@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "Kontot har verifierats!",
   "generalRetry": "Försök igen",
   "generalRetrying": "Försöker igen...",
+  "postsTitle": "Inlägg",
+  "postsDescription": "ClashKing-nyheter, berättelser om uppdateringar och tidigare meddelanden.",
+  "postsEmpty": "Inga publicerade inlägg ännu.",
+  "postsLoadFailed": "Inläggen kunde inte läsas in.",
+  "postsLoadMore": "Läs in fler",
+  "postsCurrent": "Aktuella",
+  "postsPast": "Tidigare",
+  "postsStory": "Interaktiv berättelse",
+  "postsPinned": "Utvalda",
   "generalTryAgain": "Försök igen",
   "generalReset": "Återställ",
   "generalCancel": "Avbryt",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "Filter",
+  "generalExpand": "Expandera",
+  "generalCollapse": "Kollapsa",
   "generalNotSet": "Inte angivet",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "Bokmärke",
+  "generalRemoveBookmark": "Ta bort bokmärke",
   "generalClearFilters": "Rensa filter",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "Länka e-postkonto",
   "authAccountAddEmailAuth": "Lägg till autentisering med e-post och lösenord på ditt konto för extra säkerhet.",
   "authAccountEmailLinkedSuccess": "E-postkontot har länkats!",
+  "authAccountLinkDiscord": "Länka Discord-konto",
+  "authAccountAddDiscordAuth": "Lägg till Discord-autentisering till ditt konto för synkronisering mellan plattformar och åtkomst till ClashKing-botten.",
+  "authAccountDiscordLinkedSuccess": "Discord-kontot har länkats!",
   "authEmailVerificationTitle": "Verifiera e-post",
   "authEmailVerificationCheckEmail": "Kontrollera din e-post",
   "authEmailVerificationSentTo": "Vi har skickat ett verifieringsmejl till:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "Erfarenhetsnivå",
+  "gameLeague": "Liga",
   "gameTrophies": "Troféer",
   "gameBuilderBaseTrophies": "BB-troféer",
   "gameDonations": "Donationer",
@@ -484,6 +501,11 @@
   "clanNone": "Ingen klan",
   "clanJoinToUnlock": "Gå med i en klan för att låsa upp nya funktioner.",
   "clanMembers": "Medlemmar",
+  "clanMembersSearchPlaceholder": "Sök medlemmar",
+  "clanMembersShowTotals": "Visa klantotal",
+  "clanMembersHideTotals": "Dölj klansummor",
+  "clanMembersReceivedShort": "Mottagen",
+  "clanMembersAverageTh": "Genomsnittlig TH",
   "clanMinimumMembers": "Minsta antal medlemmar",
   "clanMaximumMembers": "Högsta antal medlemmar",
   "clanLocation": "Plats",
@@ -839,6 +861,7 @@
   "warLeague": "Krig/Liga",
   "warHistory": "Krigshistorik",
   "warLog": "Krigslogg",
+  "warLogSearchPlaceholder": "Sök krig",
   "warLogClosed": "{clan}s krigslogg är stängd.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "Krigsstatistik",
+  "warStatsSearchPlaceholder": "Sök efter spelare",
+  "warStatsCurrentTownHall": "Min TH",
+  "warStatsLast50": "Senaste 50",
+  "warStatsWars": "Krig",
+  "warStatsSelectSeason": "Välj krigsstatistiksäsong",
   "warOngoing": "Pågående krig",
   "warIsNotInWar": "{clan} är inte i krig.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "Att vinna",
+  "warAnalysisToLose": "Att förlora",
+  "warAnalysisNoAttacksLeft": "Inga attacker kvar",
+  "warAnalysisScenario": "{attacks} attacker kvar -> behöver {stars} stjärnor / {percent} % per attack",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} attacker kvar -> omöjligt ({stars} stjärnor / {percent}% per attack)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "{clanName} kan inte längre förlora",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "Säkrat",
   "warAnalysisAlreadySecured": "Redan säkrat",
   "warAnalysisSecureAgainst": "Målet beräknas under antagandet att {clanName} använder alla återstående attacker.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "Kan inte säkras matematiskt om {clanName} optimerar alla återstående attacker.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "Kan inte säkras med återstående attacker",
   "warAnalysisStarGoal": "+{stars} stjärnor",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "{attacks} attacker kvar",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "Inget bättre resultat är möjligt",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "% behövs totalt",
   "warCalculatorCalculate": "Beräkna",
   "warAttacksTitle": "Attacker",
+  "warAttacksSuccessful": "Framgångsrika attacker",
+  "warAttacksFailed": "Misslyckade attacker",
   "warAttacksNone": "Ingen attack ännu",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "Bästa attacker",
   "warAttacksCount": "Antal attacker",
   "warAttacksMissed": "Missade attacker",
+  "warAttacksMissedShort": "Saknad",
   "warAttacksNumber": "Du attackerade {number_time} gång(er) under de senaste {number_war} krigen.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Klan-krigsliga",
   "cwlOngoing": "Pågående CWL",
+  "cwlHistoryTitle": "CWL historia",
+  "clanJoinLeaveTab": "Gå med/Lämna",
+  "clanRankingsTab": "Ranking",
+  "clanRankingsSeason": "Säsong",
+  "clanRankingsSelectSeason": "Välj rankningssäsong",
+  "clanRankingsFilterActivity": "Aktivitet",
+  "clanRankingsFilterWar": "Krig",
+  "clanRankingsFilterPoints": "Poäng",
+  "cwlHistoryPreviewBadge": "Förhandsvisning",
+  "cwlHistoryPreviewSubtitle": "{clan} mockup tills CWL-slutpunkten är fixerad",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Ingen CWL-historik än",
+  "cwlHistoryEmptyBody": "Den här klanen har inte deltagit i en Clan War League-säsong än.",
+  "cwlRankTitle": "Rang",
+  "cwlWarsPlayedTitle": "Krig spelade",
+  "playerWarStarsTitle": "Krigsstjärnor",
+  "playerWarPreferenceTitle": "Krigsinst.",
+  "playerDonatedTitle": "Donerat",
+  "playerReceivedTitle": "Mottagen",
+  "playerCapitalTitle": "Kapital",
+  "playerExpLevelTitle": "Exp. nivå",
+  "clanWarWinsTitle": "Krig vinner",
+  "clanWinStreakTitle": "Vinstsvit",
+  "clanBuilderBaseTitle": "Byggare bas",
+  "clanTypeTitle": "Typ",
+  "clanMinTownHallTitle": "Min. rådhus",
+  "clanMinTrophiesTitle": "Min. troféer",
+  "clanCapitalHallTitle": "Huvudstadshallen",
+  "clanDistrictsTitle": "distrikt",
+  "legendsCountryTitle": "Land",
+  "legendsLocalRankTitle": "Lokal rang",
+  "legendsGlobalRankTitle": "Global rang",
+  "warWinsTitle": "Vinner",
+  "warLossesTitle": "Förluster",
+  "warDrawsTitle": "Ritar",
   "cwlRounds": "Rundor",
   "cwlRoundNumber": "Runda {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "Pågående räder",
   "raidsDistrictsDestroyed": "Distrikt förstörda",
   "raidsCompleted": "Räder slutförda",
+  "capitalRaidStatusOngoing": "Pågående",
+  "capitalRaidStatusEnded": "Slutade",
+  "capitalRaidLoot": "Plundra",
+  "capitalRaidRewards": "Belöningar",
+  "capitalRaidPreviousWeek": "Föregående vecka",
+  "capitalRaidNextWeek": "Nästa vecka",
+  "capitalRaidFilterAttacked": "Attackerad",
+  "capitalRaidFilterNotAttacked": "Inte attackerad",
+  "capitalRaidFilterLinked": "Länkade konton",
+  "capitalRaidEmptyTitle": "Inga kapitalinfallsdata",
+  "capitalRaidEmptyBody": "Raidhistorik kommer att visas här när den här klanens kapitalraidhelger har spårats.",
+  "capitalRaidEstimated": "Uppskattad",
+  "capitalRaidEstimatedTooltip": "Inte officiellt ännu: uppskattat från veckans attack- och försvarsloggar. Supercell publicerar den verkliga medaljräkningen när razzian är över.",
+  "capitalRaidTrophyPrediction": "Förutspådda troféer",
+  "capitalRaidTrophyPredictionTooltip": "Beräknade Capital League-troféer efter denna raid, baserat på veckans prestation hittills. Inte officiellt.",
+  "capitalRaidProjectedLoot": "Projicerat byte",
+  "capitalRaidOneshots": "Enskottsattacker",
+  "capitalRaidFails": "Misslyckas",
+  "capitalDetailsOffense": "Anfall",
+  "capitalDetailsDefense": "Försvar",
+  "capitalDistrictsSection": "distrikt",
+  "capitalOpponentsSection": "Motståndare",
+  "capitalAvgAttacksPerDistrict": "Genomsnittliga attacker/distrikt",
+  "capitalAvgLootPerAttack": "Genomsnittlig byte/attack",
+  "capitalHistorySection": "Raid historia",
+  "capitalHistoryWeeksTracked": "Veckor spåras",
+  "capitalAvgLootPerWeek": "Genomsnittlig byte/vecka",
+  "capitalAvgAttacksPerWeek": "Genomsnittliga attacker/vecka",
+  "capitalBestRaid": "Bästa razzian",
+  "capitalWorstRaid": "Värsta razzian",
+  "capitalHistoryChartTitle": "Veckotrend",
   "searchNoResult": "Inget resultat.",
   "maintenanceTitle": "Underhåll",
   "maintenanceDescription": "Clash of Clans är för närvarande under underhåll, så vi kan inte komma åt API:t. Kom tillbaka senare.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "Daglig troféspårning och statistik vid säsongsslut",
   "faqFeaturesCwlTitle": "CWL-analys",
   "faqFeaturesCwlDescription": "Prestation i klankrigsligan och medlemmarnas bidrag",
+  "faqFeaturesTodoTitle": "Att göra-lista",
+  "faqFeaturesTodoDescription": "Se vilka konton som fortfarande behöver rankade attacker, räder, krigsattacker, Klanspel eller passåtgärder",
+  "faqFeaturesUpgradeTrackerTitle": "Uppgradera Tracker",
+  "faqFeaturesUpgradeTrackerDescription": "Använd en manuell kontoögonblicksbild från användaren för att se återstående uppgraderingar, resurser, byggare, laboratorietid och förlopp",
+  "faqFeaturesNotificationsTitle": "Pushaviseringar",
+  "faqFeaturesNotificationsDescription": "Välj vilka konton som ska få aviseringar för ClashKing-händelser som stöds",
+  "faqFeaturesWidgetsTitle": "Krigswidgetar",
+  "faqFeaturesWidgetsDescription": "Håll aktuell krigsstatus synlig på hemskärmen där widgetar stöds",
   "faqSearchHint": "Sök i FAQ...",
   "faqSectionGettingStarted": "Kom igång och om appen",
+  "faqSectionAccountsAlertsWidgets": "Konton, aviseringar och widgetar",
   "faqSectionSupportAndContact": "Support och kontakt",
+  "faqLinkedAccountsTitle": "Hur fungerar länkade konton och verifiering?",
+  "faqLinkedAccountsAnswer": "Din ClashKing-profil kan innehålla flera Clash of Clans-konton. När du lägger till en tagg visas offentliga data. Verifiering med Clash of Clans API-token bevisar att kontot är ditt och låser upp kontospecifika funktioner.",
+  "faqLinkedAccountsSolution1": "Hantera, ordna om, dölj eller ta bort konton i kontohanteringen.",
+  "faqLinkedAccountsSolution2": "Du hittar API-token i Clash of Clans under Inställningar > Fler inställningar > API-token.",
+  "faqLinkedAccountsSolution3": "Du kan logga in med Discord eller e-post. När kontoanslutningar är tillgängliga hanterar du dem i Inställningar.",
+  "faqNotificationsTitle": "Hur fungerar aviseringar?",
+  "faqNotificationsAnswer": "Aviseringar är valfria. När de aktiveras registrerar ClashKing den här enheten. Du kan välja vilka länkade konton varje avisering gäller.",
+  "faqNotificationsSolution1": "Tillåt aviseringar på enheten och i ClashKing-inställningarna.",
+  "faqNotificationsSolution2": "Varje avisering kan gälla olika konton. Kontrollera de valda kontona om en avisering saknas.",
+  "faqNotificationsSolution3": "Vissa aviseringar är beroende av spårade klan- eller krigsdata. Fördröjningar kan uppstå när externa data uppdateras.",
+  "faqWidgetsTitle": "Hur fungerar krigswidgetar?",
+  "faqWidgetsAnswer": "Krigswidgetar visar en snabb sammanfattning på enheter som stöds. De använder dina valda eller länkade konton, cachade ClashKing-data och bakgrundsuppdateringar när plattformen tillåter dem.",
+  "faqWidgetsSolution1": "Öppna appen när du har bytt konto eller klan så att widgeten kan synkroniseras.",
+  "faqWidgetsSolution2": "Om en widget verkar inaktuell uppdaterar du först appen. Android och iOS begränsar bakgrundsuppdateringar.",
+  "faqWidgetsSolution3": "Klanen behöver tillgängliga krigsdata för att kunna visa användbar status.",
   "faqTranslationIssue": "Saknas eller är översättningen felaktig?",
   "faqTranslationIssueAnswer": "Översättningar skrivs först med genererings- och AI-verktyg och granskas och förbättras sedan över tid. Om du är modersmålstalare och något låter konstigt kan du föreslå en rättelse på Crowdin eller kontakta oss på Discord eller via e-post.",
   "faqWaysToSupport": "Sätt att stödja oss:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "Attackordning",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Varaktighet",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "Anfallare",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "Attackhastighet",
   "gameItemAttackRange": "Attackräckvidd",
   "gameItemMovementSpeed": "Rörelsehastighet",
+  "gameItemWardenWeight": "Väktarvikt",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Väktarvikten kan ersätta bostadsutrymmet och avgör hur starkt Storväktaren prioriterar att följa en enhetsgrupp.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Helarvikt",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Helarvikten kan ersätta bostadsutrymmet när helare avgör vilka enheter som ska prioriteras.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Den här enheten bidrar inte till väktarens tröskelvärde för följning.",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "Uppgraderingsresurs",
   "gameItemRarity": "Sällsynthet",
   "gameItemHero": "Hjälte",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "Flygande",
   "gameItemUpgradeCost": "Uppgraderingskostnad",
   "gameItemUpgradeTime": "Uppgraderingstid",
-  "generalExpand": "Expandera",
-  "generalCollapse": "Kollapsa",
-  "generalBookmark": "Bokmärke",
-  "generalRemoveBookmark": "Ta bort bokmärke",
-  "gameLeague": "Liga",
-  "clanMembersSearchPlaceholder": "Sök medlemmar",
-  "clanMembersShowTotals": "Visa klantotal",
-  "clanMembersHideTotals": "Dölj klansummor",
-  "clanMembersReceivedShort": "Mottagen",
-  "clanMembersAverageTh": "Genomsnittlig TH",
-  "warLogSearchPlaceholder": "Sök krig",
-  "warStatsSearchPlaceholder": "Sök efter spelare",
-  "warStatsCurrentTownHall": "Min TH",
-  "warStatsLast50": "Senaste 50",
-  "warStatsWars": "Krig",
-  "warStatsSelectSeason": "Välj krigsstatistiksäsong",
-  "warAnalysisToWin": "Att vinna",
-  "warAnalysisToLose": "Att förlora",
-  "warAnalysisNoAttacksLeft": "Inga attacker kvar",
-  "warAnalysisScenario": "{attacks} attacker kvar -> behöver {stars} stjärnor / {percent} % per attack",
-  "warAnalysisImpossibleScenario": "{attacks} attacker kvar -> omöjligt ({stars} stjärnor / {percent}% per attack)",
-  "warAttacksSuccessful": "Framgångsrika attacker",
-  "warAttacksFailed": "Misslyckade attacker",
-  "warAttacksMissedShort": "Saknad",
-  "cwlHistoryTitle": "CWL historia",
-  "clanJoinLeaveTab": "Gå med/Lämna",
-  "clanRankingsTab": "Ranking",
-  "clanRankingsSeason": "Säsong",
-  "clanRankingsSelectSeason": "Välj rankningssäsong",
-  "clanRankingsFilterActivity": "Aktivitet",
-  "clanRankingsFilterWar": "Krig",
-  "clanRankingsFilterPoints": "Poäng",
-  "cwlHistoryPreviewBadge": "Förhandsvisning",
-  "cwlHistoryPreviewSubtitle": "{clan} mockup tills CWL-slutpunkten är fixerad",
-  "cwlHistoryEmptyTitle": "Ingen CWL-historik än",
-  "cwlHistoryEmptyBody": "Den här klanen har inte deltagit i en Clan War League-säsong än.",
-  "cwlRankTitle": "Rang",
-  "cwlWarsPlayedTitle": "Krig spelade",
-  "playerWarStarsTitle": "Krigsstjärnor",
-  "playerWarPreferenceTitle": "Krigsinst.",
-  "playerDonatedTitle": "Donerat",
-  "playerReceivedTitle": "Mottagen",
-  "playerCapitalTitle": "Kapital",
-  "playerExpLevelTitle": "Exp. nivå",
-  "clanWarWinsTitle": "Krig vinner",
-  "clanWinStreakTitle": "Vinstsvit",
-  "clanBuilderBaseTitle": "Byggare bas",
-  "clanTypeTitle": "Typ",
-  "clanMinTownHallTitle": "Min. rådhus",
-  "clanMinTrophiesTitle": "Min. troféer",
-  "clanCapitalHallTitle": "Huvudstadshallen",
-  "clanDistrictsTitle": "distrikt",
-  "legendsCountryTitle": "Land",
-  "legendsLocalRankTitle": "Lokal rang",
-  "legendsGlobalRankTitle": "Global rang",
-  "warWinsTitle": "Vinner",
-  "warLossesTitle": "Förluster",
-  "warDrawsTitle": "Ritar",
-  "capitalRaidStatusOngoing": "Pågående",
-  "capitalRaidStatusEnded": "Slutade",
-  "capitalRaidLoot": "Plundra",
-  "capitalRaidRewards": "Belöningar",
-  "capitalRaidPreviousWeek": "Föregående vecka",
-  "capitalRaidNextWeek": "Nästa vecka",
-  "capitalRaidFilterAttacked": "Attackerad",
-  "capitalRaidFilterNotAttacked": "Inte attackerad",
-  "capitalRaidFilterLinked": "Länkade konton",
-  "capitalRaidEmptyTitle": "Inga kapitalinfallsdata",
-  "capitalRaidEmptyBody": "Raidhistorik kommer att visas här när den här klanens kapitalraidhelger har spårats.",
-  "capitalRaidEstimated": "Uppskattad",
-  "capitalRaidEstimatedTooltip": "Inte officiellt ännu: uppskattat från veckans attack- och försvarsloggar. Supercell publicerar den verkliga medaljräkningen när razzian är över.",
-  "capitalRaidTrophyPrediction": "Förutspådda troféer",
-  "capitalRaidTrophyPredictionTooltip": "Beräknade Capital League-troféer efter denna raid, baserat på veckans prestation hittills. Inte officiellt.",
-  "capitalRaidProjectedLoot": "Projicerat byte",
-  "capitalRaidOneshots": "Enskottsattacker",
-  "capitalRaidFails": "Misslyckas",
-  "capitalDetailsOffense": "Anfall",
-  "capitalDetailsDefense": "Försvar",
-  "capitalDistrictsSection": "distrikt",
-  "capitalOpponentsSection": "Motståndare",
-  "capitalAvgAttacksPerDistrict": "Genomsnittliga attacker/distrikt",
-  "capitalAvgLootPerAttack": "Genomsnittlig byte/attack",
-  "capitalHistorySection": "Raid historia",
-  "capitalHistoryWeeksTracked": "Veckor spåras",
-  "capitalAvgLootPerWeek": "Genomsnittlig byte/vecka",
-  "capitalAvgAttacksPerWeek": "Genomsnittliga attacker/vecka",
-  "capitalBestRaid": "Bästa razzian",
-  "capitalWorstRaid": "Värsta razzian",
-  "capitalHistoryChartTitle": "Veckotrend",
-  "warAttacksDetailsDuration": "Varaktighet",
   "gameItemRemainingToTownHallMax": "Till TH max",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "Till globala max",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "{count} nivå(er) kvar",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "Översikt",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "Statistik",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "Nästa uppgradering",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "Uppgradera plan",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "Uppgraderingsdata är inte tillgänglig",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "Vald",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Inställningar",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Aviseringar",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Välj varningar och skicka lokala testförhandsvisningar.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "Stöd",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "Om",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Konto",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Inloggad",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Utseende",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Systemstandard",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Matcha den här enheten",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Ljus",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Mörk",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Vald",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Inga länkade konton har laddats ännu.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Inga konton har valts",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "{count}-konton har valts",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "Ny",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Spelare",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Klaner",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "Rensa",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Data har uppdaterats",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Det gick inte att uppdatera data: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "Det gick inte att läsa in filtrerad data: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "Export misslyckades: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "Spelare",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "Formatera",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "Inkluderar",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "Statistik, attacker, TH-analys",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "Ingen användardata tillgänglig",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "konton",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "Det gick inte att läsa in spelardata.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "Det gick inte att ladda klandata.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "Inga matchande konton",
   "todoNoConfiguredAccounts": "Inga att göra-konton har konfigurerats",
   "todoNoLinkedAccounts": "Inga länkade konton",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "Ingen spelarlista eller individuella attacker tillgängliga för denna raid.",
   "dashboardNoLinkedAccountsTitle": "Inga länkade konton",
   "dashboardNoLinkedAccountsBody": "Länka ett Clash-konto för att se attacker, händelser och aktivitet här.",
+  "dashboardTodoHiddenTitle": "Inga konton visas här",
+  "dashboardTodoHiddenBody": "Aktivera ett av alternativen för hemkortet (att göra, Uppgraderingsspårare, Rankat) för ett konto på fliken Spelare för att se det här.",
+  "dashboardUpgradeTrackerNoData": "Öppna spåraren för att importera eller uppdatera uppgraderingsdata.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {behöver uppdateras} other {behöver uppdateras}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {har uppgifter kvar} other {har uppgifter kvar}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {har attacker kvar} other {har attacker kvar}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Beräknat",
+  "dashboardUpgradeTrackerBuilders": "Byggare",
+  "dashboardUpgradeTrackerLab": "Laboratorium",
+  "dashboardUpgradeTrackerPets": "Husdjur",
+  "dashboardUpgradeTrackerWalls": "Murar",
+  "dashboardUpgradeTrackerVillage": "By",
+  "dashboardRankedNoData": "Öppna Rankad liga för att se kontots placering.",
+  "dashboardRankedAccounts": "{loaded}/{total} konton spåras",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "Inga bokmärkta spelare än",
   "playersNoBookmarkedBody": "Öppna en spelarprofil och spara den till senare.",
   "playersNoLinkedBody": "Hantera konton från kontoinställningsskärmen.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "Planera skada mot byggnadernas nuvarande nivåer.",
   "calculatorZapQuake": "Zap jordbävning",
   "calculatorFireball": "Eldkula",
+  "damageCalculatorSubtitle": "Jämför en attackuppsättning mot flera byggnader.",
+  "damageNoStaticDataTitle": "Skadedata är inte tillgängliga",
+  "damageNoStaticDataBody": "Uppdatera appen när statiska speldata har lästs in.",
+  "damageTownHall": "Rådhus",
+  "damageVerifiedAccountPrefill": "Förinställning från verifierat konto",
+  "damageOverridesStayLocal": "Ändringar här uppdaterar inte spelarkontot.",
+  "damageTargets": "Byggnader",
+  "damageAddBuilding": "Lägg till byggnad",
+  "damageRemoveBuilding": "Ta bort byggnad",
+  "damageNoTargetsBody": "Lägg till minst en byggnad för att jämföra resultat.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Sök byggnader",
+  "damageNoBuildingsFound": "Inga byggnader hittades",
+  "damageTryAnotherSearch": "Prova ett annat namn eller en annan rådhusnivå.",
+  "damageAttackStack": "Manuell attackuppsättning",
+  "damageNoSourcesForTownHall": "Inga skadekällor som stöds är tillgängliga på det här rådhuset.",
+  "damageCount": "Antal",
+  "damagePerUse": "{damage} skada per användning",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent} % av högsta HP, avtagande vid stapling",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Blixt",
+  "damageSourceEarthquake": "Jordbävning",
+  "damageSourceGiantArrow": "Jättepil",
+  "damageSourceFireball": "Eldkula",
+  "damageSourceFlameFlinger": "Träff med Flamkastaren",
+  "damageSourceBalloonDeath": "Ballongens dödsskada",
+  "damageSourceRocketBalloonDeath": "Raketballongens dödsskada",
+  "damageResults": "Resultat",
+  "damageDestroyed": "Förstörd",
+  "damageSurvives": "Överlever",
+  "damageResultSummary": "{damage} skada · {remaining} HP kvar",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Blixt- och jordbävningsoptimerare",
+  "damageSpellCapacity": "Besvärjelsekapacitet",
+  "damageZapQuakeUnavailable": "Blixt och Jordbävning är inte tillgängliga på det här rådhuset.",
+  "damageZapQuakeUsesSelectedLevels": "Använder Blixt nivå {lightningLevel} och Jordbävning nivå {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Blixt och Jordbävning kan inte skada det här lagret.",
+  "damageNoValidZapQuake": "Ingen giltig kombination ryms inom den valda besvärjelsekapaciteten.",
+  "damageZapQuakeCombination": "{lightning} blixt + {earthquake} jordbävning · {capacity} utrymme",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "Uppgradera Tracker",
   "upgradeTrackerSubtitle": "Återstående uppgraderingskostnad och tid.",
   "linkedAccountLabel": "Länkat konto",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Lägg till eller uppdatera länkade konton för att se uppgraderingssummor.",
   "playerOptionNotificationsTitle": "Aviseringar",
   "playerOptionNotificationsSubtitle": "Få varningar för det här kontot.",
+  "playerOptionNotificationsEnableMaster": "Aktivera först aviseringar i Inställningar.",
+  "playerOptionNotificationsVerifyFirst": "Verifiera kontot för att aktivera aviseringar.",
+  "playerOptionNotificationsSubscriptionRequired": "En prenumeration krävs för bokmärkesaviseringar.",
+  "playerOptionNotificationsLimitReached": "Du har nått gränsen för bokmärkesaviseringar.",
   "playerOptionShowTodoPageTitle": "Visa på att göra-sidan",
   "playerOptionShowTodoPageSubtitle": "Inkludera detta konto i hela att göra-listan.",
+  "playerOptionShowTodoPageVerifyFirst": "Verifiera kontot för att visa det på sidan Att göra.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Visa Uppgraderingsspåraren på Hem",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Fäst kontots uppgraderingssammanfattning på Hem.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verifiera kontot för att visa uppgraderingsförloppet på Hem.",
+  "playerOptionShowRankedHomeTitle": "Visa Rankat på Hem",
+  "playerOptionShowRankedHomeSubtitle": "Fäst kontots sammanfattning för Rankad liga på Hem.",
+  "playerOptionShowRankedHomeVerifyFirst": "Verifiera kontot för att visa dess sammanfattning för Rankad liga på Hem.",
   "playerOptionShowWarTabTitle": "Visa på fliken War",
   "playerOptionShowWarTabSubtitle": "Inkludera detta kontos klan på fliken War.",
   "bookmarkPlayerLoadFailed": "Det gick inte att ladda bokmärkt spelare.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · inga öppna uppgifter",
   "todoMockCaughtUpStatus": "Aktiv idag · ingen åtgärd behövs",
   "notifChooseAlerts": "Välj aviseringar",
+  "notifGroupLegendAttacks": "Attacker i Legend I",
+  "notifLegendAttacksDescription": "Attackresultat för bokmärkta konton med aviseringar aktiverade i Legend I.",
+  "notifGroupLegendDefenses": "Försvar i Legend I",
+  "notifLegendDefensesDescription": "Försvarsresultat för konton med aviseringar aktiverade i Legend I.",
   "notifLeagueDefenseDescription": "Försvarsresultat med angripare, stjärnor, procent och ligakontext.",
   "notifWarAttackOptionsDescription": "Krigsattackresultat, försvarsaviseringar och 5v5-attackflöde.",
   "notifWarAlertsDescription": "Krig matchat, stridsdag startad och krig avslutat.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "Huvudstadspoäng",
   "todoAllAccounts": "Alla konton",
   "todoCombinedAcrossAccounts": "Samlad att-göra-lista över dina konton",
+  "dashboardRankedCombinedAcrossAccounts": "Sammanlagd rankning för dina konton",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Sammanlagd uppgraderingsspårning för dina konton",
   "todoPreviewAccount": "Förhandskonto",
   "todoLastActiveUnavailable": "Senaste aktivitet ej tillgänglig",
   "todoActiveRelative": "Aktiv {time}",
@@ -2516,9 +2961,115 @@
   "sideRankingsEmptyTitle": "Inga rankningar returnerades",
   "sideRankingsEmptyBody": "Prova en annan topplista eller plats.",
   "sideRankingsMockups": "ClashKing-mockups",
+  "rankingsBuilderBase": "Byggmästarbas",
+  "rankingsTownHall": "Rådhus",
+  "rankingsRankedLeague": "Rankad liga",
+  "rankingsClanCapital": "Klanhuvudstad",
+  "rankingsDonations": "Donationer",
+  "rankingsWarWins": "Krigsvinster",
+  "rankingsWinStreak": "Vinstsvit",
+  "rankingsCurrent": "Aktuell",
+  "rankingsWorldwide": "Hela världen",
+  "rankingsSelectLocation": "Välj en plats",
+  "rankingsSearchLocations": "Sök platser eller landskoder",
+  "rankingsWorldwideUnavailable": "Välj en region eller ett land för den här topplistan.",
+  "rankingsLocationsLoadFailed": "Hela platslistan kunde inte läsas in. Hela världen är fortfarande tillgängligt där det stöds.",
+  "rankingsSnapshotDate": "Datum för ögonblicksbild",
+  "rankingsSource": "Källa",
+  "rankingsOfficialSource": "Officiellt Clash-API",
+  "rankingsResults": "Resultat",
+  "rankingsTopCount": "Topp {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Ingen sparad ögonblicksbild",
+  "rankingsNoSnapshotBody": "Ingen rankningsögonblicksbild har sparats för {date}. Välj ett annat datum eller återgå till Aktuell.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Det gick inte att läsa in spelaren.",
+  "rankingsClanLoadFailed": "Det gick inte att läsa in klanen.",
   "sideStatsTitle": "Statistik",
   "sideStatsSubtitle": "Toppliste-statistik från officiella Clash API-ytor.",
   "sideStatsLoadError": "Det gick inte att ladda stridsintelligens.",
+  "statsOverview": "Översikt",
+  "statsArmies": "Arméer",
+  "statsItems": "Föremål",
+  "statsWar": "Krig",
+  "statsCwl": "CWL",
+  "statsRanked": "Rankat",
+  "statsDateRange": "Datumintervall",
+  "statsDateRangeHint": "Välj upp till 90 dagar",
+  "statsDateRangeTooLong": "Välj ett datumintervall på 90 dagar eller mindre.",
+  "statsUpdated": "Färsk data",
+  "statsNoDataTitle": "Inga stridsdata ännu",
+  "statsNoDataBody": "Prova ett bredare datumintervall eller mindre restriktiva filter.",
+  "statsAddItemsTitle": "Välj objekt att analysera",
+  "statsAddItemsBody": "Lägg till trupper, besvärjelser, hjältar, husdjur eller utrustning och kör sedan frågan.",
+  "statsGlobalCounts": "Global räkning",
+  "statsPerformance": "Prestanda",
+  "statsSamples": "Prover",
+  "statsUsage": "Användning",
+  "statsAverageStars": "Genomsnittliga stjärnor",
+  "statsAverageDestruction": "Genomsnittlig förstörelse",
+  "statsStarRates": "Stjärnfrekvens",
+  "statsThreeStarRate": "Tre-stjärnig sats",
+  "statsDailyTrend": "Daglig trend",
+  "statsPlayers": "Spelare",
+  "statsClans": "Klaner",
+  "statsPlayersInWar": "Spelare i krig",
+  "statsClansInWar": "Klaner i krig",
+  "statsPlayersInLegends": "Spelare i Legends",
+  "statsWarsStored": "Krig lagrad",
+  "statsJoinLeaves": "Gå med i / lämna evenemang",
+  "statsSearchArmies": "Sök efter exakta kompositioner",
+  "statsExactComposition": "Exakt sammansättning",
+  "statsArmyShareCode": "Kod för armédelning",
+  "statsMinimumSample": "Minsta prov",
+  "statsSortBy": "Sortera efter",
+  "statsIncludeItems": "Inkludera objekt",
+  "statsExcludeItems": "Uteslut objekt",
+  "statsItemId": "Artikel-ID eller lagrat namn",
+  "statsItemType": "Artikeltyp",
+  "statsTroop": "Trupp",
+  "statsSpell": "Stavning",
+  "statsHero": "Hjälte",
+  "statsPet": "Husdjur",
+  "statsEquipment": "Utrustning",
+  "statsOwningHero": "Ägande hjälte",
+  "statsAddItem": "Lägg till objekt",
+  "statsAnalyzeItems": "Analysera objekt",
+  "statsCompositionShare": "Kompositionsandel",
+  "statsNoLevels": "Arméposter innehåller inga objektnivåer.",
+  "statsRankedCompositionOnly": "Kompositionsdata kommer från rankade battlelogs; Krig och CWL-prestationer förblir separata.",
+  "statsTownHall": "Rådhus",
+  "statsOpponentTownHall": "Motståndarens stadshus",
+  "statsEqualTownHalls": "Samma stadshus",
+  "statsLeagueTier": "Liganivå",
+  "statsLegendLeagueOne": "Legendliga 1",
+  "statsCwlLeague": "CWL-ligan",
+  "statsLeagueBronze": "Brons",
+  "statsLeagueSilver": "Silver",
+  "statsLeagueGold": "Guld",
+  "statsLeagueCrystal": "Kristall",
+  "statsLeagueMaster": "Mästare",
+  "statsLeagueChampion": "Champion",
+  "statsAllCwlLeagues": "Alla CWL-ligor",
+  "statsCwlSeasons": "CWL-säsonger",
+  "statsCwlSeasonsHint": "ÅÅÅÅ-MM, separerade med kommatecken",
+  "statsApplyFilters": "Använd filter",
+  "statsRefresh": "Uppdatera data",
+  "statsRegularWarOnly": "Endast vanliga krig; friendly wars och CWL är undantagna.",
+  "statsRankedRequired": "Stadhuset och en liganivå krävs.",
+  "statsSeasonBreakdown": "Säsongsuppdelning",
   "sideTopScore": "Bästa poäng",
   "sideTop200Avg": "Top 200-snitt",
   "sideBasesArmiesTitle": "Baser och arméer",
@@ -2535,6 +3086,51 @@
   "sideArmyLinksBody": "Sammansättning, besvärjelser, belägring, anteckningar och delningslänk.",
   "sideGameAssetsTitle": "Spelresurser",
   "sideGameAssetsSubtitle": "Hostade ClashKing-resurser, grupperade efter mapp.",
+  "gameAssetsLoadError": "Det gick inte att läsa in spelresurser",
+  "gameAssetsEmptyTitle": "Inga spelresurser är tillgängliga",
+  "gameAssetsEmptyBody": "Det värdbaserade manifestet innehöll inga bilder som stöds.",
+  "gameAssetsOneImage": "1 bild",
+  "gameAssetsImageCount": "{count} bilder",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Sök i den här kategorin",
+  "gameAssetsAllFormats": "Alla format",
+  "gameAssetsOneResult": "1 resultat",
+  "gameAssetsResultCount": "{count} resultat",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Inga matchande bilder",
+  "gameAssetsNoResultsBody": "Prova en annan sökning eller ett annat filformat.",
+  "gameAssetsLongPressHint": "Tryck länge för att kopiera värd-URL:en",
+  "gameAssetsCopyUrl": "Kopiera URL",
+  "gameAssetsCopyPath": "Kopiera sökväg",
+  "gameAssetsUrlCopied": "Resursens URL har kopierats",
+  "gameAssetsPathCopied": "Resursens sökväg har kopierats",
+  "gameAssetsCopyError": "Det gick inte att kopiera resursuppgifterna.",
+  "gameAssetsShare": "Dela",
+  "gameAssetsShareError": "Det gick inte att dela resursen.",
+  "gameAssetsSave": "Spara",
+  "gameAssetsSaving": "Sparar...",
+  "gameAssetsSaved": "Resursen har sparats.",
+  "gameAssetsSavedTo": "Resursen sparades i {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Det gick inte att spara resursen.",
   "sideZapQuakeTitle": "{zaps} blixtar + 1 jordbävning",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3473,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Supercells policy för faninnehåll",
-  "notifAudienceSectionTitle": "Mottagare för notiser",
-  "notifScopeAllLinkedAccounts": "Alla länkade konton",
-  "notifScopeSelectedAccounts": "Valda konton",
-  "notifAudienceSheetDescription": "Välj vilka konton som kan få notiser på den här enheten.",
-  "notifAudienceAllSubtitle": "{count} nuvarande konto(n). Framtida länkade konton inkluderas automatiskt.",
-  "notifAudienceSelectedSubtitle": "{count} valt för notiser.",
-  "notifAudienceSelectedEmpty": "Välj exakt vilka konton som ska få notiser.",
-  "notifAudienceAllInlineNote": "Allt du länkar senare inkluderas utan att ändra den här inställningen.",
-  "notifAccountBookmarked": "Sparat",
-  "notifGroupLeagueBattles": "Ligastrider",
-  "notifGroupWarAttacks": "Krigsattacker",
-  "notifGroupWarState": "Krigsstatus",
-  "notifGroupWarReminders": "Krigspåminnelser",
-  "notifGroupEvents": "Evenemang",
-  "notifGroupAppAnnouncements": "Appmeddelanden",
-  "notifGroupUpgradeFinishes": "Uppgraderingar klara",
-  "notifGroupMonthlySupport": "Månatligt stöd",
-  "postsTitle": "Inlägg",
-  "postsDescription": "ClashKing-nyheter, berättelser om uppdateringar och tidigare meddelanden.",
-  "postsEmpty": "Inga publicerade inlägg ännu.",
-  "postsLoadFailed": "Inläggen kunde inte läsas in.",
-  "postsLoadMore": "Läs in fler",
-  "postsCurrent": "Aktuella",
-  "postsPast": "Tidigare",
-  "postsStory": "Interaktiv berättelse",
-  "postsPinned": "Utvalda",
-  "authAccountLinkDiscord": "Länka Discord-konto",
-  "authAccountAddDiscordAuth": "Lägg till Discord-autentisering till ditt konto för synkronisering mellan plattformar och åtkomst till ClashKing-botten.",
-  "authAccountDiscordLinkedSuccess": "Discord-kontot har länkats!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "Att göra-lista",
-  "faqFeaturesTodoDescription": "Se vilka konton som fortfarande behöver rankade attacker, räder, krigsattacker, Klanspel eller passåtgärder",
-  "faqFeaturesUpgradeTrackerTitle": "Uppgradera Tracker",
-  "faqFeaturesUpgradeTrackerDescription": "Använd en manuell kontoögonblicksbild från användaren för att se återstående uppgraderingar, resurser, byggare, laboratorietid och förlopp",
-  "faqFeaturesNotificationsTitle": "Pushaviseringar",
-  "faqFeaturesNotificationsDescription": "Välj vilka konton som ska få aviseringar för ClashKing-händelser som stöds",
-  "faqFeaturesWidgetsTitle": "Krigswidgetar",
-  "faqFeaturesWidgetsDescription": "Håll aktuell krigsstatus synlig på hemskärmen där widgetar stöds",
-  "faqSectionAccountsAlertsWidgets": "Konton, aviseringar och widgetar",
-  "faqLinkedAccountsTitle": "Hur fungerar länkade konton och verifiering?",
-  "faqLinkedAccountsAnswer": "Din ClashKing-profil kan innehålla flera Clash of Clans-konton. När du lägger till en tagg visas offentliga data. Verifiering med Clash of Clans API-token bevisar att kontot är ditt och låser upp kontospecifika funktioner.",
-  "faqLinkedAccountsSolution1": "Hantera, ordna om, dölj eller ta bort konton i kontohanteringen.",
-  "faqLinkedAccountsSolution2": "Du hittar API-token i Clash of Clans under Inställningar > Fler inställningar > API-token.",
-  "faqLinkedAccountsSolution3": "Du kan logga in med Discord eller e-post. När kontoanslutningar är tillgängliga hanterar du dem i Inställningar.",
-  "faqNotificationsTitle": "Hur fungerar aviseringar?",
-  "faqNotificationsAnswer": "Aviseringar är valfria. När de aktiveras registrerar ClashKing den här enheten. Du kan välja vilka länkade konton varje avisering gäller.",
-  "faqNotificationsSolution1": "Tillåt aviseringar på enheten och i ClashKing-inställningarna.",
-  "faqNotificationsSolution2": "Varje avisering kan gälla olika konton. Kontrollera de valda kontona om en avisering saknas.",
-  "faqNotificationsSolution3": "Vissa aviseringar är beroende av spårade klan- eller krigsdata. Fördröjningar kan uppstå när externa data uppdateras.",
-  "faqWidgetsTitle": "Hur fungerar krigswidgetar?",
-  "faqWidgetsAnswer": "Krigswidgetar visar en snabb sammanfattning på enheter som stöds. De använder dina valda eller länkade konton, cachade ClashKing-data och bakgrundsuppdateringar när plattformen tillåter dem.",
-  "faqWidgetsSolution1": "Öppna appen när du har bytt konto eller klan så att widgeten kan synkroniseras.",
-  "faqWidgetsSolution2": "Om en widget verkar inaktuell uppdaterar du först appen. Android och iOS begränsar bakgrundsuppdateringar.",
-  "faqWidgetsSolution3": "Klanen behöver tillgängliga krigsdata för att kunna visa användbar status.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "Väktarvikt",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "Väktarvikten kan ersätta bostadsutrymmet och avgör hur starkt Storväktaren prioriterar att följa en enhetsgrupp.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "Helarvikt",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "Helarvikten kan ersätta bostadsutrymmet när helare avgör vilka enheter som ska prioriteras.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "Enheter som behövs för att nå väktarens tröskelvärde: {count}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "Den här enheten bidrar inte till väktarens tröskelvärde för följning.",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "Inga konton visas här",
-  "dashboardTodoHiddenBody": "Aktivera ett av alternativen för hemkortet (att göra, Uppgraderingsspårare, Rankat) för ett konto på fliken Spelare för att se det här.",
-  "dashboardUpgradeTrackerNoData": "Öppna spåraren för att importera eller uppdatera uppgraderingsdata.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {behöver uppdateras} other {behöver uppdateras}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {har uppgifter kvar} other {har uppgifter kvar}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {har attacker kvar} other {har attacker kvar}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "Beräknat",
-  "dashboardUpgradeTrackerBuilders": "Byggare",
-  "dashboardUpgradeTrackerLab": "Laboratorium",
-  "dashboardUpgradeTrackerPets": "Husdjur",
-  "dashboardUpgradeTrackerWalls": "Murar",
-  "dashboardUpgradeTrackerVillage": "By",
-  "dashboardRankedNoData": "Öppna Rankad liga för att se kontots placering.",
-  "dashboardRankedAccounts": "{loaded}/{total} konton spåras",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "Jämför en attackuppsättning mot flera byggnader.",
-  "damageNoStaticDataTitle": "Skadedata är inte tillgängliga",
-  "damageNoStaticDataBody": "Uppdatera appen när statiska speldata har lästs in.",
-  "damageTownHall": "Rådhus",
-  "damageVerifiedAccountPrefill": "Förinställning från verifierat konto",
-  "damageOverridesStayLocal": "Ändringar här uppdaterar inte spelarkontot.",
-  "damageTargets": "Byggnader",
-  "damageAddBuilding": "Lägg till byggnad",
-  "damageRemoveBuilding": "Ta bort byggnad",
-  "damageNoTargetsBody": "Lägg till minst en byggnad för att jämföra resultat.",
-  "damageHitpoints": "{hitpoints} HP",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "Sök byggnader",
-  "damageNoBuildingsFound": "Inga byggnader hittades",
-  "damageTryAnotherSearch": "Prova ett annat namn eller en annan rådhusnivå.",
-  "damageAttackStack": "Manuell attackuppsättning",
-  "damageNoSourcesForTownHall": "Inga skadekällor som stöds är tillgängliga på det här rådhuset.",
-  "damageCount": "Antal",
-  "damagePerUse": "{damage} skada per användning",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "{percent} % av högsta HP, avtagande vid stapling",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "Blixt",
-  "damageSourceEarthquake": "Jordbävning",
-  "damageSourceGiantArrow": "Jättepil",
-  "damageSourceFireball": "Eldkula",
-  "damageSourceFlameFlinger": "Träff med Flamkastaren",
-  "damageSourceBalloonDeath": "Ballongens dödsskada",
-  "damageSourceRocketBalloonDeath": "Raketballongens dödsskada",
-  "damageResults": "Resultat",
-  "damageDestroyed": "Förstörd",
-  "damageSurvives": "Överlever",
-  "damageResultSummary": "{damage} skada · {remaining} HP kvar",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "Blixt- och jordbävningsoptimerare",
-  "damageSpellCapacity": "Besvärjelsekapacitet",
-  "damageZapQuakeUnavailable": "Blixt och Jordbävning är inte tillgängliga på det här rådhuset.",
-  "damageZapQuakeUsesSelectedLevels": "Använder Blixt nivå {lightningLevel} och Jordbävning nivå {earthquakeLevel}.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "Blixt och Jordbävning kan inte skada det här lagret.",
-  "damageNoValidZapQuake": "Ingen giltig kombination ryms inom den valda besvärjelsekapaciteten.",
-  "damageZapQuakeCombination": "{lightning} blixt + {earthquake} jordbävning · {capacity} utrymme",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "Verifiera kontot för att visa det på sidan Att göra.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Visa Uppgraderingsspåraren på Hem",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Fäst kontots uppgraderingssammanfattning på Hem.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Verifiera kontot för att visa uppgraderingsförloppet på Hem.",
-  "playerOptionShowRankedHomeTitle": "Visa Rankat på Hem",
-  "playerOptionShowRankedHomeSubtitle": "Fäst kontots sammanfattning för Rankad liga på Hem.",
-  "playerOptionShowRankedHomeVerifyFirst": "Verifiera kontot för att visa dess sammanfattning för Rankad liga på Hem.",
-  "dashboardRankedCombinedAcrossAccounts": "Sammanlagd rankning för dina konton",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Sammanlagd uppgraderingsspårning för dina konton",
-  "rankingsHomeVillage": "Hemby",
-  "rankingsBuilderBase": "Byggmästarbas",
-  "rankingsTownHall": "Rådhus",
-  "rankingsRankedLeague": "Rankad liga",
-  "rankingsClanCapital": "Klanhuvudstad",
-  "rankingsDonations": "Donationer",
-  "rankingsWarWins": "Krigsvinster",
-  "rankingsWinStreak": "Vinstsvit",
-  "rankingsCurrent": "Aktuell",
-  "rankingsWorldwide": "Hela världen",
-  "rankingsSelectLocation": "Välj en plats",
-  "rankingsSearchLocations": "Sök platser eller landskoder",
-  "rankingsWorldwideUnavailable": "Välj en region eller ett land för den här topplistan.",
-  "rankingsLocationsLoadFailed": "Hela platslistan kunde inte läsas in. Hela världen är fortfarande tillgängligt där det stöds.",
-  "rankingsSnapshotDate": "Datum för ögonblicksbild",
-  "rankingsSource": "Källa",
-  "rankingsOfficialSource": "Officiellt Clash-API",
-  "rankingsResults": "Resultat",
-  "rankingsTopCount": "Topp {count}",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "Ingen sparad ögonblicksbild",
-  "rankingsNoSnapshotBody": "Ingen rankningsögonblicksbild har sparats för {date}. Välj ett annat datum eller återgå till Aktuell.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "Det gick inte att läsa in spelaren.",
-  "rankingsClanLoadFailed": "Det gick inte att läsa in klanen.",
-  "statsOverview": "Översikt",
-  "statsArmies": "Arméer",
-  "statsItems": "Föremål",
-  "statsWar": "Krig",
-  "statsCwl": "CWL",
-  "statsRanked": "Rankat",
-  "statsDateRange": "Datumintervall",
-  "statsDateRangeHint": "Välj upp till 90 dagar",
-  "statsDateRangeTooLong": "Välj ett datumintervall på 90 dagar eller mindre.",
-  "statsUpdated": "Färsk data",
-  "statsNoDataTitle": "Inga stridsdata ännu",
-  "statsNoDataBody": "Prova ett bredare datumintervall eller mindre restriktiva filter.",
-  "statsAddItemsTitle": "Välj objekt att analysera",
-  "statsAddItemsBody": "Lägg till trupper, besvärjelser, hjältar, husdjur eller utrustning och kör sedan frågan.",
-  "statsGlobalCounts": "Global räkning",
-  "statsPerformance": "Prestanda",
-  "statsSamples": "Prover",
-  "statsUsage": "Användning",
-  "statsAverageStars": "Genomsnittliga stjärnor",
-  "statsAverageDestruction": "Genomsnittlig förstörelse",
-  "statsStarRates": "Stjärnfrekvens",
-  "statsThreeStarRate": "Tre-stjärnig sats",
-  "statsDailyTrend": "Daglig trend",
-  "statsPlayers": "Spelare",
-  "statsClans": "Klaner",
-  "statsPlayersInWar": "Spelare i krig",
-  "statsClansInWar": "Klaner i krig",
-  "statsPlayersInLegends": "Spelare i Legends",
-  "statsWarsStored": "Krig lagrad",
-  "statsJoinLeaves": "Gå med i / lämna evenemang",
-  "statsSearchArmies": "Sök efter exakta kompositioner",
-  "statsExactComposition": "Exakt sammansättning",
-  "statsArmyShareCode": "Kod för armédelning",
-  "statsMinimumSample": "Minsta prov",
-  "statsSortBy": "Sortera efter",
-  "statsIncludeItems": "Inkludera objekt",
-  "statsExcludeItems": "Uteslut objekt",
-  "statsItemId": "Artikel-ID eller lagrat namn",
-  "statsItemType": "Artikeltyp",
-  "statsTroop": "Trupp",
-  "statsSpell": "Stavning",
-  "statsHero": "Hjälte",
-  "statsPet": "Husdjur",
-  "statsEquipment": "Utrustning",
-  "statsOwningHero": "Ägande hjälte",
-  "statsAddItem": "Lägg till objekt",
-  "statsAnalyzeItems": "Analysera objekt",
-  "statsCompositionShare": "Kompositionsandel",
-  "statsNoLevels": "Arméposter innehåller inga objektnivåer.",
-  "statsRankedCompositionOnly": "Kompositionsdata kommer från rankade battlelogs; Krig och CWL-prestationer förblir separata.",
-  "statsTownHall": "Rådhus",
-  "statsOpponentTownHall": "Motståndarens stadshus",
-  "statsEqualTownHalls": "Samma stadshus",
-  "statsLeagueTier": "Liganivå",
-  "statsLegendLeagueOne": "Legendliga 1",
-  "statsCwlLeague": "CWL-ligan",
-  "statsLeagueBronze": "Brons",
-  "statsLeagueSilver": "Silver",
-  "statsLeagueGold": "Guld",
-  "statsLeagueCrystal": "Kristall",
-  "statsLeagueMaster": "Mästare",
-  "statsLeagueChampion": "Champion",
-  "statsAllCwlLeagues": "Alla CWL-ligor",
-  "statsCwlSeasons": "CWL-säsonger",
-  "statsCwlSeasonsHint": "ÅÅÅÅ-MM, separerade med kommatecken",
-  "statsApplyFilters": "Använd filter",
-  "statsRefresh": "Uppdatera data",
-  "statsRegularWarOnly": "Endast vanliga krig; friendly wars och CWL är undantagna.",
-  "statsRankedRequired": "Stadhuset och en liganivå krävs.",
-  "statsSeasonBreakdown": "Säsongsuppdelning",
-  "gameAssetsLoadError": "Det gick inte att läsa in spelresurser",
-  "gameAssetsEmptyTitle": "Inga spelresurser är tillgängliga",
-  "gameAssetsEmptyBody": "Det värdbaserade manifestet innehöll inga bilder som stöds.",
-  "gameAssetsOneImage": "1 bild",
-  "gameAssetsImageCount": "{count} bilder",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "Sök i den här kategorin",
-  "gameAssetsAllFormats": "Alla format",
-  "gameAssetsOneResult": "1 resultat",
-  "gameAssetsResultCount": "{count} resultat",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "Inga matchande bilder",
-  "gameAssetsNoResultsBody": "Prova en annan sökning eller ett annat filformat.",
-  "gameAssetsLongPressHint": "Tryck länge för att kopiera värd-URL:en",
-  "gameAssetsCopyUrl": "Kopiera URL",
-  "gameAssetsCopyPath": "Kopiera sökväg",
-  "gameAssetsUrlCopied": "Resursens URL har kopierats",
-  "gameAssetsPathCopied": "Resursens sökväg har kopierats",
-  "gameAssetsCopyError": "Det gick inte att kopiera resursuppgifterna.",
-  "gameAssetsShare": "Dela",
-  "gameAssetsShareError": "Det gick inte att dela resursen.",
-  "gameAssetsSave": "Spara",
-  "gameAssetsSaving": "Sparar...",
-  "gameAssetsSaved": "Resursen har sparats.",
-  "gameAssetsSavedTo": "Resursen sparades i {path}",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "Det gick inte att spara resursen.",
   "upgradeTrackerPlan": "Plan",
   "upgradeTrackerUpgrades": "Uppgraderingar",
   "upgradeTrackerCollection": "Samling",
@@ -3852,18 +3872,23 @@
   "rankedLeagueBattleDetailsUnavailable": "Detaljerade stridsloggar är inte tillgängliga för den här perioden.",
   "rankedLeagueHistoricalDetailsUnavailable": "Endast den officiella periodsammanfattningen är tillgänglig för den här äldre perioden.",
   "rankedLeagueStarBreakdownUnavailable": "API:et anger det totala antalet stjärnor, men inte den detaljerade stjärnfördelningen för den här perioden.",
+  "notifAudienceSectionTitle": "Mottagare för notiser",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "Alla länkade konton",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "Valda konton",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "Välj vilka konton som kan få notiser på den här enheten.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} nuvarande konto(n). Framtida länkade konton inkluderas automatiskt.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3897,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "{count} valt för notiser.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,42 +3906,53 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "Välj exakt vilka konton som ska få notiser.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "Allt du länkar senare inkluderas utan att ändra den här inställningen.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "Valda konton",
+  "notifAudienceAcrossDevicesDescription": "Välj vilka konton som kan få notiser på den här enheten.",
+  "notifAccountBookmarked": "Sparat",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "Ligastrider",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "Krigsattacker",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "Krigsstatus",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "Krigspåminnelser",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "Evenemang",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "Appmeddelanden",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "Uppgraderingar klara",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "Månatligt stöd",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Uppgraderingsförlopp",
-  "widgetHomeVillage": "HEMBY",
-  "widgetVillage": "BY",
   "widgetLaboratory": "LABORATORIUM",
   "widgetPets": "HUSDJUR",
   "widgetBuilderBase": "BYGGARBAS",
@@ -3949,25 +3986,56 @@
   "widgetPetBoostShort": "Husdjur",
   "widgetClockBoostShort": "Klocka",
   "widgetBuilderCostPerk": "{percent} % förmån på byggarkostnad",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "{percent} % förmån på byggartid",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "{percent} % förmån på laboratoriekostnad",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "{percent} % förmån på laboratorietid",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Farmningsmål",
+  "farmGoalFormTitle": "Resurser att farma",
+  "farmGoalAccountTitle": "Konto",
+  "farmGoalAccountHint": "Det valda kontot anger rådhus och aktuell liga för uppskattningen.",
+  "farmGoalTargetTitle": "Byggnad att uppgradera",
+  "farmGoalTargetBuildingLabel": "Byggnad",
+  "farmGoalChooseBuilding": "Välj en byggnad",
   "farmGoalChangeBuilding": "Byt byggnad",
   "farmGoalNoTargetTitle": "Ingen byggnad vald",
   "farmGoalNoTargetBody": "Välj byggnaden du vill uppgradera för att uppskatta resurserna som behövs.",
+  "farmGoalTargetLevelLabel": "Målnivå",
+  "farmGoalUpgradeCostLabel": "Uppgraderingskostnad",
+  "farmGoalCostUnavailable": "Uppgraderingskostnaden är inte tillgänglig för den här nivån.",
+  "farmGoalLootTitle": "Uppskattat byte",
+  "farmGoalResourceLabel": "Resurs",
+  "farmGoalAmountLabel": "Mängd att farma",
   "farmGoalAverageLootLabel": "Tillgängligt byte i byn",
   "farmGoalPerfectLootHint": "Ange bytet som visas före attacken. Ligabonusen nedan läggs till automatiskt.",
   "farmGoalLeagueEstimate": "Ligabonus för {league}: {amount} {resource}. Den ingår i attackberäkningarna.",
-  "farmGoalTrackerNextTitle": "Nästa i Upgrade Tracker-planen",
-  "farmGoalTrackerMissingTitle": "Upgrade Tracker-data behövs",
-  "farmGoalTrackerMissingBody": "Importera kontots uppgraderings-JSON i Upgrade Tracker för att visa nästa planerade byggnad och den exakta kostnaden här.",
-  "farmGoalTrackerPlanComplete": "Inga återstående byggnadsuppgraderingar hittades i Upgrade Tracker. Du kan fortfarande välja en byggnad manuellt.",
-  "farmGoalOpenUpgradeTracker": "Öppna Upgrade Tracker",
-  "farmGoalUseTrackerTarget": "Använd byggnad",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,118 +4049,6 @@
       }
     }
   },
-  "gameTHLevel": "RH{level}",
-  "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameCreatorCode": "Skaparkod: ClashKing",
-  "clanWarFrequencyTitle": "Krig",
-  "notifScopeAllAccounts": "Alla konton",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
-  "notifSelectedAccounts": "Valda konton",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "Filter",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "Avboka",
-  "assetFolderTroops": "Trupper",
-  "assetFolderSpells": "Besvärjelser",
-  "assetFolderHeroes": "Hjältar",
-  "endpointStateWins": "Segrar",
-  "notifGroupBattles": "Strider",
-  "notifGroupSupport": "Stöd",
-  "gameAssetsCategoryHeroes": "Hjältar",
-  "gameAssetsCategoryTroops": "Trupper",
-  "gameAssetsCategoryPets": "Husdjur",
-  "gameAssetsCategorySpells": "Besvärjelser",
-  "rankedLeagueStars": "Stjärnor",
-  "farmGoalUpgradeCostLabel": "Uppgraderingskostnad",
-  "farmGoalAccountTitle": "Konto",
-  "damageAccountPresetShort": "Konto",
-  "damageClearStack": "Rensa",
-  "todoMockRaid1Left": "1 kvar",
-  "farmGoalResourceLabel": "Resurs",
-  "gameAssetsCategoryEquipment": "Utrustning",
-  "notifChooseAccountsManually": "Valda konton",
-  "notifAudienceAcrossDevicesDescription": "Välj vilka konton som kan få notiser på den här enheten.",
-  "damageNoTargetTitle": "Ingen byggnad vald",
-  "farmGoalMissingTarget": "Välj en byggnad och en målnivå för att beräkna de nödvändiga attackerna.",
-  "farmGoalResultTitle": "Nödvändiga attacker",
-  "farmGoalResultSummary": "{target} {resource} med ungefär {average} per perfekt attack.",
-  "@farmGoalResultSummary": {
-    "placeholders": {
-      "target": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      },
-      "average": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalMissingValues": "Ange ett mål och en uppskattning av bytet från en perfekt attack för att se attackscenarierna.",
-  "settingsLiveActivityStart": "Starta testaktivitet",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "todoExplanationRaidsTitle": "Räder:",
-  "settingsLiveActivityUpdate": "Uppdatera poäng",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "Tar bort den lokala förhandsgranskningen.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Avsluta testaktivitet",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "todoExplanationRaids": "Vikt på 5 poäng per konto (eller 6 om den sista attacken har låsts upp), 1 attack = 1 poäng.",
-  "settingsLiveActivityTest": "Liveaktivitetstest",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStartSubtitle": "Visar en lokal förhandsvisning av klankrig.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Avancerar den falska krigspoängen.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "todoMockWarAltStatus": "Aktiv för 18m sedan · krig och räder behöver uppmärksamhet",
-  "todoRaidAttacks": "Razziattacker",
-  "todoMockRaid4Left": "4 kvar",
-  "playerOptionNotificationsEnableMaster": "Aktivera först aviseringar i Inställningar.",
-  "playerOptionNotificationsVerifyFirst": "Verifiera kontot för att aktivera aviseringar.",
-  "playerOptionNotificationsSubscriptionRequired": "En prenumeration krävs för bokmärkesaviseringar.",
-  "playerOptionNotificationsLimitReached": "Du har nått gränsen för bokmärkesaviseringar.",
-  "notifGroupLegendAttacks": "Attacker i Legend I",
-  "notifLegendAttacksDescription": "Attackresultat för bokmärkta konton med aviseringar aktiverade i Legend I.",
-  "notifGroupLegendDefenses": "Försvar i Legend I",
-  "notifLegendDefensesDescription": "Försvarsresultat för konton med aviseringar aktiverade i Legend I.",
-  "farmGoalTitle": "Farmningsmål",
-  "farmGoalFormTitle": "Resurser att farma",
-  "farmGoalAccountHint": "Det valda kontot anger rådhus och aktuell liga för uppskattningen.",
-  "farmGoalTargetTitle": "Byggnad att uppgradera",
-  "farmGoalTargetBuildingLabel": "Byggnad",
-  "farmGoalChooseBuilding": "Välj en byggnad",
-  "farmGoalTargetLevelLabel": "Målnivå",
-  "farmGoalCostUnavailable": "Uppgraderingskostnaden är inte tillgänglig för den här nivån.",
-  "farmGoalLootTitle": "Uppskattat byte",
-  "farmGoalAmountLabel": "Mängd att farma",
   "farmGoalStarBonusEstimate": "Stjärnbonus: {amount} {resource} efter 5 stjärnor. Den ingår inte i antalet attacker som behövs.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4116,7 +4072,82 @@
   "farmGoalAttackShort": "attack",
   "farmGoalScenarioHint": "Uppskattning: bytet varierar med förstörda byggnader. Procentsatserna tillämpas på uppskattningen för en perfekt attack.",
   "farmGoalNoLeagueLoot": "Välj ett konto med en liga för att få ett bytesförslag.",
+  "farmGoalTrackerNextTitle": "Nästa i Upgrade Tracker-planen",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker-data behövs",
+  "farmGoalTrackerMissingBody": "Importera kontots uppgraderings-JSON i Upgrade Tracker för att visa nästa planerade byggnad och den exakta kostnaden här.",
+  "farmGoalTrackerPlanComplete": "Inga återstående byggnadsuppgraderingar hittades i Upgrade Tracker. Du kan fortfarande välja en byggnad manuellt.",
+  "farmGoalOpenUpgradeTracker": "Öppna Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Använd byggnad",
+  "farmGoalMissingTarget": "Välj en byggnad och en målnivå för att beräkna de nödvändiga attackerna.",
+  "farmGoalMissingValues": "Ange ett mål och en uppskattning av bytet från en perfekt attack för att se attackscenarierna.",
+  "farmGoalResultTitle": "Nödvändiga attacker",
   "farmGoalAttacks": "attacker",
+  "farmGoalResultSummary": "{target} {resource} med ungefär {average} per perfekt attack.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "RH{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Skaparkod: ClashKing",
+  "todoExplanationRaidsTitle": "Räder:",
+  "todoExplanationRaids": "Vikt på 5 poäng per konto (eller 6 om den sista attacken har låsts upp), 1 attack = 1 poäng.",
+  "clanWarFrequencyTitle": "Krig",
+  "notifScopeAllAccounts": "Alla konton",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "Liveaktivitetstest",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "Starta testaktivitet",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "Visar en lokal förhandsvisning av klankrig.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "Uppdatera poäng",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "Avancerar den falska krigspoängen.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "Avsluta testaktivitet",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "Tar bort den lokala förhandsgranskningen.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "Valda konton",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Filter",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "dashboardUpgradeTrackerAccounts": "{loaded}/{total} konton spåras",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
@@ -4131,12 +4162,14 @@
   "calculatorsModeDamage": "Skada",
   "calculatorsModeFarmGoal": "Farmningsmål",
   "damageCalculatorTitle": "Skadekalkylator",
+  "damageAccountPresetShort": "Konto",
   "damageChooseAccount": "Välj ett konto",
   "damageSwitchAccount": "Byt konto",
   "damageAccountSelectorHint": "Nivåerna som används följer det valda kontot.",
   "damageNoAccountsAvailable": "Inget verifierat konto är tillgängligt",
   "damageTargetSectionTitle": "Byggnad att förstöra",
   "damageChooseTarget": "Välj en byggnad",
+  "damageNoTargetTitle": "Ingen byggnad vald",
   "damageNoTargetBody": "Välj en byggnad för att se hur mycket skada den tål.",
   "damageTargetLevelLabel": "Målnivå",
   "damageCommonBuildings": "Vanligast valda",
@@ -4147,6 +4180,7 @@
   "damageQuickSetupGiantArrow": "Jättepil",
   "damageQuickSetupFlameFlinger": "Flamkastare",
   "damageQuickSetupCustom": "Anpassad",
+  "damageClearStack": "Rensa",
   "damageNoDamageSelected": "Ingen skada",
   "damageSelectedSourcesCount": "{count} källor",
   "@damageSelectedSourcesCount": {
@@ -4160,6 +4194,11 @@
   "damageOtherSources": "Andra källor",
   "damageShowAllSources": "Lägg till en annan källa",
   "damageShowFewerSources": "Dölj andra källor",
+  "searchCancel": "Avboka",
+  "todoRaidAttacks": "Razziattacker",
+  "todoMockRaid4Left": "4 kvar",
+  "todoMockWarAltStatus": "Aktiv för 18m sedan · krig och räder behöver uppmärksamhet",
+  "todoMockRaid1Left": "1 kvar",
   "gameAssetsCategoryBuildings": "Byggnader",
   "gameAssetsCategoryCapitalBase": "Huvudstadsbas",
   "gameAssetsCategoryCapitalHouseParts": "Delar till huvudstadshus",
@@ -4167,9 +4206,21 @@
   "gameAssetsCategoryClanLabels": "Klanetiketter",
   "gameAssetsCategoryCountryFlags": "Landsflaggor",
   "gameAssetsCategoryDecorations": "Dekorationer",
+  "gameAssetsCategoryEquipment": "Utrustning",
   "gameAssetsCategoryGuardians": "Väktare",
+  "gameAssetsCategoryHeroes": "Hjältar",
+  "gameAssetsCategoryPets": "Husdjur",
   "gameAssetsCategorySkins": "Utseenden",
+  "gameAssetsCategorySpells": "Besvärjelser",
+  "gameAssetsCategoryTroops": "Trupper",
+  "assetFolderTroops": "Trupper",
+  "assetFolderSpells": "Besvärjelser",
+  "assetFolderHeroes": "Hjältar",
+  "endpointStateWins": "Segrar",
+  "notifGroupBattles": "Strider",
+  "notifGroupSupport": "Stöd",
   "rankedLeagueAccountSelector": "Visat konto",
+  "rankedLeagueStars": "Stjärnor",
   "playerBattlelogTab": "Battles",
   "playerActivityTab": "Activity",
   "playerBattlelogFarming": "Farming",
@@ -4180,7 +4231,9 @@
   "playerBattlelogBattleCount": "{count} battles",
   "@playerBattlelogBattleCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "playerBattlelogAttacks": "Attacks",
@@ -4192,7 +4245,9 @@
   "playerBattlelogUsedInAttacks": "Used in {count} attacks",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "playerBattlelogAttack": "Attack",
@@ -4200,7 +4255,9 @@
   "playerBattlelogOpponent": "Against {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerBattlelogNoBattlesTitle": "No battles found",
@@ -4219,46 +4276,64 @@
   "playerActivityItemUpgraded": "{name} upgraded",
   "@playerActivityItemUpgraded": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivitySuperTroopBoosted": "{name} boosted",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivityItemUnlocked": "{name} unlocked",
   "@playerActivityItemUnlocked": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivityNameChanged": "Name changed",
   "playerActivityLevelChange": "Level {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
-      "from": {"type": "int"},
-      "to": {"type": "int"}
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
     }
   },
   "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
-      "level": {"type": "int"}
+      "level": {
+        "type": "int"
+      }
     }
   },
   "playerActivityBoostedAtLevel": "Boosted at level {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
-      "level": {"type": "int"}
+      "level": {
+        "type": "int"
+      }
     }
   },
   "playerActivityNameChangeDetail": "{from} → {to}",
   "@playerActivityNameChangeDetail": {
     "placeholders": {
-      "from": {"type": "String"},
-      "to": {"type": "String"}
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   }
 }

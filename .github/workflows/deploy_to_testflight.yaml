@@ -93,11 +93,31 @@ jobs:
               EXTERNAL_TESTING="true"
             fi
           fi
+
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            BUILD_VERSION="${{ github.event.inputs.version }}"
+          else
+            BUILD_VERSION=${GITHUB_REF#refs/tags/}
+          fi
+
+          if [[ "$BUILD_VERSION" == *"alpha"* ]]; then
+            CK_API_ENV="development"
+          elif [[ "$BUILD_VERSION" == *"beta"* ]] || \
+               [ "$TESTFLIGHT_TRACK" == "external" ]; then
+            CK_API_ENV="staging"
+          else
+            CK_API_ENV="production"
+          fi
+          API_DART_DEFINES=$(printf 'CK_API_ENV=%s' "$CK_API_ENV" | base64 | tr -d '\n')
+
           echo "TESTFLIGHT_TRACK=$TESTFLIGHT_TRACK" >> $GITHUB_OUTPUT
           echo "EXTERNAL_TESTING=$EXTERNAL_TESTING" >> $GITHUB_OUTPUT
           echo "TESTFLIGHT_TRACK=$TESTFLIGHT_TRACK" >> $GITHUB_ENV
           echo "EXTERNAL_TESTING=$EXTERNAL_TESTING" >> $GITHUB_ENV
+          echo "CK_API_ENV=$CK_API_ENV" >> $GITHUB_ENV
+          echo "API_DART_DEFINES=$API_DART_DEFINES" >> $GITHUB_ENV
           echo "Selected TestFlight track: $TESTFLIGHT_TRACK"
+          echo "Selected API environment: $CK_API_ENV"
 
       - name: Setup Xcode signing
         run: |
@@ -187,6 +207,7 @@ jobs:
             -archivePath build/Runner.xcarchive \
             CURRENT_PROJECT_VERSION=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
             MARKETING_VERSION=${{ steps.extract_version.outputs.VERSION_NAME }} \
+            DART_DEFINES="$API_DART_DEFINES" \
             archive
 
       - name: Export IPA

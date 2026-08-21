@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "Аккаунт успешно подтверждён!",
   "generalRetry": "Повторить",
   "generalRetrying": "Повторная попытка...",
+  "postsTitle": "Публикации",
+  "postsDescription": "Новости ClashKing, материалы об обновлениях и прошлые объявления.",
+  "postsEmpty": "Пока нет опубликованных материалов.",
+  "postsLoadFailed": "Не удалось загрузить публикации.",
+  "postsLoadMore": "Показать ещё",
+  "postsCurrent": "Актуальные",
+  "postsPast": "Архив",
+  "postsStory": "История с интерактивом",
+  "postsPinned": "Избранное",
   "generalTryAgain": "Попробовать снова",
   "generalReset": "Сбросить",
   "generalCancel": "Отмена",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "Фильтры",
+  "generalExpand": "Расширять",
+  "generalCollapse": "Крах",
   "generalNotSet": "Не установлено",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "Закладка",
+  "generalRemoveBookmark": "Удалить закладку",
   "generalClearFilters": "Очистить фильтры",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "Привязать email-аккаунт",
   "authAccountAddEmailAuth": "Добавьте вход по email и паролю для дополнительной безопасности аккаунта.",
   "authAccountEmailLinkedSuccess": "Email-аккаунт успешно привязан!",
+  "authAccountLinkDiscord": "Подключить учётную запись Discord",
+  "authAccountAddDiscordAuth": "Подключите вход через Discord, чтобы синхронизировать данные между платформами и пользоваться ботом ClashKing.",
+  "authAccountDiscordLinkedSuccess": "Учётная запись Discord подключена!",
   "authEmailVerificationTitle": "Подтверждение email",
   "authEmailVerificationCheckEmail": "Проверьте почту",
   "authEmailVerificationSentTo": "Мы отправили письмо подтверждения на:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "Уровень опыта",
+  "gameLeague": "Лига",
   "gameTrophies": "Трофеи",
   "gameBuilderBaseTrophies": "Трофеи ДС",
   "gameDonations": "Пожертвования",
@@ -484,6 +501,11 @@
   "clanNone": "Без клана",
   "clanJoinToUnlock": "Присоединитесь к Клану для разблокировки новых функций.",
   "clanMembers": "Участники",
+  "clanMembersSearchPlaceholder": "Поиск участников",
+  "clanMembersShowTotals": "Показать итоги клана",
+  "clanMembersHideTotals": "Скрыть итоги клана",
+  "clanMembersReceivedShort": "Полученный",
+  "clanMembersAverageTh": "Среднее число чехов",
   "clanMinimumMembers": "Минимум участников",
   "clanMaximumMembers": "Максимум участников",
   "clanLocation": "Расположение",
@@ -839,6 +861,7 @@
   "warLeague": "Война/Лига",
   "warHistory": "История войн",
   "warLog": "Журнал войн",
+  "warLogSearchPlaceholder": "Поиск войн",
   "warLogClosed": "Журнал войн {clan} закрыт.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "Статистика войны",
+  "warStatsSearchPlaceholder": "Поиск игроков",
+  "warStatsCurrentTownHall": "мой ТД",
+  "warStatsLast50": "Последние 50",
+  "warStatsWars": "Войны",
+  "warStatsSelectSeason": "Выберите сезон военной статистики",
   "warOngoing": "Идёт война",
   "warIsNotInWar": "{clan} не участвует в войне.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "Чтобы выиграть",
+  "warAnalysisToLose": "Потерять",
+  "warAnalysisNoAttacksLeft": "Нападений не осталось",
+  "warAnalysisScenario": "{attacks} атакует влево -> нужны звезды {stars} / {percent}% за атаку",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} атакует влево -> невозможно (звезды {stars} / {percent}% за атаку)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "Поражение {clanName} уже невозможно",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "Гарантировано",
   "warAnalysisAlreadySecured": "Уже гарантировано",
   "warAnalysisSecureAgainst": "Расчёт цели предполагает, что {clanName} проведёт все оставшиеся атаки.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "Математически гарантировать результат нельзя, если {clanName} оптимально проведёт все оставшиеся атаки.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "Оставшихся атак недостаточно, чтобы гарантировать результат",
   "warAnalysisStarGoal": "+{stars} зв.",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "Доступно атак: {attacks}",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "Улучшить результат уже невозможно",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "% нужно всего",
   "warCalculatorCalculate": "Рассчитать",
   "warAttacksTitle": "Атаки",
+  "warAttacksSuccessful": "Успешные атаки",
+  "warAttacksFailed": "Неудачные атаки",
   "warAttacksNone": "Атак пока нет",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "Лучшие атаки",
   "warAttacksCount": "Количество атак",
   "warAttacksMissed": "Пропущенные атаки",
+  "warAttacksMissedShort": "Пропущенный",
   "warAttacksNumber": "Вы атаковали {number_time} раз(а) за последние {number_war} войн.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "Лига войн кланов",
   "cwlClanWarLeague": "Лига войн кланов",
   "cwlOngoing": "Текущая CWL",
+  "cwlHistoryTitle": "История CWL",
+  "clanJoinLeaveTab": "Присоединиться/Выйти",
+  "clanRankingsTab": "Рейтинги",
+  "clanRankingsSeason": "Сезон",
+  "clanRankingsSelectSeason": "Выберите рейтинговый сезон",
+  "clanRankingsFilterActivity": "Активность",
+  "clanRankingsFilterWar": "Война",
+  "clanRankingsFilterPoints": "Очки",
+  "cwlHistoryPreviewBadge": "Предварительный просмотр",
+  "cwlHistoryPreviewSubtitle": "Макет {clan} до исправления конечной точки CWL.",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Истории CWL пока нет",
+  "cwlHistoryEmptyBody": "Этот клан еще не участвовал в сезоне Лиги Войн Кланов.",
+  "cwlRankTitle": "Классифицировать",
+  "cwlWarsPlayedTitle": "Войны сыграны",
+  "playerWarStarsTitle": "Звезды войны",
+  "playerWarPreferenceTitle": "Военный преф.",
+  "playerDonatedTitle": "Пожертвовано",
+  "playerReceivedTitle": "Полученный",
+  "playerCapitalTitle": "Капитал",
+  "playerExpLevelTitle": "Эксп. уровень",
+  "clanWarWinsTitle": "Война побеждает",
+  "clanWinStreakTitle": "Победная серия",
+  "clanBuilderBaseTitle": "База застройщиков",
+  "clanTypeTitle": "Тип",
+  "clanMinTownHallTitle": "Мин. ТД",
+  "clanMinTrophiesTitle": "Мин. трофеи",
+  "clanCapitalHallTitle": "Столичный зал",
+  "clanDistrictsTitle": "Районы",
+  "legendsCountryTitle": "Страна",
+  "legendsLocalRankTitle": "Местный ранг",
+  "legendsGlobalRankTitle": "Глобальный рейтинг",
+  "warWinsTitle": "Победы",
+  "warLossesTitle": "Потери",
+  "warDrawsTitle": "Ничьи",
   "cwlRounds": "Раунды",
   "cwlRoundNumber": "Раунд {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "Текущие рейды",
   "raidsDistrictsDestroyed": "Разрушено районов",
   "raidsCompleted": "Рейды завершены",
+  "capitalRaidStatusOngoing": "Непрерывный",
+  "capitalRaidStatusEnded": "Закончено",
+  "capitalRaidLoot": "Лут",
+  "capitalRaidRewards": "Награды",
+  "capitalRaidPreviousWeek": "Предыдущая неделя",
+  "capitalRaidNextWeek": "На следующей неделе",
+  "capitalRaidFilterAttacked": "Атакованный",
+  "capitalRaidFilterNotAttacked": "Не атакован",
+  "capitalRaidFilterLinked": "Связанные аккаунты",
+  "capitalRaidEmptyTitle": "Нет данных о рейде столицы",
+  "capitalRaidEmptyBody": "История рейдов появится здесь, как только будут отслежены выходные рейдов на столицу этого клана.",
+  "capitalRaidEstimated": "Оцененный",
+  "capitalRaidEstimatedTooltip": "Пока не официально: оценки основаны на журналах атак и защиты за эту неделю. Supercell публикует реальное количество медалей после завершения рейда.",
+  "capitalRaidTrophyPrediction": "Прогнозируемые трофеи",
+  "capitalRaidTrophyPredictionTooltip": "Предполагаемые трофеи Столичной лиги после этого рейда, основанные на результатах на этой неделе. Не официально.",
+  "capitalRaidProjectedLoot": "Прогнозируемая добыча",
+  "capitalRaidOneshots": "Одиночные выстрелы",
+  "capitalRaidFails": "Не удалось",
+  "capitalDetailsOffense": "Нарушение",
+  "capitalDetailsDefense": "Оборона",
+  "capitalDistrictsSection": "Районы",
+  "capitalOpponentsSection": "Оппоненты",
+  "capitalAvgAttacksPerDistrict": "Среднее количество атак/район",
+  "capitalAvgLootPerAttack": "Среднее количество добычи/атаки",
+  "capitalHistorySection": "История рейдов",
+  "capitalHistoryWeeksTracked": "Недели отслеживаются",
+  "capitalAvgLootPerWeek": "Средняя добыча в неделю",
+  "capitalAvgAttacksPerWeek": "Среднее число атак в неделю",
+  "capitalBestRaid": "Лучший рейд",
+  "capitalWorstRaid": "Худший рейд",
+  "capitalHistoryChartTitle": "Еженедельный тренд",
   "searchNoResult": "Нет результатов.",
   "maintenanceTitle": "Техническое обслуживание",
   "maintenanceDescription": "В Clash of Clans сейчас техническое обслуживание, поэтому мы не можем получить доступ к API. Загляните позже.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "Ежедневное отслеживание трофеев и статистика конца сезона",
   "faqFeaturesCwlTitle": "Аналитика CWL",
   "faqFeaturesCwlDescription": "Результаты Лиги войн кланов и вклад участников",
+  "faqFeaturesTodoTitle": "Список задач",
+  "faqFeaturesTodoDescription": "Проверяйте, каким аккаунтам ещё нужны рейтинговые атаки, рейды, атаки на войне, Игры кланов или действия сезонного пропуска",
+  "faqFeaturesUpgradeTrackerTitle": "Отслеживание улучшений",
+  "faqFeaturesUpgradeTrackerDescription": "Загрузите предоставленный пользователем снимок аккаунта, чтобы увидеть оставшиеся улучшения и ресурсы, занятость строителей и лаборатории, а также общий прогресс",
+  "faqFeaturesNotificationsTitle": "Мгновенные уведомления",
+  "faqFeaturesNotificationsDescription": "Укажите аккаунты, для которых нужно получать оповещения о поддерживаемых событиях ClashKing",
+  "faqFeaturesWidgetsTitle": "Военные виджеты",
+  "faqFeaturesWidgetsDescription": "Следите за текущим состоянием войны прямо на главном экране устройств, поддерживающих виджеты",
   "faqSearchHint": "Поиск в FAQ...",
   "faqSectionGettingStarted": "Начало работы и о проекте",
+  "faqSectionAccountsAlertsWidgets": "Аккаунты, уведомления и виджеты",
   "faqSectionSupportAndContact": "Поддержка и контакты",
+  "faqLinkedAccountsTitle": "Как устроены привязка и подтверждение аккаунтов?",
+  "faqLinkedAccountsAnswer": "К профилю ClashKing можно добавить несколько аккаунтов Clash of Clans. После добавления тега становятся видны общедоступные данные. Подтверждение токеном API Clash of Clans доказывает, что аккаунт принадлежит вам, и открывает персональные функции.",
+  "faqLinkedAccountsSolution1": "В разделе управления аккаунтами их можно упорядочивать, скрывать и удалять.",
+  "faqLinkedAccountsSolution2": "Токен API находится в Clash of Clans: «Настройки» > «Дополнительные настройки» > «Токен API».",
+  "faqLinkedAccountsSolution3": "Войти можно через Discord или электронную почту. Доступные привязки аккаунта настраиваются в разделе «Настройки».",
+  "faqNotificationsTitle": "Как устроены уведомления?",
+  "faqNotificationsAnswer": "Уведомления можно не включать. После включения ClashKing регистрирует это устройство, а вы выбираете связанные аккаунты для каждого типа оповещений.",
+  "faqNotificationsSolution1": "Разрешите уведомления и в настройках устройства, и в настройках ClashKing.",
+  "faqNotificationsSolution2": "Для разных оповещений можно выбрать разные аккаунты. Если оповещение не приходит, проверьте выбранные аккаунты.",
+  "faqNotificationsSolution3": "Некоторые оповещения используют отслеживаемые сведения о клане или войне, поэтому при обновлении внешних данных возможна задержка.",
+  "faqWidgetsTitle": "Как устроены виджеты войны?",
+  "faqWidgetsAnswer": "На поддерживаемых устройствах военный виджет показывает краткую сводку. Он использует выбранные или связанные аккаунты, кэш ClashKing и фоновое обновление, когда система его разрешает.",
+  "faqWidgetsSolution1": "После смены аккаунта или клана откройте приложение, чтобы синхронизировать виджет.",
+  "faqWidgetsSolution2": "Если данные виджета устарели, сначала обновите приложение. Android и iOS ограничивают частоту фоновых обновлений.",
+  "faqWidgetsSolution3": "Чтобы виджет показывал состояние войны, приложению нужен доступ к военным данным клана.",
   "faqTranslationIssue": "Перевод отсутствует или неверен?",
   "faqTranslationIssueAnswer": "Переводы сначала создаются с помощью генеративных и AI-инструментов, а затем со временем проверяются и улучшаются. Если вы носитель языка и текст звучит неестественно, вы можете предложить исправление на Crowdin или связаться с нами в Discord или по email.",
   "faqWaysToSupport": "Способы поддержать нас:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "Порядок атаки",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Продолжительность",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "Атакующий",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "Скорость атаки",
   "gameItemAttackRange": "Дальность атаки",
   "gameItemMovementSpeed": "Скорость передвижения",
+  "gameItemWardenWeight": "Вес Стража",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Вес определяет, насколько охотно Великий Страж следует за группой бойцов, и может иметь приоритет над занимаемым местом.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Приоритет Целительницы",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "При выборе цели Целительницы могут учитывать этот вес раньше, чем занимаемое бойцами место.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 боец для порога следования} other{{count} бойцов для порога следования}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Не учитывается при расчёте порога следования",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "Ресурс улучшения",
   "gameItemRarity": "Редкость",
   "gameItemHero": "Герой",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "Летающий",
   "gameItemUpgradeCost": "Стоимость улучшения",
   "gameItemUpgradeTime": "Время улучшения",
-  "generalExpand": "Расширять",
-  "generalCollapse": "Крах",
-  "generalBookmark": "Закладка",
-  "generalRemoveBookmark": "Удалить закладку",
-  "gameLeague": "Лига",
-  "clanMembersSearchPlaceholder": "Поиск участников",
-  "clanMembersShowTotals": "Показать итоги клана",
-  "clanMembersHideTotals": "Скрыть итоги клана",
-  "clanMembersReceivedShort": "Полученный",
-  "clanMembersAverageTh": "Среднее число чехов",
-  "warLogSearchPlaceholder": "Поиск войн",
-  "warStatsSearchPlaceholder": "Поиск игроков",
-  "warStatsCurrentTownHall": "мой ТД",
-  "warStatsLast50": "Последние 50",
-  "warStatsWars": "Войны",
-  "warStatsSelectSeason": "Выберите сезон военной статистики",
-  "warAnalysisToWin": "Чтобы выиграть",
-  "warAnalysisToLose": "Потерять",
-  "warAnalysisNoAttacksLeft": "Нападений не осталось",
-  "warAnalysisScenario": "{attacks} атакует влево -> нужны звезды {stars} / {percent}% за атаку",
-  "warAnalysisImpossibleScenario": "{attacks} атакует влево -> невозможно (звезды {stars} / {percent}% за атаку)",
-  "warAttacksSuccessful": "Успешные атаки",
-  "warAttacksFailed": "Неудачные атаки",
-  "warAttacksMissedShort": "Пропущенный",
-  "cwlHistoryTitle": "История CWL",
-  "clanJoinLeaveTab": "Присоединиться/Выйти",
-  "clanRankingsTab": "Рейтинги",
-  "clanRankingsSeason": "Сезон",
-  "clanRankingsSelectSeason": "Выберите рейтинговый сезон",
-  "clanRankingsFilterActivity": "Активность",
-  "clanRankingsFilterWar": "Война",
-  "clanRankingsFilterPoints": "Очки",
-  "cwlHistoryPreviewBadge": "Предварительный просмотр",
-  "cwlHistoryPreviewSubtitle": "Макет {clan} до исправления конечной точки CWL.",
-  "cwlHistoryEmptyTitle": "Истории CWL пока нет",
-  "cwlHistoryEmptyBody": "Этот клан еще не участвовал в сезоне Лиги Войн Кланов.",
-  "cwlRankTitle": "Классифицировать",
-  "cwlWarsPlayedTitle": "Войны сыграны",
-  "playerWarStarsTitle": "Звезды войны",
-  "playerWarPreferenceTitle": "Военный преф.",
-  "playerDonatedTitle": "Пожертвовано",
-  "playerReceivedTitle": "Полученный",
-  "playerCapitalTitle": "Капитал",
-  "playerExpLevelTitle": "Эксп. уровень",
-  "clanWarWinsTitle": "Война побеждает",
-  "clanWinStreakTitle": "Победная серия",
-  "clanBuilderBaseTitle": "База застройщиков",
-  "clanTypeTitle": "Тип",
-  "clanMinTownHallTitle": "Мин. ТД",
-  "clanMinTrophiesTitle": "Мин. трофеи",
-  "clanCapitalHallTitle": "Столичный зал",
-  "clanDistrictsTitle": "Районы",
-  "legendsCountryTitle": "Страна",
-  "legendsLocalRankTitle": "Местный ранг",
-  "legendsGlobalRankTitle": "Глобальный рейтинг",
-  "warWinsTitle": "Победы",
-  "warLossesTitle": "Потери",
-  "warDrawsTitle": "Ничьи",
-  "capitalRaidStatusOngoing": "Непрерывный",
-  "capitalRaidStatusEnded": "Закончено",
-  "capitalRaidLoot": "Лут",
-  "capitalRaidRewards": "Награды",
-  "capitalRaidPreviousWeek": "Предыдущая неделя",
-  "capitalRaidNextWeek": "На следующей неделе",
-  "capitalRaidFilterAttacked": "Атакованный",
-  "capitalRaidFilterNotAttacked": "Не атакован",
-  "capitalRaidFilterLinked": "Связанные аккаунты",
-  "capitalRaidEmptyTitle": "Нет данных о рейде столицы",
-  "capitalRaidEmptyBody": "История рейдов появится здесь, как только будут отслежены выходные рейдов на столицу этого клана.",
-  "capitalRaidEstimated": "Оцененный",
-  "capitalRaidEstimatedTooltip": "Пока не официально: оценки основаны на журналах атак и защиты за эту неделю. Supercell публикует реальное количество медалей после завершения рейда.",
-  "capitalRaidTrophyPrediction": "Прогнозируемые трофеи",
-  "capitalRaidTrophyPredictionTooltip": "Предполагаемые трофеи Столичной лиги после этого рейда, основанные на результатах на этой неделе. Не официально.",
-  "capitalRaidProjectedLoot": "Прогнозируемая добыча",
-  "capitalRaidOneshots": "Одиночные выстрелы",
-  "capitalRaidFails": "Не удалось",
-  "capitalDetailsOffense": "Нарушение",
-  "capitalDetailsDefense": "Оборона",
-  "capitalDistrictsSection": "Районы",
-  "capitalOpponentsSection": "Оппоненты",
-  "capitalAvgAttacksPerDistrict": "Среднее количество атак/район",
-  "capitalAvgLootPerAttack": "Среднее количество добычи/атаки",
-  "capitalHistorySection": "История рейдов",
-  "capitalHistoryWeeksTracked": "Недели отслеживаются",
-  "capitalAvgLootPerWeek": "Средняя добыча в неделю",
-  "capitalAvgAttacksPerWeek": "Среднее число атак в неделю",
-  "capitalBestRaid": "Лучший рейд",
-  "capitalWorstRaid": "Худший рейд",
-  "capitalHistoryChartTitle": "Еженедельный тренд",
-  "warAttacksDetailsDuration": "Продолжительность",
   "gameItemRemainingToTownHallMax": "До ТН макс.",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "До глобального максимума",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "Уровень {count} остался(а)",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "Обзор",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "Статистика",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "Следующее обновление",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "План обновления",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "Данные обновления недоступны",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "Выбрано",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Предпочтения",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Уведомления",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Выбирайте оповещения и отправляйте предварительные просмотры локальных тестов.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "Поддерживать",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "О",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Счет",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Вошёл в систему",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Появление",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Система",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Сопоставить это устройство",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Свет",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Темный",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Выбрано",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Связанные аккаунты пока не загружены.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Аккаунты не выбраны",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Выбраны аккаунты {count}.",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "Недавний",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Игроки",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Кланы",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "Прозрачный",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Данные успешно обновлены",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Не удалось обновить данные: {error}.",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "Не удалось загрузить отфильтрованные данные: {error}.",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "Не удалось экспортировать: {error}.",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "Игрок",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "Формат",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "Включает",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "Статистика, атаки, анализ TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "Нет доступных пользовательских данных",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "Счета",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "Не удалось загрузить данные игрока.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "Не удалось загрузить данные клана.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "Нет подходящих аккаунтов",
   "todoNoConfiguredAccounts": "Аккаунты дел не настроены",
   "todoNoLinkedAccounts": "Нет связанных аккаунтов",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "Для этого рейда нет списка игроков или отдельных атак.",
   "dashboardNoLinkedAccountsTitle": "Нет связанных аккаунтов",
   "dashboardNoLinkedAccountsBody": "Свяжите учетную запись Clash, чтобы видеть здесь атаки, события и активность.",
+  "dashboardTodoHiddenTitle": "Нет аккаунтов для показа",
+  "dashboardTodoHiddenBody": "Чтобы аккаунт появился здесь, включите для него на вкладке «Игроки» одну из карточек главного экрана: задачи, улучшения или рейтинг.",
+  "dashboardUpgradeTrackerNoData": "Откройте раздел улучшений, чтобы импортировать или обновить сведения.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {нужно обновить данные} other {нужно обновить данные}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {есть невыполненные задачи} other {есть невыполненные задачи}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {доступны оставшиеся атаки} other {доступны оставшиеся атаки}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Расчётный срок",
+  "dashboardUpgradeTrackerBuilders": "Строители сейчас",
+  "dashboardUpgradeTrackerLab": "Исследования",
+  "dashboardUpgradeTrackerPets": "Питомцы",
+  "dashboardUpgradeTrackerWalls": "Улучшение стен",
+  "dashboardUpgradeTrackerVillage": "Поселение",
+  "dashboardRankedNoData": "Откройте рейтинговую лигу, чтобы посмотреть положение этого аккаунта.",
+  "dashboardRankedAccounts": "Отслеживается аккаунтов: {loaded}/{total}",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "Игроков в закладках пока нет",
   "playersNoBookmarkedBody": "Откройте профиль игрока и сохраните его на будущее.",
   "playersNoLinkedBody": "Управляйте учетными записями с экрана настройки учетной записи.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "Рассчитайте урон с учётом текущих уровней зданий.",
   "calculatorZapQuake": "Землетрясение",
   "calculatorFireball": "Огненный шар",
+  "damageCalculatorSubtitle": "Сопоставьте набор средств атаки сразу с несколькими зданиями.",
+  "damageNoStaticDataTitle": "Сведения об уроне недоступны",
+  "damageNoStaticDataBody": "Обновите приложение после окончания загрузки статических данных игры.",
+  "damageTownHall": "Уровень ратуши",
+  "damageVerifiedAccountPrefill": "Набор из подтверждённого аккаунта",
+  "damageOverridesStayLocal": "Эти изменения не повлияют на аккаунт игрока.",
+  "damageTargets": "Целевые здания",
+  "damageAddBuilding": "Добавить цель",
+  "damageRemoveBuilding": "Убрать здание",
+  "damageNoTargetsBody": "Для сравнения добавьте хотя бы одно здание.",
+  "damageHitpoints": "Запас здоровья: {hitpoints}",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Найти здание",
+  "damageNoBuildingsFound": "Подходящих зданий нет",
+  "damageTryAnotherSearch": "Введите другое название или выберите иной уровень ратуши.",
+  "damageAttackStack": "Состав атаки вручную",
+  "damageNoSourcesForTownHall": "На этом уровне ратуши нет доступных источников урона.",
+  "damageCount": "Количество",
+  "damagePerUse": "Урон за применение: {damage}",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% максимального здоровья; эффект ослабевает при повторном применении",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Заклинание Молнии",
+  "damageSourceEarthquake": "Заклинание Землетрясения",
+  "damageSourceGiantArrow": "Гигантская Стрела",
+  "damageSourceFireball": "Огненный Шар",
+  "damageSourceFlameFlinger": "Попадание Огнемётчика",
+  "damageSourceBalloonDeath": "Урон при гибели Шара",
+  "damageSourceRocketBalloonDeath": "Урон при гибели Ракетного Шара",
+  "damageResults": "Итог",
+  "damageDestroyed": "Уничтожено",
+  "damageSurvives": "Уцелеет",
+  "damageResultSummary": "Урон: {damage} · останется здоровья: {remaining}",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Подбор Молний и Землетрясений",
+  "damageSpellCapacity": "Вместимость заклинаний",
+  "damageZapQuakeUnavailable": "На этом уровне ратуши заклинания Молнии и Землетрясения недоступны.",
+  "damageZapQuakeUsesSelectedLevels": "Расчёт для Молнии {lightningLevel}-го уровня и Землетрясения {earthquakeLevel}-го уровня.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Молния и Землетрясение не наносят урон этому хранилищу.",
+  "damageNoValidZapQuake": "В выбранную вместимость не помещается ни одна подходящая комбинация.",
+  "damageZapQuakeCombination": "Молнии: {lightning} + Землетрясения: {earthquake} · мест: {capacity}",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "Обновление трекера",
   "upgradeTrackerSubtitle": "Оставшаяся стоимость и время обновления.",
   "linkedAccountLabel": "Связанный аккаунт",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Добавьте или обновите связанные учетные записи, чтобы увидеть общее количество обновлений.",
   "playerOptionNotificationsTitle": "Уведомления",
   "playerOptionNotificationsSubtitle": "Получайте оповещения для этого аккаунта.",
+  "playerOptionNotificationsEnableMaster": "Сначала разрешите уведомления в настройках.",
+  "playerOptionNotificationsVerifyFirst": "Чтобы включить уведомления, подтвердите этот аккаунт.",
+  "playerOptionNotificationsSubscriptionRequired": "Уведомления для закладок доступны по подписке.",
+  "playerOptionNotificationsLimitReached": "Вы использовали все доступные уведомления для закладок.",
   "playerOptionShowTodoPageTitle": "Показать на странице дел",
   "playerOptionShowTodoPageSubtitle": "Включите эту учетную запись в полный список дел.",
+  "playerOptionShowTodoPageVerifyFirst": "Подтвердите аккаунт, чтобы показывать его в списке задач.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Показывать улучшения на главном экране",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Закрепить на главном экране сводку улучшений этого аккаунта.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Подтвердите аккаунт, чтобы видеть прогресс улучшений на главном экране.",
+  "playerOptionShowRankedHomeTitle": "Показывать рейтинг на главном экране",
+  "playerOptionShowRankedHomeSubtitle": "Закрепить на главном экране сводку рейтинговой лиги этого аккаунта.",
+  "playerOptionShowRankedHomeVerifyFirst": "Подтвердите аккаунт, чтобы видеть сводку рейтинговой лиги на главном экране.",
   "playerOptionShowWarTabTitle": "Показать на вкладке «Война»",
   "playerOptionShowWarTabSubtitle": "Включите клан этого аккаунта во вкладку «Война».",
   "bookmarkPlayerLoadFailed": "Не удалось загрузить плеер, добавленный в закладки.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · нет открытых задач",
   "todoMockCaughtUpStatus": "Активен сегодня · никаких действий не требуется",
   "notifChooseAlerts": "Выберите оповещения",
+  "notifGroupLegendAttacks": "Атаки в Легенде I",
+  "notifLegendAttacksDescription": "Результаты атак в Легенде I для добавленных в закладки аккаунтов с разрешёнными уведомлениями.",
+  "notifGroupLegendDefenses": "Защиты в Легенде I",
+  "notifLegendDefensesDescription": "Результаты защит в Легенде I для аккаунтов с разрешёнными уведомлениями.",
   "notifLeagueDefenseDescription": "Результаты защиты с атакующим, звёздами, процентом и контекстом лиги.",
   "notifWarAttackOptionsDescription": "Результаты атак в войне, оповещения о защите и параметры ленты атак 5v5.",
   "notifWarAlertsDescription": "Подбор войны, начало дня битвы и завершение войны.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "Очки столицы",
   "todoAllAccounts": "Все аккаунты",
   "todoCombinedAcrossAccounts": "Общий список дел по вашим аккаунтам",
+  "dashboardRankedCombinedAcrossAccounts": "Общий рейтинг ваших аккаунтов",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Общий прогресс улучшений ваших аккаунтов",
   "todoPreviewAccount": "Предпросмотр аккаунта",
   "todoLastActiveUnavailable": "Последняя активность недоступна",
   "todoActiveRelative": "Активен {time}",
@@ -2516,9 +2961,115 @@
   "sideRankingsEmptyTitle": "Рейтинги не вернулись",
   "sideRankingsEmptyBody": "Попробуйте другую таблицу лидеров или локацию.",
   "sideRankingsMockups": "Макеты ClashKing",
+  "rankingsBuilderBase": "База строителя",
+  "rankingsTownHall": "Уровень ратуши",
+  "rankingsRankedLeague": "Лига рейтинговых боёв",
+  "rankingsClanCapital": "Рейтинг столицы клана",
+  "rankingsDonations": "По пожертвованиям",
+  "rankingsWarWins": "Победы в войнах",
+  "rankingsWinStreak": "Серия побед",
+  "rankingsCurrent": "Сейчас",
+  "rankingsWorldwide": "Весь мир",
+  "rankingsSelectLocation": "Выбрать регион",
+  "rankingsSearchLocations": "Поиск по названию или коду страны",
+  "rankingsWorldwideUnavailable": "Для этой таблицы выберите страну или регион.",
+  "rankingsLocationsLoadFailed": "Полный перечень регионов загрузить не удалось. Глобальный рейтинг остаётся доступен там, где он поддерживается.",
+  "rankingsSnapshotDate": "Дата сохранения",
+  "rankingsSource": "Источник данных",
+  "rankingsOfficialSource": "Официальные данные Clash API",
+  "rankingsResults": "Места в рейтинге",
+  "rankingsTopCount": "Первые {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Снимок не сохранён",
+  "rankingsNoSnapshotBody": "На дату {date} сохранённого рейтинга нет. Выберите другую дату или вернитесь к текущим данным.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Данные игрока загрузить не удалось.",
+  "rankingsClanLoadFailed": "Данные клана загрузить не удалось.",
   "sideStatsTitle": "Статистика",
   "sideStatsSubtitle": "Статистика таблиц лидеров из официальных поверхностей Clash API.",
   "sideStatsLoadError": "Не удалось загрузить боевую информацию.",
+  "statsOverview": "Обзор",
+  "statsArmies": "Армии",
+  "statsItems": "Предметы",
+  "statsWar": "Войны",
+  "statsCwl": "Лиги войн кланов",
+  "statsRanked": "Рейтинговые бои",
+  "statsDateRange": "Период",
+  "statsDateRangeHint": "Выберите до 90 дней",
+  "statsDateRangeTooLong": "Выберите диапазон дат 90 дней или меньше.",
+  "statsUpdated": "Свежие данные",
+  "statsNoDataTitle": "Данных о боях пока нет.",
+  "statsNoDataBody": "Попробуйте более широкий диапазон дат или менее строгие фильтры.",
+  "statsAddItemsTitle": "Выберите предметы для анализа",
+  "statsAddItemsBody": "Добавьте войска, заклинания, героев, питомцев или снаряжение, затем запустите запрос.",
+  "statsGlobalCounts": "Глобальное количество",
+  "statsPerformance": "Производительность",
+  "statsSamples": "Образцы",
+  "statsUsage": "Использование",
+  "statsAverageStars": "Среднее количество звёзд",
+  "statsAverageDestruction": "Среднее разрушение",
+  "statsStarRates": "Звездные рейтинги",
+  "statsThreeStarRate": "Три звезды",
+  "statsDailyTrend": "Ежедневный тренд",
+  "statsPlayers": "Игроки",
+  "statsClans": "Кланы",
+  "statsPlayersInWar": "Игроки на войне",
+  "statsClansInWar": "Кланы на войне",
+  "statsPlayersInLegends": "Игроки в Legends",
+  "statsWarsStored": "Сохраненные войны",
+  "statsJoinLeaves": "Присоединение/выход из событий",
+  "statsSearchArmies": "Поиск точных составов",
+  "statsExactComposition": "Точный состав",
+  "statsArmyShareCode": "Код доли армии",
+  "statsMinimumSample": "Минимальная выборка",
+  "statsSortBy": "Сортировка по",
+  "statsIncludeItems": "Включить предметы",
+  "statsExcludeItems": "Исключить предметы",
+  "statsItemId": "Идентификатор предмета или сохраненное имя",
+  "statsItemType": "Тип предмета",
+  "statsTroop": "Войска",
+  "statsSpell": "Заклинаниям",
+  "statsHero": "Героев",
+  "statsPet": "Питомцы",
+  "statsEquipment": "Оборудование",
+  "statsOwningHero": "Владелец героя",
+  "statsAddItem": "Добавить предмет",
+  "statsAnalyzeItems": "Анализ предметов",
+  "statsCompositionShare": "Доля состава",
+  "statsNoLevels": "Армейские записи не содержат уровней предметов.",
+  "statsRankedCompositionOnly": "Данные о составе взяты из рейтинговых журналов сражений; Показатели войны и CWL остаются отдельными.",
+  "statsTownHall": "Ратуша",
+  "statsOpponentTownHall": "Ратуша противника",
+  "statsEqualTownHalls": "Равные ратуши",
+  "statsLeagueTier": "Уровень лиги",
+  "statsLegendLeagueOne": "Лига легенд 1",
+  "statsCwlLeague": "Лига CWL",
+  "statsLeagueBronze": "Бронза",
+  "statsLeagueSilver": "Серебро",
+  "statsLeagueGold": "Золото",
+  "statsLeagueCrystal": "Кристалл",
+  "statsLeagueMaster": "Мастер",
+  "statsLeagueChampion": "Чемпион",
+  "statsAllCwlLeagues": "Все лиги CWL",
+  "statsCwlSeasons": "Сезоны CWL",
+  "statsCwlSeasonsHint": "ГГГГ-ММ, разделенные запятыми",
+  "statsApplyFilters": "Применить фильтры",
+  "statsRefresh": "Обновить статистику",
+  "statsRegularWarOnly": "Только обычные войны; Дружественные войны и CWL исключены.",
+  "statsRankedRequired": "Требуются Ратуша и один уровень лиги.",
+  "statsSeasonBreakdown": "Разбивка по сезонам",
   "sideTopScore": "Лучший результат",
   "sideTop200Avg": "Среднее топ-200",
   "sideBasesArmiesTitle": "Базы и армии",
@@ -2535,6 +3086,51 @@
   "sideArmyLinksBody": "Состав, заклинания, осадные машины, заметки и ссылка для обмена.",
   "sideGameAssetsTitle": "Игровые ресурсы",
   "sideGameAssetsSubtitle": "Размещённые ассеты ClashKing, сгруппированные по папкам.",
+  "gameAssetsLoadError": "Ошибка загрузки игровых материалов",
+  "gameAssetsEmptyTitle": "Игровые материалы отсутствуют",
+  "gameAssetsEmptyBody": "В опубликованном манифесте нет изображений поддерживаемого формата.",
+  "gameAssetsOneImage": "Изображений: 1",
+  "gameAssetsImageCount": "Изображений: {count}",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Поиск по категории",
+  "gameAssetsAllFormats": "Любой формат",
+  "gameAssetsOneResult": "Найдено: 1",
+  "gameAssetsResultCount": "Найдено: {count}",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Изображения не найдены",
+  "gameAssetsNoResultsBody": "Измените запрос или выберите другой формат.",
+  "gameAssetsLongPressHint": "Удерживайте, чтобы скопировать URL размещённого файла",
+  "gameAssetsCopyUrl": "Скопировать ссылку",
+  "gameAssetsCopyPath": "Скопировать расположение",
+  "gameAssetsUrlCopied": "Ссылка на материал скопирована.",
+  "gameAssetsPathCopied": "Путь к материалу скопирован.",
+  "gameAssetsCopyError": "Не получилось скопировать сведения о материале.",
+  "gameAssetsShare": "Отправить",
+  "gameAssetsShareError": "Этим материалом не получилось поделиться.",
+  "gameAssetsSave": "Скачать",
+  "gameAssetsSaving": "Идёт сохранение…",
+  "gameAssetsSaved": "Материал сохранён.",
+  "gameAssetsSavedTo": "Материал сохранён: {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Не получилось сохранить материал.",
   "sideZapQuakeTitle": "{zaps} молний + 1 землетрясение",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3473,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Политика фан-контента Supercell",
-  "notifAudienceSectionTitle": "Получатели уведомлений",
-  "notifScopeAllLinkedAccounts": "Все связанные аккаунты",
-  "notifScopeSelectedAccounts": "Выбранные аккаунты",
-  "notifAudienceSheetDescription": "Выберите, какие аккаунты могут получать уведомления на этом устройстве.",
-  "notifAudienceAllSubtitle": "{count} текущих аккаунтов. Будущие связанные аккаунты будут добавлены автоматически.",
-  "notifAudienceSelectedSubtitle": "{count} выбрано для уведомлений.",
-  "notifAudienceSelectedEmpty": "Выберите, какие именно аккаунты будут получать уведомления.",
-  "notifAudienceAllInlineNote": "Все, что вы свяжете позже, будет включено без изменения этой настройки.",
-  "notifAccountBookmarked": "В закладках",
-  "notifGroupLeagueBattles": "Бои лиги",
-  "notifGroupWarAttacks": "Атаки войны",
-  "notifGroupWarState": "Состояние войны",
-  "notifGroupWarReminders": "Напоминания о войне",
-  "notifGroupEvents": "События",
-  "notifGroupAppAnnouncements": "Объявления приложения",
-  "notifGroupUpgradeFinishes": "Завершенные улучшения",
-  "notifGroupMonthlySupport": "Ежемесячная поддержка",
-  "postsTitle": "Публикации",
-  "postsDescription": "Новости ClashKing, материалы об обновлениях и прошлые объявления.",
-  "postsEmpty": "Пока нет опубликованных материалов.",
-  "postsLoadFailed": "Не удалось загрузить публикации.",
-  "postsLoadMore": "Показать ещё",
-  "postsCurrent": "Актуальные",
-  "postsPast": "Архив",
-  "postsStory": "История с интерактивом",
-  "postsPinned": "Избранное",
-  "authAccountLinkDiscord": "Подключить учётную запись Discord",
-  "authAccountAddDiscordAuth": "Подключите вход через Discord, чтобы синхронизировать данные между платформами и пользоваться ботом ClashKing.",
-  "authAccountDiscordLinkedSuccess": "Учётная запись Discord подключена!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "Список задач",
-  "faqFeaturesTodoDescription": "Проверяйте, каким аккаунтам ещё нужны рейтинговые атаки, рейды, атаки на войне, Игры кланов или действия сезонного пропуска",
-  "faqFeaturesUpgradeTrackerTitle": "Отслеживание улучшений",
-  "faqFeaturesUpgradeTrackerDescription": "Загрузите предоставленный пользователем снимок аккаунта, чтобы увидеть оставшиеся улучшения и ресурсы, занятость строителей и лаборатории, а также общий прогресс",
-  "faqFeaturesNotificationsTitle": "Мгновенные уведомления",
-  "faqFeaturesNotificationsDescription": "Укажите аккаунты, для которых нужно получать оповещения о поддерживаемых событиях ClashKing",
-  "faqFeaturesWidgetsTitle": "Военные виджеты",
-  "faqFeaturesWidgetsDescription": "Следите за текущим состоянием войны прямо на главном экране устройств, поддерживающих виджеты",
-  "faqSectionAccountsAlertsWidgets": "Аккаунты, уведомления и виджеты",
-  "faqLinkedAccountsTitle": "Как устроены привязка и подтверждение аккаунтов?",
-  "faqLinkedAccountsAnswer": "К профилю ClashKing можно добавить несколько аккаунтов Clash of Clans. После добавления тега становятся видны общедоступные данные. Подтверждение токеном API Clash of Clans доказывает, что аккаунт принадлежит вам, и открывает персональные функции.",
-  "faqLinkedAccountsSolution1": "В разделе управления аккаунтами их можно упорядочивать, скрывать и удалять.",
-  "faqLinkedAccountsSolution2": "Токен API находится в Clash of Clans: «Настройки» > «Дополнительные настройки» > «Токен API».",
-  "faqLinkedAccountsSolution3": "Войти можно через Discord или электронную почту. Доступные привязки аккаунта настраиваются в разделе «Настройки».",
-  "faqNotificationsTitle": "Как устроены уведомления?",
-  "faqNotificationsAnswer": "Уведомления можно не включать. После включения ClashKing регистрирует это устройство, а вы выбираете связанные аккаунты для каждого типа оповещений.",
-  "faqNotificationsSolution1": "Разрешите уведомления и в настройках устройства, и в настройках ClashKing.",
-  "faqNotificationsSolution2": "Для разных оповещений можно выбрать разные аккаунты. Если оповещение не приходит, проверьте выбранные аккаунты.",
-  "faqNotificationsSolution3": "Некоторые оповещения используют отслеживаемые сведения о клане или войне, поэтому при обновлении внешних данных возможна задержка.",
-  "faqWidgetsTitle": "Как устроены виджеты войны?",
-  "faqWidgetsAnswer": "На поддерживаемых устройствах военный виджет показывает краткую сводку. Он использует выбранные или связанные аккаунты, кэш ClashKing и фоновое обновление, когда система его разрешает.",
-  "faqWidgetsSolution1": "После смены аккаунта или клана откройте приложение, чтобы синхронизировать виджет.",
-  "faqWidgetsSolution2": "Если данные виджета устарели, сначала обновите приложение. Android и iOS ограничивают частоту фоновых обновлений.",
-  "faqWidgetsSolution3": "Чтобы виджет показывал состояние войны, приложению нужен доступ к военным данным клана.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "Вес Стража",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "Вес определяет, насколько охотно Великий Страж следует за группой бойцов, и может иметь приоритет над занимаемым местом.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "Приоритет Целительницы",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "При выборе цели Целительницы могут учитывать этот вес раньше, чем занимаемое бойцами место.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 боец для порога следования} other{{count} бойцов для порога следования}}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "Не учитывается при расчёте порога следования",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "Нет аккаунтов для показа",
-  "dashboardTodoHiddenBody": "Чтобы аккаунт появился здесь, включите для него на вкладке «Игроки» одну из карточек главного экрана: задачи, улучшения или рейтинг.",
-  "dashboardUpgradeTrackerNoData": "Откройте раздел улучшений, чтобы импортировать или обновить сведения.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {нужно обновить данные} other {нужно обновить данные}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {есть невыполненные задачи} other {есть невыполненные задачи}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {доступны оставшиеся атаки} other {доступны оставшиеся атаки}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "Расчётный срок",
-  "dashboardUpgradeTrackerBuilders": "Строители сейчас",
-  "dashboardUpgradeTrackerLab": "Исследования",
-  "dashboardUpgradeTrackerPets": "Питомцы",
-  "dashboardUpgradeTrackerWalls": "Улучшение стен",
-  "dashboardUpgradeTrackerVillage": "Поселение",
-  "dashboardRankedNoData": "Откройте рейтинговую лигу, чтобы посмотреть положение этого аккаунта.",
-  "dashboardRankedAccounts": "Отслеживается аккаунтов: {loaded}/{total}",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "Сопоставьте набор средств атаки сразу с несколькими зданиями.",
-  "damageNoStaticDataTitle": "Сведения об уроне недоступны",
-  "damageNoStaticDataBody": "Обновите приложение после окончания загрузки статических данных игры.",
-  "damageTownHall": "Уровень ратуши",
-  "damageVerifiedAccountPrefill": "Набор из подтверждённого аккаунта",
-  "damageOverridesStayLocal": "Эти изменения не повлияют на аккаунт игрока.",
-  "damageTargets": "Целевые здания",
-  "damageAddBuilding": "Добавить цель",
-  "damageRemoveBuilding": "Убрать здание",
-  "damageNoTargetsBody": "Для сравнения добавьте хотя бы одно здание.",
-  "damageHitpoints": "Запас здоровья: {hitpoints}",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "Найти здание",
-  "damageNoBuildingsFound": "Подходящих зданий нет",
-  "damageTryAnotherSearch": "Введите другое название или выберите иной уровень ратуши.",
-  "damageAttackStack": "Состав атаки вручную",
-  "damageNoSourcesForTownHall": "На этом уровне ратуши нет доступных источников урона.",
-  "damageCount": "Количество",
-  "damagePerUse": "Урон за применение: {damage}",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "{percent}% максимального здоровья; эффект ослабевает при повторном применении",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "Заклинание Молнии",
-  "damageSourceEarthquake": "Заклинание Землетрясения",
-  "damageSourceGiantArrow": "Гигантская Стрела",
-  "damageSourceFireball": "Огненный Шар",
-  "damageSourceFlameFlinger": "Попадание Огнемётчика",
-  "damageSourceBalloonDeath": "Урон при гибели Шара",
-  "damageSourceRocketBalloonDeath": "Урон при гибели Ракетного Шара",
-  "damageResults": "Итог",
-  "damageDestroyed": "Уничтожено",
-  "damageSurvives": "Уцелеет",
-  "damageResultSummary": "Урон: {damage} · останется здоровья: {remaining}",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "Подбор Молний и Землетрясений",
-  "damageSpellCapacity": "Вместимость заклинаний",
-  "damageZapQuakeUnavailable": "На этом уровне ратуши заклинания Молнии и Землетрясения недоступны.",
-  "damageZapQuakeUsesSelectedLevels": "Расчёт для Молнии {lightningLevel}-го уровня и Землетрясения {earthquakeLevel}-го уровня.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "Молния и Землетрясение не наносят урон этому хранилищу.",
-  "damageNoValidZapQuake": "В выбранную вместимость не помещается ни одна подходящая комбинация.",
-  "damageZapQuakeCombination": "Молнии: {lightning} + Землетрясения: {earthquake} · мест: {capacity}",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "Подтвердите аккаунт, чтобы показывать его в списке задач.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Показывать улучшения на главном экране",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Закрепить на главном экране сводку улучшений этого аккаунта.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Подтвердите аккаунт, чтобы видеть прогресс улучшений на главном экране.",
-  "playerOptionShowRankedHomeTitle": "Показывать рейтинг на главном экране",
-  "playerOptionShowRankedHomeSubtitle": "Закрепить на главном экране сводку рейтинговой лиги этого аккаунта.",
-  "playerOptionShowRankedHomeVerifyFirst": "Подтвердите аккаунт, чтобы видеть сводку рейтинговой лиги на главном экране.",
-  "dashboardRankedCombinedAcrossAccounts": "Общий рейтинг ваших аккаунтов",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Общий прогресс улучшений ваших аккаунтов",
-  "rankingsHomeVillage": "Основная деревня",
-  "rankingsBuilderBase": "База строителя",
-  "rankingsTownHall": "Уровень ратуши",
-  "rankingsRankedLeague": "Лига рейтинговых боёв",
-  "rankingsClanCapital": "Рейтинг столицы клана",
-  "rankingsDonations": "По пожертвованиям",
-  "rankingsWarWins": "Победы в войнах",
-  "rankingsWinStreak": "Серия побед",
-  "rankingsCurrent": "Сейчас",
-  "rankingsWorldwide": "Весь мир",
-  "rankingsSelectLocation": "Выбрать регион",
-  "rankingsSearchLocations": "Поиск по названию или коду страны",
-  "rankingsWorldwideUnavailable": "Для этой таблицы выберите страну или регион.",
-  "rankingsLocationsLoadFailed": "Полный перечень регионов загрузить не удалось. Глобальный рейтинг остаётся доступен там, где он поддерживается.",
-  "rankingsSnapshotDate": "Дата сохранения",
-  "rankingsSource": "Источник данных",
-  "rankingsOfficialSource": "Официальные данные Clash API",
-  "rankingsResults": "Места в рейтинге",
-  "rankingsTopCount": "Первые {count}",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "Снимок не сохранён",
-  "rankingsNoSnapshotBody": "На дату {date} сохранённого рейтинга нет. Выберите другую дату или вернитесь к текущим данным.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "Данные игрока загрузить не удалось.",
-  "rankingsClanLoadFailed": "Данные клана загрузить не удалось.",
-  "statsOverview": "Обзор",
-  "statsArmies": "Армии",
-  "statsItems": "Предметы",
-  "statsWar": "Войны",
-  "statsCwl": "Лиги войн кланов",
-  "statsRanked": "Рейтинговые бои",
-  "statsDateRange": "Период",
-  "statsDateRangeHint": "Выберите до 90 дней",
-  "statsDateRangeTooLong": "Выберите диапазон дат 90 дней или меньше.",
-  "statsUpdated": "Свежие данные",
-  "statsNoDataTitle": "Данных о боях пока нет.",
-  "statsNoDataBody": "Попробуйте более широкий диапазон дат или менее строгие фильтры.",
-  "statsAddItemsTitle": "Выберите предметы для анализа",
-  "statsAddItemsBody": "Добавьте войска, заклинания, героев, питомцев или снаряжение, затем запустите запрос.",
-  "statsGlobalCounts": "Глобальное количество",
-  "statsPerformance": "Производительность",
-  "statsSamples": "Образцы",
-  "statsUsage": "Использование",
-  "statsAverageStars": "Среднее количество звёзд",
-  "statsAverageDestruction": "Среднее разрушение",
-  "statsStarRates": "Звездные рейтинги",
-  "statsThreeStarRate": "Три звезды",
-  "statsDailyTrend": "Ежедневный тренд",
-  "statsPlayers": "Игроки",
-  "statsClans": "Кланы",
-  "statsPlayersInWar": "Игроки на войне",
-  "statsClansInWar": "Кланы на войне",
-  "statsPlayersInLegends": "Игроки в Legends",
-  "statsWarsStored": "Сохраненные войны",
-  "statsJoinLeaves": "Присоединение/выход из событий",
-  "statsSearchArmies": "Поиск точных составов",
-  "statsExactComposition": "Точный состав",
-  "statsArmyShareCode": "Код доли армии",
-  "statsMinimumSample": "Минимальная выборка",
-  "statsSortBy": "Сортировка по",
-  "statsIncludeItems": "Включить предметы",
-  "statsExcludeItems": "Исключить предметы",
-  "statsItemId": "Идентификатор предмета или сохраненное имя",
-  "statsItemType": "Тип предмета",
-  "statsTroop": "Войска",
-  "statsSpell": "Заклинаниям",
-  "statsHero": "Героев",
-  "statsPet": "Питомцы",
-  "statsEquipment": "Оборудование",
-  "statsOwningHero": "Владелец героя",
-  "statsAddItem": "Добавить предмет",
-  "statsAnalyzeItems": "Анализ предметов",
-  "statsCompositionShare": "Доля состава",
-  "statsNoLevels": "Армейские записи не содержат уровней предметов.",
-  "statsRankedCompositionOnly": "Данные о составе взяты из рейтинговых журналов сражений; Показатели войны и CWL остаются отдельными.",
-  "statsTownHall": "Ратуша",
-  "statsOpponentTownHall": "Ратуша противника",
-  "statsEqualTownHalls": "Равные ратуши",
-  "statsLeagueTier": "Уровень лиги",
-  "statsLegendLeagueOne": "Лига легенд 1",
-  "statsCwlLeague": "Лига CWL",
-  "statsLeagueBronze": "Бронза",
-  "statsLeagueSilver": "Серебро",
-  "statsLeagueGold": "Золото",
-  "statsLeagueCrystal": "Кристалл",
-  "statsLeagueMaster": "Мастер",
-  "statsLeagueChampion": "Чемпион",
-  "statsAllCwlLeagues": "Все лиги CWL",
-  "statsCwlSeasons": "Сезоны CWL",
-  "statsCwlSeasonsHint": "ГГГГ-ММ, разделенные запятыми",
-  "statsApplyFilters": "Применить фильтры",
-  "statsRefresh": "Обновить статистику",
-  "statsRegularWarOnly": "Только обычные войны; Дружественные войны и CWL исключены.",
-  "statsRankedRequired": "Требуются Ратуша и один уровень лиги.",
-  "statsSeasonBreakdown": "Разбивка по сезонам",
-  "gameAssetsLoadError": "Ошибка загрузки игровых материалов",
-  "gameAssetsEmptyTitle": "Игровые материалы отсутствуют",
-  "gameAssetsEmptyBody": "В опубликованном манифесте нет изображений поддерживаемого формата.",
-  "gameAssetsOneImage": "Изображений: 1",
-  "gameAssetsImageCount": "Изображений: {count}",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "Поиск по категории",
-  "gameAssetsAllFormats": "Любой формат",
-  "gameAssetsOneResult": "Найдено: 1",
-  "gameAssetsResultCount": "Найдено: {count}",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "Изображения не найдены",
-  "gameAssetsNoResultsBody": "Измените запрос или выберите другой формат.",
-  "gameAssetsLongPressHint": "Удерживайте, чтобы скопировать URL размещённого файла",
-  "gameAssetsCopyUrl": "Скопировать ссылку",
-  "gameAssetsCopyPath": "Скопировать расположение",
-  "gameAssetsUrlCopied": "Ссылка на материал скопирована.",
-  "gameAssetsPathCopied": "Путь к материалу скопирован.",
-  "gameAssetsCopyError": "Не получилось скопировать сведения о материале.",
-  "gameAssetsShare": "Отправить",
-  "gameAssetsShareError": "Этим материалом не получилось поделиться.",
-  "gameAssetsSave": "Скачать",
-  "gameAssetsSaving": "Идёт сохранение…",
-  "gameAssetsSaved": "Материал сохранён.",
-  "gameAssetsSavedTo": "Материал сохранён: {path}",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "Не получилось сохранить материал.",
   "upgradeTrackerPlan": "Планирование",
   "upgradeTrackerUpgrades": "Улучшения в деревне",
   "upgradeTrackerCollection": "Собранное",
@@ -3852,18 +3872,23 @@
   "rankedLeagueBattleDetailsUnavailable": "Для этого периода подробные журналы сражений недоступны.",
   "rankedLeagueHistoricalDetailsUnavailable": "Для этого давнего периода сохранилась только официальная итоговая сводка.",
   "rankedLeagueStarBreakdownUnavailable": "API сообщает общее число звёзд, но не их подробное распределение за этот период.",
+  "notifAudienceSectionTitle": "Получатели уведомлений",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "Все связанные аккаунты",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "Выбранные аккаунты",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "Выберите, какие аккаунты могут получать уведомления на этом устройстве.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} текущих аккаунтов. Будущие связанные аккаунты будут добавлены автоматически.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3897,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "{count} выбрано для уведомлений.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,42 +3906,53 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "Выберите, какие именно аккаунты будут получать уведомления.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "Все, что вы свяжете позже, будет включено без изменения этой настройки.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "Указать аккаунты вручную",
+  "notifAudienceAcrossDevicesDescription": "Этот выбор аккаунтов действует на всех ваших устройствах.",
+  "notifAccountBookmarked": "В закладках",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "Бои лиги",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "Атаки войны",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "Состояние войны",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "Напоминания о войне",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "События",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "Объявления приложения",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "Завершенные улучшения",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "Ежемесячная поддержка",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Ход улучшений",
-  "widgetHomeVillage": "ОСНОВНАЯ ДЕРЕВНЯ",
-  "widgetVillage": "ПОСЕЛЕНИЕ",
   "widgetLaboratory": "ЛАБОРАТОРНЫЕ РАБОТЫ",
   "widgetPets": "ПИТОМЦЫ",
   "widgetBuilderBase": "БАЗА СТРОИТЕЛЯ",
@@ -3949,25 +3986,56 @@
   "widgetPetBoostShort": "Ускорение питомцев",
   "widgetClockBoostShort": "Башня",
   "widgetBuilderCostPerk": "Скидка {percent}% на строительство",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "Строительство быстрее на {percent}%",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "Скидка {percent}% на исследования",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "Исследования быстрее на {percent}%",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Цель по добыче",
+  "farmGoalFormTitle": "Сколько ресурсов нужно добыть",
+  "farmGoalAccountTitle": "Игровой аккаунт",
+  "farmGoalAccountHint": "Ратуша и текущая лига для расчёта берутся из выбранного аккаунта.",
+  "farmGoalTargetTitle": "Планируемое улучшение",
+  "farmGoalTargetBuildingLabel": "Улучшаемое здание",
+  "farmGoalChooseBuilding": "Указать здание",
   "farmGoalChangeBuilding": "Сменить здание",
   "farmGoalNoTargetTitle": "Здание не выбрано",
   "farmGoalNoTargetBody": "Выберите здание для улучшения, чтобы рассчитать необходимое количество ресурсов.",
+  "farmGoalTargetLevelLabel": "Уровень улучшения",
+  "farmGoalUpgradeCostLabel": "Цена следующего улучшения",
+  "farmGoalCostUnavailable": "Для этого уровня неизвестна цена улучшения.",
+  "farmGoalLootTitle": "Расчётная добыча",
+  "farmGoalResourceLabel": "Вид ресурса",
+  "farmGoalAmountLabel": "Требуемая добыча",
   "farmGoalAverageLootLabel": "Доступная добыча в деревне",
   "farmGoalPerfectLootHint": "Введите добычу, показанную перед атакой. Указанный ниже бонус лиги добавится автоматически.",
   "farmGoalLeagueEstimate": "Бонус лиги {league}: {amount} {resource}. Он включён в расчёт атак.",
-  "farmGoalTrackerNextTitle": "Следующее в плане отслеживания улучшений",
-  "farmGoalTrackerMissingTitle": "Нужны данные отслеживания улучшений",
-  "farmGoalTrackerMissingBody": "Импортируйте JSON улучшений этого аккаунта в отслеживание улучшений, чтобы увидеть здесь следующее запланированное здание и его точную стоимость.",
-  "farmGoalTrackerPlanComplete": "В отслеживании улучшений не осталось улучшений зданий. Вы всё ещё можете выбрать здание вручную.",
-  "farmGoalOpenUpgradeTracker": "Открыть отслеживание улучшений",
-  "farmGoalUseTrackerTarget": "Использовать здание",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,49 +4049,39 @@
       }
     }
   },
-  "gameTHLevel": "ТХ{level}",
-  "@gameTHLevel": {
+  "farmGoalStarBonusEstimate": "Звёздный бонус после 5 звёзд: {amount} {resource}. Он не учитывается в нужном числе атак.",
+  "@farmGoalStarBonusEstimate": {
     "placeholders": {
-      "level": {
-        "type": "int"
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
       }
     }
   },
-  "gameCreatorCode": "Код Создателя: ClashKing",
-  "clanWarFrequencyTitle": "Войны",
-  "notifScopeAllAccounts": "Все аккаунты",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
+  "farmGoalScenarioPerfect": "Полное уничтожение · 100%",
+  "farmGoalScenarioAtPercent": "Уничтожение на {percent}%",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
   },
-  "notifSelectedAccounts": "Выбранные аккаунты",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "Фильтры",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "Отмена",
-  "assetFolderTroops": "Войска",
-  "assetFolderSpells": "Заклинания",
-  "assetFolderHeroes": "Герои",
-  "endpointStateWins": "Победы",
-  "notifGroupBattles": "Битвы",
-  "notifGroupSupport": "Поддержка",
-  "gameAssetsCategoryHeroes": "Изображения героев",
-  "gameAssetsCategorySpells": "Изображения заклинаний",
-  "rankedLeagueStars": "Полученные звёзды",
-  "farmGoalUpgradeCostLabel": "Цена следующего улучшения",
-  "farmGoalAccountTitle": "Игровой аккаунт",
-  "damageAccountPresetShort": "Данные аккаунта",
-  "damageClearStack": "Очистить набор",
-  "todoMockRaid1Left": "1 остался",
-  "farmGoalResourceLabel": "Вид ресурса",
-  "notifChooseAccountsManually": "Указать аккаунты вручную",
-  "notifAudienceAcrossDevicesDescription": "Этот выбор аккаунтов действует на всех ваших устройствах.",
-  "damageNoTargetTitle": "Цель не указана",
+  "farmGoalAttackShort": "атака",
+  "farmGoalScenarioHint": "Расчёт приблизительный: добыча зависит от разрушенных зданий. Процент применяется к оценке идеальной атаки.",
+  "farmGoalNoLeagueLoot": "Для подсказки по добыче выберите аккаунт, состоящий в лиге.",
+  "farmGoalTrackerNextTitle": "Следующее в плане отслеживания улучшений",
+  "farmGoalTrackerMissingTitle": "Нужны данные отслеживания улучшений",
+  "farmGoalTrackerMissingBody": "Импортируйте JSON улучшений этого аккаунта в отслеживание улучшений, чтобы увидеть здесь следующее запланированное здание и его точную стоимость.",
+  "farmGoalTrackerPlanComplete": "В отслеживании улучшений не осталось улучшений зданий. Вы всё ещё можете выбрать здание вручную.",
+  "farmGoalOpenUpgradeTracker": "Открыть отслеживание улучшений",
+  "farmGoalUseTrackerTarget": "Использовать здание",
   "farmGoalMissingTarget": "Выберите здание и целевой уровень, чтобы рассчитать необходимое число атак.",
+  "farmGoalMissingValues": "Укажите цель и расчётную добычу за идеальную атаку, чтобы увидеть сценарии атак.",
   "farmGoalResultTitle": "Необходимые атаки",
+  "farmGoalAttacks": "атак",
   "farmGoalResultSummary": "{target} {resource}, примерно по {average} за идеальную атаку.",
   "@farmGoalResultSummary": {
     "placeholders": {
@@ -4038,109 +4096,58 @@
       }
     }
   },
-  "farmGoalMissingValues": "Укажите цель и расчётную добычу за идеальную атаку, чтобы увидеть сценарии атак.",
-  "settingsLiveActivityStart": "Начать тестовую деятельность",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
+  "gameTHLevel": "ТХ{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
   },
+  "gameCreatorCode": "Код Создателя: ClashKing",
   "todoExplanationRaidsTitle": "Рейды:",
-  "settingsLiveActivityUpdate": "Обновить счет",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "Удаляет локальный предварительный просмотр.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Завершить тестовое действие",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
   "todoExplanationRaids": "Вес 5 очков на аккаунт (или 6, если последняя атака разблокирована), 1 атака = 1 очко.",
+  "clanWarFrequencyTitle": "Войны",
+  "notifScopeAllAccounts": "Все аккаунты",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
   "settingsLiveActivityTest": "Тест на живую активность",
   "@settingsLiveActivityTest": {
     "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "Начать тестовую деятельность",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
   },
   "settingsLiveActivityStartSubtitle": "Показывает предварительный просмотр локальной войны кланов.",
   "@settingsLiveActivityStartSubtitle": {
     "description": "Settings tile: start live activity subtitle"
   },
+  "settingsLiveActivityUpdate": "Обновить счет",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
   "settingsLiveActivityUpdateSubtitle": "Увеличивает счет фальшивой войны.",
   "@settingsLiveActivityUpdateSubtitle": {
     "description": "Settings tile: update live activity subtitle"
   },
-  "todoMockWarAltStatus": "Активен 18 м назад · война и рейды требуют внимания",
-  "todoRaidAttacks": "Рейдовые атаки",
-  "todoMockRaid4Left": "4 осталось",
-  "gameAssetsCategoryChests": "Изображения сундуков",
-  "gameAssetsCategoryClanLabels": "Метки кланов",
-  "farmGoalScenarioHint": "Расчёт приблизительный: добыча зависит от разрушенных зданий. Процент применяется к оценке идеальной атаки.",
-  "gameAssetsCategoryCapitalBase": "База столицы",
-  "damageQuickSetupZapQuake": "Молнии и Землетрясения",
-  "rankedLeagueAccountSelector": "Отображаемый аккаунт",
-  "notifGroupLegendAttacks": "Атаки в Легенде I",
-  "damageChooseAccount": "Укажите аккаунт",
-  "gameAssetsCategoryCapitalHouseParts": "Детали домов столицы",
-  "gameAssetsCategoryTroops": "Изображения бойцов",
-  "farmGoalCostUnavailable": "Для этого уровня неизвестна цена улучшения.",
-  "gameAssetsCategoryGuardians": "Изображения хранителей",
-  "farmGoalStarBonusEstimate": "Звёздный бонус после 5 звёзд: {amount} {resource}. Он не учитывается в нужном числе атак.",
-  "@farmGoalStarBonusEstimate": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      }
-    }
+  "settingsLiveActivityEnd": "Завершить тестовое действие",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
   },
-  "gameAssetsCategoryDecorations": "Изображения декораций",
-  "farmGoalScenarioPerfect": "Полное уничтожение · 100%",
-  "damageAccountSelectorHint": "Уровни берутся из выбранного аккаунта.",
-  "damageAllBuildings": "Любое здание",
-  "farmGoalAccountHint": "Ратуша и текущая лига для расчёта берутся из выбранного аккаунта.",
-  "damageSelectedSourcesCount": "Выбрано источников: {count}",
-  "@damageSelectedSourcesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
+  "settingsLiveActivityEndSubtitle": "Удаляет локальный предварительный просмотр.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
   },
-  "gameAssetsCategoryPets": "Изображения питомцев",
-  "gameAssetsCategorySkins": "Облики героев",
-  "damageQuickSetupGiantArrow": "Снаряжение «Гигантская Стрела»",
-  "farmGoalTargetTitle": "Планируемое улучшение",
-  "damageTargetLevelLabel": "Уровень цели",
-  "damageCommonBuildings": "Популярные цели",
-  "damageNoDamageSelected": "Урон не выбран",
-  "gameAssetsCategoryEquipment": "Снаряжение героев",
-  "damageNoTargetBody": "Укажите здание, чтобы рассчитать, какой урон оно выдержит.",
-  "gameAssetsCategoryCountryFlags": "Флаги государств",
-  "farmGoalLootTitle": "Расчётная добыча",
-  "damageShowAllSources": "Добавить источник урона",
-  "damageNoActiveSources": "Выберите способ атаки, чтобы настроить его источники урона.",
-  "farmGoalAttacks": "атак",
-  "farmGoalNoLeagueLoot": "Для подсказки по добыче выберите аккаунт, состоящий в лиге.",
-  "calculatorsModeDamage": "Расчёт урона",
-  "farmGoalScenarioAtPercent": "Уничтожение на {percent}%",
-  "@farmGoalScenarioAtPercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
+  "notifSelectedAccounts": "Выбранные аккаунты",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
   },
-  "farmGoalFormTitle": "Сколько ресурсов нужно добыть",
-  "farmGoalTitle": "Цель по добыче",
-  "damageQuickSetupFireballQuake": "Огненный Шар и Землетрясения",
-  "playerOptionNotificationsEnableMaster": "Сначала разрешите уведомления в настройках.",
-  "playerOptionNotificationsSubscriptionRequired": "Уведомления для закладок доступны по подписке.",
-  "notifGroupLegendDefenses": "Защиты в Легенде I",
-  "damageTargetSectionTitle": "Цель для уничтожения",
-  "notifLegendAttacksDescription": "Результаты атак в Легенде I для добавленных в закладки аккаунтов с разрешёнными уведомлениями.",
-  "damageOtherSources": "Дополнительные источники",
+  "searchFilters": "Фильтры",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "dashboardUpgradeTrackerAccounts": "Аккаунтов с отслеживанием: {loaded}/{total}",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
@@ -4152,24 +4159,68 @@
       }
     }
   },
-  "damageNoAccountsAvailable": "Нет доступных подтверждённых аккаунтов",
-  "farmGoalAttackShort": "атака",
-  "damageShowFewerSources": "Скрыть дополнительные источники",
-  "farmGoalTargetLevelLabel": "Уровень улучшения",
-  "damageSwitchAccount": "Выбрать другой аккаунт",
-  "playerOptionNotificationsLimitReached": "Вы использовали все доступные уведомления для закладок.",
+  "calculatorsModeDamage": "Расчёт урона",
   "calculatorsModeFarmGoal": "План добычи",
-  "damageQuickSetupFlameFlinger": "Осадная машина «Огнемётчик»",
-  "farmGoalTargetBuildingLabel": "Улучшаемое здание",
-  "damageQuickSetups": "Выберите способ атаки",
-  "farmGoalAmountLabel": "Требуемая добыча",
-  "damageQuickSetupCustom": "Свой набор",
-  "farmGoalChooseBuilding": "Указать здание",
-  "notifLegendDefensesDescription": "Результаты защит в Легенде I для аккаунтов с разрешёнными уведомлениями.",
   "damageCalculatorTitle": "Расчётчик урона",
-  "playerOptionNotificationsVerifyFirst": "Чтобы включить уведомления, подтвердите этот аккаунт.",
-  "gameAssetsCategoryBuildings": "Изображения зданий",
+  "damageAccountPresetShort": "Данные аккаунта",
+  "damageChooseAccount": "Укажите аккаунт",
+  "damageSwitchAccount": "Выбрать другой аккаунт",
+  "damageAccountSelectorHint": "Уровни берутся из выбранного аккаунта.",
+  "damageNoAccountsAvailable": "Нет доступных подтверждённых аккаунтов",
+  "damageTargetSectionTitle": "Цель для уничтожения",
   "damageChooseTarget": "Указать целевое здание",
+  "damageNoTargetTitle": "Цель не указана",
+  "damageNoTargetBody": "Укажите здание, чтобы рассчитать, какой урон оно выдержит.",
+  "damageTargetLevelLabel": "Уровень цели",
+  "damageCommonBuildings": "Популярные цели",
+  "damageAllBuildings": "Любое здание",
+  "damageQuickSetups": "Выберите способ атаки",
+  "damageQuickSetupZapQuake": "Молнии и Землетрясения",
+  "damageQuickSetupFireballQuake": "Огненный Шар и Землетрясения",
+  "damageQuickSetupGiantArrow": "Снаряжение «Гигантская Стрела»",
+  "damageQuickSetupFlameFlinger": "Осадная машина «Огнемётчик»",
+  "damageQuickSetupCustom": "Свой набор",
+  "damageClearStack": "Очистить набор",
+  "damageNoDamageSelected": "Урон не выбран",
+  "damageSelectedSourcesCount": "Выбрано источников: {count}",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Выберите способ атаки, чтобы настроить его источники урона.",
+  "damageOtherSources": "Дополнительные источники",
+  "damageShowAllSources": "Добавить источник урона",
+  "damageShowFewerSources": "Скрыть дополнительные источники",
+  "searchCancel": "Отмена",
+  "todoRaidAttacks": "Рейдовые атаки",
+  "todoMockRaid4Left": "4 осталось",
+  "todoMockWarAltStatus": "Активен 18 м назад · война и рейды требуют внимания",
+  "todoMockRaid1Left": "1 остался",
+  "gameAssetsCategoryBuildings": "Изображения зданий",
+  "gameAssetsCategoryCapitalBase": "База столицы",
+  "gameAssetsCategoryCapitalHouseParts": "Детали домов столицы",
+  "gameAssetsCategoryChests": "Изображения сундуков",
+  "gameAssetsCategoryClanLabels": "Метки кланов",
+  "gameAssetsCategoryCountryFlags": "Флаги государств",
+  "gameAssetsCategoryDecorations": "Изображения декораций",
+  "gameAssetsCategoryEquipment": "Снаряжение героев",
+  "gameAssetsCategoryGuardians": "Изображения хранителей",
+  "gameAssetsCategoryHeroes": "Изображения героев",
+  "gameAssetsCategoryPets": "Изображения питомцев",
+  "gameAssetsCategorySkins": "Облики героев",
+  "gameAssetsCategorySpells": "Изображения заклинаний",
+  "gameAssetsCategoryTroops": "Изображения бойцов",
+  "assetFolderTroops": "Войска",
+  "assetFolderSpells": "Заклинания",
+  "assetFolderHeroes": "Герои",
+  "endpointStateWins": "Победы",
+  "notifGroupBattles": "Битвы",
+  "notifGroupSupport": "Поддержка",
+  "rankedLeagueAccountSelector": "Отображаемый аккаунт",
+  "rankedLeagueStars": "Полученные звёзды",
   "playerBattlelogTab": "Battles",
   "playerActivityTab": "Activity",
   "playerBattlelogFarming": "Farming",
@@ -4180,7 +4231,9 @@
   "playerBattlelogBattleCount": "{count} battles",
   "@playerBattlelogBattleCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "playerBattlelogAttacks": "Attacks",
@@ -4192,7 +4245,9 @@
   "playerBattlelogUsedInAttacks": "Used in {count} attacks",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "playerBattlelogAttack": "Attack",
@@ -4200,7 +4255,9 @@
   "playerBattlelogOpponent": "Against {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerBattlelogNoBattlesTitle": "No battles found",
@@ -4219,46 +4276,64 @@
   "playerActivityItemUpgraded": "{name} upgraded",
   "@playerActivityItemUpgraded": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivitySuperTroopBoosted": "{name} boosted",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivityItemUnlocked": "{name} unlocked",
   "@playerActivityItemUnlocked": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivityNameChanged": "Name changed",
   "playerActivityLevelChange": "Level {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
-      "from": {"type": "int"},
-      "to": {"type": "int"}
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
     }
   },
   "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
-      "level": {"type": "int"}
+      "level": {
+        "type": "int"
+      }
     }
   },
   "playerActivityBoostedAtLevel": "Boosted at level {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
-      "level": {"type": "int"}
+      "level": {
+        "type": "int"
+      }
     }
   },
   "playerActivityNameChangeDetail": "{from} → {to}",
   "@playerActivityNameChangeDetail": {
     "placeholders": {
-      "from": {"type": "String"},
-      "to": {"type": "String"}
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   }
 }

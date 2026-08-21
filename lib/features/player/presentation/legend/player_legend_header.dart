@@ -7,6 +7,7 @@ import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -252,6 +253,7 @@ class _StatsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final loc = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
     final formatter = NumberFormat('#,###', locale);
     final currentSeason = player.legendsBySeason?.currentSeason;
@@ -304,8 +306,12 @@ class _StatsPanel extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppLocalizations.of(context)?.legendsTitle ??
-                          'Legend League',
+                      loc == null
+                          ? 'Legend League'
+                          : loc.gameName(
+                              'TID_LEAGUE_LEGENDARY',
+                              loc.legendsTitle,
+                            ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.labelMedium?.copyWith(

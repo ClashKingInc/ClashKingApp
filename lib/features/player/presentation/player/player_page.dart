@@ -15,6 +15,7 @@ import 'package:clashkingapp/features/player/presentation/player/player_item_sec
 import 'package:clashkingapp/features/player/presentation/player/player_join_leave_tab.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_profile_tab.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:intl/intl.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -116,7 +117,7 @@ class PlayerScreenState extends State<PlayerScreen> {
       imageUrl: ImageAssets.townHall(widget.selectedPlayer.townHallLevel),
     ),
     InfoProfileTabData(
-      label: AppLocalizations.of(context)?.gameBaseBuilder ?? 'Builder Base',
+      label: _builderBaseLabel(context),
       imageUrl: ImageAssets.builderHall(widget.selectedPlayer.builderHallLevel),
     ),
     InfoProfileTabData(
@@ -140,6 +141,12 @@ class PlayerScreenState extends State<PlayerScreen> {
       icon: Icons.swap_horiz_rounded,
     ),
   ];
+
+  String _builderBaseLabel(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+    return loc?.gameName('TID_CLAN_TAG_BUILDER_BASE', loc.gameBaseBuilder) ??
+        'Builder Base';
+  }
 
   Widget _buildSliverTab({
     required String key,

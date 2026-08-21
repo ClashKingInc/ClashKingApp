@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "खाता सफलतापूर्वक सत्यापित हो गया!",
   "generalRetry": "पुनः प्रयास करें",
   "generalRetrying": "फिर से प्रयास किया जा रहा है...",
+  "postsTitle": "पोस्ट",
+  "postsDescription": "ClashKing समाचार, अपडेट की कहानियाँ और पिछली घोषणाएँ।",
+  "postsEmpty": "अभी कोई प्रकाशित पोस्ट नहीं है।",
+  "postsLoadFailed": "पोस्ट लोड नहीं हो सकीं।",
+  "postsLoadMore": "और लोड करें",
+  "postsCurrent": "वर्तमान",
+  "postsPast": "पिछली",
+  "postsStory": "इंटरैक्टिव कहानी",
+  "postsPinned": "विशेष रुप से प्रदर्शित",
   "generalTryAgain": "फिर से कोशिश करें",
   "generalReset": "रीसेट करें",
   "generalCancel": "रद्द करना",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "फिल्टर",
+  "generalExpand": "बढ़ाना",
+  "generalCollapse": "गिर जाना",
   "generalNotSet": "सेट नहीं",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "बुकमार्क",
+  "generalRemoveBookmark": "बुकमार्क हटाएँ",
   "generalClearFilters": "फ़िल्टर साफ़ करें",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "ईमेल खाता लिंक करें",
   "authAccountAddEmailAuth": "अतिरिक्त सुरक्षा के लिए अपने खाते में ईमेल और पासवर्ड प्रमाणीकरण जोड़ें।",
   "authAccountEmailLinkedSuccess": "ईमेल खाता सफलतापूर्वक लिंक हो गया!",
+  "authAccountLinkDiscord": "Discord खाता लिंक करें",
+  "authAccountAddDiscordAuth": "अलग-अलग प्लेटफ़ॉर्म पर सिंक और ClashKing Bot की पहुँच के लिए अपने खाते में Discord प्रमाणीकरण जोड़ें।",
+  "authAccountDiscordLinkedSuccess": "Discord खाता सफलतापूर्वक लिंक हो गया!",
   "authEmailVerificationTitle": "ईमेल सत्यापित करें",
   "authEmailVerificationCheckEmail": "अपना ईमेल देखें",
   "authEmailVerificationSentTo": "हमने सत्यापन ईमेल भेजा है:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "अनुभव स्तर",
+  "gameLeague": "संघ",
   "gameTrophies": "ट्राफी",
   "gameBuilderBaseTrophies": "बी बी ट्रॉफियां",
   "gameDonations": "दान",
@@ -484,6 +501,11 @@
   "clanNone": "कोई कबेला नहीं",
   "clanJoinToUnlock": "नई सुविधाओं को अनलॉक करने के लिए एक कबीले में शामिल हों।",
   "clanMembers": "सदस्यों",
+  "clanMembersSearchPlaceholder": "सदस्यों को खोजें",
+  "clanMembersShowTotals": "कुल योग दिखाएँ",
+  "clanMembersHideTotals": "कुल योग छिपाएँ",
+  "clanMembersReceivedShort": "प्राप्त",
+  "clanMembersAverageTh": "औसत TH",
   "clanMinimumMembers": "न्यूनतम सदस्य",
   "clanMaximumMembers": "अधिकतम सदस्य",
   "clanLocation": "जगह",
@@ -839,6 +861,7 @@
   "warLeague": "युद्ध/लीग",
   "warHistory": "युद्ध इतिहास",
   "warLog": "युद्ध लॉग",
+  "warLogSearchPlaceholder": "युद्ध खोजें",
   "warLogClosed": "{clan} का युद्ध लॉग बंद है।",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "युद्ध आँकड़े",
+  "warStatsSearchPlaceholder": "खिलाड़ियों को खोजें",
+  "warStatsCurrentTownHall": "मिथक",
+  "warStatsLast50": "अंतिम 50",
+  "warStatsWars": "युद्धों",
+  "warStatsSelectSeason": "युद्ध आँकड़े सीज़न का चयन करें",
   "warOngoing": "चल रहा युद्ध",
   "warIsNotInWar": "{clan} युद्ध में नहीं है",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "जीतने के लिए",
+  "warAnalysisToLose": "खोने के लिए",
+  "warAnalysisNoAttacksLeft": "कोई आक्रमण नहीं बचा",
+  "warAnalysisScenario": "{attacks} हमले बाएँ -> प्रति हमले {stars} सितारों / {percent}% की आवश्यकता है",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} हमले बाएँ -> असंभव ({stars} सितारे / {percent}% प्रति हमला)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "{clanName} अब हार नहीं सकता",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "सुनिश्चित",
   "warAnalysisAlreadySecured": "पहले से सुनिश्चित",
   "warAnalysisSecureAgainst": "यह मानकर लक्ष्य की गणना की गई है कि {clanName} सभी शेष हमलों का उपयोग करेगा।",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "यदि {clanName} सभी शेष हमलों को अनुकूलित करता है तो इसे गणितीय रूप से सुनिश्चित नहीं किया जा सकता।",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "शेष हमलों से सुनिश्चित नहीं किया जा सकता",
   "warAnalysisStarGoal": "+{stars} स्टार",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "{attacks} हमले शेष",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "इससे बेहतर परिणाम संभव नहीं है",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "कुल मिलाकर % की आवश्यकता",
   "warCalculatorCalculate": "गणना",
   "warAttacksTitle": "आक्रमण",
+  "warAttacksSuccessful": "सफल हमले",
+  "warAttacksFailed": "असफल हमले",
   "warAttacksNone": "अभी कोई हमला नहीं",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "सर्वश्रेष्ठ हमले",
   "warAttacksCount": "हमलों की संख्या",
   "warAttacksMissed": "छूटे हुए हमले",
+  "warAttacksMissedShort": "चुक होना",
   "warAttacksNumber": "आपने पिछले {number_war} वॉर में {number_time} बार हमला किया।",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "सीडब्ल्यूएल",
   "cwlClanWarLeague": "वंश युद्ध लीग",
   "cwlOngoing": "चल रही सी.डब्लू.एल.",
+  "cwlHistoryTitle": "सीडब्ल्यूएल इतिहास",
+  "clanJoinLeaveTab": "शामिल हों/छोड़ें",
+  "clanRankingsTab": "रैंकिंग",
+  "clanRankingsSeason": "मौसम",
+  "clanRankingsSelectSeason": "रैंकिंग सीज़न चुनें",
+  "clanRankingsFilterActivity": "गतिविधि",
+  "clanRankingsFilterWar": "युद्ध",
+  "clanRankingsFilterPoints": "अंक",
+  "cwlHistoryPreviewBadge": "पूर्व दर्शन",
+  "cwlHistoryPreviewSubtitle": "CWL समापन बिंदु तय होने तक {clan} मॉकअप",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "अभी तक कोई CWL इतिहास नहीं है",
+  "cwlHistoryEmptyBody": "इस कबीले ने अभी तक कबीले युद्ध लीग सीज़न में भाग नहीं लिया है।",
+  "cwlRankTitle": "पद",
+  "cwlWarsPlayedTitle": "युद्ध खेले गए",
+  "playerWarStarsTitle": "युद्ध सितारे",
+  "playerWarPreferenceTitle": "युद्ध प्रीफ़.",
+  "playerDonatedTitle": "दान",
+  "playerReceivedTitle": "प्राप्त",
+  "playerCapitalTitle": "पूंजी",
+  "playerExpLevelTitle": "ऍक्स्प. स्तर",
+  "clanWarWinsTitle": "युद्ध जीतता है",
+  "clanWinStreakTitle": "जीत की लकीर",
+  "clanBuilderBaseTitle": "बिल्डर आधार",
+  "clanTypeTitle": "प्रकार",
+  "clanMinTownHallTitle": "न्यूनतम. वां",
+  "clanMinTrophiesTitle": "न्यूनतम. ट्राफियां",
+  "clanCapitalHallTitle": "कैपिटल हॉल",
+  "clanDistrictsTitle": "जिलों",
+  "legendsCountryTitle": "देश",
+  "legendsLocalRankTitle": "स्थानीय पद",
+  "legendsGlobalRankTitle": "वैश्विक रैंक",
+  "warWinsTitle": "जीत",
+  "warLossesTitle": "हानि",
+  "warDrawsTitle": "खींचता",
   "cwlRounds": "राउंड",
   "cwlRoundNumber": "राउंड {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "जारी छापे",
   "raidsDistrictsDestroyed": "नष्ट हुए जिले",
   "raidsCompleted": "छापे पूरे हुए",
+  "capitalRaidStatusOngoing": "चल रहे",
+  "capitalRaidStatusEnded": "समाप्त",
+  "capitalRaidLoot": "लूट",
+  "capitalRaidRewards": "पुरस्कार",
+  "capitalRaidPreviousWeek": "पिछला सप्ताह",
+  "capitalRaidNextWeek": "अगले सप्ताह",
+  "capitalRaidFilterAttacked": "हमला किया",
+  "capitalRaidFilterNotAttacked": "हमला नहीं किया",
+  "capitalRaidFilterLinked": "लिंक किए गए खाते",
+  "capitalRaidEmptyTitle": "पूंजी छापे का कोई डेटा नहीं",
+  "capitalRaidEmptyBody": "इस कबीले की राजधानी छापे सप्ताहांत पर नज़र रखने के बाद छापे का इतिहास यहां दिखाई देगा।",
+  "capitalRaidEstimated": "अनुमानित",
+  "capitalRaidEstimatedTooltip": "अभी तक आधिकारिक नहीं: इस सप्ताह के हमले और रक्षा लॉग से अनुमान लगाया गया है। छापा समाप्त होने के बाद सुपरसेल वास्तविक पदक संख्या प्रकाशित करता है।",
+  "capitalRaidTrophyPrediction": "अनुमानित ट्राफियां",
+  "capitalRaidTrophyPredictionTooltip": "इस सप्ताह के अब तक के प्रदर्शन के आधार पर, इस छापे के बाद अनुमानित कैपिटल लीग ट्राफियां। सरकारी नहीं।",
+  "capitalRaidProjectedLoot": "प्रक्षेपित लूट",
+  "capitalRaidOneshots": "एक-शॉट",
+  "capitalRaidFails": "विफल रहता है",
+  "capitalDetailsOffense": "अपराध",
+  "capitalDetailsDefense": "रक्षा",
+  "capitalDistrictsSection": "जिलों",
+  "capitalOpponentsSection": "विरोधियों",
+  "capitalAvgAttacksPerDistrict": "औसत हमले/जिला",
+  "capitalAvgLootPerAttack": "औसत लूट/हमला",
+  "capitalHistorySection": "छापे का इतिहास",
+  "capitalHistoryWeeksTracked": "सप्ताहों पर नज़र रखी गई",
+  "capitalAvgLootPerWeek": "औसत लूट/सप्ताह",
+  "capitalAvgAttacksPerWeek": "औसत हमले/सप्ताह",
+  "capitalBestRaid": "सर्वोत्तम छापेमारी",
+  "capitalWorstRaid": "सबसे ख़राब छापेमारी",
+  "capitalHistoryChartTitle": "साप्ताहिक रुझान",
   "searchNoResult": "कोई परिणाम नहीं",
   "maintenanceTitle": "मेंटेनेंस",
   "maintenanceDescription": "Clash of Clans अभी मेंटेनेंस में है, इसलिए हम API तक नहीं पहुँच सकते। कृपया बाद में फिर देखें।",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "दैनिक ट्रॉफी ट्रैकिंग और सीज़न समाप्ति आँकड़े",
   "faqFeaturesCwlTitle": "CWL एनालिटिक्स",
   "faqFeaturesCwlDescription": "क्लैन वॉर लीग प्रदर्शन और सदस्य योगदान",
+  "faqFeaturesTodoTitle": "कार्य सूची",
+  "faqFeaturesTodoDescription": "देखें कि किन खातों को अभी भी रैंक्ड हमले, रेड, युद्ध हमले, क्लैन गेम्स या पास की कार्रवाइयाँ करनी हैं",
+  "faqFeaturesUpgradeTrackerTitle": "ट्रैकर को अपग्रेड करें",
+  "faqFeaturesUpgradeTrackerDescription": "शेष अपग्रेड, संसाधन, बिल्डर, लैब समय और प्रगति देखने के लिए उपयोगकर्ता द्वारा दिया गया मैन्युअल खाता स्नैपशॉट इस्तेमाल करें",
+  "faqFeaturesNotificationsTitle": "पुश सूचनाएँ",
+  "faqFeaturesNotificationsDescription": "चुनें कि समर्थित ClashKing घटनाओं के अलर्ट किन खातों को मिलें",
+  "faqFeaturesWidgetsTitle": "युद्ध विजेट",
+  "faqFeaturesWidgetsDescription": "जहाँ विजेट समर्थित हों, वहाँ वर्तमान युद्ध स्थिति को होम स्क्रीन पर दिखाएँ",
   "faqSearchHint": "FAQ खोजें...",
   "faqSectionGettingStarted": "शुरुआत और परिचय",
+  "faqSectionAccountsAlertsWidgets": "खाते, अलर्ट और विजेट",
   "faqSectionSupportAndContact": "सपोर्ट और संपर्क",
+  "faqLinkedAccountsTitle": "लिंक किए खाते और सत्यापन कैसे काम करते हैं?",
+  "faqLinkedAccountsAnswer": "आपकी ClashKing प्रोफ़ाइल में कई Clash of Clans खाते हो सकते हैं। टैग जोड़ने पर सार्वजनिक डेटा दिखता है। Clash of Clans API टोकन से सत्यापन साबित करता है कि खाता आपका है और खाता-विशिष्ट सुविधाएँ खोलता है।",
+  "faqLinkedAccountsSolution1": "खाता प्रबंधन से खातों को प्रबंधित, पुनः क्रमित, छिपाएँ या हटाएँ।",
+  "faqLinkedAccountsSolution2": "Clash of Clans में सेटिंग > अधिक सेटिंग > API टोकन के अंतर्गत API टोकन पाएँ।",
+  "faqLinkedAccountsSolution3": "आप Discord या ईमेल से साइन इन कर सकते हैं। खाता कनेक्शन उपलब्ध होने पर उन्हें सेटिंग से प्रबंधित करें।",
+  "faqNotificationsTitle": "सूचनाएँ कैसे काम करती हैं?",
+  "faqNotificationsAnswer": "सूचनाएँ वैकल्पिक हैं। सक्षम होने पर ClashKing इस डिवाइस को पंजीकृत करता है। आप चुन सकते हैं कि हर अलर्ट किन लिंक खातों के लिए हो।",
+  "faqNotificationsSolution1": "अपने डिवाइस और ClashKing सेटिंग में सूचनाओं की अनुमति दें।",
+  "faqNotificationsSolution2": "हर अलर्ट अलग खातों के लिए हो सकता है। अलर्ट न मिलने पर चुने गए खाते जाँचें।",
+  "faqNotificationsSolution3": "कुछ अलर्ट ट्रैक किए गए क्लैन या युद्ध डेटा पर निर्भर हैं। बाहरी डेटा अपडेट होने में देरी हो सकती है।",
+  "faqWidgetsTitle": "युद्ध विजेट कैसे काम करते हैं?",
+  "faqWidgetsAnswer": "युद्ध विजेट समर्थित डिवाइस पर संक्षिप्त सारांश दिखाते हैं। ये आपके चुने या लिंक खातों, कैश किए ClashKing डेटा और प्लेटफ़ॉर्म की अनुमति के अनुसार बैकग्राउंड रीफ़्रेश का उपयोग करते हैं।",
+  "faqWidgetsSolution1": "खाते या क्लैन बदलने के बाद ऐप खोलें ताकि विजेट सिंक हो सके।",
+  "faqWidgetsSolution2": "विजेट पुराना लगे तो पहले ऐप रीफ़्रेश करें। Android और iOS बैकग्राउंड अपडेट सीमित करते हैं।",
+  "faqWidgetsSolution3": "उपयोगी स्थिति दिखाने के लिए क्लैन का युद्ध डेटा उपलब्ध होना चाहिए।",
   "faqTranslationIssue": "अनुवाद गायब या गलत है?",
   "faqTranslationIssueAnswer": "अनुवाद पहले जनरेशन और AI टूल्स से तैयार किए जाते हैं, फिर समय के साथ उनकी समीक्षा और सुधार होता है। यदि आप मूल वक्ता हैं और कोई टेक्स्ट अजीब लगता है, तो आप Crowdin पर सुधार सुझा सकते हैं या Discord या ईमेल से हमसे संपर्क कर सकते हैं।",
   "faqWaysToSupport": "हमें सपोर्ट करने के तरीके:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "हमले का क्रम",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "अवधि",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "हमलावर",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "हमला गति",
   "gameItemAttackRange": "हमला रेंज",
   "gameItemMovementSpeed": "मूवमेंट स्पीड",
+  "gameItemWardenWeight": "वार्डन वज़न",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "वार्डन वज़न आवास स्थान को ओवरराइड कर सकता है और तय करता है कि ग्रैंड वार्डन किसी यूनिट समूह का अनुसरण करने को कितनी प्राथमिकता देता है।",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "हीलर वज़न",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "हीलर जब यूनिटों को प्राथमिकता देने का निर्णय करती हैं, तब हीलर वज़न आवास स्थान को ओवरराइड कर सकता है।",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{अनुसरण सीमा के लिए 1 सैनिक} other{अनुसरण सीमा के लिए {count} सैनिक}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "अनुसरण सीमा में योगदान नहीं देता",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "अपग्रेड संसाधन",
   "gameItemRarity": "दुर्लभता",
   "gameItemHero": "हीरो",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "उड़ने वाला",
   "gameItemUpgradeCost": "अपग्रेड लागत",
   "gameItemUpgradeTime": "अपग्रेड समय",
-  "generalExpand": "बढ़ाना",
-  "generalCollapse": "गिर जाना",
-  "generalBookmark": "बुकमार्क",
-  "generalRemoveBookmark": "बुकमार्क हटाएँ",
-  "gameLeague": "संघ",
-  "clanMembersSearchPlaceholder": "सदस्यों को खोजें",
-  "clanMembersShowTotals": "कुल योग दिखाएँ",
-  "clanMembersHideTotals": "कुल योग छिपाएँ",
-  "clanMembersReceivedShort": "प्राप्त",
-  "clanMembersAverageTh": "औसत TH",
-  "warLogSearchPlaceholder": "युद्ध खोजें",
-  "warStatsSearchPlaceholder": "खिलाड़ियों को खोजें",
-  "warStatsCurrentTownHall": "मिथक",
-  "warStatsLast50": "अंतिम 50",
-  "warStatsWars": "युद्धों",
-  "warStatsSelectSeason": "युद्ध आँकड़े सीज़न का चयन करें",
-  "warAnalysisToWin": "जीतने के लिए",
-  "warAnalysisToLose": "खोने के लिए",
-  "warAnalysisNoAttacksLeft": "कोई आक्रमण नहीं बचा",
-  "warAnalysisScenario": "{attacks} हमले बाएँ -> प्रति हमले {stars} सितारों / {percent}% की आवश्यकता है",
-  "warAnalysisImpossibleScenario": "{attacks} हमले बाएँ -> असंभव ({stars} सितारे / {percent}% प्रति हमला)",
-  "warAttacksSuccessful": "सफल हमले",
-  "warAttacksFailed": "असफल हमले",
-  "warAttacksMissedShort": "चुक होना",
-  "cwlHistoryTitle": "सीडब्ल्यूएल इतिहास",
-  "clanJoinLeaveTab": "शामिल हों/छोड़ें",
-  "clanRankingsTab": "रैंकिंग",
-  "clanRankingsSeason": "मौसम",
-  "clanRankingsSelectSeason": "रैंकिंग सीज़न चुनें",
-  "clanRankingsFilterActivity": "गतिविधि",
-  "clanRankingsFilterWar": "युद्ध",
-  "clanRankingsFilterPoints": "अंक",
-  "cwlHistoryPreviewBadge": "पूर्व दर्शन",
-  "cwlHistoryPreviewSubtitle": "CWL समापन बिंदु तय होने तक {clan} मॉकअप",
-  "cwlHistoryEmptyTitle": "अभी तक कोई CWL इतिहास नहीं है",
-  "cwlHistoryEmptyBody": "इस कबीले ने अभी तक कबीले युद्ध लीग सीज़न में भाग नहीं लिया है।",
-  "cwlRankTitle": "पद",
-  "cwlWarsPlayedTitle": "युद्ध खेले गए",
-  "playerWarStarsTitle": "युद्ध सितारे",
-  "playerWarPreferenceTitle": "युद्ध प्रीफ़.",
-  "playerDonatedTitle": "दान",
-  "playerReceivedTitle": "प्राप्त",
-  "playerCapitalTitle": "पूंजी",
-  "playerExpLevelTitle": "ऍक्स्प. स्तर",
-  "clanWarWinsTitle": "युद्ध जीतता है",
-  "clanWinStreakTitle": "जीत की लकीर",
-  "clanBuilderBaseTitle": "बिल्डर आधार",
-  "clanTypeTitle": "प्रकार",
-  "clanMinTownHallTitle": "न्यूनतम. वां",
-  "clanMinTrophiesTitle": "न्यूनतम. ट्राफियां",
-  "clanCapitalHallTitle": "कैपिटल हॉल",
-  "clanDistrictsTitle": "जिलों",
-  "legendsCountryTitle": "देश",
-  "legendsLocalRankTitle": "स्थानीय पद",
-  "legendsGlobalRankTitle": "वैश्विक रैंक",
-  "warWinsTitle": "जीत",
-  "warLossesTitle": "हानि",
-  "warDrawsTitle": "खींचता",
-  "capitalRaidStatusOngoing": "चल रहे",
-  "capitalRaidStatusEnded": "समाप्त",
-  "capitalRaidLoot": "लूट",
-  "capitalRaidRewards": "पुरस्कार",
-  "capitalRaidPreviousWeek": "पिछला सप्ताह",
-  "capitalRaidNextWeek": "अगले सप्ताह",
-  "capitalRaidFilterAttacked": "हमला किया",
-  "capitalRaidFilterNotAttacked": "हमला नहीं किया",
-  "capitalRaidFilterLinked": "लिंक किए गए खाते",
-  "capitalRaidEmptyTitle": "पूंजी छापे का कोई डेटा नहीं",
-  "capitalRaidEmptyBody": "इस कबीले की राजधानी छापे सप्ताहांत पर नज़र रखने के बाद छापे का इतिहास यहां दिखाई देगा।",
-  "capitalRaidEstimated": "अनुमानित",
-  "capitalRaidEstimatedTooltip": "अभी तक आधिकारिक नहीं: इस सप्ताह के हमले और रक्षा लॉग से अनुमान लगाया गया है। छापा समाप्त होने के बाद सुपरसेल वास्तविक पदक संख्या प्रकाशित करता है।",
-  "capitalRaidTrophyPrediction": "अनुमानित ट्राफियां",
-  "capitalRaidTrophyPredictionTooltip": "इस सप्ताह के अब तक के प्रदर्शन के आधार पर, इस छापे के बाद अनुमानित कैपिटल लीग ट्राफियां। सरकारी नहीं।",
-  "capitalRaidProjectedLoot": "प्रक्षेपित लूट",
-  "capitalRaidOneshots": "एक-शॉट",
-  "capitalRaidFails": "विफल रहता है",
-  "capitalDetailsOffense": "अपराध",
-  "capitalDetailsDefense": "रक्षा",
-  "capitalDistrictsSection": "जिलों",
-  "capitalOpponentsSection": "विरोधियों",
-  "capitalAvgAttacksPerDistrict": "औसत हमले/जिला",
-  "capitalAvgLootPerAttack": "औसत लूट/हमला",
-  "capitalHistorySection": "छापे का इतिहास",
-  "capitalHistoryWeeksTracked": "सप्ताहों पर नज़र रखी गई",
-  "capitalAvgLootPerWeek": "औसत लूट/सप्ताह",
-  "capitalAvgAttacksPerWeek": "औसत हमले/सप्ताह",
-  "capitalBestRaid": "सर्वोत्तम छापेमारी",
-  "capitalWorstRaid": "सबसे ख़राब छापेमारी",
-  "capitalHistoryChartTitle": "साप्ताहिक रुझान",
-  "warAttacksDetailsDuration": "अवधि",
   "gameItemRemainingToTownHallMax": "अधिकतम TH तक",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "वैश्विक अधिकतम तक",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "{count} स्तर शेष है",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "सिंहावलोकन",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "आँकड़े",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "अगला अपग्रेड",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "उन्नयन योजना",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "अपग्रेड डेटा अनुपलब्ध",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "चयनित",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "प्राथमिकताएँ",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "सूचनाएं",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "अलर्ट चुनें और स्थानीय परीक्षण पूर्वावलोकन भेजें।",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "सहायता",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "के बारे में",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "खाता",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "साइन इन किया गया",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "उपस्थिति",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "प्रणाली",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "इस डिवाइस का मिलान करें",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "रोशनी",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "अँधेरा",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "चयनित",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "अभी तक कोई लिंक किया गया खाता लोड नहीं हुआ है.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "कोई खाता चयनित नहीं",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "{count} खाते चयनित",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "हाल ही का",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "खिलाड़ी",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "कुलों",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "स्पष्ट",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "डेटा सफलतापूर्वक ताज़ा किया गया",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "डेटा ताज़ा करने में विफल: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "फ़िल्टर किया गया डेटा लोड करने में विफल: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "निर्यात विफल: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "खिलाड़ी",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "प्रारूप",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "एक्सेल (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "शामिल",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "आँकड़े, हमले, TH विश्लेषण",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "कोई उपयोगकर्ता डेटा उपलब्ध नहीं है",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "हिसाब किताब",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "प्लेयर डेटा लोड करने में विफल.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "कबीले डेटा लोड करने में विफल.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "कोई मेल खाता खाता नहीं",
   "todoNoConfiguredAccounts": "कोई कार्य-कार्य खाते कॉन्फ़िगर नहीं किए गए",
   "todoNoLinkedAccounts": "कोई लिंक्ड खाता नहीं",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "इस रेड के लिए कोई खिलाड़ी सूची या व्यक्तिगत आक्रमण उपलब्ध नहीं है।",
   "dashboardNoLinkedAccountsTitle": "कोई लिंक्ड खाता नहीं",
   "dashboardNoLinkedAccountsBody": "हमलों, घटनाओं और गतिविधि को यहां देखने के लिए क्लैश खाते को लिंक करें।",
+  "dashboardTodoHiddenTitle": "यहाँ कोई खाता नहीं दिखाया गया",
+  "dashboardTodoHiddenBody": "यहाँ खाता देखने के लिए खिलाड़ी टैब में उसकी होम कार्ड विकल्पों में से कोई एक चालू करें।",
+  "dashboardUpgradeTrackerNoData": "अपग्रेड डेटा आयात या रीफ़्रेश करने के लिए ट्रैकर खोलें।",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {को अपडेट चाहिए} other {को अपडेट चाहिए}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {का कार्य शेष है} other {के कार्य शेष हैं}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {का हमला शेष है} other {के हमले शेष हैं}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "अनुमानित",
+  "dashboardUpgradeTrackerBuilders": "बिल्डर",
+  "dashboardUpgradeTrackerLab": "लैब",
+  "dashboardUpgradeTrackerPets": "पालतू जीव",
+  "dashboardUpgradeTrackerWalls": "दीवारें",
+  "dashboardUpgradeTrackerVillage": "गाँव",
+  "dashboardRankedNoData": "इस खाते की स्थिति देखने के लिए रैंक्ड लीग खोलें।",
+  "dashboardRankedAccounts": "{loaded}/{total} खाते ट्रैक किए गए",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "अभी तक कोई बुकमार्क किया गया खिलाड़ी नहीं",
   "playersNoBookmarkedBody": "एक खिलाड़ी प्रोफ़ाइल खोलें और इसे बाद के लिए सहेजें।",
   "playersNoLinkedBody": "खाता सेटअप स्क्रीन से खाते प्रबंधित करें।",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "इमारतों के मौजूदा स्तरों के विरुद्ध क्षति की योजना बनाएँ।",
   "calculatorZapQuake": "जैप भूकंप",
   "calculatorFireball": "आग का गोला",
+  "damageCalculatorSubtitle": "एक हमले के समूह की कई भवनों से तुलना करें।",
+  "damageNoStaticDataTitle": "नुकसान डेटा उपलब्ध नहीं है",
+  "damageNoStaticDataBody": "स्थिर गेम डेटा लोड होने के बाद ऐप रीफ़्रेश करें।",
+  "damageTownHall": "टाउन हॉल",
+  "damageVerifiedAccountPrefill": "सत्यापित खाते का प्रीसेट",
+  "damageOverridesStayLocal": "यहाँ किए बदलाव खिलाड़ी खाते को अपडेट नहीं करते।",
+  "damageTargets": "भवन",
+  "damageAddBuilding": "भवन जोड़ें",
+  "damageRemoveBuilding": "भवन हटाएँ",
+  "damageNoTargetsBody": "परिणामों की तुलना के लिए कम से कम एक भवन जोड़ें।",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "भवन खोजें",
+  "damageNoBuildingsFound": "कोई भवन नहीं मिला",
+  "damageTryAnotherSearch": "कोई दूसरा नाम या टाउन हॉल स्तर आज़माएँ।",
+  "damageAttackStack": "मैन्युअल हमला समूह",
+  "damageNoSourcesForTownHall": "इस टाउन हॉल में कोई समर्थित नुकसान स्रोत उपलब्ध नहीं है।",
+  "damageCount": "संख्या",
+  "damagePerUse": "हर उपयोग पर {damage} नुकसान",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "अधिकतम HP का {percent}%, एक साथ उपयोग पर घटता है",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "बिजली",
+  "damageSourceEarthquake": "भूकंप",
+  "damageSourceGiantArrow": "विशाल तीर",
+  "damageSourceFireball": "आग का गोला",
+  "damageSourceFlameFlinger": "फ्लेम फ्लिंगर प्रहार",
+  "damageSourceBalloonDeath": "गुब्बारा नष्ट होने का नुकसान",
+  "damageSourceRocketBalloonDeath": "रॉकेट गुब्बारा नष्ट होने का नुकसान",
+  "damageResults": "परिणाम",
+  "damageDestroyed": "नष्ट",
+  "damageSurvives": "बचा रहता है",
+  "damageResultSummary": "{damage} नुकसान · {remaining} HP शेष",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "ज़ैप-क्वेक अनुकूलक",
+  "damageSpellCapacity": "स्पेल क्षमता",
+  "damageZapQuakeUnavailable": "इस टाउन हॉल में बिजली और भूकंप उपलब्ध नहीं हैं।",
+  "damageZapQuakeUsesSelectedLevels": "बिजली स्तर {lightningLevel} और भूकंप स्तर {earthquakeLevel} का उपयोग।",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "बिजली और भूकंप इस भंडार को नुकसान नहीं पहुँचा सकते।",
+  "damageNoValidZapQuake": "चुनी गई स्पेल क्षमता में कोई मान्य संयोजन नहीं बैठता।",
+  "damageZapQuakeCombination": "{lightning} ज़ैप + {earthquake} क्वेक · {capacity} स्थान",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "ट्रैकर को अपग्रेड करें",
   "upgradeTrackerSubtitle": "शेष अपग्रेड लागत और समय.",
   "linkedAccountLabel": "लिंक किया गया खाता",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "कुल अपग्रेड देखने के लिए लिंक किए गए खाते जोड़ें या ताज़ा करें।",
   "playerOptionNotificationsTitle": "सूचनाएं",
   "playerOptionNotificationsSubtitle": "इस खाते के लिए अलर्ट प्राप्त करें.",
+  "playerOptionNotificationsEnableMaster": "पहले सेटिंग में सूचनाएँ चालू करें।",
+  "playerOptionNotificationsVerifyFirst": "सूचनाएँ चालू करने के लिए इस खाते को सत्यापित करें।",
+  "playerOptionNotificationsSubscriptionRequired": "बुकमार्क सूचनाओं के लिए सदस्यता आवश्यक है।",
+  "playerOptionNotificationsLimitReached": "आपकी बुकमार्क सूचना सीमा पूरी हो गई है।",
   "playerOptionShowTodoPageTitle": "कार्य-कार्य पृष्ठ पर दिखाएं",
   "playerOptionShowTodoPageSubtitle": "इस खाते को संपूर्ण कार्य सूची में शामिल करें.",
+  "playerOptionShowTodoPageVerifyFirst": "इस खाते को कार्य सूची में दिखाने के लिए सत्यापित करें।",
+  "playerOptionShowUpgradeTrackerHomeTitle": "होम पर अपग्रेड ट्रैकर दिखाएँ",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "इस खाते का अपग्रेड सारांश होम पर पिन करें।",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "होम पर अपग्रेड प्रगति दिखाने के लिए खाता सत्यापित करें।",
+  "playerOptionShowRankedHomeTitle": "होम पर रैंक्ड दिखाएँ",
+  "playerOptionShowRankedHomeSubtitle": "इस खाते का रैंक्ड लीग सारांश होम पर पिन करें।",
+  "playerOptionShowRankedHomeVerifyFirst": "होम पर रैंक्ड लीग सारांश दिखाने के लिए खाता सत्यापित करें।",
   "playerOptionShowWarTabTitle": "युद्ध टैब में दिखाएँ",
   "playerOptionShowWarTabSubtitle": "इस खाते के कबीले को युद्ध टैब में शामिल करें।",
   "bookmarkPlayerLoadFailed": "बुकमार्क किए गए प्लेयर को लोड करने में विफल.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · कोई खुला कार्य नहीं",
   "todoMockCaughtUpStatus": "आज सक्रिय · किसी कार्रवाई की आवश्यकता नहीं",
   "notifChooseAlerts": "अलर्ट चुनें",
+  "notifGroupLegendAttacks": "लीजेंड I हमले",
+  "notifLegendAttacksDescription": "लीजेंड I में सूचना-सक्षम बुकमार्क खातों के हमले के परिणाम।",
+  "notifGroupLegendDefenses": "लीजेंड I बचाव",
+  "notifLegendDefensesDescription": "लीजेंड I में सूचना-सक्षम खातों के बचाव के परिणाम।",
   "notifLeagueDefenseDescription": "हमलावर, सितारे, प्रतिशत और लीग संदर्भ के साथ रक्षा परिणाम।",
   "notifWarAttackOptionsDescription": "युद्ध हमले के परिणाम, रक्षा अलर्ट और 5v5 आक्रमण फ़ीड विकल्प।",
   "notifWarAlertsDescription": "युद्ध का मिलान हुआ, युद्ध का दिन शुरू हुआ और युद्ध समाप्त हुआ।",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "कैपिटल पॉइंट्स",
   "todoAllAccounts": "सभी खाते",
   "todoCombinedAcrossAccounts": "आपके खातों में संयुक्त टू-डू",
+  "dashboardRankedCombinedAcrossAccounts": "आपके खातों की संयुक्त रैंकिंग",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "आपके खातों की संयुक्त अपग्रेड ट्रैकिंग",
   "todoPreviewAccount": "खाता पूर्वावलोकन",
   "todoLastActiveUnavailable": "अंतिम सक्रिय उपलब्ध नहीं",
   "todoActiveRelative": "{time} सक्रिय",
@@ -2516,9 +2961,115 @@
   "sideRankingsEmptyTitle": "कोई रैंकिंग वापस नहीं आई",
   "sideRankingsEmptyBody": "दूसरा लीडरबोर्ड या स्थान आज़माएँ।",
   "sideRankingsMockups": "ClashKing मॉकअप",
+  "rankingsBuilderBase": "बिल्डर बेस",
+  "rankingsTownHall": "टाउन हॉल",
+  "rankingsRankedLeague": "रैंक्ड लीग",
+  "rankingsClanCapital": "कबीले की राजधानी",
+  "rankingsDonations": "दान",
+  "rankingsWarWins": "युद्ध जीत",
+  "rankingsWinStreak": "लगातार जीत",
+  "rankingsCurrent": "वर्तमान",
+  "rankingsWorldwide": "विश्वव्यापी",
+  "rankingsSelectLocation": "स्थान चुनें",
+  "rankingsSearchLocations": "स्थान या देश कोड खोजें",
+  "rankingsWorldwideUnavailable": "इस लीडरबोर्ड के लिए क्षेत्र या देश चुनें।",
+  "rankingsLocationsLoadFailed": "पूरी स्थान सूची लोड नहीं हो सकी। जहाँ समर्थित है वहाँ विश्वव्यापी विकल्प उपलब्ध है।",
+  "rankingsSnapshotDate": "स्नैपशॉट तिथि",
+  "rankingsSource": "स्रोत",
+  "rankingsOfficialSource": "आधिकारिक Clash API",
+  "rankingsResults": "परिणाम",
+  "rankingsTopCount": "शीर्ष {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "कोई सहेजा स्नैपशॉट नहीं",
+  "rankingsNoSnapshotBody": "{date} के लिए कोई रैंकिंग स्नैपशॉट सहेजा नहीं गया है। दूसरी तिथि चुनें या वर्तमान पर लौटें।",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "यह खिलाड़ी लोड नहीं हो सका।",
+  "rankingsClanLoadFailed": "यह क्लैन लोड नहीं हो सका।",
   "sideStatsTitle": "आँकड़े",
   "sideStatsSubtitle": "आधिकारिक Clash API सतहों से लीडरबोर्ड आँकड़े।",
   "sideStatsLoadError": "बैटल इंटेलिजेंस लोड नहीं किया जा सका।",
+  "statsOverview": "अवलोकन",
+  "statsArmies": "सेनाएं",
+  "statsItems": "आइटम",
+  "statsWar": "युद्ध",
+  "statsCwl": "सीडब्ल्यूएल",
+  "statsRanked": "रैंक्ड",
+  "statsDateRange": "तिथि सीमा",
+  "statsDateRangeHint": "90 दिनों तक चुनें",
+  "statsDateRangeTooLong": "90 दिनों या उससे कम की दिनांक सीमा चुनें।",
+  "statsUpdated": "ताजा डेटा",
+  "statsNoDataTitle": "अभी तक कोई युद्ध डेटा नहीं",
+  "statsNoDataBody": "व्यापक दिनांक सीमा या कम प्रतिबंधात्मक फ़िल्टर आज़माएं।",
+  "statsAddItemsTitle": "विश्लेषण के लिए आइटम चुनें",
+  "statsAddItemsBody": "सैनिकों, मंत्रों, नायकों, पालतू जानवरों या उपकरण को जोड़ें, फिर क्वेरी चलाएं।",
+  "statsGlobalCounts": "वैश्विक गणना",
+  "statsPerformance": "प्रदर्शन",
+  "statsSamples": "नमूने",
+  "statsUsage": "उपयोग",
+  "statsAverageStars": "औसत सितारे",
+  "statsAverageDestruction": "औसत विनाश",
+  "statsStarRates": "स्टार दरें",
+  "statsThreeStarRate": "तीन सितारा दर",
+  "statsDailyTrend": "दैनिक प्रवृत्ति",
+  "statsPlayers": "खिलाड़ियों",
+  "statsClans": "कुलों",
+  "statsPlayersInWar": "युद्ध में खिलाड़ी",
+  "statsClansInWar": "युद्ध में कबीले",
+  "statsPlayersInLegends": "लीजेंड्स में खिलाड़ी",
+  "statsWarsStored": "संग्रहीत युद्ध",
+  "statsJoinLeaves": "घटनाओं में शामिल हों/छोड़ें",
+  "statsSearchArmies": "सटीक रचनाएँ खोजें",
+  "statsExactComposition": "सटीक संरचना",
+  "statsArmyShareCode": "सेना शेयर कोड",
+  "statsMinimumSample": "न्यूनतम नमूना",
+  "statsSortBy": "क्रमबद्ध करें",
+  "statsIncludeItems": "आइटम शामिल करें",
+  "statsExcludeItems": "आइटमों को बाहर निकालें",
+  "statsItemId": "आइटम आईडी या संग्रहित नाम",
+  "statsItemType": "आइटम प्रकार",
+  "statsTroop": "ट्रूप",
+  "statsSpell": "वर्तनी",
+  "statsHero": "हीरो",
+  "statsPet": "पालतू",
+  "statsEquipment": "उपकरण",
+  "statsOwningHero": "नायक का स्वामित्व",
+  "statsAddItem": "आइटम जोड़ें",
+  "statsAnalyzeItems": "आइटमों का विश्लेषण करें",
+  "statsCompositionShare": "संरचना शेयर",
+  "statsNoLevels": "सेना के रिकॉर्ड में आइटम स्तर शामिल नहीं हैं।",
+  "statsRankedCompositionOnly": "संरचना डेटा रैंक किए गए बैटललॉग से आता है; युद्ध और सीडब्ल्यूएल प्रदर्शन अलग-अलग रहते हैं।",
+  "statsTownHall": "टाउन हॉल",
+  "statsOpponentTownHall": "प्रतिद्वंद्वी टाउन हॉल",
+  "statsEqualTownHalls": "समान टाउन हॉल",
+  "statsLeagueTier": "लीग स्तर",
+  "statsLegendLeagueOne": "लीजेंड लीग 1",
+  "statsCwlLeague": "CWL लीग",
+  "statsLeagueBronze": "कांस्य",
+  "statsLeagueSilver": "चांदी",
+  "statsLeagueGold": "सोना",
+  "statsLeagueCrystal": "क्रिस्टल",
+  "statsLeagueMaster": "मास्टर",
+  "statsLeagueChampion": "चैंपियन",
+  "statsAllCwlLeagues": "सभी सीडब्ल्यूएल लीग",
+  "statsCwlSeasons": "CWL सीज़न",
+  "statsCwlSeasonsHint": "YYYY-MM, अल्पविराम से अलग",
+  "statsApplyFilters": "फ़िल्टर लागू करें",
+  "statsRefresh": "डेटा रीफ़्रेश करें",
+  "statsRegularWarOnly": "केवल नियमित युद्ध; मैत्रीपूर्ण युद्ध और सीडब्ल्यूएल को बाहर रखा गया है।",
+  "statsRankedRequired": "टाउन हॉल और एक लीग टियर की आवश्यकता होती है।",
+  "statsSeasonBreakdown": "सीज़न विवरण",
   "sideTopScore": "शीर्ष स्कोर",
   "sideTop200Avg": "टॉप 200 औसत",
   "sideBasesArmiesTitle": "बेस और आर्मी",
@@ -2535,6 +3086,51 @@
   "sideArmyLinksBody": "कंपोज़िशन, स्पेल, सीज, नोट्स और शेयर लिंक।",
   "sideGameAssetsTitle": "गेम एसेट्स",
   "sideGameAssetsSubtitle": "ClashKing पर होस्ट किए गए एसेट्स, फ़ोल्डर के अनुसार समूहित।",
+  "gameAssetsLoadError": "गेम एसेट लोड नहीं हो सके",
+  "gameAssetsEmptyTitle": "कोई गेम एसेट उपलब्ध नहीं",
+  "gameAssetsEmptyBody": "होस्ट किए मैनिफ़ेस्ट में कोई समर्थित चित्र नहीं था।",
+  "gameAssetsOneImage": "1 चित्र",
+  "gameAssetsImageCount": "{count} चित्र",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "इस श्रेणी में खोजें",
+  "gameAssetsAllFormats": "सभी प्रारूप",
+  "gameAssetsOneResult": "1 परिणाम",
+  "gameAssetsResultCount": "{count} परिणाम",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "कोई मिलता-जुलता चित्र नहीं",
+  "gameAssetsNoResultsBody": "कोई दूसरी खोज या फ़ाइल प्रारूप आज़माएँ।",
+  "gameAssetsLongPressHint": "होस्ट किया URL कॉपी करने के लिए देर तक दबाएँ",
+  "gameAssetsCopyUrl": "URL कॉपी करें",
+  "gameAssetsCopyPath": "पथ कॉपी करें",
+  "gameAssetsUrlCopied": "एसेट URL कॉपी हो गया",
+  "gameAssetsPathCopied": "एसेट पथ कॉपी हो गया",
+  "gameAssetsCopyError": "एसेट विवरण कॉपी नहीं हो सका।",
+  "gameAssetsShare": "साझा करें",
+  "gameAssetsShareError": "यह एसेट साझा नहीं हो सका।",
+  "gameAssetsSave": "सहेजें",
+  "gameAssetsSaving": "सहेजा जा रहा है...",
+  "gameAssetsSaved": "एसेट सहेजा गया।",
+  "gameAssetsSavedTo": "एसेट {path} पर सहेजा गया",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "यह एसेट सहेजा नहीं जा सका।",
   "sideZapQuakeTitle": "{zaps} लाइटनिंग + 1 क्वेक",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3473,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Supercell फ़ैन कंटेंट नीति",
-  "notifAudienceSectionTitle": "सूचनाओं के प्राप्तकर्ता",
-  "notifScopeAllLinkedAccounts": "सभी लिंक किए गए खाते",
-  "notifScopeSelectedAccounts": "चुने गए खाते",
-  "notifAudienceSheetDescription": "चुनें कि इस डिवाइस पर कौन से खाते सूचनाएं प्राप्त कर सकते हैं।",
-  "notifAudienceAllSubtitle": "{count} मौजूदा खाते। भविष्य में लिंक किए गए खाते अपने आप शामिल होंगे।",
-  "notifAudienceSelectedSubtitle": "{count} सूचनाओं के लिए चुने गए।",
-  "notifAudienceSelectedEmpty": "ठीक-ठीक चुनें कि कौन से खाते सूचनाएं प्राप्त करेंगे।",
-  "notifAudienceAllInlineNote": "बाद में लिंक किए गए सभी खाते इस सेटिंग को बदले बिना शामिल हो जाएंगे।",
-  "notifAccountBookmarked": "सहेजा गया",
-  "notifGroupLeagueBattles": "लीग लड़ाइयां",
-  "notifGroupWarAttacks": "युद्ध हमले",
-  "notifGroupWarState": "युद्ध स्थिति",
-  "notifGroupWarReminders": "युद्ध रिमाइंडर",
-  "notifGroupEvents": "इवेंट",
-  "notifGroupAppAnnouncements": "ऐप घोषणाएं",
-  "notifGroupUpgradeFinishes": "अपग्रेड पूरे हुए",
-  "notifGroupMonthlySupport": "मासिक समर्थन",
-  "postsTitle": "पोस्ट",
-  "postsDescription": "ClashKing समाचार, अपडेट की कहानियाँ और पिछली घोषणाएँ।",
-  "postsEmpty": "अभी कोई प्रकाशित पोस्ट नहीं है।",
-  "postsLoadFailed": "पोस्ट लोड नहीं हो सकीं।",
-  "postsLoadMore": "और लोड करें",
-  "postsCurrent": "वर्तमान",
-  "postsPast": "पिछली",
-  "postsStory": "इंटरैक्टिव कहानी",
-  "postsPinned": "विशेष रुप से प्रदर्शित",
-  "authAccountLinkDiscord": "Discord खाता लिंक करें",
-  "authAccountAddDiscordAuth": "अलग-अलग प्लेटफ़ॉर्म पर सिंक और ClashKing Bot की पहुँच के लिए अपने खाते में Discord प्रमाणीकरण जोड़ें।",
-  "authAccountDiscordLinkedSuccess": "Discord खाता सफलतापूर्वक लिंक हो गया!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "कार्य सूची",
-  "faqFeaturesTodoDescription": "देखें कि किन खातों को अभी भी रैंक्ड हमले, रेड, युद्ध हमले, क्लैन गेम्स या पास की कार्रवाइयाँ करनी हैं",
-  "faqFeaturesUpgradeTrackerTitle": "ट्रैकर को अपग्रेड करें",
-  "faqFeaturesUpgradeTrackerDescription": "शेष अपग्रेड, संसाधन, बिल्डर, लैब समय और प्रगति देखने के लिए उपयोगकर्ता द्वारा दिया गया मैन्युअल खाता स्नैपशॉट इस्तेमाल करें",
-  "faqFeaturesNotificationsTitle": "पुश सूचनाएँ",
-  "faqFeaturesNotificationsDescription": "चुनें कि समर्थित ClashKing घटनाओं के अलर्ट किन खातों को मिलें",
-  "faqFeaturesWidgetsTitle": "युद्ध विजेट",
-  "faqFeaturesWidgetsDescription": "जहाँ विजेट समर्थित हों, वहाँ वर्तमान युद्ध स्थिति को होम स्क्रीन पर दिखाएँ",
-  "faqSectionAccountsAlertsWidgets": "खाते, अलर्ट और विजेट",
-  "faqLinkedAccountsTitle": "लिंक किए खाते और सत्यापन कैसे काम करते हैं?",
-  "faqLinkedAccountsAnswer": "आपकी ClashKing प्रोफ़ाइल में कई Clash of Clans खाते हो सकते हैं। टैग जोड़ने पर सार्वजनिक डेटा दिखता है। Clash of Clans API टोकन से सत्यापन साबित करता है कि खाता आपका है और खाता-विशिष्ट सुविधाएँ खोलता है।",
-  "faqLinkedAccountsSolution1": "खाता प्रबंधन से खातों को प्रबंधित, पुनः क्रमित, छिपाएँ या हटाएँ।",
-  "faqLinkedAccountsSolution2": "Clash of Clans में सेटिंग > अधिक सेटिंग > API टोकन के अंतर्गत API टोकन पाएँ।",
-  "faqLinkedAccountsSolution3": "आप Discord या ईमेल से साइन इन कर सकते हैं। खाता कनेक्शन उपलब्ध होने पर उन्हें सेटिंग से प्रबंधित करें।",
-  "faqNotificationsTitle": "सूचनाएँ कैसे काम करती हैं?",
-  "faqNotificationsAnswer": "सूचनाएँ वैकल्पिक हैं। सक्षम होने पर ClashKing इस डिवाइस को पंजीकृत करता है। आप चुन सकते हैं कि हर अलर्ट किन लिंक खातों के लिए हो।",
-  "faqNotificationsSolution1": "अपने डिवाइस और ClashKing सेटिंग में सूचनाओं की अनुमति दें।",
-  "faqNotificationsSolution2": "हर अलर्ट अलग खातों के लिए हो सकता है। अलर्ट न मिलने पर चुने गए खाते जाँचें।",
-  "faqNotificationsSolution3": "कुछ अलर्ट ट्रैक किए गए क्लैन या युद्ध डेटा पर निर्भर हैं। बाहरी डेटा अपडेट होने में देरी हो सकती है।",
-  "faqWidgetsTitle": "युद्ध विजेट कैसे काम करते हैं?",
-  "faqWidgetsAnswer": "युद्ध विजेट समर्थित डिवाइस पर संक्षिप्त सारांश दिखाते हैं। ये आपके चुने या लिंक खातों, कैश किए ClashKing डेटा और प्लेटफ़ॉर्म की अनुमति के अनुसार बैकग्राउंड रीफ़्रेश का उपयोग करते हैं।",
-  "faqWidgetsSolution1": "खाते या क्लैन बदलने के बाद ऐप खोलें ताकि विजेट सिंक हो सके।",
-  "faqWidgetsSolution2": "विजेट पुराना लगे तो पहले ऐप रीफ़्रेश करें। Android और iOS बैकग्राउंड अपडेट सीमित करते हैं।",
-  "faqWidgetsSolution3": "उपयोगी स्थिति दिखाने के लिए क्लैन का युद्ध डेटा उपलब्ध होना चाहिए।",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "वार्डन वज़न",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "वार्डन वज़न आवास स्थान को ओवरराइड कर सकता है और तय करता है कि ग्रैंड वार्डन किसी यूनिट समूह का अनुसरण करने को कितनी प्राथमिकता देता है।",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "हीलर वज़न",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "हीलर जब यूनिटों को प्राथमिकता देने का निर्णय करती हैं, तब हीलर वज़न आवास स्थान को ओवरराइड कर सकता है।",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{अनुसरण सीमा के लिए 1 सैनिक} other{अनुसरण सीमा के लिए {count} सैनिक}}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "अनुसरण सीमा में योगदान नहीं देता",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "यहाँ कोई खाता नहीं दिखाया गया",
-  "dashboardTodoHiddenBody": "यहाँ खाता देखने के लिए खिलाड़ी टैब में उसकी होम कार्ड विकल्पों में से कोई एक चालू करें।",
-  "dashboardUpgradeTrackerNoData": "अपग्रेड डेटा आयात या रीफ़्रेश करने के लिए ट्रैकर खोलें।",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {को अपडेट चाहिए} other {को अपडेट चाहिए}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {का कार्य शेष है} other {के कार्य शेष हैं}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {का हमला शेष है} other {के हमले शेष हैं}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "अनुमानित",
-  "dashboardUpgradeTrackerBuilders": "बिल्डर",
-  "dashboardUpgradeTrackerLab": "लैब",
-  "dashboardUpgradeTrackerPets": "पालतू जीव",
-  "dashboardUpgradeTrackerWalls": "दीवारें",
-  "dashboardUpgradeTrackerVillage": "गाँव",
-  "dashboardRankedNoData": "इस खाते की स्थिति देखने के लिए रैंक्ड लीग खोलें।",
-  "dashboardRankedAccounts": "{loaded}/{total} खाते ट्रैक किए गए",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "एक हमले के समूह की कई भवनों से तुलना करें।",
-  "damageNoStaticDataTitle": "नुकसान डेटा उपलब्ध नहीं है",
-  "damageNoStaticDataBody": "स्थिर गेम डेटा लोड होने के बाद ऐप रीफ़्रेश करें।",
-  "damageTownHall": "टाउन हॉल",
-  "damageVerifiedAccountPrefill": "सत्यापित खाते का प्रीसेट",
-  "damageOverridesStayLocal": "यहाँ किए बदलाव खिलाड़ी खाते को अपडेट नहीं करते।",
-  "damageTargets": "भवन",
-  "damageAddBuilding": "भवन जोड़ें",
-  "damageRemoveBuilding": "भवन हटाएँ",
-  "damageNoTargetsBody": "परिणामों की तुलना के लिए कम से कम एक भवन जोड़ें।",
-  "damageHitpoints": "{hitpoints} HP",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "भवन खोजें",
-  "damageNoBuildingsFound": "कोई भवन नहीं मिला",
-  "damageTryAnotherSearch": "कोई दूसरा नाम या टाउन हॉल स्तर आज़माएँ।",
-  "damageAttackStack": "मैन्युअल हमला समूह",
-  "damageNoSourcesForTownHall": "इस टाउन हॉल में कोई समर्थित नुकसान स्रोत उपलब्ध नहीं है।",
-  "damageCount": "संख्या",
-  "damagePerUse": "हर उपयोग पर {damage} नुकसान",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "अधिकतम HP का {percent}%, एक साथ उपयोग पर घटता है",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "बिजली",
-  "damageSourceEarthquake": "भूकंप",
-  "damageSourceGiantArrow": "विशाल तीर",
-  "damageSourceFireball": "आग का गोला",
-  "damageSourceFlameFlinger": "फ्लेम फ्लिंगर प्रहार",
-  "damageSourceBalloonDeath": "गुब्बारा नष्ट होने का नुकसान",
-  "damageSourceRocketBalloonDeath": "रॉकेट गुब्बारा नष्ट होने का नुकसान",
-  "damageResults": "परिणाम",
-  "damageDestroyed": "नष्ट",
-  "damageSurvives": "बचा रहता है",
-  "damageResultSummary": "{damage} नुकसान · {remaining} HP शेष",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "ज़ैप-क्वेक अनुकूलक",
-  "damageSpellCapacity": "स्पेल क्षमता",
-  "damageZapQuakeUnavailable": "इस टाउन हॉल में बिजली और भूकंप उपलब्ध नहीं हैं।",
-  "damageZapQuakeUsesSelectedLevels": "बिजली स्तर {lightningLevel} और भूकंप स्तर {earthquakeLevel} का उपयोग।",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "बिजली और भूकंप इस भंडार को नुकसान नहीं पहुँचा सकते।",
-  "damageNoValidZapQuake": "चुनी गई स्पेल क्षमता में कोई मान्य संयोजन नहीं बैठता।",
-  "damageZapQuakeCombination": "{lightning} ज़ैप + {earthquake} क्वेक · {capacity} स्थान",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "इस खाते को कार्य सूची में दिखाने के लिए सत्यापित करें।",
-  "playerOptionShowUpgradeTrackerHomeTitle": "होम पर अपग्रेड ट्रैकर दिखाएँ",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "इस खाते का अपग्रेड सारांश होम पर पिन करें।",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "होम पर अपग्रेड प्रगति दिखाने के लिए खाता सत्यापित करें।",
-  "playerOptionShowRankedHomeTitle": "होम पर रैंक्ड दिखाएँ",
-  "playerOptionShowRankedHomeSubtitle": "इस खाते का रैंक्ड लीग सारांश होम पर पिन करें।",
-  "playerOptionShowRankedHomeVerifyFirst": "होम पर रैंक्ड लीग सारांश दिखाने के लिए खाता सत्यापित करें।",
-  "dashboardRankedCombinedAcrossAccounts": "आपके खातों की संयुक्त रैंकिंग",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "आपके खातों की संयुक्त अपग्रेड ट्रैकिंग",
-  "rankingsHomeVillage": "मुख्य गाँव",
-  "rankingsBuilderBase": "बिल्डर बेस",
-  "rankingsTownHall": "टाउन हॉल",
-  "rankingsRankedLeague": "रैंक्ड लीग",
-  "rankingsClanCapital": "कबीले की राजधानी",
-  "rankingsDonations": "दान",
-  "rankingsWarWins": "युद्ध जीत",
-  "rankingsWinStreak": "लगातार जीत",
-  "rankingsCurrent": "वर्तमान",
-  "rankingsWorldwide": "विश्वव्यापी",
-  "rankingsSelectLocation": "स्थान चुनें",
-  "rankingsSearchLocations": "स्थान या देश कोड खोजें",
-  "rankingsWorldwideUnavailable": "इस लीडरबोर्ड के लिए क्षेत्र या देश चुनें।",
-  "rankingsLocationsLoadFailed": "पूरी स्थान सूची लोड नहीं हो सकी। जहाँ समर्थित है वहाँ विश्वव्यापी विकल्प उपलब्ध है।",
-  "rankingsSnapshotDate": "स्नैपशॉट तिथि",
-  "rankingsSource": "स्रोत",
-  "rankingsOfficialSource": "आधिकारिक Clash API",
-  "rankingsResults": "परिणाम",
-  "rankingsTopCount": "शीर्ष {count}",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "कोई सहेजा स्नैपशॉट नहीं",
-  "rankingsNoSnapshotBody": "{date} के लिए कोई रैंकिंग स्नैपशॉट सहेजा नहीं गया है। दूसरी तिथि चुनें या वर्तमान पर लौटें।",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "यह खिलाड़ी लोड नहीं हो सका।",
-  "rankingsClanLoadFailed": "यह क्लैन लोड नहीं हो सका।",
-  "statsOverview": "अवलोकन",
-  "statsArmies": "सेनाएं",
-  "statsItems": "आइटम",
-  "statsWar": "युद्ध",
-  "statsCwl": "सीडब्ल्यूएल",
-  "statsRanked": "रैंक्ड",
-  "statsDateRange": "तिथि सीमा",
-  "statsDateRangeHint": "90 दिनों तक चुनें",
-  "statsDateRangeTooLong": "90 दिनों या उससे कम की दिनांक सीमा चुनें।",
-  "statsUpdated": "ताजा डेटा",
-  "statsNoDataTitle": "अभी तक कोई युद्ध डेटा नहीं",
-  "statsNoDataBody": "व्यापक दिनांक सीमा या कम प्रतिबंधात्मक फ़िल्टर आज़माएं।",
-  "statsAddItemsTitle": "विश्लेषण के लिए आइटम चुनें",
-  "statsAddItemsBody": "सैनिकों, मंत्रों, नायकों, पालतू जानवरों या उपकरण को जोड़ें, फिर क्वेरी चलाएं।",
-  "statsGlobalCounts": "वैश्विक गणना",
-  "statsPerformance": "प्रदर्शन",
-  "statsSamples": "नमूने",
-  "statsUsage": "उपयोग",
-  "statsAverageStars": "औसत सितारे",
-  "statsAverageDestruction": "औसत विनाश",
-  "statsStarRates": "स्टार दरें",
-  "statsThreeStarRate": "तीन सितारा दर",
-  "statsDailyTrend": "दैनिक प्रवृत्ति",
-  "statsPlayers": "खिलाड़ियों",
-  "statsClans": "कुलों",
-  "statsPlayersInWar": "युद्ध में खिलाड़ी",
-  "statsClansInWar": "युद्ध में कबीले",
-  "statsPlayersInLegends": "लीजेंड्स में खिलाड़ी",
-  "statsWarsStored": "संग्रहीत युद्ध",
-  "statsJoinLeaves": "घटनाओं में शामिल हों/छोड़ें",
-  "statsSearchArmies": "सटीक रचनाएँ खोजें",
-  "statsExactComposition": "सटीक संरचना",
-  "statsArmyShareCode": "सेना शेयर कोड",
-  "statsMinimumSample": "न्यूनतम नमूना",
-  "statsSortBy": "क्रमबद्ध करें",
-  "statsIncludeItems": "आइटम शामिल करें",
-  "statsExcludeItems": "आइटमों को बाहर निकालें",
-  "statsItemId": "आइटम आईडी या संग्रहित नाम",
-  "statsItemType": "आइटम प्रकार",
-  "statsTroop": "ट्रूप",
-  "statsSpell": "वर्तनी",
-  "statsHero": "हीरो",
-  "statsPet": "पालतू",
-  "statsEquipment": "उपकरण",
-  "statsOwningHero": "नायक का स्वामित्व",
-  "statsAddItem": "आइटम जोड़ें",
-  "statsAnalyzeItems": "आइटमों का विश्लेषण करें",
-  "statsCompositionShare": "संरचना शेयर",
-  "statsNoLevels": "सेना के रिकॉर्ड में आइटम स्तर शामिल नहीं हैं।",
-  "statsRankedCompositionOnly": "संरचना डेटा रैंक किए गए बैटललॉग से आता है; युद्ध और सीडब्ल्यूएल प्रदर्शन अलग-अलग रहते हैं।",
-  "statsTownHall": "टाउन हॉल",
-  "statsOpponentTownHall": "प्रतिद्वंद्वी टाउन हॉल",
-  "statsEqualTownHalls": "समान टाउन हॉल",
-  "statsLeagueTier": "लीग स्तर",
-  "statsLegendLeagueOne": "लीजेंड लीग 1",
-  "statsCwlLeague": "CWL लीग",
-  "statsLeagueBronze": "कांस्य",
-  "statsLeagueSilver": "चांदी",
-  "statsLeagueGold": "सोना",
-  "statsLeagueCrystal": "क्रिस्टल",
-  "statsLeagueMaster": "मास्टर",
-  "statsLeagueChampion": "चैंपियन",
-  "statsAllCwlLeagues": "सभी सीडब्ल्यूएल लीग",
-  "statsCwlSeasons": "CWL सीज़न",
-  "statsCwlSeasonsHint": "YYYY-MM, अल्पविराम से अलग",
-  "statsApplyFilters": "फ़िल्टर लागू करें",
-  "statsRefresh": "डेटा रीफ़्रेश करें",
-  "statsRegularWarOnly": "केवल नियमित युद्ध; मैत्रीपूर्ण युद्ध और सीडब्ल्यूएल को बाहर रखा गया है।",
-  "statsRankedRequired": "टाउन हॉल और एक लीग टियर की आवश्यकता होती है।",
-  "statsSeasonBreakdown": "सीज़न विवरण",
-  "gameAssetsLoadError": "गेम एसेट लोड नहीं हो सके",
-  "gameAssetsEmptyTitle": "कोई गेम एसेट उपलब्ध नहीं",
-  "gameAssetsEmptyBody": "होस्ट किए मैनिफ़ेस्ट में कोई समर्थित चित्र नहीं था।",
-  "gameAssetsOneImage": "1 चित्र",
-  "gameAssetsImageCount": "{count} चित्र",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "इस श्रेणी में खोजें",
-  "gameAssetsAllFormats": "सभी प्रारूप",
-  "gameAssetsOneResult": "1 परिणाम",
-  "gameAssetsResultCount": "{count} परिणाम",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "कोई मिलता-जुलता चित्र नहीं",
-  "gameAssetsNoResultsBody": "कोई दूसरी खोज या फ़ाइल प्रारूप आज़माएँ।",
-  "gameAssetsLongPressHint": "होस्ट किया URL कॉपी करने के लिए देर तक दबाएँ",
-  "gameAssetsCopyUrl": "URL कॉपी करें",
-  "gameAssetsCopyPath": "पथ कॉपी करें",
-  "gameAssetsUrlCopied": "एसेट URL कॉपी हो गया",
-  "gameAssetsPathCopied": "एसेट पथ कॉपी हो गया",
-  "gameAssetsCopyError": "एसेट विवरण कॉपी नहीं हो सका।",
-  "gameAssetsShare": "साझा करें",
-  "gameAssetsShareError": "यह एसेट साझा नहीं हो सका।",
-  "gameAssetsSave": "सहेजें",
-  "gameAssetsSaving": "सहेजा जा रहा है...",
-  "gameAssetsSaved": "एसेट सहेजा गया।",
-  "gameAssetsSavedTo": "एसेट {path} पर सहेजा गया",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "यह एसेट सहेजा नहीं जा सका।",
   "upgradeTrackerPlan": "योजना",
   "upgradeTrackerUpgrades": "अपग्रेड",
   "upgradeTrackerCollection": "संग्रह",
@@ -3852,18 +3872,23 @@
   "rankedLeagueBattleDetailsUnavailable": "इस अवधि के लिए विस्तृत युद्ध लॉग उपलब्ध नहीं हैं।",
   "rankedLeagueHistoricalDetailsUnavailable": "इस पुरानी अवधि के लिए केवल आधिकारिक अवधि सारांश उपलब्ध है।",
   "rankedLeagueStarBreakdownUnavailable": "API कुल स्टार देता है, लेकिन इस अवधि का विस्तृत स्टार वितरण नहीं।",
+  "notifAudienceSectionTitle": "सूचनाओं के प्राप्तकर्ता",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "सभी लिंक किए गए खाते",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "चुने गए खाते",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "चुनें कि इस डिवाइस पर कौन से खाते सूचनाएं प्राप्त कर सकते हैं।",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} मौजूदा खाते। भविष्य में लिंक किए गए खाते अपने आप शामिल होंगे।",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3897,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "{count} सूचनाओं के लिए चुने गए।",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,42 +3906,53 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "ठीक-ठीक चुनें कि कौन से खाते सूचनाएं प्राप्त करेंगे।",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "बाद में लिंक किए गए सभी खाते इस सेटिंग को बदले बिना शामिल हो जाएंगे।",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "चुने गए खाते",
+  "notifAudienceAcrossDevicesDescription": "चुनें कि इस डिवाइस पर कौन से खाते सूचनाएं प्राप्त कर सकते हैं।",
+  "notifAccountBookmarked": "सहेजा गया",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "लीग लड़ाइयां",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "युद्ध हमले",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "युद्ध स्थिति",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "युद्ध रिमाइंडर",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "इवेंट",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "ऐप घोषणाएं",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "अपग्रेड पूरे हुए",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "मासिक समर्थन",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "अपग्रेड प्रगति",
-  "widgetHomeVillage": "मुख्य गाँव",
-  "widgetVillage": "गाँव",
   "widgetLaboratory": "प्रयोगशाला",
   "widgetPets": "पालतू जीव",
   "widgetBuilderBase": "बिल्डर बेस",
@@ -3949,25 +3986,56 @@
   "widgetPetBoostShort": "पालतू",
   "widgetClockBoostShort": "घड़ी",
   "widgetBuilderCostPerk": "{percent}% बिल्डर लागत लाभ",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "{percent}% बिल्डर समय लाभ",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "{percent}% लैब लागत लाभ",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "{percent}% लैब समय लाभ",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "फ़ार्म लक्ष्य",
+  "farmGoalFormTitle": "फ़ार्म किए जाने वाले संसाधन",
+  "farmGoalAccountTitle": "खाता",
+  "farmGoalAccountHint": "चुना गया खाता अनुमान के लिए टाउन हॉल और वर्तमान लीग प्रदान करता है।",
+  "farmGoalTargetTitle": "अपग्रेड किया जाने वाला भवन",
+  "farmGoalTargetBuildingLabel": "भवन",
+  "farmGoalChooseBuilding": "भवन चुनें",
   "farmGoalChangeBuilding": "इमारत बदलें",
   "farmGoalNoTargetTitle": "कोई इमारत नहीं चुनी गई",
   "farmGoalNoTargetBody": "ज़रूरी संसाधनों का अनुमान लगाने के लिए वह इमारत चुनें जिसे आप अपग्रेड करना चाहते हैं।",
+  "farmGoalTargetLevelLabel": "लक्ष्य स्तर",
+  "farmGoalUpgradeCostLabel": "अपग्रेड लागत",
+  "farmGoalCostUnavailable": "इस स्तर की अपग्रेड लागत उपलब्ध नहीं है।",
+  "farmGoalLootTitle": "अनुमानित लूट",
+  "farmGoalResourceLabel": "संसाधन",
+  "farmGoalAmountLabel": "फ़ार्म की जाने वाली मात्रा",
   "farmGoalAverageLootLabel": "गाँव में उपलब्ध लूट",
   "farmGoalPerfectLootHint": "हमला करने से पहले दिखाई गई लूट दर्ज करें। नीचे दिया गया लीग बोनस अपने-आप जुड़ जाएगा।",
   "farmGoalLeagueEstimate": "{league} लीग बोनस: {amount} {resource}। यह हमलों के अनुमान में शामिल है।",
-  "farmGoalTrackerNextTitle": "अपग्रेड ट्रैकर योजना में अगला",
-  "farmGoalTrackerMissingTitle": "अपग्रेड ट्रैकर डेटा आवश्यक है",
-  "farmGoalTrackerMissingBody": "अगली नियोजित इमारत और उसकी सटीक लागत यहाँ दिखाने के लिए इस खाते का अपग्रेड JSON अपग्रेड ट्रैकर में आयात करें।",
-  "farmGoalTrackerPlanComplete": "अपग्रेड ट्रैकर में कोई शेष इमारत अपग्रेड नहीं मिला। आप अब भी इमारत मैन्युअल रूप से चुन सकते हैं।",
-  "farmGoalOpenUpgradeTracker": "अपग्रेड ट्रैकर खोलें",
-  "farmGoalUseTrackerTarget": "इमारत का उपयोग करें",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,105 +4049,6 @@
       }
     }
   },
-  "gameCreatorCode": "क्रिएटर कोड: ClashKing",
-  "clanWarFrequencyTitle": "युद्धों",
-  "notifScopeAllAccounts": "सभी खाते",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
-  "notifSelectedAccounts": "चयनित खाते",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "फिल्टर",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "रद्द करना",
-  "assetFolderTroops": "ट्रूप्स",
-  "assetFolderSpells": "स्पेल",
-  "assetFolderHeroes": "हीरो",
-  "endpointStateWins": "जीत",
-  "notifGroupBattles": "लड़ाइयाँ",
-  "notifGroupSupport": "सपोर्ट",
-  "rankedLeagueStars": "सितारे",
-  "farmGoalUpgradeCostLabel": "अपग्रेड लागत",
-  "farmGoalAccountTitle": "खाता",
-  "damageAccountPresetShort": "खाता",
-  "damageClearStack": "स्पष्ट",
-  "todoMockRaid1Left": "1 बाकी",
-  "farmGoalResourceLabel": "संसाधन",
-  "notifChooseAccountsManually": "चुने गए खाते",
-  "notifAudienceAcrossDevicesDescription": "चुनें कि इस डिवाइस पर कौन से खाते सूचनाएं प्राप्त कर सकते हैं।",
-  "damageNoTargetTitle": "कोई इमारत नहीं चुनी गई",
-  "farmGoalMissingTarget": "ज़रूरी हमलों की गणना के लिए इमारत और लक्ष्य स्तर चुनें।",
-  "farmGoalResultTitle": "ज़रूरी हमले",
-  "farmGoalResultSummary": "हर पूर्ण हमले में लगभग {average} के हिसाब से {target} {resource}।",
-  "@farmGoalResultSummary": {
-    "placeholders": {
-      "target": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      },
-      "average": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalMissingValues": "हमले के परिदृश्य देखने के लिए लक्ष्य और पूर्ण हमले की अनुमानित लूट दर्ज करें।",
-  "settingsLiveActivityStart": "परीक्षण गतिविधि प्रारंभ करें",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "todoExplanationRaidsTitle": "छापे:",
-  "settingsLiveActivityUpdate": "अद्यतन स्कोर",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "स्थानीय पूर्वावलोकन हटा देता है.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "परीक्षण गतिविधि समाप्त करें",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "todoExplanationRaids": "प्रति खाते 5 पॉइंट का वजन (या 6 यदि अंतिम हमला अनलॉक हो चुका है), 1 हमला = 1 पॉइंट।",
-  "settingsLiveActivityTest": "लाइव एक्टिविटी टेस्ट",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStartSubtitle": "स्थानीय कबीला-युद्ध पूर्वावलोकन दिखाता है।",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdateSubtitle": "नकली युद्ध स्कोर को आगे बढ़ाता है।",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "todoMockWarAltStatus": "18 मिनट पहले सक्रिय · युद्ध और छापेमारी पर ध्यान देने की ज़रूरत है",
-  "todoRaidAttacks": "छापेमारी हमले",
-  "todoMockRaid4Left": "4 छोड़ दिये",
-  "playerOptionNotificationsEnableMaster": "पहले सेटिंग में सूचनाएँ चालू करें।",
-  "playerOptionNotificationsVerifyFirst": "सूचनाएँ चालू करने के लिए इस खाते को सत्यापित करें।",
-  "playerOptionNotificationsSubscriptionRequired": "बुकमार्क सूचनाओं के लिए सदस्यता आवश्यक है।",
-  "playerOptionNotificationsLimitReached": "आपकी बुकमार्क सूचना सीमा पूरी हो गई है।",
-  "notifGroupLegendAttacks": "लीजेंड I हमले",
-  "notifLegendAttacksDescription": "लीजेंड I में सूचना-सक्षम बुकमार्क खातों के हमले के परिणाम।",
-  "notifGroupLegendDefenses": "लीजेंड I बचाव",
-  "notifLegendDefensesDescription": "लीजेंड I में सूचना-सक्षम खातों के बचाव के परिणाम।",
-  "farmGoalTitle": "फ़ार्म लक्ष्य",
-  "farmGoalFormTitle": "फ़ार्म किए जाने वाले संसाधन",
-  "farmGoalAccountHint": "चुना गया खाता अनुमान के लिए टाउन हॉल और वर्तमान लीग प्रदान करता है।",
-  "farmGoalTargetTitle": "अपग्रेड किया जाने वाला भवन",
-  "farmGoalTargetBuildingLabel": "भवन",
-  "farmGoalChooseBuilding": "भवन चुनें",
-  "farmGoalTargetLevelLabel": "लक्ष्य स्तर",
-  "farmGoalCostUnavailable": "इस स्तर की अपग्रेड लागत उपलब्ध नहीं है।",
-  "farmGoalLootTitle": "अनुमानित लूट",
-  "farmGoalAmountLabel": "फ़ार्म की जाने वाली मात्रा",
   "farmGoalStarBonusEstimate": "स्टार बोनस: 5 स्टार के बाद {amount} {resource}। यह आवश्यक हमलों में शामिल नहीं है।",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4103,7 +4072,30 @@
   "farmGoalAttackShort": "हमला",
   "farmGoalScenarioHint": "अनुमान: नष्ट हुए भवनों के अनुसार लूट बदलती है। प्रतिशत आपके सटीक हमले के अनुमान पर लागू होते हैं।",
   "farmGoalNoLeagueLoot": "लूट सुझाव पाने के लिए लीग वाला खाता चुनें।",
+  "farmGoalTrackerNextTitle": "अपग्रेड ट्रैकर योजना में अगला",
+  "farmGoalTrackerMissingTitle": "अपग्रेड ट्रैकर डेटा आवश्यक है",
+  "farmGoalTrackerMissingBody": "अगली नियोजित इमारत और उसकी सटीक लागत यहाँ दिखाने के लिए इस खाते का अपग्रेड JSON अपग्रेड ट्रैकर में आयात करें।",
+  "farmGoalTrackerPlanComplete": "अपग्रेड ट्रैकर में कोई शेष इमारत अपग्रेड नहीं मिला। आप अब भी इमारत मैन्युअल रूप से चुन सकते हैं।",
+  "farmGoalOpenUpgradeTracker": "अपग्रेड ट्रैकर खोलें",
+  "farmGoalUseTrackerTarget": "इमारत का उपयोग करें",
+  "farmGoalMissingTarget": "ज़रूरी हमलों की गणना के लिए इमारत और लक्ष्य स्तर चुनें।",
+  "farmGoalMissingValues": "हमले के परिदृश्य देखने के लिए लक्ष्य और पूर्ण हमले की अनुमानित लूट दर्ज करें।",
+  "farmGoalResultTitle": "ज़रूरी हमले",
   "farmGoalAttacks": "हमले",
+  "farmGoalResultSummary": "हर पूर्ण हमले में लगभग {average} के हिसाब से {target} {resource}।",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
     "placeholders": {
@@ -4111,6 +4103,50 @@
         "type": "int"
       }
     }
+  },
+  "gameCreatorCode": "क्रिएटर कोड: ClashKing",
+  "todoExplanationRaidsTitle": "छापे:",
+  "todoExplanationRaids": "प्रति खाते 5 पॉइंट का वजन (या 6 यदि अंतिम हमला अनलॉक हो चुका है), 1 हमला = 1 पॉइंट।",
+  "clanWarFrequencyTitle": "युद्धों",
+  "notifScopeAllAccounts": "सभी खाते",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "लाइव एक्टिविटी टेस्ट",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "परीक्षण गतिविधि प्रारंभ करें",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "स्थानीय कबीला-युद्ध पूर्वावलोकन दिखाता है।",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "अद्यतन स्कोर",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "नकली युद्ध स्कोर को आगे बढ़ाता है।",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "परीक्षण गतिविधि समाप्त करें",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "स्थानीय पूर्वावलोकन हटा देता है.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "चयनित खाते",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "फिल्टर",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
   },
   "dashboardUpgradeTrackerAccounts": "{loaded}/{total} खातों को ट्रैक किया गया",
   "@dashboardUpgradeTrackerAccounts": {
@@ -4126,12 +4162,14 @@
   "calculatorsModeDamage": "नुकसान",
   "calculatorsModeFarmGoal": "फ़ार्म लक्ष्य",
   "damageCalculatorTitle": "नुकसान कैलकुलेटर",
+  "damageAccountPresetShort": "खाता",
   "damageChooseAccount": "खाता चुनें",
   "damageSwitchAccount": "खाता बदलें",
   "damageAccountSelectorHint": "इस्तेमाल किए गए स्तर चुने गए खाते के अनुसार होते हैं।",
   "damageNoAccountsAvailable": "कोई सत्यापित खाता उपलब्ध नहीं है",
   "damageTargetSectionTitle": "नष्ट किया जाने वाला भवन",
   "damageChooseTarget": "भवन चुनें",
+  "damageNoTargetTitle": "कोई इमारत नहीं चुनी गई",
   "damageNoTargetBody": "यह कितना नुकसान सह सकता है, यह देखने के लिए भवन चुनें।",
   "damageTargetLevelLabel": "लक्ष्य स्तर",
   "damageCommonBuildings": "सबसे अधिक चुने गए",
@@ -4142,6 +4180,7 @@
   "damageQuickSetupGiantArrow": "विशाल तीर",
   "damageQuickSetupFlameFlinger": "फ्लेम फ्लिंगर",
   "damageQuickSetupCustom": "कस्टम",
+  "damageClearStack": "स्पष्ट",
   "damageNoDamageSelected": "कोई नुकसान नहीं",
   "damageSelectedSourcesCount": "{count} स्रोत",
   "@damageSelectedSourcesCount": {
@@ -4155,6 +4194,11 @@
   "damageOtherSources": "अन्य स्रोत",
   "damageShowAllSources": "एक और स्रोत जोड़ें",
   "damageShowFewerSources": "अन्य स्रोत छिपाएँ",
+  "searchCancel": "रद्द करना",
+  "todoRaidAttacks": "छापेमारी हमले",
+  "todoMockRaid4Left": "4 छोड़ दिये",
+  "todoMockWarAltStatus": "18 मिनट पहले सक्रिय · युद्ध और छापेमारी पर ध्यान देने की ज़रूरत है",
+  "todoMockRaid1Left": "1 बाकी",
   "gameAssetsCategoryBuildings": "भवन",
   "gameAssetsCategoryCapitalBase": "कैपिटल बेस",
   "gameAssetsCategoryCapitalHouseParts": "कैपिटल हाउस के भाग",
@@ -4169,7 +4213,14 @@
   "gameAssetsCategorySkins": "स्किन",
   "gameAssetsCategorySpells": "स्पेल",
   "gameAssetsCategoryTroops": "सैनिक",
+  "assetFolderTroops": "ट्रूप्स",
+  "assetFolderSpells": "स्पेल",
+  "assetFolderHeroes": "हीरो",
+  "endpointStateWins": "जीत",
+  "notifGroupBattles": "लड़ाइयाँ",
+  "notifGroupSupport": "सपोर्ट",
   "rankedLeagueAccountSelector": "दिखाया गया खाता",
+  "rankedLeagueStars": "सितारे",
   "playerBattlelogTab": "Battles",
   "playerActivityTab": "Activity",
   "playerBattlelogFarming": "Farming",
@@ -4180,7 +4231,9 @@
   "playerBattlelogBattleCount": "{count} battles",
   "@playerBattlelogBattleCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "playerBattlelogAttacks": "Attacks",
@@ -4192,7 +4245,9 @@
   "playerBattlelogUsedInAttacks": "Used in {count} attacks",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "playerBattlelogAttack": "Attack",
@@ -4200,7 +4255,9 @@
   "playerBattlelogOpponent": "Against {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerBattlelogNoBattlesTitle": "No battles found",
@@ -4219,46 +4276,64 @@
   "playerActivityItemUpgraded": "{name} upgraded",
   "@playerActivityItemUpgraded": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivitySuperTroopBoosted": "{name} boosted",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivityItemUnlocked": "{name} unlocked",
   "@playerActivityItemUnlocked": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "playerActivityNameChanged": "Name changed",
   "playerActivityLevelChange": "Level {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
-      "from": {"type": "int"},
-      "to": {"type": "int"}
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
     }
   },
   "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
-      "level": {"type": "int"}
+      "level": {
+        "type": "int"
+      }
     }
   },
   "playerActivityBoostedAtLevel": "Boosted at level {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
-      "level": {"type": "int"}
+      "level": {
+        "type": "int"
+      }
     }
   },
   "playerActivityNameChangeDetail": "{from} → {to}",
   "@playerActivityNameChangeDetail": {
     "placeholders": {
-      "from": {"type": "String"},
-      "to": {"type": "String"}
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
     }
   }
 }

@@ -14,6 +14,7 @@ import 'package:clashkingapp/features/player/data/player_item_utils.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/features/upgrade_tracker/presentation/upgrade_tracker_page.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:flutter/foundation.dart';
 
 const String _resourceGold = '${ImageAssets.baseUrl}/resources/gold.webp';
@@ -1553,21 +1554,21 @@ class _ResourceVisual {
   String localizedLabel(AppLocalizations l10n) {
     switch (labelKey) {
       case 'darkElixir':
-        return l10n.resourceDarkElixir;
+        return l10n.gameName('TID_DARK_ELIXIR', l10n.resourceDarkElixir);
       case 'builderElixir':
-        return l10n.resourceBuilderElixir;
+        return l10n.gameName('TID_ELIXIR2', l10n.resourceBuilderElixir);
       case 'builderGold':
-        return l10n.resourceBuilderGold;
+        return l10n.gameName('TID_GOLD2', l10n.resourceBuilderGold);
       case 'elixir':
-        return l10n.resourceElixir;
+        return l10n.gameName('TID_ELIXIR', l10n.resourceElixir);
       case 'gold':
-        return l10n.resourceGold;
+        return l10n.gameName('TID_GOLD', l10n.resourceGold);
       case 'glowyOre':
-        return l10n.resourceGlowyOre;
+        return l10n.gameName('TID_GEAR_RESOURCE_RARE', l10n.resourceGlowyOre);
       case 'starryOre':
-        return l10n.resourceStarryOre;
+        return l10n.gameName('TID_GEAR_RESOURCE_EPIC', l10n.resourceStarryOre);
       case 'shinyOre':
-        return l10n.resourceShinyOre;
+        return l10n.gameName('TID_GEAR_RESOURCE_COMMON', l10n.resourceShinyOre);
       default:
         return l10n.resourceGeneric;
     }

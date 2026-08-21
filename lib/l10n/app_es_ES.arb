@@ -3301,7 +3301,6 @@
   "playerOptionShowRankedHomeVerifyFirst": "Verifica esta cuenta para mostrar su resumen de la Liga Clasificatoria en Inicio.",
   "dashboardRankedCombinedAcrossAccounts": "Clasificación combinada de tus cuentas",
   "dashboardUpgradeTrackerCombinedAcrossAccounts": "Progreso combinado de mejoras de tus cuentas",
-  "rankingsHomeVillage": "Aldea Principal",
   "rankingsBuilderBase": "Base del Constructor",
   "rankingsTownHall": "Ayuntamiento",
   "rankingsRankedLeague": "Liga Clasificatoria",
@@ -3914,8 +3913,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Progreso de mejoras",
-  "widgetHomeVillage": "ALDEA PRINCIPAL",
-  "widgetVillage": "ALDEA",
   "widgetLaboratory": "LABORATORIO",
   "widgetPets": "MASCOTAS",
   "widgetBuilderBase": "BASE DEL CONSTRUCTOR",
