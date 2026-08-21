@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "没有返回排行榜",
   "sideRankingsEmptyBody": "请尝试其他排行榜或位置。",
   "sideRankingsMockups": "ClashKing 模板图",
-  "rankingsHomeVillage": "家乡",
   "rankingsBuilderBase": "夜世界",
   "rankingsTownHall": "大本营",
   "rankingsRankedLeague": "排位联赛",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "升级进度",
-  "widgetHomeVillage": "家乡",
-  "widgetVillage": "村庄",
   "widgetLaboratory": "实验室",
   "widgetPets": "战宠",
   "widgetBuilderBase": "夜世界",
