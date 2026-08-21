@@ -374,17 +374,33 @@ void main() {
     expect(selected, 1);
   });
 
-  testWidgets('dropdown profile navigation ignores horizontal swipes', (
+  testWidgets('more than three destinations use a dropdown and ignore swipes', (
     tester,
   ) async {
     await tester.pumpWidget(
-      const MaterialApp(home: _DropdownNavigationHarness()),
+      const MaterialApp(home: _AutomaticDropdownNavigationHarness()),
     );
+
+    expect(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+      findsOneWidget,
+    );
+    expect(find.byType(TabBar), findsNothing);
     await tester.fling(find.byType(TabBarView), const Offset(-600, 0), 1200);
     await tester.pumpAndSettle();
 
-    expect(find.text('First dropdown page'), findsOneWidget);
-    expect(find.text('Second dropdown page'), findsNothing);
+    expect(find.text('First automatic page'), findsOneWidget);
+    expect(find.text('Second automatic page'), findsNothing);
+  });
+
+  testWidgets('three destinations keep the tab row', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: _ThreeTabHarness()));
+
+    expect(find.byType(TabBar), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+      findsNothing,
+    );
   });
 }
 
@@ -523,16 +539,16 @@ class _SelectedBodyHarnessState extends State<_SelectedBodyHarness> {
   }
 }
 
-class _DropdownNavigationHarness extends StatefulWidget {
-  const _DropdownNavigationHarness();
+class _AutomaticDropdownNavigationHarness extends StatefulWidget {
+  const _AutomaticDropdownNavigationHarness();
 
   @override
-  State<_DropdownNavigationHarness> createState() =>
-      _DropdownNavigationHarnessState();
+  State<_AutomaticDropdownNavigationHarness> createState() =>
+      _AutomaticDropdownNavigationHarnessState();
 }
 
-class _DropdownNavigationHarnessState
-    extends State<_DropdownNavigationHarness> {
+class _AutomaticDropdownNavigationHarnessState
+    extends State<_AutomaticDropdownNavigationHarness> {
   var selectedIndex = 0;
 
   @override
@@ -542,15 +558,42 @@ class _DropdownNavigationHarnessState
         header: const SizedBox(height: 240),
         selectedIndex: selectedIndex,
         onTabSelected: (index) => setState(() => selectedIndex = index),
-        navigationStyle: InfoProfileNavigationStyle.dropdown,
-        enableSwipeNavigation: false,
         tabs: const [
           InfoProfileTabData(label: 'First', icon: Icons.looks_one_rounded),
           InfoProfileTabData(label: 'Second', icon: Icons.looks_two_rounded),
+          InfoProfileTabData(label: 'Third', icon: Icons.looks_3_rounded),
+          InfoProfileTabData(label: 'Fourth', icon: Icons.looks_4_rounded),
         ],
         pages: const [
-          Center(child: Text('First dropdown page')),
-          Center(child: Text('Second dropdown page')),
+          Center(child: Text('First automatic page')),
+          Center(child: Text('Second automatic page')),
+          Center(child: Text('Third automatic page')),
+          Center(child: Text('Fourth automatic page')),
+        ],
+      ),
+    );
+  }
+}
+
+class _ThreeTabHarness extends StatelessWidget {
+  const _ThreeTabHarness();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: InfoProfileTabScaffold(
+        header: const SizedBox(height: 240),
+        selectedIndex: 0,
+        onTabSelected: _ignoreSelection,
+        tabs: const [
+          InfoProfileTabData(label: 'First', icon: Icons.looks_one_rounded),
+          InfoProfileTabData(label: 'Second', icon: Icons.looks_two_rounded),
+          InfoProfileTabData(label: 'Third', icon: Icons.looks_3_rounded),
+        ],
+        pages: const [
+          Center(child: Text('First page')),
+          Center(child: Text('Second page')),
+          Center(child: Text('Third page')),
         ],
       ),
     );

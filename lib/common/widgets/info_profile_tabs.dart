@@ -4,7 +4,17 @@ import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
 
-enum InfoProfileNavigationStyle { tabs, dropdown }
+enum InfoProfileNavigationStyle { automatic, tabs, dropdown }
+
+InfoProfileNavigationStyle _resolveInfoProfileNavigationStyle(
+  InfoProfileNavigationStyle style,
+  int destinationCount,
+) {
+  if (style != InfoProfileNavigationStyle.automatic) return style;
+  return destinationCount > 3
+      ? InfoProfileNavigationStyle.dropdown
+      : InfoProfileNavigationStyle.tabs;
+}
 
 class InfoProfileTabData {
   const InfoProfileTabData({
@@ -56,7 +66,7 @@ class PinnedInfoProfileTabs extends StatelessWidget {
     required this.progress,
     this.alwaysScrollable = false,
     this.controller,
-    this.navigationStyle = InfoProfileNavigationStyle.tabs,
+    this.navigationStyle = InfoProfileNavigationStyle.automatic,
   });
 
   final List<InfoProfileTabData> tabs;
@@ -156,6 +166,11 @@ class PinnedInfoProfileTabs extends StatelessWidget {
 /// gesture changes the tab and resets the coordinated inner scroll in the
 /// same frame, which avoids carrying the previous section's offset into the
 /// replacement content.
+///
+/// Navigation defaults to a tab row for up to three destinations and the
+/// shared destination dropdown for larger sets. Dropdown navigation disables
+/// horizontal page swipes so the visible selector remains the only way to
+/// change destinations.
 class InfoProfileTabScaffold extends StatefulWidget {
   const InfoProfileTabScaffold({
     super.key,
@@ -168,7 +183,7 @@ class InfoProfileTabScaffold extends StatefulWidget {
     this.alwaysScrollable = false,
     this.tabsTopSpacing = 0,
     this.nestedScrollPhysics,
-    this.navigationStyle = InfoProfileNavigationStyle.tabs,
+    this.navigationStyle = InfoProfileNavigationStyle.automatic,
     this.enableSwipeNavigation = true,
   }) : assert(
          (pages == null) != (body == null),
@@ -209,6 +224,16 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
       widget.selectedIndex.clamp(0, widget.tabs.length - 1);
 
   bool get _usesPages => widget.pages != null;
+
+  bool get _usesDropdownNavigation =>
+      _resolveInfoProfileNavigationStyle(
+        widget.navigationStyle,
+        widget.tabs.length,
+      ) ==
+      InfoProfileNavigationStyle.dropdown;
+
+  bool get _swipeNavigationEnabled =>
+      widget.enableSwipeNavigation && !_usesDropdownNavigation;
 
   @override
   void initState() {
@@ -329,12 +354,12 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
     final pages = widget.pages!;
     return Listener(
       behavior: HitTestBehavior.translucent,
-      onPointerDown: widget.enableSwipeNavigation
+      onPointerDown: _swipeNavigationEnabled
           ? (_) => _preparePageSwipe()
           : null,
       child: TabBarView(
         controller: _tabController,
-        physics: widget.enableSwipeNavigation
+        physics: _swipeNavigationEnabled
             ? null
             : const NeverScrollableScrollPhysics(),
         children: [
@@ -347,7 +372,7 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
 
   Widget _buildSelectedBody() {
     final body = KeyedSubtree(key: _bodyScrollKey, child: widget.body!);
-    if (!widget.enableSwipeNavigation) return body;
+    if (!_swipeNavigationEnabled) return body;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onHorizontalDragEnd: _handleBodySwipe,
@@ -358,7 +383,7 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
   void _selectTab(int index) {
     final target = index.clamp(0, widget.tabs.length - 1);
     if (target == _tabController.index) return;
-    if (widget.navigationStyle == InfoProfileNavigationStyle.dropdown) {
+    if (_usesDropdownNavigation) {
       if (_usesPages) {
         _resetPageToTop(target);
         if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
@@ -562,7 +587,11 @@ class _InfoProfileNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (navigationStyle == InfoProfileNavigationStyle.dropdown) {
+    final resolvedStyle = _resolveInfoProfileNavigationStyle(
+      navigationStyle,
+      tabs.length,
+    );
+    if (resolvedStyle == InfoProfileNavigationStyle.dropdown) {
       return InfoProfileDestinationPicker(
         tabs: tabs,
         selectedIndex: selectedIndex,

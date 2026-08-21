@@ -152,9 +152,11 @@ void main() {
     expect(find.text('Player result'), findsNothing);
     expect(service.queries.last.board, RankingBoard.clanHome);
 
-    await tester.drag(find.byType(TabBar), const Offset(-520, 0));
+    await tester.tap(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+    );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Donations'));
+    await tester.tap(find.text('Donations').last);
     await tester.pumpAndSettle();
 
     expect(service.queries.last.board, RankingBoard.clanDonations);
@@ -227,7 +229,10 @@ void main() {
     final selector = find.byKey(const Key('rankings-period-control'));
     expect(selector, findsOneWidget);
     expect(
-      find.ancestor(of: selector, matching: find.byType(TabBar)),
+      find.ancestor(
+        of: selector,
+        matching: find.byKey(const ValueKey('info-profile-destination-picker')),
+      ),
       findsOneWidget,
     );
     expect(find.text('History'), findsNothing);

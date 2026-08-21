@@ -192,8 +192,13 @@ Stack(
 ```
 Reference: `clan_info/clan_header.dart`, `clan_capital/clan_capital_header.dart`, `war_cwl/cwl.dart`'s `_CwlHeaderCard`.
 
-### 2. Tab bar
-`LiquidGlassBar` background + `TabBar` with icon+label tabs (image or `IconData`, dimmed when unselected via `onSurface.withValues(alpha: 0.58)`). The `TabController` is driven by an **external `int selectedTab` held in the parent**, not `TabBarView` — content below crossfades via `AnimatedSwitcher` + `KeyedSubtree(key: ValueKey(selectedTab))`. This lets the parent share state (e.g. a selected week, or war-type filters) between tabs without each tab owning an independent copy.
+### 2. Profile navigation
+Use `InfoProfileTabScaffold` for the navigation directly below a scenic header.
+It renders icon-and-label tabs for up to three peer destinations and switches
+automatically to the shared destination dropdown when a page has more than
+three. Dropdown navigation disables horizontal page swipes, while the compact
+tab row keeps coordinated swipe navigation. The selected index remains owned
+by the page so headers and tab-specific controls can react to the same state.
 
 ```dart
 AnimatedSwitcher(
@@ -209,7 +214,9 @@ AnimatedSwitcher(
   ),
 )
 ```
-Reference: `clan_info/clan_page.dart`'s `_ClanProfileTabs`, `clan_capital/clan_capital_page.dart`'s `_CapitalProfileTabs`, `war_cwl/cwl.dart`'s `_CwlProfileTabs`.
+Reference: `common/widgets/info_profile_tabs.dart`, `player/player_page.dart`,
+`clan_info/clan_page.dart`, `clan_capital/clan_capital_page.dart`, and
+`war_cwl/cwl.dart`.
 
 ### 3. Flat card/row — no nested `Card`
 Every panel and list row is a plain `Container`, never Flutter's `Card` widget:
