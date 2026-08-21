@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Sıralama döndürülmedi",
   "sideRankingsEmptyBody": "Başka bir lider tablosu veya konum dene.",
   "sideRankingsMockups": "ClashKing mockup’ları",
-  "rankingsHomeVillage": "Ana Köy",
   "rankingsBuilderBase": "İnşaatçı Üssü",
   "rankingsTownHall": "Belediye Binası",
   "rankingsRankedLeague": "Dereceli Lig",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Yükseltme İlerlemesi",
-  "widgetHomeVillage": "ANA KÖY",
-  "widgetVillage": "KÖY",
   "widgetLaboratory": "LABORATUVAR",
   "widgetPets": "HAYVANLAR",
   "widgetBuilderBase": "İNŞAATÇI ÜSSÜ",
