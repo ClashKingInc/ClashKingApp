@@ -51,4 +51,5 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
+      smoke_only: true
     secrets: inherit

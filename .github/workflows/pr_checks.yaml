@@ -11,6 +11,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.filter.outputs.android }}
+
+    steps:
+      - name: Detect Android-relevant changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            android:
+              - '.flutter-version'
+              - 'android/**'
+              - 'assets/**'
+              - 'lib/core/services/android_workmanager_service.dart'
+              - 'lib/core/services/app_icon_service.dart'
+              - 'lib/core/services/notification_debug_service.dart'
+              - 'lib/core/services/notification_preferences_service.dart'
+              - 'lib/core/services/push_notification_service.dart'
+              - 'lib/core/services/war_widget_sync_service.dart'
+              - 'lib/features/upgrade_tracker/**'
+              - 'lib/firebase_options.dart'
+              - 'lib/widgets/war_widget.dart'
+              - 'pubspec.yaml'
+              - 'pubspec.lock'
+
   flutter_checks:
     runs-on: ubuntu-latest
 
@@ -50,6 +77,8 @@ jobs:
 
   android_build:
     runs-on: ubuntu-latest
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.android == 'true'
 
     steps:
       - name: Checkout repository

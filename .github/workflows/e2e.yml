@@ -8,6 +8,11 @@ on:
         description: 'Base URL to test against'
         required: true
         type: string
+      smoke_only:
+        description: 'Run the fast PR smoke suite instead of the full E2E suite'
+        required: false
+        default: false
+        type: boolean
   # Triggered automatically after main-branch deployment
   workflow_run:
     workflows: ["Deploy Flutter Web to Cloudflare Pages"]
@@ -53,7 +58,22 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright tests
+      - name: Run Playwright PR smoke tests
+        if: inputs.smoke_only
+        run: >-
+          npx playwright test
+          tests/smoke.spec.ts
+          tests/auth.spec.ts
+          tests/dashboard.spec.ts
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://app.clashk.ing' }}
+          TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
+          E2E_TEST_COC_TAG: ${{ secrets.E2E_TEST_COC_TAG }}
+          CI: true
+
+      - name: Run full Playwright test suite
+        if: ${{ !inputs.smoke_only }}
         run: npx playwright test
         env:
           BASE_URL: ${{ inputs.base_url || 'https://app.clashk.ing' }}
