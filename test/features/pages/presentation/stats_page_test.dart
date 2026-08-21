@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Stats battle tabs fill the available width on wide screens', (
+  testWidgets('Stats uses dropdown for five battle destinations', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(768, 1024);
@@ -33,23 +33,17 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final battleTabBar = find.byType(TabBar);
-    expect(tester.widget<TabBar>(battleTabBar).isScrollable, isFalse);
-    final tabBarBounds = tester.getRect(battleTabBar);
-    final battleTabs = find.descendant(
-      of: battleTabBar,
-      matching: find.byType(Tab),
+    expect(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+      findsOneWidget,
     );
-    expect(battleTabs, findsNWidgets(5));
-    for (var index = 0; index < 5; index++) {
-      expect(
-        tester.getCenter(battleTabs.at(index)).dx,
-        moreOrLessEquals(
-          tabBarBounds.left + tabBarBounds.width * (index + 0.5) / 5,
-          epsilon: 2,
-        ),
-      );
-    }
+    expect(find.byType(TabBar), findsNothing);
+
+    provider.selectAudience(StatsAudience.world);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TabBar), findsOneWidget);
+    expect(find.byType(Tab), findsNWidgets(3));
   });
 
   testWidgets('Stats audience selector exposes each matching tab group', (
@@ -83,12 +77,22 @@ void main() {
     expect(find.text('Players'), findsNothing);
     expect(find.text('Clans'), findsNothing);
     expect(find.text('Meta'), findsWidgets);
+    expect(find.text('Top score'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+      findsOneWidget,
+    );
+    expect(find.byType(TabBar), findsNothing);
+
+    await tester.tap(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+    );
+    await tester.pumpAndSettle();
     expect(find.text('Armies'), findsOneWidget);
     expect(find.text('Items'), findsOneWidget);
-    expect(find.text('War'), findsWidgets);
-    expect(find.text('CWL'), findsWidgets);
-    expect(find.text('Top score'), findsNothing);
-    expect(tester.widget<TabBar>(find.byType(TabBar)).isScrollable, isTrue);
+    expect(find.text('CWL'), findsOneWidget);
+    await tester.tap(find.text('Armies'));
+    await tester.pumpAndSettle();
 
     provider.selectAudience(StatsAudience.world);
     await tester.pumpAndSettle();

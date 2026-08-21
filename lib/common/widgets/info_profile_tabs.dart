@@ -1,7 +1,20 @@
 import 'dart:ui' as ui;
 
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:flutter/material.dart';
+
+enum InfoProfileNavigationStyle { automatic, tabs, dropdown }
+
+InfoProfileNavigationStyle _resolveInfoProfileNavigationStyle(
+  InfoProfileNavigationStyle style,
+  int destinationCount,
+) {
+  if (style != InfoProfileNavigationStyle.automatic) return style;
+  return destinationCount > 3
+      ? InfoProfileNavigationStyle.dropdown
+      : InfoProfileNavigationStyle.tabs;
+}
 
 class InfoProfileTabData {
   const InfoProfileTabData({
@@ -53,6 +66,7 @@ class PinnedInfoProfileTabs extends StatelessWidget {
     required this.progress,
     this.alwaysScrollable = false,
     this.controller,
+    this.navigationStyle = InfoProfileNavigationStyle.automatic,
   });
 
   final List<InfoProfileTabData> tabs;
@@ -61,6 +75,7 @@ class PinnedInfoProfileTabs extends StatelessWidget {
   final double progress;
   final bool alwaysScrollable;
   final TabController? controller;
+  final InfoProfileNavigationStyle navigationStyle;
 
   static const double tabHeight = 50;
 
@@ -122,12 +137,13 @@ class PinnedInfoProfileTabs extends StatelessWidget {
               height: tabHeight,
               child: Opacity(
                 opacity: tabOpacity,
-                child: InfoProfileTabs(
+                child: _InfoProfileNavigation(
                   tabs: tabs,
                   selectedIndex: selectedIndex,
                   onTabSelected: onTabSelected,
                   alwaysScrollable: alwaysScrollable,
                   controller: controller,
+                  navigationStyle: navigationStyle,
                 ),
               ),
             ),
@@ -150,6 +166,11 @@ class PinnedInfoProfileTabs extends StatelessWidget {
 /// gesture changes the tab and resets the coordinated inner scroll in the
 /// same frame, which avoids carrying the previous section's offset into the
 /// replacement content.
+///
+/// Navigation defaults to a tab row for up to three destinations and the
+/// shared destination dropdown for larger sets. Dropdown navigation disables
+/// horizontal page swipes so the visible selector remains the only way to
+/// change destinations.
 class InfoProfileTabScaffold extends StatefulWidget {
   const InfoProfileTabScaffold({
     super.key,
@@ -162,6 +183,8 @@ class InfoProfileTabScaffold extends StatefulWidget {
     this.alwaysScrollable = false,
     this.tabsTopSpacing = 0,
     this.nestedScrollPhysics,
+    this.navigationStyle = InfoProfileNavigationStyle.automatic,
+    this.enableSwipeNavigation = true,
   }) : assert(
          (pages == null) != (body == null),
          'Provide either pages or body, but not both.',
@@ -177,6 +200,8 @@ class InfoProfileTabScaffold extends StatefulWidget {
   final bool alwaysScrollable;
   final double tabsTopSpacing;
   final ScrollPhysics? nestedScrollPhysics;
+  final InfoProfileNavigationStyle navigationStyle;
+  final bool enableSwipeNavigation;
 
   @override
   State<InfoProfileTabScaffold> createState() => _InfoProfileTabScaffoldState();
@@ -199,6 +224,16 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
       widget.selectedIndex.clamp(0, widget.tabs.length - 1);
 
   bool get _usesPages => widget.pages != null;
+
+  bool get _usesDropdownNavigation =>
+      _resolveInfoProfileNavigationStyle(
+        widget.navigationStyle,
+        widget.tabs.length,
+      ) ==
+      InfoProfileNavigationStyle.dropdown;
+
+  bool get _swipeNavigationEnabled =>
+      widget.enableSwipeNavigation && !_usesDropdownNavigation;
 
   @override
   void initState() {
@@ -274,12 +309,13 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
                       SizedBox(height: widget.tabsTopSpacing),
                     KeyedSubtree(
                       key: _tabsKey,
-                      child: InfoProfileTabs(
+                      child: _InfoProfileNavigation(
                         selectedIndex: _selectedIndex,
                         onTabSelected: _selectTab,
                         alwaysScrollable: widget.alwaysScrollable,
                         tabs: widget.tabs,
                         controller: _tabController,
+                        navigationStyle: widget.navigationStyle,
                       ),
                     ),
                   ],
@@ -306,6 +342,7 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
               alwaysScrollable: widget.alwaysScrollable,
               progress: progress,
               controller: _tabController,
+              navigationStyle: widget.navigationStyle,
             ),
           ),
         ),
@@ -317,9 +354,14 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
     final pages = widget.pages!;
     return Listener(
       behavior: HitTestBehavior.translucent,
-      onPointerDown: (_) => _preparePageSwipe(),
+      onPointerDown: _swipeNavigationEnabled
+          ? (_) => _preparePageSwipe()
+          : null,
       child: TabBarView(
         controller: _tabController,
+        physics: _swipeNavigationEnabled
+            ? null
+            : const NeverScrollableScrollPhysics(),
         children: [
           for (var index = 0; index < pages.length; index++)
             KeyedSubtree(key: _pageScrollKeys[index], child: pages[index]),
@@ -329,16 +371,28 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
   }
 
   Widget _buildSelectedBody() {
+    final body = KeyedSubtree(key: _bodyScrollKey, child: widget.body!);
+    if (!_swipeNavigationEnabled) return body;
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onHorizontalDragEnd: _handleBodySwipe,
-      child: KeyedSubtree(key: _bodyScrollKey, child: widget.body!),
+      child: body,
     );
   }
 
   void _selectTab(int index) {
     final target = index.clamp(0, widget.tabs.length - 1);
     if (target == _tabController.index) return;
+    if (_usesDropdownNavigation) {
+      if (_usesPages) {
+        _resetPageToTop(target);
+        if (_chromeProgress.value >= 0.98) _snapOuterToPinThreshold();
+      } else {
+        _prepareBodySelection();
+      }
+      _tabController.index = target;
+      return;
+    }
     if (_usesPages) {
       _tabController.animateTo(
         target,
@@ -511,6 +565,136 @@ class _InfoProfileTabScaffoldState extends State<InfoProfileTabScaffold>
       outerController.position.maxScrollExtent,
     );
     outerController.jumpTo(targetOffset);
+  }
+}
+
+class _InfoProfileNavigation extends StatelessWidget {
+  const _InfoProfileNavigation({
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onTabSelected,
+    required this.alwaysScrollable,
+    required this.controller,
+    required this.navigationStyle,
+  });
+
+  final List<InfoProfileTabData> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onTabSelected;
+  final bool alwaysScrollable;
+  final TabController? controller;
+  final InfoProfileNavigationStyle navigationStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedStyle = _resolveInfoProfileNavigationStyle(
+      navigationStyle,
+      tabs.length,
+    );
+    if (resolvedStyle == InfoProfileNavigationStyle.dropdown) {
+      return InfoProfileDestinationPicker(
+        tabs: tabs,
+        selectedIndex: selectedIndex,
+        onTabSelected: onTabSelected,
+      );
+    }
+    return InfoProfileTabs(
+      tabs: tabs,
+      selectedIndex: selectedIndex,
+      onTabSelected: onTabSelected,
+      alwaysScrollable: alwaysScrollable,
+      controller: controller,
+    );
+  }
+}
+
+/// Compact destination picker for detail pages with many peer subpages.
+///
+/// It deliberately reuses the Game Assets dropdown instead of introducing a
+/// second popup recipe. The adapter stays app-owned because its labels, images,
+/// and page selection are product navigation concerns.
+class InfoProfileDestinationPicker extends StatelessWidget {
+  const InfoProfileDestinationPicker({
+    super.key,
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onTabSelected,
+  });
+
+  final List<InfoProfileTabData> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onTabSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final boundedIndex = selectedIndex.clamp(0, tabs.length - 1);
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      elevation: 0,
+      child: SizedBox(
+        height: PinnedInfoProfileTabs.tabHeight,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: scheme.outlineVariant.withValues(alpha: 0.35),
+              ),
+            ),
+          ),
+          child: Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: FilterDropdown(
+                  key: const ValueKey('info-profile-destination-picker'),
+                  sortBy: '$boundedIndex',
+                  updateSortBy: (value) {
+                    final index = int.tryParse(value);
+                    if (index != null) onTabSelected(index);
+                  },
+                  sortByOptions: {
+                    for (var index = 0; index < tabs.length; index++)
+                      _destinationLabel(context, tabs[index]): '$index',
+                  },
+                  height: 44,
+                  fillWidth: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _destinationLabel(
+    BuildContext context,
+    InfoProfileTabData data,
+  ) {
+    final scheme = Theme.of(context).colorScheme;
+    return [
+      if (data.imageUrl case final imageUrl?)
+        MobileWebImage(imageUrl: imageUrl, width: 20, height: 20)
+      else
+        Icon(
+          data.icon ?? Icons.circle_rounded,
+          size: 19,
+          color: scheme.onSurfaceVariant,
+        ),
+      const SizedBox(width: 8),
+      Expanded(
+        child: Text(data.label, maxLines: 1, overflow: TextOverflow.ellipsis),
+      ),
+      if (data.trailing case final trailing?) ...[
+        const SizedBox(width: 4),
+        trailing,
+      ],
+    ];
   }
 }
 

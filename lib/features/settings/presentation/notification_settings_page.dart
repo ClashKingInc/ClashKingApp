@@ -160,6 +160,11 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     await _save(_settings.copyWith(reminderTimings: normalized));
   }
 
+  Future<void> _setRaidReminderTimings(Set<int> values) async {
+    final normalized = values.toList()..sort((a, b) => b.compareTo(a));
+    await _save(_settings.copyWith(raidReminderTimings: normalized));
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -198,22 +203,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     title: AppLocalizations.of(context)!.notifChooseAlerts,
                     children: [
                       _categoryRow(
-                        NotificationCategory.legendAttacks,
-                        LucideIcons.swords,
-                        AppLocalizations.of(context)!.notifGroupLegendAttacks,
-                        AppLocalizations.of(
-                          context,
-                        )!.notifLegendAttacksDescription,
-                      ),
-                      _categoryRow(
-                        NotificationCategory.legendDefenses,
-                        LucideIcons.shield,
-                        AppLocalizations.of(context)!.notifGroupLegendDefenses,
-                        AppLocalizations.of(
-                          context,
-                        )!.notifLegendDefensesDescription,
-                      ),
-                      _categoryRow(
                         NotificationCategory.warAttacks,
                         LucideIcons.swords,
                         AppLocalizations.of(context)!.notifGroupWarAttacks,
@@ -227,7 +216,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                         AppLocalizations.of(context)!.notifGroupWarState,
                         AppLocalizations.of(context)!.notifWarAlertsDescription,
                       ),
-                      _WarReminderRow(
+                      _ReminderRow(
+                        preferenceKey: 'warReminders',
+                        title: AppLocalizations.of(
+                          context,
+                        )!.notifGroupWarReminders,
+                        description: AppLocalizations.of(
+                          context,
+                        )!.notifWarRemindersDescription,
+                        icon: Icons.alarm_rounded,
+                        maxHours: 47,
                         enabled: _settings.warReminders,
                         selectedTimings: _settings.reminderTimings.toSet(),
                         onEnabledChanged: (enabled) => _setCategory(
@@ -235,6 +233,24 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                           enabled,
                         ),
                         onTimingsChanged: _setReminderTimings,
+                      ),
+                      _ReminderRow(
+                        preferenceKey: 'raidReminders',
+                        title: AppLocalizations.of(
+                          context,
+                        )!.notifGroupRaidReminders,
+                        description: AppLocalizations.of(
+                          context,
+                        )!.notifRaidRemindersDescription,
+                        icon: Icons.fort_rounded,
+                        maxHours: 72,
+                        enabled: _settings.raidReminders,
+                        selectedTimings: _settings.raidReminderTimings.toSet(),
+                        onEnabledChanged: (enabled) => _setCategory(
+                          NotificationCategory.raidReminders,
+                          enabled,
+                        ),
+                        onTimingsChanged: _setRaidReminderTimings,
                       ),
                       _categoryRow(
                         NotificationCategory.events,
@@ -515,24 +531,34 @@ class _NotificationToggleRow extends StatelessWidget {
   }
 }
 
-class _WarReminderRow extends StatefulWidget {
-  const _WarReminderRow({
+class _ReminderRow extends StatefulWidget {
+  const _ReminderRow({
+    required this.preferenceKey,
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.maxHours,
     required this.enabled,
     required this.selectedTimings,
     required this.onEnabledChanged,
     required this.onTimingsChanged,
   });
 
+  final String preferenceKey;
+  final String title;
+  final String description;
+  final IconData icon;
+  final int maxHours;
   final bool enabled;
   final Set<int> selectedTimings;
   final ValueChanged<bool> onEnabledChanged;
   final ValueChanged<Set<int>> onTimingsChanged;
 
   @override
-  State<_WarReminderRow> createState() => _WarReminderRowState();
+  State<_ReminderRow> createState() => _ReminderRowState();
 }
 
-class _WarReminderRowState extends State<_WarReminderRow> {
+class _ReminderRowState extends State<_ReminderRow> {
   var _expanded = false;
 
   @override
@@ -547,26 +573,21 @@ class _WarReminderRowState extends State<_WarReminderRow> {
             padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
             child: Row(
               children: [
-                const SizedBox(
-                  width: 30,
-                  child: Icon(LucideIcons.alarmClock, size: 22),
-                ),
+                SizedBox(width: 30, child: Icon(widget.icon, size: 22)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.notifGroupWarReminders,
+                        widget.title,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.notifWarRemindersDescription,
+                        widget.description,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -579,7 +600,7 @@ class _WarReminderRowState extends State<_WarReminderRow> {
                 ),
                 const SizedBox(width: 6),
                 Switch.adaptive(
-                  key: const ValueKey('notification-warReminders'),
+                  key: ValueKey('notification-${widget.preferenceKey}'),
                   value: widget.enabled,
                   onChanged: widget.onEnabledChanged,
                 ),
@@ -589,6 +610,8 @@ class _WarReminderRowState extends State<_WarReminderRow> {
         ),
         if (widget.enabled && _expanded)
           _ReminderTimingPicker(
+            reminderTitle: widget.title,
+            maxHours: widget.maxHours,
             selectedTimings: widget.selectedTimings,
             onChanged: widget.onTimingsChanged,
           ),
@@ -599,10 +622,14 @@ class _WarReminderRowState extends State<_WarReminderRow> {
 
 class _ReminderTimingPicker extends StatelessWidget {
   const _ReminderTimingPicker({
+    required this.reminderTitle,
+    required this.maxHours,
     required this.selectedTimings,
     required this.onChanged,
   });
 
+  final String reminderTitle;
+  final int maxHours;
   final Set<int> selectedTimings;
   final ValueChanged<Set<int>> onChanged;
 
@@ -641,6 +668,8 @@ class _ReminderTimingPicker extends StatelessWidget {
                         context: context,
                         showDragHandle: true,
                         builder: (_) => _ReminderTimingSheet(
+                          reminderTitle: reminderTitle,
+                          maxHours: maxHours,
                           selectedTimings: selectedTimings,
                         ),
                       );
@@ -663,8 +692,14 @@ class _ReminderTimingPicker extends StatelessWidget {
 }
 
 class _ReminderTimingSheet extends StatefulWidget {
-  const _ReminderTimingSheet({required this.selectedTimings});
+  const _ReminderTimingSheet({
+    required this.reminderTitle,
+    required this.maxHours,
+    required this.selectedTimings,
+  });
 
+  final String reminderTitle;
+  final int maxHours;
   final Set<int> selectedTimings;
 
   @override
@@ -695,7 +730,7 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
         children: [
           Text(
-            'Add war reminder',
+            'Add ${widget.reminderTitle}',
             style: Theme.of(
               context,
             ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
@@ -709,7 +744,7 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
               onSelectedItemChanged: (index) =>
                   setState(() => _selectedHour = index + 1),
               children: [
-                for (var hour = 1; hour <= 47; hour++)
+                for (var hour = 1; hour <= widget.maxHours; hour++)
                   Center(child: Text(hour == 1 ? '1 hour' : '$hour hours')),
               ],
             ),
