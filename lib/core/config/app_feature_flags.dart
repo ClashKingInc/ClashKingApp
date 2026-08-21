@@ -13,7 +13,6 @@ abstract final class AppFeatureFlags {
   static const upgradeTracker = 'upgrade_tracker';
   static const basesArmies = 'bases_armies';
   static const gameAssets = 'game_assets';
-  static const accountConnections = 'account_connections';
   static const warWidgets = 'war_widgets';
 
   static const Map<String, bool> defaults = {
@@ -27,7 +26,6 @@ abstract final class AppFeatureFlags {
     upgradeTracker: true,
     basesArmies: false,
     gameAssets: true,
-    accountConnections: false,
     warWidgets: true,
   };
 

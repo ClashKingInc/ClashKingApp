@@ -37,28 +37,19 @@ dependencies:
   http: ^1.6.0
   crypto: ^3.0.7
   clipboard: ^3.0.8
-  lucide_icons_flutter: ^3.1.14+1
   fl_chart: ^1.1.1
-  tuple: ^2.0.2
-  custom_sliding_segmented_control: ^1.8.5
   dropdown_button2: ^3.1.0
   home_widget: ^0.9.3
   workmanager_android: ^0.9.0+2
   workmanager_platform_interface: ^0.9.1+1
   cached_network_image: ^3.4.1
-  shimmer: ^3.0.0
   sentry_flutter: ^9.25.0
-  retry: ^3.1.2
   sliver_tools: ^0.2.12
   flutter_secure_storage: ^10.0.0
   collection: ^1.19.1
-  flutter_gif: ^0.0.4
   flutter_svg: ^2.3.0
   package_info_plus: ^10.2.0
   device_info_plus: ^13.2.0
-  mailto: ^2.0.0
-  timeago: ^3.7.1
-  dio: ^5.8.0
   universal_html: ^2.3.0
   cupertino_icons: ^1.0.8
   liquid_glass_widgets: ^0.29.1
