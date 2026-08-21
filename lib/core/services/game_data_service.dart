@@ -42,6 +42,7 @@ class GameDataService {
   static final Map<String, dynamic> _gameData = {};
   static final Map<String, dynamic> _bundleData = {};
   static final Map<String, String> _translationsData = {};
+  static final ValueNotifier<int> _staticDataRevision = ValueNotifier(0);
   static String _translationLocale = 'EN';
   static Future<void>? _bundleLoad;
   static Future<void>? _staticRefresh;
@@ -350,11 +351,17 @@ class GameDataService {
   }
 
   static String clashyLocaleCodeForAppLocale(Locale locale) {
+    return _exactClashyLocaleCode(locale) ?? 'EN';
+  }
+
+  static String? _exactClashyLocaleCode(Locale locale) {
     switch (locale.languageCode.toLowerCase()) {
       case 'ar':
         return 'AR';
       case 'de':
         return 'DE';
+      case 'en':
+        return 'EN';
       case 'es':
         return 'ES';
       case 'fi':
@@ -384,9 +391,16 @@ class GameDataService {
       case 'zh':
         return 'CN';
       default:
-        return 'EN';
+        return null;
     }
   }
+
+  /// Whether Clash's translation catalog contains the requested app locale.
+  ///
+  /// Unsupported app locales still load English for dynamic game data, but UI
+  /// adapters should retain their ARB fallback instead of displaying English.
+  static bool hasTranslationsForLocale(Locale locale) =>
+      _exactClashyLocaleCode(locale) != null;
 
   static Future<void> loadTranslationsForLocale(Locale locale) async {
     final clashyLocale = clashyLocaleCodeForAppLocale(locale);
@@ -444,11 +458,20 @@ class GameDataService {
     _replaceSection(_warLeagueData, bundle['war_leagues_data']);
     _replaceSection(_playerLeagueData, bundle['player_league_data']);
     _replaceSection(_gameData, bundle['game_data']);
+    _staticDataRevision.value++;
   }
 
   @visibleForTesting
   static void loadFromBundleForTesting(Map<String, dynamic> rawBundle) {
     _applyBundle(rawBundle);
+  }
+
+  @visibleForTesting
+  static void loadTranslationsForTesting(
+    Map<String, dynamic> translations, {
+    required Locale locale,
+  }) {
+    _applyTranslations(translations, clashyLocaleCodeForAppLocale(locale));
   }
 
   static Map<String, dynamic> _normalizeBundle(Map<String, dynamic> rawBundle) {
@@ -712,6 +735,38 @@ class GameDataService {
     return item?['name']?.toString() ?? '';
   }
 
+  /// Resolves a game-owned UI label through its static-data TID when the
+  /// selected locale is present and loaded, otherwise preserving the app's
+  /// localized fallback.
+  static String localizedNameForItemOrFallback(
+    Map<String, dynamic>? item, {
+    required Locale locale,
+    required String fallback,
+  }) {
+    final tid = item?['TID'];
+    if (tid is! Map || tid['name'] is! String) return fallback;
+    return localizedNameForTidOrFallback(
+      tid['name'] as String,
+      locale: locale,
+      fallback: fallback,
+    );
+  }
+
+  static String localizedNameForTidOrFallback(
+    String tid, {
+    required Locale locale,
+    required String fallback,
+  }) {
+    final clashyLocale = _exactClashyLocaleCode(locale);
+    if (clashyLocale == null ||
+        _translationLocale != clashyLocale ||
+        _translationsData.isEmpty) {
+      return fallback;
+    }
+    final translated = translationForTid(tid)?.trim() ?? '';
+    return translated.isEmpty ? fallback : translated;
+  }
+
   static String localizedInfoForItem(Map<String, dynamic>? item) {
     final tid = item?['TID'];
     if (tid is Map && tid['info'] is String) {
@@ -728,10 +783,25 @@ class GameDataService {
   static Map<String, dynamic> get gearsData => _gearsData;
   static Map<String, dynamic> get leagueData => _leagueData;
   static Map<String, dynamic> get warLeagueData => _warLeagueData;
+  static Map<int, Map<String, dynamic>> get warLeaguesByApiId {
+    final leagues = _warLeagueData['leagues'];
+    if (leagues is! Map) return {};
+
+    return {
+      for (final rawLeague in leagues.values)
+        if (rawLeague is Map && rawLeague['_id'] is num)
+          // The game-data table is one-based relative to the public API IDs.
+          (rawLeague['_id'] as num).toInt() - 1: Map<String, dynamic>.from(
+            rawLeague,
+          ),
+    };
+  }
+
   static Map<String, dynamic> get playerLeagueData => _playerLeagueData;
   static Map<String, dynamic> get gameData => _gameData;
   static Map<String, dynamic> get bundleData => _bundleData;
   static Map<String, String> get translationsData => _translationsData;
+  static ValueListenable<int> get staticDataRevision => _staticDataRevision;
   static String get translationLocale => _translationLocale;
 }
 

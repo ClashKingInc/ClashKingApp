@@ -8,6 +8,7 @@ import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:intl/intl.dart';
 
 class PlayerToDoHeader extends StatelessWidget {
@@ -256,7 +257,10 @@ class _TodoStatsPanel extends StatelessWidget {
                 _TodoHeaderQuickChip(
                   value: '${summary.legendDone}/${summary.legendTotal}',
                   imageUrl: ImageAssets.legendBlazonNoPadding,
-                  tooltip: loc.legendsTitle,
+                  tooltip: loc.gameName(
+                    'TID_LEAGUE_LEGENDARY',
+                    loc.legendsTitle,
+                  ),
                 ),
               if (summary.warTotal > 0)
                 _TodoHeaderQuickChip(
@@ -278,7 +282,10 @@ class _TodoStatsPanel extends StatelessWidget {
                     summary.clanGamesTotal,
                   ),
                   imageUrl: ImageAssets.clanGamesMedals,
-                  tooltip: loc.gameClanGames,
+                  tooltip: loc.gameName(
+                    'TID_CLAN_TAG_CLAN_GAMES',
+                    loc.gameClanGames,
+                  ),
                 ),
               _TodoHeaderQuickChip(
                 value: summary.compactValue(
