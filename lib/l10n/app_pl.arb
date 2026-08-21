@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Nie zwrócono rankingów",
   "sideRankingsEmptyBody": "Spróbuj innej tabeli wyników lub lokalizacji.",
   "sideRankingsMockups": "Makiety ClashKing",
-  "rankingsHomeVillage": "Wioska Główna",
   "rankingsBuilderBase": "Baza Budowniczego",
   "rankingsTownHall": "Ratusz",
   "rankingsRankedLeague": "Liga Rankingowa",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Postęp aktualizacji",
-  "widgetHomeVillage": "DOMOWA WIOSKA",
-  "widgetVillage": "WSI",
   "widgetLaboratory": "LAB",
   "widgetPets": "ZWIERZĘTA",
   "widgetBuilderBase": "BAZA KONSTRUKTORA",
