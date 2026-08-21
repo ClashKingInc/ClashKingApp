@@ -8,6 +8,11 @@ on:
         description: 'Base URL to test against'
         required: true
         type: string
+      api_base_url:
+        description: 'API origin used for direct authentication setup'
+        required: false
+        default: 'https://go.api.clashk.ing'
+        type: string
   # Triggered automatically after main-branch deployment
   workflow_run:
     workflows: ["Deploy Flutter Web to Cloudflare Pages"]
@@ -57,6 +62,7 @@ jobs:
         run: npx playwright test
         env:
           BASE_URL: ${{ inputs.base_url || 'https://app.clashk.ing' }}
+          API_BASE_URL: ${{ inputs.api_base_url || 'https://go.api.clashk.ing' }}
           TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
           E2E_TEST_COC_TAG: ${{ secrets.E2E_TEST_COC_TAG }}

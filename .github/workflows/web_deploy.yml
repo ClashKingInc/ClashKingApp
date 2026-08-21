@@ -55,4 +55,5 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
+      api_base_url: https://dev-api.clashk.ing
     secrets: inherit

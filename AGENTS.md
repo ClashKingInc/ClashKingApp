@@ -4,10 +4,10 @@
 
 The server exposes local Flutter web development at `https://dev-app.clashk.ing` through the Cloudflare Tunnel to `127.0.0.1:7357`. Only one ClashKing App worktree may run at a time because that stable hostname and Discord OAuth callback belong to a single shared development process.
 
-- Manage the process only with the global `dev-app` command. Do not start a separate `flutter run`, static server, or second app worktree manually.
-- `dev-app start [worktree]` starts the given worktree, or the current worktree when omitted. It refuses to replace a different active worktree.
-- `dev-app use <worktree>` explicitly stops the current app and switches the shared development URL to another worktree.
-- `dev-app reload` requests Flutter hot reload. Use `dev-app restart` for a full process restart, and `dev-app stop`, `dev-app status`, `dev-app logs`, or `dev-app attach` for normal management and inspection.
+- Manage the process from the repository root with the tracked `tooling/dev-app` command. Do not start a separate `flutter run`, static server, or second app worktree manually.
+- `tooling/dev-app start [worktree]` starts the given worktree, or the current worktree when omitted. It refuses to replace a different active worktree.
+- `tooling/dev-app use <worktree>` explicitly stops the current app and switches the shared development URL to another worktree.
+- `tooling/dev-app reload` requests Flutter hot reload. Use `tooling/dev-app restart` for a full process restart, and `tooling/dev-app stop`, `tooling/dev-app status`, `tooling/dev-app logs`, or `tooling/dev-app attach` for normal management and inspection.
 - The manager owns the named tmux session `clashking-app-dev` and port `7357`, so every chat can inspect and manage the same process.
 - Local development uses the staging API but keeps `https://dev-app.clashk.ing/auth/discord_callback.html` as its Discord redirect. Cloudflare Pages staging uses `https://staging-app.clashk.ing` and its matching callback instead.
 
