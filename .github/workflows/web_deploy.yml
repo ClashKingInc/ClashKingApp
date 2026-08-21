@@ -62,4 +62,5 @@ jobs:
     with:
       base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
       smoke_only: true
+      api_base_url: https://dev-api.clashk.ing
     secrets: inherit

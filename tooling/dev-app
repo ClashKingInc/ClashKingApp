@@ -13,7 +13,7 @@ readonly LOCK_FILE="$STATE_DIR/lock"
 
 usage() {
   cat <<'EOF'
-Usage: dev-app <command> [worktree]
+Usage: tooling/dev-app <command> [worktree]
 
 Commands:
   start [worktree]   Start the current or specified worktree; refuse to replace another active worktree
@@ -87,7 +87,7 @@ start_worktree() {
       printf 'Already running %s at %s\n' "$worktree" "$PUBLIC_URL"
       return
     fi
-    fail "another worktree is active: ${active:-unknown}; use 'dev-app use $worktree' to switch"
+    fail "another worktree is active: ${active:-unknown}; use 'tooling/dev-app use $worktree' to switch"
   fi
 
   ensure_port_free
@@ -125,7 +125,7 @@ selected_worktree() {
     active="$(session_worktree)"
     [[ -n "$active" ]] && printf '%s\n' "$active" && return
   fi
-  [[ -s "$STATE_FILE" ]] || fail "no worktree has been selected; run 'dev-app start [worktree]'"
+  [[ -s "$STATE_FILE" ]] || fail "no worktree has been selected; run 'tooling/dev-app start [worktree]'"
   cat "$STATE_FILE"
 }
 
