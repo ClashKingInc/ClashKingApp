@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "ランキングが返されませんでした",
   "sideRankingsEmptyBody": "別のリーダーボードまたは場所を試してください。",
   "sideRankingsMockups": "ClashKingモックアップ",
-  "rankingsHomeVillage": "本拠地の村",
   "rankingsBuilderBase": "大工の拠点",
   "rankingsTownHall": "タウンホール",
   "rankingsRankedLeague": "ランクリーグ",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "アップグレード進捗",
-  "widgetHomeVillage": "本拠地の村",
-  "widgetVillage": "村",
   "widgetLaboratory": "ラボ",
   "widgetPets": "ペット",
   "widgetBuilderBase": "大工の拠点",
