@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "Tili vahvistettu onnistuneesti!",
   "generalRetry": "Yritä uudelleen",
   "generalRetrying": "Yritetään uudelleen...",
+  "postsTitle": "Julkaisut",
+  "postsDescription": "ClashKingin uutiset, päivitystarinat ja aiemmat ilmoitukset.",
+  "postsEmpty": "Julkaistuja kirjoituksia ei vielä ole.",
+  "postsLoadFailed": "Julkaisuja ei voitu ladata.",
+  "postsLoadMore": "Lataa lisää",
+  "postsCurrent": "Nykyiset",
+  "postsPast": "Aiemmat",
+  "postsStory": "Vuorovaikutteinen tarina",
+  "postsPinned": "Nostettu",
   "generalTryAgain": "Yritä uudelleen",
   "generalReset": "Nollaa",
   "generalCancel": "Peruuta",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "Suodattimet",
+  "generalExpand": "Laajentaa",
+  "generalCollapse": "Romahdus",
   "generalNotSet": "Ei asetettu",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "Kirjanmerkki",
+  "generalRemoveBookmark": "Poista kirjanmerkki",
   "generalClearFilters": "Tyhjennä suodattimet",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "Linkitä Sähköpostitili",
   "authAccountAddEmailAuth": "Lisää sähköpostin ja salasanan todennus tilillesi lisäturvallisuuden takaamiseksi.",
   "authAccountEmailLinkedSuccess": "Sähköposti tili onnistuneesti linkitetty!",
+  "authAccountLinkDiscord": "Yhdistä Discord-tili",
+  "authAccountAddDiscordAuth": "Lisää tilillesi Discord-tunnistautuminen, jotta voit synkronoida tiedot eri alustoilla ja käyttää ClashKing-bottia.",
+  "authAccountDiscordLinkedSuccess": "Discord-tili yhdistettiin onnistuneesti!",
   "authEmailVerificationTitle": "Vahvista sähköposti",
   "authEmailVerificationCheckEmail": "Tarkista sähköpostisi",
   "authEmailVerificationSentTo": "Olemme lähettäneet vahvistussähköpostin osoitteeseen:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "Kokemuksen Taso",
+  "gameLeague": "Liiga",
   "gameTrophies": "Palkinnot",
   "gameBuilderBaseTrophies": "Bb Palkinnot",
   "gameDonations": "Lahjoitukset",
@@ -484,6 +501,11 @@
   "clanNone": "Ei klaania",
   "clanJoinToUnlock": "Liity klaaniin avataksesi uusia ominaisuuksia.",
   "clanMembers": "Jäsenet",
+  "clanMembersSearchPlaceholder": "Hae jäseniä",
+  "clanMembersShowTotals": "Näytä klaanin kokonaissummat",
+  "clanMembersHideTotals": "Piilota klaanien kokonaissummat",
+  "clanMembersReceivedShort": "Vastaanotettu",
+  "clanMembersAverageTh": "Keskim. TH",
   "clanMinimumMembers": "Minimi jäsenet",
   "clanMaximumMembers": "Jäsenten enimmäismäärä",
   "clanLocation": "Sijainti",
@@ -839,6 +861,7 @@
   "warLeague": "Sota/Liitto",
   "warHistory": "Sota Historia",
   "warLog": "Sota Loki",
+  "warLogSearchPlaceholder": "Etsi sodat",
   "warLogClosed": "{clan}'s sota loki on suljettu.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "Sodan Tilastot",
+  "warStatsSearchPlaceholder": "Etsi pelaajia",
+  "warStatsCurrentTownHall": "Minun TH",
+  "warStatsLast50": "Viimeiset 50",
+  "warStatsWars": "Sodat",
+  "warStatsSelectSeason": "Valitse sotatilastojen kausi",
   "warOngoing": "Käynnissä oleva sota",
   "warIsNotInWar": "{clan} ei ole sodassa.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "Voittaa",
+  "warAnalysisToLose": "Häviämään",
+  "warAnalysisNoAttacksLeft": "Hyökkäyksiä ei ole jäljellä",
+  "warAnalysisScenario": "{attacks}-hyökkäykset jäljellä -> tarvitaan {stars}-tähtiä / {percent}% hyökkäystä kohti",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks}-hyökkäykset jäljellä -> mahdotonta ({stars} tähteä / {percent} % hyökkäystä kohti)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "{clanName} ei voi enää hävitä",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "Varmistettu",
   "warAnalysisAlreadySecured": "Jo varmistettu",
   "warAnalysisSecureAgainst": "Tavoite on laskettu olettaen, että {clanName} käyttää kaikki jäljellä olevat hyökkäykset.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "Tulosta ei voida varmistaa matemaattisesti, jos {clanName} optimoi kaikki jäljellä olevat hyökkäykset.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "Ei voida varmistaa jäljellä olevilla hyökkäyksillä",
   "warAnalysisStarGoal": "+{stars} tähteä",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "{attacks} hyökkäystä jäljellä",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "Parempi tulos ei ole mahdollinen",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "% Tarvitaan yhteensä",
   "warCalculatorCalculate": "Laske",
   "warAttacksTitle": "Hyökkäykset",
+  "warAttacksSuccessful": "Onnistuneet hyökkäykset",
+  "warAttacksFailed": "Epäonnistuneita hyökkäyksiä",
   "warAttacksNone": "Ei hyökkäystä vielä",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "Parhaat hyökkäykset",
   "warAttacksCount": "Hyökkäysten Määrä",
   "warAttacksMissed": "Vastaamattomat Hyökkäykset",
+  "warAttacksMissedShort": "Jäi väliin",
   "warAttacksNumber": "Hyökkäsit {number_time} kertaa viimeisten {number_war} sodan aikana.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "CWL",
   "cwlClanWarLeague": "Klaani Sota Liiga",
   "cwlOngoing": "CWL On Käynnissä",
+  "cwlHistoryTitle": "CWL:n historia",
+  "clanJoinLeaveTab": "Liity/Poistu",
+  "clanRankingsTab": "Rankingit",
+  "clanRankingsSeason": "Kausi",
+  "clanRankingsSelectSeason": "Valitse sijoituskausi",
+  "clanRankingsFilterActivity": "Toiminta",
+  "clanRankingsFilterWar": "Sota",
+  "clanRankingsFilterPoints": "Pisteet",
+  "cwlHistoryPreviewBadge": "Esikatselu",
+  "cwlHistoryPreviewSubtitle": "{clan}-malli, kunnes CWL-päätepiste on korjattu",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Ei vielä CWL-historiaa",
+  "cwlHistoryEmptyBody": "Tämä klaani ei ole vielä osallistunut Clan War League -kauteen.",
+  "cwlRankTitle": "Sijoitus",
+  "cwlWarsPlayedTitle": "Sotia pelattiin",
+  "playerWarStarsTitle": "Sodan tähdet",
+  "playerWarPreferenceTitle": "Sotapref.",
+  "playerDonatedTitle": "Lahjoitettu",
+  "playerReceivedTitle": "Vastaanotettu",
+  "playerCapitalTitle": "Pääoma",
+  "playerExpLevelTitle": "Exp. taso",
+  "clanWarWinsTitle": "Sota voittaa",
+  "clanWinStreakTitle": "Voittoputki",
+  "clanBuilderBaseTitle": "Rakentajan pohja",
+  "clanTypeTitle": "Tyyppi",
+  "clanMinTownHallTitle": "Min. kaupungintalo",
+  "clanMinTrophiesTitle": "Min. palkintoja",
+  "clanCapitalHallTitle": "Pääkaupunkitalo",
+  "clanDistrictsTitle": "Piirit",
+  "legendsCountryTitle": "Maa",
+  "legendsLocalRankTitle": "Paikallinen arvosana",
+  "legendsGlobalRankTitle": "Globaali sijoitus",
+  "warWinsTitle": "Voittoja",
+  "warLossesTitle": "Tappiot",
+  "warDrawsTitle": "Tasoittaa",
   "cwlRounds": "Kierrokset",
   "cwlRoundNumber": "Pyöreä {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "Käynnissä olevat hyökkäykset",
   "raidsDistrictsDestroyed": "Tuhoutuneet alueet",
   "raidsCompleted": "Raidat valmiit",
+  "capitalRaidStatusOngoing": "Meneillään",
+  "capitalRaidStatusEnded": "Päättyi",
+  "capitalRaidLoot": "Ryöstää",
+  "capitalRaidRewards": "Palkinnot",
+  "capitalRaidPreviousWeek": "Edellinen viikko",
+  "capitalRaidNextWeek": "Ensi viikolla",
+  "capitalRaidFilterAttacked": "Hyökkäsi",
+  "capitalRaidFilterNotAttacked": "Ei hyökätty",
+  "capitalRaidFilterLinked": "Linkitetyt tilit",
+  "capitalRaidEmptyTitle": "Ei pääomaraiddataa",
+  "capitalRaidEmptyBody": "Raid-historia ilmestyy tänne, kun tämän klaanin Capital raid -viikonloppuja seurataan.",
+  "capitalRaidEstimated": "Arvioitu",
+  "capitalRaidEstimatedTooltip": "Ei vielä virallinen: arvioitu tämän viikon hyökkäys- ja puolustuslokeista. Supercell julkaisee todellisen mitalimäärän raidin päätyttyä.",
+  "capitalRaidTrophyPrediction": "Ennustetut palkinnot",
+  "capitalRaidTrophyPredictionTooltip": "Arvioidut Capital League -palkinnot tämän raidin jälkeen, perustuen tämän viikon tähänastiseen suoritukseen. Ei virallista.",
+  "capitalRaidProjectedLoot": "Suunniteltu saalis",
+  "capitalRaidOneshots": "Yksi laukaus",
+  "capitalRaidFails": "Epäonnistui",
+  "capitalDetailsOffense": "Rikkomus",
+  "capitalDetailsDefense": "Puolustus",
+  "capitalDistrictsSection": "Piirit",
+  "capitalOpponentsSection": "Vastustajat",
+  "capitalAvgAttacksPerDistrict": "Keskimääräiset hyökkäykset/piiri",
+  "capitalAvgLootPerAttack": "Keskim. ryöstö/hyökkäys",
+  "capitalHistorySection": "Raidin historia",
+  "capitalHistoryWeeksTracked": "Viikkoja seurattu",
+  "capitalAvgLootPerWeek": "Keskim. saalis/viikko",
+  "capitalAvgAttacksPerWeek": "Keskim. hyökkäyksiä/viikko",
+  "capitalBestRaid": "Paras hyökkäys",
+  "capitalWorstRaid": "Pahin hyökkäys",
+  "capitalHistoryChartTitle": "Viikkotrendi",
   "searchNoResult": "Ei tuloksia.",
   "maintenanceTitle": "Huolto",
   "maintenanceDescription": "Yhteentörmäyksestä klaanit ovat tällä hetkellä kunnossapidossa, joten emme voi käyttää APIa. Tarkista myöhemmin.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "Päivittäinen pokaalien seuranta ja kauden lopun tilastot",
   "faqFeaturesCwlTitle": "CWL-analytiikka",
   "faqFeaturesCwlDescription": "Klaanisotaliigan suoritus ja jäsenten panokset",
+  "faqFeaturesTodoTitle": "Tehtävälista",
+  "faqFeaturesTodoDescription": "Näet, mitkä tilit tarvitsevat vielä sijoitushyökkäyksiä, ryöstöjä, sotahyökkäyksiä, klaanipelejä tai kausipassin toimia",
+  "faqFeaturesUpgradeTrackerTitle": "Päivitä Tracker",
+  "faqFeaturesUpgradeTrackerDescription": "Käytä pelaajan toimittamaa tilin tilannekuvaa nähdäksesi jäljellä olevat parannukset, resurssit, rakentajat, laboratorion ajan ja edistymisen",
+  "faqFeaturesNotificationsTitle": "Push-ilmoitukset",
+  "faqFeaturesNotificationsDescription": "Valitse tilit, joille lähetetään ilmoituksia tuetuista ClashKing-tapahtumista",
+  "faqFeaturesWidgetsTitle": "Sotapienoisohjelmat",
+  "faqFeaturesWidgetsDescription": "Pidä sodan nykyinen tila näkyvissä aloitusnäytössä laitteilla, jotka tukevat pienoisohjelmia",
   "faqSearchHint": "Hae UKK:sta...",
   "faqSectionGettingStarted": "Aloitus ja tietoa",
+  "faqSectionAccountsAlertsWidgets": "Tilit, ilmoitukset ja pienoisohjelmat",
   "faqSectionSupportAndContact": "Tuki ja yhteydenotto",
+  "faqLinkedAccountsTitle": "Miten yhdistetyt tilit ja vahvistaminen toimivat?",
+  "faqLinkedAccountsAnswer": "ClashKing-profiiliisi voi kuulua useita Clash of Clans -tilejä. Tunnisteen lisääminen näyttää julkiset tiedot. Vahvistaminen Clash of Clansin API-tunnuksella todistaa tilin omaksesi ja avaa tilikohtaiset ominaisuudet.",
+  "faqLinkedAccountsSolution1": "Tilinhallinnassa voit hallita, järjestää uudelleen, piilottaa tai poistaa tilejä.",
+  "faqLinkedAccountsSolution2": "Löydät API-tunnuksen Clash of Clansista kohdasta Asetukset > Lisää asetuksia > API-tunnus.",
+  "faqLinkedAccountsSolution3": "Voit kirjautua Discordilla tai sähköpostilla. Kun tilien yhdistäminen on käytettävissä, hallitse yhteyksiä Asetuksissa.",
+  "faqNotificationsTitle": "Miten ilmoitukset toimivat?",
+  "faqNotificationsAnswer": "Ilmoitukset ovat valinnaisia. Kun ne otetaan käyttöön, ClashKing rekisteröi tämän laitteen. Voit valita, mitä yhdistettyjä tilejä kukin ilmoitus koskee.",
+  "faqNotificationsSolution1": "Salli ilmoitukset laitteessasi ja ClashKingin asetuksissa.",
+  "faqNotificationsSolution2": "Eri ilmoitukset voivat koskea eri tilejä. Jos ilmoitus puuttuu, tarkista valitut tilit.",
+  "faqNotificationsSolution3": "Jotkin ilmoitukset riippuvat seuratuista klaani- tai sotatiedoista. Ulkoisten tietojen päivittyminen voi aiheuttaa viiveitä.",
+  "faqWidgetsTitle": "Miten sotapienoisohjelmat toimivat?",
+  "faqWidgetsAnswer": "Sotapienoisohjelmat näyttävät tuetuilla laitteilla nopean yhteenvedon. Ne käyttävät valittuja tai yhdistettyjä tilejäsi, ClashKingin välimuistitietoja sekä taustapäivityksiä silloin, kun alusta sallii ne.",
+  "faqWidgetsSolution1": "Avaa sovellus tilin tai klaanin vaihtamisen jälkeen, jotta pienoisohjelma voi synkronoitua.",
+  "faqWidgetsSolution2": "Jos pienoisohjelman tiedot näyttävät vanhoilta, päivitä ensin sovellus. Android ja iOS rajoittavat taustapäivityksiä.",
+  "faqWidgetsSolution3": "Klaanin sotatietojen on oltava käytettävissä, jotta pienoisohjelma voi näyttää hyödyllisen tilan.",
   "faqTranslationIssue": "Puuttuuko käännös tai onko se virheellinen?",
   "faqTranslationIssueAnswer": "Käännökset laaditaan ensin generointi- ja tekoälytyökaluilla, minkä jälkeen niitä tarkistetaan ja parannetaan ajan mittaan. Jos olet äidinkielinen puhuja ja jokin kuulostaa oudolta, voit ehdottaa korjausta Crowdinissa tai ottaa meihin yhteyttä Discordissa tai sähköpostitse.",
   "faqWaysToSupport": "Tapoja tukea meitä:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "Hyökkäysjärjestys",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Kesto",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "Hyökkääjä",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "Hyökkäysnopeus",
   "gameItemAttackRange": "Hyökkäysetäisyys",
   "gameItemMovementSpeed": "Liikkumisnopeus",
+  "gameItemWardenWeight": "Valvojan painoarvo",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Valvojan painoarvo voi ohittaa asumistilan ja määrittää, kuinka vahvasti Suurvalvoja priorisoi yksikköryhmän seuraamista.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Parantajan painoarvo",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Parantajan painoarvo voi ohittaa asumistilan, kun parantajat päättävät, mitä yksiköitä ne priorisoivat.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Tämä yksikkö ei vaikuta valvojan seuraamiskynnykseen.",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "Päivitysresurssi",
   "gameItemRarity": "Harvinaisuus",
   "gameItemHero": "Sankari",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "Lentävä",
   "gameItemUpgradeCost": "Päivityksen hinta",
   "gameItemUpgradeTime": "Päivitysaika",
-  "generalExpand": "Laajentaa",
-  "generalCollapse": "Romahdus",
-  "generalBookmark": "Kirjanmerkki",
-  "generalRemoveBookmark": "Poista kirjanmerkki",
-  "gameLeague": "Liiga",
-  "clanMembersSearchPlaceholder": "Hae jäseniä",
-  "clanMembersShowTotals": "Näytä klaanin kokonaissummat",
-  "clanMembersHideTotals": "Piilota klaanien kokonaissummat",
-  "clanMembersReceivedShort": "Vastaanotettu",
-  "clanMembersAverageTh": "Keskim. TH",
-  "warLogSearchPlaceholder": "Etsi sodat",
-  "warStatsSearchPlaceholder": "Etsi pelaajia",
-  "warStatsCurrentTownHall": "Minun TH",
-  "warStatsLast50": "Viimeiset 50",
-  "warStatsWars": "Sodat",
-  "warStatsSelectSeason": "Valitse sotatilastojen kausi",
-  "warAnalysisToWin": "Voittaa",
-  "warAnalysisToLose": "Häviämään",
-  "warAnalysisNoAttacksLeft": "Hyökkäyksiä ei ole jäljellä",
-  "warAnalysisScenario": "{attacks}-hyökkäykset jäljellä -> tarvitaan {stars}-tähtiä / {percent}% hyökkäystä kohti",
-  "warAnalysisImpossibleScenario": "{attacks}-hyökkäykset jäljellä -> mahdotonta ({stars} tähteä / {percent} % hyökkäystä kohti)",
-  "warAttacksSuccessful": "Onnistuneet hyökkäykset",
-  "warAttacksFailed": "Epäonnistuneita hyökkäyksiä",
-  "warAttacksMissedShort": "Jäi väliin",
-  "cwlHistoryTitle": "CWL:n historia",
-  "clanJoinLeaveTab": "Liity/Poistu",
-  "clanRankingsTab": "Rankingit",
-  "clanRankingsSeason": "Kausi",
-  "clanRankingsSelectSeason": "Valitse sijoituskausi",
-  "clanRankingsFilterActivity": "Toiminta",
-  "clanRankingsFilterWar": "Sota",
-  "clanRankingsFilterPoints": "Pisteet",
-  "cwlHistoryPreviewBadge": "Esikatselu",
-  "cwlHistoryPreviewSubtitle": "{clan}-malli, kunnes CWL-päätepiste on korjattu",
-  "cwlHistoryEmptyTitle": "Ei vielä CWL-historiaa",
-  "cwlHistoryEmptyBody": "Tämä klaani ei ole vielä osallistunut Clan War League -kauteen.",
-  "cwlRankTitle": "Sijoitus",
-  "cwlWarsPlayedTitle": "Sotia pelattiin",
-  "playerWarStarsTitle": "Sodan tähdet",
-  "playerWarPreferenceTitle": "Sotapref.",
-  "playerDonatedTitle": "Lahjoitettu",
-  "playerReceivedTitle": "Vastaanotettu",
-  "playerCapitalTitle": "Pääoma",
-  "playerExpLevelTitle": "Exp. taso",
-  "clanWarWinsTitle": "Sota voittaa",
-  "clanWinStreakTitle": "Voittoputki",
-  "clanBuilderBaseTitle": "Rakentajan pohja",
-  "clanTypeTitle": "Tyyppi",
-  "clanMinTownHallTitle": "Min. kaupungintalo",
-  "clanMinTrophiesTitle": "Min. palkintoja",
-  "clanCapitalHallTitle": "Pääkaupunkitalo",
-  "clanDistrictsTitle": "Piirit",
-  "legendsCountryTitle": "Maa",
-  "legendsLocalRankTitle": "Paikallinen arvosana",
-  "legendsGlobalRankTitle": "Globaali sijoitus",
-  "warWinsTitle": "Voittoja",
-  "warLossesTitle": "Tappiot",
-  "warDrawsTitle": "Tasoittaa",
-  "capitalRaidStatusOngoing": "Meneillään",
-  "capitalRaidStatusEnded": "Päättyi",
-  "capitalRaidLoot": "Ryöstää",
-  "capitalRaidRewards": "Palkinnot",
-  "capitalRaidPreviousWeek": "Edellinen viikko",
-  "capitalRaidNextWeek": "Ensi viikolla",
-  "capitalRaidFilterAttacked": "Hyökkäsi",
-  "capitalRaidFilterNotAttacked": "Ei hyökätty",
-  "capitalRaidFilterLinked": "Linkitetyt tilit",
-  "capitalRaidEmptyTitle": "Ei pääomaraiddataa",
-  "capitalRaidEmptyBody": "Raid-historia ilmestyy tänne, kun tämän klaanin Capital raid -viikonloppuja seurataan.",
-  "capitalRaidEstimated": "Arvioitu",
-  "capitalRaidEstimatedTooltip": "Ei vielä virallinen: arvioitu tämän viikon hyökkäys- ja puolustuslokeista. Supercell julkaisee todellisen mitalimäärän raidin päätyttyä.",
-  "capitalRaidTrophyPrediction": "Ennustetut palkinnot",
-  "capitalRaidTrophyPredictionTooltip": "Arvioidut Capital League -palkinnot tämän raidin jälkeen, perustuen tämän viikon tähänastiseen suoritukseen. Ei virallista.",
-  "capitalRaidProjectedLoot": "Suunniteltu saalis",
-  "capitalRaidOneshots": "Yksi laukaus",
-  "capitalRaidFails": "Epäonnistui",
-  "capitalDetailsOffense": "Rikkomus",
-  "capitalDetailsDefense": "Puolustus",
-  "capitalDistrictsSection": "Piirit",
-  "capitalOpponentsSection": "Vastustajat",
-  "capitalAvgAttacksPerDistrict": "Keskimääräiset hyökkäykset/piiri",
-  "capitalAvgLootPerAttack": "Keskim. ryöstö/hyökkäys",
-  "capitalHistorySection": "Raidin historia",
-  "capitalHistoryWeeksTracked": "Viikkoja seurattu",
-  "capitalAvgLootPerWeek": "Keskim. saalis/viikko",
-  "capitalAvgAttacksPerWeek": "Keskim. hyökkäyksiä/viikko",
-  "capitalBestRaid": "Paras hyökkäys",
-  "capitalWorstRaid": "Pahin hyökkäys",
-  "capitalHistoryChartTitle": "Viikkotrendi",
-  "warAttacksDetailsDuration": "Kesto",
   "gameItemRemainingToTownHallMax": "TH max",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "Globaaliin max",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "{count} taso(t) jäljellä",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "Yleiskatsaus",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "Tilastot",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "Seuraava päivitys",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "Päivityssuunnitelma",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "Päivitystiedot eivät ole saatavilla",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "Valittu",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Asetukset",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Ilmoitukset",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Valitse hälytykset ja lähetä paikalliset testiesikatselut.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "Tukea",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "Noin",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Tili",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Kirjautunut sisään",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Ulkonäkö",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "Järjestelmä",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Yhdistä tämä laite",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "Kevyt",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Tumma",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Valittu",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Linkitettyjä tilejä ei ole vielä ladattu.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Tilejä ei ole valittu",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "{count} tilit valittu",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "Viimeaikaiset",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Pelaajat",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Klaanit",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "Selkeä",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Tietojen päivitys onnistui",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Tietojen päivittäminen epäonnistui: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "Suodatetun tiedon lataaminen epäonnistui: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "Vienti epäonnistui: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "Pelaaja",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "Muoto",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "Sisältää",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "Tilastot, hyökkäykset, TH-analyysi",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "Käyttäjätietoja ei ole saatavilla",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "Tilit",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "Soittimen tietojen lataaminen epäonnistui.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "Klaanitietojen lataaminen epäonnistui.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "Ei vastaavia tilejä",
   "todoNoConfiguredAccounts": "Tehtävätilejä ei ole määritetty",
   "todoNoLinkedAccounts": "Ei linkitettyjä tilejä",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "Pelaajalistaa tai yksittäisiä hyökkäyksiä ei ole saatavilla tälle raidalle.",
   "dashboardNoLinkedAccountsTitle": "Ei linkitettyjä tilejä",
   "dashboardNoLinkedAccountsBody": "Linkitä Clash-tili nähdäksesi hyökkäykset, tapahtumat ja toiminnan täällä.",
+  "dashboardTodoHiddenTitle": "Täällä ei näytetä tilejä",
+  "dashboardTodoHiddenBody": "Ota Pelaajat-välilehdellä tilille käyttöön jokin aloitusnäytön korteista (tehtävät, parannusten seuranta tai sijoitus), jotta se näkyy täällä.",
+  "dashboardUpgradeTrackerNoData": "Avaa parannusten seuranta tuodaksesi tai päivittääksesi parannustiedot.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {tarvitsee päivityksen} other {tarvitsevat päivityksen}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {tarvitsee vielä tehtäviä} other {tarvitsevat vielä tehtäviä}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {voi vielä hyökätä} other {voivat vielä hyökätä}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Arvioitu",
+  "dashboardUpgradeTrackerBuilders": "Rakentajat",
+  "dashboardUpgradeTrackerLab": "Laboratorio",
+  "dashboardUpgradeTrackerPets": "Lemmikit",
+  "dashboardUpgradeTrackerWalls": "Muurit",
+  "dashboardUpgradeTrackerVillage": "Kylä",
+  "dashboardRankedNoData": "Avaa sijoitusliiga nähdäksesi tämän tilin sijoituksen.",
+  "dashboardRankedAccounts": "{loaded}/{total} tiliä seurannassa",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "Ei vielä kirjanmerkkeihin merkittyjä pelaajia",
   "playersNoBookmarkedBody": "Avaa pelaajaprofiili ja tallenna se myöhempää käyttöä varten.",
   "playersNoLinkedBody": "Hallitse tilejä tilin asetusnäytöstä.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "Suunnittele vahinko rakennusten nykyisiä tasoja vastaan.",
   "calculatorZapQuake": "Zap-järistys",
   "calculatorFireball": "Tulipallo",
+  "damageCalculatorSubtitle": "Vertaa yhtä hyökkäyskokoonpanoa useisiin rakennuksiin.",
+  "damageNoStaticDataTitle": "Vahinkotietoja ei ole saatavilla",
+  "damageNoStaticDataBody": "Päivitä sovellus, kun staattiset pelitiedot ovat latautuneet.",
+  "damageTownHall": "Kaupungintalo",
+  "damageVerifiedAccountPrefill": "Vahvistetun tilin esiasetus",
+  "damageOverridesStayLocal": "Tässä tehdyt muutokset eivät päivitä pelaajatiliä.",
+  "damageTargets": "Rakennukset",
+  "damageAddBuilding": "Lisää rakennus",
+  "damageRemoveBuilding": "Poista rakennus",
+  "damageNoTargetsBody": "Lisää vähintään yksi rakennus tulosten vertaamista varten.",
+  "damageHitpoints": "{hitpoints} osumapistettä",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Hae rakennuksia",
+  "damageNoBuildingsFound": "Rakennuksia ei löytynyt",
+  "damageTryAnotherSearch": "Kokeile toista nimeä tai kaupungintalon tasoa.",
+  "damageAttackStack": "Manuaalinen hyökkäyskokoonpano",
+  "damageNoSourcesForTownHall": "Tälle kaupungintalolle ei ole tuettuja vahingonlähteitä.",
+  "damageCount": "Määrä",
+  "damagePerUse": "{damage} vahinkoa käyttökertaa kohti",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% enimmäisosumapisteistä, vaikutus heikkenee pinottaessa",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Salama",
+  "damageSourceEarthquake": "Maanjäristys",
+  "damageSourceGiantArrow": "Jättinuoli",
+  "damageSourceFireball": "Tulipallo",
+  "damageSourceFlameFlinger": "Liekinheittimen osuma",
+  "damageSourceBalloonDeath": "Ilmapallon kuolinvahinko",
+  "damageSourceRocketBalloonDeath": "Raketti-ilmapallon kuolinvahinko",
+  "damageResults": "Tulokset",
+  "damageDestroyed": "Tuhoutuu",
+  "damageSurvives": "Kestää",
+  "damageResultSummary": "{damage} vahinkoa · {remaining} osumapistettä jäljellä",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Salama–maanjäristys-optimointi",
+  "damageSpellCapacity": "Loitsukapasiteetti",
+  "damageZapQuakeUnavailable": "Salama ja maanjäristys eivät ole käytettävissä tällä kaupungintalon tasolla.",
+  "damageZapQuakeUsesSelectedLevels": "Käytössä salama tasolla {lightningLevel} ja maanjäristys tasolla {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Salama ja maanjäristys eivät voi vahingoittaa tätä varastoa.",
+  "damageNoValidZapQuake": "Mikään kelvollinen yhdistelmä ei mahdu valittuun loitsukapasiteettiin.",
+  "damageZapQuakeCombination": "{lightning} salamaa + {earthquake} maanjäristystä · {capacity} paikkaa",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "Päivitä Tracker",
   "upgradeTrackerSubtitle": "Jäljellä olevat päivityskustannukset ja -aika.",
   "linkedAccountLabel": "Linkitetty tili",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Lisää tai päivitä linkitetyt tilit nähdäksesi päivitysten kokonaismäärät.",
   "playerOptionNotificationsTitle": "Ilmoitukset",
   "playerOptionNotificationsSubtitle": "Hanki hälytyksiä tälle tilille.",
+  "playerOptionNotificationsEnableMaster": "Ota ilmoitukset ensin käyttöön asetuksissa.",
+  "playerOptionNotificationsVerifyFirst": "Vahvista tili ottaaksesi ilmoitukset käyttöön.",
+  "playerOptionNotificationsSubscriptionRequired": "Kirjanmerkki-ilmoitukset vaativat tilauksen.",
+  "playerOptionNotificationsLimitReached": "Kirjanmerkki-ilmoitusten raja on saavutettu.",
   "playerOptionShowTodoPageTitle": "Näytä tehtäväsivulla",
   "playerOptionShowTodoPageSubtitle": "Sisällytä tämä tili täydelliseen tehtäväluetteloon.",
+  "playerOptionShowTodoPageVerifyFirst": "Vahvista tämä tili näyttääksesi sen tehtäväsivulla.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Näytä parannusten seuranta aloitusnäytössä",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Kiinnitä tämän tilin parannusyhteenveto aloitusnäyttöön.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Vahvista tämä tili näyttääksesi parannusten edistymisen aloitusnäytössä.",
+  "playerOptionShowRankedHomeTitle": "Näytä sijoitus aloitusnäytössä",
+  "playerOptionShowRankedHomeSubtitle": "Kiinnitä tämän tilin sijoitusliigayhteenveto aloitusnäyttöön.",
+  "playerOptionShowRankedHomeVerifyFirst": "Vahvista tämä tili näyttääksesi sen sijoitusliigayhteenvedon aloitusnäytössä.",
   "playerOptionShowWarTabTitle": "Näytä Sota-välilehdellä",
   "playerOptionShowWarTabSubtitle": "Sisällytä tämän tilin klaani Sota-välilehdelle.",
   "bookmarkPlayerLoadFailed": "Kirjanmerkkeihin lisätyn soittimen lataaminen epäonnistui.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · ei avoimia tehtäviä",
   "todoMockCaughtUpStatus": "Aktiivinen tänään · toimenpiteitä ei tarvita",
   "notifChooseAlerts": "Valitse hälytykset",
+  "notifGroupLegendAttacks": "Legend I -hyökkäykset",
+  "notifLegendAttacksDescription": "Hyökkäystulokset Legend I -liigan kirjanmerkityille tileille, joilla ilmoitukset ovat käytössä.",
+  "notifGroupLegendDefenses": "Legend I -puolustukset",
+  "notifLegendDefensesDescription": "Puolustustulokset Legend I -liigan tileille, joilla ilmoitukset ovat käytössä.",
   "notifLeagueDefenseDescription": "Puolustustulokset hyökkääjällä, tähdillä, prosentteilla ja liigakontekstilla.",
   "notifWarAttackOptionsDescription": "Sotahyökkäystulokset, puolustushälytykset ja 5v5-hyökkäyssyötevaihtoehdot.",
   "notifWarAlertsDescription": "Sota sovittiin, taistelupäivä alkoi ja sota päättyi.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "Pääkaupunkipisteet",
   "todoAllAccounts": "Kaikki tilit",
   "todoCombinedAcrossAccounts": "Yhdistetty to-do kaikilta tileiltäsi",
+  "dashboardRankedCombinedAcrossAccounts": "Tiliesi yhdistetty sijoitus",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Tiliesi yhdistetty parannusseuranta",
   "todoPreviewAccount": "Esikatselutili",
   "todoLastActiveUnavailable": "Viimeisin aktiivisuus ei saatavilla",
   "todoActiveRelative": "Aktiivinen {time}",
@@ -2516,9 +2961,116 @@
   "sideRankingsEmptyTitle": "Sijoituksia ei palautettu",
   "sideRankingsEmptyBody": "Kokeile toista tulostaulukkoa tai sijaintia.",
   "sideRankingsMockups": "ClashKing-mockupit",
+  "rankingsHomeVillage": "Kotikylä",
+  "rankingsBuilderBase": "Rakentajan Pohja",
+  "rankingsTownHall": "Kaupungintalo",
+  "rankingsRankedLeague": "Sijoitusliiga",
+  "rankingsClanCapital": "Klaanin pääkaupunki",
+  "rankingsDonations": "Lahjoitukset",
+  "rankingsWarWins": "Sotavoitot",
+  "rankingsWinStreak": "Voittoputki",
+  "rankingsCurrent": "Nykyinen",
+  "rankingsWorldwide": "Maailmanlaajuinen",
+  "rankingsSelectLocation": "Valitse sijainti",
+  "rankingsSearchLocations": "Hae sijainteja tai maakoodeja",
+  "rankingsWorldwideUnavailable": "Valitse tälle tulostaululle alue tai maa.",
+  "rankingsLocationsLoadFailed": "Täydellistä sijaintiluetteloa ei voitu ladata. Maailmanlaajuinen näkymä on silti käytettävissä siellä, missä sitä tuetaan.",
+  "rankingsSnapshotDate": "Tilannekuvan päivä",
+  "rankingsSource": "Lähde",
+  "rankingsOfficialSource": "Virallinen Clash API",
+  "rankingsResults": "Tulokset",
+  "rankingsTopCount": "Parhaat {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Tallennettua tilannekuvaa ei ole",
+  "rankingsNoSnapshotBody": "Päivälle {date} ei ole tallennettu sijoitustilannetta. Valitse toinen päivä tai palaa nykyiseen näkymään.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Tämän pelaajan lataaminen epäonnistui.",
+  "rankingsClanLoadFailed": "Tämän klaanin lataaminen epäonnistui.",
   "sideStatsTitle": "Tilastot",
   "sideStatsSubtitle": "Tulostaulukkotilastot virallisista Clash API -pinnoista.",
   "sideStatsLoadError": "Taistelutiedustelua ei voitu ladata.",
+  "statsOverview": "Yleiskatsaus",
+  "statsArmies": "Armeijat",
+  "statsItems": "Tuotteet",
+  "statsWar": "Sota",
+  "statsCwl": "CWL",
+  "statsRanked": "Sijoitus",
+  "statsDateRange": "Ajanjakso",
+  "statsDateRangeHint": "Valitse enintään 90 päivää",
+  "statsDateRangeTooLong": "Valitse ajanjaksoksi 90 päivää tai vähemmän.",
+  "statsUpdated": "Tuoreet tiedot",
+  "statsNoDataTitle": "Ei vielä taistelutietoja",
+  "statsNoDataBody": "Kokeile laajempaa ajanjaksoa tai vähemmän rajoittavia suodattimia.",
+  "statsAddItemsTitle": "Valitse analysoitavat kohteet",
+  "statsAddItemsBody": "Lisää joukkoja, loitsuja, sankareita, lemmikkejä tai varusteita ja suorita sitten kysely.",
+  "statsGlobalCounts": "Globaalit määrät",
+  "statsPerformance": "Suorituskyky",
+  "statsSamples": "Näytteet",
+  "statsUsage": "Käyttö",
+  "statsAverageStars": "Keskimääräiset tähdet",
+  "statsAverageDestruction": "Keskimääräinen tuho",
+  "statsStarRates": "Tähtihinnat",
+  "statsThreeStarRate": "Kolmen tähden arvosana",
+  "statsDailyTrend": "Päivittäinen trendi",
+  "statsPlayers": "Pelaajat",
+  "statsClans": "Klaanit",
+  "statsPlayersInWar": "Pelaajat sodassa",
+  "statsClansInWar": "Klaanit sodassa",
+  "statsPlayersInLegends": "Pelaajat legendoissa",
+  "statsWarsStored": "Sodat tallennettu",
+  "statsJoinLeaves": "Liity / poistu tapahtumista",
+  "statsSearchArmies": "Hae tarkkoja sävellyksiä",
+  "statsExactComposition": "Tarkka koostumus",
+  "statsArmyShareCode": "Armeijan osakekoodi",
+  "statsMinimumSample": "Miniminäyte",
+  "statsSortBy": "Lajitteluperuste",
+  "statsIncludeItems": "Sisällytä tuotteet",
+  "statsExcludeItems": "Sulje pois kohteita",
+  "statsItemId": "Nimikkeen tunnus tai tallennettu nimi",
+  "statsItemType": "Tuotetyyppi",
+  "statsTroop": "Joukko",
+  "statsSpell": "Loitsu",
+  "statsHero": "Sankari",
+  "statsPet": "Lemmikki",
+  "statsEquipment": "Varusteet",
+  "statsOwningHero": "Omistaa sankarin",
+  "statsAddItem": "Lisää kohde",
+  "statsAnalyzeItems": "Analysoi kohteita",
+  "statsCompositionShare": "Sävellysosuus",
+  "statsNoLevels": "Armeijatietueet eivät sisällä esinetasoja.",
+  "statsRankedCompositionOnly": "Koostumustiedot tulevat paremmuusjärjestetyistä taistelulokeista; Sota- ja CWL-suorituskyky pysyvät erillään.",
+  "statsTownHall": "Kaupungintalo",
+  "statsOpponentTownHall": "Vastustaja kaupungintalo",
+  "statsEqualTownHalls": "Tasaiset kaupungintalot",
+  "statsLeagueTier": "Liigan taso",
+  "statsLegendLeagueOne": "Legendaliiga 1",
+  "statsCwlLeague": "CWL-liiga",
+  "statsLeagueBronze": "Pronssi",
+  "statsLeagueSilver": "Hopea",
+  "statsLeagueGold": "Kulta",
+  "statsLeagueCrystal": "Kristalli",
+  "statsLeagueMaster": "Mestari",
+  "statsLeagueChampion": "Valio",
+  "statsAllCwlLeagues": "Kaikki CWL-liigat",
+  "statsCwlSeasons": "CWL-kaudet",
+  "statsCwlSeasonsHint": "VVVV-KK pilkuilla erotettuna",
+  "statsApplyFilters": "Käytä suodattimia",
+  "statsRefresh": "Päivitä tiedot",
+  "statsRegularWarOnly": "Vain säännölliset sodat; ystävyyssodat ja CWL eivät sisälly.",
+  "statsRankedRequired": "Tarvitaan kaupungintalo ja yksi liigataso.",
+  "statsSeasonBreakdown": "Kauden erittely",
   "sideTopScore": "Paras tulos",
   "sideTop200Avg": "Top 200 -keskiarvo",
   "sideBasesArmiesTitle": "Tukikohdat ja armeijat",
@@ -2535,6 +3087,51 @@
   "sideArmyLinksBody": "Kokoonpano, loitsut, piirityskone, muistiinpanot ja jakolinkki.",
   "sideGameAssetsTitle": "Peliassetit",
   "sideGameAssetsSubtitle": "Hostatut ClashKing-assetit kansioittain ryhmiteltynä.",
+  "gameAssetsLoadError": "Pelisisältöjen lataaminen epäonnistui",
+  "gameAssetsEmptyTitle": "Pelisisältöjä ei ole saatavilla",
+  "gameAssetsEmptyBody": "Palvelimella oleva luettelo ei sisältänyt tuettuja kuvia.",
+  "gameAssetsOneImage": "1 kuva",
+  "gameAssetsImageCount": "{count} kuvaa",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Hae tästä luokasta",
+  "gameAssetsAllFormats": "Kaikki muodot",
+  "gameAssetsOneResult": "1 tulos",
+  "gameAssetsResultCount": "{count} tulokset",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Vastaavia kuvia ei löytynyt",
+  "gameAssetsNoResultsBody": "Kokeile toista hakua tai tiedostomuotoa.",
+  "gameAssetsLongPressHint": "Kopioi palvelimen URL-osoite painamalla pitkään",
+  "gameAssetsCopyUrl": "Kopioi URL",
+  "gameAssetsCopyPath": "Kopioi polku",
+  "gameAssetsUrlCopied": "Sisällön URL kopioitu",
+  "gameAssetsPathCopied": "Sisällön polku kopioitu",
+  "gameAssetsCopyError": "Sisällön tietoja ei voitu kopioida.",
+  "gameAssetsShare": "Jaa",
+  "gameAssetsShareError": "Tätä sisältöä ei voitu jakaa.",
+  "gameAssetsSave": "Tallenna",
+  "gameAssetsSaving": "Tallennetaan…",
+  "gameAssetsSaved": "Sisältö tallennettu.",
+  "gameAssetsSavedTo": "Sisältö tallennettu kohteeseen {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Tätä sisältöä ei voitu tallentaa.",
   "sideZapQuakeTitle": "{zaps} salamaa + 1 maanjäristys",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3474,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Supercellin fanisisältökäytäntö",
-  "notifAudienceSectionTitle": "Ilmoitusten kohderyhmä",
-  "notifScopeAllLinkedAccounts": "Kaikki linkitetyt tilit",
-  "notifScopeSelectedAccounts": "Valitut tilit",
-  "notifAudienceSheetDescription": "Valitse, mitkä tilit voivat saada ilmoituksia tällä laitteella.",
-  "notifAudienceAllSubtitle": "{count} nykyistä tiliä. Myöhemmin linkitetyt tilit sisällytetään automaattisesti.",
-  "notifAudienceSelectedSubtitle": "{count} valittu ilmoituksiin.",
-  "notifAudienceSelectedEmpty": "Valitse tarkasti, mitkä tilit saavat ilmoituksia.",
-  "notifAudienceAllInlineNote": "Kaikki myöhemmin linkittämäsi sisällytetään ilman tämän asetuksen muuttamista.",
-  "notifAccountBookmarked": "Kirjanmerkitty",
-  "notifGroupLeagueBattles": "Liigataistelut",
-  "notifGroupWarAttacks": "Sotahyökkäykset",
-  "notifGroupWarState": "Sodan tila",
-  "notifGroupWarReminders": "Sotamuistutukset",
-  "notifGroupEvents": "Tapahtumat",
-  "notifGroupAppAnnouncements": "Sovelluksen ilmoitukset",
-  "notifGroupUpgradeFinishes": "Valmistuneet parannukset",
-  "notifGroupMonthlySupport": "Kuukausituki",
-  "postsTitle": "Julkaisut",
-  "postsDescription": "ClashKingin uutiset, päivitystarinat ja aiemmat ilmoitukset.",
-  "postsEmpty": "Julkaistuja kirjoituksia ei vielä ole.",
-  "postsLoadFailed": "Julkaisuja ei voitu ladata.",
-  "postsLoadMore": "Lataa lisää",
-  "postsCurrent": "Nykyiset",
-  "postsPast": "Aiemmat",
-  "postsStory": "Vuorovaikutteinen tarina",
-  "postsPinned": "Nostettu",
-  "authAccountLinkDiscord": "Yhdistä Discord-tili",
-  "authAccountAddDiscordAuth": "Lisää tilillesi Discord-tunnistautuminen, jotta voit synkronoida tiedot eri alustoilla ja käyttää ClashKing-bottia.",
-  "authAccountDiscordLinkedSuccess": "Discord-tili yhdistettiin onnistuneesti!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "Tehtävälista",
-  "faqFeaturesTodoDescription": "Näet, mitkä tilit tarvitsevat vielä sijoitushyökkäyksiä, ryöstöjä, sotahyökkäyksiä, klaanipelejä tai kausipassin toimia",
-  "faqFeaturesUpgradeTrackerTitle": "Päivitä Tracker",
-  "faqFeaturesUpgradeTrackerDescription": "Käytä pelaajan toimittamaa tilin tilannekuvaa nähdäksesi jäljellä olevat parannukset, resurssit, rakentajat, laboratorion ajan ja edistymisen",
-  "faqFeaturesNotificationsTitle": "Push-ilmoitukset",
-  "faqFeaturesNotificationsDescription": "Valitse tilit, joille lähetetään ilmoituksia tuetuista ClashKing-tapahtumista",
-  "faqFeaturesWidgetsTitle": "Sotapienoisohjelmat",
-  "faqFeaturesWidgetsDescription": "Pidä sodan nykyinen tila näkyvissä aloitusnäytössä laitteilla, jotka tukevat pienoisohjelmia",
-  "faqSectionAccountsAlertsWidgets": "Tilit, ilmoitukset ja pienoisohjelmat",
-  "faqLinkedAccountsTitle": "Miten yhdistetyt tilit ja vahvistaminen toimivat?",
-  "faqLinkedAccountsAnswer": "ClashKing-profiiliisi voi kuulua useita Clash of Clans -tilejä. Tunnisteen lisääminen näyttää julkiset tiedot. Vahvistaminen Clash of Clansin API-tunnuksella todistaa tilin omaksesi ja avaa tilikohtaiset ominaisuudet.",
-  "faqLinkedAccountsSolution1": "Tilinhallinnassa voit hallita, järjestää uudelleen, piilottaa tai poistaa tilejä.",
-  "faqLinkedAccountsSolution2": "Löydät API-tunnuksen Clash of Clansista kohdasta Asetukset > Lisää asetuksia > API-tunnus.",
-  "faqLinkedAccountsSolution3": "Voit kirjautua Discordilla tai sähköpostilla. Kun tilien yhdistäminen on käytettävissä, hallitse yhteyksiä Asetuksissa.",
-  "faqNotificationsTitle": "Miten ilmoitukset toimivat?",
-  "faqNotificationsAnswer": "Ilmoitukset ovat valinnaisia. Kun ne otetaan käyttöön, ClashKing rekisteröi tämän laitteen. Voit valita, mitä yhdistettyjä tilejä kukin ilmoitus koskee.",
-  "faqNotificationsSolution1": "Salli ilmoitukset laitteessasi ja ClashKingin asetuksissa.",
-  "faqNotificationsSolution2": "Eri ilmoitukset voivat koskea eri tilejä. Jos ilmoitus puuttuu, tarkista valitut tilit.",
-  "faqNotificationsSolution3": "Jotkin ilmoitukset riippuvat seuratuista klaani- tai sotatiedoista. Ulkoisten tietojen päivittyminen voi aiheuttaa viiveitä.",
-  "faqWidgetsTitle": "Miten sotapienoisohjelmat toimivat?",
-  "faqWidgetsAnswer": "Sotapienoisohjelmat näyttävät tuetuilla laitteilla nopean yhteenvedon. Ne käyttävät valittuja tai yhdistettyjä tilejäsi, ClashKingin välimuistitietoja sekä taustapäivityksiä silloin, kun alusta sallii ne.",
-  "faqWidgetsSolution1": "Avaa sovellus tilin tai klaanin vaihtamisen jälkeen, jotta pienoisohjelma voi synkronoitua.",
-  "faqWidgetsSolution2": "Jos pienoisohjelman tiedot näyttävät vanhoilta, päivitä ensin sovellus. Android ja iOS rajoittavat taustapäivityksiä.",
-  "faqWidgetsSolution3": "Klaanin sotatietojen on oltava käytettävissä, jotta pienoisohjelma voi näyttää hyödyllisen tilan.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "Valvojan painoarvo",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "Valvojan painoarvo voi ohittaa asumistilan ja määrittää, kuinka vahvasti Suurvalvoja priorisoi yksikköryhmän seuraamista.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "Parantajan painoarvo",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "Parantajan painoarvo voi ohittaa asumistilan, kun parantajat päättävät, mitä yksiköitä ne priorisoivat.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "Valvojan kynnyksen saavuttamiseen tarvittavat yksiköt: {count}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "Tämä yksikkö ei vaikuta valvojan seuraamiskynnykseen.",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "Täällä ei näytetä tilejä",
-  "dashboardTodoHiddenBody": "Ota Pelaajat-välilehdellä tilille käyttöön jokin aloitusnäytön korteista (tehtävät, parannusten seuranta tai sijoitus), jotta se näkyy täällä.",
-  "dashboardUpgradeTrackerNoData": "Avaa parannusten seuranta tuodaksesi tai päivittääksesi parannustiedot.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {tarvitsee päivityksen} other {tarvitsevat päivityksen}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {tarvitsee vielä tehtäviä} other {tarvitsevat vielä tehtäviä}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {voi vielä hyökätä} other {voivat vielä hyökätä}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "Arvioitu",
-  "dashboardUpgradeTrackerBuilders": "Rakentajat",
-  "dashboardUpgradeTrackerLab": "Laboratorio",
-  "dashboardUpgradeTrackerPets": "Lemmikit",
-  "dashboardUpgradeTrackerWalls": "Muurit",
-  "dashboardUpgradeTrackerVillage": "Kylä",
-  "dashboardRankedNoData": "Avaa sijoitusliiga nähdäksesi tämän tilin sijoituksen.",
-  "dashboardRankedAccounts": "{loaded}/{total} tiliä seurannassa",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "Vertaa yhtä hyökkäyskokoonpanoa useisiin rakennuksiin.",
-  "damageNoStaticDataTitle": "Vahinkotietoja ei ole saatavilla",
-  "damageNoStaticDataBody": "Päivitä sovellus, kun staattiset pelitiedot ovat latautuneet.",
-  "damageTownHall": "Kaupungintalo",
-  "damageVerifiedAccountPrefill": "Vahvistetun tilin esiasetus",
-  "damageOverridesStayLocal": "Tässä tehdyt muutokset eivät päivitä pelaajatiliä.",
-  "damageTargets": "Rakennukset",
-  "damageAddBuilding": "Lisää rakennus",
-  "damageRemoveBuilding": "Poista rakennus",
-  "damageNoTargetsBody": "Lisää vähintään yksi rakennus tulosten vertaamista varten.",
-  "damageHitpoints": "{hitpoints} osumapistettä",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "Hae rakennuksia",
-  "damageNoBuildingsFound": "Rakennuksia ei löytynyt",
-  "damageTryAnotherSearch": "Kokeile toista nimeä tai kaupungintalon tasoa.",
-  "damageAttackStack": "Manuaalinen hyökkäyskokoonpano",
-  "damageNoSourcesForTownHall": "Tälle kaupungintalolle ei ole tuettuja vahingonlähteitä.",
-  "damageCount": "Määrä",
-  "damagePerUse": "{damage} vahinkoa käyttökertaa kohti",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "{percent}% enimmäisosumapisteistä, vaikutus heikkenee pinottaessa",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "Salama",
-  "damageSourceEarthquake": "Maanjäristys",
-  "damageSourceGiantArrow": "Jättinuoli",
-  "damageSourceFireball": "Tulipallo",
-  "damageSourceFlameFlinger": "Liekinheittimen osuma",
-  "damageSourceBalloonDeath": "Ilmapallon kuolinvahinko",
-  "damageSourceRocketBalloonDeath": "Raketti-ilmapallon kuolinvahinko",
-  "damageResults": "Tulokset",
-  "damageDestroyed": "Tuhoutuu",
-  "damageSurvives": "Kestää",
-  "damageResultSummary": "{damage} vahinkoa · {remaining} osumapistettä jäljellä",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "Salama–maanjäristys-optimointi",
-  "damageSpellCapacity": "Loitsukapasiteetti",
-  "damageZapQuakeUnavailable": "Salama ja maanjäristys eivät ole käytettävissä tällä kaupungintalon tasolla.",
-  "damageZapQuakeUsesSelectedLevels": "Käytössä salama tasolla {lightningLevel} ja maanjäristys tasolla {earthquakeLevel}.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "Salama ja maanjäristys eivät voi vahingoittaa tätä varastoa.",
-  "damageNoValidZapQuake": "Mikään kelvollinen yhdistelmä ei mahdu valittuun loitsukapasiteettiin.",
-  "damageZapQuakeCombination": "{lightning} salamaa + {earthquake} maanjäristystä · {capacity} paikkaa",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "Vahvista tämä tili näyttääksesi sen tehtäväsivulla.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Näytä parannusten seuranta aloitusnäytössä",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Kiinnitä tämän tilin parannusyhteenveto aloitusnäyttöön.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Vahvista tämä tili näyttääksesi parannusten edistymisen aloitusnäytössä.",
-  "playerOptionShowRankedHomeTitle": "Näytä sijoitus aloitusnäytössä",
-  "playerOptionShowRankedHomeSubtitle": "Kiinnitä tämän tilin sijoitusliigayhteenveto aloitusnäyttöön.",
-  "playerOptionShowRankedHomeVerifyFirst": "Vahvista tämä tili näyttääksesi sen sijoitusliigayhteenvedon aloitusnäytössä.",
-  "dashboardRankedCombinedAcrossAccounts": "Tiliesi yhdistetty sijoitus",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Tiliesi yhdistetty parannusseuranta",
-  "rankingsHomeVillage": "Kotikylä",
-  "rankingsBuilderBase": "Rakentajan Pohja",
-  "rankingsTownHall": "Kaupungintalo",
-  "rankingsRankedLeague": "Sijoitusliiga",
-  "rankingsClanCapital": "Klaanin pääkaupunki",
-  "rankingsDonations": "Lahjoitukset",
-  "rankingsWarWins": "Sotavoitot",
-  "rankingsWinStreak": "Voittoputki",
-  "rankingsCurrent": "Nykyinen",
-  "rankingsWorldwide": "Maailmanlaajuinen",
-  "rankingsSelectLocation": "Valitse sijainti",
-  "rankingsSearchLocations": "Hae sijainteja tai maakoodeja",
-  "rankingsWorldwideUnavailable": "Valitse tälle tulostaululle alue tai maa.",
-  "rankingsLocationsLoadFailed": "Täydellistä sijaintiluetteloa ei voitu ladata. Maailmanlaajuinen näkymä on silti käytettävissä siellä, missä sitä tuetaan.",
-  "rankingsSnapshotDate": "Tilannekuvan päivä",
-  "rankingsSource": "Lähde",
-  "rankingsOfficialSource": "Virallinen Clash API",
-  "rankingsResults": "Tulokset",
-  "rankingsTopCount": "Parhaat {count}",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "Tallennettua tilannekuvaa ei ole",
-  "rankingsNoSnapshotBody": "Päivälle {date} ei ole tallennettu sijoitustilannetta. Valitse toinen päivä tai palaa nykyiseen näkymään.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "Tämän pelaajan lataaminen epäonnistui.",
-  "rankingsClanLoadFailed": "Tämän klaanin lataaminen epäonnistui.",
-  "statsOverview": "Yleiskatsaus",
-  "statsArmies": "Armeijat",
-  "statsItems": "Tuotteet",
-  "statsWar": "Sota",
-  "statsCwl": "CWL",
-  "statsRanked": "Sijoitus",
-  "statsDateRange": "Ajanjakso",
-  "statsDateRangeHint": "Valitse enintään 90 päivää",
-  "statsDateRangeTooLong": "Valitse ajanjaksoksi 90 päivää tai vähemmän.",
-  "statsUpdated": "Tuoreet tiedot",
-  "statsNoDataTitle": "Ei vielä taistelutietoja",
-  "statsNoDataBody": "Kokeile laajempaa ajanjaksoa tai vähemmän rajoittavia suodattimia.",
-  "statsAddItemsTitle": "Valitse analysoitavat kohteet",
-  "statsAddItemsBody": "Lisää joukkoja, loitsuja, sankareita, lemmikkejä tai varusteita ja suorita sitten kysely.",
-  "statsGlobalCounts": "Globaalit määrät",
-  "statsPerformance": "Suorituskyky",
-  "statsSamples": "Näytteet",
-  "statsUsage": "Käyttö",
-  "statsAverageStars": "Keskimääräiset tähdet",
-  "statsAverageDestruction": "Keskimääräinen tuho",
-  "statsStarRates": "Tähtihinnat",
-  "statsThreeStarRate": "Kolmen tähden arvosana",
-  "statsDailyTrend": "Päivittäinen trendi",
-  "statsPlayers": "Pelaajat",
-  "statsClans": "Klaanit",
-  "statsPlayersInWar": "Pelaajat sodassa",
-  "statsClansInWar": "Klaanit sodassa",
-  "statsPlayersInLegends": "Pelaajat legendoissa",
-  "statsWarsStored": "Sodat tallennettu",
-  "statsJoinLeaves": "Liity / poistu tapahtumista",
-  "statsSearchArmies": "Hae tarkkoja sävellyksiä",
-  "statsExactComposition": "Tarkka koostumus",
-  "statsArmyShareCode": "Armeijan osakekoodi",
-  "statsMinimumSample": "Miniminäyte",
-  "statsSortBy": "Lajitteluperuste",
-  "statsIncludeItems": "Sisällytä tuotteet",
-  "statsExcludeItems": "Sulje pois kohteita",
-  "statsItemId": "Nimikkeen tunnus tai tallennettu nimi",
-  "statsItemType": "Tuotetyyppi",
-  "statsTroop": "Joukko",
-  "statsSpell": "Loitsu",
-  "statsHero": "Sankari",
-  "statsPet": "Lemmikki",
-  "statsEquipment": "Varusteet",
-  "statsOwningHero": "Omistaa sankarin",
-  "statsAddItem": "Lisää kohde",
-  "statsAnalyzeItems": "Analysoi kohteita",
-  "statsCompositionShare": "Sävellysosuus",
-  "statsNoLevels": "Armeijatietueet eivät sisällä esinetasoja.",
-  "statsRankedCompositionOnly": "Koostumustiedot tulevat paremmuusjärjestetyistä taistelulokeista; Sota- ja CWL-suorituskyky pysyvät erillään.",
-  "statsTownHall": "Kaupungintalo",
-  "statsOpponentTownHall": "Vastustaja kaupungintalo",
-  "statsEqualTownHalls": "Tasaiset kaupungintalot",
-  "statsLeagueTier": "Liigan taso",
-  "statsLegendLeagueOne": "Legendaliiga 1",
-  "statsCwlLeague": "CWL-liiga",
-  "statsLeagueBronze": "Pronssi",
-  "statsLeagueSilver": "Hopea",
-  "statsLeagueGold": "Kulta",
-  "statsLeagueCrystal": "Kristalli",
-  "statsLeagueMaster": "Mestari",
-  "statsLeagueChampion": "Valio",
-  "statsAllCwlLeagues": "Kaikki CWL-liigat",
-  "statsCwlSeasons": "CWL-kaudet",
-  "statsCwlSeasonsHint": "VVVV-KK pilkuilla erotettuna",
-  "statsApplyFilters": "Käytä suodattimia",
-  "statsRefresh": "Päivitä tiedot",
-  "statsRegularWarOnly": "Vain säännölliset sodat; ystävyyssodat ja CWL eivät sisälly.",
-  "statsRankedRequired": "Tarvitaan kaupungintalo ja yksi liigataso.",
-  "statsSeasonBreakdown": "Kauden erittely",
-  "gameAssetsLoadError": "Pelisisältöjen lataaminen epäonnistui",
-  "gameAssetsEmptyTitle": "Pelisisältöjä ei ole saatavilla",
-  "gameAssetsEmptyBody": "Palvelimella oleva luettelo ei sisältänyt tuettuja kuvia.",
-  "gameAssetsOneImage": "1 kuva",
-  "gameAssetsImageCount": "{count} kuvaa",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "Hae tästä luokasta",
-  "gameAssetsAllFormats": "Kaikki muodot",
-  "gameAssetsOneResult": "1 tulos",
-  "gameAssetsResultCount": "{count} tulokset",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "Vastaavia kuvia ei löytynyt",
-  "gameAssetsNoResultsBody": "Kokeile toista hakua tai tiedostomuotoa.",
-  "gameAssetsLongPressHint": "Kopioi palvelimen URL-osoite painamalla pitkään",
-  "gameAssetsCopyUrl": "Kopioi URL",
-  "gameAssetsCopyPath": "Kopioi polku",
-  "gameAssetsUrlCopied": "Sisällön URL kopioitu",
-  "gameAssetsPathCopied": "Sisällön polku kopioitu",
-  "gameAssetsCopyError": "Sisällön tietoja ei voitu kopioida.",
-  "gameAssetsShare": "Jaa",
-  "gameAssetsShareError": "Tätä sisältöä ei voitu jakaa.",
-  "gameAssetsSave": "Tallenna",
-  "gameAssetsSaving": "Tallennetaan…",
-  "gameAssetsSaved": "Sisältö tallennettu.",
-  "gameAssetsSavedTo": "Sisältö tallennettu kohteeseen {path}",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "Tätä sisältöä ei voitu tallentaa.",
   "upgradeTrackerPlan": "Suunnitelma",
   "upgradeTrackerUpgrades": "Parannukset",
   "upgradeTrackerCollection": "Kokoelma",
@@ -3852,18 +3873,23 @@
   "rankedLeagueBattleDetailsUnavailable": "Tämän kauden yksityiskohtaisia taistelulokeja ei ole saatavilla.",
   "rankedLeagueHistoricalDetailsUnavailable": "Tästä vanhemmasta kaudesta on saatavilla vain virallinen yhteenveto.",
   "rankedLeagueStarBreakdownUnavailable": "API tarjoaa tähtien kokonaismäärän mutta ei niiden tarkkaa jakautumista tällä kaudella.",
+  "notifAudienceSectionTitle": "Ilmoitusten kohderyhmä",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "Kaikki linkitetyt tilit",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "Valitut tilit",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "Valitse, mitkä tilit voivat saada ilmoituksia tällä laitteella.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} nykyistä tiliä. Myöhemmin linkitetyt tilit sisällytetään automaattisesti.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3898,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "{count} valittu ilmoituksiin.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,36 +3907,49 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "Valitse tarkasti, mitkä tilit saavat ilmoituksia.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "Kaikki myöhemmin linkittämäsi sisällytetään ilman tämän asetuksen muuttamista.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "Valitut tilit",
+  "notifAudienceAcrossDevicesDescription": "Valitse, mitkä tilit voivat saada ilmoituksia tällä laitteella.",
+  "notifAccountBookmarked": "Kirjanmerkitty",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "Liigataistelut",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "Sotahyökkäykset",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "Sodan tila",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "Sotamuistutukset",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "Tapahtumat",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "Sovelluksen ilmoitukset",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "Valmistuneet parannukset",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "Kuukausituki",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
@@ -3949,25 +3989,56 @@
   "widgetPetBoostShort": "Lemmikki",
   "widgetClockBoostShort": "Kello",
   "widgetBuilderCostPerk": "{percent}%:n alennus rakennuskustannuksiin",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "{percent}% lyhyempi rakennusaika",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "{percent}%:n alennus laboratoriokustannuksiin",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "{percent}% lyhyempi laboratorioaika",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Farmaustavoite",
+  "farmGoalFormTitle": "Farmattavat resurssit",
+  "farmGoalAccountTitle": "Tili",
+  "farmGoalAccountHint": "Valittu tili määrittää arviossa käytettävän kaupungintalon ja nykyisen liigan.",
+  "farmGoalTargetTitle": "Parannettava rakennus",
+  "farmGoalTargetBuildingLabel": "Rakennus",
+  "farmGoalChooseBuilding": "Valitse rakennus",
   "farmGoalChangeBuilding": "Vaihda rakennusta",
   "farmGoalNoTargetTitle": "Rakennusta ei ole valittu",
   "farmGoalNoTargetBody": "Valitse päivitettävä rakennus arvioidaksesi tarvittavan resurssien keräämisen.",
+  "farmGoalTargetLevelLabel": "Tavoitetaso",
+  "farmGoalUpgradeCostLabel": "Päivityksen hinta",
+  "farmGoalCostUnavailable": "Parannuksen hinta ei ole saatavilla tälle tasolle.",
+  "farmGoalLootTitle": "Arvioitu saalis",
+  "farmGoalResourceLabel": "Resurssi",
+  "farmGoalAmountLabel": "Farmattava määrä",
   "farmGoalAverageLootLabel": "Kylässä saatavilla oleva saalis",
   "farmGoalPerfectLootHint": "Syötä ennen hyökkäystä näkyvä saalis. Alla oleva liigabonus lisätään automaattisesti.",
   "farmGoalLeagueEstimate": "Liigan {league} bonus: {amount} {resource}. Se sisältyy hyökkäysarvioihin.",
-  "farmGoalTrackerNextTitle": "Seuraava Upgrade Tracker -suunnitelmassa",
-  "farmGoalTrackerMissingTitle": "Upgrade Tracker -tiedot tarvitaan",
-  "farmGoalTrackerMissingBody": "Tuo tämän tilin päivitys-JSON Upgrade Trackeriin, jotta seuraava suunniteltu rakennus ja tarkka hinta näkyvät tässä.",
-  "farmGoalTrackerPlanComplete": "Upgrade Trackerista ei löytynyt jäljellä olevia rakennuspäivityksiä. Voit silti valita rakennuksen manuaalisesti.",
-  "farmGoalOpenUpgradeTracker": "Avaa Upgrade Tracker",
-  "farmGoalUseTrackerTarget": "Käytä rakennusta",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,118 +4052,6 @@
       }
     }
   },
-  "gameTHLevel": "Th{level}",
-  "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameCreatorCode": "Luojan Koodi: ClashKing",
-  "clanWarFrequencyTitle": "Sodat",
-  "notifScopeAllAccounts": "Kaikki tilit",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
-  "notifSelectedAccounts": "Valitut tilit",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "Suodattimet",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "Peruuttaa",
-  "assetFolderTroops": "Joukot",
-  "assetFolderSpells": "Loitsut",
-  "assetFolderHeroes": "Sankarit",
-  "endpointStateWins": "Voitot",
-  "notifGroupBattles": "Taistelut",
-  "notifGroupSupport": "Tuki",
-  "gameAssetsCategoryHeroes": "Sankarit",
-  "gameAssetsCategoryTroops": "Joukot",
-  "gameAssetsCategoryPets": "Lemmikit",
-  "gameAssetsCategorySpells": "Loitsut",
-  "rankedLeagueStars": "Tähdet",
-  "farmGoalUpgradeCostLabel": "Päivityksen hinta",
-  "farmGoalAccountTitle": "Tili",
-  "damageAccountPresetShort": "Tili",
-  "damageClearStack": "Selkeä",
-  "todoMockRaid1Left": "1 jäljellä",
-  "farmGoalResourceLabel": "Resurssi",
-  "gameAssetsCategoryEquipment": "Varusteet",
-  "notifChooseAccountsManually": "Valitut tilit",
-  "notifAudienceAcrossDevicesDescription": "Valitse, mitkä tilit voivat saada ilmoituksia tällä laitteella.",
-  "damageNoTargetTitle": "Rakennusta ei ole valittu",
-  "farmGoalMissingTarget": "Valitse rakennus ja tavoitetaso laskeaksesi tarvittavat hyökkäykset.",
-  "farmGoalResultTitle": "Tarvittavat hyökkäykset",
-  "farmGoalResultSummary": "{target} {resource}, noin {average} täydellistä hyökkäystä kohden.",
-  "@farmGoalResultSummary": {
-    "placeholders": {
-      "target": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      },
-      "average": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalMissingValues": "Anna tavoite ja täydellisen hyökkäyksen saalisarvio nähdäksesi hyökkäysskenaariot.",
-  "settingsLiveActivityStart": "Aloita testitoiminta",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "todoExplanationRaidsTitle": "Raidat:",
-  "settingsLiveActivityUpdate": "Päivitä pisteet",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "Poistaa paikallisen esikatselun.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "Lopeta testitoiminta",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "todoExplanationRaids": "Paino 5 pistettä per tili (tai 6, jos viimeinen hyökkäys on avattu), 1 hyökkäys = 1 piste.",
-  "settingsLiveActivityTest": "Live-aktiivisuustesti",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStartSubtitle": "Näyttää paikallisen klaanisodan esikatselun.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdateSubtitle": "Edistää väärennettyjä sotapisteitä.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "todoMockWarAltStatus": "Aktiivinen 18 minuuttia sitten · sota ja hyökkäykset vaativat huomiota",
-  "todoRaidAttacks": "Rytmihyökkäykset",
-  "todoMockRaid4Left": "4 jäljellä",
-  "playerOptionNotificationsEnableMaster": "Ota ilmoitukset ensin käyttöön asetuksissa.",
-  "playerOptionNotificationsVerifyFirst": "Vahvista tili ottaaksesi ilmoitukset käyttöön.",
-  "playerOptionNotificationsSubscriptionRequired": "Kirjanmerkki-ilmoitukset vaativat tilauksen.",
-  "playerOptionNotificationsLimitReached": "Kirjanmerkki-ilmoitusten raja on saavutettu.",
-  "notifGroupLegendAttacks": "Legend I -hyökkäykset",
-  "notifLegendAttacksDescription": "Hyökkäystulokset Legend I -liigan kirjanmerkityille tileille, joilla ilmoitukset ovat käytössä.",
-  "notifGroupLegendDefenses": "Legend I -puolustukset",
-  "notifLegendDefensesDescription": "Puolustustulokset Legend I -liigan tileille, joilla ilmoitukset ovat käytössä.",
-  "farmGoalTitle": "Farmaustavoite",
-  "farmGoalFormTitle": "Farmattavat resurssit",
-  "farmGoalAccountHint": "Valittu tili määrittää arviossa käytettävän kaupungintalon ja nykyisen liigan.",
-  "farmGoalTargetTitle": "Parannettava rakennus",
-  "farmGoalTargetBuildingLabel": "Rakennus",
-  "farmGoalChooseBuilding": "Valitse rakennus",
-  "farmGoalTargetLevelLabel": "Tavoitetaso",
-  "farmGoalCostUnavailable": "Parannuksen hinta ei ole saatavilla tälle tasolle.",
-  "farmGoalLootTitle": "Arvioitu saalis",
-  "farmGoalAmountLabel": "Farmattava määrä",
   "farmGoalStarBonusEstimate": "Tähtibonus: {amount} {resource} 5 tähden jälkeen. Se ei sisälly tarvittavien hyökkäysten määrään.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4116,7 +4075,82 @@
   "farmGoalAttackShort": "hyökkäys",
   "farmGoalScenarioHint": "Arvio: saalis vaihtelee tuhottujen rakennusten mukaan. Prosentit lasketaan täydellisen hyökkäyksen arviosta.",
   "farmGoalNoLeagueLoot": "Valitse liigassa oleva tili saadaksesi saalisehdotuksen.",
+  "farmGoalTrackerNextTitle": "Seuraava Upgrade Tracker -suunnitelmassa",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker -tiedot tarvitaan",
+  "farmGoalTrackerMissingBody": "Tuo tämän tilin päivitys-JSON Upgrade Trackeriin, jotta seuraava suunniteltu rakennus ja tarkka hinta näkyvät tässä.",
+  "farmGoalTrackerPlanComplete": "Upgrade Trackerista ei löytynyt jäljellä olevia rakennuspäivityksiä. Voit silti valita rakennuksen manuaalisesti.",
+  "farmGoalOpenUpgradeTracker": "Avaa Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Käytä rakennusta",
+  "farmGoalMissingTarget": "Valitse rakennus ja tavoitetaso laskeaksesi tarvittavat hyökkäykset.",
+  "farmGoalMissingValues": "Anna tavoite ja täydellisen hyökkäyksen saalisarvio nähdäksesi hyökkäysskenaariot.",
+  "farmGoalResultTitle": "Tarvittavat hyökkäykset",
   "farmGoalAttacks": "hyökkäystä",
+  "farmGoalResultSummary": "{target} {resource}, noin {average} täydellistä hyökkäystä kohden.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "Th{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Luojan Koodi: ClashKing",
+  "todoExplanationRaidsTitle": "Raidat:",
+  "todoExplanationRaids": "Paino 5 pistettä per tili (tai 6, jos viimeinen hyökkäys on avattu), 1 hyökkäys = 1 piste.",
+  "clanWarFrequencyTitle": "Sodat",
+  "notifScopeAllAccounts": "Kaikki tilit",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "Live-aktiivisuustesti",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "Aloita testitoiminta",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "Näyttää paikallisen klaanisodan esikatselun.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "Päivitä pisteet",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "Edistää väärennettyjä sotapisteitä.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "Lopeta testitoiminta",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "Poistaa paikallisen esikatselun.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "Valitut tilit",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Suodattimet",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "dashboardUpgradeTrackerAccounts": "{loaded}/{total} tiliä seurannassa",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
@@ -4131,12 +4165,14 @@
   "calculatorsModeDamage": "Vahinko",
   "calculatorsModeFarmGoal": "Farmaustavoite",
   "damageCalculatorTitle": "Vahinkolaskuri",
+  "damageAccountPresetShort": "Tili",
   "damageChooseAccount": "Valitse tili",
   "damageSwitchAccount": "Vaihda tiliä",
   "damageAccountSelectorHint": "Käytetyt tasot määräytyvät valitun tilin mukaan.",
   "damageNoAccountsAvailable": "Vahvistettua tiliä ei ole saatavilla",
   "damageTargetSectionTitle": "Tuhottava rakennus",
   "damageChooseTarget": "Valitse rakennus",
+  "damageNoTargetTitle": "Rakennusta ei ole valittu",
   "damageNoTargetBody": "Valitse rakennus nähdäksesi, kuinka paljon vahinkoa se kestää.",
   "damageTargetLevelLabel": "Tavoitetaso",
   "damageCommonBuildings": "Useimmin valitut",
@@ -4147,6 +4183,7 @@
   "damageQuickSetupGiantArrow": "Jättinuoli",
   "damageQuickSetupFlameFlinger": "Liekonheitin",
   "damageQuickSetupCustom": "Mukautettu",
+  "damageClearStack": "Selkeä",
   "damageNoDamageSelected": "Ei vahinkoa",
   "damageSelectedSourcesCount": "{count} lähdettä",
   "@damageSelectedSourcesCount": {
@@ -4160,6 +4197,11 @@
   "damageOtherSources": "Muut lähteet",
   "damageShowAllSources": "Lisää toinen lähde",
   "damageShowFewerSources": "Piilota muut lähteet",
+  "searchCancel": "Peruuttaa",
+  "todoRaidAttacks": "Rytmihyökkäykset",
+  "todoMockRaid4Left": "4 jäljellä",
+  "todoMockWarAltStatus": "Aktiivinen 18 minuuttia sitten · sota ja hyökkäykset vaativat huomiota",
+  "todoMockRaid1Left": "1 jäljellä",
   "gameAssetsCategoryBuildings": "Rakennukset",
   "gameAssetsCategoryCapitalBase": "Pääkaupunkitukikohta",
   "gameAssetsCategoryCapitalHouseParts": "Pääkaupunkitalon osat",
@@ -4167,7 +4209,19 @@
   "gameAssetsCategoryClanLabels": "Klaanitunnisteet",
   "gameAssetsCategoryCountryFlags": "Maiden liput",
   "gameAssetsCategoryDecorations": "Koristeet",
+  "gameAssetsCategoryEquipment": "Varusteet",
   "gameAssetsCategoryGuardians": "Vartijat",
+  "gameAssetsCategoryHeroes": "Sankarit",
+  "gameAssetsCategoryPets": "Lemmikit",
   "gameAssetsCategorySkins": "Ulkoasut",
-  "rankedLeagueAccountSelector": "Näytettävä tili"
+  "gameAssetsCategorySpells": "Loitsut",
+  "gameAssetsCategoryTroops": "Joukot",
+  "assetFolderTroops": "Joukot",
+  "assetFolderSpells": "Loitsut",
+  "assetFolderHeroes": "Sankarit",
+  "endpointStateWins": "Voitot",
+  "notifGroupBattles": "Taistelut",
+  "notifGroupSupport": "Tuki",
+  "rankedLeagueAccountSelector": "Näytettävä tili",
+  "rankedLeagueStars": "Tähdet"
 }

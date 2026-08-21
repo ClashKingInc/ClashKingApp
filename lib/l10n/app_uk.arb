@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "Акаунт успішно підтверджено!",
   "generalRetry": "Повторити",
   "generalRetrying": "Повторна спроба...",
+  "postsTitle": "Новини",
+  "postsDescription": "Новини ClashKing, огляди оновлень і попередні оголошення.",
+  "postsEmpty": "Опублікованих новин поки немає.",
+  "postsLoadFailed": "Не вдалося завантажити новини.",
+  "postsLoadMore": "Завантажити ще",
+  "postsCurrent": "Поточні",
+  "postsPast": "Архівні",
+  "postsStory": "Інтерактивна історія",
+  "postsPinned": "Вибране",
   "generalTryAgain": "Спробуйте ще раз",
   "generalReset": "Скинути",
   "generalCancel": "Скасувати",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "Фільтри",
+  "generalExpand": "Розгорнути",
+  "generalCollapse": "Згорнути",
   "generalNotSet": "Не вибрано",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "Закладка",
+  "generalRemoveBookmark": "Видалити закладку",
   "generalClearFilters": "Очистити фільтри",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "Прив’язати email-акаунт",
   "authAccountAddEmailAuth": "Додайте автентифікацію через email і пароль для додаткової безпеки акаунта.",
   "authAccountEmailLinkedSuccess": "Email-акаунт успішно прив’язано!",
+  "authAccountLinkDiscord": "Під’єднати обліковий запис Discord",
+  "authAccountAddDiscordAuth": "Додайте вхід через Discord для синхронізації між платформами й доступу до бота ClashKing.",
+  "authAccountDiscordLinkedSuccess": "Обліковий запис Discord успішно під’єднано!",
   "authEmailVerificationTitle": "Підтвердити email",
   "authEmailVerificationCheckEmail": "Перевірте пошту",
   "authEmailVerificationSentTo": "Ми надіслали лист підтвердження на:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "Рівень досвіду",
+  "gameLeague": "Ліга",
   "gameTrophies": "Трофеї",
   "gameBuilderBaseTrophies": "ББ Трофеї",
   "gameDonations": "Пожертви",
@@ -484,6 +501,11 @@
   "clanNone": "Без клану",
   "clanJoinToUnlock": "Приєднуйтеся до клану, щоб розблокувати нові можливості.",
   "clanMembers": "Учасники",
+  "clanMembersSearchPlaceholder": "Пошук учасників",
+  "clanMembersShowTotals": "Показати підсумки клану",
+  "clanMembersHideTotals": "Приховати підсумки клану",
+  "clanMembersReceivedShort": "Отримано",
+  "clanMembersAverageTh": "Середній TH",
   "clanMinimumMembers": "Мінімальна кількість учасників",
   "clanMaximumMembers": "Максимальна кількість учасників",
   "clanLocation": "Розташування",
@@ -839,6 +861,7 @@
   "warLeague": "Війна/Ліга",
   "warHistory": "Історія війн",
   "warLog": "Журнал війн",
+  "warLogSearchPlaceholder": "Пошукові війни",
   "warLogClosed": "Журнал війн клану {clan} закритий.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "Статистика війни",
+  "warStatsSearchPlaceholder": "Пошук гравців",
+  "warStatsCurrentTownHall": "Мій TH",
+  "warStatsLast50": "Останні 50",
+  "warStatsWars": "війни",
+  "warStatsSelectSeason": "Виберіть сезон військової статистики",
   "warOngoing": "Поточна війна",
   "warIsNotInWar": "{clan} Не знаходиться у війні.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "Виграти",
+  "warAnalysisToLose": "Втрачати",
+  "warAnalysisNoAttacksLeft": "Атак не залишилося",
+  "warAnalysisScenario": "Залишилося {attacks} атак -> потрібно {stars} зірок / {percent}% на атаку",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "Залишилося {attacks} атак -> неможливо ({stars} зірок / {percent}% за атаку)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "Клан {clanName} уже не може програти",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "Гарантовано",
   "warAnalysisAlreadySecured": "Результат уже гарантовано",
   "warAnalysisSecureAgainst": "Ціль розраховано за умови, що клан {clanName} використає всі решту атак.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "Результат неможливо математично гарантувати, якщо клан {clanName} оптимально використає всі решту атак.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "Решти атак недостатньо, щоб гарантувати результат",
   "warAnalysisStarGoal": "+{stars} зірок",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "Залишилося атак: {attacks}",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "Кращий результат уже неможливий",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "% Потрібно загалом",
   "warCalculatorCalculate": "Розрахувати",
   "warAttacksTitle": "Атаки",
+  "warAttacksSuccessful": "Успішні атаки",
+  "warAttacksFailed": "Невдалі атаки",
   "warAttacksNone": "Атак ще немає",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "Найкращі атаки",
   "warAttacksCount": "Кількість атак",
   "warAttacksMissed": "Пропущені атаки",
+  "warAttacksMissedShort": "Пропущений",
   "warAttacksNumber": "Ви атакували {number_time} раз(и) протягом останніх {number_war} воєн.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "ЛВК",
   "cwlClanWarLeague": "Ліга Війн Кланів",
   "cwlOngoing": "Поточна ЛВК",
+  "cwlHistoryTitle": "Історія CWL",
+  "clanJoinLeaveTab": "Приєднатися/Вийти",
+  "clanRankingsTab": "Рейтинги",
+  "clanRankingsSeason": "Сезон",
+  "clanRankingsSelectSeason": "Виберіть сезон рейтингу",
+  "clanRankingsFilterActivity": "діяльність",
+  "clanRankingsFilterWar": "Війна",
+  "clanRankingsFilterPoints": "Очки",
+  "cwlHistoryPreviewBadge": "Попередній перегляд",
+  "cwlHistoryPreviewSubtitle": "Макет {clan}, доки не буде виправлено кінцеву точку CWL",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Історії CWL ще немає",
+  "cwlHistoryEmptyBody": "Цей клан ще не брав участі в сезоні Clan War League.",
+  "cwlRankTitle": "ранг",
+  "cwlWarsPlayedTitle": "Війни грали",
+  "playerWarStarsTitle": "Зірки війни",
+  "playerWarPreferenceTitle": "Війна преф.",
+  "playerDonatedTitle": "Пожертвував",
+  "playerReceivedTitle": "Отримано",
+  "playerCapitalTitle": "Капітал",
+  "playerExpLevelTitle": "Exp. рівень",
+  "clanWarWinsTitle": "Війна перемагає",
+  "clanWinStreakTitle": "Серія перемог",
+  "clanBuilderBaseTitle": "База забудовника",
+  "clanTypeTitle": "Тип",
+  "clanMinTownHallTitle": "Хв. TH",
+  "clanMinTrophiesTitle": "Хв. трофеї",
+  "clanCapitalHallTitle": "Столичний зал",
+  "clanDistrictsTitle": "Райони",
+  "legendsCountryTitle": "Країна",
+  "legendsLocalRankTitle": "Місцевий чин",
+  "legendsGlobalRankTitle": "Глобальний рейтинг",
+  "warWinsTitle": "Перемоги",
+  "warLossesTitle": "Втрати",
+  "warDrawsTitle": "Розігрує",
   "cwlRounds": "Раунди",
   "cwlRoundNumber": "Раунд {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "Поточні рейди",
   "raidsDistrictsDestroyed": "Знищені райони",
   "raidsCompleted": "Завершені рейди",
+  "capitalRaidStatusOngoing": "Триває",
+  "capitalRaidStatusEnded": "Завершено",
+  "capitalRaidLoot": "Бабло",
+  "capitalRaidRewards": "Нагороди",
+  "capitalRaidPreviousWeek": "Попередній тиждень",
+  "capitalRaidNextWeek": "Наступного тижня",
+  "capitalRaidFilterAttacked": "Напали",
+  "capitalRaidFilterNotAttacked": "Не атакували",
+  "capitalRaidFilterLinked": "Пов’язані облікові записи",
+  "capitalRaidEmptyTitle": "Немає даних про рейд капіталу",
+  "capitalRaidEmptyBody": "Історія рейдів з’явиться тут, коли буде відстежено вихідні капітальні рейди цього клану.",
+  "capitalRaidEstimated": "Розрахункова",
+  "capitalRaidEstimatedTooltip": "Ще не офіційно: оцінено на основі журналів атак і захисту цього тижня. Supercell публікує реальну кількість медалей після завершення рейду.",
+  "capitalRaidTrophyPrediction": "Прогнозовані трофеї",
+  "capitalRaidTrophyPredictionTooltip": "Приблизні трофеї Столичної ліги після цього рейду, виходячи з результатів цього тижня. Не офіційно.",
+  "capitalRaidProjectedLoot": "Прогнозована здобич",
+  "capitalRaidOneshots": "Одноразові",
+  "capitalRaidFails": "Не вдається",
+  "capitalDetailsOffense": "Правопорушення",
+  "capitalDetailsDefense": "Захист",
+  "capitalDistrictsSection": "Райони",
+  "capitalOpponentsSection": "Суперники",
+  "capitalAvgAttacksPerDistrict": "Середнє число атак/район",
+  "capitalAvgLootPerAttack": "Середнє здобич/атака",
+  "capitalHistorySection": "Історія рейдів",
+  "capitalHistoryWeeksTracked": "Відстежено тижні",
+  "capitalAvgLootPerWeek": "Середня здобич/тиждень",
+  "capitalAvgAttacksPerWeek": "Середнє число атак/тиждень",
+  "capitalBestRaid": "Найкращий рейд",
+  "capitalWorstRaid": "Найгірший рейд",
+  "capitalHistoryChartTitle": "Тижневий тренд",
   "searchNoResult": "Нічого не знайдено.",
   "maintenanceTitle": "Технічне обслуговування",
   "maintenanceDescription": "У Clash of Clans зараз технічне обслуговування, тому ми не можемо отримати доступ до API. Перевірте пізніше.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "Щоденне відстеження трофеїв і статистика кінця сезону",
   "faqFeaturesCwlTitle": "Аналітика CWL",
   "faqFeaturesCwlDescription": "Ефективність у Лізі воєн кланів і внесок учасників",
+  "faqFeaturesTodoTitle": "Список справ",
+  "faqFeaturesTodoDescription": "Перевірте, яким обліковим записам ще потрібні рейтингові атаки, рейди, атаки у війні, Ігри кланів або дії перепустки",
+  "faqFeaturesUpgradeTrackerTitle": "Відстеження покращень",
+  "faqFeaturesUpgradeTrackerDescription": "Використовуйте наданий користувачем знімок облікового запису, щоб переглянути решту покращень, ресурси, будівельників, час лабораторії та прогрес",
+  "faqFeaturesNotificationsTitle": "Push-сповіщення",
+  "faqFeaturesNotificationsDescription": "Виберіть облікові записи, які мають отримувати сповіщення про підтримувані події ClashKing",
+  "faqFeaturesWidgetsTitle": "Віджети війни",
+  "faqFeaturesWidgetsDescription": "Переглядайте поточний стан війни на головному екрані пристроїв, які підтримують віджети",
   "faqSearchHint": "Пошук у FAQ...",
   "faqSectionGettingStarted": "Початок і про застосунок",
+  "faqSectionAccountsAlertsWidgets": "Облікові записи, сповіщення та віджети",
   "faqSectionSupportAndContact": "Підтримка та контакт",
+  "faqLinkedAccountsTitle": "Як працюють пов’язані облікові записи та підтвердження?",
+  "faqLinkedAccountsAnswer": "Профіль ClashKing може містити кілька облікових записів Clash of Clans. Додавання тегу показує загальнодоступні дані. Підтвердження токеном API Clash of Clans доводить, що обліковий запис належить вам, і відкриває його додаткові можливості.",
+  "faqLinkedAccountsSolution1": "У керуванні обліковими записами можна змінювати їх порядок, приховувати та видаляти.",
+  "faqLinkedAccountsSolution2": "Токен API розташований у Clash of Clans у розділі Налаштування > Інші налаштування > Токен API.",
+  "faqLinkedAccountsSolution3": "Увійти можна через Discord або електронну пошту. Доступні підключення облікових записів налаштовуються в розділі Налаштування.",
+  "faqNotificationsTitle": "Як працюють сповіщення?",
+  "faqNotificationsAnswer": "Сповіщення необов’язкові. Після їх увімкнення ClashKing реєструє цей пристрій. Для кожного сповіщення можна вибрати пов’язані облікові записи.",
+  "faqNotificationsSolution1": "Дозвольте сповіщення на пристрої та в налаштуваннях ClashKing.",
+  "faqNotificationsSolution2": "Кожне сповіщення може стосуватися різних облікових записів. Якщо сповіщення не надходить, перевірте вибрані облікові записи.",
+  "faqNotificationsSolution3": "Деякі сповіщення залежать від відстежуваних даних клану або війни. Оновлення зовнішніх даних може спричинити затримку.",
+  "faqWidgetsTitle": "Як працюють віджети війни?",
+  "faqWidgetsAnswer": "Віджети війни показують короткий огляд на підтримуваних пристроях. Вони використовують вибрані або пов’язані облікові записи, кешовані дані ClashKing і фонове оновлення, якщо платформа його дозволяє.",
+  "faqWidgetsSolution1": "Після зміни облікових записів або кланів відкрийте застосунок, щоб синхронізувати віджет.",
+  "faqWidgetsSolution2": "Якщо дані віджета застаріли, спочатку оновіть застосунок. Android та iOS обмежують фонові оновлення.",
+  "faqWidgetsSolution3": "Для відображення корисного стану клан повинен мати доступні дані війни.",
   "faqTranslationIssue": "Переклад відсутній або неправильний?",
   "faqTranslationIssueAnswer": "Переклади спочатку створюються за допомогою генеративних та AI-інструментів, а потім із часом перевіряються й покращуються. Якщо ви носій мови й текст звучить неприродно, можете запропонувати виправлення на Crowdin або зв’язатися з нами в Discord чи електронною поштою.",
   "faqWaysToSupport": "Способи підтримати нас:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "Порядок атаки",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Тривалість",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "Атакувальник",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "Швидкість атаки",
   "gameItemAttackRange": "Дальність атаки",
   "gameItemMovementSpeed": "Швидкість руху",
+  "gameItemWardenWeight": "Вага Вартового",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Вага Вартового може переважати місце в армії та визначає, наскільки охоче Великий Вартовий слідує за групою військ.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Вага Цілительки",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Вага Цілительки може переважати місце в армії, коли Цілительки вибирають війська для лікування.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 військо для порога слідування} other{{count} військ для порога слідування}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Не впливає на поріг слідування",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "Ресурс покращення",
   "gameItemRarity": "Рідкість",
   "gameItemHero": "Герой",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "Літає",
   "gameItemUpgradeCost": "Вартість покращення",
   "gameItemUpgradeTime": "Час покращення",
-  "generalExpand": "Розгорнути",
-  "generalCollapse": "Згорнути",
-  "generalBookmark": "Закладка",
-  "generalRemoveBookmark": "Видалити закладку",
-  "gameLeague": "Ліга",
-  "clanMembersSearchPlaceholder": "Пошук учасників",
-  "clanMembersShowTotals": "Показати підсумки клану",
-  "clanMembersHideTotals": "Приховати підсумки клану",
-  "clanMembersReceivedShort": "Отримано",
-  "clanMembersAverageTh": "Середній TH",
-  "warLogSearchPlaceholder": "Пошукові війни",
-  "warStatsSearchPlaceholder": "Пошук гравців",
-  "warStatsCurrentTownHall": "Мій TH",
-  "warStatsLast50": "Останні 50",
-  "warStatsWars": "війни",
-  "warStatsSelectSeason": "Виберіть сезон військової статистики",
-  "warAnalysisToWin": "Виграти",
-  "warAnalysisToLose": "Втрачати",
-  "warAnalysisNoAttacksLeft": "Атак не залишилося",
-  "warAnalysisScenario": "Залишилося {attacks} атак -> потрібно {stars} зірок / {percent}% на атаку",
-  "warAnalysisImpossibleScenario": "Залишилося {attacks} атак -> неможливо ({stars} зірок / {percent}% за атаку)",
-  "warAttacksSuccessful": "Успішні атаки",
-  "warAttacksFailed": "Невдалі атаки",
-  "warAttacksMissedShort": "Пропущений",
-  "cwlHistoryTitle": "Історія CWL",
-  "clanJoinLeaveTab": "Приєднатися/Вийти",
-  "clanRankingsTab": "Рейтинги",
-  "clanRankingsSeason": "Сезон",
-  "clanRankingsSelectSeason": "Виберіть сезон рейтингу",
-  "clanRankingsFilterActivity": "діяльність",
-  "clanRankingsFilterWar": "Війна",
-  "clanRankingsFilterPoints": "Очки",
-  "cwlHistoryPreviewBadge": "Попередній перегляд",
-  "cwlHistoryPreviewSubtitle": "Макет {clan}, доки не буде виправлено кінцеву точку CWL",
-  "cwlHistoryEmptyTitle": "Історії CWL ще немає",
-  "cwlHistoryEmptyBody": "Цей клан ще не брав участі в сезоні Clan War League.",
-  "cwlRankTitle": "ранг",
-  "cwlWarsPlayedTitle": "Війни грали",
-  "playerWarStarsTitle": "Зірки війни",
-  "playerWarPreferenceTitle": "Війна преф.",
-  "playerDonatedTitle": "Пожертвував",
-  "playerReceivedTitle": "Отримано",
-  "playerCapitalTitle": "Капітал",
-  "playerExpLevelTitle": "Exp. рівень",
-  "clanWarWinsTitle": "Війна перемагає",
-  "clanWinStreakTitle": "Серія перемог",
-  "clanBuilderBaseTitle": "База забудовника",
-  "clanTypeTitle": "Тип",
-  "clanMinTownHallTitle": "Хв. TH",
-  "clanMinTrophiesTitle": "Хв. трофеї",
-  "clanCapitalHallTitle": "Столичний зал",
-  "clanDistrictsTitle": "Райони",
-  "legendsCountryTitle": "Країна",
-  "legendsLocalRankTitle": "Місцевий чин",
-  "legendsGlobalRankTitle": "Глобальний рейтинг",
-  "warWinsTitle": "Перемоги",
-  "warLossesTitle": "Втрати",
-  "warDrawsTitle": "Розігрує",
-  "capitalRaidStatusOngoing": "Триває",
-  "capitalRaidStatusEnded": "Завершено",
-  "capitalRaidLoot": "Бабло",
-  "capitalRaidRewards": "Нагороди",
-  "capitalRaidPreviousWeek": "Попередній тиждень",
-  "capitalRaidNextWeek": "Наступного тижня",
-  "capitalRaidFilterAttacked": "Напали",
-  "capitalRaidFilterNotAttacked": "Не атакували",
-  "capitalRaidFilterLinked": "Пов’язані облікові записи",
-  "capitalRaidEmptyTitle": "Немає даних про рейд капіталу",
-  "capitalRaidEmptyBody": "Історія рейдів з’явиться тут, коли буде відстежено вихідні капітальні рейди цього клану.",
-  "capitalRaidEstimated": "Розрахункова",
-  "capitalRaidEstimatedTooltip": "Ще не офіційно: оцінено на основі журналів атак і захисту цього тижня. Supercell публікує реальну кількість медалей після завершення рейду.",
-  "capitalRaidTrophyPrediction": "Прогнозовані трофеї",
-  "capitalRaidTrophyPredictionTooltip": "Приблизні трофеї Столичної ліги після цього рейду, виходячи з результатів цього тижня. Не офіційно.",
-  "capitalRaidProjectedLoot": "Прогнозована здобич",
-  "capitalRaidOneshots": "Одноразові",
-  "capitalRaidFails": "Не вдається",
-  "capitalDetailsOffense": "Правопорушення",
-  "capitalDetailsDefense": "Захист",
-  "capitalDistrictsSection": "Райони",
-  "capitalOpponentsSection": "Суперники",
-  "capitalAvgAttacksPerDistrict": "Середнє число атак/район",
-  "capitalAvgLootPerAttack": "Середнє здобич/атака",
-  "capitalHistorySection": "Історія рейдів",
-  "capitalHistoryWeeksTracked": "Відстежено тижні",
-  "capitalAvgLootPerWeek": "Середня здобич/тиждень",
-  "capitalAvgAttacksPerWeek": "Середнє число атак/тиждень",
-  "capitalBestRaid": "Найкращий рейд",
-  "capitalWorstRaid": "Найгірший рейд",
-  "capitalHistoryChartTitle": "Тижневий тренд",
-  "warAttacksDetailsDuration": "Тривалість",
   "gameItemRemainingToTownHallMax": "До TH макс",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "До загального макс",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "Рівень(и) {count} залишився",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "Огляд",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "статистика",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "Наступне оновлення",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "План оновлення",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "Дані оновлення недоступні",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "Вибране",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "Уподобання",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "Сповіщення",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "Виберіть сповіщення та надішліть попередній перегляд локальних тестів.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "Підтримка",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "про",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "Обліковий запис",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "Ви ввійшли",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "Зовнішній вигляд",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "система",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "Відповідність цьому пристрою",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "світло",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "Темний",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "Вибране",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "Пов’язаних облікових записів ще не завантажено.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "Облікові записи не вибрано",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "Облікові записи {count} вибрано",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "Останні",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "Гравці",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "Клани",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "ясно",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "Дані успішно оновлено",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "Не вдалося оновити дані: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "Не вдалося завантажити відфільтровані дані: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "Помилка експорту: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "гравець",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "Формат",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "Включає в себе",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "Статистика, атаки, аналіз TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "Дані користувача відсутні",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "Облікові записи",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "Не вдалося завантажити дані гравця.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "Не вдалося завантажити дані клану.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "Немає відповідних облікових записів",
   "todoNoConfiguredAccounts": "Облікові записи справ не налаштовано",
   "todoNoLinkedAccounts": "Немає пов’язаних облікових записів",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "Для цього рейду немає списку гравців або окремих атак.",
   "dashboardNoLinkedAccountsTitle": "Немає пов’язаних облікових записів",
   "dashboardNoLinkedAccountsBody": "Прив’яжіть обліковий запис Clash, щоб переглядати тут атаки, події та дії.",
+  "dashboardTodoHiddenTitle": "Немає облікових записів для показу",
+  "dashboardTodoHiddenBody": "На вкладці Гравці ввімкніть для облікового запису одну з карток головної сторінки: Справи, Відстеження покращень або Рейтинг.",
+  "dashboardUpgradeTrackerNoData": "Відкрийте відстеження, щоб імпортувати або оновити дані покращень.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {потребує оновлення} other {потребують оновлення}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {ще має завдання} other {ще мають завдання}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {ще має атаки} other {ще мають атаки}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Прогнозований термін",
+  "dashboardUpgradeTrackerBuilders": "Будівельники",
+  "dashboardUpgradeTrackerLab": "Лабораторія",
+  "dashboardUpgradeTrackerPets": "Улюбленці",
+  "dashboardUpgradeTrackerWalls": "Стіни",
+  "dashboardUpgradeTrackerVillage": "Селище",
+  "dashboardRankedNoData": "Відкрийте Рейтингову лігу, щоб переглянути позицію цього облікового запису.",
+  "dashboardRankedAccounts": "Відстежувані облікові записи: {loaded}/{total}",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "Ще немає гравців із закладками",
   "playersNoBookmarkedBody": "Відкрийте профіль гравця та збережіть його на потім.",
   "playersNoLinkedBody": "Керуйте обліковими записами з екрана налаштування облікового запису.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "Плануйте шкоду з урахуванням поточних рівнів будівель.",
   "calculatorZapQuake": "Зап землетрус",
   "calculatorFireball": "вогняна куля",
+  "damageCalculatorSubtitle": "Порівняйте один набір атаки з кількома будівлями.",
+  "damageNoStaticDataTitle": "Дані про шкоду недоступні",
+  "damageNoStaticDataBody": "Оновіть застосунок після завантаження статичних даних гри.",
+  "damageTownHall": "Рівень Ратуші",
+  "damageVerifiedAccountPrefill": "Рівні з підтвердженого облікового запису",
+  "damageOverridesStayLocal": "Зміни в калькуляторі не впливають на обліковий запис гравця.",
+  "damageTargets": "Цілі",
+  "damageAddBuilding": "Додати ціль",
+  "damageRemoveBuilding": "Видалити ціль",
+  "damageNoTargetsBody": "Додайте принаймні одну будівлю для порівняння.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Знайти будівлю",
+  "damageNoBuildingsFound": "Відповідних будівель не знайдено",
+  "damageTryAnotherSearch": "Уведіть іншу назву або виберіть інший рівень Ратуші.",
+  "damageAttackStack": "Власний набір атаки",
+  "damageNoSourcesForTownHall": "На цьому рівні Ратуші немає підтримуваних джерел шкоди.",
+  "damageCount": "Кількість використань",
+  "damagePerUse": "Шкода за використання: {damage}",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% максимального здоров’я; кожне наступне використання завдає менше",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Закляття Блискавки",
+  "damageSourceEarthquake": "Закляття Землетрусу",
+  "damageSourceGiantArrow": "Гігантська Стріла",
+  "damageSourceFireball": "Вогняна Куля",
+  "damageSourceFlameFlinger": "Влучання Вогнемета",
+  "damageSourceBalloonDeath": "Шкода після знищення Повітряної Кулі",
+  "damageSourceRocketBalloonDeath": "Шкода після знищення Ракетної Кулі",
+  "damageResults": "Порівняння результатів",
+  "damageDestroyed": "Ціль знищено",
+  "damageSurvives": "Ціль уціліє",
+  "damageResultSummary": "Завдано {damage} шкоди · залишилося {remaining} HP",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Оптимізатор Блискавок і Землетрусів",
+  "damageSpellCapacity": "Доступне місце для заклять",
+  "damageZapQuakeUnavailable": "На цьому рівні Ратуші Закляття Блискавки та Землетрусу недоступні.",
+  "damageZapQuakeUsesSelectedLevels": "Рівень Блискавки: {lightningLevel}; рівень Землетрусу: {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Ці закляття не можуть пошкодити вибране сховище.",
+  "damageNoValidZapQuake": "Жодна дієва комбінація не вміщується у вибрану місткість.",
+  "damageZapQuakeCombination": "Блискавки: {lightning} · Землетруси: {earthquake} · місце: {capacity}",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "Відстеження оновлень",
   "upgradeTrackerSubtitle": "Залишок вартості та часу оновлення.",
   "linkedAccountLabel": "Пов'язаний обліковий запис",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "Додайте або оновіть пов’язані облікові записи, щоб переглянути загальну суму оновлення.",
   "playerOptionNotificationsTitle": "Сповіщення",
   "playerOptionNotificationsSubtitle": "Отримувати сповіщення для цього облікового запису.",
+  "playerOptionNotificationsEnableMaster": "Увімкніть сповіщення, щоб налаштувати їх для цього облікового запису.",
+  "playerOptionNotificationsVerifyFirst": "Підтвердьте цей обліковий запис, щоб увімкнути для нього сповіщення.",
+  "playerOptionNotificationsSubscriptionRequired": "Для сповіщень цього облікового запису потрібна активна підписка.",
+  "playerOptionNotificationsLimitReached": "Досягнуто ліміту облікових записів зі сповіщеннями для вашої підписки.",
   "playerOptionShowTodoPageTitle": "Показати на сторінці справ",
   "playerOptionShowTodoPageSubtitle": "Включіть цей обліковий запис у повний список справ.",
+  "playerOptionShowTodoPageVerifyFirst": "Підтвердьте цей обліковий запис, щоб показувати його на сторінці справ.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Показувати відстеження покращень на головній",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Закріпити підсумок покращень цього облікового запису на головній сторінці.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Підтвердьте цей обліковий запис, щоб показувати прогрес покращень на головній.",
+  "playerOptionShowRankedHomeTitle": "Показувати рейтинг на головній",
+  "playerOptionShowRankedHomeSubtitle": "Закріпити підсумок Рейтингової ліги цього облікового запису на головній сторінці.",
+  "playerOptionShowRankedHomeVerifyFirst": "Підтвердьте цей обліковий запис, щоб показувати його підсумок Рейтингової ліги на головній.",
   "playerOptionShowWarTabTitle": "Показати на вкладці «Війна».",
   "playerOptionShowWarTabSubtitle": "Включіть клан цього облікового запису на вкладці «Війна».",
   "bookmarkPlayerLoadFailed": "Не вдалося завантажити програвач із закладками.",
@@ -2336,7 +2775,7 @@
   "warWidgetNoData": "Немає даних про війну",
   "warWidgetLastUpdated": "Останнє оновлення: {time}",
   "todoEventClanGames": "Кланові ігри",
-  "todoEventCwl": "CWL",
+  "todoEventCwl": "ЛВК",
   "todoEventSeasonEnds": "Сезон закінчується",
   "todoEventLeagueReset": "Скидання ліги",
   "todoEventRaidWeekend": "Рейдовий вікенд",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · немає відкритих завдань",
   "todoMockCaughtUpStatus": "Активний сьогодні · жодних дій не потрібно",
   "notifChooseAlerts": "Виберіть сповіщення",
+  "notifGroupLegendAttacks": "Атаки Ліги легенд",
+  "notifLegendAttacksDescription": "Сповіщає про невикористані атаки в Лізі легенд.",
+  "notifGroupLegendDefenses": "Захисти Ліги легенд",
+  "notifLegendDefensesDescription": "Сповіщає про нові захисти в Лізі легенд.",
   "notifLeagueDefenseDescription": "Результати захисту з нападником, зірками, відсотком і контекстом ліги.",
   "notifWarAttackOptionsDescription": "Результати атак у війні, сповіщення про захист і параметри стрічки атак 5v5.",
   "notifWarAlertsDescription": "Війну знайдено, день битви почався, війну завершено.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "Очки столиці",
   "todoAllAccounts": "Усі акаунти",
   "todoCombinedAcrossAccounts": "Об’єднаний список справ для ваших акаунтів",
+  "dashboardRankedCombinedAcrossAccounts": "Зведений рейтинг ваших облікових записів",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Зведений прогрес покращень ваших облікових записів",
   "todoPreviewAccount": "Попередній перегляд акаунта",
   "todoLastActiveUnavailable": "Остання активність недоступна",
   "todoActiveRelative": "Активний {time}",
@@ -2516,9 +2961,116 @@
   "sideRankingsEmptyTitle": "Рейтинги не повернулися",
   "sideRankingsEmptyBody": "Спробуйте іншу таблицю лідерів або локацію.",
   "sideRankingsMockups": "Макети ClashKing",
+  "rankingsHomeVillage": "Головне Селище",
+  "rankingsBuilderBase": "База Будівельника",
+  "rankingsTownHall": "Ратуша",
+  "rankingsRankedLeague": "Рейтингова Ліга",
+  "rankingsClanCapital": "Столиця Клану",
+  "rankingsDonations": "Передані війська",
+  "rankingsWarWins": "Перемоги у війнах",
+  "rankingsWinStreak": "Серія перемог",
+  "rankingsCurrent": "Поточний стан",
+  "rankingsWorldwide": "Увесь світ",
+  "rankingsSelectLocation": "Виберіть регіон",
+  "rankingsSearchLocations": "Шукайте регіони або коди країн",
+  "rankingsWorldwideUnavailable": "Виберіть регіон або країну для цієї таблиці.",
+  "rankingsLocationsLoadFailed": "Не вдалося завантажити повний список регіонів. Світовий перегляд залишається доступним там, де він підтримується.",
+  "rankingsSnapshotDate": "Дата зрізу",
+  "rankingsSource": "Джерело даних",
+  "rankingsOfficialSource": "Дані з офіційного Clash API",
+  "rankingsResults": "Таблиця результатів",
+  "rankingsTopCount": "Перші {count} місць",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Збереженого зрізу немає",
+  "rankingsNoSnapshotBody": "Для дати {date} таблицю не збережено. Виберіть іншу дату або поверніться до поточного стану.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Не вдалося завантажити дані гравця.",
+  "rankingsClanLoadFailed": "Не вдалося завантажити дані клану.",
   "sideStatsTitle": "Статистика",
   "sideStatsSubtitle": "Аналітика битв на основі зведених журналів.",
   "sideStatsLoadError": "Не вдалося завантажити бойову розвідку.",
+  "statsOverview": "Огляд",
+  "statsArmies": "Армії",
+  "statsItems": "Предмети",
+  "statsWar": "Війна",
+  "statsCwl": "ЛВК",
+  "statsRanked": "Рейтинговий режим",
+  "statsDateRange": "Діапазон дат",
+  "statsDateRangeHint": "Виберіть до 90 днів",
+  "statsDateRangeTooLong": "Виберіть діапазон дат до 90 днів або менше.",
+  "statsUpdated": "Свіжі дані",
+  "statsNoDataTitle": "Поки що немає даних про битви",
+  "statsNoDataBody": "Спробуйте ширший діапазон дат або менш обмежувальні фільтри.",
+  "statsAddItemsTitle": "Вибрати елементи для аналізу",
+  "statsAddItemsBody": "Додати війська, заклинання, героїв, домашніх тварин або спорядження, а потім запустити запит.",
+  "statsGlobalCounts": "Глобальна кількість",
+  "statsPerformance": "Продуктивність",
+  "statsSamples": "Зразки",
+  "statsUsage": "Використання",
+  "statsAverageStars": "Середнє число зірок",
+  "statsAverageDestruction": "Середнє знищення",
+  "statsStarRates": "Коефіцієнт зірок",
+  "statsThreeStarRate": "Оцінка три зірки",
+  "statsDailyTrend": "Денний тренд",
+  "statsPlayers": "Гравці",
+  "statsClans": "Клани",
+  "statsPlayersInWar": "Гравці у війні",
+  "statsClansInWar": "Клани у війні",
+  "statsPlayersInLegends": "Гравці в Legends",
+  "statsWarsStored": "Війни, що зберігаються",
+  "statsJoinLeaves": "Приєднатися до подій/залишити події",
+  "statsSearchArmies": "Пошук точних композицій",
+  "statsExactComposition": "Точний склад",
+  "statsArmyShareCode": "Код спільного використання армії",
+  "statsMinimumSample": "Мінімальна вибірка",
+  "statsSortBy": "Сортування за",
+  "statsIncludeItems": "Включити предмети",
+  "statsExcludeItems": "Виключити елементи",
+  "statsItemId": "Ідентифікатор елемента або збережена назва",
+  "statsItemType": "Тип предмета",
+  "statsTroop": "Війська",
+  "statsSpell": "Заклинанням",
+  "statsHero": "Герой",
+  "statsPet": "Пет",
+  "statsEquipment": "Спорядження",
+  "statsOwningHero": "Власний герой",
+  "statsAddItem": "Додати предмет",
+  "statsAnalyzeItems": "Аналізувати елементи",
+  "statsCompositionShare": "Частка складу",
+  "statsNoLevels": "Військові записи не містять рівні предметів.",
+  "statsRankedCompositionOnly": "Дані про склад отримані з рейтингових журналів битв; Результати війни та CWL залишаються окремими.",
+  "statsTownHall": "Ратуша",
+  "statsOpponentTownHall": "Опонентська ратуша",
+  "statsEqualTownHalls": "Рівні ратуші",
+  "statsLeagueTier": "Рівень ліги",
+  "statsLegendLeagueOne": "Легенда Ліги 1",
+  "statsCwlLeague": "Ліга CWL",
+  "statsLeagueBronze": "Бронза",
+  "statsLeagueSilver": "Срібло",
+  "statsLeagueGold": "Золото",
+  "statsLeagueCrystal": "Кристал",
+  "statsLeagueMaster": "Майстер",
+  "statsLeagueChampion": "Чемпіон",
+  "statsAllCwlLeagues": "Усі ліги CWL",
+  "statsCwlSeasons": "Сезони CWL",
+  "statsCwlSeasonsHint": "РРРР-ММ, розділені комами",
+  "statsApplyFilters": "Застосувати фільтри",
+  "statsRefresh": "Оновити статистику",
+  "statsRegularWarOnly": "Тільки звичайні війни; дружні війни та CWL виключені.",
+  "statsRankedRequired": "Потрібні ратуша та один рівень ліги.",
+  "statsSeasonBreakdown": "Розбивка сезону",
   "sideTopScore": "Найкращий результат",
   "sideTop200Avg": "Середнє Top 200",
   "sideBasesArmiesTitle": "Бази та армії",
@@ -2535,6 +3087,51 @@
   "sideArmyLinksBody": "Склад, закляття, облогова машина, нотатки й посилання для поширення.",
   "sideGameAssetsTitle": "Ігрові ресурси",
   "sideGameAssetsSubtitle": "Розміщені ресурси ClashKing, згруповані за папками.",
+  "gameAssetsLoadError": "Не вдалося завантажити графічні ресурси",
+  "gameAssetsEmptyTitle": "Немає доступних зображень із гри",
+  "gameAssetsEmptyBody": "Опублікований маніфест не містить підтримуваних зображень.",
+  "gameAssetsOneImage": "Одне зображення",
+  "gameAssetsImageCount": "Кількість зображень: {count}",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Пошук у вибраній категорії",
+  "gameAssetsAllFormats": "Будь-який формат",
+  "gameAssetsOneResult": "Один результат",
+  "gameAssetsResultCount": "Результатів: {count}",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Немає відповідних зображень",
+  "gameAssetsNoResultsBody": "Змініть пошуковий запит або формат файлу.",
+  "gameAssetsLongPressHint": "Утримуйте, щоб скопіювати адресу зображення",
+  "gameAssetsCopyUrl": "Скопіювати URL",
+  "gameAssetsCopyPath": "Скопіювати шлях до файлу",
+  "gameAssetsUrlCopied": "URL ресурсу скопійовано",
+  "gameAssetsPathCopied": "Шлях до ресурсу скопійовано",
+  "gameAssetsCopyError": "Не вдалося скопіювати відомості про ресурс.",
+  "gameAssetsShare": "Поділитися ресурсом",
+  "gameAssetsShareError": "Не вдалося поділитися цим ресурсом.",
+  "gameAssetsSave": "Зберегти",
+  "gameAssetsSaving": "Збереження…",
+  "gameAssetsSaved": "Ресурс збережено.",
+  "gameAssetsSavedTo": "Ресурс збережено в: {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Не вдалося зберегти цей ресурс.",
   "sideZapQuakeTitle": "{zaps} блискавок + 1 землетрус",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3474,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "Політика фан-контенту Supercell",
-  "notifAudienceSectionTitle": "Одержувачі сповіщень",
-  "notifScopeAllLinkedAccounts": "Усі пов’язані акаунти",
-  "notifScopeSelectedAccounts": "Вибрані акаунти",
-  "notifAudienceSheetDescription": "Виберіть, які акаунти можуть отримувати сповіщення на цьому пристрої.",
-  "notifAudienceAllSubtitle": "{count} поточних акаунтів. Майбутні пов’язані акаунти буде додано автоматично.",
-  "notifAudienceSelectedSubtitle": "{count} вибрано для сповіщень.",
-  "notifAudienceSelectedEmpty": "Виберіть саме ті акаунти, які отримуватимуть сповіщення.",
-  "notifAudienceAllInlineNote": "Усе, що ви пов’яжете пізніше, буде включено без зміни цього налаштування.",
-  "notifAccountBookmarked": "Збережено",
-  "notifGroupLeagueBattles": "Битви ліги",
-  "notifGroupWarAttacks": "Атаки війни",
-  "notifGroupWarState": "Стан війни",
-  "notifGroupWarReminders": "Нагадування про війну",
-  "notifGroupEvents": "Події",
-  "notifGroupAppAnnouncements": "Оголошення застосунку",
-  "notifGroupUpgradeFinishes": "Завершені покращення",
-  "notifGroupMonthlySupport": "Щомісячна підтримка",
-  "postsTitle": "Новини",
-  "postsDescription": "Новини ClashKing, огляди оновлень і попередні оголошення.",
-  "postsEmpty": "Опублікованих новин поки немає.",
-  "postsLoadFailed": "Не вдалося завантажити новини.",
-  "postsLoadMore": "Завантажити ще",
-  "postsCurrent": "Поточні",
-  "postsPast": "Архівні",
-  "postsStory": "Інтерактивна історія",
-  "postsPinned": "Вибране",
-  "authAccountLinkDiscord": "Під’єднати обліковий запис Discord",
-  "authAccountAddDiscordAuth": "Додайте вхід через Discord для синхронізації між платформами й доступу до бота ClashKing.",
-  "authAccountDiscordLinkedSuccess": "Обліковий запис Discord успішно під’єднано!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "Список справ",
-  "faqFeaturesTodoDescription": "Перевірте, яким обліковим записам ще потрібні рейтингові атаки, рейди, атаки у війні, Ігри кланів або дії перепустки",
-  "faqFeaturesUpgradeTrackerTitle": "Відстеження покращень",
-  "faqFeaturesUpgradeTrackerDescription": "Використовуйте наданий користувачем знімок облікового запису, щоб переглянути решту покращень, ресурси, будівельників, час лабораторії та прогрес",
-  "faqFeaturesNotificationsTitle": "Push-сповіщення",
-  "faqFeaturesNotificationsDescription": "Виберіть облікові записи, які мають отримувати сповіщення про підтримувані події ClashKing",
-  "faqFeaturesWidgetsTitle": "Віджети війни",
-  "faqFeaturesWidgetsDescription": "Переглядайте поточний стан війни на головному екрані пристроїв, які підтримують віджети",
-  "faqSectionAccountsAlertsWidgets": "Облікові записи, сповіщення та віджети",
-  "faqLinkedAccountsTitle": "Як працюють пов’язані облікові записи та підтвердження?",
-  "faqLinkedAccountsAnswer": "Профіль ClashKing може містити кілька облікових записів Clash of Clans. Додавання тегу показує загальнодоступні дані. Підтвердження токеном API Clash of Clans доводить, що обліковий запис належить вам, і відкриває його додаткові можливості.",
-  "faqLinkedAccountsSolution1": "У керуванні обліковими записами можна змінювати їх порядок, приховувати та видаляти.",
-  "faqLinkedAccountsSolution2": "Токен API розташований у Clash of Clans у розділі Налаштування > Інші налаштування > Токен API.",
-  "faqLinkedAccountsSolution3": "Увійти можна через Discord або електронну пошту. Доступні підключення облікових записів налаштовуються в розділі Налаштування.",
-  "faqNotificationsTitle": "Як працюють сповіщення?",
-  "faqNotificationsAnswer": "Сповіщення необов’язкові. Після їх увімкнення ClashKing реєструє цей пристрій. Для кожного сповіщення можна вибрати пов’язані облікові записи.",
-  "faqNotificationsSolution1": "Дозвольте сповіщення на пристрої та в налаштуваннях ClashKing.",
-  "faqNotificationsSolution2": "Кожне сповіщення може стосуватися різних облікових записів. Якщо сповіщення не надходить, перевірте вибрані облікові записи.",
-  "faqNotificationsSolution3": "Деякі сповіщення залежать від відстежуваних даних клану або війни. Оновлення зовнішніх даних може спричинити затримку.",
-  "faqWidgetsTitle": "Як працюють віджети війни?",
-  "faqWidgetsAnswer": "Віджети війни показують короткий огляд на підтримуваних пристроях. Вони використовують вибрані або пов’язані облікові записи, кешовані дані ClashKing і фонове оновлення, якщо платформа його дозволяє.",
-  "faqWidgetsSolution1": "Після зміни облікових записів або кланів відкрийте застосунок, щоб синхронізувати віджет.",
-  "faqWidgetsSolution2": "Якщо дані віджета застаріли, спочатку оновіть застосунок. Android та iOS обмежують фонові оновлення.",
-  "faqWidgetsSolution3": "Для відображення корисного стану клан повинен мати доступні дані війни.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "Вага Вартового",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "Вага Вартового може переважати місце в армії та визначає, наскільки охоче Великий Вартовий слідує за групою військ.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "Вага Цілительки",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "Вага Цілительки може переважати місце в армії, коли Цілительки вибирають війська для лікування.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{1 військо для порога слідування} other{{count} військ для порога слідування}}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "Не впливає на поріг слідування",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "Немає облікових записів для показу",
-  "dashboardTodoHiddenBody": "На вкладці Гравці ввімкніть для облікового запису одну з карток головної сторінки: Справи, Відстеження покращень або Рейтинг.",
-  "dashboardUpgradeTrackerNoData": "Відкрийте відстеження, щоб імпортувати або оновити дані покращень.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {потребує оновлення} other {потребують оновлення}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {ще має завдання} other {ще мають завдання}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {ще має атаки} other {ще мають атаки}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "Прогнозований термін",
-  "dashboardUpgradeTrackerBuilders": "Будівельники",
-  "dashboardUpgradeTrackerLab": "Лабораторія",
-  "dashboardUpgradeTrackerPets": "Улюбленці",
-  "dashboardUpgradeTrackerWalls": "Стіни",
-  "dashboardUpgradeTrackerVillage": "Селище",
-  "dashboardRankedNoData": "Відкрийте Рейтингову лігу, щоб переглянути позицію цього облікового запису.",
-  "dashboardRankedAccounts": "Відстежувані облікові записи: {loaded}/{total}",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "Порівняйте один набір атаки з кількома будівлями.",
-  "damageNoStaticDataTitle": "Дані про шкоду недоступні",
-  "damageNoStaticDataBody": "Оновіть застосунок після завантаження статичних даних гри.",
-  "damageTownHall": "Рівень Ратуші",
-  "damageVerifiedAccountPrefill": "Рівні з підтвердженого облікового запису",
-  "damageOverridesStayLocal": "Зміни в калькуляторі не впливають на обліковий запис гравця.",
-  "damageTargets": "Цілі",
-  "damageAddBuilding": "Додати ціль",
-  "damageRemoveBuilding": "Видалити ціль",
-  "damageNoTargetsBody": "Додайте принаймні одну будівлю для порівняння.",
-  "damageHitpoints": "{hitpoints} HP",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "Знайти будівлю",
-  "damageNoBuildingsFound": "Відповідних будівель не знайдено",
-  "damageTryAnotherSearch": "Уведіть іншу назву або виберіть інший рівень Ратуші.",
-  "damageAttackStack": "Власний набір атаки",
-  "damageNoSourcesForTownHall": "На цьому рівні Ратуші немає підтримуваних джерел шкоди.",
-  "damageCount": "Кількість використань",
-  "damagePerUse": "Шкода за використання: {damage}",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "{percent}% максимального здоров’я; кожне наступне використання завдає менше",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "Закляття Блискавки",
-  "damageSourceEarthquake": "Закляття Землетрусу",
-  "damageSourceGiantArrow": "Гігантська Стріла",
-  "damageSourceFireball": "Вогняна Куля",
-  "damageSourceFlameFlinger": "Влучання Вогнемета",
-  "damageSourceBalloonDeath": "Шкода після знищення Повітряної Кулі",
-  "damageSourceRocketBalloonDeath": "Шкода після знищення Ракетної Кулі",
-  "damageResults": "Порівняння результатів",
-  "damageDestroyed": "Ціль знищено",
-  "damageSurvives": "Ціль уціліє",
-  "damageResultSummary": "Завдано {damage} шкоди · залишилося {remaining} HP",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "Оптимізатор Блискавок і Землетрусів",
-  "damageSpellCapacity": "Доступне місце для заклять",
-  "damageZapQuakeUnavailable": "На цьому рівні Ратуші Закляття Блискавки та Землетрусу недоступні.",
-  "damageZapQuakeUsesSelectedLevels": "Рівень Блискавки: {lightningLevel}; рівень Землетрусу: {earthquakeLevel}.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "Ці закляття не можуть пошкодити вибране сховище.",
-  "damageNoValidZapQuake": "Жодна дієва комбінація не вміщується у вибрану місткість.",
-  "damageZapQuakeCombination": "Блискавки: {lightning} · Землетруси: {earthquake} · місце: {capacity}",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "Підтвердьте цей обліковий запис, щоб показувати його на сторінці справ.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "Показувати відстеження покращень на головній",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "Закріпити підсумок покращень цього облікового запису на головній сторінці.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Підтвердьте цей обліковий запис, щоб показувати прогрес покращень на головній.",
-  "playerOptionShowRankedHomeTitle": "Показувати рейтинг на головній",
-  "playerOptionShowRankedHomeSubtitle": "Закріпити підсумок Рейтингової ліги цього облікового запису на головній сторінці.",
-  "playerOptionShowRankedHomeVerifyFirst": "Підтвердьте цей обліковий запис, щоб показувати його підсумок Рейтингової ліги на головній.",
-  "dashboardRankedCombinedAcrossAccounts": "Зведений рейтинг ваших облікових записів",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Зведений прогрес покращень ваших облікових записів",
-  "rankingsHomeVillage": "Головне Селище",
-  "rankingsBuilderBase": "База Будівельника",
-  "rankingsTownHall": "Ратуша",
-  "rankingsRankedLeague": "Рейтингова Ліга",
-  "rankingsClanCapital": "Столиця Клану",
-  "rankingsDonations": "Передані війська",
-  "rankingsWarWins": "Перемоги у війнах",
-  "rankingsWinStreak": "Серія перемог",
-  "rankingsCurrent": "Поточний стан",
-  "rankingsWorldwide": "Увесь світ",
-  "rankingsSelectLocation": "Виберіть регіон",
-  "rankingsSearchLocations": "Шукайте регіони або коди країн",
-  "rankingsWorldwideUnavailable": "Виберіть регіон або країну для цієї таблиці.",
-  "rankingsLocationsLoadFailed": "Не вдалося завантажити повний список регіонів. Світовий перегляд залишається доступним там, де він підтримується.",
-  "rankingsSnapshotDate": "Дата зрізу",
-  "rankingsSource": "Джерело даних",
-  "rankingsOfficialSource": "Дані з офіційного Clash API",
-  "rankingsResults": "Таблиця результатів",
-  "rankingsTopCount": "Перші {count} місць",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "Збереженого зрізу немає",
-  "rankingsNoSnapshotBody": "Для дати {date} таблицю не збережено. Виберіть іншу дату або поверніться до поточного стану.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "Не вдалося завантажити дані гравця.",
-  "rankingsClanLoadFailed": "Не вдалося завантажити дані клану.",
-  "statsOverview": "Огляд",
-  "statsArmies": "Армії",
-  "statsItems": "Предмети",
-  "statsWar": "Війна",
-  "statsCwl": "CWL",
-  "statsRanked": "Рейтинговий режим",
-  "statsDateRange": "Діапазон дат",
-  "statsDateRangeHint": "Виберіть до 90 днів",
-  "statsDateRangeTooLong": "Виберіть діапазон дат до 90 днів або менше.",
-  "statsUpdated": "Свіжі дані",
-  "statsNoDataTitle": "Поки що немає даних про битви",
-  "statsNoDataBody": "Спробуйте ширший діапазон дат або менш обмежувальні фільтри.",
-  "statsAddItemsTitle": "Вибрати елементи для аналізу",
-  "statsAddItemsBody": "Додати війська, заклинання, героїв, домашніх тварин або спорядження, а потім запустити запит.",
-  "statsGlobalCounts": "Глобальна кількість",
-  "statsPerformance": "Продуктивність",
-  "statsSamples": "Зразки",
-  "statsUsage": "Використання",
-  "statsAverageStars": "Середнє число зірок",
-  "statsAverageDestruction": "Середнє знищення",
-  "statsStarRates": "Коефіцієнт зірок",
-  "statsThreeStarRate": "Оцінка три зірки",
-  "statsDailyTrend": "Денний тренд",
-  "statsPlayers": "Гравці",
-  "statsClans": "Клани",
-  "statsPlayersInWar": "Гравці у війні",
-  "statsClansInWar": "Клани у війні",
-  "statsPlayersInLegends": "Гравці в Legends",
-  "statsWarsStored": "Війни, що зберігаються",
-  "statsJoinLeaves": "Приєднатися до подій/залишити події",
-  "statsSearchArmies": "Пошук точних композицій",
-  "statsExactComposition": "Точний склад",
-  "statsArmyShareCode": "Код спільного використання армії",
-  "statsMinimumSample": "Мінімальна вибірка",
-  "statsSortBy": "Сортування за",
-  "statsIncludeItems": "Включити предмети",
-  "statsExcludeItems": "Виключити елементи",
-  "statsItemId": "Ідентифікатор елемента або збережена назва",
-  "statsItemType": "Тип предмета",
-  "statsTroop": "Війська",
-  "statsSpell": "Заклинанням",
-  "statsHero": "Герой",
-  "statsPet": "Пет",
-  "statsEquipment": "Спорядження",
-  "statsOwningHero": "Власний герой",
-  "statsAddItem": "Додати предмет",
-  "statsAnalyzeItems": "Аналізувати елементи",
-  "statsCompositionShare": "Частка складу",
-  "statsNoLevels": "Військові записи не містять рівні предметів.",
-  "statsRankedCompositionOnly": "Дані про склад отримані з рейтингових журналів битв; Результати війни та CWL залишаються окремими.",
-  "statsTownHall": "Ратуша",
-  "statsOpponentTownHall": "Опонентська ратуша",
-  "statsEqualTownHalls": "Рівні ратуші",
-  "statsLeagueTier": "Рівень ліги",
-  "statsLegendLeagueOne": "Легенда Ліги 1",
-  "statsCwlLeague": "Ліга CWL",
-  "statsLeagueBronze": "Бронза",
-  "statsLeagueSilver": "Срібло",
-  "statsLeagueGold": "Золото",
-  "statsLeagueCrystal": "Кристал",
-  "statsLeagueMaster": "Майстер",
-  "statsLeagueChampion": "Чемпіон",
-  "statsAllCwlLeagues": "Усі ліги CWL",
-  "statsCwlSeasons": "Сезони CWL",
-  "statsCwlSeasonsHint": "РРРР-ММ, розділені комами",
-  "statsApplyFilters": "Застосувати фільтри",
-  "statsRefresh": "Оновити статистику",
-  "statsRegularWarOnly": "Тільки звичайні війни; дружні війни та CWL виключені.",
-  "statsRankedRequired": "Потрібні ратуша та один рівень ліги.",
-  "statsSeasonBreakdown": "Розбивка сезону",
-  "gameAssetsLoadError": "Не вдалося завантажити графічні ресурси",
-  "gameAssetsEmptyTitle": "Немає доступних зображень із гри",
-  "gameAssetsEmptyBody": "Опублікований маніфест не містить підтримуваних зображень.",
-  "gameAssetsOneImage": "Одне зображення",
-  "gameAssetsImageCount": "Кількість зображень: {count}",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "Пошук у вибраній категорії",
-  "gameAssetsAllFormats": "Будь-який формат",
-  "gameAssetsOneResult": "Один результат",
-  "gameAssetsResultCount": "Результатів: {count}",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "Немає відповідних зображень",
-  "gameAssetsNoResultsBody": "Змініть пошуковий запит або формат файлу.",
-  "gameAssetsLongPressHint": "Утримуйте, щоб скопіювати адресу зображення",
-  "gameAssetsCopyUrl": "Скопіювати URL",
-  "gameAssetsCopyPath": "Скопіювати шлях до файлу",
-  "gameAssetsUrlCopied": "URL ресурсу скопійовано",
-  "gameAssetsPathCopied": "Шлях до ресурсу скопійовано",
-  "gameAssetsCopyError": "Не вдалося скопіювати відомості про ресурс.",
-  "gameAssetsShare": "Поділитися ресурсом",
-  "gameAssetsShareError": "Не вдалося поділитися цим ресурсом.",
-  "gameAssetsSave": "Зберегти",
-  "gameAssetsSaving": "Збереження…",
-  "gameAssetsSaved": "Ресурс збережено.",
-  "gameAssetsSavedTo": "Ресурс збережено в: {path}",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "Не вдалося зберегти цей ресурс.",
   "upgradeTrackerPlan": "План розвитку",
   "upgradeTrackerUpgrades": "Список покращень",
   "upgradeTrackerCollection": "Колекція предметів",
@@ -3852,18 +3873,23 @@
   "rankedLeagueBattleDetailsUnavailable": "Докладні журнали битв для цього періоду недоступні.",
   "rankedLeagueHistoricalDetailsUnavailable": "Для цього давнішого періоду доступний лише офіційний підсумок.",
   "rankedLeagueStarBreakdownUnavailable": "API надає загальну кількість зірок, але не їх докладний розподіл за цей період.",
+  "notifAudienceSectionTitle": "Одержувачі сповіщень",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "Усі пов’язані акаунти",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "Вибрані акаунти",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "Виберіть, які акаунти можуть отримувати сповіщення на цьому пристрої.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} поточних акаунтів. Майбутні пов’язані акаунти буде додано автоматично.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3898,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "{count} вибрано для сповіщень.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,36 +3907,49 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "Виберіть саме ті акаунти, які отримуватимуть сповіщення.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "Усе, що ви пов’яжете пізніше, буде включено без зміни цього налаштування.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "Вибрати облікові записи вручну",
+  "notifAudienceAcrossDevicesDescription": "Ці налаштування застосовуються до вибраних облікових записів на всіх ваших пристроях.",
+  "notifAccountBookmarked": "Збережено",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "Битви ліги",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "Атаки війни",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "Стан війни",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "Нагадування про війну",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "Події",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "Оголошення застосунку",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "Завершені покращення",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "Щомісячна підтримка",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
@@ -3949,25 +3989,56 @@
   "widgetPetBoostShort": "Улюбленець",
   "widgetClockBoostShort": "Годинник",
   "widgetBuilderCostPerk": "Знижка {percent}% на вартість будівництва",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "Знижка {percent}% на час будівництва",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "Знижка {percent}% на вартість досліджень",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "Знижка {percent}% на час досліджень",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Ціль збору ресурсів",
+  "farmGoalFormTitle": "Заплануйте збір ресурсів",
+  "farmGoalAccountTitle": "Обліковий запис гравця",
+  "farmGoalAccountHint": "За бажанням використайте лігу пов’язаного облікового запису для оцінки здобичі.",
+  "farmGoalTargetTitle": "Цільове покращення",
+  "farmGoalTargetBuildingLabel": "Будівля або бойова одиниця",
+  "farmGoalChooseBuilding": "Виберіть будівлю або бойову одиницю",
   "farmGoalChangeBuilding": "Змінити будівлю",
   "farmGoalNoTargetTitle": "Будівлю не вибрано",
   "farmGoalNoTargetBody": "Виберіть будівлю для покращення, щоб оцінити необхідну кількість ресурсів.",
+  "farmGoalTargetLevelLabel": "Кінцевий рівень",
+  "farmGoalUpgradeCostLabel": "Вартість цільового покращення",
+  "farmGoalCostUnavailable": "Немає даних про вартість цього покращення.",
+  "farmGoalLootTitle": "Здобич за одну атаку",
+  "farmGoalResourceLabel": "Тип ресурсу",
+  "farmGoalAmountLabel": "Потрібна кількість",
   "farmGoalAverageLootLabel": "Доступна здобич у селі",
   "farmGoalPerfectLootHint": "Введіть здобич, показану перед атакою. Зазначений нижче бонус ліги додасться автоматично.",
   "farmGoalLeagueEstimate": "Бонус ліги {league}: {amount} {resource}. Його враховано в розрахунках атак.",
-  "farmGoalTrackerNextTitle": "Наступне в плані відстеження покращень",
-  "farmGoalTrackerMissingTitle": "Потрібні дані відстеження покращень",
-  "farmGoalTrackerMissingBody": "Імпортуйте JSON покращень цього облікового запису у відстеження покращень, щоб побачити тут наступну заплановану будівлю та її точну вартість.",
-  "farmGoalTrackerPlanComplete": "У відстеженні покращень не залишилося покращень будівель. Ви все ще можете вибрати будівлю вручну.",
-  "farmGoalOpenUpgradeTracker": "Відкрити відстеження покращень",
-  "farmGoalUseTrackerTarget": "Використати будівлю",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,29 +4052,6 @@
       }
     }
   },
-  "playerOptionNotificationsEnableMaster": "Увімкніть сповіщення, щоб налаштувати їх для цього облікового запису.",
-  "playerOptionNotificationsVerifyFirst": "Підтвердьте цей обліковий запис, щоб увімкнути для нього сповіщення.",
-  "playerOptionNotificationsSubscriptionRequired": "Для сповіщень цього облікового запису потрібна активна підписка.",
-  "playerOptionNotificationsLimitReached": "Досягнуто ліміту облікових записів зі сповіщеннями для вашої підписки.",
-  "notifGroupLegendAttacks": "Атаки Ліги легенд",
-  "notifLegendAttacksDescription": "Сповіщає про невикористані атаки в Лізі легенд.",
-  "notifGroupLegendDefenses": "Захисти Ліги легенд",
-  "notifLegendDefensesDescription": "Сповіщає про нові захисти в Лізі легенд.",
-  "notifAudienceAcrossDevicesDescription": "Ці налаштування застосовуються до вибраних облікових записів на всіх ваших пристроях.",
-  "notifChooseAccountsManually": "Вибрати облікові записи вручну",
-  "farmGoalTitle": "Ціль збору ресурсів",
-  "farmGoalFormTitle": "Заплануйте збір ресурсів",
-  "farmGoalAccountTitle": "Обліковий запис гравця",
-  "farmGoalAccountHint": "За бажанням використайте лігу пов’язаного облікового запису для оцінки здобичі.",
-  "farmGoalTargetTitle": "Цільове покращення",
-  "farmGoalTargetBuildingLabel": "Будівля або бойова одиниця",
-  "farmGoalChooseBuilding": "Виберіть будівлю або бойову одиницю",
-  "farmGoalTargetLevelLabel": "Кінцевий рівень",
-  "farmGoalUpgradeCostLabel": "Вартість цільового покращення",
-  "farmGoalCostUnavailable": "Немає даних про вартість цього покращення.",
-  "farmGoalResourceLabel": "Тип ресурсу",
-  "farmGoalLootTitle": "Здобич за одну атаку",
-  "farmGoalAmountLabel": "Потрібна кількість",
   "farmGoalStarBonusEstimate": "Зірковий бонус: {amount} {resource} після 5 зірок. Він не враховується в потрібній кількості атак.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4027,9 +4075,16 @@
   "farmGoalAttackShort": "атака",
   "farmGoalScenarioHint": "Оцінка передбачає, що кожна атака приносить вибраний відсоток доступної здобичі.",
   "farmGoalNoLeagueLoot": "Для цієї ліги немає даних про здобич.",
-  "farmGoalAttacks": "Орієнтовна кількість атак",
+  "farmGoalTrackerNextTitle": "Наступне в плані відстеження покращень",
+  "farmGoalTrackerMissingTitle": "Потрібні дані відстеження покращень",
+  "farmGoalTrackerMissingBody": "Імпортуйте JSON покращень цього облікового запису у відстеження покращень, щоб побачити тут наступну заплановану будівлю та її точну вартість.",
+  "farmGoalTrackerPlanComplete": "У відстеженні покращень не залишилося покращень будівель. Ви все ще можете вибрати будівлю вручну.",
+  "farmGoalOpenUpgradeTracker": "Відкрити відстеження покращень",
+  "farmGoalUseTrackerTarget": "Використати будівлю",
   "farmGoalMissingTarget": "Виберіть будівлю та цільовий рівень, щоб розрахувати потрібну кількість атак.",
+  "farmGoalMissingValues": "Укажіть ціль і очікувану здобич за ідеальну атаку, щоб переглянути сценарії атак.",
   "farmGoalResultTitle": "Потрібні атаки",
+  "farmGoalAttacks": "Орієнтовна кількість атак",
   "farmGoalResultSummary": "{target} {resource}, приблизно по {average} за ідеальну атаку.",
   "@farmGoalResultSummary": {
     "placeholders": {
@@ -4044,69 +4099,6 @@
       }
     }
   },
-  "farmGoalMissingValues": "Укажіть ціль і очікувану здобич за ідеальну атаку, щоб переглянути сценарії атак.",
-  "dashboardUpgradeTrackerAccounts": "Відстежувані облікові записи: {loaded}/{total}",
-  "@dashboardUpgradeTrackerAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "calculatorsModeDamage": "Шкода",
-  "calculatorsModeFarmGoal": "Ціль ресурсів",
-  "damageCalculatorTitle": "Калькулятор шкоди",
-  "damageChooseAccount": "Виберіть профіль гравця",
-  "damageSwitchAccount": "Змінити профіль",
-  "damageAccountSelectorHint": "Використайте рівні підтвердженого облікового запису або встановіть їх вручну.",
-  "damageNoAccountsAvailable": "Немає підтверджених облікових записів. Рівні джерел шкоди можна встановити вручну.",
-  "damageTargetSectionTitle": "Тестована будівля",
-  "damageChooseTarget": "Виберіть тестовану будівлю",
-  "damageNoTargetTitle": "Ціль не вибрано",
-  "damageNoTargetBody": "Виберіть будівлю, щоб перевірити її міцність.",
-  "damageTargetLevelLabel": "Рівень будівлі",
-  "damageCommonBuildings": "Популярні цілі",
-  "damageAllBuildings": "Повний список будівель",
-  "damageQuickSetups": "Готові набори",
-  "damageQuickSetupZapQuake": "Блискавки + Землетрус",
-  "damageQuickSetupFireballQuake": "Вогняна Куля + Землетрус",
-  "damageQuickSetupGiantArrow": "Гігантська Стріла",
-  "damageQuickSetupFlameFlinger": "Вогнемет",
-  "damageQuickSetupCustom": "Власний набір",
-  "damageNoDamageSelected": "Додайте джерело шкоди, щоб побачити результат.",
-  "damageSelectedSourcesCount": "Вибрані джерела: {count}",
-  "@damageSelectedSourcesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "damageNoActiveSources": "Не вибрано жодного джерела шкоди.",
-  "damageOtherSources": "Інші джерела",
-  "damageShowAllSources": "Показати всі джерела",
-  "damageShowFewerSources": "Показати менше джерел",
-  "damageAccountPresetShort": "Рівні облікового запису",
-  "damageClearStack": "Очистити набір",
-  "gameAssetsCategoryBuildings": "Будівлі",
-  "gameAssetsCategoryCapitalBase": "База Столиці Клану",
-  "gameAssetsCategoryCapitalHouseParts": "Частини будинку Столиці",
-  "gameAssetsCategoryChests": "Скрині",
-  "gameAssetsCategoryClanLabels": "Мітки кланів",
-  "gameAssetsCategoryCountryFlags": "Прапори країн",
-  "gameAssetsCategoryDecorations": "Прикраси",
-  "gameAssetsCategoryEquipment": "Спорядження героїв",
-  "gameAssetsCategoryGuardians": "Вартові",
-  "gameAssetsCategoryHeroes": "Герої",
-  "gameAssetsCategoryPets": "Улюбленці героїв",
-  "gameAssetsCategorySkins": "Образи",
-  "gameAssetsCategorySpells": "Закляття",
-  "gameAssetsCategoryTroops": "Війська",
-  "rankedLeagueStars": "Здобуті зірки",
-  "rankedLeagueAccountSelector": "Відображуваний обліковий запис",
   "gameTHLevel": "TH{level}",
   "@gameTHLevel": {
     "placeholders": {
@@ -4159,15 +4151,77 @@
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
+  "dashboardUpgradeTrackerAccounts": "Відстежувані облікові записи: {loaded}/{total}",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "Шкода",
+  "calculatorsModeFarmGoal": "Ціль ресурсів",
+  "damageCalculatorTitle": "Калькулятор шкоди",
+  "damageAccountPresetShort": "Рівні облікового запису",
+  "damageChooseAccount": "Виберіть профіль гравця",
+  "damageSwitchAccount": "Змінити профіль",
+  "damageAccountSelectorHint": "Використайте рівні підтвердженого облікового запису або встановіть їх вручну.",
+  "damageNoAccountsAvailable": "Немає підтверджених облікових записів. Рівні джерел шкоди можна встановити вручну.",
+  "damageTargetSectionTitle": "Тестована будівля",
+  "damageChooseTarget": "Виберіть тестовану будівлю",
+  "damageNoTargetTitle": "Ціль не вибрано",
+  "damageNoTargetBody": "Виберіть будівлю, щоб перевірити її міцність.",
+  "damageTargetLevelLabel": "Рівень будівлі",
+  "damageCommonBuildings": "Популярні цілі",
+  "damageAllBuildings": "Повний список будівель",
+  "damageQuickSetups": "Готові набори",
+  "damageQuickSetupZapQuake": "Блискавки + Землетрус",
+  "damageQuickSetupFireballQuake": "Вогняна Куля + Землетрус",
+  "damageQuickSetupGiantArrow": "Гігантська Стріла",
+  "damageQuickSetupFlameFlinger": "Вогнемет",
+  "damageQuickSetupCustom": "Власний набір",
+  "damageClearStack": "Очистити набір",
+  "damageNoDamageSelected": "Додайте джерело шкоди, щоб побачити результат.",
+  "damageSelectedSourcesCount": "Вибрані джерела: {count}",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Не вибрано жодного джерела шкоди.",
+  "damageOtherSources": "Інші джерела",
+  "damageShowAllSources": "Показати всі джерела",
+  "damageShowFewerSources": "Показати менше джерел",
   "searchCancel": "Скасувати пошук",
   "todoRaidAttacks": "Атаки в рейді",
   "todoMockRaid4Left": "Залишилося 4 атаки в рейді",
   "todoMockWarAltStatus": "Атака у війні ще доступна",
   "todoMockRaid1Left": "Залишилася 1 атака в рейді",
+  "gameAssetsCategoryBuildings": "Будівлі",
+  "gameAssetsCategoryCapitalBase": "База Столиці Клану",
+  "gameAssetsCategoryCapitalHouseParts": "Частини будинку Столиці",
+  "gameAssetsCategoryChests": "Скрині",
+  "gameAssetsCategoryClanLabels": "Мітки кланів",
+  "gameAssetsCategoryCountryFlags": "Прапори країн",
+  "gameAssetsCategoryDecorations": "Прикраси",
+  "gameAssetsCategoryEquipment": "Спорядження героїв",
+  "gameAssetsCategoryGuardians": "Вартові",
+  "gameAssetsCategoryHeroes": "Герої",
+  "gameAssetsCategoryPets": "Улюбленці героїв",
+  "gameAssetsCategorySkins": "Образи",
+  "gameAssetsCategorySpells": "Закляття",
+  "gameAssetsCategoryTroops": "Війська",
   "assetFolderTroops": "Війська",
   "assetFolderSpells": "Закляття",
   "assetFolderHeroes": "Герої",
   "endpointStateWins": "Перемоги",
   "notifGroupBattles": "Битви",
-  "notifGroupSupport": "Підтримка"
+  "notifGroupSupport": "Підтримка",
+  "rankedLeagueAccountSelector": "Відображуваний обліковий запис",
+  "rankedLeagueStars": "Здобуті зірки"
 }

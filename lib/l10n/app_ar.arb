@@ -15,6 +15,15 @@
   "accountVerificationSuccess": "تم التحقق من الحساب بنجاح!",
   "generalRetry": "إعادة المحاولة",
   "generalRetrying": "جارٍ إعادة المحاولة...",
+  "postsTitle": "المنشورات",
+  "postsDescription": "أخبار ClashKing وقصص التحديثات والإعلانات السابقة.",
+  "postsEmpty": "لا توجد منشورات منشورة بعد.",
+  "postsLoadFailed": "تعذر تحميل المنشورات.",
+  "postsLoadMore": "تحميل المزيد",
+  "postsCurrent": "الحالية",
+  "postsPast": "السابقة",
+  "postsStory": "قصة تفاعلية",
+  "postsPinned": "مميز",
   "generalTryAgain": "حاول مرة أخرى",
   "generalReset": "إعادة تعيين",
   "generalCancel": "إلغاء",
@@ -94,6 +103,8 @@
     "description": "Shows EOS trophies history"
   },
   "generalFilters": "المرشحات",
+  "generalExpand": "يوسع",
+  "generalCollapse": "ينهار",
   "generalNotSet": "غير محدد",
   "@generalNotSet": {
     "description": "Filter value is not set"
@@ -109,6 +120,8 @@
   "@generalAdjustFilters": {
     "description": "Suggestion when filters return no results"
   },
+  "generalBookmark": "إشارة مرجعية",
+  "generalRemoveBookmark": "إزالة الإشارة المرجعية",
   "generalClearFilters": "مسح عوامل التصفية",
   "@generalClearFilters": {
     "description": "Button text to clear all applied filters"
@@ -296,6 +309,9 @@
   "authAccountLinkEmail": "ربط حساب بريد إلكتروني",
   "authAccountAddEmailAuth": "أضف مصادقة البريد الإلكتروني وكلمة المرور إلى حسابك لمزيد من الأمان.",
   "authAccountEmailLinkedSuccess": "تم ربط حساب البريد الإلكتروني بنجاح!",
+  "authAccountLinkDiscord": "ربط حساب Discord",
+  "authAccountAddDiscordAuth": "أضف مصادقة Discord إلى حسابك للمزامنة عبر المنصات والوصول إلى بوت ClashKing.",
+  "authAccountDiscordLinkedSuccess": "تم ربط حساب Discord بنجاح!",
   "authEmailVerificationTitle": "تحقق من البريد الإلكتروني",
   "authEmailVerificationCheckEmail": "تحقق من بريدك الإلكتروني",
   "authEmailVerificationSentTo": "أرسلنا رسالة تحقق إلى:",
@@ -447,6 +463,7 @@
     }
   },
   "gameExpLevel": "مستوى الخبرة",
+  "gameLeague": "الدوري",
   "gameTrophies": "الكؤوس",
   "gameBuilderBaseTrophies": "كؤوس قاعدة البنّاء",
   "gameDonations": "التبرعات",
@@ -484,6 +501,11 @@
   "clanNone": "لا توجد قبيلة",
   "clanJoinToUnlock": "انضم إلى قبيلة لفتح ميزات جديدة.",
   "clanMembers": "الأعضاء",
+  "clanMembersSearchPlaceholder": "أعضاء البحث",
+  "clanMembersShowTotals": "عرض إجماليات العشيرة",
+  "clanMembersHideTotals": "إخفاء إجماليات العشيرة",
+  "clanMembersReceivedShort": "تلقى",
+  "clanMembersAverageTh": "متوسط ​​ث",
   "clanMinimumMembers": "الحد الأدنى للأعضاء",
   "clanMaximumMembers": "الحد الأقصى للأعضاء",
   "clanLocation": "الموقع",
@@ -839,6 +861,7 @@
   "warLeague": "حرب/دوري",
   "warHistory": "تاريخ الحروب",
   "warLog": "سجل الحرب",
+  "warLogSearchPlaceholder": "بحث عن الحروب",
   "warLogClosed": "سجل حرب {clan} مغلق.",
   "@warLogClosed": {
     "placeholders": {
@@ -848,6 +871,11 @@
     }
   },
   "warStats": "إحصاءات الحرب",
+  "warStatsSearchPlaceholder": "بحث عن اللاعبين",
+  "warStatsCurrentTownHall": "خرافة",
+  "warStatsLast50": "آخر 50",
+  "warStatsWars": "الحروب",
+  "warStatsSelectSeason": "حدد موسم احصائيات الحرب",
   "warOngoing": "حرب جارية",
   "warIsNotInWar": "{clan} ليست في حرب.",
   "@warIsNotInWar": {
@@ -958,19 +986,80 @@
       }
     }
   },
+  "warAnalysisToWin": "للفوز",
+  "warAnalysisToLose": "ليخسر",
+  "warAnalysisNoAttacksLeft": "لم يتبق أي هجمات",
+  "warAnalysisScenario": "هجمات {attacks} المتبقية -> تحتاج إلى نجوم {stars} / {percent}٪ لكل هجوم",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "هجمات {attacks} المتبقية -> مستحيلة (نجوم {stars} / {percent}٪ لكل هجوم)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotLose": "لم يعد بإمكان {clanName} الخسارة",
-  "@warAnalysisCannotLose": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisSecuredBadge": "محسوم",
   "warAnalysisAlreadySecured": "محسوم بالفعل",
   "warAnalysisSecureAgainst": "حُسب الهدف بافتراض أن {clanName} سيستخدم جميع الهجمات المتبقية.",
-  "@warAnalysisSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisCannotSecureAgainst": "لا يمكن حسمه حسابيًا إذا حسّن {clanName} جميع الهجمات المتبقية.",
-  "@warAnalysisCannotSecureAgainst": {"placeholders": {"clanName": {"type": "String"}}},
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
   "warAnalysisNoSecureObjective": "لا يمكن حسمه بالهجمات المتبقية",
   "warAnalysisStarGoal": "+{stars} نجمة",
-  "@warAnalysisStarGoal": {"placeholders": {"stars": {"type": "int"}}},
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisRemainingAttempts": "تبقى {attacks} هجوم",
-  "@warAnalysisRemainingAttempts": {"placeholders": {"attacks": {"type": "int"}}},
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
   "warAnalysisNoBetterResult": "لا توجد نتيجة أفضل ممكنة",
   "warCalculatorHintPercent": "50.00",
   "@warCalculatorHintPercent": {
@@ -992,6 +1081,8 @@
   "warCalculatorNeededOverall": "% مطلوب إجمالًا",
   "warCalculatorCalculate": "احسب",
   "warAttacksTitle": "الهجمات",
+  "warAttacksSuccessful": "هجمات ناجحة",
+  "warAttacksFailed": "هجمات فاشلة",
   "warAttacksNone": "لا توجد هجمات بعد",
   "@warAttacksNone": {
     "description": "No attack yet in war"
@@ -999,6 +1090,7 @@
   "warAttacksBest": "أفضل الهجمات",
   "warAttacksCount": "عدد الهجمات",
   "warAttacksMissed": "الهجمات الفائتة",
+  "warAttacksMissedShort": "مٌفتَقد",
   "warAttacksNumber": "هاجمت {number_time} مرة خلال آخر {number_war} حروب.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1225,6 +1317,48 @@
   "cwlTitle": "سي دبليو إل",
   "cwlClanWarLeague": "دوري حروب القبائل",
   "cwlOngoing": "CWL جارٍ",
+  "cwlHistoryTitle": "تاريخ سي دبليو إل",
+  "clanJoinLeaveTab": "الانضمام/المغادرة",
+  "clanRankingsTab": "التصنيفات",
+  "clanRankingsSeason": "موسم",
+  "clanRankingsSelectSeason": "حدد موسم الترتيب",
+  "clanRankingsFilterActivity": "نشاط",
+  "clanRankingsFilterWar": "حرب",
+  "clanRankingsFilterPoints": "نقاط",
+  "cwlHistoryPreviewBadge": "معاينة",
+  "cwlHistoryPreviewSubtitle": "نموذج {clan} حتى يتم إصلاح نقطة نهاية CWL",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "لا يوجد تاريخ CWL حتى الآن",
+  "cwlHistoryEmptyBody": "لم تشارك هذه العشيرة في موسم Clan War League حتى الآن.",
+  "cwlRankTitle": "رتبة",
+  "cwlWarsPlayedTitle": "لعبت الحروب",
+  "playerWarStarsTitle": "نجوم الحرب",
+  "playerWarPreferenceTitle": "تفضيلات الحرب",
+  "playerDonatedTitle": "تم التبرع بها",
+  "playerReceivedTitle": "تلقى",
+  "playerCapitalTitle": "عاصمة",
+  "playerExpLevelTitle": "إكسب. مستوى",
+  "clanWarWinsTitle": "انتصارات الحرب",
+  "clanWinStreakTitle": "خط الفوز",
+  "clanBuilderBaseTitle": "قاعدة البناء",
+  "clanTypeTitle": "يكتب",
+  "clanMinTownHallTitle": "دقيقة. ذ",
+  "clanMinTrophiesTitle": "دقيقة. الجوائز",
+  "clanCapitalHallTitle": "قاعة العاصمة",
+  "clanDistrictsTitle": "المناطق",
+  "legendsCountryTitle": "دولة",
+  "legendsLocalRankTitle": "الرتبة المحلية",
+  "legendsGlobalRankTitle": "المرتبة العالمية",
+  "warWinsTitle": "انتصارات",
+  "warLossesTitle": "خسائر",
+  "warDrawsTitle": "يرسم",
   "cwlRounds": "الجولات",
   "cwlRoundNumber": "الجولة {number}",
   "@cwlRoundNumber": {
@@ -1384,6 +1518,37 @@
   "raidsOngoing": "الغارات الجارية",
   "raidsDistrictsDestroyed": "المناطق المدمرة",
   "raidsCompleted": "الغارات المكتملة",
+  "capitalRaidStatusOngoing": "مستمر",
+  "capitalRaidStatusEnded": "انتهى",
+  "capitalRaidLoot": "نهب",
+  "capitalRaidRewards": "المكافآت",
+  "capitalRaidPreviousWeek": "الاسبوع السابق",
+  "capitalRaidNextWeek": "الأسبوع المقبل",
+  "capitalRaidFilterAttacked": "هاجم",
+  "capitalRaidFilterNotAttacked": "لم يتعرض للهجوم",
+  "capitalRaidFilterLinked": "حسابات متصلة",
+  "capitalRaidEmptyTitle": "لا توجد بيانات غارة رأس المال",
+  "capitalRaidEmptyBody": "سيظهر تاريخ الغارة هنا بمجرد تعقب عطلات نهاية الأسبوع الخاصة بالغارة الكبرى لهذه العشيرة.",
+  "capitalRaidEstimated": "مُقدَّر",
+  "capitalRaidEstimatedTooltip": "ليس رسميًا بعد: تم تقديره من خلال سجلات الهجوم والدفاع لهذا الأسبوع. تنشر شركة Supercell عدد الميداليات الحقيقي بمجرد انتهاء الغارة.",
+  "capitalRaidTrophyPrediction": "الجوائز المتوقعة",
+  "capitalRaidTrophyPredictionTooltip": "جوائز Capital League المقدرة بعد هذه الغارة، بناءً على أداء هذا الأسبوع حتى الآن. ليس رسميا.",
+  "capitalRaidProjectedLoot": "المسروقات المتوقعة",
+  "capitalRaidOneshots": "طلقات واحدة",
+  "capitalRaidFails": "فشل",
+  "capitalDetailsOffense": "جريمة",
+  "capitalDetailsDefense": "الدفاع",
+  "capitalDistrictsSection": "المناطق",
+  "capitalOpponentsSection": "المعارضين",
+  "capitalAvgAttacksPerDistrict": "متوسط ​​الهجمات/المنطقة",
+  "capitalAvgLootPerAttack": "متوسط ​​النهب/الهجوم",
+  "capitalHistorySection": "تاريخ الغارة",
+  "capitalHistoryWeeksTracked": "تتبعت أسابيع",
+  "capitalAvgLootPerWeek": "متوسط ​​الغنائم/الأسبوع",
+  "capitalAvgAttacksPerWeek": "متوسط ​​الهجمات/الأسبوع",
+  "capitalBestRaid": "أفضل غارة",
+  "capitalWorstRaid": "أسوأ غارة",
+  "capitalHistoryChartTitle": "الاتجاه الأسبوعي",
   "searchNoResult": "لا توجد نتيجة.",
   "maintenanceTitle": "الصيانة",
   "maintenanceDescription": "Clash of Clans تحت الصيانة حاليًا، لذلك لا يمكننا الوصول إلى API. يرجى العودة لاحقًا.",
@@ -1484,9 +1649,33 @@
   "faqFeaturesLegendsDescription": "تتبع يومي للكؤوس وإحصاءات نهاية الموسم",
   "faqFeaturesCwlTitle": "تحليلات CWL",
   "faqFeaturesCwlDescription": "أداء دوري حروب القبائل ومساهمات الأعضاء",
+  "faqFeaturesTodoTitle": "قائمة المهام",
+  "faqFeaturesTodoDescription": "اعرف الحسابات التي ما زالت تحتاج إلى هجمات التصنيف أو الغارات أو هجمات الحرب أو ألعاب القبيلة أو إجراءات التذكرة",
+  "faqFeaturesUpgradeTrackerTitle": "ترقية المقتفي",
+  "faqFeaturesUpgradeTrackerDescription": "استخدم لقطة يدوية للحساب يقدمها المستخدم لمعرفة الترقيات والموارد والبنّائين ووقت المختبر والتقدم المتبقي",
+  "faqFeaturesNotificationsTitle": "الإشعارات الفورية",
+  "faqFeaturesNotificationsDescription": "اختر الحسابات التي تتلقى تنبيهات أحداث ClashKing المدعومة",
+  "faqFeaturesWidgetsTitle": "أدوات الحرب",
+  "faqFeaturesWidgetsDescription": "أبقِ حالة الحرب الحالية ظاهرة على شاشتك الرئيسية حيث تتوفر الأدوات",
   "faqSearchHint": "ابحث في الأسئلة الشائعة...",
   "faqSectionGettingStarted": "البدء والتعريف",
+  "faqSectionAccountsAlertsWidgets": "الحسابات والتنبيهات والأدوات",
   "faqSectionSupportAndContact": "الدعم والتواصل",
+  "faqLinkedAccountsTitle": "كيف تعمل الحسابات المرتبطة وعملية التحقق؟",
+  "faqLinkedAccountsAnswer": "يمكن أن يتضمن ملفك في ClashKing عدة حسابات Clash of Clans. تعرض إضافة الوسم البيانات العامة، ويثبت التحقق برمز API أن الحساب لك ويفتح ميزات خاصة به.",
+  "faqLinkedAccountsSolution1": "أدر الحسابات أو أعد ترتيبها أو أخفها أو احذفها من إدارة الحسابات.",
+  "faqLinkedAccountsSolution2": "ابحث عن رمز API في Clash of Clans ضمن الإعدادات > مزيد من الإعدادات > رمز API.",
+  "faqLinkedAccountsSolution3": "يمكنك تسجيل الدخول عبر Discord أو البريد الإلكتروني. أدر اتصالات الحساب من الإعدادات عند توفرها.",
+  "faqNotificationsTitle": "كيف تعمل الإشعارات؟",
+  "faqNotificationsAnswer": "الإشعارات اختيارية. عند تفعيلها، يسجل ClashKing هذا الجهاز ويمكنك اختيار الحسابات المرتبطة التي يستهدفها كل تنبيه.",
+  "faqNotificationsSolution1": "اسمح بالإشعارات على جهازك وفي إعدادات ClashKing.",
+  "faqNotificationsSolution2": "يمكن لكل تنبيه استهداف حسابات مختلفة. تحقق من الحسابات المحددة عند غياب تنبيه.",
+  "faqNotificationsSolution3": "تعتمد بعض التنبيهات على بيانات القبيلة أو الحرب المتتبعة، وقد يحدث تأخير أثناء تحديث البيانات الخارجية.",
+  "faqWidgetsTitle": "كيف تعمل أدوات الحرب؟",
+  "faqWidgetsAnswer": "تعرض أدوات الحرب ملخصًا سريعًا على الأجهزة المدعومة، وتستخدم حساباتك المحددة أو المرتبطة وبيانات ClashKing المخزنة والتحديث في الخلفية حين تسمح المنصة.",
+  "faqWidgetsSolution1": "افتح التطبيق بعد تغيير الحسابات أو القبائل حتى تتزامن الأداة.",
+  "faqWidgetsSolution2": "إذا بدت الأداة قديمة، فحدّث التطبيق أولاً. يحد Android وiOS من تحديثات الخلفية.",
+  "faqWidgetsSolution3": "تحتاج القبيلة إلى بيانات حرب متاحة لعرض حالة مفيدة.",
   "faqTranslationIssue": "الترجمة مفقودة أو غير صحيحة؟",
   "faqTranslationIssueAnswer": "تبدأ الترجمات كمسودات باستخدام أدوات التوليد والذكاء الاصطناعي، ثم تُراجع وتُحسّن مع الوقت. إذا كنت متحدثًا أصليًا ووجدت نصًا غير طبيعي، يمكنك اقتراح تصحيح على Crowdin أو التواصل معنا على Discord أو عبر البريد الإلكتروني.",
   "faqWaysToSupport": "طرق دعمنا:",
@@ -1709,6 +1898,10 @@
   "warAttacksDetailsAttackOrder": "ترتيب الهجوم",
   "@warAttacksDetailsAttackOrder": {
     "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "مدة",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
   },
   "warAttacksDetailsAttacker": "المهاجم",
   "@warAttacksDetailsAttacker": {
@@ -2126,6 +2319,35 @@
   "gameItemAttackSpeed": "سرعة الهجوم",
   "gameItemAttackRange": "مدى الهجوم",
   "gameItemMovementSpeed": "سرعة الحركة",
+  "gameItemWardenWeight": "وزن الحارس",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "يمكن لوزن الحارس تجاوز مساحة السكن، وهو يحدد مدى أولوية الحارس الكبير في اتباع مجموعة من الوحدات.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "وزن المعالِجة",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "يمكن لوزن المعالِجة تجاوز مساحة السكن عندما تقرر المعالِجات الوحدات التي تمنحها الأولوية.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{جندي واحد لحد المتابعة} other{{count} جنود لحد المتابعة}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "لا يساهم في حد المتابعة",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
   "gameItemUpgradeResource": "مورد الترقية",
   "gameItemRarity": "الندرة",
   "gameItemHero": "البطل",
@@ -2138,138 +2360,199 @@
   "gameItemFlying": "طائر",
   "gameItemUpgradeCost": "تكلفة الترقية",
   "gameItemUpgradeTime": "وقت الترقية",
-  "generalExpand": "يوسع",
-  "generalCollapse": "ينهار",
-  "generalBookmark": "إشارة مرجعية",
-  "generalRemoveBookmark": "إزالة الإشارة المرجعية",
-  "gameLeague": "الدوري",
-  "clanMembersSearchPlaceholder": "أعضاء البحث",
-  "clanMembersShowTotals": "عرض إجماليات العشيرة",
-  "clanMembersHideTotals": "إخفاء إجماليات العشيرة",
-  "clanMembersReceivedShort": "تلقى",
-  "clanMembersAverageTh": "متوسط ​​ث",
-  "warLogSearchPlaceholder": "بحث عن الحروب",
-  "warStatsSearchPlaceholder": "بحث عن اللاعبين",
-  "warStatsCurrentTownHall": "خرافة",
-  "warStatsLast50": "آخر 50",
-  "warStatsWars": "الحروب",
-  "warStatsSelectSeason": "حدد موسم احصائيات الحرب",
-  "warAnalysisToWin": "للفوز",
-  "warAnalysisToLose": "ليخسر",
-  "warAnalysisNoAttacksLeft": "لم يتبق أي هجمات",
-  "warAnalysisScenario": "هجمات {attacks} المتبقية -> تحتاج إلى نجوم {stars} / {percent}٪ لكل هجوم",
-  "warAnalysisImpossibleScenario": "هجمات {attacks} المتبقية -> مستحيلة (نجوم {stars} / {percent}٪ لكل هجوم)",
-  "warAttacksSuccessful": "هجمات ناجحة",
-  "warAttacksFailed": "هجمات فاشلة",
-  "warAttacksMissedShort": "مٌفتَقد",
-  "cwlHistoryTitle": "تاريخ سي دبليو إل",
-  "clanJoinLeaveTab": "الانضمام/المغادرة",
-  "clanRankingsTab": "التصنيفات",
-  "clanRankingsSeason": "موسم",
-  "clanRankingsSelectSeason": "حدد موسم الترتيب",
-  "clanRankingsFilterActivity": "نشاط",
-  "clanRankingsFilterWar": "حرب",
-  "clanRankingsFilterPoints": "نقاط",
-  "cwlHistoryPreviewBadge": "معاينة",
-  "cwlHistoryPreviewSubtitle": "نموذج {clan} حتى يتم إصلاح نقطة نهاية CWL",
-  "cwlHistoryEmptyTitle": "لا يوجد تاريخ CWL حتى الآن",
-  "cwlHistoryEmptyBody": "لم تشارك هذه العشيرة في موسم Clan War League حتى الآن.",
-  "cwlRankTitle": "رتبة",
-  "cwlWarsPlayedTitle": "لعبت الحروب",
-  "playerWarStarsTitle": "نجوم الحرب",
-  "playerWarPreferenceTitle": "تفضيلات الحرب",
-  "playerDonatedTitle": "تم التبرع بها",
-  "playerReceivedTitle": "تلقى",
-  "playerCapitalTitle": "عاصمة",
-  "playerExpLevelTitle": "إكسب. مستوى",
-  "clanWarWinsTitle": "انتصارات الحرب",
-  "clanWinStreakTitle": "خط الفوز",
-  "clanBuilderBaseTitle": "قاعدة البناء",
-  "clanTypeTitle": "يكتب",
-  "clanMinTownHallTitle": "دقيقة. ذ",
-  "clanMinTrophiesTitle": "دقيقة. الجوائز",
-  "clanCapitalHallTitle": "قاعة العاصمة",
-  "clanDistrictsTitle": "المناطق",
-  "legendsCountryTitle": "دولة",
-  "legendsLocalRankTitle": "الرتبة المحلية",
-  "legendsGlobalRankTitle": "المرتبة العالمية",
-  "warWinsTitle": "انتصارات",
-  "warLossesTitle": "خسائر",
-  "warDrawsTitle": "يرسم",
-  "capitalRaidStatusOngoing": "مستمر",
-  "capitalRaidStatusEnded": "انتهى",
-  "capitalRaidLoot": "نهب",
-  "capitalRaidRewards": "المكافآت",
-  "capitalRaidPreviousWeek": "الاسبوع السابق",
-  "capitalRaidNextWeek": "الأسبوع المقبل",
-  "capitalRaidFilterAttacked": "هاجم",
-  "capitalRaidFilterNotAttacked": "لم يتعرض للهجوم",
-  "capitalRaidFilterLinked": "حسابات متصلة",
-  "capitalRaidEmptyTitle": "لا توجد بيانات غارة رأس المال",
-  "capitalRaidEmptyBody": "سيظهر تاريخ الغارة هنا بمجرد تعقب عطلات نهاية الأسبوع الخاصة بالغارة الكبرى لهذه العشيرة.",
-  "capitalRaidEstimated": "مُقدَّر",
-  "capitalRaidEstimatedTooltip": "ليس رسميًا بعد: تم تقديره من خلال سجلات الهجوم والدفاع لهذا الأسبوع. تنشر شركة Supercell عدد الميداليات الحقيقي بمجرد انتهاء الغارة.",
-  "capitalRaidTrophyPrediction": "الجوائز المتوقعة",
-  "capitalRaidTrophyPredictionTooltip": "جوائز Capital League المقدرة بعد هذه الغارة، بناءً على أداء هذا الأسبوع حتى الآن. ليس رسميا.",
-  "capitalRaidProjectedLoot": "المسروقات المتوقعة",
-  "capitalRaidOneshots": "طلقات واحدة",
-  "capitalRaidFails": "فشل",
-  "capitalDetailsOffense": "جريمة",
-  "capitalDetailsDefense": "الدفاع",
-  "capitalDistrictsSection": "المناطق",
-  "capitalOpponentsSection": "المعارضين",
-  "capitalAvgAttacksPerDistrict": "متوسط ​​الهجمات/المنطقة",
-  "capitalAvgLootPerAttack": "متوسط ​​النهب/الهجوم",
-  "capitalHistorySection": "تاريخ الغارة",
-  "capitalHistoryWeeksTracked": "تتبعت أسابيع",
-  "capitalAvgLootPerWeek": "متوسط ​​الغنائم/الأسبوع",
-  "capitalAvgAttacksPerWeek": "متوسط ​​الهجمات/الأسبوع",
-  "capitalBestRaid": "أفضل غارة",
-  "capitalWorstRaid": "أسوأ غارة",
-  "capitalHistoryChartTitle": "الاتجاه الأسبوعي",
-  "warAttacksDetailsDuration": "مدة",
   "gameItemRemainingToTownHallMax": "إلى ث ماكس",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
   "gameItemRemainingToGlobalMax": "إلى الحد الأقصى العالمي",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
   "gameItemLevelsLeft": "مستوى (مستويات) {count} على اليسار",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "gameItemOverview": "ملخص",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
   "gameItemStats": "احصائيات",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
   "gameItemNextUpgrade": "الترقية القادمة",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
   "gameItemUpgradePlan": "خطة الترقية",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
   "gameItemUpgradeDataUnavailable": "ترقية البيانات غير متاحة",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
   "notifScopeSelected": "مختارة",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
   "settingsPreferences": "التفضيلات",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
   "settingsNotificationsTitle": "إشعارات",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
   "settingsNotificationsSubtitle": "اختر التنبيهات وأرسل معاينات الاختبار المحلية.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
   "settingsSupport": "يدعم",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
   "settingsAbout": "عن",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
   "settingsAccount": "حساب",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
   "settingsSignedIn": "تم تسجيل الدخول",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
   "settingsAppearance": "مظهر",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
   "settingsThemeSystem": "نظام",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
   "settingsThemeMatchDevice": "تطابق هذا الجهاز",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
   "settingsThemeLight": "ضوء",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
   "settingsThemeDark": "مظلم",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
   "settingsThemeSelected": "مختارة",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
   "notifNoAccountsLoadedYet": "لم يتم تحميل أي حسابات مرتبطة حتى الآن.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
   "notifNoAccountsSelected": "لم يتم اختيار أي حسابات",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
   "notifAccountsSelected": "تم تحديد حسابات {count}",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "searchRecent": "مؤخرًا",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
   "searchTabPlayers": "اللاعبين",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
   "searchTabClans": "العشائر",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
   "searchClear": "واضح",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
   "warStatsRefreshSuccess": "تم تحديث البيانات بنجاح",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
   "warStatsRefreshFailed": "فشل تحديث البيانات: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsFilterFailed": "فشل تحميل البيانات التي تمت تصفيتها: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "warStatsExportFailed": "فشل التصدير: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportLabelPlayer": "لاعب",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
   "exportLabelFormat": "شكل",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
   "exportLabelExcel": "اكسل (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
   "exportLabelIncludes": "يشمل",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
   "exportLabelContent": "الإحصائيات والهجمات وتحليل TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
   "accountNoUserData": "لا توجد بيانات المستخدم المتاحة",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
   "accountsMenuTitle": "الحسابات",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
   "searchErrorPlayerLoadFailed": "فشل في تحميل بيانات اللاعب.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
   "searchErrorClanLoadFailed": "فشل تحميل بيانات العشيرة.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
   "todoNoMatchingAccounts": "لا توجد حسابات مطابقة",
   "todoNoConfiguredAccounts": "لم يتم تكوين حسابات المهام",
   "todoNoLinkedAccounts": "لا توجد حسابات مرتبطة",
@@ -2286,6 +2569,60 @@
   "capitalRaidMembersNoIndividualData": "لا توجد قائمة لاعبين أو هجمات فردية متاحة لهذه الغارة.",
   "dashboardNoLinkedAccountsTitle": "لا توجد حسابات مرتبطة",
   "dashboardNoLinkedAccountsBody": "قم بربط حساب Clash لرؤية الهجمات والأحداث والأنشطة هنا.",
+  "dashboardTodoHiddenTitle": "لا توجد حسابات معروضة هنا",
+  "dashboardTodoHiddenBody": "فعّل أحد خيارات بطاقة الصفحة الرئيسية لحساب من تبويب اللاعبين لعرضه هنا.",
+  "dashboardUpgradeTrackerNoData": "افتح متتبع الترقيات لاستيراد بيانات الترقية أو تحديثها.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {يحتاج إلى تحديث} other {يحتاجون إلى تحديث}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {لديه مهام متبقية} other {لديهم مهام متبقية}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {لديه هجمات متبقية} other {لديهم هجمات متبقية}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "متوقع",
+  "dashboardUpgradeTrackerBuilders": "البنّاؤون",
+  "dashboardUpgradeTrackerLab": "المختبر",
+  "dashboardUpgradeTrackerPets": "الحيوانات الأليفة",
+  "dashboardUpgradeTrackerWalls": "الجدران",
+  "dashboardUpgradeTrackerVillage": "القرية",
+  "dashboardRankedNoData": "افتح الدوري المصنف لرؤية ترتيب هذا الحساب.",
+  "dashboardRankedAccounts": "تتم متابعة {loaded}/{total} حسابًا",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "playersNoBookmarkedTitle": "لم يتم وضع إشارة مرجعية على اللاعبين حتى الآن",
   "playersNoBookmarkedBody": "افتح ملف تعريف اللاعب واحفظه لوقت لاحق.",
   "playersNoLinkedBody": "إدارة الحسابات من شاشة إعداد الحساب.",
@@ -2319,6 +2656,97 @@
   "calculatorsSubtitle": "خطط للضرر وفق مستويات المباني الحالية.",
   "calculatorZapQuake": "زلزال زاب",
   "calculatorFireball": "كرة نارية",
+  "damageCalculatorSubtitle": "قارن مجموعة هجوم واحدة بعدة مبانٍ.",
+  "damageNoStaticDataTitle": "بيانات الضرر غير متاحة",
+  "damageNoStaticDataBody": "حدّث التطبيق بعد اكتمال تحميل بيانات اللعبة الثابتة.",
+  "damageTownHall": "قاعة المدينة",
+  "damageVerifiedAccountPrefill": "إعداد مسبق لحساب موثّق",
+  "damageOverridesStayLocal": "لا تؤدي التغييرات هنا إلى تحديث حساب اللاعب.",
+  "damageTargets": "المباني",
+  "damageAddBuilding": "إضافة مبنى",
+  "damageRemoveBuilding": "إزالة المبنى",
+  "damageNoTargetsBody": "أضف مبنى واحدًا على الأقل لمقارنة النتائج.",
+  "damageHitpoints": "{hitpoints} نقاط حياة",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "البحث عن مبانٍ",
+  "damageNoBuildingsFound": "لم يتم العثور على مبانٍ",
+  "damageTryAnotherSearch": "جرّب اسمًا آخر أو مستوى مختلفًا لقاعة المدينة.",
+  "damageAttackStack": "مجموعة هجوم يدوية",
+  "damageNoSourcesForTownHall": "لا تتوفر مصادر ضرر مدعومة في قاعة المدينة هذه.",
+  "damageCount": "العدد",
+  "damagePerUse": "{damage} ضرر لكل استخدام",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% من أقصى نقاط الحياة، وتتناقص عند التكديس",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "البرق",
+  "damageSourceEarthquake": "الزلزال",
+  "damageSourceGiantArrow": "السهم العملاق",
+  "damageSourceFireball": "كرة نارية",
+  "damageSourceFlameFlinger": "ضربة قاذف اللهب",
+  "damageSourceBalloonDeath": "ضرر انفجار المنطاد",
+  "damageSourceRocketBalloonDeath": "ضرر انفجار المنطاد الصاروخي",
+  "damageResults": "النتائج",
+  "damageDestroyed": "مُدمّر",
+  "damageSurvives": "يصمد",
+  "damageResultSummary": "{damage} ضرر · تبقى {remaining} نقطة حياة",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "محسّن البرق والزلزال",
+  "damageSpellCapacity": "سعة التعويذات",
+  "damageZapQuakeUnavailable": "البرق والزلزال غير متاحين في قاعة المدينة هذه.",
+  "damageZapQuakeUsesSelectedLevels": "استخدام البرق مستوى {lightningLevel} والزلزال مستوى {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "لا يمكن للبرق والزلزال إلحاق الضرر بهذا المخزن.",
+  "damageNoValidZapQuake": "لا توجد توليفة صالحة تناسب سعة التعويذات المحددة.",
+  "damageZapQuakeCombination": "{lightning} برق + {earthquake} زلزال · مساحة {capacity}",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerTitle": "ترقية المقتفي",
   "upgradeTrackerSubtitle": "تكلفة الترقية المتبقية والوقت.",
   "linkedAccountLabel": "حساب مرتبط",
@@ -2326,8 +2754,19 @@
   "noLinkedPlayersLoadedBody": "قم بإضافة أو تحديث الحسابات المرتبطة لرؤية إجماليات الترقية.",
   "playerOptionNotificationsTitle": "إشعارات",
   "playerOptionNotificationsSubtitle": "احصل على تنبيهات لهذا الحساب.",
+  "playerOptionNotificationsEnableMaster": "فعّل الإشعارات من الإعدادات أولاً.",
+  "playerOptionNotificationsVerifyFirst": "تحقق من هذا الحساب لتفعيل الإشعارات.",
+  "playerOptionNotificationsSubscriptionRequired": "يلزم اشتراك لإشعارات الإشارات المرجعية.",
+  "playerOptionNotificationsLimitReached": "لقد وصلت إلى حد إشعارات الإشارات المرجعية.",
   "playerOptionShowTodoPageTitle": "عرض على صفحة المهام",
   "playerOptionShowTodoPageSubtitle": "قم بتضمين هذا الحساب في قائمة المهام الكاملة.",
+  "playerOptionShowTodoPageVerifyFirst": "تحقق من هذا الحساب لإظهاره في صفحة المهام.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "إظهار متتبع الترقيات في الرئيسية",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "ثبّت ملخص ترقيات هذا الحساب في الرئيسية.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "تحقق من الحساب لإظهار تقدم ترقياته في الرئيسية.",
+  "playerOptionShowRankedHomeTitle": "إظهار التصنيف في الرئيسية",
+  "playerOptionShowRankedHomeSubtitle": "ثبّت ملخص الدوري المصنف لهذا الحساب في الرئيسية.",
+  "playerOptionShowRankedHomeVerifyFirst": "تحقق من الحساب لإظهار ملخص الدوري المصنف في الرئيسية.",
   "playerOptionShowWarTabTitle": "تظهر في علامة التبويب الحرب",
   "playerOptionShowWarTabSubtitle": "قم بتضمين عشيرة هذا الحساب في علامة تبويب الحرب.",
   "bookmarkPlayerLoadFailed": "فشل تحميل المشغل الذي تم وضع إشارة مرجعية عليه.",
@@ -2369,6 +2808,10 @@
   "todoMockCaughtUpSubtitle": "TH14 · لا توجد مهام مفتوحة",
   "todoMockCaughtUpStatus": "نشط اليوم · لا يلزم اتخاذ أي إجراء",
   "notifChooseAlerts": "اختر التنبيهات",
+  "notifGroupLegendAttacks": "هجمات الأسطورة I",
+  "notifLegendAttacksDescription": "نتائج الهجمات للحسابات ذات الإشعارات المفعلة والمضافة إلى الإشارات المرجعية في الأسطورة I.",
+  "notifGroupLegendDefenses": "دفاعات الأسطورة I",
+  "notifLegendDefensesDescription": "نتائج الدفاع للحسابات ذات الإشعارات المفعلة في الأسطورة I.",
   "notifLeagueDefenseDescription": "نتائج الدفاع مع المهاجم والنجوم والنسبة المئوية وسياق الدوري.",
   "notifWarAttackOptionsDescription": "نتائج هجوم الحرب، وتنبيهات الدفاع، وخيارات موجز هجوم 5 ضد 5.",
   "notifWarAlertsDescription": "تطابقت الحرب، وبدأ يوم المعركة، وانتهت الحرب.",
@@ -2463,6 +2906,8 @@
   "clanCapitalPoints": "نقاط العاصمة",
   "todoAllAccounts": "كل الحسابات",
   "todoCombinedAcrossAccounts": "مهام مجمعة عبر حساباتك",
+  "dashboardRankedCombinedAcrossAccounts": "الترتيب المجمّع عبر حساباتك",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "تتبع الترقيات المجمّع عبر حساباتك",
   "todoPreviewAccount": "معاينة الحساب",
   "todoLastActiveUnavailable": "آخر نشاط غير متاح",
   "todoActiveRelative": "نشط {time}",
@@ -2516,9 +2961,116 @@
   "sideRankingsEmptyTitle": "لم يتم إرجاع أي تصنيفات",
   "sideRankingsEmptyBody": "جرّب لوحة صدارة أو موقعًا آخر.",
   "sideRankingsMockups": "نماذج ClashKing",
+  "rankingsHomeVillage": "القرية الرئيسية",
+  "rankingsBuilderBase": "قاعدة البنّاء",
+  "rankingsTownHall": "قاعة المدينة",
+  "rankingsRankedLeague": "الدوري المصنف",
+  "rankingsClanCapital": "عاصمة القبيلة",
+  "rankingsDonations": "التبرعات",
+  "rankingsWarWins": "انتصارات الحرب",
+  "rankingsWinStreak": "سلسلة الانتصارات",
+  "rankingsCurrent": "الحالي",
+  "rankingsWorldwide": "عالميًا",
+  "rankingsSelectLocation": "اختر موقعًا",
+  "rankingsSearchLocations": "ابحث عن المواقع أو رموز الدول",
+  "rankingsWorldwideUnavailable": "اختر منطقة أو دولة للوحة الصدارة هذه.",
+  "rankingsLocationsLoadFailed": "تعذر تحميل قائمة المواقع الكاملة. يظل الخيار العالمي متاحًا حيث يكون مدعومًا.",
+  "rankingsSnapshotDate": "تاريخ اللقطة",
+  "rankingsSource": "المصدر",
+  "rankingsOfficialSource": "واجهة Clash API الرسمية",
+  "rankingsResults": "النتائج",
+  "rankingsTopCount": "أفضل {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "لا توجد لقطة محفوظة",
+  "rankingsNoSnapshotBody": "لا توجد لقطة ترتيب محفوظة لتاريخ {date}. اختر تاريخًا آخر أو ارجع إلى الحالي.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "فشل تحميل هذا اللاعب.",
+  "rankingsClanLoadFailed": "فشل تحميل هذه القبيلة.",
   "sideStatsTitle": "الإحصاءات",
   "sideStatsSubtitle": "إحصاءات لوحات الصدارة من واجهات Clash API الرسمية.",
   "sideStatsLoadError": "لا يمكن تحميل معلومات المعركة.",
+  "statsOverview": "نظرة عامة",
+  "statsArmies": "الجيوش",
+  "statsItems": "العناصر",
+  "statsWar": "الحرب",
+  "statsCwl": "سي دبليو إل",
+  "statsRanked": "المصنف",
+  "statsDateRange": "نطاق التاريخ",
+  "statsDateRangeHint": "اختر ما يصل إلى 90 يومًا",
+  "statsDateRangeTooLong": "اختر نطاقًا زمنيًا يبلغ 90 يومًا أو أقل.",
+  "statsUpdated": "بيانات جديدة",
+  "statsNoDataTitle": "لا توجد بيانات معركة حتى الآن",
+  "statsNoDataBody": "جرّب نطاقًا زمنيًا أوسع أو مرشحات أقل تقييدًا.",
+  "statsAddItemsTitle": "اختر العناصر المراد تحليلها",
+  "statsAddItemsBody": "قم بإضافة القوات أو التعويذات أو الأبطال أو الحيوانات الأليفة أو المعدات، ثم قم بتشغيل الاستعلام.",
+  "statsGlobalCounts": "التعداد العالمي",
+  "statsPerformance": "الأداء",
+  "statsSamples": "العينات",
+  "statsUsage": "الاستخدام",
+  "statsAverageStars": "متوسط النجوم",
+  "statsAverageDestruction": "تدمير متوسط",
+  "statsStarRates": "أسعار النجوم",
+  "statsThreeStarRate": "سعر ثلاث نجوم",
+  "statsDailyTrend": "الاتجاه اليومي",
+  "statsPlayers": "اللاعبين",
+  "statsClans": "العشائر",
+  "statsPlayersInWar": "اللاعبون في الحرب",
+  "statsClansInWar": "العشائر في الحرب",
+  "statsPlayersInLegends": "اللاعبون في الأساطير",
+  "statsWarsStored": "الحروب المخزنة",
+  "statsJoinLeaves": "الانضمام/الخروج من الأحداث",
+  "statsSearchArmies": "ابحث عن التراكيب الدقيقة",
+  "statsExactComposition": "التكوين الدقيق",
+  "statsArmyShareCode": "رمز مشاركة الجيش",
+  "statsMinimumSample": "الحد الأدنى للعينة",
+  "statsSortBy": "الترتيب حسب",
+  "statsIncludeItems": "تضمين العناصر",
+  "statsExcludeItems": "استبعاد العناصر",
+  "statsItemId": "معرف العنصر أو الاسم المخزن",
+  "statsItemType": "نوع العنصر",
+  "statsTroop": "القوات",
+  "statsSpell": "الإملاء",
+  "statsHero": "البطل",
+  "statsPet": "الحيوانات الأليفة",
+  "statsEquipment": "المعدات",
+  "statsOwningHero": "امتلاك البطل",
+  "statsAddItem": "إضافة عنصر",
+  "statsAnalyzeItems": "تحليل العناصر",
+  "statsCompositionShare": "حصة التكوين",
+  "statsNoLevels": "لا تحتوي سجلات الجيش على مستويات العناصر.",
+  "statsRankedCompositionOnly": "تأتي بيانات التكوين من سجلات المعارك المرتبة؛ يبقى أداء الحرب وأداء CWL منفصلين.",
+  "statsTownHall": "قاعة المدينة",
+  "statsOpponentTownHall": "قاعة المدينة المعارضة",
+  "statsEqualTownHalls": "قاعات المدينة المتساوية",
+  "statsLeagueTier": "مستوى الدوري",
+  "statsLegendLeagueOne": "الدوري الأسطوري 1",
+  "statsCwlLeague": "دوري CWL",
+  "statsLeagueBronze": "برونزي",
+  "statsLeagueSilver": "فضي",
+  "statsLeagueGold": "ذهبي",
+  "statsLeagueCrystal": "كريستال",
+  "statsLeagueMaster": "ماستر",
+  "statsLeagueChampion": "بطل",
+  "statsAllCwlLeagues": "جميع دوريات CWL",
+  "statsCwlSeasons": "مواسم CWL",
+  "statsCwlSeasonsHint": "YYYY-MM، مفصولة بفواصل",
+  "statsApplyFilters": "تطبيق المرشحات",
+  "statsRefresh": "تحديث البيانات",
+  "statsRegularWarOnly": "الحروب العادية فقط؛ يتم استبعاد الحروب الودية و CWL.",
+  "statsRankedRequired": "مطلوب قاعة المدينة ومستوى دوري واحد.",
+  "statsSeasonBreakdown": "تفاصيل الموسم",
   "sideTopScore": "أعلى نتيجة",
   "sideTop200Avg": "متوسط أفضل 200",
   "sideBasesArmiesTitle": "القواعد والجيوش",
@@ -2535,6 +3087,51 @@
   "sideArmyLinksBody": "التشكيلة، التعاويذ، الحصار، الملاحظات، ورابط المشاركة.",
   "sideGameAssetsTitle": "أصول اللعبة",
   "sideGameAssetsSubtitle": "أصول ClashKing المستضافة، مجمّعة حسب المجلد.",
+  "gameAssetsLoadError": "تعذر تحميل أصول اللعبة",
+  "gameAssetsEmptyTitle": "لا توجد أصول لعبة متاحة",
+  "gameAssetsEmptyBody": "لم يتضمن البيان المستضاف أي صور مدعومة.",
+  "gameAssetsOneImage": "صورة واحدة",
+  "gameAssetsImageCount": "{count} صورة",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "ابحث في هذه الفئة",
+  "gameAssetsAllFormats": "كل التنسيقات",
+  "gameAssetsOneResult": "نتيجة واحدة",
+  "gameAssetsResultCount": "نتائج {count}",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "لا توجد صور مطابقة",
+  "gameAssetsNoResultsBody": "جرّب بحثًا أو تنسيق ملف آخر.",
+  "gameAssetsLongPressHint": "اضغط مطولاً لنسخ الرابط المستضاف",
+  "gameAssetsCopyUrl": "نسخ الرابط",
+  "gameAssetsCopyPath": "نسخ المسار",
+  "gameAssetsUrlCopied": "تم نسخ رابط الأصل",
+  "gameAssetsPathCopied": "تم نسخ مسار الأصل",
+  "gameAssetsCopyError": "تعذر نسخ تفاصيل الأصل.",
+  "gameAssetsShare": "مشاركة",
+  "gameAssetsShareError": "تعذرت مشاركة هذا الأصل.",
+  "gameAssetsSave": "حفظ",
+  "gameAssetsSaving": "جارٍ الحفظ...",
+  "gameAssetsSaved": "تم حفظ الأصل.",
+  "gameAssetsSavedTo": "تم حفظ الأصل في {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "تعذر حفظ هذا الأصل.",
   "sideZapQuakeTitle": "{zaps} برق + زلزال واحد",
   "@sideZapQuakeTitle": {
     "placeholders": {
@@ -2877,582 +3474,6 @@
     }
   },
   "faqSupercellFanContentPolicyLink": "سياسة محتوى المعجبين لدى Supercell",
-  "notifAudienceSectionTitle": "جمهور الإشعارات",
-  "notifScopeAllLinkedAccounts": "كل الحسابات المرتبطة",
-  "notifScopeSelectedAccounts": "حسابات محددة",
-  "notifAudienceSheetDescription": "اختر الحسابات التي يمكنها تلقي الإشعارات على هذا الجهاز.",
-  "notifAudienceAllSubtitle": "{count} حساب حالي. سيتم تضمين الحسابات المرتبطة لاحقًا تلقائيًا.",
-  "notifAudienceSelectedSubtitle": "تم اختيار {count} للإشعارات.",
-  "notifAudienceSelectedEmpty": "اختر بدقة الحسابات التي ستتلقى الإشعارات.",
-  "notifAudienceAllInlineNote": "أي حساب تربطه لاحقًا سيتم تضمينه بدون تغيير هذا الإعداد.",
-  "notifAccountBookmarked": "محفوظ",
-  "notifGroupLeagueBattles": "معارك الدوري",
-  "notifGroupWarAttacks": "هجمات الحرب",
-  "notifGroupWarState": "حالة الحرب",
-  "notifGroupWarReminders": "تذكيرات الحرب",
-  "notifGroupEvents": "الأحداث",
-  "notifGroupAppAnnouncements": "إعلانات التطبيق",
-  "notifGroupUpgradeFinishes": "انتهاء الترقيات",
-  "notifGroupMonthlySupport": "الدعم الشهري",
-  "postsTitle": "المنشورات",
-  "postsDescription": "أخبار ClashKing وقصص التحديثات والإعلانات السابقة.",
-  "postsEmpty": "لا توجد منشورات منشورة بعد.",
-  "postsLoadFailed": "تعذر تحميل المنشورات.",
-  "postsLoadMore": "تحميل المزيد",
-  "postsCurrent": "الحالية",
-  "postsPast": "السابقة",
-  "postsStory": "قصة تفاعلية",
-  "postsPinned": "مميز",
-  "authAccountLinkDiscord": "ربط حساب Discord",
-  "authAccountAddDiscordAuth": "أضف مصادقة Discord إلى حسابك للمزامنة عبر المنصات والوصول إلى بوت ClashKing.",
-  "authAccountDiscordLinkedSuccess": "تم ربط حساب Discord بنجاح!",
-  "@warAnalysisScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@warAnalysisImpossibleScenario": {
-    "placeholders": {
-      "attacks": {
-        "type": "int"
-      },
-      "stars": {
-        "type": "String"
-      },
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "@cwlHistoryPreviewSubtitle": {
-    "description": "Small notice shown while CWL history uses mock data",
-    "placeholders": {
-      "clan": {
-        "type": "String"
-      }
-    }
-  },
-  "faqFeaturesTodoTitle": "قائمة المهام",
-  "faqFeaturesTodoDescription": "اعرف الحسابات التي ما زالت تحتاج إلى هجمات التصنيف أو الغارات أو هجمات الحرب أو ألعاب القبيلة أو إجراءات التذكرة",
-  "faqFeaturesUpgradeTrackerTitle": "ترقية المقتفي",
-  "faqFeaturesUpgradeTrackerDescription": "استخدم لقطة يدوية للحساب يقدمها المستخدم لمعرفة الترقيات والموارد والبنّائين ووقت المختبر والتقدم المتبقي",
-  "faqFeaturesNotificationsTitle": "الإشعارات الفورية",
-  "faqFeaturesNotificationsDescription": "اختر الحسابات التي تتلقى تنبيهات أحداث ClashKing المدعومة",
-  "faqFeaturesWidgetsTitle": "أدوات الحرب",
-  "faqFeaturesWidgetsDescription": "أبقِ حالة الحرب الحالية ظاهرة على شاشتك الرئيسية حيث تتوفر الأدوات",
-  "faqSectionAccountsAlertsWidgets": "الحسابات والتنبيهات والأدوات",
-  "faqLinkedAccountsTitle": "كيف تعمل الحسابات المرتبطة وعملية التحقق؟",
-  "faqLinkedAccountsAnswer": "يمكن أن يتضمن ملفك في ClashKing عدة حسابات Clash of Clans. تعرض إضافة الوسم البيانات العامة، ويثبت التحقق برمز API أن الحساب لك ويفتح ميزات خاصة به.",
-  "faqLinkedAccountsSolution1": "أدر الحسابات أو أعد ترتيبها أو أخفها أو احذفها من إدارة الحسابات.",
-  "faqLinkedAccountsSolution2": "ابحث عن رمز API في Clash of Clans ضمن الإعدادات > مزيد من الإعدادات > رمز API.",
-  "faqLinkedAccountsSolution3": "يمكنك تسجيل الدخول عبر Discord أو البريد الإلكتروني. أدر اتصالات الحساب من الإعدادات عند توفرها.",
-  "faqNotificationsTitle": "كيف تعمل الإشعارات؟",
-  "faqNotificationsAnswer": "الإشعارات اختيارية. عند تفعيلها، يسجل ClashKing هذا الجهاز ويمكنك اختيار الحسابات المرتبطة التي يستهدفها كل تنبيه.",
-  "faqNotificationsSolution1": "اسمح بالإشعارات على جهازك وفي إعدادات ClashKing.",
-  "faqNotificationsSolution2": "يمكن لكل تنبيه استهداف حسابات مختلفة. تحقق من الحسابات المحددة عند غياب تنبيه.",
-  "faqNotificationsSolution3": "تعتمد بعض التنبيهات على بيانات القبيلة أو الحرب المتتبعة، وقد يحدث تأخير أثناء تحديث البيانات الخارجية.",
-  "faqWidgetsTitle": "كيف تعمل أدوات الحرب؟",
-  "faqWidgetsAnswer": "تعرض أدوات الحرب ملخصًا سريعًا على الأجهزة المدعومة، وتستخدم حساباتك المحددة أو المرتبطة وبيانات ClashKing المخزنة والتحديث في الخلفية حين تسمح المنصة.",
-  "faqWidgetsSolution1": "افتح التطبيق بعد تغيير الحسابات أو القبائل حتى تتزامن الأداة.",
-  "faqWidgetsSolution2": "إذا بدت الأداة قديمة، فحدّث التطبيق أولاً. يحد Android وiOS من تحديثات الخلفية.",
-  "faqWidgetsSolution3": "تحتاج القبيلة إلى بيانات حرب متاحة لعرض حالة مفيدة.",
-  "@warAttacksDetailsDuration": {
-    "description": "Label for attack duration in attack details"
-  },
-  "gameItemWardenWeight": "وزن الحارس",
-  "@gameItemWardenWeight": {
-    "description": "Grand Warden follow-priority weight for a game item"
-  },
-  "gameItemWardenWeightTooltip": "يمكن لوزن الحارس تجاوز مساحة السكن، وهو يحدد مدى أولوية الحارس الكبير في اتباع مجموعة من الوحدات.",
-  "@gameItemWardenWeightTooltip": {
-    "description": "Explains how Warden weight affects Grand Warden follow priority"
-  },
-  "gameItemHealerWeight": "وزن المعالِجة",
-  "@gameItemHealerWeight": {
-    "description": "Healer targeting-priority weight for a game item"
-  },
-  "gameItemHealerWeightTooltip": "يمكن لوزن المعالِجة تجاوز مساحة السكن عندما تقرر المعالِجات الوحدات التي تمنحها الأولوية.",
-  "@gameItemHealerWeightTooltip": {
-    "description": "Explains how Healer weight affects targeting priority"
-  },
-  "gameItemWardenThresholdCopies": "{count, plural, =1{جندي واحد لحد المتابعة} other{{count} جنود لحد المتابعة}}",
-  "@gameItemWardenThresholdCopies": {
-    "description": "Number of copies needed to reach the Grand Warden follow threshold",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "gameItemWardenNoThresholdContribution": "لا يساهم في حد المتابعة",
-  "@gameItemWardenNoThresholdContribution": {
-    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
-  },
-  "@gameItemRemainingToTownHallMax": {
-    "description": "Label for remaining upgrades to the player's current Town Hall max"
-  },
-  "@gameItemRemainingToGlobalMax": {
-    "description": "Label for remaining upgrades to global max"
-  },
-  "@gameItemLevelsLeft": {
-    "description": "Number of remaining item levels",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@gameItemOverview": {
-    "description": "Section title for item description"
-  },
-  "@gameItemStats": {
-    "description": "Section title for item stats"
-  },
-  "@gameItemNextUpgrade": {
-    "description": "Section title for the next item upgrade"
-  },
-  "@gameItemUpgradePlan": {
-    "description": "Section title for remaining upgrade totals"
-  },
-  "@gameItemUpgradeDataUnavailable": {
-    "description": "Shown when static upgrade cost/time data is missing"
-  },
-  "@notifScopeSelected": {
-    "description": "Notification scope: only selected accounts"
-  },
-  "@settingsPreferences": {
-    "description": "Settings section: general preferences"
-  },
-  "@settingsNotificationsTitle": {
-    "description": "Settings tile: notifications title"
-  },
-  "@settingsNotificationsSubtitle": {
-    "description": "Settings tile: notifications subtitle"
-  },
-  "@settingsSupport": {
-    "description": "Settings section: support"
-  },
-  "@settingsAbout": {
-    "description": "Settings section: about"
-  },
-  "@settingsAccount": {
-    "description": "Settings section: account"
-  },
-  "@settingsSignedIn": {
-    "description": "Settings tile subtitle when signed in with Discord"
-  },
-  "@settingsAppearance": {
-    "description": "Theme mode selection bottom sheet title"
-  },
-  "@settingsThemeSystem": {
-    "description": "Theme mode: system default"
-  },
-  "@settingsThemeMatchDevice": {
-    "description": "Theme mode system subtitle"
-  },
-  "@settingsThemeLight": {
-    "description": "Theme mode: light"
-  },
-  "@settingsThemeDark": {
-    "description": "Theme mode: dark"
-  },
-  "@settingsThemeSelected": {
-    "description": "Trailing text shown on the currently selected theme mode tile"
-  },
-  "@notifNoAccountsLoadedYet": {
-    "description": "Message shown when no CoC accounts are loaded in notification settings"
-  },
-  "@notifNoAccountsSelected": {
-    "description": "Summary when no accounts are selected for notifications"
-  },
-  "@notifAccountsSelected": {
-    "description": "Summary of how many accounts are selected for notifications",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@searchRecent": {
-    "description": "Section heading for recent search results"
-  },
-  "@searchTabPlayers": {
-    "description": "Search mode tab: players"
-  },
-  "@searchTabClans": {
-    "description": "Search mode tab: clans"
-  },
-  "@searchClear": {
-    "description": "Tooltip for the clear icon button in search"
-  },
-  "@warStatsRefreshSuccess": {
-    "description": "SnackBar message when war stats data is refreshed successfully"
-  },
-  "@warStatsRefreshFailed": {
-    "description": "SnackBar message when war stats data refresh fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsFilterFailed": {
-    "description": "SnackBar message when filtered war stats data fails to load",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@warStatsExportFailed": {
-    "description": "SnackBar message when war stats export fails",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "@exportLabelPlayer": {
-    "description": "Export dialog info row label: player name"
-  },
-  "@exportLabelFormat": {
-    "description": "Export dialog info row label: file format"
-  },
-  "@exportLabelExcel": {
-    "description": "Export dialog info row value: Excel format"
-  },
-  "@exportLabelIncludes": {
-    "description": "Export dialog info row label: what is included"
-  },
-  "@exportLabelContent": {
-    "description": "Export dialog info row value: content description"
-  },
-  "@accountNoUserData": {
-    "description": "Message shown when authenticated user data is null"
-  },
-  "@accountsMenuTitle": {
-    "description": "Header label in the account dropdown menu in the app bar"
-  },
-  "@searchErrorPlayerLoadFailed": {
-    "description": "Error when player data fails to load from search"
-  },
-  "@searchErrorClanLoadFailed": {
-    "description": "Error when clan data fails to load from search"
-  },
-  "dashboardTodoHiddenTitle": "لا توجد حسابات معروضة هنا",
-  "dashboardTodoHiddenBody": "فعّل أحد خيارات بطاقة الصفحة الرئيسية لحساب من تبويب اللاعبين لعرضه هنا.",
-  "dashboardUpgradeTrackerNoData": "افتح متتبع الترقيات لاستيراد بيانات الترقية أو تحديثها.",
-  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {يحتاج إلى تحديث} other {يحتاجون إلى تحديث}}",
-  "@dashboardUpgradeTrackerNeedsUpdate": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {لديه مهام متبقية} other {لديهم مهام متبقية}}",
-  "@todoAccountsHaveTasksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {لديه هجمات متبقية} other {لديهم هجمات متبقية}}",
-  "@dashboardRankedAccountsHaveAttacksLeft": {
-    "placeholders": {
-      "subject": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "dashboardUpgradeTrackerTimeLeft": "متوقع",
-  "dashboardUpgradeTrackerBuilders": "البنّاؤون",
-  "dashboardUpgradeTrackerLab": "المختبر",
-  "dashboardUpgradeTrackerPets": "الحيوانات الأليفة",
-  "dashboardUpgradeTrackerWalls": "الجدران",
-  "dashboardUpgradeTrackerVillage": "القرية",
-  "dashboardRankedNoData": "افتح الدوري المصنف لرؤية ترتيب هذا الحساب.",
-  "dashboardRankedAccounts": "تتم متابعة {loaded}/{total} حسابًا",
-  "@dashboardRankedAccounts": {
-    "placeholders": {
-      "loaded": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "damageCalculatorSubtitle": "قارن مجموعة هجوم واحدة بعدة مبانٍ.",
-  "damageNoStaticDataTitle": "بيانات الضرر غير متاحة",
-  "damageNoStaticDataBody": "حدّث التطبيق بعد اكتمال تحميل بيانات اللعبة الثابتة.",
-  "damageTownHall": "قاعة المدينة",
-  "damageVerifiedAccountPrefill": "إعداد مسبق لحساب موثّق",
-  "damageOverridesStayLocal": "لا تؤدي التغييرات هنا إلى تحديث حساب اللاعب.",
-  "damageTargets": "المباني",
-  "damageAddBuilding": "إضافة مبنى",
-  "damageRemoveBuilding": "إزالة المبنى",
-  "damageNoTargetsBody": "أضف مبنى واحدًا على الأقل لمقارنة النتائج.",
-  "damageHitpoints": "{hitpoints} نقاط حياة",
-  "@damageHitpoints": {
-    "placeholders": {
-      "hitpoints": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSearchBuildings": "البحث عن مبانٍ",
-  "damageNoBuildingsFound": "لم يتم العثور على مبانٍ",
-  "damageTryAnotherSearch": "جرّب اسمًا آخر أو مستوى مختلفًا لقاعة المدينة.",
-  "damageAttackStack": "مجموعة هجوم يدوية",
-  "damageNoSourcesForTownHall": "لا تتوفر مصادر ضرر مدعومة في قاعة المدينة هذه.",
-  "damageCount": "العدد",
-  "damagePerUse": "{damage} ضرر لكل استخدام",
-  "@damagePerUse": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      }
-    }
-  },
-  "damageEarthquakePercent": "{percent}% من أقصى نقاط الحياة، وتتناقص عند التكديس",
-  "@damageEarthquakePercent": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "damageSourceLightning": "البرق",
-  "damageSourceEarthquake": "الزلزال",
-  "damageSourceGiantArrow": "السهم العملاق",
-  "damageSourceFireball": "كرة نارية",
-  "damageSourceFlameFlinger": "ضربة قاذف اللهب",
-  "damageSourceBalloonDeath": "ضرر انفجار المنطاد",
-  "damageSourceRocketBalloonDeath": "ضرر انفجار المنطاد الصاروخي",
-  "damageResults": "النتائج",
-  "damageDestroyed": "مُدمّر",
-  "damageSurvives": "يصمد",
-  "damageResultSummary": "{damage} ضرر · تبقى {remaining} نقطة حياة",
-  "@damageResultSummary": {
-    "placeholders": {
-      "damage": {
-        "type": "String"
-      },
-      "remaining": {
-        "type": "String"
-      }
-    }
-  },
-  "damageZapQuakeOptimizer": "محسّن البرق والزلزال",
-  "damageSpellCapacity": "سعة التعويذات",
-  "damageZapQuakeUnavailable": "البرق والزلزال غير متاحين في قاعة المدينة هذه.",
-  "damageZapQuakeUsesSelectedLevels": "استخدام البرق مستوى {lightningLevel} والزلزال مستوى {earthquakeLevel}.",
-  "@damageZapQuakeUsesSelectedLevels": {
-    "placeholders": {
-      "lightningLevel": {
-        "type": "int"
-      },
-      "earthquakeLevel": {
-        "type": "int"
-      }
-    }
-  },
-  "damageZapQuakeIneligible": "لا يمكن للبرق والزلزال إلحاق الضرر بهذا المخزن.",
-  "damageNoValidZapQuake": "لا توجد توليفة صالحة تناسب سعة التعويذات المحددة.",
-  "damageZapQuakeCombination": "{lightning} برق + {earthquake} زلزال · مساحة {capacity}",
-  "@damageZapQuakeCombination": {
-    "placeholders": {
-      "lightning": {
-        "type": "int"
-      },
-      "earthquake": {
-        "type": "int"
-      },
-      "capacity": {
-        "type": "int"
-      }
-    }
-  },
-  "playerOptionShowTodoPageVerifyFirst": "تحقق من هذا الحساب لإظهاره في صفحة المهام.",
-  "playerOptionShowUpgradeTrackerHomeTitle": "إظهار متتبع الترقيات في الرئيسية",
-  "playerOptionShowUpgradeTrackerHomeSubtitle": "ثبّت ملخص ترقيات هذا الحساب في الرئيسية.",
-  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "تحقق من الحساب لإظهار تقدم ترقياته في الرئيسية.",
-  "playerOptionShowRankedHomeTitle": "إظهار التصنيف في الرئيسية",
-  "playerOptionShowRankedHomeSubtitle": "ثبّت ملخص الدوري المصنف لهذا الحساب في الرئيسية.",
-  "playerOptionShowRankedHomeVerifyFirst": "تحقق من الحساب لإظهار ملخص الدوري المصنف في الرئيسية.",
-  "dashboardRankedCombinedAcrossAccounts": "الترتيب المجمّع عبر حساباتك",
-  "dashboardUpgradeTrackerCombinedAcrossAccounts": "تتبع الترقيات المجمّع عبر حساباتك",
-  "rankingsHomeVillage": "القرية الرئيسية",
-  "rankingsBuilderBase": "قاعدة البنّاء",
-  "rankingsTownHall": "قاعة المدينة",
-  "rankingsRankedLeague": "الدوري المصنف",
-  "rankingsClanCapital": "عاصمة القبيلة",
-  "rankingsDonations": "التبرعات",
-  "rankingsWarWins": "انتصارات الحرب",
-  "rankingsWinStreak": "سلسلة الانتصارات",
-  "rankingsCurrent": "الحالي",
-  "rankingsWorldwide": "عالميًا",
-  "rankingsSelectLocation": "اختر موقعًا",
-  "rankingsSearchLocations": "ابحث عن المواقع أو رموز الدول",
-  "rankingsWorldwideUnavailable": "اختر منطقة أو دولة للوحة الصدارة هذه.",
-  "rankingsLocationsLoadFailed": "تعذر تحميل قائمة المواقع الكاملة. يظل الخيار العالمي متاحًا حيث يكون مدعومًا.",
-  "rankingsSnapshotDate": "تاريخ اللقطة",
-  "rankingsSource": "المصدر",
-  "rankingsOfficialSource": "واجهة Clash API الرسمية",
-  "rankingsResults": "النتائج",
-  "rankingsTopCount": "أفضل {count}",
-  "@rankingsTopCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "rankingsNoSnapshotTitle": "لا توجد لقطة محفوظة",
-  "rankingsNoSnapshotBody": "لا توجد لقطة ترتيب محفوظة لتاريخ {date}. اختر تاريخًا آخر أو ارجع إلى الحالي.",
-  "@rankingsNoSnapshotBody": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "rankingsPlayerLoadFailed": "فشل تحميل هذا اللاعب.",
-  "rankingsClanLoadFailed": "فشل تحميل هذه القبيلة.",
-  "statsOverview": "نظرة عامة",
-  "statsArmies": "الجيوش",
-  "statsItems": "العناصر",
-  "statsWar": "الحرب",
-  "statsCwl": "سي دبليو إل",
-  "statsRanked": "المصنف",
-  "statsDateRange": "نطاق التاريخ",
-  "statsDateRangeHint": "اختر ما يصل إلى 90 يومًا",
-  "statsDateRangeTooLong": "اختر نطاقًا زمنيًا يبلغ 90 يومًا أو أقل.",
-  "statsUpdated": "بيانات جديدة",
-  "statsNoDataTitle": "لا توجد بيانات معركة حتى الآن",
-  "statsNoDataBody": "جرّب نطاقًا زمنيًا أوسع أو مرشحات أقل تقييدًا.",
-  "statsAddItemsTitle": "اختر العناصر المراد تحليلها",
-  "statsAddItemsBody": "قم بإضافة القوات أو التعويذات أو الأبطال أو الحيوانات الأليفة أو المعدات، ثم قم بتشغيل الاستعلام.",
-  "statsGlobalCounts": "التعداد العالمي",
-  "statsPerformance": "الأداء",
-  "statsSamples": "العينات",
-  "statsUsage": "الاستخدام",
-  "statsAverageStars": "متوسط النجوم",
-  "statsAverageDestruction": "تدمير متوسط",
-  "statsStarRates": "أسعار النجوم",
-  "statsThreeStarRate": "سعر ثلاث نجوم",
-  "statsDailyTrend": "الاتجاه اليومي",
-  "statsPlayers": "اللاعبين",
-  "statsClans": "العشائر",
-  "statsPlayersInWar": "اللاعبون في الحرب",
-  "statsClansInWar": "العشائر في الحرب",
-  "statsPlayersInLegends": "اللاعبون في الأساطير",
-  "statsWarsStored": "الحروب المخزنة",
-  "statsJoinLeaves": "الانضمام/الخروج من الأحداث",
-  "statsSearchArmies": "ابحث عن التراكيب الدقيقة",
-  "statsExactComposition": "التكوين الدقيق",
-  "statsArmyShareCode": "رمز مشاركة الجيش",
-  "statsMinimumSample": "الحد الأدنى للعينة",
-  "statsSortBy": "الترتيب حسب",
-  "statsIncludeItems": "تضمين العناصر",
-  "statsExcludeItems": "استبعاد العناصر",
-  "statsItemId": "معرف العنصر أو الاسم المخزن",
-  "statsItemType": "نوع العنصر",
-  "statsTroop": "القوات",
-  "statsSpell": "الإملاء",
-  "statsHero": "البطل",
-  "statsPet": "الحيوانات الأليفة",
-  "statsEquipment": "المعدات",
-  "statsOwningHero": "امتلاك البطل",
-  "statsAddItem": "إضافة عنصر",
-  "statsAnalyzeItems": "تحليل العناصر",
-  "statsCompositionShare": "حصة التكوين",
-  "statsNoLevels": "لا تحتوي سجلات الجيش على مستويات العناصر.",
-  "statsRankedCompositionOnly": "تأتي بيانات التكوين من سجلات المعارك المرتبة؛ يبقى أداء الحرب وأداء CWL منفصلين.",
-  "statsTownHall": "قاعة المدينة",
-  "statsOpponentTownHall": "قاعة المدينة المعارضة",
-  "statsEqualTownHalls": "قاعات المدينة المتساوية",
-  "statsLeagueTier": "مستوى الدوري",
-  "statsLegendLeagueOne": "الدوري الأسطوري 1",
-  "statsCwlLeague": "دوري CWL",
-  "statsLeagueBronze": "برونزي",
-  "statsLeagueSilver": "فضي",
-  "statsLeagueGold": "ذهبي",
-  "statsLeagueCrystal": "كريستال",
-  "statsLeagueMaster": "ماستر",
-  "statsLeagueChampion": "بطل",
-  "statsAllCwlLeagues": "جميع دوريات CWL",
-  "statsCwlSeasons": "مواسم CWL",
-  "statsCwlSeasonsHint": "YYYY-MM، مفصولة بفواصل",
-  "statsApplyFilters": "تطبيق المرشحات",
-  "statsRefresh": "تحديث البيانات",
-  "statsRegularWarOnly": "الحروب العادية فقط؛ يتم استبعاد الحروب الودية و CWL.",
-  "statsRankedRequired": "مطلوب قاعة المدينة ومستوى دوري واحد.",
-  "statsSeasonBreakdown": "تفاصيل الموسم",
-  "gameAssetsLoadError": "تعذر تحميل أصول اللعبة",
-  "gameAssetsEmptyTitle": "لا توجد أصول لعبة متاحة",
-  "gameAssetsEmptyBody": "لم يتضمن البيان المستضاف أي صور مدعومة.",
-  "gameAssetsOneImage": "صورة واحدة",
-  "gameAssetsImageCount": "{count} صورة",
-  "@gameAssetsImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSearchHint": "ابحث في هذه الفئة",
-  "gameAssetsAllFormats": "كل التنسيقات",
-  "gameAssetsOneResult": "نتيجة واحدة",
-  "gameAssetsResultCount": "نتائج {count}",
-  "@gameAssetsResultCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsNoResultsTitle": "لا توجد صور مطابقة",
-  "gameAssetsNoResultsBody": "جرّب بحثًا أو تنسيق ملف آخر.",
-  "gameAssetsLongPressHint": "اضغط مطولاً لنسخ الرابط المستضاف",
-  "gameAssetsCopyUrl": "نسخ الرابط",
-  "gameAssetsCopyPath": "نسخ المسار",
-  "gameAssetsUrlCopied": "تم نسخ رابط الأصل",
-  "gameAssetsPathCopied": "تم نسخ مسار الأصل",
-  "gameAssetsCopyError": "تعذر نسخ تفاصيل الأصل.",
-  "gameAssetsShare": "مشاركة",
-  "gameAssetsShareError": "تعذرت مشاركة هذا الأصل.",
-  "gameAssetsSave": "حفظ",
-  "gameAssetsSaving": "جارٍ الحفظ...",
-  "gameAssetsSaved": "تم حفظ الأصل.",
-  "gameAssetsSavedTo": "تم حفظ الأصل في {path}",
-  "@gameAssetsSavedTo": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "gameAssetsSaveError": "تعذر حفظ هذا الأصل.",
   "upgradeTrackerPlan": "الخطة",
   "upgradeTrackerUpgrades": "الترقيات",
   "upgradeTrackerCollection": "المجموعة",
@@ -3852,18 +3873,23 @@
   "rankedLeagueBattleDetailsUnavailable": "لا تتوفر سجلات معارك مفصلة لهذه الفترة.",
   "rankedLeagueHistoricalDetailsUnavailable": "لا يتوفر لهذه الفترة القديمة سوى الملخص الرسمي.",
   "rankedLeagueStarBreakdownUnavailable": "توفر واجهة API إجمالي النجوم، لا توزيعها التفصيلي لهذه الفترة.",
+  "notifAudienceSectionTitle": "جمهور الإشعارات",
   "@notifAudienceSectionTitle": {
     "description": "Section title for choosing which accounts receive notifications."
   },
+  "notifScopeAllLinkedAccounts": "كل الحسابات المرتبطة",
   "@notifScopeAllLinkedAccounts": {
     "description": "Option that sends notifications to all linked accounts."
   },
+  "notifScopeSelectedAccounts": "حسابات محددة",
   "@notifScopeSelectedAccounts": {
     "description": "Option that sends notifications only to selected linked accounts."
   },
+  "notifAudienceSheetDescription": "اختر الحسابات التي يمكنها تلقي الإشعارات على هذا الجهاز.",
   "@notifAudienceSheetDescription": {
     "description": "Description for notification audience settings."
   },
+  "notifAudienceAllSubtitle": "{count} حساب حالي. سيتم تضمين الحسابات المرتبطة لاحقًا تلقائيًا.",
   "@notifAudienceAllSubtitle": {
     "description": "Subtitle for the all linked accounts notification audience option.",
     "placeholders": {
@@ -3872,6 +3898,7 @@
       }
     }
   },
+  "notifAudienceSelectedSubtitle": "تم اختيار {count} للإشعارات.",
   "@notifAudienceSelectedSubtitle": {
     "description": "Subtitle for the selected accounts notification audience option.",
     "placeholders": {
@@ -3880,36 +3907,49 @@
       }
     }
   },
+  "notifAudienceSelectedEmpty": "اختر بدقة الحسابات التي ستتلقى الإشعارات.",
   "@notifAudienceSelectedEmpty": {
     "description": "Empty state subtitle for selected notification accounts."
   },
+  "notifAudienceAllInlineNote": "أي حساب تربطه لاحقًا سيتم تضمينه بدون تغيير هذا الإعداد.",
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
+  "notifChooseAccountsManually": "حسابات محددة",
+  "notifAudienceAcrossDevicesDescription": "اختر الحسابات التي يمكنها تلقي الإشعارات على هذا الجهاز.",
+  "notifAccountBookmarked": "محفوظ",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
+  "notifGroupLeagueBattles": "معارك الدوري",
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
+  "notifGroupWarAttacks": "هجمات الحرب",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
+  "notifGroupWarState": "حالة الحرب",
   "@notifGroupWarState": {
     "description": "Notification group label for war state changes."
   },
+  "notifGroupWarReminders": "تذكيرات الحرب",
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
+  "notifGroupEvents": "الأحداث",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
+  "notifGroupAppAnnouncements": "إعلانات التطبيق",
   "@notifGroupAppAnnouncements": {
     "description": "Notification group label for app announcements."
   },
+  "notifGroupUpgradeFinishes": "انتهاء الترقيات",
   "@notifGroupUpgradeFinishes": {
     "description": "Notification group label for completed upgrades."
   },
+  "notifGroupMonthlySupport": "الدعم الشهري",
   "@notifGroupMonthlySupport": {
     "description": "Notification group label for monthly support reminders."
   },
@@ -3949,25 +3989,56 @@
   "widgetPetBoostShort": "الحيوانات الأليفة",
   "widgetClockBoostShort": "الساعة",
   "widgetBuilderCostPerk": "ميزة تكلفة البنّاء {percent}%",
-  "@widgetBuilderCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetBuilderTimePerk": "ميزة وقت البنّاء {percent}%",
-  "@widgetBuilderTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabCostPerk": "ميزة تكلفة المختبر {percent}%",
-  "@widgetLabCostPerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "widgetLabTimePerk": "ميزة وقت المختبر {percent}%",
-  "@widgetLabTimePerk": {"placeholders":{"percent":{"type":"int"}}},
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "هدف جمع الموارد",
+  "farmGoalFormTitle": "الموارد المطلوب جمعها",
+  "farmGoalAccountTitle": "حساب",
+  "farmGoalAccountHint": "يوفر الحساب المحدد مستوى قاعة المدينة والدوري الحالي المستخدمين في التقدير.",
+  "farmGoalTargetTitle": "المبنى المراد ترقيته",
+  "farmGoalTargetBuildingLabel": "المبنى",
+  "farmGoalChooseBuilding": "اختر مبنى",
   "farmGoalChangeBuilding": "تغيير المبنى",
   "farmGoalNoTargetTitle": "لم يتم تحديد مبنى",
   "farmGoalNoTargetBody": "اختر المبنى الذي تريد ترقيته لتقدير الموارد المطلوبة.",
+  "farmGoalTargetLevelLabel": "المستوى المستهدف",
+  "farmGoalUpgradeCostLabel": "تكلفة الترقية",
+  "farmGoalCostUnavailable": "تكلفة الترقية غير متاحة لهذا المستوى.",
+  "farmGoalLootTitle": "الغنائم المقدّرة",
+  "farmGoalResourceLabel": "مورد",
+  "farmGoalAmountLabel": "الكمية المطلوب جمعها",
   "farmGoalAverageLootLabel": "الغنائم المتاحة في القرية",
   "farmGoalPerfectLootHint": "أدخل الغنائم المعروضة قبل الهجوم. ستُضاف مكافأة الدوري أدناه تلقائيًا.",
   "farmGoalLeagueEstimate": "مكافأة دوري {league}: {amount} {resource}. وهي مضمنة في تقديرات الهجمات.",
-  "farmGoalTrackerNextTitle": "التالي في خطة متتبع الترقيات",
-  "farmGoalTrackerMissingTitle": "بيانات متتبع الترقيات مطلوبة",
-  "farmGoalTrackerMissingBody": "استورد ملف JSON الخاص بترقيات هذا الحساب في متتبع الترقيات لعرض المبنى المخطط التالي وتكلفته الدقيقة هنا.",
-  "farmGoalTrackerPlanComplete": "لم يتم العثور على ترقيات مبانٍ متبقية في متتبع الترقيات. لا يزال بإمكانك اختيار مبنى يدويًا.",
-  "farmGoalOpenUpgradeTracker": "فتح متتبع الترقيات",
-  "farmGoalUseTrackerTarget": "استخدام المبنى",
   "@farmGoalLeagueEstimate": {
     "placeholders": {
       "league": {
@@ -3981,118 +4052,6 @@
       }
     }
   },
-  "gameTHLevel": "قاعة {level}",
-  "@gameTHLevel": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "gameCreatorCode": "رمز المنشئ: ClashKing",
-  "clanWarFrequencyTitle": "الحروب",
-  "notifScopeAllAccounts": "جميع الحسابات",
-  "@notifScopeAllAccounts": {
-    "description": "Notification scope: all linked accounts"
-  },
-  "notifSelectedAccounts": "الحسابات المختارة",
-  "@notifSelectedAccounts": {
-    "description": "Label / sheet title for the selected accounts picker"
-  },
-  "searchFilters": "المرشحات",
-  "@searchFilters": {
-    "description": "Tooltip for the filters icon button in search"
-  },
-  "searchCancel": "يلغي",
-  "assetFolderTroops": "القوات",
-  "assetFolderSpells": "التعاويذ",
-  "assetFolderHeroes": "الأبطال",
-  "endpointStateWins": "انتصارات",
-  "notifGroupBattles": "المعارك",
-  "notifGroupSupport": "الدعم",
-  "gameAssetsCategoryHeroes": "الأبطال",
-  "gameAssetsCategoryTroops": "القوات",
-  "gameAssetsCategoryPets": "الحيوانات الأليفة",
-  "gameAssetsCategorySpells": "التعاويذ",
-  "rankedLeagueStars": "النجوم",
-  "farmGoalUpgradeCostLabel": "تكلفة الترقية",
-  "farmGoalAccountTitle": "حساب",
-  "damageAccountPresetShort": "حساب",
-  "damageClearStack": "واضح",
-  "todoMockRaid1Left": "1 اليسار",
-  "farmGoalResourceLabel": "مورد",
-  "gameAssetsCategoryEquipment": "المعدات",
-  "notifChooseAccountsManually": "حسابات محددة",
-  "notifAudienceAcrossDevicesDescription": "اختر الحسابات التي يمكنها تلقي الإشعارات على هذا الجهاز.",
-  "damageNoTargetTitle": "لم يتم تحديد مبنى",
-  "farmGoalMissingTarget": "اختر مبنى ومستوى مستهدفًا لحساب عدد الهجمات المطلوبة.",
-  "farmGoalResultTitle": "الهجمات المطلوبة",
-  "farmGoalResultSummary": "{target} {resource} بمتوسط نحو {average} لكل هجوم مثالي.",
-  "@farmGoalResultSummary": {
-    "placeholders": {
-      "target": {
-        "type": "String"
-      },
-      "resource": {
-        "type": "String"
-      },
-      "average": {
-        "type": "String"
-      }
-    }
-  },
-  "farmGoalMissingValues": "أدخل الهدف وتقدير غنائم الهجوم المثالي لعرض سيناريوهات الهجوم.",
-  "settingsLiveActivityStart": "ابدأ نشاط الاختبار",
-  "@settingsLiveActivityStart": {
-    "description": "Settings tile: start live activity test"
-  },
-  "todoExplanationRaidsTitle": "الغارات:",
-  "settingsLiveActivityUpdate": "تحديث النتيجة",
-  "@settingsLiveActivityUpdate": {
-    "description": "Settings tile: update live activity score"
-  },
-  "settingsLiveActivityEndSubtitle": "يزيل المعاينة المحلية.",
-  "@settingsLiveActivityEndSubtitle": {
-    "description": "Settings tile: end live activity subtitle"
-  },
-  "settingsLiveActivityEnd": "إنهاء نشاط الاختبار",
-  "@settingsLiveActivityEnd": {
-    "description": "Settings tile: end live activity test"
-  },
-  "todoExplanationRaids": "وزن 5 نقاط لكل حساب (أو 6 إذا تم فتح الهجوم الأخير)، هجوم واحد = نقطة واحدة.",
-  "settingsLiveActivityTest": "اختبار النشاط المباشر",
-  "@settingsLiveActivityTest": {
-    "description": "Settings section: live activity test (debug only)"
-  },
-  "settingsLiveActivityStartSubtitle": "يعرض معاينة حرب العشائر المحلية.",
-  "@settingsLiveActivityStartSubtitle": {
-    "description": "Settings tile: start live activity subtitle"
-  },
-  "settingsLiveActivityUpdateSubtitle": "تقدم نتيجة الحرب وهمية.",
-  "@settingsLiveActivityUpdateSubtitle": {
-    "description": "Settings tile: update live activity subtitle"
-  },
-  "todoMockWarAltStatus": "نشط منذ 18 دقيقة · الحرب والغارات بحاجة إلى الاهتمام",
-  "todoRaidAttacks": "هجمات الغارة",
-  "todoMockRaid4Left": "4 اليسار",
-  "playerOptionNotificationsEnableMaster": "فعّل الإشعارات من الإعدادات أولاً.",
-  "playerOptionNotificationsVerifyFirst": "تحقق من هذا الحساب لتفعيل الإشعارات.",
-  "playerOptionNotificationsSubscriptionRequired": "يلزم اشتراك لإشعارات الإشارات المرجعية.",
-  "playerOptionNotificationsLimitReached": "لقد وصلت إلى حد إشعارات الإشارات المرجعية.",
-  "notifGroupLegendAttacks": "هجمات الأسطورة I",
-  "notifLegendAttacksDescription": "نتائج الهجمات للحسابات ذات الإشعارات المفعلة والمضافة إلى الإشارات المرجعية في الأسطورة I.",
-  "notifGroupLegendDefenses": "دفاعات الأسطورة I",
-  "notifLegendDefensesDescription": "نتائج الدفاع للحسابات ذات الإشعارات المفعلة في الأسطورة I.",
-  "farmGoalTitle": "هدف جمع الموارد",
-  "farmGoalFormTitle": "الموارد المطلوب جمعها",
-  "farmGoalAccountHint": "يوفر الحساب المحدد مستوى قاعة المدينة والدوري الحالي المستخدمين في التقدير.",
-  "farmGoalTargetTitle": "المبنى المراد ترقيته",
-  "farmGoalTargetBuildingLabel": "المبنى",
-  "farmGoalChooseBuilding": "اختر مبنى",
-  "farmGoalTargetLevelLabel": "المستوى المستهدف",
-  "farmGoalCostUnavailable": "تكلفة الترقية غير متاحة لهذا المستوى.",
-  "farmGoalLootTitle": "الغنائم المقدّرة",
-  "farmGoalAmountLabel": "الكمية المطلوب جمعها",
   "farmGoalStarBonusEstimate": "مكافأة النجوم: {amount} {resource} بعد 5 نجوم. لا تُحتسب ضمن الهجمات المطلوبة.",
   "@farmGoalStarBonusEstimate": {
     "placeholders": {
@@ -4116,7 +4075,82 @@
   "farmGoalAttackShort": "هجوم",
   "farmGoalScenarioHint": "تقدير تقريبي: تختلف الغنائم حسب المباني المدمرة. تُطبّق النسب على تقدير الهجوم المثالي.",
   "farmGoalNoLeagueLoot": "اختر حسابًا له دوري للحصول على اقتراح للغنائم.",
+  "farmGoalTrackerNextTitle": "التالي في خطة متتبع الترقيات",
+  "farmGoalTrackerMissingTitle": "بيانات متتبع الترقيات مطلوبة",
+  "farmGoalTrackerMissingBody": "استورد ملف JSON الخاص بترقيات هذا الحساب في متتبع الترقيات لعرض المبنى المخطط التالي وتكلفته الدقيقة هنا.",
+  "farmGoalTrackerPlanComplete": "لم يتم العثور على ترقيات مبانٍ متبقية في متتبع الترقيات. لا يزال بإمكانك اختيار مبنى يدويًا.",
+  "farmGoalOpenUpgradeTracker": "فتح متتبع الترقيات",
+  "farmGoalUseTrackerTarget": "استخدام المبنى",
+  "farmGoalMissingTarget": "اختر مبنى ومستوى مستهدفًا لحساب عدد الهجمات المطلوبة.",
+  "farmGoalMissingValues": "أدخل الهدف وتقدير غنائم الهجوم المثالي لعرض سيناريوهات الهجوم.",
+  "farmGoalResultTitle": "الهجمات المطلوبة",
   "farmGoalAttacks": "هجمات",
+  "farmGoalResultSummary": "{target} {resource} بمتوسط نحو {average} لكل هجوم مثالي.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "قاعة {level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "رمز المنشئ: ClashKing",
+  "todoExplanationRaidsTitle": "الغارات:",
+  "todoExplanationRaids": "وزن 5 نقاط لكل حساب (أو 6 إذا تم فتح الهجوم الأخير)، هجوم واحد = نقطة واحدة.",
+  "clanWarFrequencyTitle": "الحروب",
+  "notifScopeAllAccounts": "جميع الحسابات",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "settingsLiveActivityTest": "اختبار النشاط المباشر",
+  "@settingsLiveActivityTest": {
+    "description": "Settings section: live activity test (debug only)"
+  },
+  "settingsLiveActivityStart": "ابدأ نشاط الاختبار",
+  "@settingsLiveActivityStart": {
+    "description": "Settings tile: start live activity test"
+  },
+  "settingsLiveActivityStartSubtitle": "يعرض معاينة حرب العشائر المحلية.",
+  "@settingsLiveActivityStartSubtitle": {
+    "description": "Settings tile: start live activity subtitle"
+  },
+  "settingsLiveActivityUpdate": "تحديث النتيجة",
+  "@settingsLiveActivityUpdate": {
+    "description": "Settings tile: update live activity score"
+  },
+  "settingsLiveActivityUpdateSubtitle": "تقدم نتيجة الحرب وهمية.",
+  "@settingsLiveActivityUpdateSubtitle": {
+    "description": "Settings tile: update live activity subtitle"
+  },
+  "settingsLiveActivityEnd": "إنهاء نشاط الاختبار",
+  "@settingsLiveActivityEnd": {
+    "description": "Settings tile: end live activity test"
+  },
+  "settingsLiveActivityEndSubtitle": "يزيل المعاينة المحلية.",
+  "@settingsLiveActivityEndSubtitle": {
+    "description": "Settings tile: end live activity subtitle"
+  },
+  "notifSelectedAccounts": "الحسابات المختارة",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "المرشحات",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
   "dashboardUpgradeTrackerAccounts": "تتم متابعة {loaded}/{total} حسابًا",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
@@ -4131,12 +4165,14 @@
   "calculatorsModeDamage": "الضرر",
   "calculatorsModeFarmGoal": "هدف جمع الموارد",
   "damageCalculatorTitle": "حاسبة الضرر",
+  "damageAccountPresetShort": "حساب",
   "damageChooseAccount": "اختر حسابًا",
   "damageSwitchAccount": "تبديل الحساب",
   "damageAccountSelectorHint": "تتبع المستويات المستخدمة الحساب المحدد.",
   "damageNoAccountsAvailable": "لا يوجد حساب موثّق متاح",
   "damageTargetSectionTitle": "المبنى المراد تدميره",
   "damageChooseTarget": "اختر مبنى",
+  "damageNoTargetTitle": "لم يتم تحديد مبنى",
   "damageNoTargetBody": "اختر مبنى لمعرفة مقدار الضرر الذي يمكنه تحمله.",
   "damageTargetLevelLabel": "المستوى المستهدف",
   "damageCommonBuildings": "الأكثر اختيارًا",
@@ -4147,6 +4183,7 @@
   "damageQuickSetupGiantArrow": "السهم العملاق",
   "damageQuickSetupFlameFlinger": "قاذف اللهب",
   "damageQuickSetupCustom": "مخصص",
+  "damageClearStack": "واضح",
   "damageNoDamageSelected": "لا ضرر",
   "damageSelectedSourcesCount": "{count} مصدر",
   "@damageSelectedSourcesCount": {
@@ -4160,6 +4197,11 @@
   "damageOtherSources": "مصادر أخرى",
   "damageShowAllSources": "إضافة مصدر آخر",
   "damageShowFewerSources": "إخفاء المصادر الأخرى",
+  "searchCancel": "يلغي",
+  "todoRaidAttacks": "هجمات الغارة",
+  "todoMockRaid4Left": "4 اليسار",
+  "todoMockWarAltStatus": "نشط منذ 18 دقيقة · الحرب والغارات بحاجة إلى الاهتمام",
+  "todoMockRaid1Left": "1 اليسار",
   "gameAssetsCategoryBuildings": "المباني",
   "gameAssetsCategoryCapitalBase": "قاعدة العاصمة",
   "gameAssetsCategoryCapitalHouseParts": "أجزاء منزل العاصمة",
@@ -4167,7 +4209,19 @@
   "gameAssetsCategoryClanLabels": "شارات القبيلة",
   "gameAssetsCategoryCountryFlags": "أعلام الدول",
   "gameAssetsCategoryDecorations": "الزخارف",
+  "gameAssetsCategoryEquipment": "المعدات",
   "gameAssetsCategoryGuardians": "الحراس",
+  "gameAssetsCategoryHeroes": "الأبطال",
+  "gameAssetsCategoryPets": "الحيوانات الأليفة",
   "gameAssetsCategorySkins": "المظاهر",
-  "rankedLeagueAccountSelector": "الحساب المعروض"
+  "gameAssetsCategorySpells": "التعاويذ",
+  "gameAssetsCategoryTroops": "القوات",
+  "assetFolderTroops": "القوات",
+  "assetFolderSpells": "التعاويذ",
+  "assetFolderHeroes": "الأبطال",
+  "endpointStateWins": "انتصارات",
+  "notifGroupBattles": "المعارك",
+  "notifGroupSupport": "الدعم",
+  "rankedLeagueAccountSelector": "الحساب المعروض",
+  "rankedLeagueStars": "النجوم"
 }
