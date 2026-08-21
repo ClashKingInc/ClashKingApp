@@ -139,15 +139,50 @@ jobs:
       - name: Run all app tests
         run: flutter test
 
+      - name: Determine track and API environment
+        id: determine_track
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TRACK="${{ github.event.inputs.track }}"
+          else
+            # Determine track based on release tag
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+
+            if [[ "$RELEASE_TAG" == *"alpha"* ]]; then
+              TRACK="alpha"
+            elif [[ "$RELEASE_TAG" == *"beta"* ]]; then
+              TRACK="beta"
+            else
+              TRACK="production"
+            fi
+          fi
+
+          if [ "$TRACK" == "alpha" ]; then
+            CK_API_ENV="development"
+          elif [ "$TRACK" == "beta" ]; then
+            CK_API_ENV="staging"
+          else
+            CK_API_ENV="production"
+          fi
+
+          echo "TRACK=$TRACK" >> $GITHUB_OUTPUT
+          echo "TRACK=$TRACK" >> $GITHUB_ENV
+          echo "CK_API_ENV=$CK_API_ENV" >> $GITHUB_ENV
+          echo "Selected track: $TRACK"
+          echo "Selected API environment: $CK_API_ENV"
+          echo "Release tag: ${{ github.event.release.tag_name }}"
+
       - name: Build aab & Sign the release
         run: |
           flutter build appbundle --release \
+            --dart-define=CK_API_ENV="$CK_API_ENV" \
             --build-number=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
             --build-name=${{ steps.extract_version.outputs.VERSION_NAME }}
 
       - name: Build APK for release assets
         run: |
           flutter build apk --release \
+            --dart-define=CK_API_ENV="$CK_API_ENV" \
             --build-number=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
             --build-name=${{ steps.extract_version.outputs.VERSION_NAME }}
 
@@ -167,28 +202,6 @@ jobs:
         with:
           files: build/app/outputs/apk/release/app-release.apk
           tag_name: ${{ github.event.release.tag_name }}
-
-      - name: Determine track based on release type
-        id: determine_track
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            TRACK="${{ github.event.inputs.track }}"
-          else
-            # Determine track based on release tag
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
-
-            if [[ "$RELEASE_TAG" == *"alpha"* ]]; then
-              TRACK="alpha"
-            elif [[ "$RELEASE_TAG" == *"beta"* ]]; then
-              TRACK="beta"
-            else
-              TRACK="production"
-            fi
-          fi
-          echo "TRACK=$TRACK" >> $GITHUB_OUTPUT
-          echo "TRACK=$TRACK" >> $GITHUB_ENV
-          echo "Selected track: $TRACK"
-          echo "Release tag: ${{ github.event.release.tag_name }}"
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1

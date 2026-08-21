@@ -81,6 +81,7 @@ class PushNotificationService {
   static String get environment {
     if (_pushApiV2BaseOverride.isNotEmpty ||
         ApiConfig.environment == ApiEnvironment.local ||
+        ApiConfig.environment == ApiEnvironment.development ||
         ApiConfig.environment == ApiEnvironment.staging) {
       return 'sandbox';
     }
