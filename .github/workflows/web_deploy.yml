@@ -14,7 +14,7 @@ jobs:
       CK_API_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
       CK_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://v2-api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
       CK_PUSH_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://v2-api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
-      CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || 'https://staging-app.clashk.ing/auth/discord_callback.html' }}
+      CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || github.ref == 'refs/heads/staging' && 'https://staging-app.clashk.ing/auth/discord_callback.html' || '' }}
     outputs:
       deployment-url: ${{ steps.deploy.outputs.url }}
 
@@ -32,12 +32,20 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: >-
-          flutter build web --release
-          --dart-define=CK_API_ENV=$CK_API_ENV
-          --dart-define=CK_API_V2_BASE_URL=$CK_API_V2_BASE_URL
-          --dart-define=CK_PUSH_API_V2_BASE_URL=$CK_PUSH_API_V2_BASE_URL
-          --dart-define=CK_WEB_DISCORD_REDIRECT_URI=$CK_WEB_DISCORD_REDIRECT_URI
+        shell: bash
+        run: |
+          discord_redirect_args=()
+          if [[ -n "$CK_WEB_DISCORD_REDIRECT_URI" ]]; then
+            discord_redirect_args+=(
+              "--dart-define=CK_WEB_DISCORD_REDIRECT_URI=$CK_WEB_DISCORD_REDIRECT_URI"
+            )
+          fi
+
+          flutter build web --release \
+            --dart-define=CK_API_ENV="$CK_API_ENV" \
+            --dart-define=CK_API_V2_BASE_URL="$CK_API_V2_BASE_URL" \
+            --dart-define=CK_PUSH_API_V2_BASE_URL="$CK_PUSH_API_V2_BASE_URL" \
+            "${discord_redirect_args[@]}"
 
       - name: Publish to Cloudflare Pages
         id: deploy
