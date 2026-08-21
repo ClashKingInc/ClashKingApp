@@ -2961,7 +2961,6 @@
   "sideRankingsEmptyTitle": "Keine Ranglisten zurückgegeben",
   "sideRankingsEmptyBody": "Versuche eine andere Bestenliste oder einen anderen Standort.",
   "sideRankingsMockups": "ClashKing-Mockups",
-  "rankingsHomeVillage": "Heimatdorf",
   "rankingsBuilderBase": "Bauarbeiterbasis",
   "rankingsTownHall": "Rathaus",
   "rankingsRankedLeague": "Ranglistenliga",
@@ -3954,8 +3953,6 @@
     "description": "Notification group label for monthly support reminders."
   },
   "widgetUpgradeProgressTitle": "Verbesserungsfortschritt",
-  "widgetHomeVillage": "HEIMATDORF",
-  "widgetVillage": "DORF",
   "widgetLaboratory": "LABOR",
   "widgetPets": "HAUSTIERE",
   "widgetBuilderBase": "BAUARBEITERBASIS",
