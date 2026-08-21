@@ -10,6 +10,7 @@ import 'package:clashkingapp/features/player/presentation/player/player_page.dar
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:provider/provider.dart';
 
 class PlayerToDoBodyCard extends StatelessWidget {
@@ -370,7 +371,10 @@ class _TodoCardMetric {
       'legend_attacks' => loc.todoLegendAttacks,
       'war_attacks' => loc.todoWarAttacks,
       'cwl_attacks' => loc.todoCwlAttacks,
-      'clan_games' => loc.gameClanGames,
+      'clan_games' => loc.gameName(
+        'TID_CLAN_TAG_CLAN_GAMES',
+        loc.gameClanGames,
+      ),
       'season_pass' => loc.gameSeasonPassShort,
       _ => label,
     };

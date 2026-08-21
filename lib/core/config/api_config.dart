@@ -1,4 +1,4 @@
-enum ApiEnvironment { production, staging, local }
+enum ApiEnvironment { production, staging, development, local }
 
 class ApiConfig {
   ApiConfig._();
@@ -22,9 +22,9 @@ class ApiConfig {
   static ApiEnvironment environmentForName(String name) {
     switch (name.toLowerCase()) {
       case 'local':
-      case 'dev':
-      case 'development':
         return ApiEnvironment.local;
+      case 'development':
+        return ApiEnvironment.development;
       case 'stage':
       case 'staging':
         return ApiEnvironment.staging;
@@ -59,6 +59,7 @@ class ApiConfig {
 
     return switch (environment) {
       ApiEnvironment.local => '$apiBaseUrl/proxy/v1',
+      ApiEnvironment.development => '$apiBaseUrl/proxy/v1',
       ApiEnvironment.staging => '$apiBaseUrl/proxy/v1',
       ApiEnvironment.production => 'https://proxy.clashk.ing/v1',
     };
@@ -66,6 +67,7 @@ class ApiConfig {
 
   static String defaultApiBaseUrlFor(ApiEnvironment target) => switch (target) {
     ApiEnvironment.local => 'http://localhost:8000',
+    ApiEnvironment.development => 'https://dev-api.clashk.ing',
     ApiEnvironment.staging => 'https://dev-api.clashk.ing',
     ApiEnvironment.production => 'https://api.clashk.ing',
   };
@@ -84,12 +86,14 @@ class ApiConfig {
 
   static String _defaultApiV2UrlFor(ApiEnvironment target) => switch (target) {
     ApiEnvironment.local => '${defaultApiBaseUrlFor(target)}/v2',
+    ApiEnvironment.development => '${defaultApiBaseUrlFor(target)}/v2',
     ApiEnvironment.staging => '${defaultApiBaseUrlFor(target)}/v2',
     ApiEnvironment.production => 'https://v2-api.clashk.ing/v2',
   };
 
   static String defaultProxyUrlFor(ApiEnvironment target) => switch (target) {
     ApiEnvironment.local => '${defaultApiBaseUrlFor(target)}/proxy/v1',
+    ApiEnvironment.development => '${defaultApiBaseUrlFor(target)}/proxy/v1',
     ApiEnvironment.staging => '${defaultApiBaseUrlFor(target)}/proxy/v1',
     ApiEnvironment.production => 'https://proxy.clashk.ing/v1',
   };

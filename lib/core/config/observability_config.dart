@@ -30,7 +30,7 @@ class ObservabilityConfig {
 
   static String get environment {
     return switch (_apiEnvironment.toLowerCase()) {
-      'local' || 'dev' || 'development' => 'development',
+      'local' || 'development' => 'development',
       'stage' || 'staging' => 'staging',
       'prod' || 'production' => 'production',
       final value when value.isNotEmpty => value,

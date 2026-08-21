@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/war_cwl/models/cwl_clan.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:intl/intl.dart';
 
 class CwlScreen extends StatefulWidget {
@@ -590,7 +591,10 @@ class _Identity extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        loc.cwlClanWarLeague,
+                        loc.gameName(
+                          'TID_CLAN_TAG_CLAN_WAR_LEAGUE',
+                          loc.cwlClanWarLeague,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

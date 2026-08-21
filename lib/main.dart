@@ -46,20 +46,20 @@ void callbackDispatcher() {
       if (task == 'simplePeriodicTask') {
         if (!await WarWidgetSyncService.areWarWidgetsEnabled()) {
           DebugUtils.debugInfo('War widget background refresh skipped.');
-          return Future.value(true);
+          return true;
         }
         // Regular periodic widget update
         await const WarWidgetSyncService().updateWarWidget();
       } else if (task == 'refreshWarWidget') {
         if (!await WarWidgetSyncService.areWarWidgetsEnabled()) {
           DebugUtils.debugInfo('War widget manual refresh skipped.');
-          return Future.value(true);
+          return true;
         }
         // Manual refresh from widget button
         await WarWidgetService.handleWidgetRefresh();
       }
 
-      return Future.value(true);
+      return true;
     } catch (e, stackTrace) {
       ErrorReporter.captureException(
         e,
@@ -67,7 +67,7 @@ void callbackDispatcher() {
         operation: 'widget.background',
       );
       DebugUtils.debugError(" Background task error: $e");
-      return Future.value(false);
+      return false;
     }
   });
 }

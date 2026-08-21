@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
+import 'package:clashkingapp/core/services/game_data_service.dart';
 import 'package:clashkingapp/features/pages/presentation/stats_page.dart';
 import 'package:clashkingapp/features/stats/data/stats_repository.dart';
 import 'package:clashkingapp/features/stats/models/stats_models.dart';
@@ -319,6 +320,86 @@ void main() {
     expect(find.text('Retry'), findsOneWidget);
   });
 
+  testWidgets('CWL filters use official game league translations', (
+    tester,
+  ) async {
+    GameDataService.loadFromBundleForTesting({
+      'war_leagues': [
+        {
+          '_id': 48000007,
+          'name': 'Gold League III',
+          'TID': {'name': 'TID_LEAGUE_GOLD3'},
+        },
+      ],
+    });
+    GameDataService.loadTranslationsForTesting({
+      'TID_LEAGUE_GOLD3': {'DE': 'Gold-Liga III'},
+    }, locale: const Locale('de'));
+    addTearDown(() {
+      GameDataService.loadFromBundleForTesting({});
+      GameDataService.translationsData.clear();
+    });
+    final provider = StatsProvider(repository: _WidgetStatsRepository());
+    provider.updateCwlFilters(leagueId: 48000006);
+    provider.selectSection(StatsSection.cwl);
+
+    await tester.pumpWidget(
+      _StatsTestApp(provider: provider, locale: const Locale('de')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Gold-Liga III'), findsOneWidget);
+    expect(find.textContaining('Gold III'), findsNothing);
+  });
+
+  testWidgets('CWL stats keep ARB league fallbacks without static data', (
+    tester,
+  ) async {
+    GameDataService.loadFromBundleForTesting({});
+    final provider = StatsProvider(repository: _WidgetStatsRepository());
+    provider.selectSection(StatsSection.clans);
+
+    await tester.pumpWidget(_StatsTestApp(provider: provider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Champion I'), findsOneWidget);
+    expect(find.text('48000017'), findsNothing);
+  });
+
+  testWidgets('CWL labels refresh when static data finishes loading', (
+    tester,
+  ) async {
+    GameDataService.loadFromBundleForTesting({});
+    GameDataService.loadTranslationsForTesting({
+      'TID_LEAGUE_GOLD3': {'EN': 'Gold League III'},
+    }, locale: const Locale('en'));
+    addTearDown(() {
+      GameDataService.loadFromBundleForTesting({});
+      GameDataService.translationsData.clear();
+    });
+    final provider = StatsProvider(repository: _WidgetStatsRepository());
+    provider.updateCwlFilters(leagueId: 48000006);
+    provider.selectSection(StatsSection.cwl);
+
+    await tester.pumpWidget(_StatsTestApp(provider: provider));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Gold III'), findsOneWidget);
+
+    GameDataService.loadFromBundleForTesting({
+      'war_leagues': [
+        {
+          '_id': 48000007,
+          'name': 'Gold League III',
+          'TID': {'name': 'TID_LEAGUE_GOLD3'},
+        },
+      ],
+    });
+    await tester.pump();
+
+    expect(find.textContaining('Gold League III'), findsOneWidget);
+    expect(find.textContaining('Gold III'), findsNothing);
+  });
+
   testWidgets('Stats header remains stable with large text', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
@@ -357,16 +438,18 @@ void main() {
 }
 
 class _StatsTestApp extends StatelessWidget {
-  const _StatsTestApp({required this.provider, this.textScaler});
+  const _StatsTestApp({required this.provider, this.textScaler, this.locale});
 
   final StatsProvider provider;
   final TextScaler? textScaler;
+  final Locale? locale;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: locale,
       builder: textScaler == null
           ? null
           : (context, child) => MediaQuery(
@@ -415,6 +498,14 @@ class _WidgetStatsRepository extends StatsRepository {
 
   @override
   Future<StatsPerformanceResponse> loadWar(StatsWarQuery request) async =>
+      const StatsPerformanceResponse(
+        dateRange: StatsDateRange(start: null, end: null),
+        metrics: _widgetMetrics,
+        breakdowns: [],
+      );
+
+  @override
+  Future<StatsPerformanceResponse> loadCwl(StatsCwlQuery request) async =>
       const StatsPerformanceResponse(
         dateRange: StatsDateRange(start: null, end: null),
         metrics: _widgetMetrics,

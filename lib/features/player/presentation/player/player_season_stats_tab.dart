@@ -1,6 +1,7 @@
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
+import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -180,7 +181,7 @@ class _SeasonStatsGrid extends StatelessWidget {
       _StatItem(
         icon: Icons.water_drop_rounded,
         color: const Color(0xFF8D63D9),
-        label: loc.resourceDarkElixir,
+        label: loc.gameName('TID_DARK_ELIXIR', loc.resourceDarkElixir),
         value: _fmt(player.darkElixirBySeason[season] ?? 0),
       ),
       _StatItem(

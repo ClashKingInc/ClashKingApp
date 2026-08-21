@@ -8,6 +8,13 @@ void main() {
     expect(ApiConfig.environmentForName('StAgInG'), ApiEnvironment.staging);
   });
 
+  test('recognizes development aliases as a distinct API environment', () {
+    expect(
+      ApiConfig.environmentForName('development'),
+      ApiEnvironment.development,
+    );
+  });
+
   test('local API environment targets the local Go API server', () {
     expect(
       ApiConfig.defaultApiBaseUrlFor(ApiEnvironment.local),
@@ -37,6 +44,24 @@ void main() {
       'https://dev-api.clashk.ing/proxy/v1',
     );
   });
+
+  test(
+    'development uses the dev API origin for v1, v2, and proxy requests',
+    () {
+      expect(
+        ApiConfig.defaultApiBaseUrlFor(ApiEnvironment.development),
+        'https://dev-api.clashk.ing',
+      );
+      expect(
+        ApiConfig.defaultApiV2UrlFor(ApiEnvironment.development),
+        'https://dev-api.clashk.ing/v2',
+      );
+      expect(
+        ApiConfig.defaultProxyUrlFor(ApiEnvironment.development),
+        'https://dev-api.clashk.ing/proxy/v1',
+      );
+    },
+  );
 
   test('production API environment targets the public v2 API', () {
     expect(
