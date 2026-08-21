@@ -314,7 +314,7 @@ class PlayerService extends ChangeNotifier {
 
   final Map<String, RankedLeagueData> _rankedLeagueCache = {};
   final Map<String, Future<RankedLeagueData>> _rankedLeagueLoads = {};
-  Future<Map<int, RankedLeagueTier>>? _leagueTiersLoad;
+  Future<Map<int, RankedLeagueTier>?>? _leagueTiersLoad;
   Map<int, RankedLeagueTier>? _leagueTiersCache;
   int _rankedLeagueCacheGeneration = 0;
 
@@ -459,22 +459,22 @@ class PlayerService extends ChangeNotifier {
     final cached = _leagueTiersCache;
     if (cached != null) return cached;
     final existing = _leagueTiersLoad;
-    if (existing != null) return existing;
+    if (existing != null) return await existing ?? const {};
 
     final load = _fetchLeagueTiers();
     _leagueTiersLoad = load;
     try {
       final tiers = await load;
-      _leagueTiersCache = tiers;
-      return tiers;
+      if (tiers != null) _leagueTiersCache = tiers;
+      return tiers ?? const {};
     } finally {
       if (identical(_leagueTiersLoad, load)) _leagueTiersLoad = null;
     }
   }
 
-  Future<Map<int, RankedLeagueTier>> _fetchLeagueTiers() async {
+  Future<Map<int, RankedLeagueTier>?> _fetchLeagueTiers() async {
     final response = await _apiService.proxyGet('/leaguetiers');
-    if (response.statusCode != 200) return const {};
+    if (response.statusCode != 200) return null;
     return Map<int, RankedLeagueTier>.unmodifiable(
       _parseLeagueTiers(_decodeMap(response)),
     );
