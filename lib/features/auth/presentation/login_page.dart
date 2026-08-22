@@ -30,6 +30,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/utils/network_error_utils.dart';
+import 'package:clashkingapp/core/utils/discord_auth_helper.dart';
 
 class LoginPage extends StatefulWidget {
   final String? prefillEmail;
@@ -77,6 +78,12 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ),
           );
         }
+      });
+    }
+
+    if (DiscordAuthHelper.hasPendingWebAuthResult) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(_signInWithDiscord());
       });
     }
   }

@@ -33,22 +33,23 @@
   <script>
     if (window.location.pathname === '/auth/callback') {
       const code = new URLSearchParams(window.location.search).get('code');
-      if (window.opener && code) {
-        window.opener.postMessage(
-          { type: 'discord-auth', code },
-          window.location.origin
-        );
-        window.close();
+      if (code) {
+        if (window.opener) {
+          window.opener.postMessage(
+            { type: 'discord-auth', code },
+            window.location.origin
+          );
+          window.close();
+        } else {
+          window.sessionStorage.setItem('ck-discord-auth-code', code);
+          window.location.replace('/?discord_auth=complete');
+        }
+      } else {
+        window.location.replace('/?discord_auth=complete');
       }
     }
   </script>
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = {{flutter_service_worker_version}};
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer=""></script>
   <style id="splash-screen-style">
     html {
       height: 100%
@@ -129,19 +130,41 @@
       <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
   </picture>
   <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
+    async function loadFlutterApp() {
+      const isDevelopmentHost =
+        window.location.hostname === 'dev-app.clashk.ing' ||
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1';
+
+      if (isDevelopmentHost && 'serviceWorker' in navigator) {
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(
+            registrations.map((registration) => registration.unregister())
+          );
+
+          // An unregistered worker keeps controlling its current document until
+          // the next navigation. Reload once so debug assets all come from the
+          // active Flutter web server instead of a stale production cache.
+          if (
+            navigator.serviceWorker.controller &&
+            sessionStorage.getItem('ck-dev-sw-cleared') !== 'true'
+          ) {
+            sessionStorage.setItem('ck-dev-sw-cleared', 'true');
+            window.location.reload();
+            return;
+          }
+        } catch (error) {
+          console.warn('Could not clear the development service worker.', error);
         }
-      });
-    });
+      }
+
+      const bootstrap = document.createElement('script');
+      bootstrap.src = 'flutter_bootstrap.js';
+      document.body.appendChild(bootstrap);
+    }
+
+    loadFlutterApp();
   </script>
 
 

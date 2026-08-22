@@ -40,6 +40,19 @@ void main() {
   });
 
   group('TokenService session cache', () {
+    test(
+      'legacy browser cleanup failure does not fail token acceptance',
+      () async {
+        final tokenService = _FailingWebCleanupTokenService();
+
+        await expectLater(
+          tokenService.saveWebAccessToken('web-access-token'),
+          completes,
+        );
+        expect(tokenService.cleanupAttempts, 1);
+      },
+    );
+
     test('valid cached token never queries device identity', () async {
       final token = _buildToken(
         DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120,
@@ -177,6 +190,16 @@ class _CountingTokenService extends TokenService {
   Future<String> getDeviceId() async {
     deviceIdReads++;
     return 'test-device';
+  }
+}
+
+class _FailingWebCleanupTokenService extends TokenService {
+  int cleanupAttempts = 0;
+
+  @override
+  Future<void> clearLegacyBrowserTokens() async {
+    cleanupAttempts++;
+    throw StateError('browser storage unavailable');
   }
 }
 

@@ -180,6 +180,23 @@ class TokenService {
     _cachedAccessToken = accessToken;
     _cachedRefreshToken = null;
     _tokensLoaded = true;
+
+    // Browser sessions use the HttpOnly refresh cookie and keep the short-lived
+    // access token in memory. Clearing tokens left by older app versions is
+    // housekeeping only; storage APIs can be unavailable or fail in privacy
+    // modes, and that must not turn an otherwise successful login into an auth
+    // failure after the server has already issued the session.
+    try {
+      await clearLegacyBrowserTokens();
+    } catch (error) {
+      DebugUtils.debugWarning(
+        'Could not clear legacy browser auth tokens: $error',
+      );
+    }
+  }
+
+  @protected
+  Future<void> clearLegacyBrowserTokens() async {
     final prefs = await SharedPreferences.getInstance();
     await Future.wait([
       prefs.remove(_accessTokenKey),

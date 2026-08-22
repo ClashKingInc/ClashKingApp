@@ -14,7 +14,15 @@ class DiscordAuthHelper {
   static const String discordClientId = "824653933347209227";
   static const String callbackUrlScheme = "clashking";
 
+  static bool get hasPendingWebAuthResult =>
+      kIsWeb && hasPendingDiscordAuthResultWeb();
+
   static Future<Map<String, String>?> getDiscordAuthCode() async {
+    if (kIsWeb) {
+      final pendingResult = consumeDiscordAuthResultWeb();
+      if (pendingResult != null) return pendingResult;
+    }
+
     final codeVerifier = _generateCodeVerifier();
     final codeChallenge = _generateCodeChallenge(codeVerifier);
     final redirectUri = getRedirectUri();
@@ -34,10 +42,8 @@ class DiscordAuthHelper {
 
     try {
       if (kIsWeb) {
-        final code = await getDiscordAuthCodeWeb(url);
-        return code != null
-            ? {'code': code, 'code_verifier': codeVerifier}
-            : null;
+        await startDiscordAuthRedirectWeb(url, codeVerifier);
+        return null;
       } else {
         final result = await _launchDiscordAuth(url);
         final code = result.queryParameters['code'];
