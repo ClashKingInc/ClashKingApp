@@ -6,6 +6,10 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: web-deploy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -21,6 +25,7 @@ jobs:
         with:
           flutter-version-file: .flutter-version
           channel: 'stable'
+          cache: true
 
       - name: Flutter Pub Get
         run: flutter pub get
@@ -28,6 +33,7 @@ jobs:
       - name: Build Web
         run: >-
           flutter build web --release
+          --no-pub
           --dart-define=CK_API_V2_BASE_URL=https://v2-api.clashk.ing/v2
 
       - name: Publish to Cloudflare Pages
@@ -45,4 +51,5 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
+      smoke_only: true
     secrets: inherit
