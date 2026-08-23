@@ -4,7 +4,7 @@ import path from 'path';
 
 const AUTH_FILE = path.join(__dirname, '../playwright/.auth/user.json');
 const TEMPORARY_ACCOUNT_FILE = path.join(__dirname, '../playwright/.auth/temporary-account');
-const API_BASE = (process.env.API_BASE_URL ?? 'https://go.api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? 'https://v2-api.clashk.ing').replace(/\/+$/, '');
 
 teardown('delete temporary email account', async () => {
   teardown.skip(!fs.existsSync(TEMPORARY_ACCOUNT_FILE), 'No temporary E2E account was created');

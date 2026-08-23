@@ -5,10 +5,10 @@ import { createE2eEmail, getOtpInboxConfig, waitForOtp } from './otp-inbox';
 
 const AUTH_FILE = path.join(__dirname, '../playwright/.auth/user.json');
 const TEMPORARY_ACCOUNT_FILE = path.join(__dirname, '../playwright/.auth/temporary-account');
-// API host the app talks to. Defaults to prod (go.api.clashk.ing) so CI works
+// API host the app talks to. Defaults to the canonical production v2 host
 // against the deployed app; override with API_BASE_URL in .env for local runs
 // (e.g. http://127.0.0.1:8000).
-const API_BASE = (process.env.API_BASE_URL ?? 'https://go.api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? 'https://v2-api.clashk.ing').replace(/\/+$/, '');
 
 setup('authenticate with email', async () => {
   fs.rmSync(TEMPORARY_ACCOUNT_FILE, { force: true });

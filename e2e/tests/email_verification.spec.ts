@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
 import { createE2eEmail, getOtpInboxConfig, waitForOtp } from './otp-inbox';
 
-const API_BASE = (process.env.API_BASE_URL ?? 'https://go.api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? 'https://v2-api.clashk.ing').replace(/\/+$/, '');
 
 // Reaches EmailVerificationPage by registering a fresh throwaway account.
 // Each test creates one unique account (timestamp-based email) — expected in a test env.
