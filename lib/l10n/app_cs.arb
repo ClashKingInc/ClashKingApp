@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Podpora",
   "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu",
   "rankedLeagueStars": "Hvězdy",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Bitvy",
+  "playerActivityTab": "Aktivita",
+  "playerBattlelogFarming": "Farmaření",
+  "playerBattlelogRanked": "Hodnocené",
+  "playerBattlelogFarmingOverview": "Přehled farmaření",
+  "playerBattlelogRankedOverview": "Přehled hodnocených bitev",
+  "playerBattlelogRecentBattles": "Nedávné bitvy",
+  "playerBattlelogBattleCount": "Bitev: {count}",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Útoky",
+  "playerBattlelogAverageDestruction": "Průměrné zničení",
+  "playerBattlelogAverageStars": "Průměrné hvězdičky",
+  "playerBattlelogTripleRate": "Tříhvězdičková sazba",
+  "playerBattlelogAverageLoot": "Průměrná kořist",
+  "playerBattlelogPopularTroops": "Nejpoužívanější jednotky",
+  "playerBattlelogUsedInAttacks": "Použito v {count} útocích",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Útok",
+  "playerBattlelogDefense": "Obrana",
+  "playerBattlelogOpponent": "Proti hráči {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Nebyly nalezeny žádné bitvy",
+  "playerBattlelogNoBattlesBody": "Pro tento režim zatím nejsou k dispozici žádné bitvy.",
+  "playerBattlelogLoadError": "Bitevní záznamy se nepodařilo načíst",
+  "playerBattlelogHistoryUnavailable": "Historická data bitev jsou dočasně nedostupná, takže mohou chybět údaje o použití armády a starší bitvy.",
+  "playerBattlelogOfficialUnavailable": "Oficiální bitevní záznam je dočasně nedostupný, takže mohou chybět nejnovější bitvy.",
+  "playerActivityTrackingActive": "Aktuálně sledováno",
+  "playerActivityTrackingActiveBody": "Tento ověřený účet se pravidelně aktualizuje. Události se zaznamenávají od zahájení sledování a občas se mohou objevit mezery.",
+  "playerActivityTrackingUnknown": "Sledování nepotvrzeno",
+  "playerActivityTrackingUnknownBody": "Zobrazují se pouze změny zachycené v době, kdy ClashKing tohoto hráče sledoval, takže historie nemusí být úplná.",
+  "playerActivityNoEventsTitle": "Zatím žádná sledovaná aktivita",
+  "playerActivityNoEventsBody": "Vylepšení a změny profilu se zobrazí, jakmile je ClashKing zaznamená.",
+  "playerActivityLoadError": "Aktivitu hráče se nepodařilo načíst",
+  "playerActivityTownHallUpgraded": "Radnice vylepšena",
+  "playerActivityItemUpgraded": "{name} vylepšeno",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} posíleno",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} odemčeno",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Jméno změněno",
+  "playerActivityLevelChange": "Úroveň {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Odemčeno na úrovni {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Posíleno na úrovni {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

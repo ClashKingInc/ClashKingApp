@@ -56,6 +56,21 @@ void main() {
     expect(data.items.single.source, PlayerBattlelogSource.history);
     expect(data.officialAvailable, isTrue);
     expect(data.historyAvailable, isTrue);
+    expect(
+      api.getRequiresAuthByEndpoint['/player/%23P1/battlelog/history?limit=100&days=30'],
+      isTrue,
+    );
+  });
+
+  test('authenticates player activity history requests', () async {
+    final api = FakeApiService();
+    const endpoint = '/player/%23P1/changes?limit=100';
+    api.getStubs[endpoint] = http.Response('{"items":[]}', 200);
+
+    final data = await PlayerService(apiService: api).loadPlayerActivity('#P1');
+
+    expect(data.items, isEmpty);
+    expect(api.getRequiresAuthByEndpoint[endpoint], isTrue);
   });
 
   test('keeps official battles when historical data is unavailable', () async {

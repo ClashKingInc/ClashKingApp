@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "תמיכה",
   "rankedLeagueAccountSelector": "החשבון המוצג",
   "rankedLeagueStars": "כוכבים",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "קרבות",
+  "playerActivityTab": "פעילות",
+  "playerBattlelogFarming": "איסוף משאבים",
+  "playerBattlelogRanked": "מדורג",
+  "playerBattlelogFarmingOverview": "סקירת איסוף משאבים",
+  "playerBattlelogRankedOverview": "סקירת דירוג",
+  "playerBattlelogRecentBattles": "קרבות אחרונים",
+  "playerBattlelogBattleCount": "{count} קרבות",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "התקפות",
+  "playerBattlelogAverageDestruction": "הרס ממוצע",
+  "playerBattlelogAverageStars": "כוכבים ממוצעים",
+  "playerBattlelogTripleRate": "תעריף שלושה כוכבים",
+  "playerBattlelogAverageLoot": "שלל ממוצע",
+  "playerBattlelogPopularTroops": "החיילים הנפוצים ביותר",
+  "playerBattlelogUsedInAttacks": "שימש ב-{count} התקפות",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "התקפה",
+  "playerBattlelogDefense": "הֲגָנָה",
+  "playerBattlelogOpponent": "נגד {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "לא נמצאו קרבות",
+  "playerBattlelogNoBattlesBody": "עדיין אין קרבות זמינים למצב זה.",
+  "playerBattlelogLoadError": "לא ניתן לטעון את יומני הקרב",
+  "playerBattlelogHistoryUnavailable": "נתוני הקרבות ההיסטוריים אינם זמינים זמנית, ולכן ייתכן שחסרים שימושי צבא וקרבות ישנים יותר.",
+  "playerBattlelogOfficialUnavailable": "יומן הקרבות הרשמי אינו זמין זמנית, ולכן ייתכן שחסרים הקרבות החדשים ביותר.",
+  "playerActivityTrackingActive": "במעקב כעת",
+  "playerActivityTrackingActiveBody": "חשבון מאומת זה מתעדכן בקביעות. אירועים מתחילים לאחר תחילת המעקב ועדיין עשויים להיות פערים מדי פעם.",
+  "playerActivityTrackingUnknown": "המעקב לא אושר",
+  "playerActivityTrackingUnknownBody": "רק שינויים שנצפו בזמן ש-ClashKing עקב אחר שחקן זה מופיעים כאן, ולכן ייתכן שההיסטוריה אינה מלאה.",
+  "playerActivityNoEventsTitle": "אין עדיין פעילות במעקב",
+  "playerActivityNoEventsBody": "שדרוגים ושינויים בפרופיל יופיעו לאחר ש-ClashKing יזהה אותם.",
+  "playerActivityLoadError": "לא ניתן לטעון את פעילות השחקן",
+  "playerActivityTownHallUpgraded": "בית העירייה שודרג",
+  "playerActivityItemUpgraded": "{name} שודרג",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} חוזק",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} נפתח",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "השם השתנה",
+  "playerActivityLevelChange": "רמה {from} ← {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "נפתח ברמה {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "חוזק ברמה {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {
@@ -4388,7 +4388,7 @@
       }
     }
   },
-  "playerActivityNameChangeDetail": "{from} → {to}",
+  "playerActivityNameChangeDetail": "{from} ← {to}",
   "@playerActivityNameChangeDetail": {
     "placeholders": {
       "from": {

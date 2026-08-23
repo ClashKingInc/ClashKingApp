@@ -4283,15 +4283,15 @@
   "notifGroupBattles": "Битвы",
   "notifGroupSupport": "Поддержка",
   "rankedLeagueAccountSelector": "Отображаемый аккаунт",
-  "rankedLeagueStars": "Полученные звёзды",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "rankedLeagueStars": "Звёзды",
+  "playerBattlelogTab": "Проведённые бои",
+  "playerActivityTab": "Активность",
+  "playerBattlelogFarming": "Сбор ресурсов",
+  "playerBattlelogRanked": "Рейтинговые бои",
+  "playerBattlelogFarmingOverview": "Обзор сбора ресурсов",
+  "playerBattlelogRankedOverview": "Обзор рейтинговых боёв",
+  "playerBattlelogRecentBattles": "Последние бои",
+  "playerBattlelogBattleCount": "Боёв: {count}",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Наступления",
+  "playerBattlelogAverageDestruction": "Среднее разрушение",
+  "playerBattlelogAverageStars": "Среднее количество звёзд",
+  "playerBattlelogTripleRate": "Три звезды",
+  "playerBattlelogAverageLoot": "Средняя добыча",
+  "playerBattlelogPopularTroops": "Самые используемые войска",
+  "playerBattlelogUsedInAttacks": "Использовано в {count} атаках",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Атака",
+  "playerBattlelogDefense": "Оборона",
+  "playerBattlelogOpponent": "Против игрока {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Бои не найдены",
+  "playerBattlelogNoBattlesBody": "Для этого режима пока нет доступных боёв.",
+  "playerBattlelogLoadError": "Не удалось загрузить журнал боёв",
+  "playerBattlelogHistoryUnavailable": "Исторические данные боёв временно недоступны, поэтому сведения об использовании армии и старые бои могут отсутствовать.",
+  "playerBattlelogOfficialUnavailable": "Официальный журнал боёв временно недоступен, поэтому последние бои могут отсутствовать.",
+  "playerActivityTrackingActive": "Отслеживается сейчас",
+  "playerActivityTrackingActiveBody": "Этот подтверждённый аккаунт регулярно обновляется. События записываются после начала отслеживания, но иногда данные могут отсутствовать.",
+  "playerActivityTrackingUnknown": "Отслеживание не подтверждено",
+  "playerActivityTrackingUnknownBody": "Здесь отображаются только изменения, замеченные во время отслеживания игрока ClashKing, поэтому история может быть неполной.",
+  "playerActivityNoEventsTitle": "Отслеживаемой активности пока нет",
+  "playerActivityNoEventsBody": "Улучшения и изменения профиля появятся после того, как ClashKing их обнаружит.",
+  "playerActivityLoadError": "Не удалось загрузить активность игрока",
+  "playerActivityTownHallUpgraded": "Ратуша улучшена",
+  "playerActivityItemUpgraded": "{name} улучшено",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} усилено",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} разблокировано",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Имя изменено",
+  "playerActivityLevelChange": "Уровень {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Разблокировано на уровне {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Усилено на уровне {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

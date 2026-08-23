@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Assistenza",
   "rankedLeagueAccountSelector": "Account mostrato",
   "rankedLeagueStars": "Stelle",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Battaglie",
+  "playerActivityTab": "Attività",
+  "playerBattlelogFarming": "Raccolta risorse",
+  "playerBattlelogRanked": "Classificata",
+  "playerBattlelogFarmingOverview": "Panoramica raccolta risorse",
+  "playerBattlelogRankedOverview": "Panoramica classificata",
+  "playerBattlelogRecentBattles": "Battaglie recenti",
+  "playerBattlelogBattleCount": "{count} battaglie",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Attacchi",
+  "playerBattlelogAverageDestruction": "Distruzione media",
+  "playerBattlelogAverageStars": "Stelle medie",
+  "playerBattlelogTripleRate": "Valore a tre stelle",
+  "playerBattlelogAverageLoot": "Bottino medio",
+  "playerBattlelogPopularTroops": "Truppe più utilizzate",
+  "playerBattlelogUsedInAttacks": "Usato in {count} attacchi",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Attacco",
+  "playerBattlelogDefense": "Difesa",
+  "playerBattlelogOpponent": "Contro {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Nessuna battaglia trovata",
+  "playerBattlelogNoBattlesBody": "Non sono ancora disponibili battaglie per questa modalità.",
+  "playerBattlelogLoadError": "Impossibile caricare i registri delle battaglie",
+  "playerBattlelogHistoryUnavailable": "I dati storici delle battaglie non sono temporaneamente disponibili, quindi potrebbero mancare l'uso dell'esercito e le battaglie meno recenti.",
+  "playerBattlelogOfficialUnavailable": "Il registro ufficiale delle battaglie non è temporaneamente disponibile, quindi potrebbero mancare le battaglie più recenti.",
+  "playerActivityTrackingActive": "Monitoraggio attivo",
+  "playerActivityTrackingActiveBody": "Questo account verificato viene aggiornato regolarmente. Gli eventi iniziano dopo l'avvio del monitoraggio e possono comunque verificarsi lacune occasionali.",
+  "playerActivityTrackingUnknown": "Monitoraggio non confermato",
+  "playerActivityTrackingUnknownBody": "Qui compaiono solo le modifiche osservate mentre ClashKing monitorava questo giocatore, quindi la cronologia potrebbe essere incompleta.",
+  "playerActivityNoEventsTitle": "Nessuna attività monitorata",
+  "playerActivityNoEventsBody": "I potenziamenti e le modifiche al profilo compariranno quando ClashKing li rileverà.",
+  "playerActivityLoadError": "Impossibile caricare l'attività del giocatore",
+  "playerActivityTownHallUpgraded": "Municipio migliorato",
+  "playerActivityItemUpgraded": "{name} migliorato",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} potenziato",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} sbloccato",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Nome modificato",
+  "playerActivityLevelChange": "Livello {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Sbloccato al livello {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Potenziato al livello {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

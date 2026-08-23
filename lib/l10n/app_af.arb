@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Ondersteuning",
   "rankedLeagueAccountSelector": "Getoonde rekening",
   "rankedLeagueStars": "Sterre",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Gevegte",
+  "playerActivityTab": "Aktiwiteit",
+  "playerBattlelogFarming": "Boerdery",
+  "playerBattlelogRanked": "Gerangskik",
+  "playerBattlelogFarmingOverview": "Boerdery-oorsig",
+  "playerBattlelogRankedOverview": "Gerangskikte oorsig",
+  "playerBattlelogRecentBattles": "Onlangse gevegte",
+  "playerBattlelogBattleCount": "{count} gevegte",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Aanvalle",
+  "playerBattlelogAverageDestruction": "Gemiddelde vernietiging",
+  "playerBattlelogAverageStars": "Gemiddelde sterre",
+  "playerBattlelogTripleRate": "Driester-koers",
+  "playerBattlelogAverageLoot": "Gemiddelde buit",
+  "playerBattlelogPopularTroops": "Mees gebruikte troepe",
+  "playerBattlelogUsedInAttacks": "Gebruik in {count} aanvalle",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Aanval",
+  "playerBattlelogDefense": "Verdediging",
+  "playerBattlelogOpponent": "Teen {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Geen gevegte gevind nie",
+  "playerBattlelogNoBattlesBody": "Geen gevegte is nog vir hierdie modus beskikbaar nie.",
+  "playerBattlelogLoadError": "Geveglogboeke kon nie gelaai word nie",
+  "playerBattlelogHistoryUnavailable": "Historiese gevegdata is tydelik onbeskikbaar, daarom kan leërgebruik en ouer gevegte ontbreek.",
+  "playerBattlelogOfficialUnavailable": "Die amptelike geveglogboek is tydelik onbeskikbaar, daarom kan die nuutste gevegte ontbreek.",
+  "playerActivityTrackingActive": "Word tans nagespoor",
+  "playerActivityTrackingActiveBody": "Hierdie geverifieerde rekening word gereeld verfris. Gebeurtenisse begin nadat nasporing begin het en daar kan steeds soms gapings wees.",
+  "playerActivityTrackingUnknown": "Nasporing nie bevestig nie",
+  "playerActivityTrackingUnknownBody": "Slegs veranderings wat waargeneem is terwyl ClashKing hierdie speler nagespoor het, verskyn hier, dus kan hierdie geskiedenis onvolledig wees.",
+  "playerActivityNoEventsTitle": "Nog geen nagespoorde aktiwiteit nie",
+  "playerActivityNoEventsBody": "Opgraderings en profielveranderings sal verskyn nadat ClashKing dit waargeneem het.",
+  "playerActivityLoadError": "Speleraktiwiteit kon nie gelaai word nie",
+  "playerActivityTownHallUpgraded": "Stadsaal opgegradeer",
+  "playerActivityItemUpgraded": "{name} opgegradeer",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} versterk",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} ontsluit",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Naam verander",
+  "playerActivityLevelChange": "Vlak {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Ontsluit op vlak {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Versterk op vlak {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

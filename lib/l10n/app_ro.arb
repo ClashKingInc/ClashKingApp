@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Suport",
   "rankedLeagueAccountSelector": "Cont afișat",
   "rankedLeagueStars": "Stele",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Bătălii",
+  "playerActivityTab": "Activitate",
+  "playerBattlelogFarming": "Colectare de resurse",
+  "playerBattlelogRanked": "Clasat",
+  "playerBattlelogFarmingOverview": "Prezentarea colectării de resurse",
+  "playerBattlelogRankedOverview": "Prezentarea luptelor clasate",
+  "playerBattlelogRecentBattles": "Lupte recente",
+  "playerBattlelogBattleCount": "{count} lupte",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Atacuri",
+  "playerBattlelogAverageDestruction": "Distrugere medie",
+  "playerBattlelogAverageStars": "Stele medii",
+  "playerBattlelogTripleRate": "Rata de trei stele",
+  "playerBattlelogAverageLoot": "Pradă medie",
+  "playerBattlelogPopularTroops": "Cele mai folosite trupe",
+  "playerBattlelogUsedInAttacks": "Folosit în {count} atacuri",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Atac",
+  "playerBattlelogDefense": "Apărare",
+  "playerBattlelogOpponent": "Împotriva lui {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Nu s-au găsit lupte",
+  "playerBattlelogNoBattlesBody": "Nu există încă lupte disponibile pentru acest mod.",
+  "playerBattlelogLoadError": "Jurnalele de luptă nu au putut fi încărcate",
+  "playerBattlelogHistoryUnavailable": "Datele istorice ale luptelor sunt temporar indisponibile, astfel că pot lipsi utilizarea armatei și luptele mai vechi.",
+  "playerBattlelogOfficialUnavailable": "Jurnalul oficial de luptă este temporar indisponibil, astfel că pot lipsi cele mai recente lupte.",
+  "playerActivityTrackingActive": "Urmărit în prezent",
+  "playerActivityTrackingActiveBody": "Acest cont verificat este actualizat periodic. Evenimentele încep după pornirea urmăririi și pot apărea în continuare goluri ocazionale.",
+  "playerActivityTrackingUnknown": "Urmărire neconfirmată",
+  "playerActivityTrackingUnknownBody": "Aici apar doar schimbările observate în timp ce ClashKing urmărea acest jucător, astfel că istoricul poate fi incomplet.",
+  "playerActivityNoEventsTitle": "Nicio activitate urmărită încă",
+  "playerActivityNoEventsBody": "Îmbunătățirile și schimbările de profil vor apărea după ce ClashKing le observă.",
+  "playerActivityLoadError": "Activitatea jucătorului nu a putut fi încărcată",
+  "playerActivityTownHallUpgraded": "Primăria a fost îmbunătățită",
+  "playerActivityItemUpgraded": "{name} a fost îmbunătățit",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} a fost amplificat",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} a fost deblocat",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Numele a fost schimbat",
+  "playerActivityLevelChange": "Nivel {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Deblocat la nivelul {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Amplificat la nivelul {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

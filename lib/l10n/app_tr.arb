@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Destek",
   "rankedLeagueAccountSelector": "Gösterilen hesap",
   "rankedLeagueStars": "Yıldızlar",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Savaşlar",
+  "playerActivityTab": "Aktivite",
+  "playerBattlelogFarming": "Kaynak toplama",
+  "playerBattlelogRanked": "Dereceli",
+  "playerBattlelogFarmingOverview": "Kaynak toplama özeti",
+  "playerBattlelogRankedOverview": "Dereceli savaş özeti",
+  "playerBattlelogRecentBattles": "Son savaşlar",
+  "playerBattlelogBattleCount": "{count} savaş",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Saldırılar",
+  "playerBattlelogAverageDestruction": "Ortalama yıkım",
+  "playerBattlelogAverageStars": "Ortalama yıldızlar",
+  "playerBattlelogTripleRate": "Üç yıldız oranı",
+  "playerBattlelogAverageLoot": "Ortalama ganimet",
+  "playerBattlelogPopularTroops": "En çok kullanılan birlikler",
+  "playerBattlelogUsedInAttacks": "{count} saldırıda kullanıldı",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Saldırı",
+  "playerBattlelogDefense": "Savunma",
+  "playerBattlelogOpponent": "Rakip: {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Savaş bulunamadı",
+  "playerBattlelogNoBattlesBody": "Bu mod için henüz savaş yok.",
+  "playerBattlelogLoadError": "Savaş kayıtları yüklenemedi",
+  "playerBattlelogHistoryUnavailable": "Geçmiş savaş verileri geçici olarak kullanılamıyor; bu nedenle ordu kullanımı ve eski savaşlar eksik olabilir.",
+  "playerBattlelogOfficialUnavailable": "Resmî savaş kaydı geçici olarak kullanılamıyor; bu nedenle en yeni savaşlar eksik olabilir.",
+  "playerActivityTrackingActive": "Şu anda takip ediliyor",
+  "playerActivityTrackingActiveBody": "Bu doğrulanmış hesap düzenli olarak yenilenir. Olaylar takip başladıktan sonra kaydedilir ve ara sıra boşluklar oluşabilir.",
+  "playerActivityTrackingUnknown": "Takip doğrulanmadı",
+  "playerActivityTrackingUnknownBody": "Burada yalnızca ClashKing bu oyuncuyu takip ederken gözlemlenen değişiklikler görünür, bu nedenle geçmiş eksik olabilir.",
+  "playerActivityNoEventsTitle": "Henüz takip edilen etkinlik yok",
+  "playerActivityNoEventsBody": "Yükseltmeler ve profil değişiklikleri ClashKing tarafından gözlemlendikten sonra görünür.",
+  "playerActivityLoadError": "Oyuncu etkinliği yüklenemedi",
+  "playerActivityTownHallUpgraded": "Belediye Binası yükseltildi",
+  "playerActivityItemUpgraded": "{name} yükseltildi",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} güçlendirildi",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} açıldı",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Ad değiştirildi",
+  "playerActivityLevelChange": "Seviye {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "{level}. seviyede açıldı",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "{level}. seviyede güçlendirildi",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

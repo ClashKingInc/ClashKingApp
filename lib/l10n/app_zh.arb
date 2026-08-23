@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "支持",
   "rankedLeagueAccountSelector": "显示账号",
   "rankedLeagueStars": "星数",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "战斗",
+  "playerActivityTab": "活跃度",
+  "playerBattlelogFarming": "资源收集",
+  "playerBattlelogRanked": "排位战",
+  "playerBattlelogFarmingOverview": "资源收集概览",
+  "playerBattlelogRankedOverview": "排位赛概览",
+  "playerBattlelogRecentBattles": "近期对战",
+  "playerBattlelogBattleCount": "{count} 场对战",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "进攻记录",
+  "playerBattlelogAverageDestruction": "平均破坏力",
+  "playerBattlelogAverageStars": "平均星星数",
+  "playerBattlelogTripleRate": "三星级",
+  "playerBattlelogAverageLoot": "平均战利品",
+  "playerBattlelogPopularTroops": "最常用的兵种",
+  "playerBattlelogUsedInAttacks": "在 {count} 次进攻中使用",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "进攻",
+  "playerBattlelogDefense": "防御",
+  "playerBattlelogOpponent": "对阵 {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "未找到对战",
+  "playerBattlelogNoBattlesBody": "此模式暂时没有可用的对战。",
+  "playerBattlelogLoadError": "无法加载对战记录",
+  "playerBattlelogHistoryUnavailable": "历史对战数据暂时不可用，因此可能缺少军队使用情况和较早的对战。",
+  "playerBattlelogOfficialUnavailable": "官方对战记录暂时不可用，因此可能缺少最新对战。",
+  "playerActivityTrackingActive": "当前正在追踪",
+  "playerActivityTrackingActiveBody": "此已验证账号会定期刷新。事件从开始追踪后记录，偶尔仍可能出现数据缺失。",
+  "playerActivityTrackingUnknown": "未确认追踪状态",
+  "playerActivityTrackingUnknownBody": "这里只显示 ClashKing 追踪该玩家期间观察到的变化，因此历史记录可能不完整。",
+  "playerActivityNoEventsTitle": "暂无追踪活动",
+  "playerActivityNoEventsBody": "ClashKing 观察到升级和个人资料变化后，它们会显示在这里。",
+  "playerActivityLoadError": "无法加载玩家活动",
+  "playerActivityTownHallUpgraded": "大本营已升级",
+  "playerActivityItemUpgraded": "{name} 已升级",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} 已强化",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} 已解锁",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "名称已更改",
+  "playerActivityLevelChange": "等级 {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "在等级 {level} 解锁",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "在等级 {level} 强化",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

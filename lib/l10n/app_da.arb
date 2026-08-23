@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Hjælp",
   "rankedLeagueAccountSelector": "Vist konto",
   "rankedLeagueStars": "Stjerner",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Kampe",
+  "playerActivityTab": "Aktivitet",
+  "playerBattlelogFarming": "Ressourcejagt",
+  "playerBattlelogRanked": "Rangeret",
+  "playerBattlelogFarmingOverview": "Oversigt over ressourcejagt",
+  "playerBattlelogRankedOverview": "Oversigt over rangkampe",
+  "playerBattlelogRecentBattles": "Nylige slag",
+  "playerBattlelogBattleCount": "{count} Slag",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Angreb",
+  "playerBattlelogAverageDestruction": "Gennemsnitlig ødelæggelse",
+  "playerBattlelogAverageStars": "Gennemsnitlige stjerner",
+  "playerBattlelogTripleRate": "Trestjernet pris",
+  "playerBattlelogAverageLoot": "Gennemsnitligt bytte",
+  "playerBattlelogPopularTroops": "Mest brugte tropper",
+  "playerBattlelogUsedInAttacks": "Brugt i {count} angreb",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Angreb",
+  "playerBattlelogDefense": "Forsvar",
+  "playerBattlelogOpponent": "Mod {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Ingen kampe fundet",
+  "playerBattlelogNoBattlesBody": "Der er endnu ingen kampe tilgængelige for denne tilstand.",
+  "playerBattlelogLoadError": "Kampjournalerne kunne ikke indlæses",
+  "playerBattlelogHistoryUnavailable": "Historiske kampdata er midlertidigt utilgængelige, så hærbrug og ældre kampe kan mangle.",
+  "playerBattlelogOfficialUnavailable": "Den officielle kampjournal er midlertidigt utilgængelig, så de nyeste kampe kan mangle.",
+  "playerActivityTrackingActive": "Sporing er aktiv",
+  "playerActivityTrackingActiveBody": "Denne bekræftede konto opdateres regelmæssigt. Hændelser registreres fra det tidspunkt, sporingen startede, og der kan stadig forekomme enkelte huller.",
+  "playerActivityTrackingUnknown": "Sporing ikke bekræftet",
+  "playerActivityTrackingUnknownBody": "Kun ændringer, som blev observeret, mens ClashKing sporede denne spiller, vises her, så historikken kan være ufuldstændig.",
+  "playerActivityNoEventsTitle": "Ingen sporet aktivitet endnu",
+  "playerActivityNoEventsBody": "Opgraderinger og profilændringer vises, når ClashKing observerer dem.",
+  "playerActivityLoadError": "Spilleraktiviteten kunne ikke indlæses",
+  "playerActivityTownHallUpgraded": "Rådhus opgraderet",
+  "playerActivityItemUpgraded": "{name} opgraderet",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} forstærket",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} låst op",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Navn ændret",
+  "playerActivityLevelChange": "Niveau {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Låst op på niveau {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Forstærket på niveau {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

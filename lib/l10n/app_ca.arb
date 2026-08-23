@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Suport",
   "rankedLeagueAccountSelector": "Compte mostrat",
   "rankedLeagueStars": "Estrelles",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Batalles",
+  "playerActivityTab": "Activitat",
+  "playerBattlelogFarming": "Recol·lecció",
+  "playerBattlelogRanked": "Classificació",
+  "playerBattlelogFarmingOverview": "Resum de recol·lecció",
+  "playerBattlelogRankedOverview": "Resum de classificatòries",
+  "playerBattlelogRecentBattles": "Batalles recents",
+  "playerBattlelogBattleCount": "{count} Batalles",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Atacs",
+  "playerBattlelogAverageDestruction": "Destrucció mitjana",
+  "playerBattlelogAverageStars": "Estrelles mitjanes",
+  "playerBattlelogTripleRate": "Tarifa de tres estrelles",
+  "playerBattlelogAverageLoot": "Botí mitjà",
+  "playerBattlelogPopularTroops": "Tropes més utilitzades",
+  "playerBattlelogUsedInAttacks": "Utilitzat en {count} atacs",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Atac",
+  "playerBattlelogDefense": "Defensa",
+  "playerBattlelogOpponent": "Contra {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "No s'ha trobat cap batalla",
+  "playerBattlelogNoBattlesBody": "Encara no hi ha batalles disponibles per a aquest mode.",
+  "playerBattlelogLoadError": "No s'han pogut carregar els registres de batalla",
+  "playerBattlelogHistoryUnavailable": "Les dades històriques de batalles no estan disponibles temporalment; pot ser que faltin l'ús de l'exèrcit i batalles antigues.",
+  "playerBattlelogOfficialUnavailable": "El registre oficial de batalles no està disponible temporalment; pot ser que faltin les batalles més recents.",
+  "playerActivityTrackingActive": "Seguiment actiu",
+  "playerActivityTrackingActiveBody": "Aquest compte verificat s'actualitza regularment. Els esdeveniments comencen després de l'inici del seguiment i encara hi pot haver buits ocasionals.",
+  "playerActivityTrackingUnknown": "Seguiment no confirmat",
+  "playerActivityTrackingUnknownBody": "Aquí només apareixen els canvis observats mentre ClashKing seguia aquest jugador, de manera que l'historial pot ser incomplet.",
+  "playerActivityNoEventsTitle": "Encara no hi ha activitat seguida",
+  "playerActivityNoEventsBody": "Les millores i els canvis de perfil apareixeran quan ClashKing els observi.",
+  "playerActivityLoadError": "No s'ha pogut carregar l'activitat del jugador",
+  "playerActivityTownHallUpgraded": "Ajuntament millorat",
+  "playerActivityItemUpgraded": "{name} millorat",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} potenciat",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} desbloquejat",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Nom canviat",
+  "playerActivityLevelChange": "Nivell {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Desbloquejat al nivell {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Potenciat al nivell {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

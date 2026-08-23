@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Támogatás",
   "rankedLeagueAccountSelector": "Rangsorolt ligás fiók",
   "rankedLeagueStars": "Csillagok",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Csaták",
+  "playerActivityTab": "Aktivitás",
+  "playerBattlelogFarming": "Nyersanyaggyűjtés",
+  "playerBattlelogRanked": "Rangsorolt",
+  "playerBattlelogFarmingOverview": "Nyersanyaggyűjtési áttekintés",
+  "playerBattlelogRankedOverview": "Rangsorolt áttekintés",
+  "playerBattlelogRecentBattles": "Legutóbbi csaták",
+  "playerBattlelogBattleCount": "{count} csata",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Támadások",
+  "playerBattlelogAverageDestruction": "Átlagos pusztítás",
+  "playerBattlelogAverageStars": "Átlagos csillagok",
+  "playerBattlelogTripleRate": "Három csillagos arány",
+  "playerBattlelogAverageLoot": "Átlagos zsákmány",
+  "playerBattlelogPopularTroops": "Leggyakrabban használt egységek",
+  "playerBattlelogUsedInAttacks": "{count} támadásban használva",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Támadás",
+  "playerBattlelogDefense": "Védelem",
+  "playerBattlelogOpponent": "{name} ellen",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Nem találhatók csaták",
+  "playerBattlelogNoBattlesBody": "Ehhez a módhoz még nem érhetők el csaták.",
+  "playerBattlelogLoadError": "A csatanaplók nem tölthetők be",
+  "playerBattlelogHistoryUnavailable": "A korábbi csaták adatai átmenetileg nem érhetők el, ezért hiányozhatnak a sereghasználati adatok és a régebbi csaták.",
+  "playerBattlelogOfficialUnavailable": "A hivatalos csatanapló átmenetileg nem érhető el, ezért hiányozhatnak a legújabb csaták.",
+  "playerActivityTrackingActive": "Jelenleg követve",
+  "playerActivityTrackingActiveBody": "Ez a hitelesített fiók rendszeresen frissül. Az események a követés kezdetétől jelennek meg, és időnként továbbra is lehetnek hiányok.",
+  "playerActivityTrackingUnknown": "A követés nincs megerősítve",
+  "playerActivityTrackingUnknownBody": "Csak azok a változások jelennek meg itt, amelyeket a ClashKing a játékos követése közben észlelt, ezért az előzmények hiányosak lehetnek.",
+  "playerActivityNoEventsTitle": "Még nincs követett tevékenység",
+  "playerActivityNoEventsBody": "A fejlesztések és profilváltozások akkor jelennek meg, amikor a ClashKing észleli őket.",
+  "playerActivityLoadError": "A játékos tevékenysége nem tölthető be",
+  "playerActivityTownHallUpgraded": "A Városháza fejlődött",
+  "playerActivityItemUpgraded": "{name} fejlődött",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} megerősítve",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} feloldva",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "A név megváltozott",
+  "playerActivityLevelChange": "{from}. szint → {to}. szint",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Feloldva a(z) {level}. szinten",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Megerősítve a(z) {level}. szinten",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

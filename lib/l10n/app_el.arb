@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Υποστήριξη",
   "rankedLeagueAccountSelector": "Εμφανιζόμενος λογαριασμός",
   "rankedLeagueStars": "Αστέρια",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Μάχες",
+  "playerActivityTab": "Δραστηριότητα",
+  "playerBattlelogFarming": "Συλλογή πόρων",
+  "playerBattlelogRanked": "Αγώνες Κατάταξης",
+  "playerBattlelogFarmingOverview": "Επισκόπηση συλλογής πόρων",
+  "playerBattlelogRankedOverview": "Επισκόπηση κατάταξης",
+  "playerBattlelogRecentBattles": "Πρόσφατες μάχες",
+  "playerBattlelogBattleCount": "{count} μάχες",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Επιθέσεις",
+  "playerBattlelogAverageDestruction": "Μέση καταστροφή",
+  "playerBattlelogAverageStars": "Μέση αστέρια",
+  "playerBattlelogTripleRate": "Τιμή τριών αστέρων",
+  "playerBattlelogAverageLoot": "Μέση λεία",
+  "playerBattlelogPopularTroops": "Πιο χρησιμοποιημένα στρατεύματα",
+  "playerBattlelogUsedInAttacks": "Χρησιμοποιήθηκε σε {count} επιθέσεις",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Επίθεση",
+  "playerBattlelogDefense": "Αμυνα",
+  "playerBattlelogOpponent": "Εναντίον του {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Δεν βρέθηκαν μάχες",
+  "playerBattlelogNoBattlesBody": "Δεν υπάρχουν ακόμη διαθέσιμες μάχες για αυτή τη λειτουργία.",
+  "playerBattlelogLoadError": "Δεν ήταν δυνατή η φόρτωση των αρχείων μάχης",
+  "playerBattlelogHistoryUnavailable": "Τα ιστορικά δεδομένα μάχης δεν είναι προσωρινά διαθέσιμα, οπότε ενδέχεται να λείπουν η χρήση στρατού και παλαιότερες μάχες.",
+  "playerBattlelogOfficialUnavailable": "Το επίσημο αρχείο μάχης δεν είναι προσωρινά διαθέσιμο, οπότε ενδέχεται να λείπουν οι πιο πρόσφατες μάχες.",
+  "playerActivityTrackingActive": "Παρακολουθείται τώρα",
+  "playerActivityTrackingActiveBody": "Αυτός ο επαληθευμένος λογαριασμός ανανεώνεται τακτικά. Τα συμβάντα ξεκινούν μετά την έναρξη της παρακολούθησης και μπορεί να υπάρχουν περιστασιακά κενά.",
+  "playerActivityTrackingUnknown": "Η παρακολούθηση δεν επιβεβαιώθηκε",
+  "playerActivityTrackingUnknownBody": "Εδώ εμφανίζονται μόνο αλλαγές που παρατηρήθηκαν όσο το ClashKing παρακολουθούσε αυτόν τον παίκτη, επομένως το ιστορικό μπορεί να είναι ελλιπές.",
+  "playerActivityNoEventsTitle": "Δεν υπάρχει ακόμη καταγεγραμμένη δραστηριότητα",
+  "playerActivityNoEventsBody": "Οι αναβαθμίσεις και οι αλλαγές προφίλ θα εμφανιστούν αφού τις εντοπίσει το ClashKing.",
+  "playerActivityLoadError": "Δεν ήταν δυνατή η φόρτωση της δραστηριότητας παίκτη",
+  "playerActivityTownHallUpgraded": "Το Δημαρχείο αναβαθμίστηκε",
+  "playerActivityItemUpgraded": "Το {name} αναβαθμίστηκε",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "Το {name} ενισχύθηκε",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "Το {name} ξεκλειδώθηκε",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Το όνομα άλλαξε",
+  "playerActivityLevelChange": "Επίπεδο {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Ξεκλειδώθηκε στο επίπεδο {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Ενισχύθηκε στο επίπεδο {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

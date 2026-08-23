@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Podrška",
   "rankedLeagueAccountSelector": "Налог за рангирану лигу",
   "rankedLeagueStars": "Zvezdice",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Bitke",
+  "playerActivityTab": "Aktivnost",
+  "playerBattlelogFarming": "Прикупљање ресурса",
+  "playerBattlelogRanked": "Рангирано",
+  "playerBattlelogFarmingOverview": "Преглед прикупљања ресурса",
+  "playerBattlelogRankedOverview": "Преглед рангираних борби",
+  "playerBattlelogRecentBattles": "Недавне битке",
+  "playerBattlelogBattleCount": "Битака: {count}",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Napadi",
+  "playerBattlelogAverageDestruction": "Просечно уништење",
+  "playerBattlelogAverageStars": "Просечне звезде",
+  "playerBattlelogTripleRate": "Оцена од три звездице",
+  "playerBattlelogAverageLoot": "Просечан плен",
+  "playerBattlelogPopularTroops": "Најчешће коришћене трупе",
+  "playerBattlelogUsedInAttacks": "Коришћено у {count} напада",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Напад",
+  "playerBattlelogDefense": "Одбрана",
+  "playerBattlelogOpponent": "Против играча {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Нема пронађених борби",
+  "playerBattlelogNoBattlesBody": "За овај режим још нема доступних борби.",
+  "playerBattlelogLoadError": "Дневници борби нису могли да се учитају",
+  "playerBattlelogHistoryUnavailable": "Историјски подаци о борбама су привремено недоступни, па могу недостајати употреба војске и старије борбе.",
+  "playerBattlelogOfficialUnavailable": "Званични дневник борби је привремено недоступан, па могу недостајати најновије борбе.",
+  "playerActivityTrackingActive": "Тренутно се прати",
+  "playerActivityTrackingActiveBody": "Овај потврђени налог се редовно освежава. Догађаји се бележе од почетка праћења, а повремене празнине су и даље могуће.",
+  "playerActivityTrackingUnknown": "Праћење није потврђено",
+  "playerActivityTrackingUnknownBody": "Овде се приказују само промене забележене док је ClashKing пратио овог играча, па историја може бити непотпуна.",
+  "playerActivityNoEventsTitle": "Још нема праћене активности",
+  "playerActivityNoEventsBody": "Надоградње и промене профила ће се појавити када их ClashKing забележи.",
+  "playerActivityLoadError": "Активност играча није могла да се учита",
+  "playerActivityTownHallUpgraded": "Градска кућа је надограђена",
+  "playerActivityItemUpgraded": "{name} је надограђен",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} је појачан",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} је откључан",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Име је промењено",
+  "playerActivityLevelChange": "Ниво {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Откључано на нивоу {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Појачано на нивоу {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

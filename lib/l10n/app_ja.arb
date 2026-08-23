@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "サポート",
   "rankedLeagueAccountSelector": "表示中のアカウント",
   "rankedLeagueStars": "星",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "バトル",
+  "playerActivityTab": "アクティビティ",
+  "playerBattlelogFarming": "資源集め",
+  "playerBattlelogRanked": "ランク戦",
+  "playerBattlelogFarmingOverview": "資源集めの概要",
+  "playerBattlelogRankedOverview": "ランク戦の概要",
+  "playerBattlelogRecentBattles": "最近の戦闘",
+  "playerBattlelogBattleCount": "{count}戦",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "攻撃",
+  "playerBattlelogAverageDestruction": "平均破壊",
+  "playerBattlelogAverageStars": "平均スター数",
+  "playerBattlelogTripleRate": "3 つ星のレート",
+  "playerBattlelogAverageLoot": "平均戦利品",
+  "playerBattlelogPopularTroops": "使用回数の多いユニット",
+  "playerBattlelogUsedInAttacks": "{count}回の攻撃で使用",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "攻撃",
+  "playerBattlelogDefense": "防衛",
+  "playerBattlelogOpponent": "対戦相手: {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "対戦が見つかりません",
+  "playerBattlelogNoBattlesBody": "このモードで利用できる対戦はまだありません。",
+  "playerBattlelogLoadError": "対戦履歴を読み込めませんでした",
+  "playerBattlelogHistoryUnavailable": "過去の対戦データは一時的に利用できないため、編成の使用状況や古い対戦が表示されない場合があります。",
+  "playerBattlelogOfficialUnavailable": "公式の対戦履歴は一時的に利用できないため、最新の対戦が表示されない場合があります。",
+  "playerActivityTrackingActive": "追跡中",
+  "playerActivityTrackingActiveBody": "この認証済みアカウントは定期的に更新されます。イベントは追跡開始後から記録され、まれにデータが欠ける場合があります。",
+  "playerActivityTrackingUnknown": "追跡を確認できません",
+  "playerActivityTrackingUnknownBody": "ClashKingがこのプレイヤーを追跡中に検出した変更のみが表示されるため、履歴が完全でない場合があります。",
+  "playerActivityNoEventsTitle": "追跡されたアクティビティはまだありません",
+  "playerActivityNoEventsBody": "ClashKingが検出したアップグレードやプロフィール変更がここに表示されます。",
+  "playerActivityLoadError": "プレイヤーのアクティビティを読み込めませんでした",
+  "playerActivityTownHallUpgraded": "タウンホールがアップグレードされました",
+  "playerActivityItemUpgraded": "{name}がアップグレードされました",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name}がブーストされました",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name}がアンロックされました",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "名前が変更されました",
+  "playerActivityLevelChange": "レベル {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "レベル{level}でアンロック",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "レベル{level}でブースト",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

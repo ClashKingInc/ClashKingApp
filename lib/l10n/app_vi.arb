@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "Ủng hộ",
   "rankedLeagueAccountSelector": "Tài khoản đang hiển thị",
   "rankedLeagueStars": "Sao",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "Trận đánh",
+  "playerActivityTab": "Hoạt động",
+  "playerBattlelogFarming": "Thu thập tài nguyên",
+  "playerBattlelogRanked": "Xếp hạng",
+  "playerBattlelogFarmingOverview": "Tổng quan thu thập tài nguyên",
+  "playerBattlelogRankedOverview": "Tổng quan xếp hạng",
+  "playerBattlelogRecentBattles": "Trận gần đây",
+  "playerBattlelogBattleCount": "{count} trận",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "Tấn công",
+  "playerBattlelogAverageDestruction": "Sức hủy diệt trung bình",
+  "playerBattlelogAverageStars": "Sao trung bình",
+  "playerBattlelogTripleRate": "Tỷ lệ ba sao",
+  "playerBattlelogAverageLoot": "Chiến lợi phẩm trung bình",
+  "playerBattlelogPopularTroops": "Đơn vị được dùng nhiều nhất",
+  "playerBattlelogUsedInAttacks": "Được dùng trong {count} lượt tấn công",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "Tấn công",
+  "playerBattlelogDefense": "Phòng thủ",
+  "playerBattlelogOpponent": "Đối đầu {name}",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "Không tìm thấy trận chiến",
+  "playerBattlelogNoBattlesBody": "Chưa có trận chiến nào cho chế độ này.",
+  "playerBattlelogLoadError": "Không thể tải nhật ký trận chiến",
+  "playerBattlelogHistoryUnavailable": "Dữ liệu trận chiến trước đây tạm thời không khả dụng, vì vậy có thể thiếu thông tin sử dụng quân đội và các trận cũ.",
+  "playerBattlelogOfficialUnavailable": "Nhật ký trận chiến chính thức tạm thời không khả dụng, vì vậy có thể thiếu các trận mới nhất.",
+  "playerActivityTrackingActive": "Đang được theo dõi",
+  "playerActivityTrackingActiveBody": "Tài khoản đã xác minh này được làm mới thường xuyên. Sự kiện bắt đầu sau khi theo dõi được bật và đôi khi vẫn có thể bị thiếu.",
+  "playerActivityTrackingUnknown": "Chưa xác nhận theo dõi",
+  "playerActivityTrackingUnknownBody": "Chỉ những thay đổi được ghi nhận khi ClashKing theo dõi người chơi này mới xuất hiện ở đây, vì vậy lịch sử có thể chưa đầy đủ.",
+  "playerActivityNoEventsTitle": "Chưa có hoạt động được theo dõi",
+  "playerActivityNoEventsBody": "Các nâng cấp và thay đổi hồ sơ sẽ xuất hiện sau khi ClashKing ghi nhận chúng.",
+  "playerActivityLoadError": "Không thể tải hoạt động của người chơi",
+  "playerActivityTownHallUpgraded": "Nhà Chính đã được nâng cấp",
+  "playerActivityItemUpgraded": "{name} đã được nâng cấp",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} đã được tăng cường",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} đã được mở khóa",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "Tên đã thay đổi",
+  "playerActivityLevelChange": "Cấp {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "Mở khóa ở cấp {level}",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "Tăng cường ở cấp {level}",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {

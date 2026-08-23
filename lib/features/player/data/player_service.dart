@@ -248,6 +248,7 @@ class PlayerService extends ChangeNotifier {
         try {
           final response = await _apiService.getResponse(
             '/player/$encodedTag/battlelog/history?limit=100&days=30',
+            requiresAuth: true,
           );
           if (response.statusCode != 200) {
             throw HttpException(
@@ -297,6 +298,7 @@ class PlayerService extends ChangeNotifier {
     final encodedTag = Uri.encodeComponent(playerTag);
     final response = await _apiService.getResponse(
       '/player/$encodedTag/changes?limit=100',
+      requiresAuth: true,
     );
     if (response.statusCode != 200) {
       throw HttpException(

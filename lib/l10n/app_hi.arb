@@ -4284,14 +4284,14 @@
   "notifGroupSupport": "सपोर्ट",
   "rankedLeagueAccountSelector": "दिखाया गया खाता",
   "rankedLeagueStars": "सितारे",
-  "playerBattlelogTab": "Battles",
-  "playerActivityTab": "Activity",
-  "playerBattlelogFarming": "Farming",
-  "playerBattlelogRanked": "Ranked",
-  "playerBattlelogFarmingOverview": "Farming overview",
-  "playerBattlelogRankedOverview": "Ranked overview",
-  "playerBattlelogRecentBattles": "Recent battles",
-  "playerBattlelogBattleCount": "{count} battles",
+  "playerBattlelogTab": "लड़ाइयाँ",
+  "playerActivityTab": "गतिविधि",
+  "playerBattlelogFarming": "संसाधन जुटाना",
+  "playerBattlelogRanked": "रैंक्ड",
+  "playerBattlelogFarmingOverview": "संसाधन जुटाने का अवलोकन",
+  "playerBattlelogRankedOverview": "रैंक मोड का अवलोकन",
+  "playerBattlelogRecentBattles": "हाल के युद्ध",
+  "playerBattlelogBattleCount": "{count} युद्ध",
   "@playerBattlelogBattleCount": {
     "placeholders": {
       "count": {
@@ -4299,13 +4299,13 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Attacks",
-  "playerBattlelogAverageDestruction": "Average destruction",
-  "playerBattlelogAverageStars": "Average stars",
-  "playerBattlelogTripleRate": "Three-star rate",
-  "playerBattlelogAverageLoot": "Average loot",
-  "playerBattlelogPopularTroops": "Most-used troops",
-  "playerBattlelogUsedInAttacks": "Used in {count} attacks",
+  "playerBattlelogAttacks": "आक्रमण",
+  "playerBattlelogAverageDestruction": "औसत विनाश",
+  "playerBattlelogAverageStars": "औसत सितारे",
+  "playerBattlelogTripleRate": "तीन सितारा दर",
+  "playerBattlelogAverageLoot": "औसत लूट",
+  "playerBattlelogPopularTroops": "सबसे अधिक उपयोग की गई सेनाएँ",
+  "playerBattlelogUsedInAttacks": "{count} हमलों में उपयोग किया गया",
   "@playerBattlelogUsedInAttacks": {
     "placeholders": {
       "count": {
@@ -4313,9 +4313,9 @@
       }
     }
   },
-  "playerBattlelogAttack": "Attack",
-  "playerBattlelogDefense": "Defense",
-  "playerBattlelogOpponent": "Against {name}",
+  "playerBattlelogAttack": "हमला",
+  "playerBattlelogDefense": "रक्षा",
+  "playerBattlelogOpponent": "{name} के विरुद्ध",
   "@playerBattlelogOpponent": {
     "placeholders": {
       "name": {
@@ -4323,20 +4323,20 @@
       }
     }
   },
-  "playerBattlelogNoBattlesTitle": "No battles found",
-  "playerBattlelogNoBattlesBody": "No battles are available for this mode yet.",
-  "playerBattlelogLoadError": "Battle logs couldn't be loaded",
-  "playerBattlelogHistoryUnavailable": "Historical battle data is temporarily unavailable, so army usage and older battles may be missing.",
-  "playerBattlelogOfficialUnavailable": "The official battle log is temporarily unavailable, so the newest battles may be missing.",
-  "playerActivityTrackingActive": "Currently tracked",
-  "playerActivityTrackingActiveBody": "This verified account is refreshed regularly. Events begin after tracking started and occasional gaps can still occur.",
-  "playerActivityTrackingUnknown": "Tracking not confirmed",
-  "playerActivityTrackingUnknownBody": "Only changes observed while ClashKing tracked this player appear here, so this history may be incomplete.",
-  "playerActivityNoEventsTitle": "No tracked activity yet",
-  "playerActivityNoEventsBody": "Upgrades and profile changes will appear after ClashKing observes them.",
-  "playerActivityLoadError": "Player activity couldn't be loaded",
-  "playerActivityTownHallUpgraded": "Town Hall upgraded",
-  "playerActivityItemUpgraded": "{name} upgraded",
+  "playerBattlelogNoBattlesTitle": "कोई लड़ाई नहीं मिली",
+  "playerBattlelogNoBattlesBody": "इस मोड के लिए अभी कोई लड़ाई उपलब्ध नहीं है।",
+  "playerBattlelogLoadError": "लड़ाई के रिकॉर्ड लोड नहीं हो सके",
+  "playerBattlelogHistoryUnavailable": "ऐतिहासिक लड़ाई का डेटा अस्थायी रूप से उपलब्ध नहीं है, इसलिए सेना का उपयोग और पुरानी लड़ाइयाँ गायब हो सकती हैं।",
+  "playerBattlelogOfficialUnavailable": "आधिकारिक लड़ाई का रिकॉर्ड अस्थायी रूप से उपलब्ध नहीं है, इसलिए नवीनतम लड़ाइयाँ गायब हो सकती हैं।",
+  "playerActivityTrackingActive": "अभी ट्रैक किया जा रहा है",
+  "playerActivityTrackingActiveBody": "यह सत्यापित खाता नियमित रूप से रीफ़्रेश होता है। ट्रैकिंग शुरू होने के बाद इवेंट दर्ज होते हैं और कभी-कभी अंतर रह सकता है।",
+  "playerActivityTrackingUnknown": "ट्रैकिंग की पुष्टि नहीं हुई",
+  "playerActivityTrackingUnknownBody": "यहाँ केवल वे बदलाव दिखते हैं जिन्हें ClashKing ने इस खिलाड़ी को ट्रैक करते समय देखा था, इसलिए यह इतिहास अधूरा हो सकता है।",
+  "playerActivityNoEventsTitle": "अभी तक कोई ट्रैक की गई गतिविधि नहीं",
+  "playerActivityNoEventsBody": "ClashKing द्वारा देखे जाने के बाद अपग्रेड और प्रोफ़ाइल बदलाव यहाँ दिखाई देंगे।",
+  "playerActivityLoadError": "खिलाड़ी की गतिविधि लोड नहीं हो सकी",
+  "playerActivityTownHallUpgraded": "टाउन हॉल अपग्रेड हुआ",
+  "playerActivityItemUpgraded": "{name} अपग्रेड हुआ",
   "@playerActivityItemUpgraded": {
     "placeholders": {
       "name": {
@@ -4344,7 +4344,7 @@
       }
     }
   },
-  "playerActivitySuperTroopBoosted": "{name} boosted",
+  "playerActivitySuperTroopBoosted": "{name} बूस्ट हुआ",
   "@playerActivitySuperTroopBoosted": {
     "placeholders": {
       "name": {
@@ -4352,7 +4352,7 @@
       }
     }
   },
-  "playerActivityItemUnlocked": "{name} unlocked",
+  "playerActivityItemUnlocked": "{name} अनलॉक हुआ",
   "@playerActivityItemUnlocked": {
     "placeholders": {
       "name": {
@@ -4360,8 +4360,8 @@
       }
     }
   },
-  "playerActivityNameChanged": "Name changed",
-  "playerActivityLevelChange": "Level {from} → {to}",
+  "playerActivityNameChanged": "नाम बदला गया",
+  "playerActivityLevelChange": "स्तर {from} → {to}",
   "@playerActivityLevelChange": {
     "placeholders": {
       "from": {
@@ -4372,7 +4372,7 @@
       }
     }
   },
-  "playerActivityUnlockedAtLevel": "Unlocked at level {level}",
+  "playerActivityUnlockedAtLevel": "स्तर {level} पर अनलॉक हुआ",
   "@playerActivityUnlockedAtLevel": {
     "placeholders": {
       "level": {
@@ -4380,7 +4380,7 @@
       }
     }
   },
-  "playerActivityBoostedAtLevel": "Boosted at level {level}",
+  "playerActivityBoostedAtLevel": "स्तर {level} पर बूस्ट हुआ",
   "@playerActivityBoostedAtLevel": {
     "placeholders": {
       "level": {
