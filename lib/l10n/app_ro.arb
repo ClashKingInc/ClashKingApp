@@ -3612,6 +3612,67 @@
       }
     }
   },
+  "upgradeTrackerTimelineRemainingDuration": "Au mai rămas {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Acum · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Nivel {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Nivel {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, nivelul {level}, de la {start} până la {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerHeaderComplete": "Finalizat",
   "upgradeTrackerHeaderLevelsLeft": "Niveluri rămase",
   "upgradeTrackerHeaderActive": "Activ",
