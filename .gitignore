@@ -141,3 +141,6 @@ CLAUDE.md
 # Codex
 AGENTS.md
 .agents/*
+
+# Cloudflare local state
+.wrangler/

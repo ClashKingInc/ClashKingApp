@@ -12,7 +12,7 @@
 | ✅ | Implémenté |
 | 🔲 | À faire |
 | ⚠️ | Partiel / conditionnel |
-| 🔑 | Nécessite `TEST_EMAIL` / `TEST_PASSWORD` |
+| 🔑 | Nécessite une session authentifiée (compte fixe ou créé à la volée) |
 | 🎮 | Nécessite un compte CoC lié (voir §Prérequis) |
 | 📧 | Nécessite accès à la boîte mail (difficile en CI) |
 
@@ -26,6 +26,13 @@
 | `E2E_TEST_PASSWORD` | Mot de passe du compte |
 | `E2E_TEST_COC_TAG` | Tag joueur CoC pré-lié au compte (ex: `#2PP`) |
 | `E2E_TEST_COC_TOKEN` | Token API du joueur pour vérification |
+| `E2E_OTP_API_TOKEN` | Bearer token du Worker qui expose les OTP à Playwright |
+
+Variables Actions : `E2E_OTP_API_URL` et `E2E_EMAIL_DOMAIN`.
+
+Si les identifiants fixes sont absents ou invalides, `auth.setup.ts` crée un compte
+`e2e+<unique-id>@e2e-mail.clashk.ing`, le vérifie avec le code de développement ou
+l'email Cloudflare, puis `auth.teardown.ts` supprime ce compte via `DELETE /v2/auth/me`.
 
 > **Note CoC** : Les tests §8–§15 nécessitent un compte de test avec un joueur CoC
 > déjà lié dans MongoDB. Le plus simple est de créer un compte dédié via l'app,
@@ -134,7 +141,7 @@
 | 6.4 | Bouton "Back to Login" visible | ✅ |
 | 6.5 | Email destinataire affiché sur la page | ✅ |
 | 6.6 | Code erroné → message d'erreur | ✅ |
-| 6.7 | Code valide → création compte + navigation vers app | 🔲 📧 |
+| 6.7 | Code valide → création compte + navigation vers app | ✅ 📧 |
 | 6.8 | "Back to Login" → retour au login | ✅ |
 
 ---

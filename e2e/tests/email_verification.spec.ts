@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
+import { createE2eEmail, getOtpInboxConfig, waitForOtp } from './otp-inbox';
 
 // Reaches EmailVerificationPage by registering a fresh throwaway account.
 // Each test creates one unique account (timestamp-based email) — expected in a test env.
-// Tests cover UI behaviour only; a valid verification code is not available in CI.
+// UI-only cases use example.com; the Cloudflare-backed case verifies a real code in CI.
 
-async function registerAndNavigateToVerification(page: any): Promise<string | null> {
+async function registerAndNavigateToVerification(page: any, emailOverride?: string): Promise<string | null> {
   const ts = Date.now();
   const username = `e2etest${ts}`;
-  const email = `e2etest+${ts}@example.com`;
+  const email = emailOverride ?? `e2etest+${ts}@example.com`;
   const password = 'TestPassword1!';
 
   try {
@@ -75,6 +76,29 @@ test.describe('Email verification page', () => {
   // Run sequentially: each test registers a new account + hits the production API.
   // Parallel execution saturates the API and causes 90 s timeouts.
   test.describe.configure({ mode: 'serial' });
+
+  test('a real emailed code verifies a new account', async ({ page }) => {
+    test.skip(!getOtpInboxConfig(), 'Cloudflare OTP inbox is not configured');
+    test.setTimeout(120_000);
+
+    const email = createE2eEmail('verification');
+    const requestedAt = Date.now();
+    const reachedEmail = await registerAndNavigateToVerification(page, email);
+    expect(reachedEmail).toBe(email);
+
+    const code = await waitForOtp(email, { notBefore: requestedAt });
+    const digitInputs = page.getByRole('textbox');
+    await digitInputs.first().click({ force: true, timeout: 5_000 });
+    for (const digit of code) {
+      await page.keyboard.press(digit);
+      await page.waitForTimeout(100);
+    }
+
+    await page.waitForFunction(
+      () => localStorage.getItem('flutter.access_token') !== null,
+      { timeout: 20_000, polling: 500 },
+    );
+  });
 
   test('page displays 6 single-digit input boxes for the verification code', async ({ page }) => {
     test.setTimeout(240_000); // registration + API call can take > 180 s on a slow local setup
