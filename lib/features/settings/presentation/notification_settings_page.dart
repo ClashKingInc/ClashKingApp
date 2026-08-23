@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key, this.preferencesService});
@@ -199,7 +198,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     children: [
                       _categoryRow(
                         NotificationCategory.legendAttacks,
-                        LucideIcons.swords,
+                        Icons.sports_martial_arts_rounded,
                         AppLocalizations.of(context)!.notifGroupLegendAttacks,
                         AppLocalizations.of(
                           context,
@@ -207,7 +206,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                       _categoryRow(
                         NotificationCategory.legendDefenses,
-                        LucideIcons.shield,
+                        Icons.shield_outlined,
                         AppLocalizations.of(context)!.notifGroupLegendDefenses,
                         AppLocalizations.of(
                           context,
@@ -215,7 +214,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                       _categoryRow(
                         NotificationCategory.warAttacks,
-                        LucideIcons.swords,
+                        Icons.sports_martial_arts_rounded,
                         AppLocalizations.of(context)!.notifGroupWarAttacks,
                         AppLocalizations.of(
                           context,
@@ -223,7 +222,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                       _categoryRow(
                         NotificationCategory.warState,
-                        LucideIcons.flag,
+                        Icons.flag_outlined,
                         AppLocalizations.of(context)!.notifGroupWarState,
                         AppLocalizations.of(context)!.notifWarAlertsDescription,
                       ),
@@ -238,13 +237,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                       _categoryRow(
                         NotificationCategory.events,
-                        LucideIcons.calendarDays,
+                        Icons.calendar_month_outlined,
                         AppLocalizations.of(context)!.notifGroupEvents,
                         AppLocalizations.of(context)!.notifEventsDescription,
                       ),
                       _categoryRow(
                         NotificationCategory.announcements,
-                        LucideIcons.megaphone,
+                        Icons.campaign_outlined,
                         AppLocalizations.of(
                           context,
                         )!.notifGroupAppAnnouncements,
@@ -254,7 +253,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                       _categoryRow(
                         NotificationCategory.monthlySupport,
-                        LucideIcons.heartHandshake,
+                        Icons.volunteer_activism_outlined,
                         AppLocalizations.of(context)!.notifGroupMonthlySupport,
                         AppLocalizations.of(
                           context,
@@ -423,7 +422,7 @@ class _PushSetupCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            ready ? LucideIcons.badgeCheck : LucideIcons.bell,
+            ready ? Icons.verified_rounded : Icons.notifications_outlined,
             color: ready ? Colors.green : colorScheme.primary,
           ),
           const SizedBox(width: 12),
@@ -549,7 +548,7 @@ class _WarReminderRowState extends State<_WarReminderRow> {
               children: [
                 const SizedBox(
                   width: 30,
-                  child: Icon(LucideIcons.alarmClock, size: 22),
+                  child: Icon(Icons.alarm_rounded, size: 22),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -575,7 +574,9 @@ class _WarReminderRowState extends State<_WarReminderRow> {
                   ),
                 ),
                 Icon(
-                  _expanded ? LucideIcons.chevronUp : LucideIcons.chevronDown,
+                  _expanded
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded,
                 ),
                 const SizedBox(width: 6),
                 Switch.adaptive(
@@ -648,7 +649,7 @@ class _ReminderTimingPicker extends StatelessWidget {
                         onChanged({...selectedTimings, selected});
                       }
                     },
-              icon: const Icon(LucideIcons.plus),
+              icon: const Icon(Icons.add_rounded),
               label: Text(
                 selectedTimings.length >= 3
                     ? 'Maximum reminders added'
@@ -763,7 +764,7 @@ class _DebugNotificationSection extends StatelessWidget {
             onPressed: sending ? null : onSend,
             icon: sending
                 ? const SkeletonActionIndicator(width: 18, height: 6)
-                : const Icon(LucideIcons.bellRing),
+                : const Icon(Icons.notifications_active_outlined),
             label: Text(
               AppLocalizations.of(context)!.notifSendTestNotification,
             ),

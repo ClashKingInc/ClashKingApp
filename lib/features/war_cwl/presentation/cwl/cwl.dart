@@ -250,7 +250,10 @@ class _CwlStatsPanel extends StatelessWidget {
     final leagueInfo = warCwl.leagueInfo;
     final leagueUrl = ImageAssets.getWarLeagueImage(leagueName);
     final compactLeagueName = _compactLeagueName(leagueName);
-    final totalPossibleAttacks = warCwl.teamSize * clanInfo.warsPlayed;
+    final teamSize = warCwl.teamSize;
+    final totalPossibleAttacks = teamSize > 0
+        ? teamSize * clanInfo.warsPlayed
+        : null;
     final clanCount = leagueInfo?.clans.length ?? 0;
     final rankValue = clanCount > 0
         ? '#${clanInfo.rank}/$clanCount'
@@ -261,7 +264,7 @@ class _CwlStatsPanel extends StatelessWidget {
         '${formatter.format(clanInfo.stars)}  •  $destructionValue';
     final totalRounds = leagueInfo?.rounds.length ?? 0;
     final currentRoundNumber = totalRounds > 0
-        ? leagueInfo!.getCurrentRounds().roundNumber
+        ? leagueInfo!.getCurrentRounds()?.roundNumber ?? clanInfo.warsPlayed
         : clanInfo.warsPlayed;
     final seasonSubtitle = _seasonSubtitle(loc, leagueInfo?.season, locale);
 
@@ -298,7 +301,9 @@ class _CwlStatsPanel extends StatelessWidget {
             children: [
               _CwlQuickChip(
                 label: loc.warAttacksTitle,
-                value: '${clanInfo.attackCount}/$totalPossibleAttacks',
+                value: totalPossibleAttacks == null
+                    ? formatter.format(clanInfo.attackCount)
+                    : '${clanInfo.attackCount}/$totalPossibleAttacks',
                 imageUrl: ImageAssets.sword,
               ),
               _CwlQuickChip(

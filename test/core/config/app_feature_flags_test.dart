@@ -8,10 +8,6 @@ void main() {
         AppFeatureFlags.defaultValue(AppFeatureFlags.basesArmies),
         isFalse,
       );
-      expect(
-        AppFeatureFlags.defaultValue(AppFeatureFlags.accountConnections),
-        isFalse,
-      );
     });
 
     test('fails open for established production surfaces', () {

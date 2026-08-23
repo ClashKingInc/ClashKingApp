@@ -1,11 +1,11 @@
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
-import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/auth/presentation/reset_password_page.dart';
+import 'package:clashkingapp/features/auth/presentation/widgets/auth_page_shell.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -62,242 +62,162 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final logoUrl = (isDarkMode
-        ? ImageAssets.darkModeLogo
-        : ImageAssets.lightModeLogo);
+    return AuthPageShell(
+      formKey: _formKey,
+      maxWidth: 520,
+      centerContent: true,
+      child: AnimatedSwitcher(
+        duration: CKMotion.durationOf(context, CKMotion.standard),
+        switchInCurve: CKMotion.standardCurve,
+        switchOutCurve: CKMotion.standardCurve,
+        child: _emailSent
+            ? _buildSuccessState(context)
+            : _buildRequestState(context),
+      ),
+    );
+  }
 
-    return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
+  Widget _buildRequestState(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
-                // ClashKing logo
-                Center(
-                  child: SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: MobileWebImage(
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageUrl: logoUrl,
-                    ),
-                  ),
+    return Column(
+      key: const ValueKey('request-password-reset'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.authPasswordForgot,
+          style: CKTypography.of(
+            context,
+            CKTextRole.screenTitle,
+          ).copyWith(color: colorScheme.onSurface),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: CKSpacing.sm),
+        Text(
+          l10n.authPasswordForgotDescription,
+          style: CKTypography.of(
+            context,
+            CKTextRole.body,
+          ).copyWith(color: colorScheme.onSurfaceVariant),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: CKSpacing.xl),
+        CKSectionPanel(
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.done,
+                autofillHints: const [AutofillHints.email],
+                enabled: !_isLoading,
+                decoration: InputDecoration(
+                  labelText: l10n.authEmail,
+                  hintText: l10n.authEmailHint,
+                  prefixIcon: const Icon(Icons.email_outlined),
                 ),
-
-                const SizedBox(height: 32),
-
-                if (!_emailSent) ...[
-                  // Title
-                  Text(
-                    AppLocalizations.of(context)!.authPasswordForgot,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return l10n.authEmailRequired;
+                  }
+                  if (!RegExp(
+                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                  ).hasMatch(value)) {
+                    return l10n.authEmailInvalid;
+                  }
+                  return null;
+                },
+                onFieldSubmitted: (_) => _requestPasswordReset(),
+              ),
+              const SizedBox(height: CKSpacing.xl),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _requestPasswordReset,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.fromHeight(
+                      CKControlDensity.standard.minimumHeight,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Description
-                  Text(
-                    AppLocalizations.of(context)!.authPasswordForgotDescription,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Email input and reset button card
-                  Card(
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 16),
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.done,
-                            enabled: !_isLoading,
-                            decoration: InputDecoration(
-                              labelText: AppLocalizations.of(
-                                context,
-                              )!.authEmail,
-                              hintText: AppLocalizations.of(
-                                context,
-                              )!.authEmailHint,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              prefixIcon: const Icon(Icons.email),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return AppLocalizations.of(
-                                  context,
-                                )!.authEmailRequired;
-                              }
-                              if (!RegExp(
-                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                              ).hasMatch(value)) {
-                                return AppLocalizations.of(
-                                  context,
-                                )!.authEmailInvalid;
-                              }
-                              return null;
-                            },
-                            onFieldSubmitted: (_) => _requestPasswordReset(),
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // Reset button
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton(
-                              onPressed: _isLoading
-                                  ? null
-                                  : _requestPasswordReset,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                                foregroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.onPrimary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: _isLoading
-                                  ? const SkeletonActionIndicator(
-                                      width: 24,
-                                      height: 8,
-                                    )
-                                  : Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.authPasswordResetSend,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          // Back to login link
-                          if (!_emailSent)
-                            Center(
-                              child: TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(
-                                  AppLocalizations.of(context)!.authBackToLogin,
-                                  style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ] else ...[
-                  // Success message
-                  Card(
                     elevation: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green, width: 1),
-                      ),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            size: 48,
-                            color: Colors.green,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            AppLocalizations.of(context)!.authPasswordResetSent,
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green.shade700,
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            AppLocalizations.of(
-                              context,
-                            )!.authPasswordResetSentDescription,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(color: Colors.green.shade700),
-                            textAlign: TextAlign.center,
-                          ),
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
+                  ),
+                  child: _isLoading
+                      ? const SkeletonActionIndicator(width: 24, height: 8)
+                      : Text(l10n.authPasswordResetSend),
+                ),
+              ),
+              const SizedBox(height: CKSpacing.sm),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(l10n.authBackToLogin),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
-                          const SizedBox(height: 24),
+  Widget _buildSuccessState(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
-                          // Continue to reset password button
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => ResetPasswordPage(
-                                      email: _emailController.text.trim(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                AppLocalizations.of(
-                                  context,
-                                )!.authPasswordResetContinue,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+    return Semantics(
+      liveRegion: true,
+      child: CKSectionPanel(
+        key: const ValueKey('password-reset-sent'),
+        child: Column(
+          children: [
+            Icon(
+              Icons.mark_email_read_outlined,
+              size: 48,
+              color: colorScheme.secondary,
+            ),
+            const SizedBox(height: CKSpacing.lg),
+            Text(
+              l10n.authPasswordResetSent,
+              style: CKTypography.of(
+                context,
+                CKTextRole.sectionTitle,
+              ).copyWith(color: colorScheme.onSurface),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: CKSpacing.sm),
+            Text(
+              l10n.authPasswordResetSentDescription,
+              style: CKTypography.of(
+                context,
+                CKTextRole.body,
+              ).copyWith(color: colorScheme.onSurfaceVariant),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: CKSpacing.xl),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => ResetPasswordPage(
+                        email: _emailController.text.trim(),
                       ),
                     ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size.fromHeight(
+                    CKControlDensity.standard.minimumHeight,
                   ),
-                ],
-              ],
+                  elevation: 0,
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                ),
+                child: Text(l10n.authPasswordResetContinue),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

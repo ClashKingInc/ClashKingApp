@@ -11,7 +11,6 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -304,13 +303,13 @@ class ClanMembersState extends State<ClanMembers> {
                 children: [
                   const SizedBox(width: 44),
                   CKSummaryChip(
-                    icon: LucideIcons.chevronUp,
+                    icon: Icons.keyboard_arrow_up_rounded,
                     value: numberFormat.format(totalDonations),
                     label: loc?.gameDonations ?? 'Donated',
                     color: Colors.green,
                   ),
                   CKSummaryChip(
-                    icon: LucideIcons.chevronDown,
+                    icon: Icons.keyboard_arrow_down_rounded,
                     value: numberFormat.format(totalReceived),
                     label: loc?.clanMembersReceivedShort ?? 'Received',
                     color: Colors.redAccent,
@@ -592,13 +591,13 @@ class _SortValueChip extends StatelessWidget {
         );
       case 'donations':
         return _MemberMiniStat(
-          icon: LucideIcons.chevronUp,
+          icon: Icons.keyboard_arrow_up_rounded,
           value: member.donations.toString(),
           color: Colors.green,
         );
       case 'donationsReceived':
         return _MemberMiniStat(
-          icon: LucideIcons.chevronDown,
+          icon: Icons.keyboard_arrow_down_rounded,
           value: member.donationsReceived.toString(),
           color: Colors.red,
         );
@@ -612,7 +611,7 @@ class _SortValueChip extends StatelessWidget {
             ? ratio.toStringAsFixed(1)
             : ratio.toStringAsFixed(2);
         return _MemberMiniStat(
-          icon: LucideIcons.chevronsUpDown,
+          icon: Icons.unfold_more_rounded,
           value: display,
           color: Colors.blue,
         );

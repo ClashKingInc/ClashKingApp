@@ -29,7 +29,6 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,9 +66,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
     final warWidgetsEnabled = appState.isFeatureEnabled(
       AppFeatureFlags.warWidgets,
     );
-    final hasDiscord =
-        widget.user.hasDiscordAuth || widget.user.avatarUrl.isNotEmpty;
-    final hasEmail = widget.user.hasEmailAuth;
     final widgetClans = warWidgetsEnabled
         ? WarWidgetService.clanOptionsFromProfiles(
             context.watch<PlayerService>().profiles,
@@ -112,7 +108,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                 Consumer<ThemeNotifier>(
                   builder: (context, themeNotifier, child) {
                     return _SettingsTile(
-                      icon: LucideIcons.sunMoon,
+                      icon: Icons.brightness_6_outlined,
                       title: l10n.settingsToggleTheme,
                       trailingText: _themeModeLabel(
                         context,
@@ -125,7 +121,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                 ),
                 if (_supportsAlternateIcons)
                   _SettingsTile(
-                    icon: LucideIcons.image,
+                    icon: Icons.image_outlined,
                     title: l10n.settingsAppIcon,
                     trailingText: _isChangingAppIcon
                         ? l10n.settingsChanging
@@ -136,7 +132,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   ),
                 if (notificationsEnabled)
                   _SettingsTile(
-                    icon: LucideIcons.bellRing,
+                    icon: Icons.notifications_active_outlined,
                     title: l10n.settingsNotificationsTitle,
                     subtitle: l10n.settingsNotificationsSubtitle,
                     onTap: () {
@@ -150,7 +146,7 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
                   ),
                 if (warWidgetsEnabled)
                   _SettingsTile(
-                    icon: LucideIcons.panelTop,
+                    icon: Icons.web_asset_outlined,
                     title: l10n.settingsAddWarWidget,
                     subtitle: widgetClans.isEmpty
                         ? l10n.settingsWarWidgetLinkClanFirst
@@ -219,36 +215,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
             _SettingsSection(
               title: l10n.settingsAccount,
               children: [
-                if (appState.isFeatureEnabled(
-                  AppFeatureFlags.accountConnections,
-                )) ...[
-                  _SettingsTile(
-                    icon: Icons.discord,
-                    title: l10n.generalDiscord,
-                    subtitle: hasDiscord
-                        ? l10n.settingsDiscordConnectedSubtitle
-                        : l10n.settingsDiscordSyncSubtitle,
-                    trailingText: hasDiscord ? l10n.settingsConnected : null,
-                    onTap: hasDiscord
-                        ? () => _showConnectionPlaceholder('Disconnect Discord')
-                        : () => _showConnectionPlaceholder('Connect Discord'),
-                  ),
-                  _SettingsTile(
-                    icon: Icons.alternate_email,
-                    title: l10n.settingsClashKingAccount,
-                    subtitle: hasEmail
-                        ? l10n.settingsEmailConnectedSubtitle
-                        : l10n.settingsEmailRecoverySubtitle,
-                    trailingText: hasEmail ? l10n.settingsConnected : null,
-                    onTap: hasEmail
-                        ? () => _showConnectionPlaceholder(
-                            'Disconnect ClashKing account',
-                          )
-                        : () => _showConnectionPlaceholder(
-                            'Connect ClashKing account',
-                          ),
-                  ),
-                ],
                 _SettingsTile(
                   icon: Icons.alternate_email,
                   title: widget.user.email ?? widget.user.username,
@@ -602,16 +568,6 @@ class _SettingsInfoScreenState extends State<SettingsInfoScreen> {
         ),
       ),
       applicationLegalese: '© ${DateTime.now().year} ClashKing',
-    );
-  }
-
-  void _showConnectionPlaceholder(String action) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '$action will be wired once the account connection API is available.',
-        ),
-      ),
     );
   }
 
@@ -1097,7 +1053,7 @@ class _SettingsChoiceTile extends StatelessWidget {
                   dimension: 20,
                   child: selected
                       ? Icon(
-                          LucideIcons.check,
+                          Icons.check_rounded,
                           color: colorScheme.primary,
                           size: 20,
                         )

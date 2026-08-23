@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clashkingapp/core/functions/functions.dart';
 import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/core/models/user.dart';
@@ -12,6 +14,8 @@ import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthService extends ChangeNotifier {
+  static const _authMePath = '/auth/me';
+
   AuthService({
     ApiService? apiService,
     TokenService? tokenService,
@@ -30,11 +34,42 @@ class AuthService extends ChangeNotifier {
   String? _accessToken;
   bool _isAuthenticated = false;
   User? _currentUser;
+  int? _followerCount;
 
   String? get accessToken => _accessToken;
   bool get isAuthenticated => _isAuthenticated;
   bool get canUseApp => _isAuthenticated;
   User? get currentUser => _currentUser;
+  int? get followerCount => _followerCount;
+
+  void _applyCurrentUserResponse(Map<String, dynamic> response) {
+    _currentUser = User.fromJson(response);
+    final summary = response['account_summary'];
+    final rawCount = summary is Map ? summary['follower_count'] : null;
+    _followerCount = rawCount is num
+        ? rawCount.toInt()
+        : int.tryParse(rawCount?.toString() ?? '');
+  }
+
+  Future<void> _refreshAccountSummary() async {
+    try {
+      final response = await _apiService.get(_authMePath);
+      if (!_isAuthenticated ||
+          response['user_id']?.toString() != _currentUser?.userId) {
+        return;
+      }
+      final summary = response['account_summary'];
+      final rawCount = summary is Map ? summary['follower_count'] : null;
+      final nextCount = rawCount is num
+          ? rawCount.toInt()
+          : int.tryParse(rawCount?.toString() ?? '');
+      if (nextCount == _followerCount) return;
+      _followerCount = nextCount;
+      notifyListeners();
+    } catch (error) {
+      DebugUtils.debugWarning('Could not refresh account summary: $error');
+    }
+  }
 
   String _localized(
     String fallback,
@@ -57,8 +92,8 @@ class AuthService extends ChangeNotifier {
     await deletePrefs('auth_local_mode');
 
     if (_environment == ApiEnvironment.local) {
-      final response = await _apiService.get('/auth/me', requiresAuth: false);
-      _currentUser = User.fromJson(response);
+      final response = await _apiService.get(_authMePath, requiresAuth: false);
+      _applyCurrentUserResponse(response);
       _accessToken = null;
       _isAuthenticated = true;
       await ObservabilityService.setAuthenticatedUser(_currentUser);
@@ -69,8 +104,8 @@ class AuthService extends ChangeNotifier {
     _accessToken = await _tokenService.getAccessToken();
     if (_accessToken != null) {
       try {
-        final response = await _apiService.get('/auth/me');
-        _currentUser = User.fromJson(response);
+        final response = await _apiService.get(_authMePath);
+        _applyCurrentUserResponse(response);
         await ObservabilityService.setAuthenticatedUser(_currentUser);
         _isAuthenticated = true;
       } catch (e) {
@@ -124,6 +159,7 @@ class AuthService extends ChangeNotifier {
       _accessToken = response['access_token'];
       DebugUtils.debugSuccess("🔄 Tokens saved successfully.");
       notifyListeners();
+      unawaited(_refreshAccountSummary());
     } catch (e) {
       DebugUtils.debugError(" Discord login error: $e");
       throw Exception(
@@ -158,6 +194,7 @@ class AuthService extends ChangeNotifier {
 
       DebugUtils.debugSuccess("🔄 Email login completed successfully");
       notifyListeners();
+      unawaited(_refreshAccountSummary());
     } catch (e) {
       DebugUtils.debugError(" Email login error: $e");
       if (e is EmailVerificationRequiredException) {
@@ -227,6 +264,7 @@ class AuthService extends ChangeNotifier {
         "🔄 Email verification with code completed successfully",
       );
       notifyListeners();
+      unawaited(_refreshAccountSummary());
     } catch (e) {
       DebugUtils.debugError(" Email verification with code error: $e");
       rethrow; // Let the UI handle error parsing and localization
@@ -293,110 +331,10 @@ class AuthService extends ChangeNotifier {
 
       DebugUtils.debugSuccess("🔄 Password reset completed successfully");
       notifyListeners();
+      unawaited(_refreshAccountSummary());
     } catch (e) {
       DebugUtils.debugError(" Password reset error: $e");
       rethrow; // Let the UI handle error parsing and localization
-    }
-  }
-
-  Future<void> linkDiscordWithCode() async {
-    try {
-      DebugUtils.debugInfo("🔄 Starting Discord linking via OAuth code...");
-      final result = await _discordAuthCodeProvider();
-      if (result == null) {
-        throw Exception(
-          _localized(
-            'Discord auth was cancelled.',
-            (l10n) => l10n.authErrorUserCancelledDiscordLogin,
-          ),
-        );
-      }
-
-      final deviceId = await _tokenService.getDeviceId();
-      final deviceName = await _tokenService.getDeviceName();
-
-      await _apiService.post('/auth/link-discord-code', {
-        'code': result['code']!,
-        'redirect_uri': DiscordAuthHelper.getRedirectUri(),
-        'code_verifier': result['code_verifier']!,
-        'device_id': deviceId,
-        'device_name': deviceName,
-      }, requiresAuth: true);
-
-      DebugUtils.debugSuccess("🔄 Discord linking completed");
-      await initializeAuth();
-    } catch (e) {
-      DebugUtils.debugError(" Discord linking error: $e");
-      throw Exception(
-        _localized(
-          'Discord account linking failed.',
-          (l10n) => l10n.authErrorDiscordLinkFailed,
-        ),
-      );
-    }
-  }
-
-  Future<void> linkDiscordAccount(
-    String discordAccessToken,
-    String? refreshToken,
-    int? expiresIn,
-  ) async {
-    try {
-      DebugUtils.debugInfo("🔄 Linking Discord account...");
-      final deviceId = await _tokenService.getDeviceId();
-      final deviceName = await _tokenService.getDeviceName();
-
-      await _apiService.post('/auth/link-discord', {
-        'access_token': discordAccessToken,
-        'refresh_token': ?refreshToken,
-        if (expiresIn != null) 'expires_in': expiresIn.toString(),
-        'device_id': deviceId,
-        'device_name': deviceName,
-      });
-
-      DebugUtils.debugSuccess("🔄 Discord linking completed");
-      // Refresh user data to get updated auth methods
-      await initializeAuth();
-    } catch (e) {
-      DebugUtils.debugError(" Discord linking error: $e");
-      throw Exception(
-        _localized(
-          'Discord account linking failed.',
-          (l10n) => l10n.authErrorDiscordLinkFailed,
-        ),
-      );
-    }
-  }
-
-  Future<void> linkEmailAccount(
-    String email,
-    String password,
-    String username,
-  ) async {
-    try {
-      DebugUtils.debugInfo("🔄 Linking email account...");
-      final deviceId = await _tokenService.getDeviceId();
-      final deviceName = await _tokenService.getDeviceName();
-
-      await _apiService.post('/auth/link-email', {
-        'email': email,
-        'password': password,
-        'username': username,
-        'device_id': deviceId,
-        'device_name': deviceName,
-      });
-
-      DebugUtils.debugSuccess("🔄 Email linking completed");
-      // Refresh user data to get updated auth methods
-      await initializeAuth();
-    } catch (e) {
-      DebugUtils.debugError(" Email linking error: $e");
-      throw Exception(
-        _localized(
-          'Email account linking failed.',
-          (l10n) => l10n.authErrorEmailLinkFailed,
-        ),
-      );
     }
   }
 
@@ -406,7 +344,7 @@ class AuthService extends ChangeNotifier {
 
   Future<void> deleteAccount() async {
     final response = await _apiService.deleteResponse(
-      '/auth/me',
+      _authMePath,
       requiresAuth: true,
     );
     if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -433,6 +371,7 @@ class AuthService extends ChangeNotifier {
     } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
+    _followerCount = null;
     _accessToken = null;
     await ObservabilityService.clearUser();
     notifyListeners();
@@ -452,6 +391,7 @@ class AuthService extends ChangeNotifier {
     } catch (_) {}
     _isAuthenticated = false;
     _currentUser = null;
+    _followerCount = null;
     _accessToken = null;
     await ObservabilityService.clearUser();
     notifyListeners();

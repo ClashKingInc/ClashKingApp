@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './helpers';
 
+const discordAuthEnabled = process.env.DISCORD_AUTH_ENABLED !== 'false';
+
 test.describe('Auth — login page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -19,7 +21,9 @@ test.describe('Auth — login page', () => {
     // the app is running — Canvas Kit renders to <canvas>, not text nodes.
   });
 
-  test('Discord login button is present', async ({ page }) => {
+  test('Discord login matches the deployment configuration', async ({
+    page,
+  }) => {
     await enableFlutterSemantics(page);
 
     if (!(await hasFlutterSemantics(page))) {
@@ -27,9 +31,17 @@ test.describe('Auth — login page', () => {
     }
 
     const discordBtn = page
-      .locator('flt-semantics[aria-label*="Discord" i]')
-      .or(page.getByRole('button', { name: /discord/i }));
-    await expect(discordBtn.first()).toBeVisible({ timeout: 10_000 });
+      .locator('flt-semantics[aria-label*="Continue with Discord" i]')
+      .or(
+        page.getByRole('button', {
+          name: /continue with discord|sign in with discord/i,
+        }),
+      );
+    if (discordAuthEnabled) {
+      await expect(discordBtn.first()).toBeVisible({ timeout: 10_000 });
+    } else {
+      await expect(discordBtn).toHaveCount(0);
+    }
   });
 
   test('Email login option exists', async ({ page }) => {
