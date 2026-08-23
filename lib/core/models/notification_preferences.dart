@@ -1,4 +1,6 @@
 enum NotificationCategory {
+  legendAttacks,
+  legendDefenses,
   warAttacks,
   warState,
   warReminders,
@@ -9,10 +11,12 @@ enum NotificationCategory {
 }
 
 enum NotificationAccountSource {
-  verified;
+  verified,
+  bookmarked;
 
   static NotificationAccountSource fromWire(String value) => switch (value) {
     'verified' => NotificationAccountSource.verified,
+    'bookmarked' => NotificationAccountSource.bookmarked,
     _ => throw FormatException('Unsupported notification account source'),
   };
 }
@@ -48,6 +52,8 @@ class NotificationPreferences {
     this.deviceId = '',
     this.environment = 'production',
     this.notificationsEnabled = false,
+    this.legendAttacks = false,
+    this.legendDefenses = false,
     this.warAttacks = false,
     this.warState = false,
     this.warReminders = false,
@@ -63,6 +69,8 @@ class NotificationPreferences {
   final String deviceId;
   final String environment;
   final bool notificationsEnabled;
+  final bool legendAttacks;
+  final bool legendDefenses;
   final bool warAttacks;
   final bool warState;
   final bool warReminders;
@@ -137,6 +145,8 @@ class NotificationPreferences {
       deviceId: deviceId,
       environment: environment,
       notificationsEnabled: readBool('notificationsEnabled'),
+      legendAttacks: readBool('legendAttacksEnabled'),
+      legendDefenses: readBool('legendDefensesEnabled'),
       warAttacks: readBool('warAttacksEnabled'),
       warState: readBool('warStateEnabled'),
       warReminders: readBool('warRemindersEnabled'),
@@ -154,6 +164,8 @@ class NotificationPreferences {
     final accounts = json['accounts'];
     return NotificationPreferences.fromJson({
       ...json,
+      'legendAttacksEnabled': json['legendAttacksEnabled'] ?? false,
+      'legendDefensesEnabled': json['legendDefensesEnabled'] ?? false,
       'raidRemindersEnabled': json['raidRemindersEnabled'] ?? false,
       'raidReminderTimings': json['raidReminderTimings'] ?? const <int>[],
       if (accounts is List)
@@ -174,6 +186,8 @@ class NotificationPreferences {
       'deviceId': deviceId,
       'environment': environment,
       'notificationsEnabled': notificationsEnabled,
+      'legendAttacksEnabled': legendAttacks,
+      'legendDefensesEnabled': legendDefenses,
       'warAttacksEnabled': warAttacks,
       'warStateEnabled': warState,
       'warRemindersEnabled': warReminders,
@@ -202,6 +216,8 @@ class NotificationPreferences {
   }
 
   bool enabled(NotificationCategory category) => switch (category) {
+    NotificationCategory.legendAttacks => legendAttacks,
+    NotificationCategory.legendDefenses => legendDefenses,
     NotificationCategory.warAttacks => warAttacks,
     NotificationCategory.warState => warState,
     NotificationCategory.warReminders => warReminders,
@@ -215,6 +231,8 @@ class NotificationPreferences {
     NotificationCategory category,
     bool enabled,
   ) => switch (category) {
+    NotificationCategory.legendAttacks => copyWith(legendAttacks: enabled),
+    NotificationCategory.legendDefenses => copyWith(legendDefenses: enabled),
     NotificationCategory.warAttacks => copyWith(warAttacks: enabled),
     NotificationCategory.warState => copyWith(warState: enabled),
     NotificationCategory.warReminders => copyWith(warReminders: enabled),
@@ -228,6 +246,8 @@ class NotificationPreferences {
     String? deviceId,
     String? environment,
     bool? notificationsEnabled,
+    bool? legendAttacks,
+    bool? legendDefenses,
     bool? warAttacks,
     bool? warState,
     bool? warReminders,
@@ -243,6 +263,8 @@ class NotificationPreferences {
       deviceId: deviceId ?? this.deviceId,
       environment: environment ?? this.environment,
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      legendAttacks: legendAttacks ?? this.legendAttacks,
+      legendDefenses: legendDefenses ?? this.legendDefenses,
       warAttacks: warAttacks ?? this.warAttacks,
       warState: warState ?? this.warState,
       warReminders: warReminders ?? this.warReminders,

@@ -863,11 +863,15 @@ class _ClanEmptyTab extends StatelessWidget {
   final String title;
   final String body;
   final IconData icon;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   const _ClanEmptyTab({
     required this.title,
     required this.body,
     required this.icon,
+    this.actionLabel,
+    this.onAction,
   });
 
   @override
@@ -876,6 +880,8 @@ class _ClanEmptyTab extends StatelessWidget {
       title: title,
       body: body,
       icon: icon,
+      actionLabel: actionLabel,
+      onAction: onAction,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
     );
   }
@@ -1920,11 +1926,27 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
           if (snapshot.connectionState != ConnectionState.done) {
             return const SkeletonList(itemCount: 4);
           }
+          final loc = AppLocalizations.of(context)!;
+          if (snapshot.hasError) {
+            return _ClanEmptyTab(
+              title: loc.generalError,
+              body: loc.generalTryAgain,
+              icon: Icons.error_outline_rounded,
+              actionLabel: loc.generalRetry,
+              onAction: () {
+                setState(() {
+                  _history = context.read<ClanService>().getCwlRankingHistory(
+                    widget.clan.tag,
+                  );
+                });
+              },
+            );
+          }
           final entries = snapshot.data ?? const [];
           if (entries.isEmpty) {
             return _ClanEmptyTab(
-              title: 'No CWL history yet',
-              body: 'Stored CWL seasons for this clan will appear here.',
+              title: loc.cwlHistoryEmptyTitle,
+              body: loc.cwlHistoryEmptyBody,
               icon: Icons.emoji_events_outlined,
             );
           }
@@ -1934,7 +1956,7 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
                   minItemWidth: 420,
                   maxColumns: 2,
                   spacing: 10,
-                  itemBuilder: (_, index) => _CwlSeasonMockupCard(
+                  itemBuilder: (_, index) => _CwlSeasonCard(
                     entry: entries[index],
                     movement: _cwlMovementFor(
                       entries,
@@ -1947,7 +1969,7 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
               : Column(
                   children: List.generate(
                     entries.length,
-                    (index) => _CwlSeasonMockupCard(
+                    (index) => _CwlSeasonCard(
                       entry: entries[index],
                       movement: _cwlMovementFor(
                         entries,
@@ -1963,12 +1985,12 @@ class _ClanCwlHistoryTabState extends State<_ClanCwlHistoryTab> {
   }
 }
 
-class _CwlSeasonMockupCard extends StatelessWidget {
+class _CwlSeasonCard extends StatelessWidget {
   final CwlRankingHistoryEntry entry;
   final _CwlLeagueMovement? movement;
   final EdgeInsetsGeometry padding;
 
-  const _CwlSeasonMockupCard({
+  const _CwlSeasonCard({
     required this.entry,
     required this.movement,
     this.padding = const EdgeInsets.only(bottom: 10),

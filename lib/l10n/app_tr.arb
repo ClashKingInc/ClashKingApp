@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Savaş saldırı sonuçları, savunma uyarıları ve 5v5 saldırı akışı seçenekleri.",
   "notifWarAlertsDescription": "Savaş eşleşti, savaş günü başladı ve savaş bitti.",
   "notifWarRemindersDescription": "Savaş bitmeden önce özel hatırlatmalar.",
+  "notifGroupRaidReminders": "Baskın Hafta Sonu hatırlatıcıları",
+  "notifRaidRemindersDescription": "Aynı klandaki doğrulanmış hesaplarında kalan saldırılar için tek bir bildirim al.",
   "notifDefensesAgainstYourBase": "Üssüne yapılan savunmalar",
   "notifDefensesAgainstYourBaseDescription": "Yalnızca bu hesabın savunduğu saldırılar.",
   "notifAllAttacks": "Tüm saldırılar",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} kaldı",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Şimdi · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Sv. {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Sv. {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, seviye {level}, {start} ile {end} arası",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

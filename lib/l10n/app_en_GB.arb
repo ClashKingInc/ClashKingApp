@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "War attack results, defense alerts, and 5v5 attack feed options.",
   "notifWarAlertsDescription": "War matched, battle day started, and war ended.",
   "notifWarRemindersDescription": "Custom reminders before war ends.",
+  "notifGroupRaidReminders": "Raid Weekend reminders",
+  "notifRaidRemindersDescription": "Get one alert for attacks remaining across your verified accounts in the same clan.",
   "notifDefensesAgainstYourBase": "Defenses against your base",
   "notifDefensesAgainstYourBaseDescription": "Only hits where this account is defending.",
   "notifAllAttacks": "All attacks",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} left",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Now · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Lv {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Lv {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, level {level}, {start} to {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

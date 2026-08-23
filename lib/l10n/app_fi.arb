@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Sotahyökkäystulokset, puolustushälytykset ja 5v5-hyökkäyssyötevaihtoehdot.",
   "notifWarAlertsDescription": "Sota sovittiin, taistelupäivä alkoi ja sota päättyi.",
   "notifWarRemindersDescription": "Mukautetut muistutukset ennen sodan päättymistä.",
+  "notifGroupRaidReminders": "Ryöstöviikonlopun muistutukset",
+  "notifRaidRemindersDescription": "Saat yhden ilmoituksen jäljellä olevista hyökkäyksistä kaikilla vahvistetuilla tileilläsi samassa klaanissa.",
   "notifDefensesAgainstYourBase": "Puolustus tukikohtaasi vastaan",
   "notifDefensesAgainstYourBaseDescription": "Vain osumia kohtiin, joissa tämä tili suojaa.",
   "notifAllAttacks": "Kaikki hyökkäykset",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} jäljellä",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Nyt · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Taso {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Taso {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, taso {level}, {start}–{end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

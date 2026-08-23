@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clashkingapp/common/widgets/dialogs/snackbar.dart';
+import 'package:clashkingapp/common/widgets/dialogs/open_clash_dialog.dart';
 import 'package:clashkingapp/common/widgets/header_widgets.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
@@ -180,6 +181,24 @@ class _WarHeaderState extends State<WarHeader> {
   }
 
   Future<void> _openClan(BuildContext context, WarClan clan) async {
+    final isCurrentWar =
+        widget.warInfo.state == 'preparation' ||
+        widget.warInfo.state == 'inWar';
+    if (!kIsWeb && isCurrentWar) {
+      final languageCode = Localizations.localeOf(
+        context,
+      ).languageCode.toLowerCase();
+      final url = Uri.https('link.clashofclans.com', '/$languageCode', {
+        'action': 'OpenClanProfile',
+        'tag': clan.tag,
+      });
+      await showDialog<void>(
+        context: context,
+        builder: (_) => OpenClashDialog(url: url),
+      );
+      return;
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,

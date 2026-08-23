@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Αποτελέσματα επίθεσης πολέμου, ειδοποιήσεις άμυνας και επιλογές τροφοδοσίας επίθεσης 5v5.",
   "notifWarAlertsDescription": "Ο πόλεμος ταίριαξε, η μέρα της μάχης ξεκίνησε και ο πόλεμος τελείωσε.",
   "notifWarRemindersDescription": "Προσαρμοσμένες υπενθυμίσεις πριν από τη λήξη του πολέμου.",
+  "notifGroupRaidReminders": "Υπενθυμίσεις Σαββατοκύριακου Επιδρομών",
+  "notifRaidRemindersDescription": "Λάβε μία ειδοποίηση για τις επιθέσεις που απομένουν στους επαληθευμένους λογαριασμούς σου στην ίδια φυλή.",
   "notifDefensesAgainstYourBase": "Άμυνες ενάντια στη βάση σας",
   "notifDefensesAgainstYourBaseDescription": "Επισκέψεις μόνο εκεί όπου αυτός ο λογαριασμός υπερασπίζεται.",
   "notifAllAttacks": "Όλες οι επιθέσεις",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "Απομένουν {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Τώρα · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Επ. {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Επ. {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, επίπεδο {level}, από {start} έως {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

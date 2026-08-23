@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "전쟁 공격 결과, 방어 경고, 5v5 공격 피드 옵션.",
   "notifWarAlertsDescription": "전쟁이 일치하고, 전투의 날이 시작되고, 전쟁이 끝났습니다.",
   "notifWarRemindersDescription": "전쟁이 끝나기 전 맞춤 알림.",
+  "notifGroupRaidReminders": "습격 주말 알림",
+  "notifRaidRemindersDescription": "같은 클랜에 있는 인증된 계정의 남은 공격을 하나의 알림으로 받습니다.",
   "notifDefensesAgainstYourBase": "기지에 대한 방어",
   "notifDefensesAgainstYourBaseDescription": "이 계정이 방어하는 곳만 공격합니다.",
   "notifAllAttacks": "모든 공격",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} 남음",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "현재 · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "레벨 {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · 레벨 {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, 레벨 {level}, {start} ~ {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

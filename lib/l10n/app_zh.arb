@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "部落战进攻结果、防守提醒以及 5v5 进攻动态选项。",
   "notifWarAlertsDescription": "匹配到部落战、战斗日开始和部落战结束。",
   "notifWarRemindersDescription": "部落战结束前的自定义提醒。",
+  "notifGroupRaidReminders": "突袭周末提醒",
+  "notifRaidRemindersDescription": "接收一条提醒，汇总你在同一部落中所有已验证账号的剩余进攻次数。",
   "notifDefensesAgainstYourBase": "针对你阵型的防守",
   "notifDefensesAgainstYourBaseDescription": "仅显示此账号作为防守方的进攻。",
   "notifAllAttacks": "所有进攻",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "剩余 {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "当前 · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "{level}级 · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · {level}级\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}，{level}级，{start} 至 {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

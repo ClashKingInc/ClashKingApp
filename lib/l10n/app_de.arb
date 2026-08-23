@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Kriegsangriffsergebnisse, Verteidigungswarnungen und 5v5-Angriffs-Feed-Optionen.",
   "notifWarAlertsDescription": "Der Krieg endete, der Kampftag begann und der Krieg endete.",
   "notifWarRemindersDescription": "Individuelle Erinnerungen vor Kriegsende.",
+  "notifGroupRaidReminders": "Überfallwochenende-Erinnerungen",
+  "notifRaidRemindersDescription": "Erhalte eine Benachrichtigung über verbleibende Angriffe für deine verifizierten Konten im selben Clan.",
   "notifDefensesAgainstYourBase": "Verteidigung gegen Ihre Basis",
   "notifDefensesAgainstYourBaseDescription": "Nur Treffer, bei denen dieses Konto verteidigt wird.",
   "notifAllAttacks": "Alle Angriffe",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "Noch {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Jetzt · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Stufe {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Stufe {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, Stufe {level}, von {start} bis {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

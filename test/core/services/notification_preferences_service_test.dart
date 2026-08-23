@@ -14,6 +14,8 @@ void main() {
     'deviceId': 'device-1',
     'environment': 'sandbox',
     'notificationsEnabled': true,
+    'legendAttacksEnabled': true,
+    'legendDefensesEnabled': false,
     'warAttacksEnabled': false,
     'warStateEnabled': true,
     'warRemindersEnabled': true,
@@ -50,6 +52,8 @@ void main() {
       expect(api.getCallCounts[endpoint], 1);
       expect(settings.notificationsEnabled, isTrue);
       expect(settings.reminderTimings, [15, 30, 60]);
+      expect(settings.legendAttacks, isTrue);
+      expect(settings.legendDefenses, isFalse);
       expect(settings.accounts.map((account) => account.source), [
         NotificationAccountSource.verified,
       ]);
@@ -85,6 +89,8 @@ void main() {
       'deviceId': 'device-1',
       'environment': 'sandbox',
       'notificationsEnabled': true,
+      'legendAttacksEnabled': true,
+      'legendDefensesEnabled': false,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
@@ -160,6 +166,8 @@ void main() {
       'deviceId': 'device-1',
       'environment': 'sandbox',
       'notificationsEnabled': true,
+      'legendAttacksEnabled': true,
+      'legendDefensesEnabled': false,
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,

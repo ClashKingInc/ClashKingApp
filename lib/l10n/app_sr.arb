@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Rezultati ratnih napada, upozorenja odbrane i 5v5 tok napada.",
   "notifWarAlertsDescription": "Rat pronađen, dan borbe počeo i rat završen.",
   "notifWarRemindersDescription": "Prilagođeni podsetnici pre kraja rata.",
+  "notifGroupRaidReminders": "Подсетници за викенд препада",
+  "notifRaidRemindersDescription": "Добиј једно обавештење о преосталим нападима на свим потврђеним налозима у истом клану.",
   "notifDefensesAgainstYourBase": "Odbrane protiv tvoje baze",
   "notifDefensesAgainstYourBaseDescription": "Samo udarci u kojima se ovaj nalog brani.",
   "notifAllAttacks": "Svi napadi",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "Preostalo je {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Sada · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Nivo {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Nivo {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, nivo {level}, od {start} do {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

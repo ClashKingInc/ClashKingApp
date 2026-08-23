@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "युद्ध हमले के परिणाम, रक्षा अलर्ट और 5v5 आक्रमण फ़ीड विकल्प।",
   "notifWarAlertsDescription": "युद्ध का मिलान हुआ, युद्ध का दिन शुरू हुआ और युद्ध समाप्त हुआ।",
   "notifWarRemindersDescription": "युद्ध समाप्त होने से पहले कस्टम अनुस्मारक।",
+  "notifGroupRaidReminders": "रेड वीकेंड रिमाइंडर",
+  "notifRaidRemindersDescription": "एक ही क्लैन में अपने सत्यापित खातों के बचे हुए हमलों के लिए एक सूचना पाएँ।",
   "notifDefensesAgainstYourBase": "आपके आधार के विरुद्ध सुरक्षा",
   "notifDefensesAgainstYourBaseDescription": "केवल वहीं हिट करता है जहां यह खाता बचाव कर रहा है।",
   "notifAllAttacks": "सभी आक्रमण",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} शेष",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "अभी · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "स्तर {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · स्तर {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, स्तर {level}, {start} से {end} तक",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

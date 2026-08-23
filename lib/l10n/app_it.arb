@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Risultati degli attacchi di guerra, avvisi di difesa e opzioni di feed di attacco 5v5.",
   "notifWarAlertsDescription": "La guerra iniziò, il giorno della battaglia iniziò e la guerra finì.",
   "notifWarRemindersDescription": "Promemoria personalizzati prima della fine della guerra.",
+  "notifGroupRaidReminders": "Promemoria del fine settimana delle incursioni",
+  "notifRaidRemindersDescription": "Ricevi un solo avviso per gli attacchi rimanenti dei tuoi account verificati nello stesso clan.",
   "notifDefensesAgainstYourBase": "Difese contro la tua base",
   "notifDefensesAgainstYourBaseDescription": "Colpisce solo dove questo account si difende.",
   "notifAllAttacks": "Tutti gli attacchi",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} rimanenti",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Ora · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Liv. {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Liv. {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, livello {level}, dal {start} al {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "戦争攻撃の結果、防御アラート、および 5v5 攻撃フィードのオプション。",
   "notifWarAlertsDescription": "戦争が始まり、戦闘の日が始まり、戦争が終わりました。",
   "notifWarRemindersDescription": "戦争が終わる前のカスタムリマインダー。",
+  "notifGroupRaidReminders": "週末合戦のリマインダー",
+  "notifRaidRemindersDescription": "同じクランに所属する認証済みアカウントの残り攻撃回数を1件の通知で受け取ります。",
   "notifDefensesAgainstYourBase": "基地に対する防御",
   "notifDefensesAgainstYourBaseDescription": "このアカウントが防御しているところのみにヒットします。",
   "notifAllAttacks": "すべての攻撃",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "残り{duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "現在 · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "レベル{level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · レベル{level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}、レベル{level}、{start}～{end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

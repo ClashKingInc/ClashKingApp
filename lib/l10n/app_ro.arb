@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Rezultate ale atacurilor de război, alerte de apărare și feed de atacuri 5v5.",
   "notifWarAlertsDescription": "Război găsit, ziua de luptă începută și război încheiat.",
   "notifWarRemindersDescription": "Mementouri personalizate înainte de sfârșitul războiului.",
+  "notifGroupRaidReminders": "Mementouri pentru weekendul raidurilor",
+  "notifRaidRemindersDescription": "Primește o singură alertă pentru atacurile rămase pe conturile tale verificate din același clan.",
   "notifDefensesAgainstYourBase": "Apărări împotriva bazei tale",
   "notifDefensesAgainstYourBaseDescription": "Doar loviturile în care acest cont apără.",
   "notifAllAttacks": "Toate atacurile",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "Au mai rămas {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Acum · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Nivel {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Nivel {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, nivelul {level}, de la {start} până la {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

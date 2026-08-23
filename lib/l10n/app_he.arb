@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "תוצאות התקפות מלחמה, התראות הגנה ואפשרויות הזנת התקפה 5v5.",
   "notifWarAlertsDescription": "המלחמה התאימה, יום הקרב התחיל והמלחמה הסתיימה.",
   "notifWarRemindersDescription": "תזכורות מותאמות אישית לפני סיום המלחמה.",
+  "notifGroupRaidReminders": "תזכורות לסוף שבוע הפשיטות",
+  "notifRaidRemindersDescription": "קבלת התראה אחת על ההתקפות שנותרו בכל החשבונות המאומתים שלך באותו שבט.",
   "notifDefensesAgainstYourBase": "הגנות נגד הבסיס שלך",
   "notifDefensesAgainstYourBaseDescription": "כניסות רק היכן שהחשבון הזה מגן.",
   "notifAllAttacks": "כל ההתקפות",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "נותרו {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "עכשיו · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "רמה {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · רמה {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, רמה {level}, מ-{start} עד {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }

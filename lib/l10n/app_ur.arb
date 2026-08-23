@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "وار حملے کے نتائج، دفاعی الرٹس، اور 5v5 حملہ فیڈ کے اختیارات۔",
   "notifWarAlertsDescription": "وار میچ، بیٹل ڈے شروع، اور وار ختم۔",
   "notifWarRemindersDescription": "وار ختم ہونے سے پہلے کسٹم یاددہانیاں۔",
+  "notifGroupRaidReminders": "ریڈ ویک اینڈ کی یاد دہانیاں",
+  "notifRaidRemindersDescription": "ایک ہی قبیلے میں اپنے تصدیق شدہ اکاؤنٹس کے باقی حملوں کے لیے ایک اطلاع حاصل کریں۔",
   "notifDefensesAgainstYourBase": "آپ کی بیس کے خلاف دفاع",
   "notifDefensesAgainstYourBaseDescription": "صرف وہ ہٹس جہاں یہ اکاؤنٹ دفاع کر رہا ہے۔",
   "notifAllAttacks": "تمام حملے",
@@ -3608,6 +3610,67 @@
         "type": "String"
       },
       "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} باقی",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "ابھی · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "لیول {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · لیول {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}، لیول {level}، {start} سے {end} تک",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
         "type": "String"
       }
     }
