@@ -13,6 +13,7 @@ import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/models/clan.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
+import 'package:clashkingapp/core/utils/bounded_concurrency.dart';
 
 class ClanService extends ChangeNotifier {
   ClanService({ApiService? apiService})
@@ -39,6 +40,7 @@ class ClanService extends ChangeNotifier {
   List<ClanWarLog> warLogList = [];
   List<ClanWarStats> warStatsList = [];
   final Map<String, Future<Clan?>> _officialClanLoads = {};
+  final Map<String, Future<ClanMember?>> _memberLoads = {};
 
   static const String _errLoadingClanData = 'Error loading clan data';
 
@@ -46,7 +48,7 @@ class ClanService extends ChangeNotifier {
   Map<String, Clan> get clans => _clans;
 
   Clan? getClanByTag(String clanTag) {
-    return _clans[clanTag];
+    return _clans[_canonicalTag(clanTag)];
   }
 
   Future<void> loadAllClanData(
@@ -63,8 +65,10 @@ class ClanService extends ChangeNotifier {
 
     try {
       DebugUtils.debugApi("Loading clan data for tags: $clanTags");
-      final results = await Future.wait(
-        clanTags.map((tag) => _fetchOfficialClan(tag, throwOnError)),
+      final tags = _uniqueCanonicalTags(clanTags);
+      final results = await mapWithConcurrencyLimit(
+        tags,
+        (tag) => _fetchOfficialClan(tag, throwOnError),
       );
 
       fetchedClans = results.whereType<Clan>().toList();
@@ -92,12 +96,13 @@ class ClanService extends ChangeNotifier {
     bool throwOnError, {
     Map<String, String>? extraHeaders,
   }) async {
-    final loadKey = '$clanTag|${extraHeaders?['x-ck-user-id'] ?? ''}';
+    final normalizedTag = _canonicalTag(clanTag);
+    final loadKey = '$normalizedTag|${extraHeaders?['x-ck-user-id'] ?? ''}';
     final existing = _officialClanLoads[loadKey];
     if (existing != null) return existing;
 
     final load = _fetchOfficialClanOnce(
-      clanTag,
+      normalizedTag,
       throwOnError,
       extraHeaders: extraHeaders,
     );
@@ -117,7 +122,7 @@ class ClanService extends ChangeNotifier {
     Map<String, String>? extraHeaders,
   }) async {
     try {
-      final normalizedTag = clanTag.startsWith('#') ? clanTag : '#$clanTag';
+      final normalizedTag = _canonicalTag(clanTag);
       final encodedTag = Uri.encodeComponent(normalizedTag);
       final response = await _apiService.proxyGet(
         '/clans/$encodedTag',
@@ -152,8 +157,9 @@ class ClanService extends ChangeNotifier {
     String clanTag, {
     Map<String, String>? extraHeaders,
   }) async {
-    if (_clans.containsKey(clanTag) && extraHeaders == null) {
-      return _clans[clanTag]!;
+    final normalizedTag = _canonicalTag(clanTag);
+    if (_clans.containsKey(normalizedTag) && extraHeaders == null) {
+      return _clans[normalizedTag]!;
     }
 
     _isLoading = true;
@@ -162,7 +168,7 @@ class ClanService extends ChangeNotifier {
     try {
       DebugUtils.debugApi("Loading clan data for tag: $clanTag");
       final clan = await _fetchOfficialClan(
-        clanTag,
+        normalizedTag,
         true,
         extraHeaders: extraHeaders,
       );
@@ -202,7 +208,12 @@ class ClanService extends ChangeNotifier {
       final seasonsResponse = await _apiService.getResponse(
         '/cwl/$encodedTag/seasons',
       );
-      if (seasonsResponse.statusCode != 200) return [];
+      if (seasonsResponse.statusCode != 200) {
+        throw HttpException(
+          'Failed to load CWL history (${seasonsResponse.statusCode})',
+          uri: seasonsResponse.request?.url,
+        );
+      }
 
       final seasonsBody = json.decode(
         ApiService.decodeResponseBody(seasonsResponse),
@@ -218,7 +229,7 @@ class ClanService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading CWL ranking history: $e");
-      return [];
+      rethrow;
     }
   }
 
@@ -257,25 +268,61 @@ class ClanService extends ChangeNotifier {
       "🔄 Enriching ${missingMembers.length} clan members for ${clan.tag}",
     );
 
-    final enriched = await Future.wait(
-      missingMembers.map(_fetchPublicMemberData),
+    final uniqueMembers = {
+      for (final member in missingMembers) _canonicalTag(member.tag): member,
+    }.values;
+    final enriched = await mapWithConcurrencyLimit(
+      uniqueMembers,
+      _fetchPublicMemberData,
     );
     final enrichedByTag = {
-      for (final member in enriched.whereType<ClanMember>()) member.tag: member,
+      for (final member in enriched.whereType<ClanMember>())
+        _canonicalTag(member.tag): member,
     };
     if (enrichedByTag.isEmpty) return;
 
     for (var i = 0; i < clan.memberList.length; i++) {
-      final enrichedMember = enrichedByTag[clan.memberList[i].tag];
+      final enrichedMember =
+          enrichedByTag[_canonicalTag(clan.memberList[i].tag)];
       if (enrichedMember != null) {
         clan.memberList[i] = enrichedMember;
       }
     }
   }
 
+  static String _canonicalTag(String tag) {
+    final normalized = tag.replaceAll('#', '').trim().toUpperCase();
+    return normalized.isEmpty ? '' : '#$normalized';
+  }
+
+  static List<String> _uniqueCanonicalTags(Iterable<String> tags) => tags
+      .map(_canonicalTag)
+      .where((tag) => tag.isNotEmpty)
+      .toSet()
+      .toList(growable: false);
+
   Future<ClanMember?> _fetchPublicMemberData(ClanMember member) async {
+    final normalizedTag = _canonicalTag(member.tag);
+    final existing = _memberLoads[normalizedTag];
+    if (existing != null) return existing;
+
+    final load = _fetchPublicMemberDataOnce(member, normalizedTag);
+    _memberLoads[normalizedTag] = load;
     try {
-      final encodedTag = Uri.encodeComponent(member.tag);
+      return await load;
+    } finally {
+      if (identical(_memberLoads[normalizedTag], load)) {
+        _memberLoads.remove(normalizedTag);
+      }
+    }
+  }
+
+  Future<ClanMember?> _fetchPublicMemberDataOnce(
+    ClanMember member,
+    String normalizedTag,
+  ) async {
+    try {
+      final encodedTag = Uri.encodeComponent(normalizedTag);
       final response = await _apiService.proxyGet('/players/$encodedTag');
       if (response.statusCode != 200) return null;
 
@@ -284,7 +331,7 @@ class ClanService extends ChangeNotifier {
               as Map<String, dynamic>;
       return ClanMember.fromJson({
         ...data,
-        'tag': member.tag,
+        'tag': normalizedTag,
         'name': data['name'] ?? member.name,
         'role': member.role,
         'donations': data['donations'] ?? member.donations,

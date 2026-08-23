@@ -70,39 +70,49 @@ class CwlClan {
   int get oneStar => _sumStars((stats) => stats.oneStar);
   int get zeroStar => _sumStars((stats) => stats.zeroStar);
 
-  num get averageStars {
-    num totalAverageStars = 0;
-    for (var member in members) {
-      totalAverageStars += member.attackStats?.averageStars ?? 0;
-    }
-    return totalAverageStars;
+  double get averageStars {
+    final playedAttacks = members.fold<int>(
+      0,
+      (sum, member) => sum + (member.attackStats?.attackCount ?? 0),
+    );
+    if (playedAttacks == 0) return 0;
+    final earnedStars = members.fold<int>(
+      0,
+      (sum, member) => sum + (member.attackStats?.stars ?? 0),
+    );
+    return earnedStars / playedAttacks;
   }
 
-  num get averageDestruction {
-    num totalAverageDestruction = 0;
-    for (var member in members) {
-      totalAverageDestruction += member.attackStats?.averageDestruction ?? 0;
-    }
-    return totalAverageDestruction;
+  double get averageDestruction {
+    final playedAttacks = members.fold<int>(
+      0,
+      (sum, member) => sum + (member.attackStats?.attackCount ?? 0),
+    );
+    if (playedAttacks == 0) return 0;
+    final destruction = members.fold<double>(
+      0,
+      (sum, member) => sum + (member.attackStats?.totalDestruction ?? 0),
+    );
+    return destruction / playedAttacks;
   }
 
   // Defense stats
-  int get defAverageStars {
-    num totalDefAverageStars = 0;
-    for (var member in members) {
-      totalDefAverageStars += member.defenseStats?.averageStars ?? 0;
-    }
-    return totalDefAverageStars.toInt();
-  }
+  double get defAverageStars => defenseCount == 0
+      ? 0
+      : members.fold<int>(
+              0,
+              (sum, member) => sum + (member.defenseStats?.stars ?? 0),
+            ) /
+            defenseCount;
 
-  int get defAverageDestruction {
-    num totalDefAverageDestruction = 0;
-    for (var member in members) {
-      totalDefAverageDestruction +=
-          member.defenseStats?.averageDestruction ?? 0;
-    }
-    return totalDefAverageDestruction.toInt();
-  }
+  double get defAverageDestruction => defenseCount == 0
+      ? 0
+      : members.fold<double>(
+              0,
+              (sum, member) =>
+                  sum + (member.defenseStats?.totalDestruction ?? 0),
+            ) /
+            defenseCount;
 
   int get defStars {
     int totalDefStars = 0;

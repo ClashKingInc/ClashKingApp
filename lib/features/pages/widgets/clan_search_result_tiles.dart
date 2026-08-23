@@ -1,7 +1,6 @@
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_page.dart';
@@ -140,7 +139,7 @@ class ClanSearchResultTileState extends State<ClanSearchResultTile> {
                             children: <Widget>[
                               Chip(
                                 avatar: Icon(
-                                  LucideIcons.users,
+                                  Icons.groups_outlined,
                                   size: 16,
                                   color: Theme.of(
                                     context,

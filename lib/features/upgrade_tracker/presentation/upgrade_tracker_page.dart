@@ -76,12 +76,15 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   UpgradeTrackerSnapshot? _snapshot;
   Object? _error;
   String? _selectedTag;
+  int _selectionGeneration = 0;
   bool _loading = true;
   bool _initialized = false;
   int _section = 0;
   int _goldPassPercent = 0;
   UpgradePlanPreferences _planPreferences = const UpgradePlanPreferences();
   _TrackerPlanData? _planData;
+  bool _buildingPlanData = false;
+  int _planBuildGeneration = 0;
   final _capturedAtByTag = <String, DateTime>{};
   Timer? _ticker;
 
@@ -192,7 +195,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     if (initial == null) {
       setState(() => _loading = false);
     } else {
-      _selectedTag = initial;
       _load(initial);
     }
   }
@@ -223,6 +225,8 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
   }
 
   Future<void> _load(String tag) async {
+    final normalizedTag = UpgradeTrackerRepository.normalizeTag(tag);
+    final generation = ++_selectionGeneration;
     _ticker?.cancel();
     _ticker = null;
     // A snapshot already warmed in memory (e.g. by the startup prefetch, or
@@ -234,32 +238,44 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       _loading = cached == null;
       _error = null;
       _planData = null;
+      _buildingPlanData = false;
+      _planBuildGeneration++;
     });
     if (cached != null) {
-      _applyCachedSnapshot(cached);
-      unawaited(_hydrateCachedSnapshot(tag, cached));
+      _applyCachedSnapshot(cached, normalizedTag, generation);
+      unawaited(_hydrateCachedSnapshot(tag, cached, normalizedTag, generation));
       return;
     }
-    await _fetchAndApply(tag);
+    await _fetchAndApply(tag, normalizedTag, generation);
+  }
+
+  bool _isCurrentSelection(String normalizedTag, int generation) {
+    return mounted &&
+        generation == _selectionGeneration &&
+        _selectedTag != null &&
+        UpgradeTrackerRepository.normalizeTag(_selectedTag!) == normalizedTag;
   }
 
   Future<void> _hydrateCachedSnapshot(
     String tag,
     UpgradeTrackerSnapshot snapshot,
+    String normalizedTag,
+    int generation,
   ) async {
-    await _applySnapshot(snapshot);
-    if (!mounted || _selectedTag != tag) return;
-    await _revalidate(tag);
+    await _applySnapshot(snapshot, normalizedTag, generation);
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
+    await _revalidate(tag, normalizedTag, generation);
   }
 
-  void _applyCachedSnapshot(UpgradeTrackerSnapshot snapshot) {
+  void _applyCachedSnapshot(
+    UpgradeTrackerSnapshot snapshot,
+    String normalizedTag,
+    int generation,
+  ) {
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
     final goldPassPercent = _resolveGoldPassPercent(snapshot, null);
     const planPreferences = UpgradePlanPreferences();
-    final planData = _buildTrackerPlanData(
-      snapshot,
-      goldPassPercent: goldPassPercent,
-      preferences: planPreferences,
-    );
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
     setState(() {
       _snapshot = snapshot;
       _loading = false;
@@ -268,29 +284,41 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           snapshot.capturedAt;
       _goldPassPercent = goldPassPercent;
       _planPreferences = planPreferences;
-      _planData = planData;
+      _planData = null;
+      _buildingPlanData = false;
+      _planBuildGeneration++;
     });
-    _planLanes.value = planData.allLanes;
+    _planLanes.value = const [];
     _scheduleClockTick();
   }
 
-  Future<void> _revalidate(String tag) async {
+  Future<void> _revalidate(
+    String tag,
+    String normalizedTag,
+    int generation,
+  ) async {
     try {
       final snapshot = await _repository.load(tag, forceRefresh: true);
-      if (!mounted || snapshot == null || _selectedTag != tag) return;
-      await _applySnapshot(snapshot);
+      if (snapshot == null || !_isCurrentSelection(normalizedTag, generation)) {
+        return;
+      }
+      await _applySnapshot(snapshot, normalizedTag, generation);
     } catch (_) {
       // Best-effort only; the cached snapshot already rendered.
     }
   }
 
-  Future<void> _fetchAndApply(String tag) async {
+  Future<void> _fetchAndApply(
+    String tag,
+    String normalizedTag,
+    int generation,
+  ) async {
     try {
       final snapshot = await _repository.load(tag);
-      if (!mounted) return;
-      await _applySnapshot(snapshot);
+      if (!_isCurrentSelection(normalizedTag, generation)) return;
+      await _applySnapshot(snapshot, normalizedTag, generation);
     } catch (error) {
-      if (!mounted) return;
+      if (!_isCurrentSelection(normalizedTag, generation)) return;
       setState(() {
         _error = error;
         _snapshot = null;
@@ -301,29 +329,43 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     }
   }
 
-  Future<void> _applySnapshot(UpgradeTrackerSnapshot? snapshot) async {
+  Future<void> _applySnapshot(
+    UpgradeTrackerSnapshot? snapshot,
+    String normalizedTag,
+    int generation,
+  ) async {
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
     final draft = snapshot == null
         ? null
         : await _repository.loadPlanPreferences(snapshot.tag);
-    if (!mounted) return;
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
     final goldPassPercent = _resolveGoldPassPercent(snapshot, draft);
     final planPreferences = UpgradePlanPreferences.fromJson(
       draft?['heuristics'] is Map
           ? Map<String, dynamic>.from(draft!['heuristics'] as Map)
           : null,
     );
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
     setState(() {
       _snapshot = snapshot;
       _loading = false;
+      _error = null;
       if (snapshot != null) {
         _capturedAtByTag[UpgradeTrackerRepository.normalizeTag(snapshot.tag)] =
             snapshot.capturedAt;
       }
       _goldPassPercent = goldPassPercent;
       _planPreferences = planPreferences;
+      _planData = null;
+      _buildingPlanData = false;
+      _planBuildGeneration++;
     });
+    if (!_isCurrentSelection(normalizedTag, generation)) return;
     if (snapshot != null) {
-      _rebuildPlanLanes(snapshot);
+      _planLanes.value = const [];
+      if (_section == 2 || _section == 3) {
+        unawaited(_ensurePlanData(snapshot));
+      }
       _scheduleClockTick();
     } else {
       _planLanes.value = const [];
@@ -510,6 +552,9 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         allowedTags: linkedNames.keys.toSet(),
       );
       if (!mounted) return;
+      // Prevent a load started before the import from overwriting the newly
+      // persisted snapshot when its repository request completes later.
+      _selectionGeneration++;
       setState(() {
         _snapshot = snapshot;
         _selectedTag = snapshot.tag;
@@ -525,7 +570,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
           snapshot.boosts.labTimeReductionPercent,
         ].reduce((a, b) => a > b ? a : b);
       });
-      _rebuildPlanLanes(snapshot);
+      _invalidatePlanData(snapshot);
       _scheduleClockTick();
       if (_pageController.hasClients) _pageController.jumpToPage(0);
       _scheduleWidgetSync();
@@ -713,10 +758,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             : _buildBody(),
       );
     }
-    final planData = _planData;
-    if (planData == null) {
-      return const Scaffold(body: SkeletonPage(itemCount: 5));
-    }
     final tabs = [
       InfoProfileTabData(
         label: l10n.upgradeTrackerHomeVillage,
@@ -782,7 +823,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
             _planPreferences,
             (value) {
               setState(() => _planPreferences = value);
-              _rebuildPlanLanes(snapshot);
+              _invalidatePlanData(snapshot);
               unawaited(_savePlanDraft());
             },
           ),
@@ -791,7 +832,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         selectedIndex: _section,
         onTabSelected: _selectSection,
         alwaysScrollable: true,
-        pages: _trackerPages(snapshot, planData),
+        pages: _trackerPages(snapshot, _planData),
       ),
     );
   }
@@ -884,6 +925,10 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     if (value == _section) return;
     FocusManager.instance.primaryFocus?.unfocus();
     setState(() => _section = value);
+    if (value == 2 || value == 3) {
+      final snapshot = _snapshot;
+      if (snapshot != null) unawaited(_ensurePlanData(snapshot));
+    }
     if (!_pageController.hasClients) return;
     if (MediaQuery.disableAnimationsOf(context)) {
       _pageController.jumpToPage(value);
@@ -900,6 +945,10 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     if (value == _section) return;
     FocusManager.instance.primaryFocus?.unfocus();
     setState(() => _section = value);
+    if (value == 2 || value == 3) {
+      final snapshot = _snapshot;
+      if (snapshot != null) unawaited(_ensurePlanData(snapshot));
+    }
   }
 
   Future<void> _showAccountPicker(List<_TrackerAccountOption> accounts) async {
@@ -953,20 +1002,16 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         onSecondaryAction: _selectedTag == null ? null : _openClashMoreSettings,
       );
     }
-    final planData = _planData;
-    if (planData == null) {
-      return const SkeletonPage(itemCount: 5);
-    }
     return PageView(
       controller: _pageController,
       onPageChanged: _onPageChanged,
-      children: _trackerPages(snapshot, planData),
+      children: _trackerPages(snapshot, _planData),
     );
   }
 
   List<Widget> _trackerPages(
     UpgradeTrackerSnapshot snapshot,
-    _TrackerPlanData planData,
+    _TrackerPlanData? planData,
   ) => [
     _UpgradesTab(
       key: const ValueKey('home-upgrades'),
@@ -980,19 +1025,57 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
       village: UpgradeVillage.builderBase,
       clock: _clock,
     ),
-    _PlanCalendarTab(snapshot: snapshot, planData: planData),
-    _PlanTab(planData: planData),
+    if (planData == null)
+      const SkeletonPage(itemCount: 5)
+    else
+      _PlanCalendarTab(snapshot: snapshot, planData: planData),
+    if (planData == null)
+      const SkeletonPage(itemCount: 5)
+    else
+      _PlanTab(planData: planData),
     _CollectionTab(snapshot: snapshot),
   ];
 
-  void _rebuildPlanLanes(UpgradeTrackerSnapshot snapshot) {
+  Future<void> _ensurePlanData(UpgradeTrackerSnapshot snapshot) async {
+    if (_planData != null || _buildingPlanData) return;
+    final buildGeneration = _planBuildGeneration;
+    final selectionGeneration = _selectionGeneration;
+    final normalizedTag = UpgradeTrackerRepository.normalizeTag(snapshot.tag);
+    setState(() => _buildingPlanData = true);
+
+    // Let the selected tab and its loading shell paint before doing the
+    // planner's CPU-heavy lane and wall calculations.
+    await Future<void>.delayed(Duration.zero);
+    if (!_isCurrentSelection(normalizedTag, selectionGeneration) ||
+        buildGeneration != _planBuildGeneration) {
+      return;
+    }
     final planData = _buildTrackerPlanData(
       snapshot,
       goldPassPercent: _goldPassPercent,
       preferences: _planPreferences,
     );
-    _planData = planData;
+    if (!_isCurrentSelection(normalizedTag, selectionGeneration) ||
+        buildGeneration != _planBuildGeneration) {
+      return;
+    }
+    setState(() {
+      _planData = planData;
+      _buildingPlanData = false;
+    });
     _planLanes.value = planData.allLanes;
+  }
+
+  void _invalidatePlanData(UpgradeTrackerSnapshot snapshot) {
+    setState(() {
+      _planData = null;
+      _buildingPlanData = false;
+      _planBuildGeneration++;
+    });
+    _planLanes.value = const [];
+    if (_section == 2 || _section == 3) {
+      unawaited(_ensurePlanData(snapshot));
+    }
   }
 
   Future<void> _showGoldPassPicker(UpgradeTrackerSnapshot snapshot) async {
@@ -1023,7 +1106,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
     );
     if (selected == null || selected == _goldPassPercent) return;
     setState(() => _goldPassPercent = selected);
-    _rebuildPlanLanes(snapshot);
+    _invalidatePlanData(snapshot);
     unawaited(_savePlanDraft());
   }
 
@@ -2551,10 +2634,13 @@ class _UpgradeIconTile extends StatelessWidget {
       button: true,
       label:
           '${item.name}, level ${item.currentLevel} of ${item.targetLevel}${item.count > 1 ? ', ${item.count} buildings' : ''}',
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => showUpgradeDetails(context, item),
-        child: tile,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(CKRadius.tile),
+          onTap: () => showUpgradeDetails(context, item),
+          child: tile,
+        ),
       ),
     );
   }
@@ -3951,6 +4037,7 @@ class _PlanTimelineBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final horizonEnd = firstDay.add(Duration(days: days));
     if (!upgrade.endsAt.isAfter(firstDay) ||
         !upgrade.startsAt.isBefore(horizonEnd)) {
@@ -3971,7 +4058,9 @@ class _PlanTimelineBlock extends StatelessWidget {
     final iconOnly = blockWidth < 78;
     final showMetadata = blockWidth >= 168;
     final durationLabel = upgrade.isOngoing
-        ? '${_duration(upgrade.endsAt.difference(DateTime.now()).inSeconds)} left'
+        ? l10n.upgradeTrackerTimelineRemainingDuration(
+            _duration(upgrade.endsAt.difference(DateTime.now()).inSeconds),
+          )
         : _duration(upgrade.endsAt.difference(upgrade.startsAt).inSeconds);
     final scheme = Theme.of(context).colorScheme;
     final blockColor = Color.alphaBlend(
@@ -3981,104 +4070,127 @@ class _PlanTimelineBlock extends StatelessWidget {
     final borderColor = upgrade.isOngoing
         ? scheme.primary
         : accent.withValues(alpha: 0.78);
-    final block = GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => _showPlannedUpgradeDetails(context, upgrade),
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: blockColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: borderColor,
-            width: upgrade.isOngoing ? 2 : 1,
+    final block = Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () => _showPlannedUpgradeDetails(context, upgrade),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: blockColor,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: borderColor,
+              width: upgrade.isOngoing ? 2 : 1,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(9),
+            child: blockWidth < 24
+                ? const SizedBox.shrink()
+                : Row(
+                    children: [
+                      Container(width: 3, color: accent),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: iconOnly ? 3 : 6,
+                            vertical: 5,
+                          ),
+                          child: iconOnly
+                              ? Center(
+                                  child: _TimelineBlockIcon(
+                                    imageUrl: upgrade.item.imageUrl,
+                                    level: upgrade.step.targetLevel,
+                                    compact: true,
+                                  ),
+                                )
+                              : Row(
+                                  children: [
+                                    _TimelineBlockIcon(
+                                      imageUrl: upgrade.item.imageUrl,
+                                      level: upgrade.step.targetLevel,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            upgrade.isOngoing
+                                                ? l10n.upgradeTrackerTimelineOngoingTitle(
+                                                    upgrade.item.name,
+                                                  )
+                                                : upgrade.item.name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall
+                                                ?.copyWith(
+                                                  color: scheme.onSurface,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1.05,
+                                                ),
+                                          ),
+                                          if (showMetadata) ...[
+                                            const SizedBox(height: 3),
+                                            Text(
+                                              l10n.upgradeTrackerTimelineMetadata(
+                                                upgrade.step.targetLevel,
+                                                durationLabel,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelSmall
+                                                  ?.copyWith(
+                                                    color:
+                                                        scheme.onSurfaceVariant,
+                                                    fontSize: 9,
+                                                    fontWeight: FontWeight.w700,
+                                                    height: 1,
+                                                  ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
-        child: blockWidth < 24
-            ? const SizedBox.shrink()
-            : Row(
-                children: [
-                  Container(width: 3, color: accent),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: iconOnly ? 3 : 6,
-                        vertical: 5,
-                      ),
-                      child: iconOnly
-                          ? Center(
-                              child: _TimelineBlockIcon(
-                                imageUrl: upgrade.item.imageUrl,
-                                level: upgrade.step.targetLevel,
-                                compact: true,
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                _TimelineBlockIcon(
-                                  imageUrl: upgrade.item.imageUrl,
-                                  level: upgrade.step.targetLevel,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${upgrade.isOngoing ? 'Now · ' : ''}${upgrade.item.name}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall
-                                            ?.copyWith(
-                                              color: scheme.onSurface,
-                                              fontWeight: FontWeight.w800,
-                                              height: 1.05,
-                                            ),
-                                      ),
-                                      if (showMetadata) ...[
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          'Lv ${upgrade.step.targetLevel} · $durationLabel',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall
-                                              ?.copyWith(
-                                                color: scheme.onSurfaceVariant,
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w700,
-                                                height: 1,
-                                              ),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ),
-                ],
-              ),
       ),
     );
     final interactiveBlock = showTooltip
         ? Tooltip(
-            message:
-                '${upgrade.item.name} · Lv ${upgrade.step.targetLevel}\n${_timelineDateTimeLabel(upgrade.startsAt)} - ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            message: l10n.upgradeTrackerTimelineTooltip(
+              upgrade.item.name,
+              upgrade.step.targetLevel,
+              _timelineDateTimeLabel(upgrade.startsAt),
+              _timelineDateTimeLabel(upgrade.endsAt),
+            ),
             child: block,
           )
         : block;
     final includeSemantics = SemanticsBinding.instance.semanticsEnabled;
     final blockChild = includeSemantics
         ? Semantics(
-            label:
-                '${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            button: true,
+            label: l10n.upgradeTrackerTimelineSemanticLabel(
+              upgrade.item.name,
+              upgrade.step.targetLevel,
+              _timelineDateTimeLabel(upgrade.startsAt),
+              _timelineDateTimeLabel(upgrade.endsAt),
+            ),
             child: interactiveBlock,
           )
         : interactiveBlock;
