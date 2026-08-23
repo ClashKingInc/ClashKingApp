@@ -90,24 +90,30 @@ test.describe('Email verification page', () => {
 
     const code = await waitForOtp(email, { notBefore: requestedAt });
     const digitInputs = page.getByRole('textbox');
+    const verificationResponsePromise = page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' &&
+        response.url().endsWith('/v2/auth/web/verify-email-code'),
+      { timeout: 20_000 },
+    );
     await digitInputs.first().click({ force: true, timeout: 5_000 });
     for (const digit of code) {
       await page.keyboard.press(digit);
       await page.waitForTimeout(100);
     }
 
-    await page.waitForFunction(
-      () => localStorage.getItem('flutter.access_token') !== null,
-      { timeout: 20_000, polling: 500 },
-    );
-
-    const storedToken = await page.evaluate(() => localStorage.getItem('flutter.access_token'));
-    const accessToken: unknown = storedToken ? JSON.parse(storedToken) : null;
-    if (typeof accessToken !== 'string') throw new Error('Verified account has no access token');
+    const verificationResponse = await verificationResponsePromise;
+    expect(verificationResponse.ok(), 'email verification request failed').toBe(true);
+    const verification = await verificationResponse.json();
+    const accessToken: unknown = verification?.access_token;
+    if (typeof accessToken !== 'string' || !accessToken) {
+      throw new Error('Email verification response has no access token');
+    }
     const cleanup = await page.request.delete(`${API_BASE}/v2/auth/me`, {
       headers: { authorization: `Bearer ${accessToken}` },
     });
-    expect(cleanup.ok(), `account cleanup returned ${cleanup.status()}`).toBe(true);
+    const cleanupBody = cleanup.ok() ? '' : `: ${(await cleanup.text()).slice(0, 300)}`;
+    expect(cleanup.ok(), `account cleanup returned ${cleanup.status()}${cleanupBody}`).toBe(true);
   });
 
   test('page displays 6 single-digit input boxes for the verification code', async ({ page }) => {

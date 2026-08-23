@@ -32,13 +32,14 @@ setup('authenticate with email', async () => {
   const baseURL = (process.env.BASE_URL ?? 'https://app.clashk.ing').trim();
   const origin = (() => { try { return new URL(baseURL).origin; } catch { return baseURL; } })();
   const apiContext = await request.newContext({ baseURL: API_BASE });
-  let capturedTokens: { access_token: string; refresh_token: string } | null = null;
+  let capturedAccessToken: string | null = null;
+  let capturedCookies: Awaited<ReturnType<typeof apiContext.storageState>>['cookies'] = [];
   let temporaryAccountCreated = false;
   try {
     // Prefer an isolated account that teardown can delete. Static credentials
     // remain a fallback for environments where the OTP inbox is unavailable.
     if (email && password && !canProvisionAccount) {
-      const resp = await apiContext.post('/v2/auth/email', {
+      const resp = await apiContext.post('/v2/auth/web/email', {
         headers: { 'Content-Type': 'application/json' },
         data: JSON.stringify({
           email: email.trim(),
@@ -50,14 +51,14 @@ setup('authenticate with email', async () => {
       console.log(`[auth.setup] static account API → ${resp.status()}`);
       if (resp.ok()) {
         const json = await resp.json();
-        if (json?.access_token && json?.refresh_token) {
-          capturedTokens = { access_token: json.access_token, refresh_token: json.refresh_token };
+        if (typeof json?.access_token === 'string' && json.access_token) {
+          capturedAccessToken = json.access_token;
           console.log('[auth.setup] static account tokens captured ✓');
         }
       }
     }
 
-    if (!capturedTokens && canProvisionAccount) {
+    if (!capturedAccessToken && canProvisionAccount) {
       const provisionedEmail = createE2eEmail('auth');
       const provisionedPassword = `E2e!${crypto.randomUUID()}Aa1`;
       const requestedAt = Date.now();
@@ -85,7 +86,7 @@ setup('authenticate with email', async () => {
           ? registration.verification_code
           : null;
       const code = developmentCode ?? await waitForOtp(provisionedEmail, { notBefore: requestedAt });
-      const verify = await apiContext.post('/v2/auth/verify-email-code', {
+      const verify = await apiContext.post('/v2/auth/web/verify-email-code', {
         headers: { 'Content-Type': 'application/json' },
         data: JSON.stringify({ email: provisionedEmail, code }),
       });
@@ -93,10 +94,16 @@ setup('authenticate with email', async () => {
         throw new Error(`temporary account verification returned ${verify.status()}`);
       }
       const json = await verify.json();
-      if (json?.access_token && json?.refresh_token) {
-        capturedTokens = { access_token: json.access_token, refresh_token: json.refresh_token };
+      if (typeof json?.access_token === 'string' && json.access_token) {
+        capturedAccessToken = json.access_token;
         temporaryAccountCreated = true;
         console.log('[auth.setup] temporary verified account tokens captured ✓');
+      }
+    }
+    if (capturedAccessToken) {
+      capturedCookies = (await apiContext.storageState()).cookies;
+      if (capturedCookies.length === 0) {
+        throw new Error('web authentication did not issue a browser session cookie');
       }
     }
   } catch (err) {
@@ -108,7 +115,7 @@ setup('authenticate with email', async () => {
 
   fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
 
-  if (!capturedTokens) {
+  if (!capturedAccessToken) {
     console.warn('[auth.setup] tokens not captured — chromium-auth tests will run with empty auth');
     // Write a valid-but-empty state so Playwright can load the file.
     // Tests that need real auth will fail or skip on their own assertions.
@@ -120,17 +127,15 @@ setup('authenticate with email', async () => {
   }
 
   // ── Write tokens directly into the storageState JSON ─────────────────────
-  // shared_preferences_web stores String values as JSON.stringify(value) under
-  // the key 'flutter.<prefKey>'. We write the file directly instead of
-  // navigating to the app — avoids dependency on the preview URL being ready
-  // and removes a potential source of unhandled exceptions.
+  // Browser auth uses an HttpOnly refresh cookie. Keep the access token in
+  // localStorage only for teardown; the app obtains its own access token by
+  // calling /auth/web/refresh with the saved cookie.
   fs.writeFileSync(AUTH_FILE, JSON.stringify({
-    cookies: [],
+    cookies: capturedCookies,
     origins: [{
       origin,
       localStorage: [
-        { name: 'flutter.access_token', value: JSON.stringify(capturedTokens.access_token) },
-        { name: 'flutter.refresh_token', value: JSON.stringify(capturedTokens.refresh_token) },
+        { name: 'flutter.access_token', value: JSON.stringify(capturedAccessToken) },
       ],
     }],
   }));

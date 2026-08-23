@@ -28,7 +28,8 @@ teardown('delete temporary email account', async () => {
     const response = await apiContext.delete('/v2/auth/me', {
       headers: { authorization: `Bearer ${accessToken}` },
     });
-    expect(response.ok(), `account cleanup returned ${response.status()}`).toBe(true);
+    const responseBody = response.ok() ? '' : `: ${(await response.text()).slice(0, 300)}`;
+    expect(response.ok(), `account cleanup returned ${response.status()}${responseBody}`).toBe(true);
     fs.rmSync(TEMPORARY_ACCOUNT_FILE, { force: true });
     fs.rmSync(AUTH_FILE, { force: true });
   } finally {
