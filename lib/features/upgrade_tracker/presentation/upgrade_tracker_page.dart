@@ -539,6 +539,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
 
   Future<void> _importSnapshotBytes(List<int> bytes) async {
     final l10n = AppLocalizations.of(context)!;
+    ++_selectionGeneration;
     try {
       final linkedAccounts = _linkedAccountOptions();
       final linkedNames = {
@@ -4027,6 +4028,7 @@ class _PlanTimelineBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final horizonEnd = firstDay.add(Duration(days: days));
     if (!upgrade.endsAt.isAfter(firstDay) ||
         !upgrade.startsAt.isBefore(horizonEnd)) {
@@ -4047,7 +4049,9 @@ class _PlanTimelineBlock extends StatelessWidget {
     final iconOnly = blockWidth < 78;
     final showMetadata = blockWidth >= 168;
     final durationLabel = upgrade.isOngoing
-        ? '${_duration(upgrade.endsAt.difference(DateTime.now()).inSeconds)} left'
+        ? l10n.upgradeTrackerTimelineRemainingDuration(
+            _duration(upgrade.endsAt.difference(DateTime.now()).inSeconds),
+          )
         : _duration(upgrade.endsAt.difference(upgrade.startsAt).inSeconds);
     final scheme = Theme.of(context).colorScheme;
     final blockColor = Color.alphaBlend(
@@ -4107,7 +4111,11 @@ class _PlanTimelineBlock extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${upgrade.isOngoing ? 'Now · ' : ''}${upgrade.item.name}',
+                                            upgrade.isOngoing
+                                                ? l10n.upgradeTrackerTimelineOngoingTitle(
+                                                    upgrade.item.name,
+                                                  )
+                                                : upgrade.item.name,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: Theme.of(context)
@@ -4122,7 +4130,10 @@ class _PlanTimelineBlock extends StatelessWidget {
                                           if (showMetadata) ...[
                                             const SizedBox(height: 3),
                                             Text(
-                                              'Lv ${upgrade.step.targetLevel} · $durationLabel',
+                                              l10n.upgradeTrackerTimelineMetadata(
+                                                upgrade.step.targetLevel,
+                                                durationLabel,
+                                              ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)
@@ -4152,8 +4163,12 @@ class _PlanTimelineBlock extends StatelessWidget {
     );
     final interactiveBlock = showTooltip
         ? Tooltip(
-            message:
-                '${upgrade.item.name} · Lv ${upgrade.step.targetLevel}\n${_timelineDateTimeLabel(upgrade.startsAt)} - ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            message: l10n.upgradeTrackerTimelineTooltip(
+              upgrade.item.name,
+              upgrade.step.targetLevel,
+              _timelineDateTimeLabel(upgrade.startsAt),
+              _timelineDateTimeLabel(upgrade.endsAt),
+            ),
             child: block,
           )
         : block;
@@ -4161,8 +4176,12 @@ class _PlanTimelineBlock extends StatelessWidget {
     final blockChild = includeSemantics
         ? Semantics(
             button: true,
-            label:
-                '${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${_timelineDateTimeLabel(upgrade.startsAt)} to ${_timelineDateTimeLabel(upgrade.endsAt)}',
+            label: l10n.upgradeTrackerTimelineSemanticLabel(
+              upgrade.item.name,
+              upgrade.step.targetLevel,
+              _timelineDateTimeLabel(upgrade.startsAt),
+              _timelineDateTimeLabel(upgrade.endsAt),
+            ),
             child: interactiveBlock,
           )
         : interactiveBlock;

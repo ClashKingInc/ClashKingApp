@@ -548,7 +548,7 @@ class PlayerService extends ChangeNotifier {
   Future<void> hydrateBookmarkedPlayers(List<String> tags) async {
     await loadOfficialPlayerData(
       _uniqueCanonicalTags(tags),
-      notify: false,
+      notify: true,
       throwOnError: false,
     );
   }
