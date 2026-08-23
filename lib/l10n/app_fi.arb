@@ -3612,6 +3612,67 @@
       }
     }
   },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} jäljellä",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Nyt · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Taso {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Taso {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, taso {level}, {start}–{end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerHeaderComplete": "Valmis",
   "upgradeTrackerHeaderLevelsLeft": "Tasoja jäljellä",
   "upgradeTrackerHeaderActive": "Aktiivinen",
