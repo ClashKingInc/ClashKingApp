@@ -30,9 +30,10 @@
 
 Variables Actions : `E2E_OTP_API_URL` et `E2E_EMAIL_DOMAIN`.
 
-Si les identifiants fixes sont absents ou invalides, `auth.setup.ts` crée un compte
-`e2e+<unique-id>@e2e-mail.clashk.ing`, le vérifie avec le code de développement ou
-l'email Cloudflare, puis `auth.teardown.ts` supprime ce compte via `DELETE /v2/auth/me`.
+Les smoke tests de PR créent un compte `e2e+<unique-id>@e2e-mail.clashk.ing`,
+le vérifient avec le code de développement ou l'email Cloudflare, puis le suppriment
+via `DELETE /v2/auth/me`. La suite complète préfère les identifiants fixes afin de
+conserver la couverture des scénarios qui nécessitent un joueur CoC déjà lié.
 
 > **Note CoC** : Les tests §8–§15 nécessitent un compte de test avec un joueur CoC
 > déjà lié dans MongoDB. Le plus simple est de créer un compte dédié via l'app,
