@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
 import { createE2eEmail, getOtpInboxConfig, waitForOtp } from './otp-inbox';
 
+const API_BASE = (process.env.API_BASE_URL ?? 'https://go.api.clashk.ing').replace(/\/+$/, '');
+
 // Reaches EmailVerificationPage by registering a fresh throwaway account.
 // Each test creates one unique account (timestamp-based email) — expected in a test env.
 // UI-only cases use example.com; the Cloudflare-backed case verifies a real code in CI.
@@ -98,6 +100,14 @@ test.describe('Email verification page', () => {
       () => localStorage.getItem('flutter.access_token') !== null,
       { timeout: 20_000, polling: 500 },
     );
+
+    const storedToken = await page.evaluate(() => localStorage.getItem('flutter.access_token'));
+    const accessToken: unknown = storedToken ? JSON.parse(storedToken) : null;
+    if (typeof accessToken !== 'string') throw new Error('Verified account has no access token');
+    const cleanup = await page.request.delete(`${API_BASE}/v2/auth/me`, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
+    expect(cleanup.ok(), `account cleanup returned ${cleanup.status()}`).toBe(true);
   });
 
   test('page displays 6 single-digit input boxes for the verification code', async ({ page }) => {
