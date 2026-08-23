@@ -48,7 +48,12 @@ class PlayerBattlelogEntry {
     final resources = <String, int>{};
     for (final raw in _list(json['lootedResources'])) {
       final resource = _map(raw);
-      final name = resource['name']?.toString().toLowerCase() ?? '';
+      final name =
+          resource['name']?.toString().toLowerCase().replaceAll(
+            RegExp(r'[\s_]'),
+            '',
+          ) ??
+          '';
       resources[name] = _int(resource['amount']);
     }
     final armyShareCode = json['armyShareCode']?.toString() ?? '';
@@ -66,7 +71,7 @@ class PlayerBattlelogEntry {
       destructionPercentage: _int(json['destructionPercentage']),
       gold: resources['gold'] ?? 0,
       elixir: resources['elixir'] ?? 0,
-      darkElixir: resources['darkelixir'] ?? resources['dark_elixir'] ?? 0,
+      darkElixir: resources['darkelixir'] ?? 0,
       timestamp: timestamp,
       duration: _int(json['battleTime']),
       armyShareCode: armyShareCode,

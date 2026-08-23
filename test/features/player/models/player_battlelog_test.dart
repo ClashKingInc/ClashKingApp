@@ -41,6 +41,21 @@ void main() {
     });
   });
 
+  test('parses spaced Dark Elixir resource names from official battles', () {
+    final battle = PlayerBattlelogEntry.fromOfficial({
+      'battleType': 'homeVillage',
+      'attack': true,
+      'lootedResources': [
+        {'name': 'Gold', 'amount': 1000},
+        {'name': 'Elixir', 'amount': 2000},
+        {'name': 'Dark Elixir', 'amount': 300},
+      ],
+    });
+
+    expect(battle.darkElixir, 300);
+    expect(battle.totalLoot, 3300);
+  });
+
   test('merges official and historical battles and preserves army data', () {
     final official = PlayerBattlelogEntry.fromOfficial({
       'battleType': 'homeVillage',
