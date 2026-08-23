@@ -9,6 +9,7 @@ import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/achievements/data/achievements_repository.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/core/services/push_notification_service.dart';
 import 'package:clashkingapp/features/auth/presentation/maintenance_page.dart';
@@ -798,6 +799,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
       final clanService = context.read<ClanService>();
       final warCwlService = context.read<WarCwlService>();
       final authService = context.read<AuthService>();
+      final achievementsRepository = context.read<AchievementsRepository>();
       final bookmarkService = context.read<BookmarkService>();
       final appState = context.read<MyAppState>();
 
@@ -810,6 +812,7 @@ class _PostAuthLoadingScreenState extends State<_PostAuthLoadingScreen> {
           clans: clanService,
           wars: warCwlService,
         );
+        unawaited(achievementsRepository.check().catchError((_) {}));
         if (appState.isFeatureEnabled(AppFeatureFlags.notifications) &&
             PushNotificationService.supportsPushNotifications) {
           final pushResult = await PushNotificationService.instance

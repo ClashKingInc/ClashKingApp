@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Úspěchy",
   "achievementEarnedLabel": "Získáno",
+  "achievementSummary": "{earned}/{total} dokončeno",
+  "achievementEarnedCount": "Získáno ×{count}",
   "achievementTownhall18Name": "Radnice 18",
   "achievementTownhall18Requirement": "Dosáhněte 18. úrovně radnice.",
   "achievementWarWarriorName": "Válečný bojovník",

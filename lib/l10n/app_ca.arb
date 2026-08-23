@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Assoliments",
   "achievementEarnedLabel": "Aconseguit",
+  "achievementSummary": "{earned}/{total} completat",
+  "achievementEarnedCount": "Aconseguit ×{count}",
   "achievementTownhall18Name": "Ajuntament 18",
   "achievementTownhall18Requirement": "Arriba a l'ajuntament 18.",
   "achievementWarWarriorName": "Guerrer de guerra",

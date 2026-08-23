@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Başarımlar",
   "achievementEarnedLabel": "Kazanıldı",
+  "achievementSummary": "{earned}/{total} tamamlandı",
+  "achievementEarnedCount": "Kazanıldı ×{count}",
   "achievementTownhall18Name": "Belediye Binası 18",
   "achievementTownhall18Requirement": "Belediye Binası 18'e ulaş.",
   "achievementWarWarriorName": "Savaş Savaşçısı",

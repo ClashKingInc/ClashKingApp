@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Teljesítmények",
   "achievementEarnedLabel": "Megszerzések",
+  "achievementSummary": "{earned}/{total} kész",
+  "achievementEarnedCount": "Megszerzések ×{count}",
   "achievementTownhall18Name": "Városháza 18",
   "achievementTownhall18Requirement": "Érd el a 18-as városházát.",
   "achievementWarWarriorName": "Háborús harcos",

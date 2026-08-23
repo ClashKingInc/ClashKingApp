@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Erfolge",
   "achievementEarnedLabel": "Verdient",
+  "achievementSummary": "{earned}/{total} abgeschlossen",
+  "achievementEarnedCount": "Verdient ×{count}",
   "achievementTownhall18Name": "Rathaus 18",
   "achievementTownhall18Requirement": "Erreiche Rathaus 18.",
   "achievementWarWarriorName": "Kriegskrieger",

@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Conquistas",
   "achievementEarnedLabel": "Conquistado",
+  "achievementSummary": "{earned}/{total} concluído",
+  "achievementEarnedCount": "Conquistado ×{count}",
   "achievementTownhall18Name": "Câmara Municipal 18",
   "achievementTownhall18Requirement": "Alcança a Câmara Municipal 18.",
   "achievementWarWarriorName": "Guerreiro de guerra",

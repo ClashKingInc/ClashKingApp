@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "उपलब्धियाँ",
   "achievementEarnedLabel": "अर्जित",
+  "achievementSummary": "{earned}/{total} पूर्ण",
+  "achievementEarnedCount": "अर्जित ×{count}",
   "achievementTownhall18Name": "टाउन हॉल 18",
   "achievementTownhall18Requirement": "टाउन हॉल 18 तक पहुँचें।",
   "achievementWarWarriorName": "वॉर वॉरियर",

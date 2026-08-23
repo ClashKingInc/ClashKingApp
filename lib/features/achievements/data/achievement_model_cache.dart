@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AchievementModelCache {
-  AchievementModelCache({http.Client? client})
-    : _client = client ?? http.Client();
+  AchievementModelCache({
+    http.Client? client,
+    this.timeout = const Duration(seconds: 15),
+  }) : _client = client ?? http.Client();
 
   static final AchievementModelCache shared = AchievementModelCache();
 
   final http.Client _client;
+  final Duration timeout;
   final Map<String, String> _resolvedSources = {};
   final Map<String, Future<String>> _pendingSources = {};
 
@@ -22,7 +25,7 @@ class AchievementModelCache {
 
   Future<String> _download(String url) async {
     try {
-      final response = await _client.get(Uri.parse(url));
+      final response = await _client.get(Uri.parse(url)).timeout(timeout);
       if (response.statusCode < 200 || response.statusCode >= 300) return url;
       final source =
           'data:model/gltf-binary;base64,${base64Encode(response.bodyBytes)}';

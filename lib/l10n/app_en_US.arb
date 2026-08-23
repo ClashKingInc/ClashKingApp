@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Achievements",
   "achievementEarnedLabel": "Earned",
+  "achievementSummary": "{earned}/{total} completed",
+  "achievementEarnedCount": "Earned ×{count}",
   "achievementTownhall18Name": "Townhall 18",
   "achievementTownhall18Requirement": "Reach Town Hall 18.",
   "achievementWarWarriorName": "War Warrior",

@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Prestationer",
   "achievementEarnedLabel": "Intjänat",
+  "achievementSummary": "{earned}/{total} slutfört",
+  "achievementEarnedCount": "Intjänat ×{count}",
   "achievementTownhall18Name": "Stadshus 18",
   "achievementTownhall18Requirement": "Nå stadshusnivå 18.",
   "achievementWarWarriorName": "Krigskrigare",

@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Thành tựu",
   "achievementEarnedLabel": "Đã đạt",
+  "achievementSummary": "{earned}/{total} đã hoàn thành",
+  "achievementEarnedCount": "Đã đạt ×{count}",
   "achievementTownhall18Name": "Nhà Chính 18",
   "achievementTownhall18Requirement": "Đạt Nhà Chính cấp 18.",
   "achievementWarWarriorName": "Chiến binh chiến tranh",

@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Obiettivi",
   "achievementEarnedLabel": "Ottenuto",
+  "achievementSummary": "{earned}/{total} completato",
+  "achievementEarnedCount": "Ottenuto ×{count}",
   "achievementTownhall18Name": "Municipio 18",
   "achievementTownhall18Requirement": "Raggiungi il municipio 18.",
   "achievementWarWarriorName": "Guerriero di guerra",

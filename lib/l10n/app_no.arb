@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Prestasjoner",
   "achievementEarnedLabel": "Opptjent",
+  "achievementSummary": "{earned}/{total} fullført",
+  "achievementEarnedCount": "Opptjent ×{count}",
   "achievementTownhall18Name": "Rådhus 18",
   "achievementTownhall18Requirement": "Nå rådhusnivå 18.",
   "achievementWarWarriorName": "Krigskriger",

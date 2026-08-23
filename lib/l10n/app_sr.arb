@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Достигнућа",
   "achievementEarnedLabel": "Освојено",
+  "achievementSummary": "{earned}/{total} završeno",
+  "achievementEarnedCount": "Освојено ×{count}",
   "achievementTownhall18Name": "Градска кућа 18",
   "achievementTownhall18Requirement": "Достигните градску кућу 18.",
   "achievementWarWarriorName": "Ратни ратник",

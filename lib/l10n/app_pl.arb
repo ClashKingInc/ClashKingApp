@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Osiągnięcia",
   "achievementEarnedLabel": "Zdobyto",
+  "achievementSummary": "{earned}/{total} ukończono",
+  "achievementEarnedCount": "Zdobyto ×{count}",
   "achievementTownhall18Name": "Ratusz 18",
   "achievementTownhall18Requirement": "Osiągnij 18. poziom ratusza.",
   "achievementWarWarriorName": "Wojenny wojownik",

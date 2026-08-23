@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "کامیابیاں",
   "achievementEarnedLabel": "حاصل کردہ",
+  "achievementSummary": "{earned}/{total} مکمل",
+  "achievementEarnedCount": "حاصل کردہ ×{count}",
   "achievementTownhall18Name": "ٹاؤن ہال 18",
   "achievementTownhall18Requirement": "ٹاؤن ہال 18 تک پہنچیں۔",
   "achievementWarWarriorName": "وار واریئر",

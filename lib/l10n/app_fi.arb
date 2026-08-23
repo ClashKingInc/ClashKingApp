@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Saavutukset",
   "achievementEarnedLabel": "Ansaittu",
+  "achievementSummary": "{earned}/{total} valmis",
+  "achievementEarnedCount": "Ansaittu ×{count}",
   "achievementTownhall18Name": "Kaupungintalo 18",
   "achievementTownhall18Requirement": "Saavuta kaupungintalo 18.",
   "achievementWarWarriorName": "Sotasoturi",

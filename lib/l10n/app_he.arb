@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "הישגים",
   "achievementEarnedLabel": "הושג",
+  "achievementSummary": "{earned}/{total} הושלם",
+  "achievementEarnedCount": "הושג ×{count}",
   "achievementTownhall18Name": "בית עירייה 18",
   "achievementTownhall18Requirement": "הגיעו לבית עירייה 18.",
   "achievementWarWarriorName": "לוחם מלחמה",

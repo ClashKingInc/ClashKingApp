@@ -25,34 +25,52 @@ class AchievementModelRequest {
 typedef AchievementModelBuilder =
     Widget Function(BuildContext context, AchievementModelRequest request);
 
-class AchievementsPage extends StatelessWidget {
+Widget _defaultAchievementModelBuilder(
+  BuildContext context,
+  AchievementModelRequest request,
+) {
+  return AchievementModelViewer(
+    modelUrl: request.achievement.modelUrl,
+    semanticLabel: request.semanticLabel,
+    locked: !request.achievement.isUnlocked,
+    interactive: request.interactive,
+    enableIdleRotation: request.enableIdleRotation,
+  );
+}
+
+class AchievementsPage extends StatefulWidget {
   const AchievementsPage({
     super.key,
     this.achievements,
-    this.modelBuilder = _defaultModelBuilder,
+    this.modelBuilder = _defaultAchievementModelBuilder,
   });
 
   final List<Achievement>? achievements;
   final AchievementModelBuilder modelBuilder;
 
-  static Widget _defaultModelBuilder(
-    BuildContext context,
-    AchievementModelRequest request,
-  ) {
-    return AchievementModelViewer(
-      modelUrl: request.achievement.modelUrl,
-      semanticLabel: request.semanticLabel,
-      locked: !request.achievement.isUnlocked,
-      interactive: request.interactive,
-      enableIdleRotation: request.enableIdleRotation,
-    );
+  @override
+  State<AchievementsPage> createState() => _AchievementsPageState();
+}
+
+class _AchievementsPageState extends State<AchievementsPage> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.achievements == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        context.read<AchievementsRepository>().check().catchError((_) {});
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final visibleAchievements =
-        achievements ?? context.watch<AchievementsRepository>().achievements;
+    final repository = widget.achievements == null
+        ? context.watch<AchievementsRepository>()
+        : null;
+    final visibleAchievements = widget.achievements ?? repository!.achievements;
     final earned = visibleAchievements.where((item) => item.isUnlocked).length;
 
     return Scaffold(
@@ -80,8 +98,10 @@ class AchievementsPage extends StatelessWidget {
                   sliver: SliverToBoxAdapter(
                     child: _CollectionHeader(
                       title: l10n.achievementsTitle,
-                      summary:
-                          '$earned/${visibleAchievements.length} ${l10n.generalCompleted}',
+                      summary: l10n.achievementSummary(
+                        earned.toString(),
+                        visibleAchievements.length.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -106,7 +126,7 @@ class AchievementsPage extends StatelessWidget {
                       return _AchievementTile(
                         achievement: achievement,
                         copy: copy,
-                        modelBuilder: modelBuilder,
+                        modelBuilder: widget.modelBuilder,
                         onTap: () => _openAchievement(
                           context,
                           achievement: achievement,
@@ -142,7 +162,7 @@ class AchievementsPage extends StatelessWidget {
         return _AchievementDetail(
           achievement: achievement,
           copy: copy,
-          modelBuilder: modelBuilder,
+          modelBuilder: widget.modelBuilder,
           enableIdleRotation: !reduceMotion,
         );
       },
@@ -341,39 +361,53 @@ class _AchievementDetail extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: modelBuilder(
-                        context,
-                        AchievementModelRequest(
-                          achievement: achievement,
-                          semanticLabel: copy.name,
-                          interactive: true,
-                          enableIdleRotation: enableIdleRotation,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: math.min(320, sheetHeight * 0.42),
+                              child: modelBuilder(
+                                context,
+                                AchievementModelRequest(
+                                  achievement: achievement,
+                                  semanticLabel: copy.name,
+                                  interactive: true,
+                                  enableIdleRotation: enableIdleRotation,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: CKSpacing.lg),
+                            Text(
+                              copy.name,
+                              textAlign: TextAlign.center,
+                              style: CKTypography.of(
+                                context,
+                                CKTextRole.screenTitle,
+                              ),
+                            ),
+                            const SizedBox(height: CKSpacing.sm),
+                            Text(
+                              copy.description,
+                              textAlign: TextAlign.center,
+                              style: CKTypography.of(
+                                context,
+                                CKTextRole.body,
+                              ).copyWith(color: colorScheme.onSurfaceVariant),
+                            ),
+                            const SizedBox(height: CKSpacing.md),
+                            Text(
+                              l10n.achievementEarnedCount(
+                                achievement.earnedCount.toString(),
+                              ),
+                              textAlign: TextAlign.center,
+                              style: CKTypography.of(
+                                context,
+                                CKTextRole.metadata,
+                              ).copyWith(color: colorScheme.onSurface),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: CKSpacing.lg),
-                    Text(
-                      copy.name,
-                      textAlign: TextAlign.center,
-                      style: CKTypography.of(context, CKTextRole.screenTitle),
-                    ),
-                    const SizedBox(height: CKSpacing.sm),
-                    Text(
-                      copy.description,
-                      textAlign: TextAlign.center,
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.body,
-                      ).copyWith(color: colorScheme.onSurfaceVariant),
-                    ),
-                    const SizedBox(height: CKSpacing.md),
-                    Text(
-                      '${l10n.achievementEarnedLabel} ×${achievement.earnedCount}',
-                      textAlign: TextAlign.center,
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.metadata,
-                      ).copyWith(color: colorScheme.onSurface),
                     ),
                   ],
                 ),

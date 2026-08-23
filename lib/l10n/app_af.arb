@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Prestasies",
   "achievementEarnedLabel": "Verdien",
+  "achievementSummary": "{earned}/{total} voltooi",
+  "achievementEarnedCount": "Verdien ×{count}",
   "achievementTownhall18Name": "Stadsaal 18",
   "achievementTownhall18Requirement": "Bereik Stadsaal 18.",
   "achievementWarWarriorName": "Oorlogstryder",

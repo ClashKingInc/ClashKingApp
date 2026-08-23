@@ -4,6 +4,12 @@ import 'package:clashkingapp/features/achievements/models/achievement.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('does not expose catalog entries before an authenticated response', () {
+    final repository = AchievementsRepository(apiService: _FakeApiService());
+
+    expect(repository.achievements, isEmpty);
+  });
+
   test(
     'check uses the authenticated endpoint and maps all achievement states',
     () async {

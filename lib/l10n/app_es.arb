@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Logros",
   "achievementEarnedLabel": "Conseguido",
+  "achievementSummary": "{earned}/{total} completado",
+  "achievementEarnedCount": "Conseguido ×{count}",
   "achievementTownhall18Name": "Ayuntamiento 18",
   "achievementTownhall18Requirement": "Alcanza el ayuntamiento 18.",
   "achievementWarWarriorName": "Guerrero de guerra",

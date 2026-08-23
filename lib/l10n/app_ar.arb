@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "الإنجازات",
   "achievementEarnedLabel": "مرات الإنجاز",
+  "achievementSummary": "{earned}/{total} مكتمل",
+  "achievementEarnedCount": "مرات الإنجاز ×{count}",
   "achievementTownhall18Name": "قاعة المدينة 18",
   "achievementTownhall18Requirement": "وصل إلى قاعة المدينة 18.",
   "achievementWarWarriorName": "محارب الحروب",

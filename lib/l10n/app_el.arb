@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Επιτεύγματα",
   "achievementEarnedLabel": "Κερδήθηκε",
+  "achievementSummary": "{earned}/{total} ολοκληρώθηκε",
+  "achievementEarnedCount": "Κερδήθηκε ×{count}",
   "achievementTownhall18Name": "Δημαρχείο 18",
   "achievementTownhall18Requirement": "Φτάστε στο Δημαρχείο 18.",
   "achievementWarWarriorName": "Πολεμιστής Πολέμου",

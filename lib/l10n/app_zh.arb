@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "成就",
   "achievementEarnedLabel": "获得次数",
+  "achievementSummary": "{earned}/{total} 已完成",
+  "achievementEarnedCount": "获得次数 ×{count}",
   "achievementTownhall18Name": "18级大本营",
   "achievementTownhall18Requirement": "达到18级大本营。",
   "achievementWarWarriorName": "部落战勇士",

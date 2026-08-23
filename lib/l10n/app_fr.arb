@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Succès",
   "achievementEarnedLabel": "Obtenu",
+  "achievementSummary": "{earned}/{total} terminé",
+  "achievementEarnedCount": "Obtenu ×{count}",
   "achievementTownhall18Name": "Hôtel de ville 18",
   "achievementTownhall18Requirement": "Atteins l'hôtel de ville 18.",
   "achievementWarWarriorName": "Guerrier de guerre",

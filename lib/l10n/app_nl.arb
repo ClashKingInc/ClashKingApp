@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Prestaties",
   "achievementEarnedLabel": "Behaald",
+  "achievementSummary": "{earned}/{total} voltooid",
+  "achievementEarnedCount": "Behaald ×{count}",
   "achievementTownhall18Name": "Stadhuis 18",
   "achievementTownhall18Requirement": "Bereik stadhuis 18.",
   "achievementWarWarriorName": "Oorlogsstrijder",

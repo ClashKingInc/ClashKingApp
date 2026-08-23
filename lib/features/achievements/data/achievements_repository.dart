@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:clashkingapp/features/achievements/models/achievement.dart';
 import 'package:flutter/foundation.dart';
 
@@ -7,19 +8,57 @@ class AchievementsRepository extends ChangeNotifier {
     : _apiService = apiService ?? ApiService.shared;
 
   final ApiService _apiService;
-  List<Achievement> _achievements = achievementCatalogFallback;
+  List<Achievement> _achievements = const [];
   bool _isRefreshing = false;
+  int _sessionGeneration = 0;
+  String? _sessionUserId;
+  AuthService? _authService;
 
   List<Achievement> get achievements => List.unmodifiable(_achievements);
   bool get isRefreshing => _isRefreshing;
 
+  void bindAuth(AuthService authService) {
+    if (identical(_authService, authService)) return;
+    _authService?.removeListener(_handleAuthChanged);
+    _authService = authService;
+    _sessionUserId = _currentSessionUserId;
+    authService.addListener(_handleAuthChanged);
+  }
+
+  String? get _currentSessionUserId => _authService?.canUseApp == true
+      ? _authService?.currentUser?.userId
+      : null;
+
+  void _handleAuthChanged() {
+    final nextUserId = _currentSessionUserId;
+    if (nextUserId == _sessionUserId) return;
+    _sessionUserId = nextUserId;
+    clear();
+  }
+
+  void clear() {
+    _sessionGeneration++;
+    _achievements = const [];
+    _isRefreshing = false;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _authService?.removeListener(_handleAuthChanged);
+    super.dispose();
+  }
+
   Future<void> load() async {
+    final generation = _sessionGeneration;
     final response = await _apiService.get('/achievements', requiresAuth: true);
+    if (generation != _sessionGeneration) return;
     _replaceFromResponse(response);
   }
 
   Future<void> check() async {
     if (_isRefreshing) return;
+    final generation = _sessionGeneration;
     _isRefreshing = true;
     notifyListeners();
     try {
@@ -28,6 +67,7 @@ class AchievementsRepository extends ChangeNotifier {
         const {},
         requiresAuth: true,
       );
+      if (generation != _sessionGeneration) return;
       _replaceFromResponse(response);
     } finally {
       _isRefreshing = false;
@@ -65,8 +105,8 @@ class AchievementsRepository extends ChangeNotifier {
     }
 
     _achievements = [
-      for (final fallback in achievementCatalogFallback)
-        remoteById[fallback.id] ?? fallback,
+      for (final catalogItem in achievementCatalogFallback)
+        if (remoteById[catalogItem.id] case final achievement?) achievement,
     ];
     notifyListeners();
   }

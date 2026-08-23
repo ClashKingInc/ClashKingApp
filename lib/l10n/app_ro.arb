@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Realizări",
   "achievementEarnedLabel": "Obținut",
+  "achievementSummary": "{earned}/{total} finalizat",
+  "achievementEarnedCount": "Obținut ×{count}",
   "achievementTownhall18Name": "Primăria 18",
   "achievementTownhall18Requirement": "Atinge Primăria 18.",
   "achievementWarWarriorName": "Războinic de război",

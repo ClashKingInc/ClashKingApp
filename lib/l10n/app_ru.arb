@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Достижения",
   "achievementEarnedLabel": "Получено",
+  "achievementSummary": "{earned}/{total} завершено",
+  "achievementEarnedCount": "Получено ×{count}",
   "achievementTownhall18Name": "Ратуша 18",
   "achievementTownhall18Requirement": "Достигните ратуши 18-го уровня.",
   "achievementWarWarriorName": "Воин войны",

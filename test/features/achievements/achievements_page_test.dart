@@ -156,7 +156,7 @@ void main() {
         of: find.byKey(const ValueKey('achievement-detail-sheet')),
         matching: find.byType(Scrollable),
       ),
-      findsNothing,
+      findsOneWidget,
     );
     expect(
       find.byKey(const ValueKey('achievement-earned-count')),

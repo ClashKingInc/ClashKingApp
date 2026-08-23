@@ -229,7 +229,11 @@ Future<void> _startClashKingApp() async {
           ChangeNotifierProvider(create: (_) => BookmarkService()),
           ChangeNotifierProvider(create: (_) => PlayerCardPreferencesService()),
           ChangeNotifierProvider(create: (_) => StatsProvider()),
-          ChangeNotifierProvider(create: (_) => AchievementsRepository()),
+          ChangeNotifierProxyProvider<AuthService, AchievementsRepository>(
+            create: (_) => AchievementsRepository(),
+            update: (_, authService, repository) =>
+                repository!..bindAuth(authService),
+          ),
           Provider.value(value: ApiService.shared),
           Provider(create: (_) => UserService()),
           Provider.value(value: TokenService.shared),

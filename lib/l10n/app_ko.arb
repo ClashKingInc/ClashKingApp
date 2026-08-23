@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "업적",
   "achievementEarnedLabel": "획득 횟수",
+  "achievementSummary": "{earned}/{total} 완료됨",
+  "achievementEarnedCount": "획득 횟수 ×{count}",
   "achievementTownhall18Name": "마을 회관 18",
   "achievementTownhall18Requirement": "마을 회관 18레벨을 달성하세요.",
   "achievementWarWarriorName": "전쟁의 전사",

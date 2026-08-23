@@ -42,4 +42,19 @@ void main() {
 
     expect(await cache.resolve(url), url);
   });
+
+  test('falls back to the remote URL when the download times out', () async {
+    final cache = AchievementModelCache(
+      timeout: const Duration(milliseconds: 1),
+      client: MockClient((request) async {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        return http.Response('', 200);
+      }),
+    );
+
+    expect(
+      await cache.resolve('https://assets.example/slow-badge.glb'),
+      'https://assets.example/slow-badge.glb',
+    );
+  });
 }

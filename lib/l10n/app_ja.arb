@@ -2,6 +2,8 @@
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "実績",
   "achievementEarnedLabel": "獲得回数",
+  "achievementSummary": "{earned}/{total} 完了",
+  "achievementEarnedCount": "獲得回数 ×{count}",
   "achievementTownhall18Name": "タウンホール18",
   "achievementTownhall18Requirement": "タウンホール18に到達する。",
   "achievementWarWarriorName": "ウォーウォリアー",
