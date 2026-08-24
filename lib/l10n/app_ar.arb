@@ -3656,7 +3656,7 @@
       }
     }
   },
-  "upgradeTrackerTimelineSemanticLabel": "{item}، المستوى {level}، من {start} إلى {end}",
+  "upgradeTrackerTimelineSemanticLabel": "{item} المستوى {level}، من {start} إلى {end}",
   "@upgradeTrackerTimelineSemanticLabel": {
     "placeholders": {
       "item": {
