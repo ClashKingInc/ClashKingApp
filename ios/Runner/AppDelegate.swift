@@ -10,9 +10,6 @@ import Darwin
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    UserDefaults(suiteName: "group.com.clashking.apps")?.removeObject(
-      forKey: "warWidgetAuthToken"
-    )
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

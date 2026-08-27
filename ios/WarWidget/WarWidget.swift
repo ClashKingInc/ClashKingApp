@@ -335,21 +335,37 @@ private struct WidgetAuthSessionProvider {
 
   func validAccessToken(defaults: UserDefaults) async -> String? {
     do {
-      if let session = try SharedAuthKeychain.read(), !isExpired(session.accessToken) {
-        return session.accessToken
+      guard let initialSession = try SharedAuthKeychain.read() else {
+        return validLegacyAccessToken(defaults: defaults)
+      }
+      if !isExpired(initialSession.accessToken) {
+        return initialSession.accessToken
       }
 
       let lock = try await SharedAuthRefreshLock.acquire()
       defer { lock.release() }
 
       // Runner may have completed a rotation while this extension waited.
-      guard let session = try SharedAuthKeychain.read() else { return nil }
+      guard let session = try SharedAuthKeychain.read() else {
+        return validLegacyAccessToken(defaults: defaults)
+      }
       if !isExpired(session.accessToken) { return session.accessToken }
 
       return try await refresh(session, defaults: defaults)
     } catch {
+      return validLegacyAccessToken(defaults: defaults)
+    }
+  }
+
+  private func validLegacyAccessToken(defaults: UserDefaults) -> String? {
+    guard
+      let token = defaults.string(forKey: "warWidgetAuthToken"),
+      !token.isEmpty,
+      !isExpired(token)
+    else {
       return nil
     }
+    return token
   }
 
   private func refresh(_ session: SharedAuthSession, defaults: UserDefaults) async throws -> String {
