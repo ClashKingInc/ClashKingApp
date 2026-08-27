@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Résultats d’attaques de guerre, alertes de défense et options du flux d’attaques 5v5.",
   "notifWarAlertsDescription": "Guerre trouvée, jour de bataille commencé et guerre terminée.",
   "notifWarRemindersDescription": "Rappels personnalisés avant la fin de la guerre.",
+  "notifGroupRaidReminders": "Rappels du week-end de raid",
+  "notifRaidRemindersDescription": "Reçois une seule alerte pour les attaques restantes de tes comptes vérifiés dans le même clan.",
   "notifDefensesAgainstYourBase": "Défenses contre ta base",
   "notifDefensesAgainstYourBaseDescription": "Uniquement les attaques où ce compte défend.",
   "notifAllAttacks": "Toutes les attaques",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Combats",
   "notifGroupSupport": "Assistance",
   "rankedLeagueAccountSelector": "Compte affiché",
-  "rankedLeagueStars": "Étoiles"
+  "rankedLeagueStars": "Étoiles",
+  "playerBattlelogTab": "Combats",
+  "playerActivityTab": "Activité",
+  "playerBattlelogFarming": "Farm",
+  "playerBattlelogRanked": "Classé",
+  "playerBattlelogFarmingOverview": "Aperçu du farm",
+  "playerBattlelogRankedOverview": "Aperçu du mode classé",
+  "playerBattlelogRecentBattles": "Combats récents",
+  "playerBattlelogBattleCount": "{count} combats",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Attaques",
+  "playerBattlelogAverageDestruction": "Destruction moyenne",
+  "playerBattlelogAverageStars": "Étoiles moyennes",
+  "playerBattlelogTripleRate": "Taux de réussite à 3 étoiles",
+  "playerBattlelogAverageLoot": "Butin moyen",
+  "playerBattlelogPopularTroops": "Troupes les plus utilisées",
+  "playerBattlelogUsedInAttacks": "Utilisé dans {count} attaques",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Attaque",
+  "playerBattlelogDefense": "Défense",
+  "playerBattlelogOpponent": "Contre {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Aucune bataille trouvée",
+  "playerBattlelogNoBattlesBody": "Aucune bataille n'est encore disponible pour ce mode.",
+  "playerBattlelogLoadError": "Impossible de charger les journaux de bataille",
+  "playerBattlelogHistoryUnavailable": "Les données historiques des batailles sont temporairement indisponibles ; l'utilisation des armées et les anciennes batailles peuvent être absentes.",
+  "playerBattlelogOfficialUnavailable": "Le journal de bataille officiel est temporairement indisponible ; les batailles les plus récentes peuvent être absentes.",
+  "playerActivityTrackingActive": "Suivi en cours",
+  "playerActivityTrackingActiveBody": "Ce compte vérifié est actualisé régulièrement. Les événements commencent après le début du suivi et quelques interruptions peuvent encore survenir.",
+  "playerActivityTrackingUnknown": "Suivi non confirmé",
+  "playerActivityTrackingUnknownBody": "Seuls les changements observés pendant que ClashKing suivait ce joueur apparaissent ici ; cet historique peut donc être incomplet.",
+  "playerActivityNoEventsTitle": "Aucune activité suivie pour le moment",
+  "playerActivityNoEventsBody": "Les améliorations et les changements de profil apparaîtront après leur détection par ClashKing.",
+  "playerActivityLoadError": "Impossible de charger l'activité du joueur",
+  "playerActivityTownHallUpgraded": "Hôtel de ville amélioré",
+  "playerActivityItemUpgraded": "{name} amélioré",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} renforcé",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} débloqué",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Nom modifié",
+  "playerActivityLevelChange": "Niveau {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Débloqué au niveau {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Renforcé au niveau {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
