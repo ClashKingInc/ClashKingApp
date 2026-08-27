@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "युद्ध हमले के परिणाम, रक्षा अलर्ट और 5v5 आक्रमण फ़ीड विकल्प।",
   "notifWarAlertsDescription": "युद्ध का मिलान हुआ, युद्ध का दिन शुरू हुआ और युद्ध समाप्त हुआ।",
   "notifWarRemindersDescription": "युद्ध समाप्त होने से पहले कस्टम अनुस्मारक।",
+  "notifGroupRaidReminders": "रेड वीकेंड रिमाइंडर",
+  "notifRaidRemindersDescription": "एक ही क्लैन में अपने सत्यापित खातों के बचे हुए हमलों के लिए एक सूचना पाएँ।",
   "notifDefensesAgainstYourBase": "आपके आधार के विरुद्ध सुरक्षा",
   "notifDefensesAgainstYourBaseDescription": "केवल वहीं हिट करता है जहां यह खाता बचाव कर रहा है।",
   "notifAllAttacks": "सभी आक्रमण",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "लड़ाइयाँ",
   "notifGroupSupport": "सपोर्ट",
   "rankedLeagueAccountSelector": "दिखाया गया खाता",
-  "rankedLeagueStars": "सितारे"
+  "rankedLeagueStars": "सितारे",
+  "playerBattlelogTab": "लड़ाइयाँ",
+  "playerActivityTab": "गतिविधि",
+  "playerBattlelogFarming": "संसाधन जुटाना",
+  "playerBattlelogRanked": "रैंक्ड",
+  "playerBattlelogFarmingOverview": "संसाधन जुटाने का अवलोकन",
+  "playerBattlelogRankedOverview": "रैंक मोड का अवलोकन",
+  "playerBattlelogRecentBattles": "हाल के युद्ध",
+  "playerBattlelogBattleCount": "{count} युद्ध",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "आक्रमण",
+  "playerBattlelogAverageDestruction": "औसत विनाश",
+  "playerBattlelogAverageStars": "औसत सितारे",
+  "playerBattlelogTripleRate": "तीन सितारा दर",
+  "playerBattlelogAverageLoot": "औसत लूट",
+  "playerBattlelogPopularTroops": "सबसे अधिक उपयोग की गई सेनाएँ",
+  "playerBattlelogUsedInAttacks": "{count} हमलों में उपयोग किया गया",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "हमला",
+  "playerBattlelogDefense": "रक्षा",
+  "playerBattlelogOpponent": "{name} के विरुद्ध",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "कोई लड़ाई नहीं मिली",
+  "playerBattlelogNoBattlesBody": "इस मोड के लिए अभी कोई लड़ाई उपलब्ध नहीं है।",
+  "playerBattlelogLoadError": "लड़ाई के रिकॉर्ड लोड नहीं हो सके",
+  "playerBattlelogHistoryUnavailable": "ऐतिहासिक लड़ाई का डेटा अस्थायी रूप से उपलब्ध नहीं है, इसलिए सेना का उपयोग और पुरानी लड़ाइयाँ गायब हो सकती हैं।",
+  "playerBattlelogOfficialUnavailable": "आधिकारिक लड़ाई का रिकॉर्ड अस्थायी रूप से उपलब्ध नहीं है, इसलिए नवीनतम लड़ाइयाँ गायब हो सकती हैं।",
+  "playerActivityTrackingActive": "अभी ट्रैक किया जा रहा है",
+  "playerActivityTrackingActiveBody": "यह सत्यापित खाता नियमित रूप से रीफ़्रेश होता है। ट्रैकिंग शुरू होने के बाद इवेंट दर्ज होते हैं और कभी-कभी अंतर रह सकता है।",
+  "playerActivityTrackingUnknown": "ट्रैकिंग की पुष्टि नहीं हुई",
+  "playerActivityTrackingUnknownBody": "यहाँ केवल वे बदलाव दिखते हैं जिन्हें ClashKing ने इस खिलाड़ी को ट्रैक करते समय देखा था, इसलिए यह इतिहास अधूरा हो सकता है।",
+  "playerActivityNoEventsTitle": "अभी तक कोई ट्रैक की गई गतिविधि नहीं",
+  "playerActivityNoEventsBody": "ClashKing द्वारा देखे जाने के बाद अपग्रेड और प्रोफ़ाइल बदलाव यहाँ दिखाई देंगे।",
+  "playerActivityLoadError": "खिलाड़ी की गतिविधि लोड नहीं हो सकी",
+  "playerActivityTownHallUpgraded": "टाउन हॉल अपग्रेड हुआ",
+  "playerActivityItemUpgraded": "{name} अपग्रेड हुआ",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} बूस्ट हुआ",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} अनलॉक हुआ",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "नाम बदला गया",
+  "playerActivityLevelChange": "स्तर {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "स्तर {level} पर अनलॉक हुआ",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "स्तर {level} पर बूस्ट हुआ",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
