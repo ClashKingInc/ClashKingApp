@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:clashkingapp/core/services/game_data_service.dart';
@@ -268,6 +269,57 @@ void main() {
     expect(fakeApi.getCallCounts[endpoint], 1);
   });
 
+  test('a validated import invalidates an older remote load', () async {
+    const endpoint = '/links/user1/%232J8V28GV0/upgrades';
+    final remoteResponse = Completer<http.Response>();
+    final fakeApi = _DeferredGetApiService(endpoint, remoteResponse);
+    fakeApi.putStubs[endpoint] = http.Response(
+      '{"player_tag":"#2J8V28GV0","data":{},"updated_at":null}',
+      200,
+    );
+    final repository = UpgradeTrackerRepository(
+      apiService: fakeApi,
+      checkStaticDataFreshness: false,
+    );
+    repository.configureRemote(
+      accountId: 'user1',
+      verifiedPlayerTags: const ['#2J8V28GV0'],
+    );
+
+    final staleLoad = repository.load('#2J8V28GV0', forceRefresh: true);
+    await fakeApi.requested.future;
+    final imported = await repository.importSnapshotBytes(
+      utf8.encode(
+        jsonEncode({
+          'tag': '#2J8V28GV0',
+          'name': 'Imported',
+          'buildings': [
+            {'data': 1, 'lvl': 18},
+          ],
+        }),
+      ),
+      allowedTags: const {'#2J8V28GV0'},
+    );
+    remoteResponse.complete(
+      http.Response(
+        jsonEncode({
+          'data': {
+            'tag': '#2J8V28GV0',
+            'name': 'Stale remote',
+            'buildings': <Object>[],
+          },
+        }),
+        200,
+      ),
+    );
+
+    await staleLoad;
+
+    expect(imported.name, 'Imported');
+    expect(repository.peekCached('#2J8V28GV0')?.name, 'Imported');
+    expect((await repository.load('#2J8V28GV0'))?.name, 'Imported');
+  });
+
   test('shared is a single reusable instance', () {
     expect(
       UpgradeTrackerRepository.shared,
@@ -275,4 +327,33 @@ void main() {
     );
     expect(() => UpgradeTrackerRepository.shared.clearCache(), returnsNormally);
   });
+}
+
+class _DeferredGetApiService extends FakeApiService {
+  _DeferredGetApiService(this.endpoint, this.response);
+
+  final String endpoint;
+  final Completer<http.Response> response;
+  final Completer<void> requested = Completer<void>();
+
+  @override
+  Future<http.Response> getResponse(
+    String endpoint, {
+    bool requiresAuth = false,
+    String? url,
+    Duration timeout = const Duration(seconds: 15),
+    Map<String, String>? extraHeaders,
+  }) {
+    if (endpoint == this.endpoint) {
+      if (!requested.isCompleted) requested.complete();
+      return response.future;
+    }
+    return super.getResponse(
+      endpoint,
+      requiresAuth: requiresAuth,
+      url: url,
+      timeout: timeout,
+      extraHeaders: extraHeaders,
+    );
+  }
 }

@@ -539,7 +539,6 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
 
   Future<void> _importSnapshotBytes(List<int> bytes) async {
     final l10n = AppLocalizations.of(context)!;
-    ++_selectionGeneration;
     try {
       final linkedAccounts = _linkedAccountOptions();
       final linkedNames = {
@@ -552,6 +551,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         allowedTags: linkedNames.keys.toSet(),
       );
       if (!mounted) return;
+      ++_selectionGeneration;
       setState(() {
         _snapshot = snapshot;
         _selectedTag = snapshot.tag;
