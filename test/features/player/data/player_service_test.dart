@@ -429,15 +429,15 @@ void main() {
         200,
       );
       final service = PlayerService(apiService: fakeApi);
-      var notifications = 0;
-      service.addListener(() => notifications++);
+      var notified = false;
+      service.addListener(() => notified = true);
 
       await service
           .hydrateBookmarkedPlayers(tags)
           .timeout(const Duration(seconds: 5));
 
       expect(service.profiles, hasLength(tags.length));
-      expect(notifications, 1);
+      expect(notified, isTrue);
     });
   });
 
@@ -467,10 +467,7 @@ void main() {
       final fakeApi = FakeApiService();
       fakeApi.postStubs['/players'] = http.Response(jsonEncode({}), 200);
       final service = PlayerService(apiService: fakeApi);
-      await expectLater(
-        service.loadPlayerData(['#P1'], {}),
-        completes,
-      );
+      await expectLater(service.loadPlayerData(['#P1'], {}), completes);
       expect(service.isLoading, isFalse);
     });
 

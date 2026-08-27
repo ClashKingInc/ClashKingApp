@@ -428,7 +428,7 @@ class PlayerService extends ChangeNotifier {
 
   final Map<String, RankedLeagueData> _rankedLeagueCache = {};
   final Map<String, Future<RankedLeagueData>> _rankedLeagueLoads = {};
-  Future<Map<int, RankedLeagueTier>?>? _leagueTiersLoad;
+  Future<Map<int, RankedLeagueTier>>? _leagueTiersLoad;
   Map<int, RankedLeagueTier>? _leagueTiersCache;
   int _rankedLeagueCacheGeneration = 0;
 
@@ -573,22 +573,22 @@ class PlayerService extends ChangeNotifier {
     final cached = _leagueTiersCache;
     if (cached != null) return cached;
     final existing = _leagueTiersLoad;
-    if (existing != null) return await existing ?? const {};
+    if (existing != null) return existing;
 
     final load = _fetchLeagueTiers();
     _leagueTiersLoad = load;
     try {
       final tiers = await load;
-      if (tiers != null) _leagueTiersCache = tiers;
-      return tiers ?? const {};
+      _leagueTiersCache = tiers;
+      return tiers;
     } finally {
       if (identical(_leagueTiersLoad, load)) _leagueTiersLoad = null;
     }
   }
 
-  Future<Map<int, RankedLeagueTier>?> _fetchLeagueTiers() async {
+  Future<Map<int, RankedLeagueTier>> _fetchLeagueTiers() async {
     final response = await _apiService.proxyGet('/leaguetiers');
-    if (response.statusCode != 200) return null;
+    if (response.statusCode != 200) return const {};
     return Map<int, RankedLeagueTier>.unmodifiable(
       _parseLeagueTiers(_decodeMap(response)),
     );
@@ -662,10 +662,9 @@ class PlayerService extends ChangeNotifier {
   Future<void> hydrateBookmarkedPlayers(List<String> tags) async {
     await loadOfficialPlayerData(
       _uniqueCanonicalTags(tags),
-      notify: false,
+      notify: true,
       throwOnError: false,
     );
-    _safeNotify();
   }
 
   void linkClansToPlayer(List<Player> players, List<Clan> clans) {

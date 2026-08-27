@@ -12,6 +12,7 @@
     <application
         android:label="ClashKing"
         android:name="${applicationName}"
+        android:networkSecurityConfig="@xml/model_viewer_network_security_config"
         android:icon="@mipmap/launcher_icon">
         <!-- Android notification small icons must be a white-on-transparent
              silhouette. Using the full launcher icon produces a white square. -->

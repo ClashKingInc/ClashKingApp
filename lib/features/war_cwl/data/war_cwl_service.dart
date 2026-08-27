@@ -221,8 +221,7 @@ WarCwl? _parseWarSummary(dynamic item, [Set<String>? requestedTags]) {
         (requestedTags != null && !requestedTags.contains(tag))) {
       return null;
     }
-    final warInfo = json['war_info'];
-    if ((warInfo != null && warInfo is! Map) ||
+    if ((json['war_info'] != null && json['war_info'] is! Map) ||
         (json['war_league_infos'] != null &&
             json['war_league_infos'] is! List)) {
       return null;
