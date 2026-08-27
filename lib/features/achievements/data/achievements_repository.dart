@@ -70,8 +70,10 @@ class AchievementsRepository extends ChangeNotifier {
       if (generation != _sessionGeneration) return;
       _replaceFromResponse(response);
     } finally {
-      _isRefreshing = false;
-      notifyListeners();
+      if (generation == _sessionGeneration) {
+        _isRefreshing = false;
+        notifyListeners();
+      }
     }
   }
 

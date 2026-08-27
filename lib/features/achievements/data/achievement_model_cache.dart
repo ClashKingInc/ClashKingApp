@@ -26,12 +26,16 @@ class AchievementModelCache {
   Future<String> _download(String url) async {
     try {
       final response = await _client.get(Uri.parse(url)).timeout(timeout);
-      if (response.statusCode < 200 || response.statusCode >= 300) return url;
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        _resolvedSources[url] = url;
+        return url;
+      }
       final source =
           'data:model/gltf-binary;base64,${base64Encode(response.bodyBytes)}';
       _resolvedSources[url] = source;
       return source;
     } catch (_) {
+      _resolvedSources[url] = url;
       return url;
     } finally {
       _pendingSources.remove(url);

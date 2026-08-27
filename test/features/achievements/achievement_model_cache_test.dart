@@ -35,12 +35,19 @@ void main() {
   );
 
   test('falls back to the remote URL when preloading fails', () async {
+    var requests = 0;
     final cache = AchievementModelCache(
-      client: MockClient((request) async => http.Response('', 503)),
+      client: MockClient((request) async {
+        requests++;
+        return http.Response('', 503);
+      }),
     );
     const url = 'https://assets.example/badge.glb';
 
     expect(await cache.resolve(url), url);
+    expect(await cache.resolve(url), url);
+    expect(cache.peek(url), url);
+    expect(requests, 1);
   });
 
   test('falls back to the remote URL when the download times out', () async {
@@ -56,5 +63,6 @@ void main() {
       await cache.resolve('https://assets.example/slow-badge.glb'),
       'https://assets.example/slow-badge.glb',
     );
+    expect(cache.peek('https://assets.example/slow-badge.glb'), isNotNull);
   });
 }
