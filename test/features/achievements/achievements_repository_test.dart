@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:collection';
+
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/features/achievements/data/achievements_repository.dart';
@@ -98,9 +101,29 @@ void main() {
     repository.dispose();
     auth.dispose();
   });
+
+  test('a stale request cannot clear a newer refresh state', () async {
+    final api = _FakeApiService();
+    final first = Completer<Map<String, dynamic>>();
+    final second = Completer<Map<String, dynamic>>();
+    api.postResponses.addAll([first, second]);
+    final repository = AchievementsRepository(apiService: api);
+
+    final firstCheck = repository.check();
+    repository.clear();
+    final secondCheck = repository.check();
+    first.complete(_FakeApiService.response);
+    await firstCheck;
+
+    expect(repository.isRefreshing, isTrue);
+    second.complete(_FakeApiService.response);
+    await secondCheck;
+    expect(repository.isRefreshing, isFalse);
+  });
 }
 
 class _FakeApiService extends ApiService {
+  final Queue<Completer<Map<String, dynamic>>> postResponses = Queue();
   String? lastEndpoint;
   bool? lastRequiresAuth;
 
@@ -163,6 +186,7 @@ class _FakeApiService extends ApiService {
   }) async {
     lastEndpoint = endpoint;
     lastRequiresAuth = requiresAuth;
+    if (postResponses.isNotEmpty) return postResponses.removeFirst().future;
     return response;
   }
 }
