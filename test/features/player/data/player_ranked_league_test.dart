@@ -201,4 +201,41 @@ void main() {
     expect(api.getCallCounts['/players/%23ONE'], 1);
     expect(api.getCallCounts['/leaguetiers'], 1);
   });
+
+  test('retries league tiers after a transient failure', () async {
+    final api = FakeApiService();
+    api.getStubs['/players/%23PLAYER'] = http.Response(
+      jsonEncode({'tag': '#PLAYER', 'name': 'Player'}),
+      200,
+    );
+    api.getStubs['/players/%23PLAYER/leaguehistory'] = http.Response(
+      jsonEncode({'items': <Object>[]}),
+      200,
+    );
+    api.getStubs['/leaguetiers'] = http.Response('{}', 503);
+    final service = PlayerService(apiService: api);
+
+    final first = await service.loadRankedLeagueData('#PLAYER');
+    expect(first.tiers, isEmpty);
+
+    api.getStubs['/leaguetiers'] = http.Response(
+      jsonEncode({
+        'items': [
+          {
+            'id': 105000030,
+            'name': 'Dragon League 30',
+            'iconUrls': <String, String>{},
+          },
+        ],
+      }),
+      200,
+    );
+    final second = await service.loadRankedLeagueData(
+      '#PLAYER',
+      forceRefresh: true,
+    );
+
+    expect(second.tiers.values.single.name, 'Dragon League 30');
+    expect(api.getCallCounts['/leaguetiers'], 2);
+  });
 }
