@@ -41,6 +41,8 @@ class CocAccountService extends ChangeNotifier {
 
   final ApiService _apiService;
   final NotificationPreferencesService _notificationPreferencesService;
+  Future<void> _verifiedTrackingSync = Future<void>.value();
+  int _verifiedTrackingRevision = 0;
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
   String? _currentUserId;
@@ -888,19 +890,23 @@ class CocAccountService extends ChangeNotifier {
   }
 
   void _refreshVerifiedPlayerTrackingBestEffort() {
-    unawaited(
-      _notificationPreferencesService
-          .refreshVerifiedPlayerTracking(
-            verifiedAccounts.map(
-              (account) => account['player_tag']?.toString() ?? '',
-            ),
-          )
-          .catchError((Object error) {
-            DebugUtils.debugWarning(
-              'Could not refresh verified player tracking: $error',
-            );
-          }),
-    );
+    final revision = ++_verifiedTrackingRevision;
+    final playerTags = verifiedAccounts
+        .map((account) => account['player_tag']?.toString() ?? '')
+        .toList(growable: false);
+    _verifiedTrackingSync = _verifiedTrackingSync
+        .catchError((_) {})
+        .then((_) async {
+          if (revision != _verifiedTrackingRevision) return;
+          await _notificationPreferencesService.refreshVerifiedPlayerTracking(
+            playerTags,
+          );
+        })
+        .catchError((Object error) {
+          DebugUtils.debugWarning(
+            'Could not refresh verified player tracking: $error',
+          );
+        });
   }
 
   /// Updates the verification status of an account locally

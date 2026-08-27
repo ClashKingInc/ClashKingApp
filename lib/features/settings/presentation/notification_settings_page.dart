@@ -747,7 +747,7 @@ class _ReminderTimingSheetState extends State<_ReminderTimingSheet> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
         children: [
           Text(
-            'Add ${widget.reminderTitle}',
+            widget.reminderTitle,
             style: Theme.of(
               context,
             ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
