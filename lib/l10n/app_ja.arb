@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "戦争攻撃の結果、防御アラート、および 5v5 攻撃フィードのオプション。",
   "notifWarAlertsDescription": "戦争が始まり、戦闘の日が始まり、戦争が終わりました。",
   "notifWarRemindersDescription": "戦争が終わる前のカスタムリマインダー。",
+  "notifGroupRaidReminders": "週末合戦のリマインダー",
+  "notifRaidRemindersDescription": "同じクランに所属する認証済みアカウントの残り攻撃回数を1件の通知で受け取ります。",
   "notifDefensesAgainstYourBase": "基地に対する防御",
   "notifDefensesAgainstYourBaseDescription": "このアカウントが防御しているところのみにヒットします。",
   "notifAllAttacks": "すべての攻撃",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "バトル",
   "notifGroupSupport": "サポート",
   "rankedLeagueAccountSelector": "表示中のアカウント",
-  "rankedLeagueStars": "星"
+  "rankedLeagueStars": "星",
+  "playerBattlelogTab": "バトル",
+  "playerActivityTab": "アクティビティ",
+  "playerBattlelogFarming": "資源集め",
+  "playerBattlelogRanked": "ランク戦",
+  "playerBattlelogFarmingOverview": "資源集めの概要",
+  "playerBattlelogRankedOverview": "ランク戦の概要",
+  "playerBattlelogRecentBattles": "最近の戦闘",
+  "playerBattlelogBattleCount": "{count}戦",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "攻撃",
+  "playerBattlelogAverageDestruction": "平均破壊",
+  "playerBattlelogAverageStars": "平均スター数",
+  "playerBattlelogTripleRate": "3 つ星のレート",
+  "playerBattlelogAverageLoot": "平均戦利品",
+  "playerBattlelogPopularTroops": "使用回数の多いユニット",
+  "playerBattlelogUsedInAttacks": "{count}回の攻撃で使用",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "攻撃",
+  "playerBattlelogDefense": "防衛",
+  "playerBattlelogOpponent": "対戦相手: {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "対戦が見つかりません",
+  "playerBattlelogNoBattlesBody": "このモードで利用できる対戦はまだありません。",
+  "playerBattlelogLoadError": "対戦履歴を読み込めませんでした",
+  "playerBattlelogHistoryUnavailable": "過去の対戦データは一時的に利用できないため、編成の使用状況や古い対戦が表示されない場合があります。",
+  "playerBattlelogOfficialUnavailable": "公式の対戦履歴は一時的に利用できないため、最新の対戦が表示されない場合があります。",
+  "playerActivityTrackingActive": "追跡中",
+  "playerActivityTrackingActiveBody": "この認証済みアカウントは定期的に更新されます。イベントは追跡開始後から記録され、まれにデータが欠ける場合があります。",
+  "playerActivityTrackingUnknown": "追跡を確認できません",
+  "playerActivityTrackingUnknownBody": "ClashKingがこのプレイヤーを追跡中に検出した変更のみが表示されるため、履歴が完全でない場合があります。",
+  "playerActivityNoEventsTitle": "追跡されたアクティビティはまだありません",
+  "playerActivityNoEventsBody": "ClashKingが検出したアップグレードやプロフィール変更がここに表示されます。",
+  "playerActivityLoadError": "プレイヤーのアクティビティを読み込めませんでした",
+  "playerActivityTownHallUpgraded": "タウンホールがアップグレードされました",
+  "playerActivityItemUpgraded": "{name}がアップグレードされました",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name}がブーストされました",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name}がアンロックされました",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "名前が変更されました",
+  "playerActivityLevelChange": "レベル {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "レベル{level}でアンロック",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "レベル{level}でブースト",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
