@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Krigsangrebsresultater, forsvarsalarmer og 5v5-angrebsfeedmuligheder.",
   "notifWarAlertsDescription": "Krig matchede, kampdagen startede, og krigen sluttede.",
   "notifWarRemindersDescription": "Brugerdefinerede påmindelser før krigen slutter.",
+  "notifGroupRaidReminders": "Påmindelser om raidweekend",
+  "notifRaidRemindersDescription": "Få én besked om resterende angreb på tværs af dine bekræftede konti i samme klan.",
   "notifDefensesAgainstYourBase": "Forsvar mod din base",
   "notifDefensesAgainstYourBaseDescription": "Hits kun, hvor denne konto forsvarer.",
   "notifAllAttacks": "Alle angreb",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Kampe",
   "notifGroupSupport": "Hjælp",
   "rankedLeagueAccountSelector": "Vist konto",
-  "rankedLeagueStars": "Stjerner"
+  "rankedLeagueStars": "Stjerner",
+  "playerBattlelogTab": "Kampe",
+  "playerActivityTab": "Aktivitet",
+  "playerBattlelogFarming": "Ressourcejagt",
+  "playerBattlelogRanked": "Rangeret",
+  "playerBattlelogFarmingOverview": "Oversigt over ressourcejagt",
+  "playerBattlelogRankedOverview": "Oversigt over rangkampe",
+  "playerBattlelogRecentBattles": "Nylige slag",
+  "playerBattlelogBattleCount": "{count} Slag",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Angreb",
+  "playerBattlelogAverageDestruction": "Gennemsnitlig ødelæggelse",
+  "playerBattlelogAverageStars": "Gennemsnitlige stjerner",
+  "playerBattlelogTripleRate": "Trestjernet pris",
+  "playerBattlelogAverageLoot": "Gennemsnitligt bytte",
+  "playerBattlelogPopularTroops": "Mest brugte tropper",
+  "playerBattlelogUsedInAttacks": "Brugt i {count} angreb",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Angreb",
+  "playerBattlelogDefense": "Forsvar",
+  "playerBattlelogOpponent": "Mod {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Ingen kampe fundet",
+  "playerBattlelogNoBattlesBody": "Der er endnu ingen kampe tilgængelige for denne tilstand.",
+  "playerBattlelogLoadError": "Kampjournalerne kunne ikke indlæses",
+  "playerBattlelogHistoryUnavailable": "Historiske kampdata er midlertidigt utilgængelige, så hærbrug og ældre kampe kan mangle.",
+  "playerBattlelogOfficialUnavailable": "Den officielle kampjournal er midlertidigt utilgængelig, så de nyeste kampe kan mangle.",
+  "playerActivityTrackingActive": "Sporing er aktiv",
+  "playerActivityTrackingActiveBody": "Denne bekræftede konto opdateres regelmæssigt. Hændelser registreres fra det tidspunkt, sporingen startede, og der kan stadig forekomme enkelte huller.",
+  "playerActivityTrackingUnknown": "Sporing ikke bekræftet",
+  "playerActivityTrackingUnknownBody": "Kun ændringer, som blev observeret, mens ClashKing sporede denne spiller, vises her, så historikken kan være ufuldstændig.",
+  "playerActivityNoEventsTitle": "Ingen sporet aktivitet endnu",
+  "playerActivityNoEventsBody": "Opgraderinger og profilændringer vises, når ClashKing observerer dem.",
+  "playerActivityLoadError": "Spilleraktiviteten kunne ikke indlæses",
+  "playerActivityTownHallUpgraded": "Rådhus opgraderet",
+  "playerActivityItemUpgraded": "{name} opgraderet",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} forstærket",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} låst op",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Navn ændret",
+  "playerActivityLevelChange": "Niveau {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Låst op på niveau {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Forstærket på niveau {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
