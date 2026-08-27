@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Savaş saldırı sonuçları, savunma uyarıları ve 5v5 saldırı akışı seçenekleri.",
   "notifWarAlertsDescription": "Savaş eşleşti, savaş günü başladı ve savaş bitti.",
   "notifWarRemindersDescription": "Savaş bitmeden önce özel hatırlatmalar.",
+  "notifGroupRaidReminders": "Baskın Hafta Sonu hatırlatıcıları",
+  "notifRaidRemindersDescription": "Aynı klandaki doğrulanmış hesaplarında kalan saldırılar için tek bir bildirim al.",
   "notifDefensesAgainstYourBase": "Üssüne yapılan savunmalar",
   "notifDefensesAgainstYourBaseDescription": "Yalnızca bu hesabın savunduğu saldırılar.",
   "notifAllAttacks": "Tüm saldırılar",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Savaşlar",
   "notifGroupSupport": "Destek",
   "rankedLeagueAccountSelector": "Gösterilen hesap",
-  "rankedLeagueStars": "Yıldızlar"
+  "rankedLeagueStars": "Yıldızlar",
+  "playerBattlelogTab": "Savaşlar",
+  "playerActivityTab": "Aktivite",
+  "playerBattlelogFarming": "Kaynak toplama",
+  "playerBattlelogRanked": "Dereceli",
+  "playerBattlelogFarmingOverview": "Kaynak toplama özeti",
+  "playerBattlelogRankedOverview": "Dereceli savaş özeti",
+  "playerBattlelogRecentBattles": "Son savaşlar",
+  "playerBattlelogBattleCount": "{count} savaş",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Saldırılar",
+  "playerBattlelogAverageDestruction": "Ortalama yıkım",
+  "playerBattlelogAverageStars": "Ortalama yıldızlar",
+  "playerBattlelogTripleRate": "Üç yıldız oranı",
+  "playerBattlelogAverageLoot": "Ortalama ganimet",
+  "playerBattlelogPopularTroops": "En çok kullanılan birlikler",
+  "playerBattlelogUsedInAttacks": "{count} saldırıda kullanıldı",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Saldırı",
+  "playerBattlelogDefense": "Savunma",
+  "playerBattlelogOpponent": "Rakip: {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Savaş bulunamadı",
+  "playerBattlelogNoBattlesBody": "Bu mod için henüz savaş yok.",
+  "playerBattlelogLoadError": "Savaş kayıtları yüklenemedi",
+  "playerBattlelogHistoryUnavailable": "Geçmiş savaş verileri geçici olarak kullanılamıyor; bu nedenle ordu kullanımı ve eski savaşlar eksik olabilir.",
+  "playerBattlelogOfficialUnavailable": "Resmî savaş kaydı geçici olarak kullanılamıyor; bu nedenle en yeni savaşlar eksik olabilir.",
+  "playerActivityTrackingActive": "Şu anda takip ediliyor",
+  "playerActivityTrackingActiveBody": "Bu doğrulanmış hesap düzenli olarak yenilenir. Olaylar takip başladıktan sonra kaydedilir ve ara sıra boşluklar oluşabilir.",
+  "playerActivityTrackingUnknown": "Takip doğrulanmadı",
+  "playerActivityTrackingUnknownBody": "Burada yalnızca ClashKing bu oyuncuyu takip ederken gözlemlenen değişiklikler görünür, bu nedenle geçmiş eksik olabilir.",
+  "playerActivityNoEventsTitle": "Henüz takip edilen etkinlik yok",
+  "playerActivityNoEventsBody": "Yükseltmeler ve profil değişiklikleri ClashKing tarafından gözlemlendikten sonra görünür.",
+  "playerActivityLoadError": "Oyuncu etkinliği yüklenemedi",
+  "playerActivityTownHallUpgraded": "Belediye Binası yükseltildi",
+  "playerActivityItemUpgraded": "{name} yükseltildi",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} güçlendirildi",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} açıldı",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Ad değiştirildi",
+  "playerActivityLevelChange": "Seviye {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "{level}. seviyede açıldı",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "{level}. seviyede güçlendirildi",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
