@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "نتائج هجوم الحرب، وتنبيهات الدفاع، وخيارات موجز هجوم 5 ضد 5.",
   "notifWarAlertsDescription": "تطابقت الحرب، وبدأ يوم المعركة، وانتهت الحرب.",
   "notifWarRemindersDescription": "تذكيرات مخصصة قبل انتهاء الحرب.",
+  "notifGroupRaidReminders": "تذكيرات عطلة الغارات",
+  "notifRaidRemindersDescription": "احصل على تنبيه واحد بشأن الهجمات المتبقية عبر حساباتك الموثقة في العشيرة نفسها.",
   "notifDefensesAgainstYourBase": "الدفاعات ضد قاعدتك",
   "notifDefensesAgainstYourBaseDescription": "يضرب فقط حيث يدافع هذا الحساب.",
   "notifAllAttacks": "جميع الهجمات",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "المعارك",
   "notifGroupSupport": "الدعم",
   "rankedLeagueAccountSelector": "الحساب المعروض",
-  "rankedLeagueStars": "النجوم"
+  "rankedLeagueStars": "النجوم",
+  "playerBattlelogTab": "المعارك",
+  "playerActivityTab": "النشاط",
+  "playerBattlelogFarming": "جمع الموارد",
+  "playerBattlelogRanked": "المصنف",
+  "playerBattlelogFarmingOverview": "نظرة عامة على جمع الموارد",
+  "playerBattlelogRankedOverview": "نظرة عامة على النمط المصنف",
+  "playerBattlelogRecentBattles": "المعارك الأخيرة",
+  "playerBattlelogBattleCount": "{count} معركة",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "الهجمات",
+  "playerBattlelogAverageDestruction": "تدمير متوسط",
+  "playerBattlelogAverageStars": "متوسط النجوم",
+  "playerBattlelogTripleRate": "سعر ثلاث نجوم",
+  "playerBattlelogAverageLoot": "متوسط الغنائم",
+  "playerBattlelogPopularTroops": "القوات الأكثر استخدامًا",
+  "playerBattlelogUsedInAttacks": "استُخدمت في {count} هجمات",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "هجوم",
+  "playerBattlelogDefense": "الدفاع",
+  "playerBattlelogOpponent": "ضد {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "لم يتم العثور على معارك",
+  "playerBattlelogNoBattlesBody": "لا توجد معارك متاحة لهذا النمط بعد.",
+  "playerBattlelogLoadError": "تعذر تحميل سجلات المعارك",
+  "playerBattlelogHistoryUnavailable": "بيانات المعارك التاريخية غير متاحة مؤقتًا، لذلك قد تغيب بيانات استخدام الجيش والمعارك الأقدم.",
+  "playerBattlelogOfficialUnavailable": "سجل المعارك الرسمي غير متاح مؤقتًا، لذلك قد تغيب أحدث المعارك.",
+  "playerActivityTrackingActive": "قيد التتبع حاليًا",
+  "playerActivityTrackingActiveBody": "يتم تحديث هذا الحساب الموثق بانتظام. تبدأ الأحداث بعد بدء التتبع وقد تحدث بعض الفجوات أحيانًا.",
+  "playerActivityTrackingUnknown": "لم يتم تأكيد التتبع",
+  "playerActivityTrackingUnknownBody": "تظهر هنا فقط التغييرات التي رُصدت أثناء تتبع ClashKing لهذا اللاعب، لذلك قد لا يكون هذا السجل مكتملًا.",
+  "playerActivityNoEventsTitle": "لا يوجد نشاط متتبع بعد",
+  "playerActivityNoEventsBody": "ستظهر الترقيات وتغييرات الملف الشخصي بعد أن يرصدها ClashKing.",
+  "playerActivityLoadError": "تعذر تحميل نشاط اللاعب",
+  "playerActivityTownHallUpgraded": "تمت ترقية مبنى البلدية",
+  "playerActivityItemUpgraded": "تمت ترقية {name}",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "تم تعزيز {name}",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "تم فتح {name}",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "تم تغيير الاسم",
+  "playerActivityLevelChange": "المستوى {from} ← {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "تم الفتح عند المستوى {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "تم التعزيز عند المستوى {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} ← {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
