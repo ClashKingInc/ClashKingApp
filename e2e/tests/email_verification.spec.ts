@@ -109,6 +109,13 @@ test.describe('Email verification page', () => {
     if (typeof accessToken !== 'string' || !accessToken) {
       throw new Error('Email verification response has no access token');
     }
+    await expect(
+      page.getByRole('button', { name: /verify code/i }),
+    ).not.toBeVisible({ timeout: 20_000 });
+    await page.waitForFunction(
+      () => document.querySelectorAll('flt-semantics').length > 3,
+      { timeout: 20_000, polling: 500 },
+    );
     const cleanup = await page.request.delete(`${API_BASE}/v2/auth/me`, {
       headers: { authorization: `Bearer ${accessToken}` },
     });

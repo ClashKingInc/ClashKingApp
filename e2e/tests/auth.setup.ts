@@ -17,7 +17,6 @@ setup('authenticate with email', async () => {
   // Skip gracefully when credentials are not provided (e.g. fork PRs without secrets access).
   // This also skips all chromium-auth tests that depend on this setup.
   const canProvisionAccount = getOtpInboxConfig() !== null;
-  const preferTemporaryAccount = process.env.E2E_PROVISION_ACCOUNT === 'true';
   setup.skip(
     (!email || !password) && !canProvisionAccount,
     'No static credentials or Cloudflare OTP inbox — skipping authenticated tests',
@@ -37,9 +36,10 @@ setup('authenticate with email', async () => {
   let capturedCookies: Awaited<ReturnType<typeof apiContext.storageState>>['cookies'] = [];
   let temporaryAccountCreated = false;
   try {
-    // Full suites need the fixed account's linked CoC data. PR smoke runs opt
-    // into an isolated account that teardown can delete.
-    if (email && password && (!canProvisionAccount || !preferTemporaryAccount)) {
+    // Use the fixed account first so linked-account coverage remains active.
+    // Provision a disposable account only when credentials are unavailable or
+    // the fixed account can no longer authenticate.
+    if (email && password) {
       const resp = await apiContext.post('/v2/auth/web/email', {
         headers: { 'Content-Type': 'application/json', Origin: origin },
         data: JSON.stringify({
