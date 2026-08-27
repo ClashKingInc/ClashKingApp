@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "תוצאות התקפות מלחמה, התראות הגנה ואפשרויות הזנת התקפה 5v5.",
   "notifWarAlertsDescription": "המלחמה התאימה, יום הקרב התחיל והמלחמה הסתיימה.",
   "notifWarRemindersDescription": "תזכורות מותאמות אישית לפני סיום המלחמה.",
+  "notifGroupRaidReminders": "תזכורות לסוף שבוע הפשיטות",
+  "notifRaidRemindersDescription": "קבלת התראה אחת על ההתקפות שנותרו בכל החשבונות המאומתים שלך באותו שבט.",
   "notifDefensesAgainstYourBase": "הגנות נגד הבסיס שלך",
   "notifDefensesAgainstYourBaseDescription": "כניסות רק היכן שהחשבון הזה מגן.",
   "notifAllAttacks": "כל ההתקפות",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "קרבות",
   "notifGroupSupport": "תמיכה",
   "rankedLeagueAccountSelector": "החשבון המוצג",
-  "rankedLeagueStars": "כוכבים"
+  "rankedLeagueStars": "כוכבים",
+  "playerBattlelogTab": "קרבות",
+  "playerActivityTab": "פעילות",
+  "playerBattlelogFarming": "איסוף משאבים",
+  "playerBattlelogRanked": "מדורג",
+  "playerBattlelogFarmingOverview": "סקירת איסוף משאבים",
+  "playerBattlelogRankedOverview": "סקירת דירוג",
+  "playerBattlelogRecentBattles": "קרבות אחרונים",
+  "playerBattlelogBattleCount": "{count} קרבות",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "התקפות",
+  "playerBattlelogAverageDestruction": "הרס ממוצע",
+  "playerBattlelogAverageStars": "כוכבים ממוצעים",
+  "playerBattlelogTripleRate": "תעריף שלושה כוכבים",
+  "playerBattlelogAverageLoot": "שלל ממוצע",
+  "playerBattlelogPopularTroops": "החיילים הנפוצים ביותר",
+  "playerBattlelogUsedInAttacks": "שימש ב-{count} התקפות",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "התקפה",
+  "playerBattlelogDefense": "הֲגָנָה",
+  "playerBattlelogOpponent": "נגד {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "לא נמצאו קרבות",
+  "playerBattlelogNoBattlesBody": "עדיין אין קרבות זמינים למצב זה.",
+  "playerBattlelogLoadError": "לא ניתן לטעון את יומני הקרב",
+  "playerBattlelogHistoryUnavailable": "נתוני הקרבות ההיסטוריים אינם זמינים זמנית, ולכן ייתכן שחסרים שימושי צבא וקרבות ישנים יותר.",
+  "playerBattlelogOfficialUnavailable": "יומן הקרבות הרשמי אינו זמין זמנית, ולכן ייתכן שחסרים הקרבות החדשים ביותר.",
+  "playerActivityTrackingActive": "במעקב כעת",
+  "playerActivityTrackingActiveBody": "חשבון מאומת זה מתעדכן בקביעות. אירועים מתחילים לאחר תחילת המעקב ועדיין עשויים להיות פערים מדי פעם.",
+  "playerActivityTrackingUnknown": "המעקב לא אושר",
+  "playerActivityTrackingUnknownBody": "רק שינויים שנצפו בזמן ש-ClashKing עקב אחר שחקן זה מופיעים כאן, ולכן ייתכן שההיסטוריה אינה מלאה.",
+  "playerActivityNoEventsTitle": "אין עדיין פעילות במעקב",
+  "playerActivityNoEventsBody": "שדרוגים ושינויים בפרופיל יופיעו לאחר ש-ClashKing יזהה אותם.",
+  "playerActivityLoadError": "לא ניתן לטעון את פעילות השחקן",
+  "playerActivityTownHallUpgraded": "בית העירייה שודרג",
+  "playerActivityItemUpgraded": "{name} שודרג",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} חוזק",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} נפתח",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "השם השתנה",
+  "playerActivityLevelChange": "רמה {from} ← {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "נפתח ברמה {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "חוזק ברמה {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} ← {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
