@@ -406,7 +406,7 @@ class TokenService {
         // identifierForVendor is null when the device hasn't been unlocked
         // after reboot or under MDM restrictions — fall back to a stable UUID
         // persisted in the keychain so the same device always gets the same ID.
-        return loadIOSFallbackDeviceId();
+        return await loadIOSFallbackDeviceId();
       } else {
         return "unsupported-platform";
       }
