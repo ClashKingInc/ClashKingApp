@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:clashkingapp/features/clan/models/clan_capital_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
+import 'package:clashkingapp/features/clan/models/clan_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_member.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
@@ -229,6 +230,61 @@ class ClanService extends ChangeNotifier {
     } catch (e) {
       Sentry.captureException(e);
       DebugUtils.debugError("Error loading CWL ranking history: $e");
+      rethrow;
+    }
+  }
+
+  Future<ClanLeaderboardHistory> getClanLeaderboardHistory(
+    String clanTag,
+    ClanLeaderboardType type,
+  ) async {
+    final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
+    final data = await _getClanHistoryJson(
+      '/clan/$encodedTag/history/leaderboards'
+      '?type=${type.apiValue}&limit=250',
+    );
+    return ClanLeaderboardHistory.fromJson(data);
+  }
+
+  Future<ClanLegendHistory> getClanLegendHistory(String clanTag) async {
+    final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
+    final data = await _getClanHistoryJson(
+      '/clan/$encodedTag/history/legends?limit=250',
+    );
+    return ClanLegendHistory.fromJson(data);
+  }
+
+  Future<ClanRecords> getClanRecords(String clanTag) async {
+    final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
+    final data = await _getClanHistoryJson('/clan/$encodedTag/records');
+    return ClanRecords.fromJson(data);
+  }
+
+  Future<ClanProfileHistory> getClanProfileHistory(String clanTag) async {
+    final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
+    final data = await _getClanHistoryJson(
+      '/clan/$encodedTag/history/changes?limit=500',
+    );
+    return ClanProfileHistory.fromJson(data);
+  }
+
+  Future<Map<String, dynamic>> _getClanHistoryJson(String endpoint) async {
+    try {
+      final response = await _apiService.getResponse(endpoint);
+      if (response.statusCode != 200) {
+        throw HttpException(
+          'Failed to load clan history (${response.statusCode})',
+          uri: response.request?.url,
+        );
+      }
+      final decoded = json.decode(ApiService.decodeResponseBody(response));
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException('Invalid clan history response');
+      }
+      return decoded;
+    } catch (error, stackTrace) {
+      Sentry.captureException(error, stackTrace: stackTrace);
+      DebugUtils.debugError('Error loading clan history: $error');
       rethrow;
     }
   }

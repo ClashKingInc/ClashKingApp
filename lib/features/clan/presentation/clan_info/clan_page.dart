@@ -14,6 +14,7 @@ import 'package:clashkingapp/features/clan/models/clan_join_leave.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/clan/models/cwl_ranking_history.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_header.dart';
+import 'package:clashkingapp/features/clan/presentation/clan_info/clan_history_tabs.dart';
 import 'package:clashkingapp/features/clan/presentation/clan_info/clan_members.dart';
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/war_cwl/presentation/war_stats/clan_war_log.dart';
@@ -25,7 +26,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Clan detail screen: hero header + tabs for Members / War Log /
-/// Join-Leave / Statistics / CWL History — content that used to live
+/// Join-Leave / Statistics / clan history — content that used to live
 /// behind a separate pushed screen (`ClanWarStatsScreen`) is now
 /// embedded here, mirroring the player profile's tab pattern.
 class ClanInfoScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   @override
   void initState() {
     super.initState();
-    selectedTab = widget.initialTab.clamp(0, 5);
+    selectedTab = widget.initialTab.clamp(0, 9);
   }
 
   void _selectTab(int index, int tabCount) {
@@ -116,6 +117,10 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
       _ClanInfoTab.statistics,
       _ClanInfoTab.rankings,
       _ClanInfoTab.cwlHistory,
+      _ClanInfoTab.leaderboardHistory,
+      _ClanInfoTab.legendHistory,
+      _ClanInfoTab.records,
+      _ClanInfoTab.profileHistory,
     ];
   }
 
@@ -126,6 +131,22 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
 
     if (tab == _ClanInfoTab.joinLeave) {
       return _ClanJoinLeaveTab(clan: widget.clanInfo);
+    }
+
+    if (tab == _ClanInfoTab.leaderboardHistory) {
+      return ClanLeaderboardHistoryTab(clanTag: widget.clanInfo.tag);
+    }
+
+    if (tab == _ClanInfoTab.legendHistory) {
+      return ClanLegendHistoryTab(clanTag: widget.clanInfo.tag);
+    }
+
+    if (tab == _ClanInfoTab.records) {
+      return ClanRecordsTab(clanTag: widget.clanInfo.tag);
+    }
+
+    if (tab == _ClanInfoTab.profileHistory) {
+      return ClanProfileHistoryTab(clanTag: widget.clanInfo.tag);
     }
 
     final content = switch (tab) {
@@ -157,6 +178,10 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
       ),
       _ClanInfoTab.rankings => _ClanRankingsTab(clanInfo: widget.clanInfo),
       _ClanInfoTab.cwlHistory => _ClanCwlHistoryTab(clan: widget.clanInfo),
+      _ClanInfoTab.leaderboardHistory ||
+      _ClanInfoTab.legendHistory ||
+      _ClanInfoTab.records ||
+      _ClanInfoTab.profileHistory => const SizedBox.shrink(),
       _ClanInfoTab.members => const SizedBox.shrink(),
     };
 
@@ -176,6 +201,10 @@ enum _ClanInfoTab {
   statistics,
   rankings,
   cwlHistory,
+  leaderboardHistory,
+  legendHistory,
+  records,
+  profileHistory,
 }
 
 extension on _ClanInfoTab {
@@ -203,6 +232,22 @@ extension on _ClanInfoTab {
     _ClanInfoTab.cwlHistory => InfoProfileTabData(
       label: l10n.cwlHistoryTitle,
       icon: Icons.emoji_events_rounded,
+    ),
+    _ClanInfoTab.leaderboardHistory => InfoProfileTabData(
+      label: l10n.clanLeaderboardHistoryTab,
+      imageUrl: ImageAssets.trophies,
+    ),
+    _ClanInfoTab.legendHistory => InfoProfileTabData(
+      label: l10n.clanLegendHistoryTab,
+      imageUrl: ImageAssets.legendBlazon,
+    ),
+    _ClanInfoTab.records => InfoProfileTabData(
+      label: l10n.clanRecordsTab,
+      imageUrl: ImageAssets.bestTrophies,
+    ),
+    _ClanInfoTab.profileHistory => InfoProfileTabData(
+      label: l10n.clanProfileHistoryTab,
+      icon: Icons.manage_history_rounded,
     ),
   };
 }

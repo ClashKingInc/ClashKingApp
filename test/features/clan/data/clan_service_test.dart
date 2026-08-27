@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
+import 'package:clashkingapp/features/clan/models/clan_history.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_stats_filter.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
@@ -94,6 +95,59 @@ void main() {
       expect(await service.getCwlRankingHistory('#EMPTY'), isEmpty);
       await expectLater(
         service.getCwlRankingHistory('#ERROR'),
+        throwsA(isA<HttpException>()),
+      );
+    });
+  });
+
+  group('ClanService — clan history', () {
+    test('loads all four public clan history contracts', () async {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs.addAll({
+        '/clan/%23CLAN/history/leaderboards'
+            '?type=clan_home_points&limit=250': http.Response(
+          '{"items":[{"date":"2026-08-25","rank":1,'
+          '"clanPoints":150000,"members":50}]}',
+          200,
+        ),
+        '/clan/%23CLAN/history/legends?limit=250': http.Response(
+          '{"items":[{"season":"2025-09","tag":"#PLAYER",'
+          '"name":"Player","trophies":6000,"rank":10}]}',
+          200,
+        ),
+        '/clan/%23CLAN/records': http.Response(
+          '{"clanPoints":{"value":156112,'
+          '"time":"2025-10-13T06:44:43Z"}}',
+          200,
+        ),
+        '/clan/%23CLAN/history/changes?limit=500': http.Response(
+          '{"items":[{"time":"2026-07-06T07:31:37Z",'
+          '"type":"clanLevel","previous":31,"current":32}]}',
+          200,
+        ),
+      });
+      final service = ClanService(apiService: fakeApi);
+
+      final leaderboard = await service.getClanLeaderboardHistory(
+        '#CLAN',
+        ClanLeaderboardType.homeVillage,
+      );
+      final legends = await service.getClanLegendHistory('#CLAN');
+      final records = await service.getClanRecords('#CLAN');
+      final profile = await service.getClanProfileHistory('#CLAN');
+
+      expect(leaderboard.items.single.points, 150000);
+      expect(legends.items.single.trophies, 6000);
+      expect(records.clanPoints?.value, 156112);
+      expect(profile.items.single.current, 32);
+    });
+
+    test('surfaces endpoint failures instead of returning empty history', () {
+      final fakeApi = FakeApiService();
+      fakeApi.getStubs['/clan/%23CLAN/records'] = http.Response('error', 503);
+
+      expect(
+        ClanService(apiService: fakeApi).getClanRecords('#CLAN'),
         throwsA(isA<HttpException>()),
       );
     });
