@@ -31,6 +31,7 @@ class TokenService {
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _sessionKey = 'shared_auth_session_v1';
+  static const String _deviceIdFallbackKey = 'device_id_fallback';
   static const String _iosKeychainAccessGroup =
       'MZYXD43RX5.group.com.clashking.apps';
   static const FlutterSecureStorage _defaultSharedStorage =
@@ -405,12 +406,7 @@ class TokenService {
         // identifierForVendor is null when the device hasn't been unlocked
         // after reboot or under MDM restrictions — fall back to a stable UUID
         // persisted in the keychain so the same device always gets the same ID.
-        const fallbackKey = 'device_id_fallback';
-        final stored = await _secureStorage.read(key: fallbackKey);
-        if (stored != null) return stored;
-        final generated = const Uuid().v4();
-        await _secureStorage.write(key: fallbackKey, value: generated);
-        return generated;
+        return loadIOSFallbackDeviceId();
       } else {
         return "unsupported-platform";
       }
@@ -422,6 +418,22 @@ class TokenService {
       );
       return "unknown-device";
     }
+  }
+
+  @visibleForTesting
+  Future<String> loadIOSFallbackDeviceId() async {
+    final stored = await _secureStorage.read(key: _deviceIdFallbackKey);
+    if (stored != null) return stored;
+
+    final legacy = await _legacySecureStorage.read(key: _deviceIdFallbackKey);
+    if (legacy != null) {
+      await _secureStorage.write(key: _deviceIdFallbackKey, value: legacy);
+      return legacy;
+    }
+
+    final generated = const Uuid().v4();
+    await _secureStorage.write(key: _deviceIdFallbackKey, value: generated);
+    return generated;
   }
 
   Future<String> getDeviceName() async {

@@ -170,6 +170,56 @@ void main() {
       },
     );
   });
+
+  test('migrates the legacy iOS fallback device ID', () async {
+    final sharedStorage = _MemorySecureStorage();
+    final legacyStorage = _MemorySecureStorage({
+      'device_id_fallback': 'legacy-device-id',
+    });
+    final tokenService = TokenService(
+      secureStorage: sharedStorage,
+      legacySecureStorage: legacyStorage,
+    );
+
+    expect(await tokenService.loadIOSFallbackDeviceId(), 'legacy-device-id');
+    expect(sharedStorage.values['device_id_fallback'], 'legacy-device-id');
+  });
+}
+
+class _MemorySecureStorage extends FlutterSecureStorage {
+  _MemorySecureStorage([Map<String, String>? initialValues])
+    : values = {...?initialValues};
+
+  final Map<String, String> values;
+
+  @override
+  Future<String?> read({
+    required String key,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async => values[key];
+
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    if (value == null) {
+      values.remove(key);
+    } else {
+      values[key] = value;
+    }
+  }
 }
 
 class _CountingTokenService extends TokenService {
