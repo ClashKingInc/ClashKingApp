@@ -1,9 +1,16 @@
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/features/achievements/data/achievements_repository.dart';
 import 'package:clashkingapp/features/achievements/models/achievement.dart';
+import 'package:clashkingapp/features/auth/data/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   test('does not expose catalog entries before an authenticated response', () {
     final repository = AchievementsRepository(apiService: _FakeApiService());
 
@@ -60,6 +67,37 @@ void main() {
       expect(api.lastRequiresAuth, isTrue);
     },
   );
+
+  test('clear removes account-scoped state and notifies listeners', () async {
+    final repository = AchievementsRepository(apiService: _FakeApiService());
+    await repository.check();
+    var notifications = 0;
+    repository.addListener(() => notifications++);
+
+    repository.clear();
+
+    expect(repository.achievements, isEmpty);
+    expect(repository.isRefreshing, isFalse);
+    expect(notifications, 1);
+  });
+
+  test('binding auth clears achievements when the session changes', () async {
+    final api = _FakeApiService();
+    final repository = AchievementsRepository(apiService: api);
+    await repository.check();
+    final auth = AuthService(
+      apiService: api,
+      environment: ApiEnvironment.local,
+    );
+    repository.bindAuth(auth);
+    repository.bindAuth(auth);
+
+    await auth.initializeAuth();
+
+    expect(repository.achievements, isEmpty);
+    repository.dispose();
+    auth.dispose();
+  });
 }
 
 class _FakeApiService extends ApiService {
@@ -106,6 +144,14 @@ class _FakeApiService extends ApiService {
   }) async {
     lastEndpoint = endpoint;
     lastRequiresAuth = requiresAuth;
+    if (endpoint == '/auth/me') {
+      return const {
+        'user_id': 'achievement-test-user',
+        'discord_username': 'Achievement Tester',
+        'avatar_url': '',
+        'auth_methods': <String>['discord'],
+      };
+    }
     return response;
   }
 
