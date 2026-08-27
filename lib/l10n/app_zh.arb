@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "部落战进攻结果、防守提醒以及 5v5 进攻动态选项。",
   "notifWarAlertsDescription": "匹配到部落战、战斗日开始和部落战结束。",
   "notifWarRemindersDescription": "部落战结束前的自定义提醒。",
+  "notifGroupRaidReminders": "突袭周末提醒",
+  "notifRaidRemindersDescription": "接收一条提醒，汇总你在同一部落中所有已验证账号的剩余进攻次数。",
   "notifDefensesAgainstYourBase": "针对你阵型的防守",
   "notifDefensesAgainstYourBaseDescription": "仅显示此账号作为防守方的进攻。",
   "notifAllAttacks": "所有进攻",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "战斗",
   "notifGroupSupport": "支持",
   "rankedLeagueAccountSelector": "显示账号",
-  "rankedLeagueStars": "星数"
+  "rankedLeagueStars": "星数",
+  "playerBattlelogTab": "战斗",
+  "playerActivityTab": "活跃度",
+  "playerBattlelogFarming": "资源收集",
+  "playerBattlelogRanked": "排位战",
+  "playerBattlelogFarmingOverview": "资源收集概览",
+  "playerBattlelogRankedOverview": "排位赛概览",
+  "playerBattlelogRecentBattles": "近期对战",
+  "playerBattlelogBattleCount": "{count} 场对战",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "进攻记录",
+  "playerBattlelogAverageDestruction": "平均破坏力",
+  "playerBattlelogAverageStars": "平均星星数",
+  "playerBattlelogTripleRate": "三星级",
+  "playerBattlelogAverageLoot": "平均战利品",
+  "playerBattlelogPopularTroops": "最常用的兵种",
+  "playerBattlelogUsedInAttacks": "在 {count} 次进攻中使用",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "进攻",
+  "playerBattlelogDefense": "防御",
+  "playerBattlelogOpponent": "对阵 {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "未找到对战",
+  "playerBattlelogNoBattlesBody": "此模式暂时没有可用的对战。",
+  "playerBattlelogLoadError": "无法加载对战记录",
+  "playerBattlelogHistoryUnavailable": "历史对战数据暂时不可用，因此可能缺少军队使用情况和较早的对战。",
+  "playerBattlelogOfficialUnavailable": "官方对战记录暂时不可用，因此可能缺少最新对战。",
+  "playerActivityTrackingActive": "当前正在追踪",
+  "playerActivityTrackingActiveBody": "此已验证账号会定期刷新。事件从开始追踪后记录，偶尔仍可能出现数据缺失。",
+  "playerActivityTrackingUnknown": "未确认追踪状态",
+  "playerActivityTrackingUnknownBody": "这里只显示 ClashKing 追踪该玩家期间观察到的变化，因此历史记录可能不完整。",
+  "playerActivityNoEventsTitle": "暂无追踪活动",
+  "playerActivityNoEventsBody": "ClashKing 观察到升级和个人资料变化后，它们会显示在这里。",
+  "playerActivityLoadError": "无法加载玩家活动",
+  "playerActivityTownHallUpgraded": "大本营已升级",
+  "playerActivityItemUpgraded": "{name} 已升级",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} 已强化",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} 已解锁",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "名称已更改",
+  "playerActivityLevelChange": "等级 {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "在等级 {level} 解锁",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "在等级 {level} 强化",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
