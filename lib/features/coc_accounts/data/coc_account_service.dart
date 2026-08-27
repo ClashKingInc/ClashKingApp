@@ -22,11 +22,16 @@ import 'package:clashkingapp/features/coc_accounts/models/coc_account_link.dart'
 class CocAccountService extends ChangeNotifier {
   static const String _msgNotAuthenticated = 'User not authenticated';
 
-  CocAccountService({ApiService? apiService, String? currentUserId})
-    : _apiService = apiService ?? ApiService.shared,
-      _currentUserId = currentUserId?.trim().isEmpty == true
-          ? null
-          : currentUserId?.trim();
+  CocAccountService({
+    ApiService? apiService,
+    NotificationPreferencesService? notificationPreferencesService,
+    String? currentUserId,
+  }) : _apiService = apiService ?? ApiService.shared,
+       _notificationPreferencesService =
+           notificationPreferencesService ?? NotificationPreferencesService(),
+       _currentUserId = currentUserId?.trim().isEmpty == true
+           ? null
+           : currentUserId?.trim();
 
   bool _disposed = false;
 
@@ -35,6 +40,7 @@ class CocAccountService extends ChangeNotifier {
   }
 
   final ApiService _apiService;
+  final NotificationPreferencesService _notificationPreferencesService;
   List<Map<String, dynamic>> _cocAccounts = [];
   bool _isLoading = false;
   String? _currentUserId;
@@ -257,6 +263,7 @@ class CocAccountService extends ChangeNotifier {
           (account) => account["player_tag"] == playerTag,
         );
         _safeNotify();
+        _refreshVerifiedPlayerTrackingBestEffort();
       } else {
         Sentry.captureMessage(
           "Error removing CoC account, status code: ${response.statusCode}, body: ${response.body}",
@@ -468,19 +475,7 @@ class CocAccountService extends ChangeNotifier {
       DebugUtils.debugApi("Startup phase: fetch CoC accounts");
       await fetchCocAccounts();
       spanFetchAccounts.finish();
-      unawaited(
-        NotificationPreferencesService()
-            .refreshVerifiedPlayerTracking(
-              verifiedAccounts.map(
-                (account) => account['player_tag']?.toString() ?? '',
-              ),
-            )
-            .catchError((Object error) {
-              DebugUtils.debugWarning(
-                'Could not refresh verified player tracking: $error',
-              );
-            }),
-      );
+      _refreshVerifiedPlayerTrackingBestEffort();
 
       if (cocAccounts.isEmpty) {
         transaction.finish(status: SpanStatus.ok());
@@ -872,19 +867,7 @@ class CocAccountService extends ChangeNotifier {
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         updateAccountVerificationStatus(playerTag, true);
-        unawaited(
-          NotificationPreferencesService()
-              .refreshVerifiedPlayerTracking(
-                verifiedAccounts.map(
-                  (account) => account['player_tag']?.toString() ?? '',
-                ),
-              )
-              .catchError((Object error) {
-                DebugUtils.debugWarning(
-                  'Could not refresh verified player tracking: $error',
-                );
-              }),
-        );
+        _refreshVerifiedPlayerTrackingBestEffort();
         return true;
       } else if (response.statusCode == 403) {
         updateErrorMessage("Invalid API token for this account");
@@ -902,6 +885,22 @@ class CocAccountService extends ChangeNotifier {
       updateErrorMessage("Verification failed: $e");
       return false;
     }
+  }
+
+  void _refreshVerifiedPlayerTrackingBestEffort() {
+    unawaited(
+      _notificationPreferencesService
+          .refreshVerifiedPlayerTracking(
+            verifiedAccounts.map(
+              (account) => account['player_tag']?.toString() ?? '',
+            ),
+          )
+          .catchError((Object error) {
+            DebugUtils.debugWarning(
+              'Could not refresh verified player tracking: $error',
+            );
+          }),
+    );
   }
 
   /// Updates the verification status of an account locally
