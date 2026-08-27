@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "وار حملے کے نتائج، دفاعی الرٹس، اور 5v5 حملہ فیڈ کے اختیارات۔",
   "notifWarAlertsDescription": "وار میچ، بیٹل ڈے شروع، اور وار ختم۔",
   "notifWarRemindersDescription": "وار ختم ہونے سے پہلے کسٹم یاددہانیاں۔",
+  "notifGroupRaidReminders": "ریڈ ویک اینڈ کی یاد دہانیاں",
+  "notifRaidRemindersDescription": "ایک ہی قبیلے میں اپنے تصدیق شدہ اکاؤنٹس کے باقی حملوں کے لیے ایک اطلاع حاصل کریں۔",
   "notifDefensesAgainstYourBase": "آپ کی بیس کے خلاف دفاع",
   "notifDefensesAgainstYourBaseDescription": "صرف وہ ہٹس جہاں یہ اکاؤنٹ دفاع کر رہا ہے۔",
   "notifAllAttacks": "تمام حملے",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "لڑائیاں",
   "notifGroupSupport": "سپورٹ",
   "rankedLeagueAccountSelector": "دکھایا گیا اکاؤنٹ",
-  "rankedLeagueStars": "ستارے"
+  "rankedLeagueStars": "ستارے",
+  "playerBattlelogTab": "لڑائیاں",
+  "playerActivityTab": "سرگرمی",
+  "playerBattlelogFarming": "وسائل جمع کرنا",
+  "playerBattlelogRanked": "رینکڈ",
+  "playerBattlelogFarmingOverview": "وسائل جمع کرنے کا خلاصہ",
+  "playerBattlelogRankedOverview": "درجہ بند لڑائیوں کا خلاصہ",
+  "playerBattlelogRecentBattles": "حالیہ لڑائیاں",
+  "playerBattlelogBattleCount": "{count} لڑائیاں",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "حملے",
+  "playerBattlelogAverageDestruction": "اوسط تباہی۔",
+  "playerBattlelogAverageStars": "اوسط ستارے",
+  "playerBattlelogTripleRate": "تھری اسٹار ریٹ",
+  "playerBattlelogAverageLoot": "اوسط لوٹ",
+  "playerBattlelogPopularTroops": "سب سے زیادہ استعمال ہونے والے دستے",
+  "playerBattlelogUsedInAttacks": "{count} حملوں میں استعمال ہوا",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "حملہ",
+  "playerBattlelogDefense": "دفاع",
+  "playerBattlelogOpponent": "{name} کے خلاف",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "کوئی لڑائی نہیں ملی",
+  "playerBattlelogNoBattlesBody": "اس موڈ کے لیے ابھی کوئی لڑائی دستیاب نہیں ہے۔",
+  "playerBattlelogLoadError": "لڑائی کے ریکارڈ لوڈ نہیں ہو سکے",
+  "playerBattlelogHistoryUnavailable": "پرانا لڑائی کا ڈیٹا عارضی طور پر دستیاب نہیں، اس لیے فوج کا استعمال اور پرانی لڑائیاں غائب ہو سکتی ہیں۔",
+  "playerBattlelogOfficialUnavailable": "سرکاری لڑائی کا ریکارڈ عارضی طور پر دستیاب نہیں، اس لیے تازہ ترین لڑائیاں غائب ہو سکتی ہیں۔",
+  "playerActivityTrackingActive": "فی الحال ٹریک ہو رہا ہے",
+  "playerActivityTrackingActiveBody": "یہ تصدیق شدہ اکاؤنٹ باقاعدگی سے تازہ کیا جاتا ہے۔ واقعات ٹریکنگ شروع ہونے کے بعد درج ہوتے ہیں اور کبھی کبھار خلا رہ سکتا ہے۔",
+  "playerActivityTrackingUnknown": "ٹریکنگ کی تصدیق نہیں ہوئی",
+  "playerActivityTrackingUnknownBody": "یہاں صرف وہ تبدیلیاں نظر آتی ہیں جو ClashKing نے اس کھلاڑی کو ٹریک کرتے وقت دیکھی تھیں، اس لیے تاریخ نامکمل ہو سکتی ہے۔",
+  "playerActivityNoEventsTitle": "ابھی تک کوئی ٹریک شدہ سرگرمی نہیں",
+  "playerActivityNoEventsBody": "ClashKing کی جانب سے دیکھے جانے کے بعد اپ گریڈ اور پروفائل کی تبدیلیاں یہاں ظاہر ہوں گی۔",
+  "playerActivityLoadError": "کھلاڑی کی سرگرمی لوڈ نہیں ہو سکی",
+  "playerActivityTownHallUpgraded": "ٹاؤن ہال اپ گریڈ ہوا",
+  "playerActivityItemUpgraded": "{name} اپ گریڈ ہوا",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} بوسٹ ہوا",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} اَن لاک ہوا",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "نام تبدیل ہوا",
+  "playerActivityLevelChange": "لیول {from} ← {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "لیول {level} پر اَن لاک ہوا",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "لیول {level} پر بوسٹ ہوا",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} ← {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
