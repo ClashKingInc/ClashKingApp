@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Výsledky válečných útoků, výstrahy obrany a možnosti zdroje útoku 5v5.",
   "notifWarAlertsDescription": "Válka se shodovala, den bitvy začal a válka skončila.",
   "notifWarRemindersDescription": "Vlastní připomenutí před koncem války.",
+  "notifGroupRaidReminders": "Připomínky víkendu nájezdů",
+  "notifRaidRemindersDescription": "Dostávej jedno upozornění na zbývající útoky ze všech ověřených účtů ve stejném klanu.",
   "notifDefensesAgainstYourBase": "Obrana proti vaší základně",
   "notifDefensesAgainstYourBaseDescription": "Pouze zásahy tam, kde se tento účet brání.",
   "notifAllAttacks": "Všechny útoky",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Bitvy",
   "notifGroupSupport": "Podpora",
   "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu",
-  "rankedLeagueStars": "Hvězdy"
+  "rankedLeagueStars": "Hvězdy",
+  "playerBattlelogTab": "Bitvy",
+  "playerActivityTab": "Aktivita",
+  "playerBattlelogFarming": "Farmaření",
+  "playerBattlelogRanked": "Hodnocené",
+  "playerBattlelogFarmingOverview": "Přehled farmaření",
+  "playerBattlelogRankedOverview": "Přehled hodnocených bitev",
+  "playerBattlelogRecentBattles": "Nedávné bitvy",
+  "playerBattlelogBattleCount": "Bitev: {count}",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Útoky",
+  "playerBattlelogAverageDestruction": "Průměrné zničení",
+  "playerBattlelogAverageStars": "Průměrné hvězdičky",
+  "playerBattlelogTripleRate": "Tříhvězdičková sazba",
+  "playerBattlelogAverageLoot": "Průměrná kořist",
+  "playerBattlelogPopularTroops": "Nejpoužívanější jednotky",
+  "playerBattlelogUsedInAttacks": "Použito v {count} útocích",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Útok",
+  "playerBattlelogDefense": "Obrana",
+  "playerBattlelogOpponent": "Proti hráči {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Nebyly nalezeny žádné bitvy",
+  "playerBattlelogNoBattlesBody": "Pro tento režim zatím nejsou k dispozici žádné bitvy.",
+  "playerBattlelogLoadError": "Bitevní záznamy se nepodařilo načíst",
+  "playerBattlelogHistoryUnavailable": "Historická data bitev jsou dočasně nedostupná, takže mohou chybět údaje o použití armády a starší bitvy.",
+  "playerBattlelogOfficialUnavailable": "Oficiální bitevní záznam je dočasně nedostupný, takže mohou chybět nejnovější bitvy.",
+  "playerActivityTrackingActive": "Aktuálně sledováno",
+  "playerActivityTrackingActiveBody": "Tento ověřený účet se pravidelně aktualizuje. Události se zaznamenávají od zahájení sledování a občas se mohou objevit mezery.",
+  "playerActivityTrackingUnknown": "Sledování nepotvrzeno",
+  "playerActivityTrackingUnknownBody": "Zobrazují se pouze změny zachycené v době, kdy ClashKing tohoto hráče sledoval, takže historie nemusí být úplná.",
+  "playerActivityNoEventsTitle": "Zatím žádná sledovaná aktivita",
+  "playerActivityNoEventsBody": "Vylepšení a změny profilu se zobrazí, jakmile je ClashKing zaznamená.",
+  "playerActivityLoadError": "Aktivitu hráče se nepodařilo načíst",
+  "playerActivityTownHallUpgraded": "Radnice vylepšena",
+  "playerActivityItemUpgraded": "{name} vylepšeno",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} posíleno",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} odemčeno",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Jméno změněno",
+  "playerActivityLevelChange": "Úroveň {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Odemčeno na úrovni {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Posíleno na úrovni {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
