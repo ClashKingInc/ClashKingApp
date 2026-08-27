@@ -110,12 +110,11 @@ test.describe('Email verification page', () => {
       throw new Error('Email verification response has no access token');
     }
     await expect(
-      page.getByRole('button', { name: /verify code/i }),
-    ).not.toBeVisible({ timeout: 20_000 });
-    await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 3,
-      { timeout: 20_000, polling: 500 },
-    );
+      page
+        .getByRole('button', { name: /^confirm$/i })
+        .or(page.locator('flt-semantics[aria-label="Confirm"]'))
+        .first(),
+    ).toBeVisible({ timeout: 20_000 });
     const cleanup = await page.request.delete(`${API_BASE}/v2/auth/me`, {
       headers: { authorization: `Bearer ${accessToken}` },
     });
