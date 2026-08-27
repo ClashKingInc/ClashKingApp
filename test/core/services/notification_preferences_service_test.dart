@@ -19,13 +19,14 @@ void main() {
     'warAttacksEnabled': false,
     'warStateEnabled': true,
     'warRemindersEnabled': true,
+    'raidRemindersEnabled': true,
     'eventsEnabled': true,
     'announcementsEnabled': false,
     'monthlySupportEnabled': false,
     'reminderTimings': [15, 30, 60],
+    'raidReminderTimings': [60, 180],
     'accounts': [
       {'playerTag': '#VERIFIED', 'source': 'verified', 'active': true},
-      {'playerTag': '#BOOKMARK', 'source': 'bookmarked', 'active': false},
     ],
   };
 
@@ -51,9 +52,10 @@ void main() {
       expect(api.getCallCounts[endpoint], 1);
       expect(settings.notificationsEnabled, isTrue);
       expect(settings.reminderTimings, [15, 30, 60]);
+      expect(settings.legendAttacks, isTrue);
+      expect(settings.legendDefenses, isFalse);
       expect(settings.accounts.map((account) => account.source), [
         NotificationAccountSource.verified,
-        NotificationAccountSource.bookmarked,
       ]);
       final preferences = await SharedPreferences.getInstance();
       expect(
@@ -79,8 +81,6 @@ void main() {
     final settings = NotificationPreferences.fromJson({
       ...responseBody,
       'notificationsEnabled': true,
-      'legendAttacksEnabled': true,
-      'legendDefensesEnabled': false,
     });
 
     await service.save(settings);
@@ -94,10 +94,12 @@ void main() {
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
+      'raidRemindersEnabled': true,
       'eventsEnabled': true,
       'announcementsEnabled': false,
       'monthlySupportEnabled': false,
       'reminderTimings': [15, 30, 60],
+      'raidReminderTimings': [60, 180],
     });
   });
 
@@ -169,10 +171,12 @@ void main() {
       'warAttacksEnabled': false,
       'warStateEnabled': true,
       'warRemindersEnabled': true,
+      'raidRemindersEnabled': true,
       'eventsEnabled': true,
       'announcementsEnabled': false,
       'monthlySupportEnabled': false,
       'reminderTimings': [15, 30, 60],
+      'raidReminderTimings': [60, 180],
     });
     final preferences = await SharedPreferences.getInstance();
     expect(
@@ -183,22 +187,39 @@ void main() {
 
   test('account toggle uses the dedicated per-player endpoint', () async {
     final api = FakeApiService();
-    const endpoint = '/notifications/accounts/%23BOOKMARK';
+    const endpoint = '/notifications/accounts/%23VERIFIED';
     api.putStubs[endpoint] = http.Response(
       jsonEncode({
-        'playerTag': '#BOOKMARK',
-        'source': 'bookmarked',
+        'playerTag': '#VERIFIED',
+        'source': 'verified',
         'active': true,
       }),
       200,
     );
     final service = NotificationPreferencesService(apiService: api);
 
-    final account = await service.setAccountEnabled('#BOOKMARK', true);
+    final account = await service.setAccountEnabled('#VERIFIED', true);
 
     expect(account.active, isTrue);
-    expect(account.source, NotificationAccountSource.bookmarked);
+    expect(account.source, NotificationAccountSource.verified);
     expect(api.lastPutBodies[endpoint], {'enabled': true});
+  });
+
+  test('verified tracking refresh normalizes the request body', () async {
+    final api = FakeApiService();
+    api.postStubs[NotificationPreferencesService.verifiedTrackingEndpoint] =
+        http.Response('{}', 200);
+    final service = NotificationPreferencesService(apiService: api);
+
+    await service.refreshVerifiedPlayerTracking(['#ONE', ' ', '#ONE', '#TWO']);
+
+    expect(
+      api.lastPostBodies[NotificationPreferencesService
+          .verifiedTrackingEndpoint],
+      {
+        'player_tags': ['#ONE', '#TWO'],
+      },
+    );
   });
 
   test('local defaults disable notifications and every category', () async {
@@ -216,6 +237,39 @@ void main() {
     }
     expect(settings.reminderTimings, isEmpty);
     expect(settings.accounts, isEmpty);
+  });
+
+  test('local V2 cache migrates raid defaults and retired accounts', () async {
+    final legacyCache =
+        <String, dynamic>{
+            ...responseBody,
+            'accounts': [
+              {'playerTag': '#VERIFIED', 'source': 'verified', 'active': true},
+              {
+                'playerTag': '#BOOKMARK',
+                'source': 'bookmarked',
+                'active': true,
+              },
+            ],
+          }
+          ..remove('raidRemindersEnabled')
+          ..remove('raidReminderTimings');
+    SharedPreferences.setMockInitialValues({
+      NotificationPreferencesService.localKey: jsonEncode(legacyCache),
+    });
+    final service = NotificationPreferencesService(
+      apiService: FakeApiService(),
+      deviceIdProvider: () async => 'device-1',
+      environmentProvider: () => 'sandbox',
+    );
+
+    final settings = await service.loadLocal();
+
+    expect(settings.raidReminders, isFalse);
+    expect(settings.raidReminderTimings, isEmpty);
+    expect(settings.accounts.map((account) => account.playerTag), [
+      '#VERIFIED',
+    ]);
   });
 
   test('response model enforces final reminder minute bounds', () {

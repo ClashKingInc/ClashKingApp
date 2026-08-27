@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Rezultate ale atacurilor de război, alerte de apărare și feed de atacuri 5v5.",
   "notifWarAlertsDescription": "Război găsit, ziua de luptă începută și război încheiat.",
   "notifWarRemindersDescription": "Mementouri personalizate înainte de sfârșitul războiului.",
+  "notifGroupRaidReminders": "Mementouri pentru weekendul raidurilor",
+  "notifRaidRemindersDescription": "Primește o singură alertă pentru atacurile rămase pe conturile tale verificate din același clan.",
   "notifDefensesAgainstYourBase": "Apărări împotriva bazei tale",
   "notifDefensesAgainstYourBaseDescription": "Doar loviturile în care acest cont apără.",
   "notifAllAttacks": "Toate atacurile",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Bătălii",
   "notifGroupSupport": "Suport",
   "rankedLeagueAccountSelector": "Cont afișat",
-  "rankedLeagueStars": "Stele"
+  "rankedLeagueStars": "Stele",
+  "playerBattlelogTab": "Bătălii",
+  "playerActivityTab": "Activitate",
+  "playerBattlelogFarming": "Colectare de resurse",
+  "playerBattlelogRanked": "Clasat",
+  "playerBattlelogFarmingOverview": "Prezentarea colectării de resurse",
+  "playerBattlelogRankedOverview": "Prezentarea luptelor clasate",
+  "playerBattlelogRecentBattles": "Lupte recente",
+  "playerBattlelogBattleCount": "{count} lupte",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Atacuri",
+  "playerBattlelogAverageDestruction": "Distrugere medie",
+  "playerBattlelogAverageStars": "Stele medii",
+  "playerBattlelogTripleRate": "Rata de trei stele",
+  "playerBattlelogAverageLoot": "Pradă medie",
+  "playerBattlelogPopularTroops": "Cele mai folosite trupe",
+  "playerBattlelogUsedInAttacks": "Folosit în {count} atacuri",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Atac",
+  "playerBattlelogDefense": "Apărare",
+  "playerBattlelogOpponent": "Împotriva lui {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Nu s-au găsit lupte",
+  "playerBattlelogNoBattlesBody": "Nu există încă lupte disponibile pentru acest mod.",
+  "playerBattlelogLoadError": "Jurnalele de luptă nu au putut fi încărcate",
+  "playerBattlelogHistoryUnavailable": "Datele istorice ale luptelor sunt temporar indisponibile, astfel că pot lipsi utilizarea armatei și luptele mai vechi.",
+  "playerBattlelogOfficialUnavailable": "Jurnalul oficial de luptă este temporar indisponibil, astfel că pot lipsi cele mai recente lupte.",
+  "playerActivityTrackingActive": "Urmărit în prezent",
+  "playerActivityTrackingActiveBody": "Acest cont verificat este actualizat periodic. Evenimentele încep după pornirea urmăririi și pot apărea în continuare goluri ocazionale.",
+  "playerActivityTrackingUnknown": "Urmărire neconfirmată",
+  "playerActivityTrackingUnknownBody": "Aici apar doar schimbările observate în timp ce ClashKing urmărea acest jucător, astfel că istoricul poate fi incomplet.",
+  "playerActivityNoEventsTitle": "Nicio activitate urmărită încă",
+  "playerActivityNoEventsBody": "Îmbunătățirile și schimbările de profil vor apărea după ce ClashKing le observă.",
+  "playerActivityLoadError": "Activitatea jucătorului nu a putut fi încărcată",
+  "playerActivityTownHallUpgraded": "Primăria a fost îmbunătățită",
+  "playerActivityItemUpgraded": "{name} a fost îmbunătățit",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} a fost amplificat",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} a fost deblocat",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Numele a fost schimbat",
+  "playerActivityLevelChange": "Nivel {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Deblocat la nivelul {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Amplificat la nivelul {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

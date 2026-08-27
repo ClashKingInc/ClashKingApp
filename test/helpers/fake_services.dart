@@ -23,6 +23,7 @@ class FakeApiService extends ApiService {
   final Map<String, Object?> lastPatchBodies = {};
   final Map<String, Object?> lastDeleteBodies = {};
   final Map<String, Map<String, String>?> lastGetHeaders = {};
+  final Map<String, bool> getRequiresAuthByEndpoint = {};
   final Map<String, int> getCallCounts = {};
 
   /// If set, the next call to the corresponding method for [endpoint] will
@@ -42,6 +43,7 @@ class FakeApiService extends ApiService {
     Map<String, String>? extraHeaders,
   }) async {
     lastGetHeaders[endpoint] = extraHeaders;
+    getRequiresAuthByEndpoint[endpoint] = requiresAuth;
     getCallCounts.update(endpoint, (count) => count + 1, ifAbsent: () => 1);
     if (throwOnGet.containsKey(endpoint)) throw throwOnGet[endpoint]!;
     if (getStubs.containsKey(endpoint)) return getStubs[endpoint]!;

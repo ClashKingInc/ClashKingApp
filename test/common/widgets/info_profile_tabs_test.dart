@@ -343,6 +343,65 @@ void main() {
       expect(selected, 1);
     },
   );
+
+  testWidgets('profile dropdown selects a destination', (tester) async {
+    var selected = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: InfoProfileDestinationPicker(
+            selectedIndex: selected,
+            onTabSelected: (value) => selected = value,
+            tabs: const [
+              InfoProfileTabData(label: 'Home', icon: Icons.home_rounded),
+              InfoProfileTabData(
+                label: 'Activity',
+                icon: Icons.history_rounded,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Activity').last);
+    await tester.pumpAndSettle();
+
+    expect(selected, 1);
+  });
+
+  testWidgets('more than three destinations use a dropdown and ignore swipes', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: _AutomaticDropdownNavigationHarness()),
+    );
+
+    expect(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+      findsOneWidget,
+    );
+    expect(find.byType(TabBar), findsNothing);
+    await tester.fling(find.byType(TabBarView), const Offset(-600, 0), 1200);
+    await tester.pumpAndSettle();
+
+    expect(find.text('First automatic page'), findsOneWidget);
+    expect(find.text('Second automatic page'), findsNothing);
+  });
+
+  testWidgets('three destinations keep the tab row', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: _ThreeTabHarness()));
+
+    expect(find.byType(TabBar), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('info-profile-destination-picker')),
+      findsNothing,
+    );
+  });
 }
 
 void _ignoreSelection(int _) {}
@@ -475,6 +534,67 @@ class _SelectedBodyHarnessState extends State<_SelectedBodyHarness> {
             SizedBox(height: 1000, child: Text('Body $selectedIndex top')),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AutomaticDropdownNavigationHarness extends StatefulWidget {
+  const _AutomaticDropdownNavigationHarness();
+
+  @override
+  State<_AutomaticDropdownNavigationHarness> createState() =>
+      _AutomaticDropdownNavigationHarnessState();
+}
+
+class _AutomaticDropdownNavigationHarnessState
+    extends State<_AutomaticDropdownNavigationHarness> {
+  var selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: InfoProfileTabScaffold(
+        header: const SizedBox(height: 240),
+        selectedIndex: selectedIndex,
+        onTabSelected: (index) => setState(() => selectedIndex = index),
+        tabs: const [
+          InfoProfileTabData(label: 'First', icon: Icons.looks_one_rounded),
+          InfoProfileTabData(label: 'Second', icon: Icons.looks_two_rounded),
+          InfoProfileTabData(label: 'Third', icon: Icons.looks_3_rounded),
+          InfoProfileTabData(label: 'Fourth', icon: Icons.looks_4_rounded),
+        ],
+        pages: const [
+          Center(child: Text('First automatic page')),
+          Center(child: Text('Second automatic page')),
+          Center(child: Text('Third automatic page')),
+          Center(child: Text('Fourth automatic page')),
+        ],
+      ),
+    );
+  }
+}
+
+class _ThreeTabHarness extends StatelessWidget {
+  const _ThreeTabHarness();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: InfoProfileTabScaffold(
+        header: const SizedBox(height: 240),
+        selectedIndex: 0,
+        onTabSelected: _ignoreSelection,
+        tabs: const [
+          InfoProfileTabData(label: 'First', icon: Icons.looks_one_rounded),
+          InfoProfileTabData(label: 'Second', icon: Icons.looks_two_rounded),
+          InfoProfileTabData(label: 'Third', icon: Icons.looks_3_rounded),
+        ],
+        pages: const [
+          Center(child: Text('First page')),
+          Center(child: Text('Second page')),
+          Center(child: Text('Third page')),
+        ],
       ),
     );
   }

@@ -163,6 +163,7 @@ class ImageAssets {
   static const String warPreferenceIn = "$baseUrl/icons/Icon_HV_In.png";
   static const String warPreferenceOut = "$baseUrl/icons/Icon_HV_Out.png";
   static const String attackStar = "$baseUrl/icons/Icon_HV_Attack_Star.png";
+  static const String emptyStar = "$baseUrl/icons/Icon_BB_Empty_Star.png";
   static const String war = "$baseUrl/icons/Icon_DC_War.png";
   static const String warClan = "$baseUrl/icons/Icon_HV_Clan_War.png";
   static const String builderBaseStar = "$baseUrl/icons/Icon_BB_Star.png";
@@ -178,12 +179,16 @@ class ImageAssets {
   static const String trophies = "$baseUrl/icons/Icon_HV_Trophy.png";
   static const String bestTrophies = "$baseUrl/icons/Icon_HV_Trophy_Best.png";
   static const String attacks = "$baseUrl/icons/Icon_HV_Attack.png";
+  static const String attacksNoShield =
+      "$baseUrl/icons/Icon_HV_Attacks_No_Shield.png";
   static const String hitrate = "$baseUrl/icons/Icon_DC_Hitrate.png";
   static const String podium = "$baseUrl/icons/Icon_HV_Podium.png";
   static const String clanCastle =
       "$baseUrl/buildings/home-village/clan_castle/level_1.webp";
   static const String cwlSwordsNoBorder =
       "$baseUrl/icons/Icon_DC_CWL_No_Border.png";
+  static const String activeDailyLabel =
+      "$baseUrl/player_labels/active_daily.webp";
 
   // 🎖️ Legend League
   static const String legendStartFlag = "$baseUrl/icons/Icon_HV_Start_Flag.png";
@@ -226,6 +231,9 @@ class ImageAssets {
       "$baseUrl/magic_items/hammer_of_building.webp";
   static const String lootCart =
       "$baseUrl/obstacles/home-village/loot_cart.webp";
+  static const String gold = "$baseUrl/resources/gold.webp";
+  static const String elixir = "$baseUrl/resources/elixir.webp";
+  static const String darkElixir = "$baseUrl/resources/dark_elixir.webp";
   static const String researchPotion =
       "$baseUrl/magic_items/research_potion.webp";
   static const String petPotion = "$baseUrl/magic_items/pet_potion.webp";

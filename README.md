@@ -74,7 +74,8 @@ The ultimate Clash of Clans companion app for tracking stats, managing clans, an
 - `flutter build apk --release` - Build the Android APK
 - `flutter build ios --release --no-codesign` - Compile iOS and its widget extension
 
-The deployed web build uses `CK_API_V2_BASE_URL=https://v2-api.clashk.ing/v2`.
+The deployed production web build uses
+`CK_API_V2_BASE_URL=https://v2-api.clashk.ing/v2`.
 Browser authentication uses the `/v2/auth/web/*` cookie endpoints; native iOS
 and Android builds keep the JSON access/refresh-token contract.
 

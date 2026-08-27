@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Sotahyökkäystulokset, puolustushälytykset ja 5v5-hyökkäyssyötevaihtoehdot.",
   "notifWarAlertsDescription": "Sota sovittiin, taistelupäivä alkoi ja sota päättyi.",
   "notifWarRemindersDescription": "Mukautetut muistutukset ennen sodan päättymistä.",
+  "notifGroupRaidReminders": "Ryöstöviikonlopun muistutukset",
+  "notifRaidRemindersDescription": "Saat yhden ilmoituksen jäljellä olevista hyökkäyksistä kaikilla vahvistetuilla tileilläsi samassa klaanissa.",
   "notifDefensesAgainstYourBase": "Puolustus tukikohtaasi vastaan",
   "notifDefensesAgainstYourBaseDescription": "Vain osumia kohtiin, joissa tämä tili suojaa.",
   "notifAllAttacks": "Kaikki hyökkäykset",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Taistelut",
   "notifGroupSupport": "Tuki",
   "rankedLeagueAccountSelector": "Näytettävä tili",
-  "rankedLeagueStars": "Tähdet"
+  "rankedLeagueStars": "Tähdet",
+  "playerBattlelogTab": "Taistelut",
+  "playerActivityTab": "Aktiivisuus",
+  "playerBattlelogFarming": "Resurssien keräys",
+  "playerBattlelogRanked": "Sijoitus",
+  "playerBattlelogFarmingOverview": "Resurssien keräyksen yhteenveto",
+  "playerBattlelogRankedOverview": "Ranked-yhteenveto",
+  "playerBattlelogRecentBattles": "Viimeisimmät taistelut",
+  "playerBattlelogBattleCount": "{count} taistelua",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Hyökkäykset",
+  "playerBattlelogAverageDestruction": "Keskimääräinen tuho",
+  "playerBattlelogAverageStars": "Keskimääräiset tähdet",
+  "playerBattlelogTripleRate": "Kolmen tähden arvosana",
+  "playerBattlelogAverageLoot": "Keskimääräinen saalis",
+  "playerBattlelogPopularTroops": "Käytetyimmät joukot",
+  "playerBattlelogUsedInAttacks": "Käytetty {count} hyökkäyksessä",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Hyökkäys",
+  "playerBattlelogDefense": "Puolustus",
+  "playerBattlelogOpponent": "Vastassa {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Taisteluita ei löytynyt",
+  "playerBattlelogNoBattlesBody": "Tässä tilassa ei ole vielä taisteluita.",
+  "playerBattlelogLoadError": "Taistelulokeja ei voitu ladata",
+  "playerBattlelogHistoryUnavailable": "Historialliset taistelutiedot eivät ole tilapäisesti saatavilla, joten armeijan käyttöä ja vanhempia taisteluita voi puuttua.",
+  "playerBattlelogOfficialUnavailable": "Virallinen taisteluloki ei ole tilapäisesti saatavilla, joten uusimpia taisteluita voi puuttua.",
+  "playerActivityTrackingActive": "Seurataan parhaillaan",
+  "playerActivityTrackingActiveBody": "Tämä vahvistettu tili päivitetään säännöllisesti. Tapahtumat alkavat seurannan käynnistymisestä, ja satunnaisia aukkoja voi silti esiintyä.",
+  "playerActivityTrackingUnknown": "Seurantaa ei vahvistettu",
+  "playerActivityTrackingUnknownBody": "Tässä näkyvät vain muutokset, jotka havaittiin ClashKingin seuratessa tätä pelaajaa, joten historia voi olla puutteellinen.",
+  "playerActivityNoEventsTitle": "Ei vielä seurattua toimintaa",
+  "playerActivityNoEventsBody": "Parannukset ja profiilimuutokset näkyvät, kun ClashKing havaitsee ne.",
+  "playerActivityLoadError": "Pelaajan toimintaa ei voitu ladata",
+  "playerActivityTownHallUpgraded": "Kaupungintalo parannettu",
+  "playerActivityItemUpgraded": "{name} parannettu",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} tehostettu",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} avattu",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Nimi vaihdettu",
+  "playerActivityLevelChange": "Taso {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Avattu tasolla {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Tehostettu tasolla {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

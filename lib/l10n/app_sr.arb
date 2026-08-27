@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Rezultati ratnih napada, upozorenja odbrane i 5v5 tok napada.",
   "notifWarAlertsDescription": "Rat pronađen, dan borbe počeo i rat završen.",
   "notifWarRemindersDescription": "Prilagođeni podsetnici pre kraja rata.",
+  "notifGroupRaidReminders": "Подсетници за викенд препада",
+  "notifRaidRemindersDescription": "Добиј једно обавештење о преосталим нападима на свим потврђеним налозима у истом клану.",
   "notifDefensesAgainstYourBase": "Odbrane protiv tvoje baze",
   "notifDefensesAgainstYourBaseDescription": "Samo udarci u kojima se ovaj nalog brani.",
   "notifAllAttacks": "Svi napadi",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Bitke",
   "notifGroupSupport": "Podrška",
   "rankedLeagueAccountSelector": "Налог за рангирану лигу",
-  "rankedLeagueStars": "Zvezdice"
+  "rankedLeagueStars": "Zvezdice",
+  "playerBattlelogTab": "Bitke",
+  "playerActivityTab": "Aktivnost",
+  "playerBattlelogFarming": "Прикупљање ресурса",
+  "playerBattlelogRanked": "Рангирано",
+  "playerBattlelogFarmingOverview": "Преглед прикупљања ресурса",
+  "playerBattlelogRankedOverview": "Преглед рангираних борби",
+  "playerBattlelogRecentBattles": "Недавне битке",
+  "playerBattlelogBattleCount": "Битака: {count}",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Napadi",
+  "playerBattlelogAverageDestruction": "Просечно уништење",
+  "playerBattlelogAverageStars": "Просечне звезде",
+  "playerBattlelogTripleRate": "Оцена од три звездице",
+  "playerBattlelogAverageLoot": "Просечан плен",
+  "playerBattlelogPopularTroops": "Најчешће коришћене трупе",
+  "playerBattlelogUsedInAttacks": "Коришћено у {count} напада",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Напад",
+  "playerBattlelogDefense": "Одбрана",
+  "playerBattlelogOpponent": "Против играча {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Нема пронађених борби",
+  "playerBattlelogNoBattlesBody": "За овај режим још нема доступних борби.",
+  "playerBattlelogLoadError": "Дневници борби нису могли да се учитају",
+  "playerBattlelogHistoryUnavailable": "Историјски подаци о борбама су привремено недоступни, па могу недостајати употреба војске и старије борбе.",
+  "playerBattlelogOfficialUnavailable": "Званични дневник борби је привремено недоступан, па могу недостајати најновије борбе.",
+  "playerActivityTrackingActive": "Тренутно се прати",
+  "playerActivityTrackingActiveBody": "Овај потврђени налог се редовно освежава. Догађаји се бележе од почетка праћења, а повремене празнине су и даље могуће.",
+  "playerActivityTrackingUnknown": "Праћење није потврђено",
+  "playerActivityTrackingUnknownBody": "Овде се приказују само промене забележене док је ClashKing пратио овог играча, па историја може бити непотпуна.",
+  "playerActivityNoEventsTitle": "Још нема праћене активности",
+  "playerActivityNoEventsBody": "Надоградње и промене профила ће се појавити када их ClashKing забележи.",
+  "playerActivityLoadError": "Активност играча није могла да се учита",
+  "playerActivityTownHallUpgraded": "Градска кућа је надограђена",
+  "playerActivityItemUpgraded": "{name} је надограђен",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} је појачан",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} је откључан",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Име је промењено",
+  "playerActivityLevelChange": "Ниво {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Откључано на нивоу {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Појачано на нивоу {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Результаты атак в войне, оповещения о защите и параметры ленты атак 5v5.",
   "notifWarAlertsDescription": "Подбор войны, начало дня битвы и завершение войны.",
   "notifWarRemindersDescription": "Пользовательские напоминания перед окончанием войны.",
+  "notifGroupRaidReminders": "Напоминания о рейдовых выходных",
+  "notifRaidRemindersDescription": "Получай одно уведомление об оставшихся атаках для всех подтверждённых аккаунтов в одном клане.",
   "notifDefensesAgainstYourBase": "Защиты против вашей базы",
   "notifDefensesAgainstYourBaseDescription": "Только удары, где этот аккаунт защищается.",
   "notifAllAttacks": "Все атаки",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Битвы",
   "notifGroupSupport": "Поддержка",
   "rankedLeagueAccountSelector": "Отображаемый аккаунт",
-  "rankedLeagueStars": "Полученные звёзды"
+  "rankedLeagueStars": "Звёзды",
+  "playerBattlelogTab": "Проведённые бои",
+  "playerActivityTab": "Активность",
+  "playerBattlelogFarming": "Сбор ресурсов",
+  "playerBattlelogRanked": "Рейтинговые бои",
+  "playerBattlelogFarmingOverview": "Обзор сбора ресурсов",
+  "playerBattlelogRankedOverview": "Обзор рейтинговых боёв",
+  "playerBattlelogRecentBattles": "Последние бои",
+  "playerBattlelogBattleCount": "Боёв: {count}",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Наступления",
+  "playerBattlelogAverageDestruction": "Среднее разрушение",
+  "playerBattlelogAverageStars": "Среднее количество звёзд",
+  "playerBattlelogTripleRate": "Три звезды",
+  "playerBattlelogAverageLoot": "Средняя добыча",
+  "playerBattlelogPopularTroops": "Самые используемые войска",
+  "playerBattlelogUsedInAttacks": "Использовано в {count} атаках",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Атака",
+  "playerBattlelogDefense": "Оборона",
+  "playerBattlelogOpponent": "Против игрока {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Бои не найдены",
+  "playerBattlelogNoBattlesBody": "Для этого режима пока нет доступных боёв.",
+  "playerBattlelogLoadError": "Не удалось загрузить журнал боёв",
+  "playerBattlelogHistoryUnavailable": "Исторические данные боёв временно недоступны, поэтому сведения об использовании армии и старые бои могут отсутствовать.",
+  "playerBattlelogOfficialUnavailable": "Официальный журнал боёв временно недоступен, поэтому последние бои могут отсутствовать.",
+  "playerActivityTrackingActive": "Отслеживается сейчас",
+  "playerActivityTrackingActiveBody": "Этот подтверждённый аккаунт регулярно обновляется. События записываются после начала отслеживания, но иногда данные могут отсутствовать.",
+  "playerActivityTrackingUnknown": "Отслеживание не подтверждено",
+  "playerActivityTrackingUnknownBody": "Здесь отображаются только изменения, замеченные во время отслеживания игрока ClashKing, поэтому история может быть неполной.",
+  "playerActivityNoEventsTitle": "Отслеживаемой активности пока нет",
+  "playerActivityNoEventsBody": "Улучшения и изменения профиля появятся после того, как ClashKing их обнаружит.",
+  "playerActivityLoadError": "Не удалось загрузить активность игрока",
+  "playerActivityTownHallUpgraded": "Ратуша улучшена",
+  "playerActivityItemUpgraded": "{name} улучшено",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} усилено",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} разблокировано",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Имя изменено",
+  "playerActivityLevelChange": "Уровень {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Разблокировано на уровне {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Усилено на уровне {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

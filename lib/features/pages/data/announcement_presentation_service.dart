@@ -21,7 +21,7 @@ class AnnouncementPresentationService {
     final raw = preferences.getString(NotificationPreferencesService.localKey);
     final announcementsEnabled = raw == null
         ? false
-        : NotificationPreferences.fromJson(
+        : NotificationPreferences.fromLocalJson(
             Map<String, dynamic>.from(jsonDecode(raw) as Map),
           ).announcements;
     if (!announcementsEnabled) {

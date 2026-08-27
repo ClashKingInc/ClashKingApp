@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Háborús támadások eredményei, védelmi riasztások és 5v5 támadási feed opciók.",
   "notifWarAlertsDescription": "A háború megegyezett, megkezdődött a csata napja, és a háború véget ért.",
   "notifWarRemindersDescription": "Egyéni emlékeztetők a háború vége előtt.",
+  "notifGroupRaidReminders": "Rajtaütési hétvége emlékeztetői",
+  "notifRaidRemindersDescription": "Egyetlen értesítést kaphatsz az ugyanabban a klánban lévő hitelesített fiókjaid hátralévő támadásairól.",
   "notifDefensesAgainstYourBase": "Védelem a bázisod ellen",
   "notifDefensesAgainstYourBaseDescription": "Csak olyan találatok, ahol ez a fiók védi.",
   "notifAllAttacks": "Minden támadás",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Csaták",
   "notifGroupSupport": "Támogatás",
   "rankedLeagueAccountSelector": "Rangsorolt ligás fiók",
-  "rankedLeagueStars": "Csillagok"
+  "rankedLeagueStars": "Csillagok",
+  "playerBattlelogTab": "Csaták",
+  "playerActivityTab": "Aktivitás",
+  "playerBattlelogFarming": "Nyersanyaggyűjtés",
+  "playerBattlelogRanked": "Rangsorolt",
+  "playerBattlelogFarmingOverview": "Nyersanyaggyűjtési áttekintés",
+  "playerBattlelogRankedOverview": "Rangsorolt áttekintés",
+  "playerBattlelogRecentBattles": "Legutóbbi csaták",
+  "playerBattlelogBattleCount": "{count} csata",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Támadások",
+  "playerBattlelogAverageDestruction": "Átlagos pusztítás",
+  "playerBattlelogAverageStars": "Átlagos csillagok",
+  "playerBattlelogTripleRate": "Három csillagos arány",
+  "playerBattlelogAverageLoot": "Átlagos zsákmány",
+  "playerBattlelogPopularTroops": "Leggyakrabban használt egységek",
+  "playerBattlelogUsedInAttacks": "{count} támadásban használva",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Támadás",
+  "playerBattlelogDefense": "Védelem",
+  "playerBattlelogOpponent": "{name} ellen",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Nem találhatók csaták",
+  "playerBattlelogNoBattlesBody": "Ehhez a módhoz még nem érhetők el csaták.",
+  "playerBattlelogLoadError": "A csatanaplók nem tölthetők be",
+  "playerBattlelogHistoryUnavailable": "A korábbi csaták adatai átmenetileg nem érhetők el, ezért hiányozhatnak a sereghasználati adatok és a régebbi csaták.",
+  "playerBattlelogOfficialUnavailable": "A hivatalos csatanapló átmenetileg nem érhető el, ezért hiányozhatnak a legújabb csaták.",
+  "playerActivityTrackingActive": "Jelenleg követve",
+  "playerActivityTrackingActiveBody": "Ez a hitelesített fiók rendszeresen frissül. Az események a követés kezdetétől jelennek meg, és időnként továbbra is lehetnek hiányok.",
+  "playerActivityTrackingUnknown": "A követés nincs megerősítve",
+  "playerActivityTrackingUnknownBody": "Csak azok a változások jelennek meg itt, amelyeket a ClashKing a játékos követése közben észlelt, ezért az előzmények hiányosak lehetnek.",
+  "playerActivityNoEventsTitle": "Még nincs követett tevékenység",
+  "playerActivityNoEventsBody": "A fejlesztések és profilváltozások akkor jelennek meg, amikor a ClashKing észleli őket.",
+  "playerActivityLoadError": "A játékos tevékenysége nem tölthető be",
+  "playerActivityTownHallUpgraded": "A Városháza fejlődött",
+  "playerActivityItemUpgraded": "{name} fejlődött",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} megerősítve",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} feloldva",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "A név megváltozott",
+  "playerActivityLevelChange": "{from}. szint → {to}. szint",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Feloldva a(z) {level}. szinten",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Megerősítve a(z) {level}. szinten",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

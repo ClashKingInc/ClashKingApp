@@ -23,6 +23,7 @@ class NotificationPreferencesService {
            preferencesProvider ?? SharedPreferences.getInstance;
 
   static const endpoint = '/notifications/preferences';
+  static const verifiedTrackingEndpoint = '/tracking/verified-players';
   static const localKey = 'notification_settings_v2';
   static const _legacyKeys = [
     'notif_settings_enabled_types',
@@ -91,6 +92,27 @@ class NotificationPreferencesService {
     return save(current.copyWith(notificationsEnabled: enabled));
   }
 
+  Future<void> refreshVerifiedPlayerTracking(
+    Iterable<String> playerTags,
+  ) async {
+    final tags = playerTags
+        .where((tag) => tag.trim().isNotEmpty)
+        .toSet()
+        .toList();
+    final response = await _apiService.postResponse(
+      verifiedTrackingEndpoint,
+      body: {'player_tags': tags},
+      requiresAuth: true,
+      url: PushNotificationService.urlFor(verifiedTrackingEndpoint),
+    );
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw HttpException(
+        'Failed to refresh verified player tracking (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+  }
+
   Future<NotificationAccount> setAccountEnabled(
     String playerTag,
     bool enabled,
@@ -129,7 +151,7 @@ class NotificationPreferencesService {
     if (decoded is! Map<String, dynamic>) {
       throw const FormatException('Invalid local notification preferences');
     }
-    return NotificationPreferences.fromJson(decoded);
+    return NotificationPreferences.fromLocalJson(decoded);
   }
 
   NotificationPreferences _decode(dynamic response) {

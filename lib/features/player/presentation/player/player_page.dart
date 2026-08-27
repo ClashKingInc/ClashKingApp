@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/models/player_achievement.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_activity_tab.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_battlelog_tab.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_join_leave_tab.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_profile_tab.dart';
@@ -38,7 +40,7 @@ class PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
-    selectedTab = widget.initialTab.clamp(0, 4);
+    selectedTab = widget.initialTab.clamp(0, 6);
   }
 
   @override
@@ -56,7 +58,8 @@ class PlayerScreenState extends State<PlayerScreen> {
         tabs: tabs,
         selectedIndex: selectedTab,
         onTabSelected: (index) => setState(() => selectedTab = index),
-        alwaysScrollable: true,
+        navigationStyle: InfoProfileNavigationStyle.dropdown,
+        enableSwipeNavigation: false,
         pages: [
           _buildSliverTab(
             key: 'player-home',
@@ -66,6 +69,16 @@ class PlayerScreenState extends State<PlayerScreen> {
           _buildSliverTab(
             key: 'player-builder',
             slivers: _buildBuilderSlivers(widget.selectedPlayer),
+            bottomPadding: bottomPadding,
+          ),
+          PlayerBattlelogTab(
+            key: const ValueKey('player-battlelog'),
+            playerTag: widget.selectedPlayer.tag,
+            bottomPadding: bottomPadding,
+          ),
+          PlayerActivityTab(
+            key: const ValueKey('player-activity'),
+            playerTag: widget.selectedPlayer.tag,
             bottomPadding: bottomPadding,
           ),
           _buildSliverTab(
@@ -106,6 +119,14 @@ class PlayerScreenState extends State<PlayerScreen> {
     InfoProfileTabData(
       label: _builderBaseLabel(context),
       imageUrl: ImageAssets.builderHall(widget.selectedPlayer.builderHallLevel),
+    ),
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.playerBattlelogTab ?? 'Battles',
+      imageUrl: ImageAssets.attacks,
+    ),
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.playerActivityTab ?? 'Activity',
+      icon: Icons.history_rounded,
     ),
     InfoProfileTabData(
       label: AppLocalizations.of(context)?.warStats ?? 'War Stats',

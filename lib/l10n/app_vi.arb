@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Kết quả tấn công chiến tranh, cảnh báo phòng thủ và feed tấn công 5v5.",
   "notifWarAlertsDescription": "Ghép chiến tranh, ngày chiến đấu bắt đầu và chiến tranh kết thúc.",
   "notifWarRemindersDescription": "Nhắc nhở tùy chỉnh trước khi chiến tranh kết thúc.",
+  "notifGroupRaidReminders": "Nhắc nhở Cuối tuần Đột kích",
+  "notifRaidRemindersDescription": "Nhận một thông báo về số lượt tấn công còn lại trên các tài khoản đã xác minh trong cùng một bang hội.",
   "notifDefensesAgainstYourBase": "Phòng thủ trước căn cứ của bạn",
   "notifDefensesAgainstYourBaseDescription": "Chỉ các lượt đánh khi tài khoản này đang phòng thủ.",
   "notifAllAttacks": "Tất cả tấn công",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Trận đánh",
   "notifGroupSupport": "Ủng hộ",
   "rankedLeagueAccountSelector": "Tài khoản đang hiển thị",
-  "rankedLeagueStars": "Sao"
+  "rankedLeagueStars": "Sao",
+  "playerBattlelogTab": "Trận đánh",
+  "playerActivityTab": "Hoạt động",
+  "playerBattlelogFarming": "Thu thập tài nguyên",
+  "playerBattlelogRanked": "Xếp hạng",
+  "playerBattlelogFarmingOverview": "Tổng quan thu thập tài nguyên",
+  "playerBattlelogRankedOverview": "Tổng quan xếp hạng",
+  "playerBattlelogRecentBattles": "Trận gần đây",
+  "playerBattlelogBattleCount": "{count} trận",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Tấn công",
+  "playerBattlelogAverageDestruction": "Sức hủy diệt trung bình",
+  "playerBattlelogAverageStars": "Sao trung bình",
+  "playerBattlelogTripleRate": "Tỷ lệ ba sao",
+  "playerBattlelogAverageLoot": "Chiến lợi phẩm trung bình",
+  "playerBattlelogPopularTroops": "Đơn vị được dùng nhiều nhất",
+  "playerBattlelogUsedInAttacks": "Được dùng trong {count} lượt tấn công",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Tấn công",
+  "playerBattlelogDefense": "Phòng thủ",
+  "playerBattlelogOpponent": "Đối đầu {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Không tìm thấy trận chiến",
+  "playerBattlelogNoBattlesBody": "Chưa có trận chiến nào cho chế độ này.",
+  "playerBattlelogLoadError": "Không thể tải nhật ký trận chiến",
+  "playerBattlelogHistoryUnavailable": "Dữ liệu trận chiến trước đây tạm thời không khả dụng, vì vậy có thể thiếu thông tin sử dụng quân đội và các trận cũ.",
+  "playerBattlelogOfficialUnavailable": "Nhật ký trận chiến chính thức tạm thời không khả dụng, vì vậy có thể thiếu các trận mới nhất.",
+  "playerActivityTrackingActive": "Đang được theo dõi",
+  "playerActivityTrackingActiveBody": "Tài khoản đã xác minh này được làm mới thường xuyên. Sự kiện bắt đầu sau khi theo dõi được bật và đôi khi vẫn có thể bị thiếu.",
+  "playerActivityTrackingUnknown": "Chưa xác nhận theo dõi",
+  "playerActivityTrackingUnknownBody": "Chỉ những thay đổi được ghi nhận khi ClashKing theo dõi người chơi này mới xuất hiện ở đây, vì vậy lịch sử có thể chưa đầy đủ.",
+  "playerActivityNoEventsTitle": "Chưa có hoạt động được theo dõi",
+  "playerActivityNoEventsBody": "Các nâng cấp và thay đổi hồ sơ sẽ xuất hiện sau khi ClashKing ghi nhận chúng.",
+  "playerActivityLoadError": "Không thể tải hoạt động của người chơi",
+  "playerActivityTownHallUpgraded": "Nhà Chính đã được nâng cấp",
+  "playerActivityItemUpgraded": "{name} đã được nâng cấp",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} đã được tăng cường",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} đã được mở khóa",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Tên đã thay đổi",
+  "playerActivityLevelChange": "Cấp {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Mở khóa ở cấp {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Tăng cường ở cấp {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }

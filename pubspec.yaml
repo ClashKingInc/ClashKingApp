@@ -68,7 +68,7 @@ dependencies:
   clashking_design_system:
     git:
       url: https://github.com/ClashKingInc/DevKit.git
-      ref: codex/shared-devkit-controls
+      ref: agent/game-item-tile
       path: design/packages/flutter
   firebase_core: ^4.11.0
   firebase_messaging: ^16.4.1

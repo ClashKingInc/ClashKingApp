@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/core/services/notification_preferences_service.dart';
 import 'package:clashkingapp/features/clan/data/clan_service.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
@@ -470,6 +471,43 @@ void main() {
       service.addListener(() => notified = true);
       await service.removeCocAccount('#X');
       expect(notified, isTrue);
+    });
+
+    test('refreshes verified tracking after successful removal', () async {
+      final fakeApi = FakeApiService();
+      final encodedTag = Uri.encodeComponent('#REMOVE');
+      fakeApi.deleteStubs['$testLinksEndpoint/$encodedTag'] = http.Response(
+        '{}',
+        200,
+      );
+      final service = CocAccountService(
+        apiService: fakeApi,
+        notificationPreferencesService: NotificationPreferencesService(
+          apiService: fakeApi,
+        ),
+        currentUserId: testUserId,
+      );
+      fakeApi.getStubs[testLinksEndpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {'player_tag': '#REMOVE', 'is_verified': true, 'hidden': false},
+            {'player_tag': '#KEEP', 'is_verified': true, 'hidden': false},
+          ],
+        }),
+        200,
+      );
+      await service.fetchCocAccounts();
+
+      await service.removeCocAccount('#REMOVE');
+      await Future<void>.delayed(Duration.zero);
+
+      expect(
+        fakeApi.lastPostBodies[NotificationPreferencesService
+            .verifiedTrackingEndpoint],
+        {
+          'player_tags': ['#KEEP'],
+        },
+      );
     });
   });
 

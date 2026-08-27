@@ -2816,6 +2816,8 @@
   "notifWarAttackOptionsDescription": "Oorlogaanvalresultate, verdedigingswaarskuwings en 5v5-aanvalvoeropsies.",
   "notifWarAlertsDescription": "Oorlog het ooreenstem, gevegsdag het begin en oorlog het geëindig.",
   "notifWarRemindersDescription": "Pasgemaakte aanmanings voor oorlog eindig.",
+  "notifGroupRaidReminders": "Aanvalnaweek-herinnerings",
+  "notifRaidRemindersDescription": "Kry een waarskuwing vir oorblywende aanvalle oor jou geverifieerde rekeninge in dieselfde clan.",
   "notifDefensesAgainstYourBase": "Verdediging teen jou basis",
   "notifDefensesAgainstYourBaseDescription": "Slegs treffers waar hierdie rekening verdedig.",
   "notifAllAttacks": "Alle aanvalle",
@@ -4281,5 +4283,120 @@
   "notifGroupBattles": "Gevegte",
   "notifGroupSupport": "Ondersteuning",
   "rankedLeagueAccountSelector": "Getoonde rekening",
-  "rankedLeagueStars": "Sterre"
+  "rankedLeagueStars": "Sterre",
+  "playerBattlelogTab": "Gevegte",
+  "playerActivityTab": "Aktiwiteit",
+  "playerBattlelogFarming": "Boerdery",
+  "playerBattlelogRanked": "Gerangskik",
+  "playerBattlelogFarmingOverview": "Boerdery-oorsig",
+  "playerBattlelogRankedOverview": "Gerangskikte oorsig",
+  "playerBattlelogRecentBattles": "Onlangse gevegte",
+  "playerBattlelogBattleCount": "{count} gevegte",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Aanvalle",
+  "playerBattlelogAverageDestruction": "Gemiddelde vernietiging",
+  "playerBattlelogAverageStars": "Gemiddelde sterre",
+  "playerBattlelogTripleRate": "Driester-koers",
+  "playerBattlelogAverageLoot": "Gemiddelde buit",
+  "playerBattlelogPopularTroops": "Mees gebruikte troepe",
+  "playerBattlelogUsedInAttacks": "Gebruik in {count} aanvalle",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Aanval",
+  "playerBattlelogDefense": "Verdediging",
+  "playerBattlelogOpponent": "Teen {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Geen gevegte gevind nie",
+  "playerBattlelogNoBattlesBody": "Geen gevegte is nog vir hierdie modus beskikbaar nie.",
+  "playerBattlelogLoadError": "Geveglogboeke kon nie gelaai word nie",
+  "playerBattlelogHistoryUnavailable": "Historiese gevegdata is tydelik onbeskikbaar, daarom kan leërgebruik en ouer gevegte ontbreek.",
+  "playerBattlelogOfficialUnavailable": "Die amptelike geveglogboek is tydelik onbeskikbaar, daarom kan die nuutste gevegte ontbreek.",
+  "playerActivityTrackingActive": "Word tans nagespoor",
+  "playerActivityTrackingActiveBody": "Hierdie geverifieerde rekening word gereeld verfris. Gebeurtenisse begin nadat nasporing begin het en daar kan steeds soms gapings wees.",
+  "playerActivityTrackingUnknown": "Nasporing nie bevestig nie",
+  "playerActivityTrackingUnknownBody": "Slegs veranderings wat waargeneem is terwyl ClashKing hierdie speler nagespoor het, verskyn hier, dus kan hierdie geskiedenis onvolledig wees.",
+  "playerActivityNoEventsTitle": "Nog geen nagespoorde aktiwiteit nie",
+  "playerActivityNoEventsBody": "Opgraderings en profielveranderings sal verskyn nadat ClashKing dit waargeneem het.",
+  "playerActivityLoadError": "Speleraktiwiteit kon nie gelaai word nie",
+  "playerActivityTownHallUpgraded": "Stadsaal opgegradeer",
+  "playerActivityItemUpgraded": "{name} opgegradeer",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} versterk",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} ontsluit",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Naam verander",
+  "playerActivityLevelChange": "Vlak {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Ontsluit op vlak {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Versterk op vlak {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
 }
