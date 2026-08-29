@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Prestasies",
+  "achievementEarnedLabel": "Verdien",
+  "achievementSummary": "{earned}/{total} voltooi",
+  "achievementEarnedCount": "Verdien ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Stadsaal 18",
+  "achievementTownhall18Requirement": "Bereik Stadsaal 18.",
+  "achievementWarWarriorName": "Oorlogstryder",
+  "achievementWarWarriorRequirement": "Bereik 5 000 oorlogsterre.",
+  "achievementMrLegendName": "Mnr. Legende",
+  "achievementMrLegendDescription": "Het 'n foutlose Legendeliga-aanvalsdag voltooi.",
+  "achievementDefenseDoesntMatterName": "Verdediging Maak Nie Saak Nie",
+  "achievementDefenseDoesntMatterDescription": "Het 'n perfekte Legendeliga-verdedigingsdag deurstaan.",
   "appTitle": "ClashKing",
   "appDescription": "Jou uiteindelike Clash of Clans metgesel vir die navolg van statistieke, bestuur van klans, en analisering van prestasie.",
   "generalLoading": "Laai...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Stamoorlogliga",
   "cwlOngoing": "Lopende CWL",
   "cwlHistoryTitle": "CWL Geskiedenis",
+  "clanLeaderboardHistoryTab": "Ranglysgeskiedenis",
+  "clanLegendHistoryTab": "Legende-geskiedenis",
+  "clanRecordsTab": "Rekords",
+  "clanProfileHistoryTab": "Profielgeskiedenis",
+  "clanProfileLevelChanged": "Clanvlak verander",
+  "clanProfileDescriptionChanged": "Beskrywing verander",
   "clanJoinLeaveTab": "Sluit aan/Verlaat",
   "clanRankingsTab": "Ranglys",
   "clanRankingsSeason": "Seisoen",
