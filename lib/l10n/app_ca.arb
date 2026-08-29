@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Assoliments",
+  "achievementEarnedLabel": "Aconseguit",
+  "achievementSummary": "{earned}/{total} completat",
+  "achievementEarnedCount": "Aconseguit ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Ajuntament 18",
+  "achievementTownhall18Requirement": "Arriba a l'ajuntament 18.",
+  "achievementWarWarriorName": "Guerrer de guerra",
+  "achievementWarWarriorRequirement": "Arriba a 5.000 estrelles de guerra.",
+  "achievementMrLegendName": "Sr. Llegenda",
+  "achievementMrLegendDescription": "Has completat un dia d'atacs perfecte a la Lliga de Llegendes.",
+  "achievementDefenseDoesntMatterName": "La defensa no importa",
+  "achievementDefenseDoesntMatterDescription": "Has superat un dia de defenses perfecte a la Lliga de Llegendes.",
   "appTitle": "ClashKing",
   "appDescription": "El teu company definitiu de Clash of Clans per fer seguiment d'estadístiques, gestionar clans i analitzar el rendiment.",
   "generalLoading": "Carregant...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Lliga de Guerra de Clans",
   "cwlOngoing": "CWL en curs",
   "cwlHistoryTitle": "Història de CWL",
+  "clanLeaderboardHistoryTab": "Historial de classificació",
+  "clanLegendHistoryTab": "Historial de llegendes",
+  "clanRecordsTab": "Rècords",
+  "clanProfileHistoryTab": "Historial del perfil",
+  "clanProfileLevelChanged": "Nivell del clan canviat",
+  "clanProfileDescriptionChanged": "Descripció canviada",
   "clanJoinLeaveTab": "Unir-se/abandonar",
   "clanRankingsTab": "Classificacions",
   "clanRankingsSeason": "Temporada",
