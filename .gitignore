@@ -144,3 +144,7 @@ AGENTS.md
 
 # Cloudflare local state
 .wrangler/
+
+# T3 Code
+.t3/
+t3.json
