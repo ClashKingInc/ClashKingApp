@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Osiągnięcia",
+  "achievementEarnedLabel": "Zdobyto",
+  "achievementSummary": "{earned}/{total} ukończono",
+  "achievementEarnedCount": "Zdobyto ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Ratusz 18",
+  "achievementTownhall18Requirement": "Osiągnij 18. poziom ratusza.",
+  "achievementWarWarriorName": "Wojenny wojownik",
+  "achievementWarWarriorRequirement": "Zdobądź 5 000 gwiazd wojennych.",
+  "achievementMrLegendName": "Pan Legenda",
+  "achievementMrLegendDescription": "Ukończono bezbłędny dzień ataków w Lidze Legend.",
+  "achievementDefenseDoesntMatterName": "Obrona nie ma znaczenia",
+  "achievementDefenseDoesntMatterDescription": "Przetrwano idealny dzień obrony w Lidze Legend.",
   "appTitle": "ClashKing",
   "appDescription": "Twój najlepszy towarzysz Clash of Clans do śledzenia statystyk, zarządzania klanami i analizowania wydajności.",
   "generalLoading": "Wczytywanie...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Wojna Ligowa",
   "cwlOngoing": "Trwające CWL",
   "cwlHistoryTitle": "Historia CWL",
+  "clanLeaderboardHistoryTab": "Historia rankingu",
+  "clanLegendHistoryTab": "Historia Legend",
+  "clanRecordsTab": "Rekordy",
+  "clanProfileHistoryTab": "Historia profilu",
+  "clanProfileLevelChanged": "Poziom klanu zmieniony",
+  "clanProfileDescriptionChanged": "Opis zmieniony",
   "clanJoinLeaveTab": "Dołącz/Opuść",
   "clanRankingsTab": "Rankingi",
   "clanRankingsSeason": "Sezon",
