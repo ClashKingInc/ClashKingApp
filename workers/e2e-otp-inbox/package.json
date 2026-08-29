@@ -1,0 +1,24 @@
+{
+  "name": "@clashking/e2e-otp-inbox",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "npm run types && npm run typecheck && npm test",
+    "deploy": "wrangler deploy",
+    "test": "OTP_API_TOKEN=local-test-token vitest run",
+    "typecheck": "tsc --noEmit && tsc -p test/tsconfig.json --noEmit",
+    "types": "wrangler types --include-runtime=false"
+  },
+  "dependencies": {
+    "postal-mime": "^3.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.0.0",
+    "@cloudflare/workers-types": "5.20260823.1",
+    "@types/node": "^26.2.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.125.0"
+  }
+}

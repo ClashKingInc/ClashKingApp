@@ -26,6 +26,13 @@ export default defineConfig({
     {
       name: 'setup',
       testMatch: '**/auth.setup.ts',
+      teardown: 'cleanup',
+    },
+
+    // ── Cleanup: delete only accounts provisioned dynamically by setup ─────
+    {
+      name: 'cleanup',
+      testMatch: '**/auth.teardown.ts',
     },
 
     // ── Public tests (no auth) ─────────────────────────────────────────────

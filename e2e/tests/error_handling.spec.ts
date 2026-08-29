@@ -15,21 +15,21 @@ import { enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './h
 // them into aria-label attributes in this build, so all detection here is done
 // by visible text (page.getByText) rather than by [aria-label].
 
-// V1 host (prod). The glob does not match the V2 host go.api.clashk.ing because
+// V1 host (prod). The glob does not match the V2 host v2-api.clashk.ing because
 // there is no '/' before "api" there — they are blocked separately below.
 const API_V1_PATTERN = '**/api.clashk.ing/**';
-// V2 host the app talks to. Defaults to prod (go.api.clashk.ing); override with
+// V2 host the app talks to. Defaults to prod (v2-api.clashk.ing); override with
 // API_BASE_URL in .env for local runs (e.g. http://127.0.0.1:8000).
-const API_BASE = (process.env.API_BASE_URL ?? 'https://go.api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? 'https://v2-api.clashk.ing').replace(/\/+$/, '');
 const API_V2_PATTERN = `${API_BASE}/**`;
-const API_REFRESH = `${API_BASE}/v2/auth/refresh`;
+const API_REFRESH = `${API_BASE}/v2/auth/web/refresh`;
 
 // Blocks API, loads the app, waits for Flutter to boot and attempt startup.
-// Blocks both V1 (api.clashk.ing) and V2 (go.api.clashk.ing, or local override)
+// Blocks both V1 (api.clashk.ing) and V2 (v2-api.clashk.ing, or local override)
 // so that the startup widget cannot complete initialization and renders
 // ErrorPage instead.
 //
-// NOTE: /auth/refresh is intentionally allowed so that an expired access token
+// NOTE: /auth/web/refresh is intentionally allowed so that an expired access token
 // can be refreshed before the blocked /auth/me triggers ErrorPage.  Without
 // this exemption, getAccessToken() would return null for an expired token and
 // the startup widget would fall through to LoginPage instead of ErrorPage.
