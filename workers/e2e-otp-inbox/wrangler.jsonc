@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "clashking-e2e-otp-inbox",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    "EMAIL_DOMAIN": "e2e-mail.clashk.ing",
+    "OTP_TTL_SECONDS": "600",
+    "MAX_EMAIL_BYTES": "262144"
+  },
+  "secrets": {
+    "required": ["OTP_API_TOKEN"]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "OTP_INBOX",
+        "class_name": "OtpInbox"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["OtpInbox"]
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    }
+  }
+}
