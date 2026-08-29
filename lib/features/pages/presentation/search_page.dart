@@ -229,7 +229,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     final uri = Uri.parse(
-      '${ApiService.apiUrlV1}/player/full-search/${Uri.encodeComponent(query)}',
+      '${ApiService.apiUrlV2}/player/full-search/${Uri.encodeComponent(query)}',
     );
     final response = await http.get(uri).timeout(timeout);
     if (response.statusCode != 200) return [];

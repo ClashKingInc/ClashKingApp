@@ -1,4 +1,5 @@
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/clan/models/clan_war_log.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_clan.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
@@ -322,7 +323,7 @@ Map<String, String> analyzeWarLogs(List<WarLogDetails> warLogs) {
 
 Future<String?> fetchWarOpponentTag(String clanTag) async {
   final response = await http.get(
-    Uri.parse('https://api.clashking.xyz/war/${clanTag.substring(1)}/basic'),
+    Uri.parse('${ApiService.apiUrlV2}/war/${clanTag.substring(1)}/basic'),
   );
 
   if (response.statusCode == 200) {

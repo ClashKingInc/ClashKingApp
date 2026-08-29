@@ -65,8 +65,12 @@ void main() {
 
   test('production API environment targets the public v2 API', () {
     expect(
+      ApiConfig.defaultApiBaseUrlFor(ApiEnvironment.production),
+      'https://v2.api.clashk.ing/v2',
+    );
+    expect(
       ApiConfig.defaultApiV2UrlFor(ApiEnvironment.production),
-      'https://v2-api.clashk.ing/v2',
+      'https://v2.api.clashk.ing/v2',
     );
     expect(
       ApiConfig.defaultProxyUrlFor(ApiEnvironment.production),
