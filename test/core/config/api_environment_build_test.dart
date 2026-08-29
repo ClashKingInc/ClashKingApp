@@ -37,8 +37,8 @@ void main() {
       ),
       'production' => const _ExpectedEnvironment(
         environment: ApiEnvironment.production,
-        apiBaseUrl: 'https://api.clashk.ing',
-        apiV2Url: 'https://v2-api.clashk.ing/v2',
+        apiBaseUrl: 'https://v2.api.clashk.ing/v2',
+        apiV2Url: 'https://v2.api.clashk.ing/v2',
         proxyUrl: 'https://proxy.clashk.ing/v1',
         observabilityEnvironment: 'production',
         pushEnvironment: 'production',
