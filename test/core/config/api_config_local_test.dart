@@ -74,7 +74,7 @@ void main() {
     );
     expect(
       ApiConfig.defaultProxyUrlFor(ApiEnvironment.production),
-      'https://proxy.clashk.ing/v1',
+      'https://v2.api.clashk.ing/proxy/v1',
     );
   });
 }

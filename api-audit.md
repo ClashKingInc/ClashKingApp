@@ -11,12 +11,12 @@
 All routes are registered in `internal/routes/register.go`.  
 The router uses [Fiber v2](https://github.com/gofiber/fiber).  
 The file defines two groups:
-- **v2 routes** — the new Go API at `https://go.api.clashk.ing` (prefix `/v2/…`)
+- **v2 routes** — the Go API at `https://v2.api.clashk.ing` (prefix `/v2/…`)
 - **compatibility/legacy routes** — no version prefix, served at the same host
 
 ### Flutter API calls
 All API calls were traced through:
-- `lib/core/services/api_service.dart` — base URL is `https://go.api.clashk.ing/v2` for `apiUrlV2`, `https://api.clashk.ing` for `apiUrlV1`, `https://proxy.clashk.ing/v1` for `proxyUrl`
+- `lib/core/services/api_service.dart` — production uses `https://v2.api.clashk.ing/v2` for app routes and `https://v2.api.clashk.ing/proxy/v1` for Clash proxy routes
 - `lib/features/auth/data/auth_service.dart`
 - `lib/features/auth/data/user_service.dart`
 - `lib/features/coc_accounts/data/coc_account_service.dart`
@@ -161,20 +161,20 @@ The correct Go route is `GET /v2/users/coc-accounts` (plural `users`, different 
 
 ## 5. Flutter Calls to the Legacy Go Compatibility Routes (No `/v2` Prefix)
 
-These routes call `https://api.clashk.ing` (the `apiUrlV1` constant), which points at the **legacy compatibility routes** registered in `registerCompatibilityRoutes()` in `register.go`.
+These routes were originally served by the legacy compatibility API. The app now routes production requests through the canonical v2 API host.
 
 | Method | Path | Flutter file |
 |--------|------|--------------|
 | GET | `/war/:clan_tag/previous/:end_time` | `war_cwl_service.dart:96` |
 | GET | `/player/full-search/:name` | `search_page.dart:161`, `player_search_card.dart:86` |
 
-Both routes exist in `registerCompatibilityRoutes()` so these calls will work. However, they depend on the legacy host `api.clashk.ing` staying alive as these paths are served there.
+The remaining active call sites have been migrated to v2 paths and no longer depend on the legacy production host.
 
 ---
 
-## 6. Flutter Calls to `proxy.clashk.ing` (CoC Proxy)
+## 6. Flutter Calls to the API-hosted CoC Proxy
 
-These calls use `https://proxy.clashk.ing/v1` which is a reverse proxy to the official Clash of Clans API. They are not Go API routes and are expected to remain separate.
+These calls use `https://v2.api.clashk.ing/proxy/v1`, which exposes the Clash of Clans proxy through the canonical API host.
 
 | Method | Path (after `/v1`) | Flutter file |
 |--------|---------------------|--------------|
@@ -197,7 +197,7 @@ The Go API exposes many routes that the Flutter mobile app does not call. This i
 
 | Method | Path | Notes |
 |--------|------|-------|
-| GET | `/v2/war/:clan_tag/previous` | Previous wars per clan. Flutter uses the legacy `/war/:clan_tag/previous/:end_time` on `api.clashk.ing` instead of this v2 equivalent. |
+| GET | `/v2/war/:clan_tag/previous` | Previous wars per clan. |
 | GET | `/v2/cwl/:clan_tag/ranking-history` | CWL ranking history — not used in app. |
 | GET | `/v2/cwl/league-thresholds` | CWL thresholds — not used in app. |
 | GET | `/v2/war/:clan_tag/war-summary` | Single-clan war summary for widget — confirmed used by `widgets_functions.dart`. |
@@ -205,7 +205,7 @@ The Go API exposes many routes that the Flutter mobile app does not call. This i
 | GET | `/v2/dates/seasons` | Seasons list — not called by Flutter. |
 | GET | `/v2/dates/current` | Current date info — not called by Flutter. |
 | GET | `/v2/player/:player_tag/extended` | Single-player extended view — Flutter uses the bulk `POST /v2/players/extended` instead. |
-| GET | `/v2/search/clan` | Clan search — Flutter uses `proxy.clashk.ing` for search instead. |
+| GET | `/v2/search/clan` | Clan search; official Clash requests use the API-hosted proxy. |
 
 ### Bot/web-only routes (definitely not needed by mobile app)
 Routes under these path prefixes are clearly web/bot only and are not expected to be called by the mobile app:
@@ -223,11 +223,11 @@ Routes under these path prefixes are clearly web/bot only and are not expected t
 
 ## 8. Version Prefix Note
 
-The Flutter `ApiService` uses `https://go.api.clashk.ing/v2` as its base for Go routes (the `/v2` prefix is baked into the base URL string). All endpoint strings passed to `_apiService.get()/post()` etc. are therefore relative to `/v2`, e.g., `/auth/me` becomes `/v2/auth/me`.
+The Flutter `ApiService` uses `https://v2.api.clashk.ing/v2` as its production base (the `/v2` prefix is baked into the base URL string). All endpoint strings passed to `_apiService.get()/post()` etc. are therefore relative to `/v2`, e.g., `/auth/me` becomes `/v2/auth/me`.
 
 The Go routes registered in `register.go` all include `/v2` in the path string, so the prefix alignment is **correct** for v2 routes.
 
-For legacy routes, Flutter calls `apiUrlV1 = "https://api.clashk.ing"` directly with the full path including no `/v2` prefix. These map to the `registerCompatibilityRoutes()` group, which also uses no version prefix. That alignment is also **correct**.
+Production no longer routes app requests through the legacy host. Clash API passthrough requests use `https://v2.api.clashk.ing/proxy/v1`.
 
 ---
 
@@ -239,7 +239,7 @@ For legacy routes, Flutter calls `apiUrlV1 = "https://api.clashk.ing"` directly 
 | Medium | `POST /v2/clans/join-leave` does not exist in Go | Add bulk clan join-leave POST to Go, OR change Flutter fallback to use `GET /v2/clan/:clan_tag/join-leave` |
 | Low | `GET /v2/discord/me` does not exist in Go | Add route to Go if needed, OR confirm dead code and delete from Flutter |
 | Low | `GET /v2/user/clash-accounts` is a stale path | Update to `/users/coc-accounts` or delete the method in `UserService` |
-| Info | `GET /v2/war/:clan_tag/previous` exists in Go but Flutter still uses legacy `api.clashk.ing` host | Migrate to v2 path when convenient |
+| Done | Production app and proxy traffic use the canonical `v2.api.clashk.ing` host | Keep new call sites on `ApiService`/`ApiConfig` |
 | Info | Join-leave data for the primary flow comes through `/initialization` bulk endpoint correctly | No action needed for primary flow |
 
 ---
@@ -280,7 +280,7 @@ Potential endpoints:
 | GET | `/v2/clan/{clan_tag}/rankings` | Add a clan rankings card or tab. |
 | GET | `/v2/clan/{clan_tag}/changes` | Add a clan changes timeline. |
 | GET | `/v2/clan/{clan_tag}/wars` | Improve clan war history and summaries. |
-| GET | `/v2/clan/{clan_tag}/badge` | Use if richer badge metadata is needed. |
+| GET | `https://badges.clashk.ing/{clan_tag}` | Render clan badges without an API lookup. |
 | GET | `/v2/clan/{clan_tag}/join-leave` | Existing join/leave screen can be expanded. |
 | GET | `/v2/clan/{clan_tag}/join-leave/stats` | Add summary stats for member movement. |
 

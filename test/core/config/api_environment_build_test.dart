@@ -39,7 +39,7 @@ void main() {
         environment: ApiEnvironment.production,
         apiBaseUrl: 'https://v2.api.clashk.ing/v2',
         apiV2Url: 'https://v2.api.clashk.ing/v2',
-        proxyUrl: 'https://proxy.clashk.ing/v1',
+        proxyUrl: 'https://v2.api.clashk.ing/proxy/v1',
         observabilityEnvironment: 'production',
         pushEnvironment: 'production',
       ),
