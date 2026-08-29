@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Thành tựu",
+  "achievementEarnedLabel": "Đã đạt",
+  "achievementSummary": "{earned}/{total} đã hoàn thành",
+  "achievementEarnedCount": "Đã đạt ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Nhà Chính 18",
+  "achievementTownhall18Requirement": "Đạt Nhà Chính cấp 18.",
+  "achievementWarWarriorName": "Chiến binh chiến tranh",
+  "achievementWarWarriorRequirement": "Đạt 5.000 sao chiến tranh.",
+  "achievementMrLegendName": "Ngài Huyền Thoại",
+  "achievementMrLegendDescription": "Đã hoàn thành một ngày tấn công hoàn hảo tại Giải Huyền Thoại.",
+  "achievementDefenseDoesntMatterName": "Phòng thủ không quan trọng",
+  "achievementDefenseDoesntMatterDescription": "Đã trải qua một ngày phòng thủ hoàn hảo tại Giải Huyền Thoại.",
   "appTitle": "ClashKing",
   "appDescription": "Bạn đồng hành Clash of Clans hoàn hảo của bạn để theo dõi thống kê, quản lý clan và phân tích hiệu suất.",
   "generalLoading": "Đang tải...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Giải đấu Hội chiến",
   "cwlOngoing": "CWL đang diễn ra",
   "cwlHistoryTitle": "Lịch sử CWL",
+  "clanLeaderboardHistoryTab": "Lịch sử bảng xếp hạng",
+  "clanLegendHistoryTab": "Lịch sử Huyền thoại",
+  "clanRecordsTab": "Kỷ lục",
+  "clanProfileHistoryTab": "Lịch sử hồ sơ",
+  "clanProfileLevelChanged": "Cấp độ bang hội đã thay đổi",
+  "clanProfileDescriptionChanged": "Mô tả đã thay đổi",
   "clanJoinLeaveTab": "Tham gia/Rời khỏi",
   "clanRankingsTab": "Xếp hạng",
   "clanRankingsSeason": "Mùa",
