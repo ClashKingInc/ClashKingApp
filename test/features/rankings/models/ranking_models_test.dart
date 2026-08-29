@@ -1,4 +1,3 @@
-import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/rankings/models/ranking_models.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -58,7 +57,7 @@ void main() {
 
       expect(entry.audience, RankingAudience.players);
       expect(entry.subtitle, 'Clan One');
-      expect(entry.clanBadgeUrl, '${ApiConfig.apiUrlV2}/clan/%23CLAN/badge');
+      expect(entry.clanBadgeUrl, 'https://badges.clashk.ing/CLAN');
       expect(entry.score, 6012);
       expect(entry.movement, '+6');
       expect(entry.imageUrl, 'https://example.com/league.png');

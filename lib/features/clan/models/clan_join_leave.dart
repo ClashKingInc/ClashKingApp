@@ -1,3 +1,5 @@
+import 'package:clashkingapp/core/constants/image_assets.dart';
+
 class ClanJoinLeave {
   final String clanTag;
   final int available;
@@ -96,9 +98,12 @@ class JoinLeaveClan {
     required this.badge,
   });
 
-  factory JoinLeaveClan.fromJson(Map<String, dynamic> json) => JoinLeaveClan(
-    name: json['name'] as String? ?? '',
-    tag: json['tag'] as String? ?? '',
-    badge: json['badge'] as String? ?? '',
-  );
+  factory JoinLeaveClan.fromJson(Map<String, dynamic> json) {
+    final tag = json['tag'] as String? ?? '';
+    return JoinLeaveClan(
+      name: json['name'] as String? ?? '',
+      tag: tag,
+      badge: ImageAssets.clanBadgeForTag(tag),
+    );
+  }
 }
