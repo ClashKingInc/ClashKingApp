@@ -168,9 +168,9 @@ private final class SharedAuthRefreshLock {
     }
 
     let deadline = Date().addingTimeInterval(timeout)
-    while Darwin.flock(fileDescriptor, LOCK_EX | LOCK_NB) != 0 {
+    while Darwin.lockf(fileDescriptor, F_TLOCK, 0) != 0 {
       let lockError = errno
-      if lockError != EWOULDBLOCK && lockError != EAGAIN {
+      if lockError != EACCES && lockError != EAGAIN {
         close(fileDescriptor)
         throw SharedAuthRefreshLockError.acquireFailed(lockError)
       }
@@ -184,7 +184,7 @@ private final class SharedAuthRefreshLock {
     stateLock.lock()
     defer { stateLock.unlock() }
     guard descriptor == nil else {
-      Darwin.flock(fileDescriptor, LOCK_UN)
+      Darwin.lockf(fileDescriptor, F_ULOCK, 0)
       close(fileDescriptor)
       throw SharedAuthRefreshLockError.alreadyHeld
     }
@@ -198,7 +198,7 @@ private final class SharedAuthRefreshLock {
     stateLock.unlock()
 
     guard let fileDescriptor else { return }
-    Darwin.flock(fileDescriptor, LOCK_UN)
+    Darwin.lockf(fileDescriptor, F_ULOCK, 0)
     close(fileDescriptor)
   }
 

@@ -296,9 +296,9 @@ private struct SharedAuthRefreshLock {
         }
 
         let deadline = Date().addingTimeInterval(timeout)
-        while Darwin.flock(descriptor, LOCK_EX | LOCK_NB) != 0 {
+        while Darwin.lockf(descriptor, F_TLOCK, 0) != 0 {
           let lockError = errno
-          if lockError != EWOULDBLOCK && lockError != EAGAIN {
+          if lockError != EACCES && lockError != EAGAIN {
             close(descriptor)
             continuation.resume(throwing: SharedAuthError.lock(lockError))
             return
@@ -317,7 +317,7 @@ private struct SharedAuthRefreshLock {
   }
 
   func release() {
-    Darwin.flock(descriptor, LOCK_UN)
+    Darwin.lockf(descriptor, F_ULOCK, 0)
     close(descriptor)
   }
 }
