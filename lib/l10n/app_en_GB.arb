@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Achievements",
+  "achievementEarnedLabel": "Earned",
+  "achievementSummary": "{earned}/{total} completed",
+  "achievementEarnedCount": "Earned ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Townhall 18",
+  "achievementTownhall18Requirement": "Reach Town Hall 18.",
+  "achievementWarWarriorName": "War Warrior",
+  "achievementWarWarriorRequirement": "Reach 5,000 war stars.",
+  "achievementMrLegendName": "Mr. Legend",
+  "achievementMrLegendDescription": "Completed a flawless Legend League attack day.",
+  "achievementDefenseDoesntMatterName": "Defense Doesn’t Matter",
+  "achievementDefenseDoesntMatterDescription": "Survived a perfect Legend League defence day.",
   "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Loading...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Clan War League",
   "cwlOngoing": "Ongoing CWL",
   "cwlHistoryTitle": "CWL History",
+  "clanLeaderboardHistoryTab": "Leaderboard History",
+  "clanLegendHistoryTab": "Legend History",
+  "clanRecordsTab": "Records",
+  "clanProfileHistoryTab": "Profile History",
+  "clanProfileLevelChanged": "Clan level changed",
+  "clanProfileDescriptionChanged": "Description changed",
   "clanJoinLeaveTab": "Join/Leave",
   "clanRankingsTab": "Rankings",
   "clanRankingsSeason": "Season",
