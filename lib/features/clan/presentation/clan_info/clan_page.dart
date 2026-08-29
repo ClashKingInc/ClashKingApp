@@ -1223,9 +1223,11 @@ class _ClanWarLogTabState extends State<_ClanWarLogTab> {
   Future<void> _loadWarLog() async {
     if (widget.clan.clanWarLog != null || _isLoading) return;
     setState(() => _isLoading = true);
-    final logs = await context.read<ClanService>().loadWarLogData([
-      widget.clan.tag,
-    ], throwOnError: false);
+    final logs = await context.read<ClanService>().loadWarLogData(
+      [widget.clan.tag],
+      throwOnError: false,
+      publicWarLogs: {widget.clan.tag: widget.clan.isWarLogPublic},
+    );
     for (final log in logs) {
       if (log.clanTag == widget.clan.tag) {
         widget.clan.clanWarLog = log;

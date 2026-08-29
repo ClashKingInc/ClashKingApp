@@ -68,6 +68,50 @@ void main() {
     });
   });
 
+  group('PlayerService — searchPlayers', () {
+    test('uses player search for names', () async {
+      final fakeApi = FakeApiService();
+      const endpoint = '/player/search?query=Matthew+One&limit=20';
+      fakeApi.getStubs[endpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {'name': 'Matthew One', 'tag': '#PLAYER1', 'townHallLevel': 16},
+          ],
+        }),
+        200,
+      );
+      final service = PlayerService(apiService: fakeApi);
+
+      final results = await service.searchPlayers(
+        'Matthew One',
+        extraHeaders: {'x-ck-user-id': '123'},
+      );
+
+      expect(results.single['tag'], '#PLAYER1');
+      expect(fakeApi.getCallCounts[endpoint], 1);
+      expect(fakeApi.lastGetHeaders[endpoint], {'x-ck-user-id': '123'});
+    });
+
+    test('uses player search for exact tags', () async {
+      final fakeApi = FakeApiService();
+      const endpoint = '/player/search?query=%23PLAYER1&limit=20';
+      fakeApi.getStubs[endpoint] = http.Response(
+        jsonEncode({
+          'items': [
+            {'name': 'Hero', 'tag': '#PLAYER1', 'townHallLevel': 16},
+          ],
+        }),
+        200,
+      );
+      final service = PlayerService(apiService: fakeApi);
+
+      final results = await service.searchPlayers('#PLAYER1');
+
+      expect(results.single['name'], 'Hero');
+      expect(fakeApi.getCallCounts[endpoint], 1);
+    });
+  });
+
   // ---------------------------------------------------------------------------
   // initPlayerData (FakeApiService, success)
   // ---------------------------------------------------------------------------

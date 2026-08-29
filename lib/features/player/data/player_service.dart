@@ -62,6 +62,30 @@ class PlayerService extends ChangeNotifier {
     }
   }
 
+  Future<List<Map<String, dynamic>>> searchPlayers(
+    String query, {
+    int limit = 20,
+    Map<String, String>? extraHeaders,
+  }) async {
+    final normalizedQuery = query.trim();
+    if (normalizedQuery.isEmpty) return [];
+
+    final endpoint =
+        '/player/search?query=${Uri.encodeQueryComponent(normalizedQuery)}&limit=$limit';
+    final response = await _apiService.getResponse(
+      endpoint,
+      timeout: const Duration(seconds: 10),
+      extraHeaders: extraHeaders,
+    );
+    if (response.statusCode != 200) return [];
+
+    final data = jsonDecode(ApiService.decodeResponseBody(response));
+    if (data is! Map<String, dynamic> || data['items'] is! List) return [];
+    return (data['items'] as List).whereType<Map<String, dynamic>>().toList(
+      growable: false,
+    );
+  }
+
   Future<void> loadPublicPlayerData(
     List<String> playerTags, {
     bool notify = true,

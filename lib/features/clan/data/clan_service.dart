@@ -610,17 +610,25 @@ class ClanService extends ChangeNotifier {
   Future<List<ClanWarLog>> loadWarLogData(
     List<String> clanTags, {
     bool throwOnError = false,
+    Map<String, bool> publicWarLogs = const {},
   }) async {
     if (clanTags.isEmpty) return [];
 
     try {
       final warLogs = await Future.wait(
         clanTags.map((tag) async {
-          final encodedTag = Uri.encodeComponent(tag);
-          final response = await _apiService.getResponse(
-            '/clan/$encodedTag/war-log?limit=50',
-            requiresAuth: true,
-          );
+          final canonicalTag = _canonicalTag(tag);
+          final encodedTag = Uri.encodeComponent(canonicalTag);
+          final isWarLogPublic =
+              publicWarLogs[canonicalTag] ??
+              _clans[canonicalTag]?.isWarLogPublic ??
+              true;
+          final response = isWarLogPublic
+              ? await _apiService.proxyGet('/clans/$encodedTag/warlog?limit=50')
+              : await _apiService.getResponse(
+                  '/clan/$encodedTag/warlog?limit=50',
+                  requiresAuth: true,
+                );
 
           if (response.statusCode == 200) {
             String body = ApiService.decodeResponseBody(response);

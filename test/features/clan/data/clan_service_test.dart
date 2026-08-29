@@ -394,15 +394,44 @@ void main() {
     test('returns reconstructed private ClanWarLog on 200', () async {
       final fakeApi = FakeApiService();
       final encodedTag = Uri.encodeComponent('#CLAN1');
-      fakeApi.getStubs['/clan/$encodedTag/war-log?limit=50'] = http.Response(
+      final endpoint = '/clan/$encodedTag/warlog?limit=50';
+      fakeApi.getStubs[endpoint] = http.Response(
         jsonEncode({'items': [], 'isPrivate': true, 'reconstructed': true}),
         200,
       );
       final service = ClanService(apiService: fakeApi);
-      final result = await service.loadWarLogData(['#CLAN1']);
+      final result = await service.loadWarLogData(
+        ['#CLAN1'],
+        publicWarLogs: {'#CLAN1': false},
+      );
       expect(result, hasLength(1));
       expect(result.first.items, isEmpty);
       expect(result.first.reconstructed, isTrue);
+      expect(fakeApi.getCallCounts[endpoint], 1);
+      expect(fakeApi.getRequiresAuthByEndpoint[endpoint], isTrue);
+    });
+
+    test('uses the official endpoint for a public war log', () async {
+      final fakeApi = FakeApiService();
+      final encodedTag = Uri.encodeComponent('#CLAN1');
+      final endpoint = '/clans/$encodedTag/warlog?limit=50';
+      fakeApi.getStubs[endpoint] = http.Response(
+        jsonEncode({'items': []}),
+        200,
+      );
+      final service = ClanService(apiService: fakeApi);
+
+      final result = await service.loadWarLogData(
+        ['#CLAN1'],
+        publicWarLogs: {'#CLAN1': true},
+      );
+
+      expect(result, hasLength(1));
+      expect(fakeApi.getCallCounts[endpoint], 1);
+      expect(
+        fakeApi.getCallCounts['/clan/$encodedTag/warlog?limit=50'],
+        isNull,
+      );
     });
 
     test('returns empty list on network error without throwOnError', () async {

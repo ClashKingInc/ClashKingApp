@@ -224,11 +224,17 @@ class ClanDetails {
 }
 
 class WarLogService {
-  static Future<ClanWarLog> fetchWarLogData(String tag) async {
-    final response = await ApiService.shared.getResponse(
-      '/clan/${Uri.encodeComponent(tag)}/war-log?limit=50',
-      requiresAuth: true,
-    );
+  static Future<ClanWarLog> fetchWarLogData(
+    String tag, {
+    required bool isWarLogPublic,
+  }) async {
+    final encodedTag = Uri.encodeComponent(tag);
+    final response = isWarLogPublic
+        ? await ApiService.shared.proxyGet('/clans/$encodedTag/warlog?limit=50')
+        : await ApiService.shared.getResponse(
+            '/clan/$encodedTag/warlog?limit=50',
+            requiresAuth: true,
+          );
 
     if (response.statusCode == 200) {
       String body = ApiService.decodeResponseBody(response);

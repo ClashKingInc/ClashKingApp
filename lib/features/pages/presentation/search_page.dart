@@ -34,7 +34,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   static const int _recentLimit = 10;
-  static final RegExp _tagRegExp = RegExp(r'^[PYLQGRJCUV0289]{3,9}$');
 
   final ApiService _apiService = ApiService.shared;
   final TextEditingController _controller = TextEditingController();
@@ -49,7 +48,6 @@ class _SearchPageState extends State<SearchPage> {
   bool _isSearching = false;
   bool _hasSearched = false;
   int _searchVersion = 0;
-  final Set<String> _trackedFullPlayerTags = {};
 
   @override
   void initState() {
@@ -206,39 +204,10 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<List<dynamic>> _searchPlayers(String query) async {
-    const timeout = Duration(seconds: 10);
-    final normalizedTag = query.replaceFirst('#', '').toUpperCase();
-    final isTag = _tagRegExp.hasMatch(normalizedTag);
-    if (isTag) {
-      final response = await _apiService.proxyGet(
-        '/players/${Uri.encodeComponent('#$normalizedTag')}',
-        timeout: timeout,
-        extraHeaders: _searchTrackingHeaders(),
-      );
-      if (response.statusCode != 200) return [];
-
-      final data = jsonDecode(utf8.decode(response.bodyBytes));
-      if (data is Map<String, dynamic> && data['items'] is List) {
-        return data['items'] as List<dynamic>;
-      }
-      if (data is Map<String, dynamic>) {
-        final tag = data['tag']?.toString();
-        if (tag != null && tag.isNotEmpty) _trackedFullPlayerTags.add(tag);
-      }
-      return [data];
-    }
-
-    final uri = Uri.parse(
-      '${ApiService.apiUrlV2}/player/full-search/${Uri.encodeComponent(query)}',
+    return context.read<PlayerService>().searchPlayers(
+      query,
+      extraHeaders: _searchTrackingHeaders(),
     );
-    final response = await http.get(uri).timeout(timeout);
-    if (response.statusCode != 200) return [];
-
-    final data = jsonDecode(utf8.decode(response.bodyBytes));
-    if (data is Map<String, dynamic> && data['items'] is List) {
-      return data['items'] as List<dynamic>;
-    }
-    return [data];
   }
 
   Future<List<dynamic>> _searchClans(String query) async {
@@ -285,13 +254,10 @@ class _SearchPageState extends State<SearchPage> {
 
     try {
       final tag = player['tag']?.toString() ?? '';
-      final selectedPlayer =
-          _trackedFullPlayerTags.contains(tag) && player['heroes'] is List
-          ? await playerService.useOfficialPlayerData(player)
-          : await playerService.getPlayerAndClanData(
-              tag,
-              extraHeaders: _searchTrackingHeaders(),
-            );
+      final selectedPlayer = await playerService.getPlayerAndClanData(
+        tag,
+        extraHeaders: _searchTrackingHeaders(),
+      );
       unawaited(_loadRecents());
       navigator.pop();
       if (!mounted) return;
