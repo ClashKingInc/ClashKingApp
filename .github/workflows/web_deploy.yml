@@ -56,6 +56,7 @@ jobs:
             "${discord_redirect_args[@]}"
 
       - name: Publish to Cloudflare Pages
+        if: github.event_name != 'pull_request'
         id: deploy
         uses: cloudflare/pages-action@v1
         with:
@@ -64,13 +65,3 @@ jobs:
           projectName: clashkingapp
           directory: build/web
           branch: ${{ github.head_ref || github.ref_name }}
-
-  e2e:
-    needs: build-and-deploy
-    if: github.event_name == 'pull_request'
-    uses: ./.github/workflows/e2e.yml
-    with:
-      base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
-      smoke_only: true
-      api_base_url: https://dev-api.clashk.ing
-    secrets: inherit
