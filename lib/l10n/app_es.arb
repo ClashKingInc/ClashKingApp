@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Logros",
+  "achievementEarnedLabel": "Conseguido",
+  "achievementSummary": "{earned}/{total} completado",
+  "achievementEarnedCount": "Conseguido ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Ayuntamiento 18",
+  "achievementTownhall18Requirement": "Alcanza el ayuntamiento 18.",
+  "achievementWarWarriorName": "Guerrero de guerra",
+  "achievementWarWarriorRequirement": "Alcanza 5000 estrellas de guerra.",
+  "achievementMrLegendName": "Sr. Leyenda",
+  "achievementMrLegendDescription": "Has completado un día de ataques perfecto en la Liga de Leyendas.",
+  "achievementDefenseDoesntMatterName": "La defensa no importa",
+  "achievementDefenseDoesntMatterDescription": "Has superado un día de defensas perfecto en la Liga de Leyendas.",
   "appTitle": "ClashKing",
   "appDescription": "Tu compañero definitivo de Clash of Clans para hacer seguimiento de estadísticas, gestionar clanes y analizar el rendimiento.",
   "generalLoading": "Cargando...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Liga de Guerras de Clanes",
   "cwlOngoing": "LGC en curso",
   "cwlHistoryTitle": "Historial de CWL",
+  "clanLeaderboardHistoryTab": "Historial de clasificación",
+  "clanLegendHistoryTab": "Historial de leyendas",
+  "clanRecordsTab": "Récords",
+  "clanProfileHistoryTab": "Historial del perfil",
+  "clanProfileLevelChanged": "Nivel del clan cambiado",
+  "clanProfileDescriptionChanged": "Descripción cambiada",
   "clanJoinLeaveTab": "Unirse/Salir",
   "clanRankingsTab": "Clasificaciones",
   "clanRankingsSeason": "Estación",
