@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Realizări",
+  "achievementEarnedLabel": "Obținut",
+  "achievementSummary": "{earned}/{total} finalizat",
+  "achievementEarnedCount": "Obținut ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Primăria 18",
+  "achievementTownhall18Requirement": "Atinge Primăria 18.",
+  "achievementWarWarriorName": "Războinic de război",
+  "achievementWarWarriorRequirement": "Atinge 5.000 de stele de război.",
+  "achievementMrLegendName": "Dl. Legendă",
+  "achievementMrLegendDescription": "Ai încheiat o zi de atacuri fără greșeală în Liga Legendă.",
+  "achievementDefenseDoesntMatterName": "Apărarea nu contează",
+  "achievementDefenseDoesntMatterDescription": "Ai rezistat unei zile perfecte de apărare în Liga Legendă.",
   "appTitle": "ClashKing",
   "appDescription": "Tovarășul tău suprem Clash of Clans pentru urmărirea statisticilor, gestionarea clanurilor și analizarea performanței.",
   "generalLoading": "Se încarcă...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Liga Războaielor de Clan",
   "cwlOngoing": "CWL în desfășurare",
   "cwlHistoryTitle": "Istoria CWL",
+  "clanLeaderboardHistoryTab": "Istoricul clasamentului",
+  "clanLegendHistoryTab": "Istoricul Legendelor",
+  "clanRecordsTab": "Recorduri",
+  "clanProfileHistoryTab": "Istoricul profilului",
+  "clanProfileLevelChanged": "Nivelul clanului s-a schimbat",
+  "clanProfileDescriptionChanged": "Descrierea s-a schimbat",
   "clanJoinLeaveTab": "Alăturați-vă/Părăsiți",
   "clanRankingsTab": "Clasamente",
   "clanRankingsSeason": "Sezon",
