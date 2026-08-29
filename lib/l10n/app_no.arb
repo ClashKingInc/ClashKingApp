@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Prestasjoner",
+  "achievementEarnedLabel": "Opptjent",
+  "achievementSummary": "{earned}/{total} fullført",
+  "achievementEarnedCount": "Opptjent ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Rådhus 18",
+  "achievementTownhall18Requirement": "Nå rådhusnivå 18.",
+  "achievementWarWarriorName": "Krigskriger",
+  "achievementWarWarriorRequirement": "Nå 5 000 krigsstjerner.",
+  "achievementMrLegendName": "Herr Legende",
+  "achievementMrLegendDescription": "Fullførte en feilfri angrepsdag i Legendeligaen.",
+  "achievementDefenseDoesntMatterName": "Forsvar spiller ingen rolle",
+  "achievementDefenseDoesntMatterDescription": "Overlevde en perfekt forsvarsdag i Legendeligaen.",
   "appTitle": "ClashKing",
   "appDescription": "Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.",
   "generalLoading": "Laster...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Klan-krigsliga",
   "cwlOngoing": "Pågående CWL",
   "cwlHistoryTitle": "CWL historie",
+  "clanLeaderboardHistoryTab": "Resultatlistehistorikk",
+  "clanLegendHistoryTab": "Legendehistorikk",
+  "clanRecordsTab": "Rekorder",
+  "clanProfileHistoryTab": "Profilhistorikk",
+  "clanProfileLevelChanged": "Klannivå endret",
+  "clanProfileDescriptionChanged": "Beskrivelse endret",
   "clanJoinLeaveTab": "Bli med/forlate",
   "clanRankingsTab": "Rangeringer",
   "clanRankingsSeason": "Årstid",
