@@ -42,8 +42,6 @@ class ApiConfig {
     return defaultApiBaseUrlFor(environment);
   }
 
-  static String get apiUrlV1 => apiBaseUrl;
-
   static String get apiUrlV2 {
     if (_apiV2BaseOverride.isNotEmpty) {
       return _withoutTrailingSlash(_apiV2BaseOverride);
@@ -61,7 +59,7 @@ class ApiConfig {
       ApiEnvironment.local => '$apiBaseUrl/proxy/v1',
       ApiEnvironment.development => '$apiBaseUrl/proxy/v1',
       ApiEnvironment.staging => '$apiBaseUrl/proxy/v1',
-      ApiEnvironment.production => 'https://proxy.clashk.ing/v1',
+      ApiEnvironment.production => 'https://v2.api.clashk.ing/proxy/v1',
     };
   }
 
@@ -69,7 +67,7 @@ class ApiConfig {
     ApiEnvironment.local => 'http://localhost:8000',
     ApiEnvironment.development => 'https://dev-api.clashk.ing',
     ApiEnvironment.staging => 'https://dev-api.clashk.ing',
-    ApiEnvironment.production => 'https://api.clashk.ing',
+    ApiEnvironment.production => 'https://v2.api.clashk.ing/v2',
   };
 
   static String defaultApiV2UrlFor(ApiEnvironment target) =>
@@ -88,14 +86,14 @@ class ApiConfig {
     ApiEnvironment.local => '${defaultApiBaseUrlFor(target)}/v2',
     ApiEnvironment.development => '${defaultApiBaseUrlFor(target)}/v2',
     ApiEnvironment.staging => '${defaultApiBaseUrlFor(target)}/v2',
-    ApiEnvironment.production => 'https://v2-api.clashk.ing/v2',
+    ApiEnvironment.production => 'https://v2.api.clashk.ing/v2',
   };
 
   static String defaultProxyUrlFor(ApiEnvironment target) => switch (target) {
     ApiEnvironment.local => '${defaultApiBaseUrlFor(target)}/proxy/v1',
     ApiEnvironment.development => '${defaultApiBaseUrlFor(target)}/proxy/v1',
     ApiEnvironment.staging => '${defaultApiBaseUrlFor(target)}/proxy/v1',
-    ApiEnvironment.production => 'https://proxy.clashk.ing/v1',
+    ApiEnvironment.production => 'https://v2.api.clashk.ing/proxy/v1',
   };
 
   static String _withoutTrailingSlash(String value) {

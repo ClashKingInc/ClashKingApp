@@ -202,7 +202,7 @@ void main() {
     expect(api.getCallCounts['/leaguetiers'], 1);
   });
 
-  test('retries league tiers after a transient failed response', () async {
+  test('retries league tiers after a transient failure', () async {
     final api = FakeApiService();
     api.getStubs['/players/%23PLAYER'] = http.Response(
       jsonEncode({'tag': '#PLAYER', 'name': 'Player'}),
@@ -215,8 +215,8 @@ void main() {
     api.getStubs['/leaguetiers'] = http.Response('{}', 503);
     final service = PlayerService(apiService: api);
 
-    final firstLoad = await service.loadRankedLeagueData('#PLAYER');
-    expect(firstLoad.tiers, isEmpty);
+    final first = await service.loadRankedLeagueData('#PLAYER');
+    expect(first.tiers, isEmpty);
 
     api.getStubs['/leaguetiers'] = http.Response(
       jsonEncode({
@@ -224,19 +224,18 @@ void main() {
           {
             'id': 105000030,
             'name': 'Dragon League 30',
-            'iconUrls': {'small': 'small.png', 'large': 'large.png'},
+            'iconUrls': <String, String>{},
           },
         ],
       }),
       200,
     );
-
-    final retry = await service.loadRankedLeagueData(
+    final second = await service.loadRankedLeagueData(
       '#PLAYER',
       forceRefresh: true,
     );
 
+    expect(second.tiers.values.single.name, 'Dragon League 30');
     expect(api.getCallCounts['/leaguetiers'], 2);
-    expect(retry.tiers[105000030]?.name, 'Dragon League 30');
   });
 }

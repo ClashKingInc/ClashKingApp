@@ -226,6 +226,10 @@ class UpgradeTrackerRepository {
         'This does not look like a raw Clash account snapshot',
       );
     }
+    // Validation is complete, so stale loads can no longer replace this
+    // explicit import in memory or persisted storage when they finish.
+    _cacheGeneration++;
+    _snapshotLoads.remove(tag);
     await saveRawSnapshot(tag, raw, parsedSnapshot: parsed);
     return parsed;
   }

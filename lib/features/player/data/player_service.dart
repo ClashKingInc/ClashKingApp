@@ -573,7 +573,7 @@ class PlayerService extends ChangeNotifier {
     final cached = _leagueTiersCache;
     if (cached != null) return cached;
     final existing = _leagueTiersLoad;
-    if (existing != null) return await existing ?? const {};
+    if (existing != null) return (await existing) ?? const {};
 
     final load = _fetchLeagueTiers();
     _leagueTiersLoad = load;
@@ -662,10 +662,9 @@ class PlayerService extends ChangeNotifier {
   Future<void> hydrateBookmarkedPlayers(List<String> tags) async {
     await loadOfficialPlayerData(
       _uniqueCanonicalTags(tags),
-      notify: false,
+      notify: true,
       throwOnError: false,
     );
-    _safeNotify();
   }
 
   void linkClansToPlayer(List<Player> players, List<Clan> clans) {
