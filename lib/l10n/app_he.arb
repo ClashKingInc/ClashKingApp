@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "הישגים",
+  "achievementEarnedLabel": "הושג",
+  "achievementSummary": "{earned}/{total} הושלם",
+  "achievementEarnedCount": "הושג ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "בית עירייה 18",
+  "achievementTownhall18Requirement": "הגיעו לבית עירייה 18.",
+  "achievementWarWarriorName": "לוחם מלחמה",
+  "achievementWarWarriorRequirement": "השיגו 5,000 כוכבי מלחמה.",
+  "achievementMrLegendName": "מר אגדה",
+  "achievementMrLegendDescription": "השלמת יום התקפות מושלם בליגת האגדות.",
+  "achievementDefenseDoesntMatterName": "הגנה לא משנה",
+  "achievementDefenseDoesntMatterDescription": "שרדת יום הגנות מושלם בליגת האגדות.",
   "appTitle": "ClashKing",
   "appDescription": "הנדבק המושלם שלך ל-Clash of Clans למעקב אחר סטטיסטיקות, ניהול קלאנים וניתוח ביצועים.",
   "generalLoading": "טוען...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "ליגת מלחמות הקלאנים",
   "cwlOngoing": "CWL פעיל",
   "cwlHistoryTitle": "היסטוריית CWL",
+  "clanLeaderboardHistoryTab": "היסטוריית דירוג",
+  "clanLegendHistoryTab": "היסטוריית ליגת האגדות",
+  "clanRecordsTab": "שיאים",
+  "clanProfileHistoryTab": "היסטוריית הפרופיל",
+  "clanProfileLevelChanged": "רמת השבט השתנתה",
+  "clanProfileDescriptionChanged": "התיאור השתנה",
   "clanJoinLeaveTab": "הצטרף/עזוב",
   "clanRankingsTab": "דירוגים",
   "clanRankingsSeason": "עוֹנָה",
