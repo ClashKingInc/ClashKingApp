@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "الإنجازات",
+  "achievementEarnedLabel": "مرات الإنجاز",
+  "achievementSummary": "{earned}/{total} مكتمل",
+  "achievementEarnedCount": "مرات الإنجاز ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "قاعة المدينة 18",
+  "achievementTownhall18Requirement": "وصل إلى قاعة المدينة 18.",
+  "achievementWarWarriorName": "محارب الحروب",
+  "achievementWarWarriorRequirement": "اجمع 5,000 نجمة حرب.",
+  "achievementMrLegendName": "سيد الأساطير",
+  "achievementMrLegendDescription": "أكملت يوم هجوم مثاليًا في دوري الأساطير.",
+  "achievementDefenseDoesntMatterName": "الدفاع لا يهم",
+  "achievementDefenseDoesntMatterDescription": "صمدت في يوم دفاع مثالي في دوري الأساطير.",
   "appTitle": "ClashKing",
   "appDescription": "رفيقك النهائي في Clash of Clans لتتبع الإحصائيات وإدارة العشائر وتحليل الأداء.",
   "generalLoading": "جاري التحميل...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "دوري حروب القبائل",
   "cwlOngoing": "CWL جارٍ",
   "cwlHistoryTitle": "تاريخ سي دبليو إل",
+  "clanLeaderboardHistoryTab": "سجل لوحة المتصدرين",
+  "clanLegendHistoryTab": "سجل دوري الأساطير",
+  "clanRecordsTab": "الأرقام القياسية",
+  "clanProfileHistoryTab": "سجل الملف الشخصي",
+  "clanProfileLevelChanged": "تغيّر مستوى القبيلة",
+  "clanProfileDescriptionChanged": "تغيّر الوصف",
   "clanJoinLeaveTab": "الانضمام/المغادرة",
   "clanRankingsTab": "التصنيفات",
   "clanRankingsSeason": "موسم",
