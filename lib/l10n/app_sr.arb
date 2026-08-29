@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Достигнућа",
+  "achievementEarnedLabel": "Освојено",
+  "achievementSummary": "{earned}/{total} završeno",
+  "achievementEarnedCount": "Освојено ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Градска кућа 18",
+  "achievementTownhall18Requirement": "Достигните градску кућу 18.",
+  "achievementWarWarriorName": "Ратни ратник",
+  "achievementWarWarriorRequirement": "Достигните 5.000 ратних звезда.",
+  "achievementMrLegendName": "Господин Легенда",
+  "achievementMrLegendDescription": "Завршили сте беспрекоран дан напада у Лиги легенди.",
+  "achievementDefenseDoesntMatterName": "Одбрана није важна",
+  "achievementDefenseDoesntMatterDescription": "Издржали сте савршен дан одбране у Лиги легенди.",
   "appTitle": "ClashKing",
   "appDescription": "Vaš najbolji Clash of Clans saputnik za praćenje statistika, upravljanje klanova i analizu performansi.",
   "generalLoading": "Učitava...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Liga klanskih ratova",
   "cwlOngoing": "CWL u toku",
   "cwlHistoryTitle": "CWL историја",
+  "clanLeaderboardHistoryTab": "Историја ранг-листе",
+  "clanLegendHistoryTab": "Историја Легенде",
+  "clanRecordsTab": "Рекорди",
+  "clanProfileHistoryTab": "Историја профила",
+  "clanProfileLevelChanged": "Ниво клана је промењен",
+  "clanProfileDescriptionChanged": "Опис је промењен",
   "clanJoinLeaveTab": "Придружи се/напусти",
   "clanRankingsTab": "Ранкингс",
   "clanRankingsSeason": "Сезона",
