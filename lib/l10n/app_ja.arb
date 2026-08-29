@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "実績",
+  "achievementEarnedLabel": "獲得回数",
+  "achievementSummary": "{earned}/{total} 完了",
+  "achievementEarnedCount": "獲得回数 ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "タウンホール18",
+  "achievementTownhall18Requirement": "タウンホール18に到達する。",
+  "achievementWarWarriorName": "ウォーウォリアー",
+  "achievementWarWarriorRequirement": "対戦星を5,000個獲得する。",
+  "achievementMrLegendName": "ミスター・レジェンド",
+  "achievementMrLegendDescription": "レジェンドリーグで完璧な攻撃日を達成しました。",
+  "achievementDefenseDoesntMatterName": "防衛なんて関係ない",
+  "achievementDefenseDoesntMatterDescription": "レジェンドリーグで完璧な防衛日を経験しました。",
   "appTitle": "ClashKing",
   "appDescription": "統計の追跡、クランの管理、パフォーマンスの分析のためのあなたの究極のClash of Clansコンパニオン。",
   "generalLoading": "読み込み中...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "クラン対戦リーグ",
   "cwlOngoing": "進行中のCWL",
   "cwlHistoryTitle": "CWLの歴史",
+  "clanLeaderboardHistoryTab": "リーダーボード履歴",
+  "clanLegendHistoryTab": "レジェンド履歴",
+  "clanRecordsTab": "記録",
+  "clanProfileHistoryTab": "プロフィール履歴",
+  "clanProfileLevelChanged": "クランレベルが変更されました",
+  "clanProfileDescriptionChanged": "説明が変更されました",
   "clanJoinLeaveTab": "参加/脱退",
   "clanRankingsTab": "ランキング",
   "clanRankingsSeason": "季節",
