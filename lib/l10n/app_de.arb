@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Erfolge",
+  "achievementEarnedLabel": "Verdient",
+  "achievementSummary": "{earned}/{total} abgeschlossen",
+  "achievementEarnedCount": "Verdient ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Rathaus 18",
+  "achievementTownhall18Requirement": "Erreiche Rathaus 18.",
+  "achievementWarWarriorName": "Kriegskrieger",
+  "achievementWarWarriorRequirement": "Erreiche 5.000 Kriegssterne.",
+  "achievementMrLegendName": "Mr. Legende",
+  "achievementMrLegendDescription": "Du hast einen makellosen Angriffstag in der Legenden-Liga abgeschlossen.",
+  "achievementDefenseDoesntMatterName": "Verteidigung ist egal",
+  "achievementDefenseDoesntMatterDescription": "Du hast einen perfekten Verteidigungstag in der Legenden-Liga überstanden.",
   "appTitle": "ClashKing",
   "appDescription": "Dein ultimativer Clash of Clans Begleiter zum Verfolgen von Statistiken, Verwalten von Clans und Analysieren der Leistung.",
   "generalLoading": "Laden...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Clankriegsliga",
   "cwlOngoing": "Laufende Clankriegsliga",
   "cwlHistoryTitle": "CWL-Verlauf",
+  "clanLeaderboardHistoryTab": "Ranglistenverlauf",
+  "clanLegendHistoryTab": "Legendenverlauf",
+  "clanRecordsTab": "Rekorde",
+  "clanProfileHistoryTab": "Profilverlauf",
+  "clanProfileLevelChanged": "Clanlevel geändert",
+  "clanProfileDescriptionChanged": "Beschreibung geändert",
   "clanJoinLeaveTab": "Beitreten/Verlassen",
   "clanRankingsTab": "Ranglisten",
   "clanRankingsSeason": "Jahreszeit",
