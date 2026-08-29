@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Conquistas",
+  "achievementEarnedLabel": "Conquistado",
+  "achievementSummary": "{earned}/{total} concluído",
+  "achievementEarnedCount": "Conquistado ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Câmara Municipal 18",
+  "achievementTownhall18Requirement": "Alcança a Câmara Municipal 18.",
+  "achievementWarWarriorName": "Guerreiro de guerra",
+  "achievementWarWarriorRequirement": "Alcança 5 000 estrelas de guerra.",
+  "achievementMrLegendName": "Sr. Lenda",
+  "achievementMrLegendDescription": "Concluíste um dia de ataques perfeito na Liga Lendária.",
+  "achievementDefenseDoesntMatterName": "A defesa não importa",
+  "achievementDefenseDoesntMatterDescription": "Sobreviveste a um dia de defesas perfeito na Liga Lendária.",
   "appTitle": "ClashKing",
   "appDescription": "Seu companheiro definitivo do Clash of Clans para acompanhar estatísticas, gerenciar clãs e analisar desempenho.",
   "generalLoading": "Carregando...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Liga de Guerra de Clãs",
   "cwlOngoing": "CWL em curso",
   "cwlHistoryTitle": "História da CWL",
+  "clanLeaderboardHistoryTab": "Histórico da classificação",
+  "clanLegendHistoryTab": "Histórico da Liga Lendária",
+  "clanRecordsTab": "Recordes",
+  "clanProfileHistoryTab": "Histórico do perfil",
+  "clanProfileLevelChanged": "Nível do clã alterado",
+  "clanProfileDescriptionChanged": "Descrição alterada",
   "clanJoinLeaveTab": "Entrar/Sair",
   "clanRankingsTab": "Classificações",
   "clanRankingsSeason": "Temporada",
