@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["@cloudflare/vitest-plugin/types"],
+    "skipLibCheck": true
+  },
+  "include": [
+    "./**/*.ts",
+    "../worker-configuration.d.ts",
+    "../node_modules/@cloudflare/workers-types/index.d.ts"
+  ]
+}

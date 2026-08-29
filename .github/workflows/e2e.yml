@@ -16,7 +16,7 @@ on:
       api_base_url:
         description: 'API origin used for direct authentication setup'
         required: false
-        default: 'https://go.api.clashk.ing'
+        default: 'https://v2-api.clashk.ing'
         type: string
   # Triggered automatically after main-branch deployment
   workflow_run:
@@ -72,11 +72,15 @@ jobs:
           tests/dashboard.spec.ts
         env:
           BASE_URL: ${{ inputs.base_url || 'https://app.clashk.ing' }}
-          API_BASE_URL: ${{ inputs.api_base_url || 'https://go.api.clashk.ing' }}
+          API_BASE_URL: ${{ inputs.api_base_url || 'https://v2-api.clashk.ing' }}
           DISCORD_AUTH_ENABLED: ${{ !inputs.smoke_only }}
           TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
           E2E_TEST_COC_TAG: ${{ secrets.E2E_TEST_COC_TAG }}
+          E2E_OTP_API_URL: ${{ vars.E2E_OTP_API_URL }}
+          E2E_OTP_API_TOKEN: ${{ secrets.E2E_OTP_API_TOKEN }}
+          E2E_EMAIL_DOMAIN: ${{ vars.E2E_EMAIL_DOMAIN }}
+          E2E_PROVISION_ACCOUNT: true
           CI: true
 
       - name: Run full Playwright test suite
@@ -84,10 +88,13 @@ jobs:
         run: npx playwright test
         env:
           BASE_URL: ${{ inputs.base_url || 'https://app.clashk.ing' }}
-          API_BASE_URL: ${{ inputs.api_base_url || 'https://go.api.clashk.ing' }}
+          API_BASE_URL: ${{ inputs.api_base_url || 'https://v2-api.clashk.ing' }}
           TEST_EMAIL: ${{ secrets.E2E_TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.E2E_TEST_PASSWORD }}
           E2E_TEST_COC_TAG: ${{ secrets.E2E_TEST_COC_TAG }}
+          E2E_OTP_API_URL: ${{ vars.E2E_OTP_API_URL }}
+          E2E_OTP_API_TOKEN: ${{ secrets.E2E_OTP_API_TOKEN }}
+          E2E_EMAIL_DOMAIN: ${{ vars.E2E_EMAIL_DOMAIN }}
           CI: true
 
       - name: Upload Playwright report

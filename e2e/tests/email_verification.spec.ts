@@ -1,14 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
+import { createE2eEmail, getOtpInboxConfig, waitForOtp } from './otp-inbox';
+
+const API_BASE = (process.env.API_BASE_URL ?? 'https://v2-api.clashk.ing').replace(/\/+$/, '');
 
 // Reaches EmailVerificationPage by registering a fresh throwaway account.
 // Each test creates one unique account (timestamp-based email) — expected in a test env.
-// Tests cover UI behaviour only; a valid verification code is not available in CI.
+// UI-only cases use example.com; the Cloudflare-backed case verifies a real code in CI.
 
-async function registerAndNavigateToVerification(page: any): Promise<string | null> {
+async function registerAndNavigateToVerification(page: any, emailOverride?: string): Promise<string | null> {
   const ts = Date.now();
   const username = `e2etest${ts}`;
-  const email = `e2etest+${ts}@example.com`;
+  const email = emailOverride ?? `e2etest+${ts}@example.com`;
   const password = 'TestPassword1!';
 
   try {
@@ -75,6 +78,49 @@ test.describe('Email verification page', () => {
   // Run sequentially: each test registers a new account + hits the production API.
   // Parallel execution saturates the API and causes 90 s timeouts.
   test.describe.configure({ mode: 'serial' });
+
+  test('a real emailed code verifies a new account', async ({ page }) => {
+    test.skip(!getOtpInboxConfig(), 'Cloudflare OTP inbox is not configured');
+    test.setTimeout(120_000);
+
+    const email = createE2eEmail('verification');
+    const requestedAt = Date.now();
+    const reachedEmail = await registerAndNavigateToVerification(page, email);
+    expect(reachedEmail).toBe(email);
+
+    const code = await waitForOtp(email, { notBefore: requestedAt });
+    const digitInputs = page.getByRole('textbox');
+    const verificationResponsePromise = page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' &&
+        response.url().endsWith('/v2/auth/web/verify-email-code'),
+      { timeout: 20_000 },
+    );
+    await digitInputs.first().click({ force: true, timeout: 5_000 });
+    for (const digit of code) {
+      await page.keyboard.press(digit);
+      await page.waitForTimeout(100);
+    }
+
+    const verificationResponse = await verificationResponsePromise;
+    expect(verificationResponse.ok(), 'email verification request failed').toBe(true);
+    const verification = await verificationResponse.json();
+    const accessToken: unknown = verification?.access_token;
+    if (typeof accessToken !== 'string' || !accessToken) {
+      throw new Error('Email verification response has no access token');
+    }
+    await expect(
+      page
+        .getByRole('button', { name: /^confirm$/i })
+        .or(page.locator('flt-semantics[aria-label="Confirm"]'))
+        .first(),
+    ).toBeVisible({ timeout: 20_000 });
+    const cleanup = await page.request.delete(`${API_BASE}/v2/auth/me`, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
+    const cleanupBody = cleanup.ok() ? '' : `: ${(await cleanup.text()).slice(0, 300)}`;
+    expect(cleanup.ok(), `account cleanup returned ${cleanup.status()}${cleanupBody}`).toBe(true);
+  });
 
   test('page displays 6 single-digit input boxes for the verification code', async ({ page }) => {
     test.setTimeout(240_000); // registration + API call can take > 180 s on a slow local setup
