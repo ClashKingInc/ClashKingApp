@@ -875,6 +875,7 @@
   "warLog": "युद्ध लॉग",
   "warLogSearchPlaceholder": "युद्ध खोजें",
   "warLogClosed": "{clan} का युद्ध लॉग बंद है।",
+  "warLogPrivate": "{clan} का वॉर लॉग निजी है।",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

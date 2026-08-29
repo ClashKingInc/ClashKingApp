@@ -875,6 +875,7 @@
   "warLog": "Журнал войн",
   "warLogSearchPlaceholder": "Поиск войн",
   "warLogClosed": "Журнал войн {clan} закрыт.",
+  "warLogPrivate": "Журнал войн клана {clan} закрыт для просмотра.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

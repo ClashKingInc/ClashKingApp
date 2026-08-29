@@ -875,6 +875,7 @@
   "warLog": "Háború napló",
   "warLogSearchPlaceholder": "Keresési háborúk",
   "warLogClosed": "{clan} háborúnaplója le van zárva.",
+  "warLogPrivate": "{clan} háborús naplója privát.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

@@ -875,6 +875,7 @@
   "warLog": "전쟁 로그",
   "warLogSearchPlaceholder": "검색 전쟁",
   "warLogClosed": "{clan}의 전쟁 기록이 비공개입니다.",
+  "warLogPrivate": "{clan}의 전쟁 기록이 비공개입니다.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

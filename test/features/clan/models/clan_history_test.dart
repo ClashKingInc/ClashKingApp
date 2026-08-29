@@ -58,6 +58,45 @@ void main() {
     expect(legends.items.single.attackWins, 242);
   });
 
+  test('parses leaderboard and legend summary windows', () {
+    final leaderboard = ClanLeaderboardHistorySummary.fromJson({
+      'seasons': [
+        {
+          'season': '2026-08',
+          'after': '2026-07-27T00:00:00Z',
+          'before': '2026-08-30T23:59:59Z',
+          'daysInTop200': 12,
+          'bestRank': 8,
+          'peakPoints': 60000,
+        },
+      ],
+    });
+    final legends = ClanLegendHistorySummary.fromJson({
+      'seasons': [
+        {
+          'season': 'v2-2026-05-11T05:00:00Z',
+          'after': '2026-04-20T05:00:00Z',
+          'before': '2026-05-18T05:00:00Z',
+          'playerCount': 20,
+        },
+      ],
+      'topFinishes': [
+        {
+          'season': '2026-05',
+          'tag': '#PLAYER',
+          'name': 'Player',
+          'trophies': 6000,
+          'rank': 10,
+        },
+      ],
+    });
+
+    expect(leaderboard.seasons.single.daysInTop200, 12);
+    expect(leaderboard.seasons.single.after.isUtc, isTrue);
+    expect(legends.seasons.single.playerCount, 20);
+    expect(legends.topFinishes.single.rank, 10);
+  });
+
   test('keeps record timestamps and profile change value types', () {
     final records = ClanRecords.fromJson({
       'clanPoints': {'value': 156112, 'time': '2025-10-13T06:44:43Z'},

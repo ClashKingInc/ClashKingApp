@@ -27,19 +27,24 @@ class PlayerActivityTab extends StatefulWidget {
 }
 
 class _PlayerActivityTabState extends State<PlayerActivityTab> {
+  PlayerHistoryType _type = PlayerHistoryType.troopLevel;
   late Future<PlayerActivityFeed> _load;
 
   @override
   void initState() {
     super.initState();
-    _load = context.read<PlayerService>().loadPlayerActivity(widget.playerTag);
+    _load = _loadActivity();
   }
 
+  Future<PlayerActivityFeed> _loadActivity({bool forceRefresh = false}) =>
+      context.read<PlayerService>().loadPlayerActivity(
+        widget.playerTag,
+        type: _type,
+        forceRefresh: forceRefresh,
+      );
+
   Future<void> _refresh() async {
-    final next = context.read<PlayerService>().loadPlayerActivity(
-      widget.playerTag,
-      forceRefresh: true,
-    );
+    final next = _loadActivity(forceRefresh: true);
     setState(() => _load = next);
     await next;
   }
@@ -96,6 +101,14 @@ class _PlayerActivityTabState extends State<PlayerActivityTab> {
                   child: _ActivityContent(
                     feed: snapshot.data!,
                     verifiedTracking: verified,
+                    type: _type,
+                    onTypeChanged: (type) {
+                      if (type == _type) return;
+                      setState(() {
+                        _type = type;
+                        _load = _loadActivity();
+                      });
+                    },
                   ),
                 ),
               ),
@@ -111,10 +124,17 @@ String _normalizeTag(String tag) =>
     tag.replaceAll('#', '').trim().toUpperCase();
 
 class _ActivityContent extends StatelessWidget {
-  const _ActivityContent({required this.feed, required this.verifiedTracking});
+  const _ActivityContent({
+    required this.feed,
+    required this.verifiedTracking,
+    required this.type,
+    required this.onTypeChanged,
+  });
 
   final PlayerActivityFeed feed;
   final bool verifiedTracking;
+  final PlayerHistoryType type;
+  final ValueChanged<PlayerHistoryType> onTypeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +142,29 @@ class _ActivityContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        DropdownButtonFormField<PlayerHistoryType>(
+          initialValue: type,
+          isExpanded: true,
+          menuMaxHeight: 360,
+          decoration: InputDecoration(
+            labelText: loc.generalFilters,
+            prefixIcon: const Icon(Icons.filter_list_rounded),
+          ),
+          items: [
+            for (final option in PlayerHistoryType.values)
+              DropdownMenuItem(
+                value: option,
+                child: Text(
+                  _historyTypeLabel(option, loc),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+          ],
+          onChanged: (value) {
+            if (value != null) onTypeChanged(value);
+          },
+        ),
+        const SizedBox(height: CKSpacing.md),
         _TrackingCoverage(verifiedTracking: verifiedTracking),
         const SizedBox(height: CKSpacing.md),
         if (feed.items.isEmpty)
@@ -220,14 +263,21 @@ class _ActivityRow extends StatelessWidget {
       PlayerActivityKind.itemUnlocked => loc.playerActivityItemUnlocked(
         event.name,
       ),
-      PlayerActivityKind.nameChange => loc.playerActivityNameChanged,
+      PlayerActivityKind.experienceLevelChange => loc.gameExpLevel,
+      PlayerActivityKind.trophyRecord => loc.gameTrophies,
+      PlayerActivityKind.builderTrophyRecord => loc.gameBaseBuilder,
+      PlayerActivityKind.warPreferenceChange => loc.playerWarPreferenceTitle,
       _ => loc.playerActivityItemUpgraded(event.name),
     };
     final detail = switch (event.kind) {
-      PlayerActivityKind.nameChange => loc.playerActivityNameChangeDetail(
-        event.previousValue ?? '',
-        event.currentValue ?? event.name,
-      ),
+      PlayerActivityKind.experienceLevelChange ||
+      PlayerActivityKind.trophyRecord ||
+      PlayerActivityKind.builderTrophyRecord ||
+      PlayerActivityKind.warPreferenceChange =>
+        loc.playerActivityNameChangeDetail(
+          event.previousValue ?? '',
+          event.currentValue ?? '',
+        ),
       PlayerActivityKind.itemUnlocked => loc.playerActivityUnlockedAtLevel(
         event.currentLevel ?? 0,
       ),
@@ -297,15 +347,38 @@ class _ActivityRow extends StatelessWidget {
     PlayerActivityItemType.troop => ImageAssets.getTroopImage(event.name),
     PlayerActivityItemType.hero => ImageAssets.getHeroImage(event.name),
     PlayerActivityItemType.spell => ImageAssets.getSpellImage(event.name),
+    PlayerActivityItemType.pet => ImageAssets.getPetImage(event.name),
     PlayerActivityItemType.equipment => ImageAssets.getGearImage(event.name),
+    PlayerActivityItemType.trophy =>
+      event.kind == PlayerActivityKind.builderTrophyRecord
+          ? ImageAssets.builderBaseTrophy
+          : ImageAssets.trophies,
     PlayerActivityItemType.profile => ImageAssets.defaultProfile,
   };
 
   Color _eventAccent(PlayerActivityEvent event) => switch (event.kind) {
     PlayerActivityKind.superTroopBoost => CKColors.capitalPurple,
     PlayerActivityKind.townHallUpgrade => CKColors.warGold,
-    PlayerActivityKind.nameChange => CKColors.builderBlue,
+    PlayerActivityKind.experienceLevelChange => CKColors.builderBlue,
+    PlayerActivityKind.trophyRecord => CKColors.legendBlue,
+    PlayerActivityKind.builderTrophyRecord => CKColors.builderBlue,
+    PlayerActivityKind.warPreferenceChange => CKColors.capitalPurple,
     PlayerActivityKind.itemUnlocked => CKColors.donationGreen,
     _ => CKColors.legendBlue,
   };
 }
+
+String _historyTypeLabel(PlayerHistoryType type, AppLocalizations loc) =>
+    switch (type) {
+      PlayerHistoryType.troopLevel => loc.gameTroops,
+      PlayerHistoryType.superTroopBoost => loc.gameActiveSuperTroops,
+      PlayerHistoryType.heroLevel => loc.gameHeroes,
+      PlayerHistoryType.spellLevel => loc.gameSpells,
+      PlayerHistoryType.petLevel => loc.gamePets,
+      PlayerHistoryType.equipmentLevel => loc.gameEquipment,
+      PlayerHistoryType.townHallLevel => loc.gameTownHallLevel,
+      PlayerHistoryType.experienceLevel => loc.gameExpLevel,
+      PlayerHistoryType.bestTrophies => loc.gameTrophies,
+      PlayerHistoryType.bestBuilderBaseTrophies => loc.gameBaseBuilder,
+      PlayerHistoryType.warPreference => loc.playerWarPreferenceTitle,
+    };

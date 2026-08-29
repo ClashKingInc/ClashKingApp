@@ -50,13 +50,8 @@ class WarAccessDeniedCardState extends State<WarAccessDeniedCard> {
                       Text(
                         AppLocalizations.of(
                               context,
-                            )?.warLogClosed(widget.clanName) ??
-                            "'s war log is closed.",
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)?.warAskForWarLogOpening ??
-                            'Contact a leader or a co-leader to open the war log.',
+                            )?.warLogPrivate(widget.clanName) ??
+                            '${widget.clanName} has a private war log.',
                         textAlign: TextAlign.center,
                       ),
                     ],

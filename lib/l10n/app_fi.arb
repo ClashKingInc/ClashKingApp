@@ -875,6 +875,7 @@
   "warLog": "Sota Loki",
   "warLogSearchPlaceholder": "Etsi sodat",
   "warLogClosed": "{clan}'s sota loki on suljettu.",
+  "warLogPrivate": "{clan}-klaanin sotapäiväkirja on yksityinen.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

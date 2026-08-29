@@ -763,6 +763,7 @@ class _DesktopSidebar extends StatelessWidget {
               ),
               _DesktopUtilityButton(
                 icon: Icons.settings_outlined,
+                showIcon: true,
                 label: l10n.generalSettings,
                 selected: selectedUtility == l10n.generalSettings,
                 onTap: user == null
@@ -828,13 +829,6 @@ class _DesktopNavButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
               child: Row(
                 children: [
-                  _MenuAssetIcon(
-                    assetUrl: item.assetUrl,
-                    fallbackIcon: selected ? item.selectedIcon : item.icon,
-                    size: 24,
-                    color: foreground,
-                  ),
-                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       item.label,
@@ -867,6 +861,7 @@ class _DesktopUtilityButton extends StatelessWidget {
     this.assetScale = 1,
     this.selected = false,
     this.iconColor,
+    this.showIcon = false,
   });
 
   final IconData icon;
@@ -876,6 +871,7 @@ class _DesktopUtilityButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool selected;
   final Color? iconColor;
+  final bool showIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -894,18 +890,20 @@ class _DesktopUtilityButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
           child: Row(
             children: [
-              _MenuAssetIcon(
-                assetUrl: assetUrl,
-                fallbackIcon: icon,
-                size: 21,
-                assetScale: assetScale,
-                color: onTap == null
-                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.44)
-                    : selected
-                    ? colorScheme.primary
-                    : iconColor ?? colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 12),
+              if (showIcon) ...[
+                _MenuAssetIcon(
+                  assetUrl: assetUrl,
+                  fallbackIcon: icon,
+                  size: 21,
+                  assetScale: assetScale,
+                  color: onTap == null
+                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.44)
+                      : selected
+                      ? colorScheme.primary
+                      : iconColor ?? colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 12),
+              ],
               Expanded(
                 child: Text(
                   label,
@@ -934,7 +932,6 @@ class _MenuAssetIcon extends StatelessWidget {
     required this.size,
     required this.color,
     this.assetScale = 1,
-    this.enabled = true,
   });
 
   final String? assetUrl;
@@ -942,7 +939,6 @@ class _MenuAssetIcon extends StatelessWidget {
   final double size;
   final Color color;
   final double assetScale;
-  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -950,20 +946,17 @@ class _MenuAssetIcon extends StatelessWidget {
     final imageUrl = assetUrl?.trim();
     if (imageUrl == null || imageUrl.isEmpty) return fallback;
 
-    return Opacity(
-      opacity: enabled ? 1 : 0.45,
-      child: SizedBox.square(
-        dimension: size,
-        child: ClipRect(
-          child: Transform.scale(
-            scale: assetScale,
-            child: MobileWebImage(
-              imageUrl: imageUrl,
-              width: size,
-              height: size,
-              fit: BoxFit.contain,
-              errorWidget: (context, url, error) => fallback,
-            ),
+    return SizedBox.square(
+      dimension: size,
+      child: ClipRect(
+        child: Transform.scale(
+          scale: assetScale,
+          child: MobileWebImage(
+            imageUrl: imageUrl,
+            width: size,
+            height: size,
+            fit: BoxFit.contain,
+            errorWidget: (context, url, error) => fallback,
           ),
         ),
       ),
@@ -1437,9 +1430,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                     const SizedBox(height: 16),
                     if (appState.isFeatureEnabled(AppFeatureFlags.posts))
                       _DrawerMenuItem(
-                        icon: Icons.article_outlined,
-                        assetUrl: ImageAssets.fallbackLogo,
-                        assetScale: 1.2,
                         label: l10n.postsTitle,
                         onTap: () => _pushAndClose(
                           context,
@@ -1450,8 +1440,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.leaderboards))
                       _DrawerMenuItem(
-                        icon: LucideIcons.podium,
-                        iconColor: CKColors.warGold,
                         label: l10n.clanRankingsTab,
                         onTap: () => _pushAndClose(
                           context,
@@ -1462,8 +1450,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.globalStats))
                       _DrawerMenuItem(
-                        icon: LucideIcons.chartPie,
-                        iconColor: CKColors.secondaryBlue,
                         label: l10n.generalStats,
                         onTap: () => _pushAndClose(
                           context,
@@ -1474,7 +1460,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.calculators))
                       _DrawerMenuItem(
-                        icon: LucideIcons.calculator,
                         label: l10n.drawerCalculators,
                         onTap: () => _pushAndClose(
                           context,
@@ -1487,8 +1472,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       AppFeatureFlags.subscriptionSupport,
                     ))
                       _DrawerMenuItem(
-                        icon: LucideIcons.handCoins,
-                        iconColor: CKColors.warGold,
                         label: l10n.drawerSubscription,
                         onTap: () => _pushAndClose(
                           context,
@@ -1498,8 +1481,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                         ),
                       ),
                     _DrawerMenuItem(
-                      icon: LucideIcons.listChecks,
-                      iconColor: CKColors.donationGreen,
                       label: l10n.todoTitle,
                       onTap: () => _pushAndClose(
                         context,
@@ -1507,8 +1488,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     ),
                     _DrawerMenuItem(
-                      icon: Icons.emoji_events_outlined,
-                      assetUrl: ImageAssets.legendLeagueTwo,
                       label: l10n.rankedLeagueTitle,
                       onTap: () => _pushAndClose(
                         context,
@@ -1522,8 +1501,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       AppFeatureFlags.upgradeTracker,
                     ))
                       _DrawerMenuItem(
-                        icon: LucideIcons.circleFadingArrowUp,
-                        iconColor: CKColors.builderBlue,
                         label: l10n.drawerUpgradeTracker,
                         onTap: () => _pushAndClose(
                           context,
@@ -1534,9 +1511,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.basesArmies))
                       _DrawerMenuItem(
-                        icon: Icons.grid_view_rounded,
-                        assetUrl: ImageAssets.townHall(18),
-                        assetScale: 0.92,
                         label: l10n.drawerBasesArmies,
                         onTap: () => _pushAndClose(
                           context,
@@ -1547,7 +1521,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
                       _DrawerMenuItem(
-                        icon: LucideIcons.images,
                         label: l10n.drawerGameAssets,
                         onTap: () => _pushAndClose(
                           context,
@@ -1557,8 +1530,6 @@ class _AccountMenuDrawer extends StatelessWidget {
                         ),
                       ),
                     _DrawerMenuItem(
-                      icon: Icons.manage_accounts_outlined,
-                      assetUrl: ImageAssets.defaultProfile,
                       label: l10n.drawerManageAccounts,
                       onTap: () => _pushAndClose(
                         context,
@@ -1665,22 +1636,16 @@ class _DrawerCount extends StatelessWidget {
 
 class _DrawerMenuItem extends StatelessWidget {
   const _DrawerMenuItem({
-    required this.icon,
     required this.label,
     required this.onTap,
-    this.assetUrl,
-    this.assetScale = 1,
+    this.icon,
     this.dense = false,
-    this.iconColor,
   });
 
-  final IconData icon;
-  final String? assetUrl;
-  final double assetScale;
+  final IconData? icon;
   final String label;
   final VoidCallback? onTap;
   final bool dense;
-  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -1694,17 +1659,16 @@ class _DrawerMenuItem extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: dense ? 8 : 9.5),
           child: Row(
             children: [
-              _MenuAssetIcon(
-                assetUrl: assetUrl,
-                fallbackIcon: icon,
-                size: dense ? 18 : 21,
-                assetScale: assetScale,
-                color: onTap == null
-                    ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
-                    : iconColor ?? colorScheme.onSurface,
-                enabled: onTap != null,
-              ),
-              const SizedBox(width: 14),
+              if (icon != null) ...[
+                Icon(
+                  icon!,
+                  size: dense ? 18 : 21,
+                  color: onTap == null
+                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
+                      : colorScheme.onSurface,
+                ),
+                const SizedBox(width: 14),
+              ],
               Expanded(
                 child: Text(
                   label,

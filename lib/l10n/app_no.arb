@@ -875,6 +875,7 @@
   "warLog": "Krigslogg",
   "warLogSearchPlaceholder": "Søk etter kriger",
   "warLogClosed": "Krigsloggen til {clan} er lukket.",
+  "warLogPrivate": "{clan} har en privat krigslogg.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

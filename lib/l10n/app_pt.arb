@@ -875,6 +875,7 @@
   "warLog": "Registo de guerra",
   "warLogSearchPlaceholder": "Pesquisar guerras",
   "warLogClosed": "O registo de guerra de {clan} está fechado.",
+  "warLogPrivate": "{clan} tem um registo de guerra privado.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

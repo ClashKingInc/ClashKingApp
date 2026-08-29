@@ -875,6 +875,7 @@
   "warLog": "Dnevnik ratova",
   "warLogSearchPlaceholder": "Сеарцх варс",
   "warLogClosed": "Ратни дневник клана {clan} је затворен.",
+  "warLogPrivate": "{clan} има приватан ратни дневник.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

@@ -875,6 +875,7 @@
   "warLog": "Jurnal de război",
   "warLogSearchPlaceholder": "Războaie de căutare",
   "warLogClosed": "Jurnalul de război al clanului {clan} este închis.",
+  "warLogPrivate": "{clan} are jurnalul de război privat.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

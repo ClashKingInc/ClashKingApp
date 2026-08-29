@@ -22,6 +22,49 @@ class ClanLeaderboardHistory {
   }
 }
 
+class ClanLeaderboardHistorySummary {
+  const ClanLeaderboardHistorySummary({required this.seasons});
+
+  final List<ClanLeaderboardSeasonSummary> seasons;
+
+  factory ClanLeaderboardHistorySummary.fromJson(Map<String, dynamic> json) {
+    return ClanLeaderboardHistorySummary(
+      seasons: _maps(
+        json['seasons'],
+      ).map(ClanLeaderboardSeasonSummary.fromJson).toList(growable: false),
+    );
+  }
+}
+
+class ClanLeaderboardSeasonSummary {
+  const ClanLeaderboardSeasonSummary({
+    required this.season,
+    required this.after,
+    required this.before,
+    required this.daysInTop200,
+    required this.bestRank,
+    required this.peakPoints,
+  });
+
+  final String season;
+  final DateTime after;
+  final DateTime before;
+  final int daysInTop200;
+  final int bestRank;
+  final int peakPoints;
+
+  factory ClanLeaderboardSeasonSummary.fromJson(Map<String, dynamic> json) {
+    return ClanLeaderboardSeasonSummary(
+      season: json['season']?.toString() ?? '',
+      after: _date(json['after']),
+      before: _date(json['before']),
+      daysInTop200: _integer(json['daysInTop200']),
+      bestRank: _integer(json['bestRank']),
+      peakPoints: _integer(json['peakPoints']),
+    );
+  }
+}
+
 class ClanLeaderboardHistoryEntry {
   const ClanLeaderboardHistoryEntry({
     required this.date,
@@ -90,6 +133,50 @@ class ClanLegendHistory {
       items: _maps(
         json['items'],
       ).map(ClanLegendHistoryEntry.fromJson).toList(growable: false),
+    );
+  }
+}
+
+class ClanLegendHistorySummary {
+  const ClanLegendHistorySummary({
+    required this.seasons,
+    required this.topFinishes,
+  });
+
+  final List<ClanLegendSeasonSummary> seasons;
+  final List<ClanLegendHistoryEntry> topFinishes;
+
+  factory ClanLegendHistorySummary.fromJson(Map<String, dynamic> json) {
+    return ClanLegendHistorySummary(
+      seasons: _maps(
+        json['seasons'],
+      ).map(ClanLegendSeasonSummary.fromJson).toList(growable: false),
+      topFinishes: _maps(
+        json['topFinishes'],
+      ).map(ClanLegendHistoryEntry.fromJson).toList(growable: false),
+    );
+  }
+}
+
+class ClanLegendSeasonSummary {
+  const ClanLegendSeasonSummary({
+    required this.season,
+    required this.after,
+    required this.before,
+    required this.playerCount,
+  });
+
+  final String season;
+  final DateTime after;
+  final DateTime before;
+  final int playerCount;
+
+  factory ClanLegendSeasonSummary.fromJson(Map<String, dynamic> json) {
+    return ClanLegendSeasonSummary(
+      season: json['season']?.toString() ?? '',
+      after: _date(json['after']),
+      before: _date(json['before']),
+      playerCount: _integer(json['playerCount']),
     );
   }
 }

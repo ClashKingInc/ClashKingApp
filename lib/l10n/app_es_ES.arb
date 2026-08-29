@@ -852,6 +852,7 @@
   "warHistory": "Curso de Guerra",
   "warLog": "Registro de guerra",
   "warLogClosed": "El registro de guerra de {clan} está cerrado.",
+  "warLogPrivate": "{clan} tiene el registro de guerra privado.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

@@ -49,7 +49,7 @@ void main() {
   group('ClanService — CWL history', () {
     test('loads standing summaries directly from stored seasons', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/cwl/%23CLAN/seasons'] = http.Response(
+      fakeApi.getStubs['/cwl/%23CLAN/seasons?limit=100'] = http.Response(
         jsonEncode({
           'items': [
             {
@@ -85,11 +85,14 @@ void main() {
 
     test('keeps an empty successful history distinct from errors', () async {
       final fakeApi = FakeApiService();
-      fakeApi.getStubs['/cwl/%23EMPTY/seasons'] = http.Response(
+      fakeApi.getStubs['/cwl/%23EMPTY/seasons?limit=100'] = http.Response(
         '{"items":[]}',
         200,
       );
-      fakeApi.getStubs['/cwl/%23ERROR/seasons'] = http.Response('error', 503);
+      fakeApi.getStubs['/cwl/%23ERROR/seasons?limit=100'] = http.Response(
+        'error',
+        503,
+      );
       final service = ClanService(apiService: fakeApi);
 
       expect(await service.getCwlRankingHistory('#EMPTY'), isEmpty);

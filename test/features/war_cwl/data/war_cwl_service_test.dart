@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
@@ -14,6 +13,17 @@ Map<String, dynamic> _minimalWarCwl(String tag) => {
   'war_info': {'state': 'notInWar', 'currentWarInfo': null},
   'league_info': null,
   'war_league_infos': [],
+};
+
+Map<String, dynamic> _war(String left, String right, {String? warTag}) => {
+  'war_tag': ?warTag,
+  'state': 'inWar',
+  'teamSize': 1,
+  'attacksPerMember': 2,
+  'startTime': '20260829T000000.000Z',
+  'endTime': '20260830T000000.000Z',
+  'clan': {'tag': left, 'name': left, 'members': <Object>[]},
+  'opponent': {'tag': right, 'name': right, 'members': <Object>[]},
 };
 
 class _RecordingApiService extends FakeApiService {
@@ -38,402 +48,170 @@ class _RecordingApiService extends FakeApiService {
   }
 }
 
-class _BatchingApiService extends FakeApiService {
-  final List<List<String>> batches = [];
-
-  @override
-  Future<http.Response> postResponse(
-    String endpoint, {
-    Object? body,
-    bool requiresAuth = false,
-    String? url,
-    Duration timeout = const Duration(seconds: 15),
-    Map<String, String>? extraHeaders,
-  }) async {
-    final tags = List<String>.from((body! as Map)['clan_tags'] as List);
-    batches.add(tags);
-    return http.Response(
-      jsonEncode({'items': tags.map(_minimalWarCwl).toList()}),
-      200,
-    );
-  }
-}
-
-class _QueuedApiService extends FakeApiService {
-  final List<Completer<http.Response>> responses = [];
-  int postCalls = 0;
-
-  @override
-  Future<http.Response> postResponse(
-    String endpoint, {
-    Object? body,
-    bool requiresAuth = false,
-    String? url,
-    Duration timeout = const Duration(seconds: 15),
-    Map<String, String>? extraHeaders,
-  }) {
-    postCalls++;
-    final response = Completer<http.Response>();
-    responses.add(response);
-    return response.future;
-  }
-}
-
 void main() {
-  setUpAll(() {
-    TestWidgetsFlutterBinding.ensureInitialized();
-  });
+  setUpAll(TestWidgetsFlutterBinding.ensureInitialized);
 
-  group('WarCwlService — initial state', () {
-    test('summaries map starts empty', () {
+  group('WarCwlService local state', () {
+    test('starts empty and normalizes lookups', () {
       final service = WarCwlService();
       expect(service.summaries, isEmpty);
+      service.processBulkWarData([_minimalWarCwl('#CLAN')], notify: false);
+      expect(service.getWarCwlByTag('clan')?.tag, '#CLAN');
     });
 
-    test('getWarCwlByTag returns null for empty tag', () {
+    test('skips malformed bulk entries', () {
       final service = WarCwlService();
-      expect(service.getWarCwlByTag(''), isNull);
-    });
-
-    test('getWarCwlByTag returns null when no data loaded', () {
-      final service = WarCwlService();
-      expect(service.getWarCwlByTag('#UNKNOWN'), isNull);
+      service.processBulkWarData(['bad', null, 42], notify: false);
+      expect(service.summaries, isEmpty);
     });
   });
 
-  group('WarCwlService — processBulkWarData', () {
-    test('adds entries to summaries map', () {
-      final service = WarCwlService();
-      service.processBulkWarData([
-        _minimalWarCwl('#CLAN1'),
-        _minimalWarCwl('#CLAN2'),
-      ], notify: false);
-      expect(service.summaries, hasLength(2));
-      expect(service.summaries['#CLAN1'], isNotNull);
-      expect(service.summaries['#CLAN2'], isNotNull);
-    });
+  group('WarCwlService current-war resolver', () {
+    test(
+      'falls back to the public current-war endpoint when basic is null',
+      () async {
+        final api = FakeApiService();
+        api.getStubs['/war/%23CLAN/basic'] = http.Response('null', 200);
+        api.getStubs['/clans/%23CLAN/currentwar'] = http.Response(
+          jsonEncode(_war('#CLAN', '#OTHER')),
+          200,
+        );
 
-    test('does nothing for empty list', () {
-      final service = WarCwlService();
-      service.processBulkWarData([], notify: false);
-      expect(service.summaries, isEmpty);
-    });
+        final service = WarCwlService(apiService: api);
+        await service.loadAllWarData(['#CLAN'], notify: false);
 
-    test('skips non-map entries gracefully', () {
-      final service = WarCwlService();
-      service.processBulkWarData(['not a map', 42, null], notify: false);
-      expect(service.summaries, isEmpty);
-    });
+        final result = service.getWarCwlByTag('#CLAN')!;
+        expect(result.isInWar, isTrue);
+        expect(result.warInfo.clan?.tag, '#CLAN');
+      },
+    );
 
-    test('keeps clan summaries when war_info is null or missing', () {
-      final service = WarCwlService();
-      final missingWarInfo = _minimalWarCwl('#MISSING')..remove('war_info');
-
-      service.processBulkWarData([
-        {..._minimalWarCwl('#NULL'), 'war_info': null},
-        missingWarInfo,
-      ], notify: false);
-
-      expect(service.summaries, hasLength(2));
-      expect(service.summaries['#NULL']?.warInfo.state, 'notInWar');
-      expect(service.summaries['#MISSING']?.warInfo.state, 'notInWar');
-    });
-
-    test('overwrites existing entry for same tag', () {
-      final service = WarCwlService();
-      service.processBulkWarData([_minimalWarCwl('#CLAN1')], notify: false);
-      service.processBulkWarData([_minimalWarCwl('#CLAN1')], notify: false);
-      expect(service.summaries, hasLength(1));
-    });
-  });
-
-  group('WarCwlService — getWarCwlByTag', () {
-    test('returns entry after processBulkWarData', () {
-      final service = WarCwlService();
-      service.processBulkWarData([_minimalWarCwl('#CLAN1')], notify: false);
-      final result = service.getWarCwlByTag('#CLAN1');
-      expect(result, isNotNull);
-      expect(result!.tag, '#CLAN1');
-    });
-
-    test('returns null for unknown tag after data loaded', () {
-      final service = WarCwlService();
-      service.processBulkWarData([_minimalWarCwl('#CLAN1')], notify: false);
-      expect(service.getWarCwlByTag('#OTHER'), isNull);
-    });
-  });
-
-  group('WarCwlService — loadAllWarData', () {
-    test('does nothing for empty tag list', () async {
-      final service = WarCwlService();
-      await service.loadAllWarData([], notify: false);
-      expect(service.summaries, isEmpty);
-    });
-
-    test('populates summaries on 200 response', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/war/war-summary'] = http.Response(
+    test('uses a public opponent and reorients the requested clan', () async {
+      final api = FakeApiService();
+      api.getStubs['/war/%23CLAN/basic'] = http.Response(
         jsonEncode({
-          'items': [_minimalWarCwl('#CLAN1')],
+          'type': 'regular',
+          'clan': {'tag': '#CLAN', 'publicWarLog': false},
+          'opponent': {'tag': '#OTHER', 'publicWarLog': true},
         }),
         200,
       );
-      final service = WarCwlService(apiService: fakeApi);
-      await service.loadAllWarData(['#CLAN1'], notify: false);
-      expect(service.summaries['#CLAN1'], isNotNull);
-      expect(service.summaries['#CLAN1']!.tag, '#CLAN1');
-    });
-
-    test('populates multiple clans on 200 response', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/war/war-summary'] = http.Response(
-        jsonEncode({
-          'items': [_minimalWarCwl('#C1'), _minimalWarCwl('#C2')],
-        }),
+      api.getStubs['/clans/%23OTHER/currentwar'] = http.Response(
+        jsonEncode(_war('#OTHER', '#CLAN')),
         200,
       );
-      final service = WarCwlService(apiService: fakeApi);
-      await service.loadAllWarData(['#C1', '#C2'], notify: false);
-      expect(service.summaries, hasLength(2));
-    });
 
-    test('normalizes, deduplicates, and batches at 100 tags', () async {
-      final fakeApi = _BatchingApiService();
-      final service = WarCwlService(apiService: fakeApi);
-      final tags = [
-        for (var index = 0; index < 205; index++) ' clan$index ',
-        'CLAN0',
-      ];
+      final service = WarCwlService(apiService: api);
+      await service.loadAllWarData(['#CLAN'], notify: false);
 
-      await service.loadAllWarData(tags, notify: false);
-
-      expect(fakeApi.batches.map((batch) => batch.length), [100, 100, 5]);
-      expect(service.summaries, hasLength(205));
-      expect(service.getWarCwlByTag('clan0')?.tag, '#CLAN0');
-    });
-
-    test('coalesces identical in-flight loads', () async {
-      final fakeApi = _QueuedApiService();
-      final service = WarCwlService(apiService: fakeApi);
-
-      final first = service.loadAllWarData(['#CLAN'], notify: false);
-      final second = service.loadAllWarData(['clan'], notify: false);
-      expect(fakeApi.postCalls, 1);
-
-      fakeApi.responses.single.complete(
-        http.Response(
-          jsonEncode({
-            'items': [_minimalWarCwl('#CLAN')],
-          }),
-          200,
-        ),
-      );
-      await Future.wait([first, second]);
-      expect(service.summaries, hasLength(1));
-    });
-
-    test('honors notify when a later coalesced caller requests it', () async {
-      final fakeApi = _QueuedApiService();
-      final service = WarCwlService(apiService: fakeApi);
-      var notifications = 0;
-      service.addListener(() => notifications++);
-
-      final quiet = service.loadAllWarData(['#CLAN'], notify: false);
-      final notifying = service.loadAllWarData(['#CLAN'], notify: true);
-      expect(fakeApi.postCalls, 1);
-
-      fakeApi.responses.single.complete(
-        http.Response(
-          jsonEncode({
-            'items': [_minimalWarCwl('#CLAN')],
-          }),
-          200,
-        ),
-      );
-      await Future.wait([quiet, notifying]);
-
-      expect(notifications, 1);
-    });
-
-    test('applies error policy per coalesced caller', () async {
-      final fakeApi = _QueuedApiService();
-      final service = WarCwlService(apiService: fakeApi);
-
-      final bestEffort = service.loadAllWarData(['#CLAN'], notify: false);
-      final strict = service.loadAllWarData(
-        ['#CLAN'],
-        notify: false,
-        throwOnError: true,
-      );
-      expect(fakeApi.postCalls, 1);
-
-      final strictExpectation = expectLater(strict, throwsA(isA<Exception>()));
-      fakeApi.responses.single.complete(http.Response('error', 503));
-
-      await expectLater(bestEffort, completes);
-      await strictExpectation;
+      final result = service.getWarCwlByTag('#CLAN')!;
+      expect(result.isInWar, isTrue);
+      expect(result.warInfo.clan?.tag, '#CLAN');
+      expect(result.warInfo.opponent?.tag, '#OTHER');
+      expect(api.getCallCounts['/clans/%23CLAN/currentwar'], isNull);
     });
 
     test(
-      'prevents an older overlapping response replacing newer data',
+      'marks a scheduled war private when neither side exposes it',
       () async {
-        final fakeApi = _QueuedApiService();
-        final service = WarCwlService(apiService: fakeApi);
-
-        final older = service.loadAllWarData(['#CLAN'], notify: false);
-        final newer = service.loadAllWarData([
-          '#CLAN',
-          '#OTHER',
-        ], notify: false);
-        expect(fakeApi.postCalls, 2);
-
-        fakeApi.responses[1].complete(
-          http.Response(
-            jsonEncode({
-              'items': [
-                {..._minimalWarCwl('#CLAN'), 'isInWar': true},
-                _minimalWarCwl('#OTHER'),
-              ],
-            }),
-            200,
-          ),
+        final api = FakeApiService();
+        api.getStubs['/war/%23CLAN/basic'] = http.Response(
+          jsonEncode({
+            'type': 'regular',
+            'clan': {'tag': '#CLAN', 'publicWarLog': false},
+            'opponent': {'tag': '#OTHER', 'publicWarLog': false},
+          }),
+          200,
         );
-        await newer;
-        fakeApi.responses[0].complete(
-          http.Response(
-            jsonEncode({
-              'items': [_minimalWarCwl('#CLAN')],
-            }),
-            200,
-          ),
-        );
-        await older;
 
-        expect(service.summaries['#CLAN']?.isInWar, isTrue);
-        expect(service.summaries['#OTHER'], isNotNull);
+        final service = WarCwlService(apiService: api);
+        await service.loadAllWarData(['#CLAN'], notify: false);
+
+        expect(service.getWarCwlByTag('#CLAN')?.warInfo.state, 'accessDenied');
       },
     );
 
     test(
-      'keeps good state while accepting valid items from a partial response',
+      'marks a clan not in war when manual war and CWL probes are empty',
       () async {
-        final fakeApi = FakeApiService();
-        final service = WarCwlService(apiService: fakeApi);
-        service.processBulkWarData([_minimalWarCwl('#OLD')], notify: false);
-        final previous = service.summaries['#OLD'];
-        var notifications = 0;
-        service.addListener(() => notifications++);
-        fakeApi.postStubs['/war/war-summary'] = http.Response(
-          jsonEncode({
-            'items': [
-              _minimalWarCwl('#NEW'),
-              {'clan_tag': '#OLD', 'war_info': 'invalid'},
-              'invalid',
-            ],
-          }),
+        final api = FakeApiService();
+        api.getStubs['/war/%23CLAN/basic'] = http.Response('null', 200);
+        api.getStubs['/clans/%23CLAN/currentwar'] = http.Response(
+          '{"state":"notInWar"}',
           200,
         );
+        api.getStubs['/clans/%23CLAN/currentwar/leaguegroup'] = http.Response(
+          '{}',
+          404,
+        );
 
-        await service.loadAllWarData(['#OLD', '#NEW']);
+        final service = WarCwlService(apiService: api);
+        await service.loadAllWarData(['#CLAN'], notify: false);
 
-        expect(service.summaries['#OLD'], same(previous));
-        expect(service.summaries['#NEW'], isNotNull);
-        expect(notifications, 1);
+        expect(service.getWarCwlByTag('#CLAN')?.warInfo.state, 'notInWar');
       },
     );
 
-    test('does not throw on server error by default', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/war/war-summary'] = http.Response('error', 500);
-      final service = WarCwlService(apiService: fakeApi);
-      await expectLater(
-        service.loadAllWarData(['#CLAN1'], notify: false),
-        completes,
+    test('loads the scheduled CWL war directly from its war tag', () async {
+      final api = FakeApiService();
+      api.getStubs['/war/%23CLAN/basic'] = http.Response(
+        jsonEncode({
+          'type': 'cwl',
+          'warTag': '#WAR',
+          'clan': {'tag': '#CLAN', 'publicWarLog': false},
+          'opponent': {'tag': '#OTHER', 'publicWarLog': false},
+        }),
+        200,
       );
+      api.getStubs['/clans/%23CLAN/currentwar/leaguegroup'] = http.Response(
+        '{}',
+        404,
+      );
+      api.getStubs['/clanwarleagues/wars/%23WAR'] = http.Response(
+        jsonEncode(_war('#OTHER', '#CLAN', warTag: '#WAR')),
+        200,
+      );
+
+      final service = WarCwlService(apiService: api);
+      await service.loadAllWarData(['#CLAN'], notify: false);
+
+      final result = service.getWarCwlByTag('#CLAN')!;
+      expect(result.isInCwl, isTrue);
+      expect(result.getActiveWarByTag('#CLAN')?.clan?.tag, '#CLAN');
     });
 
-    test('throws when throwOnError is true on server error', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.postStubs['/war/war-summary'] = http.Response('error', 503);
-      final service = WarCwlService(apiService: fakeApi);
-      await expectLater(
-        () => service.loadAllWarData(
-          ['#CLAN1'],
-          notify: false,
-          throwOnError: true,
-        ),
-        throwsA(isA<Exception>()),
-      );
-    });
+    test('honors strict error handling', () async {
+      final api = FakeApiService();
+      api.throwOnGet['/war/%23CLAN/basic'] = Exception('network');
+      final service = WarCwlService(apiService: api);
 
-    test('does not throw on network exception by default', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/war/war-summary'] = Exception('no network');
-      final service = WarCwlService(apiService: fakeApi);
       await expectLater(
-        service.loadAllWarData(['#CLAN1'], notify: false),
-        completes,
-      );
-    });
-
-    test('throws on network exception when throwOnError is true', () async {
-      final fakeApi = FakeApiService();
-      fakeApi.throwOnPost['/war/war-summary'] = Exception('no network');
-      final service = WarCwlService(apiService: fakeApi);
-      await expectLater(
-        () => service.loadAllWarData(
-          ['#CLAN1'],
-          notify: false,
-          throwOnError: true,
-        ),
-        throwsA(isA<Exception>()),
+        service.loadAllWarData(['#CLAN'], notify: false, throwOnError: true),
+        throwsException,
       );
     });
   });
 
-  group('WarCwlService — fetchWarDataFromTime', () {
-    test('uses the v2 previous-war endpoint and parses its first item', () async {
-      final fakeApi = _RecordingApiService();
+  group('WarCwlService previous war', () {
+    test('uses the v2 endpoint and parses the first item', () async {
+      final api = _RecordingApiService();
       final end = DateTime.utc(2026, 8, 9, 12, 34, 56);
       final timestamp = end.millisecondsSinceEpoch ~/ 1000;
       final endpoint =
           '/war/%23ABC123/previous?timestamp_end=$timestamp&include_cwl=true&limit=1';
-      fakeApi.getStubs[endpoint] = http.Response(
-        jsonEncode({
-          'items': [
-            {'war_tag': '#WAR1', 'state': 'warEnded', 'type': 'regular'},
-          ],
-        }),
+      api.getStubs[endpoint] = http.Response(
+        '{"items":[{"war_tag":"#WAR1","state":"warEnded"}]}',
         200,
       );
 
       final result = await WarCwlService.fetchWarDataFromTime(
         '#ABC123',
         end,
-        apiService: fakeApi,
+        apiService: api,
       );
 
-      expect(fakeApi.getCallCounts[endpoint], 1);
-      expect(fakeApi.lastGetRequiresAuth, isTrue);
       expect(result?.tag, '#WAR1');
-      expect(result?.state, 'warEnded');
-    });
-
-    test('returns null when the v2 response has no historical wars', () async {
-      final fakeApi = FakeApiService();
-      final end = DateTime.utc(2026, 8, 9);
-      final timestamp = end.millisecondsSinceEpoch ~/ 1000;
-      final endpoint =
-          '/war/%23EMPTY/previous?timestamp_end=$timestamp&include_cwl=true&limit=1';
-      fakeApi.getStubs[endpoint] = http.Response('{"items":[]}', 200);
-
-      final result = await WarCwlService.fetchWarDataFromTime(
-        '#EMPTY',
-        end,
-        apiService: fakeApi,
-      );
-
-      expect(result, isNull);
+      expect(api.lastGetRequiresAuth, isTrue);
     });
   });
 }

@@ -875,6 +875,7 @@
   "warLog": "Αρχείο πολέμων",
   "warLogSearchPlaceholder": "Πόλεμοι αναζήτησης",
   "warLogClosed": "Το αρχείο πολέμων του {clan} είναι κλειστό.",
+  "warLogPrivate": "Το αρχείο πολέμου της {clan} είναι ιδιωτικό.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

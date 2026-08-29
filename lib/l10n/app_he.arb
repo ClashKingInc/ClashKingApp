@@ -875,6 +875,7 @@
   "warLog": "יומן מלחמה",
   "warLogSearchPlaceholder": "חיפוש מלחמות",
   "warLogClosed": "יומן המלחמה של {clan} סגור.",
+  "warLogPrivate": "יומן המלחמה של {clan} פרטי.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

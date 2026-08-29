@@ -2,50 +2,48 @@ import 'package:clashkingapp/features/player/models/player_activity.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('expands one tracked troop snapshot into upgrade and boost events', () {
+  test('parses normalized troop upgrade and boost changes', () {
     final feed = PlayerActivityFeed.fromJson({
       'items': [
         {
           'time': '2026-08-16T12:00:00Z',
-          'type': 'troops',
-          'previous': [
-            {'name': 'Super Wizard', 'level': 11, 'superTroopIsActive': false},
-          ],
-          'current': [
-            {'name': 'Super Wizard', 'level': 12, 'superTroopIsActive': true},
-          ],
+          'type': 'troop_level',
+          'item': {'id': 1, 'name': 'Super Wizard'},
+          'townhall_level': 17,
+          'previous': 11,
+          'current': 12,
+        },
+        {
+          'time': '2026-08-16T13:00:00Z',
+          'type': 'super_troop_boost',
+          'item': {'id': 1, 'name': 'Super Wizard'},
+          'previous': 0,
+          'current': 12,
         },
       ],
     });
 
     expect(feed.items, hasLength(2));
-    expect(
-      feed.items.map((event) => event.kind),
-      containsAll([
-        PlayerActivityKind.troopUpgrade,
-        PlayerActivityKind.superTroopBoost,
-      ]),
-    );
+    expect(feed.items.first.kind, PlayerActivityKind.superTroopBoost);
+    expect(feed.items.last.kind, PlayerActivityKind.troopUpgrade);
+    expect(feed.items.last.townHallLevel, 17);
   });
 
-  test('expands town hall, equipment, and name changes', () {
+  test('parses supported upgrades and excludes name changes', () {
     final feed = PlayerActivityFeed.fromJson({
       'items': [
         {
           'time': '2026-08-16T14:00:00Z',
-          'type': 'townHallLevel',
+          'type': 'townhall_level',
           'previous': 16,
           'current': 17,
         },
         {
           'time': '2026-08-16T13:00:00Z',
-          'type': 'heroEquipment',
-          'previous': [
-            {'name': 'Giant Gauntlet', 'level': 20},
-          ],
-          'current': [
-            {'name': 'Giant Gauntlet', 'level': 21},
-          ],
+          'type': 'equipment_level',
+          'item': {'id': 7, 'name': 'Giant Gauntlet'},
+          'previous': 20,
+          'current': 21,
         },
         {
           'time': '2026-08-16T12:00:00Z',
@@ -59,9 +57,7 @@ void main() {
     expect(feed.items.map((event) => event.kind), [
       PlayerActivityKind.townHallUpgrade,
       PlayerActivityKind.equipmentUpgrade,
-      PlayerActivityKind.nameChange,
     ]);
     expect(feed.items.first.currentLevel, 17);
-    expect(feed.items.last.previousValue, 'Old Name');
   });
 }

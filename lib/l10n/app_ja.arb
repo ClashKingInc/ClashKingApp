@@ -875,6 +875,7 @@
   "warLog": "対戦ログ",
   "warLogSearchPlaceholder": "探索戦争",
   "warLogClosed": "{clan}の対戦ログは非公開です。",
+  "warLogPrivate": "{clan}の対戦ログは非公開です。",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

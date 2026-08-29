@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_cwl.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_info.dart';
+import 'package:clashkingapp/features/war_cwl/models/cwl_league.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:clashkingapp/core/utils/debug_utils.dart';
 
@@ -81,29 +83,187 @@ class WarCwlService extends ChangeNotifier {
   }
 
   Future<List<WarCwl>> _loadWarBatch(List<String> batch) async {
-    final response = await _apiService.postResponse(
-      '/war/war-summary',
-      body: {"clan_tags": batch},
-      requiresAuth: true,
-    );
-    if (response.statusCode != 200) {
-      throw Exception("Failed to load war data (${response.statusCode})");
-    }
-
-    final decoded = jsonDecode(ApiService.decodeResponseBody(response));
-    final items = decoded is Map ? decoded['items'] : null;
-    if (items is! List) {
-      throw const FormatException('War summary response has no items');
-    }
-
-    final requestedTags = batch.toSet();
-    final parsedSummaries = <WarCwl>[];
-    for (final item in items) {
-      final parsed = _parseWarSummary(item, requestedTags);
-      if (parsed != null) parsedSummaries.add(parsed);
-    }
-    return parsedSummaries;
+    return Future.wait(batch.map(_resolveCurrentWar));
   }
+
+  Future<WarCwl> _resolveCurrentWar(String clanTag) async {
+    final encodedTag = Uri.encodeComponent(clanTag);
+    final basicResponse = await _apiService.getResponse(
+      '/war/$encodedTag/basic',
+    );
+    final basic = basicResponse.statusCode == 200
+        ? _decodeNullableMap(basicResponse)
+        : null;
+
+    if (basic != null && basic.isNotEmpty) {
+      final type = basic['type']?.toString().toLowerCase() ?? '';
+      final warTag = basic['warTag']?.toString();
+      if (type.contains('cwl') || type.contains('league')) {
+        final cwl = await _loadCwl(clanTag, preferredWarTag: warTag);
+        if (cwl != null) return cwl;
+      } else {
+        return _loadScheduledRegularWar(clanTag, basic);
+      }
+    }
+
+    return _loadManualCurrentWar(clanTag);
+  }
+
+  Future<WarCwl> _loadScheduledRegularWar(
+    String clanTag,
+    Map<String, dynamic> basic,
+  ) async {
+    final left = _map(basic['clan']);
+    final right = _map(basic['opponent']);
+    final leftTag = _normalizeTag(left['tag']?.toString());
+    final rightTag = _normalizeTag(right['tag']?.toString());
+    final requestedIsRight = rightTag == clanTag;
+    final requested = requestedIsRight ? right : left;
+    final opponent = requestedIsRight ? left : right;
+    final requestedPublic = requested['publicWarLog'] as bool?;
+    final opponentPublic = opponent['publicWarLog'] as bool?;
+    final opponentTag = requestedIsRight ? leftTag : rightTag;
+
+    final candidates = <String>[
+      if (requestedPublic != false) clanTag,
+      if (opponentTag != null && opponentPublic != false) opponentTag,
+    ];
+    for (final candidate in candidates) {
+      final war = await _fetchRegularWar(candidate);
+      if (war != null && _isFullWar(war)) {
+        return _regularResult(clanTag, war.reorderForClan(clanTag));
+      }
+    }
+    return _privateResult(clanTag);
+  }
+
+  Future<WarCwl> _loadManualCurrentWar(String clanTag) async {
+    final regular = await _fetchRegularWar(clanTag);
+    if (regular != null && _isFullWar(regular)) {
+      return _regularResult(clanTag, regular.reorderForClan(clanTag));
+    }
+
+    final cwl = await _loadCwl(clanTag);
+    if (cwl != null) return cwl;
+
+    if (regular?.state == 'accessDenied') return _privateResult(clanTag);
+    return _notInWarResult(clanTag);
+  }
+
+  Future<WarInfo?> _fetchRegularWar(String clanTag) async {
+    final encodedTag = Uri.encodeComponent(clanTag);
+    final response = await _apiService.proxyGet(
+      '/clans/$encodedTag/currentwar',
+    );
+    if (response.statusCode == 403) return WarInfo(state: 'accessDenied');
+    if (response.statusCode != 200) return null;
+    final data = _decodeNullableMap(response);
+    if (data == null) return null;
+    if (data['reason'] == 'accessDenied') {
+      return WarInfo(state: 'accessDenied');
+    }
+    return WarInfo.fromJson(data);
+  }
+
+  Future<WarCwl?> _loadCwl(String clanTag, {String? preferredWarTag}) async {
+    final encodedTag = Uri.encodeComponent(clanTag);
+    final groupResponse = await _apiService.proxyGet(
+      '/clans/$encodedTag/currentwar/leaguegroup',
+    );
+    final group = groupResponse.statusCode == 200
+        ? _decodeNullableMap(groupResponse)
+        : null;
+
+    if (preferredWarTag != null && preferredWarTag.isNotEmpty) {
+      final war = await _fetchCwlWar(preferredWarTag);
+      if (war != null && _isFullWar(war)) {
+        return WarCwl(
+          tag: clanTag,
+          isInWar: false,
+          isInCwl: true,
+          warInfo: WarInfo(state: 'notInWar'),
+          leagueInfo: group == null ? null : CwlLeague.fromJson(group),
+          warLeagueInfos: [war.reorderForClan(clanTag)],
+        );
+      }
+    }
+    if (group == null || group['rounds'] is! List) return null;
+
+    final rounds = (group['rounds'] as List).whereType<Map>().toList();
+    for (final round in rounds.reversed) {
+      final tags = (round['warTags'] as List? ?? const [])
+          .map((tag) => tag.toString())
+          .where((tag) => tag.isNotEmpty && tag != '#0')
+          .toList(growable: false);
+      if (tags.isEmpty) continue;
+      final wars = (await Future.wait(
+        tags.map(_fetchCwlWar),
+      )).whereType<WarInfo>().where(_isFullWar).toList(growable: false);
+      final includesClan = wars.any(
+        (war) =>
+            _normalizeTag(war.clan?.tag) == clanTag ||
+            _normalizeTag(war.opponent?.tag) == clanTag,
+      );
+      if (includesClan) {
+        return WarCwl(
+          tag: clanTag,
+          isInWar: false,
+          isInCwl: true,
+          warInfo: WarInfo(state: 'notInWar'),
+          leagueInfo: CwlLeague.fromJson(group),
+          warLeagueInfos: wars,
+        );
+      }
+    }
+    return null;
+  }
+
+  Future<WarInfo?> _fetchCwlWar(String warTag) async {
+    final encodedTag = Uri.encodeComponent(warTag);
+    final response = await _apiService.proxyGet(
+      '/clanwarleagues/wars/$encodedTag',
+    );
+    if (response.statusCode != 200) return null;
+    final data = _decodeNullableMap(response);
+    if (data == null) return null;
+    data['war_tag'] = warTag;
+    data['warType'] = 'cwl';
+    return WarInfo.fromJson(data);
+  }
+
+  static bool _isFullWar(WarInfo war) =>
+      war.state != 'notInWar' &&
+      war.state != 'unknown' &&
+      war.state != 'accessDenied' &&
+      war.clan != null &&
+      war.opponent != null;
+
+  static WarCwl _regularResult(String clanTag, WarInfo war) => WarCwl(
+    tag: clanTag,
+    isInWar: true,
+    isInCwl: false,
+    warInfo: war,
+    leagueInfo: null,
+    warLeagueInfos: const [],
+  );
+
+  static WarCwl _notInWarResult(String clanTag) => WarCwl(
+    tag: clanTag,
+    isInWar: false,
+    isInCwl: false,
+    warInfo: WarInfo(state: 'notInWar'),
+    leagueInfo: null,
+    warLeagueInfos: const [],
+  );
+
+  static WarCwl _privateResult(String clanTag) => WarCwl(
+    tag: clanTag,
+    isInWar: false,
+    isInCwl: false,
+    warInfo: WarInfo(state: 'accessDenied'),
+    leagueInfo: null,
+    warLeagueInfos: const [],
+  );
 
   bool _applyWarBatch(List<WarCwl> parsedSummaries, {required int requestId}) {
     var changed = false;
@@ -211,6 +371,15 @@ String? _normalizeTag(String? tag) {
   if (value.isEmpty) return null;
   return value.startsWith('#') ? value : '#$value';
 }
+
+Map<String, dynamic>? _decodeNullableMap(http.Response response) {
+  final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+  if (decoded is Map) return Map<String, dynamic>.from(decoded);
+  return null;
+}
+
+Map<String, dynamic> _map(Object? value) =>
+    value is Map ? Map<String, dynamic>.from(value) : <String, dynamic>{};
 
 WarCwl? _parseWarSummary(dynamic item, [Set<String>? requestedTags]) {
   if (item is! Map) return null;

@@ -875,6 +875,7 @@
   "warLog": "对战日志",
   "warLogSearchPlaceholder": "搜索战",
   "warLogClosed": "{clan} 的部落战日志已关闭。",
+  "warLogPrivate": "{clan} 的部落对战日志为私密。",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

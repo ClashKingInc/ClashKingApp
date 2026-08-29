@@ -233,11 +233,6 @@ class _PlayersPageState extends State<PlayersPage> {
 
       return _BookmarkedPlayerCard(
         player: bookmark,
-        notificationEnabled: false,
-        notificationAvailable: false,
-        notificationUpdating: false,
-        notificationSubtitle: '',
-        onNotificationChanged: (_) {},
         onTap: () =>
             _openBookmarkedPlayer(context, playerService, bookmark.tag),
       );
@@ -507,24 +502,26 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
       statusColor: widget.statusColor,
       onStatusTap: widget.onVerifyAccount,
       onTap: widget.onTap,
-      footer: _PlayerCardOptionsFooter(
-        tag: player.tag,
-        bookmarked: widget.bookmarked,
-        showNotification: !widget.bookmarked,
-        isVerified: widget.isVerified,
-        hidden: widget.hidden,
-        updatingVisibility: _updatingVisibility,
-        onToggleVisibility: _toggleVisibility,
-        onVerifyAccount: widget.onVerifyAccount,
-        notificationEnabled: widget.notificationEnabled,
-        notificationAvailable: widget.notificationAvailable,
-        notificationUpdating: widget.notificationUpdating,
-        notificationSubtitle: widget.notificationSubtitle,
-        onNotificationChanged: widget.onNotificationChanged,
-        expanded: _optionsExpanded,
-        onToggleExpanded: () =>
-            setState(() => _optionsExpanded = !_optionsExpanded),
-      ),
+      footer: widget.bookmarked
+          ? null
+          : _PlayerCardOptionsFooter(
+              tag: player.tag,
+              bookmarked: widget.bookmarked,
+              showNotification: !widget.bookmarked,
+              isVerified: widget.isVerified,
+              hidden: widget.hidden,
+              updatingVisibility: _updatingVisibility,
+              onToggleVisibility: _toggleVisibility,
+              onVerifyAccount: widget.onVerifyAccount,
+              notificationEnabled: widget.notificationEnabled,
+              notificationAvailable: widget.notificationAvailable,
+              notificationUpdating: widget.notificationUpdating,
+              notificationSubtitle: widget.notificationSubtitle,
+              onNotificationChanged: widget.onNotificationChanged,
+              expanded: _optionsExpanded,
+              onToggleExpanded: () =>
+                  setState(() => _optionsExpanded = !_optionsExpanded),
+            ),
       chips: [
         _InfoChipData(
           imageUrl: player.clan?.badgeUrls.small ?? ImageAssets.clanCastle,
@@ -532,7 +529,7 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
               player.clan?.name ??
               (player.clanOverview.name.isNotEmpty
                   ? player.clanOverview.name
-                  : 'No clan'),
+                  : AppLocalizations.of(context)!.clanNone),
         ),
         _InfoChipData(
           imageUrl: player.leagueUrl.isNotEmpty
@@ -545,71 +542,38 @@ class _PlayerDataCardState extends State<_PlayerDataCard> {
   }
 }
 
-class _BookmarkedPlayerCard extends StatefulWidget {
-  const _BookmarkedPlayerCard({
-    required this.player,
-    required this.notificationEnabled,
-    required this.notificationAvailable,
-    required this.notificationUpdating,
-    required this.notificationSubtitle,
-    required this.onNotificationChanged,
-    required this.onTap,
-  });
+class _BookmarkedPlayerCard extends StatelessWidget {
+  const _BookmarkedPlayerCard({required this.player, required this.onTap});
 
   final BookmarkedPlayer player;
-  final bool notificationEnabled;
-  final bool notificationAvailable;
-  final bool notificationUpdating;
-  final String notificationSubtitle;
-  final ValueChanged<bool> onNotificationChanged;
   final VoidCallback onTap;
 
   @override
-  State<_BookmarkedPlayerCard> createState() => _BookmarkedPlayerCardState();
-}
-
-class _BookmarkedPlayerCardState extends State<_BookmarkedPlayerCard> {
-  bool _optionsExpanded = false;
-
-  @override
   Widget build(BuildContext context) {
-    final player = widget.player;
+    final bookmark = player;
     return _PlayerCardShell(
-      imageUrl: player.townHallPic.isNotEmpty
-          ? player.townHallPic
-          : ImageAssets.townHall(player.townHallLevel),
+      imageUrl: bookmark.townHallPic.isNotEmpty
+          ? bookmark.townHallPic
+          : ImageAssets.townHall(bookmark.townHallLevel),
       imageCaption: null,
-      title: player.name,
-      tag: player.tag,
+      title: bookmark.name,
+      tag: bookmark.tag,
       statusIcon: Icons.bookmark_rounded,
       statusColor: Theme.of(context).colorScheme.onSurfaceVariant,
-      onTap: widget.onTap,
-      footer: _PlayerCardOptionsFooter(
-        tag: player.tag,
-        bookmarked: true,
-        showNotification: false,
-        notificationEnabled: widget.notificationEnabled,
-        notificationAvailable: widget.notificationAvailable,
-        notificationUpdating: widget.notificationUpdating,
-        notificationSubtitle: widget.notificationSubtitle,
-        onNotificationChanged: widget.onNotificationChanged,
-        updatingVisibility: false,
-        onToggleVisibility: () {},
-        expanded: _optionsExpanded,
-        onToggleExpanded: () =>
-            setState(() => _optionsExpanded = !_optionsExpanded),
-      ),
+      onTap: onTap,
       chips: [
         _InfoChipData(
           imageUrl: ImageAssets.clanCastle,
-          label: player.clanName.isNotEmpty ? player.clanName : 'No clan',
+          label: bookmark.clanName.isNotEmpty
+              ? bookmark.clanName
+              : AppLocalizations.of(context)!.clanNone,
         ),
-        if (player.trophies > 0)
+        if (bookmark.trophies > 0)
           _InfoChipData(
-            imageUrl: player.leagueUrl.isNotEmpty
-                ? player.leagueUrl
-                : ImageAssets.getLeagueImage(player.league),
-            label: player.trophies.toString(),
+            imageUrl: bookmark.leagueUrl.isNotEmpty
+                ? bookmark.leagueUrl
+                : ImageAssets.getLeagueImage(bookmark.league),
+            label: bookmark.trophies.toString(),
           ),
       ],
     );

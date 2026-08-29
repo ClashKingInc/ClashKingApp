@@ -62,15 +62,30 @@ void main() {
     );
   });
 
-  test('authenticates player activity history requests', () async {
+  test('loads troop upgrades by default from normalized history', () async {
     final api = FakeApiService();
-    const endpoint = '/player/%23P1/changes?limit=100';
+    const endpoint = '/player/%23P1/history/changes?type=troop_level&limit=500';
     api.getStubs[endpoint] = http.Response('{"items":[]}', 200);
 
     final data = await PlayerService(apiService: api).loadPlayerActivity('#P1');
 
     expect(data.items, isEmpty);
-    expect(api.getRequiresAuthByEndpoint[endpoint], isTrue);
+    expect(api.getRequiresAuthByEndpoint[endpoint], isFalse);
+  });
+
+  test('loads up to 100 CWL seasons and active timers', () async {
+    final api = FakeApiService();
+    api.getStubs['/player/%23P1/cwl/history?limit=100'] = http.Response(
+      '{"items":[]}',
+      200,
+    );
+    api.getStubs['/player/%23P1/timers'] = http.Response('{"items":[]}', 200);
+    final service = PlayerService(apiService: api);
+
+    expect((await service.loadPlayerCwlHistory('#P1')).items, isEmpty);
+    expect((await service.loadPlayerTimers('#P1')).items, isEmpty);
+    expect(api.getCallCounts['/player/%23P1/cwl/history?limit=100'], 1);
+    expect(api.getCallCounts['/player/%23P1/timers'], 1);
   });
 
   test('keeps official battles when historical data is unavailable', () async {

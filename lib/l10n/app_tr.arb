@@ -875,6 +875,7 @@
   "warLog": "Savaş Günlüğü",
   "warLogSearchPlaceholder": "Savaşları ara",
   "warLogClosed": "{clan} klanının savaş günlüğü kapalı.",
+  "warLogPrivate": "{clan} klanının savaş günlüğü gizli.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

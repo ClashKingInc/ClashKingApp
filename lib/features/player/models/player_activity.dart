@@ -1,15 +1,46 @@
+enum PlayerHistoryType {
+  troopLevel('troop_level'),
+  superTroopBoost('super_troop_boost'),
+  heroLevel('hero_level'),
+  spellLevel('spell_level'),
+  petLevel('pet_level'),
+  equipmentLevel('equipment_level'),
+  townHallLevel('townhall_level'),
+  experienceLevel('exp_level'),
+  bestTrophies('best_trophies'),
+  bestBuilderBaseTrophies('best_builder_base_trophies'),
+  warPreference('war_preference');
+
+  const PlayerHistoryType(this.apiValue);
+
+  final String apiValue;
+}
+
 enum PlayerActivityKind {
   townHallUpgrade,
   troopUpgrade,
   heroUpgrade,
   spellUpgrade,
+  petUpgrade,
   equipmentUpgrade,
   superTroopBoost,
   itemUnlocked,
-  nameChange,
+  experienceLevelChange,
+  trophyRecord,
+  builderTrophyRecord,
+  warPreferenceChange,
 }
 
-enum PlayerActivityItemType { townHall, troop, hero, spell, equipment, profile }
+enum PlayerActivityItemType {
+  townHall,
+  troop,
+  hero,
+  spell,
+  pet,
+  equipment,
+  trophy,
+  profile,
+}
 
 class PlayerActivityEvent {
   const PlayerActivityEvent({
@@ -17,6 +48,8 @@ class PlayerActivityEvent {
     required this.kind,
     required this.itemType,
     required this.name,
+    this.itemId,
+    this.townHallLevel,
     this.previousLevel,
     this.currentLevel,
     this.previousValue,
@@ -27,6 +60,8 @@ class PlayerActivityEvent {
   final PlayerActivityKind kind;
   final PlayerActivityItemType itemType;
   final String name;
+  final int? itemId;
+  final int? townHallLevel;
   final int? previousLevel;
   final int? currentLevel;
   final String? previousValue;
@@ -40,155 +75,96 @@ class PlayerActivityFeed {
 
   factory PlayerActivityFeed.fromJson(Map<String, dynamic> json) {
     final events = <PlayerActivityEvent>[];
-    for (final raw in _list(json['items'])) {
-      if (raw is! Map) continue;
-      events.addAll(
-        _expandChange(Map<String, dynamic>.from(raw)),
-      );
+    for (final raw in _maps(json['items'])) {
+      final event = _eventFromChange(raw);
+      if (event != null) events.add(event);
     }
     events.sort((a, b) => b.time.compareTo(a.time));
     return PlayerActivityFeed(items: events);
   }
 }
 
-Iterable<PlayerActivityEvent> _expandChange(Map<String, dynamic> change) sync* {
+PlayerActivityEvent? _eventFromChange(Map<String, dynamic> change) {
   final time = DateTime.tryParse(change['time']?.toString() ?? '')?.toUtc();
-  if (time == null) return;
+  if (time == null) return null;
   final type = change['type']?.toString() ?? '';
+  if (type == 'name') return null;
+  final item = change['item'] is Map
+      ? Map<String, dynamic>.from(change['item'] as Map)
+      : const <String, dynamic>{};
   final previous = change['previous'];
   final current = change['current'];
+  final previousLevel = _nullableInt(previous);
+  final currentLevel = _nullableInt(current);
+  final itemName = item['name']?.toString() ?? '';
+  final itemId = _nullableInt(item['id']);
+  final townHallLevel = _nullableInt(change['townhall_level']);
 
-  switch (type) {
-    case 'townHallLevel':
-      final from = _int(previous);
-      final to = _int(current);
-      if (to > from) {
-        yield PlayerActivityEvent(
-          time: time,
-          kind: PlayerActivityKind.townHallUpgrade,
-          itemType: PlayerActivityItemType.townHall,
-          name: 'Town Hall',
-          previousLevel: from,
-          currentLevel: to,
-        );
-      }
-      return;
-    case 'troops':
-      yield* _expandItemChanges(
-        time: time,
-        previous: previous,
-        current: current,
-        itemType: PlayerActivityItemType.troop,
-        upgradeKind: PlayerActivityKind.troopUpgrade,
-        detectSuperTroopBoosts: true,
-      );
-      return;
-    case 'heroes':
-      yield* _expandItemChanges(
-        time: time,
-        previous: previous,
-        current: current,
-        itemType: PlayerActivityItemType.hero,
-        upgradeKind: PlayerActivityKind.heroUpgrade,
-      );
-      return;
-    case 'spells':
-      yield* _expandItemChanges(
-        time: time,
-        previous: previous,
-        current: current,
-        itemType: PlayerActivityItemType.spell,
-        upgradeKind: PlayerActivityKind.spellUpgrade,
-      );
-      return;
-    case 'heroEquipment':
-      yield* _expandItemChanges(
-        time: time,
-        previous: previous,
-        current: current,
-        itemType: PlayerActivityItemType.equipment,
-        upgradeKind: PlayerActivityKind.equipmentUpgrade,
-      );
-      return;
-    case 'name':
-      final from = previous?.toString() ?? '';
-      final to = current?.toString() ?? '';
-      if (to.isNotEmpty && to != from) {
-        yield PlayerActivityEvent(
-          time: time,
-          kind: PlayerActivityKind.nameChange,
-          itemType: PlayerActivityItemType.profile,
-          name: to,
-          previousValue: from,
-          currentValue: to,
-        );
-      }
-      return;
+  final kind = switch (type) {
+    'troop_level' =>
+      previousLevel == 0
+          ? PlayerActivityKind.itemUnlocked
+          : PlayerActivityKind.troopUpgrade,
+    'super_troop_boost' => PlayerActivityKind.superTroopBoost,
+    'hero_level' =>
+      previousLevel == 0
+          ? PlayerActivityKind.itemUnlocked
+          : PlayerActivityKind.heroUpgrade,
+    'spell_level' =>
+      previousLevel == 0
+          ? PlayerActivityKind.itemUnlocked
+          : PlayerActivityKind.spellUpgrade,
+    'pet_level' =>
+      previousLevel == 0
+          ? PlayerActivityKind.itemUnlocked
+          : PlayerActivityKind.petUpgrade,
+    'equipment_level' =>
+      previousLevel == 0
+          ? PlayerActivityKind.itemUnlocked
+          : PlayerActivityKind.equipmentUpgrade,
+    'townhall_level' => PlayerActivityKind.townHallUpgrade,
+    'exp_level' => PlayerActivityKind.experienceLevelChange,
+    'best_trophies' => PlayerActivityKind.trophyRecord,
+    'best_builder_base_trophies' => PlayerActivityKind.builderTrophyRecord,
+    'war_preference' => PlayerActivityKind.warPreferenceChange,
+    _ => null,
+  };
+  if (kind == null) return null;
+
+  final itemType = switch (type) {
+    'troop_level' || 'super_troop_boost' => PlayerActivityItemType.troop,
+    'hero_level' => PlayerActivityItemType.hero,
+    'spell_level' => PlayerActivityItemType.spell,
+    'pet_level' => PlayerActivityItemType.pet,
+    'equipment_level' => PlayerActivityItemType.equipment,
+    'townhall_level' => PlayerActivityItemType.townHall,
+    'best_trophies' ||
+    'best_builder_base_trophies' => PlayerActivityItemType.trophy,
+    _ => PlayerActivityItemType.profile,
+  };
+
+  return PlayerActivityEvent(
+    time: time,
+    kind: kind,
+    itemType: itemType,
+    name: itemName,
+    itemId: itemId,
+    townHallLevel: townHallLevel,
+    previousLevel: previousLevel,
+    currentLevel: currentLevel,
+    previousValue: previous?.toString(),
+    currentValue: current?.toString(),
+  );
+}
+
+Iterable<Map<String, dynamic>> _maps(Object? value) sync* {
+  if (value is! List) return;
+  for (final item in value) {
+    if (item is Map) yield Map<String, dynamic>.from(item);
   }
 }
 
-Iterable<PlayerActivityEvent> _expandItemChanges({
-  required DateTime time,
-  required Object? previous,
-  required Object? current,
-  required PlayerActivityItemType itemType,
-  required PlayerActivityKind upgradeKind,
-  bool detectSuperTroopBoosts = false,
-}) sync* {
-  final oldItems = _itemsByName(previous);
-  final newItems = _itemsByName(current);
-  for (final entry in newItems.entries) {
-    final name = entry.key;
-    final item = entry.value;
-    final oldItem = oldItems[name];
-    final from = _int(oldItem?['level']);
-    final to = _int(item['level']);
-    if (oldItem == null && to > 0) {
-      yield PlayerActivityEvent(
-        time: time,
-        kind: PlayerActivityKind.itemUnlocked,
-        itemType: itemType,
-        name: name,
-        currentLevel: to,
-      );
-    } else if (to > from) {
-      yield PlayerActivityEvent(
-        time: time,
-        kind: upgradeKind,
-        itemType: itemType,
-        name: name,
-        previousLevel: from,
-        currentLevel: to,
-      );
-    }
-
-    if (detectSuperTroopBoosts &&
-        item['superTroopIsActive'] == true &&
-        oldItem?['superTroopIsActive'] != true) {
-      yield PlayerActivityEvent(
-        time: time,
-        kind: PlayerActivityKind.superTroopBoost,
-        itemType: PlayerActivityItemType.troop,
-        name: name,
-        currentLevel: to > 0 ? to : null,
-      );
-    }
-  }
+int? _nullableInt(Object? value) {
+  if (value == null) return null;
+  return value is num ? value.toInt() : int.tryParse(value.toString());
 }
-
-Map<String, Map<String, dynamic>> _itemsByName(Object? value) {
-  final result = <String, Map<String, dynamic>>{};
-  for (final raw in _list(value)) {
-    if (raw is! Map) continue;
-    final item = Map<String, dynamic>.from(raw);
-    final name = item['name']?.toString() ?? '';
-    if (name.isNotEmpty) result[name] = item;
-  }
-  return result;
-}
-
-List<dynamic> _list(Object? value) => value is List ? value : const [];
-
-int _int(Object? value) => value is num
-    ? value.toInt()
-    : int.tryParse(value?.toString() ?? '') ?? 0;

@@ -875,6 +875,7 @@
   "warLog": "Kriegsverlauf",
   "warLogSearchPlaceholder": "Suchkriege",
   "warLogClosed": "{clan}s Kriegslog ist geschlossen.",
+  "warLogPrivate": "{clan} hat ein privates Kriegslog.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

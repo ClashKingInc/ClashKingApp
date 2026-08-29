@@ -875,6 +875,7 @@
   "warLog": "Válečný deník",
   "warLogSearchPlaceholder": "Hledání válek",
   "warLogClosed": "Protokol války {clan}je uzavřen.",
+  "warLogPrivate": "{clan} má soukromý válečný deník.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

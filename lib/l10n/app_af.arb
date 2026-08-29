@@ -875,6 +875,7 @@
   "warLog": "Oorlogslogboek",
   "warLogSearchPlaceholder": "Soek oorloë",
   "warLogClosed": "{clan} se oorlogslog is gesluit.",
+  "warLogPrivate": "{clan} het 'n private oorlogslog.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {

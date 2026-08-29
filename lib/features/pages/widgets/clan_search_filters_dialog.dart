@@ -1,604 +1,449 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+
+import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'dart:convert';
-import 'dart:async';
-import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:flutter/material.dart';
 
-class ClanSearchFilters extends StatefulWidget {
-  const ClanSearchFilters({super.key});
+class ClanSearchFilterValue {
+  const ClanSearchFilterValue({
+    this.warFrequency,
+    this.locationId,
+    this.minMembers,
+    this.maxMembers,
+    this.minClanPoints,
+    this.minClanLevel,
+  });
 
-  @override
-  ClanSearchFiltersState createState() => ClanSearchFiltersState();
+  final String? warFrequency;
+  final int? locationId;
+  final int? minMembers;
+  final int? maxMembers;
+  final int? minClanPoints;
+  final int? minClanLevel;
+
+  bool get isEmpty =>
+      warFrequency == null &&
+      locationId == null &&
+      minMembers == null &&
+      maxMembers == null &&
+      minClanPoints == null &&
+      minClanLevel == null;
+
+  String get querySuffix {
+    final fields = <String, Object?>{
+      'warFrequency': warFrequency,
+      'locationId': locationId,
+      'minMembers': minMembers,
+      'maxMembers': maxMembers,
+      'minClanPoints': minClanPoints,
+      'minClanLevel': minClanLevel,
+    }..removeWhere((_, value) => value == null);
+    return fields.entries.map((entry) => '&${entry.key}=${entry.value}').join();
+  }
 }
 
-class ClanSearchFiltersState extends State<ClanSearchFilters> {
-  String warfrequency = 'whatever'; // Initial war frequency
-  String location = 'any'; // Initial location
-  String minimumMembers = '0'; // Initial minimum members
-  String maximumMembers = '50'; // Initial maximum members
-  String minimumClanPoints = '0'; // Initial minimum clan points
-  String minimumClanLevel = '0'; // Initial minimum clan level
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _controllerMin = TextEditingController(text: "2");
-  final TextEditingController _controllerMax = TextEditingController(
-    text: "50",
-  );
-  final TextEditingController _controllerPoints = TextEditingController(
-    text: "1",
-  );
-  final TextEditingController _controllerLevel = TextEditingController(
-    text: "2",
-  );
-  List _countries = [];
-  int? _selectedCountry;
+class PlayerSearchFilterValue {
+  const PlayerSearchFilterValue({
+    this.clanTags = const [],
+    this.leagueIds = const [],
+    this.townHallLevels = const [],
+  });
+
+  final List<String> clanTags;
+  final List<int> leagueIds;
+  final List<int> townHallLevels;
+
+  bool get isEmpty =>
+      clanTags.isEmpty && leagueIds.isEmpty && townHallLevels.isEmpty;
+}
+
+class ClanSearchFiltersPanel extends StatefulWidget {
+  const ClanSearchFiltersPanel({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final ClanSearchFilterValue value;
+  final ValueChanged<ClanSearchFilterValue> onChanged;
+
+  @override
+  State<ClanSearchFiltersPanel> createState() => _ClanSearchFiltersPanelState();
+}
+
+class _ClanSearchFiltersPanelState extends State<ClanSearchFiltersPanel> {
+  List<_FilterOption> _locations = const [];
 
   @override
   void initState() {
     super.initState();
-    _fetchCountries();
+    _loadLocations();
   }
 
-  Future<void> _fetchCountries() async {
-    final response = await ApiService.shared.proxyGet('/locations');
-    if (response.statusCode == 200) {
-      final List items = json.decode(utf8.decode(response.bodyBytes))['items'];
-      final countries = items.where((item) => item["name"] != "").toList();
+  Future<void> _loadLocations() async {
+    try {
+      final response = await ApiService.shared.proxyGet('/locations');
+      if (response.statusCode != 200) return;
+      final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+      final items = decoded is Map ? decoded['items'] : null;
+      if (items is! List || !mounted) return;
       setState(() {
-        _countries = countries;
-        if (_countries.isNotEmpty) {
-          _selectedCountry = 0;
-        }
+        _locations = items
+            .whereType<Map>()
+            .map((raw) => Map<String, dynamic>.from(raw))
+            .map(
+              (item) => _FilterOption(
+                id: (item['id'] as num?)?.toInt() ?? 0,
+                name: item['name']?.toString() ?? '',
+              ),
+            )
+            .where((item) => item.id != 0 && item.name.isNotEmpty)
+            .toList(growable: false);
       });
-    } else {
-      throw Exception(
-        'Failed to load countries with status code: ${response.statusCode}',
-      );
-    }
+    } catch (_) {}
   }
 
-  void _incrementMin() {
-    int currentValue = int.parse(_controllerMin.text);
-    if (currentValue < 50) {
-      _controllerMin.text = (currentValue + 1).toString();
-    }
-  }
-
-  void _decrementMin() {
-    int currentValue = int.parse(_controllerMin.text);
-    if (currentValue > 2) {
-      _controllerMin.text = (currentValue - 1).toString();
-    }
-  }
-
-  void _incrementMax() {
-    int currentValue = int.parse(_controllerMax.text);
-    if (currentValue < 50) {
-      _controllerMax.text = (currentValue + 1).toString();
-    }
-  }
-
-  void _decrementMax() {
-    int currentValue = int.parse(_controllerMax.text);
-    if (currentValue > 0) {
-      _controllerMax.text = (currentValue - 1).toString();
-    }
-  }
-
-  void _incrementPoints() {
-    int currentValue = int.parse(_controllerPoints.text);
-    if (currentValue == 1) {
-      _controllerPoints.text = (currentValue + 999).toString();
-    } else if (currentValue < 1000000) {
-      _controllerPoints.text = (currentValue + 1000).toString();
-    }
-  }
-
-  void _decrementPoints() {
-    int currentValue = int.parse(_controllerPoints.text);
-    if (currentValue > 1) {
-      _controllerPoints.text = (currentValue - 1000).toString();
-    }
-  }
-
-  void _incrementLevel() {
-    int currentValue = int.parse(_controllerLevel.text);
-    if (currentValue < 1000000) {
-      _controllerLevel.text = (currentValue + 1).toString();
-    }
-  }
-
-  void _decrementLevel() {
-    int currentValue = int.parse(_controllerLevel.text);
-    if (currentValue > 2) {
-      _controllerLevel.text = (currentValue - 1).toString();
-    }
+  void _emit({
+    Object? warFrequency = _unchanged,
+    Object? locationId = _unchanged,
+    Object? minMembers = _unchanged,
+    Object? maxMembers = _unchanged,
+    Object? minClanPoints = _unchanged,
+    Object? minClanLevel = _unchanged,
+  }) {
+    final old = widget.value;
+    widget.onChanged(
+      ClanSearchFilterValue(
+        warFrequency: identical(warFrequency, _unchanged)
+            ? old.warFrequency
+            : warFrequency as String?,
+        locationId: identical(locationId, _unchanged)
+            ? old.locationId
+            : locationId as int?,
+        minMembers: identical(minMembers, _unchanged)
+            ? old.minMembers
+            : minMembers as int?,
+        maxMembers: identical(maxMembers, _unchanged)
+            ? old.maxMembers
+            : maxMembers as int?,
+        minClanPoints: identical(minClanPoints, _unchanged)
+            ? old.minClanPoints
+            : minClanPoints as int?,
+        minClanLevel: identical(minClanLevel, _unchanged)
+            ? old.minClanLevel
+            : minClanLevel as int?,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    List<DropdownMenuItem<String>> warFrequencyItems = [
-      DropdownMenuItem(
-        value: 'whatever',
-        alignment: Alignment.center,
-        child: Text(AppLocalizations.of(context)!.generalNotSet),
-      ),
-      DropdownMenuItem(
-        value: 'always',
-        alignment: Alignment.center,
-        child: Text(AppLocalizations.of(context)!.clanWarFrequencyAlways),
-      ),
-      DropdownMenuItem(
-        value: 'never',
-        alignment: Alignment.center,
-        child: Text(AppLocalizations.of(context)!.clanWarFrequencyNever),
-      ),
-      DropdownMenuItem(
-        value: 'oncePerWeek',
-        alignment: Alignment.center,
-        child: Text(AppLocalizations.of(context)!.clanWarFrequencyOncePerWeek),
-      ),
-      DropdownMenuItem(
-        value: 'moreThanOncePerWeek',
-        alignment: Alignment.center,
-        child: Text(
-          AppLocalizations.of(context)!.clanWarFrequencyMoreThanOncePerWeek,
-        ),
-      ),
-      DropdownMenuItem(
-        value: 'lessThanOncePerWeek',
-        alignment: Alignment.center,
-        child: Text(AppLocalizations.of(context)!.clanWarFrequencyRarely),
-      ),
-    ];
-
-    return AlertDialog(
-      insetPadding: EdgeInsets.all(16),
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      surfaceTintColor: Colors.transparent,
-      title: Text(
-        AppLocalizations.of(context)!.generalFilters,
-        textAlign: TextAlign.center,
-      ),
-      content: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Card(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      AppLocalizations.of(context)!.warFrequency,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    DropdownButton<String>(
-                      value: warfrequency,
-                      elevation: 16,
-                      alignment: Alignment.center,
-                      isExpanded: true,
-                      dropdownColor: Theme.of(context).colorScheme.surface,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      underline: Container(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          warfrequency = newValue!;
-                        });
-                      },
-                      items: warFrequencyItems,
-                    ),
-                  ],
+    final loc = AppLocalizations.of(context)!;
+    final value = widget.value;
+    return CKSectionPanel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          DropdownButtonFormField<String?>(
+            key: ValueKey('war-frequency-${value.warFrequency}'),
+            initialValue: value.warFrequency,
+            decoration: InputDecoration(labelText: loc.warFrequency),
+            items: [
+              DropdownMenuItem(value: null, child: Text(loc.generalNotSet)),
+              DropdownMenuItem(
+                value: 'always',
+                child: Text(loc.clanWarFrequencyAlways),
+              ),
+              DropdownMenuItem(
+                value: 'never',
+                child: Text(loc.clanWarFrequencyNever),
+              ),
+              DropdownMenuItem(
+                value: 'oncePerWeek',
+                child: Text(loc.clanWarFrequencyOncePerWeek),
+              ),
+              DropdownMenuItem(
+                value: 'moreThanOncePerWeek',
+                child: Text(loc.clanWarFrequencyMoreThanOncePerWeek),
+              ),
+              DropdownMenuItem(
+                value: 'lessThanOncePerWeek',
+                child: Text(loc.clanWarFrequencyRarely),
+              ),
+            ],
+            onChanged: (next) => _emit(warFrequency: next),
+          ),
+          const SizedBox(height: CKSpacing.sm),
+          DropdownButtonFormField<int?>(
+            key: ValueKey('location-${value.locationId}'),
+            initialValue: value.locationId,
+            isExpanded: true,
+            decoration: InputDecoration(labelText: loc.clanLocation),
+            items: [
+              DropdownMenuItem(value: null, child: Text(loc.generalNotSet)),
+              for (final location in _locations)
+                DropdownMenuItem(
+                  value: location.id,
+                  child: Text(location.name, overflow: TextOverflow.ellipsis),
+                ),
+            ],
+            onChanged: (next) => _emit(locationId: next),
+          ),
+          const SizedBox(height: CKSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: _NumberFilter(
+                  label: loc.clanMinimumMembers,
+                  value: value.minMembers,
+                  max: 50,
+                  onChanged: (next) => _emit(minMembers: next),
                 ),
               ),
-              Card(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      AppLocalizations.of(context)!.clanLocation,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: _selectedCountry?.toString() ?? '0',
-                            elevation: 16,
-                            alignment: Alignment.center,
-                            dropdownColor: Theme.of(
-                              context,
-                            ).colorScheme.surface,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            underline: Container(),
-                            items: [
-                              DropdownMenuItem<String>(
-                                value: '0',
-                                alignment: Alignment.center,
-                                child: Text(
-                                  AppLocalizations.of(context)!.generalNotSet,
-                                ),
-                              ),
-                              ..._countries.map<DropdownMenuItem<String>>((
-                                item,
-                              ) {
-                                return DropdownMenuItem<String>(
-                                  value: item['id'].toString(),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      item["isCountry"] == true
-                                          ? MobileWebImage(
-                                              imageUrl:
-                                                  "https://assets.clashk.ing/country-flags/${item['countryCode'].toLowerCase()}.png",
-                                              width: 16,
-                                              height: 20,
-                                              errorWidget:
-                                                  (context, url, error) => Icon(
-                                                    Icons.flag,
-                                                    size: 16,
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.onSurface,
-                                                  ),
-                                            )
-                                          : Icon(
-                                              Icons.flag,
-                                              size: 16,
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.onSurface,
-                                            ),
-                                      SizedBox(width: 8.0),
-                                      Text(
-                                        item['name'],
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            ],
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedCountry = newValue == 'none'
-                                    ? null
-                                    : int.parse(newValue!);
-                              });
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Card(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      AppLocalizations.of(context)!.clanMembers,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 8),
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipDecreaseMinimumMembers,
-                            padding: EdgeInsets.only(right: 8),
-                            icon: Icon(
-                              Icons.remove,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _decrementMin,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: _controllerMin,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(
-                                context,
-                              )!.clanMinimumMembers,
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return null; // valid if field is empty
-                              }
-                              int? number = int.tryParse(value);
-                              if (number == null || number < 0 || number > 50) {
-                                return 'Must be between 0 and 50';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              minimumMembers = value!.isEmpty ? "" : value;
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipIncreaseMinimumMembers,
-                            icon: Icon(
-                              Icons.add,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _incrementMin,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        IconButton(
-                          tooltip: AppLocalizations.of(
-                            context,
-                          )!.tooltipDecreaseMaximumMembers,
-                          icon: Icon(
-                            Icons.remove,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            size: 16,
-                          ),
-                          onPressed: _decrementMax,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: _controllerMax,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(
-                                context,
-                              )!.clanMaximumMembers,
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return null; // valid if field is empty
-                              }
-                              int? number = int.tryParse(value);
-                              if (number == null || number < 0 || number > 50) {
-                                return 'Must be between 0 and 50';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              maximumMembers = value!.isEmpty ? "" : value;
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipIncreaseMaximumMembers,
-                            icon: Icon(
-                              Icons.add,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _incrementMax,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                  ],
-                ),
-              ),
-              Card(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      AppLocalizations.of(context)!.clanMinimumPoints,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipDecreaseMinimumClanPoints,
-                            padding: EdgeInsets.only(right: 8),
-                            icon: Icon(
-                              Icons.remove,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _decrementPoints,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: _controllerPoints,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(
-                                context,
-                              )!.clanMinimumMembers,
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return null; // valid if field is empty
-                              }
-                              int? number = int.tryParse(value);
-                              if (number == null ||
-                                  number < 0 ||
-                                  number > 100000) {
-                                return 'Must be between 0 and 50';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              minimumClanPoints = value!.isEmpty ? "" : value;
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipIncreaseMinimumClanPoints,
-                            icon: Icon(
-                              Icons.add,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _incrementPoints,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                  ],
-                ),
-              ),
-              Card(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      AppLocalizations.of(context)!.clanMinimumLevel,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipDecreaseMinimumClanLevel,
-                            padding: EdgeInsets.only(right: 8),
-                            icon: Icon(
-                              Icons.remove,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _decrementLevel,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: _controllerLevel,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(
-                                context,
-                              )!.clanMinimumMembers,
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return null; // valid if field is empty
-                              }
-                              int? number = int.tryParse(value);
-                              if (number == null ||
-                                  number < 0 ||
-                                  number > 100000) {
-                                return 'Must be between 0 and 50';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              minimumClanLevel = value!.isEmpty ? "" : value;
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: IconButton(
-                            tooltip: AppLocalizations.of(
-                              context,
-                            )!.tooltipIncreaseMinimumClanLevel,
-                            icon: Icon(
-                              Icons.add,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: _incrementLevel,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                  ],
+              const SizedBox(width: CKSpacing.sm),
+              Expanded(
+                child: _NumberFilter(
+                  label: loc.clanMaximumMembers,
+                  value: value.maxMembers,
+                  max: 50,
+                  onChanged: (next) => _emit(maxMembers: next),
                 ),
               ),
             ],
           ),
-        ),
+          const SizedBox(height: CKSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: _NumberFilter(
+                  label: loc.clanMinimumPoints,
+                  value: value.minClanPoints,
+                  max: 100000,
+                  onChanged: (next) => _emit(minClanPoints: next),
+                ),
+              ),
+              const SizedBox(width: CKSpacing.sm),
+              Expanded(
+                child: _NumberFilter(
+                  label: loc.clanMinimumLevel,
+                  value: value.minClanLevel,
+                  max: 100,
+                  onChanged: (next) => _emit(minClanLevel: next),
+                ),
+              ),
+            ],
+          ),
+          if (!value.isEmpty)
+            _ResetButton(
+              onPressed: () => widget.onChanged(const ClanSearchFilterValue()),
+            ),
+        ],
       ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.generalCancel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.generalApply),
-          onPressed: () {
-            String query = "";
-            if (_formKey.currentState!.validate()) {
-              _formKey.currentState!.save();
-              if (warfrequency != "whatever") {
-                query += "&warFrequency=$warfrequency";
-              }
-              if (minimumMembers != "") {
-                query += "&minMembers=$minimumMembers";
-              }
-              if (maximumMembers != "") {
-                query += "&maxMembers=$maximumMembers";
-              }
-              if (minimumClanPoints != "") {
-                query += "&minClanPoints=$minimumClanPoints";
-              }
-              if (minimumClanLevel != "") {
-                query += "&minClanLevel=$minimumClanLevel";
-              }
-              if (_selectedCountry != 0) {
-                query += "&locationId=$_selectedCountry";
-              }
-              Navigator.of(context).pop(query);
-            }
-          },
-        ),
-      ],
     );
   }
 }
+
+class PlayerSearchFiltersPanel extends StatefulWidget {
+  const PlayerSearchFiltersPanel({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final PlayerSearchFilterValue value;
+  final ValueChanged<PlayerSearchFilterValue> onChanged;
+
+  @override
+  State<PlayerSearchFiltersPanel> createState() =>
+      _PlayerSearchFiltersPanelState();
+}
+
+class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
+  late final TextEditingController _clansController;
+  List<_FilterOption> _leagues = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _clansController = TextEditingController(
+      text: widget.value.clanTags.join(', '),
+    );
+    _loadLeagues();
+  }
+
+  @override
+  void dispose() {
+    _clansController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadLeagues() async {
+    try {
+      final response = await ApiService.shared.proxyGet('/leaguetiers');
+      if (response.statusCode != 200) return;
+      final decoded = jsonDecode(ApiService.decodeResponseBody(response));
+      final items = decoded is Map ? decoded['items'] : null;
+      if (items is! List || !mounted) return;
+      setState(() {
+        _leagues = items
+            .whereType<Map>()
+            .map((raw) => Map<String, dynamic>.from(raw))
+            .map(
+              (item) => _FilterOption(
+                id: (item['id'] as num?)?.toInt() ?? 0,
+                name: item['name']?.toString() ?? '',
+              ),
+            )
+            .where((item) => item.id != 0 && item.name.isNotEmpty)
+            .toList(growable: false);
+      });
+    } catch (_) {}
+  }
+
+  void _emit({
+    List<String>? clanTags,
+    List<int>? leagueIds,
+    List<int>? townHallLevels,
+  }) {
+    widget.onChanged(
+      PlayerSearchFilterValue(
+        clanTags: clanTags ?? widget.value.clanTags,
+        leagueIds: leagueIds ?? widget.value.leagueIds,
+        townHallLevels: townHallLevels ?? widget.value.townHallLevels,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final value = widget.value;
+    return CKSectionPanel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            controller: _clansController,
+            textCapitalization: TextCapitalization.characters,
+            decoration: InputDecoration(
+              labelText: loc.clanTitle,
+              hintText: '#ABC123, #DEF456',
+            ),
+            onChanged: (raw) => _emit(
+              clanTags: raw
+                  .split(',')
+                  .map((tag) => tag.trim().toUpperCase())
+                  .where((tag) => tag.isNotEmpty)
+                  .toList(growable: false),
+            ),
+          ),
+          const SizedBox(height: CKSpacing.sm),
+          DropdownButtonFormField<int?>(
+            key: ValueKey('league-${value.leagueIds.join(',')}'),
+            initialValue: value.leagueIds.isEmpty
+                ? null
+                : value.leagueIds.first,
+            isExpanded: true,
+            decoration: InputDecoration(labelText: loc.gameLeague),
+            items: [
+              DropdownMenuItem(value: null, child: Text(loc.generalNotSet)),
+              for (final league in _leagues)
+                DropdownMenuItem(
+                  value: league.id,
+                  child: Text(league.name, overflow: TextOverflow.ellipsis),
+                ),
+            ],
+            onChanged: (next) =>
+                _emit(leagueIds: next == null ? const [] : [next]),
+          ),
+          const SizedBox(height: CKSpacing.md),
+          Text(
+            loc.gameTownHall,
+            style: CKTypography.of(context, CKTextRole.compactLabel),
+          ),
+          const SizedBox(height: CKSpacing.xs),
+          Wrap(
+            spacing: CKSpacing.xs,
+            runSpacing: CKSpacing.xs,
+            children: [
+              for (var level = 18; level >= 10; level--)
+                FilterChip(
+                  label: Text('${loc.gameTownHall}$level'),
+                  selected: value.townHallLevels.contains(level),
+                  onSelected: (selected) {
+                    final levels = [...value.townHallLevels];
+                    selected ? levels.add(level) : levels.remove(level);
+                    levels.sort((a, b) => b.compareTo(a));
+                    _emit(townHallLevels: levels);
+                  },
+                ),
+            ],
+          ),
+          if (!value.isEmpty)
+            _ResetButton(
+              onPressed: () {
+                _clansController.clear();
+                widget.onChanged(const PlayerSearchFilterValue());
+              },
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NumberFilter extends StatelessWidget {
+  const _NumberFilter({
+    required this.label,
+    required this.value,
+    required this.max,
+    required this.onChanged,
+  });
+
+  final String label;
+  final int? value;
+  final int max;
+  final ValueChanged<int?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      key: ValueKey('$label-$value'),
+      initialValue: value?.toString() ?? '',
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(labelText: label),
+      onChanged: (raw) {
+        final parsed = int.tryParse(raw);
+        onChanged(parsed?.clamp(0, max));
+      },
+    );
+  }
+}
+
+class _ResetButton extends StatelessWidget {
+  const _ResetButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton.icon(
+        onPressed: onPressed,
+        icon: const Icon(Icons.restart_alt_rounded),
+        label: Text(AppLocalizations.of(context)!.generalReset),
+      ),
+    );
+  }
+}
+
+class _FilterOption {
+  const _FilterOption({required this.id, required this.name});
+
+  final int id;
+  final String name;
+}
+
+const _unchanged = Object();

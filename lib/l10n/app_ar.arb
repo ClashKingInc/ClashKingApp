@@ -875,6 +875,7 @@
   "warLog": "سجل الحرب",
   "warLogSearchPlaceholder": "بحث عن الحروب",
   "warLogClosed": "سجل حرب {clan} مغلق.",
+  "warLogPrivate": "سجل حرب {clan} خاص.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
