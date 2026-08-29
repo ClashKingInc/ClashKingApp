@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:clashkingapp/core/config/api_config.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,9 +16,13 @@ import 'package:clashkingapp/core/services/platform_http_client.dart';
 class TokenService {
   TokenService({
     FlutterSecureStorage? secureStorage,
+    FlutterSecureStorage? legacySecureStorage,
     http.Client? client,
     DeviceInfoPlugin? deviceInfo,
-  }) : _secureStorage = secureStorage ?? const FlutterSecureStorage(),
+  }) : _secureStorage = secureStorage ?? _defaultSharedStorage,
+       _legacySecureStorage =
+           legacySecureStorage ??
+           (secureStorage ?? const FlutterSecureStorage()),
        _providedClient = client,
        _deviceInfo = deviceInfo ?? DeviceInfoPlugin();
 
@@ -25,7 +30,22 @@ class TokenService {
 
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
+  static const String _sessionKey = 'shared_auth_session_v1';
+  static const String _deviceIdFallbackKey = 'device_id_fallback';
+  static const String _iosKeychainAccessGroup =
+      'MZYXD43RX5.group.com.clashking.apps';
+  static const FlutterSecureStorage _defaultSharedStorage =
+      FlutterSecureStorage(
+        iOptions: IOSOptions(
+          groupId: _iosKeychainAccessGroup,
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
+  static const MethodChannel _sharedAuthLockChannel = MethodChannel(
+    'clashking/shared_auth_lock',
+  );
   final FlutterSecureStorage _secureStorage;
+  final FlutterSecureStorage _legacySecureStorage;
   final http.Client? _providedClient;
   final DeviceInfoPlugin _deviceInfo;
   http.Client? _defaultClient;
@@ -75,7 +95,6 @@ class TokenService {
       DebugUtils.debugError(
         "Failed to refresh token, user must re-authenticate",
       );
-      await clearTokens();
       return null;
     }();
 
@@ -94,14 +113,50 @@ class TokenService {
     String deviceId,
   ) async {
     if (kIsWeb) return _refreshWebAccessToken();
+
+    if (Platform.isIOS) {
+      return _withIOSRefreshLock(
+        () => _refreshAccessTokenWhileLocked(refreshToken, deviceId),
+      );
+    }
+
+    return _refreshAccessTokenWhileLocked(refreshToken, deviceId);
+  }
+
+  Future<String?> _refreshAccessTokenWhileLocked(
+    String refreshToken,
+    String deviceId,
+  ) async {
     try {
+      // The widget may have rotated the refresh token while this process still
+      // had the previous session cached. Always re-read after taking the
+      // cross-process lock and avoid a second refresh when possible.
+      final latest = await _readStoredSession();
+      if (latest.accessToken != null &&
+          latest.refreshToken != null &&
+          !isTokenExpired(latest.accessToken!)) {
+        _cacheSession(latest);
+        return latest.accessToken;
+      }
+
+      // A logout may have cleared the stored session while this refresh was
+      // waiting for the iOS cross-process lock. Never resurrect that session
+      // with the token captured before the lock was acquired.
+      final currentRefreshToken = latest.refreshToken;
+      if (currentRefreshToken == null) return null;
+      if (currentRefreshToken != refreshToken) {
+        DebugUtils.debugInfo(
+          'Using the refresh token rotated by another process.',
+        );
+      }
+      final currentDeviceId = latest.deviceId ?? deviceId;
       final response = await _client
           .post(
             Uri.parse('${ApiConfig.apiUrlV2}/auth/refresh'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
-              "refresh_token": refreshToken,
-              "device_id": deviceId,
+              "refresh_token": currentRefreshToken,
+              "device_id": currentDeviceId,
             }),
           )
           .timeout(const Duration(seconds: 10));
@@ -121,7 +176,11 @@ class TokenService {
           return null;
         }
 
-        await saveTokens(newAccessToken, newRefreshToken);
+        await _saveTokens(
+          newAccessToken,
+          newRefreshToken,
+          deviceId: currentDeviceId,
+        );
 
         DebugUtils.debugSuccess("Token refreshed successfully");
         return newAccessToken;
@@ -138,6 +197,33 @@ class TokenService {
         operation: 'token.refresh',
       );
       return null;
+    }
+  }
+
+  Future<T?> _withIOSRefreshLock<T>(Future<T?> Function() operation) async {
+    try {
+      await _sharedAuthLockChannel.invokeMethod<void>('acquire');
+    } on PlatformException catch (error, stackTrace) {
+      ErrorReporter.captureException(
+        error,
+        stackTrace: stackTrace,
+        operation: 'token.refresh_lock_acquire',
+      );
+      return null;
+    }
+
+    try {
+      return await operation();
+    } finally {
+      try {
+        await _sharedAuthLockChannel.invokeMethod<void>('release');
+      } on PlatformException catch (error, stackTrace) {
+        ErrorReporter.captureException(
+          error,
+          stackTrace: stackTrace,
+          operation: 'token.refresh_lock_release',
+        );
+      }
     }
   }
 
@@ -190,23 +276,61 @@ class TokenService {
   }
 
   Future<void> saveTokens(String accessToken, String refreshToken) async {
-    final prefs = await SharedPreferences.getInstance();
     if (kIsWeb) {
       return saveWebAccessToken(accessToken);
     }
 
+    final deviceId = Platform.isIOS ? await getDeviceId() : null;
+    if (Platform.isIOS) {
+      final saved = await _withIOSRefreshLock<bool>(() async {
+        await _saveTokens(accessToken, refreshToken, deviceId: deviceId);
+        return true;
+      });
+      if (saved != true) {
+        throw StateError('Could not acquire the shared authentication lock.');
+      }
+      return;
+    }
+    await _saveTokens(accessToken, refreshToken, deviceId: deviceId);
+  }
+
+  Future<void> _saveTokens(
+    String accessToken,
+    String refreshToken, {
+    String? deviceId,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final session = _StoredSession(
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      deviceId: deviceId,
+    );
+
+    await _secureStorage.write(key: _sessionKey, value: session.encode());
     await Future.wait([
-      _secureStorage.write(key: _accessTokenKey, value: accessToken),
-      _secureStorage.write(key: _refreshTokenKey, value: refreshToken),
+      _legacySecureStorage.delete(key: _accessTokenKey),
+      _legacySecureStorage.delete(key: _refreshTokenKey),
       prefs.remove(_accessTokenKey),
       prefs.remove(_refreshTokenKey),
     ]);
-    _cachedAccessToken = accessToken;
-    _cachedRefreshToken = refreshToken;
-    _tokensLoaded = true;
+    _cacheSession(session);
   }
 
   Future<void> clearTokens() async {
+    if (!kIsWeb && Platform.isIOS) {
+      final cleared = await _withIOSRefreshLock<bool>(() async {
+        await _clearTokensUnlocked();
+        return true;
+      });
+      if (cleared != true) {
+        throw StateError('Could not acquire the shared authentication lock.');
+      }
+      return;
+    }
+    await _clearTokensUnlocked();
+  }
+
+  Future<void> _clearTokensUnlocked() async {
     _cachedAccessToken = null;
     _cachedRefreshToken = null;
     _tokensLoaded = true;
@@ -224,6 +348,9 @@ class TokenService {
     }
 
     await Future.wait([
+      _secureStorage.delete(key: _sessionKey),
+      _legacySecureStorage.delete(key: _accessTokenKey),
+      _legacySecureStorage.delete(key: _refreshTokenKey),
       _secureStorage.delete(key: _accessTokenKey),
       _secureStorage.delete(key: _refreshTokenKey),
       prefs.remove(_accessTokenKey),
@@ -288,12 +415,7 @@ class TokenService {
         // identifierForVendor is null when the device hasn't been unlocked
         // after reboot or under MDM restrictions — fall back to a stable UUID
         // persisted in the keychain so the same device always gets the same ID.
-        const fallbackKey = 'device_id_fallback';
-        final stored = await _secureStorage.read(key: fallbackKey);
-        if (stored != null) return stored;
-        final generated = const Uuid().v4();
-        await _secureStorage.write(key: fallbackKey, value: generated);
-        return generated;
+        return await loadIOSFallbackDeviceId();
       } else {
         return "unsupported-platform";
       }
@@ -305,6 +427,22 @@ class TokenService {
       );
       return "unknown-device";
     }
+  }
+
+  @visibleForTesting
+  Future<String> loadIOSFallbackDeviceId() async {
+    final stored = await _secureStorage.read(key: _deviceIdFallbackKey);
+    if (stored != null) return stored;
+
+    final legacy = await _legacySecureStorage.read(key: _deviceIdFallbackKey);
+    if (legacy != null) {
+      await _secureStorage.write(key: _deviceIdFallbackKey, value: legacy);
+      return legacy;
+    }
+
+    final generated = const Uuid().v4();
+    await _secureStorage.write(key: _deviceIdFallbackKey, value: generated);
+    return generated;
   }
 
   Future<String> getDeviceName() async {
@@ -362,39 +500,99 @@ class TokenService {
       return (_cachedAccessToken, null);
     }
 
+    final session = await _readStoredSession();
+    return (session.accessToken, session.refreshToken);
+  }
+
+  Future<_StoredSession> _readStoredSession() async {
+    final encodedSession = await _secureStorage.read(key: _sessionKey);
+    var session = _StoredSession.tryDecode(encodedSession);
+    if (session.accessToken != null && session.refreshToken != null) {
+      if (Platform.isIOS && session.deviceId == null) {
+        session = session.copyWith(deviceId: await getDeviceId());
+        await _secureStorage.write(key: _sessionKey, value: session.encode());
+      }
+      return session;
+    }
+
     final storedTokens = await Future.wait([
-      _secureStorage.read(key: _accessTokenKey),
-      _secureStorage.read(key: _refreshTokenKey),
+      _legacySecureStorage.read(key: _accessTokenKey),
+      _legacySecureStorage.read(key: _refreshTokenKey),
     ]);
     String? accessToken = storedTokens[0];
     String? refreshToken = storedTokens[1];
-
-    if (accessToken != null && refreshToken != null) {
-      return (accessToken, refreshToken);
-    }
 
     final prefs = await SharedPreferences.getInstance();
     final legacyAccessToken = prefs.getString(_accessTokenKey);
     final legacyRefreshToken = prefs.getString(_refreshTokenKey);
 
-    if (legacyAccessToken != null) {
-      await _secureStorage.write(
-        key: _accessTokenKey,
-        value: legacyAccessToken,
+    accessToken ??= legacyAccessToken;
+    refreshToken ??= legacyRefreshToken;
+
+    if (accessToken != null && refreshToken != null) {
+      final deviceId = Platform.isIOS ? await getDeviceId() : null;
+      session = _StoredSession(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        deviceId: deviceId,
       );
-      await prefs.remove(_accessTokenKey);
-      accessToken = legacyAccessToken;
+      await _secureStorage.write(key: _sessionKey, value: session.encode());
+      await Future.wait([
+        _legacySecureStorage.delete(key: _accessTokenKey),
+        _legacySecureStorage.delete(key: _refreshTokenKey),
+        prefs.remove(_accessTokenKey),
+        prefs.remove(_refreshTokenKey),
+      ]);
     }
 
-    if (legacyRefreshToken != null) {
-      await _secureStorage.write(
-        key: _refreshTokenKey,
-        value: legacyRefreshToken,
-      );
-      await prefs.remove(_refreshTokenKey);
-      refreshToken = legacyRefreshToken;
-    }
-
-    return (accessToken, refreshToken);
+    return session;
   }
+
+  void _cacheSession(_StoredSession session) {
+    _cachedAccessToken = session.accessToken;
+    _cachedRefreshToken = session.refreshToken;
+    _tokensLoaded = true;
+  }
+}
+
+class _StoredSession {
+  const _StoredSession({this.accessToken, this.refreshToken, this.deviceId});
+
+  final String? accessToken;
+  final String? refreshToken;
+  final String? deviceId;
+
+  static _StoredSession tryDecode(String? value) {
+    if (value == null || value.isEmpty) return const _StoredSession();
+    try {
+      final decoded = jsonDecode(value);
+      if (decoded is! Map) return const _StoredSession();
+      final accessToken = decoded['access_token'];
+      final refreshToken = decoded['refresh_token'];
+      final deviceId = decoded['device_id'];
+      return _StoredSession(
+        accessToken: accessToken is String && accessToken.isNotEmpty
+            ? accessToken
+            : null,
+        refreshToken: refreshToken is String && refreshToken.isNotEmpty
+            ? refreshToken
+            : null,
+        deviceId: deviceId is String && deviceId.isNotEmpty ? deviceId : null,
+      );
+    } catch (_) {
+      return const _StoredSession();
+    }
+  }
+
+  String encode() => jsonEncode({
+    'access_token': accessToken,
+    'refresh_token': refreshToken,
+    if (deviceId != null) 'device_id': deviceId,
+  });
+
+  _StoredSession copyWith({String? deviceId}) => _StoredSession(
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+    deviceId: deviceId ?? this.deviceId,
+  );
 }

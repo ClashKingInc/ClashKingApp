@@ -90,9 +90,10 @@ void main() {
       expect(tokens, everyElement(refreshedToken));
       expect(refreshRequests, 1);
       expect(tokenService.deviceIdReads, 1);
-      const storage = FlutterSecureStorage();
-      expect(await storage.read(key: 'access_token'), refreshedToken);
-      expect(await storage.read(key: 'refresh_token'), replacementRefreshToken);
+      final storedSession = await _storedSession();
+      expect(storedSession['access_token'], refreshedToken);
+      expect(storedSession['refresh_token'], replacementRefreshToken);
+      expect(storedSession['device_id'], 'test-device');
     });
 
     test('uses the replacement refresh token on the next rotation', () async {
@@ -135,37 +136,109 @@ void main() {
         'initial-refresh-token',
         'first-replacement-refresh-token',
       ]);
-      const storage = FlutterSecureStorage();
-      expect(await storage.read(key: 'access_token'), secondRefreshedToken);
+      final storedSession = await _storedSession();
+      expect(storedSession['access_token'], secondRefreshedToken);
       expect(
-        await storage.read(key: 'refresh_token'),
+        storedSession['refresh_token'],
         'second-replacement-refresh-token',
       );
     });
 
-    test('rejects a successful response missing a replacement token', () async {
-      final expiredToken = _buildToken(
-        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 60,
+    test('does not refresh after the stored session is cleared', () async {
+      var refreshRequests = 0;
+      final tokenService = _CountingTokenService(
+        client: MockClient((_) async {
+          refreshRequests++;
+          return http.Response('{}', 200);
+        }),
       );
-      FlutterSecureStorage.setMockInitialValues({
-        'access_token': expiredToken,
-        'refresh_token': 'deleted-refresh-token',
-      });
-      final client = MockClient(
-        (_) async => http.Response(
-          jsonEncode({'access_token': 'new-access-token'}),
-          200,
+
+      expect(
+        await tokenService.refreshAccessToken(
+          'token-captured-before-logout',
+          'test-device',
         ),
+        isNull,
       );
-      final tokenService = _CountingTokenService(client: client);
-
-      expect(await tokenService.getAccessToken(), isNull);
-
-      const storage = FlutterSecureStorage();
-      expect(await storage.read(key: 'access_token'), isNull);
-      expect(await storage.read(key: 'refresh_token'), isNull);
+      expect(refreshRequests, 0);
     });
+
+    test(
+      'rejects a successful response missing a replacement token without corrupting the session',
+      () async {
+        final expiredToken = _buildToken(
+          DateTime.now().millisecondsSinceEpoch ~/ 1000 - 60,
+        );
+        FlutterSecureStorage.setMockInitialValues({
+          'access_token': expiredToken,
+          'refresh_token': 'deleted-refresh-token',
+        });
+        final client = MockClient(
+          (_) async => http.Response(
+            jsonEncode({'access_token': 'new-access-token'}),
+            200,
+          ),
+        );
+        final tokenService = _CountingTokenService(client: client);
+
+        expect(await tokenService.getAccessToken(), isNull);
+
+        final storedSession = await _storedSession();
+        expect(storedSession['access_token'], expiredToken);
+        expect(storedSession['refresh_token'], 'deleted-refresh-token');
+      },
+    );
   });
+
+  test('migrates the legacy iOS fallback device ID', () async {
+    final sharedStorage = _MemorySecureStorage();
+    final legacyStorage = _MemorySecureStorage({
+      'device_id_fallback': 'legacy-device-id',
+    });
+    final tokenService = TokenService(
+      secureStorage: sharedStorage,
+      legacySecureStorage: legacyStorage,
+    );
+
+    expect(await tokenService.loadIOSFallbackDeviceId(), 'legacy-device-id');
+    expect(sharedStorage.values['device_id_fallback'], 'legacy-device-id');
+  });
+}
+
+class _MemorySecureStorage extends FlutterSecureStorage {
+  _MemorySecureStorage([Map<String, String>? initialValues])
+    : values = {...?initialValues};
+
+  final Map<String, String> values;
+
+  @override
+  Future<String?> read({
+    required String key,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async => values[key];
+
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    if (value == null) {
+      values.remove(key);
+    } else {
+      values[key] = value;
+    }
+  }
 }
 
 class _CountingTokenService extends TokenService {
@@ -188,4 +261,11 @@ String _buildToken(int expiration) {
 
 String _base64UrlEncode(Map<String, dynamic> value) {
   return base64Url.encode(utf8.encode(jsonEncode(value))).replaceAll('=', '');
+}
+
+Future<Map<String, dynamic>> _storedSession() async {
+  const storage = FlutterSecureStorage();
+  final encoded = await storage.read(key: 'shared_auth_session_v1');
+  expect(encoded, isNotNull);
+  return Map<String, dynamic>.from(jsonDecode(encoded!) as Map);
 }
