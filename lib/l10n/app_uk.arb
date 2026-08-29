@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Досягнення",
+  "achievementEarnedLabel": "Отримано",
+  "achievementSummary": "{earned}/{total} завершено",
+  "achievementEarnedCount": "Отримано ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Ратуша 18",
+  "achievementTownhall18Requirement": "Досягніть ратуші 18-го рівня.",
+  "achievementWarWarriorName": "Воїн війни",
+  "achievementWarWarriorRequirement": "Наберіть 5 000 зірок війни.",
+  "achievementMrLegendName": "Містер Легенда",
+  "achievementMrLegendDescription": "Ви бездоганно завершили день атак у Лізі легенд.",
+  "achievementDefenseDoesntMatterName": "Захист не має значення",
+  "achievementDefenseDoesntMatterDescription": "Ви пережили ідеальний день захисту в Лізі легенд.",
   "appTitle": "ClashKing",
   "appDescription": "Ваш кращий супутник Clash of Clans для відстеження статистики, управління кланами та аналізу продуктивності.",
   "generalLoading": "Завантаження...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Ліга Війн Кланів",
   "cwlOngoing": "Поточна ЛВК",
   "cwlHistoryTitle": "Історія CWL",
+  "clanLeaderboardHistoryTab": "Історія рейтингу",
+  "clanLegendHistoryTab": "Історія Ліги легенд",
+  "clanRecordsTab": "Рекорди",
+  "clanProfileHistoryTab": "Історія профілю",
+  "clanProfileLevelChanged": "Рівень клану змінено",
+  "clanProfileDescriptionChanged": "Опис змінено",
   "clanJoinLeaveTab": "Приєднатися/Вийти",
   "clanRankingsTab": "Рейтинги",
   "clanRankingsSeason": "Сезон",
