@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Başarımlar",
+  "achievementEarnedLabel": "Kazanıldı",
+  "achievementSummary": "{earned}/{total} tamamlandı",
+  "achievementEarnedCount": "Kazanıldı ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Belediye Binası 18",
+  "achievementTownhall18Requirement": "Belediye Binası 18'e ulaş.",
+  "achievementWarWarriorName": "Savaş Savaşçısı",
+  "achievementWarWarriorRequirement": "5.000 savaş yıldızına ulaş.",
+  "achievementMrLegendName": "Bay Efsane",
+  "achievementMrLegendDescription": "Efsane Ligi'nde kusursuz bir saldırı günü tamamladın.",
+  "achievementDefenseDoesntMatterName": "Savunma Önemli Değil",
+  "achievementDefenseDoesntMatterDescription": "Efsane Ligi'nde kusursuz bir savunma günü yaşadın.",
   "appTitle": "ClashKing",
   "appDescription": "İstatistikleri takip etmek, klanları yönetmek ve performansı analiz etmek için nihai Clash of Clans yardımcınız.",
   "generalLoading": "Yükleniyor...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Klan Savaş Ligi",
   "cwlOngoing": "Devam eden KSL",
   "cwlHistoryTitle": "CWL Geçmişi",
+  "clanLeaderboardHistoryTab": "Liderlik tablosu geçmişi",
+  "clanLegendHistoryTab": "Efsane geçmişi",
+  "clanRecordsTab": "Rekorlar",
+  "clanProfileHistoryTab": "Profil geçmişi",
+  "clanProfileLevelChanged": "Klan seviyesi değişti",
+  "clanProfileDescriptionChanged": "Açıklama değişti",
   "clanJoinLeaveTab": "Katıl/Ayrıl",
   "clanRankingsTab": "Sıralamalar",
   "clanRankingsSeason": "Mevsim",
