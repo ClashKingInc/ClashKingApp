@@ -2,6 +2,7 @@ import 'package:clashkingapp/core/services/game_data_service.dart';
 
 class ImageAssets {
   static const String baseUrl = "https://assets.clashk.ing";
+  static const String clanBadgeBaseUrl = "https://badges.clashk.ing";
   static const String defaultImage = "$baseUrl/icons/Icon_Unknown_Troop.png";
   static const String thinkingBuilder = "$baseUrl/stickers/thinking_bk.webp";
   static const String goldPass = "$baseUrl/icons/Icon_HV_Gold_Pass.png";
@@ -211,6 +212,15 @@ class ImageAssets {
   static const String planet = "$baseUrl/icons/Icon_HV_Planet.png";
 
   // 🛡️ Clan
+  static String clanBadgeForTag(String tag) {
+    final trimmed = tag.trim();
+    final normalized = (trimmed.startsWith('#') ? trimmed.substring(1) : trimmed)
+        .toUpperCase();
+    return normalized.isEmpty
+        ? ''
+        : '$clanBadgeBaseUrl/${Uri.encodeComponent(normalized)}';
+  }
+
   static String clanBadge(String badgeUrl) =>
       badgeUrl.isNotEmpty ? badgeUrl : "$baseUrl/icons/default_clan_badge.png";
   static String getClanBadgeImage(String url) =>

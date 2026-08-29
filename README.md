@@ -84,8 +84,8 @@ Pass `--dart-define=CK_API_ENV=development` or
 `https://dev-api.clashk.ing` for legacy, v2, and Clash proxy requests. Without
 that flag, laptop-to-device builds use production. Local mode uses
 `http://localhost:8000`, while
-production continues to use `https://v2.api.clashk.ing/v2` for v2 requests and
-`https://proxy.clashk.ing/v1` for Clash API requests.
+production uses `https://v2.api.clashk.ing/v2` for app requests and
+`https://v2.api.clashk.ing/proxy/v1` for proxied Clash API requests.
 CI alpha builds use `CK_API_ENV=development`, while beta builds use
 `CK_API_ENV=staging`; both currently point to `https://dev-api.clashk.ing`.
 

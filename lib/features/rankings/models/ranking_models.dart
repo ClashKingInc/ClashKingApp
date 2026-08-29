@@ -1,5 +1,4 @@
 import 'package:clashkingapp/core/constants/image_assets.dart';
-import 'package:clashkingapp/core/config/api_config.dart';
 
 enum RankingAudience { players, clans }
 
@@ -272,7 +271,7 @@ class RankingEntry {
     final clanBadgeUrl = board.isClan || clanTag.isEmpty
         ? ''
         : board.source == RankingSource.official
-        ? '${ApiConfig.apiUrlV2}/clan/${Uri.encodeComponent(clanTag)}/badge'
+        ? ImageAssets.clanBadgeForTag(clanTag)
         : includedClanBadge;
 
     final leagueIcon =

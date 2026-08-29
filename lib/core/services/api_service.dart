@@ -25,7 +25,6 @@ class ApiService {
     tokenService: TokenService.shared,
   );
 
-  static String get apiUrlV1 => ApiConfig.apiUrlV1;
   static String get apiUrlV2 => ApiConfig.apiUrlV2;
   static const String assetUrl = "https://assets.clashk.ing";
   static String get proxyUrl => ApiConfig.proxyUrl;

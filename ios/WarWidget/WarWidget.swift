@@ -440,7 +440,7 @@ private struct WarWidgetFreshFetcher {
       return nil
     }
 
-    let baseUrl = defaults.string(forKey: "warWidgetProxyUrl") ?? "https://proxy.clashk.ing/v1"
+    let baseUrl = defaults.string(forKey: "warWidgetProxyUrl") ?? "https://v2.api.clashk.ing/proxy/v1"
     let allowed = CharacterSet.alphanumerics
     guard
       let encodedTag = clanTag.addingPercentEncoding(withAllowedCharacters: allowed),

@@ -24,6 +24,10 @@ void main() {
 
     expect(page.available, 72);
     expect(page.items.single.clan?.tag, '#CLAN');
+    expect(
+      page.items.single.clan?.badge,
+      'https://badges.clashk.ing/CLAN',
+    );
     expect(page.items.single.th, 17);
   });
 
