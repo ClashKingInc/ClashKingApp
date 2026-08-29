@@ -369,7 +369,7 @@ private struct WidgetAuthSessionProvider {
   }
 
   private func refresh(_ session: SharedAuthSession, defaults: UserDefaults) async throws -> String {
-    let baseUrl = defaults.string(forKey: "warWidgetApiV2Url") ?? "https://v2-api.clashk.ing/v2"
+    let baseUrl = defaults.string(forKey: "warWidgetApiV2Url") ?? "https://v2.api.clashk.ing/v2"
     guard let url = URL(string: "\(baseUrl)/auth/refresh") else {
       throw SharedAuthError.invalidRefreshResponse
     }

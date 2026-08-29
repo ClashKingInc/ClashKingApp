@@ -19,4 +19,13 @@ void main() {
 
     expect(source, isNot(contains('forKey: "warWidgetAuthToken"')));
   });
+
+  test('iOS widget fallbacks use the canonical API host', () {
+    final source = File('ios/WarWidget/WarWidget.swift').readAsStringSync();
+
+    expect(source, contains('https://v2.api.clashk.ing/v2'));
+    expect(source, contains('https://v2.api.clashk.ing/proxy/v1'));
+    expect(source, isNot(contains('https://v2-api.clashk.ing')));
+    expect(source, isNot(contains('https://proxy.clashk.ing')));
+  });
 }
