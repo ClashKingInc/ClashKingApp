@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Teljesítmények",
+  "achievementEarnedLabel": "Megszerzések",
+  "achievementSummary": "{earned}/{total} kész",
+  "achievementEarnedCount": "Megszerzések ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Városháza 18",
+  "achievementTownhall18Requirement": "Érd el a 18-as városházát.",
+  "achievementWarWarriorName": "Háborús harcos",
+  "achievementWarWarriorRequirement": "Érj el 5 000 háborús csillagot.",
+  "achievementMrLegendName": "Legenda úr",
+  "achievementMrLegendDescription": "Hibátlan támadási napot teljesítettél a Legendák Ligájában.",
+  "achievementDefenseDoesntMatterName": "A védelem nem számít",
+  "achievementDefenseDoesntMatterDescription": "Tökéletes védelmi napot éltél túl a Legendák Ligájában.",
   "appTitle": "ClashKing",
   "appDescription": "A végső Clash of Clans társád a statisztikák követéséhez, klánok kezeléséhez és teljesítmény elemzéséhez.",
   "generalLoading": "Betöltés...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Klánháborús Liga",
   "cwlOngoing": "Folyamatban lévő CWL",
   "cwlHistoryTitle": "CWL története",
+  "clanLeaderboardHistoryTab": "Ranglistaelőzmények",
+  "clanLegendHistoryTab": "Legendás előzmények",
+  "clanRecordsTab": "Rekordok",
+  "clanProfileHistoryTab": "Profilelőzmények",
+  "clanProfileLevelChanged": "Klánszint megváltozott",
+  "clanProfileDescriptionChanged": "Leírás megváltozott",
   "clanJoinLeaveTab": "Csatlakozás/Kilépés",
   "clanRankingsTab": "Rangsorok",
   "clanRankingsSeason": "Évad",
