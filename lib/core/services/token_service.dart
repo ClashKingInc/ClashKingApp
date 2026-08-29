@@ -139,7 +139,16 @@ class TokenService {
         return latest.accessToken;
       }
 
-      final currentRefreshToken = latest.refreshToken ?? refreshToken;
+      // A logout may have cleared the stored session while this refresh was
+      // waiting for the iOS cross-process lock. Never resurrect that session
+      // with the token captured before the lock was acquired.
+      final currentRefreshToken = latest.refreshToken;
+      if (currentRefreshToken == null) return null;
+      if (currentRefreshToken != refreshToken) {
+        DebugUtils.debugInfo(
+          'Using the refresh token rotated by another process.',
+        );
+      }
       final currentDeviceId = latest.deviceId ?? deviceId;
       final response = await _client
           .post(

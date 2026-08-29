@@ -144,6 +144,25 @@ void main() {
       );
     });
 
+    test('does not refresh after the stored session is cleared', () async {
+      var refreshRequests = 0;
+      final tokenService = _CountingTokenService(
+        client: MockClient((_) async {
+          refreshRequests++;
+          return http.Response('{}', 200);
+        }),
+      );
+
+      expect(
+        await tokenService.refreshAccessToken(
+          'token-captured-before-logout',
+          'test-device',
+        ),
+        isNull,
+      );
+      expect(refreshRequests, 0);
+    });
+
     test(
       'rejects a successful response missing a replacement token without corrupting the session',
       () async {
