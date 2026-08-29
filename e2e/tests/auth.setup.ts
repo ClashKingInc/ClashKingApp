@@ -8,7 +8,7 @@ const TEMPORARY_ACCOUNT_FILE = path.join(__dirname, '../playwright/.auth/tempora
 // API host the app talks to. Defaults to the canonical production v2 host
 // against the deployed app; override with API_BASE_URL in .env for local runs
 // (e.g. http://127.0.0.1:8000).
-const API_BASE = (process.env.API_BASE_URL ?? 'https://v2.api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? 'https://api.clashk.ing').replace(/\/+$/, '');
 
 setup('authenticate with email', async () => {
   fs.rmSync(TEMPORARY_ACCOUNT_FILE, { force: true });

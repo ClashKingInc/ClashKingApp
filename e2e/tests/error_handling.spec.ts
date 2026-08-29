@@ -15,9 +15,9 @@ import { enableFlutterSemantics, hasFlutterSemantics, waitForFlutter } from './h
 // them into aria-label attributes in this build, so all detection here is done
 // by visible text (page.getByText) rather than by [aria-label].
 
-// V2 host the app talks to. Defaults to prod (v2.api.clashk.ing); override with
+// V2 host the app talks to. Defaults to prod (api.clashk.ing); override with
 // API_BASE_URL in .env for local runs (e.g. http://127.0.0.1:8000).
-const API_BASE = (process.env.API_BASE_URL ?? 'https://v2.api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? 'https://api.clashk.ing').replace(/\/+$/, '');
 const API_V2_PATTERN = `${API_BASE}/**`;
 const API_REFRESH = `${API_BASE}/v2/auth/web/refresh`;
 

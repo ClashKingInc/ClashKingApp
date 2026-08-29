@@ -11,12 +11,12 @@
 All routes are registered in `internal/routes/register.go`.  
 The router uses [Fiber v2](https://github.com/gofiber/fiber).  
 The file defines two groups:
-- **v2 routes** — the Go API at `https://v2.api.clashk.ing` (prefix `/v2/…`)
+- **v2 routes** — the Go API at `https://api.clashk.ing` (prefix `/v2/…`)
 - **compatibility/legacy routes** — no version prefix, served at the same host
 
 ### Flutter API calls
 All API calls were traced through:
-- `lib/core/services/api_service.dart` — production uses `https://v2.api.clashk.ing/v2` for app routes and `https://v2.api.clashk.ing/proxy/v1` for Clash proxy routes
+- `lib/core/services/api_service.dart` — production uses `https://api.clashk.ing/v2` for app routes and `https://api.clashk.ing/proxy/v1` for Clash proxy routes
 - `lib/features/auth/data/auth_service.dart`
 - `lib/features/auth/data/user_service.dart`
 - `lib/features/coc_accounts/data/coc_account_service.dart`
@@ -174,7 +174,7 @@ The remaining active call sites have been migrated to v2 paths and no longer dep
 
 ## 6. Flutter Calls to the API-hosted CoC Proxy
 
-These calls use `https://v2.api.clashk.ing/proxy/v1`, which exposes the Clash of Clans proxy through the canonical API host.
+These calls use `https://api.clashk.ing/proxy/v1`, which exposes the Clash of Clans proxy through the canonical API host.
 
 | Method | Path (after `/v1`) | Flutter file |
 |--------|---------------------|--------------|
@@ -223,11 +223,11 @@ Routes under these path prefixes are clearly web/bot only and are not expected t
 
 ## 8. Version Prefix Note
 
-The Flutter `ApiService` uses `https://v2.api.clashk.ing/v2` as its production base (the `/v2` prefix is baked into the base URL string). All endpoint strings passed to `_apiService.get()/post()` etc. are therefore relative to `/v2`, e.g., `/auth/me` becomes `/v2/auth/me`.
+The Flutter `ApiService` uses `https://api.clashk.ing/v2` as its production base (the `/v2` prefix is baked into the base URL string). All endpoint strings passed to `_apiService.get()/post()` etc. are therefore relative to `/v2`, e.g., `/auth/me` becomes `/v2/auth/me`.
 
 The Go routes registered in `register.go` all include `/v2` in the path string, so the prefix alignment is **correct** for v2 routes.
 
-Production no longer routes app requests through the legacy host. Clash API passthrough requests use `https://v2.api.clashk.ing/proxy/v1`.
+Production no longer routes app requests through the legacy host. Clash API passthrough requests use `https://api.clashk.ing/proxy/v1`.
 
 ---
 
@@ -239,7 +239,7 @@ Production no longer routes app requests through the legacy host. Clash API pass
 | Medium | `POST /v2/clans/join-leave` does not exist in Go | Add bulk clan join-leave POST to Go, OR change Flutter fallback to use `GET /v2/clan/:clan_tag/join-leave` |
 | Low | `GET /v2/discord/me` does not exist in Go | Add route to Go if needed, OR confirm dead code and delete from Flutter |
 | Low | `GET /v2/user/clash-accounts` is a stale path | Update to `/users/coc-accounts` or delete the method in `UserService` |
-| Done | Production app and proxy traffic use the canonical `v2.api.clashk.ing` host | Keep new call sites on `ApiService`/`ApiConfig` |
+| Done | Production app and proxy traffic use the canonical `api.clashk.ing` host | Keep new call sites on `ApiService`/`ApiConfig` |
 | Info | Join-leave data for the primary flow comes through `/initialization` bulk endpoint correctly | No action needed for primary flow |
 
 ---
