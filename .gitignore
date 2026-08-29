@@ -148,3 +148,6 @@ AGENTS.md
 # T3 Code
 .t3/
 t3.json
+
+# Local project icon
+assets/icons/project_icon.png
