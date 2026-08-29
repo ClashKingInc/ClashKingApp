@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Tutto in pari per ora",
+  "timeDurationShort": "{unit, select, daysHours {{primary}g {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Termina tra {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

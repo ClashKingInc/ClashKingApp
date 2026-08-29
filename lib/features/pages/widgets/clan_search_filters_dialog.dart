@@ -63,10 +63,12 @@ class ClanSearchFiltersPanel extends StatefulWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.apiService,
   });
 
   final ClanSearchFilterValue value;
   final ValueChanged<ClanSearchFilterValue> onChanged;
+  final ApiService? apiService;
 
   @override
   State<ClanSearchFiltersPanel> createState() => _ClanSearchFiltersPanelState();
@@ -83,7 +85,9 @@ class _ClanSearchFiltersPanelState extends State<ClanSearchFiltersPanel> {
 
   Future<void> _loadLocations() async {
     try {
-      final response = await ApiService.shared.proxyGet('/locations');
+      final response = await (widget.apiService ?? ApiService.shared).proxyGet(
+        '/locations',
+      );
       if (response.statusCode != 200) return;
       final decoded = jsonDecode(ApiService.decodeResponseBody(response));
       final items = decoded is Map ? decoded['items'] : null;
@@ -176,8 +180,13 @@ class _ClanSearchFiltersPanelState extends State<ClanSearchFiltersPanel> {
           ),
           const SizedBox(height: CKSpacing.sm),
           DropdownButtonFormField<int?>(
-            key: ValueKey('location-${value.locationId}'),
-            initialValue: value.locationId,
+            key: ValueKey(
+              'location-${value.locationId}-${_locations.isNotEmpty}',
+            ),
+            initialValue:
+                _locations.any((location) => location.id == value.locationId)
+                ? value.locationId
+                : null,
             isExpanded: true,
             decoration: InputDecoration(labelText: loc.clanLocation),
             items: [
@@ -249,10 +258,12 @@ class PlayerSearchFiltersPanel extends StatefulWidget {
     super.key,
     required this.value,
     required this.onChanged,
+    this.apiService,
   });
 
   final PlayerSearchFilterValue value;
   final ValueChanged<PlayerSearchFilterValue> onChanged;
+  final ApiService? apiService;
 
   @override
   State<PlayerSearchFiltersPanel> createState() =>
@@ -280,7 +291,9 @@ class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
 
   Future<void> _loadLeagues() async {
     try {
-      final response = await ApiService.shared.proxyGet('/leaguetiers');
+      final response = await (widget.apiService ?? ApiService.shared).proxyGet(
+        '/leaguetiers',
+      );
       if (response.statusCode != 200) return;
       final decoded = jsonDecode(ApiService.decodeResponseBody(response));
       final items = decoded is Map ? decoded['items'] : null;
@@ -340,10 +353,14 @@ class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
           ),
           const SizedBox(height: CKSpacing.sm),
           DropdownButtonFormField<int?>(
-            key: ValueKey('league-${value.leagueIds.join(',')}'),
-            initialValue: value.leagueIds.isEmpty
-                ? null
-                : value.leagueIds.first,
+            key: ValueKey(
+              'league-${value.leagueIds.join(',')}-${_leagues.isNotEmpty}',
+            ),
+            initialValue:
+                value.leagueIds.isNotEmpty &&
+                    _leagues.any((league) => league.id == value.leagueIds.first)
+                ? value.leagueIds.first
+                : null,
             isExpanded: true,
             decoration: InputDecoration(labelText: loc.gameLeague),
             items: [
@@ -393,7 +410,7 @@ class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
   }
 }
 
-class _NumberFilter extends StatelessWidget {
+class _NumberFilter extends StatefulWidget {
   const _NumberFilter({
     required this.label,
     required this.value,
@@ -407,15 +424,46 @@ class _NumberFilter extends StatelessWidget {
   final ValueChanged<int?> onChanged;
 
   @override
+  State<_NumberFilter> createState() => _NumberFilterState();
+}
+
+class _NumberFilterState extends State<_NumberFilter> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value?.toString() ?? '');
+  }
+
+  @override
+  void didUpdateWidget(covariant _NumberFilter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final currentValue = int.tryParse(_controller.text);
+    if (currentValue == widget.value) return;
+    _controller.value = TextEditingValue(
+      text: widget.value?.toString() ?? '',
+      selection: TextSelection.collapsed(
+        offset: widget.value?.toString().length ?? 0,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      key: ValueKey('$label-$value'),
-      initialValue: value?.toString() ?? '',
+      controller: _controller,
       keyboardType: TextInputType.number,
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(labelText: widget.label),
       onChanged: (raw) {
         final parsed = int.tryParse(raw);
-        onChanged(parsed?.clamp(0, max));
+        widget.onChanged(parsed?.clamp(0, widget.max));
       },
     );
   }

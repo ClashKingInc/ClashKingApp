@@ -79,7 +79,10 @@ class PlayerToDoBodyCard extends StatelessWidget {
                       .map((metric) => _TodoMetricPill(metric: metric))
                       .toList(growable: false),
                 ),
-              _PlayerTimerCountdowns(playerTag: player.tag),
+              _PlayerTimerCountdowns(
+                key: ValueKey(player.tag.trim().toUpperCase()),
+                playerTag: player.tag,
+              ),
             ],
           ),
         ),
@@ -89,7 +92,7 @@ class PlayerToDoBodyCard extends StatelessWidget {
 }
 
 class _PlayerTimerCountdowns extends StatefulWidget {
-  const _PlayerTimerCountdowns({required this.playerTag});
+  const _PlayerTimerCountdowns({super.key, required this.playerTag});
 
   final String playerTag;
 
@@ -162,7 +165,10 @@ class _TimerChip extends StatelessWidget {
       PlayerTimerType.cwl => ImageAssets.cwlSwordsNoBorder,
       PlayerTimerType.capital => ImageAssets.capitalThickSwords,
     };
-    final remaining = _formatTimerRemaining(timer.expiresAt.difference(now));
+    final remaining = _formatTimerRemaining(
+      loc,
+      timer.expiresAt.difference(now),
+    );
     return HomeMetricPill(
       label: label,
       value: loc.todoEventEndsIn(remaining),
@@ -174,15 +180,23 @@ class _TimerChip extends StatelessWidget {
   }
 }
 
-String _formatTimerRemaining(Duration duration) {
+String _formatTimerRemaining(AppLocalizations loc, Duration duration) {
   final positive = duration.isNegative ? Duration.zero : duration;
   if (positive.inDays > 0) {
-    return '${positive.inDays}d ${positive.inHours.remainder(24)}h';
+    return loc.timeDurationShort(
+      'daysHours',
+      positive.inDays,
+      positive.inHours.remainder(24),
+    );
   }
   if (positive.inHours > 0) {
-    return '${positive.inHours}h ${positive.inMinutes.remainder(60)}m';
+    return loc.timeDurationShort(
+      'hoursMinutes',
+      positive.inHours,
+      positive.inMinutes.remainder(60),
+    );
   }
-  return '${positive.inMinutes}m';
+  return loc.timeDurationShort('minutes', positive.inMinutes, 0);
 }
 
 class _TownHallBadge extends StatelessWidget {

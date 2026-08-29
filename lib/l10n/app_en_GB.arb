@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "All caught up for now",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}m} other {{primary}m}}",
   "todoEventEndsIn": "Ends in {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

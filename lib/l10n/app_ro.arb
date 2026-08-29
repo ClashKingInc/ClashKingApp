@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Totul este la zi pentru moment",
+  "timeDurationShort": "{unit, select, daysHours {{primary}z {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Se termină în {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

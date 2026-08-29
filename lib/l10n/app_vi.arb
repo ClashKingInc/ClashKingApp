@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Hiện đã xong hết",
+  "timeDurationShort": "{unit, select, daysHours {{primary}ngày {secondary}giờ} hoursMinutes {{primary}giờ {secondary}ph} other {{primary}ph}}",
   "todoEventEndsIn": "Kết thúc sau {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

@@ -91,9 +91,11 @@ class WarCwlService extends ChangeNotifier {
     final basicResponse = await _apiService.getResponse(
       '/war/$encodedTag/basic',
     );
-    final basic = basicResponse.statusCode == 200
-        ? _decodeNullableMap(basicResponse)
-        : null;
+    final basic = switch (basicResponse.statusCode) {
+      200 => _decodeNullableMap(basicResponse),
+      404 => null,
+      _ => _throwUnexpectedResponse(basicResponse, '/war/$encodedTag/basic'),
+    };
 
     if (basic != null && basic.isNotEmpty) {
       final type = basic['type']?.toString().toLowerCase() ?? '';
@@ -156,7 +158,10 @@ class WarCwlService extends ChangeNotifier {
       '/clans/$encodedTag/currentwar',
     );
     if (response.statusCode == 403) return WarInfo(state: 'accessDenied');
-    if (response.statusCode != 200) return null;
+    if (response.statusCode == 404) return null;
+    if (response.statusCode != 200) {
+      _throwUnexpectedResponse(response, '/clans/$encodedTag/currentwar');
+    }
     final data = _decodeNullableMap(response);
     if (data == null) return null;
     if (data['reason'] == 'accessDenied') {
@@ -170,9 +175,14 @@ class WarCwlService extends ChangeNotifier {
     final groupResponse = await _apiService.proxyGet(
       '/clans/$encodedTag/currentwar/leaguegroup',
     );
-    final group = groupResponse.statusCode == 200
-        ? _decodeNullableMap(groupResponse)
-        : null;
+    final group = switch (groupResponse.statusCode) {
+      200 => _decodeNullableMap(groupResponse),
+      404 => null,
+      _ => _throwUnexpectedResponse(
+        groupResponse,
+        '/clans/$encodedTag/currentwar/leaguegroup',
+      ),
+    };
 
     if (preferredWarTag != null && preferredWarTag.isNotEmpty) {
       final war = await _fetchCwlWar(preferredWarTag);
@@ -223,7 +233,10 @@ class WarCwlService extends ChangeNotifier {
     final response = await _apiService.proxyGet(
       '/clanwarleagues/wars/$encodedTag',
     );
-    if (response.statusCode != 200) return null;
+    if (response.statusCode == 404) return null;
+    if (response.statusCode != 200) {
+      _throwUnexpectedResponse(response, '/clanwarleagues/wars/$encodedTag');
+    }
     final data = _decodeNullableMap(response);
     if (data == null) return null;
     data['war_tag'] = warTag;
@@ -380,6 +393,12 @@ Map<String, dynamic>? _decodeNullableMap(http.Response response) {
 
 Map<String, dynamic> _map(Object? value) =>
     value is Map ? Map<String, dynamic>.from(value) : <String, dynamic>{};
+
+Never _throwUnexpectedResponse(http.Response response, String endpoint) {
+  final message = 'Unexpected API status ${response.statusCode} for $endpoint.';
+  if (response.statusCode >= 500) throw ServerException(message);
+  throw ApiException(message);
+}
 
 WarCwl? _parseWarSummary(dynamic item, [Set<String>? requestedTags]) {
   if (item is! Map) return null;

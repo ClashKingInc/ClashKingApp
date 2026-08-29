@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Пока всё выполнено",
+  "timeDurationShort": "{unit, select, daysHours {{primary}д {secondary}ч} hoursMinutes {{primary}ч {secondary}мин} other {{primary}мин}}",
   "todoEventEndsIn": "Заканчивается через {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

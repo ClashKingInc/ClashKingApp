@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:clashkingapp/core/services/api_service.dart';
 import 'package:clashkingapp/features/war_cwl/data/war_cwl_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -188,6 +189,23 @@ void main() {
       await expectLater(
         service.loadAllWarData(['#CLAN'], notify: false, throwOnError: true),
         throwsException,
+      );
+    });
+
+    test('preserves cached data when a current-war request fails', () async {
+      final api = FakeApiService();
+      api.getStubs['/war/%23CLAN/basic'] = http.Response('null', 200);
+      api.getStubs['/clans/%23CLAN/currentwar'] = http.Response('{}', 503);
+      final service = WarCwlService(apiService: api);
+      service.processBulkWarData([_minimalWarCwl('#CLAN')], notify: false);
+      final cached = service.getWarCwlByTag('#CLAN');
+
+      await service.loadAllWarData(['#CLAN'], notify: false);
+
+      expect(service.getWarCwlByTag('#CLAN'), same(cached));
+      await expectLater(
+        service.loadAllWarData(['#CLAN'], notify: false, throwOnError: true),
+        throwsA(isA<ServerException>()),
       );
     });
   });

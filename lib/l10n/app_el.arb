@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Όλα τακτοποιημένα για τώρα",
+  "timeDurationShort": "{unit, select, daysHours {{primary}η {secondary}ώ} hoursMinutes {{primary}ώ {secondary}λ} other {{primary}λ}}",
   "todoEventEndsIn": "Λήγει σε {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

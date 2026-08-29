@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Egyelőre minden kész",
+  "timeDurationShort": "{unit, select, daysHours {{primary}n {secondary}ó} hoursMinutes {{primary}ó {secondary}p} other {{primary}p}}",
   "todoEventEndsIn": "Véget ér {duration} múlva",
   "@todoEventEndsIn": {
     "placeholders": {

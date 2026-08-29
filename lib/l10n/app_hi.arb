@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "अभी के लिए सब पूरा",
+  "timeDurationShort": "{unit, select, daysHours {{primary}दि {secondary}घं} hoursMinutes {{primary}घं {secondary}मि} other {{primary}मि}}",
   "todoEventEndsIn": "{duration} में समाप्त",
   "@todoEventEndsIn": {
     "placeholders": {

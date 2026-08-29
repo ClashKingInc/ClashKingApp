@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Alt er ajour for nå",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}t} hoursMinutes {{primary}t {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Slutter om {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

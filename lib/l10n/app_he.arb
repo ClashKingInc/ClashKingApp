@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "הכול מעודכן כרגע",
+  "timeDurationShort": "{unit, select, daysHours {{primary}י׳ {secondary}ש׳} hoursMinutes {{primary}ש׳ {secondary}דק׳} other {{primary}דק׳}}",
   "todoEventEndsIn": "מסתיים בעוד {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

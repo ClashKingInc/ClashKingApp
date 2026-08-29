@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Alles is voorlopig bijgewerkt",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}u} hoursMinutes {{primary}u {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Eindigt over {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

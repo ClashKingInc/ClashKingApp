@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Tudo em dia por agora",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Termina em {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "今のところすべて完了",
+  "timeDurationShort": "{unit, select, daysHours {{primary}日{secondary}時間} hoursMinutes {{primary}時間{secondary}分} other {{primary}分}}",
   "todoEventEndsIn": "{duration}後に終了",
   "@todoEventEndsIn": {
     "placeholders": {

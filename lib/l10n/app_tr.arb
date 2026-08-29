@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Şimdilik her şey tamam",
+  "timeDurationShort": "{unit, select, daysHours {{primary}g {secondary}sa} hoursMinutes {{primary}sa {secondary}dk} other {{primary}dk}}",
   "todoEventEndsIn": "{duration} içinde biter",
   "@todoEventEndsIn": {
     "placeholders": {

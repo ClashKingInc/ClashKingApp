@@ -2957,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "目前都完成了",
+  "timeDurationShort": "{unit, select, daysHours {{primary}天{secondary}小时} hoursMinutes {{primary}小时{secondary}分钟} other {{primary}分钟}}",
   "todoEventEndsIn": "将在 {duration} 后结束",
   "@todoEventEndsIn": {
     "placeholders": {
