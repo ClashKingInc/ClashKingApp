@@ -13,6 +13,7 @@ import 'package:clashkingapp/core/config/app_feature_flags.dart';
 import 'package:clashkingapp/core/models/subscription_status.dart';
 import 'package:clashkingapp/core/services/subscription_service.dart';
 import 'package:clashkingapp/features/auth/data/auth_service.dart';
+import 'package:clashkingapp/features/achievements/presentation/achievements_page.dart';
 import 'package:clashkingapp/features/coc_accounts/presentation/coc_account_management_page.dart';
 import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart';
 import 'package:clashkingapp/features/pages/presentation/dashboard_page.dart';
@@ -36,6 +37,7 @@ import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:clashkingapp/features/settings/presentation/settings_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/common/widgets/app_bar/app_bar.dart';
 import 'package:provider/provider.dart';
@@ -365,6 +367,11 @@ class _DesktopWebHomeShell extends StatelessWidget {
                     title: pageTitles[selectedIndex],
                     searchHint: l10n.searchGlobalHint,
                     onSearchTap: onSearchTap,
+                    achievementsTooltip: l10n.achievementsTitle,
+                    onAchievementsTap: () => openDesktopPage(
+                      l10n.achievementsTitle,
+                      (_) => const AchievementsPage(),
+                    ),
                     manageAccountsTooltip: l10n.drawerManageAccounts,
                     onManageAccountsTap: () => openDesktopPage(
                       l10n.drawerManageAccounts,
@@ -440,6 +447,8 @@ class _DesktopHeader extends StatelessWidget {
     required this.title,
     required this.searchHint,
     required this.onSearchTap,
+    required this.achievementsTooltip,
+    required this.onAchievementsTap,
     required this.manageAccountsTooltip,
     required this.onManageAccountsTap,
   });
@@ -447,6 +456,8 @@ class _DesktopHeader extends StatelessWidget {
   final String title;
   final String searchHint;
   final VoidCallback onSearchTap;
+  final String achievementsTooltip;
+  final VoidCallback onAchievementsTap;
   final String manageAccountsTooltip;
   final VoidCallback onManageAccountsTap;
 
@@ -460,6 +471,13 @@ class _DesktopHeader extends StatelessWidget {
           child: _DesktopSearchButton(hint: searchHint, onTap: onSearchTap),
         ),
         const SizedBox(width: 12),
+        _DesktopQuickAction(
+          tooltip: achievementsTooltip,
+          icon: LucideIcons.goal,
+          color: CKColors.warGold,
+          onTap: onAchievementsTap,
+        ),
+        const SizedBox(width: 8),
         _DesktopQuickAction(
           tooltip: manageAccountsTooltip,
           icon: Icons.person_add_alt_1_outlined,
@@ -649,9 +667,8 @@ class _DesktopSidebar extends StatelessWidget {
                         AppFeatureFlags.leaderboards,
                       ))
                         _DesktopUtilityButton(
-                          icon: Icons.leaderboard_outlined,
-                          assetUrl: ImageAssets.podium,
-                          assetScale: 1.2,
+                          icon: LucideIcons.podium,
+                          iconColor: CKColors.warGold,
                           label: l10n.clanRankingsTab,
                           selected: selectedUtility == l10n.clanRankingsTab,
                           onTap: () => openUtility(
@@ -663,9 +680,8 @@ class _DesktopSidebar extends StatelessWidget {
                         AppFeatureFlags.globalStats,
                       ))
                         _DesktopUtilityButton(
-                          icon: Icons.bar_chart_rounded,
-                          assetUrl: ImageAssets.hitrate,
-                          assetScale: 0.86,
+                          icon: LucideIcons.chartPie,
+                          iconColor: CKColors.secondaryBlue,
                           label: l10n.generalStats,
                           selected: selectedUtility == l10n.generalStats,
                           onTap: () => openUtility(
@@ -677,11 +693,7 @@ class _DesktopSidebar extends StatelessWidget {
                         AppFeatureFlags.calculators,
                       ))
                         _DesktopUtilityButton(
-                          icon: Icons.calculate_outlined,
-                          assetUrl: ImageAssets.getSpellImage(
-                            'Lightning Spell',
-                          ),
-                          assetScale: 0.92,
+                          icon: LucideIcons.calculator,
                           label: l10n.drawerCalculators,
                           selected: selectedUtility == l10n.drawerCalculators,
                           onTap: () => openUtility(
@@ -690,9 +702,8 @@ class _DesktopSidebar extends StatelessWidget {
                           ),
                         ),
                       _DesktopUtilityButton(
-                        icon: Icons.fact_check_outlined,
-                        assetUrl: ImageAssets.iconTick,
-                        assetScale: 0.9,
+                        icon: LucideIcons.listChecks,
+                        iconColor: CKColors.donationGreen,
                         label: l10n.todoTitle,
                         selected: selectedUtility == l10n.todoTitle,
                         onTap: () =>
@@ -712,12 +723,8 @@ class _DesktopSidebar extends StatelessWidget {
                         AppFeatureFlags.upgradeTracker,
                       ))
                         _DesktopUtilityButton(
-                          icon: Icons.construction_rounded,
-                          assetUrl: ImageAssets.getHomeVillageBuildingImage(
-                            "Builder's Hut",
-                            1,
-                          ),
-                          assetScale: 1.45,
+                          icon: LucideIcons.circleFadingArrowUp,
+                          iconColor: CKColors.builderBlue,
                           label: l10n.drawerUpgradeTracker,
                           selected:
                               selectedUtility == l10n.drawerUpgradeTracker,
@@ -728,9 +735,7 @@ class _DesktopSidebar extends StatelessWidget {
                         ),
                       if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
                         _DesktopUtilityButton(
-                          icon: Icons.inventory_2_outlined,
-                          assetUrl: ImageAssets.getTroopImage('Barbarian'),
-                          assetScale: 0.92,
+                          icon: LucideIcons.images,
                           label: l10n.drawerGameAssets,
                           selected: selectedUtility == l10n.drawerGameAssets,
                           onTap: () => openUtility(
@@ -861,6 +866,7 @@ class _DesktopUtilityButton extends StatelessWidget {
     this.assetUrl,
     this.assetScale = 1,
     this.selected = false,
+    this.iconColor,
   });
 
   final IconData icon;
@@ -869,6 +875,7 @@ class _DesktopUtilityButton extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
   final bool selected;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -896,7 +903,7 @@ class _DesktopUtilityButton extends StatelessWidget {
                     ? colorScheme.onSurfaceVariant.withValues(alpha: 0.44)
                     : selected
                     ? colorScheme.primary
-                    : colorScheme.onSurfaceVariant,
+                    : iconColor ?? colorScheme.onSurfaceVariant,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -1026,11 +1033,13 @@ class _DesktopQuickAction extends StatelessWidget {
     required this.tooltip,
     required this.icon,
     required this.onTap,
+    this.color,
   });
 
   final String tooltip;
   final IconData icon;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -1051,7 +1060,7 @@ class _DesktopQuickAction extends StatelessWidget {
           onTap: onTap,
           child: SizedBox.square(
             dimension: 50,
-            child: Icon(icon, color: colorScheme.onSurface),
+            child: Icon(icon, color: color ?? colorScheme.onSurface),
           ),
         ),
       ),
@@ -1363,6 +1372,20 @@ class _AccountMenuDrawer extends StatelessWidget {
                         _DrawerAvatar(imageUrl: user?.avatarUrl ?? ''),
                         const Spacer(),
                         IconButton(
+                          tooltip: l10n.achievementsTitle,
+                          onPressed: () => _pushAndClose(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AchievementsPage(),
+                            ),
+                          ),
+                          icon: const Icon(
+                            LucideIcons.goal,
+                            size: 22,
+                            color: CKColors.warGold,
+                          ),
+                        ),
+                        IconButton(
                           tooltip: l10n.accountsAdd,
                           onPressed: () => _pushAndClose(
                             context,
@@ -1427,9 +1450,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.leaderboards))
                       _DrawerMenuItem(
-                        icon: Icons.leaderboard_outlined,
-                        assetUrl: ImageAssets.podium,
-                        assetScale: 1.2,
+                        icon: LucideIcons.podium,
+                        iconColor: CKColors.warGold,
                         label: l10n.clanRankingsTab,
                         onTap: () => _pushAndClose(
                           context,
@@ -1440,9 +1462,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.globalStats))
                       _DrawerMenuItem(
-                        icon: Icons.bar_chart_rounded,
-                        assetUrl: ImageAssets.hitrate,
-                        assetScale: 0.86,
+                        icon: LucideIcons.chartPie,
+                        iconColor: CKColors.secondaryBlue,
                         label: l10n.generalStats,
                         onTap: () => _pushAndClose(
                           context,
@@ -1453,9 +1474,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.calculators))
                       _DrawerMenuItem(
-                        icon: Icons.calculate_outlined,
-                        assetUrl: ImageAssets.getSpellImage('Lightning Spell'),
-                        assetScale: 0.92,
+                        icon: LucideIcons.calculator,
                         label: l10n.drawerCalculators,
                         onTap: () => _pushAndClose(
                           context,
@@ -1468,9 +1487,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                       AppFeatureFlags.subscriptionSupport,
                     ))
                       _DrawerMenuItem(
-                        icon: Icons.workspace_premium_outlined,
-                        assetUrl: ImageAssets.iconGoldPass,
-                        assetScale: 0.94,
+                        icon: LucideIcons.handCoins,
+                        iconColor: CKColors.warGold,
                         label: l10n.drawerSubscription,
                         onTap: () => _pushAndClose(
                           context,
@@ -1480,9 +1498,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                         ),
                       ),
                     _DrawerMenuItem(
-                      icon: Icons.fact_check_outlined,
-                      assetUrl: ImageAssets.iconTick,
-                      assetScale: 0.9,
+                      icon: LucideIcons.listChecks,
+                      iconColor: CKColors.donationGreen,
                       label: l10n.todoTitle,
                       onTap: () => _pushAndClose(
                         context,
@@ -1505,12 +1522,8 @@ class _AccountMenuDrawer extends StatelessWidget {
                       AppFeatureFlags.upgradeTracker,
                     ))
                       _DrawerMenuItem(
-                        icon: Icons.construction_rounded,
-                        assetUrl: ImageAssets.getHomeVillageBuildingImage(
-                          "Builder's Hut",
-                          1,
-                        ),
-                        assetScale: 1.45,
+                        icon: LucideIcons.circleFadingArrowUp,
+                        iconColor: CKColors.builderBlue,
                         label: l10n.drawerUpgradeTracker,
                         onTap: () => _pushAndClose(
                           context,
@@ -1534,9 +1547,7 @@ class _AccountMenuDrawer extends StatelessWidget {
                       ),
                     if (appState.isFeatureEnabled(AppFeatureFlags.gameAssets))
                       _DrawerMenuItem(
-                        icon: Icons.inventory_2_outlined,
-                        assetUrl: ImageAssets.getTroopImage('Barbarian'),
-                        assetScale: 0.92,
+                        icon: LucideIcons.images,
                         label: l10n.drawerGameAssets,
                         onTap: () => _pushAndClose(
                           context,
@@ -1660,6 +1671,7 @@ class _DrawerMenuItem extends StatelessWidget {
     this.assetUrl,
     this.assetScale = 1,
     this.dense = false,
+    this.iconColor,
   });
 
   final IconData icon;
@@ -1668,6 +1680,7 @@ class _DrawerMenuItem extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
   final bool dense;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -1688,7 +1701,7 @@ class _DrawerMenuItem extends StatelessWidget {
                 assetScale: assetScale,
                 color: onTap == null
                     ? colorScheme.onSurfaceVariant.withValues(alpha: 0.45)
-                    : colorScheme.onSurface,
+                    : iconColor ?? colorScheme.onSurface,
                 enabled: onTap != null,
               ),
               const SizedBox(width: 14),

@@ -542,15 +542,19 @@ class WarWidgetService {
       ApiService.proxyUrl,
       appGroupId: _appGroupForPlatform(),
     );
+    await HomeWidget.saveWidgetData<String>(
+      'warWidgetApiV2Url',
+      ApiService.apiUrlV2,
+      appGroupId: _appGroupForPlatform(),
+    );
 
-    final token = await TokenService.shared.getAccessToken();
-    if (token != null && token.isNotEmpty) {
-      await HomeWidget.saveWidgetData<String>(
-        'warWidgetAuthToken',
-        token,
-        appGroupId: _appGroupForPlatform(),
-      );
-    }
+    // Tokens live only in the shared Keychain. Remove the legacy App Group
+    // copy once the native widget has the non-secret endpoint configuration.
+    await HomeWidget.saveWidgetData<String>(
+      'warWidgetAuthToken',
+      null,
+      appGroupId: _appGroupForPlatform(),
+    );
   }
 
   static Future<void> _updateWidget() {

@@ -25,7 +25,6 @@ import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_tracker_repos
 import 'package:clashkingapp/features/upgrade_tracker/data/upgrade_widget_sync_service.dart';
 import 'package:clashkingapp/features/upgrade_tracker/models/upgrade_tracker_models.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
-import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
@@ -552,9 +551,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         allowedTags: linkedNames.keys.toSet(),
       );
       if (!mounted) return;
-      // Prevent a load started before the import from overwriting the newly
-      // persisted snapshot when its repository request completes later.
-      _selectionGeneration++;
+      ++_selectionGeneration;
       setState(() {
         _snapshot = snapshot;
         _selectedTag = snapshot.tag;
@@ -764,10 +761,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
         imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
       ),
       InfoProfileTabData(
-        label: l10n.gameName(
-          'TID_CLAN_TAG_BUILDER_BASE',
-          l10n.upgradeTrackerBuilderBase,
-        ),
+        label: l10n.upgradeTrackerBuilderBase,
         imageUrl: ImageAssets.builderHall(snapshot.builderHallLevel),
       ),
       InfoProfileTabData(label: 'Calendar', imageUrl: ImageAssets.iconClock),
@@ -801,10 +795,7 @@ class _UpgradeTrackerPageState extends State<UpgradeTrackerPage> {
                       : UpgradeVillage.home;
                   final title = village == UpgradeVillage.home
                       ? l10n.upgradeTrackerHomeVillage
-                      : l10n.gameName(
-                          'TID_CLAN_TAG_BUILDER_BASE',
-                          l10n.upgradeTrackerBuilderBase,
-                        );
+                      : l10n.upgradeTrackerBuilderBase;
                   _showUpgradeSectionSummary(
                     context,
                     title,
@@ -8547,7 +8538,7 @@ void _showVillageUpgradeSummary(
       preferredImageName: "Builder's Hut",
     ),
     timedSection(
-      l10n.gameName('TID_BUILDING_LABORATORY', l10n.upgradeTrackerLaboratory),
+      l10n.upgradeTrackerLaboratory,
       UpgradeQueue.laboratory,
       preferredImageName: village == UpgradeVillage.home
           ? 'Laboratory'
