@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Succès",
+  "achievementEarnedLabel": "Obtenu",
+  "achievementSummary": "{earned}/{total} terminé",
+  "achievementEarnedCount": "Obtenu ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Hôtel de ville 18",
+  "achievementTownhall18Requirement": "Atteins l'hôtel de ville 18.",
+  "achievementWarWarriorName": "Guerrier de guerre",
+  "achievementWarWarriorRequirement": "Atteins 5 000 étoiles de guerre.",
+  "achievementMrLegendName": "M. Légende",
+  "achievementMrLegendDescription": "Tu as réalisé une journée d'attaques parfaite en Ligue légende.",
+  "achievementDefenseDoesntMatterName": "La défense n'a pas d'importance",
+  "achievementDefenseDoesntMatterDescription": "Tu as subi une journée de défenses parfaite en Ligue légende.",
   "appTitle": "ClashKing",
   "appDescription": "Ton compagnon Clash of Clans préféré pour suivre tes statistiques, gérer ton clan et analyser tes performances.",
   "generalLoading": "Chargement...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "LDC",
   "cwlOngoing": "LDC en cours",
   "cwlHistoryTitle": "Historique LDC",
+  "clanLeaderboardHistoryTab": "Historique du classement",
+  "clanLegendHistoryTab": "Historique Légende",
+  "clanRecordsTab": "Records",
+  "clanProfileHistoryTab": "Historique du profil",
+  "clanProfileLevelChanged": "Niveau du clan modifié",
+  "clanProfileDescriptionChanged": "Description modifiée",
   "clanJoinLeaveTab": "Entrées/Sorties",
   "clanRankingsTab": "Classements",
   "clanRankingsSeason": "Saison",
