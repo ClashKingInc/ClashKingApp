@@ -1,5 +1,34 @@
 {
   "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Επιτεύγματα",
+  "achievementEarnedLabel": "Κερδήθηκε",
+  "achievementSummary": "{earned}/{total} ολοκληρώθηκε",
+  "achievementEarnedCount": "Κερδήθηκε ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Δημαρχείο 18",
+  "achievementTownhall18Requirement": "Φτάστε στο Δημαρχείο 18.",
+  "achievementWarWarriorName": "Πολεμιστής Πολέμου",
+  "achievementWarWarriorRequirement": "Φτάστε τα 5.000 αστέρια πολέμου.",
+  "achievementMrLegendName": "Κύριος Θρύλος",
+  "achievementMrLegendDescription": "Ολοκληρώσατε μια άψογη ημέρα επιθέσεων στο Πρωτάθλημα Θρύλων.",
+  "achievementDefenseDoesntMatterName": "Η Άμυνα Δεν Έχει Σημασία",
+  "achievementDefenseDoesntMatterDescription": "Αντέξατε μια τέλεια ημέρα άμυνας στο Πρωτάθλημα Θρύλων.",
   "appTitle": "ClashKing",
   "appDescription": "Ο υπέροχος σύντροφός σας στο Clash of Clans για παρακολούθηση στατιστικών, διαχείριση κλάν και ανάλυση απόδοσης.",
   "generalLoading": "Φορτώνει...",
@@ -1318,6 +1347,12 @@
   "cwlClanWarLeague": "Πρωτάθλημα Πολέμων Clan",
   "cwlOngoing": "CWL σε εξέλιξη",
   "cwlHistoryTitle": "Ιστορία CWL",
+  "clanLeaderboardHistoryTab": "Ιστορικό κατάταξης",
+  "clanLegendHistoryTab": "Ιστορικό Θρύλων",
+  "clanRecordsTab": "Ρεκόρ",
+  "clanProfileHistoryTab": "Ιστορικό προφίλ",
+  "clanProfileLevelChanged": "Το επίπεδο της φυλής άλλαξε",
+  "clanProfileDescriptionChanged": "Η περιγραφή άλλαξε",
   "clanJoinLeaveTab": "Εγγραφή/Αποχώρηση",
   "clanRankingsTab": "Κατάταξη",
   "clanRankingsSeason": "Εποχή",
