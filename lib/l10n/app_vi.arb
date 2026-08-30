@@ -875,6 +875,7 @@
   "warLog": "Nhật ký chiến tranh",
   "warLogSearchPlaceholder": "Tìm kiếm chiến tranh",
   "warLogClosed": "Nhật ký chiến tranh của {clan} đã đóng.",
+  "warLogPrivate": "Nhật ký chiến tranh của {clan} đang ở chế độ riêng tư.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Hiện đã xong hết",
+  "timeDurationShort": "{unit, select, daysHours {{primary}ngày {secondary}giờ} hoursMinutes {{primary}giờ {secondary}ph} other {{primary}ph}}",
   "todoEventEndsIn": "Kết thúc sau {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

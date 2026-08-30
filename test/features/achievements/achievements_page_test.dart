@@ -319,7 +319,7 @@ void main() {
     expect(source, isNot(contains('label: l10n.achievementsTitle')));
   });
 
-  test('utility navigation uses the requested Lucide icon set', () {
+  test('sidebar utility options are text-only except settings', () {
     final source = File('lib/core/app/my_home_page.dart').readAsStringSync();
     for (final icon in <String>[
       'podium',
@@ -331,13 +331,16 @@ void main() {
     ]) {
       expect(
         RegExp('LucideIcons\\.$icon').allMatches(source),
-        hasLength(2),
+        hasLength(1),
         reason: icon,
       );
     }
-    expect(RegExp(r'LucideIcons\.handCoins').allMatches(source), hasLength(1));
-    expect(source, contains('iconColor: CKColors.secondaryBlue'));
-    expect(source, contains('iconColor: CKColors.donationGreen'));
-    expect(source, contains('iconColor: CKColors.builderBlue'));
+    expect(RegExp(r'LucideIcons\.handCoins').allMatches(source), isEmpty);
+    expect(source, contains('this.showIcon = false'));
+    expect(source, contains('showIcon: true'));
+    expect(
+      RegExp(r'_DrawerMenuItem\(\s*icon:').allMatches(source),
+      hasLength(1),
+    );
   });
 }

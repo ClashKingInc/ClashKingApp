@@ -875,6 +875,7 @@
   "warLog": "Válečný deník",
   "warLogSearchPlaceholder": "Hledání válek",
   "warLogClosed": "Protokol války {clan}je uzavřen.",
+  "warLogPrivate": "{clan} má soukromý válečný deník.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Zatím je vše hotovo",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Končí za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

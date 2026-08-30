@@ -875,6 +875,7 @@
   "warLog": "Jurnal de război",
   "warLogSearchPlaceholder": "Războaie de căutare",
   "warLogClosed": "Jurnalul de război al clanului {clan} este închis.",
+  "warLogPrivate": "{clan} are jurnalul de război privat.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Totul este la zi pentru moment",
+  "timeDurationShort": "{unit, select, daysHours {{primary}z {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Se termină în {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

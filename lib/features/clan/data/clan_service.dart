@@ -207,7 +207,7 @@ class ClanService extends ChangeNotifier {
     try {
       final encodedTag = Uri.encodeComponent(clanTag);
       final seasonsResponse = await _apiService.getResponse(
-        '/cwl/$encodedTag/seasons',
+        '/cwl/$encodedTag/seasons?limit=100',
       );
       if (seasonsResponse.statusCode != 200) {
         throw HttpException(
@@ -236,22 +236,69 @@ class ClanService extends ChangeNotifier {
 
   Future<ClanLeaderboardHistory> getClanLeaderboardHistory(
     String clanTag,
+    ClanLeaderboardType type, {
+    DateTime? after,
+    DateTime? before,
+  }) async {
+    final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
+    final query = StringBuffer(
+      '/clan/$encodedTag/history/leaderboards'
+      '?type=${type.apiValue}&limit=250',
+    );
+    if (after != null) {
+      query.write(
+        '&time%5Bafter%5D=${Uri.encodeQueryComponent(after.toUtc().toIso8601String())}',
+      );
+    }
+    if (before != null) {
+      query.write(
+        '&time%5Bbefore%5D=${Uri.encodeQueryComponent(before.toUtc().toIso8601String())}',
+      );
+    }
+    final data = await _getClanHistoryJson(query.toString());
+    return ClanLeaderboardHistory.fromJson(data);
+  }
+
+  Future<ClanLeaderboardHistorySummary> getClanLeaderboardHistorySummary(
+    String clanTag,
     ClanLeaderboardType type,
   ) async {
     final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
     final data = await _getClanHistoryJson(
-      '/clan/$encodedTag/history/leaderboards'
-      '?type=${type.apiValue}&limit=250',
+      '/clan/$encodedTag/history/leaderboards/summary?type=${type.apiValue}',
     );
-    return ClanLeaderboardHistory.fromJson(data);
+    return ClanLeaderboardHistorySummary.fromJson(data);
   }
 
-  Future<ClanLegendHistory> getClanLegendHistory(String clanTag) async {
+  Future<ClanLegendHistory> getClanLegendHistory(
+    String clanTag, {
+    DateTime? after,
+    DateTime? before,
+  }) async {
+    final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
+    final query = StringBuffer('/clan/$encodedTag/history/legends?limit=250');
+    if (after != null) {
+      query.write(
+        '&time%5Bafter%5D=${Uri.encodeQueryComponent(after.toUtc().toIso8601String())}',
+      );
+    }
+    if (before != null) {
+      query.write(
+        '&time%5Bbefore%5D=${Uri.encodeQueryComponent(before.toUtc().toIso8601String())}',
+      );
+    }
+    final data = await _getClanHistoryJson(query.toString());
+    return ClanLegendHistory.fromJson(data);
+  }
+
+  Future<ClanLegendHistorySummary> getClanLegendHistorySummary(
+    String clanTag,
+  ) async {
     final encodedTag = Uri.encodeComponent(_canonicalTag(clanTag));
     final data = await _getClanHistoryJson(
-      '/clan/$encodedTag/history/legends?limit=250',
+      '/clan/$encodedTag/history/legends/summary?top=10',
     );
-    return ClanLegendHistory.fromJson(data);
+    return ClanLegendHistorySummary.fromJson(data);
   }
 
   Future<ClanRecords> getClanRecords(String clanTag) async {

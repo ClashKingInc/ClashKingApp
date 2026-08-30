@@ -875,6 +875,7 @@
   "warLog": "Журнал війн",
   "warLogSearchPlaceholder": "Пошукові війни",
   "warLogClosed": "Журнал війн клану {clan} закритий.",
+  "warLogPrivate": "Журнал війн клану {clan} приватний.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Поки що все виконано",
+  "timeDurationShort": "{unit, select, daysHours {{primary}д {secondary}год} hoursMinutes {{primary}год {secondary}хв} other {{primary}хв}}",
   "todoEventEndsIn": "Завершиться через {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

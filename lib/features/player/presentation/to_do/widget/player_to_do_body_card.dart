@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/theme/app_tokens.dart';
 import 'package:clashkingapp/common/widgets/home_metric_pill.dart';
@@ -6,6 +8,8 @@ import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/bookmark_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
+import 'package:clashkingapp/features/player/models/player_timer.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_page.dart';
 import 'package:clashkingapp/features/war_cwl/models/war_member_presence.dart';
 import 'package:flutter/material.dart';
@@ -75,12 +79,124 @@ class PlayerToDoBodyCard extends StatelessWidget {
                       .map((metric) => _TodoMetricPill(metric: metric))
                       .toList(growable: false),
                 ),
+              _PlayerTimerCountdowns(
+                key: ValueKey(player.tag.trim().toUpperCase()),
+                playerTag: player.tag,
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class _PlayerTimerCountdowns extends StatefulWidget {
+  const _PlayerTimerCountdowns({super.key, required this.playerTag});
+
+  final String playerTag;
+
+  @override
+  State<_PlayerTimerCountdowns> createState() => _PlayerTimerCountdownsState();
+}
+
+class _PlayerTimerCountdownsState extends State<_PlayerTimerCountdowns> {
+  late Future<PlayerTimers> _load;
+  Timer? _ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    _load = context.read<PlayerService>().loadPlayerTimers(widget.playerTag);
+    _ticker = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PlayerTimers>(
+      future: _load,
+      builder: (context, snapshot) {
+        final now = DateTime.now().toUtc();
+        final timers =
+            (snapshot.data?.items ?? const <PlayerTimer>[])
+                .where((timer) => timer.expiresAt.isAfter(now))
+                .toList(growable: false)
+              ..sort((a, b) => a.expiresAt.compareTo(b.expiresAt));
+        if (timers.isEmpty) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final timer in timers) _TimerChip(timer: timer, now: now),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _TimerChip extends StatelessWidget {
+  const _TimerChip({required this.timer, required this.now});
+
+  final PlayerTimer timer;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final label = switch (timer.type) {
+      PlayerTimerType.war => loc.todoWarAttacks,
+      PlayerTimerType.cwl => loc.todoCwlAttacks,
+      PlayerTimerType.capital => loc.gameClanCapital,
+    };
+    final image = switch (timer.type) {
+      PlayerTimerType.war => ImageAssets.war,
+      PlayerTimerType.cwl => ImageAssets.cwlSwordsNoBorder,
+      PlayerTimerType.capital => ImageAssets.capitalThickSwords,
+    };
+    final remaining = _formatTimerRemaining(
+      loc,
+      timer.expiresAt.difference(now),
+    );
+    return HomeMetricPill(
+      label: label,
+      value: loc.todoEventEndsIn(remaining),
+      progress: 0,
+      imageUrl: image,
+      fallbackIcon: Icons.timer_outlined,
+      semanticLabel: '$label: ${loc.todoEventEndsIn(remaining)}',
+    );
+  }
+}
+
+String _formatTimerRemaining(AppLocalizations loc, Duration duration) {
+  final positive = duration.isNegative ? Duration.zero : duration;
+  if (positive.inDays > 0) {
+    return loc.timeDurationShort(
+      'daysHours',
+      positive.inDays,
+      positive.inHours.remainder(24),
+    );
+  }
+  if (positive.inHours > 0) {
+    return loc.timeDurationShort(
+      'hoursMinutes',
+      positive.inHours,
+      positive.inMinutes.remainder(60),
+    );
+  }
+  return loc.timeDurationShort('minutes', positive.inMinutes, 0);
 }
 
 class _TownHallBadge extends StatelessWidget {

@@ -11,6 +11,7 @@ import 'package:clashkingapp/features/player/models/player_achievement.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_header.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_activity_tab.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_battlelog_tab.dart';
+import 'package:clashkingapp/features/player/presentation/player/player_cwl_history_tab.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_item_section.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_join_leave_tab.dart';
 import 'package:clashkingapp/features/player/presentation/war_stats/player_war_stats_profile_tab.dart';
@@ -40,7 +41,7 @@ class PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
-    selectedTab = widget.initialTab.clamp(0, 6);
+    selectedTab = widget.initialTab.clamp(0, 7);
   }
 
   @override
@@ -91,6 +92,11 @@ class PlayerScreenState extends State<PlayerScreen> {
             bottomPadding: bottomPadding,
             alwaysScrollable: widget.selectedPlayer.warStats != null,
           ),
+          PlayerCwlHistoryTab(
+            key: const ValueKey('player-cwl-history'),
+            playerTag: widget.selectedPlayer.tag,
+            bottomPadding: bottomPadding,
+          ),
           _buildSliverTab(
             key: 'player-achievements',
             slivers: [
@@ -125,12 +131,16 @@ class PlayerScreenState extends State<PlayerScreen> {
       imageUrl: ImageAssets.attacks,
     ),
     InfoProfileTabData(
-      label: AppLocalizations.of(context)?.playerActivityTab ?? 'Activity',
+      label: AppLocalizations.of(context)?.generalHistory ?? 'History',
       icon: Icons.history_rounded,
     ),
     InfoProfileTabData(
       label: AppLocalizations.of(context)?.warStats ?? 'War Stats',
       imageUrl: ImageAssets.war,
+    ),
+    InfoProfileTabData(
+      label: AppLocalizations.of(context)?.cwlHistoryTitle ?? 'CWL History',
+      imageUrl: ImageAssets.cwlSwordsNoBorder,
     ),
     InfoProfileTabData(
       label: AppLocalizations.of(context)?.gameAchievements ?? 'Achievements',

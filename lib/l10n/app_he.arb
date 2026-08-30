@@ -875,6 +875,7 @@
   "warLog": "יומן מלחמה",
   "warLogSearchPlaceholder": "חיפוש מלחמות",
   "warLogClosed": "יומן המלחמה של {clan} סגור.",
+  "warLogPrivate": "יומן המלחמה של {clan} פרטי.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "הכול מעודכן כרגע",
+  "timeDurationShort": "{unit, select, daysHours {{primary}י׳ {secondary}ש׳} hoursMinutes {{primary}ש׳ {secondary}דק׳} other {{primary}דק׳}}",
   "todoEventEndsIn": "מסתיים בעוד {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

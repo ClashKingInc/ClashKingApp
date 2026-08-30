@@ -875,6 +875,7 @@
   "warLog": "전쟁 로그",
   "warLogSearchPlaceholder": "검색 전쟁",
   "warLogClosed": "{clan}의 전쟁 기록이 비공개입니다.",
+  "warLogPrivate": "{clan}의 전쟁 기록이 비공개입니다.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "현재 모두 완료되었습니다",
+  "timeDurationShort": "{unit, select, daysHours {{primary}일 {secondary}시간} hoursMinutes {{primary}시간 {secondary}분} other {{primary}분}}",
   "todoEventEndsIn": "{duration} 후 종료",
   "@todoEventEndsIn": {
     "placeholders": {

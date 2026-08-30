@@ -62,7 +62,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
   @override
   void initState() {
     super.initState();
-    selectedTab = widget.initialTab.clamp(0, 9);
+    selectedTab = widget.initialTab.clamp(0, 8);
   }
 
   void _selectTab(int index, int tabCount) {
@@ -120,7 +120,6 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
       _ClanInfoTab.leaderboardHistory,
       _ClanInfoTab.legendHistory,
       _ClanInfoTab.records,
-      _ClanInfoTab.profileHistory,
     ];
   }
 
@@ -142,11 +141,10 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
     }
 
     if (tab == _ClanInfoTab.records) {
-      return ClanRecordsTab(clanTag: widget.clanInfo.tag);
-    }
-
-    if (tab == _ClanInfoTab.profileHistory) {
-      return ClanProfileHistoryTab(clanTag: widget.clanInfo.tag);
+      return ClanRecordsTab(
+        clanTag: widget.clanInfo.tag,
+        clanBadgeUrl: widget.clanInfo.badgeUrls.medium,
+      );
     }
 
     final content = switch (tab) {
@@ -180,8 +178,7 @@ class _ClanInfoScreenState extends State<ClanInfoScreen> {
       _ClanInfoTab.cwlHistory => _ClanCwlHistoryTab(clan: widget.clanInfo),
       _ClanInfoTab.leaderboardHistory ||
       _ClanInfoTab.legendHistory ||
-      _ClanInfoTab.records ||
-      _ClanInfoTab.profileHistory => const SizedBox.shrink(),
+      _ClanInfoTab.records => const SizedBox.shrink(),
       _ClanInfoTab.members => const SizedBox.shrink(),
     };
 
@@ -204,7 +201,6 @@ enum _ClanInfoTab {
   leaderboardHistory,
   legendHistory,
   records,
-  profileHistory,
 }
 
 extension on _ClanInfoTab {
@@ -242,12 +238,8 @@ extension on _ClanInfoTab {
       imageUrl: ImageAssets.legendBlazon,
     ),
     _ClanInfoTab.records => InfoProfileTabData(
-      label: l10n.clanRecordsTab,
+      label: '${l10n.clanRecordsTab} & ${l10n.generalHistory}',
       imageUrl: ImageAssets.bestTrophies,
-    ),
-    _ClanInfoTab.profileHistory => InfoProfileTabData(
-      label: l10n.clanProfileHistoryTab,
-      icon: Icons.manage_history_rounded,
     ),
   };
 }

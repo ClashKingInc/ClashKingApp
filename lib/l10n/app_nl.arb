@@ -875,6 +875,7 @@
   "warLog": "Oorlogslogboek",
   "warLogSearchPlaceholder": "Oorlogen zoeken",
   "warLogClosed": "Het oorlogslogboek van {clan} is gesloten.",
+  "warLogPrivate": "{clan} heeft een privé-oorlogslogboek.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Alles is voorlopig bijgewerkt",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}u} hoursMinutes {{primary}u {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Eindigt over {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

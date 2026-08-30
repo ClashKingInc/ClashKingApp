@@ -875,6 +875,7 @@
   "warLog": "Dnevnik ratova",
   "warLogSearchPlaceholder": "Сеарцх варс",
   "warLogClosed": "Ратни дневник клана {clan} је затворен.",
+  "warLogPrivate": "{clan} има приватан ратни дневник.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Za sada je sve završeno",
+  "timeDurationShort": "{unit, select, daysHours {{primary}д {secondary}ч} hoursMinutes {{primary}ч {secondary}мин} other {{primary}мин}}",
   "todoEventEndsIn": "Završava se za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

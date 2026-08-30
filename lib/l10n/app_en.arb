@@ -886,7 +886,15 @@
   "warLog": "War Log",
   "warLogSearchPlaceholder": "Search wars",
   "warLogClosed": "{clan}'s war log is closed.",
+  "warLogPrivate": "{clan} has a private war log.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2937,6 +2945,15 @@
     }
   },
   "todoAllCaughtUpForNow": "All caught up for now",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}m} other {{primary}m}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {"type": "String"},
+      "primary": {"type": "int"},
+      "secondary": {"type": "int"}
+    }
+  },
   "todoEventEndsIn": "Ends in {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

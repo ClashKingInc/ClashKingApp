@@ -6,6 +6,8 @@ import 'package:clashkingapp/features/coc_accounts/data/coc_account_service.dart
 import 'package:clashkingapp/features/player/models/player_war_stats.dart';
 import 'package:clashkingapp/features/player/models/player_join_leave.dart';
 import 'package:clashkingapp/features/player/models/player_activity.dart';
+import 'package:clashkingapp/features/player/models/player_cwl_history.dart';
+import 'package:clashkingapp/features/player/models/player_timer.dart';
 import 'package:clashkingapp/features/player/models/player_battlelog.dart';
 import 'package:clashkingapp/features/player/models/war_stats_filter.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,7 @@ class PlayerService extends ChangeNotifier {
   final Map<String, Future<Player>> _officialPlayerLoads = {};
   final Map<String, PlayerBattlelogData> _battlelogCache = {};
   final Map<String, PlayerActivityFeed> _activityCache = {};
+  final Map<String, PlayerCwlHistory> _cwlHistoryCache = {};
 
   bool get isLoading => _isLoading;
   List<Player> get profiles => _profiles;
@@ -65,13 +68,25 @@ class PlayerService extends ChangeNotifier {
   Future<List<Map<String, dynamic>>> searchPlayers(
     String query, {
     int limit = 20,
+    List<String> clanTags = const [],
+    List<int> leagueIds = const [],
+    List<int> townHallLevels = const [],
     Map<String, String>? extraHeaders,
   }) async {
     final normalizedQuery = query.trim();
     if (normalizedQuery.isEmpty) return [];
 
-    final endpoint =
-        '/player/search?query=${Uri.encodeQueryComponent(normalizedQuery)}&limit=$limit';
+    final parameters = <String, String>{
+      'query': normalizedQuery,
+      'limit': '$limit',
+      if (clanTags.isNotEmpty) 'clanTags': clanTags.join(','),
+      if (leagueIds.isNotEmpty) 'leagueIds': leagueIds.join(','),
+      if (townHallLevels.isNotEmpty) 'townhallLevels': townHallLevels.join(','),
+    };
+    final endpoint = Uri(
+      path: '/player/search',
+      queryParameters: parameters,
+    ).toString();
     final response = await _apiService.getResponse(
       endpoint,
       timeout: const Duration(seconds: 10),
@@ -312,17 +327,19 @@ class PlayerService extends ChangeNotifier {
 
   Future<PlayerActivityFeed> loadPlayerActivity(
     String rawPlayerTag, {
+    PlayerHistoryType type = PlayerHistoryType.troopLevel,
     bool forceRefresh = false,
   }) async {
     final playerTag = _canonicalTag(rawPlayerTag);
+    final cacheKey = '$playerTag|${type.apiValue}';
     if (!forceRefresh) {
-      final cached = _activityCache[playerTag];
+      final cached = _activityCache[cacheKey];
       if (cached != null) return cached;
     }
     final encodedTag = Uri.encodeComponent(playerTag);
     final response = await _apiService.getResponse(
-      '/player/$encodedTag/changes?limit=100',
-      requiresAuth: true,
+      '/player/$encodedTag/history/changes'
+      '?type=${type.apiValue}&limit=500',
     );
     if (response.statusCode != 200) {
       throw HttpException(
@@ -331,8 +348,47 @@ class PlayerService extends ChangeNotifier {
       );
     }
     final result = PlayerActivityFeed.fromJson(_decodeMap(response));
-    _activityCache[playerTag] = result;
+    _activityCache[cacheKey] = result;
     return result;
+  }
+
+  Future<PlayerCwlHistory> loadPlayerCwlHistory(
+    String rawPlayerTag, {
+    bool forceRefresh = false,
+  }) async {
+    final playerTag = _canonicalTag(rawPlayerTag);
+    if (!forceRefresh) {
+      final cached = _cwlHistoryCache[playerTag];
+      if (cached != null) return cached;
+    }
+    final encodedTag = Uri.encodeComponent(playerTag);
+    final response = await _apiService.getResponse(
+      '/player/$encodedTag/cwl/history?limit=100',
+    );
+    if (response.statusCode != 200) {
+      throw HttpException(
+        'Failed to fetch player CWL history (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+    final result = PlayerCwlHistory.fromJson(_decodeMap(response));
+    _cwlHistoryCache[playerTag] = result;
+    return result;
+  }
+
+  Future<PlayerTimers> loadPlayerTimers(String rawPlayerTag) async {
+    final playerTag = _canonicalTag(rawPlayerTag);
+    final encodedTag = Uri.encodeComponent(playerTag);
+    final response = await _apiService.getResponse(
+      '/player/$encodedTag/timers',
+    );
+    if (response.statusCode != 200) {
+      throw HttpException(
+        'Failed to fetch player timers (${response.statusCode})',
+        uri: response.request?.url,
+      );
+    }
+    return PlayerTimers.fromJson(_decodeMap(response));
   }
 
   static List<String> _uniqueCanonicalTags(Iterable<String> tags) => tags

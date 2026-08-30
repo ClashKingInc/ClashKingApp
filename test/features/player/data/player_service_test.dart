@@ -110,6 +110,23 @@ void main() {
       expect(results.single['name'], 'Hero');
       expect(fakeApi.getCallCounts[endpoint], 1);
     });
+
+    test('passes clan, league, and Town Hall filters', () async {
+      final fakeApi = FakeApiService();
+      const endpoint =
+          '/player/search?query=Hero&limit=20&clanTags=%23ONE%2C%23TWO&leagueIds=29000022&townhallLevels=18%2C17';
+      fakeApi.getStubs[endpoint] = http.Response('{"items":[]}', 200);
+      final service = PlayerService(apiService: fakeApi);
+
+      await service.searchPlayers(
+        'Hero',
+        clanTags: const ['#ONE', '#TWO'],
+        leagueIds: const [29000022],
+        townHallLevels: const [18, 17],
+      );
+
+      expect(fakeApi.getCallCounts[endpoint], 1);
+    });
   });
 
   // ---------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 import 'package:clashkingapp/core/services/bookmark_service.dart';
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player.dart';
 import 'package:clashkingapp/features/player/presentation/to_do/widget/player_to_do_body.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
@@ -24,8 +25,11 @@ void main() {
     );
 
     await tester.pumpWidget(
-      ChangeNotifierProvider(
-        create: (_) => BookmarkService(),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => BookmarkService()),
+          ChangeNotifierProvider(create: (_) => PlayerService()),
+        ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

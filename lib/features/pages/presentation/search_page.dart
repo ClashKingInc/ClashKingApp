@@ -44,16 +44,18 @@ class _SearchPageState extends State<SearchPage> {
   List<dynamic> _results = [];
   List<_RecentSearchItem> _recentItems = [];
   String _lastQuery = '';
-  String _clanFilters = '';
+  ClanSearchFilterValue _clanFilters = const ClanSearchFilterValue();
+  PlayerSearchFilterValue _playerFilters = const PlayerSearchFilterValue();
+  bool _filtersExpanded = false;
   bool _isSearching = false;
   bool _hasSearched = false;
   int _searchVersion = 0;
+  String? _recentUserId;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_queueSearch);
-    _loadRecents();
     if (widget.autofocus) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (widget.overlay) {
@@ -68,6 +70,16 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final userId = context.watch<AuthService>().currentUser?.userId.trim();
+    final normalizedUserId = userId == null || userId.isEmpty ? null : userId;
+    if (_recentUserId == normalizedUserId) return;
+    _recentUserId = normalizedUserId;
+    unawaited(_loadRecents(expectedUserId: normalizedUserId));
+  }
+
+  @override
   void dispose() {
     _debounce?.cancel();
     _controller.dispose();
@@ -75,9 +87,9 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  Future<void> _loadRecents() async {
+  Future<void> _loadRecents({String? expectedUserId}) async {
     final loc = AppLocalizations.of(context)!;
-    final userId = _currentSearchUserId();
+    final userId = expectedUserId ?? _currentSearchUserId();
     if (userId == null) {
       if (!mounted) return;
       setState(() => _recentItems = []);
@@ -98,7 +110,7 @@ class _SearchPageState extends State<SearchPage> {
       items.clear();
     }
 
-    if (!mounted) return;
+    if (!mounted || _recentUserId != userId) return;
     setState(() => _recentItems = items.take(_recentLimit).toList());
   }
 
@@ -159,7 +171,7 @@ class _SearchPageState extends State<SearchPage> {
       _results = [];
       _lastQuery = '';
       _hasSearched = false;
-      _clanFilters = '';
+      _filtersExpanded = false;
     });
     _queueSearch();
   }
@@ -206,6 +218,9 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<dynamic>> _searchPlayers(String query) async {
     return context.read<PlayerService>().searchPlayers(
       query,
+      clanTags: _playerFilters.clanTags,
+      leagueIds: _playerFilters.leagueIds,
+      townHallLevels: _playerFilters.townHallLevels,
       extraHeaders: _searchTrackingHeaders(),
     );
   }
@@ -213,7 +228,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<dynamic>> _searchClans(String query) async {
     final searchQuery = 'name=${Uri.encodeQueryComponent(query)}';
     final response = await _apiService.proxyGet(
-      '/clans?$searchQuery$_clanFilters&limit=20&memberList=false',
+      '/clans?$searchQuery${_clanFilters.querySuffix}&limit=20&memberList=false',
       timeout: const Duration(seconds: 10),
     );
     final body = utf8.decode(response.bodyBytes, allowMalformed: true);
@@ -226,18 +241,20 @@ class _SearchPageState extends State<SearchPage> {
     return [];
   }
 
-  Future<void> _showClanFilters() async {
-    final filters = await showDialog<String>(
-      context: context,
-      builder: (context) => ClanSearchFilters(),
-    );
-    if (!mounted) return;
-    if (filters == null) return;
+  void _setClanFilters(ClanSearchFilterValue filters) {
     setState(() {
       _clanFilters = filters;
       _lastQuery = '';
     });
-    await _runSearch();
+    _queueSearch();
+  }
+
+  void _setPlayerFilters(PlayerSearchFilterValue filters) {
+    setState(() {
+      _playerFilters = filters;
+      _lastQuery = '';
+    });
+    _queueSearch();
   }
 
   Future<void> _openPlayer(dynamic rawPlayer) async {
@@ -407,18 +424,23 @@ class _SearchPageState extends State<SearchPage> {
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (_mode == _SearchMode.clans)
-                      IconButton(
-                        tooltip: l10n?.generalFilters ?? 'Filters',
-                        onPressed: _showClanFilters,
-                        splashRadius: 18,
-                        icon: Icon(
-                          Icons.filter_list_rounded,
-                          color: _clanFilters.isEmpty
-                              ? colorScheme.onSurfaceVariant
-                              : colorScheme.onSurface,
-                        ),
+                    IconButton(
+                      tooltip: l10n?.generalFilters ?? 'Filters',
+                      onPressed: () =>
+                          setState(() => _filtersExpanded = !_filtersExpanded),
+                      splashRadius: 18,
+                      icon: Icon(
+                        _filtersExpanded
+                            ? Icons.filter_list_off_rounded
+                            : Icons.filter_list_rounded,
+                        color:
+                            (_mode == _SearchMode.clans
+                                ? _clanFilters.isEmpty
+                                : _playerFilters.isEmpty)
+                            ? colorScheme.onSurfaceVariant
+                            : colorScheme.primary,
                       ),
+                    ),
                     if (_isSearching)
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 14),
@@ -519,16 +541,15 @@ class _SearchPageState extends State<SearchPage> {
                 child: Row(
                   children: [
                     Expanded(child: searchField(overlay: true)),
-                    TextButton(
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.generalCancel,
                       onPressed: () => Navigator.of(context).pop(),
-                      style: TextButton.styleFrom(
-                        foregroundColor: colorScheme.onSurface,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        minimumSize: const Size(60, 40),
-                        textStyle: Theme.of(context).textTheme.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                      icon: const Icon(Icons.close_rounded),
+                      color: colorScheme.onSurface,
+                      constraints: const BoxConstraints.tightFor(
+                        width: 48,
+                        height: 48,
                       ),
-                      child: Text(AppLocalizations.of(context)!.generalCancel),
                     ),
                   ],
                 ),
@@ -541,6 +562,11 @@ class _SearchPageState extends State<SearchPage> {
                   compact: true,
                 ),
               ),
+              if (_filtersExpanded)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
+                  child: _searchFiltersPanel(),
+                ),
               Expanded(
                 child: ListView(
                   keyboardDismissBehavior:
@@ -567,11 +593,27 @@ class _SearchPageState extends State<SearchPage> {
         _ModeSelector(mode: _mode, onChanged: _setMode),
         const SizedBox(height: 12),
         searchField(overlay: false),
+        if (_filtersExpanded) ...[
+          const SizedBox(height: 10),
+          _searchFiltersPanel(),
+        ],
         ...resultChildren,
       ],
     );
 
     return Scaffold(body: content);
+  }
+
+  Widget _searchFiltersPanel() {
+    return _mode == _SearchMode.clans
+        ? ClanSearchFiltersPanel(
+            value: _clanFilters,
+            onChanged: _setClanFilters,
+          )
+        : PlayerSearchFiltersPanel(
+            value: _playerFilters,
+            onChanged: _setPlayerFilters,
+          );
   }
 }
 

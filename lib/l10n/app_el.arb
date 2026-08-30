@@ -875,6 +875,7 @@
   "warLog": "Αρχείο πολέμων",
   "warLogSearchPlaceholder": "Πόλεμοι αναζήτησης",
   "warLogClosed": "Το αρχείο πολέμων του {clan} είναι κλειστό.",
+  "warLogPrivate": "Το αρχείο πολέμου της {clan} είναι ιδιωτικό.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Όλα τακτοποιημένα για τώρα",
+  "timeDurationShort": "{unit, select, daysHours {{primary}η {secondary}ώ} hoursMinutes {{primary}ώ {secondary}λ} other {{primary}λ}}",
   "todoEventEndsIn": "Λήγει σε {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

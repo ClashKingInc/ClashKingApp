@@ -875,6 +875,7 @@
   "warLog": "युद्ध लॉग",
   "warLogSearchPlaceholder": "युद्ध खोजें",
   "warLogClosed": "{clan} का युद्ध लॉग बंद है।",
+  "warLogPrivate": "{clan} का वॉर लॉग निजी है।",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "अभी के लिए सब पूरा",
+  "timeDurationShort": "{unit, select, daysHours {{primary}दि {secondary}घं} hoursMinutes {{primary}घं {secondary}मि} other {{primary}मि}}",
   "todoEventEndsIn": "{duration} में समाप्त",
   "@todoEventEndsIn": {
     "placeholders": {

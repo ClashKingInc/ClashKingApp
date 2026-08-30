@@ -875,6 +875,7 @@
   "warLog": "Dziennik wojenny",
   "warLogSearchPlaceholder": "Szukaj wojen",
   "warLogClosed": "Dziennik wojenny klanu {clan} jest zamknięty.",
+  "warLogPrivate": "{clan} ma prywatny dziennik wojenny.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Na razie wszystko nadrobione",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}godz.} hoursMinutes {{primary}godz. {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Kończy się za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

@@ -875,6 +875,7 @@
   "warLog": "Journal",
   "warLogSearchPlaceholder": "Rechercher des guerres",
   "warLogClosed": "Le journal de guerre de {clan} est fermé.",
+  "warLogPrivate": "Le journal de guerre de {clan} est privé.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Tout est à jour pour le moment",
+  "timeDurationShort": "{unit, select, daysHours {{primary}j {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Se termine dans {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

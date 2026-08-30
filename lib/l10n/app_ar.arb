@@ -875,6 +875,7 @@
   "warLog": "سجل الحرب",
   "warLogSearchPlaceholder": "بحث عن الحروب",
   "warLogClosed": "سجل حرب {clan} مغلق.",
+  "warLogPrivate": "سجل حرب {clan} خاص.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "كل شيء منجز حاليًا",
+  "timeDurationShort": "{unit, select, daysHours {{primary}ي {secondary}س} hoursMinutes {{primary}س {secondary}د} other {{primary}د}}",
   "todoEventEndsIn": "ينتهي خلال {duration}",
   "@todoEventEndsIn": {
     "placeholders": {

@@ -875,6 +875,7 @@
   "warLog": "Krigslog",
   "warLogSearchPlaceholder": "Søg krige",
   "warLogClosed": "{clan}'s krigslog er lukket.",
+  "warLogPrivate": "{clan} har en privat krigslog.",
   "@warLogClosed": {
     "placeholders": {
       "clan": {
@@ -2956,6 +2957,7 @@
     }
   },
   "todoAllCaughtUpForNow": "Alt er klaret for nu",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}t} hoursMinutes {{primary}t {secondary}min} other {{primary}min}}",
   "todoEventEndsIn": "Slutter om {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
