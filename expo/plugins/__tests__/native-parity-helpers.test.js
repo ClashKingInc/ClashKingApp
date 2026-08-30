@@ -648,7 +648,7 @@ test('widget source and privacy references have a stable parent group', () => {
 test('native bridge exposes dynamic legacy-storage enumeration on both platforms', () => {
   const expoRoot = path.resolve(__dirname, '../..');
   const sources = [
-    'modules/clashking-native/index.ts',
+    'modules/clashking-native/types.ts',
     'modules/clashking-native/ios/ClashKingNativeModule.swift',
     'modules/clashking-native/android/src/main/java/com/clashking/nativebridge/ClashKingNativeModule.kt',
   ].map((relativePath) => fs.readFileSync(path.join(expoRoot, relativePath), 'utf8'));
@@ -685,7 +685,7 @@ test('native app icon bridge keeps exact iOS allowlist and Android unsupported b
 test('native notification debug bridge preserves rich attachment and scheduling contract', () => {
   const expoRoot = path.resolve(__dirname, '../..');
   const typescript = fs.readFileSync(
-    path.join(expoRoot, 'modules/clashking-native/index.ts'),
+    path.join(expoRoot, 'modules/clashking-native/types.ts'),
     'utf8',
   );
   const swift = fs.readFileSync(

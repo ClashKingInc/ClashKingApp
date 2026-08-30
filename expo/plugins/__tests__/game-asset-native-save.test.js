@@ -32,7 +32,7 @@ test('Game Assets retains Flutter native save-picker semantics', () => {
   assert.match(ios, /context\.promise\.reject\(NativeParityError\.fileSaveCancelled\)/);
 
   const contract = fs.readFileSync(
-    path.join(expoRoot, 'modules/clashking-native/index.ts'),
+    path.join(expoRoot, 'modules/clashking-native/types.ts'),
     'utf8',
   );
   assert.match(contract, /saveFile\(options: SaveFileOptions\): Promise<string>/);
