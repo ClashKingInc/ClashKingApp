@@ -892,7 +892,15 @@
   "warLog": "Registro Di Guerra",
   "warLogSearchPlaceholder": "Cerca guerre",
   "warLogClosed": "Il registro di guerra di {clan}è chiuso.",
+  "warLogPrivate": "Il registro di guerra di {clan} è privato.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Tutto in pari per ora",
+  "timeDurationShort": "{unit, select, daysHours {{primary}g {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Termina tra {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
