@@ -1,5 +1,6 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -142,30 +143,28 @@ class _ActivityContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        DropdownButtonFormField<PlayerHistoryType>(
-          initialValue: type,
-          isExpanded: true,
-          menuMaxHeight: 360,
-          decoration: InputDecoration(
-            labelText: loc.generalFilters,
-            prefixIcon: const Icon(Icons.filter_list_rounded),
-          ),
-          items: [
-            for (final option in PlayerHistoryType.values)
-              DropdownMenuItem(
-                value: option,
-                child: Text(
-                  _historyTypeLabel(option, loc),
-                  overflow: TextOverflow.ellipsis,
+        Row(
+          children: [
+            Expanded(
+              child: FilterDropdown(
+                sortBy: type.apiValue,
+                fillWidth: true,
+                leadingIcon: Icons.filter_list_rounded,
+                sortByOptions: {
+                  for (final option in PlayerHistoryType.values)
+                    _historyTypeLabel(option, loc): option.apiValue,
+                },
+                updateSortBy: (value) => onTypeChanged(
+                  PlayerHistoryType.values.firstWhere(
+                    (option) => option.apiValue == value,
+                  ),
                 ),
               ),
+            ),
+            const SizedBox(width: CKSpacing.sm),
+            _TrackingCoverage(verifiedTracking: verifiedTracking),
           ],
-          onChanged: (value) {
-            if (value != null) onTypeChanged(value);
-          },
         ),
-        const SizedBox(height: CKSpacing.md),
-        _TrackingCoverage(verifiedTracking: verifiedTracking),
         const SizedBox(height: CKSpacing.md),
         if (feed.items.isEmpty)
           AppEmptyState(
@@ -202,42 +201,66 @@ class _TrackingCoverage extends StatelessWidget {
     final body = verifiedTracking
         ? loc.playerActivityTrackingActiveBody
         : loc.playerActivityTrackingUnknownBody;
-    return CKSectionPanel(
-      child: Semantics(
-        label: '$title. $body',
-        excludeSemantics: true,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox.square(
-              dimension: 44,
-              child: MobileWebImage(
-                imageUrl: verifiedTracking
-                    ? ImageAssets.activeDailyLabel
-                    : ImageAssets.thinkingBuilder,
+    return Semantics(
+      button: true,
+      label: '$title. $body',
+      child: Tooltip(
+        message: title,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: () => showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              icon: Icon(
+                verifiedTracking
+                    ? Icons.track_changes_rounded
+                    : Icons.info_outline_rounded,
+              ),
+              title: Text(title),
+              content: Text(body),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    MaterialLocalizations.of(context).closeButtonLabel,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 11),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: scheme.outlineVariant.withValues(alpha: 0.32),
               ),
             ),
-            const SizedBox(width: CKSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  verifiedTracking
+                      ? Icons.track_changes_rounded
+                      : Icons.info_outline_rounded,
+                  size: 18,
+                  color: scheme.onSurface,
+                ),
+                const SizedBox(width: 6),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 116),
+                  child: Text(
                     title,
-                    style: CKTypography.of(context, CKTextRole.rowTitle),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: CKTypography.of(context, CKTextRole.compactLabel),
                   ),
-                  const SizedBox(height: CKSpacing.xs),
-                  Text(
-                    body,
-                    style: CKTypography.of(
-                      context,
-                      CKTextRole.metadata,
-                    ).copyWith(color: scheme.onSurfaceVariant),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -253,8 +276,14 @@ class _ActivityRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final scheme = Theme.of(context).colorScheme;
+    final localTime = event.time.toLocal();
     final locale = Localizations.localeOf(context).toString();
-    final date = DateFormat.yMMMd(locale).add_jm().format(event.time.toLocal());
+    final datePart = DateFormat.yMMMd(locale).format(localTime);
+    final timePart = MaterialLocalizations.of(context).formatTimeOfDay(
+      TimeOfDay.fromDateTime(localTime),
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
+    final date = '$datePart · $timePart';
     final title = switch (event.kind) {
       PlayerActivityKind.townHallUpgrade => loc.playerActivityTownHallUpgraded,
       PlayerActivityKind.superTroopBoost => loc.playerActivitySuperTroopBoosted(
@@ -264,8 +293,9 @@ class _ActivityRow extends StatelessWidget {
         event.name,
       ),
       PlayerActivityKind.experienceLevelChange => loc.gameExpLevel,
-      PlayerActivityKind.trophyRecord => loc.gameTrophies,
-      PlayerActivityKind.builderTrophyRecord => loc.gameBaseBuilder,
+      PlayerActivityKind.trophyRecord => loc.playerBestTrophies,
+      PlayerActivityKind.builderTrophyRecord =>
+        '${loc.playerBestTrophies} · ${loc.gameBaseBuilder}',
       PlayerActivityKind.warPreferenceChange => loc.playerWarPreferenceTitle,
       _ => loc.playerActivityItemUpgraded(event.name),
     };
@@ -281,9 +311,7 @@ class _ActivityRow extends StatelessWidget {
       PlayerActivityKind.itemUnlocked => loc.playerActivityUnlockedAtLevel(
         event.currentLevel ?? 0,
       ),
-      PlayerActivityKind.superTroopBoost => loc.playerActivityBoostedAtLevel(
-        event.currentLevel ?? 0,
-      ),
+      PlayerActivityKind.superTroopBoost => null,
       _ => loc.playerActivityLevelChange(
         event.previousLevel ?? 0,
         event.currentLevel ?? 0,
@@ -294,7 +322,7 @@ class _ActivityRow extends StatelessWidget {
     return CKSectionPanel(
       padding: const EdgeInsets.all(CKSpacing.md),
       child: Semantics(
-        label: '$title. $detail. $date',
+        label: [title, detail, date].whereType<String>().join('. '),
         excludeSemantics: true,
         child: Row(
           children: [
@@ -314,16 +342,18 @@ class _ActivityRow extends StatelessWidget {
                     style: CKTypography.of(context, CKTextRole.rowTitle),
                   ),
                   const SizedBox(height: CKSpacing.xs),
-                  Text(
-                    detail,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: CKTypography.of(
-                      context,
-                      CKTextRole.metadata,
-                    ).copyWith(color: accent),
-                  ),
-                  const SizedBox(height: 2),
+                  if (detail != null) ...[
+                    Text(
+                      detail,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: CKTypography.of(
+                        context,
+                        CKTextRole.metadata,
+                      ).copyWith(color: accent),
+                    ),
+                    const SizedBox(height: 2),
+                  ],
                   Text(
                     date,
                     style: CKTypography.of(
@@ -340,21 +370,33 @@ class _ActivityRow extends StatelessWidget {
     );
   }
 
-  String _eventArtwork(PlayerActivityEvent event) => switch (event.itemType) {
-    PlayerActivityItemType.townHall => ImageAssets.townHall(
-      event.currentLevel ?? 1,
-    ),
-    PlayerActivityItemType.troop => ImageAssets.getTroopImage(event.name),
-    PlayerActivityItemType.hero => ImageAssets.getHeroImage(event.name),
-    PlayerActivityItemType.spell => ImageAssets.getSpellImage(event.name),
-    PlayerActivityItemType.pet => ImageAssets.getPetImage(event.name),
-    PlayerActivityItemType.equipment => ImageAssets.getGearImage(event.name),
-    PlayerActivityItemType.trophy =>
-      event.kind == PlayerActivityKind.builderTrophyRecord
-          ? ImageAssets.builderBaseTrophy
-          : ImageAssets.trophies,
-    PlayerActivityItemType.profile => ImageAssets.defaultProfile,
-  };
+  String _eventArtwork(PlayerActivityEvent event) {
+    if (event.kind == PlayerActivityKind.experienceLevelChange) {
+      return ImageAssets.xp;
+    }
+    if (event.kind == PlayerActivityKind.warPreferenceChange) {
+      final value = event.currentValue?.toLowerCase();
+      final optedIn = value == 'true' || value == 'in' || value == '1';
+      return optedIn
+          ? ImageAssets.warPreferenceIn
+          : ImageAssets.warPreferenceOut;
+    }
+    return switch (event.itemType) {
+      PlayerActivityItemType.townHall => ImageAssets.townHall(
+        event.currentLevel ?? 1,
+      ),
+      PlayerActivityItemType.troop => ImageAssets.getTroopImage(event.name),
+      PlayerActivityItemType.hero => ImageAssets.getHeroImage(event.name),
+      PlayerActivityItemType.spell => ImageAssets.getSpellImage(event.name),
+      PlayerActivityItemType.pet => ImageAssets.getPetImage(event.name),
+      PlayerActivityItemType.equipment => ImageAssets.getGearImage(event.name),
+      PlayerActivityItemType.trophy =>
+        event.kind == PlayerActivityKind.builderTrophyRecord
+            ? ImageAssets.builderBaseTrophy
+            : ImageAssets.trophies,
+      PlayerActivityItemType.profile => ImageAssets.defaultProfile,
+    };
+  }
 
   Color _eventAccent(PlayerActivityEvent event) => switch (event.kind) {
     PlayerActivityKind.superTroopBoost => CKColors.capitalPurple,
@@ -378,7 +420,8 @@ String _historyTypeLabel(PlayerHistoryType type, AppLocalizations loc) =>
       PlayerHistoryType.equipmentLevel => loc.gameEquipment,
       PlayerHistoryType.townHallLevel => loc.gameTownHallLevel,
       PlayerHistoryType.experienceLevel => loc.gameExpLevel,
-      PlayerHistoryType.bestTrophies => loc.gameTrophies,
-      PlayerHistoryType.bestBuilderBaseTrophies => loc.gameBaseBuilder,
+      PlayerHistoryType.bestTrophies => loc.playerBestTrophies,
+      PlayerHistoryType.bestBuilderBaseTrophies =>
+        '${loc.playerBestTrophies} · ${loc.gameBaseBuilder}',
       PlayerHistoryType.warPreference => loc.playerWarPreferenceTitle,
     };

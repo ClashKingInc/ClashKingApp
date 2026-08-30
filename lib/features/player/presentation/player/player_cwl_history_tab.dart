@@ -2,7 +2,6 @@ import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
-import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
 import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/models/player_cwl_history.dart';
@@ -27,7 +26,6 @@ class PlayerCwlHistoryTab extends StatefulWidget {
 
 class _PlayerCwlHistoryTabState extends State<PlayerCwlHistoryTab> {
   late Future<PlayerCwlHistory> _load;
-  String? _selectedSeason;
 
   @override
   void initState() {
@@ -46,214 +44,209 @@ class _PlayerCwlHistoryTabState extends State<PlayerCwlHistoryTab> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<PlayerCwlHistory>(
-      future: _load,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting &&
-            snapshot.data == null) {
-          return ListView(
-            primary: true,
-            padding: EdgeInsets.fromLTRB(16, 12, 16, widget.bottomPadding),
-            children: const [SkeletonList(itemCount: 5)],
-          );
-        }
-        final loc = AppLocalizations.of(context)!;
-        if (snapshot.hasError && snapshot.data == null) {
-          return ListView(
-            primary: true,
-            children: [
-              AppEmptyState(
-                icon: Icons.cloud_off_rounded,
-                title: loc.generalError,
-                body: loc.generalTryAgain,
-                actionLabel: loc.generalRetry,
-                onAction: _refresh,
-              ),
-            ],
-          );
-        }
-        final seasons = snapshot.data?.items ?? const <PlayerCwlSeason>[];
-        if (seasons.isEmpty) {
-          return ListView(
-            primary: true,
-            children: [
-              AppEmptyState(
-                icon: Icons.emoji_events_outlined,
-                title: loc.cwlHistoryEmptyTitle,
-                body: loc.cwlHistoryEmptyBody,
-              ),
-            ],
-          );
-        }
-        final selected = seasons.firstWhere(
-          (season) => season.season == _selectedSeason,
-          orElse: () => seasons.first,
+  Widget build(BuildContext context) => FutureBuilder<PlayerCwlHistory>(
+    future: _load,
+    builder: (context, snapshot) {
+      final loc = AppLocalizations.of(context)!;
+      if (snapshot.connectionState == ConnectionState.waiting &&
+          snapshot.data == null) {
+        return ListView(
+          primary: true,
+          padding: EdgeInsets.fromLTRB(16, 12, 16, widget.bottomPadding),
+          children: const [SkeletonList(itemCount: 5)],
         );
-        return RefreshIndicator(
-          onRefresh: _refresh,
-          child: ListView(
-            primary: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(16, 10, 16, widget.bottomPadding),
-            children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1120),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      DropdownButtonFormField<String>(
-                        initialValue: selected.season,
-                        isExpanded: true,
-                        decoration: InputDecoration(
-                          labelText: loc.warStatsSelectSeason,
-                          prefixIcon: const Icon(Icons.calendar_month_rounded),
-                        ),
-                        items: [
-                          for (final season in seasons)
-                            DropdownMenuItem(
-                              value: season.season,
-                              child: Text(
-                                _seasonLabel(context, season.season),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                        ],
-                        onChanged: (value) =>
-                            setState(() => _selectedSeason = value),
-                      ),
-                      const SizedBox(height: CKSpacing.md),
-                      _SeasonSummary(season: selected),
-                      const SizedBox(height: CKSpacing.md),
-                      Text(
-                        loc.warAttacksTitle,
-                        style: CKTypography.of(
-                          context,
-                          CKTextRole.sectionTitle,
-                        ),
-                      ),
-                      const SizedBox(height: CKSpacing.sm),
-                      ResponsiveCardGrid(
-                        itemCount: selected.attacks.length,
-                        minItemWidth: 430,
-                        maxColumns: 2,
-                        spacing: CKSpacing.md,
-                        itemBuilder: (_, index) =>
-                            _CwlAttackRow(attack: selected.attacks[index]),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+      }
+      if (snapshot.hasError && snapshot.data == null) {
+        return ListView(
+          primary: true,
+          children: [
+            AppEmptyState(
+              icon: Icons.cloud_off_rounded,
+              title: loc.generalError,
+              body: loc.generalTryAgain,
+              actionLabel: loc.generalRetry,
+              onAction: _refresh,
+            ),
+          ],
+        );
+      }
+      final seasons = snapshot.data?.items ?? const <PlayerCwlSeason>[];
+      if (seasons.isEmpty) {
+        return ListView(
+          primary: true,
+          children: [
+            AppEmptyState(
+              icon: Icons.emoji_events_outlined,
+              title: loc.cwlHistoryEmptyTitle,
+              body: loc.cwlHistoryEmptyBody,
+            ),
+          ],
+        );
+      }
+      return RefreshIndicator(
+        onRefresh: _refresh,
+        child: ListView.separated(
+          primary: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(16, 10, 16, widget.bottomPadding),
+          itemCount: seasons.length,
+          separatorBuilder: (_, _) => const SizedBox(height: CKSpacing.md),
+          itemBuilder: (_, index) => Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1120),
+              child: _CwlSeasonCard(season: seasons[index]),
+            ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
 }
 
-class _SeasonSummary extends StatelessWidget {
-  const _SeasonSummary({required this.season});
+class _CwlSeasonCard extends StatelessWidget {
+  const _CwlSeasonCard({required this.season});
 
   final PlayerCwlSeason season;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final scheme = Theme.of(context).colorScheme;
     final leagueImage = ImageAssets.getWarLeagueImage(season.clan.leagueName);
     return CKSectionPanel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              SizedBox.square(
-                dimension: 58,
-                child: MobileWebImage(imageUrl: season.clan.badgeUrl),
+      padding: EdgeInsets.zero,
+      child: Material(
+        color: Colors.transparent,
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            tilePadding: const EdgeInsets.fromLTRB(
+              CKSpacing.md,
+              CKSpacing.sm,
+              CKSpacing.md,
+              CKSpacing.sm,
+            ),
+            childrenPadding: const EdgeInsets.fromLTRB(
+              CKSpacing.md,
+              0,
+              CKSpacing.md,
+              CKSpacing.md,
+            ),
+            leading: SizedBox.square(
+              dimension: 50,
+              child: MobileWebImage(
+                imageUrl: season.clan.badgeUrl,
+                errorWidget: (_, _, _) => const Icon(Icons.shield_outlined),
               ),
-              const SizedBox(width: CKSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    season.clan.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: CKTypography.of(context, CKTextRole.rowTitle),
+                  ),
+                ),
+                const SizedBox(width: CKSpacing.sm),
+                SizedBox.square(
+                  dimension: 36,
+                  child: MobileWebImage(
+                    imageUrl: ImageAssets.townHall(season.townHallLevel),
+                    errorWidget: (_, _, _) => const Icon(Icons.home_rounded),
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 3),
+                Text(
+                  _seasonLabel(context, season.season),
+                  style: CKTypography.of(
+                    context,
+                    CKTextRole.metadata,
+                  ).copyWith(color: scheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: CKSpacing.xs),
+                Row(
                   children: [
-                    Text(
-                      season.clan.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: CKTypography.of(context, CKTextRole.sectionTitle),
+                    SizedBox.square(
+                      dimension: 22,
+                      child: MobileWebImage(
+                        imageUrl: leagueImage,
+                        errorWidget: (_, _, _) =>
+                            const Icon(Icons.military_tech_rounded),
+                      ),
                     ),
-                    const SizedBox(height: CKSpacing.xs),
-                    Row(
-                      children: [
-                        SizedBox.square(
-                          dimension: 24,
-                          child: MobileWebImage(imageUrl: leagueImage),
-                        ),
-                        const SizedBox(width: CKSpacing.xs),
-                        Expanded(
-                          child: Text(
-                            season.clan.leagueName,
-                            overflow: TextOverflow.ellipsis,
-                            style: CKTypography.of(
-                              context,
-                              CKTextRole.metadata,
-                            ),
-                          ),
-                        ),
-                      ],
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        season.clan.leagueName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: CKTypography.of(context, CKTextRole.metadata),
+                      ),
                     ),
+                    if (season.clanPlacement != null) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        '#${season.clanPlacement}',
+                        style: CKTypography.of(
+                          context,
+                          CKTextRole.compactLabel,
+                        ).copyWith(color: CKColors.warGold),
+                      ),
+                    ],
                   ],
                 ),
+              ],
+            ),
+            children: [
+              CKMetricChipGrid(
+                columns: 3,
+                chips: [
+                  CKMetricChip(
+                    label: loc.warStarsTitle,
+                    value: '${season.stars}',
+                    iconData: Icons.star_rounded,
+                  ),
+                  CKMetricChip(
+                    label: loc.warAttacksTitle,
+                    value: '${season.attacks.length}',
+                    iconData: Icons.gps_fixed_rounded,
+                  ),
+                  CKMetricChip(
+                    label: loc.warAttacksMissedShort,
+                    value: '${season.missedAttacks}',
+                    iconData: Icons.remove_circle_outline_rounded,
+                  ),
+                ],
               ),
-              SizedBox.square(
-                dimension: 46,
-                child: MobileWebImage(
-                  imageUrl: ImageAssets.townHall(season.townHallLevel),
+              if (season.attacks.isNotEmpty) ...[
+                const SizedBox(height: CKSpacing.md),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    loc.warAttacksTitle,
+                    style: CKTypography.of(context, CKTextRole.compactLabel),
+                  ),
                 ),
-              ),
+                const SizedBox(height: CKSpacing.xs),
+                for (var index = 0; index < season.attacks.length; index++) ...[
+                  if (index > 0)
+                    Divider(
+                      color: scheme.outlineVariant.withValues(alpha: 0.35),
+                    ),
+                  _CwlAttackRow(attack: season.attacks[index]),
+                ],
+              ],
             ],
           ),
-          const SizedBox(height: CKSpacing.md),
-          CKMetricChipGrid(
-            columns: MediaQuery.sizeOf(context).width < 420 ? 2 : 3,
-            chips: [
-              CKMetricChip(
-                label: loc.warStarsTitle,
-                value: '${season.stars}',
-                iconData: Icons.star_rounded,
-              ),
-              CKMetricChip(
-                label: loc.warAttacksTitle,
-                value: '${season.attacks.length}',
-                iconData: Icons.gps_fixed_rounded,
-              ),
-              CKMetricChip(
-                label: loc.warAttacksMissedShort,
-                value: '${season.missedAttacks}',
-                iconData: Icons.remove_circle_outline_rounded,
-              ),
-              CKMetricChip(
-                label: loc.cwlRankTitle,
-                value: '#${season.clanPlacement ?? '-'}',
-                iconData: Icons.emoji_events_rounded,
-              ),
-              CKMetricChip(
-                label: loc.cwlWarsPlayedTitle,
-                value:
-                    '${season.clan.won}-${season.clan.lost}-${season.clan.tied}',
-                iconData: Icons.military_tech_rounded,
-              ),
-              CKMetricChip(
-                label: loc.generalTotal,
-                value: '${season.clan.totalStars ?? '-'}',
-                iconData: Icons.auto_awesome_rounded,
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -261,24 +254,24 @@ class _SeasonSummary extends StatelessWidget {
 
 class _CwlAttackRow extends StatelessWidget {
   const _CwlAttackRow({required this.attack});
-
   final PlayerCwlAttack attack;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final scheme = Theme.of(context).colorScheme;
-    return CKSectionPanel(
-      padding: const EdgeInsets.all(CKSpacing.md),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: CKSpacing.sm),
       child: Row(
         children: [
           SizedBox.square(
-            dimension: 48,
+            dimension: 44,
             child: MobileWebImage(
               imageUrl: ImageAssets.townHall(attack.defenderTownHallLevel),
+              errorWidget: (_, _, _) => const Icon(Icons.home_rounded),
             ),
           ),
-          const SizedBox(width: CKSpacing.md),
+          const SizedBox(width: CKSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,7 +282,6 @@ class _CwlAttackRow extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: CKTypography.of(context, CKTextRole.rowTitle),
                 ),
-                const SizedBox(height: CKSpacing.xs),
                 Text(
                   '${attack.opponentName} · ${loc.cwlRoundShort(attack.round)}',
                   maxLines: 1,

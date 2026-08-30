@@ -68,22 +68,39 @@ class WarCwlService extends ChangeNotifier {
       final proposedEnd = start + _maxBatchSize;
       final end = proposedEnd < clanTags.length ? proposedEnd : clanTags.length;
       final batch = clanTags.sublist(start, end);
-      try {
-        final parsedSummaries = await _loadWarBatch(batch);
-        changed =
-            _applyWarBatch(parsedSummaries, requestId: requestId) || changed;
-      } catch (error) {
-        errors.add(error);
+      final result = await _loadWarBatch(batch);
+      changed =
+          _applyWarBatch(result.summaries, requestId: requestId) || changed;
+      errors.addAll(result.errors);
+      for (final error in result.errors) {
         Sentry.captureException(error);
-        DebugUtils.debugError("Error loading war data batch: $error");
+        DebugUtils.debugError("Error loading war data for clan: $error");
       }
     }
 
     return _WarLoadOutcome(changed: changed, errors: errors);
   }
 
-  Future<List<WarCwl>> _loadWarBatch(List<String> batch) async {
-    return Future.wait(batch.map(_resolveCurrentWar));
+  Future<_WarBatchResult> _loadWarBatch(List<String> batch) async {
+    final outcomes = await Future.wait(
+      batch.map((tag) async {
+        try {
+          return (summary: await _resolveCurrentWar(tag), error: null);
+        } catch (error) {
+          return (summary: null, error: error);
+        }
+      }),
+    );
+    return _WarBatchResult(
+      summaries: outcomes
+          .map((outcome) => outcome.summary)
+          .whereType<WarCwl>()
+          .toList(growable: false),
+      errors: outcomes
+          .map((outcome) => outcome.error)
+          .whereType<Object>()
+          .toList(growable: false),
+    );
   }
 
   Future<WarCwl> _resolveCurrentWar(String clanTag) async {
@@ -177,7 +194,7 @@ class WarCwlService extends ChangeNotifier {
     );
     final group = switch (groupResponse.statusCode) {
       200 => _decodeNullableMap(groupResponse),
-      404 => null,
+      403 || 404 => null,
       _ => _throwUnexpectedResponse(
         groupResponse,
         '/clans/$encodedTag/currentwar/leaguegroup',
@@ -366,6 +383,13 @@ class _WarLoadOutcome {
   const _WarLoadOutcome({required this.changed, required this.errors});
 
   final bool changed;
+  final List<Object> errors;
+}
+
+class _WarBatchResult {
+  const _WarBatchResult({required this.summaries, required this.errors});
+
+  final List<WarCwl> summaries;
   final List<Object> errors;
 }
 

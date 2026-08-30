@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:clashking_design_system/clashking_design_system.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
+import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
+import 'package:clashkingapp/core/constants/image_assets.dart';
 import 'package:clashkingapp/core/services/api_service.dart';
+import 'package:clashkingapp/features/rankings/models/ranking_models.dart';
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -45,17 +49,24 @@ class ClanSearchFilterValue {
 
 class PlayerSearchFilterValue {
   const PlayerSearchFilterValue({
-    this.clanTags = const [],
     this.leagueIds = const [],
-    this.townHallLevels = const [],
+    this.minTownHallLevel,
+    this.maxTownHallLevel,
   });
 
-  final List<String> clanTags;
   final List<int> leagueIds;
-  final List<int> townHallLevels;
+  final int? minTownHallLevel;
+  final int? maxTownHallLevel;
+
+  List<int> get townHallLevels {
+    if (minTownHallLevel == null && maxTownHallLevel == null) return const [];
+    final minimum = minTownHallLevel ?? 1;
+    final maximum = maxTownHallLevel ?? 18;
+    return [for (var level = minimum; level <= maximum; level++) level];
+  }
 
   bool get isEmpty =>
-      clanTags.isEmpty && leagueIds.isEmpty && townHallLevels.isEmpty;
+      leagueIds.isEmpty && minTownHallLevel == null && maxTownHallLevel == null;
 }
 
 class ClanSearchFiltersPanel extends StatefulWidget {
@@ -75,7 +86,7 @@ class ClanSearchFiltersPanel extends StatefulWidget {
 }
 
 class _ClanSearchFiltersPanelState extends State<ClanSearchFiltersPanel> {
-  List<_FilterOption> _locations = const [];
+  List<RankingLocation> _locations = const [];
 
   @override
   void initState() {
@@ -92,19 +103,20 @@ class _ClanSearchFiltersPanelState extends State<ClanSearchFiltersPanel> {
       final decoded = jsonDecode(ApiService.decodeResponseBody(response));
       final items = decoded is Map ? decoded['items'] : null;
       if (items is! List || !mounted) return;
-      setState(() {
-        _locations = items
-            .whereType<Map>()
-            .map((raw) => Map<String, dynamic>.from(raw))
-            .map(
-              (item) => _FilterOption(
-                id: (item['id'] as num?)?.toInt() ?? 0,
-                name: item['name']?.toString() ?? '',
-              ),
-            )
-            .where((item) => item.id != 0 && item.name.isNotEmpty)
-            .toList(growable: false);
-      });
+      final locations =
+          items
+              .whereType<Map>()
+              .map(
+                (item) =>
+                    RankingLocation.fromJson(Map<String, dynamic>.from(item)),
+              )
+              .where(
+                (location) =>
+                    location.id != null && location.hasValidCountryCode,
+              )
+              .toList(growable: false)
+            ..sort((a, b) => a.name.compareTo(b.name));
+      setState(() => _locations = locations);
     } catch (_) {}
   }
 
@@ -145,110 +157,108 @@ class _ClanSearchFiltersPanelState extends State<ClanSearchFiltersPanel> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final value = widget.value;
-    return CKSectionPanel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          DropdownButtonFormField<String?>(
-            key: ValueKey('war-frequency-${value.warFrequency}'),
-            initialValue: value.warFrequency,
-            decoration: InputDecoration(labelText: loc.warFrequency),
-            items: [
-              DropdownMenuItem(value: null, child: Text(loc.generalNotSet)),
-              DropdownMenuItem(
-                value: 'always',
-                child: Text(loc.clanWarFrequencyAlways),
+    final memberRange = RangeValues(
+      (value.minMembers ?? 0).toDouble(),
+      (value.maxMembers ?? 50).toDouble(),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: FilterDropdown(
+                sortBy: value.warFrequency ?? '',
+                fillWidth: true,
+                leadingIcon: Icons.security_rounded,
+                sortByOptions: {
+                  loc.generalNotSet: '',
+                  loc.clanWarFrequencyAlways: 'always',
+                  loc.clanWarFrequencyNever: 'never',
+                  loc.clanWarFrequencyOncePerWeek: 'oncePerWeek',
+                  loc.clanWarFrequencyMoreThanOncePerWeek:
+                      'moreThanOncePerWeek',
+                  loc.clanWarFrequencyRarely: 'lessThanOncePerWeek',
+                },
+                updateSortBy: (next) =>
+                    _emit(warFrequency: next.isEmpty ? null : next),
               ),
-              DropdownMenuItem(
-                value: 'never',
-                child: Text(loc.clanWarFrequencyNever),
-              ),
-              DropdownMenuItem(
-                value: 'oncePerWeek',
-                child: Text(loc.clanWarFrequencyOncePerWeek),
-              ),
-              DropdownMenuItem(
-                value: 'moreThanOncePerWeek',
-                child: Text(loc.clanWarFrequencyMoreThanOncePerWeek),
-              ),
-              DropdownMenuItem(
-                value: 'lessThanOncePerWeek',
-                child: Text(loc.clanWarFrequencyRarely),
-              ),
-            ],
-            onChanged: (next) => _emit(warFrequency: next),
-          ),
-          const SizedBox(height: CKSpacing.sm),
-          DropdownButtonFormField<int?>(
-            key: ValueKey(
-              'location-${value.locationId}-${_locations.isNotEmpty}',
             ),
-            initialValue:
-                _locations.any((location) => location.id == value.locationId)
-                ? value.locationId
-                : null,
-            isExpanded: true,
-            decoration: InputDecoration(labelText: loc.clanLocation),
-            items: [
-              DropdownMenuItem(value: null, child: Text(loc.generalNotSet)),
-              for (final location in _locations)
-                DropdownMenuItem(
-                  value: location.id,
-                  child: Text(location.name, overflow: TextOverflow.ellipsis),
-                ),
-            ],
-            onChanged: (next) => _emit(locationId: next),
-          ),
-          const SizedBox(height: CKSpacing.sm),
-          Row(
-            children: [
-              Expanded(
-                child: _NumberFilter(
-                  label: loc.clanMinimumMembers,
-                  value: value.minMembers,
-                  max: 50,
-                  onChanged: (next) => _emit(minMembers: next),
-                ),
+            const SizedBox(width: CKSpacing.sm),
+            Expanded(
+              child: FilterDropdown(
+                sortBy:
+                    _locations.any(
+                      (location) => location.id == value.locationId,
+                    )
+                    ? value.locationId.toString()
+                    : '',
+                fillWidth: true,
+                leadingIcon: Icons.public_rounded,
+                sortByOptions: {
+                  loc.generalNotSet: '',
+                  for (final location in _locations)
+                    <Widget>[
+                      SizedBox.square(
+                        dimension: 20,
+                        child: MobileWebImage(
+                          imageUrl: ImageAssets.flag(location.countryCode!),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          location.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ]: location.id
+                        .toString(),
+                },
+                updateSortBy: (next) => _emit(locationId: int.tryParse(next)),
               ),
-              const SizedBox(width: CKSpacing.sm),
-              Expanded(
-                child: _NumberFilter(
-                  label: loc.clanMaximumMembers,
-                  value: value.maxMembers,
-                  max: 50,
-                  onChanged: (next) => _emit(maxMembers: next),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: CKSpacing.sm),
-          Row(
-            children: [
-              Expanded(
-                child: _NumberFilter(
-                  label: loc.clanMinimumPoints,
-                  value: value.minClanPoints,
-                  max: 100000,
-                  onChanged: (next) => _emit(minClanPoints: next),
-                ),
-              ),
-              const SizedBox(width: CKSpacing.sm),
-              Expanded(
-                child: _NumberFilter(
-                  label: loc.clanMinimumLevel,
-                  value: value.minClanLevel,
-                  max: 100,
-                  onChanged: (next) => _emit(minClanLevel: next),
-                ),
-              ),
-            ],
-          ),
-          if (!value.isEmpty)
-            _ResetButton(
-              onPressed: () => widget.onChanged(const ClanSearchFilterValue()),
             ),
-        ],
-      ),
+          ],
+        ),
+        const SizedBox(height: CKSpacing.md),
+        _RangeFilter(
+          label: '${loc.clanMinimumMembers} – ${loc.clanMaximumMembers}',
+          value: memberRange,
+          min: 0,
+          max: 50,
+          divisions: 50,
+          valueLabel:
+              '${memberRange.start.round()} – ${memberRange.end.round()}',
+          onChanged: (next) => _emit(
+            minMembers: next.start == 0 ? null : next.start.round(),
+            maxMembers: next.end == 50 ? null : next.end.round(),
+          ),
+        ),
+        _SliderFilter(
+          label: loc.clanMinimumPoints,
+          value: (value.minClanPoints ?? 0).toDouble(),
+          max: 100000,
+          divisions: 100,
+          valueLabel: '${value.minClanPoints ?? 0}',
+          onChanged: (next) =>
+              _emit(minClanPoints: next == 0 ? null : next.round()),
+        ),
+        _SliderFilter(
+          label: loc.clanMinimumLevel,
+          value: (value.minClanLevel ?? 1).toDouble(),
+          min: 1,
+          max: 100,
+          divisions: 99,
+          valueLabel: '${value.minClanLevel ?? 1}',
+          onChanged: (next) =>
+              _emit(minClanLevel: next == 1 ? null : next.round()),
+        ),
+        if (!value.isEmpty)
+          _ResetButton(
+            onPressed: () => widget.onChanged(const ClanSearchFilterValue()),
+          ),
+      ],
     );
   }
 }
@@ -271,22 +281,12 @@ class PlayerSearchFiltersPanel extends StatefulWidget {
 }
 
 class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
-  late final TextEditingController _clansController;
   List<_FilterOption> _leagues = const [];
 
   @override
   void initState() {
     super.initState();
-    _clansController = TextEditingController(
-      text: widget.value.clanTags.join(', '),
-    );
     _loadLeagues();
-  }
-
-  @override
-  void dispose() {
-    _clansController.dispose();
-    super.dispose();
   }
 
   Future<void> _loadLeagues() async {
@@ -315,15 +315,20 @@ class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
   }
 
   void _emit({
-    List<String>? clanTags,
     List<int>? leagueIds,
-    List<int>? townHallLevels,
+    Object? minTownHallLevel = _unchanged,
+    Object? maxTownHallLevel = _unchanged,
   }) {
+    final old = widget.value;
     widget.onChanged(
       PlayerSearchFilterValue(
-        clanTags: clanTags ?? widget.value.clanTags,
-        leagueIds: leagueIds ?? widget.value.leagueIds,
-        townHallLevels: townHallLevels ?? widget.value.townHallLevels,
+        leagueIds: leagueIds ?? old.leagueIds,
+        minTownHallLevel: identical(minTownHallLevel, _unchanged)
+            ? old.minTownHallLevel
+            : minTownHallLevel as int?,
+        maxTownHallLevel: identical(maxTownHallLevel, _unchanged)
+            ? old.maxTownHallLevel
+            : maxTownHallLevel as int?,
       ),
     );
   }
@@ -332,164 +337,155 @@ class _PlayerSearchFiltersPanelState extends State<PlayerSearchFiltersPanel> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     final value = widget.value;
-    return CKSectionPanel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextFormField(
-            controller: _clansController,
-            textCapitalization: TextCapitalization.characters,
-            decoration: InputDecoration(
-              labelText: loc.clanTitle,
-              hintText: '#ABC123, #DEF456',
-            ),
-            onChanged: (raw) => _emit(
-              clanTags: raw
-                  .split(',')
-                  .map((tag) => tag.trim().toUpperCase())
-                  .where((tag) => tag.isNotEmpty)
-                  .toList(growable: false),
-            ),
+    final townHallRange = RangeValues(
+      (value.minTownHallLevel ?? 1).toDouble(),
+      (value.maxTownHallLevel ?? 18).toDouble(),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        FilterDropdown(
+          sortBy:
+              value.leagueIds.isNotEmpty &&
+                  _leagues.any((league) => league.id == value.leagueIds.first)
+              ? value.leagueIds.first.toString()
+              : '',
+          fillWidth: true,
+          leadingIcon: Icons.military_tech_rounded,
+          sortByOptions: {
+            loc.generalNotSet: '',
+            for (final league in _leagues) league.name: league.id.toString(),
+          },
+          updateSortBy: (next) =>
+              _emit(leagueIds: next.isEmpty ? const [] : [int.parse(next)]),
+        ),
+        const SizedBox(height: CKSpacing.md),
+        _RangeFilter(
+          label: loc.gameTownHall,
+          value: townHallRange,
+          min: 1,
+          max: 18,
+          divisions: 17,
+          valueLabel:
+              '${loc.gameTownHall} ${townHallRange.start.round()} – ${loc.gameTownHall} ${townHallRange.end.round()}',
+          onChanged: (next) => _emit(
+            minTownHallLevel: next.start == 1 ? null : next.start.round(),
+            maxTownHallLevel: next.end == 18 ? null : next.end.round(),
           ),
-          const SizedBox(height: CKSpacing.sm),
-          DropdownButtonFormField<int?>(
-            key: ValueKey(
-              'league-${value.leagueIds.join(',')}-${_leagues.isNotEmpty}',
-            ),
-            initialValue:
-                value.leagueIds.isNotEmpty &&
-                    _leagues.any((league) => league.id == value.leagueIds.first)
-                ? value.leagueIds.first
-                : null,
-            isExpanded: true,
-            decoration: InputDecoration(labelText: loc.gameLeague),
-            items: [
-              DropdownMenuItem(value: null, child: Text(loc.generalNotSet)),
-              for (final league in _leagues)
-                DropdownMenuItem(
-                  value: league.id,
-                  child: Text(league.name, overflow: TextOverflow.ellipsis),
-                ),
-            ],
-            onChanged: (next) =>
-                _emit(leagueIds: next == null ? const [] : [next]),
+        ),
+        if (!value.isEmpty)
+          _ResetButton(
+            onPressed: () => widget.onChanged(const PlayerSearchFilterValue()),
           ),
-          const SizedBox(height: CKSpacing.md),
-          Text(
-            loc.gameTownHall,
-            style: CKTypography.of(context, CKTextRole.compactLabel),
-          ),
-          const SizedBox(height: CKSpacing.xs),
-          Wrap(
-            spacing: CKSpacing.xs,
-            runSpacing: CKSpacing.xs,
-            children: [
-              for (var level = 18; level >= 10; level--)
-                FilterChip(
-                  label: Text('${loc.gameTownHall}$level'),
-                  selected: value.townHallLevels.contains(level),
-                  onSelected: (selected) {
-                    final levels = [...value.townHallLevels];
-                    selected ? levels.add(level) : levels.remove(level);
-                    levels.sort((a, b) => b.compareTo(a));
-                    _emit(townHallLevels: levels);
-                  },
-                ),
-            ],
-          ),
-          if (!value.isEmpty)
-            _ResetButton(
-              onPressed: () {
-                _clansController.clear();
-                widget.onChanged(const PlayerSearchFilterValue());
-              },
-            ),
-        ],
-      ),
+      ],
     );
   }
 }
 
-class _NumberFilter extends StatefulWidget {
-  const _NumberFilter({
+class _RangeFilter extends StatelessWidget {
+  const _RangeFilter({
     required this.label,
     required this.value,
+    required this.min,
     required this.max,
+    required this.divisions,
+    required this.valueLabel,
     required this.onChanged,
   });
-
   final String label;
-  final int? value;
-  final int max;
-  final ValueChanged<int?> onChanged;
+  final RangeValues value;
+  final double min;
+  final double max;
+  final int divisions;
+  final String valueLabel;
+  final ValueChanged<RangeValues> onChanged;
 
   @override
-  State<_NumberFilter> createState() => _NumberFilterState();
+  Widget build(BuildContext context) => Column(
+    children: [
+      _FilterLabel(label: label, value: valueLabel),
+      RangeSlider(
+        values: value,
+        min: min,
+        max: max,
+        divisions: divisions,
+        labels: RangeLabels('${value.start.round()}', '${value.end.round()}'),
+        onChanged: onChanged,
+      ),
+    ],
+  );
 }
 
-class _NumberFilterState extends State<_NumberFilter> {
-  late final TextEditingController _controller;
+class _SliderFilter extends StatelessWidget {
+  const _SliderFilter({
+    required this.label,
+    required this.value,
+    this.min = 0,
+    required this.max,
+    required this.divisions,
+    required this.valueLabel,
+    required this.onChanged,
+  });
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final int divisions;
+  final String valueLabel;
+  final ValueChanged<double> onChanged;
 
   @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController(text: widget.value?.toString() ?? '');
-  }
-
-  @override
-  void didUpdateWidget(covariant _NumberFilter oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final currentValue = int.tryParse(_controller.text);
-    if (currentValue == widget.value) return;
-    _controller.value = TextEditingValue(
-      text: widget.value?.toString() ?? '',
-      selection: TextSelection.collapsed(
-        offset: widget.value?.toString().length ?? 0,
+  Widget build(BuildContext context) => Column(
+    children: [
+      _FilterLabel(label: label, value: valueLabel),
+      Slider(
+        value: value,
+        min: min,
+        max: max,
+        divisions: divisions,
+        label: valueLabel,
+        onChanged: onChanged,
       ),
-    );
-  }
+    ],
+  );
+}
+
+class _FilterLabel extends StatelessWidget {
+  const _FilterLabel({required this.label, required this.value});
+  final String label;
+  final String value;
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _controller,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(labelText: widget.label),
-      onChanged: (raw) {
-        final parsed = int.tryParse(raw);
-        widget.onChanged(parsed?.clamp(0, widget.max));
-      },
-    );
-  }
+  Widget build(BuildContext context) => Row(
+    children: [
+      Expanded(
+        child: Text(
+          label,
+          style: CKTypography.of(context, CKTextRole.compactLabel),
+        ),
+      ),
+      Text(value, style: CKTypography.of(context, CKTextRole.metadata)),
+    ],
+  );
 }
 
 class _ResetButton extends StatelessWidget {
   const _ResetButton({required this.onPressed});
-
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: TextButton.icon(
-        onPressed: onPressed,
-        icon: const Icon(Icons.restart_alt_rounded),
-        label: Text(AppLocalizations.of(context)!.generalReset),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Align(
+    alignment: Alignment.centerRight,
+    child: TextButton.icon(
+      onPressed: onPressed,
+      icon: const Icon(Icons.restart_alt_rounded),
+      label: Text(AppLocalizations.of(context)!.generalReset),
+    ),
+  );
 }
 
 class _FilterOption {
   const _FilterOption({required this.id, required this.name});
-
   final int id;
   final String name;
 }
