@@ -218,7 +218,6 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<dynamic>> _searchPlayers(String query) async {
     return context.read<PlayerService>().searchPlayers(
       query,
-      clanTags: _playerFilters.clanTags,
       leagueIds: _playerFilters.leagueIds,
       townHallLevels: _playerFilters.townHallLevels,
       extraHeaders: _searchTrackingHeaders(),

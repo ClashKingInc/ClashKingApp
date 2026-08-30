@@ -319,28 +319,14 @@ void main() {
     expect(source, isNot(contains('label: l10n.achievementsTitle')));
   });
 
-  test('sidebar utility options are text-only except settings', () {
+  test('sidebar utility options use monochrome system icons', () {
     final source = File('lib/core/app/my_home_page.dart').readAsStringSync();
-    for (final icon in <String>[
-      'podium',
-      'chartPie',
-      'calculator',
-      'listChecks',
-      'circleFadingArrowUp',
-      'images',
-    ]) {
-      expect(
-        RegExp('LucideIcons\\.$icon').allMatches(source),
-        hasLength(1),
-        reason: icon,
-      );
-    }
     expect(RegExp(r'LucideIcons\.handCoins').allMatches(source), isEmpty);
-    expect(source, contains('this.showIcon = false'));
-    expect(source, contains('showIcon: true'));
+    expect(source, contains('this.showIcon = true'));
+    expect(source, contains(': colorScheme.onSurface'));
     expect(
       RegExp(r'_DrawerMenuItem\(\s*icon:').allMatches(source),
-      hasLength(1),
+      hasLength(greaterThan(10)),
     );
   });
 }

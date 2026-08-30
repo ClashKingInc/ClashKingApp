@@ -181,6 +181,47 @@ void main() {
       expect(result.getActiveWarByTag('#CLAN')?.clan?.tag, '#CLAN');
     });
 
+    test(
+      'loads a scheduled CWL war when the league group is private',
+      () async {
+        final api = FakeApiService();
+        api.getStubs['/war/%23CLAN/basic'] = http.Response(
+          jsonEncode({'type': 'cwl', 'warTag': '#WAR'}),
+          200,
+        );
+        api.getStubs['/clans/%23CLAN/currentwar/leaguegroup'] = http.Response(
+          '{"reason":"accessDenied"}',
+          403,
+        );
+        api.getStubs['/clanwarleagues/wars/%23WAR'] = http.Response(
+          jsonEncode(_war('#OTHER', '#CLAN', warTag: '#WAR')),
+          200,
+        );
+
+        final service = WarCwlService(apiService: api);
+        await service.loadAllWarData(['#CLAN'], notify: false);
+
+        expect(service.getWarCwlByTag('#CLAN')?.isInCwl, isTrue);
+      },
+    );
+
+    test('preserves successful clan results when another clan fails', () async {
+      final api = FakeApiService();
+      api.getStubs['/war/%23GOOD/basic'] = http.Response('null', 200);
+      api.getStubs['/clans/%23GOOD/currentwar'] = http.Response(
+        jsonEncode(_war('#GOOD', '#OTHER')),
+        200,
+      );
+      api.getStubs['/war/%23BAD/basic'] = http.Response('null', 200);
+      api.getStubs['/clans/%23BAD/currentwar'] = http.Response('{}', 503);
+
+      final service = WarCwlService(apiService: api);
+      await service.loadAllWarData(['#GOOD', '#BAD'], notify: false);
+
+      expect(service.getWarCwlByTag('#GOOD')?.isInWar, isTrue);
+      expect(service.getWarCwlByTag('#BAD'), isNull);
+    });
+
     test('honors strict error handling', () async {
       final api = FakeApiService();
       api.throwOnGet['/war/%23CLAN/basic'] = Exception('network');

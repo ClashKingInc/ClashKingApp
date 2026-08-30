@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:clashkingapp/features/player/data/player_service.dart';
 import 'package:clashkingapp/features/player/presentation/player/player_super_troop_section.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/liquid_glass.dart';
@@ -18,6 +21,7 @@ import 'package:clashkingapp/features/player/presentation/war_stats/player_war_s
 import 'package:clashkingapp/l10n/app_localizations.dart';
 import 'package:clashkingapp/l10n/game_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class PlayerScreen extends StatefulWidget {
   final Player selectedPlayer;
@@ -37,11 +41,26 @@ class PlayerScreenState extends State<PlayerScreen> {
   static const double _desktopBreakpoint = 900;
   static const double _desktopMaxContentWidth = 1320;
   late int selectedTab;
+  bool _startedCwlPreload = false;
 
   @override
   void initState() {
     super.initState();
     selectedTab = widget.initialTab.clamp(0, 7);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_startedCwlPreload) return;
+    _startedCwlPreload = true;
+    unawaited(
+      context
+          .read<PlayerService>()
+          .loadPlayerCwlHistory(widget.selectedPlayer.tag)
+          .then<void>((_) {})
+          .catchError((_) {}),
+    );
   }
 
   @override

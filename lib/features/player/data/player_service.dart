@@ -44,6 +44,7 @@ class PlayerService extends ChangeNotifier {
   final Map<String, PlayerBattlelogData> _battlelogCache = {};
   final Map<String, PlayerActivityFeed> _activityCache = {};
   final Map<String, PlayerCwlHistory> _cwlHistoryCache = {};
+  final Map<String, Future<PlayerCwlHistory>> _cwlHistoryLoads = {};
 
   bool get isLoading => _isLoading;
   List<Player> get profiles => _profiles;
@@ -355,12 +356,25 @@ class PlayerService extends ChangeNotifier {
   Future<PlayerCwlHistory> loadPlayerCwlHistory(
     String rawPlayerTag, {
     bool forceRefresh = false,
-  }) async {
+  }) {
     final playerTag = _canonicalTag(rawPlayerTag);
     if (!forceRefresh) {
       final cached = _cwlHistoryCache[playerTag];
-      if (cached != null) return cached;
+      if (cached != null) return Future.value(cached);
+      final pending = _cwlHistoryLoads[playerTag];
+      if (pending != null) return pending;
     }
+    late final Future<PlayerCwlHistory> load;
+    load = _fetchPlayerCwlHistory(playerTag).whenComplete(() {
+      if (identical(_cwlHistoryLoads[playerTag], load)) {
+        _cwlHistoryLoads.remove(playerTag);
+      }
+    });
+    _cwlHistoryLoads[playerTag] = load;
+    return load;
+  }
+
+  Future<PlayerCwlHistory> _fetchPlayerCwlHistory(String playerTag) async {
     final encodedTag = Uri.encodeComponent(playerTag);
     final response = await _apiService.getResponse(
       '/player/$encodedTag/cwl/history?limit=100',

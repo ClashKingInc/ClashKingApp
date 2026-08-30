@@ -1,5 +1,6 @@
 import 'package:clashking_design_system/clashking_design_system.dart';
 import 'package:clashkingapp/common/widgets/empty_state.dart';
+import 'package:clashkingapp/common/widgets/inputs/filter_dropdown.dart';
 import 'package:clashkingapp/common/widgets/loading/skeleton_loading.dart';
 import 'package:clashkingapp/common/widgets/mobile_web_image.dart';
 import 'package:clashkingapp/common/widgets/responsive_card_grid.dart';
@@ -27,6 +28,7 @@ class _ClanLeaderboardHistoryTabState extends State<ClanLeaderboardHistoryTab> {
   _LeaderboardChartMetric _metric = _LeaderboardChartMetric.rank;
   String? _selectedSeason;
   late Future<_LeaderboardViewData> _load;
+  int _loadGeneration = 0;
 
   @override
   void initState() {
@@ -35,32 +37,46 @@ class _ClanLeaderboardHistoryTabState extends State<ClanLeaderboardHistoryTab> {
   }
 
   void _loadHistory() {
-    _load = _fetchHistory();
+    final generation = ++_loadGeneration;
+    _load = _fetchHistory(
+      type: _type,
+      selectedSeason: _selectedSeason,
+      generation: generation,
+    );
   }
 
-  Future<_LeaderboardViewData> _fetchHistory() async {
+  Future<_LeaderboardViewData> _fetchHistory({
+    required ClanLeaderboardType type,
+    required String? selectedSeason,
+    required int generation,
+  }) async {
     final service = context.read<ClanService>();
     final summary = await service.getClanLeaderboardHistorySummary(
       widget.clanTag,
-      _type,
+      type,
     );
     if (summary.seasons.isEmpty) {
       return _LeaderboardViewData(summary: summary);
     }
 
     final selectedIndex = summary.seasons.indexWhere(
-      (season) => season.season == _selectedSeason,
+      (season) => season.season == selectedSeason,
     );
-    final startIndex = selectedIndex < 0 ? 0 : selectedIndex;
-    _selectedSeason = summary.seasons[startIndex].season;
-    final selectedSummaries = _type == ClanLeaderboardType.clanCapital
-        ? summary.seasons.skip(startIndex).take(3).toList(growable: false)
+    var startIndex = selectedIndex < 0 ? 0 : selectedIndex;
+    if (type == ClanLeaderboardType.clanCapital) {
+      startIndex = (startIndex ~/ 6) * 6;
+    }
+    if (generation == _loadGeneration) {
+      _selectedSeason = summary.seasons[startIndex].season;
+    }
+    final selectedSummaries = type == ClanLeaderboardType.clanCapital
+        ? summary.seasons.skip(startIndex).take(6).toList(growable: false)
         : [summary.seasons[startIndex]];
     final histories = await Future.wait(
       selectedSummaries.map(
         (season) => service.getClanLeaderboardHistory(
           widget.clanTag,
-          _type,
+          type,
           after: season.after,
           before: season.before,
         ),
@@ -84,7 +100,6 @@ class _ClanLeaderboardHistoryTabState extends State<ClanLeaderboardHistoryTab> {
     if (type == _type) return;
     setState(() {
       _type = type;
-      _selectedSeason = null;
       _metric = _LeaderboardChartMetric.rank;
       _loadHistory();
     });
@@ -115,17 +130,28 @@ class _ClanLeaderboardHistoryTabState extends State<ClanLeaderboardHistoryTab> {
           _SeasonPicker(
             value: _selectedSeason!,
             label: loc.clanRankingsSelectSeason,
-            items: data.summary.seasons
-                .map(
-                  (season) => DropdownMenuItem(
-                    value: season.season,
-                    child: Text(
-                      '${_seasonLabel(season.season, Localizations.localeOf(context).toString())} · ${loc.statsIndexDays(season.daysInTop200)}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                )
-                .toList(growable: false),
+            items:
+                (_type == ClanLeaderboardType.clanCapital
+                        ? data.summary.seasons.indexed
+                              .where((entry) => entry.$1 % 6 == 0)
+                              .map((entry) => entry.$2)
+                        : data.summary.seasons)
+                    .map(
+                      (season) => DropdownMenuItem(
+                        value: season.season,
+                        child: Text(
+                          _type == ClanLeaderboardType.clanCapital
+                              ? _capitalBucketLabel(
+                                  data.summary.seasons,
+                                  season,
+                                  Localizations.localeOf(context).toString(),
+                                )
+                              : '${_seasonLabel(season.season, Localizations.localeOf(context).toString())} · ${loc.statsIndexDays(season.daysInTop200)}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
+                    .toList(growable: false),
             onChanged: (season) {
               if (season == null || season == _selectedSeason) return;
               setState(() {
@@ -164,37 +190,46 @@ class _ClanLeaderboardHistoryTabState extends State<ClanLeaderboardHistoryTab> {
           else ...[
             _LeaderboardHistoryChart(
               entries: data.history.items,
+              summaries: data.selectedSummaries,
               metric: _metric,
               type: _type,
             ),
             const SizedBox(height: CKSpacing.md),
             CKSectionPanel(
               padding: EdgeInsets.zero,
-              child: ExpansionTile(
-                title: Text(
-                  loc.generalHistory,
-                  style: CKTypography.of(context, CKTextRole.rowTitle),
-                ),
-                childrenPadding: const EdgeInsets.fromLTRB(
-                  CKSpacing.md,
-                  0,
-                  CKSpacing.md,
-                  CKSpacing.md,
-                ),
-                children: [
-                  for (
-                    var index = 0;
-                    index < data.history.items.length;
-                    index++
-                  ) ...[
-                    if (index > 0) const Divider(height: CKSpacing.lg),
-                    _LeaderboardHistoryRow(
-                      entry: data.history.items[index],
-                      type: _type,
-                      framed: false,
+              child: Material(
+                color: Colors.transparent,
+                child: Theme(
+                  data: Theme.of(
+                    context,
+                  ).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    title: Text(
+                      loc.generalHistory,
+                      style: CKTypography.of(context, CKTextRole.rowTitle),
                     ),
-                  ],
-                ],
+                    childrenPadding: const EdgeInsets.fromLTRB(
+                      CKSpacing.md,
+                      0,
+                      CKSpacing.md,
+                      CKSpacing.md,
+                    ),
+                    children: [
+                      for (
+                        var index = 0;
+                        index < data.history.items.length;
+                        index++
+                      ) ...[
+                        if (index > 0) const Divider(height: CKSpacing.lg),
+                        _LeaderboardHistoryRow(
+                          entry: data.history.items[index],
+                          type: _type,
+                          framed: false,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
@@ -274,14 +309,38 @@ class _ClanLegendHistoryTabState extends State<ClanLegendHistoryTab> {
             items: [
               DropdownMenuItem(
                 value: _topFinishes,
-                child: Text(loc.generalAllTime),
+                child: Row(
+                  children: [
+                    SizedBox.square(
+                      dimension: 24,
+                      child: const MobileWebImage(
+                        imageUrl: ImageAssets.legendLeagueOne,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(loc.generalAllTime),
+                  ],
+                ),
               ),
               for (final season in data.summary.seasons)
                 DropdownMenuItem(
                   value: season.season,
-                  child: Text(
-                    '${_seasonLabel(season.season, locale)} · ${loc.searchTabPlayers}: ${season.playerCount}',
-                    overflow: TextOverflow.ellipsis,
+                  child: Row(
+                    children: [
+                      SizedBox.square(
+                        dimension: 24,
+                        child: MobileWebImage(
+                          imageUrl: _legendBadgeForSeason(season.season),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          '${_seasonLabel(season.season, locale)} · ${loc.searchTabPlayers}: ${season.playerCount}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
@@ -561,16 +620,21 @@ class _SeasonPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      initialValue: value,
-      isExpanded: true,
-      menuMaxHeight: 360,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: const Icon(Icons.calendar_month_rounded),
+    final selectedValue = items.any((item) => item.value == value)
+        ? value
+        : items.first.value!;
+    return Semantics(
+      label: label,
+      child: FilterDropdown(
+        sortBy: selectedValue,
+        fillWidth: true,
+        leadingIcon: Icons.calendar_month_rounded,
+        sortByOptions: {
+          for (final item in items)
+            <Widget>[Expanded(child: item.child)]: item.value!,
+        },
+        updateSortBy: onChanged,
       ),
-      items: items,
-      onChanged: onChanged,
     );
   }
 }
@@ -586,10 +650,6 @@ class _LeaderboardSummaryPanel extends StatelessWidget {
     final loc = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
     final number = NumberFormat.decimalPattern(locale);
-    final days = summaries.fold<int>(
-      0,
-      (total, season) => total + season.daysInTop200,
-    );
     final ranks = summaries
         .map((season) => season.bestRank)
         .where((rank) => rank > 0);
@@ -609,14 +669,6 @@ class _LeaderboardSummaryPanel extends StatelessWidget {
     return CKSectionPanel(
       child: Row(
         children: [
-          Expanded(
-            child: _IconMetric(
-              icon: Icons.calendar_today_rounded,
-              label: loc.generalHistory,
-              value: loc.statsIndexDays(days),
-            ),
-          ),
-          const SizedBox(width: CKSpacing.sm),
           Expanded(
             child: _IconMetric(
               icon: Icons.leaderboard_rounded,
@@ -641,11 +693,13 @@ class _LeaderboardSummaryPanel extends StatelessWidget {
 class _LeaderboardHistoryChart extends StatelessWidget {
   const _LeaderboardHistoryChart({
     required this.entries,
+    required this.summaries,
     required this.metric,
     required this.type,
   });
 
   final List<ClanLeaderboardHistoryEntry> entries;
+  final List<ClanLeaderboardSeasonSummary> summaries;
   final _LeaderboardChartMetric metric;
   final ClanLeaderboardType type;
 
@@ -653,21 +707,8 @@ class _LeaderboardHistoryChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).toString();
-    final number = NumberFormat.compact(locale: locale);
-    final spots = <FlSpot>[
-      for (var index = 0; index < entries.length; index++)
-        FlSpot(
-          index.toDouble(),
-          metric == _LeaderboardChartMetric.rank
-              ? -entries[index].rank.toDouble()
-              : entries[index].points.toDouble(),
-        ),
-    ];
-    final accent = switch (type) {
-      ClanLeaderboardType.homeVillage => CKColors.legendBlue,
-      ClanLeaderboardType.builderBase => CKColors.builderBlue,
-      ClanLeaderboardType.clanCapital => CKColors.capitalOrange,
-    };
+    final chart = _LeaderboardChartData.from(entries, summaries, metric);
+    final accent = _leaderboardChartAccent(type);
 
     return CKSectionPanel(
       child: SizedBox(
@@ -675,7 +716,10 @@ class _LeaderboardHistoryChart extends StatelessWidget {
         child: LineChart(
           LineChartData(
             minX: 0,
-            maxX: (entries.length - 1).clamp(1, entries.length).toDouble(),
+            maxX: chart.totalDays.toDouble(),
+            minY: chart.minY,
+            maxY: chart.maxY,
+            clipData: const FlClipData.all(),
             gridData: FlGridData(
               drawVerticalLine: false,
               getDrawingHorizontalLine: (_) => FlLine(
@@ -684,82 +728,17 @@ class _LeaderboardHistoryChart extends StatelessWidget {
               ),
             ),
             borderData: FlBorderData(show: false),
-            titlesData: FlTitlesData(
-              topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 46,
-                  getTitlesWidget: (value, meta) => SideTitleWidget(
-                    meta: meta,
-                    child: Text(
-                      metric == _LeaderboardChartMetric.rank
-                          ? number.format(-value)
-                          : number.format(value),
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.compactLabel,
-                      ).copyWith(color: scheme.onSurfaceVariant),
-                    ),
-                  ),
-                ),
-              ),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 30,
-                  interval: entries.length <= 4
-                      ? 1
-                      : (entries.length / 4).ceilToDouble(),
-                  getTitlesWidget: (value, meta) {
-                    final index = value.round();
-                    if (index < 0 || index >= entries.length) {
-                      return const SizedBox.shrink();
-                    }
-                    return SideTitleWidget(
-                      meta: meta,
-                      child: Text(
-                        DateFormat.MMMd(locale).format(entries[index].date),
-                        style: CKTypography.of(
-                          context,
-                          CKTextRole.compactLabel,
-                        ).copyWith(color: scheme.onSurfaceVariant),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            lineTouchData: LineTouchData(
-              touchTooltipData: LineTouchTooltipData(
-                getTooltipColor: (_) => scheme.surfaceContainerHighest,
-                getTooltipItems: (spots) => spots
-                    .map((spot) {
-                      final entry = entries[spot.x.round()];
-                      final value = metric == _LeaderboardChartMetric.rank
-                          ? '#${NumberFormat.decimalPattern(locale).format(entry.rank)}'
-                          : NumberFormat.decimalPattern(
-                              locale,
-                            ).format(entry.points);
-                      return LineTooltipItem(
-                        '${DateFormat.yMMMd(locale).format(entry.date)}\n$value',
-                        CKTypography.of(
-                          context,
-                          CKTextRole.metadata,
-                        ).copyWith(color: scheme.onSurface),
-                      );
-                    })
-                    .toList(growable: false),
-              ),
+            titlesData: _chartTitles(context, locale, chart, metric),
+            lineTouchData: _chartTouchData(
+              context,
+              locale,
+              chart.rangeStart,
+              entries,
+              metric,
             ),
             lineBarsData: [
               LineChartBarData(
-                spots: spots,
+                spots: chart.spots,
                 color: accent,
                 barWidth: 3,
                 isCurved: entries.length > 3,
@@ -779,6 +758,166 @@ class _LeaderboardHistoryChart extends StatelessWidget {
     );
   }
 }
+
+class _LeaderboardChartData {
+  const _LeaderboardChartData({
+    required this.rangeStart,
+    required this.totalDays,
+    required this.spots,
+    required this.minY,
+    required this.maxY,
+  });
+
+  final DateTime rangeStart;
+  final int totalDays;
+  final List<FlSpot> spots;
+  final double minY;
+  final double maxY;
+
+  factory _LeaderboardChartData.from(
+    List<ClanLeaderboardHistoryEntry> entries,
+    List<ClanLeaderboardSeasonSummary> summaries,
+    _LeaderboardChartMetric metric,
+  ) {
+    var rangeStart = summaries.first.after;
+    var rangeEnd = summaries.first.before;
+    for (final summary in summaries.skip(1)) {
+      if (summary.after.isBefore(rangeStart)) rangeStart = summary.after;
+      if (summary.before.isAfter(rangeEnd)) rangeEnd = summary.before;
+    }
+    final totalDays = rangeEnd.difference(rangeStart).inDays.clamp(1, 366);
+    final spots = [
+      for (final entry in entries)
+        FlSpot(entry.date.difference(rangeStart).inHours / 24, switch (metric) {
+          _LeaderboardChartMetric.rank => -entry.rank.toDouble(),
+          _LeaderboardChartMetric.points => entry.points.toDouble(),
+        }),
+    ];
+    var rawMinY = spots.first.y;
+    var rawMaxY = spots.first.y;
+    for (final spot in spots.skip(1)) {
+      if (spot.y < rawMinY) rawMinY = spot.y;
+      if (spot.y > rawMaxY) rawMaxY = spot.y;
+    }
+    final padding = ((rawMaxY - rawMinY).abs() * 0.1).clamp(1, double.infinity);
+    return _LeaderboardChartData(
+      rangeStart: rangeStart,
+      totalDays: totalDays,
+      spots: spots,
+      minY: rawMinY - padding,
+      maxY: rawMaxY + padding,
+    );
+  }
+}
+
+FlTitlesData _chartTitles(
+  BuildContext context,
+  String locale,
+  _LeaderboardChartData chart,
+  _LeaderboardChartMetric metric,
+) {
+  final scheme = Theme.of(context).colorScheme;
+  final number = NumberFormat.compact(locale: locale);
+  final labelStyle = CKTypography.of(
+    context,
+    CKTextRole.compactLabel,
+  ).copyWith(color: scheme.onSurfaceVariant);
+  return FlTitlesData(
+    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    leftTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 46,
+        getTitlesWidget: (value, meta) => SideTitleWidget(
+          meta: meta,
+          child: Text(switch (metric) {
+            _LeaderboardChartMetric.rank => number.format(-value),
+            _LeaderboardChartMetric.points => number.format(value),
+          }, style: labelStyle),
+        ),
+      ),
+    ),
+    bottomTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 30,
+        interval: (chart.totalDays / 4).ceilToDouble(),
+        getTitlesWidget: (value, meta) {
+          final day = value.round();
+          if (day < 0 || day > chart.totalDays) {
+            return const SizedBox.shrink();
+          }
+          return SideTitleWidget(
+            meta: meta,
+            child: Text(
+              DateFormat.MMMd(
+                locale,
+              ).format(chart.rangeStart.add(Duration(days: day))),
+              style: labelStyle,
+            ),
+          );
+        },
+      ),
+    ),
+  );
+}
+
+LineTouchData _chartTouchData(
+  BuildContext context,
+  String locale,
+  DateTime rangeStart,
+  List<ClanLeaderboardHistoryEntry> entries,
+  _LeaderboardChartMetric metric,
+) {
+  final scheme = Theme.of(context).colorScheme;
+  final number = NumberFormat.decimalPattern(locale);
+  return LineTouchData(
+    touchTooltipData: LineTouchTooltipData(
+      getTooltipColor: (_) => scheme.surfaceContainerHighest,
+      getTooltipItems: (spots) => spots
+          .map((spot) {
+            final entry = _closestEntry(entries, rangeStart, spot.x);
+            final value = switch (metric) {
+              _LeaderboardChartMetric.rank => '#${number.format(entry.rank)}',
+              _LeaderboardChartMetric.points => number.format(entry.points),
+            };
+            return LineTooltipItem(
+              '${DateFormat.yMMMd(locale).format(entry.date)}\n$value',
+              CKTypography.of(
+                context,
+                CKTextRole.metadata,
+              ).copyWith(color: scheme.onSurface),
+            );
+          })
+          .toList(growable: false),
+    ),
+  );
+}
+
+ClanLeaderboardHistoryEntry _closestEntry(
+  List<ClanLeaderboardHistoryEntry> entries,
+  DateTime rangeStart,
+  double targetDay,
+) {
+  var closest = entries.first;
+  var closestDistance = double.infinity;
+  for (final candidate in entries) {
+    final day = candidate.date.difference(rangeStart).inHours / 24;
+    final distance = (day - targetDay).abs();
+    if (distance < closestDistance) {
+      closest = candidate;
+      closestDistance = distance;
+    }
+  }
+  return closest;
+}
+
+Color _leaderboardChartAccent(ClanLeaderboardType type) => switch (type) {
+  ClanLeaderboardType.homeVillage => CKColors.legendBlue,
+  ClanLeaderboardType.builderBase => CKColors.builderBlue,
+  ClanLeaderboardType.clanCapital => CKColors.capitalOrange,
+};
 
 class _LeaderboardHistoryRow extends StatelessWidget {
   const _LeaderboardHistoryRow({
@@ -892,7 +1031,9 @@ class _LegendHistoryRow extends StatelessWidget {
               children: [
                 SizedBox.square(
                   dimension: 42,
-                  child: MobileWebImage(imageUrl: ImageAssets.legendBlazon),
+                  child: MobileWebImage(
+                    imageUrl: _legendBadgeForSeason(entry.season),
+                  ),
                 ),
                 const SizedBox(width: CKSpacing.md),
                 Expanded(
@@ -1035,22 +1176,15 @@ class _RecordPanel extends StatelessWidget {
   }
 }
 
-class _ProfileChangeRow extends StatefulWidget {
+class _ProfileChangeRow extends StatelessWidget {
   const _ProfileChangeRow({required this.change, required this.clanBadgeUrl});
 
   final ClanProfileChange change;
   final String clanBadgeUrl;
 
   @override
-  State<_ProfileChangeRow> createState() => _ProfileChangeRowState();
-}
-
-class _ProfileChangeRowState extends State<_ProfileChangeRow> {
-  bool _expanded = false;
-
-  @override
   Widget build(BuildContext context) {
-    final change = widget.change;
+    final change = this.change;
     final loc = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
     final title = switch (change.type) {
@@ -1061,6 +1195,7 @@ class _ProfileChangeRowState extends State<_ProfileChangeRow> {
     final previous = change.previous?.toString() ?? loc.generalNotSet;
     final current = change.current?.toString() ?? loc.generalNotSet;
     return CKSectionPanel(
+      padding: const EdgeInsets.fromLTRB(10, 12, 12, 12),
       child: Semantics(
         label: '$title. $previous. $current',
         excludeSemantics: true,
@@ -1071,7 +1206,7 @@ class _ProfileChangeRowState extends State<_ProfileChangeRow> {
               SizedBox.square(
                 dimension: 48,
                 child: MobileWebImage(
-                  imageUrl: widget.clanBadgeUrl,
+                  imageUrl: clanBadgeUrl,
                   errorWidget: (_, _, _) => const Icon(Icons.shield_rounded),
                 ),
               )
@@ -1145,21 +1280,7 @@ class _ProfileChangeRowState extends State<_ProfileChangeRow> {
                     _DescriptionDiff(
                       previous: previous,
                       current: current,
-                      expanded: _expanded,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        tooltip: _expanded
-                            ? loc.generalCollapse
-                            : loc.generalExpand,
-                        onPressed: () => setState(() => _expanded = !_expanded),
-                        icon: Icon(
-                          _expanded
-                              ? Icons.expand_less_rounded
-                              : Icons.expand_more_rounded,
-                        ),
-                      ),
+                      expanded: true,
                     ),
                   ],
                 ],
@@ -1396,3 +1517,25 @@ String _seasonLabel(String season, String locale) {
   if (parsed == null) return season;
   return DateFormat.yMMMM(locale).format(parsed);
 }
+
+String _capitalBucketLabel(
+  List<ClanLeaderboardSeasonSummary> seasons,
+  ClanLeaderboardSeasonSummary selected,
+  String locale,
+) {
+  final startIndex = seasons.indexOf(selected);
+  final bucket = seasons.skip(startIndex < 0 ? 0 : startIndex).take(6).toList();
+  final start = bucket
+      .map((item) => item.after)
+      .reduce((a, b) => a.isBefore(b) ? a : b);
+  final end = bucket
+      .map((item) => item.before)
+      .reduce((a, b) => a.isAfter(b) ? a : b);
+  final format = DateFormat.yMMMd(locale);
+  return '${format.format(start)} – ${format.format(end)}';
+}
+
+String _legendBadgeForSeason(String season) =>
+    RegExp(r'^\d{4}-\d{2}$').hasMatch(season)
+    ? ImageAssets.legendBlazon
+    : ImageAssets.legendLeagueOne;

@@ -12,12 +12,20 @@ void main() {
   Widget app(Widget child) => MaterialApp(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    home: Scaffold(body: child),
+    home: Scaffold(body: SingleChildScrollView(child: child)),
   );
 
-  testWidgets('numeric clan filters keep focus across value updates', (
-    tester,
-  ) async {
+  test('player Town Hall range expands to API levels', () {
+    const filters = PlayerSearchFilterValue(
+      minTownHallLevel: 12,
+      maxTownHallLevel: 15,
+    );
+
+    expect(filters.townHallLevels, [12, 13, 14, 15]);
+    expect(const PlayerSearchFilterValue().townHallLevels, isEmpty);
+  });
+
+  testWidgets('clan member range emits min and max values', (tester) async {
     final api = FakeApiService();
     api.getStubs['/locations'] = http.Response('{"items":[]}', 200);
     var value = const ClanSearchFilterValue();
@@ -33,28 +41,30 @@ void main() {
         ),
       ),
     );
+
+    tester.widget<RangeSlider>(find.byType(RangeSlider).first).onChanged!(
+      const RangeValues(12, 40),
+    );
     await tester.pump();
 
-    final field = find.byType(TextFormField).first;
-    await tester.tap(field);
-    await tester.enterText(field, '1');
-    await tester.pump();
-    expect(tester.testTextInput.isVisible, isTrue);
-
-    await tester.enterText(field, '12');
-    await tester.pump();
-    expect(tester.widget<TextFormField>(field).controller?.text, '12');
     expect(value.minMembers, 12);
+    expect(value.maxMembers, 40);
   });
 
-  testWidgets('retained dropdown selections wait for loaded options', (
+  testWidgets('location filter only includes countries with flags', (
     tester,
   ) async {
     final api = FakeApiService();
     api.getStubs['/locations'] = http.Response(
       jsonEncode({
         'items': [
-          {'id': 32000006, 'name': 'International'},
+          {'id': 32000006, 'name': 'International', 'isCountry': false},
+          {
+            'id': 32000058,
+            'name': 'United States',
+            'isCountry': true,
+            'countryCode': 'US',
+          },
         ],
       }),
       200,
@@ -70,11 +80,11 @@ void main() {
 
     await tester.pumpWidget(
       app(
-        ListView(
+        Column(
           children: [
             ClanSearchFiltersPanel(
               apiService: api,
-              value: const ClanSearchFilterValue(locationId: 32000006),
+              value: const ClanSearchFilterValue(locationId: 32000058),
               onChanged: (_) {},
             ),
             PlayerSearchFiltersPanel(
@@ -86,11 +96,12 @@ void main() {
         ),
       ),
     );
-    expect(tester.takeException(), isNull);
-
     await tester.pump();
+
     expect(tester.takeException(), isNull);
-    expect(find.text('International'), findsOneWidget);
+    expect(find.text('United States'), findsOneWidget);
+    expect(find.text('International'), findsNothing);
     expect(find.text('Legend League'), findsOneWidget);
+    expect(find.byType(TextFormField), findsNothing);
   });
 }

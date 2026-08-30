@@ -82,7 +82,10 @@ void main() {
     api.getStubs['/player/%23P1/timers'] = http.Response('{"items":[]}', 200);
     final service = PlayerService(apiService: api);
 
-    expect((await service.loadPlayerCwlHistory('#P1')).items, isEmpty);
+    final firstCwlLoad = service.loadPlayerCwlHistory('#P1');
+    final secondCwlLoad = service.loadPlayerCwlHistory('#P1');
+    expect(secondCwlLoad, same(firstCwlLoad));
+    expect((await firstCwlLoad).items, isEmpty);
     expect((await service.loadPlayerTimers('#P1')).items, isEmpty);
     expect(api.getCallCounts['/player/%23P1/cwl/history?limit=100'], 1);
     expect(api.getCallCounts['/player/%23P1/timers'], 1);
