@@ -45,7 +45,7 @@ export class PlatformDiscordOAuthRuntime implements DiscordOAuthRuntime {
           finish(null, new Error('Discord OAuth state did not match this login.'));
           return;
         }
-        const error = message.error === undefined ? null : String(message.error);
+        const error = message.error == null ? null : String(message.error);
         const callback = new URL('/auth/callback', window.location.origin);
         callback.searchParams.set('state', state);
         if (error !== null && error.length > 0) {

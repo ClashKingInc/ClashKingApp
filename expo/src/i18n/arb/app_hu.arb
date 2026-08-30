@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Tervezze meg a prioritásokat",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangsorolja azt, ami a legfontosabb. A frissítési szintek és az aktív munka mindig rendben marad.",
+  "upgradeTrackerPlanClose": "Bezárás",
+  "upgradeTrackerPlanPlanningGoals": "Tervezési célok",
+  "upgradeTrackerPlanConstructionSubtitle": "Építés és hős frissítések",
+  "upgradeTrackerPlanResearchSubtitle": "Csapatok, varázslatok és ostromkutatás",
+  "upgradeTrackerPlanPetHouseSubtitle": "Pet House frissítések",
+  "upgradeTrackerPlanPrioritizeNewItems": "Az új elemek prioritása",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Először helyezze el az újonnan feloldott vagy fel nem épített elemeket",
+  "upgradeTrackerPlanSharedSummary": "{tier} szint · megosztott mix {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "{tier} szint · szigorú · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "maximumig fut",
+  "upgradeTrackerPlanYieldsAfter": "hozam {target}% után",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Szigorú",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Átrendezés {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relatív rétegsúly",
+  "upgradeTrackerPlanCompletionTarget": "Befejezési cél",
+  "upgradeTrackerPlanStrictTier": "Szigorú szint",
+  "upgradeTrackerPlanWeight": "Súly {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "A maximumig",
+  "upgradeTrackerPlanUntilPercent": "{value}%-ig",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "A számozott szintek futnak először. A megosztott sorok ugyanazt a rétegszámot tartják, és keveréküket a relatív súlyokból normalizálják, így az 50 + 25 67% / 33% lesz. A cél eléri ezt a százalékos arányt a kategória hozamával, míg később jogosult marad.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max az előrehaladás előtt",
+  "upgradeTrackerPlanGoalRushNextHall": "Gyorsan érje el a következő csarnokot",
+  "upgradeTrackerPlanGoalCatchUp": "Felzárkózni rohanó szintek",
+  "upgradeTrackerPlanGoalUnlockFirst": "Először oldjon fel új dolgokat",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Falak minden héten",
+  "upgradeTrackerPlanOff": "Ki",
+  "upgradeTrackerPlanPerWeek": "{count} / hét",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "A falakhoz előnyben részesítsd az aranyat",
+  "upgradeTrackerPlanPreferGoldDescription": "Falak költésekor használjon aranyat az Elixir előtt",
+  "upgradeTrackerPlanApplyPriorities": "Alkalmazza a prioritásokat",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Kialakított védelmek",
+  "upgradeTrackerPlanCategoryTraps": "Csapdák",
+  "upgradeTrackerPlanCategoryArmy": "hadsereg",
+  "upgradeTrackerPlanCategoryDarkTroops": "Sötét csapatok",
+  "upgradeTrackerPlanCategorySieges": "Ostromok",
+  "upgradeTrackerPlanCategorySupercharge": "Feltöltés",
+  "navigationCloseDrawer": "Navigációs fiók bezárása",
+  "navigationOpenProfileMenu": "Profilmenü megnyitása",
+  "navigationClashKingWeb": "ClashKing web",
+  "settingsPrivacyDataTitle": "Adatvédelem és adatok",
+  "settingsPrivacyPolicyDescription": "Tekintsd át, mit gyűjt a ClashKing, miért használja, kik kezelik az adatokat, milyen megőrzési szabályok érvényesek, és hogyan léphetsz velünk kapcsolatba.",
+  "settingsPrivacyExportTitle": "Adataid elérése vagy exportálása",
+  "settingsPrivacyExportDescription": "Töltsd le a ClashKing-bejelentkezésedhez kapcsolt fiókadatok másolatát, beleértve a kapcsolt Clash of Clans-fiókokat és az értesítési beállításokat.",
+  "settingsPrivacyCorrectionTitle": "Adatok helyesbítése vagy korlátozása",
+  "settingsPrivacyCorrectionDescription": "Távolítsd el a kapcsolt Clash of Clans-fiókokat a fiókbeállításokban, kapcsold ki az értesítéseket, vagy kérj helyesbítést vagy korlátozást az ügyfélszolgálattól.",
+  "settingsPrivacyDeletionTitle": "ClashKing-fiókod törlése",
+  "settingsPrivacyDeletionDescription": "Ez elindítja ClashKing-fiókod és a hozzá tartozó alkalmazásadatok törlését, kivéve, ha a ClashKingnek biztonsági, csalásmegelőzési vagy jogi okokból korlátozott adatokat kell megőriznie.",
+  "settingsPrivacyChildrenTitle": "Gyermekek és családok",
+  "settingsPrivacyChildrenDescription": "A ClashKing általános közönségnek szánt kísérőalkalmazás, és nem gyermekeknek készült. Ne hozz létre fiókot, ha országodban szülői vagy gondviselői jóváhagyás nélkül még nem adhatsz hozzájárulást.",
+  "settingsPrivacyExportReady": "Az adatexport mentésre kész.",
+  "settingsPrivacyExportCreateFailed": "Az adatexportot nem sikerült létrehozni. Helyette előkészítettünk egy adatvédelmi e-mailt.",
+  "settingsPrivacyExportPrepareFirst": "Mentés előtt készítsd elő az exportot.",
+  "settingsPrivacyExportSaved": "Az adatexport mentve.",
+  "settingsPrivacyExportSaveFailed": "Az adatexportot nem sikerült menteni. Helyette előkészítettünk egy adatvédelmi e-mailt.",
+  "settingsPrivacyDeleteUnavailable": "A fióktörlés ebben a buildben nem érhető el. Helyette előkészítettünk egy adatvédelmi e-mailt.",
+  "settingsPrivacyOpenPolicy": "Szabályzat megnyitása",
+  "settingsPrivacyRefreshExport": "Export frissítése",
+  "settingsPrivacyPrepareExport": "Export előkészítése",
+  "settingsPrivacySaveExport": "Export mentése",
+  "settingsPrivacyContactSupport": "Kapcsolat az ügyfélszolgálattal",
+  "settingsPrivacyDeleteAccount": "Fiók törlése",
+  "settingsPrivacyDeleteConfirmTitle": "Törlöd a fiókot?",
+  "settingsPrivacyDeleteConfirmDescription": "A kérelem a feldolgozás után végleges. Elveszítheted a kapcsolt fiókokat, értesítési beállításokat, mentett preferenciákat és hitelesítési módokat."
 }

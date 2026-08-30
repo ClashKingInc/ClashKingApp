@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Σχεδιάστε προτεραιότητες",
+  "upgradeTrackerPlanPrioritiesDescription": "Βαθμολογήστε τι έχει μεγαλύτερη σημασία. Τα επίπεδα αναβάθμισης και η ενεργή εργασία παραμένουν πάντα σε τάξη.",
+  "upgradeTrackerPlanClose": "Κλείσιμο",
+  "upgradeTrackerPlanPlanningGoals": "Στόχοι προγραμματισμού",
+  "upgradeTrackerPlanConstructionSubtitle": "Κατασκευές και αναβαθμίσεις ηρώων",
+  "upgradeTrackerPlanResearchSubtitle": "Έρευνα για στρατεύματα, ξόρκια και πολιορκία",
+  "upgradeTrackerPlanPetHouseSubtitle": "Αναβαθμίσεις Pet House",
+  "upgradeTrackerPlanPrioritizeNewItems": "Δώστε προτεραιότητα σε νέα στοιχεία",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Τοποθετήστε πρώτα τα πρόσφατα ξεκλειδωμένα ή μη κατασκευασμένα αντικείμενα",
+  "upgradeTrackerPlanSharedSummary": "Επίπεδο {tier} · κοινόχρηστο μείγμα {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Επίπεδο {tier} · αυστηρό · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "τρέχει μέχρι το μέγιστο",
+  "upgradeTrackerPlanYieldsAfter": "αποδόσεις μετά από {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Αυστηρό",
+  "upgradeTrackerPlanMax": "Μέγ",
+  "upgradeTrackerPlanReorder": "Αναπαραγγελία {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Σχετικό βάρος βαθμίδας",
+  "upgradeTrackerPlanCompletionTarget": "Στόχος ολοκλήρωσης",
+  "upgradeTrackerPlanStrictTier": "Αυστηρή βαθμίδα",
+  "upgradeTrackerPlanWeight": "Βάρος {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Μέχρι το μέγιστο",
+  "upgradeTrackerPlanUntilPercent": "Έως {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Τα αριθμημένα επίπεδα τρέχουν πρώτα. Οι κοινόχρηστες σειρές διατηρούν τον ίδιο αριθμό βαθμίδων και το μείγμα τους κανονικοποιείται από τα σχετικά βάρη, έτσι το 50 + 25 γίνεται 67% / 33%. Ένας στόχος κάνει μια απόδοση κατηγορίας αφού φτάσει σε αυτό το ποσοστό, ενώ παραμένει κατάλληλος αργότερα.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max πριν προχωρήσετε",
+  "upgradeTrackerPlanGoalRushNextHall": "Φτάστε γρήγορα στην επόμενη αίθουσα",
+  "upgradeTrackerPlanGoalCatchUp": "Προλάβετε τα βιαστικά επίπεδα",
+  "upgradeTrackerPlanGoalUnlockFirst": "Ξεκλειδώστε πρώτα νέα πράγματα",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Τοίχοι κάθε εβδομάδα",
+  "upgradeTrackerPlanOff": "Απενεργοποίηση",
+  "upgradeTrackerPlanPerWeek": "{count} / εβδομάδα",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Προτιμήστε το Gold για τοίχους",
+  "upgradeTrackerPlanPreferGoldDescription": "Χρησιμοποιήστε το Gold πριν το Elixir όταν ξοδεύετε τοίχους",
+  "upgradeTrackerPlanApplyPriorities": "Εφαρμόστε προτεραιότητες",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Κατασκευασμένες άμυνες",
+  "upgradeTrackerPlanCategoryTraps": "Παγίδες",
+  "upgradeTrackerPlanCategoryArmy": "Στρατός",
+  "upgradeTrackerPlanCategoryDarkTroops": "Σκοτεινά στρατεύματα",
+  "upgradeTrackerPlanCategorySieges": "Πολιορκίες",
+  "upgradeTrackerPlanCategorySupercharge": "Υπερχρέωση",
+  "navigationCloseDrawer": "Κλείσιμο συρταριού πλοήγησης",
+  "navigationOpenProfileMenu": "Άνοιγμα μενού προφίλ",
+  "navigationClashKingWeb": "ClashKing για web",
+  "settingsPrivacyDataTitle": "Απόρρητο και δεδομένα",
+  "settingsPrivacyPolicyDescription": "Δείτε τι συλλέγει το ClashKing, γιατί χρησιμοποιούνται τα δεδομένα, ποιος τα επεξεργάζεται, τους κανόνες διατήρησης και πώς να επικοινωνήσετε μαζί μας.",
+  "settingsPrivacyExportTitle": "Πρόσβαση ή εξαγωγή των δεδομένων σας",
+  "settingsPrivacyExportDescription": "Κατεβάστε ένα αντίγραφο των δεδομένων λογαριασμού που συνδέονται με τη σύνδεσή σας στο ClashKing, όπως συνδεδεμένους λογαριασμούς Clash of Clans και προτιμήσεις ειδοποιήσεων.",
+  "settingsPrivacyCorrectionTitle": "Διόρθωση ή περιορισμός δεδομένων",
+  "settingsPrivacyCorrectionDescription": "Καταργήστε συνδεδεμένους λογαριασμούς Clash of Clans από τις ρυθμίσεις λογαριασμού, απενεργοποιήστε τις ειδοποιήσεις ή επικοινωνήστε με την υποστήριξη για αιτήματα διόρθωσης και περιορισμού.",
+  "settingsPrivacyDeletionTitle": "Διαγραφή του λογαριασμού ClashKing",
+  "settingsPrivacyDeletionDescription": "Αυτό ξεκινά τη διαγραφή του λογαριασμού ClashKing και των σχετικών δεδομένων εφαρμογής, εκτός αν το ClashKing πρέπει να διατηρήσει περιορισμένα αρχεία για λόγους ασφαλείας, πρόληψης απάτης ή νομικών υποχρεώσεων.",
+  "settingsPrivacyChildrenTitle": "Παιδιά και οικογένειες",
+  "settingsPrivacyChildrenDescription": "Το ClashKing είναι μια συνοδευτική εφαρμογή για το ευρύ κοινό και δεν απευθύνεται σε παιδιά. Μην δημιουργήσετε λογαριασμό αν στη χώρα σας δεν είστε αρκετά μεγάλοι για να συναινέσετε χωρίς έγκριση γονέα ή κηδεμόνα.",
+  "settingsPrivacyExportReady": "Η εξαγωγή δεδομένων είναι έτοιμη για αποθήκευση.",
+  "settingsPrivacyExportCreateFailed": "Δεν ήταν δυνατή η δημιουργία της εξαγωγής δεδομένων. Ετοιμάστηκε ένα email απορρήτου.",
+  "settingsPrivacyExportPrepareFirst": "Προετοιμάστε την εξαγωγή πριν την αποθηκεύσετε.",
+  "settingsPrivacyExportSaved": "Η εξαγωγή δεδομένων αποθηκεύτηκε.",
+  "settingsPrivacyExportSaveFailed": "Δεν ήταν δυνατή η αποθήκευση της εξαγωγής δεδομένων. Ετοιμάστηκε ένα email απορρήτου.",
+  "settingsPrivacyDeleteUnavailable": "Η διαγραφή λογαριασμού δεν είναι διαθέσιμη σε αυτή την έκδοση. Ετοιμάστηκε ένα email απορρήτου.",
+  "settingsPrivacyOpenPolicy": "Άνοιγμα πολιτικής",
+  "settingsPrivacyRefreshExport": "Ανανέωση εξαγωγής",
+  "settingsPrivacyPrepareExport": "Προετοιμασία εξαγωγής",
+  "settingsPrivacySaveExport": "Αποθήκευση εξαγωγής",
+  "settingsPrivacyContactSupport": "Επικοινωνία με την υποστήριξη",
+  "settingsPrivacyDeleteAccount": "Διαγραφή λογαριασμού",
+  "settingsPrivacyDeleteConfirmTitle": "Διαγραφή λογαριασμού;",
+  "settingsPrivacyDeleteConfirmDescription": "Το αίτημα είναι οριστικό μετά την επεξεργασία του. Ενδέχεται να χάσετε συνδεδεμένους λογαριασμούς, ρυθμίσεις ειδοποιήσεων, αποθηκευμένες προτιμήσεις και μεθόδους ελέγχου ταυτότητας."
 }

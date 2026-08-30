@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Планируйте приоритеты",
+  "upgradeTrackerPlanPrioritiesDescription": "Ранжируйте то, что важнее всего. Уровни обновления и активная работа всегда остаются в порядке.",
+  "upgradeTrackerPlanClose": "Закрыть",
+  "upgradeTrackerPlanPlanningGoals": "Планирование целей",
+  "upgradeTrackerPlanConstructionSubtitle": "Строительство и улучшения героев",
+  "upgradeTrackerPlanResearchSubtitle": "Войска, заклинания и исследования осад",
+  "upgradeTrackerPlanPetHouseSubtitle": "Улучшения домика для домашних животных",
+  "upgradeTrackerPlanPrioritizeNewItems": "Отдавайте приоритет новым предметам",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Сначала размещайте недавно разблокированные или непостроенные предметы.",
+  "upgradeTrackerPlanSharedSummary": "Уровень {tier} · общий микс {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Уровень {tier} · строгий · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "работает до максимума",
+  "upgradeTrackerPlanYieldsAfter": "доходность после {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Строгий",
+  "upgradeTrackerPlanMax": "Макс",
+  "upgradeTrackerPlanReorder": "Изменить порядок {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Относительный вес уровня",
+  "upgradeTrackerPlanCompletionTarget": "Цель завершения",
+  "upgradeTrackerPlanStrictTier": "Строгий уровень",
+  "upgradeTrackerPlanWeight": "Вес {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "До достижения максимума",
+  "upgradeTrackerPlanUntilPercent": "До {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Пронумерованные уровни запускаются первыми. Общие строки сохраняют тот же номер уровня, а их сочетание нормализуется на основе относительных весов, поэтому 50 + 25 становится 67%/33%. Цель дает доход по категории после достижения этого процента, но остается подходящей для нее позже.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Макс перед продвижением",
+  "upgradeTrackerPlanGoalRushNextHall": "Быстро доберитесь до следующего зала",
+  "upgradeTrackerPlanGoalCatchUp": "Проходите быстрые уровни",
+  "upgradeTrackerPlanGoalUnlockFirst": "Сначала открывайте новые вещи",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Стены каждую неделю",
+  "upgradeTrackerPlanOff": "Выкл.",
+  "upgradeTrackerPlanPerWeek": "{count} / неделя",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Предпочитайте золото для стен",
+  "upgradeTrackerPlanPreferGoldDescription": "Используйте золото перед эликсиром при трате стен.",
+  "upgradeTrackerPlanApplyPriorities": "Применить приоритеты",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Созданная защита",
+  "upgradeTrackerPlanCategoryTraps": "Ловушки",
+  "upgradeTrackerPlanCategoryArmy": "Армия",
+  "upgradeTrackerPlanCategoryDarkTroops": "Темные войска",
+  "upgradeTrackerPlanCategorySieges": "Осада",
+  "upgradeTrackerPlanCategorySupercharge": "Суперзаряд",
+  "navigationCloseDrawer": "Закрыть панель навигации",
+  "navigationOpenProfileMenu": "Открыть меню профиля",
+  "navigationClashKingWeb": "ClashKing в браузере",
+  "settingsPrivacyDataTitle": "Конфиденциальность и данные",
+  "settingsPrivacyPolicyDescription": "Узнайте, какие данные собирает ClashKing, зачем они используются, кто их обрабатывает, каковы правила хранения и как с нами связаться.",
+  "settingsPrivacyExportTitle": "Доступ к данным или их экспорт",
+  "settingsPrivacyExportDescription": "Скачайте копию данных аккаунта, связанных со входом в ClashKing, включая привязанные аккаунты Clash of Clans и настройки уведомлений.",
+  "settingsPrivacyCorrectionTitle": "Исправление или ограничение данных",
+  "settingsPrivacyCorrectionDescription": "Удалите привязанные аккаунты Clash of Clans в настройках аккаунта, отключите уведомления или обратитесь в поддержку с запросом на исправление или ограничение данных.",
+  "settingsPrivacyDeletionTitle": "Удаление аккаунта ClashKing",
+  "settingsPrivacyDeletionDescription": "Это запустит удаление аккаунта ClashKing и связанных данных приложения, если только ClashKing не обязан хранить ограниченные сведения для безопасности, предотвращения мошенничества или выполнения юридических обязательств.",
+  "settingsPrivacyChildrenTitle": "Дети и семьи",
+  "settingsPrivacyChildrenDescription": "ClashKing — вспомогательное приложение для широкой аудитории, не предназначенное для детей. Не создавайте аккаунт, если в вашей стране вы ещё не можете дать согласие без разрешения родителя или опекуна.",
+  "settingsPrivacyExportReady": "Экспорт данных готов к сохранению.",
+  "settingsPrivacyExportCreateFailed": "Не удалось создать экспорт данных. Вместо этого подготовлено письмо по вопросам конфиденциальности.",
+  "settingsPrivacyExportPrepareFirst": "Подготовьте экспорт перед сохранением.",
+  "settingsPrivacyExportSaved": "Экспорт данных сохранён.",
+  "settingsPrivacyExportSaveFailed": "Не удалось сохранить экспорт данных. Вместо этого подготовлено письмо по вопросам конфиденциальности.",
+  "settingsPrivacyDeleteUnavailable": "Удаление аккаунта недоступно в этой сборке. Вместо этого подготовлено письмо по вопросам конфиденциальности.",
+  "settingsPrivacyOpenPolicy": "Открыть политику",
+  "settingsPrivacyRefreshExport": "Обновить экспорт",
+  "settingsPrivacyPrepareExport": "Подготовить экспорт",
+  "settingsPrivacySaveExport": "Сохранить экспорт",
+  "settingsPrivacyContactSupport": "Связаться с поддержкой",
+  "settingsPrivacyDeleteAccount": "Удалить аккаунт",
+  "settingsPrivacyDeleteConfirmTitle": "Удалить аккаунт?",
+  "settingsPrivacyDeleteConfirmDescription": "После обработки запрос станет необратимым. Вы можете потерять привязанные аккаунты, настройки уведомлений, сохранённые предпочтения и способы аутентификации."
 }

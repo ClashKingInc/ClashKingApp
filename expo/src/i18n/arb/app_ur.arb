@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "منصوبہ بندی کی ترجیحات",
+  "upgradeTrackerPlanPrioritiesDescription": "درجہ بندی کریں جو سب سے اہم ہے۔ اپ گریڈ کی سطح اور فعال کام ہمیشہ ترتیب میں رہتے ہیں۔",
+  "upgradeTrackerPlanClose": "بند",
+  "upgradeTrackerPlanPlanningGoals": "منصوبہ بندی کے اہداف",
+  "upgradeTrackerPlanConstructionSubtitle": "تعمیراتی اور ہیرو اپ گریڈ",
+  "upgradeTrackerPlanResearchSubtitle": "دستے، منتر اور محاصرے کی تحقیق",
+  "upgradeTrackerPlanPetHouseSubtitle": "پیٹ ہاؤس اپ گریڈ",
+  "upgradeTrackerPlanPrioritizeNewItems": "نئی اشیاء کو ترجیح دیں۔",
+  "upgradeTrackerPlanPrioritizeNewDescription": "نئی کھلی ہوئی یا غیر تعمیر شدہ اشیاء کو پہلے رکھیں",
+  "upgradeTrackerPlanSharedSummary": "ٹیئر {tier} · مشترکہ مکس {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "ٹائر {tier} · سخت · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "زیادہ سے زیادہ تک چلتا ہے",
+  "upgradeTrackerPlanYieldsAfter": "{target}% کے بعد پیداوار",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "سخت",
+  "upgradeTrackerPlanMax": "زیادہ سے زیادہ",
+  "upgradeTrackerPlanReorder": "دوبارہ ترتیب دیں {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "متعلقہ درجے کا وزن",
+  "upgradeTrackerPlanCompletionTarget": "تکمیل کا ہدف",
+  "upgradeTrackerPlanStrictTier": "سخت درجہ",
+  "upgradeTrackerPlanWeight": "وزن {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "زیادہ سے زیادہ ہونے تک",
+  "upgradeTrackerPlanUntilPercent": "{value}% تک",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "نمبر والے درجے پہلے چلتے ہیں۔ مشترکہ قطاریں ایک ہی درجے کا نمبر رکھتی ہیں، اور ان کے اختلاط کو رشتہ دار وزن سے معمول بنایا جاتا ہے، لہذا 50 + 25 67% / 33% بن جاتا ہے۔ ایک ہدف اس فیصد تک پہنچنے کے بعد زمرہ کی پیداوار دیتا ہے جبکہ یہ بعد میں اہل رہتا ہے۔",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "آگے بڑھنے سے پہلے زیادہ سے زیادہ",
+  "upgradeTrackerPlanGoalRushNextHall": "جلدی سے اگلے ہال میں پہنچو",
+  "upgradeTrackerPlanGoalCatchUp": "جلدی کی سطح کو پکڑو",
+  "upgradeTrackerPlanGoalUnlockFirst": "پہلے نئی چیزوں کو غیر مقفل کریں۔",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "ہر ہفتے دیواریں۔",
+  "upgradeTrackerPlanOff": "آف",
+  "upgradeTrackerPlanPerWeek": "{count}/ ہفتہ",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "دیواروں کے لیے سونے کو ترجیح دیں۔",
+  "upgradeTrackerPlanPreferGoldDescription": "دیواروں پر خرچ کرتے وقت ایلیکسیر سے پہلے سونے کا استعمال کریں۔",
+  "upgradeTrackerPlanApplyPriorities": "ترجیحات کا اطلاق کریں۔",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "تیار کردہ دفاع",
+  "upgradeTrackerPlanCategoryTraps": "پھندے",
+  "upgradeTrackerPlanCategoryArmy": "فوج",
+  "upgradeTrackerPlanCategoryDarkTroops": "تاریک فوجیں۔",
+  "upgradeTrackerPlanCategorySieges": "محاصرے",
+  "upgradeTrackerPlanCategorySupercharge": "سپرچارج",
+  "navigationCloseDrawer": "نیویگیشن ڈراور بند کریں",
+  "navigationOpenProfileMenu": "پروفائل مینو کھولیں",
+  "navigationClashKingWeb": "ClashKing ویب",
+  "settingsPrivacyDataTitle": "رازداری اور ڈیٹا",
+  "settingsPrivacyPolicyDescription": "دیکھیں کہ ClashKing کیا جمع کرتا ہے، اسے کیوں استعمال کیا جاتا ہے، کون اس پر کارروائی کرتا ہے، اسے محفوظ رکھنے کے اصول اور ہم سے رابطے کا طریقہ کیا ہے۔",
+  "settingsPrivacyExportTitle": "اپنے ڈیٹا تک رسائی یا اسے برآمد کریں",
+  "settingsPrivacyExportDescription": "اپنے ClashKing لاگ اِن سے منسلک اکاؤنٹ ڈیٹا کی نقل ڈاؤن لوڈ کریں، جس میں منسلک Clash of Clans اکاؤنٹس اور اطلاع کی ترجیحات شامل ہیں۔",
+  "settingsPrivacyCorrectionTitle": "ڈیٹا درست یا محدود کریں",
+  "settingsPrivacyCorrectionDescription": "اکاؤنٹ کی ترتیبات سے منسلک Clash of Clans اکاؤنٹس ہٹائیں، اطلاعات بند کریں یا تصحیح اور پابندی کی درخواستوں کے لیے معاونت سے رابطہ کریں۔",
+  "settingsPrivacyDeletionTitle": "اپنا ClashKing اکاؤنٹ حذف کریں",
+  "settingsPrivacyDeletionDescription": "اس سے آپ کے ClashKing اکاؤنٹ اور متعلقہ ایپ ڈیٹا کو حذف کرنے کا عمل شروع ہوگا، سوائے اس کے کہ ClashKing کو سلامتی، دھوکا دہی کی روک تھام یا قانونی ذمہ داریوں کے لیے محدود ریکارڈ رکھنا لازم ہو۔",
+  "settingsPrivacyChildrenTitle": "بچے اور خاندان",
+  "settingsPrivacyChildrenDescription": "ClashKing عام صارفین کے لیے ایک معاون ایپ ہے اور بچوں کے لیے نہیں ہے۔ اگر آپ کے ملک میں والدین یا سرپرست کی منظوری کے بغیر رضامندی دینے کی عمر نہیں ہے تو اکاؤنٹ نہ بنائیں۔",
+  "settingsPrivacyExportReady": "آپ کا ڈیٹا برآمد محفوظ کرنے کے لیے تیار ہے۔",
+  "settingsPrivacyExportCreateFailed": "ڈیٹا برآمد نہیں بنایا جا سکا۔ اس کے بجائے رازداری سے متعلق ای میل تیار کی گئی ہے۔",
+  "settingsPrivacyExportPrepareFirst": "محفوظ کرنے سے پہلے برآمد تیار کریں۔",
+  "settingsPrivacyExportSaved": "آپ کا ڈیٹا برآمد محفوظ کر دیا گیا ہے۔",
+  "settingsPrivacyExportSaveFailed": "ڈیٹا برآمد محفوظ نہیں کیا جا سکا۔ اس کے بجائے رازداری سے متعلق ای میل تیار کی گئی ہے۔",
+  "settingsPrivacyDeleteUnavailable": "اس بلڈ میں اکاؤنٹ حذف کرنا دستیاب نہیں ہے۔ اس کے بجائے رازداری سے متعلق ای میل تیار کی گئی ہے۔",
+  "settingsPrivacyOpenPolicy": "پالیسی کھولیں",
+  "settingsPrivacyRefreshExport": "برآمد تازہ کریں",
+  "settingsPrivacyPrepareExport": "برآمد تیار کریں",
+  "settingsPrivacySaveExport": "برآمد محفوظ کریں",
+  "settingsPrivacyContactSupport": "معاونت سے رابطہ کریں",
+  "settingsPrivacyDeleteAccount": "اکاؤنٹ حذف کریں",
+  "settingsPrivacyDeleteConfirmTitle": "اکاؤنٹ حذف کریں؟",
+  "settingsPrivacyDeleteConfirmDescription": "کارروائی کے بعد یہ درخواست مستقل ہوگی۔ آپ منسلک اکاؤنٹس، اطلاع کی ترتیبات، محفوظ ترجیحات اور توثیقی طریقے کھو سکتے ہیں۔"
 }

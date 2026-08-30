@@ -68,13 +68,20 @@
       "kotlin/com/clashking/clashkingapp/UpgradeAppWidgetProvider.kt",
       "kotlin/com/clashking/clashkingapp/UpgradeWidgetConfigureActivity.kt",
       "kotlin/com/clashking/clashkingapp/UpgradeWidgetSelectionStore.kt",
+      "res/layout/widget_layout.xml",
+      "res/drawable/war_widget_background.xml",
+      "res/values/widget_colors.xml",
+      "res/values-night/widget_colors.xml",
+      "res/values/widget_strings.xml",
+      "res/values-fr/widget_strings.xml",
       "res/xml/widget_provider.xml",
       "res/xml/upgrade_widget_provider.xml"
     ],
     "widgetReceivers": [
       {
         "name": ".WarAppWidgetProvider",
-        "providerResource": "@xml/widget_provider"
+        "providerResource": "@xml/widget_provider",
+        "label": "@string/war_widget_label"
       },
       {
         "name": ".UpgradeAppWidgetProvider",

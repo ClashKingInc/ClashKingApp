@@ -83,7 +83,6 @@ export class ExpoPushRuntime implements PushRuntime {
         name: PUSH_NOTIFICATION_CHANNEL.name,
         description: PUSH_NOTIFICATION_CHANNEL.description,
         importance: Notifications.AndroidImportance.HIGH,
-        sound: 'default',
       });
     }
     this.responseSubscription?.remove();

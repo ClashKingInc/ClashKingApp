@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Planlæg prioriteter",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangér det, der betyder mest. Opgraderingsniveauer og aktivt arbejde forbliver altid i orden.",
+  "upgradeTrackerPlanClose": "Luk",
+  "upgradeTrackerPlanPlanningGoals": "Planlægning af mål",
+  "upgradeTrackerPlanConstructionSubtitle": "Byggeri og helteopgraderinger",
+  "upgradeTrackerPlanResearchSubtitle": "Tropper, besværgelser og belejringsforskning",
+  "upgradeTrackerPlanPetHouseSubtitle": "Pet House opgraderinger",
+  "upgradeTrackerPlanPrioritizeNewItems": "Prioriter nye varer",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Placer nyligt ulåste eller ubyggede genstande først",
+  "upgradeTrackerPlanSharedSummary": "Niveau {tier} · delt blanding {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Niveau {tier} · streng · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "kører indtil max",
+  "upgradeTrackerPlanYieldsAfter": "udbytte efter {target} %",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Strenge",
+  "upgradeTrackerPlanMax": "Maks",
+  "upgradeTrackerPlanReorder": "Genbestil {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relativ tiervægt",
+  "upgradeTrackerPlanCompletionTarget": "Fuldførelsesmål",
+  "upgradeTrackerPlanStrictTier": "Strenge niveau",
+  "upgradeTrackerPlanWeight": "Vægt {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Indtil max",
+  "upgradeTrackerPlanUntilPercent": "Indtil {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Nummererede niveauer kører først. Delte rækker beholder det samme niveaunummer, og deres blanding er normaliseret fra de relative vægte, så 50 + 25 bliver 67% / 33%. Et mål giver en kategori udbytte, efter at det når denne procentdel, mens det forbliver kvalificeret senere.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max før du går videre",
+  "upgradeTrackerPlanGoalRushNextHall": "Nå den næste hal hurtigt",
+  "upgradeTrackerPlanGoalCatchUp": "Indhente forhastede niveauer",
+  "upgradeTrackerPlanGoalUnlockFirst": "Lås op for nye ting først",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Vægge hver uge",
+  "upgradeTrackerPlanOff": "Fra",
+  "upgradeTrackerPlanPerWeek": "{count} / uge",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Foretrækker guld til vægge",
+  "upgradeTrackerPlanPreferGoldDescription": "Brug Guld før Elixir, når du bruger vægge",
+  "upgradeTrackerPlanApplyPriorities": "Anvend prioriteter",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Udformet forsvar",
+  "upgradeTrackerPlanCategoryTraps": "Fælder",
+  "upgradeTrackerPlanCategoryArmy": "hær",
+  "upgradeTrackerPlanCategoryDarkTroops": "Mørke tropper",
+  "upgradeTrackerPlanCategorySieges": "Belejringer",
+  "upgradeTrackerPlanCategorySupercharge": "Superladning",
+  "navigationCloseDrawer": "Luk navigationsskuffe",
+  "navigationOpenProfileMenu": "Åbn profilmenu",
+  "navigationClashKingWeb": "ClashKing på web",
+  "settingsPrivacyDataTitle": "Privatliv og data",
+  "settingsPrivacyPolicyDescription": "Se, hvad ClashKing indsamler, hvorfor det bruges, hvem der behandler det, reglerne for opbevaring, og hvordan du kontakter os.",
+  "settingsPrivacyExportTitle": "Få adgang til eller eksportér dine data",
+  "settingsPrivacyExportDescription": "Download en kopi af de kontodata, der er knyttet til dit ClashKing-login, herunder tilknyttede Clash of Clans-konti og notifikationsindstillinger.",
+  "settingsPrivacyCorrectionTitle": "Ret eller begræns data",
+  "settingsPrivacyCorrectionDescription": "Fjern tilknyttede Clash of Clans-konti i kontoindstillingerne, deaktiver notifikationer, eller kontakt support for at anmode om rettelse eller begrænsning.",
+  "settingsPrivacyDeletionTitle": "Slet din ClashKing-konto",
+  "settingsPrivacyDeletionDescription": "Dette starter sletningen af din ClashKing-konto og tilknyttede appdata, medmindre ClashKing skal beholde begrænsede oplysninger af hensyn til sikkerhed, forebyggelse af svindel eller juridiske forpligtelser.",
+  "settingsPrivacyChildrenTitle": "Børn og familier",
+  "settingsPrivacyChildrenDescription": "ClashKing er en ledsagerapp til et generelt publikum og er ikke rettet mod børn. Opret ikke en konto, hvis du i dit land ikke er gammel nok til at give samtykke uden godkendelse fra en forælder eller værge.",
+  "settingsPrivacyExportReady": "Din dataeksport er klar til at blive gemt.",
+  "settingsPrivacyExportCreateFailed": "Dataeksporten kunne ikke oprettes. Der er i stedet forberedt en e-mail om privatliv.",
+  "settingsPrivacyExportPrepareFirst": "Forbered eksporten, før du gemmer den.",
+  "settingsPrivacyExportSaved": "Din dataeksport er blevet gemt.",
+  "settingsPrivacyExportSaveFailed": "Dataeksporten kunne ikke gemmes. Der er i stedet forberedt en e-mail om privatliv.",
+  "settingsPrivacyDeleteUnavailable": "Kontosletning er ikke tilgængelig i denne version. Der er i stedet forberedt en e-mail om privatliv.",
+  "settingsPrivacyOpenPolicy": "Åbn politik",
+  "settingsPrivacyRefreshExport": "Opdater eksport",
+  "settingsPrivacyPrepareExport": "Forbered eksport",
+  "settingsPrivacySaveExport": "Gem eksport",
+  "settingsPrivacyContactSupport": "Kontakt support",
+  "settingsPrivacyDeleteAccount": "Slet konto",
+  "settingsPrivacyDeleteConfirmTitle": "Slet konto?",
+  "settingsPrivacyDeleteConfirmDescription": "Anmodningen kan ikke fortrydes, når den er behandlet. Du kan miste tilknyttede konti, notifikationsindstillinger, gemte præferencer og godkendelsesmetoder."
 }

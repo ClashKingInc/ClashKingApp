@@ -518,7 +518,7 @@ export function AuthenticatedRoot() {
             <UserRound color={theme.onSurfaceVariant} size={28} />
           )
         }
-        closeDrawerLabel="Close drawer"
+        closeDrawerLabel={t('navigationCloseDrawer')}
         displayName={user?.username ?? 'ClashKing'}
         features={featureState}
         followerCount={runtime.auth.state.followerCount}
@@ -533,8 +533,8 @@ export function AuthenticatedRoot() {
         onSearch={() => openUtility(routeById('search'))}
         onUtilityNavigate={openUtility}
         primaryScreens={screens}
-        productLabel="ClashKing web"
-        profileMenuLabel="Open profile menu"
+        productLabel={t('navigationClashKingWeb')}
+        profileMenuLabel={t('navigationOpenProfileMenu')}
         secondaryContent={secondaryContent}
         secondaryLayers={secondaryLayers}
         secondaryFullScreen={

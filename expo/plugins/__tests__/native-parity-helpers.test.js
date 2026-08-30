@@ -782,6 +782,51 @@ test('native widget lifecycle and refresh action preserve headless Flutter behav
   assert.doesNotMatch(receiver, /startActivity|getLaunchIntentForPackage/);
 });
 
+test('Android war widget mirrors the iOS matchup hierarchy', () => {
+  const expoRoot = path.resolve(__dirname, '../..');
+  const androidRoot = path.join(expoRoot, 'native/android/app/src/main');
+  const kotlin = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/WarAppWidgetProvider.kt'),
+    'utf8',
+  );
+  const layout = fs.readFileSync(path.join(androidRoot, 'res/layout/widget_layout.xml'), 'utf8');
+  const background = fs.readFileSync(
+    path.join(androidRoot, 'res/drawable/war_widget_background.xml'),
+    'utf8',
+  );
+  const lightColors = fs.readFileSync(
+    path.join(androidRoot, 'res/values/widget_colors.xml'),
+    'utf8',
+  );
+  const darkColors = fs.readFileSync(
+    path.join(androidRoot, 'res/values-night/widget_colors.xml'),
+    'utf8',
+  );
+  const provider = fs.readFileSync(path.join(androidRoot, 'res/xml/widget_provider.xml'), 'utf8');
+
+  assert.match(layout, /@drawable\/war_widget_background/);
+  assert.match(layout, /@\+id\/clan_flag/);
+  assert.match(layout, /@\+id\/text_score/);
+  assert.match(layout, /@\+id\/text_state/);
+  assert.match(layout, /@\+id\/opponent_flag/);
+  assert.doesNotMatch(layout, /text_update_time|refresh_icon|clan_attacks|opponent_attacks/);
+  assert.match(background, /@color\/war_widget_background/);
+  assert.match(background, /@color\/war_widget_border/);
+  assert.match(lightColors, /war_widget_background/);
+  assert.match(lightColors, /#FAF7F7F9/);
+  assert.match(darkColors, /war_widget_background/);
+  assert.match(darkColors, /#F9070708/);
+  assert.match(provider, /android:previewLayout="@layout\/widget_layout"/);
+  assert.doesNotMatch(provider, /android:previewImage/);
+  assert.match(kotlin, /val score = normalizedScore\(warInfo\)/);
+  assert.match(
+    kotlin,
+    /val status = displayText\(warInfo, context\.getString\(R\.string\.war_widget_status\)\)/,
+  );
+  assert.match(kotlin, /if \(score\.length >= 7\) 24f else 28f/);
+  assert.doesNotMatch(kotlin, /applyColorTheme|setBackgroundColor|text_update_time|refresh_icon/);
+});
+
 test('native scenery audio bridge preserves exact Flutter session, focus, cache, and cadence', () => {
   const expoRoot = path.resolve(__dirname, '../..');
   const swift = fs.readFileSync(

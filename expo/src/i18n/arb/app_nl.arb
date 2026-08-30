@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Plan prioriteiten",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangschik wat het belangrijkst is. Upgradeniveaus en actief werk blijven altijd op orde.",
+  "upgradeTrackerPlanClose": "Sluiten",
+  "upgradeTrackerPlanPlanningGoals": "Doelen plannen",
+  "upgradeTrackerPlanConstructionSubtitle": "Bouw- en heldupgrades",
+  "upgradeTrackerPlanResearchSubtitle": "Troepen, spreuken en belegeringsonderzoek",
+  "upgradeTrackerPlanPetHouseSubtitle": "Upgrades voor huisdierenhuizen",
+  "upgradeTrackerPlanPrioritizeNewItems": "Geef prioriteit aan nieuwe items",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Plaats nieuw ontgrendelde of ongebouwde items eerst",
+  "upgradeTrackerPlanSharedSummary": "Niveau {tier} · gedeelde mix {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Niveau {tier} · streng · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "loopt tot max",
+  "upgradeTrackerPlanYieldsAfter": "rendement na {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Strikt",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Opnieuw ordenen {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relatief niveaugewicht",
+  "upgradeTrackerPlanCompletionTarget": "Voltooiing doel",
+  "upgradeTrackerPlanStrictTier": "Strikt niveau",
+  "upgradeTrackerPlanWeight": "Gewicht {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Tot maximaal",
+  "upgradeTrackerPlanUntilPercent": "Tot {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Genummerde niveaus worden als eerste uitgevoerd. Gedeelde rijen behouden hetzelfde niveaunummer en hun mix wordt genormaliseerd op basis van de relatieve gewichten, dus 50 + 25 wordt 67% / 33%. Een doel genereert een categorierendement nadat het dat percentage heeft bereikt, terwijl het later in aanmerking blijft komen.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max voordat je verder gaat",
+  "upgradeTrackerPlanGoalRushNextHall": "Bereik snel de volgende hal",
+  "upgradeTrackerPlanGoalCatchUp": "Haal gehaaste niveaus in",
+  "upgradeTrackerPlanGoalUnlockFirst": "Ontgrendel eerst nieuwe dingen",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Muren elke week",
+  "upgradeTrackerPlanOff": "Uit",
+  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Geef de voorkeur aan goud voor muren",
+  "upgradeTrackerPlanPreferGoldDescription": "Gebruik goud vóór elixir bij het uitgeven van muren",
+  "upgradeTrackerPlanApplyPriorities": "Prioriteiten toepassen",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Gemaakte verdedigingswerken",
+  "upgradeTrackerPlanCategoryTraps": "Vallen",
+  "upgradeTrackerPlanCategoryArmy": "Leger",
+  "upgradeTrackerPlanCategoryDarkTroops": "Donkere troepen",
+  "upgradeTrackerPlanCategorySieges": "Belegeringen",
+  "upgradeTrackerPlanCategorySupercharge": "Superladen",
+  "navigationCloseDrawer": "Navigatielade sluiten",
+  "navigationOpenProfileMenu": "Profielmenu openen",
+  "navigationClashKingWeb": "ClashKing web",
+  "settingsPrivacyDataTitle": "Privacy en gegevens",
+  "settingsPrivacyPolicyDescription": "Bekijk wat ClashKing verzamelt, waarom het wordt gebruikt, wie het verwerkt, welke bewaartermijnen gelden en hoe je contact met ons opneemt.",
+  "settingsPrivacyExportTitle": "Je gegevens openen of exporteren",
+  "settingsPrivacyExportDescription": "Download een kopie van de accountgegevens die aan je ClashKing-login zijn gekoppeld, waaronder gekoppelde Clash of Clans-accounts en meldingsvoorkeuren.",
+  "settingsPrivacyCorrectionTitle": "Gegevens corrigeren of beperken",
+  "settingsPrivacyCorrectionDescription": "Verwijder gekoppelde Clash of Clans-accounts via de accountinstellingen, schakel meldingen uit of neem contact op met ondersteuning voor verzoeken om correctie of beperking.",
+  "settingsPrivacyDeletionTitle": "Je ClashKing-account verwijderen",
+  "settingsPrivacyDeletionDescription": "Hiermee start je de verwijdering van je ClashKing-account en bijbehorende appgegevens, tenzij ClashKing beperkte gegevens moet bewaren voor beveiliging, fraudepreventie of wettelijke verplichtingen.",
+  "settingsPrivacyChildrenTitle": "Kinderen en gezinnen",
+  "settingsPrivacyChildrenDescription": "ClashKing is een begeleidende app voor een algemeen publiek en is niet gericht op kinderen. Maak geen account aan als je in jouw land niet oud genoeg bent om zonder toestemming van een ouder of voogd akkoord te gaan.",
+  "settingsPrivacyExportReady": "Je gegevensexport kan worden opgeslagen.",
+  "settingsPrivacyExportCreateFailed": "De gegevensexport kon niet worden gemaakt. In plaats daarvan is een privacy-e-mail voorbereid.",
+  "settingsPrivacyExportPrepareFirst": "Bereid je export voor voordat je deze opslaat.",
+  "settingsPrivacyExportSaved": "Je gegevensexport is opgeslagen.",
+  "settingsPrivacyExportSaveFailed": "De gegevensexport kon niet worden opgeslagen. In plaats daarvan is een privacy-e-mail voorbereid.",
+  "settingsPrivacyDeleteUnavailable": "Accountverwijdering is niet beschikbaar in deze build. In plaats daarvan is een privacy-e-mail voorbereid.",
+  "settingsPrivacyOpenPolicy": "Beleid openen",
+  "settingsPrivacyRefreshExport": "Export vernieuwen",
+  "settingsPrivacyPrepareExport": "Export voorbereiden",
+  "settingsPrivacySaveExport": "Export opslaan",
+  "settingsPrivacyContactSupport": "Contact opnemen met ondersteuning",
+  "settingsPrivacyDeleteAccount": "Account verwijderen",
+  "settingsPrivacyDeleteConfirmTitle": "Account verwijderen?",
+  "settingsPrivacyDeleteConfirmDescription": "Dit verzoek is na verwerking definitief. Je kunt gekoppelde accounts, meldingsinstellingen, opgeslagen voorkeuren en verificatiemethoden verliezen."
 }

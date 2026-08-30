@@ -2,28 +2,10 @@ import { useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Baby, Download, Edit3, ExternalLink, Save, Shield, Trash2 } from 'lucide-react-native';
 
+import { useI18n } from '../../../i18n';
 import { CKText, LoadingIndicator, Surface, ckRadius, ckSpacing, useCKTheme } from '../../../ui';
 import type { PrivacyPresentationActions } from './contracts';
 import { SettingsPage } from './settings-components';
-
-const privacyCopy = {
-  title: 'Privacy & data',
-  policyTitle: 'Privacy policy',
-  policyBody:
-    'Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.',
-  exportTitle: 'Access or export your data',
-  exportBody:
-    'Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.',
-  correctionTitle: 'Correct or limit data',
-  correctionBody:
-    'Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.',
-  deletionTitle: 'Delete your ClashKing account',
-  deletionBody:
-    'This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.',
-  childrenTitle: 'Children and families',
-  childrenBody:
-    'ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.',
-} as const;
 
 export function privacyColumnCount(platform: string, viewportWidth: number): 1 | 2 {
   return platform === 'web' && viewportWidth >= 900 && Math.min(viewportWidth - 48, 1100) >= 780
@@ -44,6 +26,7 @@ export function PrivacyControlsScreen({
   now?: () => Date;
   onBack?: () => void;
 }) {
+  const { t } = useI18n();
   const theme = useCKTheme();
   const measured = useWindowDimensions().width;
   const width = viewportWidth ?? measured;
@@ -62,25 +45,25 @@ export function PrivacyControlsScreen({
         fileName: `clashking-data-${timestamp}.json`,
         data: JSON.stringify(data, null, 2),
       });
-      setNotice('Your data export is ready to save.');
+      setNotice(t('settingsPrivacyExportReady'));
     } catch {
       actions.contactSupport();
-      setNotice('The data export could not be created. A privacy email has been prepared instead.');
+      setNotice(t('settingsPrivacyExportCreateFailed'));
     } finally {
       setExporting(false);
     }
   };
   const save = async () => {
     if (!prepared) {
-      setNotice('Prepare your export before saving it.');
+      setNotice(t('settingsPrivacyExportPrepareFirst'));
       return;
     }
     try {
       await actions.saveExport(prepared.fileName, prepared.data);
-      setNotice('Your data export has been saved.');
+      setNotice(t('settingsPrivacyExportSaved'));
     } catch {
       actions.contactSupport();
-      setNotice('The data export could not be saved. A privacy email has been prepared instead.');
+      setNotice(t('settingsPrivacyExportSaveFailed'));
     }
   };
   const remove = async () => {
@@ -91,9 +74,7 @@ export function PrivacyControlsScreen({
       actions.onDeleted();
     } catch {
       actions.contactSupport();
-      setNotice(
-        'The deletion endpoint is not available in this build. A privacy email has been prepared instead.',
-      );
+      setNotice(t('settingsPrivacyDeleteUnavailable'));
     } finally {
       setDeleting(false);
     }
@@ -102,11 +83,11 @@ export function PrivacyControlsScreen({
     <PrivacyCard
       key="policy"
       icon={<Shield color={theme.primary} />}
-      title={privacyCopy.policyTitle}
-      body={privacyCopy.policyBody}
+      title={t('settingsPrivacyPolicy')}
+      body={t('settingsPrivacyPolicyDescription')}
     >
       <Action
-        label="Open policy"
+        label={t('settingsPrivacyOpenPolicy')}
         icon={<ExternalLink color={theme.primary} />}
         onPress={actions.openPrivacyPolicy}
       />
@@ -114,19 +95,19 @@ export function PrivacyControlsScreen({
     <PrivacyCard
       key="export"
       icon={<Download color={theme.primary} />}
-      title={privacyCopy.exportTitle}
-      body={privacyCopy.exportBody}
+      title={t('settingsPrivacyExportTitle')}
+      body={t('settingsPrivacyExportDescription')}
     >
       <View style={styles.actionRow}>
         <Action
-          label={prepared ? 'Refresh export' : 'Prepare export'}
+          label={prepared ? t('settingsPrivacyRefreshExport') : t('settingsPrivacyPrepareExport')}
           icon={exporting ? <LoadingIndicator /> : <Download color={theme.primary} />}
           disabled={exporting}
           onPress={() => void prepare()}
         />
         {prepared ? (
           <Action
-            label="Save export"
+            label={t('settingsPrivacySaveExport')}
             icon={<Save color={theme.primary} />}
             onPress={() => void save()}
           />
@@ -136,11 +117,11 @@ export function PrivacyControlsScreen({
     <PrivacyCard
       key="correct"
       icon={<Edit3 color={theme.primary} />}
-      title={privacyCopy.correctionTitle}
-      body={privacyCopy.correctionBody}
+      title={t('settingsPrivacyCorrectionTitle')}
+      body={t('settingsPrivacyCorrectionDescription')}
     >
       <Action
-        label="Contact support"
+        label={t('settingsPrivacyContactSupport')}
         icon={<Edit3 color={theme.primary} />}
         onPress={actions.contactSupport}
       />
@@ -148,11 +129,11 @@ export function PrivacyControlsScreen({
     <PrivacyCard
       key="delete"
       icon={<Trash2 color={theme.error} />}
-      title={privacyCopy.deletionTitle}
-      body={privacyCopy.deletionBody}
+      title={t('settingsPrivacyDeletionTitle')}
+      body={t('settingsPrivacyDeletionDescription')}
     >
       <Action
-        label="Delete account"
+        label={t('settingsPrivacyDeleteAccount')}
         icon={deleting ? <LoadingIndicator /> : <Trash2 color={theme.onError} />}
         destructive
         disabled={deleting}
@@ -162,13 +143,13 @@ export function PrivacyControlsScreen({
     <PrivacyCard
       key="children"
       icon={<Baby color={theme.primary} />}
-      title={privacyCopy.childrenTitle}
-      body={privacyCopy.childrenBody}
+      title={t('settingsPrivacyChildrenTitle')}
+      body={t('settingsPrivacyChildrenDescription')}
     />,
   ];
   return (
     <>
-      <SettingsPage title={privacyCopy.title} onBack={onBack}>
+      <SettingsPage title={t('settingsPrivacyDataTitle')} onBack={onBack}>
         {notice ? (
           <CKText accessibilityLiveRegion="polite" style={styles.notice}>
             {notice}
@@ -190,14 +171,15 @@ export function PrivacyControlsScreen({
       >
         <View style={styles.modal}>
           <Surface style={styles.dialog}>
-            <CKText role="titleLarge">Delete account?</CKText>
-            <CKText>
-              This request is permanent after processing. You may lose linked accounts, notification
-              settings, saved preferences, and authentication methods.
-            </CKText>
+            <CKText role="titleLarge">{t('settingsPrivacyDeleteConfirmTitle')}</CKText>
+            <CKText>{t('settingsPrivacyDeleteConfirmDescription')}</CKText>
             <View style={styles.actionRow}>
-              <Action label="Cancel" onPress={() => setConfirming(false)} />
-              <Action label="Delete account" destructive onPress={() => void remove()} />
+              <Action label={t('generalCancel')} onPress={() => setConfirming(false)} />
+              <Action
+                label={t('settingsPrivacyDeleteAccount')}
+                destructive
+                onPress={() => void remove()}
+              />
             </View>
           </Surface>
         </View>

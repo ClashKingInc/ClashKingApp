@@ -7,6 +7,7 @@ import {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 
+import { useI18n } from '../../../i18n';
 import { CKText, PillSurface, PressableSurface, Surface, ckRadius, useCKTheme } from '../../../ui';
 import {
   UpgradeCategory,
@@ -89,13 +90,14 @@ export function UpgradeTrackerPlanEditor({
   onSave: (value: UpgradePlanPreferencesType) => void;
 }) {
   const theme = useCKTheme();
+  const { t } = useI18n();
   const [draft, setDraft] = useState(preferences);
   const sections = useMemo(
     () =>
       [
         {
-          title: 'Builders',
-          subtitle: 'Construction and hero upgrades',
+          title: t('dashboardUpgradeTrackerBuilders'),
+          subtitle: t('upgradeTrackerPlanConstructionSubtitle'),
           queue: UpgradeQueue.builders,
           toggle: draft.prioritizeUnbuiltBuilders,
           setToggle: (value: boolean) =>
@@ -103,8 +105,8 @@ export function UpgradeTrackerPlanEditor({
           villages: [UpgradeVillage.home, UpgradeVillage.builderBase],
         },
         {
-          title: 'Laboratory',
-          subtitle: 'Troops, spells and siege research',
+          title: t('upgradeTrackerLaboratory'),
+          subtitle: t('upgradeTrackerPlanResearchSubtitle'),
           queue: UpgradeQueue.laboratory,
           toggle: draft.prioritizeUnbuiltLaboratory,
           setToggle: (value: boolean) =>
@@ -112,8 +114,8 @@ export function UpgradeTrackerPlanEditor({
           villages: [UpgradeVillage.home, UpgradeVillage.builderBase],
         },
         {
-          title: 'Pets',
-          subtitle: 'Pet House upgrades',
+          title: t('upgradeTrackerPets'),
+          subtitle: t('upgradeTrackerPlanPetHouseSubtitle'),
           queue: UpgradeQueue.pets,
           toggle: draft.prioritizeUnbuiltPets,
           setToggle: (value: boolean) =>
@@ -121,7 +123,7 @@ export function UpgradeTrackerPlanEditor({
           villages: [UpgradeVillage.home],
         },
       ] as const,
-    [draft],
+    [draft, t],
   );
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
@@ -129,25 +131,29 @@ export function UpgradeTrackerPlanEditor({
         <Surface radius={ckRadius.card} style={editorStyles.modal}>
           <View style={editorStyles.header}>
             <View style={editorStyles.grow}>
-              <CKText role="titleLarge">Plan priorities</CKText>
+              <CKText role="titleLarge">{t('upgradeTrackerPlanPrioritiesTitle')}</CKText>
               <CKText muted role="bodySmall">
-                Rank what matters most. Upgrade levels and active work always stay in order.
+                {t('upgradeTrackerPlanPrioritiesDescription')}
               </CKText>
             </View>
-            <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={onClose}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('upgradeTrackerPlanClose')}
+              onPress={onClose}
+            >
               <X color={theme.onSurface} />
             </Pressable>
           </View>
           <NestableScrollContainer contentContainerStyle={editorStyles.content}>
             <RuleNote />
-            <SectionTitle title="Planning goals" />
+            <SectionTitle title={t('upgradeTrackerPlanPlanningGoals')} />
             <GoalSelector
-              title="Home Village"
+              title={t('upgradeTrackerHomeVillage')}
               value={draft.homeGoal}
               onChange={(homeGoal) => updateDraft(draft, setDraft, { homeGoal })}
             />
             <GoalSelector
-              title="Builder Base"
+              title={t('upgradeTrackerBuilderBase')}
               value={draft.builderBaseGoal}
               onChange={(builderBaseGoal) => updateDraft(draft, setDraft, { builderBaseGoal })}
             />
@@ -164,8 +170,8 @@ export function UpgradeTrackerPlanEditor({
                     {section.subtitle}
                   </CKText>
                   <CompactToggle
-                    label="Prioritize new items"
-                    description="Place newly unlocked or unbuilt items first"
+                    label={t('upgradeTrackerPlanPrioritizeNewItems')}
+                    description={t('upgradeTrackerPlanPrioritizeNewDescription')}
                     value={section.toggle}
                     onChange={section.setToggle}
                   />
@@ -173,7 +179,9 @@ export function UpgradeTrackerPlanEditor({
                     return order.length ? (
                       <View key={village} style={editorStyles.village}>
                         <CKText role="labelLarge">
-                          {village === UpgradeVillage.home ? 'Home Village' : 'Builder Base'}
+                          {village === UpgradeVillage.home
+                            ? t('upgradeTrackerHomeVillage')
+                            : t('upgradeTrackerBuilderBase')}
                         </CKText>
                         <PriorityList
                           order={order}
@@ -214,19 +222,19 @@ export function UpgradeTrackerPlanEditor({
                 </View>
               );
             })}
-            <SectionTitle title="Walls" />
+            <SectionTitle title={t('upgradeTrackerWalls')} />
             <StepSlider
-              label="Walls each week"
+              label={t('upgradeTrackerPlanWallsEachWeek')}
               value={draft.wallsPerWeek}
               minimum={0}
               maximum={20}
-              lowLabel="Off"
-              highLabel={`${draft.wallsPerWeek} / week`}
+              lowLabel={t('upgradeTrackerPlanOff')}
+              highLabel={t('upgradeTrackerPlanPerWeek', { count: draft.wallsPerWeek })}
               onChange={(wallsPerWeek) => updateDraft(draft, setDraft, { wallsPerWeek })}
             />
             <CompactToggle
-              label="Prefer Gold for walls"
-              description="Use Gold before Elixir when spending walls"
+              label={t('upgradeTrackerPlanPreferGold')}
+              description={t('upgradeTrackerPlanPreferGoldDescription')}
               value={draft.wallResourcePreference === UpgradeWallResourcePreference.gold}
               onChange={(value) =>
                 updateDraft(draft, setDraft, {
@@ -241,7 +249,7 @@ export function UpgradeTrackerPlanEditor({
               onPress={() => onSave(draft)}
               style={editorStyles.primaryAction}
             >
-              <CKText>Apply priorities</CKText>
+              <CKText>{t('upgradeTrackerPlanApplyPriorities')}</CKText>
             </PressableSurface>
           </NestableScrollContainer>
         </Surface>
@@ -266,6 +274,7 @@ function PriorityList({
   onShare: (category: UpgradeCategoryValue, share: number) => void;
 }) {
   const theme = useCKTheme();
+  const { t } = useI18n();
   const [menu, setMenu] = useState<{
     category: UpgradeCategoryValue;
     kind: 'share' | 'target';
@@ -300,23 +309,36 @@ function PriorityList({
                   <CKText role="labelSmall">{tier}</CKText>
                 </View>
                 <View style={editorStyles.grow}>
-                  <CKText role="rowTitle">{categoryLabel(category)}</CKText>
+                  <CKText role="rowTitle">{categoryLabel(category, t)}</CKText>
                   <CKText muted role="labelSmall">
                     {share > 0
-                      ? `Tier ${tier} · shared mix ${normalized}% (${share}/${sharedWeightTotal})`
-                      : `Tier ${tier} · strict`}
-                    {' · '}
-                    {target >= 100 ? 'runs until maxed' : `yields after ${target}%`}
+                      ? t('upgradeTrackerPlanSharedSummary', {
+                          tier,
+                          normalized,
+                          share,
+                          total: sharedWeightTotal,
+                          completion:
+                            target >= 100
+                              ? t('upgradeTrackerPlanRunsUntilMaxed')
+                              : t('upgradeTrackerPlanYieldsAfter', { target }),
+                        })
+                      : t('upgradeTrackerPlanStrictSummary', {
+                          tier,
+                          completion:
+                            target >= 100
+                              ? t('upgradeTrackerPlanRunsUntilMaxed')
+                              : t('upgradeTrackerPlanYieldsAfter', { target }),
+                        })}
                   </CKText>
                   <View style={editorStyles.priorityControls}>
                     <PillButton
-                      label={share === 0 ? 'Strict' : `${share}%`}
+                      label={share === 0 ? t('upgradeTrackerPlanStrict') : `${share}%`}
                       selected={share > 0}
                       onPress={() => setMenu({ category, kind: 'share' })}
                       compact
                     />
                     <PillButton
-                      label={target === 100 ? 'Max' : `${target}%`}
+                      label={target === 100 ? t('upgradeTrackerPlanMax') : `${target}%`}
                       selected={target < 100}
                       onPress={() => setMenu({ category, kind: 'target' })}
                       compact
@@ -326,7 +348,9 @@ function PriorityList({
                 <View style={editorStyles.reorder}>
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel={`Reorder ${categoryLabel(category)}`}
+                    accessibilityLabel={t('upgradeTrackerPlanReorder', {
+                      category: categoryLabel(category, t),
+                    })}
                     disabled={isActive}
                     delayLongPress={150}
                     onLongPress={drag}
@@ -349,7 +373,9 @@ function PriorityList({
         <Pressable style={editorStyles.menuOverlay} onPress={() => setMenu(null)}>
           <Surface radius={ckRadius.card} style={editorStyles.menuCard}>
             <CKText role="sectionTitle">
-              {menu?.kind === 'share' ? 'Relative tier weight' : 'Completion target'}
+              {menu?.kind === 'share'
+                ? t('upgradeTrackerPlanRelativeTierWeight')
+                : t('upgradeTrackerPlanCompletionTarget')}
             </CKText>
             {menuOptions.map((value) => (
               <PressableSurface
@@ -367,11 +393,11 @@ function PriorityList({
                 <CKText>
                   {menu?.kind === 'share'
                     ? value === 0
-                      ? 'Strict tier'
-                      : `Weight ${value}%`
+                      ? t('upgradeTrackerPlanStrictTier')
+                      : t('upgradeTrackerPlanWeight', { value })
                     : value === 100
-                      ? 'Until maxed'
-                      : `Until ${value}%`}
+                      ? t('upgradeTrackerPlanUntilMaxed')
+                      : t('upgradeTrackerPlanUntilPercent', { value })}
                 </CKText>
               </PressableSurface>
             ))}
@@ -383,12 +409,11 @@ function PriorityList({
 }
 
 function RuleNote() {
+  const { t } = useI18n();
   return (
     <Surface radius={ckRadius.tile} style={editorStyles.note}>
       <CKText muted role="bodySmall">
-        Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized
-        from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield
-        after it reaches that percentage while it stays eligible later.
+        {t('upgradeTrackerPlanRuleNote')}
       </CKText>
     </Surface>
   );
@@ -404,6 +429,7 @@ function GoalSelector({
   onChange: (value: (typeof UpgradePlanGoal)[keyof typeof UpgradePlanGoal]) => void;
 }) {
   const theme = useCKTheme();
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   return (
     <View style={editorStyles.village}>
@@ -412,12 +438,15 @@ function GoalSelector({
       </CKText>
       <PressableSurface
         accessibilityRole="button"
-        accessibilityLabel={`${title}: ${goalLabel(value)}`}
+        accessibilityLabel={t('upgradeTrackerPlanGoalSelection', {
+          village: title,
+          goal: goalLabel(value, t),
+        })}
         accessibilityState={{ expanded: open }}
         onPress={() => setOpen(true)}
         style={editorStyles.dropdown}
       >
-        <CKText style={editorStyles.grow}>{goalLabel(value)}</CKText>
+        <CKText style={editorStyles.grow}>{goalLabel(value, t)}</CKText>
         <ChevronDown size={18} color={theme.onSurfaceVariant} />
       </PressableSurface>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
@@ -434,7 +463,7 @@ function GoalSelector({
                 }}
                 style={editorStyles.menuItem}
               >
-                <CKText>{goalLabel(goal)}</CKText>
+                <CKText>{goalLabel(goal, t)}</CKText>
               </PressableSurface>
             ))}
           </Surface>
@@ -638,32 +667,34 @@ function preferencesOptions(value: UpgradePlanPreferencesType) {
   };
 }
 
-function goalLabel(goal: string) {
-  if (goal === UpgradePlanGoal.maxCurrentHall) return 'Max before advancing';
-  if (goal === UpgradePlanGoal.rushNextHall) return 'Reach the next hall quickly';
-  if (goal === UpgradePlanGoal.catchUp) return 'Catch up rushed levels';
-  return 'Unlock new things first';
+type Translate = ReturnType<typeof useI18n>['t'];
+
+function goalLabel(goal: string, t: Translate) {
+  if (goal === UpgradePlanGoal.maxCurrentHall) return t('upgradeTrackerPlanGoalMaxCurrentHall');
+  if (goal === UpgradePlanGoal.rushNextHall) return t('upgradeTrackerPlanGoalRushNextHall');
+  if (goal === UpgradePlanGoal.catchUp) return t('upgradeTrackerPlanGoalCatchUp');
+  return t('upgradeTrackerPlanGoalUnlockFirst');
 }
-function categoryLabel(category: string) {
-  const labels: Record<string, string> = {
-    defenses: 'Defenses',
-    guardians: 'Guardians',
-    craftedDefenses: 'Crafted defenses',
-    traps: 'Traps',
-    army: 'Army',
-    resources: 'Resources',
-    troops: 'Troops',
-    darkTroops: 'Dark troops',
-    spells: 'Spells',
-    sieges: 'Sieges',
-    heroes: 'Heroes',
-    equipment: 'Equipment',
-    pets: 'Pets',
-    walls: 'Walls',
-    builders: 'Builders',
-    supercharge: 'Supercharge',
+function categoryLabel(category: string, t: Translate) {
+  const labels: Record<string, Parameters<Translate>[0]> = {
+    defenses: 'warDefensesTitle',
+    guardians: 'gameAssetsCategoryGuardians',
+    craftedDefenses: 'upgradeTrackerPlanCategoryCraftedDefenses',
+    traps: 'upgradeTrackerPlanCategoryTraps',
+    army: 'upgradeTrackerPlanCategoryArmy',
+    resources: 'assetFolderResources',
+    troops: 'upgradeSectionTroops',
+    darkTroops: 'upgradeTrackerPlanCategoryDarkTroops',
+    spells: 'upgradeSectionSpells',
+    sieges: 'upgradeTrackerPlanCategorySieges',
+    heroes: 'upgradeSectionHeroes',
+    equipment: 'upgradeTrackerEquipment',
+    pets: 'upgradeTrackerPets',
+    walls: 'upgradeTrackerWalls',
+    builders: 'dashboardUpgradeTrackerBuilders',
+    supercharge: 'upgradeTrackerPlanCategorySupercharge',
   };
-  return labels[category] ?? category;
+  return labels[category] ? t(labels[category]) : category;
 }
 const editorStyles = StyleSheet.create({
   overlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000070' },

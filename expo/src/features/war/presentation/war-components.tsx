@@ -482,12 +482,15 @@ function WarSide({ clan }: { clan: WarInfo['clan'] }) {
 function WarScoreRow({ left, right }: { left: number; right: number }) {
   return (
     <View style={styles.scoreRow}>
-      <CKText role="titleMedium" style={[styles.scoreValue, styles.scoreValueLeft]}>
-        {left}
-      </CKText>
-      <CKText role="titleMedium"> - </CKText>
-      <CKText role="titleMedium" style={[styles.scoreValue, styles.scoreValueRight]}>
-        {right}
+      <CKText
+        testID="war-summary-score"
+        role="titleMedium"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.75}
+        style={styles.scoreValue}
+      >
+        {left} - {right}
       </CKText>
     </View>
   );
@@ -678,10 +681,15 @@ const styles = StyleSheet.create({
   scoreColumn: { flex: 4, alignItems: 'center', justifyContent: 'center', gap: 5 },
   stateLabel: { textAlign: 'center', fontWeight: '700', flexShrink: 1, lineHeight: 18 },
   resultLabel: { fontWeight: '800' },
-  scoreRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
-  scoreValue: { width: 34, fontSize: 24, lineHeight: 28, fontWeight: '800' },
-  scoreValueLeft: { textAlign: 'right' },
-  scoreValueRight: { textAlign: 'left' },
+  scoreRow: { width: '100%', alignItems: 'center', justifyContent: 'center' },
+  scoreValue: {
+    width: '100%',
+    paddingHorizontal: 2,
+    fontSize: 24,
+    lineHeight: 28,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
   destructionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 },
   destructionValue: { width: 56, textAlign: 'center' },
   statusPill: {

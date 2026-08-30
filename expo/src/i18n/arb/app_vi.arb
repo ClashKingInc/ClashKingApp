@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Ưu tiên kế hoạch",
+  "upgradeTrackerPlanPrioritiesDescription": "Xếp hạng những gì quan trọng nhất. Nâng cấp cấp độ và công việc tích cực luôn theo thứ tự.",
+  "upgradeTrackerPlanClose": "Đóng",
+  "upgradeTrackerPlanPlanningGoals": "Mục tiêu quy hoạch",
+  "upgradeTrackerPlanConstructionSubtitle": "Nâng cấp xây dựng và anh hùng",
+  "upgradeTrackerPlanResearchSubtitle": "Nghiên cứu về quân đội, phép thuật và công thành",
+  "upgradeTrackerPlanPetHouseSubtitle": "Nâng cấp Nhà thú cưng",
+  "upgradeTrackerPlanPrioritizeNewItems": "Ưu tiên mặt hàng mới",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Đặt các vật phẩm mới được mở khóa hoặc chưa được xây dựng trước",
+  "upgradeTrackerPlanSharedSummary": "Cấp {tier} · kết hợp chia sẻ {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Cấp {tier} · nghiêm ngặt · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "chạy cho đến khi đạt mức tối đa",
+  "upgradeTrackerPlanYieldsAfter": "sản lượng sau {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Nghiêm khắc",
+  "upgradeTrackerPlanMax": "Tối đa",
+  "upgradeTrackerPlanReorder": "Sắp xếp lại {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Trọng lượng bậc tương đối",
+  "upgradeTrackerPlanCompletionTarget": "Mục tiêu hoàn thành",
+  "upgradeTrackerPlanStrictTier": "Cấp độ nghiêm ngặt",
+  "upgradeTrackerPlanWeight": "Trọng lượng {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Cho đến khi đạt mức tối đa",
+  "upgradeTrackerPlanUntilPercent": "Cho đến {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Các tầng được đánh số chạy đầu tiên. Các hàng được chia sẻ giữ nguyên số cấp và sự kết hợp của chúng được chuẩn hóa theo trọng số tương đối, do đó 50 + 25 trở thành 67% / 33%. Mục tiêu tạo ra lợi nhuận cho danh mục sau khi đạt đến tỷ lệ phần trăm đó trong khi sau đó vẫn đủ điều kiện.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max trước khi thăng tiến",
+  "upgradeTrackerPlanGoalRushNextHall": "Nhanh chóng đến sảnh tiếp theo",
+  "upgradeTrackerPlanGoalCatchUp": "Bắt kịp mức độ gấp rút",
+  "upgradeTrackerPlanGoalUnlockFirst": "Mở khóa những điều mới đầu tiên",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Tường mỗi tuần",
+  "upgradeTrackerPlanOff": "Tắt",
+  "upgradeTrackerPlanPerWeek": "{count} / tuần",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Thích vàng cho tường",
+  "upgradeTrackerPlanPreferGoldDescription": "Sử dụng Vàng trước Elixir khi sử dụng tường",
+  "upgradeTrackerPlanApplyPriorities": "Áp dụng các ưu tiên",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Phòng thủ được chế tạo",
+  "upgradeTrackerPlanCategoryTraps": "Bẫy",
+  "upgradeTrackerPlanCategoryArmy": "Quân đội",
+  "upgradeTrackerPlanCategoryDarkTroops": "quân đen tối",
+  "upgradeTrackerPlanCategorySieges": "Cuộc vây hãm",
+  "upgradeTrackerPlanCategorySupercharge": "siêu nạp",
+  "navigationCloseDrawer": "Đóng ngăn điều hướng",
+  "navigationOpenProfileMenu": "Mở menu hồ sơ",
+  "navigationClashKingWeb": "ClashKing trên web",
+  "settingsPrivacyDataTitle": "Quyền riêng tư và dữ liệu",
+  "settingsPrivacyPolicyDescription": "Xem ClashKing thu thập những gì, lý do sử dụng, bên xử lý dữ liệu, quy tắc lưu giữ và cách liên hệ với chúng tôi.",
+  "settingsPrivacyExportTitle": "Truy cập hoặc xuất dữ liệu của bạn",
+  "settingsPrivacyExportDescription": "Tải xuống bản sao dữ liệu tài khoản liên kết với thông tin đăng nhập ClashKing, bao gồm các tài khoản Clash of Clans đã liên kết và tùy chọn thông báo.",
+  "settingsPrivacyCorrectionTitle": "Chỉnh sửa hoặc hạn chế dữ liệu",
+  "settingsPrivacyCorrectionDescription": "Xóa tài khoản Clash of Clans đã liên kết trong phần cài đặt tài khoản, tắt thông báo hoặc liên hệ bộ phận hỗ trợ để yêu cầu chỉnh sửa hay hạn chế.",
+  "settingsPrivacyDeletionTitle": "Xóa tài khoản ClashKing",
+  "settingsPrivacyDeletionDescription": "Thao tác này bắt đầu xóa tài khoản ClashKing và dữ liệu ứng dụng liên quan, trừ khi ClashKing phải giữ lại một số hồ sơ giới hạn vì lý do bảo mật, phòng chống gian lận hoặc nghĩa vụ pháp lý.",
+  "settingsPrivacyChildrenTitle": "Trẻ em và gia đình",
+  "settingsPrivacyChildrenDescription": "ClashKing là ứng dụng đồng hành dành cho người dùng phổ thông và không hướng đến trẻ em. Đừng tạo tài khoản nếu tại quốc gia của bạn, bạn chưa đủ tuổi tự đưa ra sự đồng ý mà không cần cha mẹ hoặc người giám hộ chấp thuận.",
+  "settingsPrivacyExportReady": "Bản xuất dữ liệu đã sẵn sàng để lưu.",
+  "settingsPrivacyExportCreateFailed": "Không thể tạo bản xuất dữ liệu. Thay vào đó, một email về quyền riêng tư đã được soạn sẵn.",
+  "settingsPrivacyExportPrepareFirst": "Hãy chuẩn bị bản xuất trước khi lưu.",
+  "settingsPrivacyExportSaved": "Bản xuất dữ liệu đã được lưu.",
+  "settingsPrivacyExportSaveFailed": "Không thể lưu bản xuất dữ liệu. Thay vào đó, một email về quyền riêng tư đã được soạn sẵn.",
+  "settingsPrivacyDeleteUnavailable": "Tính năng xóa tài khoản chưa khả dụng trong bản dựng này. Thay vào đó, một email về quyền riêng tư đã được soạn sẵn.",
+  "settingsPrivacyOpenPolicy": "Mở chính sách",
+  "settingsPrivacyRefreshExport": "Làm mới bản xuất",
+  "settingsPrivacyPrepareExport": "Chuẩn bị bản xuất",
+  "settingsPrivacySaveExport": "Lưu bản xuất",
+  "settingsPrivacyContactSupport": "Liên hệ hỗ trợ",
+  "settingsPrivacyDeleteAccount": "Xóa tài khoản",
+  "settingsPrivacyDeleteConfirmTitle": "Xóa tài khoản?",
+  "settingsPrivacyDeleteConfirmDescription": "Yêu cầu này không thể hoàn tác sau khi được xử lý. Bạn có thể mất các tài khoản đã liên kết, cài đặt thông báo, tùy chọn đã lưu và phương thức xác thực."
 }

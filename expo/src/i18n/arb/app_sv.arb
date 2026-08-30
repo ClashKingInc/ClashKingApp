@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Planera prioriteringar",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangordna det som är viktigast. Uppgraderingsnivåer och aktivt arbete förblir alltid i ordning.",
+  "upgradeTrackerPlanClose": "Stäng",
+  "upgradeTrackerPlanPlanningGoals": "Planera mål",
+  "upgradeTrackerPlanConstructionSubtitle": "Konstruktion och hjälteuppgraderingar",
+  "upgradeTrackerPlanResearchSubtitle": "Trupper, besvärjelser och belägringsforskning",
+  "upgradeTrackerPlanPetHouseSubtitle": "Pet House uppgraderingar",
+  "upgradeTrackerPlanPrioritizeNewItems": "Prioritera nya föremål",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Placera nyligen olåsta eller obyggda föremål först",
+  "upgradeTrackerPlanSharedSummary": "Nivå {tier} · delad mix {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Nivå {tier} · strikt · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "kör tills max",
+  "upgradeTrackerPlanYieldsAfter": "avkastning efter {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Strikt",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Ordna om {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relativ nivåvikt",
+  "upgradeTrackerPlanCompletionTarget": "Mål för slutförande",
+  "upgradeTrackerPlanStrictTier": "Strikt nivå",
+  "upgradeTrackerPlanWeight": "Vikt {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Tills maxat",
+  "upgradeTrackerPlanUntilPercent": "Till {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Numrerade nivåer körs först. Delade rader behåller samma nivånummer och deras mix normaliseras från de relativa vikterna, så 50 + 25 blir 67% / 33%. Ett mål ger en kategori avkastning efter att det når den procentandelen medan det förblir kvalificerat senare.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max innan du avancerar",
+  "upgradeTrackerPlanGoalRushNextHall": "Nå nästa hall snabbt",
+  "upgradeTrackerPlanGoalCatchUp": "Kom ikapp förhastade nivåer",
+  "upgradeTrackerPlanGoalUnlockFirst": "Lås upp nya saker först",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Väggar varje vecka",
+  "upgradeTrackerPlanOff": "Av",
+  "upgradeTrackerPlanPerWeek": "{count}/vecka",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Föredrar guld till väggar",
+  "upgradeTrackerPlanPreferGoldDescription": "Använd Gold före Elixir när du spenderar väggar",
+  "upgradeTrackerPlanApplyPriorities": "Tillämpa prioriteringar",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Tillverkade försvar",
+  "upgradeTrackerPlanCategoryTraps": "Fällor",
+  "upgradeTrackerPlanCategoryArmy": "Armé",
+  "upgradeTrackerPlanCategoryDarkTroops": "Mörka trupper",
+  "upgradeTrackerPlanCategorySieges": "Belägringar",
+  "upgradeTrackerPlanCategorySupercharge": "Superladdning",
+  "navigationCloseDrawer": "Stäng navigeringspanel",
+  "navigationOpenProfileMenu": "Öppna profilmeny",
+  "navigationClashKingWeb": "ClashKing på webben",
+  "settingsPrivacyDataTitle": "Integritet och data",
+  "settingsPrivacyPolicyDescription": "Se vad ClashKing samlar in, varför uppgifterna används, vem som behandlar dem, reglerna för lagring och hur du kontaktar oss.",
+  "settingsPrivacyExportTitle": "Få åtkomst till eller exportera dina data",
+  "settingsPrivacyExportDescription": "Hämta en kopia av kontouppgifterna som är kopplade till din ClashKing-inloggning, inklusive kopplade Clash of Clans-konton och aviseringsinställningar.",
+  "settingsPrivacyCorrectionTitle": "Korrigera eller begränsa data",
+  "settingsPrivacyCorrectionDescription": "Ta bort kopplade Clash of Clans-konton i kontoinställningarna, stäng av aviseringar eller kontakta supporten för begäran om korrigering eller begränsning.",
+  "settingsPrivacyDeletionTitle": "Radera ditt ClashKing-konto",
+  "settingsPrivacyDeletionDescription": "Detta startar raderingen av ditt ClashKing-konto och tillhörande appdata, såvida inte ClashKing måste behålla begränsade uppgifter för säkerhet, bedrägeribekämpning eller rättsliga skyldigheter.",
+  "settingsPrivacyChildrenTitle": "Barn och familjer",
+  "settingsPrivacyChildrenDescription": "ClashKing är en kompletterande app för en allmän publik och riktar sig inte till barn. Skapa inte ett konto om du i ditt land inte är gammal nog att samtycka utan godkännande från en förälder eller vårdnadshavare.",
+  "settingsPrivacyExportReady": "Din dataexport är klar att sparas.",
+  "settingsPrivacyExportCreateFailed": "Dataexporten kunde inte skapas. Ett integritetsmeddelande via e-post har förberetts i stället.",
+  "settingsPrivacyExportPrepareFirst": "Förbered exporten innan du sparar den.",
+  "settingsPrivacyExportSaved": "Din dataexport har sparats.",
+  "settingsPrivacyExportSaveFailed": "Dataexporten kunde inte sparas. Ett integritetsmeddelande via e-post har förberetts i stället.",
+  "settingsPrivacyDeleteUnavailable": "Kontoradering är inte tillgänglig i den här versionen. Ett integritetsmeddelande via e-post har förberetts i stället.",
+  "settingsPrivacyOpenPolicy": "Öppna policy",
+  "settingsPrivacyRefreshExport": "Uppdatera export",
+  "settingsPrivacyPrepareExport": "Förbered export",
+  "settingsPrivacySaveExport": "Spara export",
+  "settingsPrivacyContactSupport": "Kontakta supporten",
+  "settingsPrivacyDeleteAccount": "Radera konto",
+  "settingsPrivacyDeleteConfirmTitle": "Radera kontot?",
+  "settingsPrivacyDeleteConfirmDescription": "Begäran kan inte ångras efter behandling. Du kan förlora kopplade konton, aviseringsinställningar, sparade preferenser och autentiseringsmetoder."
 }

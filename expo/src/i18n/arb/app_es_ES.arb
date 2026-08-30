@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Planificar prioridades",
+  "upgradeTrackerPlanPrioritiesDescription": "Clasifica lo que más importa. Los niveles de actualización y el trabajo activo siempre permanecen en orden.",
+  "upgradeTrackerPlanClose": "Cerrar",
+  "upgradeTrackerPlanPlanningGoals": "Metas de planificación",
+  "upgradeTrackerPlanConstructionSubtitle": "Mejoras de construcción y héroes.",
+  "upgradeTrackerPlanResearchSubtitle": "Tropas, hechizos e investigación de asedio.",
+  "upgradeTrackerPlanPetHouseSubtitle": "Mejoras en la casa de mascotas",
+  "upgradeTrackerPlanPrioritizeNewItems": "Priorizar nuevos elementos",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Coloque primero los elementos recién desbloqueados o no construidos",
+  "upgradeTrackerPlanSharedSummary": "Nivel {tier} · combinación compartida {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Nivel {tier} · estricto · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "corre hasta el máximo",
+  "upgradeTrackerPlanYieldsAfter": "rendimientos después del {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "estricto",
+  "upgradeTrackerPlanMax": "máx.",
+  "upgradeTrackerPlanReorder": "Reordenar {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Peso relativo del nivel",
+  "upgradeTrackerPlanCompletionTarget": "Objetivo de finalización",
+  "upgradeTrackerPlanStrictTier": "nivel estricto",
+  "upgradeTrackerPlanWeight": "Peso {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Hasta el máximo",
+  "upgradeTrackerPlanUntilPercent": "Hasta {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Los niveles numerados se ejecutan primero. Las filas compartidas mantienen el mismo número de nivel y su combinación se normaliza a partir de los pesos relativos, por lo que 50 + 25 se convierte en 67 %/33 %. Un objetivo genera rendimiento en una categoría después de alcanzar ese porcentaje, mientras que sigue siendo elegible más adelante.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max antes de avanzar",
+  "upgradeTrackerPlanGoalRushNextHall": "Llega rápidamente al siguiente pasillo.",
+  "upgradeTrackerPlanGoalCatchUp": "Ponte al día con los niveles apresurados",
+  "upgradeTrackerPlanGoalUnlockFirst": "Desbloquea cosas nuevas primero",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Paredes cada semana",
+  "upgradeTrackerPlanOff": "Apagado",
+  "upgradeTrackerPlanPerWeek": "{count} / semana",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Prefiere el oro para las paredes.",
+  "upgradeTrackerPlanPreferGoldDescription": "Usa oro antes que elixir cuando gastes muros",
+  "upgradeTrackerPlanApplyPriorities": "Aplicar prioridades",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Defensas elaboradas",
+  "upgradeTrackerPlanCategoryTraps": "Trampas",
+  "upgradeTrackerPlanCategoryArmy": "ejército",
+  "upgradeTrackerPlanCategoryDarkTroops": "tropas oscuras",
+  "upgradeTrackerPlanCategorySieges": "Asedios",
+  "upgradeTrackerPlanCategorySupercharge": "Sobrealimentar",
+  "navigationCloseDrawer": "Cerrar panel de navegación",
+  "navigationOpenProfileMenu": "Abrir menú del perfil",
+  "navigationClashKingWeb": "ClashKing web",
+  "settingsPrivacyDataTitle": "Privacidad y datos",
+  "settingsPrivacyPolicyDescription": "Revisa qué recopila ClashKing, por qué se utiliza, quién lo procesa, las reglas de conservación y cómo contactarnos.",
+  "settingsPrivacyExportTitle": "Acceder a tus datos o exportarlos",
+  "settingsPrivacyExportDescription": "Descarga una copia de los datos de la cuenta vinculados a tu inicio de sesión de ClashKing, incluidas las cuentas de Clash of Clans vinculadas y las preferencias de notificaciones.",
+  "settingsPrivacyCorrectionTitle": "Corregir o limitar datos",
+  "settingsPrivacyCorrectionDescription": "Elimina cuentas de Clash of Clans vinculadas desde los ajustes de la cuenta, desactiva las notificaciones o contacta con soporte para solicitar correcciones o limitaciones.",
+  "settingsPrivacyDeletionTitle": "Eliminar tu cuenta de ClashKing",
+  "settingsPrivacyDeletionDescription": "Esto inicia la eliminación de tu cuenta de ClashKing y los datos asociados de la aplicación, salvo que ClashKing deba conservar registros limitados por motivos de seguridad, prevención del fraude u obligaciones legales.",
+  "settingsPrivacyChildrenTitle": "Niños y familias",
+  "settingsPrivacyChildrenDescription": "ClashKing es una aplicación complementaria para el público general y no está dirigida a niños. No crees una cuenta si en tu país no tienes edad para dar tu consentimiento sin la aprobación de un padre, madre o tutor.",
+  "settingsPrivacyExportReady": "Tu exportación de datos está lista para guardarse.",
+  "settingsPrivacyExportCreateFailed": "No se pudo crear la exportación de datos. Se ha preparado un correo sobre privacidad.",
+  "settingsPrivacyExportPrepareFirst": "Prepara la exportación antes de guardarla.",
+  "settingsPrivacyExportSaved": "Tu exportación de datos se ha guardado.",
+  "settingsPrivacyExportSaveFailed": "No se pudo guardar la exportación de datos. Se ha preparado un correo sobre privacidad.",
+  "settingsPrivacyDeleteUnavailable": "La eliminación de cuentas no está disponible en esta compilación. Se ha preparado un correo sobre privacidad.",
+  "settingsPrivacyOpenPolicy": "Abrir política",
+  "settingsPrivacyRefreshExport": "Actualizar exportación",
+  "settingsPrivacyPrepareExport": "Preparar exportación",
+  "settingsPrivacySaveExport": "Guardar exportación",
+  "settingsPrivacyContactSupport": "Contactar con soporte",
+  "settingsPrivacyDeleteAccount": "Eliminar cuenta",
+  "settingsPrivacyDeleteConfirmTitle": "¿Eliminar cuenta?",
+  "settingsPrivacyDeleteConfirmDescription": "Esta solicitud es permanente una vez procesada. Podrías perder cuentas vinculadas, ajustes de notificaciones, preferencias guardadas y métodos de autenticación."
 }

@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Plánujte priority",
+  "upgradeTrackerPlanPrioritiesDescription": "Hodnoťte, na čem záleží nejvíce. Úrovně vylepšení a aktivní práce vždy zůstanou v pořádku.",
+  "upgradeTrackerPlanClose": "Zavřít",
+  "upgradeTrackerPlanPlanningGoals": "Plánování cílů",
+  "upgradeTrackerPlanConstructionSubtitle": "Konstrukce a vylepšení hrdinů",
+  "upgradeTrackerPlanResearchSubtitle": "Výzkum vojsk, kouzel a obléhání",
+  "upgradeTrackerPlanPetHouseSubtitle": "Vylepšení Pet House",
+  "upgradeTrackerPlanPrioritizeNewItems": "Upřednostnění nových položek",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Umístěte nově odemčené nebo nezastavěné položky nejprve",
+  "upgradeTrackerPlanSharedSummary": "Úroveň {tier} · sdílený poměr {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Úroveň {tier} · přísné · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "běží, dokud maximální výnosy",
+  "upgradeTrackerPlanYieldsAfter": "po {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Přísné",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Změnit pořadí: {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relativní hmotnost úrovně",
+  "upgradeTrackerPlanCompletionTarget": "Cíl dokončení",
+  "upgradeTrackerPlanStrictTier": "Přísná úroveň",
+  "upgradeTrackerPlanWeight": "Hmotnost {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Do maximální hmotnosti",
+  "upgradeTrackerPlanUntilPercent": "Do {value}",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Číslované úrovně běží jako první. Sdílené řádky mají stejné číslo úrovně a jejich kombinace je normalizována z relativních vah, takže 50 + 25 se stává 67% / 33%. Cíl dosáhne výnosu kategorie poté, co dosáhne tohoto procenta, zatímco později zůstane způsobilý.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max. před pokračováním",
+  "upgradeTrackerPlanGoalRushNextHall": "Rychle se dostaň do další haly",
+  "upgradeTrackerPlanGoalCatchUp": "Dohnat spěšné úrovně",
+  "upgradeTrackerPlanGoalUnlockFirst": "Odemknout nové věci nejprve",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Stěny každý týden",
+  "upgradeTrackerPlanOff": "Vypnuto",
+  "upgradeTrackerPlanPerWeek": "{count} / týden",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Preferujte zlato na stěny",
+  "upgradeTrackerPlanPreferGoldDescription": "Při utrácení za zdi použijte zlato před elixírem",
+  "upgradeTrackerPlanApplyPriorities": "Použijte priority",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Vyrobená obrana",
+  "upgradeTrackerPlanCategoryTraps": "Pasti",
+  "upgradeTrackerPlanCategoryArmy": "Armáda",
+  "upgradeTrackerPlanCategoryDarkTroops": "Tmavé jednotky",
+  "upgradeTrackerPlanCategorySieges": "Obležení",
+  "upgradeTrackerPlanCategorySupercharge": "Přeplatek",
+  "navigationCloseDrawer": "Zavřít navigační panel",
+  "navigationOpenProfileMenu": "Otevřít nabídku profilu",
+  "navigationClashKingWeb": "ClashKing pro web",
+  "settingsPrivacyDataTitle": "Soukromí a data",
+  "settingsPrivacyPolicyDescription": "Zjistěte, co ClashKing shromažďuje, proč se údaje používají, kdo je zpracovává, jaká platí pravidla uchovávání a jak nás kontaktovat.",
+  "settingsPrivacyExportTitle": "Přístup k datům nebo jejich export",
+  "settingsPrivacyExportDescription": "Stáhněte si kopii údajů účtu propojených s přihlášením do ClashKing, včetně propojených účtů Clash of Clans a předvoleb oznámení.",
+  "settingsPrivacyCorrectionTitle": "Oprava nebo omezení dat",
+  "settingsPrivacyCorrectionDescription": "V nastavení účtu odeberte propojené účty Clash of Clans, vypněte oznámení nebo kontaktujte podporu se žádostí o opravu či omezení.",
+  "settingsPrivacyDeletionTitle": "Smazání účtu ClashKing",
+  "settingsPrivacyDeletionDescription": "Tím zahájíte smazání účtu ClashKing a souvisejících dat aplikace, pokud ClashKing nemusí uchovat omezené záznamy kvůli zabezpečení, prevenci podvodů nebo právním povinnostem.",
+  "settingsPrivacyChildrenTitle": "Děti a rodiny",
+  "settingsPrivacyChildrenDescription": "ClashKing je doprovodná aplikace pro širokou veřejnost a není určena dětem. Nevytvářejte účet, pokud ve své zemi nemáte věk potřebný k udělení souhlasu bez schválení rodiče či opatrovníka.",
+  "settingsPrivacyExportReady": "Export dat je připraven k uložení.",
+  "settingsPrivacyExportCreateFailed": "Export dat se nepodařilo vytvořit. Místo toho byl připraven e-mail týkající se soukromí.",
+  "settingsPrivacyExportPrepareFirst": "Před uložením export připravte.",
+  "settingsPrivacyExportSaved": "Export dat byl uložen.",
+  "settingsPrivacyExportSaveFailed": "Export dat se nepodařilo uložit. Místo toho byl připraven e-mail týkající se soukromí.",
+  "settingsPrivacyDeleteUnavailable": "Smazání účtu není v tomto sestavení dostupné. Místo toho byl připraven e-mail týkající se soukromí.",
+  "settingsPrivacyOpenPolicy": "Otevřít zásady",
+  "settingsPrivacyRefreshExport": "Obnovit export",
+  "settingsPrivacyPrepareExport": "Připravit export",
+  "settingsPrivacySaveExport": "Uložit export",
+  "settingsPrivacyContactSupport": "Kontaktovat podporu",
+  "settingsPrivacyDeleteAccount": "Smazat účet",
+  "settingsPrivacyDeleteConfirmTitle": "Smazat účet?",
+  "settingsPrivacyDeleteConfirmDescription": "Po zpracování je tato žádost nevratná. Můžete přijít o propojené účty, nastavení oznámení, uložené předvolby a metody ověřování."
 }

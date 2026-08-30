@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Beplan prioriteite",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangskik wat die belangrikste is. Opgraderingsvlakke en aktiewe werk bly altyd in orde.",
+  "upgradeTrackerPlanClose": "Maak toe",
+  "upgradeTrackerPlanPlanningGoals": "Beplanningsdoelwitte",
+  "upgradeTrackerPlanConstructionSubtitle": "Konstruksie en helde-opgraderings",
+  "upgradeTrackerPlanResearchSubtitle": "Troepe, towerspreuke en beleg navorsing",
+  "upgradeTrackerPlanPetHouseSubtitle": "Troeteldierhuis-opgraderings",
+  "upgradeTrackerPlanPrioritizeNewItems": "Prioritiseer nuwe items",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Plaas nuut oopgesluit of ongeboude items eerste",
+  "upgradeTrackerPlanSharedSummary": "Vlak {tier} · gedeelde mengsel {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Vlak {tier} · streng · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "loop tot maksimum",
+  "upgradeTrackerPlanYieldsAfter": "opbrengste na {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Streng",
+  "upgradeTrackerPlanMax": "Maks",
+  "upgradeTrackerPlanReorder": "Herrangskik {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relatiewe vlak gewig",
+  "upgradeTrackerPlanCompletionTarget": "Voltooiing teiken",
+  "upgradeTrackerPlanStrictTier": "Streng vlak",
+  "upgradeTrackerPlanWeight": "Gewig {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Tot maksimum",
+  "upgradeTrackerPlanUntilPercent": "Tot {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Genommerde vlakke loop eerste. Gedeelde rye hou dieselfde vlaknommer, en hul mengsel word genormaliseer vanaf die relatiewe gewigte, dus word 50 + 25 67% / 33%. 'n Teiken maak 'n kategorie-opbrengs nadat dit daardie persentasie bereik het terwyl dit later in aanmerking kom.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Maksimum voor vorder",
+  "upgradeTrackerPlanGoalRushNextHall": "Bereik vinnig die volgende saal",
+  "upgradeTrackerPlanGoalCatchUp": "Haal gejaagde vlakke in",
+  "upgradeTrackerPlanGoalUnlockFirst": "Ontsluit eers nuwe dinge",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Mure elke week",
+  "upgradeTrackerPlanOff": "Af",
+  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Verkies Goud vir mure",
+  "upgradeTrackerPlanPreferGoldDescription": "Gebruik Gold voor Elixir wanneer jy mure spandeer",
+  "upgradeTrackerPlanApplyPriorities": "Pas prioriteite toe",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Gemaakte verdediging",
+  "upgradeTrackerPlanCategoryTraps": "Valke",
+  "upgradeTrackerPlanCategoryArmy": "Weermag",
+  "upgradeTrackerPlanCategoryDarkTroops": "Donker troepe",
+  "upgradeTrackerPlanCategorySieges": "Beleg",
+  "upgradeTrackerPlanCategorySupercharge": "Superlading",
+  "navigationCloseDrawer": "Sluit navigasielaai",
+  "navigationOpenProfileMenu": "Maak profielkieslys oop",
+  "navigationClashKingWeb": "ClashKing-web",
+  "settingsPrivacyDataTitle": "Privaatheid en data",
+  "settingsPrivacyPolicyDescription": "Lees wat ClashKing insamel, waarom dit gebruik word, wie dit verwerk, hoe lank dit bewaar word en hoe om ons te kontak.",
+  "settingsPrivacyExportTitle": "Kry toegang tot of voer jou data uit",
+  "settingsPrivacyExportDescription": "Laai ’n kopie af van rekeningdata wat aan jou ClashKing-aanmelding gekoppel is, insluitend gekoppelde Clash of Clans-rekeninge en kennisgewingvoorkeure.",
+  "settingsPrivacyCorrectionTitle": "Korrigeer of beperk data",
+  "settingsPrivacyCorrectionDescription": "Verwyder gekoppelde Clash of Clans-rekeninge in rekeninginstellings, skakel kennisgewings af, of kontak ondersteuning vir regstellings- en beperkingsversoeke.",
+  "settingsPrivacyDeletionTitle": "Vee jou ClashKing-rekening uit",
+  "settingsPrivacyDeletionDescription": "Dit begin die verwydering van jou ClashKing-rekening en verwante programdata, tensy ClashKing beperkte rekords vir sekuriteit, bedrogbeskerming of wetlike verpligtinge moet behou.",
+  "settingsPrivacyChildrenTitle": "Kinders en gesinne",
+  "settingsPrivacyChildrenDescription": "ClashKing is ’n metgeselprogram vir ’n algemene gehoor en is nie op kinders gerig nie. Moenie ’n rekening skep as jy in jou land nie oud genoeg is om sonder toestemming van ’n ouer of voog toe te stem nie.",
+  "settingsPrivacyExportReady": "Jou data-uitvoer is gereed om gestoor te word.",
+  "settingsPrivacyExportCreateFailed": "Die data-uitvoer kon nie geskep word nie. ’n Privaatheid-e-pos is eerder voorberei.",
+  "settingsPrivacyExportPrepareFirst": "Berei jou uitvoer voor voordat jy dit stoor.",
+  "settingsPrivacyExportSaved": "Jou data-uitvoer is gestoor.",
+  "settingsPrivacyExportSaveFailed": "Die data-uitvoer kon nie gestoor word nie. ’n Privaatheid-e-pos is eerder voorberei.",
+  "settingsPrivacyDeleteUnavailable": "Rekeningverwydering is nie in hierdie weergawe beskikbaar nie. ’n Privaatheid-e-pos is eerder voorberei.",
+  "settingsPrivacyOpenPolicy": "Open beleid",
+  "settingsPrivacyRefreshExport": "Verfris uitvoer",
+  "settingsPrivacyPrepareExport": "Berei uitvoer voor",
+  "settingsPrivacySaveExport": "Stoor uitvoer",
+  "settingsPrivacyContactSupport": "Kontak ondersteuning",
+  "settingsPrivacyDeleteAccount": "Vee rekening uit",
+  "settingsPrivacyDeleteConfirmTitle": "Vee rekening uit?",
+  "settingsPrivacyDeleteConfirmDescription": "Hierdie versoek is permanent nadat dit verwerk is. Jy kan gekoppelde rekeninge, kennisgewinginstellings, gestoorde voorkeure en verifikasiemetodes verloor."
 }

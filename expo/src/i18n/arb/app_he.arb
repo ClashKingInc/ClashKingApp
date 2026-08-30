@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "תכננו סדרי עדיפויות",
+  "upgradeTrackerPlanPrioritiesDescription": "דרג את מה שהכי חשוב. רמות השדרוג והעבודה הפעילה תמיד נשארים בסדר.",
+  "upgradeTrackerPlanClose": "סגור",
+  "upgradeTrackerPlanPlanningGoals": "מטרות תכנון",
+  "upgradeTrackerPlanConstructionSubtitle": "בנייה ושדרוגי גיבורים",
+  "upgradeTrackerPlanResearchSubtitle": "כוחות, לחשים וחקר מצור",
+  "upgradeTrackerPlanPetHouseSubtitle": "שדרוגי בית לחיות מחמד",
+  "upgradeTrackerPlanPrioritizeNewItems": "תעדוף פריטים חדשים",
+  "upgradeTrackerPlanPrioritizeNewDescription": "הנח תחילה פריטים שנפתחו או לא נבנו לאחרונה",
+  "upgradeTrackerPlanSharedSummary": "שכבה {tier} · מיקס משותף {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "שכבה {tier} · קפדנית · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "פועל עד למקסימום",
+  "upgradeTrackerPlanYieldsAfter": "תשואות לאחר {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "קפדני",
+  "upgradeTrackerPlanMax": "מקסימום",
+  "upgradeTrackerPlanReorder": "סדר מחדש {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "משקל שכבה יחסי",
+  "upgradeTrackerPlanCompletionTarget": "יעד השלמה",
+  "upgradeTrackerPlanStrictTier": "רמה קפדנית",
+  "upgradeTrackerPlanWeight": "משקל {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "עד למקסימום",
+  "upgradeTrackerPlanUntilPercent": "עד {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "שכבות ממוספרות פועלות ראשונות. שורות משותפות שומרות על אותו מספר שכבה, והתמהיל שלהן מנורמל מהמשקלים היחסיים, כך ש-50 + 25 הופך ל-67% / 33%. יעד מייצר תשואה של קטגוריה לאחר שהוא מגיע לאחוז הזה בזמן שהוא נשאר כשיר מאוחר יותר.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "מקסימום לפני התקדמות",
+  "upgradeTrackerPlanGoalRushNextHall": "להגיע מהר לאולם הבא",
+  "upgradeTrackerPlanGoalCatchUp": "להדביק רמות נמהרות",
+  "upgradeTrackerPlanGoalUnlockFirst": "קודם כל פתח דברים חדשים",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "קירות בכל שבוע",
+  "upgradeTrackerPlanOff": "כבוי",
+  "upgradeTrackerPlanPerWeek": "{count} לשבוע",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "העדיפו זהב לקירות",
+  "upgradeTrackerPlanPreferGoldDescription": "השתמש בזהב לפני אליקסיר בעת הוצאות קירות",
+  "upgradeTrackerPlanApplyPriorities": "החל סדרי עדיפויות",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "הגנות מעוצבות",
+  "upgradeTrackerPlanCategoryTraps": "מלכודות",
+  "upgradeTrackerPlanCategoryArmy": "צבא",
+  "upgradeTrackerPlanCategoryDarkTroops": "כוחות אפלים",
+  "upgradeTrackerPlanCategorySieges": "מצור",
+  "upgradeTrackerPlanCategorySupercharge": "מטען על",
+  "navigationCloseDrawer": "סגירת חלונית הניווט",
+  "navigationOpenProfileMenu": "פתיחת תפריט הפרופיל",
+  "navigationClashKingWeb": "ClashKing באינטרנט",
+  "settingsPrivacyDataTitle": "פרטיות ונתונים",
+  "settingsPrivacyPolicyDescription": "אפשר לעיין במידע ש-ClashKing אוספת, במטרות השימוש בו, בגורמים שמעבדים אותו, בכללי השמירה ובדרכי יצירת הקשר איתנו.",
+  "settingsPrivacyExportTitle": "גישה לנתונים או ייצוא שלהם",
+  "settingsPrivacyExportDescription": "אפשר להוריד עותק של נתוני החשבון המקושרים לכניסה ל-ClashKing, כולל חשבונות Clash of Clans מקושרים והעדפות התראות.",
+  "settingsPrivacyCorrectionTitle": "תיקון או הגבלת נתונים",
+  "settingsPrivacyCorrectionDescription": "אפשר להסיר חשבונות Clash of Clans מקושרים בהגדרות החשבון, להשבית התראות או לפנות לתמיכה בבקשות לתיקון ולהגבלה.",
+  "settingsPrivacyDeletionTitle": "מחיקת חשבון ClashKing",
+  "settingsPrivacyDeletionDescription": "פעולה זו מתחילה את מחיקת חשבון ClashKing ונתוני האפליקציה המשויכים אליו, אלא אם ClashKing חייבת לשמור רשומות מוגבלות לצורכי אבטחה, מניעת הונאה או חובות משפטיות.",
+  "settingsPrivacyChildrenTitle": "ילדים ומשפחות",
+  "settingsPrivacyChildrenDescription": "ClashKing היא אפליקציה נלווית לקהל הרחב ואינה מיועדת לילדים. אין ליצור חשבון אם גילך אינו מאפשר לתת הסכמה במדינתך ללא אישור הורה או אפוטרופוס.",
+  "settingsPrivacyExportReady": "ייצוא הנתונים מוכן לשמירה.",
+  "settingsPrivacyExportCreateFailed": "לא ניתן היה ליצור את ייצוא הנתונים. במקום זאת הוכנה הודעת דוא״ל בנושא פרטיות.",
+  "settingsPrivacyExportPrepareFirst": "יש להכין את הייצוא לפני השמירה.",
+  "settingsPrivacyExportSaved": "ייצוא הנתונים נשמר.",
+  "settingsPrivacyExportSaveFailed": "לא ניתן היה לשמור את ייצוא הנתונים. במקום זאת הוכנה הודעת דוא״ל בנושא פרטיות.",
+  "settingsPrivacyDeleteUnavailable": "מחיקת חשבון אינה זמינה בגרסה זו. במקום זאת הוכנה הודעת דוא״ל בנושא פרטיות.",
+  "settingsPrivacyOpenPolicy": "פתיחת המדיניות",
+  "settingsPrivacyRefreshExport": "רענון הייצוא",
+  "settingsPrivacyPrepareExport": "הכנת הייצוא",
+  "settingsPrivacySaveExport": "שמירת הייצוא",
+  "settingsPrivacyContactSupport": "פנייה לתמיכה",
+  "settingsPrivacyDeleteAccount": "מחיקת חשבון",
+  "settingsPrivacyDeleteConfirmTitle": "למחוק את החשבון?",
+  "settingsPrivacyDeleteConfirmDescription": "לאחר הטיפול בבקשה לא ניתן לבטלה. חשבונות מקושרים, הגדרות התראות, העדפות שמורות ושיטות אימות עלולים להימחק."
 }

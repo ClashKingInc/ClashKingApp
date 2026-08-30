@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Планирајте приоритете",
+  "upgradeTrackerPlanPrioritiesDescription": "Оцените оно што је најважније. Нивои надоградње и активни рад увек остају у реду.",
+  "upgradeTrackerPlanClose": "Затвори",
+  "upgradeTrackerPlanPlanningGoals": "Циљеви планирања",
+  "upgradeTrackerPlanConstructionSubtitle": "Конструкција и надоградње хероја",
+  "upgradeTrackerPlanResearchSubtitle": "Трупе, чаролије и истраживање опсаде",
+  "upgradeTrackerPlanPetHouseSubtitle": "Надоградња Куће за кућне љубимце",
+  "upgradeTrackerPlanPrioritizeNewItems": "Дајте приоритет новим ставкама",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Прво поставите новооткључане или неизграђене предмете",
+  "upgradeTrackerPlanSharedSummary": "Ниво {tier} · заједнички микс {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Ниво {tier} · строг · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "ради до максимума",
+  "upgradeTrackerPlanYieldsAfter": "приноси након {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Строги",
+  "upgradeTrackerPlanMax": "Макс",
+  "upgradeTrackerPlanReorder": "Поново наручи {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Релативна тежина слоја",
+  "upgradeTrackerPlanCompletionTarget": "Циљ завршетка",
+  "upgradeTrackerPlanStrictTier": "Строги ниво",
+  "upgradeTrackerPlanWeight": "Тежина {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "До максимума",
+  "upgradeTrackerPlanUntilPercent": "До {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Нумерисани нивои покрећу први. Заједнички редови задржавају исти број нивоа, а њихова мешавина је нормализована из релативних тежина, тако да 50 + 25 постаје 67% / 33%. Циљ даје категорију принос након што достигне тај проценат док остаје квалификован касније.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Макс пре напредовања",
+  "upgradeTrackerPlanGoalRushNextHall": "Брзо дођите до следеће сале",
+  "upgradeTrackerPlanGoalCatchUp": "Достигните убрзане нивое",
+  "upgradeTrackerPlanGoalUnlockFirst": "Прво откључајте нове ствари",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Зидови сваке недеље",
+  "upgradeTrackerPlanOff": "Офф",
+  "upgradeTrackerPlanPerWeek": "{count} / седмично",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Преферирајте злато за зидове",
+  "upgradeTrackerPlanPreferGoldDescription": "Користите злато пре Еликсира када трошите зидове",
+  "upgradeTrackerPlanApplyPriorities": "Примените приоритете",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Израђена одбрана",
+  "upgradeTrackerPlanCategoryTraps": "Замке",
+  "upgradeTrackerPlanCategoryArmy": "војска",
+  "upgradeTrackerPlanCategoryDarkTroops": "Мрачне трупе",
+  "upgradeTrackerPlanCategorySieges": "Опсаде",
+  "upgradeTrackerPlanCategorySupercharge": "Суперцхарге",
+  "navigationCloseDrawer": "Затвори навигациони панел",
+  "navigationOpenProfileMenu": "Отвори мени профила",
+  "navigationClashKingWeb": "ClashKing веб",
+  "settingsPrivacyDataTitle": "Приватност и подаци",
+  "settingsPrivacyPolicyDescription": "Погледајте шта ClashKing прикупља, зашто се подаци користе, ко их обрађује, правила чувања и како да нас контактирате.",
+  "settingsPrivacyExportTitle": "Приступите подацима или их извезите",
+  "settingsPrivacyExportDescription": "Преузмите копију података налога повезаних са ClashKing пријавом, укључујући повезане Clash of Clans налоге и подешавања обавештења.",
+  "settingsPrivacyCorrectionTitle": "Исправите или ограничите податке",
+  "settingsPrivacyCorrectionDescription": "Уклоните повезане Clash of Clans налоге у подешавањима налога, искључите обавештења или контактирајте подршку ради исправке или ограничења.",
+  "settingsPrivacyDeletionTitle": "Избришите ClashKing налог",
+  "settingsPrivacyDeletionDescription": "Ово покреће брисање ClashKing налога и повезаних података апликације, осим ако ClashKing мора да задржи ограничене записе због безбедности, спречавања превара или законских обавеза.",
+  "settingsPrivacyChildrenTitle": "Деца и породице",
+  "settingsPrivacyChildrenDescription": "ClashKing је пратећа апликација за општу публику и није намењена деци. Не правите налог ако у својој земљи нисте довољно стари да пристанете без одобрења родитеља или старатеља.",
+  "settingsPrivacyExportReady": "Извоз података је спреман за чување.",
+  "settingsPrivacyExportCreateFailed": "Извоз података није могуће направити. Уместо тога је припремљена порука е-поште о приватности.",
+  "settingsPrivacyExportPrepareFirst": "Припремите извоз пре чувања.",
+  "settingsPrivacyExportSaved": "Извоз података је сачуван.",
+  "settingsPrivacyExportSaveFailed": "Извоз података није могуће сачувати. Уместо тога је припремљена порука е-поште о приватности.",
+  "settingsPrivacyDeleteUnavailable": "Брисање налога није доступно у овој верзији. Уместо тога је припремљена порука е-поште о приватности.",
+  "settingsPrivacyOpenPolicy": "Отвори политику",
+  "settingsPrivacyRefreshExport": "Освежи извоз",
+  "settingsPrivacyPrepareExport": "Припреми извоз",
+  "settingsPrivacySaveExport": "Сачувај извоз",
+  "settingsPrivacyContactSupport": "Контактирај подршку",
+  "settingsPrivacyDeleteAccount": "Избриши налог",
+  "settingsPrivacyDeleteConfirmTitle": "Избрисати налог?",
+  "settingsPrivacyDeleteConfirmDescription": "Овај захтев је трајан након обраде. Можете изгубити повезане налоге, подешавања обавештења, сачуване поставке и начине потврде идентитета."
 }

@@ -197,6 +197,44 @@ describe('WarCwlPresentationRoot', () => {
     jest.useRealTimers();
   });
 
+  it('keeps three-digit war scores on one responsive line', async () => {
+    const highScoreWar = new WarInfo(
+      'inWar',
+      '#HIGH-SCORE',
+      50,
+      2,
+      new WarClan('#CLAN', 'Linked Clan', badge, 50, 40, 110, 82.16, [playerMember]),
+      new WarClan('#ENEMY', 'Enemy Clan', badge, 50, 38, 103, 77.27, [enemyMember]),
+      new Date(),
+      new Date(Date.now() + 60 * 60 * 1000),
+      new Date(),
+      'random',
+    );
+    const highScoreModel: WarPresentationModel = {
+      ...model,
+      summaries: new Map([['#CLAN', new WarCwl('#CLAN', true, false, highScoreWar, null, [])]]),
+    };
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <WarCwlPresentationRoot model={highScoreModel} actions={actions} />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    const score = screen.getByTestId('war-summary-score');
+    expect(score.props.children.join('')).toBe('110 - 103');
+    expect(score.props.numberOfLines).toBe(1);
+    expect(score.props.adjustsFontSizeToFit).toBe(true);
+  });
+
   it('shows Flutter-equivalent CWL round timing, attack counts, and perfect-war state', async () => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date('2026-08-30T15:00:00.000Z'));

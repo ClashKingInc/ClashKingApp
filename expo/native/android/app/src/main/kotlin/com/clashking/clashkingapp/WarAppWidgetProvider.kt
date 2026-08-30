@@ -2,15 +2,15 @@ package com.clashking.clashkingapp
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.widget.RemoteViews
-import android.appwidget.AppWidgetProvider
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -18,9 +18,7 @@ import java.net.URL
 class WarAppWidgetProvider : AppWidgetProvider() {
 
     companion object {
-        const val ACTION_UPDATE_WIDGET = "com.clashking.clashkingapp.ACTION_UPDATE_WIDGET"
         private const val HOME_WIDGET_PREFERENCES = "HomeWidgetPreferences"
-        private const val HOME_WIDGET_BACKGROUND_ACTION = "es.antonborri.home_widget.action.BACKGROUND"
     }
 
     override fun onUpdate(
@@ -29,8 +27,7 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         val widgetData = context.getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
-        for (appWidgetId in appWidgetIds) {
-            Log.d("TAG", "onUpdate: $widgetData")
+        appWidgetIds.forEach { appWidgetId ->
             updateAppWidget(context, appWidgetManager, appWidgetId, widgetData)
         }
     }
@@ -42,253 +39,181 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
+        views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId))
 
-        // Set the PendingIntent to the root layout of the widget
-        views.setOnClickPendingIntent(R.id.root_layout, getPendingIntent(context))
-
-        // Get the war info from SharedPreferences
-        val warInfoJson = widgetData.getString("warInfo", null)
-
-        if (warInfoJson != null) {
-            val warInfo = JSONObject(warInfoJson)
-            val state = warInfo.getString("state")
-            val updatedTime = warInfo.optString("updatedAt", "")
-            val statusIcon = warInfo.optString("statusIcon", "")
-            val primaryText = warInfo.optString("primaryText", "")
-            val secondaryText = warInfo.optString("secondaryText", "")
-            val colorTheme = warInfo.optString("colorTheme", "neutral")
-
-            views.setTextViewText(R.id.text_update_time, updatedTime)
-
-            // Apply color theme
-            applyColorTheme(views, colorTheme)
-
-            when (state) {
-                "notInWar" -> {
-                    setWidgetText(views, "$statusIcon $primaryText", secondaryText)
-                }
-
-                "notInClan" -> {
-                    setWidgetText(views, "You're currently not in a Clan.")
-                }
-
-                "accessDenied" -> {
-                    setWidgetText(views, "$statusIcon $primaryText", secondaryText)
-                }
-
-                "error" -> {
-                    setWidgetText(views, "An error occurred while fetching data.")
-                }
-
-                "cwl" -> {
-                    // Handle CWL state with enhanced UI
-                    val score = warInfo.optString("score", "")
-
-                    // Use new enhanced text fields - only show score in primary text
-                    views.setTextViewText(R.id.text_score, if (primaryText.isNotEmpty()) primaryText else score)
-                    // Only show secondary text if it's a score (contains numbers or "-")
-                    val hasScore = score.isNotEmpty() && (score.contains("-") || score.any { it.isDigit() })
-                    views.setTextViewText(R.id.text_state, if (hasScore && secondaryText.isNotEmpty()) secondaryText else "")
-
-                    val clanInfo = warInfo.optJSONObject("clan")
-                    val opponentInfo = warInfo.optJSONObject("opponent")
-
-                    if (clanInfo != null && opponentInfo != null) {
-                        val clanDetails = getClanOrOpponentDetails(clanInfo)
-                        val opponentDetails = getClanOrOpponentDetails(opponentInfo)
-
-                        setDetailsToViews(views, clanDetails, opponentDetails)
-
-                        Thread {
-                            val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
-                            val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
-                            views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
-                            views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
-                            appWidgetManager.updateAppWidget(appWidgetId, views)
-                        }.start()
-                    } else {
-                        setWidgetText(views, "CWL data incomplete", "Missing clan or opponent info")
-                    }
-                }
-
-                else -> {
-                    // Handle regular war states with enhanced UI
-                    val score = warInfo.optString("score", "")
-
-                    // Use new enhanced text fields - only show score in primary text
-                    views.setTextViewText(R.id.text_score, if (primaryText.isNotEmpty()) primaryText else score)
-                    // Only show secondary text if it's a score (contains numbers or "-")
-                    val hasScore = score.isNotEmpty() && (score.contains("-") || score.any { it.isDigit() })
-                    views.setTextViewText(R.id.text_state, if (hasScore && secondaryText.isNotEmpty()) secondaryText else "")
-
-                    val clanInfo = warInfo.optJSONObject("clan")
-                    val opponentInfo = warInfo.optJSONObject("opponent")
-
-                    if (clanInfo != null && opponentInfo != null) {
-                        val clanDetails = getClanOrOpponentDetails(clanInfo)
-                        val opponentDetails = getClanOrOpponentDetails(opponentInfo)
-
-                        setDetailsToViews(views, clanDetails, opponentDetails)
-
-                        Thread {
-                            val clanBitmap = downloadBitmap(clanDetails.badgeUrl)
-                            val opponentBitmap = downloadBitmap(opponentDetails.badgeUrl)
-                            views.setImageViewBitmap(R.id.clan_flag, clanBitmap)
-                            views.setImageViewBitmap(R.id.opponent_flag, opponentBitmap)
-                            appWidgetManager.updateAppWidget(appWidgetId, views)
-                        }.start()
-                    } else {
-                        setWidgetText(views, "War data incomplete", "Missing clan or opponent info")
-                    }
-                }
-            }
+        val rawWarInfo = widgetData.getString("warInfo", null)
+        if (rawWarInfo == null) {
+            showEmptyState(
+                views,
+                context.getString(R.string.war_widget_empty_title),
+                context.getString(R.string.war_widget_empty_subtitle)
+            )
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+            return
         }
 
-        // Update the widget when the refresh icon is clicked
-        val updateIntent = Intent(context, WarAppWidgetProvider::class.java).apply {
-            action = ACTION_UPDATE_WIDGET
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        val warInfo = runCatching { JSONObject(rawWarInfo) }.getOrNull()
+        if (warInfo == null) {
+            showEmptyState(
+                views,
+                context.getString(R.string.war_widget_empty_title),
+                context.getString(R.string.war_widget_empty_subtitle)
+            )
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+            return
         }
 
-        // Create a PendingIntent to handle the click event
-        val updatePendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            updateIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        views.setOnClickPendingIntent(R.id.refresh_icon, updatePendingIntent)
+        when (warInfo.optString("state", "error")) {
+            "notInClan" -> showEmptyState(
+                views,
+                context.getString(R.string.war_widget_not_in_clan),
+                context.getString(R.string.war_widget_choose_account)
+            )
+            "notInWar" -> showEmptyState(
+                views,
+                displayText(warInfo, context.getString(R.string.war_widget_not_in_war)),
+                warInfo.optString("secondaryText", "")
+            )
+            "accessDenied" -> showEmptyState(
+                views,
+                displayText(warInfo, context.getString(R.string.war_widget_private)),
+                warInfo.optString("secondaryText", "")
+            )
+            "error" -> showEmptyState(
+                views,
+                displayText(warInfo, context.getString(R.string.war_widget_error)),
+                warInfo.optString("secondaryText", context.getString(R.string.war_widget_empty_subtitle))
+            )
+            else -> showMatchup(
+                context,
+                views,
+                appWidgetManager,
+                appWidgetId,
+                warInfo,
+                rawWarInfo
+            )
+        }
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    // Handle the new action in onReceive method of WarAppWidgetProvider
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == ACTION_UPDATE_WIDGET) {
-            val appWidgetId = intent.getIntExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID
+    private fun showMatchup(
+        context: Context,
+        views: RemoteViews,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        warInfo: JSONObject,
+        sourcePayload: String
+    ) {
+        val clanInfo = warInfo.optJSONObject("clan")
+        val opponentInfo = warInfo.optJSONObject("opponent")
+        if (clanInfo == null || opponentInfo == null) {
+            showEmptyState(
+                views,
+                displayText(warInfo, context.getString(R.string.war_widget_empty_title)),
+                warInfo.optString("secondaryText", "")
             )
-            val views = RemoteViews(context.packageName, R.layout.widget_layout)
-            views.setTextViewText(R.id.text_update_time, "Updating...")
-            AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views)
-
-            // Creating the PendingIntent to initiate the refresh
-            val refreshIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                Intent(HOME_WIDGET_BACKGROUND_ACTION).apply {
-                    data = Uri.parse("warWidget://refreshClicked")
-                    setPackage(context.packageName)
-                },
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            // Send the PendingIntent
-            refreshIntent.send()// Send the PendingIntent directly
+            return
         }
-    }
 
+        val clan = clanInfo.toSideDetails()
+        val opponent = opponentInfo.toSideDetails()
+        val score = normalizedScore(warInfo)
+        val status = displayText(warInfo, context.getString(R.string.war_widget_status))
 
-}
-
-private fun downloadBitmap(url: String): Bitmap? {
-    return try {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        connection.doInput = true
-        connection.connect()
-        val input = connection.inputStream
-        BitmapFactory.decodeStream(input)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-private fun getPendingIntent(context: Context): PendingIntent {
-    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-    return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-}
-
-
-fun setWidgetText(views: RemoteViews, primaryText: String, secondaryText: String = "") {
-    views.setTextViewText(R.id.text_score, primaryText)
-    views.setTextViewText(R.id.text_state, secondaryText.ifEmpty { primaryText })
-
-    // Clear other details when showing simple text
-    listOf(
-        R.id.clan_name,
-        R.id.opponent_name,
-        R.id.clan_percent,
-        R.id.clan_attacks,
-        R.id.opponent_percent,
-        R.id.opponent_attacks
-    ).forEach {
-        views.setTextViewText(it, "")
-    }
-    views.setImageViewBitmap(R.id.clan_flag, null)
-    views.setImageViewBitmap(R.id.opponent_flag, null)
-}
-
-fun applyColorTheme(views: RemoteViews, colorTheme: String) {
-    // Apply color themes to widget top section only
-    val backgroundColor = when (colorTheme) {
-        "winning" -> android.graphics.Color.parseColor("#1B5E20") // Dark green
-        "losing" -> android.graphics.Color.parseColor("#B71C1C") // Dark red
-        "tied" -> android.graphics.Color.parseColor("#E65100") // Orange
-        "victory" -> android.graphics.Color.parseColor("#2E7D32") // Green
-        "defeat" -> android.graphics.Color.parseColor("#C62828") // Red
-        "preparation" -> android.graphics.Color.parseColor("#1565C0") // Blue
-        "cwl" -> android.graphics.Color.parseColor("#6A1B9A") // Purple
-        "warning" -> android.graphics.Color.parseColor("#EF6C00") // Orange
-        "neutral" -> android.graphics.Color.parseColor("#424242") // Gray
-        else -> android.graphics.Color.parseColor("#424242") // Default gray
-    }
-
-    // Create a rounded top background with the theme color
-    val topBackground = android.graphics.drawable.GradientDrawable().apply {
-        setColor(backgroundColor)
-        cornerRadii = floatArrayOf(
-            16f, 16f, // top-left
-            16f, 16f, // top-right
-            0f, 0f,   // bottom-right
-            0f, 0f    // bottom-left
+        views.setViewVisibility(R.id.matchup_content, View.VISIBLE)
+        views.setViewVisibility(R.id.empty_content, View.GONE)
+        views.setTextViewText(R.id.text_score, score)
+        views.setTextViewTextSize(
+            R.id.text_score,
+            TypedValue.COMPLEX_UNIT_SP,
+            if (score.length >= 7) 24f else 28f
         )
-    }
+        views.setTextViewText(R.id.text_state, status)
+        views.setTextViewText(R.id.clan_name, clan.name)
+        views.setTextViewText(R.id.clan_percent, clan.percent)
+        views.setTextViewText(R.id.opponent_name, opponent.name)
+        views.setTextViewText(R.id.opponent_percent, opponent.percent)
+        views.setImageViewBitmap(R.id.clan_flag, null)
+        views.setImageViewBitmap(R.id.opponent_flag, null)
 
-    // Apply the colored background to the top container only
-    views.setInt(R.id.root_layout, "setBackgroundColor", backgroundColor)
+        Thread {
+            val clanBadge = downloadBitmap(clan.badgeUrl)
+            val opponentBadge = downloadBitmap(opponent.badgeUrl)
+            val currentPayload = context
+                .getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
+                .getString("warInfo", null)
+            if (currentPayload == sourcePayload) {
+                if (clanBadge != null) views.setImageViewBitmap(R.id.clan_flag, clanBadge)
+                if (opponentBadge != null) views.setImageViewBitmap(R.id.opponent_flag, opponentBadge)
+                appWidgetManager.updateAppWidget(appWidgetId, views)
+            }
+        }.start()
+    }
 }
 
-data class ClanOrOpponentDetails(
+private data class WarSideDetails(
     val name: String,
     val badgeUrl: String,
-    val percent: String,
-    val attacks: String
+    val percent: String
 )
 
-fun getClanOrOpponentDetails(info: JSONObject): ClanOrOpponentDetails {
-    return ClanOrOpponentDetails(
-        name = info.optString("name", "Unknown"),
-        badgeUrl = info.optString(
-            "badgeUrlMedium",
-            "https://assets.clashk.ing/clashkinglogo.png"
-        ),
-        percent = info.optString("percent", "0%"),
-        attacks = info.optString("attacks", "0/0")
+private fun JSONObject.toSideDetails(): WarSideDetails {
+    return WarSideDetails(
+        name = optString("name", "Unknown"),
+        badgeUrl = optString("badgeUrlMedium", ""),
+        percent = optString("percent", "")
     )
 }
 
-fun setDetailsToViews(
-    views: RemoteViews,
-    clanDetails: ClanOrOpponentDetails,
-    opponentDetails: ClanOrOpponentDetails
-) {
-    views.setTextViewText(R.id.clan_name, clanDetails.name)
-    views.setTextViewText(R.id.clan_percent, clanDetails.percent)
-    views.setTextViewText(R.id.clan_attacks, clanDetails.attacks)
-    views.setTextViewText(R.id.opponent_name, opponentDetails.name)
-    views.setTextViewText(R.id.opponent_percent, opponentDetails.percent)
-    views.setTextViewText(R.id.opponent_attacks, opponentDetails.attacks)
+private fun normalizedScore(warInfo: JSONObject): String {
+    val score = warInfo.optString("score", "").ifBlank {
+        warInfo.optString("secondaryText", "")
+    }
+    return score
+        .replace(" ", "")
+        .replace("–", "-")
+        .ifBlank { "-" }
+}
+
+private fun displayText(warInfo: JSONObject, fallback: String): String {
+    return warInfo.optString("primaryText", "").ifBlank {
+        warInfo.optString("timeState", "")
+    }.ifBlank { fallback }
+}
+
+private fun showEmptyState(views: RemoteViews, title: String, subtitle: String) {
+    views.setViewVisibility(R.id.matchup_content, View.GONE)
+    views.setViewVisibility(R.id.empty_content, View.VISIBLE)
+    views.setTextViewText(R.id.empty_title, title)
+    views.setTextViewText(R.id.empty_subtitle, subtitle)
+    views.setViewVisibility(R.id.empty_subtitle, if (subtitle.isBlank()) View.GONE else View.VISIBLE)
+}
+
+private fun downloadBitmap(url: String): Bitmap? {
+    if (url.isBlank()) return null
+    var connection: HttpURLConnection? = null
+    return try {
+        connection = URL(url).openConnection() as HttpURLConnection
+        connection.connectTimeout = 5_000
+        connection.readTimeout = 5_000
+        connection.doInput = true
+        connection.connect()
+        connection.inputStream.use { input -> BitmapFactory.decodeStream(input) }
+    } catch (_: Exception) {
+        null
+    } finally {
+        connection?.disconnect()
+    }
+}
+
+private fun launchAppIntent(context: Context, appWidgetId: Int): PendingIntent {
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        ?: Intent(Intent.ACTION_MAIN).setPackage(context.packageName)
+    return PendingIntent.getActivity(
+        context,
+        appWidgetId,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
 }

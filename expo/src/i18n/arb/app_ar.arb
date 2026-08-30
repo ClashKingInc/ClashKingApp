@@ -4397,5 +4397,146 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "أولويات الخطة",
+  "upgradeTrackerPlanPrioritiesDescription": "رتب ما هو أكثر أهمية. مستويات الترقية والعمل النشط يظلان دائمًا في حالة جيدة.",
+  "upgradeTrackerPlanClose": "إغلاق",
+  "upgradeTrackerPlanPlanningGoals": "أهداف التخطيط",
+  "upgradeTrackerPlanConstructionSubtitle": "ترقيات البناء والبطل",
+  "upgradeTrackerPlanResearchSubtitle": "القوات والتعاويذ وأبحاث الحصار",
+  "upgradeTrackerPlanPetHouseSubtitle": "ترقيات بيت الحيوانات الأليفة",
+  "upgradeTrackerPlanPrioritizeNewItems": "إعطاء الأولوية للعناصر الجديدة",
+  "upgradeTrackerPlanPrioritizeNewDescription": "ضع العناصر غير المؤمنة أو غير المبنية حديثًا أولاً",
+  "upgradeTrackerPlanSharedSummary": "الطبقة {tier} · المزيج المشترك {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "المستوى {tier} · صارم · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "يعمل حتى بلغ الحد الأقصى",
+  "upgradeTrackerPlanYieldsAfter": "العائد بعد {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "صارم",
+  "upgradeTrackerPlanMax": "ماكس",
+  "upgradeTrackerPlanReorder": "إعادة الطلب {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "الوزن النسبي للطبقة",
+  "upgradeTrackerPlanCompletionTarget": "هدف الإنجاز",
+  "upgradeTrackerPlanStrictTier": "الطبقة الصارمة",
+  "upgradeTrackerPlanWeight": "الوزن {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "حتى بلغ الحد الأقصى",
+  "upgradeTrackerPlanUntilPercent": "حتى {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "يتم تشغيل المستويات المرقمة أولاً. تحتفظ الصفوف المشتركة بنفس رقم الطبقة، ويتم تسوية مزيجها من الأوزان النسبية، بحيث تصبح 50 + 25 67% / 33%. يحقق الهدف عائدًا للفئة بعد أن يصل إلى تلك النسبة بينما يظل مؤهلاً لاحقًا.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "ماكس قبل التقدم",
+  "upgradeTrackerPlanGoalRushNextHall": "الوصول إلى القاعة التالية بسرعة",
+  "upgradeTrackerPlanGoalCatchUp": "اللحاق بمستويات هرع",
+  "upgradeTrackerPlanGoalUnlockFirst": "افتح الأشياء الجديدة أولاً",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "الجدران كل أسبوع",
+  "upgradeTrackerPlanOff": "إيقاف",
+  "upgradeTrackerPlanPerWeek": "{count} / أسبوع",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "تفضل الذهب للجدران",
+  "upgradeTrackerPlanPreferGoldDescription": "استخدم الذهب قبل الإكسير عند إنفاق الجدران",
+  "upgradeTrackerPlanApplyPriorities": "تطبيق الأولويات",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "الدفاعات المتقنة",
+  "upgradeTrackerPlanCategoryTraps": "الفخاخ",
+  "upgradeTrackerPlanCategoryArmy": "الجيش",
+  "upgradeTrackerPlanCategoryDarkTroops": "قوات الظلام",
+  "upgradeTrackerPlanCategorySieges": "الحصار",
+  "upgradeTrackerPlanCategorySupercharge": "شحن فائق",
+  "navigationCloseDrawer": "إغلاق درج التنقل",
+  "navigationOpenProfileMenu": "فتح قائمة الملف الشخصي",
+  "navigationClashKingWeb": "ClashKing للويب",
+  "settingsPrivacyDataTitle": "الخصوصية والبيانات",
+  "settingsPrivacyPolicyDescription": "راجع ما تجمعه ClashKing، وسبب استخدامه، والجهات التي تعالجه، وقواعد الاحتفاظ به، وكيفية التواصل معنا.",
+  "settingsPrivacyExportTitle": "الوصول إلى بياناتك أو تصديرها",
+  "settingsPrivacyExportDescription": "نزّل نسخة من بيانات الحساب المرتبطة بتسجيل دخولك إلى ClashKing، بما في ذلك حسابات Clash of Clans المرتبطة وتفضيلات الإشعارات.",
+  "settingsPrivacyCorrectionTitle": "تصحيح البيانات أو تقييدها",
+  "settingsPrivacyCorrectionDescription": "أزل حسابات Clash of Clans المرتبطة من إعدادات الحساب، أو عطّل الإشعارات، أو تواصل مع الدعم لطلبات التصحيح والتقييد.",
+  "settingsPrivacyDeletionTitle": "حذف حساب ClashKing الخاص بك",
+  "settingsPrivacyDeletionDescription": "يبدأ هذا حذف حساب ClashKing وبيانات التطبيق المرتبطة به، ما لم يكن على ClashKing الاحتفاظ بسجلات محدودة لأسباب أمنية أو لمنع الاحتيال أو للوفاء بالتزامات قانونية.",
+  "settingsPrivacyChildrenTitle": "الأطفال والعائلات",
+  "settingsPrivacyChildrenDescription": "ClashKing تطبيق مساعد موجّه للجمهور العام وليس موجّهًا للأطفال. لا تنشئ حسابًا إذا لم تبلغ سن الموافقة في بلدك دون موافقة أحد الوالدين أو الوصي.",
+  "settingsPrivacyExportReady": "تصدير بياناتك جاهز للحفظ.",
+  "settingsPrivacyExportCreateFailed": "تعذّر إنشاء تصدير البيانات. تم إعداد رسالة بريد إلكتروني للخصوصية بدلًا من ذلك.",
+  "settingsPrivacyExportPrepareFirst": "جهّز التصدير قبل حفظه.",
+  "settingsPrivacyExportSaved": "تم حفظ تصدير بياناتك.",
+  "settingsPrivacyExportSaveFailed": "تعذّر حفظ تصدير البيانات. تم إعداد رسالة بريد إلكتروني للخصوصية بدلًا من ذلك.",
+  "settingsPrivacyDeleteUnavailable": "حذف الحساب غير متاح في هذا الإصدار. تم إعداد رسالة بريد إلكتروني للخصوصية بدلًا من ذلك.",
+  "settingsPrivacyOpenPolicy": "فتح السياسة",
+  "settingsPrivacyRefreshExport": "تحديث التصدير",
+  "settingsPrivacyPrepareExport": "إعداد التصدير",
+  "settingsPrivacySaveExport": "حفظ التصدير",
+  "settingsPrivacyContactSupport": "التواصل مع الدعم",
+  "settingsPrivacyDeleteAccount": "حذف الحساب",
+  "settingsPrivacyDeleteConfirmTitle": "حذف الحساب؟",
+  "settingsPrivacyDeleteConfirmDescription": "يصبح هذا الطلب نهائيًا بعد معالجته. قد تفقد الحسابات المرتبطة وإعدادات الإشعارات والتفضيلات المحفوظة وطرق المصادقة."
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="war_widget_background">#F9070708</color>
+    <color name="war_widget_border">#24FFFFFF</color>
+    <color name="war_widget_text">#FFFFFFFF</color>
+    <color name="war_widget_text_secondary">#AEB0B7</color>
+</resources>

@@ -112,7 +112,7 @@ test.describe("Login page — UI", () => {
       .waitForResponse(
         (response) =>
           response.request().method() === "POST" &&
-          response.url().includes("/auth/email"),
+          new URL(response.url()).pathname === "/v2/auth/web/email",
         { timeout: 45_000 },
       )
       .catch(() => null);
