@@ -515,19 +515,23 @@ function withAndroidWidgetComponents(config, contract) {
       application.receiver = upsertAndroidComponent(application.receiver, component);
     }
 
-    const activity = contract.android.widgetConfigurationActivity;
-    application.activity = upsertAndroidComponent(application.activity, {
-      $: {
-        'android:name': activity.name,
-        'android:exported': 'true',
-        'android:theme': activity.theme,
-      },
-      'intent-filter': [
-        {
-          action: [{ $: { 'android:name': 'android.appwidget.action.APPWIDGET_CONFIGURE' } }],
+    for (const activity of [
+      contract.android.widgetConfigurationActivity,
+      contract.android.warWidgetConfigurationActivity,
+    ]) {
+      application.activity = upsertAndroidComponent(application.activity, {
+        $: {
+          'android:name': activity.name,
+          'android:exported': 'true',
+          'android:theme': activity.theme,
         },
-      ],
-    });
+        'intent-filter': [
+          {
+            action: [{ $: { 'android:name': 'android.appwidget.action.APPWIDGET_CONFIGURE' } }],
+          },
+        ],
+      });
+    }
     application.receiver = upsertAndroidComponent(application.receiver, {
       $: {
         'android:name': 'com.clashking.nativebridge.ClashKingWidgetActionReceiver',

@@ -25,4 +25,10 @@
     <string name="war_widget_private">Journal de guerre privé</string>
     <string name="war_widget_error">Impossible de charger les données de guerre</string>
     <string name="war_widget_status">Guerre</string>
+    <string name="war_widget_configure_eyebrow">WIDGET CLASHKING</string>
+    <string name="war_widget_configure_title">Choisir un clan</string>
+    <string name="war_widget_configure_description">Ce widget suivra les guerres du clan lié ou enregistré sélectionné.</string>
+    <string name="war_widget_configure_empty">Aucun clan synchronisé pour l’instant. Ouvre ClashKing pour synchroniser les clans liés et enregistrés.</string>
+    <string name="war_widget_configure_automatic">Automatique\nSuit le clan ClashKing sélectionné</string>
+    <string name="war_widget_configure_add">Ajouter le widget</string>
 </resources>

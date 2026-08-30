@@ -32,6 +32,11 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         }
     }
 
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
+        WarWidgetSelectionStore.delete(context, appWidgetIds)
+    }
+
     private fun updateAppWidget(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -41,7 +46,21 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
         views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId))
 
-        val rawWarInfo = widgetData.getString("warInfo", null)
+        val selectedTag = WarWidgetSelectionStore.selectedTag(context, appWidgetId)
+        var payloadKey = selectedTag?.let {
+            "warInfo_${WarWidgetSelectionStore.normalizeTag(it)}"
+        } ?: "warInfo"
+        var rawWarInfo = widgetData.getString(payloadKey, null)
+        val selectedDefaultTag = widgetData.getString("warWidgetSelectedClan", null)
+            ?.let(WarWidgetSelectionStore::normalizeTag)
+        if (
+            rawWarInfo == null &&
+            selectedTag != null &&
+            selectedDefaultTag == WarWidgetSelectionStore.normalizeTag(selectedTag)
+        ) {
+            payloadKey = "warInfo"
+            rawWarInfo = widgetData.getString(payloadKey, null)
+        }
         if (rawWarInfo == null) {
             showEmptyState(
                 views,
@@ -90,6 +109,7 @@ class WarAppWidgetProvider : AppWidgetProvider() {
                 appWidgetManager,
                 appWidgetId,
                 warInfo,
+                payloadKey,
                 rawWarInfo
             )
         }
@@ -103,6 +123,7 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
         warInfo: JSONObject,
+        payloadKey: String,
         sourcePayload: String
     ) {
         val clanInfo = warInfo.optJSONObject("clan")
@@ -142,7 +163,7 @@ class WarAppWidgetProvider : AppWidgetProvider() {
             val opponentBadge = downloadBitmap(opponent.badgeUrl)
             val currentPayload = context
                 .getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
-                .getString("warInfo", null)
+                .getString(payloadKey, null)
             if (currentPayload == sourcePayload) {
                 if (clanBadge != null) views.setImageViewBitmap(R.id.clan_flag, clanBadge)
                 if (opponentBadge != null) views.setImageViewBitmap(R.id.opponent_flag, opponentBadge)

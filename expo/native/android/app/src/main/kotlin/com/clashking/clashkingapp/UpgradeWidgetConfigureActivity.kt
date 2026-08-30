@@ -1,186 +1,21 @@
 package com.clashking.clashkingapp
 
-import android.app.Activity
-import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Typeface
-import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.ScrollView
-import android.widget.TextView
 import org.json.JSONArray
 
-class UpgradeWidgetConfigureActivity : Activity() {
-    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private val tagsByRadioId = mutableMapOf<Int, String?>()
+class UpgradeWidgetConfigureActivity : WidgetConfigureActivity() {
+    override val eyebrowText = R.string.upgrade_widget_configure_eyebrow
+    override val titleText = R.string.upgrade_widget_configure_title
+    override val descriptionText = R.string.upgrade_widget_configure_description
+    override val emptyText = R.string.upgrade_widget_configure_empty
+    override val automaticText = R.string.upgrade_widget_configure_automatic
+    override val actionText = R.string.upgrade_widget_configure_add
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setResult(RESULT_CANCELED)
-        appWidgetId = intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-            return
-        }
-        setContentView(buildContent())
-    }
+    override fun selectedTag(appWidgetId: Int): String? =
+        UpgradeWidgetSelectionStore.selectedTag(this, appWidgetId)
 
-    private fun buildContent(): ScrollView {
-        val padding = dp(20)
-        val container = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(padding, dp(22), padding, dp(28))
-            setBackgroundColor(getColor(R.color.widget_background))
-        }
-        container.addView(TextView(this).apply {
-            setText(R.string.upgrade_widget_configure_eyebrow)
-            textSize = 10f
-            setTextColor(getColor(R.color.widget_accent))
-            setTypeface(typeface, Typeface.BOLD)
-            letterSpacing = 0.08f
-        }
-        )
-        container.addView(TextView(this).apply {
-            setText(R.string.upgrade_widget_configure_title)
-            textSize = 24f
-            setTextColor(getColor(R.color.widget_text))
-            setTypeface(typeface, Typeface.BOLD)
-            includeFontPadding = false
-            setPadding(0, dp(8), 0, 0)
-        })
-        container.addView(TextView(this).apply {
-            setText(R.string.upgrade_widget_configure_description)
-            textSize = 14f
-            setTextColor(getColor(R.color.widget_text_secondary))
-            setLineSpacing(dp(2).toFloat(), 1f)
-            setPadding(0, dp(10), 0, dp(24))
-        })
-
-        val accounts = readAccounts()
-        val radioGroup = RadioGroup(this).apply {
-            orientation = RadioGroup.VERTICAL
-        }
-        val savedTag = UpgradeWidgetSelectionStore.selectedTag(this, appWidgetId)
-        var defaultRadioId: Int? = null
-
-        accounts.forEach { account ->
-            val radio = accountOption(
-                "${account.name}\n#${account.tag}  ·  ${account.hall}"
-            )
-            tagsByRadioId[radio.id] = account.tag
-            radioGroup.addView(radio)
-            if (savedTag != null && account.tag == savedTag) {
-                defaultRadioId = radio.id
-            }
-        }
-
-        val automatic = accountOption(
-            getString(R.string.upgrade_widget_configure_automatic)
-        )
-        tagsByRadioId[automatic.id] = null
-        radioGroup.addView(automatic, 0)
-        if (savedTag == null) {
-            defaultRadioId = automatic.id
-        }
-        if (accounts.isEmpty()) {
-            defaultRadioId = automatic.id
-            container.addView(TextView(this).apply {
-                setText(R.string.upgrade_widget_configure_empty)
-                textSize = 14f
-                setTextColor(getColor(R.color.widget_text_secondary))
-                setPadding(0, 0, 0, dp(12))
-            })
-        }
-        radioGroup.check(defaultRadioId ?: automatic.id)
-        container.addView(radioGroup)
-
-        container.addView(Button(this).apply {
-            setText(R.string.upgrade_widget_configure_add)
-            isAllCaps = false
-            textSize = 15f
-            setTypeface(typeface, Typeface.BOLD)
-            setTextColor(getColor(android.R.color.white))
-            setBackgroundResource(R.drawable.upgrade_widget_config_button)
-            stateListAnimator = null
-            minHeight = 0
-            minWidth = 0
-            setPadding(dp(16), 0, dp(16), 0)
-            setOnClickListener {
-                saveSelection(tagsByRadioId[radioGroup.checkedRadioButtonId])
-            }
-            val params = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                dp(50)
-            )
-            params.topMargin = dp(18)
-            layoutParams = params
-        })
-        return ScrollView(this).apply {
-            setBackgroundColor(getColor(R.color.widget_background))
-            isFillViewport = true
-            addView(
-                container,
-                ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            )
-        }
-    }
-
-    private fun accountOption(label: String): RadioButton {
-        val accent = getColor(R.color.widget_accent)
-        val secondary = getColor(R.color.widget_text_secondary)
-        return RadioButton(this).apply {
-            id = View.generateViewId()
-            text = label
-            textSize = 15f
-            setTextColor(getColor(R.color.widget_text))
-            setLineSpacing(dp(1).toFloat(), 1f)
-            setPadding(dp(14), dp(10), dp(14), dp(10))
-            setBackgroundResource(R.drawable.upgrade_widget_config_option)
-            buttonTintList = ColorStateList(
-                arrayOf(
-                    intArrayOf(android.R.attr.state_checked),
-                    intArrayOf()
-                ),
-                intArrayOf(accent, secondary)
-            )
-            layoutParams = RadioGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                bottomMargin = dp(8)
-            }
-        }
-    }
-
-    private fun saveSelection(tag: String?) {
-        UpgradeWidgetSelectionStore.saveSelectedTag(this, appWidgetId, tag)
-        sendBroadcast(Intent(this, UpgradeAppWidgetProvider::class.java).apply {
-            action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-            putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))
-        })
-        setResult(
-            RESULT_OK,
-            Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        )
-        finish()
-    }
-
-    private data class Account(val tag: String, val name: String, val hall: String)
-
-    private fun readAccounts(): List<Account> {
+    override fun readOptions(): List<WidgetSelectionOption> {
         val raw = homeWidgetPreferences().getString("upgradeWidgetAccounts", null)
             ?: return emptyList()
         val array = runCatching { JSONArray(raw) }.getOrNull() ?: return emptyList()
@@ -193,19 +28,24 @@ class UpgradeWidgetConfigureActivity : Activity() {
                 val townHall = item.optInt("townHallLevel", 0)
                 val builderHall = item.optInt("builderHallLevel", 0)
                 add(
-                    Account(
+                    WidgetSelectionOption(
                         tag = tag,
-                        name = item.optString("name", "Chief"),
-                        hall = if (townHall > 0) "TH$townHall" else "BH$builderHall"
+                        title = item.optString("name", "Chief"),
+                        detail = "#" + tag + "  ·  " +
+                            if (townHall > 0) "TH$townHall" else "BH$builderHall"
                     )
                 )
             }
         }
     }
 
+    override fun saveSelectedTag(appWidgetId: Int, tag: String?) {
+        UpgradeWidgetSelectionStore.saveSelectedTag(this, appWidgetId, tag)
+    }
+
+    override fun widgetProviderClass(): Class<out AppWidgetProvider> =
+        UpgradeAppWidgetProvider::class.java
+
     private fun homeWidgetPreferences() =
         getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-
-    private fun dp(value: Int): Int =
-        (value * resources.displayMetrics.density).toInt()
 }

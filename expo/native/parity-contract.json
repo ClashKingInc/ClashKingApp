@@ -68,6 +68,9 @@
       "kotlin/com/clashking/clashkingapp/UpgradeAppWidgetProvider.kt",
       "kotlin/com/clashking/clashkingapp/UpgradeWidgetConfigureActivity.kt",
       "kotlin/com/clashking/clashkingapp/UpgradeWidgetSelectionStore.kt",
+      "kotlin/com/clashking/clashkingapp/WarWidgetConfigureActivity.kt",
+      "kotlin/com/clashking/clashkingapp/WarWidgetSelectionStore.kt",
+      "kotlin/com/clashking/clashkingapp/WidgetConfigureActivity.kt",
       "res/layout/widget_layout.xml",
       "res/drawable/war_widget_background.xml",
       "res/values/widget_colors.xml",
@@ -91,6 +94,10 @@
     ],
     "widgetConfigurationActivity": {
       "name": ".UpgradeWidgetConfigureActivity",
+      "theme": "@style/UpgradeWidgetConfigurationTheme"
+    },
+    "warWidgetConfigurationActivity": {
+      "name": ".WarWidgetConfigureActivity",
       "theme": "@style/UpgradeWidgetConfigurationTheme"
     }
   },

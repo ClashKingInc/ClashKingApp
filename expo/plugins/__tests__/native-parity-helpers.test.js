@@ -305,6 +305,10 @@ test('retained native contract is Expo-owned and complete', () => {
   assert.equal(contract.legacyWidgetStorage.preferencesName, 'HomeWidgetPreferences');
   assert.deepEqual(contract.legacyWidgetStorage.dynamicPrefixes, ['warInfo_', 'upgradeWidget_']);
   assert.equal(contract.androidPinWidgetProvider, 'WarAppWidgetProvider');
+  assert.deepEqual(contract.android.warWidgetConfigurationActivity, {
+    name: '.WarWidgetConfigureActivity',
+    theme: '@style/UpgradeWidgetConfigurationTheme',
+  });
   assert.deepEqual(contract.notificationDebug, {
     supportedPlatform: 'ios',
     identifierPrefix: 'clashking-debug-',
@@ -803,6 +807,14 @@ test('Android war widget mirrors the iOS matchup hierarchy', () => {
     'utf8',
   );
   const provider = fs.readFileSync(path.join(androidRoot, 'res/xml/widget_provider.xml'), 'utf8');
+  const configuration = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/WarWidgetConfigureActivity.kt'),
+    'utf8',
+  );
+  const selectionStore = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/WarWidgetSelectionStore.kt'),
+    'utf8',
+  );
 
   assert.match(layout, /@drawable\/war_widget_background/);
   assert.match(layout, /@\+id\/clan_flag/);
@@ -817,7 +829,24 @@ test('Android war widget mirrors the iOS matchup hierarchy', () => {
   assert.match(darkColors, /war_widget_background/);
   assert.match(darkColors, /#F9070708/);
   assert.match(provider, /android:previewLayout="@layout\/widget_layout"/);
+  assert.match(
+    provider,
+    /android:configure="com\.clashking\.clashkingapp\.WarWidgetConfigureActivity"/,
+  );
+  assert.match(provider, /android:widgetFeatures="reconfigurable"/);
   assert.doesNotMatch(provider, /android:previewImage/);
+  assert.match(configuration, /getString\("warWidgetClans"/);
+  assert.match(configuration, /WarWidgetSelectionStore\.saveSelectedTag/);
+  assert.match(selectionStore, /SELECTED_TAG_PREFIX = "selectedTag_"/);
+  assert.match(selectionStore, /"\$SELECTED_TAG_PREFIX\$appWidgetId"/);
+  assert.match(kotlin, /WarWidgetSelectionStore\.selectedTag\(context, appWidgetId\)/);
+  assert.match(kotlin, /"warInfo_\$\{WarWidgetSelectionStore\.normalizeTag\(it\)\}"/);
+  assert.match(kotlin, /getString\("warWidgetSelectedClan", null\)/);
+  assert.match(
+    kotlin,
+    /selectedDefaultTag == WarWidgetSelectionStore\.normalizeTag\(selectedTag\)/,
+  );
+  assert.match(kotlin, /WarWidgetSelectionStore\.delete\(context, appWidgetIds\)/);
   assert.match(kotlin, /val score = normalizedScore\(warInfo\)/);
   assert.match(
     kotlin,
@@ -825,6 +854,38 @@ test('Android war widget mirrors the iOS matchup hierarchy', () => {
   );
   assert.match(kotlin, /if \(score\.length >= 7\) 24f else 28f/);
   assert.doesNotMatch(kotlin, /applyColorTheme|setBackgroundColor|text_update_time|refresh_icon/);
+});
+
+test('Android upgrade widget follows the system night mode palette', () => {
+  const expoRoot = path.resolve(__dirname, '../..');
+  const androidRoot = path.join(expoRoot, 'native/android/app/src/main');
+  const darkColors = fs.readFileSync(
+    path.join(androidRoot, 'res/values-night/widget_colors.xml'),
+    'utf8',
+  );
+
+  for (const color of [
+    'widget_background',
+    'widget_text',
+    'widget_text_secondary',
+    'widget_surface',
+    'widget_config_surface',
+    'widget_config_selected_surface',
+    'widget_config_border',
+    'widget_accent',
+    'widget_boost_orange_surface',
+    'widget_boost_purple_surface',
+    'widget_boost_pink_surface',
+    'widget_warning_surface',
+    'widget_warning_text',
+    'widget_status_idle',
+    'widget_status_maxed',
+  ]) {
+    assert.match(darkColors, new RegExp(`<color name="${color}">`));
+  }
+  assert.match(darkColors, /<color name="widget_background">#F9070708<\/color>/);
+  assert.match(darkColors, /<color name="widget_surface">#FF18181B<\/color>/);
+  assert.match(darkColors, /<color name="widget_text">#FFFFFFFF<\/color>/);
 });
 
 test('native scenery audio bridge preserves exact Flutter session, focus, cache, and cadence', () => {
