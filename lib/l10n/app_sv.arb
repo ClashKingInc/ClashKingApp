@@ -892,7 +892,15 @@
   "warLog": "Krigslogg",
   "warLogSearchPlaceholder": "Sök krig",
   "warLogClosed": "{clan}s krigslogg är stängd.",
+  "warLogPrivate": "{clan} har en privat krigslogg.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Allt är klart för tillfället",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}t} hoursMinutes {{primary}t {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Slutar om {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
