@@ -47,7 +47,7 @@ jobs:
         run: npm run web:export
 
       - name: Publish to Cloudflare Pages
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name != 'pull_request'
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
