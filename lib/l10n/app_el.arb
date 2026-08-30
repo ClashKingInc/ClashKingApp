@@ -892,7 +892,15 @@
   "warLog": "Αρχείο πολέμων",
   "warLogSearchPlaceholder": "Πόλεμοι αναζήτησης",
   "warLogClosed": "Το αρχείο πολέμων του {clan} είναι κλειστό.",
+  "warLogPrivate": "Το αρχείο πολέμου της {clan} είναι ιδιωτικό.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Όλα τακτοποιημένα για τώρα",
+  "timeDurationShort": "{unit, select, daysHours {{primary}η {secondary}ώ} hoursMinutes {{primary}ώ {secondary}λ} other {{primary}λ}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Λήγει σε {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
