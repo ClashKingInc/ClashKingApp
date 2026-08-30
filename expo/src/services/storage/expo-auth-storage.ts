@@ -22,14 +22,16 @@ const secureStoreOptions: SecureStore.SecureStoreOptions = {
 
 export class ExpoSharedAuthSecureStore implements StringStore {
   getItem(key: string): Promise<string | null> {
-    if (key === SECURE_STORAGE_KEYS.sharedAuthSession && Platform.OS !== 'web') {
+    if (Platform.OS === 'web') return Promise.resolve(null);
+    if (key === SECURE_STORAGE_KEYS.sharedAuthSession) {
       return ClashKingNative.readSharedAuthSession();
     }
     return SecureStore.getItemAsync(key, secureStoreOptions);
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    if (key === SECURE_STORAGE_KEYS.sharedAuthSession && Platform.OS !== 'web') {
+    if (Platform.OS === 'web') return;
+    if (key === SECURE_STORAGE_KEYS.sharedAuthSession) {
       await ClashKingNative.writeSharedAuthSession(value);
       return;
     }
@@ -37,7 +39,8 @@ export class ExpoSharedAuthSecureStore implements StringStore {
   }
 
   async removeItem(key: string): Promise<void> {
-    if (key === SECURE_STORAGE_KEYS.sharedAuthSession && Platform.OS !== 'web') {
+    if (Platform.OS === 'web') return;
+    if (key === SECURE_STORAGE_KEYS.sharedAuthSession) {
       await ClashKingNative.clearSharedAuthSession();
       return;
     }

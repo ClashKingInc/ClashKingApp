@@ -1,5 +1,5 @@
 import * as Clipboard from 'expo-clipboard';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Trophy, UserRound } from 'lucide-react-native';
 
@@ -95,6 +95,12 @@ export function AuthenticatedRoot() {
   const state = useAppState();
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
+  const subscribeAuth = useCallback(
+    (listener: () => void) => runtime.auth.subscribe(listener),
+    [runtime.auth],
+  );
+  const getAuthSnapshot = useCallback(() => runtime.auth.state, [runtime.auth]);
+  const authState = useSyncExternalStore(subscribeAuth, getAuthSnapshot, getAuthSnapshot);
   const [primary, setPrimary] = useState<PrimaryRouteId>('home');
   const [utility, setUtility] = useState<AppRouteId>();
   const [utilityPlayerTag, setUtilityPlayerTag] = useState<string>();
@@ -110,7 +116,7 @@ export function AuthenticatedRoot() {
     openPreparedStory: presentPreparedStory,
     presentation: announcementPresentation,
   } = useAnnouncementPresentation();
-  const user = runtime.auth.state.currentUser;
+  const user = authState.currentUser;
   const featureState: FeatureState = { ...state.features };
   const pushedScene = pushedScenes.at(-1);
   const selectPrimary = (route: PrimaryRouteId) => {
@@ -521,7 +527,7 @@ export function AuthenticatedRoot() {
         closeDrawerLabel={t('navigationCloseDrawer')}
         displayName={user?.username ?? 'ClashKing'}
         features={featureState}
-        followerCount={runtime.auth.state.followerCount}
+        followerCount={authState.followerCount}
         hasUser={user !== null}
         isRtl={isRtl}
         onAccounts={() => openUtility(routeById('accounts'))}

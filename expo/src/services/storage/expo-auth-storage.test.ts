@@ -1,8 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ClashKingNative from '@clashking/native';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 import { SECURE_STORAGE_KEYS, STORAGE_KEYS } from '../../core/storage/storage';
-import { ExpoSharedAuthSecureStore } from './expo-auth-storage';
+import { AuthSessionRepository } from './auth-storage';
+import { ExpoPreferenceStore, ExpoSharedAuthSecureStore } from './expo-auth-storage';
 
 jest.mock('@clashking/native', () => ({
   __esModule: true,
@@ -66,5 +69,57 @@ describe('ExpoSharedAuthSecureStore', () => {
       STORAGE_KEYS.deviceIdFallback,
       expect.any(Object),
     );
+  });
+
+  it('never accesses native secure storage on web', async () => {
+    const originalPlatform = Platform.OS;
+    Object.defineProperty(Platform, 'OS', { configurable: true, value: 'web' });
+
+    try {
+      const store = new ExpoSharedAuthSecureStore();
+
+      await expect(store.getItem(SECURE_STORAGE_KEYS.sharedAuthSession)).resolves.toBeNull();
+      await expect(store.getItem(SECURE_STORAGE_KEYS.legacyAccessToken)).resolves.toBeNull();
+      await store.setItem(SECURE_STORAGE_KEYS.sharedAuthSession, 'session');
+      await store.setItem(SECURE_STORAGE_KEYS.legacyAccessToken, 'access');
+      await store.removeItem(SECURE_STORAGE_KEYS.sharedAuthSession);
+      await store.removeItem(SECURE_STORAGE_KEYS.legacyAccessToken);
+
+      expect(ClashKingNative.readSharedAuthSession).not.toHaveBeenCalled();
+      expect(ClashKingNative.writeSharedAuthSession).not.toHaveBeenCalled();
+      expect(ClashKingNative.clearSharedAuthSession).not.toHaveBeenCalled();
+      expect(SecureStore.getItemAsync).not.toHaveBeenCalled();
+      expect(SecureStore.setItemAsync).not.toHaveBeenCalled();
+      expect(SecureStore.deleteItemAsync).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(Platform, 'OS', { configurable: true, value: originalPlatform });
+    }
+  });
+
+  it('cleans up web legacy tokens through preferences only', async () => {
+    const originalPlatform = Platform.OS;
+    Object.defineProperty(Platform, 'OS', { configurable: true, value: 'web' });
+
+    try {
+      const repository = new AuthSessionRepository(
+        new ExpoSharedAuthSecureStore(),
+        new ExpoPreferenceStore(),
+        'web',
+        async () => 'unused-web-device',
+      );
+
+      await expect(repository.migrateLegacySession()).resolves.toEqual({
+        migrated: false,
+        source: 'none',
+        legacySecureStorageBlocked: false,
+      });
+
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(SECURE_STORAGE_KEYS.legacyAccessToken);
+      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(SECURE_STORAGE_KEYS.legacyRefreshToken);
+      expect(SecureStore.deleteItemAsync).not.toHaveBeenCalled();
+      expect(ClashKingNative.clearSharedAuthSession).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(Platform, 'OS', { configurable: true, value: originalPlatform });
+    }
   });
 });

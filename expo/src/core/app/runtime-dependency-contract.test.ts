@@ -21,4 +21,16 @@ describe('app runtime dependency contract', () => {
     );
     expect(runtime).toContain("from '../../features/subscription/subscription-service'");
   });
+
+  it('subscribes the authenticated shell to refreshed auth state', () => {
+    const authenticatedRoot = readFileSync(
+      resolve(process.cwd(), 'src', 'core', 'app', 'authenticated-root.tsx'),
+      'utf8',
+    );
+
+    expect(authenticatedRoot).toContain('useSyncExternalStore');
+    expect(authenticatedRoot).toContain('runtime.auth.subscribe(listener)');
+    expect(authenticatedRoot).toContain('followerCount={authState.followerCount}');
+    expect(authenticatedRoot).not.toContain('followerCount={runtime.auth.state.followerCount}');
+  });
 });
