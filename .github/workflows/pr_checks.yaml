@@ -32,10 +32,30 @@ jobs:
         with:
           filters: |
             android:
-              - 'expo/**'
+              - 'expo/package.json'
+              - 'expo/package-lock.json'
+              - 'expo/app.config.ts'
+              - 'expo/plugins/**'
+              - 'expo/modules/clashking-native/package.json'
+              - 'expo/modules/clashking-native/expo-module.config.json'
+              - 'expo/modules/clashking-native/android/**'
+              - 'expo/native/android/**'
+              - 'expo/native/parity-contract.json'
+              - 'expo/config/firebase/google-services.json'
+              - 'expo/assets/clashking/icons/**'
               - '.github/workflows/pr_checks.yaml'
             ios:
-              - 'expo/**'
+              - 'expo/package.json'
+              - 'expo/package-lock.json'
+              - 'expo/app.config.ts'
+              - 'expo/plugins/**'
+              - 'expo/modules/clashking-native/package.json'
+              - 'expo/modules/clashking-native/expo-module.config.json'
+              - 'expo/modules/clashking-native/ios/**'
+              - 'expo/native/ios/**'
+              - 'expo/native/parity-contract.json'
+              - 'expo/config/firebase/GoogleService-Info.plist'
+              - 'expo/assets/clashking/icons/**'
               - '.github/workflows/pr_checks.yaml'
 
   expo_checks:
@@ -99,7 +119,7 @@ jobs:
 
   android_build:
     name: Android debug build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-8vcpu-ubuntu-2404
     needs: changes
     if: github.event_name == 'push' || needs.changes.outputs.android == 'true'
     defaults:
@@ -147,7 +167,7 @@ jobs:
 
   ios_build:
     name: iOS unsigned simulator build
-    runs-on: macos-latest
+    runs-on: blacksmith-6vcpu-macos-15
     needs: changes
     if: github.event_name == 'push' || needs.changes.outputs.ios == 'true'
     defaults:
@@ -175,6 +195,23 @@ jobs:
         working-directory: expo/ios
         run: pod install
 
+      - name: Install ccache
+        run: command -v ccache >/dev/null 2>&1 || brew install ccache
+
+      - name: Restore iOS compiler cache
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-ios-ccache-${{ hashFiles('expo/package-lock.json', 'expo/app.config.ts', 'expo/modules/clashking-native/ios/**', 'expo/native/ios/**') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-ios-ccache-
+
+      - name: Configure iOS compiler cache
+        run: |
+          ccache --set-config=compiler_check=content
+          ccache --set-config=max_size=5G
+          ccache --zero-stats
+
       - name: Build iOS app and WarWidget without signing
         working-directory: expo/ios
         run: >-
@@ -186,3 +223,7 @@ jobs:
           -destination 'generic/platform=iOS Simulator'
           CODE_SIGNING_ALLOWED=NO
           build
+
+      - name: Report iOS compiler cache statistics
+        if: always()
+        run: ccache --show-stats

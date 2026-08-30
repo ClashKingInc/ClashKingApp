@@ -114,7 +114,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       [
         'expo-build-properties',
         {
-          ios: { deploymentTarget: '17.0', useFrameworks: 'static' },
+          ios: {
+            deploymentTarget: '17.0',
+            useFrameworks: 'static',
+            ccacheEnabled: true,
+          },
           android: {
             minSdkVersion: 24,
             compileSdkVersion: 36,
