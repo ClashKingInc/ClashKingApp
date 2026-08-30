@@ -892,7 +892,15 @@
   "warLog": "Háború napló",
   "warLogSearchPlaceholder": "Keresési háborúk",
   "warLogClosed": "{clan} háborúnaplója le van zárva.",
+  "warLogPrivate": "{clan} háborús naplója privát.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Egyelőre minden kész",
+  "timeDurationShort": "{unit, select, daysHours {{primary}n {secondary}ó} hoursMinutes {{primary}ó {secondary}p} other {{primary}p}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Véget ér {duration} múlva",
   "@todoEventEndsIn": {
     "placeholders": {
