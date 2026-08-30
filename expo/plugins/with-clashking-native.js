@@ -580,6 +580,7 @@ function configureWidgetTarget(project, target, contract, version = {}) {
       MARKETING_VERSION: `"${version.marketingVersion || '1.0'}"`,
       PRODUCT_BUNDLE_IDENTIFIER: `"${contract.ios.widgetBundleIdentifier}"`,
       PRODUCT_NAME: '"$(TARGET_NAME)"',
+      REACT_NATIVE_PATH: '"$(SRCROOT)/../node_modules/react-native"',
       SKIP_INSTALL: 'YES',
       SWIFT_VERSION: '5.0',
       TARGETED_DEVICE_FAMILY: '"1,2"',

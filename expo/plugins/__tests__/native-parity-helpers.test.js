@@ -612,6 +612,10 @@ test('widget target receives exact identity and host version settings', () => {
       configuration.buildSettings.PRODUCT_BUNDLE_IDENTIFIER,
       '"com.clashking.apps.warwidget"',
     );
+    assert.equal(
+      configuration.buildSettings.REACT_NATIVE_PATH,
+      '"$(SRCROOT)/../node_modules/react-native"',
+    );
   }
 });
 
