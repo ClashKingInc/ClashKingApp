@@ -1,0 +1,181 @@
+{
+  "ios": {
+    "bundleIdentifier": "com.clashking.apps",
+    "widgetBundleIdentifier": "com.clashking.apps.warwidget",
+    "widgetTargetName": "WarWidgetExtension",
+    "deploymentTarget": "17.0",
+    "teamIdentifier": "MZYXD43RX5",
+    "appGroup": "group.com.clashking.apps",
+    "keychainAccessGroup": "$(AppIdentifierPrefix)group.com.clashking.apps",
+    "rnFirebaseDependencyManager": "cocoapods",
+    "firebaseFile": "./config/firebase/GoogleService-Info.plist",
+    "widgetSourceRoot": "./native/ios/WarWidget",
+    "widgetRequiredFiles": [
+      "Info.plist",
+      "PrivacyInfo.xcprivacy",
+      "WarWidget.entitlements",
+      "WarWidget.swift"
+    ]
+  },
+  "android": {
+    "package": "com.clashking.clashkingapp",
+    "minSdk": 24,
+    "targetSdk": 36,
+    "firebaseFile": "./config/firebase/google-services.json",
+    "notificationDefaults": {
+      "channelId": "clashking_push",
+      "iconResource": "@drawable/notification_icon",
+      "colorResource": "@color/notification_icon_color"
+    },
+    "splashResources": {
+      "sourceRoot": "./native/android/splash",
+      "android12ResourceName": "android12splash",
+      "preAndroid12ResourceName": "splashscreen_logo",
+      "requiredFiles": [
+        "res/drawable-mdpi/android12splash.png",
+        "res/drawable-hdpi/android12splash.png",
+        "res/drawable-xhdpi/android12splash.png",
+        "res/drawable-xxhdpi/android12splash.png",
+        "res/drawable-xxxhdpi/android12splash.png",
+        "res/drawable-mdpi/splashscreen_logo.png",
+        "res/drawable-hdpi/splashscreen_logo.png",
+        "res/drawable-xhdpi/splashscreen_logo.png",
+        "res/drawable-xxhdpi/splashscreen_logo.png",
+        "res/drawable-xxxhdpi/splashscreen_logo.png",
+        "res/drawable-night-mdpi/android12splash.png",
+        "res/drawable-night-hdpi/android12splash.png",
+        "res/drawable-night-xhdpi/android12splash.png",
+        "res/drawable-night-xxhdpi/android12splash.png",
+        "res/drawable-night-xxxhdpi/android12splash.png",
+        "res/drawable-night-mdpi/splashscreen_logo.png",
+        "res/drawable-night-hdpi/splashscreen_logo.png",
+        "res/drawable-night-xhdpi/splashscreen_logo.png",
+        "res/drawable-night-xxhdpi/splashscreen_logo.png",
+        "res/drawable-night-xxxhdpi/splashscreen_logo.png",
+        "res/values-v31/styles.xml",
+        "res/values-night-v31/styles.xml"
+      ]
+    },
+    "widgetRefreshAction": {
+      "broadcastAction": "es.antonborri.home_widget.action.BACKGROUND",
+      "uri": "warWidget://refreshClicked",
+      "workerName": "CLASHKING_WIDGET_REFRESH",
+      "launchesActivity": false
+    },
+    "widgetSourceRoot": "./native/android/app/src/main",
+    "widgetRequiredFiles": [
+      "kotlin/com/clashking/clashkingapp/WarAppWidgetProvider.kt",
+      "kotlin/com/clashking/clashkingapp/UpgradeAppWidgetProvider.kt",
+      "kotlin/com/clashking/clashkingapp/UpgradeWidgetConfigureActivity.kt",
+      "kotlin/com/clashking/clashkingapp/UpgradeWidgetSelectionStore.kt",
+      "res/xml/widget_provider.xml",
+      "res/xml/upgrade_widget_provider.xml"
+    ],
+    "widgetReceivers": [
+      {
+        "name": ".WarAppWidgetProvider",
+        "providerResource": "@xml/widget_provider"
+      },
+      {
+        "name": ".UpgradeAppWidgetProvider",
+        "providerResource": "@xml/upgrade_widget_provider",
+        "label": "@string/upgrade_widget_label"
+      }
+    ],
+    "widgetConfigurationActivity": {
+      "name": ".UpgradeWidgetConfigureActivity",
+      "theme": "@style/UpgradeWidgetConfigurationTheme"
+    }
+  },
+  "urlScheme": "clashking",
+  "oauthHost": "com.clashking.clashkingapp",
+  "oauthPath": "/oauth",
+  "backgroundModes": ["remote-notification"],
+  "legacyStorage": {
+    "sharedAuthSessionKey": "shared_auth_session_v1",
+    "flutterSecureStorage": {
+      "version": "10.3.1",
+      "iosService": "flutter_secure_storage_service",
+      "androidPreferencesName": "FlutterSecureStorage",
+      "androidPreferencesKeyPrefix": "VGhpcyBpcyB0aGUgcHJlZml4IGZvciBhIHNlY3VyZSBzdG9yYWdlCg"
+    },
+    "flutterSharedPreferencesName": "FlutterSharedPreferences",
+    "dynamicAppPreferencePattern": "^player_.*_clan_tag$"
+  },
+  "legacyWidgetStorage": {
+    "preferencesName": "HomeWidgetPreferences",
+    "fixedKeys": [
+      "warWidgetClans",
+      "warWidgetSelectedClan",
+      "warInfo",
+      "warWidgetProxyUrl",
+      "warWidgetApiV2Url",
+      "upgradeWidgetAccounts",
+      "upgradeWidgetData",
+      "upgradeWidgetSelectedTag"
+    ],
+    "dynamicPrefixes": ["warInfo_", "upgradeWidget_"]
+  },
+  "androidPinWidgetProvider": "WarAppWidgetProvider",
+  "alternateIcons": ["AppIconChristmas", "AppIconBlackWhite", "AppIconDarkLogo"],
+  "alternateIconOptions": [
+    {
+      "labelKey": "default",
+      "iconName": null,
+      "previewAsset": "assets/icons/app_icon_ios_default.png"
+    },
+    {
+      "labelKey": "christmas",
+      "iconName": "AppIconChristmas",
+      "previewAsset": "assets/icons/app_icon_christmas.png"
+    },
+    {
+      "labelKey": "black_white",
+      "iconName": "AppIconBlackWhite",
+      "previewAsset": "assets/icons/app_icon_black_white.png"
+    },
+    {
+      "labelKey": "dark_mode",
+      "iconName": "AppIconDarkLogo",
+      "previewAsset": "assets/icons/app_icon_dark_logo.png"
+    }
+  ],
+  "alternateIconSourceRoot": "./native/ios/alternate-icons",
+  "notificationDebug": {
+    "supportedPlatform": "ios",
+    "identifierPrefix": "clashking-debug-",
+    "triggerDelaySeconds": 1,
+    "maximumAttachments": 2,
+    "sample": {
+      "id": "notificationSettings",
+      "label": "Notification settings",
+      "group": "ClashKing",
+      "title": "ClashKing notifications",
+      "body": "Push notifications are configured for this device.",
+      "assetUrl": "https://assets.clashk.ing/logos/crown-arrow-dark-bg/ClashKing-1.png"
+    }
+  },
+  "sceneryAudio": {
+    "usedSourceKinds": ["network"],
+    "loadMode": "disk",
+    "volume": 1,
+    "loop": false,
+    "positionIntervalMilliseconds": 250,
+    "ios": {
+      "category": "playback",
+      "categoryOptions": "none",
+      "expoInterruptionMode": "doNotMix",
+      "playsInSilentMode": true,
+      "backgroundPlayback": false
+    },
+    "android": {
+      "usage": "media",
+      "contentType": "music",
+      "focusGain": "gainTransientMayDuck",
+      "willPauseWhenDucked": true,
+      "expoInterruptionMode": "duckOthers",
+      "exactInterruptionParity": true,
+      "exactAudioAttributesParity": true
+    }
+  }
+}

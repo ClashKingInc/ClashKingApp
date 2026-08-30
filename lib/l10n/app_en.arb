@@ -881,6 +881,17 @@
   "warTitle": "War",
   "warFrequency": "War frequency",
   "warParticipation": "War Participation",
+  "cwlParticipantOnly": "Participant Only",
+  "warStatsLastXDays": "Last {number} days",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsCurrentMembers": "Current members",
   "warLeague": "War/League",
   "warHistory": "War History",
   "warLog": "War Log",

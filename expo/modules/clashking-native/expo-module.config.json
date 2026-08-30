@@ -1,0 +1,5 @@
+{
+  "platforms": ["ios", "android"],
+  "ios": { "modules": ["ClashKingNativeModule"] },
+  "android": { "modules": ["com.clashking.nativebridge.ClashKingNativeModule"] }
+}

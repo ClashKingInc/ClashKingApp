@@ -1,4 +1,4 @@
-name: PR Checks
+name: Expo PR Checks
 
 on:
   pull_request:
@@ -7,61 +7,97 @@ on:
       - main
 
 concurrency:
-  group: pr-checks-${{ github.event.pull_request.number || github.ref }}
+  group: expo-pr-checks-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+env:
+  CI: true
+  EXPO_NO_TELEMETRY: 1
+  EXPO_NO_GIT_STATUS: 1
 
 jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
       android: ${{ steps.filter.outputs.android }}
+      ios: ${{ steps.filter.outputs.ios }}
 
     steps:
-      - name: Detect Android-relevant changes
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect native-relevant changes
         id: filter
         uses: dorny/paths-filter@v3
         with:
           filters: |
             android:
-              - '.flutter-version'
-              - 'android/**'
-              - 'assets/**'
-              - 'lib/core/services/android_workmanager_service.dart'
-              - 'lib/core/services/app_icon_service.dart'
-              - 'lib/core/services/notification_debug_service.dart'
-              - 'lib/core/services/notification_preferences_service.dart'
-              - 'lib/core/services/push_notification_service.dart'
-              - 'lib/core/services/war_widget_sync_service.dart'
-              - 'lib/features/upgrade_tracker/**'
-              - 'lib/firebase_options.dart'
-              - 'lib/widgets/war_widget.dart'
-              - 'pubspec.yaml'
-              - 'pubspec.lock'
+              - 'expo/**'
+              - '.github/workflows/pr_checks.yaml'
+            ios:
+              - 'expo/**'
+              - '.github/workflows/pr_checks.yaml'
 
-  flutter_checks:
+  expo_checks:
+    name: Expo checks
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: expo
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Full history required for SonarQube blame analysis
           fetch-depth: 0
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          flutter-version-file: .flutter-version
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
 
       - name: Install dependencies
-        run: flutter pub get
+        run: npm ci
 
-      - name: Analyze project
-        run: flutter analyze --no-pub
+      - name: Verify Expo E2E migration structure
+        run: npm run e2e:structure
+
+      - name: Verify localization generation
+        run: npm run l10n:check
+
+      - name: Verify Flutter localization parity
+        run: npm run l10n:parity
+
+      - name: Verify Flutter asset parity
+        run: npm run assets:parity
+
+      - name: Verify migration ledger
+        run: npm run parity:check
+
+      - name: Verify native config plugins
+        run: npm run test:native-plugin
+
+      - name: Verify web build tooling
+        run: npm run test:web-build
+
+      - name: Lint Expo source
+        run: npm run lint
+
+      - name: Type-check Expo source
+        run: npm run typecheck
 
       - name: Run tests with coverage
-        run: flutter test --coverage --no-pub
+        run: npm test -- --coverage
+
+      - name: Verify Expo dependencies and configuration
+        run: npx expo-doctor
+
+      - name: Verify static web export
+        env:
+          EXPO_PUBLIC_CK_API_ENV: staging
+        run: npm run web:export
 
       - name: SonarQube scan
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
@@ -69,16 +105,15 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info
 
   android_build:
+    name: Android debug build
     runs-on: ubuntu-latest
     needs: changes
     if: github.event_name == 'push' || needs.changes.outputs.android == 'true'
+    defaults:
+      run:
+        working-directory: expo
 
     steps:
       - name: Checkout repository
@@ -87,21 +122,76 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: 21
-          cache: gradle
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          flutter-version-file: .flutter-version
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
 
       - name: Install dependencies
-        run: flutter pub get
+        run: npm ci
 
-      - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+      - name: Generate Android project
+        run: npx expo prebuild --platform android --clean --no-install
 
-      - name: Build Android arm64 debug APK
-        run: flutter build apk --debug --target-platform android-arm64 --no-pub
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('expo/android/**/*.gradle*', 'expo/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build Android debug APK
+        working-directory: expo/android
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug --stacktrace
+
+  ios_build:
+    name: iOS unsigned simulator build
+    runs-on: macos-latest
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.ios == 'true'
+    defaults:
+      run:
+        working-directory: expo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate iOS project
+        run: npx expo prebuild --platform ios --clean --no-install
+
+      - name: Install CocoaPods dependencies
+        working-directory: expo/ios
+        run: pod install
+
+      - name: Build iOS app and WarWidget without signing
+        working-directory: expo/ios
+        run: >-
+          xcodebuild
+          -workspace ClashKing.xcworkspace
+          -scheme ClashKing
+          -configuration Debug
+          -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          build

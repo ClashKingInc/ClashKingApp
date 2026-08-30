@@ -5,31 +5,31 @@ on:
   workflow_call:
     inputs:
       base_url:
-        description: 'Base URL to test against'
+        description: "Base URL to test against"
         required: true
         type: string
       smoke_only:
-        description: 'Run the fast PR smoke suite instead of the full E2E suite'
+        description: "Run the fast PR smoke suite instead of the full E2E suite"
         required: false
         default: false
         type: boolean
       api_base_url:
-        description: 'API origin used for direct authentication setup'
+        description: "API origin used for direct authentication setup"
         required: false
-        default: 'https://api.clashk.ing'
+        default: "https://api.clashk.ing"
         type: string
   # Triggered automatically after main-branch deployment
   workflow_run:
-    workflows: ["Deploy Flutter Web to Cloudflare Pages"]
+    workflows: ["Deploy Expo Web to Cloudflare Pages"]
     types: [completed]
     branches: [main]
   # Allow manual trigger with custom URL
   workflow_dispatch:
     inputs:
       base_url:
-        description: 'Base URL to test against'
+        description: "Base URL to test against"
         required: false
-        default: 'https://app.clashk.ing'
+        default: "https://app.clashk.ing"
 
 concurrency:
   group: e2e-${{ github.ref }}

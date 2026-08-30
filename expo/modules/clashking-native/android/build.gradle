@@ -1,0 +1,29 @@
+plugins {
+  id 'com.android.library'
+  id 'org.jetbrains.kotlin.android'
+}
+
+group = 'com.clashking.nativebridge'
+version = '0.1.0'
+
+android {
+  namespace 'com.clashking.nativebridge'
+  compileSdk 36
+
+  defaultConfig { minSdk 24 }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+
+  kotlinOptions { jvmTarget = '17' }
+}
+
+dependencies {
+  implementation project(':expo-modules-core')
+  implementation 'host.exp.exponent:expo.modules.backgroundtask:57.0.14'
+  implementation 'androidx.annotation:annotation:1.9.1'
+  implementation 'androidx.work:work-runtime-ktx:2.9.1'
+  implementation 'com.google.crypto.tink:tink-android:1.21.0'
+}

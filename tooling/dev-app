@@ -9,7 +9,7 @@ readonly SCRIPT_REPO_ROOT="$(git -C "$(dirname "$SCRIPT_PATH")/.." rev-parse --s
 readonly COMMON_GIT_DIR="$(git -C "$SCRIPT_REPO_ROOT" rev-parse --path-format=absolute --git-common-dir)"
 readonly STATE_DIR="$COMMON_GIT_DIR/dev-app"
 readonly STATE_FILE="$STATE_DIR/worktree"
-readonly LOCK_FILE="$STATE_DIR/lock"
+readonly LOCK_DIR="$STATE_DIR/lock.d"
 
 usage() {
   cat <<'EOF'
@@ -18,11 +18,11 @@ Usage: tooling/dev-app <command> [worktree]
 Commands:
   start [worktree]   Start the current or specified worktree; refuse to replace another active worktree
   use <worktree>     Stop the active worktree and switch the shared dev URL to this worktree
-  reload             Request Flutter hot reload in the active session
+  reload             Request an Expo reload in the active session
   restart            Fully restart the selected worktree
   stop               Stop the shared development process
   status             Show the active worktree, branch, tmux session, and URL
-  logs               Print recent Flutter output
+  logs               Print recent Expo output
   attach             Attach to the shared tmux session
 EOF
 }
@@ -51,20 +51,30 @@ resolve_worktree() {
   common="$(git -C "$root" rev-parse --path-format=absolute --git-common-dir)"
 
   [[ "$common" == "$COMMON_GIT_DIR" ]] || fail "worktree does not belong to ClashKing App: $root"
-  [[ -f "$root/pubspec.yaml" ]] || fail "Flutter project not found in worktree: $root"
+  [[ -f "$root/expo/package.json" ]] || fail "Expo project not found in worktree: $root"
   printf '%s\n' "$root"
 }
 
 ensure_port_free() {
-  if ss -H -ltn "sport = :$PORT" | grep -q .; then
+  if port_in_use; then
     fail "port $PORT is already in use outside the $SESSION session"
+  fi
+}
+
+port_in_use() {
+  if command -v lsof >/dev/null 2>&1; then
+    lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | grep -q .
+  elif command -v ss >/dev/null 2>&1; then
+    ss -H -ltn "sport = :$PORT" 2>/dev/null | grep -q .
+  else
+    fail "neither lsof nor ss is available to inspect port $PORT"
   fi
 }
 
 wait_for_port_release() {
   local attempt
   for attempt in {1..40}; do
-    if ! ss -H -ltn "sport = :$PORT" | grep -q .; then
+    if ! port_in_use; then
       return
     fi
     sleep 0.25
@@ -92,18 +102,20 @@ start_worktree() {
 
   ensure_port_free
   command=(
-    flutter run
-    -d web-server
-    --web-hostname 127.0.0.1
-    --web-port "$PORT"
-    --dart-define=CK_API_ENV=staging
-    --dart-define=CK_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
-    --dart-define=CK_PUSH_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
-    --dart-define=CK_WEB_DISCORD_REDIRECT_URI=https://dev-app.clashk.ing/auth/discord_callback.html
+    env
+    BROWSER=none
+    EXPO_PUBLIC_CK_API_ENV=staging
+    EXPO_PUBLIC_CK_API_BASE_URL=https://dev-api.clashk.ing
+    EXPO_PUBLIC_CK_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
+    EXPO_PUBLIC_CK_PROXY_BASE_URL=https://dev-api.clashk.ing/proxy/v1
+    EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
+    EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=https://dev-app.clashk.ing/auth/discord_callback.html
+    EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
+    npm run start -- --web --host localhost --port "$PORT"
   )
 
   printf -v command_line '%q ' "${command[@]}"
-  tmux new-session -d -s "$SESSION" -c "$worktree" "exec $command_line"
+  tmux new-session -d -s "$SESSION" -c "$worktree/expo" "exec $command_line"
   tmux set-environment -t "$SESSION" DEV_APP_WORKTREE "$worktree"
   remember_worktree "$worktree"
   printf 'Started %s in tmux session %s\n%s\n' "$worktree" "$SESSION" "$PUBLIC_URL"
@@ -129,9 +141,16 @@ selected_worktree() {
   cat "$STATE_FILE"
 }
 
+case "${1:-}" in
+  -h|--help|help)
+    usage
+    exit 0
+    ;;
+esac
+
 mkdir -p "$STATE_DIR"
-exec 9>"$LOCK_FILE"
-flock 9
+mkdir "$LOCK_DIR" 2>/dev/null || fail "another dev-app command is running"
+trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
 
 case "${1:-}" in
   start)
@@ -146,7 +165,7 @@ case "${1:-}" in
   reload)
     session_exists || fail "no dev app is running"
     tmux send-keys -t "$SESSION" r
-    printf 'Requested Flutter hot reload for %s\n' "$(session_worktree)"
+    printf 'Requested Expo reload for %s\n' "$(session_worktree)"
     ;;
   restart)
     worktree="$(selected_worktree)"
@@ -174,9 +193,6 @@ case "${1:-}" in
   attach)
     session_exists || fail "no dev app is running"
     exec tmux attach-session -t "$SESSION"
-    ;;
-  -h|--help|help)
-    usage
     ;;
   *)
     usage >&2

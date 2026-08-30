@@ -1,0 +1,12 @@
+{
+  "name": "@clashking/native",
+  "version": "0.1.0",
+  "description": "ClashKing native parity bridge for Expo development builds.",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true,
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
+  }
+}

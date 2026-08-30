@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/upgrade_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/upgrade_widget_background"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/upgrade_hall_image"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:contentDescription="@string/upgrade_widget_hall_description"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_upgrade_hall_placeholder" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="9dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/upgrade_account_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Upgrade Progress"
+                android:textColor="@color/widget_text"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/upgrade_account_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/widget_text_secondary"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/upgrade_stale_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/upgrade_widget_warning_chip"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingHorizontal="10dp"
+            android:text="Update needed"
+            android:textColor="@color/widget_warning_text"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/upgrade_empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/upgrade_widget_card"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="@string/upgrade_widget_empty_sync"
+        android:textColor="@color/widget_text_secondary"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/upgrade_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="6dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/upgrade_large_boosts"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_boost_one_slot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/upgrade_widget_pill_orange"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp">
+
+                <ImageView
+                    android:id="@+id/upgrade_large_boost_one_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/upgrade_widget_boost_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_upgrade_status" />
+
+                <TextView
+                    android:id="@+id/upgrade_large_boost_one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Builder Potion&#10;28m"
+                    android:textColor="@color/widget_text"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_boost_two_slot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/upgrade_widget_pill_purple"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp">
+
+                <ImageView
+                    android:id="@+id/upgrade_large_boost_two_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/upgrade_widget_boost_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_upgrade_status" />
+
+                <TextView
+                    android:id="@+id/upgrade_large_boost_two"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Research Potion&#10;30m"
+                    android:textColor="@color/widget_text"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_boost_three_slot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/upgrade_widget_pill_pink"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp">
+
+                <ImageView
+                    android:id="@+id/upgrade_large_boost_three_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/upgrade_widget_boost_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_upgrade_status" />
+
+                <TextView
+                    android:id="@+id/upgrade_large_boost_three"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Pet Potion&#10;30m"
+                    android:textColor="@color/widget_text"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/upgrade_large_helpers"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_helper_one_slot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/upgrade_large_helper_one_image"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:contentDescription="@string/upgrade_widget_helper_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_upgrade_status" />
+
+                <TextView
+                    android:id="@+id/upgrade_large_helper_one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Apprentice&#10;Ready"
+                    android:textColor="@color/widget_text"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_helper_two_slot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="3dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/upgrade_large_helper_two_image"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:contentDescription="@string/upgrade_widget_helper_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_upgrade_status" />
+
+                <TextView
+                    android:id="@+id/upgrade_large_helper_two"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Assistant&#10;Ready"
+                    android:textColor="@color/widget_text"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_helper_three_slot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/upgrade_large_helper_three_image"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:contentDescription="@string/upgrade_widget_helper_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_upgrade_status" />
+
+                <TextView
+                    android:id="@+id/upgrade_large_helper_three"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Alchemist&#10;Ready"
+                    android:textColor="@color/widget_text"
+                    android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/upgrade_large_home_card"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/upgrade_widget_card"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/upgrade_large_home_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="HOME VILLAGE"
+                        android:textColor="@color/widget_text_secondary"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/upgrade_large_home_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 ACTIVE"
+                        android:textColor="@color/widget_status_idle"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <include layout="@layout/upgrade_widget_large_home_tasks" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/upgrade_large_lab_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/upgrade_widget_card"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/upgrade_large_lab_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="LAB"
+                            android:textColor="@color/widget_text_secondary"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/upgrade_large_lab_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 ACTIVE"
+                            android:textColor="@color/widget_status_idle"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <include layout="@layout/upgrade_widget_large_lab_tasks" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/upgrade_large_pets_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginVertical="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/upgrade_widget_card"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/upgrade_large_pets_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="PETS"
+                            android:textColor="@color/widget_text_secondary"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/upgrade_large_pets_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 IDLE"
+                            android:textColor="@color/widget_status_idle"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <include layout="@layout/upgrade_widget_large_pets_tasks" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/upgrade_large_builder_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/upgrade_widget_card"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/upgrade_large_builder_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="BUILDER BASE"
+                            android:textColor="@color/widget_text_secondary"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/upgrade_large_builder_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 IDLE"
+                            android:textColor="@color/widget_status_idle"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <include layout="@layout/upgrade_widget_large_builder_tasks" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,4397 @@
+{
+  "achievementsTitle": "成就",
+  "achievementEarnedLabel": "获得次数",
+  "achievementSummary": "{earned}/{total} 已完成",
+  "achievementEarnedCount": "获得次数 ×{count}",
+  "achievementTownhall18Name": "18级大本营",
+  "achievementTownhall18Requirement": "达到18级大本营。",
+  "achievementWarWarriorName": "部落战勇士",
+  "achievementWarWarriorRequirement": "获得5,000颗战星。",
+  "achievementMrLegendName": "传奇先生",
+  "achievementMrLegendDescription": "在传奇杯联赛中完成完美进攻日。",
+  "achievementDefenseDoesntMatterName": "防守无所谓",
+  "achievementDefenseDoesntMatterDescription": "在传奇杯联赛中经历完美防守日。",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
+  "appDescription": "您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。",
+  "generalLoading": "加载中...",
+  "loadingVillages": "正在加载你的村庄...",
+  "loadingClanData": "正在获取部落数据...",
+  "loadingWarStats": "正在分析部落战数据...",
+  "loadingLegendsData": "正在准备传奇杯数据...",
+  "loadingCapitalRaids": "正在加载都城突袭...",
+  "loadingAlmostReady": "马上就好...",
+  "accountVerificationTitle": "验证账号",
+  "accountVerified": "已验证",
+  "accountVerify": "验证",
+  "accountVerificationSuccess": "账号验证成功！",
+  "generalRetry": "重试",
+  "generalRetrying": "正在重试...",
+  "postsTitle": "资讯",
+  "postsDescription": "ClashKing 新闻、更新资讯及历史公告。",
+  "postsEmpty": "暂无发布的资讯。",
+  "postsLoadFailed": "资讯加载失败，请重试。",
+  "postsLoadMore": "加载更多",
+  "postsCurrent": "当前",
+  "postsPast": "往期",
+  "postsStory": "互动故事",
+  "postsPinned": "精选",
+  "generalTryAgain": "再试一次",
+  "generalReset": "重置",
+  "generalCancel": "取消",
+  "generalOk": "确定",
+  "@generalOk": {
+    "description": "OK button on pop up"
+  },
+  "generalApply": "需要申请",
+  "generalConfirm": "确认",
+  "generalManage": "管理",
+  "generalSettings": "设置",
+  "generalCopiedToClipboard": "复制到剪贴板",
+  "generalComingSoon": "敬请期待！",
+  "generalLastRefresh": "上次刷新：{time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "刷新失败：{error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "generalAll": "所有",
+  "@generalAll": {
+    "description": "all items"
+  },
+  "generalAllTime": "全部时间",
+  "@generalAllTime": {
+    "description": "All time period"
+  },
+  "generalOthers": "其他",
+  "generalCompleted": "已完成",
+  "generalTotal": "总计",
+  "generalBest": "最佳",
+  "@generalBest": {
+    "description": "Best end of day trophies"
+  },
+  "generalWorst": "最差",
+  "@generalWorst": {
+    "description": "Worst end of day trophies"
+  },
+  "generalAverage": "平均水平",
+  "@generalAverage": {
+    "description": "Average value of legend trophies (defense and attack)"
+  },
+  "generalRemaining": "剩余时间",
+  "@generalRemaining": {
+    "description": "Remaining attacks or defenses"
+  },
+  "generalActive": "活跃",
+  "generalInactive": "非活跃",
+  "generalStarted": "已激活",
+  "@generalStarted": {
+    "description": "Title for the number of trophies at the beginning of the day"
+  },
+  "generalEnded": "已结束",
+  "@generalEnded": {
+    "description": "Title for the number of trophies at the end of the day"
+  },
+  "generalRole": "职位",
+  "generalStats": "统计数据",
+  "generalFullStats": "完整统计",
+  "generalDetails": "详细信息",
+  "generalHistory": "历史记录",
+  "@generalHistory": {
+    "description": "Shows EOS trophies history"
+  },
+  "generalFilters": "筛选器",
+  "generalExpand": "扩张",
+  "generalCollapse": "坍塌",
+  "generalNotSet": "未设置",
+  "@generalNotSet": {
+    "description": "Filter value is not set"
+  },
+  "generalWarning": "警告",
+  "generalUnknown": "未知",
+  "generalNoDataAvailable": "没有可用数据",
+  "generalNoFilteredResults": "没有符合筛选条件的结果",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "请尝试调整筛选条件，或清除筛选以查看全部数据。",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalBookmark": "书签",
+  "generalRemoveBookmark": "删除书签",
+  "generalClearFilters": "清除筛选",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "已保存的预设",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "保存",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "保存筛选预设",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "预设名称",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "输入此预设的名称",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "建议：",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "请先应用一些筛选条件再保存为预设",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "请输入名称",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "已存在同名预设",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "预设“{name}”已成功保存",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "保存预设失败",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApply": "应用预设",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "重命名",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "删除",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "重命名预设",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "预设已重命名为“{name}”",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "重命名预设失败",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "删除预设",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "确定要删除“{name}”吗？",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "预设“{name}”已删除",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "删除预设失败",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "图表",
+  "authSignUp": "注册",
+  "authLogin": "登录",
+  "authLogout": "注销",
+  "authCreateAccount": "创建账户",
+  "authJoinClashKing": "加入 ClashKing",
+  "authCreateAccountToGetStarted": "创建您的账户以开始",
+  "authAlreadyHaveAccount": "已有账号？登录",
+  "authConfirmLogout": "确定要退出登录吗？",
+  "@authConfirmLogout": {
+    "description": "Prompt asking the user to confirm logout"
+  },
+  "authDiscordTitle": "Discord",
+  "authDiscordSignIn": "使用Discord登录",
+  "authDiscordContinue": "使用 Discord 继续",
+  "authDiscordDescription": "与 ClashKing 机器人同步你的数据，解锁 ClashKing 的全部潜力！",
+  "authEmail": "Email",
+  "authEmailHint": "输入你的电子邮箱地址",
+  "authEmailDescription": "如果你无法访问 Discord，或只想使用应用内功能，请使用电子邮箱",
+  "authEmailRequired": "请输入你的电子邮箱",
+  "authEmailInvalid": "请输入有效的电子邮箱",
+  "authPasswordLabel": "密码",
+  "authPasswordHint": "输入你的密码",
+  "authPasswordConfirm": "确认密码",
+  "authPasswordRequired": "请输入你的密码",
+  "authPasswordConfirmRequired": "请确认你的密码",
+  "authPasswordMismatch": "两次输入的密码不一致",
+  "authPasswordTooShort": "密码至少需要 8 个字符",
+  "authPasswordRequirements": "密码必须包含：\n• 大写字母\n• 小写字母\n• 数字\n• 特殊字符",
+  "authPasswordHeader": "密码必须包含：",
+  "authPasswordUppercase": "大写字母",
+  "authPasswordLowercase": "小写字母",
+  "authPasswordNumber": "数字",
+  "authPasswordSpecial": "特殊字符",
+  "authPasswordInvalid": "密码不符合要求",
+  "authPasswordForgot": "忘记密码？",
+  "authPasswordForgotDescription": "输入你的电子邮箱地址，我们会向你发送一个 6 位验证码来重置密码。",
+  "authPasswordResetSend": "发送重置验证码",
+  "authPasswordResetSent": "验证码已发送！",
+  "authPasswordResetSentDescription": "我们已向你的电子邮箱发送 6 位重置验证码。请检查收件箱并使用该验证码重置密码。",
+  "authPasswordReset": "重置密码",
+  "authPasswordResetDescription": "在下方输入你的电子邮箱、邮件中的 6 位验证码以及新密码。",
+  "authPasswordNew": "新密码",
+  "authPasswordConfirmHint": "再次输入你的新密码",
+  "authPasswordResetSuccess": "密码重置成功！你现在可以登录了。",
+  "authPasswordResetContinue": "继续重置密码",
+  "authPasswordResetCode": "重置验证码",
+  "authPasswordResetCodeHint": "输入邮件中的 6 位验证码",
+  "authPasswordResetCodeRequired": "请输入重置验证码",
+  "authPasswordResetCodeInvalid": "请输入有效的 6 位验证码",
+  "authBackToLogin": "返回登录",
+  "authUsernameLabel": "用户名",
+  "authUsernameRequired": "请输入用户名",
+  "authUsernameTooShort": "用户名至少需要 3 个字符",
+  "authUsernameTooLong": "用户名不能超过 30 个字符",
+  "authErrorConnection": "发生错误，请检查网络连接并重试。",
+  "authErrorConnectionRelaunch": "发生错误，请检查网络连接并重新启动应用。",
+  "authErrorEmailAlreadyRegistered": "该电子邮箱已注册。请尝试直接登录。",
+  "authErrorEmailAlreadyPending": "验证邮件已发送到此地址。请检查邮箱或尝试重新发送。",
+  "authErrorEmailInvalidFormat": "请输入有效的电子邮箱地址。",
+  "authErrorPasswordWeak": "密码太弱。请使用更强的密码。",
+  "authErrorUsernameInvalid": "用户名无效。请仅使用字母、数字和下划线。",
+  "authErrorRegistrationFailed": "注册失败。请稍后再试。",
+  "authErrorEmailSendFailed": "发送验证邮件失败。请稍后再试。",
+  "authErrorRateLimited": "尝试次数过多。请稍等片刻再试。",
+  "authErrorServerUnavailable": "服务器暂时不可用。请稍后再试。",
+  "authAccountManagement": "在这里添加、移除并重新排序你的《部落冲突》账号。使用令牌验证账号以访问所有功能。",
+  "authAccountConnected": "已连接账号",
+  "authAccountConnectedStatus": "已连接",
+  "authAccountNotConnected": "未连接",
+  "authAccountEmailAndPassword": "电子邮箱和密码",
+  "authAccountSecured": "你的账号已通过多种身份验证方式保护",
+  "authAccountLinkEmail": "关联电子邮箱账号",
+  "authAccountAddEmailAuth": "为你的账号添加电子邮箱和密码验证，以增强安全性。",
+  "authAccountEmailLinkedSuccess": "电子邮箱账号已成功关联！",
+  "authAccountLinkDiscord": "关联 Discord 账号",
+  "authAccountAddDiscordAuth": "为账号添加 Discord 验证，以支持跨平台同步并访问 ClashKing Bot。",
+  "authAccountDiscordLinkedSuccess": "Discord 账号关联成功！",
+  "authEmailVerificationTitle": "验证电子邮箱",
+  "authEmailVerificationCheckEmail": "检查你的邮箱",
+  "authEmailVerificationSentTo": "我们已发送验证邮件至：",
+  "authEmailVerificationResend": "重新发送验证邮件",
+  "authEmailVerificationResendSuccess": "验证邮件已重新发送！请检查你的邮箱。",
+  "authEmailVerificationExpired": "验证已过期。请重新注册。",
+  "authEmailVerificationAlreadyVerified": "该电子邮箱已验证。请尝试直接登录。",
+  "authEmailVerificationNoToken": "未找到待验证请求。请先注册。",
+  "authEmailVerificationExpiredResend": "验证已过期。请返回并重新注册。",
+  "authEmailVerificationVerifying": "正在验证你的电子邮箱...",
+  "authEmailVerificationCodeInstructions": "输入发送到你邮箱的 6 位验证码：",
+  "authEmailVerificationCodeRequired": "请输入 6 位验证码",
+  "authEmailVerificationCodeInvalid": "验证码无效或已过期。请检查验证码或重新发送验证邮件。",
+  "authEmailVerificationVerify": "验证代码",
+  "helpTitle": "需要帮助？",
+  "helpJoinDiscord": "加入 Discord",
+  "helpEmailUs": "给我们发邮件",
+  "accountsWelcome": "欢迎！",
+  "accountsWelcomeMessage": "请将一个或多个部落冲突帐户添加到您的个人资料中。您可以稍后添加或删除帐户。",
+  "accountsManageTitle": "管理你的账号",
+  "accountsNoneFound": "未找到与你的个人资料关联的账号",
+  "accountsPlayerTag": "玩家标签（#ABC123）",
+  "accountsEnterPlayerTag": "输入一个玩家标签",
+  "accountsAdd": "添加账户",
+  "accountsAddInstruction": "点击 + 按钮添加你的账号",
+  "accountsApiToken": "帐户 API 令牌",
+  "accountsEnterApiToken": "请输入账号 API 令牌以确认它属于你。你可以在《部落冲突》中找到它：",
+  "accountsApiTokenLocation": "设置 > 更多设置 > API 令牌",
+  "accountsOpenMoreSettings": "打开更多设置",
+  "accountsCouldNotOpenClash": "无法打开《部落冲突》。请手动打开。",
+  "accountsFillAllFields": "请填写所有字段。",
+  "accountsErrorTagNotExists": "输入的村庄标签不存在。",
+  "accountsErrorAlreadyLinked": "村庄标签已经链接到某人。",
+  "accountsErrorAlreadyLinkedToYou": "您已连接玩家标签",
+  "accountsErrorWrongApiToken": "输入的 API 令牌不正确",
+  "accountsErrorFailedToAdd": "添加账号失败。请稍后再试。",
+  "accountsErrorFailedToUpdateOrder": "更新账号顺序失败。",
+  "errorTitle": "哎呀！我们的服务器可能被火球糊了一脸！我们正在施放治疗法术... 请稍后再试。",
+  "errorSubtitle": "如果问题持续存在，请查看我们的 Discord 服务器，看看我们是否已经知道该问题。",
+  "errorNetworkTitle": "连接问题",
+  "errorNetworkMessage": "我们连接服务器时遇到问题。这可能是你的网络连接问题，也可能是我们这边的问题。请检查连接后重试。",
+  "errorLoadingVersion": "加载版本时出错",
+  "@errorLoadingVersion": {
+    "description": "Error message when the app version cannot be loaded"
+  },
+  "errorCannotOpenLink": "我们无法打开此链接",
+  "errorExitAppToOpenClash": "您即将离开应用程序打开部落冲突",
+  "playerSearchTitle": "搜索玩家",
+  "playerSearchPlaceholder": "村庄名称或标签",
+  "playerLastActive": "上次活跃：{date}",
+  "@playerLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerNotTracked": "该玩家未被跟踪。数据可能不准确。",
+  "playerClanDescription": "您的部落是“{clan}”（{tag}）",
+  "@playerClanDescription": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "playerRatioDescription": "您的捐兵比例为{ratio}。你们已经捐赠了{donations}人口的部队，并接收了{received}人口的部队。",
+  "@playerRatioDescription": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      },
+      "donations": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarPreferenceDescription": "您的部落对战偏好是“{preference}”。",
+  "@playerWarPreferenceDescription": {
+    "placeholders": {
+      "preference": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarStarsDescription": "您拥有{stars}胜利之星。",
+  "@playerWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTrophiesDescription": "您拥有{trophies}奖杯。你目前在{league}杯段。",
+  "@playerTrophiesDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "playerTrophiesUnrankedDescription": "你有 {trophies} 个奖杯。你当前未进入任何联赛排名。",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTownHallLevelDescription": "您的大本营等级是{level}",
+  "@playerTownHallLevelDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBuilderBaseDescription": "您的大本等级为{level}，您的奖杯数为：{trophies}。",
+  "@playerBuilderBaseDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBaseHome": "家乡",
+  "gameBaseBuilder": "夜世界",
+  "gameClanCapital": "部落都城",
+  "gameTownHall": "大本等级",
+  "gameTownHallLevel": "大本等级",
+  "gameTownHallLevelNumber": "大本营 {level}",
+  "@gameTownHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameExpLevel": "经验等级",
+  "gameLeague": "联盟",
+  "gameTrophies": "奖杯",
+  "gameBuilderBaseTrophies": "建筑大师奖杯",
+  "gameDonations": "增援",
+  "gameDonationsReceived": "已接收",
+  "gameDonationsRatio": "捐收比例",
+  "gameLevel": "等级：{level}/{maxLevel}",
+  "@gameLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "maxLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "gameHeroes": "英雄",
+  "gameEquipment": "装备",
+  "gameHeroesEquipments": "英雄装备",
+  "gameTroops": "部队",
+  "gameActiveSuperTroops": "已启用的超级部队",
+  "gamePets": "宠物",
+  "gameSiegeMachines": "攻城机器",
+  "gameSpells": "法术",
+  "gameAchievements": "成就",
+  "gameClanGames": "部落竞赛",
+  "gameSeasonPass": "赛季通行证",
+  "gameCreatorCodeDescription": "免费支持我们！",
+  "gameCreatorCodeDialogTitle": "支持 ClashKing",
+  "gameCreatorCodeDialogDescription": "当你使用我们的创作者代码时，你会帮助资助开发，让应用和机器人对所有人保持免费，并支持新增功能。\n\n我们会从你的游戏内购买中获得 5% 的分成，你无需额外付费——只需在任意 Supercell 游戏商店中输入“ClashKing”。\n\n感谢你的支持！",
+  "gameCreatorCodeDialogButton": "使用创作者代码",
+  "clanTitle": "部落",
+  "clanSearchTitle": "搜索部落",
+  "clanSearchPlaceholder": "部落名称",
+  "clanNone": "无部落信息",
+  "clanJoinToUnlock": "加入一个部落来解锁新功能。",
+  "clanMembers": "成员",
+  "clanMembersSearchPlaceholder": "搜索会员",
+  "clanMembersShowTotals": "显示部落总数",
+  "clanMembersHideTotals": "隐藏部落总数",
+  "clanMembersReceivedShort": "已收到",
+  "clanMembersAverageTh": "平均TH",
+  "clanMinimumMembers": "最小成员数",
+  "clanMaximumMembers": "最大成员数",
+  "clanLocation": "位置",
+  "clanMinimumPoints": "最低部落奖杯总数",
+  "clanMinimumLevel": "最低部落等级",
+  "clanInviteOnly": "仅限邀请",
+  "@clanInviteOnly": {
+    "description": "Clan is invite only"
+  },
+  "clanOpened": "开放",
+  "@clanOpened": {
+    "description": "Clan is opened"
+  },
+  "clanRoleLeader": "首领",
+  "clanRoleCoLeader": "副首领",
+  "clanRoleElder": "长老",
+  "clanRoleMember": "成员",
+  "clanWarFrequencyAlways": "总是",
+  "clanWarFrequencyNever": "从不",
+  "clanWarFrequencyOncePerWeek": "1次/周",
+  "clanWarFrequencyMoreThanOncePerWeek": "每周超过 1 次",
+  "clanWarFrequencyRarely": "很少",
+  "timeHourIndicator": "小时",
+  "timeDaysAgo": "{days} 天前",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDayAgo": "{day}天之前",
+  "@timeDayAgo": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHourAgo": "{hour}小时之前",
+  "@timeHourAgo": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours} 小时前",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinuteAgo": "{minute}分钟之前",
+  "@timeMinuteAgo": {
+    "placeholders": {
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinutesAgo": "{minutes}分钟之前",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeJustNow": "刚刚",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "刚刚结束",
+  "timeEndedMinutesAgo": "已于 {minutes} 分钟前结束",
+  "@timeEndedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedHoursAgo": "已于 {hours} 小时前结束",
+  "@timeEndedHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedDaysAgo": "已于 {days} 天前结束",
+  "@timeEndedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeStartsIn": "开始时间（{time}后",
+  "@timeStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeStartsAt": "开始时间（{time}）",
+  "@timeStartsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsIn": "结束于{time}",
+  "@timeEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsAt": "结束于{time}",
+  "@timeEndsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsTitle": "传奇杯联赛",
+  "legendsNotInLeague": "不在传奇联赛中",
+  "legendsNoDataToday": "你当前不在传奇杯联赛，但可以查看过去赛季。",
+  "legendsStartDescription": "您以{trophies}奖杯开始了新的一天。",
+  "@legendsStartDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsNoRankLocalDescription": "您目前没有获得{trophies}奖杯的排名（{country}）。",
+  "@legendsNoRankLocalDescription": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsRankLocalDescription": "您目前拥有{trophies}奖杯，排名{rank}（{country}）。",
+  "@legendsRankLocalDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGainDescription": "您获得了{trophies}奖杯。",
+  "@legendsGainDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsLossDescription": "您失去了{trophies}奖杯。",
+  "@legendsLossDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoGlobalRankDescription": "您目前没有在全国范围内获得排名（{trophies}）。",
+  "@legendsNoGlobalRankDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGlobalRankDescription": "你目前以 {trophies} 个奖杯排名全球第 {rank}。",
+  "@legendsGlobalRankDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoRank": "暂无排名",
+  "legendsBestTrophies": "最高奖杯",
+  "legendsMostAttacks": "最多进攻次数",
+  "legendsLastSeason": "上一赛季",
+  "legendsBestRank": "最佳全球等级",
+  "legendsTrophiesBySeason": "每赛季的奖杯数",
+  "legendsEosTrophies": "赛季结束前的奖杯数",
+  "legendsEosDetails": "赛季结束详情",
+  "legendsInaccurateTitle": "数据不准确？",
+  "legendsInaccurateIntro": "由于Clans API分类的限制，我们的数据可能并不总是完全准确。可能有以下原因：",
+  "legendsInaccurateApiDelayTitle": "1. API 延迟： ",
+  "legendsInaccurateApiDelayBody": "API可能需要长达5分钟的时间进行更新，从而导致反映实时奖杯变化的滞后。",
+  "legendsInaccurateConcurrentTitle": "2.合并奖杯：",
+  "legendsInaccurateMultipleAttacksTitle": "- 多次攻击/防御： ",
+  "legendsInaccurateMultipleAttacksBody": "如果连续发生多次攻击或防御，API可能会显示合并结果(如+68 或 -68)。\n",
+  "legendsInaccurateSimultaneousTitle": "- 同时攻击和防御： ",
+  "legendsInaccurateSimultaneousBody": "如果同时发生攻击和防御，你可能会看到好坏参半的结果(例如+4。\n",
+  "legendsInaccurateNetGainTitle": "3. 净增益： ",
+  "legendsInaccurateNetGainBody": "尽管时间安排有问题，但这一天的净损益总额是准确的。 ",
+  "legendsInaccurateConclusion": "这些限制在使用部落冲突API的所有工具上都很常见。遗憾的是，我们无法修复这个问题，因为它的所有权是在Supercell的手中。 我们尽最大努力弥补这些限制，提供尽可能接近现实的结果。谢谢你们的理解！",
+  "statsSeasonStats": "赛季数据",
+  "statsByDay": "按天",
+  "@statsByDay": {
+    "description": "Shows stats by day"
+  },
+  "statsBySeason": "按赛季",
+  "@statsBySeason": {
+    "description": "Shows stats by season"
+  },
+  "statsDayIndex": "第{index}天",
+  "@statsDayIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsIndexDays": "{index}天",
+  "@statsIndexDays": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsSeasonDate": "{date}赛季",
+  "@statsSeasonDate": {
+    "description": "Example: August 2024 season",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "statsAllTownHalls": "所有大本营",
+  "statsMembers": "成员统计",
+  "todoTitle": "待办事宜列表",
+  "todoExplanationTitle": "任务计算方法",
+  "todoExplanationIntro": "任务完成率是根据下列具有特定权重的活动计算出来的：",
+  "todoExplanationLegendsTitle": "传奇联赛",
+  "todoExplanationLegends": "每个账户的权重为8分，1次攻击=1分。",
+  "todoExplanationClanWarsTitle": "部落战：",
+  "todoExplanationClanWars": "每个账户2分的权重，1次攻击=1分。",
+  "todoExplanationCwlTitle": "部落联赛",
+  "todoExplanationCwl": "每个账户的权重为1分，1次攻击=1分。如果玩家不在他们的部落中，则无法跟踪部落联赛。",
+  "todoExplanationPassAndGamesTitle": "月卡和部落游戏",
+  "todoExplanationPassAndGames": "每个账户的权重为2分。该比率基于剩余天数（通行证为1个月，比赛为6天）。绿色=按计划完成传球或比赛，红色=落后于计划。",
+  "todoExplanationConclusion": "最终百分比等于进行中活动里已完成的操作总数除以所需操作总数。",
+  "todoAccountsNumber": "{number}账户",
+  "@todoAccountsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Number of accounts (ex: 4 accounts)"
+  },
+  "todoAccountsNumberActive": "{number}活账户",
+  "@todoAccountsNumberActive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsNumberInactive": "{number}不活跃账户",
+  "@todoAccountsNumberInactive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsActive": "活跃帐户",
+  "todoAccountsInactive": "不活跃账户",
+  "todoAccountsNoInactive": "没有不活跃的帐户。",
+  "todoAccountsNoActive": "没有活跃的帐户。",
+  "todoAttacksLeftDescription": "你还有 {attacks} 次进攻剩余（{type}）。",
+  "@todoAttacksLeftDescription": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDefensesLeftDescription": "你还有 {defenses} 次防守剩余（{type}）。",
+  "@todoDefensesLeftDescription": {
+    "placeholders": {
+      "defenses": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoNoAttacksLeftDescription": "恭喜，你已完成所有进攻（{type}）！",
+  "@todoNoAttacksLeftDescription": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescription": "你今天还需获得 {points} 点数，才能按时完成该活动（{type}）。",
+  "@todoPointsLeftDescription": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescriptionNoPoints": "恭喜，你正按进度获取该活动结束时的最高奖励（{type}）！",
+  "@todoPointsLeftDescriptionNoPoints": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "warTitle": "部落战",
+  "warFrequency": "对战频率",
+  "warParticipation": "参战",
+  "cwlParticipantOnly": "仅参与",
+  "warStatsLastXDays": "最近 {number} 天",
+  "warStatsCurrentMembers": "当前成员",
+  "warLeague": "部落战/联赛",
+  "warHistory": "部落对战历史",
+  "warLog": "对战日志",
+  "warLogSearchPlaceholder": "搜索战",
+  "warLogClosed": "{clan} 的部落战日志已关闭。",
+  "warLogPrivate": "{clan} 的部落对战日志为私密。",
+  "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warStats": "部落战统计",
+  "warStatsSearchPlaceholder": "搜索球员",
+  "warStatsCurrentTownHall": "我的TH",
+  "warStatsLast50": "最后 50 名",
+  "warStatsWars": "战争",
+  "warStatsSelectSeason": "选择战争统计赛季",
+  "warOngoing": "进行中的部落战",
+  "warIsNotInWar": "{clan} 当前未参与部落战。",
+  "@warIsNotInWar": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warAskForWar": "请联系首领或副首领发起一场部落战。",
+  "warAskForWarLogOpening": "请联系首领或副首领开启对战日志。",
+  "warEnded": "部落战已结束",
+  "warInWar": "战斗中",
+  "@warInWar": {
+    "description": "War state: active"
+  },
+  "warPreparation": "准备阶段",
+  "warPerfectWar": "满星部落战",
+  "warVictory": "胜利",
+  "warDefeat": "失败",
+  "warDraw": "平局",
+  "@warDraw": {
+    "description": "War ended in a draw"
+  },
+  "warTeamSize": "队伍规模",
+  "warMyTeam": "我的部落",
+  "warEnemiesTeam": "敌方部落",
+  "warClanDraw": "双方部落战成平局",
+  "warStateOfTheWar": "部落战状态",
+  "warStarsNeededToTakeTheLead": "{clan} 仍需 {star} 颗星，或 {stars2} 颗星加上 {percent}% 的摧毁率才能取得领先",
+  "@warStarsNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "star": {
+        "type": "int"
+      },
+      "stars2": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} 仍需 {percent}% 或再获得 1 颗星才能取得领先",
+  "@warStarsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warNotStarted": "部落战尚未开始",
+  "warWonByStars": "{clanName} 赢得了部落战！",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} 输掉了部落战",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} 凭摧毁率获胜！",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} 因摧毁率落败",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "完美平局",
+  "warCanTieNeedsStars": "{clanName} 可以追平，但还需要 {stars} 颗星",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} 无法在星数上追上",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisToWin": "赢得胜利",
+  "warAnalysisToLose": "失去",
+  "warAnalysisNoAttacksLeft": "没有剩余攻击",
+  "warAnalysisScenario": "{attacks} 攻击剩余 -> 每次攻击需要 {stars} 星星 / {percent}%",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} 攻击剩余 -> 不可能（{stars} 星星/每次攻击 {percent}%）",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotLose": "{clanName} 已立于不败之地",
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisSecuredBadge": "锁定胜局",
+  "warAnalysisAlreadySecured": "已锁定胜局",
+  "warAnalysisSecureAgainst": "按 {clanName} 用完剩余进攻次数计算目标。",
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotSecureAgainst": "即使 {clanName} 完美发挥剩余进攻，仍无法提前锁定胜局。",
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisNoSecureObjective": "依靠剩余进攻次数无法锁定胜局",
+  "warAnalysisStarGoal": "+{stars} 星",
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisRemainingAttempts": "剩余 {attacks} 次进攻",
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisNoBetterResult": "已无提升空间",
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
+  },
+  "warNoDataAvailableForThisWar": "此场部落战暂无数据",
+  "warCalculatorFast": "快速计算",
+  "warCalculatorAnswer": "要达到 {percentNeeded}% 的摧毁率，总共需要 {result}%。",
+  "@warCalculatorAnswer": {
+    "placeholders": {
+      "percentNeeded": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorNeededOverall": "所需总百分比",
+  "warCalculatorCalculate": "计算",
+  "warAttacksTitle": "进攻记录",
+  "warAttacksSuccessful": "成功的攻击",
+  "warAttacksFailed": "失败的攻击",
+  "warAttacksNone": "暂无进攻",
+  "@warAttacksNone": {
+    "description": "No attack yet in war"
+  },
+  "warAttacksBest": "最佳进攻",
+  "warAttacksCount": "进攻次数",
+  "warAttacksMissed": "错过的进攻",
+  "warAttacksMissedShort": "错过了",
+  "warAttacksNumber": "在最近 {number_war} 场部落战中，你进攻了 {number_time} 次。",
+  "@warAttacksNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warAttacksAverageStars": "你每场部落战平均获得 {stars} 颗星。",
+  "@warAttacksAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warAttacksAverageDestruction": "你每场部落战平均摧毁率为 {percent}%。",
+  "@warAttacksAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesTitle": "防御记录",
+  "warDefensesNone": "暂无防守",
+  "@warDefensesNone": {
+    "description": "No defense yet in war"
+  },
+  "warDefensesBest": "最佳防守",
+  "warDefensesBestOutOf": "最佳防守（共 {number} 次）",
+  "@warDefensesBestOutOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+  },
+  "warDefensesNumber": "在最近 {number_war} 场部落战中，你防守了 {number_time} 次。",
+  "@warDefensesNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warDefensesAverageStars": "你每次防守平均被拿到 {stars} 颗星。",
+  "@warDefensesAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesAverageDestruction": "你每次防守平均被摧毁率为 {percent}%。",
+  "@warDefensesAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsTitle": "星数",
+  "warStarsAverage": "平均胜利之星",
+  "warStarsNumber": "获得的星数",
+  "warStarsOne": "1 胜利之星",
+  "warStarsTwo": "2 胜利之星",
+  "warStarsThree": "3 胜利之星",
+  "warStarsZero": "0 星",
+  "warStarsBestPerformance": "最佳表现",
+  "@warStarsBestPerformance": {
+    "description": "Best performance in war"
+  },
+  "warDestructionTitle": "摧毁率",
+  "warDestructionAverage": "平均摧毁",
+  "warDestructionRate": "摧毁率",
+  "@warDestructionRate": {
+    "description": "Percentage of destruction in war"
+  },
+  "warHistoryWinsDescription": "在过去50场部落战中，您的部落赢得{wins}场({percent}%)",
+  "@warHistoryWinsDescription": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryLossesDescription": "在过去的50 场部落战中，您的部落失败{losses}场({percent}%)",
+  "@warHistoryLossesDescription": {
+    "placeholders": {
+      "losses": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryDrawsDescription": "在过去50场部落战中，您的部落平局{draws}场({percent}%)",
+  "@warHistoryDrawsDescription": {
+    "placeholders": {
+      "draws": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageMembersDescription": "在过去50场部落战中，您的部落平均有{members}人参战",
+  "@warHistoryAverageMembersDescription": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      }
+    }
+  },
+  "warHistoryAverageWarStarsDescription": "在过去 50 场战争中，您的部落平均每场战争获得 {stars} 颗星星，占比 {percent}",
+  "@warHistoryAverageWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageHitRateDescription": "您的部落在过去 50 场战争中的平均摧毁率为 {percent}%",
+  "@warHistoryAverageHitRateDescription": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warPositionMap": "地图位置",
+  "@warPositionMap": {
+    "description": "Map position in war"
+  },
+  "warPositionAbbr": "位置",
+  "@warPositionAbbr": {
+    "description": "Abbreviation for map position"
+  },
+  "warPositionOrder": "顺序",
+  "@warPositionOrder": {
+    "description": "Order of the player in the clan"
+  },
+  "warOpponentTownhall": "对手 TH",
+  "@warOpponentTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+  },
+  "warOpponentLowerTownhall": "较低 TH",
+  "warOpponentUpperTownhall": "较高 TH",
+  "warOpponentEqualThLevel": "大本等级相同",
+  "warOpponentSelectMembersThLevel": "成员大本等级",
+  "warOpponentSelectOpponentsThLevel": "队友大本等级",
+  "warFiltersLastXwars": "最后{number}场战争",
+  "@warFiltersLastXwars": {
+    "description": "Example: Shows the last 25 wars",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warFiltersFriendly": "友好",
+  "@warFiltersFriendly": {
+    "description": "Friendly war"
+  },
+  "warFiltersRandom": "随机",
+  "@warFiltersRandom": {
+    "description": "Random/basic war (not friendly or cwl)"
+  },
+  "warVisibilityToggleTownHall": "显示/隐藏前大本等级统计",
+  "@warVisibilityToggleTownHall": {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+  },
+  "warEventsTitle": "事件",
+  "@warEventsTitle": {
+    "description": "War events"
+  },
+  "warEventsNewest": "最新",
+  "warEventsOldest": "最早",
+  "warStatusReady": "参战",
+  "@warStatusReady": {
+    "description": "Opted In for war"
+  },
+  "warStatusUnready": "退出",
+  "@warStatusUnready": {
+    "description": "Opted Out for war"
+  },
+  "warStatusMissed": "已错过",
+  "@warStatusMissed": {
+    "description": "Missed attacks"
+  },
+  "warStatusMissedInfo": "错过：{number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warAbbreviationAvg": "平均",
+  "@warAbbreviationAvg": {
+    "description": "Abbreviation for average"
+  },
+  "warAbbreviationAvgPercentage": "平均 %",
+  "@warAbbreviationAvgPercentage": {
+    "description": "Abbreviation for average percentage"
+  },
+  "cwlTitle": "部落联赛",
+  "cwlClanWarLeague": "部落战联赛",
+  "cwlOngoing": "正在进行的部落联赛",
+  "cwlHistoryTitle": "CWL历史",
+  "clanLeaderboardHistoryTab": "排行榜历史",
+  "clanLegendHistoryTab": "传奇联赛历史",
+  "clanRecordsTab": "纪录",
+  "clanProfileHistoryTab": "资料历史",
+  "clanProfileLevelChanged": "部落等级已更改",
+  "clanProfileDescriptionChanged": "描述已更改",
+  "clanJoinLeaveTab": "加入/离开",
+  "clanRankingsTab": "排行榜",
+  "clanRankingsSeason": "季节",
+  "clanRankingsSelectSeason": "选择排名赛季",
+  "clanRankingsFilterActivity": "活动",
+  "clanRankingsFilterWar": "战争",
+  "clanRankingsFilterPoints": "积分",
+  "cwlHistoryPreviewBadge": "预览",
+  "cwlHistoryPreviewSubtitle": "{clan} 模型，直到 CWL 端点修复",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "还没有 CWL 历史记录",
+  "cwlHistoryEmptyBody": "该氏族尚未参加过氏族战争联赛赛季。",
+  "cwlRankTitle": "秩",
+  "cwlWarsPlayedTitle": "战争打响",
+  "playerWarStarsTitle": "战争明星",
+  "playerWarPreferenceTitle": "战争首选。",
+  "playerDonatedTitle": "捐赠",
+  "playerReceivedTitle": "已收到",
+  "playerCapitalTitle": "首都",
+  "playerExpLevelTitle": "过期。等级",
+  "clanWarWinsTitle": "战争胜利",
+  "clanWinStreakTitle": "连胜",
+  "clanBuilderBaseTitle": "建设者基地",
+  "clanTypeTitle": "类型",
+  "clanMinTownHallTitle": "分钟。 TH",
+  "clanMinTrophiesTitle": "分钟。奖杯",
+  "clanCapitalHallTitle": "首都大厅",
+  "clanDistrictsTitle": "地区",
+  "legendsCountryTitle": "国家",
+  "legendsLocalRankTitle": "当地排名",
+  "legendsGlobalRankTitle": "全球排名",
+  "warWinsTitle": "胜利",
+  "warLossesTitle": "损失",
+  "warDrawsTitle": "抽奖",
+  "cwlRounds": "轮次",
+  "cwlRoundNumber": "第 {number} 轮",
+  "@cwlRoundNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRound": "当前轮次（第 {round} 轮）",
+  "@cwlCurrentRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRank": "你的部落当前排名第 {rank}。",
+  "@cwlRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlStars": "你的部落共获得 {stars} 颗星。",
+  "@cwlStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlDestructionPercentage": "你的部落的总摧毁率为 {percent}%。",
+  "@cwlDestructionPercentage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlTotalAttacks": "你的部落共有 {attacks} 次进攻，最多可进行 {totalAttacks} 次。",
+  "@cwlTotalAttacks": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "totalAttacks": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveTitle": "加入/离开日志（当前赛季）",
+  "joinLeaveJoin": "加入",
+  "joinLeaveLeave": "退出",
+  "joinLeaveJoins": "加入",
+  "joinLeaveLeaves": "离开",
+  "joinLeaveUniquePlayers": "唯一玩家",
+  "joinLeaveMovingPlayers": "流动玩家",
+  "joinLeaveMostMovingPlayers": "最常流动玩家",
+  "joinLeaveStillInClan": "仍在部落中",
+  "joinLeaveLeftForever": "永久离开",
+  "joinLeaveRejoinedPlayers": "重新加入的玩家",
+  "joinLeaveAvgTimeJoinLeave": "平均加入/离开时间",
+  "joinLeavePeakHour": "最活跃时段",
+  "joinLeaveNumberDescription": "当前赛季（{date}）发生了 {number} 次离开事件。",
+  "@joinLeaveNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinNumberDescription": "当前赛季（{date}）发生了 {number} 次加入事件。",
+  "@joinLeaveJoinNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveMovingNumberDescription": "当前赛季（{date}）有 {number} 名玩家离开并重新加入部落。",
+  "@joinLeaveMovingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveUniqueNumberDescription": "当前赛季（{date}）有 {number} 名唯一玩家加入/离开部落。",
+  "@joinLeaveUniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveStillInClanNumberDescription": "有 {number} 名玩家加入后仍在部落中。",
+  "@joinLeaveStillInClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveLeftClanNumberDescription": "有 {number} 名玩家加入后离开部落，且未再次加入。",
+  "@joinLeaveLeftClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@joinLeaveTitle": {
+    "description": "Logs of players joining or leaving the clan."
+  },
+  "joinLeaveLeftOnAt": "于 {date} 的 {time} 离开。",
+  "@joinLeaveLeftOnAt": {
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinedOnAt": "于 {date} 的 {time} 加入。",
+  "@joinLeaveJoinedOnAt": {
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "raidsTitle": "突袭",
+  "raidsLast": "历史突袭记录",
+  "raidsOngoing": "进行中的突袭",
+  "raidsDistrictsDestroyed": "摧毁的都城",
+  "raidsCompleted": "已完成突袭",
+  "capitalRaidStatusOngoing": "进行中",
+  "capitalRaidStatusEnded": "结束",
+  "capitalRaidLoot": "抢劫",
+  "capitalRaidRewards": "奖励",
+  "capitalRaidPreviousWeek": "上周",
+  "capitalRaidNextWeek": "下周",
+  "capitalRaidFilterAttacked": "受到攻击",
+  "capitalRaidFilterNotAttacked": "没有受到攻击",
+  "capitalRaidFilterLinked": "关联账户",
+  "capitalRaidEmptyTitle": "没有资本掠夺数据",
+  "capitalRaidEmptyBody": "一旦追踪到该氏族的首都突袭周末，突袭历史就会出现在这里。",
+  "capitalRaidEstimated": "估计的",
+  "capitalRaidEstimatedTooltip": "尚未官方：根据本周的攻击和防御日志估计。突袭结束后，Supercell 会公布真实的奖牌数。",
+  "capitalRaidTrophyPrediction": "预测奖杯",
+  "capitalRaidTrophyPredictionTooltip": "根据本周迄今为止的表现，本次突袭后估计的首都联盟奖杯数。不是官方的。",
+  "capitalRaidProjectedLoot": "预计战利品",
+  "capitalRaidOneshots": "一击",
+  "capitalRaidFails": "失败",
+  "capitalDetailsOffense": "罪行",
+  "capitalDetailsDefense": "防御",
+  "capitalDistrictsSection": "地区",
+  "capitalOpponentsSection": "对手",
+  "capitalAvgAttacksPerDistrict": "平均攻击次数/区域",
+  "capitalAvgLootPerAttack": "平均战利品/攻击",
+  "capitalHistorySection": "突袭历史",
+  "capitalHistoryWeeksTracked": "追踪周数",
+  "capitalAvgLootPerWeek": "每周平均战利品",
+  "capitalAvgAttacksPerWeek": "平均攻击次数/周",
+  "capitalBestRaid": "最佳突袭",
+  "capitalWorstRaid": "最糟糕的袭击",
+  "capitalHistoryChartTitle": "每周趋势",
+  "searchNoResult": "没有找到该查询的结果",
+  "maintenanceTitle": "维护",
+  "maintenanceDescription": "《部落冲突》当前正在维护，因此我们无法访问 API。请稍后再回来查看。",
+  "downloadTooltip": "下载 CWL 摘要",
+  "downloadInProgress": "正在下载文件... 可能需要几秒钟...",
+  "downloadSuccess": "文件已成功保存到 {path}",
+  "@downloadSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadError": "下载文件失败",
+  "dashboardTitle": "主页",
+  "toolsTitle": "工具",
+  "navigationTeam": "部落",
+  "navigationStatistics": "统计数据",
+  "versionDevice": "版本&设备",
+  "@versionDevice": {
+    "description": "Version of the app and device information"
+  },
+  "settingsLicenses": "开源许可证",
+  "settingsLicensesSubtitle": "查看第三方库许可证",
+  "settingsPrivacyPolicy": "隐私政策",
+  "settingsPrivacyPolicySubtitle": "我们如何处理你的数据",
+  "betaFeature": "Beta功能",
+  "betaLabel": "BETA",
+  "betaDescription": "此功能目前处于测试阶段，可能存在一些错误或不完整。我们正在积极改进，欢迎您的反馈。请在我们的Discord服务器中分享您的想法并报告任何问题，以帮助我们做得更好。",
+  "settingsLanguage": "语言",
+  "settingsSelectLanguage": "搜索语言",
+  "settingsToggleTheme": "切换主题",
+  "faqTitle": "FAQ",
+  "faqSubtitle": "常见问题回答",
+  "faqIsThisFromSupercell": "这个应用程序是Supercell的吗？",
+  "faqFanContentPolicy": "此材料是非官方的，未得到Supercell的认可。有关更多信息，请参阅Supercell的粉丝内容政策：www.Supercell.com/Fan-Content-Policy",
+  "faqWhyNotAccurate": "为什么数据有时不准确或缺失？",
+  "faqClanNotTracked": "部落未被追踪",
+  "faqClanNotTrackedAnswer": "只有当部落被追踪时，ClashKing才能检索此信息。如果你的部落没有被追踪，请邀请ClashKing机器人到你的Discord服务器，并使用命令/addclan。我们正在努力尽快在应用程序中提供此功能。",
+  "faqTrackingDown": "跟踪",
+  "faqTrackingDownAnswer": "跟踪可以在一段时间内停止工作。这就是为什么你的数据有时会有漏洞。我们正在努力改进这一点。",
+  "faqApiLimitation": "部落冲突API限制",
+  "faqApiLimitationAnswer": "一些数据是由部落冲突提供的，他们的API有一些限制。传奇杯追踪就是这种情况，它有时会像一次攻击一样叠加奖杯的得失。这也是为什么我们没有关于您基地的任何信息。",
+  "faqSupportWork": "我如何支持你的工作？",
+  "faqSupportWorkAnswer": "有几种方法可以支持我们：",
+  "faqUseCodeClashKing": "创作者代码：ClashKing",
+  "faqSupportUsOnPatreon": "在Patreon上支持我们",
+  "faqRateTheApp": "对商店中的应用程序进行评分",
+  "faqWhatCanBotDo": "ClashKing Discord 机器人可以做什么？",
+  "faqWhatCanBotDoAnswer": "ClashKing Discord 机器人可通过全面的追踪工具、自动通知以及与本应用的无缝集成，帮助你直接在 Discord 中管理部落。它专为想保持联系和组织有序的部落首领与成员设计：",
+  "faqInviteBotToServer": "邀请机器人到服务器",
+  "faqBotFeatureTracking": "玩家和部落追踪",
+  "faqBotFeatureTrackingDesc": "添加并监控多个部落和玩家，获取实时更新",
+  "faqBotFeatureWars": "部落战管理",
+  "faqBotFeatureWarsDesc": "追踪部落战表现、分析进攻并接收部落战通知",
+  "faqBotFeatureNotifications": "智能通知",
+  "faqBotFeatureNotificationsDesc": "获取捐兵、部落战进攻和重要部落事件提醒",
+  "faqBotFeatureCommands": "强大的命令",
+  "faqBotFeatureCommandsDesc": "使用斜杠命令快速访问玩家统计、部落战信息等",
+  "faqNeedHelp": "我需要帮助，或者我想提个建议。我怎样才能联系到你？",
+  "faqNeedHelpAnswer": "您可以加入我们的Discord服务器以寻求帮助或提供反馈，也可以发送电子邮件至devs@clashk.ing.请用英语或法语书写。",
+  "faqPrivacyDataTitle": "我可以管理或删除自己的个人数据吗？",
+  "faqPrivacyDataAnswer": "可以。在“设置 > 隐私政策”中，你可以打开隐私政策、准备导出 ClashKing 账号数据、请求更正或限制处理，并开始删除账号。服务器端隐私服务推出期间，部分请求可能仍会通过支持邮箱处理。ClashKing 可以处理存储在你 ClashKing 账号中的数据；Clash of Clans 数据也可能来自 Supercell API 或公开的部落和玩家数据。",
+  "faqSendEmail": "发送电子邮件",
+  "faqJoinDiscord": "加入我们的Discord服务器",
+  "faqCannotOpenMailClient": "由于某些原因，我们无法打开您的邮件客户端。我们为您复制了电子邮件地址。您可以编写电子邮件并将地址粘贴到收件人字段中。",
+  "faqTroubleshooting": "故障排除",
+  "faqTroubleshootingDataTitle": "为什么我的数据没有同步？",
+  "faqTroubleshootingDataDescription": "玩家或部落数据显示已过期",
+  "faqTroubleshootingDataSolution1": "下拉刷新页面",
+  "faqTroubleshootingDataSolution2": "检查你的部落是否已被追踪（见上方）",
+  "faqTroubleshootingDataSolution3": "等待几分钟后再试：API 可能需要一些时间更新",
+  "faqTroubleshootingCrashTitle": "为什么应用会崩溃？",
+  "faqTroubleshootingCrashDescription": "应用意外关闭或卡住",
+  "faqTroubleshootingCrashSolution1": "关闭应用并重新启动",
+  "faqTroubleshootingCrashSolution2": "将应用更新到最新版本",
+  "faqTroubleshootingCrashSolution3": "清除应用缓存和数据（Android）或重新安装应用",
+  "faqTroubleshootingCrashSolution4": "释放设备存储空间",
+  "faqContactSupport": "如果问题持续存在，请联系支持（见最后一节）",
+  "faqTroubleshootingAccountTitle": "为什么我无法验证账号？",
+  "faqTroubleshootingAccountDescription": "关联你的《部落冲突》账号时出现问题",
+  "faqTroubleshootingAccountSolution1": "确保你使用的是以 # 开头的正确玩家标签",
+  "faqTroubleshootingAccountSolution2": "如果账号似乎已经被关联，请使用《部落冲突》设置中的 API 令牌",
+  "faqTroubleshootingSolutions": "解决方案：",
+  "faqWhatIsClashKingProject": "ClashKing 项目是什么？",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing 是一个用于《部落冲突》统计和部落管理的开源项目。它主要由两位开发者维护，也会偶尔得到贡献者的帮助。我们会在时间允许时持续改进它，目标很简单：帮助玩家和部落更轻松地跟踪进度。应用、Discord 机器人和免费 API 会协同工作。",
+  "faqViewOnGitHub": "在 GitHub 上查看",
+  "faqFeaturesGuide": "ClashKing 应用可以做什么？",
+  "faqFeaturesGuideDescription": "将你的《部落冲突》体验提升到下一层！ClashKing 应用提供美观、快速的入口来查看你的所有统计和部落数据——非常适合没有 Discord 的玩家，以及偏爱流畅移动体验的玩家：",
+  "faqAppDevelopmentNotice": "我们正在积极开发新功能，让应用变得更好。你的反馈能帮助我们改进！",
+  "faqFeaturesPlayerTitle": "玩家统计",
+  "faqFeaturesPlayerDescription": "追踪你的进度、成就和传奇杯表现",
+  "faqFeaturesClanTitle": "部落管理",
+  "faqFeaturesClanDescription": "监控部落成员、捐兵和整体部落健康状况",
+  "faqFeaturesWarTitle": "部落战追踪",
+  "faqFeaturesWarDescription": "分析部落战表现、进攻策略和胜率",
+  "faqFeaturesLegendsTitle": "数据不准确？",
+  "faqFeaturesLegendsDescription": "每日奖杯追踪和赛季结束统计",
+  "faqFeaturesCwlTitle": "CWL 分析",
+  "faqFeaturesCwlDescription": "部落战联赛表现和成员贡献",
+  "faqFeaturesTodoTitle": "待办事项清单",
+  "faqFeaturesTodoDescription": "查看哪些账号还需完成排位战进攻、都城突袭、部落战进攻、部落竞赛或黄金令牌任务",
+  "faqFeaturesUpgradeTrackerTitle": "升级追踪器",
+  "faqFeaturesUpgradeTrackerDescription": "使用用户手动提供的账号快照，查看剩余升级、资源、建筑工人、实验室时间和升级进度",
+  "faqFeaturesNotificationsTitle": "推送通知",
+  "faqFeaturesNotificationsDescription": "选择哪些账号接收 ClashKing 支持事件的提醒",
+  "faqFeaturesWidgetsTitle": "部落战小组件",
+  "faqFeaturesWidgetsDescription": "在设备主屏幕上实时展示当前的部落战对局状态",
+  "faqSearchHint": "搜索 FAQ...",
+  "faqSectionGettingStarted": "入门与关于",
+  "faqSectionAccountsAlertsWidgets": "账号、提醒与小组件",
+  "faqSectionSupportAndContact": "支持与联系",
+  "faqLinkedAccountsTitle": "如何关联账号并完成验证？",
+  "faqLinkedAccountsAnswer": "你的 ClashKing 玩家资料可以包含多个《部落冲突》账号。添加玩家标签即可查看公开数据。通过《部落冲突》API 令牌验证后，可以证明该账号属于你本人，并解锁账号专属功能。",
+  "faqLinkedAccountsSolution1": "你可以在账号管理中管理、调整顺序、隐藏或移除账号。",
+  "faqLinkedAccountsSolution2": "你可以在《部落冲突》中前往「设置 > 更多设置 > API 令牌」找到 API 令牌。",
+  "faqLinkedAccountsSolution3": "你可以使用 Discord 或电子邮箱登录。当账号关联功能可用时，可在设置中管理它们。",
+  "faqNotificationsTitle": "推送通知是如何运作的？",
+  "faqNotificationsAnswer": "通知是可选功能。开启后，ClashKing 会在本设备上注册。你可以为每个提醒选择要通知的关联账号。",
+  "faqNotificationsSolution1": "在设备和 ClashKing 设置中允许通知。",
+  "faqNotificationsSolution2": "每条提醒可针对不同账号。如果某条提醒未收到，请检查所选账号。",
+  "faqNotificationsSolution3": "部分提醒依赖被追踪的部落或部落战数据。外部数据更新时可能出现延迟。",
+  "faqWidgetsTitle": "部落战小组件是如何运作的？",
+  "faqWidgetsAnswer": "部落战小组件会在受支持的设备上显示简要概览。它会使用你选择或关联的账号、ClashKing 缓存的数据，并在平台允许时进行后台刷新。",
+  "faqWidgetsSolution1": "更改账号或部落后，请打开应用以便小组件同步。",
+  "faqWidgetsSolution2": "如果小组件显示过时，请先刷新应用。Android 与 iOS 会限制后台更新。",
+  "faqWidgetsSolution3": "部落需有可访问的部落战数据才能显示有用状态。",
+  "faqTranslationIssue": "翻译缺失或不正确？",
+  "faqTranslationIssueAnswer": "翻译会先通过生成工具和 AI 工具起草，然后随着时间推移进行审核和改进。如果你是母语使用者，觉得某段文字不自然，可以在 Crowdin 提出修正，或通过 Discord 或电子邮件联系我们。",
+  "faqWaysToSupport": "支持我们的方式：",
+  "translationHelpUsTranslate": "帮助我们翻译",
+  "translationThankYou": "感谢您！",
+  "translationThankYouContent": "非常感谢我们所有出色的翻译人员，他们帮助我们让世界各地的更多人可以访问这个应用程序！",
+  "translationHelpTranslateContent": "您可以在Crowdin上帮助我们翻译应用程序。如果您的语言在Crowdin上不可用，请随时在我们的Discord服务器上请求。非常感谢你的帮助！",
+  "translationHelpTranslateButton": "在Crowdin上帮助翻译",
+  "translationCurrentTranslators": "翻译员",
+  "filtersTimeFilters": "时间筛选",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "部落战设置",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "表现",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "高级",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "未启用筛选",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "正在显示最近 {count} 场部落战（默认）",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "快速筛选",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "最近 30 天",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "仅三星",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersFreshAttacks": "首攻",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "赛季",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "日期范围",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "部落战类型",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "大本营",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "进攻方 TH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "防守方 TH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "仅相同大本营",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersDestructionPercentage": "摧毁百分比",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersOptions": "选项",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "仅首攻",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "结果数量限制",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "最低位置",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "最高位置",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "开始日期",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "结束日期",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersYear": "年份",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "月份",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "选择年份",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "所有部落战",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "chartsAttackPerformance": "按 TH 等级显示进攻表现",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "按 TH 等级显示防守表现",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "行：你的 TH | 列：对手 TH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsGood": "良好",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "优秀",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "表现洞察",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for statistical performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "根据你的星数统计筛选建议，以突出表现模式",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
+  },
+  "generalExport": "导出",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "导出部落战统计",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "导出成功！",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportDialogDesc": "这将把你的部落战统计下载为包含总体统计、详细进攻和 TH 分析等多个工作表的 Excel 文件。",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "正在生成导出...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "部落战统计的导出功能即将推出",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "未应用筛选",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "加载玩家数据失败",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "deepLinkInvalidPlayer": "无效的玩家链接。",
+  "@deepLinkInvalidPlayer": {
+    "description": "Shown when a player deep link does not include a valid tag"
+  },
+  "deepLinkInvalidClan": "无效的部落链接。",
+  "@deepLinkInvalidClan": {
+    "description": "Shown when a clan deep link does not include a valid tag"
+  },
+  "deepLinkFailedToOpenPlayer": "打开玩家失败。",
+  "@deepLinkFailedToOpenPlayer": {
+    "description": "Shown when a player deep link target could not be loaded"
+  },
+  "deepLinkFailedToOpenClan": "打开部落失败。",
+  "@deepLinkFailedToOpenClan": {
+    "description": "Shown when a clan deep link target could not be loaded"
+  },
+  "deepLinkUnknown": "未知深度链接。",
+  "@deepLinkUnknown": {
+    "description": "Shown when the app receives a deep link it does not understand"
+  },
+  "warAttacksDetailsTitle": "进攻详情",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsAttackOrder": "进攻顺序",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "期间",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
+  },
+  "warAttacksDetailsAttacker": "进攻方",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "防守方",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "名称",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "状态",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "每名成员进攻次数",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "部落战开始",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "部落战结束",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "部落等级",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "总星数",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "摧毁率 %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "部落战信息",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "部落战结果",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "玩家",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "失败进攻（0-1 星）",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "显示未能获得 2 星及以上的进攻",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "错失完美进攻",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "显示获得 2 星的进攻——可能是完美进攻机会",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "对 TH{thLevel} 星数偏低",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "显示对 TH{thLevel} 星数较低的进攻",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "容易被 TH{thLevel} 攻破",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "显示 TH{thLevel} 进攻方对你获得高星的情况",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "CWL 表现偏低",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for low CWL performance"
+  },
+  "performanceAnalysisCwlIssuesDesc": "显示星数平均值低于普通部落战的 CWL 进攻",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for low CWL performance analysis"
+  },
+  "performanceAnalysisRandomWarIssues": "随机部落战表现偏低",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for low random war performance"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "显示星数平均值低于 CWL 的随机部落战进攻",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for low random war performance analysis"
+  },
+  "performanceAnalysisFreshOnly": "首攻分析",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "仅分析对新鲜阵型的表现",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "近期表现（30 天）",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "显示近期表现以识别当前趋势",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "高风险进攻",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "显示部落战前 5 号位的进攻",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "收尾进攻",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "显示较低部落战位置的进攻",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingNeedsImprovement": "需要改进",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "三星率高",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "摧毁率高",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "表现稳定",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "三星稳定性",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "整体星数表现",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "presetSuggestionCwlOnly": "仅 CWL",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "随机部落战",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "友谊战",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "仅 {count} 星",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "完美进攻",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "失败进攻",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "仅 TH{level}",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "上周",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "上个月",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "我的预设",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "自定义筛选",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "近期筛选",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
+  },
+  "generalError": "错误",
+  "generalSuccess": "成功",
+  "generalFailed": "失败",
+  "generalMinimum": "最小值",
+  "generalMaximum": "最大值",
+  "generalHigh": "高",
+  "generalLow": "低",
+  "generalPoor": "差",
+  "generalOpen": "开放",
+  "generalClosed": "关闭",
+  "generalAvailable": "可用",
+  "authErrorUserCancelledDiscordLogin": "用户取消了 Discord 登录。",
+  "authErrorDiscordLoginFailed": "Discord 登录失败。请重试。",
+  "authErrorEmailLoginFailed": "电子邮箱登录失败。请检查你的凭据。",
+  "authErrorEmailNotVerified": "你的电子邮箱地址尚未验证。请检查邮箱并输入验证码。",
+  "authErrorEmailVerificationFailed": "电子邮箱验证失败。令牌可能无效或已过期。",
+  "authErrorDiscordLinkFailed": "关联 Discord 账号失败。它可能已关联到另一个账号。",
+  "authErrorEmailLinkFailed": "关联电子邮箱账号失败。该邮箱可能已被使用。",
+  "authErrorUserNotAuthenticated": "用户未通过身份验证。请重新登录。",
+  "apiErrorInvalidJsonResponse": "出现问题。请重试。",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "出现问题。请检查你的输入。",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "你没有授权。请重新登录。",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "你没有权限执行此操作。",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "我们找不到你要查找的内容。",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "请求过多。请稍后再试。",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "服务器暂时不可用。请稍后再试。",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "发生意外错误。请重试。",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "没有网络连接。请检查网络后重试。",
+  "apiErrorTimeout": "请求超时。请重试。",
+  "apiErrorInvalidFormat": "响应格式无效。请重试。",
+  "apiErrorOperationFailed": "我们无法完成你的请求。请重试。",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "你似乎处于离线状态。请检查连接后重试。",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "请求耗时过长。请重试。",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "处理数据时出现问题。请重试。",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "我们无法加载应用设置（错误 {statusCode}）。请重试。",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "从服务器加载配置时出错",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "gameItemHousingSpace": "所需空间",
+  "gameItemAttackSpeed": "攻击速度",
+  "gameItemAttackRange": "攻击范围",
+  "gameItemMovementSpeed": "移动速度",
+  "gameItemWardenWeight": "大守护者跟随权重",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "大守护者跟随权重可覆盖所需空间，用于决定大守护者优先跟随哪一组部队。",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "天使治疗权重",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "天使治疗权重可覆盖所需空间，用于决定天使优先治疗哪些单位。",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 个部队计入跟随阈值} other{{count} 个部队计入跟随阈值}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "不计入跟随阈值",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
+  "gameItemUpgradeResource": "升级资源",
+  "gameItemRarity": "稀有度",
+  "gameItemHero": "英雄",
+  "gameItemDps": "DPS",
+  "gameItemHitpoints": "HP",
+  "gameItemHealOnActivation": "治疗",
+  "gameItemTargets": "目标",
+  "gameItemTargetsGround": "地面",
+  "gameItemTargetsAir": "空中",
+  "gameItemFlying": "飞行",
+  "gameItemUpgradeCost": "升级费用",
+  "gameItemUpgradeTime": "升级时间",
+  "gameItemRemainingToTownHallMax": "至 TH 最大值",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
+  "gameItemRemainingToGlobalMax": "至全局最大值",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
+  "gameItemLevelsLeft": "{count} 级左",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemOverview": "概述",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
+  "gameItemStats": "统计数据",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
+  "gameItemNextUpgrade": "下次升级",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
+  "gameItemUpgradePlan": "升级计划",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
+  "gameItemUpgradeDataUnavailable": "升级数据不可用",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
+  "notifScopeSelected": "已选择",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
+  "settingsPreferences": "偏好设置",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
+  "settingsNotificationsTitle": "通知",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
+  "settingsNotificationsSubtitle": "选择警报并发送本地测试预览。",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
+  "settingsSupport": "支持",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
+  "settingsAbout": "关于",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
+  "settingsAccount": "帐户",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
+  "settingsSignedIn": "已登录",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
+  "settingsAppearance": "外貌",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
+  "settingsThemeSystem": "系统",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
+  "settingsThemeMatchDevice": "匹配此设备",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
+  "settingsThemeLight": "光",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
+  "settingsThemeDark": "黑暗的",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
+  "settingsThemeSelected": "已选择",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
+  "notifNoAccountsLoadedYet": "尚未加载关联帐户。",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
+  "notifNoAccountsSelected": "未选择账户",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
+  "notifAccountsSelected": "已选择 {count} 账户",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchRecent": "最近的",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
+  "searchTabPlayers": "玩家",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
+  "searchTabClans": "氏族",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
+  "searchClear": "清除",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
+  "warStatsRefreshSuccess": "数据刷新成功",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
+  "warStatsRefreshFailed": "刷新数据失败：{error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsFilterFailed": "加载过滤数据失败：{error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsExportFailed": "导出失败：{error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportLabelPlayer": "玩家",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
+  "exportLabelFormat": "格式",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
+  "exportLabelIncludes": "包括",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "统计、攻击、TH 分析",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "没有可用的用户数据",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "账户",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "无法加载玩家数据。",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "无法加载部落数据。",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
+  "todoNoMatchingAccounts": "没有匹配的帐户",
+  "todoNoConfiguredAccounts": "未配置待办事项帐户",
+  "todoNoLinkedAccounts": "没有关联账户",
+  "todoNoAccountsNeedAction": "没有账户需要采取行动",
+  "todoNoCompletedAccounts": "没有已完成的账目",
+  "todoNoBookmarkedAccounts": "没有添加书签的帐户",
+  "todoTryAnotherSearchOrFilter": "尝试其他搜索或过滤器。",
+  "clanJoinLeaveNoDataTitle": "无加入/离开数据",
+  "clanJoinLeaveNoDataBody": "加载跟踪数据后，此处会显示最近的名册变动情况。",
+  "clanJoinLeaveNoRecentMovementTitle": "最近没有动静",
+  "clanJoinLeaveNoRecentMovementBody": "摘要已加载，但事件列表为空。",
+  "capitalRaidMembersAttackLogFallback": "此突袭周末未返回成员列表。显示攻击日志统计数据。",
+  "capitalRaidMembersNoPlayerData": "这个周末的突袭没有返回任何玩家级别的数据。 API 仅包括地区和对手总数。",
+  "capitalRaidMembersNoIndividualData": "没有可用于此袭击的玩家列表或个人攻击。",
+  "dashboardNoLinkedAccountsTitle": "没有关联账户",
+  "dashboardNoLinkedAccountsBody": "链接 Clash 帐户以在此处查看攻击、事件和活动。",
+  "dashboardTodoHiddenTitle": "此处无账号显示",
+  "dashboardTodoHiddenBody": "在「玩家」标签中为该账号开启主页卡片选项之一（待办、升级追踪、排位联赛），即可在此查看。",
+  "dashboardUpgradeTrackerNoData": "打开追踪器以导入或刷新升级数据。",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {需要更新} other {需要更新}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {还有待办事项} other {还有待办事项}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {还有进攻次数} other {还有进攻次数}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "预计",
+  "dashboardUpgradeTrackerBuilders": "建筑工人",
+  "dashboardUpgradeTrackerLab": "实验室",
+  "dashboardUpgradeTrackerPets": "战宠",
+  "dashboardUpgradeTrackerWalls": "城墙",
+  "dashboardUpgradeTrackerVillage": "村庄",
+  "dashboardRankedNoData": "打开排位联赛即可查看该账号的排名情况。",
+  "dashboardRankedAccounts": "{loaded}/{total} 个账号已追踪",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "playersNoBookmarkedTitle": "还没有添加书签的球员",
+  "playersNoBookmarkedBody": "打开玩家个人资料并保存以供以后使用。",
+  "playersNoLinkedBody": "从帐户设置屏幕管理帐户。",
+  "navigationHome": "家",
+  "drawerFollowers": "追随者",
+  "drawerFollowersHelp": "为您已验证的关联帐户之一添加书签的人。",
+  "drawerCalculators": "计算器",
+  "drawerSubscription": "订阅",
+  "drawerUpgradeTracker": "升级追踪器",
+  "drawerBasesArmies": "基地和军队",
+  "drawerGameAssets": "游戏资产",
+  "drawerManageAccounts": "管理账户",
+  "playersLinked": "链接",
+  "playersBookmarked": "已添加书签",
+  "searchGlobalHint": "搜索玩家或部落",
+  "tooltipDecreaseMinimumMembers": "减少最低成员数",
+  "tooltipIncreaseMinimumMembers": "增加最低成员数",
+  "tooltipDecreaseMaximumMembers": "减少最大成员数",
+  "tooltipIncreaseMaximumMembers": "增加最大成员数",
+  "tooltipDecreaseMinimumClanPoints": "降低最低部落积分",
+  "tooltipIncreaseMinimumClanPoints": "增加最低部落积分",
+  "tooltipDecreaseMinimumClanLevel": "降低最低部落等级",
+  "tooltipIncreaseMinimumClanLevel": "提高最低部落等级",
+  "tooltipShowChart": "显示图表",
+  "tooltipShowTable": "显示表格",
+  "tooltipDismissMessage": "关闭消息",
+  "tooltipShowPassword": "显示密码",
+  "tooltipHidePassword": "隐藏密码",
+  "tooltipRemoveAccount": "删除帐户",
+  "calculatorsTitle": "计算器",
+  "calculatorsSubtitle": "根据建筑当前等级规划伤害。",
+  "calculatorZapQuake": "电击地震",
+  "calculatorFireball": "火球术",
+  "damageCalculatorSubtitle": "将一套进攻组合对比多个建筑。",
+  "damageNoStaticDataTitle": "暂无伤害数据",
+  "damageNoStaticDataBody": "游戏基础数据加载完成后，请尝试刷新应用。",
+  "damageTownHall": "大本营",
+  "damageVerifiedAccountPrefill": "已验证账号预设",
+  "damageOverridesStayLocal": "此处的修改仅用于模拟计算，不会同步至你的实际游戏账号。",
+  "damageTargets": "建筑",
+  "damageAddBuilding": "添加建筑",
+  "damageRemoveBuilding": "删除建筑",
+  "damageNoTargetsBody": "请至少添加一个建筑以对比结果。",
+  "damageHitpoints": "{hitpoints} 生命值",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "搜索建筑",
+  "damageNoBuildingsFound": "未找到建筑",
+  "damageTryAnotherSearch": "请尝试更换建筑名称或大本营等级。",
+  "damageAttackStack": "手动进攻组合",
+  "damageNoSourcesForTownHall": "该大本营等级下没有可用的伤害来源。",
+  "damageCount": "数量",
+  "damagePerUse": "单次伤害：{damage}",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "造成最大生命值 {percent}% 的伤害，连续使用效果递减",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "闪电法术",
+  "damageSourceEarthquake": "地震法术",
+  "damageSourceGiantArrow": "巨型箭矢",
+  "damageSourceFireball": "火球术",
+  "damageSourceFlameFlinger": "攻城烈焰车单发命中",
+  "damageSourceBalloonDeath": "气球兵死亡伤害",
+  "damageSourceRocketBalloonDeath": "火箭气球兵死亡伤害",
+  "damageResults": "结果",
+  "damageDestroyed": "摧毁",
+  "damageSurvives": "未摧毁",
+  "damageResultSummary": "造成 {damage} 伤害 · 剩余 {remaining} 生命值",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "闪震组合优化",
+  "damageSpellCapacity": "法术空间",
+  "damageZapQuakeUnavailable": "当前大本营等级尚未解锁闪电法术和地震法术。",
+  "damageZapQuakeUsesSelectedLevels": "当前使用 {lightningLevel} 级闪电法术与 {earthquakeLevel} 级地震法术。",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "闪电法术和地震法术无法对此类资源建筑造成伤害。",
+  "damageNoValidZapQuake": "没有符合当前法术空间的有效闪震组合。",
+  "damageZapQuakeCombination": "{lightning} 闪电 + {earthquake} 地震 · {capacity} 空间",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerTitle": "升级追踪器",
+  "upgradeTrackerSubtitle": "剩余的升级成本和时间。",
+  "linkedAccountLabel": "关联账户",
+  "noLinkedPlayersLoadedTitle": "未加载链接的玩家",
+  "noLinkedPlayersLoadedBody": "添加或刷新链接帐户以查看升级总数。",
+  "playerOptionNotificationsTitle": "通知",
+  "playerOptionNotificationsSubtitle": "获取此帐户的提醒。",
+  "playerOptionNotificationsEnableMaster": "请先在设置中开启通知。",
+  "playerOptionNotificationsVerifyFirst": "验证该账号后才能开启通知。",
+  "playerOptionNotificationsSubscriptionRequired": "收藏通知需要订阅。",
+  "playerOptionNotificationsLimitReached": "收藏通知数量已达上限。",
+  "playerOptionShowTodoPageTitle": "显示在待办事项页面上",
+  "playerOptionShowTodoPageSubtitle": "将此帐户包含在完整的待办事项列表中。",
+  "playerOptionShowTodoPageVerifyFirst": "验证该账号后，它才会显示在待办页。",
+  "playerOptionShowUpgradeTrackerHomeTitle": "在主页显示升级追踪",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "将该账号的升级概要固定在主页。",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "验证该账号后，主页才会显示升级进度。",
+  "playerOptionShowRankedHomeTitle": "在主页显示排位联赛",
+  "playerOptionShowRankedHomeSubtitle": "将该账号的排位联赛概要固定在主页。",
+  "playerOptionShowRankedHomeVerifyFirst": "验证该账号后，主页才会显示其排位联赛概要。",
+  "playerOptionShowWarTabTitle": "在战争选项卡中显示",
+  "playerOptionShowWarTabSubtitle": "将此帐户的氏族包含在“战争”选项卡中。",
+  "bookmarkPlayerLoadFailed": "无法加载添加书签的播放器。",
+  "warNoLinkedOrBookmarked": "没有可显示的链接或书签氏族战争。",
+  "warWidgetRefreshData": "刷新战争数据",
+  "warWidgetNoData": "没有可用的战争数据",
+  "warWidgetLastUpdated": "最后更新：{time}",
+  "todoEventClanGames": "部落游戏",
+  "todoEventCwl": "部落联赛",
+  "todoEventSeasonEnds": "赛季结束",
+  "todoEventLeagueReset": "联赛重置",
+  "todoEventRaidWeekend": "突袭周末",
+  "todoMagicDispatch": "魔法派遣",
+  "todoMagicDispatchDescription": "点击获取最新的 ClashKing 更新",
+  "todoUseCodeClashKing": "使用代码 ClashKing",
+  "todoUseCodeClashKingDescription": "支持 Supercell 商店中的项目",
+  "todoLegendAttacks": "传奇攻击",
+  "todoWarAttacks": "战争袭击",
+  "todoCwlAttacks": "CWL 攻击",
+  "gameSeasonPassShort": "经过",
+  "todoMockMaxedMainName": "最大主线",
+  "todoMockMaxedMainSubtitle": "TH17·一切活跃",
+  "todoMockMaxedMainStatus": "现在活跃 · 完整的每日清单",
+  "todoMockLegend5Left": "今天还剩5个",
+  "todoMockWar1Left": "还剩 1 个",
+  "todoMockCwl1LeftRound": "本轮还剩 1 名",
+  "todoMockClanGames2700Left": "还剩 2700 分",
+  "todoMockPass850Left": "还剩850分",
+  "todoMockWarAltName": "战争替代品",
+  "todoMockWarAltSubtitle": "TH15·战争聚焦",
+  "todoMockWar2Left": "还剩 2 个",
+  "todoMockClanGames900Left": "还剩900分",
+  "todoMockLegendPushName": "传奇推",
+  "todoMockLegendPushSubtitle": "TH16·日常攻击",
+  "todoMockLegendPushStatus": "活跃于 1 小时前·传奇和关卡进度",
+  "todoMockLegend2Left": "今天还剩2个",
+  "todoMockOnPace": "步调一致",
+  "todoMockCaughtUpName": "赶上了",
+  "todoMockCaughtUpSubtitle": "TH14 · 没有未完成的任务",
+  "todoMockCaughtUpStatus": "今天活跃 · 无需采取任何行动",
+  "notifChooseAlerts": "选择提醒",
+  "notifGroupLegendAttacks": "传奇 I 进攻",
+  "notifLegendAttacksDescription": "传奇 I 中已开启通知的收藏账号的进攻结果。",
+  "notifGroupLegendDefenses": "传奇 I 防守",
+  "notifLegendDefensesDescription": "传奇 I 中已开启通知的账号的防守结果。",
+  "notifLeagueDefenseDescription": "防守结果，包含进攻方、星数、百分比和联赛上下文。",
+  "notifWarAttackOptionsDescription": "部落战进攻结果、防守提醒以及 5v5 进攻动态选项。",
+  "notifWarAlertsDescription": "匹配到部落战、战斗日开始和部落战结束。",
+  "notifWarRemindersDescription": "部落战结束前的自定义提醒。",
+  "notifGroupRaidReminders": "突袭周末提醒",
+  "notifRaidRemindersDescription": "接收一条提醒，汇总你在同一部落中所有已验证账号的剩余进攻次数。",
+  "notifDefensesAgainstYourBase": "针对你阵型的防守",
+  "notifDefensesAgainstYourBaseDescription": "仅显示此账号作为防守方的进攻。",
+  "notifAllAttacks": "所有进攻",
+  "notifAllAttacksDescription": "仅 5v5 部落战中的每一次进攻。",
+  "notifThirtyMinutes": "30 分钟",
+  "notifFifteenMinutes": "15 分钟",
+  "notifSendTestNotification": "发送测试通知",
+  "notifScheduledMessage": "已计划：{title}",
+  "generalStartDate": "开始日期",
+  "generalEndDate": "结束日期",
+  "warFiltersAllWars": "所有部落战",
+  "warFiltersRandomWars": "随机部落战",
+  "warFiltersCwlWars": "CWL 部落战",
+  "warFiltersFriendlyWars": "友谊战",
+  "warType": "部落战类型",
+  "warFiltersAnyTownHall": "任意 TH",
+  "gameTownHallLevelShort": "{level}级大本",
+  "warAttackerTownHall": "进攻方 TH",
+  "warDefenderTownHall": "防守方 TH",
+  "warStatsFilterSameTownHallOnly": "仅相同大本营",
+  "warStatsFilterSameTownHallDescription": "仅显示进攻方与防守方 TH 等级相同的进攻",
+  "generalAny": "任意",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "最低星数",
+  "warStatsFilterMaxStars": "最高星数",
+  "warStatsFilterMinDestructionPercent": "最低摧毁率 %",
+  "warStatsFilterMaxDestructionPercent": "最高摧毁率 %",
+  "warStatsFilterMinPosition": "最低位置",
+  "warStatsFilterMaxPosition": "最高位置",
+  "warStatsFilterFreshAttacksOnly": "仅首攻",
+  "warStatsFilterFreshAttacksDescription": "仅显示每个阵型的第一次进攻",
+  "warStatsFilterResultLimit": "结果数量限制",
+  "generalResultsCount": "{count} 个结果",
+  "notifEventsDescription": "部落竞赛、CWL、突袭周末和赛季活动。",
+  "notifAnnouncementsDescription": "应用内横幅以及未来用于 ClashKing 更新的推送提醒。",
+  "notifUpgradeFinishesDescription": "军队、英雄、战宠、法术、装备和建筑。",
+  "notifSupportReminderDescription": "每月提醒支持 ClashKing。",
+  "notifDevicePushSetup": "设备推送设置",
+  "notifAccountScope": "账号范围",
+  "notifTestNotification": "测试通知",
+  "settingsAppIcon": "应用图标",
+  "settingsChanging": "正在更改...",
+  "settingsAddWarWidget": "添加部落战小组件",
+  "settingsWarWidgetLinkClanFirst": "请先关联一个在部落中的账号",
+  "settingsWarWidgetClanCount": "有 {count} 个部落可用",
+  "generalDiscord": "Discord",
+  "settingsDiscordConnectedSubtitle": "机器人关联账号和 Discord 数据",
+  "settingsDiscordSyncSubtitle": "同步机器人关联账号和 Discord 数据",
+  "settingsConnected": "已连接",
+  "settingsClashKingAccount": "ClashKing 账号",
+  "settingsEmailConnectedSubtitle": "已连接电子邮箱登录",
+  "settingsEmailRecoverySubtitle": "添加电子邮箱登录以便账号恢复",
+  "playerOpenInGame": "在游戏中打开",
+  "playerBookmarkRemove": "移除玩家书签",
+  "playerBookmarkAdd": "收藏玩家",
+  "playerBestTrophies": "最高奖杯",
+  "clanLoadFailed": "加载部落失败。",
+  "gameItemLevels": "等级",
+  "resourceDarkElixir": "暗黑重油",
+  "resourceBuilderElixir": "建筑大师圣水",
+  "resourceBuilderGold": "建筑大师金币",
+  "resourceElixir": "圣水",
+  "resourceGold": "金币",
+  "resourceGlowyOre": "璀璨矿石",
+  "resourceStarryOre": "星辉矿石",
+  "resourceShinyOre": "闪亮矿石",
+  "resourceGeneric": "资源",
+  "seasonStatsGoldGrabbed": "掠夺金币",
+  "seasonStatsActivity": "活跃度",
+  "seasonStatsAttackWins": "进攻胜利",
+  "seasonStatsTrophies": "赛季奖杯",
+  "todoSearchAccountsHint": "搜索账号",
+  "generalClearSearch": "清除搜索",
+  "clanCapitalAvgRewards": "平均奖励",
+  "clanCapitalAvgDistrictsPerWeek": "平均区域/周",
+  "clanCapitalTopAttackers": "最佳进攻者",
+  "clanCapitalPlayersTracked": "已追踪 {count} 名玩家",
+  "clanCapitalDefenseOverTime": "防守随时间变化",
+  "clanCapitalDistrictsTracked": "已追踪 {count} 个区域",
+  "clanCapitalSelectedRaid": "已选突袭",
+  "generalSummary": "摘要",
+  "generalBreakdown": "明细",
+  "clanPointsTitle": "部落积分",
+  "clanBuilderBasePoints": "建筑大师基地积分",
+  "clanType": "部落类型",
+  "clanRequiredTownHall": "所需大本营",
+  "clanRequiredTownHallOnly": "仅 {level}+ ",
+  "clanCapitalPoints": "都城积分",
+  "todoAllAccounts": "所有账号",
+  "todoCombinedAcrossAccounts": "你的账号的合并待办事项",
+  "dashboardRankedCombinedAcrossAccounts": "跨账号合并排名",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "跨账号合并升级追踪",
+  "todoPreviewAccount": "预览账号",
+  "todoLastActiveUnavailable": "上次活跃时间不可用",
+  "todoActiveRelative": "活跃于 {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "完成",
+  "todoPointsLeftShort": "剩余 {points} 点",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "剩余 {count}",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "目前都完成了",
+  "timeDurationShort": "{unit, select, daysHours {{primary}天{secondary}小时} hoursMinutes {{primary}小时{secondary}分钟} other {{primary}分钟}}",
+  "todoEventEndsIn": "将在 {duration} 后结束",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "将在 {duration} 后开始",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "点按查看剩余升级费用和时间",
+  "announcementAnimeFuryTitle": "动漫狂热",
+  "announcementAnimeFurySubtitle": "点按浏览 2026 年 6 月更新",
+  "sideRankingsTitle": "排行榜",
+  "sideRankingsSubtitle": "官方排行榜以及 ClashKing 端点。",
+  "sideRankingsLoadError": "无法加载官方排行榜。",
+  "sideRankingsEmptyTitle": "没有返回排行榜",
+  "sideRankingsEmptyBody": "请尝试其他排行榜或位置。",
+  "sideRankingsMockups": "ClashKing 模板图",
+  "rankingsBuilderBase": "夜世界",
+  "rankingsTownHall": "大本营",
+  "rankingsRankedLeague": "排位联赛",
+  "rankingsClanCapital": "部落都城",
+  "rankingsDonations": "增援",
+  "rankingsWarWins": "部落战胜利",
+  "rankingsWinStreak": "连胜",
+  "rankingsCurrent": "当前",
+  "rankingsWorldwide": "全球",
+  "rankingsSelectLocation": "选择位置",
+  "rankingsSearchLocations": "搜索位置或国家代码",
+  "rankingsWorldwideUnavailable": "请为该排行榜选择地区或国家。",
+  "rankingsLocationsLoadFailed": "无法加载完整地区列表。在支持的地区中，全球榜仍可使用。",
+  "rankingsSnapshotDate": "快照日期",
+  "rankingsSource": "来源",
+  "rankingsOfficialSource": "部落冲突官方 API",
+  "rankingsResults": "结果",
+  "rankingsTopCount": "前 {count} 名",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "无已存储快照",
+  "rankingsNoSnapshotBody": "未存储 {date} 的排行榜快照。请选择其他日期或返回「当前」。",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "加载该玩家失败。",
+  "rankingsClanLoadFailed": "加载该部落失败。",
+  "sideStatsTitle": "统计",
+  "sideStatsSubtitle": "基于汇总战报的战斗分析。",
+  "sideStatsLoadError": "无法加载战斗情报。",
+  "statsOverview": "概述",
+  "statsArmies": "军队",
+  "statsItems": "物品",
+  "statsWar": "战争",
+  "statsCwl": "部落联赛",
+  "statsRanked": "排位战",
+  "statsDateRange": "日期范围",
+  "statsDateRangeHint": "选择最长 90 天",
+  "statsDateRangeTooLong": "选择 90 天或更短的日期范围。",
+  "statsUpdated": "最新数据",
+  "statsNoDataTitle": "尚无战斗数据",
+  "statsNoDataBody": "尝试更宽的日期范围或更少限制的过滤器。",
+  "statsAddItemsTitle": "选择要分析的物品",
+  "statsAddItemsBody": "添加部队、法术、英雄、宠物或装备，然后运行查询。",
+  "statsGlobalCounts": "全局计数",
+  "statsPerformance": "表现",
+  "statsSamples": "样本",
+  "statsUsage": "使用情况",
+  "statsAverageStars": "平均星星数",
+  "statsAverageDestruction": "平均破坏力",
+  "statsStarRates": "星级率",
+  "statsThreeStarRate": "三星级",
+  "statsDailyTrend": "每日趋势",
+  "statsPlayers": "玩家",
+  "statsClans": "氏族",
+  "statsPlayersInWar": "战争中的玩家",
+  "statsClansInWar": "战争中的氏族",
+  "statsPlayersInLegends": "传奇中的玩家",
+  "statsWarsStored": "存储的战争",
+  "statsJoinLeaves": "加入/离开活动",
+  "statsSearchArmies": "搜索确切的作曲",
+  "statsExactComposition": "精确的组成",
+  "statsArmyShareCode": "军团分享代码",
+  "statsMinimumSample": "最小样本",
+  "statsSortBy": "排序方式",
+  "statsIncludeItems": "包含物品",
+  "statsExcludeItems": "排除物品",
+  "statsItemId": "物品ID或存储名称",
+  "statsItemType": "物品类型",
+  "statsTroop": "部队",
+  "statsSpell": "拼写",
+  "statsHero": "英雄",
+  "statsPet": "宠物",
+  "statsEquipment": "装备",
+  "statsOwningHero": "拥有英雄",
+  "statsAddItem": "添加物品",
+  "statsAnalyzeItems": "分析物品",
+  "statsCompositionShare": "构图分享",
+  "statsNoLevels": "军队记录不包含物品等级。",
+  "statsRankedCompositionOnly": "构图数据来自排名战日志；战争和 CWL 表现保持独立。",
+  "statsTownHall": "市政厅",
+  "statsOpponentTownHall": "对手市政厅",
+  "statsEqualTownHalls": "平等的市政厅",
+  "statsLeagueTier": "联赛等级",
+  "statsLegendLeagueOne": "传奇联赛1",
+  "statsCwlLeague": "CWL联赛",
+  "statsLeagueBronze": "铜",
+  "statsLeagueSilver": "银",
+  "statsLeagueGold": "金",
+  "statsLeagueCrystal": "水晶",
+  "statsLeagueMaster": "大师",
+  "statsLeagueChampion": "冠军",
+  "statsAllCwlLeagues": "所有CWL联赛",
+  "statsCwlSeasons": "CWL 季节",
+  "statsCwlSeasonsHint": "YYYY-MM，以逗号分隔",
+  "statsApplyFilters": "应用过滤器",
+  "statsRefresh": "刷新数据",
+  "statsRegularWarOnly": "仅限常规战争；友军战争和CWL除外。",
+  "statsRankedRequired": "需要市政厅和一级联赛。",
+  "statsSeasonBreakdown": "季节细分",
+  "sideTopScore": "最高分",
+  "sideTop200Avg": "前 200 平均",
+  "sideBasesArmiesTitle": "阵型与配兵",
+  "sideBasesArmiesSubtitle": "Discord 保存的阵型和军队链接。",
+  "sideBotSyncTarget": "机器人同步目标",
+  "sideBotSyncTargetBody": "机器人已经把阵型和军队保存到 Discord 个人资料。此页面已准备好接收同步的数据。",
+  "sideSavedBases": "已保存阵型",
+  "sideWarBaseSlots": "部落战阵型栏位",
+  "sideWarBaseSlotsBody": "大本营、阵型类型、链接和上次更新时间。",
+  "sideLegendBaseSlots": "传奇阵型栏位",
+  "sideLegendBaseSlotsBody": "快速复制以及账号关联。",
+  "sideSavedArmies": "已保存军队",
+  "sideArmyLinks": "军队链接",
+  "sideArmyLinksBody": "配置、法术、攻城机器、备注和分享链接。",
+  "sideGameAssetsTitle": "游戏素材",
+  "sideGameAssetsSubtitle": "托管的 ClashKing 素材，按文件夹分组。",
+  "gameAssetsLoadError": "无法加载游戏素材",
+  "gameAssetsEmptyTitle": "无可用游戏素材",
+  "gameAssetsEmptyBody": "托管的清单中没有找到任何支持的图片。",
+  "gameAssetsOneImage": "1 张图片",
+  "gameAssetsImageCount": "{count} 张图片",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "搜索此分类",
+  "gameAssetsAllFormats": "所有格式",
+  "gameAssetsOneResult": "1 条结果",
+  "gameAssetsResultCount": "{count} 个结果",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "无匹配图片",
+  "gameAssetsNoResultsBody": "试试其他搜索词或文件格式。",
+  "gameAssetsLongPressHint": "长按以复制托管链接",
+  "gameAssetsCopyUrl": "复制链接",
+  "gameAssetsCopyPath": "复制路径",
+  "gameAssetsUrlCopied": "素材链接已复制",
+  "gameAssetsPathCopied": "素材路径已复制",
+  "gameAssetsCopyError": "无法复制素材详情。",
+  "gameAssetsShare": "分享",
+  "gameAssetsShareError": "无法分享该素材。",
+  "gameAssetsSave": "保存",
+  "gameAssetsSaving": "正在保存...",
+  "gameAssetsSaved": "素材已保存。",
+  "gameAssetsSavedTo": "素材已保存至 {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "无法保存该素材。",
+  "sideZapQuakeTitle": "{zaps} 个闪电 + 1 个地震",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "地震伤害 {quakeDamage}，每个闪电 {lightningDamage}",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "建筑生命值",
+  "sideLightningLevel": "闪电等级",
+  "sideEarthquakeLevel": "地震等级",
+  "sideWithoutEarthquake": "不使用地震",
+  "sideLightningCount": "{count} 个闪电",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "火球 + 1 个地震",
+  "sideAddSupportDamage": "添加支援伤害",
+  "sideFireballQuakeSubtitle": "火球伤害 {fireballDamage}，地震后剩余 {hpLeft} 生命值",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "火球等级",
+  "sideQuakePressure": "地震压力",
+  "sideQuakeSpellCount": "{count} 个地震法术",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "位置",
+  "sideFilter": "筛选",
+  "sideRefresh": "刷新",
+  "sideOfficialClashLeaderboard": "官方 Clash 排行榜",
+  "sideAllTownHallsShort": "所有 TH",
+  "sideDecrease": "减少",
+  "sideIncrease": "增加",
+  "sideLevel": "等级 {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingPlayerTrophies": "玩家奖杯",
+  "rankingPlayerTrophiesHeading": "玩家奖杯排行榜",
+  "rankingPlayerBuilder": "玩家建筑大师",
+  "rankingPlayerBuilderHeading": "玩家建筑大师基地排行榜",
+  "rankingClanTrophies": "部落奖杯",
+  "rankingClanTrophiesHeading": "部落奖杯排行榜",
+  "rankingClanBuilder": "部落建筑大师",
+  "rankingClanBuilderHeading": "部落建筑大师基地排行榜",
+  "rankingClanCapital": "部落都城",
+  "rankingClanCapitalHeading": "部落都城排行榜",
+  "assetFolderEquipment": "装备",
+  "assetFolderLeagues": "联赛",
+  "assetFolderResources": "资源",
+  "assetFolderStickers": "贴纸",
+  "upgradeSectionHeroes": "英雄",
+  "upgradeSectionTroops": "军队",
+  "upgradeSectionSpells": "法术",
+  "upgradeSectionPets": "战宠",
+  "upgradeSectionEquipment": "装备",
+  "sideMockupSource": "来源",
+  "sideMockupMode": "模式",
+  "sideMockupPreview": "预览",
+  "sideMockupRows": "行数",
+  "sideMockupRowsValue": "5 个模板图",
+  "endpointLeagueTop200": "联赛前 200",
+  "endpointLeagueTop200Preview": "传奇杯联赛 · 5,742 奖杯",
+  "endpointTownhallTop200": "大本营前 200",
+  "endpointTownhallTop200Preview": "TH17 · 全球玩家榜",
+  "endpointClanDonations": "部落捐兵",
+  "endpointClanDonationsPreview": "美国 · 每周部落总计",
+  "endpointClanWarWins": "部落战胜场",
+  "endpointClanWarWinsPreview": "国际 · 历史部落战胜场",
+  "endpointTop200ArmyUsage": "前 200 军队使用率",
+  "endpointTop200ArmyUsagePreview": "战斗日志 · 军队和法术使用率",
+  "endpointStateTop200": "前 200",
+  "endpointStateWeekly": "每周",
+  "endpointStateUsage": "使用率",
+  "notifGroupReminders": "提醒",
+  "notifGroupProgress": "进度",
+  "notifLeagueDefense": "联赛防守",
+  "notifLeagueDefenseResult": "联赛防守结果",
+  "notifLeagueTriple": "联赛三星",
+  "notifLeagueAttackBody": "Lord Clasher 进攻了 {player} • {percent}% • {stars} 星 • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "部落战防守",
+  "notifWarAttackOnTh": "对 TH{th} 的部落战进攻",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} 进攻了 {player} • {percent}% • {stars} 星 • {clan} 防守",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "5v5 部落战动态",
+  "notifWarAttackResult": "部落战进攻结果",
+  "notifWarAttackResultBody": "{clan} 进攻了 Pine Riders TH{th} • 100% • 3 星",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "已匹配部落战",
+  "notifWarMatchedBody": "{clan} 匹配到了 Pine Riders。准备日已开始。",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "部落战已开始",
+  "notifBattleDayStarted": "战斗日已开始",
+  "notifWarStartedBody": "{clan} 对阵 Pine Riders 已开战。祝你好运。",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "部落战已结束",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders。最终结果已可查看。",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "部落战提醒：1 小时",
+  "notifWarReminder30m": "部落战提醒：30 分钟",
+  "notifWarReminder15m": "部落战提醒：15 分钟",
+  "notifOneHourLeft": "剩余 1 小时",
+  "notifThirtyMinutesLeft": "剩余 30 分钟",
+  "notifFifteenMinutesLeft": "剩余 15 分钟",
+  "notifRemainingWarAttacksBody": "{player} 还有剩余部落战进攻。{time}。",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} 已开始",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} 可以开始获得 {name} 点数。",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} 可以开始准备部落战联赛。",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} 可以开始都城突袭进攻。",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "赛季开始",
+  "notifNewSeasonStarted": "新赛季已开始",
+  "notifSeasonStartedBody": "{player} 的 {league} 赛季已开始。",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "特殊活动",
+  "notifNewEventLive": "新活动已上线",
+  "notifNewClashEventBody": "新的 Clash 活动可用了。",
+  "notifSupportClashKing": "支持 ClashKing",
+  "notifMonthlySupportBody": "每月支持有助于让 ClashKing 持续可用并不断改进。谢谢。",
+  "notifUpgradeFinished": "升级已完成",
+  "notifUpgradeReadyTitle": "{name} 已就绪",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "{player} 的等级 {level} 已完成。升级完成。",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "加载部落数据失败：{error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "默认",
+  "appIconChristmas": "圣诞节",
+  "appIconBlackWhite": "黑白",
+  "appIconDarkMode": "深色模式",
+  "generalMembersCount": "{count} 名成员",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "已收藏",
+  "clanLevelValue": "等级 {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "排名 {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "第 {round} 轮",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "{level}级大本",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Supercell 粉丝内容政策",
+  "upgradeTrackerPlan": "计划",
+  "upgradeTrackerUpgrades": "升级",
+  "upgradeTrackerCollection": "收集",
+  "upgradeTrackerChooseAccount": "选择账号",
+  "upgradeTrackerSwitchAccount": "切换账号：{account}",
+  "@upgradeTrackerSwitchAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerShare": "分享追踪器",
+  "upgradeTrackerPasteJson": "粘贴账号 JSON",
+  "upgradeTrackerImportTitle": "导入账号数据",
+  "upgradeTrackerImportDescription": "粘贴原始账号 JSON，数据仅保留在本设备。",
+  "upgradeTrackerAccountJson": "账号 JSON",
+  "upgradeTrackerPasteClipboard": "粘贴剪贴板",
+  "upgradeTrackerImportAction": "导入账号",
+  "upgradeTrackerImportSuccess": "{player} 已在本设备导入。",
+  "@upgradeTrackerImportSuccess": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerImportFailed": "无法导入账号数据：{error}",
+  "@upgradeTrackerImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSnapshotUnreadable": "账号数据无法读取",
+  "upgradeTrackerTryAgain": "再试一次",
+  "upgradeTrackerNoDataTitle": "把你的村庄进度带入 ClashKing",
+  "upgradeTrackerNoDataBody": "从部落冲突中复制「账号数据 JSON」，然后从剪贴板粘贴。数据仅保留在本设备。",
+  "upgradeTrackerNoDataLocation": "在部落冲突中，打开「设置 > 更多设置」。「账号数据 JSON」位于「API 令牌」下方。",
+  "upgradeTrackerOpenMoreSettings": "在《部落冲突》中打开更多设置",
+  "upgradeTrackerNoLinkedAccount": "导入账号数据前，请先关联一个《部落冲突》账号。",
+  "upgradeTrackerUpdatedJustNow": "刚刚更新",
+  "upgradeTrackerUpdatedMinutesAgo": "于 {count} 分钟前更新",
+  "@upgradeTrackerUpdatedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedHoursAgo": "于 {count} 小时前更新",
+  "@upgradeTrackerUpdatedHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedOn": "更新于 {date}",
+  "@upgradeTrackerUpdatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSearchUpgrades": "搜索升级",
+  "upgradeTrackerSearchCollection": "搜索收集",
+  "upgradeTrackerShowFilters": "显示筛选",
+  "upgradeTrackerHideFilters": "隐藏筛选",
+  "upgradeTrackerFilterAll": "所有",
+  "upgradeTrackerFilterOwned": "已拥有",
+  "upgradeTrackerFilterMissing": "缺失",
+  "upgradeTrackerAllVillages": "所有村庄",
+  "upgradeTrackerHomeVillage": "家乡",
+  "upgradeTrackerBuilderBase": "夜世界",
+  "upgradeTrackerNoMatchingItems": "无匹配项目",
+  "upgradeTrackerOwnedCount": "已拥有 {owned}/{total}",
+  "@upgradeTrackerOwnedCount": {
+    "placeholders": {
+      "owned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLevelsLeft": "剩余 {count} 级",
+  "@upgradeTrackerLevelsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemCount": "{count} 个项目",
+  "@upgradeTrackerItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCollected": "已收集",
+  "upgradeTrackerMissing": "缺失",
+  "upgradeTrackerDataAge": "账号数据",
+  "upgradeTrackerBuildersCount": "{count} 个建筑工人",
+  "@upgradeTrackerBuildersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLaboratory": "实验室",
+  "upgradeTrackerPets": "战宠",
+  "upgradeTrackerWalls": "城墙",
+  "upgradeTrackerEquipment": "装备",
+  "upgradeTrackerLevelsRemaining": "剩余 {count} 级",
+  "@upgradeTrackerLevelsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCompletesOn": "完成于 {date} · {duration}",
+  "@upgradeTrackerCompletesOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "剩余 {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "当前 · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "{level}级 · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · {level}级\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}，{level}级，{start} 至 {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerHeaderComplete": "已完成",
+  "upgradeTrackerHeaderLevelsLeft": "剩余等级",
+  "upgradeTrackerHeaderActive": "活跃",
+  "upgradeTrackerHeaderFinishes": "完成时间",
+  "upgradeTrackerHeaderOwned": "已拥有",
+  "upgradeTrackerHeaderUpdated": "已更新",
+  "homeCouldNotLoadTitle": "主页无法加载",
+  "homeVerifiedAccountRequiredTitle": "验证一个关联账号",
+  "homeVerifiedAccountRequiredBody": "主页需要至少一个已验证的部落冲突账号。请关联账号或验证现有关联以继续。",
+  "homeVerifyAccountAction": "关联或验证账号",
+  "playerOptionVerifyAccountBody": "该账号尚未验证。验证后即可解锁下方的待办、排位联赛与升级追踪选项。",
+  "homeUpcomingTitle": "即将到来",
+  "homeUpcomingSubtitle": "各账号即将到期的截止时间与升级完成时间。",
+  "homeCollapseSection": "收起分区",
+  "homeExpandSection": "展开分区",
+  "homeUpcomingEmpty": "暂无即将到来的追踪截止时间。若刚关联账号，请下拉刷新。",
+  "homeRecentlyCompleted": "已完成",
+  "homeTodoTitle": "待办",
+  "homeTodoSubtitle": "可操作的账号详情，按紧急程度排序。",
+  "homeTodoEmpty": "当前没有已验证账号需要关注。",
+  "homeClanless": "无部落信息",
+  "homeNeedsAttention": "需要关注",
+  "homeCaughtUp": "已搞定",
+  "homeTrackingDataPending": "该已验证玩家为新追踪或处于不活跃状态，暂无可操作的详情。",
+  "homeUpgradeUnavailable": "无法加载升级数据。你的其他账号数据仍为最新。",
+  "homeUpgradeNotImported": "暂无升级数据。请在升级追踪中导入该已验证账号的 JSON。",
+  "homeUpgradeActiveCount": "{count} 项进行中升级",
+  "@homeUpgradeActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeIdle": "未找到进行中的升级计时，建筑工人可能处于闲置。",
+  "homeDone": "已完成",
+  "homeRemainingCount": "剩余 {count}",
+  "@homeRemainingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeVerifiedPlayerDataMissing": "该关联已验证，但玩家资料不可用。请下拉刷新或等待追踪开始。",
+  "homeSinceAwayTitle": "离开以来",
+  "homeSinceAwayFirstVisit": "这是首次追踪的主页访问，因此较早的活动不会被标记为「新」。",
+  "homeSinceAwaySubtitle": "「新」标记与你在 {time} 上次打开主页时的状态进行对比。",
+  "@homeSinceAwaySubtitle": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSinceAwayEmpty": "这些已验证玩家与部落暂无加入、离开或玩家历史活动。",
+  "homeNewMarker": "新",
+  "homePulseTitle": "你的动态",
+  "homePulseSubtitle": "个人 30 天部落战与部落联赛战绩、排位战表现，以及可用的全球排行榜。",
+  "homePulseEmpty": "暂无战绩历史或排行榜数据。新追踪与不活跃账号将在数据到达后逐步填充。",
+  "homeToday": "今天",
+  "homeYesterday": "昨天",
+  "homeEarlier": "更早",
+  "homeRankedAttacks": "排位战进攻",
+  "homeSeasonPass": "黄金令牌",
+  "homeUpcomingAccountDetail": "{player} 还有 {count} 项。",
+  "@homeUpcomingAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeDataNeeded": "添加升级数据",
+  "homeUpgradeDataNeededDetail": "导入 {player} 的账号 JSON 以追踪升级计时与闲置建筑工人。",
+  "@homeUpgradeDataNeededDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeIdleTitle": "建筑工人可能闲置",
+  "homeUpgradeIdleDetail": "{player} 有升级数据，但未找到进行中的计时。",
+  "@homeUpgradeIdleDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeAccountDetail": "{player} 的升级计时。",
+  "@homeUpgradeAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseWarAverage": "30 天部落战平均",
+  "homePulseCwlAverage": "30 天部落联赛平均",
+  "homePulseRankedToday": "30 天排位联赛",
+  "homePulseRankedValue": "{count} 次进攻 · {trophies} 奖杯",
+  "@homePulseRankedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseBestGlobalRank": "全球玩家最佳排名",
+  "homeActivityJoined": "加入",
+  "homeActivityLeft": "离开",
+  "homeActivityAClan": "一个部落",
+  "statsMeta": "元数据",
+  "statsBattle": "战斗",
+  "statsWorld": "世界",
+  "statsHeaderSubtitle": "探索对战表现与我们所追踪的世界。",
+  "statsPreview": "预览",
+  "statsTownHallDistribution": "市政厅分布",
+  "statsBuilderHallDistribution": "建造者大厅分布",
+  "statsLeagueDistribution": "排名联赛分布",
+  "statsTrackedPlayers": "当前追踪玩家人数",
+  "statsTrackedClans": "当前追踪的氏族人口",
+  "statsCwlLeagueDistribution": "CWL联赛分布",
+  "statsCapitalLeagueDistribution": "首都联赛分布",
+  "statsTrackedLocations": "追踪部落位置",
+  "statsLocationCountHelp": "追踪部落代表的国家和地区。",
+  "statsLeagueId": "联盟 {id}",
+  "@statsLeagueId": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "statsEquipmentAdoption": "各等级的装备采用情况",
+  "statsEquipmentAdoptionPreview": "在汇总拥有情况和等级数量可用前，此处为预览布局。",
+  "statsExperienceDistribution": "玩家XP分布",
+  "statsExperienceDistributionPreview": "在经验直方图数据可用前，此为占位布局。",
+  "statsCwlRosterSizes": "CWL名单大小",
+  "statsCwlRosterSizesPreview": "在阵容规模计数可用前，此为 15v15 / 30v30 的占位分布。",
+  "statsWarsOverTime": "一段时间内的战争",
+  "statsWarsOverTimePreview": "在正式计数接口接入前，此为每日趋势占位图。",
+  "statsStrategyLenses": "策略镜头",
+  "statsStrategyLensesBody": "命名策略使用重叠的、版本化的规则。精确的装备保持独立，因此标签永远不会假装证明战斗意图。",
+  "statsQueenCharge": "女王冲锋",
+  "statsQueenChargeRule": "弓箭手女王+至少5个治疗者",
+  "statsSuperBowlerCore": "超级碗核心",
+  "statsSuperBowlerRule": "至少 4 名超级碗手",
+  "statsRootRiderCore": "Root Rider核心",
+  "statsRootRiderRule": "至少4名Root Rider",
+  "statsPatternDiscoveryBody": "自动发现应该呈现类似的负载集群以供人类命名；它不应该仅从构图来推断战术。",
+  "statsUsageVsThreeStar": "使用率与三星级比率",
+  "statsTapPointForLoadout": "点击一个点即可检查其准确的装备和样本。",
+  "statsExactLoadouts": "精确的装备",
+  "statsCustomLens": "定制镜头",
+  "statsCustomLensBody": "选择所需数量、排除项、市政厅、联赛、样品楼层和排序顺序。这会针对真实的负载，但尚未保存。",
+  "rankedLeagueTitle": "排位联赛",
+  "rankedLeagueAbout": "关于排位联赛",
+  "rankedLeagueAboutBody": "本页数据来自官方每周排位联赛的分组、战报和周期历史。当前周期结束前，结果可能发生变化。",
+  "rankedLeagueOverview": "概述",
+  "rankedLeagueRanking": "排名",
+  "rankedLeagueGroupRank": "小组排名",
+  "rankedLeagueTrophies": "奖杯",
+  "rankedLeaguePlayers": "{count} 名玩家",
+  "@rankedLeaguePlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBest": "最佳：{value}",
+  "@rankedLeagueBest": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueNoGroup": "无活跃小组",
+  "rankedLeagueCurrentPeriod": "当前周期",
+  "rankedLeagueLiveGroupSubtitle": "来自玩家官方排位联赛小组的实时结果。",
+  "rankedLeagueBattles": "战斗",
+  "rankedLeagueAttacksPlayed": "已进攻次数",
+  "rankedLeagueAttackRecord": "进攻记录",
+  "rankedLeagueDefenseRecord": "防守记录",
+  "rankedLeagueWinsLosses": "胜 - 负",
+  "rankedLeagueDefensesLogged": "{count} 次防守已记录",
+  "@rankedLeagueDefensesLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueRecentBattles": "近期对战",
+  "rankedLeagueRecentBattlesSubtitle": "当前每周小组的详细结果可用。",
+  "rankedLeagueAttacks": "进攻记录",
+  "rankedLeagueDefenses": "防御记录",
+  "rankedLeagueNoBattles": "暂无对战记录。",
+  "rankedLeagueGroupRanking": "小组排名",
+  "rankedLeagueRankingSubtitle": "当前小组的实时排名。你的玩家已高亮。",
+  "rankedLeagueJumpToMyRank": "跳转到我的排名",
+  "rankedLeagueLastPeriod": "上一周期",
+  "rankedLeagueBestGroupRank": "最佳小组排名",
+  "rankedLeaguePeriodHistory": "周期历史",
+  "rankedLeagueHistorySubtitle": "已完成每周周期的官方汇总。",
+  "rankedLeagueBestRankedResults": "最佳排位战成绩",
+  "rankedLeagueAllRankedResults": "全部排位战成绩",
+  "rankedLeaguePeriods": "周期",
+  "rankedLeaguePeriodStats": "周期统计",
+  "rankedLeagueTrophyProgress": "按对战计算奖杯进度",
+  "rankedLeagueTrophiesByPeriod": "按周期统计奖杯",
+  "rankedLeagueBattleCount": "{count} 场对战",
+  "@rankedLeagueBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBattleProgress": "{count} / {max} 场对战",
+  "@rankedLeagueBattleProgress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueTrophyAverage": "{trophies} 奖杯 · 场均 {average} 奖杯",
+  "@rankedLeagueTrophyAverage": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueByPeriod": "按周期",
+  "rankedLeaguePeriodTab": "周期",
+  "rankedLeagueAverage": "平均水平",
+  "rankedLeagueRemaining": "剩余时间",
+  "rankedLeagueSevenDayPeriod": "7 天排位联赛周期",
+  "rankedLeagueEquipmentUnavailable": "配兵方案与装备尚未包含在官方排位联赛战报中。",
+  "rankedLeagueBattleDetailsUnavailable": "该周期的详细战报不可用。",
+  "rankedLeagueHistoricalDetailsUnavailable": "该较早周期仅提供官方周期汇总。",
+  "rankedLeagueStarBreakdownUnavailable": "API 提供了星级总数，但未提供该周期的详细星级分布。",
+  "notifAudienceSectionTitle": "通知接收范围",
+  "@notifAudienceSectionTitle": {
+    "description": "Section title for choosing which accounts receive notifications."
+  },
+  "notifScopeAllLinkedAccounts": "所有已关联账号",
+  "@notifScopeAllLinkedAccounts": {
+    "description": "Option that sends notifications to all linked accounts."
+  },
+  "notifScopeSelectedAccounts": "已选择账号",
+  "@notifScopeSelectedAccounts": {
+    "description": "Option that sends notifications only to selected linked accounts."
+  },
+  "notifAudienceSheetDescription": "选择哪些账号可以在此设备上接收通知。",
+  "@notifAudienceSheetDescription": {
+    "description": "Description for notification audience settings."
+  },
+  "notifAudienceAllSubtitle": "当前 {count} 个账号。以后关联的账号会自动包含。",
+  "@notifAudienceAllSubtitle": {
+    "description": "Subtitle for the all linked accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedSubtitle": "已选择 {count} 个用于通知。",
+  "@notifAudienceSelectedSubtitle": {
+    "description": "Subtitle for the selected accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedEmpty": "准确选择要接收通知的账号。",
+  "@notifAudienceSelectedEmpty": {
+    "description": "Empty state subtitle for selected notification accounts."
+  },
+  "notifAudienceAllInlineNote": "之后关联的任何账号都会自动包含，无需更改此设置。",
+  "@notifAudienceAllInlineNote": {
+    "description": "Inline note explaining all linked accounts behavior."
+  },
+  "notifChooseAccountsManually": "已选择账号",
+  "notifAudienceAcrossDevicesDescription": "选择哪些账号可以在此设备上接收通知。",
+  "notifAccountBookmarked": "已收藏",
+  "@notifAccountBookmarked": {
+    "description": "Label for a bookmarked account in notification settings."
+  },
+  "notifGroupLeagueBattles": "联赛战斗",
+  "@notifGroupLeagueBattles": {
+    "description": "Notification group label for league battles."
+  },
+  "notifGroupWarAttacks": "部落战进攻",
+  "@notifGroupWarAttacks": {
+    "description": "Notification group label for war attacks."
+  },
+  "notifGroupWarState": "部落战状态",
+  "@notifGroupWarState": {
+    "description": "Notification group label for war state changes."
+  },
+  "notifGroupWarReminders": "部落战提醒",
+  "@notifGroupWarReminders": {
+    "description": "Notification group label for war reminders."
+  },
+  "notifGroupEvents": "活动",
+  "@notifGroupEvents": {
+    "description": "Notification group label for events."
+  },
+  "notifGroupAppAnnouncements": "应用公告",
+  "@notifGroupAppAnnouncements": {
+    "description": "Notification group label for app announcements."
+  },
+  "notifGroupUpgradeFinishes": "升级完成",
+  "@notifGroupUpgradeFinishes": {
+    "description": "Notification group label for completed upgrades."
+  },
+  "notifGroupMonthlySupport": "每月支持提醒",
+  "@notifGroupMonthlySupport": {
+    "description": "Notification group label for monthly support reminders."
+  },
+  "widgetUpgradeProgressTitle": "升级进度",
+  "widgetLaboratory": "实验室",
+  "widgetPets": "战宠",
+  "widgetBuilderBase": "夜世界",
+  "widgetResearch": "研究",
+  "widgetActive": "进行中",
+  "widgetIdle": "闲置",
+  "widgetLocked": "已锁定",
+  "widgetMaxed": "已满级",
+  "widgetNotUnlocked": "未解锁",
+  "widgetFullyUpgraded": "已满级",
+  "widgetNoActiveUpgrades": "无进行中升级",
+  "widgetNoActiveResearch": "无进行中研究",
+  "widgetDataStale": "需要更新",
+  "widgetMoreUpgrade": "个升级",
+  "widgetMoreUpgrades": "个升级",
+  "widgetLevelShort": "级",
+  "widgetReady": "就绪",
+  "widgetReadyIn": "还需",
+  "widgetHelping": "援助中",
+  "widgetApprenticeShort": "学徒",
+  "widgetAssistantShort": "助手",
+  "widgetAlchemistShort": "炼金术士",
+  "widgetBuilderPotion": "建筑工人药水",
+  "widgetResearchPotion": "研究药水",
+  "widgetPetPotion": "战宠药水",
+  "widgetClockTower": "时光钟楼",
+  "widgetTownHallBuilderBoost": "大本营建筑加成",
+  "widgetTownHallLabBoost": "大本营实验室加成",
+  "widgetBuilderBoostShort": "工人",
+  "widgetResearchBoostShort": "研究",
+  "widgetPetBoostShort": "宠物",
+  "widgetClockBoostShort": "钟楼",
+  "widgetBuilderCostPerk": "{percent}% 建筑工人花费加成",
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetBuilderTimePerk": "{percent}% 建筑工人时间加成",
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabCostPerk": "{percent}% 实验室花费加成",
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabTimePerk": "{percent}% 实验室时间加成",
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "资源目标",
+  "farmGoalFormTitle": "目标资源",
+  "farmGoalAccountTitle": "帐户",
+  "farmGoalAccountHint": "所选账号提供用于估算的大本营与当前联赛。",
+  "farmGoalTargetTitle": "要升级的建筑",
+  "farmGoalTargetBuildingLabel": "建筑",
+  "farmGoalChooseBuilding": "选择建筑",
+  "farmGoalChangeBuilding": "更换建筑",
+  "farmGoalNoTargetTitle": "未选择建筑",
+  "farmGoalNoTargetBody": "选择要升级的建筑，以估算需要获取的资源。",
+  "farmGoalTargetLevelLabel": "目标等级",
+  "farmGoalUpgradeCostLabel": "升级费用",
+  "farmGoalCostUnavailable": "该等级升级花费不可用。",
+  "farmGoalLootTitle": "预计战利品",
+  "farmGoalResourceLabel": "资源",
+  "farmGoalAmountLabel": "所需数量",
+  "farmGoalAverageLootLabel": "村庄中的可用战利品",
+  "farmGoalPerfectLootHint": "输入进攻前显示的战利品。下方的联赛奖励会自动加上。",
+  "farmGoalLeagueEstimate": "{league} 联赛奖励：{amount} {resource}。该奖励已计入进攻次数估算。",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalStarBonusEstimate": "胜利之星奖励：打满 5 星可得 {amount} {resource}。不计入所需进攻次数。",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "完美进攻 · 100%",
+  "farmGoalScenarioAtPercent": "{percent}% 摧毁率",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "进攻",
+  "farmGoalScenarioHint": "近似估算：摧毁不同建筑收益有所差异，百分比基于完美进攻收益计算。",
+  "farmGoalNoLeagueLoot": "请选择带有联赛的账号以获取战利品建议。",
+  "farmGoalTrackerNextTitle": "升级追踪器计划中的下一项",
+  "farmGoalTrackerMissingTitle": "需要升级追踪器数据",
+  "farmGoalTrackerMissingBody": "在升级追踪器中导入此账号的升级 JSON，即可在此显示下一个计划升级的建筑及其准确费用。",
+  "farmGoalTrackerPlanComplete": "升级追踪器中没有剩余的建筑升级。你仍可手动选择建筑。",
+  "farmGoalOpenUpgradeTracker": "打开升级追踪器",
+  "farmGoalUseTrackerTarget": "使用建筑",
+  "farmGoalMissingTarget": "选择建筑及目标等级以计算所需进攻次数。",
+  "farmGoalMissingValues": "输入目标与完美进攻收益，查看进攻方案。",
+  "farmGoalResultTitle": "所需进攻次数",
+  "farmGoalAttacks": "进攻",
+  "farmGoalResultSummary": "目标 {target} {resource}，单次完美进攻约 {average}。",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "{level}级大本",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "创作者代码：ClashKing",
+  "todoExplanationRaidsTitle": "都城突袭：",
+  "todoExplanationRaids": "每个账号计 5 分（若已解锁最后一次进攻则计 6 分），1 次进攻 = 1 分。",
+  "clanWarFrequencyTitle": "战争",
+  "notifScopeAllAccounts": "所有账户",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "notifSelectedAccounts": "选定的账户",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "过滤器",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} 个账号已追踪",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "伤害",
+  "calculatorsModeFarmGoal": "资源目标",
+  "damageCalculatorTitle": "伤害计算器",
+  "damageAccountPresetShort": "帐户",
+  "damageChooseAccount": "选择账号",
+  "damageSwitchAccount": "切换账号",
+  "damageAccountSelectorHint": "所用等级跟随所选账号。",
+  "damageNoAccountsAvailable": "无可用已验证账号",
+  "damageTargetSectionTitle": "要摧毁的建筑",
+  "damageChooseTarget": "选择建筑",
+  "damageNoTargetTitle": "未选择建筑",
+  "damageNoTargetBody": "选择建筑以查看其可承受的伤害。",
+  "damageTargetLevelLabel": "目标等级",
+  "damageCommonBuildings": "最常选择",
+  "damageAllBuildings": "所有建筑",
+  "damageQuickSetups": "选择方式",
+  "damageQuickSetupZapQuake": "闪电 + 地震",
+  "damageQuickSetupFireballQuake": "火球 + 地震",
+  "damageQuickSetupGiantArrow": "巨型箭矢",
+  "damageQuickSetupFlameFlinger": "攻城烈焰车",
+  "damageQuickSetupCustom": "自定义",
+  "damageClearStack": "清除",
+  "damageNoDamageSelected": "无伤害",
+  "damageSelectedSourcesCount": "{count} 个来源",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "选择一种方式以显示可调整的伤害来源。",
+  "damageOtherSources": "其他来源",
+  "damageShowAllSources": "添加其他来源",
+  "damageShowFewerSources": "隐藏其他来源",
+  "searchCancel": "取消",
+  "todoRaidAttacks": "都城突袭进攻",
+  "todoMockRaid4Left": "剩 4 次",
+  "todoMockWarAltStatus": "18 分钟前活跃 · 部落战与突袭需关注",
+  "todoMockRaid1Left": "还剩 1 个",
+  "gameAssetsCategoryBuildings": "建筑",
+  "gameAssetsCategoryCapitalBase": "都城基地",
+  "gameAssetsCategoryCapitalHouseParts": "都城房屋部件",
+  "gameAssetsCategoryChests": "宝箱",
+  "gameAssetsCategoryClanLabels": "部落标签",
+  "gameAssetsCategoryCountryFlags": "国旗",
+  "gameAssetsCategoryDecorations": "装饰物",
+  "gameAssetsCategoryEquipment": "装备",
+  "gameAssetsCategoryGuardians": "守护者",
+  "gameAssetsCategoryHeroes": "英雄",
+  "gameAssetsCategoryPets": "战宠",
+  "gameAssetsCategorySkins": "皮肤",
+  "gameAssetsCategorySpells": "法术",
+  "gameAssetsCategoryTroops": "兵种",
+  "assetFolderTroops": "军队",
+  "assetFolderSpells": "法术",
+  "assetFolderHeroes": "英雄",
+  "endpointStateWins": "胜场",
+  "notifGroupBattles": "战斗",
+  "notifGroupSupport": "支持",
+  "rankedLeagueAccountSelector": "显示账号",
+  "rankedLeagueStars": "星数",
+  "playerBattlelogTab": "战斗",
+  "playerActivityTab": "活跃度",
+  "playerBattlelogFarming": "资源收集",
+  "playerBattlelogRanked": "排位战",
+  "playerBattlelogFarmingOverview": "资源收集概览",
+  "playerBattlelogRankedOverview": "排位赛概览",
+  "playerBattlelogRecentBattles": "近期对战",
+  "playerBattlelogBattleCount": "{count} 场对战",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "进攻记录",
+  "playerBattlelogAverageDestruction": "平均破坏力",
+  "playerBattlelogAverageStars": "平均星星数",
+  "playerBattlelogTripleRate": "三星级",
+  "playerBattlelogAverageLoot": "平均战利品",
+  "playerBattlelogPopularTroops": "最常用的兵种",
+  "playerBattlelogUsedInAttacks": "在 {count} 次进攻中使用",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "进攻",
+  "playerBattlelogDefense": "防御",
+  "playerBattlelogOpponent": "对阵 {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "未找到对战",
+  "playerBattlelogNoBattlesBody": "此模式暂时没有可用的对战。",
+  "playerBattlelogLoadError": "无法加载对战记录",
+  "playerBattlelogHistoryUnavailable": "历史对战数据暂时不可用，因此可能缺少军队使用情况和较早的对战。",
+  "playerBattlelogOfficialUnavailable": "官方对战记录暂时不可用，因此可能缺少最新对战。",
+  "playerActivityTrackingActive": "当前正在追踪",
+  "playerActivityTrackingActiveBody": "此已验证账号会定期刷新。事件从开始追踪后记录，偶尔仍可能出现数据缺失。",
+  "playerActivityTrackingUnknown": "未确认追踪状态",
+  "playerActivityTrackingUnknownBody": "这里只显示 ClashKing 追踪该玩家期间观察到的变化，因此历史记录可能不完整。",
+  "playerActivityNoEventsTitle": "暂无追踪活动",
+  "playerActivityNoEventsBody": "ClashKing 观察到升级和个人资料变化后，它们会显示在这里。",
+  "playerActivityLoadError": "无法加载玩家活动",
+  "playerActivityTownHallUpgraded": "大本营已升级",
+  "playerActivityItemUpgraded": "{name} 已升级",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} 已强化",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} 已解锁",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "名称已更改",
+  "playerActivityLevelChange": "等级 {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "在等级 {level} 解锁",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "在等级 {level} 强化",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -6,119 +6,135 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: 'Branch or tag to deploy (e.g., main, v1.0.0)'
+        description: "Branch or tag to deploy (e.g., main, v1.0.0)"
         required: true
-        default: 'main'
+        default: "main"
         type: string
       version:
-        description: 'Version to deploy (e.g., 0.2.0-alpha) - only needed if not deploying a tag'
+        description: "Version to deploy (e.g., 0.2.0-alpha) - only needed if not deploying a tag"
         required: false
         type: string
       track:
-        description: 'Play Store track'
+        description: "Play Store track"
         required: true
-        default: 'alpha'
+        default: "alpha"
         type: choice
         options:
           - alpha
           - beta
           - production
 
+permissions:
+  contents: write
+
 jobs:
   store_deploy_android:
     name: Android Store Release
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: expo
     env:
+      CI: true
+      EXPO_NO_TELEMETRY: 1
+      EXPO_NO_GIT_STATUS: 1
       JAVA_VERSION: 21
-      AAB_PATH: build/app/outputs/bundle/release/app-release.aab
-      KEYSTORE_PATH: android/ck_key.jks
-      KEY_PROPS_PATH: android/key.properties
-      SERVICE_ACCOUNT_PATH: android/app/store_credentials.json
-      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      AAB_PATH: ${{ github.workspace }}/expo/android/app/build/outputs/bundle/release/app-release.aab
+      APK_PATH: ${{ github.workspace }}/expo/android/app/build/outputs/apk/release/app-release.apk
+      SERVICE_ACCOUNT_PATH: ${{ github.workspace }}/expo/store_credentials.json
+
     steps:
-      - name: Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.ref || github.ref }}
+          ref: ${{ inputs.ref || github.event.release.tag_name }}
 
-      - name: Extract version from release and generate build number
-        id: extract_version
+      - name: Extract version and build number
+        id: version
+        shell: bash
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            # Check if ref is a tag (starts with v) and no version provided
-            if [[ "${{ github.event.inputs.ref }}" =~ ^v[0-9] ]] && [ -z "${{ github.event.inputs.version }}" ]; then
-              # Extract version from tag name
-              VERSION_NAME="${{ github.event.inputs.ref }}"
-              VERSION_NAME=${VERSION_NAME#v}     # Remove "v" prefix
-            elif [ -n "${{ github.event.inputs.version }}" ]; then
-              # Use provided version
-              VERSION_NAME="${{ github.event.inputs.version }}"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ inputs.ref }}" =~ ^v[0-9] ]] && [[ -z "${{ inputs.version }}" ]]; then
+              VERSION_NAME="${{ inputs.ref }}"
+            elif [[ -n "${{ inputs.version }}" ]]; then
+              VERSION_NAME="${{ inputs.version }}"
             else
-              echo "Error: Version is required when not deploying a tag"
+              echo "Version is required when the selected ref is not a version tag." >&2
               exit 1
             fi
           else
-            # Extract version from release tag
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
-            VERSION_NAME=${RELEASE_TAG#v}                # Remove "v" prefix if present
+            VERSION_NAME="${{ github.event.release.tag_name }}"
           fi
+          VERSION_NAME="${VERSION_NAME#v}"
+          VERSION_NAME="$(printf '%s' "$VERSION_NAME" | sed -E 's/-(alpha|beta).*//')"
+          [[ "$VERSION_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+            echo "Resolved version '$VERSION_NAME' is not semantic x.y.z." >&2
+            exit 1
+          }
+          BUILD_NUMBER="$(date +%s)"
+          echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+          echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
-          # Remove alpha/beta suffixes for Play Store (required by Google)
-          VERSION_NAME=$(echo "$VERSION_NAME" | sed 's/-alpha.*$//' | sed 's/-beta.*$//')
-          echo "Cleaned version for Play Store: $VERSION_NAME"
-          BUILD_NUMBER=$(date +%s)             # Generate build number based on timestamp
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_OUTPUT
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-          
-      - name: Update version in pubspec.yaml
+      - name: Determine Play track and API environment
+        id: release
+        shell: bash
         run: |
-          sed -i "s/^version: .*/version: ${{ steps.extract_version.outputs.VERSION_NAME }}+${{ steps.extract_version.outputs.BUILD_NUMBER }}/" pubspec.yaml
-          echo "Updated pubspec.yaml with version ${{ steps.extract_version.outputs.VERSION_NAME }}+${{ steps.extract_version.outputs.BUILD_NUMBER }}"
-      
-      - name: Verify updated pubspec.yaml
-        run: cat pubspec.yaml
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TRACK="${{ inputs.track }}"
+          else
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+            if [[ "$RELEASE_TAG" == *alpha* ]]; then
+              TRACK=alpha
+            elif [[ "$RELEASE_TAG" == *beta* ]]; then
+              TRACK=beta
+            else
+              TRACK=production
+            fi
+          fi
+          case "$TRACK" in
+            alpha) API_ENV=development ;;
+            beta) API_ENV=staging ;;
+            production) API_ENV=production ;;
+            *) echo "Unsupported Play track: $TRACK" >&2; exit 1 ;;
+          esac
+          echo "track=$TRACK" >> "$GITHUB_OUTPUT"
+          echo "api_env=$API_ENV" >> "$GITHUB_OUTPUT"
 
-      - name: Setup Java to compile the Android project
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: ${{ env.JAVA_VERSION }}
-      
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version-file: .flutter-version
 
-      - name: Create minimal local.properties
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify Expo project
         run: |
-          echo "sdk.dir=${{ env.ANDROID_SDK_ROOT }}" > android/local.properties
+          npm run test:native-plugin
+          npm run typecheck
+          npm run lint
+          npm test
+          npm run l10n:check
+          npm run l10n:parity
+          npm run assets:parity
+          npm run parity:check
+          npx expo-doctor
 
-      - name: Accept Android SDK licenses
-        run: |
-          yes | ${{ env.ANDROID_SDK_ROOT }}/cmdline-tools/latest/bin/sdkmanager --licenses
-
-      - name: Decode and create Android keystore
-        run: echo "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ${{ env.KEYSTORE_PATH }}
-
-      - name: Create key.properties
-        run: |
-          echo "storeFile=${{ github.workspace }}/${{ env.KEYSTORE_PATH }}" > ${{ env.KEY_PROPS_PATH }}
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> ${{ env.KEY_PROPS_PATH }}
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> ${{ env.KEY_PROPS_PATH }}
-
-      - name: Decode Android Service Account
-        run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > ${{ env.SERVICE_ACCOUNT_PATH }}
-
-      - name: Cache pub dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
+      - name: Generate Android project
+        env:
+          CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
+          CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
+          EXPO_PUBLIC_CK_API_ENV: ${{ steps.release.outputs.api_env }}
+        run: npx expo prebuild --platform android --clean --no-install
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
@@ -126,81 +142,48 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('expo/android/**/*.gradle*', 'expo/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Run flutter pub get
-        run: flutter pub get
- 
-      - name: Analyze to check for bad Dart/Flutter practices
-        run: flutter analyze
- 
-      - name: Run all app tests
-        run: flutter test
-
-      - name: Determine track and API environment
-        id: determine_track
+      - name: Decode Android signing credentials
+        shell: bash
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            TRACK="${{ github.event.inputs.track }}"
-          else
-            # Determine track based on release tag
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
+          printf '%s' "${{ secrets.KEY_STORE_FILE }}" | base64 --decode > ck_key.jks
+          printf '%s' "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" | base64 --decode > store_credentials.json
+          test -s ck_key.jks
+          test -s store_credentials.json
 
-            if [[ "$RELEASE_TAG" == *"alpha"* ]]; then
-              TRACK="alpha"
-            elif [[ "$RELEASE_TAG" == *"beta"* ]]; then
-              TRACK="beta"
-            else
-              TRACK="production"
-            fi
-          fi
+      - name: Build signed AAB and APK
+        working-directory: expo/android
+        env:
+          EXPO_PUBLIC_CK_API_ENV: ${{ steps.release.outputs.api_env }}
+          ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_FILE: ${{ github.workspace }}/expo/ck_key.jks
+          ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew :app:bundleRelease :app:assembleRelease --no-daemon
 
-          if [ "$TRACK" == "alpha" ]; then
-            CK_API_ENV="development"
-          elif [ "$TRACK" == "beta" ]; then
-            CK_API_ENV="staging"
-          else
-            CK_API_ENV="production"
-          fi
-
-          echo "TRACK=$TRACK" >> $GITHUB_OUTPUT
-          echo "TRACK=$TRACK" >> $GITHUB_ENV
-          echo "CK_API_ENV=$CK_API_ENV" >> $GITHUB_ENV
-          echo "Selected track: $TRACK"
-          echo "Selected API environment: $CK_API_ENV"
-          echo "Release tag: ${{ github.event.release.tag_name }}"
-
-      - name: Build aab & Sign the release
+      - name: Verify release outputs
+        working-directory: .
         run: |
-          flutter build appbundle --release \
-            --dart-define=CK_API_ENV="$CK_API_ENV" \
-            --build-number=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
-            --build-name=${{ steps.extract_version.outputs.VERSION_NAME }}
+          test -s "${{ env.AAB_PATH }}"
+          test -s "${{ env.APK_PATH }}"
 
-      - name: Build APK for release assets
-        run: |
-          flutter build apk --release \
-            --dart-define=CK_API_ENV="$CK_API_ENV" \
-            --build-number=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
-            --build-name=${{ steps.extract_version.outputs.VERSION_NAME }}
-
-      - name: List output files for debugging
-        run: |
-          ls -R build/app/outputs/bundle/release/
-          ls -R build/app/outputs/apk/release/
-
-      - name: Upload generated aab to the artifacts
+      - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: aab-stores
-          path: build/app/outputs/bundle/release/app-release.aab
+          name: android-store-release
+          path: |
+            ${{ env.AAB_PATH }}
+            ${{ env.APK_PATH }}
+          if-no-files-found: error
 
-      - name: Upload APK to release assets (only on release trigger)
-        uses: softprops/action-gh-release@v1
+      - name: Upload APK to GitHub release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
         with:
-          files: build/app/outputs/apk/release/app-release.apk
+          files: ${{ env.APK_PATH }}
           tag_name: ${{ github.event.release.tag_name }}
 
       - name: Deploy to Play Store
@@ -208,8 +191,8 @@ jobs:
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_PATH }}
           packageName: ${{ secrets.PACKAGE_NAME }}
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: ${{ steps.determine_track.outputs.TRACK }}
+          releaseFiles: ${{ env.AAB_PATH }}
+          track: ${{ steps.release.outputs.track }}
           status: completed
           inAppUpdatePriority: 4
           whatsNewDirectory: update-news
