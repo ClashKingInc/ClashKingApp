@@ -892,7 +892,15 @@
   "warLog": "Válečný deník",
   "warLogSearchPlaceholder": "Hledání válek",
   "warLogClosed": "Protokol války {clan}je uzavřen.",
+  "warLogPrivate": "{clan} má soukromý válečný deník.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Zatím je vše hotovo",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Končí za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
