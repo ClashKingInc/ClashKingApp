@@ -892,7 +892,15 @@
   "warLog": "Kriegsverlauf",
   "warLogSearchPlaceholder": "Suchkriege",
   "warLogClosed": "{clan}s Kriegslog ist geschlossen.",
+  "warLogPrivate": "{clan} hat ein privates Kriegslog.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Derzeit alles erledigt",
+  "timeDurationShort": "{unit, select, daysHours {{primary}T {secondary}Std} hoursMinutes {{primary}Std {secondary}Min} other {{primary}Min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Endet in {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
