@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Activer les notifications ?",
+  "notificationPrimerBody": "ClashKing peut t’avertir des actualités concernant les guerres, la LGC, ton compte et tes projets. Tu peux modifier ce réglage à tout moment dans Paramètres > Notifications.",
+  "notificationPrimerNotNow": "Plus tard",
+  "notificationPrimerAllow": "Autoriser",
   "achievementsTitle": "Succès",
   "achievementEarnedLabel": "Obtenu",
   "achievementSummary": "{earned}/{total} terminé",

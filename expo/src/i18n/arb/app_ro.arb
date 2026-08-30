@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Activați notificările?",
+  "notificationPrimerBody": "ClashKing vă poate anunța despre actualizări privind războaiele, CWL, contul și proiectele. Puteți schimba oricând această opțiune în Setări > Notificări.",
+  "notificationPrimerNotNow": "Nu acum",
+  "notificationPrimerAllow": "Permite",
   "achievementsTitle": "Realizări",
   "achievementEarnedLabel": "Obținut",
   "achievementSummary": "{earned}/{total} finalizat",

@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Включить уведомления?",
+  "notificationPrimerBody": "ClashKing может уведомлять вас об обновлениях войн, CWL, аккаунта и проектов. Это можно изменить в любое время в разделе «Настройки» > «Уведомления».",
+  "notificationPrimerNotNow": "Не сейчас",
+  "notificationPrimerAllow": "Разрешить",
   "achievementsTitle": "Достижения",
   "achievementEarnedLabel": "Получено",
   "achievementSummary": "{earned}/{total} завершено",

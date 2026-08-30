@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Bildirimler etkinleştirilsin mi?",
+  "notificationPrimerBody": "ClashKing savaş, CWL, hesap ve proje güncellemelerini sana bildirebilir. Bunu istediğin zaman Ayarlar > Bildirimler bölümünden değiştirebilirsin.",
+  "notificationPrimerNotNow": "Şimdi değil",
+  "notificationPrimerAllow": "İzin ver",
   "achievementsTitle": "Başarımlar",
   "achievementEarnedLabel": "Kazanıldı",
   "achievementSummary": "{earned}/{total} tamamlandı",

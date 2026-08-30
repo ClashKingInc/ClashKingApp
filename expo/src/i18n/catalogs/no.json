@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Vil du slå på varsler?",
+  "notificationPrimerBody": "ClashKing kan varsle deg om oppdateringer for krig, CWL, konto og prosjekter. Du kan endre dette når som helst under Innstillinger > Varsler.",
+  "notificationPrimerNotNow": "Ikke nå",
+  "notificationPrimerAllow": "Tillat",
   "achievementsTitle": "Prestasjoner",
   "achievementEarnedLabel": "Opptjent",
   "achievementSummary": "{earned}/{total} fullført",

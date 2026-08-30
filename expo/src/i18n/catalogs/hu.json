@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Értesítések engedélyezése?",
+  "notificationPrimerBody": "A ClashKing értesíthet a háborúk, a CWL, a fiókod és a projektek frissítéseiről. Ezt bármikor módosíthatod a Beállítások > Értesítések menüben.",
+  "notificationPrimerNotNow": "Most nem",
+  "notificationPrimerAllow": "Engedélyezés",
   "achievementsTitle": "Teljesítmények",
   "achievementEarnedLabel": "Megszerzések",
   "achievementSummary": "{earned}/{total} kész",

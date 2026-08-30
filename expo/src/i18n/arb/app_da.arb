@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Aktivér notifikationer?",
+  "notificationPrimerBody": "ClashKing kan give dig besked om opdateringer til krig, CWL, konto og projekter. Du kan altid ændre dette under Indstillinger > Notifikationer.",
+  "notificationPrimerNotNow": "Ikke nu",
+  "notificationPrimerAllow": "Tillad",
   "achievementsTitle": "Præstationer",
   "achievementEarnedLabel": "Optjent",
   "achievementSummary": "{earned}/{total} fuldført",

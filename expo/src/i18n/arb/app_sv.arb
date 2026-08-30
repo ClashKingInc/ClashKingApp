@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Aktivera notiser?",
+  "notificationPrimerBody": "ClashKing kan meddela dig om uppdateringar för krig, CWL, konto och projekt. Du kan ändra detta när som helst under Inställningar > Notiser.",
+  "notificationPrimerNotNow": "Inte nu",
+  "notificationPrimerAllow": "Tillåt",
   "achievementsTitle": "Prestationer",
   "achievementEarnedLabel": "Intjänat",
   "achievementSummary": "{earned}/{total} slutfört",

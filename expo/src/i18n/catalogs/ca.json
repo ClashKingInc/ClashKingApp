@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Vols activar les notificacions?",
+  "notificationPrimerBody": "ClashKing et pot avisar sobre actualitzacions de guerres, CWL, comptes i projectes. Pots canviar-ho en qualsevol moment a Configuració > Notificacions.",
+  "notificationPrimerNotNow": "Ara no",
+  "notificationPrimerAllow": "Permet",
   "achievementsTitle": "Assoliments",
   "achievementEarnedLabel": "Aconseguit",
   "achievementSummary": "{earned}/{total} completat",

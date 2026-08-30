@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Омогућити обавештења?",
+  "notificationPrimerBody": "ClashKing може да вас обавести о новостима за ратове, CWL, налог и пројекте. Ово можете да промените у било ком тренутку у Подешавања > Обавештења.",
+  "notificationPrimerNotNow": "Не сада",
+  "notificationPrimerAllow": "Дозволи",
   "achievementsTitle": "Достигнућа",
   "achievementEarnedLabel": "Освојено",
   "achievementSummary": "{earned}/{total} završeno",

@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Ota ilmoitukset käyttöön?",
+  "notificationPrimerBody": "ClashKing voi ilmoittaa sodan, CWL:n, tilin ja projektien päivityksistä. Voit muuttaa tätä milloin tahansa kohdassa Asetukset > Ilmoitukset.",
+  "notificationPrimerNotNow": "Ei nyt",
+  "notificationPrimerAllow": "Salli",
   "achievementsTitle": "Saavutukset",
   "achievementEarnedLabel": "Ansaittu",
   "achievementSummary": "{earned}/{total} valmis",

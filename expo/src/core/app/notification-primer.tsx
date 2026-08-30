@@ -1,5 +1,6 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
+import { useI18n } from '../../i18n';
 import { CKText, Surface, ckRadius, ckSpacing, useCKTheme } from '../../ui';
 
 export function NotificationPermissionPrimer({
@@ -12,19 +13,17 @@ export function NotificationPermissionPrimer({
   onAllow: () => void;
 }) {
   const theme = useCKTheme();
+  const { t } = useI18n();
   return (
     <Modal animationType="fade" onRequestClose={onDecline} transparent visible={visible}>
       <View style={styles.backdrop}>
         <Surface accessibilityViewIsModal radius={ckRadius.card} style={styles.dialog}>
-          <CKText role="sectionTitle">Enable notifications?</CKText>
-          <CKText>
-            ClashKing can notify you about war, CWL, account, and project updates. You can change
-            this anytime in Settings &gt; Notifications.
-          </CKText>
+          <CKText role="sectionTitle">{t('notificationPrimerTitle')}</CKText>
+          <CKText>{t('notificationPrimerBody')}</CKText>
           <View style={styles.actions}>
             <Pressable accessibilityRole="button" onPress={onDecline} style={styles.action}>
               <CKText role="rowTitle" style={{ color: theme.primary }}>
-                Not now
+                {t('notificationPrimerNotNow')}
               </CKText>
             </Pressable>
             <Pressable
@@ -33,7 +32,7 @@ export function NotificationPermissionPrimer({
               style={[styles.action, styles.allow, { backgroundColor: theme.primary }]}
             >
               <CKText role="rowTitle" style={{ color: theme.onPrimary }}>
-                Allow
+                {t('notificationPrimerAllow')}
               </CKText>
             </Pressable>
           </View>

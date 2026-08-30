@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "להפעיל התראות?",
+  "notificationPrimerBody": "ClashKing יכול להודיע לך על עדכונים במלחמות, ב-CWL, בחשבון ובפרויקטים. אפשר לשנות זאת בכל עת דרך הגדרות > התראות.",
+  "notificationPrimerNotNow": "לא עכשיו",
+  "notificationPrimerAllow": "אישור",
   "achievementsTitle": "הישגים",
   "achievementEarnedLabel": "הושג",
   "achievementSummary": "{earned}/{total} הושלם",

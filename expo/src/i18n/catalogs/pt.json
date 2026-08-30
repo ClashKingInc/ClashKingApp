@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Ativar notificações?",
+  "notificationPrimerBody": "O ClashKing pode avisar-te sobre atualizações de guerras, CWL, conta e projetos. Podes alterar esta opção a qualquer momento em Definições > Notificações.",
+  "notificationPrimerNotNow": "Agora não",
+  "notificationPrimerAllow": "Permitir",
   "achievementsTitle": "Conquistas",
   "achievementEarnedLabel": "Conquistado",
   "achievementSummary": "{earned}/{total} concluído",

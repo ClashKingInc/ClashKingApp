@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "सूचनाएँ चालू करें?",
+  "notificationPrimerBody": "ClashKing आपको युद्ध, CWL, खाते और प्रोजेक्ट के अपडेट की सूचना दे सकता है। आप इसे सेटिंग्स > सूचनाएँ में कभी भी बदल सकते हैं।",
+  "notificationPrimerNotNow": "अभी नहीं",
+  "notificationPrimerAllow": "अनुमति दें",
   "achievementsTitle": "उपलब्धियाँ",
   "achievementEarnedLabel": "अर्जित",
   "achievementSummary": "{earned}/{total} पूर्ण",

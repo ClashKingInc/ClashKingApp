@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Meldingen inschakelen?",
+  "notificationPrimerBody": "ClashKing kan je informeren over updates voor oorlogen, CWL, je account en projecten. Je kunt dit altijd wijzigen via Instellingen > Meldingen.",
+  "notificationPrimerNotNow": "Niet nu",
+  "notificationPrimerAllow": "Toestaan",
   "achievementsTitle": "Prestaties",
   "achievementEarnedLabel": "Behaald",
   "achievementSummary": "{earned}/{total} voltooid",

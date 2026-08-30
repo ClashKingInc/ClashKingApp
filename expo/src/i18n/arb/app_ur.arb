@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "اطلاعات فعال کریں؟",
+  "notificationPrimerBody": "ClashKing آپ کو جنگ، CWL، اکاؤنٹ اور پروجیکٹ کی اپ ڈیٹس کے بارے میں مطلع کر سکتا ہے۔ آپ اسے کسی بھی وقت ترتیبات > اطلاعات میں تبدیل کر سکتے ہیں۔",
+  "notificationPrimerNotNow": "ابھی نہیں",
+  "notificationPrimerAllow": "اجازت دیں",
   "achievementsTitle": "کامیابیاں",
   "achievementEarnedLabel": "حاصل کردہ",
   "achievementSummary": "{earned}/{total} مکمل",

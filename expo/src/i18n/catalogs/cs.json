@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Povolit oznámení?",
+  "notificationPrimerBody": "ClashKing vás může upozornit na aktualizace válek, CWL, účtu a projektů. Toto nastavení můžete kdykoli změnit v Nastavení > Oznámení.",
+  "notificationPrimerNotNow": "Teď ne",
+  "notificationPrimerAllow": "Povolit",
   "achievementsTitle": "Úspěchy",
   "achievementEarnedLabel": "Získáno",
   "achievementSummary": "{earned}/{total} dokončeno",

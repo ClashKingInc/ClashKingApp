@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Aktiveer kennisgewings?",
+  "notificationPrimerBody": "ClashKing kan jou in kennis stel van oorlog-, CWL-, rekening- en projekopdaterings. Jy kan dit enige tyd verander onder Instellings > Kennisgewings.",
+  "notificationPrimerNotNow": "Nie nou nie",
+  "notificationPrimerAllow": "Laat toe",
   "achievementsTitle": "Prestasies",
   "achievementEarnedLabel": "Verdien",
   "achievementSummary": "{earned}/{total} voltooi",

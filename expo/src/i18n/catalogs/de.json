@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Benachrichtigungen aktivieren?",
+  "notificationPrimerBody": "ClashKing kann dich über Neuigkeiten zu Kriegen, der CWL, deinem Konto und Projekten informieren. Du kannst dies jederzeit unter Einstellungen > Benachrichtigungen ändern.",
+  "notificationPrimerNotNow": "Nicht jetzt",
+  "notificationPrimerAllow": "Zulassen",
   "achievementsTitle": "Erfolge",
   "achievementEarnedLabel": "Verdient",
   "achievementSummary": "{earned}/{total} abgeschlossen",

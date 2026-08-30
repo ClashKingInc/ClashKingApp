@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "开启通知？",
+  "notificationPrimerBody": "ClashKing 可以向你发送部落战、CWL、账号和项目更新通知。你可以随时在“设置”>“通知”中更改此选项。",
+  "notificationPrimerNotNow": "暂不",
+  "notificationPrimerAllow": "允许",
   "achievementsTitle": "成就",
   "achievementEarnedLabel": "获得次数",
   "achievementSummary": "{earned}/{total} 已完成",

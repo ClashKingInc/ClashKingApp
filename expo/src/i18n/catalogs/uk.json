@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Увімкнути сповіщення?",
+  "notificationPrimerBody": "ClashKing може сповіщати вас про оновлення війн, CWL, облікового запису та проєктів. Це можна будь-коли змінити в Налаштування > Сповіщення.",
+  "notificationPrimerNotNow": "Не зараз",
+  "notificationPrimerAllow": "Дозволити",
   "achievementsTitle": "Досягнення",
   "achievementEarnedLabel": "Отримано",
   "achievementSummary": "{earned}/{total} завершено",

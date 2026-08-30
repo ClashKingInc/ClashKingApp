@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "هل تريد تفعيل الإشعارات؟",
+  "notificationPrimerBody": "يمكن لـ ClashKing إشعارك بتحديثات الحروب ودوري حروب القبائل والحساب والمشاريع. يمكنك تغيير ذلك في أي وقت من الإعدادات > الإشعارات.",
+  "notificationPrimerNotNow": "ليس الآن",
+  "notificationPrimerAllow": "سماح",
   "achievementsTitle": "الإنجازات",
   "achievementEarnedLabel": "مرات الإنجاز",
   "achievementSummary": "{earned}/{total} مكتمل",

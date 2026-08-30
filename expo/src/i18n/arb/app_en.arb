@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Enable notifications?",
+  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
+  "notificationPrimerNotNow": "Not now",
+  "notificationPrimerAllow": "Allow",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Achievements",
   "achievementEarnedLabel": "Earned",

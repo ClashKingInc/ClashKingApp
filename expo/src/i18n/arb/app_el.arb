@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Ενεργοποίηση ειδοποιήσεων;",
+  "notificationPrimerBody": "Το ClashKing μπορεί να σας ειδοποιεί για ενημερώσεις πολέμων, CWL, λογαριασμού και έργων. Μπορείτε να το αλλάξετε ανά πάσα στιγμή στις Ρυθμίσεις > Ειδοποιήσεις.",
+  "notificationPrimerNotNow": "Όχι τώρα",
+  "notificationPrimerAllow": "Να επιτρέπονται",
   "achievementsTitle": "Επιτεύγματα",
   "achievementEarnedLabel": "Κερδήθηκε",
   "achievementSummary": "{earned}/{total} ολοκληρώθηκε",

@@ -1,4 +1,8 @@
 {
+  "notificationPrimerTitle": "Bật thông báo?",
+  "notificationPrimerBody": "ClashKing có thể thông báo cho bạn về các cập nhật chiến tranh, CWL, tài khoản và dự án. Bạn có thể thay đổi tùy chọn này bất cứ lúc nào trong Cài đặt > Thông báo.",
+  "notificationPrimerNotNow": "Để sau",
+  "notificationPrimerAllow": "Cho phép",
   "achievementsTitle": "Thành tựu",
   "achievementEarnedLabel": "Đã đạt",
   "achievementSummary": "{earned}/{total} đã hoàn thành",
