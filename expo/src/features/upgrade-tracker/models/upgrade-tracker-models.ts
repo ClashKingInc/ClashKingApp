@@ -847,7 +847,13 @@ export class UpgradeTrackerSnapshot {
       ready: PendingChain[] = [],
       future: PendingChain[] = [];
     let sequence = 0;
-    const earliest = () => laneEnds.slice(0, base).reduce((a, b) => (a < b ? a : b));
+    const earliest = () => {
+      let value = laneEnds[0]!;
+      for (let index = 1; index < base; index += 1) {
+        if (laneEnds[index]! < value) value = laneEnds[index]!;
+      }
+      return value;
+    };
     const enqueue = (chain: UpgradeChain) => {
       const pending = { chain, sequence: sequence++ };
       (chain.dependencyReadyAt > earliest() ? future : ready).push(pending);

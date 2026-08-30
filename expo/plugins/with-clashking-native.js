@@ -158,20 +158,16 @@ function ensureRNFirebaseCocoaPodsMode(podfile) {
   }
 
   const targetMatch = /^target\s+['"][^'"]+['"]\s+do\s*$/m.exec(podfile);
-  if (!targetMatch || targetMatch.index === undefined) {
+  if (!targetMatch) {
     throw new Error('Generated Podfile has no target block for the RNFirebase CocoaPods switch.');
   }
-  if (
-    assignments.length === 1 &&
-    assignments[0].index !== undefined &&
-    assignments[0].index < targetMatch.index
-  ) {
+  if (assignments.length === 1 && assignments[0].index < targetMatch.index) {
     return podfile;
   }
 
   const withoutAssignments = podfile.replace(assignmentPattern, '').replace(/\n{3,}/g, '\n\n');
   const insertionTarget = /^target\s+['"][^'"]+['"]\s+do\s*$/m.exec(withoutAssignments);
-  if (!insertionTarget || insertionTarget.index === undefined) {
+  if (!insertionTarget) {
     throw new Error('Generated Podfile target block disappeared while configuring RNFirebase.');
   }
   return `${withoutAssignments.slice(0, insertionTarget.index)}# RNFirebase requires CocoaPods Firebase when Expo links pods as static frameworks.\n${RNFIREBASE_DISABLE_SPM_ASSIGNMENT}\n\n${withoutAssignments.slice(insertionTarget.index)}`;

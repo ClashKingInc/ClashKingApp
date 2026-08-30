@@ -302,3 +302,165 @@ test('card preferences normalize tags, ignore malformed JSON, persist non-defaul
   service.clear();
   expect(service.isRankedShownOnHome('#ABC')).toBe(true);
 });
+
+test('loads and caches activity while preserving exact timer and join/leave contracts', async () => {
+  const before = new Date('2026-08-01T00:00:00.000Z');
+  const { api, calls } = setup({
+      '/player/%23P1/history/changes?type=troop_level&limit=500': { items: [] },
+      '/player/%23P1/timers': { items: [] },
+      '/player/%23P1/join-leave?limit=50&time%5Bbefore%5D=2026-08-01T00%3A00%3A00.000Z': {
+        available: 0,
+        items: [],
+      },
+      '/player/%23P1/join-leave/totals': { items: [{ clan_tag: '#C', count: 2 }] },
+    }),
+    service = new PlayerService(api);
+
+  const first = await service.loadPlayerActivity('p1');
+  expect(await service.loadPlayerActivity('#P1')).toBe(first);
+  await service.loadPlayerActivity('#P1', 'troop_level', true);
+  await service.loadPlayerTimers('p1');
+  await service.loadPlayerJoinLeave('p1', before);
+  const totals = await service.loadPlayerJoinLeaveTotals('p1');
+
+  expect(calls.get('/player/%23P1/history/changes?type=troop_level&limit=500')).toBe(2);
+  expect(calls.get('/player/%23P1/timers')).toBe(1);
+  expect(
+    calls.get('/player/%23P1/join-leave?limit=50&time%5Bbefore%5D=2026-08-01T00%3A00%3A00.000Z'),
+  ).toBe(1);
+  expect(totals).toHaveLength(1);
+});
+
+test('uses official data, links clans, and emits minimal player JSON', async () => {
+  const { api } = setup({}),
+    storage = new MemoryStorage(),
+    service = new PlayerService(api, storage);
+  const listener = jest.fn();
+  service.subscribe(listener);
+  const player = await service.useOfficialPlayerData({
+    tag: '#P1',
+    name: 'One',
+    townHallLevel: 18,
+    clan: { tag: '#C', name: 'Clan', badgeUrls: {} },
+  });
+  const replacementClan = { tag: '#C', name: 'Replacement' };
+
+  service.linkClansToPlayer([player], [replacementClan]);
+
+  expect(player.clan).toBe(replacementClan);
+  expect(storage.values.get('player_#P1_clan_tag')).toBe('#C');
+  expect(JSON.parse(service.getMinimalisticPlayerByTag('#P1'))).toEqual({
+    player_tag: '#P1',
+    name: 'One',
+    townHallLevel: 18,
+  });
+  expect(service.getMinimalisticPlayerByTag('#MISSING')).toBe('{}');
+  expect(service.getSelectedProfile('#P1')).toBe(player);
+  expect(service.getSelectedProfile(null)).toBeNull();
+  expect(listener).toHaveBeenCalledTimes(1);
+  service.dispose();
+  service.notifyDataChanged();
+  expect(listener).toHaveBeenCalledTimes(1);
+});
+
+test('hydrates bookmarked and bulk players while retaining existing profiles and enrichment', async () => {
+  const { api, calls } = setup({
+      '/players/%23P1': { tag: '#P1', name: 'One' },
+      '/players/%23P2': { tag: '#P2', name: 'Two' },
+    }),
+    storage = new MemoryStorage(),
+    service = new PlayerService(api, storage);
+  await service.hydrateBookmarkedPlayers(['p1', '#P1']);
+
+  service.processBulkPlayerData(
+    [{ tag: '#P2', last_online: 123 }],
+    [
+      {
+        tag: '#P2',
+        name: 'Two',
+        clan: { tag: '#C', name: 'Clan', badgeUrls: {} },
+      },
+    ],
+    false,
+  );
+
+  expect(calls.get('/players/%23P1')).toBe(1);
+  expect(service.profiles.map(({ tag }) => tag)).toEqual(['#P2', '#P1']);
+  expect(service.profiles[0]?.lastOnline).toEqual(new Date(123_000));
+  await Promise.resolve();
+  expect(storage.values.get('player_#P2_clan_tag')).toBe('#C');
+});
+
+test('loads, attaches, filters, and applies bulk war statistics', async () => {
+  const warItem = {
+    type: 'random',
+    attacksPerMember: 2,
+    endTime: '20260820T120000.000Z',
+    player: { tag: '#P1', name: 'One', townhallLevel: 18, mapPosition: 1 },
+    clan: { tag: '#C' },
+    opponent: { tag: '#O' },
+    attacks: [],
+    defenses: [],
+  };
+  const { api, calls } = setup({
+      '/player/%23P1/war/stats?limit=50': { items: [warItem] },
+      '/player/%23P1/war/stats?limit=500&type=cwl&time%5Bbefore%5D=2026-09-01T00%3A00%3A00.000Z': {
+        items: [warItem],
+      },
+    }),
+    service = new PlayerService(api);
+  await service.useOfficialPlayerData({ tag: '#P1', name: 'One' });
+  const listener = jest.fn();
+  service.subscribe(listener);
+
+  await service.loadPlayerWarStats(['p1', '#P1']);
+  await service.loadPlayerWarStatsWithFilter(
+    '#P1',
+    new WarStatsFilter({
+      limit: 999,
+      warTypes: ['cwl'],
+      endDate: new Date('2026-09-01T00:00:00Z'),
+    }),
+  );
+  service.processBulkWarStats([{ tag: '#P1', wars: [] }], false);
+
+  expect(calls.get('/player/%23P1/war/stats?limit=50')).toBe(1);
+  expect(
+    calls.get(
+      '/player/%23P1/war/stats?limit=500&type=cwl&time%5Bbefore%5D=2026-09-01T00%3A00%3A00.000Z',
+    ),
+  ).toBe(1);
+  expect(service.profiles[0]?.warStats).not.toBeNull();
+  expect(listener).toHaveBeenCalledTimes(1);
+});
+
+test('persists and restores named war filter presets', async () => {
+  const { api } = setup({}),
+    storage = new MemoryStorage(),
+    service = new PlayerService(api, storage);
+  const presets = [
+    { name: 'CWL only', filter: new WarStatsFilter({ warTypes: ['cwl'], limit: 25 }) },
+  ];
+
+  await service.saveWarFilterPresets(presets);
+  const restored = await service.loadWarFilterPresets();
+
+  expect(restored).toHaveLength(1);
+  expect(restored[0]?.name).toBe('CWL only');
+  expect(restored[0]?.filter).toMatchObject({ warType: 'cwl', limit: 25 });
+});
+
+test('reports complete battlelog failure and keeps load wrappers notification-safe', async () => {
+  const { api } = setup({}),
+    service = new PlayerService(api);
+  const listener = jest.fn();
+  service.subscribe(listener);
+
+  await expect(service.loadPlayerBattlelog('#MISSING')).rejects.toThrow();
+  await expect(service.initPlayerData([], { throwOnError: true })).resolves.toEqual({});
+  await expect(service.loadPlayerData([], {})).resolves.toBeUndefined();
+  await expect(service.loadPlayerWarStats(['#P1'], { throwOnError: true })).rejects.toThrow();
+
+  expect(service.isLoading).toBe(false);
+  expect(listener).toHaveBeenCalled();
+});

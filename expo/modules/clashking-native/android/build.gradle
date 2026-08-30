@@ -27,3 +27,9 @@ dependencies {
   implementation 'androidx.work:work-runtime-ktx:2.9.1'
   implementation 'com.google.crypto.tink:tink-android:1.21.0'
 }
+
+dependencyLocking {
+  // Regenerate from expo/android with :clashking-native:dependencies --write-locks.
+  lockAllConfigurations()
+  lockMode = LockMode.STRICT
+}

@@ -973,12 +973,12 @@ function isSuperTroop(item: Record<string, unknown>) {
     String(item.category).toLowerCase() === 'super_troop'
   );
 }
-function firstSentences(value: string, count: number) {
+export function firstSentences(value: string, count: number) {
   return (
     value
       .replace(/\s+/g, ' ')
       .trim()
-      .match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? []
+      .match(/(?:[^.!?]+[.!?]+)|(?:[^.!?]+$)/g) ?? []
   )
     .slice(0, count)
     .map((part) => part.trim())
@@ -1033,8 +1033,8 @@ export function detailAccent(category: string) {
   if (category === UpgradeCategory.pets) return '#E56B9F';
   return '#4D9DE0';
 }
-function weightValue(value: number) {
-  return Number.isInteger(value) ? String(value) : String(value);
+export function weightValue(value: number) {
+  return String(value);
 }
 function compact(value: number, intlLocale: string) {
   if (value >= 1e9) return `${trimCompact(value / 1e9)}B`;

@@ -4,7 +4,7 @@
 [![Expo](https://img.shields.io/badge/Expo-SDK%2057-000020)](https://expo.dev)
 [![License](https://img.shields.io/badge/license-Open%20Source-green)](https://github.com/ClashKingInc)
 
-The Clash of Clans companion app for tracking stats, managing clans, and analyzing performance. The shipping application is the Expo SDK 57 project under `expo/`; the root Flutter project is frozen as the behavioral and localization reference during migration.
+The Clash of Clans companion app for tracking stats, managing clans, and analyzing performance. The shipping application is the Expo SDK 57 project under `expo/`.
 
 ## ✨ Features
 
@@ -125,28 +125,11 @@ expo/
 ├── native/         # Retained widget sources and native parity contract
 ├── plugins/        # Expo config plugins that generate native projects
 └── public/         # PWA, OAuth callback, and Cloudflare static assets
-
-lib/                # Frozen Flutter behavioral reference
 ```
 
 The Expo project uses CNG: `expo/ios` and `expo/android` are generated and
 ignored. Make durable native changes in `expo/app.config.ts`, `expo/plugins`,
 `expo/native`, or the local `@clashking/native` module.
-
-The retained Flutter structure is reference-only:
-
-```
-lib/
-├── core/
-├── features/
-│   ├── auth/       # Authentication and user management
-│   ├── clan/       # Clan-related features
-│   ├── player/     # Player statistics and profiles
-│   ├── war_cwl/    # War and CWL analytics
-│   └── settings/   # App settings and preferences
-├── common/         # Shared widgets and utilities
-└── l10n/          # Internationalization files
-```
 
 Expo startup and post-login hydration share `AccountBootstrapService`. The
 runtime context owns the reusable API client, auth/session storage, preferences,
@@ -182,6 +165,10 @@ The app supports 20+ languages with community-driven translations:
 
 ### Contributing Translations
 
+The ARB catalogs under `expo/src/i18n/arb` are the localization source of
+truth. `npm run l10n:generate` creates the runtime JSON and TypeScript catalogs,
+and `npm run l10n:check` verifies that generated output is current.
+
 Help us translate the app! We use Crowdin for community translations:
 
 - Visit our [Crowdin project](https://crowdin.com/project/clashkingapp)
@@ -201,7 +188,7 @@ We welcome contributions from the community! This is a side project developed al
 
 ### Development Guidelines
 
-- Follow the existing Expo/TypeScript patterns; use Flutter only to verify frozen parity
+- Follow the existing Expo/TypeScript patterns
 - Maintain existing code style and patterns
 - Add translations for new strings
 - Test on both Android and iOS

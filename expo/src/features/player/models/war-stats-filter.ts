@@ -65,8 +65,8 @@ export class WarStatsFilter {
     this.metadata = i.metadata ?? null;
   }
   static fromJson(j: JsonRecord) {
-    const own = Array.isArray(j.own_th) ? j.own_th.map(int) : null,
-      enemy = Array.isArray(j.enemy_th) ? j.enemy_th.map(int) : null,
+    const own = Array.isArray(j.own_th) ? j.own_th.map((value) => int(value)) : null,
+      enemy = Array.isArray(j.enemy_th) ? j.enemy_th.map((value) => int(value)) : null,
       types = Array.isArray(j.type) ? j.type.map(String) : null;
     return new WarStatsFilter({
       season: nullableString(j.season),
@@ -80,7 +80,7 @@ export class WarStatsFilter {
       warType: types?.length === 1 ? types[0]! : 'all',
       warTypes: types,
       freshAttacksOnly: typeof j.fresh_only === 'boolean' ? j.fresh_only : null,
-      allowedStars: Array.isArray(j.stars) ? j.stars.map(int) : null,
+      allowedStars: Array.isArray(j.stars) ? j.stars.map((value) => int(value)) : null,
       minDestruction: typeof j.min_destruction === 'number' ? j.min_destruction : null,
       maxDestruction: typeof j.max_destruction === 'number' ? j.max_destruction : null,
       minMapPosition: nullableInt(j.map_position_min),

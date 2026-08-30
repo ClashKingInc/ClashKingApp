@@ -224,4 +224,125 @@ describe('ClanService', () => {
     service.notifyDataChanged();
     expect(listener).not.toHaveBeenCalled();
   });
+
+  test('decodes all clan history resources and applies both range boundaries', async () => {
+    const { service, requests } = harness((url) => {
+      if (url.includes('/leaderboards/summary')) return json({ seasons: [{ season: '2026-08' }] });
+      if (url.includes('/history/leaderboards')) return json({ items: [{ rank: 1 }] });
+      if (url.includes('/history/legends/summary')) return json({ seasons: [], topFinishes: [] });
+      if (url.includes('/history/legends')) return json({ items: [{ rank: 2 }] });
+      if (url.endsWith('/records')) return json({ clanPoints: { value: 123 } });
+      return json({ items: [{ type: 'description', current: 'New' }] });
+    });
+    const after = new Date('2026-01-01T00:00:00Z');
+    const before = new Date('2026-02-01T00:00:00Z');
+
+    expect(
+      (
+        await service.getClanLeaderboardHistory('#C', ClanLeaderboardType.builderBase, {
+          after,
+          before,
+        })
+      ).items,
+    ).toHaveLength(1);
+    expect(
+      (await service.getClanLeaderboardHistorySummary('#C', ClanLeaderboardType.clanCapital))
+        .seasons,
+    ).toHaveLength(1);
+    expect((await service.getClanLegendHistory('#C', { after, before })).items).toHaveLength(1);
+    expect((await service.getClanLegendHistorySummary('#C')).topFinishes).toEqual([]);
+    expect((await service.getClanRecords('#C')).clanPoints?.value).toBe(123);
+    expect((await service.getClanProfileHistory('#C')).items[0]?.type).toBe('description');
+    expect(requests[0]?.url).toContain('time%5Bafter%5D=');
+    expect(requests[0]?.url).toContain('time%5Bbefore%5D=');
+  });
+
+  test('enriches incomplete members, coalesces duplicate tags, and preserves clan role data', async () => {
+    const { service, requests } = harness((url) => {
+      if (url.includes('/clans/')) {
+        return json({
+          tag: '#C',
+          name: 'Clan',
+          memberList: [
+            { tag: '#P', name: 'Original', role: 'admin', donations: 4 },
+            { tag: '#P', name: 'Duplicate', role: 'member', donations: 1 },
+          ],
+        });
+      }
+      return json({
+        tag: '#P',
+        name: 'Enriched',
+        townHallLevel: 18,
+        leagueTier: { id: 1, name: 'League' },
+        donations: 9,
+      });
+    });
+
+    const clan = await service.getClanAndWarData('#C');
+
+    expect(requests.filter(({ url }) => url.includes('/players/'))).toHaveLength(1);
+    expect(clan.memberList).toHaveLength(2);
+    expect(clan.memberList[0]).toMatchObject({
+      name: 'Enriched',
+      role: 'member',
+      townHallLevel: 18,
+      donations: 9,
+    });
+    expect(clan.memberList[1]).toMatchObject({ name: 'Enriched', role: 'member' });
+  });
+
+  test('links loaded auxiliaries and war ownership to matching clans', async () => {
+    const { service } = harness(() => json({ tag: '#C', name: 'Clan' }));
+    await service.loadClanData('#C');
+    const clan = service.getClanByTag('#C')!;
+    const war = { tag: '#C' };
+
+    service.linkJoinLeaveToClans();
+    service.linkCapitalToClans();
+    service.linkWarLogToClans();
+    service.linkWarStatsToClans();
+    service.linkWarsToClans([clan], [war, { tag: '#OTHER' }]);
+
+    expect(clan.clanCapitalRaid).not.toBeNull();
+    expect(clan.clanWarLog).not.toBeNull();
+    expect(clan.clanWarStats).not.toBeNull();
+    expect(clan.warCwl).toBe(war);
+  });
+
+  test('handles empty and failed optional loads without mutating successful state', async () => {
+    const { service } = harness((url) => {
+      if (url.includes('capitalraidseasons')) return json({}, 500);
+      if (url.includes('/warlog')) return json({}, 500);
+      return json({});
+    });
+    const clan = Clan.fromJson({ tag: '#C' });
+
+    await expect(service.loadCapitalData([], 10)).resolves.toEqual([]);
+    await expect(service.loadCapitalData(['#C'], 10)).resolves.toEqual([]);
+    await expect(service.loadCapitalData(['#C'], 10, { throwOnError: true })).rejects.toThrow(
+      'Failed to load capital data',
+    );
+    await expect(service.loadWarLogData([])).resolves.toEqual([]);
+    await expect(service.loadWarLogData(['#C'])).resolves.toEqual([]);
+    await expect(service.loadMoreJoinLeaveForClan(clan)).resolves.toBe(false);
+    expect(service.isLoading).toBe(false);
+  });
+
+  test('skips malformed bulk entries while retaining valid war-log and stat payloads', async () => {
+    const { service } = harness(() => json({}));
+    await service.processBulkClanData(
+      {
+        clan_details: { '#BAD': null, '#C': { tag: '#C', name: 'Clan' } },
+        capital_data: [{ clan_tag: '' }, { clan_tag: '#C', history: [], stats: {} }],
+        war_log_data: [null, { clan_tag: '#C', items: [] }],
+        clan_war_stats: [{ clan_tag: '#C', players: [] }],
+      },
+      [],
+    );
+
+    expect(service.getClanByTag('#C')?.name).toBe('Clan');
+    expect(service.capitalHistory).toHaveLength(1);
+    expect(service.warLogList).toHaveLength(1);
+    expect(service.warStatsList).toHaveLength(1);
+  });
 });

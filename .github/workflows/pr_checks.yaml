@@ -67,15 +67,6 @@ jobs:
       - name: Verify localization generation
         run: npm run l10n:check
 
-      - name: Verify Flutter localization parity
-        run: npm run l10n:parity
-
-      - name: Verify Flutter asset parity
-        run: npm run assets:parity
-
-      - name: Verify migration ledger
-        run: npm run parity:check
-
       - name: Verify native config plugins
         run: npm run test:native-plugin
 

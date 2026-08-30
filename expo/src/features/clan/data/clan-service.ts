@@ -573,7 +573,10 @@ function historyRangeQuery(options: { after?: Date; before?: Date }): string {
 
 function oneMicrosecondBefore(date: Date): string {
   const priorMillisecond = new Date(date.getTime() - 1).toISOString();
-  return priorMillisecond.replace(/\.(\d{3})Z$/, '.$1999Z');
+  return priorMillisecond.replace(
+    /\.(\d{3})Z$/,
+    (_match, milliseconds: string) => `.${milliseconds}999Z`,
+  );
 }
 
 function decodeRecord(bodyText: string, endpoint: string): JsonRecord {

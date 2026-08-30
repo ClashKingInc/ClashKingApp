@@ -58,7 +58,7 @@ export class WarCwlService {
     if (!tags.length) return Promise.resolve();
     const notify = options.notify ?? true;
     const throwOnError = options.throwOnError ?? false;
-    const key = [...tags].sort().join(',');
+    const key = [...tags].sort((left, right) => left.localeCompare(right)).join(',');
     const existing = this.inFlightLoads.get(key);
     if (existing) {
       existing.shouldNotify ||= notify;

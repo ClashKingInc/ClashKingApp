@@ -1,6 +1,6 @@
 files:
-  - source: /lib/l10n/app_en.arb
-    translation: /lib/l10n/app_%two_letters_code%.arb
+  - source: /expo/src/i18n/arb/app_en.arb
+    translation: /expo/src/i18n/arb/app_%two_letters_code%.arb
     update_option: update_as_unapproved
     languages_mapping:
       two_letters_code:

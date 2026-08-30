@@ -8,8 +8,7 @@ drift during prebuild; it has no Flutter-tree source dependency.
 - `ios/alternate-icons` contains the three alternate app icon catalogs.
 - `android/app/src/main` contains both widget providers, the configuration
   activity, and every referenced layout, drawable, value, XML, and mipmap.
-- `android/splash` contains the byte-exact light/dark density resources emitted
-  by the frozen Flutter launch configuration. The finalized config-plugin stage
+- `android/splash` contains the shipping light/dark density resources. The finalized config-plugin stage
   overwrites Expo's generated Android splash PNGs so pre-Android-12 and Android
   12 launches keep their distinct shipping artwork.
 

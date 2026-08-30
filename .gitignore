@@ -1,153 +1,37 @@
-# Miscellaneous
-*.class
-*.lock
-*.log
-*.pyc
-*.swp
+# Operating systems and editors
 .DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
 .idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/.dart_tool/
-**/ios/Flutter/.last_build_id
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-pubspec_overrides.yaml
-/build/
-flutter_*.png
-.metadata
-devtools_options.yaml
-
-# Platform-specific generated files
-# Linux
-**/linux/flutter/generated_plugin_registrant.cc
-**/linux/flutter/generated_plugin_registrant.h
-**/linux/flutter/generated_plugins.cmake
-**/linux/flutter/ephemeral/
-
-# macOS
-**/macos/Flutter/GeneratedPluginRegistrant.swift
-**/macos/Flutter/ephemeral/
-**/xcuserdata/
-
-# Windows
-**/windows/flutter/generated_plugin_registrant.cc
-**/windows/flutter/generated_plugin_registrant.h
-**/windows/flutter/generated_plugins.cmake
-**/windows/flutter/ephemeral/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android related
-/android/app/debug
-/android/app/profile
-/android/app/release
-**/android/**/gradle-wrapper.jar
-.gradle/
-**/android/captures/
-**/android/gradlew
-**/android/gradlew.bat
-**/android/local.properties
-**/android/**/GeneratedPluginRegistrant.java
-**/android/key.properties
-**/android/app/.cxx/
-*.jks
-
-# iOS/XCode related
-**/ios/**/*.mode1v3
-**/ios/**/*.mode2v3
-**/ios/**/*.moved-aside
-**/ios/**/*.pbxuser
-**/ios/**/*.perspectivev3
-**/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
-**/ios/**/DerivedData/
-**/ios/**/Icon?
-**/ios/**/Pods/
-**/ios/**/.symlinks/
-**/ios/**/profile
-**/ios/**/xcuserdata
-**/ios/.generated/
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
-**/ios/Flutter/flutter_export_environment.sh
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
-**/ios/WIDGET_SETUP_INSTRUCTIONS.md
-
-# Exceptions to above rules.
-!pubspec.lock
-!/android/gradlew
-!/android/gradlew.bat
-!/android/gradle/wrapper/gradle-wrapper.jar
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-
-# VS Code related
 .vscode/settings.json
+*.iml
+*.swp
 
-# Environment files (DO NOT INCLUDE SECRETS)
-.env
-config.json
-
-# Localization (generated files)
-untranslated_messages.json
-lib/l10n/app_localizations*.dart
-
-# Coverage
+# Dependencies and generated output
+node_modules/
 coverage/
+playwright-report/
+test-results/
+.expo/
+*.log
+*.tsbuildinfo
 
-# Extensions
-.VsCodeCounter/*
+# Local configuration and credentials
+.env
+.env*.local
+config.json
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
 
-# Claude
+# Local tool state
+.wrangler/
 .claude/
 CLAUDE.md
-
-# Codex
-AGENTS.md
 .agents/*
-
-# Cloudflare local state
-.wrangler/
-
-# T3 Code
 .t3/
 t3.json
 
-# Local project icon
+# Generated reports and local assets
+untranslated_messages.json
 assets/icons/project_icon.png

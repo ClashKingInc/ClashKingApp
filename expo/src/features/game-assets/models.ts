@@ -121,7 +121,11 @@ export class GameAssetCategory {
   }
 
   get extensions(): readonly string[] {
-    return Object.freeze([...new Set(this.assets.map((asset) => asset.extension))].sort());
+    return Object.freeze(
+      [...new Set(this.assets.map((asset) => asset.extension))].sort((left, right) =>
+        left.localeCompare(right),
+      ),
+    );
   }
 }
 
@@ -171,7 +175,9 @@ function buildCategories(assets: readonly GameAsset[]): GameAssetCategory[] {
     items.push(asset);
     grouped.set(asset.category, items);
   }
-  return [...grouped.keys()].sort().map((id) => new GameAssetCategory(id, grouped.get(id)!));
+  return [...grouped.keys()]
+    .sort((left, right) => left.localeCompare(right))
+    .map((id) => new GameAssetCategory(id, grouped.get(id)!));
 }
 
 function naturalParts(value: string): readonly (number | string)[] {

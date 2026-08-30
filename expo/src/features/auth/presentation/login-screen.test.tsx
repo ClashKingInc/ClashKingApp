@@ -54,6 +54,8 @@ describe('LoginScreen', () => {
     expect(screen.getByLabelText('Password')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Login' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Continue with Discord' })).toBeTruthy();
+    expect(screen.getByTestId('discord-login-mark')).toBeTruthy();
+    expect(screen.getByTestId('discord-support-mark')).toBeTruthy();
   });
 
   it('omits only the Discord alternative when Discord sign-in is disabled', async () => {

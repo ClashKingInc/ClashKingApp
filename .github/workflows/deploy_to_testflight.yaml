@@ -87,9 +87,6 @@ jobs:
           npm run lint
           npm test
           npm run l10n:check
-          npm run l10n:parity
-          npm run assets:parity
-          npm run parity:check
           npx expo-doctor
 
       - name: Generate iOS project

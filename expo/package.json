@@ -92,11 +92,7 @@
     "l10n:check": "node ./scripts/generate-localizations.mjs --check",
     "licenses:generate": "node ./scripts/generate-license-inventory.mjs",
     "licenses:check": "node ./scripts/generate-license-inventory.mjs --check",
-    "l10n:parity": "node ./scripts/check-flutter-localization-parity.mjs",
-    "assets:parity": "node ./scripts/check-flutter-asset-parity.mjs",
     "e2e:structure": "node ./scripts/check-expo-e2e-structure.mjs",
-    "parity:generate": "node ./scripts/generate-parity-manifest.mjs",
-    "parity:check": "node --test ./scripts/parity-source-fingerprint.test.mjs && node ./scripts/generate-parity-manifest.mjs --check",
     "test:native-plugin": "node --test plugins/__tests__/*.test.js",
     "test:web-build": "node --test scripts/stamp-web-service-worker.test.mjs"
   },

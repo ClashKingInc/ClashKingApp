@@ -141,17 +141,30 @@ export function rankedTierHighlights(
         tier: list[0]?.tier ?? null,
         lastPeriod: latest(list),
         bestRankPeriod: ranked.length
-          ? ranked.reduce((a, b) => (a.placement < b.placement ? a : b))
+          ? selectPeriod(ranked, (a, b) => (a.placement < b.placement ? a : b))
           : null,
-        bestTrophiesPeriod: list.reduce((a, b) => (a.trophies > b.trophies ? a : b)),
-        mostAttacksPeriod: list.reduce((a, b) => (a.attackCount > b.attackCount ? a : b)),
+        bestTrophiesPeriod: selectPeriod(list, (a, b) => (a.trophies > b.trophies ? a : b)),
+        mostAttacksPeriod: selectPeriod(list, (a, b) => (a.attackCount > b.attackCount ? a : b)),
       };
     })
     .sort((a, b) => (b.tier?.id ?? 0) - (a.tier?.id ?? 0));
 }
 
 function latest(periods: readonly RankedPeriod[]) {
-  return periods.reduce((a, b) => (a.seasonId > b.seasonId ? a : b));
+  return selectPeriod(periods, (a, b) => (a.seasonId > b.seasonId ? a : b));
+}
+
+function selectPeriod(
+  periods: readonly RankedPeriod[],
+  select: (current: RankedPeriod, candidate: RankedPeriod) => RankedPeriod,
+): RankedPeriod {
+  const first = periods[0];
+  if (first === undefined) throw new Error('Cannot select from an empty ranked period list.');
+  let selected = first;
+  for (let index = 1; index < periods.length; index += 1) {
+    selected = select(selected, periods[index]!);
+  }
+  return selected;
 }
 
 export interface LegendChartPoint {

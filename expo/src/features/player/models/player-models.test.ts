@@ -222,6 +222,23 @@ test('full stats orient the current war to the player and parser fallback matche
   expect(player.warData?.clan?.tag).toBe('#B');
   expect(player.warData?.opponent?.tag).toBe('#A');
 });
+test('legend extrema handle empty histories and preserve the latest matching best season', () => {
+  const player = Player.empty();
+  expect(player.getBestTrophiesSeason()).toBeNull();
+  expect(player.getBestGlobalRankSeason()).toBeNull();
+  expect(player.getBestAttackWinsSeason()).toBeNull();
+
+  player.enrichWithFullStats({
+    legend_eos_ranking: [
+      { season: '2026-06', trophies: 5500, rank: 20, attackWins: 100 },
+      { season: '2026-07', trophies: 5600, rank: 10, attackWins: 110 },
+      { season: '2026-08', trophies: 5600, rank: 10, attackWins: 110 },
+    ],
+  });
+  expect(player.getBestTrophiesSeason()?.season).toBe('2026-08');
+  expect(player.getBestGlobalRankSeason()?.season).toBe('2026-08');
+  expect(player.getBestAttackWinsSeason()?.season).toBe('2026-08');
+});
 test('war filter preserves exact request keys and precedence', () => {
   const filter = new WarStatsFilter({
     season: '2026-08',
@@ -240,6 +257,17 @@ test('war filter preserves exact request keys and precedence', () => {
     stars: [2, 3],
   });
   expect(WarStatsFilter.fromJson(filter.toJson()).hasActiveFilters()).toBe(true);
+});
+test('war filter array parsing does not use map indexes as numeric fallbacks', () => {
+  const filter = WarStatsFilter.fromJson({
+    own_th: [16, 'invalid', 18],
+    enemy_th: ['invalid', 17],
+    stars: ['invalid', 3],
+  });
+
+  expect(filter.ownTownHalls).toEqual([16, 0, 18]);
+  expect(filter.enemyTownHalls).toEqual([0, 17]);
+  expect(filter.allowedStars).toEqual([0, 3]);
 });
 test('war snapshots retain dates, members, attacks, and to-do lookup behavior', () => {
   const war = WarInfoSnapshot.fromJson({

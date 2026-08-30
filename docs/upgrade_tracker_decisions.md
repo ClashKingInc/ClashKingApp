@@ -84,7 +84,7 @@ Every upgrade category exposes its remaining upgrade-level count and resource to
 
 ### **Use one configurable native upgrade widget**
 
-The existing iOS widget extension and App Group are reused. Flutter writes only linked accounts that also have raw snapshots. System Large separates Home Village, Laboratory, Pets, and Builder Base; System Medium uses a purpose-built, less granular village/research summary. Both show structured boosts, helper status, level transitions beside compact durations, and aspect-fit artwork.
+The existing iOS widget extension and App Group are reused. The app writes only linked accounts that also have raw snapshots. System Large separates Home Village, Laboratory, Pets, and Builder Base; System Medium uses a purpose-built, less granular village/research summary. Both show structured boosts, helper status, level transitions beside compact durations, and aspect-fit artwork.
 
 ### **Follow iPhone interaction conventions during refinement**
 

@@ -500,6 +500,9 @@ function intString(value: unknown) {
 function leagueName(value: unknown) {
   return string(record(value).name, 'Unranked');
 }
-function reduceOrNull<T>(items: T[], fn: (a: T, b: T) => T) {
-  return items.length ? items.reduce(fn) : null;
+function reduceOrNull<T>(items: T[], fn: (a: T, b: T) => T): T | null {
+  if (items.length === 0) return null;
+  let result: T = items[0]!;
+  for (let index = 1; index < items.length; index += 1) result = fn(result, items[index]!);
+  return result;
 }

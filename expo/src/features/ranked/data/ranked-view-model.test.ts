@@ -81,6 +81,21 @@ describe('Ranked and Legend view models', () => {
     expect(highlights[1]?.bestRankPeriod).toBeNull();
   });
 
+  test('preserves the latest matching period when ranked highlight values tie', () => {
+    const period = rankedHistoricalPeriods(rankedPeriods(data))[0]!;
+    const laterMatchingPeriod = {
+      ...period,
+      seasonId: period.seasonId + 1,
+      startsAt: new Date(period.startsAt.getTime() + 1_000),
+    };
+
+    const highlight = rankedTierHighlights([period, laterMatchingPeriod])[0]!;
+    expect(highlight.lastPeriod).toBe(laterMatchingPeriod);
+    expect(highlight.bestRankPeriod).toBe(laterMatchingPeriod);
+    expect(highlight.bestTrophiesPeriod).toBe(laterMatchingPeriod);
+    expect(highlight.mostAttacksPeriod).toBe(laterMatchingPeriod);
+  });
+
   test('uses battle trophy deltas rather than star totals for the offense and defense summary', () => {
     const second = new RankedLeagueBattle('#B', 'B', 1, 40, 20, null);
     expect(rankedBattleSummary([attack, second], 2, 14)).toEqual({

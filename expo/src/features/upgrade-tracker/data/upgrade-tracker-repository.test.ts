@@ -50,9 +50,11 @@ function setup(
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation: fetchImplementation as typeof fetch,
   });
+  const store = new MemoryStore();
   return {
-    repository: new UpgradeTrackerRepository(api, new MemoryStore(), undefined, () => bundle),
+    repository: new UpgradeTrackerRepository(api, store, undefined, () => bundle),
     calls,
+    store,
   };
 }
 
@@ -201,4 +203,99 @@ test('remote failures fall back to the last local snapshot and clearCache remove
   repository.clearCache();
   expect((await repository.load('#TEST'))?.name).toBe('Local');
   expect(calls.filter((call) => call.path.endsWith('/upgrades'))).toHaveLength(1);
+});
+
+test('validates object shape, player identity, static data, and recognizable village data', async () => {
+  const { repository } = setup();
+  await expect(
+    repository.importSnapshotBytes(new TextEncoder().encode('[]'), {
+      allowedTags: new Set(['#TEST']),
+    }),
+  ).rejects.toMatchObject({
+    reason: 'invalid-account-json',
+    message: expect.stringContaining('object'),
+  });
+  await expect(
+    repository.importSnapshotBytes(new TextEncoder().encode('{}'), {
+      allowedTags: new Set(['#TEST']),
+    }),
+  ).rejects.toThrow('missing its player tag');
+  await expect(
+    repository.importSnapshotBytes(new TextEncoder().encode('{"tag":"#TEST"}'), {
+      allowedTags: new Set(['#TEST']),
+    }),
+  ).rejects.toThrow('raw Clash account snapshot');
+
+  const noStatic = setup().repository;
+  Object.defineProperty(noStatic, 'bundleProvider', { value: () => ({}) });
+  await expect(noStatic.load('#TEST')).rejects.toThrow('Static game data was not loaded');
+  await expect(noStatic.saveRawSnapshot('', {})).rejects.toThrow('must include a player tag');
+});
+
+test('loads saved snapshot batches, filters malformed index entries, and reuses cache', async () => {
+  const { repository, store } = setup();
+  await repository.importSnapshotBytes(
+    new TextEncoder().encode(
+      JSON.stringify({ tag: '#A', name: 'Alpha', buildings: [{ data: 1, lvl: 18 }] }),
+    ),
+    { allowedTags: new Set(['#A']) },
+  );
+  await store.setItem(
+    'upgrade_tracker_snapshot_index_v1',
+    JSON.stringify([null, {}, { tag: '#A', name: 'Alpha', townHallLevel: 18 }]),
+  );
+  await expect(repository.savedSnapshotAccounts()).resolves.toEqual([
+    expect.objectContaining({ tag: '#A', name: 'Alpha', townHallLevel: '18' }),
+  ]);
+  const first = await repository.loadSavedSnapshots(['#A', '#MISSING']);
+  const second = await repository.loadSavedSnapshots(['A']);
+  expect(first).toHaveLength(1);
+  expect(second[0]).toBe(first[0]);
+
+  await store.setItem('upgrade_tracker_snapshot_index_v1', '{}');
+  await expect(repository.savedSnapshotAccounts()).resolves.toEqual([]);
+});
+
+test('uses remote preferences when valid and keeps local preferences for invalid or failed responses', async () => {
+  const { repository, store, calls } = setup(async (path) => {
+    if (path.endsWith('/upgrade-preferences')) {
+      return reply({ preferences: { strategy: 'cheapest', gold_pass_percent: 10 } });
+    }
+    return reply({}, 404);
+  });
+  repository.configureRemote({ accountId: ' user ', verifiedPlayerTags: ['test'] });
+  await expect(repository.loadPlanPreferences('#TEST')).resolves.toMatchObject({
+    strategy: 'cheapest',
+    gold_pass_percent: 10,
+  });
+  expect(calls[0]?.path).toBe('/links/user/%23TEST/upgrade-preferences');
+
+  await store.setItem(
+    'upgrade_tracker_preferences_v2_#TEST',
+    JSON.stringify({ strategy: 'shortest', gold_pass_percent: 20 }),
+  );
+  const fallback = setup(async () => reply({ preferences: [] }, 500));
+  fallback.repository.configureRemote({ accountId: 'user', verifiedPlayerTags: ['#TEST'] });
+  await fallback.store.setItem(
+    'upgrade_tracker_preferences_v2_#TEST',
+    JSON.stringify({ strategy: 'shortest', gold_pass_percent: 20 }),
+  );
+  await expect(fallback.repository.loadPlanPreferences('#TEST')).resolves.toMatchObject({
+    strategy: 'shortest',
+  });
+});
+
+test('surfaces rejected remote writes and ignores empty remote snapshot responses', async () => {
+  const failed = setup(async () => reply({}, 503));
+  failed.repository.configureRemote({ accountId: 'user', verifiedPlayerTags: ['#TEST'] });
+  await expect(
+    failed.repository.saveRawSnapshot('#TEST', { tag: '#TEST', buildings: [{ data: 1, lvl: 18 }] }),
+  ).rejects.toThrow('Could not save upgrade data (503)');
+  await expect(failed.repository.savePlanPreferences('#TEST', 0, 'balanced')).rejects.toThrow(
+    'Could not save upgrade preferences (503)',
+  );
+
+  const empty = setup(async () => reply({ data: {} }));
+  empty.repository.configureRemote({ accountId: 'user', verifiedPlayerTags: ['#TEST'] });
+  await expect(empty.repository.load('#TEST', true)).resolves.toBeNull();
 });

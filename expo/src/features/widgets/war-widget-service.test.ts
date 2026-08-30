@@ -182,6 +182,117 @@ describe('war widget payloads', () => {
       }),
     );
   });
+
+  test('formats preparation and ended wars with the correct timing, result, and fallbacks', () => {
+    const preparation = JSON.parse(
+      buildWarWidgetPayload(
+        {
+          war_info: {
+            currentWarInfo: {
+              state: 'preparation',
+              teamSize: 5,
+              startTime: new Date(2026, 0, 2, 13, 49).toISOString(),
+              clan: { stars: 0 },
+              opponent: { stars: 0 },
+            },
+          },
+        },
+        '#HOME',
+        now,
+      ),
+    );
+    expect(preparation).toMatchObject({
+      state: 'preparation',
+      primaryText: 'Starts in 1h 15m',
+      colorTheme: 'preparation',
+      clan: { name: 'Unknown', badgeUrlMedium: expect.stringContaining('clashkinglogo') },
+    });
+
+    const victory = JSON.parse(
+      buildWarWidgetPayload(
+        {
+          war_info: {
+            currentWarInfo: {
+              state: 'warEnded',
+              teamSize: 10,
+              clan: { stars: 29, badgeUrls: { small: 'small.png', large: 'large.png' } },
+              opponent: { stars: 28 },
+            },
+          },
+        },
+        '#HOME',
+        now,
+      ),
+    );
+    expect(victory).toMatchObject({
+      primaryText: 'Victory!',
+      score: '29 - 28',
+      statusIcon: '🏆',
+      clan: { badgeUrlMedium: 'small.png' },
+    });
+
+    const soon = JSON.parse(
+      buildWarWidgetPayload(
+        {
+          isInWar: true,
+          war_info: {
+            currentWarInfo: {
+              state: 'inWar',
+              endTime: new Date(2026, 0, 2, 12, 49).toISOString(),
+              clan: { stars: 1 },
+              opponent: { stars: 2 },
+            },
+          },
+        },
+        '#HOME',
+        now,
+      ),
+    );
+    expect(soon).toMatchObject({ primaryText: 'Ends at 12:49', colorTheme: 'losing' });
+  });
+
+  test('uses the latest completed CWL war and returns a neutral payload when none match', () => {
+    const completed = JSON.parse(
+      buildWarWidgetPayload(
+        {
+          isInCwl: true,
+          league_info: { clans: [{ tag: '#OURS', rank: Number.NaN }] },
+          war_league_infos: [
+            {
+              state: 'warEnded',
+              endTime: '2026-01-01T00:00:00Z',
+              clan: { tag: '#OURS', stars: 1 },
+              opponent: { tag: '#OLD', stars: 2 },
+            },
+            {
+              state: 'warEnded',
+              endTime: '2026-01-02T00:00:00Z',
+              clan: { tag: '#OURS', stars: 3 },
+              opponent: { tag: '#NEW', stars: 2 },
+            },
+          ],
+        },
+        'OURS',
+        now,
+      ),
+    );
+    expect(completed).toMatchObject({
+      primaryText: 'CWL Victory!',
+      score: '3 - 2',
+      cwlRank: null,
+      cwlLeague: 'unknown',
+      clan: { badgeUrlMedium: null },
+    });
+
+    const empty = JSON.parse(
+      buildWarWidgetPayload(
+        { isInCwl: true, league_info: {}, war_league_infos: [{ state: 'unknown' }] },
+        '#OURS',
+        now,
+      ),
+    );
+    expect(empty).toMatchObject({ state: 'cwl', score: '-', secondaryText: 'No active wars' });
+  });
 });
 
 describe('WarWidgetService', () => {
@@ -325,5 +436,73 @@ describe('WarWidgetService', () => {
     expect(h.reportError).toHaveBeenCalledWith(
       expect.objectContaining({ operation: 'widget.fetch_war_summary' }),
     );
+  });
+
+  test('handles platform, scheduler, empty action, and malformed action boundaries', async () => {
+    const ios = harness({ platform: 'ios', backgroundScheduler: undefined });
+    await expect(ios.service.registerPeriodicRefresh()).resolves.toBeUndefined();
+    await expect(ios.service.consumePendingWidgetAction()).resolves.toBe(false);
+
+    const android = harness({ backgroundScheduler: undefined });
+    await expect(android.service.registerPeriodicRefresh()).rejects.toThrow('not configured');
+    await expect(android.service.consumePendingWidgetAction()).resolves.toBe(false);
+    await expect(android.service.handleWidgetAction('not a url')).resolves.toBe(false);
+    expect(android.reportError).toHaveBeenCalledWith(
+      expect.objectContaining({ operation: 'widget.action' }),
+    );
+    await expect(android.service.executeBackgroundTask('unrelated')).resolves.toBe(true);
+  });
+
+  test('seeds cached options, updates from fallback clan, and tolerates malformed cache data', async () => {
+    const h = harness({
+      getFirstAvailableAccount: jest.fn(async () => '#PLAYER'),
+      loadPlayerClanTag: jest.fn(async () => '#CLAN'),
+    });
+    await h.service.seedClanOptionsFromProfiles([]);
+    expect(h.native.reloadWidgets).not.toHaveBeenCalled();
+
+    await h.service.seedClanOptionsFromProfiles([
+      {
+        tag: '#PLAYER',
+        clanOverview: { tag: '#CLAN', name: 'Clan', badgeUrls: { medium: '' } },
+      },
+    ]);
+    expect(h.native.reloadWidgets).toHaveBeenCalledTimes(1);
+    expect(await h.service.getCachedClanOptions()).toEqual([{ tag: '#CLAN', name: 'Clan' }]);
+
+    await h.mirror.setItem(WIDGET_STORAGE_KEYS.warClans, '{bad json');
+    await expect(h.service.getCachedClanOptions()).resolves.toEqual([]);
+    await h.mirror.removeItem(WIDGET_STORAGE_KEYS.warClans);
+    h.native.reloadWidgets.mockClear();
+    await h.service.updateWarWidget();
+    expect(h.native.setWidgetValue).toHaveBeenCalledWith('warInfo_CLAN', expect.any(String));
+    expect(h.native.reloadWidgets).toHaveBeenCalledTimes(1);
+  });
+
+  test('refreshes every cached clan, coalesces duplicate loads, and reports non-fatally', async () => {
+    let release: ((value: { war_info: { state: string } }) => void) | undefined;
+    const pending = new Promise<{ war_info: { state: string } }>((resolve) => {
+      release = resolve;
+    });
+    const loadWarSummary = jest.fn(async () => pending);
+    const h = harness({
+      loadWarSummary,
+      reportError: jest.fn(async () => Promise.reject(new Error('reporter offline'))),
+    });
+    await h.mirror.setItem(
+      WIDGET_STORAGE_KEYS.warClans,
+      JSON.stringify([
+        { tag: '#A', name: 'Alpha' },
+        { tag: '#A', name: 'Alpha duplicate' },
+      ]),
+    );
+    const first = h.service.refreshWarInfoForClan('#A');
+    const second = h.service.refreshWarInfoForClan('A');
+    expect(loadWarSummary).toHaveBeenCalledTimes(1);
+    release?.({ war_info: { state: 'notInWar' } });
+    await Promise.all([first, second]);
+
+    await h.service.handleWidgetRefresh();
+    expect(h.native.reloadWidgets).toHaveBeenCalled();
   });
 });
