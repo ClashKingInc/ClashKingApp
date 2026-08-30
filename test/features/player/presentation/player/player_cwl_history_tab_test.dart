@@ -42,6 +42,10 @@ void main() {
     expect(find.text('First Clan'), findsOneWidget);
     expect(find.text('Second Clan'), findsOneWidget);
     expect(find.byType(DropdownButtonFormField<String>), findsNothing);
+    expect(
+      tester.widget<ExpansionTile>(find.byType(ExpansionTile).first).key,
+      const PageStorageKey<String>('player-cwl-2026-08-01-#CLAN'),
+    );
     expect(find.text('Defender One'), findsNothing);
 
     await tester.tap(find.text('First Clan'));

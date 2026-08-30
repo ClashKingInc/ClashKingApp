@@ -121,6 +121,9 @@ class _CwlSeasonCard extends StatelessWidget {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
+            key: PageStorageKey<String>(
+              'player-cwl-${season.season}-${season.clan.tag}',
+            ),
             tilePadding: const EdgeInsets.fromLTRB(
               CKSpacing.md,
               CKSpacing.sm,

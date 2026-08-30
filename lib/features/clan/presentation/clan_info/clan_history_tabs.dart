@@ -62,11 +62,10 @@ class _ClanLeaderboardHistoryTabState extends State<ClanLeaderboardHistoryTab> {
     final selectedIndex = summary.seasons.indexWhere(
       (season) => season.season == selectedSeason,
     );
-    final startIndex = selectedIndex < 0
-        ? 0
-        : type == ClanLeaderboardType.clanCapital
-        ? (selectedIndex ~/ 6) * 6
-        : selectedIndex;
+    var startIndex = selectedIndex < 0 ? 0 : selectedIndex;
+    if (type == ClanLeaderboardType.clanCapital) {
+      startIndex = (startIndex ~/ 6) * 6;
+    }
     if (generation == _loadGeneration) {
       _selectedSeason = summary.seasons[startIndex].season;
     }
@@ -314,7 +313,7 @@ class _ClanLegendHistoryTabState extends State<ClanLegendHistoryTab> {
                   children: [
                     SizedBox.square(
                       dimension: 24,
-                      child: MobileWebImage(
+                      child: const MobileWebImage(
                         imageUrl: ImageAssets.legendLeagueOne,
                       ),
                     ),
@@ -708,35 +707,8 @@ class _LeaderboardHistoryChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).toString();
-    final number = NumberFormat.compact(locale: locale);
-    final rangeStart = summaries
-        .map((summary) => summary.after)
-        .reduce((a, b) => a.isBefore(b) ? a : b);
-    final rangeEnd = summaries
-        .map((summary) => summary.before)
-        .reduce((a, b) => a.isAfter(b) ? a : b);
-    final totalDays = rangeEnd.difference(rangeStart).inDays.clamp(1, 366);
-    final spots = <FlSpot>[
-      for (final entry in entries)
-        FlSpot(
-          entry.date.difference(rangeStart).inHours / 24,
-          metric == _LeaderboardChartMetric.rank
-              ? -entry.rank.toDouble()
-              : entry.points.toDouble(),
-        ),
-    ];
-    final values = spots.map((spot) => spot.y);
-    final rawMinY = values.reduce((a, b) => a < b ? a : b);
-    final rawMaxY = values.reduce((a, b) => a > b ? a : b);
-    final yPadding = ((rawMaxY - rawMinY).abs() * 0.1).clamp(
-      1,
-      double.infinity,
-    );
-    final accent = switch (type) {
-      ClanLeaderboardType.homeVillage => CKColors.legendBlue,
-      ClanLeaderboardType.builderBase => CKColors.builderBlue,
-      ClanLeaderboardType.clanCapital => CKColors.capitalOrange,
-    };
+    final chart = _LeaderboardChartData.from(entries, summaries, metric);
+    final accent = _leaderboardChartAccent(type);
 
     return CKSectionPanel(
       child: SizedBox(
@@ -744,9 +716,9 @@ class _LeaderboardHistoryChart extends StatelessWidget {
         child: LineChart(
           LineChartData(
             minX: 0,
-            maxX: totalDays.toDouble(),
-            minY: rawMinY - yPadding,
-            maxY: rawMaxY + yPadding,
+            maxX: chart.totalDays.toDouble(),
+            minY: chart.minY,
+            maxY: chart.maxY,
             clipData: const FlClipData.all(),
             gridData: FlGridData(
               drawVerticalLine: false,
@@ -756,94 +728,17 @@ class _LeaderboardHistoryChart extends StatelessWidget {
               ),
             ),
             borderData: FlBorderData(show: false),
-            titlesData: FlTitlesData(
-              topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 46,
-                  getTitlesWidget: (value, meta) => SideTitleWidget(
-                    meta: meta,
-                    child: Text(
-                      metric == _LeaderboardChartMetric.rank
-                          ? number.format(-value)
-                          : number.format(value),
-                      style: CKTypography.of(
-                        context,
-                        CKTextRole.compactLabel,
-                      ).copyWith(color: scheme.onSurfaceVariant),
-                    ),
-                  ),
-                ),
-              ),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 30,
-                  interval: (totalDays / 4).ceilToDouble(),
-                  getTitlesWidget: (value, meta) {
-                    final day = value.round();
-                    if (day < 0 || day > totalDays) {
-                      return const SizedBox.shrink();
-                    }
-                    return SideTitleWidget(
-                      meta: meta,
-                      child: Text(
-                        DateFormat.MMMd(
-                          locale,
-                        ).format(rangeStart.add(Duration(days: day))),
-                        style: CKTypography.of(
-                          context,
-                          CKTextRole.compactLabel,
-                        ).copyWith(color: scheme.onSurfaceVariant),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            lineTouchData: LineTouchData(
-              touchTooltipData: LineTouchTooltipData(
-                getTooltipColor: (_) => scheme.surfaceContainerHighest,
-                getTooltipItems: (spots) => spots
-                    .map((spot) {
-                      final entry = entries.reduce(
-                        (closest, candidate) =>
-                            (candidate.date.difference(rangeStart).inHours /
-                                            24 -
-                                        spot.x)
-                                    .abs() <
-                                (closest.date.difference(rangeStart).inHours /
-                                            24 -
-                                        spot.x)
-                                    .abs()
-                            ? candidate
-                            : closest,
-                      );
-                      final value = metric == _LeaderboardChartMetric.rank
-                          ? '#${NumberFormat.decimalPattern(locale).format(entry.rank)}'
-                          : NumberFormat.decimalPattern(
-                              locale,
-                            ).format(entry.points);
-                      return LineTooltipItem(
-                        '${DateFormat.yMMMd(locale).format(entry.date)}\n$value',
-                        CKTypography.of(
-                          context,
-                          CKTextRole.metadata,
-                        ).copyWith(color: scheme.onSurface),
-                      );
-                    })
-                    .toList(growable: false),
-              ),
+            titlesData: _chartTitles(context, locale, chart, metric),
+            lineTouchData: _chartTouchData(
+              context,
+              locale,
+              chart.rangeStart,
+              entries,
+              metric,
             ),
             lineBarsData: [
               LineChartBarData(
-                spots: spots,
+                spots: chart.spots,
                 color: accent,
                 barWidth: 3,
                 isCurved: entries.length > 3,
@@ -863,6 +758,166 @@ class _LeaderboardHistoryChart extends StatelessWidget {
     );
   }
 }
+
+class _LeaderboardChartData {
+  const _LeaderboardChartData({
+    required this.rangeStart,
+    required this.totalDays,
+    required this.spots,
+    required this.minY,
+    required this.maxY,
+  });
+
+  final DateTime rangeStart;
+  final int totalDays;
+  final List<FlSpot> spots;
+  final double minY;
+  final double maxY;
+
+  factory _LeaderboardChartData.from(
+    List<ClanLeaderboardHistoryEntry> entries,
+    List<ClanLeaderboardSeasonSummary> summaries,
+    _LeaderboardChartMetric metric,
+  ) {
+    var rangeStart = summaries.first.after;
+    var rangeEnd = summaries.first.before;
+    for (final summary in summaries.skip(1)) {
+      if (summary.after.isBefore(rangeStart)) rangeStart = summary.after;
+      if (summary.before.isAfter(rangeEnd)) rangeEnd = summary.before;
+    }
+    final totalDays = rangeEnd.difference(rangeStart).inDays.clamp(1, 366);
+    final spots = [
+      for (final entry in entries)
+        FlSpot(entry.date.difference(rangeStart).inHours / 24, switch (metric) {
+          _LeaderboardChartMetric.rank => -entry.rank.toDouble(),
+          _LeaderboardChartMetric.points => entry.points.toDouble(),
+        }),
+    ];
+    var rawMinY = spots.first.y;
+    var rawMaxY = spots.first.y;
+    for (final spot in spots.skip(1)) {
+      if (spot.y < rawMinY) rawMinY = spot.y;
+      if (spot.y > rawMaxY) rawMaxY = spot.y;
+    }
+    final padding = ((rawMaxY - rawMinY).abs() * 0.1).clamp(1, double.infinity);
+    return _LeaderboardChartData(
+      rangeStart: rangeStart,
+      totalDays: totalDays,
+      spots: spots,
+      minY: rawMinY - padding,
+      maxY: rawMaxY + padding,
+    );
+  }
+}
+
+FlTitlesData _chartTitles(
+  BuildContext context,
+  String locale,
+  _LeaderboardChartData chart,
+  _LeaderboardChartMetric metric,
+) {
+  final scheme = Theme.of(context).colorScheme;
+  final number = NumberFormat.compact(locale: locale);
+  final labelStyle = CKTypography.of(
+    context,
+    CKTextRole.compactLabel,
+  ).copyWith(color: scheme.onSurfaceVariant);
+  return FlTitlesData(
+    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+    leftTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 46,
+        getTitlesWidget: (value, meta) => SideTitleWidget(
+          meta: meta,
+          child: Text(switch (metric) {
+            _LeaderboardChartMetric.rank => number.format(-value),
+            _LeaderboardChartMetric.points => number.format(value),
+          }, style: labelStyle),
+        ),
+      ),
+    ),
+    bottomTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 30,
+        interval: (chart.totalDays / 4).ceilToDouble(),
+        getTitlesWidget: (value, meta) {
+          final day = value.round();
+          if (day < 0 || day > chart.totalDays) {
+            return const SizedBox.shrink();
+          }
+          return SideTitleWidget(
+            meta: meta,
+            child: Text(
+              DateFormat.MMMd(
+                locale,
+              ).format(chart.rangeStart.add(Duration(days: day))),
+              style: labelStyle,
+            ),
+          );
+        },
+      ),
+    ),
+  );
+}
+
+LineTouchData _chartTouchData(
+  BuildContext context,
+  String locale,
+  DateTime rangeStart,
+  List<ClanLeaderboardHistoryEntry> entries,
+  _LeaderboardChartMetric metric,
+) {
+  final scheme = Theme.of(context).colorScheme;
+  final number = NumberFormat.decimalPattern(locale);
+  return LineTouchData(
+    touchTooltipData: LineTouchTooltipData(
+      getTooltipColor: (_) => scheme.surfaceContainerHighest,
+      getTooltipItems: (spots) => spots
+          .map((spot) {
+            final entry = _closestEntry(entries, rangeStart, spot.x);
+            final value = switch (metric) {
+              _LeaderboardChartMetric.rank => '#${number.format(entry.rank)}',
+              _LeaderboardChartMetric.points => number.format(entry.points),
+            };
+            return LineTooltipItem(
+              '${DateFormat.yMMMd(locale).format(entry.date)}\n$value',
+              CKTypography.of(
+                context,
+                CKTextRole.metadata,
+              ).copyWith(color: scheme.onSurface),
+            );
+          })
+          .toList(growable: false),
+    ),
+  );
+}
+
+ClanLeaderboardHistoryEntry _closestEntry(
+  List<ClanLeaderboardHistoryEntry> entries,
+  DateTime rangeStart,
+  double targetDay,
+) {
+  var closest = entries.first;
+  var closestDistance = double.infinity;
+  for (final candidate in entries) {
+    final day = candidate.date.difference(rangeStart).inHours / 24;
+    final distance = (day - targetDay).abs();
+    if (distance < closestDistance) {
+      closest = candidate;
+      closestDistance = distance;
+    }
+  }
+  return closest;
+}
+
+Color _leaderboardChartAccent(ClanLeaderboardType type) => switch (type) {
+  ClanLeaderboardType.homeVillage => CKColors.legendBlue,
+  ClanLeaderboardType.builderBase => CKColors.builderBlue,
+  ClanLeaderboardType.clanCapital => CKColors.capitalOrange,
+};
 
 class _LeaderboardHistoryRow extends StatelessWidget {
   const _LeaderboardHistoryRow({
