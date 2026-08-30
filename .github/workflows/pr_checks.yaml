@@ -167,7 +167,7 @@ jobs:
 
   ios_build:
     name: iOS unsigned simulator build
-    runs-on: blacksmith-6vcpu-macos-15
+    runs-on: blacksmith-6vcpu-macos-26
     needs: changes
     if: github.event_name == 'push' || needs.changes.outputs.ios == 'true'
     defaults:
@@ -188,15 +188,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate iOS project
-        run: npx expo prebuild --platform ios --clean --no-install
-
-      - name: Install CocoaPods dependencies
-        working-directory: expo/ios
-        run: pod install
-
       - name: Install ccache
         run: command -v ccache >/dev/null 2>&1 || brew install ccache
+
+      - name: Generate iOS project
+        run: npx expo prebuild --platform ios --clean --no-install
 
       - name: Restore iOS compiler cache
         uses: actions/cache@v4
@@ -211,6 +207,10 @@ jobs:
           ccache --set-config=compiler_check=content
           ccache --set-config=max_size=5G
           ccache --zero-stats
+
+      - name: Install CocoaPods dependencies
+        working-directory: expo/ios
+        run: pod install
 
       - name: Build iOS app and WarWidget without signing
         working-directory: expo/ios
