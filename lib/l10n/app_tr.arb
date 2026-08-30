@@ -892,7 +892,15 @@
   "warLog": "Savaş Günlüğü",
   "warLogSearchPlaceholder": "Savaşları ara",
   "warLogClosed": "{clan} klanının savaş günlüğü kapalı.",
+  "warLogPrivate": "{clan} klanının savaş günlüğü gizli.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Şimdilik her şey tamam",
+  "timeDurationShort": "{unit, select, daysHours {{primary}g {secondary}sa} hoursMinutes {{primary}sa {secondary}dk} other {{primary}dk}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "{duration} içinde biter",
   "@todoEventEndsIn": {
     "placeholders": {
