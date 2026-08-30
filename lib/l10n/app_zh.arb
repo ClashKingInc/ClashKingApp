@@ -892,7 +892,15 @@
   "warLog": "对战日志",
   "warLogSearchPlaceholder": "搜索战",
   "warLogClosed": "{clan} 的部落战日志已关闭。",
+  "warLogPrivate": "{clan} 的部落对战日志为私密。",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "目前都完成了",
+  "timeDurationShort": "{unit, select, daysHours {{primary}天{secondary}小时} hoursMinutes {{primary}小时{secondary}分钟} other {{primary}分钟}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "将在 {duration} 后结束",
   "@todoEventEndsIn": {
     "placeholders": {
