@@ -892,7 +892,15 @@
   "warLog": "Sota Loki",
   "warLogSearchPlaceholder": "Etsi sodat",
   "warLogClosed": "{clan}'s sota loki on suljettu.",
+  "warLogPrivate": "{clan}-klaanin sotapäiväkirja on yksityinen.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -2973,6 +2981,21 @@
     }
   },
   "todoAllCaughtUpForNow": "Kaikki ajan tasalla toistaiseksi",
+  "timeDurationShort": "{unit, select, daysHours {{primary}pv {secondary}t} hoursMinutes {{primary}t {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Päättyy {duration} kuluttua",
   "@todoEventEndsIn": {
     "placeholders": {
