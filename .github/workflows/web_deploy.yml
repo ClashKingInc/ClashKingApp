@@ -5,10 +5,9 @@ on:
     branches:
       - main
       - staging
-  pull_request:
 
 concurrency:
-  group: web-deploy-${{ github.event.pull_request.number || github.ref }}
+  group: web-deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -25,9 +24,7 @@ jobs:
       EXPO_PUBLIC_CK_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
       EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
       EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || github.ref == 'refs/heads/staging' && 'https://staging-app.clashk.ing/auth/discord_callback.html' || '' }}
-      EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED: ${{ github.event_name == 'pull_request' && 'false' || 'true' }}
-    outputs:
-      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+      EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED: true
 
     steps:
       - name: Checkout
@@ -47,7 +44,6 @@ jobs:
         run: npm run web:export
 
       - name: Publish to Cloudflare Pages
-        if: github.event_name != 'pull_request'
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
@@ -55,16 +51,3 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: expo
           command: pages deploy dist --project-name=clashkingapp --branch=${{ github.head_ref || github.ref_name }}
-
-  pr-smoke:
-    needs: build-and-deploy
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      needs.build-and-deploy.outputs.deployment-url != ''
-    uses: ./.github/workflows/e2e.yml
-    with:
-      base_url: ${{ needs.build-and-deploy.outputs.deployment-url }}
-      api_base_url: https://dev-api.clashk.ing
-      smoke_only: true
-    secrets: inherit
