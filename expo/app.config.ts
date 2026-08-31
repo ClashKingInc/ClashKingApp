@@ -31,6 +31,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       googleServicesFile: './config/firebase/GoogleService-Info.plist',
       infoPlist: {
         CADisableMinimumFrameDurationOnPhone: true,
+        NSPhotoLibraryUsageDescription:
+          'ClashKing uses photo library access only when you choose to share generated progress images with a compatible app.',
         UIFileSharingEnabled: true,
         LSSupportsOpeningDocumentsInPlace: true,
         UISupportsDocumentBrowser: true,

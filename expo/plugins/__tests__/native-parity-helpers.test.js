@@ -182,6 +182,12 @@ test('retained Apple team identifier is part of the app config contract', () => 
   );
 });
 
+test('app config explains the photo-library symbol linked by native image sharing', () => {
+  const appConfig = fs.readFileSync(path.join(__dirname, '..', '..', 'app.config.ts'), 'utf8');
+  assert.match(appConfig, /NSPhotoLibraryUsageDescription:/);
+  assert.match(appConfig, /share generated progress images with a compatible app/);
+});
+
 test('appendUnique is stable and idempotent', () => {
   assert.deepEqual(appendUnique(['remote-notification'], ['remote-notification', 'processing']), [
     'remote-notification',
