@@ -283,13 +283,14 @@ describe('first linked-account continuation', () => {
     expect(names).toEqual(['One', 'Two']);
   });
 
-  it('inserts an account transferred by API-token verification', async () => {
+  it('opens API-token verification instead of generic failure for an account linked elsewhere', async () => {
     const transferred = {
       playerTag: '#NEW',
       isVerified: true,
       hidden: false,
       raw: { name: 'Transferred', townHallLevel: 16 },
     };
+    const addAccountWithToken = jest.fn(async () => ({ success: true, message: null }));
     const screen = await render(
       <I18nProvider locale="en">
         <CKThemeProvider preference="light">
@@ -307,7 +308,7 @@ describe('first linked-account continuation', () => {
                 message: 'Account linked elsewhere',
                 account: transferred,
               }),
-              addAccountWithToken: async () => ({ success: true, message: null }),
+              addAccountWithToken,
             }}
           />
         </CKThemeProvider>
@@ -316,9 +317,16 @@ describe('first linked-account continuation', () => {
 
     await fireEvent.changeText(screen.getByLabelText('Player Tag (#ABC123)'), '#NEW');
     await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
+    await waitFor(() => expect(screen.getByText('Verify Account')).toBeTruthy());
+    expect(screen.getByLabelText('Account API Token')).toBeTruthy();
+    expect(screen.getByText('#NEW')).toBeTruthy();
+    expect(screen.queryByText('Failed to add the account. Please try again later.')).toBeNull();
+    expect(addAccountWithToken).not.toHaveBeenCalled();
+
     await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
     await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
 
+    await waitFor(() => expect(addAccountWithToken).toHaveBeenCalledWith('#NEW', 'token'));
     await waitFor(() => expect(screen.getByText('Transferred')).toBeTruthy());
   });
 });

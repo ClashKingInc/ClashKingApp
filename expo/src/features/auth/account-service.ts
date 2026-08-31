@@ -346,13 +346,7 @@ export class CocAccountService {
         );
       }
       const data = parseOptionalResponseRecord(response);
-      const rawAccount =
-        response.status === 200
-          ? data.account
-          : isRecord(data.detail)
-            ? data.detail.account
-            : undefined;
-      const account = normalizeAccount(rawAccount);
+      const account = normalizeAccount(data.account);
       if (response.status === 200 && account !== null) {
         this.accountLinks = [
           ...this.accountLinks.filter((existing) => existing.playerTag !== account.playerTag),

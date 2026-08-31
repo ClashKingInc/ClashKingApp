@@ -76,15 +76,20 @@ describe('CocAccountService', () => {
     expect(requests).toHaveLength(1);
   });
 
-  test('adds accounts with and without verification and preserves detail error accounts', async () => {
+  test('adds accounts with and without verification and parses top-level conflict accounts', async () => {
     const { service, requests, reportError } = harness(({ body }) => {
       const requestBody = body as Record<string, unknown>;
       if (requestBody.player_tag === '#ERROR') {
         return new Response(
           JSON.stringify({
-            detail: {
-              message: 'Already linked',
-              account: account('#ERROR', { is_verified: true }),
+            code: 'conflict',
+            message: 'Already linked',
+            account: {
+              tag: '#ERROR',
+              name: 'Player #ERROR',
+              townHallLevel: 17,
+              is_verified: false,
+              hidden: false,
             },
           }),
           { status: 409 },
@@ -107,14 +112,15 @@ describe('CocAccountService', () => {
       code: 200,
       account: { playerTag: '#TWO', isVerified: true },
     });
-    await expect(service.addAccountWithVerification('#ERROR', 'token')).resolves.toEqual({
+    await expect(service.addAccount('#ERROR')).resolves.toMatchObject({
       code: 409,
       message: 'Already linked',
-      account: null,
+      account: { playerTag: '#ERROR', isVerified: false },
     });
     expect(service.accounts.map(({ playerTag }) => playerTag)).toEqual(['#ONE', '#TWO']);
     expect(requests[0]?.body).toEqual({ player_tag: '#ONE' });
     expect(requests[1]?.body).toEqual({ player_tag: '#TWO', api_token: 'token' });
+    expect(requests[2]?.body).toEqual({ player_tag: '#ERROR' });
     expect(reportError).toHaveBeenCalledWith('coc_account.add', expect.any(AccountHttpException));
   });
 
