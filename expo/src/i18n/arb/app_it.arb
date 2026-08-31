@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Tutti i costruttori sono occupati",
+  "upgradeTrackerBuildCost": "Costo di costruzione",
+  "upgradeTrackerBuilderBaseBuilders": "Costruttori della base del costruttore",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorio della base del costruttore",
+  "upgradeTrackerCalendar": "Calendario",
+  "upgradeTrackerClearCost": "Costo di rimozione",
+  "upgradeTrackerCompletionDetails": "Dettagli dei progressi del villaggio",
+  "upgradeTrackerCustomSoundtrack": "Colonna sonora personalizzata",
+  "upgradeTrackerGoldPassPercent": "Pass d'Oro al {percent}%",
+  "upgradeTrackerGroupSummary": "Riepilogo di {group}",
+  "upgradeTrackerGuardians": "Guardiani",
+  "upgradeTrackerHelpers": "Assistenti",
+  "upgradeTrackerHouseParts": "Parti della casa",
+  "upgradeTrackerIdleBuilders": "{count} costruttori inattivi",
+  "upgradeTrackerInProgress": "In corso",
+  "upgradeTrackerItemSemanticLabel": "{item}, livello {currentLevel} di {targetLevel}, {count} edifici",
+  "upgradeTrackerItemsOwned": "{count} posseduti",
+  "upgradeTrackerLane": "Coda",
+  "upgradeTrackerLevelTransition": "Livello {from} → {to}",
+  "upgradeTrackerLootNow": "Bottino attuale",
+  "upgradeTrackerLootOutlook": "Previsione del bottino",
+  "upgradeTrackerMusic": "Musica",
+  "upgradeTrackerNextDays": "Prossimi {count} giorni",
+  "upgradeTrackerNextPeriod": "Periodo successivo",
+  "upgradeTrackerNoGoldPass": "Nessun Pass d'Oro",
+  "upgradeTrackerNoMatchingUpgrades": "Nessun miglioramento corrispondente",
+  "upgradeTrackerNoMatchingUpgradesBody": "Prova un altro villaggio o un'altra coda.",
+  "upgradeTrackerNothingNeededNow": "Non serve nulla al momento",
+  "upgradeTrackerObstacles": "Ostacoli",
+  "upgradeTrackerPart": "Parte",
+  "upgradeTrackerPassReward": "Ricompensa del pass",
+  "upgradeTrackerPauseSoundtrack": "Metti in pausa la colonna sonora",
+  "upgradeTrackerPeriodCount": "Periodo {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Riproduci la colonna sonora",
+  "upgradeTrackerPreviousPeriod": "Periodo precedente",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Scenari",
+  "upgradeTrackerScheduledLane": "Programmato n. {lane}",
+  "upgradeTrackerShareProgress": "Progressi di {village}",
+  "upgradeTrackerSize": "Dimensione",
+  "upgradeTrackerSortLongest": "Più lunghi prima",
+  "upgradeTrackerSortName": "Nome A–Z",
+  "upgradeTrackerSortScheduled": "Programmato",
+  "upgradeTrackerSortShortest": "Più brevi prima",
+  "upgradeTrackerSoundtrackPosition": "Posizione della colonna sonora",
+  "upgradeTrackerStarts": "Inizio",
+  "upgradeTrackerTier": "Fascia",
+  "upgradeTrackerUpgradesStarting": "miglioramenti in partenza",
+  "upgradeTrackerUpgradingNow": "Miglioramento in corso",
+  "upgradeTrackerWarBase": "Base di guerra",
+  "notifSettingsSaveFailed": "Impossibile salvare le impostazioni delle notifiche.",
+  "notifPushEnabled": "Notifiche push attivate",
+  "notifReceiveNotifications": "Ricevi notifiche",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Gli avvisi attivati possono essere inviati a questo dispositivo.",
+  "notifDisabledAccountDescription": "Le notifiche sono disattivate per tutto il tuo account ClashKing.",
+  "notifMaximumRemindersAdded": "Numero massimo di promemoria aggiunto",
+  "notifAddReminder": "Aggiungi promemoria",
+  "notifDurationOneHour": "1 ora",
+  "notifDurationHours": "{count} ore",
+  "notifDurationMinutes": "{count} minuti",
+  "notifAddTiming": "Aggiungi {timing}",
+  "notifTimingOneHourBefore": "1 ora prima",
+  "notifTimingHoursBefore": "{count} ore prima",
+  "notifTimingMinutesBefore": "{count} minuti prima",
+  "notifPushReady": "Le notifiche push sono pronte su questo dispositivo.",
+  "notifPushPermissionRequired": "Consenti le notifiche per ricevere gli avvisi di ClashKing.",
+  "notifPushPermissionDenied": "L’autorizzazione alle notifiche è stata negata.",
+  "notifPushNotConfigured": "Firebase non è configurato per questa build.",
+  "notifPushTokenUnavailable": "Non è ancora disponibile un token push.",
+  "notifPushUnsupported": "Le notifiche push non sono supportate su questa piattaforma.",
+  "notifPushInitializing": "Configurazione delle notifiche push…",
   "notificationPrimerTitle": "Attivare le notifiche?",
   "notificationPrimerBody": "ClashKing può avvisarti degli aggiornamenti su guerre, CWL, account e progetti. Puoi modificare questa opzione in qualsiasi momento in Impostazioni > Notifiche.",
   "notificationPrimerNotNow": "Non ora",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Contatta l’assistenza",
   "settingsPrivacyDeleteAccount": "Elimina account",
   "settingsPrivacyDeleteConfirmTitle": "Eliminare l’account?",
-  "settingsPrivacyDeleteConfirmDescription": "Dopo l’elaborazione, la richiesta è definitiva. Potresti perdere account collegati, impostazioni delle notifiche, preferenze salvate e metodi di autenticazione."
+  "settingsPrivacyDeleteConfirmDescription": "Dopo l’elaborazione, la richiesta è definitiva. Potresti perdere account collegati, impostazioni delle notifiche, preferenze salvate e metodi di autenticazione.",
+  "generalUnranked": "Senza lega",
+  "playerJoinLeaveTab": "Entrata / Uscita",
+  "playerUpgradeRemainingAccessibility": "Rimanente per Municipio {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Completato al {progress}% per TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Questa sezione è completa per TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Tempo rimanente",
+  "playerUpgradeNoResourceData": "Nessun dato sulle risorse",
+  "playerJoinLeaveLoadError": "Impossibile caricare lo storico di entrate e uscite",
+  "playerJoinLeaveClanTotals": "Totali per clan",
+  "playerJoinLeaveTime": "Tempo",
+  "playerJoinLeaveTimeSpent": "Tempo trascorso",
+  "playerJoinLeaveVisits": "Visite",
+  "playerJoinLeaveJoined": "È entrato",
+  "playerJoinLeaveLeft": "È uscito",
+  "playerJoinLeaveNoHistory": "Nessuno storico di entrate e uscite disponibile",
+  "playerJoinLeaveNoClanTotals": "Nessun totale di clan disponibile",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

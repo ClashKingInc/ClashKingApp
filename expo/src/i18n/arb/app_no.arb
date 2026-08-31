@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Alle byggerne er opptatt",
+  "upgradeTrackerBuildCost": "Byggekostnad",
+  "upgradeTrackerBuilderBaseBuilders": "Byggere i byggerbasen",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorium i byggerbasen",
+  "upgradeTrackerCalendar": "Kalender",
+  "upgradeTrackerClearCost": "Fjerningskostnad",
+  "upgradeTrackerCompletionDetails": "Detaljer om landsbyens fremdrift",
+  "upgradeTrackerCustomSoundtrack": "Egendefinert lydspor",
+  "upgradeTrackerGoldPassPercent": "{percent} % Gullpass",
+  "upgradeTrackerGroupSummary": "Sammendrag av {group}",
+  "upgradeTrackerGuardians": "Voktere",
+  "upgradeTrackerHelpers": "Hjelpere",
+  "upgradeTrackerHouseParts": "Husdeler",
+  "upgradeTrackerIdleBuilders": "{count} ledige byggere",
+  "upgradeTrackerInProgress": "Pågår",
+  "upgradeTrackerItemSemanticLabel": "{item}, nivå {currentLevel} av {targetLevel}, {count} bygninger",
+  "upgradeTrackerItemsOwned": "{count} eid",
+  "upgradeTrackerLane": "Kø",
+  "upgradeTrackerLevelTransition": "Nivå {from} → {to}",
+  "upgradeTrackerLootNow": "Bytte nå",
+  "upgradeTrackerLootOutlook": "Bytteprognose",
+  "upgradeTrackerMusic": "Musikk",
+  "upgradeTrackerNextDays": "Neste {count} dager",
+  "upgradeTrackerNextPeriod": "Neste periode",
+  "upgradeTrackerNoGoldPass": "Ingen Gullpass",
+  "upgradeTrackerNoMatchingUpgrades": "Ingen samsvarende oppgraderinger",
+  "upgradeTrackerNoMatchingUpgradesBody": "Prøv en annen landsby eller kø.",
+  "upgradeTrackerNothingNeededNow": "Ingenting trengs akkurat nå",
+  "upgradeTrackerObstacles": "Hindringer",
+  "upgradeTrackerPart": "Del",
+  "upgradeTrackerPassReward": "Passbelønning",
+  "upgradeTrackerPauseSoundtrack": "Sett lydsporet på pause",
+  "upgradeTrackerPeriodCount": "Periode {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Spill av lydspor",
+  "upgradeTrackerPreviousPeriod": "Forrige periode",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Landskap",
+  "upgradeTrackerScheduledLane": "Planlagt nr. {lane}",
+  "upgradeTrackerShareProgress": "Fremdrift for {village}",
+  "upgradeTrackerSize": "Størrelse",
+  "upgradeTrackerSortLongest": "Lengste først",
+  "upgradeTrackerSortName": "Navn A–Z",
+  "upgradeTrackerSortScheduled": "Planlagt",
+  "upgradeTrackerSortShortest": "Korteste først",
+  "upgradeTrackerSoundtrackPosition": "Posisjon i lydspor",
+  "upgradeTrackerStarts": "Starter",
+  "upgradeTrackerTier": "Nivå",
+  "upgradeTrackerUpgradesStarting": "oppgraderinger starter",
+  "upgradeTrackerUpgradingNow": "Oppgraderes nå",
+  "upgradeTrackerWarBase": "Krigsbase",
+  "notifSettingsSaveFailed": "Varslingsinnstillingene kunne ikke lagres.",
+  "notifPushEnabled": "Pushvarsler aktivert",
+  "notifReceiveNotifications": "Motta varsler",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Aktiverte varsler kan sendes til denne enheten.",
+  "notifDisabledAccountDescription": "Varsler er slått av for hele ClashKing-kontoen din.",
+  "notifMaximumRemindersAdded": "Maksimalt antall påminnelser er lagt til",
+  "notifAddReminder": "Legg til påminnelse",
+  "notifDurationOneHour": "1 time",
+  "notifDurationHours": "{count} timer",
+  "notifDurationMinutes": "{count} minutter",
+  "notifAddTiming": "Legg til {timing}",
+  "notifTimingOneHourBefore": "1 time før",
+  "notifTimingHoursBefore": "{count} timer før",
+  "notifTimingMinutesBefore": "{count} minutter før",
+  "notifPushReady": "Pushvarsler er klare på denne enheten.",
+  "notifPushPermissionRequired": "Tillat varsler for å motta ClashKing-varsler.",
+  "notifPushPermissionDenied": "Varslingstillatelsen ble avslått.",
+  "notifPushNotConfigured": "Firebase er ikke konfigurert for denne versjonen.",
+  "notifPushTokenUnavailable": "Et push-token er ikke tilgjengelig ennå.",
+  "notifPushUnsupported": "Pushvarsler støttes ikke på denne plattformen.",
+  "notifPushInitializing": "Konfigurerer pushvarsler…",
   "notificationPrimerTitle": "Vil du slå på varsler?",
   "notificationPrimerBody": "ClashKing kan varsle deg om oppdateringer for krig, CWL, konto og prosjekter. Du kan endre dette når som helst under Innstillinger > Varsler.",
   "notificationPrimerNotNow": "Ikke nå",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Kontakt brukerstøtten",
   "settingsPrivacyDeleteAccount": "Slett konto",
   "settingsPrivacyDeleteConfirmTitle": "Slette kontoen?",
-  "settingsPrivacyDeleteConfirmDescription": "Forespørselen kan ikke angres etter behandling. Du kan miste tilknyttede kontoer, varslingsinnstillinger, lagrede preferanser og autentiseringsmetoder."
+  "settingsPrivacyDeleteConfirmDescription": "Forespørselen kan ikke angres etter behandling. Du kan miste tilknyttede kontoer, varslingsinnstillinger, lagrede preferanser og autentiseringsmetoder.",
+  "generalUnranked": "Ikke rangert",
+  "playerJoinLeaveTab": "Bli med / Forlat",
+  "playerUpgradeRemainingAccessibility": "Gjenstår for rådhus {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress} % fullført for RH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Denne delen er fullført for RH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Gjenstående tid",
+  "playerUpgradeNoResourceData": "Ingen ressursdata",
+  "playerJoinLeaveLoadError": "Kunne ikke laste historikk for inn- og utmeldinger",
+  "playerJoinLeaveClanTotals": "Klantotaler",
+  "playerJoinLeaveTime": "Tid",
+  "playerJoinLeaveTimeSpent": "Tid brukt",
+  "playerJoinLeaveVisits": "Besøk",
+  "playerJoinLeaveJoined": "Ble med",
+  "playerJoinLeaveLeft": "Forlot",
+  "playerJoinLeaveNoHistory": "Ingen historikk for inn- og utmeldinger",
+  "playerJoinLeaveNoClanTotals": "Ingen klantotaler tilgjengelig",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Tất cả thợ xây đều đang bận",
+  "upgradeTrackerBuildCost": "Chi phí xây dựng",
+  "upgradeTrackerBuilderBaseBuilders": "Thợ xây Nhà Chính Thợ Xây",
+  "upgradeTrackerBuilderBaseLaboratory": "Phòng thí nghiệm Nhà Chính Thợ Xây",
+  "upgradeTrackerCalendar": "Lịch",
+  "upgradeTrackerClearCost": "Chi phí dọn",
+  "upgradeTrackerCompletionDetails": "Chi tiết hoàn thành làng",
+  "upgradeTrackerCustomSoundtrack": "Nhạc nền tùy chỉnh",
+  "upgradeTrackerGoldPassPercent": "Thẻ Vàng {percent}%",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "Tóm tắt {group}",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Hộ vệ",
+  "upgradeTrackerHelpers": "Trợ thủ",
+  "upgradeTrackerHouseParts": "Bộ phận nhà",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# thợ xây đang rảnh} other {# thợ xây đang rảnh}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "Đang tiến hành",
+  "upgradeTrackerItemSemanticLabel": "{item}, cấp {currentLevel}/{targetLevel}{count, plural, =1 {} other {, # công trình}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "Đã sở hữu: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Hàng",
+  "upgradeTrackerLevelTransition": "Cấp {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Tài nguyên cần ngay",
+  "upgradeTrackerLootOutlook": "Dự báo tài nguyên",
+  "upgradeTrackerMusic": "Âm nhạc",
+  "upgradeTrackerNextDays": "{count, plural, one {# ngày tới} other {# ngày tới}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Kỳ tiếp theo",
+  "upgradeTrackerNoGoldPass": "Không có Thẻ Vàng",
+  "upgradeTrackerNoMatchingUpgrades": "Không có nâng cấp phù hợp",
+  "upgradeTrackerNoMatchingUpgradesBody": "Hãy thử làng hoặc hàng đợi khác.",
+  "upgradeTrackerNothingNeededNow": "Hiện không cần gì",
+  "upgradeTrackerObstacles": "Chướng ngại vật",
+  "upgradeTrackerPart": "Bộ phận",
+  "upgradeTrackerPassReward": "Phần thưởng thẻ",
+  "upgradeTrackerPauseSoundtrack": "Tạm dừng nhạc nền",
+  "upgradeTrackerPeriodCount": "Kỳ {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Phát nhạc nền",
+  "upgradeTrackerPreviousPeriod": "Kỳ trước",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Phong cảnh",
+  "upgradeTrackerScheduledLane": "Được lên lịch ở hàng #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "Tiến độ {village}",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Kích thước",
+  "upgradeTrackerSortLongest": "Dài nhất trước",
+  "upgradeTrackerSortName": "Tên A–Z",
+  "upgradeTrackerSortScheduled": "Đã lên lịch",
+  "upgradeTrackerSortShortest": "Ngắn nhất trước",
+  "upgradeTrackerSoundtrackPosition": "Vị trí nhạc nền",
+  "upgradeTrackerStarts": "Bắt đầu",
+  "upgradeTrackerTier": "Bậc",
+  "upgradeTrackerUpgradesStarting": "nâng cấp sắp bắt đầu",
+  "upgradeTrackerUpgradingNow": "Đang nâng cấp",
+  "upgradeTrackerWarBase": "Căn cứ chiến tranh",
+  "notifSettingsSaveFailed": "Không thể lưu cài đặt thông báo.",
+  "notifPushEnabled": "Đã bật thông báo đẩy",
+  "notifReceiveNotifications": "Nhận thông báo",
+  "notifTokenPreview": "Mã thông báo: {token}",
+  "notifEnabledDeliveryDescription": "Các cảnh báo đã bật có thể được gửi đến thiết bị này.",
+  "notifDisabledAccountDescription": "Thông báo đã bị tắt trên toàn bộ tài khoản ClashKing của bạn.",
+  "notifMaximumRemindersAdded": "Đã thêm số lời nhắc tối đa",
+  "notifAddReminder": "Thêm lời nhắc",
+  "notifDurationOneHour": "1 giờ",
+  "notifDurationHours": "{count} giờ",
+  "notifDurationMinutes": "{count} phút",
+  "notifAddTiming": "Thêm {timing}",
+  "notifTimingOneHourBefore": "trước 1 giờ",
+  "notifTimingHoursBefore": "trước {count} giờ",
+  "notifTimingMinutesBefore": "trước {count} phút",
+  "notifPushReady": "Thông báo đẩy đã sẵn sàng trên thiết bị này.",
+  "notifPushPermissionRequired": "Cho phép thông báo để nhận cảnh báo ClashKing.",
+  "notifPushPermissionDenied": "Quyền thông báo đã bị từ chối.",
+  "notifPushNotConfigured": "Firebase chưa được cấu hình cho bản dựng này.",
+  "notifPushTokenUnavailable": "Mã thông báo đẩy chưa khả dụng.",
+  "notifPushUnsupported": "Nền tảng này không hỗ trợ thông báo đẩy.",
+  "notifPushInitializing": "Đang cấu hình thông báo đẩy…",
   "notificationPrimerTitle": "Bật thông báo?",
   "notificationPrimerBody": "ClashKing có thể thông báo cho bạn về các cập nhật chiến tranh, CWL, tài khoản và dự án. Bạn có thể thay đổi tùy chọn này bất cứ lúc nào trong Cài đặt > Thông báo.",
   "notificationPrimerNotNow": "Để sau",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "Liên hệ hỗ trợ",
   "settingsPrivacyDeleteAccount": "Xóa tài khoản",
   "settingsPrivacyDeleteConfirmTitle": "Xóa tài khoản?",
-  "settingsPrivacyDeleteConfirmDescription": "Yêu cầu này không thể hoàn tác sau khi được xử lý. Bạn có thể mất các tài khoản đã liên kết, cài đặt thông báo, tùy chọn đã lưu và phương thức xác thực."
+  "settingsPrivacyDeleteConfirmDescription": "Yêu cầu này không thể hoàn tác sau khi được xử lý. Bạn có thể mất các tài khoản đã liên kết, cài đặt thông báo, tùy chọn đã lưu và phương thức xác thực.",
+  "generalUnranked": "Chưa xếp hạng",
+  "playerJoinLeaveTab": "Tham gia / Rời đi",
+  "playerUpgradeRemainingAccessibility": "Còn lại cho Nhà Chính {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Đã hoàn thành {progress}% cho TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Mục này đã hoàn thành cho TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Thời gian còn lại",
+  "playerUpgradeNoResourceData": "Không có dữ liệu tài nguyên",
+  "playerJoinLeaveLoadError": "Không thể tải lịch sử tham gia / rời đi",
+  "playerJoinLeaveClanTotals": "Tổng theo bang hội",
+  "playerJoinLeaveTime": "Thời gian",
+  "playerJoinLeaveTimeSpent": "Thời gian tham gia",
+  "playerJoinLeaveVisits": "Lượt ghé",
+  "playerJoinLeaveJoined": "Đã tham gia",
+  "playerJoinLeaveLeft": "Đã rời đi",
+  "playerJoinLeaveNoHistory": "Không có lịch sử tham gia / rời đi",
+  "playerJoinLeaveNoClanTotals": "Không có tổng dữ liệu bang hội",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

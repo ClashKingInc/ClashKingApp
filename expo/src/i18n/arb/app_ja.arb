@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "大工は全員作業中です",
+  "upgradeTrackerBuildCost": "建設コスト",
+  "upgradeTrackerBuilderBaseBuilders": "ビルダーベースの大工",
+  "upgradeTrackerBuilderBaseLaboratory": "ビルダーベースのラボ",
+  "upgradeTrackerCalendar": "カレンダー",
+  "upgradeTrackerClearCost": "撤去コスト",
+  "upgradeTrackerCompletionDetails": "村の完成度の詳細",
+  "upgradeTrackerCustomSoundtrack": "カスタムサウンドトラック",
+  "upgradeTrackerGoldPassPercent": "ゴールドパス {percent}%",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group}の概要",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "ガーディアン",
+  "upgradeTrackerHelpers": "ヘルパー",
+  "upgradeTrackerHouseParts": "ハウスパーツ",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {空いている大工：#人} other {空いている大工：#人}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "進行中",
+  "upgradeTrackerItemSemanticLabel": "{item}、レベル{currentLevel}/{targetLevel}{count, plural, =1 {} other {、#棟}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "所有数：{count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "レーン",
+  "upgradeTrackerLevelTransition": "レベル{from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "現在必要な資源",
+  "upgradeTrackerLootOutlook": "資源の見通し",
+  "upgradeTrackerMusic": "音楽",
+  "upgradeTrackerNextDays": "{count, plural, one {今後#日間} other {今後#日間}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "次の期間",
+  "upgradeTrackerNoGoldPass": "ゴールドパスなし",
+  "upgradeTrackerNoMatchingUpgrades": "一致するアップグレードはありません",
+  "upgradeTrackerNoMatchingUpgradesBody": "別の村またはキューをお試しください。",
+  "upgradeTrackerNothingNeededNow": "現在必要なものはありません",
+  "upgradeTrackerObstacles": "障害物",
+  "upgradeTrackerPart": "パーツ",
+  "upgradeTrackerPassReward": "パス報酬",
+  "upgradeTrackerPauseSoundtrack": "サウンドトラックを一時停止",
+  "upgradeTrackerPeriodCount": "期間{current}/{total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "サウンドトラックを再生",
+  "upgradeTrackerPreviousPeriod": "前の期間",
+  "upgradeTrackerResourceAmount": "{resource}、{amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "背景",
+  "upgradeTrackerScheduledLane": "レーン#{lane}に予定",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village}の進行状況",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "サイズ",
+  "upgradeTrackerSortLongest": "長い順",
+  "upgradeTrackerSortName": "名前順",
+  "upgradeTrackerSortScheduled": "予定順",
+  "upgradeTrackerSortShortest": "短い順",
+  "upgradeTrackerSoundtrackPosition": "サウンドトラックの再生位置",
+  "upgradeTrackerStarts": "開始",
+  "upgradeTrackerTier": "ティア",
+  "upgradeTrackerUpgradesStarting": "開始するアップグレード",
+  "upgradeTrackerUpgradingNow": "アップグレード中",
+  "upgradeTrackerWarBase": "対戦用の村",
+  "notifSettingsSaveFailed": "通知設定を保存できませんでした。",
+  "notifPushEnabled": "プッシュ通知は有効です",
+  "notifReceiveNotifications": "通知を受け取る",
+  "notifTokenPreview": "トークン：{token}",
+  "notifEnabledDeliveryDescription": "有効にしたアラートをこの端末に配信できます。",
+  "notifDisabledAccountDescription": "ClashKingアカウント全体で通知がオフになっています。",
+  "notifMaximumRemindersAdded": "追加できるリマインダーの上限に達しました",
+  "notifAddReminder": "リマインダーを追加",
+  "notifDurationOneHour": "1時間",
+  "notifDurationHours": "{count}時間",
+  "notifDurationMinutes": "{count}分",
+  "notifAddTiming": "{timing}を追加",
+  "notifTimingOneHourBefore": "1時間前",
+  "notifTimingHoursBefore": "{count}時間前",
+  "notifTimingMinutesBefore": "{count}分前",
+  "notifPushReady": "この端末でプッシュ通知を利用できます。",
+  "notifPushPermissionRequired": "ClashKingのアラートを受け取るには通知を許可してください。",
+  "notifPushPermissionDenied": "通知の許可が拒否されました。",
+  "notifPushNotConfigured": "このビルドではFirebaseが設定されていません。",
+  "notifPushTokenUnavailable": "プッシュトークンはまだ利用できません。",
+  "notifPushUnsupported": "このプラットフォームではプッシュ通知に対応していません。",
+  "notifPushInitializing": "プッシュ通知を設定しています…",
   "notificationPrimerTitle": "通知を有効にしますか？",
   "notificationPrimerBody": "ClashKing から、対戦、CWL、アカウント、プロジェクトの更新情報を通知できます。この設定はいつでも「設定」>「通知」で変更できます。",
   "notificationPrimerNotNow": "後で",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "サポートに問い合わせる",
   "settingsPrivacyDeleteAccount": "アカウントを削除",
   "settingsPrivacyDeleteConfirmTitle": "アカウントを削除しますか？",
-  "settingsPrivacyDeleteConfirmDescription": "処理後はこのリクエストを取り消せません。連携済みアカウント、通知設定、保存済みの設定、認証方法が失われる可能性があります。"
+  "settingsPrivacyDeleteConfirmDescription": "処理後はこのリクエストを取り消せません。連携済みアカウント、通知設定、保存済みの設定、認証方法が失われる可能性があります。",
+  "generalUnranked": "ランク外",
+  "playerJoinLeaveTab": "加入 / 脱退",
+  "playerUpgradeRemainingAccessibility": "タウンホール{townHallLevel}の残り",
+  "playerUpgradeSummaryTitle": "TH{townHallLevel}で{progress}%完了",
+  "playerUpgradeSectionMaxed": "このセクションはTH{townHallLevel}で完了しています。",
+  "playerUpgradeTimeRemaining": "残り時間",
+  "playerUpgradeNoResourceData": "資源データがありません",
+  "playerJoinLeaveLoadError": "加入 / 脱退履歴を読み込めませんでした",
+  "playerJoinLeaveClanTotals": "クラン別合計",
+  "playerJoinLeaveTime": "時間",
+  "playerJoinLeaveTimeSpent": "在籍時間",
+  "playerJoinLeaveVisits": "訪問回数",
+  "playerJoinLeaveJoined": "加入",
+  "playerJoinLeaveLeft": "脱退",
+  "playerJoinLeaveNoHistory": "加入 / 脱退履歴はありません",
+  "playerJoinLeaveNoClanTotals": "クラン別合計はありません",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Tots els constructors estan ocupats",
+  "upgradeTrackerBuildCost": "Cost de construcció",
+  "upgradeTrackerBuilderBaseBuilders": "Constructors de la base del constructor",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratori de la base del constructor",
+  "upgradeTrackerCalendar": "Calendari",
+  "upgradeTrackerClearCost": "Cost d’eliminació",
+  "upgradeTrackerCompletionDetails": "Detalls del progrés del poble",
+  "upgradeTrackerCustomSoundtrack": "Banda sonora personalitzada",
+  "upgradeTrackerGoldPassPercent": "Passi d’Or al {percent} %",
+  "upgradeTrackerGroupSummary": "Resum de {group}",
+  "upgradeTrackerGuardians": "Guardians",
+  "upgradeTrackerHelpers": "Ajudants",
+  "upgradeTrackerHouseParts": "Parts de la casa",
+  "upgradeTrackerIdleBuilders": "{count} constructors inactius",
+  "upgradeTrackerInProgress": "En curs",
+  "upgradeTrackerItemSemanticLabel": "{item}, nivell {currentLevel} de {targetLevel}, {count} edificis",
+  "upgradeTrackerItemsOwned": "{count} en propietat",
+  "upgradeTrackerLane": "Cua",
+  "upgradeTrackerLevelTransition": "Nivell {from} → {to}",
+  "upgradeTrackerLootNow": "Botí actual",
+  "upgradeTrackerLootOutlook": "Previsió de botí",
+  "upgradeTrackerMusic": "Música",
+  "upgradeTrackerNextDays": "Pròxims {count} dies",
+  "upgradeTrackerNextPeriod": "Període següent",
+  "upgradeTrackerNoGoldPass": "Sense Passi d’Or",
+  "upgradeTrackerNoMatchingUpgrades": "No hi ha millores coincidents",
+  "upgradeTrackerNoMatchingUpgradesBody": "Prova un altre poble o una altra cua.",
+  "upgradeTrackerNothingNeededNow": "No cal res ara mateix",
+  "upgradeTrackerObstacles": "Obstacles",
+  "upgradeTrackerPart": "Part",
+  "upgradeTrackerPassReward": "Recompensa del passi",
+  "upgradeTrackerPauseSoundtrack": "Pausa la banda sonora",
+  "upgradeTrackerPeriodCount": "Període {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Reprodueix la banda sonora",
+  "upgradeTrackerPreviousPeriod": "Període anterior",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Escenaris",
+  "upgradeTrackerScheduledLane": "Programat núm. {lane}",
+  "upgradeTrackerShareProgress": "Progrés de {village}",
+  "upgradeTrackerSize": "Mida",
+  "upgradeTrackerSortLongest": "Més llargues primer",
+  "upgradeTrackerSortName": "Nom A–Z",
+  "upgradeTrackerSortScheduled": "Programat",
+  "upgradeTrackerSortShortest": "Més curtes primer",
+  "upgradeTrackerSoundtrackPosition": "Posició de la banda sonora",
+  "upgradeTrackerStarts": "Comença",
+  "upgradeTrackerTier": "Categoria",
+  "upgradeTrackerUpgradesStarting": "millores que comencen",
+  "upgradeTrackerUpgradingNow": "Millorant ara",
+  "upgradeTrackerWarBase": "Base de guerra",
+  "notifSettingsSaveFailed": "No s’han pogut desar els paràmetres de notificació.",
+  "notifPushEnabled": "Notificacions push activades",
+  "notifReceiveNotifications": "Rebre notificacions",
+  "notifTokenPreview": "Testimoni: {token}",
+  "notifEnabledDeliveryDescription": "Les alertes activades es poden enviar a aquest dispositiu.",
+  "notifDisabledAccountDescription": "Les notificacions estan desactivades a tot el teu compte de ClashKing.",
+  "notifMaximumRemindersAdded": "S’ha afegit el màxim de recordatoris",
+  "notifAddReminder": "Afegeix un recordatori",
+  "notifDurationOneHour": "1 hora",
+  "notifDurationHours": "{count} hores",
+  "notifDurationMinutes": "{count} minuts",
+  "notifAddTiming": "Afegeix {timing}",
+  "notifTimingOneHourBefore": "1 hora abans",
+  "notifTimingHoursBefore": "{count} hores abans",
+  "notifTimingMinutesBefore": "{count} minuts abans",
+  "notifPushReady": "Les notificacions push estan preparades en aquest dispositiu.",
+  "notifPushPermissionRequired": "Permet les notificacions per rebre alertes de ClashKing.",
+  "notifPushPermissionDenied": "S’ha denegat el permís de notificacions.",
+  "notifPushNotConfigured": "Firebase no està configurat per a aquesta compilació.",
+  "notifPushTokenUnavailable": "Encara no hi ha cap testimoni push disponible.",
+  "notifPushUnsupported": "Les notificacions push no són compatibles amb aquesta plataforma.",
+  "notifPushInitializing": "S’estan configurant les notificacions push…",
   "notificationPrimerTitle": "Vols activar les notificacions?",
   "notificationPrimerBody": "ClashKing et pot avisar sobre actualitzacions de guerres, CWL, comptes i projectes. Pots canviar-ho en qualsevol moment a Configuració > Notificacions.",
   "notificationPrimerNotNow": "Ara no",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Contacta amb el suport",
   "settingsPrivacyDeleteAccount": "Suprimeix el compte",
   "settingsPrivacyDeleteConfirmTitle": "Vols suprimir el compte?",
-  "settingsPrivacyDeleteConfirmDescription": "Aquesta sol·licitud és permanent un cop processada. Pots perdre comptes vinculats, configuració de notificacions, preferències desades i mètodes d’autenticació."
+  "settingsPrivacyDeleteConfirmDescription": "Aquesta sol·licitud és permanent un cop processada. Pots perdre comptes vinculats, configuració de notificacions, preferències desades i mètodes d’autenticació.",
+  "generalUnranked": "Sense classificar",
+  "playerJoinLeaveTab": "Entrada / Sortida",
+  "playerUpgradeRemainingAccessibility": "Restant per a l’Ajuntament {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% complet per a AJ{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Aquesta secció està completada per a AJ{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Temps restant",
+  "playerUpgradeNoResourceData": "No hi ha dades de recursos",
+  "playerJoinLeaveLoadError": "No s’ha pogut carregar l’historial d’entrades i sortides",
+  "playerJoinLeaveClanTotals": "Totals per clan",
+  "playerJoinLeaveTime": "Temps",
+  "playerJoinLeaveTimeSpent": "Temps passat",
+  "playerJoinLeaveVisits": "Visites",
+  "playerJoinLeaveJoined": "Ha entrat",
+  "playerJoinLeaveLeft": "Ha sortit",
+  "playerJoinLeaveNoHistory": "No hi ha historial d’entrades i sortides",
+  "playerJoinLeaveNoClanTotals": "No hi ha totals de clans",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

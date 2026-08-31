@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Alle bouwers zijn bezig",
+  "upgradeTrackerBuildCost": "Bouwkosten",
+  "upgradeTrackerBuilderBaseBuilders": "Bouwers van de bouwersbasis",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorium van de bouwersbasis",
+  "upgradeTrackerCalendar": "Kalender",
+  "upgradeTrackerClearCost": "Verwijderingskosten",
+  "upgradeTrackerCompletionDetails": "Details van de dorpsvoortgang",
+  "upgradeTrackerCustomSoundtrack": "Aangepaste soundtrack",
+  "upgradeTrackerGoldPassPercent": "Gouden Pas van {percent}%",
+  "upgradeTrackerGroupSummary": "Samenvatting van {group}",
+  "upgradeTrackerGuardians": "Bewakers",
+  "upgradeTrackerHelpers": "Helpers",
+  "upgradeTrackerHouseParts": "Huisonderdelen",
+  "upgradeTrackerIdleBuilders": "{count} inactieve bouwers",
+  "upgradeTrackerInProgress": "Bezig",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} van {targetLevel}, {count} gebouwen",
+  "upgradeTrackerItemsOwned": "{count} in bezit",
+  "upgradeTrackerLane": "Wachtrij",
+  "upgradeTrackerLevelTransition": "Level {from} → {to}",
+  "upgradeTrackerLootNow": "Buit nu",
+  "upgradeTrackerLootOutlook": "Buitprognose",
+  "upgradeTrackerMusic": "Muziek",
+  "upgradeTrackerNextDays": "Volgende {count} dagen",
+  "upgradeTrackerNextPeriod": "Volgende periode",
+  "upgradeTrackerNoGoldPass": "Geen Gouden Pas",
+  "upgradeTrackerNoMatchingUpgrades": "Geen overeenkomende upgrades",
+  "upgradeTrackerNoMatchingUpgradesBody": "Probeer een ander dorp of een andere wachtrij.",
+  "upgradeTrackerNothingNeededNow": "Er is nu niets nodig",
+  "upgradeTrackerObstacles": "Obstakels",
+  "upgradeTrackerPart": "Onderdeel",
+  "upgradeTrackerPassReward": "Pasbeloning",
+  "upgradeTrackerPauseSoundtrack": "Soundtrack pauzeren",
+  "upgradeTrackerPeriodCount": "Periode {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Soundtrack afspelen",
+  "upgradeTrackerPreviousPeriod": "Vorige periode",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Landschappen",
+  "upgradeTrackerScheduledLane": "Gepland nr. {lane}",
+  "upgradeTrackerShareProgress": "Voortgang van {village}",
+  "upgradeTrackerSize": "Grootte",
+  "upgradeTrackerSortLongest": "Langste eerst",
+  "upgradeTrackerSortName": "Naam A–Z",
+  "upgradeTrackerSortScheduled": "Gepland",
+  "upgradeTrackerSortShortest": "Kortste eerst",
+  "upgradeTrackerSoundtrackPosition": "Positie in soundtrack",
+  "upgradeTrackerStarts": "Begint",
+  "upgradeTrackerTier": "Klasse",
+  "upgradeTrackerUpgradesStarting": "upgrades die beginnen",
+  "upgradeTrackerUpgradingNow": "Wordt nu geüpgraded",
+  "upgradeTrackerWarBase": "Oorlogsbasis",
+  "notifSettingsSaveFailed": "De meldingsinstellingen konden niet worden opgeslagen.",
+  "notifPushEnabled": "Pushmeldingen ingeschakeld",
+  "notifReceiveNotifications": "Meldingen ontvangen",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Je ingeschakelde waarschuwingen kunnen naar dit apparaat worden gestuurd.",
+  "notifDisabledAccountDescription": "Meldingen zijn uitgeschakeld voor je hele ClashKing-account.",
+  "notifMaximumRemindersAdded": "Maximumaantal herinneringen toegevoegd",
+  "notifAddReminder": "Herinnering toevoegen",
+  "notifDurationOneHour": "1 uur",
+  "notifDurationHours": "{count} uur",
+  "notifDurationMinutes": "{count} minuten",
+  "notifAddTiming": "{timing} toevoegen",
+  "notifTimingOneHourBefore": "1 uur van tevoren",
+  "notifTimingHoursBefore": "{count} uur van tevoren",
+  "notifTimingMinutesBefore": "{count} minuten van tevoren",
+  "notifPushReady": "Pushmeldingen zijn klaar op dit apparaat.",
+  "notifPushPermissionRequired": "Sta meldingen toe om ClashKing-waarschuwingen te ontvangen.",
+  "notifPushPermissionDenied": "Toestemming voor meldingen is geweigerd.",
+  "notifPushNotConfigured": "Firebase is niet geconfigureerd voor deze build.",
+  "notifPushTokenUnavailable": "Er is nog geen pushtoken beschikbaar.",
+  "notifPushUnsupported": "Pushmeldingen worden niet ondersteund op dit platform.",
+  "notifPushInitializing": "Pushmeldingen configureren…",
   "notificationPrimerTitle": "Meldingen inschakelen?",
   "notificationPrimerBody": "ClashKing kan je informeren over updates voor oorlogen, CWL, je account en projecten. Je kunt dit altijd wijzigen via Instellingen > Meldingen.",
   "notificationPrimerNotNow": "Niet nu",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Contact opnemen met ondersteuning",
   "settingsPrivacyDeleteAccount": "Account verwijderen",
   "settingsPrivacyDeleteConfirmTitle": "Account verwijderen?",
-  "settingsPrivacyDeleteConfirmDescription": "Dit verzoek is na verwerking definitief. Je kunt gekoppelde accounts, meldingsinstellingen, opgeslagen voorkeuren en verificatiemethoden verliezen."
+  "settingsPrivacyDeleteConfirmDescription": "Dit verzoek is na verwerking definitief. Je kunt gekoppelde accounts, meldingsinstellingen, opgeslagen voorkeuren en verificatiemethoden verliezen.",
+  "generalUnranked": "Niet geklasseerd",
+  "playerJoinLeaveTab": "Toetreding / Vertrek",
+  "playerUpgradeRemainingAccessibility": "Resterend voor stadhuis {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% voltooid voor SH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Dit onderdeel is voltooid voor SH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Resterende tijd",
+  "playerUpgradeNoResourceData": "Geen grondstofgegevens",
+  "playerJoinLeaveLoadError": "De toetredings-/vertrekgeschiedenis kon niet worden geladen",
+  "playerJoinLeaveClanTotals": "Clantotalen",
+  "playerJoinLeaveTime": "Tijd",
+  "playerJoinLeaveTimeSpent": "Bestede tijd",
+  "playerJoinLeaveVisits": "Bezoeken",
+  "playerJoinLeaveJoined": "Toegetreden",
+  "playerJoinLeaveLeft": "Vertrokken",
+  "playerJoinLeaveNoHistory": "Geen toetredings-/vertrekgeschiedenis beschikbaar",
+  "playerJoinLeaveNoClanTotals": "Geen clantotalen beschikbaar",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

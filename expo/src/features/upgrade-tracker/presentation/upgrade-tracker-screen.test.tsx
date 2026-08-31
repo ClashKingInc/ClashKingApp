@@ -143,7 +143,7 @@ describe('UpgradeTrackerScreen', () => {
     await fireEvent.press(screen.getByLabelText('Village completion details'));
     expect(screen.getAllByText(/levels left/).length).toBeGreaterThan(0);
     await fireEvent.press(screen.getAllByLabelText('Close')[0]!);
-    await fireEvent.press(screen.getByLabelText('Priorities'));
+    await fireEvent.press(screen.getByLabelText('Plan priorities'));
     expect(screen.getByText('Plan priorities')).toBeTruthy();
     expect(screen.getByText('Planning goals')).toBeTruthy();
     expect(screen.getByText('Walls each week')).toBeTruthy();

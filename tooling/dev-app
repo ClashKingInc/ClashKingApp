@@ -9,7 +9,7 @@ readonly SCRIPT_REPO_ROOT="$(git -C "$(dirname "$SCRIPT_PATH")/.." rev-parse --s
 readonly COMMON_GIT_DIR="$(git -C "$SCRIPT_REPO_ROOT" rev-parse --path-format=absolute --git-common-dir)"
 readonly STATE_DIR="$COMMON_GIT_DIR/dev-app"
 readonly STATE_FILE="$STATE_DIR/worktree"
-readonly LOCK_DIR="$STATE_DIR/lock.d"
+readonly LOCK_FILE="$STATE_DIR/command.lock"
 
 usage() {
   cat <<'EOF'
@@ -30,10 +30,6 @@ EOF
 fail() {
   printf 'dev-app: %s\n' "$*" >&2
   exit 1
-}
-
-release_lock() {
-  rmdir "$LOCK_DIR" 2>/dev/null
 }
 
 session_exists() {
@@ -153,8 +149,16 @@ case "${1:-}" in
 esac
 
 mkdir -p "$STATE_DIR"
-mkdir "$LOCK_DIR" 2>/dev/null || fail "another dev-app command is running"
-trap 'release_lock || true' EXIT
+
+if [[ "${1:-}" == attach ]]; then
+  session_exists || fail "no dev app is running"
+  exec tmux attach-session -t "$SESSION"
+fi
+
+if [[ "${DEV_APP_COMMAND_LOCKED:-}" != 1 ]]; then
+  command -v lockf >/dev/null 2>&1 || fail "lockf is required to coordinate dev-app commands"
+  exec lockf -t 0 "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+fi
 
 case "${1:-}" in
   start)
@@ -193,12 +197,6 @@ case "${1:-}" in
   logs)
     session_exists || fail "no dev app is running"
     tmux capture-pane -p -S -200 -t "$SESSION"
-    ;;
-  attach)
-    session_exists || fail "no dev app is running"
-    release_lock || fail "could not release the dev-app command lock"
-    trap - EXIT
-    exec tmux attach-session -t "$SESSION"
     ;;
   *)
     usage >&2

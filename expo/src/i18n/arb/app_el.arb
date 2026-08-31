@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Όλοι οι εργάτες είναι απασχολημένοι",
+  "upgradeTrackerBuildCost": "Κόστος κατασκευής",
+  "upgradeTrackerBuilderBaseBuilders": "Εργάτες Βάσης Εργατών",
+  "upgradeTrackerBuilderBaseLaboratory": "Εργαστήριο Βάσης Εργατών",
+  "upgradeTrackerCalendar": "Ημερολόγιο",
+  "upgradeTrackerClearCost": "Κόστος απομάκρυνσης",
+  "upgradeTrackerCompletionDetails": "Λεπτομέρειες ολοκλήρωσης χωριού",
+  "upgradeTrackerCustomSoundtrack": "Προσαρμοσμένο μουσικό θέμα",
+  "upgradeTrackerGoldPassPercent": "Χρυσό Πάσο {percent}%",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "Σύνοψη {group}",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Φύλακες",
+  "upgradeTrackerHelpers": "Βοηθοί",
+  "upgradeTrackerHouseParts": "Τμήματα σπιτιού",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# αδρανής εργάτης} other {# αδρανείς εργάτες}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "Σε εξέλιξη",
+  "upgradeTrackerItemSemanticLabel": "{item}, επίπεδο {currentLevel} από {targetLevel}{count, plural, =1 {} other {, # κτίρια}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "{count} στην κατοχή σου",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Λωρίδα",
+  "upgradeTrackerLevelTransition": "Επίπεδο {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Λάφυρα τώρα",
+  "upgradeTrackerLootOutlook": "Πρόβλεψη λαφύρων",
+  "upgradeTrackerMusic": "Μουσική",
+  "upgradeTrackerNextDays": "{count, plural, one {Επόμενη # ημέρα} other {Επόμενες # ημέρες}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Επόμενη περίοδος",
+  "upgradeTrackerNoGoldPass": "Χωρίς Χρυσό Πάσο",
+  "upgradeTrackerNoMatchingUpgrades": "Δεν υπάρχουν αναβαθμίσεις που να ταιριάζουν",
+  "upgradeTrackerNoMatchingUpgradesBody": "Δοκίμασε άλλο χωριό ή ουρά.",
+  "upgradeTrackerNothingNeededNow": "Δεν χρειάζεται τίποτα τώρα",
+  "upgradeTrackerObstacles": "Εμπόδια",
+  "upgradeTrackerPart": "Τμήμα",
+  "upgradeTrackerPassReward": "Ανταμοιβή Πάσου",
+  "upgradeTrackerPauseSoundtrack": "Παύση μουσικού θέματος",
+  "upgradeTrackerPeriodCount": "Περίοδος {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Αναπαραγωγή μουσικού θέματος",
+  "upgradeTrackerPreviousPeriod": "Προηγούμενη περίοδος",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Τοπία",
+  "upgradeTrackerScheduledLane": "Προγραμματισμένο στη λωρίδα #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "Πρόοδος {village}",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Μέγεθος",
+  "upgradeTrackerSortLongest": "Μεγαλύτερη διάρκεια πρώτα",
+  "upgradeTrackerSortName": "Όνομα Α–Ω",
+  "upgradeTrackerSortScheduled": "Προγραμματισμένα",
+  "upgradeTrackerSortShortest": "Μικρότερη διάρκεια πρώτα",
+  "upgradeTrackerSoundtrackPosition": "Θέση μουσικού θέματος",
+  "upgradeTrackerStarts": "Έναρξη",
+  "upgradeTrackerTier": "Βαθμίδα",
+  "upgradeTrackerUpgradesStarting": "αναβαθμίσεις που ξεκινούν",
+  "upgradeTrackerUpgradingNow": "Αναβαθμίζεται τώρα",
+  "upgradeTrackerWarBase": "Βάση Πολέμου",
+  "notifSettingsSaveFailed": "Δεν ήταν δυνατή η αποθήκευση των ρυθμίσεων ειδοποιήσεων.",
+  "notifPushEnabled": "Οι ειδοποιήσεις push ενεργοποιήθηκαν",
+  "notifReceiveNotifications": "Λήψη ειδοποιήσεων",
+  "notifTokenPreview": "Διακριτικό: {token}",
+  "notifEnabledDeliveryDescription": "Οι ενεργοποιημένες ειδοποιήσεις μπορούν να αποστέλλονται σε αυτήν τη συσκευή.",
+  "notifDisabledAccountDescription": "Οι ειδοποιήσεις είναι απενεργοποιημένες σε ολόκληρο τον λογαριασμό ClashKing.",
+  "notifMaximumRemindersAdded": "Προστέθηκε ο μέγιστος αριθμός υπενθυμίσεων",
+  "notifAddReminder": "Προσθήκη υπενθύμισης",
+  "notifDurationOneHour": "1 ώρα",
+  "notifDurationHours": "{count} ώρες",
+  "notifDurationMinutes": "{count} λεπτά",
+  "notifAddTiming": "Προσθήκη {timing}",
+  "notifTimingOneHourBefore": "1 ώρα πριν",
+  "notifTimingHoursBefore": "{count} ώρες πριν",
+  "notifTimingMinutesBefore": "{count} λεπτά πριν",
+  "notifPushReady": "Οι ειδοποιήσεις push είναι έτοιμες σε αυτήν τη συσκευή.",
+  "notifPushPermissionRequired": "Επιτρέψτε τις ειδοποιήσεις για να λαμβάνετε ενημερώσεις του ClashKing.",
+  "notifPushPermissionDenied": "Η άδεια ειδοποιήσεων απορρίφθηκε.",
+  "notifPushNotConfigured": "Το Firebase δεν έχει ρυθμιστεί για αυτήν την έκδοση.",
+  "notifPushTokenUnavailable": "Δεν υπάρχει ακόμη διαθέσιμο διακριτικό push.",
+  "notifPushUnsupported": "Οι ειδοποιήσεις push δεν υποστηρίζονται σε αυτήν την πλατφόρμα.",
+  "notifPushInitializing": "Ρύθμιση ειδοποιήσεων push…",
   "notificationPrimerTitle": "Ενεργοποίηση ειδοποιήσεων;",
   "notificationPrimerBody": "Το ClashKing μπορεί να σας ειδοποιεί για ενημερώσεις πολέμων, CWL, λογαριασμού και έργων. Μπορείτε να το αλλάξετε ανά πάσα στιγμή στις Ρυθμίσεις > Ειδοποιήσεις.",
   "notificationPrimerNotNow": "Όχι τώρα",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "Επικοινωνία με την υποστήριξη",
   "settingsPrivacyDeleteAccount": "Διαγραφή λογαριασμού",
   "settingsPrivacyDeleteConfirmTitle": "Διαγραφή λογαριασμού;",
-  "settingsPrivacyDeleteConfirmDescription": "Το αίτημα είναι οριστικό μετά την επεξεργασία του. Ενδέχεται να χάσετε συνδεδεμένους λογαριασμούς, ρυθμίσεις ειδοποιήσεων, αποθηκευμένες προτιμήσεις και μεθόδους ελέγχου ταυτότητας."
+  "settingsPrivacyDeleteConfirmDescription": "Το αίτημα είναι οριστικό μετά την επεξεργασία του. Ενδέχεται να χάσετε συνδεδεμένους λογαριασμούς, ρυθμίσεις ειδοποιήσεων, αποθηκευμένες προτιμήσεις και μεθόδους ελέγχου ταυτότητας.",
+  "generalUnranked": "Χωρίς κατάταξη",
+  "playerJoinLeaveTab": "Συμμετοχή / Αποχώρηση",
+  "playerUpgradeRemainingAccessibility": "Απομένει για Δημαρχείο {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% ολοκληρωμένο για ΔΗ{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Αυτή η ενότητα έχει ολοκληρωθεί για ΔΗ{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Χρόνος που απομένει",
+  "playerUpgradeNoResourceData": "Δεν υπάρχουν δεδομένα πόρων",
+  "playerJoinLeaveLoadError": "Δεν ήταν δυνατή η φόρτωση του ιστορικού συμμετοχών / αποχωρήσεων",
+  "playerJoinLeaveClanTotals": "Σύνολα φυλών",
+  "playerJoinLeaveTime": "Χρόνος",
+  "playerJoinLeaveTimeSpent": "Χρόνος παραμονής",
+  "playerJoinLeaveVisits": "Επισκέψεις",
+  "playerJoinLeaveJoined": "Συμμετείχε",
+  "playerJoinLeaveLeft": "Αποχώρησε",
+  "playerJoinLeaveNoHistory": "Δεν υπάρχει διαθέσιμο ιστορικό συμμετοχών / αποχωρήσεων",
+  "playerJoinLeaveNoClanTotals": "Δεν υπάρχουν διαθέσιμα σύνολα φυλών",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

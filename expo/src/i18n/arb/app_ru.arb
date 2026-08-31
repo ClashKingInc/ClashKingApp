@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Все строители заняты",
+  "upgradeTrackerBuildCost": "Стоимость строительства",
+  "upgradeTrackerBuilderBaseBuilders": "Строители Деревни строителя",
+  "upgradeTrackerBuilderBaseLaboratory": "Лаборатория Деревни строителя",
+  "upgradeTrackerCalendar": "Календарь",
+  "upgradeTrackerClearCost": "Стоимость удаления",
+  "upgradeTrackerCompletionDetails": "Сведения о завершении деревни",
+  "upgradeTrackerCustomSoundtrack": "Пользовательская музыка",
+  "upgradeTrackerGoldPassPercent": "Золотой пропуск {percent}%",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "Сводка: {group}",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Хранители",
+  "upgradeTrackerHelpers": "Помощники",
+  "upgradeTrackerHouseParts": "Части дома",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# свободный строитель} other {# свободных строителей}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "В процессе",
+  "upgradeTrackerItemSemanticLabel": "{item}, уровень {currentLevel} из {targetLevel}{count, plural, =1 {} other {, зданий: #}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "В наличии: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Линия",
+  "upgradeTrackerLevelTransition": "Уровень {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Ресурсы сейчас",
+  "upgradeTrackerLootOutlook": "Прогноз ресурсов",
+  "upgradeTrackerMusic": "Музыка",
+  "upgradeTrackerNextDays": "{count, plural, one {Следующий # день} other {Следующие # дней}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Следующий период",
+  "upgradeTrackerNoGoldPass": "Без Золотого пропуска",
+  "upgradeTrackerNoMatchingUpgrades": "Нет подходящих улучшений",
+  "upgradeTrackerNoMatchingUpgradesBody": "Выберите другую деревню или очередь.",
+  "upgradeTrackerNothingNeededNow": "Сейчас ничего не требуется",
+  "upgradeTrackerObstacles": "Препятствия",
+  "upgradeTrackerPart": "Часть",
+  "upgradeTrackerPassReward": "Награда пропуска",
+  "upgradeTrackerPauseSoundtrack": "Приостановить музыку",
+  "upgradeTrackerPeriodCount": "Период {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Воспроизвести музыку",
+  "upgradeTrackerPreviousPeriod": "Предыдущий период",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Пейзажи",
+  "upgradeTrackerScheduledLane": "Запланировано на линии №{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "Прогресс: {village}",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Размер",
+  "upgradeTrackerSortLongest": "Сначала долгие",
+  "upgradeTrackerSortName": "Имя А–Я",
+  "upgradeTrackerSortScheduled": "Запланированные",
+  "upgradeTrackerSortShortest": "Сначала короткие",
+  "upgradeTrackerSoundtrackPosition": "Позиция воспроизведения",
+  "upgradeTrackerStarts": "Начало",
+  "upgradeTrackerTier": "Уровень",
+  "upgradeTrackerUpgradesStarting": "начинающиеся улучшения",
+  "upgradeTrackerUpgradingNow": "Улучшается сейчас",
+  "upgradeTrackerWarBase": "Военная база",
+  "notifSettingsSaveFailed": "Не удалось сохранить настройки уведомлений.",
+  "notifPushEnabled": "Push-уведомления включены",
+  "notifReceiveNotifications": "Получать уведомления",
+  "notifTokenPreview": "Токен: {token}",
+  "notifEnabledDeliveryDescription": "Включённые оповещения могут доставляться на это устройство.",
+  "notifDisabledAccountDescription": "Уведомления отключены для всей вашей учётной записи ClashKing.",
+  "notifMaximumRemindersAdded": "Добавлено максимальное количество напоминаний",
+  "notifAddReminder": "Добавить напоминание",
+  "notifDurationOneHour": "1 час",
+  "notifDurationHours": "{count} часов",
+  "notifDurationMinutes": "{count} минут",
+  "notifAddTiming": "Добавить {timing}",
+  "notifTimingOneHourBefore": "за 1 час",
+  "notifTimingHoursBefore": "за {count} часов",
+  "notifTimingMinutesBefore": "за {count} минут",
+  "notifPushReady": "Push-уведомления готовы на этом устройстве.",
+  "notifPushPermissionRequired": "Разрешите уведомления, чтобы получать оповещения ClashKing.",
+  "notifPushPermissionDenied": "В разрешении на уведомления отказано.",
+  "notifPushNotConfigured": "Firebase не настроен для этой сборки.",
+  "notifPushTokenUnavailable": "Push-токен пока недоступен.",
+  "notifPushUnsupported": "Push-уведомления не поддерживаются на этой платформе.",
+  "notifPushInitializing": "Настройка push-уведомлений…",
   "notificationPrimerTitle": "Включить уведомления?",
   "notificationPrimerBody": "ClashKing может уведомлять вас об обновлениях войн, CWL, аккаунта и проектов. Это можно изменить в любое время в разделе «Настройки» > «Уведомления».",
   "notificationPrimerNotNow": "Не сейчас",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "Связаться с поддержкой",
   "settingsPrivacyDeleteAccount": "Удалить аккаунт",
   "settingsPrivacyDeleteConfirmTitle": "Удалить аккаунт?",
-  "settingsPrivacyDeleteConfirmDescription": "После обработки запрос станет необратимым. Вы можете потерять привязанные аккаунты, настройки уведомлений, сохранённые предпочтения и способы аутентификации."
+  "settingsPrivacyDeleteConfirmDescription": "После обработки запрос станет необратимым. Вы можете потерять привязанные аккаунты, настройки уведомлений, сохранённые предпочтения и способы аутентификации.",
+  "generalUnranked": "Без рейтинга",
+  "playerJoinLeaveTab": "Вступление / Выход",
+  "playerUpgradeRemainingAccessibility": "Осталось для ратуши {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Завершено на {progress}% для ТХ{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Этот раздел завершён для ТХ{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Оставшееся время",
+  "playerUpgradeNoResourceData": "Нет данных о ресурсах",
+  "playerJoinLeaveLoadError": "Не удалось загрузить историю вступлений и выходов",
+  "playerJoinLeaveClanTotals": "Итоги по кланам",
+  "playerJoinLeaveTime": "Время",
+  "playerJoinLeaveTimeSpent": "Время в клане",
+  "playerJoinLeaveVisits": "Посещения",
+  "playerJoinLeaveJoined": "Вступил",
+  "playerJoinLeaveLeft": "Вышел",
+  "playerJoinLeaveNoHistory": "История вступлений и выходов отсутствует",
+  "playerJoinLeaveNoClanTotals": "Итоги по кланам отсутствуют",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

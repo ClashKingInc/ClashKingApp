@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Kaikki rakentajat ovat varattuja",
+  "upgradeTrackerBuildCost": "Rakennuskustannus",
+  "upgradeTrackerBuilderBaseBuilders": "Rakentajat rakentajan tukikohdassa",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorio rakentajan tukikohdassa",
+  "upgradeTrackerCalendar": "Kalenteri",
+  "upgradeTrackerClearCost": "Poistokustannus",
+  "upgradeTrackerCompletionDetails": "Kylän edistymisen tiedot",
+  "upgradeTrackerCustomSoundtrack": "Mukautettu ääniraita",
+  "upgradeTrackerGoldPassPercent": "{percent} %:n kultapassi",
+  "upgradeTrackerGroupSummary": "Ryhmän {group} yhteenveto",
+  "upgradeTrackerGuardians": "Vartijat",
+  "upgradeTrackerHelpers": "Apulaiset",
+  "upgradeTrackerHouseParts": "Talon osat",
+  "upgradeTrackerIdleBuilders": "{count} vapaata rakentajaa",
+  "upgradeTrackerInProgress": "Käynnissä",
+  "upgradeTrackerItemSemanticLabel": "{item}, taso {currentLevel}/{targetLevel}, {count} rakennusta",
+  "upgradeTrackerItemsOwned": "Omistettu: {count}",
+  "upgradeTrackerLane": "Jono",
+  "upgradeTrackerLevelTransition": "Taso {from} → {to}",
+  "upgradeTrackerLootNow": "Saalis nyt",
+  "upgradeTrackerLootOutlook": "Saalisennuste",
+  "upgradeTrackerMusic": "Musiikki",
+  "upgradeTrackerNextDays": "Seuraavat {count} päivää",
+  "upgradeTrackerNextPeriod": "Seuraava jakso",
+  "upgradeTrackerNoGoldPass": "Ei kultapassia",
+  "upgradeTrackerNoMatchingUpgrades": "Ei vastaavia parannuksia",
+  "upgradeTrackerNoMatchingUpgradesBody": "Kokeile toista kylää tai jonoa.",
+  "upgradeTrackerNothingNeededNow": "Mitään ei tarvita juuri nyt",
+  "upgradeTrackerObstacles": "Esteet",
+  "upgradeTrackerPart": "Osa",
+  "upgradeTrackerPassReward": "Passipalkinto",
+  "upgradeTrackerPauseSoundtrack": "Keskeytä ääniraita",
+  "upgradeTrackerPeriodCount": "Jakso {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Toista ääniraita",
+  "upgradeTrackerPreviousPeriod": "Edellinen jakso",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Maisemat",
+  "upgradeTrackerScheduledLane": "Ajastettu nro {lane}",
+  "upgradeTrackerShareProgress": "Kylän {village} edistyminen",
+  "upgradeTrackerSize": "Koko",
+  "upgradeTrackerSortLongest": "Pisimmät ensin",
+  "upgradeTrackerSortName": "Nimi A–Z",
+  "upgradeTrackerSortScheduled": "Ajastettu",
+  "upgradeTrackerSortShortest": "Lyhyimmät ensin",
+  "upgradeTrackerSoundtrackPosition": "Ääniraidan kohta",
+  "upgradeTrackerStarts": "Alkaa",
+  "upgradeTrackerTier": "Taso",
+  "upgradeTrackerUpgradesStarting": "alkavat parannukset",
+  "upgradeTrackerUpgradingNow": "Parannetaan nyt",
+  "upgradeTrackerWarBase": "Sotatukikohta",
+  "notifSettingsSaveFailed": "Ilmoitusasetuksia ei voitu tallentaa.",
+  "notifPushEnabled": "Push-ilmoitukset käytössä",
+  "notifReceiveNotifications": "Vastaanota ilmoituksia",
+  "notifTokenPreview": "Tunnus: {token}",
+  "notifEnabledDeliveryDescription": "Käytössä olevat hälytykset voidaan toimittaa tähän laitteeseen.",
+  "notifDisabledAccountDescription": "Ilmoitukset on poistettu käytöstä koko ClashKing-tililtäsi.",
+  "notifMaximumRemindersAdded": "Muistutusten enimmäismäärä lisätty",
+  "notifAddReminder": "Lisää muistutus",
+  "notifDurationOneHour": "1 tunti",
+  "notifDurationHours": "{count} tuntia",
+  "notifDurationMinutes": "{count} minuuttia",
+  "notifAddTiming": "Lisää {timing}",
+  "notifTimingOneHourBefore": "1 tunti ennen",
+  "notifTimingHoursBefore": "{count} tuntia ennen",
+  "notifTimingMinutesBefore": "{count} minuuttia ennen",
+  "notifPushReady": "Push-ilmoitukset ovat valmiina tällä laitteella.",
+  "notifPushPermissionRequired": "Salli ilmoitukset saadaksesi ClashKing-hälytyksiä.",
+  "notifPushPermissionDenied": "Ilmoituslupa evättiin.",
+  "notifPushNotConfigured": "Firebasea ei ole määritetty tälle koontiversiolle.",
+  "notifPushTokenUnavailable": "Push-tunnus ei ole vielä saatavilla.",
+  "notifPushUnsupported": "Push-ilmoituksia ei tueta tällä alustalla.",
+  "notifPushInitializing": "Määritetään push-ilmoituksia…",
   "notificationPrimerTitle": "Ota ilmoitukset käyttöön?",
   "notificationPrimerBody": "ClashKing voi ilmoittaa sodan, CWL:n, tilin ja projektien päivityksistä. Voit muuttaa tätä milloin tahansa kohdassa Asetukset > Ilmoitukset.",
   "notificationPrimerNotNow": "Ei nyt",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Ota yhteyttä tukeen",
   "settingsPrivacyDeleteAccount": "Poista tili",
   "settingsPrivacyDeleteConfirmTitle": "Poistetaanko tili?",
-  "settingsPrivacyDeleteConfirmDescription": "Pyyntö on käsittelyn jälkeen pysyvä. Saatat menettää liitetyt tilit, ilmoitusasetukset, tallennetut valinnat ja todennusmenetelmät."
+  "settingsPrivacyDeleteConfirmDescription": "Pyyntö on käsittelyn jälkeen pysyvä. Saatat menettää liitetyt tilit, ilmoitusasetukset, tallennetut valinnat ja todennusmenetelmät.",
+  "generalUnranked": "Ei sijoitusta",
+  "playerJoinLeaveTab": "Liittyminen / Poistuminen",
+  "playerUpgradeRemainingAccessibility": "Jäljellä kaupungintalolle {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress} % valmis tasolle TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Tämä osio on valmis tasolle TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Aikaa jäljellä",
+  "playerUpgradeNoResourceData": "Ei resurssitietoja",
+  "playerJoinLeaveLoadError": "Liittymis- ja poistumishistoriaa ei voitu ladata",
+  "playerJoinLeaveClanTotals": "Klaanien yhteenveto",
+  "playerJoinLeaveTime": "Aika",
+  "playerJoinLeaveTimeSpent": "Käytetty aika",
+  "playerJoinLeaveVisits": "Vierailut",
+  "playerJoinLeaveJoined": "Liittyi",
+  "playerJoinLeaveLeft": "Poistui",
+  "playerJoinLeaveNoHistory": "Liittymis- ja poistumishistoriaa ei ole",
+  "playerJoinLeaveNoClanTotals": "Klaanien yhteenvetoa ei ole",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

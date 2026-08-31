@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Tüm inşaatçılar meşgul",
+  "upgradeTrackerBuildCost": "İnşa maliyeti",
+  "upgradeTrackerBuilderBaseBuilders": "İnşaatçı Üssü inşaatçıları",
+  "upgradeTrackerBuilderBaseLaboratory": "İnşaatçı Üssü laboratuvarı",
+  "upgradeTrackerCalendar": "Takvim",
+  "upgradeTrackerClearCost": "Kaldırma maliyeti",
+  "upgradeTrackerCompletionDetails": "Köy tamamlanma ayrıntıları",
+  "upgradeTrackerCustomSoundtrack": "Özel müzik",
+  "upgradeTrackerGoldPassPercent": "%{percent} Altın Bilet",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group} özeti",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Muhafızlar",
+  "upgradeTrackerHelpers": "Yardımcılar",
+  "upgradeTrackerHouseParts": "Ev parçaları",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# boşta inşaatçı} other {# boşta inşaatçı}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "Devam ediyor",
+  "upgradeTrackerItemSemanticLabel": "{item}, seviye {currentLevel}/{targetLevel}{count, plural, =1 {} other {, # bina}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "Sahip olunan: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Hat",
+  "upgradeTrackerLevelTransition": "Seviye {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Şimdi gereken ganimet",
+  "upgradeTrackerLootOutlook": "Ganimet görünümü",
+  "upgradeTrackerMusic": "Müzik",
+  "upgradeTrackerNextDays": "{count, plural, one {Önümüzdeki # gün} other {Önümüzdeki # gün}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Sonraki dönem",
+  "upgradeTrackerNoGoldPass": "Altın Bilet yok",
+  "upgradeTrackerNoMatchingUpgrades": "Eşleşen yükseltme yok",
+  "upgradeTrackerNoMatchingUpgradesBody": "Başka bir köy veya sıra deneyin.",
+  "upgradeTrackerNothingNeededNow": "Şu anda gereken bir şey yok",
+  "upgradeTrackerObstacles": "Engeller",
+  "upgradeTrackerPart": "Parça",
+  "upgradeTrackerPassReward": "Bilet ödülü",
+  "upgradeTrackerPauseSoundtrack": "Müziği duraklat",
+  "upgradeTrackerPeriodCount": "Dönem {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Müziği çal",
+  "upgradeTrackerPreviousPeriod": "Önceki dönem",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Manzaralar",
+  "upgradeTrackerScheduledLane": "#{lane}. hatta planlandı",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village} ilerlemesi",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Boyut",
+  "upgradeTrackerSortLongest": "Önce en uzun",
+  "upgradeTrackerSortName": "Ad A–Z",
+  "upgradeTrackerSortScheduled": "Planlanan",
+  "upgradeTrackerSortShortest": "Önce en kısa",
+  "upgradeTrackerSoundtrackPosition": "Müzik konumu",
+  "upgradeTrackerStarts": "Başlangıç",
+  "upgradeTrackerTier": "Kademe",
+  "upgradeTrackerUpgradesStarting": "başlayacak yükseltmeler",
+  "upgradeTrackerUpgradingNow": "Şimdi yükseltiliyor",
+  "upgradeTrackerWarBase": "Savaş Üssü",
+  "notifSettingsSaveFailed": "Bildirim ayarları kaydedilemedi.",
+  "notifPushEnabled": "Anlık bildirimler etkin",
+  "notifReceiveNotifications": "Bildirimleri al",
+  "notifTokenPreview": "Jeton: {token}",
+  "notifEnabledDeliveryDescription": "Etkin uyarılarınız bu cihaza gönderilebilir.",
+  "notifDisabledAccountDescription": "Bildirimler tüm ClashKing hesabınızda kapalı.",
+  "notifMaximumRemindersAdded": "En fazla sayıda hatırlatıcı eklendi",
+  "notifAddReminder": "Hatırlatıcı ekle",
+  "notifDurationOneHour": "1 saat",
+  "notifDurationHours": "{count} saat",
+  "notifDurationMinutes": "{count} dakika",
+  "notifAddTiming": "{timing} ekle",
+  "notifTimingOneHourBefore": "1 saat önce",
+  "notifTimingHoursBefore": "{count} saat önce",
+  "notifTimingMinutesBefore": "{count} dakika önce",
+  "notifPushReady": "Anlık bildirimler bu cihazda hazır.",
+  "notifPushPermissionRequired": "ClashKing uyarılarını almak için bildirimlere izin verin.",
+  "notifPushPermissionDenied": "Bildirim izni reddedildi.",
+  "notifPushNotConfigured": "Firebase bu derleme için yapılandırılmamış.",
+  "notifPushTokenUnavailable": "Henüz bir anlık bildirim jetonu yok.",
+  "notifPushUnsupported": "Anlık bildirimler bu platformda desteklenmiyor.",
+  "notifPushInitializing": "Anlık bildirimler yapılandırılıyor…",
   "notificationPrimerTitle": "Bildirimler etkinleştirilsin mi?",
   "notificationPrimerBody": "ClashKing savaş, CWL, hesap ve proje güncellemelerini sana bildirebilir. Bunu istediğin zaman Ayarlar > Bildirimler bölümünden değiştirebilirsin.",
   "notificationPrimerNotNow": "Şimdi değil",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "Destekle iletişime geç",
   "settingsPrivacyDeleteAccount": "Hesabı sil",
   "settingsPrivacyDeleteConfirmTitle": "Hesap silinsin mi?",
-  "settingsPrivacyDeleteConfirmDescription": "Bu talep işlendikten sonra kalıcıdır. Bağlı hesapları, bildirim ayarlarını, kayıtlı tercihleri ve kimlik doğrulama yöntemlerini kaybedebilirsiniz."
+  "settingsPrivacyDeleteConfirmDescription": "Bu talep işlendikten sonra kalıcıdır. Bağlı hesapları, bildirim ayarlarını, kayıtlı tercihleri ve kimlik doğrulama yöntemlerini kaybedebilirsiniz.",
+  "generalUnranked": "Derecesiz",
+  "playerJoinLeaveTab": "Katılma / Ayrılma",
+  "playerUpgradeRemainingAccessibility": "Belediye Binası {townHallLevel} için kalan",
+  "playerUpgradeSummaryTitle": "BB{townHallLevel} için %{progress} tamamlandı",
+  "playerUpgradeSectionMaxed": "Bu bölüm BB{townHallLevel} için tamamlandı.",
+  "playerUpgradeTimeRemaining": "Kalan süre",
+  "playerUpgradeNoResourceData": "Kaynak verisi yok",
+  "playerJoinLeaveLoadError": "Katılma / ayrılma geçmişi yüklenemedi",
+  "playerJoinLeaveClanTotals": "Klan toplamları",
+  "playerJoinLeaveTime": "Süre",
+  "playerJoinLeaveTimeSpent": "Geçirilen süre",
+  "playerJoinLeaveVisits": "Ziyaretler",
+  "playerJoinLeaveJoined": "Katıldı",
+  "playerJoinLeaveLeft": "Ayrıldı",
+  "playerJoinLeaveNoHistory": "Katılma / ayrılma geçmişi yok",
+  "playerJoinLeaveNoClanTotals": "Klan toplamı yok",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

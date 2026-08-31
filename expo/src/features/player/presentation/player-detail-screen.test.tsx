@@ -461,7 +461,7 @@ describe('PlayerDetailScreen', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'History' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'Clan totals' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
-    expect(screen.getByText('Time spent')).toBeTruthy();
+    expect(screen.getAllByText('Time spent').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Visits').length).toBeGreaterThan(0);
   });
 

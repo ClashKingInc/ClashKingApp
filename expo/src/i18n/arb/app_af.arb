@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Alle bouers is besig",
+  "upgradeTrackerBuildCost": "Boukoste",
+  "upgradeTrackerBuilderBaseBuilders": "Bouers van die bouersbasis",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorium van die bouersbasis",
+  "upgradeTrackerCalendar": "Kalender",
+  "upgradeTrackerClearCost": "Verwyderingskoste",
+  "upgradeTrackerCompletionDetails": "Besonderhede van dorpvordering",
+  "upgradeTrackerCustomSoundtrack": "Pasgemaakte klankbaan",
+  "upgradeTrackerGoldPassPercent": "{percent}% Goue Pas",
+  "upgradeTrackerGroupSummary": "Opsomming van {group}",
+  "upgradeTrackerGuardians": "Bewakers",
+  "upgradeTrackerHelpers": "Helpers",
+  "upgradeTrackerHouseParts": "Huisdele",
+  "upgradeTrackerIdleBuilders": "{count} ledige bouers",
+  "upgradeTrackerInProgress": "Besig",
+  "upgradeTrackerItemSemanticLabel": "{item}, vlak {currentLevel} van {targetLevel}, {count} geboue",
+  "upgradeTrackerItemsOwned": "{count} besit",
+  "upgradeTrackerLane": "Tou",
+  "upgradeTrackerLevelTransition": "Vlak {from} → {to}",
+  "upgradeTrackerLootNow": "Buit nou",
+  "upgradeTrackerLootOutlook": "Buitvooruitsig",
+  "upgradeTrackerMusic": "Musiek",
+  "upgradeTrackerNextDays": "Volgende {count} dae",
+  "upgradeTrackerNextPeriod": "Volgende tydperk",
+  "upgradeTrackerNoGoldPass": "Geen Goue Pas",
+  "upgradeTrackerNoMatchingUpgrades": "Geen ooreenstemmende opgraderings nie",
+  "upgradeTrackerNoMatchingUpgradesBody": "Probeer ’n ander dorp of tou.",
+  "upgradeTrackerNothingNeededNow": "Niks is nou nodig nie",
+  "upgradeTrackerObstacles": "Hindernisse",
+  "upgradeTrackerPart": "Deel",
+  "upgradeTrackerPassReward": "Pasbeloning",
+  "upgradeTrackerPauseSoundtrack": "Onderbreek klankbaan",
+  "upgradeTrackerPeriodCount": "Tydperk {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Speel klankbaan",
+  "upgradeTrackerPreviousPeriod": "Vorige tydperk",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Landskappe",
+  "upgradeTrackerScheduledLane": "Geskeduleer nr. {lane}",
+  "upgradeTrackerShareProgress": "Vordering van {village}",
+  "upgradeTrackerSize": "Grootte",
+  "upgradeTrackerSortLongest": "Langste eerste",
+  "upgradeTrackerSortName": "Naam A–Z",
+  "upgradeTrackerSortScheduled": "Geskeduleer",
+  "upgradeTrackerSortShortest": "Kortste eerste",
+  "upgradeTrackerSoundtrackPosition": "Klankbaanposisie",
+  "upgradeTrackerStarts": "Begin",
+  "upgradeTrackerTier": "Rang",
+  "upgradeTrackerUpgradesStarting": "opgraderings wat begin",
+  "upgradeTrackerUpgradingNow": "Word nou opgegradeer",
+  "upgradeTrackerWarBase": "Oorlogsbasis",
+  "notifSettingsSaveFailed": "Kennisgewinginstellings kon nie gestoor word nie.",
+  "notifPushEnabled": "Stootkennisgewings geaktiveer",
+  "notifReceiveNotifications": "Ontvang kennisgewings",
+  "notifTokenPreview": "Teken: {token}",
+  "notifEnabledDeliveryDescription": "Jou geaktiveerde waarskuwings kan na hierdie toestel gestuur word.",
+  "notifDisabledAccountDescription": "Kennisgewings is vir jou hele ClashKing-rekening afgeskakel.",
+  "notifMaximumRemindersAdded": "Maksimum aantal herinnerings bygevoeg",
+  "notifAddReminder": "Voeg herinnering by",
+  "notifDurationOneHour": "1 uur",
+  "notifDurationHours": "{count} uur",
+  "notifDurationMinutes": "{count} minute",
+  "notifAddTiming": "Voeg {timing} by",
+  "notifTimingOneHourBefore": "1 uur voor",
+  "notifTimingHoursBefore": "{count} uur voor",
+  "notifTimingMinutesBefore": "{count} minute voor",
+  "notifPushReady": "Stootkennisgewings is gereed op hierdie toestel.",
+  "notifPushPermissionRequired": "Laat kennisgewings toe om ClashKing-waarskuwings te ontvang.",
+  "notifPushPermissionDenied": "Toestemming vir kennisgewings is geweier.",
+  "notifPushNotConfigured": "Firebase is nie vir hierdie weergawe opgestel nie.",
+  "notifPushTokenUnavailable": "’n Stootkennisgewingsteken is nog nie beskikbaar nie.",
+  "notifPushUnsupported": "Stootkennisgewings word nie op hierdie platform ondersteun nie.",
+  "notifPushInitializing": "Stootkennisgewings word opgestel…",
   "notificationPrimerTitle": "Aktiveer kennisgewings?",
   "notificationPrimerBody": "ClashKing kan jou in kennis stel van oorlog-, CWL-, rekening- en projekopdaterings. Jy kan dit enige tyd verander onder Instellings > Kennisgewings.",
   "notificationPrimerNotNow": "Nie nou nie",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Kontak ondersteuning",
   "settingsPrivacyDeleteAccount": "Vee rekening uit",
   "settingsPrivacyDeleteConfirmTitle": "Vee rekening uit?",
-  "settingsPrivacyDeleteConfirmDescription": "Hierdie versoek is permanent nadat dit verwerk is. Jy kan gekoppelde rekeninge, kennisgewinginstellings, gestoorde voorkeure en verifikasiemetodes verloor."
+  "settingsPrivacyDeleteConfirmDescription": "Hierdie versoek is permanent nadat dit verwerk is. Jy kan gekoppelde rekeninge, kennisgewinginstellings, gestoorde voorkeure en verifikasiemetodes verloor.",
+  "generalUnranked": "Ongerangskik",
+  "playerJoinLeaveTab": "Sluit aan / Verlaat",
+  "playerUpgradeRemainingAccessibility": "Dorpstadhuis {townHallLevel} oor",
+  "playerUpgradeSummaryTitle": "{progress}% voltooi vir SV{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Hierdie afdeling is voltooi vir SV{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Oorblywende tyd",
+  "playerUpgradeNoResourceData": "Geen hulpbrondata nie",
+  "playerJoinLeaveLoadError": "Kon nie aansluit-/verlaatgeskiedenis laai nie",
+  "playerJoinLeaveClanTotals": "Stamtotale",
+  "playerJoinLeaveTime": "Tyd",
+  "playerJoinLeaveTimeSpent": "Tyd bestee",
+  "playerJoinLeaveVisits": "Besoeke",
+  "playerJoinLeaveJoined": "Aangesluit",
+  "playerJoinLeaveLeft": "Verlaat",
+  "playerJoinLeaveNoHistory": "Geen aansluit-/verlaatgeskiedenis beskikbaar nie",
+  "playerJoinLeaveNoClanTotals": "Geen stamtotale beskikbaar nie",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "تمام معمار مصروف ہیں",
+  "upgradeTrackerBuildCost": "تعمیر کی لاگت",
+  "upgradeTrackerBuilderBaseBuilders": "بلڈر بیس کے معمار",
+  "upgradeTrackerBuilderBaseLaboratory": "بلڈر بیس لیبارٹری",
+  "upgradeTrackerCalendar": "کیلنڈر",
+  "upgradeTrackerClearCost": "ہٹانے کی لاگت",
+  "upgradeTrackerCompletionDetails": "گاؤں کی تکمیل کی تفصیلات",
+  "upgradeTrackerCustomSoundtrack": "حسب ضرورت ساؤنڈ ٹریک",
+  "upgradeTrackerGoldPassPercent": "{percent}% گولڈ پاس",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group} کا خلاصہ",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "نگہبان",
+  "upgradeTrackerHelpers": "معاون",
+  "upgradeTrackerHouseParts": "گھر کے حصے",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# فارغ معمار} other {# فارغ معمار}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "جاری ہے",
+  "upgradeTrackerItemSemanticLabel": "{item}، لیول {currentLevel} از {targetLevel}{count, plural, =1 {} other {، # عمارتیں}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "ملکیت میں: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "لین",
+  "upgradeTrackerLevelTransition": "لیول {from} ← {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "ابھی کا لوٹ",
+  "upgradeTrackerLootOutlook": "لوٹ کا تخمینہ",
+  "upgradeTrackerMusic": "موسیقی",
+  "upgradeTrackerNextDays": "{count, plural, one {اگلا # دن} other {اگلے # دن}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "اگلی مدت",
+  "upgradeTrackerNoGoldPass": "کوئی گولڈ پاس نہیں",
+  "upgradeTrackerNoMatchingUpgrades": "کوئی مماثل اپ گریڈ نہیں",
+  "upgradeTrackerNoMatchingUpgradesBody": "کوئی دوسرا گاؤں یا قطار آزمائیں۔",
+  "upgradeTrackerNothingNeededNow": "ابھی کچھ درکار نہیں",
+  "upgradeTrackerObstacles": "رکاوٹیں",
+  "upgradeTrackerPart": "حصہ",
+  "upgradeTrackerPassReward": "پاس انعام",
+  "upgradeTrackerPauseSoundtrack": "ساؤنڈ ٹریک روکیں",
+  "upgradeTrackerPeriodCount": "مدت {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "ساؤنڈ ٹریک چلائیں",
+  "upgradeTrackerPreviousPeriod": "پچھلی مدت",
+  "upgradeTrackerResourceAmount": "{resource}، {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "مناظر",
+  "upgradeTrackerScheduledLane": "لین #{lane} میں طے شدہ",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village} کی پیش رفت",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "سائز",
+  "upgradeTrackerSortLongest": "طویل ترین پہلے",
+  "upgradeTrackerSortName": "نام الف تا ی",
+  "upgradeTrackerSortScheduled": "طے شدہ",
+  "upgradeTrackerSortShortest": "مختصر ترین پہلے",
+  "upgradeTrackerSoundtrackPosition": "ساؤنڈ ٹریک کی پوزیشن",
+  "upgradeTrackerStarts": "آغاز",
+  "upgradeTrackerTier": "درجہ",
+  "upgradeTrackerUpgradesStarting": "شروع ہونے والی اپ گریڈز",
+  "upgradeTrackerUpgradingNow": "ابھی اپ گریڈ ہو رہا ہے",
+  "upgradeTrackerWarBase": "وار بیس",
+  "notifSettingsSaveFailed": "اطلاع کی ترتیبات محفوظ نہیں ہو سکیں۔",
+  "notifPushEnabled": "پش اطلاعات فعال ہیں",
+  "notifReceiveNotifications": "اطلاعات وصول کریں",
+  "notifTokenPreview": "ٹوکن: {token}",
+  "notifEnabledDeliveryDescription": "آپ کے فعال انتباہات اس آلے پر بھیجے جا سکتے ہیں۔",
+  "notifDisabledAccountDescription": "آپ کے پورے ClashKing اکاؤنٹ پر اطلاعات بند ہیں۔",
+  "notifMaximumRemindersAdded": "یاد دہانیوں کی زیادہ سے زیادہ تعداد شامل ہو گئی",
+  "notifAddReminder": "یاد دہانی شامل کریں",
+  "notifDurationOneHour": "1 گھنٹہ",
+  "notifDurationHours": "{count} گھنٹے",
+  "notifDurationMinutes": "{count} منٹ",
+  "notifAddTiming": "{timing} شامل کریں",
+  "notifTimingOneHourBefore": "1 گھنٹہ پہلے",
+  "notifTimingHoursBefore": "{count} گھنٹے پہلے",
+  "notifTimingMinutesBefore": "{count} منٹ پہلے",
+  "notifPushReady": "پش اطلاعات اس آلے پر تیار ہیں۔",
+  "notifPushPermissionRequired": "ClashKing انتباہات کے لیے اطلاعات کی اجازت دیں۔",
+  "notifPushPermissionDenied": "اطلاعات کی اجازت مسترد کر دی گئی۔",
+  "notifPushNotConfigured": "Firebase اس بلڈ کے لیے ترتیب نہیں دیا گیا۔",
+  "notifPushTokenUnavailable": "پش ٹوکن ابھی دستیاب نہیں ہے۔",
+  "notifPushUnsupported": "اس پلیٹ فارم پر پش اطلاعات معاون نہیں ہیں۔",
+  "notifPushInitializing": "پش اطلاعات ترتیب دی جا رہی ہیں…",
   "notificationPrimerTitle": "اطلاعات فعال کریں؟",
   "notificationPrimerBody": "ClashKing آپ کو جنگ، CWL، اکاؤنٹ اور پروجیکٹ کی اپ ڈیٹس کے بارے میں مطلع کر سکتا ہے۔ آپ اسے کسی بھی وقت ترتیبات > اطلاعات میں تبدیل کر سکتے ہیں۔",
   "notificationPrimerNotNow": "ابھی نہیں",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "معاونت سے رابطہ کریں",
   "settingsPrivacyDeleteAccount": "اکاؤنٹ حذف کریں",
   "settingsPrivacyDeleteConfirmTitle": "اکاؤنٹ حذف کریں؟",
-  "settingsPrivacyDeleteConfirmDescription": "کارروائی کے بعد یہ درخواست مستقل ہوگی۔ آپ منسلک اکاؤنٹس، اطلاع کی ترتیبات، محفوظ ترجیحات اور توثیقی طریقے کھو سکتے ہیں۔"
+  "settingsPrivacyDeleteConfirmDescription": "کارروائی کے بعد یہ درخواست مستقل ہوگی۔ آپ منسلک اکاؤنٹس، اطلاع کی ترتیبات، محفوظ ترجیحات اور توثیقی طریقے کھو سکتے ہیں۔",
+  "generalUnranked": "بغیر درجہ",
+  "playerJoinLeaveTab": "شمولیت / علیحدگی",
+  "playerUpgradeRemainingAccessibility": "ٹاؤن ہال {townHallLevel} کے لیے باقی",
+  "playerUpgradeSummaryTitle": "TH{townHallLevel} کے لیے {progress}% مکمل",
+  "playerUpgradeSectionMaxed": "یہ حصہ TH{townHallLevel} کے لیے مکمل ہے۔",
+  "playerUpgradeTimeRemaining": "باقی وقت",
+  "playerUpgradeNoResourceData": "وسائل کا ڈیٹا موجود نہیں",
+  "playerJoinLeaveLoadError": "شمولیت / علیحدگی کی سرگزشت لوڈ نہیں ہو سکی",
+  "playerJoinLeaveClanTotals": "قبیلوں کے مجموعے",
+  "playerJoinLeaveTime": "وقت",
+  "playerJoinLeaveTimeSpent": "گزارا گیا وقت",
+  "playerJoinLeaveVisits": "دورے",
+  "playerJoinLeaveJoined": "شامل ہوا",
+  "playerJoinLeaveLeft": "چلا گیا",
+  "playerJoinLeaveNoHistory": "شمولیت / علیحدگی کی کوئی سرگزشت نہیں",
+  "playerJoinLeaveNoClanTotals": "قبیلوں کے مجموعے دستیاب نہیں",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

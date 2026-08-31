@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Všichni stavitelé jsou zaneprázdněni",
+  "upgradeTrackerBuildCost": "Cena stavby",
+  "upgradeTrackerBuilderBaseBuilders": "Stavitelé stavitelské základny",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratoř stavitelské základny",
+  "upgradeTrackerCalendar": "Kalendář",
+  "upgradeTrackerClearCost": "Cena odstranění",
+  "upgradeTrackerCompletionDetails": "Podrobnosti o dokončení vesnice",
+  "upgradeTrackerCustomSoundtrack": "Vlastní hudební doprovod",
+  "upgradeTrackerGoldPassPercent": "Zlatý pas {percent} %",
+  "upgradeTrackerGroupSummary": "Souhrn: {group}",
+  "upgradeTrackerGuardians": "Strážci",
+  "upgradeTrackerHelpers": "Pomocníci",
+  "upgradeTrackerHouseParts": "Části domu",
+  "upgradeTrackerIdleBuilders": "{count} nečinných stavitelů",
+  "upgradeTrackerInProgress": "Probíhá",
+  "upgradeTrackerItemSemanticLabel": "{item}, úroveň {currentLevel} z {targetLevel}, počet budov: {count}",
+  "upgradeTrackerItemsOwned": "Vlastněno: {count}",
+  "upgradeTrackerLane": "Fronta",
+  "upgradeTrackerLevelTransition": "Úroveň {from} → {to}",
+  "upgradeTrackerLootNow": "Kořist nyní",
+  "upgradeTrackerLootOutlook": "Výhled kořisti",
+  "upgradeTrackerMusic": "Hudba",
+  "upgradeTrackerNextDays": "Příštích {count} dní",
+  "upgradeTrackerNextPeriod": "Další období",
+  "upgradeTrackerNoGoldPass": "Bez Zlatého pasu",
+  "upgradeTrackerNoMatchingUpgrades": "Žádná odpovídající vylepšení",
+  "upgradeTrackerNoMatchingUpgradesBody": "Zkuste jinou vesnici nebo frontu.",
+  "upgradeTrackerNothingNeededNow": "Právě teď není nic potřeba",
+  "upgradeTrackerObstacles": "Překážky",
+  "upgradeTrackerPart": "Část",
+  "upgradeTrackerPassReward": "Odměna z pasu",
+  "upgradeTrackerPauseSoundtrack": "Pozastavit hudební doprovod",
+  "upgradeTrackerPeriodCount": "Období {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Přehrát hudební doprovod",
+  "upgradeTrackerPreviousPeriod": "Předchozí období",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Scenérie",
+  "upgradeTrackerScheduledLane": "Naplánováno č. {lane}",
+  "upgradeTrackerShareProgress": "Postup: {village}",
+  "upgradeTrackerSize": "Velikost",
+  "upgradeTrackerSortLongest": "Nejdelší první",
+  "upgradeTrackerSortName": "Název A–Z",
+  "upgradeTrackerSortScheduled": "Naplánováno",
+  "upgradeTrackerSortShortest": "Nejkratší první",
+  "upgradeTrackerSoundtrackPosition": "Pozice hudebního doprovodu",
+  "upgradeTrackerStarts": "Začátek",
+  "upgradeTrackerTier": "Třída",
+  "upgradeTrackerUpgradesStarting": "začínající vylepšení",
+  "upgradeTrackerUpgradingNow": "Právě se vylepšuje",
+  "upgradeTrackerWarBase": "Válečná základna",
+  "notifSettingsSaveFailed": "Nastavení oznámení se nepodařilo uložit.",
+  "notifPushEnabled": "Push oznámení zapnuta",
+  "notifReceiveNotifications": "Přijímat oznámení",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Zapnutá upozornění lze doručovat do tohoto zařízení.",
+  "notifDisabledAccountDescription": "Oznámení jsou vypnuta pro celý váš účet ClashKing.",
+  "notifMaximumRemindersAdded": "Byl přidán maximální počet připomenutí",
+  "notifAddReminder": "Přidat připomenutí",
+  "notifDurationOneHour": "1 hodina",
+  "notifDurationHours": "{count} hodin",
+  "notifDurationMinutes": "{count} minut",
+  "notifAddTiming": "Přidat {timing}",
+  "notifTimingOneHourBefore": "1 hodinu předem",
+  "notifTimingHoursBefore": "{count} hodin předem",
+  "notifTimingMinutesBefore": "{count} minut předem",
+  "notifPushReady": "Push oznámení jsou na tomto zařízení připravena.",
+  "notifPushPermissionRequired": "Povolte oznámení, abyste dostávali upozornění ClashKing.",
+  "notifPushPermissionDenied": "Oprávnění k oznámením bylo zamítnuto.",
+  "notifPushNotConfigured": "Firebase není pro toto sestavení nakonfigurován.",
+  "notifPushTokenUnavailable": "Push token zatím není k dispozici.",
+  "notifPushUnsupported": "Push oznámení nejsou na této platformě podporována.",
+  "notifPushInitializing": "Nastavují se push oznámení…",
   "notificationPrimerTitle": "Povolit oznámení?",
   "notificationPrimerBody": "ClashKing vás může upozornit na aktualizace válek, CWL, účtu a projektů. Toto nastavení můžete kdykoli změnit v Nastavení > Oznámení.",
   "notificationPrimerNotNow": "Teď ne",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Kontaktovat podporu",
   "settingsPrivacyDeleteAccount": "Smazat účet",
   "settingsPrivacyDeleteConfirmTitle": "Smazat účet?",
-  "settingsPrivacyDeleteConfirmDescription": "Po zpracování je tato žádost nevratná. Můžete přijít o propojené účty, nastavení oznámení, uložené předvolby a metody ověřování."
+  "settingsPrivacyDeleteConfirmDescription": "Po zpracování je tato žádost nevratná. Můžete přijít o propojené účty, nastavení oznámení, uložené předvolby a metody ověřování.",
+  "generalUnranked": "Bez hodnocení",
+  "playerJoinLeaveTab": "Příchod / Odchod",
+  "playerUpgradeRemainingAccessibility": "Zbývá pro radnici {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress} % dokončeno pro RH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Tato část je dokončena pro RH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Zbývající čas",
+  "playerUpgradeNoResourceData": "Žádné údaje o surovinách",
+  "playerJoinLeaveLoadError": "Historii příchodů a odchodů se nepodařilo načíst",
+  "playerJoinLeaveClanTotals": "Souhrny klanů",
+  "playerJoinLeaveTime": "Čas",
+  "playerJoinLeaveTimeSpent": "Strávený čas",
+  "playerJoinLeaveVisits": "Návštěvy",
+  "playerJoinLeaveJoined": "Přišel",
+  "playerJoinLeaveLeft": "Odešel",
+  "playerJoinLeaveNoHistory": "Historie příchodů a odchodů není k dispozici",
+  "playerJoinLeaveNoClanTotals": "Souhrny klanů nejsou k dispozici",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -183,7 +183,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
     },
     {
       key: 'calendar',
-      label: 'Calendar',
+      label: t('upgradeTrackerCalendar'),
       icon: <MobileWebImage imageUrl={ImageAssets.iconClock} style={styles.tabImage} />,
     },
     {
@@ -377,7 +377,9 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
         onClose={() => setShareOpen(false)}
       >
         <ChoiceRow
-          label="Home Village progress"
+          label={t('upgradeTrackerShareProgress', {
+            village: t('upgradeTrackerHomeVillage'),
+          })}
           icon={<Home color={theme.onSurfaceVariant} />}
           onPress={() => {
             setShareOpen(false);
@@ -385,7 +387,9 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           }}
         />
         <ChoiceRow
-          label="Builder Base progress"
+          label={t('upgradeTrackerShareProgress', {
+            village: t('upgradeTrackerBuilderBase'),
+          })}
           icon={<Hammer color={theme.onSurfaceVariant} />}
           onPress={() => {
             setShareOpen(false);
@@ -423,13 +427,13 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
       ) : null}
       <ChoiceModal
         visible={goldPassOpen}
-        title={props.goldPassPercent === 0 ? 'No Gold Pass' : `${props.goldPassPercent}% Gold Pass`}
+        title={goldPassLabel(props.goldPassPercent, t)}
         onClose={() => setGoldPassOpen(false)}
       >
         {[0, 10, 15, 20].map((value) => (
           <ChoiceRow
             key={value}
-            label={value === 0 ? 'No Gold Pass' : `${value}% Gold Pass`}
+            label={goldPassLabel(value, t)}
             selected={value === props.goldPassPercent}
             icon={<MobileWebImage imageUrl={ImageAssets.goldPass} style={styles.choiceIcon} />}
             onPress={() => {
@@ -580,17 +584,14 @@ function TrackerHeader({
           <ArrowLeft color="white" />
         </HeroIconButton>
         <View style={styles.grow} />
-        <HeroIconButton
-          label={goldPassPercent === 0 ? 'No Gold Pass' : `${goldPassPercent}% Gold Pass`}
-          onPress={onGoldPass}
-        >
+        <HeroIconButton label={goldPassLabel(goldPassPercent, t)} onPress={onGoldPass}>
           <MobileWebImage imageUrl={ImageAssets.goldPass} style={styles.heroActionImage} />
         </HeroIconButton>
-        <HeroIconButton label="Priorities" onPress={onPriorities}>
+        <HeroIconButton label={t('upgradeTrackerPlanPrioritiesTitle')} onPress={onPriorities}>
           <SlidersHorizontal color="white" />
         </HeroIconButton>
         {onInfo ? (
-          <HeroIconButton label="Village completion details" onPress={onInfo}>
+          <HeroIconButton label={t('upgradeTrackerCompletionDetails')} onPress={onInfo}>
             <Info color="white" />
           </HeroIconButton>
         ) : null}
@@ -693,6 +694,12 @@ function shortAge(capturedAt: Date) {
   const hours = Math.floor(milliseconds / 3_600_000);
   if (hours > 0) return `${hours}h`;
   return `${Math.min(59, Math.floor(milliseconds / 60_000))}m`;
+}
+
+function goldPassLabel(percent: number, t: I18nValue['t']) {
+  return percent === 0
+    ? t('upgradeTrackerNoGoldPass')
+    : t('upgradeTrackerGoldPassPercent', { percent });
 }
 
 function snapshotAgeLabel(
@@ -1077,7 +1084,7 @@ function UpgradesTab({
             >
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={upgradeGroupLabel(group, village)}
+                accessibilityLabel={upgradeGroupLabel(group, village, t)}
                 onPress={() =>
                   setExpanded((current) => {
                     const next = new Set(current);
@@ -1098,7 +1105,7 @@ function UpgradesTab({
                   style={styles.groupImage}
                 />
                 <View style={styles.grow}>
-                  <CKText role="sectionTitle">{upgradeGroupLabel(group, village)}</CKText>
+                  <CKText role="sectionTitle">{upgradeGroupLabel(group, village, t)}</CKText>
                   <CKText muted role="labelSmall">
                     {t('upgradeTrackerLevelsLeft', { count: summary.levelsRemaining })} ·{' '}
                     {t('upgradeTrackerItemCount', { count: items.length })}
@@ -1106,9 +1113,11 @@ function UpgradesTab({
                 </View>
                 <SectionProgressBadge
                   progress={summary.completion}
-                  accessibilityLabel={`${upgradeGroupLabel(group, village)} summary`}
+                  accessibilityLabel={t('upgradeTrackerGroupSummary', {
+                    group: upgradeGroupLabel(group, village, t),
+                  })}
                   onPress={() =>
-                    setSummary({ title: upgradeGroupLabel(group, village), value: summary })
+                    setSummary({ title: upgradeGroupLabel(group, village, t), value: summary })
                   }
                 />
               </Pressable>
@@ -1151,22 +1160,26 @@ function UpgradeGroupTiles({
   snapshot: UpgradeTrackerSnapshot;
   onSelect: (item: UpgradeTrackerItem) => void;
 }) {
+  const { t } = useI18n();
   const sections: readonly (readonly [string, readonly UpgradeTrackerItem[]])[] =
     group === 'laboratory'
       ? [
           [
-            'Troops',
+            t('gameTroops'),
             items.filter(
               (item) =>
                 item.category === UpgradeCategory.troops ||
                 item.category === UpgradeCategory.darkTroops,
             ),
           ],
-          ['Spells', items.filter((item) => item.category === UpgradeCategory.spells)],
-          ['Siege Machines', items.filter((item) => item.category === UpgradeCategory.sieges)],
+          [t('gameSpells'), items.filter((item) => item.category === UpgradeCategory.spells)],
+          [
+            t('gameSiegeMachines'),
+            items.filter((item) => item.category === UpgradeCategory.sieges),
+          ],
         ]
       : group === 'equipment'
-        ? equipmentHeroGroups(items)
+        ? equipmentHeroGroups(items, t)
         : [['', items]];
   return (
     <View style={styles.groupedTileSections}>
@@ -1175,7 +1188,7 @@ function UpgradeGroupTiles({
           <View key={label || group} style={styles.groupedTileSection}>
             {label ? (
               <View style={styles.groupedTileHeading}>
-                {group === 'equipment' && label !== 'Other' ? (
+                {group === 'equipment' && label !== t('generalOthers') ? (
                   <MobileWebImage
                     imageUrl={ImageAssets.getHeroImage(label)}
                     style={styles.groupedTileHeadingImage}
@@ -1277,7 +1290,7 @@ export function formatSectionProgress(progress: number): string {
   return Number.isInteger(percentage) ? `${percentage}` : percentage.toFixed(1);
 }
 
-function equipmentHeroGroups(items: readonly UpgradeTrackerItem[]) {
+function equipmentHeroGroups(items: readonly UpgradeTrackerItem[], t: I18nValue['t']) {
   const preferred = [
     'Barbarian King',
     'Archer Queen',
@@ -1288,7 +1301,7 @@ function equipmentHeroGroups(items: readonly UpgradeTrackerItem[]) {
   const groups = new Map<string, UpgradeTrackerItem[]>();
   for (const item of items) {
     const raw = item.meta?.hero;
-    const hero = typeof raw === 'string' && raw.trim() ? raw.trim() : 'Other';
+    const hero = typeof raw === 'string' && raw.trim() ? raw.trim() : t('generalOthers');
     groups.set(hero, [...(groups.get(hero) ?? []), item]);
   }
   return [...groups].sort(([left], [right]) => {
@@ -1416,20 +1429,23 @@ function groupedUpgradeItems(
   });
 }
 
-function upgradeGroupLabel(group: UpgradeGroup, village: UpgradeVillageValue) {
+function upgradeGroupLabel(group: UpgradeGroup, village: UpgradeVillageValue, t: I18nValue['t']) {
   const labels: Record<UpgradeGroup, string> = {
-    buildings: 'Buildings',
-    defenses: 'Defenses',
-    craftedDefenses: 'Crafted Defenses',
-    traps: 'Traps',
-    supercharges: 'Supercharges',
-    heroes: 'Heroes',
-    guardians: 'Guardians',
-    laboratory: 'Laboratory',
-    equipment: 'Equipment',
-    pets: 'Pets',
-    walls: 'Walls',
-    helpers: village === UpgradeVillage.home ? 'Helpers' : 'Builders',
+    buildings: t('gameAssetsCategoryBuildings'),
+    defenses: t('warDefensesTitle'),
+    craftedDefenses: t('upgradeTrackerPlanCategoryCraftedDefenses'),
+    traps: t('upgradeTrackerPlanCategoryTraps'),
+    supercharges: t('upgradeTrackerPlanCategorySupercharge'),
+    heroes: t('gameHeroes'),
+    guardians: t('gameAssetsCategoryGuardians'),
+    laboratory: t('upgradeTrackerLaboratory'),
+    equipment: t('upgradeTrackerEquipment'),
+    pets: t('upgradeTrackerPets'),
+    walls: t('upgradeTrackerWalls'),
+    helpers:
+      village === UpgradeVillage.home
+        ? t('upgradeTrackerHelpers')
+        : t('dashboardUpgradeTrackerBuilders'),
   };
   return labels[group];
 }
@@ -1443,6 +1459,7 @@ function UpgradeTile({
   active: boolean;
   onPress: () => void;
 }) {
+  const { t } = useI18n();
   const theme = useCKTheme();
   const themeMode = useCKThemeMode();
   const containedArt = usesContainedUpgradeArt(item.category);
@@ -1462,7 +1479,12 @@ function UpgradeTile({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${item.name}, level ${item.currentLevel} of ${item.targetLevel}${item.count > 1 ? `, ${item.count} buildings` : ''}`}
+      accessibilityLabel={t('upgradeTrackerItemSemanticLabel', {
+        item: item.name,
+        currentLevel: item.currentLevel,
+        targetLevel: item.targetLevel,
+        count: item.count,
+      })}
       onPress={onPress}
     >
       <View
@@ -1565,7 +1587,7 @@ function CalendarTab({
   const groups = [
     [
       'home-builders',
-      'Builders',
+      t('dashboardUpgradeTrackerBuilders'),
       UpgradeQueue.builders,
       snapshot.homeBuilderCount,
       plan.homeBuilders,
@@ -1573,16 +1595,23 @@ function CalendarTab({
     ],
     [
       'builder-builders',
-      'Builder Base Builders',
+      t('upgradeTrackerBuilderBaseBuilders'),
       UpgradeQueue.builders,
       snapshot.builderBaseBuilderCount,
       plan.builderBuilders,
       '#E7953D',
     ],
-    ['laboratory', 'Laboratory', UpgradeQueue.laboratory, 1, plan.laboratory, '#9B6DE3'],
+    [
+      'laboratory',
+      t('upgradeTrackerLaboratory'),
+      UpgradeQueue.laboratory,
+      1,
+      plan.laboratory,
+      '#9B6DE3',
+    ],
     [
       'builder-laboratory',
-      'Builder Base Laboratory',
+      t('upgradeTrackerBuilderBaseLaboratory'),
       UpgradeQueue.laboratory,
       1,
       plan.builderLaboratory,
@@ -1626,7 +1655,10 @@ function CalendarTab({
       scrollEventThrottle={16}
     >
       <View style={styles.periodBar}>
-        <IconButton label="Previous period" onPress={() => setPeriod(Math.max(0, period - 1))}>
+        <IconButton
+          label={t('upgradeTrackerPreviousPeriod')}
+          onPress={() => setPeriod(Math.max(0, period - 1))}
+        >
           <ChevronLeft color={theme.onSurface} />
         </IconButton>
         <View style={styles.grow}>
@@ -1642,10 +1674,15 @@ function CalendarTab({
             })}
           </CKText>
           <CKText muted role="labelSmall" style={styles.centerText}>
-            {maxPeriod > 0 ? `Period ${period + 1} / ${maxPeriod + 1}` : ''}
+            {maxPeriod > 0
+              ? t('upgradeTrackerPeriodCount', { current: period + 1, total: maxPeriod + 1 })
+              : ''}
           </CKText>
         </View>
-        <IconButton label="Next period" onPress={() => setPeriod(Math.min(maxPeriod, period + 1))}>
+        <IconButton
+          label={t('upgradeTrackerNextPeriod')}
+          onPress={() => setPeriod(Math.min(maxPeriod, period + 1))}
+        >
           <ChevronRight color={theme.onSurface} />
         </IconButton>
       </View>
@@ -1679,7 +1716,7 @@ function CalendarTab({
                     ]}
                   >
                     {today
-                      ? 'Today'
+                      ? t('homeToday')
                       : day.toLocaleDateString(toIntlLocale(locale), {
                           month: 'short',
                           day: 'numeric',
@@ -1717,7 +1754,9 @@ function CalendarTab({
                         {title}
                       </CKText>
                       <PillSurface style={styles.calendarPill}>
-                        <CKText role="labelSmall">{upgrades.length} upg</CKText>
+                        <CKText role="labelSmall">
+                          {t('upgradeTrackerItemCount', { count: upgrades.length })}
+                        </CKText>
                       </PillSurface>
                       {nextFinish ? (
                         <PillSurface style={styles.calendarPill}>
@@ -1859,14 +1898,19 @@ function TimelineBlock({
   accent: string;
   onPress: () => void;
 }) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const intlLocale = toIntlLocale(locale);
   const iconOnly = width < 78;
   const metadata = width >= 168;
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${upgrade.item.name}, level ${upgrade.step.targetLevel}, ${upgrade.startsAt.toLocaleString(intlLocale)} to ${upgrade.endsAt.toLocaleString(intlLocale)}`}
+      accessibilityLabel={t('upgradeTrackerTimelineSemanticLabel', {
+        item: upgrade.item.name,
+        level: upgrade.step.targetLevel,
+        start: upgrade.startsAt.toLocaleString(intlLocale),
+        end: upgrade.endsAt.toLocaleString(intlLocale),
+      })}
       onPress={onPress}
       style={[
         styles.calendarBlock,
@@ -1951,38 +1995,48 @@ function PlannedUpgradeModal({
             <View style={styles.grow}>
               <CKText role="titleLarge">{upgrade.item.name}</CKText>
               <CKText muted role="bodySmall">
-                Lv {upgrade.item.currentLevel} → {upgrade.step.targetLevel} ·{' '}
-                {upgrade.item.village === UpgradeVillage.home ? 'Home Village' : 'Builder Base'} ·{' '}
-                {upgrade.item.category}
+                {t('upgradeTrackerLevelTransition', {
+                  from: upgrade.item.currentLevel,
+                  to: upgrade.step.targetLevel,
+                })}{' '}
+                ·{' '}
+                {upgrade.item.village === UpgradeVillage.home
+                  ? t('upgradeTrackerHomeVillage')
+                  : t('upgradeTrackerBuilderBase')}{' '}
+                · {upgrade.item.category}
               </CKText>
             </View>
-            <IconButton label="Close" onPress={onClose}>
+            <IconButton label={t('upgradeTrackerPlanClose')} onPress={onClose}>
               <X color={theme.onSurface} />
             </IconButton>
           </View>
           <View style={styles.timelineDetailGrid}>
             <TimelineDetailMetric
-              label="Duration"
+              label={t('warAttacksDetailsDuration')}
               value={formatTrackerDuration(
                 (upgrade.endsAt.getTime() - upgrade.startsAt.getTime()) / 1000,
               )}
             />
             <TimelineDetailMetric
-              label="Starts"
+              label={t('upgradeTrackerStarts')}
               value={upgrade.startsAt.toLocaleString(intlLocale)}
             />
             <TimelineDetailMetric
-              label="Finishes"
+              label={t('upgradeTrackerHeaderFinishes')}
               value={upgrade.endsAt.toLocaleString(intlLocale)}
             />
             <TimelineDetailMetric
-              label="Lane"
-              value={upgrade.isOngoing ? 'In progress' : `Scheduled #${upgrade.instance}`}
+              label={t('upgradeTrackerLane')}
+              value={
+                upgrade.isOngoing
+                  ? t('upgradeTrackerInProgress')
+                  : t('upgradeTrackerScheduledLane', { lane: upgrade.instance })
+              }
             />
           </View>
           {upgrade.costs.length ? (
             <>
-              <CKText role="sectionTitle">Upgrade cost</CKText>
+              <CKText role="sectionTitle">{t('gameItemUpgradeCost')}</CKText>
               <View style={styles.wrap}>
                 {upgrade.costs.map((cost) => (
                   <PillSurface key={`${cost.resource}-${cost.amount}`} style={styles.pill}>
@@ -2076,12 +2130,23 @@ function PlanTab({
       return primary || left.endsAt.getTime() - right.endsAt.getTime();
     });
   const groups = groupPlannedUpgrades(upgrades);
-  const villageLabels = { all: 'All', home: 'Home Village', builderBase: 'Builder Base' } as const;
+  const villageLabels = {
+    all: t('generalAll'),
+    home: t('upgradeTrackerHomeVillage'),
+    builderBase: t('upgradeTrackerBuilderBase'),
+  } as const;
   const sortLabels = {
-    scheduled: 'Scheduled',
-    name: 'Name A–Z',
-    long: 'Longest first',
-    short: 'Shortest first',
+    scheduled: t('upgradeTrackerSortScheduled'),
+    name: t('upgradeTrackerSortName'),
+    long: t('upgradeTrackerSortLongest'),
+    short: t('upgradeTrackerSortShortest'),
+  } as const;
+  const queueLabels = {
+    all: t('generalAll'),
+    builders: t('dashboardUpgradeTrackerBuilders'),
+    laboratory: t('upgradeTrackerLaboratory'),
+    pets: t('upgradeTrackerPets'),
+    walls: t('upgradeTrackerWalls'),
   } as const;
   return (
     <Animated.ScrollView
@@ -2097,7 +2162,7 @@ function PlanTab({
       <View style={styles.filterWrap}>
         {(['all', 'builders', 'laboratory', 'pets', 'walls'] as const).map((value) => (
           <FilterPill key={value} selected={queue === value} onPress={() => setQueue(value)}>
-            {value === 'all' ? 'All' : value[0]!.toUpperCase() + value.slice(1)}
+            {queueLabels[value]}
           </FilterPill>
         ))}
       </View>
@@ -2122,7 +2187,10 @@ function PlanTab({
         </PressableSurface>
       </View>
       {!groups.length ? (
-        <EmptyState title="No matching upgrades" body="Try another village or queue." />
+        <EmptyState
+          title={t('upgradeTrackerNoMatchingUpgrades')}
+          body={t('upgradeTrackerNoMatchingUpgradesBody')}
+        />
       ) : (
         <View style={[styles.planRows, desktop && styles.desktopSectionGrid]}>
           {groups.map((group) => {
@@ -2140,12 +2208,16 @@ function PlanTab({
                     {group.upgrades.length > 1 ? ` ×${group.upgrades.length}` : ''}
                   </CKText>
                   <CKText muted role="labelSmall">
-                    Level {upgrade.step.targetLevel - 1} → {upgrade.step.targetLevel} ·{' '}
+                    {t('upgradeTrackerLevelTransition', {
+                      from: upgrade.step.targetLevel - 1,
+                      to: upgrade.step.targetLevel,
+                    })}{' '}
+                    ·{' '}
                     {upgrade.startsAt.toLocaleDateString(intlLocale, {
                       month: 'short',
                       day: 'numeric',
                     })}
-                    {group.isOngoing ? ' · Upgrading now' : ''}
+                    {group.isOngoing ? ` · ${t('upgradeTrackerUpgradingNow')}` : ''}
                   </CKText>
                   {group.costs.length ? (
                     <CKText muted role="labelSmall">
@@ -2170,7 +2242,7 @@ function PlanTab({
       )}
       <ChoiceModal
         visible={picker !== null}
-        title={picker === 'village' ? 'Village' : 'Sort'}
+        title={picker === 'village' ? t('dashboardUpgradeTrackerVillage') : t('statsSortBy')}
         onClose={() => setPicker(null)}
       >
         {picker === 'village'
@@ -2202,6 +2274,7 @@ function PlanTab({
 }
 
 function LootOutlook({ plan }: { plan: ReturnType<typeof buildTrackerPlanData> }) {
+  const { t } = useI18n();
   const theme = useCKTheme();
   const startsAt = plan.startsAt;
   const upgrades = plan.upgrades
@@ -2221,17 +2294,17 @@ function LootOutlook({ plan }: { plan: ReturnType<typeof buildTrackerPlanData> }
     <Surface radius={ckRadius.card} style={styles.lootOutlook}>
       <View style={styles.lootOutlookHeader}>
         <MobileWebImage imageUrl={ImageAssets.lootCart} style={styles.lootOutlookImage} />
-        <CKText role="sectionTitle">Loot outlook</CKText>
+        <CKText role="sectionTitle">{t('upgradeTrackerLootOutlook')}</CKText>
       </View>
       <PlanPeriodSummary
-        label="Loot now"
+        label={t('upgradeTrackerLootNow')}
         upgrades={lootNow}
         countLabel={
           lootNow.length
-            ? `${lootNow.length} idle ${lootNow.length === 1 ? 'builder' : 'builders'}`
-            : 'All builders occupied'
+            ? t('upgradeTrackerIdleBuilders', { count: lootNow.length })
+            : t('upgradeTrackerAllBuildersOccupied')
         }
-        emptyLabel="Nothing needed right now"
+        emptyLabel={t('upgradeTrackerNothingNeededNow')}
         showCount={false}
       />
       <View
@@ -2243,8 +2316,11 @@ function LootOutlook({ plan }: { plan: ReturnType<typeof buildTrackerPlanData> }
         ]}
       />
       <View style={styles.periodRow}>
-        <PlanPeriodSummary label="Next 7 days" upgrades={within(7)} />
-        <PlanPeriodSummary label="Next 30 days" upgrades={within(30)} />
+        <PlanPeriodSummary label={t('upgradeTrackerNextDays', { count: 7 })} upgrades={within(7)} />
+        <PlanPeriodSummary
+          label={t('upgradeTrackerNextDays', { count: 30 })}
+          upgrades={within(30)}
+        />
       </View>
     </Surface>
   );
@@ -2253,8 +2329,8 @@ function LootOutlook({ plan }: { plan: ReturnType<typeof buildTrackerPlanData> }
 function PlanPeriodSummary({
   label,
   upgrades,
-  countLabel = 'upgrades starting',
-  emptyLabel = '—',
+  countLabel,
+  emptyLabel,
   showCount = true,
 }: {
   label: string;
@@ -2278,7 +2354,7 @@ function PlanPeriodSummary({
       <View style={styles.periodCountRow}>
         {showCount ? <CKText role="titleLarge">{upgrades.length}</CKText> : null}
         <CKText muted={!showCount} role={showCount ? 'labelSmall' : 'rowTitle'} style={styles.grow}>
-          {countLabel}
+          {countLabel ?? t('upgradeTrackerUpgradesStarting')}
         </CKText>
       </View>
       {resources.length ? (
@@ -2290,7 +2366,10 @@ function PlanPeriodSummary({
               <View
                 key={resource}
                 accessible
-                accessibilityLabel={`${resourceLabel}, ${formattedAmount}`}
+                accessibilityLabel={t('upgradeTrackerResourceAmount', {
+                  resource: resourceLabel,
+                  amount: formattedAmount,
+                })}
                 style={styles.planResourceRow}
               >
                 <MobileWebImage
@@ -2308,7 +2387,7 @@ function PlanPeriodSummary({
         </View>
       ) : (
         <CKText muted role="labelSmall">
-          {emptyLabel}
+          {emptyLabel ?? '—'}
         </CKText>
       )}
     </View>
@@ -2573,7 +2652,7 @@ function CollectionTab({
             >
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={collectionTypeLabel(type)}
+                accessibilityLabel={collectionTypeLabel(type, t)}
                 onPress={() =>
                   setExpanded((current) => {
                     const next = new Set(current);
@@ -2594,7 +2673,7 @@ function CollectionTab({
                   style={styles.groupImage}
                 />
                 <View style={styles.grow}>
-                  <CKText role="sectionTitle">{collectionTypeLabel(type)}</CKText>
+                  <CKText role="sectionTitle">{collectionTypeLabel(type, t)}</CKText>
                   <CKText muted role="labelSmall">
                     {t('upgradeTrackerOwnedCount', {
                       owned: scopedOwned,
@@ -2604,7 +2683,9 @@ function CollectionTab({
                 </View>
                 <SectionProgressBadge
                   progress={scopedOwned / scoped.length}
-                  accessibilityLabel={`${collectionTypeLabel(type)} summary`}
+                  accessibilityLabel={t('upgradeTrackerGroupSummary', {
+                    group: collectionTypeLabel(type, t),
+                  })}
                   onPress={() => setSummaryType(type)}
                 />
               </Pressable>
@@ -2671,7 +2752,7 @@ function CollectionTab({
       <CollectionDetailModal item={selected} onClose={() => setSelected(null)} />
       <UpgradeCollectionSummaryModal
         visible={summaryType !== null}
-        title={summaryType ? collectionTypeLabel(summaryType) : ''}
+        title={summaryType ? collectionTypeLabel(summaryType, t) : ''}
         items={
           summaryType
             ? collectionItems.filter(
@@ -2697,21 +2778,21 @@ function CollectionDetailModal({
   item: UpgradeCollectionItem | null;
   onClose: () => void;
 }) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const intlLocale = toIntlLocale(locale);
   if (!item) return null;
   const music = sceneryMusicUrl(item);
-  const info = collectionInfo(item, intlLocale);
+  const info = collectionInfo(item, intlLocale, t);
   return (
     <ChoiceModal visible title={collectionDisplayName(item)} onClose={onClose}>
       <MobileWebImage imageUrl={item.imageUrl} style={styles.collectionDetailImage} />
       <CKText muted style={styles.centerText}>
         {item.type === UpgradeCollectionType.decorations ||
         item.type === UpgradeCollectionType.obstacles
-          ? `${item.count} owned`
+          ? t('upgradeTrackerItemsOwned', { count: item.count })
           : item.owned
-            ? 'Owned'
-            : 'Missing'}
+            ? t('upgradeTrackerFilterOwned')
+            : t('upgradeTrackerFilterMissing')}
       </CKText>
       {music ? <SceneryPlayer source={music} /> : null}
       {info.map((row) => (
@@ -2726,7 +2807,7 @@ function CollectionDetailModal({
   );
 }
 
-function collectionInfo(item: UpgradeCollectionItem, locale: string) {
+function collectionInfo(item: UpgradeCollectionItem, locale: string, t: I18nValue['t']) {
   const meta = item.meta;
   if (!meta) return [];
   const rows: { label: string; value: string }[] = [];
@@ -2740,37 +2821,39 @@ function collectionInfo(item: UpgradeCollectionItem, locale: string) {
     rows.push({ label, value: `${compactNumber(numeric, locale)} ${String(resource)}` });
   };
   const villageName = (value: unknown) => {
-    if (value === 'builderBase' || value === 'builder') return 'Builder Base';
-    if (value === 'war') return 'War Base';
-    if (value === 'home') return 'Home Village';
+    if (value === 'builderBase' || value === 'builder') return t('upgradeTrackerBuilderBase');
+    if (value === 'war') return t('upgradeTrackerWarBase');
+    if (value === 'home') return t('upgradeTrackerHomeVillage');
     return value;
   };
   if (item.type === UpgradeCollectionType.skins) {
-    add('Tier', meta.tier);
-    add('Hero', meta.character);
+    add(t('upgradeTrackerTier'), meta.tier);
+    add(t('statsHero'), meta.character);
   } else if (item.type === UpgradeCollectionType.sceneries) {
-    add('Village', villageName(meta.type));
-    if (meta.music !== null && meta.music !== undefined) add('Music', 'Custom soundtrack');
+    add(t('dashboardUpgradeTrackerVillage'), villageName(meta.type));
+    if (meta.music !== null && meta.music !== undefined)
+      add(t('upgradeTrackerMusic'), t('upgradeTrackerCustomSoundtrack'));
   } else if (item.type === UpgradeCollectionType.decorations) {
-    add('Village', villageName(meta.village));
+    add(t('dashboardUpgradeTrackerVillage'), villageName(meta.village));
     if (meta.width !== null && meta.width !== undefined)
-      add('Size', `${String(meta.width)} × ${String(meta.width)}`);
-    add('Maximum', item.maxCount);
-    addResource('Build cost', meta.build_cost, meta.build_resource);
-    if (meta.pass_reward === true) add('Source', 'Pass reward');
+      add(t('upgradeTrackerSize'), `${String(meta.width)} × ${String(meta.width)}`);
+    add(t('generalMaximum'), item.maxCount);
+    addResource(t('upgradeTrackerBuildCost'), meta.build_cost, meta.build_resource);
+    if (meta.pass_reward === true) add(t('rankingsSource'), t('upgradeTrackerPassReward'));
   } else if (item.type === UpgradeCollectionType.obstacles) {
-    add('Village', villageName(meta.village));
+    add(t('dashboardUpgradeTrackerVillage'), villageName(meta.village));
     if (meta.width !== null && meta.width !== undefined)
-      add('Size', `${String(meta.width)} × ${String(meta.width)}`);
-    addResource('Clear cost', meta.clear_cost, meta.clear_resource);
-    addResource('Loot', meta.loot_count, meta.loot_resource);
+      add(t('upgradeTrackerSize'), `${String(meta.width)} × ${String(meta.width)}`);
+    addResource(t('upgradeTrackerClearCost'), meta.clear_cost, meta.clear_resource);
+    addResource(t('capitalRaidLoot'), meta.loot_count, meta.loot_resource);
   } else {
-    add('Part', meta.slot_type);
+    add(t('upgradeTrackerPart'), meta.slot_type);
   }
   return rows;
 }
 
 function SceneryPlayer({ source }: { source: string }) {
+  const { t } = useI18n();
   const theme = useCKTheme();
   const [trackWidth, setTrackWidth] = useState(0);
   const [state, setState] = useState<SceneryAudioState>({
@@ -2817,7 +2900,9 @@ function SceneryPlayer({ source }: { source: string }) {
     <View style={styles.audio}>
       <PressableSurface
         accessibilityRole="button"
-        accessibilityLabel={state.playing ? 'Pause soundtrack' : 'Play soundtrack'}
+        accessibilityLabel={
+          state.playing ? t('upgradeTrackerPauseSoundtrack') : t('upgradeTrackerPlaySoundtrack')
+        }
         disabled={state.loading}
         onPress={() => void service.current?.toggle()}
         style={styles.audioButton}
@@ -2833,7 +2918,7 @@ function SceneryPlayer({ source }: { source: string }) {
       <View style={styles.audioTimeline}>
         <Pressable
           accessibilityRole="adjustable"
-          accessibilityLabel="Soundtrack position"
+          accessibilityLabel={t('upgradeTrackerSoundtrackPosition')}
           disabled={state.durationMilliseconds <= 0}
           onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
           onPress={(event) =>
@@ -3136,13 +3221,13 @@ function IconButton({
     </Pressable>
   );
 }
-function collectionTypeLabel(type: UpgradeCollectionTypeValue) {
+function collectionTypeLabel(type: UpgradeCollectionTypeValue, t: I18nValue['t']) {
   const labels: Record<UpgradeCollectionTypeValue, string> = {
-    [UpgradeCollectionType.skins]: 'Skins',
-    [UpgradeCollectionType.sceneries]: 'Sceneries',
-    [UpgradeCollectionType.decorations]: 'Decorations',
-    [UpgradeCollectionType.obstacles]: 'Obstacles',
-    [UpgradeCollectionType.capitalHouseParts]: 'House parts',
+    [UpgradeCollectionType.skins]: t('gameAssetsCategorySkins'),
+    [UpgradeCollectionType.sceneries]: t('upgradeTrackerSceneries'),
+    [UpgradeCollectionType.decorations]: t('gameAssetsCategoryDecorations'),
+    [UpgradeCollectionType.obstacles]: t('upgradeTrackerObstacles'),
+    [UpgradeCollectionType.capitalHouseParts]: t('upgradeTrackerHouseParts'),
   };
   return labels[type];
 }

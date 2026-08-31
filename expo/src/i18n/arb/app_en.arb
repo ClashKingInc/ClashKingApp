@@ -1,4 +1,213 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
+  "upgradeTrackerBuildCost": "Build cost",
+  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
+  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
+  "upgradeTrackerCalendar": "Calendar",
+  "upgradeTrackerClearCost": "Clear cost",
+  "upgradeTrackerCompletionDetails": "Village completion details",
+  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
+  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group} summary",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Guardians",
+  "upgradeTrackerHelpers": "Helpers",
+  "upgradeTrackerHouseParts": "House parts",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "In progress",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "{count} owned",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLevelTransition": "Level {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Loot now",
+  "upgradeTrackerLootOutlook": "Loot outlook",
+  "upgradeTrackerMusic": "Music",
+  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Next period",
+  "upgradeTrackerNoGoldPass": "No Gold Pass",
+  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
+  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
+  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
+  "upgradeTrackerObstacles": "Obstacles",
+  "upgradeTrackerPart": "Part",
+  "upgradeTrackerPassReward": "Pass reward",
+  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
+  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
+  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Sceneries",
+  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village} progress",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Size",
+  "upgradeTrackerSortLongest": "Longest first",
+  "upgradeTrackerSortName": "Name A–Z",
+  "upgradeTrackerSortScheduled": "Scheduled",
+  "upgradeTrackerSortShortest": "Shortest first",
+  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerStarts": "Starts",
+  "upgradeTrackerTier": "Tier",
+  "upgradeTrackerUpgradesStarting": "upgrades starting",
+  "upgradeTrackerUpgradingNow": "Upgrading now",
+  "upgradeTrackerWarBase": "War Base",
+  "notifSettingsSaveFailed": "Notification settings could not be saved.",
+  "notifPushEnabled": "Push enabled",
+  "notifReceiveNotifications": "Receive notifications",
+  "notifTokenPreview": "Token: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
+  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
+  "notifMaximumRemindersAdded": "Maximum reminders added",
+  "notifAddReminder": "Add reminder",
+  "notifDurationOneHour": "1 hour",
+  "notifDurationHours": "{count} hours",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifDurationMinutes": "{count} minutes",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAddTiming": "Add {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
+  "notifTimingOneHourBefore": "1 hour before",
+  "notifTimingHoursBefore": "{count} hours before",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifTimingMinutesBefore": "{count} minutes before",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifPushReady": "Push notifications are ready on this device.",
+  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
+  "notifPushPermissionDenied": "Notification permission was denied.",
+  "notifPushNotConfigured": "Firebase is not configured for this build.",
+  "notifPushTokenUnavailable": "A push token is not available yet.",
+  "notifPushUnsupported": "Push notifications are not supported on this platform.",
+  "notifPushInitializing": "Configuring push notifications…",
   "notificationPrimerTitle": "Enable notifications?",
   "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
   "notificationPrimerNotNow": "Not now",
@@ -4584,5 +4793,45 @@
   "settingsPrivacyContactSupport": "Contact support",
   "settingsPrivacyDeleteAccount": "Delete account",
   "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods."
+  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
+  "generalUnranked": "Unranked",
+  "playerJoinLeaveTab": "Join / Leave",
+  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
+  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Time Remaining",
+  "playerUpgradeNoResourceData": "No resource data",
+  "playerJoinLeaveLoadError": "Could not load join / leave history",
+  "playerJoinLeaveClanTotals": "Clan totals",
+  "playerJoinLeaveTime": "Time",
+  "playerJoinLeaveTimeSpent": "Time spent",
+  "playerJoinLeaveVisits": "Visits",
+  "playerJoinLeaveJoined": "Joined",
+  "playerJoinLeaveLeft": "Left",
+  "playerJoinLeaveNoHistory": "No join / leave history available",
+  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

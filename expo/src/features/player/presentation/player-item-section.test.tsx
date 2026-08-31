@@ -1,10 +1,14 @@
 import { fireEvent, render } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { I18nProvider } from '../../../i18n';
+import { I18nProvider, type SupportedLocale } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
 import { PlayerSuperTroop, PlayerTroop } from '../models/player-items';
-import { PlayerItemSection, formatPlayerResourceAmount } from './player-detail-components';
+import {
+  PlayerItemSection,
+  formatDurationSeconds,
+  formatPlayerResourceAmount,
+} from './player-detail-components';
 import {
   detailAccent,
   detailModalMaximumContentHeight,
@@ -13,7 +17,7 @@ import {
 } from '../../upgrade-tracker/presentation/upgrade-tracker-breakdowns';
 import { UpgradeCategory } from '../../upgrade-tracker/models';
 
-const wrap = (child: React.ReactElement) =>
+const wrap = (child: React.ReactElement, locale: SupportedLocale = 'en') =>
   render(
     <SafeAreaProvider
       initialMetrics={{
@@ -21,7 +25,7 @@ const wrap = (child: React.ReactElement) =>
         insets: { top: 0, right: 0, bottom: 0, left: 0 },
       }}
     >
-      <I18nProvider locale="en">
+      <I18nProvider locale={locale}>
         <CKThemeProvider preference="light">{child}</CKThemeProvider>
       </I18nProvider>
     </SafeAreaProvider>,
@@ -93,6 +97,26 @@ describe('PlayerItemSection modal routing', () => {
     expect(detailScaleDownFactor(700, 400)).toBeCloseTo(400 / 700);
     expect(detailScaleDownFactor(300, 400)).toBe(1);
     expect(detailModalMaximumContentHeight(844)).toBeCloseTo(844 * 0.88 - 40);
+    expect(formatDurationSeconds(90_000, 'en')).toBe('1d 1h');
+    expect(formatDurationSeconds(90_000, 'fr')).toBe('1j 1h');
+  });
+
+  it('localizes the remaining-upgrade summary and its accessibility copy', async () => {
+    const screen = await wrap(
+      <PlayerItemSection
+        title="Troupes"
+        items={[PlayerTroop.fromRaw(source)]}
+        townHallLevel={17}
+      />,
+      'fr',
+    );
+
+    await fireEvent.press(screen.getByRole('button', { name: 'Restant pour l’Hôtel de ville 17' }));
+
+    expect(screen.getByText('70 % terminé pour HDV17')).toBeTruthy();
+    expect(screen.getByText('Temps restant')).toBeTruthy();
+    expect(screen.getByText('Ressources')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Fermer' })).toBeTruthy();
   });
 
   it('uses Flutter one-decimal, intrinsic progress badges', async () => {

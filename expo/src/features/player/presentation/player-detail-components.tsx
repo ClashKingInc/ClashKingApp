@@ -128,7 +128,7 @@ export const PLAYER_DETAIL_TABS: readonly {
   { key: 'war', labelKey: 'warStats' },
   { key: 'cwl', labelKey: 'cwlHistoryTitle' },
   { key: 'achievements', labelKey: 'gameAchievements' },
-  { key: 'joinLeave', flutterLabel: 'Join / Leave' },
+  { key: 'joinLeave', labelKey: 'playerJoinLeaveTab' },
 ];
 
 export function PlayerDetailHeader({
@@ -213,7 +213,7 @@ export function PlayerDetailHeader({
             />
             <View style={styles.grow}>
               <CKText role="labelLarge" numberOfLines={1}>
-                {String(name).replace(' League', '').trim() || 'Unranked'}
+                {String(name).replace(' League', '').trim() || t('generalUnranked')}
               </CKText>
               <View style={styles.leagueSubtitle}>
                 <MobileWebImage
@@ -673,7 +673,7 @@ export function PlayerItemSection({
         {items[0] instanceof PlayerSuperTroop ? null : (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`${townHallLevel} Town Hall remaining`}
+            accessibilityLabel={t('playerUpgradeRemainingAccessibility', { townHallLevel })}
             onPress={(event) => {
               event.stopPropagation();
               setShowSummary(true);
@@ -760,19 +760,26 @@ export function PlayerItemSection({
           <Surface radius={ckRadius.card} style={styles.dialog}>
             <View style={styles.dialogTitle}>
               <CKText role="titleLarge" style={styles.grow}>
-                {formattedProgress}% Maxed for TH{townHallLevel}
+                {t('playerUpgradeSummaryTitle', {
+                  progress: formattedProgress,
+                  townHallLevel,
+                })}
               </CKText>
-              <Pressable accessibilityRole="button" onPress={() => setShowSummary(false)}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={materialCloseLabel(locale)}
+                onPress={() => setShowSummary(false)}
+              >
                 <X color={theme.onSurfaceVariant} />
               </Pressable>
             </View>
             {progress >= 100 ? (
-              <CKText>This section is maxed for TH{townHallLevel}.</CKText>
+              <CKText>{t('playerUpgradeSectionMaxed', { townHallLevel })}</CKText>
             ) : (
               <>
-                <CKText role="rowTitle">Time Remaining:</CKText>
-                <CKText>{formatDurationSeconds(summary.seconds)}</CKText>
-                <CKText role="rowTitle">Resources:</CKText>
+                <CKText role="rowTitle">{t('playerUpgradeTimeRemaining')}</CKText>
+                <CKText>{formatDurationSeconds(summary.seconds, locale)}</CKText>
+                <CKText role="rowTitle">{t('assetFolderResources')}</CKText>
                 {summary.resources.size ? (
                   <View style={styles.wrap}>
                     {[...summary.resources]
@@ -788,7 +795,7 @@ export function PlayerItemSection({
                       ))}
                   </View>
                 ) : (
-                  <CKText>No resource data</CKText>
+                  <CKText>{t('playerUpgradeNoResourceData')}</CKText>
                 )}
               </>
             )}
@@ -915,11 +922,19 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
   );
 }
 
-function formatDurationSeconds(seconds: number) {
-  if (!seconds) return '0m';
+export function formatDurationSeconds(seconds: number, locale: string) {
+  const formatUnit = (value: number, unit: 'day' | 'hour' | 'minute') =>
+    new Intl.NumberFormat(toIntlLocale(locale), {
+      style: 'unit',
+      unit,
+      unitDisplay: 'narrow',
+    }).format(value);
+  if (!seconds) return formatUnit(0, 'minute');
   const days = Math.floor(seconds / 86400),
     hours = Math.floor((seconds % 86400) / 3600);
-  return days ? `${days}d ${hours}h` : `${Math.max(1, Math.ceil(seconds / 3600))}h`;
+  return days
+    ? `${formatUnit(days, 'day')} ${formatUnit(hours, 'hour')}`
+    : formatUnit(Math.max(1, Math.ceil(seconds / 3600)), 'hour');
 }
 export function formatPlayerResourceAmount(value: number, locale: string) {
   const suffix = (amount: number, unit: string) =>
@@ -3191,7 +3206,7 @@ export function PlayerJoinLeaveTab({
   if (!page)
     return (
       <ErrorState
-        title="Could not load join / leave history"
+        title={t('playerJoinLeaveLoadError')}
         actionLabel={t('generalRetry')}
         onAction={() => void actions.loadTab('joinLeave', true)}
       />
@@ -3206,8 +3221,8 @@ export function PlayerJoinLeaveTab({
           value={view}
           icon={<Repeat2 size={16} color={theme.onSurfaceVariant} />}
           choices={[
-            ['events', 'History'],
-            ['clans', 'Clan totals'],
+            ['events', t('generalHistory')],
+            ['clans', t('playerJoinLeaveClanTotals')],
           ]}
           onSelect={(v) => setView(v as typeof view)}
         />
@@ -3228,13 +3243,13 @@ export function PlayerJoinLeaveTab({
                 <JoinLeaveSummaryChip
                   icon={<Repeat2 size={15} color={theme.primary} />}
                   value={`${page.available}`}
-                  label="Events"
+                  label={t('warEventsTitle')}
                   color={theme.primary}
                 />
                 <JoinLeaveSummaryChip
                   icon={<Shield size={15} color={theme.primary} />}
                   value={`${(totals ?? []).length}`}
-                  label="Clans"
+                  label={t('statsClans')}
                   color={theme.primary}
                 />
               </>
@@ -3243,13 +3258,13 @@ export function PlayerJoinLeaveTab({
                 <JoinLeaveSummaryChip
                   icon={<Shield size={15} color={theme.primary} />}
                   value={`${(totals ?? []).length}`}
-                  label="Clans"
+                  label={t('statsClans')}
                   color={theme.primary}
                 />
                 <JoinLeaveSummaryChip
                   icon={<Clock3 size={15} color="#009688" />}
                   value={joinLeaveDuration(totalMinutes)}
-                  label="Time"
+                  label={t('playerJoinLeaveTime')}
                   color="#009688"
                 />
               </>
@@ -3296,10 +3311,15 @@ export function PlayerJoinLeaveTab({
           <View style={styles.wrap}>
             {(
               [
-                ['time', 'Time spent', <Clock3 key="time" size={16} color="#009688" />, '#009688'],
+                [
+                  'time',
+                  t('playerJoinLeaveTimeSpent'),
+                  <Clock3 key="time" size={16} color="#009688" />,
+                  '#009688',
+                ],
                 [
                   'visits',
-                  'Visits',
+                  t('playerJoinLeaveVisits'),
                   <Repeat2 key="visits" size={16} color={theme.primary} />,
                   theme.primary,
                 ],
@@ -3334,7 +3354,7 @@ export function PlayerJoinLeaveTab({
               )}
               <View style={styles.grow}>
                 <CKText role="rowTitle">{event.clan?.name || event.clan?.tag || ''}</CKText>
-                <CKText muted>{joinLeaveRelativeTime(event.time)}</CKText>
+                <CKText muted>{joinLeaveRelativeTime(event.time, t)}</CKText>
               </View>
               <View style={styles.joinLeaveMovement}>
                 {event.type.toLowerCase().includes('join') ? (
@@ -3342,16 +3362,18 @@ export function PlayerJoinLeaveTab({
                 ) : (
                   <LogOut size={18} color="#FF5252" />
                 )}
-                <CKText>{event.type.toLowerCase().includes('join') ? 'Joined' : 'Left'}</CKText>
+                <CKText>
+                  {event.type.toLowerCase().includes('join')
+                    ? t('playerJoinLeaveJoined')
+                    : t('playerJoinLeaveLeft')}
+                </CKText>
               </View>
             </Surface>
           ))}
           {!events.length ? (
             <EmptyState
               title={
-                eventType === 'all'
-                  ? 'No join / leave history available'
-                  : t('generalNoFilteredResults')
+                eventType === 'all' ? t('playerJoinLeaveNoHistory') : t('generalNoFilteredResults')
               }
             />
           ) : null}
@@ -3376,17 +3398,17 @@ export function PlayerJoinLeaveTab({
                 <CKText role="rowTitle">{total.clan.name || total.clan.tag}</CKText>
                 <View style={styles.row}>
                   <CKText style={{ color: '#009688' }}>{joinLeaveDuration(total.minutes)}</CKText>
-                  <CKText muted>time spent</CKText>
+                  <CKText muted>{t('playerJoinLeaveTimeSpent')}</CKText>
                 </View>
               </View>
               <PillSurface style={styles.joinLeaveVisitChip}>
                 <Repeat2 size={15} color={theme.primary} />
                 <CKText role="labelLarge">{total.visits}</CKText>
-                <CKText role="labelSmall">Visits</CKText>
+                <CKText role="labelSmall">{t('playerJoinLeaveVisits')}</CKText>
               </PillSurface>
             </Surface>
           ))}
-          {!sortedTotals.length ? <EmptyState title="No clan totals available" /> : null}
+          {!sortedTotals.length ? <EmptyState title={t('playerJoinLeaveNoClanTotals')} /> : null}
         </>
       )}
     </View>
@@ -3863,11 +3885,20 @@ function parseFilterNumber(value: string) {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) ? parsed : null;
 }
-function joinLeaveRelativeTime(time: Date) {
+function joinLeaveRelativeTime(time: Date, t: ReturnType<typeof useI18n>['t']) {
   const minutes = Math.max(1, Math.floor((Date.now() - time.getTime()) / 60_000));
-  if (minutes >= 1440) return `${Math.floor(minutes / 1440)}d ago`;
-  if (minutes >= 60) return `${Math.floor(minutes / 60)}h ago`;
-  return `${Math.min(59, minutes)}m ago`;
+  if (minutes >= 1440) {
+    const days = Math.floor(minutes / 1440);
+    return days === 1 ? t('timeDayAgo', { day: days }) : t('timeDaysAgo', { days });
+  }
+  if (minutes >= 60) {
+    const hours = Math.floor(minutes / 60);
+    return hours === 1 ? t('timeHourAgo', { hour: hours }) : t('timeHoursAgo', { hours });
+  }
+  const elapsedMinutes = Math.min(59, minutes);
+  return elapsedMinutes === 1
+    ? t('timeMinuteAgo', { minute: elapsedMinutes })
+    : t('timeMinutesAgo', { minutes: elapsedMinutes });
 }
 function parseFilterNumbers(value: string) {
   const values = value

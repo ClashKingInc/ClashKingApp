@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Todos os construtores estão ocupados",
+  "upgradeTrackerBuildCost": "Custo de construção",
+  "upgradeTrackerBuilderBaseBuilders": "Construtores da base do construtor",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratório da base do construtor",
+  "upgradeTrackerCalendar": "Calendário",
+  "upgradeTrackerClearCost": "Custo de remoção",
+  "upgradeTrackerCompletionDetails": "Detalhes do progresso da vila",
+  "upgradeTrackerCustomSoundtrack": "Banda sonora personalizada",
+  "upgradeTrackerGoldPassPercent": "Passe Dourado a {percent}%",
+  "upgradeTrackerGroupSummary": "Resumo de {group}",
+  "upgradeTrackerGuardians": "Guardiões",
+  "upgradeTrackerHelpers": "Ajudantes",
+  "upgradeTrackerHouseParts": "Partes da casa",
+  "upgradeTrackerIdleBuilders": "{count} construtores inativos",
+  "upgradeTrackerInProgress": "Em curso",
+  "upgradeTrackerItemSemanticLabel": "{item}, nível {currentLevel} de {targetLevel}, {count} edifícios",
+  "upgradeTrackerItemsOwned": "{count} possuídos",
+  "upgradeTrackerLane": "Fila",
+  "upgradeTrackerLevelTransition": "Nível {from} → {to}",
+  "upgradeTrackerLootNow": "Saque atual",
+  "upgradeTrackerLootOutlook": "Previsão de saque",
+  "upgradeTrackerMusic": "Música",
+  "upgradeTrackerNextDays": "Próximos {count} dias",
+  "upgradeTrackerNextPeriod": "Período seguinte",
+  "upgradeTrackerNoGoldPass": "Sem Passe Dourado",
+  "upgradeTrackerNoMatchingUpgrades": "Nenhuma melhoria correspondente",
+  "upgradeTrackerNoMatchingUpgradesBody": "Tente outra vila ou fila.",
+  "upgradeTrackerNothingNeededNow": "Nada necessário neste momento",
+  "upgradeTrackerObstacles": "Obstáculos",
+  "upgradeTrackerPart": "Parte",
+  "upgradeTrackerPassReward": "Recompensa do passe",
+  "upgradeTrackerPauseSoundtrack": "Pausar banda sonora",
+  "upgradeTrackerPeriodCount": "Período {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Reproduzir banda sonora",
+  "upgradeTrackerPreviousPeriod": "Período anterior",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Cenários",
+  "upgradeTrackerScheduledLane": "Agendado n.º {lane}",
+  "upgradeTrackerShareProgress": "Progresso de {village}",
+  "upgradeTrackerSize": "Tamanho",
+  "upgradeTrackerSortLongest": "Mais longos primeiro",
+  "upgradeTrackerSortName": "Nome A–Z",
+  "upgradeTrackerSortScheduled": "Agendado",
+  "upgradeTrackerSortShortest": "Mais curtos primeiro",
+  "upgradeTrackerSoundtrackPosition": "Posição da banda sonora",
+  "upgradeTrackerStarts": "Começa",
+  "upgradeTrackerTier": "Categoria",
+  "upgradeTrackerUpgradesStarting": "melhorias a começar",
+  "upgradeTrackerUpgradingNow": "A melhorar agora",
+  "upgradeTrackerWarBase": "Base de guerra",
+  "notifSettingsSaveFailed": "Não foi possível guardar as definições de notificações.",
+  "notifPushEnabled": "Notificações push ativadas",
+  "notifReceiveNotifications": "Receber notificações",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Os alertas ativados podem ser enviados para este dispositivo.",
+  "notifDisabledAccountDescription": "As notificações estão desativadas em toda a sua conta ClashKing.",
+  "notifMaximumRemindersAdded": "Número máximo de lembretes adicionado",
+  "notifAddReminder": "Adicionar lembrete",
+  "notifDurationOneHour": "1 hora",
+  "notifDurationHours": "{count} horas",
+  "notifDurationMinutes": "{count} minutos",
+  "notifAddTiming": "Adicionar {timing}",
+  "notifTimingOneHourBefore": "1 hora antes",
+  "notifTimingHoursBefore": "{count} horas antes",
+  "notifTimingMinutesBefore": "{count} minutos antes",
+  "notifPushReady": "As notificações push estão prontas neste dispositivo.",
+  "notifPushPermissionRequired": "Permita notificações para receber alertas do ClashKing.",
+  "notifPushPermissionDenied": "A permissão de notificações foi recusada.",
+  "notifPushNotConfigured": "O Firebase não está configurado para esta compilação.",
+  "notifPushTokenUnavailable": "Ainda não está disponível um token push.",
+  "notifPushUnsupported": "As notificações push não são suportadas nesta plataforma.",
+  "notifPushInitializing": "A configurar notificações push…",
   "notificationPrimerTitle": "Ativar notificações?",
   "notificationPrimerBody": "O ClashKing pode avisar-te sobre atualizações de guerras, CWL, conta e projetos. Podes alterar esta opção a qualquer momento em Definições > Notificações.",
   "notificationPrimerNotNow": "Agora não",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Contactar o suporte",
   "settingsPrivacyDeleteAccount": "Eliminar conta",
   "settingsPrivacyDeleteConfirmTitle": "Eliminar conta?",
-  "settingsPrivacyDeleteConfirmDescription": "Este pedido é definitivo após o processamento. Poderá perder contas associadas, definições de notificações, preferências guardadas e métodos de autenticação."
+  "settingsPrivacyDeleteConfirmDescription": "Este pedido é definitivo após o processamento. Poderá perder contas associadas, definições de notificações, preferências guardadas e métodos de autenticação.",
+  "generalUnranked": "Sem classificação",
+  "playerJoinLeaveTab": "Entrada / Saída",
+  "playerUpgradeRemainingAccessibility": "Restante para Centro de Vila {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% concluído para CV{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Esta secção está concluída para CV{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Tempo restante",
+  "playerUpgradeNoResourceData": "Sem dados de recursos",
+  "playerJoinLeaveLoadError": "Não foi possível carregar o histórico de entradas e saídas",
+  "playerJoinLeaveClanTotals": "Totais por clã",
+  "playerJoinLeaveTime": "Tempo",
+  "playerJoinLeaveTimeSpent": "Tempo passado",
+  "playerJoinLeaveVisits": "Visitas",
+  "playerJoinLeaveJoined": "Entrou",
+  "playerJoinLeaveLeft": "Saiu",
+  "playerJoinLeaveNoHistory": "Não há histórico de entradas e saídas",
+  "playerJoinLeaveNoClanTotals": "Não há totais de clãs",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

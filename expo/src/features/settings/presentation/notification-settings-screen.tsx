@@ -33,7 +33,7 @@ import {
   type NotificationCategory,
   type NotificationPreferences,
 } from '../../../core/dto/notification-preferences';
-import { useI18n, type MessageKey } from '../../../i18n';
+import { useI18n, type I18nValue, type MessageKey } from '../../../i18n';
 import {
   CKText,
   LoadingIndicator,
@@ -159,7 +159,7 @@ export function NotificationSettingsScreen({
       setSettings(await service.save(next));
     } catch {
       setSettings(rollback);
-      setSnackbar('Notification settings could not be saved.');
+      setSnackbar(t('notifSettingsSaveFailed'));
     } finally {
       savingRef.current = false;
       setSaving(false);
@@ -188,7 +188,7 @@ export function NotificationSettingsScreen({
         setPush(result);
         setToken(await service.tokenPreview());
         if (result.state !== 'ready' || !result.token) {
-          setSnackbar(result.message ?? pushFallback(result));
+          setSnackbar(result.message ?? pushFallback(t, result));
           return;
         }
       } finally {
@@ -225,14 +225,16 @@ export function NotificationSettingsScreen({
             )}
             <View style={styles.copy}>
               <CKText role="titleMedium" style={styles.strong}>
-                {settings.notificationsEnabled ? 'Push enabled' : 'Receive notifications'}
+                {settings.notificationsEnabled
+                  ? t('notifPushEnabled')
+                  : t('notifReceiveNotifications')}
               </CKText>
               <CKText muted role="bodySmall">
                 {settings.notificationsEnabled
                   ? token
-                    ? `Token: ${token}`
-                    : 'Your enabled alerts can be delivered to this device.'
-                  : 'Notifications are turned off across your ClashKing account.'}
+                    ? t('notifTokenPreview', { token })
+                    : t('notifEnabledDeliveryDescription')
+                  : t('notifDisabledAccountDescription')}
               </CKText>
             </View>
             <SettingSwitch
@@ -380,6 +382,7 @@ function ReminderRow({
   onToggle: (value: boolean) => void;
   onValues: (values: readonly number[]) => void;
 }) {
+  const { t } = useI18n();
   const theme = useCKTheme();
   const [expanded, setExpanded] = useState(false);
   const [picker, setPicker] = useState(false);
@@ -427,7 +430,7 @@ function ReminderRow({
                       { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.72) },
                     ]}
                   >
-                    <CKText>{timingLabel(minutes)}</CKText>
+                    <CKText>{timingLabel(t, minutes)}</CKText>
                     <Trash2 color={theme.onSurfaceVariant} size={15} />
                   </Pressable>
                 ))}
@@ -445,7 +448,7 @@ function ReminderRow({
           >
             <Plus color={theme.primary} />
             <CKText role="rowTitle">
-              {values.length >= 3 ? 'Maximum reminders added' : 'Add reminder'}
+              {values.length >= 3 ? t('notifMaximumRemindersAdded') : t('notifAddReminder')}
             </CKText>
           </Pressable>
         </View>
@@ -479,6 +482,7 @@ function ReminderTimingSheet({
   onClose: () => void;
   onSelect: (minutes: number) => void;
 }) {
+  const { t } = useI18n();
   const theme = useCKTheme();
   const [hour, setHour] = useState(1);
   const selectedMinutes = hour * 60;
@@ -513,7 +517,11 @@ function ReminderTimingSheet({
             >
               {Array.from({ length: maxHours }, (_, index) => (
                 <View key={index + 1} style={styles.pickerItem}>
-                  <CKText role="bodyLarge">{index === 0 ? '1 hour' : `${index + 1} hours`}</CKText>
+                  <CKText role="bodyLarge">
+                    {index === 0
+                      ? t('notifDurationOneHour')
+                      : t('notifDurationHours', { count: index + 1 })}
+                  </CKText>
                 </View>
               ))}
             </ScrollView>
@@ -529,7 +537,7 @@ function ReminderTimingSheet({
             ]}
           >
             <CKText role="rowTitle" style={{ color: theme.onPrimary }}>
-              Add {timingLabel(selectedMinutes)}
+              {t('notifAddTiming', { timing: timingLabel(t, selectedMinutes) })}
             </CKText>
           </Pressable>
           <View style={styles.quickRow}>
@@ -545,7 +553,7 @@ function ReminderTimingSheet({
                   selectedTimings.has(minutes) && styles.disabled,
                 ]}
               >
-                <CKText role="rowTitle">{minutes} minutes</CKText>
+                <CKText role="rowTitle">{t('notifDurationMinutes', { count: minutes })}</CKText>
               </Pressable>
             ))}
           </View>
@@ -575,23 +583,25 @@ function SettingsSnackbar({ message, onDismiss }: { message?: string; onDismiss:
   );
 }
 
-export function timingLabel(minutes: number): string {
+export function timingLabel(t: I18nValue['t'], minutes: number): string {
   if (minutes % 60 === 0) {
     const hours = minutes / 60;
-    return hours === 1 ? '1 hour before' : `${hours} hours before`;
+    return hours === 1
+      ? t('notifTimingOneHourBefore')
+      : t('notifTimingHoursBefore', { count: hours });
   }
-  return `${minutes} minutes before`;
+  return t('notifTimingMinutesBefore', { count: minutes });
 }
 
-function pushFallback(result: PushNotificationSetupResult): string {
+function pushFallback(t: I18nValue['t'], result: PushNotificationSetupResult): string {
   return {
-    ready: 'Push notifications are ready on this device.',
-    permissionRequired: 'Allow notifications to receive ClashKing alerts.',
-    permissionDenied: 'Notification permission was denied.',
-    notConfigured: 'Firebase is not configured for this build.',
-    tokenUnavailable: 'A push token is not available yet.',
-    unsupported: 'Push notifications are not supported on this platform.',
-    initializing: 'Configuring push notifications…',
+    ready: t('notifPushReady'),
+    permissionRequired: t('notifPushPermissionRequired'),
+    permissionDenied: t('notifPushPermissionDenied'),
+    notConfigured: t('notifPushNotConfigured'),
+    tokenUnavailable: t('notifPushTokenUnavailable'),
+    unsupported: t('notifPushUnsupported'),
+    initializing: t('notifPushInitializing'),
   }[result.state];
 }
 

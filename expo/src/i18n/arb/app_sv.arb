@@ -1,4 +1,76 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Alla byggare är upptagna",
+  "upgradeTrackerBuildCost": "Byggkostnad",
+  "upgradeTrackerBuilderBaseBuilders": "Byggare i byggarbasen",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorium i byggarbasen",
+  "upgradeTrackerCalendar": "Kalender",
+  "upgradeTrackerClearCost": "Borttagningskostnad",
+  "upgradeTrackerCompletionDetails": "Detaljer om byns framsteg",
+  "upgradeTrackerCustomSoundtrack": "Anpassat soundtrack",
+  "upgradeTrackerGoldPassPercent": "{percent} % Guldpass",
+  "upgradeTrackerGroupSummary": "Sammanfattning av {group}",
+  "upgradeTrackerGuardians": "Väktare",
+  "upgradeTrackerHelpers": "Hjälpare",
+  "upgradeTrackerHouseParts": "Husdelar",
+  "upgradeTrackerIdleBuilders": "{count} lediga byggare",
+  "upgradeTrackerInProgress": "Pågår",
+  "upgradeTrackerItemSemanticLabel": "{item}, nivå {currentLevel} av {targetLevel}, {count} byggnader",
+  "upgradeTrackerItemsOwned": "{count} ägda",
+  "upgradeTrackerLane": "Kö",
+  "upgradeTrackerLevelTransition": "Nivå {from} → {to}",
+  "upgradeTrackerLootNow": "Byte nu",
+  "upgradeTrackerLootOutlook": "Bytesprognos",
+  "upgradeTrackerMusic": "Musik",
+  "upgradeTrackerNextDays": "Nästa {count} dagar",
+  "upgradeTrackerNextPeriod": "Nästa period",
+  "upgradeTrackerNoGoldPass": "Inget Guldpass",
+  "upgradeTrackerNoMatchingUpgrades": "Inga matchande uppgraderingar",
+  "upgradeTrackerNoMatchingUpgradesBody": "Prova en annan by eller kö.",
+  "upgradeTrackerNothingNeededNow": "Inget behövs just nu",
+  "upgradeTrackerObstacles": "Hinder",
+  "upgradeTrackerPart": "Del",
+  "upgradeTrackerPassReward": "Passbelöning",
+  "upgradeTrackerPauseSoundtrack": "Pausa soundtrack",
+  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerPlaySoundtrack": "Spela soundtrack",
+  "upgradeTrackerPreviousPeriod": "Föregående period",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerSceneries": "Landskap",
+  "upgradeTrackerScheduledLane": "Schemalagd nr {lane}",
+  "upgradeTrackerShareProgress": "Framsteg för {village}",
+  "upgradeTrackerSize": "Storlek",
+  "upgradeTrackerSortLongest": "Längsta först",
+  "upgradeTrackerSortName": "Namn A–Ö",
+  "upgradeTrackerSortScheduled": "Schemalagd",
+  "upgradeTrackerSortShortest": "Kortaste först",
+  "upgradeTrackerSoundtrackPosition": "Position i soundtrack",
+  "upgradeTrackerStarts": "Startar",
+  "upgradeTrackerTier": "Nivå",
+  "upgradeTrackerUpgradesStarting": "uppgraderingar startar",
+  "upgradeTrackerUpgradingNow": "Uppgraderas nu",
+  "upgradeTrackerWarBase": "Krigsbas",
+  "notifSettingsSaveFailed": "Aviseringsinställningarna kunde inte sparas.",
+  "notifPushEnabled": "Pushaviseringar aktiverade",
+  "notifReceiveNotifications": "Ta emot aviseringar",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Dina aktiverade varningar kan skickas till den här enheten.",
+  "notifDisabledAccountDescription": "Aviseringar är avstängda för hela ditt ClashKing-konto.",
+  "notifMaximumRemindersAdded": "Maximalt antal påminnelser har lagts till",
+  "notifAddReminder": "Lägg till påminnelse",
+  "notifDurationOneHour": "1 timme",
+  "notifDurationHours": "{count} timmar",
+  "notifDurationMinutes": "{count} minuter",
+  "notifAddTiming": "Lägg till {timing}",
+  "notifTimingOneHourBefore": "1 timme före",
+  "notifTimingHoursBefore": "{count} timmar före",
+  "notifTimingMinutesBefore": "{count} minuter före",
+  "notifPushReady": "Pushaviseringar är klara på den här enheten.",
+  "notifPushPermissionRequired": "Tillåt aviseringar för att få ClashKing-varningar.",
+  "notifPushPermissionDenied": "Behörighet för aviseringar nekades.",
+  "notifPushNotConfigured": "Firebase är inte konfigurerat för den här versionen.",
+  "notifPushTokenUnavailable": "En push-token är inte tillgänglig ännu.",
+  "notifPushUnsupported": "Pushaviseringar stöds inte på den här plattformen.",
+  "notifPushInitializing": "Konfigurerar pushaviseringar…",
   "notificationPrimerTitle": "Aktivera notiser?",
   "notificationPrimerBody": "ClashKing kan meddela dig om uppdateringar för krig, CWL, konto och projekt. Du kan ändra detta när som helst under Inställningar > Notiser.",
   "notificationPrimerNotNow": "Inte nu",
@@ -4538,5 +4610,45 @@
   "settingsPrivacyContactSupport": "Kontakta supporten",
   "settingsPrivacyDeleteAccount": "Radera konto",
   "settingsPrivacyDeleteConfirmTitle": "Radera kontot?",
-  "settingsPrivacyDeleteConfirmDescription": "Begäran kan inte ångras efter behandling. Du kan förlora kopplade konton, aviseringsinställningar, sparade preferenser och autentiseringsmetoder."
+  "settingsPrivacyDeleteConfirmDescription": "Begäran kan inte ångras efter behandling. Du kan förlora kopplade konton, aviseringsinställningar, sparade preferenser och autentiseringsmetoder.",
+  "generalUnranked": "Orankad",
+  "playerJoinLeaveTab": "Gå med / Lämna",
+  "playerUpgradeRemainingAccessibility": "Återstår för rådhus {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress} % klart för RH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Det här avsnittet är klart för RH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Återstående tid",
+  "playerUpgradeNoResourceData": "Inga resursdata",
+  "playerJoinLeaveLoadError": "Det gick inte att läsa in historiken över anslutningar och utträden",
+  "playerJoinLeaveClanTotals": "Klansummor",
+  "playerJoinLeaveTime": "Tid",
+  "playerJoinLeaveTimeSpent": "Tillbringad tid",
+  "playerJoinLeaveVisits": "Besök",
+  "playerJoinLeaveJoined": "Gick med",
+  "playerJoinLeaveLeft": "Lämnade",
+  "playerJoinLeaveNoHistory": "Ingen historik över anslutningar och utträden",
+  "playerJoinLeaveNoClanTotals": "Inga klansummor tillgängliga",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }

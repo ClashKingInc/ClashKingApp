@@ -1,4 +1,171 @@
 {
+  "upgradeTrackerAllBuildersOccupied": "Wszyscy budowniczowie są zajęci",
+  "upgradeTrackerBuildCost": "Koszt budowy",
+  "upgradeTrackerBuilderBaseBuilders": "Budowniczowie Bazy Budowniczego",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorium Bazy Budowniczego",
+  "upgradeTrackerCalendar": "Kalendarz",
+  "upgradeTrackerClearCost": "Koszt usunięcia",
+  "upgradeTrackerCompletionDetails": "Szczegóły ukończenia wioski",
+  "upgradeTrackerCustomSoundtrack": "Niestandardowa ścieżka dźwiękowa",
+  "upgradeTrackerGoldPassPercent": "Złota Przepustka {percent}%",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "Podsumowanie: {group}",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Strażnicy",
+  "upgradeTrackerHelpers": "Pomocnicy",
+  "upgradeTrackerHouseParts": "Części domu",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# bezczynny budowniczy} other {# bezczynnych budowniczych}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "W toku",
+  "upgradeTrackerItemSemanticLabel": "{item}, poziom {currentLevel} z {targetLevel}{count, plural, =1 {} other {, # budynków}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "Posiadane: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Tor",
+  "upgradeTrackerLevelTransition": "Poziom {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Łupy teraz",
+  "upgradeTrackerLootOutlook": "Prognoza łupów",
+  "upgradeTrackerMusic": "Muzyka",
+  "upgradeTrackerNextDays": "{count, plural, one {Następny # dzień} other {Następne # dni}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Następny okres",
+  "upgradeTrackerNoGoldPass": "Brak Złotej Przepustki",
+  "upgradeTrackerNoMatchingUpgrades": "Brak pasujących ulepszeń",
+  "upgradeTrackerNoMatchingUpgradesBody": "Spróbuj wybrać inną wioskę lub kolejkę.",
+  "upgradeTrackerNothingNeededNow": "Nic nie jest teraz potrzebne",
+  "upgradeTrackerObstacles": "Przeszkody",
+  "upgradeTrackerPart": "Część",
+  "upgradeTrackerPassReward": "Nagroda z przepustki",
+  "upgradeTrackerPauseSoundtrack": "Wstrzymaj ścieżkę dźwiękową",
+  "upgradeTrackerPeriodCount": "Okres {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Odtwórz ścieżkę dźwiękową",
+  "upgradeTrackerPreviousPeriod": "Poprzedni okres",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Scenerie",
+  "upgradeTrackerScheduledLane": "Zaplanowano na torze #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "Postęp: {village}",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Rozmiar",
+  "upgradeTrackerSortLongest": "Najdłuższe najpierw",
+  "upgradeTrackerSortName": "Nazwa A–Z",
+  "upgradeTrackerSortScheduled": "Zaplanowane",
+  "upgradeTrackerSortShortest": "Najkrótsze najpierw",
+  "upgradeTrackerSoundtrackPosition": "Pozycja ścieżki dźwiękowej",
+  "upgradeTrackerStarts": "Rozpoczęcie",
+  "upgradeTrackerTier": "Poziom",
+  "upgradeTrackerUpgradesStarting": "rozpoczynające się ulepszenia",
+  "upgradeTrackerUpgradingNow": "Ulepszanie w toku",
+  "upgradeTrackerWarBase": "Baza wojenna",
+  "notifSettingsSaveFailed": "Nie udało się zapisać ustawień powiadomień.",
+  "notifPushEnabled": "Powiadomienia push włączone",
+  "notifReceiveNotifications": "Otrzymuj powiadomienia",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "Włączone alerty mogą być dostarczane na to urządzenie.",
+  "notifDisabledAccountDescription": "Powiadomienia są wyłączone na całym koncie ClashKing.",
+  "notifMaximumRemindersAdded": "Dodano maksymalną liczbę przypomnień",
+  "notifAddReminder": "Dodaj przypomnienie",
+  "notifDurationOneHour": "1 godzina",
+  "notifDurationHours": "{count} godzin",
+  "notifDurationMinutes": "{count} minut",
+  "notifAddTiming": "Dodaj {timing}",
+  "notifTimingOneHourBefore": "1 godzinę wcześniej",
+  "notifTimingHoursBefore": "{count} godzin wcześniej",
+  "notifTimingMinutesBefore": "{count} minut wcześniej",
+  "notifPushReady": "Powiadomienia push są gotowe na tym urządzeniu.",
+  "notifPushPermissionRequired": "Zezwól na powiadomienia, aby otrzymywać alerty ClashKing.",
+  "notifPushPermissionDenied": "Odmówiono uprawnień do powiadomień.",
+  "notifPushNotConfigured": "Firebase nie jest skonfigurowany dla tej kompilacji.",
+  "notifPushTokenUnavailable": "Token push nie jest jeszcze dostępny.",
+  "notifPushUnsupported": "Powiadomienia push nie są obsługiwane na tej platformie.",
+  "notifPushInitializing": "Konfigurowanie powiadomień push…",
   "notificationPrimerTitle": "Włączyć powiadomienia?",
   "notificationPrimerBody": "ClashKing może powiadamiać Cię o aktualizacjach wojen, CWL, konta i projektów. Możesz to zmienić w dowolnym momencie w Ustawieniach > Powiadomienia.",
   "notificationPrimerNotNow": "Nie teraz",
@@ -4538,5 +4705,45 @@
   "settingsPrivacyContactSupport": "Skontaktuj się z pomocą",
   "settingsPrivacyDeleteAccount": "Usuń konto",
   "settingsPrivacyDeleteConfirmTitle": "Usunąć konto?",
-  "settingsPrivacyDeleteConfirmDescription": "Po przetworzeniu ta prośba jest nieodwracalna. Możesz utracić połączone konta, ustawienia powiadomień, zapisane preferencje i metody uwierzytelniania."
+  "settingsPrivacyDeleteConfirmDescription": "Po przetworzeniu ta prośba jest nieodwracalna. Możesz utracić połączone konta, ustawienia powiadomień, zapisane preferencje i metody uwierzytelniania.",
+  "generalUnranked": "Bez rankingu",
+  "playerJoinLeaveTab": "Dołączenie / Odejście",
+  "playerUpgradeRemainingAccessibility": "Pozostało dla ratusza {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Ukończono {progress}% dla TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Ta sekcja jest ukończona dla TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Pozostały czas",
+  "playerUpgradeNoResourceData": "Brak danych o zasobach",
+  "playerJoinLeaveLoadError": "Nie udało się wczytać historii dołączeń i odejść",
+  "playerJoinLeaveClanTotals": "Podsumowania klanów",
+  "playerJoinLeaveTime": "Czas",
+  "playerJoinLeaveTimeSpent": "Spędzony czas",
+  "playerJoinLeaveVisits": "Wizyty",
+  "playerJoinLeaveJoined": "Dołączył",
+  "playerJoinLeaveLeft": "Odszedł",
+  "playerJoinLeaveNoHistory": "Brak historii dołączeń i odejść",
+  "playerJoinLeaveNoClanTotals": "Brak podsumowań klanów",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
 }
