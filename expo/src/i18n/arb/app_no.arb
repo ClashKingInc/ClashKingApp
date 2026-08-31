@@ -1,0 +1,4870 @@
+{
+  "warStatsRangeTitle": "War stats range",
+  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
+  "warStatsRangeDays": "Days",
+  "warStatsRangeWarsToInclude": "Wars to include",
+  "warStatsRangeDaysToInclude": "Days to include",
+  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
+  "upgradeTrackerBuildCost": "Build cost",
+  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
+  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
+  "upgradeTrackerCalendar": "Calendar",
+  "upgradeTrackerClearCost": "Clear cost",
+  "upgradeTrackerCompletionDetails": "Village completion details",
+  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
+  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group} summary",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Voktere",
+  "upgradeTrackerHelpers": "Helpers",
+  "upgradeTrackerHouseParts": "House parts",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "In progress",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "{count} owned",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLevelTransition": "Nivå {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Loot now",
+  "upgradeTrackerLootOutlook": "Loot outlook",
+  "upgradeTrackerMusic": "Music",
+  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Next period",
+  "upgradeTrackerNoGoldPass": "No Gold Pass",
+  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
+  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
+  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
+  "upgradeTrackerObstacles": "Obstacles",
+  "upgradeTrackerPart": "Part",
+  "upgradeTrackerPassReward": "Pass reward",
+  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
+  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
+  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Sceneries",
+  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village} progress",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Size",
+  "upgradeTrackerSortLongest": "Longest first",
+  "upgradeTrackerSortName": "Name A–Z",
+  "upgradeTrackerSortScheduled": "Planlagt",
+  "upgradeTrackerSortShortest": "Shortest first",
+  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerStarts": "Starter",
+  "upgradeTrackerTier": "Tier",
+  "upgradeTrackerUpgradesStarting": "upgrades starting",
+  "upgradeTrackerUpgradingNow": "Upgrading now",
+  "upgradeTrackerWarBase": "War Base",
+  "notifSettingsSaveFailed": "Notification settings could not be saved.",
+  "notifPushEnabled": "Push enabled",
+  "notifReceiveNotifications": "Receive notifications",
+  "notifTokenPreview": "Token: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
+  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
+  "notifMaximumRemindersAdded": "Maximum reminders added",
+  "notifAddReminder": "Add reminder",
+  "notifDurationOneHour": "1 hour",
+  "notifDurationHours": "{count} hours",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifDurationMinutes": "{count} minutes",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAddTiming": "Add {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
+  "notifTimingOneHourBefore": "1 hour before",
+  "notifTimingHoursBefore": "{count} hours before",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifTimingMinutesBefore": "{count} minutes before",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifPushReady": "Push notifications are ready on this device.",
+  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
+  "notifPushPermissionDenied": "Notification permission was denied.",
+  "notifPushNotConfigured": "Firebase is not configured for this build.",
+  "notifPushTokenUnavailable": "A push token is not available yet.",
+  "notifPushUnsupported": "Push notifications are not supported on this platform.",
+  "notifPushInitializing": "Configuring push notifications…",
+  "notificationPrimerTitle": "Enable notifications?",
+  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
+  "notificationPrimerNotNow": "Not now",
+  "notificationPrimerAllow": "Allow",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Prestasjoner",
+  "achievementEarnedLabel": "Opptjent",
+  "achievementSummary": "{earned}/{total} fullført",
+  "achievementEarnedCount": "Opptjent ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Rådhus 18",
+  "achievementTownhall18Requirement": "Nå rådhusnivå 18.",
+  "achievementWarWarriorName": "Krigskriger",
+  "achievementWarWarriorRequirement": "Nå 5 000 krigsstjerner.",
+  "achievementMrLegendName": "Herr Legende",
+  "achievementMrLegendDescription": "Fullførte en feilfri angrepsdag i Legendeligaen.",
+  "achievementDefenseDoesntMatterName": "Forsvar spiller ingen rolle",
+  "achievementDefenseDoesntMatterDescription": "Overlevde en perfekt forsvarsdag i Legendeligaen.",
+  "appTitle": "ClashKing",
+  "appDescription": "Din ultimate Clash of Clans-følgesvenn for å spore statistikk, administrere klaner og analysere ytelse.",
+  "generalLoading": "Laster...",
+  "loadingVillages": "Laster landsbyene dine...",
+  "loadingClanData": "Henter klandata...",
+  "loadingWarStats": "Analyserer krigsstatistikk...",
+  "loadingLegendsData": "Forbereder legenddata...",
+  "loadingCapitalRaids": "Laster hovedstadsraid...",
+  "loadingAlmostReady": "Nesten klar...",
+  "accountVerificationTitle": "Bekreft konto",
+  "accountVerified": "Bekreftet",
+  "accountVerify": "Bekreft",
+  "accountVerificationSuccess": "Kontoen ble bekreftet!",
+  "generalRetry": "Prøv igjen",
+  "generalRetrying": "Prøver på nytt...",
+  "postsTitle": "Poster",
+  "postsDescription": "ClashKing-nyheter, oppdateringshistorier og tidligere kunngjøringer.",
+  "postsEmpty": "Ingen publiserte innlegg ennå.",
+  "postsLoadFailed": "Innleggene kunne ikke lastes inn.",
+  "postsLoadMore": "Last inn mere",
+  "postsCurrent": "Gjeldende",
+  "postsPast": "Fortid",
+  "postsStory": "Interaktiv historie",
+  "postsPinned": "Fremhævet",
+  "generalTryAgain": "Prøv igjen",
+  "generalReset": "Tilbakestill",
+  "generalCancel": "Avbryt",
+  "generalOk": "Ok",
+  "@generalOk": {
+    "description": "OK button on pop up"
+  },
+  "generalApply": "Bruk",
+  "generalConfirm": "Bekreft",
+  "generalManage": "Administrer",
+  "generalSettings": "Innstillinger",
+  "generalCopiedToClipboard": "Kopiert til utklippstavlen",
+  "generalComingSoon": "Kommer snart!",
+  "generalLastRefresh": "Sist oppdatert: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Oppdatering mislyktes: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "generalAll": "Alle",
+  "@generalAll": {
+    "description": "all items"
+  },
+  "generalAllTime": "Hele perioden",
+  "@generalAllTime": {
+    "description": "All time period"
+  },
+  "generalOthers": "Andre",
+  "generalCompleted": "fullført",
+  "generalTotal": "Totalt",
+  "generalBest": "Beste",
+  "@generalBest": {
+    "description": "Best end of day trophies"
+  },
+  "generalWorst": "Verste",
+  "@generalWorst": {
+    "description": "Worst end of day trophies"
+  },
+  "generalAverage": "Gjennomsnitt",
+  "@generalAverage": {
+    "description": "Average value of legend trophies (defense and attack)"
+  },
+  "generalRemaining": "Gjenstår",
+  "@generalRemaining": {
+    "description": "Remaining attacks or defenses"
+  },
+  "generalActive": "Aktiv",
+  "generalInactive": "Inaktiv",
+  "generalStarted": "Startet",
+  "@generalStarted": {
+    "description": "Title for the number of trophies at the beginning of the day"
+  },
+  "generalEnded": "Avsluttet",
+  "@generalEnded": {
+    "description": "Title for the number of trophies at the end of the day"
+  },
+  "generalRole": "Rolle",
+  "generalStats": "Statistikk",
+  "generalFullStats": "Full statistikk",
+  "generalDetails": "Detaljer",
+  "generalHistory": "Historie",
+  "@generalHistory": {
+    "description": "Shows EOS trophies history"
+  },
+  "generalFilters": "Filtre",
+  "generalExpand": "Utvide",
+  "generalCollapse": "Kollapse",
+  "generalNotSet": "Ikke satt",
+  "@generalNotSet": {
+    "description": "Filter value is not set"
+  },
+  "generalWarning": "Advarsel",
+  "generalUnknown": "Ukjent",
+  "generalNoDataAvailable": "Ingen data tilgjengelig.",
+  "generalNoFilteredResults": "Ingen resultater matcher filtrene dine",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "Prøv å justere filterkriteriene eller tøm filtrene for å se alle data.",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalBookmark": "Bokmerke",
+  "generalRemoveBookmark": "Fjern bokmerket",
+  "generalClearFilters": "Tøm filtre",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "Lagrede forhåndsinnstillinger",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "Lagre",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "Lagre filterforhåndsinnstilling",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "Navn på forhåndsinnstilling",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "Skriv inn et navn for denne forhåndsinnstillingen",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "Forslag:",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "Bruk noen filtre før du lagrer som forhåndsinnstilling",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "Skriv inn et navn",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "En forhåndsinnstilling med dette navnet finnes allerede",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "Forhåndsinnstillingen \"{name}\" ble lagret",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "Kunne ikke lagre forhåndsinnstillingen",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApply": "Bruk forhåndsinnstilling",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "Gi nytt navn",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "Slett",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "Gi forhåndsinnstilling nytt navn",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "Forhåndsinnstillingen fikk navnet \"{name}\"",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "Kunne ikke gi forhåndsinnstillingen nytt navn",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "Slett forhåndsinnstilling",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "Er du sikker på at du vil slette \"{name}\"?",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "Forhåndsinnstillingen \"{name}\" ble slettet",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "Kunne ikke slette forhåndsinnstillingen",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "Diagrammer",
+  "authSignUp": "Registrer deg",
+  "authLogin": "Logg inn",
+  "authLogout": "Logg ut",
+  "authCreateAccount": "Opprett konto",
+  "authJoinClashKing": "Bli med ClashKing",
+  "authCreateAccountToGetStarted": "Opprett din konto for å komme i gang",
+  "authAlreadyHaveAccount": "Har du allerede en konto? Logg inn",
+  "authConfirmLogout": "Er du sikker på at du vil logge ut?",
+  "@authConfirmLogout": {
+    "description": "Prompt asking the user to confirm logout"
+  },
+  "authDiscordTitle": "Uenighed",
+  "authDiscordSignIn": "Logg inn med Discord",
+  "authDiscordContinue": "Fortsett med Discord",
+  "authDiscordDescription": "Synkroniser dataene dine med ClashKing Bot og lås opp hele potensialet i ClashKing!",
+  "authEmail": "E-mail",
+  "authEmailHint": "Skriv inn e-postadressen din",
+  "authEmailDescription": "Bruk e-post hvis du ikke har tilgang til Discord eller foretrekker funksjoner bare i appen",
+  "authEmailRequired": "Skriv inn e-postadressen din",
+  "authEmailInvalid": "Skriv inn en gyldig e-postadresse",
+  "authPasswordLabel": "Passord",
+  "authPasswordHint": "Skriv inn passordet ditt",
+  "authPasswordConfirm": "Bekreft passord",
+  "authPasswordRequired": "Skriv inn passordet ditt",
+  "authPasswordConfirmRequired": "Bekreft passordet ditt",
+  "authPasswordMismatch": "Passordene samsvarer ikke",
+  "authPasswordTooShort": "Passordet må være minst 8 tegn",
+  "authPasswordRequirements": "Passordet må inneholde:\n• Stor bokstav\n• Liten bokstav\n• Tall\n• Spesialtegn",
+  "authPasswordHeader": "Passordet må inneholde:",
+  "authPasswordUppercase": "Stor bokstav",
+  "authPasswordLowercase": "Liten bokstav",
+  "authPasswordNumber": "Tall",
+  "authPasswordSpecial": "Spesialtegn",
+  "authPasswordInvalid": "Passordet oppfyller ikke kravene",
+  "authPasswordForgot": "Glemt passord?",
+  "authPasswordForgotDescription": "Skriv inn e-postadressen din, så sender vi deg en 6-sifret kode for å tilbakestille passordet.",
+  "authPasswordResetSend": "Send tilbakestillingskode",
+  "authPasswordResetSent": "Kode sendt!",
+  "authPasswordResetSentDescription": "Vi har sendt en 6-sifret tilbakestillingskode til e-postadressen din. Sjekk innboksen og bruk koden til å tilbakestille passordet.",
+  "authPasswordReset": "Tilbakestill passord",
+  "authPasswordResetDescription": "Skriv inn e-postadressen, den 6-sifrede koden fra e-posten og det nye passordet nedenfor.",
+  "authPasswordNew": "Nytt passord",
+  "authPasswordConfirmHint": "Skriv inn det nye passordet på nytt",
+  "authPasswordResetSuccess": "Passordet ble tilbakestilt! Du kan nå logge inn.",
+  "authPasswordResetContinue": "Fortsett til tilbakestilling av passord",
+  "authPasswordResetCode": "Tilbakestillingskode",
+  "authPasswordResetCodeHint": "Skriv inn den 6-sifrede koden fra e-posten",
+  "authPasswordResetCodeRequired": "Skriv inn tilbakestillingskoden",
+  "authPasswordResetCodeInvalid": "Skriv inn en gyldig 6-sifret kode",
+  "authBackToLogin": "Tilbake til innlogging",
+  "authUsernameLabel": "Brukernavn",
+  "authUsernameRequired": "Skriv inn et brukernavn",
+  "authUsernameTooShort": "Brukernavnet må være minst 3 tegn",
+  "authUsernameTooLong": "Brukernavnet kan ikke være mer enn 30 tegn",
+  "authErrorConnection": "Det oppstod en feil. Sjekk internettforbindelsen og prøv igjen.",
+  "authErrorConnectionRelaunch": "Det oppstod en feil. Sjekk internettforbindelsen og start appen på nytt.",
+  "authErrorEmailAlreadyRegistered": "Denne e-postadressen er allerede registrert. Prøv å logge inn i stedet.",
+  "authErrorEmailAlreadyPending": "En bekreftelses-e-post er allerede sendt til denne adressen. Sjekk e-posten din eller prøv å sende på nytt.",
+  "authErrorEmailInvalidFormat": "Skriv inn en gyldig e-postadresse.",
+  "authErrorPasswordWeak": "Passordet er for svakt. Bruk et sterkere passord.",
+  "authErrorUsernameInvalid": "Brukernavnet er ugyldig. Bruk bare bokstaver, tall og understreker.",
+  "authErrorRegistrationFailed": "Registrering mislyktes. Prøv igjen senere.",
+  "authErrorEmailSendFailed": "Kunne ikke sende bekreftelses-e-post. Prøv igjen senere.",
+  "authErrorRateLimited": "For mange forsøk. Vent litt og prøv igjen.",
+  "authErrorServerUnavailable": "Serveren er midlertidig utilgjengelig. Prøv igjen senere.",
+  "authAccountManagement": "Legg til, fjern og omorganiser Clash of Clans-kontoene dine her. Bekreft kontoene dine med en token for å få tilgang til alle funksjoner.",
+  "authAccountConnected": "Tilkoblede kontoer",
+  "authAccountConnectedStatus": "Tilkoblet",
+  "authAccountNotConnected": "Ikke tilkoblet",
+  "authAccountEmailAndPassword": "E-post og passord",
+  "authAccountSecured": "Kontoen din er sikret med flere autentiseringsmetoder",
+  "authAccountLinkEmail": "Koble til e-postkonto",
+  "authAccountAddEmailAuth": "Legg til e-post- og passordautentisering på kontoen din for ekstra sikkerhet.",
+  "authAccountEmailLinkedSuccess": "E-postkontoen ble koblet til!",
+  "authAccountLinkDiscord": "Link Discord-konto",
+  "authAccountAddDiscordAuth": "Legg til Discord-autentisering på kontoen din for synkronisering på tvers av plattformer og tilgang til ClashKing-boten.",
+  "authAccountDiscordLinkedSuccess": "Discord-kontoen ble koblet til!",
+  "authEmailVerificationTitle": "Bekreft e-post",
+  "authEmailVerificationCheckEmail": "Sjekk e-posten din",
+  "authEmailVerificationSentTo": "Vi har sendt en bekreftelses-e-post til:",
+  "authEmailVerificationResend": "Send bekreftelses-e-post på nytt",
+  "authEmailVerificationResendSuccess": "Bekreftelses-e-post sendt på nytt! Sjekk e-posten din.",
+  "authEmailVerificationExpired": "Bekreftelsen er utløpt. Registrer deg på nytt.",
+  "authEmailVerificationAlreadyVerified": "Denne e-postadressen er allerede bekreftet. Prøv å logge inn i stedet.",
+  "authEmailVerificationNoToken": "Fant ingen ventende bekreftelse. Registrer deg først.",
+  "authEmailVerificationExpiredResend": "Bekreftelsen er utløpt. Gå tilbake og registrer deg på nytt.",
+  "authEmailVerificationVerifying": "Bekrefter e-posten din...",
+  "authEmailVerificationCodeInstructions": "Skriv inn den 6-sifrede koden som ble sendt til e-posten din:",
+  "authEmailVerificationCodeRequired": "Skriv inn den 6-sifrede bekreftelseskoden",
+  "authEmailVerificationCodeInvalid": "Ugyldig eller utløpt kode. Sjekk koden eller send bekreftelses-e-posten på nytt.",
+  "authEmailVerificationVerify": "Bekreft kode",
+  "helpTitle": "Trenger du hjelp?",
+  "helpJoinDiscord": "Bli med på Discord",
+  "helpEmailUs": "Send oss e-post",
+  "accountsWelcome": "Velkommen!",
+  "accountsWelcomeMessage": "Legg til én eller flere Clash of Clans-kontoer i profilen din. Du kan legge til eller fjerne kontoer senere.",
+  "accountsManageTitle": "Administrer kontoene dine",
+  "accountsNoneFound": "Fant ingen konto koblet til profilen din",
+  "accountsPlayerTag": "Spillertagg (#ABC123)",
+  "accountsEnterPlayerTag": "Skriv inn en spillertagg",
+  "accountsAdd": "Legg til konto",
+  "accountsAddInstruction": "Trykk på +-knappen for å legge til kontoen din",
+  "accountsApiToken": "API-token for konto",
+  "accountsEnterApiToken": "Skriv inn kontoens API-token for å bekrefte at den er din. Du finner den i Clash of Clans:",
+  "accountsApiTokenLocation": "Innstillinger > Flere innstillinger > API-token",
+  "accountsOpenMoreSettings": "Åpne Flere innstillinger",
+  "accountsCouldNotOpenClash": "Kunne ikke åpne Clash of Clans. Åpne det manuelt.",
+  "accountsFillAllFields": "Fyll ut alle feltene.",
+  "accountsErrorTagNotExists": "Spillertaggen du skrev inn finnes ikke.",
+  "accountsErrorAlreadyLinked": "Spillertaggen er allerede koblet til noen.",
+  "accountsErrorAlreadyLinkedToYou": "Spillertaggen er allerede koblet til deg.",
+  "accountsErrorWrongApiToken": "API-tokenet du skrev inn er feil",
+  "accountsErrorFailedToAdd": "Kunne ikke legge til kontoen. Prøv igjen senere.",
+  "accountsErrorFailedToUpdateOrder": "Kunne ikke oppdatere rekkefølgen på kontoene.",
+  "errorTitle": "Oops! Serverne våre kan ha fått en ildkule midt i fleisen! Vi kaster en helbredelsesformel... Prøv igjen om et øyeblikk.",
+  "errorSubtitle": "Hvis problemet vedvarer, sjekk Discord-serveren vår for å se om vi kjenner til det.",
+  "errorNetworkTitle": "Tilkoblingsproblem",
+  "errorNetworkMessage": "Vi har problemer med å koble til serverne våre. Dette kan skyldes internettforbindelsen din eller et problem hos oss. Sjekk tilkoblingen og prøv igjen.",
+  "errorLoadingVersion": "Feil ved lasting av versjon",
+  "@errorLoadingVersion": {
+    "description": "Error message when the app version cannot be loaded"
+  },
+  "errorCannotOpenLink": "Vi kan ikke åpne denne lenken.",
+  "errorExitAppToOpenClash": "Du er i ferd med å forlate appen for å åpne Clash of Clans.",
+  "playerSearchTitle": "Søk etter spiller",
+  "playerSearchPlaceholder": "Spillerens navn eller tagg",
+  "playerLastActive": "Sist aktiv: {date}",
+  "@playerLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerNotTracked": "Denne spilleren spores ikke. Dataene kan være unøyaktige.",
+  "playerClanDescription": "Klanen din er \"{clan}\" ({tag}).",
+  "@playerClanDescription": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "playerRatioDescription": "Donasjonsforholdet ditt er {ratio}. Du har donert {donations} tropper og mottatt {received} tropper.",
+  "@playerRatioDescription": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      },
+      "donations": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarPreferenceDescription": "Krigspreferansen din er \"{preference}\".",
+  "@playerWarPreferenceDescription": {
+    "placeholders": {
+      "preference": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarStarsDescription": "Du har {stars} krigsstjerner.",
+  "@playerWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTrophiesDescription": "Du har {trophies} trofeer. Du er for øyeblikket i {league}.",
+  "@playerTrophiesDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "playerTrophiesUnrankedDescription": "Du har {trophies} trofeer. Du er ikke rangert i noen liga.",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTownHallLevelDescription": "Rådhusnivået ditt er {level}.",
+  "@playerTownHallLevelDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBuilderBaseDescription": "Byggerhallnivået ditt er {level}, og du har {trophies} trofeer.",
+  "@playerBuilderBaseDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBaseHome": "Hjemmebase",
+  "gameBaseBuilder": "Byggerbase",
+  "gameClanCapital": "Klanhovedstad",
+  "gameTownHall": "TH",
+  "gameTownHallLevel": "Rådhusnivå",
+  "gameTownHallLevelNumber": "Rådhus {level}",
+  "@gameTownHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameExpLevel": "Erfaringsnivå",
+  "gameLeague": "Liga",
+  "gameTrophies": "Trofeer",
+  "gameBuilderBaseTrophies": "BB-trofeer",
+  "gameDonations": "Donasjoner",
+  "gameDonationsReceived": "Mottatt",
+  "gameDonationsRatio": "Donasjonsforhold",
+  "gameLevel": "Nivå: {level}/{maxLevel}",
+  "@gameLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "maxLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "gameHeroes": "Helter",
+  "gameEquipment": "Utstyr",
+  "gameHeroesEquipments": "Helteutstyr",
+  "gameTroops": "Tropper",
+  "gameActiveSuperTroops": "Aktive supertropper",
+  "gamePets": "Kjæledyr",
+  "gameSiegeMachines": "Beleiringsmaskiner",
+  "gameSpells": "Formler",
+  "gameAchievements": "Prestasjoner",
+  "gameClanGames": "Klanleker",
+  "gameSeasonPass": "Sesongpass",
+  "gameCreatorCodeDescription": "Støtt oss gratis!",
+  "gameCreatorCodeDialogTitle": "Støtt ClashKing",
+  "gameCreatorCodeDialogDescription": "Når du bruker skaperkoden vår, hjelper du med å finansiere utvikling, holde appen og boten gratis for alle og støtte nye funksjoner.\n\nVi mottar 5 % av kjøpene dine i spillet uten ekstra kostnad for deg — bare skriv inn \"ClashKing\" i butikken i et hvilket som helst Supercell-spill.\n\nTakk for støtten!",
+  "gameCreatorCodeDialogButton": "Bruk skaperkode",
+  "clanTitle": "Klan",
+  "clanSearchTitle": "Søk etter klan",
+  "clanSearchPlaceholder": "Klanens navn",
+  "clanNone": "Ingen klan",
+  "clanJoinToUnlock": "Bli med i en klan for å låse opp nye funksjoner.",
+  "clanMembers": "Medlemmer",
+  "clanMembersSearchPlaceholder": "Søk medlemmer",
+  "clanMembersShowTotals": "Vis klantotaler",
+  "clanMembersHideTotals": "Skjul klantotaler",
+  "clanMembersReceivedShort": "Mottatt",
+  "clanMembersAverageTh": "Gj.sn. TH",
+  "clanMinimumMembers": "Minimum medlemmer",
+  "clanMaximumMembers": "Maksimum medlemmer",
+  "clanLocation": "Plassering",
+  "clanMinimumPoints": "Minimum klanpoeng",
+  "clanMinimumLevel": "Minimum klannivå",
+  "clanInviteOnly": "Kun invitasjon",
+  "@clanInviteOnly": {
+    "description": "Clan is invite only"
+  },
+  "clanOpened": "Åpen",
+  "@clanOpened": {
+    "description": "Clan is opened"
+  },
+  "clanRoleLeader": "Leder",
+  "clanRoleCoLeader": "Medleder",
+  "clanRoleElder": "Eldste",
+  "clanRoleMember": "Medlem",
+  "clanWarFrequencyAlways": "Alltid",
+  "clanWarFrequencyNever": "Aldri",
+  "clanWarFrequencyOncePerWeek": "1/uke",
+  "clanWarFrequencyMoreThanOncePerWeek": "Mer enn 1/uke",
+  "clanWarFrequencyRarely": "Sjelden",
+  "timeHourIndicator": "h",
+  "timeDaysAgo": "for {days} dager siden",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDayAgo": "for {day} dag siden",
+  "@timeDayAgo": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHourAgo": "for {hour} time siden",
+  "@timeHourAgo": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "for {hours} timer siden",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinuteAgo": "for {minute} minutt siden",
+  "@timeMinuteAgo": {
+    "placeholders": {
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinutesAgo": "for {minutes} minutter siden",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeJustNow": "Akkurat nå",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Avsluttet akkurat nå",
+  "timeEndedMinutesAgo": "Avsluttet for {minutes} minutter siden",
+  "@timeEndedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedHoursAgo": "Avsluttet for {hours} timer siden",
+  "@timeEndedHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedDaysAgo": "Avsluttet for {days} dager siden",
+  "@timeEndedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeStartsIn": "Starter om {time}",
+  "@timeStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeStartsAt": "Starter {time}",
+  "@timeStartsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsIn": "Slutter om {time}",
+  "@timeEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsAt": "Slutter {time}",
+  "@timeEndsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsTitle": "Legendeligaen",
+  "legendsNotInLeague": "Ikke i Legend-ligaen",
+  "legendsNoDataToday": "Du er ikke i Legend-ligaen, men tidligere sesonger er tilgjengelige.",
+  "legendsStartDescription": "Du startet dagen med {trophies} trofeer.",
+  "@legendsStartDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsNoRankLocalDescription": "Du er for øyeblikket ikke rangert ({country}) med {trophies} trofeer.",
+  "@legendsNoRankLocalDescription": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsRankLocalDescription": "Du er for øyeblikket rangert som {rank} ({country}) med {trophies} trofeer.",
+  "@legendsRankLocalDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGainDescription": "Du har vunnet {trophies} trofeer så langt.",
+  "@legendsGainDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsLossDescription": "Du har tapt {trophies} trofeer så langt.",
+  "@legendsLossDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoGlobalRankDescription": "Du er for øyeblikket ikke rangert globalt med {trophies} trofeer.",
+  "@legendsNoGlobalRankDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGlobalRankDescription": "Du er for øyeblikket rangert som {rank} globalt med {trophies} trofeer.",
+  "@legendsGlobalRankDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoRank": "Ingen rangering",
+  "legendsBestTrophies": "Beste trofeer",
+  "legendsMostAttacks": "Flest angrep",
+  "legendsLastSeason": "Forrige sesong",
+  "legendsBestRank": "Beste globale rangering",
+  "legendsTrophiesBySeason": "Trofeer per sesong",
+  "legendsEosTrophies": "Trofeer ved sesongslutt",
+  "legendsEosDetails": "Detaljer ved sesongslutt",
+  "legendsInaccurateTitle": "Unøyaktige data?",
+  "legendsInaccurateIntro": "På grunn av begrensninger i Clash of Clans-API-et kan dataene våre ikke alltid være helt nøyaktige. Her er hvorfor:\n",
+  "legendsInaccurateApiDelayTitle": "1. API-forsinkelse: ",
+  "legendsInaccurateApiDelayBody": "API-et kan bruke opptil 5 minutter på å oppdatere, noe som gir en forsinkelse i sanntidsendringer av trofeer.\n",
+  "legendsInaccurateConcurrentTitle": "2. Samtidige endringer: ",
+  "legendsInaccurateMultipleAttacksTitle": "- Flere angrep/forsvar: ",
+  "legendsInaccurateMultipleAttacksBody": "Hvis flere angrep eller forsvar skjer raskt etter hverandre, kan API-et vise kombinerte resultater (f.eks. +68 eller -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Samtidig angrep og forsvar: ",
+  "legendsInaccurateSimultaneousBody": "Hvis et angrep og et forsvar skjer samtidig, kan du se et blandet resultat (f.eks. +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Netto gevinst/tap: ",
+  "legendsInaccurateNetGainBody": "Til tross for tidsproblemer er den totale netto gevinsten eller tapet for dagen nøyaktig. ",
+  "legendsInaccurateConclusion": "Disse begrensningene er vanlige i alle verktøy som bruker Clash of Clans-API-et. Dessverre kan vi ikke fikse det, siden det ligger hos Supercell. Vi gjør vårt beste for å kompensere for disse begrensningene og gi resultater så nær virkeligheten som mulig. Takk for forståelsen!",
+  "statsSeasonStats": "Sesongstatistikk",
+  "statsByDay": "Per dag",
+  "@statsByDay": {
+    "description": "Shows stats by day"
+  },
+  "statsBySeason": "Per sesong",
+  "@statsBySeason": {
+    "description": "Shows stats by season"
+  },
+  "statsDayIndex": "Dag {index}",
+  "@statsDayIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsIndexDays": "{index} dager",
+  "@statsIndexDays": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsSeasonDate": "{date}-sesongen",
+  "@statsSeasonDate": {
+    "description": "Example: August 2024 season",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "statsAllTownHalls": "Alle rådhus",
+  "statsMembers": "Medlemsstatistikk",
+  "todoTitle": "Gjøremålsliste",
+  "todoExplanationTitle": "Oppgaveberegning",
+  "todoExplanationIntro": "Fullføringsprosenten for oppgaver beregnes basert på følgende aktiviteter med spesifikke vektinger:",
+  "todoExplanationLegendsTitle": "Legend-liga:",
+  "todoExplanationLegends": "Vekt på 8 poeng per konto, 1 angrep = 1 poeng.",
+  "todoExplanationClanWarsTitle": "Klankriger:",
+  "todoExplanationClanWars": "Vekt på 2 poeng per konto, 1 angrep = 1 poeng.",
+  "todoExplanationCwlTitle": "Klan-krigsliga:",
+  "todoExplanationCwl": "Vekt på 1 poeng per konto, 1 angrep = 1 poeng. CWL kan ikke spores hvis spilleren ikke er i ligaklanen sin.",
+  "todoExplanationPassAndGamesTitle": "Sesongpass og klanleker:",
+  "todoExplanationPassAndGames": "Vekt på 2 poeng hver per konto. Forholdet baseres på antall dager som gjenstår (1 måned for passet og 6 dager for lekene). Grønn = i rute til å fullføre passet eller lekene, rød = bak skjema.",
+  "todoExplanationConclusion": "Den endelige prosentandelen beregnes ved å dele det totale antallet handlinger som er fullført under pågående hendelser, på det totale antallet påkrevde handlinger.",
+  "todoAccountsNumber": "{number} kontoer",
+  "@todoAccountsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Number of accounts (ex: 4 accounts)"
+  },
+  "todoAccountsNumberActive": "{number} aktive kontoer",
+  "@todoAccountsNumberActive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsNumberInactive": "{number} inaktive kontoer",
+  "@todoAccountsNumberInactive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsActive": "Aktive kontoer",
+  "todoAccountsInactive": "Inaktive kontoer",
+  "todoAccountsNoInactive": "Ingen inaktive kontoer.",
+  "todoAccountsNoActive": "Ingen aktive kontoer.",
+  "todoAttacksLeftDescription": "Du har {attacks} angrep igjen ({type}).",
+  "@todoAttacksLeftDescription": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDefensesLeftDescription": "Du har {defenses} forsvar igjen ({type}).",
+  "@todoDefensesLeftDescription": {
+    "placeholders": {
+      "defenses": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoNoAttacksLeftDescription": "Gratulerer, du har gjort alle angrepene dine ({type})!",
+  "@todoNoAttacksLeftDescription": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescription": "Du har {points} poeng igjen å få i dag for å være i rute til slutten av arrangementet ({type}).",
+  "@todoPointsLeftDescription": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescriptionNoPoints": "Gratulerer, du er i rute til å få de maksimale belønningene ved slutten av arrangementet ({type})!",
+  "@todoPointsLeftDescriptionNoPoints": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "warTitle": "Krig",
+  "warFrequency": "Krigsfrekvens",
+  "warParticipation": "Krigsdeltakelse",
+  "cwlParticipantOnly": "Participant Only",
+  "warStatsLastXDays": "Last {number} days",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsCurrentMembers": "Current members",
+  "warLeague": "Krig/liga",
+  "warHistory": "Krigshistorikk",
+  "warLog": "Krigslogg",
+  "warLogSearchPlaceholder": "Søk etter kriger",
+  "warLogClosed": "Krigsloggen til {clan} er lukket.",
+  "warLogPrivate": "{clan} har en privat krigslogg.",
+  "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warStats": "Krigsstatistikk",
+  "warStatsSearchPlaceholder": "Søk etter spillere",
+  "warStatsCurrentTownHall": "Min TH",
+  "warStatsLast50": "Siste 50",
+  "warStatsWars": "Kriger",
+  "warStatsSelectSeason": "Velg krigsstatistikk sesong",
+  "warOngoing": "Pågående krig",
+  "warIsNotInWar": "{clan} er ikke i krig.",
+  "@warIsNotInWar": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warAskForWar": "Kontakt lederen eller en medleder for å starte en krig.",
+  "warAskForWarLogOpening": "Kontakt en leder eller medleder for å åpne krigsloggen.",
+  "warEnded": "Krigen er avsluttet",
+  "warInWar": "I krig",
+  "@warInWar": {
+    "description": "War state: active"
+  },
+  "warPreparation": "Forberedelse",
+  "warPerfectWar": "Perfekt krig",
+  "warVictory": "Seier",
+  "warDefeat": "Nederlag",
+  "warDraw": "Uavgjort",
+  "@warDraw": {
+    "description": "War ended in a draw"
+  },
+  "warTeamSize": "Lagstørrelse",
+  "warMyTeam": "Mitt lag",
+  "warEnemiesTeam": "Fiender",
+  "warClanDraw": "De to klanene står likt",
+  "warStateOfTheWar": "Krigens status",
+  "warStarsNeededToTakeTheLead": "{clan} trenger fortsatt {star} stjerne(r) til eller {stars2} stjerne(r) og {percent}% for å ta ledelsen.",
+  "@warStarsNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "star": {
+        "type": "int"
+      },
+      "stars2": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} trenger fortsatt {percent}% eller 1 stjerne til for å ta ledelsen",
+  "@warStarsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warNotStarted": "Krigen har ikke startet ennå",
+  "warWonByStars": "{clanName} vant krigen!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} tapte krigen",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} vant på ødeleggelse!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} tapte på ødeleggelse",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Perfekt uavgjort",
+  "warCanTieNeedsStars": "{clanName} kan utligne, men trenger {stars} stjerner",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} kan ikke ta igjen stjernene",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisToWin": "Å vinne",
+  "warAnalysisToLose": "Å tape",
+  "warAnalysisNoAttacksLeft": "Ingen angrep igjen",
+  "warAnalysisScenario": "{attacks} angrep igjen -> trenger {stars} stjerner / {percent} % per angrep",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} angrep igjen -> umulig ({stars} stjerner / {percent} % per angrep)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotLose": "{clanName} kan ikke lenger tabe",
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisSecuredBadge": "Sikret",
+  "warAnalysisAlreadySecured": "Allerede sikret",
+  "warAnalysisSecureAgainst": "Mål beregnet under antagelse {clanName} bruger alle gjenværende angrep.",
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotSecureAgainst": "Kan ikke matematisk sikres, hvis {clanName} Optimerer alle gjenværende angrep.",
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisNoSecureObjective": "Kan ikke sikres med de gjenværende angrep",
+  "warAnalysisStarGoal": "+{stars} Stjerne(r)",
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisRemainingAttempts": "{attacks} angrep(e) til venstre",
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisNoBetterResult": "Bedre resultat er ikke mulig",
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
+  },
+  "warNoDataAvailableForThisWar": "Ingen data tilgjengelig for denne krigen",
+  "warCalculatorFast": "Rask kalkulator",
+  "warCalculatorAnswer": "For å oppnå en ødeleggelsesrate på {percentNeeded}% trengs totalt {result}%.",
+  "@warCalculatorAnswer": {
+    "placeholders": {
+      "percentNeeded": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorNeededOverall": "% nødvendig totalt",
+  "warCalculatorCalculate": "Beregn",
+  "warAttacksTitle": "Angrep",
+  "warAttacksSuccessful": "Vellykkede angrep",
+  "warAttacksFailed": "Mislykkede angrep",
+  "warAttacksNone": "Ingen angrep ennå",
+  "@warAttacksNone": {
+    "description": "No attack yet in war"
+  },
+  "warAttacksBest": "Beste angrep",
+  "warAttacksCount": "Antall angrep",
+  "warAttacksMissed": "Tapte angrep",
+  "warAttacksMissedShort": "Mistet",
+  "warAttacksNumber": "Du angrep {number_time} gang(er) i løpet av de siste {number_war} krigene.",
+  "@warAttacksNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warAttacksAverageStars": "Du hadde i gjennomsnitt {stars} stjerner per krig.",
+  "@warAttacksAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warAttacksAverageDestruction": "Du hadde i gjennomsnitt {percent}% ødeleggelse per krig.",
+  "@warAttacksAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesTitle": "Forsvar",
+  "warDefensesNone": "Ingen forsvar ennå",
+  "@warDefensesNone": {
+    "description": "No defense yet in war"
+  },
+  "warDefensesBest": "Beste forsvar",
+  "warDefensesBestOutOf": "Beste forsvar (av {number})",
+  "@warDefensesBestOutOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+  },
+  "warDefensesNumber": "Du forsvarte {number_time} gang(er) i løpet av de siste {number_war} krigene.",
+  "@warDefensesNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warDefensesAverageStars": "Du hadde i gjennomsnitt {stars} stjerner per forsvar.",
+  "@warDefensesAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesAverageDestruction": "Du hadde i gjennomsnitt {percent}% ødeleggelse per forsvar.",
+  "@warDefensesAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsTitle": "Stjerner",
+  "warStarsAverage": "Gjennomsnittlige stjerner",
+  "warStarsNumber": "Antall stjerner",
+  "warStarsOne": "1 stjerne",
+  "warStarsTwo": "2 stjerner",
+  "warStarsThree": "3 stjerner",
+  "warStarsZero": "0 stjerner",
+  "warStarsBestPerformance": "Beste prestasjon",
+  "@warStarsBestPerformance": {
+    "description": "Best performance in war"
+  },
+  "warDestructionTitle": "Ødeleggelse",
+  "warDestructionAverage": "Gjennomsnittlig ødeleggelse",
+  "warDestructionRate": "Ødeleggelsesrate",
+  "@warDestructionRate": {
+    "description": "Percentage of destruction in war"
+  },
+  "warHistoryWinsDescription": "Klanen din vant {wins} kriger ({percent}%) av de siste 50 krigene.",
+  "@warHistoryWinsDescription": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryLossesDescription": "Klanen din tapte {losses} kriger ({percent}%) av de siste 50 krigene.",
+  "@warHistoryLossesDescription": {
+    "placeholders": {
+      "losses": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryDrawsDescription": "Klanen din hadde {draws} uavgjorte ({percent}%) av de siste 50 krigene.",
+  "@warHistoryDrawsDescription": {
+    "placeholders": {
+      "draws": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageMembersDescription": "Klanen din har i gjennomsnitt {members} deltakende medlemmer av de siste 50 krigene.",
+  "@warHistoryAverageMembersDescription": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      }
+    }
+  },
+  "warHistoryAverageWarStarsDescription": "Klanen din hadde i gjennomsnitt {stars} stjerner per krig fra de siste 50 krigene. Det utgjør {percent} av de totale stjernene.",
+  "@warHistoryAverageWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageHitRateDescription": "Klanen din hadde en gjennomsnittlig treffrate på {percent}% i de siste 50 krigene.",
+  "@warHistoryAverageHitRateDescription": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warPositionMap": "Posisjonskart",
+  "@warPositionMap": {
+    "description": "Map position in war"
+  },
+  "warPositionAbbr": "Plass",
+  "@warPositionAbbr": {
+    "description": "Abbreviation for map position"
+  },
+  "warPositionOrder": "Rekkefølge etter posisjon",
+  "@warPositionOrder": {
+    "description": "Order of the player in the clan"
+  },
+  "warOpponentTownhall": "Motstander-RH",
+  "@warOpponentTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+  },
+  "warOpponentLowerTownhall": "Lavere RH",
+  "warOpponentUpperTownhall": "Høyere RH",
+  "warOpponentEqualThLevel": "Lik RH",
+  "warOpponentSelectMembersThLevel": "Medlemmers RH-nivå",
+  "warOpponentSelectOpponentsThLevel": "Motstanderes RH-nivå",
+  "warFiltersLastXwars": "Siste {number} kriger",
+  "@warFiltersLastXwars": {
+    "description": "Example: Shows the last 25 wars",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warFiltersFriendly": "Vennskapelig",
+  "@warFiltersFriendly": {
+    "description": "Friendly war"
+  },
+  "warFiltersRandom": "Tilfeldig",
+  "@warFiltersRandom": {
+    "description": "Random/basic war (not friendly or cwl)"
+  },
+  "warVisibilityToggleTownHall": "Skjul/vis statistikk fra tidligere RH-nivåer",
+  "@warVisibilityToggleTownHall": {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+  },
+  "warEventsTitle": "Hendelser",
+  "@warEventsTitle": {
+    "description": "War events"
+  },
+  "warEventsNewest": "Nyeste",
+  "warEventsOldest": "Eldste",
+  "warStatusReady": "Valgt inn",
+  "@warStatusReady": {
+    "description": "Opted In for war"
+  },
+  "warStatusUnready": "Valgt ut",
+  "@warStatusUnready": {
+    "description": "Opted Out for war"
+  },
+  "warStatusMissed": "Mistet",
+  "@warStatusMissed": {
+    "description": "Missed attacks"
+  },
+  "warStatusMissedInfo": "Mistet: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warAbbreviationAvg": "Snitt",
+  "@warAbbreviationAvg": {
+    "description": "Abbreviation for average"
+  },
+  "warAbbreviationAvgPercentage": "Snitt %",
+  "@warAbbreviationAvgPercentage": {
+    "description": "Abbreviation for average percentage"
+  },
+  "cwlTitle": "CWL",
+  "cwlClanWarLeague": "Klan-krigsliga",
+  "cwlOngoing": "Pågående CWL",
+  "cwlHistoryTitle": "CWL historie",
+  "clanLeaderboardHistoryTab": "Resultatlistehistorikk",
+  "clanLegendHistoryTab": "Legendehistorikk",
+  "clanRecordsTab": "Rekorder",
+  "clanProfileHistoryTab": "Profilhistorikk",
+  "clanProfileLevelChanged": "Klannivå endret",
+  "clanProfileDescriptionChanged": "Beskrivelse endret",
+  "clanJoinLeaveTab": "Bli med/forlate",
+  "clanRankingsTab": "Rangeringer",
+  "clanRankingsSeason": "Sesong",
+  "clanRankingsSelectSeason": "Velg rangeringssesong",
+  "clanRankingsFilterActivity": "Aktivitet",
+  "clanRankingsFilterWar": "Krig",
+  "clanRankingsFilterPoints": "Poeng",
+  "cwlHistoryPreviewBadge": "Forhåndsvisning",
+  "cwlHistoryPreviewSubtitle": "{clan} mockup til CWL-endepunktet er fikset",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Ingen CWL-historikk ennå",
+  "cwlHistoryEmptyBody": "Denne klanen har ikke deltatt i en Clan War League-sesong ennå.",
+  "cwlRankTitle": "Rang",
+  "cwlWarsPlayedTitle": "Kriger spilte",
+  "playerWarStarsTitle": "Krigsstjerner",
+  "playerWarPreferenceTitle": "Krigspref.",
+  "playerDonatedTitle": "Donert",
+  "playerReceivedTitle": "Mottatt",
+  "playerCapitalTitle": "Kapital",
+  "playerExpLevelTitle": "Exp. nivå",
+  "clanWarWinsTitle": "Krig vinner",
+  "clanWinStreakTitle": "Seiersrekke",
+  "clanBuilderBaseTitle": "Byggmesterbase",
+  "clanTypeTitle": "Klantype",
+  "clanMinTownHallTitle": "Min. RH",
+  "clanMinTrophiesTitle": "Min. trofeer",
+  "clanCapitalHallTitle": "Hovedstadshallen",
+  "clanDistrictsTitle": "Distrikter",
+  "legendsCountryTitle": "Land",
+  "legendsLocalRankTitle": "Lokal rangering",
+  "legendsGlobalRankTitle": "Global rangering",
+  "warWinsTitle": "Vinner",
+  "warLossesTitle": "Tap",
+  "warDrawsTitle": "Tegner",
+  "cwlRounds": "Runder",
+  "cwlRoundNumber": "Runde {number}",
+  "@cwlRoundNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRound": "Gjeldende runde (Runde {round})",
+  "@cwlCurrentRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRank": "Klanen din er for øyeblikket rangert som {rank}.",
+  "@cwlRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlStars": "Klanen din har totalt {stars} stjerner.",
+  "@cwlStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlDestructionPercentage": "Klanen din har en total ødeleggelsesrate på {percent}%.",
+  "@cwlDestructionPercentage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlTotalAttacks": "Klanen din har totalt {attacks} angrep av {totalAttacks} mulige angrep.",
+  "@cwlTotalAttacks": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "totalAttacks": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveTitle": "Inn-/utmeldingslogger (nåværende sesong)",
+  "joinLeaveJoin": "Bli med",
+  "joinLeaveLeave": "Forlat",
+  "joinLeaveJoins": "Innmeldinger",
+  "joinLeaveLeaves": "Utmeldinger",
+  "joinLeaveUniquePlayers": "Unike spillere",
+  "joinLeaveMovingPlayers": "Spillere i bevegelse",
+  "joinLeaveMostMovingPlayers": "Mest bevegelige spillere",
+  "joinLeaveStillInClan": "Fortsatt i klanen",
+  "joinLeaveLeftForever": "Dro for godt",
+  "joinLeaveRejoinedPlayers": "Spillere som kom tilbake",
+  "joinLeaveAvgTimeJoinLeave": "Gj.sn. inn-/utmeldingstid",
+  "joinLeavePeakHour": "Mest aktive time",
+  "joinLeaveNumberDescription": "{number} utmeldingshendelser skjedde i løpet av den nåværende sesongen ({date}).",
+  "@joinLeaveNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinNumberDescription": "{number} innmeldingshendelser skjedde i løpet av den nåværende sesongen ({date}).",
+  "@joinLeaveJoinNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveMovingNumberDescription": "{number} spiller(e) forlot og kom tilbake til klanen i løpet av den nåværende sesongen ({date}).",
+  "@joinLeaveMovingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveUniqueNumberDescription": "{number} unike spiller(e) ble med i/forlot klanen i løpet av den nåværende sesongen ({date}).",
+  "@joinLeaveUniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveStillInClanNumberDescription": "{number} spiller(e) ble med og er fortsatt i klanen.",
+  "@joinLeaveStillInClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveLeftClanNumberDescription": "{number} spiller(e) ble med, forlot deretter klanen og kom aldri tilbake.",
+  "@joinLeaveLeftClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@joinLeaveTitle": {
+    "description": "Logs of players joining or leaving the clan."
+  },
+  "joinLeaveLeftOnAt": "Forlot {date} kl. {time}.",
+  "@joinLeaveLeftOnAt": {
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinedOnAt": "Ble med {date} kl. {time}.",
+  "@joinLeaveJoinedOnAt": {
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "raidsTitle": "Raid",
+  "raidsLast": "Siste raid",
+  "raidsOngoing": "Pågående raid",
+  "raidsDistrictsDestroyed": "Distrikter ødelagt",
+  "raidsCompleted": "Raid fullført",
+  "capitalRaidStatusOngoing": "Pågående",
+  "capitalRaidStatusEnded": "Avsluttet",
+  "capitalRaidLoot": "Plyndre",
+  "capitalRaidRewards": "Belønninger",
+  "capitalRaidPreviousWeek": "Forrige uke",
+  "capitalRaidNextWeek": "Neste uke",
+  "capitalRaidFilterAttacked": "Angrepet",
+  "capitalRaidFilterNotAttacked": "Ikke angrepet",
+  "capitalRaidFilterLinked": "Tilknyttede kontoer",
+  "capitalRaidEmptyTitle": "Ingen data om kapitalangrep",
+  "capitalRaidEmptyBody": "Raidhistorikk vil vises her når denne klanens kapitalraidhelger er sporet.",
+  "capitalRaidEstimated": "Estimert",
+  "capitalRaidEstimatedTooltip": "Ikke offisielt ennå: estimert fra denne ukens angreps- og forsvarslogger. Supercell publiserer den virkelige medaljetellingen når raidet er over.",
+  "capitalRaidTrophyPrediction": "Spådd trofeer",
+  "capitalRaidTrophyPredictionTooltip": "Estimerte Capital League-trofeer etter dette raidet, basert på ukens prestasjoner så langt. Ikke offisielt.",
+  "capitalRaidProjectedLoot": "Projisert tyvegods",
+  "capitalRaidOneshots": "Én-angrep",
+  "capitalRaidFails": "Mislykkes",
+  "capitalDetailsOffense": "Forbrytelse",
+  "capitalDetailsDefense": "Forsvar",
+  "capitalDistrictsSection": "Distrikter",
+  "capitalOpponentsSection": "Motstandere",
+  "capitalAvgAttacksPerDistrict": "Gj.sn. angrep/distrikt",
+  "capitalAvgLootPerAttack": "Gjennomsnittlig tyvegods/angrep",
+  "capitalHistorySection": "Raid historie",
+  "capitalHistoryWeeksTracked": "Uker spores",
+  "capitalAvgLootPerWeek": "Gjennomsnittlig tyvegods/uke",
+  "capitalAvgAttacksPerWeek": "Gj.sn. angrep/uke",
+  "capitalBestRaid": "Beste raid",
+  "capitalWorstRaid": "Verste raidet",
+  "capitalHistoryChartTitle": "Ukentlig trend",
+  "searchNoResult": "Ingen resultat.",
+  "maintenanceTitle": "Vedlikehold",
+  "maintenanceDescription": "Clash of Clans er for øyeblikket under vedlikehold, så vi får ikke tilgang til API-et. Kom tilbake senere.",
+  "downloadTooltip": "Last ned CWL-sammendrag",
+  "downloadInProgress": "Laster ned fil... Det kan ta noen sekunder...",
+  "downloadSuccess": "Filen ble lagret i {path}",
+  "@downloadSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadError": "Kunne ikke laste ned filen",
+  "dashboardTitle": "Dashbord",
+  "toolsTitle": "Verktøy",
+  "navigationTeam": "Lag",
+  "navigationStatistics": "Statistikk",
+  "versionDevice": "Versjon og enhet",
+  "@versionDevice": {
+    "description": "Version of the app and device information"
+  },
+  "settingsLicenses": "Åpen kildekode-lisenser",
+  "settingsLicensesSubtitle": "Vis lisenser for tredjepartsbiblioteker",
+  "settingsPrivacyPolicy": "Personvernerklæring",
+  "settingsPrivacyPolicySubtitle": "Hvordan vi håndterer dataene dine",
+  "betaFeature": "Betafunksjon",
+  "betaLabel": "INDSATS",
+  "betaDescription": "Denne funksjonen er for øyeblikket i beta, så den kan ha noen feil eller være ufullstendig. Vi jobber aktivt med forbedringer og setter pris på tilbakemeldingen din. Del ideene dine og rapporter problemer på Discord-serveren vår for å hjelpe oss med å gjøre den bedre.",
+  "settingsLanguage": "Språk",
+  "settingsSelectLanguage": "Velg et språk",
+  "settingsToggleTheme": "Bytt tema",
+  "faqTitle": "OSS",
+  "faqSubtitle": "Ofte stilte spørsmål",
+  "faqIsThisFromSupercell": "Er denne appen fra Supercell?",
+  "faqFanContentPolicy": "Dette materialet er uoffisielt og er ikke godkjent av Supercell. For mer informasjon, se Supercells Fan Content Policy: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Hvorfor er dataene noen ganger unøyaktige eller manglende?",
+  "faqClanNotTracked": "Klanen spores ikke",
+  "faqClanNotTrackedAnswer": "ClashKing kan bare hente denne informasjonen hvis klanen spores. Hvis klanen din ikke spores, inviter ClashKing Bot til Discord-serveren din og bruk kommandoen /addclan. Vi jobber med å gjøre denne funksjonen tilgjengelig i appen snart.",
+  "faqTrackingDown": "Sporing nede",
+  "faqTrackingDownAnswer": "Sporingen kan slutte å fungere i en periode. Derfor kan du noen ganger ha hull i dataene dine. Vi jobber med å forbedre dette.",
+  "faqApiLimitation": "Begrensning i Clash of Clans-API-et",
+  "faqApiLimitationAnswer": "Noen data leveres av Clash of Clans, og API-et deres har noen begrensninger. Dette gjelder legends-sporing; noen ganger samler det trofégevinst og -tap som om det var ett enkelt angrep. Det er også derfor vi ikke har informasjon om bygningsnivåene dine.",
+  "faqSupportWork": "Hvordan kan jeg støtte arbeidet deres?",
+  "faqSupportWorkAnswer": "Det finnes flere måter å støtte oss på:",
+  "faqUseCodeClashKing": "Skaperkode: ClashKing",
+  "faqSupportUsOnPatreon": "Støtt oss på Patreon",
+  "faqRateTheApp": "Vurder appen i butikken",
+  "faqWhatCanBotDo": "Hva kan ClashKing Discord-boten gjøre?",
+  "faqWhatCanBotDoAnswer": "ClashKing Discord-boten hjelper deg med å administrere klanen din direkte fra Discord med omfattende sporingsverktøy, automatiske varsler og sømløs integrasjon med denne appen. Den er laget for klanledere og medlemmer som vil holde seg oppdatert og organisert:",
+  "faqInviteBotToServer": "Inviter boten til serveren",
+  "faqBotFeatureTracking": "Spiller- og klansporing",
+  "faqBotFeatureTrackingDesc": "Legg til og overvåk flere klaner og spillere med sanntidsoppdateringer",
+  "faqBotFeatureWars": "Krigshåndtering",
+  "faqBotFeatureWarsDesc": "Spor krigsprestasjoner, analyser angrep og få krigsvarsler",
+  "faqBotFeatureNotifications": "Smarte varsler",
+  "faqBotFeatureNotificationsDesc": "Få varsler om donasjoner, krigsangrep og viktige klanhendelser",
+  "faqBotFeatureCommands": "Kraftige kommandoer",
+  "faqBotFeatureCommandsDesc": "Bruk skråstrekkommandoer for rask tilgang til spillerstatistikk, krigsinfo og mer",
+  "faqNeedHelp": "Jeg trenger hjelp eller vil komme med et forslag. Hvordan kan jeg kontakte dere?",
+  "faqNeedHelpAnswer": "Du kan bli med på Discord-serveren vår for å be om hjelp eller gi tilbakemelding, eller sende oss e-post på devs@clashk.ing. Skriv helst bare på engelsk eller fransk.",
+  "faqPrivacyDataTitle": "Kan jeg administrere eller slette personopplysningene mine?",
+  "faqPrivacyDataAnswer": "Ja. I Innstillinger > Personvernregler kan du åpne personvernreglene, forberede en eksport av ClashKing-kontodataene dine, be om rettelser eller begrensninger og starte sletting av konto. Noen forespørsler kan fortsatt bruke support-e-post mens personverntjenester på serversiden rulles ut. ClashKing kan håndtere data som er lagret i ClashKing-kontoen din; Clash of Clans-data kan også komme fra Supercell-API-er eller offentlige klan- og spillerdata.",
+  "faqSendEmail": "Send en e-post",
+  "faqJoinDiscord": "Bli med på Discord-serveren vår",
+  "faqCannotOpenMailClient": "Av en eller annen grunn kan vi ikke åpne e-postklienten din. Vi kopierte e-postadressen for deg. Du kan skrive en e-post og lime inn adressen i mottakerfeltet.",
+  "faqTroubleshooting": "Feilsøking",
+  "faqTroubleshootingDataTitle": "Hvorfor synkroniseres ikke dataene mine?",
+  "faqTroubleshootingDataDescription": "Spiller- eller klandata ser utdaterte ut",
+  "faqTroubleshootingDataSolution1": "Dra ned for å oppdatere siden",
+  "faqTroubleshootingDataSolution2": "Sjekk om klanen din spores (se over)",
+  "faqTroubleshootingDataSolution3": "Vent noen minutter og prøv igjen: API-et kan bruke litt tid på å oppdatere",
+  "faqTroubleshootingCrashTitle": "Hvorfor krasjer appen?",
+  "faqTroubleshootingCrashDescription": "Appen lukkes uventet eller fryser",
+  "faqTroubleshootingCrashSolution1": "Lukk appen og start den på nytt",
+  "faqTroubleshootingCrashSolution2": "Oppdater appen til nyeste versjon",
+  "faqTroubleshootingCrashSolution3": "Tøm appbuffer og data (Android) eller installer appen på nytt",
+  "faqTroubleshootingCrashSolution4": "Frigjør lagringsplass på enheten",
+  "faqContactSupport": "Kontakt support hvis problemet vedvarer (se siste seksjon)",
+  "faqTroubleshootingAccountTitle": "Hvorfor kan jeg ikke bekrefte kontoen min?",
+  "faqTroubleshootingAccountDescription": "Problemer med å koble til Clash of Clans-kontoen din",
+  "faqTroubleshootingAccountSolution1": "Sørg for at du bruker riktig spillertagg som starter med #",
+  "faqTroubleshootingAccountSolution2": "Hvis kontoen ser ut til å allerede være koblet, bruk API-tokenet fra Clash of Clans-innstillingene",
+  "faqTroubleshootingSolutions": "Løsninger:",
+  "faqWhatIsClashKingProject": "Hva er ClashKing-prosjektet?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing er et åpen kildekode-prosjekt for Clash of Clans-statistikk og klanstyring. Det vedlikeholdes hovedsakelig av to utviklere, med sporadisk hjelp fra bidragsytere. Vi forbedrer det når tiden strekker til, med ett enkelt mål: å hjelpe spillere og klaner med å følge fremgangen sin enklere. Appen, Discord-boten og det gratis API-et fungerer sammen.",
+  "faqViewOnGitHub": "Vis på GitHub",
+  "faqFeaturesGuide": "Hva kan ClashKing-appen gjøre?",
+  "faqFeaturesGuideDescription": "Ta Clash of Clans-opplevelsen din til neste nivå! ClashKing-appen gir pen og rask tilgang til all statistikken og klandataene dine – perfekt for spillere som ikke har Discord, og for dem som foretrekker en elegant mobilopplevelse:",
+  "faqAppDevelopmentNotice": "Vi utvikler aktivt nye funksjoner for å gjøre appen enda bedre. Tilbakemeldingen din hjelper oss å forbedre den!",
+  "faqFeaturesPlayerTitle": "Spillerstatistikk",
+  "faqFeaturesPlayerDescription": "Spor fremgangen din, prestasjonene dine og Legend-liga-resultatene dine",
+  "faqFeaturesClanTitle": "Klanadministrasjon",
+  "faqFeaturesClanDescription": "Overvåk klanmedlemmer, donasjoner og generell klanhelse",
+  "faqFeaturesWarTitle": "Krigssporing",
+  "faqFeaturesWarDescription": "Analyser krigsprestasjoner, angrepsstrategier og seiersrater",
+  "faqFeaturesLegendsTitle": "Unøyaktige data?",
+  "faqFeaturesLegendsDescription": "Daglig trofésporing og statistikk ved sesongslutt",
+  "faqFeaturesCwlTitle": "CWL-analyse",
+  "faqFeaturesCwlDescription": "Ytelse i klan-krigsligaen og medlemsbidrag",
+  "faqFeaturesTodoTitle": "Oppgavesjekkliste",
+  "faqFeaturesTodoDescription": "Se hvilke kontoer som fortsatt trenger rangerte angrep, raid, krigsangrep, klanspill eller passhandlinger",
+  "faqFeaturesUpgradeTrackerTitle": "Oppgrader Tracker",
+  "faqFeaturesUpgradeTrackerDescription": "Bruk et manuelt kontoøyeblikksbilde fra brukeren for å se gjenværende oppgraderinger, ressurser, byggere, laboratorietid og fremdrift",
+  "faqFeaturesNotificationsTitle": "Push-varsler",
+  "faqFeaturesNotificationsDescription": "Velg hvilke kontoer som skal motta varsler for støttede ClashKing-hendelser",
+  "faqFeaturesWidgetsTitle": "Krigsgadgets",
+  "faqFeaturesWidgetsDescription": "Hold gjeldende krigsstatus synlig på startskjermen der widgeter støttes",
+  "faqSearchHint": "Søk i FAQ...",
+  "faqSectionGettingStarted": "Kom i gang og om",
+  "faqSectionAccountsAlertsWidgets": "Kontoer, varsler og widgeter",
+  "faqSectionSupportAndContact": "Support og kontakt",
+  "faqLinkedAccountsTitle": "Hvordan fungerer tilknyttede kontoer og verifikation?",
+  "faqLinkedAccountsAnswer": "ClashKing-profilen din kan inneholde flere Clash of Clans-kontoer. Når du legger til en tagg, vises offentlige data. Bekreftelse med Clash of Clans API-token beviser at kontoen er din og låser opp kontospesifikke funksjoner.",
+  "faqLinkedAccountsSolution1": "Administrer, omorganiser, skjul eller fjern kontoer fra kontoadministrasjonen.",
+  "faqLinkedAccountsSolution2": "Find API-tokenet i Clash of Clans under Innstillinger > Flere innstillinger > API-token.",
+  "faqLinkedAccountsSolution3": "Du kan logge inn med Discord eller e-post. Når kontotilkoblinger er tilgjengelige, administrerer du dem fra Innstillinger.",
+  "faqNotificationsTitle": "Hvordan fungerer varsler?",
+  "faqNotificationsAnswer": "Varsler er valgfrie. Når de er aktivert, registrerer ClashKing denne enheten. Du kan velge hvilke tilknyttede kontoer hvert varsel gjelder.",
+  "faqNotificationsSolution1": "Tillat varsler på enheten og i ClashKing-innstillingene.",
+  "faqNotificationsSolution2": "Hvert varsel kan gjelde forskjellige kontoer. Kontroller de valgte kontoene hvis et varsel mangler.",
+  "faqNotificationsSolution3": "Noen varsler avhenger av sporede klan- eller krigsdata. Forsinkelser kan oppstå mens eksterne data oppdateres.",
+  "faqWidgetsTitle": "Hvordan fungerer krigswidgeter?",
+  "faqWidgetsAnswer": "Krigswidgeter viser et raskt sammendrag på støttede enheter. De bruker de valgte eller tilknyttede kontoene dine, bufrede ClashKing-data og bakgrunnsoppdateringer når plattformen tillater det.",
+  "faqWidgetsSolution1": "Åpne appen etter at du har byttet konto eller klan, slik at widgeten kan synkroniseres.",
+  "faqWidgetsSolution2": "Hvis en widget ser gammel ud, så oppdater appen først. Android og iOS begrænser baggrundsoppdateringer.",
+  "faqWidgetsSolution3": "Klanen trenger tilgjengelige krigsdata for å vise nyttig status.",
+  "faqTranslationIssue": "Mangler oversettelse eller er den feil?",
+  "faqTranslationIssueAnswer": "Oversettelser blir først laget med genererings- og KI-verktøy, og deretter gjennomgått og forbedret over tid. Hvis du er morsmålsbruker og noe høres unaturlig ut, kan du foreslå en rettelse på Crowdin eller kontakte oss på Discord eller e-post.",
+  "faqWaysToSupport": "Måter å støtte oss på:",
+  "translationHelpUsTranslate": "Hjelp oss å oversette",
+  "translationThankYou": "Takk!",
+  "translationThankYouContent": "En stor takk til alle de fantastiske oversetterne våre som hjelper oss med å gjøre appen tilgjengelig for flere mennesker over hele verden!",
+  "translationHelpTranslateContent": "Du kan hjelpe oss med å oversette appen på Crowdin. Hvis språket ditt ikke er tilgjengelig på Crowdin, kan du gjerne be om det på Discord-serveren vår. Tusen takk for hjelpen!",
+  "translationHelpTranslateButton": "Hjelp til med oversetting på Crowdin",
+  "translationCurrentTranslators": "Oversettere",
+  "filtersTimeFilters": "Tidsfiltre",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "Krigsinnstillinger",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Ytelse",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Avansert",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "Ingen aktive filtre",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "Viser de siste {count} krigene (standard)",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "Hurtigfiltre",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "Siste 30 dager",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "Kun 3 stjerner",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersFreshAttacks": "Førsteangrep",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Sesong",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Datointervall",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "Krigstype",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Rådhus",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "Angriper-RH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "Forsvarer-RH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Kun samme rådhus",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersDestructionPercentage": "Ødeleggelsesprosent",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersOptions": "Alternativer",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Kun førsteangrep",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Resultatgrense",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Min. posisjon",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Maks. posisjon",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Startdato",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "Sluttdato",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersYear": "År",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Måned",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Velg år",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "Alle kriger",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "chartsAttackPerformance": "Angrepsytelse etter RH-nivå",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Forsvarsytelse etter RH-nivå",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Rader: ditt RH | Kolonner: motstanderens RH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsGood": "Bra",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Utmerket",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "Ytelsesinnsikt",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for statistical performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "Filtrer forslag basert på stjernestatistikken din for å fremheve ytelsesmønstre",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
+  },
+  "generalExport": "Eksporter",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "Eksporter krigsstatistikk",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "Eksport vellykket!",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportDialogDesc": "Dette laster ned krigsstatistikken din som en Excel-fil med flere ark, inkludert samlet statistikk, detaljerte angrep og RH-analyse.",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "Genererer eksport...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "Eksportfunksjon kommer snart for klankrigsstatistikk",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "Ingen filtre brukt",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "Kunne ikke laste spillerdata",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "deepLinkInvalidPlayer": "Ugyldig spillerlenke.",
+  "@deepLinkInvalidPlayer": {
+    "description": "Shown when a player deep link does not include a valid tag"
+  },
+  "deepLinkInvalidClan": "Ugyldig klanlenke.",
+  "@deepLinkInvalidClan": {
+    "description": "Shown when a clan deep link does not include a valid tag"
+  },
+  "deepLinkFailedToOpenPlayer": "Kunne ikke åpne spiller.",
+  "@deepLinkFailedToOpenPlayer": {
+    "description": "Shown when a player deep link target could not be loaded"
+  },
+  "deepLinkFailedToOpenClan": "Kunne ikke åpne klan.",
+  "@deepLinkFailedToOpenClan": {
+    "description": "Shown when a clan deep link target could not be loaded"
+  },
+  "deepLinkUnknown": "Ukjent dyplenke.",
+  "@deepLinkUnknown": {
+    "description": "Shown when the app receives a deep link it does not understand"
+  },
+  "warAttacksDetailsTitle": "Angrepsdetaljer",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsAttackOrder": "Angrepsrekkefølge",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Varighet",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
+  },
+  "warAttacksDetailsAttacker": "Angriper",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Forsvarer",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Navn",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "Status",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "Angrep per medlem",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "Krigsstart",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "Krigsslutt",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "Klannivå",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "Totale stjerner",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "Ødeleggelse %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "Krigsinformasjon",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "Krigsresultater",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Spillere",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "Mislykkede angrep (0–1 stjerner)",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "Viser angrep som ikke klarte å få 2+ stjerner",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "Tapte perfekte angrep",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "Viser angrep som fikk 2 stjerner – mulige perfekte muligheter",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "Lave stjerner mot RH{thLevel}",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "Viser angrep med lavt stjerneantall mot RH{thLevel}",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "Sårbar mot RH{thLevel}",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "Viser når RH{thLevel}-angripere får mange stjerner mot deg",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "Lav CWL-ytelse",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for low CWL performance"
+  },
+  "performanceAnalysisCwlIssuesDesc": "Viser CWL-angrep med lavere stjernesnitt enn vanlige kriger",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for low CWL performance analysis"
+  },
+  "performanceAnalysisRandomWarIssues": "Lav ytelse i tilfeldig krig",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for low random war performance"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "Viser tilfeldige krigsangrep med lavere stjernesnitt enn CWL",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for low random war performance analysis"
+  },
+  "performanceAnalysisFreshOnly": "Analyse av førsteangrep",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "Analyserer ytelse kun på ferske baser",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "Nylig ytelse (30 dager)",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "Viser nylig ytelse for å identifisere nåværende trender",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "Høyinnsatsangrep",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "Viser angrep fra de 5 øverste krigsposisjonene",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "Opprydningsangrep",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "Viser angrep fra lavere krigsposisjoner",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingNeedsImprovement": "Trenger forbedring",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "Høy trestjernerate",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "Høy ødeleggelse",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "Jevn ytelse",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "Trestjernekonsistens",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "Samlet stjerneytelse",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "presetSuggestionCwlOnly": "Kun CWL",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "Tilfeldige kriger",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "Vennskapskriger",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "Kun {count} stjerner",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "Perfekte angrep",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "Mislykkede angrep",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "Kun RH{level}",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "Forrige uke",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "Forrige måned",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "Min forhåndsinnstilling",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "Egendefinert filter",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "Nylig filter",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
+  },
+  "generalError": "Feil",
+  "generalSuccess": "Suksess",
+  "generalFailed": "Mislyktes",
+  "generalMinimum": "Minimumsverdi",
+  "generalMaximum": "Maksimum",
+  "generalHigh": "Høy",
+  "generalLow": "Lav",
+  "generalPoor": "Svak",
+  "generalOpen": "Åpen",
+  "generalClosed": "Lukket",
+  "generalAvailable": "Tilgjengelig",
+  "authErrorUserCancelledDiscordLogin": "Brukeren avbrøt Discord-innlogging.",
+  "authErrorDiscordLoginFailed": "Discord-innlogging mislyktes. Prøv igjen.",
+  "authErrorEmailLoginFailed": "E-postinnlogging mislyktes. Sjekk påloggingsinformasjonen din.",
+  "authErrorEmailNotVerified": "E-postadressen din er ikke bekreftet. Sjekk e-posten din og skriv inn bekreftelseskoden.",
+  "authErrorEmailVerificationFailed": "E-postbekreftelse mislyktes. Tokenet kan være ugyldig eller utløpt.",
+  "authErrorDiscordLinkFailed": "Kunne ikke koble til Discord-kontoen. Den kan allerede være koblet til en annen konto.",
+  "authErrorEmailLinkFailed": "Kunne ikke koble til e-postkontoen. E-posten kan allerede være i bruk.",
+  "authErrorUserNotAuthenticated": "Brukeren er ikke autentisert. Logg inn på nytt.",
+  "apiErrorInvalidJsonResponse": "Noe gikk galt. Prøv igjen.",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Noe gikk galt. Sjekk inndataene dine.",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "Du er ikke autorisert. Logg inn på nytt.",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "Du har ikke tillatelse til å utføre denne handlingen.",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "Vi fant ikke det du lette etter.",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "For mange forespørsler. Prøv igjen senere.",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "Serveren er midlertidig utilgjengelig. Prøv igjen om litt.",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "Det oppstod en uventet feil. Prøv igjen.",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "Ingen internettforbindelse. Sjekk nettverket og prøv igjen.",
+  "apiErrorTimeout": "Forespørselen tok for lang tid. Prøv igjen.",
+  "apiErrorInvalidFormat": "Ugyldig svarformat. Prøv igjen.",
+  "apiErrorOperationFailed": "Vi kunne ikke fullføre forespørselen din. Prøv igjen.",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "Det ser ut til at du er frakoblet. Sjekk tilkoblingen og prøv igjen.",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "Forespørselen tok for lang tid. Prøv igjen.",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Noe gikk galt under behandling av dataene. Prøv igjen.",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "Vi kunne ikke laste appinnstillingene (feil {statusCode}). Prøv igjen.",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Feil ved lasting av konfigurasjon fra serveren",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "gameItemHousingSpace": "Husrom",
+  "gameItemAttackSpeed": "Angrepshastighet",
+  "gameItemAttackRange": "Angrepsrekkevidde",
+  "gameItemMovementSpeed": "Bevegelseshastighet",
+  "gameItemWardenWeight": "Voktervekt",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Voktervekten kan overstyre boligarealet og avgjør hvor sterkt Storvokteren prioriterer å følge en enhetsgruppe.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Helbredervekt",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Helbredervekten kan overstyre boligarealet når helbredere avgjør hvilke enheter de skal prioritere.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 troop for follow threshold} other{{count} troops for follow threshold}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Denne enheten bidrar ikke til vokterens terskel for å følge.",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
+  "gameItemUpgradeResource": "Oppgraderingsressurs",
+  "gameItemRarity": "Sjeldenhet",
+  "gameItemHero": "Helt",
+  "gameItemDps": "Skade per sekund",
+  "gameItemHitpoints": "Treffpoeng",
+  "gameItemHealOnActivation": "Helbredelse",
+  "gameItemTargets": "Mål",
+  "gameItemTargetsGround": "Bakke",
+  "gameItemTargetsAir": "Luft",
+  "gameItemFlying": "Flygende",
+  "gameItemUpgradeCost": "Oppgraderingskostnad",
+  "gameItemUpgradeTime": "Oppgraderingstid",
+  "gameItemRemainingToTownHallMax": "Til TH maks",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
+  "gameItemRemainingToGlobalMax": "Til global maks",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
+  "gameItemLevelsLeft": "{count} nivå(er) igjen",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemOverview": "Oversikt",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
+  "gameItemStats": "Statistikk",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
+  "gameItemNextUpgrade": "Neste oppgradering",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
+  "gameItemUpgradePlan": "Oppgrader plan",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
+  "gameItemUpgradeDataUnavailable": "Oppgraderingsdata er ikke tilgjengelig",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
+  "notifScopeSelected": "Valgt",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
+  "settingsPreferences": "Preferanser",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
+  "settingsNotificationsTitle": "Varsler",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
+  "settingsNotificationsSubtitle": "Velg varsler og send lokale testforhåndsvisninger.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
+  "settingsSupport": "Støtte",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
+  "settingsAbout": "Om",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
+  "settingsAccount": "Konto",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
+  "settingsSignedIn": "Logget på",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
+  "settingsAppearance": "Utseende",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
+  "settingsThemeSystem": "Systemstandard",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
+  "settingsThemeMatchDevice": "Match denne enheten",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
+  "settingsThemeLight": "Lys",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
+  "settingsThemeDark": "Mørk",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
+  "settingsThemeSelected": "Valgt",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
+  "notifNoAccountsLoadedYet": "Ingen tilknyttede kontoer er lastet inn ennå.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
+  "notifNoAccountsSelected": "Ingen kontoer er valgt",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
+  "notifAccountsSelected": "{count}-kontoer er valgt",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchRecent": "Nylig",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
+  "searchTabPlayers": "Spillere",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
+  "searchTabClans": "Klaner",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
+  "searchClear": "Klar",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
+  "warStatsRefreshSuccess": "Dataene ble oppdatert",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
+  "warStatsRefreshFailed": "Kunne ikke oppdatere data: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsFilterFailed": "Kunne ikke laste inn filtrerte data: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsExportFailed": "Eksport mislyktes: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportLabelPlayer": "Spiller",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
+  "exportLabelFormat": "Filformat",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
+  "exportLabelIncludes": "Inkluderer",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Statistikk, angrep, TH-analyse",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "Ingen brukerdata tilgjengelig",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Kontoer",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "Kunne ikke laste inn spillerdata.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "Kunne ikke laste inn klandata.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
+  "todoNoMatchingAccounts": "Ingen samsvarende kontoer",
+  "todoNoConfiguredAccounts": "Ingen gjøremålskontoer er konfigurert",
+  "todoNoLinkedAccounts": "Ingen tilknyttede kontoer",
+  "todoNoAccountsNeedAction": "Ingen kontoer trenger handling",
+  "todoNoCompletedAccounts": "Ingen fullførte regnskaper",
+  "todoNoBookmarkedAccounts": "Ingen bokmerkede kontoer",
+  "todoTryAnotherSearchOrFilter": "Prøv et annet søk eller filter.",
+  "clanJoinLeaveNoDataTitle": "Ingen delta/forlate-data",
+  "clanJoinLeaveNoDataBody": "Nylig listebevegelse vises her når sporingsdata er lastet inn.",
+  "clanJoinLeaveNoRecentMovementTitle": "Ingen nyere bevegelse",
+  "clanJoinLeaveNoRecentMovementBody": "Sammendraget er lastet inn, men hendelseslisten er tom.",
+  "capitalRaidMembersAttackLogFallback": "Medlemsliste returneres ikke for denne raidhelgen. Viser angrepsloggstatistikk i stedet.",
+  "capitalRaidMembersNoPlayerData": "Ingen data på spillernivå returneres for denne raidhelgen. API-en inkluderer bare distrikts- og motstandertotaler.",
+  "capitalRaidMembersNoIndividualData": "Ingen spillerliste eller individuelle angrep tilgjengelig for dette raidet.",
+  "dashboardNoLinkedAccountsTitle": "Ingen tilknyttede kontoer",
+  "dashboardNoLinkedAccountsBody": "Koble til en Clash-konto for å se angrep, hendelser og aktivitet her.",
+  "dashboardTodoHiddenTitle": "Ingen beretninger vises her",
+  "dashboardTodoHiddenBody": "Slå på et av alternativene for hjemmekortet (Oppgaver, Oppgraderingssporer, Rangert) for en konto i fanen Spillere for å se den her.",
+  "dashboardUpgradeTrackerNoData": "Åpne sporeren for å importere eller oppdatere oppgraderingsdata.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {må oppdateres} other {må oppdateres}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject}  {count, plural, one {Har opgaver tilbake} other {har opgaver tilbake}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject}  {count, plural, one {har angrep tilbake} other {har angrep tilbake}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Forventet",
+  "dashboardUpgradeTrackerBuilders": "Bygherrer",
+  "dashboardUpgradeTrackerLab": "Laboratorium",
+  "dashboardUpgradeTrackerPets": "Kjæledyr",
+  "dashboardUpgradeTrackerWalls": "Vægge",
+  "dashboardUpgradeTrackerVillage": "Landsby",
+  "dashboardRankedNoData": "Åpne Rangert liga for å se kontoens plassering.",
+  "dashboardRankedAccounts": "{loaded}/{total} Kontoer registreret",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "playersNoBookmarkedTitle": "Ingen bokmerkede spillere ennå",
+  "playersNoBookmarkedBody": "Åpne en spillerprofil og lagre den til senere.",
+  "playersNoLinkedBody": "Administrer kontoer fra kontooppsettskjermen.",
+  "navigationHome": "Hjem",
+  "drawerFollowers": "Følgere",
+  "drawerFollowersHelp": "Folk som har bokmerket en av de bekreftede tilknyttede kontoene dine.",
+  "drawerCalculators": "Kalkulatorer",
+  "drawerSubscription": "Abonnement",
+  "drawerUpgradeTracker": "Oppgrader Tracker",
+  "drawerBasesArmies": "Baser og hærer",
+  "drawerGameAssets": "Spilleiendeler",
+  "drawerManageAccounts": "Administrer kontoer",
+  "playersLinked": "Koblet",
+  "playersBookmarked": "Bokmerke",
+  "searchGlobalHint": "Søk etter spillere eller klaner",
+  "tooltipDecreaseMinimumMembers": "Reduser minimumsmedlemmer",
+  "tooltipIncreaseMinimumMembers": "Øk minimum antall medlemmer",
+  "tooltipDecreaseMaximumMembers": "Reduser maksimalt antall medlemmer",
+  "tooltipIncreaseMaximumMembers": "Øk maksimalt antall medlemmer",
+  "tooltipDecreaseMinimumClanPoints": "Reduser minimum klanpoeng",
+  "tooltipIncreaseMinimumClanPoints": "Øk minimum klanpoeng",
+  "tooltipDecreaseMinimumClanLevel": "Reduser minimum klannivå",
+  "tooltipIncreaseMinimumClanLevel": "Øk minimum klannivå",
+  "tooltipShowChart": "Vis diagram",
+  "tooltipShowTable": "Vis bord",
+  "tooltipDismissMessage": "Avvis meldingen",
+  "tooltipShowPassword": "Vis passord",
+  "tooltipHidePassword": "Skjul passord",
+  "tooltipRemoveAccount": "Fjern konto",
+  "calculatorsTitle": "Kalkulatorer",
+  "calculatorsSubtitle": "Planlegg skade mot bygningenes nåværende nivåer.",
+  "calculatorZapQuake": "Zap skjelv",
+  "calculatorFireball": "Ildkule",
+  "damageCalculatorSubtitle": "Sammenlign ett angrepsoppsett mot flere bygninger.",
+  "damageNoStaticDataTitle": "Skadesdata er ikke tilgjengelige",
+  "damageNoStaticDataBody": "Oppdater appen når de statiske spilldataene er ferdig lastet inn.",
+  "damageTownHall": "Rådhus",
+  "damageVerifiedAccountPrefill": "Bekreftet kontoforudindstilling",
+  "damageOverridesStayLocal": "Endringer her oppdaterer ikke spillerkontoen.",
+  "damageTargets": "Bygninger",
+  "damageAddBuilding": "Legg til bygning",
+  "damageRemoveBuilding": "Fjern bygning",
+  "damageNoTargetsBody": "Legg til minst én bygning for å sammenligne resultater.",
+  "damageHitpoints": "{hitpoints} HP",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Søk bygninger",
+  "damageNoBuildingsFound": "Ingen bygninger funnet",
+  "damageTryAnotherSearch": "Prøv et annet navn eller rådhusnivå.",
+  "damageAttackStack": "Manuel angrepsstabel",
+  "damageNoSourcesForTownHall": "Ingen støttede skadekilder er tilgjengelige på dette rådhuset.",
+  "damageCount": "Greve",
+  "damagePerUse": "{damage} skade per bruk",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% af max HP, der falder når den er stablet",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Lyn",
+  "damageSourceEarthquake": "Jordskjelv",
+  "damageSourceGiantArrow": "Kjempepil",
+  "damageSourceFireball": "Ildkule",
+  "damageSourceFlameFlinger": "Flammekaster ramt",
+  "damageSourceBalloonDeath": "Ballondødsskade",
+  "damageSourceRocketBalloonDeath": "Raketballonens dødsskade",
+  "damageResults": "Resultater",
+  "damageDestroyed": "Ødelagt",
+  "damageSurvives": "Overlever",
+  "damageResultSummary": "{damage} Skade · {remaining} HP tilbake",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Zap Quake-optimalisering",
+  "damageSpellCapacity": "Trylleformularkapasitet",
+  "damageZapQuakeUnavailable": "Lyn og Jordskjelv er ikke tilgjengelige på dette rådhuset.",
+  "damageZapQuakeUsesSelectedLevels": "Bruker Lyn på nivå {lightningLevel} og Jordskjelv på nivå {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Lyn og jordskjelv kan ikke beskadige dette lager.",
+  "damageNoValidZapQuake": "Ingen gyldig kombination passer til den valgte trylleformularkapasitet.",
+  "damageZapQuakeCombination": "{lightning} Zap + {earthquake} Jordskjelv · {capacity} Rum",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerTitle": "Oppgrader Tracker",
+  "upgradeTrackerSubtitle": "Gjenstående oppgraderingskostnad og tid.",
+  "linkedAccountLabel": "Tilknyttet konto",
+  "noLinkedPlayersLoadedTitle": "Ingen tilknyttede spillere lastet",
+  "noLinkedPlayersLoadedBody": "Legg til eller oppdater tilknyttede kontoer for å se totalsum for oppgradering.",
+  "playerOptionNotificationsTitle": "Varsler",
+  "playerOptionNotificationsSubtitle": "Få varsler for denne kontoen.",
+  "playerOptionNotificationsEnableMaster": "Slå først på varsler i Innstillinger.",
+  "playerOptionNotificationsVerifyFirst": "Bekreft kontoen for å aktivere varsler.",
+  "playerOptionNotificationsSubscriptionRequired": "Et abonnement kreves for bokmerkevarsler.",
+  "playerOptionNotificationsLimitReached": "Du har nådd grensen for bokmerkevarsler.",
+  "playerOptionShowTodoPageTitle": "Vis på gjøremålssiden",
+  "playerOptionShowTodoPageSubtitle": "Inkluder denne kontoen i den fullstendige oppgavelisten.",
+  "playerOptionShowTodoPageVerifyFirst": "Bekreft kontoen for å vise den på oppgavesiden.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Vis oppgraderingstracker på hjemmebane",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Sæt denne kontos oppgraderingsoversikt på Home.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Bekreft kontoen for å vise oppgraderingsfremdriften på Hjem.",
+  "playerOptionShowRankedHomeTitle": "Show rangeret på Home",
+  "playerOptionShowRankedHomeSubtitle": "Sæt denne kontos Ranked League-oversikt på Home.",
+  "playerOptionShowRankedHomeVerifyFirst": "Bekreft kontoen for å vise sammendraget for Rangert liga på Hjem.",
+  "playerOptionShowWarTabTitle": "Vis i fanen Krig",
+  "playerOptionShowWarTabSubtitle": "Inkluder denne kontoens klan i War-fanen.",
+  "bookmarkPlayerLoadFailed": "Kunne ikke laste inn bokmerket spiller.",
+  "warNoLinkedOrBookmarked": "Ingen lenkede eller bokmerkede klankriger å vise.",
+  "warWidgetRefreshData": "Oppdater krigsdata",
+  "warWidgetNoData": "Ingen krigsdata tilgjengelig",
+  "warWidgetLastUpdated": "Sist oppdatert: {time}",
+  "todoEventClanGames": "Klanleker",
+  "todoEventCwl": "CWL",
+  "todoEventSeasonEnds": "Sesong slutter",
+  "todoEventLeagueReset": "Liga tilbakestilt",
+  "todoEventRaidWeekend": "Raid helg",
+  "todoMagicDispatch": "Magisk utsendelse",
+  "todoMagicDispatchDescription": "Trykk for den siste ClashKing-oppdateringen",
+  "todoUseCodeClashKing": "Bruk koden ClashKing",
+  "todoUseCodeClashKingDescription": "Støtt prosjektet i Supercell Store",
+  "todoLegendAttacks": "Legendangrep",
+  "todoWarAttacks": "Krigsangrep",
+  "todoCwlAttacks": "CWL-angrep",
+  "gameSeasonPassShort": "Sesongpass",
+  "todoMockMaxedMainName": "Maks hoved",
+  "todoMockMaxedMainSubtitle": "TH17 · alt aktivt",
+  "todoMockMaxedMainStatus": "Aktiv nå · full daglig sjekkliste",
+  "todoMockLegend5Left": "5 igjen i dag",
+  "todoMockWar1Left": "1 igjen",
+  "todoMockCwl1LeftRound": "1 igjen denne runden",
+  "todoMockClanGames2700Left": "2,7 000 poeng igjen",
+  "todoMockPass850Left": "850 poeng igjen",
+  "todoMockWarAltName": "Krig Alt",
+  "todoMockWarAltSubtitle": "TH15 · krigsfokusert",
+  "todoMockWar2Left": "2 igjen",
+  "todoMockClanGames900Left": "900 poeng igjen",
+  "todoMockLegendPushName": "Legend-push",
+  "todoMockLegendPushSubtitle": "TH16 · daglige angrep",
+  "todoMockLegendPushStatus": "Aktiv for 1 time siden · legender og passfremgang",
+  "todoMockLegend2Left": "2 igjen i dag",
+  "todoMockOnPace": "i tempo",
+  "todoMockCaughtUpName": "fanget opp",
+  "todoMockCaughtUpSubtitle": "TH14 · ingen åpne oppgaver",
+  "todoMockCaughtUpStatus": "Aktiv i dag · ingen handling nødvendig",
+  "notifChooseAlerts": "Velg varsler",
+  "notifGroupLegendAttacks": "Angrep i Legende I",
+  "notifLegendAttacksDescription": "Angrepsresultater for bokmerkede kontoer med varsler aktivert i Legende I.",
+  "notifGroupLegendDefenses": "Forsvar i Legende I",
+  "notifLegendDefensesDescription": "Forsvarsresultater for kontoer med varsler aktivert i Legende I.",
+  "notifLeagueDefenseDescription": "Forsvarsresultater med angriper, stjerner, prosentandel og ligakontekst.",
+  "notifWarAttackOptionsDescription": "Krigsangrepsresultater, forsvarsvarsler og 5v5 angrepsfeedalternativer.",
+  "notifWarAlertsDescription": "Krig matchet, kampdagen startet og krigen tok slutt.",
+  "notifWarRemindersDescription": "Egendefinerte påminnelser før krigen slutter.",
+  "notifGroupRaidReminders": "Påminnelser om raidhelg",
+  "notifRaidRemindersDescription": "Få ett varsel om gjenværende angrep for alle de bekreftede kontoene dine i samme klan.",
+  "notifDefensesAgainstYourBase": "Forsvar mot basen din",
+  "notifDefensesAgainstYourBaseDescription": "Bare treff der denne kontoen forsvarer.",
+  "notifAllAttacks": "Alle angrep",
+  "notifAllAttacksDescription": "Hvert treff kun i 5v5-kriger.",
+  "notifThirtyMinutes": "30 minutter",
+  "notifFifteenMinutes": "15 minutter",
+  "notifSendTestNotification": "Send testvarsel",
+  "notifScheduledMessage": "Planlagt: {title}",
+  "generalStartDate": "Startdato",
+  "generalEndDate": "Sluttdato",
+  "warFiltersAllWars": "Alle kriger",
+  "warFiltersRandomWars": "Tilfeldige kriger",
+  "warFiltersCwlWars": "CWL-kriger",
+  "warFiltersFriendlyWars": "Vennskapskriger",
+  "warType": "Krigstype",
+  "warFiltersAnyTownHall": "Enhver TH",
+  "gameTownHallLevelShort": "RH{level}",
+  "warAttackerTownHall": "Angriper-RH",
+  "warDefenderTownHall": "Forsvarer-RH",
+  "warStatsFilterSameTownHallOnly": "Kun samme rådhus",
+  "warStatsFilterSameTownHallDescription": "Vis kun angrep der angriper og forsvarer har samme TH-nivå",
+  "generalAny": "Noen",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "Min stjerner",
+  "warStatsFilterMaxStars": "Max stjerner",
+  "warStatsFilterMinDestructionPercent": "Min. ødeleggelse %",
+  "warStatsFilterMaxDestructionPercent": "Maks ødeleggelse %",
+  "warStatsFilterMinPosition": "Min. posisjon",
+  "warStatsFilterMaxPosition": "Maks. posisjon",
+  "warStatsFilterFreshAttacksOnly": "Kun førsteangrep",
+  "warStatsFilterFreshAttacksDescription": "Vis kun de første angrepene på hver base",
+  "warStatsFilterResultLimit": "Resultatgrense",
+  "generalResultsCount": "{count} resultater",
+  "notifEventsDescription": "Klanleker, CWL, raidhelg og sesonghendelser.",
+  "notifAnnouncementsDescription": "Bannere i appen og fremtidige pushvarsler for ClashKing-oppdateringer.",
+  "notifUpgradeFinishesDescription": "Tropper, helter, kjæledyr, magier, utstyr og bygninger.",
+  "notifSupportReminderDescription": "Månedlig påminnelse om å støtte ClashKing.",
+  "notifDevicePushSetup": "Push-oppsett på enhet",
+  "notifAccountScope": "Kontoomfang",
+  "notifTestNotification": "Testvarsel",
+  "settingsAppIcon": "Appikon",
+  "settingsChanging": "Endrer...",
+  "settingsAddWarWidget": "Legg til krigs-widget",
+  "settingsWarWidgetLinkClanFirst": "Koble først til en konto i en klan",
+  "settingsWarWidgetClanCount": "{count} klan(er) tilgjengelig",
+  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
+  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
+  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
+  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
+  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
+  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
+  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "generalDiscord": "Uenighed",
+  "settingsDiscordConnectedSubtitle": "Bottilknyttede kontoer og Discord-data",
+  "settingsDiscordSyncSubtitle": "Synkroniser bottilknyttede kontoer og Discord-data",
+  "settingsConnected": "Tilkoblet",
+  "settingsClashKingAccount": "ClashKing-konto",
+  "settingsEmailConnectedSubtitle": "E-postinnlogging er tilkoblet",
+  "settingsEmailRecoverySubtitle": "Legg til e-postinnlogging for kontogjenoppretting",
+  "playerOpenInGame": "Åpne i spillet",
+  "playerBookmarkRemove": "Fjern spillerbokmerke",
+  "playerBookmarkAdd": "Bokmerk spiller",
+  "playerBestTrophies": "Beste trofeer",
+  "clanLoadFailed": "Kunne ikke laste klan.",
+  "gameItemLevels": "Nivåer",
+  "resourceDarkElixir": "Mørk eliksir",
+  "resourceBuilderElixir": "Byggereliksir",
+  "resourceBuilderGold": "Byggergull",
+  "resourceElixir": "Eliksir",
+  "resourceGold": "Gull",
+  "resourceGlowyOre": "Glødende malm",
+  "resourceStarryOre": "Stjernemalm",
+  "resourceShinyOre": "Skinnende malm",
+  "resourceGeneric": "Ressurs",
+  "seasonStatsGoldGrabbed": "Gull ranet",
+  "seasonStatsActivity": "Aktivitet",
+  "seasonStatsAttackWins": "Angrepsseire",
+  "seasonStatsTrophies": "Sesongtrofeer",
+  "todoSearchAccountsHint": "Søk kontoer",
+  "generalClearSearch": "Tøm søk",
+  "clanCapitalAvgRewards": "Snittbelønninger",
+  "clanCapitalAvgDistrictsPerWeek": "Snittdistrikter/uke",
+  "clanCapitalTopAttackers": "Beste angripere",
+  "clanCapitalPlayersTracked": "{count} spillere spores",
+  "clanCapitalDefenseOverTime": "Forsvar over tid",
+  "clanCapitalDistrictsTracked": "{count} distrikter spores",
+  "clanCapitalSelectedRaid": "Valgt raid",
+  "generalSummary": "Sammendrag",
+  "generalBreakdown": "Fordeling",
+  "clanPointsTitle": "Klanpoeng",
+  "clanBuilderBasePoints": "Byggerbasepoeng",
+  "clanType": "Klantype",
+  "clanRequiredTownHall": "Påkrevd rådhus",
+  "clanRequiredTownHallOnly": "Kun {level}+",
+  "clanCapitalPoints": "Hovedstadspoeng",
+  "todoAllAccounts": "Alle kontoer",
+  "todoCombinedAcrossAccounts": "Samlet gjøremål på tvers av kontoene dine",
+  "dashboardRankedCombinedAcrossAccounts": "Samlet rangering på tvers av kontoene dine",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Kombinert oppgraderingssporing på tvers av kontoene dine",
+  "todoPreviewAccount": "Forhåndsvisningskonto",
+  "todoLastActiveUnavailable": "Siste aktivitet utilgjengelig",
+  "todoActiveRelative": "Aktiv {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "fullført",
+  "todoPointsLeftShort": "{points} poeng igjen",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "{count} igjen",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "Alt er ajour for nå",
+  "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}t} hoursMinutes {{primary}t {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
+  "todoEventEndsIn": "Slutter om {duration}",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "Starter om {duration}",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "Trykk for gjenværende oppgraderingskostnad og tid",
+  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFurySubtitle": "Trykk deg gjennom juni 2026-oppdateringen",
+  "sideRankingsTitle": "Rangeringer",
+  "sideRankingsSubtitle": "Offisielle ledertavler pluss ClashKing-endepunkter.",
+  "sideRankingsLoadError": "Kunne ikke laste offisielle rangeringer.",
+  "sideRankingsEmptyTitle": "Ingen rangeringer returnert",
+  "sideRankingsEmptyBody": "Prøv en annen ledertavle eller plassering.",
+  "sideRankingsMockups": "ClashKing-mockups",
+  "rankingsBuilderBase": "Byggerbase",
+  "rankingsTownHall": "Rådhus",
+  "rankingsRankedLeague": "Rangeret liga",
+  "rankingsClanCapital": "Klanhovedstad",
+  "rankingsDonations": "Donasjoner",
+  "rankingsWarWins": "Krigsseire",
+  "rankingsWinStreak": "Sejrsrække",
+  "rankingsCurrent": "Gjeldende",
+  "rankingsWorldwide": "Verden over",
+  "rankingsSelectLocation": "Velg et sted",
+  "rankingsSearchLocations": "Søk etter steder eller landskoder",
+  "rankingsWorldwideUnavailable": "Velg en region eller et land til denne leaderboard.",
+  "rankingsLocationsLoadFailed": "Hele stedslisten kunne ikke lastes inn. Verdensomspennende er fortsatt tilgjengelig der det støttes.",
+  "rankingsSnapshotDate": "Snapshot-dato",
+  "rankingsSource": "Kilde",
+  "rankingsOfficialSource": "Officiel Clash API",
+  "rankingsResults": "Resultater",
+  "rankingsTopCount": "Top {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Intet lagret snapshot",
+  "rankingsNoSnapshotBody": "Det er ikke lagret noe rangeringsøyeblikksbilde for {date}. Velg en annen dato eller gå tilbake til Gjeldende.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Spilleren kunne ikke lastes inn.",
+  "rankingsClanLoadFailed": "Klanen kunne ikke lastes inn.",
+  "sideStatsTitle": "Statistikk",
+  "sideStatsSubtitle": "Ledertavlestatistikk fra offisielle Clash API-flater.",
+  "sideStatsLoadError": "Kunne ikke laste inn kampintelligens.",
+  "statsOverview": "Oversikt",
+  "statsArmies": "Hærer",
+  "statsItems": "Gjenstander",
+  "statsWar": "Krig",
+  "statsCwl": "CWL",
+  "statsRanked": "Rangeret",
+  "statsDateRange": "Datointerval",
+  "statsDateRangeHint": "Velg opptil 90 dager",
+  "statsDateRangeTooLong": "Velg en datoperiode på 90 dager eller mindre.",
+  "statsUpdated": "Ferske data",
+  "statsNoDataTitle": "Ingen kampdata ennå",
+  "statsNoDataBody": "Prøv en bredere datoperiode eller mindre restriktive filtre.",
+  "statsAddItemsTitle": "Velg elementer å analysere",
+  "statsAddItemsBody": "Legg til tropper, trylleformler, helter, kjæledyr eller utstyr, og kjør deretter søket.",
+  "statsGlobalCounts": "Globalt antall",
+  "statsPerformance": "Ytelse",
+  "statsSamples": "Eksempler",
+  "statsUsage": "Bruk",
+  "statsAverageStars": "Gjennomsnittlige stjerner",
+  "statsAverageDestruction": "Gjennomsnittlig ødeleggelse",
+  "statsStarRates": "Stjernefrekvens",
+  "statsThreeStarRate": "Tre-stjerners rate",
+  "statsDailyTrend": "Daglig trend",
+  "statsPlayers": "Spillere",
+  "statsClans": "Klaner",
+  "statsPlayersInWar": "Spillere i krig",
+  "statsClansInWar": "Klaner i krig",
+  "statsPlayersInLegends": "Spillere i Legends",
+  "statsWarsStored": "Kriger lagret",
+  "statsJoinLeaves": "Bli med i / forlat arrangementer",
+  "statsSearchArmies": "Søk i nøyaktige komposisjoner",
+  "statsExactComposition": "Nøyaktig sammensetning",
+  "statsArmyShareCode": "Delingskode for hær",
+  "statsMinimumSample": "Minimumsprøve",
+  "statsSortBy": "Sorter etter",
+  "statsIncludeItems": "Inkluder elementer",
+  "statsExcludeItems": "Ekskluder elementer",
+  "statsItemId": "Vare-ID eller lagret navn",
+  "statsItemType": "Varetype",
+  "statsTroop": "Troppen",
+  "statsSpell": "Stav",
+  "statsHero": "Helt",
+  "statsPet": "Kjæledyr",
+  "statsEquipment": "Utstyr",
+  "statsOwningHero": "Eierhelten",
+  "statsAddItem": "Legg til element",
+  "statsAnalyzeItems": "Analyser elementer",
+  "statsCompositionShare": "Komposisjonsandel",
+  "statsNoLevels": "Hærens poster inneholder ikke elementnivåer.",
+  "statsRankedCompositionOnly": "Komposisjonsdata kommer fra rangerte kamplogger; Krig og CWL-prestasjon forblir atskilt.",
+  "statsTownHall": "Rådhus",
+  "statsOpponentTownHall": "Motstanders rådhus",
+  "statsEqualTownHalls": "Like rådhus",
+  "statsLeagueTier": "Liganivå",
+  "statsLegendLeagueOne": "Legendeliga 1",
+  "statsCwlLeague": "CWL-liga",
+  "statsLeagueBronze": "Bronse",
+  "statsLeagueSilver": "Sølv",
+  "statsLeagueGold": "Gull",
+  "statsLeagueCrystal": "Krystall",
+  "statsLeagueMaster": "Mester",
+  "statsLeagueChampion": "Mester",
+  "statsAllCwlLeagues": "Alle CWL-ligaer",
+  "statsCwlSeasons": "CWL-sesonger",
+  "statsCwlSeasonsHint": "ÅÅÅÅ-MM, atskilt med komma",
+  "statsApplyFilters": "Bruk filtre",
+  "statsRefresh": "Opfrisk data",
+  "statsRegularWarOnly": "Kun vanlige kriger; friendly wars og CWL er ekskludert.",
+  "statsRankedRequired": "Rådhuset og ett liganivå er påkrevd.",
+  "statsSeasonBreakdown": "Sesongoversikt",
+  "sideTopScore": "Beste poengsum",
+  "sideTop200Avg": "Top 200-snitt",
+  "sideBasesArmiesTitle": "Baser og hærer",
+  "sideBasesArmiesSubtitle": "Discord-lagrede oppsett og hærlenker.",
+  "sideBotSyncTarget": "Mål for botsynkronisering",
+  "sideBotSyncTargetBody": "Boten lagrer allerede baser og hærer i Discord-profilen. Denne siden er klar for den synkroniserte datalasten.",
+  "sideSavedBases": "Lagrede baser",
+  "sideWarBaseSlots": "Krigsbaseplasser",
+  "sideWarBaseSlotsBody": "Rådhus, basetype, lenke og sist oppdatert.",
+  "sideLegendBaseSlots": "Legend-baseplasser",
+  "sideLegendBaseSlotsBody": "Hurtigkopi pluss kontotilknytning.",
+  "sideSavedArmies": "Lagrede hærer",
+  "sideArmyLinks": "Hærlenker",
+  "sideArmyLinksBody": "Sammensetning, magier, beleiring, notater og delingslenke.",
+  "sideGameAssetsTitle": "Spilleiendeler",
+  "sideGameAssetsSubtitle": "Hostede ClashKing-ressurser, gruppert etter mappe.",
+  "gameAssetsLoadError": "Spillressursene kunne ikke lastes inn",
+  "gameAssetsEmptyTitle": "Ingen spillressurser er tilgjengelige",
+  "gameAssetsEmptyBody": "Det publiserte manifestet inneholdt ingen støttede bilder.",
+  "gameAssetsOneImage": "1 bilde",
+  "gameAssetsImageCount": "{count} Bilder",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Søk i denne kategori",
+  "gameAssetsAllFormats": "Alle formater",
+  "gameAssetsOneResult": "1 resultat",
+  "gameAssetsResultCount": "{count} resultater",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Ingen matchende bilder",
+  "gameAssetsNoResultsBody": "Prøv et annet søk eller filformat.",
+  "gameAssetsLongPressHint": "Trykk og hold for å kopiere den publiserte URL-en",
+  "gameAssetsCopyUrl": "Kopier URL",
+  "gameAssetsCopyPath": "Kopiersti",
+  "gameAssetsUrlCopied": "Ressurs-URL kopiert",
+  "gameAssetsPathCopied": "Ressursstien er kopiert",
+  "gameAssetsCopyError": "Kunne ikke kopiere asset-detaljerne.",
+  "gameAssetsShare": "Del",
+  "gameAssetsShareError": "Kunne ikke dele denne ressource.",
+  "gameAssetsSave": "Lagre",
+  "gameAssetsSaving": "At redde...",
+  "gameAssetsSaved": "Asset reddet.",
+  "gameAssetsSavedTo": "Asset lagret til {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Kunne ikke redde dette aktiv.",
+  "sideZapQuakeTitle": "{zaps} lyn + 1 jordskjelv",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "{quakeDamage} jordskjelvskade, {lightningDamage} per lyn",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "Bygnings-HP",
+  "sideLightningLevel": "Lynnivå",
+  "sideEarthquakeLevel": "Jordskjelvnivå",
+  "sideWithoutEarthquake": "Uten jordskjelv",
+  "sideLightningCount": "{count} lyn",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "Ildkule + 1 jordskjelv",
+  "sideAddSupportDamage": "Legg til støtteskade",
+  "sideFireballQuakeSubtitle": "{fireballDamage} ildkuleskade, {hpLeft} HP igjen etter jordskjelv",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "Ildkulenivå",
+  "sideQuakePressure": "Jordskjelvpress",
+  "sideQuakeSpellCount": "{count} jordskjelvmagi(er)",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "Plassering",
+  "sideFilter": "Filtrer",
+  "sideRefresh": "Oppdater",
+  "sideOfficialClashLeaderboard": "Offisiell Clash-ledertavle",
+  "sideAllTownHallsShort": "Alle RH",
+  "sideDecrease": "Reduser",
+  "sideIncrease": "Øk",
+  "sideLevel": "Nivå {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingPlayerTrophies": "Spillertrofeer",
+  "rankingPlayerTrophiesHeading": "Rangering av spillertrofeer",
+  "rankingPlayerBuilder": "Spillerbygger",
+  "rankingPlayerBuilderHeading": "Rangering av spilleres byggerbase",
+  "rankingClanTrophies": "Klantrofeer",
+  "rankingClanTrophiesHeading": "Rangering av klantrofeer",
+  "rankingClanBuilder": "Klanbygger",
+  "rankingClanBuilderHeading": "Rangering av klaners byggerbase",
+  "rankingClanCapital": "Klanhovedstad",
+  "rankingClanCapitalHeading": "Rangering av klanhovedstad",
+  "assetFolderEquipment": "Utstyr",
+  "assetFolderLeagues": "Ligaer",
+  "assetFolderResources": "Ressurser",
+  "assetFolderStickers": "Klistremerker",
+  "upgradeSectionHeroes": "Helter",
+  "upgradeSectionTroops": "Tropper",
+  "upgradeSectionSpells": "Formler",
+  "upgradeSectionPets": "Kjæledyr",
+  "upgradeSectionEquipment": "Utstyr",
+  "sideMockupSource": "Kilde",
+  "sideMockupMode": "Modus",
+  "sideMockupPreview": "Forhåndsvisning",
+  "sideMockupRows": "Rader",
+  "sideMockupRowsValue": "5 forhåndsvisninger",
+  "endpointLeagueTop200": "Liga topp 200",
+  "endpointLeagueTop200Preview": "Legendeliga · 5 742 trofeer",
+  "endpointTownhallTop200": "Rådhus topp 200",
+  "endpointTownhallTop200Preview": "RH17 · Global spillertavle",
+  "endpointClanDonations": "Klandonasjoner",
+  "endpointClanDonationsPreview": "USA · ukentlige klantotaler",
+  "endpointClanWarWins": "Klan-krigsseire",
+  "endpointClanWarWinsPreview": "Internasjonalt · krigsseire gjennom tidene",
+  "endpointTop200ArmyUsage": "Hærbruk topp 200",
+  "endpointTop200ArmyUsagePreview": "Kamp logger · bruk av tropper og magier",
+  "endpointStateTop200": "Top 200",
+  "endpointStateWeekly": "Ukentlig",
+  "endpointStateUsage": "Bruk",
+  "notifGroupReminders": "Påminnelser",
+  "notifGroupProgress": "Fremdrift",
+  "notifLeagueDefense": "Ligaforsvar",
+  "notifLeagueDefenseResult": "Resultat for ligaforsvar",
+  "notifLeagueTriple": "Ligatrippel",
+  "notifLeagueAttackBody": "Lord Clasher angrep {player} • {percent}% • {stars} stjerner • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "Krigsforsvar",
+  "notifWarAttackOnTh": "Krigsangrep på RH{th}",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} angrep {player} • {percent}% • {stars} stjerner • {clan}-forsvar",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "5v5-krigsfeed",
+  "notifWarAttackResult": "Resultat for krigsangrep",
+  "notifWarAttackResultBody": "{clan} angrep Pine Riders RH{th} • 100% • 3 stjerner",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "Krig funnet",
+  "notifWarMatchedBody": "{clan} ble matchet med Pine Riders. Forberedelsesdagen startet.",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "Krigen startet",
+  "notifBattleDayStarted": "Kampdagen startet",
+  "notifWarStartedBody": "{clan} vs Pine Riders er live. Lykke til.",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "Krigen er avsluttet",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Sluttresultatene er tilgjengelige.",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "Krigspåminnelse: 1 t",
+  "notifWarReminder30m": "Krigspåminnelse: 30 min",
+  "notifWarReminder15m": "Krigspåminnelse: 15 min",
+  "notifOneHourLeft": "1 time igjen",
+  "notifThirtyMinutesLeft": "30 minutter igjen",
+  "notifFifteenMinutesLeft": "15 minutter igjen",
+  "notifRemainingWarAttacksBody": "{player} har krigsangrep igjen. {time}.",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} startet",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} kan begynne å tjene {name}-poeng.",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} kan begynne forberedelsen til Klan-krigsliga.",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} kan starte hovedstadsraidangrep.",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "Sesongstart",
+  "notifNewSeasonStarted": "Ny sesong startet",
+  "notifSeasonStartedBody": "{league}-sesongen har startet for {player}.",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "Spesialhendelse",
+  "notifNewEventLive": "En ny hendelse er live",
+  "notifNewClashEventBody": "En ny Clash-hendelse er tilgjengelig.",
+  "notifSupportClashKing": "Støtt ClashKing",
+  "notifMonthlySupportBody": "Månedlig støtte hjelper med å holde ClashKing tilgjengelig og bedre. Takk.",
+  "notifUpgradeFinished": "Oppgradering fullført",
+  "notifUpgradeReadyTitle": "{name} er klar",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "Nivå {level} fullført for {player}. Oppgradering fullført.",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "Kunne ikke laste klandata: {error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "Standard",
+  "appIconChristmas": "Jul",
+  "appIconBlackWhite": "Svart-hvitt",
+  "appIconDarkMode": "Mørk modus",
+  "generalMembersCount": "{count} medlemmer",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "bokmerket",
+  "clanLevelValue": "nivå {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "Rang {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "Runde {round}",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "RH{level}",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Supercells retningslinjer for faninnhold",
+  "upgradeTrackerPlan": "Plan",
+  "upgradeTrackerUpgrades": "Oppgraderinger",
+  "upgradeTrackerCollection": "Samling",
+  "upgradeTrackerChooseAccount": "Velg konto",
+  "upgradeTrackerSwitchAccount": "Bytt konto, {account}",
+  "@upgradeTrackerSwitchAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerShare": "Delingstracker",
+  "upgradeTrackerPasteJson": "Lim inn konto JSON",
+  "upgradeTrackerImportTitle": "Importer kontodata",
+  "upgradeTrackerImportDescription": "Lim inn den rå konto-JSON-en. Den blir værende på denne enheten.",
+  "upgradeTrackerAccountJson": "Konto-JSON",
+  "upgradeTrackerPasteClipboard": "Klip på clipboard",
+  "upgradeTrackerImportAction": "Importkonto",
+  "upgradeTrackerImportSuccess": "{player} ble importert på denne enheten.",
+  "@upgradeTrackerImportSuccess": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerImportFailed": "Kunne ikke importere kontodata: {error}",
+  "@upgradeTrackerImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSnapshotUnreadable": "Kontodata kunne ikke leses",
+  "upgradeTrackerTryAgain": "Prøv igjen",
+  "upgradeTrackerNoDataTitle": "Ta med landsbyfremdriften din til ClashKing",
+  "upgradeTrackerNoDataBody": "Kopier kontodata-JSON-en fra Clash of Clans, og lim den deretter inn fra utklippstavlen. Dataene dine blir værende på denne enheten.",
+  "upgradeTrackerNoDataLocation": "I Clash of Clans, åpne Innstillinger > Flere Innstillinger. Account Data JSON ligger direkte under afsnittet API Token.",
+  "upgradeTrackerOpenMoreSettings": "Åpne flere innstillinger i Clash of Clans",
+  "upgradeTrackerNoLinkedAccount": "Koble til en Clash of Clans-konto, før du importerer dens kontodata.",
+  "upgradeTrackerUpdatedJustNow": "Oppdatert akkurat nå",
+  "upgradeTrackerUpdatedMinutesAgo": "Oppdateret {count} For minutter siden",
+  "@upgradeTrackerUpdatedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedHoursAgo": "Oppdateret {count} For timer siden",
+  "@upgradeTrackerUpdatedHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedOn": "Oppdateret {date}",
+  "@upgradeTrackerUpdatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSearchUpgrades": "Søkeoppgraderinger",
+  "upgradeTrackerSearchCollection": "Søkesamling",
+  "upgradeTrackerShowFilters": "Showfiltre",
+  "upgradeTrackerHideFilters": "Skjul filtre",
+  "upgradeTrackerFilterAll": "Alle",
+  "upgradeTrackerFilterOwned": "Ejet",
+  "upgradeTrackerFilterMissing": "Savnet",
+  "upgradeTrackerAllVillages": "Alle landsbyer",
+  "upgradeTrackerHomeVillage": "Hjembyen",
+  "upgradeTrackerBuilderBase": "Byggerbase",
+  "upgradeTrackerNoMatchingItems": "Ingen matchende genstande",
+  "upgradeTrackerOwnedCount": "{owned} af {total} Ejet",
+  "@upgradeTrackerOwnedCount": {
+    "placeholders": {
+      "owned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLevelsLeft": "{count} Venstre nivåer",
+  "@upgradeTrackerLevelsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemCount": "{count} Genstande",
+  "@upgradeTrackerItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCollected": "Samlet",
+  "upgradeTrackerMissing": "Mangler",
+  "upgradeTrackerDataAge": "Kontodata",
+  "upgradeTrackerBuildersCount": "{count} Bygherrer",
+  "@upgradeTrackerBuildersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLaboratory": "Laboratorium",
+  "upgradeTrackerPets": "Kjæledyr",
+  "upgradeTrackerWalls": "Vægge",
+  "upgradeTrackerEquipment": "Utstyr",
+  "upgradeTrackerLevelsRemaining": "{count} Gjenværende nivåer",
+  "@upgradeTrackerLevelsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCompletesOn": "Fuldfører {date} · {duration}",
+  "@upgradeTrackerCompletesOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} igjen",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Nå · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Nivå {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Nivå {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, nivå {level}, fra {start} til {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerHeaderComplete": "Komplet",
+  "upgradeTrackerHeaderLevelsLeft": "Venstre nivåer",
+  "upgradeTrackerHeaderActive": "Aktiv",
+  "upgradeTrackerHeaderFinishes": "Fullføres",
+  "upgradeTrackerHeaderOwned": "Ejet",
+  "upgradeTrackerHeaderUpdated": "Oppdateret",
+  "homeCouldNotLoadTitle": "Hjem kunne ikke lastes inn",
+  "homeVerifiedAccountRequiredTitle": "Bekreft en tilknyttet konto",
+  "homeVerifiedAccountRequiredBody": "Hjem krever minst én bekreftet Clash-konto. Koble til en konto eller bekreft en eksisterende kobling for å fortsette.",
+  "homeVerifyAccountAction": "Koble til eller bekreft konto",
+  "playerOptionVerifyAccountBody": "Denne kontoen er ikke bekreftet ennå. Bekreft den for å låse opp alternativene Oppgaver, Rangert og Oppgraderingssporer nedenfor.",
+  "homeUpcomingTitle": "Kommende",
+  "homeUpcomingSubtitle": "De neste tidsfristene og fullførte oppgraderingene på tvers av kontoene dine.",
+  "homeCollapseSection": "Sammenstyrtningssektion",
+  "homeExpandSection": "Udvid sektionen",
+  "homeUpcomingEmpty": "Ingen sporede tidsfrister nærmer seg. Dra for å oppdatere hvis kontoen nettopp ble koblet til.",
+  "homeRecentlyCompleted": "Ferdiggjort",
+  "homeTodoTitle": "At gøre",
+  "homeTodoSubtitle": "Kontodetaljer som krever handling, sortert etter hvor mye de haster.",
+  "homeTodoEmpty": "Ingen bekreftet konto trenger oppmerksomhet akkurat nå.",
+  "homeClanless": "Ingen klan",
+  "homeNeedsAttention": "Krever oppmerksomhet",
+  "homeCaughtUp": "Oppdateret",
+  "homeTrackingDataPending": "Denne bekreftede spilleren er nylig sporet eller inaktiv, så detaljer som krever handling er ikke tilgjengelige ennå.",
+  "homeUpgradeUnavailable": "Oppgraderingsdata kunne ikke lastes inn. De andre kontodataene dine er fortsatt oppdaterte.",
+  "homeUpgradeNotImported": "Ingen oppgraderingsdata ennå. Importer JSON-en til denne bekreftede kontoen i Oppgraderingssporeren.",
+  "homeUpgradeActiveCount": "{count} Aktive oppgraderinger",
+  "@homeUpgradeActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeIdle": "Ingen aktive oppgraderingstimere ble funnet. Byggere kan være inaktive.",
+  "homeDone": "Ferdig",
+  "homeRemainingCount": "{count} igjen",
+  "@homeRemainingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeVerifiedPlayerDataMissing": "Denne koblingen er bekreftet, men spillerprofilen er ikke tilgjengelig. Dra for å oppdatere, eller vent til sporingen begynner.",
+  "homeSinceAwayTitle": "Siden væk",
+  "homeSinceAwayFirstVisit": "Dette er det første sporede hjemmebesøket, så eldre aktivitet markeres ikke som ny.",
+  "homeSinceAwaySubtitle": "Nye markører sammenlignes med forrige gang du åpnet Hjem kl. {time}.",
+  "@homeSinceAwaySubtitle": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSinceAwayEmpty": "Ingen aktivitet for innmelding, utmelding eller spillerhistorikk er tilgjengelig for disse bekreftede spillerne og klanene.",
+  "homeNewMarker": "Ny",
+  "homePulseTitle": "Din puls",
+  "homePulseSubtitle": "Din personlige 30-dagersform i krig og CWL, rangert spill og tilgjengelige globale rangeringer.",
+  "homePulseEmpty": "Prestasjonshistorikk eller rangeringer er ikke tilgjengelige ennå. Nylig sporede og inaktive kontoer fylles ut etter hvert som data kommer inn.",
+  "homeToday": "I dag",
+  "homeYesterday": "I går",
+  "homeEarlier": "Tidligere",
+  "homeRankedAttacks": "Rangerede angrep",
+  "homeSeasonPass": "Sæsonpas",
+  "homeUpcomingAccountDetail": "{player} har {count} Rest.",
+  "@homeUpcomingAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeDataNeeded": "Legg til oppgraderingsdata",
+  "homeUpgradeDataNeededDetail": "Import {player}s konto JSON til at spore oppgraderingstimere og inaktive byggere.",
+  "@homeUpgradeDataNeededDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeIdleTitle": "Bygherrer kan være inaktive",
+  "homeUpgradeIdleDetail": "{player} har oppgraderingsdata, men ingen aktive timere ble funnet.",
+  "@homeUpgradeIdleDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeAccountDetail": "Oppgraderingstimer for {player}.",
+  "@homeUpgradeAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseWarAverage": "30-dagers krigsgjennomsnitt",
+  "homePulseCwlAverage": "30-dagers CWL-gjennomsnitt",
+  "homePulseRankedToday": "30-dagers rangeret",
+  "homePulseRankedValue": "{count} Angrep · {trophies} Trofeer",
+  "@homePulseRankedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseBestGlobalRank": "Beste globale spillerrang",
+  "homeActivityJoined": "Sluttede sig til",
+  "homeActivityLeft": "Venstre",
+  "homeActivityAClan": "En klan",
+  "statsMeta": "Meta",
+  "statsBattle": "Slag",
+  "statsWorld": "Verden",
+  "statsHeaderSubtitle": "Utforsk kampprestasjoner og verdenen vi følger.",
+  "statsPreview": "Forhåndsvisning",
+  "statsTownHallDistribution": "Rådhusets distribusjon",
+  "statsBuilderHallDistribution": "Builder Hall distribusjon",
+  "statsLeagueDistribution": "Rangert ligadistribusjon",
+  "statsTrackedPlayers": "Nåværende sporet spillerpopulasjon",
+  "statsTrackedClans": "Nåværende sporet klanpopulasjon",
+  "statsCwlLeagueDistribution": "CWL-ligadistribusjon",
+  "statsCapitalLeagueDistribution": "Capital league distribusjon",
+  "statsTrackedLocations": "Sporte klanplasseringer",
+  "statsLocationCountHelp": "Land og lokasjoner representert av sporede klaner.",
+  "statsLeagueId": "Liga {id}",
+  "@statsLeagueId": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "statsEquipmentAdoption": "Anvendelse av utstyr etter nivå",
+  "statsEquipmentAdoptionPreview": "Eksempellayout inntil samlede eier- og nivåantall er tilgjengelige.",
+  "statsExperienceDistribution": "Spiller XP-distribusjon",
+  "statsExperienceDistributionPreview": "Eksempellayout inntil intervallene for XP-histogrammet er tilgjengelige.",
+  "statsCwlRosterSizes": "CWL-listestørrelser",
+  "statsCwlRosterSizesPreview": "Eksempelfordeling 15v15 / 30v30 inntil antall for gruppestørrelser er tilgjengelige.",
+  "statsWarsOverTime": "Kriger over tid",
+  "statsWarsOverTimePreview": "Eksempel på daglig trend frem til det kanoniske endepunktet for antall er tilkoblet.",
+  "statsStrategyLenses": "Strategilinser",
+  "statsStrategyLensesBody": "Navngivne strategier bruker overlappende, versjonerte regler. Nøyaktige belastninger forblir separate, slik at etiketten aldri later som om de beviser kampintensjon.",
+  "statsQueenCharge": "Dronningsladning",
+  "statsQueenChargeRule": "Archer Queen + minst 5 healere",
+  "statsSuperBowlerCore": "Super Bowler-kjerne",
+  "statsSuperBowlerRule": "Minst 4 Super Bowlers",
+  "statsRootRiderCore": "Root Rider-kjerne",
+  "statsRootRiderRule": "Minst 4 Root Riders",
+  "statsPatternDiscoveryBody": "Automatisk oppdagelse bør vise lignende loadout-klynger for navngivning av mennesker; det bør ikke utlede taktikk fra komposisjon alene.",
+  "statsUsageVsThreeStar": "Bruk kontra tre-stjerners rate",
+  "statsTapPointForLoadout": "Trykk på et punkt for å inspisere den nøyaktige belastningen og prøven.",
+  "statsExactLoadouts": "Eksakt utlasting",
+  "statsCustomLens": "Tilpasset linse",
+  "statsCustomLensBody": "Velg nødvendige mengder, utelukkelser, rådhus, liga, prøvegulv og sorteringsrekkefølge. Dette kjører mot reelle belastninger, men er ikke lagret ennå.",
+  "rankedLeagueTitle": "Rangeret liga",
+  "rankedLeagueAbout": "Om rangeret liga",
+  "rankedLeagueAboutBody": "Denne siden bruker den offisielle ukentlige gruppen i Rangert liga, kamplogger og periodehistorikk. Gjeldende resultater kan endres frem til perioden slutter.",
+  "rankedLeagueOverview": "Oversikt",
+  "rankedLeagueRanking": "Rangering",
+  "rankedLeagueGroupRank": "Grupperang",
+  "rankedLeagueTrophies": "Trofeer",
+  "rankedLeaguePlayers": "{count} Spillere",
+  "@rankedLeaguePlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBest": "Beste: {value}",
+  "@rankedLeagueBest": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueNoGroup": "Ingen aktiv gruppe",
+  "rankedLeagueCurrentPeriod": "Gjeldende periode",
+  "rankedLeagueLiveGroupSubtitle": "Liveresultater fra spillerens offisielle gruppe i Rangert liga.",
+  "rankedLeagueBattles": "Kamper",
+  "rankedLeagueAttacksPlayed": "Angrep spillet",
+  "rankedLeagueAttackRecord": "Angrepsresultater",
+  "rankedLeagueDefenseRecord": "Forsvarsrekord",
+  "rankedLeagueWinsLosses": "Seire - tap",
+  "rankedLeagueDefensesLogged": "{count} Forsvar logget",
+  "@rankedLeagueDefensesLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueRecentBattles": "Nylige kamper",
+  "rankedLeagueRecentBattlesSubtitle": "Detaljerte resultater er tilgjengelige for den aktive ukentlige gruppen.",
+  "rankedLeagueAttacks": "Angrep",
+  "rankedLeagueDefenses": "Forsvar",
+  "rankedLeagueNoBattles": "Ingen kamp er registrert ennå.",
+  "rankedLeagueGroupRanking": "Grupperangering",
+  "rankedLeagueRankingSubtitle": "Livestilling for den gjeldende gruppen. Spilleren din er markert.",
+  "rankedLeagueJumpToMyRank": "Spring til min rang",
+  "rankedLeagueLastPeriod": "Sidste periode",
+  "rankedLeagueBestGroupRank": "Beste rang",
+  "rankedLeaguePeriodHistory": "Periodens historie",
+  "rankedLeagueHistorySubtitle": "Offisielle sammendrag for fullførte ukentlige perioder.",
+  "rankedLeagueBestRankedResults": "Beste rangerede resultater",
+  "rankedLeagueAllRankedResults": "Alle rangerede resultater",
+  "rankedLeaguePeriods": "Perioder",
+  "rankedLeaguePeriodStats": "Periodestatistik",
+  "rankedLeagueTrophyProgress": "Troféutvikling per kamp",
+  "rankedLeagueTrophiesByPeriod": "Trofeer per periode",
+  "rankedLeagueBattleCount": "{count} Slag",
+  "@rankedLeagueBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBattleProgress": "{count} / {max} Slag",
+  "@rankedLeagueBattleProgress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueTrophyAverage": "{trophies} Trofeer · {average} AVG.",
+  "@rankedLeagueTrophyAverage": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueByPeriod": "Efter periode",
+  "rankedLeaguePeriodTab": "Punktum",
+  "rankedLeagueAverage": "Gjennomsnitt",
+  "rankedLeagueRemaining": "Gjenstår",
+  "rankedLeagueSevenDayPeriod": "7-dagers Ranked League-periode",
+  "rankedLeagueEquipmentUnavailable": "Hær og utstyr er ikke inkludert i de offisielle kamploggene for Rangert liga ennå.",
+  "rankedLeagueBattleDetailsUnavailable": "Detaljerte kamplogger er ikke tilgjengelige for denne perioden.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Bare det offisielle periodesammendraget er tilgjengelig for denne eldre perioden.",
+  "rankedLeagueStarBreakdownUnavailable": "API-et oppgir det totale antallet stjerner, men ikke den detaljerte stjernefordelingen for denne perioden.",
+  "notifAudienceSectionTitle": "Varselmottakere",
+  "@notifAudienceSectionTitle": {
+    "description": "Section title for choosing which accounts receive notifications."
+  },
+  "notifScopeAllLinkedAccounts": "Alle tilknyttede kontoer",
+  "@notifScopeAllLinkedAccounts": {
+    "description": "Option that sends notifications to all linked accounts."
+  },
+  "notifScopeSelectedAccounts": "Valgte kontoer",
+  "@notifScopeSelectedAccounts": {
+    "description": "Option that sends notifications only to selected linked accounts."
+  },
+  "notifAudienceSheetDescription": "Velg hvilke kontoer som kan motta varsler på denne enheten.",
+  "@notifAudienceSheetDescription": {
+    "description": "Description for notification audience settings."
+  },
+  "notifAudienceAllSubtitle": "{count} nåværende konto(er). Fremtidige tilknyttede kontoer inkluderes automatisk.",
+  "@notifAudienceAllSubtitle": {
+    "description": "Subtitle for the all linked accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedSubtitle": "{count} valgt for varsler.",
+  "@notifAudienceSelectedSubtitle": {
+    "description": "Subtitle for the selected accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedEmpty": "Velg nøyaktig hvilke kontoer som skal motta varsler.",
+  "@notifAudienceSelectedEmpty": {
+    "description": "Empty state subtitle for selected notification accounts."
+  },
+  "notifAudienceAllInlineNote": "Alt du knytter til senere, inkluderes uten å endre denne innstillingen.",
+  "@notifAudienceAllInlineNote": {
+    "description": "Inline note explaining all linked accounts behavior."
+  },
+  "notifChooseAccountsManually": "Valgte kontoer",
+  "notifAudienceAcrossDevicesDescription": "Velg hvilke kontoer som kan motta varsler på denne enheten.",
+  "notifAccountBookmarked": "Bokmerke",
+  "@notifAccountBookmarked": {
+    "description": "Label for a bookmarked account in notification settings."
+  },
+  "notifGroupLeagueBattles": "Ligakamper",
+  "@notifGroupLeagueBattles": {
+    "description": "Notification group label for league battles."
+  },
+  "notifGroupWarAttacks": "Krigsangrep",
+  "@notifGroupWarAttacks": {
+    "description": "Notification group label for war attacks."
+  },
+  "notifGroupWarState": "Krigsstatus",
+  "@notifGroupWarState": {
+    "description": "Notification group label for war state changes."
+  },
+  "notifGroupWarReminders": "Krigspåminnelser",
+  "@notifGroupWarReminders": {
+    "description": "Notification group label for war reminders."
+  },
+  "notifGroupEvents": "Hendelser",
+  "@notifGroupEvents": {
+    "description": "Notification group label for events."
+  },
+  "notifGroupAppAnnouncements": "App-kunngjøringer",
+  "@notifGroupAppAnnouncements": {
+    "description": "Notification group label for app announcements."
+  },
+  "notifGroupUpgradeFinishes": "Oppgraderinger ferdige",
+  "@notifGroupUpgradeFinishes": {
+    "description": "Notification group label for completed upgrades."
+  },
+  "notifGroupMonthlySupport": "Månedlig støtte",
+  "@notifGroupMonthlySupport": {
+    "description": "Notification group label for monthly support reminders."
+  },
+  "widgetUpgradeProgressTitle": "Oppgraderingsfremdrift",
+  "widgetLaboratory": "LAB",
+  "widgetPets": "KÆLEDYR",
+  "widgetBuilderBase": "BYGGERBASE",
+  "widgetResearch": "FORSKNING",
+  "widgetActive": "AKTIV",
+  "widgetIdle": "INAKTIV",
+  "widgetLocked": "LÅST",
+  "widgetMaxed": "MAKSIMALT",
+  "widgetNotUnlocked": "Ikke ulåst",
+  "widgetFullyUpgraded": "Fullt oppgraderet",
+  "widgetNoActiveUpgrades": "Ingen aktive oppgraderinger",
+  "widgetNoActiveResearch": "Ingen aktiv forskning",
+  "widgetDataStale": "Oppdatering nødvendig",
+  "widgetMoreUpgrade": "Mere oppgradering",
+  "widgetMoreUpgrades": "Flere oppgraderinger",
+  "widgetLevelShort": "Lv",
+  "widgetReady": "Klar",
+  "widgetReadyIn": "Klar ind",
+  "widgetHelping": "Hjelper",
+  "widgetApprenticeShort": "Lærling",
+  "widgetAssistantShort": "Assistent",
+  "widgetAlchemistShort": "Alkymist",
+  "widgetBuilderPotion": "Bygger-eliksir",
+  "widgetResearchPotion": "Forskningseliksir",
+  "widgetPetPotion": "Kjæledyrseliksir",
+  "widgetClockTower": "Klokketårn",
+  "widgetTownHallBuilderBoost": "Boost til rådhus-byggeren",
+  "widgetTownHallLabBoost": "Forbedring af rådhusets laboratorium",
+  "widgetBuilderBoostShort": "Bygherre",
+  "widgetResearchBoostShort": "Forskning",
+  "widgetPetBoostShort": "Kjæledyr",
+  "widgetClockBoostShort": "Ur",
+  "widgetBuilderCostPerk": "{percent}% byggerkostnadsperk",
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetBuilderTimePerk": "{percent}% byggertidsperk",
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabCostPerk": "{percent}% laboratoriekostnadsfordel",
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabTimePerk": "{percent}% laboratorietid fordel",
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Farmemål",
+  "farmGoalFormTitle": "Ressurser å farme",
+  "farmGoalAccountTitle": "Konto",
+  "farmGoalAccountHint": "Den valgte kontoen angir rådhuset og gjeldende liga som brukes i beregningen.",
+  "farmGoalTargetTitle": "Bygning som skal oppgraderes",
+  "farmGoalTargetBuildingLabel": "Bygning",
+  "farmGoalChooseBuilding": "Velg en bygning",
+  "farmGoalChangeBuilding": "Bytt bygning",
+  "farmGoalNoTargetTitle": "Ingen bygning valgt",
+  "farmGoalNoTargetBody": "Velg bygningen du vil oppgradere for å beregne nødvendig ressursinnsamling.",
+  "farmGoalTargetLevelLabel": "Målnivå",
+  "farmGoalUpgradeCostLabel": "Oppgraderingskostnad",
+  "farmGoalCostUnavailable": "Oppgraderingskostnaden er ikke tilgjengelig for dette nivået.",
+  "farmGoalLootTitle": "Anslått bytte",
+  "farmGoalResourceLabel": "Ressurs",
+  "farmGoalAmountLabel": "Mengde å farme",
+  "farmGoalAverageLootLabel": "Tilgjengelig bytte i landsbyen",
+  "farmGoalPerfectLootHint": "Skriv inn byttet som vises før angrepet. Ligabonusen nedenfor legges til automatisk.",
+  "farmGoalLeagueEstimate": "Ligabonus for {league}: {amount} {resource}. Den er inkludert i angrepsberegningene.",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalStarBonusEstimate": "Stjernebonus: {amount} {resource} etter 5 stjerner. Den er ikke inkludert i antallet nødvendige angrep.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Perfekt angrep · 100 %",
+  "farmGoalScenarioAtPercent": "{percent} % ødeleggelse",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "angrep",
+  "farmGoalScenarioHint": "Anslag: byttet varierer med bygningene som ødelegges. Prosentene brukes på anslaget for et perfekt angrep.",
+  "farmGoalNoLeagueLoot": "Velg en konto med en liga for å få et bytteforslag.",
+  "farmGoalTrackerNextTitle": "Neste i Upgrade Tracker-planen",
+  "farmGoalTrackerMissingTitle": "Upgrade Tracker-data kreves",
+  "farmGoalTrackerMissingBody": "Importer oppgraderings-JSON-en for denne kontoen i Upgrade Tracker for å vise neste planlagte bygning og nøyaktig kostnad her.",
+  "farmGoalTrackerPlanComplete": "Ingen gjenværende bygningsoppgraderinger ble funnet i Upgrade Tracker. Du kan fortsatt velge en bygning manuelt.",
+  "farmGoalOpenUpgradeTracker": "Åpne Upgrade Tracker",
+  "farmGoalUseTrackerTarget": "Bruk bygning",
+  "farmGoalMissingTarget": "Velg en bygning og et målnivå for å beregne de nødvendige angrepene.",
+  "farmGoalMissingValues": "Angi et mål og et anslag for byttet fra et perfekt angrep for å se angrepsscenarioene.",
+  "farmGoalResultTitle": "Nødvendige angrep",
+  "farmGoalAttacks": "angrep",
+  "farmGoalResultSummary": "{target} {resource} med omtrent {average} per perfekt angrep.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "RH{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Skaperkode: ClashKing",
+  "todoExplanationRaidsTitle": "Raid:",
+  "todoExplanationRaids": "Vekt på 5 poeng per konto (eller 6 hvis siste angrep er låst opp), 1 angrep = 1 poeng.",
+  "clanWarFrequencyTitle": "Kriger",
+  "notifScopeAllAccounts": "Alle kontoer",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "notifSelectedAccounts": "Utvalgte kontoer",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Filtre",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} Kontoer registreret",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "Skade",
+  "calculatorsModeFarmGoal": "Farmemål",
+  "damageCalculatorTitle": "Skadekalkulator",
+  "damageAccountPresetShort": "Konto",
+  "damageChooseAccount": "Velg en konto",
+  "damageSwitchAccount": "Bytt konto",
+  "damageAccountSelectorHint": "Nivåene som brukes følger den valgte kontoen.",
+  "damageNoAccountsAvailable": "Ingen bekreftet konto er tilgjengelig",
+  "damageTargetSectionTitle": "Bygning som skal ødelegges",
+  "damageChooseTarget": "Velg en bygning",
+  "damageNoTargetTitle": "Ingen bygning valgt",
+  "damageNoTargetBody": "Velg en bygning for å se hvor mye skade den tåler.",
+  "damageTargetLevelLabel": "Målnivå",
+  "damageCommonBuildings": "Oftest valgt",
+  "damageAllBuildings": "Alle bygninger",
+  "damageQuickSetups": "Velg en metode",
+  "damageQuickSetupZapQuake": "Lyn + jordskjelv",
+  "damageQuickSetupFireballQuake": "Ildkule + jordskjelv",
+  "damageQuickSetupGiantArrow": "Kjempepil",
+  "damageQuickSetupFlameFlinger": "Flammekaster",
+  "damageQuickSetupCustom": "Egendefinert",
+  "damageClearStack": "Klar",
+  "damageNoDamageSelected": "Ingen skade",
+  "damageSelectedSourcesCount": "{count} kilder",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Velg en metode for å vise skadekildene som kan justeres.",
+  "damageOtherSources": "Andre kilder",
+  "damageShowAllSources": "Legg til en annen kilde",
+  "damageShowFewerSources": "Skjul andre kilder",
+  "searchCancel": "Avbryt",
+  "todoRaidAttacks": "Raidangrep",
+  "todoMockRaid4Left": "4 igjen",
+  "todoMockWarAltStatus": "Aktiv for 18 m siden · krig og raid trenger oppmerksomhet",
+  "todoMockRaid1Left": "1 igjen",
+  "gameAssetsCategoryBuildings": "Bygninger",
+  "gameAssetsCategoryCapitalBase": "Hovedstadsbase",
+  "gameAssetsCategoryCapitalHouseParts": "Deler til hovedstadshus",
+  "gameAssetsCategoryChests": "Kister",
+  "gameAssetsCategoryClanLabels": "Klanetiketter",
+  "gameAssetsCategoryCountryFlags": "Landsflagg",
+  "gameAssetsCategoryDecorations": "Dekorasjoner",
+  "gameAssetsCategoryEquipment": "Utstyr",
+  "gameAssetsCategoryGuardians": "Voktere",
+  "gameAssetsCategoryHeroes": "Helter",
+  "gameAssetsCategoryPets": "Kjæledyr",
+  "gameAssetsCategorySkins": "Utseender",
+  "gameAssetsCategorySpells": "Formler",
+  "gameAssetsCategoryTroops": "Tropper",
+  "assetFolderTroops": "Tropper",
+  "assetFolderSpells": "Formler",
+  "assetFolderHeroes": "Helter",
+  "endpointStateWins": "Vinner",
+  "notifGroupBattles": "Kamper",
+  "notifGroupSupport": "Støtte",
+  "rankedLeagueAccountSelector": "Vist konto",
+  "rankedLeagueStars": "Stjerner",
+  "playerBattlelogTab": "Kamper",
+  "playerActivityTab": "Aktivitet",
+  "playerBattlelogFarming": "Ressurssanking",
+  "playerBattlelogRanked": "Rangeret",
+  "playerBattlelogFarmingOverview": "Oversikt over ressurssanking",
+  "playerBattlelogRankedOverview": "Oversikt over rangerte kamper",
+  "playerBattlelogRecentBattles": "Nylige kamper",
+  "playerBattlelogBattleCount": "{count} Slag",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Angrep",
+  "playerBattlelogAverageDestruction": "Gjennomsnittlig ødeleggelse",
+  "playerBattlelogAverageStars": "Gjennomsnittlige stjerner",
+  "playerBattlelogTripleRate": "Tre-stjerners rate",
+  "playerBattlelogAverageLoot": "Gjennomsnittlig bytte",
+  "playerBattlelogPopularTroops": "Mest brukte tropper",
+  "playerBattlelogUsedInAttacks": "Brukt i {count} angrep",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Angrep",
+  "playerBattlelogDefense": "Forsvar",
+  "playerBattlelogOpponent": "Mot {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Ingen kamper funnet",
+  "playerBattlelogNoBattlesBody": "Det finnes ingen kamper for denne modusen ennå.",
+  "playerBattlelogLoadError": "Kampelogger kunne ikke lastes inn",
+  "playerBattlelogHistoryUnavailable": "Historiske kampdata er midlertidig utilgjengelige, så hærbruk og eldre kamper kan mangle.",
+  "playerBattlelogOfficialUnavailable": "Den offisielle kampeloggen er midlertidig utilgjengelig, så de nyeste kampene kan mangle.",
+  "playerActivityTrackingActive": "Spores nå",
+  "playerActivityTrackingActiveBody": "Denne bekreftede kontoen oppdateres regelmessig. Hendelser registreres etter at sporingen starter, og enkelte hull kan fortsatt forekomme.",
+  "playerActivityTrackingUnknown": "Sporing ikke bekreftet",
+  "playerActivityTrackingUnknownBody": "Bare endringer som ble observert mens ClashKing sporet denne spilleren, vises her, så historikken kan være ufullstendig.",
+  "playerActivityNoEventsTitle": "Ingen sporet aktivitet ennå",
+  "playerActivityNoEventsBody": "Oppgraderinger og profilendringer vises når ClashKing oppdager dem.",
+  "playerActivityLoadError": "Spilleraktiviteten kunne ikke lastes inn",
+  "playerActivityTownHallUpgraded": "Rådhuset er oppgradert",
+  "playerActivityItemUpgraded": "{name} er oppgradert",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} er forsterket",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} er låst opp",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Navnet er endret",
+  "playerActivityLevelChange": "Nivå {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Låst opp på nivå {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Forsterket på nivå {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
+  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanClose": "Lukk",
+  "upgradeTrackerPlanPlanningGoals": "Planning goals",
+  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
+  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
+  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
+  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
+  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
+  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Strict",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
+  "upgradeTrackerPlanCompletionTarget": "Completion target",
+  "upgradeTrackerPlanStrictTier": "Strict tier",
+  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Until maxed",
+  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
+  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
+  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
+  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanOff": "Fra",
+  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
+  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
+  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
+  "upgradeTrackerPlanCategoryTraps": "Traps",
+  "upgradeTrackerPlanCategoryArmy": "Army",
+  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
+  "upgradeTrackerPlanCategorySieges": "Sieges",
+  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
+  "navigationCloseDrawer": "Close navigation drawer",
+  "navigationOpenProfileMenu": "Open profile menu",
+  "navigationClashKingWeb": "ClashKing web",
+  "settingsPrivacyDataTitle": "Privacy & data",
+  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
+  "settingsPrivacyExportTitle": "Access or export your data",
+  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
+  "settingsPrivacyCorrectionTitle": "Correct or limit data",
+  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
+  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
+  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
+  "settingsPrivacyChildrenTitle": "Children and families",
+  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
+  "settingsPrivacyExportReady": "Your data export is ready to save.",
+  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
+  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
+  "settingsPrivacyExportSaved": "Your data export has been saved.",
+  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
+  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
+  "settingsPrivacyOpenPolicy": "Open policy",
+  "settingsPrivacyRefreshExport": "Refresh export",
+  "settingsPrivacyPrepareExport": "Prepare export",
+  "settingsPrivacySaveExport": "Save export",
+  "settingsPrivacyContactSupport": "Contact support",
+  "settingsPrivacyDeleteAccount": "Delete account",
+  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
+  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
+  "generalUnranked": "Unranked",
+  "playerJoinLeaveTab": "Join / Leave",
+  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
+  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Time Remaining",
+  "playerUpgradeNoResourceData": "No resource data",
+  "playerJoinLeaveLoadError": "Could not load join / leave history",
+  "playerJoinLeaveClanTotals": "Clan totals",
+  "playerJoinLeaveTime": "Tid",
+  "playerJoinLeaveTimeSpent": "Time spent",
+  "playerJoinLeaveVisits": "Visits",
+  "playerJoinLeaveJoined": "Joined",
+  "playerJoinLeaveLeft": "Left",
+  "playerJoinLeaveNoHistory": "No join / leave history available",
+  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}
