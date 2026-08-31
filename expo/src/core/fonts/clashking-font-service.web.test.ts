@@ -20,5 +20,6 @@ describe('ClashKing web font loading', () => {
     expect(Font.loadAsync).toHaveBeenCalledWith('ClashKing', {
       uri: 'blob:clashking-font',
     });
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
   });
 });
