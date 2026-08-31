@@ -19,7 +19,7 @@ async function loadOnce(): Promise<boolean> {
     const bytes = await response.arrayBuffer();
     if (bytes.byteLength === 0) throw new Error('Downloaded ClashKing font is empty.');
     objectUrl = URL.createObjectURL(new Blob([bytes], { type: 'font/ttf' }));
-    await Font.loadAsync(CLASHKING_FONT_FAMILY, objectUrl);
+    await Font.loadAsync(CLASHKING_FONT_FAMILY, { uri: objectUrl });
     return true;
   } catch (error) {
     console.warn('ClashKing font download failed; using system fallback', error);
