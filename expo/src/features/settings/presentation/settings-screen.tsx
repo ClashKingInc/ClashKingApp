@@ -348,25 +348,23 @@ export function SettingsScreen({
         title={t('settingsAddWarWidget')}
         subtitle={
           platform === 'ios'
-            ? 'Choose a clan to cache it. After adding the widget, long press it, tap Edit Widget, then choose Clan.'
-            : 'Choose a clan to cache it, then add the widget from Android.'
+            ? t('settingsWarWidgetIosInstructions')
+            : t('settingsWarWidgetAndroidInstructions')
         }
-        emptyLabel="No linked accounts are currently in a clan."
-        footer={
-          platform === 'ios'
-            ? 'You can add more than one War Widget and set a different Clan on each one.'
-            : undefined
-        }
+        emptyLabel={t('settingsWarWidgetEmpty')}
+        footer={platform === 'ios' ? t('settingsWarWidgetIosFooter') : undefined}
         choices={warWidgetClans}
         onPrepare={async (clan) => {
           await onPrepareWarWidget?.(clan.tag, platform === 'android');
           setSnackbar(
             platform === 'ios'
-              ? `${clan.name} is ready. Edit the widget and choose it under Clan.`
-              : `${clan.name} widget data is ready.`,
+              ? t('settingsWarWidgetIosReady', { clanName: clan.name })
+              : t('settingsWarWidgetAndroidReady', { clanName: clan.name }),
           );
         }}
-        onError={(error) => setSnackbar(`Could not prepare widget: ${String(error)}`)}
+        onError={(error) =>
+          setSnackbar(t('settingsWarWidgetPrepareFailed', { error: String(error) }))
+        }
         onClose={() => setDialog(undefined)}
       />
       {snackbar ? (

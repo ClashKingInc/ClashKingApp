@@ -26,6 +26,7 @@ const {
   configureGeneratedAndroidBuildTypePermissions,
   configureAlternateIconTarget,
   configureIosPlatformPlist,
+  configureWidgetEmbedding,
   configureWidgetTarget,
   ensureRNFirebaseCocoaPodsMode,
   removeUnscopedAndroidScheme,
@@ -621,6 +622,47 @@ test('widget target receives exact identity and host version settings', () => {
       '"$(SRCROOT)/../node_modules/react-native"',
     );
   }
+});
+
+test('widget extension is embedded in and required by the application target', () => {
+  const application = {
+    productType: '"com.apple.product-type.application"',
+    buildPhases: [{ value: 'copy', comment: 'Copy Files' }],
+    dependencies: [],
+  };
+  const widget = {
+    name: '"WarWidgetExtension"',
+    productReference: 'widget-product',
+  };
+  const objects = {
+    PBXNativeTarget: { app: application, widget },
+    PBXBuildFile: { embedded: { fileRef: 'widget-product' } },
+    PBXCopyFilesBuildPhase: {
+      copy: { name: '"Copy Files"', dstSubfolderSpec: 13, files: [{ value: 'embedded' }] },
+      copy_comment: 'Copy Files',
+    },
+  };
+  let dependencyAdds = 0;
+  const project = {
+    hash: { project: { objects } },
+    pbxNativeTargetSection: () => objects.PBXNativeTarget,
+    pbxBuildFileSection: () => objects.PBXBuildFile,
+    addTargetDependency: (applicationTargetUuid, widgetTargetUuids) => {
+      dependencyAdds += 1;
+      assert.equal(applicationTargetUuid, 'app');
+      assert.deepEqual(widgetTargetUuids, ['widget']);
+      objects.PBXTargetDependency.dependency = { target: 'widget' };
+      application.dependencies.push({ value: 'dependency' });
+    },
+  };
+
+  configureWidgetEmbedding(project, 'widget', widget);
+  configureWidgetEmbedding(project, 'widget', widget);
+
+  assert.equal(dependencyAdds, 1);
+  assert.equal(objects.PBXCopyFilesBuildPhase.copy.name, '"Embed App Extensions"');
+  assert.equal(objects.PBXCopyFilesBuildPhase.copy_comment, 'Embed App Extensions');
+  assert.equal(application.buildPhases[0].comment, 'Embed App Extensions');
 });
 
 test('widget source and privacy references have a stable parent group', () => {

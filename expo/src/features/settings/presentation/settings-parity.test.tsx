@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 
-import { I18nProvider } from '../../../i18n';
+import { I18nProvider, type SupportedLocale } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
 import type { ExternalSettingsActions, SettingsPresentationActions } from './contracts';
 import { FaqScreen } from './faq-screen';
@@ -20,6 +20,14 @@ jest.mock('../../../ui/accessibility', () => ({
 function wrapped(node: React.ReactNode) {
   return (
     <I18nProvider locale="en">
+      <CKThemeProvider preference="light">{node}</CKThemeProvider>
+    </I18nProvider>
+  );
+}
+
+function wrappedWithLocale(node: React.ReactNode, locale: SupportedLocale) {
+  return (
+    <I18nProvider locale={locale}>
       <CKThemeProvider preference="light">{node}</CKThemeProvider>
     </I18nProvider>
   );
@@ -99,6 +107,41 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
   await fireEvent.press(screen.getByText('Version & Device'));
   expect(copyVersion).toHaveBeenCalledWith('Version 1.2.3\nDevice');
   await waitFor(() => expect(screen.getByText('Copied to clipboard')).toBeTruthy());
+});
+
+it('localizes the iOS war widget setup dialog', async () => {
+  const actions: SettingsPresentationActions = {
+    changeLocale: async () => undefined,
+    changeTheme: async () => undefined,
+    open: jest.fn(),
+    openDiscord: jest.fn(),
+    showLicenses: jest.fn(),
+    copyVersion: jest.fn(),
+    logout: async () => undefined,
+  };
+  const screen = await render(
+    wrappedWithLocale(
+      <SettingsScreen
+        actions={actions}
+        alternateIconsSupported={false}
+        currentLocale="fr"
+        localeChoices={[]}
+        notificationsEnabled={false}
+        platform="ios"
+        themeMode="system"
+        user={{ username: 'Personne', email: null, avatarUrl: '' }}
+        versionLabel="Version 1.2.3"
+        warWidgetClans={[]}
+        warWidgetsEnabled
+      />,
+      'fr',
+    ),
+  );
+
+  await fireEvent.press(screen.getByText('Ajouter un widget guerre'));
+  expect(screen.getByText(/Après avoir ajouté le widget/)).toBeTruthy();
+  expect(screen.getByText(/Aucun de vos comptes liés/)).toBeTruthy();
+  expect(screen.getByText(/Ajoutez plusieurs widgets de guerre/)).toBeTruthy();
 });
 
 it('uses structured FAQ search and copies support email when mail launch fails', async () => {

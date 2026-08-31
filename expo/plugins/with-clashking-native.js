@@ -592,6 +592,54 @@ function configureWidgetTarget(project, target, contract, version = {}) {
   }
 }
 
+function configureWidgetEmbedding(project, widgetTargetUuid, widgetTarget) {
+  const applicationTargetEntry = Object.entries(project.pbxNativeTargetSection()).find(
+    ([key, target]) =>
+      !key.endsWith('_comment') &&
+      unquote(target.productType) === 'com.apple.product-type.application',
+  );
+  if (!applicationTargetEntry)
+    throw new Error('Generated Xcode project has no application target.');
+
+  const [applicationTargetUuid, applicationTarget] = applicationTargetEntry;
+  const objects = project.hash.project.objects;
+  objects.PBXTargetDependency ||= {};
+  objects.PBXContainerItemProxy ||= {};
+  applicationTarget.dependencies ||= [];
+
+  const dependencySection = objects.PBXTargetDependency;
+  const hasDependency = applicationTarget.dependencies.some(
+    ({ value }) => dependencySection[value]?.target === widgetTargetUuid,
+  );
+  if (!hasDependency) project.addTargetDependency(applicationTargetUuid, [widgetTargetUuid]);
+
+  const buildFiles = project.pbxBuildFileSection();
+  const copyFilesPhases = objects.PBXCopyFilesBuildPhase || {};
+  const embeddedPhaseEntry = (applicationTarget.buildPhases || [])
+    .map((phaseReference) => [phaseReference, copyFilesPhases[phaseReference.value]])
+    .find(([, phase]) =>
+      phase?.files?.some(
+        ({ value }) => buildFiles[value]?.fileRef === widgetTarget.productReference,
+      ),
+    );
+
+  if (!embeddedPhaseEntry) {
+    project.addBuildPhase(
+      [`${unquote(widgetTarget.name)}.appex`],
+      'PBXCopyFilesBuildPhase',
+      'Embed App Extensions',
+      applicationTargetUuid,
+      'app_extension',
+    );
+    return;
+  }
+
+  const [phaseReference, embeddedPhase] = embeddedPhaseEntry;
+  embeddedPhase.name = '"Embed App Extensions"';
+  copyFilesPhases[`${phaseReference.value}_comment`] = 'Embed App Extensions';
+  phaseReference.comment = 'Embed App Extensions';
+}
+
 function attachFileReferencesToGroup(project, filePaths, groupKey) {
   const group = project.getPBXGroupByKey(groupKey);
   if (!group?.children) throw new Error('Generated Xcode project has no main file group.');
@@ -655,7 +703,7 @@ function withIosWidgetTarget(config, contract) {
     const project = mod.modResults;
     const existing = findTargetByName(project, contract.ios.widgetTargetName);
     if (existing) {
-      const [, target] = existing;
+      const [targetUuid, target] = existing;
       const bundleIdentifiers = new Set(
         targetBuildConfigurations(project, target).map((configuration) =>
           unquote(configuration.buildSettings.PRODUCT_BUNDLE_IDENTIFIER),
@@ -670,6 +718,7 @@ function withIosWidgetTarget(config, contract) {
         );
       }
       configureWidgetTarget(project, target, contract, version);
+      configureWidgetEmbedding(project, targetUuid, target);
       return mod;
     }
 
@@ -706,6 +755,7 @@ function withIosWidgetTarget(config, contract) {
       project.getFirstProject().firstProject.mainGroup,
     );
     configureWidgetTarget(project, target.pbxNativeTarget, contract, version);
+    configureWidgetEmbedding(project, target.uuid, target.pbxNativeTarget);
     return mod;
   });
 }
@@ -887,6 +937,7 @@ module.exports.configureFirebaseFiles = configureFirebaseFiles;
 module.exports.upsertAndroidComponent = upsertAndroidComponent;
 module.exports.findTargetByName = findTargetByName;
 module.exports.configureWidgetTarget = configureWidgetTarget;
+module.exports.configureWidgetEmbedding = configureWidgetEmbedding;
 module.exports.attachFileReferencesToGroup = attachFileReferencesToGroup;
 module.exports.configureAlternateIconTarget = configureAlternateIconTarget;
 module.exports.validateAlternateIconCatalog = validateAlternateIconCatalog;

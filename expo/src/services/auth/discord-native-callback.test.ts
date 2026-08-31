@@ -16,6 +16,7 @@ describe('native intent routing', () => {
   it.each([
     ['player', 'clashking://player?tag=%232J8V28GV0', '#2J8V28GV0'],
     ['clan', 'clashking://clan?tag=%232VC0Q9LV', '#2VC0Q9LV'],
+    ['war', 'clashking://war?tag=%232J8V28GV0', '#2J8V28GV0'],
   ])(
     'mounts the app root for a supported %s link while preserving its handler URL',
     (route, appLink, tag) => {
@@ -28,7 +29,7 @@ describe('native intent routing', () => {
   );
 
   it('leaves unrelated and malformed incoming links unchanged', () => {
-    const appLink = 'clashking://war?tag=%232J8V28GV0';
+    const appLink = 'clashking://settings';
 
     expect(isDiscordNativeCallbackUrl(appLink)).toBe(false);
     expect(redirectSystemPath({ path: appLink, initial: false })).toBe(appLink);

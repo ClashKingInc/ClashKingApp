@@ -15,7 +15,7 @@ function isSupportedNativeAppLink(path: string): boolean {
     const url = new URL(path);
     if (url.protocol.toLowerCase() !== 'clashking:') return false;
     const route = extractDeepLinkRoute(url);
-    return route === 'player' || route === 'clan';
+    return route === 'player' || route === 'clan' || route === 'war';
   } catch {
     return false;
   }

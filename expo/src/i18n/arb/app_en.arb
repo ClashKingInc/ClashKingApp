@@ -3130,6 +3130,13 @@
   "settingsAddWarWidget": "Add War Widget",
   "settingsWarWidgetLinkClanFirst": "Link an account in a clan first",
   "settingsWarWidgetClanCount": "{count} clan(s) available",
+  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
+  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
+  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
+  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
+  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
+  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
+  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Bot-linked accounts and Discord data",
   "settingsDiscordSyncSubtitle": "Sync bot-linked accounts and Discord data",
@@ -4831,6 +4838,27 @@
     "placeholders": {
       "townHallLevel": {
         "type": "int"
+      }
+    }
+  },
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
       }
     }
   }
