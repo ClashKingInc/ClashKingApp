@@ -1,0 +1,4870 @@
+{
+  "warStatsRangeTitle": "War stats range",
+  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
+  "warStatsRangeDays": "Days",
+  "warStatsRangeWarsToInclude": "Wars to include",
+  "warStatsRangeDaysToInclude": "Days to include",
+  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
+  "upgradeTrackerBuildCost": "Build cost",
+  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
+  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
+  "upgradeTrackerCalendar": "Calendar",
+  "upgradeTrackerClearCost": "Clear cost",
+  "upgradeTrackerCompletionDetails": "Village completion details",
+  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
+  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group} summary",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Hộ Vệ",
+  "upgradeTrackerHelpers": "Helpers",
+  "upgradeTrackerHouseParts": "House parts",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "In progress",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "{count} owned",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLevelTransition": "Cấp {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Loot now",
+  "upgradeTrackerLootOutlook": "Loot outlook",
+  "upgradeTrackerMusic": "Music",
+  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Next period",
+  "upgradeTrackerNoGoldPass": "No Gold Pass",
+  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
+  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
+  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
+  "upgradeTrackerObstacles": "Obstacles",
+  "upgradeTrackerPart": "Part",
+  "upgradeTrackerPassReward": "Pass reward",
+  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
+  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
+  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Sceneries",
+  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village} progress",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Size",
+  "upgradeTrackerSortLongest": "Longest first",
+  "upgradeTrackerSortName": "Name A–Z",
+  "upgradeTrackerSortScheduled": "Đã lên lịch",
+  "upgradeTrackerSortShortest": "Shortest first",
+  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerStarts": "Bắt đầu",
+  "upgradeTrackerTier": "Tier",
+  "upgradeTrackerUpgradesStarting": "upgrades starting",
+  "upgradeTrackerUpgradingNow": "Upgrading now",
+  "upgradeTrackerWarBase": "War Base",
+  "notifSettingsSaveFailed": "Notification settings could not be saved.",
+  "notifPushEnabled": "Push enabled",
+  "notifReceiveNotifications": "Receive notifications",
+  "notifTokenPreview": "Token: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
+  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
+  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
+  "notifMaximumRemindersAdded": "Maximum reminders added",
+  "notifAddReminder": "Add reminder",
+  "notifDurationOneHour": "1 hour",
+  "notifDurationHours": "{count} hours",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifDurationMinutes": "{count} minutes",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAddTiming": "Add {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
+  "notifTimingOneHourBefore": "1 hour before",
+  "notifTimingHoursBefore": "{count} hours before",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifTimingMinutesBefore": "{count} minutes before",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifPushReady": "Push notifications are ready on this device.",
+  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
+  "notifPushPermissionDenied": "Notification permission was denied.",
+  "notifPushNotConfigured": "Firebase is not configured for this build.",
+  "notifPushTokenUnavailable": "A push token is not available yet.",
+  "notifPushUnsupported": "Push notifications are not supported on this platform.",
+  "notifPushInitializing": "Configuring push notifications…",
+  "notificationPrimerTitle": "Enable notifications?",
+  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
+  "notificationPrimerNotNow": "Not now",
+  "notificationPrimerAllow": "Allow",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "achievementsTitle": "Thành tựu",
+  "achievementEarnedLabel": "Đã đạt",
+  "achievementSummary": "{earned}/{total} đã hoàn thành",
+  "achievementEarnedCount": "Đã đạt ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementTownhall18Name": "Nhà Chính 18",
+  "achievementTownhall18Requirement": "Đạt Nhà Chính cấp 18.",
+  "achievementWarWarriorName": "Chiến binh chiến tranh",
+  "achievementWarWarriorRequirement": "Đạt 5.000 sao chiến tranh.",
+  "achievementMrLegendName": "Ngài Huyền Thoại",
+  "achievementMrLegendDescription": "Đã hoàn thành một ngày tấn công hoàn hảo tại Giải Huyền Thoại.",
+  "achievementDefenseDoesntMatterName": "Phòng thủ không quan trọng",
+  "achievementDefenseDoesntMatterDescription": "Đã trải qua một ngày phòng thủ hoàn hảo tại Giải Huyền Thoại.",
+  "appTitle": "ClashKing",
+  "appDescription": "Bạn đồng hành Clash of Clans hoàn hảo của bạn để theo dõi thống kê, quản lý clan và phân tích hiệu suất.",
+  "generalLoading": "Đang tải...",
+  "loadingVillages": "Đang tải các làng của bạn...",
+  "loadingClanData": "Đang lấy dữ liệu bang hội...",
+  "loadingWarStats": "Đang phân tích thống kê chiến tranh...",
+  "loadingLegendsData": "Đang chuẩn bị dữ liệu Huyền Thoại...",
+  "loadingCapitalRaids": "Đang tải Đột kích Thủ đô...",
+  "loadingAlmostReady": "Sắp xong rồi...",
+  "accountVerificationTitle": "Xác minh tài khoản",
+  "accountVerified": "Đã xác minh",
+  "accountVerify": "Xác minh",
+  "accountVerificationSuccess": "Tài khoản đã được xác minh thành công!",
+  "generalRetry": "Thử lại",
+  "generalRetrying": "Đang thử lại...",
+  "postsTitle": "Bài viết",
+  "postsDescription": "Tin tức ClashKing, câu chuyện cập nhật và các thông báo trước đây.",
+  "postsEmpty": "Chưa có bài viết nào được đăng.",
+  "postsLoadFailed": "Không thể tải bài viết.",
+  "postsLoadMore": "Tải thêm",
+  "postsCurrent": "Hiện tại",
+  "postsPast": "Trước đây",
+  "postsStory": "Câu chuyện tương tác",
+  "postsPinned": "Nổi bật",
+  "generalTryAgain": "Thử lại",
+  "generalReset": "Đặt lại",
+  "generalCancel": "Hủy",
+  "generalOk": "OK",
+  "@generalOk": {
+    "description": "OK button on pop up"
+  },
+  "generalApply": "Áp dụng",
+  "generalConfirm": "Xác nhận",
+  "generalManage": "Quản lý",
+  "generalSettings": "Cài đặt",
+  "generalCopiedToClipboard": "Đã sao chép vào bảng nhớ tạm",
+  "generalComingSoon": "Sắp ra mắt!",
+  "generalLastRefresh": "Lần làm mới cuối: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Làm mới thất bại: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "generalAll": "Tất cả",
+  "@generalAll": {
+    "description": "all items"
+  },
+  "generalAllTime": "Mọi thời gian",
+  "@generalAllTime": {
+    "description": "All time period"
+  },
+  "generalOthers": "Khác",
+  "generalCompleted": "đã hoàn thành",
+  "generalTotal": "Tổng",
+  "generalBest": "Tốt nhất",
+  "@generalBest": {
+    "description": "Best end of day trophies"
+  },
+  "generalWorst": "Tệ nhất",
+  "@generalWorst": {
+    "description": "Worst end of day trophies"
+  },
+  "generalAverage": "Trung bình",
+  "@generalAverage": {
+    "description": "Average value of legend trophies (defense and attack)"
+  },
+  "generalRemaining": "Còn lại",
+  "@generalRemaining": {
+    "description": "Remaining attacks or defenses"
+  },
+  "generalActive": "Đang hoạt động",
+  "generalInactive": "Không hoạt động",
+  "generalStarted": "Đã bắt đầu",
+  "@generalStarted": {
+    "description": "Title for the number of trophies at the beginning of the day"
+  },
+  "generalEnded": "Đã kết thúc",
+  "@generalEnded": {
+    "description": "Title for the number of trophies at the end of the day"
+  },
+  "generalRole": "Vai trò",
+  "generalStats": "Thống kê",
+  "generalFullStats": "Thống kê đầy đủ",
+  "generalDetails": "Chi tiết",
+  "generalHistory": "Lịch sử",
+  "@generalHistory": {
+    "description": "Shows EOS trophies history"
+  },
+  "generalFilters": "Bộ lọc",
+  "generalExpand": "Mở rộng",
+  "generalCollapse": "Sụp đổ",
+  "generalNotSet": "Chưa đặt",
+  "@generalNotSet": {
+    "description": "Filter value is not set"
+  },
+  "generalWarning": "Cảnh báo",
+  "generalUnknown": "Không rõ",
+  "generalNoDataAvailable": "Không có dữ liệu.",
+  "generalNoFilteredResults": "Không có kết quả khớp với bộ lọc của bạn",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "Hãy thử điều chỉnh tiêu chí lọc hoặc xóa bộ lọc để xem tất cả dữ liệu.",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalBookmark": "Đánh dấu",
+  "generalRemoveBookmark": "Xóa dấu trang",
+  "generalClearFilters": "Xóa bộ lọc",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "Preset đã lưu",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "Lưu",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "Lưu preset bộ lọc",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "Tên preset",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "Nhập tên cho preset này",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "Gợi ý:",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "Hãy áp dụng một số bộ lọc trước khi lưu thành preset",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "Vui lòng nhập tên",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "Đã tồn tại preset có tên này",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "Đã lưu preset \"{name}\" thành công",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "Không thể lưu preset",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApply": "Áp dụng preset",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "Đổi tên",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "Xóa",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "Đổi tên preset",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "Đã đổi tên preset thành \"{name}\"",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "Không thể đổi tên preset",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "Xóa preset",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "Bạn có chắc muốn xóa \"{name}\" không?",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "Đã xóa preset \"{name}\"",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "Không thể xóa preset",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "Biểu đồ",
+  "authSignUp": "Đăng ký",
+  "authLogin": "Đăng nhập",
+  "authLogout": "Đăng xuất",
+  "authCreateAccount": "Tạo tài khoản",
+  "authJoinClashKing": "Tham gia ClashKing",
+  "authCreateAccountToGetStarted": "Tạo tài khoản để bắt đầu",
+  "authAlreadyHaveAccount": "Đã có tài khoản? Đăng nhập",
+  "authConfirmLogout": "Bạn có chắc muốn đăng xuất không?",
+  "@authConfirmLogout": {
+    "description": "Prompt asking the user to confirm logout"
+  },
+  "authDiscordTitle": "Discord",
+  "authDiscordSignIn": "Đăng nhập bằng Discord",
+  "authDiscordContinue": "Tiếp tục với Discord",
+  "authDiscordDescription": "Đồng bộ dữ liệu của bạn với ClashKing Bot và mở khóa toàn bộ tiềm năng của ClashKing!",
+  "authEmail": "Email",
+  "authEmailHint": "Nhập địa chỉ email của bạn",
+  "authEmailDescription": "Dùng email nếu bạn không truy cập được Discord hoặc chỉ muốn dùng các tính năng trong ứng dụng",
+  "authEmailRequired": "Vui lòng nhập email của bạn",
+  "authEmailInvalid": "Vui lòng nhập email hợp lệ",
+  "authPasswordLabel": "Mật khẩu",
+  "authPasswordHint": "Nhập mật khẩu của bạn",
+  "authPasswordConfirm": "Xác nhận mật khẩu",
+  "authPasswordRequired": "Vui lòng nhập mật khẩu của bạn",
+  "authPasswordConfirmRequired": "Vui lòng xác nhận mật khẩu của bạn",
+  "authPasswordMismatch": "Mật khẩu không khớp",
+  "authPasswordTooShort": "Mật khẩu phải có ít nhất 8 ký tự",
+  "authPasswordRequirements": "Mật khẩu phải chứa:\n• Chữ hoa\n• Chữ thường\n• Số\n• Ký tự đặc biệt",
+  "authPasswordHeader": "Mật khẩu phải chứa:",
+  "authPasswordUppercase": "Chữ hoa",
+  "authPasswordLowercase": "Chữ thường",
+  "authPasswordNumber": "Số",
+  "authPasswordSpecial": "Ký tự đặc biệt",
+  "authPasswordInvalid": "Mật khẩu không đáp ứng yêu cầu",
+  "authPasswordForgot": "Quên mật khẩu?",
+  "authPasswordForgotDescription": "Nhập địa chỉ email của bạn, chúng tôi sẽ gửi mã 6 chữ số để đặt lại mật khẩu.",
+  "authPasswordResetSend": "Gửi mã đặt lại",
+  "authPasswordResetSent": "Đã gửi mã!",
+  "authPasswordResetSentDescription": "Chúng tôi đã gửi mã đặt lại gồm 6 chữ số tới địa chỉ email của bạn. Vui lòng kiểm tra hộp thư và dùng mã đó để đặt lại mật khẩu.",
+  "authPasswordReset": "Đặt lại mật khẩu",
+  "authPasswordResetDescription": "Nhập email, mã 6 chữ số từ email và mật khẩu mới của bạn bên dưới.",
+  "authPasswordNew": "Mật khẩu mới",
+  "authPasswordConfirmHint": "Nhập lại mật khẩu mới của bạn",
+  "authPasswordResetSuccess": "Đặt lại mật khẩu thành công! Bây giờ bạn có thể đăng nhập.",
+  "authPasswordResetContinue": "Tiếp tục đặt lại mật khẩu",
+  "authPasswordResetCode": "Mã đặt lại",
+  "authPasswordResetCodeHint": "Nhập mã 6 chữ số từ email của bạn",
+  "authPasswordResetCodeRequired": "Vui lòng nhập mã đặt lại",
+  "authPasswordResetCodeInvalid": "Vui lòng nhập mã 6 chữ số hợp lệ",
+  "authBackToLogin": "Quay lại đăng nhập",
+  "authUsernameLabel": "Tên người dùng",
+  "authUsernameRequired": "Vui lòng nhập tên người dùng",
+  "authUsernameTooShort": "Tên người dùng phải có ít nhất 3 ký tự",
+  "authUsernameTooLong": "Tên người dùng không được quá 30 ký tự",
+  "authErrorConnection": "Đã xảy ra lỗi. Vui lòng kiểm tra kết nối internet và thử lại.",
+  "authErrorConnectionRelaunch": "Đã xảy ra lỗi. Vui lòng kiểm tra kết nối internet và khởi động lại ứng dụng.",
+  "authErrorEmailAlreadyRegistered": "Email này đã được đăng ký. Vui lòng thử đăng nhập thay thế.",
+  "authErrorEmailAlreadyPending": "Email xác minh đã được gửi tới địa chỉ này. Vui lòng kiểm tra email hoặc thử gửi lại.",
+  "authErrorEmailInvalidFormat": "Vui lòng nhập địa chỉ email hợp lệ.",
+  "authErrorPasswordWeak": "Mật khẩu quá yếu. Vui lòng dùng mật khẩu mạnh hơn.",
+  "authErrorUsernameInvalid": "Tên người dùng không hợp lệ. Vui lòng chỉ dùng chữ cái, số và dấu gạch dưới.",
+  "authErrorRegistrationFailed": "Đăng ký thất bại. Vui lòng thử lại sau.",
+  "authErrorEmailSendFailed": "Không thể gửi email xác minh. Vui lòng thử lại sau.",
+  "authErrorRateLimited": "Quá nhiều lần thử. Vui lòng chờ một chút rồi thử lại.",
+  "authErrorServerUnavailable": "Máy chủ tạm thời không khả dụng. Vui lòng thử lại sau.",
+  "authAccountManagement": "Thêm, xóa và sắp xếp lại các tài khoản Clash of Clans của bạn tại đây. Xác minh tài khoản bằng token để truy cập tất cả tính năng.",
+  "authAccountConnected": "Tài khoản đã kết nối",
+  "authAccountConnectedStatus": "Đã kết nối",
+  "authAccountNotConnected": "Chưa kết nối",
+  "authAccountEmailAndPassword": "Email & mật khẩu",
+  "authAccountSecured": "Tài khoản của bạn được bảo vệ bằng nhiều phương thức xác thực",
+  "authAccountLinkEmail": "Liên kết tài khoản email",
+  "authAccountAddEmailAuth": "Thêm xác thực email & mật khẩu vào tài khoản của bạn để tăng bảo mật.",
+  "authAccountEmailLinkedSuccess": "Đã liên kết tài khoản email thành công!",
+  "authAccountLinkDiscord": "Liên kết tài khoản Discord",
+  "authAccountAddDiscordAuth": "Thêm phương thức xác thực Discord vào tài khoản để đồng bộ trên nhiều nền tảng và truy cập Bot ClashKing.",
+  "authAccountDiscordLinkedSuccess": "Đã liên kết tài khoản Discord thành công!",
+  "authEmailVerificationTitle": "Xác minh email",
+  "authEmailVerificationCheckEmail": "Kiểm tra email của bạn",
+  "authEmailVerificationSentTo": "Chúng tôi đã gửi email xác minh tới:",
+  "authEmailVerificationResend": "Gửi lại email xác minh",
+  "authEmailVerificationResendSuccess": "Đã gửi lại email xác minh thành công! Vui lòng kiểm tra email của bạn.",
+  "authEmailVerificationExpired": "Xác minh đã hết hạn. Vui lòng đăng ký lại.",
+  "authEmailVerificationAlreadyVerified": "Email này đã được xác minh. Vui lòng thử đăng nhập thay thế.",
+  "authEmailVerificationNoToken": "Không tìm thấy xác minh đang chờ. Vui lòng đăng ký trước.",
+  "authEmailVerificationExpiredResend": "Xác minh đã hết hạn. Vui lòng quay lại đăng ký lại.",
+  "authEmailVerificationVerifying": "Đang xác minh email của bạn...",
+  "authEmailVerificationCodeInstructions": "Nhập mã 6 chữ số đã gửi tới email của bạn:",
+  "authEmailVerificationCodeRequired": "Vui lòng nhập mã xác minh 6 chữ số",
+  "authEmailVerificationCodeInvalid": "Mã không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra mã hoặc gửi lại email xác minh.",
+  "authEmailVerificationVerify": "Xác minh mã",
+  "helpTitle": "Cần trợ giúp?",
+  "helpJoinDiscord": "Tham gia Discord",
+  "helpEmailUs": "Gửi email cho chúng tôi",
+  "accountsWelcome": "Chào mừng!",
+  "accountsWelcomeMessage": "Vui lòng thêm một hoặc nhiều tài khoản Clash of Clans vào hồ sơ của bạn. Bạn có thể thêm hoặc xóa tài khoản sau.",
+  "accountsManageTitle": "Quản lý tài khoản của bạn",
+  "accountsNoneFound": "Không tìm thấy tài khoản nào được liên kết với hồ sơ của bạn",
+  "accountsPlayerTag": "Thẻ người chơi (#ABC123)",
+  "accountsEnterPlayerTag": "Nhập thẻ người chơi",
+  "accountsAdd": "Thêm tài khoản",
+  "accountsAddInstruction": "Nhấn nút + để thêm tài khoản của bạn",
+  "accountsApiToken": "Token API tài khoản",
+  "accountsEnterApiToken": "Vui lòng nhập token API tài khoản để xác nhận đó là của bạn. Bạn có thể tìm thấy trong Clash of Clans:",
+  "accountsApiTokenLocation": "Cài đặt > Cài đặt khác > Token API",
+  "accountsOpenMoreSettings": "Mở Cài đặt khác",
+  "accountsCouldNotOpenClash": "Không thể mở Clash of Clans. Vui lòng mở thủ công.",
+  "accountsFillAllFields": "Vui lòng điền đầy đủ các trường.",
+  "accountsErrorTagNotExists": "Thẻ người chơi đã nhập không tồn tại.",
+  "accountsErrorAlreadyLinked": "Thẻ người chơi đã được liên kết với người khác.",
+  "accountsErrorAlreadyLinkedToYou": "Thẻ người chơi đã được liên kết với bạn.",
+  "accountsErrorWrongApiToken": "Token API đã nhập không chính xác",
+  "accountsErrorFailedToAdd": "Không thể thêm tài khoản. Vui lòng thử lại sau.",
+  "accountsErrorFailedToUpdateOrder": "Không thể cập nhật thứ tự tài khoản.",
+  "errorTitle": "Ôi! Máy chủ của chúng tôi có thể vừa ăn một quả cầu lửa thẳng vào mặt! Chúng tôi đang dùng phép hồi máu... Hãy thử lại sau một lát.",
+  "errorSubtitle": "Nếu sự cố vẫn tiếp diễn, hãy kiểm tra máy chủ Discord của chúng tôi để xem chúng tôi đã biết chưa.",
+  "errorNetworkTitle": "Sự cố kết nối",
+  "errorNetworkMessage": "Chúng tôi gặp sự cố khi kết nối tới máy chủ. Có thể do kết nối internet của bạn hoặc sự cố phía chúng tôi. Vui lòng kiểm tra kết nối và thử lại.",
+  "errorLoadingVersion": "Lỗi khi tải phiên bản",
+  "@errorLoadingVersion": {
+    "description": "Error message when the app version cannot be loaded"
+  },
+  "errorCannotOpenLink": "Chúng tôi không thể mở liên kết này.",
+  "errorExitAppToOpenClash": "Bạn sắp rời khỏi ứng dụng để mở Clash of Clans.",
+  "playerSearchTitle": "Tìm người chơi",
+  "playerSearchPlaceholder": "Tên hoặc thẻ người chơi",
+  "playerLastActive": "Hoạt động lần cuối: {date}",
+  "@playerLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerNotTracked": "Người chơi này chưa được theo dõi. Dữ liệu có thể không chính xác.",
+  "playerClanDescription": "Bang hội của bạn là \"{clan}\" ({tag}).",
+  "@playerClanDescription": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "playerRatioDescription": "Tỉ lệ quyên góp của bạn là {ratio}. Bạn đã quyên góp {donations} quân và nhận {received} quân.",
+  "@playerRatioDescription": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      },
+      "donations": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarPreferenceDescription": "Tùy chọn chiến tranh của bạn là \"{preference}\".",
+  "@playerWarPreferenceDescription": {
+    "placeholders": {
+      "preference": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarStarsDescription": "Bạn có {stars} sao chiến tranh.",
+  "@playerWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTrophiesDescription": "Bạn có {trophies} cúp. Hiện bạn đang ở {league}.",
+  "@playerTrophiesDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "playerTrophiesUnrankedDescription": "Bạn có {trophies} cúp. Bạn chưa được xếp hạng trong giải đấu nào.",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTownHallLevelDescription": "Cấp Nhà Chính của bạn là {level}.",
+  "@playerTownHallLevelDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBuilderBaseDescription": "Cấp Nhà Thợ Xây của bạn là {level} và bạn có {trophies} cúp.",
+  "@playerBuilderBaseDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBaseHome": "Làng chính",
+  "gameBaseBuilder": "Căn cứ Thợ Xây",
+  "gameClanCapital": "Thủ đô Bang hội",
+  "gameTownHall": "TH",
+  "gameTownHallLevel": "Cấp TH",
+  "gameTownHallLevelNumber": "Nhà Chính {level}",
+  "@gameTownHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameExpLevel": "Cấp kinh nghiệm",
+  "gameLeague": "Liên minh",
+  "gameTrophies": "Cúp",
+  "gameBuilderBaseTrophies": "Cúp BB",
+  "gameDonations": "Quyên góp",
+  "gameDonationsReceived": "Đã nhận",
+  "gameDonationsRatio": "Tỉ lệ quyên góp",
+  "gameLevel": "Cấp: {level}/{maxLevel}",
+  "@gameLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "maxLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "gameHeroes": "Tướng",
+  "gameEquipment": "Trang bị",
+  "gameHeroesEquipments": "Trang bị tướng",
+  "gameTroops": "Quân lính",
+  "gameActiveSuperTroops": "Siêu binh đang hoạt động",
+  "gamePets": "Linh thú",
+  "gameSiegeMachines": "Máy công thành",
+  "gameSpells": "Phép thuật",
+  "gameAchievements": "Thành tựu",
+  "gameClanGames": "Trò chơi Bang hội",
+  "gameSeasonPass": "Vé mùa",
+  "gameCreatorCodeDescription": "Ủng hộ chúng tôi miễn phí!",
+  "gameCreatorCodeDialogTitle": "Ủng hộ ClashKing",
+  "gameCreatorCodeDialogDescription": "Khi dùng mã nhà sáng tạo của chúng tôi, bạn giúp tài trợ phát triển, giữ ứng dụng và bot miễn phí cho mọi người, đồng thời hỗ trợ thêm tính năng mới.\n\nChúng tôi nhận 5% từ các giao dịch mua trong game của bạn mà bạn không mất thêm chi phí — chỉ cần nhập \"ClashKing\" trong cửa hàng của bất kỳ trò chơi Supercell nào.\n\nCảm ơn bạn đã ủng hộ!",
+  "gameCreatorCodeDialogButton": "Dùng mã nhà sáng tạo",
+  "clanTitle": "Bang hội",
+  "clanSearchTitle": "Tìm bang hội",
+  "clanSearchPlaceholder": "Tên bang hội",
+  "clanNone": "Không có bang hội",
+  "clanJoinToUnlock": "Tham gia bang hội để mở khóa tính năng mới.",
+  "clanMembers": "Thành viên",
+  "clanMembersSearchPlaceholder": "Tìm kiếm thành viên",
+  "clanMembersShowTotals": "Hiển thị tổng số bang hội",
+  "clanMembersHideTotals": "Ẩn tổng số bang hội",
+  "clanMembersReceivedShort": "Đã nhận",
+  "clanMembersAverageTh": "TH trung bình",
+  "clanMinimumMembers": "Số thành viên tối thiểu",
+  "clanMaximumMembers": "Số thành viên tối đa",
+  "clanLocation": "Vị trí",
+  "clanMinimumPoints": "Điểm bang hội tối thiểu",
+  "clanMinimumLevel": "Cấp bang hội tối thiểu",
+  "clanInviteOnly": "Chỉ mời",
+  "@clanInviteOnly": {
+    "description": "Clan is invite only"
+  },
+  "clanOpened": "Đang mở",
+  "@clanOpened": {
+    "description": "Clan is opened"
+  },
+  "clanRoleLeader": "Thủ lĩnh",
+  "clanRoleCoLeader": "Đồng thủ lĩnh",
+  "clanRoleElder": "Trưởng lão",
+  "clanRoleMember": "Thành viên",
+  "clanWarFrequencyAlways": "Luôn luôn",
+  "clanWarFrequencyNever": "Không bao giờ",
+  "clanWarFrequencyOncePerWeek": "1/tuần",
+  "clanWarFrequencyMoreThanOncePerWeek": "Hơn 1 lần/tuần",
+  "clanWarFrequencyRarely": "Hiếm khi",
+  "timeHourIndicator": "h",
+  "timeDaysAgo": "{days} ngày trước",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDayAgo": "{day} ngày trước",
+  "@timeDayAgo": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHourAgo": "{hour} giờ trước",
+  "@timeHourAgo": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours} giờ trước",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinuteAgo": "{minute} phút trước",
+  "@timeMinuteAgo": {
+    "placeholders": {
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinutesAgo": "{minutes} phút trước",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeJustNow": "Vừa xong",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Vừa kết thúc",
+  "timeEndedMinutesAgo": "Đã kết thúc {minutes} phút trước",
+  "@timeEndedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedHoursAgo": "Đã kết thúc {hours} giờ trước",
+  "@timeEndedHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedDaysAgo": "Đã kết thúc {days} ngày trước",
+  "@timeEndedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeStartsIn": "Bắt đầu sau {time}",
+  "@timeStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeStartsAt": "Bắt đầu lúc {time}",
+  "@timeStartsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsIn": "Kết thúc sau {time}",
+  "@timeEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsAt": "Kết thúc lúc {time}",
+  "@timeEndsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsTitle": "Giải đấu Huyền thoại",
+  "legendsNotInLeague": "Không ở Giải Huyền Thoại",
+  "legendsNoDataToday": "Bạn không ở Giải Huyền Thoại, nhưng các mùa trước vẫn có sẵn.",
+  "legendsStartDescription": "Bạn bắt đầu ngày với {trophies} cúp.",
+  "@legendsStartDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsNoRankLocalDescription": "Hiện bạn chưa được xếp hạng ({country}) với {trophies} cúp.",
+  "@legendsNoRankLocalDescription": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsRankLocalDescription": "Hiện bạn đang xếp hạng {rank} ({country}) với {trophies} cúp.",
+  "@legendsRankLocalDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGainDescription": "Bạn hiện đã nhận thêm {trophies} cúp.",
+  "@legendsGainDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsLossDescription": "Bạn hiện đã mất {trophies} cúp.",
+  "@legendsLossDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoGlobalRankDescription": "Hiện bạn chưa được xếp hạng toàn cầu với {trophies} cúp.",
+  "@legendsNoGlobalRankDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGlobalRankDescription": "Hiện bạn đang xếp hạng {rank} toàn cầu với {trophies} cúp.",
+  "@legendsGlobalRankDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoRank": "Không có xếp hạng",
+  "legendsBestTrophies": "Cúp cao nhất",
+  "legendsMostAttacks": "Nhiều lượt tấn công nhất",
+  "legendsLastSeason": "Mùa trước",
+  "legendsBestRank": "Hạng toàn cầu tốt nhất",
+  "legendsTrophiesBySeason": "Cúp theo mùa",
+  "legendsEosTrophies": "Cúp cuối mùa",
+  "legendsEosDetails": "Chi tiết cuối mùa",
+  "legendsInaccurateTitle": "Dữ liệu không chính xác?",
+  "legendsInaccurateIntro": "Do các giới hạn của API Clash of Clans, dữ liệu của chúng tôi có thể không phải lúc nào cũng hoàn toàn chính xác. Đây là lý do:\n",
+  "legendsInaccurateApiDelayTitle": "1. Độ trễ API: ",
+  "legendsInaccurateApiDelayBody": "API có thể mất tới 5 phút để cập nhật, gây độ trễ khi phản ánh thay đổi cúp theo thời gian thực.\n",
+  "legendsInaccurateConcurrentTitle": "2. Thay đổi đồng thời: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- Nhiều lượt tấn công/phòng thủ: ",
+  "legendsInaccurateMultipleAttacksBody": "Nếu nhiều lượt tấn công hoặc phòng thủ xảy ra liên tiếp nhanh, API có thể hiển thị kết quả gộp (ví dụ: +68 hoặc -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Tấn công và phòng thủ đồng thời: ",
+  "legendsInaccurateSimultaneousBody": "Nếu một lượt tấn công và phòng thủ xảy ra cùng lúc, bạn có thể thấy kết quả lẫn lộn (ví dụ: +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Lãi/lỗ ròng: ",
+  "legendsInaccurateNetGainBody": "Bất chấp vấn đề thời điểm, tổng mức tăng hoặc giảm ròng trong ngày là chính xác. ",
+  "legendsInaccurateConclusion": "Những giới hạn này thường gặp ở mọi công cụ dùng API Clash of Clans. Rất tiếc chúng tôi không thể sửa vì điều đó nằm trong tay Supercell. Chúng tôi cố gắng hết sức để bù đắp các giới hạn này và cung cấp kết quả gần với thực tế nhất có thể. Cảm ơn bạn đã thông cảm!",
+  "statsSeasonStats": "Thống kê mùa",
+  "statsByDay": "Theo ngày",
+  "@statsByDay": {
+    "description": "Shows stats by day"
+  },
+  "statsBySeason": "Theo mùa",
+  "@statsBySeason": {
+    "description": "Shows stats by season"
+  },
+  "statsDayIndex": "Ngày {index}",
+  "@statsDayIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsIndexDays": "{index} ngày",
+  "@statsIndexDays": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsSeasonDate": "Mùa {date}",
+  "@statsSeasonDate": {
+    "description": "Example: August 2024 season",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "statsAllTownHalls": "Tất cả Nhà Chính",
+  "statsMembers": "Thống kê thành viên",
+  "todoTitle": "Danh sách việc cần làm",
+  "todoExplanationTitle": "Cách tính nhiệm vụ",
+  "todoExplanationIntro": "Tỷ lệ hoàn thành nhiệm vụ được tính dựa trên các hoạt động sau với trọng số cụ thể:",
+  "todoExplanationLegendsTitle": "Giải Huyền Thoại:",
+  "todoExplanationLegends": "Trọng số 8 điểm cho mỗi tài khoản, 1 lượt tấn công = 1 điểm.",
+  "todoExplanationClanWarsTitle": "Hội chiến:",
+  "todoExplanationClanWars": "Trọng số 2 điểm cho mỗi tài khoản, 1 lượt tấn công = 1 điểm.",
+  "todoExplanationCwlTitle": "Giải đấu Hội chiến:",
+  "todoExplanationCwl": "Trọng số 1 điểm cho mỗi tài khoản, 1 lượt tấn công = 1 điểm. Không thể theo dõi CWL nếu người chơi không ở trong bang hội giải đấu của họ.",
+  "todoExplanationPassAndGamesTitle": "Vé mùa & Trò chơi Bang hội:",
+  "todoExplanationPassAndGames": "Trọng số 2 điểm cho mỗi mục trên mỗi tài khoản. Tỷ lệ dựa trên số ngày còn lại (1 tháng cho vé và 6 ngày cho trò chơi). Xanh = đang đúng tiến độ để hoàn thành vé hoặc trò chơi, đỏ = chậm tiến độ.",
+  "todoExplanationConclusion": "Tỷ lệ cuối cùng được tính bằng cách lấy tổng số hành động đã hoàn thành trong các sự kiện đang diễn ra chia cho tổng số hành động cần thiết.",
+  "todoAccountsNumber": "{number} tài khoản",
+  "@todoAccountsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Number of accounts (ex: 4 accounts)"
+  },
+  "todoAccountsNumberActive": "{number} tài khoản đang hoạt động",
+  "@todoAccountsNumberActive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsNumberInactive": "{number} tài khoản không hoạt động",
+  "@todoAccountsNumberInactive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsActive": "Tài khoản đang hoạt động",
+  "todoAccountsInactive": "Tài khoản không hoạt động",
+  "todoAccountsNoInactive": "Không có tài khoản không hoạt động.",
+  "todoAccountsNoActive": "Không có tài khoản đang hoạt động.",
+  "todoAttacksLeftDescription": "Bạn còn {attacks} lượt tấn công ({type}).",
+  "@todoAttacksLeftDescription": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDefensesLeftDescription": "Bạn còn {defenses} lượt phòng thủ ({type}).",
+  "@todoDefensesLeftDescription": {
+    "placeholders": {
+      "defenses": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoNoAttacksLeftDescription": "Chúc mừng, bạn đã hoàn thành tất cả lượt tấn công ({type})!",
+  "@todoNoAttacksLeftDescription": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescription": "Bạn còn cần {points} điểm hôm nay để kịp tiến độ tới cuối sự kiện ({type}).",
+  "@todoPointsLeftDescription": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescriptionNoPoints": "Chúc mừng, bạn đang đúng tiến độ để nhận phần thưởng tối đa khi sự kiện kết thúc ({type})!",
+  "@todoPointsLeftDescriptionNoPoints": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "warTitle": "Chiến tranh",
+  "warFrequency": "Tần suất chiến tranh",
+  "warParticipation": "Tham gia chiến tranh",
+  "cwlParticipantOnly": "Participant Only",
+  "warStatsLastXDays": "Last {number} days",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsCurrentMembers": "Current members",
+  "warLeague": "Chiến tranh/Giải đấu",
+  "warHistory": "Lịch sử chiến tranh",
+  "warLog": "Nhật ký chiến tranh",
+  "warLogSearchPlaceholder": "Tìm kiếm chiến tranh",
+  "warLogClosed": "Nhật ký chiến tranh của {clan} đã đóng.",
+  "warLogPrivate": "Nhật ký chiến tranh của {clan} đang ở chế độ riêng tư.",
+  "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warStats": "Thống kê chiến tranh",
+  "warStatsSearchPlaceholder": "Tìm kiếm người chơi",
+  "warStatsCurrentTownHall": "TH của tôi",
+  "warStatsLast50": "50 cuối cùng",
+  "warStatsWars": "chiến tranh",
+  "warStatsSelectSeason": "Chọn mùa thống kê chiến tranh",
+  "warOngoing": "Chiến tranh đang diễn ra",
+  "warIsNotInWar": "{clan} hiện không tham chiến.",
+  "@warIsNotInWar": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warAskForWar": "Liên hệ thủ lĩnh hoặc đồng thủ lĩnh để bắt đầu chiến tranh.",
+  "warAskForWarLogOpening": "Liên hệ thủ lĩnh hoặc đồng thủ lĩnh để mở nhật ký chiến tranh.",
+  "warEnded": "Chiến tranh đã kết thúc",
+  "warInWar": "Đang chiến tranh",
+  "@warInWar": {
+    "description": "War state: active"
+  },
+  "warPreparation": "Chuẩn bị",
+  "warPerfectWar": "Chiến tranh hoàn hảo",
+  "warVictory": "Chiến thắng",
+  "warDefeat": "Thất bại",
+  "warDraw": "Hòa",
+  "@warDraw": {
+    "description": "War ended in a draw"
+  },
+  "warTeamSize": "Quy mô đội",
+  "warMyTeam": "Đội của tôi",
+  "warEnemiesTeam": "Kẻ địch",
+  "warClanDraw": "Hai bang hội đang hòa",
+  "warStateOfTheWar": "Tình trạng chiến tranh",
+  "warStarsNeededToTakeTheLead": "{clan} vẫn cần thêm {star} sao hoặc {stars2} sao và {percent}% để vượt lên dẫn trước.",
+  "@warStarsNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "star": {
+        "type": "int"
+      },
+      "stars2": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} vẫn cần {percent}% hoặc thêm 1 sao để vượt lên dẫn trước",
+  "@warStarsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warNotStarted": "Chiến tranh chưa bắt đầu",
+  "warWonByStars": "{clanName} đã thắng chiến tranh!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} đã thua chiến tranh",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} đã thắng nhờ phần trăm phá hủy!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} đã thua do phần trăm phá hủy",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Hòa hoàn hảo",
+  "warCanTieNeedsStars": "{clanName} có thể hòa nhưng cần {stars} sao",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} không thể bắt kịp về sao",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisToWin": "Để giành chiến thắng",
+  "warAnalysisToLose": "Để thua",
+  "warAnalysisNoAttacksLeft": "Không còn đòn tấn công nào",
+  "warAnalysisScenario": "Còn lại {attacks} tấn công -> cần {stars} sao / {percent}% mỗi lần tấn công",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} tấn công còn lại -> không thể ({stars} sao / {percent}% mỗi lần tấn công)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotLose": "{clanName} không thể thua nữa",
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisSecuredBadge": "Đã đảm bảo",
+  "warAnalysisAlreadySecured": "Đã được đảm bảo",
+  "warAnalysisSecureAgainst": "Mục tiêu được tính với giả định {clanName} sử dụng toàn bộ lượt tấn công còn lại.",
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotSecureAgainst": "Không thể đảm bảo kết quả về mặt toán học nếu {clanName} tối ưu toàn bộ lượt tấn công còn lại.",
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisNoSecureObjective": "Không thể đảm bảo bằng số lượt tấn công còn lại",
+  "warAnalysisStarGoal": "+{stars} sao",
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisRemainingAttempts": "Còn {attacks} lượt tấn công",
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisNoBetterResult": "Không thể đạt kết quả tốt hơn",
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
+  },
+  "warNoDataAvailableForThisWar": "Không có dữ liệu cho chiến tranh này",
+  "warCalculatorFast": "Máy tính nhanh",
+  "warCalculatorAnswer": "Để đạt tỷ lệ phá hủy {percentNeeded}%, cần tổng cộng {result}%.",
+  "@warCalculatorAnswer": {
+    "placeholders": {
+      "percentNeeded": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorNeededOverall": "% cần tổng thể",
+  "warCalculatorCalculate": "Tính toán",
+  "warAttacksTitle": "Tấn công",
+  "warAttacksSuccessful": "Tấn công thành công",
+  "warAttacksFailed": "Các cuộc tấn công thất bại",
+  "warAttacksNone": "Chưa có lượt tấn công",
+  "@warAttacksNone": {
+    "description": "No attack yet in war"
+  },
+  "warAttacksBest": "Lượt tấn công tốt nhất",
+  "warAttacksCount": "Số lượt tấn công",
+  "warAttacksMissed": "Lượt tấn công bỏ lỡ",
+  "warAttacksMissedShort": "Bỏ lỡ",
+  "warAttacksNumber": "Bạn đã tấn công {number_time} lần trong {number_war} cuộc chiến gần nhất.",
+  "@warAttacksNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warAttacksAverageStars": "Bạn đạt trung bình {stars} sao mỗi cuộc chiến.",
+  "@warAttacksAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warAttacksAverageDestruction": "Bạn đạt trung bình {percent}% tỷ lệ phá hủy mỗi cuộc chiến.",
+  "@warAttacksAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesTitle": "Phòng thủ",
+  "warDefensesNone": "Chưa có lượt phòng thủ",
+  "@warDefensesNone": {
+    "description": "No defense yet in war"
+  },
+  "warDefensesBest": "Lượt phòng thủ tốt nhất",
+  "warDefensesBestOutOf": "Phòng thủ tốt nhất (trong {number})",
+  "@warDefensesBestOutOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+  },
+  "warDefensesNumber": "Bạn đã phòng thủ {number_time} lần trong {number_war} cuộc chiến gần nhất.",
+  "@warDefensesNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warDefensesAverageStars": "Bạn để đối thủ đạt trung bình {stars} sao mỗi lượt phòng thủ.",
+  "@warDefensesAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesAverageDestruction": "Bạn để đối thủ đạt trung bình {percent}% tỷ lệ phá hủy mỗi lượt phòng thủ.",
+  "@warDefensesAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsTitle": "Sao",
+  "warStarsAverage": "Sao trung bình",
+  "warStarsNumber": "Số sao",
+  "warStarsOne": "1 sao",
+  "warStarsTwo": "2 sao",
+  "warStarsThree": "3 sao",
+  "warStarsZero": "0 sao",
+  "warStarsBestPerformance": "Hiệu suất tốt nhất",
+  "@warStarsBestPerformance": {
+    "description": "Best performance in war"
+  },
+  "warDestructionTitle": "Phá hủy",
+  "warDestructionAverage": "Phá hủy trung bình",
+  "warDestructionRate": "Tỷ lệ phá hủy",
+  "@warDestructionRate": {
+    "description": "Percentage of destruction in war"
+  },
+  "warHistoryWinsDescription": "Bang hội của bạn đã thắng {wins} cuộc chiến ({percent}%) trong 50 cuộc chiến gần nhất.",
+  "@warHistoryWinsDescription": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryLossesDescription": "Bang hội của bạn đã thua {losses} cuộc chiến ({percent}%) trong 50 cuộc chiến gần nhất.",
+  "@warHistoryLossesDescription": {
+    "placeholders": {
+      "losses": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryDrawsDescription": "Bang hội của bạn có {draws} trận hòa ({percent}%) trong 50 cuộc chiến gần nhất.",
+  "@warHistoryDrawsDescription": {
+    "placeholders": {
+      "draws": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageMembersDescription": "Bang hội của bạn có trung bình {members} thành viên tham gia trong 50 cuộc chiến gần nhất.",
+  "@warHistoryAverageMembersDescription": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      }
+    }
+  },
+  "warHistoryAverageWarStarsDescription": "Bang hội của bạn đạt trung bình {stars} sao mỗi cuộc chiến trong 50 cuộc chiến gần nhất. Con số này chiếm {percent} tổng số sao.",
+  "@warHistoryAverageWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageHitRateDescription": "Bang hội của bạn có trung bình {percent}% tỷ lệ phá hủy trong 50 cuộc chiến gần nhất.",
+  "@warHistoryAverageHitRateDescription": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warPositionMap": "Vị trí bản đồ",
+  "@warPositionMap": {
+    "description": "Map position in war"
+  },
+  "warPositionAbbr": "Vị trí",
+  "@warPositionAbbr": {
+    "description": "Abbreviation for map position"
+  },
+  "warPositionOrder": "Thứ tự",
+  "@warPositionOrder": {
+    "description": "Order of the player in the clan"
+  },
+  "warOpponentTownhall": "TH đối thủ",
+  "@warOpponentTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+  },
+  "warOpponentLowerTownhall": "TH thấp hơn",
+  "warOpponentUpperTownhall": "TH cao hơn",
+  "warOpponentEqualThLevel": "TH bằng nhau",
+  "warOpponentSelectMembersThLevel": "Cấp TH thành viên",
+  "warOpponentSelectOpponentsThLevel": "Cấp TH đối thủ",
+  "warFiltersLastXwars": "{number} cuộc chiến gần nhất",
+  "@warFiltersLastXwars": {
+    "description": "Example: Shows the last 25 wars",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warFiltersFriendly": "Giao hữu",
+  "@warFiltersFriendly": {
+    "description": "Friendly war"
+  },
+  "warFiltersRandom": "Ngẫu nhiên",
+  "@warFiltersRandom": {
+    "description": "Random/basic war (not friendly or cwl)"
+  },
+  "warVisibilityToggleTownHall": "Ẩn/hiện thống kê từ các cấp TH cũ",
+  "@warVisibilityToggleTownHall": {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+  },
+  "warEventsTitle": "Sự kiện",
+  "@warEventsTitle": {
+    "description": "War events"
+  },
+  "warEventsNewest": "Mới nhất",
+  "warEventsOldest": "Cũ nhất",
+  "warStatusReady": "Đã tham gia",
+  "@warStatusReady": {
+    "description": "Opted In for war"
+  },
+  "warStatusUnready": "Không tham gia",
+  "@warStatusUnready": {
+    "description": "Opted Out for war"
+  },
+  "warStatusMissed": "Bỏ lỡ",
+  "@warStatusMissed": {
+    "description": "Missed attacks"
+  },
+  "warStatusMissedInfo": "Bỏ lỡ: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warAbbreviationAvg": "TB",
+  "@warAbbreviationAvg": {
+    "description": "Abbreviation for average"
+  },
+  "warAbbreviationAvgPercentage": "TB %",
+  "@warAbbreviationAvgPercentage": {
+    "description": "Abbreviation for average percentage"
+  },
+  "cwlTitle": "CWL",
+  "cwlClanWarLeague": "Giải đấu Hội chiến",
+  "cwlOngoing": "CWL đang diễn ra",
+  "cwlHistoryTitle": "Lịch sử CWL",
+  "clanLeaderboardHistoryTab": "Lịch sử bảng xếp hạng",
+  "clanLegendHistoryTab": "Lịch sử Huyền thoại",
+  "clanRecordsTab": "Kỷ lục",
+  "clanProfileHistoryTab": "Lịch sử hồ sơ",
+  "clanProfileLevelChanged": "Cấp độ bang hội đã thay đổi",
+  "clanProfileDescriptionChanged": "Mô tả đã thay đổi",
+  "clanJoinLeaveTab": "Tham gia/Rời khỏi",
+  "clanRankingsTab": "Xếp hạng",
+  "clanRankingsSeason": "Mùa",
+  "clanRankingsSelectSeason": "Chọn mùa xếp hạng",
+  "clanRankingsFilterActivity": "Hoạt động",
+  "clanRankingsFilterWar": "Chiến tranh",
+  "clanRankingsFilterPoints": "Điểm",
+  "cwlHistoryPreviewBadge": "Xem trước",
+  "cwlHistoryPreviewSubtitle": "Mô hình {clan} cho đến khi điểm cuối CWL được sửa",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Chưa có lịch sử CWL",
+  "cwlHistoryEmptyBody": "Bang hội này chưa tham gia mùa giải Clan War League nào.",
+  "cwlRankTitle": "Thứ hạng",
+  "cwlWarsPlayedTitle": "Cuộc chiến đã chơi",
+  "playerWarStarsTitle": "Sao chiến tranh",
+  "playerWarPreferenceTitle": "Trưởng phòng chiến tranh",
+  "playerDonatedTitle": "Đã quyên góp",
+  "playerReceivedTitle": "Đã nhận",
+  "playerCapitalTitle": "Thủ đô",
+  "playerExpLevelTitle": "Exp. mức độ",
+  "clanWarWinsTitle": "Chiến tranh thắng lợi",
+  "clanWinStreakTitle": "Chuỗi chiến thắng",
+  "clanBuilderBaseTitle": "Căn cứ xây dựng",
+  "clanTypeTitle": "Kiểu",
+  "clanMinTownHallTitle": "Tối thiểu. TH",
+  "clanMinTrophiesTitle": "Tối thiểu. danh hiệu",
+  "clanCapitalHallTitle": "Tòa thị chính",
+  "clanDistrictsTitle": "Quận",
+  "legendsCountryTitle": "Quốc gia",
+  "legendsLocalRankTitle": "Xếp hạng địa phương",
+  "legendsGlobalRankTitle": "Xếp hạng toàn cầu",
+  "warWinsTitle": "Thắng",
+  "warLossesTitle": "Tổn thất",
+  "warDrawsTitle": "Hòa",
+  "cwlRounds": "Vòng",
+  "cwlRoundNumber": "Vòng {number}",
+  "@cwlRoundNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRound": "Vòng hiện tại (Vòng {round})",
+  "@cwlCurrentRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRank": "Bang hội của bạn hiện xếp hạng {rank}.",
+  "@cwlRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlStars": "Bang hội của bạn có tổng cộng {stars} sao.",
+  "@cwlStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlDestructionPercentage": "Bang hội của bạn có tổng tỷ lệ phá hủy {percent}%.",
+  "@cwlDestructionPercentage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlTotalAttacks": "Bang hội của bạn có tổng cộng {attacks} lượt tấn công trên {totalAttacks} lượt có thể.",
+  "@cwlTotalAttacks": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "totalAttacks": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveTitle": "Nhật ký vào/rời bang hội (Mùa hiện tại)",
+  "joinLeaveJoin": "Vào",
+  "joinLeaveLeave": "Rời",
+  "joinLeaveJoins": "Lượt vào",
+  "joinLeaveLeaves": "Lượt rời",
+  "joinLeaveUniquePlayers": "Người chơi duy nhất",
+  "joinLeaveMovingPlayers": "Người chơi di chuyển",
+  "joinLeaveMostMovingPlayers": "Người chơi di chuyển nhiều nhất",
+  "joinLeaveStillInClan": "Vẫn ở trong bang hội",
+  "joinLeaveLeftForever": "Đã rời hẳn",
+  "joinLeaveRejoinedPlayers": "Người chơi đã quay lại",
+  "joinLeaveAvgTimeJoinLeave": "Thời gian vào/rời TB",
+  "joinLeavePeakHour": "Giờ hoạt động nhiều nhất",
+  "joinLeaveNumberDescription": "{number} sự kiện rời bang hội đã xảy ra trong mùa hiện tại ({date}).",
+  "@joinLeaveNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinNumberDescription": "{number} sự kiện vào bang hội đã xảy ra trong mùa hiện tại ({date}).",
+  "@joinLeaveJoinNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveMovingNumberDescription": "{number} người chơi đã rời rồi quay lại bang hội trong mùa hiện tại ({date}).",
+  "@joinLeaveMovingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveUniqueNumberDescription": "{number} người chơi duy nhất đã vào/rời bang hội trong mùa hiện tại ({date}).",
+  "@joinLeaveUniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveStillInClanNumberDescription": "{number} người chơi đã vào và vẫn còn trong bang hội.",
+  "@joinLeaveStillInClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveLeftClanNumberDescription": "{number} người chơi đã vào, sau đó rời bang hội và chưa từng quay lại.",
+  "@joinLeaveLeftClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@joinLeaveTitle": {
+    "description": "Logs of players joining or leaving the clan."
+  },
+  "joinLeaveLeftOnAt": "Đã rời vào {date} lúc {time}.",
+  "@joinLeaveLeftOnAt": {
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinedOnAt": "Đã vào vào {date} lúc {time}.",
+  "@joinLeaveJoinedOnAt": {
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "raidsTitle": "Đột kích",
+  "raidsLast": "Đợt đột kích gần nhất",
+  "raidsOngoing": "Đột kích đang diễn ra",
+  "raidsDistrictsDestroyed": "Quận đã phá hủy",
+  "raidsCompleted": "Đột kích đã hoàn thành",
+  "capitalRaidStatusOngoing": "Đang thực hiện",
+  "capitalRaidStatusEnded": "Đã kết thúc",
+  "capitalRaidLoot": "Cướp bóc",
+  "capitalRaidRewards": "Phần thưởng",
+  "capitalRaidPreviousWeek": "Tuần trước",
+  "capitalRaidNextWeek": "Tuần tới",
+  "capitalRaidFilterAttacked": "bị tấn công",
+  "capitalRaidFilterNotAttacked": "Không bị tấn công",
+  "capitalRaidFilterLinked": "Tài khoản được liên kết",
+  "capitalRaidEmptyTitle": "Không có dữ liệu đột kích vốn",
+  "capitalRaidEmptyBody": "Lịch sử đột kích sẽ xuất hiện ở đây sau khi theo dõi các ngày cuối tuần đột kích thủ đô của bang hội này.",
+  "capitalRaidEstimated": "Ước lượng",
+  "capitalRaidEstimatedTooltip": "Chưa chính thức: ước tính từ nhật ký tấn công và phòng thủ của tuần này. Supercell công bố số huy chương thực sự sau khi cuộc đột kích kết thúc.",
+  "capitalRaidTrophyPrediction": "Danh hiệu dự đoán",
+  "capitalRaidTrophyPredictionTooltip": "Các danh hiệu Capital League ước tính sau cuộc đột kích này, dựa trên thành tích tính đến thời điểm hiện tại của tuần này. Không chính thức.",
+  "capitalRaidProjectedLoot": "Chiến lợi phẩm dự kiến",
+  "capitalRaidOneshots": "Một lần",
+  "capitalRaidFails": "Thất bại",
+  "capitalDetailsOffense": "hành vi phạm tội",
+  "capitalDetailsDefense": "Phòng thủ",
+  "capitalDistrictsSection": "Quận",
+  "capitalOpponentsSection": "đối thủ",
+  "capitalAvgAttacksPerDistrict": "Các cuộc tấn công trung bình/quận",
+  "capitalAvgLootPerAttack": "Cướp bóc/tấn công trung bình",
+  "capitalHistorySection": "Lịch sử đột kích",
+  "capitalHistoryWeeksTracked": "Tuần được theo dõi",
+  "capitalAvgLootPerWeek": "Chiến lợi phẩm trung bình/tuần",
+  "capitalAvgAttacksPerWeek": "Số lần tấn công trung bình/tuần",
+  "capitalBestRaid": "Cuộc đột kích hay nhất",
+  "capitalWorstRaid": "Cuộc đột kích tồi tệ nhất",
+  "capitalHistoryChartTitle": "Xu hướng hàng tuần",
+  "searchNoResult": "Không có kết quả.",
+  "maintenanceTitle": "Bảo trì",
+  "maintenanceDescription": "Clash of Clans hiện đang bảo trì, nên chúng tôi không thể truy cập API. Vui lòng quay lại sau.",
+  "downloadTooltip": "Tải xuống tóm tắt CWL",
+  "downloadInProgress": "Đang tải tệp... Có thể mất vài giây...",
+  "downloadSuccess": "Đã lưu tệp thành công tại {path}",
+  "@downloadSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadError": "Không thể tải tệp",
+  "dashboardTitle": "Bảng điều khiển",
+  "toolsTitle": "Công cụ",
+  "navigationTeam": "Đội",
+  "navigationStatistics": "Thống kê",
+  "versionDevice": "Phiên bản & thiết bị",
+  "@versionDevice": {
+    "description": "Version of the app and device information"
+  },
+  "settingsLicenses": "Giấy phép mã nguồn mở",
+  "settingsLicensesSubtitle": "Xem giấy phép của các thư viện bên thứ ba",
+  "settingsPrivacyPolicy": "Chính sách quyền riêng tư",
+  "settingsPrivacyPolicySubtitle": "Cách chúng tôi xử lý dữ liệu của bạn",
+  "betaFeature": "Tính năng beta",
+  "betaLabel": "BETA",
+  "betaDescription": "Tính năng này hiện đang ở giai đoạn beta, có thể còn lỗi hoặc chưa hoàn thiện. Chúng tôi đang tích cực cải thiện và hoan nghênh phản hồi của bạn. Vui lòng chia sẻ ý tưởng và báo cáo mọi vấn đề trong Máy chủ Discord của chúng tôi để giúp tính năng tốt hơn.",
+  "settingsLanguage": "Ngôn ngữ",
+  "settingsSelectLanguage": "Chọn ngôn ngữ",
+  "settingsToggleTheme": "Chuyển đổi giao diện",
+  "faqTitle": "FAQ",
+  "faqSubtitle": "Câu hỏi thường gặp",
+  "faqIsThisFromSupercell": "Ứng dụng này có phải từ Supercell không?",
+  "faqFanContentPolicy": "Tài liệu này không chính thức và không được Supercell xác nhận. Để biết thêm thông tin, xem Chính sách Nội dung Người hâm mộ của Supercell: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Tại sao dữ liệu đôi khi không chính xác hoặc bị thiếu?",
+  "faqClanNotTracked": "Bang hội chưa được theo dõi",
+  "faqClanNotTrackedAnswer": "ClashKing chỉ có thể lấy thông tin này nếu bang hội được theo dõi. Nếu bang hội của bạn chưa được theo dõi, vui lòng mời ClashKing Bot vào Máy chủ Discord của bạn và dùng lệnh /addclan. Chúng tôi đang cố gắng đưa tính năng này vào ứng dụng trong thời gian tới.",
+  "faqTrackingDown": "Theo dõi bị gián đoạn",
+  "faqTrackingDownAnswer": "Việc theo dõi có thể ngừng hoạt động trong một khoảng thời gian nhất định. Vì vậy đôi khi dữ liệu của bạn có thể bị thiếu đoạn. Chúng tôi đang cải thiện vấn đề này.",
+  "faqApiLimitation": "Giới hạn API Clash of Clans",
+  "faqApiLimitationAnswer": "Một số dữ liệu do Clash of Clans và API của họ cung cấp có những giới hạn nhất định. Trường hợp này xảy ra với theo dõi Huyền Thoại: đôi khi hệ thống gộp lượng cúp tăng và giảm như thể đó là một lượt tấn công duy nhất. Đây cũng là lý do chúng tôi không có thông tin về cấp công trình của bạn.",
+  "faqSupportWork": "Tôi có thể ủng hộ công việc của các bạn như thế nào?",
+  "faqSupportWorkAnswer": "Có nhiều cách để ủng hộ chúng tôi:",
+  "faqUseCodeClashKing": "Mã nhà sáng tạo: ClashKing",
+  "faqSupportUsOnPatreon": "Ủng hộ chúng tôi trên Patreon",
+  "faqRateTheApp": "Đánh giá ứng dụng trong cửa hàng",
+  "faqWhatCanBotDo": "Bot Discord ClashKing có thể làm gì?",
+  "faqWhatCanBotDoAnswer": "Bot Discord ClashKing giúp bạn quản lý bang hội trực tiếp từ Discord với các công cụ theo dõi toàn diện, thông báo tự động và tích hợp liền mạch với ứng dụng này. Bot được thiết kế cho thủ lĩnh và thành viên bang hội muốn luôn kết nối và có tổ chức:",
+  "faqInviteBotToServer": "Mời bot vào máy chủ",
+  "faqBotFeatureTracking": "Theo dõi người chơi & bang hội",
+  "faqBotFeatureTrackingDesc": "Thêm và giám sát nhiều bang hội và người chơi với cập nhật thời gian thực",
+  "faqBotFeatureWars": "Quản lý chiến tranh",
+  "faqBotFeatureWarsDesc": "Theo dõi hiệu suất chiến tranh, phân tích lượt tấn công và nhận thông báo chiến tranh",
+  "faqBotFeatureNotifications": "Thông báo thông minh",
+  "faqBotFeatureNotificationsDesc": "Nhận cảnh báo về quyên góp, lượt tấn công chiến tranh và sự kiện bang hội quan trọng",
+  "faqBotFeatureCommands": "Lệnh mạnh mẽ",
+  "faqBotFeatureCommandsDesc": "Dùng lệnh slash để truy cập nhanh thống kê người chơi, thông tin chiến tranh và hơn thế nữa",
+  "faqNeedHelp": "Tôi cần trợ giúp hoặc muốn góp ý. Tôi có thể liên hệ với bạn như thế nào?",
+  "faqNeedHelpAnswer": "Bạn có thể tham gia Máy chủ Discord của chúng tôi để yêu cầu trợ giúp hoặc gửi phản hồi, hoặc gửi email tới devs@clashk.ing. Vui lòng chỉ viết bằng tiếng Anh hoặc tiếng Pháp.",
+  "faqPrivacyDataTitle": "Tôi có thể quản lý hoặc xóa dữ liệu cá nhân của mình không?",
+  "faqPrivacyDataAnswer": "Có. Trong Cài đặt > Chính sách quyền riêng tư, bạn có thể mở chính sách quyền riêng tư, chuẩn bị bản xuất dữ liệu tài khoản ClashKing, yêu cầu chỉnh sửa hoặc hạn chế, và bắt đầu xóa tài khoản. Một số yêu cầu vẫn có thể dùng email hỗ trợ trong khi các dịch vụ quyền riêng tư phía máy chủ được triển khai. ClashKing có thể xử lý dữ liệu được lưu trong tài khoản ClashKing của bạn; dữ liệu Clash of Clans cũng có thể đến từ API Supercell hoặc dữ liệu công khai của bang hội và người chơi.",
+  "faqSendEmail": "Gửi email",
+  "faqJoinDiscord": "Tham gia Máy chủ Discord của chúng tôi",
+  "faqCannotOpenMailClient": "Vì một số lý do, chúng tôi không thể mở ứng dụng email của bạn. Chúng tôi đã sao chép địa chỉ email cho bạn. Bạn có thể viết email và dán địa chỉ vào trường người nhận.",
+  "faqTroubleshooting": "Khắc phục sự cố",
+  "faqTroubleshootingDataTitle": "Tại sao dữ liệu của tôi không đồng bộ?",
+  "faqTroubleshootingDataDescription": "Dữ liệu người chơi hoặc bang hội có vẻ đã cũ",
+  "faqTroubleshootingDataSolution1": "Kéo xuống để làm mới trang",
+  "faqTroubleshootingDataSolution2": "Kiểm tra xem bang hội của bạn có được theo dõi không (xem bên trên)",
+  "faqTroubleshootingDataSolution3": "Chờ vài phút rồi thử lại: API có thể cần thời gian để cập nhật",
+  "faqTroubleshootingCrashTitle": "Tại sao ứng dụng bị crash?",
+  "faqTroubleshootingCrashDescription": "Ứng dụng đóng bất ngờ hoặc bị treo",
+  "faqTroubleshootingCrashSolution1": "Đóng ứng dụng và khởi động lại",
+  "faqTroubleshootingCrashSolution2": "Cập nhật ứng dụng lên phiên bản mới nhất",
+  "faqTroubleshootingCrashSolution3": "Xóa bộ nhớ đệm và dữ liệu ứng dụng (Android) hoặc cài đặt lại ứng dụng",
+  "faqTroubleshootingCrashSolution4": "Giải phóng dung lượng lưu trữ thiết bị",
+  "faqContactSupport": "Liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn (xem phần cuối)",
+  "faqTroubleshootingAccountTitle": "Tại sao tôi không thể xác minh tài khoản?",
+  "faqTroubleshootingAccountDescription": "Sự cố khi liên kết tài khoản Clash of Clans của bạn",
+  "faqTroubleshootingAccountSolution1": "Đảm bảo bạn đang dùng đúng thẻ người chơi bắt đầu bằng #",
+  "faqTroubleshootingAccountSolution2": "Nếu tài khoản có vẻ đã được liên kết, hãy dùng token API từ cài đặt Clash of Clans",
+  "faqTroubleshootingSolutions": "Giải pháp:",
+  "faqWhatIsClashKingProject": "Dự án ClashKing là gì?",
+  "faqWhatIsClashKingProjectAnswer": "ClashKing là một dự án mã nguồn mở về thống kê Clash of Clans và quản lý bang hội. Dự án chủ yếu do hai nhà phát triển duy trì, thỉnh thoảng có sự hỗ trợ của cộng tác viên. Chúng tôi tiếp tục cải thiện khi có thời gian, với một mục tiêu đơn giản: giúp người chơi và bang hội theo dõi tiến trình dễ hơn. Ứng dụng, bot Discord và API miễn phí hoạt động cùng nhau.",
+  "faqViewOnGitHub": "Xem trên GitHub",
+  "faqFeaturesGuide": "Ứng dụng ClashKing có thể làm gì?",
+  "faqFeaturesGuideDescription": "Nâng trải nghiệm Clash of Clans của bạn lên tầm cao mới! Ứng dụng ClashKing mang lại quyền truy cập đẹp mắt, nhanh chóng vào toàn bộ thống kê và dữ liệu bang hội của bạn - hoàn hảo cho người chơi không có Discord và những ai thích trải nghiệm di động gọn gàng:",
+  "faqAppDevelopmentNotice": "Chúng tôi đang tích cực phát triển tính năng mới để ứng dụng còn tốt hơn nữa. Phản hồi của bạn giúp chúng tôi cải thiện!",
+  "faqFeaturesPlayerTitle": "Thống kê người chơi",
+  "faqFeaturesPlayerDescription": "Theo dõi tiến trình, thành tựu và hiệu suất Giải Huyền Thoại của bạn",
+  "faqFeaturesClanTitle": "Quản lý bang hội",
+  "faqFeaturesClanDescription": "Theo dõi thành viên, quyên góp và sức khỏe tổng thể của bang hội",
+  "faqFeaturesWarTitle": "Theo dõi chiến tranh",
+  "faqFeaturesWarDescription": "Phân tích hiệu suất chiến tranh, chiến thuật tấn công và tỷ lệ thắng",
+  "faqFeaturesLegendsTitle": "Dữ liệu không chính xác?",
+  "faqFeaturesLegendsDescription": "Theo dõi cúp hằng ngày và thống kê cuối mùa",
+  "faqFeaturesCwlTitle": "Phân tích CWL",
+  "faqFeaturesCwlDescription": "Hiệu suất Giải đấu Hội chiến và đóng góp của thành viên",
+  "faqFeaturesTodoTitle": "Danh sách việc cần làm",
+  "faqFeaturesTodoDescription": "Xem những tài khoản nào vẫn cần tấn công Xếp hạng, đột kích, tấn công chiến tranh, Trò chơi Bang hội hoặc thực hiện nhiệm vụ vé mùa",
+  "faqFeaturesUpgradeTrackerTitle": "Trình theo dõi nâng cấp",
+  "faqFeaturesUpgradeTrackerDescription": "Dùng ảnh chụp dữ liệu tài khoản do người dùng cung cấp để xem các nâng cấp còn lại, tài nguyên, thợ xây, thời gian phòng thí nghiệm và tiến độ",
+  "faqFeaturesNotificationsTitle": "Thông báo đẩy",
+  "faqFeaturesNotificationsDescription": "Chọn tài khoản sẽ nhận cảnh báo cho các sự kiện ClashKing được hỗ trợ",
+  "faqFeaturesWidgetsTitle": "Tiện ích chiến tranh",
+  "faqFeaturesWidgetsDescription": "Theo dõi trạng thái chiến tranh hiện tại ngay trên màn hình chính ở những thiết bị hỗ trợ tiện ích",
+  "faqSearchHint": "Tìm trong FAQ...",
+  "faqSectionGettingStarted": "Bắt đầu & Giới thiệu",
+  "faqSectionAccountsAlertsWidgets": "Tài khoản, cảnh báo và tiện ích",
+  "faqSectionSupportAndContact": "Hỗ trợ & Liên hệ",
+  "faqLinkedAccountsTitle": "Tài khoản liên kết và việc xác minh hoạt động như thế nào?",
+  "faqLinkedAccountsAnswer": "Hồ sơ ClashKing của bạn có thể chứa nhiều tài khoản Clash of Clans. Việc thêm thẻ sẽ hiển thị dữ liệu công khai. Xác minh bằng mã API Clash of Clans chứng minh tài khoản thuộc về bạn và mở khóa các tính năng riêng cho tài khoản.",
+  "faqLinkedAccountsSolution1": "Bạn có thể quản lý, sắp xếp lại, ẩn hoặc xóa tài khoản trong phần quản lý tài khoản.",
+  "faqLinkedAccountsSolution2": "Tìm mã API trong Clash of Clans tại Cài đặt > Cài đặt khác > Mã API.",
+  "faqLinkedAccountsSolution3": "Bạn có thể đăng nhập bằng Discord hoặc email. Khi tính năng kết nối tài khoản khả dụng, hãy quản lý chúng trong Cài đặt.",
+  "faqNotificationsTitle": "Thông báo hoạt động như thế nào?",
+  "faqNotificationsAnswer": "Thông báo là tùy chọn. Khi được bật, ClashKing sẽ đăng ký thiết bị này. Bạn có thể chọn tài khoản liên kết mà mỗi loại cảnh báo áp dụng.",
+  "faqNotificationsSolution1": "Cho phép thông báo trên thiết bị và trong phần cài đặt ClashKing.",
+  "faqNotificationsSolution2": "Mỗi cảnh báo có thể áp dụng cho các tài khoản khác nhau. Nếu thiếu cảnh báo, hãy kiểm tra những tài khoản đã chọn.",
+  "faqNotificationsSolution3": "Một số cảnh báo phụ thuộc vào dữ liệu bang hội hoặc chiến tranh đang được theo dõi. Việc cập nhật dữ liệu bên ngoài có thể gây chậm trễ.",
+  "faqWidgetsTitle": "Tiện ích chiến tranh hoạt động như thế nào?",
+  "faqWidgetsAnswer": "Tiện ích chiến tranh hiển thị bản tóm tắt nhanh trên thiết bị được hỗ trợ. Chúng sử dụng tài khoản đã chọn hoặc đã liên kết, dữ liệu ClashKing lưu đệm và tính năng làm mới nền khi nền tảng cho phép.",
+  "faqWidgetsSolution1": "Mở ứng dụng sau khi đổi tài khoản hoặc bang hội để tiện ích đồng bộ.",
+  "faqWidgetsSolution2": "Nếu tiện ích hiển thị dữ liệu cũ, hãy làm mới ứng dụng trước. Android và iOS giới hạn việc cập nhật trong nền.",
+  "faqWidgetsSolution3": "Bang hội cần có dữ liệu chiến tranh truy cập được để hiển thị trạng thái hữu ích.",
+  "faqTranslationIssue": "Bản dịch bị thiếu hoặc không chính xác?",
+  "faqTranslationIssueAnswer": "Bản dịch trước tiên được tạo bằng các công cụ tạo nội dung và AI, sau đó được xem lại và cải thiện theo thời gian. Nếu bạn là người bản ngữ và thấy câu chữ chưa tự nhiên, bạn có thể đề xuất sửa trên Crowdin hoặc liên hệ với chúng tôi qua Discord hoặc email.",
+  "faqWaysToSupport": "Các cách ủng hộ chúng tôi:",
+  "translationHelpUsTranslate": "Giúp chúng tôi dịch",
+  "translationThankYou": "Cảm ơn bạn!",
+  "translationThankYouContent": "Xin gửi lời cảm ơn lớn tới tất cả những dịch giả tuyệt vời đã giúp chúng tôi đưa ứng dụng này đến với nhiều người hơn trên khắp thế giới!",
+  "translationHelpTranslateContent": "Bạn có thể giúp chúng tôi dịch ứng dụng trên Crowdin. Nếu ngôn ngữ của bạn chưa có trên Crowdin, hãy thoải mái yêu cầu trong Máy chủ Discord của chúng tôi. Cảm ơn bạn rất nhiều vì đã giúp đỡ!",
+  "translationHelpTranslateButton": "Giúp dịch trên Crowdin",
+  "translationCurrentTranslators": "Dịch giả",
+  "filtersTimeFilters": "Bộ lọc thời gian",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "Cài đặt chiến tranh",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Hiệu suất",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Nâng cao",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "Không có bộ lọc nào đang bật",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "Đang hiển thị {count} cuộc chiến gần nhất (mặc định)",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "Bộ lọc nhanh",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "30 ngày gần nhất",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "Chỉ 3 sao",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersFreshAttacks": "Tấn công lần đầu",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Mùa",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Khoảng ngày",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "Loại chiến tranh",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Nhà Chính",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "TH người tấn công",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "TH người phòng thủ",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Chỉ cùng cấp Nhà Chính",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersDestructionPercentage": "Phần trăm phá hủy",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersOptions": "Tùy chọn",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Chỉ tấn công lần đầu",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Giới hạn kết quả",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Vị trí tối thiểu",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Vị trí tối đa",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Ngày bắt đầu",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "Ngày kết thúc",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersYear": "Năm",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Tháng",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Chọn năm",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "Tất cả chiến tranh",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "chartsAttackPerformance": "Hiệu suất tấn công theo cấp TH",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Hiệu suất phòng thủ theo cấp TH",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Hàng: TH của bạn | Cột: TH đối thủ",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsGood": "Tốt",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Xuất sắc",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "Thông tin hiệu suất",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for statistical performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "Gợi ý bộ lọc dựa trên thống kê sao của bạn để làm nổi bật các mẫu hiệu suất",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
+  },
+  "generalExport": "Xuất",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "Xuất thống kê chiến tranh",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "Xuất thành công!",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportDialogDesc": "Thao tác này sẽ tải thống kê chiến tranh của bạn dưới dạng tệp Excel với nhiều trang tính, bao gồm thống kê tổng quan, chi tiết lượt tấn công và phân tích TH.",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "Đang tạo bản xuất...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "Tính năng xuất sắp ra mắt cho thống kê chiến tranh bang hội",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "Chưa áp dụng bộ lọc nào",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "Không thể tải dữ liệu người chơi",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "deepLinkInvalidPlayer": "Liên kết người chơi không hợp lệ.",
+  "@deepLinkInvalidPlayer": {
+    "description": "Shown when a player deep link does not include a valid tag"
+  },
+  "deepLinkInvalidClan": "Liên kết bang hội không hợp lệ.",
+  "@deepLinkInvalidClan": {
+    "description": "Shown when a clan deep link does not include a valid tag"
+  },
+  "deepLinkFailedToOpenPlayer": "Không thể mở người chơi.",
+  "@deepLinkFailedToOpenPlayer": {
+    "description": "Shown when a player deep link target could not be loaded"
+  },
+  "deepLinkFailedToOpenClan": "Không thể mở bang hội.",
+  "@deepLinkFailedToOpenClan": {
+    "description": "Shown when a clan deep link target could not be loaded"
+  },
+  "deepLinkUnknown": "Liên kết sâu không xác định.",
+  "@deepLinkUnknown": {
+    "description": "Shown when the app receives a deep link it does not understand"
+  },
+  "warAttacksDetailsTitle": "Chi tiết tấn công",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsAttackOrder": "Thứ tự tấn công",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Khoảng thời gian",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
+  },
+  "warAttacksDetailsAttacker": "Người tấn công",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Người phòng thủ",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Tên",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "Trạng thái",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "Số lượt tấn công mỗi thành viên",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "Bắt đầu chiến tranh",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "Kết thúc chiến tranh",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "Cấp độ hội",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "Tổng sao",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "% phá hủy",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "Thông tin chiến tranh",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "Kết quả chiến tranh",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Người chơi",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "Tấn công thất bại (0–1 sao)",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "Hiển thị các lượt tấn công không đạt 2+ sao",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "Bỏ lỡ lượt tấn công hoàn hảo",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "Hiển thị các lượt tấn công đạt 2 sao — cơ hội có thể hoàn hảo",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "Ít sao khi đánh TH{thLevel}",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "Hiển thị các lượt tấn công có số sao thấp khi đánh TH{thLevel}",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "Dễ bị TH{thLevel} khai thác",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "Hiển thị khi người tấn công TH{thLevel} đạt nhiều sao trước bạn",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "Hiệu suất CWL thấp",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for low CWL performance"
+  },
+  "performanceAnalysisCwlIssuesDesc": "Hiển thị các lượt tấn công CWL có trung bình sao thấp hơn chiến tranh thường",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for low CWL performance analysis"
+  },
+  "performanceAnalysisRandomWarIssues": "Hiệu suất chiến tranh ngẫu nhiên thấp",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for low random war performance"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "Hiển thị các lượt tấn công chiến tranh ngẫu nhiên có trung bình sao thấp hơn CWL",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for low random war performance analysis"
+  },
+  "performanceAnalysisFreshOnly": "Phân tích tấn công lần đầu",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "Chỉ phân tích hiệu suất trên các căn cứ chưa bị đánh",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "Hiệu suất gần đây (30 ngày)",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "Hiển thị hiệu suất gần đây để nhận biết xu hướng hiện tại",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "Tấn công quan trọng",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "Hiển thị các lượt tấn công từ 5 vị trí chiến tranh cao nhất",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "Tấn công dọn dẹp",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "Hiển thị các lượt tấn công từ vị trí chiến tranh thấp hơn",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingNeedsImprovement": "Cần cải thiện",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "Tỷ lệ ba sao cao",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "Tỷ lệ phá hủy cao",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "Hiệu suất ổn định",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "Độ ổn định ba sao",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "Hiệu suất sao tổng thể",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "presetSuggestionCwlOnly": "Chỉ CWL",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "Chiến tranh ngẫu nhiên",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "Chiến tranh giao hữu",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "Chỉ {count} sao",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "Tấn công hoàn hảo",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "Tấn công thất bại",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "Chỉ TH{level}",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "Tuần trước",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "Tháng trước",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "Thiết lập của tôi",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "Bộ lọc tùy chỉnh",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "Bộ lọc gần đây",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
+  },
+  "generalError": "Lỗi",
+  "generalSuccess": "Thành công",
+  "generalFailed": "Thất bại",
+  "generalMinimum": "Giá trị tối thiểu",
+  "generalMaximum": "Tối đa",
+  "generalHigh": "Cao",
+  "generalLow": "Thấp",
+  "generalPoor": "Kém",
+  "generalOpen": "Mở",
+  "generalClosed": "Đã đóng",
+  "generalAvailable": "Có sẵn",
+  "authErrorUserCancelledDiscordLogin": "Người dùng đã hủy đăng nhập Discord.",
+  "authErrorDiscordLoginFailed": "Đăng nhập Discord thất bại. Vui lòng thử lại.",
+  "authErrorEmailLoginFailed": "Đăng nhập bằng email thất bại. Vui lòng kiểm tra thông tin đăng nhập.",
+  "authErrorEmailNotVerified": "Địa chỉ email của bạn chưa được xác minh. Vui lòng kiểm tra email và nhập mã xác minh.",
+  "authErrorEmailVerificationFailed": "Xác minh email thất bại. Mã có thể không hợp lệ hoặc đã hết hạn.",
+  "authErrorDiscordLinkFailed": "Không thể liên kết tài khoản Discord. Tài khoản này có thể đã liên kết với tài khoản khác.",
+  "authErrorEmailLinkFailed": "Không thể liên kết tài khoản email. Email có thể đã được sử dụng.",
+  "authErrorUserNotAuthenticated": "Người dùng chưa được xác thực. Vui lòng đăng nhập lại.",
+  "apiErrorInvalidJsonResponse": "Đã xảy ra lỗi. Vui lòng thử lại.",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Đã xảy ra lỗi. Vui lòng kiểm tra dữ liệu nhập.",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "Bạn không được phép. Vui lòng đăng nhập lại.",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "Bạn không có quyền thực hiện hành động này.",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "Không tìm thấy nội dung bạn đang tìm.",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "Máy chủ tạm thời không khả dụng. Vui lòng thử lại sau ít phút.",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "Không có kết nối internet. Vui lòng kiểm tra mạng và thử lại.",
+  "apiErrorTimeout": "Yêu cầu đã hết thời gian chờ. Vui lòng thử lại.",
+  "apiErrorInvalidFormat": "Định dạng phản hồi không hợp lệ. Vui lòng thử lại.",
+  "apiErrorOperationFailed": "Không thể hoàn tất yêu cầu của bạn. Vui lòng thử lại.",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "Có vẻ bạn đang ngoại tuyến. Vui lòng kiểm tra kết nối và thử lại.",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "Yêu cầu mất quá nhiều thời gian. Vui lòng thử lại.",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Đã xảy ra lỗi khi xử lý dữ liệu. Vui lòng thử lại.",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "Không thể tải cài đặt ứng dụng (lỗi {statusCode}). Vui lòng thử lại.",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Lỗi khi tải cấu hình từ máy chủ",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "gameItemHousingSpace": "Sức chứa nhà ở",
+  "gameItemAttackSpeed": "Tốc độ tấn công",
+  "gameItemAttackRange": "Tầm tấn công",
+  "gameItemMovementSpeed": "Tốc độ di chuyển",
+  "gameItemWardenWeight": "Trọng số Đại Quản Giá",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Trọng số Đại Quản Giá có thể được ưu tiên hơn sức chứa và quyết định mức độ Đại Quản Giá ưu tiên đi theo một nhóm quân.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Trọng số Thiên Sứ",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "Trọng số Thiên Sứ có thể được ưu tiên hơn sức chứa khi Thiên Sứ quyết định đơn vị cần ưu tiên.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 đơn vị cho ngưỡng đi theo} other{{count} đơn vị cho ngưỡng đi theo}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Không được tính vào ngưỡng đi theo",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
+  "gameItemUpgradeResource": "Tài nguyên nâng cấp",
+  "gameItemRarity": "Độ hiếm",
+  "gameItemHero": "Tướng",
+  "gameItemDps": "DPS",
+  "gameItemHitpoints": "HP",
+  "gameItemHealOnActivation": "Hồi máu",
+  "gameItemTargets": "Mục tiêu",
+  "gameItemTargetsGround": "Mặt đất",
+  "gameItemTargetsAir": "Trên không",
+  "gameItemFlying": "Bay",
+  "gameItemUpgradeCost": "Chi phí nâng cấp",
+  "gameItemUpgradeTime": "Thời gian nâng cấp",
+  "gameItemRemainingToTownHallMax": "Đến TH tối đa",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
+  "gameItemRemainingToGlobalMax": "Đến mức tối đa toàn cầu",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
+  "gameItemLevelsLeft": "Còn lại (các) cấp độ {count}",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemOverview": "Tổng quan",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
+  "gameItemStats": "Thống kê",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
+  "gameItemNextUpgrade": "Nâng cấp tiếp theo",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
+  "gameItemUpgradePlan": "kế hoạch nâng cấp",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
+  "gameItemUpgradeDataUnavailable": "Dữ liệu nâng cấp không có sẵn",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
+  "notifScopeSelected": "Đã chọn",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
+  "settingsPreferences": "Tùy chọn",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
+  "settingsNotificationsTitle": "Thông báo",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
+  "settingsNotificationsSubtitle": "Chọn thông báo và gửi bản xem trước thử nghiệm cục bộ.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
+  "settingsSupport": "Ủng hộ",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
+  "settingsAbout": "Về",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
+  "settingsAccount": "Tài khoản",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
+  "settingsSignedIn": "Đã đăng nhập",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
+  "settingsAppearance": "Vẻ bề ngoài",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
+  "settingsThemeSystem": "Hệ thống",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
+  "settingsThemeMatchDevice": "Phù hợp với thiết bị này",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
+  "settingsThemeLight": "Ánh sáng",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
+  "settingsThemeDark": "Tối tăm",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
+  "settingsThemeSelected": "Đã chọn",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
+  "notifNoAccountsLoadedYet": "Chưa có tài khoản được liên kết nào được tải.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
+  "notifNoAccountsSelected": "Không có tài khoản nào được chọn",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
+  "notifAccountsSelected": "Đã chọn tài khoản {count}",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchRecent": "Gần đây",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
+  "searchTabPlayers": "Người chơi",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
+  "searchTabClans": "Gia tộc",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
+  "searchClear": "Thông thoáng",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
+  "warStatsRefreshSuccess": "Đã làm mới dữ liệu thành công",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
+  "warStatsRefreshFailed": "Không thể làm mới dữ liệu: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsFilterFailed": "Không tải được dữ liệu đã lọc: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsExportFailed": "Xuất không thành công: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportLabelPlayer": "Người chơi",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
+  "exportLabelFormat": "Định dạng",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
+  "exportLabelIncludes": "Bao gồm",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Thống kê, tấn công, phân tích TH",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "Không có sẵn dữ liệu người dùng",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Tài khoản",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "Không tải được dữ liệu người chơi.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "Không thể tải dữ liệu bang hội.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
+  "todoNoMatchingAccounts": "Không có tài khoản phù hợp",
+  "todoNoConfiguredAccounts": "Không có tài khoản việc cần làm nào được định cấu hình",
+  "todoNoLinkedAccounts": "Không có tài khoản được liên kết",
+  "todoNoAccountsNeedAction": "Không có tài khoản nào cần hành động",
+  "todoNoCompletedAccounts": "Không có tài khoản nào đã hoàn thành",
+  "todoNoBookmarkedAccounts": "Không có tài khoản được đánh dấu",
+  "todoTryAnotherSearchOrFilter": "Hãy thử tìm kiếm hoặc bộ lọc khác.",
+  "clanJoinLeaveNoDataTitle": "Không có dữ liệu tham gia/rời khỏi",
+  "clanJoinLeaveNoDataBody": "Chuyển động trong danh sách gần đây xuất hiện ở đây khi dữ liệu theo dõi được tải.",
+  "clanJoinLeaveNoRecentMovementTitle": "Không có chuyển động gần đây",
+  "clanJoinLeaveNoRecentMovementBody": "Bản tóm tắt được tải nhưng danh sách sự kiện trống.",
+  "capitalRaidMembersAttackLogFallback": "Danh sách thành viên không được trả lại cho cuộc đột kích cuối tuần này. Thay vào đó, hiển thị số liệu thống kê về nhật ký tấn công.",
+  "capitalRaidMembersNoPlayerData": "Không có dữ liệu cấp độ người chơi nào được trả lại cho cuộc đột kích cuối tuần này. API chỉ bao gồm tổng số quận và đối thủ.",
+  "capitalRaidMembersNoIndividualData": "Không có danh sách người chơi hoặc các cuộc tấn công cá nhân có sẵn cho cuộc đột kích này.",
+  "dashboardNoLinkedAccountsTitle": "Không có tài khoản được liên kết",
+  "dashboardNoLinkedAccountsBody": "Liên kết tài khoản Clash để xem các cuộc tấn công, sự kiện và hoạt động tại đây.",
+  "dashboardTodoHiddenTitle": "Không có tài khoản nào hiển thị tại đây",
+  "dashboardTodoHiddenBody": "Bật một tùy chọn thẻ Trang chủ (việc cần làm, Theo dõi nâng cấp hoặc Xếp hạng) cho tài khoản trong thẻ Người chơi để tài khoản xuất hiện tại đây.",
+  "dashboardUpgradeTrackerNoData": "Mở trình theo dõi để nhập hoặc làm mới dữ liệu nâng cấp.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {cần được cập nhật} other {cần được cập nhật}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {vẫn còn nhiệm vụ} other {vẫn còn nhiệm vụ}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {vẫn còn lượt tấn công} other {vẫn còn lượt tấn công}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Dự kiến",
+  "dashboardUpgradeTrackerBuilders": "Thợ xây",
+  "dashboardUpgradeTrackerLab": "Phòng thí nghiệm",
+  "dashboardUpgradeTrackerPets": "Linh thú",
+  "dashboardUpgradeTrackerWalls": "Tường",
+  "dashboardUpgradeTrackerVillage": "Làng",
+  "dashboardRankedNoData": "Mở Giải đấu Xếp hạng để xem thứ hạng của tài khoản này.",
+  "dashboardRankedAccounts": "Đang theo dõi {loaded}/{total} tài khoản",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "playersNoBookmarkedTitle": "Chưa có người chơi nào được đánh dấu",
+  "playersNoBookmarkedBody": "Mở hồ sơ người chơi và lưu nó để sử dụng sau.",
+  "playersNoLinkedBody": "Quản lý tài khoản từ màn hình thiết lập tài khoản.",
+  "navigationHome": "Trang chủ",
+  "drawerFollowers": "Người theo dõi",
+  "drawerFollowersHelp": "Những người đã đánh dấu một trong các tài khoản được liên kết đã được xác minh của bạn.",
+  "drawerCalculators": "Máy tính",
+  "drawerSubscription": "Đăng ký",
+  "drawerUpgradeTracker": "Trình theo dõi nâng cấp",
+  "drawerBasesArmies": "Căn cứ & Quân đội",
+  "drawerGameAssets": "Tài sản trò chơi",
+  "drawerManageAccounts": "Quản lý tài khoản",
+  "playersLinked": "Đã liên kết",
+  "playersBookmarked": "Đã đánh dấu",
+  "searchGlobalHint": "Tìm kiếm người chơi hoặc gia tộc",
+  "tooltipDecreaseMinimumMembers": "Giảm thành viên tối thiểu",
+  "tooltipIncreaseMinimumMembers": "Tăng thành viên tối thiểu",
+  "tooltipDecreaseMaximumMembers": "Giảm số lượng thành viên tối đa",
+  "tooltipIncreaseMaximumMembers": "Tăng thành viên tối đa",
+  "tooltipDecreaseMinimumClanPoints": "Giảm điểm hội tối thiểu",
+  "tooltipIncreaseMinimumClanPoints": "Tăng điểm bang hội tối thiểu",
+  "tooltipDecreaseMinimumClanLevel": "Giảm cấp độ bang hội tối thiểu",
+  "tooltipIncreaseMinimumClanLevel": "Tăng cấp độ bang hội tối thiểu",
+  "tooltipShowChart": "Hiển thị biểu đồ",
+  "tooltipShowTable": "Hiển thị bảng",
+  "tooltipDismissMessage": "Loại bỏ tin nhắn",
+  "tooltipShowPassword": "Hiển thị mật khẩu",
+  "tooltipHidePassword": "Ẩn mật khẩu",
+  "tooltipRemoveAccount": "Xóa tài khoản",
+  "calculatorsTitle": "Máy tính",
+  "calculatorsSubtitle": "Lập kế hoạch sát thương theo cấp hiện tại của công trình.",
+  "calculatorZapQuake": "Trận động đất Zap",
+  "calculatorFireball": "Quả cầu lửa",
+  "damageCalculatorSubtitle": "So sánh một đội hình tấn công với nhiều công trình.",
+  "damageNoStaticDataTitle": "Không có dữ liệu sát thương",
+  "damageNoStaticDataBody": "Làm mới ứng dụng sau khi dữ liệu trò chơi tĩnh tải xong.",
+  "damageTownHall": "Nhà Chính",
+  "damageVerifiedAccountPrefill": "Cấu hình sẵn từ tài khoản đã xác minh",
+  "damageOverridesStayLocal": "Các thay đổi tại đây không cập nhật tài khoản người chơi.",
+  "damageTargets": "Công trình",
+  "damageAddBuilding": "Thêm công trình",
+  "damageRemoveBuilding": "Xóa công trình",
+  "damageNoTargetsBody": "Thêm ít nhất một công trình để so sánh kết quả.",
+  "damageHitpoints": "{hitpoints} máu",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Tìm công trình",
+  "damageNoBuildingsFound": "Không tìm thấy công trình",
+  "damageTryAnotherSearch": "Thử tên khác hoặc cấp Nhà Chính khác.",
+  "damageAttackStack": "Đội hình tấn công thủ công",
+  "damageNoSourcesForTownHall": "Không có nguồn sát thương được hỗ trợ ở cấp Nhà Chính này.",
+  "damageCount": "Số lượng",
+  "damagePerUse": "{damage} sát thương mỗi lần dùng",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "{percent}% lượng máu tối đa, giảm dần khi dùng chồng",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Sét",
+  "damageSourceEarthquake": "Động đất",
+  "damageSourceGiantArrow": "Mũi tên Khổng lồ",
+  "damageSourceFireball": "Quả cầu lửa",
+  "damageSourceFlameFlinger": "Đòn đánh của Máy phóng Lửa",
+  "damageSourceBalloonDeath": "Sát thương khi Khinh khí cầu bị hạ",
+  "damageSourceRocketBalloonDeath": "Sát thương khi Khinh khí cầu Tên lửa bị hạ",
+  "damageResults": "Kết quả",
+  "damageDestroyed": "Bị phá hủy",
+  "damageSurvives": "Sống sót",
+  "damageResultSummary": "{damage} sát thương · còn {remaining} máu",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Tối ưu Sét và Động đất",
+  "damageSpellCapacity": "Sức chứa phép",
+  "damageZapQuakeUnavailable": "Sét và Động đất không khả dụng ở cấp Nhà Chính này.",
+  "damageZapQuakeUsesSelectedLevels": "Đang dùng Sét cấp {lightningLevel} và Động đất cấp {earthquakeLevel}.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "Sét và Động đất không thể gây sát thương cho kho chứa này.",
+  "damageNoValidZapQuake": "Không có tổ hợp hợp lệ nào phù hợp với sức chứa phép đã chọn.",
+  "damageZapQuakeCombination": "{lightning} Sét + {earthquake} Động đất · {capacity} chỗ",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerTitle": "Trình theo dõi nâng cấp",
+  "upgradeTrackerSubtitle": "Chi phí và thời gian nâng cấp còn lại.",
+  "linkedAccountLabel": "Tài khoản được liên kết",
+  "noLinkedPlayersLoadedTitle": "Không có người chơi được liên kết nào được tải",
+  "noLinkedPlayersLoadedBody": "Thêm hoặc làm mới các tài khoản được liên kết để xem tổng số lần nâng cấp.",
+  "playerOptionNotificationsTitle": "Thông báo",
+  "playerOptionNotificationsSubtitle": "Nhận thông báo cho tài khoản này.",
+  "playerOptionNotificationsEnableMaster": "Trước tiên, hãy bật thông báo trong phần Cài đặt.",
+  "playerOptionNotificationsVerifyFirst": "Xác minh tài khoản này để bật thông báo.",
+  "playerOptionNotificationsSubscriptionRequired": "Cần đăng ký để nhận thông báo dấu trang.",
+  "playerOptionNotificationsLimitReached": "Bạn đã đạt giới hạn thông báo dấu trang.",
+  "playerOptionShowTodoPageTitle": "Hiển thị trên trang việc cần làm",
+  "playerOptionShowTodoPageSubtitle": "Đưa tài khoản này vào danh sách việc cần làm đầy đủ.",
+  "playerOptionShowTodoPageVerifyFirst": "Xác minh tài khoản này để hiển thị trên trang việc cần làm.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Hiển thị Theo dõi nâng cấp trên Trang chủ",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Ghim bản tóm tắt nâng cấp của tài khoản này trên Trang chủ.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Xác minh tài khoản này để hiển thị tiến độ nâng cấp trên Trang chủ.",
+  "playerOptionShowRankedHomeTitle": "Hiển thị Xếp hạng trên Trang chủ",
+  "playerOptionShowRankedHomeSubtitle": "Ghim bản tóm tắt Giải đấu Xếp hạng của tài khoản này trên Trang chủ.",
+  "playerOptionShowRankedHomeVerifyFirst": "Xác minh tài khoản này để hiển thị bản tóm tắt Giải đấu Xếp hạng trên Trang chủ.",
+  "playerOptionShowWarTabTitle": "Hiển thị trong tab Chiến tranh",
+  "playerOptionShowWarTabSubtitle": "Đưa bang hội của tài khoản này vào tab Chiến tranh.",
+  "bookmarkPlayerLoadFailed": "Không thể tải trình phát được đánh dấu trang.",
+  "warNoLinkedOrBookmarked": "Không có cuộc chiến bang hội được liên kết hoặc đánh dấu nào để hiển thị.",
+  "warWidgetRefreshData": "Làm mới dữ liệu chiến tranh",
+  "warWidgetNoData": "Không có dữ liệu chiến tranh",
+  "warWidgetLastUpdated": "Cập nhật lần cuối: {time}",
+  "todoEventClanGames": "Trò chơi Bang hội",
+  "todoEventCwl": "CWL",
+  "todoEventSeasonEnds": "Mùa kết thúc",
+  "todoEventLeagueReset": "Đặt lại giải đấu",
+  "todoEventRaidWeekend": "Đột kích cuối tuần",
+  "todoMagicDispatch": "Công văn kỳ diệu",
+  "todoMagicDispatchDescription": "Nhấn để có bản cập nhật ClashKing mới nhất",
+  "todoUseCodeClashKing": "Sử dụng mã ClashKing",
+  "todoUseCodeClashKingDescription": "Hỗ trợ dự án trong Cửa hàng Supercell",
+  "todoLegendAttacks": "Cuộc tấn công huyền thoại",
+  "todoWarAttacks": "tấn công chiến tranh",
+  "todoCwlAttacks": "tấn công CWL",
+  "gameSeasonPassShort": "Vượt qua",
+  "todoMockMaxedMainName": "Chính tối đa",
+  "todoMockMaxedMainSubtitle": "TH17 · mọi thứ đang hoạt động",
+  "todoMockMaxedMainStatus": "Đang hoạt động · danh sách kiểm tra đầy đủ hàng ngày",
+  "todoMockLegend5Left": "hôm nay còn 5",
+  "todoMockWar1Left": "còn lại 1",
+  "todoMockCwl1LeftRound": "1 còn lại vòng này",
+  "todoMockClanGames2700Left": "Còn 2,7K điểm",
+  "todoMockPass850Left": "Còn 850 điểm",
+  "todoMockWarAltName": "chiến tranh thay thế",
+  "todoMockWarAltSubtitle": "TH15 · tập trung vào chiến tranh",
+  "todoMockWar2Left": "2 trái",
+  "todoMockClanGames900Left": "Còn 900 điểm",
+  "todoMockLegendPushName": "Đẩy huyền thoại",
+  "todoMockLegendPushSubtitle": "TH16 · tấn công hàng ngày",
+  "todoMockLegendPushStatus": "Hoạt động 1 giờ trước · Huyền thoại và tiến độ vượt qua",
+  "todoMockLegend2Left": "hôm nay còn 2",
+  "todoMockOnPace": "đúng tiến độ",
+  "todoMockCaughtUpName": "Bắt kịp",
+  "todoMockCaughtUpSubtitle": "TH14 · không có nhiệm vụ nào đang mở",
+  "todoMockCaughtUpStatus": "Hoạt động hôm nay · không cần thực hiện hành động nào",
+  "notifChooseAlerts": "Chọn cảnh báo",
+  "notifGroupLegendAttacks": "Tấn công Huyền Thoại I",
+  "notifLegendAttacksDescription": "Kết quả tấn công của các tài khoản đã đánh dấu và bật thông báo trong Huyền Thoại I.",
+  "notifGroupLegendDefenses": "Phòng thủ Huyền Thoại I",
+  "notifLegendDefensesDescription": "Kết quả phòng thủ của các tài khoản đã bật thông báo trong Huyền Thoại I.",
+  "notifLeagueDefenseDescription": "Kết quả phòng thủ với người tấn công, sao, phần trăm và ngữ cảnh giải đấu.",
+  "notifWarAttackOptionsDescription": "Kết quả tấn công chiến tranh, cảnh báo phòng thủ và feed tấn công 5v5.",
+  "notifWarAlertsDescription": "Ghép chiến tranh, ngày chiến đấu bắt đầu và chiến tranh kết thúc.",
+  "notifWarRemindersDescription": "Nhắc nhở tùy chỉnh trước khi chiến tranh kết thúc.",
+  "notifGroupRaidReminders": "Nhắc nhở Cuối tuần Đột kích",
+  "notifRaidRemindersDescription": "Nhận một thông báo về số lượt tấn công còn lại trên các tài khoản đã xác minh trong cùng một bang hội.",
+  "notifDefensesAgainstYourBase": "Phòng thủ trước căn cứ của bạn",
+  "notifDefensesAgainstYourBaseDescription": "Chỉ các lượt đánh khi tài khoản này đang phòng thủ.",
+  "notifAllAttacks": "Tất cả tấn công",
+  "notifAllAttacksDescription": "Mọi lượt đánh chỉ trong chiến tranh 5v5.",
+  "notifThirtyMinutes": "30 phút",
+  "notifFifteenMinutes": "15 phút",
+  "notifSendTestNotification": "Gửi thông báo thử",
+  "notifScheduledMessage": "Đã lên lịch: {title}",
+  "generalStartDate": "Ngày bắt đầu",
+  "generalEndDate": "Ngày kết thúc",
+  "warFiltersAllWars": "Tất cả chiến tranh",
+  "warFiltersRandomWars": "Chiến tranh ngẫu nhiên",
+  "warFiltersCwlWars": "Chiến tranh CWL",
+  "warFiltersFriendlyWars": "Chiến tranh giao hữu",
+  "warType": "Loại chiến tranh",
+  "warFiltersAnyTownHall": "Bất kỳ TH nào",
+  "gameTownHallLevelShort": "TH{level}",
+  "warAttackerTownHall": "TH người tấn công",
+  "warDefenderTownHall": "TH người phòng thủ",
+  "warStatsFilterSameTownHallOnly": "Chỉ cùng cấp Nhà Chính",
+  "warStatsFilterSameTownHallDescription": "Chỉ hiển thị các lượt tấn công khi người tấn công và phòng thủ có cùng cấp TH",
+  "generalAny": "Bất kỳ",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "Sao tối thiểu",
+  "warStatsFilterMaxStars": "Sao tối đa",
+  "warStatsFilterMinDestructionPercent": "% phá hủy tối thiểu",
+  "warStatsFilterMaxDestructionPercent": "% phá hủy tối đa",
+  "warStatsFilterMinPosition": "Vị trí tối thiểu",
+  "warStatsFilterMaxPosition": "Vị trí tối đa",
+  "warStatsFilterFreshAttacksOnly": "Chỉ tấn công lần đầu",
+  "warStatsFilterFreshAttacksDescription": "Chỉ hiển thị lượt tấn công đầu tiên trên mỗi căn cứ",
+  "warStatsFilterResultLimit": "Giới hạn kết quả",
+  "generalResultsCount": "{count} kết quả",
+  "notifEventsDescription": "Trò chơi Hội, CWL, Cuối tuần Đột kích và sự kiện mùa.",
+  "notifAnnouncementsDescription": "Banner trong ứng dụng và cảnh báo push trong tương lai cho các cập nhật ClashKing.",
+  "notifUpgradeFinishesDescription": "Quân, tướng, thú cưng, phép, trang bị và công trình.",
+  "notifSupportReminderDescription": "Nhắc nhở hằng tháng để ủng hộ ClashKing.",
+  "notifDevicePushSetup": "Thiết lập push trên thiết bị",
+  "notifAccountScope": "Phạm vi tài khoản",
+  "notifTestNotification": "Thông báo thử",
+  "settingsAppIcon": "Biểu tượng ứng dụng",
+  "settingsChanging": "Đang thay đổi...",
+  "settingsAddWarWidget": "Thêm widget chiến tranh",
+  "settingsWarWidgetLinkClanFirst": "Trước tiên hãy liên kết một tài khoản trong hội",
+  "settingsWarWidgetClanCount": "Có {count} hội",
+  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
+  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
+  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
+  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
+  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
+  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
+  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "generalDiscord": "Discord",
+  "settingsDiscordConnectedSubtitle": "Tài khoản liên kết bot và dữ liệu Discord",
+  "settingsDiscordSyncSubtitle": "Đồng bộ tài khoản liên kết bot và dữ liệu Discord",
+  "settingsConnected": "Đã kết nối",
+  "settingsClashKingAccount": "Tài khoản ClashKing",
+  "settingsEmailConnectedSubtitle": "Đăng nhập bằng email đã được kết nối",
+  "settingsEmailRecoverySubtitle": "Thêm đăng nhập email để khôi phục tài khoản",
+  "playerOpenInGame": "Mở trong trò chơi",
+  "playerBookmarkRemove": "Xóa dấu trang người chơi",
+  "playerBookmarkAdd": "Đánh dấu người chơi",
+  "playerBestTrophies": "Cúp cao nhất",
+  "clanLoadFailed": "Không thể tải hội.",
+  "gameItemLevels": "Cấp độ",
+  "resourceDarkElixir": "Dầu đen",
+  "resourceBuilderElixir": "Dầu thợ xây",
+  "resourceBuilderGold": "Vàng thợ xây",
+  "resourceElixir": "Tiên dược",
+  "resourceGold": "Vàng",
+  "resourceGlowyOre": "Quặng phát sáng",
+  "resourceStarryOre": "Quặng sao",
+  "resourceShinyOre": "Quặng lấp lánh",
+  "resourceGeneric": "Tài nguyên",
+  "seasonStatsGoldGrabbed": "Vàng đã cướp",
+  "seasonStatsActivity": "Hoạt động",
+  "seasonStatsAttackWins": "Thắng tấn công",
+  "seasonStatsTrophies": "Cúp mùa",
+  "todoSearchAccountsHint": "Tìm tài khoản",
+  "generalClearSearch": "Xóa tìm kiếm",
+  "clanCapitalAvgRewards": "Phần thưởng TB",
+  "clanCapitalAvgDistrictsPerWeek": "Quận TB/tuần",
+  "clanCapitalTopAttackers": "Người tấn công hàng đầu",
+  "clanCapitalPlayersTracked": "Đang theo dõi {count} người chơi",
+  "clanCapitalDefenseOverTime": "Phòng thủ theo thời gian",
+  "clanCapitalDistrictsTracked": "Đang theo dõi {count} quận",
+  "clanCapitalSelectedRaid": "Đột kích đã chọn",
+  "generalSummary": "Tóm tắt",
+  "generalBreakdown": "Phân tích",
+  "clanPointsTitle": "Điểm hội",
+  "clanBuilderBasePoints": "Điểm căn cứ thợ xây",
+  "clanType": "Loại hội",
+  "clanRequiredTownHall": "Nhà Chính yêu cầu",
+  "clanRequiredTownHallOnly": "Chỉ {level}+",
+  "clanCapitalPoints": "Điểm thủ phủ",
+  "todoAllAccounts": "Tất cả tài khoản",
+  "todoCombinedAcrossAccounts": "To-do tổng hợp trên các tài khoản của bạn",
+  "dashboardRankedCombinedAcrossAccounts": "Xếp hạng tổng hợp của các tài khoản",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Theo dõi nâng cấp tổng hợp của các tài khoản",
+  "todoPreviewAccount": "Tài khoản xem trước",
+  "todoLastActiveUnavailable": "Không có hoạt động gần nhất",
+  "todoActiveRelative": "Hoạt động {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "hoàn tất",
+  "todoPointsLeftShort": "còn {points} điểm",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "còn {count}",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "Hiện đã xong hết",
+  "timeDurationShort": "{unit, select, daysHours {{primary}ngày {secondary}giờ} hoursMinutes {{primary}giờ {secondary}ph} other {{primary}ph}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
+  "todoEventEndsIn": "Kết thúc sau {duration}",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "Bắt đầu sau {duration}",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "Nhấn để xem chi phí và thời gian nâng cấp còn lại",
+  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFurySubtitle": "Nhấn để xem qua bản cập nhật tháng 6 năm 2026",
+  "sideRankingsTitle": "Xếp hạng",
+  "sideRankingsSubtitle": "Bảng xếp hạng chính thức cùng endpoint ClashKing.",
+  "sideRankingsLoadError": "Không thể tải bảng xếp hạng chính thức.",
+  "sideRankingsEmptyTitle": "Không có bảng xếp hạng trả về",
+  "sideRankingsEmptyBody": "Thử bảng xếp hạng hoặc vị trí khác.",
+  "sideRankingsMockups": "Mockup ClashKing",
+  "rankingsBuilderBase": "Căn cứ Thợ Xây",
+  "rankingsTownHall": "Nhà Chính",
+  "rankingsRankedLeague": "Giải đấu Xếp hạng",
+  "rankingsClanCapital": "Thủ đô Bang hội",
+  "rankingsDonations": "Quyên góp",
+  "rankingsWarWins": "Số trận thắng chiến tranh",
+  "rankingsWinStreak": "Chuỗi thắng",
+  "rankingsCurrent": "Hiện tại",
+  "rankingsWorldwide": "Toàn thế giới",
+  "rankingsSelectLocation": "Chọn địa điểm",
+  "rankingsSearchLocations": "Tìm địa điểm hoặc mã quốc gia",
+  "rankingsWorldwideUnavailable": "Chọn khu vực hoặc quốc gia cho bảng xếp hạng này.",
+  "rankingsLocationsLoadFailed": "Không thể tải toàn bộ danh sách địa điểm. Chế độ Toàn thế giới vẫn khả dụng ở nơi được hỗ trợ.",
+  "rankingsSnapshotDate": "Ngày chụp dữ liệu",
+  "rankingsSource": "Nguồn",
+  "rankingsOfficialSource": "API Clash chính thức",
+  "rankingsResults": "Kết quả",
+  "rankingsTopCount": "Top {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Không có bản chụp đã lưu",
+  "rankingsNoSnapshotBody": "Không có bản chụp xếp hạng được lưu cho ngày {date}. Hãy chọn ngày khác hoặc quay lại Hiện tại.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "Không thể tải người chơi này.",
+  "rankingsClanLoadFailed": "Không thể tải bang hội này.",
+  "sideStatsTitle": "Thống kê",
+  "sideStatsSubtitle": "Thống kê bảng xếp hạng từ các bề mặt Clash API chính thức.",
+  "sideStatsLoadError": "Không thể tải thông tin tình báo về trận chiến.",
+  "statsOverview": "Tổng quan",
+  "statsArmies": "Quân đội",
+  "statsItems": "Vật phẩm",
+  "statsWar": "Chiến tranh",
+  "statsCwl": "CWL",
+  "statsRanked": "Xếp hạng",
+  "statsDateRange": "Khoảng ngày",
+  "statsDateRangeHint": "Chọn tối đa 90 ngày",
+  "statsDateRangeTooLong": "Chọn phạm vi ngày từ 90 ngày trở xuống.",
+  "statsUpdated": "Dữ liệu mới",
+  "statsNoDataTitle": "Chưa có dữ liệu trận chiến",
+  "statsNoDataBody": "Hãy thử phạm vi ngày rộng hơn hoặc các bộ lọc ít hạn chế hơn.",
+  "statsAddItemsTitle": "Chọn vật phẩm để phân tích",
+  "statsAddItemsBody": "Thêm quân, phép thuật, anh hùng, vật nuôi hoặc trang bị, sau đó chạy truy vấn.",
+  "statsGlobalCounts": "Số lượng toàn cầu",
+  "statsPerformance": "Hiệu suất",
+  "statsSamples": "Mẫu",
+  "statsUsage": "Cách sử dụng",
+  "statsAverageStars": "Sao trung bình",
+  "statsAverageDestruction": "Phá hủy trung bình",
+  "statsStarRates": "Tỷ lệ theo sao",
+  "statsThreeStarRate": "Tỷ lệ ba sao",
+  "statsDailyTrend": "Xu hướng hàng ngày",
+  "statsPlayers": "Người chơi",
+  "statsClans": "Gia tộc",
+  "statsPlayersInWar": "Người chơi trong chiến tranh",
+  "statsClansInWar": "Gia tộc trong chiến tranh",
+  "statsPlayersInLegends": "Người chơi trong Huyền thoại",
+  "statsWarsStored": "Chiến tranh được lưu trữ",
+  "statsJoinLeaves": "Sự kiện tham gia / rời khỏi",
+  "statsSearchArmies": "Tìm kiếm các tác phẩm chính xác",
+  "statsExactComposition": "Thành phần chính xác",
+  "statsArmyShareCode": "Mã chia sẻ quân đội",
+  "statsMinimumSample": "Mẫu tối thiểu",
+  "statsSortBy": "Sắp xếp theo",
+  "statsIncludeItems": "Bao gồm vật phẩm",
+  "statsExcludeItems": "Loại trừ vật phẩm",
+  "statsItemId": "ID vật phẩm hoặc tên được lưu trữ",
+  "statsItemType": "Loại vật phẩm",
+  "statsTroop": "Quân đội",
+  "statsSpell": "Chính tả",
+  "statsHero": "Tướng",
+  "statsPet": "Thú cưng",
+  "statsEquipment": "Thiết bị",
+  "statsOwningHero": "Sở hữu anh hùng",
+  "statsAddItem": "Thêm vật phẩm",
+  "statsAnalyzeItems": "Phân tích vật phẩm",
+  "statsCompositionShare": "Chia sẻ thành phần",
+  "statsNoLevels": "Hồ sơ quân đội không chứa cấp độ vật phẩm.",
+  "statsRankedCompositionOnly": "Dữ liệu thành phần đến từ nhật ký chiến đấu được xếp hạng; Hiệu suất chiến tranh và CWL vẫn tách biệt.",
+  "statsTownHall": "Nhà Chính",
+  "statsOpponentTownHall": "Tòa thị chính đối thủ",
+  "statsEqualTownHalls": "Tòa thị chính Equal",
+  "statsLeagueTier": "Cấp độ giải đấu",
+  "statsLegendLeagueOne": "Giải đấu huyền thoại 1",
+  "statsCwlLeague": "Giải đấu CWL",
+  "statsLeagueBronze": "Đồng",
+  "statsLeagueSilver": "Bạc",
+  "statsLeagueGold": "Vàng",
+  "statsLeagueCrystal": "Pha lê",
+  "statsLeagueMaster": "Bậc thầy",
+  "statsLeagueChampion": "Nhà vô địch",
+  "statsAllCwlLeagues": "Tất cả các giải đấu CWL",
+  "statsCwlSeasons": "Các mùa CWL",
+  "statsCwlSeasonsHint": "YYYY-MM, phân tách bằng dấu phẩy",
+  "statsApplyFilters": "Áp dụng bộ lọc",
+  "statsRefresh": "Làm mới dữ liệu",
+  "statsRegularWarOnly": "Chỉ các cuộc chiến thông thường; chiến tranh giao hữu và CWL bị loại trừ.",
+  "statsRankedRequired": "Tòa thị chính và một cấp giải đấu là bắt buộc.",
+  "statsSeasonBreakdown": "Phân tích theo mùa",
+  "sideTopScore": "Điểm cao nhất",
+  "sideTop200Avg": "Trung bình Top 200",
+  "sideBasesArmiesTitle": "Căn cứ & Quân đội",
+  "sideBasesArmiesSubtitle": "Bố cục đã lưu trên Discord và link đội hình.",
+  "sideBotSyncTarget": "Đích đồng bộ bot",
+  "sideBotSyncTargetBody": "Bot đã lưu căn cứ và đội hình vào hồ sơ Discord. Trang này đã sẵn sàng cho dữ liệu đồng bộ đó.",
+  "sideSavedBases": "Căn cứ đã lưu",
+  "sideWarBaseSlots": "Ô căn cứ chiến tranh",
+  "sideWarBaseSlotsBody": "Nhà Chính, loại căn cứ, liên kết và lần cập nhật cuối.",
+  "sideLegendBaseSlots": "Ô căn cứ huyền thoại",
+  "sideLegendBaseSlotsBody": "Sao chép nhanh cùng liên kết tài khoản.",
+  "sideSavedArmies": "Đội hình đã lưu",
+  "sideArmyLinks": "Liên kết đội hình",
+  "sideArmyLinksBody": "Thành phần, phép, máy công thành, ghi chú và liên kết chia sẻ.",
+  "sideGameAssetsTitle": "Tài sản trò chơi",
+  "sideGameAssetsSubtitle": "Tài nguyên ClashKing được lưu trữ, nhóm theo thư mục.",
+  "gameAssetsLoadError": "Không thể tải tài nguyên trò chơi",
+  "gameAssetsEmptyTitle": "Không có tài nguyên trò chơi",
+  "gameAssetsEmptyBody": "Tệp kê khai được lưu trữ không chứa hình ảnh được hỗ trợ.",
+  "gameAssetsOneImage": "1 hình ảnh",
+  "gameAssetsImageCount": "{count} hình ảnh",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Tìm trong danh mục này",
+  "gameAssetsAllFormats": "Tất cả định dạng",
+  "gameAssetsOneResult": "1 kết quả",
+  "gameAssetsResultCount": "{count} kết quả",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Không có hình ảnh phù hợp",
+  "gameAssetsNoResultsBody": "Thử tìm kiếm khác hoặc định dạng tệp khác.",
+  "gameAssetsLongPressHint": "Nhấn giữ để sao chép URL được lưu trữ",
+  "gameAssetsCopyUrl": "Sao chép URL",
+  "gameAssetsCopyPath": "Sao chép đường dẫn",
+  "gameAssetsUrlCopied": "Đã sao chép URL tài nguyên",
+  "gameAssetsPathCopied": "Đã sao chép đường dẫn tài nguyên",
+  "gameAssetsCopyError": "Không thể sao chép chi tiết tài nguyên.",
+  "gameAssetsShare": "Chia sẻ",
+  "gameAssetsShareError": "Không thể chia sẻ tài nguyên này.",
+  "gameAssetsSave": "Lưu",
+  "gameAssetsSaving": "Đang lưu…",
+  "gameAssetsSaved": "Đã lưu tài nguyên.",
+  "gameAssetsSavedTo": "Đã lưu tài nguyên vào {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Không thể lưu tài nguyên này.",
+  "sideZapQuakeTitle": "{zaps} sét + 1 động đất",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "{quakeDamage} sát thương động đất, {lightningDamage} mỗi sét",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "Máu công trình",
+  "sideLightningLevel": "Cấp sét",
+  "sideEarthquakeLevel": "Cấp động đất",
+  "sideWithoutEarthquake": "Không có động đất",
+  "sideLightningCount": "{count} sét",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "Cầu lửa + 1 động đất",
+  "sideAddSupportDamage": "Thêm sát thương hỗ trợ",
+  "sideFireballQuakeSubtitle": "{fireballDamage} sát thương cầu lửa, còn {hpLeft} máu sau động đất",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "Cấp cầu lửa",
+  "sideQuakePressure": "Áp lực động đất",
+  "sideQuakeSpellCount": "{count} phép động đất",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "Vị trí",
+  "sideFilter": "Bộ lọc",
+  "sideRefresh": "Làm mới",
+  "sideOfficialClashLeaderboard": "Bảng xếp hạng Clash chính thức",
+  "sideAllTownHallsShort": "Tất cả TH",
+  "sideDecrease": "Giảm",
+  "sideIncrease": "Tăng",
+  "sideLevel": "Cấp {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingPlayerTrophies": "Cúp người chơi",
+  "rankingPlayerTrophiesHeading": "Xếp hạng cúp người chơi",
+  "rankingPlayerBuilder": "Thợ xây người chơi",
+  "rankingPlayerBuilderHeading": "Xếp hạng Căn cứ Thợ xây người chơi",
+  "rankingClanTrophies": "Cúp hội",
+  "rankingClanTrophiesHeading": "Xếp hạng cúp hội",
+  "rankingClanBuilder": "Thợ xây hội",
+  "rankingClanBuilderHeading": "Xếp hạng Căn cứ Thợ xây hội",
+  "rankingClanCapital": "Thủ phủ hội",
+  "rankingClanCapitalHeading": "Xếp hạng Thủ phủ Hội",
+  "assetFolderEquipment": "Thiết bị",
+  "assetFolderLeagues": "Giải đấu",
+  "assetFolderResources": "Tài nguyên",
+  "assetFolderStickers": "Nhãn dán",
+  "upgradeSectionHeroes": "Tướng",
+  "upgradeSectionTroops": "Quân lính",
+  "upgradeSectionSpells": "Phép thuật",
+  "upgradeSectionPets": "Linh thú",
+  "upgradeSectionEquipment": "Thiết bị",
+  "sideMockupSource": "Nguồn",
+  "sideMockupMode": "Chế độ",
+  "sideMockupPreview": "Xem trước",
+  "sideMockupRows": "Hàng",
+  "sideMockupRowsValue": "5 mockup",
+  "endpointLeagueTop200": "Top 200 giải đấu",
+  "endpointLeagueTop200Preview": "Giải Huyền thoại · 5.742 cúp",
+  "endpointTownhallTop200": "Top 200 Nhà Chính",
+  "endpointTownhallTop200Preview": "TH17 · Bảng người chơi toàn cầu",
+  "endpointClanDonations": "Quyên góp hội",
+  "endpointClanDonationsPreview": "Hoa Kỳ · tổng hội hằng tuần",
+  "endpointClanWarWins": "Thắng chiến tranh hội",
+  "endpointClanWarWinsPreview": "Quốc tế · thắng chiến tranh mọi thời đại",
+  "endpointTop200ArmyUsage": "Mức dùng đội hình Top 200",
+  "endpointTop200ArmyUsagePreview": "Nhật ký trận đánh · mức dùng quân và phép",
+  "endpointStateTop200": "Top 200",
+  "endpointStateWeekly": "Hằng tuần",
+  "endpointStateUsage": "Cách sử dụng",
+  "notifGroupReminders": "Nhắc nhở",
+  "notifGroupProgress": "Tiến độ",
+  "notifLeagueDefense": "Phòng thủ giải đấu",
+  "notifLeagueDefenseResult": "Kết quả phòng thủ giải đấu",
+  "notifLeagueTriple": "Ba sao giải đấu",
+  "notifLeagueAttackBody": "Lord Clasher đã tấn công {player} • {percent}% • {stars} sao • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "Phòng thủ chiến tranh",
+  "notifWarAttackOnTh": "Tấn công chiến tranh vào TH{th}",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} đã tấn công {player} • {percent}% • {stars} sao • phòng thủ {clan}",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "Feed chiến tranh 5v5",
+  "notifWarAttackResult": "Kết quả tấn công chiến tranh",
+  "notifWarAttackResultBody": "{clan} đã tấn công Pine Riders TH{th} • 100% • 3 sao",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "Đã ghép chiến tranh",
+  "notifWarMatchedBody": "{clan} đã ghép với Pine Riders. Ngày chuẩn bị đã bắt đầu.",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "Chiến tranh bắt đầu",
+  "notifBattleDayStarted": "Ngày chiến đấu bắt đầu",
+  "notifWarStartedBody": "{clan} vs Pine Riders đang diễn ra. Chúc may mắn.",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "Chiến tranh đã kết thúc",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Kết quả cuối cùng đã có.",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "Nhắc chiến tranh: 1 giờ",
+  "notifWarReminder30m": "Nhắc chiến tranh: 30 phút",
+  "notifWarReminder15m": "Nhắc chiến tranh: 15 phút",
+  "notifOneHourLeft": "Còn 1 giờ",
+  "notifThirtyMinutesLeft": "Còn 30 phút",
+  "notifFifteenMinutesLeft": "Còn 15 phút",
+  "notifRemainingWarAttacksBody": "{player} còn lượt tấn công chiến tranh. {time}.",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} đã bắt đầu",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} có thể bắt đầu kiếm điểm {name}.",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} có thể bắt đầu chuẩn bị Giải đấu Hội chiến.",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} có thể bắt đầu tấn công Đột kích Thủ phủ.",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "Bắt đầu mùa",
+  "notifNewSeasonStarted": "Mùa mới đã bắt đầu",
+  "notifSeasonStartedBody": "Mùa {league} đã bắt đầu cho {player}.",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "Sự kiện đặc biệt",
+  "notifNewEventLive": "Một sự kiện mới đang diễn ra",
+  "notifNewClashEventBody": "Một sự kiện Clash mới đã có.",
+  "notifSupportClashKing": "Ủng hộ ClashKing",
+  "notifMonthlySupportBody": "Ủng hộ hằng tháng giúp ClashKing luôn khả dụng và tiếp tục cải thiện. Cảm ơn bạn.",
+  "notifUpgradeFinished": "Nâng cấp hoàn tất",
+  "notifUpgradeReadyTitle": "{name} đã sẵn sàng",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "Cấp {level} đã hoàn tất cho {player}. Nâng cấp xong.",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "Không thể tải dữ liệu hội: {error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "Mặc định",
+  "appIconChristmas": "Giáng sinh",
+  "appIconBlackWhite": "Đen trắng",
+  "appIconDarkMode": "Chế độ tối",
+  "generalMembersCount": "{count} thành viên",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "đã đánh dấu",
+  "clanLevelValue": "cấp {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "Hạng {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "Vòng {round}",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "TH{level}",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Chính sách Nội dung Người hâm mộ của Supercell",
+  "upgradeTrackerPlan": "Kế hoạch",
+  "upgradeTrackerUpgrades": "Nâng cấp",
+  "upgradeTrackerCollection": "Bộ sưu tập",
+  "upgradeTrackerChooseAccount": "Chọn tài khoản",
+  "upgradeTrackerSwitchAccount": "Đổi tài khoản: {account}",
+  "@upgradeTrackerSwitchAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerShare": "Chia sẻ trình theo dõi",
+  "upgradeTrackerPasteJson": "Dán JSON tài khoản",
+  "upgradeTrackerImportTitle": "Nhập dữ liệu tài khoản",
+  "upgradeTrackerImportDescription": "Dán JSON tài khoản nguyên bản. Dữ liệu chỉ được lưu trên thiết bị này.",
+  "upgradeTrackerAccountJson": "JSON tài khoản",
+  "upgradeTrackerPasteClipboard": "Dán từ bảng nhớ tạm",
+  "upgradeTrackerImportAction": "Nhập tài khoản",
+  "upgradeTrackerImportSuccess": "Đã nhập {player} trên thiết bị này.",
+  "@upgradeTrackerImportSuccess": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerImportFailed": "Không thể nhập dữ liệu tài khoản: {error}",
+  "@upgradeTrackerImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSnapshotUnreadable": "Không thể đọc dữ liệu tài khoản",
+  "upgradeTrackerTryAgain": "Thử lại",
+  "upgradeTrackerNoDataTitle": "Đưa tiến độ làng của bạn vào ClashKing",
+  "upgradeTrackerNoDataBody": "Sao chép JSON Dữ liệu tài khoản từ Clash of Clans rồi dán từ bảng nhớ tạm. Dữ liệu của bạn chỉ được lưu trên thiết bị này.",
+  "upgradeTrackerNoDataLocation": "Trong Clash of Clans, mở Cài đặt > Cài đặt khác. JSON Dữ liệu tài khoản nằm ngay dưới mục Mã API.",
+  "upgradeTrackerOpenMoreSettings": "Mở Cài đặt khác trong Clash of Clans",
+  "upgradeTrackerNoLinkedAccount": "Liên kết tài khoản Clash of Clans trước khi nhập dữ liệu của tài khoản đó.",
+  "upgradeTrackerUpdatedJustNow": "Vừa cập nhật",
+  "upgradeTrackerUpdatedMinutesAgo": "Đã cập nhật {count} phút trước",
+  "@upgradeTrackerUpdatedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedHoursAgo": "Đã cập nhật {count} giờ trước",
+  "@upgradeTrackerUpdatedHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedOn": "Đã cập nhật ngày {date}",
+  "@upgradeTrackerUpdatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSearchUpgrades": "Tìm nâng cấp",
+  "upgradeTrackerSearchCollection": "Tìm trong bộ sưu tập",
+  "upgradeTrackerShowFilters": "Hiện bộ lọc",
+  "upgradeTrackerHideFilters": "Ẩn bộ lọc",
+  "upgradeTrackerFilterAll": "Tất cả",
+  "upgradeTrackerFilterOwned": "Đã sở hữu",
+  "upgradeTrackerFilterMissing": "Còn thiếu",
+  "upgradeTrackerAllVillages": "Tất cả làng",
+  "upgradeTrackerHomeVillage": "Làng Chính",
+  "upgradeTrackerBuilderBase": "Căn cứ Thợ Xây",
+  "upgradeTrackerNoMatchingItems": "Không có mục phù hợp",
+  "upgradeTrackerOwnedCount": "Đã sở hữu {owned}/{total}",
+  "@upgradeTrackerOwnedCount": {
+    "placeholders": {
+      "owned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLevelsLeft": "Còn {count} cấp",
+  "@upgradeTrackerLevelsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemCount": "{count} mục",
+  "@upgradeTrackerItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCollected": "đã thu thập",
+  "upgradeTrackerMissing": "còn thiếu",
+  "upgradeTrackerDataAge": "Dữ liệu tài khoản",
+  "upgradeTrackerBuildersCount": "{count} thợ xây",
+  "@upgradeTrackerBuildersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLaboratory": "Phòng thí nghiệm",
+  "upgradeTrackerPets": "Linh thú",
+  "upgradeTrackerWalls": "Tường",
+  "upgradeTrackerEquipment": "Thiết bị",
+  "upgradeTrackerLevelsRemaining": "Còn {count} cấp",
+  "@upgradeTrackerLevelsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCompletesOn": "Hoàn tất {date} · {duration}",
+  "@upgradeTrackerCompletesOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "Còn {duration}",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Bây giờ · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "Cấp {level} · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · Cấp {level}\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, cấp {level}, từ {start} đến {end}",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerHeaderComplete": "Hoàn tất",
+  "upgradeTrackerHeaderLevelsLeft": "Cấp còn lại",
+  "upgradeTrackerHeaderActive": "Đang hoạt động",
+  "upgradeTrackerHeaderFinishes": "Hoàn thành",
+  "upgradeTrackerHeaderOwned": "Đã sở hữu",
+  "upgradeTrackerHeaderUpdated": "Đã cập nhật",
+  "homeCouldNotLoadTitle": "Không thể tải Trang chủ",
+  "homeVerifiedAccountRequiredTitle": "Xác minh tài khoản đã liên kết",
+  "homeVerifiedAccountRequiredBody": "Trang chủ cần ít nhất một tài khoản Clash đã xác minh. Hãy liên kết tài khoản hoặc xác minh liên kết hiện có để tiếp tục.",
+  "homeVerifyAccountAction": "Liên kết hoặc xác minh tài khoản",
+  "playerOptionVerifyAccountBody": "Tài khoản này chưa được xác minh. Hãy xác minh để mở khóa các tùy chọn việc cần làm, Xếp hạng và Theo dõi nâng cấp bên dưới.",
+  "homeUpcomingTitle": "Sắp tới",
+  "homeUpcomingSubtitle": "Các hạn chót và lần hoàn tất nâng cấp tiếp theo trên các tài khoản của bạn.",
+  "homeCollapseSection": "Thu gọn mục",
+  "homeExpandSection": "Mở rộng mục",
+  "homeUpcomingEmpty": "Không có hạn chót nào đang được theo dõi sắp tới. Kéo để làm mới nếu tài khoản này vừa được liên kết.",
+  "homeRecentlyCompleted": "Đã hoàn tất",
+  "homeTodoTitle": "Việc cần làm",
+  "homeTodoSubtitle": "Chi tiết tài khoản cần xử lý, được sắp xếp theo mức độ khẩn cấp.",
+  "homeTodoEmpty": "Hiện không có tài khoản đã xác minh nào cần chú ý.",
+  "homeClanless": "Không có bang hội",
+  "homeNeedsAttention": "Cần chú ý",
+  "homeCaughtUp": "Đã xử lý hết",
+  "homeTrackingDataPending": "Người chơi đã xác minh này mới được theo dõi hoặc không hoạt động, nên chưa có chi tiết cần xử lý.",
+  "homeUpgradeUnavailable": "Không thể tải dữ liệu nâng cấp. Các dữ liệu khác của tài khoản vẫn là dữ liệu mới nhất.",
+  "homeUpgradeNotImported": "Chưa có dữ liệu nâng cấp. Hãy nhập JSON của tài khoản đã xác minh này trong Theo dõi nâng cấp.",
+  "homeUpgradeActiveCount": "{count} nâng cấp đang diễn ra",
+  "@homeUpgradeActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeIdle": "Không tìm thấy bộ hẹn giờ nâng cấp đang hoạt động; thợ xây có thể đang rảnh.",
+  "homeDone": "Xong",
+  "homeRemainingCount": "còn {count}",
+  "@homeRemainingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeVerifiedPlayerDataMissing": "Liên kết này đã được xác minh nhưng hồ sơ người chơi không khả dụng. Kéo để làm mới hoặc chờ quá trình theo dõi bắt đầu.",
+  "homeSinceAwayTitle": "Trong lúc bạn vắng mặt",
+  "homeSinceAwayFirstVisit": "Đây là lần truy cập Trang chủ đầu tiên được theo dõi, vì vậy hoạt động cũ không được đánh dấu là mới.",
+  "homeSinceAwaySubtitle": "Các dấu mới được so sánh với lần bạn mở Trang chủ trước đó lúc {time}.",
+  "@homeSinceAwaySubtitle": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSinceAwayEmpty": "Không có hoạt động gia nhập, rời đi hoặc lịch sử người chơi cho các người chơi và bang hội đã xác minh này.",
+  "homeNewMarker": "Mới",
+  "homePulseTitle": "Nhịp hoạt động của bạn",
+  "homePulseSubtitle": "Phong độ chiến tranh và CWL cá nhân trong 30 ngày, trận Xếp hạng và các thứ hạng toàn cầu hiện có.",
+  "homePulseEmpty": "Chưa có lịch sử thành tích hoặc thứ hạng. Dữ liệu của tài khoản mới theo dõi và tài khoản không hoạt động sẽ xuất hiện khi được thu thập.",
+  "homeToday": "Hôm nay",
+  "homeYesterday": "Hôm qua",
+  "homeEarlier": "Trước đó",
+  "homeRankedAttacks": "Lượt tấn công Xếp hạng",
+  "homeSeasonPass": "Vé mùa",
+  "homeUpcomingAccountDetail": "{player} còn {count}.",
+  "@homeUpcomingAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeDataNeeded": "Thêm dữ liệu nâng cấp",
+  "homeUpgradeDataNeededDetail": "Nhập JSON tài khoản của {player} để theo dõi bộ hẹn giờ nâng cấp và thợ xây đang rảnh.",
+  "@homeUpgradeDataNeededDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeIdleTitle": "Thợ xây có thể đang rảnh",
+  "homeUpgradeIdleDetail": "{player} có dữ liệu nâng cấp nhưng không tìm thấy bộ hẹn giờ đang hoạt động.",
+  "@homeUpgradeIdleDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeAccountDetail": "Bộ hẹn giờ nâng cấp của {player}.",
+  "@homeUpgradeAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseWarAverage": "Trung bình chiến tranh trong 30 ngày",
+  "homePulseCwlAverage": "Trung bình CWL trong 30 ngày",
+  "homePulseRankedToday": "Xếp hạng trong 30 ngày",
+  "homePulseRankedValue": "{count} lượt tấn công · {trophies} cúp",
+  "@homePulseRankedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseBestGlobalRank": "Thứ hạng người chơi toàn cầu cao nhất",
+  "homeActivityJoined": "đã gia nhập",
+  "homeActivityLeft": "đã rời",
+  "homeActivityAClan": "một bang hội",
+  "statsMeta": "Meta",
+  "statsBattle": "Trận chiến",
+  "statsWorld": "Thế giới",
+  "statsHeaderSubtitle": "Khám phá thành tích chiến đấu và thế giới mà chúng tôi theo dõi.",
+  "statsPreview": "Xem trước",
+  "statsTownHallDistribution": "Phân bổ Tòa thị chính",
+  "statsBuilderHallDistribution": "Phân phối Hall của thợ xây",
+  "statsLeagueDistribution": "Phân bổ giải đấu được xếp hạng",
+  "statsTrackedPlayers": "Số lượng người chơi được theo dõi hiện tại",
+  "statsTrackedClans": "Dân số bang hội được theo dõi hiện tại",
+  "statsCwlLeagueDistribution": "Phân bổ giải đấu CWL",
+  "statsCapitalLeagueDistribution": "Phân bổ giải đấu thủ đô",
+  "statsTrackedLocations": "Vị trí bang hội được theo dõi",
+  "statsLocationCountHelp": "Các quốc gia và địa điểm được đại diện bởi các bang hội được theo dõi.",
+  "statsLeagueId": "Giải đấu {id}",
+  "@statsLeagueId": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "statsEquipmentAdoption": "Sử dụng thiết bị theo cấp độ",
+  "statsEquipmentAdoptionPreview": "Bố cục tạm thời cho đến khi có số liệu tổng hợp về sở hữu và cấp độ.",
+  "statsExperienceDistribution": "Phân phối XP của người chơi",
+  "statsExperienceDistributionPreview": "Bố cục tạm thời cho đến khi có các nhóm dữ liệu biểu đồ XP.",
+  "statsCwlRosterSizes": "Quy mô danh sách CWL",
+  "statsCwlRosterSizesPreview": "Tỷ lệ 15 đấu 15 / 30 đấu 30 tạm thời cho đến khi có số liệu quy mô nhóm.",
+  "statsWarsOverTime": "Chiến tranh theo thời gian",
+  "statsWarsOverTimePreview": "Xu hướng theo ngày tạm thời cho đến khi kết nối điểm cuối số liệu chuẩn.",
+  "statsStrategyLenses": "Thấu kính chiến lược",
+  "statsStrategyLensesBody": "Chiến lược được đặt tên sử dụng các quy tắc được phiên bản, chồng chéo. Các lần tải chính xác luôn tách biệt để nhãn không bao giờ giả vờ chứng minh ý định chiến đấu.",
+  "statsQueenCharge": "Queen Charge",
+  "statsQueenChargeRule": "Nữ hoàng cung thủ + ít nhất 5 Người chữa lành",
+  "statsSuperBowlerCore": "Cốt lõi của Super Bowler",
+  "statsSuperBowlerRule": "Ít nhất 4 Super Bowler",
+  "statsRootRiderCore": "Root Rider core",
+  "statsRootRiderRule": "Ít nhất 4 Root Rider",
+  "statsPatternDiscoveryBody": "Tính năng khám phá tự động sẽ hiển thị các cụm tải tương tự để đặt tên con người; nó không nên suy ra chiến thuật chỉ từ bố cục.",
+  "statsUsageVsThreeStar": "Cách sử dụng so với tỷ lệ ba sao",
+  "statsTapPointForLoadout": "Nhấn vào một điểm để kiểm tra tải và mẫu chính xác của nó.",
+  "statsExactLoadouts": "Tải chính xác",
+  "statsCustomLens": "Ống kính tùy chỉnh",
+  "statsCustomLensBody": "Chọn số lượng yêu cầu, loại trừ, Tòa thị chính, giải đấu, tầng mẫu và thứ tự sắp xếp. Điều này chạy theo số lượt tải thực nhưng chưa được lưu.",
+  "rankedLeagueTitle": "Giải đấu Xếp hạng",
+  "rankedLeagueAbout": "Giới thiệu Giải đấu Xếp hạng",
+  "rankedLeagueAboutBody": "Trang này sử dụng nhóm Giải đấu Xếp hạng chính thức hằng tuần, nhật ký chiến đấu và lịch sử kỳ đấu. Kết quả hiện tại có thể thay đổi cho đến khi kỳ đấu kết thúc.",
+  "rankedLeagueOverview": "Tổng quan",
+  "rankedLeagueRanking": "Xếp hạng",
+  "rankedLeagueGroupRank": "Hạng trong nhóm",
+  "rankedLeagueTrophies": "Cúp",
+  "rankedLeaguePlayers": "{count} người chơi",
+  "@rankedLeaguePlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBest": "Cao nhất: {value}",
+  "@rankedLeagueBest": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueNoGroup": "Không có nhóm đang hoạt động",
+  "rankedLeagueCurrentPeriod": "Kỳ hiện tại",
+  "rankedLeagueLiveGroupSubtitle": "Kết quả trực tiếp từ nhóm Giải đấu Xếp hạng chính thức của người chơi.",
+  "rankedLeagueBattles": "Trận đánh",
+  "rankedLeagueAttacksPlayed": "lượt tấn công đã chơi",
+  "rankedLeagueAttackRecord": "Thành tích tấn công",
+  "rankedLeagueDefenseRecord": "Thành tích phòng thủ",
+  "rankedLeagueWinsLosses": "thắng – thua",
+  "rankedLeagueDefensesLogged": "Đã ghi nhận {count} lượt phòng thủ",
+  "@rankedLeagueDefensesLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueRecentBattles": "Trận gần đây",
+  "rankedLeagueRecentBattlesSubtitle": "Có kết quả chi tiết cho nhóm hằng tuần đang hoạt động.",
+  "rankedLeagueAttacks": "Tấn công",
+  "rankedLeagueDefenses": "Phòng thủ",
+  "rankedLeagueNoBattles": "Chưa ghi nhận trận chiến nào.",
+  "rankedLeagueGroupRanking": "Xếp hạng nhóm",
+  "rankedLeagueRankingSubtitle": "Bảng xếp hạng trực tiếp của nhóm hiện tại. Người chơi của bạn được làm nổi bật.",
+  "rankedLeagueJumpToMyRank": "Đi đến thứ hạng của tôi",
+  "rankedLeagueLastPeriod": "Kỳ trước",
+  "rankedLeagueBestGroupRank": "Hạng cao nhất",
+  "rankedLeaguePeriodHistory": "Lịch sử kỳ đấu",
+  "rankedLeagueHistorySubtitle": "Bản tóm tắt chính thức của các kỳ đấu hằng tuần đã kết thúc.",
+  "rankedLeagueBestRankedResults": "Kết quả Xếp hạng tốt nhất",
+  "rankedLeagueAllRankedResults": "Tất cả kết quả Xếp hạng",
+  "rankedLeaguePeriods": "Các kỳ đấu",
+  "rankedLeaguePeriodStats": "Thống kê kỳ đấu",
+  "rankedLeagueTrophyProgress": "Tiến độ cúp theo từng trận",
+  "rankedLeagueTrophiesByPeriod": "Cúp theo kỳ đấu",
+  "rankedLeagueBattleCount": "{count} trận",
+  "@rankedLeagueBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBattleProgress": "{count}/{max} trận",
+  "@rankedLeagueBattleProgress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueTrophyAverage": "{trophies} cúp · trung bình {average}",
+  "@rankedLeagueTrophyAverage": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueByPeriod": "Theo kỳ đấu",
+  "rankedLeaguePeriodTab": "Kỳ đấu",
+  "rankedLeagueAverage": "Trung bình",
+  "rankedLeagueRemaining": "Còn lại",
+  "rankedLeagueSevenDayPeriod": "Kỳ Giải đấu Xếp hạng 7 ngày",
+  "rankedLeagueEquipmentUnavailable": "Quân đội và trang bị chưa được đưa vào nhật ký chiến đấu Giải đấu Xếp hạng chính thức.",
+  "rankedLeagueBattleDetailsUnavailable": "Không có nhật ký chiến đấu chi tiết cho kỳ này.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Chỉ có bản tóm tắt kỳ đấu chính thức cho kỳ cũ này.",
+  "rankedLeagueStarBreakdownUnavailable": "API cung cấp tổng số sao nhưng không cung cấp phân bố sao chi tiết cho kỳ này.",
+  "notifAudienceSectionTitle": "Đối tượng nhận thông báo",
+  "@notifAudienceSectionTitle": {
+    "description": "Section title for choosing which accounts receive notifications."
+  },
+  "notifScopeAllLinkedAccounts": "Tất cả tài khoản đã liên kết",
+  "@notifScopeAllLinkedAccounts": {
+    "description": "Option that sends notifications to all linked accounts."
+  },
+  "notifScopeSelectedAccounts": "Tài khoản đã chọn",
+  "@notifScopeSelectedAccounts": {
+    "description": "Option that sends notifications only to selected linked accounts."
+  },
+  "notifAudienceSheetDescription": "Chọn tài khoản có thể nhận thông báo trên thiết bị này.",
+  "@notifAudienceSheetDescription": {
+    "description": "Description for notification audience settings."
+  },
+  "notifAudienceAllSubtitle": "{count} tài khoản hiện tại. Các tài khoản liên kết sau này sẽ được tự động bao gồm.",
+  "@notifAudienceAllSubtitle": {
+    "description": "Subtitle for the all linked accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedSubtitle": "Đã chọn {count} cho thông báo.",
+  "@notifAudienceSelectedSubtitle": {
+    "description": "Subtitle for the selected accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedEmpty": "Chọn chính xác tài khoản sẽ nhận thông báo.",
+  "@notifAudienceSelectedEmpty": {
+    "description": "Empty state subtitle for selected notification accounts."
+  },
+  "notifAudienceAllInlineNote": "Bất kỳ tài khoản nào bạn liên kết sau này sẽ được bao gồm mà không cần đổi cài đặt này.",
+  "@notifAudienceAllInlineNote": {
+    "description": "Inline note explaining all linked accounts behavior."
+  },
+  "notifChooseAccountsManually": "Tài khoản đã chọn",
+  "notifAudienceAcrossDevicesDescription": "Chọn tài khoản có thể nhận thông báo trên thiết bị này.",
+  "notifAccountBookmarked": "Đã đánh dấu",
+  "@notifAccountBookmarked": {
+    "description": "Label for a bookmarked account in notification settings."
+  },
+  "notifGroupLeagueBattles": "Trận đấu giải đấu",
+  "@notifGroupLeagueBattles": {
+    "description": "Notification group label for league battles."
+  },
+  "notifGroupWarAttacks": "tấn công chiến tranh",
+  "@notifGroupWarAttacks": {
+    "description": "Notification group label for war attacks."
+  },
+  "notifGroupWarState": "Trạng thái chiến tranh",
+  "@notifGroupWarState": {
+    "description": "Notification group label for war state changes."
+  },
+  "notifGroupWarReminders": "Nhắc nhở chiến tranh",
+  "@notifGroupWarReminders": {
+    "description": "Notification group label for war reminders."
+  },
+  "notifGroupEvents": "Sự kiện",
+  "@notifGroupEvents": {
+    "description": "Notification group label for events."
+  },
+  "notifGroupAppAnnouncements": "Thông báo ứng dụng",
+  "@notifGroupAppAnnouncements": {
+    "description": "Notification group label for app announcements."
+  },
+  "notifGroupUpgradeFinishes": "Nâng cấp hoàn tất",
+  "@notifGroupUpgradeFinishes": {
+    "description": "Notification group label for completed upgrades."
+  },
+  "notifGroupMonthlySupport": "Ủng hộ hằng tháng",
+  "@notifGroupMonthlySupport": {
+    "description": "Notification group label for monthly support reminders."
+  },
+  "widgetUpgradeProgressTitle": "Tiến độ nâng cấp",
+  "widgetLaboratory": "PHÒNG THÍ NGHIỆM",
+  "widgetPets": "THÚ CƯNG",
+  "widgetBuilderBase": "CĂN CỨ THỢ XÂY",
+  "widgetResearch": "NGHIÊN CỨU",
+  "widgetActive": "ĐANG HOẠT ĐỘNG",
+  "widgetIdle": "ĐANG RẢNH",
+  "widgetLocked": "BỊ KHÓA",
+  "widgetMaxed": "TỐI ĐA",
+  "widgetNotUnlocked": "Chưa mở khóa",
+  "widgetFullyUpgraded": "Đã nâng cấp hoàn toàn",
+  "widgetNoActiveUpgrades": "Không có nâng cấp đang diễn ra",
+  "widgetNoActiveResearch": "Không có nghiên cứu đang diễn ra",
+  "widgetDataStale": "Cần cập nhật",
+  "widgetMoreUpgrade": "nâng cấp khác",
+  "widgetMoreUpgrades": "nâng cấp khác",
+  "widgetLevelShort": "Cấp",
+  "widgetReady": "Sẵn sàng",
+  "widgetReadyIn": "Sẵn sàng sau",
+  "widgetHelping": "Đang hỗ trợ",
+  "widgetApprenticeShort": "Học việc",
+  "widgetAssistantShort": "Trợ lý",
+  "widgetAlchemistShort": "Nhà giả kim",
+  "widgetBuilderPotion": "Thuốc Thợ xây",
+  "widgetResearchPotion": "Thuốc Nghiên cứu",
+  "widgetPetPotion": "Thuốc Thú cưng",
+  "widgetClockTower": "Tháp Đồng hồ",
+  "widgetTownHallBuilderBoost": "Tăng tốc thợ xây từ Nhà Chính",
+  "widgetTownHallLabBoost": "Tăng tốc phòng thí nghiệm từ Nhà Chính",
+  "widgetBuilderBoostShort": "Thợ xây",
+  "widgetResearchBoostShort": "Nghiên cứu",
+  "widgetPetBoostShort": "Thú cưng",
+  "widgetClockBoostShort": "Đồng hồ",
+  "widgetBuilderCostPerk": "Giảm {percent}% chi phí thợ xây",
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetBuilderTimePerk": "Giảm {percent}% thời gian xây dựng",
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabCostPerk": "Giảm {percent}% chi phí phòng thí nghiệm",
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabTimePerk": "Giảm {percent}% thời gian phòng thí nghiệm",
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Mục tiêu cày tài nguyên",
+  "farmGoalFormTitle": "Tài nguyên cần cày",
+  "farmGoalAccountTitle": "Tài khoản",
+  "farmGoalAccountHint": "Tài khoản đã chọn cung cấp Nhà Chính và giải đấu hiện tại dùng cho ước tính.",
+  "farmGoalTargetTitle": "Công trình cần nâng cấp",
+  "farmGoalTargetBuildingLabel": "Công trình",
+  "farmGoalChooseBuilding": "Chọn một công trình",
+  "farmGoalChangeBuilding": "Đổi công trình",
+  "farmGoalNoTargetTitle": "Chưa chọn công trình",
+  "farmGoalNoTargetBody": "Chọn công trình bạn muốn nâng cấp để ước tính lượng tài nguyên cần kiếm.",
+  "farmGoalTargetLevelLabel": "Cấp mục tiêu",
+  "farmGoalUpgradeCostLabel": "Chi phí nâng cấp",
+  "farmGoalCostUnavailable": "Không có chi phí nâng cấp cho cấp này.",
+  "farmGoalLootTitle": "Chiến lợi phẩm ước tính",
+  "farmGoalResourceLabel": "Tài nguyên",
+  "farmGoalAmountLabel": "Số lượng cần cày",
+  "farmGoalAverageLootLabel": "Chiến lợi phẩm có sẵn trong làng",
+  "farmGoalPerfectLootHint": "Nhập lượng chiến lợi phẩm hiển thị trước khi tấn công. Phần thưởng giải đấu bên dưới sẽ được tự động cộng thêm.",
+  "farmGoalLeagueEstimate": "Thưởng giải đấu {league}: {amount} {resource}. Khoản này được tính trong ước lượng số lần tấn công.",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalStarBonusEstimate": "Thưởng sao: {amount} {resource} sau 5 sao. Khoản này không được tính vào số lượt tấn công cần thiết.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Tấn công hoàn hảo · 100%",
+  "farmGoalScenarioAtPercent": "Phá hủy {percent}%",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "lượt tấn công",
+  "farmGoalScenarioHint": "Ước tính: chiến lợi phẩm thay đổi theo công trình bị phá hủy. Tỷ lệ phần trăm áp dụng cho ước tính tấn công hoàn hảo.",
+  "farmGoalNoLeagueLoot": "Chọn tài khoản có giải đấu để nhận gợi ý chiến lợi phẩm.",
+  "farmGoalTrackerNextTitle": "Mục tiếp theo trong kế hoạch Theo dõi nâng cấp",
+  "farmGoalTrackerMissingTitle": "Cần dữ liệu Theo dõi nâng cấp",
+  "farmGoalTrackerMissingBody": "Nhập JSON nâng cấp của tài khoản này vào Theo dõi nâng cấp để hiển thị công trình dự kiến tiếp theo và chi phí chính xác tại đây.",
+  "farmGoalTrackerPlanComplete": "Không tìm thấy nâng cấp công trình nào còn lại trong Theo dõi nâng cấp. Bạn vẫn có thể chọn công trình theo cách thủ công.",
+  "farmGoalOpenUpgradeTracker": "Mở Theo dõi nâng cấp",
+  "farmGoalUseTrackerTarget": "Dùng công trình",
+  "farmGoalMissingTarget": "Chọn công trình và cấp mục tiêu để tính số lượt tấn công cần thiết.",
+  "farmGoalMissingValues": "Nhập mục tiêu và lượng chiến lợi phẩm ước tính từ một lượt tấn công hoàn hảo để xem các kịch bản tấn công.",
+  "farmGoalResultTitle": "Số lượt tấn công cần thiết",
+  "farmGoalAttacks": "lượt tấn công",
+  "farmGoalResultSummary": "{target} {resource}, khoảng {average} cho mỗi lượt tấn công hoàn hảo.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "TH{level}",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Mã nhà sáng tạo: ClashKing",
+  "todoExplanationRaidsTitle": "Đột kích:",
+  "todoExplanationRaids": "Trọng số 5 điểm cho mỗi tài khoản (hoặc 6 nếu lượt tấn công cuối đã được mở khóa), 1 lượt tấn công = 1 điểm.",
+  "clanWarFrequencyTitle": "chiến tranh",
+  "notifScopeAllAccounts": "Tất cả tài khoản",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "notifSelectedAccounts": "Tài khoản đã chọn",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Bộ lọc",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "dashboardUpgradeTrackerAccounts": "Đang theo dõi {loaded}/{total} tài khoản",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "Sát thương",
+  "calculatorsModeFarmGoal": "Mục tiêu cày tài nguyên",
+  "damageCalculatorTitle": "Máy tính sát thương",
+  "damageAccountPresetShort": "Tài khoản",
+  "damageChooseAccount": "Chọn tài khoản",
+  "damageSwitchAccount": "Chuyển tài khoản",
+  "damageAccountSelectorHint": "Các cấp được sử dụng theo tài khoản đã chọn.",
+  "damageNoAccountsAvailable": "Không có tài khoản đã xác minh",
+  "damageTargetSectionTitle": "Công trình cần phá hủy",
+  "damageChooseTarget": "Chọn một công trình",
+  "damageNoTargetTitle": "Chưa chọn công trình",
+  "damageNoTargetBody": "Chọn một công trình để xem nó có thể chịu bao nhiêu sát thương.",
+  "damageTargetLevelLabel": "Cấp mục tiêu",
+  "damageCommonBuildings": "Được chọn nhiều nhất",
+  "damageAllBuildings": "Tất cả công trình",
+  "damageQuickSetups": "Chọn một phương pháp",
+  "damageQuickSetupZapQuake": "Sét + động đất",
+  "damageQuickSetupFireballQuake": "Cầu lửa + động đất",
+  "damageQuickSetupGiantArrow": "Mũi tên Khổng lồ",
+  "damageQuickSetupFlameFlinger": "Máy Phóng Lửa",
+  "damageQuickSetupCustom": "Tùy chỉnh",
+  "damageClearStack": "Thông thoáng",
+  "damageNoDamageSelected": "Không có sát thương",
+  "damageSelectedSourcesCount": "{count} nguồn",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Chọn một phương pháp để hiển thị các nguồn sát thương cần điều chỉnh.",
+  "damageOtherSources": "Nguồn khác",
+  "damageShowAllSources": "Thêm nguồn khác",
+  "damageShowFewerSources": "Ẩn các nguồn khác",
+  "searchCancel": "Hủy",
+  "todoRaidAttacks": "Tấn công đột kích",
+  "todoMockRaid4Left": "4 trái",
+  "todoMockWarAltStatus": "Đang hoạt động 18 phút trước · chiến tranh và đột kích cần được chú ý",
+  "todoMockRaid1Left": "còn lại 1",
+  "gameAssetsCategoryBuildings": "Công trình",
+  "gameAssetsCategoryCapitalBase": "Căn Cứ Thủ Đô",
+  "gameAssetsCategoryCapitalHouseParts": "Bộ phận Nhà Thủ Đô",
+  "gameAssetsCategoryChests": "Rương",
+  "gameAssetsCategoryClanLabels": "Nhãn Hội",
+  "gameAssetsCategoryCountryFlags": "Quốc kỳ",
+  "gameAssetsCategoryDecorations": "Vật trang trí",
+  "gameAssetsCategoryEquipment": "Thiết bị",
+  "gameAssetsCategoryGuardians": "Hộ Vệ",
+  "gameAssetsCategoryHeroes": "Tướng",
+  "gameAssetsCategoryPets": "Linh thú",
+  "gameAssetsCategorySkins": "Trang phục",
+  "gameAssetsCategorySpells": "Phép thuật",
+  "gameAssetsCategoryTroops": "Quân lính",
+  "assetFolderTroops": "Quân lính",
+  "assetFolderSpells": "Phép thuật",
+  "assetFolderHeroes": "Tướng",
+  "endpointStateWins": "Thắng",
+  "notifGroupBattles": "Trận đánh",
+  "notifGroupSupport": "Ủng hộ",
+  "rankedLeagueAccountSelector": "Tài khoản đang hiển thị",
+  "rankedLeagueStars": "Sao",
+  "playerBattlelogTab": "Trận đánh",
+  "playerActivityTab": "Hoạt động",
+  "playerBattlelogFarming": "Thu thập tài nguyên",
+  "playerBattlelogRanked": "Xếp hạng",
+  "playerBattlelogFarmingOverview": "Tổng quan thu thập tài nguyên",
+  "playerBattlelogRankedOverview": "Tổng quan xếp hạng",
+  "playerBattlelogRecentBattles": "Trận gần đây",
+  "playerBattlelogBattleCount": "{count} trận",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Tấn công",
+  "playerBattlelogAverageDestruction": "Phá hủy trung bình",
+  "playerBattlelogAverageStars": "Sao trung bình",
+  "playerBattlelogTripleRate": "Tỷ lệ ba sao",
+  "playerBattlelogAverageLoot": "Chiến lợi phẩm trung bình",
+  "playerBattlelogPopularTroops": "Đơn vị được dùng nhiều nhất",
+  "playerBattlelogUsedInAttacks": "Được dùng trong {count} lượt tấn công",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Tấn công",
+  "playerBattlelogDefense": "Phòng thủ",
+  "playerBattlelogOpponent": "Đối đầu {name}",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Không tìm thấy trận chiến",
+  "playerBattlelogNoBattlesBody": "Chưa có trận chiến nào cho chế độ này.",
+  "playerBattlelogLoadError": "Không thể tải nhật ký trận chiến",
+  "playerBattlelogHistoryUnavailable": "Dữ liệu trận chiến trước đây tạm thời không khả dụng, vì vậy có thể thiếu thông tin sử dụng quân đội và các trận cũ.",
+  "playerBattlelogOfficialUnavailable": "Nhật ký trận chiến chính thức tạm thời không khả dụng, vì vậy có thể thiếu các trận mới nhất.",
+  "playerActivityTrackingActive": "Đang được theo dõi",
+  "playerActivityTrackingActiveBody": "Tài khoản đã xác minh này được làm mới thường xuyên. Sự kiện bắt đầu sau khi theo dõi được bật và đôi khi vẫn có thể bị thiếu.",
+  "playerActivityTrackingUnknown": "Chưa xác nhận theo dõi",
+  "playerActivityTrackingUnknownBody": "Chỉ những thay đổi được ghi nhận khi ClashKing theo dõi người chơi này mới xuất hiện ở đây, vì vậy lịch sử có thể chưa đầy đủ.",
+  "playerActivityNoEventsTitle": "Chưa có hoạt động được theo dõi",
+  "playerActivityNoEventsBody": "Các nâng cấp và thay đổi hồ sơ sẽ xuất hiện sau khi ClashKing ghi nhận chúng.",
+  "playerActivityLoadError": "Không thể tải hoạt động của người chơi",
+  "playerActivityTownHallUpgraded": "Nhà Chính đã được nâng cấp",
+  "playerActivityItemUpgraded": "{name} đã được nâng cấp",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} đã được tăng cường",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} đã được mở khóa",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "Tên đã thay đổi",
+  "playerActivityLevelChange": "Cấp {from} → {to}",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Mở khóa ở cấp {level}",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Tăng cường ở cấp {level}",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
+  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanClose": "Đóng",
+  "upgradeTrackerPlanPlanningGoals": "Planning goals",
+  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
+  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
+  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
+  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
+  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
+  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Strict",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
+  "upgradeTrackerPlanCompletionTarget": "Completion target",
+  "upgradeTrackerPlanStrictTier": "Strict tier",
+  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "Until maxed",
+  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
+  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
+  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
+  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanOff": "Tắt",
+  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
+  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
+  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
+  "upgradeTrackerPlanCategoryTraps": "Traps",
+  "upgradeTrackerPlanCategoryArmy": "Army",
+  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
+  "upgradeTrackerPlanCategorySieges": "Sieges",
+  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
+  "navigationCloseDrawer": "Close navigation drawer",
+  "navigationOpenProfileMenu": "Open profile menu",
+  "navigationClashKingWeb": "ClashKing web",
+  "settingsPrivacyDataTitle": "Privacy & data",
+  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
+  "settingsPrivacyExportTitle": "Access or export your data",
+  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
+  "settingsPrivacyCorrectionTitle": "Correct or limit data",
+  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
+  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
+  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
+  "settingsPrivacyChildrenTitle": "Children and families",
+  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
+  "settingsPrivacyExportReady": "Your data export is ready to save.",
+  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
+  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
+  "settingsPrivacyExportSaved": "Your data export has been saved.",
+  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
+  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
+  "settingsPrivacyOpenPolicy": "Open policy",
+  "settingsPrivacyRefreshExport": "Refresh export",
+  "settingsPrivacyPrepareExport": "Prepare export",
+  "settingsPrivacySaveExport": "Save export",
+  "settingsPrivacyContactSupport": "Contact support",
+  "settingsPrivacyDeleteAccount": "Delete account",
+  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
+  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
+  "generalUnranked": "Unranked",
+  "playerJoinLeaveTab": "Join / Leave",
+  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
+  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Time Remaining",
+  "playerUpgradeNoResourceData": "No resource data",
+  "playerJoinLeaveLoadError": "Could not load join / leave history",
+  "playerJoinLeaveClanTotals": "Clan totals",
+  "playerJoinLeaveTime": "Thời gian",
+  "playerJoinLeaveTimeSpent": "Time spent",
+  "playerJoinLeaveVisits": "Visits",
+  "playerJoinLeaveJoined": "Joined",
+  "playerJoinLeaveLeft": "Left",
+  "playerJoinLeaveNoHistory": "No join / leave history available",
+  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}
