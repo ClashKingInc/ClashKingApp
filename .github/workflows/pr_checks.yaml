@@ -62,14 +62,14 @@ jobs:
           fi
 
           base_dir="$RUNNER_TEMP/clashking-fingerprint-base"
-          mkdir -p "$base_dir"
-          git archive "$BASE_SHA" expo | tar -x -C "$base_dir"
-
-          if [[ ! -f "$base_dir/expo/package-lock.json" ]]; then
+          if ! git cat-file -e "$BASE_SHA:expo/package-lock.json"; then
             echo "android=true" >> "$GITHUB_OUTPUT"
             echo "ios=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
+          mkdir -p "$base_dir"
+          git archive "$BASE_SHA" expo | tar -x -C "$base_dir"
 
           workflow_changed=false
           if ! git diff --quiet "$BASE_SHA" HEAD -- .github/workflows/pr_checks.yaml; then
