@@ -2,7 +2,7 @@
   "name": "@clashking/native",
   "version": "0.1.0",
   "description": "ClashKing native parity bridge for Expo development builds.",
-  "main": "index.ts",
+  "main": "index",
   "types": "index.ts",
   "private": true,
   "peerDependencies": {
