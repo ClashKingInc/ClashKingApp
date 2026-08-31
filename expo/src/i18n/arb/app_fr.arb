@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Période des statistiques de guerre",
+  "warStatsRangeDescription": "Choisissez si les statistiques couvrent un nombre fixe de guerres récentes ou une période récente en jours.",
+  "warStatsRangeDays": "Jours",
+  "warStatsRangeWarsToInclude": "Guerres à inclure",
+  "warStatsRangeDaysToInclude": "Jours à inclure",
   "upgradeTrackerAllBuildersOccupied": "Tous les ouvriers sont occupés",
   "upgradeTrackerBuildCost": "Coût de construction",
   "upgradeTrackerBuilderBaseBuilders": "Ouvriers de la base des ouvriers",

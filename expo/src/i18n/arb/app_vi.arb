@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Phạm vi thống kê chiến tranh",
+  "warStatsRangeDescription": "Chọn thống kê theo số lượng cố định các cuộc chiến gần đây hoặc theo khoảng thời gian gần đây tính bằng ngày.",
+  "warStatsRangeDays": "Ngày",
+  "warStatsRangeWarsToInclude": "Số cuộc chiến cần tính",
+  "warStatsRangeDaysToInclude": "Số ngày cần tính",
   "upgradeTrackerAllBuildersOccupied": "Tất cả thợ xây đều đang bận",
   "upgradeTrackerBuildCost": "Chi phí xây dựng",
   "upgradeTrackerBuilderBaseBuilders": "Thợ xây Nhà Chính Thợ Xây",

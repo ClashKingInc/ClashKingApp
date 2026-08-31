@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "War stats range",
+  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
+  "warStatsRangeDays": "Days",
+  "warStatsRangeWarsToInclude": "Wars to include",
+  "warStatsRangeDaysToInclude": "Days to include",
   "upgradeTrackerAllBuildersOccupied": "All builders occupied",
   "upgradeTrackerBuildCost": "Build cost",
   "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",

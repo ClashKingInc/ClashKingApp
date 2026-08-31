@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Interval d'estadístiques de guerra",
+  "warStatsRangeDescription": "Tria si les estadístiques cobreixen un nombre fix de guerres recents o un període recent de dies.",
+  "warStatsRangeDays": "Dies",
+  "warStatsRangeWarsToInclude": "Guerres que s'inclouran",
+  "warStatsRangeDaysToInclude": "Dies que s'inclouran",
   "upgradeTrackerAllBuildersOccupied": "Tots els constructors estan ocupats",
   "upgradeTrackerBuildCost": "Cost de construcció",
   "upgradeTrackerBuilderBaseBuilders": "Constructors de la base del constructor",

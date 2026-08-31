@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "部落战统计范围",
+  "warStatsRangeDescription": "选择统计固定场数的近期部落战，或按天数统计近期时段。",
+  "warStatsRangeDays": "天数",
+  "warStatsRangeWarsToInclude": "纳入统计的部落战",
+  "warStatsRangeDaysToInclude": "纳入统计的天数",
   "upgradeTrackerAllBuildersOccupied": "所有建筑工人都在忙碌",
   "upgradeTrackerBuildCost": "建造费用",
   "upgradeTrackerBuilderBaseBuilders": "建筑大师基地建筑工人",

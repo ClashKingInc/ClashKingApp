@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Sotatilastojen aikaväli",
+  "warStatsRangeDescription": "Valitse, kattavatko tilastot kiinteän määrän viimeaikaisia sotia vai viimeaikaisen ajanjakson päivinä.",
+  "warStatsRangeDays": "Päivät",
+  "warStatsRangeWarsToInclude": "Mukaan otettavat sodat",
+  "warStatsRangeDaysToInclude": "Mukaan otettavat päivät",
   "upgradeTrackerAllBuildersOccupied": "Kaikki rakentajat ovat varattuja",
   "upgradeTrackerBuildCost": "Rakennuskustannus",
   "upgradeTrackerBuilderBaseBuilders": "Rakentajat rakentajan tukikohdassa",

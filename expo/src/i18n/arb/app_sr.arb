@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Опсег ратне статистике",
+  "warStatsRangeDescription": "Изаберите да ли статистика обухвата одређени број недавних ратова или недавни период у данима.",
+  "warStatsRangeDays": "Дани",
+  "warStatsRangeWarsToInclude": "Ратови за укључивање",
+  "warStatsRangeDaysToInclude": "Дани за укључивање",
   "upgradeTrackerAllBuildersOccupied": "Сви градитељи су заузети",
   "upgradeTrackerBuildCost": "Цена изградње",
   "upgradeTrackerBuilderBaseBuilders": "Градитељи Градитељске базе",

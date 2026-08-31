@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "جنگ کے اعداد و شمار کی حد",
+  "warStatsRangeDescription": "منتخب کریں کہ اعداد و شمار حالیہ جنگوں کی مقررہ تعداد یا دنوں کی حالیہ مدت پر مشتمل ہوں۔",
+  "warStatsRangeDays": "دن",
+  "warStatsRangeWarsToInclude": "شامل کی جانے والی جنگیں",
+  "warStatsRangeDaysToInclude": "شامل کیے جانے والے دن",
   "upgradeTrackerAllBuildersOccupied": "تمام معمار مصروف ہیں",
   "upgradeTrackerBuildCost": "تعمیر کی لاگت",
   "upgradeTrackerBuilderBaseBuilders": "بلڈر بیس کے معمار",

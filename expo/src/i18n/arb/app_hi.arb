@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "युद्ध आँकड़ों की सीमा",
+  "warStatsRangeDescription": "चुनें कि आँकड़ों में हाल के युद्धों की एक निश्चित संख्या शामिल हो या दिनों की हाल की अवधि।",
+  "warStatsRangeDays": "दिन",
+  "warStatsRangeWarsToInclude": "शामिल किए जाने वाले युद्ध",
+  "warStatsRangeDaysToInclude": "शामिल किए जाने वाले दिन",
   "upgradeTrackerAllBuildersOccupied": "सभी बिल्डर व्यस्त हैं",
   "upgradeTrackerBuildCost": "निर्माण लागत",
   "upgradeTrackerBuilderBaseBuilders": "बिल्डर बेस के बिल्डर",

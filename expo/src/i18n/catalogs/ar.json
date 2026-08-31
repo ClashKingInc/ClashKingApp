@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "نطاق إحصاءات الحرب",
+  "warStatsRangeDescription": "اختر ما إذا كانت الإحصاءات تغطي عددًا ثابتًا من الحروب الأخيرة أو فترة حديثة بالأيام.",
+  "warStatsRangeDays": "الأيام",
+  "warStatsRangeWarsToInclude": "الحروب المراد تضمينها",
+  "warStatsRangeDaysToInclude": "الأيام المراد تضمينها",
   "upgradeTrackerAllBuildersOccupied": "جميع البنّائين مشغولون",
   "upgradeTrackerBuildCost": "تكلفة البناء",
   "upgradeTrackerBuilderBaseBuilders": "بنّاؤو قاعدة البنّاء",

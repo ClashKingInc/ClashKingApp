@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Zeitraum der Kriegsstatistik",
+  "warStatsRangeDescription": "Wähle, ob die Statistik eine feste Anzahl vergangener Kriege oder einen vergangenen Zeitraum in Tagen abdeckt.",
+  "warStatsRangeDays": "Tage",
+  "warStatsRangeWarsToInclude": "Einzubeziehende Kriege",
+  "warStatsRangeDaysToInclude": "Einzubeziehende Tage",
   "upgradeTrackerAllBuildersOccupied": "Alle Bauarbeiter beschäftigt",
   "upgradeTrackerBuildCost": "Baukosten",
   "upgradeTrackerBuilderBaseBuilders": "Bauarbeiter der Bauarbeiterbasis",

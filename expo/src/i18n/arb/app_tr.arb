@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Savaş istatistikleri aralığı",
+  "warStatsRangeDescription": "İstatistiklerin sabit sayıda son savaşı mı yoksa gün cinsinden yakın bir dönemi mi kapsayacağını seç.",
+  "warStatsRangeDays": "Gün",
+  "warStatsRangeWarsToInclude": "Dahil edilecek savaşlar",
+  "warStatsRangeDaysToInclude": "Dahil edilecek günler",
   "upgradeTrackerAllBuildersOccupied": "Tüm inşaatçılar meşgul",
   "upgradeTrackerBuildCost": "İnşa maliyeti",
   "upgradeTrackerBuilderBaseBuilders": "İnşaatçı Üssü inşaatçıları",

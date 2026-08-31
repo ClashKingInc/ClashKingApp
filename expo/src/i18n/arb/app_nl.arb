@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Bereik van oorlogsstatistieken",
+  "warStatsRangeDescription": "Kies of de statistieken een vast aantal recente oorlogen of een recente periode in dagen omvatten.",
+  "warStatsRangeDays": "Dagen",
+  "warStatsRangeWarsToInclude": "Op te nemen oorlogen",
+  "warStatsRangeDaysToInclude": "Op te nemen dagen",
   "upgradeTrackerAllBuildersOccupied": "Alle bouwers zijn bezig",
   "upgradeTrackerBuildCost": "Bouwkosten",
   "upgradeTrackerBuilderBaseBuilders": "Bouwers van de bouwersbasis",

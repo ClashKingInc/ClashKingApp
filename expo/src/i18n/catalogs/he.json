@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "טווח סטטיסטיקות מלחמה",
+  "warStatsRangeDescription": "בחר אם הסטטיסטיקות יכללו מספר קבוע של מלחמות אחרונות או תקופה אחרונה בימים.",
+  "warStatsRangeDays": "ימים",
+  "warStatsRangeWarsToInclude": "מלחמות להכללה",
+  "warStatsRangeDaysToInclude": "ימים להכללה",
   "upgradeTrackerAllBuildersOccupied": "כל הבנאים עסוקים",
   "upgradeTrackerBuildCost": "עלות בנייה",
   "upgradeTrackerBuilderBaseBuilders": "בנאי בסיס הבנאי",

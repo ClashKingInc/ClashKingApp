@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Háborús statisztikák tartománya",
+  "warStatsRangeDescription": "Válaszd ki, hogy a statisztikák meghatározott számú legutóbbi háborút vagy egy napokban megadott időszakot fedjenek le.",
+  "warStatsRangeDays": "Napok",
+  "warStatsRangeWarsToInclude": "Belefoglalandó háborúk",
+  "warStatsRangeDaysToInclude": "Belefoglalandó napok",
   "upgradeTrackerAllBuildersOccupied": "Minden építő foglalt",
   "upgradeTrackerBuildCost": "Építési költség",
   "upgradeTrackerBuilderBaseBuilders": "Építőbázis építői",

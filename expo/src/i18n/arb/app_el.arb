@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Εύρος στατιστικών πολέμου",
+  "warStatsRangeDescription": "Επίλεξε αν τα στατιστικά καλύπτουν έναν σταθερό αριθμό πρόσφατων πολέμων ή ένα πρόσφατο διάστημα ημερών.",
+  "warStatsRangeDays": "Ημέρες",
+  "warStatsRangeWarsToInclude": "Πόλεμοι προς συμπερίληψη",
+  "warStatsRangeDaysToInclude": "Ημέρες προς συμπερίληψη",
   "upgradeTrackerAllBuildersOccupied": "Όλοι οι εργάτες είναι απασχολημένοι",
   "upgradeTrackerBuildCost": "Κόστος κατασκευής",
   "upgradeTrackerBuilderBaseBuilders": "Εργάτες Βάσης Εργατών",

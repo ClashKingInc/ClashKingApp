@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Zakres statystyk wojennych",
+  "warStatsRangeDescription": "Wybierz, czy statystyki mają obejmować stałą liczbę ostatnich wojen, czy ostatni okres podany w dniach.",
+  "warStatsRangeDays": "Dni",
+  "warStatsRangeWarsToInclude": "Wojny do uwzględnienia",
+  "warStatsRangeDaysToInclude": "Dni do uwzględnienia",
   "upgradeTrackerAllBuildersOccupied": "Wszyscy budowniczowie są zajęci",
   "upgradeTrackerBuildCost": "Koszt budowy",
   "upgradeTrackerBuilderBaseBuilders": "Budowniczowie Bazy Budowniczego",

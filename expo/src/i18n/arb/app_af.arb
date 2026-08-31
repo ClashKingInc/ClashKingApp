@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Oorlogstatistiekreeks",
+  "warStatsRangeDescription": "Kies of die statistieke 'n vaste aantal onlangse oorloë of 'n onlangse tydperk in dae dek.",
+  "warStatsRangeDays": "Dae",
+  "warStatsRangeWarsToInclude": "Oorloë om in te sluit",
+  "warStatsRangeDaysToInclude": "Dae om in te sluit",
   "upgradeTrackerAllBuildersOccupied": "Alle bouers is besig",
   "upgradeTrackerBuildCost": "Boukoste",
   "upgradeTrackerBuilderBaseBuilders": "Bouers van die bouersbasis",

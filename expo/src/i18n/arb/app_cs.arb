@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Rozsah válečných statistik",
+  "warStatsRangeDescription": "Zvolte, zda statistiky zahrnují pevný počet nedávných válek, nebo nedávné období ve dnech.",
+  "warStatsRangeDays": "Dny",
+  "warStatsRangeWarsToInclude": "Zahrnuté války",
+  "warStatsRangeDaysToInclude": "Zahrnuté dny",
   "upgradeTrackerAllBuildersOccupied": "Všichni stavitelé jsou zaneprázdněni",
   "upgradeTrackerBuildCost": "Cena stavby",
   "upgradeTrackerBuilderBaseBuilders": "Stavitelé stavitelské základny",

@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "対戦統計の範囲",
+  "warStatsRangeDescription": "直近の対戦を一定数含めるか、直近の期間を日数で指定するかを選択します。",
+  "warStatsRangeDays": "日数",
+  "warStatsRangeWarsToInclude": "含める対戦数",
+  "warStatsRangeDaysToInclude": "含める日数",
   "upgradeTrackerAllBuildersOccupied": "大工は全員作業中です",
   "upgradeTrackerBuildCost": "建設コスト",
   "upgradeTrackerBuilderBaseBuilders": "ビルダーベースの大工",

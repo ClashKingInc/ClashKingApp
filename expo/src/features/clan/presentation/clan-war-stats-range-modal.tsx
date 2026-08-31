@@ -43,7 +43,7 @@ export function ClanWarStatsRangeModal({
   const minimum = usingWars ? 10 : 7;
   const maximum = usingWars ? 100 : 365;
   const step = usingWars ? 5 : 1;
-  const rangeLabel = usingWars ? 'Wars to include' : 'Days to include';
+  const rangeLabel = usingWars ? t('warStatsRangeWarsToInclude') : t('warStatsRangeDaysToInclude');
 
   const reset = () => {
     setMode('wars');
@@ -65,11 +65,9 @@ export function ClanWarStatsRangeModal({
             style={[styles.dragHandle, { backgroundColor: colorWithAlpha(theme.onSurface, 0.32) }]}
           />
           <CKText role="titleLarge" style={styles.title}>
-            War stats range
+            {t('warStatsRangeTitle')}
           </CKText>
-          <CKText muted>
-            Choose whether the stats cover a fixed number of recent wars or a recent span of days.
-          </CKText>
+          <CKText muted>{t('warStatsRangeDescription')}</CKText>
 
           <GlassSurface cornerRadius={ckRadius.pill} style={styles.segmented}>
             {(['wars', 'days'] as const).map((value) => {
@@ -79,7 +77,7 @@ export function ClanWarStatsRangeModal({
                   key={value}
                   accessibilityRole="radio"
                   accessibilityState={{ selected }}
-                  accessibilityLabel={value === 'wars' ? t('warStatsWars') : 'Days'}
+                  accessibilityLabel={value === 'wars' ? t('warStatsWars') : t('warStatsRangeDays')}
                   onPress={() => setMode(value)}
                   style={styles.segmentButton}
                 >
@@ -93,7 +91,7 @@ export function ClanWarStatsRangeModal({
                     ]}
                   >
                     <CKText role="labelLarge" style={selected && { color: theme.primary }}>
-                      {value === 'wars' ? t('warStatsWars') : 'Days'}
+                      {value === 'wars' ? t('warStatsWars') : t('warStatsRangeDays')}
                     </CKText>
                   </View>
                 </Pressable>

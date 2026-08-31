@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Intervall for krigsstatistikk",
+  "warStatsRangeDescription": "Velg om statistikken skal dekke et fast antall nylige kriger eller en nylig periode i dager.",
+  "warStatsRangeDays": "Dager",
+  "warStatsRangeWarsToInclude": "Kriger som skal tas med",
+  "warStatsRangeDaysToInclude": "Dager som skal tas med",
   "upgradeTrackerAllBuildersOccupied": "Alle byggerne er opptatt",
   "upgradeTrackerBuildCost": "Byggekostnad",
   "upgradeTrackerBuilderBaseBuilders": "Byggere i byggerbasen",

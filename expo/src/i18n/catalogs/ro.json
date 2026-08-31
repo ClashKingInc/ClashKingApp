@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Intervalul statisticilor de război",
+  "warStatsRangeDescription": "Alege dacă statisticile acoperă un număr fix de războaie recente sau o perioadă recentă exprimată în zile.",
+  "warStatsRangeDays": "Zile",
+  "warStatsRangeWarsToInclude": "Războaie de inclus",
+  "warStatsRangeDaysToInclude": "Zile de inclus",
   "upgradeTrackerAllBuildersOccupied": "Toți constructorii sunt ocupați",
   "upgradeTrackerBuildCost": "Cost de construire",
   "upgradeTrackerBuilderBaseBuilders": "Constructorii Bazei Constructorului",

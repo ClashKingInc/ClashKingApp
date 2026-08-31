@@ -1,4 +1,9 @@
 {
+  "warStatsRangeTitle": "Діапазон воєнної статистики",
+  "warStatsRangeDescription": "Виберіть, чи охоплює статистика задану кількість нещодавніх воєн, чи нещодавній період у днях.",
+  "warStatsRangeDays": "Дні",
+  "warStatsRangeWarsToInclude": "Війни для врахування",
+  "warStatsRangeDaysToInclude": "Дні для врахування",
   "upgradeTrackerAllBuildersOccupied": "Усі будівельники зайняті",
   "upgradeTrackerBuildCost": "Вартість будівництва",
   "upgradeTrackerBuilderBaseBuilders": "Будівельники Бази будівельника",
