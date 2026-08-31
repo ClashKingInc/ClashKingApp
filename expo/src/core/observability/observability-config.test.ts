@@ -31,7 +31,7 @@ describe('observability config', () => {
     const config = resolveObservabilityConfig(
       {
         EXPO_PUBLIC_CK_SENTRY_DSN: ' https://example.test/1 ',
-        EXPO_PUBLIC_CK_API_ENV: 'stage',
+        EXPO_PUBLIC_CK_API_ENV: 'development',
         EXPO_PUBLIC_CK_SENTRY_TRACES_SAMPLE_RATE_PERCENT: '125',
         EXPO_PUBLIC_CK_SENTRY_REPLAY_SESSION_SAMPLE_RATE_PERCENT: '-4',
         EXPO_PUBLIC_CK_SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE_PERCENT: '2.5',
@@ -40,7 +40,7 @@ describe('observability config', () => {
     );
     expect(config).toMatchObject({
       dsn: 'https://example.test/1',
-      environment: 'staging',
+      environment: 'development',
       tracesSampleRate: 1,
       replaysSessionSampleRate: 0,
       replaysOnErrorSampleRate: 0.025,

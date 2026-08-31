@@ -82,7 +82,7 @@ function harness(overrides: Partial<PushNotificationServiceOptions> = {}) {
   const reportError = jest.fn(async () => undefined);
   const options: PushNotificationServiceOptions = {
     platform: 'ios',
-    apiEnvironment: 'staging',
+    apiEnvironment: 'development',
     api,
     preferences: store,
     tokenService: { getDeviceId: jest.fn(async () => 'device-1') },

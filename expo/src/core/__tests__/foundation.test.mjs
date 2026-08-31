@@ -15,8 +15,8 @@ import {
 } from '../dto/notification-preferences.ts';
 import { serializeStoredAuthSession, tryParseStoredAuthSession } from '../dto/auth-session.ts';
 
-test('API environment aliases and overrides match Flutter', () => {
-  assert.equal(apiEnvironmentForName('stage'), 'staging');
+test('API environment aliases and overrides use supported environments', () => {
+  assert.equal(apiEnvironmentForName('development'), 'development');
   assert.equal(apiEnvironmentForName('anything'), 'production');
   assert.deepEqual(
     resolveApiConfiguration({

@@ -73,7 +73,7 @@ function serviceOptions(options: {
   tokenService?: TokenService;
   preferences?: MemoryPreferences;
   platform?: 'web' | 'native';
-  environment?: 'local' | 'staging' | 'production';
+  environment?: 'local' | 'development' | 'production';
   discordOAuth?: DiscordOAuthClient;
   unregisterPushDevice?: () => Promise<void>;
   observability?: AuthObservability;

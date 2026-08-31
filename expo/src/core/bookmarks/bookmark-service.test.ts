@@ -19,7 +19,7 @@ function harness(handler: Handler) {
   const api = new ApiClient({
     baseUrl: 'https://api.test/v2',
     proxyUrl: 'https://proxy.test',
-    environment: 'staging',
+    environment: 'development',
     tokenProvider: { getAccessToken: async () => 'access' },
     fetchImplementation,
   });

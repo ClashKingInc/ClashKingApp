@@ -26,7 +26,7 @@ function harness(routes: Record<string, Route>) {
   const api = new ApiClient({
     baseUrl: 'https://api.test',
     proxyUrl: 'https://proxy.test',
-    environment: 'staging',
+    environment: 'development',
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation,
   });

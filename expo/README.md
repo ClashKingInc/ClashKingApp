@@ -14,17 +14,20 @@ npx expo run:ios
 npx expo run:android
 ```
 
-The API defaults to production. Local and staging builds can set:
+The API defaults to production. Development builds can use the remote development API:
 
 ```bash
-EXPO_PUBLIC_CK_API_ENV=staging
+EXPO_PUBLIC_CK_API_ENV=development
 EXPO_PUBLIC_CK_API_BASE_URL=https://dev-api.clashk.ing
 EXPO_PUBLIC_CK_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
 EXPO_PUBLIC_CK_PROXY_BASE_URL=https://dev-api.clashk.ing/proxy/v1
 EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
-EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=https://staging-app.clashk.ing/auth/discord_callback.html
 EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
 ```
+
+Local API development can instead set `EXPO_PUBLIC_CK_API_ENV=local` and the
+corresponding URL overrides. TestFlight, Play Store, and deployed web builds
+always use the production API.
 
 ## Verification
 

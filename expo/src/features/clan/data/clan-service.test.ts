@@ -14,7 +14,7 @@ function harness(responder: (url: string, init?: RequestInit) => Response | Prom
   const api = new ApiClient({
     baseUrl: 'https://api.example',
     proxyUrl: 'https://api.example/proxy/v1',
-    environment: 'staging',
+    environment: 'development',
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation,
     platform: 'native',

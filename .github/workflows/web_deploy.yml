@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - staging
 
 concurrency:
   group: web-deploy-${{ github.ref }}
@@ -20,10 +19,10 @@ jobs:
       CI: true
       EXPO_NO_TELEMETRY: 1
       EXPO_NO_GIT_STATUS: 1
-      EXPO_PUBLIC_CK_API_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-      EXPO_PUBLIC_CK_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
-      EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
-      EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || github.ref == 'refs/heads/staging' && 'https://staging-app.clashk.ing/auth/discord_callback.html' || '' }}
+      EXPO_PUBLIC_CK_API_ENV: production
+      EXPO_PUBLIC_CK_API_V2_BASE_URL: https://api.clashk.ing/v2
+      EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL: https://api.clashk.ing/v2
+      EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI: https://app.clashk.ing/auth/discord_callback.html
       EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED: true
 
     steps:

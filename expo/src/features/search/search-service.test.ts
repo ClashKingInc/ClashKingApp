@@ -20,7 +20,7 @@ function setup(routes: Record<string, { body: unknown; status?: number }>) {
   const api = new ApiClient({
     baseUrl: 'https://api.test',
     proxyUrl: 'https://proxy.test',
-    environment: 'staging',
+    environment: 'development',
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation: fetchMock as typeof fetch,
   });

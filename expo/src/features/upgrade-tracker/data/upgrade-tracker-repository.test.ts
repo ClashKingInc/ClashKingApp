@@ -46,7 +46,7 @@ function setup(
   });
   const api = new ApiClient({
     baseUrl: 'https://api.test',
-    environment: 'staging',
+    environment: 'development',
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation: fetchImplementation as typeof fetch,
   });

@@ -39,9 +39,6 @@ export function sentryEnvironment(value: string | undefined): string {
     case 'local':
     case 'development':
       return 'development';
-    case 'stage':
-    case 'staging':
-      return 'staging';
     case 'prod':
     case 'production':
     case '':

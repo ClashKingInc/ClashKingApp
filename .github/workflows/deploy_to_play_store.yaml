@@ -76,7 +76,7 @@ jobs:
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
-      - name: Determine Play track and API environment
+      - name: Determine Play track
         id: release
         shell: bash
         run: |
@@ -93,13 +93,10 @@ jobs:
             fi
           fi
           case "$TRACK" in
-            alpha) API_ENV=development ;;
-            beta) API_ENV=staging ;;
-            production) API_ENV=production ;;
+            alpha|beta|production) ;;
             *) echo "Unsupported Play track: $TRACK" >&2; exit 1 ;;
           esac
           echo "track=$TRACK" >> "$GITHUB_OUTPUT"
-          echo "api_env=$API_ENV" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -130,7 +127,7 @@ jobs:
         env:
           CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
           CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
-          EXPO_PUBLIC_CK_API_ENV: ${{ steps.release.outputs.api_env }}
+          EXPO_PUBLIC_CK_API_ENV: production
         run: npx expo prebuild --platform android --clean --no-install
 
       - name: Cache Gradle dependencies
@@ -154,7 +151,7 @@ jobs:
       - name: Build signed AAB and APK
         working-directory: expo/android
         env:
-          EXPO_PUBLIC_CK_API_ENV: ${{ steps.release.outputs.api_env }}
+          EXPO_PUBLIC_CK_API_ENV: production
           ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_FILE: ${{ github.workspace }}/expo/ck_key.jks
           ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}

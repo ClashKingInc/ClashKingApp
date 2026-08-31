@@ -1,5 +1,5 @@
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'QUERY';
-export type ApiEnvironment = 'production' | 'staging' | 'development' | 'local';
+export type ApiEnvironment = 'production' | 'development' | 'local';
 
 export class ApiException extends Error {
   readonly status?: number;

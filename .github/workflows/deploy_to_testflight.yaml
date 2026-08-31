@@ -52,23 +52,14 @@ jobs:
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
-      - name: Determine TestFlight track and API environment
+      - name: Determine TestFlight track
         id: release
         shell: bash
         run: |
           TRACK="${{ inputs.testflight_track }}"
-          VERSION_INPUT="${{ inputs.version }}"
-          if [[ "$VERSION_INPUT" == *alpha* ]]; then
-            API_ENV=development
-          elif [[ "$VERSION_INPUT" == *beta* || "$TRACK" == external ]]; then
-            API_ENV=staging
-          else
-            API_ENV=production
-          fi
           [[ "$TRACK" == external ]] && EXTERNAL_TESTING=true || EXTERNAL_TESTING=false
           echo "track=$TRACK" >> "$GITHUB_OUTPUT"
           echo "external_testing=$EXTERNAL_TESTING" >> "$GITHUB_OUTPUT"
-          echo "api_env=$API_ENV" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -93,7 +84,7 @@ jobs:
         env:
           CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
           CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
-          EXPO_PUBLIC_CK_API_ENV: ${{ steps.release.outputs.api_env }}
+          EXPO_PUBLIC_CK_API_ENV: production
         run: npx expo prebuild --platform ios --clean --no-install
 
       - name: Install CocoaPods dependencies
@@ -220,7 +211,7 @@ jobs:
       - name: Archive app and widget
         working-directory: expo/ios
         env:
-          EXPO_PUBLIC_CK_API_ENV: ${{ steps.release.outputs.api_env }}
+          EXPO_PUBLIC_CK_API_ENV: production
         run: |
           xcodebuild \
             -workspace ClashKing.xcworkspace \

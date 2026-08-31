@@ -1,4 +1,4 @@
-export type ApiEnvironment = 'production' | 'staging' | 'development' | 'local';
+export type ApiEnvironment = 'production' | 'development' | 'local';
 
 export interface ApiEnvironmentVariables {
   readonly CK_API_ENV?: string;
@@ -25,9 +25,6 @@ export function apiEnvironmentForName(name: string | undefined): ApiEnvironment 
       return 'local';
     case 'development':
       return 'development';
-    case 'stage':
-    case 'staging':
-      return 'staging';
     case 'prod':
     case 'production':
     default:
@@ -40,7 +37,6 @@ export function defaultApiBaseUrl(environment: ApiEnvironment): string {
     case 'local':
       return 'http://localhost:8000';
     case 'development':
-    case 'staging':
       return 'https://dev-api.clashk.ing';
     case 'production':
       return 'https://api.clashk.ing/v2';

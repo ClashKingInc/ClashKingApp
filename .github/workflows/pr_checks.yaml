@@ -145,7 +145,7 @@ jobs:
 
       - name: Verify static web export
         env:
-          EXPO_PUBLIC_CK_API_ENV: staging
+          EXPO_PUBLIC_CK_API_ENV: development
         run: npm run web:export
 
       - name: SonarQube scan

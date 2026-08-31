@@ -37,7 +37,7 @@ function setup(routes: Record<string, unknown | (() => Promise<Response>)>) {
   const api = new ApiClient({
     baseUrl: 'https://api.test',
     proxyUrl: 'https://proxy.test',
-    environment: 'staging',
+    environment: 'development',
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation: fetchMock as typeof fetch,
   });
@@ -209,7 +209,7 @@ test('search returns empty for HTTP/shape misses but propagates transport failur
   const transportApi = new ApiClient({
     baseUrl: 'https://api.test',
     proxyUrl: 'https://proxy.test',
-    environment: 'staging',
+    environment: 'development',
     fetchImplementation: jest.fn(async () => {
       throw new TypeError('offline');
     }) as typeof fetch,
