@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to deploy (e.g., 0.2.0-alpha)'
+        description: "Version to deploy (e.g., 0.2.0-alpha)"
         required: true
         type: string
       testflight_track:
-        description: 'TestFlight track'
+        description: "TestFlight track"
         required: true
-        default: 'internal'
+        default: "internal"
         type: choice
         options:
           - internal
@@ -21,202 +21,231 @@ jobs:
     name: iOS TestFlight Release
     runs-on: macos-latest
     timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: expo
+    env:
+      CI: true
+      EXPO_NO_TELEMETRY: 1
+      EXPO_NO_GIT_STATUS: 1
+      APP_BUNDLE_ID: com.clashking.apps
+      WIDGET_BUNDLE_ID: com.clashking.apps.warwidget
+      APPLE_TEAM_ID: MZYXD43RX5
+      IPA_PATH: expo/ios/build/ClashKing.ipa
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - name: Extract version and build number
+        id: version
+        shell: bash
+        run: |
+          VERSION_NAME="${{ inputs.version }}"
+          VERSION_NAME="${VERSION_NAME#v}"
+          VERSION_NAME="$(printf '%s' "$VERSION_NAME" | sed -E 's/-(alpha|beta).*//')"
+          [[ "$VERSION_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+            echo "Resolved version '$VERSION_NAME' is not semantic x.y.z." >&2
+            exit 1
+          }
+          BUILD_NUMBER="$(date +%s)"
+          echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+          echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Determine TestFlight track
+        id: release
+        shell: bash
+        run: |
+          TRACK="${{ inputs.testflight_track }}"
+          [[ "$TRACK" == external ]] && EXTERNAL_TESTING=true || EXTERNAL_TESTING=false
+          echo "track=$TRACK" >> "$GITHUB_OUTPUT"
+          echo "external_testing=$EXTERNAL_TESTING" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          flutter-version-file: .flutter-version
-          cache: true
-
-      - name: Extract version from tag
-        id: extract_version
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            VERSION_NAME="${{ github.event.inputs.version }}"
-          else
-            TAG=${GITHUB_REF#refs/tags/}          # Extract "v1.0.0-alpha"
-            VERSION_NAME=${TAG#v}                 # Remove "v" to get "1.0.0-alpha"
-          fi
-
-          # Remove alpha/beta suffixes for consistency with Android
-          VERSION_NAME=$(echo "$VERSION_NAME" | sed 's/-alpha.*$//' | sed 's/-beta.*$//')
-          echo "Cleaned version for TestFlight: $VERSION_NAME"
-          BUILD_NUMBER=$(date +%s)              # Generate timestamp build number
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_OUTPUT
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-          echo "Deploying version: $VERSION_NAME ($BUILD_NUMBER)"
-
-      - name: Update version in pubspec.yaml
-        run: |
-          sed -i '' "s/^version: .*/version: ${{ steps.extract_version.outputs.VERSION_NAME }}+${{ steps.extract_version.outputs.BUILD_NUMBER }}/" pubspec.yaml
-          echo "Updated pubspec.yaml with version ${{ steps.extract_version.outputs.VERSION_NAME }}+${{ steps.extract_version.outputs.BUILD_NUMBER }}"
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
 
       - name: Install dependencies
-        run: flutter pub get
+        run: npm ci
+
+      - name: Verify Expo project
+        run: |
+          npm run test:native-plugin
+          npm run typecheck
+          npm run lint
+          npm test
+          npm run l10n:check
+          npx expo-doctor
+
+      - name: Generate iOS project
+        env:
+          CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
+          CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
+          EXPO_PUBLIC_CK_API_ENV: production
+        run: npx expo prebuild --platform ios --clean --no-install
 
       - name: Install CocoaPods dependencies
-        working-directory: ios
+        working-directory: expo/ios
         run: pod install
 
-      - name: Analyze project
-        run: flutter analyze
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Determine TestFlight track based on tag
-        id: determine_track
+      - name: Install distribution certificate and provisioning profiles
+        id: signing
+        shell: bash
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          APP_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          WIDGET_PROFILE_BASE64: ${{ secrets.IOS_WIDGET_PROVISIONING_PROFILE_BASE64 }}
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            TESTFLIGHT_TRACK="${{ github.event.inputs.testflight_track }}"
-            if [ "$TESTFLIGHT_TRACK" == "external" ]; then
-              EXTERNAL_TESTING="true"
-            else
-              EXTERNAL_TESTING="false"
-            fi
-          else
-            TAG=${GITHUB_REF#refs/tags/}
-            if [[ "$TAG" == *"alpha"* ]]; then
-              TESTFLIGHT_TRACK="internal"
-              EXTERNAL_TESTING="false"
-            elif [[ "$TAG" == *"beta"* ]]; then
-              TESTFLIGHT_TRACK="external"
-              EXTERNAL_TESTING="true"
-            else
-              TESTFLIGHT_TRACK="external"
-              EXTERNAL_TESTING="true"
-            fi
-          fi
+          set -euo pipefail
+          for value in CERTIFICATE_BASE64 CERTIFICATE_PASSWORD APP_PROFILE_BASE64 WIDGET_PROFILE_BASE64; do
+            [[ -n "${!value}" ]] || { echo "$value is empty" >&2; exit 1; }
+          done
 
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            BUILD_VERSION="${{ github.event.inputs.version }}"
-          else
-            BUILD_VERSION=${GITHUB_REF#refs/tags/}
-          fi
+          printf '%s' "$CERTIFICATE_BASE64" | base64 --decode > certificate.p12
+          printf '%s' "$APP_PROFILE_BASE64" | base64 --decode > app.mobileprovision
+          printf '%s' "$WIDGET_PROFILE_BASE64" | base64 --decode > widget.mobileprovision
 
-          if [[ "$BUILD_VERSION" == *"alpha"* ]]; then
-            CK_API_ENV="development"
-          elif [[ "$BUILD_VERSION" == *"beta"* ]] || \
-               [ "$TESTFLIGHT_TRACK" == "external" ]; then
-            CK_API_ENV="staging"
-          else
-            CK_API_ENV="production"
-          fi
-          API_DART_DEFINES=$(printf 'CK_API_ENV=%s' "$CK_API_ENV" | base64 | tr -d '\n')
-
-          echo "TESTFLIGHT_TRACK=$TESTFLIGHT_TRACK" >> $GITHUB_OUTPUT
-          echo "EXTERNAL_TESTING=$EXTERNAL_TESTING" >> $GITHUB_OUTPUT
-          echo "TESTFLIGHT_TRACK=$TESTFLIGHT_TRACK" >> $GITHUB_ENV
-          echo "EXTERNAL_TESTING=$EXTERNAL_TESTING" >> $GITHUB_ENV
-          echo "CK_API_ENV=$CK_API_ENV" >> $GITHUB_ENV
-          echo "API_DART_DEFINES=$API_DART_DEFINES" >> $GITHUB_ENV
-          echo "Selected TestFlight track: $TESTFLIGHT_TRACK"
-          echo "Selected API environment: $CK_API_ENV"
-
-      - name: Setup Xcode signing
-        run: |
-          # Every TestFlight upload, including internal testing, is an App
-          # Store distribution build. Development certificates cannot archive
-          # an uploadable TestFlight IPA.
-          CERTIFICATE_BASE64="${{ secrets.IOS_CERTIFICATE_BASE64 }}"
-          CERTIFICATE_PASSWORD="${{ secrets.IOS_CERTIFICATE_PASSWORD }}"
-          PROVISIONING_PROFILE_BASE64="${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}"
-
-          # Create certificates directory
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-
-          # Validate certificate data exists
-          if [ -z "$CERTIFICATE_BASE64" ]; then
-            echo "❌ ERROR: Certificate base64 data is empty"
-            exit 1
-          fi
-
-          if [ -z "$CERTIFICATE_PASSWORD" ]; then
-            echo "❌ ERROR: Certificate password is empty"
-            exit 1
-          fi
-
-          # Decode and install certificate
-          echo "$CERTIFICATE_BASE64" | base64 --decode > certificate.p12
-
-          # Verify certificate file was created and has content
-          if [ ! -f certificate.p12 ] || [ ! -s certificate.p12 ]; then
-            echo "❌ ERROR: Certificate file is empty or doesn't exist"
-            ls -la certificate.p12 || echo "File not found"
-            exit 1
-          fi
-
-          echo "✅ Certificate file created successfully ($(stat -f%z certificate.p12 2>/dev/null || stat -c%s certificate.p12) bytes)"
-
-          # Create a new keychain
-          security create-keychain -p "temppassword" build.keychain
+          security create-keychain -p temppassword build.keychain
           security set-keychain-settings -lut 21600 build.keychain
-          security unlock-keychain -p "temppassword" build.keychain
+          security unlock-keychain -p temppassword build.keychain
+          security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/xcodebuild
+          security list-keychains -d user -s build.keychain login.keychain
+          security default-keychain -d user -s build.keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temppassword build.keychain
 
-          # Import certificate with better error handling
-          echo "🔐 Importing certificate..."
-          if ! security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/xcodebuild; then
-            echo "❌ ERROR: Failed to import certificate"
-            echo "🔍 Troubleshooting info:"
-            echo "  - Certificate file size: $(stat -f%z certificate.p12 2>/dev/null || stat -c%s certificate.p12) bytes"
-            echo "  - Password length: ${#CERTIFICATE_PASSWORD}"
-            echo "  - Trying to verify certificate format..."
-            openssl pkcs12 -info -in certificate.p12 -noout -passin pass:"$CERTIFICATE_PASSWORD" || echo "  Certificate verification failed"
-            exit 1
-          fi
-          echo "✅ Certificate imported successfully"
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          install_profile() {
+            local profile="$1" prefix="$2" plist="${profile}.plist" uuid name app_id
+            security cms -D -i "$profile" > "$plist"
+            uuid="$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$plist")"
+            name="$(/usr/libexec/PlistBuddy -c 'Print :Name' "$plist")"
+            app_id="$(/usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' "$plist")"
+            cp "$profile" "$HOME/Library/MobileDevice/Provisioning Profiles/$uuid.mobileprovision"
+            echo "${prefix}_profile_name=$name" >> "$GITHUB_OUTPUT"
+            echo "${prefix}_application_identifier=$app_id" >> "$GITHUB_OUTPUT"
+          }
+          install_profile app.mobileprovision app
+          install_profile widget.mobileprovision widget
 
-          # Set keychain search list
-          security list-keychains -s build.keychain login.keychain
-          security default-keychain -s build.keychain
-
-          # Allow codesign to use the keychain
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "temppassword" build.keychain
-
-          # Decode and install provisioning profile with proper UUID filename
-          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode > profile.mobileprovision
-          UUID=$(grep -a -A 1 'UUID' profile.mobileprovision | grep -o '[A-F0-9\-]\{36\}' | head -1)
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
-
-          # Debug: List all provisioning profiles
-          echo "Installed provisioning profiles:"
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
-
-          # Debug: Show certificate details
-          echo "Available signing identities:"
-          security find-identity -v -p codesigning build.keychain
-
-          # Debug: Check profile details
-          echo "Profile details:"
-          /usr/libexec/PlistBuddy -c "Print :Name" /dev/stdin <<< $(security cms -D -i profile.mobileprovision)
-          /usr/libexec/PlistBuddy -c "Print :ApplicationIdentifierPrefix" /dev/stdin <<< $(security cms -D -i profile.mobileprovision)
-
-      - name: Build and Archive with xcodebuild
+      - name: Validate signing profile identifiers and entitlements
+        shell: bash
+        env:
+          REQUIRED_APP_GROUP: group.com.clashking.apps
         run: |
-          cd ios
-          xcodebuild -workspace Runner.xcworkspace \
-            -scheme Runner \
+          set -euo pipefail
+          [[ "${{ steps.signing.outputs.app_application_identifier }}" == "${{ env.APPLE_TEAM_ID }}.${{ env.APP_BUNDLE_ID }}" ]]
+          [[ "${{ steps.signing.outputs.widget_application_identifier }}" == "${{ env.APPLE_TEAM_ID }}.${{ env.WIDGET_BUNDLE_ID }}" ]]
+          python3 <<'PYTHON'
+          import os
+          import plistlib
+          import sys
+
+          required_group = os.environ['REQUIRED_APP_GROUP']
+
+          def read_entitlements(path: str) -> dict:
+              with open(path, 'rb') as profile_file:
+                  profile = plistlib.load(profile_file)
+              entitlements = profile.get('Entitlements')
+              if not isinstance(entitlements, dict):
+                  raise ValueError(f'{path}: Entitlements must be a dictionary')
+              return entitlements
+
+          def normalized_groups(path: str, entitlements: dict) -> set[str]:
+              value = entitlements.get('com.apple.security.application-groups')
+              if isinstance(value, str):
+                  return {value}
+              if isinstance(value, list) and all(isinstance(group, str) for group in value):
+                  return set(value)
+              raise ValueError(
+                  f'{path}: com.apple.security.application-groups must be a string or string array'
+              )
+
+          try:
+              app_entitlements = read_entitlements('app.mobileprovision.plist')
+              widget_entitlements = read_entitlements('widget.mobileprovision.plist')
+              for path, entitlements in (
+                  ('app.mobileprovision.plist', app_entitlements),
+                  ('widget.mobileprovision.plist', widget_entitlements),
+              ):
+                  if required_group not in normalized_groups(path, entitlements):
+                      raise ValueError(f'{path}: missing required app group {required_group}')
+
+              aps_environment = app_entitlements.get('aps-environment')
+              if not isinstance(aps_environment, str) or not aps_environment.strip():
+                  raise ValueError('app.mobileprovision.plist: missing non-empty aps-environment')
+          except (OSError, plistlib.InvalidFileException, ValueError) as error:
+              print(f'Provisioning profile validation failed: {error}', file=sys.stderr)
+              raise SystemExit(1)
+          PYTHON
+
+      - name: Configure manual signing for app and widget
+        shell: bash
+        env:
+          APP_PROFILE_NAME: ${{ steps.signing.outputs.app_profile_name }}
+          WIDGET_PROFILE_NAME: ${{ steps.signing.outputs.widget_profile_name }}
+        run: |
+          ruby <<'RUBY'
+          require 'xcodeproj'
+          project = Xcodeproj::Project.open('ios/ClashKing.xcodeproj')
+          profiles = {
+            'ClashKing' => ENV.fetch('APP_PROFILE_NAME'),
+            'WarWidgetExtension' => ENV.fetch('WIDGET_PROFILE_NAME'),
+          }
+          profiles.each do |target_name, profile|
+            target = project.targets.find { |candidate| candidate.name == target_name }
+            raise "Missing Xcode target #{target_name}" unless target
+            target.build_configurations.select { |configuration| configuration.name == 'Release' }.each do |configuration|
+              configuration.build_settings['CODE_SIGN_STYLE'] = 'Manual'
+              configuration.build_settings['DEVELOPMENT_TEAM'] = ENV.fetch('APPLE_TEAM_ID')
+              configuration.build_settings['CODE_SIGN_IDENTITY'] = 'Apple Distribution'
+              configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = profile
+            end
+          end
+          project.save
+          RUBY
+
+      - name: Archive app and widget
+        working-directory: expo/ios
+        env:
+          EXPO_PUBLIC_CK_API_ENV: production
+        run: |
+          xcodebuild \
+            -workspace ClashKing.xcworkspace \
+            -scheme ClashKing \
             -configuration Release \
             -destination generic/platform=iOS \
-            -archivePath build/Runner.xcarchive \
-            CURRENT_PROJECT_VERSION=${{ steps.extract_version.outputs.BUILD_NUMBER }} \
-            MARKETING_VERSION=${{ steps.extract_version.outputs.VERSION_NAME }} \
-            DART_DEFINES="$API_DART_DEFINES" \
+            -archivePath build/ClashKing.xcarchive \
+            CURRENT_PROJECT_VERSION=${{ steps.version.outputs.build_number }} \
+            MARKETING_VERSION=${{ steps.version.outputs.version_name }} \
             archive
 
-      - name: Export IPA
+      - name: Create App Store export options
+        shell: bash
+        env:
+          APP_PROFILE_NAME: ${{ steps.signing.outputs.app_profile_name }}
+          WIDGET_PROFILE_NAME: ${{ steps.signing.outputs.widget_profile_name }}
         run: |
-          cd ios
+          cp config/ios/ExportOptions.plist.template ios/ExportOptions.plist
+          /usr/libexec/PlistBuddy -c "Set :teamID $APPLE_TEAM_ID" ios/ExportOptions.plist
+          /usr/libexec/PlistBuddy -c "Set :provisioningProfiles:$APP_BUNDLE_ID $APP_PROFILE_NAME" ios/ExportOptions.plist
+          /usr/libexec/PlistBuddy -c "Set :provisioningProfiles:$WIDGET_BUNDLE_ID $WIDGET_PROFILE_NAME" ios/ExportOptions.plist
+          plutil -lint ios/ExportOptions.plist
+
+      - name: Export IPA
+        working-directory: expo/ios
+        run: |
+          mkdir -p build/export
           xcodebuild -exportArchive \
-            -archivePath build/Runner.xcarchive \
-            -exportPath build \
+            -archivePath build/ClashKing.xcarchive \
+            -exportPath build/export \
             -exportOptionsPlist ExportOptions.plist
+          IPA="$(find build/export -maxdepth 1 -name '*.ipa' -print -quit)"
+          test -n "$IPA"
+          cp "$IPA" build/ClashKing.ipa
 
       - name: Upload to TestFlight
         env:
@@ -224,31 +253,29 @@ jobs:
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
-          # Create API key file
-          mkdir -p ~/.appstoreconnect/private_keys/
-          echo "$API_PRIVATE_KEY" > ~/.appstoreconnect/private_keys/AuthKey_$API_KEY_ID.p8
-
-          # Upload to TestFlight
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          printf '%s' "$API_PRIVATE_KEY" > "$HOME/.appstoreconnect/private_keys/AuthKey_${API_KEY_ID}.p8"
           xcrun altool --upload-app \
             --type ios \
-            --file ios/build/Runner.ipa \
-            --apiKey $API_KEY_ID \
-            --apiIssuer $API_ISSUER_ID
+            --file ios/build/ClashKing.ipa \
+            --apiKey "$API_KEY_ID" \
+            --apiIssuer "$API_ISSUER_ID"
 
-      - name: Configure TestFlight Testing Groups (External Testing)
-        if: steps.determine_track.outputs.EXTERNAL_TESTING == 'true'
-        env:
-          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-        run: |
-          echo "External testing enabled - build will be available for public beta testing"
-          # Note: External testing requires manual approval from Apple
-          # The build will appear in TestFlight but needs to be submitted for external testing review
+      - name: Report external testing requirement
+        if: steps.release.outputs.external_testing == 'true'
+        run: echo 'The uploaded build requires App Store Connect external TestFlight review/group assignment.'
 
       - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: ios/build/Runner.ipa
+          path: ${{ env.IPA_PATH }}
+          if-no-files-found: error
+
+      - name: Cleanup signing keychain
+        if: always()
+        working-directory: .
+        run: |
+          security default-keychain -d user -s login.keychain || true
+          security delete-keychain build.keychain || true

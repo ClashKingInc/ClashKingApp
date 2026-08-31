@@ -22,7 +22,7 @@ This app is a general-audience Clash of Clans companion app intended for Google 
 - Added a mailto fallback for rights requests until backend privacy endpoints are deployed.
 - Added push-token unregister flow when the global notification toggle is disabled.
 - Reduced Sentry user scope to user ID only and removed username, auth-method metadata, and selected player tag context.
-- Added `ios/Runner/PrivacyInfo.xcprivacy` with no tracking domains and declared app data categories.
+- Added the generated iOS app privacy manifest plus `expo/native/ios/WarWidget/PrivacyInfo.xcprivacy`, with no tracking domains and declared app data categories.
 
 ## Store submission checklist
 

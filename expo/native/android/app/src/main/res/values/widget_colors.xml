@@ -1,0 +1,21 @@
+<resources>
+    <color name="widget_background">#FFFFFF</color>
+    <color name="widget_text">#000000</color>
+    <color name="widget_text_secondary">#5F6368</color>
+    <color name="widget_surface">#F1F3F4</color>
+    <color name="widget_config_surface">#F8F8F8</color>
+    <color name="widget_config_selected_surface">#FFF0F1</color>
+    <color name="widget_config_border">#DADCE0</color>
+    <color name="widget_accent">#E30613</color>
+    <color name="widget_boost_orange_surface">#FFF0DC</color>
+    <color name="widget_boost_purple_surface">#F3E8FF</color>
+    <color name="widget_boost_pink_surface">#FFE6EC</color>
+    <color name="widget_warning_surface">#FFF3D6</color>
+    <color name="widget_warning_text">#7A4B00</color>
+    <color name="widget_status_idle">#B85C00</color>
+    <color name="widget_status_maxed">#137333</color>
+    <color name="war_widget_background">#FAF7F7F9</color>
+    <color name="war_widget_border">#1F000000</color>
+    <color name="war_widget_text">#FF111114</color>
+    <color name="war_widget_text_secondary">#6E6E73</color>
+</resources>

@@ -1,26 +1,37 @@
-import { test, expect } from '@playwright/test';
-import { authSegment, clickAuthSegment, enableFlutterSemantics, hasFlutterSemantics } from './helpers';
-import { createE2eEmail, getOtpInboxConfig, waitForOtp } from './otp-inbox';
+import { test, expect } from "@playwright/test";
+import {
+  authSegment,
+  clickAuthSegment,
+  waitForExpoAccessibility,
+  hasExpoAccessibility,
+} from "./helpers";
+import { createE2eEmail, getOtpInboxConfig, waitForOtp } from "./otp-inbox";
 
-const API_BASE = (process.env.API_BASE_URL ?? 'https://api.clashk.ing').replace(/\/+$/, '');
+const API_BASE = (process.env.API_BASE_URL ?? "https://api.clashk.ing").replace(
+  /\/+$/,
+  "",
+);
 
 // Reaches EmailVerificationPage by registering a fresh throwaway account.
 // Each test creates one unique account (timestamp-based email) — expected in a test env.
 // UI-only cases use example.com; the Cloudflare-backed case verifies a real code in CI.
 
-async function registerAndNavigateToVerification(page: any, emailOverride?: string): Promise<string | null> {
+async function registerAndNavigateToVerification(
+  page: any,
+  emailOverride?: string,
+): Promise<string | null> {
   const ts = Date.now();
   const username = `e2etest${ts}`;
   const email = emailOverride ?? `e2etest+${ts}@example.com`;
-  const password = 'TestPassword1!';
+  const password = "TestPassword1!";
 
   try {
     // Cap all page actions at 30 s so they don't inherit the 240 s test timeout.
     page.setDefaultNavigationTimeout(30_000);
     page.setDefaultTimeout(30_000);
-    await page.goto('/');
-    // enableFlutterSemantics calls waitForFlutter internally — no need to call it separately
-    await enableFlutterSemantics(page);
+    await page.goto("/");
+    // waitForExpoAccessibility calls waitForExpo internally — no need to call it separately
+    await waitForExpoAccessibility(page);
 
     // Switch to Email auth segment — explicit waitFor prevents 30 s default action timeout
     await clickAuthSegment(page, /email/i);
@@ -28,20 +39,20 @@ async function registerAndNavigateToVerification(page: any, emailOverride?: stri
 
     // Navigate to Register page
     const signUpBtn = page
-      .getByRole('button', { name: /sign up/i })
-      .or(page.locator('flt-semantics[aria-label*="Sign up" i]'))
+      .getByRole("button", { name: /sign up/i })
+      .or(page.locator('[aria-label*="Sign up" i]'))
       .first();
-    await signUpBtn.waitFor({ state: 'attached', timeout: 8_000 });
+    await signUpBtn.waitFor({ state: "attached", timeout: 8_000 });
     await signUpBtn.click({ timeout: 8_000 });
     await page.waitForTimeout(600);
 
     // Fill registration form
-    const usernameInput = page.getByRole('textbox', { name: /username/i });
-    await usernameInput.waitFor({ state: 'attached', timeout: 8_000 });
+    const usernameInput = page.getByRole("textbox", { name: /username/i });
+    await usernameInput.waitFor({ state: "attached", timeout: 8_000 });
     await usernameInput.click({ force: true, timeout: 5_000 });
     await usernameInput.pressSequentially(username, { delay: 20 });
 
-    const emailInput = page.getByRole('textbox', { name: /email/i });
+    const emailInput = page.getByRole("textbox", { name: /email/i });
     await emailInput.click({ force: true, timeout: 5_000 });
     await emailInput.pressSequentially(email, { delay: 20 });
 
@@ -53,18 +64,20 @@ async function registerAndNavigateToVerification(page: any, emailOverride?: stri
 
     // Submit — creates account and navigates to EmailVerificationPage
     const createBtn = page
-      .getByRole('button', { name: /create account/i })
-      .or(page.locator('flt-semantics[aria-label*="Create Account" i]'))
+      .getByRole("button", { name: /create account/i })
+      .or(page.locator('[aria-label*="Create Account" i]'))
       .first();
-    await createBtn.waitFor({ state: 'attached', timeout: 8_000 });
+    await createBtn.waitFor({ state: "attached", timeout: 8_000 });
     await createBtn.click({ timeout: 8_000 });
 
     // Wait for EmailVerificationPage ("Verify Email" appbar title or "Verify Code" button).
-    // Flutter web exposes these strings via textContent, not aria-label, so inspect
+    // Expo web exposes these strings via textContent, not aria-label, so inspect
     // textContent — checking aria-label here would always time out and skip every test.
     await page.waitForFunction(
-      () => Array.from(document.querySelectorAll('flt-semantics'))
-        .some(el => /verify/i.test(el.textContent ?? '')),
+      () =>
+        Array.from(
+          document.querySelectorAll("#root [role], #root input, #root button"),
+        ).some((el) => /verify/i.test(el.textContent ?? "")),
       { timeout: 15_000, polling: 500 },
     );
   } catch {
@@ -74,26 +87,26 @@ async function registerAndNavigateToVerification(page: any, emailOverride?: stri
   return email;
 }
 
-test.describe('Email verification page', () => {
+test.describe("Email verification page", () => {
   // Run sequentially: each test registers a new account + hits the production API.
   // Parallel execution saturates the API and causes 90 s timeouts.
-  test.describe.configure({ mode: 'serial' });
+  test.describe.configure({ mode: "serial" });
 
-  test('a real emailed code verifies a new account', async ({ page }) => {
-    test.skip(!getOtpInboxConfig(), 'Cloudflare OTP inbox is not configured');
+  test("a real emailed code verifies a new account", async ({ page }) => {
+    test.skip(!getOtpInboxConfig(), "Cloudflare OTP inbox is not configured");
     test.setTimeout(120_000);
 
-    const email = createE2eEmail('verification');
+    const email = createE2eEmail("verification");
     const requestedAt = Date.now();
     const reachedEmail = await registerAndNavigateToVerification(page, email);
     expect(reachedEmail).toBe(email);
 
     const code = await waitForOtp(email, { notBefore: requestedAt });
-    const digitInputs = page.getByRole('textbox');
+    const digitInputs = page.getByRole("textbox");
     const verificationResponsePromise = page.waitForResponse(
       (response) =>
-        response.request().method() === 'POST' &&
-        response.url().endsWith('/v2/auth/web/verify-email-code'),
+        response.request().method() === "POST" &&
+        response.url().endsWith("/v2/auth/web/verify-email-code"),
       { timeout: 20_000 },
     );
     await digitInputs.first().click({ force: true, timeout: 5_000 });
@@ -103,118 +116,150 @@ test.describe('Email verification page', () => {
     }
 
     const verificationResponse = await verificationResponsePromise;
-    expect(verificationResponse.ok(), 'email verification request failed').toBe(true);
+    expect(verificationResponse.ok(), "email verification request failed").toBe(
+      true,
+    );
     const verification = await verificationResponse.json();
     const accessToken: unknown = verification?.access_token;
-    if (typeof accessToken !== 'string' || !accessToken) {
-      throw new Error('Email verification response has no access token');
+    if (typeof accessToken !== "string" || !accessToken) {
+      throw new Error("Email verification response has no access token");
     }
     await expect(
       page
-        .getByRole('button', { name: /^confirm$/i })
-        .or(page.locator('flt-semantics[aria-label="Confirm"]'))
+        .getByRole("button", { name: /^confirm$/i })
+        .or(page.locator('[aria-label="Confirm"]'))
         .first(),
     ).toBeVisible({ timeout: 20_000 });
     const cleanup = await page.request.delete(`${API_BASE}/v2/auth/me`, {
       headers: { authorization: `Bearer ${accessToken}` },
     });
-    const cleanupBody = cleanup.ok() ? '' : `: ${(await cleanup.text()).slice(0, 300)}`;
-    expect(cleanup.ok(), `account cleanup returned ${cleanup.status()}${cleanupBody}`).toBe(true);
+    const cleanupBody = cleanup.ok()
+      ? ""
+      : `: ${(await cleanup.text()).slice(0, 300)}`;
+    expect(
+      cleanup.ok(),
+      `account cleanup returned ${cleanup.status()}${cleanupBody}`,
+    ).toBe(true);
   });
 
-  test('page displays 6 single-digit input boxes for the verification code', async ({ page }) => {
+  test("page displays 6 single-digit input boxes for the verification code", async ({
+    page,
+  }) => {
     test.setTimeout(240_000); // registration + API call can take > 180 s on a slow local setup
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage — API may be unavailable');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email)
+      test.skip(
+        true,
+        "Could not reach EmailVerificationPage — API may be unavailable",
+      );
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
-    // 6 inputs rendered by Flutter for the 6-digit verification code.
-    // Flutter may use inputmode="decimal" or "numeric" — use generic textbox role.
-    const digitInputs = page.getByRole('textbox');
+    // 6 inputs rendered by Expo for the 6-digit verification code.
+    // Expo may use inputmode="decimal" or "numeric" — use generic textbox role.
+    const digitInputs = page.getByRole("textbox");
     await expect(digitInputs.first()).toBeAttached({ timeout: 8_000 });
     const count = await digitInputs.count();
     expect(count).toBeGreaterThanOrEqual(6);
   });
 
-  test('"Verify Code" button is present and disabled before any digit is entered', async ({ page }) => {
+  test('"Verify Code" button is present and disabled before any digit is entered', async ({
+    page,
+  }) => {
     test.setTimeout(120_000);
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email) test.skip(true, "Could not reach EmailVerificationPage");
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
-    // Flutter sets aria-disabled="true" when onPressed is null (code length != 6)
+    // Expo sets aria-disabled="true" when onPressed is null (code length != 6)
     const verifyBtn = page
-      .getByRole('button', { name: /verify code/i })
-      .or(page.locator('flt-semantics[aria-label*="Verify Code" i]'))
+      .getByRole("button", { name: /verify code/i })
+      .or(page.locator('[aria-label*="Verify Code" i]'))
       .first();
-    await verifyBtn.waitFor({ state: 'attached', timeout: 8_000 });
+    await verifyBtn.waitFor({ state: "attached", timeout: 8_000 });
     await expect(verifyBtn).toBeDisabled({ timeout: 5_000 });
   });
 
   test('"Resend Verification Email" button is present', async ({ page }) => {
     test.setTimeout(120_000);
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email) test.skip(true, "Could not reach EmailVerificationPage");
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
     await expect(
-      page.getByRole('button', { name: /resend/i })
-        .or(page.locator('flt-semantics[aria-label*="Resend" i]'))
-        .first()
+      page
+        .getByRole("button", { name: /resend/i })
+        .or(page.locator('[aria-label*="Resend" i]'))
+        .first(),
     ).toBeAttached({ timeout: 8_000 });
   });
 
   test('"Back to Login" button is present', async ({ page }) => {
     test.setTimeout(120_000);
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email) test.skip(true, "Could not reach EmailVerificationPage");
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
     await expect(
-      page.getByRole('button', { name: /back to login/i })
-        .or(page.locator('flt-semantics[aria-label*="Back to Login" i]'))
-        .first()
+      page
+        .getByRole("button", { name: /back to login/i })
+        .or(page.locator('[aria-label*="Back to Login" i]'))
+        .first(),
     ).toBeAttached({ timeout: 8_000 });
   });
 
-  test('page shows the email address the code was sent to', async ({ page }) => {
+  test("page shows the email address the code was sent to", async ({
+    page,
+  }) => {
     test.setTimeout(120_000);
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email) test.skip(true, "Could not reach EmailVerificationPage");
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
     // EmailVerificationPage displays widget.email as a Text widget
     const emailLabel = page
-      .locator(`flt-semantics[aria-label*="${email}" i]`)
+      .locator(`[aria-label*="${email}" i]`)
       .or(page.getByText(email, { exact: false }));
     await expect(emailLabel.first()).toBeAttached({ timeout: 8_000 });
   });
 
-  test('entering a wrong 6-digit code triggers an error message', async ({ page }) => {
+  test("entering a wrong 6-digit code triggers an error message", async ({
+    page,
+  }) => {
     test.setTimeout(120_000);
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email) test.skip(true, "Could not reach EmailVerificationPage");
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
-    // Flutter's OTP widget auto-advances focus after each digit.
+    // Expo's OTP widget auto-advances focus after each digit.
     // Clicking each box individually resets state; instead focus the first box
-    // then send 6 keystrokes so Flutter handles auto-advance naturally.
-    const digitInputs = page.getByRole('textbox');
-    await digitInputs.first().waitFor({ state: 'attached', timeout: 8_000 });
+    // then send 6 keystrokes so Expo handles auto-advance naturally.
+    const digitInputs = page.getByRole("textbox");
+    await digitInputs.first().waitFor({ state: "attached", timeout: 8_000 });
     const count = await digitInputs.count();
-    if (count < 6) test.skip(true, 'Could not find 6 digit input boxes');
+    if (count < 6) test.skip(true, "Could not find 6 digit input boxes");
 
     await digitInputs.first().click({ force: true, timeout: 5_000 });
     for (let i = 0; i < 6; i++) {
-      await page.keyboard.press('9');
+      await page.keyboard.press("9");
       await page.waitForTimeout(150);
     }
 
     // Wait for Verify Code button to become enabled — confirms all 6 digits registered
-    const verifyBtn = page.getByRole('button', { name: /verify code/i });
-    const submitted = await verifyBtn.isEnabled({ timeout: 3_000 }).catch(() => false);
+    const verifyBtn = page.getByRole("button", { name: /verify code/i });
+    const submitted = await verifyBtn
+      .isEnabled({ timeout: 3_000 })
+      .catch(() => false);
     if (!submitted) {
-      test.skip(true, 'OTP widget did not register digits — Flutter keyboard interaction unreliable in CI');
+      test.skip(
+        true,
+        "OTP widget did not register digits — Expo keyboard interaction unreliable in CI",
+      );
     }
 
     // Auto-submit fires; wait for API response then check error message
@@ -228,14 +273,15 @@ test.describe('Email verification page', () => {
   test('"Back to Login" navigates back to the login page', async ({ page }) => {
     test.setTimeout(120_000);
     const email = await registerAndNavigateToVerification(page);
-    if (!email) test.skip(true, 'Could not reach EmailVerificationPage');
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
+    if (!email) test.skip(true, "Could not reach EmailVerificationPage");
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
 
     const backBtn = page
-      .getByRole('button', { name: /back to login/i })
-      .or(page.locator('flt-semantics[aria-label*="Back to Login" i]'))
+      .getByRole("button", { name: /back to login/i })
+      .or(page.locator('[aria-label*="Back to Login" i]'))
       .first();
-    await backBtn.waitFor({ state: 'attached', timeout: 8_000 });
+    await backBtn.waitFor({ state: "attached", timeout: 8_000 });
     await backBtn.click({ timeout: 8_000 });
     await page.waitForTimeout(800);
 

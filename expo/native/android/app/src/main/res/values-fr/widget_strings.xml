@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upgrade_widget_label">Suivi des améliorations</string>
+    <string name="upgrade_widget_description">Suis la progression des améliorations ClashKing pour tes comptes liés.</string>
+    <string name="upgrade_widget_empty_sync">Ouvre ClashKing pour synchroniser les améliorations</string>
+    <string name="upgrade_widget_hall_description">Hôtel de ville</string>
+    <string name="upgrade_widget_task_description">Amélioration en cours</string>
+    <string name="upgrade_widget_boost_description">Bonus actif</string>
+    <string name="upgrade_widget_helper_description">Assistant d’amélioration</string>
+    <string name="upgrade_widget_configure_eyebrow">WIDGET CLASHKING</string>
+    <string name="upgrade_widget_configure_title">Choisir un compte</string>
+    <string name="upgrade_widget_configure_description">Ce widget suivra les améliorations du compte lié sélectionné.</string>
+    <string name="upgrade_widget_configure_empty">Aucun compte synchronisé pour l’instant. Le widget utilisera ton compte sélectionné après la synchronisation de ClashKing.</string>
+    <string name="upgrade_widget_configure_automatic">Automatique\nSuit le compte ClashKing sélectionné</string>
+    <string name="upgrade_widget_configure_add">Ajouter le widget</string>
+    <string name="war_widget_label">Guerre de clans</string>
+    <string name="war_widget_description">Suis la guerre ou le score de LDC du clan sélectionné.</string>
+    <string name="war_widget_clan_badge_description">Badge du clan</string>
+    <string name="war_widget_opponent_badge_description">Badge du clan adverse</string>
+    <string name="war_widget_empty_title">Aucune guerre en cours</string>
+    <string name="war_widget_empty_subtitle">Ouvre ClashKing pour actualiser les données de guerre</string>
+    <string name="war_widget_not_in_clan">Aucun clan</string>
+    <string name="war_widget_choose_account">Ouvre ClashKing pour choisir un compte</string>
+    <string name="war_widget_not_in_war">Pas en guerre</string>
+    <string name="war_widget_private">Journal de guerre privé</string>
+    <string name="war_widget_error">Impossible de charger les données de guerre</string>
+    <string name="war_widget_status">Guerre</string>
+    <string name="war_widget_configure_eyebrow">WIDGET CLASHKING</string>
+    <string name="war_widget_configure_title">Choisir un clan</string>
+    <string name="war_widget_configure_description">Ce widget suivra les guerres du clan lié ou enregistré sélectionné.</string>
+    <string name="war_widget_configure_empty">Aucun clan synchronisé pour l’instant. Ouvre ClashKing pour synchroniser les clans liés et enregistrés.</string>
+    <string name="war_widget_configure_automatic">Automatique\nSuit le clan ClashKing sélectionné</string>
+    <string name="war_widget_configure_add">Ajouter le widget</string>
+</resources>

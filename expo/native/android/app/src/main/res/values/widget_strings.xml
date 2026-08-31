@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upgrade_widget_label">Upgrade Tracker</string>
+    <string name="upgrade_widget_description">Track ClashKing upgrade progress for your linked accounts.</string>
+    <string name="upgrade_widget_empty_sync">Open ClashKing to sync upgrade data</string>
+    <string name="upgrade_widget_hall_description">Town Hall</string>
+    <string name="upgrade_widget_task_description">Active upgrade</string>
+    <string name="upgrade_widget_boost_description">Active boost</string>
+    <string name="upgrade_widget_helper_description">Upgrade helper</string>
+    <string name="upgrade_widget_configure_eyebrow">CLASHKING WIDGET</string>
+    <string name="upgrade_widget_configure_title">Choose an account</string>
+    <string name="upgrade_widget_configure_description">This widget will track upgrades for the selected linked account.</string>
+    <string name="upgrade_widget_configure_empty">No synced accounts yet. The widget will use your selected account after ClashKing syncs.</string>
+    <string name="upgrade_widget_configure_automatic">Automatic\nFollows your selected ClashKing account</string>
+    <string name="upgrade_widget_configure_add">Add widget</string>
+    <string name="war_widget_label">Clan War</string>
+    <string name="war_widget_description">Track your selected clan war and CWL score.</string>
+    <string name="war_widget_clan_badge_description">Clan badge</string>
+    <string name="war_widget_opponent_badge_description">Opponent clan badge</string>
+    <string name="war_widget_empty_title">No active war</string>
+    <string name="war_widget_empty_subtitle">Open ClashKing to refresh war data</string>
+    <string name="war_widget_not_in_clan">Not in a clan</string>
+    <string name="war_widget_choose_account">Open ClashKing to choose an account</string>
+    <string name="war_widget_not_in_war">Not in war</string>
+    <string name="war_widget_private">War log private</string>
+    <string name="war_widget_error">Unable to load war data</string>
+    <string name="war_widget_status">War</string>
+    <string name="war_widget_configure_eyebrow">CLASHKING WIDGET</string>
+    <string name="war_widget_configure_title">Choose a clan</string>
+    <string name="war_widget_configure_description">This widget will track wars for the selected linked or bookmarked clan.</string>
+    <string name="war_widget_configure_empty">No synced clans yet. Open ClashKing to sync linked and bookmarked clans.</string>
+    <string name="war_widget_configure_automatic">Automatic\nFollows your selected ClashKing clan</string>
+    <string name="war_widget_configure_add">Add widget</string>
+</resources>

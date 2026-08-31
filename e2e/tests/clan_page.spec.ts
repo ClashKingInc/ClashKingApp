@@ -1,27 +1,27 @@
-import { test, expect } from '@playwright/test';
-import { hasFlutterSemantics, waitForAppReady } from './helpers';
+import { test, expect } from "@playwright/test";
+import { hasExpoAccessibility, waitForAppReady } from "./helpers";
 
-// Tests for the Clan page (second tab in the bottom nav).
+// Tests for the Clan page (second tab in the primary navigation).
 // The page shows either clan cards (ClanInfoCard, ClanJoinLeaveCard, ClanCapitalCard)
 // or a "No clan" empty state — tests handle both gracefully.
 // All tests skip if the test account has no linked CoC account.
 //
-// Detection note: Flutter renders nav labels and card titles as flt-semantics
+// Detection note: Expo renders nav labels and card titles as #root [role], #root input, #root button
 // *textContent*, not [aria-label], so we target by text (page.getByText).
 
 async function waitForApp(page: any) {
-  await page.goto('/');
+  await page.goto("/");
   await waitForAppReady(page);
 }
 
-async function isOnMyHomePage(page: any): Promise<boolean> {
-  return (await page.getByText('Dashboard', { exact: true }).count()) > 0;
+async function isOnAuthenticatedShell(page: any): Promise<boolean> {
+  return (await page.getByText("Home", { exact: true }).count()) > 0;
 }
 
 async function openClanTab(page: any): Promise<boolean> {
-  if (!(await isOnMyHomePage(page))) return false;
-  const clanNav = page.getByText('Clan', { exact: true }).first();
-  await clanNav.waitFor({ state: 'attached', timeout: 8_000 });
+  if (!(await isOnAuthenticatedShell(page))) return false;
+  const clanNav = page.getByText("Clans", { exact: true }).first();
+  await clanNav.waitFor({ state: "attached", timeout: 8_000 });
   await clanNav.click({ force: true });
   await page.waitForTimeout(1_200);
   return true;
@@ -31,71 +31,99 @@ async function isNoClanState(page: any): Promise<boolean> {
   return (await page.getByText(/No clan/i).count()) > 0;
 }
 
-test.describe('Clan page', () => {
+test.describe("Clan page", () => {
   test.beforeEach(async ({ page }) => {
     await waitForApp(page);
   });
 
-  test('Clan tab is accessible from the bottom nav', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
+  test("Clan tab is accessible from the primary navigation", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
 
     const reached = await openClanTab(page);
     expect(reached).toBe(true);
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
+    await expect(page.locator("#root")).toBeAttached();
   });
 
-  test('Clan page loads and renders content (or empty state)', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+  test("Clan page loads and renders content (or empty state)", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 5,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 5,
       { timeout: 12_000, polling: 500 },
     );
 
-    const count = await page.locator('flt-semantics').count();
+    const count = await page
+      .locator("#root [role], #root input, #root button")
+      .count();
     expect(count).toBeGreaterThan(5);
   });
 
   test('"No clan" empty state shows correct message', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
     if (!(await isNoClanState(page))) {
-      test.skip(true, 'Test account is in a clan — no-clan state not visible');
+      test.skip(true, "Test account is in a clan — no-clan state not visible");
     }
 
     // NoClanCard: "No clan" + "Join a clan to unlock new features."
-    await expect(page.getByText(/No clan/i).first()).toBeAttached({ timeout: 5_000 });
-    await expect(page.getByText(/Join a clan/i).first()).toBeAttached({ timeout: 5_000 });
+    await expect(page.getByText(/No clan/i).first()).toBeAttached({
+      timeout: 5_000,
+    });
+    await expect(page.getByText(/Join a clan/i).first()).toBeAttached({
+      timeout: 5_000,
+    });
   });
 
-  test('Clan info card is visible when account is in a clan', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+  test("Clan info card is visible when account is in a clan", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 8,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 8,
       { timeout: 12_000, polling: 500 },
     );
 
     // Clan page with a clan shows multiple cards — more than 8 semantic elements
-    const count = await page.locator('flt-semantics').count();
+    const count = await page
+      .locator("#root [role], #root input, #root button")
+      .count();
     expect(count).toBeGreaterThan(8);
   });
 
-  test('Join/Leave card is present when in a clan', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+  test("Join/Leave card is present when in a clan", async ({ page }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForTimeout(2_000);
 
@@ -106,45 +134,59 @@ test.describe('Clan page', () => {
       .first();
 
     // Page should at minimum be alive
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
+    await expect(page.locator("#root")).toBeAttached();
     // If the join/leave card is rendered, assert it
-    if (await joinLeaveEl.count() > 0) {
+    if ((await joinLeaveEl.count()) > 0) {
       await expect(joinLeaveEl).toBeAttached();
     }
   });
 
-  test('tapping the clan info card navigates to clan detail screen', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+  test("tapping the clan info card navigates to clan detail screen", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 8,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 8,
       { timeout: 12_000, polling: 500 },
     );
 
-    // ClanInfoCard is the first GestureDetector card — tap at center of page, ~200px from top
+    // ClanInfoCard is the first Pressable card — tap at center of page, ~200px from top
     const size = page.viewportSize();
     await page.mouse.click((size?.width ?? 400) / 2, 200);
     await page.waitForTimeout(1_200);
 
     // Clan detail screen (ClanInfoScreen) opens — semantic count should increase
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
-    const countAfter = await page.locator('flt-semantics').count();
+    await expect(page.locator("#root")).toBeAttached();
+    const countAfter = await page
+      .locator("#root [role], #root input, #root button")
+      .count();
     expect(countAfter).toBeGreaterThan(5);
   });
 
-  test('back navigation from clan detail returns to clan page', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+  test("back navigation from clan detail returns to clan page", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 8,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 8,
       { timeout: 12_000, polling: 500 },
     );
 
@@ -157,35 +199,48 @@ test.describe('Clan page', () => {
     await page.goBack();
     await page.waitForTimeout(800);
 
-    // Bottom nav should be back
-    await expect(page.getByText('Clan', { exact: true }).first()).toBeAttached({ timeout: 8_000 });
+    // Primary navigation should be back
+    await expect(page.getByText("Clans", { exact: true }).first()).toBeAttached(
+      { timeout: 8_000 },
+    );
   });
 
   // §11.8 — Clan Capital card
-  test('"Clan Capital" card is visible when account is in a clan', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+  test('"Clan Capital" card is visible when account is in a clan', async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForTimeout(2_000);
 
     const capitalEl = page.getByText(/Clan Capital/i);
-    if (await capitalEl.count() === 0) {
-      test.skip(true, 'Clan Capital card not rendered (clan may not have capital data yet)');
+    if ((await capitalEl.count()) === 0) {
+      test.skip(
+        true,
+        "Clan Capital card not rendered (clan may not have capital data yet)",
+      );
     }
     await expect(capitalEl.first()).toBeAttached({ timeout: 5_000 });
   });
 
   // §11.9 — Clan detail Members tab
-  test('clan detail screen shows member list', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+  test("clan detail screen shows member list", async ({ page }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 8,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 8,
       { timeout: 12_000, polling: 500 },
     );
 
@@ -195,43 +250,57 @@ test.describe('Clan page', () => {
     await page.waitForTimeout(2_000);
 
     // ClanInfoScreen shows ClanMembers — semantic elements increase above detail threshold
-    const count = await page.locator('flt-semantics').count();
+    const count = await page
+      .locator("#root [role], #root input, #root button")
+      .count();
     expect(count).toBeGreaterThan(8);
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
+    await expect(page.locator("#root")).toBeAttached();
   });
 
   // §11.11 — Clan Capital card tap opens Capital detail screen
-  test('tapping the Clan Capital card opens the Capital detail screen', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+  test("tapping the Clan Capital card opens the Capital detail screen", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForTimeout(2_000);
 
     const capitalEl = page.getByText(/Clan Capital/i).first();
-    if (await capitalEl.count() === 0) {
-      test.skip(true, 'Clan Capital card not rendered for this clan');
+    if ((await capitalEl.count()) === 0) {
+      test.skip(true, "Clan Capital card not rendered for this clan");
     }
 
     await capitalEl.click({ force: true });
     await page.waitForTimeout(2_000);
 
     // Capital detail screen should load without crashing
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
-    const count = await page.locator('flt-semantics').count();
+    await expect(page.locator("#root")).toBeAttached();
+    const count = await page
+      .locator("#root [role], #root input, #root button")
+      .count();
     expect(count).toBeGreaterThan(5);
   });
 
   // §11.12 — Tapping a clan member opens their player profile
-  test('tapping a clan member in the detail screen opens their player profile', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
-    if (await isNoClanState(page)) test.skip(true, 'Test account has no clan');
+  test("tapping a clan member in the detail screen opens their player profile", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
+    if (await isNoClanState(page)) test.skip(true, "Test account has no clan");
 
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 8,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 8,
       { timeout: 12_000, polling: 500 },
     );
 
@@ -242,41 +311,52 @@ test.describe('Clan page', () => {
 
     // Wait for member list to load (semantic count increases above a threshold)
     await page.waitForFunction(
-      () => document.querySelectorAll('flt-semantics').length > 15,
+      () =>
+        document.querySelectorAll("#root [role], #root input, #root button")
+          .length > 15,
       { timeout: 10_000, polling: 500 },
     );
 
     // Find the first member row by its tag text ("#...").
     const memberEl = page.getByText(/^#[A-Z0-9]+$/i).first();
 
-    if (await memberEl.count() === 0) {
-      test.skip(true, 'No member tags found in clan detail semantics');
+    if ((await memberEl.count()) === 0) {
+      test.skip(true, "No member tags found in clan detail semantics");
     }
 
     await memberEl.click({ force: true });
     await page.waitForTimeout(3_000);
 
     // PlayerScreen opens — check for Home Base tab or sufficient semantic elements
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
-    const onPlayerPage = await page
-      .getByText(/Home Base/i)
-      .or(page.getByText(/Heroes/i))
-      .count() > 0;
+    await expect(page.locator("#root")).toBeAttached();
+    const onPlayerPage =
+      (await page
+        .getByText(/Home Base/i)
+        .or(page.getByText(/Heroes/i))
+        .count()) > 0;
 
     if (!onPlayerPage) {
       // Navigation may have gone elsewhere — app still alive is enough
-      const count = await page.locator('flt-semantics').count();
+      const count = await page
+        .locator("#root [role], #root input, #root button")
+        .count();
       expect(count).toBeGreaterThan(5);
     } else {
-      await expect(page.getByText(/Home Base/i).first()).toBeAttached({ timeout: 5_000 });
+      await expect(page.getByText(/Home Base/i).first()).toBeAttached({
+        timeout: 5_000,
+      });
     }
   });
 
   // §11.10 — Pull-to-refresh on clan page
-  test('pull-to-refresh on clan page does not crash the app', async ({ page }) => {
-    if (!(await hasFlutterSemantics(page))) test.skip(true, 'Flutter semantics unavailable');
-    if (!(await isOnMyHomePage(page))) test.skip(true, 'No CoC accounts — not on MyHomePage');
-    if (!(await openClanTab(page))) test.skip(true, 'Could not open Clan tab');
+  test("pull-to-refresh on clan page does not crash the app", async ({
+    page,
+  }) => {
+    if (!(await hasExpoAccessibility(page)))
+      test.skip(true, "Expo semantics unavailable");
+    if (!(await isOnAuthenticatedShell(page)))
+      test.skip(true, "No CoC accounts — not on authenticated shell");
+    if (!(await openClanTab(page))) test.skip(true, "Could not open Clan tab");
 
     await page.waitForTimeout(1_000);
 
@@ -288,6 +368,6 @@ test.describe('Clan page', () => {
     await page.mouse.up();
 
     await page.waitForTimeout(4_000);
-    await expect(page.locator('flt-glass-pane')).toBeAttached();
+    await expect(page.locator("#root")).toBeAttached();
   });
 });

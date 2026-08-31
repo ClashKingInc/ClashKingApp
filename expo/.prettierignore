@@ -1,0 +1,8 @@
+# Generated files are verified by their owning deterministic generators.
+coverage/
+src/features/settings/presentation/generated-license-inventory.ts
+src/i18n/catalogs.generated.ts
+
+# Authoritative platform/service inputs retain their source formatting.
+config/firebase/google-services.json
+native/ios/alternate-icons/*/Contents.json

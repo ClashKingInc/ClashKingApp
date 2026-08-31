@@ -1,67 +1,52 @@
-name: Deploy Flutter Web to Cloudflare Pages
+name: Deploy Expo Web to Cloudflare Pages
 
 on:
   push:
     branches:
       - main
-      - staging
-  pull_request:
 
 concurrency:
-  group: web-deploy-${{ github.event.pull_request.number || github.ref }}
+  group: web-deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: expo
     env:
-      CK_API_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-      CK_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
-      CK_PUSH_API_V2_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://api.clashk.ing/v2' || 'https://dev-api.clashk.ing/v2' }}
-      CK_WEB_DISCORD_REDIRECT_URI: ${{ github.ref == 'refs/heads/main' && 'https://app.clashk.ing/auth/discord_callback.html' || github.ref == 'refs/heads/staging' && 'https://staging-app.clashk.ing/auth/discord_callback.html' || '' }}
-      CK_DISCORD_SIGN_IN_ENABLED: ${{ github.event_name == 'pull_request' && 'false' || 'true' }}
-    outputs:
-      deployment-url: ${{ steps.deploy.outputs.url }}
+      CI: true
+      EXPO_NO_TELEMETRY: 1
+      EXPO_NO_GIT_STATUS: 1
+      EXPO_PUBLIC_CK_API_ENV: production
+      EXPO_PUBLIC_CK_API_V2_BASE_URL: https://api.clashk.ing/v2
+      EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL: https://api.clashk.ing/v2
+      EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI: https://app.clashk.ing/auth/discord_callback.html
+      EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          flutter-version-file: .flutter-version
-          channel: 'stable'
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
 
-      - name: Flutter Pub Get
-        run: flutter pub get
+      - name: Install Expo dependencies
+        run: npm ci
 
-      - name: Build Web
-        shell: bash
-        run: |
-          discord_redirect_args=()
-          if [[ -n "$CK_WEB_DISCORD_REDIRECT_URI" ]]; then
-            discord_redirect_args+=(
-              "--dart-define=CK_WEB_DISCORD_REDIRECT_URI=$CK_WEB_DISCORD_REDIRECT_URI"
-            )
-          fi
-
-          flutter build web --release \
-            --no-pub \
-            --dart-define=CK_API_ENV="$CK_API_ENV" \
-            --dart-define=CK_API_V2_BASE_URL="$CK_API_V2_BASE_URL" \
-            --dart-define=CK_PUSH_API_V2_BASE_URL="$CK_PUSH_API_V2_BASE_URL" \
-            --dart-define=CK_DISCORD_SIGN_IN_ENABLED="$CK_DISCORD_SIGN_IN_ENABLED" \
-            "${discord_redirect_args[@]}"
+      - name: Build static Expo web export
+        run: npm run web:export
 
       - name: Publish to Cloudflare Pages
-        if: github.event_name != 'pull_request'
         id: deploy
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: clashkingapp
-          directory: build/web
-          branch: ${{ github.head_ref || github.ref_name }}
+          workingDirectory: expo
+          command: pages deploy dist --project-name=clashkingapp --branch=${{ github.head_ref || github.ref_name }}

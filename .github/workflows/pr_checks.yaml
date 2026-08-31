@@ -1,4 +1,4 @@
-name: PR Checks
+name: Expo PR Checks
 
 on:
   pull_request:
@@ -7,61 +7,146 @@ on:
       - main
 
 concurrency:
-  group: pr-checks-${{ github.event.pull_request.number || github.ref }}
+  group: expo-pr-checks-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+env:
+  CI: true
+  EXPO_NO_TELEMETRY: 1
+  EXPO_NO_GIT_STATUS: 1
 
 jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      android: ${{ steps.filter.outputs.android }}
-
-    steps:
-      - name: Detect Android-relevant changes
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            android:
-              - '.flutter-version'
-              - 'android/**'
-              - 'assets/**'
-              - 'lib/core/services/android_workmanager_service.dart'
-              - 'lib/core/services/app_icon_service.dart'
-              - 'lib/core/services/notification_debug_service.dart'
-              - 'lib/core/services/notification_preferences_service.dart'
-              - 'lib/core/services/push_notification_service.dart'
-              - 'lib/core/services/war_widget_sync_service.dart'
-              - 'lib/features/upgrade_tracker/**'
-              - 'lib/firebase_options.dart'
-              - 'lib/widgets/war_widget.dart'
-              - 'pubspec.yaml'
-              - 'pubspec.lock'
-
-  flutter_checks:
-    runs-on: ubuntu-latest
+      android: ${{ steps.fingerprint.outputs.android }}
+      android_hash: ${{ steps.fingerprint.outputs.android_hash }}
+      ios: ${{ steps.fingerprint.outputs.ios }}
+      ios_hash: ${{ steps.fingerprint.outputs.ios_hash }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Full history required for SonarQube blame analysis
           fetch-depth: 0
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          flutter-version-file: .flutter-version
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+
+      - name: Install current dependencies
+        working-directory: expo
+        run: npm ci
+
+      - name: Compare native fingerprints
+        id: fingerprint
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          for platform in android ios; do
+            (
+              cd expo
+              npx --no-install fingerprint fingerprint:generate --platform "$platform"
+            ) > "$RUNNER_TEMP/current-$platform-fingerprint.json"
+            current_hash=$(jq -r '.hash' "$RUNNER_TEMP/current-$platform-fingerprint.json")
+            echo "${platform}_hash=$current_hash" >> "$GITHUB_OUTPUT"
+          done
+
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            echo "android=true" >> "$GITHUB_OUTPUT"
+            echo "ios=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          base_dir="$RUNNER_TEMP/clashking-fingerprint-base"
+          if ! git cat-file -e "$BASE_SHA:expo/package-lock.json"; then
+            echo "android=true" >> "$GITHUB_OUTPUT"
+            echo "ios=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          mkdir -p "$base_dir"
+          git archive "$BASE_SHA" expo | tar -x -C "$base_dir"
+
+          workflow_changed=false
+          if ! git diff --quiet "$BASE_SHA" HEAD -- .github/workflows/pr_checks.yaml; then
+            workflow_changed=true
+          fi
+
+          (
+            cd "$base_dir/expo"
+            npm ci
+          )
+
+          for platform in android ios; do
+            (
+              cd "$base_dir/expo"
+              npx --no-install fingerprint fingerprint:generate --platform "$platform"
+            ) > "$RUNNER_TEMP/base-$platform-fingerprint.json"
+
+            current_hash=$(jq -r '.hash' "$RUNNER_TEMP/current-$platform-fingerprint.json")
+            base_hash=$(jq -r '.hash' "$RUNNER_TEMP/base-$platform-fingerprint.json")
+            if [[ "$workflow_changed" == "false" && "$current_hash" == "$base_hash" ]]; then
+              echo "$platform=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "$platform=true" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
+  expo_checks:
+    name: Expo checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: expo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
 
       - name: Install dependencies
-        run: flutter pub get
+        run: npm ci
 
-      - name: Analyze project
-        run: flutter analyze --no-pub
+      - name: Verify Expo E2E migration structure
+        run: npm run e2e:structure
+
+      - name: Verify localization generation
+        run: npm run l10n:check
+
+      - name: Verify native config plugins
+        run: npm run test:native-plugin
+
+      - name: Verify web build tooling
+        run: npm run test:web-build
+
+      - name: Lint Expo source
+        run: npm run lint
+
+      - name: Type-check Expo source
+        run: npm run typecheck
 
       - name: Run tests with coverage
-        run: flutter test --coverage --no-pub
+        run: npm test -- --coverage
+
+      - name: Verify Expo dependencies and configuration
+        run: npx expo-doctor
+
+      - name: Verify static web export
+        env:
+          EXPO_PUBLIC_CK_API_ENV: development
+        run: npm run web:export
 
       - name: SonarQube scan
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
@@ -69,39 +154,169 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info
 
   android_build:
-    runs-on: ubuntu-latest
+    name: Android debug build
+    runs-on: blacksmith-8vcpu-ubuntu-2404
     needs: changes
     if: github.event_name == 'push' || needs.changes.outputs.android == 'true'
+    defaults:
+      run:
+        working-directory: expo
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Restore native validation result
+        id: native-validation
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/android-native-validation
+          key: android-native-validation-v1-pr-${{ github.event.pull_request.number }}-${{ needs.changes.outputs.android_hash }}-${{ hashFiles('.github/workflows/pr_checks.yaml') }}
+
       - name: Set up Java
+        if: steps.native-validation.outputs.cache-hit != 'true'
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: 21
-          cache: gradle
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - name: Set up Node.js
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v4
         with:
-          flutter-version-file: .flutter-version
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
 
       - name: Install dependencies
-        run: flutter pub get
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        run: npm ci
 
-      - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
+      - name: Generate Android project
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        run: npx expo prebuild --platform android --clean --no-install
 
-      - name: Build Android arm64 debug APK
-        run: flutter build apk --debug --target-platform android-arm64 --no-pub
+      - name: Cache Gradle dependencies
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('expo/android/**/*.gradle*', 'expo/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+            ${{ runner.os }}-gradle-
+
+      - name: Build Android debug APK
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        working-directory: expo/android
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug --stacktrace --build-cache
+
+      - name: Record successful native validation
+        if: github.event_name == 'pull_request' && steps.native-validation.outputs.cache-hit != 'true' && success()
+        run: mkdir -p "$RUNNER_TEMP/android-native-validation" && touch "$RUNNER_TEMP/android-native-validation/passed"
+
+      - name: Save native validation result
+        if: github.event_name == 'pull_request' && steps.native-validation.outputs.cache-hit != 'true' && success()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/android-native-validation
+          key: android-native-validation-v1-pr-${{ github.event.pull_request.number }}-${{ needs.changes.outputs.android_hash }}-${{ hashFiles('.github/workflows/pr_checks.yaml') }}
+
+  ios_build:
+    name: iOS unsigned simulator build
+    runs-on: blacksmith-6vcpu-macos-26
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.ios == 'true'
+    defaults:
+      run:
+        working-directory: expo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Restore native validation result
+        id: native-validation
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/ios-native-validation
+          key: ios-native-validation-v1-pr-${{ github.event.pull_request.number }}-${{ needs.changes.outputs.ios_hash }}-${{ hashFiles('.github/workflows/pr_checks.yaml') }}
+
+      - name: Set up Node.js
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+
+      - name: Install dependencies
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install ccache
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        run: command -v ccache >/dev/null 2>&1 || brew install ccache
+
+      - name: Generate iOS project
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        run: npx expo prebuild --platform ios --clean --no-install
+
+      - name: Restore iOS compiler cache
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/ccache
+          key: ${{ runner.os }}-${{ runner.arch }}-ios-ccache-v2-${{ hashFiles('expo/package-lock.json', 'expo/app.config.ts', 'expo/modules/clashking-native/ios/**', 'expo/native/ios/**') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-ios-ccache-v2-
+            ${{ runner.os }}-${{ runner.arch }}-ios-ccache-
+
+      - name: Configure iOS compiler cache
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        run: |
+          ccache --set-config=compiler_check=content
+          ccache --set-config=max_size=5G
+          ccache --zero-stats
+
+      - name: Install CocoaPods dependencies
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        working-directory: expo/ios
+        run: pod install
+
+      - name: Build iOS app and WarWidget without signing
+        if: steps.native-validation.outputs.cache-hit != 'true'
+        working-directory: expo/ios
+        run: >-
+          xcodebuild
+          -workspace ClashKing.xcworkspace
+          -scheme ClashKing
+          -configuration Debug
+          -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          CLANG_ENABLE_EXPLICIT_MODULES=NO
+          CODE_SIGNING_ALLOWED=NO
+          build
+
+      - name: Report iOS compiler cache statistics
+        if: always() && steps.native-validation.outputs.cache-hit != 'true'
+        run: ccache --show-stats
+
+      - name: Record successful native validation
+        if: github.event_name == 'pull_request' && steps.native-validation.outputs.cache-hit != 'true' && success()
+        run: mkdir -p "$RUNNER_TEMP/ios-native-validation" && touch "$RUNNER_TEMP/ios-native-validation/passed"
+
+      - name: Save native validation result
+        if: github.event_name == 'pull_request' && steps.native-validation.outputs.cache-hit != 'true' && success()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/ios-native-validation
+          key: ios-native-validation-v1-pr-${{ github.event.pull_request.number }}-${{ needs.changes.outputs.ios_hash }}-${{ hashFiles('.github/workflows/pr_checks.yaml') }}

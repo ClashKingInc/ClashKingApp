@@ -1,0 +1,4761 @@
+{
+  "warStatsRangeTitle": "Háborús statisztikák tartománya",
+  "warStatsRangeDescription": "Válaszd ki, hogy a statisztikák meghatározott számú legutóbbi háborút vagy egy napokban megadott időszakot fedjenek le.",
+  "warStatsRangeDays": "Napok",
+  "warStatsRangeWarsToInclude": "Belefoglalandó háborúk",
+  "warStatsRangeDaysToInclude": "Belefoglalandó napok",
+  "upgradeTrackerAllBuildersOccupied": "Minden építő foglalt",
+  "upgradeTrackerBuildCost": "Építési költség",
+  "upgradeTrackerBuilderBaseBuilders": "Építőbázis építői",
+  "upgradeTrackerBuilderBaseLaboratory": "Építőbázis laboratóriuma",
+  "upgradeTrackerCalendar": "Naptár",
+  "upgradeTrackerClearCost": "Eltávolítás költsége",
+  "upgradeTrackerCompletionDetails": "A falu befejezettségének részletei",
+  "upgradeTrackerCustomSoundtrack": "Egyéni hangsáv",
+  "upgradeTrackerGoldPassPercent": "{percent}%-os Aranyjegy",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerGroupSummary": "{group} összegzése",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerGuardians": "Őrzők",
+  "upgradeTrackerHelpers": "Segítők",
+  "upgradeTrackerHouseParts": "Házrészek",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# tétlen építő} other {# tétlen építő}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerInProgress": "Folyamatban",
+  "upgradeTrackerItemSemanticLabel": "{item}, {currentLevel}. szint / {targetLevel}. szint{count, plural, =1 {} other {, # épület}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemsOwned": "{count} birtokolt",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLane": "Sáv",
+  "upgradeTrackerLevelTransition": "{from}. szint → {to}. szint",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLootNow": "Zsákmány most",
+  "upgradeTrackerLootOutlook": "Zsákmánykilátások",
+  "upgradeTrackerMusic": "Zene",
+  "upgradeTrackerNextDays": "{count, plural, one {Következő # nap} other {Következő # nap}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerNextPeriod": "Következő időszak",
+  "upgradeTrackerNoGoldPass": "Nincs Aranyjegy",
+  "upgradeTrackerNoMatchingUpgrades": "Nincs megfelelő fejlesztés",
+  "upgradeTrackerNoMatchingUpgradesBody": "Próbálj másik falut vagy várólistát.",
+  "upgradeTrackerNothingNeededNow": "Most semmire sincs szükség",
+  "upgradeTrackerObstacles": "Akadályok",
+  "upgradeTrackerPart": "Rész",
+  "upgradeTrackerPassReward": "Jegyjutalom",
+  "upgradeTrackerPauseSoundtrack": "Hangsáv szüneteltetése",
+  "upgradeTrackerPeriodCount": "{current}. időszak / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlaySoundtrack": "Hangsáv lejátszása",
+  "upgradeTrackerPreviousPeriod": "Előző időszak",
+  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSceneries": "Tájak",
+  "upgradeTrackerScheduledLane": "Ütemezve a(z) #{lane}. sávban",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerShareProgress": "{village} haladása",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSize": "Méret",
+  "upgradeTrackerSortLongest": "Leghosszabb elöl",
+  "upgradeTrackerSortName": "Név A–Z",
+  "upgradeTrackerSortScheduled": "Ütemezett",
+  "upgradeTrackerSortShortest": "Legrövidebb elöl",
+  "upgradeTrackerSoundtrackPosition": "Hangsáv pozíciója",
+  "upgradeTrackerStarts": "Kezdés",
+  "upgradeTrackerTier": "Szint",
+  "upgradeTrackerUpgradesStarting": "induló fejlesztés",
+  "upgradeTrackerUpgradingNow": "Fejlesztés folyamatban",
+  "upgradeTrackerWarBase": "Háborús bázis",
+  "notifSettingsSaveFailed": "Az értesítési beállításokat nem sikerült menteni.",
+  "notifPushEnabled": "Push értesítések bekapcsolva",
+  "notifReceiveNotifications": "Értesítések fogadása",
+  "notifTokenPreview": "Token: {token}",
+  "notifEnabledDeliveryDescription": "A bekapcsolt riasztások elküldhetők erre az eszközre.",
+  "notifDisabledAccountDescription": "Az értesítések ki vannak kapcsolva a teljes ClashKing-fiókodban.",
+  "notifMaximumRemindersAdded": "Elérted az emlékeztetők maximális számát",
+  "notifAddReminder": "Emlékeztető hozzáadása",
+  "notifDurationOneHour": "1 óra",
+  "notifDurationHours": "{count} óra",
+  "notifDurationMinutes": "{count} perc",
+  "notifAddTiming": "{timing} hozzáadása",
+  "notifTimingOneHourBefore": "1 órával előtte",
+  "notifTimingHoursBefore": "{count} órával előtte",
+  "notifTimingMinutesBefore": "{count} perccel előtte",
+  "notifPushReady": "A push értesítések készen állnak ezen az eszközön.",
+  "notifPushPermissionRequired": "Engedélyezd az értesítéseket a ClashKing-riasztások fogadásához.",
+  "notifPushPermissionDenied": "Az értesítési engedélyt elutasították.",
+  "notifPushNotConfigured": "A Firebase nincs beállítva ehhez a buildhez.",
+  "notifPushTokenUnavailable": "Még nem érhető el push token.",
+  "notifPushUnsupported": "A push értesítések nem támogatottak ezen a platformon.",
+  "notifPushInitializing": "Push értesítések beállítása…",
+  "notificationPrimerTitle": "Értesítések engedélyezése?",
+  "notificationPrimerBody": "A ClashKing értesíthet a háborúk, a CWL, a fiókod és a projektek frissítéseiről. Ezt bármikor módosíthatod a Beállítások > Értesítések menüben.",
+  "notificationPrimerNotNow": "Most nem",
+  "notificationPrimerAllow": "Engedélyezés",
+  "achievementsTitle": "Teljesítmények",
+  "achievementEarnedLabel": "Megszerzések",
+  "achievementSummary": "{earned}/{total} kész",
+  "achievementEarnedCount": "Megszerzések ×{count}",
+  "achievementTownhall18Name": "Városháza 18",
+  "achievementTownhall18Requirement": "Érd el a 18-as városházát.",
+  "achievementWarWarriorName": "Háborús harcos",
+  "achievementWarWarriorRequirement": "Érj el 5 000 háborús csillagot.",
+  "achievementMrLegendName": "Legenda úr",
+  "achievementMrLegendDescription": "Hibátlan támadási napot teljesítettél a Legendák Ligájában.",
+  "achievementDefenseDoesntMatterName": "A védelem nem számít",
+  "achievementDefenseDoesntMatterDescription": "Tökéletes védelmi napot éltél túl a Legendák Ligájában.",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
+  "appTitle": "ClashKing",
+  "appDescription": "A végső Clash of Clans társád a statisztikák követéséhez, klánok kezeléséhez és teljesítmény elemzéséhez.",
+  "generalLoading": "Betöltés...",
+  "loadingVillages": "Falvaid betöltése...",
+  "loadingClanData": "Klánadatok lekérése...",
+  "loadingWarStats": "Háborús statisztikák elemzése...",
+  "loadingLegendsData": "Legendaadatok előkészítése...",
+  "loadingCapitalRaids": "Fővárosi rajtaütések betöltése...",
+  "loadingAlmostReady": "Mindjárt kész...",
+  "accountVerificationTitle": "Fiók ellenőrzése",
+  "accountVerified": "Ellenőrizve",
+  "accountVerify": "Ellenőrzés",
+  "accountVerificationSuccess": "A fiók ellenőrzése sikeres!",
+  "generalRetry": "Újrapróbálás",
+  "generalRetrying": "Újrapróbálkozás...",
+  "postsTitle": "Bejegyzések",
+  "postsDescription": "ClashKing-hírek, frissítési történetek és korábbi közlemények.",
+  "postsEmpty": "Még nincs közzétett bejegyzés.",
+  "postsLoadFailed": "A bejegyzéseket nem sikerült betölteni.",
+  "postsLoadMore": "Továbbiak betöltése",
+  "postsCurrent": "Aktuális",
+  "postsPast": "Korábbi",
+  "postsStory": "Interaktív történet",
+  "postsPinned": "Kiemelt",
+  "generalTryAgain": "Próbáld újra",
+  "generalReset": "Visszaállítás",
+  "generalCancel": "Mégse",
+  "generalOk": "OK",
+  "@generalOk": {
+    "description": "OK button on pop up"
+  },
+  "generalApply": "Alkalmaz",
+  "generalConfirm": "Megerősítés",
+  "generalManage": "Kezelés",
+  "generalSettings": "Beállítások",
+  "generalCopiedToClipboard": "Vágólapra másolva",
+  "generalComingSoon": "Hamarosan!",
+  "generalLastRefresh": "Utolsó frissítés: {time}",
+  "@generalLastRefresh": {
+    "description": "Last refresh time indicator",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Formatted time of last refresh"
+      }
+    }
+  },
+  "generalRefreshFailed": "Frissítés sikertelen: {error}",
+  "@generalRefreshFailed": {
+    "description": "Error message when refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "generalAll": "Összes",
+  "@generalAll": {
+    "description": "all items"
+  },
+  "generalAllTime": "Összes idő",
+  "@generalAllTime": {
+    "description": "All time period"
+  },
+  "generalOthers": "Egyebek",
+  "generalCompleted": "kész",
+  "generalTotal": "Összes",
+  "generalBest": "Legjobb",
+  "@generalBest": {
+    "description": "Best end of day trophies"
+  },
+  "generalWorst": "Legrosszabb",
+  "@generalWorst": {
+    "description": "Worst end of day trophies"
+  },
+  "generalAverage": "Átlag",
+  "@generalAverage": {
+    "description": "Average value of legend trophies (defense and attack)"
+  },
+  "generalRemaining": "Hátralévő idő",
+  "@generalRemaining": {
+    "description": "Remaining attacks or defenses"
+  },
+  "generalActive": "Aktív",
+  "generalInactive": "Inaktív",
+  "generalStarted": "Elkezdődött",
+  "@generalStarted": {
+    "description": "Title for the number of trophies at the beginning of the day"
+  },
+  "generalEnded": "Befejezve",
+  "@generalEnded": {
+    "description": "Title for the number of trophies at the end of the day"
+  },
+  "generalRole": "Szerepkör",
+  "generalStats": "Statisztikák",
+  "generalFullStats": "Teljes statisztikák",
+  "generalDetails": "Részletek",
+  "generalHistory": "Előzmények",
+  "@generalHistory": {
+    "description": "Shows EOS trophies history"
+  },
+  "generalFilters": "Szűrők",
+  "generalExpand": "Bontsa ki",
+  "generalCollapse": "Összeomlás",
+  "generalNotSet": "Nincs beállítva",
+  "@generalNotSet": {
+    "description": "Filter value is not set"
+  },
+  "generalWarning": "Figyelmeztetés",
+  "generalUnknown": "Ismeretlen",
+  "generalNoDataAvailable": "Nincs rendelkezésre álló adat.",
+  "generalNoFilteredResults": "Nincs a szűrőknek megfelelő találat",
+  "@generalNoFilteredResults": {
+    "description": "Message when applied filters return no results"
+  },
+  "generalAdjustFilters": "Módosítsd a szűrőfeltételeket, vagy töröld a szűrőket az összes adat megjelenítéséhez.",
+  "@generalAdjustFilters": {
+    "description": "Suggestion when filters return no results"
+  },
+  "generalBookmark": "Könyvjelző",
+  "generalRemoveBookmark": "Könyvjelző eltávolítása",
+  "generalClearFilters": "Szűrők törlése",
+  "@generalClearFilters": {
+    "description": "Button text to clear all applied filters"
+  },
+  "presetsSaved": "Mentett előbeállítások",
+  "@presetsSaved": {
+    "description": "Header for saved filter presets section"
+  },
+  "presetsSave": "Mentés",
+  "@presetsSave": {
+    "description": "Button to save current filter as preset"
+  },
+  "presetsSaveTitle": "Szűrő-előbeállítás mentése",
+  "@presetsSaveTitle": {
+    "description": "Title for save preset dialog"
+  },
+  "presetsName": "Előbeállítás neve",
+  "@presetsName": {
+    "description": "Label for preset name input"
+  },
+  "presetsNameHint": "Adj nevet ennek az előbeállításnak",
+  "@presetsNameHint": {
+    "description": "Hint text for preset name input"
+  },
+  "presetsSuggestions": "Javaslatok:",
+  "@presetsSuggestions": {
+    "description": "Label for name suggestions section"
+  },
+  "presetsApplyFirst": "Mentés előtt alkalmazz néhány szűrőt előbeállításként",
+  "@presetsApplyFirst": {
+    "description": "Message when trying to save without active filters"
+  },
+  "presetsNameRequired": "Adj meg egy nevet",
+  "@presetsNameRequired": {
+    "description": "Error when preset name is empty"
+  },
+  "presetsNameExists": "Már létezik ilyen nevű előbeállítás",
+  "@presetsNameExists": {
+    "description": "Error when preset name is duplicate"
+  },
+  "presetsSaveSuccess": "A(z) „{name}” előbeállítás sikeresen mentve",
+  "@presetsSaveSuccess": {
+    "description": "Success message when preset is saved",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the saved preset"
+      }
+    }
+  },
+  "presetsSaveError": "Az előbeállítás mentése sikertelen",
+  "@presetsSaveError": {
+    "description": "Error message when preset save fails"
+  },
+  "presetsApply": "Előbeállítás alkalmazása",
+  "@presetsApply": {
+    "description": "Context menu option to apply preset"
+  },
+  "presetsRename": "Átnevezés",
+  "@presetsRename": {
+    "description": "Context menu option to rename preset"
+  },
+  "presetsDelete": "Törlés",
+  "@presetsDelete": {
+    "description": "Context menu option to delete preset"
+  },
+  "presetsRenameTitle": "Előbeállítás átnevezése",
+  "@presetsRenameTitle": {
+    "description": "Title for rename preset dialog"
+  },
+  "presetsRenameSuccess": "Az előbeállítás új neve: „{name}”",
+  "@presetsRenameSuccess": {
+    "description": "Success message when preset is renamed",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "New name of the preset"
+      }
+    }
+  },
+  "presetsRenameError": "Az előbeállítás átnevezése sikertelen",
+  "@presetsRenameError": {
+    "description": "Error message when preset rename fails"
+  },
+  "presetsDeleteTitle": "Előbeállítás törlése",
+  "@presetsDeleteTitle": {
+    "description": "Title for delete preset dialog"
+  },
+  "presetsDeleteConfirm": "Biztosan törölni szeretnéd ezt: „{name}”?",
+  "@presetsDeleteConfirm": {
+    "description": "Confirmation message for preset deletion",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the preset to delete"
+      }
+    }
+  },
+  "presetsDeleteSuccess": "A(z) „{name}” előbeállítás törölve",
+  "@presetsDeleteSuccess": {
+    "description": "Success message when preset is deleted",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Name of the deleted preset"
+      }
+    }
+  },
+  "presetsDeleteError": "Az előbeállítás törlése sikertelen",
+  "@presetsDeleteError": {
+    "description": "Error message when preset deletion fails"
+  },
+  "generalCharts": "Diagramok",
+  "authSignUp": "Regisztráció",
+  "authLogin": "Bejelentkezés",
+  "authLogout": "Kijelentkezés",
+  "authCreateAccount": "Fiók létrehozása",
+  "authJoinClashKing": "Csatlakozz a ClashKing-hez",
+  "authCreateAccountToGetStarted": "Hozd létre a fiókodat az induláshoz",
+  "authAlreadyHaveAccount": "Már van fiókod? Jelentkezz be",
+  "authConfirmLogout": "Biztosan ki szeretnél jelentkezni?",
+  "@authConfirmLogout": {
+    "description": "Prompt asking the user to confirm logout"
+  },
+  "authDiscordTitle": "Discord",
+  "authDiscordSignIn": "Bejelentkezés Discord-dal",
+  "authDiscordContinue": "Folytatás Discord-dal",
+  "authDiscordDescription": "Szinkronizáld az adataidat a ClashKing Bot-tal és oldja fel a ClashKing teljes potenciálját!",
+  "authEmail": "E-mail",
+  "authEmailHint": "Add meg az e-mail címed",
+  "authEmailDescription": "Használj e-mailt, ha nem férsz hozzá a Discord-hoz, vagy inkább csak az alkalmazás funkcióit szeretnéd",
+  "authEmailRequired": "Kérjük, add meg az e-mail címedet",
+  "authEmailInvalid": "Kérjük, adj meg egy érvényes e-mail címet",
+  "authPasswordLabel": "Jelszó",
+  "authPasswordHint": "Add meg a jelszavad",
+  "authPasswordConfirm": "Jelszó megerősítése",
+  "authPasswordRequired": "Kérjük, add meg a jelszavadat",
+  "authPasswordConfirmRequired": "Kérjük, erősítsd meg a jelszavadat",
+  "authPasswordMismatch": "A jelszavak nem egyeznek",
+  "authPasswordTooShort": "A jelszónak legalább 8 karakterből kell állnia",
+  "authPasswordRequirements": "A jelszónak tartalmaznia kell:\n• Nagybetűt\n• Kisbetűt\n• Számot\n• Speciális karaktert",
+  "authPasswordHeader": "A jelszónak tartalmaznia kell:",
+  "authPasswordUppercase": "Nagybetű",
+  "authPasswordLowercase": "Kisbetű",
+  "authPasswordNumber": "Szám",
+  "authPasswordSpecial": "Speciális karakter",
+  "authPasswordInvalid": "A jelszó nem felel meg a követelményeknek",
+  "authPasswordForgot": "Elfelejtett jelszó?",
+  "authPasswordForgotDescription": "Add meg az e-mail címed, és küldünk egy 6 jegyű kódot a jelszavad visszaállításához.",
+  "authPasswordResetSend": "Visszaállító kód küldése",
+  "authPasswordResetSent": "Kód elküldve!",
+  "authPasswordResetSentDescription": "Elküldtünk egy 6 jegyű visszaállító kódot az e-mail címedre. Ellenőrizd a beérkező leveleidet, és használd a kódot a jelszó visszaállításához.",
+  "authPasswordReset": "Jelszó visszaállítása",
+  "authPasswordResetDescription": "Add meg lent az e-mail címedet, az e-mailben kapott 6 jegyű kódot és az új jelszavadat.",
+  "authPasswordNew": "Új jelszó",
+  "authPasswordConfirmHint": "Add meg újra az új jelszavad",
+  "authPasswordResetSuccess": "A jelszó visszaállítása sikeres! Most már bejelentkezhetsz.",
+  "authPasswordResetContinue": "Tovább a jelszó visszaállításához",
+  "authPasswordResetCode": "Visszaállító kód",
+  "authPasswordResetCodeHint": "Add meg az e-mailben kapott 6 jegyű kódot",
+  "authPasswordResetCodeRequired": "Add meg a visszaállító kódot",
+  "authPasswordResetCodeInvalid": "Adj meg egy érvényes 6 jegyű kódot",
+  "authBackToLogin": "Vissza a bejelentkezéshez",
+  "authUsernameLabel": "Felhasználónév",
+  "authUsernameRequired": "Kérjük, adja meg a felhasználónevet",
+  "authUsernameTooShort": "A felhasználónévnek legalább 3 karakterből kell állnia",
+  "authUsernameTooLong": "A felhasználónév legfeljebb 30 karakter lehet",
+  "authErrorConnection": "Hiba történt. Kérjük, ellenőrizd az internetkapcsolatodat és próbáld újra.",
+  "authErrorConnectionRelaunch": "Hiba történt. Kérjük, ellenőrizd az internetkapcsolatodat és indítsd újra az alkalmazást.",
+  "authErrorEmailAlreadyRegistered": "Ez az e-mail cím már regisztrálva van. Próbálj inkább bejelentkezni.",
+  "authErrorEmailAlreadyPending": "Erre a címre már küldtünk ellenőrző e-mailt. Ellenőrizd az e-mailjeidet, vagy próbáld újraküldeni.",
+  "authErrorEmailInvalidFormat": "Adj meg egy érvényes e-mail címet.",
+  "authErrorPasswordWeak": "A jelszó túl gyenge. Használj erősebb jelszót.",
+  "authErrorUsernameInvalid": "A felhasználónév érvénytelen. Csak betűket, számokat és aláhúzásjelet használj.",
+  "authErrorRegistrationFailed": "A regisztráció sikertelen. Próbáld újra később.",
+  "authErrorEmailSendFailed": "Az ellenőrző e-mail elküldése sikertelen. Próbáld újra később.",
+  "authErrorRateLimited": "Túl sok próbálkozás. Várj egy kicsit, majd próbáld újra.",
+  "authErrorServerUnavailable": "A szerver átmenetileg nem elérhető. Próbáld újra később.",
+  "authAccountManagement": "Itt adhatsz hozzá, távolíthatsz el és rendezhetsz újra Clash of Clans-fiókokat. Ellenőrizd a fiókjaidat tokennel az összes funkció eléréséhez.",
+  "authAccountConnected": "Csatlakoztatott fiókok",
+  "authAccountConnectedStatus": "Csatlakoztatva",
+  "authAccountNotConnected": "Nincs csatlakoztatva",
+  "authAccountEmailAndPassword": "E-mail és jelszó",
+  "authAccountSecured": "A fiókod több hitelesítési módszerrel van biztosítva",
+  "authAccountLinkEmail": "E-mail fiók csatlakoztatása",
+  "authAccountAddEmailAuth": "Adj hozzá e-mail és jelszó hitelesítést a fiókodhoz a további biztonság érdekében.",
+  "authAccountEmailLinkedSuccess": "E-mail fiók sikeresen csatlakoztatva!",
+  "authAccountLinkDiscord": "Discord-fiók összekapcsolása",
+  "authAccountAddDiscordAuth": "Adj Discord-hitelesítést a fiókodhoz a platformok közötti szinkronizáláshoz és a ClashKing Bot eléréséhez.",
+  "authAccountDiscordLinkedSuccess": "A Discord-fiók sikeresen összekapcsolva!",
+  "authEmailVerificationTitle": "E-mail ellenőrzése",
+  "authEmailVerificationCheckEmail": "Ellenőrizd az e-mailjeidet",
+  "authEmailVerificationSentTo": "Ellenőrző e-mailt küldtünk ide:",
+  "authEmailVerificationResend": "Ellenőrző e-mail újraküldése",
+  "authEmailVerificationResendSuccess": "Az ellenőrző e-mail sikeresen újraküldve! Ellenőrizd az e-mailjeidet.",
+  "authEmailVerificationExpired": "Az ellenőrzés lejárt. Regisztrálj újra.",
+  "authEmailVerificationAlreadyVerified": "Ez az e-mail cím már ellenőrizve van. Próbálj inkább bejelentkezni.",
+  "authEmailVerificationNoToken": "Nincs függőben lévő ellenőrzés. Először regisztrálj.",
+  "authEmailVerificationExpiredResend": "Az ellenőrzés lejárt. Menj vissza, és regisztrálj újra.",
+  "authEmailVerificationVerifying": "E-mail ellenőrzése...",
+  "authEmailVerificationCodeInstructions": "Add meg az e-mailedre küldött 6 jegyű kódot:",
+  "authEmailVerificationCodeRequired": "Add meg a 6 jegyű ellenőrző kódot",
+  "authEmailVerificationCodeInvalid": "Érvénytelen vagy lejárt kód. Ellenőrizd a kódot, vagy küldd újra az ellenőrző e-mailt.",
+  "authEmailVerificationVerify": "Kód ellenőrzése",
+  "helpTitle": "Segítségre van szükséged?",
+  "helpJoinDiscord": "Csatlakozz a Discord-hoz",
+  "helpEmailUs": "Írj nekünk e-mailt",
+  "accountsWelcome": "Üdv!",
+  "accountsWelcomeMessage": "Kérjük adj egy vagy több Clash Of Clans fiókot a profilodhoz. Később tudsz további fiókokat hozzáadni.",
+  "accountsManageTitle": "Kezeld a fiókjaidat",
+  "accountsNoneFound": "A profilhoz nem található csatolt fiók",
+  "accountsPlayerTag": "Játékoscímke (#ABC123)",
+  "accountsEnterPlayerTag": "Adjon meg egy játékos tag-et",
+  "accountsAdd": "Fiók hozzáadása",
+  "accountsAddInstruction": "Koppints a + gombra a fiókod hozzáadásához",
+  "accountsApiToken": "Fiók API-tokenje",
+  "accountsEnterApiToken": "Add meg a fiók API-tokenjét annak igazolásához, hogy a tiéd. A Clash of Clansban találod:",
+  "accountsApiTokenLocation": "Beállítások > További beállítások > API-token",
+  "accountsOpenMoreSettings": "További beállítások megnyitása",
+  "accountsCouldNotOpenClash": "Nem sikerült megnyitni a Clash of Clanst. Nyisd meg kézzel.",
+  "accountsFillAllFields": "Tölts ki minden mezőt.",
+  "accountsErrorTagNotExists": "A megadott játékos tag nem létezik.",
+  "accountsErrorAlreadyLinked": "A játékos tag-je már csatolva van valakihez.",
+  "accountsErrorAlreadyLinkedToYou": "Ez a játékoscímke már hozzád van kapcsolva.",
+  "accountsErrorWrongApiToken": "A megadott API-token helytelen",
+  "accountsErrorFailedToAdd": "A fiók hozzáadása sikertelen. Próbáld újra később.",
+  "accountsErrorFailedToUpdateOrder": "A fiókok sorrendjének frissítése sikertelen.",
+  "errorTitle": "Hoppá! A szervereink talán tűzgolyót kaptak az arcukba! Gyógyító varázslatot szórunk... Próbáld újra egy pillanat múlva.",
+  "errorSubtitle": "Ha a probléma továbbra is fennáll, nézd meg a Discord-szerverünket, hogy tudunk-e róla.",
+  "errorNetworkTitle": "Kapcsolódási probléma",
+  "errorNetworkMessage": "Nem sikerül kapcsolódni a szervereinkhez. Ennek oka lehet az internetkapcsolatod vagy egy nálunk jelentkező hiba. Ellenőrizd a kapcsolatot, és próbáld újra.",
+  "errorLoadingVersion": "Hiba verzió betöltése közben",
+  "@errorLoadingVersion": {
+    "description": "Error message when the app version cannot be loaded"
+  },
+  "errorCannotOpenLink": "Nem tudjuk megnyitni ezt a linket.",
+  "errorExitAppToOpenClash": "El fogod hagyni az alkalmazást a Clash of Clans megnyitásához.",
+  "playerSearchTitle": "Játékos keresése",
+  "playerSearchPlaceholder": "Játékos neve vagy címkéje",
+  "playerLastActive": "Utolsó aktivitás: {date}",
+  "@playerLastActive": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerNotTracked": "Ez a játékos nincs követve. Az adatok pontatlanok lehetnek.",
+  "playerClanDescription": "A klánod: „{clan}” ({tag}).",
+  "@playerClanDescription": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "playerRatioDescription": "Az adományozási arányod {ratio}. {donations} katonát adományoztál és {received} katonát kaptál.",
+  "@playerRatioDescription": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      },
+      "donations": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarPreferenceDescription": "A háborús beállításod: „{preference}”.",
+  "@playerWarPreferenceDescription": {
+    "placeholders": {
+      "preference": {
+        "type": "String"
+      }
+    }
+  },
+  "playerWarStarsDescription": "{stars} háborús csillagod van.",
+  "@playerWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTrophiesDescription": "{trophies} trófeád van. Jelenleg ebben a ligában vagy: {league}.",
+  "@playerTrophiesDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "playerTrophiesUnrankedDescription": "{trophies} trófeád van. Nem vagy rangsorolva egyetlen ligában sem.",
+  "@playerTrophiesUnrankedDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "playerTownHallLevelDescription": "A városházád szintje {level}.",
+  "@playerTownHallLevelDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBuilderBaseDescription": "Az építőcsarnokod szintje {level}, és {trophies} trófeád van.",
+  "@playerBuilderBaseDescription": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "gameBaseHome": "Fő bázis",
+  "gameBaseBuilder": "Építő Bázis",
+  "gameClanCapital": "Klán Főváros",
+  "gameTownHall": "TH",
+  "gameTownHallLevel": "TH szint",
+  "gameTownHallLevelNumber": "Városháza {level}",
+  "@gameTownHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameExpLevel": "Tapasztalati szint",
+  "gameLeague": "Liga",
+  "gameTrophies": "Kupák",
+  "gameBuilderBaseTrophies": "BB kupák",
+  "gameDonations": "Adományok",
+  "gameDonationsReceived": "Kapott",
+  "gameDonationsRatio": "Adományok aránya",
+  "gameLevel": "Szint: {level}/{maxLevel}",
+  "@gameLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "maxLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "gameHeroes": "Hősök",
+  "gameEquipment": "Felszerelések",
+  "gameHeroesEquipments": "Hősfelszerelések",
+  "gameTroops": "Csapatok",
+  "gameActiveSuperTroops": "Aktív szuperkatonák",
+  "gamePets": "Háziállatok",
+  "gameSiegeMachines": "Ostromgépek",
+  "gameSpells": "Varázs szerek",
+  "gameAchievements": "Mérföldkövek",
+  "gameClanGames": "Klánjátékok",
+  "gameSeasonPass": "Szezonbérlet",
+  "gameCreatorCodeDescription": "Támogass minket ingyen!",
+  "gameCreatorCodeDialogTitle": "ClashKing támogatása",
+  "gameCreatorCodeDialogDescription": "Amikor a készítői kódunkat használod, segítesz finanszírozni a fejlesztést, ingyenesen tartani az alkalmazást és a botot mindenki számára, valamint támogatod az új funkciók hozzáadását.\n\nA játékon belüli vásárlásaid 5%-át kapjuk meg, neked extra költség nélkül — csak írd be a „ClashKing” kódot bármely Supercell-játék boltjában.\n\nKöszönjük a támogatásodat!",
+  "gameCreatorCodeDialogButton": "Készítői kód használata",
+  "clanTitle": "Klán",
+  "clanSearchTitle": "Klán keresése",
+  "clanSearchPlaceholder": "Klán neve",
+  "clanNone": "Nincs klán",
+  "clanJoinToUnlock": "Csatlakozz egy klánhoz az új funkciók feloldásához.",
+  "clanMembers": "Tagok",
+  "clanMembersSearchPlaceholder": "Tagok keresése",
+  "clanMembersShowTotals": "Mutasd a klánösszegeket",
+  "clanMembersHideTotals": "A klánösszeg elrejtése",
+  "clanMembersReceivedShort": "Megérkezett",
+  "clanMembersAverageTh": "Átl. TH",
+  "clanMinimumMembers": "Minimum tagok",
+  "clanMaximumMembers": "Maximum tagok",
+  "clanLocation": "Tartózkodási hely",
+  "clanMinimumPoints": "Minimális klán pontok",
+  "clanMinimumLevel": "Minimális klán szint",
+  "clanInviteOnly": "Csak meghívással",
+  "@clanInviteOnly": {
+    "description": "Clan is invite only"
+  },
+  "clanOpened": "Megnyitva",
+  "@clanOpened": {
+    "description": "Clan is opened"
+  },
+  "clanRoleLeader": "Vezető",
+  "clanRoleCoLeader": "Társvezető",
+  "clanRoleElder": "Segítő",
+  "clanRoleMember": "Tag",
+  "clanWarFrequencyAlways": "Mindig",
+  "clanWarFrequencyNever": "Soha",
+  "clanWarFrequencyOncePerWeek": "1/hét",
+  "clanWarFrequencyMoreThanOncePerWeek": "Hetente több mint 1",
+  "clanWarFrequencyRarely": "Ritkán",
+  "timeHourIndicator": "ó",
+  "timeDaysAgo": "{days} napja",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDayAgo": "{day} napja",
+  "@timeDayAgo": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHourAgo": "{hour} órája",
+  "@timeHourAgo": {
+    "placeholders": {
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours} órája",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinuteAgo": "{minute} perce",
+  "@timeMinuteAgo": {
+    "placeholders": {
+      "minute": {
+        "type": "int"
+      }
+    }
+  },
+  "timeMinutesAgo": "{minutes} perce",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeJustNow": "Épp most",
+  "@timeJustNow": {
+    "description": "Indicates something happened just now"
+  },
+  "timeEndedJustNow": "Épp most ért véget",
+  "timeEndedMinutesAgo": "{minutes} perce ért véget",
+  "@timeEndedMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedHoursAgo": "{hours} órája ért véget",
+  "@timeEndedHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeEndedDaysAgo": "{days} napja ért véget",
+  "@timeEndedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeStartsIn": "Kezdés ennyi idő múlva: {time}",
+  "@timeStartsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeStartsAt": "Kezdés ekkor: {time}",
+  "@timeStartsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsIn": "Befejezés ennyi idő múlva: {time}",
+  "@timeEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeEndsAt": "Befejezés ekkor: {time}",
+  "@timeEndsAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsTitle": "Legendák Ligája",
+  "legendsNotInLeague": "Nem vagy Legenda Ligában",
+  "legendsNoDataToday": "Nem vagy Legenda Ligában, de a korábbi szezonok elérhetők.",
+  "legendsStartDescription": "A napot {trophies} trófeával kezdted.",
+  "@legendsStartDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "legendsNoRankLocalDescription": "Jelenleg nem vagy rangsorolva ({country}) {trophies} trófeával.",
+  "@legendsNoRankLocalDescription": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsRankLocalDescription": "Jelenlegi helyezésed: {rank} ({country}), {trophies} trófeával.",
+  "@legendsRankLocalDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "country": {
+        "type": "String"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGainDescription": "Eddig {trophies} trófeát szereztél.",
+  "@legendsGainDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsLossDescription": "Eddig {trophies} trófeát vesztettél.",
+  "@legendsLossDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoGlobalRankDescription": "Jelenleg nem vagy globálisan rangsorolva {trophies} trófeával.",
+  "@legendsNoGlobalRankDescription": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsGlobalRankDescription": "Jelenlegi globális helyezésed: {rank}, {trophies} trófeával.",
+  "@legendsGlobalRankDescription": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsNoRank": "Nincs rangsorolás",
+  "legendsBestTrophies": "Legjobb trófeaszám",
+  "legendsMostAttacks": "Legtöbb támadás",
+  "legendsLastSeason": "Előző szezon",
+  "legendsBestRank": "Legjobb globális helyezés",
+  "legendsTrophiesBySeason": "Trófeák szezononként",
+  "legendsEosTrophies": "Szezonvégi kupák",
+  "legendsEosDetails": "Szezonvégi részletek",
+  "legendsInaccurateTitle": "Pontatlan adatok?",
+  "legendsInaccurateIntro": "A Clash of Clans API korlátai miatt az adataink nem mindig lehetnek teljesen pontosak. Ezért:\n",
+  "legendsInaccurateApiDelayTitle": "1. API-késés: ",
+  "legendsInaccurateApiDelayBody": "Az API frissítése akár 5 percig is eltarthat, ezért késhet a valós idejű trófeaváltozások megjelenítése.\n",
+  "legendsInaccurateConcurrentTitle": "2. Egyidejű változások: \n",
+  "legendsInaccurateMultipleAttacksTitle": "- Több támadás/védekezés: ",
+  "legendsInaccurateMultipleAttacksBody": "Ha több támadás vagy védekezés történik gyors egymásutánban, az API összevont eredményt mutathat (pl. +68 vagy -68).\n",
+  "legendsInaccurateSimultaneousTitle": "- Egyidejű támadás és védekezés: ",
+  "legendsInaccurateSimultaneousBody": "Ha egy támadás és egy védekezés egyszerre történik, vegyes eredményt láthatsz (pl. +4).\n",
+  "legendsInaccurateNetGainTitle": "3. Nettó nyereség/veszteség: ",
+  "legendsInaccurateNetGainBody": "Az időzítési problémák ellenére a napi összesített nettó nyereség vagy veszteség pontos. ",
+  "legendsInaccurateConclusion": "Ezek a korlátok minden Clash of Clans API-t használó eszköznél előfordulnak. Sajnos nem tudjuk kijavítani, mert ez a Supercell kezében van. Mindent megteszünk, hogy kompenzáljuk ezeket a korlátokat, és a valósághoz minél közelebbi eredményeket adjunk. Köszönjük a megértésedet!",
+  "statsSeasonStats": "Szezonstatisztikák",
+  "statsByDay": "Naponta",
+  "@statsByDay": {
+    "description": "Shows stats by day"
+  },
+  "statsBySeason": "Szezon szerint",
+  "@statsBySeason": {
+    "description": "Shows stats by season"
+  },
+  "statsDayIndex": "{index}. nap",
+  "@statsDayIndex": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsIndexDays": "{index} nap",
+  "@statsIndexDays": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "statsSeasonDate": "{date} szezon",
+  "@statsSeasonDate": {
+    "description": "Example: August 2024 season",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "statsAllTownHalls": "Összes városháza",
+  "statsMembers": "Tagstatisztikák",
+  "todoTitle": "Teendőlista",
+  "todoExplanationTitle": "Feladatok számítása",
+  "todoExplanationIntro": "A feladatok teljesítési százaléka a következő tevékenységek alapján, megadott súlyozással kerül kiszámításra:",
+  "todoExplanationLegendsTitle": "Legenda Liga:",
+  "todoExplanationLegends": "Fiókonként 8 pontos súly, 1 támadás = 1 pont.",
+  "todoExplanationClanWarsTitle": "Klánháborúk:",
+  "todoExplanationClanWars": "Fiókonként 2 pontos súly, 1 támadás = 1 pont.",
+  "todoExplanationCwlTitle": "Klánháborús Liga:",
+  "todoExplanationCwl": "Fiókonként 1 pontos súly, 1 támadás = 1 pont. A CWL nem követhető, ha a játékos nincs a ligaklánjában.",
+  "todoExplanationPassAndGamesTitle": "Szezonbérlet és Klánjátékok:",
+  "todoExplanationPassAndGames": "Fiókonként egyenként 2 pontos súly. Az arány a hátralévő napok számán alapul (1 hónap a bérlethez és 6 nap a játékokhoz). Zöld = jó úton haladsz a bérlet vagy játékok teljesítéséhez, piros = lemaradásban vagy.",
+  "todoExplanationConclusion": "A végső százalékot a folyamatban lévő események során elvégzett műveletek számának és az összes szükséges művelet számának hányadosa adja.",
+  "todoAccountsNumber": "{number} fiók",
+  "@todoAccountsNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Number of accounts (ex: 4 accounts)"
+  },
+  "todoAccountsNumberActive": "{number} aktív fiók",
+  "@todoAccountsNumberActive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsNumberInactive": "{number} inaktív fiók",
+  "@todoAccountsNumberInactive": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsActive": "Aktív fiókok",
+  "todoAccountsInactive": "Inaktív fiókok",
+  "todoAccountsNoInactive": "Nincs inaktív fiók.",
+  "todoAccountsNoActive": "Nincs aktív fiók.",
+  "todoAttacksLeftDescription": "{attacks} támadásod maradt ({type}).",
+  "@todoAttacksLeftDescription": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoDefensesLeftDescription": "{defenses} védekezésed maradt ({type}).",
+  "@todoDefensesLeftDescription": {
+    "placeholders": {
+      "defenses": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoNoAttacksLeftDescription": "Gratulálunk, minden támadásodat elvégezted ({type})!",
+  "@todoNoAttacksLeftDescription": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescription": "Ma még {points} pontot kell szerezned, hogy időben célba érj az esemény végére ({type}).",
+  "@todoPointsLeftDescription": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "todoPointsLeftDescriptionNoPoints": "Gratulálunk, időben haladsz a maximális jutalmak megszerzéséhez az esemény végén ({type})!",
+  "@todoPointsLeftDescriptionNoPoints": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "warTitle": "Háború",
+  "warFrequency": "Háború gyakorisága",
+  "warParticipation": "Háborús részvétel",
+  "cwlParticipantOnly": "Csak résztvevő",
+  "warStatsLastXDays": "Elmúlt {number} nap",
+  "warStatsCurrentMembers": "Jelenlegi tagok",
+  "warLeague": "Háború/Rang",
+  "warHistory": "Háború lista",
+  "warLog": "Háború napló",
+  "warLogSearchPlaceholder": "Keresési háborúk",
+  "warLogClosed": "{clan} háborúnaplója le van zárva.",
+  "warLogPrivate": "{clan} háborús naplója privát.",
+  "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warStats": "Háború Statisztika",
+  "warStatsSearchPlaceholder": "Játékosok keresése",
+  "warStatsCurrentTownHall": "Az én TH-m",
+  "warStatsLast50": "Utolsó 50",
+  "warStatsWars": "Háborúk",
+  "warStatsSelectSeason": "Válassza ki a háborús statisztikák szezonját",
+  "warOngoing": "Folyamatban lévő háború",
+  "warIsNotInWar": "A(z) {clan} nincs háborúban.",
+  "@warIsNotInWar": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "warAskForWar": "Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy háborút indíts.",
+  "warAskForWarLogOpening": "Lépj kapcsolatba egy vezetővel vagy egy társvezetővel, hogy megnyisd a háború naplót.",
+  "warEnded": "Háború véget ért",
+  "warInWar": "Háborúban",
+  "@warInWar": {
+    "description": "War state: active"
+  },
+  "warPreparation": "Felkészülés",
+  "warPerfectWar": "Tökéletes háború",
+  "warVictory": "Győzelem",
+  "warDefeat": "Vereség",
+  "warDraw": "Döntetlen",
+  "@warDraw": {
+    "description": "War ended in a draw"
+  },
+  "warTeamSize": "Csapat mérete",
+  "warMyTeam": "Csapatom",
+  "warEnemiesTeam": "Ellenségek",
+  "warClanDraw": "A klánok fej-fej mellett vannak",
+  "warStateOfTheWar": "Háború állapota",
+  "warStarsNeededToTakeTheLead": "{clan} még {star} csillagot vagy {stars2} csillagot és {percent}%-ot kell szereznie az élre kerüléshez.",
+  "@warStarsNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "star": {
+        "type": "int"
+      },
+      "stars2": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsAndPercentNeededToTakeTheLead": "{clan} még {percent}%-ot vagy még 1 csillagot kell szereznie az élre kerüléshez",
+  "@warStarsAndPercentNeededToTakeTheLead": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warNotStarted": "A háború még nem kezdődött el",
+  "warWonByStars": "{clanName} megnyerte a háborút!",
+  "@warWonByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByStars": "{clanName} elvesztette a háborút",
+  "@warLostByStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warWonByDestruction": "{clanName} pusztítás alapján nyert!",
+  "@warWonByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warLostByDestruction": "{clanName} pusztítás alapján veszített",
+  "@warLostByDestruction": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warPerfectDraw": "Tökéletes döntetlen",
+  "warCanTieNeedsStars": "{clanName} döntetlent érhet el, de {stars} csillagra van szüksége",
+  "@warCanTieNeedsStars": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      },
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warCannotCatchUp": "{clanName} már nem tud felzárkózni csillagokban",
+  "@warCannotCatchUp": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisToWin": "Nyerni",
+  "warAnalysisToLose": "Elveszíteni",
+  "warAnalysisNoAttacksLeft": "Nem maradtak támadások",
+  "warAnalysisScenario": "{attacks} támadások maradtak -> {stars} csillagok szükségesek / {percent}% támadásonként",
+  "@warAnalysisScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisImpossibleScenario": "{attacks} támadások balra -> lehetetlen ({stars} csillagok / {percent}% támadásonként)",
+  "@warAnalysisImpossibleScenario": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotLose": "{clanName} már nem veszíthet",
+  "@warAnalysisCannotLose": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisSecuredBadge": "Biztosítva",
+  "warAnalysisAlreadySecured": "Már biztosítva",
+  "warAnalysisSecureAgainst": "A cél kiszámítása feltételezi, hogy {clanName} minden hátralévő támadást felhasznál.",
+  "@warAnalysisSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisCannotSecureAgainst": "Matematikailag nem biztosítható, ha {clanName} optimálisan használja fel az összes hátralévő támadást.",
+  "@warAnalysisCannotSecureAgainst": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "warAnalysisNoSecureObjective": "A hátralévő támadásokkal nem biztosítható",
+  "warAnalysisStarGoal": "+{stars} csillag",
+  "@warAnalysisStarGoal": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisRemainingAttempts": "{attacks} támadás maradt",
+  "@warAnalysisRemainingAttempts": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      }
+    }
+  },
+  "warAnalysisNoBetterResult": "Jobb eredmény nem érhető el",
+  "warCalculatorHintPercent": "50.00",
+  "@warCalculatorHintPercent": {
+    "description": "Hint text for percentage input in war calculator"
+  },
+  "warNoDataAvailableForThisWar": "Nem áll rendelkezésre adat ehhez a háborúhoz",
+  "warCalculatorFast": "Gyors számológép",
+  "warCalculatorAnswer": "A(z) {percentNeeded}% pusztítási arány eléréséhez összesen {result}% szükséges.",
+  "@warCalculatorAnswer": {
+    "placeholders": {
+      "percentNeeded": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "warCalculatorNeededOverall": "% Szükséges összesen",
+  "warCalculatorCalculate": "Számítás",
+  "warAttacksTitle": "Támadások",
+  "warAttacksSuccessful": "Sikeres támadások",
+  "warAttacksFailed": "Sikertelen támadások",
+  "warAttacksNone": "Még nincs támadás",
+  "@warAttacksNone": {
+    "description": "No attack yet in war"
+  },
+  "warAttacksBest": "Legjobb támadások",
+  "warAttacksCount": "Támadások száma",
+  "warAttacksMissed": "Kihagyott támadások",
+  "warAttacksMissedShort": "Elmaradt",
+  "warAttacksNumber": "Az utolsó {number_war} háborúban {number_time} alkalommal támadtál.",
+  "@warAttacksNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warAttacksAverageStars": "Háborúnként átlagosan {stars} csillagot szereztél.",
+  "@warAttacksAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warAttacksAverageDestruction": "Háborúnként átlagosan {percent}% pusztítási arányod volt.",
+  "@warAttacksAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesTitle": "Védekezések",
+  "warDefensesNone": "Még nincs védekezés",
+  "@warDefensesNone": {
+    "description": "No defense yet in war"
+  },
+  "warDefensesBest": "Legjobb védekezések",
+  "warDefensesBestOutOf": "Legjobb védekezés ({number} közül)",
+  "@warDefensesBestOutOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    },
+    "description": "Best war defense (out of 3 defenses)"
+  },
+  "warDefensesNumber": "Az utolsó {number_war} háborúban {number_time} alkalommal védekeztél.",
+  "@warDefensesNumber": {
+    "placeholders": {
+      "number_time": {
+        "type": "int"
+      },
+      "number_war": {
+        "type": "int"
+      }
+    }
+  },
+  "warDefensesAverageStars": "Védekezésenként átlagosan {stars} csillagot kaptál.",
+  "@warDefensesAverageStars": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "warDefensesAverageDestruction": "Védekezésenként átlagosan {percent}% pusztítási arányt kaptál.",
+  "@warDefensesAverageDestruction": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warStarsTitle": "Csillagok",
+  "warStarsAverage": "Átlagos csillagok",
+  "warStarsNumber": "Csillagok száma",
+  "warStarsOne": "1 csillag",
+  "warStarsTwo": "2 csillag",
+  "warStarsThree": "3 csillag",
+  "warStarsZero": "0 csillag",
+  "warStarsBestPerformance": "Legjobb teljesítmény",
+  "@warStarsBestPerformance": {
+    "description": "Best performance in war"
+  },
+  "warDestructionTitle": "Pusztítás",
+  "warDestructionAverage": "Átlagos pusztítás",
+  "warDestructionRate": "Elpusztítási arány",
+  "@warDestructionRate": {
+    "description": "Percentage of destruction in war"
+  },
+  "warHistoryWinsDescription": "A klánod az utolsó 50 háborúból {wins} háborút nyert ({percent}%).",
+  "@warHistoryWinsDescription": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryLossesDescription": "A klánod az utolsó 50 háborúból {losses} háborút veszített ({percent}%).",
+  "@warHistoryLossesDescription": {
+    "placeholders": {
+      "losses": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryDrawsDescription": "A klánod az utolsó 50 háborúból {draws} döntetlent játszott ({percent}%).",
+  "@warHistoryDrawsDescription": {
+    "placeholders": {
+      "draws": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageMembersDescription": "A klánodnál az utolsó 50 háborúban átlagosan {members} tag vett részt.",
+  "@warHistoryAverageMembersDescription": {
+    "placeholders": {
+      "members": {
+        "type": "int"
+      }
+    }
+  },
+  "warHistoryAverageWarStarsDescription": "A klánod az utolsó 50 háborúban átlagosan {stars} csillagot szerzett háborúnként. Ez az összes csillag {percent}-a.",
+  "@warHistoryAverageWarStarsDescription": {
+    "placeholders": {
+      "stars": {
+        "type": "double"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warHistoryAverageHitRateDescription": "A klánod átlagos pusztítási aránya az utolsó 50 háborúban {percent}% volt.",
+  "@warHistoryAverageHitRateDescription": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "warPositionMap": "Térképpozíció",
+  "@warPositionMap": {
+    "description": "Map position in war"
+  },
+  "warPositionAbbr": "Poz.",
+  "@warPositionAbbr": {
+    "description": "Abbreviation for map position"
+  },
+  "warPositionOrder": "Sorrend",
+  "@warPositionOrder": {
+    "description": "Order of the player in the clan"
+  },
+  "warOpponentTownhall": "Ellenfél TH",
+  "@warOpponentTownhall": {
+    "description": "Abbreviation for opponent's town hall level"
+  },
+  "warOpponentLowerTownhall": "Alacsonyabb TH",
+  "warOpponentUpperTownhall": "Magasabb TH",
+  "warOpponentEqualThLevel": "Azonos TH",
+  "warOpponentSelectMembersThLevel": "Tagok TH-szintje",
+  "warOpponentSelectOpponentsThLevel": "Ellenfelek TH-szintje",
+  "warFiltersLastXwars": "Utolsó {number} háború",
+  "@warFiltersLastXwars": {
+    "description": "Example: Shows the last 25 wars",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warFiltersFriendly": "Barátságos",
+  "@warFiltersFriendly": {
+    "description": "Friendly war"
+  },
+  "warFiltersRandom": "Véletlenszerű",
+  "@warFiltersRandom": {
+    "description": "Random/basic war (not friendly or cwl)"
+  },
+  "warVisibilityToggleTownHall": "Korábbi TH-szintek statisztikáinak elrejtése/megjelenítése",
+  "@warVisibilityToggleTownHall": {
+    "description": "For example, hide stats from TH15 and below if the player is now TH16"
+  },
+  "warEventsTitle": "Események",
+  "@warEventsTitle": {
+    "description": "War events"
+  },
+  "warEventsNewest": "Legújabb",
+  "warEventsOldest": "Legidősebb",
+  "warStatusReady": "Részt vesz",
+  "@warStatusReady": {
+    "description": "Opted In for war"
+  },
+  "warStatusUnready": "Nem vesz részt",
+  "@warStatusUnready": {
+    "description": "Opted Out for war"
+  },
+  "warStatusMissed": "Kihagyva",
+  "@warStatusMissed": {
+    "description": "Missed attacks"
+  },
+  "warStatusMissedInfo": "Kihagyva: {number}",
+  "@warStatusMissedInfo": {
+    "description": "Number of missed attacks",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warAbbreviationAvg": "Átl.",
+  "@warAbbreviationAvg": {
+    "description": "Abbreviation for average"
+  },
+  "warAbbreviationAvgPercentage": "Átl. %",
+  "@warAbbreviationAvgPercentage": {
+    "description": "Abbreviation for average percentage"
+  },
+  "cwlTitle": "CWL",
+  "cwlClanWarLeague": "Klánháborús Liga",
+  "cwlOngoing": "Folyamatban lévő CWL",
+  "cwlHistoryTitle": "CWL története",
+  "clanLeaderboardHistoryTab": "Ranglistaelőzmények",
+  "clanLegendHistoryTab": "Legendás előzmények",
+  "clanRecordsTab": "Rekordok",
+  "clanProfileHistoryTab": "Profilelőzmények",
+  "clanProfileLevelChanged": "Klánszint megváltozott",
+  "clanProfileDescriptionChanged": "Leírás megváltozott",
+  "clanJoinLeaveTab": "Csatlakozás/Kilépés",
+  "clanRankingsTab": "Rangsorok",
+  "clanRankingsSeason": "Évad",
+  "clanRankingsSelectSeason": "Válassza ki a rangsorolási szezont",
+  "clanRankingsFilterActivity": "Tevékenység",
+  "clanRankingsFilterWar": "Háború",
+  "clanRankingsFilterPoints": "Pontok",
+  "cwlHistoryPreviewBadge": "Előnézet",
+  "cwlHistoryPreviewSubtitle": "{clan} makett a CWL végpont rögzítéséig",
+  "@cwlHistoryPreviewSubtitle": {
+    "description": "Small notice shown while CWL history uses mock data",
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlHistoryEmptyTitle": "Még nincs CWL előzmény",
+  "cwlHistoryEmptyBody": "Ez a klán még nem vett részt a Clan War League szezonban.",
+  "cwlRankTitle": "Rang",
+  "cwlWarsPlayedTitle": "Játszott háborúk",
+  "playerWarStarsTitle": "Háborús csillagok",
+  "playerWarPreferenceTitle": "Háborús pref.",
+  "playerDonatedTitle": "Adományozott",
+  "playerReceivedTitle": "Megérkezett",
+  "playerCapitalTitle": "Tőke",
+  "playerExpLevelTitle": "Exp. szint",
+  "clanWarWinsTitle": "A háború győz",
+  "clanWinStreakTitle": "Győzelmi sorozat",
+  "clanBuilderBaseTitle": "Építőalap",
+  "clanTypeTitle": "Írja be",
+  "clanMinTownHallTitle": "Min. városháza",
+  "clanMinTrophiesTitle": "Min. trófeák",
+  "clanCapitalHallTitle": "Fővárosi Csarnok",
+  "clanDistrictsTitle": "kerületek",
+  "legendsCountryTitle": "Ország",
+  "legendsLocalRankTitle": "Helyi rang",
+  "legendsGlobalRankTitle": "Globális rang",
+  "warWinsTitle": "Győzelem",
+  "warLossesTitle": "Veszteség",
+  "warDrawsTitle": "Döntetlen",
+  "cwlRounds": "Körök",
+  "cwlRoundNumber": "{number}. forduló",
+  "@cwlRoundNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlCurrentRound": "Jelenlegi forduló ({round}. forduló)",
+  "@cwlCurrentRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRank": "A klánod jelenlegi helyezése: {rank}.",
+  "@cwlRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlStars": "A klánodnak összesen {stars} csillaga van.",
+  "@cwlStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlDestructionPercentage": "A klánod összesített pusztítási aránya {percent}%.",
+  "@cwlDestructionPercentage": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlTotalAttacks": "A klánod {attacks} támadást használt fel a lehetséges {totalAttacks} támadásból.",
+  "@cwlTotalAttacks": {
+    "placeholders": {
+      "attacks": {
+        "type": "int"
+      },
+      "totalAttacks": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveTitle": "Csatlakozási/kilépési naplók (aktuális szezon)",
+  "joinLeaveJoin": "Csatlakozás",
+  "joinLeaveLeave": "Kilépés",
+  "joinLeaveJoins": "Csatlakozások",
+  "joinLeaveLeaves": "Kilépések",
+  "joinLeaveUniquePlayers": "Egyedi játékosok",
+  "joinLeaveMovingPlayers": "Mozgó játékosok",
+  "joinLeaveMostMovingPlayers": "Legtöbbet mozgó játékosok",
+  "joinLeaveStillInClan": "Még a klánban",
+  "joinLeaveLeftForever": "Végleg kilépett",
+  "joinLeaveRejoinedPlayers": "Visszatért játékosok",
+  "joinLeaveAvgTimeJoinLeave": "Átl. csatlakozási/kilépési idő",
+  "joinLeavePeakHour": "Legaktívabb óra",
+  "joinLeaveNumberDescription": "Az aktuális szezonban ({date}) {number} kilépési esemény történt.",
+  "@joinLeaveNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinNumberDescription": "Az aktuális szezonban ({date}) {number} csatlakozási esemény történt.",
+  "@joinLeaveJoinNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveMovingNumberDescription": "Az aktuális szezonban ({date}) {number} játékos kilépett, majd visszacsatlakozott a klánhoz.",
+  "@joinLeaveMovingNumberDescription": {
+    "description": "Number of players who left and rejoined the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveUniqueNumberDescription": "Az aktuális szezonban ({date}) {number} egyedi játékos csatlakozott/kilépett a klánból.",
+  "@joinLeaveUniqueNumberDescription": {
+    "description": "Number of unique players who joined/left the clan during the current season.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveStillInClanNumberDescription": "{number} játékos csatlakozott, és még mindig a klánban van.",
+  "@joinLeaveStillInClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "joinLeaveLeftClanNumberDescription": "{number} játékos csatlakozott, majd kilépett a klánból, és nem tért vissza.",
+  "@joinLeaveLeftClanNumberDescription": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@joinLeaveTitle": {
+    "description": "Logs of players joining or leaving the clan."
+  },
+  "joinLeaveLeftOnAt": "Kilépett ekkor: {date}, {time}.",
+  "@joinLeaveLeftOnAt": {
+    "description": "[The player] left the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "joinLeaveJoinedOnAt": "Csatlakozott ekkor: {date}, {time}.",
+  "@joinLeaveJoinedOnAt": {
+    "description": "[The player] joined the clan on 16/06/2024 at 10:35.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "raidsTitle": "Rajtaütések",
+  "raidsLast": "Legutóbbi rajtaütések",
+  "raidsOngoing": "Folyamatban lévő rajtaütések",
+  "raidsDistrictsDestroyed": "Elpusztított kerületek",
+  "raidsCompleted": "Sikeres portyázások",
+  "capitalRaidStatusOngoing": "Folyamatban",
+  "capitalRaidStatusEnded": "Véget ért",
+  "capitalRaidLoot": "Zsákmány",
+  "capitalRaidRewards": "Jutalmak",
+  "capitalRaidPreviousWeek": "Előző hét",
+  "capitalRaidNextWeek": "Jövő héten",
+  "capitalRaidFilterAttacked": "Megtámadták",
+  "capitalRaidFilterNotAttacked": "Nem támadták meg",
+  "capitalRaidFilterLinked": "Összekapcsolt fiókok",
+  "capitalRaidEmptyTitle": "Nincsenek tőketámadási adatok",
+  "capitalRaidEmptyBody": "A razziák története itt fog megjelenni, ha nyomon követik a klán fővárosi raidhétvégéit.",
+  "capitalRaidEstimated": "Becsült",
+  "capitalRaidEstimatedTooltip": "Még nem hivatalos: az e heti támadási és védekezési naplókból becsülték. A Supercell közzéteszi a valódi érmek számát, amint a raid véget ér.",
+  "capitalRaidTrophyPrediction": "Megjósolt trófeák",
+  "capitalRaidTrophyPredictionTooltip": "Becsült Capital League-trófeák a razzia után, az e heti eddigi teljesítmény alapján. Nem hivatalos.",
+  "capitalRaidProjectedLoot": "Tervezett zsákmány",
+  "capitalRaidOneshots": "Egylövés",
+  "capitalRaidFails": "Sikertelen",
+  "capitalDetailsOffense": "Sértés",
+  "capitalDetailsDefense": "Védelem",
+  "capitalDistrictsSection": "kerületek",
+  "capitalOpponentsSection": "Ellenfelek",
+  "capitalAvgAttacksPerDistrict": "Átl. támadások/körzet",
+  "capitalAvgLootPerAttack": "Átl. zsákmány/támadás",
+  "capitalHistorySection": "Raid története",
+  "capitalHistoryWeeksTracked": "Hetek nyomon követve",
+  "capitalAvgLootPerWeek": "Átl. zsákmány/hét",
+  "capitalAvgAttacksPerWeek": "Átl. támadás/hét",
+  "capitalBestRaid": "A legjobb raid",
+  "capitalWorstRaid": "A legrosszabb raid",
+  "capitalHistoryChartTitle": "Heti trend",
+  "searchNoResult": "Nincs találat.",
+  "maintenanceTitle": "Karbantartás",
+  "maintenanceDescription": "A Clash of Clans jelenleg karbantartás alatt áll, ezért nem férünk hozzá az API-hoz. Nézz vissza később.",
+  "downloadTooltip": "CWL-összefoglaló letöltése",
+  "downloadInProgress": "Fájl letöltése... Ez eltarthat néhány másodpercig...",
+  "downloadSuccess": "A fájl sikeresen mentve ide: {path}",
+  "@downloadSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadError": "A fájl letöltése sikertelen",
+  "dashboardTitle": "Vezérlőpult",
+  "toolsTitle": "Eszközök",
+  "navigationTeam": "Csapatok",
+  "navigationStatistics": "Statisztikák",
+  "versionDevice": "Verzió & Eszköz",
+  "@versionDevice": {
+    "description": "Version of the app and device information"
+  },
+  "settingsLicenses": "Nyílt forráskódú licencek",
+  "settingsLicensesSubtitle": "Harmadik féltől származó könyvtárak licenceinek megtekintése",
+  "settingsPrivacyPolicy": "Adatvédelmi irányelvek",
+  "settingsPrivacyPolicySubtitle": "Hogyan kezeljük az adataidat",
+  "betaFeature": "Béta Funkció",
+  "betaLabel": "BÉTA",
+  "betaDescription": "Ez a funkció jelenleg báta fázisban van, lehetnek benne hibák vagy lehet nincs befejezve. Aktívan dolgozunk a javításokon és szívesen fogadunk megjegyzéseket. Kérjük oszd meg az ötleteided vagy jelentsd a hibákat a Discord szerverünkön hogy segíts minket.",
+  "settingsLanguage": "Nyelv",
+  "settingsSelectLanguage": "Nyelv kiválasztása",
+  "settingsToggleTheme": "Téma váltása",
+  "faqTitle": "GYIK",
+  "faqSubtitle": "Gyakran Ismételt Kérdések",
+  "faqIsThisFromSupercell": "Ez az alkalmazás a Supercelltől származik?",
+  "faqFanContentPolicy": "Ez az anyag nem hivatalos, és nem kapott jóváhagyást Supercelltől. További információért lásd a Supercell rajongói tartalomra vonatkozó irányelveit: www.supercell.com/fan-content-policy",
+  "faqWhyNotAccurate": "Miért nem pontos néha az adat, vagy miért hiányos?",
+  "faqClanNotTracked": "Klán nincs követve",
+  "faqClanNotTrackedAnswer": "ClashKing csak úgy éri el az információt, ha a klán követve van. Ha a klán nincs követve, hívd meg a ClashKing bot-ot a Discord szerveredre es használd az /addclan parancsot. Reméljük hamarosan ez a funkció az alkalmazásban is jelen lesz.",
+  "faqTrackingDown": "Lekövetés",
+  "faqTrackingDownAnswer": "A követés néha megállhat, emiatt lehet hiányos az adat. Dolgozunk azon, hogy ez javítva legyen.",
+  "faqApiLimitation": "Clash of Clans API korlát",
+  "faqApiLimitationAnswer": "Az adat egy része a Clash of Clans API-tól van, és ennek vannak korlátjai. Például a Legends League követés, a támadással és védéssel járó kupák összekeverednek. És emiatt nincs információnk az épületek szintjéről.",
+  "faqSupportWork": "Hogyan tudom támogatni a munkádat?",
+  "faqSupportWorkAnswer": "Számos mód van arra, hogy támogass minket:",
+  "faqUseCodeClashKing": "Alkotói kód: ClashKing",
+  "faqSupportUsOnPatreon": "Támogass minket a Patreon-on",
+  "faqRateTheApp": "Értékelj minket az áruházban",
+  "faqWhatCanBotDo": "Mire képes a ClashKing Discord bot?",
+  "faqWhatCanBotDoAnswer": "A ClashKing Discord bot segít közvetlenül Discordról kezelni a klánodat átfogó követőeszközökkel, automatikus értesítésekkel és zökkenőmentes integrációval ehhez az alkalmazáshoz. Klánvezetőknek és tagoknak készült, akik szeretnének kapcsolatban maradni és rendszerezetten dolgozni:",
+  "faqInviteBotToServer": "Bot meghívása a szerverre",
+  "faqBotFeatureTracking": "Játékos- és klánkövetés",
+  "faqBotFeatureTrackingDesc": "Több klán és játékos hozzáadása és figyelése valós idejű frissítésekkel",
+  "faqBotFeatureWars": "Háborúkezelés",
+  "faqBotFeatureWarsDesc": "Kövesd a háborús teljesítményt, elemezd a támadásokat, és kapj háborús értesítéseket",
+  "faqBotFeatureNotifications": "Okos értesítések",
+  "faqBotFeatureNotificationsDesc": "Kapj riasztásokat adományokról, háborús támadásokról és fontos kláneseményekről",
+  "faqBotFeatureCommands": "Hatékony parancsok",
+  "faqBotFeatureCommandsDesc": "Perjeles parancsokkal gyorsan elérheted a játékosstatisztikákat, háborús infókat és még többet",
+  "faqNeedHelp": "Segítségre van szükségem, vagy szeretnék egy javaslatot tenni. Hogyan tudok kapcsolatba lépni?",
+  "faqNeedHelpAnswer": "Csatlakozhatsz a Discord szerverünkhöz és kérhetsz segítset, vagy küldhetsz emailt a devs@clashk.ing címre.\nKérjük csak angolul vagy franciául írj.",
+  "faqPrivacyDataTitle": "Kezelhetem vagy törölhetem a személyes adataimat?",
+  "faqPrivacyDataAnswer": "Igen. A Beállítások > Adatvédelmi irányelvek alatt megnyithatod az adatvédelmi irányelveket, előkészítheted a ClashKing-fiókod adatainak exportját, kérhetsz javítást vagy korlátozást, és elindíthatod a fiók törlését. Egyes kérések még a támogatási e-mailen keresztül történhetnek, amíg a szerveroldali adatvédelmi szolgáltatások bevezetése zajlik. A ClashKing a ClashKing-fiókodban tárolt adatokkal tud foglalkozni; a Clash of Clans-adatok Supercell API-kból vagy nyilvános klán- és játékosadatokból is származhatnak.",
+  "faqSendEmail": "Küldjön egy e-mailt",
+  "faqJoinDiscord": "Csatlakozz a Discord szerverünkhöz",
+  "faqCannotOpenMailClient": "Valamijen oknál fogva nem tudtuk a levelező kliensedet kinyitni. Vágólapra másoltuk a címet. Irhatsz egy emailt és bemásolhatod a címet.",
+  "faqTroubleshooting": "Hibaelhárítás",
+  "faqTroubleshootingDataTitle": "Miért nem szinkronizálódnak az adataim?",
+  "faqTroubleshootingDataDescription": "A játékos- vagy klánadatok elavultnak tűnnek",
+  "faqTroubleshootingDataSolution1": "Húzd le az oldalt a frissítéshez",
+  "faqTroubleshootingDataSolution2": "Ellenőrizd, hogy a klánod követve van-e (lásd fent)",
+  "faqTroubleshootingDataSolution3": "Várj néhány percet, majd próbáld újra: az API frissítése eltarthat egy ideig",
+  "faqTroubleshootingCrashTitle": "Miért omlik össze az alkalmazás?",
+  "faqTroubleshootingCrashDescription": "Az alkalmazás váratlanul bezárul vagy lefagy",
+  "faqTroubleshootingCrashSolution1": "Zárd be az alkalmazást, majd indítsd újra",
+  "faqTroubleshootingCrashSolution2": "Frissítsd az alkalmazást a legújabb verzióra",
+  "faqTroubleshootingCrashSolution3": "Töröld az alkalmazás gyorsítótárát és adatait (Android), vagy telepítsd újra az alkalmazást",
+  "faqTroubleshootingCrashSolution4": "Szabadíts fel tárhelyet az eszközön",
+  "faqContactSupport": "Ha a probléma továbbra is fennáll, lépj kapcsolatba a támogatással (lásd az utolsó részt)",
+  "faqTroubleshootingAccountTitle": "Miért nem tudom ellenőrizni a fiókomat?",
+  "faqTroubleshootingAccountDescription": "Problémák a Clash of Clans-fiókod összekapcsolásával",
+  "faqTroubleshootingAccountSolution1": "Győződj meg róla, hogy a helyes, #-tel kezdődő játékoscímkét használod",
+  "faqTroubleshootingAccountSolution2": "Ha úgy tűnik, hogy a fiók már össze van kapcsolva, használd a Clash of Clans beállításaiban található API-tokent",
+  "faqTroubleshootingSolutions": "Megoldások:",
+  "faqWhatIsClashKingProject": "Mi az a ClashKing projekt?",
+  "faqWhatIsClashKingProjectAnswer": "A ClashKing egy nyílt forráskódú projekt Clash of Clans statisztikákhoz és klánkezeléshez. Főként két fejlesztő tartja karban, időnként közreműködők segítségével. Akkor fejlesztjük tovább, amikor időnk engedi, egy egyszerű céllal: hogy a játékosok és klánok könnyebben követhessék a fejlődésüket. Az alkalmazás, a Discord bot és az ingyenes API együtt működik.",
+  "faqViewOnGitHub": "Megtekintés GitHubon",
+  "faqFeaturesGuide": "Mire képes a ClashKing alkalmazás?",
+  "faqFeaturesGuideDescription": "Emeld magasabb szintre a Clash of Clans élményedet! A ClashKing alkalmazás szép és gyors hozzáférést ad minden statisztikádhoz és klánadatodhoz – tökéletes azoknak, akiknek nincs Discordjuk, vagy a letisztult mobilélményt részesítik előnyben:",
+  "faqAppDevelopmentNotice": "Aktívan fejlesztünk új funkciókat, hogy az alkalmazás még jobb legyen. A visszajelzésed segít fejlődni!",
+  "faqFeaturesPlayerTitle": "Játékosstatisztikák",
+  "faqFeaturesPlayerDescription": "Kövesd a fejlődésedet, eredményeidet és legend ligás teljesítményedet",
+  "faqFeaturesClanTitle": "Klánkezelés",
+  "faqFeaturesClanDescription": "Figyeld a klántagokat, adományokat és a klán általános állapotát",
+  "faqFeaturesWarTitle": "Háborúkövetés",
+  "faqFeaturesWarDescription": "Elemezd a háborús teljesítményt, támadási stratégiákat és győzelmi arányokat",
+  "faqFeaturesLegendsTitle": "Pontatlan adatok?",
+  "faqFeaturesLegendsDescription": "Napi trófeakövetés és szezonvégi statisztikák",
+  "faqFeaturesCwlTitle": "CWL elemzések",
+  "faqFeaturesCwlDescription": "Klánháborús Liga teljesítmény és tagi hozzájárulások",
+  "faqFeaturesTodoTitle": "Teendőlista",
+  "faqFeaturesTodoDescription": "Nézd meg, mely fiókoknak maradt Rangsorolt támadása, rajtaütése, háborús támadása, Klánjáték- vagy bérletfeladata",
+  "faqFeaturesUpgradeTrackerTitle": "Frissítse a Trackert",
+  "faqFeaturesUpgradeTrackerDescription": "A felhasználó által megadott kézi fiókpillanatképpel megtekintheted a hátralévő fejlesztéseket, nyersanyagokat, építőket, laboridőt és haladást",
+  "faqFeaturesNotificationsTitle": "Leküldéses értesítések",
+  "faqFeaturesNotificationsDescription": "Válaszd ki, mely fiókok kapjanak riasztást a támogatott ClashKing-eseményekről",
+  "faqFeaturesWidgetsTitle": "Háborús widgetek",
+  "faqFeaturesWidgetsDescription": "Tartsd láthatóan az aktuális háború állapotát a kezdőképernyőn, ahol a widgetek támogatottak",
+  "faqSearchHint": "FAQ keresése...",
+  "faqSectionGettingStarted": "Kezdés és névjegy",
+  "faqSectionAccountsAlertsWidgets": "Fiókok, riasztások és widgetek",
+  "faqSectionSupportAndContact": "Támogatás és kapcsolat",
+  "faqLinkedAccountsTitle": "Hogyan működnek az összekapcsolt fiókok és az igazolás?",
+  "faqLinkedAccountsAnswer": "A ClashKing-profilod több Clash of Clans-fiókot is tartalmazhat. Egy címke hozzáadásával megjelennek a nyilvános adatok. A Clash of Clans API-tokenjével végzett igazolás bizonyítja, hogy a fiók a tiéd, és feloldja a fiókhoz kötött funkciókat.",
+  "faqLinkedAccountsSolution1": "A fiókkezelésben kezelheted, átrendezheted, elrejtheted vagy eltávolíthatod a fiókokat.",
+  "faqLinkedAccountsSolution2": "Az API-tokent a Clash of Clans Beállítások > További beállítások > API-token menüpontjában találod.",
+  "faqLinkedAccountsSolution3": "Discorddal vagy e-maillel jelentkezhetsz be. Ha elérhetők a fiókkapcsolatok, a Beállításokban kezelheted őket.",
+  "faqNotificationsTitle": "Hogyan működnek az értesítések?",
+  "faqNotificationsAnswer": "Az értesítések opcionálisak. Bekapcsolásukkor a ClashKing regisztrálja ezt az eszközt. Kiválaszthatod, hogy az egyes riasztások mely összekapcsolt fiókokra vonatkozzanak.",
+  "faqNotificationsSolution1": "Engedélyezd az értesítéseket az eszközön és a ClashKing beállításaiban is.",
+  "faqNotificationsSolution2": "Minden riasztás más fiókokra vonatkozhat. Ha hiányzik egy riasztás, ellenőrizd a kiválasztott fiókokat.",
+  "faqNotificationsSolution3": "Egyes riasztások a követett klán- vagy háborús adatoktól függenek. A külső adatok frissítése közben késés fordulhat elő.",
+  "faqWidgetsTitle": "Hogyan működnek a háborús widgetek?",
+  "faqWidgetsAnswer": "A háborús widgetek gyors összefoglalót mutatnak a támogatott eszközökön. A kiválasztott vagy összekapcsolt fiókokat, a gyorsítótárazott ClashKing-adatokat és a platform által engedélyezett háttérfrissítéseket használják.",
+  "faqWidgetsSolution1": "Fiók- vagy klánváltás után nyisd meg az alkalmazást, hogy a widget szinkronizálódjon.",
+  "faqWidgetsSolution2": "Ha a widget adatai elavultnak tűnnek, először frissítsd az alkalmazást. Az Android és az iOS korlátozza a háttérfrissítéseket.",
+  "faqWidgetsSolution3": "A klánnak hozzáférhető háborús adatokkal kell rendelkeznie ahhoz, hogy hasznos állapot jelenjen meg.",
+  "faqTranslationIssue": "Hiányzik vagy hibás a fordítás?",
+  "faqTranslationIssueAnswer": "A fordítások először generáló és AI-eszközökkel készülnek, majd idővel ellenőrizzük és javítjuk őket. Ha anyanyelvi beszélő vagy, és valami furcsán hangzik, javasolhatsz javítást a Crowdinon, vagy kapcsolatba léphetsz velünk Discordon vagy e-mailben.",
+  "faqWaysToSupport": "Így támogathatsz minket:",
+  "translationHelpUsTranslate": "Segíts a fordításban",
+  "translationThankYou": "Köszönjük!",
+  "translationThankYouContent": "Hatalmas köszönet a rendkívüli fordítóknak, akik segítenek hogy az app minél több embernek világszerte elérhető legyen!",
+  "translationHelpTranslateContent": "Segíthetsz a fordításban Crowdin-en. Ha a nyelved nem elérhető Crowdin-en, nyugodtan kérd a Discord szerverünkön. Nagyon köszönjük a segítségedet!",
+  "translationHelpTranslateButton": "Segíts fordítani Crowdin-en",
+  "translationCurrentTranslators": "Fordítók",
+  "filtersTimeFilters": "Időszűrők",
+  "@filtersTimeFilters": {
+    "description": "Time-based filters section title"
+  },
+  "filtersWarSettings": "Háborús beállítások",
+  "@filtersWarSettings": {
+    "description": "War settings filters section title"
+  },
+  "filtersPerformance": "Teljesítmény",
+  "@filtersPerformance": {
+    "description": "Performance filters section title"
+  },
+  "filtersAdvanced": "Haladó",
+  "@filtersAdvanced": {
+    "description": "Advanced filters section title"
+  },
+  "filtersNoFiltersActive": "Nincs aktív szűrő",
+  "@filtersNoFiltersActive": {
+    "description": "Text shown when no filters are applied in a section"
+  },
+  "filtersShowingDefaultData": "Az utolsó {count} háború megjelenítése (alapértelmezett)",
+  "@filtersShowingDefaultData": {
+    "description": "Text shown in filter bandeau when no filters are applied",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of wars being shown"
+      }
+    }
+  },
+  "filtersQuickFilters": "Gyors szűrők",
+  "@filtersQuickFilters": {
+    "description": "Quick preset filters section title"
+  },
+  "filtersLast30Days": "Utolsó 30 nap",
+  "@filtersLast30Days": {
+    "description": "Preset filter for last 30 days"
+  },
+  "filters3StarOnly": "Csak 3 csillagos",
+  "@filters3StarOnly": {
+    "description": "Preset filter for 3-star attacks only"
+  },
+  "filtersFreshAttacks": "Első támadások",
+  "@filtersFreshAttacks": {
+    "description": "Preset filter for fresh attacks only"
+  },
+  "filtersSeason": "Szezon",
+  "@filtersSeason": {
+    "description": "Season filter subsection title"
+  },
+  "filtersDateRange": "Dátumtartomány",
+  "@filtersDateRange": {
+    "description": "Date range filter subsection title"
+  },
+  "filtersWarType": "Háborútípus",
+  "@filtersWarType": {
+    "description": "War type filter subsection title"
+  },
+  "filtersTownHall": "Városháza",
+  "@filtersTownHall": {
+    "description": "Town hall filter subsection title"
+  },
+  "filtersAttackerTh": "Támadó TH",
+  "@filtersAttackerTh": {
+    "description": "Attacker town hall filter label"
+  },
+  "filtersDefenderTh": "Védő TH",
+  "@filtersDefenderTh": {
+    "description": "Defender town hall filter label"
+  },
+  "filtersSameTownHallOnly": "Csak azonos városháza",
+  "@filtersSameTownHallOnly": {
+    "description": "Same town hall filter option"
+  },
+  "filtersDestructionPercentage": "Pusztítási százalék",
+  "@filtersDestructionPercentage": {
+    "description": "Destruction percentage filter subsection title"
+  },
+  "filtersOptions": "Beállítások",
+  "@filtersOptions": {
+    "description": "Options filter subsection title"
+  },
+  "filtersFreshAttacksOnly": "Csak első támadások",
+  "@filtersFreshAttacksOnly": {
+    "description": "Fresh attacks only filter option"
+  },
+  "filtersResultLimit": "Eredménykorlát",
+  "@filtersResultLimit": {
+    "description": "Result limit filter label"
+  },
+  "filtersMinPosition": "Min. pozíció",
+  "@filtersMinPosition": {
+    "description": "Minimum map position filter label"
+  },
+  "filtersMaxPosition": "Max. pozíció",
+  "@filtersMaxPosition": {
+    "description": "Maximum map position filter label"
+  },
+  "filtersStartDate": "Kezdő dátum",
+  "@filtersStartDate": {
+    "description": "Start date filter label"
+  },
+  "filtersEndDate": "Záró dátum",
+  "@filtersEndDate": {
+    "description": "End date filter label"
+  },
+  "filtersYear": "Év",
+  "@filtersYear": {
+    "description": "Year selector label"
+  },
+  "filtersMonth": "Hónap",
+  "@filtersMonth": {
+    "description": "Month selector label"
+  },
+  "filtersSelectYear": "Év kiválasztása",
+  "@filtersSelectYear": {
+    "description": "Year picker dialog title"
+  },
+  "filtersAllWars": "Összes háború",
+  "@filtersAllWars": {
+    "description": "All wars filter option"
+  },
+  "chartsAttackPerformance": "Támadási teljesítmény TH-szint szerint",
+  "@chartsAttackPerformance": {
+    "description": "Attack performance chart title"
+  },
+  "chartsDefensePerformance": "Védelmi teljesítmény TH-szint szerint",
+  "@chartsDefensePerformance": {
+    "description": "Defense performance chart title"
+  },
+  "chartsRowsYourTh": "Sorok: saját TH | Oszlopok: ellenfél TH",
+  "@chartsRowsYourTh": {
+    "description": "Heatmap chart axis explanation"
+  },
+  "chartsGood": "Jó",
+  "@chartsGood": {
+    "description": "Good performance legend label"
+  },
+  "chartsExcellent": "Kiváló",
+  "@chartsExcellent": {
+    "description": "Excellent performance legend label"
+  },
+  "chartsNoData": "N/A",
+  "@chartsNoData": {
+    "description": "No data available indicator"
+  },
+  "performanceAnalysisSuggestions": "Teljesítmény-elemzések",
+  "@performanceAnalysisSuggestions": {
+    "description": "Section title for statistical performance analysis suggestions"
+  },
+  "performanceAnalysisTooltip": "Szűrőjavaslatok a csillagstatisztikáid alapján, hogy kiemeljék a teljesítménymintákat",
+  "@performanceAnalysisTooltip": {
+    "description": "Tooltip explaining that suggestions are based on statistical analysis"
+  },
+  "generalExport": "Exportálás",
+  "@generalExport": {
+    "description": "Export button label"
+  },
+  "exportTitle": "Háborús statisztikák exportálása",
+  "@exportTitle": {
+    "description": "Title for export bottom sheet dialog"
+  },
+  "exportSuccess": "Exportálás sikeres!",
+  "@exportSuccess": {
+    "description": "Success message for completed export"
+  },
+  "exportDialogDesc": "Ez letölti a háborús statisztikáidat Excel-fájlként, több munkalappal, beleértve az összesített statisztikákat, a részletes támadásokat és a TH-elemzést.",
+  "@exportDialogDesc": {
+    "description": "Description text for export dialog"
+  },
+  "exportGenerating": "Export készítése...",
+  "@exportGenerating": {
+    "description": "Loading message while generating export"
+  },
+  "exportClanWarStatsComingSoon": "A klánháborús statisztikák exportálása hamarosan érkezik",
+  "@exportClanWarStatsComingSoon": {
+    "description": "Message shown when clan war stats export is not yet available"
+  },
+  "filtersNoneApplied": "Nincs alkalmazott szűrő",
+  "@filtersNoneApplied": {
+    "description": "Text shown when no filters are active"
+  },
+  "warAttacksFailedToLoadPlayer": "A játékosadatok betöltése sikertelen",
+  "@warAttacksFailedToLoadPlayer": {
+    "description": "Error message when player profile fails to load"
+  },
+  "deepLinkInvalidPlayer": "Érvénytelen játékoslink.",
+  "@deepLinkInvalidPlayer": {
+    "description": "Shown when a player deep link does not include a valid tag"
+  },
+  "deepLinkInvalidClan": "Érvénytelen klánlink.",
+  "@deepLinkInvalidClan": {
+    "description": "Shown when a clan deep link does not include a valid tag"
+  },
+  "deepLinkFailedToOpenPlayer": "A játékos megnyitása sikertelen.",
+  "@deepLinkFailedToOpenPlayer": {
+    "description": "Shown when a player deep link target could not be loaded"
+  },
+  "deepLinkFailedToOpenClan": "A klán megnyitása sikertelen.",
+  "@deepLinkFailedToOpenClan": {
+    "description": "Shown when a clan deep link target could not be loaded"
+  },
+  "deepLinkUnknown": "Ismeretlen mélylink.",
+  "@deepLinkUnknown": {
+    "description": "Shown when the app receives a deep link it does not understand"
+  },
+  "warAttacksDetailsTitle": "Támadás részletei",
+  "@warAttacksDetailsTitle": {
+    "description": "Title for attack details modal"
+  },
+  "warAttacksDetailsAttackOrder": "Támadási sorrend",
+  "@warAttacksDetailsAttackOrder": {
+    "description": "Label for attack order in attack details"
+  },
+  "warAttacksDetailsDuration": "Időtartam",
+  "@warAttacksDetailsDuration": {
+    "description": "Label for attack duration in attack details"
+  },
+  "warAttacksDetailsAttacker": "Támadó",
+  "@warAttacksDetailsAttacker": {
+    "description": "Label for attacker section in attack details"
+  },
+  "warAttacksDetailsDefender": "Védő",
+  "@warAttacksDetailsDefender": {
+    "description": "Label for defender section in attack details"
+  },
+  "warAttacksDetailsName": "Név",
+  "@warAttacksDetailsName": {
+    "description": "Label for player name in attack details"
+  },
+  "warDataState": "Állapot",
+  "@warDataState": {
+    "description": "Label for war state"
+  },
+  "warDataAttacksPerMember": "Támadások tagonként",
+  "@warDataAttacksPerMember": {
+    "description": "Label for attacks per member"
+  },
+  "warDataStartTime": "Háború kezdete",
+  "@warDataStartTime": {
+    "description": "Label for war start time"
+  },
+  "warDataEndTime": "Háború vége",
+  "@warDataEndTime": {
+    "description": "Label for war end time"
+  },
+  "warDataClanLevel": "Klánszint",
+  "@warDataClanLevel": {
+    "description": "Label for clan level"
+  },
+  "warDataTotalStars": "Összes csillag",
+  "@warDataTotalStars": {
+    "description": "Label for total stars earned"
+  },
+  "warDataDestructionPercentage": "Pusztítás %",
+  "@warDataDestructionPercentage": {
+    "description": "Label for destruction percentage"
+  },
+  "warInformationTitle": "Háborús információk",
+  "@warInformationTitle": {
+    "description": "Title for war information section in attack details"
+  },
+  "warResultsTitle": "Háborús eredmények",
+  "@warResultsTitle": {
+    "description": "Title for war results section showing clan vs opponent"
+  },
+  "warPlayersTitle": "Játékosok",
+  "@warPlayersTitle": {
+    "description": "Title for players section showing attacker and defender info"
+  },
+  "performanceAnalysisFailedAttacks": "Sikertelen támadások (0–1 csillag)",
+  "@performanceAnalysisFailedAttacks": {
+    "description": "Performance analysis preset for failed attacks"
+  },
+  "performanceAnalysisFailedAttacksDesc": "Azokat a támadásokat mutatja, amelyek nem értek el legalább 2 csillagot",
+  "@performanceAnalysisFailedAttacksDesc": {
+    "description": "Description for failed attacks analysis"
+  },
+  "performanceAnalysisMissedPerfects": "Elmaradt tökéletes támadások",
+  "@performanceAnalysisMissedPerfects": {
+    "description": "Performance analysis preset for missed perfect attacks"
+  },
+  "performanceAnalysisMissedPerfectsDesc": "A 2 csillagos támadásokat mutatja – lehetséges tökéletes támadási lehetőségek",
+  "@performanceAnalysisMissedPerfectsDesc": {
+    "description": "Description for missed perfect attacks analysis"
+  },
+  "performanceAnalysisThAttackIssues": "Kevés csillag TH{thLevel} ellen",
+  "@performanceAnalysisThAttackIssues": {
+    "description": "Performance analysis preset for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThAttackIssuesDesc": "Az alacsony csillagszámú támadásokat mutatja TH{thLevel} ellen",
+  "@performanceAnalysisThAttackIssuesDesc": {
+    "description": "Description for low-star attacks against specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssues": "Sebezhető TH{thLevel} ellen",
+  "@performanceAnalysisThDefenseIssues": {
+    "description": "Performance analysis preset for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisThDefenseIssuesDesc": "Megmutatja, amikor TH{thLevel} támadók magas csillagszámot érnek el ellened",
+  "@performanceAnalysisThDefenseIssuesDesc": {
+    "description": "Description for defensive vulnerabilities to specific TH levels",
+    "placeholders": {
+      "thLevel": {
+        "type": "int",
+        "description": "Town Hall level"
+      }
+    }
+  },
+  "performanceAnalysisCwlIssues": "Alacsony CWL-teljesítmény",
+  "@performanceAnalysisCwlIssues": {
+    "description": "Performance analysis preset for low CWL performance"
+  },
+  "performanceAnalysisCwlIssuesDesc": "Azokat a CWL-támadásokat mutatja, amelyek csillagátlaga alacsonyabb a normál háborúknál",
+  "@performanceAnalysisCwlIssuesDesc": {
+    "description": "Description for low CWL performance analysis"
+  },
+  "performanceAnalysisRandomWarIssues": "Alacsony teljesítmény véletlen háborúban",
+  "@performanceAnalysisRandomWarIssues": {
+    "description": "Performance analysis preset for low random war performance"
+  },
+  "performanceAnalysisRandomWarIssuesDesc": "Azokat a véletlen háborús támadásokat mutatja, amelyek csillagátlaga alacsonyabb a CWL-nél",
+  "@performanceAnalysisRandomWarIssuesDesc": {
+    "description": "Description for low random war performance analysis"
+  },
+  "performanceAnalysisFreshOnly": "Első támadások elemzése",
+  "@performanceAnalysisFreshOnly": {
+    "description": "Performance analysis preset for fresh attacks only"
+  },
+  "performanceAnalysisFreshOnlyDesc": "Csak az elsőként támadott bázisokon nyújtott teljesítményt elemzi",
+  "@performanceAnalysisFreshOnlyDesc": {
+    "description": "Description for fresh attack analysis"
+  },
+  "performanceAnalysisRecentPerformance": "Legutóbbi teljesítmény (30 nap)",
+  "@performanceAnalysisRecentPerformance": {
+    "description": "Performance analysis preset for recent performance"
+  },
+  "performanceAnalysisRecentPerformanceDesc": "Megmutatja a legutóbbi teljesítményt az aktuális trendek felismeréséhez",
+  "@performanceAnalysisRecentPerformanceDesc": {
+    "description": "Description for recent performance analysis"
+  },
+  "performanceAnalysisHighStakes": "Nagy tétű támadások",
+  "@performanceAnalysisHighStakes": {
+    "description": "Performance analysis preset for high-stakes attacks"
+  },
+  "performanceAnalysisHighStakesDesc": "Megjeleníti az első 5 háborús pozícióból indított támadásokat",
+  "@performanceAnalysisHighStakesDesc": {
+    "description": "Description for high-stakes attacks analysis"
+  },
+  "performanceAnalysisCleanupCrew": "Takarító támadások",
+  "@performanceAnalysisCleanupCrew": {
+    "description": "Performance analysis preset for cleanup attacks"
+  },
+  "performanceAnalysisCleanupCrewDesc": "Megjeleníti az alacsonyabb háborús pozíciókból indított támadásokat",
+  "@performanceAnalysisCleanupCrewDesc": {
+    "description": "Description for cleanup attacks analysis"
+  },
+  "performanceRatingNeedsImprovement": "Fejlesztésre szorul",
+  "@performanceRatingNeedsImprovement": {
+    "description": "Needs improvement performance rating"
+  },
+  "performanceStrengthHighThreeStarRate": "Magas háromcsillagos arány",
+  "@performanceStrengthHighThreeStarRate": {
+    "description": "Strength area: high three-star rate"
+  },
+  "performanceStrengthHighDestruction": "Magas pusztítás",
+  "@performanceStrengthHighDestruction": {
+    "description": "Strength area: high destruction percentage"
+  },
+  "performanceStrengthConsistentPerformance": "Következetes teljesítmény",
+  "@performanceStrengthConsistentPerformance": {
+    "description": "Strength area: consistent performance"
+  },
+  "performanceImprovementThreeStarConsistency": "Háromcsillagos következetesség",
+  "@performanceImprovementThreeStarConsistency": {
+    "description": "Improvement area: three-star consistency"
+  },
+  "performanceImprovementOverallStarPerformance": "Összesített csillagteljesítmény",
+  "@performanceImprovementOverallStarPerformance": {
+    "description": "Improvement area: overall star performance"
+  },
+  "presetSuggestionCwlOnly": "Csak CWL",
+  "@presetSuggestionCwlOnly": {
+    "description": "Preset suggestion for CWL wars only"
+  },
+  "presetSuggestionRandomWars": "Véletlen háborúk",
+  "@presetSuggestionRandomWars": {
+    "description": "Preset suggestion for random wars"
+  },
+  "presetSuggestionFriendlyWars": "Barátságos háborúk",
+  "@presetSuggestionFriendlyWars": {
+    "description": "Preset suggestion for friendly wars"
+  },
+  "presetSuggestionStarOnly": "Csak {count} csillag",
+  "@presetSuggestionStarOnly": {
+    "description": "Preset suggestion for specific star count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionPerfectAttacks": "Tökéletes támadások",
+  "@presetSuggestionPerfectAttacks": {
+    "description": "Preset suggestion for perfect attacks"
+  },
+  "presetSuggestionFailedAttacks": "Sikertelen támadások",
+  "@presetSuggestionFailedAttacks": {
+    "description": "Preset suggestion for failed attacks"
+  },
+  "presetSuggestionThOnly": "Csak TH{level}",
+  "@presetSuggestionThOnly": {
+    "description": "Preset suggestion for specific town hall level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "presetSuggestionLastWeek": "Múlt hét",
+  "@presetSuggestionLastWeek": {
+    "description": "Preset suggestion for last week timeframe"
+  },
+  "presetSuggestionLastMonth": "Múlt hónap",
+  "@presetSuggestionLastMonth": {
+    "description": "Preset suggestion for last month timeframe"
+  },
+  "presetSuggestionMyPreset": "Saját előbeállítás",
+  "@presetSuggestionMyPreset": {
+    "description": "Default preset suggestion"
+  },
+  "presetSuggestionCustomFilter": "Egyéni szűrő",
+  "@presetSuggestionCustomFilter": {
+    "description": "Default custom filter suggestion"
+  },
+  "presetSuggestionRecentFilter": "Legutóbbi szűrő",
+  "@presetSuggestionRecentFilter": {
+    "description": "Default recent filter suggestion"
+  },
+  "generalError": "Hiba",
+  "generalSuccess": "Siker",
+  "generalFailed": "Sikertelen",
+  "generalMinimum": "Minimális érték",
+  "generalMaximum": "Maximális érték",
+  "generalHigh": "Magas",
+  "generalLow": "Alacsony",
+  "generalPoor": "Gyenge",
+  "generalOpen": "Nyitott",
+  "generalClosed": "Zárt",
+  "generalAvailable": "Elérhető",
+  "authErrorUserCancelledDiscordLogin": "A felhasználó megszakította a Discord bejelentkezést.",
+  "authErrorDiscordLoginFailed": "A Discord bejelentkezés sikertelen. Próbáld újra.",
+  "authErrorEmailLoginFailed": "Az e-mailes bejelentkezés sikertelen. Ellenőrizd az adataidat.",
+  "authErrorEmailNotVerified": "Az e-mail címed nincs megerősítve. Ellenőrizd az e-mailt, és add meg az ellenőrző kódot.",
+  "authErrorEmailVerificationFailed": "Az e-mail ellenőrzése sikertelen. A token érvénytelen vagy lejárt lehet.",
+  "authErrorDiscordLinkFailed": "Nem sikerült összekapcsolni a Discord fiókot. Lehet, hogy már egy másik fiókhoz van kapcsolva.",
+  "authErrorEmailLinkFailed": "Nem sikerült összekapcsolni az e-mail fiókot. Az e-mail már használatban lehet.",
+  "authErrorUserNotAuthenticated": "A felhasználó nincs hitelesítve. Jelentkezz be újra.",
+  "apiErrorInvalidJsonResponse": "Valami hiba történt. Próbáld újra.",
+  "@apiErrorInvalidJsonResponse": {
+    "description": "Error when API returns invalid JSON",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint that returned invalid JSON"
+      }
+    }
+  },
+  "apiErrorBadRequest": "Valami hiba történt. Ellenőrizd a megadott adatokat.",
+  "@apiErrorBadRequest": {
+    "description": "API bad request error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorUnauthorized": "Nincs jogosultságod. Jelentkezz be újra.",
+  "@apiErrorUnauthorized": {
+    "description": "API unauthorized error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorForbidden": "Nincs engedélyed a művelet végrehajtására.",
+  "@apiErrorForbidden": {
+    "description": "API forbidden error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorNotFound": "Nem találtuk, amit kerestél.",
+  "@apiErrorNotFound": {
+    "description": "API not found error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorRateLimit": "Túl sok kérés. Próbáld újra később.",
+  "@apiErrorRateLimit": {
+    "description": "API rate limit error",
+    "placeholders": {
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorServer": "A szerver átmenetileg nem elérhető. Próbáld újra hamarosan.",
+  "@apiErrorServer": {
+    "description": "API server error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "endpoint": {
+        "type": "String",
+        "description": "API endpoint"
+      }
+    }
+  },
+  "apiErrorGeneric": "Váratlan hiba történt. Próbáld újra.",
+  "@apiErrorGeneric": {
+    "description": "Generic API error",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      },
+      "details": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "apiErrorNetworkConnection": "Nincs internetkapcsolat. Ellenőrizd a hálózatot, és próbáld újra.",
+  "apiErrorTimeout": "A kérés időtúllépés miatt megszakadt. Próbáld újra.",
+  "apiErrorInvalidFormat": "Érvénytelen válaszformátum. Próbáld újra.",
+  "apiErrorOperationFailed": "Nem tudtuk teljesíteni a kérésedet. Próbáld újra.",
+  "@apiErrorOperationFailed": {
+    "description": "Generic operation failed error",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorNetworkOperation": "Úgy tűnik, offline vagy. Ellenőrizd a kapcsolatot, és próbáld újra.",
+  "@apiErrorNetworkOperation": {
+    "description": "Network error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorTimeoutOperation": "A kérés túl sokáig tartott. Próbáld újra.",
+  "@apiErrorTimeoutOperation": {
+    "description": "Timeout error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorDataFormatOperation": "Hiba történt az adatok feldolgozása közben. Próbáld újra.",
+  "@apiErrorDataFormatOperation": {
+    "description": "Data format error during specific operation",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "description": "The operation that failed"
+      }
+    }
+  },
+  "apiErrorConfigLoadFailed": "Nem tudtuk betölteni az alkalmazás beállításait ({statusCode} hiba). Próbáld újra.",
+  "@apiErrorConfigLoadFailed": {
+    "description": "Error loading app config",
+    "placeholders": {
+      "statusCode": {
+        "type": "int",
+        "description": "HTTP status code"
+      }
+    }
+  },
+  "apiErrorConfigException": "Hiba a konfiguráció szerverről való betöltésekor",
+  "@apiErrorConfigException": {
+    "description": "Exception while loading config",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "gameItemHousingSpace": "Lakóhely",
+  "gameItemAttackSpeed": "Támadási sebesség",
+  "gameItemAttackRange": "Támadási hatótáv",
+  "gameItemMovementSpeed": "Mozgási sebesség",
+  "gameItemWardenWeight": "Őrzősúly",
+  "@gameItemWardenWeight": {
+    "description": "Grand Warden follow-priority weight for a game item"
+  },
+  "gameItemWardenWeightTooltip": "Az őrzősúly felülírhatja a férőhelyet, és meghatározza, mennyire részesíti előnyben a Nagy Őrző egy egységcsoport követését.",
+  "@gameItemWardenWeightTooltip": {
+    "description": "Explains how Warden weight affects Grand Warden follow priority"
+  },
+  "gameItemHealerWeight": "Gyógyítósúly",
+  "@gameItemHealerWeight": {
+    "description": "Healer targeting-priority weight for a game item"
+  },
+  "gameItemHealerWeightTooltip": "A gyógyítósúly felülírhatja a férőhelyet, amikor a Gyógyítók eldöntik, mely egységeket részesítsék előnyben.",
+  "@gameItemHealerWeightTooltip": {
+    "description": "Explains how Healer weight affects targeting priority"
+  },
+  "gameItemWardenThresholdCopies": "{count, plural, =1{1 egység a követési küszöbhöz} other{{count} egység a követési küszöbhöz}}",
+  "@gameItemWardenThresholdCopies": {
+    "description": "Number of copies needed to reach the Grand Warden follow threshold",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemWardenNoThresholdContribution": "Nem számít bele a követési küszöbbe",
+  "@gameItemWardenNoThresholdContribution": {
+    "description": "Shown when an item's zero Warden weight adds nothing to the follow threshold"
+  },
+  "gameItemUpgradeResource": "Fejlesztési erőforrás",
+  "gameItemRarity": "Ritkaság",
+  "gameItemHero": "Hős",
+  "gameItemDps": "DPS",
+  "gameItemHitpoints": "HP",
+  "gameItemHealOnActivation": "Gyógyítás",
+  "gameItemTargets": "Célpontok",
+  "gameItemTargetsGround": "Földi",
+  "gameItemTargetsAir": "Légi",
+  "gameItemFlying": "Repülő",
+  "gameItemUpgradeCost": "Fejlesztési költség",
+  "gameItemUpgradeTime": "Fejlesztési idő",
+  "gameItemRemainingToTownHallMax": "TH max",
+  "@gameItemRemainingToTownHallMax": {
+    "description": "Label for remaining upgrades to the player's current Town Hall max"
+  },
+  "gameItemRemainingToGlobalMax": "A globális max",
+  "@gameItemRemainingToGlobalMax": {
+    "description": "Label for remaining upgrades to global max"
+  },
+  "gameItemLevelsLeft": "{count} szint(ek) maradt",
+  "@gameItemLevelsLeft": {
+    "description": "Number of remaining item levels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gameItemOverview": "Áttekintés",
+  "@gameItemOverview": {
+    "description": "Section title for item description"
+  },
+  "gameItemStats": "Statisztika",
+  "@gameItemStats": {
+    "description": "Section title for item stats"
+  },
+  "gameItemNextUpgrade": "Következő frissítés",
+  "@gameItemNextUpgrade": {
+    "description": "Section title for the next item upgrade"
+  },
+  "gameItemUpgradePlan": "Frissítési terv",
+  "@gameItemUpgradePlan": {
+    "description": "Section title for remaining upgrade totals"
+  },
+  "gameItemUpgradeDataUnavailable": "Nem állnak rendelkezésre frissítési adatok",
+  "@gameItemUpgradeDataUnavailable": {
+    "description": "Shown when static upgrade cost/time data is missing"
+  },
+  "notifScopeSelected": "Kiválasztott",
+  "@notifScopeSelected": {
+    "description": "Notification scope: only selected accounts"
+  },
+  "settingsPreferences": "Beállítások",
+  "@settingsPreferences": {
+    "description": "Settings section: general preferences"
+  },
+  "settingsNotificationsTitle": "Értesítések",
+  "@settingsNotificationsTitle": {
+    "description": "Settings tile: notifications title"
+  },
+  "settingsNotificationsSubtitle": "Válassza ki a figyelmeztetéseket, és küldjön helyi tesztelőnézeteket.",
+  "@settingsNotificationsSubtitle": {
+    "description": "Settings tile: notifications subtitle"
+  },
+  "settingsSupport": "Támogatás",
+  "@settingsSupport": {
+    "description": "Settings section: support"
+  },
+  "settingsAbout": "Körülbelül",
+  "@settingsAbout": {
+    "description": "Settings section: about"
+  },
+  "settingsAccount": "fiók",
+  "@settingsAccount": {
+    "description": "Settings section: account"
+  },
+  "settingsSignedIn": "Bejelentkezve",
+  "@settingsSignedIn": {
+    "description": "Settings tile subtitle when signed in with Discord"
+  },
+  "settingsAppearance": "Megjelenés",
+  "@settingsAppearance": {
+    "description": "Theme mode selection bottom sheet title"
+  },
+  "settingsThemeSystem": "Rendszer",
+  "@settingsThemeSystem": {
+    "description": "Theme mode: system default"
+  },
+  "settingsThemeMatchDevice": "Párosítsa ezt az eszközt",
+  "@settingsThemeMatchDevice": {
+    "description": "Theme mode system subtitle"
+  },
+  "settingsThemeLight": "Fény",
+  "@settingsThemeLight": {
+    "description": "Theme mode: light"
+  },
+  "settingsThemeDark": "Sötét",
+  "@settingsThemeDark": {
+    "description": "Theme mode: dark"
+  },
+  "settingsThemeSelected": "Kiválasztott",
+  "@settingsThemeSelected": {
+    "description": "Trailing text shown on the currently selected theme mode tile"
+  },
+  "notifNoAccountsLoadedYet": "Még nincs betöltve összekapcsolt fiók.",
+  "@notifNoAccountsLoadedYet": {
+    "description": "Message shown when no CoC accounts are loaded in notification settings"
+  },
+  "notifNoAccountsSelected": "Nincsenek kiválasztott fiókok",
+  "@notifNoAccountsSelected": {
+    "description": "Summary when no accounts are selected for notifications"
+  },
+  "notifAccountsSelected": "{count} fiókok kiválasztva",
+  "@notifAccountsSelected": {
+    "description": "Summary of how many accounts are selected for notifications",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "searchRecent": "Legutóbbi",
+  "@searchRecent": {
+    "description": "Section heading for recent search results"
+  },
+  "searchTabPlayers": "Játékosok",
+  "@searchTabPlayers": {
+    "description": "Search mode tab: players"
+  },
+  "searchTabClans": "klánok",
+  "@searchTabClans": {
+    "description": "Search mode tab: clans"
+  },
+  "searchClear": "Világos",
+  "@searchClear": {
+    "description": "Tooltip for the clear icon button in search"
+  },
+  "warStatsRefreshSuccess": "Az adatok sikeresen frissítve",
+  "@warStatsRefreshSuccess": {
+    "description": "SnackBar message when war stats data is refreshed successfully"
+  },
+  "warStatsRefreshFailed": "Nem sikerült frissíteni az adatokat: {error}",
+  "@warStatsRefreshFailed": {
+    "description": "SnackBar message when war stats data refresh fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsFilterFailed": "Nem sikerült betölteni a szűrt adatokat: {error}",
+  "@warStatsFilterFailed": {
+    "description": "SnackBar message when filtered war stats data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "warStatsExportFailed": "Az exportálás sikertelen: {error}",
+  "@warStatsExportFailed": {
+    "description": "SnackBar message when war stats export fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportLabelPlayer": "Játékos",
+  "@exportLabelPlayer": {
+    "description": "Export dialog info row label: player name"
+  },
+  "exportLabelFormat": "Formátum",
+  "@exportLabelFormat": {
+    "description": "Export dialog info row label: file format"
+  },
+  "exportLabelExcel": "Excel (.xlsx)",
+  "@exportLabelExcel": {
+    "description": "Export dialog info row value: Excel format"
+  },
+  "exportLabelIncludes": "Tartalmazza",
+  "@exportLabelIncludes": {
+    "description": "Export dialog info row label: what is included"
+  },
+  "exportLabelContent": "Statisztikák, támadások, TH elemzés",
+  "@exportLabelContent": {
+    "description": "Export dialog info row value: content description"
+  },
+  "accountNoUserData": "Nem állnak rendelkezésre felhasználói adatok",
+  "@accountNoUserData": {
+    "description": "Message shown when authenticated user data is null"
+  },
+  "accountsMenuTitle": "Fiókok",
+  "@accountsMenuTitle": {
+    "description": "Header label in the account dropdown menu in the app bar"
+  },
+  "searchErrorPlayerLoadFailed": "Nem sikerült betölteni a játékos adatait.",
+  "@searchErrorPlayerLoadFailed": {
+    "description": "Error when player data fails to load from search"
+  },
+  "searchErrorClanLoadFailed": "Nem sikerült betölteni a klán adatait.",
+  "@searchErrorClanLoadFailed": {
+    "description": "Error when clan data fails to load from search"
+  },
+  "todoNoMatchingAccounts": "Nincs egyező fiók",
+  "todoNoConfiguredAccounts": "Nincs beállítva teendőfiók",
+  "todoNoLinkedAccounts": "Nincsenek összekapcsolt fiókok",
+  "todoNoAccountsNeedAction": "A fiókok nem igényelnek beavatkozást",
+  "todoNoCompletedAccounts": "Nincsenek befejezett fiókok",
+  "todoNoBookmarkedAccounts": "Nincsenek könyvjelzővel ellátott fiókok",
+  "todoTryAnotherSearchOrFilter": "Próbálkozzon másik kereséssel vagy szűrővel.",
+  "clanJoinLeaveNoDataTitle": "Nincsenek csatlakozási/kilépési adatok",
+  "clanJoinLeaveNoDataBody": "A legutóbbi névsormozgás itt jelenik meg a nyomkövetési adatok betöltésekor.",
+  "clanJoinLeaveNoRecentMovementTitle": "Nincs közelmúltbeli mozgás",
+  "clanJoinLeaveNoRecentMovementBody": "Az összefoglaló betöltődik, de az eseménylista üres.",
+  "capitalRaidMembersAttackLogFallback": "Ezen a raidhétvégén nem küldjük vissza a taglistát. Ehelyett a támadásnapló statisztikái jelennek meg.",
+  "capitalRaidMembersNoPlayerData": "Nem küldenek vissza játékos szintű adatokat erre a raidhétvégére. Az API csak a kerületi és az ellenfél összesítését tartalmazza.",
+  "capitalRaidMembersNoIndividualData": "Ehhez a raidhez nem áll rendelkezésre játékoslista vagy egyéni támadás.",
+  "dashboardNoLinkedAccountsTitle": "Nincsenek összekapcsolt fiókok",
+  "dashboardNoLinkedAccountsBody": "Kapcsoljon össze egy Clash-fiókot a támadások, események és tevékenységek megtekintéséhez.",
+  "dashboardTodoHiddenTitle": "Itt egyetlen fiók sem látható",
+  "dashboardTodoHiddenBody": "Kapcsold be az egyik kezdőlapkártyát (teendők, Fejlesztéskövető, Rangsorolt) a fiókhoz a Játékosok lapon, hogy itt megjelenjen.",
+  "dashboardUpgradeTrackerNoData": "Nyisd meg a követőt a fejlesztési adatok importálásához vagy frissítéséhez.",
+  "dashboardUpgradeTrackerNeedsUpdate": "{subject} {count, plural, one {frissítést igényel} other {frissítést igényelnek}}",
+  "@dashboardUpgradeTrackerNeedsUpdate": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAccountsHaveTasksLeft": "{subject} {count, plural, one {fióknak maradt feladata} other {fióknak maradtak feladatai}}",
+  "@todoAccountsHaveTasksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardRankedAccountsHaveAttacksLeft": "{subject} {count, plural, one {fióknak maradt támadása} other {fióknak maradtak támadásai}}",
+  "@dashboardRankedAccountsHaveAttacksLeft": {
+    "placeholders": {
+      "subject": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardUpgradeTrackerTimeLeft": "Becsült",
+  "dashboardUpgradeTrackerBuilders": "Építők",
+  "dashboardUpgradeTrackerLab": "Labor",
+  "dashboardUpgradeTrackerPets": "Hősállatok",
+  "dashboardUpgradeTrackerWalls": "Falak",
+  "dashboardUpgradeTrackerVillage": "Falu",
+  "dashboardRankedNoData": "Nyisd meg a Rangsorolt Ligát a fiók helyezésének megtekintéséhez.",
+  "dashboardRankedAccounts": "Követett fiókok: {loaded}/{total}",
+  "@dashboardRankedAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "playersNoBookmarkedTitle": "Még nincsenek könyvjelzővel ellátott játékosok",
+  "playersNoBookmarkedBody": "Nyisson meg egy játékos profilt, és mentse el későbbre.",
+  "playersNoLinkedBody": "Kezelje a fiókokat a fiókbeállítási képernyőn.",
+  "navigationHome": "Otthon",
+  "drawerFollowers": "Követők",
+  "drawerFollowersHelp": "Azok az emberek, akik könyvjelzővel látták el valamelyik igazolt összekapcsolt fiókját.",
+  "drawerCalculators": "Számológépek",
+  "drawerSubscription": "Előfizetés",
+  "drawerUpgradeTracker": "Frissítse a Trackert",
+  "drawerBasesArmies": "Bázisok és hadseregek",
+  "drawerGameAssets": "Játékeszközök",
+  "drawerManageAccounts": "Fiókok kezelése",
+  "playersLinked": "Összekapcsolva",
+  "playersBookmarked": "Könyvjelzővel ellátva",
+  "searchGlobalHint": "Keressen játékosokat vagy klánokat",
+  "tooltipDecreaseMinimumMembers": "Csökkentse a minimális taglétszámot",
+  "tooltipIncreaseMinimumMembers": "Növelje a minimális taglétszámot",
+  "tooltipDecreaseMaximumMembers": "Csökkentse a maximális létszámot",
+  "tooltipIncreaseMaximumMembers": "A maximális létszám növelése",
+  "tooltipDecreaseMinimumClanPoints": "Csökkentse a minimális klánpontokat",
+  "tooltipIncreaseMinimumClanPoints": "Növelje a minimális klánpontokat",
+  "tooltipDecreaseMinimumClanLevel": "Csökkentse a minimális klánszintet",
+  "tooltipIncreaseMinimumClanLevel": "Növelje a minimális klánszintet",
+  "tooltipShowChart": "Diagram megjelenítése",
+  "tooltipShowTable": "Táblázat megjelenítése",
+  "tooltipDismissMessage": "Üzenet elvetése",
+  "tooltipShowPassword": "Jelszó megjelenítése",
+  "tooltipHidePassword": "Jelszó elrejtése",
+  "tooltipRemoveAccount": "Fiók eltávolítása",
+  "calculatorsTitle": "Számológépek",
+  "calculatorsSubtitle": "Tervezd meg a sebzést az épületek jelenlegi szintjeihez.",
+  "calculatorZapQuake": "Zap rengés",
+  "calculatorFireball": "Tűzgömb",
+  "damageCalculatorSubtitle": "Hasonlíts össze egy támadó-összeállítást több épülettel.",
+  "damageNoStaticDataTitle": "A sebzési adatok nem érhetők el",
+  "damageNoStaticDataBody": "Frissítsd az alkalmazást, miután a statikus játékadatok betöltődtek.",
+  "damageTownHall": "Városháza",
+  "damageVerifiedAccountPrefill": "Igazolt fiók előbeállítása",
+  "damageOverridesStayLocal": "Az itt végzett módosítások nem frissítik a játékos fiókját.",
+  "damageTargets": "Épületek",
+  "damageAddBuilding": "Épület hozzáadása",
+  "damageRemoveBuilding": "Épület eltávolítása",
+  "damageNoTargetsBody": "Az eredmények összehasonlításához adj hozzá legalább egy épületet.",
+  "damageHitpoints": "{hitpoints} életerő",
+  "@damageHitpoints": {
+    "placeholders": {
+      "hitpoints": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSearchBuildings": "Épületek keresése",
+  "damageNoBuildingsFound": "Nem található épület",
+  "damageTryAnotherSearch": "Próbálj másik nevet vagy Városháza-szintet.",
+  "damageAttackStack": "Kézi támadó-összeállítás",
+  "damageNoSourcesForTownHall": "Ehhez a Városházához nem érhető el támogatott sebzésforrás.",
+  "damageCount": "Darabszám",
+  "damagePerUse": "{damage} sebzés használatonként",
+  "@damagePerUse": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "damageEarthquakePercent": "A maximális életerő {percent}%-a, halmozáskor csökken",
+  "@damageEarthquakePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "damageSourceLightning": "Villám",
+  "damageSourceEarthquake": "Földrengés",
+  "damageSourceGiantArrow": "Óriásnyíl",
+  "damageSourceFireball": "Tűzgömb",
+  "damageSourceFlameFlinger": "Lángvető találata",
+  "damageSourceBalloonDeath": "Léggömb pusztulási sebzése",
+  "damageSourceRocketBalloonDeath": "Rakétás Léggömb pusztulási sebzése",
+  "damageResults": "Eredmények",
+  "damageDestroyed": "Elpusztult",
+  "damageSurvives": "Túléli",
+  "damageResultSummary": "{damage} sebzés · {remaining} életerő maradt",
+  "@damageResultSummary": {
+    "placeholders": {
+      "damage": {
+        "type": "String"
+      },
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "damageZapQuakeOptimizer": "Villám–Földrengés optimalizáló",
+  "damageSpellCapacity": "Varázslatkapacitás",
+  "damageZapQuakeUnavailable": "A Villám és a Földrengés nem érhető el ezen a Városháza-szinten.",
+  "damageZapQuakeUsesSelectedLevels": "{lightningLevel}. szintű Villám és {earthquakeLevel}. szintű Földrengés használata.",
+  "@damageZapQuakeUsesSelectedLevels": {
+    "placeholders": {
+      "lightningLevel": {
+        "type": "int"
+      },
+      "earthquakeLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "damageZapQuakeIneligible": "A Villám és a Földrengés nem sebezheti ezt a raktárt.",
+  "damageNoValidZapQuake": "Egyetlen érvényes kombináció sem fér el a kiválasztott varázslatkapacitásban.",
+  "damageZapQuakeCombination": "{lightning} villám + {earthquake} földrengés · {capacity} hely",
+  "@damageZapQuakeCombination": {
+    "placeholders": {
+      "lightning": {
+        "type": "int"
+      },
+      "earthquake": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerTitle": "Frissítse a Trackert",
+  "upgradeTrackerSubtitle": "Fennmaradó frissítési költség és idő.",
+  "linkedAccountLabel": "Kapcsolt fiók",
+  "noLinkedPlayersLoadedTitle": "Nincsenek kapcsolt játékosok betöltve",
+  "noLinkedPlayersLoadedBody": "Adjon hozzá vagy frissítsen összekapcsolt fiókokat a frissítések összegének megtekintéséhez.",
+  "playerOptionNotificationsTitle": "Értesítések",
+  "playerOptionNotificationsSubtitle": "Értesítések kérése ehhez a fiókhoz.",
+  "playerOptionNotificationsEnableMaster": "Kapcsold be az értesítéseket a fiók riasztásainak beállításához.",
+  "playerOptionNotificationsVerifyFirst": "Az értesítések bekapcsolásához igazold ezt a fiókot.",
+  "playerOptionNotificationsSubscriptionRequired": "A fiók értesítéseihez aktív előfizetés szükséges.",
+  "playerOptionNotificationsLimitReached": "Elérted az előfizetésedben értesítésekhez engedélyezett fiókok számát.",
+  "playerOptionShowTodoPageTitle": "Megjelenítés a teendők oldalon",
+  "playerOptionShowTodoPageSubtitle": "Vegye fel ezt a fiókot a teljes feladatlistába.",
+  "playerOptionShowTodoPageVerifyFirst": "Igazold ezt a fiókot, hogy megjelenjen a teendők oldalán.",
+  "playerOptionShowUpgradeTrackerHomeTitle": "Fejlesztéskövető megjelenítése a Kezdőlapon",
+  "playerOptionShowUpgradeTrackerHomeSubtitle": "Rögzítsd a fiók fejlesztési összefoglalóját a Kezdőlapon.",
+  "playerOptionShowUpgradeTrackerHomeVerifyFirst": "Igazold ezt a fiókot, hogy a fejlesztési haladása megjelenjen a Kezdőlapon.",
+  "playerOptionShowRankedHomeTitle": "Rangsorolt adatok megjelenítése a Kezdőlapon",
+  "playerOptionShowRankedHomeSubtitle": "Rögzítsd a fiók Rangsorolt Liga-összefoglalóját a Kezdőlapon.",
+  "playerOptionShowRankedHomeVerifyFirst": "Igazold ezt a fiókot, hogy a Rangsorolt Liga-összefoglalója megjelenjen a Kezdőlapon.",
+  "playerOptionShowWarTabTitle": "Megjelenítés a Háború lapon",
+  "playerOptionShowWarTabSubtitle": "Vegye fel ennek a fióknak a klánját a Háború lapra.",
+  "bookmarkPlayerLoadFailed": "Nem sikerült betölteni a könyvjelzővel ellátott lejátszót.",
+  "warNoLinkedOrBookmarked": "Nincs megjeleníthető linkelt vagy könyvjelzővel ellátott klánháború.",
+  "warWidgetRefreshData": "Frissítse a háborús adatokat",
+  "warWidgetNoData": "Nem állnak rendelkezésre háborús adatok",
+  "warWidgetLastUpdated": "Utolsó frissítés: {time}",
+  "todoEventClanGames": "Klán játékok",
+  "todoEventCwl": "CWL",
+  "todoEventSeasonEnds": "Véget ér a szezon",
+  "todoEventLeagueReset": "Liga visszaállítása",
+  "todoEventRaidWeekend": "Raid hétvége",
+  "todoMagicDispatch": "Mágikus küldetés",
+  "todoMagicDispatchDescription": "Koppintson a legújabb ClashKing frissítésért",
+  "todoUseCodeClashKing": "Használja a ClashKing kódot",
+  "todoUseCodeClashKingDescription": "Támogassa a projektet a Supercell Store-ban",
+  "todoLegendAttacks": "Legenda támadások",
+  "todoWarAttacks": "Háborús támadások",
+  "todoCwlAttacks": "CWL támadások",
+  "gameSeasonPassShort": "Bérlet",
+  "todoMockMaxedMainName": "Maxolt főfiók",
+  "todoMockMaxedMainSubtitle": "TH17 · minden aktív",
+  "todoMockMaxedMainStatus": "Aktív most · teljes napi ellenőrzőlista",
+  "todoMockLegend5Left": "5 maradt ma",
+  "todoMockWar1Left": "1 maradt",
+  "todoMockCwl1LeftRound": "1 távozott ebből a körből",
+  "todoMockClanGames2700Left": "2,7 ezer pont maradt",
+  "todoMockPass850Left": "850 pont maradt",
+  "todoMockWarAltName": "Háborús alt",
+  "todoMockWarAltSubtitle": "TH15 · háború fókuszú",
+  "todoMockWar2Left": "2 maradt",
+  "todoMockClanGames900Left": "900 pont maradt",
+  "todoMockLegendPushName": "Legend push",
+  "todoMockLegendPushSubtitle": "TH16 · napi rohamok",
+  "todoMockLegendPushStatus": "Aktív 1 órája · Legendák és haladások",
+  "todoMockLegend2Left": "2 maradt ma",
+  "todoMockOnPace": "ütemben",
+  "todoMockCaughtUpName": "Felkapott",
+  "todoMockCaughtUpSubtitle": "TH14 · nincsenek nyitott feladatok",
+  "todoMockCaughtUpStatus": "Ma aktív · nincs szükség teendőre",
+  "notifChooseAlerts": "Válassza ki a figyelmeztetéseket",
+  "notifGroupLegendAttacks": "Legend Liga-támadások",
+  "notifLegendAttacksDescription": "Értesít, ha még maradt Legend Liga-támadásod.",
+  "notifGroupLegendDefenses": "Legend Liga-védések",
+  "notifLegendDefensesDescription": "Értesít az új Legend Liga-védésekről.",
+  "notifLeagueDefenseDescription": "Védelmi eredmények támadókkal, csillagokkal, százalékos arányokkal és bajnoki kontextussal.",
+  "notifWarAttackOptionsDescription": "Háborús támadások eredményei, védelmi riasztások és 5v5 támadási feed opciók.",
+  "notifWarAlertsDescription": "A háború megegyezett, megkezdődött a csata napja, és a háború véget ért.",
+  "notifWarRemindersDescription": "Egyéni emlékeztetők a háború vége előtt.",
+  "notifGroupRaidReminders": "Rajtaütési hétvége emlékeztetői",
+  "notifRaidRemindersDescription": "Egyetlen értesítést kaphatsz az ugyanabban a klánban lévő hitelesített fiókjaid hátralévő támadásairól.",
+  "notifDefensesAgainstYourBase": "Védelem a bázisod ellen",
+  "notifDefensesAgainstYourBaseDescription": "Csak olyan találatok, ahol ez a fiók védi.",
+  "notifAllAttacks": "Minden támadás",
+  "notifAllAttacksDescription": "Minden találat csak az 5v5 háborúkban.",
+  "notifThirtyMinutes": "30 perc",
+  "notifFifteenMinutes": "15 perc",
+  "notifSendTestNotification": "Tesztértesítés küldése",
+  "notifScheduledMessage": "Ütemezett: {title}",
+  "generalStartDate": "Kezdés dátuma",
+  "generalEndDate": "Befejezés dátuma",
+  "warFiltersAllWars": "Minden háború",
+  "warFiltersRandomWars": "Véletlen háborúk",
+  "warFiltersCwlWars": "CWL háborúk",
+  "warFiltersFriendlyWars": "Barátságos háborúk",
+  "warType": "Háborús típus",
+  "warFiltersAnyTownHall": "Bármilyen TH",
+  "gameTownHallLevelShort": "{level}. TH",
+  "warAttackerTownHall": "Támadó TH",
+  "warDefenderTownHall": "Védő TH",
+  "warStatsFilterSameTownHallOnly": "Csak ugyanaz a városháza",
+  "warStatsFilterSameTownHallDescription": "Csak azokat a támadásokat jelenítse meg, ahol a támadó és a védő azonos TH-szintű",
+  "generalAny": "Bármilyen",
+  "warStarsWithIcon": "{stars} ⭐",
+  "warStatsFilterMinStars": "Min csillagok",
+  "warStatsFilterMaxStars": "Max. csillagok",
+  "warStatsFilterMinDestructionPercent": "Minimális megsemmisítés %",
+  "warStatsFilterMaxDestructionPercent": "Maximális megsemmisítés %",
+  "warStatsFilterMinPosition": "Min. pozíció",
+  "warStatsFilterMaxPosition": "Max pozíció",
+  "warStatsFilterFreshAttacksOnly": "Csak friss támadások",
+  "warStatsFilterFreshAttacksDescription": "Minden bázison csak az első támadásokat jelenítse meg",
+  "warStatsFilterResultLimit": "Eredménykorlát",
+  "generalResultsCount": "{count} eredmények",
+  "notifEventsDescription": "Klánjátékok, CWL, Raid hétvége és szezonális események.",
+  "notifAnnouncementsDescription": "Alkalmazáson belüli bannerek és jövőbeli push értesítések ClashKing frissítésekhez.",
+  "notifUpgradeFinishesDescription": "Csapatok, hősök, petek, varázslatok, felszerelések és épületek.",
+  "notifSupportReminderDescription": "Havi emlékeztető a ClashKing támogatására.",
+  "notifDevicePushSetup": "Eszköz push beállítása",
+  "notifAccountScope": "Fiók hatóköre",
+  "notifTestNotification": "Tesztértesítés",
+  "settingsAppIcon": "Alkalmazásikon",
+  "settingsChanging": "Módosítás...",
+  "settingsAddWarWidget": "Háborús widget hozzáadása",
+  "settingsWarWidgetLinkClanFirst": "Először kapcsolj egy klánban lévő fiókot",
+  "settingsWarWidgetClanCount": "{count} klán elérhető",
+  "settingsWarWidgetIosInstructions": "Válassz klánt. A widget hozzáadása után tartsd nyomva, koppints a Widget szerkesztése lehetőségre, majd válaszd a Klánt.",
+  "settingsWarWidgetAndroidInstructions": "Válassz klánt, majd add hozzá a widgetet az Android widgetválasztójából.",
+  "settingsWarWidgetEmpty": "Jelenleg egyik összekapcsolt fiókod sincs klánban.",
+  "settingsWarWidgetIosFooter": "Adj hozzá több háborús widgetet, és mindegyikhez válassz másik klánt.",
+  "settingsWarWidgetIosReady": "{clanName} készen áll. Szerkeszd a widgetet, és válaszd ki a Klán alatt.",
+  "settingsWarWidgetAndroidReady": "A(z) {clanName} widgetadatai készen állnak.",
+  "settingsWarWidgetPrepareFailed": "A widget előkészítése sikertelen: {error}",
+  "generalDiscord": "Discord",
+  "settingsDiscordConnectedSubtitle": "Bothoz kapcsolt fiókok és Discord adatok",
+  "settingsDiscordSyncSubtitle": "Bothoz kapcsolt fiókok és Discord adatok szinkronizálása",
+  "settingsConnected": "Csatlakoztatva",
+  "settingsClashKingAccount": "ClashKing fiók",
+  "settingsEmailConnectedSubtitle": "Az e-mailes bejelentkezés csatlakoztatva",
+  "settingsEmailRecoverySubtitle": "Adj hozzá e-mailes bejelentkezést a fiók helyreállításához",
+  "playerOpenInGame": "Megnyitás a játékban",
+  "playerBookmarkRemove": "Játékos könyvjelző eltávolítása",
+  "playerBookmarkAdd": "Játékos könyvjelzőzése",
+  "playerBestTrophies": "Legjobb trófeák",
+  "clanLoadFailed": "A klán betöltése sikertelen.",
+  "gameItemLevels": "Szintek",
+  "resourceDarkElixir": "Sötét elixír",
+  "resourceBuilderElixir": "Építő elixír",
+  "resourceBuilderGold": "Építő arany",
+  "resourceElixir": "Elixír",
+  "resourceGold": "Arany",
+  "resourceGlowyOre": "Ragyogó érc",
+  "resourceStarryOre": "Csillagos érc",
+  "resourceShinyOre": "Fényes érc",
+  "resourceGeneric": "Erőforrás",
+  "seasonStatsGoldGrabbed": "Zsákmányolt arany",
+  "seasonStatsActivity": "Aktivitás",
+  "seasonStatsAttackWins": "Támadási győzelmek",
+  "seasonStatsTrophies": "Szezontrófeák",
+  "todoSearchAccountsHint": "Fiókok keresése",
+  "generalClearSearch": "Keresés törlése",
+  "clanCapitalAvgRewards": "Átl. jutalmak",
+  "clanCapitalAvgDistrictsPerWeek": "Átl. körzet/hét",
+  "clanCapitalTopAttackers": "Legjobb támadók",
+  "clanCapitalPlayersTracked": "{count} játékos követve",
+  "clanCapitalDefenseOverTime": "Védekezés időben",
+  "clanCapitalDistrictsTracked": "{count} körzet követve",
+  "clanCapitalSelectedRaid": "Kiválasztott raid",
+  "generalSummary": "Összegzés",
+  "generalBreakdown": "Bontás",
+  "clanPointsTitle": "Klánpontok",
+  "clanBuilderBasePoints": "Építőbázis-pontok",
+  "clanType": "Klántípus",
+  "clanRequiredTownHall": "Szükséges Városháza",
+  "clanRequiredTownHallOnly": "Csak {level}+",
+  "clanCapitalPoints": "Fővárospontok",
+  "todoAllAccounts": "Minden fiók",
+  "todoCombinedAcrossAccounts": "Összesített teendők a fiókjaidon",
+  "dashboardRankedCombinedAcrossAccounts": "Fiókjaid összesített rangsora",
+  "dashboardUpgradeTrackerCombinedAcrossAccounts": "Fiókjaid összesített fejlesztéskövetése",
+  "todoPreviewAccount": "Előnézeti fiók",
+  "todoLastActiveUnavailable": "Utolsó aktivitás nem elérhető",
+  "todoActiveRelative": "Aktív {time}",
+  "@todoActiveRelative": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todoCompleteLower": "kész",
+  "todoPointsLeftShort": "{points} pont maradt",
+  "@todoPointsLeftShort": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "todoItemsLeftShort": "{count} maradt",
+  "@todoItemsLeftShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todoAllCaughtUpForNow": "Egyelőre minden kész",
+  "timeDurationShort": "{unit, select, daysHours {{primary}n {secondary}ó} hoursMinutes {{primary}ó {secondary}p} other {{primary}p}}",
+  "todoEventEndsIn": "Véget ér {duration} múlva",
+  "@todoEventEndsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoEventStartsIn": "Kezdődik {duration} múlva",
+  "@todoEventStartsIn": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "todoRemainingUpgradeTooltip": "Koppints a hátralévő fejlesztési költségért és időért",
+  "announcementAnimeFuryTitle": "Anime Fury",
+  "announcementAnimeFurySubtitle": "Koppints végig a 2026. júniusi frissítésen",
+  "sideRankingsTitle": "Ranglisták",
+  "sideRankingsSubtitle": "Hivatalos ranglisták és ClashKing endpointok.",
+  "sideRankingsLoadError": "Nem sikerült betölteni a hivatalos ranglistákat.",
+  "sideRankingsEmptyTitle": "Nem érkezett ranglista",
+  "sideRankingsEmptyBody": "Próbálj másik ranglistát vagy helyet.",
+  "sideRankingsMockups": "ClashKing makettek",
+  "rankingsBuilderBase": "Építő Bázis",
+  "rankingsTownHall": "Városháza",
+  "rankingsRankedLeague": "Rangsorolt Liga",
+  "rankingsClanCapital": "Klán Főváros",
+  "rankingsDonations": "Adományok",
+  "rankingsWarWins": "Háborús győzelmek",
+  "rankingsWinStreak": "Győzelmi sorozat",
+  "rankingsCurrent": "Aktuális",
+  "rankingsWorldwide": "Világszerte",
+  "rankingsSelectLocation": "Hely kiválasztása",
+  "rankingsSearchLocations": "Helyek vagy országkódok keresése",
+  "rankingsWorldwideUnavailable": "Válassz régiót vagy országot ehhez a ranglistához.",
+  "rankingsLocationsLoadFailed": "A teljes helylista nem tölthető be. A világszintű nézet továbbra is elérhető, ahol támogatott.",
+  "rankingsSnapshotDate": "Pillanatkép dátuma",
+  "rankingsSource": "Forrás",
+  "rankingsOfficialSource": "Hivatalos Clash API",
+  "rankingsResults": "Eredmények",
+  "rankingsTopCount": "Legjobb {count}",
+  "@rankingsTopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsNoSnapshotTitle": "Nincs tárolt pillanatkép",
+  "rankingsNoSnapshotBody": "Nincs tárolt ranglistapillanatkép ehhez a dátumhoz: {date}. Válassz másik dátumot, vagy térj vissza az Aktuális nézethez.",
+  "@rankingsNoSnapshotBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rankingsPlayerLoadFailed": "A játékost nem sikerült betölteni.",
+  "rankingsClanLoadFailed": "A klánt nem sikerült betölteni.",
+  "sideStatsTitle": "Statisztikák",
+  "sideStatsSubtitle": "Ranglista-statisztikák a hivatalos Clash API felületekről.",
+  "sideStatsLoadError": "Nem sikerült betölteni a harci intelligenciát.",
+  "statsOverview": "Áttekintés",
+  "statsArmies": "Seregek",
+  "statsItems": "Tételek",
+  "statsWar": "Háború",
+  "statsCwl": "CWL",
+  "statsRanked": "Rangsorolt",
+  "statsDateRange": "Dátumtartomány",
+  "statsDateRangeHint": "Válasszon legfeljebb 90 napot",
+  "statsDateRangeTooLong": "Válasszon 90 napos vagy rövidebb dátumtartományt.",
+  "statsUpdated": "Friss adatok",
+  "statsNoDataTitle": "Még nincsenek csataadatok",
+  "statsNoDataBody": "Próbálkozzon szélesebb dátumtartománysal vagy kevésbé korlátozó szűrőkkel.",
+  "statsAddItemsTitle": "Válassza ki az elemezni kívánt elemeket",
+  "statsAddItemsBody": "Adjon hozzá csapatokat, varázslatokat, hősöket, háziállatokat vagy felszerelést, majd futtassa a lekérdezést.",
+  "statsGlobalCounts": "Globális számok",
+  "statsPerformance": "Teljesítmény",
+  "statsSamples": "Minták",
+  "statsUsage": "Használat",
+  "statsAverageStars": "Átlagos csillagok",
+  "statsAverageDestruction": "Átlagos pusztítás",
+  "statsStarRates": "Csillagok",
+  "statsThreeStarRate": "Három csillagos arány",
+  "statsDailyTrend": "Napi trend",
+  "statsPlayers": "Játékosok",
+  "statsClans": "Klánok",
+  "statsPlayersInWar": "Játékosok háborúban",
+  "statsClansInWar": "Háborúban lévő klánok",
+  "statsPlayersInLegends": "Játékosok a legendákban",
+  "statsWarsStored": "Háborúk tárolva",
+  "statsJoinLeaves": "Csatlakozás/kilépés az eseményekhez",
+  "statsSearchArmies": "Pontos kompozíciók keresése",
+  "statsExactComposition": "Pontos összetétel",
+  "statsArmyShareCode": "A hadsereg megosztásának kódja",
+  "statsMinimumSample": "Minimális minta",
+  "statsSortBy": "Rendezés",
+  "statsIncludeItems": "Elemek felvétele",
+  "statsExcludeItems": "Elemek kizárása",
+  "statsItemId": "Elemazonosító vagy tárolt név",
+  "statsItemType": "Elem típusa",
+  "statsTroop": "Csoport",
+  "statsSpell": "Varázslat",
+  "statsHero": "Hős",
+  "statsPet": "Kisállat",
+  "statsEquipment": "Eszközök",
+  "statsOwningHero": "A tulajdonos hős",
+  "statsAddItem": "Elem hozzáadása",
+  "statsAnalyzeItems": "Elemek elemzése",
+  "statsCompositionShare": "Összeállítás",
+  "statsNoLevels": "A hadsereg nyilvántartásai nem tartalmaznak tételszinteket.",
+  "statsRankedCompositionOnly": "Az összetételi adatok rangsorolt ​​csatanaplókból származnak; A háborús és a CWL-es teljesítmény külön marad.",
+  "statsTownHall": "Városháza",
+  "statsOpponentTownHall": "Az ellenfél városháza",
+  "statsEqualTownHalls": "Egyenlő városházák",
+  "statsLeagueTier": "Ligaszint",
+  "statsLegendLeagueOne": "Legenda Liga 1",
+  "statsCwlLeague": "CWL liga",
+  "statsLeagueBronze": "Bronz",
+  "statsLeagueSilver": "ezüst",
+  "statsLeagueGold": "arany",
+  "statsLeagueCrystal": "kristály",
+  "statsLeagueMaster": "mester",
+  "statsLeagueChampion": "bajnok",
+  "statsAllCwlLeagues": "Minden CWL liga",
+  "statsCwlSeasons": "CWL szezonok",
+  "statsCwlSeasonsHint": "ÉÉÉÉ-HH, vesszővel elválasztva",
+  "statsApplyFilters": "Szűrők alkalmazása",
+  "statsRefresh": "Adatok frissítése",
+  "statsRegularWarOnly": "Csak a szokásos háborúk; a barátságos háborúk és a CWL kizárva.",
+  "statsRankedRequired": "Városháza és egy ligaszint szükséges.",
+  "statsSeasonBreakdown": "Évad szerinti lebontás",
+  "sideTopScore": "Legjobb pontszám",
+  "sideTop200Avg": "Top 200 átlag",
+  "sideBasesArmiesTitle": "Bázisok és seregek",
+  "sideBasesArmiesSubtitle": "Discordon mentett elrendezések és sereglinkek.",
+  "sideBotSyncTarget": "Bot szinkronizálási cél",
+  "sideBotSyncTargetBody": "A bot már menti a bázisokat és seregeket a Discord profilba. Ez az oldal készen áll a szinkronizált adatokra.",
+  "sideSavedBases": "Mentett bázisok",
+  "sideWarBaseSlots": "Háborús bázishelyek",
+  "sideWarBaseSlotsBody": "Városháza, bázistípus, link és utolsó frissítés.",
+  "sideLegendBaseSlots": "Legend bázishelyek",
+  "sideLegendBaseSlotsBody": "Gyors másolás és fióktársítás.",
+  "sideSavedArmies": "Mentett seregek",
+  "sideArmyLinks": "Sereglinkek",
+  "sideArmyLinksBody": "Összeállítás, varázslatok, ostromgép, jegyzetek és megosztási link.",
+  "sideGameAssetsTitle": "Játékeszközök",
+  "sideGameAssetsSubtitle": "Hostolt ClashKing eszközök mappák szerint csoportosítva.",
+  "gameAssetsLoadError": "A játékbeli elemek nem tölthetők be",
+  "gameAssetsEmptyTitle": "Nincs elérhető játékbeli elem",
+  "gameAssetsEmptyBody": "A tárolt jegyzék nem tartalmazott támogatott képeket.",
+  "gameAssetsOneImage": "1 kép",
+  "gameAssetsImageCount": "{count} kép",
+  "@gameAssetsImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSearchHint": "Keresés ebben a kategóriában",
+  "gameAssetsAllFormats": "Minden formátum",
+  "gameAssetsOneResult": "1 találat",
+  "gameAssetsResultCount": "{count} eredmények",
+  "@gameAssetsResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsNoResultsTitle": "Nincs egyező kép",
+  "gameAssetsNoResultsBody": "Próbálj másik keresést vagy fájlformátumot.",
+  "gameAssetsLongPressHint": "Hosszan nyomva másolhatod a tárolt URL-t",
+  "gameAssetsCopyUrl": "URL másolása",
+  "gameAssetsCopyPath": "Elérési út másolása",
+  "gameAssetsUrlCopied": "Az elem URL-je másolva",
+  "gameAssetsPathCopied": "Az elem elérési útja másolva",
+  "gameAssetsCopyError": "Az elem adatait nem sikerült másolni.",
+  "gameAssetsShare": "Megosztás",
+  "gameAssetsShareError": "Az elem nem osztható meg.",
+  "gameAssetsSave": "Mentés",
+  "gameAssetsSaving": "Mentés...",
+  "gameAssetsSaved": "Az elem mentve.",
+  "gameAssetsSavedTo": "Az elem ide lett mentve: {path}",
+  "@gameAssetsSavedTo": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "gameAssetsSaveError": "Az elem nem menthető.",
+  "sideZapQuakeTitle": "{zaps} villám + 1 földrengés",
+  "@sideZapQuakeTitle": {
+    "placeholders": {
+      "zaps": {
+        "type": "int"
+      }
+    }
+  },
+  "sideZapQuakeSubtitle": "{quakeDamage} földrengéssebzés, {lightningDamage} villámonként",
+  "@sideZapQuakeSubtitle": {
+    "placeholders": {
+      "quakeDamage": {
+        "type": "String"
+      },
+      "lightningDamage": {
+        "type": "String"
+      }
+    }
+  },
+  "sideBuildingHp": "Épület HP",
+  "sideLightningLevel": "Villám szint",
+  "sideEarthquakeLevel": "Földrengés szint",
+  "sideWithoutEarthquake": "Földrengés nélkül",
+  "sideLightningCount": "{count} villám",
+  "@sideLightningCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideFireballQuakeTitle": "Tűzgolyó + 1 földrengés",
+  "sideAddSupportDamage": "Támogató sebzés hozzáadása",
+  "sideFireballQuakeSubtitle": "{fireballDamage} tűzgolyósebzés, {hpLeft} HP marad földrengés után",
+  "@sideFireballQuakeSubtitle": {
+    "placeholders": {
+      "fireballDamage": {
+        "type": "String"
+      },
+      "hpLeft": {
+        "type": "String"
+      }
+    }
+  },
+  "sideFireballLevel": "Tűzgolyó szint",
+  "sideQuakePressure": "Földrengés nyomás",
+  "sideQuakeSpellCount": "{count} földrengés varázslat",
+  "@sideQuakeSpellCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sideLocation": "Hely",
+  "sideFilter": "Szűrő",
+  "sideRefresh": "Frissítés",
+  "sideOfficialClashLeaderboard": "Hivatalos Clash ranglista",
+  "sideAllTownHallsShort": "Minden TH",
+  "sideDecrease": "Csökkentés",
+  "sideIncrease": "Növelés",
+  "sideLevel": "Szint {level}",
+  "@sideLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingPlayerTrophies": "Játékos trófeák",
+  "rankingPlayerTrophiesHeading": "Játékos trófeák ranglistája",
+  "rankingPlayerBuilder": "Játékos építő",
+  "rankingPlayerBuilderHeading": "Játékos építőbázis ranglista",
+  "rankingClanTrophies": "Klántrófeák",
+  "rankingClanTrophiesHeading": "Klántrófeák ranglistája",
+  "rankingClanBuilder": "Klán építő",
+  "rankingClanBuilderHeading": "Klán építőbázis ranglista",
+  "rankingClanCapital": "Klánfőváros",
+  "rankingClanCapitalHeading": "Klánfőváros ranglista",
+  "assetFolderEquipment": "Felszerelés",
+  "assetFolderLeagues": "Ligák",
+  "assetFolderResources": "Erőforrások",
+  "assetFolderStickers": "Matricák",
+  "upgradeSectionHeroes": "Hősök",
+  "upgradeSectionTroops": "Csapatok",
+  "upgradeSectionSpells": "Varázslatok",
+  "upgradeSectionPets": "Petek",
+  "upgradeSectionEquipment": "Felszerelés",
+  "sideMockupSource": "Forrás",
+  "sideMockupMode": "Mód",
+  "sideMockupPreview": "Előnézet",
+  "sideMockupRows": "Sorok",
+  "sideMockupRowsValue": "5 makett",
+  "endpointLeagueTop200": "Liga top 200",
+  "endpointLeagueTop200Preview": "Legend Liga · 5 742 trófea",
+  "endpointTownhallTop200": "Városháza top 200",
+  "endpointTownhallTop200Preview": "TH17 · globális játékostábla",
+  "endpointClanDonations": "Klánadományok",
+  "endpointClanDonationsPreview": "Egyesült Államok · heti klánösszesítők",
+  "endpointClanWarWins": "Klánháborús győzelmek",
+  "endpointClanWarWinsPreview": "Nemzetközi · mindenkori háborús győzelmek",
+  "endpointTop200ArmyUsage": "Top 200 sereg használat",
+  "endpointTop200ArmyUsagePreview": "Csatanaplók · csapat- és varázslathasználat",
+  "endpointStateTop200": "Top 200",
+  "endpointStateWeekly": "Heti",
+  "endpointStateUsage": "Használat",
+  "notifGroupReminders": "Emlékeztetők",
+  "notifGroupProgress": "Előrehaladás",
+  "notifLeagueDefense": "Liga védekezés",
+  "notifLeagueDefenseResult": "Liga védekezés eredménye",
+  "notifLeagueTriple": "Liga tripla",
+  "notifLeagueAttackBody": "Lord Clasher megtámadta {player} játékost • {percent}% • {stars} csillag • {league}",
+  "@notifLeagueAttackBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "league": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarDefense": "Háborús védekezés",
+  "notifWarAttackOnTh": "Háborús támadás TH{th} ellen",
+  "@notifWarAttackOnTh": {
+    "placeholders": {
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarDefenseBody": "{opponentClan} megtámadta {player} játékost • {percent}% • {stars} csillag • {clan} védekezés",
+  "@notifWarDefenseBody": {
+    "placeholders": {
+      "opponentClan": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      },
+      "stars": {
+        "type": "int"
+      },
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarFeed5v5": "5v5 háborús feed",
+  "notifWarAttackResult": "Háborús támadás eredménye",
+  "notifWarAttackResultBody": "{clan} megtámadta Pine Riders TH{th} bázist • 100% • 3 csillag",
+  "@notifWarAttackResultBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "th": {
+        "type": "int"
+      }
+    }
+  },
+  "notifWarMatched": "Háború párosítva",
+  "notifWarMatchedBody": "{clan} párosítva lett Pine Riders ellen. A felkészülési nap elkezdődött.",
+  "@notifWarMatchedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarStarted": "Háború elkezdődött",
+  "notifBattleDayStarted": "Csatanap elkezdődött",
+  "notifWarStartedBody": "{clan} vs Pine Riders élőben. Sok sikert.",
+  "@notifWarStartedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarEnded": "Háború véget ért",
+  "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. A végső eredmények elérhetők.",
+  "@notifWarEndedBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifWarReminder1h": "Háborús emlékeztető: 1 ó",
+  "notifWarReminder30m": "Háborús emlékeztető: 30 perc",
+  "notifWarReminder15m": "Háborús emlékeztető: 15 perc",
+  "notifOneHourLeft": "1 óra maradt",
+  "notifThirtyMinutesLeft": "30 perc maradt",
+  "notifFifteenMinutesLeft": "15 perc maradt",
+  "notifRemainingWarAttacksBody": "{player} játékosnak maradtak háborús támadásai. {time}.",
+  "@notifRemainingWarAttacksBody": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notifStarted": "{name} elkezdődött",
+  "@notifStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifClanGamesPointsBody": "{clan} elkezdhet {name} pontokat gyűjteni.",
+  "@notifClanGamesPointsBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifCwlPreparationBody": "{clan} elkezdheti a Klánháborús Liga felkészülést.",
+  "@notifCwlPreparationBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifRaidWeekendBody": "{clan} elkezdheti a Fővárosi Raid támadásokat.",
+  "@notifRaidWeekendBody": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSeasonStart": "Szezon kezdete",
+  "notifNewSeasonStarted": "Új szezon kezdődött",
+  "notifSeasonStartedBody": "A(z) {league} szezon elkezdődött {player} számára.",
+  "@notifSeasonStartedBody": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "notifSpecialEvent": "Különleges esemény",
+  "notifNewEventLive": "Egy új esemény élő",
+  "notifNewClashEventBody": "Új Clash esemény érhető el.",
+  "notifSupportClashKing": "ClashKing támogatása",
+  "notifMonthlySupportBody": "A havi támogatás segít, hogy a ClashKing elérhető maradjon és fejlődjön. Köszönjük.",
+  "notifUpgradeFinished": "Fejlesztés kész",
+  "notifUpgradeReadyTitle": "{name} készen áll",
+  "@notifUpgradeReadyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notifUpgradeCompleteBody": "A(z) {level}. szint elkészült {player} számára. Fejlesztés kész.",
+  "@notifUpgradeCompleteBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "clanSearchLoadFailed": "Nem sikerült betölteni a klánadatokat: {error}",
+  "@clanSearchLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appIconDefault": "Alapértelmezett",
+  "appIconChristmas": "Karácsony",
+  "appIconBlackWhite": "Fekete-fehér",
+  "appIconDarkMode": "Sötét mód",
+  "generalMembersCount": "{count} tag",
+  "@generalMembersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "generalBookmarked": "könyvjelzőzve",
+  "clanLevelValue": "szint {level}",
+  "@clanLevelValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRankShort": "Helyezés {rank}",
+  "@cwlRankShort": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRoundShort": "Forduló {round}",
+  "@cwlRoundShort": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTownHallShortLevel": "{level}. TH",
+  "@gameTownHallShortLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "faqSupercellFanContentPolicyLink": "Supercell rajongói tartalom irányelvek",
+  "upgradeTrackerPlan": "Terv",
+  "upgradeTrackerUpgrades": "Fejlesztések",
+  "upgradeTrackerCollection": "Gyűjtemény",
+  "upgradeTrackerChooseAccount": "Válassz fiókot",
+  "upgradeTrackerSwitchAccount": "Fiókváltás: {account}",
+  "@upgradeTrackerSwitchAccount": {
+    "placeholders": {
+      "account": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerShare": "Követő megosztása",
+  "upgradeTrackerPasteJson": "Fiók-JSON beillesztése",
+  "upgradeTrackerImportTitle": "Fiókadatok importálása",
+  "upgradeTrackerImportDescription": "Illeszd be a nyers fiók-JSON-t. Az adatok ezen az eszközön maradnak.",
+  "upgradeTrackerAccountJson": "Fiók-JSON",
+  "upgradeTrackerPasteClipboard": "Beillesztés a vágólapról",
+  "upgradeTrackerImportAction": "Fiók importálása",
+  "upgradeTrackerImportSuccess": "{player} importálva lett erre az eszközre.",
+  "@upgradeTrackerImportSuccess": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerImportFailed": "A fiókadatok importálása sikertelen: {error}",
+  "@upgradeTrackerImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSnapshotUnreadable": "A fiókadatok nem olvashatók",
+  "upgradeTrackerTryAgain": "Próbáld újra",
+  "upgradeTrackerNoDataTitle": "Hozd be falud haladását a ClashKingbe",
+  "upgradeTrackerNoDataBody": "Másold ki a Fiókadatok JSON-ját a Clash of Clansból, majd illeszd be a vágólapról. Az adatok ezen az eszközön maradnak.",
+  "upgradeTrackerNoDataLocation": "A Clash of Clansban nyisd meg a Beállítások > További beállítások menüt. A Fiókadatok JSON-ja közvetlenül az API-token szakasz alatt található.",
+  "upgradeTrackerOpenMoreSettings": "További beállítások megnyitása a Clash of Clansban",
+  "upgradeTrackerNoLinkedAccount": "A fiókadatok importálása előtt kapcsolj össze egy Clash of Clans-fiókot.",
+  "upgradeTrackerUpdatedJustNow": "Éppen most frissítve",
+  "upgradeTrackerUpdatedMinutesAgo": "Frissítve {count} perce",
+  "@upgradeTrackerUpdatedMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedHoursAgo": "Frissítve {count} órája",
+  "@upgradeTrackerUpdatedHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerUpdatedOn": "Frissítve: {date}",
+  "@upgradeTrackerUpdatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerSearchUpgrades": "Fejlesztések keresése",
+  "upgradeTrackerSearchCollection": "Keresés a gyűjteményben",
+  "upgradeTrackerShowFilters": "Szűrők megjelenítése",
+  "upgradeTrackerHideFilters": "Szűrők elrejtése",
+  "upgradeTrackerFilterAll": "Összes",
+  "upgradeTrackerFilterOwned": "Meglévő",
+  "upgradeTrackerFilterMissing": "Hiányzó",
+  "upgradeTrackerAllVillages": "Minden falu",
+  "upgradeTrackerHomeVillage": "Otthoni falu",
+  "upgradeTrackerBuilderBase": "Építő Bázis",
+  "upgradeTrackerNoMatchingItems": "Nincs egyező elem",
+  "upgradeTrackerOwnedCount": "{owned} / {total} megszerezve",
+  "@upgradeTrackerOwnedCount": {
+    "placeholders": {
+      "owned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLevelsLeft": "{count} szint maradt",
+  "@upgradeTrackerLevelsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerItemCount": "{count} elem",
+  "@upgradeTrackerItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCollected": "megszerezve",
+  "upgradeTrackerMissing": "hiányzik",
+  "upgradeTrackerDataAge": "Fiókadatok",
+  "upgradeTrackerBuildersCount": "{count} építő",
+  "@upgradeTrackerBuildersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerLaboratory": "Laboratórium",
+  "upgradeTrackerPets": "Hősállatok",
+  "upgradeTrackerWalls": "Falak",
+  "upgradeTrackerEquipment": "Felszerelés",
+  "upgradeTrackerLevelsRemaining": "{count} hátralévő szint",
+  "@upgradeTrackerLevelsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerCompletesOn": "Elkészül: {date} · {duration}",
+  "@upgradeTrackerCompletesOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineRemainingDuration": "{duration} van hátra",
+  "@upgradeTrackerTimelineRemainingDuration": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineOngoingTitle": "Most · {item}",
+  "@upgradeTrackerTimelineOngoingTitle": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineMetadata": "{level}. szint · {duration}",
+  "@upgradeTrackerTimelineMetadata": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineTooltip": "{item} · {level}. szint\n{start} - {end}",
+  "@upgradeTrackerTimelineTooltip": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerTimelineSemanticLabel": "{item}, {level}. szint, {start} és {end} között",
+  "@upgradeTrackerTimelineSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      },
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerHeaderComplete": "Kész",
+  "upgradeTrackerHeaderLevelsLeft": "Hátralévő szintek",
+  "upgradeTrackerHeaderActive": "Aktív",
+  "upgradeTrackerHeaderFinishes": "Befejezés",
+  "upgradeTrackerHeaderOwned": "Meglévő",
+  "upgradeTrackerHeaderUpdated": "Frissítve",
+  "homeCouldNotLoadTitle": "A Kezdőlap nem tölthető be",
+  "homeVerifiedAccountRequiredTitle": "Igazolj egy összekapcsolt fiókot",
+  "homeVerifiedAccountRequiredBody": "A Kezdőlaphoz legalább egy igazolt Clash-fiók szükséges. A folytatáshoz kapcsolj össze egy fiókot, vagy igazolj egy meglévő kapcsolatot.",
+  "homeVerifyAccountAction": "Fiók összekapcsolása vagy igazolása",
+  "playerOptionVerifyAccountBody": "Ez a fiók még nincs igazolva. Igazold az alábbi Teendők, Rangsorolt és Fejlesztéskövető lehetőségek feloldásához.",
+  "homeUpcomingTitle": "Közelgő",
+  "homeUpcomingSubtitle": "A következő határidők és befejeződő fejlesztések a fiókjaidban.",
+  "homeCollapseSection": "Szakasz összecsukása",
+  "homeExpandSection": "Szakasz kibontása",
+  "homeUpcomingEmpty": "Nem közeleg követett határidő. Ha a fiókot éppen most kapcsoltad össze, húzd le a frissítéshez.",
+  "homeRecentlyCompleted": "Befejezve",
+  "homeTodoTitle": "Teendők",
+  "homeTodoSubtitle": "Beavatkozást igénylő fiókadatok sürgősség szerint rendezve.",
+  "homeTodoEmpty": "Jelenleg egyetlen igazolt fiók sem igényel figyelmet.",
+  "homeClanless": "Nincs klán",
+  "homeNeedsAttention": "Figyelmet igényel",
+  "homeCaughtUp": "Minden kész",
+  "homeTrackingDataPending": "Ez az igazolt játékos újonnan követett vagy inaktív, ezért a teendőkhöz szükséges adatok még nem érhetők el.",
+  "homeUpgradeUnavailable": "A fejlesztési adatok nem tölthetők be. A többi fiókadat továbbra is naprakész.",
+  "homeUpgradeNotImported": "Még nincs fejlesztési adat. Importáld az igazolt fiók JSON-ját a Fejlesztéskövetőben.",
+  "homeUpgradeActiveCount": "{count} aktív fejlesztés",
+  "@homeUpgradeActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeIdle": "Nem található aktív fejlesztési időzítő; lehet, hogy az építők tétlenek.",
+  "homeDone": "Kész",
+  "homeRemainingCount": "{count} maradt",
+  "@homeRemainingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeVerifiedPlayerDataMissing": "A kapcsolat igazolt, de a játékos profilja nem érhető el. Húzd le a frissítéshez, vagy várd meg a követés kezdetét.",
+  "homeSinceAwayTitle": "Távolléted óta",
+  "homeSinceAwayFirstVisit": "Ez az első követett Kezdőlap-látogatás, ezért a régebbi tevékenység nincs újként megjelölve.",
+  "homeSinceAwaySubtitle": "Az új jelölések a Kezdőlap előző, {time} időpontban történt megnyitásához viszonyítanak.",
+  "@homeSinceAwaySubtitle": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSinceAwayEmpty": "Ezekhez az igazolt játékosokhoz és klánokhoz nincs elérhető csatlakozási, távozási vagy játékostörténeti tevékenység.",
+  "homeNewMarker": "Új",
+  "homePulseTitle": "Saját áttekintés",
+  "homePulseSubtitle": "Személyes 30 napos háborús és CWL-forma, rangsorolt játék és elérhető globális ranglisták.",
+  "homePulseEmpty": "A teljesítménytörténet vagy a ranglisták még nem érhetők el. Az újonnan követett és inaktív fiókok az adatok érkezésével töltődnek fel.",
+  "homeToday": "Ma",
+  "homeYesterday": "Tegnap",
+  "homeEarlier": "Korábban",
+  "homeRankedAttacks": "Rangsorolt támadások",
+  "homeSeasonPass": "Szezonbérlet",
+  "homeUpcomingAccountDetail": "{player} fennmaradó mennyisége: {count}.",
+  "@homeUpcomingAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeUpgradeDataNeeded": "Fejlesztési adatok hozzáadása",
+  "homeUpgradeDataNeededDetail": "Importáld {player} fiók-JSON-ját a fejlesztési időzítők és a tétlen építők követéséhez.",
+  "@homeUpgradeDataNeededDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeIdleTitle": "Az építők tétlenek lehetnek",
+  "homeUpgradeIdleDetail": "{player} rendelkezik fejlesztési adatokkal, de nem található aktív időzítő.",
+  "@homeUpgradeIdleDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUpgradeAccountDetail": "{player} fejlesztési időzítője.",
+  "@homeUpgradeAccountDetail": {
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseWarAverage": "30 napos háborús átlag",
+  "homePulseCwlAverage": "30 napos CWL-átlag",
+  "homePulseRankedToday": "30 napos rangsorolt",
+  "homePulseRankedValue": "{count} támadás · {trophies} trófea",
+  "@homePulseRankedValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "trophies": {
+        "type": "String"
+      }
+    }
+  },
+  "homePulseBestGlobalRank": "Legjobb globális játékoshelyezés",
+  "homeActivityJoined": "csatlakozott",
+  "homeActivityLeft": "kilépett",
+  "homeActivityAClan": "egy klánhoz",
+  "statsMeta": "Meta",
+  "statsBattle": "Csata",
+  "statsWorld": "Világ",
+  "statsHeaderSubtitle": "Fedezd fel a harci teljesítményt és az általunk követett világot.",
+  "statsPreview": "Előnézet",
+  "statsTownHallDistribution": "Városháza megoszlása",
+  "statsBuilderHallDistribution": "Builder Hall elosztása",
+  "statsLeagueDistribution": "Rangsorolt ​​ligaeloszlás",
+  "statsTrackedPlayers": "Jelenlegi nyomon követett játékospopuláció",
+  "statsTrackedClans": "Jelenlegi nyomon követett klánpopuláció",
+  "statsCwlLeagueDistribution": "CWL liga eloszlás",
+  "statsCapitalLeagueDistribution": "Fővárosi Liga elosztása",
+  "statsTrackedLocations": "Nyomon követett klánhelyek",
+  "statsLocationCountHelp": "A nyomon követett klánok által képviselt országok és helyek.",
+  "statsLeagueId": "Liga {id}",
+  "@statsLeagueId": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "statsEquipmentAdoption": "Eszközök átvétele szintek szerint",
+  "statsEquipmentAdoptionPreview": "Mintaelrendezés, amíg az összesített birtoklási és szintadatok elérhetővé nem válnak.",
+  "statsExperienceDistribution": "Player XP disztribúció",
+  "statsExperienceDistributionPreview": "Mintaelrendezés, amíg az XP-hisztogram tartományai elérhetővé nem válnak.",
+  "statsCwlRosterSizes": "CWL névsorméretek",
+  "statsCwlRosterSizesPreview": "Minta 15v15 / 30v30 megoszlás, amíg a csoportméretek számai elérhetővé nem válnak.",
+  "statsWarsOverTime": "Háborúk az idő múlásával",
+  "statsWarsOverTimePreview": "Minta napi trend, amíg a hivatalos számláló végpont csatlakoztatva nem lesz.",
+  "statsStrategyLenses": "Stratégiai objektívek",
+  "statsStrategyLensesBody": "A megnevezett stratégiák átfedő, verziószámmal ellátott szabályokat használnak. A pontos betöltések külön maradnak, így a címke soha nem állítja a harci szándékot.",
+  "statsQueenCharge": "Queen Charge",
+  "statsQueenChargeRule": "Archer Queen + legalább 5 Healer",
+  "statsSuperBowlerCore": "Super Bowler mag",
+  "statsSuperBowlerRule": "Legalább 4 Super Bowler",
+  "statsRootRiderCore": "Root Rider mag",
+  "statsRootRiderRule": "Legalább 4 Root Rider",
+  "statsPatternDiscoveryBody": "Az automatikus felderítésnek hasonló betöltési klasztereket kell felszínre hoznia az emberi névadáshoz; pusztán a kompozícióból nem következtethet taktikára.",
+  "statsUsageVsThreeStar": "Használat vs. háromcsillagos arány",
+  "statsTapPointForLoadout": "Koppintson egy pontra a pontos betöltés és minta ellenőrzéséhez.",
+  "statsExactLoadouts": "Pontos betöltések",
+  "statsCustomLens": "Egyedi objektív",
+  "statsCustomLensBody": "Válassza ki a szükséges mennyiségeket, kizárásokat, városházát, bajnokságot, mintaszintet és rendezési sorrendet. Ez valós betöltésekkel fut, de még nincs mentve.",
+  "rankedLeagueTitle": "Rangsorolt Liga",
+  "rankedLeagueAbout": "A Rangsorolt Ligáról",
+  "rankedLeagueAboutBody": "Ez az oldal a hivatalos heti Rangsorolt Liga-csoportot, csatanaplókat és időszakelőzményeket használja. Az aktuális eredmények az időszak végéig változhatnak.",
+  "rankedLeagueOverview": "Áttekintés",
+  "rankedLeagueRanking": "Rangsor",
+  "rankedLeagueGroupRank": "Csoporthelyezés",
+  "rankedLeagueTrophies": "Kupák",
+  "rankedLeaguePlayers": "{count} játékos",
+  "@rankedLeaguePlayers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBest": "Legjobb: {value}",
+  "@rankedLeagueBest": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueNoGroup": "Nincs aktív csoport",
+  "rankedLeagueCurrentPeriod": "Aktuális időszak",
+  "rankedLeagueLiveGroupSubtitle": "Élő eredmények a játékos hivatalos Rangsorolt Liga-csoportjából.",
+  "rankedLeagueBattles": "Csaták",
+  "rankedLeagueAttacksPlayed": "lejátszott támadás",
+  "rankedLeagueAttackRecord": "Támadási mérleg",
+  "rankedLeagueDefenseRecord": "Védelmi mérleg",
+  "rankedLeagueWinsLosses": "győzelem – vereség",
+  "rankedLeagueDefensesLogged": "{count} rögzített védelem",
+  "@rankedLeagueDefensesLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueRecentBattles": "Legutóbbi csaták",
+  "rankedLeagueRecentBattlesSubtitle": "Részletes eredmények az aktív heti csoporthoz.",
+  "rankedLeagueAttacks": "Támadások",
+  "rankedLeagueDefenses": "Védekezések",
+  "rankedLeagueNoBattles": "Még nincs rögzített csata.",
+  "rankedLeagueGroupRanking": "Csoportrangsor",
+  "rankedLeagueRankingSubtitle": "Az aktuális csoport élő állása. A játékosod ki van emelve.",
+  "rankedLeagueJumpToMyRank": "Ugrás a helyezésemhez",
+  "rankedLeagueLastPeriod": "Előző időszak",
+  "rankedLeagueBestGroupRank": "Legjobb helyezés",
+  "rankedLeaguePeriodHistory": "Időszakelőzmények",
+  "rankedLeagueHistorySubtitle": "Hivatalos összefoglalók a lezárt heti időszakokról.",
+  "rankedLeagueBestRankedResults": "Legjobb rangsorolt eredmények",
+  "rankedLeagueAllRankedResults": "Minden rangsorolt eredmény",
+  "rankedLeaguePeriods": "Időszakok",
+  "rankedLeaguePeriodStats": "Időszak statisztikái",
+  "rankedLeagueTrophyProgress": "Trófeák alakulása csatánként",
+  "rankedLeagueTrophiesByPeriod": "Trófeák időszakonként",
+  "rankedLeagueBattleCount": "{count} csata",
+  "@rankedLeagueBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueBattleProgress": "{count} / {max} csata",
+  "@rankedLeagueBattleProgress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rankedLeagueTrophyAverage": "{trophies} trófea · {average} átlag",
+  "@rankedLeagueTrophyAverage": {
+    "placeholders": {
+      "trophies": {
+        "type": "int"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "rankedLeagueByPeriod": "Időszakonként",
+  "rankedLeaguePeriodTab": "Időszak",
+  "rankedLeagueAverage": "Átlag",
+  "rankedLeagueRemaining": "Hátralévő idő",
+  "rankedLeagueSevenDayPeriod": "7 napos Rangsorolt Liga-időszak",
+  "rankedLeagueEquipmentUnavailable": "A sereg és a felszerelés még nem szerepel a hivatalos Rangsorolt Liga-csatanaplókban.",
+  "rankedLeagueBattleDetailsUnavailable": "Ehhez az időszakhoz nem érhető el részletes csatanapló.",
+  "rankedLeagueHistoricalDetailsUnavailable": "Ehhez a régebbi időszakhoz csak a hivatalos időszak-összefoglaló érhető el.",
+  "rankedLeagueStarBreakdownUnavailable": "Az API megadja a csillagok összegét, de az időszak részletes csillageloszlását nem.",
+  "notifAudienceSectionTitle": "Értesítések címzettjei",
+  "@notifAudienceSectionTitle": {
+    "description": "Section title for choosing which accounts receive notifications."
+  },
+  "notifScopeAllLinkedAccounts": "Minden összekapcsolt fiók",
+  "@notifScopeAllLinkedAccounts": {
+    "description": "Option that sends notifications to all linked accounts."
+  },
+  "notifScopeSelectedAccounts": "Kiválasztott fiókok",
+  "@notifScopeSelectedAccounts": {
+    "description": "Option that sends notifications only to selected linked accounts."
+  },
+  "notifAudienceSheetDescription": "Válaszd ki, mely fiókok kaphatnak értesítéseket ezen az eszközön.",
+  "@notifAudienceSheetDescription": {
+    "description": "Description for notification audience settings."
+  },
+  "notifAudienceAllSubtitle": "{count} jelenlegi fiók. A később összekapcsolt fiókok automatikusan bekerülnek.",
+  "@notifAudienceAllSubtitle": {
+    "description": "Subtitle for the all linked accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedSubtitle": "{count} kiválasztva értesítésekhez.",
+  "@notifAudienceSelectedSubtitle": {
+    "description": "Subtitle for the selected accounts notification audience option.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifAudienceSelectedEmpty": "Válaszd ki pontosan, mely fiókok kapjanak értesítéseket.",
+  "@notifAudienceSelectedEmpty": {
+    "description": "Empty state subtitle for selected notification accounts."
+  },
+  "notifAudienceAllInlineNote": "A később összekapcsolt fiókok bekerülnek anélkül, hogy módosítanád ezt a beállítást.",
+  "@notifAudienceAllInlineNote": {
+    "description": "Inline note explaining all linked accounts behavior."
+  },
+  "notifChooseAccountsManually": "Kiválasztott fiókok",
+  "notifAudienceAcrossDevicesDescription": "Válaszd ki, mely fiókok kaphatnak értesítéseket ezen az eszközön.",
+  "notifAccountBookmarked": "Mentett",
+  "@notifAccountBookmarked": {
+    "description": "Label for a bookmarked account in notification settings."
+  },
+  "notifGroupLeagueBattles": "Ligacsaták",
+  "@notifGroupLeagueBattles": {
+    "description": "Notification group label for league battles."
+  },
+  "notifGroupWarAttacks": "Háborús támadások",
+  "@notifGroupWarAttacks": {
+    "description": "Notification group label for war attacks."
+  },
+  "notifGroupWarState": "Háború állapota",
+  "@notifGroupWarState": {
+    "description": "Notification group label for war state changes."
+  },
+  "notifGroupWarReminders": "Háborús emlékeztetők",
+  "@notifGroupWarReminders": {
+    "description": "Notification group label for war reminders."
+  },
+  "notifGroupEvents": "Események",
+  "@notifGroupEvents": {
+    "description": "Notification group label for events."
+  },
+  "notifGroupAppAnnouncements": "Alkalmazásbejelentések",
+  "@notifGroupAppAnnouncements": {
+    "description": "Notification group label for app announcements."
+  },
+  "notifGroupUpgradeFinishes": "Befejezett fejlesztések",
+  "@notifGroupUpgradeFinishes": {
+    "description": "Notification group label for completed upgrades."
+  },
+  "notifGroupMonthlySupport": "Havi támogatás",
+  "@notifGroupMonthlySupport": {
+    "description": "Notification group label for monthly support reminders."
+  },
+  "widgetUpgradeProgressTitle": "Fejlesztési haladás",
+  "widgetLaboratory": "LABORATÓRIUM",
+  "widgetPets": "HŐSÁLLATOK",
+  "widgetBuilderBase": "ÉPÍTŐBÁZIS",
+  "widgetResearch": "KUTATÁS",
+  "widgetActive": "AKTÍV",
+  "widgetIdle": "TÉTLEN",
+  "widgetLocked": "ZÁROLVA",
+  "widgetMaxed": "MAXIMÁLIS",
+  "widgetNotUnlocked": "Nincs feloldva",
+  "widgetFullyUpgraded": "Teljesen kifejlesztve",
+  "widgetNoActiveUpgrades": "Nincs aktív fejlesztés",
+  "widgetNoActiveResearch": "Nincs aktív kutatás",
+  "widgetDataStale": "Frissítés szükséges",
+  "widgetMoreUpgrade": "további fejlesztés",
+  "widgetMoreUpgrades": "további fejlesztés",
+  "widgetLevelShort": "Sz.",
+  "widgetReady": "Kész",
+  "widgetReadyIn": "Elkészül ennyi idő múlva",
+  "widgetHelping": "Segít",
+  "widgetApprenticeShort": "Tanonc",
+  "widgetAssistantShort": "Segéd",
+  "widgetAlchemistShort": "Alkimista",
+  "widgetBuilderPotion": "Építőital",
+  "widgetResearchPotion": "Kutatóital",
+  "widgetPetPotion": "Hősállatital",
+  "widgetClockTower": "Óratorony",
+  "widgetTownHallBuilderBoost": "Városházi építőgyorsítás",
+  "widgetTownHallLabBoost": "Városházi laborgyorsítás",
+  "widgetBuilderBoostShort": "Építő",
+  "widgetResearchBoostShort": "Kutatás",
+  "widgetPetBoostShort": "Kisállat",
+  "widgetClockBoostShort": "Óra",
+  "widgetBuilderCostPerk": "{percent}% építési költségkedvezmény",
+  "@widgetBuilderCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetBuilderTimePerk": "{percent}% építési időkedvezmény",
+  "@widgetBuilderTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabCostPerk": "{percent}% laborköltség-kedvezmény",
+  "@widgetLabCostPerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetLabTimePerk": "{percent}% laboridő-kedvezmény",
+  "@widgetLabTimePerk": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "farmGoalTitle": "Farmolási cél",
+  "farmGoalFormTitle": "Farmolási cél tervezése",
+  "farmGoalAccountTitle": "fiók",
+  "farmGoalAccountHint": "A zsákmány becsléséhez opcionálisan használd egy összekapcsolt fiók ligáját.",
+  "farmGoalTargetTitle": "Célfejlesztés",
+  "farmGoalTargetBuildingLabel": "Épület vagy egység",
+  "farmGoalChooseBuilding": "Válassz épületet vagy egységet",
+  "farmGoalChangeBuilding": "Épület módosítása",
+  "farmGoalNoTargetTitle": "Nincs kiválasztott épület",
+  "farmGoalNoTargetBody": "Válaszd ki a fejleszteni kívánt épületet a szükséges nyersanyaggyűjtés becsléséhez.",
+  "farmGoalTargetLevelLabel": "Célszint",
+  "farmGoalUpgradeCostLabel": "Fejlesztési költség",
+  "farmGoalCostUnavailable": "Ehhez a fejlesztéshez nem érhető el költségadat.",
+  "farmGoalLootTitle": "Zsákmány támadásonként",
+  "farmGoalResourceLabel": "Erőforrás",
+  "farmGoalAmountLabel": "Mennyiség",
+  "farmGoalAverageLootLabel": "A faluban elérhető zsákmány",
+  "farmGoalPerfectLootHint": "Add meg a támadás előtt látható zsákmányt. Az alábbi ligabónusz automatikusan hozzáadódik.",
+  "farmGoalLeagueEstimate": "A(z) {league} ligabónusza: {amount} {resource}. Ez szerepel a támadási becslésekben.",
+  "@farmGoalLeagueEstimate": {
+    "placeholders": {
+      "league": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalStarBonusEstimate": "Csillagbónusz: {amount} {resource} 5 csillag után. Nem számít bele a szükséges támadásokba.",
+  "@farmGoalStarBonusEstimate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalScenarioPerfect": "Az elérhető zsákmány 100%-a",
+  "farmGoalScenarioAtPercent": "Az elérhető zsákmány {percent}%-a",
+  "@farmGoalScenarioAtPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "farmGoalAttackShort": "támadás",
+  "farmGoalScenarioHint": "A becslés feltételezi, hogy minden támadásban megszerzed az elérhető zsákmány kiválasztott százalékát.",
+  "farmGoalNoLeagueLoot": "Ehhez a ligához nem érhetők el zsákmányadatok.",
+  "farmGoalTrackerNextTitle": "Következő a Fejlesztéskövető tervében",
+  "farmGoalTrackerMissingTitle": "Fejlesztéskövető-adatok szükségesek",
+  "farmGoalTrackerMissingBody": "Importáld a fiók fejlesztési JSON-fájlját a Fejlesztéskövetőbe, hogy itt megjelenjen a következő tervezett épület és annak pontos költsége.",
+  "farmGoalTrackerPlanComplete": "A Fejlesztéskövetőben nem található további épületfejlesztés. Továbbra is választhatsz kézzel épületet.",
+  "farmGoalOpenUpgradeTracker": "Fejlesztéskövető megnyitása",
+  "farmGoalUseTrackerTarget": "Épület használata",
+  "farmGoalMissingTarget": "Válassz egy épületet és célszintet a szükséges támadások kiszámításához.",
+  "farmGoalMissingValues": "Adj meg egy célt és a tökéletes támadás becsült zsákmányát a támadási forgatókönyvek megtekintéséhez.",
+  "farmGoalResultTitle": "Szükséges támadások",
+  "farmGoalAttacks": "Becsült támadások",
+  "farmGoalResultSummary": "{target} {resource}, tökéletes támadásonként körülbelül {average}.",
+  "@farmGoalResultSummary": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      },
+      "resource": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "gameTHLevel": "{level}. TH",
+  "@gameTHLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "gameCreatorCode": "Alkotói kód: ClashKing",
+  "todoExplanationRaidsTitle": "Rajtaütések:",
+  "todoExplanationRaids": "Fiókonként 5 pontos súly (vagy 6, ha az utolsó támadás feloldódott), 1 támadás = 1 pont.",
+  "clanWarFrequencyTitle": "Háborúk",
+  "notifScopeAllAccounts": "Minden fiók",
+  "@notifScopeAllAccounts": {
+    "description": "Notification scope: all linked accounts"
+  },
+  "notifSelectedAccounts": "Kiválasztott fiókok",
+  "@notifSelectedAccounts": {
+    "description": "Label / sheet title for the selected accounts picker"
+  },
+  "searchFilters": "Szűrők",
+  "@searchFilters": {
+    "description": "Tooltip for the filters icon button in search"
+  },
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} követett fiók",
+  "@dashboardUpgradeTrackerAccounts": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "calculatorsModeDamage": "Sebzés",
+  "calculatorsModeFarmGoal": "Farmolási cél",
+  "damageCalculatorTitle": "Sebzéskalkulátor",
+  "damageAccountPresetShort": "fiók",
+  "damageChooseAccount": "Válassz fiókot",
+  "damageSwitchAccount": "Fiókváltás",
+  "damageAccountSelectorHint": "Használd egy igazolt fiók egységszintjeit, vagy állíts be mindent kézzel.",
+  "damageNoAccountsAvailable": "Nincs elérhető igazolt fiók. A sebzési szinteket kézzel is beállíthatod.",
+  "damageTargetSectionTitle": "Célépület",
+  "damageChooseTarget": "Válassz célt",
+  "damageNoTargetTitle": "Nincs kiválasztott épület",
+  "damageNoTargetBody": "Válassz egy épületet az ellenállásának teszteléséhez.",
+  "damageTargetLevelLabel": "Cél szintje",
+  "damageCommonBuildings": "Gyakori épületek",
+  "damageAllBuildings": "Minden épület",
+  "damageQuickSetups": "Gyorsbeállítások",
+  "damageQuickSetupZapQuake": "Villám + Földrengés",
+  "damageQuickSetupFireballQuake": "Tűzgolyó + Földrengés",
+  "damageQuickSetupGiantArrow": "Óriásnyíl",
+  "damageQuickSetupFlameFlinger": "Lángvető",
+  "damageQuickSetupCustom": "Egyéni",
+  "damageClearStack": "Világos",
+  "damageNoDamageSelected": "Adj hozzá sebzésforrást az eredmények megtekintéséhez.",
+  "damageSelectedSourcesCount": "Kiválasztott források ({count})",
+  "@damageSelectedSourcesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "damageNoActiveSources": "Nincs kiválasztva sebzésforrás.",
+  "damageOtherSources": "További források",
+  "damageShowAllSources": "Összes forrás megjelenítése",
+  "damageShowFewerSources": "Kevesebb forrás megjelenítése",
+  "searchCancel": "Mégsem",
+  "todoRaidAttacks": "Raid támadások",
+  "todoMockRaid4Left": "4 maradt",
+  "todoMockWarAltStatus": "Aktív 18 perce · A háború és a rajtaütések figyelmet igényelnek",
+  "todoMockRaid1Left": "1 maradt",
+  "gameAssetsCategoryBuildings": "Épületek",
+  "gameAssetsCategoryCapitalBase": "Klánfőváros",
+  "gameAssetsCategoryCapitalHouseParts": "Fővárosi házelemek",
+  "gameAssetsCategoryChests": "Ládák",
+  "gameAssetsCategoryClanLabels": "Kláncímkék",
+  "gameAssetsCategoryCountryFlags": "Országzászlók",
+  "gameAssetsCategoryDecorations": "Díszek",
+  "gameAssetsCategoryEquipment": "Felszerelések",
+  "gameAssetsCategoryGuardians": "Őrzők",
+  "gameAssetsCategoryHeroes": "Hősök",
+  "gameAssetsCategoryPets": "Hősállatok",
+  "gameAssetsCategorySkins": "Kinézetek",
+  "gameAssetsCategorySpells": "Varázslatok",
+  "gameAssetsCategoryTroops": "Csapatok",
+  "assetFolderTroops": "Csapatok",
+  "assetFolderSpells": "Varázslatok",
+  "assetFolderHeroes": "Hősök",
+  "endpointStateWins": "Győzelmek",
+  "notifGroupBattles": "Csaták",
+  "notifGroupSupport": "Támogatás",
+  "rankedLeagueAccountSelector": "Rangsorolt ligás fiók",
+  "rankedLeagueStars": "Csillagok",
+  "playerBattlelogTab": "Csaták",
+  "playerActivityTab": "Aktivitás",
+  "playerBattlelogFarming": "Nyersanyaggyűjtés",
+  "playerBattlelogRanked": "Rangsorolt",
+  "playerBattlelogFarmingOverview": "Nyersanyaggyűjtési áttekintés",
+  "playerBattlelogRankedOverview": "Rangsorolt áttekintés",
+  "playerBattlelogRecentBattles": "Legutóbbi csaták",
+  "playerBattlelogBattleCount": "{count} csata",
+  "@playerBattlelogBattleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttacks": "Támadások",
+  "playerBattlelogAverageDestruction": "Átlagos pusztítás",
+  "playerBattlelogAverageStars": "Átlagos csillagok",
+  "playerBattlelogTripleRate": "Három csillagos arány",
+  "playerBattlelogAverageLoot": "Átlagos zsákmány",
+  "playerBattlelogPopularTroops": "Leggyakrabban használt egységek",
+  "playerBattlelogUsedInAttacks": "{count} támadásban használva",
+  "@playerBattlelogUsedInAttacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBattlelogAttack": "Támadás",
+  "playerBattlelogDefense": "Védelem",
+  "playerBattlelogOpponent": "{name} ellen",
+  "@playerBattlelogOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerBattlelogNoBattlesTitle": "Nem találhatók csaták",
+  "playerBattlelogNoBattlesBody": "Ehhez a módhoz még nem érhetők el csaták.",
+  "playerBattlelogLoadError": "A csatanaplók nem tölthetők be",
+  "playerBattlelogHistoryUnavailable": "A korábbi csaták adatai átmenetileg nem érhetők el, ezért hiányozhatnak a sereghasználati adatok és a régebbi csaták.",
+  "playerBattlelogOfficialUnavailable": "A hivatalos csatanapló átmenetileg nem érhető el, ezért hiányozhatnak a legújabb csaták.",
+  "playerActivityTrackingActive": "Jelenleg követve",
+  "playerActivityTrackingActiveBody": "Ez a hitelesített fiók rendszeresen frissül. Az események a követés kezdetétől jelennek meg, és időnként továbbra is lehetnek hiányok.",
+  "playerActivityTrackingUnknown": "A követés nincs megerősítve",
+  "playerActivityTrackingUnknownBody": "Csak azok a változások jelennek meg itt, amelyeket a ClashKing a játékos követése közben észlelt, ezért az előzmények hiányosak lehetnek.",
+  "playerActivityNoEventsTitle": "Még nincs követett tevékenység",
+  "playerActivityNoEventsBody": "A fejlesztések és profilváltozások akkor jelennek meg, amikor a ClashKing észleli őket.",
+  "playerActivityLoadError": "A játékos tevékenysége nem tölthető be",
+  "playerActivityTownHallUpgraded": "A Városháza fejlődött",
+  "playerActivityItemUpgraded": "{name} fejlődött",
+  "@playerActivityItemUpgraded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivitySuperTroopBoosted": "{name} megerősítve",
+  "@playerActivitySuperTroopBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityItemUnlocked": "{name} feloldva",
+  "@playerActivityItemUnlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playerActivityNameChanged": "A név megváltozott",
+  "playerActivityLevelChange": "{from}. szint → {to}. szint",
+  "@playerActivityLevelChange": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityUnlockedAtLevel": "Feloldva a(z) {level}. szinten",
+  "@playerActivityUnlockedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityBoostedAtLevel": "Megerősítve a(z) {level}. szinten",
+  "@playerActivityBoostedAtLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "playerActivityNameChangeDetail": "{from} → {to}",
+  "@playerActivityNameChangeDetail": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanPrioritiesTitle": "Tervezze meg a prioritásokat",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangsorolja azt, ami a legfontosabb. A frissítési szintek és az aktív munka mindig rendben marad.",
+  "upgradeTrackerPlanClose": "Bezárás",
+  "upgradeTrackerPlanPlanningGoals": "Tervezési célok",
+  "upgradeTrackerPlanConstructionSubtitle": "Építés és hős frissítések",
+  "upgradeTrackerPlanResearchSubtitle": "Csapatok, varázslatok és ostromkutatás",
+  "upgradeTrackerPlanPetHouseSubtitle": "Pet House frissítések",
+  "upgradeTrackerPlanPrioritizeNewItems": "Az új elemek prioritása",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Először helyezze el az újonnan feloldott vagy fel nem épített elemeket",
+  "upgradeTrackerPlanSharedSummary": "{tier} szint · megosztott mix {normalized}% ({share}/{total}) · {completion}",
+  "@upgradeTrackerPlanSharedSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "normalized": {
+        "type": "int"
+      },
+      "share": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrictSummary": "{tier} szint · szigorú · {completion}",
+  "@upgradeTrackerPlanStrictSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "completion": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRunsUntilMaxed": "maximumig fut",
+  "upgradeTrackerPlanYieldsAfter": "hozam {target}% után",
+  "@upgradeTrackerPlanYieldsAfter": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanStrict": "Szigorú",
+  "upgradeTrackerPlanMax": "Max",
+  "upgradeTrackerPlanReorder": "Átrendezés {category}",
+  "@upgradeTrackerPlanReorder": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanRelativeTierWeight": "Relatív rétegsúly",
+  "upgradeTrackerPlanCompletionTarget": "Befejezési cél",
+  "upgradeTrackerPlanStrictTier": "Szigorú szint",
+  "upgradeTrackerPlanWeight": "Súly {value}%",
+  "@upgradeTrackerPlanWeight": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanUntilMaxed": "A maximumig",
+  "upgradeTrackerPlanUntilPercent": "{value}%-ig",
+  "@upgradeTrackerPlanUntilPercent": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanRuleNote": "A számozott szintek futnak először. A megosztott sorok ugyanazt a rétegszámot tartják, és keveréküket a relatív súlyokból normalizálják, így az 50 + 25 67% / 33% lesz. A cél eléri ezt a százalékos arányt a kategória hozamával, míg később jogosult marad.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max az előrehaladás előtt",
+  "upgradeTrackerPlanGoalRushNextHall": "Gyorsan érje el a következő csarnokot",
+  "upgradeTrackerPlanGoalCatchUp": "Felzárkózni rohanó szintek",
+  "upgradeTrackerPlanGoalUnlockFirst": "Először oldjon fel új dolgokat",
+  "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
+  "@upgradeTrackerPlanGoalSelection": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "upgradeTrackerPlanWallsEachWeek": "Falak minden héten",
+  "upgradeTrackerPlanOff": "Ki",
+  "upgradeTrackerPlanPerWeek": "{count} / hét",
+  "@upgradeTrackerPlanPerWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgradeTrackerPlanPreferGold": "A falakhoz előnyben részesítsd az aranyat",
+  "upgradeTrackerPlanPreferGoldDescription": "Falak költésekor használjon aranyat az Elixir előtt",
+  "upgradeTrackerPlanApplyPriorities": "Alkalmazza a prioritásokat",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Kialakított védelmek",
+  "upgradeTrackerPlanCategoryTraps": "Csapdák",
+  "upgradeTrackerPlanCategoryArmy": "hadsereg",
+  "upgradeTrackerPlanCategoryDarkTroops": "Sötét csapatok",
+  "upgradeTrackerPlanCategorySieges": "Ostromok",
+  "upgradeTrackerPlanCategorySupercharge": "Feltöltés",
+  "navigationCloseDrawer": "Navigációs fiók bezárása",
+  "navigationOpenProfileMenu": "Profilmenü megnyitása",
+  "navigationClashKingWeb": "ClashKing web",
+  "settingsPrivacyDataTitle": "Adatvédelem és adatok",
+  "settingsPrivacyPolicyDescription": "Tekintsd át, mit gyűjt a ClashKing, miért használja, kik kezelik az adatokat, milyen megőrzési szabályok érvényesek, és hogyan léphetsz velünk kapcsolatba.",
+  "settingsPrivacyExportTitle": "Adataid elérése vagy exportálása",
+  "settingsPrivacyExportDescription": "Töltsd le a ClashKing-bejelentkezésedhez kapcsolt fiókadatok másolatát, beleértve a kapcsolt Clash of Clans-fiókokat és az értesítési beállításokat.",
+  "settingsPrivacyCorrectionTitle": "Adatok helyesbítése vagy korlátozása",
+  "settingsPrivacyCorrectionDescription": "Távolítsd el a kapcsolt Clash of Clans-fiókokat a fiókbeállításokban, kapcsold ki az értesítéseket, vagy kérj helyesbítést vagy korlátozást az ügyfélszolgálattól.",
+  "settingsPrivacyDeletionTitle": "ClashKing-fiókod törlése",
+  "settingsPrivacyDeletionDescription": "Ez elindítja ClashKing-fiókod és a hozzá tartozó alkalmazásadatok törlését, kivéve, ha a ClashKingnek biztonsági, csalásmegelőzési vagy jogi okokból korlátozott adatokat kell megőriznie.",
+  "settingsPrivacyChildrenTitle": "Gyermekek és családok",
+  "settingsPrivacyChildrenDescription": "A ClashKing általános közönségnek szánt kísérőalkalmazás, és nem gyermekeknek készült. Ne hozz létre fiókot, ha országodban szülői vagy gondviselői jóváhagyás nélkül még nem adhatsz hozzájárulást.",
+  "settingsPrivacyExportReady": "Az adatexport mentésre kész.",
+  "settingsPrivacyExportCreateFailed": "Az adatexportot nem sikerült létrehozni. Helyette előkészítettünk egy adatvédelmi e-mailt.",
+  "settingsPrivacyExportPrepareFirst": "Mentés előtt készítsd elő az exportot.",
+  "settingsPrivacyExportSaved": "Az adatexport mentve.",
+  "settingsPrivacyExportSaveFailed": "Az adatexportot nem sikerült menteni. Helyette előkészítettünk egy adatvédelmi e-mailt.",
+  "settingsPrivacyDeleteUnavailable": "A fióktörlés ebben a buildben nem érhető el. Helyette előkészítettünk egy adatvédelmi e-mailt.",
+  "settingsPrivacyOpenPolicy": "Szabályzat megnyitása",
+  "settingsPrivacyRefreshExport": "Export frissítése",
+  "settingsPrivacyPrepareExport": "Export előkészítése",
+  "settingsPrivacySaveExport": "Export mentése",
+  "settingsPrivacyContactSupport": "Kapcsolat az ügyfélszolgálattal",
+  "settingsPrivacyDeleteAccount": "Fiók törlése",
+  "settingsPrivacyDeleteConfirmTitle": "Törlöd a fiókot?",
+  "settingsPrivacyDeleteConfirmDescription": "A kérelem a feldolgozás után végleges. Elveszítheted a kapcsolt fiókokat, értesítési beállításokat, mentett preferenciákat és hitelesítési módokat.",
+  "generalUnranked": "Nincs rangsorolva",
+  "playerJoinLeaveTab": "Csatlakozás / Kilépés",
+  "playerUpgradeRemainingAccessibility": "Hátralévő a(z) {townHallLevel}. városházához",
+  "playerUpgradeSummaryTitle": "{progress}% kész a(z) {townHallLevel}. városházánál",
+  "playerUpgradeSectionMaxed": "Ez a szakasz teljes a(z) {townHallLevel}. városházánál.",
+  "playerUpgradeTimeRemaining": "Hátralévő idő",
+  "playerUpgradeNoResourceData": "Nincs nyersanyagadat",
+  "playerJoinLeaveLoadError": "Nem sikerült betölteni a csatlakozási / kilépési előzményeket",
+  "playerJoinLeaveClanTotals": "Klánösszesítések",
+  "playerJoinLeaveTime": "Idő",
+  "playerJoinLeaveTimeSpent": "Eltöltött idő",
+  "playerJoinLeaveVisits": "Látogatások",
+  "playerJoinLeaveJoined": "Csatlakozott",
+  "playerJoinLeaveLeft": "Kilépett",
+  "playerJoinLeaveNoHistory": "Nincsenek csatlakozási / kilépési előzmények",
+  "playerJoinLeaveNoClanTotals": "Nincsenek klánösszesítések",
+  "@playerUpgradeRemainingAccessibility": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSummaryTitle": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      },
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "@playerUpgradeSectionMaxed": {
+    "placeholders": {
+      "townHallLevel": {
+        "type": "int"
+      }
+    }
+  }
+}
