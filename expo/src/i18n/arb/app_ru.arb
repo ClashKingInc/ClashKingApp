@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Диапазон военной статистики",
+  "warStatsRangeDescription": "Выберите, охватывает ли статистика заданное число недавних войн или недавний период в днях.",
+  "warStatsRangeDays": "Дни",
+  "warStatsRangeWarsToInclude": "Учитываемые войны",
+  "warStatsRangeDaysToInclude": "Учитываемые дни",
+  "upgradeTrackerAllBuildersOccupied": "Все строители заняты",
+  "upgradeTrackerBuildCost": "Стоимость строительства",
+  "upgradeTrackerBuilderBaseBuilders": "Строители Деревни строителя",
+  "upgradeTrackerBuilderBaseLaboratory": "Лаборатория Деревни строителя",
+  "upgradeTrackerCalendar": "Календарь",
+  "upgradeTrackerClearCost": "Стоимость удаления",
+  "upgradeTrackerCompletionDetails": "Сведения о завершении деревни",
+  "upgradeTrackerCustomSoundtrack": "Пользовательская музыка",
+  "upgradeTrackerGoldPassPercent": "Золотой пропуск {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Сводка: {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -28,10 +28,10 @@
       }
     }
   },
-  "upgradeTrackerGuardians": "Изображения хранителей",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerGuardians": "Хранители",
+  "upgradeTrackerHelpers": "Помощники",
+  "upgradeTrackerHouseParts": "Части дома",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# свободный строитель} other {# свободных строителей}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "В процессе",
+  "upgradeTrackerItemSemanticLabel": "{item}, уровень {currentLevel} из {targetLevel}{count, plural, =1 {} other {, зданий: #}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "В наличии: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Линия",
   "upgradeTrackerLevelTransition": "Уровень {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Ресурсы сейчас",
+  "upgradeTrackerLootOutlook": "Прогноз ресурсов",
+  "upgradeTrackerMusic": "Музыка",
+  "upgradeTrackerNextDays": "{count, plural, one {Следующий # день} other {Следующие # дней}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Следующий период",
+  "upgradeTrackerNoGoldPass": "Без Золотого пропуска",
+  "upgradeTrackerNoMatchingUpgrades": "Нет подходящих улучшений",
+  "upgradeTrackerNoMatchingUpgradesBody": "Выберите другую деревню или очередь.",
+  "upgradeTrackerNothingNeededNow": "Сейчас ничего не требуется",
+  "upgradeTrackerObstacles": "Препятствия",
+  "upgradeTrackerPart": "Часть",
+  "upgradeTrackerPassReward": "Награда пропуска",
+  "upgradeTrackerPauseSoundtrack": "Приостановить музыку",
+  "upgradeTrackerPeriodCount": "Период {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Воспроизвести музыку",
+  "upgradeTrackerPreviousPeriod": "Предыдущий период",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Пейзажи",
+  "upgradeTrackerScheduledLane": "Запланировано на линии №{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Прогресс: {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "Запланировано",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "Размер",
+  "upgradeTrackerSortLongest": "Сначала долгие",
+  "upgradeTrackerSortName": "Имя А–Я",
+  "upgradeTrackerSortScheduled": "Запланированные",
+  "upgradeTrackerSortShortest": "Сначала короткие",
+  "upgradeTrackerSoundtrackPosition": "Позиция воспроизведения",
   "upgradeTrackerStarts": "Начало",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "Уровень",
+  "upgradeTrackerUpgradesStarting": "начинающиеся улучшения",
+  "upgradeTrackerUpgradingNow": "Улучшается сейчас",
+  "upgradeTrackerWarBase": "Военная база",
+  "notifSettingsSaveFailed": "Не удалось сохранить настройки уведомлений.",
+  "notifPushEnabled": "Push-уведомления включены",
+  "notifReceiveNotifications": "Получать уведомления",
+  "notifTokenPreview": "Токен: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Включённые оповещения могут доставляться на это устройство.",
+  "notifDisabledAccountDescription": "Уведомления отключены для всей вашей учётной записи ClashKing.",
+  "notifMaximumRemindersAdded": "Добавлено максимальное количество напоминаний",
+  "notifAddReminder": "Добавить напоминание",
+  "notifDurationOneHour": "1 час",
+  "notifDurationHours": "{count} часов",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} минут",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Добавить {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "за 1 час",
+  "notifTimingHoursBefore": "за {count} часов",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "за {count} минут",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,19 +206,19 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Push-уведомления готовы на этом устройстве.",
+  "notifPushPermissionRequired": "Разрешите уведомления, чтобы получать оповещения ClashKing.",
+  "notifPushPermissionDenied": "В разрешении на уведомления отказано.",
+  "notifPushNotConfigured": "Firebase не настроен для этой сборки.",
+  "notifPushTokenUnavailable": "Push-токен пока недоступен.",
+  "notifPushUnsupported": "Push-уведомления не поддерживаются на этой платформе.",
+  "notifPushInitializing": "Настройка push-уведомлений…",
+  "notificationPrimerTitle": "Включить уведомления?",
+  "notificationPrimerBody": "ClashKing может уведомлять вас об обновлениях войн, CWL, аккаунта и проектов. Это можно изменить в любое время в разделе «Настройки» > «Уведомления».",
+  "notificationPrimerNotNow": "Не сейчас",
+  "notificationPrimerAllow": "Разрешить",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "achievementsTitle": "Список достижений",
+  "achievementsTitle": "Достижения",
   "achievementEarnedLabel": "Получено",
   "achievementSummary": "{earned}/{total} завершено",
   "achievementEarnedCount": "Получено ×{count}",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Поиск участников",
   "clanMembersShowTotals": "Показать итоги клана",
   "clanMembersHideTotals": "Скрыть итоги клана",
-  "clanMembersReceivedShort": "Получено",
+  "clanMembersReceivedShort": "Полученный",
   "clanMembersAverageTh": "Среднее число чехов",
   "clanMinimumMembers": "Минимум участников",
   "clanMaximumMembers": "Максимум участников",
@@ -1105,8 +1105,26 @@
   "warTitle": "Война",
   "warFrequency": "Частота войн",
   "warParticipation": "Участие в войне",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Только участник",
+  "warStatsRangeWarsCompact": "{number} войн",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} дней",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Последние {number} дней",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Текущие участники",
   "warLeague": "Война/Лига",
   "warHistory": "История войн",
   "warLog": "Журнал войн",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "Лучшие атаки",
   "warAttacksCount": "Количество атак",
   "warAttacksMissed": "Пропущенные атаки",
-  "warAttacksMissedShort": "Пропущено",
+  "warAttacksMissedShort": "Пропущенный",
   "warAttacksNumber": "Вы атаковали {number_time} раз(а) за последние {number_war} войн.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Звезды войны",
   "playerWarPreferenceTitle": "Военный преф.",
   "playerDonatedTitle": "Пожертвовано",
-  "playerReceivedTitle": "Получено",
+  "playerReceivedTitle": "Полученный",
   "playerCapitalTitle": "Капитал",
   "playerExpLevelTitle": "Эксп. уровень",
   "clanWarWinsTitle": "Война побеждает",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "Разрушено районов",
   "raidsCompleted": "Рейды завершены",
   "capitalRaidStatusOngoing": "Непрерывный",
-  "capitalRaidStatusEnded": "Завершен",
+  "capitalRaidStatusEnded": "Закончено",
   "capitalRaidLoot": "Лут",
   "capitalRaidRewards": "Награды",
   "capitalRaidPreviousWeek": "Предыдущая неделя",
@@ -1923,7 +1941,7 @@
   "faqFeaturesCwlDescription": "Результаты Лиги войн кланов и вклад участников",
   "faqFeaturesTodoTitle": "Список задач",
   "faqFeaturesTodoDescription": "Проверяйте, каким аккаунтам ещё нужны рейтинговые атаки, рейды, атаки на войне, Игры кланов или действия сезонного пропуска",
-  "faqFeaturesUpgradeTrackerTitle": "Обновление трекера",
+  "faqFeaturesUpgradeTrackerTitle": "Отслеживание улучшений",
   "faqFeaturesUpgradeTrackerDescription": "Загрузите предоставленный пользователем снимок аккаунта, чтобы увидеть оставшиеся улучшения и ресурсы, занятость строителей и лаборатории, а также общий прогресс",
   "faqFeaturesNotificationsTitle": "Мгновенные уведомления",
   "faqFeaturesNotificationsDescription": "Укажите аккаунты, для которых нужно получать оповещения о поддерживаемых событиях ClashKing",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Подключённые приложения",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Просматривайте и отключайте приложения с доступом к аккаунту.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Активные подключения",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Нет подключённых приложений",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Подключённые приложения появятся здесь.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Не удалось загрузить подключённые приложения",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Все текущие и будущие привязанные аккаунты",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "Выбрано аккаунтов: {count}",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Отключить",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Отключить приложение?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "Приложение {name} немедленно потеряет доступ к вашим привязанным аккаунтам.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Приложение {name} отключено.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Не удалось отключить приложение {name}. Повторите попытку.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Вошёл в систему",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2880,8 +2970,8 @@
   "dashboardUpgradeTrackerTimeLeft": "Расчётный срок",
   "dashboardUpgradeTrackerBuilders": "Строители сейчас",
   "dashboardUpgradeTrackerLab": "Исследования",
-  "dashboardUpgradeTrackerPets": "Животные",
-  "dashboardUpgradeTrackerWalls": "Улучшения стен",
+  "dashboardUpgradeTrackerPets": "Питомцы",
+  "dashboardUpgradeTrackerWalls": "Улучшение стен",
   "dashboardUpgradeTrackerVillage": "Поселение",
   "dashboardRankedNoData": "Откройте рейтинговую лигу, чтобы посмотреть положение этого аккаунта.",
   "dashboardRankedAccounts": "Отслеживается аккаунтов: {loaded}/{total}",
@@ -2931,7 +3021,7 @@
   "damageCalculatorSubtitle": "Сопоставьте набор средств атаки сразу с несколькими зданиями.",
   "damageNoStaticDataTitle": "Сведения об уроне недоступны",
   "damageNoStaticDataBody": "Обновите приложение после окончания загрузки статических данных игры.",
-  "damageTownHall": "Ратуша",
+  "damageTownHall": "Уровень ратуши",
   "damageVerifiedAccountPrefill": "Набор из подтверждённого аккаунта",
   "damageOverridesStayLocal": "Эти изменения не повлияют на аккаунт игрока.",
   "damageTargets": "Целевые здания",
@@ -2971,7 +3061,7 @@
   "damageSourceLightning": "Заклинание Молнии",
   "damageSourceEarthquake": "Заклинание Землетрясения",
   "damageSourceGiantArrow": "Гигантская Стрела",
-  "damageSourceFireball": "Огненный шар",
+  "damageSourceFireball": "Огненный Шар",
   "damageSourceFlameFlinger": "Попадание Огнемётчика",
   "damageSourceBalloonDeath": "Урон при гибели Шара",
   "damageSourceRocketBalloonDeath": "Урон при гибели Ракетного Шара",
@@ -3047,7 +3137,7 @@
   "warWidgetNoData": "Данных о войне нет.",
   "warWidgetLastUpdated": "Последнее обновление: {time}",
   "todoEventClanGames": "Клановые игры",
-  "todoEventCwl": "Лига войн кланов",
+  "todoEventCwl": "КВЛ",
   "todoEventSeasonEnds": "Сезон заканчивается",
   "todoEventLeagueReset": "Сброс лиги",
   "todoEventRaidWeekend": "Рейдовые выходные",
@@ -3109,7 +3199,7 @@
   "gameTownHallLevelShort": "ТХ{level}",
   "warAttackerTownHall": "ТХ атакующего",
   "warDefenderTownHall": "ТХ защитника",
-  "warStatsFilterSameTownHallOnly": "Только одинаковый ТХ",
+  "warStatsFilterSameTownHallOnly": "Только одинаковая Ратуша",
   "warStatsFilterSameTownHallDescription": "Показывать только атаки, где у атакующего и защитника одинаковый уровень ТХ",
   "generalAny": "Любой",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3135,17 +3225,17 @@
   "settingsAddWarWidget": "Добавить виджет войны",
   "settingsWarWidgetLinkClanFirst": "Сначала привяжите аккаунт в клане",
   "settingsWarWidgetClanCount": "Доступно кланов: {count}",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Выберите клан. После добавления виджета нажмите и удерживайте его, выберите Изменить виджет, затем выберите Клан.",
+  "settingsWarWidgetAndroidInstructions": "Выберите клан, затем добавьте виджет через меню виджетов Android.",
+  "settingsWarWidgetEmpty": "Сейчас ни один из связанных аккаунтов не состоит в клане.",
+  "settingsWarWidgetIosFooter": "Добавьте несколько виджетов войны и выберите отдельный клан для каждого.",
+  "settingsWarWidgetIosReady": "{clanName} готов. Измените виджет и выберите его в разделе Клан.",
+  "settingsWarWidgetAndroidReady": "Данные виджета для {clanName} готовы.",
+  "settingsWarWidgetPrepareFailed": "Не удалось подготовить виджет: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Аккаунты, привязанные к боту, и данные Discord",
   "settingsDiscordSyncSubtitle": "Синхронизация аккаунтов, привязанных к боту, и данных Discord",
-  "settingsConnected": "Подключён",
+  "settingsConnected": "Подключено",
   "settingsClashKingAccount": "Аккаунт ClashKing",
   "settingsEmailConnectedSubtitle": "Вход по email подключён",
   "settingsEmailRecoverySubtitle": "Добавьте вход по email для восстановления аккаунта",
@@ -3257,14 +3347,14 @@
   "sideRankingsEmptyTitle": "Рейтинги не вернулись",
   "sideRankingsEmptyBody": "Попробуйте другую таблицу лидеров или локацию.",
   "sideRankingsMockups": "Макеты ClashKing",
-  "rankingsBuilderBase": "Деревня Строителя",
-  "rankingsTownHall": "Ратуша",
+  "rankingsBuilderBase": "База строителя",
+  "rankingsTownHall": "Уровень ратуши",
   "rankingsRankedLeague": "Лига рейтинговых боёв",
-  "rankingsClanCapital": "Столица клана",
-  "rankingsDonations": "Пожертвования",
+  "rankingsClanCapital": "Рейтинг столицы клана",
+  "rankingsDonations": "По пожертвованиям",
   "rankingsWarWins": "Победы в войнах",
   "rankingsWinStreak": "Серия побед",
-  "rankingsCurrent": "Актуальные",
+  "rankingsCurrent": "Сейчас",
   "rankingsWorldwide": "Весь мир",
   "rankingsSelectLocation": "Выбрать регион",
   "rankingsSearchLocations": "Поиск по названию или коду страны",
@@ -3273,7 +3363,7 @@
   "rankingsSnapshotDate": "Дата сохранения",
   "rankingsSource": "Источник данных",
   "rankingsOfficialSource": "Официальные данные Clash API",
-  "rankingsResults": "Итог",
+  "rankingsResults": "Места в рейтинге",
   "rankingsTopCount": "Первые {count}",
   "@rankingsTopCount": {
     "placeholders": {
@@ -3299,8 +3389,8 @@
   "statsOverview": "Обзор",
   "statsArmies": "Армии",
   "statsItems": "Предметы",
-  "statsWar": "Война",
-  "statsCwl": "Лига войн кланов",
+  "statsWar": "Войны",
+  "statsCwl": "Лиги войн кланов",
   "statsRanked": "Рейтинговые бои",
   "statsDateRange": "Период",
   "statsDateRangeHint": "Выберите до 90 дней",
@@ -3311,10 +3401,10 @@
   "statsAddItemsTitle": "Выберите предметы для анализа",
   "statsAddItemsBody": "Добавьте войска, заклинания, героев, питомцев или снаряжение, затем запустите запрос.",
   "statsGlobalCounts": "Глобальное количество",
-  "statsPerformance": "Эффективность",
+  "statsPerformance": "Производительность",
   "statsSamples": "Образцы",
   "statsUsage": "Использование",
-  "statsAverageStars": "Среднее число звёзд",
+  "statsAverageStars": "Среднее количество звёзд",
   "statsAverageDestruction": "Среднее разрушение",
   "statsStarRates": "Звездные рейтинги",
   "statsThreeStarRate": "Три звезды",
@@ -3337,7 +3427,7 @@
   "statsItemType": "Тип предмета",
   "statsTroop": "Войска",
   "statsSpell": "Заклинаниям",
-  "statsHero": "Герой",
+  "statsHero": "Героев",
   "statsPet": "Питомцы",
   "statsEquipment": "Оборудование",
   "statsOwningHero": "Владелец героя",
@@ -3397,7 +3487,7 @@
   "gameAssetsSearchHint": "Поиск по категории",
   "gameAssetsAllFormats": "Любой формат",
   "gameAssetsOneResult": "Найдено: 1",
-  "gameAssetsResultCount": "{count} результатов",
+  "gameAssetsResultCount": "Найдено: {count}",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3415,7 +3505,7 @@
   "gameAssetsCopyError": "Не получилось скопировать сведения о материале.",
   "gameAssetsShare": "Отправить",
   "gameAssetsShareError": "Этим материалом не получилось поделиться.",
-  "gameAssetsSave": "Сохранить",
+  "gameAssetsSave": "Скачать",
   "gameAssetsSaving": "Идёт сохранение…",
   "gameAssetsSaved": "Материал сохранён.",
   "gameAssetsSavedTo": "Материал сохранён: {path}",
@@ -3481,7 +3571,7 @@
       }
     }
   },
-  "sideLocation": "Расположение",
+  "sideLocation": "Локация",
   "sideFilter": "Фильтр",
   "sideRefresh": "Обновить",
   "sideOfficialClashLeaderboard": "Официальная таблица лидеров Clash",
@@ -3506,18 +3596,18 @@
   "rankingClanBuilderHeading": "Рейтинг кланов по базе строителя",
   "rankingClanCapital": "Столица клана",
   "rankingClanCapitalHeading": "Рейтинг столицы кланов",
-  "assetFolderEquipment": "Оборудование",
+  "assetFolderEquipment": "Снаряжение",
   "assetFolderLeagues": "Лиги",
   "assetFolderResources": "Ресурсы",
   "assetFolderStickers": "Стикеры",
   "upgradeSectionHeroes": "Герои",
-  "upgradeSectionTroops": "Войны",
+  "upgradeSectionTroops": "Войска",
   "upgradeSectionSpells": "Заклинания",
-  "upgradeSectionPets": "Животные",
-  "upgradeSectionEquipment": "Оборудование",
-  "sideMockupSource": "Источник данных",
+  "upgradeSectionPets": "Питомцы",
+  "upgradeSectionEquipment": "Снаряжение",
+  "sideMockupSource": "Источник",
   "sideMockupMode": "Режим",
-  "sideMockupPreview": "Предварительный просмотр",
+  "sideMockupPreview": "Предпросмотр",
   "sideMockupRows": "Строки",
   "sideMockupRowsValue": "5 макетов",
   "endpointLeagueTop200": "Топ-200 лиги",
@@ -3760,7 +3850,7 @@
       }
     }
   },
-  "gameTownHallShortLevel": "ТХ{level}",
+  "gameTownHallShortLevel": "Ратуша {level}",
   "@gameTownHallShortLevel": {
     "placeholders": {
       "level": {
@@ -3805,7 +3895,7 @@
     }
   },
   "upgradeTrackerSnapshotUnreadable": "Не удалось прочитать сведения об аккаунте",
-  "upgradeTrackerTryAgain": "Попробовать снова",
+  "upgradeTrackerTryAgain": "Повторить попытку",
   "upgradeTrackerNoDataTitle": "Перенесите сведения о деревне в ClashKing",
   "upgradeTrackerNoDataBody": "Скопируйте JSON «Данные аккаунта» в Clash of Clans и вставьте его из буфера обмена. Всё останется на этом устройстве.",
   "upgradeTrackerNoDataLocation": "В Clash of Clans откройте «Настройки» > «Дополнительные настройки». Пункт с JSON данных аккаунта расположен сразу под токеном API.",
@@ -3840,12 +3930,12 @@
   "upgradeTrackerSearchCollection": "Найти в собрании",
   "upgradeTrackerShowFilters": "Открыть фильтры",
   "upgradeTrackerHideFilters": "Закрыть фильтры",
-  "upgradeTrackerFilterAll": "Все",
+  "upgradeTrackerFilterAll": "Все варианты",
   "upgradeTrackerFilterOwned": "Получено",
   "upgradeTrackerFilterMissing": "Не получено",
   "upgradeTrackerAllVillages": "Обе деревни",
   "upgradeTrackerHomeVillage": "Основная деревня",
-  "upgradeTrackerBuilderBase": "Деревня Строителя",
+  "upgradeTrackerBuilderBase": "База строителя",
   "upgradeTrackerNoMatchingItems": "Ничего подходящего не найдено",
   "upgradeTrackerOwnedCount": "Получено: {owned} из {total}",
   "@upgradeTrackerOwnedCount": {
@@ -3886,9 +3976,9 @@
     }
   },
   "upgradeTrackerLaboratory": "Исследования в лаборатории",
-  "upgradeTrackerPets": "Животные",
+  "upgradeTrackerPets": "Улучшения питомцев",
   "upgradeTrackerWalls": "Улучшения стен",
-  "upgradeTrackerEquipment": "Оборудование",
+  "upgradeTrackerEquipment": "Снаряжение героев",
   "upgradeTrackerLevelsRemaining": "Уровней до завершения: {count}",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
@@ -3971,9 +4061,9 @@
   },
   "upgradeTrackerHeaderComplete": "Выполнено",
   "upgradeTrackerHeaderLevelsLeft": "Осталось уровней",
-  "upgradeTrackerHeaderActive": "Активный",
+  "upgradeTrackerHeaderActive": "В процессе",
   "upgradeTrackerHeaderFinishes": "Завершение",
-  "upgradeTrackerHeaderOwned": "Получено",
+  "upgradeTrackerHeaderOwned": "В наличии",
   "upgradeTrackerHeaderUpdated": "Последнее обновление",
   "homeCouldNotLoadTitle": "Главный экран не загрузился",
   "homeVerifiedAccountRequiredTitle": "Подтвердите привязанный аккаунт",
@@ -3989,7 +4079,7 @@
   "homeTodoTitle": "Задачи",
   "homeTodoSubtitle": "Требующие действий сведения об аккаунтах, сначала самые срочные.",
   "homeTodoEmpty": "Сейчас ни один подтверждённый аккаунт не требует действий.",
-  "homeClanless": "Без клана",
+  "homeClanless": "Не состоит в клане",
   "homeNeedsAttention": "Нужно проверить",
   "homeCaughtUp": "Всё выполнено",
   "homeTrackingDataPending": "Этот подтверждённый игрок отслеживается недавно или давно неактивен, поэтому полезные сведения ещё не появились.",
@@ -4005,7 +4095,7 @@
   },
   "homeUpgradeIdle": "Активных таймеров улучшений нет — возможно, строители свободны.",
   "homeDone": "Завершено",
-  "homeRemainingCount": "осталось: {count}",
+  "homeRemainingCount": "Ещё {count}",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -4133,13 +4223,13 @@
   "statsExactLoadouts": "Точное снаряжение",
   "statsCustomLens": "Пользовательский объектив",
   "statsCustomLensBody": "Выберите необходимое количество, исключения, ратушу, лигу, этаж выборки и порядок сортировки. Это соответствует реальным загрузкам, но еще не сохранено.",
-  "rankedLeagueTitle": "Лига рейтинговых боёв",
+  "rankedLeagueTitle": "Рейтинговая лига Clash",
   "rankedLeagueAbout": "О лиге рейтинговых боёв",
   "rankedLeagueAboutBody": "Здесь используются официальная еженедельная группа рейтинговой лиги, журналы боёв и история периодов. До конца периода текущие результаты могут измениться.",
-  "rankedLeagueOverview": "Обзор",
+  "rankedLeagueOverview": "Сводка",
   "rankedLeagueRanking": "Турнирная таблица",
   "rankedLeagueGroupRank": "Место в группе",
-  "rankedLeagueTrophies": "Трофеи",
+  "rankedLeagueTrophies": "Количество трофеев",
   "rankedLeaguePlayers": "Игроков: {count}",
   "@rankedLeaguePlayers": {
     "placeholders": {
@@ -4174,8 +4264,8 @@
   },
   "rankedLeagueRecentBattles": "Последние бои",
   "rankedLeagueRecentBattlesSubtitle": "Подробные итоги доступны для действующей недельной группы.",
-  "rankedLeagueAttacks": "Атаки",
-  "rankedLeagueDefenses": "Защиты",
+  "rankedLeagueAttacks": "Наступления",
+  "rankedLeagueDefenses": "Обороны",
   "rankedLeagueNoBattles": "Записей о боях пока нет.",
   "rankedLeagueGroupRanking": "Таблица группы",
   "rankedLeagueRankingSubtitle": "Актуальные места в текущей группе. Ваш игрок выделен.",
@@ -4222,8 +4312,8 @@
   },
   "rankedLeagueByPeriod": "По игровым периодам",
   "rankedLeaguePeriodTab": "Игровой период",
-  "rankedLeagueAverage": "Средний",
-  "rankedLeagueRemaining": "Осталось",
+  "rankedLeagueAverage": "Среднее значение",
+  "rankedLeagueRemaining": "Оставшееся",
   "rankedLeagueSevenDayPeriod": "Семидневный период рейтинговой лиги",
   "rankedLeagueEquipmentUnavailable": "Официальные журналы рейтинговой лиги пока не содержат состав армии и снаряжение.",
   "rankedLeagueBattleDetailsUnavailable": "Для этого периода подробные журналы сражений недоступны.",
@@ -4271,8 +4361,8 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Выбранные аккаунты",
-  "notifAudienceAcrossDevicesDescription": "Выберите, какие аккаунты могут получать уведомления на этом устройстве.",
+  "notifChooseAccountsManually": "Указать аккаунты вручную",
+  "notifAudienceAcrossDevicesDescription": "Этот выбор аккаунтов действует на всех ваших устройствах.",
   "notifAccountBookmarked": "В закладках",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "Военные атаки",
+  "notifGroupWarAttacks": "Атаки войны",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4340,7 +4430,7 @@
   "widgetTownHallLabBoost": "Ускорение лаборатории от ратуши",
   "widgetBuilderBoostShort": "Строительство",
   "widgetResearchBoostShort": "Лаборатория",
-  "widgetPetBoostShort": "Питомцы",
+  "widgetPetBoostShort": "Ускорение питомцев",
   "widgetClockBoostShort": "Башня",
   "widgetBuilderCostPerk": "Скидка {percent}% на строительство",
   "@widgetBuilderCostPerk": {
@@ -4376,19 +4466,19 @@
   },
   "farmGoalTitle": "Цель по добыче",
   "farmGoalFormTitle": "Сколько ресурсов нужно добыть",
-  "farmGoalAccountTitle": "Счет",
+  "farmGoalAccountTitle": "Игровой аккаунт",
   "farmGoalAccountHint": "Ратуша и текущая лига для расчёта берутся из выбранного аккаунта.",
   "farmGoalTargetTitle": "Планируемое улучшение",
   "farmGoalTargetBuildingLabel": "Улучшаемое здание",
   "farmGoalChooseBuilding": "Указать здание",
   "farmGoalChangeBuilding": "Сменить здание",
-  "farmGoalNoTargetTitle": "Цель не указана",
+  "farmGoalNoTargetTitle": "Здание не выбрано",
   "farmGoalNoTargetBody": "Выберите здание для улучшения, чтобы рассчитать необходимое количество ресурсов.",
   "farmGoalTargetLevelLabel": "Уровень улучшения",
-  "farmGoalUpgradeCostLabel": "Стоимость улучшения",
+  "farmGoalUpgradeCostLabel": "Цена следующего улучшения",
   "farmGoalCostUnavailable": "Для этого уровня неизвестна цена улучшения.",
   "farmGoalLootTitle": "Расчётная добыча",
-  "farmGoalResourceLabel": "Ресурс",
+  "farmGoalResourceLabel": "Вид ресурса",
   "farmGoalAmountLabel": "Требуемая добыча",
   "farmGoalAverageLootLabel": "Доступная добыча в деревне",
   "farmGoalPerfectLootHint": "Введите добычу, показанную перед атакой. Указанный ниже бонус лиги добавится автоматически.",
@@ -4477,7 +4567,7 @@
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "Отслеживается аккаунтов: {loaded}/{total}",
+  "dashboardUpgradeTrackerAccounts": "Аккаунтов с отслеживанием: {loaded}/{total}",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4489,27 +4579,27 @@
     }
   },
   "calculatorsModeDamage": "Расчёт урона",
-  "calculatorsModeFarmGoal": "Цель по добыче",
+  "calculatorsModeFarmGoal": "План добычи",
   "damageCalculatorTitle": "Расчётчик урона",
-  "damageAccountPresetShort": "Счет",
+  "damageAccountPresetShort": "Данные аккаунта",
   "damageChooseAccount": "Укажите аккаунт",
   "damageSwitchAccount": "Выбрать другой аккаунт",
   "damageAccountSelectorHint": "Уровни берутся из выбранного аккаунта.",
   "damageNoAccountsAvailable": "Нет доступных подтверждённых аккаунтов",
   "damageTargetSectionTitle": "Цель для уничтожения",
-  "damageChooseTarget": "Указать здание",
+  "damageChooseTarget": "Указать целевое здание",
   "damageNoTargetTitle": "Цель не указана",
   "damageNoTargetBody": "Укажите здание, чтобы рассчитать, какой урон оно выдержит.",
-  "damageTargetLevelLabel": "Уровень улучшения",
+  "damageTargetLevelLabel": "Уровень цели",
   "damageCommonBuildings": "Популярные цели",
   "damageAllBuildings": "Любое здание",
   "damageQuickSetups": "Выберите способ атаки",
   "damageQuickSetupZapQuake": "Молнии и Землетрясения",
   "damageQuickSetupFireballQuake": "Огненный Шар и Землетрясения",
-  "damageQuickSetupGiantArrow": "Гигантская Стрела",
+  "damageQuickSetupGiantArrow": "Снаряжение «Гигантская Стрела»",
   "damageQuickSetupFlameFlinger": "Осадная машина «Огнемётчик»",
   "damageQuickSetupCustom": "Свой набор",
-  "damageClearStack": "Прозрачный",
+  "damageClearStack": "Очистить набор",
   "damageNoDamageSelected": "Урон не выбран",
   "damageSelectedSourcesCount": "Выбрано источников: {count}",
   "@damageSelectedSourcesCount": {
@@ -4528,26 +4618,26 @@
   "todoMockRaid4Left": "4 осталось",
   "todoMockWarAltStatus": "Активен 18 м назад · война и рейды требуют внимания",
   "todoMockRaid1Left": "1 остался",
-  "gameAssetsCategoryBuildings": "Целевые здания",
+  "gameAssetsCategoryBuildings": "Изображения зданий",
   "gameAssetsCategoryCapitalBase": "База столицы",
   "gameAssetsCategoryCapitalHouseParts": "Детали домов столицы",
   "gameAssetsCategoryChests": "Изображения сундуков",
   "gameAssetsCategoryClanLabels": "Метки кланов",
   "gameAssetsCategoryCountryFlags": "Флаги государств",
   "gameAssetsCategoryDecorations": "Изображения декораций",
-  "gameAssetsCategoryEquipment": "Оборудование",
+  "gameAssetsCategoryEquipment": "Снаряжение героев",
   "gameAssetsCategoryGuardians": "Изображения хранителей",
-  "gameAssetsCategoryHeroes": "Герои",
-  "gameAssetsCategoryPets": "Животные",
+  "gameAssetsCategoryHeroes": "Изображения героев",
+  "gameAssetsCategoryPets": "Изображения питомцев",
   "gameAssetsCategorySkins": "Облики героев",
-  "gameAssetsCategorySpells": "Заклинания",
-  "gameAssetsCategoryTroops": "Войны",
-  "assetFolderTroops": "Войны",
+  "gameAssetsCategorySpells": "Изображения заклинаний",
+  "gameAssetsCategoryTroops": "Изображения бойцов",
+  "assetFolderTroops": "Войска",
   "assetFolderSpells": "Заклинания",
   "assetFolderHeroes": "Герои",
   "endpointStateWins": "Победы",
-  "notifGroupBattles": "Проведённые бои",
-  "notifGroupSupport": "Поддерживать",
+  "notifGroupBattles": "Битвы",
+  "notifGroupSupport": "Поддержка",
   "rankedLeagueAccountSelector": "Отображаемый аккаунт",
   "rankedLeagueStars": "Звёзды",
   "playerBattlelogTab": "Проведённые бои",
@@ -4565,9 +4655,9 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Атаки",
+  "playerBattlelogAttacks": "Наступления",
   "playerBattlelogAverageDestruction": "Среднее разрушение",
-  "playerBattlelogAverageStars": "Среднее число звёзд",
+  "playerBattlelogAverageStars": "Среднее количество звёзд",
   "playerBattlelogTripleRate": "Три звезды",
   "playerBattlelogAverageLoot": "Средняя добыча",
   "playerBattlelogPopularTroops": "Самые используемые войска",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Планируйте приоритеты",
+  "upgradeTrackerPlanPrioritiesDescription": "Ранжируйте то, что важнее всего. Уровни обновления и активная работа всегда остаются в порядке.",
   "upgradeTrackerPlanClose": "Закрыть",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Планирование целей",
+  "upgradeTrackerPlanConstructionSubtitle": "Строительство и улучшения героев",
+  "upgradeTrackerPlanResearchSubtitle": "Войска, заклинания и исследования осад",
+  "upgradeTrackerPlanPetHouseSubtitle": "Улучшения домика для домашних животных",
+  "upgradeTrackerPlanPrioritizeNewItems": "Отдавайте приоритет новым предметам",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Сначала размещайте недавно разблокированные или непостроенные предметы.",
+  "upgradeTrackerPlanSharedSummary": "Уровень {tier} · общий микс {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Уровень {tier} · строгий · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "работает до максимума",
+  "upgradeTrackerPlanYieldsAfter": "доходность после {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "Строгий",
+  "upgradeTrackerPlanMax": "Макс",
+  "upgradeTrackerPlanReorder": "Изменить порядок {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Относительный вес уровня",
+  "upgradeTrackerPlanCompletionTarget": "Цель завершения",
+  "upgradeTrackerPlanStrictTier": "Строгий уровень",
+  "upgradeTrackerPlanWeight": "Вес {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "До достижения максимума",
+  "upgradeTrackerPlanUntilPercent": "До {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Пронумерованные уровни запускаются первыми. Общие строки сохраняют тот же номер уровня, а их сочетание нормализуется на основе относительных весов, поэтому 50 + 25 становится 67%/33%. Цель дает доход по категории после достижения этого процента, но остается подходящей для нее позже.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Макс перед продвижением",
+  "upgradeTrackerPlanGoalRushNextHall": "Быстро доберитесь до следующего зала",
+  "upgradeTrackerPlanGoalCatchUp": "Проходите быстрые уровни",
+  "upgradeTrackerPlanGoalUnlockFirst": "Сначала открывайте новые вещи",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
-  "upgradeTrackerPlanOff": "Выключено",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanWallsEachWeek": "Стены каждую неделю",
+  "upgradeTrackerPlanOff": "Выкл.",
+  "upgradeTrackerPlanPerWeek": "{count} / неделя",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "Предпочитайте золото для стен",
+  "upgradeTrackerPlanPreferGoldDescription": "Используйте золото перед эликсиром при трате стен.",
+  "upgradeTrackerPlanApplyPriorities": "Применить приоритеты",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Созданная защита",
+  "upgradeTrackerPlanCategoryTraps": "Ловушки",
+  "upgradeTrackerPlanCategoryArmy": "Армия",
+  "upgradeTrackerPlanCategoryDarkTroops": "Темные войска",
+  "upgradeTrackerPlanCategorySieges": "Осада",
+  "upgradeTrackerPlanCategorySupercharge": "Суперзаряд",
+  "navigationCloseDrawer": "Закрыть панель навигации",
+  "navigationOpenProfileMenu": "Открыть меню профиля",
+  "navigationClashKingWeb": "ClashKing в браузере",
+  "settingsPrivacyDataTitle": "Конфиденциальность и данные",
+  "settingsPrivacyPolicyDescription": "Узнайте, какие данные собирает ClashKing, зачем они используются, кто их обрабатывает, каковы правила хранения и как с нами связаться.",
+  "settingsPrivacyExportTitle": "Доступ к данным или их экспорт",
+  "settingsPrivacyExportDescription": "Скачайте копию данных аккаунта, связанных со входом в ClashKing, включая привязанные аккаунты Clash of Clans и настройки уведомлений.",
+  "settingsPrivacyCorrectionTitle": "Исправление или ограничение данных",
+  "settingsPrivacyCorrectionDescription": "Удалите привязанные аккаунты Clash of Clans в настройках аккаунта, отключите уведомления или обратитесь в поддержку с запросом на исправление или ограничение данных.",
+  "settingsPrivacyDeletionTitle": "Удаление аккаунта ClashKing",
+  "settingsPrivacyDeletionDescription": "Это запустит удаление аккаунта ClashKing и связанных данных приложения, если только ClashKing не обязан хранить ограниченные сведения для безопасности, предотвращения мошенничества или выполнения юридических обязательств.",
+  "settingsPrivacyChildrenTitle": "Дети и семьи",
+  "settingsPrivacyChildrenDescription": "ClashKing — вспомогательное приложение для широкой аудитории, не предназначенное для детей. Не создавайте аккаунт, если в вашей стране вы ещё не можете дать согласие без разрешения родителя или опекуна.",
+  "settingsPrivacyExportReady": "Экспорт данных готов к сохранению.",
+  "settingsPrivacyExportCreateFailed": "Не удалось создать экспорт данных. Вместо этого подготовлено письмо по вопросам конфиденциальности.",
+  "settingsPrivacyExportPrepareFirst": "Подготовьте экспорт перед сохранением.",
+  "settingsPrivacyExportSaved": "Экспорт данных сохранён.",
+  "settingsPrivacyExportSaveFailed": "Не удалось сохранить экспорт данных. Вместо этого подготовлено письмо по вопросам конфиденциальности.",
+  "settingsPrivacyDeleteUnavailable": "Удаление аккаунта недоступно в этой сборке. Вместо этого подготовлено письмо по вопросам конфиденциальности.",
+  "settingsPrivacyOpenPolicy": "Открыть политику",
+  "settingsPrivacyRefreshExport": "Обновить экспорт",
+  "settingsPrivacyPrepareExport": "Подготовить экспорт",
+  "settingsPrivacySaveExport": "Сохранить экспорт",
+  "settingsPrivacyContactSupport": "Связаться с поддержкой",
+  "settingsPrivacyDeleteAccount": "Удалить аккаунт",
+  "settingsPrivacyDeleteConfirmTitle": "Удалить аккаунт?",
+  "settingsPrivacyDeleteConfirmDescription": "После обработки запрос станет необратимым. Вы можете потерять привязанные аккаунты, настройки уведомлений, сохранённые предпочтения и способы аутентификации.",
+  "generalUnranked": "Без рейтинга",
+  "playerJoinLeaveTab": "Вступление / Выход",
+  "playerUpgradeRemainingAccessibility": "Осталось для ратуши {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Завершено на {progress}% для ТХ{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Этот раздел завершён для ТХ{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Оставшееся время",
+  "playerUpgradeNoResourceData": "Нет данных о ресурсах",
+  "playerJoinLeaveLoadError": "Не удалось загрузить историю вступлений и выходов",
+  "playerJoinLeaveClanTotals": "Итоги по кланам",
   "playerJoinLeaveTime": "Время",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "Время в клане",
+  "playerJoinLeaveVisits": "Посещения",
+  "playerJoinLeaveJoined": "Вступил",
+  "playerJoinLeaveLeft": "Вышел",
+  "playerJoinLeaveNoHistory": "История вступлений и выходов отсутствует",
+  "playerJoinLeaveNoClanTotals": "Итоги по кланам отсутствуют",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
