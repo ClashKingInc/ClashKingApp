@@ -3228,8 +3228,38 @@ export function PlayerJoinLeaveTab({
   const totalMinutes = (totals ?? []).reduce((sum, total) => sum + total.minutes, 0);
   return (
     <View style={styles.sections}>
-      <View testID="player-join-leave-toolbar" style={styles.toolbar}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.grow}>
+      <View testID="player-join-leave-toolbar" style={styles.joinLeaveToolbar}>
+        <View testID="player-join-leave-controls-row" style={styles.joinLeaveControlsRow}>
+          <View testID="player-join-leave-view-control">
+            <FilterDropdown
+              value={view}
+              plain
+              showIcon={false}
+              choices={[
+                ['events', t('generalHistory')],
+                ['clans', t('playerJoinLeaveClanTotals')],
+              ]}
+              onSelect={(v) => setView(v as typeof view)}
+            />
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('generalFilters')}
+            accessibilityState={{ expanded: filtersExpanded }}
+            testID="player-join-leave-filter-control"
+            onPress={() => setFiltersExpanded((value) => !value)}
+          >
+            <PillSurface style={styles.compactFilterButton}>
+              <Filter size={17} color={theme.onSurfaceVariant} />
+            </PillSurface>
+          </Pressable>
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          testID="player-join-leave-summary-row"
+          style={styles.joinLeaveSummaryRail}
+        >
           <View style={styles.wrap}>
             {view === 'events' ? (
               <>
@@ -3264,29 +3294,6 @@ export function PlayerJoinLeaveTab({
             )}
           </View>
         </ScrollView>
-        <View testID="player-join-leave-view-control" style={styles.joinLeaveTrailingControl}>
-          <FilterDropdown
-            value={view}
-            fillWidth
-            showIcon={false}
-            choices={[
-              ['events', t('generalHistory')],
-              ['clans', t('playerJoinLeaveClanTotals')],
-            ]}
-            onSelect={(v) => setView(v as typeof view)}
-          />
-        </View>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('generalFilters')}
-          accessibilityState={{ expanded: filtersExpanded }}
-          testID="player-join-leave-filter-control"
-          onPress={() => setFiltersExpanded((value) => !value)}
-        >
-          <PillSurface style={styles.compactFilterButton}>
-            <Filter size={17} color={theme.onSurfaceVariant} />
-          </PillSurface>
-        </Pressable>
       </View>
       {filtersExpanded ? (
         view === 'events' ? (
@@ -3552,6 +3559,7 @@ function FilterDropdown({
   onSelect,
   fillWidth = false,
   icon,
+  plain = false,
   showIcon = true,
 }: {
   value: string;
@@ -3559,6 +3567,7 @@ function FilterDropdown({
   onSelect: (value: string) => void;
   fillWidth?: boolean;
   icon?: ReactNode;
+  plain?: boolean;
   showIcon?: boolean;
 }) {
   const theme = useCKTheme();
@@ -3568,6 +3577,7 @@ function FilterDropdown({
       accessibilityLabel={selected}
       fillWidth={fillWidth}
       leading={showIcon ? (icon ?? <Filter size={16} color={theme.onSurfaceVariant} />) : undefined}
+      plain={plain}
       onSelect={onSelect}
       options={choices.map(([key, label]) => ({ key, label }))}
       selectedKey={value}
@@ -4324,13 +4334,15 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 9,
   },
-  joinLeaveTrailingControl: {
-    width: 160,
-    minWidth: 130,
-    maxWidth: 180,
-    marginLeft: 'auto',
-    flexShrink: 1,
+  joinLeaveToolbar: { gap: 8 },
+  joinLeaveControlsRow: {
+    minHeight: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 8,
   },
+  joinLeaveSummaryRail: { width: '100%' },
   directionBadge: { width: 64, alignItems: 'center', padding: 5, borderRadius: ckRadius.tile },
   subRow: {
     minHeight: 42,

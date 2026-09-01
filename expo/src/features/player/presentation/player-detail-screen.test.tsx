@@ -454,8 +454,14 @@ describe('PlayerDetailScreen', () => {
     expect(screen.getByText('Clans')).toBeTruthy();
     expect(screen.getByTestId('player-join-leave-toolbar')).toBeTruthy();
     expect(
-      StyleSheet.flatten(screen.getByTestId('player-join-leave-view-control').props.style),
-    ).toMatchObject({ marginLeft: 'auto', minWidth: 130 });
+      StyleSheet.flatten(screen.getByTestId('player-join-leave-controls-row').props.style),
+    ).toMatchObject({ justifyContent: 'flex-end' });
+    expect(
+      within(screen.getByTestId('player-join-leave-view-control')).getByTestId(
+        'selection-picker-plain-control',
+      ),
+    ).toBeTruthy();
+    expect(screen.getByTestId('player-join-leave-summary-row')).toBeTruthy();
     const filterControl = screen.getByTestId('player-join-leave-filter-control');
     expect(filterControl).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Filters' })).toBeTruthy();
