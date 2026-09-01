@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "جنگ کے اعداد و شمار کی حد",
+  "warStatsRangeDescription": "منتخب کریں کہ اعداد و شمار حالیہ جنگوں کی مقررہ تعداد یا دنوں کی حالیہ مدت پر مشتمل ہوں۔",
+  "warStatsRangeDays": "دن",
+  "warStatsRangeWarsToInclude": "شامل کی جانے والی جنگیں",
+  "warStatsRangeDaysToInclude": "شامل کیے جانے والے دن",
+  "upgradeTrackerAllBuildersOccupied": "تمام معمار مصروف ہیں",
+  "upgradeTrackerBuildCost": "تعمیر کی لاگت",
+  "upgradeTrackerBuilderBaseBuilders": "بلڈر بیس کے معمار",
+  "upgradeTrackerBuilderBaseLaboratory": "بلڈر بیس لیبارٹری",
+  "upgradeTrackerCalendar": "کیلنڈر",
+  "upgradeTrackerClearCost": "ہٹانے کی لاگت",
+  "upgradeTrackerCompletionDetails": "گاؤں کی تکمیل کی تفصیلات",
+  "upgradeTrackerCustomSoundtrack": "حسب ضرورت ساؤنڈ ٹریک",
+  "upgradeTrackerGoldPassPercent": "{percent}% گولڈ پاس",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "{group} کا خلاصہ",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -28,10 +28,10 @@
       }
     }
   },
-  "upgradeTrackerGuardians": "محافظ",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerGuardians": "نگہبان",
+  "upgradeTrackerHelpers": "معاون",
+  "upgradeTrackerHouseParts": "گھر کے حصے",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# فارغ معمار} other {# فارغ معمار}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "جاری ہے",
+  "upgradeTrackerItemSemanticLabel": "{item}، لیول {currentLevel} از {targetLevel}{count, plural, =1 {} other {، # عمارتیں}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "ملکیت میں: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "لین",
   "upgradeTrackerLevelTransition": "لیول {from} ← {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "ابھی کا لوٹ",
+  "upgradeTrackerLootOutlook": "لوٹ کا تخمینہ",
+  "upgradeTrackerMusic": "موسیقی",
+  "upgradeTrackerNextDays": "{count, plural, one {اگلا # دن} other {اگلے # دن}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "اگلی مدت",
+  "upgradeTrackerNoGoldPass": "کوئی گولڈ پاس نہیں",
+  "upgradeTrackerNoMatchingUpgrades": "کوئی مماثل اپ گریڈ نہیں",
+  "upgradeTrackerNoMatchingUpgradesBody": "کوئی دوسرا گاؤں یا قطار آزمائیں۔",
+  "upgradeTrackerNothingNeededNow": "ابھی کچھ درکار نہیں",
+  "upgradeTrackerObstacles": "رکاوٹیں",
+  "upgradeTrackerPart": "حصہ",
+  "upgradeTrackerPassReward": "پاس انعام",
+  "upgradeTrackerPauseSoundtrack": "ساؤنڈ ٹریک روکیں",
+  "upgradeTrackerPeriodCount": "مدت {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,9 +108,9 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
-  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerPlaySoundtrack": "ساؤنڈ ٹریک چلائیں",
+  "upgradeTrackerPreviousPeriod": "پچھلی مدت",
+  "upgradeTrackerResourceAmount": "{resource}، {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
       "resource": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "مناظر",
+  "upgradeTrackerScheduledLane": "لین #{lane} میں طے شدہ",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "{village} کی پیش رفت",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "شیڈول شدہ",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "سائز",
+  "upgradeTrackerSortLongest": "طویل ترین پہلے",
+  "upgradeTrackerSortName": "نام الف تا ی",
+  "upgradeTrackerSortScheduled": "طے شدہ",
+  "upgradeTrackerSortShortest": "مختصر ترین پہلے",
+  "upgradeTrackerSoundtrackPosition": "ساؤنڈ ٹریک کی پوزیشن",
   "upgradeTrackerStarts": "آغاز",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "درجہ",
+  "upgradeTrackerUpgradesStarting": "شروع ہونے والی اپ گریڈز",
+  "upgradeTrackerUpgradingNow": "ابھی اپ گریڈ ہو رہا ہے",
+  "upgradeTrackerWarBase": "وار بیس",
+  "notifSettingsSaveFailed": "اطلاع کی ترتیبات محفوظ نہیں ہو سکیں۔",
+  "notifPushEnabled": "پش اطلاعات فعال ہیں",
+  "notifReceiveNotifications": "اطلاعات وصول کریں",
+  "notifTokenPreview": "ٹوکن: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "آپ کے فعال انتباہات اس آلے پر بھیجے جا سکتے ہیں۔",
+  "notifDisabledAccountDescription": "آپ کے پورے ClashKing اکاؤنٹ پر اطلاعات بند ہیں۔",
+  "notifMaximumRemindersAdded": "یاد دہانیوں کی زیادہ سے زیادہ تعداد شامل ہو گئی",
+  "notifAddReminder": "یاد دہانی شامل کریں",
+  "notifDurationOneHour": "1 گھنٹہ",
+  "notifDurationHours": "{count} گھنٹے",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} منٹ",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "{timing} شامل کریں",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 گھنٹہ پہلے",
+  "notifTimingHoursBefore": "{count} گھنٹے پہلے",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} منٹ پہلے",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "پش اطلاعات اس آلے پر تیار ہیں۔",
+  "notifPushPermissionRequired": "ClashKing انتباہات کے لیے اطلاعات کی اجازت دیں۔",
+  "notifPushPermissionDenied": "اطلاعات کی اجازت مسترد کر دی گئی۔",
+  "notifPushNotConfigured": "Firebase اس بلڈ کے لیے ترتیب نہیں دیا گیا۔",
+  "notifPushTokenUnavailable": "پش ٹوکن ابھی دستیاب نہیں ہے۔",
+  "notifPushUnsupported": "اس پلیٹ فارم پر پش اطلاعات معاون نہیں ہیں۔",
+  "notifPushInitializing": "پش اطلاعات ترتیب دی جا رہی ہیں…",
+  "notificationPrimerTitle": "اطلاعات فعال کریں؟",
+  "notificationPrimerBody": "ClashKing آپ کو جنگ، CWL، اکاؤنٹ اور پروجیکٹ کی اپ ڈیٹس کے بارے میں مطلع کر سکتا ہے۔ آپ اسے کسی بھی وقت ترتیبات > اطلاعات میں تبدیل کر سکتے ہیں۔",
+  "notificationPrimerNotNow": "ابھی نہیں",
+  "notificationPrimerAllow": "اجازت دیں",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "کامیابیاں",
   "achievementEarnedLabel": "حاصل کردہ",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "اراکین کو تلاش کریں۔",
   "clanMembersShowTotals": "کلان کل دکھائیں۔",
   "clanMembersHideTotals": "کلان کل چھپائیں۔",
-  "clanMembersReceivedShort": "موصول شدہ",
+  "clanMembersReceivedShort": "موصول ہوا۔",
   "clanMembersAverageTh": "اوسط TH",
   "clanMinimumMembers": "کم سے کم ممبران",
   "clanMaximumMembers": "زیادہ سے زیادہ ممبران",
@@ -1105,8 +1105,26 @@
   "warTitle": "جنگ",
   "warFrequency": "جنگ کی تعدد",
   "warParticipation": "جنگ میں شرکت",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "صرف شریک",
+  "warStatsRangeWarsCompact": "{number} جنگیں",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} دن",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "گزشتہ {number} دن",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "موجودہ اراکین",
   "warLeague": "جنگ/لیگ",
   "warHistory": "جنگ کی تاریخ",
   "warLog": "جنگی ریکارڈ",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "بہترین حملے",
   "warAttacksCount": "حملوں کی تعداد",
   "warAttacksMissed": "مفقود حملے",
-  "warAttacksMissedShort": "رہ گیا",
+  "warAttacksMissedShort": "چھوٹ گیا۔",
   "warAttacksNumber": "آپ نے پچھلی {number_war} جنگوں کے دوران {number_time} بار حملہ کیا۔",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1592,7 +1610,7 @@
   "clanProfileDescriptionChanged": "تفصیل تبدیل ہوئی",
   "clanJoinLeaveTab": "شامل ہونا/چھوڑنا",
   "clanRankingsTab": "درجہ بندی",
-  "clanRankingsSeason": "سیزن",
+  "clanRankingsSeason": "موسم",
   "clanRankingsSelectSeason": "درجہ بندی کا موسم منتخب کریں۔",
   "clanRankingsFilterActivity": "سرگرمی",
   "clanRankingsFilterWar": "جنگ",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "جنگی ستارے۔",
   "playerWarPreferenceTitle": "جنگ کی ترجیح",
   "playerDonatedTitle": "عطیہ کیا۔",
-  "playerReceivedTitle": "موصول شدہ",
+  "playerReceivedTitle": "موصول ہوا۔",
   "playerCapitalTitle": "سرمایہ",
   "playerExpLevelTitle": "ختم سطح",
   "clanWarWinsTitle": "جنگ جیت جاتی ہے۔",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "منسلک ایپس",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "اکاؤنٹ تک رسائی رکھنے والی ایپس دیکھیں اور منقطع کریں۔",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "فعال کنکشنز",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "کوئی منسلک ایپ نہیں",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "آپ کی منسلک کردہ ایپس یہاں نظر آئیں گی۔",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "منسلک ایپس لوڈ نہیں ہو سکیں",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "تمام موجودہ اور آئندہ منسلک اکاؤنٹس",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} منتخب اکاؤنٹس",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "منقطع کریں",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "ایپ منقطع کریں؟",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} فوری طور پر آپ کے منسلک اکاؤنٹس تک رسائی کھو دے گی۔",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "{name} منقطع کر دی گئی۔",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "{name} کو منقطع نہیں کیا جا سکا۔ دوبارہ کوشش کریں۔",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "سائن ان",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "جنگ کا ڈیٹا ریفریش کریں۔",
   "warWidgetNoData": "جنگ کا کوئی ڈیٹا دستیاب نہیں۔",
   "warWidgetLastUpdated": "آخری بار اپ ڈیٹ کیا گیا: {time}",
-  "todoEventClanGames": "کلان گیمز",
+  "todoEventClanGames": "کلین گیمز",
   "todoEventCwl": "سی ڈبلیو ایل",
   "todoEventSeasonEnds": "سیزن ختم",
   "todoEventLeagueReset": "لیگ ری سیٹ",
@@ -3135,17 +3225,17 @@
   "settingsAddWarWidget": "وار ویجٹ شامل کریں",
   "settingsWarWidgetLinkClanFirst": "پہلے کسی کلین میں اکاؤنٹ لنک کریں",
   "settingsWarWidgetClanCount": "{count} کلین دستیاب",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "ایک کلین منتخب کریں۔ ویجیٹ شامل کرنے کے بعد اسے دبا کر رکھیں، ویجیٹ میں ترمیم پر ٹیپ کریں، پھر کلین منتخب کریں۔",
+  "settingsWarWidgetAndroidInstructions": "ایک کلین منتخب کریں، پھر Android ویجیٹ منتخب کنندہ سے ویجیٹ شامل کریں۔",
+  "settingsWarWidgetEmpty": "آپ کا کوئی بھی منسلک اکاؤنٹ اس وقت کسی کلین میں نہیں ہے۔",
+  "settingsWarWidgetIosFooter": "متعدد وار ویجیٹس شامل کریں اور ہر ایک کے لیے مختلف کلین منتخب کریں۔",
+  "settingsWarWidgetIosReady": "{clanName} تیار ہے۔ ویجیٹ میں ترمیم کریں اور کلین کے تحت اسے منتخب کریں۔",
+  "settingsWarWidgetAndroidReady": "{clanName} کا ویجیٹ ڈیٹا تیار ہے۔",
+  "settingsWarWidgetPrepareFailed": "ویجیٹ تیار نہیں کیا جا سکا: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "بوٹ سے لنک اکاؤنٹس اور Discord ڈیٹا",
   "settingsDiscordSyncSubtitle": "بوٹ سے لنک اکاؤنٹس اور Discord ڈیٹا سنک کریں",
-  "settingsConnected": "منسلک",
+  "settingsConnected": "کنیکٹڈ",
   "settingsClashKingAccount": "ClashKing اکاؤنٹ",
   "settingsEmailConnectedSubtitle": "ای میل لاگ اِن کنیکٹڈ ہے",
   "settingsEmailRecoverySubtitle": "اکاؤنٹ ریکوری کے لیے ای میل لاگ اِن شامل کریں",
@@ -3251,7 +3341,7 @@
   "todoRemainingUpgradeTooltip": "باقی اپ گریڈ لاگت اور وقت کے لیے ٹیپ کریں",
   "announcementAnimeFuryTitle": "اینیمی فیوری",
   "announcementAnimeFurySubtitle": "جون 2026 اپ ڈیٹ دیکھنے کے لیے ٹیپ کریں",
-  "sideRankingsTitle": "درجہ بندی",
+  "sideRankingsTitle": "رینکنگز",
   "sideRankingsSubtitle": "آفیشل لیڈر بورڈز کے ساتھ ClashKing endpoints۔",
   "sideRankingsLoadError": "آفیشل رینکنگز لوڈ نہیں ہو سکیں۔",
   "sideRankingsEmptyTitle": "کوئی رینکنگ واپس نہیں آئی",
@@ -3299,7 +3389,7 @@
   "statsOverview": "جائزہ",
   "statsArmies": "آرمیز لگائیں۔",
   "statsItems": "آئٹمز",
-  "statsWar": "جنگ",
+  "statsWar": "وار",
   "statsCwl": "سی ڈبلیو ایل",
   "statsRanked": "رینکڈ",
   "statsDateRange": "تاریخ کی حد",
@@ -3314,13 +3404,13 @@
   "statsPerformance": "کارکردگی",
   "statsSamples": "نمونے",
   "statsUsage": "استعمال",
-  "statsAverageStars": "اوسط ستارے۔",
-  "statsAverageDestruction": "اوسط تباہی",
+  "statsAverageStars": "اوسط ستارے",
+  "statsAverageDestruction": "اوسط تباہی۔",
   "statsStarRates": "ستارہ کی شرحیں۔",
   "statsThreeStarRate": "تھری اسٹار ریٹ",
   "statsDailyTrend": "روزانہ رجحان",
   "statsPlayers": "کھلاڑی",
-  "statsClans": "قبیلے",
+  "statsClans": "قبیلہ",
   "statsPlayersInWar": "جنگ میں کھلاڑی",
   "statsClansInWar": "جنگ میں قبیلے",
   "statsPlayersInLegends": "لیجنڈز میں کھلاڑی",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "سیزن کی خرابی",
   "sideTopScore": "ٹاپ اسکور",
   "sideTop200Avg": "ٹاپ 200 اوسط",
-  "sideBasesArmiesTitle": "اڈے اور فوجیں۔",
+  "sideBasesArmiesTitle": "بیسز اور آرميز",
   "sideBasesArmiesSubtitle": "Discord میں محفوظ لے آؤٹس اور آرمی لنکس۔",
   "sideBotSyncTarget": "بوٹ سنک ہدف",
   "sideBotSyncTargetBody": "بوٹ پہلے ہی بیسز اور آرميز کو Discord پروفائل میں محفوظ کرتا ہے۔ یہ صفحہ اس سنک شدہ پے لوڈ کے لیے تیار ہے۔",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "محفوظ آرميز",
   "sideArmyLinks": "آرمی لنکس",
   "sideArmyLinksBody": "کمپوزیشن، اسپیلز، سیج، نوٹس، اور شیئر لنک۔",
-  "sideGameAssetsTitle": "کھیل ہی کھیل میں اثاثوں",
+  "sideGameAssetsTitle": "گیم اثاثے",
   "sideGameAssetsSubtitle": "Hosted ClashKing اثاثے، فولڈر کے لحاظ سے گروپ شدہ۔",
   "gameAssetsLoadError": "گیم اثاثے لوڈ نہیں ہو سکے",
   "gameAssetsEmptyTitle": "کوئی گیم اثاثہ دستیاب نہیں",
@@ -3506,18 +3596,18 @@
   "rankingClanBuilderHeading": "کلینز کی بلڈر بیس رینکنگ",
   "rankingClanCapital": "کلین کیپیٹل",
   "rankingClanCapitalHeading": "کلین کیپیٹل رینکنگ",
-  "assetFolderEquipment": "سازوسامان",
+  "assetFolderEquipment": "سامان",
   "assetFolderLeagues": "لیگز",
   "assetFolderResources": "وسائل",
   "assetFolderStickers": "اسٹیکرز",
-  "upgradeSectionHeroes": "ہیرو",
-  "upgradeSectionTroops": "دستے",
-  "upgradeSectionSpells": "منتر",
+  "upgradeSectionHeroes": "ہیروز",
+  "upgradeSectionTroops": "ٹروپس",
+  "upgradeSectionSpells": "اسپیلز",
   "upgradeSectionPets": "پالتو",
-  "upgradeSectionEquipment": "سازوسامان",
+  "upgradeSectionEquipment": "سامان",
   "sideMockupSource": "ماخذ",
   "sideMockupMode": "موڈ",
-  "sideMockupPreview": "پیش نظارہ",
+  "sideMockupPreview": "پیش منظر",
   "sideMockupRows": "قطاریں",
   "sideMockupRowsValue": "5 موک اپس",
   "endpointLeagueTop200": "لیگ ٹاپ 200",
@@ -3616,7 +3706,7 @@
       }
     }
   },
-  "notifWarEnded": "جنگ ختم ہوئی۔",
+  "notifWarEnded": "وار ختم ہو گئی",
   "notifWarEndedBody": "{clan} 86 - 82 Pine Riders۔ حتمی نتائج دستیاب ہیں۔",
   "@notifWarEndedBody": {
     "placeholders": {
@@ -3693,7 +3783,7 @@
   "notifSpecialEvent": "خصوصی ایونٹ",
   "notifNewEventLive": "ایک نیا ایونٹ لائیو ہے",
   "notifNewClashEventBody": "ایک نیا Clash ایونٹ دستیاب ہے۔",
-  "notifSupportClashKing": "ClashKing کی مدد کریں",
+  "notifSupportClashKing": "ClashKing کو سپورٹ کریں",
   "notifMonthlySupportBody": "ماہانہ سپورٹ ClashKing کو دستیاب رکھنے اور بہتر بنانے میں مدد دیتی ہے۔ شکریہ۔",
   "notifUpgradeFinished": "اپ گریڈ مکمل",
   "notifUpgradeReadyTitle": "{name} تیار ہے",
@@ -3888,7 +3978,7 @@
   "upgradeTrackerLaboratory": "لیبارٹری",
   "upgradeTrackerPets": "پالتو",
   "upgradeTrackerWalls": "دیواریں",
-  "upgradeTrackerEquipment": "سازوسامان",
+  "upgradeTrackerEquipment": "سامان",
   "upgradeTrackerLevelsRemaining": "{count} لیول باقی",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "منتخب اکاؤنٹس",
   "notifAudienceAcrossDevicesDescription": "منتخب کریں کہ اس ڈیوائس پر کون سے اکاؤنٹس اطلاعات وصول کر سکتے ہیں۔",
-  "notifAccountBookmarked": "بک مارک شدہ",
+  "notifAccountBookmarked": "محفوظ",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4293,7 +4383,7 @@
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
-  "notifGroupEvents": "واقعات",
+  "notifGroupEvents": "ایونٹس",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
@@ -4535,19 +4625,19 @@
   "gameAssetsCategoryClanLabels": "کلین لیبلز",
   "gameAssetsCategoryCountryFlags": "ملکی پرچم",
   "gameAssetsCategoryDecorations": "سجاوٹ",
-  "gameAssetsCategoryEquipment": "سازوسامان",
+  "gameAssetsCategoryEquipment": "آلات",
   "gameAssetsCategoryGuardians": "محافظ",
-  "gameAssetsCategoryHeroes": "ہیرو",
+  "gameAssetsCategoryHeroes": "ہیروز",
   "gameAssetsCategoryPets": "پالتو",
   "gameAssetsCategorySkins": "اسکنز",
   "gameAssetsCategorySpells": "منتر",
-  "gameAssetsCategoryTroops": "دستے",
-  "assetFolderTroops": "دستے",
-  "assetFolderSpells": "منتر",
-  "assetFolderHeroes": "ہیرو",
-  "endpointStateWins": "جیتتا ہے۔",
+  "gameAssetsCategoryTroops": "فوجی دستے",
+  "assetFolderTroops": "ٹروپس",
+  "assetFolderSpells": "اسپیلز",
+  "assetFolderHeroes": "ہیروز",
+  "endpointStateWins": "جیتیں",
   "notifGroupBattles": "لڑائیاں",
-  "notifGroupSupport": "حمایت",
+  "notifGroupSupport": "سپورٹ",
   "rankedLeagueAccountSelector": "دکھایا گیا اکاؤنٹ",
   "rankedLeagueStars": "ستارے",
   "playerBattlelogTab": "لڑائیاں",
@@ -4566,8 +4656,8 @@
     }
   },
   "playerBattlelogAttacks": "حملے",
-  "playerBattlelogAverageDestruction": "اوسط تباہی",
-  "playerBattlelogAverageStars": "اوسط ستارے۔",
+  "playerBattlelogAverageDestruction": "اوسط تباہی۔",
+  "playerBattlelogAverageStars": "اوسط ستارے",
   "playerBattlelogTripleRate": "تھری اسٹار ریٹ",
   "playerBattlelogAverageLoot": "اوسط لوٹ",
   "playerBattlelogPopularTroops": "سب سے زیادہ استعمال ہونے والے دستے",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
-  "upgradeTrackerPlanClose": "بند کریں",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPrioritiesTitle": "منصوبہ بندی کی ترجیحات",
+  "upgradeTrackerPlanPrioritiesDescription": "درجہ بندی کریں جو سب سے اہم ہے۔ اپ گریڈ کی سطح اور فعال کام ہمیشہ ترتیب میں رہتے ہیں۔",
+  "upgradeTrackerPlanClose": "بند",
+  "upgradeTrackerPlanPlanningGoals": "منصوبہ بندی کے اہداف",
+  "upgradeTrackerPlanConstructionSubtitle": "تعمیراتی اور ہیرو اپ گریڈ",
+  "upgradeTrackerPlanResearchSubtitle": "دستے، منتر اور محاصرے کی تحقیق",
+  "upgradeTrackerPlanPetHouseSubtitle": "پیٹ ہاؤس اپ گریڈ",
+  "upgradeTrackerPlanPrioritizeNewItems": "نئی اشیاء کو ترجیح دیں۔",
+  "upgradeTrackerPlanPrioritizeNewDescription": "نئی کھلی ہوئی یا غیر تعمیر شدہ اشیاء کو پہلے رکھیں",
+  "upgradeTrackerPlanSharedSummary": "ٹیئر {tier} · مشترکہ مکس {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "ٹائر {tier} · سخت · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "زیادہ سے زیادہ تک چلتا ہے",
+  "upgradeTrackerPlanYieldsAfter": "{target}% کے بعد پیداوار",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "سخت",
+  "upgradeTrackerPlanMax": "زیادہ سے زیادہ",
+  "upgradeTrackerPlanReorder": "دوبارہ ترتیب دیں {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "متعلقہ درجے کا وزن",
+  "upgradeTrackerPlanCompletionTarget": "تکمیل کا ہدف",
+  "upgradeTrackerPlanStrictTier": "سخت درجہ",
+  "upgradeTrackerPlanWeight": "وزن {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "زیادہ سے زیادہ ہونے تک",
+  "upgradeTrackerPlanUntilPercent": "{value}% تک",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "نمبر والے درجے پہلے چلتے ہیں۔ مشترکہ قطاریں ایک ہی درجے کا نمبر رکھتی ہیں، اور ان کے اختلاط کو رشتہ دار وزن سے معمول بنایا جاتا ہے، لہذا 50 + 25 67% / 33% بن جاتا ہے۔ ایک ہدف اس فیصد تک پہنچنے کے بعد زمرہ کی پیداوار دیتا ہے جبکہ یہ بعد میں اہل رہتا ہے۔",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "آگے بڑھنے سے پہلے زیادہ سے زیادہ",
+  "upgradeTrackerPlanGoalRushNextHall": "جلدی سے اگلے ہال میں پہنچو",
+  "upgradeTrackerPlanGoalCatchUp": "جلدی کی سطح کو پکڑو",
+  "upgradeTrackerPlanGoalUnlockFirst": "پہلے نئی چیزوں کو غیر مقفل کریں۔",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "ہر ہفتے دیواریں۔",
   "upgradeTrackerPlanOff": "آف",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count}/ ہفتہ",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "دیواروں کے لیے سونے کو ترجیح دیں۔",
+  "upgradeTrackerPlanPreferGoldDescription": "دیواروں پر خرچ کرتے وقت ایلیکسیر سے پہلے سونے کا استعمال کریں۔",
+  "upgradeTrackerPlanApplyPriorities": "ترجیحات کا اطلاق کریں۔",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "تیار کردہ دفاع",
+  "upgradeTrackerPlanCategoryTraps": "پھندے",
+  "upgradeTrackerPlanCategoryArmy": "فوج",
+  "upgradeTrackerPlanCategoryDarkTroops": "تاریک فوجیں۔",
+  "upgradeTrackerPlanCategorySieges": "محاصرے",
+  "upgradeTrackerPlanCategorySupercharge": "سپرچارج",
+  "navigationCloseDrawer": "نیویگیشن ڈراور بند کریں",
+  "navigationOpenProfileMenu": "پروفائل مینو کھولیں",
+  "navigationClashKingWeb": "ClashKing ویب",
+  "settingsPrivacyDataTitle": "رازداری اور ڈیٹا",
+  "settingsPrivacyPolicyDescription": "دیکھیں کہ ClashKing کیا جمع کرتا ہے، اسے کیوں استعمال کیا جاتا ہے، کون اس پر کارروائی کرتا ہے، اسے محفوظ رکھنے کے اصول اور ہم سے رابطے کا طریقہ کیا ہے۔",
+  "settingsPrivacyExportTitle": "اپنے ڈیٹا تک رسائی یا اسے برآمد کریں",
+  "settingsPrivacyExportDescription": "اپنے ClashKing لاگ اِن سے منسلک اکاؤنٹ ڈیٹا کی نقل ڈاؤن لوڈ کریں، جس میں منسلک Clash of Clans اکاؤنٹس اور اطلاع کی ترجیحات شامل ہیں۔",
+  "settingsPrivacyCorrectionTitle": "ڈیٹا درست یا محدود کریں",
+  "settingsPrivacyCorrectionDescription": "اکاؤنٹ کی ترتیبات سے منسلک Clash of Clans اکاؤنٹس ہٹائیں، اطلاعات بند کریں یا تصحیح اور پابندی کی درخواستوں کے لیے معاونت سے رابطہ کریں۔",
+  "settingsPrivacyDeletionTitle": "اپنا ClashKing اکاؤنٹ حذف کریں",
+  "settingsPrivacyDeletionDescription": "اس سے آپ کے ClashKing اکاؤنٹ اور متعلقہ ایپ ڈیٹا کو حذف کرنے کا عمل شروع ہوگا، سوائے اس کے کہ ClashKing کو سلامتی، دھوکا دہی کی روک تھام یا قانونی ذمہ داریوں کے لیے محدود ریکارڈ رکھنا لازم ہو۔",
+  "settingsPrivacyChildrenTitle": "بچے اور خاندان",
+  "settingsPrivacyChildrenDescription": "ClashKing عام صارفین کے لیے ایک معاون ایپ ہے اور بچوں کے لیے نہیں ہے۔ اگر آپ کے ملک میں والدین یا سرپرست کی منظوری کے بغیر رضامندی دینے کی عمر نہیں ہے تو اکاؤنٹ نہ بنائیں۔",
+  "settingsPrivacyExportReady": "آپ کا ڈیٹا برآمد محفوظ کرنے کے لیے تیار ہے۔",
+  "settingsPrivacyExportCreateFailed": "ڈیٹا برآمد نہیں بنایا جا سکا۔ اس کے بجائے رازداری سے متعلق ای میل تیار کی گئی ہے۔",
+  "settingsPrivacyExportPrepareFirst": "محفوظ کرنے سے پہلے برآمد تیار کریں۔",
+  "settingsPrivacyExportSaved": "آپ کا ڈیٹا برآمد محفوظ کر دیا گیا ہے۔",
+  "settingsPrivacyExportSaveFailed": "ڈیٹا برآمد محفوظ نہیں کیا جا سکا۔ اس کے بجائے رازداری سے متعلق ای میل تیار کی گئی ہے۔",
+  "settingsPrivacyDeleteUnavailable": "اس بلڈ میں اکاؤنٹ حذف کرنا دستیاب نہیں ہے۔ اس کے بجائے رازداری سے متعلق ای میل تیار کی گئی ہے۔",
+  "settingsPrivacyOpenPolicy": "پالیسی کھولیں",
+  "settingsPrivacyRefreshExport": "برآمد تازہ کریں",
+  "settingsPrivacyPrepareExport": "برآمد تیار کریں",
+  "settingsPrivacySaveExport": "برآمد محفوظ کریں",
+  "settingsPrivacyContactSupport": "معاونت سے رابطہ کریں",
+  "settingsPrivacyDeleteAccount": "اکاؤنٹ حذف کریں",
+  "settingsPrivacyDeleteConfirmTitle": "اکاؤنٹ حذف کریں؟",
+  "settingsPrivacyDeleteConfirmDescription": "کارروائی کے بعد یہ درخواست مستقل ہوگی۔ آپ منسلک اکاؤنٹس، اطلاع کی ترتیبات، محفوظ ترجیحات اور توثیقی طریقے کھو سکتے ہیں۔",
+  "generalUnranked": "بغیر درجہ",
+  "playerJoinLeaveTab": "شمولیت / علیحدگی",
+  "playerUpgradeRemainingAccessibility": "ٹاؤن ہال {townHallLevel} کے لیے باقی",
+  "playerUpgradeSummaryTitle": "TH{townHallLevel} کے لیے {progress}% مکمل",
+  "playerUpgradeSectionMaxed": "یہ حصہ TH{townHallLevel} کے لیے مکمل ہے۔",
+  "playerUpgradeTimeRemaining": "باقی وقت",
+  "playerUpgradeNoResourceData": "وسائل کا ڈیٹا موجود نہیں",
+  "playerJoinLeaveLoadError": "شمولیت / علیحدگی کی سرگزشت لوڈ نہیں ہو سکی",
+  "playerJoinLeaveClanTotals": "قبیلوں کے مجموعے",
   "playerJoinLeaveTime": "وقت",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "گزارا گیا وقت",
+  "playerJoinLeaveVisits": "دورے",
+  "playerJoinLeaveJoined": "شامل ہوا",
+  "playerJoinLeaveLeft": "چلا گیا",
+  "playerJoinLeaveNoHistory": "شمولیت / علیحدگی کی کوئی سرگزشت نہیں",
+  "playerJoinLeaveNoClanTotals": "قبیلوں کے مجموعے دستیاب نہیں",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
