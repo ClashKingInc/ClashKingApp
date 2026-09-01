@@ -448,6 +448,8 @@
   "warFrequency": "Háború gyakorisága",
   "warParticipation": "Háborús részvétel",
   "cwlParticipantOnly": "Csak résztvevő",
+  "warStatsRangeWarsCompact": "{number} háború",
+  "warStatsRangeDaysCompact": "{number} nap",
   "warStatsLastXDays": "Elmúlt {number} nap",
   "warStatsCurrentMembers": "Jelenlegi tagok",
   "warLeague": "Háború/Rang",

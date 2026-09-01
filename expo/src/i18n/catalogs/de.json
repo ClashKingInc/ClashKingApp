@@ -448,6 +448,8 @@
   "warFrequency": "Kriegshäufigkeit",
   "warParticipation": "Kriegsbeteiligung",
   "cwlParticipantOnly": "Nur Teilnehmer",
+  "warStatsRangeWarsCompact": "{number} Kriege",
+  "warStatsRangeDaysCompact": "{number} Tage",
   "warStatsLastXDays": "Letzte {number} Tage",
   "warStatsCurrentMembers": "Aktuelle Mitglieder",
   "warLeague": "Krieg/Clankriegsliga",

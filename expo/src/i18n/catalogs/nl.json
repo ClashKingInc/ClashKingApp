@@ -448,6 +448,8 @@
   "warFrequency": "Oorlogfrequentie",
   "warParticipation": "Oorlogsdeelname",
   "cwlParticipantOnly": "Alleen deelnemer",
+  "warStatsRangeWarsCompact": "{number} oorlogen",
+  "warStatsRangeDaysCompact": "{number} dagen",
   "warStatsLastXDays": "Afgelopen {number} dagen",
   "warStatsCurrentMembers": "Huidige leden",
   "warLeague": "Oorlog/Divisies",

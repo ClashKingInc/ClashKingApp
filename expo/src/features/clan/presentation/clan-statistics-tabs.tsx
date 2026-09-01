@@ -90,8 +90,8 @@ export function ClanStatisticsTab({
   const sortLabel = sortOptions.find((option) => option.key === sort)?.label ?? sort;
   const rangeLabel =
     rangeMode === 'wars'
-      ? t('warFiltersLastXwars', { number: warRange })
-      : t('warStatsLastXDays', { number: dayRange });
+      ? t('warStatsRangeWarsCompact', { number: warRange })
+      : t('warStatsRangeDaysCompact', { number: dayRange });
   const load = async (mode: WarStatsRangeMode, wars: number, days: number) => {
     setLoading(true);
     try {

@@ -210,6 +210,7 @@ describe('ClanInfoScreen', () => {
     expect(screen.getByTestId('clan-war-stats-search-row')).toBeTruthy();
     const controls = screen.getByTestId('clan-war-stats-controls-row');
     expect(within(controls).getAllByTestId('destination-picker-control')).toHaveLength(2);
+    expect(within(controls).getByText('50 wars')).toBeTruthy();
     expect(screen.getByTestId('clan-filter-trigger')).toBeTruthy();
     expect(screen.getByTestId('clan-war-stats-summary-row')).toBeTruthy();
   });

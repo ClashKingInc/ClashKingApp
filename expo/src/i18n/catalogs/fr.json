@@ -448,6 +448,8 @@
   "warFrequency": "Fréquence de guerre",
   "warParticipation": "Participation à la guerre",
   "cwlParticipantOnly": "Participant uniquement",
+  "warStatsRangeWarsCompact": "{number} guerres",
+  "warStatsRangeDaysCompact": "{number} jours",
   "warStatsLastXDays": "{number} derniers jours",
   "warStatsCurrentMembers": "Membres actuels",
   "warLeague": "Guerre/Ligue",

@@ -1047,6 +1047,8 @@
   "warFrequency": "전쟁 빈도",
   "warParticipation": "전쟁 참여",
   "cwlParticipantOnly": "참가만",
+  "warStatsRangeWarsCompact": "{number}번의 전쟁",
+  "warStatsRangeDaysCompact": "{number}일",
   "warStatsLastXDays": "최근 {number}일",
   "warStatsCurrentMembers": "현재 멤버",
   "warLeague": "전쟁/리그",

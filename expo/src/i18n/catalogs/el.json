@@ -448,6 +448,8 @@
   "warFrequency": "Συχνότητα πολέμου",
   "warParticipation": "Συμμετοχή στον πόλεμο",
   "cwlParticipantOnly": "Μόνο συμμετέχων",
+  "warStatsRangeWarsCompact": "{number} πόλεμοι",
+  "warStatsRangeDaysCompact": "{number} ημέρες",
   "warStatsLastXDays": "Τελευταίες {number} ημέρες",
   "warStatsCurrentMembers": "Τρέχοντα μέλη",
   "warLeague": "Πόλεμος/Λίγκα",

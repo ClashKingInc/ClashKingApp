@@ -1047,6 +1047,8 @@
   "warFrequency": "Frecvența războaielor",
   "warParticipation": "Participare la război",
   "cwlParticipantOnly": "Doar participant",
+  "warStatsRangeWarsCompact": "{number} războaie",
+  "warStatsRangeDaysCompact": "{number} zile",
   "warStatsLastXDays": "Ultimele {number} zile",
   "warStatsCurrentMembers": "Membri actuali",
   "warLeague": "Război/Ligă",

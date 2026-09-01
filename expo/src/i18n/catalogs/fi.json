@@ -448,6 +448,8 @@
   "warFrequency": "Sodan taajuus",
   "warParticipation": "Sota Osallistuminen",
   "cwlParticipantOnly": "Vain osallistuja",
+  "warStatsRangeWarsCompact": "{number} sotaa",
+  "warStatsRangeDaysCompact": "{number} päivää",
   "warStatsLastXDays": "Viimeiset {number} päivää",
   "warStatsCurrentMembers": "Nykyiset jäsenet",
   "warLeague": "Sota/Liitto",

@@ -448,6 +448,8 @@
   "warFrequency": "युद्ध आवृत्ति",
   "warParticipation": "युद्ध में भागीदारी",
   "cwlParticipantOnly": "केवल प्रतिभागी",
+  "warStatsRangeWarsCompact": "{number} युद्ध",
+  "warStatsRangeDaysCompact": "{number} दिन",
   "warStatsLastXDays": "पिछले {number} दिन",
   "warStatsCurrentMembers": "वर्तमान सदस्य",
   "warLeague": "युद्ध/लीग",

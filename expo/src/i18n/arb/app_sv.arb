@@ -952,6 +952,8 @@
   "warFrequency": "Krigsfrekvens",
   "warParticipation": "Krigsdeltagande",
   "cwlParticipantOnly": "Endast deltagare",
+  "warStatsRangeWarsCompact": "{number} krig",
+  "warStatsRangeDaysCompact": "{number} dagar",
   "warStatsLastXDays": "Senaste {number} dagarna",
   "warStatsCurrentMembers": "Nuvarande medlemmar",
   "warLeague": "Krig/Liga",

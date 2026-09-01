@@ -448,6 +448,8 @@
   "warFrequency": "Válečná frekvence",
   "warParticipation": "Účast na válce",
   "cwlParticipantOnly": "Pouze účastník",
+  "warStatsRangeWarsCompact": "{number} válek",
+  "warStatsRangeDaysCompact": "{number} dní",
   "warStatsLastXDays": "Posledních {number} dní",
   "warStatsCurrentMembers": "Současní členové",
   "warLeague": "Válka/Liga",

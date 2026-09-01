@@ -448,6 +448,8 @@
   "warFrequency": "Savaş sıklığı",
   "warParticipation": "Savaş Katılımı",
   "cwlParticipantOnly": "Yalnızca katılımcı",
+  "warStatsRangeWarsCompact": "{number} savaş",
+  "warStatsRangeDaysCompact": "{number} gün",
   "warStatsLastXDays": "Son {number} gün",
   "warStatsCurrentMembers": "Mevcut üyeler",
   "warLeague": "Savaş/Lig",

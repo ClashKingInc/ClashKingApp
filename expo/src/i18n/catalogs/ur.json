@@ -448,6 +448,8 @@
   "warFrequency": "جنگ کی تعدد",
   "warParticipation": "جنگ میں شرکت",
   "cwlParticipantOnly": "صرف شریک",
+  "warStatsRangeWarsCompact": "{number} جنگیں",
+  "warStatsRangeDaysCompact": "{number} دن",
   "warStatsLastXDays": "گزشتہ {number} دن",
   "warStatsCurrentMembers": "موجودہ اراکین",
   "warLeague": "جنگ/لیگ",

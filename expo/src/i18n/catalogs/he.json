@@ -448,6 +448,8 @@
   "warFrequency": "תדירות מלחמה",
   "warParticipation": "השתתפות במלחמה",
   "cwlParticipantOnly": "משתתף בלבד",
+  "warStatsRangeWarsCompact": "{number} מלחמות",
+  "warStatsRangeDaysCompact": "{number} ימים",
   "warStatsLastXDays": "{number} הימים האחרונים",
   "warStatsCurrentMembers": "חברים נוכחיים",
   "warLeague": "מלחמה/ליגה",

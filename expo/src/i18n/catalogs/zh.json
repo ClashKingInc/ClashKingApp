@@ -448,6 +448,8 @@
   "warFrequency": "对战频率",
   "warParticipation": "参战",
   "cwlParticipantOnly": "仅参与",
+  "warStatsRangeWarsCompact": "{number}场战争",
+  "warStatsRangeDaysCompact": "{number}天",
   "warStatsLastXDays": "最近 {number} 天",
   "warStatsCurrentMembers": "当前成员",
   "warLeague": "部落战/联赛",

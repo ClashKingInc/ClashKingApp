@@ -448,6 +448,8 @@
   "warFrequency": "Učestalost ratova",
   "warParticipation": "Učešće u ratu",
   "cwlParticipantOnly": "Samo učesnik",
+  "warStatsRangeWarsCompact": "{number} ratova",
+  "warStatsRangeDaysCompact": "{number} dana",
   "warStatsLastXDays": "Poslednjih {number} dana",
   "warStatsCurrentMembers": "Trenutni članovi",
   "warLeague": "Rat/Liga",

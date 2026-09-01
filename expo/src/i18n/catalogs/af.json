@@ -448,6 +448,8 @@
   "warFrequency": "Oorlogsfrekwensie",
   "warParticipation": "Oorlogsdeelname",
   "cwlParticipantOnly": "Slegs deelnemer",
+  "warStatsRangeWarsCompact": "{number} oorloë",
+  "warStatsRangeDaysCompact": "{number} dae",
   "warStatsLastXDays": "Laaste {number} dae",
   "warStatsCurrentMembers": "Huidige lede",
   "warLeague": "Oorlog/Liga",

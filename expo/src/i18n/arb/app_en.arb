@@ -1106,6 +1106,24 @@
   "warFrequency": "War frequency",
   "warParticipation": "War Participation",
   "cwlParticipantOnly": "Participant Only",
+  "warStatsRangeWarsCompact": "{number} wars",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} days",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Last {number} days",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",

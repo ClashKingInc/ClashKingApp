@@ -1047,6 +1047,8 @@
   "warFrequency": "تكرار الحرب",
   "warParticipation": "المشاركة في الحرب",
   "cwlParticipantOnly": "مشارك فقط",
+  "warStatsRangeWarsCompact": "{number} حروب",
+  "warStatsRangeDaysCompact": "{number} أيام",
   "warStatsLastXDays": "آخر {number} أيام",
   "warStatsCurrentMembers": "الأعضاء الحاليون",
   "warLeague": "حرب/دوري",

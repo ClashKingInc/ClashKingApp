@@ -1047,6 +1047,8 @@
   "warFrequency": "Частота войн",
   "warParticipation": "Участие в войне",
   "cwlParticipantOnly": "Только участник",
+  "warStatsRangeWarsCompact": "{number} войн",
+  "warStatsRangeDaysCompact": "{number} дней",
   "warStatsLastXDays": "Последние {number} дней",
   "warStatsCurrentMembers": "Текущие участники",
   "warLeague": "Война/Лига",

@@ -448,6 +448,8 @@
   "warFrequency": "Частота війн",
   "warParticipation": "Участь у війні",
   "cwlParticipantOnly": "Лише учасник",
+  "warStatsRangeWarsCompact": "{number} війн",
+  "warStatsRangeDaysCompact": "{number} днів",
   "warStatsLastXDays": "Останні {number} днів",
   "warStatsCurrentMembers": "Поточні учасники",
   "warLeague": "Війна/Ліга",

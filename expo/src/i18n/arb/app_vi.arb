@@ -1047,6 +1047,8 @@
   "warFrequency": "Tần suất chiến tranh",
   "warParticipation": "Tham gia chiến tranh",
   "cwlParticipantOnly": "Chỉ tham gia",
+  "warStatsRangeWarsCompact": "{number} cuộc chiến",
+  "warStatsRangeDaysCompact": "{number} ngày",
   "warStatsLastXDays": "{number} ngày qua",
   "warStatsCurrentMembers": "Thành viên hiện tại",
   "warLeague": "Chiến tranh/Giải đấu",
