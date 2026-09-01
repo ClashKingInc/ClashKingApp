@@ -5,12 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { CKThemeProvider } from '../../ui';
 import { DesktopSidebar } from '../desktop-sidebar';
-import {
-  NavigationShell,
-  shouldCompleteSecondaryBackPan,
-  shouldStartSecondaryBackPan,
-  type NavigationShellProps,
-} from '../navigation-shell';
+import { NavigationShell, type NavigationShellProps } from '../navigation-shell';
 import { RetainedPrimaryPager } from '../retained-pager';
 import { fallbackTabBarBottomPadding } from '../primary-tab-bar';
 
@@ -478,73 +473,6 @@ describe('navigation shell components', () => {
     });
   });
 
-  it('reserves the leading-edge gesture for popping mobile secondary pages', () => {
-    expect(
-      shouldStartSecondaryBackPan({
-        pageX: 12,
-        dx: 28,
-        dy: 3,
-        viewportWidth: 390,
-        edgeWidth: 20,
-        isRtl: false,
-      }),
-    ).toBe(true);
-    expect(
-      shouldStartSecondaryBackPan({
-        pageX: 21,
-        dx: 80,
-        dy: 2,
-        viewportWidth: 390,
-        edgeWidth: 20,
-        isRtl: false,
-      }),
-    ).toBe(false);
-    expect(
-      shouldStartSecondaryBackPan({
-        pageX: 120,
-        dx: 80,
-        dy: 2,
-        viewportWidth: 390,
-        edgeWidth: 20,
-        isRtl: false,
-      }),
-    ).toBe(false);
-    expect(
-      shouldStartSecondaryBackPan({
-        pageX: 380,
-        dx: -28,
-        dy: 3,
-        viewportWidth: 390,
-        edgeWidth: 20,
-        isRtl: true,
-      }),
-    ).toBe(true);
-    expect(
-      shouldCompleteSecondaryBackPan({
-        dx: 94,
-        velocityX: 0,
-        viewportWidth: 390,
-        isRtl: false,
-      }),
-    ).toBe(true);
-    expect(
-      shouldCompleteSecondaryBackPan({
-        dx: 18,
-        velocityX: 0.55,
-        viewportWidth: 390,
-        isRtl: false,
-      }),
-    ).toBe(true);
-    expect(
-      shouldCompleteSecondaryBackPan({
-        dx: 18,
-        velocityX: 0.1,
-        viewportWidth: 390,
-        isRtl: false,
-      }),
-    ).toBe(false);
-  });
-
   it('retains lower secondary scenes while exposing only the top scene', async () => {
     const common: NavigationShellProps = {
       selectedPrimary: 'home',
@@ -562,7 +490,6 @@ describe('navigation shell components', () => {
       closeDrawerLabel: 'close',
       onPrimarySelect: jest.fn(),
       onUtilityNavigate: jest.fn(),
-      onSecondaryBack: jest.fn(),
       onAchievements: jest.fn(),
       onAddAccount: jest.fn(),
       onAccounts: jest.fn(),
@@ -647,7 +574,6 @@ describe('navigation shell components', () => {
         closeDrawerLabel="close"
         onPrimarySelect={jest.fn()}
         onUtilityNavigate={jest.fn()}
-        onSecondaryBack={jest.fn()}
         onAchievements={jest.fn()}
         onAddAccount={jest.fn()}
         onAccounts={jest.fn()}

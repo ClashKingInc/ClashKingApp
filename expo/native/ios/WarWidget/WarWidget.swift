@@ -1081,6 +1081,9 @@ struct SelectUpgradeAccountIntent: WidgetConfigurationIntent {
 
   @Parameter(title: "Account")
   var account: UpgradeWidgetAccountEntity?
+
+  @Parameter(title: "Show Builder Base", default: true)
+  var showBuilderBase: Bool
 }
 
 private struct UpgradeWidgetTask: Codable, Identifiable {
@@ -1325,11 +1328,18 @@ private struct UpgradeWidgetEntry: TimelineEntry {
   let data: UpgradeWidgetData
   let images: [String: Data]
   let mediumTaskIndex: Int
+  let showBuilderBase: Bool
 }
 
 private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> UpgradeWidgetEntry {
-    UpgradeWidgetEntry(date: Date(), data: .placeholder, images: [:], mediumTaskIndex: 0)
+    UpgradeWidgetEntry(
+      date: Date(),
+      data: .placeholder,
+      images: [:],
+      mediumTaskIndex: 0,
+      showBuilderBase: true
+    )
   }
 
   func snapshot(for configuration: SelectUpgradeAccountIntent, in context: Context) async -> UpgradeWidgetEntry {
@@ -1339,21 +1349,24 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
     return UpgradeWidgetEntry(
       date: Date(),
       data: data,
-      images: await images(for: data),
-      mediumTaskIndex: 0
+      images: await images(for: data, showBuilderBase: configuration.showBuilderBase),
+      mediumTaskIndex: 0,
+      showBuilderBase: configuration.showBuilderBase
     )
   }
 
   func timeline(for configuration: SelectUpgradeAccountIntent, in context: Context) async -> Timeline<UpgradeWidgetEntry> {
     let data = UpgradeWidgetData.current(accountTag: configuration.account?.id) ?? .empty
     let now = Date()
-    let imageData = await images(for: data)
-    let rotationCount = data.mediumTaskChoices.count
+    let showBuilderBase = configuration.showBuilderBase
+    let imageData = await images(for: data, showBuilderBase: showBuilderBase)
+    let rotationCount = data.mediumTaskChoices(showBuilderBase: showBuilderBase).count
     let baseEntry = UpgradeWidgetEntry(
       date: now,
       data: data,
       images: imageData,
-      mediumTaskIndex: 0
+      mediumTaskIndex: 0,
+      showBuilderBase: showBuilderBase
     )
     let entries: [UpgradeWidgetEntry]
     if context.family == .systemMedium && rotationCount > 1 {
@@ -1363,13 +1376,16 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
           date: now.addingTimeInterval(TimeInterval(index) * rotationInterval),
           data: data,
           images: imageData,
-          mediumTaskIndex: index
+          mediumTaskIndex: index,
+          showBuilderBase: showBuilderBase
         )
       }
     } else {
       entries = [baseEntry]
     }
-    let next = data.timelineDates.filter { $0 > now }.min() ?? now.addingTimeInterval(3600)
+    let next = data.timelineDates(showBuilderBase: showBuilderBase)
+      .filter { $0 > now }
+      .min() ?? now.addingTimeInterval(3600)
     let refreshDate: Date
     if context.family == .systemMedium && rotationCount > 1 {
       let rotationCycleEnd = now.addingTimeInterval(TimeInterval(rotationCount) * 15 * 60)
@@ -1380,9 +1396,9 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
     return Timeline(entries: entries, policy: .after(refreshDate))
   }
 
-  private func images(for data: UpgradeWidgetData) async -> [String: Data] {
+  private func images(for data: UpgradeWidgetData, showBuilderBase: Bool) async -> [String: Data] {
     var result: [String: Data] = [:]
-    let urls = [data.hallImageUrl] + data.allTasks.map(\.imageUrl) + data.helpers.map(\.imageUrl) + data.boosts.compactMap(\.imageUrl)
+    let urls = [data.hallImageUrl] + data.allTasks(showBuilderBase: showBuilderBase).map(\.imageUrl) + data.helpers.map(\.imageUrl) + data.boosts.compactMap(\.imageUrl)
     for imageUrl in urls where result[imageUrl] == nil && !imageUrl.isEmpty {
       guard let url = URL(string: imageUrl), url.scheme == "https" else { continue }
       if let (bytes, response) = try? await URLSession.shared.data(from: url),
@@ -1397,12 +1413,12 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
 private extension UpgradeWidgetData {
   var localizedLabels: UpgradeWidgetLabels { labels ?? .fallback }
 
-  var allTasks: [UpgradeWidgetTask] {
-    homeBuilders.tasks + laboratory.tasks + pets.tasks + builderBase.tasks
+  func allTasks(showBuilderBase: Bool) -> [UpgradeWidgetTask] {
+    homeBuilders.tasks + laboratory.tasks + pets.tasks + (showBuilderBase ? builderBase.tasks : [])
   }
 
-  var allSections: [UpgradeWidgetSectionData] {
-    [homeBuilders, laboratory, pets, builderBase]
+  func allSections(showBuilderBase: Bool) -> [UpgradeWidgetSectionData] {
+    [homeBuilders, laboratory, pets] + (showBuilderBase ? [builderBase] : [])
   }
 
   func activeBoosts(at date: Date) -> [UpgradeWidgetBoost] {
@@ -1412,30 +1428,29 @@ private extension UpgradeWidgetData {
     }
   }
 
-  var mediumTaskChoices: [UpgradeWidgetTaskChoice] {
+  func mediumTaskChoices(showBuilderBase: Bool) -> [UpgradeWidgetTaskChoice] {
     let labels = localizedLabels
     let groups: [(String, [UpgradeWidgetTask])] = [
       (labels.village, homeBuilders.tasks),
       (labels.laboratory, laboratory.tasks),
       (labels.pets, pets.tasks),
-      (labels.builderBase, builderBase.tasks),
-    ]
+    ] + (showBuilderBase ? [(labels.builderBase, builderBase.tasks)] : [])
     return groups.flatMap { title, tasks in
       tasks.map { UpgradeWidgetTaskChoice(title: title, task: $0) }
     }
   }
 
-  var timelineDates: [Date] {
-    let taskDates = allTasks.flatMap { task in
+  func timelineDates(showBuilderBase: Bool) -> [Date] {
+    let taskDates = allTasks(showBuilderBase: showBuilderBase).flatMap { task in
       [task.finishesAt, task.helperFinishesAt].compactMap { $0 }
     }
     return taskDates + activeBoosts(at: Date()).compactMap(\.expiresAt) + helpers.compactMap(\.statusUntil)
   }
 
-  func hasFinishedTask(now: Date) -> Bool {
+  func hasFinishedTask(now: Date, showBuilderBase: Bool) -> Bool {
     (hasStaleData ?? false) ||
-      allSections.contains { ($0.hiddenFinishesAt ?? .distantFuture) <= now } ||
-      allTasks.contains { $0.finishesAt <= now }
+      allSections(showBuilderBase: showBuilderBase).contains { ($0.hiddenFinishesAt ?? .distantFuture) <= now } ||
+      allTasks(showBuilderBase: showBuilderBase).contains { $0.finishesAt <= now }
   }
 }
 
@@ -1459,7 +1474,7 @@ private struct UpgradeWidgetView: View {
     let activeBoosts = entry.data.activeBoosts(at: entry.date)
     return VStack(alignment: .leading, spacing: 7) {
       accountHeader
-      if entry.data.hasFinishedTask(now: entry.date) {
+      if entry.data.hasFinishedTask(now: entry.date, showBuilderBase: entry.showBuilderBase) {
         staleChip
       }
 
@@ -1488,7 +1503,9 @@ private struct UpgradeWidgetView: View {
         VStack(alignment: .leading, spacing: 7) {
           sectionCard(title: labels.laboratory, section: entry.data.laboratory, columns: 1)
           sectionCard(title: labels.pets, section: entry.data.pets, columns: 1)
-          sectionCard(title: labels.builderBase, section: entry.data.builderBase, columns: 1)
+          if entry.showBuilderBase {
+            sectionCard(title: labels.builderBase, section: entry.data.builderBase, columns: 1)
+          }
         }
       }
     }
@@ -1497,7 +1514,7 @@ private struct UpgradeWidgetView: View {
   private var mediumBody: some View {
     VStack(alignment: .leading, spacing: 6) {
       accountHeader
-      if entry.data.hasFinishedTask(now: entry.date) {
+      if entry.data.hasFinishedTask(now: entry.date, showBuilderBase: entry.showBuilderBase) {
         staleChip
       }
       if let choice = mediumTaskChoice {
@@ -1520,7 +1537,7 @@ private struct UpgradeWidgetView: View {
   }
 
   private var mediumTaskChoice: UpgradeWidgetTaskChoice? {
-    let choices = entry.data.mediumTaskChoices
+    let choices = entry.data.mediumTaskChoices(showBuilderBase: entry.showBuilderBase)
     guard !choices.isEmpty else { return nil }
     return choices[entry.mediumTaskIndex % choices.count]
   }
@@ -1695,7 +1712,8 @@ private struct UpgradeWidgetView: View {
       Text(labels.research)
         .font(.system(size: 8, weight: .bold))
         .foregroundStyle(.secondary)
-      if let task = entry.data.laboratory.tasks.first ?? entry.data.pets.tasks.first ?? entry.data.builderBase.tasks.first {
+      let builderTask = entry.showBuilderBase ? entry.data.builderBase.tasks.first : nil
+      if let task = entry.data.laboratory.tasks.first ?? entry.data.pets.tasks.first ?? builderTask {
         taskRow(task)
       } else {
         Text(labels.noActiveResearch)

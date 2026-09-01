@@ -40,11 +40,17 @@ export class AsyncStorageGameDataPreferences implements GameDataPreferences {
   }
 }
 
-export function createExpoGameDataService(): GameDataService {
-  const platform: GameDataPlatform = Platform.OS === 'web' ? 'web' : 'native';
+const WEB_GAME_DATA_FILES: GameDataFileStore = {
+  read: async () => null,
+  write: async () => undefined,
+};
+
+export function createExpoGameDataService(
+  platform: GameDataPlatform = Platform.OS === 'web' ? 'web' : 'native',
+): GameDataService {
   return new GameDataService({
     platform,
-    files: new ExpoGameDataFileStore(),
+    files: platform === 'web' ? WEB_GAME_DATA_FILES : new ExpoGameDataFileStore(),
     preferences: new AsyncStorageGameDataPreferences(),
     systemLocales: () =>
       getLocales().map((locale) => ({

@@ -1,12 +1,5 @@
-export const CLASHKING_FONT_FAMILY = 'ClashKing';
-export const CLASHKING_FONT_URL = 'https://assets.clashk.ing/fonts/clashking.ttf';
-export const CLASHKING_FONT_CACHE_LIFETIME_MS = 7 * 24 * 60 * 60 * 1_000;
+import type { FontSource } from 'expo-font';
 
-export function isClashKingFontCacheStale(
-  modificationTime: number | undefined,
-  now = Date.now(),
-): boolean {
-  return (
-    modificationTime === undefined || now - modificationTime >= CLASHKING_FONT_CACHE_LIFETIME_MS
-  );
-}
+export const CLASHKING_FONT_FAMILY = 'ClashKing';
+export const CLASHKING_FONT_SOURCE =
+  require('../../../assets/clashking/fonts/clashking.ttf') as FontSource;

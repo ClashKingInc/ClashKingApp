@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor, within } from '@testing-library/react-native';
 import { Button, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -250,6 +250,7 @@ describe('PlayerDetailScreen', () => {
     const screen = await wrap(<PlayerDetailScreen model={model} actions={screenActions} />);
 
     await fireEvent.press(screen.getByLabelText('#ALPHA'));
+    await fireEvent.press(screen.getByTestId('player-header-name-copy'));
     await fireEvent.press(screen.getByLabelText('Open in game'));
     await fireEvent.press(screen.getByLabelText('Home Base'));
     expect(screen.getByText('Builder Base')).toBeTruthy();
@@ -260,6 +261,7 @@ describe('PlayerDetailScreen', () => {
     expect(screen.getByText('Achievements')).toBeTruthy();
     expect(screen.getByText('Join / Leave')).toBeTruthy();
     expect(screen.getAllByRole('radio')).toHaveLength(8);
+    expect(screenActions.copyTag).toHaveBeenCalledTimes(2);
     expect(screenActions.copyTag).toHaveBeenCalledWith('#ALPHA');
     expect(screenActions.openInGame).toHaveBeenCalledWith('#ALPHA');
   });
@@ -450,6 +452,21 @@ describe('PlayerDetailScreen', () => {
     expect(screen.getByText('Events')).toBeTruthy();
     expect(screen.getByText('1')).toBeTruthy();
     expect(screen.getByText('Clans')).toBeTruthy();
+    expect(screen.getByTestId('player-join-leave-toolbar')).toBeTruthy();
+    expect(
+      StyleSheet.flatten(screen.getByTestId('player-join-leave-controls-row').props.style),
+    ).toMatchObject({ justifyContent: 'flex-end' });
+    expect(
+      within(screen.getByTestId('player-join-leave-view-control')).getByTestId(
+        'selection-picker-plain-control',
+      ),
+    ).toBeTruthy();
+    expect(screen.getByTestId('player-join-leave-summary-row')).toBeTruthy();
+    const filterControl = screen.getByTestId('player-join-leave-filter-control');
+    expect(filterControl).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Filters' })).toBeTruthy();
+    expect(within(filterControl).queryByText('Filters')).toBeNull();
+    expect(screen.getByText('History')).toBeTruthy();
     await fireEvent.scroll(screen.getByTestId('player-detail-scroll'), {
       nativeEvent: {
         contentOffset: { y: 600 },
@@ -461,6 +478,9 @@ describe('PlayerDetailScreen', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'History' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'Clan totals' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
+    expect(
+      StyleSheet.flatten(screen.getByTestId('player-join-leave-filter-options').props.style),
+    ).toMatchObject({ justifyContent: 'flex-end' });
     expect(screen.getAllByText('Time spent').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Visits').length).toBeGreaterThan(0);
   });

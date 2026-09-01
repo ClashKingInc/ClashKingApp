@@ -4,7 +4,8 @@ import { AccessibilityInfo, Platform } from 'react-native';
 import { ckBreakpoints } from './tokens';
 import type { CKPlatform } from './policies';
 
-type AccessibilityInfoExtended = typeof AccessibilityInfo & {
+type AccessibilityInfoExtended = Omit<typeof AccessibilityInfo, 'isReduceTransparencyEnabled'> & {
+  isReduceTransparencyEnabled?: () => Promise<boolean>;
   isHighTextContrastEnabled?: () => Promise<boolean>;
 };
 
@@ -38,9 +39,11 @@ export function useCKAccessibility(): CKAccessibilityPreferences {
 
   useEffect(() => {
     let active = true;
+    const reduceTransparencySupported =
+      typeof extendedAccessibilityInfo.isReduceTransparencyEnabled === 'function';
     void Promise.all([
       AccessibilityInfo.isReduceMotionEnabled(),
-      AccessibilityInfo.isReduceTransparencyEnabled(),
+      extendedAccessibilityInfo.isReduceTransparencyEnabled?.() ?? Promise.resolve(false),
       extendedAccessibilityInfo.isHighTextContrastEnabled?.() ?? Promise.resolve(false),
     ]).then(([reduceMotion, reduceTransparency, highContrast]) => {
       if (active) setPreferences({ reduceMotion, reduceTransparency, highContrast });
@@ -49,17 +52,16 @@ export function useCKAccessibility(): CKAccessibilityPreferences {
     const motion = AccessibilityInfo.addEventListener('reduceMotionChanged', (reduceMotion) => {
       setPreferences((value) => ({ ...value, reduceMotion }));
     });
-    const transparency = AccessibilityInfo.addEventListener(
-      'reduceTransparencyChanged',
-      (reduceTransparency) => {
-        setPreferences((value) => ({ ...value, reduceTransparency }));
-      },
-    );
+    const transparency = reduceTransparencySupported
+      ? AccessibilityInfo.addEventListener('reduceTransparencyChanged', (reduceTransparency) => {
+          setPreferences((value) => ({ ...value, reduceTransparency }));
+        })
+      : undefined;
 
     return () => {
       active = false;
       motion.remove();
-      transparency.remove();
+      transparency?.remove();
     };
   }, []);
 

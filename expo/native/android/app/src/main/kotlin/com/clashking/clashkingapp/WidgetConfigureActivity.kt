@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.ScrollView
+import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.StringRes
 
@@ -33,11 +34,14 @@ abstract class WidgetConfigureActivity : Activity() {
     @get:StringRes protected abstract val emptyText: Int
     @get:StringRes protected abstract val automaticText: Int
     @get:StringRes protected abstract val actionText: Int
+    @get:StringRes protected open val builderBaseOptionText: Int? = null
 
     protected abstract fun selectedTag(appWidgetId: Int): String?
     protected abstract fun readOptions(): List<WidgetSelectionOption>
     protected abstract fun saveSelectedTag(appWidgetId: Int, tag: String?)
     protected abstract fun widgetProviderClass(): Class<out AppWidgetProvider>
+    protected open fun builderBaseEnabled(appWidgetId: Int): Boolean = true
+    protected open fun saveBuilderBaseEnabled(appWidgetId: Int, enabled: Boolean) = Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +121,33 @@ abstract class WidgetConfigureActivity : Activity() {
         radioGroup.check(defaultRadioId ?: automatic.id)
         container.addView(radioGroup)
 
+        val builderBaseSwitch = builderBaseOptionText?.let { textResource ->
+            Switch(this).apply {
+                setText(textResource)
+                textSize = 15f
+                setTextColor(getColor(R.color.widget_text))
+                isChecked = builderBaseEnabled(appWidgetId)
+                buttonTintList = null
+                thumbTintList = ColorStateList.valueOf(getColor(R.color.widget_text))
+                trackTintList = ColorStateList(
+                    arrayOf(
+                        intArrayOf(android.R.attr.state_checked),
+                        intArrayOf()
+                    ),
+                    intArrayOf(
+                        getColor(R.color.widget_accent),
+                        getColor(R.color.widget_text_secondary)
+                    )
+                )
+                setPadding(dp(14), dp(10), dp(14), dp(10))
+                setBackgroundResource(R.drawable.upgrade_widget_config_option)
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply { topMargin = dp(10) }
+            }.also(container::addView)
+        }
+
         container.addView(Button(this).apply {
             setText(actionText)
             isAllCaps = false
@@ -129,7 +160,10 @@ abstract class WidgetConfigureActivity : Activity() {
             minWidth = 0
             setPadding(dp(16), 0, dp(16), 0)
             setOnClickListener {
-                saveSelection(tagsByRadioId[radioGroup.checkedRadioButtonId])
+                saveSelection(
+                    tagsByRadioId[radioGroup.checkedRadioButtonId],
+                    builderBaseSwitch?.isChecked ?: true
+                )
             }
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -178,8 +212,9 @@ abstract class WidgetConfigureActivity : Activity() {
         }
     }
 
-    private fun saveSelection(tag: String?) {
+    private fun saveSelection(tag: String?, showBuilderBase: Boolean) {
         saveSelectedTag(appWidgetId, tag)
+        saveBuilderBaseEnabled(appWidgetId, showBuilderBase)
         sendBroadcast(Intent(this, widgetProviderClass()).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))

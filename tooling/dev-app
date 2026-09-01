@@ -104,12 +104,12 @@ start_worktree() {
   command=(
     env
     BROWSER=none
-    EXPO_PUBLIC_CK_API_ENV=staging
-    EXPO_PUBLIC_CK_API_BASE_URL=https://dev-api.clashk.ing
-    EXPO_PUBLIC_CK_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
-    EXPO_PUBLIC_CK_PROXY_BASE_URL=https://dev-api.clashk.ing/proxy/v1
-    EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL=https://dev-api.clashk.ing/v2
-    EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=https://dev-app.clashk.ing/auth/discord_callback.html
+    EXPO_PUBLIC_CK_API_ENV=production
+    EXPO_PUBLIC_CK_API_BASE_URL=https://api.clashk.ing
+    EXPO_PUBLIC_CK_API_V2_BASE_URL=https://api.clashk.ing/v2
+    EXPO_PUBLIC_CK_PROXY_BASE_URL=https://api.clashk.ing/proxy/v1
+    EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL=https://api.clashk.ing/v2
+    EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=http://localhost:7357/auth/callback
     EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
     npm run start -- --web --host localhost --port "$PORT"
   )

@@ -192,12 +192,14 @@ export function ClanLeaderboardHistoryTab({
           }}
         />
       </View>
-      <SeasonPicker
-        accessibilityLabel={t('clanRankingsSelectSeason')}
-        selectedKey={`${seasonIndex}`}
-        choices={seasonChoices}
-        onSelect={(key) => void load(type, Number(key))}
-      />
+      <View style={styles.seasonPickerRow}>
+        <SeasonPicker
+          accessibilityLabel={t('clanRankingsSelectSeason')}
+          selectedKey={`${seasonIndex}`}
+          choices={seasonChoices}
+          onSelect={(key) => void load(type, Number(key))}
+        />
+      </View>
       <SummaryRail>
         {data.selected.map((item, index) => (
           <View key={`${item.season}:${index}`} style={styles.summaryGroup}>
@@ -549,12 +551,14 @@ export function ClanLegendHistoryTab({
   ];
   return (
     <View style={styles.tab}>
-      <SeasonPicker
-        accessibilityLabel={t('clanRankingsSelectSeason')}
-        selectedKey={season ?? choices[0]!.key}
-        choices={choices}
-        onSelect={(key) => void load(key)}
-      />
+      <View style={styles.seasonPickerRow}>
+        <SeasonPicker
+          accessibilityLabel={t('clanRankingsSelectSeason')}
+          selectedKey={season ?? choices[0]!.key}
+          choices={choices}
+          onSelect={(key) => void load(key)}
+        />
+      </View>
       <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
         {items.map((entry, index) => (
           <LegendRow
@@ -972,6 +976,7 @@ const styles = StyleSheet.create({
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   grow: { flex: 1 },
   summaryGroup: { flexDirection: 'row', gap: 8 },
+  seasonPickerRow: { width: '100%', maxWidth: 440, alignSelf: 'flex-end' },
   chart: { paddingHorizontal: 10, paddingTop: 12, paddingBottom: 2 },
   chartLegend: { flexDirection: 'row', alignItems: 'center', gap: 7, paddingHorizontal: 4 },
   chartLegendDot: { width: 9, height: 9, borderRadius: 5 },

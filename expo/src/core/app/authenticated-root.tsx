@@ -1,6 +1,7 @@
 import * as Clipboard from 'expo-clipboard';
+import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Trophy, UserRound } from 'lucide-react-native';
 
 import {
@@ -14,7 +15,7 @@ import {
   type AppRouteId,
   type FeatureState,
 } from '../../navigation';
-import { NavigationShell, type PrimaryRouteId } from '../../shell';
+import { NavigationShell, resolveShellLayout, type PrimaryRouteId } from '../../shell';
 import { SettingsRoot } from '../../features/settings/presentation';
 import {
   AnnouncementOpeningController,
@@ -70,6 +71,12 @@ import {
 } from '../../ui';
 import { useAppRuntime, useAppState } from './runtime-context';
 import { subscribeSecondaryBackHandler } from './secondary-back-handler';
+import {
+  nativeSecondaryRouteTransition,
+  publishNativeSecondaryLayer,
+  removeNativeSecondaryLayer,
+  removeNativeSecondaryLayers,
+} from './native-secondary-navigation';
 import { supportCreatorUrl } from './runtime-effects';
 
 type PushedScene =
@@ -95,6 +102,9 @@ export function AuthenticatedRoot() {
   const state = useAppState();
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
+  const viewportWidth = useWindowDimensions().width;
+  const usesNativeSecondaryNavigation =
+    Platform.OS === 'ios' && resolveShellLayout(Platform.OS, viewportWidth) === 'mobile';
   const subscribeAuth = useCallback(
     (listener: () => void) => runtime.auth.subscribe(listener),
     [runtime.auth],
@@ -111,6 +121,8 @@ export function AuthenticatedRoot() {
   const [deepLinkLoading, setDeepLinkLoading] = useState(false);
   const routeCurrent = useRef(true);
   const navigationGeneration = useRef(0);
+  const nativeRouteKeys = useRef<readonly string[]>([]);
+  const expectedNativeRouteKeys = useRef<readonly string[]>([]);
   const {
     openHomeAnnouncement: presentHomeAnnouncement,
     openPreparedStory: presentPreparedStory,
@@ -145,17 +157,21 @@ export function AuthenticatedRoot() {
   };
   const closeSecondary = useCallback(() => {
     navigationGeneration.current += 1;
+    if (usesNativeSecondaryNavigation && (pushedScenes.length || utility !== undefined)) {
+      router.back();
+      return;
+    }
     if (pushedScenes.length) setPushedScenes((current) => current.slice(0, -1));
     else setUtility(undefined);
-  }, [pushedScenes.length]);
+  }, [pushedScenes.length, usesNativeSecondaryNavigation, utility]);
 
   useEffect(() => {
     const subscription = subscribeSecondaryBackHandler(
-      pushedScenes.length > 0 || utility !== undefined,
+      !usesNativeSecondaryNavigation && (pushedScenes.length > 0 || utility !== undefined),
       closeSecondary,
     );
     return () => subscription?.remove();
-  }, [closeSecondary, pushedScenes.length, utility]);
+  }, [closeSecondary, pushedScenes.length, usesNativeSecondaryNavigation, utility]);
   const pushPlayer = (player: Player) => {
     navigationGeneration.current += 1;
     setPushedScenes((current) => [...current, { kind: 'player', player }]);
@@ -510,6 +526,56 @@ export function AuthenticatedRoot() {
   ];
   const secondaryContent = secondaryLayers.at(-1)?.content;
 
+  useEffect(() => {
+    if (!usesNativeSecondaryNavigation) {
+      removeNativeSecondaryLayers([...nativeRouteKeys.current, ...expectedNativeRouteKeys.current]);
+      nativeRouteKeys.current = [];
+      expectedNativeRouteKeys.current = [];
+      return;
+    }
+
+    const expected = secondaryLayers.map((layer) => layer.key);
+    expectedNativeRouteKeys.current = expected;
+    secondaryLayers.forEach((layer) => {
+      publishNativeSecondaryLayer(layer.key, {
+        content: layer.content,
+        onRemove: () => {
+          if (!expectedNativeRouteKeys.current.includes(layer.key)) return;
+          navigationGeneration.current += 1;
+          nativeRouteKeys.current = nativeRouteKeys.current.filter((key) => key !== layer.key);
+          if (layer.key.startsWith('utility:')) {
+            setPushedScenes([]);
+            setUtility(undefined);
+            return;
+          }
+          const pushedIndex = Number(layer.key.split(':')[1]);
+          if (Number.isInteger(pushedIndex)) {
+            setPushedScenes((current) => current.slice(0, pushedIndex));
+          }
+        },
+      });
+    });
+
+    const transition = nativeSecondaryRouteTransition(nativeRouteKeys.current, expected);
+    transition.staleKeys.forEach(removeNativeSecondaryLayer);
+    nativeRouteKeys.current = transition.routeKeys;
+    if (transition.type === 'push') {
+      const nextKey = transition.key;
+      router.push({ pathname: '/detail' as never, params: { layer: nextKey } });
+    } else if (transition.type === 'replace') {
+      router.replace({ pathname: '/detail' as never, params: { layer: transition.key } });
+    }
+  });
+
+  useEffect(
+    () => () => {
+      removeNativeSecondaryLayers([...nativeRouteKeys.current, ...expectedNativeRouteKeys.current]);
+      nativeRouteKeys.current = [];
+      expectedNativeRouteKeys.current = [];
+    },
+    [],
+  );
+
   return (
     <>
       <NavigationShell
@@ -535,28 +601,17 @@ export function AuthenticatedRoot() {
         onAddAccount={() => openUtility(routeById('accounts'))}
         onPrimarySelect={selectPrimary}
         onResetDesktopContent={closeSecondary}
-        onSecondaryBack={closeSecondary}
         onSearch={() => openUtility(routeById('search'))}
         onUtilityNavigate={openUtility}
         primaryScreens={screens}
         productLabel={t('navigationClashKingWeb')}
         profileMenuLabel={t('navigationOpenProfileMenu')}
-        secondaryContent={secondaryContent}
-        secondaryLayers={secondaryLayers}
+        secondaryContent={usesNativeSecondaryNavigation ? undefined : secondaryContent}
+        secondaryLayers={usesNativeSecondaryNavigation ? [] : secondaryLayers}
         secondaryFullScreen={
           (pushedScene?.kind === 'utility' ? pushedScene.route : utility) === 'search'
         }
-        secondaryRouteId={
-          pushedScene?.kind === 'player'
-            ? 'players'
-            : pushedScene?.kind === 'clan' || pushedScene?.kind === 'capital'
-              ? 'clans'
-              : pushedScene?.kind === 'war' || pushedScene?.kind === 'cwl'
-                ? 'war'
-                : pushedScene?.kind === 'utility'
-                  ? pushedScene.route
-                  : undefined
-        }
+        secondaryRouteId={secondaryRouteIdFor(pushedScene)}
         selectedPrimary={primary}
         selectedUtility={pushedScene ? undefined : utility}
         t={t}
@@ -575,6 +630,13 @@ export function AuthenticatedRoot() {
       />
     </>
   );
+}
+
+function secondaryRouteIdFor(scene: PushedScene | undefined): AppRouteId | undefined {
+  if (scene?.kind === 'player') return 'players';
+  if (scene?.kind === 'clan' || scene?.kind === 'capital') return 'clans';
+  if (scene?.kind === 'war' || scene?.kind === 'cwl') return 'war';
+  return scene?.kind === 'utility' ? scene.route : undefined;
 }
 
 function currentCwlRoute(

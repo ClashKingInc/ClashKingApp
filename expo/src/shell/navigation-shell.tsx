@@ -1,13 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import {
-  Animated,
-  BackHandler,
-  PanResponder,
-  Platform,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { BackHandler, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import ReanimatedDrawerLayout, {
   DrawerKeyboardDismissMode,
   DrawerLockMode,
@@ -45,11 +37,7 @@ export interface NavigationShellProps {
   secondaryRouteId?: AppRouteId;
   primaryScreens: PrimaryScreenSlots;
   secondaryContent?: ReactNode;
-  /**
-   * Mobile's retained app-owned stack. Keeping every pushed scene mounted
-   * mirrors Flutter's Navigator and lets an interactive edge pop reveal the
-   * preceding scene instead of the retained primary page.
-   */
+  /** Android and web retain app-owned secondary scenes; iOS uses Expo Router's native stack. */
   secondaryLayers?: readonly { readonly key: string; readonly content: ReactNode }[];
   /** Flutter's global search route covers the complete desktop shell, including the sidebar. */
   secondaryFullScreen?: boolean;
@@ -65,8 +53,6 @@ export interface NavigationShellProps {
   closeDrawerLabel: string;
   onPrimarySelect: (route: PrimaryRouteId) => void;
   onUtilityNavigate: (route: AppRouteDefinition, options: { replace: boolean }) => void;
-  /** Pops the active utility or pushed detail from the app-owned mobile stack. */
-  onSecondaryBack?: () => void;
   onResetDesktopContent?: () => void;
   onSearch?: () => void;
   onAchievements: () => void;
@@ -89,15 +75,13 @@ export function NavigationShell(props: NavigationShellProps) {
 
 function MobileNavigationShell(props: NavigationShellProps & { width: number }) {
   const theme = useCKTheme();
-  const { isRtl, onSecondaryBack, width } = props;
+  const { isRtl, width } = props;
   const platform = props.platform ?? Platform.OS;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerRef = useRef<DrawerLayoutMethods>(null);
   const pendingDrawerAction = useRef<(() => void) | undefined>(undefined);
-  const [secondaryTranslateX] = useState(() => new Animated.Value(0));
   const drawerEdgeWidth = 20;
   const drawerWidth = resolveMobileDrawerWidth(width);
-  const backEdgeWidth = 20;
   const secondaryLayers = props.secondaryLayers?.length
     ? props.secondaryLayers
     : props.secondaryContent
@@ -133,71 +117,6 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     pendingDrawerAction.current = undefined;
     pending?.();
   }, []);
-  const secondaryBackPan = useMemo(
-    () =>
-      PanResponder.create({
-        // Let sheets, horizontal controls and other child gestures win first. The page pop is
-        // deliberately a leading-edge fallback, matching UINavigationController's recognizer.
-        onMoveShouldSetPanResponderCapture: (_, gesture) =>
-          platform === 'ios' &&
-          secondaryActive &&
-          onSecondaryBack !== undefined &&
-          shouldStartSecondaryBackPan({
-            pageX: gesture.x0,
-            dx: gesture.dx,
-            dy: gesture.dy,
-            viewportWidth: width,
-            edgeWidth: backEdgeWidth,
-            isRtl,
-          }),
-        onMoveShouldSetPanResponder: () => false,
-        onPanResponderMove: (_, gesture) => {
-          const inwardDistance = isRtl ? Math.min(0, gesture.dx) : Math.max(0, gesture.dx);
-          secondaryTranslateX.setValue(inwardDistance);
-        },
-        onPanResponderRelease: (_, gesture) => {
-          if (
-            shouldCompleteSecondaryBackPan({
-              dx: gesture.dx,
-              velocityX: gesture.vx,
-              viewportWidth: width,
-              isRtl,
-            })
-          ) {
-            Animated.timing(secondaryTranslateX, {
-              toValue: isRtl ? -width : width,
-              duration: 160,
-              useNativeDriver: true,
-            }).start(({ finished }) => {
-              if (!finished) return;
-              secondaryTranslateX.setValue(0);
-              onSecondaryBack?.();
-            });
-            return;
-          }
-          Animated.spring(secondaryTranslateX, {
-            toValue: 0,
-            damping: 32,
-            stiffness: 360,
-            mass: 1,
-            useNativeDriver: true,
-          }).start();
-        },
-        onPanResponderTerminate: () => {
-          Animated.spring(secondaryTranslateX, {
-            toValue: 0,
-            damping: 32,
-            stiffness: 360,
-            mass: 1,
-            useNativeDriver: true,
-          }).start();
-        },
-      }),
-    [backEdgeWidth, isRtl, onSecondaryBack, platform, secondaryActive, secondaryTranslateX, width],
-  );
-  useEffect(() => {
-    if (!secondaryActive) secondaryTranslateX.setValue(0);
-  }, [secondaryActive, secondaryTranslateX]);
   useEffect(() => {
     if (!secondaryActive) return;
     pendingDrawerAction.current = undefined;
@@ -284,24 +203,19 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
           ? mountedSecondaryLayers.map((layer, index) => {
               const isTop = index === mountedSecondaryLayers.length - 1;
               return (
-                <Animated.View
+                <View
                   accessibilityElementsHidden={!isTop}
                   importantForAccessibility={isTop ? 'auto' : 'no-hide-descendants'}
                   key={layer.key}
                   pointerEvents={isTop ? 'auto' : 'none'}
                   style={[
                     styles.secondaryOverlay,
-                    {
-                      backgroundColor: theme.background,
-                      transform: [{ translateX: isTop ? secondaryTranslateX : 0 }],
-                      zIndex: 4 + index,
-                    },
+                    { backgroundColor: theme.background, zIndex: 4 + index },
                   ]}
                   testID={isTop ? 'mobile-secondary-overlay' : `mobile-secondary-underlay-${index}`}
-                  {...(isTop ? secondaryBackPan.panHandlers : {})}
                 >
                   {layer.content}
-                </Animated.View>
+                </View>
               );
             })
           : null}
@@ -404,42 +318,6 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
 
 function platformAllowsTabSwipe(platform?: string): boolean {
   return (platform ?? Platform.OS) !== 'web';
-}
-
-export function shouldStartSecondaryBackPan({
-  pageX,
-  dx,
-  dy,
-  viewportWidth,
-  edgeWidth,
-  isRtl,
-}: {
-  pageX: number;
-  dx: number;
-  dy: number;
-  viewportWidth: number;
-  edgeWidth: number;
-  isRtl: boolean;
-}): boolean {
-  const startsAtLeadingEdge = isRtl ? pageX >= viewportWidth - edgeWidth : pageX <= edgeWidth;
-  const movesInward = isRtl ? dx < -8 : dx > 8;
-  return startsAtLeadingEdge && movesInward && Math.abs(dx) > Math.abs(dy) * 1.1;
-}
-
-export function shouldCompleteSecondaryBackPan({
-  dx,
-  velocityX,
-  viewportWidth,
-  isRtl,
-}: {
-  dx: number;
-  velocityX: number;
-  viewportWidth: number;
-  isRtl: boolean;
-}): boolean {
-  const distance = isRtl ? -dx : dx;
-  const velocity = isRtl ? -velocityX : velocityX;
-  return distance >= Math.min(96, viewportWidth * 0.24) || velocity >= 0.5;
 }
 
 const styles = StyleSheet.create({

@@ -9,7 +9,7 @@ The server exposes local Expo web development at `https://dev-app.clashk.ing` th
 - `tooling/dev-app use <worktree>` explicitly stops the current app and switches the shared development URL to another worktree.
 - `tooling/dev-app reload` requests an Expo reload. Use `tooling/dev-app restart` for a full process restart, and `tooling/dev-app stop`, `tooling/dev-app status`, `tooling/dev-app logs`, or `tooling/dev-app attach` for normal management and inspection.
 - The manager owns the named tmux session `clashking-app-dev` and port `7357`, so every chat can inspect and manage the same process.
-- Local development uses the staging API but keeps `https://dev-app.clashk.ing/auth/discord_callback.html` as its Discord redirect. Cloudflare Pages staging uses `https://staging-app.clashk.ing` and its matching callback instead.
+- Local development uses the production API at `https://api.clashk.ing` with `http://localhost:7357/auth/callback` as its Discord redirect. Cloudflare Pages staging uses `https://staging-app.clashk.ing` and its matching callback instead.
 
 ## Localization pre-commit gate
 

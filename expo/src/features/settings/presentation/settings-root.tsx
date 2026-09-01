@@ -10,6 +10,7 @@ import { useI18n, type SupportedLocale } from '../../../i18n';
 import { ClashHandoffDialog } from '../../../ui';
 import { useAppRuntime, useAppState } from '../../../core/app/runtime-context';
 import { APP_ICON_OPTIONS } from '../app-icons/app-icon-service';
+import { ConnectedApplicationsService } from '../data';
 import { clanOptionsFromProfiles } from '../../widgets';
 import type {
   ExternalSettingsActions,
@@ -27,6 +28,7 @@ import { SETTINGS_LOCALES } from './settings-locales';
 import { getVersionDeviceLabel } from './settings-runtime';
 import { SettingsScreen, type SettingsAppIconChoice } from './settings-screen';
 import { TranslationScreen } from './translation-screen';
+import { ConnectedApplicationsScreen } from './connected-applications-screen';
 
 type SettingsScene = 'main' | SettingsDestination | 'licenses';
 
@@ -54,6 +56,10 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
   const [alternateIconsSupported, setAlternateIconsSupported] = useState(false);
   const [selectedAppIcon, setSelectedAppIcon] = useState<string>('');
   const [clashHandoffUrl, setClashHandoffUrl] = useState<string>();
+  const connectedApplications = useMemo(
+    () => new ConnectedApplicationsService(runtime.api),
+    [runtime.api],
+  );
 
   useEffect(() => {
     const unsubscribePlayers = runtime.players.subscribe(refreshDomainState);
@@ -179,6 +185,14 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
   }
   if (scene === 'privacy') {
     return <PrivacyControlsScreen actions={privacyActions} onBack={() => setScene('main')} />;
+  }
+  if (scene === 'connectedApps') {
+    return (
+      <ConnectedApplicationsScreen
+        onBack={() => setScene('main')}
+        service={connectedApplications}
+      />
+    );
   }
   if (scene === 'licenses') {
     return (

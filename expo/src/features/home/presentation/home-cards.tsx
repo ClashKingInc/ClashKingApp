@@ -83,7 +83,13 @@ function MobilePager({
     if (width > 0) ref.current?.scrollTo({ x: selected * width, animated: true });
   }, [selected, width]);
   const finish = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (width > 0) onSelect(Math.round(event.nativeEvent.contentOffset.x / width));
+    if (width > 0)
+      onSelect(
+        clampHomePageIndex(
+          Math.round(Math.max(0, event.nativeEvent.contentOffset.x) / width),
+          children.length,
+        ),
+      );
   };
   return (
     <View onLayout={(event) => setWidth(event.nativeEvent.layout.width)}>
@@ -91,6 +97,10 @@ function MobilePager({
         ref={ref}
         horizontal
         pagingEnabled
+        bounces={false}
+        alwaysBounceHorizontal={false}
+        overScrollMode="never"
+        contentInsetAdjustmentBehavior="never"
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={finish}
         style={isRtl ? styles.rtlScroll : undefined}
@@ -182,6 +192,7 @@ export function HomeTodoCard({
                   <ProgressRing
                     progress={page.total === 0 ? 1 : page.done / page.total}
                     size={54}
+                    showLabel={false}
                   />
                 }
               />
@@ -214,6 +225,7 @@ export function HomeTodoCard({
           <ProgressRing
             progress={current.total === 0 ? 1 : current.done / current.total}
             size={46}
+            showLabel={false}
           />
         }
       />
@@ -567,7 +579,9 @@ export function HomeUpgradeCard({
                 title={entry?.name ?? t('todoAllAccounts')}
                 subtitle={entry?.subtitle ?? t('todoAccountsNumber', { number: entries.length })}
                 size={54}
-                trailing={<ProgressRing progress={completion(entry)} size={54} />}
+                trailing={
+                  <ProgressRing progress={completion(entry)} size={54} labelFontSize={15} />
+                }
               />
               {renderBody(entry)}
             </HomeCardFrame>
@@ -593,7 +607,7 @@ export function HomeUpgradeCard({
             allLabel={hasSummary ? t('todoAllAccounts') : undefined}
           />
         }
-        trailing={<ProgressRing progress={completion(current)} size={46} />}
+        trailing={<ProgressRing progress={completion(current)} size={46} labelFontSize={13} />}
       />
       <MobilePager selected={safeSelected} onSelect={setSelected}>
         {pages.map((entry, index) => (

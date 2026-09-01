@@ -150,6 +150,8 @@ export function PlayerDetailHeader({
   const compact = width < 900;
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
+  const copyPlayerTag = () =>
+    void actions.copyTag(player.tag).then(() => actions.showMessage(t('generalCopiedToClipboard')));
   const warAction = model.currentWar
     ? {
         label: t('warOngoing'),
@@ -358,17 +360,24 @@ export function PlayerDetailHeader({
             ) : null}
           </View>
           <View style={[styles.identityCopy, compact && styles.identityCopyCompact]}>
-            <CKText
-              role="titleLarge"
-              numberOfLines={1}
-              style={[styles.headerText, compact && styles.centerText]}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${player.name}. ${t('generalCopiedToClipboard')}`}
+              testID="player-header-name-copy"
+              onPress={copyPlayerTag}
             >
-              {player.name}
-            </CKText>
+              <CKText
+                role="titleLarge"
+                numberOfLines={1}
+                style={[styles.headerText, compact && styles.centerText]}
+              >
+                {player.name}
+              </CKText>
+            </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={player.tag}
-              onPress={() => void actions.copyTag(player.tag)}
+              onPress={copyPlayerTag}
             >
               <CKText role="labelLarge" style={styles.headerText}>
                 {player.tag}
@@ -1270,16 +1279,6 @@ export function PlayerActivityTab({
   return (
     <View style={styles.sections}>
       <View style={styles.toolbar}>
-        <FilterDropdown
-          fillWidth
-          choices={choices}
-          value={filter}
-          onSelect={(value) => {
-            const next = value as PlayerHistoryTypeValue;
-            setFilter(next);
-            void actions.loadActivity(next);
-          }}
-        />
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`${verifiedTracking ? t('playerActivityTrackingActive') : t('playerActivityTrackingUnknown')}. ${verifiedTracking ? t('playerActivityTrackingActiveBody') : t('playerActivityTrackingUnknownBody')}`}
@@ -1298,6 +1297,16 @@ export function PlayerActivityTab({
             </CKText>
           </PillSurface>
         </Pressable>
+        <FilterDropdown
+          fillWidth
+          choices={choices}
+          value={filter}
+          onSelect={(value) => {
+            const next = value as PlayerHistoryTypeValue;
+            setFilter(next);
+            void actions.loadActivity(next);
+          }}
+        />
       </View>
       <View testID="activity-responsive-grid">
         <ResponsiveGrid minItemWidth={430} maxColumns={2}>
@@ -1536,6 +1545,11 @@ export function PlayerWarTab({
           selected={section}
           onSelect={(v) => setSection(v as typeof section)}
         />
+        <CKText muted style={styles.grow}>
+          {filter.hasActiveFilters()
+            ? warFilterSummary(filter, t, locale)
+            : t('filtersShowingDefaultData', { count: 50 })}
+        </CKText>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('filtersQuickFilters')}
@@ -1546,11 +1560,6 @@ export function PlayerWarTab({
             <Filter size={18} color={theme.onSurfaceVariant} />
           </PillSurface>
         </Pressable>
-        <CKText muted style={styles.grow}>
-          {filter.hasActiveFilters()
-            ? warFilterSummary(filter, t, locale)
-            : t('filtersShowingDefaultData', { count: 50 })}
-        </CKText>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('generalFilters')}
@@ -1572,7 +1581,10 @@ export function PlayerWarTab({
         </Pressable>
       </View>
       {filtersExpanded ? (
-        <View style={styles.wrap}>
+        <View
+          testID="player-war-quick-filter-options"
+          style={[styles.wrap, styles.trailingChoices]}
+        >
           {['random', 'cwl', 'friendly'].map((type) => (
             <Choice
               key={type}
@@ -3216,27 +3228,38 @@ export function PlayerJoinLeaveTab({
   const totalMinutes = (totals ?? []).reduce((sum, total) => sum + total.minutes, 0);
   return (
     <View style={styles.sections}>
-      <View style={styles.toolbar}>
-        <FilterDropdown
-          value={view}
-          icon={<Repeat2 size={16} color={theme.onSurfaceVariant} />}
-          choices={[
-            ['events', t('generalHistory')],
-            ['clans', t('playerJoinLeaveClanTotals')],
-          ]}
-          onSelect={(v) => setView(v as typeof view)}
-        />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('generalFilters')}
-          accessibilityState={{ expanded: filtersExpanded }}
-          onPress={() => setFiltersExpanded((value) => !value)}
+      <View testID="player-join-leave-toolbar" style={styles.joinLeaveToolbar}>
+        <View testID="player-join-leave-controls-row" style={styles.joinLeaveControlsRow}>
+          <View testID="player-join-leave-view-control">
+            <FilterDropdown
+              value={view}
+              plain
+              showIcon={false}
+              choices={[
+                ['events', t('generalHistory')],
+                ['clans', t('playerJoinLeaveClanTotals')],
+              ]}
+              onSelect={(v) => setView(v as typeof view)}
+            />
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('generalFilters')}
+            accessibilityState={{ expanded: filtersExpanded }}
+            testID="player-join-leave-filter-control"
+            onPress={() => setFiltersExpanded((value) => !value)}
+          >
+            <PillSurface style={styles.compactFilterButton}>
+              <Filter size={17} color={theme.onSurfaceVariant} />
+            </PillSurface>
+          </Pressable>
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          testID="player-join-leave-summary-row"
+          style={styles.joinLeaveSummaryRail}
         >
-          <PillSurface style={styles.compactFilterButton}>
-            <Filter size={18} color={theme.onSurfaceVariant} />
-          </PillSurface>
-        </Pressable>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.grow}>
           <View style={styles.wrap}>
             {view === 'events' ? (
               <>
@@ -3274,7 +3297,10 @@ export function PlayerJoinLeaveTab({
       </View>
       {filtersExpanded ? (
         view === 'events' ? (
-          <View style={styles.wrap}>
+          <View
+            testID="player-join-leave-filter-options"
+            style={[styles.wrap, styles.trailingChoices]}
+          >
             {(
               [
                 [
@@ -3308,7 +3334,10 @@ export function PlayerJoinLeaveTab({
             ))}
           </View>
         ) : (
-          <View style={styles.wrap}>
+          <View
+            testID="player-join-leave-filter-options"
+            style={[styles.wrap, styles.trailingChoices]}
+          >
             {(
               [
                 [
@@ -3530,12 +3559,16 @@ function FilterDropdown({
   onSelect,
   fillWidth = false,
   icon,
+  plain = false,
+  showIcon = true,
 }: {
   value: string;
   choices: readonly (readonly [string, string])[];
   onSelect: (value: string) => void;
   fillWidth?: boolean;
   icon?: ReactNode;
+  plain?: boolean;
+  showIcon?: boolean;
 }) {
   const theme = useCKTheme();
   const selected = choices.find(([key]) => key === value)?.[1] ?? value;
@@ -3543,7 +3576,8 @@ function FilterDropdown({
     <SelectionPicker
       accessibilityLabel={selected}
       fillWidth={fillWidth}
-      leading={icon ?? <Filter size={16} color={theme.onSurfaceVariant} />}
+      leading={showIcon ? (icon ?? <Filter size={16} color={theme.onSurfaceVariant} />) : undefined}
+      plain={plain}
       onSelect={onSelect}
       options={choices.map(([key, label]) => ({ key, label }))}
       selectedKey={value}
@@ -4300,6 +4334,15 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 9,
   },
+  joinLeaveToolbar: { gap: 8 },
+  joinLeaveControlsRow: {
+    minHeight: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 8,
+  },
+  joinLeaveSummaryRail: { width: '100%' },
   directionBadge: { width: 64, alignItems: 'center', padding: 5, borderRadius: ckRadius.tile },
   subRow: {
     minHeight: 42,
@@ -4312,6 +4355,7 @@ const styles = StyleSheet.create({
   filterButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   compactFilterButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  trailingChoices: { justifyContent: 'flex-end' },
   fieldGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   filterField: { minWidth: 150, flex: 1, gap: 4 },
   filterInput: {

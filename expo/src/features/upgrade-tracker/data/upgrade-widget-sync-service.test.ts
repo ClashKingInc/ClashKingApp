@@ -171,7 +171,13 @@ test('payload exposes stale work, hidden completion, helpers, and every active b
       helperSeconds,
     });
   const stale = work(1, 'Expired', 60);
-  const visible = [work(2, 'Cannon', 7200), work(3, 'Archer Tower', 3600), work(4, 'Mortar', 5400)];
+  const visible = [
+    work(2, 'Cannon', 7200),
+    work(3, 'Archer Tower', 3600),
+    work(4, 'Mortar', 5400),
+    work(9, 'Wizard Tower', 8400),
+    work(10, 'Air Defense', 9600),
+  ];
   const hidden = work(5, 'Tesla', 1800);
   const assistant = new UpgradeTrackerItem({
     id: 6,
@@ -223,7 +229,7 @@ test('payload exposes stale work, hidden completion, helpers, and every active b
     name: 'Rich',
     townHallLevel: 18,
     builderHallLevel: 0,
-    homeBuilderCount: 4,
+    homeBuilderCount: 6,
     builderBaseBuilderCount: 1,
     items: [stale, ...visible, hidden, assistant, laboratory, researchAssistant],
     collections: [],
@@ -252,9 +258,9 @@ test('payload exposes stale work, hidden completion, helpers, and every active b
 
   expect(payload.hallImageUrl).toContain('builder_hall/level_10');
   expect(payload.hasStaleData).toBe(true);
-  expect(payload.homeBuilders).toMatchObject({ activeCount: 4, capacity: 4 });
-  expect(payload.homeBuilders.tasks).toHaveLength(3);
-  expect(payload.homeBuilders.hiddenFinishesAt).toBe('2026-07-11T10:29:00.000Z');
+  expect(payload.homeBuilders).toMatchObject({ activeCount: 6, capacity: 6 });
+  expect(payload.homeBuilders.tasks).toHaveLength(6);
+  expect(payload.homeBuilders.hiddenFinishesAt).toBeUndefined();
   expect(payload.laboratory.tasks[0]).toMatchObject({
     helperName: 'Research Assistant',
     helperFinishesAt: '2026-07-11T10:14:00.000Z',

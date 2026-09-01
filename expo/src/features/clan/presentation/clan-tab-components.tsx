@@ -27,10 +27,13 @@ export function ClanFilterBar({
   return (
     <View style={styles.filterWrap}>
       <View style={styles.filterRow}>
+        <View style={styles.filterMiddle}>{middle}</View>
+        {actions}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('generalFilters')}
           accessibilityState={{ expanded }}
+          testID="clan-filter-trigger"
           onPress={() => setExpanded(!expanded)}
           style={[
             styles.filterButton,
@@ -48,10 +51,12 @@ export function ClanFilterBar({
         >
           <Filter size={18} color={theme.onSurface} />
         </Pressable>
-        {actions}
-        <View style={styles.filterMiddle}>{middle}</View>
       </View>
-      {expanded ? <View style={styles.filterChips}>{chips}</View> : null}
+      {expanded ? (
+        <View testID="clan-filter-options" style={styles.filterChips}>
+          {chips}
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -200,13 +205,14 @@ const styles = StyleSheet.create({
   filterButton: {
     width: 40,
     height: 40,
+    marginLeft: 'auto',
     borderRadius: 16,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   filterMiddle: { flex: 1 },
-  filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  filterChips: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 8 },
   pill: {
     height: 36,
     paddingHorizontal: 11,

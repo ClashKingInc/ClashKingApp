@@ -251,10 +251,14 @@ export function ProgressRing({
   progress,
   size,
   label,
+  labelFontSize,
+  showLabel = true,
 }: {
   progress: number;
   size: number;
   label?: string;
+  labelFontSize?: number;
+  showLabel?: boolean;
 }) {
   const theme = useCKTheme();
   const value = Math.max(0, Math.min(1, progress));
@@ -290,11 +294,13 @@ export function ProgressRing({
           origin={`${size / 2}, ${size / 2}`}
         />
       </Svg>
-      <View style={styles.ringLabel}>
-        <CKText role="titleSmall" style={styles.heavy}>
-          {label ?? `${Math.round(value * 100)}%`}
-        </CKText>
-      </View>
+      {showLabel ? (
+        <View style={styles.ringLabel}>
+          <CKText role="titleSmall" style={[styles.heavy, { fontSize: labelFontSize }]}>
+            {label ?? `${Math.round(value * 100)}%`}
+          </CKText>
+        </View>
+      ) : null}
     </View>
   );
 }

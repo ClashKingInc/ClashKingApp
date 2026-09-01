@@ -13,6 +13,7 @@
     <string name="upgrade_widget_configure_empty">No synced accounts yet. The widget will use your selected account after ClashKing syncs.</string>
     <string name="upgrade_widget_configure_automatic">Automatic\nFollows your selected ClashKing account</string>
     <string name="upgrade_widget_configure_add">Add widget</string>
+    <string name="upgrade_widget_configure_builder_base">Show Builder Base upgrades</string>
     <string name="war_widget_label">Clan War</string>
     <string name="war_widget_description">Track your selected clan war and CWL score.</string>
     <string name="war_widget_clan_badge_description">Clan badge</string>

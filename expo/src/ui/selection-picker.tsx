@@ -39,6 +39,7 @@ export function SelectionPicker<T extends string>({
   leading,
   positionLabel,
   fillWidth = false,
+  plain = false,
   onOpen,
   externallyManaged = false,
 }: {
@@ -52,12 +53,36 @@ export function SelectionPicker<T extends string>({
   leading?: ReactNode;
   positionLabel?: string;
   fillWidth?: boolean;
+  plain?: boolean;
   onOpen?: () => void;
   externallyManaged?: boolean;
 }) {
   const theme = useCKTheme();
   const [visible, setVisible] = useState(false);
   const selected = options.find((option) => option.key === selectedKey) ?? options[0];
+  const controlContent = (
+    <>
+      {tintIcon(leading ?? selected?.icon, theme.onSurfaceVariant)}
+      <CKText role="rowTitle" numberOfLines={1} style={styles.grow}>
+        {selected?.label}
+      </CKText>
+      {positionLabel ? (
+        <View
+          testID="destination-picker-position"
+          style={[styles.positionHint, { backgroundColor: colorWithAlpha(theme.onSurface, 0.07) }]}
+        >
+          <CKText muted role="labelSmall">
+            {positionLabel}
+          </CKText>
+        </View>
+      ) : null}
+      {positionLabel ? (
+        <ChevronsUpDown color={theme.onSurfaceVariant} size={18} />
+      ) : (
+        <ChevronDown color={theme.onSurfaceVariant} size={18} />
+      )}
+    </>
+  );
   return (
     <View style={fillWidth ? styles.grow : undefined}>
       <Pressable
@@ -70,30 +95,22 @@ export function SelectionPicker<T extends string>({
         }}
         style={({ pressed }) => pressed && styles.pressed}
       >
-        <Surface radius={ckRadius.chip} style={styles.control} testID="destination-picker-control">
-          {tintIcon(leading ?? selected?.icon, theme.onSurfaceVariant)}
-          <CKText role="rowTitle" numberOfLines={1} style={styles.grow}>
-            {selected?.label}
-          </CKText>
-          {positionLabel ? (
-            <View
-              testID="destination-picker-position"
-              style={[
-                styles.positionHint,
-                { backgroundColor: colorWithAlpha(theme.onSurface, 0.07) },
-              ]}
-            >
-              <CKText muted role="labelSmall">
-                {positionLabel}
-              </CKText>
-            </View>
-          ) : null}
-          {positionLabel ? (
-            <ChevronsUpDown color={theme.onSurfaceVariant} size={18} />
-          ) : (
-            <ChevronDown color={theme.onSurfaceVariant} size={18} />
-          )}
-        </Surface>
+        {plain ? (
+          <View
+            testID="selection-picker-plain-control"
+            style={[styles.control, styles.plainControl]}
+          >
+            {controlContent}
+          </View>
+        ) : (
+          <Surface
+            radius={ckRadius.chip}
+            style={styles.control}
+            testID="destination-picker-control"
+          >
+            {controlContent}
+          </Surface>
+        )}
       </Pressable>
       {!externallyManaged ? (
         <SelectionPickerModal
@@ -342,6 +359,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 14,
   },
+  plainControl: { minWidth: 120, paddingHorizontal: 4 },
   positionHint: {
     minWidth: 34,
     minHeight: 24,
