@@ -1,5 +1,6 @@
 import * as Font from 'expo-font';
 
+import { CLASHKING_FONT_SOURCE } from './clashking-font-contract';
 import { loadClashKingFont } from './clashking-font-service.web';
 
 jest.mock('expo-font', () => ({
@@ -7,19 +8,12 @@ jest.mock('expo-font', () => ({
 }));
 
 describe('ClashKing web font loading', () => {
-  test('registers the downloaded font as a web resource', async () => {
-    jest.spyOn(globalThis, 'fetch').mockResolvedValue({
-      status: 200,
-      arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer,
-    } as Response);
-    jest.spyOn(URL, 'createObjectURL').mockReturnValue('blob:clashking-font');
-    jest.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+  test('registers the bundled font without a network request', async () => {
+    const fetchSpy = jest.spyOn(globalThis, 'fetch');
 
     await expect(loadClashKingFont()).resolves.toBe(true);
 
-    expect(Font.loadAsync).toHaveBeenCalledWith('ClashKing', {
-      uri: 'blob:clashking-font',
-    });
-    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+    expect(Font.loadAsync).toHaveBeenCalledWith('ClashKing', CLASHKING_FONT_SOURCE);
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 });
