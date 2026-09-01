@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Zeitraum der Kriegsstatistik",
+  "warStatsRangeDescription": "Wähle, ob die Statistik eine feste Anzahl vergangener Kriege oder einen vergangenen Zeitraum in Tagen abdeckt.",
+  "warStatsRangeDays": "Tage",
+  "warStatsRangeWarsToInclude": "Einzubeziehende Kriege",
+  "warStatsRangeDaysToInclude": "Einzubeziehende Tage",
+  "upgradeTrackerAllBuildersOccupied": "Alle Bauarbeiter beschäftigt",
+  "upgradeTrackerBuildCost": "Baukosten",
+  "upgradeTrackerBuilderBaseBuilders": "Bauarbeiter der Bauarbeiterbasis",
+  "upgradeTrackerBuilderBaseLaboratory": "Labor der Bauarbeiterbasis",
+  "upgradeTrackerCalendar": "Kalender",
+  "upgradeTrackerClearCost": "Entfernungskosten",
+  "upgradeTrackerCompletionDetails": "Details zum Dorffortschritt",
+  "upgradeTrackerCustomSoundtrack": "Benutzerdefinierter Soundtrack",
+  "upgradeTrackerGoldPassPercent": "{percent} % Gold-Pass",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Zusammenfassung: {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,8 +29,8 @@
     }
   },
   "upgradeTrackerGuardians": "Wächter",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
+  "upgradeTrackerHelpers": "Helfer",
+  "upgradeTrackerHouseParts": "Hausteile",
   "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
@@ -39,7 +39,7 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
+  "upgradeTrackerInProgress": "In Bearbeitung",
   "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "{count} im Besitz",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Warteschlange",
   "upgradeTrackerLevelTransition": "Stufe {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,9 +77,9 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
+  "upgradeTrackerLootNow": "Beute jetzt",
+  "upgradeTrackerLootOutlook": "Beutevorschau",
+  "upgradeTrackerMusic": "Musik",
   "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Nächster Zeitraum",
+  "upgradeTrackerNoGoldPass": "Kein Gold-Pass",
+  "upgradeTrackerNoMatchingUpgrades": "Keine passenden Verbesserungen",
+  "upgradeTrackerNoMatchingUpgradesBody": "Versuche ein anderes Dorf oder eine andere Warteschlange.",
+  "upgradeTrackerNothingNeededNow": "Momentan nichts benötigt",
+  "upgradeTrackerObstacles": "Hindernisse",
+  "upgradeTrackerPart": "Teil",
+  "upgradeTrackerPassReward": "Pass-Belohnung",
+  "upgradeTrackerPauseSoundtrack": "Soundtrack pausieren",
+  "upgradeTrackerPeriodCount": "Zeitraum {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Soundtrack abspielen",
+  "upgradeTrackerPreviousPeriod": "Vorheriger Zeitraum",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Landschaften",
+  "upgradeTrackerScheduledLane": "Geplant Nr. {lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Fortschritt: {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,20 +138,20 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
+  "upgradeTrackerSize": "Größe",
+  "upgradeTrackerSortLongest": "Längste zuerst",
   "upgradeTrackerSortName": "Name A–Z",
   "upgradeTrackerSortScheduled": "Geplant",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSortShortest": "Kürzeste zuerst",
+  "upgradeTrackerSoundtrackPosition": "Soundtrack-Position",
   "upgradeTrackerStarts": "Beginnt",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
+  "upgradeTrackerTier": "Stufe",
+  "upgradeTrackerUpgradesStarting": "Verbesserungen starten",
+  "upgradeTrackerUpgradingNow": "Wird jetzt verbessert",
+  "upgradeTrackerWarBase": "Kriegsbasis",
+  "notifSettingsSaveFailed": "Die Benachrichtigungseinstellungen konnten nicht gespeichert werden.",
+  "notifPushEnabled": "Push aktiviert",
+  "notifReceiveNotifications": "Benachrichtigungen empfangen",
   "notifTokenPreview": "Token: {token}",
   "@notifTokenPreview": {
     "placeholders": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Deine aktivierten Hinweise können an dieses Gerät gesendet werden.",
+  "notifDisabledAccountDescription": "Benachrichtigungen sind für dein gesamtes ClashKing-Konto deaktiviert.",
+  "notifMaximumRemindersAdded": "Maximale Anzahl an Erinnerungen hinzugefügt",
+  "notifAddReminder": "Erinnerung hinzufügen",
+  "notifDurationOneHour": "1 Stunde",
+  "notifDurationHours": "{count} Stunden",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} Minuten",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "{timing} hinzufügen",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 Stunde vorher",
+  "notifTimingHoursBefore": "{count} Stunden vorher",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} Minuten vorher",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,19 +206,19 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Push-Benachrichtigungen sind auf diesem Gerät bereit.",
+  "notifPushPermissionRequired": "Erlaube Benachrichtigungen, um ClashKing-Hinweise zu erhalten.",
+  "notifPushPermissionDenied": "Die Benachrichtigungsberechtigung wurde verweigert.",
+  "notifPushNotConfigured": "Firebase ist für diesen Build nicht konfiguriert.",
+  "notifPushTokenUnavailable": "Ein Push-Token ist noch nicht verfügbar.",
+  "notifPushUnsupported": "Push-Benachrichtigungen werden auf dieser Plattform nicht unterstützt.",
+  "notifPushInitializing": "Push-Benachrichtigungen werden eingerichtet…",
+  "notificationPrimerTitle": "Benachrichtigungen aktivieren?",
+  "notificationPrimerBody": "ClashKing kann dich über Neuigkeiten zu Kriegen, der CWL, deinem Konto und Projekten informieren. Du kannst dies jederzeit unter Einstellungen > Benachrichtigungen ändern.",
+  "notificationPrimerNotNow": "Nicht jetzt",
+  "notificationPrimerAllow": "Zulassen",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "achievementsTitle": "Errungenschaften",
+  "achievementsTitle": "Erfolge",
   "achievementEarnedLabel": "Verdient",
   "achievementSummary": "{earned}/{total} abgeschlossen",
   "achievementEarnedCount": "Verdient ×{count}",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Mitglieder suchen",
   "clanMembersShowTotals": "Clan-Gesamtzahlen anzeigen",
   "clanMembersHideTotals": "Clan-Gesamtzahlen ausblenden",
-  "clanMembersReceivedShort": "Spenden erhalten",
+  "clanMembersReceivedShort": "Erhalten",
   "clanMembersAverageTh": "Durchschn. TH",
   "clanMinimumMembers": "Mindestanzahl von Mitgliedern",
   "clanMaximumMembers": "Maximale Anzahl von Mitgliedern",
@@ -1105,8 +1105,26 @@
   "warTitle": "Krieg",
   "warFrequency": "Kriegshäufigkeit",
   "warParticipation": "Kriegsbeteiligung",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Nur Teilnehmer",
+  "warStatsRangeWarsCompact": "{number} Kriege",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} Tage",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Letzte {number} Tage",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Aktuelle Mitglieder",
   "warLeague": "Krieg/Clankriegsliga",
   "warHistory": "Kriegsgeschichte",
   "warLog": "Kriegsverlauf",
@@ -1592,7 +1610,7 @@
   "clanProfileDescriptionChanged": "Beschreibung geändert",
   "clanJoinLeaveTab": "Beitreten/Verlassen",
   "clanRankingsTab": "Ranglisten",
-  "clanRankingsSeason": "Saison",
+  "clanRankingsSeason": "Jahreszeit",
   "clanRankingsSelectSeason": "Ranglistensaison auswählen",
   "clanRankingsFilterActivity": "Aktivität",
   "clanRankingsFilterWar": "Krieg",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Kriegssterne",
   "playerWarPreferenceTitle": "Kriegspräf.",
   "playerDonatedTitle": "Gespendet",
-  "playerReceivedTitle": "Spenden erhalten",
+  "playerReceivedTitle": "Erhalten",
   "playerCapitalTitle": "Hauptstadt",
   "playerExpLevelTitle": "Exp. Ebene",
   "clanWarWinsTitle": "Krieg siegt",
@@ -1923,7 +1941,7 @@
   "faqFeaturesCwlDescription": "Clan War League Leistung und Mitgliedsbeiträge",
   "faqFeaturesTodoTitle": "Aufgaben-Checkliste",
   "faqFeaturesTodoDescription": "Sieh nach, welche Konten noch Ranglistenangriffe, Überfälle, Kriegsangriffe, Clanspiele oder Aktionen für den Saisonpass benötigen",
-  "faqFeaturesUpgradeTrackerTitle": "Upgrade-Tracker",
+  "faqFeaturesUpgradeTrackerTitle": "Verbesserungsplaner",
   "faqFeaturesUpgradeTrackerDescription": "Nutze einen manuell bereitgestellten Kontostand, um ausstehende Verbesserungen, Ressourcen, Bauarbeiter, Laborzeit und Fortschritt anzuzeigen",
   "faqFeaturesNotificationsTitle": "Push-Benachrichtigungen",
   "faqFeaturesNotificationsDescription": "Lege fest, welche Konten Meldungen zu unterstützten ClashKing-Ereignissen erhalten sollen",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Verbundene Apps",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Apps mit Kontozugriff anzeigen und trennen.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Aktive Verbindungen",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Keine verbundenen Apps",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Verbundene Apps werden hier angezeigt.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Verbundene Apps konnten nicht geladen werden",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Alle aktuellen und zukünftigen verknüpften Konten",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} ausgewählte Konten",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Trennen",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "App trennen?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} verliert sofort den Zugriff auf deine verknüpften Konten.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "{name} wurde getrennt.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "{name} konnte nicht getrennt werden. Versuche es erneut.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Angemeldet",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2880,7 +2970,7 @@
   "dashboardUpgradeTrackerTimeLeft": "Voraussichtlich",
   "dashboardUpgradeTrackerBuilders": "Bauarbeiter",
   "dashboardUpgradeTrackerLab": "Labor",
-  "dashboardUpgradeTrackerPets": "Begleiter",
+  "dashboardUpgradeTrackerPets": "Haustiere",
   "dashboardUpgradeTrackerWalls": "Mauern",
   "dashboardUpgradeTrackerVillage": "Dorf",
   "dashboardRankedNoData": "Öffne die Ranglistenliga, um die Platzierung dieses Kontos zu sehen.",
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "Kriegsdaten aktualisieren",
   "warWidgetNoData": "Keine Kriegsdaten verfügbar",
   "warWidgetLastUpdated": "Letzte Aktualisierung: {time}",
-  "todoEventClanGames": "Clanspiele",
+  "todoEventClanGames": "Clan-Spiele",
   "todoEventCwl": "Clankriegsliga",
   "todoEventSeasonEnds": "Die Saison endet",
   "todoEventLeagueReset": "Liga zurückgesetzt",
@@ -3098,18 +3188,18 @@
   "notifFifteenMinutes": "15 Minuten",
   "notifSendTestNotification": "Testbenachrichtigung senden",
   "notifScheduledMessage": "Geplant: {title}",
-  "generalStartDate": "Start Datum",
+  "generalStartDate": "Startdatum",
   "generalEndDate": "Enddatum",
   "warFiltersAllWars": "Alle Kriege",
   "warFiltersRandomWars": "Zufällige Kriege",
   "warFiltersCwlWars": "CWL-Kriege",
-  "warFiltersFriendlyWars": "Freundschaftskriege",
+  "warFiltersFriendlyWars": "Freundliche Kriege",
   "warType": "Kriegstyp",
   "warFiltersAnyTownHall": "Irgendein TH",
   "gameTownHallLevelShort": "RH{level}",
   "warAttackerTownHall": "Angreifer TH",
   "warDefenderTownHall": "Verteidiger TH",
-  "warStatsFilterSameTownHallOnly": "Nur dasselbe Rathaus",
+  "warStatsFilterSameTownHallOnly": "Nur das gleiche Rathaus",
   "warStatsFilterSameTownHallDescription": "Zeigt nur Angriffe an, bei denen Angreifer und Verteidiger das gleiche TH-Level haben",
   "generalAny": "Beliebig",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3118,8 +3208,8 @@
   "warStatsFilterMinDestructionPercent": "Min. Zerstörung %",
   "warStatsFilterMaxDestructionPercent": "Maximale Zerstörung %",
   "warStatsFilterMinPosition": "Min. Position",
-  "warStatsFilterMaxPosition": "Max. Position",
-  "warStatsFilterFreshAttacksOnly": "Frische Angriffe",
+  "warStatsFilterMaxPosition": "Maximale Position",
+  "warStatsFilterFreshAttacksOnly": "Nur neue Angriffe",
   "warStatsFilterFreshAttacksDescription": "Zeigen Sie nur die ersten Angriffe auf jeder Basis an",
   "warStatsFilterResultLimit": "Ergebnislimit",
   "generalResultsCount": "{count}-Ergebnisse",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Kriegs-Widget hinzufügen",
   "settingsWarWidgetLinkClanFirst": "Verknüpfe zuerst ein Konto in einem Clan",
   "settingsWarWidgetClanCount": "{count} Clan(s) verfügbar",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Wähle einen Clan. Halte das Widget nach dem Hinzufügen gedrückt, tippe auf Widget bearbeiten und wähle Clan.",
+  "settingsWarWidgetAndroidInstructions": "Wähle einen Clan und füge das Widget dann über die Android-Widgetauswahl hinzu.",
+  "settingsWarWidgetEmpty": "Keines deiner verknüpften Konten ist derzeit in einem Clan.",
+  "settingsWarWidgetIosFooter": "Füge mehrere Kriegs-Widgets hinzu und wähle für jedes einen anderen Clan.",
+  "settingsWarWidgetIosReady": "{clanName} ist bereit. Bearbeite das Widget und wähle den Clan aus.",
+  "settingsWarWidgetAndroidReady": "Die Widget-Daten für {clanName} sind bereit.",
+  "settingsWarWidgetPrepareFailed": "Widget konnte nicht vorbereitet werden: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Bot-verknüpfte Konten und Discord-Daten",
   "settingsDiscordSyncSubtitle": "Bot-verknüpfte Konten und Discord-Daten synchronisieren",
@@ -3261,7 +3351,7 @@
   "rankingsTownHall": "Rathaus",
   "rankingsRankedLeague": "Ranglistenliga",
   "rankingsClanCapital": "Clanstadt",
-  "rankingsDonations": "Gespendet",
+  "rankingsDonations": "Spenden",
   "rankingsWarWins": "Kriegssiege",
   "rankingsWinStreak": "Siegesserie",
   "rankingsCurrent": "Aktuell",
@@ -3273,7 +3363,7 @@
   "rankingsSnapshotDate": "Stichtag",
   "rankingsSource": "Quelle",
   "rankingsOfficialSource": "Offizielle Clash-API",
-  "rankingsResults": "Ergebnisse",
+  "rankingsResults": "Platzierungen",
   "rankingsTopCount": "Beste {count}",
   "@rankingsTopCount": {
     "placeholders": {
@@ -3296,7 +3386,7 @@
   "sideStatsTitle": "Statistiken",
   "sideStatsSubtitle": "Kampfauswertung aus zusammengefassten Kampfprotokollen.",
   "sideStatsLoadError": "Kampfinformationen konnten nicht geladen werden.",
-  "statsOverview": "Überblick",
+  "statsOverview": "Übersicht",
   "statsArmies": "Armeen",
   "statsItems": "Artikel",
   "statsWar": "Krieg",
@@ -3320,7 +3410,7 @@
   "statsThreeStarRate": "Drei-Sterne-Preis",
   "statsDailyTrend": "Tagestrend",
   "statsPlayers": "Spieler",
-  "statsClans": "Clanliste",
+  "statsClans": "Erfasste Clans",
   "statsPlayersInWar": "Spieler im Krieg",
   "statsClansInWar": "Clans im Krieg",
   "statsPlayersInLegends": "Spieler in Legends",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "Saisonaufschlüsselung",
   "sideTopScore": "Höchstwert",
   "sideTop200Avg": "Top-200-Durchschnitt",
-  "sideBasesArmiesTitle": "Stützpunkte und Armeen",
+  "sideBasesArmiesTitle": "Basen & Armeen",
   "sideBasesArmiesSubtitle": "Über Discord gespeicherte Layouts und Armeelinks.",
   "sideBotSyncTarget": "Bot-Sync-Ziel",
   "sideBotSyncTargetBody": "Der Bot speichert Basen und Armeen bereits im Discord-Profil. Diese Seite ist bereit für diese synchronisierten Daten.",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Gespeicherte Armeen",
   "sideArmyLinks": "Armeelinks",
   "sideArmyLinksBody": "Zusammensetzung, Zauber, Belagerung, Notizen und Freigabelink.",
-  "sideGameAssetsTitle": "Spielressourcen",
+  "sideGameAssetsTitle": "Spiel-Assets",
   "sideGameAssetsSubtitle": "Gehostete ClashKing-Assets, nach Ordner gruppiert.",
   "gameAssetsLoadError": "Spielinhalte konnten nicht geladen werden",
   "gameAssetsEmptyTitle": "Keine Spielinhalte verfügbar",
@@ -3397,7 +3487,7 @@
   "gameAssetsSearchHint": "In dieser Kategorie suchen",
   "gameAssetsAllFormats": "Alle Formate",
   "gameAssetsOneResult": "1 Ergebnis",
-  "gameAssetsResultCount": "{count}-Ergebnisse",
+  "gameAssetsResultCount": "{count} Ergebnisse",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3532,7 +3622,7 @@
   "endpointTop200ArmyUsagePreview": "Kampfprotokolle · Truppen- und Zaubernutzung",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "Wöchentlich",
-  "endpointStateUsage": "Verwendung",
+  "endpointStateUsage": "Nutzung",
   "notifGroupReminders": "Erinnerungen",
   "notifGroupProgress": "Fortschritt",
   "notifLeagueDefense": "Ligaverteidigung",
@@ -3805,7 +3895,7 @@
     }
   },
   "upgradeTrackerSnapshotUnreadable": "Kontodaten konnten nicht gelesen werden",
-  "upgradeTrackerTryAgain": "Versuche es später nochmal",
+  "upgradeTrackerTryAgain": "Erneut versuchen",
   "upgradeTrackerNoDataTitle": "Übertrage den Fortschritt deines Dorfs zu ClashKing",
   "upgradeTrackerNoDataBody": "Kopiere die JSON unter „Kontodaten“ aus Clash of Clans und füge sie aus der Zwischenablage ein. Deine Daten bleiben auf diesem Gerät.",
   "upgradeTrackerNoDataLocation": "Öffne in Clash of Clans Einstellungen > Weitere Einstellungen. Die Kontodaten-JSON befindet sich direkt unter dem Abschnitt „API-Token“.",
@@ -3886,7 +3976,7 @@
     }
   },
   "upgradeTrackerLaboratory": "Labor",
-  "upgradeTrackerPets": "Begleiter",
+  "upgradeTrackerPets": "Haustiere",
   "upgradeTrackerWalls": "Mauern",
   "upgradeTrackerEquipment": "Ausrüstung",
   "upgradeTrackerLevelsRemaining": "Noch {count} Stufen",
@@ -3989,7 +4079,7 @@
   "homeTodoTitle": "Zu erledigen",
   "homeTodoSubtitle": "Kontodetails mit Handlungsbedarf, nach Dringlichkeit sortiert.",
   "homeTodoEmpty": "Derzeit erfordert kein verifiziertes Konto deine Aufmerksamkeit.",
-  "homeClanless": "Kein Clan",
+  "homeClanless": "Ohne Clan",
   "homeNeedsAttention": "Handlungsbedarf",
   "homeCaughtUp": "Alles erledigt",
   "homeTrackingDataPending": "Dieser verifizierte Spieler wird erst seit Kurzem erfasst oder ist inaktiv. Daher sind noch keine konkreten Hinweise verfügbar.",
@@ -4005,7 +4095,7 @@
   },
   "homeUpgradeIdle": "Es wurden keine aktiven Verbesserungs-Timer gefunden; möglicherweise sind Bauarbeiter frei.",
   "homeDone": "Fertig",
-  "homeRemainingCount": "{count} übrig",
+  "homeRemainingCount": "Noch {count}",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -4136,7 +4226,7 @@
   "rankedLeagueTitle": "Ranglistenliga",
   "rankedLeagueAbout": "Über die Ranglistenliga",
   "rankedLeagueAboutBody": "Diese Seite verwendet die offizielle wöchentliche Gruppe der Ranglistenliga, Kampfprotokolle und den Periodenverlauf. Aktuelle Ergebnisse können sich bis zum Ende des Zeitraums ändern.",
-  "rankedLeagueOverview": "Überblick",
+  "rankedLeagueOverview": "Übersicht",
   "rankedLeagueRanking": "Rangliste",
   "rankedLeagueGroupRank": "Gruppenplatz",
   "rankedLeagueTrophies": "Trophäen",
@@ -4271,9 +4361,9 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Ausgewählte Konten",
-  "notifAudienceAcrossDevicesDescription": "Wähle aus, welche Konten auf diesem Gerät Benachrichtigungen erhalten können.",
-  "notifAccountBookmarked": "Mit Lesezeichen versehen",
+  "notifChooseAccountsManually": "Konten manuell auswählen",
+  "notifAudienceAcrossDevicesDescription": "Diese Kontenauswahl gilt auf allen deinen Geräten.",
+  "notifAccountBookmarked": "Gespeichert",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4509,7 +4599,7 @@
   "damageQuickSetupGiantArrow": "Riesenpfeil",
   "damageQuickSetupFlameFlinger": "Flammenwerfer",
   "damageQuickSetupCustom": "Benutzerdefiniert",
-  "damageClearStack": "Klar",
+  "damageClearStack": "Leeren",
   "damageNoDamageSelected": "Kein Schaden",
   "damageSelectedSourcesCount": "{count} Schadensquelle(n)",
   "@damageSelectedSourcesCount": {
@@ -4527,8 +4617,8 @@
   "todoRaidAttacks": "Überfallangriffe",
   "todoMockRaid4Left": "Noch 4",
   "todoMockWarAltStatus": "Vor 18 Min. aktiv · Krieg und Überfälle erfordern Aufmerksamkeit",
-  "todoMockRaid1Left": "1 übrig",
-  "gameAssetsCategoryBuildings": "Gebäudeziele",
+  "todoMockRaid1Left": "Noch 1",
+  "gameAssetsCategoryBuildings": "Gebäude",
   "gameAssetsCategoryCapitalBase": "Hauptstadtbasis",
   "gameAssetsCategoryCapitalHouseParts": "Teile des Hauptstadt-Hauses",
   "gameAssetsCategoryChests": "Truhen",
@@ -4538,7 +4628,7 @@
   "gameAssetsCategoryEquipment": "Ausrüstung",
   "gameAssetsCategoryGuardians": "Wächter",
   "gameAssetsCategoryHeroes": "Helden",
-  "gameAssetsCategoryPets": "Begleiter",
+  "gameAssetsCategoryPets": "Haustiere",
   "gameAssetsCategorySkins": "Skins",
   "gameAssetsCategorySpells": "Zauber",
   "gameAssetsCategoryTroops": "Truppen",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Planen Sie Prioritäten",
+  "upgradeTrackerPlanPrioritiesDescription": "Ordnen Sie, was am wichtigsten ist. Upgrade-Level und aktive Arbeit bleiben immer in Ordnung.",
   "upgradeTrackerPlanClose": "Schließen",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Planungsziele",
+  "upgradeTrackerPlanConstructionSubtitle": "Bau- und Helden-Upgrades",
+  "upgradeTrackerPlanResearchSubtitle": "Truppen, Zauber und Belagerungsforschung",
+  "upgradeTrackerPlanPetHouseSubtitle": "Upgrades für das Haustierhaus",
+  "upgradeTrackerPlanPrioritizeNewItems": "Priorisieren Sie neue Artikel",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Platzieren Sie neu freigeschaltete oder nicht gebaute Gegenstände zuerst",
+  "upgradeTrackerPlanSharedSummary": "Stufe {tier} · Gemeinsamer Mix {normalized} % ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Stufe {tier} · streng · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "Läuft bis zum Maximum",
+  "upgradeTrackerPlanYieldsAfter": "Renditen nach {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
+  "upgradeTrackerPlanStrict": "Streng",
   "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanReorder": "Neu anordnen {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Relatives Stufengewicht",
+  "upgradeTrackerPlanCompletionTarget": "Abschlussziel",
+  "upgradeTrackerPlanStrictTier": "Strenge Stufe",
+  "upgradeTrackerPlanWeight": "Gewicht {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Bis zum Maximum",
+  "upgradeTrackerPlanUntilPercent": "Bis {value} %",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Die nummerierten Ebenen laufen zuerst. Gemeinsame Zeilen behalten die gleiche Stufennummer und ihre Mischung wird anhand der relativen Gewichtungen normalisiert, sodass aus 50 + 25 67 % / 33 % werden. Ein Ziel erzielt eine Kategorieausbeute, nachdem es diesen Prozentsatz erreicht hat, während es später weiterhin förderfähig bleibt.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max bevor er weitergeht",
+  "upgradeTrackerPlanGoalRushNextHall": "Erreiche schnell die nächste Halle",
+  "upgradeTrackerPlanGoalCatchUp": "Erledige überstürzte Level",
+  "upgradeTrackerPlanGoalUnlockFirst": "Schalte zuerst neue Dinge frei",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Wände jede Woche",
   "upgradeTrackerPlanOff": "Aus",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / Woche",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "Bevorzugen Sie Gold für Wände",
+  "upgradeTrackerPlanPreferGoldDescription": "Benutze Gold vor Elixier, wenn du Wände ausgibst",
+  "upgradeTrackerPlanApplyPriorities": "Setzen Sie Prioritäten",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Hergestellte Verteidigungen",
+  "upgradeTrackerPlanCategoryTraps": "Fallen",
+  "upgradeTrackerPlanCategoryArmy": "Armee",
+  "upgradeTrackerPlanCategoryDarkTroops": "Dunkle Truppen",
+  "upgradeTrackerPlanCategorySieges": "Belagerungen",
+  "upgradeTrackerPlanCategorySupercharge": "Aufladen",
+  "navigationCloseDrawer": "Navigationsleiste schließen",
+  "navigationOpenProfileMenu": "Profilmenü öffnen",
+  "navigationClashKingWeb": "ClashKing Web",
+  "settingsPrivacyDataTitle": "Datenschutz und Daten",
+  "settingsPrivacyPolicyDescription": "Prüfe, welche Daten ClashKing erhebt, warum sie verwendet werden, wer sie verarbeitet, welche Aufbewahrungsregeln gelten und wie du uns erreichst.",
+  "settingsPrivacyExportTitle": "Auf deine Daten zugreifen oder sie exportieren",
+  "settingsPrivacyExportDescription": "Lade eine Kopie der mit deiner ClashKing-Anmeldung verknüpften Kontodaten herunter, einschließlich verknüpfter Clash of Clans-Konten und Benachrichtigungseinstellungen.",
+  "settingsPrivacyCorrectionTitle": "Daten berichtigen oder einschränken",
+  "settingsPrivacyCorrectionDescription": "Entferne verknüpfte Clash of Clans-Konten in den Kontoeinstellungen, deaktiviere Benachrichtigungen oder wende dich für Berichtigungs- und Einschränkungsanfragen an den Support.",
+  "settingsPrivacyDeletionTitle": "Dein ClashKing-Konto löschen",
+  "settingsPrivacyDeletionDescription": "Hiermit wird die Löschung deines ClashKing-Kontos und der zugehörigen App-Daten eingeleitet, sofern ClashKing nicht aus Sicherheitsgründen, zur Betrugsprävention oder aufgrund gesetzlicher Pflichten begrenzte Datensätze aufbewahren muss.",
+  "settingsPrivacyChildrenTitle": "Kinder und Familien",
+  "settingsPrivacyChildrenDescription": "ClashKing ist eine Begleit-App für ein allgemeines Publikum und richtet sich nicht an Kinder. Erstelle kein Konto, wenn du in deinem Land ohne Zustimmung eines Elternteils oder Erziehungsberechtigten noch nicht selbst einwilligen darfst.",
+  "settingsPrivacyExportReady": "Dein Datenexport kann jetzt gespeichert werden.",
+  "settingsPrivacyExportCreateFailed": "Der Datenexport konnte nicht erstellt werden. Stattdessen wurde eine Datenschutz-E-Mail vorbereitet.",
+  "settingsPrivacyExportPrepareFirst": "Bereite deinen Export vor, bevor du ihn speicherst.",
+  "settingsPrivacyExportSaved": "Dein Datenexport wurde gespeichert.",
+  "settingsPrivacyExportSaveFailed": "Der Datenexport konnte nicht gespeichert werden. Stattdessen wurde eine Datenschutz-E-Mail vorbereitet.",
+  "settingsPrivacyDeleteUnavailable": "Die Kontolöschung ist in diesem Build nicht verfügbar. Stattdessen wurde eine Datenschutz-E-Mail vorbereitet.",
+  "settingsPrivacyOpenPolicy": "Richtlinie öffnen",
+  "settingsPrivacyRefreshExport": "Export aktualisieren",
+  "settingsPrivacyPrepareExport": "Export vorbereiten",
+  "settingsPrivacySaveExport": "Export speichern",
+  "settingsPrivacyContactSupport": "Support kontaktieren",
+  "settingsPrivacyDeleteAccount": "Konto löschen",
+  "settingsPrivacyDeleteConfirmTitle": "Konto löschen?",
+  "settingsPrivacyDeleteConfirmDescription": "Diese Anfrage ist nach der Bearbeitung dauerhaft. Du kannst verknüpfte Konten, Benachrichtigungseinstellungen, gespeicherte Präferenzen und Authentifizierungsmethoden verlieren.",
+  "generalUnranked": "Nicht gewertet",
+  "playerJoinLeaveTab": "Beitritt / Austritt",
+  "playerUpgradeRemainingAccessibility": "Verbleibend für Rathaus {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Für RH{townHallLevel} zu {progress} % abgeschlossen",
+  "playerUpgradeSectionMaxed": "Dieser Bereich ist für RH{townHallLevel} abgeschlossen.",
+  "playerUpgradeTimeRemaining": "Verbleibende Zeit",
+  "playerUpgradeNoResourceData": "Keine Ressourcendaten",
+  "playerJoinLeaveLoadError": "Beitritts-/Austrittsverlauf konnte nicht geladen werden",
+  "playerJoinLeaveClanTotals": "Clan-Gesamtwerte",
   "playerJoinLeaveTime": "Zeit",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "Verbrachte Zeit",
+  "playerJoinLeaveVisits": "Besuche",
+  "playerJoinLeaveJoined": "Beigetreten",
+  "playerJoinLeaveLeft": "Ausgetreten",
+  "playerJoinLeaveNoHistory": "Kein Beitritts-/Austrittsverlauf verfügbar",
+  "playerJoinLeaveNoClanTotals": "Keine Clan-Gesamtwerte verfügbar",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
