@@ -485,14 +485,15 @@ function completionDate(startsAt: Date, seconds: number) {
 }
 
 export function formatTrackerCompletionDate(date: Date, locale: string) {
-  if (!locale.toLowerCase().startsWith('en')) {
-    return new Intl.DateTimeFormat(locale, {
+  const intlLocale = toIntlLocale(locale);
+  if (!intlLocale.toLowerCase().startsWith('en')) {
+    return new Intl.DateTimeFormat(intlLocale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     }).format(date);
   }
-  const parts = new Intl.DateTimeFormat(locale, {
+  const parts = new Intl.DateTimeFormat(intlLocale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

@@ -1,5 +1,12 @@
-import { Children, Fragment, type ReactNode } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Children, Fragment, type ReactElement, type ReactNode } from 'react';
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+  type RefreshControlProps,
+} from 'react-native';
 import { ArrowLeft, Check, ChevronRight } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,11 +18,13 @@ export function SettingsPage({
   children,
   onBack,
   backLabel,
+  refreshControl,
 }: {
   title: string;
   children: ReactNode;
   onBack?: () => void;
   backLabel?: string;
+  refreshControl?: ReactElement<RefreshControlProps>;
 }) {
   const theme = useCKTheme();
   const { locale } = useI18n();
@@ -38,7 +47,9 @@ export function SettingsPage({
         ) : null}
         <CKText role="screenTitle">{title}</CKText>
       </View>
-      <ScrollView contentContainerStyle={styles.page}>{children}</ScrollView>
+      <ScrollView contentContainerStyle={styles.page} refreshControl={refreshControl}>
+        {children}
+      </ScrollView>
     </SafeAreaView>
   );
 }
