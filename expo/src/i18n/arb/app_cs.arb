@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Rozsah válečných statistik",
+  "warStatsRangeDescription": "Zvolte, zda statistiky zahrnují pevný počet nedávných válek, nebo nedávné období ve dnech.",
+  "warStatsRangeDays": "Dny",
+  "warStatsRangeWarsToInclude": "Zahrnuté války",
+  "warStatsRangeDaysToInclude": "Zahrnuté dny",
+  "upgradeTrackerAllBuildersOccupied": "Všichni stavitelé jsou zaneprázdněni",
+  "upgradeTrackerBuildCost": "Cena stavby",
+  "upgradeTrackerBuilderBaseBuilders": "Stavitelé stavitelské základny",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratoř stavitelské základny",
+  "upgradeTrackerCalendar": "Kalendář",
+  "upgradeTrackerClearCost": "Cena odstranění",
+  "upgradeTrackerCompletionDetails": "Podrobnosti o dokončení vesnice",
+  "upgradeTrackerCustomSoundtrack": "Vlastní hudební doprovod",
+  "upgradeTrackerGoldPassPercent": "Zlatý pas {percent} %",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Souhrn: {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,8 +29,8 @@
     }
   },
   "upgradeTrackerGuardians": "Strážci",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
+  "upgradeTrackerHelpers": "Pomocníci",
+  "upgradeTrackerHouseParts": "Části domu",
   "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
@@ -39,7 +39,7 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
+  "upgradeTrackerInProgress": "Probíhá",
   "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "Vlastněno: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Fronta",
   "upgradeTrackerLevelTransition": "Úroveň {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,9 +77,9 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
+  "upgradeTrackerLootNow": "Kořist nyní",
+  "upgradeTrackerLootOutlook": "Výhled kořisti",
+  "upgradeTrackerMusic": "Hudba",
   "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Další období",
+  "upgradeTrackerNoGoldPass": "Bez Zlatého pasu",
+  "upgradeTrackerNoMatchingUpgrades": "Žádná odpovídající vylepšení",
+  "upgradeTrackerNoMatchingUpgradesBody": "Zkuste jinou vesnici nebo frontu.",
+  "upgradeTrackerNothingNeededNow": "Právě teď není nic potřeba",
+  "upgradeTrackerObstacles": "Překážky",
+  "upgradeTrackerPart": "Část",
+  "upgradeTrackerPassReward": "Odměna z pasu",
+  "upgradeTrackerPauseSoundtrack": "Pozastavit hudební doprovod",
+  "upgradeTrackerPeriodCount": "Období {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Přehrát hudební doprovod",
+  "upgradeTrackerPreviousPeriod": "Předchozí období",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Scenérie",
+  "upgradeTrackerScheduledLane": "Naplánováno č. {lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Postup: {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,20 +138,20 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
+  "upgradeTrackerSize": "Velikost",
+  "upgradeTrackerSortLongest": "Nejdelší první",
+  "upgradeTrackerSortName": "Název A–Z",
   "upgradeTrackerSortScheduled": "Naplánováno",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
-  "upgradeTrackerStarts": "Začíná",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
+  "upgradeTrackerSortShortest": "Nejkratší první",
+  "upgradeTrackerSoundtrackPosition": "Pozice hudebního doprovodu",
+  "upgradeTrackerStarts": "Začátek",
+  "upgradeTrackerTier": "Třída",
+  "upgradeTrackerUpgradesStarting": "začínající vylepšení",
+  "upgradeTrackerUpgradingNow": "Právě se vylepšuje",
+  "upgradeTrackerWarBase": "Válečná základna",
+  "notifSettingsSaveFailed": "Nastavení oznámení se nepodařilo uložit.",
+  "notifPushEnabled": "Push oznámení zapnuta",
+  "notifReceiveNotifications": "Přijímat oznámení",
   "notifTokenPreview": "Token: {token}",
   "@notifTokenPreview": {
     "placeholders": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Zapnutá upozornění lze doručovat do tohoto zařízení.",
+  "notifDisabledAccountDescription": "Oznámení jsou vypnuta pro celý váš účet ClashKing.",
+  "notifMaximumRemindersAdded": "Byl přidán maximální počet připomenutí",
+  "notifAddReminder": "Přidat připomenutí",
+  "notifDurationOneHour": "1 hodina",
+  "notifDurationHours": "{count} hodin",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} minut",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Přidat {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 hodinu předem",
+  "notifTimingHoursBefore": "{count} hodin předem",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} minut předem",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Push oznámení jsou na tomto zařízení připravena.",
+  "notifPushPermissionRequired": "Povolte oznámení, abyste dostávali upozornění ClashKing.",
+  "notifPushPermissionDenied": "Oprávnění k oznámením bylo zamítnuto.",
+  "notifPushNotConfigured": "Firebase není pro toto sestavení nakonfigurován.",
+  "notifPushTokenUnavailable": "Push token zatím není k dispozici.",
+  "notifPushUnsupported": "Push oznámení nejsou na této platformě podporována.",
+  "notifPushInitializing": "Nastavují se push oznámení…",
+  "notificationPrimerTitle": "Povolit oznámení?",
+  "notificationPrimerBody": "ClashKing vás může upozornit na aktualizace válek, CWL, účtu a projektů. Toto nastavení můžete kdykoli změnit v Nastavení > Oznámení.",
+  "notificationPrimerNotNow": "Teď ne",
+  "notificationPrimerAllow": "Povolit",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Úspěchy",
   "achievementEarnedLabel": "Získáno",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Hledat členy",
   "clanMembersShowTotals": "Zobrazit klanové součty",
   "clanMembersHideTotals": "Skrýt klanové součty",
-  "clanMembersReceivedShort": "Obdržené dary",
+  "clanMembersReceivedShort": "Přijato",
   "clanMembersAverageTh": "Prům. TH",
   "clanMinimumMembers": "Minimální počet členů",
   "clanMaximumMembers": "Maximální počet členů",
@@ -1105,8 +1105,26 @@
   "warTitle": "Válka",
   "warFrequency": "Válečná frekvence",
   "warParticipation": "Účast na válce",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Pouze účastník",
+  "warStatsRangeWarsCompact": "{number} válek",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} dní",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Posledních {number} dní",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Současní členové",
   "warLeague": "Válka/Liga",
   "warHistory": "Válečná historie",
   "warLog": "Válečný deník",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "Nejlepší útoky",
   "warAttacksCount": "Počet útoků",
   "warAttacksMissed": "Zmeškané útoky",
-  "warAttacksMissedShort": "Zmeškané",
+  "warAttacksMissedShort": "Zmeškaný",
   "warAttacksNumber": "Během posledních válek {number_war} jsi napadl {number_time} krát.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Válečné hvězdy",
   "playerWarPreferenceTitle": "Válečný pref.",
   "playerDonatedTitle": "Darováno",
-  "playerReceivedTitle": "Obdržené dary",
+  "playerReceivedTitle": "Přijato",
   "playerCapitalTitle": "Kapitál",
   "playerExpLevelTitle": "Exp. úroveň",
   "clanWarWinsTitle": "Válka vítězí",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "Okresy zničeny",
   "raidsCompleted": "Plnění nájezdů",
   "capitalRaidStatusOngoing": "Pokračující",
-  "capitalRaidStatusEnded": "Ukončeno",
+  "capitalRaidStatusEnded": "Skončilo",
   "capitalRaidLoot": "Kořist",
   "capitalRaidRewards": "Odměny",
   "capitalRaidPreviousWeek": "Předchozí týden",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Připojené aplikace",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Zobrazte a odpojte aplikace s přístupem k účtu.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Aktivní připojení",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Žádné připojené aplikace",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Aplikace, které připojíte, se zobrazí zde.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Připojené aplikace se nepodařilo načíst",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Všechny současné i budoucí propojené účty",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "Vybrané účty: {count}",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Odpojit",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Odpojit aplikaci?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "Aplikace {name} okamžitě ztratí přístup k vašim propojeným účtům.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Aplikace {name} byla odpojena.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Aplikaci {name} se nepodařilo odpojit. Zkuste to znovu.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Přihlášeno",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2880,7 +2970,7 @@
   "dashboardUpgradeTrackerTimeLeft": "Odhad",
   "dashboardUpgradeTrackerBuilders": "Stavitelé",
   "dashboardUpgradeTrackerLab": "Laboratoř",
-  "dashboardUpgradeTrackerPets": "Domácí zvířata",
+  "dashboardUpgradeTrackerPets": "Mazlíčci",
   "dashboardUpgradeTrackerWalls": "Zdi",
   "dashboardUpgradeTrackerVillage": "Vesnice",
   "dashboardRankedNoData": "Otevřete Hodnocenou ligu a zobrazte umístění tohoto účtu.",
@@ -3098,17 +3188,17 @@
   "notifFifteenMinutes": "15 minut",
   "notifSendTestNotification": "Odeslat testovací oznámení",
   "notifScheduledMessage": "Naplánováno: {title}",
-  "generalStartDate": "Datum začátku",
-  "generalEndDate": "Datum konce",
+  "generalStartDate": "Datum zahájení",
+  "generalEndDate": "Datum ukončení",
   "warFiltersAllWars": "Všechny války",
   "warFiltersRandomWars": "Náhodné války",
   "warFiltersCwlWars": "Války CWL",
   "warFiltersFriendlyWars": "Přátelské války",
-  "warType": "Typ války",
+  "warType": "Válečný typ",
   "warFiltersAnyTownHall": "Jakékoli TH",
   "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "TH útočníka",
-  "warDefenderTownHall": "TH obránce",
+  "warAttackerTownHall": "Útočník TH",
+  "warDefenderTownHall": "Obránce TH",
   "warStatsFilterSameTownHallOnly": "Pouze stejná radnice",
   "warStatsFilterSameTownHallDescription": "Ukažte útoky pouze tam, kde mají útočník a obránce stejnou úroveň TH",
   "generalAny": "Žádný",
@@ -3118,10 +3208,10 @@
   "warStatsFilterMinDestructionPercent": "Min. % zničení",
   "warStatsFilterMaxDestructionPercent": "Maximální % zničení",
   "warStatsFilterMinPosition": "Min. pozice",
-  "warStatsFilterMaxPosition": "Max. pozice",
+  "warStatsFilterMaxPosition": "Max pozice",
   "warStatsFilterFreshAttacksOnly": "Pouze čerstvé útoky",
   "warStatsFilterFreshAttacksDescription": "Ukažte pouze první útoky na každou základnu",
-  "warStatsFilterResultLimit": "Limit výsledků",
+  "warStatsFilterResultLimit": "Limit výsledku",
   "generalResultsCount": "Výsledky {count}",
   "notifEventsDescription": "Clan Games, CWL, Raid Weekend a sezónní události.",
   "notifAnnouncementsDescription": "Bannery v aplikaci a budoucí push upozornění na novinky ClashKing.",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Přidat válečný widget",
   "settingsWarWidgetLinkClanFirst": "Nejprve propoj účet v klanu",
   "settingsWarWidgetClanCount": "K dispozici {count} klan(ů)",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Vyberte klan. Po přidání widget podržte, klepněte na Upravit widget a vyberte Klan.",
+  "settingsWarWidgetAndroidInstructions": "Vyberte klan a poté přidejte widget z nabídky widgetů Androidu.",
+  "settingsWarWidgetEmpty": "Žádný z vašich propojených účtů právě není v klanu.",
+  "settingsWarWidgetIosFooter": "Přidejte více válečných widgetů a pro každý vyberte jiný klan.",
+  "settingsWarWidgetIosReady": "{clanName} je připraven. Upravte widget a vyberte jej v části Klan.",
+  "settingsWarWidgetAndroidReady": "Data widgetu pro {clanName} jsou připravena.",
+  "settingsWarWidgetPrepareFailed": "Widget se nepodařilo připravit: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Účty propojené s botem a data Discordu",
   "settingsDiscordSyncSubtitle": "Synchronizovat účty propojené s botem a data Discordu",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Uložené armády",
   "sideArmyLinks": "Odkazy na armády",
   "sideArmyLinksBody": "Složení, kouzla, obléhací stroj, poznámky a odkaz ke sdílení.",
-  "sideGameAssetsTitle": "Herní aktiva",
+  "sideGameAssetsTitle": "Herní assety",
   "sideGameAssetsSubtitle": "Hostované assety ClashKing seskupené podle složek.",
   "gameAssetsLoadError": "Herní podklady se nepodařilo načíst",
   "gameAssetsEmptyTitle": "Nejsou k dispozici žádné herní podklady",
@@ -3481,7 +3571,7 @@
       }
     }
   },
-  "sideLocation": "Poloha",
+  "sideLocation": "Lokace",
   "sideFilter": "Filtr",
   "sideRefresh": "Aktualizovat",
   "sideOfficialClashLeaderboard": "Oficiální žebříček Clash",
@@ -3511,9 +3601,9 @@
   "assetFolderResources": "Suroviny",
   "assetFolderStickers": "Samolepky",
   "upgradeSectionHeroes": "Hrdinové",
-  "upgradeSectionTroops": "Vojenské jednotky",
+  "upgradeSectionTroops": "Jednotky",
   "upgradeSectionSpells": "Kouzla",
-  "upgradeSectionPets": "Domácí zvířata",
+  "upgradeSectionPets": "Mazlíčci",
   "upgradeSectionEquipment": "Vybavení",
   "sideMockupSource": "Zdroj",
   "sideMockupMode": "Režim",
@@ -3532,7 +3622,7 @@
   "endpointTop200ArmyUsagePreview": "Záznamy bitev · využití jednotek a kouzel",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "Týdně",
-  "endpointStateUsage": "Použití",
+  "endpointStateUsage": "Využití",
   "notifGroupReminders": "Připomenutí",
   "notifGroupProgress": "Postup",
   "notifLeagueDefense": "Obrana v lize",
@@ -3886,7 +3976,7 @@
     }
   },
   "upgradeTrackerLaboratory": "Laboratoř",
-  "upgradeTrackerPets": "Domácí zvířata",
+  "upgradeTrackerPets": "Mazlíčci",
   "upgradeTrackerWalls": "Zdi",
   "upgradeTrackerEquipment": "Vybavení",
   "upgradeTrackerLevelsRemaining": "Zbývající úrovně: {count}",
@@ -3973,7 +4063,7 @@
   "upgradeTrackerHeaderLevelsLeft": "Zbývající úrovně",
   "upgradeTrackerHeaderActive": "Aktivní",
   "upgradeTrackerHeaderFinishes": "Dokončení",
-  "upgradeTrackerHeaderOwned": "Vlastněné",
+  "upgradeTrackerHeaderOwned": "Vlastněno",
   "upgradeTrackerHeaderUpdated": "Aktualizováno",
   "homeCouldNotLoadTitle": "Domovskou stránku se nepodařilo načíst",
   "homeVerifiedAccountRequiredTitle": "Ověřte propojený účet",
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "Vybrané účty",
   "notifAudienceAcrossDevicesDescription": "Vyber, které účty mohou na tomto zařízení dostávat oznámení.",
-  "notifAccountBookmarked": "Záložka",
+  "notifAccountBookmarked": "Uloženo",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4477,7 +4567,7 @@
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "Sledované účty: {loaded}/{total}",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} sledovaných účtů",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4497,10 +4587,10 @@
   "damageAccountSelectorHint": "Použijte úrovně jednotek z ověřeného účtu nebo vše nastavte ručně.",
   "damageNoAccountsAvailable": "Nejsou k dispozici žádné ověřené účty. Úrovně poškození můžete nastavit ručně.",
   "damageTargetSectionTitle": "Cílová budova",
-  "damageChooseTarget": "Vyberte budovu nebo jednotku",
+  "damageChooseTarget": "Vyberte cíl",
   "damageNoTargetTitle": "Není vybrána žádná budova",
   "damageNoTargetBody": "Vyberte budovu, jejíž odolnost chcete otestovat.",
-  "damageTargetLevelLabel": "Cílová úroveň",
+  "damageTargetLevelLabel": "Úroveň cíle",
   "damageCommonBuildings": "Běžné budovy",
   "damageAllBuildings": "Všechny budovy",
   "damageQuickSetups": "Rychlá nastavení",
@@ -4538,14 +4628,14 @@
   "gameAssetsCategoryEquipment": "Vybavení",
   "gameAssetsCategoryGuardians": "Strážci",
   "gameAssetsCategoryHeroes": "Hrdinové",
-  "gameAssetsCategoryPets": "Domácí zvířata",
+  "gameAssetsCategoryPets": "Mazlíčci",
   "gameAssetsCategorySkins": "Vzhledy",
   "gameAssetsCategorySpells": "Kouzla",
-  "gameAssetsCategoryTroops": "Vojenské jednotky",
-  "assetFolderTroops": "Vojenské jednotky",
+  "gameAssetsCategoryTroops": "Jednotky",
+  "assetFolderTroops": "Jednotky",
   "assetFolderSpells": "Kouzla",
   "assetFolderHeroes": "Hrdinové",
-  "endpointStateWins": "Vyhrává",
+  "endpointStateWins": "Vítězství",
   "notifGroupBattles": "Bitvy",
   "notifGroupSupport": "Podpora",
   "rankedLeagueAccountSelector": "Účet pro hodnocenou ligu",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Plánujte priority",
+  "upgradeTrackerPlanPrioritiesDescription": "Hodnoťte, na čem záleží nejvíce. Úrovně vylepšení a aktivní práce vždy zůstanou v pořádku.",
   "upgradeTrackerPlanClose": "Zavřít",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Plánování cílů",
+  "upgradeTrackerPlanConstructionSubtitle": "Konstrukce a vylepšení hrdinů",
+  "upgradeTrackerPlanResearchSubtitle": "Výzkum vojsk, kouzel a obléhání",
+  "upgradeTrackerPlanPetHouseSubtitle": "Vylepšení Pet House",
+  "upgradeTrackerPlanPrioritizeNewItems": "Upřednostnění nových položek",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Umístěte nově odemčené nebo nezastavěné položky nejprve",
+  "upgradeTrackerPlanSharedSummary": "Úroveň {tier} · sdílený poměr {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Úroveň {tier} · přísné · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "běží, dokud maximální výnosy",
+  "upgradeTrackerPlanYieldsAfter": "po {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
+  "upgradeTrackerPlanStrict": "Přísné",
   "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanReorder": "Změnit pořadí: {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Relativní hmotnost úrovně",
+  "upgradeTrackerPlanCompletionTarget": "Cíl dokončení",
+  "upgradeTrackerPlanStrictTier": "Přísná úroveň",
+  "upgradeTrackerPlanWeight": "Hmotnost {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Do maximální hmotnosti",
+  "upgradeTrackerPlanUntilPercent": "Do {value}",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Číslované úrovně běží jako první. Sdílené řádky mají stejné číslo úrovně a jejich kombinace je normalizována z relativních vah, takže 50 + 25 se stává 67% / 33%. Cíl dosáhne výnosu kategorie poté, co dosáhne tohoto procenta, zatímco později zůstane způsobilý.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max. před pokračováním",
+  "upgradeTrackerPlanGoalRushNextHall": "Rychle se dostaň do další haly",
+  "upgradeTrackerPlanGoalCatchUp": "Dohnat spěšné úrovně",
+  "upgradeTrackerPlanGoalUnlockFirst": "Odemknout nové věci nejprve",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Stěny každý týden",
   "upgradeTrackerPlanOff": "Vypnuto",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / týden",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "Preferujte zlato na stěny",
+  "upgradeTrackerPlanPreferGoldDescription": "Při utrácení za zdi použijte zlato před elixírem",
+  "upgradeTrackerPlanApplyPriorities": "Použijte priority",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Vyrobená obrana",
+  "upgradeTrackerPlanCategoryTraps": "Pasti",
+  "upgradeTrackerPlanCategoryArmy": "Armáda",
+  "upgradeTrackerPlanCategoryDarkTroops": "Tmavé jednotky",
+  "upgradeTrackerPlanCategorySieges": "Obležení",
+  "upgradeTrackerPlanCategorySupercharge": "Přeplatek",
+  "navigationCloseDrawer": "Zavřít navigační panel",
+  "navigationOpenProfileMenu": "Otevřít nabídku profilu",
+  "navigationClashKingWeb": "ClashKing pro web",
+  "settingsPrivacyDataTitle": "Soukromí a data",
+  "settingsPrivacyPolicyDescription": "Zjistěte, co ClashKing shromažďuje, proč se údaje používají, kdo je zpracovává, jaká platí pravidla uchovávání a jak nás kontaktovat.",
+  "settingsPrivacyExportTitle": "Přístup k datům nebo jejich export",
+  "settingsPrivacyExportDescription": "Stáhněte si kopii údajů účtu propojených s přihlášením do ClashKing, včetně propojených účtů Clash of Clans a předvoleb oznámení.",
+  "settingsPrivacyCorrectionTitle": "Oprava nebo omezení dat",
+  "settingsPrivacyCorrectionDescription": "V nastavení účtu odeberte propojené účty Clash of Clans, vypněte oznámení nebo kontaktujte podporu se žádostí o opravu či omezení.",
+  "settingsPrivacyDeletionTitle": "Smazání účtu ClashKing",
+  "settingsPrivacyDeletionDescription": "Tím zahájíte smazání účtu ClashKing a souvisejících dat aplikace, pokud ClashKing nemusí uchovat omezené záznamy kvůli zabezpečení, prevenci podvodů nebo právním povinnostem.",
+  "settingsPrivacyChildrenTitle": "Děti a rodiny",
+  "settingsPrivacyChildrenDescription": "ClashKing je doprovodná aplikace pro širokou veřejnost a není určena dětem. Nevytvářejte účet, pokud ve své zemi nemáte věk potřebný k udělení souhlasu bez schválení rodiče či opatrovníka.",
+  "settingsPrivacyExportReady": "Export dat je připraven k uložení.",
+  "settingsPrivacyExportCreateFailed": "Export dat se nepodařilo vytvořit. Místo toho byl připraven e-mail týkající se soukromí.",
+  "settingsPrivacyExportPrepareFirst": "Před uložením export připravte.",
+  "settingsPrivacyExportSaved": "Export dat byl uložen.",
+  "settingsPrivacyExportSaveFailed": "Export dat se nepodařilo uložit. Místo toho byl připraven e-mail týkající se soukromí.",
+  "settingsPrivacyDeleteUnavailable": "Smazání účtu není v tomto sestavení dostupné. Místo toho byl připraven e-mail týkající se soukromí.",
+  "settingsPrivacyOpenPolicy": "Otevřít zásady",
+  "settingsPrivacyRefreshExport": "Obnovit export",
+  "settingsPrivacyPrepareExport": "Připravit export",
+  "settingsPrivacySaveExport": "Uložit export",
+  "settingsPrivacyContactSupport": "Kontaktovat podporu",
+  "settingsPrivacyDeleteAccount": "Smazat účet",
+  "settingsPrivacyDeleteConfirmTitle": "Smazat účet?",
+  "settingsPrivacyDeleteConfirmDescription": "Po zpracování je tato žádost nevratná. Můžete přijít o propojené účty, nastavení oznámení, uložené předvolby a metody ověřování.",
+  "generalUnranked": "Bez hodnocení",
+  "playerJoinLeaveTab": "Příchod / Odchod",
+  "playerUpgradeRemainingAccessibility": "Zbývá pro radnici {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress} % dokončeno pro RH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Tato část je dokončena pro RH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Zbývající čas",
+  "playerUpgradeNoResourceData": "Žádné údaje o surovinách",
+  "playerJoinLeaveLoadError": "Historii příchodů a odchodů se nepodařilo načíst",
+  "playerJoinLeaveClanTotals": "Souhrny klanů",
   "playerJoinLeaveTime": "Čas",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "Strávený čas",
+  "playerJoinLeaveVisits": "Návštěvy",
+  "playerJoinLeaveJoined": "Přišel",
+  "playerJoinLeaveLeft": "Odešel",
+  "playerJoinLeaveNoHistory": "Historie příchodů a odchodů není k dispozici",
+  "playerJoinLeaveNoClanTotals": "Souhrny klanů nejsou k dispozici",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
