@@ -312,6 +312,12 @@ describe('ClanInfoScreen', () => {
       2,
     );
 
+    expect(StyleSheet.flatten(screen.getByTestId('clan-filter-trigger').props.style)).toMatchObject(
+      {
+        marginLeft: 'auto',
+      },
+    );
+
     await fireEvent.scroll(screen.getByTestId('clan-info-scroll'), {
       nativeEvent: {
         contentOffset: { y: 600 },

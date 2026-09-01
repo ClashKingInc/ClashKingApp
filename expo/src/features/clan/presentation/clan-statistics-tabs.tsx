@@ -156,19 +156,21 @@ export function ClanStatisticsTab({
         onSortPress={() => setShowSort(true)}
       />
       <ClanFilterBar
+        actions={
+          <SummaryChip
+            value={
+              rangeMode === 'wars'
+                ? t('warFiltersLastXwars', { number: warRange })
+                : t('warStatsLastXDays', { number: dayRange })
+            }
+            label={t('filtersDateRange')}
+            icon={<SlidersHorizontal size={18} color={theme.primary} />}
+            selected
+            onPress={() => setShowRange(true)}
+          />
+        }
         middle={
           <SummaryRail>
-            <SummaryChip
-              value={
-                rangeMode === 'wars'
-                  ? t('warFiltersLastXwars', { number: warRange })
-                  : t('warStatsLastXDays', { number: dayRange })
-              }
-              label={t('filtersDateRange')}
-              icon={<SlidersHorizontal size={18} color={theme.primary} />}
-              selected
-              onPress={() => setShowRange(true)}
-            />
             <SummaryChip
               value={`${overview.activePlayers}`}
               label={t('clanMembers')}

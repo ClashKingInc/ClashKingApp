@@ -17,7 +17,9 @@ import {
   replacePlanQueueOrder,
 } from './upgrade-tracker-plan-editor';
 import {
+  formatTrackerCompletionDate,
   shareTrackerCaptures,
+  trackerNativeShareOptions,
   trackerProgressSections,
   trackerShareFilename,
 } from './upgrade-tracker-share';
@@ -69,7 +71,7 @@ describe('upgrade tracker parity helpers', () => {
     ).toBe(1);
   });
 
-  it('groups the Home Village progress export into the requested eight sections', () => {
+  it('groups the Home Village progress export without the helper section', () => {
     const definitions = [
       [UpgradeCategory.walls, UpgradeQueue.builders],
       [UpgradeCategory.defenses, UpgradeQueue.builders],
@@ -120,7 +122,6 @@ describe('upgrade tracker parity helpers', () => {
       'laboratory',
       'pets',
       'equipment',
-      'helpers',
       'craftedDefenses',
     ]);
     expect(sections.find((section) => section.key === 'buildings')?.summary.levelsRemaining).toBe(
@@ -131,6 +132,21 @@ describe('upgrade tracker parity helpers', () => {
         .filter((section) => section.key !== 'buildings')
         .every((section) => section.summary.levelsRemaining === 1),
     ).toBe(true);
+  });
+
+  it('formats English completion dates with ordinals and shares image-only native payloads', () => {
+    expect(formatTrackerCompletionDate(new Date('2026-07-30T12:00:00Z'), 'en-US')).toBe(
+      'July 30th 2026',
+    );
+    expect(formatTrackerCompletionDate(new Date('2026-07-01T12:00:00Z'), 'en-US')).toBe(
+      'July 1st 2026',
+    );
+    expect(trackerNativeShareOptions(['/tmp/progress.png'])).toEqual({
+      urls: ['/tmp/progress.png'],
+      type: 'image/png',
+      failOnCancel: false,
+    });
+    expect(trackerNativeShareOptions(['/tmp/progress.png'])).not.toHaveProperty('message');
   });
 
   it('captures and shares all three exact Flutter exports on native', async () => {

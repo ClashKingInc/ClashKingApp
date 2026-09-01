@@ -36,14 +36,7 @@ const CAPTURE_TIMEOUT_MS = 12_000;
 const ARTWORK_TIMEOUT_MS = 2_500;
 
 export type TrackerProgressSectionKey =
-  | 'walls'
-  | 'buildings'
-  | 'heroes'
-  | 'laboratory'
-  | 'pets'
-  | 'equipment'
-  | 'helpers'
-  | 'craftedDefenses';
+  'walls' | 'buildings' | 'heroes' | 'laboratory' | 'pets' | 'equipment' | 'craftedDefenses';
 
 export interface TrackerProgressSection {
   readonly key: TrackerProgressSectionKey;
@@ -78,7 +71,6 @@ export function trackerProgressSections(
     ['laboratory', items.filter((item) => item.queue === UpgradeQueue.laboratory), 'troops'],
     ['pets', items.filter((item) => item.category === UpgradeCategory.pets), 'pets'],
     ['equipment', items.filter((item) => item.category === UpgradeCategory.equipment), 'equipment'],
-    ['helpers', items.filter((item) => item.category === UpgradeCategory.builders), 'builders'],
     [
       'craftedDefenses',
       items.filter((item) => item.category === UpgradeCategory.craftedDefenses),
@@ -141,6 +133,10 @@ export async function shareTrackerCaptures(options: {
   return { captures, message };
 }
 
+export function trackerNativeShareOptions(urls: readonly string[]) {
+  return { urls: [...urls], type: 'image/png' as const, failOnCancel: false };
+}
+
 export function UpgradeTrackerShareModal({
   visible,
   initial,
@@ -191,9 +187,9 @@ export function UpgradeTrackerShareModal({
             CAPTURE_TIMEOUT_MS,
           );
         },
-        nativeShare: async (urls, message) => {
+        nativeShare: async (urls) => {
           const { default: Share } = await import('react-native-share');
-          await Share.open({ urls: [...urls], message, type: 'image/png', failOnCancel: false });
+          await Share.open(trackerNativeShareOptions(urls));
         },
         webDownload: (url, filename) => {
           if (typeof document === 'undefined') return;
@@ -318,23 +314,29 @@ const ProgressGraphic = forwardRef<
             <CKText style={shareStyles.silver}>{snapshot.tag}</CKText>
           </View>
         </View>
-        <CKText style={shareStyles.percent}>{(overall.completion * 100).toFixed(1)}%</CKText>
-        <CKText style={shareStyles.silverStrong}>{t('generalCompleted')}</CKText>
-        <View style={shareStyles.timeSummaryRow}>
-          <TimeSummary
-            imageUrl={ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)}
-            label={t('dashboardUpgradeTrackerBuilders')}
-            seconds={builderTime}
-          />
-          <TimeSummary
-            imageUrl={
-              village === UpgradeVillage.home
-                ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
-                : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1)
-            }
-            label={t('upgradeTrackerLaboratory')}
-            seconds={laboratoryTime}
-          />
+        <View style={shareStyles.progressSummaryRow}>
+          <View style={shareStyles.grow}>
+            <CKText style={shareStyles.percent}>{(overall.completion * 100).toFixed(1)}%</CKText>
+            <CKText style={shareStyles.silverStrong}>{t('generalCompleted')}</CKText>
+          </View>
+          <View style={shareStyles.completionDates}>
+            <CompletionDate
+              imageUrl={ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)}
+              label={t('dashboardUpgradeTrackerBuilders')}
+              date={completionDate(startsAt, builderTime)}
+              locale={intlLocale}
+            />
+            <CompletionDate
+              imageUrl={
+                village === UpgradeVillage.home
+                  ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
+                  : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1)
+              }
+              label={t('upgradeTrackerLaboratory')}
+              date={completionDate(startsAt, laboratoryTime)}
+              locale={intlLocale}
+            />
+          </View>
         </View>
         <View style={shareStyles.categoryList}>
           {sections.map((section) => (
@@ -391,26 +393,62 @@ const ProgressGraphic = forwardRef<
   );
 });
 
-function TimeSummary({
+function CompletionDate({
   imageUrl,
   label,
-  seconds,
+  date,
+  locale,
 }: {
   imageUrl: string;
   label: string;
-  seconds: number;
+  date: Date | null;
+  locale: string;
 }) {
   return (
-    <View style={shareStyles.timeSummary}>
-      <Image source={{ uri: imageUrl }} style={shareStyles.timeSummaryIcon} />
+    <View style={shareStyles.completionDate}>
+      <Image source={{ uri: imageUrl }} style={shareStyles.completionDateIcon} />
       <View style={shareStyles.grow}>
-        <CKText style={shareStyles.silver}>{label}</CKText>
-        <CKText style={shareStyles.timeSummaryValue}>
-          {seconds > 0 ? formatTrackerDuration(seconds) : '—'}
+        <CKText style={shareStyles.completionDateLabel}>{label}</CKText>
+        <CKText style={shareStyles.completionDateValue} numberOfLines={1}>
+          {date ? formatTrackerCompletionDate(date, locale) : '—'}
         </CKText>
       </View>
     </View>
   );
+}
+
+function completionDate(startsAt: Date, seconds: number) {
+  return seconds > 0 ? new Date(startsAt.getTime() + seconds * 1000) : null;
+}
+
+export function formatTrackerCompletionDate(date: Date, locale: string) {
+  if (!locale.toLowerCase().startsWith('en')) {
+    return new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  }
+  const parts = new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).formatToParts(date);
+  const month = parts.find((part) => part.type === 'month')?.value ?? '';
+  const day = Number(parts.find((part) => part.type === 'day')?.value ?? 0);
+  const year = parts.find((part) => part.type === 'year')?.value ?? '';
+  const modulo100 = day % 100;
+  const suffix =
+    modulo100 >= 11 && modulo100 <= 13
+      ? 'th'
+      : day % 10 === 1
+        ? 'st'
+        : day % 10 === 2
+          ? 'nd'
+          : day % 10 === 3
+            ? 'rd'
+            : 'th';
+  return `${month} ${day}${suffix} ${year}`;
 }
 
 function CollectionGraphic({ snapshot }: { snapshot: UpgradeTrackerSnapshot }) {
@@ -474,7 +512,6 @@ function progressSectionLabel(key: TrackerProgressSectionKey, t: I18nValue['t'])
     laboratory: t('upgradeTrackerLaboratory'),
     pets: t('upgradeTrackerPets'),
     equipment: t('upgradeTrackerEquipment'),
-    helpers: t('upgradeTrackerHelpers'),
     craftedDefenses: t('upgradeTrackerPlanCategoryCraftedDefenses'),
   };
   return labels[key];
@@ -597,7 +634,7 @@ const shareStyles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   grow: { flex: 1 },
   graphicBoundary: { width: '100%' },
-  progressGraphicBoundary: { aspectRatio: 0.64 },
+  progressGraphicBoundary: { aspectRatio: 0.62 },
   collectionGraphicBoundary: { aspectRatio: 1 },
   graphic: { flex: 1, borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
   graphicShade: { backgroundColor: '#050506dc' },
@@ -606,21 +643,22 @@ const shareStyles = StyleSheet.create({
   whiteTitle: { color: '#fff', fontSize: 20, fontWeight: '900' },
   silver: { color: '#bfc2c8', fontSize: 11, fontWeight: '700' },
   silverStrong: { color: '#d4d7dd', fontSize: 11, fontWeight: '900' },
-  percent: { color: '#fff', fontSize: 42, lineHeight: 46, fontWeight: '900', marginTop: 8 },
-  timeSummaryRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
-  timeSummary: {
-    flex: 1,
-    minHeight: 44,
+  progressSummaryRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 12, marginTop: 8 },
+  percent: { color: '#fff', fontSize: 42, lineHeight: 46, fontWeight: '900' },
+  completionDates: { width: '54%', gap: 5, paddingBottom: 1 },
+  completionDate: {
+    minHeight: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 7,
-    borderRadius: 12,
+    gap: 6,
+    borderRadius: 10,
     backgroundColor: '#1a1a1ecc',
-    paddingHorizontal: 9,
-    paddingVertical: 6,
+    paddingHorizontal: 7,
+    paddingVertical: 4,
   },
-  timeSummaryIcon: { width: 28, height: 28, resizeMode: 'contain' },
-  timeSummaryValue: { color: '#fff', fontSize: 12, fontWeight: '900' },
+  completionDateIcon: { width: 21, height: 21, resizeMode: 'contain' },
+  completionDateLabel: { color: '#bfc2c8', fontSize: 8, fontWeight: '700' },
+  completionDateValue: { color: '#fff', fontSize: 9, fontWeight: '900' },
   resourceRow: { minHeight: 16, flexDirection: 'row', alignItems: 'center', gap: 6 },
   resourcePair: { flexDirection: 'row', alignItems: 'center', gap: 3 },
   resourceIcon: { width: 14, height: 14, resizeMode: 'contain' },

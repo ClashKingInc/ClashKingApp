@@ -450,6 +450,12 @@ describe('PlayerDetailScreen', () => {
     expect(screen.getByText('Events')).toBeTruthy();
     expect(screen.getByText('1')).toBeTruthy();
     expect(screen.getByText('Clans')).toBeTruthy();
+    expect(screen.getByTestId('player-join-leave-toolbar')).toBeTruthy();
+    expect(
+      StyleSheet.flatten(screen.getByTestId('player-join-leave-view-control').props.style),
+    ).toMatchObject({ marginLeft: 'auto' });
+    expect(screen.getByTestId('player-join-leave-filter-control')).toBeTruthy();
+    expect(screen.getAllByText('Filters').length).toBeGreaterThan(0);
     await fireEvent.scroll(screen.getByTestId('player-detail-scroll'), {
       nativeEvent: {
         contentOffset: { y: 600 },
