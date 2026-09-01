@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
+  "warStatsRangeTitle": "Intervalul statisticilor de război",
+  "warStatsRangeDescription": "Alege dacă statisticile acoperă un număr fix de războaie recente sau o perioadă recentă exprimată în zile.",
+  "warStatsRangeDays": "Zile",
+  "warStatsRangeWarsToInclude": "Războaie de inclus",
+  "warStatsRangeDaysToInclude": "Zile de inclus",
+  "upgradeTrackerAllBuildersOccupied": "Toți constructorii sunt ocupați",
+  "upgradeTrackerBuildCost": "Cost de construire",
+  "upgradeTrackerBuilderBaseBuilders": "Constructorii Bazei Constructorului",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorul Bazei Constructorului",
   "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "upgradeTrackerClearCost": "Cost de eliminare",
+  "upgradeTrackerCompletionDetails": "Detalii despre finalizarea satului",
+  "upgradeTrackerCustomSoundtrack": "Coloană sonoră personalizată",
+  "upgradeTrackerGoldPassPercent": "Permis de Aur {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Rezumat {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,9 +29,9 @@
     }
   },
   "upgradeTrackerGuardians": "Gardieni",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerHelpers": "Ajutoare",
+  "upgradeTrackerHouseParts": "Părți de casă",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# constructor inactiv} other {# constructori inactivi}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "În desfășurare",
+  "upgradeTrackerItemSemanticLabel": "{item}, nivelul {currentLevel} din {targetLevel}{count, plural, =1 {} other {, # clădiri}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "Deținute: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,8 +65,8 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
-  "upgradeTrackerLevelTransition": "Nivel {from} → {to}",
+  "upgradeTrackerLane": "Culoar",
+  "upgradeTrackerLevelTransition": "Nivelul {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
       "from": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Pradă acum",
+  "upgradeTrackerLootOutlook": "Prognoza prăzii",
+  "upgradeTrackerMusic": "Muzică",
+  "upgradeTrackerNextDays": "{count, plural, one {Următoarea # zi} other {Următoarele # zile}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Perioada următoare",
+  "upgradeTrackerNoGoldPass": "Fără Permis de Aur",
+  "upgradeTrackerNoMatchingUpgrades": "Nu există îmbunătățiri corespunzătoare",
+  "upgradeTrackerNoMatchingUpgradesBody": "Încearcă alt sat sau altă coadă.",
+  "upgradeTrackerNothingNeededNow": "Nu este nevoie de nimic acum",
+  "upgradeTrackerObstacles": "Obstacole",
+  "upgradeTrackerPart": "Parte",
+  "upgradeTrackerPassReward": "Recompensă din permis",
+  "upgradeTrackerPauseSoundtrack": "Întrerupe coloana sonoră",
+  "upgradeTrackerPeriodCount": "Perioada {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Redă coloana sonoră",
+  "upgradeTrackerPreviousPeriod": "Perioada anterioară",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Peisaje",
+  "upgradeTrackerScheduledLane": "Programat pe culoarul #{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Progres {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,20 +138,20 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "Programat",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "Dimensiune",
+  "upgradeTrackerSortLongest": "Cele mai lungi mai întâi",
+  "upgradeTrackerSortName": "Nume A–Z",
+  "upgradeTrackerSortScheduled": "Programate",
+  "upgradeTrackerSortShortest": "Cele mai scurte mai întâi",
+  "upgradeTrackerSoundtrackPosition": "Poziția coloanei sonore",
   "upgradeTrackerStarts": "Începe",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
+  "upgradeTrackerTier": "Categorie",
+  "upgradeTrackerUpgradesStarting": "îmbunătățiri care încep",
+  "upgradeTrackerUpgradingNow": "Se îmbunătățește acum",
+  "upgradeTrackerWarBase": "Bază de război",
+  "notifSettingsSaveFailed": "Setările notificărilor nu au putut fi salvate.",
+  "notifPushEnabled": "Notificări push activate",
+  "notifReceiveNotifications": "Primește notificări",
   "notifTokenPreview": "Token: {token}",
   "@notifTokenPreview": {
     "placeholders": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Alertele activate pot fi trimise pe acest dispozitiv.",
+  "notifDisabledAccountDescription": "Notificările sunt dezactivate pentru întregul cont ClashKing.",
+  "notifMaximumRemindersAdded": "A fost adăugat numărul maxim de mementouri",
+  "notifAddReminder": "Adaugă memento",
+  "notifDurationOneHour": "1 oră",
+  "notifDurationHours": "{count} ore",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} minute",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Adaugă {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "cu 1 oră înainte",
+  "notifTimingHoursBefore": "cu {count} ore înainte",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "cu {count} minute înainte",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Notificările push sunt pregătite pe acest dispozitiv.",
+  "notifPushPermissionRequired": "Permite notificările pentru a primi alerte ClashKing.",
+  "notifPushPermissionDenied": "Permisiunea pentru notificări a fost refuzată.",
+  "notifPushNotConfigured": "Firebase nu este configurat pentru această versiune.",
+  "notifPushTokenUnavailable": "Un token push nu este încă disponibil.",
+  "notifPushUnsupported": "Notificările push nu sunt acceptate pe această platformă.",
+  "notifPushInitializing": "Se configurează notificările push…",
+  "notificationPrimerTitle": "Activați notificările?",
+  "notificationPrimerBody": "ClashKing vă poate anunța despre actualizări privind războaiele, CWL, contul și proiectele. Puteți schimba oricând această opțiune în Setări > Notificări.",
+  "notificationPrimerNotNow": "Nu acum",
+  "notificationPrimerAllow": "Permite",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Realizări",
   "achievementEarnedLabel": "Obținut",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Căutați membri",
   "clanMembersShowTotals": "Arată totalurile clanului",
   "clanMembersHideTotals": "Ascunde totalurile clanului",
-  "clanMembersReceivedShort": "Primite",
+  "clanMembersReceivedShort": "Primit",
   "clanMembersAverageTh": "TH medie",
   "clanMinimumMembers": "Număr minim de membri",
   "clanMaximumMembers": "Număr maxim de membri",
@@ -1105,8 +1105,26 @@
   "warTitle": "Război",
   "warFrequency": "Frecvența războaielor",
   "warParticipation": "Participare la război",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Doar participant",
+  "warStatsRangeWarsCompact": "{number} războaie",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} zile",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Ultimele {number} zile",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Membri actuali",
   "warLeague": "Război/Ligă",
   "warHistory": "Istoric războaie",
   "warLog": "Jurnal de război",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "Cele mai bune atacuri",
   "warAttacksCount": "Număr de atacuri",
   "warAttacksMissed": "Atacuri ratate",
-  "warAttacksMissedShort": "Ratat",
+  "warAttacksMissedShort": "ratat",
   "warAttacksNumber": "Ai atacat de {number_time} ori în ultimele {number_war} războaie.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Stele de război",
   "playerWarPreferenceTitle": "Pref. de război",
   "playerDonatedTitle": "Donat",
-  "playerReceivedTitle": "Primite",
+  "playerReceivedTitle": "Primit",
   "playerCapitalTitle": "Capitală",
   "playerExpLevelTitle": "Exp. nivel",
   "clanWarWinsTitle": "Războiul învinge",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "Districte distruse",
   "raidsCompleted": "Raiduri finalizate",
   "capitalRaidStatusOngoing": "În curs de desfășurare",
-  "capitalRaidStatusEnded": "Terminat",
+  "capitalRaidStatusEnded": "Încheiat",
   "capitalRaidLoot": "Pradă",
   "capitalRaidRewards": "Recompense",
   "capitalRaidPreviousWeek": "Săptămâna anterioară",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Aplicații conectate",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Vezi și deconectează aplicațiile cu acces la cont.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Conexiuni active",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Nicio aplicație conectată",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Aplicațiile pe care le conectezi vor apărea aici.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Aplicațiile conectate nu au putut fi încărcate",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Toate conturile asociate actuale și viitoare",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} conturi selectate",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Deconectează",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Deconectezi aplicația?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} va pierde imediat accesul la conturile tale asociate.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Aplicația {name} a fost deconectată.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Aplicația {name} nu a putut fi deconectată. Încearcă din nou.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Conectat",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "Actualizează datele de război",
   "warWidgetNoData": "Nu sunt disponibile date de război",
   "warWidgetLastUpdated": "Ultima actualizare: {time}",
-  "todoEventClanGames": "Jocurile clanului",
+  "todoEventClanGames": "Jocuri de clan",
   "todoEventCwl": "CWL",
   "todoEventSeasonEnds": "Se termină sezonul",
   "todoEventLeagueReset": "Resetarea ligii",
@@ -3107,8 +3197,8 @@
   "warType": "Tip de război",
   "warFiltersAnyTownHall": "Orice TH",
   "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "Primăria atacatorului",
-  "warDefenderTownHall": "Primăria apărătorului",
+  "warAttackerTownHall": "TH atacator",
+  "warDefenderTownHall": "TH apărător",
   "warStatsFilterSameTownHallOnly": "Doar aceeași Primărie",
   "warStatsFilterSameTownHallDescription": "Afișează doar atacurile în care atacatorul și apărătorul au același nivel TH",
   "generalAny": "Oricare",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Adaugă widget de război",
   "settingsWarWidgetLinkClanFirst": "Conectează mai întâi un cont dintr-un clan",
   "settingsWarWidgetClanCount": "{count} clan(uri) disponibile",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Alege un clan. După ce adaugi widgetul, ține-l apăsat, atinge Editați widgetul, apoi alege Clan.",
+  "settingsWarWidgetAndroidInstructions": "Alege un clan, apoi adaugă widgetul din selectorul de widgeturi Android.",
+  "settingsWarWidgetEmpty": "Niciunul dintre conturile conectate nu se află momentan într-un clan.",
+  "settingsWarWidgetIosFooter": "Adaugă mai multe widgeturi de război și alege un clan diferit pentru fiecare.",
+  "settingsWarWidgetIosReady": "{clanName} este pregătit. Editează widgetul și selectează-l la Clan.",
+  "settingsWarWidgetAndroidReady": "Datele widgetului pentru {clanName} sunt pregătite.",
+  "settingsWarWidgetPrepareFailed": "Widgetul nu a putut fi pregătit: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Conturi conectate la bot și date Discord",
   "settingsDiscordSyncSubtitle": "Sincronizează conturile conectate la bot și datele Discord",
@@ -3264,7 +3354,7 @@
   "rankingsDonations": "Donații",
   "rankingsWarWins": "Victorii în războaie",
   "rankingsWinStreak": "Serie de victorii",
-  "rankingsCurrent": "Actuale",
+  "rankingsCurrent": "Actual",
   "rankingsWorldwide": "Global",
   "rankingsSelectLocation": "Selectează o locație",
   "rankingsSearchLocations": "Caută locații sau coduri de țară",
@@ -3314,7 +3404,7 @@
   "statsPerformance": "Performanță",
   "statsSamples": "Eșantioane",
   "statsUsage": "Utilizare",
-  "statsAverageStars": "Medie stele",
+  "statsAverageStars": "Stele medii",
   "statsAverageDestruction": "Distrugere medie",
   "statsStarRates": "Rate de stele",
   "statsThreeStarRate": "Rata de trei stele",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Armate salvate",
   "sideArmyLinks": "Linkuri de armate",
   "sideArmyLinksBody": "Compoziție, vrăji, asediu, notițe și link de partajare.",
-  "sideGameAssetsTitle": "Activele jocului",
+  "sideGameAssetsTitle": "Asset-uri joc",
   "sideGameAssetsSubtitle": "Asset-uri ClashKing găzduite, grupate după folder.",
   "gameAssetsLoadError": "Resursele jocului nu au putut fi încărcate",
   "gameAssetsEmptyTitle": "Nu există resurse de joc disponibile",
@@ -3616,7 +3706,7 @@
       }
     }
   },
-  "notifWarEnded": "Război încheiat",
+  "notifWarEnded": "Războiul s-a încheiat",
   "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Rezultatele finale sunt disponibile.",
   "@notifWarEndedBody": {
     "placeholders": {
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "Conturi selectate",
   "notifAudienceAcrossDevicesDescription": "Alege ce conturi pot primi notificări pe acest dispozitiv.",
-  "notifAccountBookmarked": "Marcat",
+  "notifAccountBookmarked": "Salvat",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "Atacurile de război",
+  "notifGroupWarAttacks": "Atacuri de război",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4453,7 +4543,7 @@
       }
     }
   },
-  "gameTHLevel": "TH{level}",
+  "gameTHLevel": "PN{level}",
   "@gameTHLevel": {
     "placeholders": {
       "level": {
@@ -4523,7 +4613,7 @@
   "damageOtherSources": "Alte surse",
   "damageShowAllSources": "Adaugă altă sursă",
   "damageShowFewerSources": "Ascunde celelalte surse",
-  "searchCancel": "Anulează",
+  "searchCancel": "Anula",
   "todoRaidAttacks": "Atacurile raid",
   "todoMockRaid4Left": "4 au rămas",
   "todoMockWarAltStatus": "Activ acum 18 m · războiul și raidurile au nevoie de atenție",
@@ -4545,9 +4635,9 @@
   "assetFolderTroops": "Trupe",
   "assetFolderSpells": "Vrăji",
   "assetFolderHeroes": "Eroi",
-  "endpointStateWins": "Câștigă",
+  "endpointStateWins": "Victorii",
   "notifGroupBattles": "Bătălii",
-  "notifGroupSupport": "Sprijin",
+  "notifGroupSupport": "Suport",
   "rankedLeagueAccountSelector": "Cont afișat",
   "rankedLeagueStars": "Stele",
   "playerBattlelogTab": "Bătălii",
@@ -4567,7 +4657,7 @@
   },
   "playerBattlelogAttacks": "Atacuri",
   "playerBattlelogAverageDestruction": "Distrugere medie",
-  "playerBattlelogAverageStars": "Medie stele",
+  "playerBattlelogAverageStars": "Stele medii",
   "playerBattlelogTripleRate": "Rata de trei stele",
   "playerBattlelogAverageLoot": "Pradă medie",
   "playerBattlelogPopularTroops": "Cele mai folosite trupe",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Planificați prioritățile",
+  "upgradeTrackerPlanPrioritiesDescription": "Clasează ceea ce contează cel mai mult. Nivelurile de upgrade și munca activă rămân întotdeauna în ordine.",
   "upgradeTrackerPlanClose": "Închide",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Planificarea obiectivelor",
+  "upgradeTrackerPlanConstructionSubtitle": "Construcții și upgrade-uri pentru eroi",
+  "upgradeTrackerPlanResearchSubtitle": "Trupe, vrăji și cercetare de asediu",
+  "upgradeTrackerPlanPetHouseSubtitle": "Modernizări pentru casă pentru animale de companie",
+  "upgradeTrackerPlanPrioritizeNewItems": "Prioritizează elementele noi",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Așezați mai întâi articolele nou deblocate sau neconstruite",
+  "upgradeTrackerPlanSharedSummary": "Nivelul {tier} · mix partajat {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Nivelul {tier} · strict · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "rulează până la maxim",
+  "upgradeTrackerPlanYieldsAfter": "randamente după {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4716,7 +4806,7 @@
   },
   "upgradeTrackerPlanStrict": "Strict",
   "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanReorder": "Reordonează {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Greutatea relativă a nivelului",
+  "upgradeTrackerPlanCompletionTarget": "Ținta de finalizare",
+  "upgradeTrackerPlanStrictTier": "Nivel strict",
+  "upgradeTrackerPlanWeight": "Greutate {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Până la maxim",
+  "upgradeTrackerPlanUntilPercent": "Până la {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Nivelurile numerotate rulează primele. Rândurile partajate păstrează același număr de nivel, iar amestecul lor este normalizat din ponderile relative, astfel încât 50 + 25 devine 67% / 33%. O țintă produce randamentul unei categorii după ce atinge acel procent, în timp ce rămâne eligibilă mai târziu.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max înainte de a avansa",
+  "upgradeTrackerPlanGoalRushNextHall": "Ajunge repede la următoarea sală",
+  "upgradeTrackerPlanGoalCatchUp": "Reveniți din urmă nivelurile grăbite",
+  "upgradeTrackerPlanGoalUnlockFirst": "Deblocați mai întâi lucruri noi",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Ziduri în fiecare săptămână",
   "upgradeTrackerPlanOff": "Dezactivat",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / săptămână",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
+  "upgradeTrackerPlanPreferGold": "Preferați aurul pentru pereți",
+  "upgradeTrackerPlanPreferGoldDescription": "Folosește Aur înainte de Elixir când cheltuiești pereți",
+  "upgradeTrackerPlanApplyPriorities": "Aplicați priorități",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Apărări realizate",
+  "upgradeTrackerPlanCategoryTraps": "Capcane",
+  "upgradeTrackerPlanCategoryArmy": "armata",
+  "upgradeTrackerPlanCategoryDarkTroops": "Trupe întunecate",
+  "upgradeTrackerPlanCategorySieges": "Asedii",
+  "upgradeTrackerPlanCategorySupercharge": "Supraalimentare",
+  "navigationCloseDrawer": "Închide panoul de navigare",
+  "navigationOpenProfileMenu": "Deschide meniul profilului",
   "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
-  "playerJoinLeaveTime": "Oră",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "settingsPrivacyDataTitle": "Confidențialitate și date",
+  "settingsPrivacyPolicyDescription": "Află ce colectează ClashKing, de ce sunt folosite datele, cine le prelucrează, regulile de păstrare și cum ne poți contacta.",
+  "settingsPrivacyExportTitle": "Accesează sau exportă datele",
+  "settingsPrivacyExportDescription": "Descarcă o copie a datelor contului asociate autentificării ClashKing, inclusiv conturile Clash of Clans conectate și preferințele pentru notificări.",
+  "settingsPrivacyCorrectionTitle": "Corectează sau limitează datele",
+  "settingsPrivacyCorrectionDescription": "Elimină conturile Clash of Clans conectate din setările contului, dezactivează notificările sau contactează asistența pentru solicitări de corectare ori limitare.",
+  "settingsPrivacyDeletionTitle": "Șterge contul ClashKing",
+  "settingsPrivacyDeletionDescription": "Aceasta începe ștergerea contului ClashKing și a datelor asociate aplicației, cu excepția cazului în care ClashKing trebuie să păstreze informații limitate pentru securitate, prevenirea fraudei sau obligații legale.",
+  "settingsPrivacyChildrenTitle": "Copii și familii",
+  "settingsPrivacyChildrenDescription": "ClashKing este o aplicație însoțitoare pentru publicul larg și nu se adresează copiilor. Nu crea un cont dacă, în țara ta, nu ai vârsta necesară pentru a consimți fără aprobarea unui părinte sau tutore.",
+  "settingsPrivacyExportReady": "Exportul datelor este gata de salvare.",
+  "settingsPrivacyExportCreateFailed": "Exportul datelor nu a putut fi creat. În schimb, a fost pregătit un e-mail privind confidențialitatea.",
+  "settingsPrivacyExportPrepareFirst": "Pregătește exportul înainte de a-l salva.",
+  "settingsPrivacyExportSaved": "Exportul datelor a fost salvat.",
+  "settingsPrivacyExportSaveFailed": "Exportul datelor nu a putut fi salvat. În schimb, a fost pregătit un e-mail privind confidențialitatea.",
+  "settingsPrivacyDeleteUnavailable": "Ștergerea contului nu este disponibilă în această versiune. În schimb, a fost pregătit un e-mail privind confidențialitatea.",
+  "settingsPrivacyOpenPolicy": "Deschide politica",
+  "settingsPrivacyRefreshExport": "Reîmprospătează exportul",
+  "settingsPrivacyPrepareExport": "Pregătește exportul",
+  "settingsPrivacySaveExport": "Salvează exportul",
+  "settingsPrivacyContactSupport": "Contactează asistența",
+  "settingsPrivacyDeleteAccount": "Șterge contul",
+  "settingsPrivacyDeleteConfirmTitle": "Ștergi contul?",
+  "settingsPrivacyDeleteConfirmDescription": "Solicitarea devine definitivă după procesare. Poți pierde conturile conectate, setările notificărilor, preferințele salvate și metodele de autentificare.",
+  "generalUnranked": "Neclasificat",
+  "playerJoinLeaveTab": "Intrare / Ieșire",
+  "playerUpgradeRemainingAccessibility": "Rămas pentru Primăria {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Finalizat {progress}% pentru TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Această secțiune este completă pentru TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Timp rămas",
+  "playerUpgradeNoResourceData": "Nu există date despre resurse",
+  "playerJoinLeaveLoadError": "Istoricul intrărilor și ieșirilor nu a putut fi încărcat",
+  "playerJoinLeaveClanTotals": "Totaluri pe clan",
+  "playerJoinLeaveTime": "Timp",
+  "playerJoinLeaveTimeSpent": "Timp petrecut",
+  "playerJoinLeaveVisits": "Vizite",
+  "playerJoinLeaveJoined": "A intrat",
+  "playerJoinLeaveLeft": "A ieșit",
+  "playerJoinLeaveNoHistory": "Nu există istoric al intrărilor și ieșirilor",
+  "playerJoinLeaveNoClanTotals": "Nu există totaluri pentru clanuri",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
