@@ -250,6 +250,7 @@ describe('PlayerDetailScreen', () => {
     const screen = await wrap(<PlayerDetailScreen model={model} actions={screenActions} />);
 
     await fireEvent.press(screen.getByLabelText('#ALPHA'));
+    await fireEvent.press(screen.getByTestId('player-header-name-copy'));
     await fireEvent.press(screen.getByLabelText('Open in game'));
     await fireEvent.press(screen.getByLabelText('Home Base'));
     expect(screen.getByText('Builder Base')).toBeTruthy();
@@ -260,6 +261,7 @@ describe('PlayerDetailScreen', () => {
     expect(screen.getByText('Achievements')).toBeTruthy();
     expect(screen.getByText('Join / Leave')).toBeTruthy();
     expect(screen.getAllByRole('radio')).toHaveLength(8);
+    expect(screenActions.copyTag).toHaveBeenCalledTimes(2);
     expect(screenActions.copyTag).toHaveBeenCalledWith('#ALPHA');
     expect(screenActions.openInGame).toHaveBeenCalledWith('#ALPHA');
   });

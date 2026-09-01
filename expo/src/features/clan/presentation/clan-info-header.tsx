@@ -44,6 +44,10 @@ export function ClanInfoHeader({
   const capitalLeagueAssetName = clan.capitalLeague?.name ?? 'Unranked';
   const warLeagueLabel = clan.warLeague?.name ?? t('generalNotSet');
   const capitalLeagueLabel = clan.capitalLeague?.name ?? t('generalNotSet');
+  const copyClanTag = () =>
+    void actions
+      .copyClanTag(clan.tag)
+      .then(() => actions.showMessage(t('generalCopiedToClipboard')));
   const primaryStats = [
     { value: `${clan.clanPoints}`, image: ImageAssets.trophies, label: t('clanPointsTitle') },
     {
@@ -153,17 +157,20 @@ export function ClanInfoHeader({
             style={[styles.badge, desktop && styles.desktopBadge]}
           />
           <View style={desktop ? styles.desktopIdentityCopy : styles.centered}>
-            <CKText numberOfLines={1} style={styles.name}>
-              {clan.name}
-            </CKText>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${clan.name}. ${t('generalCopiedToClipboard')}`}
+              testID="clan-header-name-copy"
+              onPress={copyClanTag}
+            >
+              <CKText numberOfLines={1} style={styles.name}>
+                {clan.name}
+              </CKText>
+            </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`${clan.tag}. ${t('generalCopiedToClipboard')}`}
-              onPress={() =>
-                void actions
-                  .copyClanTag(clan.tag)
-                  .then(() => actions.showMessage(t('generalCopiedToClipboard')))
-              }
+              onPress={copyClanTag}
               style={styles.tagRow}
             >
               <CKText style={styles.tag}>{clan.tag}</CKText>

@@ -150,6 +150,8 @@ export function PlayerDetailHeader({
   const compact = width < 900;
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
+  const copyPlayerTag = () =>
+    void actions.copyTag(player.tag).then(() => actions.showMessage(t('generalCopiedToClipboard')));
   const warAction = model.currentWar
     ? {
         label: t('warOngoing'),
@@ -358,17 +360,24 @@ export function PlayerDetailHeader({
             ) : null}
           </View>
           <View style={[styles.identityCopy, compact && styles.identityCopyCompact]}>
-            <CKText
-              role="titleLarge"
-              numberOfLines={1}
-              style={[styles.headerText, compact && styles.centerText]}
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${player.name}. ${t('generalCopiedToClipboard')}`}
+              testID="player-header-name-copy"
+              onPress={copyPlayerTag}
             >
-              {player.name}
-            </CKText>
+              <CKText
+                role="titleLarge"
+                numberOfLines={1}
+                style={[styles.headerText, compact && styles.centerText]}
+              >
+                {player.name}
+              </CKText>
+            </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={player.tag}
-              onPress={() => void actions.copyTag(player.tag)}
+              onPress={copyPlayerTag}
             >
               <CKText role="labelLarge" style={styles.headerText}>
                 {player.tag}

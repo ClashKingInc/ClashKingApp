@@ -156,8 +156,10 @@ describe('ClanInfoScreen', () => {
       screenActions,
     );
 
+    await fireEvent.press(screen.getByTestId('clan-header-name-copy'));
     await fireEvent.press(screen.getByLabelText('Discord'));
     await fireEvent.press(screen.getByLabelText('Open in game'));
+    expect(screenActions.copyClanTag).toHaveBeenCalledWith('#CLAN');
     expect(screenActions.openDiscord).toHaveBeenCalledWith('Clash123');
     expect(screenActions.openClanInGame).toHaveBeenCalledWith(testClan);
   });
