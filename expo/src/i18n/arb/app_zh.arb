@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "部落战统计范围",
+  "warStatsRangeDescription": "选择统计固定场数的近期部落战，或按天数统计近期时段。",
+  "warStatsRangeDays": "天数",
+  "warStatsRangeWarsToInclude": "纳入统计的部落战",
+  "warStatsRangeDaysToInclude": "纳入统计的天数",
+  "upgradeTrackerAllBuildersOccupied": "所有建筑工人都在忙碌",
+  "upgradeTrackerBuildCost": "建造费用",
+  "upgradeTrackerBuilderBaseBuilders": "建筑大师基地建筑工人",
+  "upgradeTrackerBuilderBaseLaboratory": "建筑大师基地实验室",
+  "upgradeTrackerCalendar": "日历",
+  "upgradeTrackerClearCost": "移除费用",
+  "upgradeTrackerCompletionDetails": "村庄完成度详情",
+  "upgradeTrackerCustomSoundtrack": "自定义配乐",
+  "upgradeTrackerGoldPassPercent": "黄金令牌 {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "{group}摘要",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -28,10 +28,10 @@
       }
     }
   },
-  "upgradeTrackerGuardians": "守护者",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerGuardians": "守卫",
+  "upgradeTrackerHelpers": "助手",
+  "upgradeTrackerHouseParts": "房屋部件",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {空闲建筑工人：#} other {空闲建筑工人：#}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "进行中",
+  "upgradeTrackerItemSemanticLabel": "{item}，等级 {currentLevel}/{targetLevel}{count, plural, =1 {} other {，# 座建筑}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "已拥有：{count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "队列",
   "upgradeTrackerLevelTransition": "等级 {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "当前所需资源",
+  "upgradeTrackerLootOutlook": "资源需求展望",
+  "upgradeTrackerMusic": "音乐",
+  "upgradeTrackerNextDays": "{count, plural, one {未来 # 天} other {未来 # 天}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "下一时段",
+  "upgradeTrackerNoGoldPass": "无黄金令牌",
+  "upgradeTrackerNoMatchingUpgrades": "没有匹配的升级",
+  "upgradeTrackerNoMatchingUpgradesBody": "请尝试其他村庄或队列。",
+  "upgradeTrackerNothingNeededNow": "目前没有所需资源",
+  "upgradeTrackerObstacles": "障碍物",
+  "upgradeTrackerPart": "部件",
+  "upgradeTrackerPassReward": "令牌奖励",
+  "upgradeTrackerPauseSoundtrack": "暂停配乐",
+  "upgradeTrackerPeriodCount": "时段 {current}/{total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,9 +108,9 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
-  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerPlaySoundtrack": "播放配乐",
+  "upgradeTrackerPreviousPeriod": "上一时段",
+  "upgradeTrackerResourceAmount": "{resource}，{amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
       "resource": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "场景",
+  "upgradeTrackerScheduledLane": "已安排到队列 #{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "{village}进度",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "已计划",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "尺寸",
+  "upgradeTrackerSortLongest": "时长从长到短",
+  "upgradeTrackerSortName": "名称 A–Z",
+  "upgradeTrackerSortScheduled": "按计划顺序",
+  "upgradeTrackerSortShortest": "时长从短到长",
+  "upgradeTrackerSoundtrackPosition": "配乐位置",
   "upgradeTrackerStarts": "开始",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "品质",
+  "upgradeTrackerUpgradesStarting": "即将开始的升级",
+  "upgradeTrackerUpgradingNow": "正在升级",
+  "upgradeTrackerWarBase": "战争基地",
+  "notifSettingsSaveFailed": "无法保存通知设置。",
+  "notifPushEnabled": "推送通知已开启",
+  "notifReceiveNotifications": "接收通知",
+  "notifTokenPreview": "令牌：{token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "已启用的提醒可以发送到此设备。",
+  "notifDisabledAccountDescription": "你的整个 ClashKing 账户已关闭通知。",
+  "notifMaximumRemindersAdded": "已添加最大数量的提醒",
+  "notifAddReminder": "添加提醒",
+  "notifDurationOneHour": "1 小时",
+  "notifDurationHours": "{count} 小时",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} 分钟",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "添加{timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "提前 1 小时",
+  "notifTimingHoursBefore": "提前 {count} 小时",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "提前 {count} 分钟",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "此设备已可接收推送通知。",
+  "notifPushPermissionRequired": "请允许通知以接收 ClashKing 提醒。",
+  "notifPushPermissionDenied": "通知权限被拒绝。",
+  "notifPushNotConfigured": "此构建尚未配置 Firebase。",
+  "notifPushTokenUnavailable": "推送令牌暂不可用。",
+  "notifPushUnsupported": "此平台不支持推送通知。",
+  "notifPushInitializing": "正在配置推送通知…",
+  "notificationPrimerTitle": "开启通知？",
+  "notificationPrimerBody": "ClashKing 可以向你发送部落战、CWL、账号和项目更新通知。你可以随时在“设置”>“通知”中更改此选项。",
+  "notificationPrimerNotNow": "暂不",
+  "notificationPrimerAllow": "允许",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "成就",
   "achievementEarnedLabel": "获得次数",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "搜索会员",
   "clanMembersShowTotals": "显示部落总数",
   "clanMembersHideTotals": "隐藏部落总数",
-  "clanMembersReceivedShort": "已接收",
+  "clanMembersReceivedShort": "已收到",
   "clanMembersAverageTh": "平均TH",
   "clanMinimumMembers": "最小成员数",
   "clanMaximumMembers": "最大成员数",
@@ -1105,8 +1105,26 @@
   "warTitle": "部落战",
   "warFrequency": "对战频率",
   "warParticipation": "参战",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "仅参与",
+  "warStatsRangeWarsCompact": "{number}场战争",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number}天",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "最近 {number} 天",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "当前成员",
   "warLeague": "部落战/联赛",
   "warHistory": "部落对战历史",
   "warLog": "对战日志",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "最佳进攻",
   "warAttacksCount": "进攻次数",
   "warAttacksMissed": "错过的进攻",
-  "warAttacksMissedShort": "已错过",
+  "warAttacksMissedShort": "错过了",
   "warAttacksNumber": "在最近 {number_war} 场部落战中，你进攻了 {number_time} 次。",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1592,10 +1610,10 @@
   "clanProfileDescriptionChanged": "描述已更改",
   "clanJoinLeaveTab": "加入/离开",
   "clanRankingsTab": "排行榜",
-  "clanRankingsSeason": "赛季",
+  "clanRankingsSeason": "季节",
   "clanRankingsSelectSeason": "选择排名赛季",
   "clanRankingsFilterActivity": "活动",
-  "clanRankingsFilterWar": "部落战",
+  "clanRankingsFilterWar": "战争",
   "clanRankingsFilterPoints": "积分",
   "cwlHistoryPreviewBadge": "预览",
   "cwlHistoryPreviewSubtitle": "{clan} 模型，直到 CWL 端点修复",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "战争明星",
   "playerWarPreferenceTitle": "战争首选。",
   "playerDonatedTitle": "捐赠",
-  "playerReceivedTitle": "已接收",
+  "playerReceivedTitle": "已收到",
   "playerCapitalTitle": "首都",
   "playerExpLevelTitle": "过期。等级",
   "clanWarWinsTitle": "战争胜利",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "摧毁的都城",
   "raidsCompleted": "已完成突袭",
   "capitalRaidStatusOngoing": "进行中",
-  "capitalRaidStatusEnded": "已结束",
+  "capitalRaidStatusEnded": "结束",
   "capitalRaidLoot": "抢劫",
   "capitalRaidRewards": "奖励",
   "capitalRaidPreviousWeek": "上周",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "已连接的应用",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "查看并断开拥有账号访问权限的应用。",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "有效连接",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "没有已连接的应用",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "你连接的应用会显示在这里。",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "无法加载已连接的应用",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "所有当前及未来关联的账号",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "已选择 {count} 个账号",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "断开连接",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "断开应用连接？",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} 将立即失去对你关联账号的访问权限。",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "已断开 {name}。",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "无法断开 {name}。请重试。",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "已登录",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2880,7 +2970,7 @@
   "dashboardUpgradeTrackerTimeLeft": "预计",
   "dashboardUpgradeTrackerBuilders": "建筑工人",
   "dashboardUpgradeTrackerLab": "实验室",
-  "dashboardUpgradeTrackerPets": "宠物",
+  "dashboardUpgradeTrackerPets": "战宠",
   "dashboardUpgradeTrackerWalls": "城墙",
   "dashboardUpgradeTrackerVillage": "村庄",
   "dashboardRankedNoData": "打开排位联赛即可查看该账号的排名情况。",
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "刷新战争数据",
   "warWidgetNoData": "没有可用的战争数据",
   "warWidgetLastUpdated": "最后更新：{time}",
-  "todoEventClanGames": "部落竞赛",
+  "todoEventClanGames": "部落游戏",
   "todoEventCwl": "部落联赛",
   "todoEventSeasonEnds": "赛季结束",
   "todoEventLeagueReset": "联赛重置",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "添加部落战小组件",
   "settingsWarWidgetLinkClanFirst": "请先关联一个在部落中的账号",
   "settingsWarWidgetClanCount": "有 {count} 个部落可用",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "选择一个部落。添加小组件后，长按它，轻点编辑小组件，然后选择部落。",
+  "settingsWarWidgetAndroidInstructions": "选择一个部落，然后从 Android 小组件选择器中添加该小组件。",
+  "settingsWarWidgetEmpty": "你关联的账号目前都不在部落中。",
+  "settingsWarWidgetIosFooter": "可添加多个部落战小组件，并为每个小组件选择不同的部落。",
+  "settingsWarWidgetIosReady": "{clanName} 已准备好。请编辑小组件并在部落中选择它。",
+  "settingsWarWidgetAndroidReady": "{clanName} 的小组件数据已准备好。",
+  "settingsWarWidgetPrepareFailed": "无法准备小组件：{error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "机器人关联账号和 Discord 数据",
   "settingsDiscordSyncSubtitle": "同步机器人关联账号和 Discord 数据",
@@ -3165,7 +3255,7 @@
   "resourceShinyOre": "闪亮矿石",
   "resourceGeneric": "资源",
   "seasonStatsGoldGrabbed": "掠夺金币",
-  "seasonStatsActivity": "活动",
+  "seasonStatsActivity": "活跃度",
   "seasonStatsAttackWins": "进攻胜利",
   "seasonStatsTrophies": "赛季奖杯",
   "todoSearchAccountsHint": "搜索账号",
@@ -3293,13 +3383,13 @@
   },
   "rankingsPlayerLoadFailed": "加载该玩家失败。",
   "rankingsClanLoadFailed": "加载该部落失败。",
-  "sideStatsTitle": "统计数据",
+  "sideStatsTitle": "统计",
   "sideStatsSubtitle": "基于汇总战报的战斗分析。",
   "sideStatsLoadError": "无法加载战斗情报。",
   "statsOverview": "概述",
   "statsArmies": "军队",
   "statsItems": "物品",
-  "statsWar": "部落战",
+  "statsWar": "战争",
   "statsCwl": "部落联赛",
   "statsRanked": "排位战",
   "statsDateRange": "日期范围",
@@ -3314,8 +3404,8 @@
   "statsPerformance": "表现",
   "statsSamples": "样本",
   "statsUsage": "使用情况",
-  "statsAverageStars": "平均胜利之星",
-  "statsAverageDestruction": "平均摧毁",
+  "statsAverageStars": "平均星星数",
+  "statsAverageDestruction": "平均破坏力",
   "statsStarRates": "星级率",
   "statsThreeStarRate": "三星级",
   "statsDailyTrend": "每日趋势",
@@ -3346,7 +3436,7 @@
   "statsCompositionShare": "构图分享",
   "statsNoLevels": "军队记录不包含物品等级。",
   "statsRankedCompositionOnly": "构图数据来自排名战日志；战争和 CWL 表现保持独立。",
-  "statsTownHall": "大本营",
+  "statsTownHall": "市政厅",
   "statsOpponentTownHall": "对手市政厅",
   "statsEqualTownHalls": "平等的市政厅",
   "statsLeagueTier": "联赛等级",
@@ -3354,7 +3444,7 @@
   "statsCwlLeague": "CWL联赛",
   "statsLeagueBronze": "铜",
   "statsLeagueSilver": "银",
-  "statsLeagueGold": "金币",
+  "statsLeagueGold": "金",
   "statsLeagueCrystal": "水晶",
   "statsLeagueMaster": "大师",
   "statsLeagueChampion": "冠军",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "季节细分",
   "sideTopScore": "最高分",
   "sideTop200Avg": "前 200 平均",
-  "sideBasesArmiesTitle": "基地和军队",
+  "sideBasesArmiesTitle": "阵型与配兵",
   "sideBasesArmiesSubtitle": "Discord 保存的阵型和军队链接。",
   "sideBotSyncTarget": "机器人同步目标",
   "sideBotSyncTargetBody": "机器人已经把阵型和军队保存到 Discord 个人资料。此页面已准备好接收同步的数据。",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "已保存军队",
   "sideArmyLinks": "军队链接",
   "sideArmyLinksBody": "配置、法术、攻城机器、备注和分享链接。",
-  "sideGameAssetsTitle": "游戏资产",
+  "sideGameAssetsTitle": "游戏素材",
   "sideGameAssetsSubtitle": "托管的 ClashKing 素材，按文件夹分组。",
   "gameAssetsLoadError": "无法加载游戏素材",
   "gameAssetsEmptyTitle": "无可用游戏素材",
@@ -3511,9 +3601,9 @@
   "assetFolderResources": "资源",
   "assetFolderStickers": "贴纸",
   "upgradeSectionHeroes": "英雄",
-  "upgradeSectionTroops": "部队",
+  "upgradeSectionTroops": "军队",
   "upgradeSectionSpells": "法术",
-  "upgradeSectionPets": "宠物",
+  "upgradeSectionPets": "战宠",
   "upgradeSectionEquipment": "装备",
   "sideMockupSource": "来源",
   "sideMockupMode": "模式",
@@ -3532,7 +3622,7 @@
   "endpointTop200ArmyUsagePreview": "战斗日志 · 军队和法术使用率",
   "endpointStateTop200": "前 200",
   "endpointStateWeekly": "每周",
-  "endpointStateUsage": "使用情况",
+  "endpointStateUsage": "使用率",
   "notifGroupReminders": "提醒",
   "notifGroupProgress": "进度",
   "notifLeagueDefense": "联赛防守",
@@ -3886,7 +3976,7 @@
     }
   },
   "upgradeTrackerLaboratory": "实验室",
-  "upgradeTrackerPets": "宠物",
+  "upgradeTrackerPets": "战宠",
   "upgradeTrackerWalls": "城墙",
   "upgradeTrackerEquipment": "装备",
   "upgradeTrackerLevelsRemaining": "剩余 {count} 级",
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "已选择账号",
   "notifAudienceAcrossDevicesDescription": "选择哪些账号可以在此设备上接收通知。",
-  "notifAccountBookmarked": "已添加书签",
+  "notifAccountBookmarked": "已收藏",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "战争袭击",
+  "notifGroupWarAttacks": "部落战进攻",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4293,7 +4383,7 @@
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
-  "notifGroupEvents": "事件",
+  "notifGroupEvents": "活动",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
@@ -4465,7 +4555,7 @@
   "todoExplanationRaidsTitle": "都城突袭：",
   "todoExplanationRaids": "每个账号计 5 分（若已解锁最后一次进攻则计 6 分），1 次进攻 = 1 分。",
   "clanWarFrequencyTitle": "战争",
-  "notifScopeAllAccounts": "所有账号",
+  "notifScopeAllAccounts": "所有账户",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
@@ -4473,7 +4563,7 @@
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "筛选器",
+  "searchFilters": "过滤器",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
@@ -4538,20 +4628,20 @@
   "gameAssetsCategoryEquipment": "装备",
   "gameAssetsCategoryGuardians": "守护者",
   "gameAssetsCategoryHeroes": "英雄",
-  "gameAssetsCategoryPets": "宠物",
+  "gameAssetsCategoryPets": "战宠",
   "gameAssetsCategorySkins": "皮肤",
   "gameAssetsCategorySpells": "法术",
-  "gameAssetsCategoryTroops": "部队",
-  "assetFolderTroops": "部队",
+  "gameAssetsCategoryTroops": "兵种",
+  "assetFolderTroops": "军队",
   "assetFolderSpells": "法术",
   "assetFolderHeroes": "英雄",
-  "endpointStateWins": "胜利",
+  "endpointStateWins": "胜场",
   "notifGroupBattles": "战斗",
   "notifGroupSupport": "支持",
   "rankedLeagueAccountSelector": "显示账号",
   "rankedLeagueStars": "星数",
   "playerBattlelogTab": "战斗",
-  "playerActivityTab": "活动",
+  "playerActivityTab": "活跃度",
   "playerBattlelogFarming": "资源收集",
   "playerBattlelogRanked": "排位战",
   "playerBattlelogFarmingOverview": "资源收集概览",
@@ -4566,8 +4656,8 @@
     }
   },
   "playerBattlelogAttacks": "进攻记录",
-  "playerBattlelogAverageDestruction": "平均摧毁",
-  "playerBattlelogAverageStars": "平均胜利之星",
+  "playerBattlelogAverageDestruction": "平均破坏力",
+  "playerBattlelogAverageStars": "平均星星数",
   "playerBattlelogTripleRate": "三星级",
   "playerBattlelogAverageLoot": "平均战利品",
   "playerBattlelogPopularTroops": "最常用的兵种",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "计划优先事项",
+  "upgradeTrackerPlanPrioritiesDescription": "对最重要的事情进行排名。升级水平和积极的工作始终保持井然有序。",
   "upgradeTrackerPlanClose": "关闭",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "规划目标",
+  "upgradeTrackerPlanConstructionSubtitle": "建造和英雄升级",
+  "upgradeTrackerPlanResearchSubtitle": "军队、法术和攻城研究",
+  "upgradeTrackerPlanPetHouseSubtitle": "宠物屋升级",
+  "upgradeTrackerPlanPrioritizeNewItems": "优先考虑新项目",
+  "upgradeTrackerPlanPrioritizeNewDescription": "首先放置新解锁或未构建的物品",
+  "upgradeTrackerPlanSharedSummary": "第 {tier} · 共享混合 {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "级别 {tier} · 严格 · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "运行直到达到最大",
+  "upgradeTrackerPlanYieldsAfter": "{target}%后的收益率",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "严格",
+  "upgradeTrackerPlanMax": "最大",
+  "upgradeTrackerPlanReorder": "重新排序{category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "相对层权重",
+  "upgradeTrackerPlanCompletionTarget": "完成目标",
+  "upgradeTrackerPlanStrictTier": "严格的层级",
+  "upgradeTrackerPlanWeight": "重量{value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "直到达到最大",
+  "upgradeTrackerPlanUntilPercent": "直到{value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "编号层首先运行。共享行保持相同的层数，并且它们的组合根据相对权重进行标准化，因此 50 + 25 变为 67% / 33%。目标在达到该百分比后会产生类别收益，并在以后保持合格状态。",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "前进前最大",
+  "upgradeTrackerPlanGoalRushNextHall": "快速到达下一个大厅",
+  "upgradeTrackerPlanGoalCatchUp": "赶上匆忙的水平",
+  "upgradeTrackerPlanGoalUnlockFirst": "首先解锁新事物",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "每周墙",
   "upgradeTrackerPlanOff": "关闭",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count}/周",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "墙壁更喜欢金色",
+  "upgradeTrackerPlanPreferGoldDescription": "花费墙壁时先使用金币再使用圣水",
+  "upgradeTrackerPlanApplyPriorities": "应用优先级",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "精心设计的防御",
+  "upgradeTrackerPlanCategoryTraps": "陷阱",
+  "upgradeTrackerPlanCategoryArmy": "陆军",
+  "upgradeTrackerPlanCategoryDarkTroops": "黑暗部队",
+  "upgradeTrackerPlanCategorySieges": "围攻",
+  "upgradeTrackerPlanCategorySupercharge": "增压",
+  "navigationCloseDrawer": "关闭导航抽屉",
+  "navigationOpenProfileMenu": "打开个人资料菜单",
+  "navigationClashKingWeb": "ClashKing 网页版",
+  "settingsPrivacyDataTitle": "隐私与数据",
+  "settingsPrivacyPolicyDescription": "查看 ClashKing 收集哪些信息、使用这些信息的原因、由谁处理、保留规则以及如何联系我们。",
+  "settingsPrivacyExportTitle": "访问或导出你的数据",
+  "settingsPrivacyExportDescription": "下载与你的 ClashKing 登录信息关联的账户数据副本，包括已关联的 Clash of Clans 账户和通知偏好设置。",
+  "settingsPrivacyCorrectionTitle": "更正或限制数据",
+  "settingsPrivacyCorrectionDescription": "在账户设置中移除已关联的 Clash of Clans 账户、关闭通知，或联系支持团队提出更正或限制请求。",
+  "settingsPrivacyDeletionTitle": "删除你的 ClashKing 账户",
+  "settingsPrivacyDeletionDescription": "此操作会开始删除你的 ClashKing 账户和相关应用数据，但 ClashKing 可能因安全、防欺诈或法律义务而需要保留有限的记录。",
+  "settingsPrivacyChildrenTitle": "儿童与家庭",
+  "settingsPrivacyChildrenDescription": "ClashKing 是面向普通用户的辅助应用，并非面向儿童。如果你在所在国家或地区尚未达到无需父母或监护人批准即可自行同意的年龄，请勿创建账户。",
+  "settingsPrivacyExportReady": "你的数据导出已可保存。",
+  "settingsPrivacyExportCreateFailed": "无法创建数据导出，已改为准备一封隐私相关邮件。",
+  "settingsPrivacyExportPrepareFirst": "请先准备导出内容，再进行保存。",
+  "settingsPrivacyExportSaved": "你的数据导出已保存。",
+  "settingsPrivacyExportSaveFailed": "无法保存数据导出，已改为准备一封隐私相关邮件。",
+  "settingsPrivacyDeleteUnavailable": "此版本无法删除账户，已改为准备一封隐私相关邮件。",
+  "settingsPrivacyOpenPolicy": "打开政策",
+  "settingsPrivacyRefreshExport": "刷新导出",
+  "settingsPrivacyPrepareExport": "准备导出",
+  "settingsPrivacySaveExport": "保存导出",
+  "settingsPrivacyContactSupport": "联系支持团队",
+  "settingsPrivacyDeleteAccount": "删除账户",
+  "settingsPrivacyDeleteConfirmTitle": "要删除账户吗？",
+  "settingsPrivacyDeleteConfirmDescription": "此请求一经处理便无法撤销。你可能会失去已关联的账户、通知设置、已保存的偏好设置和身份验证方式。",
+  "generalUnranked": "未定级",
+  "playerJoinLeaveTab": "加入 / 离开",
+  "playerUpgradeRemainingAccessibility": "大本营 {townHallLevel} 的剩余进度",
+  "playerUpgradeSummaryTitle": "大本营 {townHallLevel} 已完成 {progress}%",
+  "playerUpgradeSectionMaxed": "此部分已达到大本营 {townHallLevel} 的最高等级。",
+  "playerUpgradeTimeRemaining": "剩余时间",
+  "playerUpgradeNoResourceData": "没有资源数据",
+  "playerJoinLeaveLoadError": "无法加载加入 / 离开历史",
+  "playerJoinLeaveClanTotals": "部落汇总",
   "playerJoinLeaveTime": "时间",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "停留时间",
+  "playerJoinLeaveVisits": "访问次数",
+  "playerJoinLeaveJoined": "已加入",
+  "playerJoinLeaveLeft": "已离开",
+  "playerJoinLeaveNoHistory": "没有加入 / 离开历史",
+  "playerJoinLeaveNoClanTotals": "没有可用的部落汇总",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
