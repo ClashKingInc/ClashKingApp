@@ -36,7 +36,14 @@ const CAPTURE_TIMEOUT_MS = 12_000;
 const ARTWORK_TIMEOUT_MS = 2_500;
 
 export type TrackerProgressSectionKey =
-  'walls' | 'buildings' | 'heroes' | 'laboratory' | 'pets' | 'equipment' | 'craftedDefenses';
+  | 'walls'
+  | 'buildings'
+  | 'supercharges'
+  | 'heroes'
+  | 'laboratory'
+  | 'pets'
+  | 'equipment'
+  | 'craftedDefenses';
 
 export interface TrackerProgressSection {
   readonly key: TrackerProgressSectionKey;
@@ -45,7 +52,7 @@ export interface TrackerProgressSection {
 }
 
 export function trackerProgressGraphicAspectRatio(sectionCount: number) {
-  const visibleSections = Math.max(1, Math.min(7, Math.round(sectionCount)));
+  const visibleSections = Math.max(1, Math.min(8, Math.round(sectionCount)));
   return Math.min(1, 0.64 + (7 - visibleSections) * 0.07);
 }
 
@@ -68,9 +75,15 @@ export function trackerProgressSections(
           item.category !== UpgradeCategory.walls &&
           item.category !== UpgradeCategory.heroes &&
           item.category !== UpgradeCategory.builders &&
-          item.category !== UpgradeCategory.craftedDefenses,
+          item.category !== UpgradeCategory.craftedDefenses &&
+          item.category !== UpgradeCategory.supercharge,
       ),
       'defenses',
+    ],
+    [
+      'supercharges',
+      items.filter((item) => item.category === UpgradeCategory.supercharge),
+      'supercharge',
     ],
     ['heroes', items.filter((item) => item.category === UpgradeCategory.heroes), 'heroes'],
     ['laboratory', items.filter((item) => item.queue === UpgradeQueue.laboratory), 'troops'],
@@ -294,6 +307,36 @@ const ProgressGraphic = forwardRef<
   const builderTime = queueDurationSeconds(snapshot, village, UpgradeQueue.builders, startsAt);
   const laboratoryTime = queueDurationSeconds(snapshot, village, UpgradeQueue.laboratory, startsAt);
   const builderCount = snapshot.buildersFor(village);
+  const remainingBuilderItems = snapshot.itemsFor({
+    village,
+    queue: UpgradeQueue.builders,
+    remainingOnly: true,
+  });
+  const temporaryBuilderItems = remainingBuilderItems.filter(
+    (item) =>
+      item.category === UpgradeCategory.supercharge ||
+      item.category === UpgradeCategory.craftedDefenses,
+  );
+  const builderTemporaryContent = [
+    ...new Set(temporaryBuilderItems.map((item) => item.category)),
+  ].map((category) =>
+    progressSectionLabel(
+      category === UpgradeCategory.supercharge ? 'supercharges' : 'craftedDefenses',
+      t,
+    ),
+  );
+  const baseBuilderTime = queueDurationSeconds(
+    snapshot,
+    village,
+    UpgradeQueue.builders,
+    startsAt,
+    new Set(
+      remainingBuilderItems
+        .filter((item) => !temporaryBuilderItems.includes(item))
+        .map((item) => item.planKey),
+    ),
+  );
+  const builderTemporaryTime = Math.max(0, builderTime - baseBuilderTime);
   const hall = village === UpgradeVillage.home ? snapshot.townHallLevel : snapshot.builderHallLevel;
   return (
     <View style={shareStyles.graphic}>
@@ -333,19 +376,10 @@ const ProgressGraphic = forwardRef<
           <CompletionDate
             imageUrl={ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)}
             label={t('upgradeTrackerBuildersCount', { count: builderCount })}
+            includedContent={builderTemporaryContent}
+            includedSeconds={builderTemporaryTime}
             seconds={builderTime}
             date={completionDate(startsAt, builderTime)}
-            locale={intlLocale}
-          />
-          <CompletionDate
-            imageUrl={
-              village === UpgradeVillage.home
-                ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
-                : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1)
-            }
-            label={t('upgradeTrackerLaboratory')}
-            seconds={laboratoryTime}
-            date={completionDate(startsAt, laboratoryTime)}
             locale={intlLocale}
           />
         </View>
@@ -409,12 +443,16 @@ const ProgressGraphic = forwardRef<
 function CompletionDate({
   imageUrl,
   label,
+  includedContent = [],
+  includedSeconds = 0,
   seconds,
   date,
   locale,
 }: {
   imageUrl: string;
   label: string;
+  includedContent?: readonly string[];
+  includedSeconds?: number;
   seconds: number;
   date: Date | null;
   locale: string;
@@ -424,6 +462,13 @@ function CompletionDate({
       <Image source={{ uri: imageUrl }} style={shareStyles.completionDateIcon} />
       <View style={shareStyles.grow}>
         <CKText style={shareStyles.completionDateLabel}>{label}</CKText>
+        {includedContent.length > 0 && includedSeconds > 0 ? (
+          <CKText style={shareStyles.completionDateIncluded} numberOfLines={1} adjustsFontSizeToFit>
+            + {formatTrackerDuration(includedSeconds)} · {includedContent.join(' · ')}
+          </CKText>
+        ) : null}
+      </View>
+      <View style={shareStyles.completionDateTiming}>
         <CKText style={shareStyles.completionDateDuration} numberOfLines={1}>
           {seconds > 0 ? formatTrackerDuration(seconds) : '—'}
         </CKText>
@@ -526,6 +571,7 @@ function progressSectionLabel(key: TrackerProgressSectionKey, t: I18nValue['t'])
   const labels: Record<TrackerProgressSectionKey, string> = {
     walls: t('upgradeTrackerWalls'),
     buildings: t('gameAssetsCategoryBuildings'),
+    supercharges: t('upgradeTrackerPlanCategorySupercharge'),
     heroes: t('gameHeroes'),
     laboratory: t('upgradeTrackerLaboratory'),
     pets: t('upgradeTrackerPets'),
@@ -586,6 +632,7 @@ function queueDurationSeconds(
   village: UpgradeVillageValue,
   queue: (typeof UpgradeQueue)[keyof typeof UpgradeQueue],
   startsAt: Date,
+  includedItemKeys?: ReadonlySet<string>,
 ) {
   const finish = snapshot
     .buildPlan({
@@ -593,6 +640,7 @@ function queueDurationSeconds(
       strategy: UpgradePlanStrategy.balanced,
       village,
       startsAt,
+      includedItemKeys,
     })
     .reduce<Date | null>(
       (latest, lane) =>
@@ -676,6 +724,8 @@ const shareStyles = StyleSheet.create({
   },
   completionDateIcon: { width: 21, height: 21, resizeMode: 'contain' },
   completionDateLabel: { color: '#bfc2c8', fontSize: 8, fontWeight: '700' },
+  completionDateIncluded: { color: '#f1b84b', fontSize: 7, fontWeight: '900' },
+  completionDateTiming: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   completionDateDuration: { color: '#fff', fontSize: 9, fontWeight: '900' },
   completionDateValue: { color: '#fff', fontSize: 9, fontWeight: '900' },
   resourceRow: { minHeight: 16, flexDirection: 'row', alignItems: 'center', gap: 6 },

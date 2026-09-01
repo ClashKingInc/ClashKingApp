@@ -77,6 +77,7 @@ describe('upgrade tracker parity helpers', () => {
       [UpgradeCategory.walls, UpgradeQueue.builders],
       [UpgradeCategory.defenses, UpgradeQueue.builders],
       [UpgradeCategory.guardians, UpgradeQueue.builders],
+      [UpgradeCategory.supercharge, UpgradeQueue.builders],
       [UpgradeCategory.heroes, UpgradeQueue.builders],
       [UpgradeCategory.troops, UpgradeQueue.laboratory],
       [UpgradeCategory.pets, UpgradeQueue.pets],
@@ -119,6 +120,7 @@ describe('upgrade tracker parity helpers', () => {
     expect(sections.map((section) => section.key)).toEqual([
       'walls',
       'buildings',
+      'supercharges',
       'heroes',
       'laboratory',
       'pets',
@@ -145,7 +147,8 @@ describe('upgrade tracker parity helpers', () => {
         (item) =>
           item.category !== UpgradeCategory.pets &&
           item.category !== UpgradeCategory.equipment &&
-          item.category !== UpgradeCategory.craftedDefenses,
+          item.category !== UpgradeCategory.craftedDefenses &&
+          item.category !== UpgradeCategory.supercharge,
       ),
       collections: [],
       boosts: new UpgradeBoosts(),
@@ -155,6 +158,7 @@ describe('upgrade tracker parity helpers', () => {
     expect(
       trackerProgressSections(lowerTownHall, UpgradeVillage.home).map(({ key }) => key),
     ).toEqual(['walls', 'buildings', 'heroes', 'laboratory']);
+    expect(trackerProgressGraphicAspectRatio(8)).toBeCloseTo(0.57);
     expect(trackerProgressGraphicAspectRatio(7)).toBe(0.64);
     expect(trackerProgressGraphicAspectRatio(4)).toBeCloseTo(0.85);
   });
