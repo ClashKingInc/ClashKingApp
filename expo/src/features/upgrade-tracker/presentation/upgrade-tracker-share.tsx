@@ -283,6 +283,7 @@ const ProgressGraphic = forwardRef<
   const sections = trackerProgressSections(snapshot, village);
   const builderTime = queueDurationSeconds(snapshot, village, UpgradeQueue.builders, startsAt);
   const laboratoryTime = queueDurationSeconds(snapshot, village, UpgradeQueue.laboratory, startsAt);
+  const builderCount = snapshot.buildersFor(village);
   const hall = village === UpgradeVillage.home ? snapshot.townHallLevel : snapshot.builderHallLevel;
   return (
     <View style={shareStyles.graphic}>
@@ -313,30 +314,30 @@ const ProgressGraphic = forwardRef<
             </CKText>
             <CKText style={shareStyles.silver}>{snapshot.tag}</CKText>
           </View>
-        </View>
-        <View style={shareStyles.progressSummaryRow}>
-          <View style={shareStyles.grow}>
+          <View style={shareStyles.overallProgress}>
             <CKText style={shareStyles.percent}>{(overall.completion * 100).toFixed(1)}%</CKText>
             <CKText style={shareStyles.silverStrong}>{t('generalCompleted')}</CKText>
           </View>
-          <View style={shareStyles.completionDates}>
-            <CompletionDate
-              imageUrl={ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)}
-              label={t('dashboardUpgradeTrackerBuilders')}
-              date={completionDate(startsAt, builderTime)}
-              locale={intlLocale}
-            />
-            <CompletionDate
-              imageUrl={
-                village === UpgradeVillage.home
-                  ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
-                  : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1)
-              }
-              label={t('upgradeTrackerLaboratory')}
-              date={completionDate(startsAt, laboratoryTime)}
-              locale={intlLocale}
-            />
-          </View>
+        </View>
+        <View style={shareStyles.completionDates}>
+          <CompletionDate
+            imageUrl={ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)}
+            label={t('upgradeTrackerBuildersCount', { count: builderCount })}
+            seconds={builderTime}
+            date={completionDate(startsAt, builderTime)}
+            locale={intlLocale}
+          />
+          <CompletionDate
+            imageUrl={
+              village === UpgradeVillage.home
+                ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
+                : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1)
+            }
+            label={t('upgradeTrackerLaboratory')}
+            seconds={laboratoryTime}
+            date={completionDate(startsAt, laboratoryTime)}
+            locale={intlLocale}
+          />
         </View>
         <View style={shareStyles.categoryList}>
           {sections.map((section) => (
@@ -396,11 +397,13 @@ const ProgressGraphic = forwardRef<
 function CompletionDate({
   imageUrl,
   label,
+  seconds,
   date,
   locale,
 }: {
   imageUrl: string;
   label: string;
+  seconds: number;
   date: Date | null;
   locale: string;
 }) {
@@ -409,6 +412,9 @@ function CompletionDate({
       <Image source={{ uri: imageUrl }} style={shareStyles.completionDateIcon} />
       <View style={shareStyles.grow}>
         <CKText style={shareStyles.completionDateLabel}>{label}</CKText>
+        <CKText style={shareStyles.completionDateDuration} numberOfLines={1}>
+          {seconds > 0 ? formatTrackerDuration(seconds) : '—'}
+        </CKText>
         <CKText style={shareStyles.completionDateValue} numberOfLines={1}>
           {date ? formatTrackerCompletionDate(date, locale) : '—'}
         </CKText>
@@ -634,35 +640,37 @@ const shareStyles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   grow: { flex: 1 },
   graphicBoundary: { width: '100%' },
-  progressGraphicBoundary: { aspectRatio: 0.62 },
+  progressGraphicBoundary: { aspectRatio: 0.55 },
   collectionGraphicBoundary: { aspectRatio: 1 },
   graphic: { flex: 1, borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
   graphicShade: { backgroundColor: '#050506dc' },
-  graphicContent: { flex: 1, padding: 20 },
+  graphicContent: { flex: 1, padding: 18 },
   hall: { width: 58, height: 58, resizeMode: 'contain' },
   whiteTitle: { color: '#fff', fontSize: 20, fontWeight: '900' },
   silver: { color: '#bfc2c8', fontSize: 11, fontWeight: '700' },
   silverStrong: { color: '#d4d7dd', fontSize: 11, fontWeight: '900' },
-  progressSummaryRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 12, marginTop: 8 },
-  percent: { color: '#fff', fontSize: 42, lineHeight: 46, fontWeight: '900' },
-  completionDates: { width: '54%', gap: 5, paddingBottom: 1 },
+  overallProgress: { alignItems: 'flex-end' },
+  percent: { color: '#fff', fontSize: 28, lineHeight: 31, fontWeight: '900' },
+  completionDates: { flexDirection: 'row', gap: 6, marginTop: 8 },
   completionDate: {
-    minHeight: 30,
+    flex: 1,
+    minHeight: 42,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     borderRadius: 10,
     backgroundColor: '#1a1a1ecc',
     paddingHorizontal: 7,
-    paddingVertical: 4,
+    paddingVertical: 5,
   },
   completionDateIcon: { width: 21, height: 21, resizeMode: 'contain' },
   completionDateLabel: { color: '#bfc2c8', fontSize: 8, fontWeight: '700' },
+  completionDateDuration: { color: '#fff', fontSize: 9, fontWeight: '900' },
   completionDateValue: { color: '#fff', fontSize: 9, fontWeight: '900' },
   resourceRow: { minHeight: 16, flexDirection: 'row', alignItems: 'center', gap: 6 },
   resourcePair: { flexDirection: 'row', alignItems: 'center', gap: 3 },
   resourceIcon: { width: 14, height: 14, resizeMode: 'contain' },
-  categoryList: { gap: 6, marginTop: 10 },
+  categoryList: { gap: 5, marginTop: 8 },
   categoryRow: {
     minHeight: 35,
     flexDirection: 'row',

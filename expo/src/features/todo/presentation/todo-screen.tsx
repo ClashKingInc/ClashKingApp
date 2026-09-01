@@ -281,7 +281,6 @@ function TodoHeaderStats({
           progress={summary.progressRatio}
           size={52}
           color={summary.openTasks === 0 ? statColors.win : theme.primary}
-          foreground="#FFF"
         />
         <View style={styles.flex}>
           <CKText style={styles.progressTitle} numberOfLines={1}>
@@ -521,12 +520,10 @@ function ProgressRing({
   progress,
   size,
   color,
-  foreground,
 }: {
   progress: number;
   size: number;
   color: string;
-  foreground?: string;
 }) {
   const theme = useCKTheme();
   const value = Math.max(0, Math.min(1, progress));
@@ -562,11 +559,6 @@ function ProgressRing({
           origin={`${size / 2}, ${size / 2}`}
         />
       </Svg>
-      <View style={styles.ringLabel}>
-        <CKText style={{ color: foreground, fontSize: 13, fontWeight: '900' }}>
-          {Math.round(value * 100)}%
-        </CKText>
-      </View>
     </View>
   );
 }
@@ -851,15 +843,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   timerGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
-  ringLabel: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   modalBackdrop: {
     flex: 1,
     backgroundColor: '#00000033',
