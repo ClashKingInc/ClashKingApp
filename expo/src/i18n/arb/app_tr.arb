@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Savaş istatistikleri aralığı",
+  "warStatsRangeDescription": "İstatistiklerin sabit sayıda son savaşı mı yoksa gün cinsinden yakın bir dönemi mi kapsayacağını seç.",
+  "warStatsRangeDays": "Gün",
+  "warStatsRangeWarsToInclude": "Dahil edilecek savaşlar",
+  "warStatsRangeDaysToInclude": "Dahil edilecek günler",
+  "upgradeTrackerAllBuildersOccupied": "Tüm inşaatçılar meşgul",
+  "upgradeTrackerBuildCost": "İnşa maliyeti",
+  "upgradeTrackerBuilderBaseBuilders": "İnşaatçı Üssü inşaatçıları",
+  "upgradeTrackerBuilderBaseLaboratory": "İnşaatçı Üssü laboratuvarı",
+  "upgradeTrackerCalendar": "Takvim",
+  "upgradeTrackerClearCost": "Kaldırma maliyeti",
+  "upgradeTrackerCompletionDetails": "Köy tamamlanma ayrıntıları",
+  "upgradeTrackerCustomSoundtrack": "Özel müzik",
+  "upgradeTrackerGoldPassPercent": "%{percent} Altın Bilet",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "{group} özeti",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,9 +29,9 @@
     }
   },
   "upgradeTrackerGuardians": "Muhafızlar",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerHelpers": "Yardımcılar",
+  "upgradeTrackerHouseParts": "Ev parçaları",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# boşta inşaatçı} other {# boşta inşaatçı}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "Devam ediyor",
+  "upgradeTrackerItemSemanticLabel": "{item}, seviye {currentLevel}/{targetLevel}{count, plural, =1 {} other {, # bina}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "Sahip olunan: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Hat",
   "upgradeTrackerLevelTransition": "Seviye {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Şimdi gereken ganimet",
+  "upgradeTrackerLootOutlook": "Ganimet görünümü",
+  "upgradeTrackerMusic": "Müzik",
+  "upgradeTrackerNextDays": "{count, plural, one {Önümüzdeki # gün} other {Önümüzdeki # gün}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Sonraki dönem",
+  "upgradeTrackerNoGoldPass": "Altın Bilet yok",
+  "upgradeTrackerNoMatchingUpgrades": "Eşleşen yükseltme yok",
+  "upgradeTrackerNoMatchingUpgradesBody": "Başka bir köy veya sıra deneyin.",
+  "upgradeTrackerNothingNeededNow": "Şu anda gereken bir şey yok",
+  "upgradeTrackerObstacles": "Engeller",
+  "upgradeTrackerPart": "Parça",
+  "upgradeTrackerPassReward": "Bilet ödülü",
+  "upgradeTrackerPauseSoundtrack": "Müziği duraklat",
+  "upgradeTrackerPeriodCount": "Dönem {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Müziği çal",
+  "upgradeTrackerPreviousPeriod": "Önceki dönem",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Manzaralar",
+  "upgradeTrackerScheduledLane": "#{lane}. hatta planlandı",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "{village} ilerlemesi",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "Planlandı",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
-  "upgradeTrackerStarts": "Başlar",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerSize": "Boyut",
+  "upgradeTrackerSortLongest": "Önce en uzun",
+  "upgradeTrackerSortName": "Ad A–Z",
+  "upgradeTrackerSortScheduled": "Planlanan",
+  "upgradeTrackerSortShortest": "Önce en kısa",
+  "upgradeTrackerSoundtrackPosition": "Müzik konumu",
+  "upgradeTrackerStarts": "Başlangıç",
+  "upgradeTrackerTier": "Kademe",
+  "upgradeTrackerUpgradesStarting": "başlayacak yükseltmeler",
+  "upgradeTrackerUpgradingNow": "Şimdi yükseltiliyor",
+  "upgradeTrackerWarBase": "Savaş Üssü",
+  "notifSettingsSaveFailed": "Bildirim ayarları kaydedilemedi.",
+  "notifPushEnabled": "Anlık bildirimler etkin",
+  "notifReceiveNotifications": "Bildirimleri al",
+  "notifTokenPreview": "Jeton: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Etkin uyarılarınız bu cihaza gönderilebilir.",
+  "notifDisabledAccountDescription": "Bildirimler tüm ClashKing hesabınızda kapalı.",
+  "notifMaximumRemindersAdded": "En fazla sayıda hatırlatıcı eklendi",
+  "notifAddReminder": "Hatırlatıcı ekle",
+  "notifDurationOneHour": "1 saat",
+  "notifDurationHours": "{count} saat",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} dakika",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "{timing} ekle",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 saat önce",
+  "notifTimingHoursBefore": "{count} saat önce",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} dakika önce",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Anlık bildirimler bu cihazda hazır.",
+  "notifPushPermissionRequired": "ClashKing uyarılarını almak için bildirimlere izin verin.",
+  "notifPushPermissionDenied": "Bildirim izni reddedildi.",
+  "notifPushNotConfigured": "Firebase bu derleme için yapılandırılmamış.",
+  "notifPushTokenUnavailable": "Henüz bir anlık bildirim jetonu yok.",
+  "notifPushUnsupported": "Anlık bildirimler bu platformda desteklenmiyor.",
+  "notifPushInitializing": "Anlık bildirimler yapılandırılıyor…",
+  "notificationPrimerTitle": "Bildirimler etkinleştirilsin mi?",
+  "notificationPrimerBody": "ClashKing savaş, CWL, hesap ve proje güncellemelerini sana bildirebilir. Bunu istediğin zaman Ayarlar > Bildirimler bölümünden değiştirebilirsin.",
+  "notificationPrimerNotNow": "Şimdi değil",
+  "notificationPrimerAllow": "İzin ver",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Başarımlar",
   "achievementEarnedLabel": "Kazanıldı",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Üye ara",
   "clanMembersShowTotals": "Klan toplamlarını göster",
   "clanMembersHideTotals": "Klan toplamlarını gizle",
-  "clanMembersReceivedShort": "Alınan Bağışlar",
+  "clanMembersReceivedShort": "Kabul edilmiş",
   "clanMembersAverageTh": "Ort. TH",
   "clanMinimumMembers": "Asgari Üye",
   "clanMaximumMembers": "Azami Üye",
@@ -1105,8 +1105,26 @@
   "warTitle": "Savaş",
   "warFrequency": "Savaş sıklığı",
   "warParticipation": "Savaş Katılımı",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Yalnızca katılımcı",
+  "warStatsRangeWarsCompact": "{number} savaş",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} gün",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Son {number} gün",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Mevcut üyeler",
   "warLeague": "Savaş/Lig",
   "warHistory": "Savaş Geçmişi",
   "warLog": "Savaş Günlüğü",
@@ -1592,7 +1610,7 @@
   "clanProfileDescriptionChanged": "Açıklama değişti",
   "clanJoinLeaveTab": "Katıl/Ayrıl",
   "clanRankingsTab": "Sıralamalar",
-  "clanRankingsSeason": "Sezon",
+  "clanRankingsSeason": "Mevsim",
   "clanRankingsSelectSeason": "Sıralama sezonunu seçin",
   "clanRankingsFilterActivity": "Etkinlik",
   "clanRankingsFilterWar": "Savaş",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Savaş yıldızları",
   "playerWarPreferenceTitle": "Savaş tercihi.",
   "playerDonatedTitle": "Bağışlandı",
-  "playerReceivedTitle": "Alınan Bağışlar",
+  "playerReceivedTitle": "Kabul edilmiş",
   "playerCapitalTitle": "Başkent",
   "playerExpLevelTitle": "Exp. seviye",
   "clanWarWinsTitle": "Savaş kazanır",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "Yıkılan bölgeler",
   "raidsCompleted": "Tamamlanan baskınlar",
   "capitalRaidStatusOngoing": "devam ediyor",
-  "capitalRaidStatusEnded": "Bitti",
+  "capitalRaidStatusEnded": "Sona erdi",
   "capitalRaidLoot": "Yağma",
   "capitalRaidRewards": "Ödüller",
   "capitalRaidPreviousWeek": "Önceki hafta",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Bağlı uygulamalar",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Hesap erişimi olan uygulamaları görüntüle ve bağlantılarını kes.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Etkin bağlantılar",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Bağlı uygulama yok",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Bağladığın uygulamalar burada görünür.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Bağlı uygulamalar yüklenemedi",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Mevcut ve gelecekteki tüm bağlı hesaplar",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} seçili hesap",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Bağlantıyı kes",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Uygulamanın bağlantısı kesilsin mi?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name}, bağlı hesaplarına erişimini hemen kaybedecek.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "{name} bağlantısı kesildi.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "{name} bağlantısı kesilemedi. Tekrar dene.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Oturum açıldı",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -3098,18 +3188,18 @@
   "notifFifteenMinutes": "15 dakika",
   "notifSendTestNotification": "Test bildirimi gönder",
   "notifScheduledMessage": "Planlandı: {title}",
-  "generalStartDate": "Başlangıç Tarihi",
-  "generalEndDate": "Bitiş Tarihi",
-  "warFiltersAllWars": "Tüm Savaşlar",
-  "warFiltersRandomWars": "Rastgele Savaşlar",
+  "generalStartDate": "Başlangıç tarihi",
+  "generalEndDate": "Bitiş tarihi",
+  "warFiltersAllWars": "Tüm savaşlar",
+  "warFiltersRandomWars": "Rastgele savaşlar",
   "warFiltersCwlWars": "CWL savaşları",
-  "warFiltersFriendlyWars": "Dostluk Savaşları",
-  "warType": "Savaş Türü",
+  "warFiltersFriendlyWars": "Dostluk savaşları",
+  "warType": "Savaş türü",
   "warFiltersAnyTownHall": "Herhangi bir BB",
   "gameTownHallLevelShort": "BB {level}",
-  "warAttackerTownHall": "Saldırgan BB",
+  "warAttackerTownHall": "Saldıran BB",
   "warDefenderTownHall": "Savunan BB",
-  "warStatsFilterSameTownHallOnly": "Sadece Aynı Belediye Binası",
+  "warStatsFilterSameTownHallOnly": "Yalnızca aynı Belediye Binası",
   "warStatsFilterSameTownHallDescription": "Yalnızca saldıran ve savunan aynı BB seviyesindeyse göster",
   "generalAny": "Herhangi",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3117,11 +3207,11 @@
   "warStatsFilterMaxStars": "Maks. yıldız",
   "warStatsFilterMinDestructionPercent": "Min. yıkım %",
   "warStatsFilterMaxDestructionPercent": "Maks. yıkım %",
-  "warStatsFilterMinPosition": "Minimum Pozisyon",
-  "warStatsFilterMaxPosition": "Maksimum Pozisyon",
-  "warStatsFilterFreshAttacksOnly": "Sadece Taze Saldırılar",
+  "warStatsFilterMinPosition": "Min. sıra",
+  "warStatsFilterMaxPosition": "Maks. sıra",
+  "warStatsFilterFreshAttacksOnly": "Yalnızca ilk saldırılar",
   "warStatsFilterFreshAttacksDescription": "Her üsse yapılan yalnızca ilk saldırıları göster",
-  "warStatsFilterResultLimit": "Sonuç limiti",
+  "warStatsFilterResultLimit": "Sonuç sınırı",
   "generalResultsCount": "{count} sonuç",
   "notifEventsDescription": "Klan Oyunları, CWL, Baskın Hafta Sonu ve sezon etkinlikleri.",
   "notifAnnouncementsDescription": "ClashKing güncellemeleri için uygulama içi bannerlar ve gelecekteki push uyarıları.",
@@ -3135,17 +3225,17 @@
   "settingsAddWarWidget": "Savaş widget’ı ekle",
   "settingsWarWidgetLinkClanFirst": "Önce bir klandaki hesabı bağla",
   "settingsWarWidgetClanCount": "{count} klan mevcut",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Bir klan seçin. Widget'ı ekledikten sonra basılı tutun, Widget'ı Düzenle'ye dokunun ve Klan'ı seçin.",
+  "settingsWarWidgetAndroidInstructions": "Bir klan seçin, ardından widget'ı Android widget seçicisinden ekleyin.",
+  "settingsWarWidgetEmpty": "Bağlı hesaplarınızın hiçbiri şu anda bir klanda değil.",
+  "settingsWarWidgetIosFooter": "Birden fazla Savaş Widget'ı ekleyin ve her biri için farklı bir klan seçin.",
+  "settingsWarWidgetIosReady": "{clanName} hazır. Widget'ı düzenleyin ve Klan altında seçin.",
+  "settingsWarWidgetAndroidReady": "{clanName} widget verileri hazır.",
+  "settingsWarWidgetPrepareFailed": "Widget hazırlanamadı: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Bot bağlantılı hesaplar ve Discord verileri",
   "settingsDiscordSyncSubtitle": "Bot bağlantılı hesapları ve Discord verilerini senkronize et",
-  "settingsConnected": "Bağlı",
+  "settingsConnected": "Bağlandı",
   "settingsClashKingAccount": "ClashKing hesabı",
   "settingsEmailConnectedSubtitle": "E-posta girişi bağlı",
   "settingsEmailRecoverySubtitle": "Hesap kurtarma için e-posta girişi ekle",
@@ -3165,7 +3255,7 @@
   "resourceShinyOre": "Işıltılı cevher",
   "resourceGeneric": "Kaynak",
   "seasonStatsGoldGrabbed": "Toplanan altın",
-  "seasonStatsActivity": "Etkinlik",
+  "seasonStatsActivity": "Aktivite",
   "seasonStatsAttackWins": "Saldırı galibiyetleri",
   "seasonStatsTrophies": "Sezon kupaları",
   "todoSearchAccountsHint": "Hesap ara",
@@ -3314,8 +3404,8 @@
   "statsPerformance": "Performans",
   "statsSamples": "Örnekler",
   "statsUsage": "Kullanım",
-  "statsAverageStars": "Ortalama Yıldızlar",
-  "statsAverageDestruction": "Ortalama Yıkım",
+  "statsAverageStars": "Ortalama yıldızlar",
+  "statsAverageDestruction": "Ortalama yıkım",
   "statsStarRates": "Yıldız oranları",
   "statsThreeStarRate": "Üç yıldız oranı",
   "statsDailyTrend": "Günlük trend",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "Sezon dökümü",
   "sideTopScore": "En yüksek skor",
   "sideTop200Avg": "Top 200 ort.",
-  "sideBasesArmiesTitle": "Üsler ve Ordular",
+  "sideBasesArmiesTitle": "Üsler ve ordular",
   "sideBasesArmiesSubtitle": "Discord’da kaydedilen düzenler ve ordu bağlantıları.",
   "sideBotSyncTarget": "Bot senkron hedefi",
   "sideBotSyncTargetBody": "Bot, üsleri ve orduları zaten Discord profiline kaydediyor. Bu sayfa senkronize veri için hazır.",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Kayıtlı ordular",
   "sideArmyLinks": "Ordu bağlantıları",
   "sideArmyLinksBody": "Kompozisyon, büyüler, kuşatma, notlar ve paylaşım bağlantısı.",
-  "sideGameAssetsTitle": "Oyun Varlıkları",
+  "sideGameAssetsTitle": "Oyun varlıkları",
   "sideGameAssetsSubtitle": "Klasöre göre gruplanmış barındırılan ClashKing varlıkları.",
   "gameAssetsLoadError": "Oyun verileri yüklenemedi",
   "gameAssetsEmptyTitle": "Kullanılabilir oyun verisi yok",
@@ -3513,7 +3603,7 @@
   "upgradeSectionHeroes": "Kahramanlar",
   "upgradeSectionTroops": "Birlikler",
   "upgradeSectionSpells": "Büyüler",
-  "upgradeSectionPets": "Evcil Hayvanlar",
+  "upgradeSectionPets": "Petler",
   "upgradeSectionEquipment": "Ekipman",
   "sideMockupSource": "Kaynak",
   "sideMockupMode": "Mod",
@@ -3616,7 +3706,7 @@
       }
     }
   },
-  "notifWarEnded": "Savaş sonu",
+  "notifWarEnded": "Savaş bitti",
   "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Final sonuçları mevcut.",
   "@notifWarEndedBody": {
     "placeholders": {
@@ -3693,7 +3783,7 @@
   "notifSpecialEvent": "Özel etkinlik",
   "notifNewEventLive": "Yeni bir etkinlik yayında",
   "notifNewClashEventBody": "Yeni bir Clash etkinliği mevcut.",
-  "notifSupportClashKing": "ClashKing'i destekleyin",
+  "notifSupportClashKing": "ClashKing’i destekle",
   "notifMonthlySupportBody": "Aylık destek ClashKing’in erişilebilir kalmasına ve gelişmesine yardımcı olur. Teşekkürler.",
   "notifUpgradeFinished": "Yükseltme tamamlandı",
   "notifUpgradeReadyTitle": "{name} hazır",
@@ -3886,7 +3976,7 @@
     }
   },
   "upgradeTrackerLaboratory": "Laboratuvar",
-  "upgradeTrackerPets": "Evcil Hayvanlar",
+  "upgradeTrackerPets": "Hayvanlar",
   "upgradeTrackerWalls": "Duvarlar",
   "upgradeTrackerEquipment": "Ekipman",
   "upgradeTrackerLevelsRemaining": "{count} seviye kaldı",
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "Seçili hesaplar",
   "notifAudienceAcrossDevicesDescription": "Bu cihazda hangi hesapların bildirim alabileceğini seç.",
-  "notifAccountBookmarked": "Favorilere eklendi",
+  "notifAccountBookmarked": "Kaydedildi",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4477,7 +4567,7 @@
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
-  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} takip edilen hesap",
+  "dashboardUpgradeTrackerAccounts": "{loaded}/{total} hesap takip ediliyor",
   "@dashboardUpgradeTrackerAccounts": {
     "placeholders": {
       "loaded": {
@@ -4523,7 +4613,7 @@
   "damageOtherSources": "Diğer kaynaklar",
   "damageShowAllSources": "Başka bir kaynak ekle",
   "damageShowFewerSources": "Diğer kaynakları gizle",
-  "searchCancel": "İptal",
+  "searchCancel": "İptal etmek",
   "todoRaidAttacks": "Baskın saldırıları",
   "todoMockRaid4Left": "4 kaldı",
   "todoMockWarAltStatus": "18 dakika önce etkindi · savaş ve baskınlarla ilgilenilmesi gerekiyor",
@@ -4538,20 +4628,20 @@
   "gameAssetsCategoryEquipment": "Ekipman",
   "gameAssetsCategoryGuardians": "Muhafızlar",
   "gameAssetsCategoryHeroes": "Kahramanlar",
-  "gameAssetsCategoryPets": "Evcil Hayvanlar",
+  "gameAssetsCategoryPets": "Hayvanlar",
   "gameAssetsCategorySkins": "Görünümler",
   "gameAssetsCategorySpells": "Büyüler",
   "gameAssetsCategoryTroops": "Birlikler",
   "assetFolderTroops": "Birlikler",
   "assetFolderSpells": "Büyüler",
   "assetFolderHeroes": "Kahramanlar",
-  "endpointStateWins": "galibiyet",
+  "endpointStateWins": "Galibiyetler",
   "notifGroupBattles": "Savaşlar",
   "notifGroupSupport": "Destek",
   "rankedLeagueAccountSelector": "Gösterilen hesap",
   "rankedLeagueStars": "Yıldızlar",
   "playerBattlelogTab": "Savaşlar",
-  "playerActivityTab": "Etkinlik",
+  "playerActivityTab": "Aktivite",
   "playerBattlelogFarming": "Kaynak toplama",
   "playerBattlelogRanked": "Dereceli",
   "playerBattlelogFarmingOverview": "Kaynak toplama özeti",
@@ -4566,8 +4656,8 @@
     }
   },
   "playerBattlelogAttacks": "Saldırılar",
-  "playerBattlelogAverageDestruction": "Ortalama Yıkım",
-  "playerBattlelogAverageStars": "Ortalama Yıldızlar",
+  "playerBattlelogAverageDestruction": "Ortalama yıkım",
+  "playerBattlelogAverageStars": "Ortalama yıldızlar",
   "playerBattlelogTripleRate": "Üç yıldız oranı",
   "playerBattlelogAverageLoot": "Ortalama ganimet",
   "playerBattlelogPopularTroops": "En çok kullanılan birlikler",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Öncelikleri planlayın",
+  "upgradeTrackerPlanPrioritiesDescription": "En önemli olanı sıralayın. Yükseltme seviyeleri ve aktif çalışma her zaman düzenli kalır.",
   "upgradeTrackerPlanClose": "Kapat",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Planlama hedefleri",
+  "upgradeTrackerPlanConstructionSubtitle": "İnşaat ve kahraman yükseltmeleri",
+  "upgradeTrackerPlanResearchSubtitle": "Birlikler, büyüler ve kuşatma araştırması",
+  "upgradeTrackerPlanPetHouseSubtitle": "Evcil Hayvan Evi yükseltmeleri",
+  "upgradeTrackerPlanPrioritizeNewItems": "Yeni öğelere öncelik verin",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Yeni kilidi açılmış veya inşa edilmemiş öğeleri ilk önce yerleştirin",
+  "upgradeTrackerPlanSharedSummary": "Kademe {tier} · paylaşılan karışım {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Kademe {tier} · katı · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "maksimuma kadar çalışır",
+  "upgradeTrackerPlanYieldsAfter": "%{target} sonrasında getiriler",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "Katı",
+  "upgradeTrackerPlanMax": "Maksimum",
+  "upgradeTrackerPlanReorder": "Yeniden sırala {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Göreli katman ağırlığı",
+  "upgradeTrackerPlanCompletionTarget": "Tamamlama hedefi",
+  "upgradeTrackerPlanStrictTier": "Katı katman",
+  "upgradeTrackerPlanWeight": "Ağırlık {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Maksimuma ulaşana kadar",
+  "upgradeTrackerPlanUntilPercent": "%{value}'a kadar",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Numaralandırılmış katmanlar ilk önce çalıştırılır. Paylaşılan satırlar aynı katman numarasını korur ve karışımları göreceli ağırlıklardan normalleştirilir, böylece 50 + 25 %67 / %33 olur. Bir hedef, bu yüzdeye ulaştıktan sonra kategori getirisi sağlar ve daha sonra uygun kalır.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "İlerlemeden önce maksimum",
+  "upgradeTrackerPlanGoalRushNextHall": "Bir sonraki salona hızla ulaşın",
+  "upgradeTrackerPlanGoalCatchUp": "Hızlandırılmış seviyeleri yakalayın",
+  "upgradeTrackerPlanGoalUnlockFirst": "İlk önce yeni şeylerin kilidini açın",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Her hafta duvarlar",
   "upgradeTrackerPlanOff": "Kapalı",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / hafta",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
+  "upgradeTrackerPlanPreferGold": "Duvarlarda Altın Tercih Edin",
+  "upgradeTrackerPlanPreferGoldDescription": "Duvarları harcarken İksirden önce Altın kullanın",
+  "upgradeTrackerPlanApplyPriorities": "Öncelikleri uygula",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Hazırlanmış savunmalar",
+  "upgradeTrackerPlanCategoryTraps": "Tuzaklar",
+  "upgradeTrackerPlanCategoryArmy": "Ordu",
+  "upgradeTrackerPlanCategoryDarkTroops": "Karanlık birlikler",
+  "upgradeTrackerPlanCategorySieges": "Kuşatmalar",
+  "upgradeTrackerPlanCategorySupercharge": "Süperşarj",
+  "navigationCloseDrawer": "Gezinme çekmecesini kapat",
+  "navigationOpenProfileMenu": "Profil menüsünü aç",
   "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
-  "playerJoinLeaveTime": "Zaman",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "settingsPrivacyDataTitle": "Gizlilik ve veriler",
+  "settingsPrivacyPolicyDescription": "ClashKing’in neleri topladığını, bunların neden kullanıldığını, kimlerin işlediğini, saklama kurallarını ve bize nasıl ulaşacağınızı inceleyin.",
+  "settingsPrivacyExportTitle": "Verilerinize erişin veya dışa aktarın",
+  "settingsPrivacyExportDescription": "Bağlı Clash of Clans hesapları ve bildirim tercihleri dâhil olmak üzere ClashKing girişinize bağlı hesap verilerinin bir kopyasını indirin.",
+  "settingsPrivacyCorrectionTitle": "Verileri düzeltin veya sınırlayın",
+  "settingsPrivacyCorrectionDescription": "Hesap ayarlarından bağlı Clash of Clans hesaplarını kaldırın, bildirimleri kapatın veya düzeltme ve sınırlama talepleri için destek ekibiyle iletişime geçin.",
+  "settingsPrivacyDeletionTitle": "ClashKing hesabınızı silin",
+  "settingsPrivacyDeletionDescription": "Bu işlem ClashKing hesabınızın ve ilişkili uygulama verilerinin silinmesini başlatır. ClashKing güvenlik, dolandırıcılığı önleme veya yasal yükümlülükler için sınırlı kayıtları saklamak zorunda olabilir.",
+  "settingsPrivacyChildrenTitle": "Çocuklar ve aileler",
+  "settingsPrivacyChildrenDescription": "ClashKing genel kullanıma yönelik bir yardımcı uygulamadır ve çocuklara yönelik değildir. Ülkenizde ebeveyn veya vasi onayı olmadan rıza gösterecek yaşta değilseniz hesap oluşturmayın.",
+  "settingsPrivacyExportReady": "Veri dışa aktarımınız kaydedilmeye hazır.",
+  "settingsPrivacyExportCreateFailed": "Veri dışa aktarımı oluşturulamadı. Bunun yerine bir gizlilik e-postası hazırlandı.",
+  "settingsPrivacyExportPrepareFirst": "Kaydetmeden önce dışa aktarımı hazırlayın.",
+  "settingsPrivacyExportSaved": "Veri dışa aktarımınız kaydedildi.",
+  "settingsPrivacyExportSaveFailed": "Veri dışa aktarımı kaydedilemedi. Bunun yerine bir gizlilik e-postası hazırlandı.",
+  "settingsPrivacyDeleteUnavailable": "Bu sürümde hesap silme kullanılamıyor. Bunun yerine bir gizlilik e-postası hazırlandı.",
+  "settingsPrivacyOpenPolicy": "Politikayı aç",
+  "settingsPrivacyRefreshExport": "Dışa aktarımı yenile",
+  "settingsPrivacyPrepareExport": "Dışa aktarımı hazırla",
+  "settingsPrivacySaveExport": "Dışa aktarımı kaydet",
+  "settingsPrivacyContactSupport": "Destekle iletişime geç",
+  "settingsPrivacyDeleteAccount": "Hesabı sil",
+  "settingsPrivacyDeleteConfirmTitle": "Hesap silinsin mi?",
+  "settingsPrivacyDeleteConfirmDescription": "Bu talep işlendikten sonra kalıcıdır. Bağlı hesapları, bildirim ayarlarını, kayıtlı tercihleri ve kimlik doğrulama yöntemlerini kaybedebilirsiniz.",
+  "generalUnranked": "Derecesiz",
+  "playerJoinLeaveTab": "Katılma / Ayrılma",
+  "playerUpgradeRemainingAccessibility": "Belediye Binası {townHallLevel} için kalan",
+  "playerUpgradeSummaryTitle": "BB{townHallLevel} için %{progress} tamamlandı",
+  "playerUpgradeSectionMaxed": "Bu bölüm BB{townHallLevel} için tamamlandı.",
+  "playerUpgradeTimeRemaining": "Kalan süre",
+  "playerUpgradeNoResourceData": "Kaynak verisi yok",
+  "playerJoinLeaveLoadError": "Katılma / ayrılma geçmişi yüklenemedi",
+  "playerJoinLeaveClanTotals": "Klan toplamları",
+  "playerJoinLeaveTime": "Süre",
+  "playerJoinLeaveTimeSpent": "Geçirilen süre",
+  "playerJoinLeaveVisits": "Ziyaretler",
+  "playerJoinLeaveJoined": "Katıldı",
+  "playerJoinLeaveLeft": "Ayrıldı",
+  "playerJoinLeaveNoHistory": "Katılma / ayrılma geçmişi yok",
+  "playerJoinLeaveNoClanTotals": "Klan toplamı yok",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
