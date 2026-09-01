@@ -449,13 +449,13 @@ function CompletionDate({
   date,
   locale,
 }: {
-  imageUrl: string;
-  label: string;
-  includedContent?: readonly string[];
-  includedSeconds?: number;
-  seconds: number;
-  date: Date | null;
-  locale: string;
+  readonly imageUrl: string;
+  readonly label: string;
+  readonly includedContent?: readonly string[];
+  readonly includedSeconds?: number;
+  readonly seconds: number;
+  readonly date: Date | null;
+  readonly locale: string;
 }) {
   return (
     <View style={shareStyles.completionDate}>
@@ -501,18 +501,15 @@ export function formatTrackerCompletionDate(date: Date, locale: string) {
   const month = parts.find((part) => part.type === 'month')?.value ?? '';
   const day = Number(parts.find((part) => part.type === 'day')?.value ?? 0);
   const year = parts.find((part) => part.type === 'year')?.value ?? '';
+  return `${month} ${day}${ordinalSuffix(day)} ${year}`;
+}
+
+function ordinalSuffix(day: number) {
   const modulo100 = day % 100;
-  const suffix =
-    modulo100 >= 11 && modulo100 <= 13
-      ? 'th'
-      : day % 10 === 1
-        ? 'st'
-        : day % 10 === 2
-          ? 'nd'
-          : day % 10 === 3
-            ? 'rd'
-            : 'th';
-  return `${month} ${day}${suffix} ${year}`;
+  if (modulo100 >= 11 && modulo100 <= 13) return 'th';
+  if (day % 10 === 1) return 'st';
+  if (day % 10 === 2) return 'nd';
+  return day % 10 === 3 ? 'rd' : 'th';
 }
 
 function CollectionGraphic({ snapshot }: { snapshot: UpgradeTrackerSnapshot }) {
@@ -672,7 +669,8 @@ function resourceImage(resource: string) {
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
+    .replace(/^_+/, '')
+    .replace(/_+$/, '');
   return `${ImageAssets.baseUrl}/resources/${normalized}.webp`;
 }
 

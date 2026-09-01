@@ -963,9 +963,13 @@ test('upgrade widgets show six builders and keep Builder Base visibility per wid
   assert.match(androidSelection, /SHOW_BUILDER_BASE_PREFIX = "showBuilderBase_"/);
   assert.match(androidSelection, /getBoolean\("\$SHOW_BUILDER_BASE_PREFIX\$appWidgetId", true\)/);
   assert.match(androidProvider, /if \(showBuilderBase\) View\.VISIBLE else View\.GONE/);
+  assert.match(androidProvider, /val reportedStale = data\.optBoolean\("hasStaleData", false\)/);
+  assert.doesNotMatch(androidProvider, /reportedStale = showBuilderBase &&/);
   assert.match(swift, /@Parameter\(title: "Show Builder Base", default: true\)/);
   assert.match(swift, /mediumTaskChoices\(showBuilderBase: showBuilderBase\)/);
   assert.match(swift, /if entry\.showBuilderBase/);
+  assert.match(swift, /\(hasStaleData \?\? false\) \|\|/);
+  assert.doesNotMatch(swift, /showBuilderBase && \(hasStaleData/);
 });
 
 test('native scenery audio bridge preserves exact Flutter session, focus, cache, and cadence', () => {

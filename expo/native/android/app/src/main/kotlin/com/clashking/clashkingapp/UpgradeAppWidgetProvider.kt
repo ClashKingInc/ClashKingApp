@@ -623,7 +623,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         labels: JSONObject?,
         showBuilderBase: Boolean
     ) {
-        val reportedStale = showBuilderBase && data.optBoolean("hasStaleData", false)
+        val reportedStale = data.optBoolean("hasStaleData", false)
         val isStale = reportedStale || hasFinishedTask(data, showBuilderBase)
         views.setViewVisibility(R.id.upgrade_stale_chip, if (isStale) View.VISIBLE else View.GONE)
         views.setTextViewText(

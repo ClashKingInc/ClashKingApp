@@ -72,8 +72,10 @@ import {
 import { useAppRuntime, useAppState } from './runtime-context';
 import { subscribeSecondaryBackHandler } from './secondary-back-handler';
 import {
+  nativeSecondaryRouteTransition,
   publishNativeSecondaryLayer,
   removeNativeSecondaryLayer,
+  removeNativeSecondaryLayers,
 } from './native-secondary-navigation';
 import { supportCreatorUrl } from './runtime-effects';
 
@@ -526,7 +528,7 @@ export function AuthenticatedRoot() {
 
   useEffect(() => {
     if (!usesNativeSecondaryNavigation) {
-      nativeRouteKeys.current.forEach(removeNativeSecondaryLayer);
+      removeNativeSecondaryLayers([...nativeRouteKeys.current, ...expectedNativeRouteKeys.current]);
       nativeRouteKeys.current = [];
       expectedNativeRouteKeys.current = [];
       return;
@@ -554,16 +556,25 @@ export function AuthenticatedRoot() {
       });
     });
 
-    const current = nativeRouteKeys.current;
-    const sharedPrefixLength = current.findIndex((key, index) => expected[index] !== key);
-    const prefixLength =
-      sharedPrefixLength < 0 ? Math.min(current.length, expected.length) : sharedPrefixLength;
-    if (prefixLength === current.length && expected.length > current.length) {
-      const nextKey = expected[current.length]!;
-      nativeRouteKeys.current = [...current, nextKey];
+    const transition = nativeSecondaryRouteTransition(nativeRouteKeys.current, expected);
+    transition.staleKeys.forEach(removeNativeSecondaryLayer);
+    nativeRouteKeys.current = transition.routeKeys;
+    if (transition.type === 'push') {
+      const nextKey = transition.key;
       router.push({ pathname: '/detail' as never, params: { layer: nextKey } });
+    } else if (transition.type === 'replace') {
+      router.replace({ pathname: '/detail' as never, params: { layer: transition.key } });
     }
   });
+
+  useEffect(
+    () => () => {
+      removeNativeSecondaryLayers([...nativeRouteKeys.current, ...expectedNativeRouteKeys.current]);
+      nativeRouteKeys.current = [];
+      expectedNativeRouteKeys.current = [];
+    },
+    [],
+  );
 
   return (
     <>
@@ -600,17 +611,7 @@ export function AuthenticatedRoot() {
         secondaryFullScreen={
           (pushedScene?.kind === 'utility' ? pushedScene.route : utility) === 'search'
         }
-        secondaryRouteId={
-          pushedScene?.kind === 'player'
-            ? 'players'
-            : pushedScene?.kind === 'clan' || pushedScene?.kind === 'capital'
-              ? 'clans'
-              : pushedScene?.kind === 'war' || pushedScene?.kind === 'cwl'
-                ? 'war'
-                : pushedScene?.kind === 'utility'
-                  ? pushedScene.route
-                  : undefined
-        }
+        secondaryRouteId={secondaryRouteIdFor(pushedScene)}
         selectedPrimary={primary}
         selectedUtility={pushedScene ? undefined : utility}
         t={t}
@@ -629,6 +630,13 @@ export function AuthenticatedRoot() {
       />
     </>
   );
+}
+
+function secondaryRouteIdFor(scene: PushedScene | undefined): AppRouteId | undefined {
+  if (scene?.kind === 'player') return 'players';
+  if (scene?.kind === 'clan' || scene?.kind === 'capital') return 'clans';
+  if (scene?.kind === 'war' || scene?.kind === 'cwl') return 'war';
+  return scene?.kind === 'utility' ? scene.route : undefined;
 }
 
 function currentCwlRoute(

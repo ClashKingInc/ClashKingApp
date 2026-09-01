@@ -1448,7 +1448,7 @@ private extension UpgradeWidgetData {
   }
 
   func hasFinishedTask(now: Date, showBuilderBase: Bool) -> Bool {
-    (showBuilderBase && (hasStaleData ?? false)) ||
+    (hasStaleData ?? false) ||
       allSections(showBuilderBase: showBuilderBase).contains { ($0.hiddenFinishesAt ?? .distantFuture) <= now } ||
       allTasks(showBuilderBase: showBuilderBase).contains { $0.finishesAt <= now }
   }

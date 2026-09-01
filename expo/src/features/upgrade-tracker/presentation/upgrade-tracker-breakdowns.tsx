@@ -471,7 +471,7 @@ export function detailModalMaximumContentHeight(viewportHeight: number) {
   return Math.max(220, viewportHeight * 0.88 - modalVerticalPadding - modalBorderAllowance);
 }
 
-function ScaleDownContent({ children }: { children: ReactNode }) {
+function ScaleDownContent({ children }: { readonly children: ReactNode }) {
   const { height } = useWindowDimensions();
   const [contentHeight, setContentHeight] = useState(0);
   const maximumHeight = detailModalMaximumContentHeight(height);
@@ -506,9 +506,9 @@ function Metric({
   value,
   imageUrl,
 }: {
-  label: string;
-  value: string | number;
-  imageUrl?: string;
+  readonly label: string;
+  readonly value: string | number;
+  readonly imageUrl?: string;
 }) {
   return (
     <Surface
@@ -896,7 +896,8 @@ function resourceImage(resource: string) {
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
+    .replace(/^_+/, '')
+    .replace(/_+$/, '');
   return `${ImageAssets.baseUrl}/resources/${normalized}.webp`;
 }
 

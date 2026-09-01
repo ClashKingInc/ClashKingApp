@@ -15,16 +15,16 @@ import { ckControlHeight, ckRadius, ckSpacing } from './tokens';
 import { useCKTheme } from './theme';
 
 export type SearchSortBarProps = {
-  value: string;
-  onChangeText: (value: string) => void;
-  placeholder: string;
-  searchLabel?: string;
-  searchIcon?: ReactNode;
-  sortLabel: string;
-  sortValue?: string;
-  sortIcon?: ReactNode;
-  onSortPress: () => void;
-  style?: StyleProp<ViewStyle>;
+  readonly value: string;
+  readonly onChangeText: (value: string) => void;
+  readonly placeholder: string;
+  readonly searchLabel?: string;
+  readonly searchIcon?: ReactNode;
+  readonly sortLabel: string;
+  readonly sortValue?: string;
+  readonly sortIcon?: ReactNode;
+  readonly onSortPress: () => void;
+  readonly style?: StyleProp<ViewStyle>;
 };
 
 export type SearchFieldProps = Pick<

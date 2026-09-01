@@ -22,8 +22,8 @@ export function ConnectedApplicationsScreen({
   service,
   onBack,
 }: {
-  service: ConnectedApplicationsServiceContract;
-  onBack: () => void;
+  readonly service: ConnectedApplicationsServiceContract;
+  readonly onBack: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -157,9 +157,9 @@ function ConnectedApplicationRow({
   revoking,
   onDisconnect,
 }: {
-  item: ConnectedApplicationGrantItem;
-  revoking: boolean;
-  onDisconnect: () => void;
+  readonly item: ConnectedApplicationGrantItem;
+  readonly revoking: boolean;
+  readonly onDisconnect: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -219,10 +219,10 @@ function DisconnectDialog({
   onCancel,
   onConfirm,
 }: {
-  item?: ConnectedApplicationGrantItem;
-  busy: boolean;
-  onCancel: () => void;
-  onConfirm: () => void;
+  readonly item?: ConnectedApplicationGrantItem;
+  readonly busy: boolean;
+  readonly onCancel: () => void;
+  readonly onConfirm: () => void;
 }) {
   const { t } = useI18n();
   return (
@@ -256,11 +256,11 @@ function DialogAction({
   loading = false,
   onPress,
 }: {
-  label: string;
-  destructive?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
-  onPress: () => void;
+  readonly label: string;
+  readonly destructive?: boolean;
+  readonly disabled?: boolean;
+  readonly loading?: boolean;
+  readonly onPress: () => void;
 }) {
   const theme = useCKTheme();
   return (
