@@ -13,7 +13,6 @@ import {
 import {
   AtSign,
   BellRing,
-  Cable,
   FileText,
   Gamepad2,
   Info,
@@ -228,12 +227,6 @@ export function SettingsScreen({
         />
       </SettingsSection>
       <SettingsSection title={t('settingsAccount')}>
-        <SettingsTile
-          icon={<Cable color={iconColor} />}
-          title={t('settingsConnectedAppsTitle')}
-          subtitle={t('settingsConnectedAppsSubtitle')}
-          onPress={() => actions.open('connectedApps')}
-        />
         <SettingsTile
           icon={<AtSign color={iconColor} />}
           title={user.email ?? user.username}

@@ -109,36 +109,6 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
   await waitFor(() => expect(screen.getByText('Copied to clipboard')).toBeTruthy());
 });
 
-it('opens connected application management from the account settings section', async () => {
-  const open = jest.fn();
-  const actions: SettingsPresentationActions = {
-    changeLocale: async () => undefined,
-    changeTheme: async () => undefined,
-    open,
-    openDiscord: jest.fn(),
-    showLicenses: jest.fn(),
-    copyVersion: jest.fn(),
-    logout: async () => undefined,
-  };
-  const screen = await render(
-    wrapped(
-      <SettingsScreen
-        actions={actions}
-        alternateIconsSupported={false}
-        currentLocale="en"
-        localeChoices={[]}
-        notificationsEnabled={false}
-        themeMode="system"
-        user={{ username: 'Person', email: null, avatarUrl: '' }}
-        versionLabel="Version 1.2.3"
-        warWidgetsEnabled={false}
-      />,
-    ),
-  );
-  await fireEvent.press(screen.getByRole('button', { name: /Connected apps/ }));
-  expect(open).toHaveBeenCalledWith('connectedApps');
-});
-
 it('localizes the iOS war widget setup dialog', async () => {
   const actions: SettingsPresentationActions = {
     changeLocale: async () => undefined,

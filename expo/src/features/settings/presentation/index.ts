@@ -8,5 +8,4 @@ export * from './settings-screen';
 export * from './settings-locales';
 export * from './settings-runtime';
 export * from './settings-root';
-export * from './connected-applications-screen';
 export * from './translation-screen';
