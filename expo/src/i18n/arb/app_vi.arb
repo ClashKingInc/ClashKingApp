@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Phạm vi thống kê chiến tranh",
+  "warStatsRangeDescription": "Chọn thống kê theo số lượng cố định các cuộc chiến gần đây hoặc theo khoảng thời gian gần đây tính bằng ngày.",
+  "warStatsRangeDays": "Ngày",
+  "warStatsRangeWarsToInclude": "Số cuộc chiến cần tính",
+  "warStatsRangeDaysToInclude": "Số ngày cần tính",
+  "upgradeTrackerAllBuildersOccupied": "Tất cả thợ xây đều đang bận",
+  "upgradeTrackerBuildCost": "Chi phí xây dựng",
+  "upgradeTrackerBuilderBaseBuilders": "Thợ xây Nhà Chính Thợ Xây",
+  "upgradeTrackerBuilderBaseLaboratory": "Phòng thí nghiệm Nhà Chính Thợ Xây",
+  "upgradeTrackerCalendar": "Lịch",
+  "upgradeTrackerClearCost": "Chi phí dọn",
+  "upgradeTrackerCompletionDetails": "Chi tiết hoàn thành làng",
+  "upgradeTrackerCustomSoundtrack": "Nhạc nền tùy chỉnh",
+  "upgradeTrackerGoldPassPercent": "Thẻ Vàng {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Tóm tắt {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -28,10 +28,10 @@
       }
     }
   },
-  "upgradeTrackerGuardians": "Hộ Vệ",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerGuardians": "Hộ vệ",
+  "upgradeTrackerHelpers": "Trợ thủ",
+  "upgradeTrackerHouseParts": "Bộ phận nhà",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# thợ xây đang rảnh} other {# thợ xây đang rảnh}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "Đang tiến hành",
+  "upgradeTrackerItemSemanticLabel": "{item}, cấp {currentLevel}/{targetLevel}{count, plural, =1 {} other {, # công trình}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "Đã sở hữu: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Hàng",
   "upgradeTrackerLevelTransition": "Cấp {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Tài nguyên cần ngay",
+  "upgradeTrackerLootOutlook": "Dự báo tài nguyên",
+  "upgradeTrackerMusic": "Âm nhạc",
+  "upgradeTrackerNextDays": "{count, plural, one {# ngày tới} other {# ngày tới}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Kỳ tiếp theo",
+  "upgradeTrackerNoGoldPass": "Không có Thẻ Vàng",
+  "upgradeTrackerNoMatchingUpgrades": "Không có nâng cấp phù hợp",
+  "upgradeTrackerNoMatchingUpgradesBody": "Hãy thử làng hoặc hàng đợi khác.",
+  "upgradeTrackerNothingNeededNow": "Hiện không cần gì",
+  "upgradeTrackerObstacles": "Chướng ngại vật",
+  "upgradeTrackerPart": "Bộ phận",
+  "upgradeTrackerPassReward": "Phần thưởng thẻ",
+  "upgradeTrackerPauseSoundtrack": "Tạm dừng nhạc nền",
+  "upgradeTrackerPeriodCount": "Kỳ {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Phát nhạc nền",
+  "upgradeTrackerPreviousPeriod": "Kỳ trước",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Phong cảnh",
+  "upgradeTrackerScheduledLane": "Được lên lịch ở hàng #{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Tiến độ {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
+  "upgradeTrackerSize": "Kích thước",
+  "upgradeTrackerSortLongest": "Dài nhất trước",
+  "upgradeTrackerSortName": "Tên A–Z",
   "upgradeTrackerSortScheduled": "Đã lên lịch",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSortShortest": "Ngắn nhất trước",
+  "upgradeTrackerSoundtrackPosition": "Vị trí nhạc nền",
   "upgradeTrackerStarts": "Bắt đầu",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "Bậc",
+  "upgradeTrackerUpgradesStarting": "nâng cấp sắp bắt đầu",
+  "upgradeTrackerUpgradingNow": "Đang nâng cấp",
+  "upgradeTrackerWarBase": "Căn cứ chiến tranh",
+  "notifSettingsSaveFailed": "Không thể lưu cài đặt thông báo.",
+  "notifPushEnabled": "Đã bật thông báo đẩy",
+  "notifReceiveNotifications": "Nhận thông báo",
+  "notifTokenPreview": "Mã thông báo: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Các cảnh báo đã bật có thể được gửi đến thiết bị này.",
+  "notifDisabledAccountDescription": "Thông báo đã bị tắt trên toàn bộ tài khoản ClashKing của bạn.",
+  "notifMaximumRemindersAdded": "Đã thêm số lời nhắc tối đa",
+  "notifAddReminder": "Thêm lời nhắc",
+  "notifDurationOneHour": "1 giờ",
+  "notifDurationHours": "{count} giờ",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} phút",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Thêm {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "trước 1 giờ",
+  "notifTimingHoursBefore": "trước {count} giờ",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "trước {count} phút",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Thông báo đẩy đã sẵn sàng trên thiết bị này.",
+  "notifPushPermissionRequired": "Cho phép thông báo để nhận cảnh báo ClashKing.",
+  "notifPushPermissionDenied": "Quyền thông báo đã bị từ chối.",
+  "notifPushNotConfigured": "Firebase chưa được cấu hình cho bản dựng này.",
+  "notifPushTokenUnavailable": "Mã thông báo đẩy chưa khả dụng.",
+  "notifPushUnsupported": "Nền tảng này không hỗ trợ thông báo đẩy.",
+  "notifPushInitializing": "Đang cấu hình thông báo đẩy…",
+  "notificationPrimerTitle": "Bật thông báo?",
+  "notificationPrimerBody": "ClashKing có thể thông báo cho bạn về các cập nhật chiến tranh, CWL, tài khoản và dự án. Bạn có thể thay đổi tùy chọn này bất cứ lúc nào trong Cài đặt > Thông báo.",
+  "notificationPrimerNotNow": "Để sau",
+  "notificationPrimerAllow": "Cho phép",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Thành tựu",
   "achievementEarnedLabel": "Đã đạt",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Tìm kiếm thành viên",
   "clanMembersShowTotals": "Hiển thị tổng số bang hội",
   "clanMembersHideTotals": "Ẩn tổng số bang hội",
-  "clanMembersReceivedShort": "Đã nhận",
+  "clanMembersReceivedShort": "Đã nhận",
   "clanMembersAverageTh": "TH trung bình",
   "clanMinimumMembers": "Số thành viên tối thiểu",
   "clanMaximumMembers": "Số thành viên tối đa",
@@ -1105,8 +1105,26 @@
   "warTitle": "Chiến tranh",
   "warFrequency": "Tần suất chiến tranh",
   "warParticipation": "Tham gia chiến tranh",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Chỉ tham gia",
+  "warStatsRangeWarsCompact": "{number} cuộc chiến",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} ngày",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "{number} ngày qua",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Thành viên hiện tại",
   "warLeague": "Chiến tranh/Giải đấu",
   "warHistory": "Lịch sử chiến tranh",
   "warLog": "Nhật ký chiến tranh",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Sao chiến tranh",
   "playerWarPreferenceTitle": "Trưởng phòng chiến tranh",
   "playerDonatedTitle": "Đã quyên góp",
-  "playerReceivedTitle": "Đã nhận",
+  "playerReceivedTitle": "Đã nhận",
   "playerCapitalTitle": "Thủ đô",
   "playerExpLevelTitle": "Exp. mức độ",
   "clanWarWinsTitle": "Chiến tranh thắng lợi",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Ứng dụng đã kết nối",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Xem và ngắt kết nối các ứng dụng có quyền truy cập tài khoản.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Kết nối đang hoạt động",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Không có ứng dụng đã kết nối",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Các ứng dụng bạn kết nối sẽ xuất hiện tại đây.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Không thể tải các ứng dụng đã kết nối",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Tất cả tài khoản đã liên kết hiện tại và tương lai",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} tài khoản đã chọn",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Ngắt kết nối",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Ngắt kết nối ứng dụng?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} sẽ mất ngay quyền truy cập vào các tài khoản đã liên kết của bạn.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Đã ngắt kết nối {name}.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Không thể ngắt kết nối {name}. Hãy thử lại.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Đã đăng nhập",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2880,7 +2970,7 @@
   "dashboardUpgradeTrackerTimeLeft": "Dự kiến",
   "dashboardUpgradeTrackerBuilders": "Thợ xây",
   "dashboardUpgradeTrackerLab": "Phòng thí nghiệm",
-  "dashboardUpgradeTrackerPets": "Linh thú",
+  "dashboardUpgradeTrackerPets": "Thú cưng",
   "dashboardUpgradeTrackerWalls": "Tường",
   "dashboardUpgradeTrackerVillage": "Làng",
   "dashboardRankedNoData": "Mở Giải đấu Xếp hạng để xem thứ hạng của tài khoản này.",
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "Làm mới dữ liệu chiến tranh",
   "warWidgetNoData": "Không có dữ liệu chiến tranh",
   "warWidgetLastUpdated": "Cập nhật lần cuối: {time}",
-  "todoEventClanGames": "Trò chơi Bang hội",
+  "todoEventClanGames": "Trò chơi bang hội",
   "todoEventCwl": "CWL",
   "todoEventSeasonEnds": "Mùa kết thúc",
   "todoEventLeagueReset": "Đặt lại giải đấu",
@@ -3107,8 +3197,8 @@
   "warType": "Loại chiến tranh",
   "warFiltersAnyTownHall": "Bất kỳ TH nào",
   "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "TH người tấn công",
-  "warDefenderTownHall": "TH người phòng thủ",
+  "warAttackerTownHall": "TH tấn công",
+  "warDefenderTownHall": "TH phòng thủ",
   "warStatsFilterSameTownHallOnly": "Chỉ cùng cấp Nhà Chính",
   "warStatsFilterSameTownHallDescription": "Chỉ hiển thị các lượt tấn công khi người tấn công và phòng thủ có cùng cấp TH",
   "generalAny": "Bất kỳ",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Thêm widget chiến tranh",
   "settingsWarWidgetLinkClanFirst": "Trước tiên hãy liên kết một tài khoản trong hội",
   "settingsWarWidgetClanCount": "Có {count} hội",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Chọn một hội. Sau khi thêm tiện ích, hãy nhấn giữ, chạm Sửa tiện ích rồi chọn Hội.",
+  "settingsWarWidgetAndroidInstructions": "Chọn một hội, sau đó thêm tiện ích từ trình chọn tiện ích Android.",
+  "settingsWarWidgetEmpty": "Hiện không có tài khoản đã liên kết nào của bạn ở trong hội.",
+  "settingsWarWidgetIosFooter": "Thêm nhiều tiện ích chiến tranh và chọn một hội khác nhau cho từng tiện ích.",
+  "settingsWarWidgetIosReady": "{clanName} đã sẵn sàng. Hãy sửa tiện ích và chọn hội này trong mục Hội.",
+  "settingsWarWidgetAndroidReady": "Dữ liệu tiện ích của {clanName} đã sẵn sàng.",
+  "settingsWarWidgetPrepareFailed": "Không thể chuẩn bị tiện ích: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Tài khoản liên kết bot và dữ liệu Discord",
   "settingsDiscordSyncSubtitle": "Đồng bộ tài khoản liên kết bot và dữ liệu Discord",
@@ -3251,7 +3341,7 @@
   "todoRemainingUpgradeTooltip": "Nhấn để xem chi phí và thời gian nâng cấp còn lại",
   "announcementAnimeFuryTitle": "Anime Fury",
   "announcementAnimeFurySubtitle": "Nhấn để xem qua bản cập nhật tháng 6 năm 2026",
-  "sideRankingsTitle": "Xếp hạng",
+  "sideRankingsTitle": "Bảng xếp hạng",
   "sideRankingsSubtitle": "Bảng xếp hạng chính thức cùng endpoint ClashKing.",
   "sideRankingsLoadError": "Không thể tải bảng xếp hạng chính thức.",
   "sideRankingsEmptyTitle": "Không có bảng xếp hạng trả về",
@@ -3315,7 +3405,7 @@
   "statsSamples": "Mẫu",
   "statsUsage": "Cách sử dụng",
   "statsAverageStars": "Sao trung bình",
-  "statsAverageDestruction": "Phá hủy trung bình",
+  "statsAverageDestruction": "Sức hủy diệt trung bình",
   "statsStarRates": "Tỷ lệ theo sao",
   "statsThreeStarRate": "Tỷ lệ ba sao",
   "statsDailyTrend": "Xu hướng hàng ngày",
@@ -3337,7 +3427,7 @@
   "statsItemType": "Loại vật phẩm",
   "statsTroop": "Quân đội",
   "statsSpell": "Chính tả",
-  "statsHero": "Tướng",
+  "statsHero": "Anh hùng",
   "statsPet": "Thú cưng",
   "statsEquipment": "Thiết bị",
   "statsOwningHero": "Sở hữu anh hùng",
@@ -3346,7 +3436,7 @@
   "statsCompositionShare": "Chia sẻ thành phần",
   "statsNoLevels": "Hồ sơ quân đội không chứa cấp độ vật phẩm.",
   "statsRankedCompositionOnly": "Dữ liệu thành phần đến từ nhật ký chiến đấu được xếp hạng; Hiệu suất chiến tranh và CWL vẫn tách biệt.",
-  "statsTownHall": "Nhà Chính",
+  "statsTownHall": "Tòa thị chính",
   "statsOpponentTownHall": "Tòa thị chính đối thủ",
   "statsEqualTownHalls": "Tòa thị chính Equal",
   "statsLeagueTier": "Cấp độ giải đấu",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "Phân tích theo mùa",
   "sideTopScore": "Điểm cao nhất",
   "sideTop200Avg": "Trung bình Top 200",
-  "sideBasesArmiesTitle": "Căn cứ & Quân đội",
+  "sideBasesArmiesTitle": "Căn cứ & đội hình",
   "sideBasesArmiesSubtitle": "Bố cục đã lưu trên Discord và link đội hình.",
   "sideBotSyncTarget": "Đích đồng bộ bot",
   "sideBotSyncTargetBody": "Bot đã lưu căn cứ và đội hình vào hồ sơ Discord. Trang này đã sẵn sàng cho dữ liệu đồng bộ đó.",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Đội hình đã lưu",
   "sideArmyLinks": "Liên kết đội hình",
   "sideArmyLinksBody": "Thành phần, phép, máy công thành, ghi chú và liên kết chia sẻ.",
-  "sideGameAssetsTitle": "Tài sản trò chơi",
+  "sideGameAssetsTitle": "Tài nguyên trò chơi",
   "sideGameAssetsSubtitle": "Tài nguyên ClashKing được lưu trữ, nhóm theo thư mục.",
   "gameAssetsLoadError": "Không thể tải tài nguyên trò chơi",
   "gameAssetsEmptyTitle": "Không có tài nguyên trò chơi",
@@ -3506,15 +3596,15 @@
   "rankingClanBuilderHeading": "Xếp hạng Căn cứ Thợ xây hội",
   "rankingClanCapital": "Thủ phủ hội",
   "rankingClanCapitalHeading": "Xếp hạng Thủ phủ Hội",
-  "assetFolderEquipment": "Thiết bị",
+  "assetFolderEquipment": "Trang bị",
   "assetFolderLeagues": "Giải đấu",
   "assetFolderResources": "Tài nguyên",
   "assetFolderStickers": "Nhãn dán",
   "upgradeSectionHeroes": "Tướng",
-  "upgradeSectionTroops": "Quân lính",
-  "upgradeSectionSpells": "Phép thuật",
-  "upgradeSectionPets": "Linh thú",
-  "upgradeSectionEquipment": "Thiết bị",
+  "upgradeSectionTroops": "Quân",
+  "upgradeSectionSpells": "Phép",
+  "upgradeSectionPets": "Thú cưng",
+  "upgradeSectionEquipment": "Trang bị",
   "sideMockupSource": "Nguồn",
   "sideMockupMode": "Chế độ",
   "sideMockupPreview": "Xem trước",
@@ -3532,7 +3622,7 @@
   "endpointTop200ArmyUsagePreview": "Nhật ký trận đánh · mức dùng quân và phép",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "Hằng tuần",
-  "endpointStateUsage": "Cách sử dụng",
+  "endpointStateUsage": "Mức dùng",
   "notifGroupReminders": "Nhắc nhở",
   "notifGroupProgress": "Tiến độ",
   "notifLeagueDefense": "Phòng thủ giải đấu",
@@ -3616,7 +3706,7 @@
       }
     }
   },
-  "notifWarEnded": "Chiến tranh đã kết thúc",
+  "notifWarEnded": "Chiến tranh kết thúc",
   "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Kết quả cuối cùng đã có.",
   "@notifWarEndedBody": {
     "placeholders": {
@@ -3886,9 +3976,9 @@
     }
   },
   "upgradeTrackerLaboratory": "Phòng thí nghiệm",
-  "upgradeTrackerPets": "Linh thú",
+  "upgradeTrackerPets": "Thú cưng",
   "upgradeTrackerWalls": "Tường",
-  "upgradeTrackerEquipment": "Thiết bị",
+  "upgradeTrackerEquipment": "Trang bị",
   "upgradeTrackerLevelsRemaining": "Còn {count} cấp",
   "@upgradeTrackerLevelsRemaining": {
     "placeholders": {
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "Tài khoản đã chọn",
   "notifAudienceAcrossDevicesDescription": "Chọn tài khoản có thể nhận thông báo trên thiết bị này.",
-  "notifAccountBookmarked": "Đã đánh dấu",
+  "notifAccountBookmarked": "Đã lưu",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "tấn công chiến tranh",
+  "notifGroupWarAttacks": "Đòn tấn công chiến tranh",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4506,7 +4596,7 @@
   "damageQuickSetups": "Chọn một phương pháp",
   "damageQuickSetupZapQuake": "Sét + động đất",
   "damageQuickSetupFireballQuake": "Cầu lửa + động đất",
-  "damageQuickSetupGiantArrow": "Mũi tên Khổng lồ",
+  "damageQuickSetupGiantArrow": "Mũi Tên Khổng Lồ",
   "damageQuickSetupFlameFlinger": "Máy Phóng Lửa",
   "damageQuickSetupCustom": "Tùy chỉnh",
   "damageClearStack": "Thông thoáng",
@@ -4523,7 +4613,7 @@
   "damageOtherSources": "Nguồn khác",
   "damageShowAllSources": "Thêm nguồn khác",
   "damageShowFewerSources": "Ẩn các nguồn khác",
-  "searchCancel": "Hủy",
+  "searchCancel": "Hủy bỏ",
   "todoRaidAttacks": "Tấn công đột kích",
   "todoMockRaid4Left": "4 trái",
   "todoMockWarAltStatus": "Đang hoạt động 18 phút trước · chiến tranh và đột kích cần được chú ý",
@@ -4535,15 +4625,15 @@
   "gameAssetsCategoryClanLabels": "Nhãn Hội",
   "gameAssetsCategoryCountryFlags": "Quốc kỳ",
   "gameAssetsCategoryDecorations": "Vật trang trí",
-  "gameAssetsCategoryEquipment": "Thiết bị",
+  "gameAssetsCategoryEquipment": "Trang bị",
   "gameAssetsCategoryGuardians": "Hộ Vệ",
   "gameAssetsCategoryHeroes": "Tướng",
-  "gameAssetsCategoryPets": "Linh thú",
+  "gameAssetsCategoryPets": "Thú cưng",
   "gameAssetsCategorySkins": "Trang phục",
   "gameAssetsCategorySpells": "Phép thuật",
   "gameAssetsCategoryTroops": "Quân lính",
-  "assetFolderTroops": "Quân lính",
-  "assetFolderSpells": "Phép thuật",
+  "assetFolderTroops": "Quân",
+  "assetFolderSpells": "Phép",
   "assetFolderHeroes": "Tướng",
   "endpointStateWins": "Thắng",
   "notifGroupBattles": "Trận đánh",
@@ -4566,7 +4656,7 @@
     }
   },
   "playerBattlelogAttacks": "Tấn công",
-  "playerBattlelogAverageDestruction": "Phá hủy trung bình",
+  "playerBattlelogAverageDestruction": "Sức hủy diệt trung bình",
   "playerBattlelogAverageStars": "Sao trung bình",
   "playerBattlelogTripleRate": "Tỷ lệ ba sao",
   "playerBattlelogAverageLoot": "Chiến lợi phẩm trung bình",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Ưu tiên kế hoạch",
+  "upgradeTrackerPlanPrioritiesDescription": "Xếp hạng những gì quan trọng nhất. Nâng cấp cấp độ và công việc tích cực luôn theo thứ tự.",
   "upgradeTrackerPlanClose": "Đóng",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Mục tiêu quy hoạch",
+  "upgradeTrackerPlanConstructionSubtitle": "Nâng cấp xây dựng và anh hùng",
+  "upgradeTrackerPlanResearchSubtitle": "Nghiên cứu về quân đội, phép thuật và công thành",
+  "upgradeTrackerPlanPetHouseSubtitle": "Nâng cấp Nhà thú cưng",
+  "upgradeTrackerPlanPrioritizeNewItems": "Ưu tiên mặt hàng mới",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Đặt các vật phẩm mới được mở khóa hoặc chưa được xây dựng trước",
+  "upgradeTrackerPlanSharedSummary": "Cấp {tier} · kết hợp chia sẻ {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Cấp {tier} · nghiêm ngặt · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "chạy cho đến khi đạt mức tối đa",
+  "upgradeTrackerPlanYieldsAfter": "sản lượng sau {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "Nghiêm khắc",
+  "upgradeTrackerPlanMax": "Tối đa",
+  "upgradeTrackerPlanReorder": "Sắp xếp lại {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Trọng lượng bậc tương đối",
+  "upgradeTrackerPlanCompletionTarget": "Mục tiêu hoàn thành",
+  "upgradeTrackerPlanStrictTier": "Cấp độ nghiêm ngặt",
+  "upgradeTrackerPlanWeight": "Trọng lượng {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Cho đến khi đạt mức tối đa",
+  "upgradeTrackerPlanUntilPercent": "Cho đến {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Các tầng được đánh số chạy đầu tiên. Các hàng được chia sẻ giữ nguyên số cấp và sự kết hợp của chúng được chuẩn hóa theo trọng số tương đối, do đó 50 + 25 trở thành 67% / 33%. Mục tiêu tạo ra lợi nhuận cho danh mục sau khi đạt đến tỷ lệ phần trăm đó trong khi sau đó vẫn đủ điều kiện.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max trước khi thăng tiến",
+  "upgradeTrackerPlanGoalRushNextHall": "Nhanh chóng đến sảnh tiếp theo",
+  "upgradeTrackerPlanGoalCatchUp": "Bắt kịp mức độ gấp rút",
+  "upgradeTrackerPlanGoalUnlockFirst": "Mở khóa những điều mới đầu tiên",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Tường mỗi tuần",
   "upgradeTrackerPlanOff": "Tắt",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / tuần",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "Thích vàng cho tường",
+  "upgradeTrackerPlanPreferGoldDescription": "Sử dụng Vàng trước Elixir khi sử dụng tường",
+  "upgradeTrackerPlanApplyPriorities": "Áp dụng các ưu tiên",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Phòng thủ được chế tạo",
+  "upgradeTrackerPlanCategoryTraps": "Bẫy",
+  "upgradeTrackerPlanCategoryArmy": "Quân đội",
+  "upgradeTrackerPlanCategoryDarkTroops": "quân đen tối",
+  "upgradeTrackerPlanCategorySieges": "Cuộc vây hãm",
+  "upgradeTrackerPlanCategorySupercharge": "siêu nạp",
+  "navigationCloseDrawer": "Đóng ngăn điều hướng",
+  "navigationOpenProfileMenu": "Mở menu hồ sơ",
+  "navigationClashKingWeb": "ClashKing trên web",
+  "settingsPrivacyDataTitle": "Quyền riêng tư và dữ liệu",
+  "settingsPrivacyPolicyDescription": "Xem ClashKing thu thập những gì, lý do sử dụng, bên xử lý dữ liệu, quy tắc lưu giữ và cách liên hệ với chúng tôi.",
+  "settingsPrivacyExportTitle": "Truy cập hoặc xuất dữ liệu của bạn",
+  "settingsPrivacyExportDescription": "Tải xuống bản sao dữ liệu tài khoản liên kết với thông tin đăng nhập ClashKing, bao gồm các tài khoản Clash of Clans đã liên kết và tùy chọn thông báo.",
+  "settingsPrivacyCorrectionTitle": "Chỉnh sửa hoặc hạn chế dữ liệu",
+  "settingsPrivacyCorrectionDescription": "Xóa tài khoản Clash of Clans đã liên kết trong phần cài đặt tài khoản, tắt thông báo hoặc liên hệ bộ phận hỗ trợ để yêu cầu chỉnh sửa hay hạn chế.",
+  "settingsPrivacyDeletionTitle": "Xóa tài khoản ClashKing",
+  "settingsPrivacyDeletionDescription": "Thao tác này bắt đầu xóa tài khoản ClashKing và dữ liệu ứng dụng liên quan, trừ khi ClashKing phải giữ lại một số hồ sơ giới hạn vì lý do bảo mật, phòng chống gian lận hoặc nghĩa vụ pháp lý.",
+  "settingsPrivacyChildrenTitle": "Trẻ em và gia đình",
+  "settingsPrivacyChildrenDescription": "ClashKing là ứng dụng đồng hành dành cho người dùng phổ thông và không hướng đến trẻ em. Đừng tạo tài khoản nếu tại quốc gia của bạn, bạn chưa đủ tuổi tự đưa ra sự đồng ý mà không cần cha mẹ hoặc người giám hộ chấp thuận.",
+  "settingsPrivacyExportReady": "Bản xuất dữ liệu đã sẵn sàng để lưu.",
+  "settingsPrivacyExportCreateFailed": "Không thể tạo bản xuất dữ liệu. Thay vào đó, một email về quyền riêng tư đã được soạn sẵn.",
+  "settingsPrivacyExportPrepareFirst": "Hãy chuẩn bị bản xuất trước khi lưu.",
+  "settingsPrivacyExportSaved": "Bản xuất dữ liệu đã được lưu.",
+  "settingsPrivacyExportSaveFailed": "Không thể lưu bản xuất dữ liệu. Thay vào đó, một email về quyền riêng tư đã được soạn sẵn.",
+  "settingsPrivacyDeleteUnavailable": "Tính năng xóa tài khoản chưa khả dụng trong bản dựng này. Thay vào đó, một email về quyền riêng tư đã được soạn sẵn.",
+  "settingsPrivacyOpenPolicy": "Mở chính sách",
+  "settingsPrivacyRefreshExport": "Làm mới bản xuất",
+  "settingsPrivacyPrepareExport": "Chuẩn bị bản xuất",
+  "settingsPrivacySaveExport": "Lưu bản xuất",
+  "settingsPrivacyContactSupport": "Liên hệ hỗ trợ",
+  "settingsPrivacyDeleteAccount": "Xóa tài khoản",
+  "settingsPrivacyDeleteConfirmTitle": "Xóa tài khoản?",
+  "settingsPrivacyDeleteConfirmDescription": "Yêu cầu này không thể hoàn tác sau khi được xử lý. Bạn có thể mất các tài khoản đã liên kết, cài đặt thông báo, tùy chọn đã lưu và phương thức xác thực.",
+  "generalUnranked": "Chưa xếp hạng",
+  "playerJoinLeaveTab": "Tham gia / Rời đi",
+  "playerUpgradeRemainingAccessibility": "Còn lại cho Nhà Chính {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Đã hoàn thành {progress}% cho TH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Mục này đã hoàn thành cho TH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Thời gian còn lại",
+  "playerUpgradeNoResourceData": "Không có dữ liệu tài nguyên",
+  "playerJoinLeaveLoadError": "Không thể tải lịch sử tham gia / rời đi",
+  "playerJoinLeaveClanTotals": "Tổng theo bang hội",
   "playerJoinLeaveTime": "Thời gian",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "Thời gian tham gia",
+  "playerJoinLeaveVisits": "Lượt ghé",
+  "playerJoinLeaveJoined": "Đã tham gia",
+  "playerJoinLeaveLeft": "Đã rời đi",
+  "playerJoinLeaveNoHistory": "Không có lịch sử tham gia / rời đi",
+  "playerJoinLeaveNoClanTotals": "Không có tổng dữ liệu bang hội",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
