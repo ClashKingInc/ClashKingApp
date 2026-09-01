@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Εύρος στατιστικών πολέμου",
+  "warStatsRangeDescription": "Επίλεξε αν τα στατιστικά καλύπτουν έναν σταθερό αριθμό πρόσφατων πολέμων ή ένα πρόσφατο διάστημα ημερών.",
+  "warStatsRangeDays": "Ημέρες",
+  "warStatsRangeWarsToInclude": "Πόλεμοι προς συμπερίληψη",
+  "warStatsRangeDaysToInclude": "Ημέρες προς συμπερίληψη",
+  "upgradeTrackerAllBuildersOccupied": "Όλοι οι εργάτες είναι απασχολημένοι",
+  "upgradeTrackerBuildCost": "Κόστος κατασκευής",
+  "upgradeTrackerBuilderBaseBuilders": "Εργάτες Βάσης Εργατών",
+  "upgradeTrackerBuilderBaseLaboratory": "Εργαστήριο Βάσης Εργατών",
+  "upgradeTrackerCalendar": "Ημερολόγιο",
+  "upgradeTrackerClearCost": "Κόστος απομάκρυνσης",
+  "upgradeTrackerCompletionDetails": "Λεπτομέρειες ολοκλήρωσης χωριού",
+  "upgradeTrackerCustomSoundtrack": "Προσαρμοσμένο μουσικό θέμα",
+  "upgradeTrackerGoldPassPercent": "Χρυσό Πάσο {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Σύνοψη {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,9 +29,9 @@
     }
   },
   "upgradeTrackerGuardians": "Φύλακες",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerHelpers": "Βοηθοί",
+  "upgradeTrackerHouseParts": "Τμήματα σπιτιού",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# αδρανής εργάτης} other {# αδρανείς εργάτες}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "Σε εξέλιξη",
+  "upgradeTrackerItemSemanticLabel": "{item}, επίπεδο {currentLevel} από {targetLevel}{count, plural, =1 {} other {, # κτίρια}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "{count} στην κατοχή σου",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Λωρίδα",
   "upgradeTrackerLevelTransition": "Επίπεδο {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Λάφυρα τώρα",
+  "upgradeTrackerLootOutlook": "Πρόβλεψη λαφύρων",
+  "upgradeTrackerMusic": "Μουσική",
+  "upgradeTrackerNextDays": "{count, plural, one {Επόμενη # ημέρα} other {Επόμενες # ημέρες}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Επόμενη περίοδος",
+  "upgradeTrackerNoGoldPass": "Χωρίς Χρυσό Πάσο",
+  "upgradeTrackerNoMatchingUpgrades": "Δεν υπάρχουν αναβαθμίσεις που να ταιριάζουν",
+  "upgradeTrackerNoMatchingUpgradesBody": "Δοκίμασε άλλο χωριό ή ουρά.",
+  "upgradeTrackerNothingNeededNow": "Δεν χρειάζεται τίποτα τώρα",
+  "upgradeTrackerObstacles": "Εμπόδια",
+  "upgradeTrackerPart": "Τμήμα",
+  "upgradeTrackerPassReward": "Ανταμοιβή Πάσου",
+  "upgradeTrackerPauseSoundtrack": "Παύση μουσικού θέματος",
+  "upgradeTrackerPeriodCount": "Περίοδος {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Αναπαραγωγή μουσικού θέματος",
+  "upgradeTrackerPreviousPeriod": "Προηγούμενη περίοδος",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Τοπία",
+  "upgradeTrackerScheduledLane": "Προγραμματισμένο στη λωρίδα #{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Πρόοδος {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "Προγραμματισμένη",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
-  "upgradeTrackerStarts": "Ξεκινά",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerSize": "Μέγεθος",
+  "upgradeTrackerSortLongest": "Μεγαλύτερη διάρκεια πρώτα",
+  "upgradeTrackerSortName": "Όνομα Α–Ω",
+  "upgradeTrackerSortScheduled": "Προγραμματισμένα",
+  "upgradeTrackerSortShortest": "Μικρότερη διάρκεια πρώτα",
+  "upgradeTrackerSoundtrackPosition": "Θέση μουσικού θέματος",
+  "upgradeTrackerStarts": "Έναρξη",
+  "upgradeTrackerTier": "Βαθμίδα",
+  "upgradeTrackerUpgradesStarting": "αναβαθμίσεις που ξεκινούν",
+  "upgradeTrackerUpgradingNow": "Αναβαθμίζεται τώρα",
+  "upgradeTrackerWarBase": "Βάση Πολέμου",
+  "notifSettingsSaveFailed": "Δεν ήταν δυνατή η αποθήκευση των ρυθμίσεων ειδοποιήσεων.",
+  "notifPushEnabled": "Οι ειδοποιήσεις push ενεργοποιήθηκαν",
+  "notifReceiveNotifications": "Λήψη ειδοποιήσεων",
+  "notifTokenPreview": "Διακριτικό: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Οι ενεργοποιημένες ειδοποιήσεις μπορούν να αποστέλλονται σε αυτήν τη συσκευή.",
+  "notifDisabledAccountDescription": "Οι ειδοποιήσεις είναι απενεργοποιημένες σε ολόκληρο τον λογαριασμό ClashKing.",
+  "notifMaximumRemindersAdded": "Προστέθηκε ο μέγιστος αριθμός υπενθυμίσεων",
+  "notifAddReminder": "Προσθήκη υπενθύμισης",
+  "notifDurationOneHour": "1 ώρα",
+  "notifDurationHours": "{count} ώρες",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} λεπτά",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Προσθήκη {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 ώρα πριν",
+  "notifTimingHoursBefore": "{count} ώρες πριν",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} λεπτά πριν",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Οι ειδοποιήσεις push είναι έτοιμες σε αυτήν τη συσκευή.",
+  "notifPushPermissionRequired": "Επιτρέψτε τις ειδοποιήσεις για να λαμβάνετε ενημερώσεις του ClashKing.",
+  "notifPushPermissionDenied": "Η άδεια ειδοποιήσεων απορρίφθηκε.",
+  "notifPushNotConfigured": "Το Firebase δεν έχει ρυθμιστεί για αυτήν την έκδοση.",
+  "notifPushTokenUnavailable": "Δεν υπάρχει ακόμη διαθέσιμο διακριτικό push.",
+  "notifPushUnsupported": "Οι ειδοποιήσεις push δεν υποστηρίζονται σε αυτήν την πλατφόρμα.",
+  "notifPushInitializing": "Ρύθμιση ειδοποιήσεων push…",
+  "notificationPrimerTitle": "Ενεργοποίηση ειδοποιήσεων;",
+  "notificationPrimerBody": "Το ClashKing μπορεί να σας ειδοποιεί για ενημερώσεις πολέμων, CWL, λογαριασμού και έργων. Μπορείτε να το αλλάξετε ανά πάσα στιγμή στις Ρυθμίσεις > Ειδοποιήσεις.",
+  "notificationPrimerNotNow": "Όχι τώρα",
+  "notificationPrimerAllow": "Να επιτρέπονται",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Επιτεύγματα",
   "achievementEarnedLabel": "Κερδήθηκε",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Αναζήτηση μελών",
   "clanMembersShowTotals": "Εμφάνιση συνόλων φυλών",
   "clanMembersHideTotals": "Απόκρυψη συνόλων φυλών",
-  "clanMembersReceivedShort": "Ληφθέντα",
+  "clanMembersReceivedShort": "Ελήφθη",
   "clanMembersAverageTh": "Μέσος όρος TH",
   "clanMinimumMembers": "Ελάχιστα μέλη",
   "clanMaximumMembers": "Μέγιστα μέλη",
@@ -1105,8 +1105,26 @@
   "warTitle": "Πόλεμος",
   "warFrequency": "Συχνότητα πολέμου",
   "warParticipation": "Συμμετοχή στον πόλεμο",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Μόνο συμμετέχων",
+  "warStatsRangeWarsCompact": "{number} πόλεμοι",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} ημέρες",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Τελευταίες {number} ημέρες",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Τρέχοντα μέλη",
   "warLeague": "Πόλεμος/Λίγκα",
   "warHistory": "Ιστορικό πολέμων",
   "warLog": "Αρχείο πολέμων",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "Καλύτερες επιθέσεις",
   "warAttacksCount": "Αριθμός επιθέσεων",
   "warAttacksMissed": "Χαμένες επιθέσεις",
-  "warAttacksMissedShort": "Χαμένο",
+  "warAttacksMissedShort": "Χάθηκε",
   "warAttacksNumber": "Έκανες επίθεση {number_time} φορά/ές στους τελευταίους {number_war} πολέμους.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1592,7 +1610,7 @@
   "clanProfileDescriptionChanged": "Η περιγραφή άλλαξε",
   "clanJoinLeaveTab": "Εγγραφή/Αποχώρηση",
   "clanRankingsTab": "Κατάταξη",
-  "clanRankingsSeason": "Σεζόν",
+  "clanRankingsSeason": "Εποχή",
   "clanRankingsSelectSeason": "Επιλέξτε σεζόν κατάταξης",
   "clanRankingsFilterActivity": "Δραστηριότητα",
   "clanRankingsFilterWar": "Πόλεμος",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Αστέρια του πολέμου",
   "playerWarPreferenceTitle": "Προφ. πολέμου.",
   "playerDonatedTitle": "Δωρεές",
-  "playerReceivedTitle": "Ληφθέντα",
+  "playerReceivedTitle": "Ελήφθη",
   "playerCapitalTitle": "Κεφάλαιο",
   "playerExpLevelTitle": "Exp. επίπεδο",
   "clanWarWinsTitle": "Ο πόλεμος κερδίζει",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "Districts που καταστράφηκαν",
   "raidsCompleted": "Ολοκληρωμένα raids",
   "capitalRaidStatusOngoing": "Σε εξέλιξη",
-  "capitalRaidStatusEnded": "Έληξε",
+  "capitalRaidStatusEnded": "Τελείωσε",
   "capitalRaidLoot": "Λάφυρο",
   "capitalRaidRewards": "Ανταμοιβές",
   "capitalRaidPreviousWeek": "Προηγούμενη εβδομάδα",
@@ -2653,7 +2671,7 @@
   "@gameItemOverview": {
     "description": "Section title for item description"
   },
-  "gameItemStats": "Στατιστικά",
+  "gameItemStats": "Στατιστικά στοιχεία",
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
@@ -2696,6 +2714,78 @@
   "settingsAccount": "Λογαριασμός",
   "@settingsAccount": {
     "description": "Settings section: account"
+  },
+  "settingsConnectedAppsTitle": "Συνδεδεμένες εφαρμογές",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Δες και αποσύνδεσε εφαρμογές με πρόσβαση στον λογαριασμό.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Ενεργές συνδέσεις",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Δεν υπάρχουν συνδεδεμένες εφαρμογές",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Οι εφαρμογές που συνδέεις θα εμφανίζονται εδώ.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Δεν ήταν δυνατή η φόρτωση των συνδεδεμένων εφαρμογών",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Όλοι οι τρέχοντες και μελλοντικοί συνδεδεμένοι λογαριασμοί",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} επιλεγμένοι λογαριασμοί",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Αποσύνδεση",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Αποσύνδεση εφαρμογής;",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "Η εφαρμογή {name} θα χάσει αμέσως την πρόσβαση στους συνδεδεμένους λογαριασμούς σου.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Η εφαρμογή {name} αποσυνδέθηκε.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Δεν ήταν δυνατή η αποσύνδεση της εφαρμογής {name}. Δοκίμασε ξανά.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "settingsSignedIn": "Συνδεδεμένος",
   "@settingsSignedIn": {
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "Ανανεώστε τα δεδομένα πολέμου",
   "warWidgetNoData": "Δεν υπάρχουν διαθέσιμα στοιχεία πολέμου",
   "warWidgetLastUpdated": "Τελευταία ενημέρωση: {time}",
-  "todoEventClanGames": "Παιχνίδια Clan",
+  "todoEventClanGames": "Παιχνίδια φυλών",
   "todoEventCwl": "CWL",
   "todoEventSeasonEnds": "Η σεζόν τελειώνει",
   "todoEventLeagueReset": "Επαναφορά πρωταθλήματος",
@@ -3103,13 +3193,13 @@
   "warFiltersAllWars": "Όλοι οι πόλεμοι",
   "warFiltersRandomWars": "Τυχαίοι πόλεμοι",
   "warFiltersCwlWars": "Πόλεμοι CWL",
-  "warFiltersFriendlyWars": "Φιλικοί πόλεμοι",
+  "warFiltersFriendlyWars": "Φιλικοί Πόλεμοι",
   "warType": "Τύπος πολέμου",
   "warFiltersAnyTownHall": "Οποιοδήποτε TH",
   "gameTownHallLevelShort": "Θ{level}",
-  "warAttackerTownHall": "TH επιτιθέμενου",
-  "warDefenderTownHall": "TH αμυνόμενου",
-  "warStatsFilterSameTownHallOnly": "Μόνο ίδιο Δημαρχείο",
+  "warAttackerTownHall": "Επιτιθέμενος Θ",
+  "warDefenderTownHall": "Συνήγορος Θ",
+  "warStatsFilterSameTownHallOnly": "Μόνο το ίδιο Δημαρχείο",
   "warStatsFilterSameTownHallDescription": "Εμφάνιση επιθέσεων μόνο όπου ο επιθετικός και ο αμυντικός έχουν το ίδιο επίπεδο TH",
   "generalAny": "Κάθε",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3118,8 +3208,8 @@
   "warStatsFilterMinDestructionPercent": "Ελάχιστη καταστροφή %",
   "warStatsFilterMaxDestructionPercent": "Μέγιστο ποσοστό καταστροφής",
   "warStatsFilterMinPosition": "Ελάχιστη θέση",
-  "warStatsFilterMaxPosition": "Μέγιστη θέση",
-  "warStatsFilterFreshAttacksOnly": "Μόνο πρώτες επιθέσεις",
+  "warStatsFilterMaxPosition": "Μέγιστη Θέση",
+  "warStatsFilterFreshAttacksOnly": "Μόνο φρέσκες επιθέσεις",
   "warStatsFilterFreshAttacksDescription": "Εμφάνιση μόνο των πρώτων επιθέσεων σε κάθε βάση",
   "warStatsFilterResultLimit": "Όριο αποτελεσμάτων",
   "generalResultsCount": "Αποτελέσματα {count}",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Προσθήκη widget πολέμου",
   "settingsWarWidgetLinkClanFirst": "Σύνδεσε πρώτα έναν λογαριασμό σε clan",
   "settingsWarWidgetClanCount": "{count} διαθέσιμο/α clan",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Επιλέξτε clan. Αφού προσθέσετε το widget, πατήστε το παρατεταμένα, επιλέξτε Επεξεργασία widget και μετά Clan.",
+  "settingsWarWidgetAndroidInstructions": "Επιλέξτε clan και προσθέστε το widget από τον επιλογέα widget του Android.",
+  "settingsWarWidgetEmpty": "Κανένας συνδεδεμένος λογαριασμός σας δεν βρίσκεται αυτήν τη στιγμή σε clan.",
+  "settingsWarWidgetIosFooter": "Προσθέστε πολλά widget πολέμου και επιλέξτε διαφορετικό clan για το καθένα.",
+  "settingsWarWidgetIosReady": "Το {clanName} είναι έτοιμο. Επεξεργαστείτε το widget και επιλέξτε το στο Clan.",
+  "settingsWarWidgetAndroidReady": "Τα δεδομένα widget για το {clanName} είναι έτοιμα.",
+  "settingsWarWidgetPrepareFailed": "Δεν ήταν δυνατή η προετοιμασία του widget: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Λογαριασμοί συνδεδεμένοι με bot και δεδομένα Discord",
   "settingsDiscordSyncSubtitle": "Συγχρονισμός λογαριασμών συνδεδεμένων με bot και δεδομένων Discord",
@@ -3251,7 +3341,7 @@
   "todoRemainingUpgradeTooltip": "Πάτησε για το υπόλοιπο κόστος και χρόνο αναβάθμισης",
   "announcementAnimeFuryTitle": "Anime Fury",
   "announcementAnimeFurySubtitle": "Πάτησε για να δεις την ενημέρωση Ιουνίου 2026",
-  "sideRankingsTitle": "Κατάταξη",
+  "sideRankingsTitle": "Κατατάξεις",
   "sideRankingsSubtitle": "Επίσημοι πίνακες κατάταξης μαζί με endpoints του ClashKing.",
   "sideRankingsLoadError": "Δεν ήταν δυνατή η φόρτωση των επίσημων κατατάξεων.",
   "sideRankingsEmptyTitle": "Δεν επιστράφηκαν κατατάξεις",
@@ -3314,7 +3404,7 @@
   "statsPerformance": "Απόδοση",
   "statsSamples": "Δείγματα",
   "statsUsage": "Χρήση",
-  "statsAverageStars": "Μέσος όρος αστεριών",
+  "statsAverageStars": "Μέση αστέρια",
   "statsAverageDestruction": "Μέση καταστροφή",
   "statsStarRates": "Τιμές αστεριών",
   "statsThreeStarRate": "Τιμή τριών αστέρων",
@@ -3354,7 +3444,7 @@
   "statsCwlLeague": "Πρωτάθλημα CWL",
   "statsLeagueBronze": "Χάλκινο",
   "statsLeagueSilver": "Ασημί",
-  "statsLeagueGold": "Χρυσός",
+  "statsLeagueGold": "Χρυσό",
   "statsLeagueCrystal": "Κρύσταλλο",
   "statsLeagueMaster": "Μάστερ",
   "statsLeagueChampion": "Πρωταθλητής",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "Ανάλυση σεζόν",
   "sideTopScore": "Κορυφαία βαθμολογία",
   "sideTop200Avg": "Μέσος όρος Top 200",
-  "sideBasesArmiesTitle": "Βάσεις & Στρατοί",
+  "sideBasesArmiesTitle": "Βάσεις & στρατοί",
   "sideBasesArmiesSubtitle": "Διατάξεις και σύνδεσμοι στρατών αποθηκευμένοι στο Discord.",
   "sideBotSyncTarget": "Στόχος συγχρονισμού bot",
   "sideBotSyncTargetBody": "Το bot ήδη αποθηκεύει βάσεις και στρατούς στο προφίλ Discord. Αυτή η σελίδα είναι έτοιμη για αυτό το συγχρονισμένο payload.",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Αποθηκευμένοι στρατοί",
   "sideArmyLinks": "Σύνδεσμοι στρατών",
   "sideArmyLinksBody": "Σύνθεση, ξόρκια, siege, σημειώσεις και σύνδεσμος κοινοποίησης.",
-  "sideGameAssetsTitle": "Περιουσιακά στοιχεία παιχνιδιού",
+  "sideGameAssetsTitle": "Assets παιχνιδιού",
   "sideGameAssetsSubtitle": "Φιλοξενούμενα assets του ClashKing, ομαδοποιημένα ανά φάκελο.",
   "gameAssetsLoadError": "Δεν ήταν δυνατή η φόρτωση των στοιχείων του παιχνιδιού",
   "gameAssetsEmptyTitle": "Δεν υπάρχουν διαθέσιμα στοιχεία παιχνιδιού",
@@ -3511,13 +3601,13 @@
   "assetFolderResources": "Πόροι",
   "assetFolderStickers": "Αυτοκόλλητα",
   "upgradeSectionHeroes": "Ήρωες",
-  "upgradeSectionTroops": "Στρατός",
+  "upgradeSectionTroops": "Στρατεύματα",
   "upgradeSectionSpells": "Ξόρκια",
   "upgradeSectionPets": "Κατοικίδια",
   "upgradeSectionEquipment": "Εξοπλισμός",
   "sideMockupSource": "Πηγή",
   "sideMockupMode": "Λειτουργία",
-  "sideMockupPreview": "Πρεμιέρα",
+  "sideMockupPreview": "Προεπισκόπηση",
   "sideMockupRows": "Γραμμές",
   "sideMockupRowsValue": "5 προεπισκοπήσεις",
   "endpointLeagueTop200": "Top 200 λίγκας",
@@ -4093,7 +4183,7 @@
   "statsBattle": "Μάχη",
   "statsWorld": "Κόσμος",
   "statsHeaderSubtitle": "Εξερευνήστε την απόδοση μάχης και τον κόσμο που παρακολουθούμε.",
-  "statsPreview": "Πρεμιέρα",
+  "statsPreview": "Προεπισκόπηση",
   "statsTownHallDistribution": "Διανομή Δημαρχείου",
   "statsBuilderHallDistribution": "Διανομή Builder Hall",
   "statsLeagueDistribution": "Κατανομή πρωταθλήματος",
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "Επιλεγμένοι λογαριασμοί",
   "notifAudienceAcrossDevicesDescription": "Επίλεξε ποιοι λογαριασμοί μπορούν να λαμβάνουν ειδοποιήσεις σε αυτήν τη συσκευή.",
-  "notifAccountBookmarked": "Σελιδοδείκτη",
+  "notifAccountBookmarked": "Αποθηκευμένος",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "Πολεμικές επιθέσεις",
+  "notifGroupWarAttacks": "Επιθέσεις πολέμου",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4293,7 +4383,7 @@
   "@notifGroupWarReminders": {
     "description": "Notification group label for war reminders."
   },
-  "notifGroupEvents": "Συμβάντα πολέμου",
+  "notifGroupEvents": "Εκδηλώσεις",
   "@notifGroupEvents": {
     "description": "Notification group label for events."
   },
@@ -4523,7 +4613,7 @@
   "damageOtherSources": "Άλλες πηγές",
   "damageShowAllSources": "Προσθήκη άλλης πηγής",
   "damageShowFewerSources": "Απόκρυψη άλλων πηγών",
-  "searchCancel": "Ακύρωση",
+  "searchCancel": "Ματαίωση",
   "todoRaidAttacks": "Επιθέσεις επιδρομών",
   "todoMockRaid4Left": "4 έμειναν",
   "todoMockWarAltStatus": "Ενεργός πριν από 18 μέτρα · ο πόλεμος και οι επιδρομές χρειάζονται προσοχή",
@@ -4541,11 +4631,11 @@
   "gameAssetsCategoryPets": "Κατοικίδια",
   "gameAssetsCategorySkins": "Δέρματα",
   "gameAssetsCategorySpells": "Ξόρκια",
-  "gameAssetsCategoryTroops": "Στρατός",
-  "assetFolderTroops": "Στρατός",
+  "gameAssetsCategoryTroops": "Στρατεύματα",
+  "assetFolderTroops": "Στρατεύματα",
   "assetFolderSpells": "Ξόρκια",
   "assetFolderHeroes": "Ήρωες",
-  "endpointStateWins": "Κερδίζει",
+  "endpointStateWins": "Νίκες",
   "notifGroupBattles": "Μάχες",
   "notifGroupSupport": "Υποστήριξη",
   "rankedLeagueAccountSelector": "Εμφανιζόμενος λογαριασμός",
@@ -4567,7 +4657,7 @@
   },
   "playerBattlelogAttacks": "Επιθέσεις",
   "playerBattlelogAverageDestruction": "Μέση καταστροφή",
-  "playerBattlelogAverageStars": "Μέσος όρος αστεριών",
+  "playerBattlelogAverageStars": "Μέση αστέρια",
   "playerBattlelogTripleRate": "Τιμή τριών αστέρων",
   "playerBattlelogAverageLoot": "Μέση λεία",
   "playerBattlelogPopularTroops": "Πιο χρησιμοποιημένα στρατεύματα",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Σχεδιάστε προτεραιότητες",
+  "upgradeTrackerPlanPrioritiesDescription": "Βαθμολογήστε τι έχει μεγαλύτερη σημασία. Τα επίπεδα αναβάθμισης και η ενεργή εργασία παραμένουν πάντα σε τάξη.",
   "upgradeTrackerPlanClose": "Κλείσιμο",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Στόχοι προγραμματισμού",
+  "upgradeTrackerPlanConstructionSubtitle": "Κατασκευές και αναβαθμίσεις ηρώων",
+  "upgradeTrackerPlanResearchSubtitle": "Έρευνα για στρατεύματα, ξόρκια και πολιορκία",
+  "upgradeTrackerPlanPetHouseSubtitle": "Αναβαθμίσεις Pet House",
+  "upgradeTrackerPlanPrioritizeNewItems": "Δώστε προτεραιότητα σε νέα στοιχεία",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Τοποθετήστε πρώτα τα πρόσφατα ξεκλειδωμένα ή μη κατασκευασμένα αντικείμενα",
+  "upgradeTrackerPlanSharedSummary": "Επίπεδο {tier} · κοινόχρηστο μείγμα {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Επίπεδο {tier} · αυστηρό · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "τρέχει μέχρι το μέγιστο",
+  "upgradeTrackerPlanYieldsAfter": "αποδόσεις μετά από {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "Αυστηρό",
+  "upgradeTrackerPlanMax": "Μέγ",
+  "upgradeTrackerPlanReorder": "Αναπαραγγελία {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Σχετικό βάρος βαθμίδας",
+  "upgradeTrackerPlanCompletionTarget": "Στόχος ολοκλήρωσης",
+  "upgradeTrackerPlanStrictTier": "Αυστηρή βαθμίδα",
+  "upgradeTrackerPlanWeight": "Βάρος {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Μέχρι το μέγιστο",
+  "upgradeTrackerPlanUntilPercent": "Έως {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Τα αριθμημένα επίπεδα τρέχουν πρώτα. Οι κοινόχρηστες σειρές διατηρούν τον ίδιο αριθμό βαθμίδων και το μείγμα τους κανονικοποιείται από τα σχετικά βάρη, έτσι το 50 + 25 γίνεται 67% / 33%. Ένας στόχος κάνει μια απόδοση κατηγορίας αφού φτάσει σε αυτό το ποσοστό, ενώ παραμένει κατάλληλος αργότερα.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max πριν προχωρήσετε",
+  "upgradeTrackerPlanGoalRushNextHall": "Φτάστε γρήγορα στην επόμενη αίθουσα",
+  "upgradeTrackerPlanGoalCatchUp": "Προλάβετε τα βιαστικά επίπεδα",
+  "upgradeTrackerPlanGoalUnlockFirst": "Ξεκλειδώστε πρώτα νέα πράγματα",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
-  "upgradeTrackerPlanOff": "Ανενεργό",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanWallsEachWeek": "Τοίχοι κάθε εβδομάδα",
+  "upgradeTrackerPlanOff": "Απενεργοποίηση",
+  "upgradeTrackerPlanPerWeek": "{count} / εβδομάδα",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
-  "playerJoinLeaveTime": "Ώρα",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "upgradeTrackerPlanPreferGold": "Προτιμήστε το Gold για τοίχους",
+  "upgradeTrackerPlanPreferGoldDescription": "Χρησιμοποιήστε το Gold πριν το Elixir όταν ξοδεύετε τοίχους",
+  "upgradeTrackerPlanApplyPriorities": "Εφαρμόστε προτεραιότητες",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Κατασκευασμένες άμυνες",
+  "upgradeTrackerPlanCategoryTraps": "Παγίδες",
+  "upgradeTrackerPlanCategoryArmy": "Στρατός",
+  "upgradeTrackerPlanCategoryDarkTroops": "Σκοτεινά στρατεύματα",
+  "upgradeTrackerPlanCategorySieges": "Πολιορκίες",
+  "upgradeTrackerPlanCategorySupercharge": "Υπερχρέωση",
+  "navigationCloseDrawer": "Κλείσιμο συρταριού πλοήγησης",
+  "navigationOpenProfileMenu": "Άνοιγμα μενού προφίλ",
+  "navigationClashKingWeb": "ClashKing για web",
+  "settingsPrivacyDataTitle": "Απόρρητο και δεδομένα",
+  "settingsPrivacyPolicyDescription": "Δείτε τι συλλέγει το ClashKing, γιατί χρησιμοποιούνται τα δεδομένα, ποιος τα επεξεργάζεται, τους κανόνες διατήρησης και πώς να επικοινωνήσετε μαζί μας.",
+  "settingsPrivacyExportTitle": "Πρόσβαση ή εξαγωγή των δεδομένων σας",
+  "settingsPrivacyExportDescription": "Κατεβάστε ένα αντίγραφο των δεδομένων λογαριασμού που συνδέονται με τη σύνδεσή σας στο ClashKing, όπως συνδεδεμένους λογαριασμούς Clash of Clans και προτιμήσεις ειδοποιήσεων.",
+  "settingsPrivacyCorrectionTitle": "Διόρθωση ή περιορισμός δεδομένων",
+  "settingsPrivacyCorrectionDescription": "Καταργήστε συνδεδεμένους λογαριασμούς Clash of Clans από τις ρυθμίσεις λογαριασμού, απενεργοποιήστε τις ειδοποιήσεις ή επικοινωνήστε με την υποστήριξη για αιτήματα διόρθωσης και περιορισμού.",
+  "settingsPrivacyDeletionTitle": "Διαγραφή του λογαριασμού ClashKing",
+  "settingsPrivacyDeletionDescription": "Αυτό ξεκινά τη διαγραφή του λογαριασμού ClashKing και των σχετικών δεδομένων εφαρμογής, εκτός αν το ClashKing πρέπει να διατηρήσει περιορισμένα αρχεία για λόγους ασφαλείας, πρόληψης απάτης ή νομικών υποχρεώσεων.",
+  "settingsPrivacyChildrenTitle": "Παιδιά και οικογένειες",
+  "settingsPrivacyChildrenDescription": "Το ClashKing είναι μια συνοδευτική εφαρμογή για το ευρύ κοινό και δεν απευθύνεται σε παιδιά. Μην δημιουργήσετε λογαριασμό αν στη χώρα σας δεν είστε αρκετά μεγάλοι για να συναινέσετε χωρίς έγκριση γονέα ή κηδεμόνα.",
+  "settingsPrivacyExportReady": "Η εξαγωγή δεδομένων είναι έτοιμη για αποθήκευση.",
+  "settingsPrivacyExportCreateFailed": "Δεν ήταν δυνατή η δημιουργία της εξαγωγής δεδομένων. Ετοιμάστηκε ένα email απορρήτου.",
+  "settingsPrivacyExportPrepareFirst": "Προετοιμάστε την εξαγωγή πριν την αποθηκεύσετε.",
+  "settingsPrivacyExportSaved": "Η εξαγωγή δεδομένων αποθηκεύτηκε.",
+  "settingsPrivacyExportSaveFailed": "Δεν ήταν δυνατή η αποθήκευση της εξαγωγής δεδομένων. Ετοιμάστηκε ένα email απορρήτου.",
+  "settingsPrivacyDeleteUnavailable": "Η διαγραφή λογαριασμού δεν είναι διαθέσιμη σε αυτή την έκδοση. Ετοιμάστηκε ένα email απορρήτου.",
+  "settingsPrivacyOpenPolicy": "Άνοιγμα πολιτικής",
+  "settingsPrivacyRefreshExport": "Ανανέωση εξαγωγής",
+  "settingsPrivacyPrepareExport": "Προετοιμασία εξαγωγής",
+  "settingsPrivacySaveExport": "Αποθήκευση εξαγωγής",
+  "settingsPrivacyContactSupport": "Επικοινωνία με την υποστήριξη",
+  "settingsPrivacyDeleteAccount": "Διαγραφή λογαριασμού",
+  "settingsPrivacyDeleteConfirmTitle": "Διαγραφή λογαριασμού;",
+  "settingsPrivacyDeleteConfirmDescription": "Το αίτημα είναι οριστικό μετά την επεξεργασία του. Ενδέχεται να χάσετε συνδεδεμένους λογαριασμούς, ρυθμίσεις ειδοποιήσεων, αποθηκευμένες προτιμήσεις και μεθόδους ελέγχου ταυτότητας.",
+  "generalUnranked": "Χωρίς κατάταξη",
+  "playerJoinLeaveTab": "Συμμετοχή / Αποχώρηση",
+  "playerUpgradeRemainingAccessibility": "Απομένει για Δημαρχείο {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% ολοκληρωμένο για ΔΗ{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Αυτή η ενότητα έχει ολοκληρωθεί για ΔΗ{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Χρόνος που απομένει",
+  "playerUpgradeNoResourceData": "Δεν υπάρχουν δεδομένα πόρων",
+  "playerJoinLeaveLoadError": "Δεν ήταν δυνατή η φόρτωση του ιστορικού συμμετοχών / αποχωρήσεων",
+  "playerJoinLeaveClanTotals": "Σύνολα φυλών",
+  "playerJoinLeaveTime": "Χρόνος",
+  "playerJoinLeaveTimeSpent": "Χρόνος παραμονής",
+  "playerJoinLeaveVisits": "Επισκέψεις",
+  "playerJoinLeaveJoined": "Συμμετείχε",
+  "playerJoinLeaveLeft": "Αποχώρησε",
+  "playerJoinLeaveNoHistory": "Δεν υπάρχει διαθέσιμο ιστορικό συμμετοχών / αποχωρήσεων",
+  "playerJoinLeaveNoClanTotals": "Δεν υπάρχουν διαθέσιμα σύνολα φυλών",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
