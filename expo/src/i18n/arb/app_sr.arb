@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Опсег ратне статистике",
+  "warStatsRangeDescription": "Изаберите да ли статистика обухвата одређени број недавних ратова или недавни период у данима.",
+  "warStatsRangeDays": "Дани",
+  "warStatsRangeWarsToInclude": "Ратови за укључивање",
+  "warStatsRangeDaysToInclude": "Дани за укључивање",
+  "upgradeTrackerAllBuildersOccupied": "Сви градитељи су заузети",
+  "upgradeTrackerBuildCost": "Цена изградње",
+  "upgradeTrackerBuilderBaseBuilders": "Градитељи Градитељске базе",
+  "upgradeTrackerBuilderBaseLaboratory": "Лабораторија Градитељске базе",
+  "upgradeTrackerCalendar": "Календар",
+  "upgradeTrackerClearCost": "Цена уклањања",
+  "upgradeTrackerCompletionDetails": "Детаљи завршености села",
+  "upgradeTrackerCustomSoundtrack": "Прилагођена музика",
+  "upgradeTrackerGoldPassPercent": "Златна пропусница {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Резиме: {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,9 +29,9 @@
     }
   },
   "upgradeTrackerGuardians": "Чувари",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerHelpers": "Помоћници",
+  "upgradeTrackerHouseParts": "Делови куће",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# слободан градитељ} other {# слободних градитеља}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "У току",
+  "upgradeTrackerItemSemanticLabel": "{item}, ниво {currentLevel} од {targetLevel}{count, plural, =1 {} other {, зграда: #}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "Поседовано: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Трака",
   "upgradeTrackerLevelTransition": "Ниво {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Плен сада",
+  "upgradeTrackerLootOutlook": "Прогноза плена",
+  "upgradeTrackerMusic": "Музика",
+  "upgradeTrackerNextDays": "{count, plural, one {Следећи # дан} other {Следећих # дана}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Следећи период",
+  "upgradeTrackerNoGoldPass": "Без Златне пропуснице",
+  "upgradeTrackerNoMatchingUpgrades": "Нема одговарајућих надоградњи",
+  "upgradeTrackerNoMatchingUpgradesBody": "Покушајте са другим селом или редом.",
+  "upgradeTrackerNothingNeededNow": "Тренутно ништа није потребно",
+  "upgradeTrackerObstacles": "Препреке",
+  "upgradeTrackerPart": "Део",
+  "upgradeTrackerPassReward": "Награда пропуснице",
+  "upgradeTrackerPauseSoundtrack": "Паузирај музику",
+  "upgradeTrackerPeriodCount": "Период {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Пусти музику",
+  "upgradeTrackerPreviousPeriod": "Претходни период",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Пејзажи",
+  "upgradeTrackerScheduledLane": "Заказано у траци #{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Напредак: {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "Zakazano",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
-  "upgradeTrackerStarts": "Počinje",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerSize": "Величина",
+  "upgradeTrackerSortLongest": "Прво најдуже",
+  "upgradeTrackerSortName": "Име А–Ш",
+  "upgradeTrackerSortScheduled": "Заказано",
+  "upgradeTrackerSortShortest": "Прво најкраће",
+  "upgradeTrackerSoundtrackPosition": "Позиција музике",
+  "upgradeTrackerStarts": "Почиње",
+  "upgradeTrackerTier": "Категорија",
+  "upgradeTrackerUpgradesStarting": "надоградње које почињу",
+  "upgradeTrackerUpgradingNow": "Надоградња је у току",
+  "upgradeTrackerWarBase": "Ратна база",
+  "notifSettingsSaveFailed": "Подешавања обавештења нису могла да се сачувају.",
+  "notifPushEnabled": "Пуш обавештења су укључена",
+  "notifReceiveNotifications": "Примај обавештења",
+  "notifTokenPreview": "Токен: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Укључена упозорења могу да се шаљу на овај уређај.",
+  "notifDisabledAccountDescription": "Обавештења су искључена за цео ClashKing налог.",
+  "notifMaximumRemindersAdded": "Додат је максималан број подсетника",
+  "notifAddReminder": "Додај подсетник",
+  "notifDurationOneHour": "1 сат",
+  "notifDurationHours": "{count} сати",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} минута",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Додај {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 сат раније",
+  "notifTimingHoursBefore": "{count} сати раније",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} минута раније",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,19 +206,19 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Пуш обавештења су спремна на овом уређају.",
+  "notifPushPermissionRequired": "Дозволите обавештења да бисте примали ClashKing упозорења.",
+  "notifPushPermissionDenied": "Дозвола за обавештења је одбијена.",
+  "notifPushNotConfigured": "Firebase није подешен за ову верзију.",
+  "notifPushTokenUnavailable": "Пуш токен још није доступан.",
+  "notifPushUnsupported": "Пуш обавештења нису подржана на овој платформи.",
+  "notifPushInitializing": "Подешавање пуш обавештења…",
+  "notificationPrimerTitle": "Омогућити обавештења?",
+  "notificationPrimerBody": "ClashKing може да вас обавести о новостима за ратове, CWL, налог и пројекте. Ово можете да промените у било ком тренутку у Подешавања > Обавештења.",
+  "notificationPrimerNotNow": "Не сада",
+  "notificationPrimerAllow": "Дозволи",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "achievementsTitle": "Dostignuća",
+  "achievementsTitle": "Достигнућа",
   "achievementEarnedLabel": "Освојено",
   "achievementSummary": "{earned}/{total} završeno",
   "achievementEarnedCount": "Освојено ×{count}",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Претражи чланове",
   "clanMembersShowTotals": "Прикажи укупне вредности клана",
   "clanMembersHideTotals": "Сакриј укупне вредности клана",
-  "clanMembersReceivedShort": "Primljeno",
+  "clanMembersReceivedShort": "Примљено",
   "clanMembersAverageTh": "Авг ТХ",
   "clanMinimumMembers": "Minimum članova",
   "clanMaximumMembers": "Maksimum članova",
@@ -1105,8 +1105,26 @@
   "warTitle": "Rat",
   "warFrequency": "Učestalost ratova",
   "warParticipation": "Učešće u ratu",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Samo učesnik",
+  "warStatsRangeWarsCompact": "{number} ratova",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} dana",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Poslednjih {number} dana",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Trenutni članovi",
   "warLeague": "Rat/Liga",
   "warHistory": "Istorija ratova",
   "warLog": "Dnevnik ratova",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "Najbolji napadi",
   "warAttacksCount": "Broj napada",
   "warAttacksMissed": "Propušteni napadi",
-  "warAttacksMissedShort": "Propušteno",
+  "warAttacksMissedShort": "Пропуштено",
   "warAttacksNumber": "Napali ste {number_time} put(a) tokom poslednjih {number_war} ratova.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1592,10 +1610,10 @@
   "clanProfileDescriptionChanged": "Опис је промењен",
   "clanJoinLeaveTab": "Придружи се/напусти",
   "clanRankingsTab": "Ранкингс",
-  "clanRankingsSeason": "Sezona",
+  "clanRankingsSeason": "Сезона",
   "clanRankingsSelectSeason": "Изаберите сезону рангирања",
   "clanRankingsFilterActivity": "Активност",
-  "clanRankingsFilterWar": "Rat",
+  "clanRankingsFilterWar": "Рат",
   "clanRankingsFilterPoints": "Поени",
   "cwlHistoryPreviewBadge": "Преглед",
   "cwlHistoryPreviewSubtitle": "Макета за {clan} док се CWL endpoint не поправи",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Ратне звезде",
   "playerWarPreferenceTitle": "Ратни преф.",
   "playerDonatedTitle": "Донатед",
-  "playerReceivedTitle": "Primljeno",
+  "playerReceivedTitle": "Примљено",
   "playerCapitalTitle": "Капитал",
   "playerExpLevelTitle": "Екп. ниво",
   "clanWarWinsTitle": "Рат побеђује",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "Uništeni distrikti",
   "raidsCompleted": "Završeni napadi",
   "capitalRaidStatusOngoing": "У току",
-  "capitalRaidStatusEnded": "Završeno",
+  "capitalRaidStatusEnded": "Завршено",
   "capitalRaidLoot": "Лоот",
   "capitalRaidRewards": "Награде",
   "capitalRaidPreviousWeek": "Претходна недеља",
@@ -2653,7 +2671,7 @@
   "@gameItemOverview": {
     "description": "Section title for item description"
   },
-  "gameItemStats": "Statistike",
+  "gameItemStats": "Статс",
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
@@ -2696,6 +2714,78 @@
   "settingsAccount": "Рачун",
   "@settingsAccount": {
     "description": "Settings section: account"
+  },
+  "settingsConnectedAppsTitle": "Повезане апликације",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Прегледајте и прекините везу апликација које имају приступ налогу.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Активне везе",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Нема повезаних апликација",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Апликације које повежете појавиће се овде.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Није могуће учитати повезане апликације",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Сви тренутни и будући повезани налози",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "Изабрани налози: {count}",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Прекини везу",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Прекинути везу са апликацијом?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "Апликација {name} ће одмах изгубити приступ вашим повезаним налозима.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Прекинута је веза са апликацијом {name}.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Није могуће прекинути везу са апликацијом {name}. Покушајте поново.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "settingsSignedIn": "Пријављени",
   "@settingsSignedIn": {
@@ -2746,7 +2836,7 @@
   "@searchRecent": {
     "description": "Section heading for recent search results"
   },
-  "searchTabPlayers": "Igrači",
+  "searchTabPlayers": "Играчи",
   "@searchTabPlayers": {
     "description": "Search mode tab: players"
   },
@@ -2931,7 +3021,7 @@
   "damageCalculatorSubtitle": "Упоредите једну поставу за напад са више зграда.",
   "damageNoStaticDataTitle": "Подаци о штети нису доступни",
   "damageNoStaticDataBody": "Освежите апликацију када се статички подаци игре учитају.",
-  "damageTownHall": "Gradska većnica",
+  "damageTownHall": "Градска кућа",
   "damageVerifiedAccountPrefill": "Предефинисане вредности верификованог налога",
   "damageOverridesStayLocal": "Овдашње измене не ажурирају налог играча.",
   "damageTargets": "Зграде",
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "Освежите ратне податке",
   "warWidgetNoData": "Нема доступних ратних података",
   "warWidgetLastUpdated": "Последње ажурирано: {time}",
-  "todoEventClanGames": "Klanske igre",
+  "todoEventClanGames": "Кланске игре",
   "todoEventCwl": "ЦВЛ",
   "todoEventSeasonEnds": "Сезона се завршава",
   "todoEventLeagueReset": "Ресетовање лиге",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Dodaj ratni vidžet",
   "settingsWarWidgetLinkClanFirst": "Prvo poveži nalog u klanu",
   "settingsWarWidgetClanCount": "{count} klan(ova) dostupno",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Izaberite klan. Nakon dodavanja vidžeta, pritisnite ga i zadržite, dodirnite Uredi vidžet, pa izaberite Klan.",
+  "settingsWarWidgetAndroidInstructions": "Izaberite klan, a zatim dodajte vidžet iz Android birača vidžeta.",
+  "settingsWarWidgetEmpty": "Nijedan povezani nalog trenutno nije u klanu.",
+  "settingsWarWidgetIosFooter": "Dodajte više ratnih vidžeta i izaberite drugi klan za svaki.",
+  "settingsWarWidgetIosReady": "{clanName} je spreman. Uredite vidžet i izaberite ga pod Klan.",
+  "settingsWarWidgetAndroidReady": "Podaci vidžeta za {clanName} su spremni.",
+  "settingsWarWidgetPrepareFailed": "Vidžet nije mogao da se pripremi: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Nalozi povezani sa botom i Discord podaci",
   "settingsDiscordSyncSubtitle": "Sinhronizuj naloge povezane sa botom i Discord podatke",
@@ -3165,7 +3255,7 @@
   "resourceShinyOre": "Blistava ruda",
   "resourceGeneric": "Resurs",
   "seasonStatsGoldGrabbed": "Zlato opljačkano",
-  "seasonStatsActivity": "Активност",
+  "seasonStatsActivity": "Aktivnost",
   "seasonStatsAttackWins": "Pobede u napadu",
   "seasonStatsTrophies": "Sezonski trofeji",
   "todoSearchAccountsHint": "Pretraži naloge",
@@ -3251,14 +3341,14 @@
   "todoRemainingUpgradeTooltip": "Dodirni za preostalu cenu i vreme nadogradnje",
   "announcementAnimeFuryTitle": "Anime Fury",
   "announcementAnimeFurySubtitle": "Dodirni za pregled ažuriranja iz juna 2026",
-  "sideRankingsTitle": "Ранкингс",
+  "sideRankingsTitle": "Rang liste",
   "sideRankingsSubtitle": "Zvanične rang liste plus ClashKing endpointi.",
   "sideRankingsLoadError": "Učitavanje zvaničnih rang lista nije uspelo.",
   "sideRankingsEmptyTitle": "Nema vraćenih rang lista",
   "sideRankingsEmptyBody": "Probaj drugu rang listu ili lokaciju.",
   "sideRankingsMockups": "ClashKing makete",
   "rankingsBuilderBase": "Graditeljska baza",
-  "rankingsTownHall": "Gradska većnica",
+  "rankingsTownHall": "Градска кућа",
   "rankingsRankedLeague": "Рангирана лига",
   "rankingsClanCapital": "Klanska prestonica",
   "rankingsDonations": "Donacije",
@@ -3293,13 +3383,13 @@
   },
   "rankingsPlayerLoadFailed": "Играч није могао да се учита.",
   "rankingsClanLoadFailed": "Клан није могао да се учита.",
-  "sideStatsTitle": "Statistike",
+  "sideStatsTitle": "Statistika",
   "sideStatsSubtitle": "Statistika rang liste sa zvaničnih Clash API površina.",
   "sideStatsLoadError": "Није могуће учитати обавештајне податке о борби.",
   "statsOverview": "Преглед",
   "statsArmies": "Армије",
   "statsItems": "Ставке",
-  "statsWar": "Rat",
+  "statsWar": "Рат",
   "statsCwl": "ЦВЛ",
   "statsRanked": "Рангирано",
   "statsDateRange": "Опсег датума",
@@ -3311,15 +3401,15 @@
   "statsAddItemsTitle": "Одаберите ставке за анализу",
   "statsAddItemsBody": "Додајте трупе, чини, хероје, кућне љубимце или опрему, а затим покрените упит.",
   "statsGlobalCounts": "Глобални број",
-  "statsPerformance": "Učinak",
+  "statsPerformance": "Перформансе",
   "statsSamples": "Узорци",
   "statsUsage": "Употреба",
-  "statsAverageStars": "Prosečne zvezdice",
-  "statsAverageDestruction": "Prosečno uništenje",
+  "statsAverageStars": "Просечне звезде",
+  "statsAverageDestruction": "Просечно уништење",
   "statsStarRates": "Стопе звездица",
   "statsThreeStarRate": "Оцена од три звездице",
   "statsDailyTrend": "Дневни тренд",
-  "statsPlayers": "Igrači",
+  "statsPlayers": "Играчи",
   "statsClans": "Кланови",
   "statsPlayersInWar": "Играчи у рату",
   "statsClansInWar": "Кланови у рату",
@@ -3337,7 +3427,7 @@
   "statsItemType": "Тип ставке",
   "statsTroop": "Трооп",
   "statsSpell": "Спелл",
-  "statsHero": "Heroj",
+  "statsHero": "Херо",
   "statsPet": "Пет",
   "statsEquipment": "Опрема",
   "statsOwningHero": "Поседовање хероја",
@@ -3346,7 +3436,7 @@
   "statsCompositionShare": "Удео у саставу",
   "statsNoLevels": "Записи војске не садрже нивое ставки.",
   "statsRankedCompositionOnly": "Подаци о саставу потичу из рангираних битака; Рат и ЦВЛ учинак остају одвојени.",
-  "statsTownHall": "Gradska većnica",
+  "statsTownHall": "Градска скупштина",
   "statsOpponentTownHall": "Градска скупштина противника",
   "statsEqualTownHalls": "Једнаке градске куће",
   "statsLeagueTier": "Ниво лиге",
@@ -3354,7 +3444,7 @@
   "statsCwlLeague": "ЦВЛ лига",
   "statsLeagueBronze": "Бронза",
   "statsLeagueSilver": "Сребро",
-  "statsLeagueGold": "Zlato",
+  "statsLeagueGold": "Злато",
   "statsLeagueCrystal": "Кристал",
   "statsLeagueMaster": "Мајстор",
   "statsLeagueChampion": "Шампион",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "Разврставање по сезонама",
   "sideTopScore": "Najbolji rezultat",
   "sideTop200Avg": "Prosek Top 200",
-  "sideBasesArmiesTitle": "базе и војске",
+  "sideBasesArmiesTitle": "Baze i vojske",
   "sideBasesArmiesSubtitle": "Layout-i sačuvani na Discord-u i linkovi vojski.",
   "sideBotSyncTarget": "Cilj sinhronizacije bota",
   "sideBotSyncTargetBody": "Bot već čuva baze i vojske u Discord profilu. Ova stranica je spremna za taj sinhronizovani paket podataka.",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Sačuvane vojske",
   "sideArmyLinks": "Linkovi vojski",
   "sideArmyLinksBody": "Sastav, čarolije, opsada, beleške i link za deljenje.",
-  "sideGameAssetsTitle": "Гаме Ассетс",
+  "sideGameAssetsTitle": "Resursi igre",
   "sideGameAssetsSubtitle": "Hostovani ClashKing resursi, grupisani po folderu.",
   "gameAssetsLoadError": "Елементи игре нису могли да се учитају",
   "gameAssetsEmptyTitle": "Нема доступних елемената игре",
@@ -3506,7 +3596,7 @@
   "rankingClanBuilderHeading": "Rang lista graditeljske baze klanova",
   "rankingClanCapital": "Prestonica klana",
   "rankingClanCapitalHeading": "Rang lista Prestonice klana",
-  "assetFolderEquipment": "Опрема",
+  "assetFolderEquipment": "Oprema",
   "assetFolderLeagues": "Lige",
   "assetFolderResources": "Resursi",
   "assetFolderStickers": "Nalepnice",
@@ -3514,10 +3604,10 @@
   "upgradeSectionTroops": "Trupe",
   "upgradeSectionSpells": "Čarolije",
   "upgradeSectionPets": "Ljubimci",
-  "upgradeSectionEquipment": "Опрема",
+  "upgradeSectionEquipment": "Oprema",
   "sideMockupSource": "Izvor",
   "sideMockupMode": "Režim",
-  "sideMockupPreview": "Преглед",
+  "sideMockupPreview": "Pregled",
   "sideMockupRows": "Redovi",
   "sideMockupRowsValue": "5 maketa",
   "endpointLeagueTop200": "Liga Top 200",
@@ -3532,7 +3622,7 @@
   "endpointTop200ArmyUsagePreview": "Dnevnici bitaka · korišćenje trupa i čarolija",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "Nedeljno",
-  "endpointStateUsage": "Употреба",
+  "endpointStateUsage": "Korišćenje",
   "notifGroupReminders": "Podsetnici",
   "notifGroupProgress": "Napredak",
   "notifLeagueDefense": "Liga odbrana",
@@ -3693,7 +3783,7 @@
   "notifSpecialEvent": "Specijalni događaj",
   "notifNewEventLive": "Novi događaj je uživo",
   "notifNewClashEventBody": "Novi Clash događaj je dostupan.",
-  "notifSupportClashKing": "Podržite ClashKing",
+  "notifSupportClashKing": "Podrži ClashKing",
   "notifMonthlySupportBody": "Mesečna podrška pomaže da ClashKing ostane dostupan i da se poboljšava. Hvala.",
   "notifUpgradeFinished": "Nadogradnja završena",
   "notifUpgradeReadyTitle": "{name} je spremno",
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "Izabrani nalozi",
   "notifAudienceAcrossDevicesDescription": "Izaberi koji nalozi mogu da primaju obaveštenja na ovom uređaju.",
-  "notifAccountBookmarked": "Боокмаркед",
+  "notifAccountBookmarked": "Sačuvan",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "Ратни напади",
+  "notifGroupWarAttacks": "Ratni napadi",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4465,7 +4555,7 @@
   "todoExplanationRaidsTitle": "Napadi:",
   "todoExplanationRaids": "Težina od 5 poena po nalogu (ili 6 ako je poslednji napad otključan), 1 napad = 1 poen.",
   "clanWarFrequencyTitle": "Ратови",
-  "notifScopeAllAccounts": "Svi nalozi",
+  "notifScopeAllAccounts": "Сви рачуни",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
@@ -4473,7 +4563,7 @@
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Filteri",
+  "searchFilters": "Филтери",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
@@ -4497,10 +4587,10 @@
   "damageAccountSelectorHint": "Користите нивое јединица са верификованог налога или све подесите ручно.",
   "damageNoAccountsAvailable": "Нема доступних верификованих налога. Нивое штете можете подесити ручно.",
   "damageTargetSectionTitle": "Циљна зграда",
-  "damageChooseTarget": "Изаберите зграду или јединицу",
+  "damageChooseTarget": "Изаберите циљ",
   "damageNoTargetTitle": "Nije izabrana zgrada",
   "damageNoTargetBody": "Изаберите зграду чију отпорност желите да тестирате.",
-  "damageTargetLevelLabel": "Циљни ниво",
+  "damageTargetLevelLabel": "Ниво циља",
   "damageCommonBuildings": "Честе зграде",
   "damageAllBuildings": "Све зграде",
   "damageQuickSetups": "Брза подешавања",
@@ -4523,7 +4613,7 @@
   "damageOtherSources": "Други извори",
   "damageShowAllSources": "Прикажи све изворе",
   "damageShowFewerSources": "Прикажи мање извора",
-  "searchCancel": "Otkaži",
+  "searchCancel": "Откажи",
   "todoRaidAttacks": "Раид напади",
   "todoMockRaid4Left": "4 лијево",
   "todoMockWarAltStatus": "Активан пре 18 милиона · рат и рације захтевају пажњу",
@@ -4545,13 +4635,13 @@
   "assetFolderTroops": "Trupe",
   "assetFolderSpells": "Čarolije",
   "assetFolderHeroes": "Heroji",
-  "endpointStateWins": "Побеђује",
+  "endpointStateWins": "Pobede",
   "notifGroupBattles": "Bitke",
-  "notifGroupSupport": "Подршка",
+  "notifGroupSupport": "Podrška",
   "rankedLeagueAccountSelector": "Налог за рангирану лигу",
   "rankedLeagueStars": "Zvezdice",
   "playerBattlelogTab": "Bitke",
-  "playerActivityTab": "Активност",
+  "playerActivityTab": "Aktivnost",
   "playerBattlelogFarming": "Прикупљање ресурса",
   "playerBattlelogRanked": "Рангирано",
   "playerBattlelogFarmingOverview": "Преглед прикупљања ресурса",
@@ -4566,8 +4656,8 @@
     }
   },
   "playerBattlelogAttacks": "Napadi",
-  "playerBattlelogAverageDestruction": "Prosečno uništenje",
-  "playerBattlelogAverageStars": "Prosečne zvezdice",
+  "playerBattlelogAverageDestruction": "Просечно уништење",
+  "playerBattlelogAverageStars": "Просечне звезде",
   "playerBattlelogTripleRate": "Оцена од три звездице",
   "playerBattlelogAverageLoot": "Просечан плен",
   "playerBattlelogPopularTroops": "Најчешће коришћене трупе",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
-  "upgradeTrackerPlanClose": "Zatvori",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPrioritiesTitle": "Планирајте приоритете",
+  "upgradeTrackerPlanPrioritiesDescription": "Оцените оно што је најважније. Нивои надоградње и активни рад увек остају у реду.",
+  "upgradeTrackerPlanClose": "Затвори",
+  "upgradeTrackerPlanPlanningGoals": "Циљеви планирања",
+  "upgradeTrackerPlanConstructionSubtitle": "Конструкција и надоградње хероја",
+  "upgradeTrackerPlanResearchSubtitle": "Трупе, чаролије и истраживање опсаде",
+  "upgradeTrackerPlanPetHouseSubtitle": "Надоградња Куће за кућне љубимце",
+  "upgradeTrackerPlanPrioritizeNewItems": "Дајте приоритет новим ставкама",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Прво поставите новооткључане или неизграђене предмете",
+  "upgradeTrackerPlanSharedSummary": "Ниво {tier} · заједнички микс {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Ниво {tier} · строг · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "ради до максимума",
+  "upgradeTrackerPlanYieldsAfter": "приноси након {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "Строги",
+  "upgradeTrackerPlanMax": "Макс",
+  "upgradeTrackerPlanReorder": "Поново наручи {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Релативна тежина слоја",
+  "upgradeTrackerPlanCompletionTarget": "Циљ завршетка",
+  "upgradeTrackerPlanStrictTier": "Строги ниво",
+  "upgradeTrackerPlanWeight": "Тежина {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "До максимума",
+  "upgradeTrackerPlanUntilPercent": "До {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Нумерисани нивои покрећу први. Заједнички редови задржавају исти број нивоа, а њихова мешавина је нормализована из релативних тежина, тако да 50 + 25 постаје 67% / 33%. Циљ даје категорију принос након што достигне тај проценат док остаје квалификован касније.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Макс пре напредовања",
+  "upgradeTrackerPlanGoalRushNextHall": "Брзо дођите до следеће сале",
+  "upgradeTrackerPlanGoalCatchUp": "Достигните убрзане нивое",
+  "upgradeTrackerPlanGoalUnlockFirst": "Прво откључајте нове ствари",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
-  "upgradeTrackerPlanOff": "Isključeno",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanWallsEachWeek": "Зидови сваке недеље",
+  "upgradeTrackerPlanOff": "Офф",
+  "upgradeTrackerPlanPerWeek": "{count} / седмично",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
-  "playerJoinLeaveTime": "Vreme",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "upgradeTrackerPlanPreferGold": "Преферирајте злато за зидове",
+  "upgradeTrackerPlanPreferGoldDescription": "Користите злато пре Еликсира када трошите зидове",
+  "upgradeTrackerPlanApplyPriorities": "Примените приоритете",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Израђена одбрана",
+  "upgradeTrackerPlanCategoryTraps": "Замке",
+  "upgradeTrackerPlanCategoryArmy": "војска",
+  "upgradeTrackerPlanCategoryDarkTroops": "Мрачне трупе",
+  "upgradeTrackerPlanCategorySieges": "Опсаде",
+  "upgradeTrackerPlanCategorySupercharge": "Суперцхарге",
+  "navigationCloseDrawer": "Затвори навигациони панел",
+  "navigationOpenProfileMenu": "Отвори мени профила",
+  "navigationClashKingWeb": "ClashKing веб",
+  "settingsPrivacyDataTitle": "Приватност и подаци",
+  "settingsPrivacyPolicyDescription": "Погледајте шта ClashKing прикупља, зашто се подаци користе, ко их обрађује, правила чувања и како да нас контактирате.",
+  "settingsPrivacyExportTitle": "Приступите подацима или их извезите",
+  "settingsPrivacyExportDescription": "Преузмите копију података налога повезаних са ClashKing пријавом, укључујући повезане Clash of Clans налоге и подешавања обавештења.",
+  "settingsPrivacyCorrectionTitle": "Исправите или ограничите податке",
+  "settingsPrivacyCorrectionDescription": "Уклоните повезане Clash of Clans налоге у подешавањима налога, искључите обавештења или контактирајте подршку ради исправке или ограничења.",
+  "settingsPrivacyDeletionTitle": "Избришите ClashKing налог",
+  "settingsPrivacyDeletionDescription": "Ово покреће брисање ClashKing налога и повезаних података апликације, осим ако ClashKing мора да задржи ограничене записе због безбедности, спречавања превара или законских обавеза.",
+  "settingsPrivacyChildrenTitle": "Деца и породице",
+  "settingsPrivacyChildrenDescription": "ClashKing је пратећа апликација за општу публику и није намењена деци. Не правите налог ако у својој земљи нисте довољно стари да пристанете без одобрења родитеља или старатеља.",
+  "settingsPrivacyExportReady": "Извоз података је спреман за чување.",
+  "settingsPrivacyExportCreateFailed": "Извоз података није могуће направити. Уместо тога је припремљена порука е-поште о приватности.",
+  "settingsPrivacyExportPrepareFirst": "Припремите извоз пре чувања.",
+  "settingsPrivacyExportSaved": "Извоз података је сачуван.",
+  "settingsPrivacyExportSaveFailed": "Извоз података није могуће сачувати. Уместо тога је припремљена порука е-поште о приватности.",
+  "settingsPrivacyDeleteUnavailable": "Брисање налога није доступно у овој верзији. Уместо тога је припремљена порука е-поште о приватности.",
+  "settingsPrivacyOpenPolicy": "Отвори политику",
+  "settingsPrivacyRefreshExport": "Освежи извоз",
+  "settingsPrivacyPrepareExport": "Припреми извоз",
+  "settingsPrivacySaveExport": "Сачувај извоз",
+  "settingsPrivacyContactSupport": "Контактирај подршку",
+  "settingsPrivacyDeleteAccount": "Избриши налог",
+  "settingsPrivacyDeleteConfirmTitle": "Избрисати налог?",
+  "settingsPrivacyDeleteConfirmDescription": "Овај захтев је трајан након обраде. Можете изгубити повезане налоге, подешавања обавештења, сачуване поставке и начине потврде идентитета.",
+  "generalUnranked": "Без ранга",
+  "playerJoinLeaveTab": "Улазак / Излазак",
+  "playerUpgradeRemainingAccessibility": "Преостало за градску кућу {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% завршено за ГК{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Овај одељак је завршен за ГК{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Преостало време",
+  "playerUpgradeNoResourceData": "Нема података о ресурсима",
+  "playerJoinLeaveLoadError": "Није могуће учитати историју улазака и излазака",
+  "playerJoinLeaveClanTotals": "Укупно по клановима",
+  "playerJoinLeaveTime": "Време",
+  "playerJoinLeaveTimeSpent": "Проведено време",
+  "playerJoinLeaveVisits": "Посете",
+  "playerJoinLeaveJoined": "Придружио се",
+  "playerJoinLeaveLeft": "Напустио је",
+  "playerJoinLeaveNoHistory": "Нема историје улазака и излазака",
+  "playerJoinLeaveNoClanTotals": "Нема доступних укупних података о клановима",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
