@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "نطاق إحصاءات الحرب",
+  "warStatsRangeDescription": "اختر ما إذا كانت الإحصاءات تغطي عددًا ثابتًا من الحروب الأخيرة أو فترة حديثة بالأيام.",
+  "warStatsRangeDays": "الأيام",
+  "warStatsRangeWarsToInclude": "الحروب المراد تضمينها",
+  "warStatsRangeDaysToInclude": "الأيام المراد تضمينها",
+  "upgradeTrackerAllBuildersOccupied": "جميع البنّائين مشغولون",
+  "upgradeTrackerBuildCost": "تكلفة البناء",
+  "upgradeTrackerBuilderBaseBuilders": "بنّاؤو قاعدة البنّاء",
+  "upgradeTrackerBuilderBaseLaboratory": "مختبر قاعدة البنّاء",
+  "upgradeTrackerCalendar": "التقويم",
+  "upgradeTrackerClearCost": "تكلفة الإزالة",
+  "upgradeTrackerCompletionDetails": "تفاصيل اكتمال القرية",
+  "upgradeTrackerCustomSoundtrack": "موسيقى تصويرية مخصصة",
+  "upgradeTrackerGoldPassPercent": "تذكرة ذهبية بنسبة {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "ملخص {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -28,10 +28,10 @@
       }
     }
   },
-  "upgradeTrackerGuardians": "الحراس",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerGuardians": "الحُرّاس",
+  "upgradeTrackerHelpers": "المساعدون",
+  "upgradeTrackerHouseParts": "أجزاء المنزل",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {بنّاء خامل واحد} other {# بنّائين خاملين}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "قيد التنفيذ",
+  "upgradeTrackerItemSemanticLabel": "{item}، المستوى {currentLevel} من {targetLevel}{count, plural, =1 {} other {، عدد المباني #}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "المملوك: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "المسار",
   "upgradeTrackerLevelTransition": "المستوى {from} ← {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "الغنائم الآن",
+  "upgradeTrackerLootOutlook": "توقعات الغنائم",
+  "upgradeTrackerMusic": "الموسيقى",
+  "upgradeTrackerNextDays": "{count, plural, one {اليوم القادم} other {الأيام الـ # القادمة}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "الفترة التالية",
+  "upgradeTrackerNoGoldPass": "لا توجد تذكرة ذهبية",
+  "upgradeTrackerNoMatchingUpgrades": "لا توجد ترقيات مطابقة",
+  "upgradeTrackerNoMatchingUpgradesBody": "جرّب قرية أو قائمة انتظار أخرى.",
+  "upgradeTrackerNothingNeededNow": "لا يلزم شيء الآن",
+  "upgradeTrackerObstacles": "العوائق",
+  "upgradeTrackerPart": "الجزء",
+  "upgradeTrackerPassReward": "مكافأة التذكرة",
+  "upgradeTrackerPauseSoundtrack": "إيقاف الموسيقى مؤقتًا",
+  "upgradeTrackerPeriodCount": "الفترة {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,9 +108,9 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
-  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerPlaySoundtrack": "تشغيل الموسيقى",
+  "upgradeTrackerPreviousPeriod": "الفترة السابقة",
+  "upgradeTrackerResourceAmount": "{resource}، {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
       "resource": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "المناظر",
+  "upgradeTrackerScheduledLane": "مجدول في المسار رقم {lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "تقدم {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "مجدول",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "الحجم",
+  "upgradeTrackerSortLongest": "الأطول أولًا",
+  "upgradeTrackerSortName": "الاسم من أ إلى ي",
+  "upgradeTrackerSortScheduled": "المجدول",
+  "upgradeTrackerSortShortest": "الأقصر أولًا",
+  "upgradeTrackerSoundtrackPosition": "موضع الموسيقى",
   "upgradeTrackerStarts": "يبدأ",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "الدرجة",
+  "upgradeTrackerUpgradesStarting": "الترقيات التي تبدأ",
+  "upgradeTrackerUpgradingNow": "تتم الترقية الآن",
+  "upgradeTrackerWarBase": "قاعدة الحرب",
+  "notifSettingsSaveFailed": "تعذر حفظ إعدادات الإشعارات.",
+  "notifPushEnabled": "تم تفعيل الإشعارات الفورية",
+  "notifReceiveNotifications": "تلقي الإشعارات",
+  "notifTokenPreview": "الرمز: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "يمكن إرسال التنبيهات المفعّلة إلى هذا الجهاز.",
+  "notifDisabledAccountDescription": "الإشعارات متوقفة في حساب ClashKing بالكامل.",
+  "notifMaximumRemindersAdded": "تمت إضافة الحد الأقصى من التذكيرات",
+  "notifAddReminder": "إضافة تذكير",
+  "notifDurationOneHour": "ساعة واحدة",
+  "notifDurationHours": "{count} ساعات",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} دقائق",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "إضافة {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "قبل ساعة واحدة",
+  "notifTimingHoursBefore": "قبل {count} ساعات",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "قبل {count} دقائق",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "الإشعارات الفورية جاهزة على هذا الجهاز.",
+  "notifPushPermissionRequired": "اسمح بالإشعارات لتلقي تنبيهات ClashKing.",
+  "notifPushPermissionDenied": "تم رفض إذن الإشعارات.",
+  "notifPushNotConfigured": "لم تتم تهيئة Firebase لهذا الإصدار.",
+  "notifPushTokenUnavailable": "رمز الإشعارات الفورية غير متاح بعد.",
+  "notifPushUnsupported": "الإشعارات الفورية غير مدعومة على هذه المنصة.",
+  "notifPushInitializing": "جارٍ إعداد الإشعارات الفورية…",
+  "notificationPrimerTitle": "هل تريد تفعيل الإشعارات؟",
+  "notificationPrimerBody": "يمكن لـ ClashKing إشعارك بتحديثات الحروب ودوري حروب القبائل والحساب والمشاريع. يمكنك تغيير ذلك في أي وقت من الإعدادات > الإشعارات.",
+  "notificationPrimerNotNow": "ليس الآن",
+  "notificationPrimerAllow": "سماح",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "الإنجازات",
   "achievementEarnedLabel": "مرات الإنجاز",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "أعضاء البحث",
   "clanMembersShowTotals": "عرض إجماليات العشيرة",
   "clanMembersHideTotals": "إخفاء إجماليات العشيرة",
-  "clanMembersReceivedShort": "المستلَمة",
+  "clanMembersReceivedShort": "تلقى",
   "clanMembersAverageTh": "متوسط ​​ث",
   "clanMinimumMembers": "الحد الأدنى للأعضاء",
   "clanMaximumMembers": "الحد الأقصى للأعضاء",
@@ -1105,8 +1105,26 @@
   "warTitle": "الحرب",
   "warFrequency": "تكرار الحرب",
   "warParticipation": "المشاركة في الحرب",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "مشارك فقط",
+  "warStatsRangeWarsCompact": "{number} حروب",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} أيام",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "آخر {number} أيام",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "الأعضاء الحاليون",
   "warLeague": "حرب/دوري",
   "warHistory": "تاريخ الحروب",
   "warLog": "سجل الحرب",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "أفضل الهجمات",
   "warAttacksCount": "عدد الهجمات",
   "warAttacksMissed": "الهجمات الفائتة",
-  "warAttacksMissedShort": "فائت",
+  "warAttacksMissedShort": "مٌفتَقد",
   "warAttacksNumber": "هاجمت {number_time} مرة خلال آخر {number_war} حروب.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1592,10 +1610,10 @@
   "clanProfileDescriptionChanged": "تغيّر الوصف",
   "clanJoinLeaveTab": "الانضمام/المغادرة",
   "clanRankingsTab": "التصنيفات",
-  "clanRankingsSeason": "الموسم",
+  "clanRankingsSeason": "موسم",
   "clanRankingsSelectSeason": "حدد موسم الترتيب",
   "clanRankingsFilterActivity": "نشاط",
-  "clanRankingsFilterWar": "الحرب",
+  "clanRankingsFilterWar": "حرب",
   "clanRankingsFilterPoints": "نقاط",
   "cwlHistoryPreviewBadge": "معاينة",
   "cwlHistoryPreviewSubtitle": "نموذج {clan} حتى يتم إصلاح نقطة نهاية CWL",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "نجوم الحرب",
   "playerWarPreferenceTitle": "تفضيلات الحرب",
   "playerDonatedTitle": "تم التبرع بها",
-  "playerReceivedTitle": "المستلَمة",
+  "playerReceivedTitle": "تلقى",
   "playerCapitalTitle": "عاصمة",
   "playerExpLevelTitle": "إكسب. مستوى",
   "clanWarWinsTitle": "انتصارات الحرب",
@@ -2653,7 +2671,7 @@
   "@gameItemOverview": {
     "description": "Section title for item description"
   },
-  "gameItemStats": "الإحصائيات",
+  "gameItemStats": "احصائيات",
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
@@ -2696,6 +2714,78 @@
   "settingsAccount": "حساب",
   "@settingsAccount": {
     "description": "Settings section: account"
+  },
+  "settingsConnectedAppsTitle": "التطبيقات المتصلة",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "اعرض التطبيقات التي تملك صلاحية الوصول إلى الحساب وافصلها.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "الاتصالات النشطة",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "لا توجد تطبيقات متصلة",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "ستظهر هنا التطبيقات التي تربطها.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "تعذر تحميل التطبيقات المتصلة",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "جميع الحسابات المرتبطة الحالية والمستقبلية",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} من الحسابات المحددة",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "فصل",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "فصل التطبيق؟",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "سيفقد {name} فورًا إمكانية الوصول إلى حساباتك المرتبطة.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "تم فصل {name}.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "تعذر فصل {name}. حاول مرة أخرى.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "settingsSignedIn": "تم تسجيل الدخول",
   "@settingsSignedIn": {
@@ -2746,7 +2836,7 @@
   "@searchRecent": {
     "description": "Section heading for recent search results"
   },
-  "searchTabPlayers": "اللاعبون",
+  "searchTabPlayers": "اللاعبين",
   "@searchTabPlayers": {
     "description": "Search mode tab: players"
   },
@@ -3046,7 +3136,7 @@
   "warWidgetRefreshData": "تحديث بيانات الحرب",
   "warWidgetNoData": "لا توجد بيانات الحرب المتاحة",
   "warWidgetLastUpdated": "آخر تحديث: {time}",
-  "todoEventClanGames": "ألعاب القبيلة",
+  "todoEventClanGames": "العاب القبيلة",
   "todoEventCwl": "سي دبليو إل",
   "todoEventSeasonEnds": "ينتهي الموسم",
   "todoEventLeagueReset": "إعادة ضبط الدوري",
@@ -3100,15 +3190,15 @@
   "notifScheduledMessage": "المقرر: {title}",
   "generalStartDate": "تاريخ البدء",
   "generalEndDate": "تاريخ الانتهاء",
-  "warFiltersAllWars": "كل الحروب",
+  "warFiltersAllWars": "جميع الحروب",
   "warFiltersRandomWars": "الحروب العشوائية",
   "warFiltersCwlWars": "حروب CWL",
   "warFiltersFriendlyWars": "الحروب الودية",
   "warType": "نوع الحرب",
   "warFiltersAnyTownHall": "أي ث",
   "gameTownHallLevelShort": "قاعة {level}",
-  "warAttackerTownHall": "قاعة المهاجم",
-  "warDefenderTownHall": "قاعة المدافع",
+  "warAttackerTownHall": "المهاجم ث",
+  "warDefenderTownHall": "المدافع ث",
   "warStatsFilterSameTownHallOnly": "نفس قاعة المدينة فقط",
   "warStatsFilterSameTownHallDescription": "اعرض فقط الهجمات التي يكون فيها المهاجم والمدافع لديهم نفس مستوى TH",
   "generalAny": "أي",
@@ -3117,11 +3207,11 @@
   "warStatsFilterMaxStars": "ماكس ستارز",
   "warStatsFilterMinDestructionPercent": "الحد الأدنى للتدمير٪",
   "warStatsFilterMaxDestructionPercent": "أقصى نسبة تدمير",
-  "warStatsFilterMinPosition": "أدنى موضع",
-  "warStatsFilterMaxPosition": "أعلى موضع",
-  "warStatsFilterFreshAttacksOnly": "الهجمات الأولى فقط",
+  "warStatsFilterMinPosition": "موقف الحد الأدنى",
+  "warStatsFilterMaxPosition": "موقف ماكس",
+  "warStatsFilterFreshAttacksOnly": "هجمات جديدة فقط",
   "warStatsFilterFreshAttacksDescription": "تظهر فقط الهجمات الأولى على كل قاعدة",
-  "warStatsFilterResultLimit": "حد النتائج",
+  "warStatsFilterResultLimit": "حد النتيجة",
   "generalResultsCount": "نتائج {count}",
   "notifEventsDescription": "ألعاب القبيلة، CWL، عطلة الغارات، وأحداث الموسم.",
   "notifAnnouncementsDescription": "لافتات داخل التطبيق وتنبيهات دفع مستقبلية لتحديثات ClashKing.",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "إضافة ويدجت الحرب",
   "settingsWarWidgetLinkClanFirst": "اربط حسابًا في قبيلة أولًا",
   "settingsWarWidgetClanCount": "{count} قبيلة/قبائل متاحة",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "اختر قبيلة. بعد إضافة الأداة، المسها مطولًا واضغط تعديل الأداة ثم اختر القبيلة.",
+  "settingsWarWidgetAndroidInstructions": "اختر قبيلة، ثم أضف الأداة من منتقي أدوات Android.",
+  "settingsWarWidgetEmpty": "لا يوجد أي من حساباتك المرتبطة في قبيلة حاليًا.",
+  "settingsWarWidgetIosFooter": "أضف عدة أدوات حرب واختر قبيلة مختلفة لكل أداة.",
+  "settingsWarWidgetIosReady": "{clanName} جاهزة. عدّل الأداة واخترها ضمن القبيلة.",
+  "settingsWarWidgetAndroidReady": "بيانات أداة {clanName} جاهزة.",
+  "settingsWarWidgetPrepareFailed": "تعذر إعداد الأداة: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "حسابات مرتبطة بالبوت وبيانات Discord",
   "settingsDiscordSyncSubtitle": "مزامنة الحسابات المرتبطة بالبوت وبيانات Discord",
@@ -3165,7 +3255,7 @@
   "resourceShinyOre": "الخام اللامع",
   "resourceGeneric": "مورد",
   "seasonStatsGoldGrabbed": "الذهب المنهوب",
-  "seasonStatsActivity": "نشاط",
+  "seasonStatsActivity": "النشاط",
   "seasonStatsAttackWins": "انتصارات الهجوم",
   "seasonStatsTrophies": "كؤوس الموسم",
   "todoSearchAccountsHint": "ابحث في الحسابات",
@@ -3264,7 +3354,7 @@
   "rankingsDonations": "التبرعات",
   "rankingsWarWins": "انتصارات الحرب",
   "rankingsWinStreak": "سلسلة الانتصارات",
-  "rankingsCurrent": "الحالية",
+  "rankingsCurrent": "الحالي",
   "rankingsWorldwide": "عالميًا",
   "rankingsSelectLocation": "اختر موقعًا",
   "rankingsSearchLocations": "ابحث عن المواقع أو رموز الدول",
@@ -3293,10 +3383,10 @@
   },
   "rankingsPlayerLoadFailed": "فشل تحميل هذا اللاعب.",
   "rankingsClanLoadFailed": "فشل تحميل هذه القبيلة.",
-  "sideStatsTitle": "الإحصائيات",
+  "sideStatsTitle": "الإحصاءات",
   "sideStatsSubtitle": "إحصاءات لوحات الصدارة من واجهات Clash API الرسمية.",
   "sideStatsLoadError": "لا يمكن تحميل معلومات المعركة.",
-  "statsOverview": "ملخص",
+  "statsOverview": "نظرة عامة",
   "statsArmies": "الجيوش",
   "statsItems": "العناصر",
   "statsWar": "الحرب",
@@ -3315,11 +3405,11 @@
   "statsSamples": "العينات",
   "statsUsage": "الاستخدام",
   "statsAverageStars": "متوسط النجوم",
-  "statsAverageDestruction": "متوسط التدمير",
+  "statsAverageDestruction": "تدمير متوسط",
   "statsStarRates": "أسعار النجوم",
   "statsThreeStarRate": "سعر ثلاث نجوم",
   "statsDailyTrend": "الاتجاه اليومي",
-  "statsPlayers": "اللاعبون",
+  "statsPlayers": "اللاعبين",
   "statsClans": "العشائر",
   "statsPlayersInWar": "اللاعبون في الحرب",
   "statsClansInWar": "العشائر في الحرب",
@@ -3354,7 +3444,7 @@
   "statsCwlLeague": "دوري CWL",
   "statsLeagueBronze": "برونزي",
   "statsLeagueSilver": "فضي",
-  "statsLeagueGold": "الذهب",
+  "statsLeagueGold": "ذهبي",
   "statsLeagueCrystal": "كريستال",
   "statsLeagueMaster": "ماستر",
   "statsLeagueChampion": "بطل",
@@ -3952,7 +4042,7 @@
       }
     }
   },
-  "upgradeTrackerTimelineSemanticLabel": "{item} المستوى {level}، من {start} إلى {end}",
+  "upgradeTrackerTimelineSemanticLabel": "{item}، المستوى {level}، من {start} إلى {end}",
   "@upgradeTrackerTimelineSemanticLabel": {
     "placeholders": {
       "item": {
@@ -4136,7 +4226,7 @@
   "rankedLeagueTitle": "الدوري المصنف",
   "rankedLeagueAbout": "حول الدوري المصنف",
   "rankedLeagueAboutBody": "تستخدم هذه الصفحة مجموعة الدوري المصنف الأسبوعية الرسمية وسجلات المعارك وسجل الفترات. قد تتغير النتائج الحالية حتى تنتهي الفترة.",
-  "rankedLeagueOverview": "ملخص",
+  "rankedLeagueOverview": "نظرة عامة",
   "rankedLeagueRanking": "الترتيب",
   "rankedLeagueGroupRank": "ترتيب المجموعة",
   "rankedLeagueTrophies": "الكؤوس",
@@ -4273,7 +4363,7 @@
   },
   "notifChooseAccountsManually": "حسابات محددة",
   "notifAudienceAcrossDevicesDescription": "اختر الحسابات التي يمكنها تلقي الإشعارات على هذا الجهاز.",
-  "notifAccountBookmarked": "إشارة مرجعية",
+  "notifAccountBookmarked": "محفوظ",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4465,7 +4555,7 @@
   "todoExplanationRaidsTitle": "الغارات:",
   "todoExplanationRaids": "وزن 5 نقاط لكل حساب (أو 6 إذا تم فتح الهجوم الأخير)، هجوم واحد = نقطة واحدة.",
   "clanWarFrequencyTitle": "الحروب",
-  "notifScopeAllAccounts": "كل الحسابات",
+  "notifScopeAllAccounts": "جميع الحسابات",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
@@ -4523,7 +4613,7 @@
   "damageOtherSources": "مصادر أخرى",
   "damageShowAllSources": "إضافة مصدر آخر",
   "damageShowFewerSources": "إخفاء المصادر الأخرى",
-  "searchCancel": "إلغاء",
+  "searchCancel": "يلغي",
   "todoRaidAttacks": "هجمات الغارة",
   "todoMockRaid4Left": "4 اليسار",
   "todoMockWarAltStatus": "نشط منذ 18 دقيقة · الحرب والغارات بحاجة إلى الاهتمام",
@@ -4547,11 +4637,11 @@
   "assetFolderHeroes": "الأبطال",
   "endpointStateWins": "انتصارات",
   "notifGroupBattles": "المعارك",
-  "notifGroupSupport": "يدعم",
+  "notifGroupSupport": "الدعم",
   "rankedLeagueAccountSelector": "الحساب المعروض",
   "rankedLeagueStars": "النجوم",
   "playerBattlelogTab": "المعارك",
-  "playerActivityTab": "نشاط",
+  "playerActivityTab": "النشاط",
   "playerBattlelogFarming": "جمع الموارد",
   "playerBattlelogRanked": "المصنف",
   "playerBattlelogFarmingOverview": "نظرة عامة على جمع الموارد",
@@ -4566,7 +4656,7 @@
     }
   },
   "playerBattlelogAttacks": "الهجمات",
-  "playerBattlelogAverageDestruction": "متوسط التدمير",
+  "playerBattlelogAverageDestruction": "تدمير متوسط",
   "playerBattlelogAverageStars": "متوسط النجوم",
   "playerBattlelogTripleRate": "سعر ثلاث نجوم",
   "playerBattlelogAverageLoot": "متوسط الغنائم",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "أولويات الخطة",
+  "upgradeTrackerPlanPrioritiesDescription": "رتب ما هو أكثر أهمية. مستويات الترقية والعمل النشط يظلان دائمًا في حالة جيدة.",
   "upgradeTrackerPlanClose": "إغلاق",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "أهداف التخطيط",
+  "upgradeTrackerPlanConstructionSubtitle": "ترقيات البناء والبطل",
+  "upgradeTrackerPlanResearchSubtitle": "القوات والتعاويذ وأبحاث الحصار",
+  "upgradeTrackerPlanPetHouseSubtitle": "ترقيات بيت الحيوانات الأليفة",
+  "upgradeTrackerPlanPrioritizeNewItems": "إعطاء الأولوية للعناصر الجديدة",
+  "upgradeTrackerPlanPrioritizeNewDescription": "ضع العناصر غير المؤمنة أو غير المبنية حديثًا أولاً",
+  "upgradeTrackerPlanSharedSummary": "الطبقة {tier} · المزيج المشترك {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "المستوى {tier} · صارم · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "يعمل حتى بلغ الحد الأقصى",
+  "upgradeTrackerPlanYieldsAfter": "العائد بعد {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "صارم",
+  "upgradeTrackerPlanMax": "ماكس",
+  "upgradeTrackerPlanReorder": "إعادة الطلب {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "الوزن النسبي للطبقة",
+  "upgradeTrackerPlanCompletionTarget": "هدف الإنجاز",
+  "upgradeTrackerPlanStrictTier": "الطبقة الصارمة",
+  "upgradeTrackerPlanWeight": "الوزن {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "حتى بلغ الحد الأقصى",
+  "upgradeTrackerPlanUntilPercent": "حتى {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "يتم تشغيل المستويات المرقمة أولاً. تحتفظ الصفوف المشتركة بنفس رقم الطبقة، ويتم تسوية مزيجها من الأوزان النسبية، بحيث تصبح 50 + 25 67% / 33%. يحقق الهدف عائدًا للفئة بعد أن يصل إلى تلك النسبة بينما يظل مؤهلاً لاحقًا.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "ماكس قبل التقدم",
+  "upgradeTrackerPlanGoalRushNextHall": "الوصول إلى القاعة التالية بسرعة",
+  "upgradeTrackerPlanGoalCatchUp": "اللحاق بمستويات هرع",
+  "upgradeTrackerPlanGoalUnlockFirst": "افتح الأشياء الجديدة أولاً",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
-  "upgradeTrackerPlanOff": "متوقف",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanWallsEachWeek": "الجدران كل أسبوع",
+  "upgradeTrackerPlanOff": "إيقاف",
+  "upgradeTrackerPlanPerWeek": "{count} / أسبوع",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "تفضل الذهب للجدران",
+  "upgradeTrackerPlanPreferGoldDescription": "استخدم الذهب قبل الإكسير عند إنفاق الجدران",
+  "upgradeTrackerPlanApplyPriorities": "تطبيق الأولويات",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "الدفاعات المتقنة",
+  "upgradeTrackerPlanCategoryTraps": "الفخاخ",
+  "upgradeTrackerPlanCategoryArmy": "الجيش",
+  "upgradeTrackerPlanCategoryDarkTroops": "قوات الظلام",
+  "upgradeTrackerPlanCategorySieges": "الحصار",
+  "upgradeTrackerPlanCategorySupercharge": "شحن فائق",
+  "navigationCloseDrawer": "إغلاق درج التنقل",
+  "navigationOpenProfileMenu": "فتح قائمة الملف الشخصي",
+  "navigationClashKingWeb": "ClashKing للويب",
+  "settingsPrivacyDataTitle": "الخصوصية والبيانات",
+  "settingsPrivacyPolicyDescription": "راجع ما تجمعه ClashKing، وسبب استخدامه، والجهات التي تعالجه، وقواعد الاحتفاظ به، وكيفية التواصل معنا.",
+  "settingsPrivacyExportTitle": "الوصول إلى بياناتك أو تصديرها",
+  "settingsPrivacyExportDescription": "نزّل نسخة من بيانات الحساب المرتبطة بتسجيل دخولك إلى ClashKing، بما في ذلك حسابات Clash of Clans المرتبطة وتفضيلات الإشعارات.",
+  "settingsPrivacyCorrectionTitle": "تصحيح البيانات أو تقييدها",
+  "settingsPrivacyCorrectionDescription": "أزل حسابات Clash of Clans المرتبطة من إعدادات الحساب، أو عطّل الإشعارات، أو تواصل مع الدعم لطلبات التصحيح والتقييد.",
+  "settingsPrivacyDeletionTitle": "حذف حساب ClashKing الخاص بك",
+  "settingsPrivacyDeletionDescription": "يبدأ هذا حذف حساب ClashKing وبيانات التطبيق المرتبطة به، ما لم يكن على ClashKing الاحتفاظ بسجلات محدودة لأسباب أمنية أو لمنع الاحتيال أو للوفاء بالتزامات قانونية.",
+  "settingsPrivacyChildrenTitle": "الأطفال والعائلات",
+  "settingsPrivacyChildrenDescription": "ClashKing تطبيق مساعد موجّه للجمهور العام وليس موجّهًا للأطفال. لا تنشئ حسابًا إذا لم تبلغ سن الموافقة في بلدك دون موافقة أحد الوالدين أو الوصي.",
+  "settingsPrivacyExportReady": "تصدير بياناتك جاهز للحفظ.",
+  "settingsPrivacyExportCreateFailed": "تعذّر إنشاء تصدير البيانات. تم إعداد رسالة بريد إلكتروني للخصوصية بدلًا من ذلك.",
+  "settingsPrivacyExportPrepareFirst": "جهّز التصدير قبل حفظه.",
+  "settingsPrivacyExportSaved": "تم حفظ تصدير بياناتك.",
+  "settingsPrivacyExportSaveFailed": "تعذّر حفظ تصدير البيانات. تم إعداد رسالة بريد إلكتروني للخصوصية بدلًا من ذلك.",
+  "settingsPrivacyDeleteUnavailable": "حذف الحساب غير متاح في هذا الإصدار. تم إعداد رسالة بريد إلكتروني للخصوصية بدلًا من ذلك.",
+  "settingsPrivacyOpenPolicy": "فتح السياسة",
+  "settingsPrivacyRefreshExport": "تحديث التصدير",
+  "settingsPrivacyPrepareExport": "إعداد التصدير",
+  "settingsPrivacySaveExport": "حفظ التصدير",
+  "settingsPrivacyContactSupport": "التواصل مع الدعم",
+  "settingsPrivacyDeleteAccount": "حذف الحساب",
+  "settingsPrivacyDeleteConfirmTitle": "حذف الحساب؟",
+  "settingsPrivacyDeleteConfirmDescription": "يصبح هذا الطلب نهائيًا بعد معالجته. قد تفقد الحسابات المرتبطة وإعدادات الإشعارات والتفضيلات المحفوظة وطرق المصادقة.",
+  "generalUnranked": "غير مصنّف",
+  "playerJoinLeaveTab": "الانضمام / المغادرة",
+  "playerUpgradeRemainingAccessibility": "المتبقي لمبنى البلدية {townHallLevel}",
+  "playerUpgradeSummaryTitle": "مكتمل بنسبة {progress}% لمبنى البلدية {townHallLevel}",
+  "playerUpgradeSectionMaxed": "هذا القسم مكتمل لمبنى البلدية {townHallLevel}.",
+  "playerUpgradeTimeRemaining": "الوقت المتبقي",
+  "playerUpgradeNoResourceData": "لا توجد بيانات موارد",
+  "playerJoinLeaveLoadError": "تعذّر تحميل سجل الانضمام / المغادرة",
+  "playerJoinLeaveClanTotals": "إجماليات القبائل",
   "playerJoinLeaveTime": "الوقت",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "الوقت المستغرق",
+  "playerJoinLeaveVisits": "الزيارات",
+  "playerJoinLeaveJoined": "انضم",
+  "playerJoinLeaveLeft": "غادر",
+  "playerJoinLeaveNoHistory": "لا يتوفر سجل انضمام / مغادرة",
+  "playerJoinLeaveNoClanTotals": "لا تتوفر إجماليات للقبائل",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
