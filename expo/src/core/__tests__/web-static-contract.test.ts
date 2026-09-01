@@ -72,7 +72,7 @@ describe('static web authentication contract', () => {
 
     const favicon = readFileSync(resolve(process.cwd(), 'public', 'favicon.png'));
     expect(createHash('sha256').update(favicon).digest('hex')).toBe(
-      '7ab2525f4b86b65d3e4c70358a17e5a1aaf6f437f99cbcc046dad73d59bb9015',
+      '92ebccaef52b9da3ac91aa19824620152c6e08327b09bec8a6d9a1e3589cd6c0',
     );
     const expoConfig = readFileSync(resolve(process.cwd(), 'app.config.ts'), 'utf8');
     expect(expoConfig).not.toContain('favicon:');
