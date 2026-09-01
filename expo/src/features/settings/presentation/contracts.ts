@@ -3,8 +3,7 @@ import type { AuthUser } from '../../auth/models';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 
 export type SettingsThemeMode = 'system' | 'light' | 'dark';
-export type SettingsDestination =
-  'notifications' | 'faq' | 'translation' | 'privacy' | 'connectedApps';
+export type SettingsDestination = 'notifications' | 'faq' | 'translation' | 'privacy';
 
 export interface SettingsPresentationActions {
   changeLocale(locale: string): Promise<void>;
