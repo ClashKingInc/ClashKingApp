@@ -467,6 +467,9 @@ describe('PlayerDetailScreen', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'History' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'Clan totals' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
+    expect(
+      StyleSheet.flatten(screen.getByTestId('player-join-leave-filter-options').props.style),
+    ).toMatchObject({ justifyContent: 'flex-end' });
     expect(screen.getAllByText('Time spent').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Visits').length).toBeGreaterThan(0);
   });

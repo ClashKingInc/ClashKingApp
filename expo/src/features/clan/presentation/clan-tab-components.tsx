@@ -52,7 +52,11 @@ export function ClanFilterBar({
           <Filter size={18} color={theme.onSurface} />
         </Pressable>
       </View>
-      {expanded ? <View style={styles.filterChips}>{chips}</View> : null}
+      {expanded ? (
+        <View testID="clan-filter-options" style={styles.filterChips}>
+          {chips}
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -208,7 +212,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   filterMiddle: { flex: 1 },
-  filterChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  filterChips: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 8 },
   pill: {
     height: 36,
     paddingHorizontal: 11,

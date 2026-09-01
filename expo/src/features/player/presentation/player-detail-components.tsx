@@ -1572,7 +1572,10 @@ export function PlayerWarTab({
         </Pressable>
       </View>
       {filtersExpanded ? (
-        <View style={styles.wrap}>
+        <View
+          testID="player-war-quick-filter-options"
+          style={[styles.wrap, styles.trailingChoices]}
+        >
           {['random', 'cwl', 'friendly'].map((type) => (
             <Choice
               key={type}
@@ -3277,7 +3280,10 @@ export function PlayerJoinLeaveTab({
       </View>
       {filtersExpanded ? (
         view === 'events' ? (
-          <View style={styles.wrap}>
+          <View
+            testID="player-join-leave-filter-options"
+            style={[styles.wrap, styles.trailingChoices]}
+          >
             {(
               [
                 [
@@ -3311,7 +3317,10 @@ export function PlayerJoinLeaveTab({
             ))}
           </View>
         ) : (
-          <View style={styles.wrap}>
+          <View
+            testID="player-join-leave-filter-options"
+            style={[styles.wrap, styles.trailingChoices]}
+          >
             {(
               [
                 [
@@ -4324,6 +4333,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  trailingChoices: { justifyContent: 'flex-end' },
   fieldGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   filterField: { minWidth: 150, flex: 1, gap: 4 },
   filterInput: {

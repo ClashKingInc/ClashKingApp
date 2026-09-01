@@ -317,6 +317,12 @@ describe('ClanInfoScreen', () => {
         marginLeft: 'auto',
       },
     );
+    await fireEvent.press(screen.getByTestId('clan-filter-trigger'));
+    expect(StyleSheet.flatten(screen.getByTestId('clan-filter-options').props.style)).toMatchObject(
+      {
+        justifyContent: 'flex-end',
+      },
+    );
 
     await fireEvent.scroll(screen.getByTestId('clan-info-scroll'), {
       nativeEvent: {
