@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "対戦統計の範囲",
+  "warStatsRangeDescription": "直近の対戦を一定数含めるか、直近の期間を日数で指定するかを選択します。",
+  "warStatsRangeDays": "日数",
+  "warStatsRangeWarsToInclude": "含める対戦数",
+  "warStatsRangeDaysToInclude": "含める日数",
+  "upgradeTrackerAllBuildersOccupied": "大工は全員作業中です",
+  "upgradeTrackerBuildCost": "建設コスト",
+  "upgradeTrackerBuilderBaseBuilders": "ビルダーベースの大工",
+  "upgradeTrackerBuilderBaseLaboratory": "ビルダーベースのラボ",
+  "upgradeTrackerCalendar": "カレンダー",
+  "upgradeTrackerClearCost": "撤去コスト",
+  "upgradeTrackerCompletionDetails": "村の完成度の詳細",
+  "upgradeTrackerCustomSoundtrack": "カスタムサウンドトラック",
+  "upgradeTrackerGoldPassPercent": "ゴールドパス {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "{group}の概要",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -29,9 +29,9 @@
     }
   },
   "upgradeTrackerGuardians": "ガーディアン",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerHelpers": "ヘルパー",
+  "upgradeTrackerHouseParts": "ハウスパーツ",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {空いている大工：#人} other {空いている大工：#人}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "進行中",
+  "upgradeTrackerItemSemanticLabel": "{item}、レベル{currentLevel}/{targetLevel}{count, plural, =1 {} other {、#棟}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "所有数：{count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,8 +65,8 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
-  "upgradeTrackerLevelTransition": "レベル {from} → {to}",
+  "upgradeTrackerLane": "レーン",
+  "upgradeTrackerLevelTransition": "レベル{from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
       "from": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "現在必要な資源",
+  "upgradeTrackerLootOutlook": "資源の見通し",
+  "upgradeTrackerMusic": "音楽",
+  "upgradeTrackerNextDays": "{count, plural, one {今後#日間} other {今後#日間}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "次の期間",
+  "upgradeTrackerNoGoldPass": "ゴールドパスなし",
+  "upgradeTrackerNoMatchingUpgrades": "一致するアップグレードはありません",
+  "upgradeTrackerNoMatchingUpgradesBody": "別の村またはキューをお試しください。",
+  "upgradeTrackerNothingNeededNow": "現在必要なものはありません",
+  "upgradeTrackerObstacles": "障害物",
+  "upgradeTrackerPart": "パーツ",
+  "upgradeTrackerPassReward": "パス報酬",
+  "upgradeTrackerPauseSoundtrack": "サウンドトラックを一時停止",
+  "upgradeTrackerPeriodCount": "期間{current}/{total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,9 +108,9 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
-  "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "upgradeTrackerPlaySoundtrack": "サウンドトラックを再生",
+  "upgradeTrackerPreviousPeriod": "前の期間",
+  "upgradeTrackerResourceAmount": "{resource}、{amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
       "resource": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "背景",
+  "upgradeTrackerScheduledLane": "レーン#{lane}に予定",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "{village}の進行状況",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "予定",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "サイズ",
+  "upgradeTrackerSortLongest": "長い順",
+  "upgradeTrackerSortName": "名前順",
+  "upgradeTrackerSortScheduled": "予定順",
+  "upgradeTrackerSortShortest": "短い順",
+  "upgradeTrackerSoundtrackPosition": "サウンドトラックの再生位置",
   "upgradeTrackerStarts": "開始",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "ティア",
+  "upgradeTrackerUpgradesStarting": "開始するアップグレード",
+  "upgradeTrackerUpgradingNow": "アップグレード中",
+  "upgradeTrackerWarBase": "対戦用の村",
+  "notifSettingsSaveFailed": "通知設定を保存できませんでした。",
+  "notifPushEnabled": "プッシュ通知は有効です",
+  "notifReceiveNotifications": "通知を受け取る",
+  "notifTokenPreview": "トークン：{token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "有効にしたアラートをこの端末に配信できます。",
+  "notifDisabledAccountDescription": "ClashKingアカウント全体で通知がオフになっています。",
+  "notifMaximumRemindersAdded": "追加できるリマインダーの上限に達しました",
+  "notifAddReminder": "リマインダーを追加",
+  "notifDurationOneHour": "1時間",
+  "notifDurationHours": "{count}時間",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count}分",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "{timing}を追加",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1時間前",
+  "notifTimingHoursBefore": "{count}時間前",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count}分前",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,19 +206,19 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "この端末でプッシュ通知を利用できます。",
+  "notifPushPermissionRequired": "ClashKingのアラートを受け取るには通知を許可してください。",
+  "notifPushPermissionDenied": "通知の許可が拒否されました。",
+  "notifPushNotConfigured": "このビルドではFirebaseが設定されていません。",
+  "notifPushTokenUnavailable": "プッシュトークンはまだ利用できません。",
+  "notifPushUnsupported": "このプラットフォームではプッシュ通知に対応していません。",
+  "notifPushInitializing": "プッシュ通知を設定しています…",
+  "notificationPrimerTitle": "通知を有効にしますか？",
+  "notificationPrimerBody": "ClashKing から、対戦、CWL、アカウント、プロジェクトの更新情報を通知できます。この設定はいつでも「設定」>「通知」で変更できます。",
+  "notificationPrimerNotNow": "後で",
+  "notificationPrimerAllow": "許可",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
-  "achievementsTitle": "達成項目",
+  "achievementsTitle": "実績",
   "achievementEarnedLabel": "獲得回数",
   "achievementSummary": "{earned}/{total} 完了",
   "achievementEarnedCount": "獲得回数 ×{count}",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "メンバーを検索する",
   "clanMembersShowTotals": "クランの合計を表示する",
   "clanMembersHideTotals": "クランの合計を非表示にする",
-  "clanMembersReceivedShort": "受取数",
+  "clanMembersReceivedShort": "受け取った",
   "clanMembersAverageTh": "平均TH",
   "clanMinimumMembers": "最小メンバー数",
   "clanMaximumMembers": "最大メンバー数",
@@ -1105,8 +1105,26 @@
   "warTitle": "対戦",
   "warFrequency": "対戦頻度",
   "warParticipation": "対戦参加",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "参加のみ",
+  "warStatsRangeWarsCompact": "{number}回の対戦",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number}日",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "過去{number}日",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "現在のメンバー",
   "warLeague": "対戦/リーグ",
   "warHistory": "対戦履歴",
   "warLog": "対戦ログ",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "ベスト攻撃",
   "warAttacksCount": "攻撃数",
   "warAttacksMissed": "未消化攻撃",
-  "warAttacksMissedShort": "未消化",
+  "warAttacksMissedShort": "逃した",
   "warAttacksNumber": "直近{number_war}回の対戦で{number_time}回攻撃しました。",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1592,10 +1610,10 @@
   "clanProfileDescriptionChanged": "説明が変更されました",
   "clanJoinLeaveTab": "参加/脱退",
   "clanRankingsTab": "ランキング",
-  "clanRankingsSeason": "シーズン",
+  "clanRankingsSeason": "季節",
   "clanRankingsSelectSeason": "ランキングシーズンを選択してください",
   "clanRankingsFilterActivity": "活動",
-  "clanRankingsFilterWar": "対戦",
+  "clanRankingsFilterWar": "戦争",
   "clanRankingsFilterPoints": "ポイント",
   "cwlHistoryPreviewBadge": "プレビュー",
   "cwlHistoryPreviewSubtitle": "CWL エンドポイントが修正されるまでの {clan} モックアップ",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "戦争のスター",
   "playerWarPreferenceTitle": "戦争県",
   "playerDonatedTitle": "寄付しました",
-  "playerReceivedTitle": "受取数",
+  "playerReceivedTitle": "受け取った",
   "playerCapitalTitle": "資本",
   "playerExpLevelTitle": "経験値レベル",
   "clanWarWinsTitle": "戦争の勝利",
@@ -1791,7 +1809,7 @@
   "raidsDistrictsDestroyed": "破壊した地区",
   "raidsCompleted": "完了したレイド",
   "capitalRaidStatusOngoing": "進行中",
-  "capitalRaidStatusEnded": "終了済み",
+  "capitalRaidStatusEnded": "終了しました",
   "capitalRaidLoot": "戦利品",
   "capitalRaidRewards": "報酬",
   "capitalRaidPreviousWeek": "前の週",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "連携アプリ",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "アカウントにアクセスできるアプリの確認と連携解除を行います。",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "有効な連携",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "連携中のアプリはありません",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "連携したアプリがここに表示されます。",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "連携アプリを読み込めませんでした",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "現在および今後連携するすべてのアカウント",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "選択したアカウント：{count}件",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "連携解除",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "アプリの連携を解除しますか？",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} は連携アカウントへのアクセスを直ちに失います。",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "{name} の連携を解除しました。",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "{name} の連携を解除できませんでした。もう一度お試しください。",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "サインインしました",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2746,7 +2836,7 @@
   "@searchRecent": {
     "description": "Section heading for recent search results"
   },
-  "searchTabPlayers": "プレイヤー",
+  "searchTabPlayers": "選手",
   "@searchTabPlayers": {
     "description": "Search mode tab: players"
   },
@@ -3100,16 +3190,16 @@
   "notifScheduledMessage": "予定: {title}",
   "generalStartDate": "開始日",
   "generalEndDate": "終了日",
-  "warFiltersAllWars": "すべての対戦",
-  "warFiltersRandomWars": "ランダム対戦",
+  "warFiltersAllWars": "すべての戦争",
+  "warFiltersRandomWars": "ランダムウォーズ",
   "warFiltersCwlWars": "CWLウォーズ",
-  "warFiltersFriendlyWars": "フレンド対戦",
-  "warType": "対戦タイプ",
+  "warFiltersFriendlyWars": "フレンドリーウォーズ",
+  "warType": "戦争タイプ",
   "warFiltersAnyTownHall": "任意のTH",
   "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "攻撃側TH",
-  "warDefenderTownHall": "防衛側TH",
-  "warStatsFilterSameTownHallOnly": "同じタウンホールのみ",
+  "warAttackerTownHall": "アタッカーTH",
+  "warDefenderTownHall": "ディフェンダーTH",
+  "warStatsFilterSameTownHallOnly": "同じ市庁舎のみ",
   "warStatsFilterSameTownHallDescription": "攻撃者と防御者のTHレベルが同じ場合の攻撃のみを表示します",
   "generalAny": "どれでも",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3117,11 +3207,11 @@
   "warStatsFilterMaxStars": "マックススターズ",
   "warStatsFilterMinDestructionPercent": "最小破壊率",
   "warStatsFilterMaxDestructionPercent": "最大破壊率",
-  "warStatsFilterMinPosition": "最小順位",
-  "warStatsFilterMaxPosition": "最大順位",
-  "warStatsFilterFreshAttacksOnly": "初回攻撃のみ",
+  "warStatsFilterMinPosition": "最小位置",
+  "warStatsFilterMaxPosition": "最大位置",
+  "warStatsFilterFreshAttacksOnly": "フレッシュアタックのみ",
   "warStatsFilterFreshAttacksDescription": "各拠点の最初の攻撃のみを表示",
-  "warStatsFilterResultLimit": "結果数の上限",
+  "warStatsFilterResultLimit": "結果の制限",
   "generalResultsCount": "{count}の結果",
   "notifEventsDescription": "クランゲーム、CWL、レイド週末、シーズンイベント。",
   "notifAnnouncementsDescription": "アプリ内バナーとClashKing更新の今後のプッシュ通知。",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "対戦ウィジェットを追加",
   "settingsWarWidgetLinkClanFirst": "まずクラン内のアカウントを連携してください",
   "settingsWarWidgetClanCount": "{count}個のクランが利用可能",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "クランを選択します。ウィジェットを追加した後、長押しして「ウィジェットを編集」をタップし、「クラン」を選択します。",
+  "settingsWarWidgetAndroidInstructions": "クランを選択し、Android のウィジェット選択画面からウィジェットを追加します。",
+  "settingsWarWidgetEmpty": "リンク済みアカウントは現在どのクランにも所属していません。",
+  "settingsWarWidgetIosFooter": "複数の対戦ウィジェットを追加し、それぞれに別のクランを選択できます。",
+  "settingsWarWidgetIosReady": "{clanName} の準備ができました。ウィジェットを編集し、「クラン」で選択してください。",
+  "settingsWarWidgetAndroidReady": "{clanName} のウィジェットデータを準備しました。",
+  "settingsWarWidgetPrepareFailed": "ウィジェットを準備できませんでした: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "ボット連携アカウントとDiscordデータ",
   "settingsDiscordSyncSubtitle": "ボット連携アカウントとDiscordデータを同期",
@@ -3165,7 +3255,7 @@
   "resourceShinyOre": "シャイニー鉱石",
   "resourceGeneric": "資源",
   "seasonStatsGoldGrabbed": "奪ったゴールド",
-  "seasonStatsActivity": "活動",
+  "seasonStatsActivity": "アクティビティ",
   "seasonStatsAttackWins": "攻撃勝利",
   "seasonStatsTrophies": "シーズントロフィー",
   "todoSearchAccountsHint": "アカウントを検索",
@@ -3299,7 +3389,7 @@
   "statsOverview": "概要",
   "statsArmies": "軍隊",
   "statsItems": "アイテム",
-  "statsWar": "対戦",
+  "statsWar": "戦争",
   "statsCwl": "CWL",
   "statsRanked": "ランク戦",
   "statsDateRange": "期間",
@@ -3311,11 +3401,11 @@
   "statsAddItemsTitle": "分析するアイテムを選択してください",
   "statsAddItemsBody": "部隊、呪文、ヒーロー、ペット、または装備を追加してから、クエリを実行します。",
   "statsGlobalCounts": "グローバル数",
-  "statsPerformance": "成績",
+  "statsPerformance": "パフォーマンス",
   "statsSamples": "サンプル",
   "statsUsage": "使用状況",
-  "statsAverageStars": "平均星数",
-  "statsAverageDestruction": "平均破壊率",
+  "statsAverageStars": "平均スター数",
+  "statsAverageDestruction": "平均破壊",
   "statsStarRates": "スター率",
   "statsThreeStarRate": "3 つ星のレート",
   "statsDailyTrend": "毎日の傾向",
@@ -3346,7 +3436,7 @@
   "statsCompositionShare": "構成シェア",
   "statsNoLevels": "軍の記録にはアイテム レベルが含まれていません。",
   "statsRankedCompositionOnly": "構成データはランク付けされたバトルログから取得されます。戦争と CWL のパフォーマンスは別々のままです。",
-  "statsTownHall": "タウンホール",
+  "statsTownHall": "タウン ホール",
   "statsOpponentTownHall": "相手の市庁舎",
   "statsEqualTownHalls": "同等の市庁舎",
   "statsLeagueTier": "リーグ階層",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "シーズンの内訳",
   "sideTopScore": "最高スコア",
   "sideTop200Avg": "Top 200平均",
-  "sideBasesArmiesTitle": "基地と軍隊",
+  "sideBasesArmiesTitle": "基地と編成",
   "sideBasesArmiesSubtitle": "Discordに保存されたレイアウトと編成リンク。",
   "sideBotSyncTarget": "ボット同期先",
   "sideBotSyncTargetBody": "ボットはすでに基地と編成をDiscordプロフィールに保存しています。このページはその同期データに対応する準備ができています。",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "保存済み編成",
   "sideArmyLinks": "編成リンク",
   "sideArmyLinksBody": "構成、呪文、突破兵器、メモ、共有リンク。",
-  "sideGameAssetsTitle": "ゲームアセット",
+  "sideGameAssetsTitle": "ゲーム素材",
   "sideGameAssetsSubtitle": "フォルダーごとに分類されたホスト済みClashKing素材。",
   "gameAssetsLoadError": "ゲーム素材を読み込めませんでした",
   "gameAssetsEmptyTitle": "利用可能なゲーム素材がありません",
@@ -3397,7 +3487,7 @@
   "gameAssetsSearchHint": "このカテゴリを検索",
   "gameAssetsAllFormats": "すべての形式",
   "gameAssetsOneResult": "結果1件",
-  "gameAssetsResultCount": "{count}の結果",
+  "gameAssetsResultCount": "{count}件の結果",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3481,7 +3571,7 @@
       }
     }
   },
-  "sideLocation": "所在地",
+  "sideLocation": "場所",
   "sideFilter": "フィルター",
   "sideRefresh": "更新",
   "sideOfficialClashLeaderboard": "公式Clashリーダーボード",
@@ -3532,7 +3622,7 @@
   "endpointTop200ArmyUsagePreview": "バトルログ · ユニットと呪文の使用率",
   "endpointStateTop200": "Top 200",
   "endpointStateWeekly": "週間",
-  "endpointStateUsage": "使用状況",
+  "endpointStateUsage": "使用率",
   "notifGroupReminders": "リマインダー",
   "notifGroupProgress": "進行状況",
   "notifLeagueDefense": "リーグ防衛",
@@ -3693,7 +3783,7 @@
   "notifSpecialEvent": "特別イベント",
   "notifNewEventLive": "新しいイベントが開催中",
   "notifNewClashEventBody": "新しいClashイベントが利用可能です。",
-  "notifSupportClashKing": "ClashKingを応援",
+  "notifSupportClashKing": "ClashKingをサポート",
   "notifMonthlySupportBody": "毎月のサポートはClashKingの提供と改善に役立ちます。ありがとうございます。",
   "notifUpgradeFinished": "アップグレード完了",
   "notifUpgradeReadyTitle": "{name}の準備ができました",
@@ -4271,9 +4361,9 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "選択したアカウント",
-  "notifAudienceAcrossDevicesDescription": "この端末で通知を受け取れるアカウントを選択します。",
-  "notifAccountBookmarked": "ブックマーク済み",
+  "notifChooseAccountsManually": "手動でアカウントを選択",
+  "notifAudienceAcrossDevicesDescription": "このアカウント選択はすべての端末に適用されます。",
+  "notifAccountBookmarked": "保存済み",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "戦争攻撃",
+  "notifGroupWarAttacks": "対戦攻撃",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4464,7 +4554,7 @@
   "gameCreatorCode": "クリエイターコード: ClashKing",
   "todoExplanationRaidsTitle": "レイド:",
   "todoExplanationRaids": "アカウントごとに5ポイントの重み（最後の攻撃が解放されている場合は6）、1攻撃 = 1ポイント。",
-  "clanWarFrequencyTitle": "戦争",
+  "clanWarFrequencyTitle": "クラン対戦",
   "notifScopeAllAccounts": "すべてのアカウント",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
@@ -4527,7 +4617,7 @@
   "todoRaidAttacks": "襲撃攻撃",
   "todoMockRaid4Left": "残り4回",
   "todoMockWarAltStatus": "18分前にアクティブ · 対戦と襲撃に対応が必要です",
-  "todoMockRaid1Left": "残り1個",
+  "todoMockRaid1Left": "残り1回",
   "gameAssetsCategoryBuildings": "建物",
   "gameAssetsCategoryCapitalBase": "都の拠点",
   "gameAssetsCategoryCapitalHouseParts": "都の家のパーツ",
@@ -4551,7 +4641,7 @@
   "rankedLeagueAccountSelector": "表示中のアカウント",
   "rankedLeagueStars": "星",
   "playerBattlelogTab": "バトル",
-  "playerActivityTab": "活動",
+  "playerActivityTab": "アクティビティ",
   "playerBattlelogFarming": "資源集め",
   "playerBattlelogRanked": "ランク戦",
   "playerBattlelogFarmingOverview": "資源集めの概要",
@@ -4566,8 +4656,8 @@
     }
   },
   "playerBattlelogAttacks": "攻撃",
-  "playerBattlelogAverageDestruction": "平均破壊率",
-  "playerBattlelogAverageStars": "平均星数",
+  "playerBattlelogAverageDestruction": "平均破壊",
+  "playerBattlelogAverageStars": "平均スター数",
   "playerBattlelogTripleRate": "3 つ星のレート",
   "playerBattlelogAverageLoot": "平均戦利品",
   "playerBattlelogPopularTroops": "使用回数の多いユニット",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "優先順位を計画する",
+  "upgradeTrackerPlanPrioritiesDescription": "最も重要なことをランク付けします。アップグレードレベルとアクティブな作業は常に適切な状態に保たれます。",
   "upgradeTrackerPlanClose": "閉じる",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "計画の目標",
+  "upgradeTrackerPlanConstructionSubtitle": "建設とヒーローのアップグレード",
+  "upgradeTrackerPlanResearchSubtitle": "軍隊、呪文、包囲攻撃の研究",
+  "upgradeTrackerPlanPetHouseSubtitle": "ペットハウスのアップグレード",
+  "upgradeTrackerPlanPrioritizeNewItems": "新しいアイテムを優先する",
+  "upgradeTrackerPlanPrioritizeNewDescription": "新しくロック解除されたアイテムまたは未構築のアイテムを最初に配置します",
+  "upgradeTrackerPlanSharedSummary": "ティア {tier} · 共有ミックス {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "ティア {tier} · 厳格 · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "最大値まで実行される",
+  "upgradeTrackerPlanYieldsAfter": "{target}%後の利回り",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "厳格",
+  "upgradeTrackerPlanMax": "マックス",
+  "upgradeTrackerPlanReorder": "再注文 {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "相対的な階層の重み",
+  "upgradeTrackerPlanCompletionTarget": "完成目標",
+  "upgradeTrackerPlanStrictTier": "厳格な階層",
+  "upgradeTrackerPlanWeight": "重量{value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "最大になるまで",
+  "upgradeTrackerPlanUntilPercent": "{value}%まで",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "番号付きの層が最初に実行されます。共有行は同じ階層番号を維持し、その混合は相対的な重みから正規化されるため、50 + 25 は 67% / 33% になります。ターゲットは、そのパーセンテージに達した後にカテゴリの収益を上げますが、その後も資格を維持します。",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "進む前にマックスにする",
+  "upgradeTrackerPlanGoalRushNextHall": "早く次のホールに着いてね",
+  "upgradeTrackerPlanGoalCatchUp": "急ぐレベルに追いつく",
+  "upgradeTrackerPlanGoalUnlockFirst": "まずは新しいものをアンロックする",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "毎週の壁",
   "upgradeTrackerPlanOff": "オフ",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / 週",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
-  "playerJoinLeaveTime": "時刻",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "upgradeTrackerPlanPreferGold": "壁にはゴールドを好む",
+  "upgradeTrackerPlanPreferGoldDescription": "壁を消費するときはエリクサーの前にゴールドを使用してください",
+  "upgradeTrackerPlanApplyPriorities": "優先順位を適用する",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "巧妙に作られた防御",
+  "upgradeTrackerPlanCategoryTraps": "トラップ",
+  "upgradeTrackerPlanCategoryArmy": "軍隊",
+  "upgradeTrackerPlanCategoryDarkTroops": "闇の軍隊",
+  "upgradeTrackerPlanCategorySieges": "包囲戦",
+  "upgradeTrackerPlanCategorySupercharge": "スーパーチャージ",
+  "navigationCloseDrawer": "ナビゲーションドロワーを閉じる",
+  "navigationOpenProfileMenu": "プロフィールメニューを開く",
+  "navigationClashKingWeb": "ClashKing ウェブ",
+  "settingsPrivacyDataTitle": "プライバシーとデータ",
+  "settingsPrivacyPolicyDescription": "ClashKing が収集する情報、利用目的、処理者、保存ルール、お問い合わせ方法を確認できます。",
+  "settingsPrivacyExportTitle": "データへのアクセスまたはエクスポート",
+  "settingsPrivacyExportDescription": "ClashKing のログインに関連付けられたアカウントデータのコピーをダウンロードします。連携済みの Clash of Clans アカウントや通知設定も含まれます。",
+  "settingsPrivacyCorrectionTitle": "データの訂正または利用制限",
+  "settingsPrivacyCorrectionDescription": "アカウント設定で連携済みの Clash of Clans アカウントを削除したり、通知を無効にしたりできます。訂正や利用制限についてはサポートにお問い合わせください。",
+  "settingsPrivacyDeletionTitle": "ClashKing アカウントを削除",
+  "settingsPrivacyDeletionDescription": "ClashKing アカウントと関連するアプリデータの削除を開始します。ただし、セキュリティ、不正防止、法的義務のために一部の記録を保持する場合があります。",
+  "settingsPrivacyChildrenTitle": "お子様とご家族",
+  "settingsPrivacyChildrenDescription": "ClashKing は一般ユーザー向けの補助アプリであり、お子様を対象としていません。お住まいの国で保護者の承認なしに同意できる年齢に達していない場合は、アカウントを作成しないでください。",
+  "settingsPrivacyExportReady": "データのエクスポートを保存できます。",
+  "settingsPrivacyExportCreateFailed": "データのエクスポートを作成できませんでした。代わりにプライバシーに関するメールを用意しました。",
+  "settingsPrivacyExportPrepareFirst": "保存する前にエクスポートを準備してください。",
+  "settingsPrivacyExportSaved": "データのエクスポートを保存しました。",
+  "settingsPrivacyExportSaveFailed": "データのエクスポートを保存できませんでした。代わりにプライバシーに関するメールを用意しました。",
+  "settingsPrivacyDeleteUnavailable": "このビルドではアカウントを削除できません。代わりにプライバシーに関するメールを用意しました。",
+  "settingsPrivacyOpenPolicy": "ポリシーを開く",
+  "settingsPrivacyRefreshExport": "エクスポートを更新",
+  "settingsPrivacyPrepareExport": "エクスポートを準備",
+  "settingsPrivacySaveExport": "エクスポートを保存",
+  "settingsPrivacyContactSupport": "サポートに問い合わせる",
+  "settingsPrivacyDeleteAccount": "アカウントを削除",
+  "settingsPrivacyDeleteConfirmTitle": "アカウントを削除しますか？",
+  "settingsPrivacyDeleteConfirmDescription": "処理後はこのリクエストを取り消せません。連携済みアカウント、通知設定、保存済みの設定、認証方法が失われる可能性があります。",
+  "generalUnranked": "ランク外",
+  "playerJoinLeaveTab": "加入 / 脱退",
+  "playerUpgradeRemainingAccessibility": "タウンホール{townHallLevel}の残り",
+  "playerUpgradeSummaryTitle": "TH{townHallLevel}で{progress}%完了",
+  "playerUpgradeSectionMaxed": "このセクションはTH{townHallLevel}で完了しています。",
+  "playerUpgradeTimeRemaining": "残り時間",
+  "playerUpgradeNoResourceData": "資源データがありません",
+  "playerJoinLeaveLoadError": "加入 / 脱退履歴を読み込めませんでした",
+  "playerJoinLeaveClanTotals": "クラン別合計",
+  "playerJoinLeaveTime": "時間",
+  "playerJoinLeaveTimeSpent": "在籍時間",
+  "playerJoinLeaveVisits": "訪問回数",
+  "playerJoinLeaveJoined": "加入",
+  "playerJoinLeaveLeft": "脱退",
+  "playerJoinLeaveNoHistory": "加入 / 脱退履歴はありません",
+  "playerJoinLeaveNoClanTotals": "クラン別合計はありません",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
