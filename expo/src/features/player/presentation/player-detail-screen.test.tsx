@@ -453,7 +453,7 @@ describe('PlayerDetailScreen', () => {
     expect(screen.getByTestId('player-join-leave-toolbar')).toBeTruthy();
     expect(
       StyleSheet.flatten(screen.getByTestId('player-join-leave-view-control').props.style),
-    ).toMatchObject({ marginLeft: 'auto' });
+    ).toMatchObject({ marginLeft: 'auto', minWidth: 130 });
     const filterControl = screen.getByTestId('player-join-leave-filter-control');
     expect(filterControl).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Filters' })).toBeTruthy();

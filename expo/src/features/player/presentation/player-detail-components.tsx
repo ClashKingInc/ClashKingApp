@@ -3258,6 +3258,7 @@ export function PlayerJoinLeaveTab({
         <View testID="player-join-leave-view-control" style={styles.joinLeaveTrailingControl}>
           <FilterDropdown
             value={view}
+            fillWidth
             showIcon={false}
             choices={[
               ['events', t('generalHistory')],
@@ -4314,7 +4315,13 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 9,
   },
-  joinLeaveTrailingControl: { marginLeft: 'auto' },
+  joinLeaveTrailingControl: {
+    width: 160,
+    minWidth: 130,
+    maxWidth: 180,
+    marginLeft: 'auto',
+    flexShrink: 1,
+  },
   directionBadge: { width: 64, alignItems: 'center', padding: 5, borderRadius: ckRadius.tile },
   subRow: {
     minHeight: 42,
