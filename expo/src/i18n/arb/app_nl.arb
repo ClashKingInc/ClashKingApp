@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Bereik van oorlogsstatistieken",
+  "warStatsRangeDescription": "Kies of de statistieken een vast aantal recente oorlogen of een recente periode in dagen omvatten.",
+  "warStatsRangeDays": "Dagen",
+  "warStatsRangeWarsToInclude": "Op te nemen oorlogen",
+  "warStatsRangeDaysToInclude": "Op te nemen dagen",
+  "upgradeTrackerAllBuildersOccupied": "Alle bouwers zijn bezig",
+  "upgradeTrackerBuildCost": "Bouwkosten",
+  "upgradeTrackerBuilderBaseBuilders": "Bouwers van de bouwersbasis",
+  "upgradeTrackerBuilderBaseLaboratory": "Laboratorium van de bouwersbasis",
+  "upgradeTrackerCalendar": "Kalender",
+  "upgradeTrackerClearCost": "Verwijderingskosten",
+  "upgradeTrackerCompletionDetails": "Details van de dorpsvoortgang",
+  "upgradeTrackerCustomSoundtrack": "Aangepaste soundtrack",
+  "upgradeTrackerGoldPassPercent": "Gouden Pas van {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Samenvatting van {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -30,7 +30,7 @@
   },
   "upgradeTrackerGuardians": "Bewakers",
   "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
+  "upgradeTrackerHouseParts": "Huisonderdelen",
   "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
@@ -39,7 +39,7 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
+  "upgradeTrackerInProgress": "Bezig",
   "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "{count} in bezit",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Wachtrij",
   "upgradeTrackerLevelTransition": "Niveau {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,9 +77,9 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
+  "upgradeTrackerLootNow": "Buit nu",
+  "upgradeTrackerLootOutlook": "Buitprognose",
+  "upgradeTrackerMusic": "Muziek",
   "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Volgende periode",
+  "upgradeTrackerNoGoldPass": "Geen Gouden Pas",
+  "upgradeTrackerNoMatchingUpgrades": "Geen overeenkomende upgrades",
+  "upgradeTrackerNoMatchingUpgradesBody": "Probeer een ander dorp of een andere wachtrij.",
+  "upgradeTrackerNothingNeededNow": "Er is nu niets nodig",
+  "upgradeTrackerObstacles": "Obstakels",
+  "upgradeTrackerPart": "Onderdeel",
+  "upgradeTrackerPassReward": "Pasbeloning",
+  "upgradeTrackerPauseSoundtrack": "Soundtrack pauzeren",
+  "upgradeTrackerPeriodCount": "Periode {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Soundtrack afspelen",
+  "upgradeTrackerPreviousPeriod": "Vorige periode",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Landschappen",
+  "upgradeTrackerScheduledLane": "Gepland nr. {lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Voortgang van {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,20 +138,20 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
+  "upgradeTrackerSize": "Grootte",
+  "upgradeTrackerSortLongest": "Langste eerst",
+  "upgradeTrackerSortName": "Naam A–Z",
   "upgradeTrackerSortScheduled": "Gepland",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
-  "upgradeTrackerStarts": "Start",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
+  "upgradeTrackerSortShortest": "Kortste eerst",
+  "upgradeTrackerSoundtrackPosition": "Positie in soundtrack",
+  "upgradeTrackerStarts": "Begint",
+  "upgradeTrackerTier": "Klasse",
+  "upgradeTrackerUpgradesStarting": "upgrades die beginnen",
+  "upgradeTrackerUpgradingNow": "Wordt nu geüpgraded",
+  "upgradeTrackerWarBase": "Oorlogsbasis",
+  "notifSettingsSaveFailed": "De meldingsinstellingen konden niet worden opgeslagen.",
+  "notifPushEnabled": "Pushmeldingen ingeschakeld",
+  "notifReceiveNotifications": "Meldingen ontvangen",
   "notifTokenPreview": "Token: {token}",
   "@notifTokenPreview": {
     "placeholders": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Je ingeschakelde waarschuwingen kunnen naar dit apparaat worden gestuurd.",
+  "notifDisabledAccountDescription": "Meldingen zijn uitgeschakeld voor je hele ClashKing-account.",
+  "notifMaximumRemindersAdded": "Maximumaantal herinneringen toegevoegd",
+  "notifAddReminder": "Herinnering toevoegen",
+  "notifDurationOneHour": "1 uur",
+  "notifDurationHours": "{count} uur",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} minuten",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "{timing} toevoegen",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "1 uur van tevoren",
+  "notifTimingHoursBefore": "{count} uur van tevoren",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "{count} minuten van tevoren",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
+  "notifPushReady": "Pushmeldingen zijn klaar op dit apparaat.",
+  "notifPushPermissionRequired": "Sta meldingen toe om ClashKing-waarschuwingen te ontvangen.",
+  "notifPushPermissionDenied": "Toestemming voor meldingen is geweigerd.",
+  "notifPushNotConfigured": "Firebase is niet geconfigureerd voor deze build.",
+  "notifPushTokenUnavailable": "Er is nog geen pushtoken beschikbaar.",
+  "notifPushUnsupported": "Pushmeldingen worden niet ondersteund op dit platform.",
+  "notifPushInitializing": "Pushmeldingen configureren…",
+  "notificationPrimerTitle": "Meldingen inschakelen?",
+  "notificationPrimerBody": "ClashKing kan je informeren over updates voor oorlogen, CWL, je account en projecten. Je kunt dit altijd wijzigen via Instellingen > Meldingen.",
   "notificationPrimerNotNow": "Niet nu",
-  "notificationPrimerAllow": "Allow",
+  "notificationPrimerAllow": "Toestaan",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Prestaties",
   "achievementEarnedLabel": "Behaald",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Leden zoeken",
   "clanMembersShowTotals": "Clantotalen tonen",
   "clanMembersHideTotals": "Clantotalen verbergen",
-  "clanMembersReceivedShort": "Donaties ontvangen",
+  "clanMembersReceivedShort": "Ontvangen",
   "clanMembersAverageTh": "Gem. TH",
   "clanMinimumMembers": "Minimum aantal leden",
   "clanMaximumMembers": "Maximum aantal leden",
@@ -1105,8 +1105,26 @@
   "warTitle": "Oorlog",
   "warFrequency": "Oorlogfrequentie",
   "warParticipation": "Oorlogsdeelname",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Alleen deelnemer",
+  "warStatsRangeWarsCompact": "{number} oorlogen",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} dagen",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Afgelopen {number} dagen",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Huidige leden",
   "warLeague": "Oorlog/Divisies",
   "warHistory": "Oorlogsgeschiedenis",
   "warLog": "Oorlogslogboek",
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Oorlogssterren",
   "playerWarPreferenceTitle": "War-voorkeur",
   "playerDonatedTitle": "Gedoneerd",
-  "playerReceivedTitle": "Donaties ontvangen",
+  "playerReceivedTitle": "Ontvangen",
   "playerCapitalTitle": "Hoofdstad",
   "playerExpLevelTitle": "Exp.-niveau",
   "clanWarWinsTitle": "War-overwinningen",
@@ -1923,7 +1941,7 @@
   "faqFeaturesCwlDescription": "Clan War League prestaties en bijdragen van leden",
   "faqFeaturesTodoTitle": "Takenlijst",
   "faqFeaturesTodoDescription": "Bekijk welke accounts nog aanvallen in de Klassementsdivisie, overvallen, oorlogsaanvallen, Clanspelen of pasacties moeten uitvoeren",
-  "faqFeaturesUpgradeTrackerTitle": "Upgrade-tracker",
+  "faqFeaturesUpgradeTrackerTitle": "Upgradetracker",
   "faqFeaturesUpgradeTrackerDescription": "Gebruik een handmatige accountsnapshot van de gebruiker om resterende upgrades, grondstoffen, bouwers, laboratoriumtijd en voortgang te bekijken",
   "faqFeaturesNotificationsTitle": "Pushmeldingen",
   "faqFeaturesNotificationsDescription": "Kies welke accounts waarschuwingen moeten ontvangen voor ondersteunde ClashKing-gebeurtenissen",
@@ -2697,6 +2715,78 @@
   "@settingsAccount": {
     "description": "Settings section: account"
   },
+  "settingsConnectedAppsTitle": "Verbonden apps",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Bekijk en ontkoppel apps met accounttoegang.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Actieve verbindingen",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Geen verbonden apps",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Apps die je verbindt, verschijnen hier.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Verbonden apps konden niet worden geladen",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Alle huidige en toekomstige gekoppelde accounts",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "{count} geselecteerde accounts",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Ontkoppelen",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "App ontkoppelen?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "{name} verliest direct de toegang tot je gekoppelde accounts.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "{name} is ontkoppeld.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Kan {name} niet ontkoppelen. Probeer het opnieuw.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "settingsSignedIn": "Ingelogd",
   "@settingsSignedIn": {
     "description": "Settings tile subtitle when signed in with Discord"
@@ -2924,7 +3014,7 @@
   "tooltipShowPassword": "Wachtwoord tonen",
   "tooltipHidePassword": "Wachtwoord verbergen",
   "tooltipRemoveAccount": "Account verwijderen",
-  "calculatorsTitle": "Rekenmachines",
+  "calculatorsTitle": "Rekenhulpen",
   "calculatorsSubtitle": "Plan schade tegen de huidige gebouwniveaus.",
   "calculatorZapQuake": "Bliksem + aardbeving",
   "calculatorFireball": "Vuurbal",
@@ -3100,16 +3190,16 @@
   "notifScheduledMessage": "Gepland: {title}",
   "generalStartDate": "Startdatum",
   "generalEndDate": "Einddatum",
-  "warFiltersAllWars": "Alle oorlogen",
-  "warFiltersRandomWars": "Willekeurige oorlogen",
+  "warFiltersAllWars": "Alle wars",
+  "warFiltersRandomWars": "Random wars",
   "warFiltersCwlWars": "CWL-wars",
-  "warFiltersFriendlyWars": "Vriendschappelijke oorlogen",
-  "warType": "Oorlogstype",
+  "warFiltersFriendlyWars": "Friendly wars",
+  "warType": "War-type",
   "warFiltersAnyTownHall": "Elke TH",
   "gameTownHallLevelShort": "SH{level}",
-  "warAttackerTownHall": "Aanvaller SH",
-  "warDefenderTownHall": "Verdediger SH",
-  "warStatsFilterSameTownHallOnly": "Alleen hetzelfde stadhuis",
+  "warAttackerTownHall": "Aanvaller TH",
+  "warDefenderTownHall": "Verdediger TH",
+  "warStatsFilterSameTownHallOnly": "Alleen dezelfde TH",
   "warStatsFilterSameTownHallDescription": "Toon alleen aanvallen waarbij aanvaller en verdediger hetzelfde TH-niveau hebben",
   "generalAny": "Alles",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3117,11 +3207,11 @@
   "warStatsFilterMaxStars": "Max. sterren",
   "warStatsFilterMinDestructionPercent": "Min. vernietiging %",
   "warStatsFilterMaxDestructionPercent": "Max. vernietiging %",
-  "warStatsFilterMinPosition": "Min positie",
-  "warStatsFilterMaxPosition": "Max positie",
-  "warStatsFilterFreshAttacksOnly": "Alleen nieuwe aanvallen",
+  "warStatsFilterMinPosition": "Min. positie",
+  "warStatsFilterMaxPosition": "Max. positie",
+  "warStatsFilterFreshAttacksOnly": "Alleen fresh attacks",
   "warStatsFilterFreshAttacksDescription": "Toon alleen eerste aanvallen op elke basis",
-  "warStatsFilterResultLimit": "Resultaat limiet",
+  "warStatsFilterResultLimit": "Resultaatlimiet",
   "generalResultsCount": "{count} resultaten",
   "notifEventsDescription": "Clan Games, CWL, Raidweekend en seizoensevenementen.",
   "notifAnnouncementsDescription": "In-app banners en toekomstige pushmeldingen voor ClashKing-updates.",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "War-widget toevoegen",
   "settingsWarWidgetLinkClanFirst": "Koppel eerst een account in een clan",
   "settingsWarWidgetClanCount": "{count} clan(s) beschikbaar",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Kies een clan. Houd de widget na het toevoegen ingedrukt, tik op Wijzig widget en kies Clan.",
+  "settingsWarWidgetAndroidInstructions": "Kies een clan en voeg de widget toe via de Android-widgetkiezer.",
+  "settingsWarWidgetEmpty": "Geen van je gekoppelde accounts zit momenteel in een clan.",
+  "settingsWarWidgetIosFooter": "Voeg meerdere oorlogswidgets toe en kies voor elke widget een andere clan.",
+  "settingsWarWidgetIosReady": "{clanName} is klaar. Wijzig de widget en kies deze bij Clan.",
+  "settingsWarWidgetAndroidReady": "De widgetgegevens voor {clanName} zijn klaar.",
+  "settingsWarWidgetPrepareFailed": "Widget kon niet worden voorbereid: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Bot-gekoppelde accounts en Discord-gegevens",
   "settingsDiscordSyncSubtitle": "Synchroniseer bot-gekoppelde accounts en Discord-gegevens",
@@ -3257,10 +3347,10 @@
   "sideRankingsEmptyTitle": "Geen ranglijsten teruggegeven",
   "sideRankingsEmptyBody": "Probeer een ander klassement of een andere locatie.",
   "sideRankingsMockups": "ClashKing-mockups",
-  "rankingsBuilderBase": "Bouwerbasis",
+  "rankingsBuilderBase": "Bouwersbasis",
   "rankingsTownHall": "Stadhuis",
   "rankingsRankedLeague": "Klassementsdivisie",
-  "rankingsClanCapital": "Clan Hoofdstad",
+  "rankingsClanCapital": "Clanhoofdstad",
   "rankingsDonations": "Donaties",
   "rankingsWarWins": "Oorlogsoverwinningen",
   "rankingsWinStreak": "Overwinningsreeks",
@@ -3311,10 +3401,10 @@
   "statsAddItemsTitle": "Kies items om te analyseren",
   "statsAddItemsBody": "Voeg troepen, spreuken, helden, huisdieren of uitrusting toe en voer de zoekopdracht uit.",
   "statsGlobalCounts": "Globale tellingen",
-  "statsPerformance": "Prestatie",
+  "statsPerformance": "Prestaties",
   "statsSamples": "Voorbeelden",
   "statsUsage": "Gebruik",
-  "statsAverageStars": "Gemiddelde sterren",
+  "statsAverageStars": "Gemiddeld aantal sterren",
   "statsAverageDestruction": "Gemiddelde vernietiging",
   "statsStarRates": "Sterren",
   "statsThreeStarRate": "Driesterrentarief",
@@ -3368,7 +3458,7 @@
   "statsSeasonBreakdown": "Seizoensindeling",
   "sideTopScore": "Topscore",
   "sideTop200Avg": "Top 200-gemiddelde",
-  "sideBasesArmiesTitle": "Basissen en legers",
+  "sideBasesArmiesTitle": "Bases & legers",
   "sideBasesArmiesSubtitle": "Via Discord opgeslagen layouts en legerlinks.",
   "sideBotSyncTarget": "Bot-synchronisatiedoel",
   "sideBotSyncTargetBody": "De bot slaat bases en legers al op in het Discord-profiel. Deze pagina is klaar voor die gesynchroniseerde payload.",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Opgeslagen legers",
   "sideArmyLinks": "Legerlinks",
   "sideArmyLinksBody": "Samenstelling, spreuken, belegering, notities en deellink.",
-  "sideGameAssetsTitle": "Spelbronnen",
+  "sideGameAssetsTitle": "Game-assets",
   "sideGameAssetsSubtitle": "Gehoste ClashKing-assets, gegroepeerd per map.",
   "gameAssetsLoadError": "Spelassets konden niet worden geladen",
   "gameAssetsEmptyTitle": "Geen spelassets beschikbaar",
@@ -3616,7 +3706,7 @@
       }
     }
   },
-  "notifWarEnded": "Oorlog afgelopen",
+  "notifWarEnded": "Oorlog geëindigd",
   "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Eindresultaten zijn beschikbaar.",
   "@notifWarEndedBody": {
     "placeholders": {
@@ -3805,7 +3895,7 @@
     }
   },
   "upgradeTrackerSnapshotUnreadable": "Accountgegevens konden niet worden gelezen",
-  "upgradeTrackerTryAgain": "Probeer het opnieuw",
+  "upgradeTrackerTryAgain": "Opnieuw proberen",
   "upgradeTrackerNoDataTitle": "Breng de voortgang van je dorp naar ClashKing",
   "upgradeTrackerNoDataBody": "Kopieer de JSON met accountgegevens uit Clash of Clans en plak deze vanaf je klembord. Je gegevens blijven op dit apparaat.",
   "upgradeTrackerNoDataLocation": "Open in Clash of Clans Instellingen > Meer instellingen. De JSON met accountgegevens staat direct onder het gedeelte API-token.",
@@ -3845,7 +3935,7 @@
   "upgradeTrackerFilterMissing": "Ontbrekend",
   "upgradeTrackerAllVillages": "Alle dorpen",
   "upgradeTrackerHomeVillage": "Thuisdorp",
-  "upgradeTrackerBuilderBase": "Bouwerbasis",
+  "upgradeTrackerBuilderBase": "Bouwersbasis",
   "upgradeTrackerNoMatchingItems": "Geen overeenkomende items",
   "upgradeTrackerOwnedCount": "{owned} van {total} in bezit",
   "@upgradeTrackerOwnedCount": {
@@ -4005,7 +4095,7 @@
   },
   "homeUpgradeIdle": "Er zijn geen actieve upgradetimers gevonden; mogelijk zijn er bouwers inactief.",
   "homeDone": "Klaar",
-  "homeRemainingCount": "{count} over",
+  "homeRemainingCount": "Nog {count}",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -4271,9 +4361,9 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Geselecteerde accounts",
-  "notifAudienceAcrossDevicesDescription": "Kies welke accounts meldingen op dit apparaat kunnen ontvangen.",
-  "notifAccountBookmarked": "Bladwijzers",
+  "notifChooseAccountsManually": "Accounts handmatig kiezen",
+  "notifAudienceAcrossDevicesDescription": "Deze accountkeuzes gelden op al je apparaten.",
+  "notifAccountBookmarked": "Opgeslagen",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "War-aanvallen",
+  "notifGroupWarAttacks": "Oorlogsaanvallen",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4461,7 +4551,7 @@
       }
     }
   },
-  "gameCreatorCode": "Makerscode: ClashKing",
+  "gameCreatorCode": "Creatorcode: ClashKing",
   "todoExplanationRaidsTitle": "Overvallen:",
   "todoExplanationRaids": "Gewicht van 5 punten per account (of 6 als de laatste aanval is ontgrendeld), 1 aanval = 1 punt.",
   "clanWarFrequencyTitle": "Oorlogen",
@@ -4527,7 +4617,7 @@
   "todoRaidAttacks": "Overvalaanvallen",
   "todoMockRaid4Left": "Nog 4",
   "todoMockWarAltStatus": "18 m geleden actief · oorlog en overvallen vereisen aandacht",
-  "todoMockRaid1Left": "1 over",
+  "todoMockRaid1Left": "Nog 1",
   "gameAssetsCategoryBuildings": "Gebouwen",
   "gameAssetsCategoryCapitalBase": "Hoofdstadbasis",
   "gameAssetsCategoryCapitalHouseParts": "Hoofdstadhuisonderdelen",
@@ -4567,7 +4657,7 @@
   },
   "playerBattlelogAttacks": "Aanvallen",
   "playerBattlelogAverageDestruction": "Gemiddelde vernietiging",
-  "playerBattlelogAverageStars": "Gemiddelde sterren",
+  "playerBattlelogAverageStars": "Gemiddeld aantal sterren",
   "playerBattlelogTripleRate": "Driesterrentarief",
   "playerBattlelogAverageLoot": "Gemiddelde buit",
   "playerBattlelogPopularTroops": "Meest gebruikte troepen",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Plan prioriteiten",
+  "upgradeTrackerPlanPrioritiesDescription": "Rangschik wat het belangrijkst is. Upgradeniveaus en actief werk blijven altijd op orde.",
   "upgradeTrackerPlanClose": "Sluiten",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Doelen plannen",
+  "upgradeTrackerPlanConstructionSubtitle": "Bouw- en heldupgrades",
+  "upgradeTrackerPlanResearchSubtitle": "Troepen, spreuken en belegeringsonderzoek",
+  "upgradeTrackerPlanPetHouseSubtitle": "Upgrades voor huisdierenhuizen",
+  "upgradeTrackerPlanPrioritizeNewItems": "Geef prioriteit aan nieuwe items",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Plaats nieuw ontgrendelde of ongebouwde items eerst",
+  "upgradeTrackerPlanSharedSummary": "Niveau {tier} · gedeelde mix {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Niveau {tier} · streng · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "loopt tot max",
+  "upgradeTrackerPlanYieldsAfter": "rendement na {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
+  "upgradeTrackerPlanStrict": "Strikt",
   "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanReorder": "Opnieuw ordenen {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Relatief niveaugewicht",
+  "upgradeTrackerPlanCompletionTarget": "Voltooiing doel",
+  "upgradeTrackerPlanStrictTier": "Strikt niveau",
+  "upgradeTrackerPlanWeight": "Gewicht {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "Tot maximaal",
+  "upgradeTrackerPlanUntilPercent": "Tot {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Genummerde niveaus worden als eerste uitgevoerd. Gedeelde rijen behouden hetzelfde niveaunummer en hun mix wordt genormaliseerd op basis van de relatieve gewichten, dus 50 + 25 wordt 67% / 33%. Een doel genereert een categorierendement nadat het dat percentage heeft bereikt, terwijl het later in aanmerking blijft komen.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Max voordat je verder gaat",
+  "upgradeTrackerPlanGoalRushNextHall": "Bereik snel de volgende hal",
+  "upgradeTrackerPlanGoalCatchUp": "Haal gehaaste niveaus in",
+  "upgradeTrackerPlanGoalUnlockFirst": "Ontgrendel eerst nieuwe dingen",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,7 +4850,7 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Muren elke week",
   "upgradeTrackerPlanOff": "Uit",
   "upgradeTrackerPlanPerWeek": "{count} / week",
   "@upgradeTrackerPlanPerWeek": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
+  "upgradeTrackerPlanPreferGold": "Geef de voorkeur aan goud voor muren",
+  "upgradeTrackerPlanPreferGoldDescription": "Gebruik goud vóór elixir bij het uitgeven van muren",
+  "upgradeTrackerPlanApplyPriorities": "Prioriteiten toepassen",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Gemaakte verdedigingswerken",
+  "upgradeTrackerPlanCategoryTraps": "Vallen",
+  "upgradeTrackerPlanCategoryArmy": "Leger",
+  "upgradeTrackerPlanCategoryDarkTroops": "Donkere troepen",
+  "upgradeTrackerPlanCategorySieges": "Belegeringen",
+  "upgradeTrackerPlanCategorySupercharge": "Superladen",
+  "navigationCloseDrawer": "Navigatielade sluiten",
+  "navigationOpenProfileMenu": "Profielmenu openen",
   "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "settingsPrivacyDataTitle": "Privacy en gegevens",
+  "settingsPrivacyPolicyDescription": "Bekijk wat ClashKing verzamelt, waarom het wordt gebruikt, wie het verwerkt, welke bewaartermijnen gelden en hoe je contact met ons opneemt.",
+  "settingsPrivacyExportTitle": "Je gegevens openen of exporteren",
+  "settingsPrivacyExportDescription": "Download een kopie van de accountgegevens die aan je ClashKing-login zijn gekoppeld, waaronder gekoppelde Clash of Clans-accounts en meldingsvoorkeuren.",
+  "settingsPrivacyCorrectionTitle": "Gegevens corrigeren of beperken",
+  "settingsPrivacyCorrectionDescription": "Verwijder gekoppelde Clash of Clans-accounts via de accountinstellingen, schakel meldingen uit of neem contact op met ondersteuning voor verzoeken om correctie of beperking.",
+  "settingsPrivacyDeletionTitle": "Je ClashKing-account verwijderen",
+  "settingsPrivacyDeletionDescription": "Hiermee start je de verwijdering van je ClashKing-account en bijbehorende appgegevens, tenzij ClashKing beperkte gegevens moet bewaren voor beveiliging, fraudepreventie of wettelijke verplichtingen.",
+  "settingsPrivacyChildrenTitle": "Kinderen en gezinnen",
+  "settingsPrivacyChildrenDescription": "ClashKing is een begeleidende app voor een algemeen publiek en is niet gericht op kinderen. Maak geen account aan als je in jouw land niet oud genoeg bent om zonder toestemming van een ouder of voogd akkoord te gaan.",
+  "settingsPrivacyExportReady": "Je gegevensexport kan worden opgeslagen.",
+  "settingsPrivacyExportCreateFailed": "De gegevensexport kon niet worden gemaakt. In plaats daarvan is een privacy-e-mail voorbereid.",
+  "settingsPrivacyExportPrepareFirst": "Bereid je export voor voordat je deze opslaat.",
+  "settingsPrivacyExportSaved": "Je gegevensexport is opgeslagen.",
+  "settingsPrivacyExportSaveFailed": "De gegevensexport kon niet worden opgeslagen. In plaats daarvan is een privacy-e-mail voorbereid.",
+  "settingsPrivacyDeleteUnavailable": "Accountverwijdering is niet beschikbaar in deze build. In plaats daarvan is een privacy-e-mail voorbereid.",
+  "settingsPrivacyOpenPolicy": "Beleid openen",
+  "settingsPrivacyRefreshExport": "Export vernieuwen",
+  "settingsPrivacyPrepareExport": "Export voorbereiden",
+  "settingsPrivacySaveExport": "Export opslaan",
+  "settingsPrivacyContactSupport": "Contact opnemen met ondersteuning",
+  "settingsPrivacyDeleteAccount": "Account verwijderen",
+  "settingsPrivacyDeleteConfirmTitle": "Account verwijderen?",
+  "settingsPrivacyDeleteConfirmDescription": "Dit verzoek is na verwerking definitief. Je kunt gekoppelde accounts, meldingsinstellingen, opgeslagen voorkeuren en verificatiemethoden verliezen.",
+  "generalUnranked": "Niet geklasseerd",
+  "playerJoinLeaveTab": "Toetreding / Vertrek",
+  "playerUpgradeRemainingAccessibility": "Resterend voor stadhuis {townHallLevel}",
+  "playerUpgradeSummaryTitle": "{progress}% voltooid voor SH{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Dit onderdeel is voltooid voor SH{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Resterende tijd",
+  "playerUpgradeNoResourceData": "Geen grondstofgegevens",
+  "playerJoinLeaveLoadError": "De toetredings-/vertrekgeschiedenis kon niet worden geladen",
+  "playerJoinLeaveClanTotals": "Clantotalen",
   "playerJoinLeaveTime": "Tijd",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "Bestede tijd",
+  "playerJoinLeaveVisits": "Bezoeken",
+  "playerJoinLeaveJoined": "Toegetreden",
+  "playerJoinLeaveLeft": "Vertrokken",
+  "playerJoinLeaveNoHistory": "Geen toetredings-/vertrekgeschiedenis beschikbaar",
+  "playerJoinLeaveNoClanTotals": "Geen clantotalen beschikbaar",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
