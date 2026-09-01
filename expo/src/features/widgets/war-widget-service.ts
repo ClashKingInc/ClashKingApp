@@ -232,6 +232,9 @@ export class WarWidgetService {
   }
 
   async migrateLegacyWidgetValues(): Promise<WidgetMigrationResult> {
+    if (this.options.platform === 'web') {
+      return { migratedKeys: [], sourceValuesRetained: true };
+    }
     if ((await this.options.mirror.getItem(LEGACY_WIDGET_MIGRATION_MARKER)) === 'true') {
       return { migratedKeys: [], sourceValuesRetained: true };
     }

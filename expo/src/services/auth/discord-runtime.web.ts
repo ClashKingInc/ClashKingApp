@@ -9,14 +9,40 @@ interface DiscordAuthMessage {
 }
 
 export class PlatformDiscordOAuthRuntime implements DiscordOAuthRuntime {
+  private preparedPopup: Window | null = null;
+
+  prepareAuthorization(): void {
+    this.cancelPreparedAuthorization();
+    const popup = window.open('', 'discordLogin', 'popup=yes,width=520,height=760');
+    if (popup === null) {
+      throw new Error('The Discord login popup was blocked.');
+    }
+    this.preparedPopup = popup;
+  }
+
+  cancelPreparedAuthorization(): void {
+    if (this.preparedPopup !== null && !this.preparedPopup.closed) {
+      this.preparedPopup.close();
+    }
+    this.preparedPopup = null;
+  }
+
   authorize(
     authorizationUrl: string,
     _redirectUri: string,
     expectedState: string,
   ): Promise<string | null> {
-    const popup = window.open(authorizationUrl, 'discordLogin', 'popup=yes,width=520,height=760');
+    const preparedPopup = this.preparedPopup;
+    this.preparedPopup = null;
+    const popup =
+      preparedPopup ??
+      window.open(authorizationUrl, 'discordLogin', 'popup=yes,width=520,height=760');
     if (popup === null) {
       throw new Error('The Discord login popup was blocked.');
+    }
+    if (preparedPopup !== null) {
+      if (popup.closed) throw new Error('The Discord login popup was closed.');
+      popup.location.href = authorizationUrl;
     }
 
     return new Promise<string | null>((resolve, reject) => {

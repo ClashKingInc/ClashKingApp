@@ -383,6 +383,16 @@ describe('WarWidgetService', () => {
     expect(h.native.readLegacyWidgetValues).toHaveBeenCalledTimes(1);
   });
 
+  test('skips native legacy widget migration on web', async () => {
+    const h = harness({ platform: 'web' });
+
+    await expect(h.service.migrateLegacyWidgetValues()).resolves.toEqual({
+      migratedKeys: [],
+      sourceValuesRetained: true,
+    });
+    expect(h.native.readLegacyWidgetValues).not.toHaveBeenCalled();
+  });
+
   test('returns exact pin support/request results and reports unsupported platforms', async () => {
     const h = harness();
     await expect(h.service.requestPinnedWarWidget()).resolves.toEqual({

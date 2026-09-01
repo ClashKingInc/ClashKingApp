@@ -15,6 +15,8 @@ export interface DiscordAuthorizationResult {
 }
 
 export interface DiscordOAuthRuntime {
+  prepareAuthorization?(): void;
+  cancelPreparedAuthorization?(): void;
   authorize(
     authorizationUrl: string,
     redirectUri: string,
@@ -34,36 +36,44 @@ export class DiscordOAuthClient {
   constructor(private readonly options: DiscordOAuthOptions) {}
 
   async authorize(): Promise<DiscordAuthorizationResult | null> {
-    const state = await randomString(64, STATE_CHARACTERS);
-    const codeVerifier = await randomString(128, VERIFIER_CHARACTERS);
-    const codeChallenge = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      codeVerifier,
-      { encoding: Crypto.CryptoEncoding.BASE64 },
-    );
-    const redirectUri = resolveDiscordRedirectUri(this.options);
-    const authorizationUrl = buildDiscordAuthorizationUrl(
-      redirectUri,
-      state,
-      codeChallenge.replaceAll('=', '').replaceAll('+', '-').replaceAll('/', '_'),
-    );
-    const callback = await withTimeout(
-      this.options.runtime.authorize(authorizationUrl, redirectUri, state),
-      120_000,
-    );
-    if (callback === null) return null;
+    this.options.runtime.prepareAuthorization?.();
+    let authorizationStarted = false;
+    try {
+      const state = await randomString(64, STATE_CHARACTERS);
+      const codeVerifier = await randomString(128, VERIFIER_CHARACTERS);
+      const codeChallenge = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        codeVerifier,
+        { encoding: Crypto.CryptoEncoding.BASE64 },
+      );
+      const redirectUri = resolveDiscordRedirectUri(this.options);
+      const authorizationUrl = buildDiscordAuthorizationUrl(
+        redirectUri,
+        state,
+        codeChallenge.replaceAll('=', '').replaceAll('+', '-').replaceAll('/', '_'),
+      );
+      authorizationStarted = true;
+      const callback = await withTimeout(
+        this.options.runtime.authorize(authorizationUrl, redirectUri, state),
+        120_000,
+      );
+      if (callback === null) return null;
 
-    const result = new URL(callback);
-    if (result.searchParams.get('state') !== state) {
-      throw new Error('Discord OAuth state did not match this login.');
+      const result = new URL(callback);
+      if (result.searchParams.get('state') !== state) {
+        throw new Error('Discord OAuth state did not match this login.');
+      }
+      const error = result.searchParams.get('error');
+      if (error === 'access_denied') return null;
+      if (error !== null) {
+        throw new Error(result.searchParams.get('error_description') ?? error);
+      }
+      const code = result.searchParams.get('code');
+      return code === null || code.length === 0 ? null : { code, codeVerifier, redirectUri };
+    } catch (error) {
+      if (!authorizationStarted) this.options.runtime.cancelPreparedAuthorization?.();
+      throw error;
     }
-    const error = result.searchParams.get('error');
-    if (error === 'access_denied') return null;
-    if (error !== null) {
-      throw new Error(result.searchParams.get('error_description') ?? error);
-    }
-    const code = result.searchParams.get('code');
-    return code === null || code.length === 0 ? null : { code, codeVerifier, redirectUri };
   }
 }
 

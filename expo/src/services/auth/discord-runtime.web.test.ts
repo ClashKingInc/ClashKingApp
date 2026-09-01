@@ -11,6 +11,51 @@ describe('web Discord OAuth runtime', () => {
     });
   });
 
+  it('reserves a popup before navigating it to Discord', async () => {
+    const popup = {
+      closed: false,
+      close: jest.fn(),
+      location: { href: 'about:blank' },
+    };
+    const open = jest.fn(() => popup);
+    let onMessage: ((event: MessageEvent<unknown>) => void) | undefined;
+    Object.defineProperty(globalThis, 'window', {
+      configurable: true,
+      value: {
+        addEventListener: jest.fn(
+          (type: string, listener: (event: MessageEvent<unknown>) => void) => {
+            if (type === 'message') onMessage = listener;
+          },
+        ),
+        removeEventListener: jest.fn(),
+        open,
+        location: { origin: 'https://app.clashk.ing' },
+        setInterval,
+        setTimeout,
+      },
+    });
+    const runtime = new PlatformDiscordOAuthRuntime();
+
+    runtime.prepareAuthorization();
+    expect(open).toHaveBeenCalledWith('', 'discordLogin', 'popup=yes,width=520,height=760');
+
+    const authorization = runtime.authorize(
+      'https://discord.com/oauth2/authorize',
+      'https://app.clashk.ing/auth/discord_callback.html',
+      'expected-state',
+    );
+    expect(popup.location.href).toBe('https://discord.com/oauth2/authorize');
+    expect(open).toHaveBeenCalledTimes(1);
+
+    onMessage?.({
+      origin: 'https://app.clashk.ing',
+      source: popup,
+      data: { type: 'discord-auth', state: 'expected-state', code: 'authorization-code' },
+    } as unknown as MessageEvent<unknown>);
+
+    await expect(authorization).resolves.toContain('code=authorization-code');
+  });
+
   it('closes the popup and listener when the Flutter-equivalent timeout expires', async () => {
     jest.useFakeTimers();
     const popup = { closed: false, close: jest.fn() };
