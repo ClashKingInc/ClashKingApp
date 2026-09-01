@@ -1,18 +1,18 @@
 {
-  "warStatsRangeTitle": "War stats range",
-  "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
-  "warStatsRangeDays": "Days",
-  "warStatsRangeWarsToInclude": "Wars to include",
-  "warStatsRangeDaysToInclude": "Days to include",
-  "upgradeTrackerAllBuildersOccupied": "All builders occupied",
-  "upgradeTrackerBuildCost": "Build cost",
-  "upgradeTrackerBuilderBaseBuilders": "Builder Base Builders",
-  "upgradeTrackerBuilderBaseLaboratory": "Builder Base Laboratory",
-  "upgradeTrackerCalendar": "Calendar",
-  "upgradeTrackerClearCost": "Clear cost",
-  "upgradeTrackerCompletionDetails": "Village completion details",
-  "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
-  "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "warStatsRangeTitle": "Діапазон воєнної статистики",
+  "warStatsRangeDescription": "Виберіть, чи охоплює статистика задану кількість нещодавніх воєн, чи нещодавній період у днях.",
+  "warStatsRangeDays": "Дні",
+  "warStatsRangeWarsToInclude": "Війни для врахування",
+  "warStatsRangeDaysToInclude": "Дні для врахування",
+  "upgradeTrackerAllBuildersOccupied": "Усі будівельники зайняті",
+  "upgradeTrackerBuildCost": "Вартість будівництва",
+  "upgradeTrackerBuilderBaseBuilders": "Будівельники Бази будівельника",
+  "upgradeTrackerBuilderBaseLaboratory": "Лабораторія Бази будівельника",
+  "upgradeTrackerCalendar": "Календар",
+  "upgradeTrackerClearCost": "Вартість видалення",
+  "upgradeTrackerCompletionDetails": "Відомості про завершення села",
+  "upgradeTrackerCustomSoundtrack": "Власний музичний супровід",
+  "upgradeTrackerGoldPassPercent": "Золотий пропуск {percent}%",
   "@upgradeTrackerGoldPassPercent": {
     "placeholders": {
       "percent": {
@@ -20,7 +20,7 @@
       }
     }
   },
-  "upgradeTrackerGroupSummary": "{group} summary",
+  "upgradeTrackerGroupSummary": "Підсумок: {group}",
   "@upgradeTrackerGroupSummary": {
     "placeholders": {
       "group": {
@@ -28,10 +28,10 @@
       }
     }
   },
-  "upgradeTrackerGuardians": "Вартові",
-  "upgradeTrackerHelpers": "Helpers",
-  "upgradeTrackerHouseParts": "House parts",
-  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "upgradeTrackerGuardians": "Охоронці",
+  "upgradeTrackerHelpers": "Помічники",
+  "upgradeTrackerHouseParts": "Частини будинку",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# вільний будівельник} other {# вільних будівельників}}",
   "@upgradeTrackerIdleBuilders": {
     "placeholders": {
       "count": {
@@ -39,8 +39,8 @@
       }
     }
   },
-  "upgradeTrackerInProgress": "In progress",
-  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "upgradeTrackerInProgress": "Виконується",
+  "upgradeTrackerItemSemanticLabel": "{item}, рівень {currentLevel} із {targetLevel}{count, plural, =1 {} other {, будівель: #}}",
   "@upgradeTrackerItemSemanticLabel": {
     "placeholders": {
       "item": {
@@ -57,7 +57,7 @@
       }
     }
   },
-  "upgradeTrackerItemsOwned": "{count} owned",
+  "upgradeTrackerItemsOwned": "У власності: {count}",
   "@upgradeTrackerItemsOwned": {
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "upgradeTrackerLane": "Lane",
+  "upgradeTrackerLane": "Лінія",
   "upgradeTrackerLevelTransition": "Рівень {from} → {to}",
   "@upgradeTrackerLevelTransition": {
     "placeholders": {
@@ -77,10 +77,10 @@
       }
     }
   },
-  "upgradeTrackerLootNow": "Loot now",
-  "upgradeTrackerLootOutlook": "Loot outlook",
-  "upgradeTrackerMusic": "Music",
-  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "upgradeTrackerLootNow": "Ресурси зараз",
+  "upgradeTrackerLootOutlook": "Прогноз ресурсів",
+  "upgradeTrackerMusic": "Музика",
+  "upgradeTrackerNextDays": "{count, plural, one {Наступний # день} other {Наступні # днів}}",
   "@upgradeTrackerNextDays": {
     "placeholders": {
       "count": {
@@ -88,16 +88,16 @@
       }
     }
   },
-  "upgradeTrackerNextPeriod": "Next period",
-  "upgradeTrackerNoGoldPass": "No Gold Pass",
-  "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
-  "upgradeTrackerNoMatchingUpgradesBody": "Try another village or queue.",
-  "upgradeTrackerNothingNeededNow": "Nothing needed right now",
-  "upgradeTrackerObstacles": "Obstacles",
-  "upgradeTrackerPart": "Part",
-  "upgradeTrackerPassReward": "Pass reward",
-  "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
-  "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "upgradeTrackerNextPeriod": "Наступний період",
+  "upgradeTrackerNoGoldPass": "Без Золотого пропуску",
+  "upgradeTrackerNoMatchingUpgrades": "Немає відповідних покращень",
+  "upgradeTrackerNoMatchingUpgradesBody": "Спробуйте інше село або чергу.",
+  "upgradeTrackerNothingNeededNow": "Зараз нічого не потрібно",
+  "upgradeTrackerObstacles": "Перешкоди",
+  "upgradeTrackerPart": "Частина",
+  "upgradeTrackerPassReward": "Нагорода пропуску",
+  "upgradeTrackerPauseSoundtrack": "Призупинити музику",
+  "upgradeTrackerPeriodCount": "Період {current} / {total}",
   "@upgradeTrackerPeriodCount": {
     "placeholders": {
       "current": {
@@ -108,8 +108,8 @@
       }
     }
   },
-  "upgradeTrackerPlaySoundtrack": "Play soundtrack",
-  "upgradeTrackerPreviousPeriod": "Previous period",
+  "upgradeTrackerPlaySoundtrack": "Відтворити музику",
+  "upgradeTrackerPreviousPeriod": "Попередній період",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
   "@upgradeTrackerResourceAmount": {
     "placeholders": {
@@ -121,8 +121,8 @@
       }
     }
   },
-  "upgradeTrackerSceneries": "Sceneries",
-  "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "upgradeTrackerSceneries": "Пейзажі",
+  "upgradeTrackerScheduledLane": "Заплановано на лінії №{lane}",
   "@upgradeTrackerScheduledLane": {
     "placeholders": {
       "lane": {
@@ -130,7 +130,7 @@
       }
     }
   },
-  "upgradeTrackerShareProgress": "{village} progress",
+  "upgradeTrackerShareProgress": "Прогрес: {village}",
   "@upgradeTrackerShareProgress": {
     "placeholders": {
       "village": {
@@ -138,21 +138,21 @@
       }
     }
   },
-  "upgradeTrackerSize": "Size",
-  "upgradeTrackerSortLongest": "Longest first",
-  "upgradeTrackerSortName": "Name A–Z",
-  "upgradeTrackerSortScheduled": "Заплановано",
-  "upgradeTrackerSortShortest": "Shortest first",
-  "upgradeTrackerSoundtrackPosition": "Soundtrack position",
+  "upgradeTrackerSize": "Розмір",
+  "upgradeTrackerSortLongest": "Спочатку найдовші",
+  "upgradeTrackerSortName": "Назва А–Я",
+  "upgradeTrackerSortScheduled": "Заплановані",
+  "upgradeTrackerSortShortest": "Спочатку найкоротші",
+  "upgradeTrackerSoundtrackPosition": "Позиція відтворення",
   "upgradeTrackerStarts": "Початок",
-  "upgradeTrackerTier": "Tier",
-  "upgradeTrackerUpgradesStarting": "upgrades starting",
-  "upgradeTrackerUpgradingNow": "Upgrading now",
-  "upgradeTrackerWarBase": "War Base",
-  "notifSettingsSaveFailed": "Notification settings could not be saved.",
-  "notifPushEnabled": "Push enabled",
-  "notifReceiveNotifications": "Receive notifications",
-  "notifTokenPreview": "Token: {token}",
+  "upgradeTrackerTier": "Рівень",
+  "upgradeTrackerUpgradesStarting": "покращення, що починаються",
+  "upgradeTrackerUpgradingNow": "Покращується зараз",
+  "upgradeTrackerWarBase": "Військова база",
+  "notifSettingsSaveFailed": "Не вдалося зберегти налаштування сповіщень.",
+  "notifPushEnabled": "Push-сповіщення ввімкнено",
+  "notifReceiveNotifications": "Отримувати сповіщення",
+  "notifTokenPreview": "Токен: {token}",
   "@notifTokenPreview": {
     "placeholders": {
       "token": {
@@ -160,12 +160,12 @@
       }
     }
   },
-  "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
-  "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
-  "notifMaximumRemindersAdded": "Maximum reminders added",
-  "notifAddReminder": "Add reminder",
-  "notifDurationOneHour": "1 hour",
-  "notifDurationHours": "{count} hours",
+  "notifEnabledDeliveryDescription": "Увімкнені попередження можуть надсилатися на цей пристрій.",
+  "notifDisabledAccountDescription": "Сповіщення вимкнено для всього облікового запису ClashKing.",
+  "notifMaximumRemindersAdded": "Додано максимальну кількість нагадувань",
+  "notifAddReminder": "Додати нагадування",
+  "notifDurationOneHour": "1 година",
+  "notifDurationHours": "{count} годин",
   "@notifDurationHours": {
     "placeholders": {
       "count": {
@@ -173,7 +173,7 @@
       }
     }
   },
-  "notifDurationMinutes": "{count} minutes",
+  "notifDurationMinutes": "{count} хвилин",
   "@notifDurationMinutes": {
     "placeholders": {
       "count": {
@@ -181,7 +181,7 @@
       }
     }
   },
-  "notifAddTiming": "Add {timing}",
+  "notifAddTiming": "Додати {timing}",
   "@notifAddTiming": {
     "placeholders": {
       "timing": {
@@ -189,8 +189,8 @@
       }
     }
   },
-  "notifTimingOneHourBefore": "1 hour before",
-  "notifTimingHoursBefore": "{count} hours before",
+  "notifTimingOneHourBefore": "за 1 годину",
+  "notifTimingHoursBefore": "за {count} годин",
   "@notifTimingHoursBefore": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
       }
     }
   },
-  "notifTimingMinutesBefore": "{count} minutes before",
+  "notifTimingMinutesBefore": "за {count} хвилин",
   "@notifTimingMinutesBefore": {
     "placeholders": {
       "count": {
@@ -206,17 +206,17 @@
       }
     }
   },
-  "notifPushReady": "Push notifications are ready on this device.",
-  "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
-  "notifPushPermissionDenied": "Notification permission was denied.",
-  "notifPushNotConfigured": "Firebase is not configured for this build.",
-  "notifPushTokenUnavailable": "A push token is not available yet.",
-  "notifPushUnsupported": "Push notifications are not supported on this platform.",
-  "notifPushInitializing": "Configuring push notifications…",
-  "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
-  "notificationPrimerNotNow": "Not now",
-  "notificationPrimerAllow": "Allow",
+  "notifPushReady": "Push-сповіщення готові на цьому пристрої.",
+  "notifPushPermissionRequired": "Дозвольте сповіщення, щоб отримувати попередження ClashKing.",
+  "notifPushPermissionDenied": "У дозволі на сповіщення відмовлено.",
+  "notifPushNotConfigured": "Firebase не налаштовано для цієї збірки.",
+  "notifPushTokenUnavailable": "Push-токен ще недоступний.",
+  "notifPushUnsupported": "Push-сповіщення не підтримуються на цій платформі.",
+  "notifPushInitializing": "Налаштування push-сповіщень…",
+  "notificationPrimerTitle": "Увімкнути сповіщення?",
+  "notificationPrimerBody": "ClashKing може сповіщати вас про оновлення війн, CWL, облікового запису та проєктів. Це можна будь-коли змінити в Налаштування > Сповіщення.",
+  "notificationPrimerNotNow": "Не зараз",
+  "notificationPrimerAllow": "Дозволити",
   "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Досягнення",
   "achievementEarnedLabel": "Отримано",
@@ -751,7 +751,7 @@
   "clanMembersSearchPlaceholder": "Пошук учасників",
   "clanMembersShowTotals": "Показати підсумки клану",
   "clanMembersHideTotals": "Приховати підсумки клану",
-  "clanMembersReceivedShort": "Пожертв отримано",
+  "clanMembersReceivedShort": "Отримано",
   "clanMembersAverageTh": "Середній TH",
   "clanMinimumMembers": "Мінімальна кількість учасників",
   "clanMaximumMembers": "Максимальна кількість учасників",
@@ -1105,8 +1105,26 @@
   "warTitle": "Війна",
   "warFrequency": "Частота війн",
   "warParticipation": "Участь у війні",
-  "cwlParticipantOnly": "Participant Only",
-  "warStatsLastXDays": "Last {number} days",
+  "cwlParticipantOnly": "Лише учасник",
+  "warStatsRangeWarsCompact": "{number} війн",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsRangeDaysCompact": "{number} днів",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warStatsLastXDays": "Останні {number} днів",
   "@warStatsLastXDays": {
     "description": "Clan war statistics date-range label",
     "placeholders": {
@@ -1115,7 +1133,7 @@
       }
     }
   },
-  "warStatsCurrentMembers": "Current members",
+  "warStatsCurrentMembers": "Поточні учасники",
   "warLeague": "Війна/Ліга",
   "warHistory": "Історія війн",
   "warLog": "Журнал війн",
@@ -1356,7 +1374,7 @@
   "warAttacksBest": "Найкращі атаки",
   "warAttacksCount": "Кількість атак",
   "warAttacksMissed": "Пропущені атаки",
-  "warAttacksMissedShort": "Пропущено",
+  "warAttacksMissedShort": "Пропущений",
   "warAttacksNumber": "Ви атакували {number_time} раз(и) протягом останніх {number_war} воєн.",
   "@warAttacksNumber": {
     "placeholders": {
@@ -1614,7 +1632,7 @@
   "playerWarStarsTitle": "Зірки війни",
   "playerWarPreferenceTitle": "Війна преф.",
   "playerDonatedTitle": "Пожертвував",
-  "playerReceivedTitle": "Пожертв отримано",
+  "playerReceivedTitle": "Отримано",
   "playerCapitalTitle": "Капітал",
   "playerExpLevelTitle": "Exp. рівень",
   "clanWarWinsTitle": "Війна перемагає",
@@ -1923,7 +1941,7 @@
   "faqFeaturesCwlDescription": "Ефективність у Лізі воєн кланів і внесок учасників",
   "faqFeaturesTodoTitle": "Список справ",
   "faqFeaturesTodoDescription": "Перевірте, яким обліковим записам ще потрібні рейтингові атаки, рейди, атаки у війні, Ігри кланів або дії перепустки",
-  "faqFeaturesUpgradeTrackerTitle": "Відстеження оновлень",
+  "faqFeaturesUpgradeTrackerTitle": "Відстеження покращень",
   "faqFeaturesUpgradeTrackerDescription": "Використовуйте наданий користувачем знімок облікового запису, щоб переглянути решту покращень, ресурси, будівельників, час лабораторії та прогрес",
   "faqFeaturesNotificationsTitle": "Push-сповіщення",
   "faqFeaturesNotificationsDescription": "Виберіть облікові записи, які мають отримувати сповіщення про підтримувані події ClashKing",
@@ -2653,7 +2671,7 @@
   "@gameItemOverview": {
     "description": "Section title for item description"
   },
-  "gameItemStats": "Статистика",
+  "gameItemStats": "статистика",
   "@gameItemStats": {
     "description": "Section title for item stats"
   },
@@ -2696,6 +2714,78 @@
   "settingsAccount": "Обліковий запис",
   "@settingsAccount": {
     "description": "Settings section: account"
+  },
+  "settingsConnectedAppsTitle": "Підключені застосунки",
+  "@settingsConnectedAppsTitle": {
+    "description": "Settings page and tile title for third-party applications connected to the user account"
+  },
+  "settingsConnectedAppsSubtitle": "Переглядайте та відключайте застосунки з доступом до облікового запису.",
+  "@settingsConnectedAppsSubtitle": {
+    "description": "Settings tile subtitle for connected applications"
+  },
+  "connectedAppsActiveConnections": "Активні підключення",
+  "@connectedAppsActiveConnections": {
+    "description": "Section title for applications with active account access"
+  },
+  "connectedAppsEmptyTitle": "Немає підключених застосунків",
+  "@connectedAppsEmptyTitle": {
+    "description": "Empty state title when no third-party applications have account access"
+  },
+  "connectedAppsEmptyBody": "Підключені застосунки з'являться тут.",
+  "@connectedAppsEmptyBody": {
+    "description": "Empty state description for connected applications"
+  },
+  "connectedAppsLoadErrorTitle": "Не вдалося завантажити підключені застосунки",
+  "@connectedAppsLoadErrorTitle": {
+    "description": "Error shown when connected application grants cannot be loaded"
+  },
+  "connectedAppsAccessAll": "Усі поточні та майбутні пов'язані облікові записи",
+  "@connectedAppsAccessAll": {
+    "description": "Access summary for a grant covering every current and future linked account"
+  },
+  "connectedAppsAccessSelected": "Вибрано облікових записів: {count}",
+  "@connectedAppsAccessSelected": {
+    "description": "Access summary for a grant covering selected linked accounts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectedAppsDisconnect": "Відключити",
+  "@connectedAppsDisconnect": {
+    "description": "Action that immediately revokes an application's account access"
+  },
+  "connectedAppsDisconnectConfirmTitle": "Відключити застосунок?",
+  "@connectedAppsDisconnectConfirmTitle": {
+    "description": "Confirmation dialog title before revoking an application's access"
+  },
+  "connectedAppsDisconnectConfirmBody": "Застосунок {name} негайно втратить доступ до ваших пов'язаних облікових записів.",
+  "@connectedAppsDisconnectConfirmBody": {
+    "description": "Confirmation dialog body before revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnected": "Застосунок {name} відключено.",
+  "@connectedAppsDisconnected": {
+    "description": "Success feedback after revoking an application's access",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "connectedAppsDisconnectFailed": "Не вдалося відключити застосунок {name}. Спробуйте ще раз.",
+  "@connectedAppsDisconnectFailed": {
+    "description": "Failure feedback when revoking an application's access fails",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "settingsSignedIn": "Ви ввійшли",
   "@settingsSignedIn": {
@@ -2880,8 +2970,8 @@
   "dashboardUpgradeTrackerTimeLeft": "Прогнозований термін",
   "dashboardUpgradeTrackerBuilders": "Будівельники",
   "dashboardUpgradeTrackerLab": "Лабораторія",
-  "dashboardUpgradeTrackerPets": "Тварини",
-  "dashboardUpgradeTrackerWalls": "Рівні стін",
+  "dashboardUpgradeTrackerPets": "Улюбленці",
+  "dashboardUpgradeTrackerWalls": "Стіни",
   "dashboardUpgradeTrackerVillage": "Селище",
   "dashboardRankedNoData": "Відкрийте Рейтингову лігу, щоб переглянути позицію цього облікового запису.",
   "dashboardRankedAccounts": "Відстежувані облікові записи: {loaded}/{total}",
@@ -2931,7 +3021,7 @@
   "damageCalculatorSubtitle": "Порівняйте один набір атаки з кількома будівлями.",
   "damageNoStaticDataTitle": "Дані про шкоду недоступні",
   "damageNoStaticDataBody": "Оновіть застосунок після завантаження статичних даних гри.",
-  "damageTownHall": "Ратуша",
+  "damageTownHall": "Рівень Ратуші",
   "damageVerifiedAccountPrefill": "Рівні з підтвердженого облікового запису",
   "damageOverridesStayLocal": "Зміни в калькуляторі не впливають на обліковий запис гравця.",
   "damageTargets": "Цілі",
@@ -2971,7 +3061,7 @@
   "damageSourceLightning": "Закляття Блискавки",
   "damageSourceEarthquake": "Закляття Землетрусу",
   "damageSourceGiantArrow": "Гігантська Стріла",
-  "damageSourceFireball": "вогняна куля",
+  "damageSourceFireball": "Вогняна Куля",
   "damageSourceFlameFlinger": "Влучання Вогнемета",
   "damageSourceBalloonDeath": "Шкода після знищення Повітряної Кулі",
   "damageSourceRocketBalloonDeath": "Шкода після знищення Ракетної Кулі",
@@ -3107,9 +3197,9 @@
   "warType": "Тип війни",
   "warFiltersAnyTownHall": "Будь-яка ратуша",
   "gameTownHallLevelShort": "TH{level}",
-  "warAttackerTownHall": "TH атакувальника",
-  "warDefenderTownHall": "TH захисника",
-  "warStatsFilterSameTownHallOnly": "Лише однакова ратуша",
+  "warAttackerTownHall": "Ратуша нападника",
+  "warDefenderTownHall": "Ратуша захисника",
+  "warStatsFilterSameTownHallOnly": "Лише однаковий рівень ратуші",
   "warStatsFilterSameTownHallDescription": "Показувати лише атаки, де нападник і захисник мають однаковий рівень ратуші",
   "generalAny": "Будь-який",
   "warStarsWithIcon": "{stars} ⭐",
@@ -3135,13 +3225,13 @@
   "settingsAddWarWidget": "Додати віджет війни",
   "settingsWarWidgetLinkClanFirst": "Спочатку прив’яжіть акаунт у клані",
   "settingsWarWidgetClanCount": "Доступно кланів: {count}",
-  "settingsWarWidgetIosInstructions": "Choose a clan. After adding the widget, touch and hold it, tap Edit Widget, then choose Clan.",
-  "settingsWarWidgetAndroidInstructions": "Choose a clan, then add the widget from the Android widget picker.",
-  "settingsWarWidgetEmpty": "None of your linked accounts are currently in a clan.",
-  "settingsWarWidgetIosFooter": "Add multiple War Widgets and choose a different clan for each one.",
-  "settingsWarWidgetIosReady": "{clanName} is ready. Edit the widget and choose it under Clan.",
-  "settingsWarWidgetAndroidReady": "{clanName} widget data is ready.",
-  "settingsWarWidgetPrepareFailed": "Could not prepare widget: {error}",
+  "settingsWarWidgetIosInstructions": "Виберіть клан. Після додавання віджета натисніть і утримуйте його, виберіть Змінити віджет, а потім Клан.",
+  "settingsWarWidgetAndroidInstructions": "Виберіть клан, а потім додайте віджет через меню віджетів Android.",
+  "settingsWarWidgetEmpty": "Зараз жоден із пов’язаних облікових записів не перебуває в клані.",
+  "settingsWarWidgetIosFooter": "Додайте кілька віджетів війни та виберіть окремий клан для кожного.",
+  "settingsWarWidgetIosReady": "{clanName} готовий. Змініть віджет і виберіть його в розділі Клан.",
+  "settingsWarWidgetAndroidReady": "Дані віджета для {clanName} готові.",
+  "settingsWarWidgetPrepareFailed": "Не вдалося підготувати віджет: {error}",
   "generalDiscord": "Discord",
   "settingsDiscordConnectedSubtitle": "Акаунти, прив’язані через бота, і дані Discord",
   "settingsDiscordSyncSubtitle": "Синхронізація акаунтів, прив’язаних через бота, і даних Discord",
@@ -3165,7 +3255,7 @@
   "resourceShinyOre": "Блискуча руда",
   "resourceGeneric": "Ресурс",
   "seasonStatsGoldGrabbed": "Здобуте золото",
-  "seasonStatsActivity": "діяльність",
+  "seasonStatsActivity": "Активність",
   "seasonStatsAttackWins": "Перемоги в атаках",
   "seasonStatsTrophies": "Сезонні трофеї",
   "todoSearchAccountsHint": "Пошук акаунтів",
@@ -3257,14 +3347,14 @@
   "sideRankingsEmptyTitle": "Рейтинги не повернулися",
   "sideRankingsEmptyBody": "Спробуйте іншу таблицю лідерів або локацію.",
   "sideRankingsMockups": "Макети ClashKing",
-  "rankingsBuilderBase": "База будівельника",
+  "rankingsBuilderBase": "База Будівельника",
   "rankingsTownHall": "Ратуша",
   "rankingsRankedLeague": "Рейтингова Ліга",
-  "rankingsClanCapital": "Столиця клану",
-  "rankingsDonations": "Пожертви",
+  "rankingsClanCapital": "Столиця Клану",
+  "rankingsDonations": "Передані війська",
   "rankingsWarWins": "Перемоги у війнах",
   "rankingsWinStreak": "Серія перемог",
-  "rankingsCurrent": "Поточні",
+  "rankingsCurrent": "Поточний стан",
   "rankingsWorldwide": "Увесь світ",
   "rankingsSelectLocation": "Виберіть регіон",
   "rankingsSearchLocations": "Шукайте регіони або коди країн",
@@ -3273,7 +3363,7 @@
   "rankingsSnapshotDate": "Дата зрізу",
   "rankingsSource": "Джерело даних",
   "rankingsOfficialSource": "Дані з офіційного Clash API",
-  "rankingsResults": "Порівняння результатів",
+  "rankingsResults": "Таблиця результатів",
   "rankingsTopCount": "Перші {count} місць",
   "@rankingsTopCount": {
     "placeholders": {
@@ -3311,10 +3401,10 @@
   "statsAddItemsTitle": "Вибрати елементи для аналізу",
   "statsAddItemsBody": "Додати війська, заклинання, героїв, домашніх тварин або спорядження, а потім запустити запит.",
   "statsGlobalCounts": "Глобальна кількість",
-  "statsPerformance": "Ефективність",
+  "statsPerformance": "Продуктивність",
   "statsSamples": "Зразки",
   "statsUsage": "Використання",
-  "statsAverageStars": "Середні зірки",
+  "statsAverageStars": "Середнє число зірок",
   "statsAverageDestruction": "Середнє знищення",
   "statsStarRates": "Коефіцієнт зірок",
   "statsThreeStarRate": "Оцінка три зірки",
@@ -3380,7 +3470,7 @@
   "sideSavedArmies": "Збережені армії",
   "sideArmyLinks": "Посилання на армії",
   "sideArmyLinksBody": "Склад, закляття, облогова машина, нотатки й посилання для поширення.",
-  "sideGameAssetsTitle": "Ігрові активи",
+  "sideGameAssetsTitle": "Ігрові ресурси",
   "sideGameAssetsSubtitle": "Розміщені ресурси ClashKing, згруповані за папками.",
   "gameAssetsLoadError": "Не вдалося завантажити графічні ресурси",
   "gameAssetsEmptyTitle": "Немає доступних зображень із гри",
@@ -3397,7 +3487,7 @@
   "gameAssetsSearchHint": "Пошук у вибраній категорії",
   "gameAssetsAllFormats": "Будь-який формат",
   "gameAssetsOneResult": "Один результат",
-  "gameAssetsResultCount": "{count} результатів",
+  "gameAssetsResultCount": "Результатів: {count}",
   "@gameAssetsResultCount": {
     "placeholders": {
       "count": {
@@ -3481,7 +3571,7 @@
       }
     }
   },
-  "sideLocation": "Розташування",
+  "sideLocation": "Локація",
   "sideFilter": "Фільтр",
   "sideRefresh": "Оновити",
   "sideOfficialClashLeaderboard": "Офіційна таблиця лідерів Clash",
@@ -3512,12 +3602,12 @@
   "assetFolderStickers": "Стікери",
   "upgradeSectionHeroes": "Герої",
   "upgradeSectionTroops": "Війська",
-  "upgradeSectionSpells": "Заклинання",
-  "upgradeSectionPets": "Тварини",
+  "upgradeSectionSpells": "Закляття",
+  "upgradeSectionPets": "Улюбленці",
   "upgradeSectionEquipment": "Спорядження",
-  "sideMockupSource": "Джерело даних",
+  "sideMockupSource": "Джерело",
   "sideMockupMode": "Режим",
-  "sideMockupPreview": "Попередній перегляд",
+  "sideMockupPreview": "Перегляд",
   "sideMockupRows": "Рядки",
   "sideMockupRowsValue": "5 макетів",
   "endpointLeagueTop200": "Топ 200 ліги",
@@ -3616,7 +3706,7 @@
       }
     }
   },
-  "notifWarEnded": "Війна завершилася",
+  "notifWarEnded": "Війна завершилась",
   "notifWarEndedBody": "{clan} 86 - 82 Pine Riders. Фінальні результати доступні.",
   "@notifWarEndedBody": {
     "placeholders": {
@@ -3805,7 +3895,7 @@
     }
   },
   "upgradeTrackerSnapshotUnreadable": "Не вдалося прочитати дані облікового запису",
-  "upgradeTrackerTryAgain": "Спробуйте ще раз",
+  "upgradeTrackerTryAgain": "Спробувати знову",
   "upgradeTrackerNoDataTitle": "Перенесіть прогрес селища до ClashKing",
   "upgradeTrackerNoDataBody": "Скопіюйте JSON даних облікового запису з Clash of Clans і вставте його з буфера обміну. Відомості залишаться лише на цьому пристрої.",
   "upgradeTrackerNoDataLocation": "У Clash of Clans відкрийте Налаштування > Інші налаштування. JSON даних облікового запису розташований безпосередньо під розділом Токена API.",
@@ -3840,12 +3930,12 @@
   "upgradeTrackerSearchCollection": "Пошук у колекції",
   "upgradeTrackerShowFilters": "Розгорнути фільтри",
   "upgradeTrackerHideFilters": "Згорнути фільтри",
-  "upgradeTrackerFilterAll": "Всі",
+  "upgradeTrackerFilterAll": "Усі предмети",
   "upgradeTrackerFilterOwned": "Уже отримано",
   "upgradeTrackerFilterMissing": "Ще не отримано",
   "upgradeTrackerAllVillages": "Обидва селища",
   "upgradeTrackerHomeVillage": "Головне Селище",
-  "upgradeTrackerBuilderBase": "База будівельника",
+  "upgradeTrackerBuilderBase": "База Будівельника",
   "upgradeTrackerNoMatchingItems": "Фільтри не повернули жодного предмета",
   "upgradeTrackerOwnedCount": "Отримано: {owned} із {total}",
   "@upgradeTrackerOwnedCount": {
@@ -3886,7 +3976,7 @@
     }
   },
   "upgradeTrackerLaboratory": "Дослідження лабораторії",
-  "upgradeTrackerPets": "Тварини",
+  "upgradeTrackerPets": "Улюбленці героїв",
   "upgradeTrackerWalls": "Рівні стін",
   "upgradeTrackerEquipment": "Спорядження",
   "upgradeTrackerLevelsRemaining": "Рівнів до завершення: {count}",
@@ -3971,9 +4061,9 @@
   },
   "upgradeTrackerHeaderComplete": "Завершено",
   "upgradeTrackerHeaderLevelsLeft": "Ще покращити",
-  "upgradeTrackerHeaderActive": "Активний",
+  "upgradeTrackerHeaderActive": "Виконується",
   "upgradeTrackerHeaderFinishes": "Термін завершення",
-  "upgradeTrackerHeaderOwned": "Уже отримано",
+  "upgradeTrackerHeaderOwned": "Отримано",
   "upgradeTrackerHeaderUpdated": "Останнє оновлення",
   "homeCouldNotLoadTitle": "Не вдалося відкрити головну сторінку",
   "homeVerifiedAccountRequiredTitle": "Підтвердьте пов’язаний обліковий запис",
@@ -3989,7 +4079,7 @@
   "homeTodoTitle": "Потрібно виконати",
   "homeTodoSubtitle": "Завдання облікових записів, упорядковані за терміновістю.",
   "homeTodoEmpty": "Жоден підтверджений обліковий запис зараз не потребує дій.",
-  "homeClanless": "Без клану",
+  "homeClanless": "Поза кланом",
   "homeNeedsAttention": "Потребує дій",
   "homeCaughtUp": "Усе надолужено",
   "homeTrackingDataPending": "Цей підтверджений гравець відстежується нещодавно або неактивний, тому подробиці завдань ще недоступні.",
@@ -4005,7 +4095,7 @@
   },
   "homeUpgradeIdle": "Активних таймерів покращень не знайдено; будівельники можуть бути вільні.",
   "homeDone": "Виконано",
-  "homeRemainingCount": "залишилось: {count}",
+  "homeRemainingCount": "Залишилося: {count}",
   "@homeRemainingCount": {
     "placeholders": {
       "count": {
@@ -4133,13 +4223,13 @@
   "statsExactLoadouts": "Точне спорядження",
   "statsCustomLens": "Власна лінза",
   "statsCustomLensBody": "Виберіть необхідні кількості, виключення, ратушу, лігу, вибірковий майданчик і порядок сортування. Це відповідає реальним завантаженням, але ще не збережено.",
-  "rankedLeagueTitle": "Рейтингова Ліга",
+  "rankedLeagueTitle": "Рейтингові змагання",
   "rankedLeagueAbout": "Про Рейтингову лігу",
   "rankedLeagueAboutBody": "Ця сторінка використовує офіційну щотижневу групу Рейтингової ліги, журнал битв та історію періодів. Результати можуть змінюватися до завершення періоду.",
   "rankedLeagueOverview": "Огляд",
   "rankedLeagueRanking": "Турнірна таблиця",
   "rankedLeagueGroupRank": "Місце в групі",
-  "rankedLeagueTrophies": "Трофеї",
+  "rankedLeagueTrophies": "Кількість трофеїв",
   "rankedLeaguePlayers": "Кількість гравців: {count}",
   "@rankedLeaguePlayers": {
     "placeholders": {
@@ -4174,8 +4264,8 @@
   },
   "rankedLeagueRecentBattles": "Останні битви",
   "rankedLeagueRecentBattlesSubtitle": "Докладні результати активної тижневої групи.",
-  "rankedLeagueAttacks": "Атаки",
-  "rankedLeagueDefenses": "Захисти",
+  "rankedLeagueAttacks": "Результати атак",
+  "rankedLeagueDefenses": "Результати захистів",
   "rankedLeagueNoBattles": "Жодної битви ще не зареєстровано.",
   "rankedLeagueGroupRanking": "Таблиця групи",
   "rankedLeagueRankingSubtitle": "Поточне положення в групі. Вашого гравця виділено.",
@@ -4223,7 +4313,7 @@
   "rankedLeagueByPeriod": "Розподіл за періодами",
   "rankedLeaguePeriodTab": "Вибраний період",
   "rankedLeagueAverage": "Середнє значення",
-  "rankedLeagueRemaining": "Залишилося",
+  "rankedLeagueRemaining": "Залишок",
   "rankedLeagueSevenDayPeriod": "Семиденний період Рейтингової ліги",
   "rankedLeagueEquipmentUnavailable": "Армія та спорядження ще не відображаються в офіційних журналах битв Рейтингової ліги.",
   "rankedLeagueBattleDetailsUnavailable": "Докладні журнали битв для цього періоду недоступні.",
@@ -4271,9 +4361,9 @@
   "@notifAudienceAllInlineNote": {
     "description": "Inline note explaining all linked accounts behavior."
   },
-  "notifChooseAccountsManually": "Вибрані акаунти",
-  "notifAudienceAcrossDevicesDescription": "Виберіть, які акаунти можуть отримувати сповіщення на цьому пристрої.",
-  "notifAccountBookmarked": "Додано в закладки",
+  "notifChooseAccountsManually": "Вибрати облікові записи вручну",
+  "notifAudienceAcrossDevicesDescription": "Ці налаштування застосовуються до вибраних облікових записів на всіх ваших пристроях.",
+  "notifAccountBookmarked": "Збережено",
   "@notifAccountBookmarked": {
     "description": "Label for a bookmarked account in notification settings."
   },
@@ -4281,7 +4371,7 @@
   "@notifGroupLeagueBattles": {
     "description": "Notification group label for league battles."
   },
-  "notifGroupWarAttacks": "Військові атаки",
+  "notifGroupWarAttacks": "Атаки війни",
   "@notifGroupWarAttacks": {
     "description": "Notification group label for war attacks."
   },
@@ -4340,7 +4430,7 @@
   "widgetTownHallLabBoost": "Прискорення лабораторії від Ратуші",
   "widgetBuilderBoostShort": "Будівельник",
   "widgetResearchBoostShort": "Дослідження",
-  "widgetPetBoostShort": "Пет",
+  "widgetPetBoostShort": "Улюбленець",
   "widgetClockBoostShort": "Годинник",
   "widgetBuilderCostPerk": "Знижка {percent}% на вартість будівництва",
   "@widgetBuilderCostPerk": {
@@ -4376,19 +4466,19 @@
   },
   "farmGoalTitle": "Ціль збору ресурсів",
   "farmGoalFormTitle": "Заплануйте збір ресурсів",
-  "farmGoalAccountTitle": "Обліковий запис",
+  "farmGoalAccountTitle": "Обліковий запис гравця",
   "farmGoalAccountHint": "За бажанням використайте лігу пов’язаного облікового запису для оцінки здобичі.",
   "farmGoalTargetTitle": "Цільове покращення",
   "farmGoalTargetBuildingLabel": "Будівля або бойова одиниця",
   "farmGoalChooseBuilding": "Виберіть будівлю або бойову одиницю",
   "farmGoalChangeBuilding": "Змінити будівлю",
-  "farmGoalNoTargetTitle": "Ціль не вибрано",
+  "farmGoalNoTargetTitle": "Будівлю не вибрано",
   "farmGoalNoTargetBody": "Виберіть будівлю для покращення, щоб оцінити необхідну кількість ресурсів.",
   "farmGoalTargetLevelLabel": "Кінцевий рівень",
-  "farmGoalUpgradeCostLabel": "Вартість покращення",
+  "farmGoalUpgradeCostLabel": "Вартість цільового покращення",
   "farmGoalCostUnavailable": "Немає даних про вартість цього покращення.",
   "farmGoalLootTitle": "Здобич за одну атаку",
-  "farmGoalResourceLabel": "Ресурс",
+  "farmGoalResourceLabel": "Тип ресурсу",
   "farmGoalAmountLabel": "Потрібна кількість",
   "farmGoalAverageLootLabel": "Доступна здобич у селі",
   "farmGoalPerfectLootHint": "Введіть здобич, показану перед атакою. Зазначений нижче бонус ліги додасться автоматично.",
@@ -4461,11 +4551,11 @@
       }
     }
   },
-  "gameCreatorCode": "Код Творця: ClashKing",
+  "gameCreatorCode": "Код автора",
   "todoExplanationRaidsTitle": "Атаки в рейдах",
   "todoExplanationRaids": "Виконайте атаки у вихідні рейдів, щоб допомогти Столиці Клану.",
-  "clanWarFrequencyTitle": "війни",
-  "notifScopeAllAccounts": "Усі акаунти",
+  "clanWarFrequencyTitle": "Частота воєн",
+  "notifScopeAllAccounts": "Усі пов’язані облікові записи",
   "@notifScopeAllAccounts": {
     "description": "Notification scope: all linked accounts"
   },
@@ -4473,7 +4563,7 @@
   "@notifSelectedAccounts": {
     "description": "Label / sheet title for the selected accounts picker"
   },
-  "searchFilters": "Фільтри",
+  "searchFilters": "Фільтри пошуку",
   "@searchFilters": {
     "description": "Tooltip for the filters icon button in search"
   },
@@ -4489,18 +4579,18 @@
     }
   },
   "calculatorsModeDamage": "Шкода",
-  "calculatorsModeFarmGoal": "Ціль збору ресурсів",
+  "calculatorsModeFarmGoal": "Ціль ресурсів",
   "damageCalculatorTitle": "Калькулятор шкоди",
-  "damageAccountPresetShort": "Обліковий запис",
+  "damageAccountPresetShort": "Рівні облікового запису",
   "damageChooseAccount": "Виберіть профіль гравця",
   "damageSwitchAccount": "Змінити профіль",
   "damageAccountSelectorHint": "Використайте рівні підтвердженого облікового запису або встановіть їх вручну.",
   "damageNoAccountsAvailable": "Немає підтверджених облікових записів. Рівні джерел шкоди можна встановити вручну.",
   "damageTargetSectionTitle": "Тестована будівля",
-  "damageChooseTarget": "Виберіть будівлю або бойову одиницю",
+  "damageChooseTarget": "Виберіть тестовану будівлю",
   "damageNoTargetTitle": "Ціль не вибрано",
   "damageNoTargetBody": "Виберіть будівлю, щоб перевірити її міцність.",
-  "damageTargetLevelLabel": "Кінцевий рівень",
+  "damageTargetLevelLabel": "Рівень будівлі",
   "damageCommonBuildings": "Популярні цілі",
   "damageAllBuildings": "Повний список будівель",
   "damageQuickSetups": "Готові набори",
@@ -4509,7 +4599,7 @@
   "damageQuickSetupGiantArrow": "Гігантська Стріла",
   "damageQuickSetupFlameFlinger": "Вогнемет",
   "damageQuickSetupCustom": "Власний набір",
-  "damageClearStack": "ясно",
+  "damageClearStack": "Очистити набір",
   "damageNoDamageSelected": "Додайте джерело шкоди, щоб побачити результат.",
   "damageSelectedSourcesCount": "Вибрані джерела: {count}",
   "@damageSelectedSourcesCount": {
@@ -4523,35 +4613,35 @@
   "damageOtherSources": "Інші джерела",
   "damageShowAllSources": "Показати всі джерела",
   "damageShowFewerSources": "Показати менше джерел",
-  "searchCancel": "Скасувати",
+  "searchCancel": "Скасувати пошук",
   "todoRaidAttacks": "Атаки в рейді",
   "todoMockRaid4Left": "Залишилося 4 атаки в рейді",
   "todoMockWarAltStatus": "Атака у війні ще доступна",
-  "todoMockRaid1Left": "залишився 1",
-  "gameAssetsCategoryBuildings": "Цілі",
+  "todoMockRaid1Left": "Залишилася 1 атака в рейді",
+  "gameAssetsCategoryBuildings": "Будівлі",
   "gameAssetsCategoryCapitalBase": "База Столиці Клану",
   "gameAssetsCategoryCapitalHouseParts": "Частини будинку Столиці",
   "gameAssetsCategoryChests": "Скрині",
   "gameAssetsCategoryClanLabels": "Мітки кланів",
   "gameAssetsCategoryCountryFlags": "Прапори країн",
   "gameAssetsCategoryDecorations": "Прикраси",
-  "gameAssetsCategoryEquipment": "Спорядження",
+  "gameAssetsCategoryEquipment": "Спорядження героїв",
   "gameAssetsCategoryGuardians": "Вартові",
   "gameAssetsCategoryHeroes": "Герої",
-  "gameAssetsCategoryPets": "Тварини",
+  "gameAssetsCategoryPets": "Улюбленці героїв",
   "gameAssetsCategorySkins": "Образи",
-  "gameAssetsCategorySpells": "Заклинання",
+  "gameAssetsCategorySpells": "Закляття",
   "gameAssetsCategoryTroops": "Війська",
   "assetFolderTroops": "Війська",
-  "assetFolderSpells": "Заклинання",
+  "assetFolderSpells": "Закляття",
   "assetFolderHeroes": "Герої",
   "endpointStateWins": "Перемоги",
-  "notifGroupBattles": "Проведені битви",
+  "notifGroupBattles": "Битви",
   "notifGroupSupport": "Підтримка",
   "rankedLeagueAccountSelector": "Відображуваний обліковий запис",
   "rankedLeagueStars": "Зірки",
   "playerBattlelogTab": "Проведені битви",
-  "playerActivityTab": "діяльність",
+  "playerActivityTab": "Активність",
   "playerBattlelogFarming": "Збір ресурсів",
   "playerBattlelogRanked": "Рейтинговий режим",
   "playerBattlelogFarmingOverview": "Огляд збору ресурсів",
@@ -4565,9 +4655,9 @@
       }
     }
   },
-  "playerBattlelogAttacks": "Атаки",
+  "playerBattlelogAttacks": "Результати атак",
   "playerBattlelogAverageDestruction": "Середнє знищення",
-  "playerBattlelogAverageStars": "Середні зірки",
+  "playerBattlelogAverageStars": "Середнє число зірок",
   "playerBattlelogTripleRate": "Оцінка три зірки",
   "playerBattlelogAverageLoot": "Середня здобич",
   "playerBattlelogPopularTroops": "Найчастіше використовувані війська",
@@ -4665,16 +4755,16 @@
       }
     }
   },
-  "upgradeTrackerPlanPrioritiesTitle": "Plan priorities",
-  "upgradeTrackerPlanPrioritiesDescription": "Rank what matters most. Upgrade levels and active work always stay in order.",
+  "upgradeTrackerPlanPrioritiesTitle": "Плануйте пріоритети",
+  "upgradeTrackerPlanPrioritiesDescription": "Розташуйте найважливіше. Рівні оновлення та активна робота завжди в порядку.",
   "upgradeTrackerPlanClose": "Закрити",
-  "upgradeTrackerPlanPlanningGoals": "Planning goals",
-  "upgradeTrackerPlanConstructionSubtitle": "Construction and hero upgrades",
-  "upgradeTrackerPlanResearchSubtitle": "Troops, spells and siege research",
-  "upgradeTrackerPlanPetHouseSubtitle": "Pet House upgrades",
-  "upgradeTrackerPlanPrioritizeNewItems": "Prioritize new items",
-  "upgradeTrackerPlanPrioritizeNewDescription": "Place newly unlocked or unbuilt items first",
-  "upgradeTrackerPlanSharedSummary": "Tier {tier} · shared mix {normalized}% ({share}/{total}) · {completion}",
+  "upgradeTrackerPlanPlanningGoals": "Цілі планування",
+  "upgradeTrackerPlanConstructionSubtitle": "Будівництво та покращення героїв",
+  "upgradeTrackerPlanResearchSubtitle": "Війська, заклинання та дослідження облоги",
+  "upgradeTrackerPlanPetHouseSubtitle": "Оновлення будинку для домашніх тварин",
+  "upgradeTrackerPlanPrioritizeNewItems": "Розставте пріоритети для нових елементів",
+  "upgradeTrackerPlanPrioritizeNewDescription": "Спочатку розмістіть щойно розблоковані або ще не створені предмети",
+  "upgradeTrackerPlanSharedSummary": "Рівень {tier} · спільна суміш {normalized}% ({share}/{total}) · {completion}",
   "@upgradeTrackerPlanSharedSummary": {
     "placeholders": {
       "tier": {
@@ -4694,7 +4784,7 @@
       }
     }
   },
-  "upgradeTrackerPlanStrictSummary": "Tier {tier} · strict · {completion}",
+  "upgradeTrackerPlanStrictSummary": "Рівень {tier} · суворий · {completion}",
   "@upgradeTrackerPlanStrictSummary": {
     "placeholders": {
       "tier": {
@@ -4705,8 +4795,8 @@
       }
     }
   },
-  "upgradeTrackerPlanRunsUntilMaxed": "runs until maxed",
-  "upgradeTrackerPlanYieldsAfter": "yields after {target}%",
+  "upgradeTrackerPlanRunsUntilMaxed": "працює до максимального значення",
+  "upgradeTrackerPlanYieldsAfter": "врожайність після {target}%",
   "@upgradeTrackerPlanYieldsAfter": {
     "placeholders": {
       "target": {
@@ -4714,9 +4804,9 @@
       }
     }
   },
-  "upgradeTrackerPlanStrict": "Strict",
-  "upgradeTrackerPlanMax": "Max",
-  "upgradeTrackerPlanReorder": "Reorder {category}",
+  "upgradeTrackerPlanStrict": "Суворий",
+  "upgradeTrackerPlanMax": "Макс",
+  "upgradeTrackerPlanReorder": "Перезамовити {category}",
   "@upgradeTrackerPlanReorder": {
     "placeholders": {
       "category": {
@@ -4724,10 +4814,10 @@
       }
     }
   },
-  "upgradeTrackerPlanRelativeTierWeight": "Relative tier weight",
-  "upgradeTrackerPlanCompletionTarget": "Completion target",
-  "upgradeTrackerPlanStrictTier": "Strict tier",
-  "upgradeTrackerPlanWeight": "Weight {value}%",
+  "upgradeTrackerPlanRelativeTierWeight": "Відносна вага ярусу",
+  "upgradeTrackerPlanCompletionTarget": "Ціль завершення",
+  "upgradeTrackerPlanStrictTier": "Строгий ярус",
+  "upgradeTrackerPlanWeight": "Вага {value}%",
   "@upgradeTrackerPlanWeight": {
     "placeholders": {
       "value": {
@@ -4735,8 +4825,8 @@
       }
     }
   },
-  "upgradeTrackerPlanUntilMaxed": "Until maxed",
-  "upgradeTrackerPlanUntilPercent": "Until {value}%",
+  "upgradeTrackerPlanUntilMaxed": "До максимального значення",
+  "upgradeTrackerPlanUntilPercent": "До {value}%",
   "@upgradeTrackerPlanUntilPercent": {
     "placeholders": {
       "value": {
@@ -4744,11 +4834,11 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numbered tiers run first. Shared rows keep the same tier number, and their mix is normalized from the relative weights, so 50 + 25 becomes 67% / 33%. A target makes a category yield after it reaches that percentage while it stays eligible later.",
-  "upgradeTrackerPlanGoalMaxCurrentHall": "Max before advancing",
-  "upgradeTrackerPlanGoalRushNextHall": "Reach the next hall quickly",
-  "upgradeTrackerPlanGoalCatchUp": "Catch up rushed levels",
-  "upgradeTrackerPlanGoalUnlockFirst": "Unlock new things first",
+  "upgradeTrackerPlanRuleNote": "Пронумеровані яруси запускаються першими. Спільні рядки зберігають той самий номер рівня, а їх суміш нормалізується на основі відносних ваг, тому 50 + 25 стає 67% / 33%. Ціль робить категорію прибутковою після того, як вона досягає цього відсотка, і залишається придатною пізніше.",
+  "upgradeTrackerPlanGoalMaxCurrentHall": "Макс перед наступним",
+  "upgradeTrackerPlanGoalRushNextHall": "Швидко дійдіть до наступного залу",
+  "upgradeTrackerPlanGoalCatchUp": "Наздоганяйте швидкі рівні",
+  "upgradeTrackerPlanGoalUnlockFirst": "Спершу розблокуйте нові речі",
   "upgradeTrackerPlanGoalSelection": "{village}: {goal}",
   "@upgradeTrackerPlanGoalSelection": {
     "placeholders": {
@@ -4760,9 +4850,9 @@
       }
     }
   },
-  "upgradeTrackerPlanWallsEachWeek": "Walls each week",
+  "upgradeTrackerPlanWallsEachWeek": "Стіни кожного тижня",
   "upgradeTrackerPlanOff": "Вимкнено",
-  "upgradeTrackerPlanPerWeek": "{count} / week",
+  "upgradeTrackerPlanPerWeek": "{count} / тиждень",
   "@upgradeTrackerPlanPerWeek": {
     "placeholders": {
       "count": {
@@ -4770,58 +4860,58 @@
       }
     }
   },
-  "upgradeTrackerPlanPreferGold": "Prefer Gold for walls",
-  "upgradeTrackerPlanPreferGoldDescription": "Use Gold before Elixir when spending walls",
-  "upgradeTrackerPlanApplyPriorities": "Apply priorities",
-  "upgradeTrackerPlanCategoryCraftedDefenses": "Crafted defenses",
-  "upgradeTrackerPlanCategoryTraps": "Traps",
-  "upgradeTrackerPlanCategoryArmy": "Army",
-  "upgradeTrackerPlanCategoryDarkTroops": "Dark troops",
-  "upgradeTrackerPlanCategorySieges": "Sieges",
-  "upgradeTrackerPlanCategorySupercharge": "Supercharge",
-  "navigationCloseDrawer": "Close navigation drawer",
-  "navigationOpenProfileMenu": "Open profile menu",
-  "navigationClashKingWeb": "ClashKing web",
-  "settingsPrivacyDataTitle": "Privacy & data",
-  "settingsPrivacyPolicyDescription": "Review what ClashKing collects, why it is used, who processes it, retention rules, and how to contact us.",
-  "settingsPrivacyExportTitle": "Access or export your data",
-  "settingsPrivacyExportDescription": "Download a copy of account data linked to your ClashKing login, including linked Clash of Clans accounts and notification preferences.",
-  "settingsPrivacyCorrectionTitle": "Correct or limit data",
-  "settingsPrivacyCorrectionDescription": "Remove linked Clash of Clans accounts from account settings, disable notifications in notification settings, or contact support for correction and restriction requests.",
-  "settingsPrivacyDeletionTitle": "Delete your ClashKing account",
-  "settingsPrivacyDeletionDescription": "This starts deletion of your ClashKing account and associated app data unless ClashKing must keep limited records for security, fraud prevention, or legal obligations.",
-  "settingsPrivacyChildrenTitle": "Children and families",
-  "settingsPrivacyChildrenDescription": "ClashKing is a general-audience companion app and is not directed to children. Do not create an account if you are not old enough to consent in your country without parent or guardian approval.",
-  "settingsPrivacyExportReady": "Your data export is ready to save.",
-  "settingsPrivacyExportCreateFailed": "The data export could not be created. A privacy email has been prepared instead.",
-  "settingsPrivacyExportPrepareFirst": "Prepare your export before saving it.",
-  "settingsPrivacyExportSaved": "Your data export has been saved.",
-  "settingsPrivacyExportSaveFailed": "The data export could not be saved. A privacy email has been prepared instead.",
-  "settingsPrivacyDeleteUnavailable": "Account deletion is not available in this build. A privacy email has been prepared instead.",
-  "settingsPrivacyOpenPolicy": "Open policy",
-  "settingsPrivacyRefreshExport": "Refresh export",
-  "settingsPrivacyPrepareExport": "Prepare export",
-  "settingsPrivacySaveExport": "Save export",
-  "settingsPrivacyContactSupport": "Contact support",
-  "settingsPrivacyDeleteAccount": "Delete account",
-  "settingsPrivacyDeleteConfirmTitle": "Delete account?",
-  "settingsPrivacyDeleteConfirmDescription": "This request is permanent after processing. You may lose linked accounts, notification settings, saved preferences, and authentication methods.",
-  "generalUnranked": "Unranked",
-  "playerJoinLeaveTab": "Join / Leave",
-  "playerUpgradeRemainingAccessibility": "Town Hall {townHallLevel} remaining",
-  "playerUpgradeSummaryTitle": "{progress}% Maxed for TH{townHallLevel}",
-  "playerUpgradeSectionMaxed": "This section is maxed for TH{townHallLevel}.",
-  "playerUpgradeTimeRemaining": "Time Remaining",
-  "playerUpgradeNoResourceData": "No resource data",
-  "playerJoinLeaveLoadError": "Could not load join / leave history",
-  "playerJoinLeaveClanTotals": "Clan totals",
+  "upgradeTrackerPlanPreferGold": "Віддайте перевагу золоту для стін",
+  "upgradeTrackerPlanPreferGoldDescription": "Використовуйте золото перед еліксиром, коли витрачаєте стіни",
+  "upgradeTrackerPlanApplyPriorities": "Застосуйте пріоритети",
+  "upgradeTrackerPlanCategoryCraftedDefenses": "Створений захист",
+  "upgradeTrackerPlanCategoryTraps": "Пастки",
+  "upgradeTrackerPlanCategoryArmy": "Армія",
+  "upgradeTrackerPlanCategoryDarkTroops": "Темні війська",
+  "upgradeTrackerPlanCategorySieges": "Облоги",
+  "upgradeTrackerPlanCategorySupercharge": "Надзарядка",
+  "navigationCloseDrawer": "Закрити панель навігації",
+  "navigationOpenProfileMenu": "Відкрити меню профілю",
+  "navigationClashKingWeb": "ClashKing у браузері",
+  "settingsPrivacyDataTitle": "Конфіденційність і дані",
+  "settingsPrivacyPolicyDescription": "Перегляньте, які дані збирає ClashKing, навіщо вони використовуються, хто їх обробляє, правила зберігання та способи зв’язку з нами.",
+  "settingsPrivacyExportTitle": "Доступ до даних або їх експорт",
+  "settingsPrivacyExportDescription": "Завантажте копію даних облікового запису, пов’язаних із входом у ClashKing, зокрема прив’язані облікові записи Clash of Clans і налаштування сповіщень.",
+  "settingsPrivacyCorrectionTitle": "Виправлення або обмеження даних",
+  "settingsPrivacyCorrectionDescription": "Видаліть прив’язані облікові записи Clash of Clans у налаштуваннях облікового запису, вимкніть сповіщення або зверніться до підтримки із запитом на виправлення чи обмеження.",
+  "settingsPrivacyDeletionTitle": "Видалення облікового запису ClashKing",
+  "settingsPrivacyDeletionDescription": "Це розпочне видалення облікового запису ClashKing і пов’язаних даних застосунку, якщо тільки ClashKing не зобов’язаний зберігати обмежені відомості для безпеки, запобігання шахрайству або виконання юридичних зобов’язань.",
+  "settingsPrivacyChildrenTitle": "Діти та сім’ї",
+  "settingsPrivacyChildrenDescription": "ClashKing — допоміжний застосунок для широкої аудиторії, не призначений для дітей. Не створюйте обліковий запис, якщо у вашій країні ви ще не можете надати згоду без дозволу когось із батьків або опікуна.",
+  "settingsPrivacyExportReady": "Експорт даних готовий до збереження.",
+  "settingsPrivacyExportCreateFailed": "Не вдалося створити експорт даних. Натомість підготовлено лист щодо конфіденційності.",
+  "settingsPrivacyExportPrepareFirst": "Підготуйте експорт перед збереженням.",
+  "settingsPrivacyExportSaved": "Експорт даних збережено.",
+  "settingsPrivacyExportSaveFailed": "Не вдалося зберегти експорт даних. Натомість підготовлено лист щодо конфіденційності.",
+  "settingsPrivacyDeleteUnavailable": "Видалення облікового запису недоступне в цій збірці. Натомість підготовлено лист щодо конфіденційності.",
+  "settingsPrivacyOpenPolicy": "Відкрити політику",
+  "settingsPrivacyRefreshExport": "Оновити експорт",
+  "settingsPrivacyPrepareExport": "Підготувати експорт",
+  "settingsPrivacySaveExport": "Зберегти експорт",
+  "settingsPrivacyContactSupport": "Звернутися до підтримки",
+  "settingsPrivacyDeleteAccount": "Видалити обліковий запис",
+  "settingsPrivacyDeleteConfirmTitle": "Видалити обліковий запис?",
+  "settingsPrivacyDeleteConfirmDescription": "Після обробки цей запит не можна скасувати. Ви можете втратити прив’язані облікові записи, налаштування сповіщень, збережені параметри та способи автентифікації.",
+  "generalUnranked": "Без рейтингу",
+  "playerJoinLeaveTab": "Вступ / Вихід",
+  "playerUpgradeRemainingAccessibility": "Залишилося для ратуші {townHallLevel}",
+  "playerUpgradeSummaryTitle": "Завершено на {progress}% для ТХ{townHallLevel}",
+  "playerUpgradeSectionMaxed": "Цей розділ завершено для ТХ{townHallLevel}.",
+  "playerUpgradeTimeRemaining": "Час, що залишився",
+  "playerUpgradeNoResourceData": "Немає даних про ресурси",
+  "playerJoinLeaveLoadError": "Не вдалося завантажити історію вступів і виходів",
+  "playerJoinLeaveClanTotals": "Підсумки за кланами",
   "playerJoinLeaveTime": "Час",
-  "playerJoinLeaveTimeSpent": "Time spent",
-  "playerJoinLeaveVisits": "Visits",
-  "playerJoinLeaveJoined": "Joined",
-  "playerJoinLeaveLeft": "Left",
-  "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "playerJoinLeaveTimeSpent": "Час у клані",
+  "playerJoinLeaveVisits": "Відвідування",
+  "playerJoinLeaveJoined": "Вступив",
+  "playerJoinLeaveLeft": "Вийшов",
+  "playerJoinLeaveNoHistory": "Історія вступів і виходів відсутня",
+  "playerJoinLeaveNoClanTotals": "Підсумки за кланами відсутні",
   "@playerUpgradeRemainingAccessibility": {
     "placeholders": {
       "townHallLevel": {
