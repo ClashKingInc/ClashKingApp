@@ -20,111 +20,14 @@ import {
 import {
   UpgradeCategory,
   UpgradeCost,
-  UpgradePlanPreferences,
-  UpgradeQueue,
   UpgradeStep,
   UpgradeVillage,
   type UpgradeCategorySummary,
   type UpgradeCollectionItem,
   type UpgradeTrackerItem,
   type UpgradeTrackerSnapshot,
-  type UpgradeVillageValue,
 } from '../models';
 import { formatTrackerDuration } from './upgrade-tracker-logic';
-
-export function UpgradeVillageSummaryModal({
-  visible,
-  snapshot,
-  village,
-  goldPassPercent,
-  preferences,
-  onClose,
-}: {
-  visible: boolean;
-  snapshot: UpgradeTrackerSnapshot;
-  village: UpgradeVillageValue;
-  goldPassPercent: number;
-  preferences: UpgradePlanPreferences;
-  onClose: () => void;
-}) {
-  const { t, locale } = useI18n();
-  const [now] = useState(() => new Date());
-  const overall = snapshot.overallSummary(village);
-  const sections = [
-    timedBreakdown(
-      snapshot,
-      village,
-      UpgradeQueue.builders,
-      t('upgradeTrackerBuildersCount', { count: snapshot.buildersFor(village) }),
-      now,
-      goldPassPercent,
-      preferences,
-    ),
-    timedBreakdown(
-      snapshot,
-      village,
-      UpgradeQueue.laboratory,
-      t('upgradeTrackerLaboratory'),
-      now,
-      goldPassPercent,
-      preferences,
-    ),
-    village === UpgradeVillage.home
-      ? timedBreakdown(
-          snapshot,
-          village,
-          UpgradeQueue.pets,
-          t('upgradeTrackerPets'),
-          now,
-          goldPassPercent,
-          preferences,
-        )
-      : null,
-    untimedBreakdown(snapshot, village, UpgradeCategory.walls, t('upgradeTrackerWalls')),
-    village === UpgradeVillage.home
-      ? untimedBreakdown(snapshot, village, UpgradeCategory.equipment, t('upgradeTrackerEquipment'))
-      : null,
-  ].filter(Boolean) as Breakdown[];
-  return (
-    <BreakdownModal
-      visible={visible}
-      title={
-        village === UpgradeVillage.home
-          ? t('upgradeTrackerHomeVillage')
-          : t('upgradeTrackerBuilderBase')
-      }
-      onClose={onClose}
-    >
-      <CKText muted role="bodySmall">
-        {(overall.completion * 100).toFixed(1)}% {t('generalCompleted')} ·{' '}
-        {t('upgradeTrackerLevelsRemaining', { count: overall.levelsRemaining })}
-      </CKText>
-      {sections.map((section) => (
-        <Surface key={section.label} radius={ckRadius.tile} style={breakdownStyles.section}>
-          <View style={breakdownStyles.row}>
-            <MobileWebImage imageUrl={section.imageUrl} style={breakdownStyles.sectionImage} />
-            <View style={breakdownStyles.grow}>
-              <CKText role="sectionTitle">{section.label}</CKText>
-              <CKText muted role="labelSmall">
-                {section.finishesAt
-                  ? t('upgradeTrackerCompletesOn', {
-                      date: section.finishesAt.toLocaleDateString(toIntlLocale(locale)),
-                      duration: formatTrackerDuration(
-                        (section.finishesAt.getTime() - now.getTime()) / 1000,
-                      ),
-                    })
-                  : t('upgradeTrackerLevelsRemaining', {
-                      count: section.summary.levelsRemaining,
-                    })}
-              </CKText>
-            </View>
-          </View>
-          <ResourceMetrics summary={section.summary} />
-        </Surface>
-      ))}
-    </BreakdownModal>
-  );
-}
 
 export function UpgradeCollectionSummaryModal({
   visible,
@@ -210,6 +113,7 @@ export function UpgradeCategorySummaryModal({
               key={resource}
               label={resourceLabel(resource)}
               value={compact(amount, intlLocale)}
+              imageUrl={resourceImage(resource)}
             />
           ))}
       </ResponsiveGrid>
@@ -597,88 +501,27 @@ function ScaleDownContent({ children }: { children: ReactNode }) {
   );
 }
 
-type Breakdown = {
+function Metric({
+  label,
+  value,
+  imageUrl,
+}: {
   label: string;
-  imageUrl: string;
-  summary: UpgradeCategorySummary;
-  finishesAt: Date | null;
-};
-function timedBreakdown(
-  snapshot: UpgradeTrackerSnapshot,
-  village: UpgradeVillageValue,
-  queue: string,
-  label: string,
-  startsAt: Date,
-  goldPassPercent: number,
-  preferences: UpgradePlanPreferences,
-): Breakdown | null {
-  const items = snapshot
-    .itemsFor({ village, queue: queue as never })
-    .filter((item) => item.category !== UpgradeCategory.builders);
-  if (!items.length) return null;
-  const lanes = snapshot.buildPlan({
-    queue: queue as never,
-    strategy: 'balanced',
-    village,
-    startsAt,
-    goldPassPercent,
-    preferences,
-    includedItemKeys: new Set(items.map((item) => item.planKey)),
-  });
-  const finishesAt = lanes.reduce<Date | null>(
-    (latest, lane) =>
-      lane.finishesAt && (!latest || lane.finishesAt > latest) ? lane.finishesAt : latest,
-    null,
-  );
-  return {
-    label,
-    imageUrl: items[0]!.imageUrl,
-    summary: snapshot.summaryForItems(items),
-    finishesAt,
-  };
-}
-function untimedBreakdown(
-  snapshot: UpgradeTrackerSnapshot,
-  village: UpgradeVillageValue,
-  category: string,
-  label: string,
-): Breakdown | null {
-  const items = snapshot.itemsFor({ village, category: category as never });
-  return items.length
-    ? {
-        label,
-        imageUrl: items[0]!.imageUrl,
-        summary: snapshot.summaryForItems(items, category as never),
-        finishesAt: null,
-      }
-    : null;
-}
-function ResourceMetrics({ summary }: { summary: UpgradeCategorySummary }) {
-  const { locale } = useI18n();
-  const intlLocale = toIntlLocale(locale);
-  const costs = Object.entries(summary.costs).sort(
-    ([left], [right]) => resourceWeight(left) - resourceWeight(right),
-  );
-  if (!costs.length) return null;
+  value: string | number;
+  imageUrl?: string;
+}) {
   return (
-    <ResponsiveGrid minItemWidth={112} maxColumns={3}>
-      {costs.map(([resource, amount]) => (
-        <Metric
-          key={resource}
-          label={resourceLabel(resource)}
-          value={compact(amount, intlLocale)}
-        />
-      ))}
-    </ResponsiveGrid>
-  );
-}
-function Metric({ label, value }: { label: string; value: string | number }) {
-  return (
-    <Surface radius={ckRadius.tile} style={breakdownStyles.metric}>
-      <CKText role="rowTitle">{value}</CKText>
-      <CKText muted role="labelSmall">
-        {label}
-      </CKText>
+    <Surface
+      radius={ckRadius.tile}
+      style={[breakdownStyles.metric, imageUrl && breakdownStyles.metricWithImage]}
+    >
+      {imageUrl ? <MobileWebImage imageUrl={imageUrl} style={breakdownStyles.metricImage} /> : null}
+      <View style={imageUrl ? breakdownStyles.grow : undefined}>
+        <CKText role="rowTitle">{value}</CKText>
+        <CKText muted role="labelSmall">
+          {label}
+        </CKText>
+      </View>
     </Surface>
   );
 }
@@ -1048,6 +891,14 @@ function trimCompact(value: number) {
 function resourceLabel(value: string) {
   return value.replaceAll('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 }
+function resourceImage(resource: string) {
+  const normalized = resource
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return `${ImageAssets.baseUrl}/resources/${normalized}.webp`;
+}
 
 const breakdownStyles = StyleSheet.create({
   overlay: {
@@ -1074,6 +925,8 @@ const breakdownStyles = StyleSheet.create({
   section: { padding: 12, gap: 10 },
   sectionImage: { width: 46, height: 42, resizeMode: 'contain' },
   metric: { minHeight: 58, justifyContent: 'center', padding: 8 },
+  metricWithImage: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  metricImage: { width: 30, height: 30, resizeMode: 'contain' },
   hero: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   detailHero: {
     minHeight: 70,

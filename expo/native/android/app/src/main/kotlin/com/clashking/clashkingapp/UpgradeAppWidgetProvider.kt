@@ -71,6 +71,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         val expectedTaskCapacity: Int,
         val expectedTag: String,
         val expectedUpdatedAt: String,
+        val expectedShowBuilderBase: Boolean,
         val targets: Map<Int, String>
     ) {
         fun apply(context: Context) {
@@ -112,6 +113,9 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
                 ?: widgetData.getString("upgradeWidgetSelectedTag", null)?.let(::normalizedTagValue)
                 ?: firstLinkedTag(widgetData)
             if (currentTag != expectedNormalizedTag) return false
+            if (UpgradeWidgetSelectionStore.showBuilderBase(context, appWidgetId) != expectedShowBuilderBase) {
+                return false
+            }
 
             val raw = widgetData.getString("upgradeWidget_$expectedNormalizedTag", null)
                 ?: widgetData.getString("upgradeWidgetData", null)
@@ -173,6 +177,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         val compactTaskCapacity = if (isLarge) 0 else taskCapacity(appWidgetManager, appWidgetId)
         val views = RemoteViews(context.packageName, layoutId)
         views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context))
+        val showBuilderBase = UpgradeWidgetSelectionStore.showBuilderBase(context, appWidgetId)
 
         val data = readCurrentUpgradeData(context, appWidgetId, widgetData)
         if (data == null) {
@@ -182,13 +187,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
 
         val imageTargets = if (isLarge) {
-            renderLargeUpgradeData(context, views, data)
+            renderLargeUpgradeData(context, views, data, showBuilderBase)
         } else {
             renderUpgradeData(
                 context,
                 views,
                 data,
-                compactTaskCapacity
+                compactTaskCapacity,
+                showBuilderBase
             )
         }
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -201,6 +207,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
                 compactTaskCapacity,
                 data.optString("tag", ""),
                 data.optString("updatedAt", ""),
+                showBuilderBase,
                 it
             )
         }
@@ -271,13 +278,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         context: Context,
         views: RemoteViews,
         data: JSONObject,
-        taskCapacity: Int
+        taskCapacity: Int,
+        showBuilderBase: Boolean
     ): Map<Int, String> {
         val imageTargets = mutableMapOf<Int, String>()
         val labels = labels(data)
         views.setViewVisibility(R.id.upgrade_empty_state, View.GONE)
         views.setViewVisibility(R.id.upgrade_content, View.VISIBLE)
-        renderStaleChip(views, data, labels)
+        renderStaleChip(views, data, labels, showBuilderBase)
         views.setImageViewResource(
             R.id.upgrade_hall_image,
             R.drawable.ic_upgrade_hall_placeholder
@@ -291,7 +299,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             data.optString("hallImageUrl", "")
         )
 
-        val activeTasks = activeTasks(data)
+        val activeTasks = activeTasks(data, showBuilderBase)
         val featured = activeTasks.firstOrNull()
         if (featured != null) {
             views.setViewVisibility(R.id.upgrade_featured_card, View.VISIBLE)
@@ -299,7 +307,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.upgrade_featured_category, featured.category)
             views.setTextViewText(
                 R.id.upgrade_active_count,
-                activeStatus(labels, totalActiveCount(data))
+                activeStatus(labels, totalActiveCount(data, showBuilderBase))
             )
             views.setTextViewText(
                 R.id.upgrade_featured_name,
@@ -335,7 +343,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
                 R.id.upgrade_village_state,
                 R.id.upgrade_village_status
             )
-            renderCompactResearch(context, views, data, labels)
+            renderCompactResearch(context, views, data, labels, showBuilderBase)
         }
 
         val boosts = activeBoosts(data.optJSONArray("boosts"))
@@ -370,13 +378,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
     private fun renderLargeUpgradeData(
         context: Context,
         views: RemoteViews,
-        data: JSONObject
+        data: JSONObject,
+        showBuilderBase: Boolean
     ): Map<Int, String> {
         val imageTargets = mutableMapOf<Int, String>()
         val labels = labels(data)
         views.setViewVisibility(R.id.upgrade_empty_state, View.GONE)
         views.setViewVisibility(R.id.upgrade_content, View.VISIBLE)
-        renderStaleChip(views, data, labels)
+        renderStaleChip(views, data, labels, showBuilderBase)
         views.setImageViewResource(
             R.id.upgrade_hall_image,
             R.drawable.ic_upgrade_hall_placeholder
@@ -460,6 +469,10 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         views.setTextViewText(R.id.upgrade_large_lab_title, label(labels, "laboratory", "LAB"))
         views.setTextViewText(R.id.upgrade_large_pets_title, label(labels, "pets", "PETS"))
         views.setTextViewText(R.id.upgrade_large_builder_title, label(labels, "builderBase", "BUILDER BASE"))
+        views.setViewVisibility(
+            R.id.upgrade_large_builder_card,
+            if (showBuilderBase) View.VISIBLE else View.GONE
+        )
 
         renderLargeSection(
             context,
@@ -483,6 +496,21 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
                     R.id.upgrade_large_home_task_three,
                     R.id.upgrade_large_home_task_three_image,
                     R.id.upgrade_large_home_task_three_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_home_task_four,
+                    R.id.upgrade_large_home_task_four_image,
+                    R.id.upgrade_large_home_task_four_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_home_task_five,
+                    R.id.upgrade_large_home_task_five_image,
+                    R.id.upgrade_large_home_task_five_text
+                ),
+                LargeTaskSlot(
+                    R.id.upgrade_large_home_task_six,
+                    R.id.upgrade_large_home_task_six_image,
+                    R.id.upgrade_large_home_task_six_text
                 )
             ),
             imageTargets
@@ -524,27 +552,29 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             ),
             imageTargets
         )
-        renderLargeSection(
-            context,
-            views,
-            data.optJSONObject("builderBase"),
-            labels,
-            R.id.upgrade_large_builder_status,
-            R.id.upgrade_large_builder_empty,
-            listOf(
-                LargeTaskSlot(
-                    R.id.upgrade_large_builder_task_one,
-                    R.id.upgrade_large_builder_task_one_image,
-                    R.id.upgrade_large_builder_task_one_text
+        if (showBuilderBase) {
+            renderLargeSection(
+                context,
+                views,
+                data.optJSONObject("builderBase"),
+                labels,
+                R.id.upgrade_large_builder_status,
+                R.id.upgrade_large_builder_empty,
+                listOf(
+                    LargeTaskSlot(
+                        R.id.upgrade_large_builder_task_one,
+                        R.id.upgrade_large_builder_task_one_image,
+                        R.id.upgrade_large_builder_task_one_text
+                    ),
+                    LargeTaskSlot(
+                        R.id.upgrade_large_builder_task_two,
+                        R.id.upgrade_large_builder_task_two_image,
+                        R.id.upgrade_large_builder_task_two_text
+                    )
                 ),
-                LargeTaskSlot(
-                    R.id.upgrade_large_builder_task_two,
-                    R.id.upgrade_large_builder_task_two_image,
-                    R.id.upgrade_large_builder_task_two_text
-                )
-            ),
-            imageTargets
-        )
+                imageTargets
+            )
+        }
         return imageTargets
     }
 
@@ -590,9 +620,11 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
     private fun renderStaleChip(
         views: RemoteViews,
         data: JSONObject,
-        labels: JSONObject?
+        labels: JSONObject?,
+        showBuilderBase: Boolean
     ) {
-        val isStale = data.optBoolean("hasStaleData", false) || hasFinishedTask(data)
+        val reportedStale = showBuilderBase && data.optBoolean("hasStaleData", false)
+        val isStale = reportedStale || hasFinishedTask(data, showBuilderBase)
         views.setViewVisibility(R.id.upgrade_stale_chip, if (isStale) View.VISIBLE else View.GONE)
         views.setTextViewText(
             R.id.upgrade_stale_chip,
@@ -642,17 +674,22 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
 
     private data class CategorizedTask(val category: String, val task: JSONObject)
 
-    private fun upgradeSections(data: JSONObject): List<Pair<String, JSONObject?>> =
-        listOf(
-            label(labels(data), "homeVillage", "HOME VILLAGE") to data.optJSONObject("homeBuilders"),
-            label(labels(data), "laboratory", "LAB") to data.optJSONObject("laboratory"),
-            label(labels(data), "pets", "PETS") to data.optJSONObject("pets"),
-            label(labels(data), "builderBase", "BUILDER BASE") to data.optJSONObject("builderBase")
-        )
+    private fun upgradeSections(
+        data: JSONObject,
+        showBuilderBase: Boolean
+    ): List<Pair<String, JSONObject?>> =
+        buildList {
+            add(label(labels(data), "homeVillage", "HOME VILLAGE") to data.optJSONObject("homeBuilders"))
+            add(label(labels(data), "laboratory", "LAB") to data.optJSONObject("laboratory"))
+            add(label(labels(data), "pets", "PETS") to data.optJSONObject("pets"))
+            if (showBuilderBase) {
+                add(label(labels(data), "builderBase", "BUILDER BASE") to data.optJSONObject("builderBase"))
+            }
+        }
 
-    private fun activeTasks(data: JSONObject): List<CategorizedTask> {
+    private fun activeTasks(data: JSONObject, showBuilderBase: Boolean): List<CategorizedTask> {
         return buildList {
-            for ((title, section) in upgradeSections(data)) {
+            for ((title, section) in upgradeSections(data, showBuilderBase)) {
                 val tasks = section?.optJSONArray("tasks") ?: continue
                 for (index in 0 until tasks.length()) {
                     tasks.optJSONObject(index)?.let { add(CategorizedTask(title, it)) }
@@ -767,12 +804,18 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         views.setTextColor(statusViewId, context.getColor(statusColor(status)))
     }
 
-    private fun renderCompactResearch(context: Context, views: RemoteViews, data: JSONObject, labels: JSONObject?) {
-        val sections = listOf(
-            data.optJSONObject("laboratory"),
-            data.optJSONObject("pets"),
-            data.optJSONObject("builderBase")
-        )
+    private fun renderCompactResearch(
+        context: Context,
+        views: RemoteViews,
+        data: JSONObject,
+        labels: JSONObject?,
+        showBuilderBase: Boolean
+    ) {
+        val sections = buildList {
+            add(data.optJSONObject("laboratory"))
+            add(data.optJSONObject("pets"))
+            if (showBuilderBase) add(data.optJSONObject("builderBase"))
+        }
         val available = sections.filterNotNull().filter { it.optBoolean("available", true) }
         val remaining = available.sumOf { it.optInt("remainingCount", 0) }
         val state = when {
@@ -901,19 +944,19 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         return count
     }
 
-    private fun totalActiveCount(data: JSONObject): Int =
-        upgradeSections(data).sumOf { (_, section) ->
+    private fun totalActiveCount(data: JSONObject, showBuilderBase: Boolean): Int =
+        upgradeSections(data, showBuilderBase).sumOf { (_, section) ->
             val displayedTasks = taskArrayDisplayCount(section?.optJSONArray("tasks"))
             section?.optInt("activeCount", displayedTasks) ?: 0
         }
 
-    private fun hasFinishedTask(data: JSONObject): Boolean {
-        val sections = listOf(
-            data.optJSONObject("homeBuilders"),
-            data.optJSONObject("laboratory"),
-            data.optJSONObject("pets"),
-            data.optJSONObject("builderBase")
-        )
+    private fun hasFinishedTask(data: JSONObject, showBuilderBase: Boolean): Boolean {
+        val sections = buildList {
+            add(data.optJSONObject("homeBuilders"))
+            add(data.optJSONObject("laboratory"))
+            add(data.optJSONObject("pets"))
+            if (showBuilderBase) add(data.optJSONObject("builderBase"))
+        }
         val now = Instant.now()
         for (section in sections) {
             val hiddenFinishesAt = section

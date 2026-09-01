@@ -11,6 +11,7 @@ class UpgradeWidgetConfigureActivity : WidgetConfigureActivity() {
     override val emptyText = R.string.upgrade_widget_configure_empty
     override val automaticText = R.string.upgrade_widget_configure_automatic
     override val actionText = R.string.upgrade_widget_configure_add
+    override val builderBaseOptionText = R.string.upgrade_widget_configure_builder_base
 
     override fun selectedTag(appWidgetId: Int): String? =
         UpgradeWidgetSelectionStore.selectedTag(this, appWidgetId)
@@ -41,6 +42,13 @@ class UpgradeWidgetConfigureActivity : WidgetConfigureActivity() {
 
     override fun saveSelectedTag(appWidgetId: Int, tag: String?) {
         UpgradeWidgetSelectionStore.saveSelectedTag(this, appWidgetId, tag)
+    }
+
+    override fun builderBaseEnabled(appWidgetId: Int): Boolean =
+        UpgradeWidgetSelectionStore.showBuilderBase(this, appWidgetId)
+
+    override fun saveBuilderBaseEnabled(appWidgetId: Int, enabled: Boolean) {
+        UpgradeWidgetSelectionStore.saveShowBuilderBase(this, appWidgetId, enabled)
     }
 
     override fun widgetProviderClass(): Class<out AppWidgetProvider> =

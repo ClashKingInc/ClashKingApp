@@ -15,7 +15,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
   useWindowDimensions,
   type LayoutChangeEvent,
@@ -33,7 +32,6 @@ import {
   Headphones,
   Home,
   ImageIcon,
-  Info,
   Pause,
   Play,
   Search,
@@ -64,6 +62,7 @@ import {
   PressableSurface,
   ProfileTabs,
   ResponsiveGrid,
+  SearchField,
   Skeleton,
   Surface,
   ckRadius,
@@ -106,7 +105,6 @@ import {
   UpgradeCategorySummaryModal,
   UpgradeCollectionSummaryModal,
   UpgradeItemDetailModal,
-  UpgradeVillageSummaryModal,
 } from './upgrade-tracker-breakdowns';
 import { UpgradeTrackerPlanEditor } from './upgrade-tracker-plan-editor';
 import { UpgradeTrackerShareModal } from './upgrade-tracker-share';
@@ -149,7 +147,6 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const [shareKind, setShareKind] = useState<'home' | 'builder' | 'collection' | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [goldPassOpen, setGoldPassOpen] = useState(false);
-  const [summaryOpen, setSummaryOpen] = useState(false);
   const pager = useRef<PagerViewHandle>(null);
   const [trackerScrollY] = useState(() => new Animated.Value(0));
   const [trackerOffsets, setTrackerOffsets] = useState<Partial<Record<TrackerTab, number>>>({});
@@ -322,7 +319,6 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
               onAccount={() => setAccountOpen(true)}
               onGoldPass={() => setGoldPassOpen(true)}
               onPriorities={() => setSettingsOpen(true)}
-              onInfo={tab === 'home' || tab === 'builder' ? () => setSummaryOpen(true) : undefined}
               onShare={() => setShareOpen(true)}
               onImport={() => setImportOpen(true)}
             />
@@ -443,16 +439,6 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           />
         ))}
       </ChoiceModal>
-      {snapshot ? (
-        <UpgradeVillageSummaryModal
-          visible={summaryOpen}
-          snapshot={snapshot}
-          village={tab === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home}
-          goldPassPercent={props.goldPassPercent}
-          preferences={props.preferences}
-          onClose={() => setSummaryOpen(false)}
-        />
-      ) : null}
     </SafeAreaView>
   );
 }
@@ -467,7 +453,6 @@ function TrackerHeader({
   onAccount,
   onGoldPass,
   onPriorities,
-  onInfo,
   onShare,
   onImport,
 }: {
@@ -480,7 +465,6 @@ function TrackerHeader({
   onAccount: () => void;
   onGoldPass: () => void;
   onPriorities: () => void;
-  onInfo?: () => void;
   onShare: () => void;
   onImport: () => void;
 }) {
@@ -590,11 +574,6 @@ function TrackerHeader({
         <HeroIconButton label={t('upgradeTrackerPlanPrioritiesTitle')} onPress={onPriorities}>
           <SlidersHorizontal color="white" />
         </HeroIconButton>
-        {onInfo ? (
-          <HeroIconButton label={t('upgradeTrackerCompletionDetails')} onPress={onInfo}>
-            <Info color="white" />
-          </HeroIconButton>
-        ) : null}
         <HeroIconButton label={t('upgradeTrackerShare')} onPress={onShare}>
           <Share2 color="white" />
         </HeroIconButton>
@@ -3141,16 +3120,12 @@ function SearchBar({
   const { t } = useI18n();
   return (
     <View style={styles.toolbar}>
-      <GlassSurface cornerRadius={ckRadius.control} style={styles.search}>
-        <Search size={18} color={theme.onSurfaceVariant} />
-        <TextInput
-          value={value}
-          onChangeText={onChange}
-          placeholder={placeholder}
-          placeholderTextColor={theme.onSurfaceVariant}
-          style={[styles.searchInput, { color: theme.onSurface }]}
-        />
-      </GlassSurface>
+      <SearchField
+        value={value}
+        onChangeText={onChange}
+        placeholder={placeholder}
+        searchIcon={<Search size={18} color={theme.onSurfaceVariant} />}
+      />
       {onFilter ? (
         <IconButton testID={filterTestID} label={t('generalFilters')} onPress={onFilter}>
           <Filter color={filtered ? theme.primary : theme.onSurface} />
@@ -3317,15 +3292,6 @@ const styles = StyleSheet.create({
   trackerPage: { flex: 1 },
   iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   toolbar: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  search: {
-    flex: 1,
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 12,
-  },
-  searchInput: { flex: 1, minHeight: 44, fontSize: 16 },
   section: { padding: 12, gap: 8 },
   upgradeGroupSection: { padding: 12 },
   upgradeGroupSectionOpen: { gap: 12 },

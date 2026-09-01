@@ -936,6 +936,38 @@ test('Android upgrade widget follows the system night mode palette', () => {
   assert.match(darkColors, /<color name="widget_text">#FFFFFFFF<\/color>/);
 });
 
+test('upgrade widgets show six builders and keep Builder Base visibility per widget', () => {
+  const expoRoot = path.resolve(__dirname, '../..');
+  const androidRoot = path.join(expoRoot, 'native/android/app/src/main');
+  const androidProvider = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/UpgradeAppWidgetProvider.kt'),
+    'utf8',
+  );
+  const androidSelection = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/UpgradeWidgetSelectionStore.kt'),
+    'utf8',
+  );
+  const androidLayout = fs.readFileSync(
+    path.join(androidRoot, 'res/layout/upgrade_widget_large_home_tasks.xml'),
+    'utf8',
+  );
+  const swift = fs.readFileSync(
+    path.join(expoRoot, 'native/ios/WarWidget/WarWidget.swift'),
+    'utf8',
+  );
+
+  for (const suffix of ['one', 'two', 'three', 'four', 'five', 'six']) {
+    assert.match(androidLayout, new RegExp(`upgrade_large_home_task_${suffix}`));
+    assert.match(androidProvider, new RegExp(`upgrade_large_home_task_${suffix}`));
+  }
+  assert.match(androidSelection, /SHOW_BUILDER_BASE_PREFIX = "showBuilderBase_"/);
+  assert.match(androidSelection, /getBoolean\("\$SHOW_BUILDER_BASE_PREFIX\$appWidgetId", true\)/);
+  assert.match(androidProvider, /if \(showBuilderBase\) View\.VISIBLE else View\.GONE/);
+  assert.match(swift, /@Parameter\(title: "Show Builder Base", default: true\)/);
+  assert.match(swift, /mediumTaskChoices\(showBuilderBase: showBuilderBase\)/);
+  assert.match(swift, /if entry\.showBuilderBase/);
+});
+
 test('native scenery audio bridge preserves exact Flutter session, focus, cache, and cadence', () => {
   const expoRoot = path.resolve(__dirname, '../..');
   const swift = fs.readFileSync(

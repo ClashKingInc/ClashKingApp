@@ -27,6 +27,44 @@ export type SearchSortBarProps = {
   style?: StyleProp<ViewStyle>;
 };
 
+export type SearchFieldProps = Pick<
+  SearchSortBarProps,
+  'value' | 'onChangeText' | 'placeholder' | 'searchLabel' | 'searchIcon' | 'style'
+>;
+
+export function SearchField({
+  value,
+  onChangeText,
+  placeholder,
+  searchLabel,
+  searchIcon,
+  style,
+}: SearchFieldProps) {
+  const theme = useCKTheme();
+  return (
+    <GlassSurface
+      cornerRadius={ckRadius.pill}
+      style={[styles.search, style]}
+      testID="search-sort-search"
+    >
+      {tintIcon(searchIcon, theme.onSurfaceVariant)}
+      <TextInput
+        accessibilityLabel={searchLabel ?? placeholder}
+        allowFontScaling
+        autoCapitalize="none"
+        autoCorrect={false}
+        clearButtonMode="while-editing"
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor={theme.onSurfaceVariant}
+        returnKeyType="search"
+        style={[styles.input, { color: theme.onSurface }]}
+        value={value}
+      />
+    </GlassSurface>
+  );
+}
+
 export function SearchSortBar({
   value,
   onChangeText,
@@ -42,22 +80,13 @@ export function SearchSortBar({
   const theme = useCKTheme();
   return (
     <View style={[styles.row, style]}>
-      <GlassSurface cornerRadius={ckRadius.pill} style={styles.search} testID="search-sort-search">
-        {tintIcon(searchIcon, theme.onSurfaceVariant)}
-        <TextInput
-          accessibilityLabel={searchLabel ?? placeholder}
-          allowFontScaling
-          autoCapitalize="none"
-          autoCorrect={false}
-          clearButtonMode="while-editing"
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={theme.onSurfaceVariant}
-          returnKeyType="search"
-          style={[styles.input, { color: theme.onSurface }]}
-          value={value}
-        />
-      </GlassSurface>
+      <SearchField
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        searchLabel={searchLabel}
+        searchIcon={searchIcon}
+      />
       <Pressable accessibilityRole="button" accessibilityLabel={sortLabel} onPress={onSortPress}>
         <GlassSurface
           cornerRadius={ckRadius.chip}

@@ -142,7 +142,7 @@ export class UpgradeWidgetSyncService {
         UpgradeVillage.home,
         UpgradeQueue.builders,
         snapshot.homeBuilderCount,
-        3,
+        snapshot.homeBuilderCount,
       ),
       laboratory: this.widgetSection(
         snapshot,

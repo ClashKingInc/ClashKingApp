@@ -134,15 +134,13 @@ describe('UpgradeTrackerScreen', () => {
 
     expect(actions.onBack).toHaveBeenCalled();
     expect(actions.onSelectAccount).toHaveBeenCalledWith('#TEST');
-    expect(screen.getAllByText('Share progress')).toHaveLength(2);
+    expect(screen.getAllByText('Share tracker')).toHaveLength(2);
     expect(screen.getByText('Share all 3')).toBeTruthy();
   });
 
-  it('opens the graphical village breakdown and full planner priority editor', async () => {
+  it('omits the redundant village breakdown and opens the full planner priority editor', async () => {
     const screen = await renderScreen();
-    await fireEvent.press(screen.getByLabelText('Village completion details'));
-    expect(screen.getAllByText(/levels left/).length).toBeGreaterThan(0);
-    await fireEvent.press(screen.getAllByLabelText('Close')[0]!);
+    expect(screen.queryByLabelText('Village completion details')).toBeNull();
     await fireEvent.press(screen.getByLabelText('Plan priorities'));
     expect(screen.getByText('Plan priorities')).toBeTruthy();
     expect(screen.getByText('Planning goals')).toBeTruthy();

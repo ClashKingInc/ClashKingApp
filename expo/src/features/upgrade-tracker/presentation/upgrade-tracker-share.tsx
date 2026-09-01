@@ -13,7 +13,7 @@ import { captureRef } from 'react-native-view-shot';
 import { Images, Share2, X } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { toIntlLocale, useI18n } from '../../../i18n';
+import { toIntlLocale, useI18n, type I18nValue } from '../../../i18n';
 import { CKText, PressableSurface, Surface, ckRadius, useCKTheme } from '../../../ui';
 import {
   UpgradeCategory,
@@ -21,14 +21,78 @@ import {
   UpgradePlanStrategy,
   UpgradeQueue,
   UpgradeVillage,
+  type UpgradeCategorySummary,
+  type UpgradeTrackerItem,
   type UpgradeTrackerSnapshot,
   type UpgradeVillageValue,
 } from '../models';
+import { formatTrackerDuration } from './upgrade-tracker-logic';
 
 export type TrackerShareKind = 'home' | 'builder' | 'collection';
 export type TrackerSharePreview = TrackerShareKind;
 
 const ALL_PREVIEWS: readonly TrackerSharePreview[] = ['home', 'builder', 'collection'];
+const CAPTURE_TIMEOUT_MS = 12_000;
+const ARTWORK_TIMEOUT_MS = 2_500;
+
+export type TrackerProgressSectionKey =
+  | 'walls'
+  | 'buildings'
+  | 'heroes'
+  | 'laboratory'
+  | 'pets'
+  | 'equipment'
+  | 'helpers'
+  | 'craftedDefenses';
+
+export interface TrackerProgressSection {
+  readonly key: TrackerProgressSectionKey;
+  readonly imageUrl: string;
+  readonly summary: UpgradeCategorySummary;
+}
+
+export function trackerProgressSections(
+  snapshot: UpgradeTrackerSnapshot,
+  village: UpgradeVillageValue,
+): readonly TrackerProgressSection[] {
+  const items = snapshot.itemsFor({ village });
+  const definitions: readonly [
+    TrackerProgressSectionKey,
+    readonly UpgradeTrackerItem[],
+    keyof typeof UpgradeCategory,
+  ][] = [
+    ['walls', items.filter((item) => item.category === UpgradeCategory.walls), 'walls'],
+    [
+      'buildings',
+      items.filter(
+        (item) =>
+          item.queue === UpgradeQueue.builders &&
+          item.category !== UpgradeCategory.walls &&
+          item.category !== UpgradeCategory.heroes &&
+          item.category !== UpgradeCategory.builders &&
+          item.category !== UpgradeCategory.craftedDefenses,
+      ),
+      'defenses',
+    ],
+    ['heroes', items.filter((item) => item.category === UpgradeCategory.heroes), 'heroes'],
+    ['laboratory', items.filter((item) => item.queue === UpgradeQueue.laboratory), 'troops'],
+    ['pets', items.filter((item) => item.category === UpgradeCategory.pets), 'pets'],
+    ['equipment', items.filter((item) => item.category === UpgradeCategory.equipment), 'equipment'],
+    ['helpers', items.filter((item) => item.category === UpgradeCategory.builders), 'builders'],
+    [
+      'craftedDefenses',
+      items.filter((item) => item.category === UpgradeCategory.craftedDefenses),
+      'craftedDefenses',
+    ],
+  ];
+  return definitions
+    .filter(([, matching]) => matching.length > 0)
+    .map(([key, matching, category]) => ({
+      key,
+      imageUrl: progressSectionImage(snapshot, village, key, matching),
+      summary: snapshot.summaryForItems(matching, UpgradeCategory[category]),
+    }));
+}
 
 export function trackerShareFilename(
   snapshot: Pick<UpgradeTrackerSnapshot, 'tag'>,
@@ -90,16 +154,18 @@ export function UpgradeTrackerShareModal({
 }) {
   const [preview, setPreview] = useState<TrackerSharePreview>(initial);
   const [sharing, setSharing] = useState(false);
+  const [shareError, setShareError] = useState(false);
   const boundary = useRef<ViewType>(null);
   const theme = useCKTheme();
-  const title = preview === 'collection' ? 'Share collection' : 'Share progress';
+  const { t } = useI18n();
+  const title = t('upgradeTrackerShare');
 
   async function share(all: boolean) {
     if (!boundary.current || sharing) return;
     const original = preview;
     setSharing(true);
+    setShareError(false);
     try {
-      await Promise.allSettled(trackerArtworkUrls(snapshot).map((url) => Image.prefetch(url)));
       await shareTrackerCaptures({
         snapshot,
         selected: preview,
@@ -107,12 +173,23 @@ export function UpgradeTrackerShareModal({
         capture: async (next, filename) => {
           setPreview(next);
           await afterPaint();
-          return captureRef(boundary, {
-            format: 'png',
-            quality: 1,
-            result: Platform.OS === 'web' ? 'data-uri' : 'tmpfile',
-            fileName: filename.replace(/\.png$/, ''),
-          });
+          await withTimeout(
+            Promise.allSettled(
+              trackerArtworkUrls(snapshot, next).map((url) => Image.prefetch(url)),
+            ).then(() => undefined),
+            ARTWORK_TIMEOUT_MS,
+          ).catch(() => undefined);
+          await afterPaint();
+          if (!boundary.current) throw new Error('Share preview is unavailable.');
+          return withTimeout(
+            captureRef(boundary.current, {
+              format: 'png',
+              quality: 1,
+              result: Platform.OS === 'web' ? 'data-uri' : 'tmpfile',
+              fileName: filename.replace(/\.png$/, ''),
+            }),
+            CAPTURE_TIMEOUT_MS,
+          );
         },
         nativeShare: async (urls, message) => {
           const { default: Share } = await import('react-native-share');
@@ -126,6 +203,8 @@ export function UpgradeTrackerShareModal({
           anchor.click();
         },
       });
+    } catch {
+      setShareError(true);
     } finally {
       setPreview(original);
       setSharing(false);
@@ -145,7 +224,16 @@ export function UpgradeTrackerShareModal({
             </Pressable>
           </View>
           <ScrollView contentContainerStyle={shareStyles.content}>
-            <View ref={boundary} collapsable={false} style={shareStyles.graphicBoundary}>
+            <View
+              ref={boundary}
+              collapsable={false}
+              style={[
+                shareStyles.graphicBoundary,
+                preview === 'collection'
+                  ? shareStyles.collectionGraphicBoundary
+                  : shareStyles.progressGraphicBoundary,
+              ]}
+            >
               {preview === 'collection' ? (
                 <CollectionGraphic snapshot={snapshot} />
               ) : (
@@ -155,6 +243,11 @@ export function UpgradeTrackerShareModal({
                 />
               )}
             </View>
+            {shareError ? (
+              <CKText muted role="bodySmall" style={shareStyles.error}>
+                {t('apiErrorOperationFailed', { operation: t('upgradeTrackerShare') })}
+              </CKText>
+            ) : null}
             <PressableSurface
               accessibilityRole="button"
               disabled={sharing}
@@ -162,7 +255,7 @@ export function UpgradeTrackerShareModal({
               style={shareStyles.action}
             >
               <Share2 color={theme.onSurface} />
-              <CKText>{sharing ? 'Preparing images…' : title}</CKText>
+              <CKText>{sharing ? t('generalLoading') : title}</CKText>
             </PressableSurface>
             <PressableSurface
               accessibilityRole="button"
@@ -187,71 +280,13 @@ const ProgressGraphic = forwardRef<
     village: UpgradeVillageValue;
   }
 >(function ProgressGraphic({ snapshot, village }, _ref) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const intlLocale = toIntlLocale(locale);
   const [startsAt] = useState(() => new Date());
   const overall = snapshot.overallSummary(village);
-  const lanes = [
-    ...snapshot.buildPlan({
-      queue: UpgradeQueue.builders,
-      strategy: UpgradePlanStrategy.balanced,
-      village,
-      startsAt,
-    }),
-    ...snapshot.buildPlan({
-      queue: UpgradeQueue.laboratory,
-      strategy: UpgradePlanStrategy.balanced,
-      village,
-      startsAt,
-    }),
-    ...(village === UpgradeVillage.home
-      ? snapshot.buildPlan({
-          queue: UpgradeQueue.pets,
-          strategy: UpgradePlanStrategy.balanced,
-          village,
-          startsAt,
-        })
-      : []),
-  ];
-  const finish = lanes.reduce<Date | null>(
-    (latest, lane) =>
-      lane.finishesAt && (!latest || lane.finishesAt > latest) ? lane.finishesAt : latest,
-    null,
-  );
-  const days = finish
-    ? Math.max(0, Math.ceil((finish.getTime() - startsAt.getTime()) / 86_400_000))
-    : 0;
-  const preferred =
-    village === UpgradeVillage.home
-      ? [
-          UpgradeCategory.defenses,
-          UpgradeCategory.army,
-          UpgradeCategory.troops,
-          UpgradeCategory.heroes,
-          UpgradeCategory.equipment,
-          UpgradeCategory.pets,
-          UpgradeCategory.walls,
-        ]
-      : [
-          UpgradeCategory.defenses,
-          UpgradeCategory.traps,
-          UpgradeCategory.army,
-          UpgradeCategory.resources,
-          UpgradeCategory.troops,
-          UpgradeCategory.heroes,
-          UpgradeCategory.walls,
-        ];
-  const resources = Object.entries(overall.costs).sort(
-    ([left], [right]) => resourceWeight(left) - resourceWeight(right),
-  );
-  const ores = resources.filter(([resource]) => resource.toLowerCase().includes('ore'));
-  const primaryResources = resources
-    .filter(([resource]) => !resource.toLowerCase().includes('ore'))
-    .slice(0, 2);
-  const categories = preferred
-    .map((category) => [category, snapshot.summaryFor(category, village)] as const)
-    .filter(([, summary]) => summary.target > 0)
-    .slice(0, ores.length ? 4 : 5);
+  const sections = trackerProgressSections(snapshot, village);
+  const builderTime = queueDurationSeconds(snapshot, village, UpgradeQueue.builders, startsAt);
+  const laboratoryTime = queueDurationSeconds(snapshot, village, UpgradeQueue.laboratory, startsAt);
   const hall = village === UpgradeVillage.home ? snapshot.townHallLevel : snapshot.builderHallLevel;
   return (
     <View style={shareStyles.graphic}>
@@ -284,45 +319,65 @@ const ProgressGraphic = forwardRef<
           </View>
         </View>
         <CKText style={shareStyles.percent}>{(overall.completion * 100).toFixed(1)}%</CKText>
-        <CKText style={shareStyles.silverStrong}>Village complete</CKText>
-        <View style={shareStyles.resourceRow}>
-          <CKText style={shareStyles.days}>{days} days left</CKText>
-          {primaryResources.map(([resource, amount]) => (
-            <View key={resource} style={shareStyles.resourcePair}>
-              <Image source={{ uri: resourceImage(resource) }} style={shareStyles.resourceIcon} />
-              <CKText style={shareStyles.silver}>{compact(amount, intlLocale)}</CKText>
-            </View>
-          ))}
+        <CKText style={shareStyles.silverStrong}>{t('generalCompleted')}</CKText>
+        <View style={shareStyles.timeSummaryRow}>
+          <TimeSummary
+            imageUrl={ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)}
+            label={t('dashboardUpgradeTrackerBuilders')}
+            seconds={builderTime}
+          />
+          <TimeSummary
+            imageUrl={
+              village === UpgradeVillage.home
+                ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
+                : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1)
+            }
+            label={t('upgradeTrackerLaboratory')}
+            seconds={laboratoryTime}
+          />
         </View>
-        {ores.length ? (
-          <View style={shareStyles.resourceRow}>
-            <CKText style={shareStyles.days}>Ore needed</CKText>
-            {ores.slice(0, 3).map(([resource, amount]) => (
-              <View key={resource} style={shareStyles.resourcePair}>
-                <Image source={{ uri: resourceImage(resource) }} style={shareStyles.resourceIcon} />
-                <CKText style={shareStyles.silver}>{compact(amount, intlLocale)}</CKText>
-              </View>
-            ))}
-          </View>
-        ) : null}
         <View style={shareStyles.categoryList}>
-          {categories.map(([category, summary]) => (
-            <View key={category} style={shareStyles.categoryRow}>
-              <Image
-                source={{
-                  uri:
-                    snapshot.itemsFor({ village, category })[0]?.imageUrl ??
-                    ImageAssets.defaultImage,
-                }}
-                style={shareStyles.categoryIcon}
-              />
-              <CKText style={shareStyles.categoryLabel}>{categoryLabel(category)}</CKText>
-              <View style={shareStyles.bar}>
-                <View style={[shareStyles.barFill, { width: `${summary.completion * 100}%` }]} />
+          {sections.map((section) => (
+            <View key={section.key} style={shareStyles.categoryRow}>
+              <Image source={{ uri: section.imageUrl }} style={shareStyles.categoryIcon} />
+              <View style={shareStyles.categoryBody}>
+                <View style={shareStyles.categoryHeading}>
+                  <CKText style={shareStyles.categoryLabel}>
+                    {progressSectionLabel(section.key, t)}
+                  </CKText>
+                  {section.summary.seconds > 0 ? (
+                    <CKText style={shareStyles.categoryTime}>
+                      {formatTrackerDuration(section.summary.seconds)}
+                    </CKText>
+                  ) : null}
+                  <CKText style={shareStyles.categoryPercent}>
+                    {Math.round(section.summary.completion * 100)}%
+                  </CKText>
+                </View>
+                <View style={shareStyles.categoryDetail}>
+                  <View style={shareStyles.bar}>
+                    <View
+                      style={[
+                        shareStyles.barFill,
+                        { width: `${section.summary.completion * 100}%` },
+                      ]}
+                    />
+                  </View>
+                  <View style={shareStyles.resourceRow}>
+                    {Object.entries(section.summary.costs)
+                      .sort(([left], [right]) => resourceWeight(left) - resourceWeight(right))
+                      .map(([resource, amount]) => (
+                        <View key={resource} style={shareStyles.resourcePair}>
+                          <Image
+                            source={{ uri: resourceImage(resource) }}
+                            style={shareStyles.resourceIcon}
+                          />
+                          <CKText style={shareStyles.silver}>{compact(amount, intlLocale)}</CKText>
+                        </View>
+                      ))}
+                  </View>
+                </View>
               </View>
-              <CKText style={shareStyles.categoryPercent}>
-                {Math.round(summary.completion * 100)}%
-              </CKText>
             </View>
           ))}
         </View>
@@ -335,6 +390,28 @@ const ProgressGraphic = forwardRef<
     </View>
   );
 });
+
+function TimeSummary({
+  imageUrl,
+  label,
+  seconds,
+}: {
+  imageUrl: string;
+  label: string;
+  seconds: number;
+}) {
+  return (
+    <View style={shareStyles.timeSummary}>
+      <Image source={{ uri: imageUrl }} style={shareStyles.timeSummaryIcon} />
+      <View style={shareStyles.grow}>
+        <CKText style={shareStyles.silver}>{label}</CKText>
+        <CKText style={shareStyles.timeSummaryValue}>
+          {seconds > 0 ? formatTrackerDuration(seconds) : '—'}
+        </CKText>
+      </View>
+    </View>
+  );
+}
 
 function CollectionGraphic({ snapshot }: { snapshot: UpgradeTrackerSnapshot }) {
   const types = Object.values(UpgradeCollectionType).filter((type) =>
@@ -389,19 +466,18 @@ function afterPaint() {
   );
 }
 
-function categoryLabel(value: string) {
-  const labels: Record<string, string> = {
-    defenses: 'Defenses',
-    traps: 'Traps',
-    army: 'Army',
-    resources: 'Resources',
-    troops: 'Troops',
-    heroes: 'Heroes',
-    equipment: 'Equipment',
-    pets: 'Pets',
-    walls: 'Walls',
+function progressSectionLabel(key: TrackerProgressSectionKey, t: I18nValue['t']) {
+  const labels: Record<TrackerProgressSectionKey, string> = {
+    walls: t('upgradeTrackerWalls'),
+    buildings: t('gameAssetsCategoryBuildings'),
+    heroes: t('gameHeroes'),
+    laboratory: t('upgradeTrackerLaboratory'),
+    pets: t('upgradeTrackerPets'),
+    equipment: t('upgradeTrackerEquipment'),
+    helpers: t('upgradeTrackerHelpers'),
+    craftedDefenses: t('upgradeTrackerPlanCategoryCraftedDefenses'),
   };
-  return labels[value] ?? value;
+  return labels[key];
 }
 
 function collectionLabel(value: string) {
@@ -415,17 +491,76 @@ function collectionLabel(value: string) {
   return labels[value] ?? value;
 }
 
-export function trackerArtworkUrls(snapshot: UpgradeTrackerSnapshot) {
+export function trackerArtworkUrls(
+  snapshot: UpgradeTrackerSnapshot,
+  preview: TrackerSharePreview = 'home',
+) {
+  const village = preview === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home;
+  const sections = preview === 'collection' ? [] : trackerProgressSections(snapshot, village);
   return [
     ImageAssets.townHall(snapshot.townHallLevel),
     ImageAssets.builderHall(snapshot.builderHallLevel),
     ImageAssets.homeBaseBackground,
     ImageAssets.builderBaseBackground,
     ImageAssets.darkModeLogo,
-    ...snapshot.items.filter((item) => !item.isComplete).map((item) => item.imageUrl),
-    ...snapshot.collections.map((item) => item.imageUrl),
-    ...snapshot.items.flatMap((item) => Object.keys(item.totalCosts).map(resourceImage)),
+    ...(preview === 'collection' ? snapshot.collections.map((item) => item.imageUrl) : []),
+    ...sections.map((section) => section.imageUrl),
+    ...sections.flatMap((section) => Object.keys(section.summary.costs).map(resourceImage)),
   ].filter((url, index, values) => url.startsWith('http') && values.indexOf(url) === index);
+}
+
+function progressSectionImage(
+  snapshot: UpgradeTrackerSnapshot,
+  village: UpgradeVillageValue,
+  key: TrackerProgressSectionKey,
+  items: readonly UpgradeTrackerItem[],
+) {
+  if (key === 'buildings')
+    return village === UpgradeVillage.home
+      ? ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)
+      : ImageAssets.getBuilderBaseBuildingImage("Builder's Hut", 1);
+  if (key === 'laboratory')
+    return village === UpgradeVillage.home
+      ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
+      : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1);
+  return items[0]?.imageUrl ?? ImageAssets.defaultImage;
+}
+
+function queueDurationSeconds(
+  snapshot: UpgradeTrackerSnapshot,
+  village: UpgradeVillageValue,
+  queue: (typeof UpgradeQueue)[keyof typeof UpgradeQueue],
+  startsAt: Date,
+) {
+  const finish = snapshot
+    .buildPlan({
+      queue,
+      strategy: UpgradePlanStrategy.balanced,
+      village,
+      startsAt,
+    })
+    .reduce<Date | null>(
+      (latest, lane) =>
+        lane.finishesAt && (!latest || lane.finishesAt > latest) ? lane.finishesAt : latest,
+      null,
+    );
+  return finish ? Math.max(0, (finish.getTime() - startsAt.getTime()) / 1000) : 0;
+}
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Operation timed out.')), timeoutMs);
+    promise.then(
+      (value) => {
+        clearTimeout(timeout);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      },
+    );
+  });
 }
 
 function resourceImage(resource: string) {
@@ -461,7 +596,9 @@ const shareStyles = StyleSheet.create({
   content: { gap: 10, paddingBottom: 24 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   grow: { flex: 1 },
-  graphicBoundary: { width: '100%', aspectRatio: 1 },
+  graphicBoundary: { width: '100%' },
+  progressGraphicBoundary: { aspectRatio: 0.64 },
+  collectionGraphicBoundary: { aspectRatio: 1 },
   graphic: { flex: 1, borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
   graphicShade: { backgroundColor: '#050506dc' },
   graphicContent: { flex: 1, padding: 20 },
@@ -470,19 +607,45 @@ const shareStyles = StyleSheet.create({
   silver: { color: '#bfc2c8', fontSize: 11, fontWeight: '700' },
   silverStrong: { color: '#d4d7dd', fontSize: 11, fontWeight: '900' },
   percent: { color: '#fff', fontSize: 42, lineHeight: 46, fontWeight: '900', marginTop: 8 },
-  days: { color: '#fff', fontSize: 10, fontWeight: '900', marginTop: 8 },
-  resourceRow: { minHeight: 20, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  timeSummaryRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
+  timeSummary: {
+    flex: 1,
+    minHeight: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    borderRadius: 12,
+    backgroundColor: '#1a1a1ecc',
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+  },
+  timeSummaryIcon: { width: 28, height: 28, resizeMode: 'contain' },
+  timeSummaryValue: { color: '#fff', fontSize: 12, fontWeight: '900' },
+  resourceRow: { minHeight: 16, flexDirection: 'row', alignItems: 'center', gap: 6 },
   resourcePair: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  resourceIcon: { width: 16, height: 16, resizeMode: 'contain' },
-  categoryList: { gap: 7, marginTop: 10 },
-  categoryRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  categoryIcon: { width: 20, height: 20, resizeMode: 'contain' },
-  categoryLabel: { color: '#fff', width: 76, fontSize: 11, fontWeight: '800' },
+  resourceIcon: { width: 14, height: 14, resizeMode: 'contain' },
+  categoryList: { gap: 6, marginTop: 10 },
+  categoryRow: {
+    minHeight: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderRadius: 11,
+    backgroundColor: '#151519c9',
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+  },
+  categoryIcon: { width: 26, height: 26, resizeMode: 'contain' },
+  categoryBody: { flex: 1, gap: 3 },
+  categoryHeading: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  categoryDetail: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+  categoryLabel: { flex: 1, color: '#fff', fontSize: 10, fontWeight: '800' },
+  categoryTime: { color: '#bfc2c8', fontSize: 9, fontWeight: '700' },
   categoryPercent: {
     color: '#fff',
-    width: 38,
+    width: 32,
     textAlign: 'right',
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '900',
   },
   bar: { flex: 1, height: 6, borderRadius: 99, backgroundColor: '#303238', overflow: 'hidden' },
@@ -513,4 +676,5 @@ const shareStyles = StyleSheet.create({
     gap: 8,
     padding: 12,
   },
+  error: { color: '#ff8d88', textAlign: 'center', paddingVertical: 4 },
 });

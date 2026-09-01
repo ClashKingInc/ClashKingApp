@@ -1,13 +1,26 @@
 import { Platform } from 'react-native';
 
-import { UpgradeCategory, UpgradePlanPreferences, UpgradeQueue, UpgradeVillage } from '../models';
+import {
+  UpgradeBoosts,
+  UpgradeCategory,
+  UpgradePlanPreferences,
+  UpgradeQueue,
+  UpgradeStep,
+  UpgradeTrackerItem,
+  UpgradeTrackerSnapshot,
+  UpgradeVillage,
+} from '../models';
 import { trackerFixture } from './upgrade-tracker-logic.test';
 import {
   planQueueOrder,
   priorityTierForOrder,
   replacePlanQueueOrder,
 } from './upgrade-tracker-plan-editor';
-import { shareTrackerCaptures, trackerShareFilename } from './upgrade-tracker-share';
+import {
+  shareTrackerCaptures,
+  trackerProgressSections,
+  trackerShareFilename,
+} from './upgrade-tracker-share';
 import { formatSectionProgress, usesContainedUpgradeArt } from './upgrade-tracker-screen';
 
 jest.mock('react-native-draggable-flatlist', () => ({
@@ -54,6 +67,70 @@ describe('upgrade tracker parity helpers', () => {
         UpgradeCategory.defenses,
       ),
     ).toBe(1);
+  });
+
+  it('groups the Home Village progress export into the requested eight sections', () => {
+    const definitions = [
+      [UpgradeCategory.walls, UpgradeQueue.builders],
+      [UpgradeCategory.defenses, UpgradeQueue.builders],
+      [UpgradeCategory.guardians, UpgradeQueue.builders],
+      [UpgradeCategory.heroes, UpgradeQueue.builders],
+      [UpgradeCategory.troops, UpgradeQueue.laboratory],
+      [UpgradeCategory.pets, UpgradeQueue.pets],
+      [UpgradeCategory.equipment, UpgradeQueue.none],
+      [UpgradeCategory.builders, UpgradeQueue.none],
+      [UpgradeCategory.craftedDefenses, UpgradeQueue.builders],
+    ] as const;
+    const items = definitions.map(
+      ([category, queue], index) =>
+        new UpgradeTrackerItem({
+          id: index + 1,
+          name: `${category}-${index}`,
+          imageUrl: `https://example.com/${category}.png`,
+          village: UpgradeVillage.home,
+          category,
+          queue,
+          currentLevel: 0,
+          targetLevel: 1,
+          count: 1,
+          steps: [new UpgradeStep(1, [], 60)],
+          completedUpgradeSeconds: 0,
+          totalUpgradeSeconds: 60,
+        }),
+    );
+    const snapshot = new UpgradeTrackerSnapshot({
+      tag: '#SECTIONS',
+      name: 'Sections',
+      townHallLevel: 18,
+      builderHallLevel: 10,
+      homeBuilderCount: 6,
+      builderBaseBuilderCount: 2,
+      items,
+      collections: [],
+      boosts: new UpgradeBoosts(),
+      events: [],
+      capturedAt: new Date('2026-08-29T12:00:00Z'),
+    });
+
+    const sections = trackerProgressSections(snapshot, UpgradeVillage.home);
+    expect(sections.map((section) => section.key)).toEqual([
+      'walls',
+      'buildings',
+      'heroes',
+      'laboratory',
+      'pets',
+      'equipment',
+      'helpers',
+      'craftedDefenses',
+    ]);
+    expect(sections.find((section) => section.key === 'buildings')?.summary.levelsRemaining).toBe(
+      2,
+    );
+    expect(
+      sections
+        .filter((section) => section.key !== 'buildings')
+        .every((section) => section.summary.levelsRemaining === 1),
+    ).toBe(true);
   });
 
   it('captures and shares all three exact Flutter exports on native', async () => {
