@@ -25,8 +25,8 @@ import {
   MobileWebImage,
   PillSurface,
   ResponsiveGrid,
-  SearchSortBar,
-  SelectionPickerModal,
+  SearchField,
+  SelectionPicker,
   Surface,
   colorWithAlpha,
   useCKTheme,
@@ -66,7 +66,6 @@ export function ClanStatisticsTab({
   const [loading, setLoading] = useState(stats === null);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<StatsSort>('three');
-  const [showSort, setShowSort] = useState(false);
   const [currentOnly, setCurrentOnly] = useState(false);
   const [currentTownHall, setCurrentTownHall] = useState(false);
   const [rangeMode, setRangeMode] = useState<WarStatsRangeMode>('wars');
@@ -89,6 +88,10 @@ export function ClanStatisticsTab({
     { key: 'missed', label: t('warAttacksMissed') },
   ];
   const sortLabel = sortOptions.find((option) => option.key === sort)?.label ?? sort;
+  const rangeLabel =
+    rangeMode === 'wars'
+      ? t('warFiltersLastXwars', { number: warRange })
+      : t('warStatsLastXDays', { number: dayRange });
   const load = async (mode: WarStatsRangeMode, wars: number, days: number) => {
     setLoading(true);
     try {
@@ -146,49 +149,37 @@ export function ClanStatisticsTab({
   ));
   return (
     <View style={styles.tab}>
-      <SearchSortBar
-        value={query}
-        onChangeText={setQuery}
-        placeholder={t('warStatsSearchPlaceholder')}
-        sortLabel={sortLabel}
-        sortValue={sort}
-        sortIcon={<Star size={18} color={theme.onSurfaceVariant} />}
-        onSortPress={() => setShowSort(true)}
-      />
+      <View testID="clan-war-stats-search-row">
+        <SearchField
+          value={query}
+          onChangeText={setQuery}
+          placeholder={t('warStatsSearchPlaceholder')}
+        />
+      </View>
       <ClanFilterBar
-        actions={
-          <SummaryChip
-            value={
-              rangeMode === 'wars'
-                ? t('warFiltersLastXwars', { number: warRange })
-                : t('warStatsLastXDays', { number: dayRange })
-            }
-            label={t('filtersDateRange')}
-            icon={<SlidersHorizontal size={18} color={theme.primary} />}
-            selected
-            onPress={() => setShowRange(true)}
-          />
-        }
         middle={
-          <SummaryRail>
-            <SummaryChip
-              value={`${overview.activePlayers}`}
-              label={t('clanMembers')}
-              icon={<Users size={18} color={theme.primary} />}
+          <View testID="clan-war-stats-controls-row" style={styles.statsControlPickers}>
+            <SelectionPicker
+              accessibilityLabel={t('filtersDateRange')}
+              externallyManaged
+              fillWidth
+              leading={<SlidersHorizontal size={16} color={theme.onSurfaceVariant} />}
+              onOpen={() => setShowRange(true)}
+              onSelect={() => undefined}
+              options={[{ key: 'range', label: rangeLabel }]}
+              selectedKey="range"
+              title={t('filtersDateRange')}
             />
-            <SummaryChip value={`${overview.attacks}`} label={t('warAttacksTitle')} />
-            <SummaryChip
-              value={overview.averageStars.toFixed(2)}
-              label={t('warStarsAverage')}
-              icon={<Star size={18} color={theme.primary} />}
+            <SelectionPicker
+              accessibilityLabel={sortLabel}
+              fillWidth
+              leading={<Star size={16} color={theme.onSurfaceVariant} />}
+              onSelect={setSort}
+              options={sortOptions}
+              selectedKey={sort}
+              title={sortLabel}
             />
-            <SummaryChip
-              value={`${overview.averageDestruction.toFixed(1)}%`}
-              label={t('warDestructionAverage')}
-              icon={<Percent size={18} color={theme.primary} />}
-            />
-            <SummaryChip value={`${overview.missed}`} label={t('warAttacksMissedShort')} />
-          </SummaryRail>
+          </View>
         }
         chips={
           <>
@@ -223,6 +214,27 @@ export function ClanStatisticsTab({
           </>
         }
       />
+      <View testID="clan-war-stats-summary-row">
+        <SummaryRail>
+          <SummaryChip
+            value={`${overview.activePlayers}`}
+            label={t('clanMembers')}
+            icon={<Users size={18} color={theme.primary} />}
+          />
+          <SummaryChip value={`${overview.attacks}`} label={t('warAttacksTitle')} />
+          <SummaryChip
+            value={overview.averageStars.toFixed(2)}
+            label={t('warStarsAverage')}
+            icon={<Star size={18} color={theme.primary} />}
+          />
+          <SummaryChip
+            value={`${overview.averageDestruction.toFixed(1)}%`}
+            label={t('warDestructionAverage')}
+            icon={<Percent size={18} color={theme.primary} />}
+          />
+          <SummaryChip value={`${overview.missed}`} label={t('warAttacksMissedShort')} />
+        </SummaryRail>
+      </View>
       {loading ? (
         <View style={styles.center}>
           <LoadingIndicator />
@@ -254,17 +266,6 @@ export function ClanStatisticsTab({
           }}
         />
       ) : null}
-      <SelectionPickerModal
-        visible={showSort}
-        title={sortLabel}
-        options={sortOptions}
-        selectedKey={sort}
-        onSelect={(value) => {
-          setSort(value);
-          setShowSort(false);
-        }}
-        onClose={() => setShowSort(false)}
-      />
     </View>
   );
 }
@@ -842,6 +843,7 @@ const styles = StyleSheet.create({
   list: { gap: 8 },
   bold: { fontWeight: '800' },
   grow: { flex: 1 },
+  statsControlPickers: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
   playerCard: { minHeight: 62, flexDirection: 'row', alignItems: 'center', gap: 9, padding: 10 },
   playerTownHall: { width: 42, height: 42, resizeMode: 'contain' },
   starMetric: { alignItems: 'center', minWidth: 26 },

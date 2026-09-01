@@ -3258,6 +3258,7 @@ export function PlayerJoinLeaveTab({
         <View testID="player-join-leave-view-control" style={styles.joinLeaveTrailingControl}>
           <FilterDropdown
             value={view}
+            showIcon={false}
             choices={[
               ['events', t('generalHistory')],
               ['clans', t('playerJoinLeaveClanTotals')],
@@ -3272,9 +3273,8 @@ export function PlayerJoinLeaveTab({
           testID="player-join-leave-filter-control"
           onPress={() => setFiltersExpanded((value) => !value)}
         >
-          <PillSurface style={styles.labeledFilterButton}>
+          <PillSurface style={styles.compactFilterButton}>
             <Filter size={17} color={theme.onSurfaceVariant} />
-            <CKText role="labelMedium">{t('generalFilters')}</CKText>
           </PillSurface>
         </Pressable>
       </View>
@@ -3542,12 +3542,14 @@ function FilterDropdown({
   onSelect,
   fillWidth = false,
   icon,
+  showIcon = true,
 }: {
   value: string;
   choices: readonly (readonly [string, string])[];
   onSelect: (value: string) => void;
   fillWidth?: boolean;
   icon?: ReactNode;
+  showIcon?: boolean;
 }) {
   const theme = useCKTheme();
   const selected = choices.find(([key]) => key === value)?.[1] ?? value;
@@ -3555,7 +3557,7 @@ function FilterDropdown({
     <SelectionPicker
       accessibilityLabel={selected}
       fillWidth={fillWidth}
-      leading={icon ?? <Filter size={16} color={theme.onSurfaceVariant} />}
+      leading={showIcon ? (icon ?? <Filter size={16} color={theme.onSurfaceVariant} />) : undefined}
       onSelect={onSelect}
       options={choices.map(([key, label]) => ({ key, label }))}
       selectedKey={value}
@@ -4324,14 +4326,6 @@ const styles = StyleSheet.create({
   toolbar: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   filterButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   compactFilterButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  labeledFilterButton: {
-    minHeight: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-  },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   trailingChoices: { justifyContent: 'flex-end' },
   fieldGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },

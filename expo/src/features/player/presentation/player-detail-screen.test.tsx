@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor, within } from '@testing-library/react-native';
 import { Button, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -454,8 +454,11 @@ describe('PlayerDetailScreen', () => {
     expect(
       StyleSheet.flatten(screen.getByTestId('player-join-leave-view-control').props.style),
     ).toMatchObject({ marginLeft: 'auto' });
-    expect(screen.getByTestId('player-join-leave-filter-control')).toBeTruthy();
-    expect(screen.getAllByText('Filters').length).toBeGreaterThan(0);
+    const filterControl = screen.getByTestId('player-join-leave-filter-control');
+    expect(filterControl).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Filters' })).toBeTruthy();
+    expect(within(filterControl).queryByText('Filters')).toBeNull();
+    expect(screen.getByText('History')).toBeTruthy();
     await fireEvent.scroll(screen.getByTestId('player-detail-scroll'), {
       nativeEvent: {
         contentOffset: { y: 600 },

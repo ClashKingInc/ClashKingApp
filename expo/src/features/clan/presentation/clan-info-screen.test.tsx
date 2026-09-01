@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor, within } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -198,6 +198,20 @@ describe('ClanInfoScreen', () => {
     expect(
       screen.getByTestId('clan-retained-tab-rankings', { includeHiddenElements: true }),
     ).toBeTruthy();
+  });
+
+  it('separates war stats search, dropdown controls, and summary rows', async () => {
+    const screen = await renderScreen(
+      { clan: testClan, bookmarked: false, activeUserTags: new Set() },
+      actions(),
+      3,
+    );
+
+    expect(screen.getByTestId('clan-war-stats-search-row')).toBeTruthy();
+    const controls = screen.getByTestId('clan-war-stats-controls-row');
+    expect(within(controls).getAllByTestId('destination-picker-control')).toHaveLength(2);
+    expect(screen.getByTestId('clan-filter-trigger')).toBeTruthy();
+    expect(screen.getByTestId('clan-war-stats-summary-row')).toBeTruthy();
   });
 
   it('starts every clan history request on entry instead of waiting for selection', async () => {
