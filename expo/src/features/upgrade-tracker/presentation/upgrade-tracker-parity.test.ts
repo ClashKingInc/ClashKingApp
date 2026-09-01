@@ -20,6 +20,7 @@ import {
   formatTrackerCompletionDate,
   shareTrackerCaptures,
   trackerNativeShareOptions,
+  trackerProgressGraphicAspectRatio,
   trackerProgressSections,
   trackerShareFilename,
 } from './upgrade-tracker-share';
@@ -132,6 +133,30 @@ describe('upgrade tracker parity helpers', () => {
         .filter((section) => section.key !== 'buildings')
         .every((section) => section.summary.levelsRemaining === 1),
     ).toBe(true);
+
+    const lowerTownHall = new UpgradeTrackerSnapshot({
+      tag: '#LOWER',
+      name: 'Lower Town Hall',
+      townHallLevel: 10,
+      builderHallLevel: 6,
+      homeBuilderCount: 5,
+      builderBaseBuilderCount: 1,
+      items: items.filter(
+        (item) =>
+          item.category !== UpgradeCategory.pets &&
+          item.category !== UpgradeCategory.equipment &&
+          item.category !== UpgradeCategory.craftedDefenses,
+      ),
+      collections: [],
+      boosts: new UpgradeBoosts(),
+      events: [],
+      capturedAt: new Date('2026-08-29T12:00:00Z'),
+    });
+    expect(
+      trackerProgressSections(lowerTownHall, UpgradeVillage.home).map(({ key }) => key),
+    ).toEqual(['walls', 'buildings', 'heroes', 'laboratory']);
+    expect(trackerProgressGraphicAspectRatio(7)).toBe(0.64);
+    expect(trackerProgressGraphicAspectRatio(4)).toBeCloseTo(0.85);
   });
 
   it('formats English completion dates with ordinals and shares image-only native payloads', () => {

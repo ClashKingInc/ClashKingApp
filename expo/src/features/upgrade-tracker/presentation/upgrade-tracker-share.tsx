@@ -44,6 +44,11 @@ export interface TrackerProgressSection {
   readonly summary: UpgradeCategorySummary;
 }
 
+export function trackerProgressGraphicAspectRatio(sectionCount: number) {
+  const visibleSections = Math.max(1, Math.min(7, Math.round(sectionCount)));
+  return Math.min(1, 0.64 + (7 - visibleSections) * 0.07);
+}
+
 export function trackerProgressSections(
   snapshot: UpgradeTrackerSnapshot,
   village: UpgradeVillageValue,
@@ -155,6 +160,9 @@ export function UpgradeTrackerShareModal({
   const theme = useCKTheme();
   const { t } = useI18n();
   const title = t('upgradeTrackerShare');
+  const progressVillage = preview === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home;
+  const progressSectionCount =
+    preview === 'collection' ? 0 : trackerProgressSections(snapshot, progressVillage).length;
 
   async function share(all: boolean) {
     if (!boundary.current || sharing) return;
@@ -227,7 +235,9 @@ export function UpgradeTrackerShareModal({
                 shareStyles.graphicBoundary,
                 preview === 'collection'
                   ? shareStyles.collectionGraphicBoundary
-                  : shareStyles.progressGraphicBoundary,
+                  : {
+                      aspectRatio: trackerProgressGraphicAspectRatio(progressSectionCount),
+                    },
               ]}
             >
               {preview === 'collection' ? (
@@ -350,7 +360,9 @@ const ProgressGraphic = forwardRef<
                   </CKText>
                   {section.summary.seconds > 0 ? (
                     <CKText style={shareStyles.categoryTime}>
-                      {formatTrackerDuration(section.summary.seconds)}
+                      {formatTrackerDuration(
+                        section.key === 'laboratory' ? laboratoryTime : section.summary.seconds,
+                      )}
                     </CKText>
                   ) : null}
                   <CKText style={shareStyles.categoryPercent}>
@@ -640,7 +652,6 @@ const shareStyles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   grow: { flex: 1 },
   graphicBoundary: { width: '100%' },
-  progressGraphicBoundary: { aspectRatio: 0.55 },
   collectionGraphicBoundary: { aspectRatio: 1 },
   graphic: { flex: 1, borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
   graphicShade: { backgroundColor: '#050506dc' },
