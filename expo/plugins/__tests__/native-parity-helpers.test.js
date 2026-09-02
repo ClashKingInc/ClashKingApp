@@ -23,6 +23,7 @@ const {
   copyAndroidSplashResources,
   configureAndroidNotificationMetadata,
   configureAndroidPermissions,
+  configureAndroidLauncherAliases,
   configureGeneratedAndroidBuildTypePermissions,
   configureAlternateIconTarget,
   configureIosPlatformPlist,
@@ -708,7 +709,7 @@ test('native bridge exposes dynamic legacy-storage enumeration on both platforms
   }
 });
 
-test('native app icon bridge keeps exact iOS allowlist and Android unsupported behavior', () => {
+test('native app icon bridge keeps the shared iOS and Android allowlist', () => {
   const expoRoot = path.resolve(__dirname, '../..');
   const swift = fs.readFileSync(
     path.join(expoRoot, 'modules/clashking-native/ios/ClashKingNativeModule.swift'),
@@ -723,11 +724,35 @@ test('native app icon bridge keeps exact iOS allowlist and Android unsupported b
   );
   for (const icon of ['AppIconChristmas', 'AppIconBlackWhite', 'AppIconDarkLogo']) {
     assert.match(swift, new RegExp(`"${icon}"`));
+    assert.match(kotlin, new RegExp(`"${icon}"`));
   }
   assert.match(swift, /UIApplication\.shared\.supportsAlternateIcons/);
   assert.match(swift, /UIApplication\.shared\.setAlternateIconName/);
-  assert.match(kotlin, /AsyncFunction\("supportsAlternateIcons"\) \{ false \}/);
-  assert.match(kotlin, /AsyncFunction\("getAlternateIconName"\) \{ null as String\? \}/);
+  assert.match(kotlin, /APP_ICON_ALIASES/);
+  assert.match(kotlin, /setComponentEnabledSetting/);
+});
+
+test('Android launcher aliases preserve other aliases and expose every app icon', () => {
+  const application = {
+    'activity-alias': [{ $: { 'android:name': '.UnrelatedAlias' } }],
+  };
+  configureAndroidLauncherAliases(application, '.MainActivity');
+  assert.equal(application['activity-alias'].length, 5);
+  assert.deepEqual(
+    application['activity-alias']
+      .slice(1)
+      .map((alias) => [
+        alias.$['android:name'],
+        alias.$['android:enabled'],
+        alias.$['android:targetActivity'],
+      ]),
+    [
+      ['.MainActivityDefault', 'true', '.MainActivity'],
+      ['.MainActivityChristmas', 'false', '.MainActivity'],
+      ['.MainActivityBlackWhite', 'false', '.MainActivity'],
+      ['.MainActivityDarkLogo', 'false', '.MainActivity'],
+    ],
+  );
 });
 
 test('native notification debug bridge preserves rich attachment and scheduling contract', () => {

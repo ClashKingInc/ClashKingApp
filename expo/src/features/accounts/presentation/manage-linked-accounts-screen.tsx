@@ -186,6 +186,10 @@ export function ManageLinkedAccountsScreen({
     else setError(t('accountsErrorFailedToAdd'));
   };
   const continueAfterPersist = async () => {
+    if (!hasVerified) {
+      setError(t('homeVerifiedAccountRequiredBody'));
+      return;
+    }
     setContinuing(true);
     try {
       if (orderChanged) {
@@ -378,11 +382,7 @@ export function ManageLinkedAccountsScreen({
         />
         {requiresVerifiedAccount ? (
           <View style={styles.continue}>
-            <PrimaryAction
-              label={continueLabel}
-              disabled={!hasVerified}
-              onPress={() => void continueAfterPersist()}
-            />
+            <PrimaryAction label={continueLabel} onPress={() => void continueAfterPersist()} />
           </View>
         ) : null}
       </View>

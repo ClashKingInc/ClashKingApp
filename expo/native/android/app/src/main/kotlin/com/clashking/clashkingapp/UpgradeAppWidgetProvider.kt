@@ -176,6 +176,15 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
         val compactTaskCapacity = if (isLarge) 0 else taskCapacity(appWidgetManager, appWidgetId)
         val views = RemoteViews(context.packageName, layoutId)
+        views.setInt(
+            R.id.upgrade_root_layout,
+            "setBackgroundResource",
+            if (UpgradeWidgetSelectionStore.transparentBackground(context, appWidgetId)) {
+                android.R.color.transparent
+            } else {
+                R.drawable.upgrade_widget_background
+            }
+        )
         views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context))
         val showBuilderBase = UpgradeWidgetSelectionStore.showBuilderBase(context, appWidgetId)
 

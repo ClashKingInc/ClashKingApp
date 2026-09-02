@@ -30,13 +30,13 @@ describe('static web authentication contract', () => {
   it('preserves the install manifest and iOS PWA chrome', () => {
     const manifest = JSON.parse(readPublicFile('manifest.webmanifest')) as Record<string, unknown>;
     expect(manifest).toMatchObject({
-      name: 'clashkingapp',
-      short_name: 'clashkingapp',
+      name: 'ClashKing',
+      short_name: 'ClashKing',
       start_url: '.',
       display: 'standalone',
       orientation: 'portrait-primary',
-      background_color: '#0175C2',
-      theme_color: '#0175C2',
+      background_color: '#FFFFFF',
+      theme_color: '#000000',
       description:
         'ClashKing helps players and clans track wars, upgrades, rankings, and account progress.',
       prefer_related_applications: false,
@@ -47,7 +47,7 @@ describe('static web authentication contract', () => {
     const document = readFileSync(resolve(process.cwd(), 'src', 'app', '+html.tsx'), 'utf8');
     expect(document).toContain('content="width=device-width, initial-scale=1.0"');
     expect(document).toContain('content="black"');
-    expect(document).toContain('name="theme-color" content="#0175C2"');
+    expect(document).toContain('name="theme-color" content="#000000"');
     expect(document).toContain('<link rel="icon" type="image/png" href="/favicon.png" />');
     expect(document).not.toContain('maximum-scale=1');
     expect(document).not.toContain('black-translucent');

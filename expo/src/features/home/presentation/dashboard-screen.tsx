@@ -3,12 +3,16 @@ import {
   Platform,
   Pressable,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { EyeOff, RefreshCw, UserCircle } from 'lucide-react-native';
+import { EyeOff, GripVertical, RefreshCw, UserCircle } from 'lucide-react-native';
+import {
+  NestableDraggableFlatList,
+  NestableScrollContainer,
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -18,6 +22,7 @@ import {
   homeRecapWidth,
   isDesktopHome,
   visibleHomeCards,
+  type HomeCardId,
   type HomeDashboardActions,
   type HomeDashboardModel,
   type HomePlatform,
@@ -98,30 +103,59 @@ export function DashboardScreen({
           desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
         ]}
       >
-        {cards.map((card, index) => (
-          <View
-            key={card}
-            style={index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined}
-          >
-            {desktop ? (
-              <CKText role="titleMedium" style={styles.sectionTitle}>
-                {card === 'todo'
-                  ? t('todoTitle')
-                  : card === 'ranked'
-                    ? t('rankedLeagueTitle')
-                    : t('drawerUpgradeTracker')}
-              </CKText>
-            ) : null}
-            {desktop ? <View style={styles.sectionGap} /> : null}
-            {card === 'todo' && model.todo ? (
-              <HomeTodoCard model={model.todo} desktop={desktop} actions={actions} />
-            ) : card === 'ranked' && model.ranked ? (
-              <HomeRankedCard model={model.ranked} desktop={desktop} actions={actions} />
-            ) : card === 'upgrade' && model.upgrade ? (
-              <HomeUpgradeCard model={model.upgrade} desktop={desktop} actions={actions} />
-            ) : null}
-          </View>
-        ))}
+        <NestableDraggableFlatList
+          activationDistance={8}
+          data={cards}
+          keyExtractor={(card) => card}
+          onDragEnd={({ data }) => actions.reorderCards(data)}
+          scrollEnabled={false}
+          renderItem={({ item: card, drag, isActive, getIndex }) => {
+            const title = homeCardTitle(card, t);
+            const index = getIndex() ?? 0;
+            return (
+              <ScaleDecorator activeScale={1.015}>
+                <View
+                  style={[
+                    index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
+                    isActive && styles.activeCard,
+                  ]}
+                >
+                  <View style={styles.cardHeading}>
+                    {desktop ? (
+                      <CKText role="titleMedium" style={styles.sectionTitle}>
+                        {title}
+                      </CKText>
+                    ) : (
+                      <View style={styles.grow} />
+                    )}
+                    <Pressable
+                      accessibilityLabel={t('upgradeTrackerPlanReorder', { category: title })}
+                      accessibilityRole="button"
+                      delayLongPress={180}
+                      disabled={isActive}
+                      onLongPress={drag}
+                      style={({ pressed }) => [
+                        styles.dragHandle,
+                        pressed && styles.dragHandlePressed,
+                      ]}
+                      testID={`home-card-drag-${card}`}
+                    >
+                      <GripVertical color={theme.onSurfaceVariant} size={20} />
+                    </Pressable>
+                  </View>
+                  {desktop ? <View style={styles.sectionGap} /> : null}
+                  {card === 'todo' && model.todo ? (
+                    <HomeTodoCard model={model.todo} desktop={desktop} actions={actions} />
+                  ) : card === 'ranked' && model.ranked ? (
+                    <HomeRankedCard model={model.ranked} desktop={desktop} actions={actions} />
+                  ) : card === 'upgrade' && model.upgrade ? (
+                    <HomeUpgradeCard model={model.upgrade} desktop={desktop} actions={actions} />
+                  ) : null}
+                </View>
+              </ScaleDecorator>
+            );
+          }}
+        />
       </View>
     );
   return (
@@ -130,7 +164,7 @@ export function DashboardScreen({
       onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <ScrollView
+      <NestableScrollContainer
         alwaysBounceVertical
         contentContainerStyle={{
           paddingHorizontal: horizontal,
@@ -155,9 +189,15 @@ export function DashboardScreen({
         />
         <View style={{ height: desktop ? 24 : 16 }} />
         {body}
-      </ScrollView>
+      </NestableScrollContainer>
     </SafeAreaView>
   );
+}
+
+function homeCardTitle(card: HomeCardId, t: ReturnType<typeof useI18n>['t']): string {
+  if (card === 'todo') return t('todoTitle');
+  if (card === 'ranked') return t('rankedLeagueTitle');
+  return t('drawerUpgradeTracker');
 }
 
 export function formatLastRefresh(
@@ -216,6 +256,17 @@ const styles = StyleSheet.create({
   },
   refreshGap: { height: 12 },
   recap: { width: '100%' },
+  grow: { flex: 1 },
+  cardHeading: { minHeight: 28, flexDirection: 'row', alignItems: 'center' },
+  dragHandle: {
+    width: 40,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+  },
+  dragHandlePressed: { opacity: 0.56, transform: [{ scale: 0.96 }] },
+  activeCard: { opacity: 0.94 },
   sectionTitle: { fontWeight: '900' },
   sectionGap: { height: ckSpacing.sm },
   mobileGap: { height: 16 },

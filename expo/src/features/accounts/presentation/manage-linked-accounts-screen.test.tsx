@@ -174,8 +174,16 @@ describe('first linked-account continuation', () => {
     await waitFor(() => expect(removeAccount).toHaveBeenCalledWith('#ABC'));
 
     const continueButton = screen.getByRole('button', { name: 'Continue' });
-    expect(continueButton.props.accessibilityState).toEqual(
+    expect(continueButton.props.accessibilityState).not.toEqual(
       expect.objectContaining({ disabled: true }),
+    );
+    fireEvent.press(continueButton);
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'Home needs at least one verified Clash account. Link an account or verify an existing link to continue.',
+        ),
+      ).toBeTruthy(),
     );
     fireEvent.press(screen.getByRole('button', { name: 'Back' }));
     expect(onBack).not.toHaveBeenCalled();

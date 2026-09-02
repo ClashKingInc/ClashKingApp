@@ -63,6 +63,6 @@ describe('ImageAssets', () => {
     );
     expect(ImageAssets.getHeroImage('')).toBe(ImageAssets.defaultImage);
     expect(ImageAssets.getHomeVillageBuildingImage('Town Hall', 0)).toBe(ImageAssets.defaultImage);
-    expect(ImageAssets.clanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC');
+    expect(ImageAssets.clanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC.avif');
   });
 });

@@ -113,7 +113,9 @@ export class ImageAssets {
   static clanBadgeForTag(tag: string): string {
     const trimmed = tag.trim();
     const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
-    return normalized ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}` : '';
+    return normalized
+      ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}.avif`
+      : '';
   }
 
   static clanBadge(badgeUrl: string): string {

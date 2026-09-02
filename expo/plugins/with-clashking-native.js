@@ -17,11 +17,43 @@ const ExpoPlist = require('@expo/plist').default;
 const {
   appendUnique,
   assertExact,
+  copyFileIfChanged,
   copyTreeIfChanged,
   requirePath,
   validateRelativeTarget,
   validateRequiredFiles,
 } = require('./native-parity-helpers');
+
+const ANDROID_LAUNCHER_ALIASES = [
+  {
+    iconName: null,
+    aliasName: '.MainActivityDefault',
+    resourceName: 'app_icon_default',
+    sourcePath: './public/icons/Icon-maskable-512.png',
+    enabled: true,
+  },
+  {
+    iconName: 'AppIconChristmas',
+    aliasName: '.MainActivityChristmas',
+    resourceName: 'app_icon_christmas',
+    sourcePath: './assets/clashking/icons/app_icon_christmas.png',
+    enabled: false,
+  },
+  {
+    iconName: 'AppIconBlackWhite',
+    aliasName: '.MainActivityBlackWhite',
+    resourceName: 'app_icon_black_white',
+    sourcePath: './assets/clashking/icons/app_icon_black_white.png',
+    enabled: false,
+  },
+  {
+    iconName: 'AppIconDarkLogo',
+    aliasName: '.MainActivityDarkLogo',
+    resourceName: 'app_icon_dark_logo',
+    sourcePath: './assets/clashking/icons/app_icon_dark_logo.png',
+    enabled: false,
+  },
+];
 
 function loadContract(projectRoot, contractPath) {
   const resolved = requirePath(
@@ -325,9 +357,60 @@ function withClashKingAndroidLinks(config, contract) {
       ...common,
       data: [androidData(contract.urlScheme, contract.oauthHost, contract.oauthPath)],
     });
-    mainActivity['intent-filter'] = filters;
+    mainActivity['intent-filter'] = filters.filter(
+      (filter) =>
+        !(filter.action || []).some(
+          (action) => action.$?.['android:name'] === 'android.intent.action.MAIN',
+        ),
+    );
+    configureAndroidLauncherAliases(application, mainActivity.$?.['android:name']);
     return mod;
   });
+}
+
+function configureAndroidLauncherAliases(application, targetActivity) {
+  if (!targetActivity) throw new Error('Generated Android launcher activity has no name.');
+  const managedNames = new Set(ANDROID_LAUNCHER_ALIASES.map((option) => option.aliasName));
+  const unmanagedAliases = (application['activity-alias'] || []).filter(
+    (alias) => !managedNames.has(alias.$?.['android:name']),
+  );
+  application['activity-alias'] = [
+    ...unmanagedAliases,
+    ...ANDROID_LAUNCHER_ALIASES.map((option) => ({
+      $: {
+        'android:name': option.aliasName,
+        'android:targetActivity': targetActivity,
+        'android:enabled': String(option.enabled),
+        'android:exported': 'true',
+        'android:icon': `@drawable/${option.resourceName}`,
+        'android:roundIcon': `@drawable/${option.resourceName}`,
+      },
+      'intent-filter': [
+        {
+          action: [{ $: { 'android:name': 'android.intent.action.MAIN' } }],
+          category: [{ $: { 'android:name': 'android.intent.category.LAUNCHER' } }],
+        },
+      ],
+    })),
+  ];
+  return application;
+}
+
+function withAndroidAlternateIconAssets(config, projectRoot) {
+  return withDangerousMod(config, [
+    'android',
+    async (mod) => {
+      const destination = path.join(
+        mod.modRequest.platformProjectRoot,
+        'app/src/main/res/drawable-nodpi',
+      );
+      for (const option of ANDROID_LAUNCHER_ALIASES) {
+        const source = requirePath(projectRoot, option.sourcePath, option.resourceName);
+        copyFileIfChanged(source, path.join(destination, `${option.resourceName}.png`));
+      }
+      return mod;
+    },
+  ]);
 }
 
 function removeUnscopedAndroidScheme(filters, scheme) {
@@ -922,6 +1005,7 @@ function withClashKingNative(config, options = {}) {
   config = withGeneratedAndroidBuildTypePermissions(config);
   config = withAndroidNotificationMetadata(config, contract);
   config = withAndroidSplashResources(config, projectRoot, contract);
+  config = withAndroidAlternateIconAssets(config, projectRoot);
   config = withRNFirebaseCocoaPodsMode(config);
   config = withGeneratedIosPlatformPlist(config, contract);
   if (options.stageAlternateIcons !== false) {
@@ -948,6 +1032,7 @@ module.exports.configureAndroidPermissions = configureAndroidPermissions;
 module.exports.configureGeneratedAndroidBuildTypePermissions =
   configureGeneratedAndroidBuildTypePermissions;
 module.exports.configureIosPlatformPlist = configureIosPlatformPlist;
+module.exports.configureAndroidLauncherAliases = configureAndroidLauncherAliases;
 module.exports.removeUnscopedAndroidScheme = removeUnscopedAndroidScheme;
 module.exports.android12SplashStyleXml = android12SplashStyleXml;
 module.exports.copyAndroidSplashResources = copyAndroidSplashResources;

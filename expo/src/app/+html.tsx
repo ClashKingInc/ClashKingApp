@@ -21,7 +21,7 @@ export default function RootHtml({ children }: { readonly children: ReactNode })
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <meta name="apple-mobile-web-app-title" content="ClashKing" />
-        <meta name="theme-color" content="#0175C2" />
+        <meta name="theme-color" content="#000000" />
         <link rel="apple-touch-icon" href="/icons/Icon-192.png" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />

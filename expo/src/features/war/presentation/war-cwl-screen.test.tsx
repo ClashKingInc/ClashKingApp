@@ -7,8 +7,10 @@ import { I18nProvider } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
 import {
   CwlClan,
+  CwlAttackStats,
   CwlLeague,
   CwlLeagueRound,
+  CwlMember,
   WarAttack,
   WarClan,
   WarCwl,
@@ -16,7 +18,7 @@ import {
   WarMember,
 } from '../models';
 import type { WarPresentationActions, WarPresentationModel } from './contracts';
-import { CwlScreen } from './cwl-screen';
+import { CwlScreen, hasCwlClanStats, hasCwlMemberStats } from './cwl-screen';
 import { WarCwlPresentationRoot } from './war-cwl-screen';
 
 const badge = new ClanBadgeUrls('', '', 'badge.png');
@@ -79,6 +81,34 @@ function renderRoot() {
 }
 
 describe('WarCwlPresentationRoot', () => {
+  it('hides unavailable CWL details until attacks or defenses exist', () => {
+    const pendingMember = new CwlMember('#PENDING', 'Pending', 18);
+    const activeMember = new CwlMember(
+      '#ACTIVE',
+      'Active',
+      18,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      new CwlAttackStats(3, {}, {}, {}, {}, 100, 1, 0),
+    );
+
+    expect(hasCwlMemberStats(pendingMember)).toBe(false);
+    expect(
+      hasCwlClanStats(new CwlClan('#C', 'Clan', badge, 1, 0, 0, 0, 0, [pendingMember], 0, 0, {})),
+    ).toBe(false);
+    expect(hasCwlMemberStats(activeMember)).toBe(true);
+  });
+
   it('shows one clean Flutter message for a clan that is not in war', async () => {
     const inactiveModel: WarPresentationModel = {
       ...model,

@@ -205,7 +205,8 @@ function CwlHero({
           <MobileWebImage imageUrl={ImageAssets.cwlSwordsNoBorder} style={styles.leagueIcon} />
           <View>
             <CKText role="rowTitle" style={styles.white}>
-              {t('cwlRankTitle')} #{clan.rank}/{summary.leagueInfo?.clans.length}
+              {t('cwlRankTitle')}{' '}
+              {clan.rank > 0 ? `#${clan.rank}/${summary.leagueInfo?.clans.length}` : '—'}
             </CKText>
             <CKText style={styles.mutedWhite}>
               {clan.stars} ★ · {formatPercent(clan.destructionPercentageInflicted, 0)}
@@ -506,24 +507,30 @@ function CwlTeams({
                 </CKText>
               </View>
             </Pressable>
-            <View style={styles.townHallStrip}>
-              {Object.entries(clan.townHallLevels)
-                .sort(([left], [right]) => Number(right) - Number(left))
-                .map(([level, count]) => (
-                  <View key={level} style={styles.townHallCount}>
-                    <MobileWebImage
-                      imageUrl={ImageAssets.townHall(Number(level))}
-                      style={styles.townHallIcon}
-                    />
-                    <CKText role="labelMedium">x{count}</CKText>
-                  </View>
-                ))}
-            </View>
-            <FullStatsToggle
-              expanded={expanded.has(clan.tag)}
-              onPress={() => setExpanded(toggleStringSet(expanded, clan.tag))}
-            />
-            {expanded.has(clan.tag) ? <CwlClanFullStats clan={clan} /> : null}
+            {Object.keys(clan.townHallLevels).length ? (
+              <View style={styles.townHallStrip}>
+                {Object.entries(clan.townHallLevels)
+                  .sort(([left], [right]) => Number(right) - Number(left))
+                  .map(([level, count]) => (
+                    <View key={level} style={styles.townHallCount}>
+                      <MobileWebImage
+                        imageUrl={ImageAssets.townHall(Number(level))}
+                        style={styles.townHallIcon}
+                      />
+                      <CKText role="labelMedium">x{count}</CKText>
+                    </View>
+                  ))}
+              </View>
+            ) : null}
+            {hasCwlClanStats(clan) ? (
+              <>
+                <FullStatsToggle
+                  expanded={expanded.has(clan.tag)}
+                  onPress={() => setExpanded(toggleStringSet(expanded, clan.tag))}
+                />
+                {expanded.has(clan.tag) ? <CwlClanFullStats clan={clan} /> : null}
+              </>
+            ) : null}
           </Surface>
         </View>
       ))}
@@ -636,8 +643,10 @@ function CwlMemberCard({
         </View>
         <CwlMemberSortValue member={member} sort={sort} />
       </Pressable>
-      <FullStatsToggle expanded={expanded} onPress={onToggle} />
-      {expanded ? (
+      {hasCwlMemberStats(member) ? (
+        <FullStatsToggle expanded={expanded} onPress={onToggle} />
+      ) : null}
+      {expanded && hasCwlMemberStats(member) ? (
         <View style={styles.memberStats}>
           {attack ? (
             <CwlStatsSection
@@ -738,6 +747,14 @@ function FullStatsToggle({ expanded, onPress }: { expanded: boolean; onPress: ()
       />
     </Pressable>
   );
+}
+
+export function hasCwlMemberStats(member: CwlMember): boolean {
+  return (member.attackStats?.attackCount ?? 0) > 0 || (member.defenseStats?.defenseCount ?? 0) > 0;
+}
+
+export function hasCwlClanStats(clan: CwlClan): boolean {
+  return clan.members.some(hasCwlMemberStats);
 }
 
 function CwlClanFullStats({ clan }: { clan: CwlClan }) {
@@ -912,7 +929,7 @@ function cwlSeasonSubtitle(
 ): string {
   const trimmed = season?.trim();
   if (!trimmed || trimmed === 'unknown') return t('cwlTitle');
-  const match = /^(\d{4})-(\d{2})$/.exec(trimmed);
+  const match = /^(\d{4})-(\d{2})(?:-\d{2})?$/.exec(trimmed);
   if (!match) return t('statsSeasonDate', { date: trimmed });
   const date = new Date(Number(match[1]), Number(match[2]) - 1, 1);
   return t('statsSeasonDate', {

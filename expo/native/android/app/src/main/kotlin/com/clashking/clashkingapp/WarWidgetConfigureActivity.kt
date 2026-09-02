@@ -40,6 +40,13 @@ class WarWidgetConfigureActivity : WidgetConfigureActivity() {
         WarWidgetSelectionStore.saveSelectedTag(this, appWidgetId, tag)
     }
 
+    override fun transparentBackgroundEnabled(appWidgetId: Int): Boolean =
+        WarWidgetSelectionStore.transparentBackground(this, appWidgetId)
+
+    override fun saveTransparentBackgroundEnabled(appWidgetId: Int, enabled: Boolean) {
+        WarWidgetSelectionStore.saveTransparentBackground(this, appWidgetId, enabled)
+    }
+
     override fun widgetProviderClass(): Class<out AppWidgetProvider> =
         WarAppWidgetProvider::class.java
 

@@ -46,6 +46,10 @@ jest.mock('./search-screen', () => {
       }) => void;
       onFiltersExpandedChange: (value: boolean) => void;
       onModeChange: (value: 'players' | 'clans') => void;
+      onOpenResult: (
+        result: Record<string, unknown>,
+        type: 'players' | 'clans',
+      ) => void | Promise<void>;
     }) => (
       <View>
         <Text>{`mode:${props.mode}`}</Text>
@@ -54,6 +58,11 @@ jest.mock('./search-screen', () => {
         </Pressable>
         <Pressable onPress={() => props.onModeChange('clans')}>
           <Text>clans</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => props.onOpenResult({ tag: '#CLAN', name: 'Search Clan' }, 'clans')}
+        >
+          <Text>open-clan</Text>
         </Pressable>
         <Pressable onPress={() => props.onQueryChange('Hero')}>
           <Text>query</Text>
@@ -122,4 +131,20 @@ test('reruns player search with the selected filters', async () => {
   );
   jest.clearAllTimers();
   jest.useRealTimers();
+});
+
+test('opens the clan shell from search data when both detail requests fail', async () => {
+  jest.spyOn(SearchService.prototype, 'loadRecents').mockResolvedValue([]);
+  jest.spyOn(SearchService.prototype, 'loadClanFallback').mockRejectedValue(new Error('blocked'));
+  mockRuntime.clans.getClanAndWarData.mockRejectedValueOnce(new Error('blocked'));
+  mockRuntime.clans.loadJoinLeaveForClan.mockResolvedValueOnce(undefined);
+  const onOpenClan = jest.fn();
+
+  const view = await render(<SearchRoot onOpenPlayer={jest.fn()} onOpenClan={onOpenClan} />);
+  await act(async () => {
+    await fireEvent.press(view.getByText('open-clan'));
+  });
+
+  await waitFor(() => expect(onOpenClan).toHaveBeenCalledTimes(1));
+  expect(onOpenClan.mock.calls[0]?.[0]).toMatchObject({ tag: '#CLAN', name: 'Search Clan' });
 });

@@ -44,6 +44,15 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
+        views.setInt(
+            R.id.root_layout,
+            "setBackgroundResource",
+            if (WarWidgetSelectionStore.transparentBackground(context, appWidgetId)) {
+                android.R.color.transparent
+            } else {
+                R.drawable.war_widget_background
+            }
+        )
         views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId))
 
         val selectedTag = WarWidgetSelectionStore.selectedTag(context, appWidgetId)

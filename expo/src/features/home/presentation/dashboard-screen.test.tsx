@@ -6,6 +6,35 @@ import { CKThemeProvider } from '../../../ui';
 import type { HomeDashboardActions } from './contracts';
 import { DashboardScreen } from './dashboard-screen';
 
+jest.mock('react-native-draggable-flatlist', () => {
+  const ReactModule = jest.requireActual<typeof import('react')>('react');
+  const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
+  return {
+    __esModule: true,
+    ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
+    NestableScrollContainer: ({ children }: { children: React.ReactNode }) =>
+      ReactModule.createElement(MockView, null, children),
+    NestableDraggableFlatList: ({
+      data,
+      renderItem,
+    }: {
+      data: readonly unknown[];
+      renderItem: (parameters: Record<string, unknown>) => React.ReactNode;
+    }) =>
+      ReactModule.createElement(
+        MockView,
+        null,
+        data.map((item, index) =>
+          ReactModule.createElement(
+            ReactModule.Fragment,
+            { key: index },
+            renderItem({ item, drag: jest.fn(), isActive: false, getIndex: () => index }),
+          ),
+        ),
+      ),
+  };
+});
+
 const actions = (): HomeDashboardActions => ({
   refresh: jest.fn(async () => undefined),
   showRefreshError: jest.fn(),
@@ -14,6 +43,7 @@ const actions = (): HomeDashboardActions => ({
   openTodo: jest.fn(),
   openRanked: jest.fn(),
   openUpgradeTracker: jest.fn(),
+  reorderCards: jest.fn(),
 });
 
 describe('DashboardScreen states', () => {

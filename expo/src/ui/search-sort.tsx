@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react-native';
 import {
   Pressable,
   StyleSheet,
@@ -100,6 +101,7 @@ export function SearchSortBar({
               {sortValue}
             </CKText>
           ) : null}
+          <ChevronDown color={theme.onSurfaceVariant} size={16} />
         </GlassSurface>
       </Pressable>
     </View>

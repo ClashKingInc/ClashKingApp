@@ -59,6 +59,7 @@ test('parses official battle resources/share codes and lets history win a merge'
       battleType: 'homeVillage',
       attack: true,
       opponentPlayerTag: '#OTHER',
+      opponentTownHallLevel: 16,
       battleTimestamp: '20260816T120000.000Z',
       lootedResources: [{ name: 'Dark Elixir', amount: 300 }],
       armyShareCode: 'u8x5-2x6s1x1',
@@ -68,6 +69,7 @@ test('parses official battle resources/share codes and lets history win a merge'
       battle_type: 'farming',
       attack: true,
       opponent_tag: '#OTHER',
+      opponent_townhall: 15,
       timestamp: '2026-08-16T12:00:00Z',
       army_counts: { u_5: 8 },
     }),
@@ -78,6 +80,8 @@ test('parses official battle resources/share codes and lets history win a merge'
       historyAvailable: true,
     });
   expect(official.darkElixir).toBe(300);
+  expect(official.opponentTownHall).toBe(17);
+  expect(history.opponentTownHall).toBe(16);
   expect(parseArmyCounts('u8x5-2x6s1x1')).toEqual({ u_5: 8, u_6: 2, s_1: 1 });
   expect(merged.items).toHaveLength(1);
   expect(merged.items[0]?.source).toBe('history');
@@ -175,7 +179,7 @@ test('parses CWL, timer, join-leave, and ranking wire shapes', () => {
     });
   expect(cwl.items[0]?.stars).toBe(3);
   expect(timers.items.map((item) => item.type)).toEqual(['war', 'cwl', 'capital']);
-  expect(join.items[0]?.clan?.badge).toBe('https://badges.clashk.ing/CLAN');
+  expect(join.items[0]?.clan?.badge).toBe('https://badges.clashk.ing/CLAN.avif');
   expect(rankings.homeVillage.globalRank).toBe(42);
 });
 test('player parser accepts leagueTier, builds complete lists, and enriches tracked seasons', () => {

@@ -43,7 +43,7 @@ export class PlayerBattlelogEntry {
       json.attack === true,
       string(json.opponentPlayerTag),
       string(json.opponentName),
-      int(json.opponentTownHallLevel),
+      zeroIndexedTownHall(json.opponentTownHallLevel),
       int(json.stars),
       int(json.destructionPercentage),
       resources.gold ?? 0,
@@ -67,7 +67,7 @@ export class PlayerBattlelogEntry {
       json.attack === true,
       string(json.opponent_tag),
       string(json.opponent_name),
-      int(json.opponent_townhall),
+      zeroIndexedTownHall(json.opponent_townhall),
       int(json.stars),
       int(json.destruction_percentage),
       int(json.gold),
@@ -79,6 +79,12 @@ export class PlayerBattlelogEntry {
       Object.keys(stored).length ? stored : parseArmyCounts(share),
     );
   }
+}
+
+function zeroIndexedTownHall(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 0;
+  const level = Math.trunc(value);
+  return level >= 0 ? level + 1 : 0;
 }
 export class PlayerBattlelogData {
   constructor(

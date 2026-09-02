@@ -35,6 +35,8 @@ abstract class WidgetConfigureActivity : Activity() {
     @get:StringRes protected abstract val automaticText: Int
     @get:StringRes protected abstract val actionText: Int
     @get:StringRes protected open val builderBaseOptionText: Int? = null
+    @get:StringRes protected open val transparentBackgroundOptionText: Int =
+        R.string.widget_configure_transparent_background
 
     protected abstract fun selectedTag(appWidgetId: Int): String?
     protected abstract fun readOptions(): List<WidgetSelectionOption>
@@ -42,6 +44,8 @@ abstract class WidgetConfigureActivity : Activity() {
     protected abstract fun widgetProviderClass(): Class<out AppWidgetProvider>
     protected open fun builderBaseEnabled(appWidgetId: Int): Boolean = true
     protected open fun saveBuilderBaseEnabled(appWidgetId: Int, enabled: Boolean) = Unit
+    protected abstract fun transparentBackgroundEnabled(appWidgetId: Int): Boolean
+    protected abstract fun saveTransparentBackgroundEnabled(appWidgetId: Int, enabled: Boolean)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,6 +152,28 @@ abstract class WidgetConfigureActivity : Activity() {
             }.also(container::addView)
         }
 
+        val transparentBackgroundSwitch = Switch(this).apply {
+            setText(transparentBackgroundOptionText)
+            textSize = 15f
+            setTextColor(getColor(R.color.widget_text))
+            isChecked = transparentBackgroundEnabled(appWidgetId)
+            buttonTintList = null
+            thumbTintList = ColorStateList.valueOf(getColor(R.color.widget_text))
+            trackTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+                intArrayOf(
+                    getColor(R.color.widget_accent),
+                    getColor(R.color.widget_text_secondary)
+                )
+            )
+            setPadding(dp(14), dp(10), dp(14), dp(10))
+            setBackgroundResource(R.drawable.upgrade_widget_config_option)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = dp(10) }
+        }.also(container::addView)
+
         container.addView(Button(this).apply {
             setText(actionText)
             isAllCaps = false
@@ -162,7 +188,8 @@ abstract class WidgetConfigureActivity : Activity() {
             setOnClickListener {
                 saveSelection(
                     tagsByRadioId[radioGroup.checkedRadioButtonId],
-                    builderBaseSwitch?.isChecked ?: true
+                    builderBaseSwitch?.isChecked ?: true,
+                    transparentBackgroundSwitch.isChecked
                 )
             }
             layoutParams = LinearLayout.LayoutParams(
@@ -212,9 +239,14 @@ abstract class WidgetConfigureActivity : Activity() {
         }
     }
 
-    private fun saveSelection(tag: String?, showBuilderBase: Boolean) {
+    private fun saveSelection(
+        tag: String?,
+        showBuilderBase: Boolean,
+        transparentBackground: Boolean
+    ) {
         saveSelectedTag(appWidgetId, tag)
         saveBuilderBaseEnabled(appWidgetId, showBuilderBase)
+        saveTransparentBackgroundEnabled(appWidgetId, transparentBackground)
         sendBroadcast(Intent(this, widgetProviderClass()).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))
