@@ -110,7 +110,7 @@ export function WarCwlRoot(props: WarCwlRootProps) {
         }
       },
       fetchPreviousWar: (clanTag, before) =>
-        WarCwlService.fetchWarDataFromTime(runtime.api, clanTag, before),
+        WarCwlService.fetchWarDataFromTime(runtime.contractApi, clanTag, before),
     }),
     [additionalClanTags, props, runtime, t],
   );
@@ -260,7 +260,7 @@ function useStandaloneWarActions(
         }
       },
       fetchPreviousWar: (tag, before) =>
-        WarCwlService.fetchWarDataFromTime(runtime.api, tag, before),
+        WarCwlService.fetchWarDataFromTime(runtime.contractApi, tag, before),
     }),
     [openClan, openPlayer, runtime, t],
   );

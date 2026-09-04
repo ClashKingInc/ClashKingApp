@@ -118,6 +118,11 @@ export function PlayersRoot(props: PlayersRootProps) {
         await runtime.accounts.fetchAccounts();
       },
       openGameSettings: props.openGameSettings,
+      reorderLinkedPlayers: async (orderedTags) => {
+        const saved = await runtime.accounts.updateAccountOrder(orderedTags);
+        if (!saved) throw new Error('Couldn’t update linked-account order.');
+      },
+      reorderBookmarkedPlayers: (orderedTags) => runtime.bookmarks.reorderPlayers(orderedTags),
       setAccountNotifications: async (playerTag, enabled) => {
         const normalized = canonicalTag(playerTag);
         if (updatingNotificationTags.has(normalized)) return;

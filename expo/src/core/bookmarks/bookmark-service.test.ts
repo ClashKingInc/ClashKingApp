@@ -1,4 +1,5 @@
-import { ApiClient, UnauthorizedException } from '../api/client';
+import { createContractTestApi, readContractRequest } from '../api/contract-api.testing';
+import { UnauthorizedException } from '../api/contract-api';
 import {
   BookmarkedClan,
   BookmarkedPlayer,
@@ -12,11 +13,11 @@ type Handler = (url: URL, init?: RequestInit) => Promise<Response>;
 function harness(handler: Handler) {
   const requests: { url: URL; init?: RequestInit }[] = [];
   const fetchImplementation = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = new URL(String(input));
-    requests.push({ url, init });
-    return handler(url, init);
+    const request = await readContractRequest(input, init);
+    requests.push(request);
+    return handler(request.url, request.init);
   }) as typeof fetch;
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.test/v2',
     proxyUrl: 'https://proxy.test',
     environment: 'development',
@@ -29,13 +30,25 @@ function harness(handler: Handler) {
 const response = (body: unknown, status = 200) =>
   new Response(typeof body === 'string' ? body : JSON.stringify(body), { status });
 
+function bookmark(type: 'player' | 'clan', tag: string, order = 0) {
+  return { type, tag, order_index: order, created_at: '2026-08-01T00:00:00Z' };
+}
+
+function mutationBody(init?: RequestInit) {
+  if (init?.method === 'POST') {
+    const body = JSON.parse(String(init.body)) as { type: 'player' | 'clan'; tag: string };
+    return bookmark(body.type, body.tag);
+  }
+  return { message: 'ok' };
+}
+
 describe('BookmarkService Flutter contract', () => {
   test('loads ordered player and clan caches in parallel with authenticated requests', async () => {
     const { service, requests } = harness(async (url) =>
       response(
         url.searchParams.get('type') === 'player'
-          ? { items: [{ player_tag: '#P2' }, { tag: '#P1' }, 'ignored'] }
-          : { items: [{ clan_tag: '#C1' }] },
+          ? { items: [bookmark('player', '#P2'), bookmark('player', '#P1', 1)] }
+          : { items: [bookmark('clan', '#C1')] },
       ),
     );
     const listener = jest.fn();
@@ -50,12 +63,12 @@ describe('BookmarkService Flutter contract', () => {
       '/v2/links/user%2Fname/bookmarks?type=clan',
       '/v2/links/user%2Fname/bookmarks?type=player',
     ]);
-    expect(requests[0]?.init?.headers).toMatchObject({ Authorization: 'Bearer access' });
+    expect(requests[0]?.init?.headers).toMatchObject({ authorization: 'Bearer access' });
     expect(listener).toHaveBeenCalledTimes(1);
   });
 
   test('treats either 404 collection as empty but rejects malformed and failed payloads', async () => {
-    const missing = harness(async () => response({}, 404)).service;
+    const missing = harness(async () => response({ code: 'not_found', message: 'missing' }, 404)).service;
     missing.setCurrentUserId('u');
     await missing.load();
     expect(missing.players).toEqual([]);
@@ -79,8 +92,8 @@ describe('BookmarkService Flutter contract', () => {
     const { service } = harness(async (url) => {
       const oldUser = url.pathname.includes('/old/');
       if (oldUser) await oldPending;
-      const type = url.searchParams.get('type');
-      return response({ items: [{ tag: `${oldUser ? '#OLD' : '#NEW'}-${type}` }] });
+      const type = url.searchParams.get('type') === 'player' ? 'player' : 'clan';
+      return response({ items: [bookmark(type, `${oldUser ? '#OLD' : '#NEW'}-${type}`)] });
     });
     service.setCurrentUserId('old');
     const oldLoad = service.load();
@@ -93,9 +106,10 @@ describe('BookmarkService Flutter contract', () => {
   });
 
   test('unauthenticated load clears both caches, remains unloaded, and does not notify', async () => {
-    const { service } = harness(async (url) =>
-      response({ items: [{ tag: url.searchParams.get('type') === 'player' ? '#P' : '#C' }] }),
-    );
+    const { service } = harness(async (url) => {
+      const type = url.searchParams.get('type') === 'player' ? 'player' : 'clan';
+      return response({ items: [bookmark(type, type === 'player' ? '#P' : '#C')] });
+    });
     service.setCurrentUserId('u');
     await service.load();
     const listener = jest.fn();
@@ -114,7 +128,7 @@ describe('BookmarkService Flutter contract', () => {
     const { service, requests } = harness(async (url, init) => {
       if (init?.method === 'GET') return response({ items: [] });
       if (init?.method === 'DELETE' && failDelete) return response({}, 500);
-      return response({});
+      return response(mutationBody(init));
     });
     const player = new BookmarkedPlayer('#P', 'P', 16, '', '', '', 0, '', '');
     service.setCurrentUserId('user');
@@ -137,7 +151,7 @@ describe('BookmarkService Flutter contract', () => {
   test('reorder preserves Flutter index validation, order body, and rollback', async () => {
     let failOrder = false;
     const { service, requests } = harness(async (_url, init) =>
-      response({}, init?.method === 'PUT' && failOrder ? 409 : 200),
+      response(mutationBody(init), init?.method === 'PUT' && failOrder ? 409 : 200),
     );
     service.setCurrentUserId('u');
     await service.addClan(new BookmarkedClan('#A', 'A', '', 0, 0));
@@ -156,8 +170,37 @@ describe('BookmarkService Flutter contract', () => {
     expect(requests).toHaveLength(before);
   });
 
+  test('player card order preserves bookmarks hidden by linked-account deduplication', async () => {
+    let failOrder = false;
+    const { service, requests } = harness(async (url, init) => {
+      if (init?.method === 'GET') {
+        return response(
+          url.searchParams.get('type') === 'player'
+            ? { items: [bookmark('player', '#VISIBLE1'), bookmark('player', '#HIDDEN', 1), bookmark('player', '#VISIBLE2', 2)] }
+            : { items: [] },
+        );
+      }
+      return response(mutationBody(init), failOrder ? 409 : 200);
+    });
+    service.setCurrentUserId('u');
+    await service.load();
+
+    await service.reorderPlayers(['#VISIBLE2', '#VISIBLE1']);
+    expect(service.players.map((item) => item.tag)).toEqual(['#VISIBLE2', '#HIDDEN', '#VISIBLE1']);
+    expect(JSON.parse(String(requests.at(-1)?.init?.body))).toEqual({
+      type: 'player',
+      ordered_tags: ['#VISIBLE2', '#HIDDEN', '#VISIBLE1'],
+    });
+
+    failOrder = true;
+    await expect(service.reorderPlayers(['#VISIBLE1', '#VISIBLE2'])).rejects.toBeInstanceOf(
+      BookmarkHttpException,
+    );
+    expect(service.players.map((item) => item.tag)).toEqual(['#VISIBLE2', '#HIDDEN', '#VISIBLE1']);
+  });
+
   test('reorder preserves Flutter removal-before-range-error quirk at original length', async () => {
-    const { service } = harness(async () => response({}));
+    const { service } = harness(async (_url, init) => response(mutationBody(init)));
     service.setCurrentUserId('u');
     await service.addClan(new BookmarkedClan('#A', 'A', '', 0, 0));
     await service.addClan(new BookmarkedClan('#B', 'B', '', 0, 0));

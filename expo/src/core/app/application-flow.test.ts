@@ -28,4 +28,26 @@ describe('application route decisions', () => {
       }),
     ).toEqual({ kind: 'error', networkError: true });
   });
+
+  it('maps a forced update to a non-bypassable update scene', () => {
+    expect(
+      sceneForStartupResult({
+        destination: 'update',
+        authenticated: true,
+        hasVerifiedAccount: false,
+        failure: null,
+        networkError: false,
+        requestPushPermission: false,
+        update: {
+          minimumVersion: '0.4.0',
+          storeUrl: 'https://apps.apple.com/app/id123',
+          message: 'A newer ClashKing build is required.',
+        },
+      }),
+    ).toEqual({
+      kind: 'update',
+      storeUrl: 'https://apps.apple.com/app/id123',
+      message: 'A newer ClashKing build is required.',
+    });
+  });
 });

@@ -2,6 +2,14 @@ import type { ExpoConfig, ConfigContext } from 'expo/config';
 
 const version = process.env.CK_APP_VERSION?.trim() || '0.3.5';
 const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '25';
+const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
+const updateChannel = process.env.CK_RELEASE_TRACK?.trim() || 'production';
+const updateCertificatePath = process.env.CK_UPDATES_CERTIFICATE_PATH?.trim();
+const explicitRuntimeVersion = process.env.CK_RUNTIME_VERSION?.trim();
+
+if (updatesEnabled && !updateCertificatePath) {
+  throw new Error('CK_UPDATES_CERTIFICATE_PATH is required when release updates are enabled.');
+}
 
 if (!/^[1-9]\d*$/.test(buildNumber)) {
   throw new Error('CK_BUILD_NUMBER must be a positive integer string.');
@@ -19,8 +27,23 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     scheme: 'clashking',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
-    runtimeVersion: { policy: 'fingerprint' },
-    updates: { enabled: false },
+    runtimeVersion: explicitRuntimeVersion || { policy: 'fingerprint' },
+    updates: updatesEnabled
+      ? {
+          enabled: true,
+          url:
+            process.env.CK_UPDATES_URL?.trim() || 'https://api.clashk.ing/v2/app/updates/manifest',
+          requestHeaders: { 'expo-channel-name': updateChannel },
+          checkAutomatically: 'ON_LOAD',
+          fallbackToCacheTimeout: 0,
+          ...(updateCertificatePath
+            ? {
+                codeSigningCertificate: updateCertificatePath,
+                codeSigningMetadata: { keyid: 'main', alg: 'rsa-v1_5-sha256' as const },
+              }
+            : {}),
+        }
+      : { enabled: false },
     ios: {
       bundleIdentifier: 'com.clashking.apps',
       appleTeamId: 'MZYXD43RX5',
@@ -31,6 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       googleServicesFile: './config/firebase/GoogleService-Info.plist',
       infoPlist: {
         CADisableMinimumFrameDurationOnPhone: true,
+        ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
           'ClashKing uses photo library access only when you choose to share generated progress images with a compatible app.',
         UIFileSharingEnabled: true,
@@ -78,6 +102,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     plugins: [
       'expo-router',
       'expo-localization',
+      'expo-image',
       '@react-native-firebase/app',
       '@react-native-firebase/messaging',
       [

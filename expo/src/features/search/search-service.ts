@@ -1,6 +1,14 @@
-import type { ApiClient } from '../../core/api/client';
 import {
-  clanSearchQuerySuffix,
+  ProxyClanEndpoint,
+  ProxyClanSearchEndpoint,
+  ProxyLeagueTiersEndpoint,
+  ProxyLocationsEndpoint,
+  RecentSearchesEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../core/api/contract-api';
+import {
   decodeRecentSearches,
   decodeSearchLeagues,
   decodeSearchLocations,
@@ -12,34 +20,48 @@ import {
   type SearchLocation,
 } from './models';
 
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
-
 export class SearchService {
-  constructor(private readonly api: ApiClient) {}
+  constructor(private readonly api: ContractApiService) {}
 
   async loadRecents(userId: string | null): Promise<readonly RecentSearchItem[]> {
     if (!userId) return [];
     try {
-      const response = await this.api.get(`/links/${encodeURIComponent(userId)}/searches`, {
-        requiresAuth: true,
-        acceptedStatuses: ALL_HTTP_STATUSES,
-      });
-      if (response.status !== 200) return [];
-      return decodeRecentSearches(JSON.parse(response.bodyText));
+      return decodeRecentSearches(
+        await Effect.runPromise(
+          this.api.execute(RecentSearchesEndpoint, { path: { userId }, query: {}, body: {} }),
+        ),
+      );
     } catch {
       return [];
     }
   }
 
   async searchClans(query: string, filters: ClanSearchFilters): Promise<readonly JsonRecord[]> {
-    const endpoint = `/clans?name=${encodeURIComponent(query)}${clanSearchQuerySuffix(filters)}&limit=20&memberList=false`;
-    const response = await this.api.proxyGet(endpoint, {
-      timeoutMs: 10_000,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-    });
-    if (response.status !== 200) return [];
-    const decoded: unknown = JSON.parse(response.bodyText);
-    return isRecord(decoded) && Array.isArray(decoded.items) ? decoded.items.filter(isRecord) : [];
+    try {
+      const decoded = await Effect.runPromise(
+        this.api.execute(
+          ProxyClanSearchEndpoint,
+          {
+            path: {},
+            body: {},
+            query: {
+              name: query,
+              limit: 20,
+              memberList: false,
+              ...(filters.warFrequency === null ? {} : { warFrequency: filters.warFrequency }),
+              ...(filters.locationId === null ? {} : { locationId: filters.locationId }),
+              ...(filters.minMembers === null ? {} : { minMembers: filters.minMembers }),
+              ...(filters.maxMembers === null ? {} : { maxMembers: filters.maxMembers }),
+              ...(filters.minClanLevel === null ? {} : { minClanLevel: filters.minClanLevel }),
+            },
+          },
+          { timeoutMs: 10_000 },
+        ),
+      );
+      return decoded.items;
+    } catch {
+      return [];
+    }
   }
 
   /** Mirrors SearchPage's direct official-proxy fallback when clan enrichment fails. */
@@ -47,19 +69,24 @@ export class SearchService {
     tag: string,
     extraHeaders?: Readonly<Record<string, string>>,
   ): Promise<JsonRecord> {
-    const response = await this.api.proxyGet(`/clans/${encodeURIComponent(tag)}`, {
-      headers: extraHeaders,
-      timeoutMs: 10_000,
-    });
-    const decoded: unknown = JSON.parse(response.bodyText);
+    const decoded: unknown = await Effect.runPromise(
+      this.api.execute(
+        ProxyClanEndpoint,
+        { path: { clanTag: tag }, query: {}, body: {} },
+        { headers: extraHeaders, timeoutMs: 10_000 },
+      ),
+    );
     if (!isRecord(decoded)) throw new TypeError('Invalid clan response');
     return decoded;
   }
 
   async loadLocations(): Promise<readonly SearchLocation[]> {
     try {
-      const response = await this.api.proxyGet('/locations');
-      return decodeSearchLocations(JSON.parse(response.bodyText));
+      return decodeSearchLocations(
+        await Effect.runPromise(
+          this.api.execute(ProxyLocationsEndpoint, { path: {}, query: {}, body: {} }),
+        ),
+      );
     } catch {
       return [];
     }
@@ -67,8 +94,11 @@ export class SearchService {
 
   async loadLeagues(): Promise<readonly SearchLeague[]> {
     try {
-      const response = await this.api.proxyGet('/leaguetiers');
-      return decodeSearchLeagues(JSON.parse(response.bodyText));
+      return decodeSearchLeagues(
+        await Effect.runPromise(
+          this.api.execute(ProxyLeagueTiersEndpoint, { path: {}, query: {}, body: {} }),
+        ),
+      );
     } catch {
       return [];
     }

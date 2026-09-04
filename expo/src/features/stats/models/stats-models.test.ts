@@ -26,8 +26,7 @@ describe('stats models', () => {
         250,
       ).toJson(),
     ).toEqual({
-      start_date: '2026-08-01',
-      end_date: '2026-08-30',
+      dates: { start_date: '2026-08-01', end_date: '2026-08-30' },
       townhall_level: 18,
       opponent_townhall_level: 17,
       equal_townhalls: false,

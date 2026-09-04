@@ -1,7 +1,7 @@
 import * as Linking from 'expo-linking';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
-import { EmailVerificationRequiredException } from '../api/client';
+import { EmailVerificationRequiredException } from '../api/contract-api';
 import { canonicalTag } from '../domain/tags';
 import { reportException } from '../observability/observability';
 import {
@@ -32,7 +32,7 @@ import {
   initializeApplication,
   initializeAuthenticatedPush,
 } from './startup-coordinator';
-import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
+import { ForcedUpdateScreen, StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
 import { StartupLoadingScreen } from './startup-loading';
 
 const DISCORD_URL = 'https://discord.gg/clashking';
@@ -102,6 +102,7 @@ export function ApplicationRoot() {
         auth: runtime.auth,
         accounts: runtime.accounts,
         gameData: runtime.gameData,
+        featureFlags: runtime.featureFlags,
         push: runtime.push,
         initializeAuthenticatedData: async () => {
           runtime.achievements.bindSession(runtime.auth.state.currentUser?.userId ?? null);
@@ -281,6 +282,14 @@ export function ApplicationRoot() {
       break;
     case 'home':
       content = <AuthenticatedRoot />;
+      break;
+    case 'update':
+      content = (
+        <ForcedUpdateScreen
+          message={scene.message}
+          onUpdate={() => void openExternal(scene.storeUrl)}
+        />
+      );
       break;
     case 'maintenance':
       content = <MaintenanceScreen onRetry={() => void runStartup()} />;

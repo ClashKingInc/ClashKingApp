@@ -1,4 +1,7 @@
-import { ResponseFormatException, type ApiClient } from '../../../core/api/client';
+import { AchievementsCheckEndpoint } from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import {
   ACHIEVEMENT_CATALOG_FALLBACK,
   isAchievementId,
@@ -22,7 +25,7 @@ export class AchievementsRepository {
   private sessionGeneration = 0;
   private sessionUserId: string | null = null;
 
-  constructor(private readonly api: Pick<ApiClient, 'requestRecord'>) {}
+  constructor(private readonly api: ContractApiService) {}
 
   get snapshot(): AchievementsSnapshot {
     return this.snapshotValue;
@@ -67,16 +70,14 @@ export class AchievementsRepository {
   }
 
   private fetchCatalog(): Promise<Record<string, unknown>> {
-    return this.api.requestRecord('/achievements/check', {
-      method: 'POST',
-      body: {},
-      requiresAuth: true,
-    });
+    return Effect.runPromise(
+      this.api.execute(AchievementsCheckEndpoint, { path: {}, query: {}, body: {} }),
+    );
   }
 
   private replaceFromResponse(response: Record<string, unknown>, preserveRefreshing = false): void {
     if (!Array.isArray(response.items)) {
-      throw new ResponseFormatException('Achievement response is missing items.');
+      throw new TypeError('Achievement response is missing items.');
     }
     const remoteById = new Map<AchievementId, Achievement>();
     for (const rawItem of response.items) {

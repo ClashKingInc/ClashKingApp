@@ -1,9 +1,13 @@
 import {
-  ApiClient,
-  ApiException,
-  ResponseFormatException,
-  ServerException,
-} from '../../../core/api/client';
+  ProxyCurrentLeagueGroupEndpoint,
+  ProxyCurrentWarEndpoint,
+  ProxyCwlWarEndpoint,
+  WarBasicEndpoint,
+  WarPreviousEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import {
   CwlLeague,
   WarCwl,
@@ -16,7 +20,6 @@ import {
   type JsonRecord,
 } from '../models';
 
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
 const MAX_BATCH_SIZE = 100;
 
 interface WarLoadOutcome {
@@ -37,7 +40,7 @@ export class WarCwlService {
   private requestSequence = 0;
   private disposed = false;
 
-  constructor(private readonly api: ApiClient) {}
+  constructor(private readonly api: ContractApiService) {}
 
   subscribe(listener: () => void): () => void {
     if (this.disposed) return () => undefined;
@@ -102,17 +105,21 @@ export class WarCwlService {
   }
 
   static async fetchWarDataFromTime(
-    api: ApiClient,
+    api: ContractApiService,
     tag: string,
     end: Date,
   ): Promise<WarInfo | null> {
     const endTime = formatClashTime(end);
-    const endpoint = `/war/${encodeURIComponent(tag)}/previous/${encodeURIComponent(endTime)}`;
-    const response = await api.get(endpoint, { acceptedStatuses: ALL_HTTP_STATUSES });
-    if (response.status === 404) return null;
-    if (response.status !== 200) return null;
-    const data = decodeRecord(response.bodyText, endpoint);
-    return WarInfo.fromJson(data);
+    const response = await Effect.runPromise(
+      api.executeStatus(WarPreviousEndpoint, {
+        path: { clanTag: tag, endTime },
+        query: {},
+        body: {},
+      }),
+    );
+    return response.ok
+      ? WarInfo.fromJson({ ...response.value, war_tag: response.value.tag })
+      : null;
   }
 
   private async loadWarData(tags: readonly string[], requestId: number): Promise<WarLoadOutcome> {
@@ -146,15 +153,10 @@ export class WarCwlService {
   }
 
   private async resolveCurrentWar(clanTag: string): Promise<WarCwl> {
-    const encoded = encodeURIComponent(clanTag);
-    const endpoint = `/war/${encoded}/basic`;
-    const response = await this.api.get(endpoint, { acceptedStatuses: ALL_HTTP_STATUSES });
-    const basic =
-      response.status === 200
-        ? decodeNullableRecord(response.bodyText, endpoint)
-        : response.status === 404
-          ? null
-          : unexpected(response.status, endpoint);
+    const response = await Effect.runPromise(
+      this.api.executeStatus(WarBasicEndpoint, { path: { clanTag }, query: {}, body: {} }),
+    );
+    const basic = response.ok ? response.value : null;
 
     if (basic && Object.keys(basic).length) {
       const type = string(basic.type).toLowerCase();
@@ -199,26 +201,22 @@ export class WarCwlService {
   }
 
   private async fetchRegularWar(clanTag: string): Promise<WarInfo | null> {
-    const endpoint = `/clans/${encodeURIComponent(clanTag)}/currentwar`;
-    const response = await this.api.proxyGet(endpoint, { acceptedStatuses: ALL_HTTP_STATUSES });
-    if (response.status === 403) return new WarInfo('accessDenied');
-    if (response.status === 404) return null;
-    if (response.status !== 200) return unexpected(response.status, endpoint);
-    const data = decodeNullableRecord(response.bodyText, endpoint);
-    if (!data) return null;
-    if (data.reason === 'accessDenied') return new WarInfo('accessDenied');
-    return WarInfo.fromJson(data);
+    const response = await Effect.runPromise(
+      this.api.executeStatus(ProxyCurrentWarEndpoint, { path: { clanTag }, query: {}, body: {} }),
+    );
+    if (!response.ok) return response.status === 403 ? new WarInfo('accessDenied') : null;
+    return WarInfo.fromJson(response.value);
   }
 
   private async loadCwl(clanTag: string, preferredWarTag?: string | null): Promise<WarCwl | null> {
-    const endpoint = `/clans/${encodeURIComponent(clanTag)}/currentwar/leaguegroup`;
-    const response = await this.api.proxyGet(endpoint, { acceptedStatuses: ALL_HTTP_STATUSES });
-    const group =
-      response.status === 200
-        ? decodeNullableRecord(response.bodyText, endpoint)
-        : response.status === 403 || response.status === 404
-          ? null
-          : unexpected(response.status, endpoint);
+    const response = await Effect.runPromise(
+      this.api.executeStatus(ProxyCurrentLeagueGroupEndpoint, {
+        path: { clanTag },
+        query: {},
+        body: {},
+      }),
+    );
+    const group = response.ok ? response.value : null;
 
     if (preferredWarTag) {
       const war = await this.fetchCwlWar(preferredWarTag);
@@ -244,13 +242,11 @@ export class WarCwlService {
   }
 
   private async fetchCwlWar(warTag: string): Promise<WarInfo | null> {
-    const endpoint = `/clanwarleagues/wars/${encodeURIComponent(warTag)}`;
-    const response = await this.api.proxyGet(endpoint, { acceptedStatuses: ALL_HTTP_STATUSES });
-    if (response.status === 404) return null;
-    if (response.status !== 200) return unexpected(response.status, endpoint);
-    const data = decodeNullableRecord(response.bodyText, endpoint);
-    if (!data) return null;
-    return WarInfo.fromJson({ ...data, war_tag: warTag, warType: 'cwl' });
+    const response = await Effect.runPromise(
+      this.api.executeStatus(ProxyCwlWarEndpoint, { path: { warTag }, query: {}, body: {} }),
+    );
+    if (!response.ok) return null;
+    return WarInfo.fromJson({ ...response.value, war_tag: warTag, warType: 'cwl' });
   }
 
   private applyWarBatch(summaries: readonly WarCwl[], requestId: number): boolean {
@@ -318,28 +314,6 @@ function parseWarSummary(value: unknown): WarCwl | null {
   } catch {
     return null;
   }
-}
-
-function unexpected(status: number, endpoint: string): never {
-  const message = `Unexpected API status ${status} for ${endpoint}.`;
-  if (status >= 500) throw new ServerException(message, status);
-  throw new ApiException(message, status);
-}
-
-function decodeNullableRecord(body: string, endpoint: string): JsonRecord | null {
-  let value: unknown;
-  try {
-    value = JSON.parse(body);
-  } catch {
-    throw new ResponseFormatException(`Invalid JSON response for ${endpoint}.`);
-  }
-  return isRecord(value) ? value : null;
-}
-
-function decodeRecord(body: string, endpoint: string): JsonRecord {
-  const value = decodeNullableRecord(body, endpoint);
-  if (!value) throw new ResponseFormatException(`Invalid response type for ${endpoint}.`);
-  return value;
 }
 
 function formatClashTime(value: Date): string {

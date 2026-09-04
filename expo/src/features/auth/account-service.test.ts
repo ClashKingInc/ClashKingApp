@@ -1,6 +1,7 @@
-import { ApiClient } from '../../core/api/client';
+import { createContractTestApi, readContractRequest } from '../../core/api/contract-api.testing';
 import type { StringStore } from '../../services/storage/auth-storage';
 import { AccountHttpException, CocAccountService } from './account-service';
+import { ResponseDecodeError } from '@clashking/api-client';
 
 class MemoryPreferences implements StringStore {
   readonly values = new Map<string, string>();
@@ -25,16 +26,17 @@ function harness(
   reportError = jest.fn(),
 ) {
   const requests: Request[] = [];
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.example/v2',
     environment: 'production',
     tokenProvider: { getAccessToken: async () => 'access' },
     fetchImplementation: jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = new URL(String(input));
-      const body = init?.body ? JSON.parse(String(init.body)) : undefined;
+      const parsed = await readContractRequest(input, init);
+      const url = parsed.url;
+      const body = parsed.init.body ? JSON.parse(String(parsed.init.body)) : undefined;
       const request = {
         path: `${url.pathname}${url.search}`,
-        method: init?.method ?? 'GET',
+        method: parsed.init.method!,
         body,
       };
       requests.push(request);
@@ -50,6 +52,11 @@ function harness(
 function account(playerTag: string, overrides: Record<string, unknown> = {}) {
   return {
     player_tag: playerTag,
+    tag: playerTag,
+    user_id: 'user/id',
+    order_index: 0,
+    added_at: '2026-01-01T00:00:00Z',
+    last_login: null,
     hidden: false,
     is_verified: false,
     name: `Player ${playerTag}`,
@@ -97,6 +104,7 @@ describe('CocAccountService', () => {
       }
       return new Response(
         JSON.stringify({
+          message: 'Linked',
           account: account(String(requestBody.player_tag), {
             is_verified: requestBody.api_token !== undefined,
           }),
@@ -131,6 +139,7 @@ describe('CocAccountService', () => {
         postComplete = true;
         return new Response(
           JSON.stringify({
+            message: 'Linked',
             account: account('#ONE', { name: 'Fresh Name', townHallLevel: 18 }),
           }),
         );
@@ -158,7 +167,16 @@ describe('CocAccountService', () => {
     [404, 'Account not found'],
     [500, 'Failed to add account. Please try again.'],
   ])('maps add-with-token HTTP %i to a stable message', async (status, message) => {
-    const { service } = harness(() => new Response('{}', { status }));
+    const { service } = harness(
+      () =>
+        new Response(
+          JSON.stringify({
+            code: status === 403 ? 'forbidden' : status === 404 ? 'not_found' : 'internal_error',
+            message: 'Error',
+          }),
+          { status },
+        ),
+    );
     await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
       success: false,
       message,
@@ -172,7 +190,11 @@ describe('CocAccountService', () => {
           JSON.stringify({ items: [account('#ONE'), account('#TWO'), account('#THREE')] }),
         );
       }
-      return new Response('{}');
+      if (method === 'POST')
+        return new Response(JSON.stringify({ message: 'Linked', account: account('#ONE') }));
+      if (method === 'PATCH')
+        return new Response(JSON.stringify(account('#TWO', { hidden: true })));
+      return new Response('{"message":"ok"}');
     });
     await service.fetchAccounts();
     const listener = jest.fn();
@@ -209,12 +231,14 @@ describe('CocAccountService', () => {
     expect(reportError).toHaveBeenCalledTimes(1);
 
     service.setCurrentUserId('user');
-    await expect(service.fetchAccounts()).rejects.toThrow('Invalid CoC accounts payload');
-    expect(reportError).toHaveBeenLastCalledWith('accounts.fetch', expect.any(TypeError));
+    await expect(service.fetchAccounts()).rejects.toBeInstanceOf(ResponseDecodeError);
+    expect(reportError).toHaveBeenLastCalledWith('accounts.fetch', expect.any(ResponseDecodeError));
   });
 
   test('maps verification errors without reporting expected authentication failures', async () => {
-    const { service, reportError } = harness(() => new Response('{}', { status: 403 }));
+    const { service, reportError } = harness(
+      () => new Response('{"code":"forbidden","message":"Invalid token"}', { status: 403 }),
+    );
     await expect(service.verifyAccount('#ONE', 'bad')).resolves.toEqual({
       success: false,
       message: 'Invalid API token for this account',

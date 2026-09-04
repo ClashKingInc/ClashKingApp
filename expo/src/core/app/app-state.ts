@@ -58,10 +58,14 @@ export function createAppStateStore(
             : resolveFlutterStartupLocale(storedLocale);
         const themePreference = parseThemePreference(storedTheme);
 
-        await Promise.all([
+        // Keep the update-policy refresh inside the initialization lifetime,
+        // including when a translation request fails first.
+        const loaded = await Promise.allSettled([
           dependencies.gameData.loadTranslationsForLocale(appLocale(locale)),
           dependencies.featureFlags.refresh().catch(() => undefined),
         ]);
+        const failed = loaded.find((result) => result.status === 'rejected');
+        if (failed?.status === 'rejected') throw failed.reason;
         set({
           locale,
           themePreference,

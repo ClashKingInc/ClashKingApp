@@ -1,3 +1,11 @@
+export type UpgradeJsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | readonly UpgradeJsonValue[]
+  | { readonly [key: string]: UpgradeJsonValue };
+
 export const UpgradeVillage = { home: 'home', builderBase: 'builderBase' } as const;
 export type UpgradeVillageValue = (typeof UpgradeVillage)[keyof typeof UpgradeVillage];
 
@@ -392,7 +400,7 @@ export class UpgradePlanPreferences {
     }
     return 999;
   }
-  toJson(): Record<string, unknown> {
+  toJson(): Record<string, UpgradeJsonValue> {
     return {
       home_goal: this.homeGoal,
       builder_base_goal: this.builderBaseGoal,

@@ -12,6 +12,10 @@ import {
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Bookmark, RefreshCw, UserCircle } from 'lucide-react-native';
+import DraggableFlatList, {
+  ScaleDecorator,
+  type RenderItemParams,
+} from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
@@ -31,6 +35,7 @@ import type { Player } from '../models/player';
 import {
   buildPlayerRosters,
   normalizeRosterTag,
+  type PlayerRosterEntry,
   type PlayerRosterMode,
   type PlayersPresentationActions,
   type PlayersPresentationModel,
@@ -92,12 +97,11 @@ export function PlayersScreen({
     }
   };
   const entries = mode === 'linked' ? rosters.linked : rosters.bookmarked;
-  const cards = entries.map((entry) => {
+  const cardForEntry = (entry: PlayerRosterEntry, drag?: () => void, dragTestID?: string) => {
     if (entry.kind === 'linked') {
       const key = normalizeRosterTag(entry.player.tag);
       return (
         <PlayerDataCard
-          key={key}
           player={entry.player}
           link={entry.link}
           options={model.optionsByTag[key] ?? new PlayerCardOptions()}
@@ -107,13 +111,14 @@ export function PlayersScreen({
           notificationUpdating={model.updatingNotificationTags.has(key)}
           actions={actions}
           onVerify={() => setVerification(entry.player)}
+          onLongPress={drag}
+          dragTestID={dragTestID}
         />
       );
     }
     if (entry.player)
       return (
         <PlayerDataCard
-          key={entry.bookmark.tag}
           player={entry.player}
           bookmarked
           options={new PlayerCardOptions()}
@@ -123,81 +128,125 @@ export function PlayersScreen({
           notificationUpdating={false}
           actions={actions}
           onVerify={() => undefined}
+          onLongPress={drag}
+          dragTestID={dragTestID}
         />
       );
     return (
       <BookmarkedPlayerCard
-        key={entry.bookmark.tag}
         bookmark={entry.bookmark}
         onPress={() => void openBookmark(entry.bookmark.tag)}
+        onLongPress={drag}
+        dragTestID={dragTestID}
       />
     );
-  });
+  };
+  const reorder = ({ data, from, to }: { data: PlayerRosterEntry[]; from: number; to: number }) => {
+    if (from === to) return;
+    const operation =
+      mode === 'linked'
+        ? actions.reorderLinkedPlayers(data.map(playerRosterEntryTag))
+        : actions.reorderBookmarkedPlayers(data.map(playerRosterEntryTag));
+    void operation.catch(() => actions.showMessage(t('accountsErrorFailedToUpdateOrder')));
+  };
+  const listHeader = (
+    <>
+      {model.lastRefresh ? (
+        <View style={styles.refresh}>
+          <RefreshCw size={12} color={colorWithAlpha(theme.onSurface, 0.6)} />
+          <CKText role="bodySmall" style={{ color: colorWithAlpha(theme.onSurface, 0.6) }}>
+            {t('generalLastRefresh', {
+              time: formatLastRefresh(model.lastRefresh, t, locale),
+            })}
+          </CKText>
+        </View>
+      ) : null}
+      <View style={styles.segmentWrap}>
+        <PlayerRosterControl
+          mode={mode}
+          linkedLabel={t('playersLinked')}
+          bookmarkedLabel={t('playersBookmarked')}
+          isRtl={isRtl}
+          onChange={setMode}
+        />
+      </View>
+    </>
+  );
+  const emptyRoster = (
+    <EmptyState
+      title={
+        mode === 'linked' ? t('dashboardNoLinkedAccountsTitle') : t('playersNoBookmarkedTitle')
+      }
+      body={mode === 'linked' ? t('playersNoLinkedBody') : t('playersNoBookmarkedBody')}
+      icon={
+        mode === 'linked' ? (
+          <UserCircle color={theme.onSurfaceVariant} />
+        ) : (
+          <Bookmark color={theme.onSurfaceVariant} />
+        )
+      }
+      actionLabel={mode === 'linked' ? t('drawerManageAccounts') : undefined}
+      onAction={mode === 'linked' ? actions.openManageAccounts : undefined}
+      style={styles.empty}
+    />
+  );
+  const refreshControl = (
+    <RefreshControl
+      refreshing={refreshing}
+      onRefresh={() => void refresh()}
+      tintColor={theme.primary}
+    />
+  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <ScrollView
-        alwaysBounceVertical
-        contentContainerStyle={{
-          paddingHorizontal: horizontal,
-          paddingBottom: desktop ? 32 : insets.bottom + 96,
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => void refresh()}
-            tintColor={theme.primary}
-          />
-        }
-      >
-        {model.lastRefresh ? (
-          <View style={styles.refresh}>
-            <RefreshCw size={12} color={colorWithAlpha(theme.onSurface, 0.6)} />
-            <CKText role="bodySmall" style={{ color: colorWithAlpha(theme.onSurface, 0.6) }}>
-              {t('generalLastRefresh', {
-                time: formatLastRefresh(model.lastRefresh, t, locale),
-              })}
-            </CKText>
-          </View>
-        ) : null}
-        <View style={styles.segmentWrap}>
-          <PlayerRosterControl
-            mode={mode}
-            linkedLabel={t('playersLinked')}
-            bookmarkedLabel={t('playersBookmarked')}
-            isRtl={isRtl}
-            onChange={setMode}
-          />
-        </View>
-        {entries.length === 0 ? (
-          <EmptyState
-            title={
-              mode === 'linked'
-                ? t('dashboardNoLinkedAccountsTitle')
-                : t('playersNoBookmarkedTitle')
-            }
-            body={mode === 'linked' ? t('playersNoLinkedBody') : t('playersNoBookmarkedBody')}
-            icon={
-              mode === 'linked' ? (
-                <UserCircle color={theme.onSurfaceVariant} />
-              ) : (
-                <Bookmark color={theme.onSurfaceVariant} />
-              )
-            }
-            actionLabel={mode === 'linked' ? t('drawerManageAccounts') : undefined}
-            onAction={mode === 'linked' ? actions.openManageAccounts : undefined}
-            style={styles.empty}
-          />
-        ) : desktop ? (
-          <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
-            {cards}
-          </ResponsiveGrid>
-        ) : (
-          <View style={styles.list}>{cards}</View>
-        )}
-      </ScrollView>
+      {desktop ? (
+        <ScrollView
+          alwaysBounceVertical
+          contentContainerStyle={{ paddingHorizontal: horizontal, paddingBottom: 32 }}
+          refreshControl={refreshControl}
+        >
+          {listHeader}
+          {entries.length === 0 ? (
+            emptyRoster
+          ) : (
+            <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
+              {entries.map((entry) => (
+                <View key={playerRosterEntryTag(entry)}>{cardForEntry(entry)}</View>
+              ))}
+            </ResponsiveGrid>
+          )}
+        </ScrollView>
+      ) : (
+        <DraggableFlatList
+          activationDistance={8}
+          alwaysBounceVertical
+          data={entries}
+          key={`${mode}-roster`}
+          keyExtractor={playerRosterEntryTag}
+          onDragEnd={reorder}
+          contentContainerStyle={{
+            paddingHorizontal: horizontal,
+            paddingBottom: insets.bottom + 96,
+          }}
+          ListHeaderComponent={listHeader}
+          ListEmptyComponent={emptyRoster}
+          refreshControl={refreshControl}
+          renderItem={(params: RenderItemParams<PlayerRosterEntry>) => (
+            <ScaleDecorator activeScale={1.015}>
+              <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+                {cardForEntry(
+                  params.item,
+                  params.drag,
+                  `player-roster-card-${playerRosterEntryTag(params.item)}`,
+                )}
+              </View>
+            </ScaleDecorator>
+          )}
+        />
+      )}
       <Modal
         transparent
         visible={loadingBookmark}
@@ -231,6 +280,10 @@ export function PlayersScreen({
       />
     </SafeAreaView>
   );
+}
+
+function playerRosterEntryTag(entry: PlayerRosterEntry): string {
+  return normalizeRosterTag(entry.kind === 'linked' ? entry.player.tag : entry.bookmark.tag);
 }
 
 function PlayerRosterControl({
@@ -385,7 +438,8 @@ const styles = StyleSheet.create({
   segmentIndicator: { position: 'absolute', left: 2, top: 2, bottom: 2, borderRadius: 14 },
   segmentItem: { flex: 1, alignItems: 'center', justifyContent: 'center', borderRadius: 14 },
   segmentLabel: { width: '100%', textAlign: 'center', fontSize: 13, fontWeight: '600' },
-  list: { gap: 10 },
+  cardItem: { marginBottom: 10 },
+  activeCard: { opacity: 0.96 },
   empty: { padding: 0 },
   modalOverlay: {
     flex: 1,

@@ -1,4 +1,11 @@
-import { type ApiClient, type ApiResponse } from '../../../core/api/client';
+import {
+  NotificationAccountPutEndpoint,
+  NotificationPreferencesGetEndpoint,
+  NotificationPreferencesPutEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import {
   createDefaultNotificationPreferences,
   parseLocalNotificationPreferences,
@@ -11,8 +18,6 @@ import {
 } from '../../../core/dto/notification-preferences';
 import { LEGACY_NOTIFICATION_PREFERENCE_KEYS, STORAGE_KEYS } from '../../../core/storage/storage';
 import type { StringStore } from '../../../services/storage/auth-storage';
-
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
 
 export const NOTIFICATION_PREFERENCES_ENDPOINT = '/notifications/preferences';
 
@@ -27,7 +32,7 @@ export class NotificationPreferencesHttpError extends Error {
 }
 
 export interface NotificationPreferencesServiceOptions {
-  readonly api: ApiClient;
+  readonly api: ContractApiService;
   readonly deviceIdProvider: () => Promise<string>;
   readonly environmentProvider: () => string;
   readonly preferences: StringStore;
@@ -42,13 +47,8 @@ export class NotificationPreferencesService {
       this.options.deviceIdProvider(),
       Promise.resolve(this.options.environmentProvider()),
     ]);
-    const query = new URLSearchParams({ device_id: deviceId, environment });
-    const response = await this.rawRequest(
-      `${NOTIFICATION_PREFERENCES_ENDPOINT}?${query.toString()}`,
-      'GET',
-    );
-    this.expectSuccess(response, 'load notification preferences');
-    const settings = parseNotificationPreferences(parseResponseJson(response));
+    const response = await Effect.runPromise(this.options.api.execute(NotificationPreferencesGetEndpoint, { path: {}, query: { device_id: deviceId, environment: environment === 'production' ? 'production' : 'sandbox' }, body: {} }, this.executeOptions()));
+    const settings = parseNotificationPreferences(response);
     await this.persistBestEffort(settings);
     return settings;
   }
@@ -58,13 +58,8 @@ export class NotificationPreferencesService {
       this.options.deviceIdProvider(),
       Promise.resolve(this.options.environmentProvider()),
     ]);
-    const response = await this.rawRequest(
-      NOTIFICATION_PREFERENCES_ENDPOINT,
-      'PUT',
-      serializeNotificationPreferencesForPut(settings, deviceId, environment),
-    );
-    this.expectSuccess(response, 'save notification preferences');
-    const saved = parseNotificationPreferences(parseResponseJson(response));
+    const response = await Effect.runPromise(this.options.api.execute(NotificationPreferencesPutEndpoint, { path: {}, query: {}, body: serializeNotificationPreferencesForPut(settings, deviceId, environment === 'production' ? 'production' : 'sandbox') }, this.executeOptions()));
+    const saved = parseNotificationPreferences(response);
     await this.persistBestEffort(saved);
     return saved;
   }
@@ -75,10 +70,8 @@ export class NotificationPreferencesService {
   }
 
   async setAccountEnabled(playerTag: string, enabled: boolean): Promise<NotificationAccount> {
-    const endpoint = `/notifications/accounts/${encodeURIComponent(playerTag)}`;
-    const response = await this.rawRequest(endpoint, 'PUT', { enabled });
-    this.expectSuccess(response, 'update account notifications');
-    return parseNotificationAccount(parseResponseJson(response));
+    const response = await Effect.runPromise(this.options.api.execute(NotificationAccountPutEndpoint, { path: { playerTag }, query: {}, body: { enabled } }, this.executeOptions()));
+    return parseNotificationAccount(response);
   }
 
   async loadLocal(): Promise<NotificationPreferences> {
@@ -114,35 +107,8 @@ export class NotificationPreferencesService {
     }
   }
 
-  private rawRequest(
-    endpoint: string,
-    method: 'GET' | 'PUT',
-    body?: unknown,
-  ): Promise<ApiResponse> {
+  private executeOptions() {
     const override = this.options.pushApiV2BaseUrlOverride?.replace(/\/$/, '');
-    return this.options.api.request(endpoint, {
-      method,
-      body,
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-      ...(override ? { url: `${override}${endpoint}` } : undefined),
-    });
-  }
-
-  private expectSuccess(response: ApiResponse, operation: string): void {
-    if (response.status < 200 || response.status >= 300) {
-      throw new NotificationPreferencesHttpError(
-        response.status,
-        `Failed to ${operation} (${response.status})`,
-      );
-    }
-  }
-}
-
-function parseResponseJson(response: ApiResponse): unknown {
-  try {
-    return JSON.parse(response.bodyText) as unknown;
-  } catch (error) {
-    throw new TypeError('Invalid notification preferences response', { cause: error });
+    return override ? { baseUrl: override.replace(/\/v2\/?$/, '') } : undefined;
   }
 }

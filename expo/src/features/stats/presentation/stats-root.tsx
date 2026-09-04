@@ -10,7 +10,10 @@ export interface StatsRootProps {
 
 export function StatsRoot({ onBack }: StatsRootProps) {
   const runtime = useAppRuntime();
-  const provider = useMemo(() => new StatsProvider(new StatsRepository(runtime.api)), [runtime]);
+  const provider = useMemo(
+    () => new StatsProvider(new StatsRepository(runtime.contractApi)),
+    [runtime],
+  );
   const [, setRevision] = useState(0);
   useEffect(() => {
     const unsubscribe = provider.subscribe(() => setRevision((value) => value + 1));

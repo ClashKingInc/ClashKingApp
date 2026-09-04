@@ -176,6 +176,7 @@ describe('PlayerDetailScreen', () => {
     const screenActions = actions();
     const service = {
       apiV2Url: 'https://api.test',
+      downloadWarStatsExport: jest.fn(),
       loadCachedClanTag: jest.fn(async () => '#CACHED'),
       loadPlayerBattlelog: jest.fn(async () => undefined),
       loadPlayerActivity: jest.fn(async () => undefined),
@@ -215,6 +216,7 @@ describe('PlayerDetailScreen', () => {
     screenActions.toggleBookmark = jest.fn(() => pending);
     const service = {
       apiV2Url: 'https://api.test',
+      downloadWarStatsExport: jest.fn(),
       loadCachedClanTag: jest.fn(async () => ''),
       loadPlayerBattlelog: jest.fn(async () => undefined),
       loadPlayerActivity: jest.fn(async () => undefined),

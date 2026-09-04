@@ -1,4 +1,19 @@
-import type { ApiClient } from '../../../core/api/client';
+import {
+  ClanCapitalLeagueCountsEndpoint,
+  ClanLocationCountsEndpoint,
+  CwlLeagueCountsEndpoint,
+  PlayerLeagueTierCountsEndpoint,
+  PlayerTownhallCountsEndpoint,
+  StatsArmiesEndpoint,
+  StatsCwlEndpoint,
+  StatsItemsEndpoint,
+  StatsRankedEndpoint,
+  StatsOverviewEndpoint,
+  StatsWarEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import {
   decodeStatsGroupedCounts,
   StatsArmiesResponse,
@@ -27,34 +42,48 @@ export interface StatsRepositoryContract {
 }
 
 export class StatsRepository implements StatsRepositoryContract {
-  constructor(private readonly api: ApiClient) {}
+  constructor(private readonly contractApi: ContractApiService) {}
 
   async loadOverview(dates: StatsDateFilter): Promise<StatsOverviewResponse> {
-    const query = new URLSearchParams({
-      start_date: formatDate(dates.start),
-      end_date: formatDate(dates.end),
-    });
     return StatsOverviewResponse.fromJson(
-      await this.api.requestRecord(`/stats/overview?${query}`, { requiresAuth: false }),
+      await Effect.runPromise(
+        this.contractApi.execute(StatsOverviewEndpoint, {
+          path: {},
+          query: { start_date: formatDate(dates.start), end_date: formatDate(dates.end) },
+          body: {},
+        }),
+      ),
     );
   }
   async loadPlayerCounts(): Promise<StatsPlayerCountsResponse> {
     const responses = await Promise.all([
-      this.api.requestRecord('/counts/players/town-halls', { requiresAuth: false }),
-      this.api.requestRecord('/counts/players/builder-halls', { requiresAuth: false }),
-      this.api.requestRecord('/counts/players/league-tiers', { requiresAuth: false }),
+      Effect.runPromise(
+        this.contractApi.execute(PlayerTownhallCountsEndpoint, { path: {}, query: {}, body: {} }),
+      ),
+      Effect.runPromise(
+        this.contractApi.execute(PlayerLeagueTierCountsEndpoint, { path: {}, query: {}, body: {} }),
+      ),
     ]);
     return new StatsPlayerCountsResponse(
       decodeStatsGroupedCounts(responses[0], 'townhall_level'),
-      decodeStatsGroupedCounts(responses[1], 'builderhall_level'),
-      decodeStatsGroupedCounts(responses[2], 'league_tier_id'),
+      decodeStatsGroupedCounts(responses[1], 'league_tier_id'),
     );
   }
   async loadClanCounts(): Promise<StatsClanCountsResponse> {
     const responses = await Promise.all([
-      this.api.requestRecord('/counts/clans/locations', { requiresAuth: false }),
-      this.api.requestRecord('/counts/clans/cwl-leagues', { requiresAuth: false }),
-      this.api.requestRecord('/counts/clans/capital-leagues', { requiresAuth: false }),
+      Effect.runPromise(
+        this.contractApi.execute(ClanLocationCountsEndpoint, { path: {}, query: {}, body: {} }),
+      ),
+      Effect.runPromise(
+        this.contractApi.execute(CwlLeagueCountsEndpoint, { path: {}, query: {}, body: {} }),
+      ),
+      Effect.runPromise(
+        this.contractApi.execute(ClanCapitalLeagueCountsEndpoint, {
+          path: {},
+          query: {},
+          body: {},
+        }),
+      ),
     ]);
     return new StatsClanCountsResponse(
       decodeStatsGroupedCounts(responses[0], 'location_id'),
@@ -63,23 +92,59 @@ export class StatsRepository implements StatsRepositoryContract {
     );
   }
   async loadArmies(request: StatsArmiesQuery): Promise<StatsArmiesResponse> {
-    return StatsArmiesResponse.fromJson(await this.query('/stats/armies', request.toJson()));
+    return StatsArmiesResponse.fromJson(
+      await Effect.runPromise(
+        this.contractApi.execute(StatsArmiesEndpoint, {
+          path: {},
+          query: {},
+          body: request.toJson(),
+        }),
+      ),
+    );
   }
   async loadItems(request: StatsItemsQuery): Promise<StatsItemsResponse> {
-    return StatsItemsResponse.fromJson(await this.query('/stats/items', request.toJson()));
+    return StatsItemsResponse.fromJson(
+      await Effect.runPromise(
+        this.contractApi.execute(StatsItemsEndpoint, {
+          path: {},
+          query: {},
+          body: request.toJson(),
+        }),
+      ),
+    );
   }
   async loadRanked(request: StatsRankedQuery): Promise<StatsPerformanceResponse> {
-    return StatsPerformanceResponse.fromJson(await this.query('/stats/ranked', request.toJson()));
+    return StatsPerformanceResponse.fromJson(
+      await Effect.runPromise(
+        this.contractApi.execute(StatsRankedEndpoint, {
+          path: {},
+          query: {},
+          body: request.toJson(),
+        }),
+      ),
+    );
   }
   async loadWar(request: StatsWarQuery): Promise<StatsPerformanceResponse> {
-    return StatsPerformanceResponse.fromJson(await this.query('/stats/war', request.toJson()));
+    return StatsPerformanceResponse.fromJson(
+      await Effect.runPromise(
+        this.contractApi.execute(StatsWarEndpoint, {
+          path: {},
+          query: {},
+          body: request.toJson(),
+        }),
+      ),
+    );
   }
   async loadCwl(request: StatsCwlQuery): Promise<StatsPerformanceResponse> {
-    return StatsPerformanceResponse.fromJson(await this.query('/stats/cwl', request.toJson()));
-  }
-
-  private query(path: string, body: Record<string, unknown>): Promise<Record<string, unknown>> {
-    return this.api.requestRecord(path, { method: 'QUERY', body, requiresAuth: false });
+    return StatsPerformanceResponse.fromJson(
+      await Effect.runPromise(
+        this.contractApi.execute(StatsCwlEndpoint, {
+          path: {},
+          query: {},
+          body: request.toJson(),
+        }),
+      ),
+    );
   }
 }
 

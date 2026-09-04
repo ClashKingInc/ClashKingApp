@@ -46,6 +46,8 @@ export interface PlayersPresentationActions {
   ): Promise<{ success: boolean; message: string | null }>;
   refreshAccounts(): Promise<void>;
   openGameSettings(): void;
+  reorderLinkedPlayers(orderedTags: readonly string[]): Promise<void>;
+  reorderBookmarkedPlayers(orderedTags: readonly string[]): Promise<void>;
   setAccountNotifications(playerTag: string, enabled: boolean): Promise<void>;
   setAccountHidden(playerTag: string, hidden: boolean): Promise<void>;
   setCardOption(

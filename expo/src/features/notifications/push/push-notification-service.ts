@@ -1,4 +1,10 @@
-import type { ApiEnvironment, ApiRequestOptions } from '../../../core/api/client';
+import {
+  NotificationDeviceDeleteEndpoint,
+  NotificationDeviceRegisterEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ApiEnvironment } from '../../../core/api/contract-api';
 import { STORAGE_KEYS } from '../../../core/storage/storage';
 import type {
   PushAuthorizationStatus,
@@ -12,7 +18,6 @@ import type {
 } from './contracts';
 
 export const PUSH_DEVICE_ENDPOINT = '/notifications/devices';
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
 const SUPPORTED_ROUTES = new Set<SupportedPushRoute>([
   '/support-creator',
   '/settings/support',
@@ -251,13 +256,15 @@ export class PushNotificationService {
         locale: this.options.locale(),
         authorizationStatus: await this.options.runtime.getAuthorizationStatus(),
       });
-      const response = await this.request('POST', payload);
-      if (response.status >= 200 && response.status < 300) {
-        await this.options.preferences.setItem(STORAGE_KEYS.pushLastRegistrationToken, token);
-        this.options.log?.('Push device token registered.');
-      } else {
-        this.options.log?.(`Push token registration failed: ${response.status}`);
-      }
+      await Effect.runPromise(
+        this.options.api.execute(
+          NotificationDeviceRegisterEndpoint,
+          { path: {}, query: {}, body: payload },
+          this.executeOptions(),
+        ),
+      );
+      await this.options.preferences.setItem(STORAGE_KEYS.pushLastRegistrationToken, token);
+      this.options.log?.('Push device token registered.');
     } catch (error) {
       // Registration remains non-fatal while the API endpoint is unavailable.
       await this.report('register', error);
@@ -271,15 +278,21 @@ export class PushNotificationService {
 
     let unregistered = false;
     try {
-      const query = new URLSearchParams({
-        device_id: await this.options.tokenService.getDeviceId(),
-      });
-      const response = await this.request(
-        'DELETE',
-        undefined,
-        `${PUSH_DEVICE_ENDPOINT}?${query.toString()}`,
+      await Effect.runPromise(
+        this.options.api.execute(
+          NotificationDeviceDeleteEndpoint,
+          {
+            path: {},
+            query: {
+              device_id: await this.options.tokenService.getDeviceId(),
+              environment: this.environment,
+            },
+            body: {},
+          },
+          this.executeOptions(),
+        ),
       );
-      unregistered = response.status >= 200 && response.status < 300;
+      unregistered = true;
     } catch (error) {
       await this.report('unregister', error);
     } finally {
@@ -399,16 +412,9 @@ export class PushNotificationService {
     return this.options.preferences.setItem(STORAGE_KEYS.pushFcmToken, token);
   }
 
-  private request(method: 'POST' | 'DELETE', body?: unknown, endpoint = PUSH_DEVICE_ENDPOINT) {
+  private executeOptions() {
     const override = this.options.pushApiV2BaseUrlOverride?.replace(/\/$/, '');
-    const requestOptions: ApiRequestOptions = {
-      method,
-      ...(body === undefined ? undefined : { body }),
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-      ...(override ? { url: `${override}${endpoint}` } : undefined),
-    };
-    return this.options.api.request(endpoint, requestOptions);
+    return override ? { baseUrl: override.replace(/\/v2\/?$/, '') } : undefined;
   }
 
   private setResult(result: PushNotificationSetupResult) {

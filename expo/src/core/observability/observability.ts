@@ -99,7 +99,7 @@ export interface HttpBreadcrumbInput {
   readonly method: string;
   readonly statusCode: number;
   readonly durationMs: number;
-  readonly responseBodySize: number;
+  readonly responseBodySize?: number;
 }
 
 export function addHttpBreadcrumb(input: HttpBreadcrumbInput): void {
@@ -112,7 +112,9 @@ export function addHttpBreadcrumb(input: HttpBreadcrumbInput): void {
       method: input.method,
       status_code: input.statusCode,
       request_duration: input.durationMs,
-      response_body_size: input.responseBodySize,
+      ...(input.responseBodySize === undefined
+        ? {}
+        : { response_body_size: input.responseBodySize }),
     },
   });
 }

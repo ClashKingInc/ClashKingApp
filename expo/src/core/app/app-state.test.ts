@@ -16,6 +16,41 @@ class MemoryStore implements StringStore {
 }
 
 describe('app state parity', () => {
+  it('waits for remote policy before rejecting a failed translation load', async () => {
+    const failure = new Error('Translation unavailable');
+    let finishRefresh!: () => void;
+    const refresh = new Promise<void>((resolve) => {
+      finishRefresh = resolve;
+    });
+    const store = createAppStateStore({
+      preferences: new MemoryStore(),
+      gameData: {
+        loadTranslationsForLocale: async () => {
+          throw failure;
+        },
+      },
+      featureFlags: {
+        refresh: () => refresh,
+        isEnabled: (_key, fallback) => fallback ?? true,
+      },
+      systemLocale: () => 'en',
+    });
+    let settled = false;
+    const initialization = store
+      .getState()
+      .initialize()
+      .catch((error: unknown) => {
+        settled = true;
+        return error;
+      });
+    for (let turn = 0; turn < 10; turn += 1) await Promise.resolve();
+    const settledBeforeRefresh = settled;
+    finishRefresh();
+    expect(await initialization).toBe(failure);
+    expect(settledBeforeRefresh).toBe(false);
+    expect(store.getState().initialized).toBe(false);
+  });
+
   it('loads persisted locale/theme, translations, and remote flags once', async () => {
     const preferences = new MemoryStore();
     await preferences.setItem('languageCode', 'fr');

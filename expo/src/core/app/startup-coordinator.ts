@@ -1,4 +1,5 @@
 import type { StoreApi } from 'zustand/vanilla';
+import { ApiResponseError, TransportError } from '@clashking/api-client';
 
 import type { AuthService } from '../../features/auth/auth-service';
 import type { CocAccountService } from '../../features/auth/account-service';
@@ -6,6 +7,8 @@ import { initializeAccountsForCurrentAuth, type StartupResult } from '../../feat
 import type { PushNotificationService } from '../../features/notifications/push';
 import type { FlutterPreferenceMigration } from '../../services/storage/auth-storage';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
+import type { RequiredAppUpdate } from '../feature-flags/feature-flags';
+import type { RemoteFeatureFlagService } from '../feature-flags/remote-feature-flag-service';
 import type { GameDataService } from '../game-data';
 import type { AppStateSnapshot } from './app-state';
 
@@ -14,6 +17,15 @@ export type AppStartupResult =
       readonly failure: null;
       readonly requestPushPermission: boolean;
     })
+  | {
+      readonly destination: 'update';
+      readonly authenticated: boolean;
+      readonly hasVerifiedAccount: false;
+      readonly failure: null;
+      readonly networkError: false;
+      readonly requestPushPermission: false;
+      readonly update: RequiredAppUpdate;
+    }
   | {
       readonly destination: 'maintenance' | 'error';
       readonly authenticated: boolean;
@@ -29,6 +41,7 @@ export interface StartupCoordinatorDependencies {
   readonly auth: AuthService;
   readonly accounts: CocAccountService;
   readonly gameData: Pick<GameDataService, 'loadFreshGameData'>;
+  readonly featureFlags: Pick<RemoteFeatureFlagService, 'requiredUpdate'>;
   readonly push: Pick<
     PushNotificationService,
     'supportsPushNotifications' | 'initialize' | 'registerCurrentDeviceToken'
@@ -49,20 +62,44 @@ export async function initializeApplication(
     // storage bridge problem cannot prevent login or an existing session.
     dependencies.reportError?.('startup.preferenceMigration', error);
   }
+  let bootstrapFailure: unknown;
   try {
-    await Promise.all([
+    // A rejected auth/game-data bootstrap must not outrun the minimum-version
+    // policy loaded by app state and route an old binary into Login or Home.
+    const bootstrap = await Promise.allSettled([
       dependencies.auth.initializeAuth(),
       dependencies.gameData.loadFreshGameData(),
       dependencies.appState.getState().initialize(),
     ]);
+    const failed = bootstrap.find((result) => result.status === 'rejected');
+    if (failed?.status === 'rejected') throw failed.reason;
   } catch (error) {
+    bootstrapFailure = error;
+  }
+
+  const update = dependencies.featureFlags.requiredUpdate();
+  if (update !== null) {
+    return {
+      destination: 'update',
+      authenticated: dependencies.auth.canUseApp,
+      hasVerifiedAccount: false,
+      failure: null,
+      networkError: false,
+      requestPushPermission: false,
+      update,
+    };
+  }
+
+  // A known mandatory update wins over recoverable error screens, whose
+  // logout action otherwise permits returning to Login on an outdated binary.
+  if (bootstrapFailure !== undefined) {
     const isNetworkError = dependencies.isNetworkError ?? defaultIsNetworkError;
     const isMaintenanceError = dependencies.isMaintenanceError ?? defaultIsMaintenanceError;
-    if (isNetworkError(error) || isMaintenanceError(error)) {
-      dependencies.reportError?.('startup.bootstrap', error);
-      return failureResult(error, dependencies.auth.canUseApp, {
-        network: isNetworkError(error),
-        maintenance: isMaintenanceError(error),
+    if (isNetworkError(bootstrapFailure) || isMaintenanceError(bootstrapFailure)) {
+      dependencies.reportError?.('startup.bootstrap', bootstrapFailure);
+      return failureResult(bootstrapFailure, dependencies.auth.canUseApp, {
+        network: isNetworkError(bootstrapFailure),
+        maintenance: isMaintenanceError(bootstrapFailure),
       });
     }
     // AuthService clears an expired/revoked session before rethrowing. Flutter
@@ -141,6 +178,7 @@ function failureResult(
 }
 
 export function defaultIsNetworkError(error: unknown): boolean {
+  if (error instanceof TransportError) return true;
   const text = String(error).toLowerCase();
   return (
     text.includes('network') ||
@@ -155,6 +193,7 @@ export function defaultIsNetworkError(error: unknown): boolean {
 }
 
 export function defaultIsMaintenanceError(error: unknown): boolean {
+  if (error instanceof ApiResponseError) return error.status === 503 || error.status === 500;
   const text = String(error);
   return text.includes('503') || text.includes('500');
 }

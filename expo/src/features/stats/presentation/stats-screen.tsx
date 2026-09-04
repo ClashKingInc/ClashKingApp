@@ -286,13 +286,6 @@ function PlayersSection({ data }: { data: StatsPlayerCountsResponse }) {
         label={distributionLeagueLabel}
         color="#E7B946"
       />
-      <DistributionCard
-        title={t('statsBuilderHallDistribution')}
-        subtitle={t('statsTrackedPlayers')}
-        values={data.builderHalls}
-        label={(id) => `BH${id ?? '?'}`}
-        color="#7A5AF8"
-      />
       <ComingSoon title={t('statsEquipmentAdoption')} />
       <ComingSoon title={t('statsExperienceDistribution')} />
     </Section>

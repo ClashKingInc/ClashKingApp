@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Menu, Search } from 'lucide-react-native';
+import { Search } from 'lucide-react-native';
 
 import { CKText, GlassSurface, colorWithAlpha, useCKTheme, useCKThemeMode } from '../ui';
 
@@ -43,12 +43,6 @@ export function MobileHeader({
             style={({ pressed }) => [styles.profileButton, pressed && styles.pressed]}
           >
             <View style={styles.avatar}>{avatar}</View>
-            <View
-              pointerEvents="none"
-              style={[styles.menuBadge, { backgroundColor: theme.primary }]}
-            >
-              <Menu color={theme.onPrimary} size={11} strokeWidth={3} />
-            </View>
           </Pressable>
         </GlassSurface>
         {onSearch && (
@@ -96,16 +90,6 @@ const styles = StyleSheet.create({
   },
   profileGlass: { width: 46, height: 46 },
   profileButton: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  menuBadge: {
-    position: 'absolute',
-    right: -2,
-    bottom: -2,
-    width: 19,
-    height: 19,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   avatar: {
     width: 36,
     height: 36,

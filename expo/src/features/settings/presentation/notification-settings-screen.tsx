@@ -21,7 +21,6 @@ import {
   HeartHandshake,
   Megaphone,
   Plus,
-  Shield,
   Swords,
   Trash2,
 } from 'lucide-react-native';
@@ -55,18 +54,6 @@ const categoryRows: readonly {
   description: MessageKey;
   icon: (color: string) => ReactNode;
 }[] = [
-  {
-    category: 'legendAttacks',
-    title: 'notifGroupLegendAttacks',
-    description: 'notifLegendAttacksDescription',
-    icon: (color) => <Swords color={color} size={22} />,
-  },
-  {
-    category: 'legendDefenses',
-    title: 'notifGroupLegendDefenses',
-    description: 'notifLegendDefensesDescription',
-    icon: (color) => <Shield color={color} size={22} />,
-  },
   {
     category: 'warAttacks',
     title: 'notifGroupWarAttacks',

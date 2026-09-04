@@ -1,8 +1,6 @@
 export type NotificationAccountSource = 'verified' | 'bookmarked';
 
 export type NotificationCategory =
-  | 'legendAttacks'
-  | 'legendDefenses'
   | 'warAttacks'
   | 'warState'
   | 'warReminders'
@@ -21,8 +19,6 @@ export interface NotificationPreferences {
   readonly deviceId: string;
   readonly environment: string;
   readonly notificationsEnabled: boolean;
-  readonly legendAttacks: boolean;
-  readonly legendDefenses: boolean;
   readonly warAttacks: boolean;
   readonly warState: boolean;
   readonly warReminders: boolean;
@@ -35,15 +31,6 @@ export interface NotificationPreferences {
   readonly accounts: readonly NotificationAccount[];
 }
 
-/**
- * Known persistence mismatch: the live transport schema exposes the two raid
- * reminder fields below, but clashking_api and clashking_schemas do not yet
- * persist them. Keep parsing strict; transport support is not proof that a
- * saved value will survive a later load on another device.
- */
-export const NOTIFICATION_RAID_BACKEND_INCOMPATIBILITY =
-  'clashking_api exposes but does not persist raidRemindersEnabled and raidReminderTimings';
-
 export function createDefaultNotificationPreferences(
   deviceId = '',
   environment = 'production',
@@ -52,8 +39,6 @@ export function createDefaultNotificationPreferences(
     deviceId,
     environment,
     notificationsEnabled: false,
-    legendAttacks: false,
-    legendDefenses: false,
     warAttacks: false,
     warState: false,
     warReminders: false,
@@ -103,8 +88,6 @@ export function parseNotificationPreferences(value: unknown): NotificationPrefer
     deviceId: expectString(json.deviceId, 'deviceId'),
     environment: expectString(json.environment, 'environment'),
     notificationsEnabled: expectBoolean(json.notificationsEnabled, 'notificationsEnabled'),
-    legendAttacks: expectBoolean(json.legendAttacksEnabled, 'legendAttacksEnabled'),
-    legendDefenses: expectBoolean(json.legendDefensesEnabled, 'legendDefensesEnabled'),
     warAttacks: expectBoolean(json.warAttacksEnabled, 'warAttacksEnabled'),
     warState: expectBoolean(json.warStateEnabled, 'warStateEnabled'),
     warReminders: expectBoolean(json.warRemindersEnabled, 'warRemindersEnabled'),
@@ -127,8 +110,6 @@ export function parseLocalNotificationPreferences(value: unknown): NotificationP
     : json.accounts;
   return parseNotificationPreferences({
     ...json,
-    legendAttacksEnabled: json.legendAttacksEnabled ?? false,
-    legendDefensesEnabled: json.legendDefensesEnabled ?? false,
     raidRemindersEnabled: json.raidRemindersEnabled ?? false,
     raidReminderTimings: json.raidReminderTimings ?? [],
     accounts,
@@ -138,14 +119,12 @@ export function parseLocalNotificationPreferences(value: unknown): NotificationP
 export function serializeNotificationPreferencesForPut(
   preferences: NotificationPreferences,
   deviceId: string,
-  environment: string,
-): Record<string, unknown> {
+  environment: 'production' | 'sandbox',
+) {
   return {
     deviceId,
     environment,
     notificationsEnabled: preferences.notificationsEnabled,
-    legendAttacksEnabled: preferences.legendAttacks,
-    legendDefensesEnabled: preferences.legendDefenses,
     warAttacksEnabled: preferences.warAttacks,
     warStateEnabled: preferences.warState,
     warRemindersEnabled: preferences.warReminders,
@@ -165,7 +144,7 @@ export function serializeNotificationPreferencesForLocalStorage(
     ...serializeNotificationPreferencesForPut(
       preferences,
       preferences.deviceId,
-      preferences.environment,
+      preferences.environment === 'production' ? 'production' : 'sandbox',
     ),
     accounts: preferences.accounts.map((account) => ({ ...account })),
   };

@@ -1,4 +1,4 @@
-import type { ApiClient, ApiEnvironment } from '../../../core/api/client';
+import type { ApiEnvironment, ContractApiService } from '../../../core/api/contract-api';
 import type { TokenService } from '../../../services/auth/token-service';
 import type { StringStore } from '../../../services/storage/auth-storage';
 
@@ -71,7 +71,7 @@ export interface PushErrorContext {
 export interface PushNotificationServiceOptions {
   readonly platform: PushPlatform;
   readonly apiEnvironment: ApiEnvironment;
-  readonly api: Pick<ApiClient, 'request'>;
+  readonly api: ContractApiService;
   readonly preferences: StringStore;
   readonly tokenService: Pick<TokenService, 'getDeviceId'>;
   readonly runtime?: PushRuntime;

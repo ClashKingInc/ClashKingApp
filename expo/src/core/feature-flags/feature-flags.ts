@@ -1,3 +1,5 @@
+import type { AppConfigResponse } from '@clashking/api-contracts/expo';
+
 export const APP_FEATURE_FLAGS = {
   notifications: 'notifications',
   posts: 'posts',
@@ -46,39 +48,52 @@ export interface FeatureFlagEvaluation {
   readonly now?: Date;
 }
 
+export interface RequiredAppUpdate {
+  readonly minimumVersion: string;
+  readonly storeUrl: string;
+  readonly message: string;
+}
+
 export function defaultFeatureFlagValue(key: string): boolean {
   return (FEATURE_FLAG_DEFAULTS as Readonly<Record<string, boolean>>)[key] ?? true;
 }
 
-export function parseRemoteFeatureFlag(value: unknown): RemoteFeatureFlag {
-  const json = isRecord(value) ? value : {};
-  const percentage =
-    typeof json.rollout_percentage === 'number' ? Math.trunc(json.rollout_percentage) : 0;
-  const platforms = Array.isArray(json.platforms)
-    ? json.platforms.filter((item): item is string => typeof item === 'string')
-    : [];
-  const minimum =
-    typeof json.min_app_version === 'string' ? json.min_app_version.trim() : undefined;
+export function remoteFeatureFlag(value: AppConfigResponse['flags'][number]): RemoteFeatureFlag {
   return {
-    key: typeof json.key === 'string' ? json.key : '',
-    enabled: json.enabled === true,
-    rolloutPercentage: percentage,
-    platforms,
-    minAppVersion: minimum,
-    startsAt: parseOptionalDate(json.starts_at),
-    endsAt: parseOptionalDate(json.ends_at),
+    key: value.key,
+    enabled: value.enabled,
+    rolloutPercentage: Math.trunc(value.rollout_percentage),
+    platforms: value.platforms,
+    ...(value.min_app_version === undefined ? {} : { minAppVersion: value.min_app_version.trim() }),
+    startsAt: parseOptionalDate(value.starts_at),
+    endsAt: parseOptionalDate(value.ends_at),
   };
 }
 
-export function parseFeatureFlagResponse(value: unknown): ReadonlyMap<string, RemoteFeatureFlag> {
-  if (!isRecord(value) || !Array.isArray(value.flags)) return new Map();
+export function featureFlagsFromConfig(
+  config: AppConfigResponse,
+): ReadonlyMap<string, RemoteFeatureFlag> {
   const flags = new Map<string, RemoteFeatureFlag>();
-  for (const raw of value.flags) {
-    if (!isRecord(raw)) continue;
-    const flag = parseRemoteFeatureFlag(raw);
+  for (const raw of config.flags) {
+    const flag = remoteFeatureFlag(raw);
     if (flag.key.length > 0) flags.set(flag.key, flag);
   }
   return flags;
+}
+
+export function requiredAppUpdate(
+  config: AppConfigResponse,
+  platform: FeaturePlatform,
+  currentVersion: string,
+): RequiredAppUpdate | null {
+  if (platform === 'web') return null;
+  const policy = config.updates[platform];
+  if (meetsMinimumVersion(currentVersion, policy.minimum_version)) return null;
+  return {
+    minimumVersion: policy.minimum_version,
+    storeUrl: policy.store_url,
+    message: policy.message,
+  };
 }
 
 export function isFeatureFlagEnabled(
@@ -151,8 +166,4 @@ function parseOptionalDate(value: unknown): Date | undefined {
   if (typeof value !== 'string') return undefined;
   const milliseconds = Date.parse(value);
   return Number.isNaN(milliseconds) ? undefined : new Date(milliseconds);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

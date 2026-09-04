@@ -16,7 +16,6 @@ export interface ApiConfiguration {
 
 export const API_ASSET_URL = 'https://assets.clashk.ing';
 export const COC_ASSET_PROXY_URL = 'https://assets-proxy.clashk.ing';
-export const CDN_URL = 'https://cdn.clashk.ing';
 export const DISCORD_URL = 'https://discord.gg/clashking';
 
 export function apiEnvironmentForName(name: string | undefined): ApiEnvironment {

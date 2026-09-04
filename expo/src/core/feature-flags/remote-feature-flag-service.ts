@@ -1,17 +1,20 @@
-import type { ApiClient } from '../api/client';
+import type { AppConfigResponse } from '@clashking/api-contracts/expo';
+
 import { STORAGE_KEYS } from '../storage/storage';
 import type { StringStore } from '../../services/storage/auth-storage';
 import {
   defaultFeatureFlagValue,
+  featureFlagsFromConfig,
   isFeatureFlagEnabled,
-  parseFeatureFlagResponse,
+  requiredAppUpdate,
   type FeatureFlagEvaluation,
   type FeaturePlatform,
+  type RequiredAppUpdate,
   type RemoteFeatureFlag,
 } from './feature-flags';
 
 export interface RemoteFeatureFlagServiceOptions {
-  readonly api: ApiClient;
+  readonly loadConfig: () => Promise<AppConfigResponse>;
   readonly preferences: StringStore;
   readonly platform: FeaturePlatform;
   readonly appVersionProvider: () => Promise<string>;
@@ -23,6 +26,7 @@ export class RemoteFeatureFlagService {
   private flags: ReadonlyMap<string, RemoteFeatureFlag> = new Map();
   private installationSeed = 0;
   private appVersion = '';
+  private updateRequirement: RequiredAppUpdate | null = null;
 
   constructor(private readonly options: RemoteFeatureFlagServiceOptions) {}
 
@@ -31,10 +35,13 @@ export class RemoteFeatureFlagService {
       this.loadInstallationSeed(),
       this.options.appVersionProvider(),
     ]);
-    const response = await this.options.api.requestRecord('/app/config', {
-      requiresAuth: false,
-    });
-    this.flags = parseFeatureFlagResponse(response);
+    const response = await this.options.loadConfig();
+    this.flags = featureFlagsFromConfig(response);
+    this.updateRequirement = requiredAppUpdate(response, this.options.platform, this.appVersion);
+  }
+
+  requiredUpdate(): RequiredAppUpdate | null {
+    return this.updateRequirement;
   }
 
   isEnabled(key: string, fallback = defaultFeatureFlagValue(key)): boolean {

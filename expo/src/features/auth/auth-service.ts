@@ -1,12 +1,35 @@
-import { EmailVerificationRequiredException, type ApiClient } from '../../core/api/client';
+import {
+  AuthDeleteEndpoint,
+  AuthDiscordEndpoint,
+  AuthEmailEndpoint,
+  AuthExportEndpoint,
+  AuthForgotPasswordEndpoint,
+  AuthMeEndpoint,
+  AuthRegisterEndpoint,
+  AuthResendVerificationEndpoint,
+  AuthResetPasswordEndpoint,
+  AuthVerifyEmailEndpoint,
+  AuthWebDiscordEndpoint,
+  AuthWebEmailEndpoint,
+  AuthWebLogoutEndpoint,
+  AuthWebResetPasswordEndpoint,
+  AuthWebVerifyEmailEndpoint,
+  type AnyEndpoint,
+  type EndpointRequest,
+  type EndpointResponse,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+import { TransportError } from '@clashking/api-client';
+
+import {
+  EmailVerificationRequiredException,
+  type ContractApiService,
+} from '../../core/api/contract-api';
 import type { ApiEnvironment } from '../../core/config/api-config';
 import type { DiscordOAuthClient } from '../../services/auth/discord-oauth';
 import type { TokenService } from '../../services/auth/token-service';
 import type { StringStore } from '../../services/storage/auth-storage';
 import { parseAuthUser, type AuthUser } from './models';
-
-const AUTH_ME_PATH = '/auth/me';
-const ALL_SUCCESS_STATUSES = Array.from({ length: 100 }, (_, index) => index + 200);
 
 export interface AuthObservability {
   setAuthenticatedUser(user: AuthUser): Promise<void>;
@@ -14,7 +37,7 @@ export interface AuthObservability {
 }
 
 export interface AuthServiceOptions {
-  readonly api: ApiClient;
+  readonly api: ContractApiService;
   readonly tokens: TokenService;
   readonly preferences: StringStore & { clear(): Promise<void> };
   readonly environment: ApiEnvironment;
@@ -32,6 +55,15 @@ export interface AuthState {
   readonly currentUser: AuthUser | null;
   readonly followerCount: number | null;
 }
+
+interface AuthenticationResponse {
+  readonly access_token: string;
+  readonly account_summary?: unknown;
+  readonly refresh_token?: string;
+  readonly user: unknown;
+}
+
+type CurrentUserResponse = EndpointResponse<typeof AuthMeEndpoint>;
 
 export class AuthFlowException extends Error {
   constructor(message: string, options?: ErrorOptions) {
@@ -70,9 +102,7 @@ export class AuthService {
   async initializeAuth(): Promise<void> {
     await this.options.preferences.removeItem('auth_local_mode');
     if (this.options.environment === 'local') {
-      const response = await this.options.api.requestRecord(AUTH_ME_PATH, {
-        requiresAuth: false,
-      });
+      const response = await this.execute(AuthMeEndpoint, {});
       await this.applyAuthenticatedResponse(response, null);
       return;
     }
@@ -84,9 +114,7 @@ export class AuthService {
     }
 
     try {
-      const response = await this.options.api.requestRecord(AUTH_ME_PATH, {
-        requiresAuth: true,
-      });
+      const response = await this.execute(AuthMeEndpoint, {});
       await this.applyAuthenticatedResponse(response, accessToken);
     } catch (error) {
       if (this.isNetworkError(error)) {
@@ -116,18 +144,20 @@ export class AuthService {
         throw new AuthFlowException('Discord login was cancelled.');
       }
       const deviceId = await this.options.tokens.getDeviceId();
-      const response = await this.options.api.requestRecord(
-        this.options.platform === 'web' ? '/auth/web/discord' : '/auth/discord',
-        {
-          method: 'POST',
-          body: {
-            code: authorization.code,
-            redirect_uri: authorization.redirectUri,
-            code_verifier: authorization.codeVerifier,
-            device_id: deviceId,
-          },
+      const input = {
+        path: {},
+        query: {},
+        body: {
+          code: authorization.code,
+          redirect_uri: authorization.redirectUri,
+          code_verifier: authorization.codeVerifier,
+          device_id: deviceId,
         },
-      );
+      };
+      const response =
+        this.options.platform === 'web'
+          ? await Effect.runPromise(this.options.api.execute(AuthWebDiscordEndpoint, input))
+          : await Effect.runPromise(this.options.api.execute(AuthDiscordEndpoint, input));
       await this.finishAuthentication(response);
     } catch (error) {
       throw new AuthFlowException('Discord login failed.', { cause: error });
@@ -140,18 +170,17 @@ export class AuthService {
         this.options.tokens.getDeviceId(),
         this.options.tokens.getDeviceName(),
       ]);
-      const response = await this.options.api.requestRecord(
-        this.options.platform === 'web' ? '/auth/web/email' : '/auth/email',
-        {
-          method: 'POST',
-          body: {
-            email,
-            password,
-            device_id: deviceId,
-            device_name: deviceName,
-          },
-        },
-      );
+      const input = {
+        path: {},
+        query: {},
+        body: { email, password, device_id: deviceId, device_name: deviceName },
+      };
+      const result =
+        this.options.platform === 'web'
+          ? await Effect.runPromise(this.options.api.executeStatus(AuthWebEmailEndpoint, input))
+          : await Effect.runPromise(this.options.api.executeStatus(AuthEmailEndpoint, input));
+      if (!result.ok) throw new EmailVerificationRequiredException(result.body.message);
+      const response = result.value;
       await this.finishAuthentication(response);
     } catch (error) {
       if (error instanceof EmailVerificationRequiredException) throw error;
@@ -163,74 +192,63 @@ export class AuthService {
     email: string,
     password: string,
     username: string,
-  ): Promise<Record<string, unknown>> {
+  ): Promise<EndpointResponse<typeof AuthRegisterEndpoint>> {
     return this.withDevice(async (deviceId, deviceName) =>
-      this.options.api.requestRecord('/auth/register', {
-        method: 'POST',
-        body: {
-          email,
-          password,
-          username,
-          device_id: deviceId,
-          device_name: deviceName,
-        },
+      this.execute(AuthRegisterEndpoint, {
+        email,
+        password,
+        username,
+        device_id: deviceId,
+        device_name: deviceName,
       }),
     );
   }
 
   async verifyEmailWithCode(email: string, code: string): Promise<void> {
-    const response = await this.options.api.requestRecord(
-      this.options.platform === 'web' ? '/auth/web/verify-email-code' : '/auth/verify-email-code',
-      { method: 'POST', body: { email, code } },
-    );
+    const input = { path: {}, query: {}, body: { email, code } };
+    const response =
+      this.options.platform === 'web'
+        ? await Effect.runPromise(this.options.api.execute(AuthWebVerifyEmailEndpoint, input))
+        : await Effect.runPromise(this.options.api.execute(AuthVerifyEmailEndpoint, input));
     await this.finishAuthentication(response);
   }
 
-  resendVerificationEmail(email: string): Promise<Record<string, unknown>> {
-    return this.options.api.requestRecord('/auth/resend-verification', {
-      method: 'POST',
-      body: { email },
-    });
+  resendVerificationEmail(
+    email: string,
+  ): Promise<EndpointResponse<typeof AuthResendVerificationEndpoint>> {
+    return this.execute(AuthResendVerificationEndpoint, { email });
   }
 
-  forgotPassword(email: string): Promise<Record<string, unknown>> {
-    return this.options.api.requestRecord('/auth/forgot-password', {
-      method: 'POST',
-      body: { email },
-    });
+  forgotPassword(email: string): Promise<EndpointResponse<typeof AuthForgotPasswordEndpoint>> {
+    return this.execute(AuthForgotPasswordEndpoint, { email });
   }
 
   async resetPassword(email: string, resetCode: string, newPassword: string): Promise<void> {
-    const response = await this.withDevice((deviceId, deviceName) =>
-      this.options.api.requestRecord(
-        this.options.platform === 'web' ? '/auth/web/reset-password' : '/auth/reset-password',
-        {
-          method: 'POST',
-          body: {
-            email,
-            reset_code: resetCode,
-            new_password: newPassword,
-            device_id: deviceId,
-            device_name: deviceName,
-          },
+    const response = await this.withDevice((deviceId, deviceName) => {
+      const input = {
+        path: {},
+        query: {},
+        body: {
+          email,
+          reset_code: resetCode,
+          new_password: newPassword,
+          device_id: deviceId,
+          device_name: deviceName,
         },
-      ),
-    );
+      };
+      return this.options.platform === 'web'
+        ? Effect.runPromise(this.options.api.execute(AuthWebResetPasswordEndpoint, input))
+        : Effect.runPromise(this.options.api.execute(AuthResetPasswordEndpoint, input));
+    });
     await this.finishAuthentication(response);
   }
 
-  requestDataExport(): Promise<Record<string, unknown>> {
-    return this.options.api.requestRecord('/auth/export', {
-      requiresAuth: true,
-    });
+  requestDataExport(): Promise<EndpointResponse<typeof AuthExportEndpoint>> {
+    return this.execute(AuthExportEndpoint, {});
   }
 
   async deleteAccount(): Promise<void> {
-    await this.options.api.request(AUTH_ME_PATH, {
-      method: 'DELETE',
-      requiresAuth: true,
-      acceptedStatuses: ALL_SUCCESS_STATUSES,
-    });
+    await this.execute(AuthDeleteEndpoint, {});
     await this.signOut();
   }
 
@@ -243,10 +261,7 @@ export class AuthService {
     }
     if (this.options.platform === 'web') {
       try {
-        await this.options.api.request('/auth/web/logout', {
-          method: 'POST',
-          acceptedStatuses: ALL_SUCCESS_STATUSES,
-        });
+        await this.execute(AuthWebLogoutEndpoint, {});
       } catch {
         // The HTTP-only refresh cookie may remain until the server is reachable.
       }
@@ -267,7 +282,7 @@ export class AuthService {
     });
   }
 
-  private async finishAuthentication(response: Record<string, unknown>): Promise<void> {
+  private async finishAuthentication(response: AuthenticationResponse): Promise<void> {
     const accessToken = nonEmptyString(response.access_token);
     if (accessToken === null) {
       throw new TypeError('Authentication response omitted access_token.');
@@ -294,7 +309,7 @@ export class AuthService {
   }
 
   private async applyAuthenticatedResponse(
-    response: Record<string, unknown>,
+    response: CurrentUserResponse,
     accessToken: string | null,
   ): Promise<void> {
     const user = parseAuthUser(response);
@@ -309,9 +324,7 @@ export class AuthService {
 
   private async refreshAccountSummary(): Promise<void> {
     try {
-      const response = await this.options.api.requestRecord(AUTH_ME_PATH, {
-        requiresAuth: true,
-      });
+      const response = await this.execute(AuthMeEndpoint, {});
       if (
         !this.stateValue.isAuthenticated ||
         String(response.user_id ?? '') !== this.stateValue.currentUser?.userId
@@ -333,13 +346,21 @@ export class AuthService {
     ]).then(([deviceId, deviceName]) => operation(deviceId, deviceName));
   }
 
+  private execute<E extends AnyEndpoint>(
+    endpoint: E,
+    body: EndpointRequest<E>['body'],
+  ): Promise<EndpointResponse<E>> {
+    const input = { path: {}, query: {}, body } as EndpointRequest<E>;
+    return Effect.runPromise(this.options.api.execute(endpoint, input));
+  }
+
   private publish(state: AuthState): void {
     this.stateValue = state;
     for (const listener of this.listeners) listener(state);
   }
 }
 
-function followerCount(response: Record<string, unknown>): number | null {
+function followerCount(response: { readonly account_summary?: unknown }): number | null {
   const summary = isRecord(response.account_summary) ? response.account_summary : null;
   const raw = summary?.follower_count;
   if (typeof raw === 'number') return Math.trunc(raw);
@@ -355,6 +376,7 @@ function nonEmptyString(value: unknown): string | null {
 function defaultIsNetworkError(error: unknown): boolean {
   const text = String(error).toLowerCase();
   return (
+    error instanceof TransportError ||
     error instanceof TypeError ||
     text.includes('network') ||
     text.includes('connection') ||

@@ -3,7 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { I18nProvider } from '../../i18n';
 import { CKThemeProvider } from '../../ui';
-import { StartupErrorScreen } from './startup-feedback';
+import { ForcedUpdateScreen, StartupErrorScreen } from './startup-feedback';
 
 test('keeps the Flutter account header and logout escape hatch on startup errors', async () => {
   const logout = jest.fn();
@@ -33,4 +33,29 @@ test('keeps the Flutter account header and logout escape hatch on startup errors
   expect(screen.getByText('Chief')).toBeTruthy();
   await fireEvent.press(screen.getByRole('button', { name: 'Log out' }));
   expect(logout).toHaveBeenCalledTimes(1);
+});
+
+test('keeps a required native update on a single store action', async () => {
+  const update = jest.fn();
+  const screen = await render(
+    <SafeAreaProvider
+      initialMetrics={{
+        frame: { x: 0, y: 0, width: 390, height: 844 },
+        insets: { top: 47, right: 0, bottom: 34, left: 0 },
+      }}
+    >
+      <I18nProvider locale="en">
+        <CKThemeProvider preference="light">
+          <ForcedUpdateScreen
+            message="A newer ClashKing build is required."
+            onUpdate={update}
+          />
+        </CKThemeProvider>
+      </I18nProvider>
+    </SafeAreaProvider>,
+  );
+
+  expect(screen.getByText('A newer ClashKing build is required.')).toBeTruthy();
+  await fireEvent.press(screen.getByRole('link'));
+  expect(update).toHaveBeenCalledTimes(1);
 });

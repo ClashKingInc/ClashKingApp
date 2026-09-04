@@ -3,8 +3,12 @@ import Constants from 'expo-constants';
 import * as Crypto from 'expo-crypto';
 import { Platform } from 'react-native';
 import ClashKingNative from '@clashking/native';
+import { AppConfigEndpoint } from '@clashking/api-contracts/expo';
+import { createApiClient, httpTransport } from '@clashking/api-client';
+import { Effect } from 'effect';
 
-import { ApiClient } from '../api/client';
+import { withBearerToken, type ContractApiService } from '../api/contract-api';
+import { observedTransport, withApiDiagnostics } from '../api/contract-api-observability';
 import { BookmarkService } from '../bookmarks';
 import { resolveApiConfiguration } from '../config/api-config';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
@@ -68,7 +72,7 @@ export interface AppRuntime {
   readonly configuration: ReturnType<typeof resolveApiConfiguration>;
   readonly preferences: ExpoPreferenceStore;
   readonly preferenceMigration: FlutterPreferenceMigration;
-  readonly api: ApiClient;
+  readonly contractApi: ContractApiService;
   readonly tokens: TokenService;
   readonly auth: AuthService;
   readonly accounts: CocAccountService;
@@ -138,17 +142,21 @@ export function createAppRuntime(): AppRuntime {
     refreshLock,
     deviceIdentity: identity,
   });
-  const api = new ApiClient({
-    baseUrl: configuration.apiV2Url,
-    proxyUrl: configuration.proxyUrl,
-    environment: configuration.environment,
-    tokenProvider: tokens,
-    platform: nativePlatform,
-    observability: { addHttpBreadcrumb, reportException },
-  });
+  const contractApi = withApiDiagnostics(
+    withBearerToken(
+      createApiClient({
+        baseUrl: configuration.apiV2Url.replace(/\/v2\/?$/, ''),
+        transport: observedTransport(httpTransport(), { addHttpBreadcrumb }),
+        ...(nativePlatform === 'web' ? { credentials: 'include' } : {}),
+      }),
+      tokens,
+    ),
+    { reportException },
+  );
   const gameData = createExpoGameDataService();
   const featureFlags = new RemoteFeatureFlagService({
-    api,
+    loadConfig: () =>
+      Effect.runPromise(contractApi.execute(AppConfigEndpoint, { path: {}, query: {}, body: {} })),
     preferences,
     platform: runtimePlatform,
     appVersionProvider: async () => appVersion(),
@@ -164,7 +172,7 @@ export function createAppRuntime(): AppRuntime {
   const push = new PushNotificationService({
     platform: runtimePlatform,
     apiEnvironment: configuration.environment,
-    api,
+    api: contractApi,
     preferences,
     tokenService: tokens,
     runtime: createPlatformPushRuntime(),
@@ -177,32 +185,35 @@ export function createAppRuntime(): AppRuntime {
     showPermissionPrimer: () => effects.showPermissionPrimer(),
     reportError: ({ operation, error }) => reportException(error, operation),
   });
-  const accounts = new CocAccountService(api, preferences, (operation, error) =>
+  const accounts = new CocAccountService(contractApi, preferences, (operation, error) =>
     reportException(error, operation),
   );
-  const achievements = new AchievementsRepository(api);
-  const bookmarks = new BookmarkService(api);
-  const players = new PlayerService(api, preferences, configuration.apiV2Url, (operation, error) =>
-    reportException(error, operation),
+  const achievements = new AchievementsRepository(contractApi);
+  const bookmarks = new BookmarkService(contractApi);
+  const players = new PlayerService(
+    contractApi,
+    preferences,
+    configuration.apiV2Url,
+    (operation, error) => reportException(error, operation),
   );
   const playerCardPreferences = new PlayerCardPreferencesService(preferences);
-  const rankings = new RankingsService(api);
+  const rankings = new RankingsService(contractApi);
   const announcements = new AnnouncementService(
-    api,
+    contractApi,
     runtimePlatform,
     () => appState.getState().locale,
   );
   const announcementPresentation = new AnnouncementPresentationService(preferences);
-  const upgrades = new UpgradeTrackerRepository(api, preferences);
-  const subscription = new SubscriptionService(api);
+  const upgrades = new UpgradeTrackerRepository(contractApi, preferences);
+  const subscription = new SubscriptionService(contractApi);
   const upgradeWidgets = new UpgradeWidgetSyncService({
     platform: runtimePlatform,
     native: ClashKingNative,
     mirror: preferences,
     translate: (key, values) => createTranslator(appState.getState().locale)(key, values),
   });
-  const clans = new ClanService(api);
-  const wars = new WarCwlService(api);
+  const clans = new ClanService(contractApi);
+  const wars = new WarCwlService(contractApi);
   const discordOAuth = new DiscordOAuthClient({
     platform: nativePlatform,
     runtime: new PlatformDiscordOAuthRuntime(),
@@ -211,7 +222,7 @@ export function createAppRuntime(): AppRuntime {
     webRedirectOverride: process.env.EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI,
   });
   const auth = new AuthService({
-    api,
+    api: contractApi,
     tokens,
     preferences,
     environment: configuration.environment,
@@ -232,7 +243,7 @@ export function createAppRuntime(): AppRuntime {
     },
   });
   const notificationPreferences = new NotificationPreferencesService({
-    api,
+    api: contractApi,
     deviceIdProvider: () => tokens.getDeviceId(),
     environmentProvider: () => push.environment,
     preferences,
@@ -253,7 +264,7 @@ export function createAppRuntime(): AppRuntime {
       runtimePlatform === 'android' ? new ExpoWidgetBackgroundScheduler() : undefined,
     proxyUrl: configuration.proxyUrl,
     apiV2Url: configuration.apiV2Url,
-    loadWarSummary: (clanTag) => fetchWarWidgetSummary(api, clanTag),
+    loadWarSummary: (clanTag) => fetchWarWidgetSummary(contractApi, clanTag),
     getFirstAvailableAccount: async () => {
       const current = accounts.accounts[0]?.playerTag;
       if (current !== undefined) return current;
@@ -289,7 +300,7 @@ export function createAppRuntime(): AppRuntime {
     configuration,
     preferences,
     preferenceMigration: new FlutterPreferenceMigration(preferences, legacyBridge, secureStore),
-    api,
+    contractApi,
     tokens,
     auth,
     accounts,

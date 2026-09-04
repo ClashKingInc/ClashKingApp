@@ -1,4 +1,7 @@
-import { ApiClient } from '../../../core/api/client';
+import { ClanWarlogEndpoint, ProxyClanWarlogEndpoint } from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { WarInfoSnapshot } from '../../player/models';
 import { ClanBadgeUrls } from './clan-core';
 import {
@@ -185,20 +188,14 @@ export class WarLogStatsService {
 
 export class WarLogService {
   static async fetchWarLogData(
-    api: ApiClient,
+    api: ContractApiService,
     tag: string,
     options: { isWarLogPublic: boolean },
   ): Promise<ClanWarLog> {
-    const endpoint = options.isWarLogPublic
-      ? `/clans/${encodeURIComponent(tag)}/warlog?limit=50`
-      : `/clan/${encodeURIComponent(tag)}/warlog?limit=50`;
     const response = options.isWarLogPublic
-      ? await api.proxyGet(endpoint)
-      : await api.get(endpoint, { requiresAuth: true });
-    const parsed: unknown = JSON.parse(response.bodyText);
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
-      throw new TypeError('Invalid war log response.');
-    const result = ClanWarLog.fromJson(parsed as JsonRecord, tag);
+      ? await Effect.runPromise(api.execute(ProxyClanWarlogEndpoint, { path: { clanTag: tag }, query: { limit: 50 }, body: {} }))
+      : await Effect.runPromise(api.execute(ClanWarlogEndpoint, { path: { clanTag: tag }, query: { limit: 50 }, body: {} }));
+    const result = ClanWarLog.fromJson(response, tag);
     result.warLogStats = analyzeWarLogs(result.items);
     return result;
   }

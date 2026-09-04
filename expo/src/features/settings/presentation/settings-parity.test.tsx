@@ -1,4 +1,5 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import lockfile from '../../../../package-lock.json';
 
 import { I18nProvider, type SupportedLocale } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
@@ -35,7 +36,18 @@ function wrappedWithLocale(node: React.ReactNode, locale: SupportedLocale) {
 
 it('ships complete verbatim production dependency licenses and opens their text', async () => {
   const covered = GENERATED_LICENSE_INVENTORY.flatMap(({ packages }) => packages);
-  expect(covered.length).toBeGreaterThan(850);
+  const productionPackages = Object.entries(lockfile.packages)
+    .filter(
+      ([path, metadata]) =>
+        path.startsWith('node_modules/') &&
+        !(metadata as { dev?: boolean }).dev &&
+        !path.endsWith('/@clashking/native'),
+    )
+    .map(
+      ([path, metadata]) =>
+        `${path.split('node_modules/').at(-1)}@${(metadata as { version?: string }).version}`,
+    );
+  expect([...new Set(covered)].sort()).toEqual([...new Set(productionPackages)].sort());
   expect(covered.some((name) => name.startsWith('react@'))).toBe(true);
   expect(covered.some((name) => name.startsWith('react-native@'))).toBe(true);
   expect(GENERATED_LICENSE_INVENTORY.every(({ text }) => text.length > 40)).toBe(true);

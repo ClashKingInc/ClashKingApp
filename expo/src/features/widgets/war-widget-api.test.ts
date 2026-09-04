@@ -1,19 +1,33 @@
-import { ApiClient } from '../../core/api/client';
+import { createContractTestApi } from '../../core/api/contract-api.testing';
 import { fetchWarWidgetSummary } from './war-widget-api';
 import { buildWarWidgetPayload } from './war-widget-payload';
+import { ApiResponseError } from '@clashking/api-client';
+
+const basicWar = (type = 'regular') => ({
+  type,
+  clan: { tag: '#CLAN', publicWarLog: true },
+  opponent: { tag: '#RIVAL', publicWarLog: true },
+  preparationStartTime: '20260830T120000.000Z',
+  endTime: '20260831T120000.000Z',
+});
+const warClan = (tag: string, name: string, stars: number) => ({
+  tag,
+  name,
+  stars,
+  badgeUrls: { small: '', medium: '', large: '' },
+  members: [],
+  clanLevel: 1,
+  attacks: 1,
+  destructionPercentage: 0,
+});
 
 function setup(response: (url: string) => { status: number; body: unknown }) {
   const fetchImplementation = jest.fn(async (input: string | URL | Request) => {
-    const url = String(input);
+    const url = (input as Request).url;
     const { status, body } = response(url);
-    return {
-      status,
-      url: '',
-      headers: new Headers(),
-      text: async () => (body === null ? 'null' : JSON.stringify(body)),
-    } as Response;
+    return new Response(body === null ? 'null' : JSON.stringify(body), { status });
   });
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.test/v2',
     proxyUrl: 'https://api.test/proxy/v1',
     environment: 'production',
@@ -53,11 +67,7 @@ test('uses the live basic-war resolver and preserves the regular widget payload'
     if (url.endsWith('/v2/war/%23CLAN/basic')) {
       return {
         status: 200,
-        body: {
-          type: 'regular',
-          clan: { tag: '#CLAN', publicWarLog: true },
-          opponent: { tag: '#RIVAL', publicWarLog: true },
-        },
+        body: basicWar(),
       };
     }
     if (url.endsWith('/proxy/v1/clans/%23CLAN/currentwar')) {
@@ -92,23 +102,19 @@ test('uses the live basic-war resolver and preserves the regular widget payload'
       opponent: expect.objectContaining({ name: 'Rival', badgeUrlMedium: 'r-small' }),
     }),
   );
-  expect(fetchImplementation).toHaveBeenCalledWith(
+  const requests = fetchImplementation.mock.calls.map(([input]) => input as Request);
+  expect(requests.map(({ url }) => url)).toEqual([
     'https://api.test/v2/war/%23CLAN/basic',
-    expect.objectContaining({ method: 'GET' }),
-  );
-  expect(fetchImplementation).toHaveBeenCalledWith(
     'https://api.test/proxy/v1/clans/%23CLAN/currentwar',
-    expect.objectContaining({
-      method: 'GET',
-      headers: expect.objectContaining({ Authorization: 'Bearer token' }),
-    }),
-  );
+  ]);
+  expect(requests.every(({ method }) => method === 'GET')).toBe(true);
+  expect(requests[1]!.headers.get('authorization')).toBe('Bearer token');
 });
 
 test('uses live league-group and league-war routes and preserves the CWL widget payload', async () => {
   const { api, fetchImplementation } = setup((url) => {
     if (url.endsWith('/v2/war/%23CLAN/basic')) {
-      return { status: 200, body: { type: 'cwl', warTag: '#WAR' } };
+      return { status: 200, body: { ...basicWar('cwl'), warTag: '#WAR' } };
     }
     if (url.endsWith('/proxy/v1/clans/%23CLAN/currentwar/leaguegroup')) {
       return {
@@ -116,7 +122,15 @@ test('uses live league-group and league-war routes and preserves the CWL widget 
         body: {
           state: 'inWar',
           season: '2026-08',
-          clans: [{ tag: '#CLAN', name: 'Home', rank: 2, badgeUrls: {} }],
+          clans: [
+            {
+              tag: '#CLAN',
+              name: 'Home',
+              clanLevel: 1,
+              members: [],
+              badgeUrls: { small: '', medium: '', large: '' },
+            },
+          ],
           rounds: [{ warTags: ['#WAR'] }],
         },
       };
@@ -127,8 +141,8 @@ test('uses live league-group and league-war routes and preserves the CWL widget 
         body: {
           state: 'inWar',
           teamSize: 15,
-          clan: { tag: '#RIVAL', name: 'Rival', stars: 10, badgeUrls: {}, members: [] },
-          opponent: { tag: '#CLAN', name: 'Home', stars: 12, badgeUrls: {}, members: [] },
+          clan: warClan('#RIVAL', 'Rival', 10),
+          opponent: warClan('#CLAN', 'Home', 12),
         },
       };
     }
@@ -141,13 +155,12 @@ test('uses live league-group and league-war routes and preserves the CWL widget 
       state: 'cwl',
       mode: 'cwl',
       score: '12 - 10',
-      cwlRank: 2,
       cwlLeague: '2026-08',
       clan: expect.objectContaining({ name: 'Home', stars: 12 }),
       opponent: expect.objectContaining({ name: 'Rival', stars: 10 }),
     }),
   );
-  expect(fetchImplementation.mock.calls.map(([url]) => String(url))).toEqual([
+  expect(fetchImplementation.mock.calls.map(([input]) => (input as Request).url)).toEqual([
     'https://api.test/v2/war/%23CLAN/basic',
     'https://api.test/proxy/v1/clans/%23CLAN/currentwar/leaguegroup',
     'https://api.test/proxy/v1/clanwarleagues/wars/%23WAR',
@@ -156,7 +169,5 @@ test('uses live league-group and league-war routes and preserves the CWL widget 
 
 test('surfaces API failures so the widget service emits its established error payload', async () => {
   const { api } = setup(() => ({ status: 500, body: {} }));
-  await expect(fetchWarWidgetSummary(api, '#CLAN')).rejects.toThrow(
-    'Unexpected API status 500 for /war/%23CLAN/basic.',
-  );
+  await expect(fetchWarWidgetSummary(api, '#CLAN')).rejects.toBeInstanceOf(ApiResponseError);
 });

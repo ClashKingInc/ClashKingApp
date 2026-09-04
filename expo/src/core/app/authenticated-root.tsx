@@ -592,6 +592,7 @@ export function AuthenticatedRoot() {
         }
         closeDrawerLabel={t('navigationCloseDrawer')}
         displayName={user?.username ?? 'ClashKing'}
+        drawerHintStore={runtime.preferences}
         features={featureState}
         followerCount={authState.followerCount}
         hasUser={user !== null}

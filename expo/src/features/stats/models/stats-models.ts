@@ -1,3 +1,11 @@
+import type {
+  StatsArmiesRequest as StatsArmiesRequestContract,
+  StatsCwlRequest as StatsCwlRequestContract,
+  StatsItemsRequest as StatsItemsRequestContract,
+  StatsRankedRequest as StatsRankedRequestContract,
+  StatsWarRequest as StatsWarRequestContract,
+} from '@clashking/api-contracts/expo';
+
 export const StatsAudience = { battle: 'battle', world: 'world' } as const;
 export type StatsAudienceValue = (typeof StatsAudience)[keyof typeof StatsAudience];
 export const StatsSection = {
@@ -29,7 +37,7 @@ export class StatsDateFilter {
   get inclusiveDays(): number {
     return Math.round((utcDay(this.end) - utcDay(this.start)) / 86_400_000) + 1;
   }
-  toJson(): Record<string, unknown> {
+  toJson(): StatsRankedRequestContract['dates'] {
     return {
       start_date: StatsDateFilter.formatDate(this.start),
       end_date: StatsDateFilter.formatDate(this.end),
@@ -45,7 +53,7 @@ export class StatsItemQuantityFilter {
     readonly minQuantity?: number,
     readonly maxQuantity?: number,
   ) {}
-  toJson(): Record<string, unknown> {
+  toJson(): NonNullable<StatsArmiesRequestContract['include_items']>[number] {
     return {
       item: this.item,
       ...(this.minQuantity == null ? {} : { min_quantity: this.minQuantity }),
@@ -64,9 +72,9 @@ export class StatsBattleFilters {
     readonly excludeItems: readonly string[] = [],
     readonly minimumSampleSize = 100,
   ) {}
-  toJson(): Record<string, unknown> {
+  toJson(): Omit<StatsArmiesRequestContract, 'limit' | 'sort_by'> {
     return {
-      ...this.dates.toJson(),
+      dates: this.dates.toJson(),
       ...(this.townHallLevel == null ? {} : { townhall_level: this.townHallLevel }),
       ...(this.opponentTownHallLevel == null
         ? {}
@@ -78,7 +86,7 @@ export class StatsBattleFilters {
       ...(this.includeItems.length
         ? { include_items: this.includeItems.map((item) => item.toJson()) }
         : {}),
-      ...(this.excludeItems.length ? { exclude_items: this.excludeItems } : {}),
+      ...(this.excludeItems.length ? { exclude_items: [...this.excludeItems] } : {}),
       minimum_sample_size: this.minimumSampleSize,
     };
   }
@@ -87,10 +95,14 @@ export class StatsArmiesQuery {
   constructor(
     readonly filters: StatsBattleFilters,
     readonly limit = 25,
-    readonly sortBy = 'usage_rate',
+    readonly sortBy: NonNullable<StatsArmiesRequestContract['sort_by']> = 'usage_rate',
   ) {}
-  toJson(): Record<string, unknown> {
-    return { ...this.filters.toJson(), limit: this.limit, sort_by: this.sortBy };
+  toJson(): StatsArmiesRequestContract {
+    return {
+      ...this.filters.toJson(),
+      limit: this.limit,
+      sort_by: this.sortBy,
+    };
   }
 }
 export class StatsItemSelector {
@@ -113,7 +125,7 @@ export class StatsItemSelector {
         StatsItemSelector.validEquipmentHeroes.has(this.hero?.trim() ?? ''))
     );
   }
-  toJson(): Record<string, unknown> {
+  toJson(): StatsItemsRequestContract['items'][number] {
     return {
       item: this.item.trim(),
       type: this.type,
@@ -126,7 +138,7 @@ export class StatsItemsQuery {
     readonly filters: StatsBattleFilters,
     readonly items: readonly StatsItemSelector[],
   ) {}
-  toJson(): Record<string, unknown> {
+  toJson(): StatsItemsRequestContract {
     return { ...this.filters.toJson(), items: this.items.map((item) => item.toJson()) };
   }
 }
@@ -136,7 +148,7 @@ export class StatsRankedQuery {
     readonly townHallLevel: number,
     readonly rankedLeagueTierId: number,
   ) {}
-  toJson(): Record<string, unknown> {
+  toJson(): StatsRankedRequestContract {
     return {
       dates: this.dates.toJson(),
       townhall_level: this.townHallLevel,
@@ -151,7 +163,7 @@ export class StatsWarQuery {
     readonly opponentTownHallLevel?: number,
     readonly equalTownHalls = true,
   ) {}
-  toJson(): Record<string, unknown> {
+  toJson(): StatsWarRequestContract {
     return {
       dates: this.dates.toJson(),
       ...(this.townHallLevel == null ? {} : { townhall_level: this.townHallLevel }),
@@ -173,11 +185,11 @@ export class StatsCwlQuery extends StatsWarQuery {
   ) {
     super(dates, townHallLevel, opponentTownHallLevel, equalTownHalls);
   }
-  override toJson(): Record<string, unknown> {
+  override toJson(): StatsCwlRequestContract {
     return {
       ...super.toJson(),
       ...(this.cwlLeagueId == null ? {} : { cwl_league_id: this.cwlLeagueId }),
-      ...(this.seasons.length ? { seasons: this.seasons } : {}),
+      ...(this.seasons.length ? { seasons: [...this.seasons] } : {}),
     };
   }
 }
@@ -285,7 +297,6 @@ export class StatsGroupedCount {
 export class StatsPlayerCountsResponse {
   constructor(
     readonly townHalls: readonly StatsGroupedCount[],
-    readonly builderHalls: readonly StatsGroupedCount[],
     readonly leagueTiers: readonly StatsGroupedCount[],
   ) {}
 }

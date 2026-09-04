@@ -1,4 +1,5 @@
-import { ApiClient } from '@/core/api/client';
+import { createContractTestApi } from '@/core/api/contract-api.testing';
+import { TransportError } from '@clashking/api-client';
 import type { StringStorage } from '@/core/storage/storage';
 import { PlayerCardPreferencesService } from './player-card-preferences';
 import { PlayerService } from './player-service';
@@ -17,24 +18,85 @@ class MemoryStorage implements StringStorage {
   }
 }
 function reply(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), { status });
+}
+function officialPlayer(overrides: Record<string, unknown> = {}) {
+  const clan = overrides.clan;
   return {
-    status,
-    url: '',
-    headers: { get: () => null },
-    text: async () => JSON.stringify(body),
-  } as unknown as Response;
+    tag: '#P1',
+    name: 'One',
+    townHallLevel: 18,
+    expLevel: 200,
+    trophies: 5000,
+    bestTrophies: 5100,
+    warStars: 1000,
+    attackWins: 100,
+    defenseWins: 20,
+    achievements: [],
+    heroes: [],
+    troops: [],
+    spells: [],
+    ...overrides,
+    ...(typeof clan === 'object' && clan !== null
+      ? {
+          clan: {
+            clanLevel: 1,
+            badgeUrls: { large: 'https://assets.example/clan.png' },
+            ...clan,
+          },
+        }
+      : {}),
+  };
+}
+function rankedMember(playerTag: string, playerName: string, leagueTrophies: number) {
+  return {
+    playerTag,
+    playerName,
+    clanTag: '#CLAN',
+    clanName: 'Clan',
+    leagueTrophies,
+    attackWinCount: 1,
+    attackLoseCount: 0,
+    defenseWinCount: 0,
+    defenseLoseCount: 1,
+  };
+}
+function warStatsItem(overrides: Record<string, unknown> = {}) {
+  const clan = {
+    tag: '#C',
+    name: 'Clan',
+    badgeUrls: { small: '', medium: '', large: '' },
+    clanLevel: 1,
+    attacks: 1,
+    stars: 3,
+    destructionPercentage: 100,
+  };
+  return {
+    teamSize: 15,
+    attacksPerMember: 2,
+    preparationStartTime: '20260819T120000.000Z',
+    endTime: '20260820T120000.000Z',
+    clan,
+    opponent: { ...clan, tag: '#O', name: 'Opponent' },
+    type: 'random',
+    player: { tag: '#P1', name: 'One', townhallLevel: 18, mapPosition: 1 },
+    attacks: [],
+    defenses: [],
+    ...overrides,
+  };
 }
 function setup(routes: Record<string, unknown | (() => Promise<Response>)>) {
   const calls = new Map<string, number>();
   const fetchMock = jest.fn(async (input: RequestInfo | URL, _init?: RequestInit) => {
-    const url = String(input),
+    const request = input as Request;
+    const url = request.url,
       path = new URL(url).pathname + new URL(url).search;
     calls.set(path, (calls.get(path) ?? 0) + 1);
     const route = routes[path];
     if (typeof route === 'function') return route();
     return reply(route ?? {}, route === undefined ? 404 : 200);
   });
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.test',
     proxyUrl: 'https://proxy.test',
     environment: 'development',
@@ -48,16 +110,14 @@ test('loads canonical official profiles concurrently, coalesces duplicates, and 
   const pending = new Promise<Response>((resolve) => {
     resolveResponse = resolve;
   });
-  const { api, calls } = setup({ '/players/%23P1': () => pending });
+  const { api, calls } = setup({ '/proxy/v1/players/%23P1': () => pending });
   const storage = new MemoryStorage(),
     service = new PlayerService(api, storage);
   const first = service.loadOfficialPlayerData(['p1', '#P1'], { throwOnError: true }),
     second = service.getPlayerAndClanData('#P1');
-  resolveResponse?.(
-    reply({ tag: '#P1', name: 'One', clan: { tag: '#CLAN', name: 'Clan', badgeUrls: {} } }),
-  );
+  resolveResponse?.(reply(officialPlayer({ clan: { tag: '#CLAN', name: 'Clan' } })));
   await Promise.all([first, second]);
-  expect(calls.get('/players/%23P1')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23P1')).toBe(1);
   expect(service.profiles[0]?.name).toBe('One');
   expect(storage.values.get('player_#P1_clan_tag')).toBe('#CLAN');
   expect(await service.loadCachedClanTag('p1')).toBe('#CLAN');
@@ -65,7 +125,9 @@ test('loads canonical official profiles concurrently, coalesces duplicates, and 
 });
 test('rejects an official response whose tag does not match the request', async () => {
   const reportError = jest.fn();
-  const { api } = setup({ '/players/%23P1': { tag: '#OTHER', name: 'Other' } }),
+  const { api } = setup({
+      '/proxy/v1/players/%23P1': officialPlayer({ tag: '#OTHER', name: 'Other' }),
+    }),
     service = new PlayerService(api, undefined, '', reportError);
   await expect(service.loadOfficialPlayerData(['#P1'], { throwOnError: true })).rejects.toThrow(
     'mismatched',
@@ -75,14 +137,20 @@ test('rejects an official response whose tag does not match the request', async 
 });
 test('merges battlelogs when one source is unavailable and caches by canonical tag', async () => {
   const { api, calls } = setup({
-      '/players/%23P1/battlelog': {
+      '/proxy/v1/players/%23P1/battlelog': {
         items: [
           {
             attack: true,
             battleType: 'homeVillage',
             opponentPlayerTag: '#O',
+            opponentName: 'Opponent',
+            opponentTownHallLevel: 17,
+            stars: 3,
+            destructionPercentage: 100,
+            lootedResources: [],
             battleTimestamp: '20260816T120000.000Z',
             armyShareCode: 'u8x5',
+            battleTime: 30,
           },
         ],
       },
@@ -93,27 +161,36 @@ test('merges battlelogs when one source is unavailable and caches by canonical t
   expect(first).toBe(second);
   expect(first.officialAvailable).toBe(true);
   expect(first.historyAvailable).toBe(false);
-  expect(calls.get('/players/%23P1/battlelog')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23P1/battlelog')).toBe(1);
 });
 test('coalesces CWL and ranked loads and caches global league tiers', async () => {
   const routes = {
-    '/player/%23P1/cwl/history?limit=100': { items: [] },
-    '/players/%23P1': {
-      tag: '#P1',
-      name: 'One',
+    '/v2/player/%23P1/cwl/history?limit=100': { items: [] },
+    '/proxy/v1/players/%23P1': officialPlayer({
       leagueTier: { id: 30, name: 'Dragon League 30' },
       currentLeagueGroupTag: '#G',
       currentLeagueSeasonId: 123,
-    },
-    '/players/%23P1/leaguehistory': {
-      items: [{ leagueSeasonId: 123, leagueTierId: 30, maxBattles: 14 }],
-    },
-    '/leaguetiers': { items: [{ id: 30, name: 'Dragon League 30' }] },
-    '/leaguegroup/%23G/123?playerTag=%23P1': {
-      members: [
-        { playerTag: '#P1', playerName: 'One', leagueTrophies: 36 },
-        { playerTag: '#P2', leagueTrophies: 50 },
+    }),
+    '/proxy/v1/players/%23P1/leaguehistory': {
+      items: [
+        {
+          leagueSeasonId: 123,
+          leagueTrophies: 36,
+          leagueTierId: 30,
+          placement: 2,
+          attackWins: 1,
+          attackLosses: 0,
+          attackStars: 3,
+          defenseWins: 0,
+          defenseLosses: 1,
+          defenseStars: 2,
+          maxBattles: 14,
+        },
       ],
+    },
+    '/proxy/v1/leaguetiers': { items: [{ id: 30, name: 'Dragon League 30' }] },
+    '/proxy/v1/leaguegroup/%23G/123?playerTag=%23P1': {
+      members: [rankedMember('#P1', 'One', 36), rankedMember('#P2', 'Two', 50)],
       attackLogs: [],
       defenseLogs: [],
     },
@@ -133,35 +210,29 @@ test('coalesces CWL and ranked loads and caches global league tiers', async () =
   expect(ranked1).toBe(ranked2);
   expect(ranked1.currentRank).toBe(2);
   expect(ranked1.currentMaxBattles).toBe(14);
-  expect(calls.get('/players/%23P1')).toBe(1);
-  expect(calls.get('/leaguetiers')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23P1')).toBe(1);
+  expect(calls.get('/proxy/v1/leaguetiers')).toBe(1);
   expect(rankedChanged).toHaveBeenCalledTimes(1);
 });
 
 test('builds the existing war-stat model from deployed per-player history', async () => {
   const path =
-    '/player/%23P1/war/stats?limit=25&type=random&time%5Bafter%5D=2026-08-01T00%3A00%3A00.000Z';
+    '/v2/player/%23P1/war/stats?type=random&limit=25&time%5Bafter%5D=2026-08-01T00%3A00%3A00.000Z';
   const { api, calls } = setup({
     [path]: {
       items: [
-        {
-          type: 'random',
-          attacksPerMember: 2,
-          endTime: '20260820T120000.000Z',
-          player: { tag: '#P1', name: 'One', townhallLevel: 18, mapPosition: 1 },
-          clan: { tag: '#C' },
-          opponent: { tag: '#O' },
+        warStatsItem({
           attacks: [
             {
               stars: 3,
               destructionPercentage: 100,
               order: 1,
+              duration: 30,
               fresh: true,
-              player: { tag: '#D', townhallLevel: 18, mapPosition: 1 },
+              player: { tag: '#D', name: 'Defender', townhallLevel: 18, mapPosition: 1 },
             },
           ],
-          defenses: [],
-        },
+        }),
       ],
     },
   });
@@ -184,8 +255,9 @@ test('builds the existing war-stat model from deployed per-player history', asyn
 });
 test('search uses exact filter names and tracking headers', async () => {
   const { api, fetchMock } = setup({
-      '/player/search?query=Hero&limit=20&clanTags=%23C&leagueIds=1&townhallLevels=17': {
-        items: [{ tag: '#P' }],
+      '/v2/player/search?query=Hero&limit=20&clanTags=%23C&leagueIds=1&townhallLevels=17': {
+        items: [{ tag: '#P', name: 'Player', townHallLevel: 17 }],
+        pagination: { limit: 20, hasMore: false, nextCursor: null },
       },
     }),
     service = new PlayerService(api);
@@ -196,17 +268,15 @@ test('search uses exact filter names and tracking headers', async () => {
     extraHeaders: { 'x-ck-user-id': '123' },
   });
   expect(result[0]?.tag).toBe('#P');
-  expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
-    headers: expect.objectContaining({ 'x-ck-user-id': '123' }),
-  });
+  expect((fetchMock.mock.calls[0]?.[0] as Request).headers.get('x-ck-user-id')).toBe('123');
 });
 test('search returns empty for HTTP/shape misses but propagates transport failures', async () => {
   const notFound = setup({}),
-    invalidShape = setup({ '/player/search?query=Hero&limit=20': { result: [] } });
+    invalidShape = setup({ '/v2/player/search?query=Hero&limit=20': { result: [] } });
   await expect(new PlayerService(notFound.api).searchPlayers('Hero')).resolves.toEqual([]);
   await expect(new PlayerService(invalidShape.api).searchPlayers('Hero')).resolves.toEqual([]);
 
-  const transportApi = new ApiClient({
+  const transportApi = createContractTestApi({
     baseUrl: 'https://api.test',
     proxyUrl: 'https://proxy.test',
     environment: 'development',
@@ -214,12 +284,14 @@ test('search returns empty for HTTP/shape misses but propagates transport failur
       throw new TypeError('offline');
     }) as typeof fetch,
   });
-  await expect(new PlayerService(transportApi).searchPlayers('Hero')).rejects.toThrow('offline');
+  await expect(new PlayerService(transportApi).searchPlayers('Hero')).rejects.toBeInstanceOf(
+    TransportError,
+  );
 });
 test('ranked history HTTP misses are optional but transport failures propagate', async () => {
   const routes = {
-    '/players/%23P1': { tag: '#P1', name: 'One' },
-    '/leaguetiers': { items: [] },
+    '/proxy/v1/players/%23P1': officialPlayer(),
+    '/proxy/v1/leaguetiers': { items: [] },
   };
   const httpMiss = setup(routes);
   await expect(new PlayerService(httpMiss.api).loadRankedLeagueData('#P1')).resolves.toMatchObject({
@@ -228,30 +300,30 @@ test('ranked history HTTP misses are optional but transport failures propagate',
 
   const transport = setup({
     ...routes,
-    '/players/%23P1/leaguehistory': async () => {
+    '/proxy/v1/players/%23P1/leaguehistory': async () => {
       throw new TypeError('ranked offline');
     },
   });
-  await expect(new PlayerService(transport.api).loadRankedLeagueData('#P1')).rejects.toThrow(
-    'ranked offline',
+  await expect(new PlayerService(transport.api).loadRankedLeagueData('#P1')).rejects.toBeInstanceOf(
+    TransportError,
   );
 });
 test('ranked warmup canonicalizes duplicates and isolates per-account failures', async () => {
   const { api, calls } = setup({
-      '/players/%23P1': { tag: '#P1', name: 'One' },
-      '/players/%23P1/leaguehistory': { items: [] },
-      '/leaguetiers': { items: [] },
-      '/players/%23BAD': async () => {
+      '/proxy/v1/players/%23P1': officialPlayer(),
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/proxy/v1/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23BAD': async () => {
         throw new TypeError('offline');
       },
     }),
     service = new PlayerService(api);
 
   await expect(service.prefetchRankedLeagueData(['p1', '#P1', '#BAD'])).resolves.toBeUndefined();
-  expect(calls.get('/players/%23P1')).toBe(1);
-  expect(calls.get('/players/%23BAD')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23P1')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23BAD')).toBe(1);
   await expect(service.loadRankedLeagueData('#P1')).resolves.toMatchObject({ playerName: 'One' });
-  expect(calls.get('/players/%23P1')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23P1')).toBe(1);
 });
 test('clearing ranked data prevents an older in-flight response from repopulating the cache', async () => {
   let resolveOld: ((value: Response) => void) | undefined;
@@ -260,14 +332,14 @@ test('clearing ranked data prevents an older in-flight response from repopulatin
   });
   let profileCalls = 0;
   const { api, calls } = setup({
-      '/players/%23P1': async () => {
+      '/proxy/v1/players/%23P1': async () => {
         profileCalls += 1;
         return profileCalls === 1
           ? oldResponse
-          : reply({ tag: '#P1', name: 'New profile', trophies: 2 });
+          : reply(officialPlayer({ name: 'New profile', trophies: 2 }));
       },
-      '/players/%23P1/leaguehistory': { items: [] },
-      '/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/proxy/v1/leaguetiers': { items: [] },
     }),
     service = new PlayerService(api);
 
@@ -276,10 +348,10 @@ test('clearing ranked data prevents an older in-flight response from repopulatin
   const newer = await service.loadRankedLeagueData('#P1');
   expect(newer.playerName).toBe('New profile');
 
-  resolveOld?.(reply({ tag: '#P1', name: 'Old profile', trophies: 1 }));
+  resolveOld?.(reply(officialPlayer({ name: 'Old profile', trophies: 1 })));
   expect((await older).playerName).toBe('Old profile');
   expect((await service.loadRankedLeagueData('#P1')).playerName).toBe('New profile');
-  expect(calls.get('/players/%23P1')).toBe(2);
+  expect(calls.get('/proxy/v1/players/%23P1')).toBe(2);
 });
 test('role text accepts the existing localization translator contract', () => {
   const { api } = setup({}),
@@ -306,13 +378,15 @@ test('card preferences normalize tags, ignore malformed JSON, persist non-defaul
 test('loads and caches activity while preserving exact timer and join/leave contracts', async () => {
   const before = new Date('2026-08-01T00:00:00.000Z');
   const { api, calls } = setup({
-      '/player/%23P1/history/changes?type=troop_level&limit=500': { items: [] },
-      '/player/%23P1/timers': { items: [] },
-      '/player/%23P1/join-leave?limit=50&time%5Bbefore%5D=2026-08-01T00%3A00%3A00.000Z': {
+      '/v2/player/%23P1/history/changes?type=troop_level&limit=500': { items: [] },
+      '/v2/player/%23P1/timers': { items: [] },
+      '/v2/player/%23P1/join-leave?limit=50&time%5Bbefore%5D=2026-08-01T00%3A00%3A00.000Z': {
         available: 0,
         items: [],
       },
-      '/player/%23P1/join-leave/totals': { items: [{ clan_tag: '#C', count: 2 }] },
+      '/v2/player/%23P1/join-leave/totals': {
+        items: [{ clan: { tag: '#C', name: 'Clan' }, visits: 2, minutes: 60 }],
+      },
     }),
     service = new PlayerService(api);
 
@@ -323,10 +397,10 @@ test('loads and caches activity while preserving exact timer and join/leave cont
   await service.loadPlayerJoinLeave('p1', before);
   const totals = await service.loadPlayerJoinLeaveTotals('p1');
 
-  expect(calls.get('/player/%23P1/history/changes?type=troop_level&limit=500')).toBe(2);
-  expect(calls.get('/player/%23P1/timers')).toBe(1);
+  expect(calls.get('/v2/player/%23P1/history/changes?type=troop_level&limit=500')).toBe(2);
+  expect(calls.get('/v2/player/%23P1/timers')).toBe(1);
   expect(
-    calls.get('/player/%23P1/join-leave?limit=50&time%5Bbefore%5D=2026-08-01T00%3A00%3A00.000Z'),
+    calls.get('/v2/player/%23P1/join-leave?limit=50&time%5Bbefore%5D=2026-08-01T00%3A00%3A00.000Z'),
   ).toBe(1);
   expect(totals).toHaveLength(1);
 });
@@ -365,8 +439,8 @@ test('uses official data, links clans, and emits minimal player JSON', async () 
 
 test('hydrates bookmarked and bulk players while retaining existing profiles and enrichment', async () => {
   const { api, calls } = setup({
-      '/players/%23P1': { tag: '#P1', name: 'One' },
-      '/players/%23P2': { tag: '#P2', name: 'Two' },
+      '/proxy/v1/players/%23P1': officialPlayer(),
+      '/proxy/v1/players/%23P2': officialPlayer({ tag: '#P2', name: 'Two' }),
     }),
     storage = new MemoryStorage(),
     service = new PlayerService(api, storage);
@@ -384,7 +458,7 @@ test('hydrates bookmarked and bulk players while retaining existing profiles and
     false,
   );
 
-  expect(calls.get('/players/%23P1')).toBe(1);
+  expect(calls.get('/proxy/v1/players/%23P1')).toBe(1);
   expect(service.profiles.map(({ tag }) => tag)).toEqual(['#P2', '#P1']);
   expect(service.profiles[0]?.lastOnline).toEqual(new Date(123_000));
   await Promise.resolve();
@@ -392,21 +466,13 @@ test('hydrates bookmarked and bulk players while retaining existing profiles and
 });
 
 test('loads, attaches, filters, and applies bulk war statistics', async () => {
-  const warItem = {
-    type: 'random',
-    attacksPerMember: 2,
-    endTime: '20260820T120000.000Z',
-    player: { tag: '#P1', name: 'One', townhallLevel: 18, mapPosition: 1 },
-    clan: { tag: '#C' },
-    opponent: { tag: '#O' },
-    attacks: [],
-    defenses: [],
-  };
+  const warItem = warStatsItem();
   const { api, calls } = setup({
-      '/player/%23P1/war/stats?limit=50': { items: [warItem] },
-      '/player/%23P1/war/stats?limit=500&type=cwl&time%5Bbefore%5D=2026-09-01T00%3A00%3A00.000Z': {
-        items: [warItem],
-      },
+      '/v2/player/%23P1/war/stats?limit=50': { items: [warItem] },
+      '/v2/player/%23P1/war/stats?type=cwl&limit=500&time%5Bbefore%5D=2026-09-01T00%3A00%3A00.000Z':
+        {
+          items: [warItem],
+        },
     }),
     service = new PlayerService(api);
   await service.useOfficialPlayerData({ tag: '#P1', name: 'One' });
@@ -424,10 +490,10 @@ test('loads, attaches, filters, and applies bulk war statistics', async () => {
   );
   service.processBulkWarStats([{ tag: '#P1', wars: [] }], false);
 
-  expect(calls.get('/player/%23P1/war/stats?limit=50')).toBe(1);
+  expect(calls.get('/v2/player/%23P1/war/stats?limit=50')).toBe(1);
   expect(
     calls.get(
-      '/player/%23P1/war/stats?limit=500&type=cwl&time%5Bbefore%5D=2026-09-01T00%3A00%3A00.000Z',
+      '/v2/player/%23P1/war/stats?type=cwl&limit=500&time%5Bbefore%5D=2026-09-01T00%3A00%3A00.000Z',
     ),
   ).toBe(1);
   expect(service.profiles[0]?.warStats).not.toBeNull();

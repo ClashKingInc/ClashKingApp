@@ -7,12 +7,8 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { EyeOff, GripVertical, RefreshCw, UserCircle } from 'lucide-react-native';
-import {
-  NestableDraggableFlatList,
-  NestableScrollContainer,
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
+import { EyeOff, RefreshCw, UserCircle } from 'lucide-react-native';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -66,9 +62,9 @@ export function DashboardScreen({
     }
   };
   const cards = visibleHomeCards(model);
-  let body;
+  let emptyBody;
   if (model.loading && model.linkedAccountCount === 0)
-    body = (
+    emptyBody = (
       <>
         <HomeCardSkeleton rows={1} />
         <View style={styles.mobileGap} />
@@ -76,7 +72,7 @@ export function DashboardScreen({
       </>
     );
   else if (model.linkedAccountCount === 0)
-    body = (
+    emptyBody = (
       <EmptyState
         title={t('dashboardNoLinkedAccountsTitle')}
         body={t('dashboardNoLinkedAccountsBody')}
@@ -87,7 +83,7 @@ export function DashboardScreen({
       />
     );
   else if (cards.length === 0)
-    body = (
+    emptyBody = (
       <EmptyState
         title={t('dashboardTodoHiddenTitle')}
         body={t('dashboardTodoHiddenBody')}
@@ -95,81 +91,47 @@ export function DashboardScreen({
         style={styles.empty}
       />
     );
-  else
-    body = (
-      <View
-        style={[
-          styles.recap,
-          desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
-        ]}
-      >
-        <NestableDraggableFlatList
-          activationDistance={8}
-          data={cards}
-          keyExtractor={(card) => card}
-          onDragEnd={({ data }) => actions.reorderCards(data)}
-          scrollEnabled={false}
-          renderItem={({ item: card, drag, isActive, getIndex }) => {
-            const title = homeCardTitle(card, t);
-            const index = getIndex() ?? 0;
-            return (
-              <ScaleDecorator activeScale={1.015}>
-                <View
-                  style={[
-                    index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
-                    isActive && styles.activeCard,
-                  ]}
-                >
-                  <View style={styles.cardHeading}>
-                    {desktop ? (
-                      <CKText role="titleMedium" style={styles.sectionTitle}>
-                        {title}
-                      </CKText>
-                    ) : (
-                      <View style={styles.grow} />
-                    )}
-                    <Pressable
-                      accessibilityLabel={t('upgradeTrackerPlanReorder', { category: title })}
-                      accessibilityRole="button"
-                      delayLongPress={180}
-                      disabled={isActive}
-                      onLongPress={drag}
-                      style={({ pressed }) => [
-                        styles.dragHandle,
-                        pressed && styles.dragHandlePressed,
-                      ]}
-                      testID={`home-card-drag-${card}`}
-                    >
-                      <GripVertical color={theme.onSurfaceVariant} size={20} />
-                    </Pressable>
-                  </View>
-                  {desktop ? <View style={styles.sectionGap} /> : null}
-                  {card === 'todo' && model.todo ? (
-                    <HomeTodoCard model={model.todo} desktop={desktop} actions={actions} />
-                  ) : card === 'ranked' && model.ranked ? (
-                    <HomeRankedCard model={model.ranked} desktop={desktop} actions={actions} />
-                  ) : card === 'upgrade' && model.upgrade ? (
-                    <HomeUpgradeCard model={model.upgrade} desktop={desktop} actions={actions} />
-                  ) : null}
-                </View>
-              </ScaleDecorator>
-            );
-          }}
-        />
-      </View>
-    );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <NestableScrollContainer
+      <DraggableFlatList
+        activationDistance={8}
         alwaysBounceVertical
+        data={cards}
+        keyExtractor={(card) => card}
+        onDragEnd={({ data }) => actions.reorderCards(data)}
+        scrollEnabled
         contentContainerStyle={{
           paddingHorizontal: horizontal,
           paddingBottom: homeBottomPadding(desktop, insets.bottom),
         }}
+        ListEmptyComponent={
+          <View
+            style={[
+              styles.recap,
+              desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
+            ]}
+          >
+            {emptyBody}
+          </View>
+        }
+        ListHeaderComponent={
+          <>
+            {model.lastRefresh ? (
+              <LastRefresh lastRefresh={model.lastRefresh} onRefresh={() => void refresh()} />
+            ) : null}
+            <View style={styles.refreshGap} />
+            <HomeEventBanner
+              announcements={model.announcements}
+              desktop={desktop}
+              onOpen={actions.openAnnouncement}
+            />
+            <View style={{ height: desktop ? 24 : 16 }} />
+          </>
+        }
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -177,19 +139,55 @@ export function DashboardScreen({
             tintColor={theme.primary}
           />
         }
-      >
-        {model.lastRefresh ? (
-          <LastRefresh lastRefresh={model.lastRefresh} onRefresh={() => void refresh()} />
-        ) : null}
-        <View style={styles.refreshGap} />
-        <HomeEventBanner
-          announcements={model.announcements}
-          desktop={desktop}
-          onOpen={actions.openAnnouncement}
-        />
-        <View style={{ height: desktop ? 24 : 16 }} />
-        {body}
-      </NestableScrollContainer>
+        renderItem={({ item: card, drag, isActive, getIndex }) => {
+          const title = homeCardTitle(card, t);
+          const index = getIndex() ?? 0;
+          const dragProps = { onLongPress: drag, dragTestID: `home-card-${card}` };
+          return (
+            <ScaleDecorator activeScale={1.015}>
+              <View
+                style={[
+                  styles.recap,
+                  desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
+                  index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
+                  isActive && styles.activeCard,
+                ]}
+              >
+                {desktop ? (
+                  <>
+                    <CKText role="titleMedium" style={styles.sectionTitle}>
+                      {title}
+                    </CKText>
+                    <View style={styles.sectionGap} />
+                  </>
+                ) : null}
+                {card === 'todo' && model.todo ? (
+                  <HomeTodoCard
+                    model={model.todo}
+                    desktop={desktop}
+                    actions={actions}
+                    {...dragProps}
+                  />
+                ) : card === 'ranked' && model.ranked ? (
+                  <HomeRankedCard
+                    model={model.ranked}
+                    desktop={desktop}
+                    actions={actions}
+                    {...dragProps}
+                  />
+                ) : card === 'upgrade' && model.upgrade ? (
+                  <HomeUpgradeCard
+                    model={model.upgrade}
+                    desktop={desktop}
+                    actions={actions}
+                    {...dragProps}
+                  />
+                ) : null}
+              </View>
+            </ScaleDecorator>
+          );
+        }}
+      />
     </SafeAreaView>
   );
 }
@@ -256,16 +254,6 @@ const styles = StyleSheet.create({
   },
   refreshGap: { height: 12 },
   recap: { width: '100%' },
-  grow: { flex: 1 },
-  cardHeading: { minHeight: 28, flexDirection: 'row', alignItems: 'center' },
-  dragHandle: {
-    width: 40,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 16,
-  },
-  dragHandlePressed: { opacity: 0.56, transform: [{ scale: 0.96 }] },
   activeCard: { opacity: 0.94 },
   sectionTitle: { fontWeight: '900' },
   sectionGap: { height: ckSpacing.sm },

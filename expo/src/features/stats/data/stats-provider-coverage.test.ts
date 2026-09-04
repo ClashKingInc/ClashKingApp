@@ -32,7 +32,7 @@ function repository(overrides: Partial<StatsRepositoryContract> = {}): StatsRepo
           performance().metrics,
         ),
     ),
-    loadPlayerCounts: jest.fn(async () => new StatsPlayerCountsResponse([], [], [])),
+    loadPlayerCounts: jest.fn(async () => new StatsPlayerCountsResponse([], [])),
     loadClanCounts: jest.fn(async () => new StatsClanCountsResponse([], [], [])),
     loadArmies: jest.fn(async () => new StatsArmiesResponse(range, [], 0)),
     loadItems: jest.fn(async () => new StatsItemsResponse(range, [], 0)),
@@ -77,13 +77,13 @@ describe('StatsProvider state and query coverage', () => {
       leagueTier: 2,
       minimumSample: 50,
       limit: 10,
-      sortBy: 'win_rate',
+      sortBy: 'average_stars',
       include: [new StatsItemQuantityFilter('Wizard', 2)],
       exclude: ['Wizard'],
     });
     await provider.load(StatsSection.armies);
     const armies = (repo.loadArmies as jest.Mock).mock.calls[0]![0];
-    expect(armies).toMatchObject({ limit: 10, sortBy: 'win_rate' });
+    expect(armies).toMatchObject({ limit: 10, sortBy: 'average_stars' });
     expect(armies.filters).toMatchObject({
       townHallLevel: 17,
       rankedLeagueTierId: 2,
@@ -194,7 +194,7 @@ describe('StatsProvider state and query coverage', () => {
     );
     const pending = provider.load(StatsSection.players);
     await provider.setDates(new Date('2026-08-01'), new Date('2026-08-02'));
-    resolvePlayers(new StatsPlayerCountsResponse([{ townHall: 17, count: 1 }] as never, [], []));
+    resolvePlayers(new StatsPlayerCountsResponse([{ townHall: 17, count: 1 }] as never, []));
     await pending;
     expect(provider.stateFor(StatsSection.players).status).toBe(StatsLoadStatus.idle);
 

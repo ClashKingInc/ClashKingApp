@@ -1,4 +1,5 @@
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 
 import { I18nProvider } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
@@ -12,6 +13,14 @@ jest.mock('../../../ui/accessibility', () => ({
     highContrast: false,
   }),
 }));
+
+jest.mock('react-native-safe-area-context', () => {
+  const actual = jest.requireActual('react-native-safe-area-context');
+  return {
+    ...actual,
+    useSafeAreaInsets: () => ({ top: 47, right: 0, bottom: 34, left: 0 }),
+  };
+});
 
 jest.mock('react-native-draggable-flatlist', () => {
   const ReactModule = jest.requireActual<typeof import('react')>('react');
@@ -57,6 +66,35 @@ const service: LinkedAccountPresentationService = {
 };
 
 describe('first linked-account continuation', () => {
+  it('keeps Continue above the device bottom inset while the account list owns scrolling', async () => {
+    const screen = await render(
+      <I18nProvider locale="en">
+        <CKThemeProvider preference="light">
+          <ManageLinkedAccountsScreen
+            continueLabel="Continue"
+            firstConnection
+            initialAccounts={Array.from({ length: 12 }, (_, index) => ({
+              playerTag: `#PLAYER${index}`,
+              name: `Player ${index}`,
+              townHallLevel: 17,
+              isVerified: index === 0,
+              hidden: false,
+              raw: {},
+            }))}
+            onContinue={jest.fn()}
+            onOpenGameSettings={jest.fn()}
+            service={service}
+          />
+        </CKThemeProvider>
+      </I18nProvider>,
+    );
+
+    expect(
+      StyleSheet.flatten(screen.getByTestId('linked-accounts-continue').props.style).paddingBottom,
+    ).toBe(42);
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
+  });
+
   it('hydrates account identity when player profiles arrive after the links', async () => {
     const props = {
       continueLabel: 'Continue',

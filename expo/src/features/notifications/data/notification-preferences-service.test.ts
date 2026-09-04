@@ -1,4 +1,4 @@
-import { ApiClient } from '../../../core/api/client';
+import { createContractTestApi } from '../../../core/api/contract-api.testing';
 import { parseNotificationPreferences } from '../../../core/dto/notification-preferences';
 import { STORAGE_KEYS } from '../../../core/storage/storage';
 import type { StringStore } from '../../../services/storage/auth-storage';
@@ -11,8 +11,6 @@ const responseBody = {
   deviceId: 'device-1',
   environment: 'sandbox',
   notificationsEnabled: true,
-  legendAttacksEnabled: true,
-  legendDefensesEnabled: false,
   warAttacksEnabled: false,
   warStateEnabled: true,
   warRemindersEnabled: true,
@@ -49,7 +47,7 @@ function serviceWith(
   pushApiV2BaseUrlOverride?: string,
 ): NotificationPreferencesService {
   return new NotificationPreferencesService({
-    api: new ApiClient({
+    api: createContractTestApi({
       baseUrl: 'https://push.example/v2',
       environment: 'production',
       platform: 'native',
@@ -68,7 +66,7 @@ describe('NotificationPreferencesService', () => {
     const requested: string[] = [];
     const service = serviceWith(
       async (input) => {
-        requested.push(String(input));
+        requested.push((input as Request).url);
         return new Response(JSON.stringify(responseBody));
       },
       new MemoryStore(),
@@ -86,7 +84,7 @@ describe('NotificationPreferencesService', () => {
     const requested: string[] = [];
     const preferences = new MemoryStore();
     const service = serviceWith(async (input) => {
-      requested.push(String(input));
+      requested.push((input as Request).url);
       return new Response(JSON.stringify(responseBody));
     }, preferences);
 
@@ -102,8 +100,8 @@ describe('NotificationPreferencesService', () => {
 
   it('PUT sends categories without rewriting account selection', async () => {
     let body: unknown;
-    const service = serviceWith(async (_input, init) => {
-      body = JSON.parse(String(init?.body)) as unknown;
+    const service = serviceWith(async (input) => {
+      body = await (input as Request).clone().json();
       return new Response(JSON.stringify(responseBody));
     });
 
@@ -113,8 +111,6 @@ describe('NotificationPreferencesService', () => {
       deviceId: 'device-1',
       environment: 'sandbox',
       notificationsEnabled: true,
-      legendAttacksEnabled: true,
-      legendDefensesEnabled: false,
       warAttacksEnabled: false,
       warStateEnabled: true,
       warRemindersEnabled: true,
@@ -143,9 +139,9 @@ describe('NotificationPreferencesService', () => {
   it('uses the dedicated encoded per-player endpoint', async () => {
     let request = '';
     let body = '';
-    const service = serviceWith(async (input, init) => {
-      request = String(input);
-      body = String(init?.body);
+    const service = serviceWith(async (input) => {
+      request = (input as Request).url;
+      body = await (input as Request).clone().text();
       return new Response(
         JSON.stringify({ playerTag: '#VERIFIED', source: 'verified', active: true }),
       );

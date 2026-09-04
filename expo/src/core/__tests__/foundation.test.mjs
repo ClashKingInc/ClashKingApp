@@ -10,7 +10,6 @@ import {
   stableFeatureBucket,
 } from '../feature-flags/feature-flags.ts';
 import {
-  NOTIFICATION_RAID_BACKEND_INCOMPATIBILITY,
   parseNotificationPreferences,
 } from '../dto/notification-preferences.ts';
 import { serializeStoredAuthSession, tryParseStoredAuthSession } from '../dto/auth-session.ts';
@@ -77,14 +76,11 @@ test('feature evaluation preserves version, time, platform, and rollout rules', 
   );
 });
 
-test('notification DTO deliberately exposes the unresolved raid backend mismatch', () => {
-  assert.match(NOTIFICATION_RAID_BACKEND_INCOMPATIBILITY, /clashking_api/);
+test('notification DTO requires the supported raid reminder fields', () => {
   const currentBackendShape = {
     deviceId: 'device',
     environment: 'production',
     notificationsEnabled: true,
-    legendAttacksEnabled: true,
-    legendDefensesEnabled: true,
     warAttacksEnabled: true,
     warStateEnabled: true,
     warRemindersEnabled: true,

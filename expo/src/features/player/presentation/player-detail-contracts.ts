@@ -1,4 +1,5 @@
 import type { Achievement } from '../../achievements/models';
+import type { PlayerWarStatsExportEndpoint } from '@clashking/api-contracts/expo';
 import type { WarCwl, WarInfo } from '../../war/models';
 import type {
   Player,
@@ -65,6 +66,7 @@ export interface PlayerDetailRootProps {
   readonly player: Player;
   readonly service: {
     readonly apiV2Url: string;
+    downloadWarStatsExport(body: typeof PlayerWarStatsExportEndpoint.body.Type): Promise<Response>;
     loadPlayerBattlelog(tag: string, force?: boolean): Promise<PlayerBattlelogData>;
     loadPlayerActivity(
       tag: string,

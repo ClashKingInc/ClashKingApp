@@ -1,4 +1,7 @@
-import { ResponseFormatException } from '../../../core/api/client';
+import { AchievementsCheckEndpoint } from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { AchievementsRepository } from './achievements-repository';
 
 const response = {
@@ -31,10 +34,12 @@ const response = {
 };
 
 function setup(result: Record<string, unknown> | Promise<Record<string, unknown>> = response) {
-  const requestRecord = jest.fn(async () => result);
+  const execute = jest.fn(() => Effect.promise(() => Promise.resolve(result))) as unknown as
+    jest.MockedFunction<ContractApiService['execute']>;
+  const executeStatus = jest.fn() as unknown as ContractApiService['executeStatus'];
   return {
-    requestRecord,
-    repository: new AchievementsRepository({ requestRecord }),
+    execute,
+    repository: new AchievementsRepository({ execute, executeStatus }),
   };
 }
 
@@ -43,12 +48,10 @@ test('does not expose fallback entries before an authenticated response', () => 
 });
 
 test('check posts an empty body with auth and maps server state in catalog order', async () => {
-  const { repository, requestRecord } = setup();
+  const { repository, execute } = setup();
   await repository.check();
-  expect(requestRecord).toHaveBeenCalledWith('/achievements/check', {
-    method: 'POST',
-    body: {},
-    requiresAuth: true,
+  expect(execute).toHaveBeenCalledWith(AchievementsCheckEndpoint, {
+    path: {}, query: {}, body: {},
   });
   expect(repository.snapshot.achievements.map((item) => [item.id, item.earnedCount])).toEqual([
     ['townhall_18', 3],
@@ -60,12 +63,10 @@ test('check posts an empty body with auth and maps server state in catalog order
 });
 
 test('load uses the only deployed catalog response', async () => {
-  const { repository, requestRecord } = setup();
+  const { repository, execute } = setup();
   await repository.load();
-  expect(requestRecord).toHaveBeenCalledWith('/achievements/check', {
-    method: 'POST',
-    body: {},
-    requiresAuth: true,
+  expect(execute).toHaveBeenCalledWith(AchievementsCheckEndpoint, {
+    path: {}, query: {}, body: {},
   });
 });
 
@@ -80,7 +81,7 @@ test('skips invalid and unknown entries and rejects a missing items list', async
   expect(repository.snapshot.achievements.map((item) => item.id)).toEqual(['townhall_18']);
 
   const malformed = setup({}).repository;
-  await expect(malformed.check()).rejects.toBeInstanceOf(ResponseFormatException);
+  await expect(malformed.check()).rejects.toBeInstanceOf(TypeError);
   expect(malformed.snapshot.isRefreshing).toBe(false);
 });
 
@@ -89,11 +90,13 @@ test('session changes clear state and stale checks cannot replace a newer refres
   let resolveSecond: ((value: Record<string, unknown>) => void) | undefined;
   const first = new Promise<Record<string, unknown>>((resolve) => (resolveFirst = resolve));
   const second = new Promise<Record<string, unknown>>((resolve) => (resolveSecond = resolve));
-  const requestRecord = jest
-    .fn<Promise<Record<string, unknown>>, []>()
-    .mockImplementationOnce(() => first)
-    .mockImplementationOnce(() => second);
-  const repository = new AchievementsRepository({ requestRecord });
+  const execute = jest
+    .fn()
+    .mockImplementationOnce(() => Effect.promise(() => first))
+    .mockImplementationOnce(() => Effect.promise(() => second)) as unknown as
+    jest.MockedFunction<ContractApiService['execute']>;
+  const executeStatus = jest.fn() as unknown as ContractApiService['executeStatus'];
+  const repository = new AchievementsRepository({ execute, executeStatus });
 
   const stale = repository.check();
   repository.bindSession('user-2');
@@ -111,10 +114,10 @@ test('session changes clear state and stale checks cannot replace a newer refres
 test('coalesces checks while a refresh is active', async () => {
   let resolve: ((value: Record<string, unknown>) => void) | undefined;
   const pending = new Promise<Record<string, unknown>>((done) => (resolve = done));
-  const { repository, requestRecord } = setup(pending);
+  const { repository, execute } = setup(pending);
   const first = repository.check();
   await repository.check();
-  expect(requestRecord).toHaveBeenCalledTimes(1);
+  expect(execute).toHaveBeenCalledTimes(1);
   resolve?.(response);
   await first;
 });

@@ -50,7 +50,10 @@ export function SearchRoot({
 }: SearchRootProps) {
   const runtime = useAppRuntime();
   const { t } = useI18n();
-  const service = useMemo(() => new SearchService(runtime.api), [runtime.api]);
+  const service = useMemo(
+    () => new SearchService(runtime.contractApi),
+    [runtime.contractApi],
+  );
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<SearchMode>('players');
   const [filtersExpanded, setFiltersExpanded] = useState(false);

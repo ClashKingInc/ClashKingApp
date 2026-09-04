@@ -49,7 +49,7 @@ export class StatsProvider {
   armiesLeagueTier?: number;
   armiesMinimumSample = 100;
   armiesLimit = 25;
-  armiesSortBy = 'usage_rate';
+  armiesSortBy: StatsArmiesQuery['sortBy'] = 'usage_rate';
   armiesInclude: readonly StatsItemQuantityFilter[] = [];
   armiesExclude: readonly string[] = [];
   itemsTownHall?: number;
@@ -120,7 +120,7 @@ export class StatsProvider {
     leagueTier?: number | null;
     minimumSample?: number;
     limit?: number;
-    sortBy?: string;
+    sortBy?: StatsArmiesQuery['sortBy'];
     include?: readonly StatsItemQuantityFilter[];
     exclude?: readonly string[];
   }): void {
@@ -310,7 +310,7 @@ function isEmpty(value: object): boolean {
   if (value instanceof StatsItemsResponse) return value.items.length === 0;
   if (value instanceof StatsPerformanceResponse) return !value.metrics.available;
   if (value instanceof StatsPlayerCountsResponse)
-    return value.townHalls.length + value.builderHalls.length + value.leagueTiers.length === 0;
+    return value.townHalls.length + value.leagueTiers.length === 0;
   if (value instanceof StatsClanCountsResponse)
     return value.locations.length + value.cwlLeagues.length + value.capitalLeagues.length === 0;
   if (value instanceof StatsArmiesResponse) return false;
