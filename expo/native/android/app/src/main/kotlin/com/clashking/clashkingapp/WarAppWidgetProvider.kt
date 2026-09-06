@@ -228,7 +228,11 @@ private fun downloadBitmap(url: String): Bitmap? {
     if (url.isBlank()) return null
     var connection: HttpURLConnection? = null
     return try {
-        connection = URL(url).openConnection() as HttpURLConnection
+        val source = URL(url)
+        val badgeUrl = if (source.host == "badges.clashk.ing") {
+            URL("https", source.host, source.path.replace(Regex("\\.[^/]+$"), "") + ".png?size=256")
+        } else source
+        connection = badgeUrl.openConnection() as HttpURLConnection
         connection.connectTimeout = 5_000
         connection.readTimeout = 5_000
         connection.doInput = true

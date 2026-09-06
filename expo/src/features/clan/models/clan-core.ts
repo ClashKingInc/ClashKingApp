@@ -25,8 +25,8 @@ export class ClanBadgeUrls {
     return this.small || this.medium || this.large;
   }
 
-  static fromJson(_value: unknown, tag = ''): ClanBadgeUrls {
-    const url = ImageAssets.clanBadgeForTag(tag);
+  static fromJson(value: unknown, tag = ''): ClanBadgeUrls {
+    const url = ImageAssets.clanBadgeForTag(tag, value);
     return new ClanBadgeUrls(url, url, url);
   }
 
@@ -210,7 +210,7 @@ export class Clan {
         ? ClanLocation.fromJson(record(json.location))
         : null,
       bool(json.isFamilyFriendly),
-      ClanBadgeUrls.fromJson(json.badgeUrls, string(json.tag)),
+      ClanBadgeUrls.fromJson(json, string(json.tag)),
       int(json.clanLevel),
       int(json.clanPoints),
       int(json.clanBuilderBasePoints),

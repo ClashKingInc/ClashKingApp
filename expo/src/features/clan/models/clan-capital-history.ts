@@ -51,7 +51,7 @@ export class RaidDefender {
     readonly badgeUrls: Readonly<Record<string, string>>,
   ) {}
   static fromJson(json: JsonRecord) {
-    const badges = ImageAssets.clanBadgeUrls(string(json.tag));
+    const badges = ImageAssets.clanBadgeUrls(string(json.tag), json);
     return new RaidDefender(string(json.tag), string(json.name), int(json.level), badges);
   }
 }

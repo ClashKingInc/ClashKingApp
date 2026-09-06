@@ -221,7 +221,7 @@ export class CwlClan {
       return new CwlClan(
         string(json.tag, 'No tag'),
         string(json.name, 'No name'),
-        ClanBadgeUrls.fromJson(json.badgeUrls, string(json.tag)),
+        ClanBadgeUrls.fromJson(json, string(json.tag)),
         int(json.clanLevel),
         int(json.attack_count),
         int(json.total_stars),

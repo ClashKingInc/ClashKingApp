@@ -10,6 +10,23 @@ private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
 private let sharedAuthSessionKey = "shared_auth_session_v1"
 private let sharedAuthKeychainService = "flutter_secure_storage_service"
 
+private func widgetBadgeURL(_ url: URL) -> URL? {
+  guard url.host == "badges.clashk.ing" else { return url }
+  var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+  components?.path = url.deletingPathExtension().path + ".png"
+  components?.queryItems = [URLQueryItem(name: "size", value: "256")]
+  components?.fragment = nil
+  return components?.url
+}
+
+private func widgetClanBadge(_ tag: String?) -> String? {
+  let normalized = (tag ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    .replacingOccurrences(of: "#", with: "").uppercased()
+  guard !normalized.isEmpty,
+        normalized.range(of: "^[A-Z0-9]+$", options: .regularExpression) != nil else { return nil }
+  return "https://badges.clashk.ing/\(normalized).png?size=256"
+}
+
 private func widgetDestination(tag: String?, upgrade: Bool) -> URL? {
   let normalized = (tag ?? "").replacingOccurrences(of: "#", with: "").uppercased()
   guard !normalized.isEmpty,
@@ -203,7 +220,8 @@ struct WarTimelineProvider: AppIntentTimelineProvider {
   private func fetchBadgeData(_ urlString: String?) -> Data? {
     guard
       let urlString,
-      let url = URL(string: urlString),
+      let originalURL = URL(string: urlString),
+      let url = widgetBadgeURL(originalURL),
       url.scheme == "https"
     else {
       return nil
@@ -638,7 +656,7 @@ private struct WarWidgetFreshFetcher {
     let destruction = double(raw["destructionPercentage"])
     return WarWidgetData.Side(
       name: string(raw["name"]) ?? "Unknown",
-      badgeUrlMedium: string(dictionary(raw["badgeUrls"])["medium"]) ?? "https://assets.clashk.ing/clashkinglogo.png",
+      badgeUrlMedium: widgetClanBadge(string(raw["tag"])) ?? "https://assets.clashk.ing/clashkinglogo.png",
       percent: String(format: "%.2f%%", destruction),
       attacks: "\(int(raw["attacks"]))/\(teamSize * attacksPerMember)",
       stars: stars,

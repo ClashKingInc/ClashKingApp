@@ -1,3 +1,4 @@
+import { badgeRequestHeaders } from './badge-token-hints';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Directory, File, Paths } from 'expo-file-system';
 import { fetch } from 'expo/fetch';
@@ -22,7 +23,7 @@ export const localImageCache = new ManagedImageCache(localFileIndex, {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30_000);
     try {
-      const response = await fetch(url, { signal: controller.signal, headers: { 'Cache-Control': 'no-cache' } });
+      const response = await fetch(url, { signal: controller.signal, headers: { 'Cache-Control': 'no-cache', ...badgeRequestHeaders(url, 'native') } });
       if (!response.ok || !response.headers.get('content-type')?.startsWith('image/'))
         throw new Error('Image download failed');
       if (Number(response.headers.get('content-length')) > MAX_IMAGE_BYTES) throw new Error('Image exceeds cache limit');

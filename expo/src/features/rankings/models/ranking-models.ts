@@ -263,7 +263,7 @@ export class RankingEntry {
           ...(!clanName && !clanTag && tag ? [tag] : []),
         ].join(' · ')
       : clanName;
-    const clanBadgeUrl = rankingBoard.isClan || !clanTag ? '' : ImageAssets.clanBadgeForTag(clanTag);
+    const clanBadgeUrl = rankingBoard.isClan || !clanTag ? '' : ImageAssets.clanBadgeForTag(clanTag, json.clan);
     const leagueIcon =
       nestedString(json.leagueTier, 'iconUrls.medium') ??
       nestedString(json.leagueTier, 'iconUrls.large') ??
@@ -277,7 +277,7 @@ export class RankingEntry {
       rankingBoard === RankingBoard.playerBuilder
         ? ImageAssets.getBuilderBaseLeagueImage(json.builderBaseLeague)
         : null;
-    const badgeUrl = ImageAssets.clanBadgeForTag(tag);
+    const badgeUrl = ImageAssets.clanBadgeForTag(tag, rankingBoard.isClan ? json : undefined);
     const rankedIcon =
       rankingBoard === RankingBoard.playerRanked
         ? (rankedLeagueIconUrl ?? rankingBoard.iconUrl)

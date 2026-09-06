@@ -483,7 +483,7 @@ export class ClanInfo {
     return new ClanInfo(
       string(j.tag),
       string(j.name),
-      ImageAssets.clanBadgeUrls(string(j.tag)),
+      ImageAssets.clanBadgeUrls(string(j.tag), j),
       int(j.clanLevel),
       int(j.attacks),
       int(j.stars),

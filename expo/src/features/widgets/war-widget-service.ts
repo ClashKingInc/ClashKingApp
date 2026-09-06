@@ -220,7 +220,7 @@ export class WarWidgetService {
         if (!isRecord(value)) return [];
         const tag = String(value.tag ?? '');
         if (!tag) return [];
-        const badgeUrl = value.badgeUrl == null ? undefined : String(value.badgeUrl);
+        const badgeUrl = ImageAssets.widgetClanBadgeForTag(tag);
         return [
           {
             tag,
@@ -260,7 +260,12 @@ export class WarWidgetService {
   ): Promise<void> {
     if (syncConfig) await this.syncWidgetProxyConfig();
     const deduped = new Map<string, WarWidgetClanOption>();
-    for (const clan of clans) if (clan.tag) deduped.set(normalizedClanTag(clan.tag), clan);
+    for (const clan of clans)
+      if (clan.tag)
+        deduped.set(normalizedClanTag(clan.tag), {
+          ...clan,
+          badgeUrl: ImageAssets.widgetClanBadgeForTag(clan.tag),
+        });
     const options = [...deduped.values()].sort((left, right) =>
       compareNames(left.name, right.name),
     );

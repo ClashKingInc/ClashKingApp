@@ -121,7 +121,7 @@ export class WarClan {
       return new WarClan(
         string(json.tag, 'No tag'),
         string(json.name, 'No name'),
-        ClanBadgeUrls.fromJson(json.badgeUrls, string(json.tag)),
+        ClanBadgeUrls.fromJson(json, string(json.tag)),
         int(json.clanLevel),
         int(json.attacks),
         int(json.stars),

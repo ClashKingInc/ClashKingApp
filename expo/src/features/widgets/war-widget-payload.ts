@@ -181,10 +181,10 @@ function sidePayload(
   fallbackName: string,
   fallbackBadge: boolean,
 ) {
-  const badge = ImageAssets.clanBadgeForTag(nullableString(side.tag) ?? '');
+  const badge = ImageAssets.widgetClanBadgeForTag(nullableString(side.tag) ?? '') || null;
   return {
     name: nullableString(side.name) ?? fallbackName,
-    badgeUrlMedium: fallbackBadge ? (badge ?? FALLBACK_BADGE) : badge,
+    badgeUrlMedium: fallbackBadge ? badge || FALLBACK_BADGE : badge,
     percent: `${number(side.destructionPercentage).toFixed(2)}%`,
     attacks: `${integer(side.attacks)}/${attackMaximum}`,
     stars,

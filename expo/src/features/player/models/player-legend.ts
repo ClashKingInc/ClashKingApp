@@ -200,7 +200,7 @@ export class PlayerLegendClan {
     return new PlayerLegendClan(
       string(json.tag),
       string(json.name),
-      ImageAssets.clanBadgeUrls(string(json.tag)),
+      ImageAssets.clanBadgeUrls(string(json.tag), json),
     );
   }
 }

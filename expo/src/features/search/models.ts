@@ -99,7 +99,7 @@ function decodeRecentGroup(value: unknown, type: RecentSearchType): RecentSearch
         tag,
         createdAt: validDate(item.created_at),
         imageUrl:
-          type === 'clan' ? ImageAssets.clanBadgeForTag(tag) : ImageAssets.townHall(townHallLevel),
+          type === 'clan' ? ImageAssets.clanBadgeForTag(tag, item) : ImageAssets.townHall(townHallLevel),
         clanName: type === 'player' ? nullableString(clan.name) : null,
         leagueName: type === 'player' ? nullableString(league.name) : null,
         members: type === 'clan' ? numberValue(item.members) : 0,

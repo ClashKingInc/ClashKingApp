@@ -55,7 +55,7 @@ export class PlayerClanOverview {
     readonly badgeUrls: ClanBadgeUrls,
   ) {}
   static fromJson(json: JsonRecord) {
-    return new PlayerClanOverview(string(json.tag), string(json.name), int(json.clanLevel), ImageAssets.clanBadgeUrls(string(json.tag)));
+    return new PlayerClanOverview(string(json.tag), string(json.name), int(json.clanLevel), ImageAssets.clanBadgeUrls(string(json.tag), json));
   }
   static empty() {
     return new PlayerClanOverview('', '', 0, { small: '', medium: '', large: '' });

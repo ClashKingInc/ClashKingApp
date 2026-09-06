@@ -16,9 +16,9 @@ test('sizes raster assets in physical pixels and leaves other formats and hosts 
 });
 test('sizes badges for physical pixels and preserves the badge service', () => {
   const url = 'https://badges.clashk.ing/CLAN.avif';
-  expect(sizedBadgeUrl(url, 64, 64, 3)).toBe(`${url}?size=medium`);
-  expect(sizedBadgeUrl(url, 120, 120, 3)).toBe(`${url}?size=large`);
-  expect(sizedBadgeUrl(url, 16, 16, 3)).toBe(`${url}?size=small`);
-  expect(sizedBadgeUrl(url, 0, 0, 3)).toBe(`${url}?size=large`);
+  expect(sizedBadgeUrl(url, 64, 64, 3)).toBe(`${url}?size=256`);
+  expect(sizedBadgeUrl(url, 120, 120, 3)).toBe(`${url}?size=512`);
+  expect(sizedBadgeUrl(url, 16, 16, 3)).toBe(`${url}?size=64`);
+  expect(sizedBadgeUrl(url, 0, 0, 3)).toBe(`${url}?size=512`);
   expect(sizedBadgeUrl('https://example.com/a.gif', 64, 64, 3)).toBe('https://example.com/a.gif');
 });

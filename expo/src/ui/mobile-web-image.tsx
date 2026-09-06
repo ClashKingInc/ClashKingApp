@@ -1,8 +1,9 @@
+import { badgeImageSource } from '../core/assets/badge-token-hints';
 import { Image, type ImageProps, type ImageLoadEventData } from 'expo-image';
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { localImageCache } from '../core/assets/local-asset-cache';
 import { Platform, StyleSheet, PixelRatio } from 'react-native';
-import { sizedAssetUrl, sizedBadgeUrl } from './image-delivery';
+import { sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } from './image-delivery';
 
 import { ImageAssets } from '../core/assets/image-assets';
 import { assetManifestRevision, manifestImage, subscribeAssetManifest } from '../core/assets/asset-manifest';
@@ -65,7 +66,7 @@ export function MobileWebImage({
   const height = measured.height || (typeof layout?.height === 'number' ? layout.height : 0);
   const badgeUrl = sizedBadgeUrl(imageUrl, width, height, PixelRatio.get());
   const metadata = manifestImage(imageUrl);
-  const originalUrl = imageUrl;
+  const originalUrl = originalBadgeUrl(badgeUrl);
   const requestedUrl = preserveAnimation || metadata?.animated
     ? badgeUrl
     : sizedAssetUrl(badgeUrl, width, height, PixelRatio.get());
@@ -142,7 +143,7 @@ function CandidateImage({
     <Image
       {...imageProps}
       recyclingKey={imageProps.recyclingKey ?? candidate}
-      source={managed ? (localUri ? { uri: localUri } : null) : { uri: candidate, ...(candidate.startsWith('https://assets.clashk.ing/') ?
+      source={managed ? (localUri ? { uri: localUri } : null) : { ...badgeImageSource(candidate, Platform.OS), ...(candidate.startsWith('https://assets.clashk.ing/') ?
         { headers: { 'Cache-Control': 'no-cache' } } : {}) }}
       onLoad={(event: ImageLoadEventData) => {
         rememberResolved(resolutionKey, candidate);
