@@ -27,6 +27,7 @@ import {
   type ClansPresentationModel,
 } from './contracts';
 import { formatClanLastRefresh } from './presentation-utils';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 
 export function ClansScreen({
   model,
@@ -44,7 +45,17 @@ export function ClansScreen({
   const [refreshing, setRefreshing] = useState(false);
   const [, setRefreshMinute] = useState(0);
   const requestedBookmarks = useRef(new Set<string>());
-  const roster = useMemo(() => buildClanRoster(model), [model]);
+  const link = useLinkParameters();
+  const roster = useMemo(() => {
+    const result = buildClanRoster(model);
+    if (link.tab === 'linked')
+      return { ...result, items: result.items.filter((item) => item.accountCount > 0) };
+    if (link.tab === 'bookmarks') {
+      const bookmarked = new Set(model.bookmarks.map((item) => item.tag));
+      return { ...result, items: result.items.filter((item) => bookmarked.has(item.tag)) };
+    }
+    return result;
+  }, [model, link.tab]);
   useEffect(() => {
     const missing = roster.missingBookmarkTags.filter(
       (tag) => !requestedBookmarks.current.has(tag),

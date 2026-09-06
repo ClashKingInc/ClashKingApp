@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
   Modal,
   type NativeScrollEvent,
@@ -11,7 +12,6 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ImageBackground } from 'expo-image';
 import {
   ArrowLeft,
   Bookmark,
@@ -89,9 +89,14 @@ export function RankedScreen(props: RankedScreenProps) {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && width >= 900;
-  const [tab, setTab] = useState<'period' | 'history'>('period');
-  const [periodIndex, setPeriodIndex] = useState(0);
-  const [mode, setMode] = useState<'details' | 'ranking'>('details');
+  const link = useLinkParameters();
+  const [tab, setTab] = useState<'period' | 'history'>(
+    linkChoice(link.tab, ['period', 'history'], 'period'),
+  );
+  const [periodIndex, setPeriodIndex] = useState<number | undefined>();
+  const [mode, setMode] = useState<'details' | 'ranking'>(
+    linkChoice(link.mode, ['details', 'ranking'], 'details'),
+  );
   const [showHistoryTable, setShowHistoryTable] = useState(false);
   const [info, setInfo] = useState(false);
   const [accountPicker, setAccountPicker] = useState(false);
@@ -125,7 +130,15 @@ export function RankedScreen(props: RankedScreenProps) {
     setScrollOffsets((current) => ({ ...current, [tab]: y }));
   };
   const periods = useMemo(() => (props.data ? rankedPeriods(props.data) : []), [props.data]);
-  const safePeriodIndex = Math.min(periodIndex, Math.max(0, periods.length - 1));
+  const linkedPeriodIndex = periods.findIndex((period) =>
+    link.day
+      ? period.startsAt.toISOString().slice(0, 10) === link.day
+      : Boolean(link.season && period.startsAt.toISOString().startsWith(link.season)),
+  );
+  const safePeriodIndex = Math.min(
+    periodIndex ?? Math.max(0, linkedPeriodIndex),
+    Math.max(0, periods.length - 1),
+  );
   const period = periods[safePeriodIndex] ?? null;
   const openPlayerTag = async (tag: string) => {
     setOpeningPlayer(true);
@@ -196,8 +209,8 @@ export function RankedScreen(props: RankedScreenProps) {
       mode={mode}
       locale={locale}
       onMode={setMode}
-      onPrevious={() => setPeriodIndex((value) => Math.min(periods.length - 1, value + 1))}
-      onNext={() => setPeriodIndex((value) => Math.max(0, value - 1))}
+      onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
+      onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
       onOpenPlayerTag={openPlayerTag}
       onJumpToPlayer={(target) => {
         target.measure((_x, _y, _width, _height, _pageX, pageY) => {
@@ -354,13 +367,14 @@ function RankedHeader({
   );
   return (
     <View testID="ranked-player-header" style={styles.rankedHeader}>
-      <ImageBackground
-        testID="ranked-header-background"
-        source={{ uri: ImageAssets.homeBaseBackground }}
-        cachePolicy="disk"
-        contentFit="cover"
-        style={styles.headerBackground}
-      >
+      <View style={styles.headerBackground}>
+        <MobileWebImage
+          testID="ranked-header-background"
+          imageUrl={ImageAssets.homeBaseBackground}
+          cachePolicy="disk"
+          contentFit="cover"
+          style={StyleSheet.absoluteFill}
+        />
         <View
           testID="ranked-header-scrim"
           style={[StyleSheet.absoluteFill, { backgroundColor: colorWithAlpha('#000000', 0.5) }]}
@@ -537,7 +551,7 @@ function RankedHeader({
             style={styles.headerFadeTail}
           />
         </View>
-      </ImageBackground>
+      </View>
     </View>
   );
 }
@@ -1288,16 +1302,13 @@ function rankedClanIdentity(player: Player) {
   if (typeof clan === 'object' && clan !== null) {
     const record = clan as Record<string, unknown>;
     const name = typeof record.name === 'string' ? record.name : '';
-    const badges = record.badgeUrls;
-    const badgeUrl =
-      typeof badges === 'object' &&
-      badges !== null &&
-      typeof (badges as Record<string, unknown>).small === 'string'
-        ? ((badges as Record<string, unknown>).small as string)
-        : '';
+    const badgeUrl = ImageAssets.clanBadgeForTag(typeof record.tag === 'string' ? record.tag : '');
     if (name) return { name, badgeUrl };
   }
-  return { name: player.clanOverview.name, badgeUrl: player.clanOverview.badgeUrls.small };
+  return {
+    name: player.clanOverview.name,
+    badgeUrl: ImageAssets.clanBadgeForTag(player.clanOverview.tag),
+  };
 }
 
 const styles = StyleSheet.create({

@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Tarkistetaan päivityksiä…",
+  "startupDownloadingUpdate": "Ladataan päivitystä…",
+  "startupUpdateInBackground": "Päivitä taustalla",
   "warStatsRangeTitle": "Sotatilastojen aikaväli",
   "warStatsRangeDescription": "Valitse, kattavatko tilastot kiinteän määrän viimeaikaisia sotia vai viimeaikaisen ajanjakson päivinä.",
   "warStatsRangeDays": "Päivät",

@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Проверка обновлений…",
+  "startupDownloadingUpdate": "Загрузка обновления…",
+  "startupUpdateInBackground": "Обновить в фоне",
   "warStatsRangeTitle": "Диапазон военной статистики",
   "warStatsRangeDescription": "Выберите, охватывает ли статистика заданное число недавних войн или недавний период в днях.",
   "warStatsRangeDays": "Дни",

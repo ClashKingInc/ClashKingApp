@@ -32,11 +32,6 @@ function harness(
     migrationError?: unknown;
     accountError?: unknown;
     pushToken?: string;
-    requiredUpdate?: {
-      minimumVersion: string;
-      storeUrl: string;
-      message: string;
-    };
   } = {},
 ) {
   const calls: string[] = [];
@@ -118,9 +113,6 @@ function harness(
           calls.push('game');
         },
       },
-      featureFlags: {
-        requiredUpdate: () => options.requiredUpdate ?? null,
-      },
       push: {
         supportsPushNotifications: true,
         initialize: async () => {
@@ -185,41 +177,6 @@ describe('startup coordinator parity', () => {
     expect(result.destination).toBe('account-setup');
   });
 
-  it('stops startup before account bootstrap when a native update is required', async () => {
-    const update = {
-      minimumVersion: '0.4.0',
-      storeUrl: 'https://apps.apple.com/app/id123',
-      message: 'A newer ClashKing build is required.',
-    };
-    const test = harness({ requiredUpdate: update });
-
-    const result = await initializeApplication(test.dependencies);
-
-    expect(result).toMatchObject({ destination: 'update', update });
-    expect(test.calls).not.toContain('accounts');
-    expect(test.calls).not.toContain('data');
-    expect(test.calls).not.toContain('push');
-  });
-
-  it.each([new Error('failed to fetch'), new Error('HTTP 503')])(
-    'prioritizes a loaded mandatory update over bootstrap failure %s',
-    async (initializeError) => {
-      const update = {
-        minimumVersion: '0.4.0',
-        storeUrl: 'https://apps.apple.com/app/id123',
-        message: 'A newer ClashKing build is required.',
-      };
-      const test = harness({ requiredUpdate: update, initializeError });
-      expect(await initializeApplication(test.dependencies)).toMatchObject({
-        destination: 'update',
-        update,
-      });
-      expect(test.calls).not.toContain('accounts');
-      expect(test.calls).not.toContain('data');
-      expect(test.calls).not.toContain('push');
-    },
-  );
-
   it('reports preference migration failures and continues startup like Flutter', async () => {
     const test = harness({ migrationError: new Error('legacy store unavailable') });
 
@@ -230,25 +187,17 @@ describe('startup coordinator parity', () => {
     expect(test.calls).toEqual(expect.arrayContaining(['auth', 'game', 'state', 'data']));
   });
 
-  it('waits for the update policy when authentication rejects before config resolves', async () => {
+  it('allows login after a revoked session without waiting for remote config', async () => {
     const test = harness({ authenticated: false, initializeError: new Error('revoked') });
-    const update = {
-      minimumVersion: '0.4.0',
-      storeUrl: 'https://apps.apple.com/app/id123',
-      message: 'A newer ClashKing build is required.',
-    };
     let releaseConfig!: () => void;
     const config = new Promise<void>((resolve) => {
       releaseConfig = resolve;
     });
-    let loaded = false;
     test.dependencies.appState.setState({
       initialize: async () => {
         await config;
-        loaded = true;
       },
     });
-    test.dependencies.featureFlags.requiredUpdate = () => (loaded ? update : null);
     let settled = false;
     const startup = initializeApplication(test.dependencies).then((result) => {
       settled = true;
@@ -259,8 +208,8 @@ describe('startup coordinator parity', () => {
     const settledBeforeConfig = settled;
     releaseConfig();
     const result = await startup;
-    expect(settledBeforeConfig).toBe(false);
-    expect(result).toMatchObject({ destination: 'update', update });
+    expect(settledBeforeConfig).toBe(true);
+    expect(result).toMatchObject({ destination: 'login' });
     expect(test.calls).not.toContain('accounts');
     expect(test.calls).not.toContain('push');
   });

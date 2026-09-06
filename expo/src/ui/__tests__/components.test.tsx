@@ -54,6 +54,9 @@ describe('shared UI semantics', () => {
     expect(empty.getByText('No wars')).toBeTruthy();
     expect(empty.getByText('Check back later')).toBeTruthy();
     expect(empty.getByTestId('empty-state-sticker')).toBeTruthy();
+    expect(empty.getByTestId('empty-state')).toHaveStyle({ alignItems: 'center', justifyContent: 'center' });
+    expect(empty.getByText('No wars')).toHaveStyle({ textAlign: 'center' });
+    expect(empty.getByText('Check back later')).toHaveStyle({ textAlign: 'center' });
     await empty.unmount();
 
     const error = await renderWithTheme(

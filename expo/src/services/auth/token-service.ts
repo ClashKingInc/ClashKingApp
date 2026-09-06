@@ -23,6 +23,7 @@ export class TokenService {
   private tokensLoaded = false;
   private tokenLoad: Promise<StoredAuthSession> | null = null;
   private refreshInFlight: Promise<string | null> | null = null;
+  private sessionGeneration = 0;
   private readonly fetchImplementation: typeof fetch;
   private readonly nowSeconds: () => number;
 
@@ -58,6 +59,7 @@ export class TokenService {
   }
 
   async saveWebAccessToken(accessToken: string): Promise<void> {
+    this.sessionGeneration += 1;
     this.cachedAccessToken = accessToken;
     this.cachedRefreshToken = null;
     this.tokensLoaded = true;
@@ -81,12 +83,7 @@ export class TokenService {
 
   async clearTokens(): Promise<void> {
     const clear = async () => {
-      this.cachedAccessToken = null;
-      this.cachedRefreshToken = null;
-      this.tokensLoaded = true;
-      this.tokenLoad = null;
-      this.refreshInFlight = null;
-      await this.options.sessions.clear();
+      await this.clearSessionUnlocked();
       return true;
     };
     const cleared = await this.options.refreshLock.run(clear);
@@ -123,55 +120,58 @@ export class TokenService {
     deviceId: string,
   ): Promise<string | null> {
     if (this.options.platform === 'web') return this.refreshWebAccessToken();
-    try {
-      const refreshed = await this.options.refreshLock.run(async () => {
-        const latest = await this.options.sessions.read();
-        if (
-          latest.accessToken !== null &&
-          latest.refreshToken !== null &&
-          !this.isTokenExpired(latest.accessToken)
-        ) {
-          this.cacheSession(latest);
-          return latest.accessToken;
-        }
-        // Re-reading while holding the cross-process lock prevents an old token
-        // from resurrecting a session cleared by logout or rotated by WidgetKit.
-        if (latest.refreshToken === null) return null;
-        const currentDeviceId = latest.deviceId ?? deviceId;
-        const response = await this.fetchWithTimeout(
-          `${withoutTrailingSlash(this.options.apiV2Url)}/auth/refresh`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              refresh_token:
-                latest.refreshToken === capturedRefreshToken
-                  ? capturedRefreshToken
-                  : latest.refreshToken,
-              device_id: currentDeviceId,
-            }),
-          },
-        );
-        if (response.status !== 200) return null;
-        const data = await parseResponseRecord(response);
-        const accessToken = nonEmptyString(data.access_token);
-        const refreshToken = nonEmptyString(data.refresh_token);
-        if (accessToken === null || refreshToken === null) return null;
-        await this.saveSession({
-          accessToken,
-          refreshToken,
-          deviceId: currentDeviceId,
-        });
-        return accessToken;
+    const refreshed = await this.options.refreshLock.run(async () => {
+      const latest = await this.options.sessions.read();
+      if (
+        latest.accessToken !== null &&
+        latest.refreshToken !== null &&
+        !this.isTokenExpired(latest.accessToken)
+      ) {
+        this.cacheSession(latest);
+        return latest.accessToken;
+      }
+      // Re-reading while holding the cross-process lock prevents an old token
+      // from resurrecting a session cleared by logout or rotated by WidgetKit.
+      if (latest.refreshToken === null) return null;
+      const currentDeviceId = latest.deviceId ?? deviceId;
+      const response = await this.fetchWithTimeout(
+        `${withoutTrailingSlash(this.options.apiV2Url)}/auth/refresh`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            refresh_token:
+              latest.refreshToken === capturedRefreshToken
+                ? capturedRefreshToken
+                : latest.refreshToken,
+            device_id: currentDeviceId,
+          }),
+        },
+      );
+      if (response.status === 401) {
+        await this.clearSessionUnlocked();
+        return null;
+      }
+      if (response.status !== 200) {
+        throw new Error(`Native session refresh failed (${response.status}).`);
+      }
+      const data = await parseResponseRecord(response);
+      const accessToken = nonEmptyString(data.access_token);
+      const refreshToken = nonEmptyString(data.refresh_token);
+      if (accessToken === null || refreshToken === null) return null;
+      await this.saveSession({
+        accessToken,
+        refreshToken,
+        deviceId: currentDeviceId,
       });
-      return refreshed ?? null;
-    } catch {
-      return null;
-    }
+      return accessToken;
+    });
+    return refreshed ?? null;
   }
 
   private async refreshWebAccessToken(): Promise<string | null> {
     if (this.refreshInFlight !== null) return this.refreshInFlight;
+    const generation = this.sessionGeneration;
     const refresh = (async () => {
       try {
         const response = await this.fetchWithTimeout(
@@ -185,7 +185,12 @@ export class TokenService {
         const data = await parseResponseRecord(response);
         const token = nonEmptyString(data.access_token);
         if (token === null) return null;
-        await this.saveWebAccessToken(token);
+        if (generation !== this.sessionGeneration) return null;
+        this.cachedAccessToken = token;
+        this.cachedRefreshToken = null;
+        this.tokensLoaded = true;
+        await this.options.sessions.clearWebLegacyTokens();
+        if (generation !== this.sessionGeneration) return null;
         return token;
       } catch {
         return null;
@@ -231,14 +236,35 @@ export class TokenService {
     this.cachedRefreshToken = session.refreshToken;
   }
 
+  private async clearSessionUnlocked(): Promise<void> {
+    this.sessionGeneration += 1;
+    this.cachedAccessToken = null;
+    this.cachedRefreshToken = null;
+    this.tokensLoaded = true;
+    this.tokenLoad = null;
+    this.refreshInFlight = null;
+    await this.options.sessions.clear();
+  }
+
   private async fetchWithTimeout(input: string, init: RequestInit): Promise<Response> {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 10_000);
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 10_000);
     try {
       return await this.fetchImplementation(input, {
         ...init,
         signal: controller.signal,
       });
+    } catch (error) {
+      if (timedOut) {
+        const timeout = new Error('Token refresh timed out.');
+        timeout.name = 'TimeoutError';
+        throw timeout;
+      }
+      throw error;
     } finally {
       clearTimeout(timer);
     }

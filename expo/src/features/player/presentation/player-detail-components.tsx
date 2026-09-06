@@ -499,11 +499,7 @@ export function playerHeaderClanIdentity(
   return {
     tag,
     name: linked?.name || player.clanOverview.name || tag,
-    badgeUrl:
-      linked?.badgeUrls?.small ||
-      linked?.badgeUrls?.medium ||
-      player.clanOverview.badgeUrls.small ||
-      player.clanOverview.badgeUrls.medium,
+    badgeUrl: ImageAssets.clanBadgeForTag(tag),
   };
 }
 

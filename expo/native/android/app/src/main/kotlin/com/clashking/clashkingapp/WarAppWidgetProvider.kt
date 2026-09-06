@@ -53,12 +53,16 @@ class WarAppWidgetProvider : AppWidgetProvider() {
                 R.drawable.war_widget_background
             }
         )
-        views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId))
 
+        // Migrate old automatic widgets once, then keep each instance pinned to that clan.
         val selectedTag = WarWidgetSelectionStore.selectedTag(context, appWidgetId)
+            ?: widgetData.getString("warWidgetSelectedClan", null)?.takeIf { it.isNotBlank() }?.also {
+                WarWidgetSelectionStore.saveSelectedTag(context, appWidgetId, it)
+            }
+        views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId, selectedTag))
         var payloadKey = selectedTag?.let {
             "warInfo_${WarWidgetSelectionStore.normalizeTag(it)}"
-        } ?: "warInfo"
+        } ?: "warInfo_unconfigured"
         var rawWarInfo = widgetData.getString(payloadKey, null)
         val selectedDefaultTag = widgetData.getString("warWidgetSelectedClan", null)
             ?.let(WarWidgetSelectionStore::normalizeTag)
@@ -237,9 +241,12 @@ private fun downloadBitmap(url: String): Bitmap? {
     }
 }
 
-private fun launchAppIntent(context: Context, appWidgetId: Int): PendingIntent {
+private fun launchAppIntent(context: Context, appWidgetId: Int, selectedTag: String?): PendingIntent {
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
         ?: Intent(Intent.ACTION_MAIN).setPackage(context.packageName)
+    intent.action = Intent.ACTION_VIEW
+    val tag = selectedTag?.let { android.net.Uri.encode(WarWidgetSelectionStore.normalizeTag(it)) }
+    intent.data = android.net.Uri.parse(if (tag.isNullOrBlank()) "clashking://war" else "clashking://clan/$tag/war")
     return PendingIntent.getActivity(
         context,
         appWidgetId,

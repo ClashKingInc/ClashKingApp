@@ -189,6 +189,16 @@ test('app config explains the photo-library symbol linked by native image sharin
   assert.match(appConfig, /share generated progress images with a compatible app/);
 });
 
+test('iPad supports landscape without unlocking iPhone orientation', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'app.config.ts'), 'utf8');
+  assert.match(source, /UISupportedInterfaceOrientations: \['UIInterfaceOrientationPortrait'\]/);
+  const ipad = source.match(/'UISupportedInterfaceOrientations~ipad': \[([^\]]+)\]/)?.[1];
+  assert.ok(ipad);
+  assert.match(ipad, /UIInterfaceOrientationLandscapeLeft/);
+  assert.match(ipad, /UIInterfaceOrientationLandscapeRight/);
+  assert.match(ipad, /UIInterfaceOrientationPortrait/);
+});
+
 test('appendUnique is stable and idempotent', () => {
   assert.deepEqual(appendUnique(['remote-notification'], ['remote-notification', 'processing']), [
     'remote-notification',

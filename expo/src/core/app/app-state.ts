@@ -40,7 +40,7 @@ export function createAppStateStore(
 
   const store = createStore<AppStateSnapshot>((set, get) => ({
     locale: 'en',
-    themePreference: 'system',
+    themePreference: 'dark',
     features: defaultFeatureState(),
     initialized: false,
 
@@ -58,14 +58,10 @@ export function createAppStateStore(
             : resolveFlutterStartupLocale(storedLocale);
         const themePreference = parseThemePreference(storedTheme);
 
-        // Keep the update-policy refresh inside the initialization lifetime,
-        // including when a translation request fails first.
-        const loaded = await Promise.allSettled([
+        await Promise.all([
           dependencies.gameData.loadTranslationsForLocale(appLocale(locale)),
           dependencies.featureFlags.refresh().catch(() => undefined),
         ]);
-        const failed = loaded.find((result) => result.status === 'rejected');
-        if (failed?.status === 'rejected') throw failed.reason;
         set({
           locale,
           themePreference,
@@ -131,7 +127,7 @@ function currentFeatureState(
 }
 
 function parseThemePreference(value: string | null): AppThemePreference {
-  return value === 'dark' || value === 'light' ? value : 'system';
+  return value === 'dark' || value === 'light' || value === 'system' ? value : 'dark';
 }
 
 function appLocale(locale: SupportedLocale): {

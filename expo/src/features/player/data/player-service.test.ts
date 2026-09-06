@@ -105,6 +105,29 @@ function setup(routes: Record<string, unknown | (() => Promise<Response>)>) {
   });
   return { api, calls, fetchMock };
 }
+test('loads an official player whose achievement completion text is explicitly null', async () => {
+  const { api } = setup({
+    '/proxy/v1/players/%23P1': officialPlayer({
+      achievements: [
+        {
+          name: 'Bigger & Better',
+          stars: 3,
+          value: 18,
+          target: 15,
+          info: 'Upgrade your Town Hall',
+          completionInfo: null,
+          village: 'home',
+        },
+      ],
+    }),
+  });
+  const service = new PlayerService(api);
+  await expect(service.loadOfficialPlayerData(['#P1'], { throwOnError: true })).resolves.toEqual(
+    {},
+  );
+  expect(service.profiles[0]?.name).toBe('One');
+});
+
 test('loads canonical official profiles concurrently, coalesces duplicates, and stores clan keys', async () => {
   let resolveResponse: ((value: Response) => void) | undefined;
   const pending = new Promise<Response>((resolve) => {
@@ -308,6 +331,52 @@ test('ranked history HTTP misses are optional but transport failures propagate',
     TransportError,
   );
 });
+test.each(['current', 'previous'] as const)(
+  'ranked %s group transport failures propagate without caching an incomplete result',
+  async (period) => {
+    const { api } = setup({
+      '/proxy/v1/players/%23P1': officialPlayer(
+        period === 'current'
+          ? { currentLeagueGroupTag: '#GROUP', currentLeagueSeasonId: 123 }
+          : { previousLeagueGroupTag: '#GROUP', previousLeagueSeasonId: 123 },
+      ),
+      '/proxy/v1/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/proxy/v1/leaguegroup/%23GROUP/123?playerTag=%23P1': async () => {
+        throw new TypeError('group offline');
+      },
+    });
+    await expect(new PlayerService(api).loadRankedLeagueData('#P1')).rejects.toBeInstanceOf(
+      TransportError,
+    );
+  },
+);
+
+test('keeps the active ranked group when another member has no clan', async () => {
+  const { api } = setup({
+    '/proxy/v1/players/%23P1': officialPlayer({
+      trophies: 627,
+      currentLeagueGroupTag: '#GROUP',
+      currentLeagueSeasonId: 123,
+    }),
+    '/proxy/v1/leaguetiers': { items: [] },
+    '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+    '/proxy/v1/leaguegroup/%23GROUP/123?playerTag=%23P1': {
+      members: [
+        rankedMember('#P1', 'One', 627),
+        { ...rankedMember('#NOCLAN', 'Clanless', 242), clanTag: null, clanName: null },
+      ],
+      attackLogs: [],
+      defenseLogs: [],
+    },
+  });
+
+  const data = await new PlayerService(api).loadRankedLeagueData('#P1');
+  expect(data.currentGroup).toMatchObject({ tag: '#GROUP', seasonId: 123 });
+  expect(data.currentGroup?.members).toHaveLength(2);
+  expect(data.currentRank).toBe(1);
+});
+
 test('ranked warmup canonicalizes duplicates and isolates per-account failures', async () => {
   const { api, calls } = setup({
       '/proxy/v1/players/%23P1': officialPlayer(),

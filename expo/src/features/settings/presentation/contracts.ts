@@ -9,6 +9,7 @@ export interface SettingsPresentationActions {
   changeLocale(locale: string): Promise<void>;
   changeTheme(mode: SettingsThemeMode): Promise<void>;
   changeAppIcon?(iconName: string | null): Promise<void>;
+  clearImageCache?(): Promise<void>;
   open(destination: SettingsDestination): void;
   openDiscord(): void;
   showLicenses(): void;

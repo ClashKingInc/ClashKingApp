@@ -25,6 +25,7 @@ export interface AccountVerificationResult {
 }
 
 export type AccountErrorReporter = (operation: string, error: unknown) => void;
+export type SelectedTagChangeHandler = (tag: string | null) => Promise<void>;
 
 export class AccountHttpException extends Error {
   constructor(
@@ -42,6 +43,7 @@ export class CocAccountService {
   private selectedPlayerTag: string | null = null;
   private lastRefreshedAt: Date | null = null;
   private bootstrapCoordinator: ((userId: string | null) => Promise<void>) | null = null;
+  private selectedTagChangeHandler: SelectedTagChangeHandler | null = null;
   private readonly listeners = new Set<() => void>();
 
   constructor(
@@ -83,14 +85,18 @@ export class CocAccountService {
     this.bootstrapCoordinator = coordinator;
   }
 
+  setSelectedTagChangeHandler(handler: SelectedTagChangeHandler): void {
+    this.selectedTagChangeHandler = handler;
+  }
+
   async initializeForCurrentUser(userId: string | null): Promise<void> {
     if (this.bootstrapCoordinator !== null) {
       await this.bootstrapCoordinator(userId);
       return;
     }
     this.setCurrentUserId(userId);
-    await Promise.all([this.loadSelectedTag(), this.fetchAccounts()]);
-    await this.initializeSelectedTag();
+    await this.loadSelectedTag();
+    await this.fetchAccounts();
   }
 
   setCurrentUserId(userId: string | null): void {
@@ -120,7 +126,9 @@ export class CocAccountService {
         }),
       );
       this.accountLinks = data.items.map(parseCocAccountLink);
-      this.notify();
+      const previousSelection = this.selectedPlayerTag;
+      await this.initializeSelectedTag();
+      if (this.selectedPlayerTag === previousSelection) this.notify();
       return this.accountLinks;
     } catch (error) {
       this.report('accounts.fetch', error);
@@ -188,9 +196,7 @@ export class CocAccountService {
         message:
           error instanceof UnauthorizedException
             ? 'User not authenticated'
-            : error instanceof ApiResponseError
-              ? 'Failed to add account. Please try again.'
-              : `Failed to add account: ${String(error)}`,
+            : 'Failed to add account. Please try again.',
       };
     }
   }
@@ -234,9 +240,7 @@ export class CocAccountService {
         message:
           error instanceof UnauthorizedException
             ? 'User not authenticated'
-            : error instanceof ApiResponseError
-              ? 'Verification failed. Please try again.'
-              : `Verification failed: ${String(error)}`,
+            : 'Verification failed. Please try again.',
       };
     }
   }
@@ -251,7 +255,9 @@ export class CocAccountService {
         }),
       );
       this.accountLinks = this.accountLinks.filter((account) => account.playerTag !== playerTag);
-      this.notify();
+      const previousSelection = this.selectedPlayerTag;
+      await this.initializeSelectedTag();
+      if (this.selectedPlayerTag === previousSelection) this.notify();
       return true;
     } catch (error) {
       this.report('accounts.remove', error);
@@ -321,9 +327,11 @@ export class CocAccountService {
   }
 
   async initializeSelectedTag(): Promise<string | null> {
-    if (this.accountLinks.length > 0 && this.selectedPlayerTag === null) {
-      await this.setSelectedTag(this.accountLinks[0]!.playerTag);
-    }
+    const selected = this.accountLinks.find(
+      (account) => account.playerTag.toUpperCase() === this.selectedPlayerTag?.toUpperCase(),
+    );
+    const next = selected?.playerTag ?? this.accountLinks[0]?.playerTag ?? null;
+    if (next !== this.selectedPlayerTag) await this.setSelectedTag(next);
     return this.selectedPlayerTag;
   }
 
@@ -332,6 +340,13 @@ export class CocAccountService {
     if (tag === null) await this.preferences.removeItem(STORAGE_KEYS.selectedTag);
     else await this.preferences.setItem(STORAGE_KEYS.selectedTag, tag);
     this.notify();
+    if (this.selectedTagChangeHandler !== null) {
+      try {
+        await this.selectedTagChangeHandler(tag);
+      } catch (error) {
+        this.report('accounts.selection', error);
+      }
+    }
   }
 
   private async addAccountRequest(

@@ -171,3 +171,37 @@ test('surfaces API failures so the widget service emits its established error pa
   const { api } = setup(() => ({ status: 500, body: {} }));
   await expect(fetchWarWidgetSummary(api, '#CLAN')).rejects.toBeInstanceOf(ApiResponseError);
 });
+
+test('prefers the current CWL battle over a preferred upcoming preparation round', async () => {
+  const { api, fetchImplementation } = setup((url) => {
+    if (url.endsWith('/basic'))
+      return { status: 200, body: { ...basicWar('cwl'), warTag: '#PREP' } };
+    if (url.endsWith('/leaguegroup'))
+      return {
+        status: 200,
+        body: {
+          state: 'inWar',
+          season: '2026-09',
+          clans: [],
+          rounds: [{ warTags: ['#ACTIVE'] }, { warTags: ['#PREP'] }],
+        },
+      };
+    const prep = url.endsWith('%23PREP');
+    return {
+      status: 200,
+      body: {
+        state: prep ? 'preparation' : 'inWar',
+        teamSize: 15,
+        clan: warClan('#CLAN', 'Our Clan', prep ? 0 : 30),
+        opponent: warClan('#RIVAL', 'Rival', prep ? 0 : 25),
+      },
+    };
+  });
+  const summary = await fetchWarWidgetSummary(api, '#CLAN');
+  expect(JSON.parse(buildWarWidgetPayload(summary, '#CLAN'))).toMatchObject({
+    mode: 'cwl',
+    score: '30 - 25',
+  });
+  expect(fetchImplementation.mock.calls.filter(([input]) =>
+    (input as Request).url.endsWith('%23PREP'))).toHaveLength(1);
+});

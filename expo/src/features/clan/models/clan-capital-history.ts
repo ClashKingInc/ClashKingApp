@@ -51,9 +51,7 @@ export class RaidDefender {
     readonly badgeUrls: Readonly<Record<string, string>>,
   ) {}
   static fromJson(json: JsonRecord) {
-    const badges = Object.fromEntries(
-      Object.entries(record(json.badgeUrls)).map(([key, value]) => [key, string(value)]),
-    );
+    const badges = ImageAssets.clanBadgeUrls(string(json.tag));
     return new RaidDefender(string(json.tag), string(json.name), int(json.level), badges);
   }
 }
@@ -222,3 +220,4 @@ export class CapitalHistoryItems {
     return new CapitalHistoryItems([], '');
   }
 }
+import { ImageAssets } from '../../../core/assets/image-assets';

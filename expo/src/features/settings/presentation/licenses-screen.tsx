@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ChevronRight, X } from 'lucide-react-native';
 
@@ -25,7 +26,15 @@ export function LicensesScreen({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [selected, setSelected] = useState<LicensePackageSummary>();
+  const link = useLinkParameters();
+  const [selected, setSelected] = useState<LicensePackageSummary | undefined>(() =>
+    packages.find((entry) =>
+      entry.packages.some(
+        (name) =>
+          name === link.package || Boolean(link.package && name.startsWith(`${link.package}@`)),
+      ),
+    ),
+  );
   return (
     <SettingsPage title={t('settingsLicenses')} onBack={onBack}>
       <View style={styles.application}>

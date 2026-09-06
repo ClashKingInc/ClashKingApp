@@ -30,7 +30,7 @@ export class ClanDetails {
     return new ClanDetails(
       string(json.tag),
       string(json.name),
-      ClanBadgeUrls.fromJson(json.badgeUrls),
+      ClanBadgeUrls.fromJson(json.badgeUrls, string(json.tag)),
       int(json.clanLevel),
       int(json.attacks),
       int(json.stars),

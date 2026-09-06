@@ -2,6 +2,7 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 
 import { SearchRoot } from './search-root';
 import { SearchService } from './search-service';
+import { LinkParametersContext } from '../../core/deep-links/link-parameters';
 
 const mockRuntime = {
   api: {},
@@ -106,6 +107,22 @@ test('loads only the visible filter metadata after filters are expanded', async 
   await fireEvent.press(view.getByText('filters'));
   await waitFor(() => expect(loadLocations).toHaveBeenCalledTimes(1));
   expect(loadLeagues).toHaveBeenCalledTimes(1);
+  jest.clearAllTimers();
+  jest.useRealTimers();
+});
+
+test('honors a linked clan search query and type at mount', async () => {
+  jest.useFakeTimers();
+  jest.spyOn(SearchService.prototype, 'loadRecents').mockResolvedValue([]);
+  const search = jest.spyOn(SearchService.prototype, 'searchClans').mockResolvedValue([]);
+  const view = await render(
+    <LinkParametersContext.Provider value={{ q: 'Savage Stars', type: 'clans' }}>
+      <SearchRoot onOpenPlayer={jest.fn()} onOpenClan={jest.fn()} />
+    </LinkParametersContext.Provider>,
+  );
+  expect(view.getByText('mode:clans')).toBeTruthy();
+  await act(async () => jest.advanceTimersByTime(450));
+  expect(search).toHaveBeenCalledWith('Savage Stars', expect.any(Object));
   jest.clearAllTimers();
   jest.useRealTimers();
 });

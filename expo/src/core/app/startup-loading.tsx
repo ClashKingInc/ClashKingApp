@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
+import {
+  Animated,
+  Easing,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 
 import { useI18n, type MessageKey } from '../../i18n';
 import { CKText, MobileWebImage, useCKAccessibility, useCKTheme, useCKThemeMode } from '../../ui';
@@ -17,7 +25,13 @@ const loadingMessageKeys = [
 const STARTUP_MESSAGE_HOLD_MS = 800;
 const STARTUP_MESSAGE_FADE_MS = 200;
 
-export function StartupLoadingScreen() {
+export function StartupLoadingScreen({
+  update,
+  onUpdateInBackground,
+}: {
+  update?: { downloading: boolean; progress: number };
+  onUpdateInBackground?: () => void;
+} = {}) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const mode = useCKThemeMode();
@@ -107,31 +121,65 @@ export function StartupLoadingScreen() {
           {
             color: theme.onSurfaceVariant,
             marginTop: dimensions.loadingGap,
-            opacity: reduceMotion ? 1 : opacity,
+            opacity: update || reduceMotion ? 1 : opacity,
           },
         ]}
       >
-        {t(loadingMessageKeys[messageIndex]!)}
+        {update
+          ? t(update.downloading ? 'startupDownloadingUpdate' : 'startupCheckingUpdate')
+          : t(loadingMessageKeys[messageIndex]!)}
       </Animated.Text>
-      <View style={styles.steps}>
-        {loadingMessageKeys.map((key, index) => {
-          const active = index <= messageIndex;
-          return (
+      {update ? (
+        <View style={styles.updateControls}>
+          <View
+            accessibilityRole="progressbar"
+            accessibilityValue={{
+              min: 0,
+              max: 100,
+              now: Math.round(Math.max(0, Math.min(1, update.progress)) * 100),
+            }}
+            style={[styles.progressTrack, { backgroundColor: `${theme.primary}33` }]}
+          >
             <View
-              accessibilityElementsHidden
-              importantForAccessibility="no"
-              key={key}
               style={{
-                width: active ? (desktop ? 18 : 20) : dimensions.dotHeight,
-                height: dimensions.dotHeight,
-                marginHorizontal: 4,
-                borderRadius: dimensions.dotHeight / 2,
-                backgroundColor: active ? theme.primary : `${theme.primary}4D`,
+                height: '100%',
+                width: `${Math.max(0, Math.min(1, update.progress)) * 100}%`,
+                backgroundColor: theme.primary,
+                borderRadius: 3,
               }}
             />
-          );
-        })}
-      </View>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            onPress={onUpdateInBackground}
+            style={styles.backgroundAction}
+          >
+            <CKText muted role="bodySmall">
+              {t('startupUpdateInBackground')}
+            </CKText>
+          </Pressable>
+        </View>
+      ) : (
+        <View style={styles.steps}>
+          {loadingMessageKeys.map((key, index) => {
+            const active = index <= messageIndex;
+            return (
+              <View
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+                key={key}
+                style={{
+                  width: active ? (desktop ? 18 : 20) : dimensions.dotHeight,
+                  height: dimensions.dotHeight,
+                  marginHorizontal: 4,
+                  borderRadius: dimensions.dotHeight / 2,
+                  backgroundColor: active ? theme.primary : `${theme.primary}4D`,
+                }}
+              />
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 }
@@ -141,4 +189,7 @@ const styles = StyleSheet.create({
   wordmark: { aspectRatio: 3806 / 558 },
   message: { fontFamily: 'ClashKing', fontSize: 16, fontWeight: '500', textAlign: 'center' },
   steps: { flexDirection: 'row', alignItems: 'center', marginTop: 20 },
+  updateControls: { marginTop: 20, width: '65%', maxWidth: 320, alignItems: 'center' },
+  progressTrack: { height: 5, borderRadius: 3, width: '100%', overflow: 'hidden' },
+  backgroundAction: { minHeight: 44, justifyContent: 'center', marginTop: 8 },
 });

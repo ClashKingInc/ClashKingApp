@@ -200,9 +200,7 @@ export class PlayerLegendClan {
     return new PlayerLegendClan(
       string(json.tag),
       string(json.name),
-      Object.fromEntries(
-        Object.entries(record(json.badgeUrls)).map(([key, value]) => [key, string(value)]),
-      ),
+      ImageAssets.clanBadgeUrls(string(json.tag)),
     );
   }
 }
@@ -283,3 +281,4 @@ export class SpotData {
 function numericMap(value: unknown): ReadonlyMap<number, number> {
   return new Map(Object.entries(record(value)).map(([key, item]) => [Number(key), number(item)]));
 }
+import { ImageAssets } from '../../../core/assets/image-assets';

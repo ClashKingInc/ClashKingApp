@@ -55,12 +55,8 @@ import { UpgradeTrackerRoot } from '../../features/upgrade-tracker';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
 import { canonicalTag } from '../domain/tags';
 import { reportException } from '../observability/observability';
-import {
-  DeepLinkHandler,
-  ExpoDeepLinkRuntime,
-  startDeepLinkHandling,
-  type DeepLinkFeedback,
-} from '../deep-links';
+import { refreshLinkedAccountsForCurrentAuth } from '../../features/auth/startup';
+import { DeepLinkHandler, startDeepLinkHandling, type DeepLinkFeedback } from '../deep-links';
 import {
   ClashHandoffDialog,
   EmptyState,
@@ -78,8 +74,15 @@ import {
   removeNativeSecondaryLayers,
 } from './native-secondary-navigation';
 import { supportCreatorUrl } from './runtime-effects';
+import { appLinkInbox } from '../deep-links/link-inbox';
+import { appLinkPath, type AppLink, type AppLinkParams } from '../deep-links/app-link';
+import { LinkParametersContext, EMPTY_LINK_PARAMS } from '../deep-links/link-parameters';
+import { WarCwlService } from '../../features/war/data';
+import { apiDate } from '../../features/war/models';
+import { isRouteEnabled } from '../../navigation/route-manifest';
+import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
 
-type PushedScene =
+type PushedScene = { readonly linkParams?: AppLinkParams; readonly linkKey?: number } & (
   | { readonly kind: 'player'; readonly player: Player }
   | { readonly kind: 'clan'; readonly clan: Clan }
   | { readonly kind: 'capital'; readonly clan: Clan }
@@ -94,7 +97,8 @@ type PushedScene =
       readonly kind: 'utility';
       readonly route: AppRouteId;
       readonly playerTag?: string;
-    };
+    }
+);
 
 /** Production shell composition for the retained four-tab Flutter navigation model. */
 export function AuthenticatedRoot() {
@@ -115,6 +119,17 @@ export function AuthenticatedRoot() {
   const [utility, setUtility] = useState<AppRouteId>();
   const [utilityPlayerTag, setUtilityPlayerTag] = useState<string>();
   const [utilityPostId, setUtilityPostId] = useState<string>();
+  const [primaryLinks, setPrimaryLinks] = useState<
+    Partial<Record<PrimaryRouteId, { key: number; params: AppLinkParams }>>
+  >({});
+  const [linkState, setLinkState] = useState<{ key: number; params: AppLinkParams }>({
+    key: 0,
+    params: {},
+  });
+  const featureStateRef = useRef(state.features);
+  useEffect(() => {
+    featureStateRef.current = state.features;
+  }, [state.features]);
   const [pushedScenes, setPushedScenes] = useState<readonly PushedScene[]>([]);
   const [snackbar, setSnackbar] = useState<string>();
   const [handoffUrl, setHandoffUrl] = useState<string>();
@@ -132,12 +147,18 @@ export function AuthenticatedRoot() {
   const featureState: FeatureState = { ...state.features };
   const pushedScene = pushedScenes.at(-1);
   const selectPrimary = (route: PrimaryRouteId) => {
+    recordBrowserPath(routeById(route).href);
+    setLinkState({ key: 0, params: {} });
     navigationGeneration.current += 1;
     setPushedScenes([]);
     setUtility(undefined);
     setPrimary(route);
   };
   const showUtility = useCallback((route: AppRouteDefinition, playerTag?: string) => {
+    recordBrowserPath(
+      appLinkPath({ kind: 'page', page: route.id, params: playerTag ? { player: playerTag } : {} }),
+    );
+    setLinkState({ key: 0, params: {} });
     navigationGeneration.current += 1;
     setPushedScenes([]);
     setUtilityPostId(undefined);
@@ -150,6 +171,10 @@ export function AuthenticatedRoot() {
     [showUtility],
   );
   const openPost = (postId?: string) => {
+    setLinkState({ key: 0, params: {} });
+    recordBrowserPath(
+      appLinkPath({ kind: 'page', page: 'posts', params: postId ? { postId } : {} }),
+    );
     navigationGeneration.current += 1;
     setPushedScenes([]);
     setUtilityPostId(postId);
@@ -157,6 +182,7 @@ export function AuthenticatedRoot() {
   };
   const closeSecondary = useCallback(() => {
     navigationGeneration.current += 1;
+    if (backThroughBrowserHistory()) return;
     if (usesNativeSecondaryNavigation && (pushedScenes.length || utility !== undefined)) {
       router.back();
       return;
@@ -173,22 +199,45 @@ export function AuthenticatedRoot() {
     return () => subscription?.remove();
   }, [closeSecondary, pushedScenes.length, usesNativeSecondaryNavigation, utility]);
   const pushPlayer = (player: Player) => {
+    recordBrowserPath(appLinkPath({ kind: 'player', tag: player.tag, params: {} }));
     navigationGeneration.current += 1;
     setPushedScenes((current) => [...current, { kind: 'player', player }]);
   };
   const pushClan = (clan: Clan) => {
+    recordBrowserPath(appLinkPath({ kind: 'clan', tag: clan.tag, params: {} }));
     navigationGeneration.current += 1;
     setPushedScenes((current) => [...current, { kind: 'clan', clan }]);
   };
   const pushCapital = (clan: Clan) => {
+    recordBrowserPath(appLinkPath({ kind: 'capital', tag: clan.tag, params: {} }));
     navigationGeneration.current += 1;
     setPushedScenes((current) => [...current, { kind: 'capital', clan }]);
   };
   const pushCwl = (cwl: PlayerCurrentCwl) => {
+    recordBrowserPath(
+      appLinkPath({
+        kind: 'cwl',
+        tag: cwl.clanTag,
+        params: cwl.summary.leagueInfo?.season
+          ? { season: cwl.summary.leagueInfo.season.slice(0, 7) }
+          : {},
+      }),
+    );
     navigationGeneration.current += 1;
     setPushedScenes((current) => [...current, { kind: 'cwl', ...cwl }]);
   };
   const pushWar = (war: WarInfo, roundNumber: number | null = null, cwl?: PlayerCurrentCwl) => {
+    if (war.clan)
+      recordBrowserPath(
+        appLinkPath({
+          kind: 'war',
+          tag: war.clan.tag,
+          ...(war.state === 'warEnded' && war.endTime
+            ? { warId: war.endTime.toISOString().replaceAll('-', '').replaceAll(':', '') }
+            : {}),
+          params: {},
+        }),
+      );
     navigationGeneration.current += 1;
     setPushedScenes((current) => [
       ...current,
@@ -196,6 +245,9 @@ export function AuthenticatedRoot() {
     ]);
   };
   const pushUtility = (route: AppRouteId, playerTag?: string) => {
+    recordBrowserPath(
+      appLinkPath({ kind: 'page', page: route, params: playerTag ? { player: playerTag } : {} }),
+    );
     navigationGeneration.current += 1;
     setPushedScenes((current) => [
       ...current,
@@ -329,6 +381,82 @@ export function AuthenticatedRoot() {
       loadClan: (tag) => runtime.clans.getClanAndWarData(tag),
       openPlayer: pushPlayer,
       openClan: pushClan,
+      openDestination: async (link: AppLink) => {
+        const generation = ++navigationGeneration.current;
+        let scene: PushedScene | undefined;
+        if (link.kind === 'page') {
+          if (!isRouteEnabled(routeById(link.page), featureStateRef.current)) {
+            if (active) setSnackbar(t('generalNoDataAvailable'));
+            return;
+          }
+          if (link.page === 'ranked' && link.params.player)
+            await runtime.players.getPlayerAndClanData(link.params.player);
+          if (link.page === 'war' && link.params.clan) {
+            await runtime.wars.loadAllWarData([link.params.clan], { throwOnError: true });
+            const summary = runtime.wars.getWarCwlByTag(link.params.clan);
+            const war = summary?.isInCwl
+              ? summary.getActiveWarByTag(link.params.clan)
+              : summary?.warInfo;
+            if (war?.clan) scene = { kind: 'war', war, roundNumber: null };
+            else throw new Error('No war available for requested clan');
+          }
+        } else if (link.kind === 'player') {
+          const player = await runtime.players.getPlayerAndClanData(link.tag);
+          if (!player) throw new Error('Player unavailable');
+          scene = { kind: 'player', player };
+        } else if (link.kind === 'clan' || link.kind === 'capital') {
+          const clan = await runtime.clans.getClanAndWarData(link.tag);
+          if (!clan) throw new Error('Clan unavailable');
+          scene = { kind: link.kind, clan };
+        } else if (link.kind === 'cwl') {
+          const cwl = await runtime.wars.loadLinkedCwl(link.tag, link.params.season);
+          scene = { kind: 'cwl', ...cwl, clanTag: link.tag };
+        } else if (link.kind === 'war') {
+          if (link.warId) {
+            const end = apiDate(link.warId);
+            if (!end) throw new Error('Invalid historical war end time');
+            const war = await WarCwlService.fetchWarDataFromTime(
+              runtime.contractApi,
+              link.tag,
+              end,
+            );
+            if (!war?.clan || war.endTime?.getTime() !== end.getTime())
+              throw new Error('Requested historical war unavailable');
+            scene = { kind: 'war', war: war.reorderForClan(link.tag), roundNumber: null };
+          } else {
+            await runtime.wars.loadAllWarData([link.tag], { throwOnError: true });
+            const summary = runtime.wars.getWarCwlByTag(link.tag);
+            const war = summary?.isInCwl ? summary.getActiveWarByTag(link.tag) : summary?.warInfo;
+            if (!war?.clan) throw new Error('No current war available');
+            scene = {
+              kind: 'war',
+              war: war.reorderForClan(link.tag),
+              roundNumber: null,
+              ...(summary?.isInCwl ? { cwl: { summary, clanTag: link.tag } } : {}),
+            };
+          }
+        }
+        if (!active || generation !== navigationGeneration.current) return;
+        setLinkState({ key: generation, params: link.params });
+        setUtility(undefined);
+        setPushedScenes(scene ? [{ ...scene, linkParams: link.params, linkKey: generation }] : []);
+        if (!scene && link.kind === 'page') {
+          if (routeById(link.page).primaryTab) {
+            setPrimary(link.page as PrimaryRouteId);
+            setPrimaryLinks((current) => ({
+              ...current,
+              [link.page]: { key: generation, params: link.params },
+            }));
+          } else {
+            setUtilityPlayerTag(link.params.player);
+            setUtilityPostId(link.params.postId);
+            setUtility(link.page);
+          }
+        }
+        if (Platform.OS === 'web' && typeof window !== 'undefined') {
+          window.history.replaceState(window.history.state, '', appLinkPath(link));
+        }
+      },
       showLoading: (loading) => {
         if (active) setDeepLinkLoading(loading);
       },
@@ -337,7 +465,7 @@ export function AuthenticatedRoot() {
       },
       reportError: (operation, error) => reportException(error, operation),
     });
-    void startDeepLinkHandling(new ExpoDeepLinkRuntime(), handler, (operation, error) =>
+    void startDeepLinkHandling(appLinkInbox, handler, (operation, error) =>
       reportException(error, operation),
     ).then((stop) => {
       if (active) unsubscribe = stop;
@@ -369,12 +497,28 @@ export function AuthenticatedRoot() {
           )}
           playerProfiles={runtime.players.profiles}
           onBack={async () => {
-            await runtime.accountBootstrap.initialize(user?.userId ?? null);
-            if (runtime.accounts.hasVerifiedAccounts) closeSecondary();
+            const result = await refreshLinkedAccountsForCurrentAuth(
+              runtime.auth,
+              runtime.accounts,
+            );
+            if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
+            if (!result.hasVerifiedAccount) throw new Error(t('homeVerifiedAccountRequiredBody'));
+            closeSecondary();
+            void runtime.accountBootstrap
+              .initialize(user?.userId ?? null)
+              .catch((error: unknown) => reportException(error, 'accountSetup.hydration'));
           }}
           onContinue={async () => {
-            await runtime.accountBootstrap.initialize(user?.userId ?? null);
-            if (runtime.accounts.hasVerifiedAccounts) closeSecondary();
+            const result = await refreshLinkedAccountsForCurrentAuth(
+              runtime.auth,
+              runtime.accounts,
+            );
+            if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
+            if (!result.hasVerifiedAccount) throw new Error(t('homeVerifiedAccountRequiredBody'));
+            closeSecondary();
+            void runtime.accountBootstrap
+              .initialize(user?.userId ?? null)
+              .catch((error: unknown) => reportException(error, 'accountSetup.hydration'));
           }}
           onOpenGameSettings={() =>
             openExternal('https://link.clashofclans.com/?action=OpenMoreSettings')
@@ -410,8 +554,9 @@ export function AuthenticatedRoot() {
       );
       const available = runtime.players.profiles.filter(
         (player) =>
-          verified.has(canonicalTag(player.tag)) &&
-          runtime.playerCardPreferences.isRankedShownOnHome(player.tag),
+          playerTag !== undefined ||
+          (verified.has(canonicalTag(player.tag)) &&
+            runtime.playerCardPreferences.isRankedShownOnHome(player.tag)),
       );
       const player = playerTag
         ? available.find((candidate) => canonicalTag(candidate.tag) === canonicalTag(playerTag))
@@ -514,14 +659,25 @@ export function AuthenticatedRoot() {
     ...(utility
       ? [
           {
-            key: `utility:${utility}:${utilityPlayerTag ?? ''}`,
-            content: renderUtilityContent(utility),
+            key: `utility:${utility}:${utilityPlayerTag ?? ''}:${linkState.key}`,
+            content: (
+              <LinkParametersContext.Provider value={linkState.params} key={linkState.key}>
+                {renderUtilityContent(utility)}
+              </LinkParametersContext.Provider>
+            ),
           },
         ]
       : []),
     ...pushedScenes.map((scene, index) => ({
-      key: `pushed:${index}:${scene.kind}`,
-      content: renderPushedScene(scene),
+      key: `pushed:${index}:${scene.kind}:${scene.linkKey ?? ''}`,
+      content: (
+        <LinkParametersContext.Provider
+          value={scene.linkParams ?? EMPTY_LINK_PARAMS}
+          key={scene.linkKey}
+        >
+          {renderPushedScene(scene)}
+        </LinkParametersContext.Provider>
+      ),
     })),
   ];
   const secondaryContent = secondaryLayers.at(-1)?.content;
@@ -604,7 +760,22 @@ export function AuthenticatedRoot() {
         onResetDesktopContent={closeSecondary}
         onSearch={() => openUtility(routeById('search'))}
         onUtilityNavigate={openUtility}
-        primaryScreens={screens}
+        primaryScreens={
+          Object.fromEntries(
+            Object.entries(screens).map(([key, screen]) => {
+              const entry = primaryLinks[key as PrimaryRouteId];
+              return [
+                key,
+                <LinkParametersContext.Provider
+                  key={entry?.key ?? 0}
+                  value={entry?.params ?? EMPTY_LINK_PARAMS}
+                >
+                  {screen}
+                </LinkParametersContext.Provider>,
+              ];
+            }),
+          ) as Record<PrimaryRouteId, React.ReactNode>
+        }
         productLabel={t('navigationClashKingWeb')}
         profileMenuLabel={t('navigationOpenProfileMenu')}
         secondaryContent={usesNativeSecondaryNavigation ? undefined : secondaryContent}
@@ -674,6 +845,8 @@ function deepLinkFeedbackMessage(
       return t('deepLinkFailedToOpenPlayer');
     case 'failedClan':
       return t('deepLinkFailedToOpenClan');
+    case 'unavailable':
+      return t('generalNoDataAvailable');
     case 'unknown':
       return t('deepLinkUnknown');
   }

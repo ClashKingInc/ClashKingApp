@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "A procurar atualizações…",
+  "startupDownloadingUpdate": "A descarregar atualização…",
+  "startupUpdateInBackground": "Atualizar em segundo plano",
   "warStatsRangeTitle": "Intervalo das estatísticas de guerra",
   "warStatsRangeDescription": "Escolhe se as estatísticas abrangem um número fixo de guerras recentes ou um período recente em dias.",
   "warStatsRangeDays": "Dias",

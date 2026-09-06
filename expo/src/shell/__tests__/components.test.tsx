@@ -446,7 +446,7 @@ describe('navigation shell components', () => {
       view.queryByTestId('mobile-drawer-gesture-hint', { includeHiddenElements: true }),
     ).toBeNull();
     expect(drawerHintStore.setString).toHaveBeenCalledWith(
-      STORAGE_KEYS.mobileDrawerGestureHintSeen,
+      `${STORAGE_KEYS.mobileDrawerGestureHintSeen}_preview_v2`,
       'true',
     );
   });

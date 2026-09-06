@@ -1,6 +1,7 @@
 import { createContractTestApi } from '../../core/api/contract-api.testing';
 import { emptyClanSearchFilters } from './models';
 import { SearchService } from './search-service';
+import { TransportError } from '@clashking/api-client';
 
 function reply(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status });
@@ -46,6 +47,13 @@ function setup(routes: Record<string, { body: unknown; status?: number }>) {
 }
 
 describe('SearchService', () => {
+  it('does not report an offline clan search as an empty result', async () => {
+    const { service, fetchMock } = setup({});
+    fetchMock.mockRejectedValueOnce(new TypeError('offline'));
+    await expect(service.searchClans('Clan', emptyClanSearchFilters)).rejects.toBeInstanceOf(
+      TransportError,
+    );
+  });
   it('loads authenticated recent searches from the exact user route', async () => {
     const { service, fetchMock } = setup({
       'api.test/v2/links/user%2F1/searches': {

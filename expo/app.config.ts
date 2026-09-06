@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           url:
             process.env.CK_UPDATES_URL?.trim() || 'https://api.clashk.ing/v2/app/updates/manifest',
           requestHeaders: { 'expo-channel-name': updateChannel },
-          checkAutomatically: 'ON_LOAD',
+          checkAutomatically: 'NEVER',
           fallbackToCacheTimeout: 0,
           ...(updateCertificatePath
             ? {
@@ -49,6 +49,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       appleTeamId: 'MZYXD43RX5',
       buildNumber,
       supportsTablet: true,
+      associatedDomains: ['applinks:app.clashk.ing'],
       requireFullScreen: true,
       icon: './assets/clashking/icons/app_icon_ios_default.png',
       googleServicesFile: './config/firebase/GoogleService-Info.plist',
@@ -62,7 +63,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         UISupportsDocumentBrowser: true,
         UIRequiresFullScreen: true,
         UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait'],
-        'UISupportedInterfaceOrientations~ipad': ['UIInterfaceOrientationPortrait'],
+        'UISupportedInterfaceOrientations~ipad': [
+          'UIInterfaceOrientationPortrait',
+          'UIInterfaceOrientationLandscapeLeft',
+          'UIInterfaceOrientationLandscapeRight',
+        ],
       },
     },
     android: {
@@ -76,6 +81,40 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         monochromeImage: './assets/clashking/icons/app_icon_black_white.png',
       },
       permissions: ['INTERNET', 'POST_NOTIFICATIONS'],
+      intentFilters: [
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          category: ['BROWSABLE', 'DEFAULT'],
+          data: [
+            ...[
+              '/',
+              '/players',
+              '/clans',
+              '/war',
+              '/search',
+              '/todo',
+              '/ranked',
+              '/upgrade-tracker',
+              '/rankings',
+              '/stats',
+              '/calculators',
+              '/posts',
+              '/bases-armies',
+              '/game-assets',
+              '/achievements',
+              '/accounts',
+              '/subscription',
+              '/settings',
+            ].map((path) => ({ scheme: 'https', host: 'app.clashk.ing', path })),
+            ...['/player/', '/clan/', '/war/', '/posts/', '/settings/'].map((pathPrefix) => ({
+              scheme: 'https',
+              host: 'app.clashk.ing',
+              pathPrefix,
+            })),
+          ],
+        },
+      ],
       predictiveBackGestureEnabled: false,
     },
     web: {

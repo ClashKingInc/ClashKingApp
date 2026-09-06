@@ -109,7 +109,13 @@ export class AuthService {
 
     const accessToken = await this.options.tokens.getAccessToken();
     if (accessToken === null) {
-      this.publish({ ...this.stateValue, accessToken: null });
+      await this.options.observability?.clearUser();
+      this.publish({
+        accessToken: null,
+        isAuthenticated: false,
+        currentUser: null,
+        followerCount: null,
+      });
       return;
     }
 

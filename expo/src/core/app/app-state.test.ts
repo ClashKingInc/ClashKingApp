@@ -16,7 +16,7 @@ class MemoryStore implements StringStore {
 }
 
 describe('app state parity', () => {
-  it('waits for remote policy before rejecting a failed translation load', async () => {
+  it('reports a failed translation load without waiting for remote feature flags', async () => {
     const failure = new Error('Translation unavailable');
     let finishRefresh!: () => void;
     const refresh = new Promise<void>((resolve) => {
@@ -47,7 +47,7 @@ describe('app state parity', () => {
     const settledBeforeRefresh = settled;
     finishRefresh();
     expect(await initialization).toBe(failure);
-    expect(settledBeforeRefresh).toBe(false);
+    expect(settledBeforeRefresh).toBe(true);
     expect(store.getState().initialized).toBe(false);
   });
 
@@ -85,7 +85,7 @@ describe('app state parity', () => {
     expect(refreshes).toBe(1);
   });
 
-  it('falls back to the supported system locale and preserves Flutter theme toggling', async () => {
+  it('defaults to dark before and after loading missing preferences, while retaining the system locale', async () => {
     const preferences = new MemoryStore();
     const store = createAppStateStore({
       preferences,
@@ -97,15 +97,35 @@ describe('app state parity', () => {
       systemLocale: () => 'en_GB',
     });
 
+    expect(store.getState().themePreference).toBe('dark');
     await store.getState().initialize();
     expect(store.getState().locale).toBe('en_GB');
-    expect(store.getState().themePreference).toBe('system');
+    expect(store.getState().themePreference).toBe('dark');
 
     await store.getState().toggleTheme();
-    expect(store.getState().themePreference).toBe('dark');
-    await store.getState().toggleTheme();
     expect(store.getState().themePreference).toBe('light');
+    await store.getState().toggleTheme();
+    expect(store.getState().themePreference).toBe('dark');
   });
+
+  it.each(['dark', 'light', 'system'] as const)(
+    'preserves an explicitly saved %s theme',
+    async (theme) => {
+      const preferences = new MemoryStore();
+      await preferences.setItem('themeMode', theme);
+      const store = createAppStateStore({
+        preferences,
+        gameData: { loadTranslationsForLocale: async () => undefined },
+        featureFlags: {
+          refresh: async () => undefined,
+          isEnabled: (_key, fallback) => fallback ?? true,
+        },
+        systemLocale: () => 'en',
+      });
+      await store.getState().initialize();
+      expect(store.getState().themePreference).toBe(theme);
+    },
+  );
 
   it('restores persisted language codes with Flutter first-match locale behavior', async () => {
     const preferences = new MemoryStore();

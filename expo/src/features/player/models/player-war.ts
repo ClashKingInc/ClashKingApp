@@ -483,7 +483,7 @@ export class ClanInfo {
     return new ClanInfo(
       string(j.tag),
       string(j.name),
-      record(j.badgeUrls),
+      ImageAssets.clanBadgeUrls(string(j.tag)),
       int(j.clanLevel),
       int(j.attacks),
       int(j.stars),
@@ -570,3 +570,4 @@ function filterTownHalls(
   }
   return result;
 }
+import { ImageAssets } from '../../../core/assets/image-assets';

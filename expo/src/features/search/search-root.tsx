@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
 import { View } from 'react-native';
 
 import { useAppRuntime } from '../../core/app/runtime-context';
@@ -54,8 +55,11 @@ export function SearchRoot({
     () => new SearchService(runtime.contractApi),
     [runtime.contractApi],
   );
-  const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<SearchMode>('players');
+  const link = useLinkParameters();
+  const [query, setQuery] = useState(link.q ?? '');
+  const [mode, setMode] = useState<SearchMode>(
+    linkChoice(link.type, ['players', 'clans'], 'players'),
+  );
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [playerFilters, setPlayerFiltersState] = useState(emptyPlayerSearchFilters);
   const [clanFilters, setClanFiltersState] = useState(emptyClanSearchFilters);

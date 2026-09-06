@@ -25,13 +25,9 @@ export class ClanBadgeUrls {
     return this.small || this.medium || this.large;
   }
 
-  static fromJson(value: unknown): ClanBadgeUrls {
-    const json = record(value);
-    return new ClanBadgeUrls(
-      cocAssetsProxyUrl(string(json.small)),
-      cocAssetsProxyUrl(string(json.medium)),
-      cocAssetsProxyUrl(string(json.large)),
-    );
+  static fromJson(_value: unknown, tag = ''): ClanBadgeUrls {
+    const url = ImageAssets.clanBadgeForTag(tag);
+    return new ClanBadgeUrls(url, url, url);
   }
 
   static empty(): ClanBadgeUrls {
@@ -214,7 +210,7 @@ export class Clan {
         ? ClanLocation.fromJson(record(json.location))
         : null,
       bool(json.isFamilyFriendly),
-      ClanBadgeUrls.fromJson(json.badgeUrls),
+      ClanBadgeUrls.fromJson(json.badgeUrls, string(json.tag)),
       int(json.clanLevel),
       int(json.clanPoints),
       int(json.clanBuilderBasePoints),

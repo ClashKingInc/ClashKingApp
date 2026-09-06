@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import type { NotificationPreferences } from '../../../core/dto/notification-preferences';
 import { canonicalTag } from '../../../core/domain/tags';
@@ -44,6 +44,7 @@ export function PlayersRoot(props: PlayersRootProps) {
   }, [runtime]);
 
   useEffect(() => {
+    if (Platform.OS === 'web') return;
     let current = true;
     void runtime.notificationPreferences
       .load()
@@ -86,7 +87,8 @@ export function PlayersRoot(props: PlayersRootProps) {
         leagueUrl: bookmark.leagueUrl,
       })),
       optionsByTag,
-      notificationsEnabled: notificationPreferences?.notificationsEnabled === true,
+      notificationsEnabled:
+        Platform.OS !== 'web' && notificationPreferences?.notificationsEnabled === true,
       notificationAccountTags,
       updatingNotificationTags,
       ...(runtime.accounts.lastRefresh ? { lastRefresh: runtime.accounts.lastRefresh } : {}),

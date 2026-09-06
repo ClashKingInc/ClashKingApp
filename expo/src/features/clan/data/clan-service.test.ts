@@ -205,6 +205,15 @@ describe('ClanService', () => {
     expect(clan.joinLeave.joinLeaveList).toHaveLength(2);
   });
 
+  test('keeps successful capital history when another clan has an HTTP failure', async () => {
+    const { service } = harness((url) =>
+      url.includes('%23GOOD') ? json({ items: [capitalSeason()] }) : json({}, 503),
+    );
+    const result = await service.loadCapitalData(['#GOOD', '#UNAVAILABLE'], 10);
+    expect(result).toHaveLength(1);
+    expect(service.capitalHistory).toHaveLength(1);
+  });
+
   test('capital uses the official proxy without tag normalization and preserves limit', async () => {
     const { service, requests } = harness(() => json({ items: [capitalSeason()] }));
     const result = await service.loadCapitalData(['abc'], 10);

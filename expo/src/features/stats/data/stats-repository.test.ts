@@ -152,6 +152,45 @@ describe('StatsRepository', () => {
     expect(executeStatus).not.toHaveBeenCalled();
   });
 
+  it('loads real player distributions without calling the unavailable Builder Hall route', async () => {
+    const requests: Request[] = [];
+    const repository = new StatsRepository(
+      createContractTestApi({
+        baseUrl: 'https://api.test/v2',
+        fetchImplementation: async (input, init) => {
+          const request = new Request(input, init);
+          requests.push(request);
+          switch (new URL(request.url).pathname) {
+            case '/v2/counts/players/town-halls':
+              return Response.json({ items: [{ townhall_level: 18, count: 42 }], count: 1 });
+            case '/v2/counts/players/league-tiers':
+              return Response.json({ items: [{ league_tier_id: 1, count: 23 }], count: 1 });
+            case '/v2/counts/players/builder-halls':
+              return Response.json(
+                {
+                  code: 'not_implemented',
+                  message: 'Builder Hall counts are not implemented',
+                },
+                { status: 501 },
+              );
+            default:
+              throw new Error(`Unexpected stats request: ${request.url}`);
+          }
+        },
+      }),
+    );
+
+    const result = await repository.loadPlayerCounts();
+
+    expect(result.townHalls).toEqual([{ id: 18, count: 42 }]);
+    expect(result.leagueTiers).toEqual([{ id: 1, count: 23 }]);
+    expect(result).not.toHaveProperty('builderHalls');
+    expect(requests.map((request) => [request.method, new URL(request.url).pathname])).toEqual([
+      ['GET', '/v2/counts/players/town-halls'],
+      ['GET', '/v2/counts/players/league-tiers'],
+    ]);
+  });
+
   it('uses the shared POST contract for battle stats requests', async () => {
     const execute = jest.fn(() =>
       Effect.succeed({ date_range: { start: '2026-08-01', end: '2026-08-30' }, metrics: {} }),

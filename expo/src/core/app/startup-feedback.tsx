@@ -1,13 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import {
-  ExternalLink,
-  Hammer,
-  LogOut,
-  MessageCircle,
-  RefreshCcw,
-  UserRound,
-  WifiOff,
-} from 'lucide-react-native';
+import { Hammer, LogOut, MessageCircle, RefreshCcw, UserRound, WifiOff } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../assets/image-assets';
@@ -40,44 +32,6 @@ export function MaintenanceScreen({ onRetry }: { onRetry: () => void }) {
         </CKText>
         <CKText style={styles.center}>{t('maintenanceDescription')}</CKText>
         <TextButton label={t('generalTryAgain')} onPress={onRetry} />
-      </View>
-    </SafeAreaView>
-  );
-}
-
-export function ForcedUpdateScreen({
-  message,
-  onUpdate,
-}: {
-  message: string;
-  onUpdate: () => void;
-}) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: theme.surface }]}>
-      <View style={styles.maintenance}>
-        <MobileWebImage
-          accessibilityIgnoresInvertColors
-          imageUrl={ImageAssets.thinkingBuilder}
-          errorFallback={<Hammer color={theme.onSurfaceVariant} size={72} />}
-          style={styles.maintenanceImage}
-          contentFit="contain"
-        />
-        <CKText role="screenTitle" style={[styles.center, { color: theme.primary }]}>
-          {t('appTitle')}
-        </CKText>
-        <CKText style={styles.center}>{message}</CKText>
-        <Pressable
-          accessibilityRole="link"
-          onPress={onUpdate}
-          style={[styles.retry, { backgroundColor: theme.primary }]}
-        >
-          <ExternalLink color={theme.onPrimary} size={20} />
-          <CKText role="rowTitle" style={{ color: theme.onPrimary }}>
-            {t('faqTroubleshootingCrashSolution2')}
-          </CKText>
-        </Pressable>
       </View>
     </SafeAreaView>
   );

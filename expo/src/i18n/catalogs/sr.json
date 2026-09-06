@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Провера ажурирања…",
+  "startupDownloadingUpdate": "Преузимање ажурирања…",
+  "startupUpdateInBackground": "Ажурирај у позадини",
   "warStatsRangeTitle": "Опсег ратне статистике",
   "warStatsRangeDescription": "Изаберите да ли статистика обухвата одређени број недавних ратова или недавни период у данима.",
   "warStatsRangeDays": "Дани",

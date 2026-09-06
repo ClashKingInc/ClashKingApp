@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
   Animated,
   Modal,
@@ -56,7 +57,14 @@ export function PlayersScreen({
   const { width } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && width >= 900;
   const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
-  const [mode, setMode] = useState<PlayerRosterMode>('linked');
+  const link = useLinkParameters();
+  const [mode, setMode] = useState<PlayerRosterMode>(
+    linkChoice(
+      link.tab === 'bookmarks' ? 'bookmarked' : link.tab,
+      ['linked', 'bookmarked'],
+      'linked',
+    ),
+  );
   const [refreshing, setRefreshing] = useState(false);
   const [verification, setVerification] = useState<Player>();
   const [loadingBookmark, setLoadingBookmark] = useState(false);

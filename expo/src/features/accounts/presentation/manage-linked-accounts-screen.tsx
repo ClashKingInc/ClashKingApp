@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BackHandler,
   Platform,
@@ -98,6 +98,24 @@ export function ManageLinkedAccountsScreen({
   const [verification, setVerification] = useState<LinkedAccountItem>();
   const [notice, setNotice] = useState<string>();
   const [addServerFailure, setAddServerFailure] = useState(false);
+  const refreshVersion = useRef(0);
+  const refreshError = (failure: unknown) => {
+    const message =
+      failure instanceof Error ? failure.message : typeof failure === 'string' ? failure : '';
+    return t('generalRefreshFailed', {
+      error: message.replace('Exception: ', '').trim() || t('apiErrorOperationFailed'),
+    });
+  };
+  const refreshAfterMutation = async () => {
+    const version = ++refreshVersion.current;
+    setError(undefined);
+    try {
+      await onRefresh?.();
+      if (version === refreshVersion.current) setError(undefined);
+    } catch (failure) {
+      if (version === refreshVersion.current) setError(refreshError(failure));
+    }
+  };
   const hasVerified = accounts.some((account) => account.isVerified);
   const requiresVerifiedAccount = firstConnection || !hasVerified;
   const byTag = useMemo(
@@ -148,9 +166,11 @@ export function ManageLinkedAccountsScreen({
     const result = await service.addAccount(normalized);
     setAdding(false);
     if (result.code === 200 && result.account) {
-      setAccounts((current) => [...current, presentAccount(result.account!)]);
+      const addedAccount = presentAccount(result.account);
+      setAccounts((current) => [...current, addedAccount]);
       setTag('');
-      await onRefresh?.();
+      if (!addedAccount.isVerified) setVerification(addedAccount);
+      await refreshAfterMutation();
       return;
     }
     if (result.code === 409 && result.account) {
@@ -160,7 +180,11 @@ export function ManageLinkedAccountsScreen({
     if (result.code === 500) setAddServerFailure(true);
     else
       setError(
-        result.code === 404 ? t('accountsErrorTagNotExists') : t('accountsErrorFailedToAdd'),
+        result.code === 404
+          ? t('accountsErrorTagNotExists')
+          : result.code >= 500
+            ? t('authErrorServerUnavailable')
+            : t('accountsErrorFailedToAdd'),
       );
   };
   const finishReorder = ({ data, from, to }: DragEndParams<LinkedAccountItem>) => {
@@ -179,6 +203,9 @@ export function ManageLinkedAccountsScreen({
     else setError(t('accountsErrorFailedToAdd'));
   };
   const continueAfterPersist = async () => {
+    if (continuing) return;
+    const version = ++refreshVersion.current;
+    setError(undefined);
     if (!hasVerified) {
       setError(t('homeVerifiedAccountRequiredBody'));
       return;
@@ -195,14 +222,15 @@ export function ManageLinkedAccountsScreen({
       }
       await onContinue();
     } catch (failure) {
-      const message = failure instanceof Error ? failure.message : String(failure);
-      setError(t('generalRefreshFailed', { error: message.replace('Exception: ', '') }));
+      if (version === refreshVersion.current) setError(refreshError(failure));
     } finally {
       setContinuing(false);
     }
   };
   const leaveAfterPersist = async () => {
     if (!onBack || continuing) return;
+    const version = ++refreshVersion.current;
+    setError(undefined);
     setContinuing(true);
     try {
       if (orderChanged) {
@@ -219,8 +247,7 @@ export function ManageLinkedAccountsScreen({
       }
       await onBack();
     } catch (failure) {
-      const message = failure instanceof Error ? failure.message : String(failure);
-      setError(t('generalRefreshFailed', { error: message.replace('Exception: ', '') }));
+      if (version === refreshVersion.current) setError(refreshError(failure));
     } finally {
       setContinuing(false);
     }
@@ -239,7 +266,7 @@ export function ManageLinkedAccountsScreen({
     setVerification(undefined);
     setTag('');
     setNotice(t('accountVerificationSuccess'));
-    await onRefresh?.();
+    await refreshAfterMutation();
   };
   if (addServerFailure) {
     return (
@@ -305,6 +332,10 @@ export function ManageLinkedAccountsScreen({
           keyExtractor={(account) => account.playerTag}
           onDragEnd={finishReorder}
           keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          // The draggable list has its own outer View; size it as well as the list
+          // so the linking form remains visible even before the first account.
+          containerStyle={styles.accountList}
           style={styles.accountList}
           contentContainerStyle={[
             styles.scroll,

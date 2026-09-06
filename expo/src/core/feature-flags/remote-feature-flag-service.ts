@@ -6,10 +6,8 @@ import {
   defaultFeatureFlagValue,
   featureFlagsFromConfig,
   isFeatureFlagEnabled,
-  requiredAppUpdate,
   type FeatureFlagEvaluation,
   type FeaturePlatform,
-  type RequiredAppUpdate,
   type RemoteFeatureFlag,
 } from './feature-flags';
 
@@ -26,7 +24,6 @@ export class RemoteFeatureFlagService {
   private flags: ReadonlyMap<string, RemoteFeatureFlag> = new Map();
   private installationSeed = 0;
   private appVersion = '';
-  private updateRequirement: RequiredAppUpdate | null = null;
 
   constructor(private readonly options: RemoteFeatureFlagServiceOptions) {}
 
@@ -37,11 +34,6 @@ export class RemoteFeatureFlagService {
     ]);
     const response = await this.options.loadConfig();
     this.flags = featureFlagsFromConfig(response);
-    this.updateRequirement = requiredAppUpdate(response, this.options.platform, this.appVersion);
-  }
-
-  requiredUpdate(): RequiredAppUpdate | null {
-    return this.updateRequirement;
   }
 
   isEnabled(key: string, fallback = defaultFeatureFlagValue(key)): boolean {

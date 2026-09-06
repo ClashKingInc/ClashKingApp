@@ -89,7 +89,6 @@ function decodeRecentGroup(value: unknown, type: RecentSearchType): RecentSearch
     if (!isRecord(item)) return [];
     const tag = stringValue(item.tag);
     if (!tag) return [];
-    const badgeUrls = recordValue(item.badgeUrls);
     const clan = recordValue(item.clan);
     const league = recordValue(item.league);
     const townHallLevel = numberValue(item.townHallLevel, 1);
@@ -100,21 +99,13 @@ function decodeRecentGroup(value: unknown, type: RecentSearchType): RecentSearch
         tag,
         createdAt: validDate(item.created_at),
         imageUrl:
-          type === 'clan' ? smallestBadgeUrl(badgeUrls) : ImageAssets.townHall(townHallLevel),
+          type === 'clan' ? ImageAssets.clanBadgeForTag(tag) : ImageAssets.townHall(townHallLevel),
         clanName: type === 'player' ? nullableString(clan.name) : null,
         leagueName: type === 'player' ? nullableString(league.name) : null,
         members: type === 'clan' ? numberValue(item.members) : 0,
       },
     ];
   });
-}
-
-function smallestBadgeUrl(badgeUrls: JsonRecord): string | null {
-  return (
-    nullableString(badgeUrls.small) ??
-    nullableString(badgeUrls.medium) ??
-    nullableString(badgeUrls.large)
-  );
 }
 
 export interface SearchLocation {

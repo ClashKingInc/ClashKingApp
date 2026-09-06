@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Söker efter uppdateringar…",
+  "startupDownloadingUpdate": "Hämtar uppdatering…",
+  "startupUpdateInBackground": "Uppdatera i bakgrunden",
   "warStatsRangeTitle": "Intervall för krigsstatistik",
   "warStatsRangeDescription": "Välj om statistiken ska omfatta ett fast antal nyliga krig eller en nylig period i dagar.",
   "warStatsRangeDays": "Dagar",

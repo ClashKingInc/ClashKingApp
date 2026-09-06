@@ -72,6 +72,67 @@ function basicWar(overrides: Record<string, unknown> = {}) {
 }
 
 describe('WarCwlService', () => {
+  const storedGroup = (tag = '#CLAN', season = '2026-08') => ({
+    state: 'ended',
+    season,
+    warLeague: { id: 48000018, name: 'Champion League I' },
+    clans: [warClan(tag)],
+    rounds: [
+      { warTags: [{ ...officialWar(tag, '#OTHER'), tag: '#WAR', season }, { tag: '#0' }] },
+    ],
+  });
+
+  test('loads the requested stored CWL season and hydrated wars through the shared contract', async () => {
+    const { service, calls } = harness({
+      '/v2/cwl/%23CLAN/group?season=2026-08': { body: storedGroup() },
+    });
+    const { summary, warLeagueName } = await service.loadLinkedCwl('#CLAN', '2026-08');
+    expect(summary.leagueInfo?.season).toBe('2026-08');
+    expect(summary.leagueInfo?.rounds[0]?.warTags).toEqual(['#WAR', '#0']);
+    expect(summary.warLeagueInfos).toHaveLength(1);
+    expect(summary.warLeagueInfos[0]?.tag).toBe('#WAR');
+    expect(warLeagueName).toBe('Champion League I');
+    expect(calls.size).toBe(1);
+  });
+
+  test('rejects a stored CWL group for another clan', async () => {
+    const { service } = harness({ '/v2/cwl/%23CLAN/group': { body: storedGroup('#OTHER') } });
+    await expect(service.loadLinkedCwl('#CLAN')).rejects.toThrow('requested clan');
+  });
+  test('loads an exact dated CWL season without reducing it to a month', async () => {
+    const { service } = harness({ '/v2/cwl/%23CLAN/group?season=2026-08-02': { body: storedGroup('#CLAN', '2026-08-02') } });
+    expect((await service.loadLinkedCwl('#CLAN', '2026-08-02')).summary.leagueInfo?.season).toBe('2026-08-02');
+  });
+
+  test('rejects a different stored season without substituting live data', async () => {
+    const { service, calls } = harness({
+      '/v2/cwl/%23CLAN/group?season=2026-07': { body: storedGroup() },
+    });
+    await expect(service.loadLinkedCwl('#CLAN', '2026-07')).rejects.toThrow('season unavailable');
+    expect(calls.size).toBe(1);
+  });
+
+  test('an explicitly requested missing season does not fall back to the current season', async () => {
+    const { service, calls } = harness({
+      '/v2/cwl/%23CLAN/group?season=2026-08': { status: 404, body: { code: 'not_found', message: 'Not found' } },
+    });
+    await expect(service.loadLinkedCwl('#CLAN', '2026-08')).rejects.toThrow('season unavailable');
+    expect(calls.size).toBe(1);
+  });
+
+  test('only an unspecified missing season may fall back to live CWL', async () => {
+    const { service, calls } = harness({
+      '/v2/cwl/%23CLAN/group': { status: 404, body: { code: 'not_found', message: 'Not found' } },
+      '/v2/war/%23CLAN/basic': { body: basicWar({ type: 'cwl', warTag: '#WAR' }) },
+      '/proxy/v1/clans/%23CLAN/currentwar/leaguegroup': {
+        body: { ...storedGroup('#CLAN', '2026-09'), rounds: [{ warTags: ['#WAR'] }] },
+      },
+      '/proxy/v1/clanwarleagues/wars/%23WAR': { body: officialWar('#CLAN', '#OTHER', '#WAR') },
+    });
+    expect((await service.loadLinkedCwl('#CLAN')).summary.leagueInfo?.season).toBe('2026-09');
+    expect(calls.get('/v2/cwl/%23CLAN/group')).toBe(1);
+  });
+
   test('normalizes bulk state, skips malformed items, and controls notification', () => {
     const { service } = harness({});
     const listener = jest.fn();

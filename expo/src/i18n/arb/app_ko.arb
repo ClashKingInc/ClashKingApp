@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "업데이트 확인 중…",
+  "startupDownloadingUpdate": "업데이트 다운로드 중…",
+  "startupUpdateInBackground": "백그라운드에서 업데이트",
   "warStatsRangeTitle": "클랜전 통계 범위",
   "warStatsRangeDescription": "최근 클랜전의 고정 횟수 또는 최근 기간의 일수 중 통계 범위를 선택하세요.",
   "warStatsRangeDays": "일",

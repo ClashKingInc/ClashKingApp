@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "正在检查更新…",
+  "startupDownloadingUpdate": "正在下载更新…",
+  "startupUpdateInBackground": "在后台更新",
   "warStatsRangeTitle": "部落战统计范围",
   "warStatsRangeDescription": "选择统计固定场数的近期部落战，或按天数统计近期时段。",
   "warStatsRangeDays": "天数",

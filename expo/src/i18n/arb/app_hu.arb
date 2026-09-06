@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Frissítések keresése…",
+  "startupDownloadingUpdate": "Frissítés letöltése…",
+  "startupUpdateInBackground": "Frissítés a háttérben",
   "warStatsRangeTitle": "Háborús statisztikák tartománya",
   "warStatsRangeDescription": "Válaszd ki, hogy a statisztikák meghatározott számú legutóbbi háborút vagy egy napokban megadott időszakot fedjenek le.",
   "warStatsRangeDays": "Napok",

@@ -122,6 +122,11 @@ export class ImageAssets {
     return badgeUrl || `${ImageAssets.baseUrl}/icons/default_clan_badge.png`;
   }
 
+  static clanBadgeUrls(tag: string): { small: string; medium: string; large: string } {
+    const url = ImageAssets.clanBadgeForTag(tag);
+    return { small: url, medium: url, large: url };
+  }
+
   static getClanBadgeImage(url: string): string {
     return url || ImageAssets.defaultImage;
   }

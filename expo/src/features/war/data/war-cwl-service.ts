@@ -2,6 +2,7 @@ import {
   ProxyCurrentLeagueGroupEndpoint,
   ProxyCurrentWarEndpoint,
   ProxyCwlWarEndpoint,
+  StoredCwlGroupEndpoint,
   WarBasicEndpoint,
   WarPreviousEndpoint,
 } from '@clashking/api-contracts/expo';
@@ -122,6 +123,44 @@ export class WarCwlService {
       : null;
   }
 
+  /** Stored groups contain hydrated wars inside each round, unlike the live proxy. */
+  async loadLinkedCwl(
+    tag: string,
+    season?: string,
+  ): Promise<{ summary: WarCwl; warLeagueName?: string }> {
+    const response = await Effect.runPromise(
+      this.api.executeStatus(StoredCwlGroupEndpoint, {
+        path: { tag },
+        query: season ? { season } : {},
+        body: {},
+      }),
+    );
+    if (!response.ok && response.status === 404 && !season) {
+      await this.loadAllWarData([tag], { throwOnError: true });
+      const live = this.getWarCwlByTag(tag);
+      if (live?.isInCwl && live.leagueInfo) return { summary: live };
+    }
+    if (!response.ok) throw new Error('Requested CWL season unavailable');
+    const group = response.value;
+    if (season && string(group.season) !== season)
+      throw new Error('Requested CWL season unavailable');
+    const wars: WarInfo[] = [];
+    const rounds = records(group.rounds).map((round) => ({
+      warTags: records(round.warTags).map((item) => {
+        if (item.clan && item.opponent) wars.push(WarInfo.fromJson({ ...item, war_tag: item.tag }));
+        return string(item.tag);
+      }),
+    }));
+    const summary = cwlResult(tag, { ...group, rounds }, wars);
+    if (
+      !summary.leagueInfo?.clans.some((clan) => normalizeWarTag(clan.tag) === normalizeWarTag(tag))
+    ) {
+      throw new Error('CWL group does not contain requested clan');
+    }
+    const warLeagueName = string(record(group.warLeague).name);
+    return { summary, ...(warLeagueName ? { warLeagueName } : {}) };
+  }
+
   private async loadWarData(tags: readonly string[], requestId: number): Promise<WarLoadOutcome> {
     let changed = false;
     const errors: unknown[] = [];
@@ -218,27 +257,39 @@ export class WarCwlService {
     );
     const group = response.ok ? response.value : null;
 
+    const fetched = new Map<string, Promise<WarInfo | null>>();
+    const fetchWar = (tag: string) => {
+      if (!fetched.has(tag)) fetched.set(tag, this.fetchCwlWar(tag));
+      return fetched.get(tag)!;
+    };
+    const matchesClan = (war: WarInfo) =>
+      normalizeWarTag(war.clan?.tag) === clanTag || normalizeWarTag(war.opponent?.tag) === clanTag;
+    let fallback: WarInfo[] = [];
     if (preferredWarTag) {
-      const war = await this.fetchCwlWar(preferredWarTag);
-      if (war && isFullWar(war)) return cwlResult(clanTag, group, [war.reorderForClan(clanTag)]);
+      const war = await fetchWar(preferredWarTag);
+      if (war && isFullWar(war) && matchesClan(war)) {
+        if (war.state === 'inWar') return cwlResult(clanTag, group, [war.reorderForClan(clanTag)]);
+        fallback = [war.reorderForClan(clanTag)];
+      }
     }
-    if (!group || !Array.isArray(group.rounds)) return null;
+    if (!group || !Array.isArray(group.rounds))
+      return fallback.length ? cwlResult(clanTag, group, fallback) : null;
     for (const round of records(group.rounds).reverse()) {
       const tags = (Array.isArray(round.warTags) ? round.warTags : [])
         .map(String)
         .filter((tag) => tag && tag !== '#0');
       if (!tags.length) continue;
-      const wars = (await Promise.all(tags.map((tag) => this.fetchCwlWar(tag))))
+      const wars = (await Promise.all(tags.map(fetchWar)))
         .filter((war): war is WarInfo => war !== null)
         .filter(isFullWar);
-      const includesClan = wars.some(
-        (war) =>
-          normalizeWarTag(war.clan?.tag) === clanTag ||
-          normalizeWarTag(war.opponent?.tag) === clanTag,
-      );
-      if (includesClan) return cwlResult(clanTag, group, wars);
+      const ourWar = wars.find(matchesClan);
+      if (!ourWar) continue;
+      if (ourWar.state === 'inWar') return cwlResult(clanTag, group, wars);
+      if (!fallback.length) fallback = wars;
+      // Once an ended round is reached there cannot be an older active round.
+      if (ourWar.state === 'warEnded') break;
     }
-    return null;
+    return fallback.length ? cwlResult(clanTag, group, fallback) : null;
   }
 
   private async fetchCwlWar(warTag: string): Promise<WarInfo | null> {

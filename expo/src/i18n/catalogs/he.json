@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "מחפש עדכונים…",
+  "startupDownloadingUpdate": "מוריד עדכון…",
+  "startupUpdateInBackground": "עדכון ברקע",
   "warStatsRangeTitle": "טווח סטטיסטיקות מלחמה",
   "warStatsRangeDescription": "בחר אם הסטטיסטיקות יכללו מספר קבוע של מלחמות אחרונות או תקופה אחרונה בימים.",
   "warStatsRangeDays": "ימים",

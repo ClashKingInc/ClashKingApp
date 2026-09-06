@@ -85,6 +85,7 @@ import {
   type FarmTrackerTarget,
 } from './calculator-logic';
 
+import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
 export type CalculatorMode = 'damage' | 'farmGoal';
 
 export interface CalculatorsScreenProps {
@@ -104,7 +105,10 @@ const engine = new DamageCalculatorEngine();
 export function CalculatorsScreen(props: CalculatorsScreenProps) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [mode, setMode] = useState<CalculatorMode>('damage');
+  const link = useLinkParameters();
+  const [mode, setMode] = useState<CalculatorMode>(
+    linkChoice(link.mode, ['damage', 'farmGoal'], 'damage'),
+  );
   const [revision, setRevision] = useState(0);
   const mutate = (operation: () => void) => {
     operation();

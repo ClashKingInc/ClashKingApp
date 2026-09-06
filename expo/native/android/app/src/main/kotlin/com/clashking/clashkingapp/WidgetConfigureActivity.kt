@@ -107,14 +107,7 @@ abstract class WidgetConfigureActivity : Activity() {
             }
         }
 
-        val automatic = selectionOption(getString(automaticText))
-        tagsByRadioId[automatic.id] = null
-        radioGroup.addView(automatic, 0)
-        if (savedTag == null) {
-            defaultRadioId = automatic.id
-        }
         if (options.isEmpty()) {
-            defaultRadioId = automatic.id
             container.addView(TextView(this).apply {
                 setText(emptyText)
                 textSize = 14f
@@ -122,7 +115,9 @@ abstract class WidgetConfigureActivity : Activity() {
                 setPadding(0, 0, 0, dp(12))
             })
         }
-        radioGroup.check(defaultRadioId ?: automatic.id)
+        if (radioGroup.childCount > 0) {
+            radioGroup.check(defaultRadioId ?: radioGroup.getChildAt(0).id)
+        }
         container.addView(radioGroup)
 
         val builderBaseSwitch = builderBaseOptionText?.let { textResource ->
@@ -176,6 +171,7 @@ abstract class WidgetConfigureActivity : Activity() {
 
         container.addView(Button(this).apply {
             setText(actionText)
+            isEnabled = options.isNotEmpty()
             isAllCaps = false
             textSize = 15f
             setTypeface(typeface, Typeface.BOLD)
@@ -186,8 +182,9 @@ abstract class WidgetConfigureActivity : Activity() {
             minWidth = 0
             setPadding(dp(16), 0, dp(16), 0)
             setOnClickListener {
+                val tag = tagsByRadioId[radioGroup.checkedRadioButtonId] ?: return@setOnClickListener
                 saveSelection(
-                    tagsByRadioId[radioGroup.checkedRadioButtonId],
+                    tag,
                     builderBaseSwitch?.isChecked ?: true,
                     transparentBackgroundSwitch.isChecked
                 )

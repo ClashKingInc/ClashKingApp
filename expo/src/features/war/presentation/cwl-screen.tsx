@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
   ArrowLeft,
@@ -57,7 +58,10 @@ export function CwlScreen({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
-  const [tab, setTab] = useState<CwlTab>('rounds');
+  const link = useLinkParameters();
+  const [tab, setTab] = useState<CwlTab>(
+    linkChoice(link.tab, ['rounds', 'teams', 'members'], 'rounds'),
+  );
   const clan = summary.leagueInfo?.getClanDetails(clanTag) ?? null;
   if (!clan || !summary.leagueInfo) {
     return (
@@ -252,7 +256,8 @@ function CwlRounds({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const current = summary.leagueInfo?.getCurrentRounds()?.roundNumber ?? -1;
+  const link = useLinkParameters();
+  const current = Number(link.round) || summary.leagueInfo?.getCurrentRounds()?.roundNumber || -1;
   const [expanded, setExpanded] = useState<ReadonlySet<number>>(
     new Set(current > 0 ? [current] : []),
   );

@@ -1,4 +1,6 @@
 import * as Linking from 'expo-linking';
+import { AppState } from 'react-native';
+import { startGameDataRefresh } from '../game-data/game-data-refresh';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import { EmailVerificationRequiredException } from '../api/contract-api';
@@ -16,7 +18,10 @@ import {
   ResetPasswordScreen,
   type PostAuthDestination,
 } from '../../features/auth/presentation';
-import { initializeAccountsForCurrentAuth } from '../../features/auth/startup';
+import {
+  initializeAccountsForCurrentAuth,
+  refreshLinkedAccountsForCurrentAuth,
+} from '../../features/auth/startup';
 import { materialContinueLabel, useI18n } from '../../i18n';
 import {
   sceneForPostAuthDestination,
@@ -32,14 +37,23 @@ import {
   initializeApplication,
   initializeAuthenticatedPush,
 } from './startup-coordinator';
-import { ForcedUpdateScreen, StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
+import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
 import { StartupLoadingScreen } from './startup-loading';
+import { StartupUpdateGate } from './startup-update-gate';
 
 const DISCORD_URL = 'https://discord.gg/clashking';
 const SUPPORT_EMAIL_URL = 'mailto:devs@clashk.ing?subject=ClashKing%20App%20Support';
 const CLASH_SETTINGS_URL = 'https://link.clashofclans.com/?action=OpenMoreSettings';
 
 export function ApplicationRoot() {
+  return (
+    <StartupUpdateGate>
+      <ApplicationContent />
+    </StartupUpdateGate>
+  );
+}
+
+function ApplicationContent() {
   const runtime = useAppRuntime();
   const { locale, t } = useI18n();
   const [scene, setScene] = useState<ApplicationScene>({ kind: 'startup' });
@@ -55,6 +69,7 @@ export function ApplicationRoot() {
   }, [scene]);
 
   const loadAccounts = useCallback(async () => {
+    void runtime.gameData.refreshGameDataIfChanged().catch(() => undefined);
     const result = await initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts);
     if (!result.authenticated) throw new Error('Authentication expired.');
     runtime.achievements.bindSession(runtime.auth.state.currentUser?.userId ?? null);
@@ -102,7 +117,6 @@ export function ApplicationRoot() {
         auth: runtime.auth,
         accounts: runtime.accounts,
         gameData: runtime.gameData,
-        featureFlags: runtime.featureFlags,
         push: runtime.push,
         initializeAuthenticatedData: async () => {
           runtime.achievements.bindSession(runtime.auth.state.currentUser?.userId ?? null);
@@ -174,6 +188,19 @@ export function ApplicationRoot() {
   );
 
   useEffect(() => () => primerResolver.current?.(false), []);
+
+  useEffect(
+    () =>
+      startGameDataRefresh(
+        () => runtime.gameData.refreshGameDataIfChanged(),
+        () => AppState.currentState === 'active',
+        (check) => {
+          const subscription = AppState.addEventListener('change', check);
+          return () => subscription.remove();
+        },
+      ),
+    [runtime],
+  );
 
   const closePrimer = (enabled: boolean) => {
     setPrimerVisible(false);
@@ -261,11 +288,18 @@ export function ApplicationRoot() {
           )}
           playerProfiles={runtime.players.profiles}
           onContinue={async () => {
-            const accounts = await loadAccounts();
-            if (!accounts.some((account) => account.isVerified)) {
+            const result = await refreshLinkedAccountsForCurrentAuth(
+              runtime.auth,
+              runtime.accounts,
+            );
+            if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
+            if (!result.hasVerifiedAccount) {
               throw new Error(t('homeVerifiedAccountRequiredBody'));
             }
             setScene({ kind: 'home' });
+            void runtime.accountBootstrap
+              .initialize(runtime.auth.state.currentUser?.userId ?? null)
+              .catch((error: unknown) => reportException(error, 'accountSetup.hydration'));
           }}
           onOpenGameSettings={() => openExternal(CLASH_SETTINGS_URL)}
           onRefresh={async () => {
@@ -282,14 +316,6 @@ export function ApplicationRoot() {
       break;
     case 'home':
       content = <AuthenticatedRoot />;
-      break;
-    case 'update':
-      content = (
-        <ForcedUpdateScreen
-          message={scene.message}
-          onUpdate={() => void openExternal(scene.storeUrl)}
-        />
-      );
       break;
     case 'maintenance':
       content = <MaintenanceScreen onRetry={() => void runStartup()} />;

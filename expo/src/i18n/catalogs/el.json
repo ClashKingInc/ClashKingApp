@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Έλεγχος για ενημερώσεις…",
+  "startupDownloadingUpdate": "Λήψη ενημέρωσης…",
+  "startupUpdateInBackground": "Ενημέρωση στο παρασκήνιο",
   "warStatsRangeTitle": "Εύρος στατιστικών πολέμου",
   "warStatsRangeDescription": "Επίλεξε αν τα στατιστικά καλύπτουν έναν σταθερό αριθμό πρόσφατων πολέμων ή ένα πρόσφατο διάστημα ημερών.",
   "warStatsRangeDays": "Ημέρες",

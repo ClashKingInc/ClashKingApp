@@ -426,23 +426,27 @@ export class PlayerService {
     ];
     if (currentTag && currentSeason > 0)
       requests.push(
-        Effect.runPromise(
-          this.api.execute(ProxyLeagueGroupEndpoint, {
-            path: { leagueGroupTag: currentTag, seasonId: currentSeason },
-            query: { playerTag: tag },
-            body: {},
-          }),
-        ).catch(() => null),
+        optionalApiResponse(
+          Effect.runPromise(
+            this.api.execute(ProxyLeagueGroupEndpoint, {
+              path: { leagueGroupTag: currentTag, seasonId: currentSeason },
+              query: { playerTag: tag },
+              body: {},
+            }),
+          ),
+        ),
       );
     if (previousTag && previousSeason > 0)
       requests.push(
-        Effect.runPromise(
-          this.api.execute(ProxyLeagueGroupEndpoint, {
-            path: { leagueGroupTag: previousTag, seasonId: previousSeason },
-            query: { playerTag: tag },
-            body: {},
-          }),
-        ).catch(() => null),
+        optionalApiResponse(
+          Effect.runPromise(
+            this.api.execute(ProxyLeagueGroupEndpoint, {
+              path: { leagueGroupTag: previousTag, seasonId: previousSeason },
+              query: { playerTag: tag },
+              body: {},
+            }),
+          ),
+        ),
       );
     const responses = await Promise.all(requests),
       historyJson = responses[0] ?? {},

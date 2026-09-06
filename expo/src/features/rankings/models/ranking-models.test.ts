@@ -93,7 +93,7 @@ describe('ranking models', () => {
       RankingBoard.playerTownHall,
     );
 
-    expect(entry.clanBadgeUrl).toBe('https://example.com/clan.png');
+    expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/CLAN.avif');
   });
 
   test('uses selected ranked-tier art unless a town hall is present', () => {
@@ -127,7 +127,7 @@ describe('ranking models', () => {
     );
 
     expect(entry.score).toBe(4_321);
-    expect(entry.imageUrl).toBe('https://example.com/badge.png');
+    expect(entry.imageUrl).toBe('https://badges.clashk.ing/CLAN.avif');
     expect(entry.movement).toBe('+3');
   });
 

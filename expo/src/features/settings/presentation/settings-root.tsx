@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import * as Clipboard from 'expo-clipboard';
 import { File, Paths } from 'expo-file-system';
 import * as Linking from 'expo-linking';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
+import { clearMobileImageCache } from '../../../ui/mobile-web-image';
 
 import { APP_FEATURE_FLAGS } from '../../../core/feature-flags/feature-flags';
 import { useI18n, type SupportedLocale } from '../../../i18n';
@@ -49,7 +51,17 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
   const appState = useAppState();
   const { t, locale } = useI18n();
   const [domainRevision, refreshDomainState] = useReducer((value: number) => value + 1, 0);
-  const [scene, setScene] = useState<SettingsScene>('main');
+  const link = useLinkParameters();
+  const [scene, setScene] = useState<SettingsScene>(
+    linkChoice(
+      link.section === 'notifications' &&
+        (Platform.OS === 'web' || !appState.isFeatureEnabled(APP_FEATURE_FLAGS.notifications))
+        ? 'main'
+        : link.section,
+      ['main', 'notifications', 'faq', 'translation', 'privacy', 'licenses'],
+      'main',
+    ),
+  );
   const [versionLabel, setVersionLabel] = useState(t('generalLoading'));
   const [alternateIconsSupported, setAlternateIconsSupported] = useState(false);
   const [selectedAppIcon, setSelectedAppIcon] = useState<string>('');
@@ -57,9 +69,13 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const unsubscribePlayers = runtime.players.subscribe(refreshDomainState);
     const unsubscribeBookmarks = runtime.bookmarks.subscribe(refreshDomainState);
+    const unsubscribeAccounts = runtime.accounts.subscribe(refreshDomainState);
+    const unsubscribeClans = runtime.clans.subscribe(refreshDomainState);
     return () => {
       unsubscribePlayers();
       unsubscribeBookmarks();
+      unsubscribeAccounts();
+      unsubscribeClans();
     };
   }, [runtime]);
 
@@ -92,11 +108,17 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
 
   const widgetClans = useMemo(() => {
     void domainRevision;
-    return clanOptionsFromProfiles(runtime.players.profiles, runtime.bookmarks.clans);
+    const linkedTags = new Set(
+      runtime.accounts.accounts.map((account) => account.playerTag.toUpperCase()),
+    );
+    return clanOptionsFromProfiles(
+      runtime.players.profiles.filter((player) => linkedTags.has(player.tag.toUpperCase())),
+      runtime.bookmarks.clans,
+      [...runtime.clans.clans.values()],
+    );
   }, [domainRevision, runtime]);
   useEffect(() => {
-    if (!appState.isFeatureEnabled(APP_FEATURE_FLAGS.warWidgets) || widgetClans.length === 0)
-      return;
+    if (!appState.isFeatureEnabled(APP_FEATURE_FLAGS.warWidgets)) return;
     void runtime.warWidgets.cacheClanOptions(widgetClans).catch(() => undefined);
   }, [appState, runtime, widgetClans]);
 
@@ -191,6 +213,7 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
   }
 
   const settingsActions: SettingsPresentationActions = {
+    clearImageCache: Platform.OS === 'web' ? undefined : clearMobileImageCache,
     changeLocale: (nextLocale) =>
       runtime.appState.getState().changeLanguage(nextLocale as SupportedLocale),
     changeTheme: (mode) => runtime.appState.getState().setThemePreference(mode),
@@ -228,7 +251,9 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
         appIcons={appIcons}
         currentLocale={locale}
         localeChoices={SETTINGS_LOCALES}
-        notificationsEnabled={appState.isFeatureEnabled(APP_FEATURE_FLAGS.notifications)}
+        notificationsEnabled={
+          Platform.OS !== 'web' && appState.isFeatureEnabled(APP_FEATURE_FLAGS.notifications)
+        }
         onBack={onClose}
         onPrepareWarWidget={async (clanTag, requestPin) => {
           await runtime.warWidgets.prepareClanWidgets(widgetClans, clanTag);

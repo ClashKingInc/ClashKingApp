@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Güncellemeler kontrol ediliyor…",
+  "startupDownloadingUpdate": "Güncelleme indiriliyor…",
+  "startupUpdateInBackground": "Arka planda güncelle",
   "warStatsRangeTitle": "Savaş istatistikleri aralığı",
   "warStatsRangeDescription": "İstatistiklerin sabit sayıda son savaşı mı yoksa gün cinsinden yakın bir dönemi mi kapsayacağını seç.",
   "warStatsRangeDays": "Gün",

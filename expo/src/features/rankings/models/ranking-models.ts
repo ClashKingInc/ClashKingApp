@@ -263,21 +263,7 @@ export class RankingEntry {
           ...(!clanName && !clanTag && tag ? [tag] : []),
         ].join(' · ')
       : clanName;
-    const includedClanBadge =
-      nestedString(json.clan, 'badgeUrls.small') ??
-      nestedString(json.clan, 'badge_urls.small') ??
-      nestedString(json.clan, 'badgeUrls.medium') ??
-      nestedString(json.clan, 'badge_urls.medium') ??
-      nestedString(json.clan, 'badgeUrls.large') ??
-      nestedString(json.clan, 'badge_urls.large') ??
-      nestedString(json.clan, 'badge') ??
-      firstString(json, ['clan_badge', 'clanBadge']);
-    const clanBadgeUrl =
-      rankingBoard.isClan || !clanTag
-        ? ''
-        : rankingBoard.source === RankingSource.official
-          ? ImageAssets.clanBadgeForTag(clanTag)
-          : includedClanBadge;
+    const clanBadgeUrl = rankingBoard.isClan || !clanTag ? '' : ImageAssets.clanBadgeForTag(clanTag);
     const leagueIcon =
       nestedString(json.leagueTier, 'iconUrls.medium') ??
       nestedString(json.leagueTier, 'iconUrls.large') ??
@@ -291,14 +277,7 @@ export class RankingEntry {
       rankingBoard === RankingBoard.playerBuilder
         ? ImageAssets.getBuilderBaseLeagueImage(json.builderBaseLeague)
         : null;
-    const badgeUrl =
-      nestedString(json.badgeUrls, 'small') ??
-      nestedString(json.badge_urls, 'small') ??
-      nestedString(json.badgeUrls, 'medium') ??
-      nestedString(json.badge_urls, 'medium') ??
-      nestedString(json.badgeUrls, 'large') ??
-      nestedString(json.badge_urls, 'large') ??
-      firstString(json, ['badge_url']);
+    const badgeUrl = ImageAssets.clanBadgeForTag(tag);
     const rankedIcon =
       rankingBoard === RankingBoard.playerRanked
         ? (rankedLeagueIconUrl ?? rankingBoard.iconUrl)

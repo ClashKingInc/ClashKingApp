@@ -1,5 +1,5 @@
 import { useRef, useState, type ReactElement } from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Switch, View } from 'react-native';
 import {
   Bell,
   Bookmark,
@@ -190,19 +190,21 @@ export function PlayerDataCard({
           </Pressable>
           {expanded ? (
             <View style={styles.options}>
-              <PlayerOptionSwitch
-                icon={<Bell color={theme.onSurfaceVariant} />}
-                title={t('playerOptionNotificationsTitle')}
-                subtitle={notificationSubtitle}
-                value={notificationActive}
-                enabled={notificationAvailable}
-                loading={notificationUpdating}
-                onChange={(value) =>
-                  void actions
-                    .setAccountNotifications(player.tag, value)
-                    .catch(() => actions.showMessage('Couldn’t update account notifications.'))
-                }
-              />
+              {Platform.OS !== 'web' ? (
+                <PlayerOptionSwitch
+                  icon={<Bell color={theme.onSurfaceVariant} />}
+                  title={t('playerOptionNotificationsTitle')}
+                  subtitle={notificationSubtitle}
+                  value={notificationActive}
+                  enabled={notificationAvailable}
+                  loading={notificationUpdating}
+                  onChange={(value) =>
+                    void actions
+                      .setAccountNotifications(player.tag, value)
+                      .catch(() => actions.showMessage('Couldn’t update account notifications.'))
+                  }
+                />
+              ) : null}
               {verified === false ? (
                 <PlayerOptionAction
                   title={t('homeVerifyAccountAction')}

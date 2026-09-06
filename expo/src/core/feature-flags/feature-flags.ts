@@ -48,12 +48,6 @@ export interface FeatureFlagEvaluation {
   readonly now?: Date;
 }
 
-export interface RequiredAppUpdate {
-  readonly minimumVersion: string;
-  readonly storeUrl: string;
-  readonly message: string;
-}
-
 export function defaultFeatureFlagValue(key: string): boolean {
   return (FEATURE_FLAG_DEFAULTS as Readonly<Record<string, boolean>>)[key] ?? true;
 }
@@ -79,21 +73,6 @@ export function featureFlagsFromConfig(
     if (flag.key.length > 0) flags.set(flag.key, flag);
   }
   return flags;
-}
-
-export function requiredAppUpdate(
-  config: AppConfigResponse,
-  platform: FeaturePlatform,
-  currentVersion: string,
-): RequiredAppUpdate | null {
-  if (platform === 'web') return null;
-  const policy = config.updates[platform];
-  if (meetsMinimumVersion(currentVersion, policy.minimum_version)) return null;
-  return {
-    minimumVersion: policy.minimum_version,
-    storeUrl: policy.store_url,
-    message: policy.message,
-  };
 }
 
 export function isFeatureFlagEnabled(

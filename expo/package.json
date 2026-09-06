@@ -3,8 +3,8 @@
   "main": "expo-router/entry",
   "version": "0.3.5",
   "dependencies": {
-    "@clashking/api-client": "0.1.0-rc.0",
-    "@clashking/api-contracts": "0.1.0-rc.0",
+    "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.4.tgz",
+    "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.4.tgz",
     "@clashking/native": "file:./modules/clashking-native",
     "@expo/ui": "~57.0.15",
     "@formatjs/icu-messageformat-parser": "^3.5.17",
@@ -67,10 +67,10 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1125.0",
     "@babel/parser": "7.29.8",
     "@babel/traverse": "7.29.8",
     "@babel/types": "7.29.8",
-    "@aws-sdk/client-s3": "^3.1125.0",
     "@react-native/jest-preset": "0.86.3",
     "@testing-library/react-native": "^14.0.1",
     "@types/jest": "^29.5.14",
@@ -94,9 +94,9 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "web:export": "expo export --platform web --output-dir dist && node ./scripts/stamp-web-service-worker.mjs dist",
+    "web:export": "expo export --platform web --output-dir dist && node ./scripts/app-link-associations.mjs dist && node ./scripts/stamp-web-service-worker.mjs dist",
     "lint": "expo lint --no-cache",
-    "typecheck": "node ./node_modules/typescript7/bin/tsc --noEmit",
+    "typecheck": "node --test ./scripts/typescript-toolchain.test.mjs && node ./node_modules/typescript7/bin/tsc --noEmit",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "l10n:generate": "node ./scripts/generate-localizations.mjs",
@@ -104,9 +104,9 @@
     "licenses:generate": "node ./scripts/generate-license-inventory.mjs",
     "licenses:check": "node ./scripts/generate-license-inventory.mjs --check",
     "e2e:structure": "node ./scripts/check-expo-e2e-structure.mjs",
-    "test:api-boundary": "node ./scripts/check-api-package-boundary.mjs",
+    "test:api-boundary": "node --test ./scripts/api-package-boundary.test.mjs && node ./scripts/check-api-package-boundary.mjs",
     "test:native-plugin": "node --test plugins/__tests__/*.test.js",
-    "test:web-build": "node --test scripts/stamp-web-service-worker.test.mjs",
+    "test:web-build": "node --test scripts/stamp-web-service-worker.test.mjs scripts/service-worker.test.mjs scripts/app-link-associations.test.mjs",
     "test:release": "node --test scripts/release-plan.test.mjs scripts/release-manifest.test.mjs"
   },
   "private": true

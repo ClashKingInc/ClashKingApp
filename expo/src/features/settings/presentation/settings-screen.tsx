@@ -133,6 +133,21 @@ export function SettingsScreen({
         </CKText>
       </View>
       <SettingsSection title={t('settingsPreferences')}>
+        {actions.clearImageCache ? (
+          <SettingsTile
+            icon={<ImageIcon color={iconColor} />}
+            title={t('settingsClearImageCache')}
+            subtitle={t('settingsClearImageCacheDescription')}
+            disabled={busy}
+            onPress={() => {
+              setBusy(true);
+              void actions.clearImageCache!()
+                .then(() => setSnackbar(t('settingsImageCacheCleared')))
+                .catch(() => setSnackbar(t('settingsImageCacheClearFailed')))
+                .finally(() => setBusy(false));
+            }}
+          />
+        ) : null}
         <SettingsTile
           icon={<Languages color={iconColor} />}
           title={t('settingsLanguage')}
@@ -159,7 +174,7 @@ export function SettingsScreen({
             onPress={() => setDialog('icon')}
           />
         ) : null}
-        {notificationsEnabled ? (
+        {platform !== 'web' && notificationsEnabled ? (
           <SettingsTile
             icon={<BellRing color={iconColor} />}
             title={t('settingsNotificationsTitle')}

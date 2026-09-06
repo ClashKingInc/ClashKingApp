@@ -2,6 +2,7 @@ import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import type { DeepLinkHandler } from './deep-link-handler';
 import type { DeepLinkRuntime } from './contracts';
+import { parseAppLink } from './app-link';
 
 export class ExpoDeepLinkRuntime implements DeepLinkRuntime {
   constructor(
@@ -12,13 +13,24 @@ export class ExpoDeepLinkRuntime implements DeepLinkRuntime {
   ) {}
 
   async getInitialUrl(): Promise<string | null> {
-    if (this.platform === 'web') return Promise.resolve(null);
+    if (this.platform === 'web')
+      return typeof window === 'undefined' || !window.location
+        ? null
+        : new URL(window.location.pathname + window.location.search, 'https://app.clashk.ing').href;
     const url = await Linking.getInitialURL();
     return url !== null && isClashKingDeepLink(url) ? url : null;
   }
 
   subscribe(listener: (url: string) => void): () => void {
-    if (this.platform === 'web') return () => undefined;
+    if (this.platform === 'web') {
+      if (typeof window === 'undefined' || !window.addEventListener) return () => undefined;
+      const onPop = () =>
+        listener(
+          new URL(window.location.pathname + window.location.search, 'https://app.clashk.ing').href,
+        );
+      window.addEventListener('popstate', onPop);
+      return () => window.removeEventListener('popstate', onPop);
+    }
     const subscription = Linking.addEventListener('url', ({ url }) => {
       if (isClashKingDeepLink(url)) listener(url);
     });
@@ -27,11 +39,7 @@ export class ExpoDeepLinkRuntime implements DeepLinkRuntime {
 }
 
 export function isClashKingDeepLink(url: string): boolean {
-  try {
-    return new URL(url).protocol.toLowerCase() === 'clashking:';
-  } catch {
-    return false;
-  }
+  return parseAppLink(url) !== null;
 }
 
 export async function startDeepLinkHandling<Player, Clan>(

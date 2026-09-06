@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Đang kiểm tra bản cập nhật…",
+  "startupDownloadingUpdate": "Đang tải bản cập nhật…",
+  "startupUpdateInBackground": "Cập nhật trong nền",
   "warStatsRangeTitle": "Phạm vi thống kê chiến tranh",
   "warStatsRangeDescription": "Chọn thống kê theo số lượng cố định các cuộc chiến gần đây hoặc theo khoảng thời gian gần đây tính bằng ngày.",
   "warStatsRangeDays": "Ngày",

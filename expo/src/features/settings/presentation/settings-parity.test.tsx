@@ -9,6 +9,7 @@ import { GENERATED_LICENSE_INVENTORY } from './generated-license-inventory';
 import { LicensesScreen } from './licenses-screen';
 import { NotificationSettingsScreen } from './notification-settings-screen';
 import { SettingsScreen } from './settings-screen';
+import { LinkParametersContext } from '../../../core/deep-links/link-parameters';
 
 jest.mock('../../../ui/accessibility', () => ({
   useCKAccessibility: () => ({
@@ -25,6 +26,24 @@ function wrapped(node: React.ReactNode) {
     </I18nProvider>
   );
 }
+
+it('opens the requested dependency license directly without a tap', async () => {
+  const view = await render(
+    wrapped(
+      <LinkParametersContext.Provider value={{ package: 'example' }}>
+        <LicensesScreen
+          applicationName="ClashKing"
+          applicationVersion="0.4.2"
+          onBack={jest.fn()}
+          packages={[
+            { packages: ['example@1.0.0'], license: 'MIT', text: 'The requested license text' },
+          ]}
+        />
+      </LinkParametersContext.Provider>,
+    ),
+  );
+  expect(view.getByText('The requested license text')).toBeTruthy();
+});
 
 function wrappedWithLocale(node: React.ReactNode, locale: SupportedLocale) {
   return (
@@ -43,10 +62,12 @@ it('ships complete verbatim production dependency licenses and opens their text'
         !(metadata as { dev?: boolean }).dev &&
         !path.endsWith('/@clashking/native'),
     )
-    .map(
-      ([path, metadata]) =>
-        `${path.split('node_modules/').at(-1)}@${(metadata as { version?: string }).version}`,
-    );
+    .map(([path, metadata]) => {
+      // npm aliases retain the actual licensed package name in lock metadata.
+      // For example, @jest/react-is-18 installs the react-is package.
+      const { name, version } = metadata as { name?: string; version?: string };
+      return `${name ?? path.split('node_modules/').at(-1)}@${version}`;
+    });
   expect([...new Set(covered)].sort()).toEqual([...new Set(productionPackages)].sort());
   expect(covered.some((name) => name.startsWith('react@'))).toBe(true);
   expect(covered.some((name) => name.startsWith('react-native@'))).toBe(true);
@@ -119,6 +140,55 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
   await fireEvent.press(screen.getByText('Version & Device'));
   expect(copyVersion).toHaveBeenCalledWith('Version 1.2.3\nDevice');
   await waitFor(() => expect(screen.getByText('Copied to clipboard')).toBeTruthy());
+});
+
+it('clears image storage without signing out or changing account data', async () => {
+  const clearImageCache = jest.fn(async () => {});
+  const logout = jest.fn(async () => {});
+  const screen = await render(wrapped(
+    <SettingsScreen
+      actions={{ changeLocale: async () => {}, changeTheme: async () => {},
+        open: jest.fn(), openDiscord: jest.fn(), showLicenses: jest.fn(),
+        copyVersion: jest.fn(), logout, clearImageCache }}
+      alternateIconsSupported={false} currentLocale="en" localeChoices={[]}
+      notificationsEnabled={false} themeMode="dark"
+      user={{ username: 'Person', email: null, avatarUrl: '' }}
+      versionLabel="Version 1" warWidgetsEnabled={false}
+    />
+  ));
+  await fireEvent.press(screen.getByText('Clear image cache'));
+  await waitFor(() => expect(screen.getByText('Image cache cleared.')).toBeTruthy());
+  expect(clearImageCache).toHaveBeenCalledTimes(1);
+  expect(logout).not.toHaveBeenCalled();
+});
+
+it('hides notifications on web even when enabled by the feature flag', async () => {
+  const screen = await render(
+    wrapped(
+      <SettingsScreen
+        actions={{
+          changeLocale: async () => undefined,
+          changeTheme: async () => undefined,
+          open: jest.fn(),
+          openDiscord: jest.fn(),
+          showLicenses: jest.fn(),
+          copyVersion: jest.fn(),
+          logout: async () => undefined,
+        }}
+        alternateIconsSupported={false}
+        currentLocale="en"
+        localeChoices={[]}
+        notificationsEnabled
+        platform="web"
+        themeMode="system"
+        user={{ username: 'Person', email: null, avatarUrl: '' }}
+        versionLabel="Version 0.4.2"
+        warWidgetsEnabled={false}
+      />,
+    ),
+  );
+  expect(screen.queryByText('Notifications')).toBeNull();
+  expect(screen.getByText('Version & Device')).toBeTruthy();
 });
 
 it('localizes the iOS war widget setup dialog', async () => {

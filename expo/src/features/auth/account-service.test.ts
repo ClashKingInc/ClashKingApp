@@ -83,6 +83,31 @@ describe('CocAccountService', () => {
     expect(requests).toHaveLength(1);
   });
 
+  test('replaces a stored selection that is no longer linked', async () => {
+    const { service, preferences } = harness(
+      () => new Response(JSON.stringify({ items: [account('#FIRST'), account('#SECOND')] })),
+    );
+    await preferences.setItem('selectedTag', '#REMOVED');
+
+    await service.initializeForCurrentUser('user/id');
+
+    expect(service.selectedTag).toBe('#FIRST');
+    expect(preferences.values.get('selectedTag')).toBe('#FIRST');
+  });
+
+  test('reconciles the selection when a refreshed link list removes it', async () => {
+    let items = [account('#ONE'), account('#TWO')];
+    const { service, preferences } = harness(() => new Response(JSON.stringify({ items })));
+    await service.fetchAccounts();
+    await service.setSelectedTag('#ONE');
+    items = [account('#TWO')];
+
+    await service.fetchAccounts();
+
+    expect(service.selectedTag).toBe('#TWO');
+    expect(preferences.values.get('selectedTag')).toBe('#TWO');
+  });
+
   test('adds accounts with and without verification and parses top-level conflict accounts', async () => {
     const { service, requests, reportError } = harness(({ body }) => {
       const requestBody = body as Record<string, unknown>;
@@ -183,6 +208,55 @@ describe('CocAccountService', () => {
     });
   });
 
+  test('does not expose decoder internals when the post-verification list is malformed', async () => {
+    const { service, reportError } = harness(
+      ({ method }) =>
+        new Response(
+          JSON.stringify(
+            method === 'POST'
+              ? { message: 'Linked', account: account('#ONE', { is_verified: true }) }
+              : { items: [{ ...account('#ONE'), last_login: undefined }] },
+          ),
+        ),
+    );
+    await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
+      success: false,
+      message: 'Failed to add account. Please try again.',
+    });
+    expect(reportError).toHaveBeenCalledWith('accounts.fetch', expect.any(ResponseDecodeError));
+  });
+
+  test('refreshes a newly verified account with no last-login timestamp', async () => {
+    const { service } = harness(
+      ({ method }) =>
+        new Response(
+          JSON.stringify(
+            method === 'POST'
+              ? { message: 'Linked', account: account('#ONE', { is_verified: true }) }
+              : {
+                  items: [
+                    {
+                      user_id: 'user/id',
+                      player_tag: '#ONE',
+                      order_index: 0,
+                      is_verified: true,
+                      hidden: false,
+                      added_at: '2026-09-05T00:00:00Z',
+                      verified_at: '2026-09-05T00:00:00Z',
+                      last_login: null,
+                    },
+                  ],
+                },
+          ),
+        ),
+    );
+    await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
+      success: true,
+      message: null,
+    });
+    expect(service.accounts[0]?.isVerified).toBe(true);
+  });
+
   test('verifies, hides, reorders, removes, and persists selection through successful mutations', async () => {
     const { service, preferences, requests } = harness(({ method }) => {
       if (method === 'GET') {
@@ -216,6 +290,43 @@ describe('CocAccountService', () => {
     expect(preferences.values.has('selectedTag')).toBe(false);
     expect(requests.map(({ method }) => method)).toEqual(['GET', 'POST', 'PATCH', 'PUT', 'DELETE']);
     expect(listener).toHaveBeenCalledTimes(6);
+  });
+
+  test('selects the next linked account and updates dependents after removing the selection', async () => {
+    const { service, preferences } = harness(({ method }) =>
+      method === 'GET'
+        ? new Response(JSON.stringify({ items: [account('#ONE'), account('#TWO')] }))
+        : new Response('{"message":"ok"}'),
+    );
+    const selectionChanged = jest.fn(async () => undefined);
+    service.setSelectedTagChangeHandler(selectionChanged);
+    await service.fetchAccounts();
+    await service.setSelectedTag('#ONE');
+    selectionChanged.mockClear();
+
+    await expect(service.removeAccount('#ONE')).resolves.toBe(true);
+
+    expect(service.selectedTag).toBe('#TWO');
+    expect(preferences.values.get('selectedTag')).toBe('#TWO');
+    expect(selectionChanged).toHaveBeenCalledWith('#TWO');
+  });
+
+  test('clears the selection and updates dependents after removing the final account', async () => {
+    const { service, preferences } = harness(({ method }) =>
+      method === 'GET'
+        ? new Response(JSON.stringify({ items: [account('#ONLY')] }))
+        : new Response('{"message":"ok"}'),
+    );
+    const selectionChanged = jest.fn(async () => undefined);
+    service.setSelectedTagChangeHandler(selectionChanged);
+    await service.fetchAccounts();
+    selectionChanged.mockClear();
+
+    await expect(service.removeAccount('#ONLY')).resolves.toBe(true);
+
+    expect(service.selectedTag).toBeNull();
+    expect(preferences.values.has('selectedTag')).toBe(false);
+    expect(selectionChanged).toHaveBeenCalledWith(null);
   });
 
   test('normalizes an empty user id and reports authentication and malformed payload failures', async () => {

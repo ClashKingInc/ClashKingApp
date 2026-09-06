@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { sizedAssetUrl } from '../../../ui/image-delivery';
 import { I18nProvider } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
 import {
@@ -88,7 +89,7 @@ describe('RankedScreen player presentation', () => {
     expect(headerStyle.overflow).toBe('hidden');
     expect(headerStyle.marginBottom).toBe(-44);
     const background = screen.getByTestId('ranked-header-background');
-    expect(background.props.source).toContainEqual({ uri: ImageAssets.homeBaseBackground });
+    expect(background.props.source).toContainEqual({ uri: sizedAssetUrl(ImageAssets.homeBaseBackground, 0, 0, 1) });
     expect(background.props.contentFit).toBe('cover');
     expect(StyleSheet.flatten(background.props.style)).toMatchObject({
       position: 'absolute',

@@ -94,11 +94,15 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const pendingDrawerAction = useRef<(() => void) | undefined>(undefined);
   const drawerEdgeWidth = 20;
   const drawerWidth = resolveMobileDrawerWidth(width);
+  // Replay this revised hint once in development without resetting production preferences.
+  const hintStorageKey = __DEV__
+    ? `${STORAGE_KEYS.mobileDrawerGestureHintSeen}_preview_v2`
+    : STORAGE_KEYS.mobileDrawerGestureHintSeen;
   useEffect(() => {
     let current = true;
     if (!props.drawerHintStore) return;
     void props.drawerHintStore
-      .getString(STORAGE_KEYS.mobileDrawerGestureHintSeen)
+      .getString(hintStorageKey)
       .then((seen) => {
         if (current) setDrawerHintVisible(seen !== 'true');
       })
@@ -108,7 +112,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     return () => {
       current = false;
     };
-  }, [props.drawerHintStore]);
+  }, [props.drawerHintStore, hintStorageKey]);
   const secondaryLayers = props.secondaryLayers?.length
     ? props.secondaryLayers
     : props.secondaryContent
@@ -147,12 +151,10 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const handleDrawerOpen = useCallback(() => {
     setDrawerOpen(true);
     setDrawerHintVisible(false);
-    void props.drawerHintStore
-      ?.setString(STORAGE_KEYS.mobileDrawerGestureHintSeen, 'true')
-      .catch(() => {
-        // The drawer remains usable when persistence is unavailable.
-      });
-  }, [props.drawerHintStore]);
+    void props.drawerHintStore?.setString(hintStorageKey, 'true').catch(() => {
+      // The drawer remains usable when persistence is unavailable.
+    });
+  }, [props.drawerHintStore, hintStorageKey]);
   useEffect(() => {
     if (!secondaryActive) return;
     pendingDrawerAction.current = undefined;
@@ -287,6 +289,7 @@ function DrawerEdgeHint({ isRtl }: { isRtl: boolean }) {
         }),
         Animated.delay(900),
       ]),
+      { iterations: 3 },
     );
     animation.start();
     return () => animation.stop();
@@ -305,17 +308,20 @@ function DrawerEdgeHint({ isRtl }: { isRtl: boolean }) {
         styles.drawerHint,
         isRtl ? styles.drawerHintRight : styles.drawerHintLeft,
         {
-          backgroundColor: colorWithAlpha(theme.primary, 0.82),
+          backgroundColor: 'transparent',
           opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.58, 0.9] }),
           transform: [{ translateX }],
         },
       ]}
       testID="mobile-drawer-gesture-hint"
     >
+      <View
+        style={[styles.drawerHintBar, { backgroundColor: colorWithAlpha(theme.onSurface, 0.5) }]}
+      />
       {isRtl ? (
-        <ChevronLeft color={theme.onPrimary} size={13} strokeWidth={2.75} />
+        <ChevronLeft color={theme.onSurfaceVariant} size={12} strokeWidth={2} />
       ) : (
-        <ChevronRight color={theme.onPrimary} size={13} strokeWidth={2.75} />
+        <ChevronRight color={theme.onSurfaceVariant} size={12} strokeWidth={2} />
       )}
     </Animated.View>
   );
@@ -423,21 +429,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '36%',
     zIndex: 3,
-    width: 17,
-    height: 52,
+    width: 22,
+    height: 44,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   drawerHintLeft: {
-    left: -7,
+    left: 2,
     borderTopRightRadius: 14,
     borderBottomRightRadius: 14,
   },
   drawerHintRight: {
-    right: -7,
+    right: 2,
+    flexDirection: 'row-reverse',
     borderTopLeftRadius: 14,
     borderBottomLeftRadius: 14,
   },
+  drawerHintBar: { height: 30, width: 3, borderRadius: 2 },
   desktopFrame: { flex: 1, position: 'relative' },
   desktopRow: { flex: 1, flexDirection: 'row' },
   desktopRowRtl: { flexDirection: 'row-reverse' },

@@ -13,7 +13,10 @@ export default function RootHtml({ children }: { readonly children: ReactNode })
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+        />
         <meta
           name="description"
           content="ClashKing helps players and clans track wars, upgrades, rankings, and account progress."
@@ -31,7 +34,9 @@ export default function RootHtml({ children }: { readonly children: ReactNode })
         <style
           dangerouslySetInnerHTML={{
             __html: `html,body,#root{height:100%;min-height:100%;margin:0}
-body{background-color:#fff}
+body{background-color:#fff;overscroll-behavior:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@supports(height:100dvh){html,body,#root{height:100dvh;min-height:100dvh}}
+input,textarea{font-size:16px}
 .center{margin:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 @media(prefers-color-scheme:dark){body{background-color:#000}}`,
           }}

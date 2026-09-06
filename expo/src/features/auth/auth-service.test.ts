@@ -199,6 +199,29 @@ describe('AuthService', () => {
     expect(rejectedAuth.state.isAuthenticated).toBe(false);
   });
 
+  test('returns to logged out state when a previously restored native session is rejected', async () => {
+    const { api } = apiWith(() => new Response(JSON.stringify(currentUser())));
+    const getAccessToken = jest
+      .fn<Promise<string | null>, []>()
+      .mockResolvedValueOnce('stored')
+      .mockResolvedValueOnce(null);
+    const auth = new AuthService(
+      serviceOptions({ api, tokenService: tokens({ getAccessToken }) }),
+    );
+
+    await auth.initializeAuth();
+    expect(auth.state.isAuthenticated).toBe(true);
+
+    await auth.initializeAuth();
+
+    expect(auth.state).toEqual({
+      accessToken: null,
+      isAuthenticated: false,
+      currentUser: null,
+      followerCount: null,
+    });
+  });
+
   test('uses native Discord exchange details and wraps cancellation and exchange failures', async () => {
     const { api, requests } = apiWith(
       (path) =>

@@ -10,11 +10,6 @@ export type ApplicationScene =
   | { readonly kind: 'reset-password'; readonly email: string }
   | { readonly kind: 'account-setup' }
   | { readonly kind: 'home' }
-  | {
-      readonly kind: 'update';
-      readonly message: string;
-      readonly storeUrl: string;
-    }
   | { readonly kind: 'maintenance' }
   | { readonly kind: 'error'; readonly networkError: boolean };
 
@@ -26,12 +21,6 @@ export function sceneForStartupResult(result: AppStartupResult): ApplicationScen
       return { kind: 'account-setup' };
     case 'home':
       return { kind: 'home' };
-    case 'update':
-      return {
-        kind: 'update',
-        message: result.update.message,
-        storeUrl: result.update.storeUrl,
-      };
     case 'maintenance':
       return { kind: 'maintenance' };
     case 'error':

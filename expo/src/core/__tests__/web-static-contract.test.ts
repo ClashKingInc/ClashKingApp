@@ -45,7 +45,8 @@ describe('static web authentication contract', () => {
     expect(manifest).not.toHaveProperty('scope');
 
     const document = readFileSync(resolve(process.cwd(), 'src', 'app', '+html.tsx'), 'utf8');
-    expect(document).toContain('content="width=device-width, initial-scale=1.0"');
+    expect(document).toContain('viewport-fit=cover, interactive-widget=resizes-content');
+    expect(document).toContain('height:100dvh');
     expect(document).toContain('content="black"');
     expect(document).toContain('name="theme-color" content="#000000"');
     expect(document).toContain('<link rel="icon" type="image/png" href="/favicon.png" />');

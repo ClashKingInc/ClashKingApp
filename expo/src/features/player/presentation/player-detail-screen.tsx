@@ -24,6 +24,7 @@ import {
   TabState,
 } from './player-detail-components';
 import { PlayerAchievementsTab } from './player-achievements-tab';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 
 export function PlayerDetailScreen({
   model,
@@ -38,7 +39,8 @@ export function PlayerDetailScreen({
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const tabs = useMemo(() => PLAYER_DETAIL_TABS, []);
-  const initialTabKey = tabs.some((item) => item.key === initialTab) ? initialTab : 'home';
+  const link = useLinkParameters();
+  const initialTabKey = tabs.find((item) => item.key === (link.tab ?? initialTab))?.key ?? 'home';
   const [tab, setTab] = useState<PlayerDetailTabKey>(initialTabKey);
   const [retainedTabs, setRetainedTabs] = useState<readonly PlayerDetailTabKey[]>(() => [
     initialTabKey,

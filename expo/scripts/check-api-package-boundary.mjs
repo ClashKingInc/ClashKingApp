@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
-import { parse } from '@babel/parser';
+import { disallowedAppContractImports, moduleSpecifiers } from './api-package-boundary.mjs';
 
 const expoRoot = path.resolve(import.meta.dirname, '..');
 const sourceRoot = path.join(expoRoot, 'src');
@@ -27,23 +27,21 @@ function collectSourceFiles(directory) {
 
 const appSourceFiles = collectSourceFiles(sourceRoot);
 for (const absolutePath of appSourceFiles) {
-  const source = parse(fs.readFileSync(absolutePath, 'utf8'), {
-    sourceType: 'module',
-    plugins: ['typescript', ...(absolutePath.endsWith('.tsx') ? ['jsx'] : [])],
-  });
-  for (const statement of source.program.body) {
-    if ('source' in statement && statement.source?.value === '@clashking/api-contracts') {
-      failures.push(
-        `${path.relative(expoRoot, absolutePath)} imports the root contracts barrel instead of /expo`,
-      );
-    }
+  for (const specifier of disallowedAppContractImports(fs.readFileSync(absolutePath, 'utf8'), [
+    'typescript',
+    ...(absolutePath.endsWith('.tsx') ? ['jsx'] : []),
+  ])) {
+    failures.push(
+      `${path.relative(expoRoot, absolutePath)} imports ${specifier} instead of the restricted /expo entry`,
+    );
   }
 }
 
 const entrypoint = path.join(contractsRoot, 'dist/expo.js');
 const contractModules = new Set();
 const allowedExternalImports = new Set(['effect']);
-const serverOnlyModule = /^(?:admin|bot(?:-|\.)|dashboard|persistent-runtime|current-war-summary)/u;
+const serverOnlyModule =
+  /^(?:admin|bot(?:-|\.)|dashboard|persistent-runtime|deferred-runtime|roster-interaction|roster-configuration|current-war-summary)/u;
 
 function inspectContractModule(absolutePath) {
   if (contractModules.has(absolutePath)) return;
@@ -58,12 +56,7 @@ function inspectContractModule(absolutePath) {
     failures.push(`the Expo contracts graph reaches server-only module ${moduleName}`);
   }
 
-  const source = parse(fs.readFileSync(absolutePath, 'utf8'), { sourceType: 'module' });
-  for (const statement of source.program.body) {
-    if (!('source' in statement) || statement.source === null || statement.source === undefined) {
-      continue;
-    }
-    const specifier = statement.source.value;
+  for (const specifier of moduleSpecifiers(fs.readFileSync(absolutePath, 'utf8'))) {
     if (specifier.startsWith('.')) {
       const dependency = path.resolve(path.dirname(absolutePath), specifier);
       if (!dependency.startsWith(`${path.join(contractsRoot, 'dist')}${path.sep}`)) {

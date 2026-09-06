@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "アップデートを確認中…",
+  "startupDownloadingUpdate": "アップデートをダウンロード中…",
+  "startupUpdateInBackground": "バックグラウンドで更新",
   "warStatsRangeTitle": "対戦統計の範囲",
   "warStatsRangeDescription": "直近の対戦を一定数含めるか、直近の期間を日数で指定するかを選択します。",
   "warStatsRangeDays": "日数",

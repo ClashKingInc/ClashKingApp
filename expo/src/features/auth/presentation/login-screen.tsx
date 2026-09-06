@@ -211,6 +211,8 @@ function DiscordMark({ color, size, testID }: { color: string; size: number; tes
 
 function LoginSurface({ children }: { children: ReactNode }) {
   const theme = useCKTheme();
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
   return (
     <View testID="login-background" style={[styles.fill, { backgroundColor: theme.background }]}>
       <SafeAreaView style={styles.fill} edges={['top', 'bottom']}>
@@ -219,6 +221,13 @@ function LoginSurface({ children }: { children: ReactNode }) {
           style={styles.fill}
         >
           <ScrollView
+            testID="login-scroll"
+            onLayout={(event) => setViewportHeight(event.nativeEvent.layout.height)}
+            onContentSizeChange={(_width, height) => setContentHeight(height)}
+            scrollEnabled={viewportHeight > 0 && contentHeight > viewportHeight + 1}
+            bounces={false}
+            alwaysBounceVertical={false}
+            overScrollMode="never"
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.page}

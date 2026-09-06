@@ -14,6 +14,7 @@ import {
   ProxyPlayerEndpoint,
 } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
+import { ApiResponseError } from '@clashking/api-client';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
 import { canonicalTag } from '../../../core/domain/tags';
@@ -309,7 +310,11 @@ export class ClanService {
               query: { limit },
               body: {},
             }),
-          );
+          ).catch((error: unknown) => {
+            if (!throwOnError && error instanceof ApiResponseError) return null;
+            throw error;
+          });
+          if (data === null) return null;
           return Array.isArray(data.items)
             ? CapitalHistoryItems.fromJson({ history: data.items }, tag)
             : null;

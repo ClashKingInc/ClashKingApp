@@ -281,6 +281,21 @@ export function createAppRuntime(): AppRuntime {
     reportError: ({ operation, error }) => reportException(error, operation),
   });
   configureWarWidgetBackgroundExecutor((taskName) => warWidgets.executeBackgroundTask(taskName));
+  accounts.setSelectedTagChangeHandler(async (selectedTag) => {
+    if (accounts.accounts.length === 0) await upgradeWidgets.clear();
+    else await upgradeWidgets.syncSelectedTag(selectedTag);
+    await warWidgets.seedClanOptionsFromProfiles(
+      players.profiles.filter((player) =>
+        accounts.accounts.some(
+          (account) => account.playerTag.toUpperCase() === player.tag.toUpperCase(),
+        ),
+      ),
+      {
+        bookmarkedClans: bookmarks.clans,
+        selectedPlayerTag: selectedTag,
+      },
+    );
+  });
   const accountBootstrap = new AccountBootstrapService({
     accounts,
     bookmarks,

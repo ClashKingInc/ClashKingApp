@@ -5,7 +5,7 @@ import { ckThemeColors, type CKThemeColors, type CKThemeMode } from './tokens';
 
 export type CKThemePreference = CKThemeMode | 'system';
 
-const CKThemePreferenceContext = createContext<CKThemePreference>('system');
+const CKThemePreferenceContext = createContext<CKThemePreference>('dark');
 
 export function CKThemeProvider({
   preference,

@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Se caută actualizări…",
+  "startupDownloadingUpdate": "Se descarcă actualizarea…",
+  "startupUpdateInBackground": "Actualizează în fundal",
   "warStatsRangeTitle": "Intervalul statisticilor de război",
   "warStatsRangeDescription": "Alege dacă statisticile acoperă un număr fix de războaie recente sau o perioadă recentă exprimată în zile.",
   "warStatsRangeDays": "Zile",

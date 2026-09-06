@@ -1,4 +1,11 @@
 {
+  "settingsClearImageCache": "Clear image cache",
+  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Zoeken naar updates…",
+  "startupDownloadingUpdate": "Update downloaden…",
+  "startupUpdateInBackground": "Op de achtergrond bijwerken",
   "warStatsRangeTitle": "Bereik van oorlogsstatistieken",
   "warStatsRangeDescription": "Kies of de statistieken een vast aantal recente oorlogen of een recente periode in dagen omvatten.",
   "warStatsRangeDays": "Dagen",

@@ -296,6 +296,27 @@ describe('war widget payloads', () => {
 });
 
 describe('WarWidgetService', () => {
+  test('uses hydrated bookmark names in the picker without adding unrelated clans', async () => {
+    const h = harness();
+    await h.service.seedClanOptionsFromProfiles([], {
+      bookmarkedClans: [{ tag: '#BOOKMARK', name: '#BOOKMARK' }],
+      hydratedClans: [
+        { tag: '#BOOKMARK', name: 'Actual Clan Name', badgeUrls: { medium: 'clan.png' } },
+        { tag: '#UNRELATED', name: 'Bookmarked Player Clan', badgeUrls: { medium: 'other.png' } },
+      ],
+    });
+    expect(await h.service.getCachedClanOptions()).toEqual([
+      { tag: '#BOOKMARK', name: 'Actual Clan Name', badgeUrl: 'clan.png' },
+    ]);
+    expect(h.native.reloadWidgets).toHaveBeenCalled();
+  });
+
+  test('retains the bookmarked tag as a fallback if clan hydration is unavailable', () => {
+    expect(clanOptionsFromProfiles([], [{ tag: '#BOOKMARK', name: '#BOOKMARK' }])).toEqual([
+      { tag: '#BOOKMARK', name: '#BOOKMARK' },
+    ]);
+  });
+
   test('deduplicates/sorts profile and bookmark clans and selects the active profile clan', () => {
     const profiles = [
       {
@@ -434,6 +455,22 @@ describe('WarWidgetService', () => {
     await expect(h.service.handleWidgetAction('clashking://player')).resolves.toBe(false);
   });
 
+  test('keeps the bookmarked clan identity visible when it has no current war', async () => {
+    const h = harness();
+    await h.service.cacheClanOptions([
+      { tag: '#BOOKMARK', name: 'Bookmarked Clan', badgeUrl: 'badge.avif' },
+    ]);
+    await h.service.refreshWarInfoForClan('#BOOKMARK');
+    const call = h.native.setWidgetValue.mock.calls.find(([key]) => key === 'warInfo_BOOKMARK');
+    expect(JSON.parse(String(call?.[1]))).toMatchObject({
+      state: 'notInWar',
+      secondaryText: 'Bookmarked Clan',
+      clan: { name: 'Bookmarked Clan', badgeUrlMedium: 'badge.avif' },
+    });
+    await h.service.cacheClanOptions([]);
+    expect(h.native.setWidgetValue).toHaveBeenCalledWith(WIDGET_STORAGE_KEYS.warSelectedClan, null);
+  });
+
   test('stores an error payload on API failure and keeps widget update non-fatal', async () => {
     const h = harness({
       loadWarSummary: jest.fn(async () => Promise.reject(new Error('offline'))),
@@ -469,7 +506,8 @@ describe('WarWidgetService', () => {
       loadPlayerClanTag: jest.fn(async () => '#CLAN'),
     });
     await h.service.seedClanOptionsFromProfiles([]);
-    expect(h.native.reloadWidgets).not.toHaveBeenCalled();
+    expect(await h.service.getCachedClanOptions()).toEqual([]);
+    h.native.reloadWidgets.mockClear();
 
     await h.service.seedClanOptionsFromProfiles([
       {

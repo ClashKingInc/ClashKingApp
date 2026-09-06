@@ -6,6 +6,7 @@ import {
   RecentSearchesEndpoint,
 } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
+import { TransportError } from '@clashking/api-client';
 
 import type { ContractApiService } from '../../core/api/contract-api';
 import {
@@ -59,7 +60,8 @@ export class SearchService {
         ),
       );
       return decoded.items;
-    } catch {
+    } catch (error) {
+      if (error instanceof TransportError) throw error;
       return [];
     }
   }

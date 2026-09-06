@@ -40,6 +40,25 @@ async function renderLogin(overrides: Partial<React.ComponentProps<typeof LoginS
 }
 
 describe('LoginScreen', () => {
+  it('only scrolls when the form exceeds the available height, including keyboard resizing', async () => {
+    const { screen } = await renderLogin();
+    const scroll = () => screen.getByTestId('login-scroll');
+    await fireEvent(scroll(), 'layout', { nativeEvent: { layout: { height: 800 } } });
+    await fireEvent(scroll(), 'contentSizeChange', 390, 800);
+    expect(scroll().props.scrollEnabled).toBe(false);
+    expect(scroll().props.bounces).toBe(false);
+    expect(scroll().props.alwaysBounceVertical).toBe(false);
+    expect(scroll().props.overScrollMode).toBe('never');
+
+    // KeyboardAvoidingView shrinks the viewport; short screens behave the same way.
+    await fireEvent(scroll(), 'layout', { nativeEvent: { layout: { height: 400 } } });
+    expect(scroll().props.scrollEnabled).toBe(true);
+    await fireEvent(scroll(), 'layout', { nativeEvent: { layout: { height: 800 } } });
+    expect(scroll().props.scrollEnabled).toBe(false);
+    await fireEvent(scroll(), 'contentSizeChange', 390, 1000);
+    expect(scroll().props.scrollEnabled).toBe(true);
+  });
+
   it('uses a solid app surface and one minimal authentication form', async () => {
     const { screen } = await renderLogin();
 

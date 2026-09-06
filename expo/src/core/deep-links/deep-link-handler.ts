@@ -1,4 +1,5 @@
 import type { DeepLinkHandlerOptions } from './contracts';
+import { parseAppLink } from './app-link';
 
 export type DeepLinkRoute = 'oauth' | 'player' | 'clan' | 'war' | string;
 
@@ -39,7 +40,7 @@ export class DeepLinkHandler<Player, Clan> {
 
   queueDeepLink(url: string): void {
     this.pendingUrl = url;
-    this.options.log?.(`Queued deep link: ${url}`);
+    this.options.log?.('Queued deep link');
   }
 
   async tryHandlePendingDeepLink(): Promise<void> {
@@ -60,12 +61,38 @@ export class DeepLinkHandler<Player, Clan> {
     } finally {
       this.handling = false;
     }
+    if (this.pendingUrl !== null && this.pendingUrl !== captured)
+      await this.tryHandlePendingDeepLink();
   }
 
   private async dispatch(uri: URL): Promise<boolean> {
     const route = extractDeepLinkRoute(uri);
     if (route === 'oauth') return true;
     if (!this.options.isAuthenticated()) return false;
+    if (this.options.openDestination) {
+      const link = parseAppLink(uri.toString());
+      if (!link) {
+        await this.options.showFeedback('unknown');
+        return true;
+      }
+      await this.options.showLoading(true);
+      try {
+        await this.options.openDestination(link);
+      } catch (error) {
+        await this.report('deep_link.destination', error);
+        if (this.options.isReady())
+          await this.options.showFeedback(
+            link.kind === 'player'
+              ? 'failedPlayer'
+              : link.kind === 'clan'
+                ? 'failedClan'
+                : 'unavailable',
+          );
+      } finally {
+        if (this.options.isReady()) await this.options.showLoading(false);
+      }
+      return true;
+    }
     switch (route) {
       case 'player':
         await this.openPlayer(uri);

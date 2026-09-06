@@ -1,5 +1,14 @@
-import { useState, type ReactNode } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import {
+  Animated,
+  Modal,
+  PanResponder,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { Clock3, Coins, Layers3, X } from 'lucide-react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
@@ -324,45 +333,117 @@ function DetailLevelSlider({
   const [width, setWidth] = useState(1);
   const range = Math.max(0, maximum - minimum);
   const fraction = range === 0 ? 0 : (value - minimum) / range;
+  const [liveFraction] = useState(() => new Animated.Value(fraction));
+  const valueRef = useRef(value);
+
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+
+  const updateFromPosition = useCallback(
+    (position: number) => {
+      if (range <= 0) return;
+      const nextFraction = detailSliderFractionFromPosition(position, width);
+      liveFraction.setValue(nextFraction);
+      const nextLevel = detailLevelFromSliderPosition(position, width, minimum, maximum);
+      if (nextLevel === valueRef.current) return nextLevel;
+      valueRef.current = nextLevel;
+      onChange(nextLevel);
+      return nextLevel;
+    },
+    [liveFraction, maximum, minimum, onChange, range, width],
+  );
+
+  const settleToSelectedLevel = useCallback(
+    (selectedLevel: number) => {
+      const selectedFraction =
+        range === 0 ? 0 : Math.max(0, Math.min(1, (selectedLevel - minimum) / range));
+      Animated.spring(liveFraction, {
+        toValue: selectedFraction,
+        damping: 24,
+        stiffness: 280,
+        mass: 0.8,
+        useNativeDriver: false,
+      }).start();
+    },
+    [liveFraction, minimum, range],
+  );
+
+  /* eslint-disable react-hooks/refs -- PanResponder registers these closures during render but only invokes them for touch events. */
+  const responder = useMemo(() => {
+    const finish = (position: number) => {
+      const selectedLevel = detailLevelFromSliderPosition(position, width, minimum, maximum);
+      if (selectedLevel !== valueRef.current) {
+        valueRef.current = selectedLevel;
+        onChange(selectedLevel);
+      }
+      settleToSelectedLevel(selectedLevel);
+    };
+    return PanResponder.create({
+      onStartShouldSetPanResponder: () => range > 0,
+      onMoveShouldSetPanResponder: (_event, gesture) =>
+        range > 0 && Math.abs(gesture.dx) >= Math.abs(gesture.dy),
+      onPanResponderGrant: (event) => {
+        liveFraction.stopAnimation();
+        updateFromPosition(event.nativeEvent.locationX);
+      },
+      onPanResponderMove: (event) => updateFromPosition(event.nativeEvent.locationX),
+      onPanResponderRelease: (event) => finish(event.nativeEvent.locationX),
+      onPanResponderTerminate: (event) => finish(event.nativeEvent.locationX),
+      onPanResponderTerminationRequest: () => false,
+    });
+  }, [
+    liveFraction,
+    maximum,
+    minimum,
+    onChange,
+    range,
+    settleToSelectedLevel,
+    updateFromPosition,
+    width,
+  ]);
+  /* eslint-enable react-hooks/refs */
+
+  const animatedWidth = liveFraction.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '100%'],
+  });
   return (
     <View style={breakdownStyles.levelSliderWrap}>
-      <Pressable
+      <View
         accessibilityRole="adjustable"
         accessibilityLabel={`Level ${value}`}
         accessibilityValue={{ min: minimum, max: maximum, now: value }}
         accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
         onAccessibilityAction={(event) => {
-          if (event.nativeEvent.actionName === 'increment') onChange(Math.min(maximum, value + 1));
-          if (event.nativeEvent.actionName === 'decrement') onChange(Math.max(minimum, value - 1));
+          const nextValue =
+            event.nativeEvent.actionName === 'increment'
+              ? Math.min(maximum, value + 1)
+              : event.nativeEvent.actionName === 'decrement'
+                ? Math.max(minimum, value - 1)
+                : value;
+          if (nextValue === value) return;
+          settleToSelectedLevel(nextValue);
+          onChange(nextValue);
         }}
         onLayout={(event) => setWidth(Math.max(1, event.nativeEvent.layout.width))}
-        onPress={(event) =>
-          onChange(
-            Math.max(
-              minimum,
-              Math.min(
-                maximum,
-                Math.round(minimum + (event.nativeEvent.locationX / width) * range),
-              ),
-            ),
-          )
-        }
         style={breakdownStyles.levelSlider}
+        {...responder.panHandlers}
       >
         <View style={breakdownStyles.levelSliderTrack} />
-        <View
+        <Animated.View
           style={[
             breakdownStyles.levelSliderFill,
-            { width: `${fraction * 100}%`, backgroundColor: accent },
+            { width: animatedWidth, backgroundColor: accent },
           ]}
         />
-        <View
+        <Animated.View
           style={[
             breakdownStyles.levelSliderThumb,
-            { left: `${fraction * 100}%`, backgroundColor: accent },
+            { left: animatedWidth, backgroundColor: accent },
           ]}
         />
-      </Pressable>
+      </View>
       <View style={breakdownStyles.levelLabels}>
         <CKText role="labelSmall" style={{ color: accent, fontWeight: '800' }}>
           Level {value}
@@ -370,6 +451,28 @@ function DetailLevelSlider({
         <CKText role="labelSmall">Max {maximum}</CKText>
       </View>
     </View>
+  );
+}
+
+export function detailSliderFractionFromPosition(position: number, width: number) {
+  if (!Number.isFinite(position) || !Number.isFinite(width) || width <= 0) return 0;
+  return Math.max(0, Math.min(1, position / width));
+}
+
+export function detailLevelFromSliderPosition(
+  position: number,
+  width: number,
+  minimum: number,
+  maximum: number,
+) {
+  const range = Math.max(0, maximum - minimum);
+  if (range === 0) return minimum;
+  return Math.max(
+    minimum,
+    Math.min(
+      maximum,
+      Math.round(minimum + detailSliderFractionFromPosition(position, width) * range),
+    ),
   );
 }
 
