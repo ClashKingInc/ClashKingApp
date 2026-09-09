@@ -66,18 +66,6 @@ function account(playerTag: string, overrides: Record<string, unknown> = {}) {
 }
 
 describe('CocAccountService', () => {
-  test('records authenticated app activity through the shared link endpoint', async () => {
-    const { service, requests } = harness(
-      () => new Response(JSON.stringify({ timestamp: '2026-09-08T18:00:00Z', updated_count: 2 })),
-    );
-
-    await service.recordActivity();
-
-    expect(requests).toEqual([
-      { path: '/v2/links/user%2Fid/last-login', method: 'PATCH', body: undefined },
-    ]);
-  });
-
   test('initializes selection itself or delegates the full bootstrap to its coordinator', async () => {
     const { service, preferences, requests } = harness(
       () => new Response(JSON.stringify({ items: [account('#FIRST')] })),

@@ -19,7 +19,6 @@ function harness(
       calls.push('accounts-fetch');
       return linkedAccounts;
     },
-    recordActivity: async () => calls.push('account-activity'),
     initializeSelectedTag: async () => calls.push('selected-init'),
     updateRefreshTime: () => calls.push('refresh-time'),
   };
@@ -142,7 +141,6 @@ describe('AccountBootstrapService', () => {
     expect(calls).toEqual(
       expect.arrayContaining([
         'accounts-fetch',
-        'account-activity',
         'bookmarked-players:#BP',
         'clans:#CACHED,#BC',
         'wars:#CACHED,#BC',
@@ -169,7 +167,6 @@ describe('AccountBootstrapService', () => {
     expect(calls).toContain('bookmarked-players:#BP');
     expect(calls).toContain('selected-init');
     expect(calls).not.toContain('players');
-    expect(calls).not.toContain('account-activity');
     expect(calls).toContain('widgets');
   });
 
