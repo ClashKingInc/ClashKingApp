@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Csatlakozott",
   "playerJoinLeaveLeft": "Kilépett",
   "playerJoinLeaveNoHistory": "Nincsenek csatlakozási / kilépési előzmények",
-  "playerJoinLeaveNoClanTotals": "Nincsenek klánösszesítések"
+  "playerJoinLeaveNoClanTotals": "Nincsenek klánösszesítések",
+  "cwlRegisteredRoster": "Regisztrált keret",
+  "cwlMatches": "Párosítások",
+  "cwlNextMatchup": "Következő párosítás",
+  "cwlOtherMatches": "További párosítások",
+  "cwlOutlook": "Szezonkilátások",
+  "cwlFirstPlace": "Első hely",
+  "cwlTopTwo": "Első kettő",
+  "cwlRemainingOpponents": "Hátralévő ellenfelek",
+  "cwlWinBonusNote": "A csillagok lezárt győzelmenként 10 bónuszcsillagot tartalmaznak.",
+  "cwlEstimateNote": "A becslések lezárt háborúkon és hátralévő ellenfeleken alapulnak, nem a felállás változásain. Klánonként legalább két lezárt háború szükséges. A becslések nincsenek kalibrálva; a feljutási szabályok ligánként eltérnek.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# óra} other {# óra}}} other {{count, plural, one {# perc} other {# perc}}}}"
 }

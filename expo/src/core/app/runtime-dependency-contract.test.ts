@@ -14,17 +14,22 @@ describe('app runtime dependency contract', () => {
     expect(layout).toMatch(/return \(\) => \{\s*active = false;\s*stop\(\);/);
     expect(authenticatedRoot).toContain('startDeepLinkHandling(appLinkInbox, handler,');
     expect(authenticatedRoot).toContain('runtime.wars.loadLinkedCwl(link.tag, link.params.season)');
-    expect(authenticatedRoot).toContain(
-      'WarCwlService.fetchWarDataFromTime(runtime.contractApi, link.tag, end)',
+    expect(authenticatedRoot).toMatch(
+      /WarCwlService\.fetchWarDataFromTime\(\s*runtime\.contractApi,\s*link\.tag,\s*end,?\s*\)/,
     );
     expect(authenticatedRoot).not.toContain('runtime.api');
-    expect(authenticatedRoot).toContain('if (!active || generation !== navigationGeneration.current) return;');
+    expect(authenticatedRoot).toContain(
+      'if (!active || generation !== navigationGeneration.current) return;',
+    );
   });
 
   it('mounts the same application at direct public destinations with static screen entries', () => {
-    const destination = readFileSync(resolve(process.cwd(), 'src/app/[...destination].tsx'), 'utf8');
+    const destination = readFileSync(
+      resolve(process.cwd(), 'src/app/[...destination].tsx'),
+      'utf8',
+    );
     expect(destination).toContain('export default ApplicationRoot;');
-    expect(destination).toContain("return [");
+    expect(destination).toContain('return [');
     for (const path of ['players', 'clans', 'war', 'search', 'settings/faq', 'settings/licenses']) {
       expect(destination).toContain(`'${path}'`);
     }
@@ -43,6 +48,20 @@ describe('app runtime dependency contract', () => {
     expect(config).toContain("const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';");
     expect(config).toContain("checkAutomatically: 'NEVER'");
     expect(config).not.toContain("checkAutomatically: 'ON_LOAD'");
+  });
+
+  it('hydrates linked account data before leaving account setup', () => {
+    const root = readFileSync(resolve(process.cwd(), 'src/core/app/application-root.tsx'), 'utf8');
+    const authenticatedRoot = readFileSync(
+      resolve(process.cwd(), 'src/core/app/authenticated-root.tsx'),
+      'utf8',
+    );
+    expect(root).toMatch(
+      /await runtime\.accountBootstrap\.initialize\([\s\S]*?\);\s*setScene\(\{ kind: 'home' \}\)/,
+    );
+    expect(authenticatedRoot).toMatch(
+      /await runtime\.accountBootstrap\.initialize\(user\?\.userId \?\? null\);\s*closeSecondary\(\)/,
+    );
   });
 
   it('constructs feature services from leaf modules instead of UI-exporting barrels', () => {

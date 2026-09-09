@@ -1,13 +1,7 @@
-import { useEffect, useState } from 'react';
-import {
-  Platform,
-  Pressable,
-  RefreshControl,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import { EyeOff, RefreshCw, UserCircle } from 'lucide-react-native';
+import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
+import { useState } from 'react';
+import { Platform, RefreshControl, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { EyeOff, UserCircle } from 'lucide-react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -42,7 +36,7 @@ export function DashboardScreen({
   actions: HomeDashboardActions;
   platform?: HomePlatform;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
@@ -51,6 +45,7 @@ export function DashboardScreen({
   const maxContent = desktop ? homeContentWidth(windowWidth) : 840;
   const horizontal = centeredContentPadding(contentWidth, maxContent);
   const [refreshing, setRefreshing] = useState(false);
+  const pullRefresh = usePullRefreshHint();
   const refresh = async () => {
     setRefreshing(true);
     try {
@@ -98,6 +93,9 @@ export function DashboardScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <DraggableFlatList
+        onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+        onScrollEndDrag={pullRefresh.onScrollEndDrag}
         activationDistance={8}
         alwaysBounceVertical
         data={cards}
@@ -120,10 +118,6 @@ export function DashboardScreen({
         }
         ListHeaderComponent={
           <>
-            {model.lastRefresh ? (
-              <LastRefresh lastRefresh={model.lastRefresh} onRefresh={() => void refresh()} />
-            ) : null}
-            <View style={styles.refreshGap} />
             <HomeEventBanner
               announcements={model.announcements}
               desktop={desktop}
@@ -188,6 +182,17 @@ export function DashboardScreen({
           );
         }}
       />
+      <PullRefreshHint
+        distance={pullRefresh.distance}
+        refreshing={refreshing}
+        label={
+          model.lastRefresh
+            ? t('generalLastRefresh', {
+                time: formatLastRefresh(model.lastRefresh, new Date(), t, locale),
+              })
+            : undefined
+        }
+      />
     </SafeAreaView>
   );
 }
@@ -217,42 +222,8 @@ export function formatLastRefresh(
   });
 }
 
-function LastRefresh({ lastRefresh, onRefresh }: { lastRefresh: Date; onRefresh: () => void }) {
-  const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const [, setMinute] = useState(0);
-  useEffect(() => {
-    const timer = setInterval(() => setMinute((value) => value + 1), 60000);
-    return () => clearInterval(timer);
-  }, []);
-  const label = t('generalLastRefresh', {
-    time: formatLastRefresh(lastRefresh, new Date(), t, locale),
-  });
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      onPress={onRefresh}
-      style={styles.refreshRow}
-    >
-      <RefreshCw size={12} color={theme.onSurfaceVariant} />
-      <CKText muted role="bodySmall">
-        {label}
-      </CKText>
-    </Pressable>
-  );
-}
-
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  refreshRow: {
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  refreshGap: { height: 12 },
   recap: { width: '100%' },
   activeCard: { opacity: 0.94 },
   sectionTitle: { fontWeight: '900' },

@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Вступив",
   "playerJoinLeaveLeft": "Вийшов",
   "playerJoinLeaveNoHistory": "Історія вступів і виходів відсутня",
-  "playerJoinLeaveNoClanTotals": "Підсумки за кланами відсутні"
+  "playerJoinLeaveNoClanTotals": "Підсумки за кланами відсутні",
+  "cwlRegisteredRoster": "Заявлений склад",
+  "cwlMatches": "Матчі",
+  "cwlNextMatchup": "Наступний матч",
+  "cwlOtherMatches": "Інші матчі",
+  "cwlOutlook": "Прогноз сезону",
+  "cwlFirstPlace": "Перше місце",
+  "cwlTopTwo": "Перші два місця",
+  "cwlRemainingOpponents": "Решта суперників",
+  "cwlWinBonusNote": "Зірки включають 10 бонусних зірок за кожну завершену перемогу.",
+  "cwlEstimateNote": "Оцінки враховують завершені війни та решту суперників, але не зміни складів. Потрібно щонайменше дві завершені війни на клан. Оцінки не відкалібровані; правила підвищення залежать від ліги.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# година} few {# години} other {# годин}}} other {{count, plural, one {# хвилина} few {# хвилини} other {# хвилин}}}}"
 }

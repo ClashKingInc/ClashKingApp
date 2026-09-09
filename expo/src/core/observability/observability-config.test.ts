@@ -1,12 +1,7 @@
-import {
-  DEFAULT_BETTER_STACK_DSN,
-  percentageRate,
-  resolveObservabilityConfig,
-  sentryEnvironment,
-} from './observability-config';
+import { resolveObservabilityConfig, sentryEnvironment } from './observability-config';
 
 describe('observability config', () => {
-  it('uses the Better Stack defaults and package metadata', () => {
+  it('keeps reporting disabled without a dedicated DSN and uses package metadata', () => {
     expect(
       resolveObservabilityConfig(
         {},
@@ -17,17 +12,25 @@ describe('observability config', () => {
         },
       ),
     ).toEqual({
-      dsn: DEFAULT_BETTER_STACK_DSN,
+      dsn: undefined,
       environment: 'production',
       release: 'com.clashking.apps@0.3.5',
       dist: '25',
-      tracesSampleRate: 0,
-      replaysSessionSampleRate: 0,
-      replaysOnErrorSampleRate: 0,
+      tracesSampleRate: undefined,
+      profilesSampleRate: undefined,
+      replaysSessionSampleRate: undefined,
+      replaysOnErrorSampleRate: undefined,
+      enableLogs: false,
+      enableAutoSessionTracking: false,
+      enableAutoPerformanceTracing: false,
+      enableAppStartTracking: false,
+      enableNativeFramesTracking: false,
+      enableStallTracking: false,
+      enableUserInteractionTracing: false,
     });
   });
 
-  it('honors the public DSN override and clamps percentage rates', () => {
+  it('honors the dedicated DSN but ignores telemetry sampling overrides', () => {
     const config = resolveObservabilityConfig(
       {
         EXPO_PUBLIC_CK_SENTRY_DSN: ' https://example.test/1 ',
@@ -41,17 +44,24 @@ describe('observability config', () => {
     expect(config).toMatchObject({
       dsn: 'https://example.test/1',
       environment: 'development',
-      tracesSampleRate: 1,
-      replaysSessionSampleRate: 0,
-      replaysOnErrorSampleRate: 0.025,
+      tracesSampleRate: undefined,
+      profilesSampleRate: undefined,
+      replaysSessionSampleRate: undefined,
+      replaysOnErrorSampleRate: undefined,
+      enableLogs: false,
+      enableAutoSessionTracking: false,
+      enableAutoPerformanceTracing: false,
+      enableAppStartTracking: false,
+      enableNativeFramesTracking: false,
+      enableStallTracking: false,
+      enableUserInteractionTracing: false,
     });
   });
 
-  it('maps API environments and treats invalid percentages as zero', () => {
+  it('maps API environments', () => {
     expect(sentryEnvironment('local')).toBe('development');
     expect(sentryEnvironment('development')).toBe('development');
     expect(sentryEnvironment('production')).toBe('production');
     expect(sentryEnvironment('preview')).toBe('preview');
-    expect(percentageRate('not-a-number')).toBe(0);
   });
 });

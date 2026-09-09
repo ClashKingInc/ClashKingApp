@@ -4671,5 +4671,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Tilmeldt trup",
+  "cwlMatches": "Opgør",
+  "cwlNextMatchup": "Næste opgør",
+  "cwlOtherMatches": "Andre opgør",
+  "cwlOutlook": "Sæsonudsigt",
+  "cwlFirstPlace": "Førsteplads",
+  "cwlTopTwo": "Top to",
+  "cwlRemainingOpponents": "Resterende modstandere",
+  "cwlWinBonusNote": "Stjerner inkluderer 10 bonusstjerner pr. afsluttet sejr.",
+  "cwlEstimateNote": "Estimater bruger afsluttede krige og resterende modstandere, ikke ændringer i opstillingen. Der kræves mindst to afsluttede krige pr. klan. Estimaterne er ikke kalibrerede; oprykningsregler varierer efter liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# time} other {# timer}}} other {{count, plural, one {# minut} other {# minutter}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

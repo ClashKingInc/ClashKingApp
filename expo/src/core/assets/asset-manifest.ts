@@ -1,5 +1,21 @@
 export const ASSET_MANIFEST_URL = 'https://assets.clashk.ing/manifest.json';
 export interface ManifestImage { readonly sha: string; readonly animated: boolean }
+export interface ManifestDataEntry { path: string; sha: string }
+export function manifestData(value: Record<string, unknown>): { stats: ManifestDataEntry[]; translations: ManifestDataEntry[] } {
+  const data = value.data as Record<string, unknown> | undefined;
+  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid manifest data index');
+  for (const [group, pattern] of Object.entries({ stats: /^static_data\/[a-z_]+\.json$/, translations: /^translations\/[A-Z]{2,8}\.json$/ })) {
+    const entries = data[group];
+    const seen = new Set<string>();
+    if (!Array.isArray(entries) || (group === 'stats' && !entries.length)) throw new Error('Invalid manifest data index');
+    for (const item of entries) {
+      if (!item || typeof item.path !== 'string' || !pattern.test(item.path) || seen.has(item.path) ||
+        typeof item.sha !== 'string' || !/^[a-f0-9]{64}$/.test(item.sha)) throw new Error('Invalid manifest data index');
+      seen.add(item.path);
+    }
+  }
+  return data as { stats: ManifestDataEntry[]; translations: ManifestDataEntry[] };
+}
 let images = new Map<string, ManifestImage>();
 let revision = 0;
 const listeners = new Set<() => void>();
@@ -23,10 +39,7 @@ export function validateAssetManifest(value: Record<string, unknown>): Map<strin
     next.set(item.path, { sha: item.sha, animated: item.animated });
     }
   }
-  if (!Array.isArray(value.data) || value.data.length === 0 || value.data.some((item) =>
-    !item || typeof item.path !== 'string' || !/^(static_data\/[a-z_]+|translations\/[A-Z]{2,8})\.json$/.test(item.path) ||
-    typeof item.sha !== 'string' || !/^[a-f0-9]{64}$/.test(item.sha)))
-    throw new Error('Invalid manifest data index');
+  manifestData(value);
   return next;
 }
 

@@ -6,38 +6,84 @@ import { FileUpdateIndex } from '../assets/file-update-index';
 
 jest.mock('expo-crypto', () => ({
   CryptoDigestAlgorithm: { SHA256: 'sha256' },
-  digestStringAsync: async (_: string, text: string) => jest.requireActual<typeof import('node:crypto')>('node:crypto').createHash('sha256').update(text).digest('hex'),
+  digestStringAsync: async (_: string, text: string) =>
+    jest
+      .requireActual<typeof import('node:crypto')>('node:crypto')
+      .createHash('sha256')
+      .update(text)
+      .digest('hex'),
 }));
 class MemoryStore {
   readonly values = new Map<string, string>();
-  async read(key: string) { return this.values.get(key) ?? null; }
-  async write(key: string, value: string) { this.values.set(key, value); }
+  async read(key: string) {
+    return this.values.get(key) ?? null;
+  }
+  async write(key: string, value: string) {
+    this.values.set(key, value);
+  }
+  getKeys = async () => [...this.values.keys()];
+  getMany = async (keys: readonly string[]) =>
+    keys.map((key) => [key, this.values.get(key) ?? null] as const);
+  removeString = async (key: string) => {
+    this.values.delete(key);
+  };
   getString = this.read;
   setString = this.write;
 }
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
-const response = (status: number, body = '', headers: Record<string, string> = {}) => ({
-  status, text: async () => body, headers: { get: (key: string) => headers[key.toLowerCase()] ?? null },
-}) as Response;
+const response = (status: number, body = '', headers: Record<string, string> = {}) =>
+  ({
+    status,
+    text: async () => body,
+    headers: { get: (key: string) => headers[key.toLowerCase()] ?? null },
+  }) as Response;
 function setup() {
   let now = new Date('2026-09-05T00:00:00Z');
   const files = new MemoryStore();
   const preferences = new MemoryStore();
   const sections: Record<string, string> = {
-    troops: JSON.stringify({ items: [{ name: 'Barbarian' }] }), spells: JSON.stringify({ items: [] }),
+    troops: JSON.stringify({ items: [{ name: 'Barbarian' }] }),
+    spells: JSON.stringify({ items: [] }),
   };
   const fetchMock = jest.fn(async (url: string, _options?: RequestInit) => {
-    if (url === ASSET_MANIFEST_URL) return response(200, JSON.stringify({ version: 2, assets: {},
-      data: Object.entries(sections).map(([name, body]) => ({ path: 'static_data/' + name + '.json', sha: sha(body) })),
-    }), { 'last-modified': 'Sat, 05 Sep 2026 00:00:00 GMT' });
+    if (url === ASSET_MANIFEST_URL)
+      return response(
+        200,
+        JSON.stringify({
+          version: 2,
+          assets: {},
+          data: {
+            stats: Object.entries(sections).map(([name, body]) => ({
+              path: 'static_data/' + name + '.json',
+              sha: sha(body),
+            })),
+            translations: [] as { path: string; sha: string }[],
+          },
+        }),
+        { 'last-modified': 'Sat, 05 Sep 2026 00:00:00 GMT' },
+      );
     const name = url.split('/').pop()!.replace('.json', '');
     if (url.includes('/translations/')) return response(200, JSON.stringify({ TID: name }));
     return response(200, sections[name]!, { etag: '"' + sha(sections[name]!) + '"' });
   });
-  const options = { platform: 'native' as const, files, preferences,
-    fetchImplementation: fetchMock as unknown as typeof fetch, now: () => now };
-  return { service: new GameDataService(options), files, preferences, sections, fetchMock, options,
-    advance: () => { now = new Date(now.getTime() + 60_000); } };
+  const options = {
+    platform: 'native' as const,
+    files,
+    preferences,
+    fetchImplementation: fetchMock as unknown as typeof fetch,
+    now: () => now,
+  };
+  return {
+    service: new GameDataService(options),
+    files,
+    preferences,
+    sections,
+    fetchMock,
+    options,
+    advance: () => {
+      now = new Date(now.getTime() + 60_000);
+    },
+  };
 }
 beforeEach(resetGameDataStateForTesting);
 
@@ -57,7 +103,10 @@ test('restart reconciles JSON saved before an interrupted local-index commit', a
   s.fetchMock.mockClear();
   resetGameDataStateForTesting();
   await new GameDataService(options).loadFreshGameData({ languageCode: 'en' });
-  expect(await index.get(url)).toMatchObject({ sha: sha(s.sections.troops!), pendingSha: null });
+  expect(await index.get(url)).toMatchObject({
+    installedSha: sha(s.sections.troops!),
+    pendingSha: null,
+  });
   expect(s.fetchMock).not.toHaveBeenCalled();
 });
 
@@ -70,7 +119,7 @@ test('a saved new manifest does not mark failed JSON downloads complete, includi
     if (url === ASSET_MANIFEST_URL) {
       const result = await original(url, options);
       const manifest = JSON.parse(await result.text());
-      manifest.data.push({ path: 'translations/FR.json', sha: sha(translated) });
+      manifest.data.translations.push({ path: 'translations/FR.json', sha: sha(translated) });
       return response(200, JSON.stringify(manifest));
     }
     if (failing) throw new Error('download interrupted');
@@ -78,7 +127,8 @@ test('a saved new manifest does not mark failed JSON downloads complete, includi
     return original(url, options);
   });
   await s.service.loadFreshGameData({ languageCode: 'fr' });
-  const record = (file: string) => JSON.parse(s.files.values.get(file + '.' + s.preferences.values.get(file + '.slot'))!);
+  const record = (file: string) =>
+    JSON.parse(s.files.values.get(file + '.' + s.preferences.values.get(file + '.slot'))!);
   const oldTroopsSha = record('static_data_troops.json').sha;
   const oldFrenchSha = record('translations_FR.json').sha;
   s.sections.troops = JSON.stringify({ items: [{ name: 'Archer' }] });
@@ -86,8 +136,9 @@ test('a saved new manifest does not mark failed JSON downloads complete, includi
   failing = true;
   s.advance();
   await s.service.refreshGameDataIfChanged({ languageCode: 'fr' });
-  expect(JSON.parse(record('asset_manifest.json').body).data).toContainEqual({
-    path: 'static_data/troops.json', sha: sha(s.sections.troops!),
+  expect(JSON.parse(record('asset_manifest.json').body).data.stats).toContainEqual({
+    path: 'static_data/troops.json',
+    sha: sha(s.sections.troops!),
   });
   expect(record('static_data_troops.json').sha).toBe(oldTroopsSha);
   expect(record('translations_FR.json').sha).toBe(oldFrenchSha);
@@ -137,7 +188,9 @@ test('split files persist and a later offline launch reuses them', async () => {
   const s = setup();
   await s.service.loadGameData({ languageCode: 'en' });
   expect(s.fetchMock.mock.calls.map(([url]) => url)).toEqual([
-    ASSET_MANIFEST_URL, 'https://assets.clashk.ing/static_data/troops.json', 'https://assets.clashk.ing/static_data/spells.json',
+    ASSET_MANIFEST_URL,
+    'https://assets.clashk.ing/static_data/troops.json',
+    'https://assets.clashk.ing/static_data/spells.json',
   ]);
   expect(gameDataState.troopsData.troops).toHaveProperty('Barbarian');
   s.fetchMock.mockRejectedValue(new Error('offline'));
@@ -153,7 +206,9 @@ test('manifest Last-Modified produces one conditional request and no section dow
   s.fetchMock.mockResolvedValue(response(304));
   await s.service.refreshStaticDataIfChanged();
   expect(s.fetchMock).toHaveBeenCalledTimes(4);
-  expect(s.fetchMock.mock.calls[3]?.[1]?.headers).toMatchObject({ 'If-Modified-Since': 'Sat, 05 Sep 2026 00:00:00 GMT' });
+  expect(s.fetchMock.mock.calls[3]?.[1]?.headers).toMatchObject({
+    'If-Modified-Since': 'Sat, 05 Sep 2026 00:00:00 GMT',
+  });
   expect(gameDataState.troopsData.troops).toHaveProperty('Barbarian');
 });
 
@@ -174,40 +229,52 @@ test('only a changed section downloads and replaces its old body', async () => {
   s.advance();
   await s.service.refreshStaticDataIfChanged();
   expect(s.fetchMock.mock.calls.slice(3).map(([url]) => url)).toEqual([
-    ASSET_MANIFEST_URL, 'https://assets.clashk.ing/static_data/troops.json',
+    ASSET_MANIFEST_URL,
+    'https://assets.clashk.ing/static_data/troops.json',
   ]);
   expect(gameDataState.troopsData.troops).toHaveProperty('Archer');
 });
-test.each(['offline', 'invalid-json', 'wrong-hash'])('keeps the last good body on %s', async (failure) => {
-  const s = setup();
-  await s.service.loadGameData({ languageCode: 'en' });
-  const original = s.fetchMock.getMockImplementation()!;
-  s.sections.troops = JSON.stringify({ items: [{ name: 'New' }] });
-  s.fetchMock.mockImplementation(async (url, options) => {
-    if (url === ASSET_MANIFEST_URL) return original(url, options);
-    if (failure === 'offline') throw new Error('offline');
-    return response(200, failure === 'invalid-json' ? '{' : '{"items":[]}');
-  });
-  s.advance();
-  await s.service.refreshStaticDataIfChanged();
-  expect(gameDataState.troopsData.troops).toHaveProperty('Barbarian');
-  const slot = s.preferences.values.get('static_data_troops.json.slot');
-  expect(JSON.parse(s.files.values.get('static_data_troops.json.' + slot)!).body).toContain('Barbarian');
-});
+test.each(['offline', 'invalid-json', 'wrong-hash'])(
+  'keeps the last good body on %s',
+  async (failure) => {
+    const s = setup();
+    await s.service.loadGameData({ languageCode: 'en' });
+    const original = s.fetchMock.getMockImplementation()!;
+    s.sections.troops = JSON.stringify({ items: [{ name: 'New' }] });
+    s.fetchMock.mockImplementation(async (url, options) => {
+      if (url === ASSET_MANIFEST_URL) return original(url, options);
+      if (failure === 'offline') throw new Error('offline');
+      return response(200, failure === 'invalid-json' ? '{' : '{"items":[]}');
+    });
+    s.advance();
+    await s.service.refreshStaticDataIfChanged();
+    expect(gameDataState.troopsData.troops).toHaveProperty('Barbarian');
+    const slot = s.preferences.values.get('static_data_troops.json.slot');
+    expect(JSON.parse(s.files.values.get('static_data_troops.json.' + slot)!).body).toContain(
+      'Barbarian',
+    );
+  },
+);
 test('only selected languages download and switching back reuses cached files', async () => {
   const s = setup();
   await s.service.loadTranslationsForLocale({ languageCode: 'fr' });
   await s.service.loadTranslationsForLocale({ languageCode: 'de' });
   await s.service.loadTranslationsForLocale({ languageCode: 'fr' });
   expect(s.fetchMock.mock.calls.map(([url]) => url)).toEqual([
-    'https://assets.clashk.ing/translations/FR.json', 'https://assets.clashk.ing/translations/DE.json',
+    'https://assets.clashk.ing/translations/FR.json',
+    'https://assets.clashk.ing/translations/DE.json',
   ]);
   expect(gameDataState.translationsData.TID).toBe('FR');
 });
 test('late translation response cannot undo a switch to English', async () => {
   const s = setup();
   let finish!: (value: Response) => void;
-  s.fetchMock.mockImplementationOnce(() => new Promise((resolve) => { finish = resolve; }));
+  s.fetchMock.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
   const pending = s.service.loadTranslationsForLocale({ languageCode: 'fr' });
   await new Promise<void>((resolve) => setImmediate(resolve));
   await s.service.loadTranslationsForLocale({ languageCode: 'en' });
@@ -217,7 +284,10 @@ test('late translation response cannot undo a switch to English', async () => {
 });
 test('concurrent loads share requests, failed cache writes retain the old pointer', async () => {
   const s = setup();
-  await Promise.all([s.service.loadGameData({ languageCode: 'en' }), s.service.loadGameData({ languageCode: 'en' })]);
+  await Promise.all([
+    s.service.loadGameData({ languageCode: 'en' }),
+    s.service.loadGameData({ languageCode: 'en' }),
+  ]);
   expect(s.fetchMock).toHaveBeenCalledTimes(3);
   const key = 'static_data_troops.json.slot';
   const before = s.preferences.values.get(key);

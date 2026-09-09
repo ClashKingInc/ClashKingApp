@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Entró",
   "playerJoinLeaveLeft": "Salió",
   "playerJoinLeaveNoHistory": "No hay historial de entradas y salidas",
-  "playerJoinLeaveNoClanTotals": "No hay totales de clanes"
+  "playerJoinLeaveNoClanTotals": "No hay totales de clanes",
+  "cwlRegisteredRoster": "Plantilla inscrita",
+  "cwlMatches": "Enfrentamientos",
+  "cwlNextMatchup": "Próximo enfrentamiento",
+  "cwlOtherMatches": "Otros enfrentamientos",
+  "cwlOutlook": "Previsión de temporada",
+  "cwlFirstPlace": "Primer puesto",
+  "cwlTopTwo": "Dos primeros",
+  "cwlRemainingOpponents": "Rivales restantes",
+  "cwlWinBonusNote": "Las estrellas incluyen 10 estrellas extra por victoria completada.",
+  "cwlEstimateNote": "Las estimaciones usan guerras completadas y rivales restantes, no cambios de alineación. Se necesitan al menos dos guerras completadas por clan. Son estimaciones sin calibrar; las reglas de ascenso varían según la liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# horas}}} other {{count, plural, one {# minuto} other {# minutos}}}}"
 }

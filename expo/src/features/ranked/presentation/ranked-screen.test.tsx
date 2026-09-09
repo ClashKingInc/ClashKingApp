@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { sizedAssetUrl } from '../../../ui/image-delivery';
 import { I18nProvider } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
 import {
@@ -33,7 +32,7 @@ const player = {
 
 const tier = new RankedLeagueTier(2, 'Gold', 'tier-small.png', 'tier-large.png');
 const member = new RankedLeagueMember('#ALPHA', 'Alpha', '#CLAN', 'Alpha Clan', 1200, 2, 1, 1, 2);
-const group = new RankedLeagueGroup('#GROUP', 1_777_000_000, [member], [], []);
+const group = new RankedLeagueGroup('#GROUP', 1_777_000_000, [member]);
 const data = new RankedLeagueData(
   ' alpha ',
   'Alpha',
@@ -88,8 +87,14 @@ describe('RankedScreen player presentation', () => {
     expect(headerStyle.minHeight).toBeUndefined();
     expect(headerStyle.overflow).toBe('hidden');
     expect(headerStyle.marginBottom).toBe(-44);
+    const backgroundPlaceholder = screen.getByTestId('ranked-header-background');
+    await fireEvent(backgroundPlaceholder, 'layout', {
+      nativeEvent: { layout: { width: 390, height: 420 } },
+    });
     const background = screen.getByTestId('ranked-header-background');
-    expect(background.props.source).toContainEqual({ uri: sizedAssetUrl(ImageAssets.homeBaseBackground, 0, 0, 1) });
+    expect(background.props.source).toContainEqual(
+      expect.objectContaining({ uri: ImageAssets.homeBaseBackground }),
+    );
     expect(background.props.contentFit).toBe('cover');
     expect(StyleSheet.flatten(background.props.style)).toMatchObject({
       position: 'absolute',

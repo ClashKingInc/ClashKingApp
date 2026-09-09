@@ -19,6 +19,7 @@ function clan(tag: string, name = 'Clan') {
     clanPoints: 0,
     clanBuilderBasePoints: 0,
     clanCapitalPoints: 0,
+    clanCapital: { clanGoldSinkTotal: 0 },
     requiredTrophies: 0,
     warFrequency: 'always',
     warWinStreak: 0,

@@ -1,11 +1,13 @@
 import {
-  ProxyCurrentLeagueGroupEndpoint,
-  ProxyCurrentWarEndpoint,
-  ProxyCwlWarEndpoint,
   StoredCwlGroupEndpoint,
   WarBasicEndpoint,
   WarPreviousEndpoint,
 } from '@clashking/api-contracts/expo';
+import {
+  ProxyCurrentLeagueGroupEndpoint,
+  ProxyCurrentWarEndpoint,
+  ProxyCwlWarEndpoint,
+} from '../../../core/api/proxy-contracts';
 import { Effect } from 'effect';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
@@ -20,6 +22,8 @@ import {
   string,
   type JsonRecord,
 } from '../models';
+
+import { enrichCwlDetail } from '../models/cwl-detail';
 
 const MAX_BATCH_SIZE = 100;
 
@@ -38,6 +42,8 @@ export class WarCwlService {
   private readonly inFlightLoads = new Map<string, InFlightWarLoad>();
   private readonly latestRequestByTag = new Map<string, number>();
   private readonly listeners = new Set<() => void>();
+  private readonly detailSnapshots = new Map<string, WarCwl>();
+  private readonly detailLoads = new Map<string, Promise<WarCwl>>();
   private requestSequence = 0;
   private disposed = false;
 
@@ -52,6 +58,7 @@ export class WarCwlService {
   dispose(): void {
     this.disposed = true;
     this.listeners.clear();
+    this.detailSnapshots.clear();
   }
 
   loadAllWarData(
@@ -123,6 +130,70 @@ export class WarCwlService {
       : null;
   }
 
+  getCwlDetail(tag: string, season: string): WarCwl | undefined {
+    return this.detailSnapshots.get(`${tag}:${season}`);
+  }
+
+  /** Detail needs every matchup; keep the home summary's small request budget separate. */
+  loadCwlDetail(tag: string, season: string): Promise<WarCwl> {
+    const key = `${tag}:${season}`;
+    const existing = this.detailLoads.get(key);
+    if (existing) return existing;
+    const future = this.fetchCwlDetail(tag, season)
+      .then((summary) => {
+        if (!this.disposed) {
+          this.detailSnapshots.delete(key);
+          this.detailSnapshots.set(key, summary);
+          if (this.detailSnapshots.size > 16)
+            this.detailSnapshots.delete(this.detailSnapshots.keys().next().value!);
+        }
+        return summary;
+      })
+      .finally(() => this.detailLoads.delete(key));
+    this.detailLoads.set(key, future);
+    return future;
+  }
+
+  private async fetchCwlDetail(tag: string, season: string): Promise<WarCwl> {
+    const response = await Effect.runPromise(
+      this.api.executeStatus(ProxyCurrentLeagueGroupEndpoint, {
+        path: { clanTag: tag },
+        query: {},
+        body: {},
+      }),
+    );
+    if (!response.ok || response.value.season !== season) {
+      return (await this.loadLinkedCwl(tag, season)).summary;
+    }
+    const group = response.value;
+    const tags = [
+      ...new Set(
+        records(group.rounds).flatMap((round) =>
+          (Array.isArray(round.warTags) ? round.warTags : [])
+            .map(String)
+            .filter((warTag) => warTag && warTag !== '#0'),
+        ),
+      ),
+    ];
+    if (tags.length > 64) throw new Error('CWL group contains too many wars');
+    const wars: WarInfo[] = [];
+    for (let index = 0; index < tags.length; index += 8) {
+      const batch = await Promise.all(
+        tags.slice(index, index + 8).map((warTag) => this.fetchCwlWar(warTag)),
+      );
+      if (batch.some((war) => !war || !isFullWar(war))) throw new Error('CWL round unavailable');
+      wars.push(...(batch as WarInfo[]));
+    }
+    return new WarCwl(
+      tag,
+      false,
+      true,
+      new WarInfo('notInWar'),
+      enrichCwlDetail(group, wars),
+      wars,
+    );
+  }
+
   /** Stored groups contain hydrated wars inside each round, unlike the live proxy. */
   async loadLinkedCwl(
     tag: string,
@@ -147,11 +218,23 @@ export class WarCwlService {
     const wars: WarInfo[] = [];
     const rounds = records(group.rounds).map((round) => ({
       warTags: records(round.warTags).map((item) => {
-        if (item.clan && item.opponent) wars.push(WarInfo.fromJson({ ...item, war_tag: item.tag }));
+        if (item.clan && item.opponent)
+          wars.push(WarInfo.fromJson({ ...item, war_tag: item.tag, warType: 'cwl' }));
         return string(item.tag);
       }),
     }));
-    const summary = cwlResult(tag, { ...group, rounds }, wars);
+    const missingTags = [...new Set(rounds.flatMap((round) => round.warTags))].filter(
+      (warTag) => warTag && warTag !== '#0' && !wars.some((war) => war.tag === warTag),
+    );
+    if (missingTags.length) throw new Error('Stored CWL round unavailable');
+    const summary = new WarCwl(
+      tag,
+      false,
+      true,
+      new WarInfo('notInWar'),
+      enrichCwlDetail({ ...group, rounds }, wars),
+      wars,
+    );
     if (
       !summary.leagueInfo?.clans.some((clan) => normalizeWarTag(clan.tag) === normalizeWarTag(tag))
     ) {

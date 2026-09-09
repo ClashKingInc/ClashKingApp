@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Liittyi",
   "playerJoinLeaveLeft": "Poistui",
   "playerJoinLeaveNoHistory": "Liittymis- ja poistumishistoriaa ei ole",
-  "playerJoinLeaveNoClanTotals": "Klaanien yhteenvetoa ei ole"
+  "playerJoinLeaveNoClanTotals": "Klaanien yhteenvetoa ei ole",
+  "cwlRegisteredRoster": "Ilmoitettu kokoonpano",
+  "cwlMatches": "Ottelut",
+  "cwlNextMatchup": "Seuraava ottelu",
+  "cwlOtherMatches": "Muut ottelut",
+  "cwlOutlook": "Kauden näkymät",
+  "cwlFirstPlace": "Ensimmäinen sija",
+  "cwlTopTwo": "Kaksi parasta",
+  "cwlRemainingOpponents": "Jäljellä olevat vastustajat",
+  "cwlWinBonusNote": "Tähtiin sisältyy 10 bonustähteä jokaisesta päättyneestä voitosta.",
+  "cwlEstimateNote": "Arviot perustuvat päättyneisiin sotiin ja jäljellä oleviin vastustajiin, eivät kokoonpanomuutoksiin. Jokaiselta klaanilta tarvitaan vähintään kaksi päättynyttä sotaa. Arvioita ei ole kalibroitu; noususäännöt vaihtelevat liigoittain.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# tunti} other {# tuntia}}} other {{count, plural, one {# minuutti} other {# minuuttia}}}}"
 }

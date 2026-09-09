@@ -6,8 +6,13 @@ import {
 } from './game-data-localization';
 import { applyGameDataBundle } from './game-data-normalization';
 import { gameDataState, isRecord, type JsonRecord } from './game-data-state';
-import { applyAssetManifest, ASSET_MANIFEST_URL, validateAssetManifest } from '../assets/asset-manifest';
-import { FileUpdateIndex } from '../assets/file-update-index';
+import {
+  applyAssetManifest,
+  ASSET_MANIFEST_URL,
+  validateAssetManifest,
+  manifestData,
+} from '../assets/asset-manifest';
+import { FileUpdateIndex, type FileIndexStorage } from '../assets/file-update-index';
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto';
 
 export const STATIC_DATA_URL = 'https://assets.clashk.ing/static_data';
@@ -32,10 +37,7 @@ export interface GameDataFileStore {
   write(fileName: string, contents: string): Promise<void>;
 }
 
-export interface GameDataPreferences {
-  getString(key: string): Promise<string | null>;
-  setString(key: string, value: string): Promise<void>;
-}
+export type GameDataPreferences = FileIndexStorage;
 
 export interface GameDataServiceOptions {
   readonly fileIndex?: FileUpdateIndex;
@@ -72,8 +74,13 @@ const MANIFEST_CACHE: CachedJsonAsset = {
 };
 
 function dataCache(fileName: string, sha?: string): CachedJsonAsset {
-  return { label: fileName, fileName, sha,
-    lastModifiedKey: fileName + '.lastModified', cachedAtKey: fileName + '.cachedAt' };
+  return {
+    label: fileName,
+    fileName,
+    sha,
+    lastModifiedKey: fileName + '.lastModified',
+    cachedAtKey: fileName + '.cachedAt',
+  };
 }
 
 export class GameDataService {
@@ -99,6 +106,7 @@ export class GameDataService {
   }
 
   async loadGameData(locale?: AppLocale): Promise<void> {
+    await this.fileIndex.hydrate();
     const preferredLocale = locale ?? (await this.resolvePreferredLocale());
     await Promise.all([this.loadBundle(), this.loadTranslationsForLocale(preferredLocale)]);
     void this.refreshGameDataIfChanged(preferredLocale);
@@ -112,16 +120,24 @@ export class GameDataService {
   async refreshGameDataIfChanged(locale?: AppLocale): Promise<void> {
     const preferred = clashyLocaleCodeForAppLocale(locale ?? (await this.resolvePreferredLocale()));
     const manifest = await this.refreshStaticDataIfChanged();
-    const entry = Array.isArray(manifest?.data) ? manifest.data.find((item) =>
-      isRecord(item) && item.path === `translations/${preferred}.json`) : undefined;
+    const entry = manifest
+      ? manifestData(manifest).translations.find(
+          (item) => item.path === `translations/${preferred}.json`,
+        )
+      : undefined;
     if (preferred !== 'EN') {
-      await this.refreshAsset(dataCache(`translations_${preferred}.json`, isRecord(entry) && typeof entry.sha === 'string' ? entry.sha : undefined), `${TRANSLATIONS_URL}/${preferred}.json`)
-            .then((data) => {
-              // A locale switch during the request must not restore the old language.
-              if (this.desiredLocale === preferred)
-                applyGameTranslations(data, preferred);
-            })
-            .catch(() => undefined);
+      await this.refreshAsset(
+        dataCache(
+          `translations_${preferred}.json`,
+          isRecord(entry) && typeof entry.sha === 'string' ? entry.sha : undefined,
+        ),
+        `${TRANSLATIONS_URL}/${preferred}.json`,
+      )
+        .then((data) => {
+          // A locale switch during the request must not restore the old language.
+          if (this.desiredLocale === preferred) applyGameTranslations(data, preferred);
+        })
+        .catch(() => undefined);
     }
   }
 
@@ -202,8 +218,10 @@ export class GameDataService {
 
   private async loadTranslationsOnce(clashyLocale: string): Promise<void> {
     try {
-      const data = await this.loadCachedJsonAsset(dataCache(`translations_${clashyLocale}.json`),
-        `${TRANSLATIONS_URL}/${clashyLocale}.json`);
+      const data = await this.loadCachedJsonAsset(
+        dataCache(`translations_${clashyLocale}.json`),
+        `${TRANSLATIONS_URL}/${clashyLocale}.json`,
+      );
       if (this.desiredLocale === clashyLocale) applyGameTranslations(data, clashyLocale);
     } catch {
       if (this.desiredLocale === clashyLocale) clearGameTranslations(clashyLocale);
@@ -211,33 +229,40 @@ export class GameDataService {
   }
 
   private async noticeManifest(manifest: JsonRecord): Promise<void> {
-    const available = new Map([...validateAssetManifest(manifest)].map(([path, image]) => [path, image.sha]));
-    for (const item of manifest.data as { path: string; sha: string }[]) available.set(item.path, item.sha);
+    const available = new Map(
+      [...validateAssetManifest(manifest)].map(([path, image]) => [path, image.sha]),
+    );
+    const data = manifestData(manifest);
+    for (const item of [...data.stats, ...data.translations]) available.set(item.path, item.sha);
     await this.fileIndex.notice(available);
   }
 
   private async loadSections(manifest: JsonRecord, refresh: boolean): Promise<void> {
-    if (!Array.isArray(manifest.data)) throw new Error('Missing static data index');
-    const entries = manifest.data.filter((entry): entry is JsonRecord =>
-      isRecord(entry) && typeof entry.path === 'string' && /^static_data\/[a-z_]+\.json$/.test(entry.path));
+    const entries = manifestData(manifest).stats;
     if (!entries.length) throw new Error('Empty static data index');
     const bundle: JsonRecord = {};
     // Bound concurrency instead of starting every section request at once.
     for (let offset = 0; offset < entries.length; offset += 4) {
-      await Promise.all(entries.slice(offset, offset + 4).map(async (entry) => {
-        if (typeof entry.sha !== 'string' || !/^[a-f0-9]{64}$/.test(entry.sha))
-          throw new Error('Invalid section hash');
-        const path = String(entry.path);
-        const name = path.slice('static_data/'.length, -5);
-        const asset = dataCache(`static_data_${name}.json`, entry.sha);
-        const url = `https://assets.clashk.ing/${path}`;
-        const cached = await this.readCache(asset).catch(() => null);
-        if (cached?.sha === entry.sha) await this.reconcileSavedFile(asset, url, cached);
-        const data = cached?.sha === entry.sha ? parseJsonObject(cached.body, asset.label)
-          : await (refresh ? this.refreshAsset(asset, url) : this.loadCachedJsonAsset(asset, url));
-        if (!Array.isArray(data.items)) throw new Error('Invalid static data section');
-        bundle[name] = data.items;
-      }));
+      await Promise.all(
+        entries.slice(offset, offset + 4).map(async (entry) => {
+          if (typeof entry.sha !== 'string' || !/^[a-f0-9]{64}$/.test(entry.sha))
+            throw new Error('Invalid section hash');
+          const path = String(entry.path);
+          const name = path.slice('static_data/'.length, -5);
+          const asset = dataCache(`static_data_${name}.json`, entry.sha);
+          const url = `https://assets.clashk.ing/${path}`;
+          const cached = await this.readCache(asset).catch(() => null);
+          if (cached?.sha === entry.sha) await this.reconcileSavedFile(asset, url, cached);
+          const data =
+            cached?.sha === entry.sha
+              ? parseJsonObject(cached.body, asset.label)
+              : await (refresh
+                  ? this.refreshAsset(asset, url)
+                  : this.loadCachedJsonAsset(asset, url));
+          if (!Array.isArray(data.items)) throw new Error('Invalid static data section');
+          bundle[name] = data.items;
+        }),
+      );
     }
     // Never replace the in-memory bundle with a partially downloaded set.
     applyGameDataBundle(bundle);
@@ -258,8 +283,13 @@ export class GameDataService {
             typeof value.checkedAt === 'string'
           ) {
             this.validateAssetBody(asset, value.body);
-            return { body: value.body, etag: value.etag, sha: typeof value.sha === 'string' ? value.sha : undefined,
-              lastModified: value.lastModified, checkedAt: value.checkedAt };
+            return {
+              body: value.body,
+              etag: value.etag,
+              sha: typeof value.sha === 'string' ? value.sha : undefined,
+              lastModified: value.lastModified,
+              checkedAt: value.checkedAt,
+            };
           }
         } catch {
           /* Fall back to the previous unversioned cache. */
@@ -293,10 +323,14 @@ export class GameDataService {
     await this.preferences.setString(asset.fileName + '.slot', slot);
   }
 
-  private async reconcileSavedFile(asset: CachedJsonAsset, url: string, cache: JsonCache): Promise<void> {
+  private async reconcileSavedFile(
+    asset: CachedJsonAsset,
+    url: string,
+    cache: JsonCache,
+  ): Promise<void> {
     if (!cache.sha || asset === MANIFEST_CACHE) return;
     const local = await this.fileIndex.get(url);
-    if (local?.sha === cache.sha && local.pendingSha !== cache.sha) return;
+    if (local?.installedSha === cache.sha && local.pendingSha !== cache.sha) return;
     await this.fileIndex.prepare(url, new URL(url).pathname.slice(1));
     const slot = await this.preferences.getString(asset.fileName + '.slot');
     if (slot) await this.fileIndex.commit(url, asset.fileName + '.' + slot, cache.sha);
@@ -307,13 +341,17 @@ export class GameDataService {
     if (asset === MANIFEST_CACHE) validateAssetManifest(data);
     else if (asset.fileName.startsWith('static_data_') && !Array.isArray(data.items))
       throw new Error('Invalid static data section');
-    else if (asset.fileName.startsWith('translations_') && Object.values(data).some((value) => typeof value !== 'string'))
+    else if (
+      asset.fileName.startsWith('translations_') &&
+      Object.values(data).some((value) => typeof value !== 'string')
+    )
       throw new Error('Invalid translation catalog');
   }
 
   private async loadCachedJsonAsset(asset: CachedJsonAsset, url: string): Promise<JsonRecord> {
     const cache = await this.readCache(asset).catch(() => null);
-    const pending = asset === MANIFEST_CACHE ? undefined : (await this.fileIndex.get(url))?.pendingSha;
+    const pending =
+      asset === MANIFEST_CACHE ? undefined : (await this.fileIndex.get(url))?.pendingSha;
     if (cache !== null && !pending && (!asset.sha || cache.sha === asset.sha)) {
       return parseJsonObject(cache.body, asset.label);
     }
@@ -341,15 +379,19 @@ export class GameDataService {
 
   private async refreshAssetOnce(asset: CachedJsonAsset, url: string): Promise<JsonRecord> {
     const cache = await this.readCache(asset).catch(() => null);
-    const local = asset === MANIFEST_CACHE ? undefined : await this.fileIndex.prepare(url,
-      new URL(url).pathname.slice(1), asset.sha);
+    const local =
+      asset === MANIFEST_CACHE
+        ? undefined
+        : await this.fileIndex.prepare(url, new URL(url).pathname.slice(1), asset.sha);
     const expectedSha = local?.pendingSha ?? asset.sha;
     if (cache?.sha && cache.sha === expectedSha) await this.reconcileSavedFile(asset, url, cache);
     const now = this.now().getTime();
     const attemptKey = url + (expectedSha ?? '');
     const lastAttempt = this.attempts.get(attemptKey);
     if (
-      (cache && (!expectedSha || cache.sha === expectedSha) && !this.cacheNeedsRefresh(cache.checkedAt)) ||
+      (cache &&
+        (!expectedSha || cache.sha === expectedSha) &&
+        !this.cacheNeedsRefresh(cache.checkedAt)) ||
       (lastAttempt !== undefined &&
         now >= lastAttempt &&
         now - lastAttempt < GAME_DATA_CACHE_FRESHNESS_MS)
@@ -372,8 +414,11 @@ export class GameDataService {
       });
       let record: JsonCache;
       if (response.status === 304 && cache) {
-        if (expectedSha && cache.sha !== expectedSha &&
-            await digestStringAsync(CryptoDigestAlgorithm.SHA256, cache.body) !== expectedSha)
+        if (
+          expectedSha &&
+          cache.sha !== expectedSha &&
+          (await digestStringAsync(CryptoDigestAlgorithm.SHA256, cache.body)) !== expectedSha
+        )
           throw new Error('Section is not updated yet');
         record = { ...cache, sha: expectedSha ?? cache.sha, checkedAt: this.now().toISOString() };
       } else if (response.status === 200) {
@@ -393,12 +438,14 @@ export class GameDataService {
       const decoded = parseJsonObject(record.body, asset.label);
       if (asset === MANIFEST_CACHE) await this.noticeManifest(decoded);
       // A valid downloaded body is usable even if persistence is unavailable.
-      await this.saveCache(asset, record).then(async () => {
-        if (asset !== MANIFEST_CACHE && record.sha) {
-          const slot = await this.preferences.getString(asset.fileName + '.slot');
-          await this.fileIndex.commit(url, asset.fileName + '.' + slot, record.sha);
-        }
-      }).catch(() => undefined);
+      await this.saveCache(asset, record)
+        .then(async () => {
+          if (asset !== MANIFEST_CACHE && record.sha) {
+            const slot = await this.preferences.getString(asset.fileName + '.slot');
+            await this.fileIndex.commit(url, asset.fileName + '.' + slot, record.sha);
+          }
+        })
+        .catch(() => undefined);
       return decoded;
     } catch (error) {
       if (cache) return parseJsonObject(cache.body, asset.label);

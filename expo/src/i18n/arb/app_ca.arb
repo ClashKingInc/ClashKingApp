@@ -4671,5 +4671,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Plantilla inscrita",
+  "cwlMatches": "Enfrontaments",
+  "cwlNextMatchup": "Pròxim enfrontament",
+  "cwlOtherMatches": "Altres enfrontaments",
+  "cwlOutlook": "Previsió de temporada",
+  "cwlFirstPlace": "Primer lloc",
+  "cwlTopTwo": "Dos primers",
+  "cwlRemainingOpponents": "Rivals restants",
+  "cwlWinBonusNote": "Les estrelles inclouen 10 estrelles extra per victòria completada.",
+  "cwlEstimateNote": "Les estimacions utilitzen guerres completades i rivals restants, no canvis en les alineacions. Calen almenys dues guerres completades per clan. Són estimacions no calibrades; les regles de promoció varien segons la lliga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# hores}}} other {{count, plural, one {# minut} other {# minuts}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

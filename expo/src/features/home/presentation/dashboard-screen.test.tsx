@@ -6,6 +6,10 @@ import { CKThemeProvider } from '../../../ui';
 import type { HomeDashboardActions } from './contracts';
 import { DashboardScreen } from './dashboard-screen';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+}));
+
 const mockHomeDrag = jest.fn();
 
 jest.mock('react-native-draggable-flatlist', () => {

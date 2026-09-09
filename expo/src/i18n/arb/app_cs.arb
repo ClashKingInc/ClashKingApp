@@ -4671,5 +4671,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Registrovaná soupiska",
+  "cwlMatches": "Souboje",
+  "cwlNextMatchup": "Příští souboj",
+  "cwlOtherMatches": "Ostatní souboje",
+  "cwlOutlook": "Výhled sezóny",
+  "cwlFirstPlace": "První místo",
+  "cwlTopTwo": "První dva",
+  "cwlRemainingOpponents": "Zbývající soupeři",
+  "cwlWinBonusNote": "Hvězdy zahrnují 10 bonusových hvězd za každou dokončenou výhru.",
+  "cwlEstimateNote": "Odhady vycházejí z dokončených válek a zbývajících soupeřů, ne ze změn sestav. Každý klan musí mít alespoň dvě dokončené války. Odhady nejsou kalibrované; pravidla postupu se liší podle ligy.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hodina} few {# hodiny} other {# hodin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "加入",
   "playerJoinLeaveLeft": "脱退",
   "playerJoinLeaveNoHistory": "加入 / 脱退履歴はありません",
-  "playerJoinLeaveNoClanTotals": "クラン別合計はありません"
+  "playerJoinLeaveNoClanTotals": "クラン別合計はありません",
+  "cwlRegisteredRoster": "登録メンバー",
+  "cwlMatches": "対戦",
+  "cwlNextMatchup": "次の対戦",
+  "cwlOtherMatches": "その他の対戦",
+  "cwlOutlook": "シーズンの見通し",
+  "cwlFirstPlace": "1位",
+  "cwlTopTwo": "上位2位",
+  "cwlRemainingOpponents": "残りの対戦相手",
+  "cwlWinBonusNote": "終了した対戦での勝利ごとにボーナスの星10個を含みます。",
+  "cwlEstimateNote": "推定は終了した対戦と残りの相手に基づき、編成変更は考慮しません。各クランに最低2回の終了した対戦が必要です。精度の検証はされていません。昇格ルールはリーグごとに異なります。",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# 時間} other {# 時間}}} other {{count, plural, one {# 分} other {# 分}}}}"
 }

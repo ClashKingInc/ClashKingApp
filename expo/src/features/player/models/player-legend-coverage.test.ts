@@ -3,6 +3,7 @@ import type { PlayerEquipment } from './player-items';
 import {
   LegendHeroGear,
   PlayerLegendAttack,
+  PlayerLegendBattlelog,
   PlayerLegendClan,
   PlayerLegendDay,
   PlayerLegendRanking,
@@ -64,6 +65,49 @@ const seasonJson = {
 };
 
 describe('legend model behavior', () => {
+  it('represents a closed detailed day with real attacks, automatic defenses, and loot', () => {
+    const battlelog = PlayerLegendBattlelog.fromJson({
+      tag: '#P1',
+      day: '2026-08-01',
+      attackTrophies: 40,
+      defenseTrophies: -12,
+      trophies: 28,
+      attacks: [
+        {
+          time: '2026-08-01T12:00:00Z',
+          duration: 90,
+          townHallLevel: 18,
+          opponent: { tag: '#O', name: 'Opponent', townHallLevel: 18 },
+          stars: 3,
+          destructionPercentage: 100,
+          lootedResources: { gold: 100, elixir: 200, darkElixir: 3 },
+          armyHash: '0'.repeat(64),
+          shareCode: null,
+          trophies: 40,
+        },
+      ],
+      defenses: [{ trophies: -12, automatic: true }],
+    });
+
+    expect(battlelog).toMatchObject({
+      closed: true,
+      trophyChange: 28,
+      lootedResources: { gold: 100, elixir: 200, darkElixir: 3 },
+    });
+    expect(battlelog.attacks[0]).toMatchObject({
+      automatic: false,
+      opponentTag: '#O',
+      stars: 3,
+      shareCode: null,
+      items: [],
+    });
+    expect(battlelog.defenses[0]).toMatchObject({
+      automatic: true,
+      trophies: -12,
+      stars: null,
+    });
+  });
+
   it('parses attacks and days, calculates remaining attacks, usage, and profile-backed gear', () => {
     gameDataState.gearsData.gears = {
       Fireball: { maxLevel: 27, levels: [{ level: 12 }] },
@@ -140,7 +184,13 @@ describe('legend model behavior', () => {
       clan: { tag: '#C', name: 'Clan', badgeUrls: { small: 'small.png' } },
     });
     const second = PlayerLegendRanking.fromJson({ season: '2026-07-15', trophies: 5400 });
-    expect(first.clan).toEqual(new PlayerLegendClan('#C', 'Clan', { small: 'small.png' }));
+    expect(first.clan).toEqual(
+      new PlayerLegendClan('#C', 'Clan', {
+        small: 'https://badges.clashk.ing/C.avif',
+        medium: 'https://badges.clashk.ing/C.avif',
+        large: 'https://badges.clashk.ing/C.avif',
+      }),
+    );
 
     const spots = SpotData.fromLegendRankings([first, second]);
     expect(spots.spots.map((spot) => spot.y)).toEqual([5400, 5500]);

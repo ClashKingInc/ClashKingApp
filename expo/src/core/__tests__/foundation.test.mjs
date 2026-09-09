@@ -9,14 +9,16 @@ import {
   meetsMinimumVersion,
   stableFeatureBucket,
 } from '../feature-flags/feature-flags.ts';
-import {
-  parseNotificationPreferences,
-} from '../dto/notification-preferences.ts';
+import { parseNotificationPreferences } from '../dto/notification-preferences.ts';
 import { serializeStoredAuthSession, tryParseStoredAuthSession } from '../dto/auth-session.ts';
 
 test('API environment aliases and overrides use supported environments', () => {
   assert.equal(apiEnvironmentForName('development'), 'development');
   assert.equal(apiEnvironmentForName('anything'), 'production');
+  assert.equal(
+    resolveApiConfiguration({ CK_API_ENV: 'local' }).apiBaseUrl,
+    'http://localhost:8787',
+  );
   assert.deepEqual(
     resolveApiConfiguration({
       CK_API_ENV: 'local',

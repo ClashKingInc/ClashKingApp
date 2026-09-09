@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { localImageCache } from '../../../core/assets/local-asset-cache';
+import { useEffect, useMemo, useReducer, useState, useSyncExternalStore } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import * as Clipboard from 'expo-clipboard';
 import { File, Paths } from 'expo-file-system';
@@ -61,6 +62,11 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
       ['main', 'notifications', 'faq', 'translation', 'privacy', 'licenses'],
       'main',
     ),
+  );
+  const imageCacheBytes = useSyncExternalStore(
+    localImageCache.subscribe,
+    localImageCache.getSize,
+    localImageCache.getSize,
   );
   const [versionLabel, setVersionLabel] = useState(t('generalLoading'));
   const [alternateIconsSupported, setAlternateIconsSupported] = useState(false);
@@ -263,6 +269,7 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
         selectedAppIcon={selectedAppIcon}
         themeMode={appState.themePreference}
         user={runtime.auth.state.currentUser!}
+        imageCacheBytes={imageCacheBytes}
         versionLabel={versionLabel}
         warWidgetClans={widgetClans}
         warWidgetsEnabled={appState.isFeatureEnabled(APP_FEATURE_FLAGS.warWidgets)}

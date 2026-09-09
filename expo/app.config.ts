@@ -1,6 +1,6 @@
 import type { ExpoConfig, ConfigContext } from 'expo/config';
 
-const version = process.env.CK_APP_VERSION?.trim() || '0.3.5';
+const version = process.env.CK_APP_VERSION?.trim() || '0.4.2';
 const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '25';
 const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
 const updateChannel = process.env.CK_RELEASE_TRACK?.trim() || 'production';

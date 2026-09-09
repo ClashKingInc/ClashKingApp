@@ -1,3 +1,4 @@
+import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
@@ -12,7 +13,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { Bookmark, RefreshCw, UserCircle } from 'lucide-react-native';
+import { Bookmark, UserCircle } from 'lucide-react-native';
 import DraggableFlatList, {
   ScaleDecorator,
   type RenderItemParams,
@@ -66,9 +67,9 @@ export function PlayersScreen({
     ),
   );
   const [refreshing, setRefreshing] = useState(false);
+  const pullRefresh = usePullRefreshHint();
   const [verification, setVerification] = useState<Player>();
   const [loadingBookmark, setLoadingBookmark] = useState(false);
-  const [, setRefreshMinute] = useState(0);
   const requestedBookmarks = useRef(new Set<string>());
   const rosters = useMemo(() => buildPlayerRosters(model), [model]);
   useEffect(() => {
@@ -79,11 +80,6 @@ export function PlayersScreen({
     missing.forEach((tag) => requestedBookmarks.current.add(normalizeRosterTag(tag)));
     void actions.hydrateBookmarkedPlayers(missing);
   }, [actions, rosters.missingBookmarkTags]);
-  useEffect(() => {
-    if (!model.lastRefresh) return;
-    const timer = setInterval(() => setRefreshMinute((value) => value + 1), 60_000);
-    return () => clearInterval(timer);
-  }, [model.lastRefresh]);
   const refresh = async () => {
     setRefreshing(true);
     try {
@@ -159,16 +155,6 @@ export function PlayersScreen({
   };
   const listHeader = (
     <>
-      {model.lastRefresh ? (
-        <View style={styles.refresh}>
-          <RefreshCw size={12} color={colorWithAlpha(theme.onSurface, 0.6)} />
-          <CKText role="bodySmall" style={{ color: colorWithAlpha(theme.onSurface, 0.6) }}>
-            {t('generalLastRefresh', {
-              time: formatLastRefresh(model.lastRefresh, t, locale),
-            })}
-          </CKText>
-        </View>
-      ) : null}
       <View style={styles.segmentWrap}>
         <PlayerRosterControl
           mode={mode}
@@ -212,6 +198,10 @@ export function PlayersScreen({
     >
       {desktop ? (
         <ScrollView
+          onScroll={pullRefresh.onScroll}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
+          scrollEventThrottle={16}
           alwaysBounceVertical
           contentContainerStyle={{ paddingHorizontal: horizontal, paddingBottom: 32 }}
           refreshControl={refreshControl}
@@ -229,6 +219,9 @@ export function PlayersScreen({
         </ScrollView>
       ) : (
         <DraggableFlatList
+          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
           activationDistance={8}
           alwaysBounceVertical
           data={entries}
@@ -285,6 +278,15 @@ export function PlayersScreen({
           setVerification(undefined);
           void actions.refreshAccounts();
         }}
+      />
+      <PullRefreshHint
+        distance={pullRefresh.distance}
+        refreshing={refreshing}
+        label={
+          model.lastRefresh
+            ? t('generalLastRefresh', { time: formatLastRefresh(model.lastRefresh, t, locale) })
+            : undefined
+        }
       />
     </SafeAreaView>
   );
@@ -426,13 +428,6 @@ function PlayerRosterControl({
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  refresh: {
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
   segmentWrap: { height: 74, paddingTop: 8, paddingBottom: 14, justifyContent: 'center' },
   segment: {
     height: 32,

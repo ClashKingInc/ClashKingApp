@@ -162,7 +162,7 @@ export class PushNotificationService {
       }
 
       await this.cacheToken(token);
-      if (register) void this.registerCurrentDeviceToken({ token });
+      if (register) await this.registerCurrentDeviceToken({ token });
       return this.setResult({ state: 'ready', token });
     } catch (error) {
       await this.report('initialize', error);

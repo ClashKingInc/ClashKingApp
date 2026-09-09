@@ -208,18 +208,60 @@ export function CwlInfoRoot({
   openClan,
   openPlayer,
 }: CwlInfoRootProps) {
+  const runtime = useAppRuntime();
+  const { t } = useI18n();
+  const [detail, setDetail] = useState<WarCwl | undefined>(() =>
+    runtime.wars.getCwlDetail(clanTag, summary.leagueInfo?.season ?? ''),
+  );
+  const [completedKey, setCompletedKey] = useState('');
+  const [failureKey, setFailureKey] = useState('');
+  const [revision, setRevision] = useState(0);
+  const season = summary.leagueInfo?.season ?? '';
+  const requestKey = `${clanTag}:${season}:${revision}`;
+  const loading = completedKey !== requestKey;
+  const failed = failureKey === requestKey;
+  useEffect(() => {
+    let active = true;
+    void runtime.wars
+      .loadCwlDetail(clanTag, season)
+      .then((loaded) => {
+        if (active) setDetail(loaded);
+      })
+      .catch(() => {
+        if (active) setFailureKey(requestKey);
+      })
+      .finally(() => {
+        if (active) setCompletedKey(requestKey);
+      });
+    return () => {
+      active = false;
+    };
+  }, [runtime, clanTag, season, requestKey]);
+  const matchingDetail =
+    detail?.tag === clanTag && detail.leagueInfo?.season === season ? detail : undefined;
   const { actions, snackbar, dismissSnackbar } = useStandaloneWarActions(openClan, openPlayer);
   return (
     <View style={{ flex: 1 }}>
       <CwlScreen
-        summary={summary}
+        summary={matchingDetail ?? summary}
+        loading={loading && !matchingDetail}
+        failed={failed && !matchingDetail}
+        refreshing={loading}
+        onRefresh={() => setRevision((value) => value + 1)}
         clanTag={clanTag}
         warLeagueName={warLeagueName}
         actions={actions}
         onBack={onBack}
         onOpenWar={onOpenWar}
       />
-      <Snackbar avoidBottomNavigation message={snackbar} onDismiss={dismissSnackbar} />
+      <Snackbar
+        avoidBottomNavigation
+        message={failed && matchingDetail ? t('errorNetworkTitle') : snackbar}
+        onDismiss={() => {
+          setFailureKey('');
+          dismissSnackbar();
+        }}
+      />
     </View>
   );
 }

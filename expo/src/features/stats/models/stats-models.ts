@@ -1,10 +1,27 @@
 import type {
-  StatsArmiesRequest as StatsArmiesRequestContract,
-  StatsCwlRequest as StatsCwlRequestContract,
-  StatsItemsRequest as StatsItemsRequestContract,
-  StatsRankedRequest as StatsRankedRequestContract,
-  StatsWarRequest as StatsWarRequestContract,
+  ArmySearchEndpoint,
+  EndpointRequest,
+  StatsCwlEndpoint,
+  StatsRankedEndpoint,
+  StatsWarEndpoint,
 } from '@clashking/api-contracts/expo';
+
+type ArmySearchQueryContract = EndpointRequest<typeof ArmySearchEndpoint>['query'];
+type StatsCwlQueryContract = EndpointRequest<typeof StatsCwlEndpoint>['query'];
+interface StatsItemsQueryContract {
+  readonly startDate?: string;
+  readonly endDate?: string;
+  readonly townHallLevel?: number;
+  readonly opponentTownHallLevel?: number;
+  readonly equalTownHalls?: boolean;
+  readonly leagueTierId?: number;
+  readonly includeItems?: readonly string[];
+  readonly excludeItems?: readonly string[];
+  readonly minimumSampleSize: number;
+  readonly items: readonly string[];
+}
+type StatsRankedQueryContract = EndpointRequest<typeof StatsRankedEndpoint>['query'];
+type StatsWarQueryContract = EndpointRequest<typeof StatsWarEndpoint>['query'];
 
 export const StatsAudience = { battle: 'battle', world: 'world' } as const;
 export type StatsAudienceValue = (typeof StatsAudience)[keyof typeof StatsAudience];
@@ -28,6 +45,12 @@ export const StatsItemType = {
   equipment: 'equipment',
 } as const;
 export type StatsItemTypeValue = (typeof StatsItemType)[keyof typeof StatsItemType];
+const armyItemIdentityPattern =
+  /^(?:troop|super_troop|spell|siege_machine|hero|hero_equipment|pet):\d+$/u;
+
+export function isArmyItemIdentity(value: string): boolean {
+  return armyItemIdentityPattern.test(value.trim());
+}
 
 export class StatsDateFilter {
   constructor(
@@ -37,10 +60,10 @@ export class StatsDateFilter {
   get inclusiveDays(): number {
     return Math.round((utcDay(this.end) - utcDay(this.start)) / 86_400_000) + 1;
   }
-  toJson(): StatsRankedRequestContract['dates'] {
+  toQuery(): Pick<StatsRankedQueryContract, 'startDate' | 'endDate'> {
     return {
-      start_date: StatsDateFilter.formatDate(this.start),
-      end_date: StatsDateFilter.formatDate(this.end),
+      startDate: StatsDateFilter.formatDate(this.start),
+      endDate: StatsDateFilter.formatDate(this.end),
     };
   }
   static formatDate(value: Date): string {
@@ -53,12 +76,21 @@ export class StatsItemQuantityFilter {
     readonly minQuantity?: number,
     readonly maxQuantity?: number,
   ) {}
-  toJson(): NonNullable<StatsArmiesRequestContract['include_items']>[number] {
-    return {
-      item: this.item,
-      ...(this.minQuantity == null ? {} : { min_quantity: this.minQuantity }),
-      ...(this.maxQuantity == null ? {} : { max_quantity: this.maxQuantity }),
-    };
+  toStatsQueryValue(): string {
+    return [this.item.trim(), this.minQuantity, this.maxQuantity]
+      .map((value) => value ?? '')
+      .join(':')
+      .replace(/:+$/u, '');
+  }
+  toArmyQueryValue(): string {
+    const identity = this.item.trim();
+    if (!isArmyItemIdentity(identity)) {
+      throw new RangeError('Army items must use type:itemId.');
+    }
+    return [identity, this.minQuantity, this.maxQuantity]
+      .map((value) => value ?? '')
+      .join(':')
+      .replace(/:+$/u, '');
   }
 }
 export class StatsBattleFilters {
@@ -72,22 +104,20 @@ export class StatsBattleFilters {
     readonly excludeItems: readonly string[] = [],
     readonly minimumSampleSize = 100,
   ) {}
-  toJson(): Omit<StatsArmiesRequestContract, 'limit' | 'sort_by'> {
+  toQuery(): Omit<StatsItemsQueryContract, 'items'> {
     return {
-      dates: this.dates.toJson(),
-      ...(this.townHallLevel == null ? {} : { townhall_level: this.townHallLevel }),
+      ...this.dates.toQuery(),
+      ...(this.townHallLevel == null ? {} : { townHallLevel: this.townHallLevel }),
       ...(this.opponentTownHallLevel == null
         ? {}
-        : { opponent_townhall_level: this.opponentTownHallLevel }),
-      ...(this.equalTownHalls == null ? {} : { equal_townhalls: this.equalTownHalls }),
-      ...(this.rankedLeagueTierId == null
-        ? {}
-        : { ranked_league_tier_id: this.rankedLeagueTierId }),
+        : { opponentTownHallLevel: this.opponentTownHallLevel }),
+      ...(this.equalTownHalls == null ? {} : { equalTownHalls: this.equalTownHalls }),
+      ...(this.rankedLeagueTierId == null ? {} : { leagueTierId: this.rankedLeagueTierId }),
       ...(this.includeItems.length
-        ? { include_items: this.includeItems.map((item) => item.toJson()) }
+        ? { includeItems: this.includeItems.map((item) => item.toStatsQueryValue()) }
         : {}),
-      ...(this.excludeItems.length ? { exclude_items: [...this.excludeItems] } : {}),
-      minimum_sample_size: this.minimumSampleSize,
+      ...(this.excludeItems.length ? { excludeItems: [...this.excludeItems] } : {}),
+      minimumSampleSize: this.minimumSampleSize,
     };
   }
 }
@@ -95,13 +125,27 @@ export class StatsArmiesQuery {
   constructor(
     readonly filters: StatsBattleFilters,
     readonly limit = 25,
-    readonly sortBy: NonNullable<StatsArmiesRequestContract['sort_by']> = 'usage_rate',
+    readonly sortBy: NonNullable<ArmySearchQueryContract['sort']> = 'usage',
   ) {}
-  toJson(): StatsArmiesRequestContract {
+  toQuery(): ArmySearchQueryContract {
+    const identities = this.filters.includeItems.map((item) => item.item.trim().split(':'));
+    const heroIds = identities
+      .filter(([type]) => type === 'hero')
+      .map(([, id]) => id)
+      .filter(Boolean);
+    const equipmentIds = identities
+      .filter(([type]) => type === 'hero_equipment')
+      .map(([, id]) => id)
+      .filter(Boolean);
     return {
-      ...this.filters.toJson(),
+      'time[after]': StatsDateFilter.formatDate(this.filters.dates.start),
+      'time[before]': StatsDateFilter.formatDate(this.filters.dates.end),
+      ...(heroIds.length ? { heroIds: heroIds.join(',') } : {}),
+      ...(equipmentIds.length ? { equipmentIds: equipmentIds.join(',') } : {}),
+      minimumAttacks: this.filters.minimumSampleSize,
       limit: this.limit,
-      sort_by: this.sortBy,
+      sort: this.sortBy,
+      direction: 'desc',
     };
   }
 }
@@ -125,12 +169,8 @@ export class StatsItemSelector {
         StatsItemSelector.validEquipmentHeroes.has(this.hero?.trim() ?? ''))
     );
   }
-  toJson(): StatsItemsRequestContract['items'][number] {
-    return {
-      item: this.item.trim(),
-      type: this.type,
-      ...(this.hero?.trim() ? { hero: this.hero.trim() } : {}),
-    };
+  toQueryValue(): string {
+    return [this.type, this.item.trim(), this.hero?.trim()].filter(Boolean).join(':');
   }
 }
 export class StatsItemsQuery {
@@ -138,8 +178,11 @@ export class StatsItemsQuery {
     readonly filters: StatsBattleFilters,
     readonly items: readonly StatsItemSelector[],
   ) {}
-  toJson(): StatsItemsRequestContract {
-    return { ...this.filters.toJson(), items: this.items.map((item) => item.toJson()) };
+  toQuery(): StatsItemsQueryContract {
+    return {
+      ...this.filters.toQuery(),
+      items: this.items.map((item) => item.toQueryValue()),
+    };
   }
 }
 export class StatsRankedQuery {
@@ -148,11 +191,11 @@ export class StatsRankedQuery {
     readonly townHallLevel: number,
     readonly rankedLeagueTierId: number,
   ) {}
-  toJson(): StatsRankedRequestContract {
+  toQuery(): StatsRankedQueryContract {
     return {
-      dates: this.dates.toJson(),
-      townhall_level: this.townHallLevel,
-      ranked_league_tier_id: this.rankedLeagueTierId,
+      ...this.dates.toQuery(),
+      townHallLevel: this.townHallLevel,
+      leagueTierId: this.rankedLeagueTierId,
     };
   }
 }
@@ -163,14 +206,14 @@ export class StatsWarQuery {
     readonly opponentTownHallLevel?: number,
     readonly equalTownHalls = true,
   ) {}
-  toJson(): StatsWarRequestContract {
+  toQuery(): StatsWarQueryContract {
     return {
-      dates: this.dates.toJson(),
-      ...(this.townHallLevel == null ? {} : { townhall_level: this.townHallLevel }),
+      ...this.dates.toQuery(),
+      ...(this.townHallLevel == null ? {} : { townHallLevel: this.townHallLevel }),
       ...(this.opponentTownHallLevel == null
         ? {}
-        : { opponent_townhall_level: this.opponentTownHallLevel }),
-      equal_townhalls: this.equalTownHalls,
+        : { opponentTownHallLevel: this.opponentTownHallLevel }),
+      equalTownHalls: this.equalTownHalls,
     };
   }
 }
@@ -185,10 +228,10 @@ export class StatsCwlQuery extends StatsWarQuery {
   ) {
     super(dates, townHallLevel, opponentTownHallLevel, equalTownHalls);
   }
-  override toJson(): StatsCwlRequestContract {
+  override toQuery(): StatsCwlQueryContract {
     return {
-      ...super.toJson(),
-      ...(this.cwlLeagueId == null ? {} : { cwl_league_id: this.cwlLeagueId }),
+      ...super.toQuery(),
+      ...(this.cwlLeagueId == null ? {} : { cwlLeagueId: this.cwlLeagueId }),
       ...(this.seasons.length ? { seasons: [...this.seasons] } : {}),
     };
   }
@@ -217,6 +260,21 @@ export class StatsDailyPoint {
     readonly usageRate?: number,
   ) {}
   static fromJson(value: unknown): StatsDailyPoint {
+    const j = record(value);
+    return new StatsDailyPoint(
+      text(j.date),
+      integer(j.sampleSize),
+      decimal(j.averageStars),
+      decimal(j.averageDestruction),
+      decimal(j.zeroStarRate),
+      decimal(j.oneStarRate),
+      decimal(j.twoStarRate),
+      decimal(j.threeStarRate),
+      optionalInteger(j.useCount),
+      optionalDecimal(j.usageRate),
+    );
+  }
+  static fromOverviewJson(value: unknown): StatsDailyPoint {
     const j = record(value);
     return new StatsDailyPoint(
       text(j.date),
@@ -249,6 +307,21 @@ export class StatsMetrics {
     const j = record(value);
     return new StatsMetrics(
       j.available === true,
+      integer(j.sampleSize),
+      decimal(j.averageStars),
+      decimal(j.averageDestruction),
+      decimal(j.zeroStarRate),
+      decimal(j.oneStarRate),
+      decimal(j.twoStarRate),
+      decimal(j.threeStarRate),
+      list(j.daily).map(StatsDailyPoint.fromJson),
+      optionalDecimal(j.usageRate),
+    );
+  }
+  static fromOverviewJson(value: unknown): StatsMetrics {
+    const j = record(value);
+    return new StatsMetrics(
+      j.available === true,
       integer(j.sample_size),
       decimal(j.average_stars),
       decimal(j.average_destruction),
@@ -256,7 +329,7 @@ export class StatsMetrics {
       decimal(j.one_star_rate),
       decimal(j.two_star_rate),
       decimal(j.three_star_rate),
-      list(j.daily).map(StatsDailyPoint.fromJson),
+      list(j.daily).map(StatsDailyPoint.fromOverviewJson),
       optionalDecimal(j.usage_rate),
     );
   }
@@ -326,28 +399,50 @@ export class StatsOverviewResponse {
     return new StatsOverviewResponse(
       StatsDateRange.fromJson(j.date_range),
       StatsGlobalCounts.fromJson(j.counts),
-      StatsMetrics.fromJson(j.ranked),
-      StatsMetrics.fromJson(j.war),
-      StatsMetrics.fromJson(j.cwl),
+      StatsMetrics.fromOverviewJson(j.ranked),
+      StatsMetrics.fromOverviewJson(j.war),
+      StatsMetrics.fromOverviewJson(j.cwl),
     );
   }
 }
 export class StatsArmyResult {
   constructor(
-    readonly armyShareCode: string,
+    readonly armyShareCode: string | null,
     readonly armyItems: readonly string[],
     readonly armyCounts: Readonly<Record<string, number>>,
     readonly metrics: StatsMetrics,
   ) {}
   static fromJson(value: unknown): StatsArmyResult {
     const j = record(value);
+    const items = list(j.items).map((value) => {
+      const item = record(value);
+      return {
+        key: `${text(item.type)}:${integer(item.itemId)}`,
+        quantity: integer(item.quantity),
+      };
+    });
+    const starCounts = record(j.starCounts);
+    const attacks = integer(j.attacks);
     return new StatsArmyResult(
-      text(j.army_share_code),
-      list(j.army_items).map(text),
-      Object.fromEntries(
-        Object.entries(record(j.army_counts)).map(([key, count]) => [key, integer(count)]),
+      j.shareCode == null ? null : text(j.shareCode),
+      items.length ? items.map((item) => item.key) : [text(j.name)],
+      Object.fromEntries(items.map((item) => [item.key, item.quantity])),
+      new StatsMetrics(
+        attacks > 0,
+        attacks,
+        attacks === 0
+          ? 0
+          : (integer(starCounts.one) +
+              integer(starCounts.two) * 2 +
+              integer(starCounts.three) * 3) /
+              attacks,
+        decimal(j.averageDestruction),
+        attacks === 0 ? 0 : integer(starCounts.zero) / attacks,
+        attacks === 0 ? 0 : integer(starCounts.one) / attacks,
+        attacks === 0 ? 0 : integer(starCounts.two) / attacks,
+        attacks === 0 ? 0 : integer(starCounts.three) / attacks,
+        [],
       ),
-      StatsMetrics.fromJson(j),
     );
   }
 }
@@ -357,13 +452,10 @@ export class StatsArmiesResponse {
     readonly items: readonly StatsArmyResult[],
     readonly count: number,
   ) {}
-  static fromJson(value: unknown): StatsArmiesResponse {
+  static fromJson(value: unknown, dates = new StatsDateRange(null, null)): StatsArmiesResponse {
     const j = record(value);
-    return new StatsArmiesResponse(
-      StatsDateRange.fromJson(j.date_range),
-      list(j.items).map(StatsArmyResult.fromJson),
-      integer(j.count),
-    );
+    const items = list(j.items).map(StatsArmyResult.fromJson);
+    return new StatsArmiesResponse(dates, items, items.length);
   }
 }
 export class StatsItemResult {
@@ -380,10 +472,10 @@ export class StatsItemResult {
     return new StatsItemResult(
       text(j.item),
       text(j.type),
-      integer(j.use_count),
+      integer(j.useCount),
       StatsMetrics.fromJson(j),
       j.hero == null ? undefined : text(j.hero),
-      optionalDecimal(j.composition_share),
+      optionalDecimal(j.compositionShare),
     );
   }
 }
@@ -396,7 +488,7 @@ export class StatsItemsResponse {
   static fromJson(value: unknown): StatsItemsResponse {
     const j = record(value);
     return new StatsItemsResponse(
-      StatsDateRange.fromJson(j.date_range),
+      StatsDateRange.fromJson(j.dateRange),
       list(j.items).map(StatsItemResult.fromJson),
       integer(j.count),
     );
@@ -421,7 +513,7 @@ export class StatsPerformanceResponse {
   static fromJson(value: unknown): StatsPerformanceResponse {
     const j = record(value);
     return new StatsPerformanceResponse(
-      StatsDateRange.fromJson(j.date_range),
+      StatsDateRange.fromJson(j.dateRange),
       StatsMetrics.fromJson(j.metrics),
       list(j.breakdowns).map(StatsBreakdown.fromJson),
     );

@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "رجسٹرڈ فہرست",
+  "cwlMatches": "مقابلے",
+  "cwlNextMatchup": "اگلا مقابلہ",
+  "cwlOtherMatches": "دیگر مقابلے",
+  "cwlOutlook": "سیزن کا اندازہ",
+  "cwlFirstPlace": "پہلی پوزیشن",
+  "cwlTopTwo": "پہلی دو پوزیشنیں",
+  "cwlRemainingOpponents": "باقی مخالفین",
+  "cwlWinBonusNote": "ہر مکمل جیت کے 10 بونس ستارے شامل ہیں۔",
+  "cwlEstimateNote": "اندازے مکمل جنگوں اور باقی مخالفین پر مبنی ہیں، ٹیم کی تبدیلیوں پر نہیں۔ ہر کلین کی کم از کم دو جنگیں مکمل ہونی چاہئیں۔ یہ غیر مصدقہ اندازے ہیں؛ ترقی کے اصول لیگ کے لحاظ سے مختلف ہوتے ہیں۔",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# گھنٹہ} other {# گھنٹے}}} other {{count, plural, one {# منٹ} other {# منٹ}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

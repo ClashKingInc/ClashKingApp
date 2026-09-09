@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Заявленный состав",
+  "cwlMatches": "Матчи",
+  "cwlNextMatchup": "Следующий матч",
+  "cwlOtherMatches": "Другие матчи",
+  "cwlOutlook": "Прогноз сезона",
+  "cwlFirstPlace": "Первое место",
+  "cwlTopTwo": "Два первых места",
+  "cwlRemainingOpponents": "Оставшиеся соперники",
+  "cwlWinBonusNote": "Звёзды включают 10 бонусных звёзд за каждую завершённую победу.",
+  "cwlEstimateNote": "Оценки учитывают завершённые войны и оставшихся соперников, но не изменения составов. Нужно хотя бы две завершённые войны на клан. Оценки не откалиброваны; правила повышения зависят от лиги.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# час} few {# часа} other {# часов}}} other {{count, plural, one {# минута} few {# минуты} other {# минут}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

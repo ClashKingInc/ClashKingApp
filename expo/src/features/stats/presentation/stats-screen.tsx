@@ -52,6 +52,7 @@ import {
 } from '../../../ui';
 import { StatsLoadStatus, type StatsProvider } from '../data';
 import {
+  isArmyItemIdentity,
   StatsArmiesResponse,
   StatsAudience,
   StatsClanCountsResponse,
@@ -74,7 +75,6 @@ import {
 const battleSections = [
   StatsSection.ranked,
   StatsSection.armies,
-  StatsSection.items,
   StatsSection.war,
   StatsSection.cwl,
 ] as const;
@@ -337,14 +337,14 @@ function ArmiesSection({ provider, data }: { provider: StatsProvider; data: Stat
   const items = data.items.filter(
     (army) =>
       !needle ||
-      army.armyShareCode.toLowerCase().includes(needle) ||
+      (army.armyShareCode ?? '').toLowerCase().includes(needle) ||
       Object.keys(army.armyCounts).some((item) => item.toLowerCase().includes(needle)),
   );
   return (
     <Section>
       <BattleContext
         provider={provider}
-        summary={`${townHallSummary(provider.armiesTownHall, t)} · ${t('statsMinimumSample')} ${provider.armiesMinimumSample}`}
+        summary={`${t('statsMinimumSample')} ${provider.armiesMinimumSample}`}
         onFilters={() => setFilters(true)}
       />
       <SearchField value={query} onChange={setQuery} placeholder={t('statsSearchArmies')} />
@@ -394,7 +394,7 @@ function ArmiesSection({ provider, data }: { provider: StatsProvider; data: Stat
           <SectionTitle>{t('statsExactLoadouts')}</SectionTitle>
           {items.map((army, index) => (
             <MetricsCard
-              key={`${army.armyShareCode}-${index}`}
+              key={`${army.armyShareCode ?? army.armyItems.join(',')}-${index}`}
               title={t('statsExactComposition')}
               metrics={army.metrics}
               extra={
@@ -890,9 +890,6 @@ function BattleFilters({
   const [include, setInclude] = useState<readonly StatsItemQuantityFilter[]>(
     provider.armiesInclude,
   );
-  const [includeItem, setIncludeItem] = useState('');
-  const [includeMinimum, setIncludeMinimum] = useState('');
-  const [includeMaximum, setIncludeMaximum] = useState('');
   const [exclude, setExclude] = useState(provider.armiesExclude.join(', '));
   const [seasons, setSeasons] = useState(provider.cwlSeasons.join(', '));
   const [start, setStart] = useState(StatsDateFilter.formatDate(provider.dates.start));
@@ -924,7 +921,7 @@ function BattleFilters({
         exclude: exclude
           .split(',')
           .map((value) => value.trim())
-          .filter(Boolean),
+          .filter(isArmyItemIdentity),
       });
     else if (section === StatsSection.items) {
       provider.updateItemFilters({ townHall: townHall ?? null, leagueTier: league ?? null });
@@ -964,11 +961,8 @@ function BattleFilters({
     setEqual(true);
     setLeague(section === StatsSection.ranked ? 1 : undefined);
     setMinimum(100);
-    setSortBy('usage_rate');
+    setSortBy('usage');
     setInclude([]);
-    setIncludeItem('');
-    setIncludeMinimum('');
-    setIncludeMaximum('');
     setExclude('');
     setSeasons('');
     setResetItemSelectors(section === StatsSection.items);
@@ -1028,17 +1022,19 @@ function BattleFilters({
                 {dateError}
               </CKText>
             ) : null}
-            <ChoiceField
-              label={t('statsTownHall')}
-              value={townHall}
-              values={
-                section === StatsSection.ranked
-                  ? Array.from({ length: 12 }, (_, i) => 18 - i)
-                  : [undefined, ...Array.from({ length: 12 }, (_, i) => 18 - i)]
-              }
-              format={(value) => (value == null ? t('statsAllTownHalls') : `TH${value}`)}
-              onChange={setTownHall}
-            />
+            {section !== StatsSection.armies && section !== StatsSection.items ? (
+              <ChoiceField
+                label={t('statsTownHall')}
+                value={townHall}
+                values={
+                  section === StatsSection.ranked
+                    ? Array.from({ length: 12 }, (_, i) => 18 - i)
+                    : [undefined, ...Array.from({ length: 12 }, (_, i) => 18 - i)]
+                }
+                format={(value) => (value == null ? t('statsAllTownHalls') : `TH${value}`)}
+                onChange={setTownHall}
+              />
+            ) : null}
             {section === StatsSection.war || section === StatsSection.cwl ? (
               <>
                 <View style={styles.switchRow}>
@@ -1056,10 +1052,7 @@ function BattleFilters({
                 ) : null}
               </>
             ) : null}
-            {section === StatsSection.ranked ||
-            section === StatsSection.armies ||
-            section === StatsSection.items ||
-            section === StatsSection.cwl ? (
+            {section === StatsSection.ranked || section === StatsSection.cwl ? (
               <ChoiceField
                 label={section === StatsSection.cwl ? t('statsCwlLeague') : t('statsLeagueTier')}
                 value={league}
@@ -1115,104 +1108,17 @@ function BattleFilters({
                 <ChoiceField
                   label={t('statsSortBy')}
                   value={sortBy}
-                  values={['usage_rate', 'three_star_rate', 'average_stars', 'average_destruction']}
+                  values={['usage', 'tripleRate', 'averageDuration', 'zeroStarRate']}
                   format={(value) =>
-                    value === 'usage_rate'
+                    value === 'usage'
                       ? t('statsUsage')
-                      : value === 'three_star_rate'
+                      : value === 'tripleRate'
                         ? t('statsThreeStarRate')
-                        : value === 'average_stars'
-                          ? t('statsAverageStars')
-                          : t('statsAverageDestruction')
+                        : value === 'averageDuration'
+                          ? t('warAttacksDetailsDuration')
+                          : t('warStarsZero')
                   }
                   onChange={setSortBy}
-                />
-                <CKText role="labelLarge">{t('statsIncludeItems')}</CKText>
-                {include.map((item, index) => (
-                  <View key={`${item.item}-${index}`} style={styles.includeRow}>
-                    <CKText
-                      style={styles.grow}
-                    >{`${item.item} · ${item.minQuantity ?? 1}–${item.maxQuantity ?? '∞'}`}</CKText>
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel={t('presetsDelete')}
-                      onPress={() =>
-                        setInclude(include.filter((_, itemIndex) => itemIndex !== index))
-                      }
-                    >
-                      <X size={18} color={theme.onSurfaceVariant} />
-                    </Pressable>
-                  </View>
-                ))}
-                <View style={styles.dateInputs}>
-                  <TextInput
-                    value={includeItem}
-                    onChangeText={setIncludeItem}
-                    placeholder={t('statsItemId')}
-                    placeholderTextColor={theme.onSurfaceVariant}
-                    style={[
-                      styles.input,
-                      styles.grow,
-                      { color: theme.onSurface, borderColor: theme.outlineVariant },
-                    ]}
-                  />
-                  <TextInput
-                    value={includeMinimum}
-                    onChangeText={setIncludeMinimum}
-                    keyboardType="number-pad"
-                    placeholder={t('generalMinimum')}
-                    placeholderTextColor={theme.onSurfaceVariant}
-                    style={[
-                      styles.input,
-                      styles.quantityInput,
-                      { color: theme.onSurface, borderColor: theme.outlineVariant },
-                    ]}
-                  />
-                  <TextInput
-                    value={includeMaximum}
-                    onChangeText={setIncludeMaximum}
-                    keyboardType="number-pad"
-                    placeholder={t('generalMaximum')}
-                    placeholderTextColor={theme.onSurfaceVariant}
-                    style={[
-                      styles.input,
-                      styles.quantityInput,
-                      { color: theme.onSurface, borderColor: theme.outlineVariant },
-                    ]}
-                  />
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={t('statsAddItem')}
-                    onPress={() => {
-                      const item = includeItem.trim();
-                      if (!item) return;
-                      setInclude([
-                        ...include,
-                        new StatsItemQuantityFilter(
-                          item,
-                          parseOptionalInt(includeMinimum),
-                          parseOptionalInt(includeMaximum),
-                        ),
-                      ]);
-                      setIncludeItem('');
-                      setIncludeMinimum('');
-                      setIncludeMaximum('');
-                    }}
-                    style={styles.addButton}
-                  >
-                    <CKText role="titleMedium">+</CKText>
-                  </Pressable>
-                </View>
-                <CKText role="labelLarge">{t('statsExcludeItems')}</CKText>
-                <TextInput
-                  value={exclude}
-                  onChangeText={setExclude}
-                  placeholder="u_1, u_2"
-                  placeholderTextColor={theme.onSurfaceVariant}
-                  style={[
-                    styles.input,
-                    { color: theme.onSurface, borderColor: theme.outlineVariant },
-                  ]}
                 />
               </View>
             ) : null}
@@ -1747,10 +1653,6 @@ function parseLocalDate(value: string): Date | null {
     result.getDate() === day
     ? result
     : null;
-}
-function parseOptionalInt(value: string): number | undefined {
-  const parsed = Number.parseInt(value.trim(), 10);
-  return Number.isFinite(parsed) ? parsed : undefined;
 }
 function itemTypeLabel(value: StatsItemTypeValue, t: Translate): string {
   switch (value) {

@@ -200,7 +200,7 @@ describe('PlayerDetailScreen', () => {
     expect(playerHeaderClanIdentity(fallbackPlayer, '#CACHED')).toMatchObject({
       tag: '#CACHED',
       name: '#CACHED',
-      badgeUrl: '',
+      badgeUrl: 'https://badges.clashk.ing/CACHED.avif',
     });
     expect(screen.queryByText('|')).toBeNull();
     await fireEvent.press(screen.getByText('#CACHED'));

@@ -503,10 +503,8 @@ export function AuthenticatedRoot() {
             );
             if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
             if (!result.hasVerifiedAccount) throw new Error(t('homeVerifiedAccountRequiredBody'));
+            await runtime.accountBootstrap.initialize(user?.userId ?? null);
             closeSecondary();
-            void runtime.accountBootstrap
-              .initialize(user?.userId ?? null)
-              .catch((error: unknown) => reportException(error, 'accountSetup.hydration'));
           }}
           onContinue={async () => {
             const result = await refreshLinkedAccountsForCurrentAuth(
@@ -515,10 +513,8 @@ export function AuthenticatedRoot() {
             );
             if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
             if (!result.hasVerifiedAccount) throw new Error(t('homeVerifiedAccountRequiredBody'));
+            await runtime.accountBootstrap.initialize(user?.userId ?? null);
             closeSecondary();
-            void runtime.accountBootstrap
-              .initialize(user?.userId ?? null)
-              .catch((error: unknown) => reportException(error, 'accountSetup.hydration'));
           }}
           onOpenGameSettings={() =>
             openExternal('https://link.clashofclans.com/?action=OpenMoreSettings')

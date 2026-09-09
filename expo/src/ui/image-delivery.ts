@@ -1,15 +1,36 @@
+import { manifestImage } from '../core/assets/asset-manifest';
+
 export const ASSET_IMAGE_SIZES = [64, 128, 256, 512, 1024] as const;
 
+function requiredPixels(width: number, height: number, scale: number): number | undefined {
+  if (![width, height, scale].every((value) => Number.isFinite(value) && value > 0))
+    return undefined;
+  return Math.ceil(Math.max(width, height) * scale);
+}
+
 /** Only first-party raster images opt in. The caller retains the original fallback. */
-export function sizedAssetUrl(url: string, width: number, height: number, scale: number): string {
+export function sizedAssetUrl(
+  url: string,
+  width: number,
+  height: number,
+  scale: number,
+  preserveAnimation = false,
+): string {
   if (!url.startsWith('https://assets.clashk.ing/')) return url;
   const value = new URL(url);
   if (!/\.(png|webp|jpe?g|avif)$/i.test(value.pathname)) return url;
-  const pixels = Math.ceil(Math.max(width, height) * Math.max(1, scale));
-  const size = pixels > 0 ? (ASSET_IMAGE_SIZES.find((bound) => bound >= pixels) ?? 1024) : 1024;
+  const metadata = manifestImage(url);
+  // PNG, WebP and AVIF can contain animation. Until the manifest identifies a
+  // static source, use the original rather than probing a potentially animated file.
+  if (preserveAnimation || metadata?.animated || (!metadata && !/\.jpe?g$/i.test(value.pathname)))
+    return url;
+  const pixels = requiredPixels(width, height, scale);
+  const size =
+    pixels === undefined ? undefined : ASSET_IMAGE_SIZES.find((bound) => bound >= pixels);
   value.pathname = value.pathname.replace(/\.(png|webp|jpe?g|avif)$/i, '.avif');
   value.search = '';
-  value.searchParams.set('size', String(size));
+  // Unknown dimensions and displays larger than our biggest variant retain full resolution.
+  if (size !== undefined) value.searchParams.set('size', String(size));
   return value.toString();
 }
 

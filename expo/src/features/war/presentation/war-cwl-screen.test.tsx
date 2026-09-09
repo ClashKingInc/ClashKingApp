@@ -21,6 +21,15 @@ import type { WarPresentationActions, WarPresentationModel } from './contracts';
 import { CwlScreen, hasCwlClanStats, hasCwlMemberStats } from './cwl-screen';
 import { WarCwlPresentationRoot } from './war-cwl-screen';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
+}));
+
 const badge = new ClanBadgeUrls('', '', 'badge.png');
 const attack = new WarAttack('#P1', '#E1', 3, 100, 1, 135);
 const playerMember = new WarMember('#P1', 'Main', 17, 1, 0, [attack], null);
@@ -139,12 +148,12 @@ describe('WarCwlPresentationRoot', () => {
   it('opens the full war detail, switches tabs, and opens an attack sheet', async () => {
     const screen = await renderRoot();
     await fireEvent.press(screen.getByRole('button', { name: 'Linked Clan versus Enemy Clan' }));
-    expect(screen.getAllByText('Statistics')).toHaveLength(2);
-    await fireEvent.press(screen.getByRole('tab', { name: 'Events' }));
+    expect(screen.getByRole('tab', { name: 'Overview' })).toBeTruthy();
+    await fireEvent.press(screen.getByRole('tab', { name: 'Attacks' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Main 3 stars' }));
     expect(screen.getByText('Attack Details')).toBeTruthy();
     expect(screen.getByText('random')).toBeTruthy();
-    expect(screen.getByText('Destruction')).toBeTruthy();
+    expect(screen.getAllByText('Destruction').length).toBeGreaterThan(0);
     expect(screen.getByText('2m 15s')).toBeTruthy();
   });
 
@@ -290,6 +299,8 @@ describe('WarCwlPresentationRoot', () => {
       new CwlLeague('ended', '2026-08', [cwlClan, enemyClan], [new CwlLeagueRound(1, ['#CWLWAR'])]),
       [ended],
     );
+    const onBack = jest.fn();
+    const onOpenWar = jest.fn();
     const screen = await render(
       <SafeAreaProvider
         initialMetrics={{
@@ -303,18 +314,22 @@ describe('WarCwlPresentationRoot', () => {
               clanTag="#CLAN"
               summary={summary}
               actions={actions}
-              onBack={jest.fn()}
-              onOpenWar={jest.fn()}
+              onBack={onBack}
+              onOpenWar={onOpenWar}
             />
           </CKThemeProvider>
         </I18nProvider>
       </SafeAreaProvider>,
     );
 
-    expect(screen.getByText('Ended 1 hours ago')).toBeTruthy();
+    expect(screen.queryByText('Ended 1 hours ago')).toBeNull();
     expect(screen.getAllByText('1/1').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('0/1')).toBeTruthy();
-    expect(screen.getAllByText('Perfect war')).toHaveLength(2);
+    expect(screen.getAllByText('Perfect war')).toHaveLength(1);
+    await fireEvent.press(screen.getByRole('button', { name: 'Linked Clan · Enemy Clan' }));
+    expect(onOpenWar).toHaveBeenCalledWith(expect.objectContaining({ tag: '#CWLWAR' }), 1);
+    await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
+    expect(onBack).toHaveBeenCalledTimes(1);
     jest.useRealTimers();
   });
 });

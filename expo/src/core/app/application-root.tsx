@@ -296,10 +296,10 @@ function ApplicationContent() {
             if (!result.hasVerifiedAccount) {
               throw new Error(t('homeVerifiedAccountRequiredBody'));
             }
+            await runtime.accountBootstrap.initialize(
+              runtime.auth.state.currentUser?.userId ?? null,
+            );
             setScene({ kind: 'home' });
-            void runtime.accountBootstrap
-              .initialize(runtime.auth.state.currentUser?.userId ?? null)
-              .catch((error: unknown) => reportException(error, 'accountSetup.hydration'));
           }}
           onOpenGameSettings={() => openExternal(CLASH_SETTINGS_URL)}
           onRefresh={async () => {

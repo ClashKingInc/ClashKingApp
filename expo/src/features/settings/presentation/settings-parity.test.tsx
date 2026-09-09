@@ -11,6 +11,8 @@ import { NotificationSettingsScreen } from './notification-settings-screen';
 import { SettingsScreen } from './settings-screen';
 import { LinkParametersContext } from '../../../core/deep-links/link-parameters';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({ localImageCache: { subscribe: () => () => {}, getRevision: () => 0, peek: () => undefined, clear: jest.fn() } }));
+
 jest.mock('../../../ui/accessibility', () => ({
   useCKAccessibility: () => ({
     reduceMotion: false,
@@ -142,7 +144,7 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
   await waitFor(() => expect(screen.getByText('Copied to clipboard')).toBeTruthy());
 });
 
-it('clears image storage without signing out or changing account data', async () => {
+it.each(['en', 'en_GB'])('formats cache size for %s and clears images without signing out', async (currentLocale) => {
   const clearImageCache = jest.fn(async () => {});
   const logout = jest.fn(async () => {});
   const screen = await render(wrapped(
@@ -150,12 +152,14 @@ it('clears image storage without signing out or changing account data', async ()
       actions={{ changeLocale: async () => {}, changeTheme: async () => {},
         open: jest.fn(), openDiscord: jest.fn(), showLicenses: jest.fn(),
         copyVersion: jest.fn(), logout, clearImageCache }}
-      alternateIconsSupported={false} currentLocale="en" localeChoices={[]}
+      alternateIconsSupported={false} currentLocale={currentLocale} localeChoices={[]}
       notificationsEnabled={false} themeMode="dark"
       user={{ username: 'Person', email: null, avatarUrl: '' }}
-      versionLabel="Version 1" warWidgetsEnabled={false}
+      versionLabel="Version 1" imageCacheBytes={44_669_338} warWidgetsEnabled={false}
     />
   ));
+  expect(screen.getByText('42.6 MB')).toBeTruthy();
+  expect(screen.queryByText('Remove downloaded images from this phone. Your accounts and saved data stay unchanged.')).toBeNull();
   await fireEvent.press(screen.getByText('Clear image cache'));
   await waitFor(() => expect(screen.getByText('Image cache cleared.')).toBeTruthy());
   expect(clearImageCache).toHaveBeenCalledTimes(1);

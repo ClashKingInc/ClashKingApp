@@ -1,5 +1,5 @@
 import { createContractTestApi } from '@/core/api/contract-api.testing';
-import { TransportError } from '@clashking/api-client';
+import { ApiResponseError, ResponseDecodeError, TransportError } from '@clashking/api-client';
 import type { StringStorage } from '@/core/storage/storage';
 import { PlayerCardPreferencesService } from './player-card-preferences';
 import { PlayerService } from './player-service';
@@ -59,6 +59,35 @@ function rankedMember(playerTag: string, playerName: string, leagueTrophies: num
     attackLoseCount: 0,
     defenseWinCount: 0,
     defenseLoseCount: 1,
+  };
+}
+function rankedBattlelog(overrides: Record<string, unknown> = {}) {
+  return {
+    tag: '#P1',
+    seasonId: '123',
+    leagueGroupId: '#GROUP',
+    league: { id: 1, name: 'Ranked League' },
+    registeredAttacks: 0,
+    registeredDefenses: 0,
+    maxBattles: 0,
+    attackTrophies: 0,
+    defenseTrophies: 0,
+    trophies: 0,
+    attacks: [],
+    defenses: [],
+    ...overrides,
+  };
+}
+function legendBattlelog(overrides: Record<string, unknown> = {}) {
+  return {
+    tag: '#P1',
+    day: '2026-08-01',
+    attackTrophies: 0,
+    defenseTrophies: 0,
+    trophies: 0,
+    attacks: [],
+    defenses: [],
+    ...overrides,
   };
 }
 function warStatsItem(overrides: Record<string, unknown> = {}) {
@@ -185,6 +214,7 @@ test('merges battlelogs when one source is unavailable and caches by canonical t
   expect(first.officialAvailable).toBe(true);
   expect(first.historyAvailable).toBe(false);
   expect(calls.get('/proxy/v1/players/%23P1/battlelog')).toBe(1);
+  expect(calls.get('/v2/player/%23P1/battlelog/history')).toBe(1);
 });
 test('coalesces CWL and ranked loads and caches global league tiers', async () => {
   const routes = {
@@ -217,8 +247,35 @@ test('coalesces CWL and ranked loads and caches global league tiers', async () =
       attackLogs: [],
       defenseLogs: [],
     },
+    '/v2/player/%23P1/ranked/123/battlelog': {
+      tag: '#P1',
+      seasonId: '123',
+      leagueGroupId: '#G',
+      league: { id: 30, name: 'Dragon League 30' },
+      registeredAttacks: 2,
+      registeredDefenses: 2,
+      maxBattles: 14,
+      attackTrophies: 40,
+      defenseTrophies: 38,
+      trophies: 78,
+      attacks: [
+        {
+          time: '2026-08-25T12:00:00Z',
+          duration: 120,
+          townHallLevel: 18,
+          opponent: { tag: '#OPPONENT', name: 'Opponent', townHallLevel: 18 },
+          stars: 3,
+          destructionPercentage: 100,
+          lootedResources: { gold: 0, elixir: 0, darkElixir: 0 },
+          armyHash: '0'.repeat(64),
+          shareCode: null,
+          trophies: 40,
+        },
+      ],
+      defenses: [{ trophies: 38, automatic: true }],
+    },
   };
-  const { api, calls } = setup(routes),
+  const { api, calls, fetchMock } = setup(routes),
     service = new PlayerService(api);
   const rankedChanged = jest.fn();
   service.subscribe(rankedChanged);
@@ -233,8 +290,29 @@ test('coalesces CWL and ranked loads and caches global league tiers', async () =
   expect(ranked1).toBe(ranked2);
   expect(ranked1.currentRank).toBe(2);
   expect(ranked1.currentMaxBattles).toBe(14);
+  expect(ranked1.currentBattlelog).toMatchObject({
+    leagueGroupId: '#G',
+    attacksComplete: false,
+    missingRealAttacks: 1,
+    automaticDefensesDerived: true,
+  });
+  expect(ranked1.currentBattlelog?.attacks[0]).toMatchObject({
+    opponentPlayerTag: '#OPPONENT',
+    stars: 3,
+  });
+  expect(ranked1.currentBattlelog?.defenses[0]).toMatchObject({
+    automatic: true,
+    stars: null,
+    trophies: 38,
+  });
   expect(calls.get('/proxy/v1/players/%23P1')).toBe(1);
   expect(calls.get('/proxy/v1/leaguetiers')).toBe(1);
+  expect(calls.get('/v2/player/%23P1/ranked/123/battlelog')).toBe(1);
+  const rankedRequest = fetchMock.mock.calls
+    .map(([input]) => input as Request)
+    .find((request) => request.url.includes('/ranked/123/battlelog'));
+  expect(rankedRequest?.method).toBe('GET');
+  expect(rankedRequest?.body).toBeNull();
   expect(rankedChanged).toHaveBeenCalledTimes(1);
 });
 
@@ -349,6 +427,105 @@ test.each(['current', 'previous'] as const)(
     await expect(new PlayerService(api).loadRankedLeagueData('#P1')).rejects.toBeInstanceOf(
       TransportError,
     );
+  },
+);
+
+test('ranked battlelog decode failures propagate and a later load retries', async () => {
+  let battlelogCalls = 0;
+  const { api, calls } = setup({
+      '/proxy/v1/players/%23P1': officialPlayer({ currentLeagueSeasonId: 123 }),
+      '/proxy/v1/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/v2/player/%23P1/ranked/123/battlelog': async () => {
+        battlelogCalls += 1;
+        return reply(battlelogCalls === 1 ? { tag: '#P1' } : rankedBattlelog());
+      },
+    }),
+    service = new PlayerService(api);
+
+  await expect(service.loadRankedLeagueData('#P1')).rejects.toBeInstanceOf(ResponseDecodeError);
+  await expect(service.loadRankedLeagueData('#P1')).resolves.toMatchObject({
+    currentBattlelog: { seasonId: '123' },
+  });
+  expect(calls.get('/v2/player/%23P1/ranked/123/battlelog')).toBe(2);
+});
+
+test('ranked battlelog upstream failures propagate and a later load retries', async () => {
+  let battlelogCalls = 0;
+  const { api, calls } = setup({
+      '/proxy/v1/players/%23P1': officialPlayer({ currentLeagueSeasonId: 123 }),
+      '/proxy/v1/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/v2/player/%23P1/ranked/123/battlelog': async () => {
+        battlelogCalls += 1;
+        return battlelogCalls === 1
+          ? reply({ code: 'upstream_unavailable', message: 'down' }, 503)
+          : reply(rankedBattlelog());
+      },
+    }),
+    service = new PlayerService(api);
+
+  await expect(service.loadRankedLeagueData('#P1')).rejects.toBeInstanceOf(ApiResponseError);
+  await expect(service.loadRankedLeagueData('#P1')).resolves.toMatchObject({
+    currentBattlelog: { seasonId: '123' },
+  });
+  expect(calls.get('/v2/player/%23P1/ranked/123/battlelog')).toBe(2);
+});
+
+test('loads and caches an empty canonical Legend day', async () => {
+  const path = '/v2/player/%23P1/legend/2026-08-01/battlelog';
+  const { api, calls, fetchMock } = setup({ [path]: legendBattlelog() });
+  const service = new PlayerService(api);
+
+  await expect(service.loadLegendBattlelog('p1', '2026-08-01')).resolves.toMatchObject({
+    tag: '#P1',
+    day: '2026-08-01',
+    closed: true,
+    attacks: [],
+    defenses: [],
+  });
+  await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).resolves.toBeTruthy();
+  expect(calls.get(path)).toBe(1);
+  const request = fetchMock.mock.calls
+    .map(([input]) => input as Request)
+    .find((item) => item.url.includes('/legend/2026-08-01/battlelog'));
+  expect(request?.method).toBe('GET');
+  expect(request?.body).toBeNull();
+});
+
+test('treats only a Legend-day 404 as optional absence', async () => {
+  const path = '/v2/player/%23P1/legend/2026-08-01/battlelog';
+  const { api, calls } = setup({});
+  const service = new PlayerService(api);
+
+  await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).resolves.toBeNull();
+  await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).resolves.toBeNull();
+  expect(calls.get(path)).toBe(1);
+});
+
+test.each([
+  ['decode', { tag: '#P1' }, ResponseDecodeError],
+  ['upstream', { code: 'upstream_unavailable', message: 'down' }, ApiResponseError],
+] as const)(
+  'Legend-day %s failures propagate and a later load retries',
+  async (_name, failure, kind) => {
+    const path = '/v2/player/%23P1/legend/2026-08-01/battlelog';
+    let callsForDay = 0;
+    const { api, calls } = setup({
+        [path]: async () => {
+          callsForDay += 1;
+          return callsForDay === 1
+            ? reply(failure, kind === ApiResponseError ? 503 : 200)
+            : reply(legendBattlelog());
+        },
+      }),
+      service = new PlayerService(api);
+
+    await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).rejects.toBeInstanceOf(kind);
+    await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).resolves.toMatchObject({
+      day: '2026-08-01',
+    });
+    expect(calls.get(path)).toBe(2);
   },
 );
 

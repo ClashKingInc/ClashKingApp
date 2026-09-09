@@ -1,8 +1,11 @@
 module.exports = {
   preset: 'jest-expo',
+  setupFiles: ['<rootDir>/jest.setup.cjs'],
   roots: ['<rootDir>/src'],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   moduleNameMapper: {
+    '^@clashking/clash-contract/effect$':
+      '<rootDir>/node_modules/@clashking/clash-contract/dist/effect.js',
     '^@clashking/api-client$': '<rootDir>/node_modules/@clashking/api-client/dist/index.js',
     '^@clashking/api-contracts$': '<rootDir>/node_modules/@clashking/api-contracts/dist/index.js',
     '^@clashking/api-contracts/expo$':

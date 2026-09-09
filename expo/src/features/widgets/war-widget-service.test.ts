@@ -136,7 +136,7 @@ describe('war widget payloads', () => {
       colorTheme: 'winning',
       clan: {
         name: 'Home',
-        badgeUrlMedium: 'https://badges.clashk.ing/HOME.png?size=256',
+        badgeUrlMedium: 'https://badges.clashk.ing/HOME',
         percent: '88.10%',
         attacks: '12/30',
         stars: 20,
@@ -144,7 +144,7 @@ describe('war widget payloads', () => {
       },
       opponent: {
         name: 'Away',
-        badgeUrlMedium: 'https://badges.clashk.ing/AWAY.png?size=256',
+        badgeUrlMedium: 'https://badges.clashk.ing/AWAY',
         percent: '80.00%',
         attacks: '11/30',
         stars: 18,
@@ -283,7 +283,7 @@ describe('war widget payloads', () => {
       score: '3 - 2',
       cwlRank: null,
       cwlLeague: 'unknown',
-      clan: { badgeUrlMedium: 'https://badges.clashk.ing/OURS.png?size=256' },
+      clan: { badgeUrlMedium: 'https://badges.clashk.ing/OURS' },
     });
 
     const empty = JSON.parse(
@@ -311,7 +311,7 @@ describe('WarWidgetService', () => {
       {
         tag: '#BOOKMARK',
         name: 'Actual Clan Name',
-        badgeUrl: 'https://badges.clashk.ing/BOOKMARK.png?size=256',
+        badgeUrl: 'https://badges.clashk.ing/BOOKMARK',
       },
     ]);
     expect(h.native.reloadWidgets).toHaveBeenCalled();
@@ -372,8 +372,8 @@ describe('WarWidgetService', () => {
     expect(h.native.setWidgetValue).toHaveBeenCalledWith(
       WIDGET_STORAGE_KEYS.warClans,
       JSON.stringify([
-        { tag: '#A', name: 'Alpha', badgeUrl: 'https://badges.clashk.ing/A.png?size=256' },
-        { tag: '#B', name: 'Beta', badgeUrl: 'https://badges.clashk.ing/B.png?size=256' },
+        { tag: '#A', name: 'Alpha', badgeUrl: 'https://badges.clashk.ing/A' },
+        { tag: '#B', name: 'Beta', badgeUrl: 'https://badges.clashk.ing/B' },
       ]),
     );
     expect(h.native.setWidgetValue).toHaveBeenCalledWith('warInfo_A', expect.any(String));
@@ -384,8 +384,8 @@ describe('WarWidgetService', () => {
     );
     expect(h.native.reloadWidgets).toHaveBeenCalledTimes(1);
     expect(await h.service.getCachedClanOptions()).toEqual([
-      { tag: '#A', name: 'Alpha', badgeUrl: 'https://badges.clashk.ing/A.png?size=256' },
-      { tag: '#B', name: 'Beta', badgeUrl: 'https://badges.clashk.ing/B.png?size=256' },
+      { tag: '#A', name: 'Alpha', badgeUrl: 'https://badges.clashk.ing/A' },
+      { tag: '#B', name: 'Beta', badgeUrl: 'https://badges.clashk.ing/B' },
     ]);
   });
 
@@ -471,7 +471,7 @@ describe('WarWidgetService', () => {
     expect(JSON.parse(String(call?.[1]))).toMatchObject({
       state: 'notInWar',
       secondaryText: 'Bookmarked Clan',
-      clan: { name: 'Bookmarked Clan', badgeUrlMedium: 'https://badges.clashk.ing/BOOKMARK.png?size=256' },
+      clan: { name: 'Bookmarked Clan', badgeUrlMedium: 'https://badges.clashk.ing/BOOKMARK' },
     });
     await h.service.cacheClanOptions([]);
     expect(h.native.setWidgetValue).toHaveBeenCalledWith(WIDGET_STORAGE_KEYS.warSelectedClan, null);
@@ -523,7 +523,7 @@ describe('WarWidgetService', () => {
     ]);
     expect(h.native.reloadWidgets).toHaveBeenCalledTimes(1);
     expect(await h.service.getCachedClanOptions()).toEqual([
-      { tag: '#CLAN', name: 'Clan', badgeUrl: 'https://badges.clashk.ing/CLAN.png?size=256' },
+      { tag: '#CLAN', name: 'Clan', badgeUrl: 'https://badges.clashk.ing/CLAN' },
     ]);
 
     await h.mirror.setItem(WIDGET_STORAGE_KEYS.warClans, '{bad json');

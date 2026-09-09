@@ -111,7 +111,11 @@ describe('RankingsService', () => {
   test('uses the authenticated official proxy route for current rankings', async () => {
     const { service, calls } = setup({
       'https://api.test/proxy/v1/locations/global/rankings/players?limit=200': {
-        body: { items: [{ tag: '#ONE', name: 'One', rank: 1, trophies: 6200 }] },
+        body: {
+          items: [
+            { tag: '#ONE', name: 'One', rank: 1, previousRank: 1, expLevel: 200, trophies: 6200 },
+          ],
+        },
       },
     });
 
@@ -131,7 +135,16 @@ describe('RankingsService', () => {
       'https://api.test/v2/leaderboard/league/105000035?limit=500': {
         body: {
           count: 1,
-          items: [{ tag: '#RANKED', name: 'Ranked', rank: 1, trophies: 900, townhall_level: 18 }],
+          items: [
+            {
+              tag: '#RANKED',
+              name: 'Ranked',
+              rank: 1,
+              trophies: 900,
+              townhall_level: 18,
+              leagueGroupId: '#GROUP',
+            },
+          ],
         },
       },
     });
@@ -141,6 +154,7 @@ describe('RankingsService', () => {
     expect(calls[0]?.url).toBe('https://api.test/v2/leaderboard/league/105000035?limit=500');
     expect(calls[0]?.init?.method).toBe('GET');
     expect(result.entries[0]?.metricImageUrl).toBe(RankingLeagueOption.legendTwo.iconUrl);
+    expect(result.entries[0]?.leagueGroupId).toBe('#GROUP');
   });
 
   test('maps HTTP 404 to empty ranking results but preserves other statuses', async () => {

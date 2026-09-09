@@ -31,7 +31,7 @@ import {
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useI18n } from '../../../i18n';
+import { useI18n, toIntlLocale } from '../../../i18n';
 import {
   CKText,
   MobileWebImage,
@@ -68,6 +68,7 @@ export function SettingsScreen({
   selectedAppIcon = '',
   appIcons = [],
   warWidgetClans = [],
+  imageCacheBytes = 0,
   versionLabel,
   actions,
   onPrepareWarWidget,
@@ -85,6 +86,7 @@ export function SettingsScreen({
   selectedAppIcon?: string;
   appIcons?: readonly SettingsAppIconChoice[];
   warWidgetClans?: readonly WarWidgetClanChoice[];
+  imageCacheBytes?: number;
   versionLabel: string;
   actions: SettingsPresentationActions;
   onPrepareWarWidget?: (clanTag: string, requestPin: boolean) => Promise<void>;
@@ -133,21 +135,6 @@ export function SettingsScreen({
         </CKText>
       </View>
       <SettingsSection title={t('settingsPreferences')}>
-        {actions.clearImageCache ? (
-          <SettingsTile
-            icon={<ImageIcon color={iconColor} />}
-            title={t('settingsClearImageCache')}
-            subtitle={t('settingsClearImageCacheDescription')}
-            disabled={busy}
-            onPress={() => {
-              setBusy(true);
-              void actions.clearImageCache!()
-                .then(() => setSnackbar(t('settingsImageCacheCleared')))
-                .catch(() => setSnackbar(t('settingsImageCacheClearFailed')))
-                .finally(() => setBusy(false));
-            }}
-          />
-        ) : null}
         <SettingsTile
           icon={<Languages color={iconColor} />}
           title={t('settingsLanguage')}
@@ -240,6 +227,21 @@ export function SettingsScreen({
               : undefined
           }
         />
+        {actions.clearImageCache ? (
+          <SettingsTile
+            icon={<ImageIcon color={iconColor} />}
+            title={t('settingsClearImageCache')}
+            trailing={`${new Intl.NumberFormat(toIntlLocale(currentLocale), { maximumFractionDigits: 1 }).format(imageCacheBytes / (1024 * 1024))} MB`}
+            disabled={busy}
+            onPress={() => {
+              setBusy(true);
+              void actions.clearImageCache!()
+                .then(() => setSnackbar(t('settingsImageCacheCleared')))
+                .catch(() => setSnackbar(t('settingsImageCacheClearFailed')))
+                .finally(() => setBusy(false));
+            }}
+          />
+        ) : null}
       </SettingsSection>
       <SettingsSection title={t('settingsAccount')}>
         <SettingsTile

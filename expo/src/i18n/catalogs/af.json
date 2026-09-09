@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Aangesluit",
   "playerJoinLeaveLeft": "Verlaat",
   "playerJoinLeaveNoHistory": "Geen aansluit-/verlaatgeskiedenis beskikbaar nie",
-  "playerJoinLeaveNoClanTotals": "Geen stamtotale beskikbaar nie"
+  "playerJoinLeaveNoClanTotals": "Geen stamtotale beskikbaar nie",
+  "cwlRegisteredRoster": "Geregistreerde spanlys",
+  "cwlMatches": "Wedstryde",
+  "cwlNextMatchup": "Volgende wedstryd",
+  "cwlOtherMatches": "Ander wedstryde",
+  "cwlOutlook": "Seisoenvooruitsig",
+  "cwlFirstPlace": "Eerste plek",
+  "cwlTopTwo": "Top twee",
+  "cwlRemainingOpponents": "Oorblywende teenstanders",
+  "cwlWinBonusNote": "Sterre sluit 10 bonussterre per voltooide oorwinning in.",
+  "cwlEstimateNote": "Ramings gebruik voltooide oorloë en oorblywende teenstanders, nie spanveranderings nie. Minstens twee voltooide oorloë per stam word vereis. Dit is ongekalibreerde ramings; promosiereëls verskil per liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minute}}}}"
 }

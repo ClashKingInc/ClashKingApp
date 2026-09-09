@@ -68,7 +68,7 @@ describe('ImageAssets', () => {
 });
 
 test('uses explicit PNG widget badges while app badges remain AVIF', () => {
-  expect(ImageAssets.widgetClanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC.png?size=256');
+  expect(ImageAssets.widgetClanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC');
   expect(ImageAssets.clanBadgeForTag('#ABC')).toBe('https://badges.clashk.ing/ABC.avif');
   expect(ImageAssets.widgetClanBadgeForTag('')).toBe('');
 });

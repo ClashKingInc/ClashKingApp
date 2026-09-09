@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Lot înscris",
+  "cwlMatches": "Confruntări",
+  "cwlNextMatchup": "Următoarea confruntare",
+  "cwlOtherMatches": "Alte confruntări",
+  "cwlOutlook": "Perspectivele sezonului",
+  "cwlFirstPlace": "Primul loc",
+  "cwlTopTwo": "Primele două",
+  "cwlRemainingOpponents": "Adversari rămași",
+  "cwlWinBonusNote": "Stelele includ 10 stele bonus pentru fiecare victorie încheiată.",
+  "cwlEstimateNote": "Estimările folosesc războaiele încheiate și adversarii rămași, nu schimbările de componență. Sunt necesare cel puțin două războaie încheiate per clan. Estimările nu sunt calibrate; regulile de promovare diferă în funcție de ligă.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# oră} other {# ore}}} other {{count, plural, one {# minut} other {# minute}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

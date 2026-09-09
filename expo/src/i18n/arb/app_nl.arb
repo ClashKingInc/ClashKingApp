@@ -4671,5 +4671,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Ingeschreven selectie",
+  "cwlMatches": "Wedstrijden",
+  "cwlNextMatchup": "Volgende wedstrijd",
+  "cwlOtherMatches": "Andere wedstrijden",
+  "cwlOutlook": "Seizoensverwachting",
+  "cwlFirstPlace": "Eerste plaats",
+  "cwlTopTwo": "Top twee",
+  "cwlRemainingOpponents": "Resterende tegenstanders",
+  "cwlWinBonusNote": "Sterren bevatten 10 bonussterren per afgeronde overwinning.",
+  "cwlEstimateNote": "Schattingen gebruiken afgeronde oorlogen en resterende tegenstanders, geen wijzigingen in de opstelling. Minstens twee afgeronde oorlogen per clan zijn nodig. De schattingen zijn niet gekalibreerd; promotieregels verschillen per divisie.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minuten}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

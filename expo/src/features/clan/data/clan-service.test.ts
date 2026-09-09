@@ -37,6 +37,8 @@ function officialClan(overrides: Record<string, unknown> = {}) {
   const memberList = Array.isArray(overrides.memberList)
     ? overrides.memberList.map((member) => ({
         role: 'member',
+        clanRank: 1,
+        previousClanRank: 1,
         townHallLevel: 18,
         expLevel: 200,
         trophies: 5000,
@@ -56,6 +58,7 @@ function officialClan(overrides: Record<string, unknown> = {}) {
     clanPoints: 0,
     clanBuilderBasePoints: 0,
     clanCapitalPoints: 0,
+    clanCapital: { clanGoldSinkTotal: 0 },
     requiredTrophies: 0,
     warFrequency: 'always',
     warWinStreak: 0,

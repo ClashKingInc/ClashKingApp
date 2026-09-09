@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Kayıtlı kadro",
+  "cwlMatches": "Eşleşmeler",
+  "cwlNextMatchup": "Sonraki eşleşme",
+  "cwlOtherMatches": "Diğer eşleşmeler",
+  "cwlOutlook": "Sezon tahmini",
+  "cwlFirstPlace": "Birincilik",
+  "cwlTopTwo": "İlk iki",
+  "cwlRemainingOpponents": "Kalan rakipler",
+  "cwlWinBonusNote": "Yıldızlar, tamamlanan her galibiyet için 10 bonus yıldız içerir.",
+  "cwlEstimateNote": "Tahminler tamamlanan savaşları ve kalan rakipleri kullanır, kadro değişikliklerini dikkate almaz. Klan başına en az iki tamamlanmış savaş gerekir. Tahminler kalibre edilmemiştir; yükselme kuralları lige göre değişir.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# saat} other {# saat}}} other {{count, plural, one {# dakika} other {# dakika}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

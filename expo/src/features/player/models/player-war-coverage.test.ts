@@ -192,7 +192,11 @@ describe('player war aggregation contracts', () => {
     expect(snapshot.toJson()).toMatchObject({ attackerTag: '#A', duration: null });
 
     const clan = ClanInfo.fromJson({ tag: '#C', badgeUrls: { small: 'badge.png' }, attacks: 10 });
-    expect(clan).toMatchObject({ tag: '#C', attacks: 10, badgeUrls: { small: 'badge.png' } });
+    expect(clan).toMatchObject({
+      tag: '#C',
+      attacks: 10,
+      badgeUrls: { small: 'https://badges.clashk.ing/C.avif' },
+    });
     const details = PlayerWarStatsDetails.fromJson({
       state: 'warEnded',
       teamSize: 15,

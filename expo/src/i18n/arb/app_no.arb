@@ -4671,5 +4671,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Påmeldt tropp",
+  "cwlMatches": "Oppgjør",
+  "cwlNextMatchup": "Neste oppgjør",
+  "cwlOtherMatches": "Andre oppgjør",
+  "cwlOutlook": "Sesongutsikter",
+  "cwlFirstPlace": "Førsteplass",
+  "cwlTopTwo": "Topp to",
+  "cwlRemainingOpponents": "Gjenstående motstandere",
+  "cwlWinBonusNote": "Stjernene inkluderer 10 bonusstjerner per avsluttet seier.",
+  "cwlEstimateNote": "Anslag bruker avsluttede kriger og gjenstående motstandere, ikke endringer i lagoppstillingen. Minst to avsluttede kriger per klan kreves. Anslagene er ikke kalibrert; opprykksreglene varierer mellom ligaer.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# time} other {# timer}}} other {{count, plural, one {# minutt} other {# minutter}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

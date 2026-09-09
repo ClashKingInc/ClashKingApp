@@ -1,10 +1,10 @@
+import { RecentSearchesEndpoint } from '@clashking/api-contracts/expo';
 import {
   ProxyClanEndpoint,
   ProxyClanSearchEndpoint,
   ProxyLeagueTiersEndpoint,
   ProxyLocationsEndpoint,
-  RecentSearchesEndpoint,
-} from '@clashking/api-contracts/expo';
+} from '../../core/api/proxy-contracts';
 import { Effect } from 'effect';
 import { TransportError } from '@clashking/api-client';
 

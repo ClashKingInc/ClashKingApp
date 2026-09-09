@@ -657,19 +657,21 @@ function PeriodDetails({ period, locale }: { period: RankedPeriod; locale: strin
           imageUrl={ImageAssets.sword}
           battles={period.attacks}
           count={period.attackCount}
-          max={period.maxBattles}
+          max={period.attackMaxBattles}
           attack
           locale={locale}
           hasDetails={period.hasDetails}
+          complete={period.attacksComplete}
         />
         <BattleCard
           title={t('rankedLeagueDefenses')}
           imageUrl={ImageAssets.shieldWithArrow}
           battles={period.defenses}
           count={period.defenseCount}
-          max={period.maxBattles}
+          max={period.defenseMaxBattles}
           locale={locale}
           hasDetails={period.hasDetails}
+          complete={period.defensesComplete}
         />
       </View>
       <Surface style={styles.notice}>
@@ -692,6 +694,7 @@ function BattleCard({
   attack = false,
   locale,
   hasDetails,
+  complete,
 }: {
   title: string;
   imageUrl: string;
@@ -701,13 +704,14 @@ function BattleCard({
   attack?: boolean;
   locale: string;
   hasDetails: boolean;
+  complete: boolean;
 }) {
   const { t } = useI18n();
   const {
     remaining,
     trophyTotal,
     trophyAverage: average,
-  } = rankedBattleSummary(battles, count, max);
+  } = rankedBattleSummary(battles, count, max, complete);
   const sign = attack ? '+' : '-';
   return (
     <Surface style={styles.battleCard}>
@@ -736,15 +740,16 @@ function BattleCard({
           {average === null ? '—' : `${sign}${Math.abs(average).toFixed(1)}`}
         </CKText>
       </View>
-      {!hasDetails ? (
+      {!hasDetails || !complete ? (
         <CKText style={styles.unavailableBattles}>
           {t('rankedLeagueBattleDetailsUnavailable')}
         </CKText>
-      ) : (
+      ) : null}
+      {hasDetails ? (
         <View style={styles.battleList}>
           {battles.map((battle, index) => (
             <BattleRow
-              key={`${battle.opponentPlayerTag}-${index}`}
+              key={`${battle.opponentPlayerTag || 'automatic'}-${index}`}
               battle={battle}
               attack={attack}
               locale={locale}
@@ -754,7 +759,7 @@ function BattleCard({
             <EmptyBattleRow key={`remaining-${index}`} attack={attack} />
           ))}
         </View>
-      )}
+      ) : null}
       <View style={styles.footerStats}>
         <View style={styles.divider} />
         <StatLine label={t('rankedLeagueBattles')} value={max > 0 ? `${count} / ${max}` : count} />
@@ -813,6 +818,7 @@ function BattleRow({
   locale: string;
 }) {
   const sign = attack ? '+' : '-';
+  const automatic = battle.automatic;
   return (
     <View style={styles.battleRow}>
       <MobileWebImage
@@ -825,24 +831,33 @@ function BattleRow({
             <MobileWebImage
               key={star}
               imageUrl={ImageAssets.builderBaseStar}
-              style={[styles.battleStar, star >= battle.stars && styles.dimmed]}
+              style={[
+                styles.battleStar,
+                (battle.stars === null || star >= battle.stars) && styles.dimmed,
+              ]}
             />
           ))}
-          <CKText role="labelLarge">{Math.round(battle.destructionPercentage)}%</CKText>
+          <CKText role="labelLarge">
+            {battle.destructionPercentage === null
+              ? '—'
+              : `${Math.round(battle.destructionPercentage)}%`}
+          </CKText>
           <CKText role="labelSmall" style={{ color: attack ? '#2E7D32' : '#C62828' }}>
             ({sign}
             {Math.abs(battle.trophies)})
           </CKText>
         </View>
         <CKText muted role="labelSmall">
-          {battle.creationTime
-            ? new Intl.DateTimeFormat(toIntlLocale(locale), {
-                weekday: 'short',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-              }).format(battle.creationTime)
-            : '—'}
+          {automatic
+            ? '—'
+            : battle.creationTime
+              ? new Intl.DateTimeFormat(toIntlLocale(locale), {
+                  weekday: 'short',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                }).format(battle.creationTime)
+              : '—'}
         </CKText>
       </View>
     </View>

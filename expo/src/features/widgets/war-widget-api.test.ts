@@ -84,8 +84,11 @@ test('uses the live basic-war resolver and preserves the regular widget payload'
       state: 'inWar',
       currentWarInfo: {
         state: 'inWar',
-        clan: { tag: '#CLAN', badgeUrls: { medium: 'medium' } },
-        opponent: { tag: '#RIVAL', badgeUrls: { medium: 'r-medium' } },
+        clan: { tag: '#CLAN', badgeUrls: { medium: 'https://badges.clashk.ing/CLAN.avif' } },
+        opponent: {
+          tag: '#RIVAL',
+          badgeUrls: { medium: 'https://badges.clashk.ing/RIVAL.avif' },
+        },
       },
     },
     league_info: null,
@@ -98,8 +101,14 @@ test('uses the live basic-war resolver and preserves the regular widget payload'
       state: 'inWar',
       mode: 'war',
       score: '25 - 23',
-      clan: expect.objectContaining({ name: 'Clan', badgeUrlMedium: 'small' }),
-      opponent: expect.objectContaining({ name: 'Rival', badgeUrlMedium: 'r-small' }),
+      clan: expect.objectContaining({
+        name: 'Clan',
+        badgeUrlMedium: 'https://badges.clashk.ing/CLAN',
+      }),
+      opponent: expect.objectContaining({
+        name: 'Rival',
+        badgeUrlMedium: 'https://badges.clashk.ing/RIVAL',
+      }),
     }),
   );
   const requests = fetchImplementation.mock.calls.map(([input]) => input as Request);
@@ -202,6 +211,7 @@ test('prefers the current CWL battle over a preferred upcoming preparation round
     mode: 'cwl',
     score: '30 - 25',
   });
-  expect(fetchImplementation.mock.calls.filter(([input]) =>
-    (input as Request).url.endsWith('%23PREP'))).toHaveLength(1);
+  expect(
+    fetchImplementation.mock.calls.filter(([input]) => (input as Request).url.endsWith('%23PREP')),
+  ).toHaveLength(1);
 });

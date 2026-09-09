@@ -9,10 +9,12 @@ import {
   ClanRecordsEndpoint,
   ClanWarlogEndpoint,
   ClanWarsEndpoint,
+} from '@clashking/api-contracts/expo';
+import {
   ProxyCapitalRaidSeasonsEndpoint,
   ProxyClanEndpoint,
   ProxyPlayerEndpoint,
-} from '@clashking/api-contracts/expo';
+} from '../../../core/api/proxy-contracts';
 import { Effect } from 'effect';
 import { ApiResponseError } from '@clashking/api-client';
 

@@ -1,4 +1,5 @@
-import { ClanWarlogEndpoint, ProxyClanWarlogEndpoint } from '@clashking/api-contracts/expo';
+import { ClanWarlogEndpoint } from '@clashking/api-contracts/expo';
+import { ProxyClanWarlogEndpoint } from '../../../core/api/proxy-contracts';
 import { Effect } from 'effect';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
@@ -193,8 +194,20 @@ export class WarLogService {
     options: { isWarLogPublic: boolean },
   ): Promise<ClanWarLog> {
     const response = options.isWarLogPublic
-      ? await Effect.runPromise(api.execute(ProxyClanWarlogEndpoint, { path: { clanTag: tag }, query: { limit: 50 }, body: {} }))
-      : await Effect.runPromise(api.execute(ClanWarlogEndpoint, { path: { clanTag: tag }, query: { limit: 50 }, body: {} }));
+      ? await Effect.runPromise(
+          api.execute(ProxyClanWarlogEndpoint, {
+            path: { clanTag: tag },
+            query: { limit: 50 },
+            body: {},
+          }),
+        )
+      : await Effect.runPromise(
+          api.execute(ClanWarlogEndpoint, {
+            path: { clanTag: tag },
+            query: { limit: 50 },
+            body: {},
+          }),
+        );
     const result = ClanWarLog.fromJson(response, tag);
     result.warLogStats = analyzeWarLogs(result.items);
     return result;

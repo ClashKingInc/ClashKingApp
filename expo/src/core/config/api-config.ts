@@ -34,7 +34,7 @@ export function apiEnvironmentForName(name: string | undefined): ApiEnvironment 
 export function defaultApiBaseUrl(environment: ApiEnvironment): string {
   switch (environment) {
     case 'local':
-      return 'http://localhost:8000';
+      return 'http://localhost:8787';
     case 'development':
       return 'https://dev-api.clashk.ing';
     case 'production':

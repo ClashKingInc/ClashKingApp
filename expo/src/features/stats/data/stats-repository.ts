@@ -1,12 +1,11 @@
 import {
+  ArmySearchEndpoint,
   ClanCapitalLeagueCountsEndpoint,
   ClanLocationCountsEndpoint,
   CwlLeagueCountsEndpoint,
   PlayerLeagueTierCountsEndpoint,
   PlayerTownhallCountsEndpoint,
-  StatsArmiesEndpoint,
   StatsCwlEndpoint,
-  StatsItemsEndpoint,
   StatsRankedEndpoint,
   StatsOverviewEndpoint,
   StatsWarEndpoint,
@@ -18,6 +17,7 @@ import {
   decodeStatsGroupedCounts,
   StatsArmiesResponse,
   StatsClanCountsResponse,
+  StatsDateRange,
   StatsItemsResponse,
   StatsOverviewResponse,
   StatsPerformanceResponse,
@@ -94,32 +94,25 @@ export class StatsRepository implements StatsRepositoryContract {
   async loadArmies(request: StatsArmiesQuery): Promise<StatsArmiesResponse> {
     return StatsArmiesResponse.fromJson(
       await Effect.runPromise(
-        this.contractApi.execute(StatsArmiesEndpoint, {
+        this.contractApi.execute(ArmySearchEndpoint, {
           path: {},
-          query: {},
-          body: request.toJson(),
+          query: request.toQuery(),
+          body: {},
         }),
       ),
+      new StatsDateRange(request.filters.dates.start, request.filters.dates.end),
     );
   }
-  async loadItems(request: StatsItemsQuery): Promise<StatsItemsResponse> {
-    return StatsItemsResponse.fromJson(
-      await Effect.runPromise(
-        this.contractApi.execute(StatsItemsEndpoint, {
-          path: {},
-          query: {},
-          body: request.toJson(),
-        }),
-      ),
-    );
+  async loadItems(_request: StatsItemsQuery): Promise<StatsItemsResponse> {
+    throw new RangeError('Item statistics are no longer available.');
   }
   async loadRanked(request: StatsRankedQuery): Promise<StatsPerformanceResponse> {
     return StatsPerformanceResponse.fromJson(
       await Effect.runPromise(
         this.contractApi.execute(StatsRankedEndpoint, {
           path: {},
-          query: {},
-          body: request.toJson(),
+          query: request.toQuery(),
+          body: {},
         }),
       ),
     );
@@ -129,8 +122,8 @@ export class StatsRepository implements StatsRepositoryContract {
       await Effect.runPromise(
         this.contractApi.execute(StatsWarEndpoint, {
           path: {},
-          query: {},
-          body: request.toJson(),
+          query: request.toQuery(),
+          body: {},
         }),
       ),
     );
@@ -140,8 +133,8 @@ export class StatsRepository implements StatsRepositoryContract {
       await Effect.runPromise(
         this.contractApi.execute(StatsCwlEndpoint, {
           path: {},
-          query: {},
-          body: request.toJson(),
+          query: request.toQuery(),
+          body: {},
         }),
       ),
     );

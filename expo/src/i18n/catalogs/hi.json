@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "शामिल हुआ",
   "playerJoinLeaveLeft": "चला गया",
   "playerJoinLeaveNoHistory": "शामिल होने / छोड़ने का इतिहास उपलब्ध नहीं है",
-  "playerJoinLeaveNoClanTotals": "क्लान का कुल डेटा उपलब्ध नहीं है"
+  "playerJoinLeaveNoClanTotals": "क्लान का कुल डेटा उपलब्ध नहीं है",
+  "cwlRegisteredRoster": "पंजीकृत रोस्टर",
+  "cwlMatches": "मुकाबले",
+  "cwlNextMatchup": "अगला मुकाबला",
+  "cwlOtherMatches": "अन्य मुकाबले",
+  "cwlOutlook": "सीज़न का अनुमान",
+  "cwlFirstPlace": "पहला स्थान",
+  "cwlTopTwo": "शीर्ष दो",
+  "cwlRemainingOpponents": "बाकी विरोधी",
+  "cwlWinBonusNote": "हर पूरी हुई जीत के 10 बोनस सितारे शामिल हैं।",
+  "cwlEstimateNote": "अनुमान पूरी हुई लड़ाइयों और बाकी विरोधियों पर आधारित हैं, दल में बदलाव पर नहीं। हर क्लैन की कम से कम दो लड़ाइयाँ पूरी होनी चाहिए। ये अप्रमाणित अनुमान हैं; पदोन्नति के नियम लीग के अनुसार बदलते हैं।",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# घंटा} other {# घंटे}}} other {{count, plural, one {# मिनट} other {# मिनट}}}}"
 }

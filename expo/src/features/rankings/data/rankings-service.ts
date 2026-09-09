@@ -5,13 +5,15 @@ import {
   LeaderboardHistoryEndpoint,
   LeaderboardLeagueEndpoint,
   LeaderboardTownhallsEndpoint,
+} from '@clashking/api-contracts/expo';
+import {
   ProxyBuilderClanRankingsEndpoint,
   ProxyBuilderPlayerRankingsEndpoint,
   ProxyCapitalRankingsEndpoint,
   ProxyClanRankingsEndpoint,
   ProxyLocationsEndpoint,
   ProxyPlayerRankingsEndpoint,
-} from '@clashking/api-contracts/expo';
+} from '../../../core/api/proxy-contracts';
 import { Effect } from 'effect';
 import { ApiResponseError } from '@clashking/api-client';
 

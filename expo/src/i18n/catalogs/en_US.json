@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Joined",
   "playerJoinLeaveLeft": "Left",
   "playerJoinLeaveNoHistory": "No join / leave history available",
-  "playerJoinLeaveNoClanTotals": "No clan totals available"
+  "playerJoinLeaveNoClanTotals": "No clan totals available",
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}"
 }

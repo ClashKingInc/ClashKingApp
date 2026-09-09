@@ -77,13 +77,13 @@ describe('StatsProvider state and query coverage', () => {
       leagueTier: 2,
       minimumSample: 50,
       limit: 10,
-      sortBy: 'average_stars',
-      include: [new StatsItemQuantityFilter('Wizard', 2)],
-      exclude: ['Wizard'],
+      sortBy: 'averageDuration',
+      include: [new StatsItemQuantityFilter('troop:4000005', 2)],
+      exclude: ['troop:4000005'],
     });
     await provider.load(StatsSection.armies);
     const armies = (repo.loadArmies as jest.Mock).mock.calls[0]![0];
-    expect(armies).toMatchObject({ limit: 10, sortBy: 'average_stars' });
+    expect(armies).toMatchObject({ limit: 10, sortBy: 'averageDuration' });
     expect(armies.filters).toMatchObject({
       townHallLevel: 17,
       rankedLeagueTierId: 2,

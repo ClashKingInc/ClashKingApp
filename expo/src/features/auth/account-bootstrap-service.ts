@@ -105,6 +105,12 @@ export class AccountBootstrapService {
       return;
     }
 
+    try {
+      await accounts.recordActivity();
+    } catch (error) {
+      this.report('accountBootstrap.activity', error);
+    }
+
     const playerTags = links.map((account) => account.playerTag);
     const rankedWarmup = players.prefetchRankedLeagueData(
       playerTags,

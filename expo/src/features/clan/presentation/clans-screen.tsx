@@ -1,3 +1,4 @@
+import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Platform,
@@ -7,19 +8,11 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { RefreshCw, Users } from 'lucide-react-native';
+import { Users } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
-import {
-  CKText,
-  EmptyState,
-  ResponsiveGrid,
-  Surface,
-  ckRadius,
-  colorWithAlpha,
-  useCKTheme,
-} from '../../../ui';
+import { EmptyState, ResponsiveGrid, Surface, ckRadius, useCKTheme } from '../../../ui';
 import { ClanRosterCard } from './clan-card';
 import {
   buildClanRoster,
@@ -43,7 +36,7 @@ export function ClansScreen({
   const desktop = Platform.OS === 'web' && width >= 900;
   const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
   const [refreshing, setRefreshing] = useState(false);
-  const [, setRefreshMinute] = useState(0);
+  const pullRefresh = usePullRefreshHint();
   const requestedBookmarks = useRef(new Set<string>());
   const link = useLinkParameters();
   const roster = useMemo(() => {
@@ -64,11 +57,6 @@ export function ClansScreen({
     missing.forEach((tag) => requestedBookmarks.current.add(tag));
     void actions.hydrateBookmarkedClans(missing);
   }, [actions, roster.missingBookmarkTags]);
-  useEffect(() => {
-    if (!model.lastRefresh) return;
-    const timer = setInterval(() => setRefreshMinute((value) => value + 1), 60_000);
-    return () => clearInterval(timer);
-  }, [model.lastRefresh]);
   const refresh = async () => {
     setRefreshing(true);
     try {
@@ -109,6 +97,10 @@ export function ClansScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <ScrollView
+        onScroll={pullRefresh.onScroll}
+        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+        onScrollEndDrag={pullRefresh.onScrollEndDrag}
+        scrollEventThrottle={16}
         contentContainerStyle={{
           paddingHorizontal: horizontal,
           paddingBottom: desktop ? 32 : insets.bottom + 96,
@@ -121,16 +113,6 @@ export function ClansScreen({
           />
         }
       >
-        {model.lastRefresh ? (
-          <View style={styles.refresh}>
-            <RefreshCw size={12} color={colorWithAlpha(theme.onSurface, 0.6)} />
-            <CKText role="bodySmall" style={{ color: colorWithAlpha(theme.onSurface, 0.6) }}>
-              {t('generalLastRefresh', {
-                time: formatClanLastRefresh(model.lastRefresh, t, locale),
-              })}
-            </CKText>
-          </View>
-        ) : null}
         <View style={styles.roster}>
           {roster.items.length === 0 ? (
             <Surface radius={ckRadius.control}>
@@ -150,19 +132,23 @@ export function ClansScreen({
           )}
         </View>
       </ScrollView>
+      <PullRefreshHint
+        distance={pullRefresh.distance}
+        refreshing={refreshing}
+        label={
+          model.lastRefresh
+            ? t('generalLastRefresh', {
+                time: formatClanLastRefresh(model.lastRefresh, t, locale),
+              })
+            : undefined
+        }
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  refresh: {
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
   roster: { paddingTop: 8 },
   list: { gap: 10 },
   empty: { padding: 0 },

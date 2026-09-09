@@ -1,3 +1,4 @@
+import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
 import { useState, type ReactNode } from 'react';
 import {
   KeyboardAvoidingView,
@@ -78,7 +79,7 @@ export function LoginScreen({
       setAuthenticated(true);
     } catch (error) {
       if (isVerificationRequired(error)) onVerificationRequired(email.trim());
-      else if (/\b(?:500|503)\b/.test(String(error))) onMaintenance();
+      else if (defaultIsMaintenanceError(error)) onMaintenance();
       else setErrors({ action: errorText(error) });
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ export function LoginScreen({
       await auth.signInWithDiscord();
       setAuthenticated(true);
     } catch (error) {
-      if (/\b(?:500|503)\b/.test(String(error))) onMaintenance();
+      if (defaultIsMaintenanceError(error)) onMaintenance();
       else setErrors({ action: errorText(error) });
     } finally {
       setLoading(false);

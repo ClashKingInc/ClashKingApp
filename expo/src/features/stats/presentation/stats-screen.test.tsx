@@ -42,7 +42,7 @@ test('renders Flutter army discovery copy, exact composition, and share code', a
     armiesLeagueTier: undefined,
     armiesMinimumSample: 100,
     armiesLimit: 25,
-    armiesSortBy: 'usage_rate',
+    armiesSortBy: 'usage',
     armiesInclude: [],
     armiesExclude: [],
     currentState: {

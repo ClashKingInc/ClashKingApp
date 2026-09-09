@@ -24,6 +24,7 @@ import {
   sortCwlClans,
   sortCwlMembers,
   warComparisonStats,
+  warTimeRemaining,
 } from './presentation-utils';
 
 const badge = new ClanBadgeUrls('', '', '');
@@ -263,4 +264,36 @@ describe('war presentation helpers', () => {
     });
     expect(sortCwlClans([lowThClan, highThClan], 'townHallLevel')).toEqual([highThClan, lowThClan]);
   });
+});
+
+describe('readable war countdowns', () => {
+  const now = new Date('2026-09-06T00:00:00Z');
+  it('uses words for units and normalizes stored locale tags', () => {
+    expect(warTimeRemaining(new Date('2026-09-06T22:21:00Z'), now, 'en_GB')).toBe(
+      '22 hours 21 minutes',
+    );
+    expect(warTimeRemaining(new Date('2026-09-06T01:01:00Z'), now, 'en')).toBe('1 hour 1 minute');
+  });
+  it('clamps expired countdowns rather than displaying negative time', () => {
+    expect(warTimeRemaining(new Date('2026-09-05T22:00:00Z'), now, 'en')).toBe('0 minutes');
+  });
+});
+
+it('formats countdowns even when the native runtime cannot format hour/minute units', () => {
+  const NumberFormat = Intl.NumberFormat;
+  const spy = jest.spyOn(Intl, 'NumberFormat').mockImplementation((locale, options) => {
+    if (options?.style === 'unit') throw new Error('Native unit formatting unavailable');
+    return new NumberFormat(locale, options);
+  });
+  Object.assign(spy, { supportedLocalesOf: NumberFormat.supportedLocalesOf });
+  try {
+    expect(
+      warTimeRemaining(new Date('2026-09-06T22:21:00Z'), new Date('2026-09-06T00:00:00Z'), 'en_GB'),
+    ).toBe('22 hours 21 minutes');
+    expect(
+      warTimeRemaining(new Date('2026-09-06T01:00:00Z'), new Date('2026-09-06T00:00:00Z'), 'de'),
+    ).toBe('1 Stunde');
+  } finally {
+    spy.mockRestore();
+  }
 });

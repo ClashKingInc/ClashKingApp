@@ -61,7 +61,12 @@ describe('search models', () => {
       ],
     });
     expect(result).toHaveLength(10);
-    expect(result[0]).toMatchObject({ type: 'clan', tag: '#C', members: 49, imageUrl: 'badge' });
+    expect(result[0]).toMatchObject({
+      type: 'clan',
+      tag: '#C',
+      members: 49,
+      imageUrl: 'https://badges.clashk.ing/C.avif',
+    });
     expect(result.some((item) => item.tag === '')).toBe(false);
   });
 
@@ -76,7 +81,7 @@ describe('search models', () => {
         },
       ],
     });
-    expect(clan?.imageUrl).toBe('small');
+    expect(clan?.imageUrl).toBe('https://badges.clashk.ing/C.avif');
   });
 
   it('keeps only real country locations and valid named league tiers', () => {

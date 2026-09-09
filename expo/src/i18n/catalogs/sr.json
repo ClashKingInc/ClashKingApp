@@ -2020,5 +2020,16 @@
   "playerJoinLeaveJoined": "Придружио се",
   "playerJoinLeaveLeft": "Напустио је",
   "playerJoinLeaveNoHistory": "Нема историје улазака и излазака",
-  "playerJoinLeaveNoClanTotals": "Нема доступних укупних података о клановима"
+  "playerJoinLeaveNoClanTotals": "Нема доступних укупних података о клановима",
+  "cwlRegisteredRoster": "Пријављени састав",
+  "cwlMatches": "Мечеви",
+  "cwlNextMatchup": "Следећи меч",
+  "cwlOtherMatches": "Остали мечеви",
+  "cwlOutlook": "Изгледи за сезону",
+  "cwlFirstPlace": "Прво место",
+  "cwlTopTwo": "Прва два",
+  "cwlRemainingOpponents": "Преостали противници",
+  "cwlWinBonusNote": "Звезде укључују 10 бонус звезда за сваку завршену победу.",
+  "cwlEstimateNote": "Процене користе завршене ратове и преостале противнике, не промене састава. Потребна су бар два завршена рата по клану. Процене нису калибрисане; правила напредовања зависе од лиге.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# сат} few {# сата} other {# сати}}} other {{count, plural, one {# минут} few {# минута} other {# минута}}}}"
 }

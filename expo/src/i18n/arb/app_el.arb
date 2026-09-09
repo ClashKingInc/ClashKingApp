@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Εγγεγραμμένο ρόστερ",
+  "cwlMatches": "Αναμετρήσεις",
+  "cwlNextMatchup": "Επόμενη αναμέτρηση",
+  "cwlOtherMatches": "Άλλες αναμετρήσεις",
+  "cwlOutlook": "Πρόβλεψη σεζόν",
+  "cwlFirstPlace": "Πρώτη θέση",
+  "cwlTopTwo": "Πρώτες δύο θέσεις",
+  "cwlRemainingOpponents": "Εναπομείναντες αντίπαλοι",
+  "cwlWinBonusNote": "Τα αστέρια περιλαμβάνουν 10 επιπλέον αστέρια ανά ολοκληρωμένη νίκη.",
+  "cwlEstimateNote": "Οι εκτιμήσεις βασίζονται σε ολοκληρωμένους πολέμους και εναπομείναντες αντιπάλους, όχι σε αλλαγές σύνθεσης. Απαιτούνται τουλάχιστον δύο ολοκληρωμένοι πόλεμοι ανά φυλή. Οι εκτιμήσεις δεν είναι βαθμονομημένες· οι κανόνες ανόδου διαφέρουν ανά λίγκα.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# ώρα} other {# ώρες}}} other {{count, plural, one {# λεπτό} other {# λεπτά}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

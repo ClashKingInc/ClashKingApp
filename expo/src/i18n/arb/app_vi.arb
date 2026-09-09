@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Danh sách đã đăng ký",
+  "cwlMatches": "Trận đấu",
+  "cwlNextMatchup": "Trận đấu tiếp theo",
+  "cwlOtherMatches": "Các trận khác",
+  "cwlOutlook": "Dự báo mùa giải",
+  "cwlFirstPlace": "Hạng nhất",
+  "cwlTopTwo": "Hai hạng đầu",
+  "cwlRemainingOpponents": "Đối thủ còn lại",
+  "cwlWinBonusNote": "Số sao gồm 10 sao thưởng cho mỗi chiến thắng đã kết thúc.",
+  "cwlEstimateNote": "Ước tính dựa trên các cuộc chiến đã kết thúc và đối thủ còn lại, không tính thay đổi đội hình. Mỗi hội cần ít nhất hai cuộc chiến đã kết thúc. Ước tính chưa được hiệu chỉnh; quy tắc thăng hạng tùy theo giải đấu.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# giờ} other {# giờ}}} other {{count, plural, one {# phút} other {# phút}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

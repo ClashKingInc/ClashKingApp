@@ -39,7 +39,7 @@ for (const absolutePath of appSourceFiles) {
 
 const entrypoint = path.join(contractsRoot, 'dist/expo.js');
 const contractModules = new Set();
-const allowedExternalImports = new Set(['effect']);
+const allowedExternalImports = new Set(['@clashking/clash-contract/effect', 'effect']);
 const serverOnlyModule =
   /^(?:admin|bot(?:-|\.)|dashboard|persistent-runtime|deferred-runtime|roster-interaction|roster-configuration|current-war-summary)/u;
 

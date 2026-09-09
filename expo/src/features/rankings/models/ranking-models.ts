@@ -238,6 +238,7 @@ export class RankingEntry {
     readonly metricImageUrl: string,
     readonly townHallLevel: number,
     readonly clanBadgeUrl = '',
+    readonly leagueGroupId = '',
   ) {}
 
   get movement(): string {
@@ -263,7 +264,8 @@ export class RankingEntry {
           ...(!clanName && !clanTag && tag ? [tag] : []),
         ].join(' · ')
       : clanName;
-    const clanBadgeUrl = rankingBoard.isClan || !clanTag ? '' : ImageAssets.clanBadgeForTag(clanTag, json.clan);
+    const clanBadgeUrl =
+      rankingBoard.isClan || !clanTag ? '' : ImageAssets.clanBadgeForTag(clanTag, json.clan);
     const leagueIcon =
       nestedString(json.leagueTier, 'iconUrls.medium') ??
       nestedString(json.leagueTier, 'iconUrls.large') ??
@@ -302,6 +304,7 @@ export class RankingEntry {
         : (rankedIcon ?? leagueIcon ?? rankingBoard.iconUrl),
       townHall,
       clanBadgeUrl,
+      rankingBoard === RankingBoard.playerRanked ? firstString(json, ['leagueGroupId']) : '',
     );
   }
 }

@@ -53,6 +53,16 @@ export function withApiDiagnostics(
           ? `API request failed with status ${error.status} for ${endpoint.path}.`
           : `API request failed for ${endpoint.path}.`,
       );
+      if (__DEV__ && error._tag === 'ResponseDecodeError') {
+        console.warn(
+          '[API decode failure]',
+          operation,
+          JSON.stringify(decodeIssueDetails(error.cause)),
+        );
+      }
+      if (__DEV__ && error._tag === 'ApiResponseError' && error.status >= 500) {
+        console.warn('[API failure]', operation, error.status, error.requestId ?? '');
+      }
       diagnostic.name = error._tag;
       observability.reportException(diagnostic, operation, error);
     });
@@ -65,5 +75,20 @@ export function withApiDiagnostics(
       client
         .executeStatus(endpoint, input, options)
         .pipe(Effect.tapError((error) => report(endpoint, error))),
+  };
+}
+
+// Keep field paths and issue kinds, but never log response values or request credentials.
+function decodeIssueDetails(cause: unknown, depth = 0): unknown {
+  if (!cause || typeof cause !== 'object' || depth > 12) return { kind: 'Unknown' };
+  const issue = cause as Record<string, unknown>;
+  return {
+    kind:
+      typeof issue._tag === 'string' ? issue._tag : cause instanceof Error ? cause.name : 'Unknown',
+    ...(Array.isArray(issue.path) ? { path: issue.path.map(String) } : {}),
+    ...(issue.issue ? { issue: decodeIssueDetails(issue.issue, depth + 1) } : {}),
+    ...(Array.isArray(issue.issues)
+      ? { issues: issue.issues.map((child) => decodeIssueDetails(child, depth + 1)) }
+      : {}),
   };
 }

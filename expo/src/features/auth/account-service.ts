@@ -1,5 +1,6 @@
 import {
   LinksAddEndpoint,
+  LinksActivityEndpoint,
   LinksListEndpoint,
   LinksOrderEndpoint,
   LinksRemoveEndpoint,
@@ -134,6 +135,16 @@ export class CocAccountService {
       this.report('accounts.fetch', error);
       throw error;
     }
+  }
+
+  async recordActivity(): Promise<void> {
+    await Effect.runPromise(
+      this.api.execute(LinksActivityEndpoint, {
+        path: { userId: this.requireUserId() },
+        query: {},
+        body: {},
+      }),
+    );
   }
 
   async addAccount(playerTag: string): Promise<AccountMutationResult> {

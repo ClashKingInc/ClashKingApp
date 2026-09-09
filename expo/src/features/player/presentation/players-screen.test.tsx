@@ -10,6 +10,10 @@ import { buildPlayerRosters } from './contracts';
 import type { PlayersPresentationActions, PlayersPresentationModel } from './contracts';
 import { PlayersScreen } from './players-screen';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+}));
+
 const mockRosterDrag = jest.fn();
 
 jest.mock('react-native-draggable-flatlist', () => {

@@ -49,7 +49,7 @@ export class StatsProvider {
   armiesLeagueTier?: number;
   armiesMinimumSample = 100;
   armiesLimit = 25;
-  armiesSortBy: StatsArmiesQuery['sortBy'] = 'usage_rate';
+  armiesSortBy: StatsArmiesQuery['sortBy'] = 'usage';
   armiesInclude: readonly StatsItemQuantityFilter[] = [];
   armiesExclude: readonly string[] = [];
   itemsTownHall?: number;

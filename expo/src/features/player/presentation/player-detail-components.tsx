@@ -689,7 +689,13 @@ export function PlayerItemSection({
         )}
       </Pressable>
       {expanded ? (
-        <ResponsiveGrid minItemWidth={54} maxColumns={10} gap={8}>
+        <ResponsiveGrid
+          minItemWidth={54}
+          maxColumns={10}
+          gap={8}
+          waitForLayout
+          testID="player-item-grid"
+        >
           {visible.map((item, index) => {
             const thMax = maxLevelForItemAtTH(item, townHallLevel);
             const isGlobalMax = item.maxLevel > 0 && item.level >= item.maxLevel;

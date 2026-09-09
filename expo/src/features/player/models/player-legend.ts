@@ -1,6 +1,119 @@
 import { gameDataState } from '@/core/game-data/game-data-state';
+import { ImageAssets } from '../../../core/assets/image-assets';
 import { PlayerEquipment } from './player-items';
-import { date, int, number, record, records, string, type JsonRecord } from './parsing';
+import { apiDate, date, int, number, record, records, string, type JsonRecord } from './parsing';
+
+export type LeagueArmyItemType =
+  'troop' | 'super_troop' | 'spell' | 'siege_machine' | 'hero' | 'hero_equipment' | 'pet';
+
+export interface LeagueBattleLoot {
+  readonly gold: number;
+  readonly elixir: number;
+  readonly darkElixir: number;
+}
+
+export interface LeagueBattleItem {
+  readonly type: LeagueArmyItemType;
+  readonly itemId: number;
+  readonly quantity: number;
+}
+
+export class PlayerLegendBattle {
+  constructor(
+    readonly trophies: number,
+    readonly automatic: boolean,
+    readonly battleTime: Date | null = null,
+    readonly duration = 0,
+    readonly townHallLevel = 0,
+    readonly opponentTag = '',
+    readonly opponentTownHallLevel = 0,
+    readonly stars: number | null = null,
+    readonly destructionPercentage: number | null = null,
+    readonly lootedResources: LeagueBattleLoot = { gold: 0, elixir: 0, darkElixir: 0 },
+    readonly armyHash = '',
+    readonly shareCode: string | null = null,
+    readonly items: readonly LeagueBattleItem[] = [],
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    if (json.automatic === true) {
+      return new PlayerLegendBattle(int(json.trophies), true);
+    }
+    const opponent = record(json.opponent);
+    const loot = record(json.lootedResources);
+    return new PlayerLegendBattle(
+      int(json.trophies),
+      false,
+      apiDate(json.time),
+      int(json.duration),
+      int(json.townHallLevel),
+      string(opponent.tag),
+      int(opponent.townHallLevel),
+      int(json.stars),
+      number(json.destructionPercentage),
+      {
+        gold: int(loot.gold),
+        elixir: int(loot.elixir),
+        darkElixir: int(loot.darkElixir),
+      },
+      string(json.armyHash),
+      json.shareCode === null ? null : string(json.shareCode),
+      records(json.items).map((item) => ({
+        type: string(item.type) as LeagueArmyItemType,
+        itemId: int(item.itemId),
+        quantity: int(item.quantity),
+      })),
+    );
+  }
+}
+
+export class PlayerLegendBattlelog {
+  constructor(
+    readonly tag: string,
+    readonly day: string,
+    readonly startsAt: Date,
+    readonly endsAt: Date,
+    readonly closed: boolean,
+    readonly attackTrophies: number,
+    readonly defenseTrophies: number,
+    readonly trophyChange: number,
+    readonly lootedResources: LeagueBattleLoot,
+    readonly attacks: readonly PlayerLegendBattle[],
+    readonly defenses: readonly PlayerLegendBattle[],
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    const day = string(json.day);
+    const startsAt = new Date(`${day}T05:00:00.000Z`);
+    const endsAt = new Date(startsAt.getTime() + 86_400_000);
+    const attacks = records(json.attacks);
+    const defenses = records(json.defenses);
+    const loot = attacks.reduce<LeagueBattleLoot>(
+      (total, attack) => {
+        const resources = record(attack.lootedResources);
+        return {
+          gold: total.gold + int(resources.gold),
+          elixir: total.elixir + int(resources.elixir),
+          darkElixir: total.darkElixir + int(resources.darkElixir),
+        };
+      },
+      { gold: 0, elixir: 0, darkElixir: 0 },
+    );
+    return new PlayerLegendBattlelog(
+      string(json.tag),
+      day,
+      startsAt,
+      endsAt,
+      endsAt.getTime() <= Date.now(),
+      int(json.attackTrophies),
+      int(json.defenseTrophies),
+      int(json.trophies),
+      loot,
+      attacks.map(PlayerLegendBattle.fromJson),
+      defenses.map(PlayerLegendBattle.fromJson),
+    );
+  }
+}
 
 export class LegendHeroGear {
   constructor(
@@ -281,4 +394,3 @@ export class SpotData {
 function numericMap(value: unknown): ReadonlyMap<number, number> {
   return new Map(Object.entries(record(value)).map(([key, item]) => [Number(key), number(item)]));
 }
-import { ImageAssets } from '../../../core/assets/image-assets';

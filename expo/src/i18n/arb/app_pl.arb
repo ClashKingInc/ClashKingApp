@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "Zgłoszony skład",
+  "cwlMatches": "Starcia",
+  "cwlNextMatchup": "Następne starcie",
+  "cwlOtherMatches": "Pozostałe starcia",
+  "cwlOutlook": "Prognoza sezonu",
+  "cwlFirstPlace": "Pierwsze miejsce",
+  "cwlTopTwo": "Pierwsza dwójka",
+  "cwlRemainingOpponents": "Pozostali rywale",
+  "cwlWinBonusNote": "Gwiazdy obejmują 10 dodatkowych gwiazd za każde zakończone zwycięstwo.",
+  "cwlEstimateNote": "Szacunki uwzględniają zakończone wojny i pozostałych rywali, a nie zmiany składu. Wymagane są co najmniej dwie zakończone wojny na klan. Szacunki nie są skalibrowane; zasady awansu zależą od ligi.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# godzina} few {# godziny} other {# godzin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

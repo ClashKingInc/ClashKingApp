@@ -1,10 +1,11 @@
+import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ShieldAlert } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
-import { CKText, EmptyState, useCKTheme } from '../../../ui';
+import { EmptyState, useCKTheme } from '../../../ui';
 import type { WarCwl, WarInfo } from '../models';
 import {
   buildWarRoster,
@@ -156,6 +157,7 @@ export function WarCwlScreen({
   const requestedPlayers = useRef(new Set<string>());
   const requestedWars = useRef(new Set<string>());
   const [refreshing, setRefreshing] = useState(false);
+  const pullRefresh = usePullRefreshHint();
   const [now, setNow] = useState(() => new Date());
   const roster = useMemo(() => buildWarRoster(model), [model]);
   useEffect(() => {
@@ -199,6 +201,10 @@ export function WarCwlScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <ScrollView
+        onScroll={pullRefresh.onScroll}
+        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+        onScrollEndDrag={pullRefresh.onScrollEndDrag}
+        scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -211,13 +217,6 @@ export function WarCwlScreen({
           { paddingBottom: insets.bottom + (desktop ? 32 : 96) },
         ]}
       >
-        {model.lastRefresh ? (
-          <CKText muted role="labelSmall" style={styles.refresh}>
-            {t('generalLastRefresh', {
-              time: relativeWarTime(model.lastRefresh, now, t),
-            })}
-          </CKText>
-        ) : null}
         {!roster.items.length ? (
           <EmptyState
             title={t('warNoLinkedOrBookmarked')}
@@ -240,6 +239,15 @@ export function WarCwlScreen({
           </View>
         )}
       </ScrollView>
+      <PullRefreshHint
+        distance={pullRefresh.distance}
+        refreshing={refreshing}
+        label={
+          model.lastRefresh
+            ? t('generalLastRefresh', { time: relativeWarTime(model.lastRefresh, now, t) })
+            : undefined
+        }
+      />
     </SafeAreaView>
   );
 }
@@ -247,7 +255,6 @@ export function WarCwlScreen({
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   scroll: { width: '100%', maxWidth: 1360, alignSelf: 'center', paddingHorizontal: 16 },
-  refresh: { textAlign: 'center', paddingVertical: 8 },
   grid: { gap: 10 },
   desktopGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
   desktopItem: { width: '48%', minWidth: 420, maxWidth: 640 },

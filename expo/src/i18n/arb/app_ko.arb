@@ -4766,5 +4766,27 @@
         "type": "int"
       }
     }
+  },
+  "cwlRegisteredRoster": "등록 명단",
+  "cwlMatches": "대진",
+  "cwlNextMatchup": "다음 대진",
+  "cwlOtherMatches": "다른 대진",
+  "cwlOutlook": "시즌 전망",
+  "cwlFirstPlace": "1위",
+  "cwlTopTwo": "상위 2위",
+  "cwlRemainingOpponents": "남은 상대",
+  "cwlWinBonusNote": "완료된 승리마다 보너스 별 10개가 포함됩니다.",
+  "cwlEstimateNote": "추정치는 완료된 전쟁과 남은 상대를 기반으로 하며 라인업 변경은 반영하지 않습니다. 클랜당 최소 두 번의 완료된 전쟁이 필요합니다. 보정되지 않은 추정치이며 승급 규칙은 리그마다 다릅니다.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# 시간} other {# 시간}}} other {{count, plural, one {# 분} other {# 분}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

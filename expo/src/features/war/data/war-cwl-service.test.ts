@@ -77,9 +77,7 @@ describe('WarCwlService', () => {
     season,
     warLeague: { id: 48000018, name: 'Champion League I' },
     clans: [warClan(tag)],
-    rounds: [
-      { warTags: [{ ...officialWar(tag, '#OTHER'), tag: '#WAR', season }, { tag: '#0' }] },
-    ],
+    rounds: [{ warTags: [{ ...officialWar(tag, '#OTHER'), tag: '#WAR', season }, { tag: '#0' }] }],
   });
 
   test('loads the requested stored CWL season and hydrated wars through the shared contract', async () => {
@@ -100,8 +98,12 @@ describe('WarCwlService', () => {
     await expect(service.loadLinkedCwl('#CLAN')).rejects.toThrow('requested clan');
   });
   test('loads an exact dated CWL season without reducing it to a month', async () => {
-    const { service } = harness({ '/v2/cwl/%23CLAN/group?season=2026-08-02': { body: storedGroup('#CLAN', '2026-08-02') } });
-    expect((await service.loadLinkedCwl('#CLAN', '2026-08-02')).summary.leagueInfo?.season).toBe('2026-08-02');
+    const { service } = harness({
+      '/v2/cwl/%23CLAN/group?season=2026-08-02': { body: storedGroup('#CLAN', '2026-08-02') },
+    });
+    expect((await service.loadLinkedCwl('#CLAN', '2026-08-02')).summary.leagueInfo?.season).toBe(
+      '2026-08-02',
+    );
   });
 
   test('rejects a different stored season without substituting live data', async () => {
@@ -114,7 +116,10 @@ describe('WarCwlService', () => {
 
   test('an explicitly requested missing season does not fall back to the current season', async () => {
     const { service, calls } = harness({
-      '/v2/cwl/%23CLAN/group?season=2026-08': { status: 404, body: { code: 'not_found', message: 'Not found' } },
+      '/v2/cwl/%23CLAN/group?season=2026-08': {
+        status: 404,
+        body: { code: 'not_found', message: 'Not found' },
+      },
     });
     await expect(service.loadLinkedCwl('#CLAN', '2026-08')).rejects.toThrow('season unavailable');
     expect(calls.size).toBe(1);
@@ -233,6 +238,29 @@ describe('WarCwlService', () => {
     expect(requests.some(({ path }) => path.includes('%23OLD'))).toBe(false);
   });
 
+  test('an overlapping active round wins over a newer preparation round', async () => {
+    const preparation = { ...officialWar('#CLAN', '#NEXT'), state: 'preparation' };
+    const { service } = harness({
+      '/v2/war/%23CLAN/basic': { body: basicWar({ type: 'cwl', warTag: '#PREP' }) },
+      '/proxy/v1/clans/%23CLAN/currentwar/leaguegroup': {
+        body: {
+          state: 'inWar',
+          season: '2026-09',
+          clans: [],
+          rounds: [{ warTags: ['#ACTIVE'] }, { warTags: ['#PREP'] }],
+        },
+      },
+      '/proxy/v1/clanwarleagues/wars/%23PREP': { body: preparation },
+      '/proxy/v1/clanwarleagues/wars/%23ACTIVE': {
+        body: officialWar('#CLAN', '#CURRENT'),
+      },
+    });
+    await service.loadAllWarData(['#CLAN'], { notify: false, throwOnError: true });
+    expect(service.getWarCwlByTag('#CLAN')?.getActiveWarByTag('#CLAN')?.opponent?.tag).toBe(
+      '#CURRENT',
+    );
+  });
+
   test('partial failures preserve successful tags and strict callers receive first error', async () => {
     const { service } = harness({
       '/v2/war/%23GOOD/basic': { body: 'null' },
@@ -294,5 +322,85 @@ describe('WarCwlService', () => {
       },
     });
     await expect(WarCwlService.fetchWarDataFromTime(api, '#ABC', end)).resolves.toBeNull();
+  });
+});
+
+describe('complete CWL detail loading', () => {
+  const group = {
+    state: 'inWar',
+    season: '2026-09',
+    clans: [warClan('#CLAN'), warClan('#OTHER')],
+    rounds: [
+      { warTags: ['#OLD'] },
+      { warTags: ['#NOW', '#NOW'] },
+      { warTags: ['#NEXT'] },
+      { warTags: ['#0'] },
+    ],
+  };
+  test('fetches past, active and preparation rounds once and deduplicates concurrent opens', async () => {
+    const { service, calls } = harness({
+      '/proxy/v1/clans/%23CLAN/currentwar/leaguegroup': { body: group },
+      '/proxy/v1/clanwarleagues/wars/%23OLD': {
+        body: { ...officialWar('#CLAN', '#OTHER'), state: 'warEnded' },
+      },
+      '/proxy/v1/clanwarleagues/wars/%23NOW': { body: officialWar('#CLAN', '#OTHER') },
+      '/proxy/v1/clanwarleagues/wars/%23NEXT': {
+        body: { ...officialWar('#CLAN', '#OTHER'), state: 'preparation' },
+      },
+    });
+    const [first, second] = await Promise.all([
+      service.loadCwlDetail('#CLAN', '2026-09'),
+      service.loadCwlDetail('#CLAN', '2026-09'),
+    ]);
+    expect(first).toBe(second);
+    expect(first.warLeagueInfos.map((war) => war.state)).toEqual([
+      'warEnded',
+      'inWar',
+      'preparation',
+    ]);
+    expect(first.getActiveWarByTag('#CLAN')?.tag).toBe('#NOW');
+    expect(first.leagueInfo?.clans[0]?.warsPlayed).toBe(2);
+    expect(calls.get('/proxy/v1/clanwarleagues/wars/%23NOW')).toBe(1);
+    expect(calls.has('/proxy/v1/clanwarleagues/wars/%230')).toBe(false);
+  });
+  test('a failed round rejects the incomplete result and can be retried', async () => {
+    let failures = 1;
+    const { service } = harness({
+      '/proxy/v1/clans/%23CLAN/currentwar/leaguegroup': {
+        body: { ...group, rounds: [{ warTags: ['#NOW'] }] },
+      },
+      '/proxy/v1/clanwarleagues/wars/%23NOW': async () =>
+        failures-- > 0 ? reply({ reason: 'notFound' }, 404) : reply(officialWar('#CLAN', '#OTHER')),
+    });
+    await expect(service.loadCwlDetail('#CLAN', '2026-09')).rejects.toThrow('round unavailable');
+    expect((await service.loadCwlDetail('#CLAN', '2026-09')).warLeagueInfos).toHaveLength(1);
+  });
+  test('an older requested season uses its archive rather than current season wars', async () => {
+    const { service, calls } = harness({
+      '/proxy/v1/clans/%23CLAN/currentwar/leaguegroup': { body: group },
+      '/v2/cwl/%23CLAN/group?season=2026-08': {
+        body: {
+          state: 'ended',
+          season: '2026-08',
+          warLeague: null,
+          clans: [warClan('#CLAN')],
+          rounds: [
+            {
+              warTags: [
+                {
+                  ...officialWar('#CLAN', '#OTHER'),
+                  tag: '#PAST',
+                  state: 'warEnded',
+                  season: '2026-08',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    });
+    const result = await service.loadCwlDetail('#CLAN', '2026-08');
+    expect(result.warLeagueInfos[0]?.tag).toBe('#PAST');
+    expect(calls.has('/proxy/v1/clanwarleagues/wars/%23NOW')).toBe(false);
   });
 });

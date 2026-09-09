@@ -33,6 +33,9 @@ export class ExpoGameDataFileStore implements GameDataFileStore {
 }
 
 export class AsyncStorageGameDataPreferences implements GameDataPreferences {
+  getKeys = () => AsyncStorage.getAllKeys();
+  getMany = (keys: readonly string[]) => AsyncStorage.multiGet([...keys]);
+  removeString = (key: string) => AsyncStorage.removeItem(key);
   getString(key: string): Promise<string | null> {
     return AsyncStorage.getItem(key);
   }

@@ -1,4 +1,4 @@
-import { ApiResponseError } from '@clashking/api-client';
+import { ApiResponseError, ResponseDecodeError } from '@clashking/api-client';
 import { AppConfigEndpoint } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
 
@@ -51,5 +51,41 @@ describe('shared API observability', () => {
     expect(diagnostic.message).toContain('500');
     expect(diagnostic.message).not.toContain('secret-token');
     expect(diagnostic.cause).toBeUndefined();
+  });
+  it('logs decode paths without leaking response values and preserves the failure', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const failure = new ResponseDecodeError({
+        operationId: 'appConfig',
+        cause: {
+          _tag: 'SchemaError',
+          issue: {
+            _tag: 'Pointer',
+            path: ['field'],
+            issue: {
+              _tag: 'InvalidType',
+              actual: 'secret-token',
+            },
+          },
+        },
+      });
+      const execute = jest.fn(() =>
+        Effect.fail(failure),
+      ) as unknown as ContractApiService['execute'];
+      const client = withApiDiagnostics(
+        { execute, executeStatus: jest.fn() as unknown as ContractApiService['executeStatus'] },
+        { reportException: jest.fn() },
+      );
+      await expect(
+        Effect.runPromise(client.execute(AppConfigEndpoint, { path: {}, query: {}, body: {} })),
+      ).rejects.toBe(failure);
+      const log = JSON.stringify(warn.mock.calls);
+      expect(log).toContain('GET /v2/app/config');
+      expect(log).toContain('field');
+      expect(log).toContain('InvalidType');
+      expect(log).not.toContain('secret-token');
+    } finally {
+      warn.mockRestore();
+    }
   });
 });

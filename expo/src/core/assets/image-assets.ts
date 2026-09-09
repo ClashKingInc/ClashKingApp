@@ -121,16 +121,19 @@ export class ImageAssets {
   }
 
   static widgetClanBadgeForTag(tag: string): string {
-    const badge = ImageAssets.clanBadgeForTag(tag);
-    // Covers the widgets' largest 56pt badge at 3x without AVIF decoding.
-    return badge ? badge.replace(/\.avif$/, '.png') + '?size=256' : '';
+    const trimmed = tag.trim();
+    const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
+    return normalized ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}` : '';
   }
 
   static clanBadge(badgeUrl: string): string {
     return badgeUrl || `${ImageAssets.baseUrl}/icons/default_clan_badge.png`;
   }
 
-  static clanBadgeUrls(tag: string, badgeData?: unknown): { small: string; medium: string; large: string } {
+  static clanBadgeUrls(
+    tag: string,
+    badgeData?: unknown,
+  ): { small: string; medium: string; large: string } {
     const url = ImageAssets.clanBadgeForTag(tag, badgeData);
     return { small: url, medium: url, large: url };
   }
