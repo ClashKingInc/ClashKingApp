@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Tøm bildebuffer",
+  "settingsImageCacheCleared": "Bildebufferen er tømt.",
+  "settingsImageCacheClearFailed": "Kunne ikke tømme bildebufferen. Prøv igjen.",
   "startupCheckingUpdate": "Ser etter oppdateringer…",
   "startupDownloadingUpdate": "Laster ned oppdatering…",
   "startupUpdateInBackground": "Oppdater i bakgrunnen",

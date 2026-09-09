@@ -98,11 +98,15 @@ describe('observability service', () => {
     ).toEqual([defaultIntegration]);
   });
 
-  it('does not initialize reporting without an explicit app DSN', () => {
+  it('uses the built-in app DSN when an environment override is blank', () => {
     process.env.EXPO_PUBLIC_CK_SENTRY_DSN = '   ';
     initializeObservability();
-    expect(mockInit).not.toHaveBeenCalled();
-    expect(mockSetContext).not.toHaveBeenCalled();
+    expect(mockInit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dsn: 'https://dd63e00ff0707d03b77f7837e60718b3@o4509853737353216.ingest.de.sentry.io/4512054295461968',
+      }),
+    );
+    expect(mockSetContext).toHaveBeenCalledWith('selected_player', null);
   });
 
   it('fails open when the SDK cannot initialize', () => {
@@ -209,6 +213,15 @@ describe('observability service', () => {
     expect(scrub({ ...first, event_id: 'third', message: 'different' })).not.toBeNull();
     time += 101;
     expect(scrub({ ...first, event_id: 'fourth' })).not.toBeNull();
+  });
+
+  it('reports an equivalent error signature only once per app session by default', () => {
+    let time = 1_000;
+    const scrub = createBeforeSend({ now: () => time });
+    const first = { type: undefined, message: 'same failure', tags: { operation: 'refresh' } };
+    expect(scrub(first)).not.toBeNull();
+    time += 86_400_000;
+    expect(scrub({ ...first, event_id: 'later' })).toBeNull();
   });
 
   it('bounds the signature cache and evicts the oldest signature', () => {

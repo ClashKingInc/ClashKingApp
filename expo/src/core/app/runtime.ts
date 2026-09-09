@@ -197,7 +197,7 @@ export function createAppRuntime(): AppRuntime {
     (operation, error) => reportException(error, operation),
   );
   const playerCardPreferences = new PlayerCardPreferencesService(preferences);
-  const rankings = new RankingsService(contractApi);
+  const rankings = new RankingsService(contractApi, preferences);
   const announcements = new AnnouncementService(
     contractApi,
     runtimePlatform,

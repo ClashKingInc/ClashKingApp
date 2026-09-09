@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "이미지 캐시 지우기",
+  "settingsImageCacheCleared": "이미지 캐시를 지웠습니다.",
+  "settingsImageCacheClearFailed": "이미지 캐시를 지우지 못했습니다. 다시 시도해 주세요.",
   "startupCheckingUpdate": "업데이트 확인 중…",
   "startupDownloadingUpdate": "업데이트 다운로드 중…",
   "startupUpdateInBackground": "백그라운드에서 업데이트",

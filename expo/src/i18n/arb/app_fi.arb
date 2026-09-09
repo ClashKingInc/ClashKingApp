@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Tyhjennä kuvavälimuisti",
+  "settingsImageCacheCleared": "Kuvavälimuisti tyhjennettiin.",
+  "settingsImageCacheClearFailed": "Kuvavälimuistia ei voitu tyhjentää. Yritä uudelleen.",
   "startupCheckingUpdate": "Tarkistetaan päivityksiä…",
   "startupDownloadingUpdate": "Ladataan päivitystä…",
   "startupUpdateInBackground": "Päivitä taustalla",

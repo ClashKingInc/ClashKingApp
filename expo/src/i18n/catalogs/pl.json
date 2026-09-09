@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Wyczyść pamięć podręczną obrazów",
+  "settingsImageCacheCleared": "Pamięć podręczna obrazów została wyczyszczona.",
+  "settingsImageCacheClearFailed": "Nie udało się wyczyścić pamięci podręcznej obrazów. Spróbuj ponownie.",
   "startupCheckingUpdate": "Sprawdzanie aktualizacji…",
   "startupDownloadingUpdate": "Pobieranie aktualizacji…",
   "startupUpdateInBackground": "Aktualizuj w tle",

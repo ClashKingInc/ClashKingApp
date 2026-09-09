@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Обриши кеш слика",
+  "settingsImageCacheCleared": "Кеш слика је обрисан.",
+  "settingsImageCacheClearFailed": "Није могуће обрисати кеш слика. Покушај поново.",
   "startupCheckingUpdate": "Провера ажурирања…",
   "startupDownloadingUpdate": "Преузимање ажурирања…",
   "startupUpdateInBackground": "Ажурирај у позадини",

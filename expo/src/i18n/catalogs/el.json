@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Εκκαθάριση προσωρινής μνήμης εικόνων",
+  "settingsImageCacheCleared": "Η προσωρινή μνήμη εικόνων εκκαθαρίστηκε.",
+  "settingsImageCacheClearFailed": "Δεν ήταν δυνατή η εκκαθάριση της προσωρινής μνήμης εικόνων. Δοκιμάστε ξανά.",
   "startupCheckingUpdate": "Έλεγχος για ενημερώσεις…",
   "startupDownloadingUpdate": "Λήψη ενημέρωσης…",
   "startupUpdateInBackground": "Ενημέρωση στο παρασκήνιο",

@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "清除图片缓存",
+  "settingsImageCacheCleared": "图片缓存已清除。",
+  "settingsImageCacheClearFailed": "无法清除图片缓存。请重试。",
   "startupCheckingUpdate": "正在检查更新…",
   "startupDownloadingUpdate": "正在下载更新…",
   "startupUpdateInBackground": "在后台更新",

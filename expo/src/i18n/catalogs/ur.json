@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "تصاویر کی کیش صاف کریں",
+  "settingsImageCacheCleared": "تصاویر کی کیش صاف کر دی گئی۔",
+  "settingsImageCacheClearFailed": "تصاویر کی کیش صاف نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
   "startupCheckingUpdate": "اپ ڈیٹس کی جانچ ہو رہی ہے…",
   "startupDownloadingUpdate": "اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے…",
   "startupUpdateInBackground": "پس منظر میں اپ ڈیٹ کریں",

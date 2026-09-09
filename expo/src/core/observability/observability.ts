@@ -12,7 +12,7 @@ import {
 import type { AuthUser } from '../../features/auth/models';
 import { resolveObservabilityConfig } from './observability-config';
 
-const DEFAULT_DEDUPE_WINDOW_MS = 60_000;
+const DEFAULT_DEDUPE_WINDOW_MS = Number.POSITIVE_INFINITY;
 const DEFAULT_DEDUPE_CAP = 256;
 const REDACTED = '[redacted]';
 let reportedObjects = new WeakSet<object>();
@@ -22,7 +22,8 @@ let enabled = false;
 
 export function initializeObservability(): void {
   if (initialized) return;
-  const version = Application.nativeApplicationVersion ?? Constants.expoConfig?.version ?? '0.3.5';
+  const version =
+    Application.nativeApplicationVersion ?? Constants.expoConfig?.version ?? 'unknown';
   const packageName =
     Application.applicationId ??
     Constants.expoConfig?.ios?.bundleIdentifier ??

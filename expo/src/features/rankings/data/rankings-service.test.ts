@@ -18,7 +18,14 @@ function response(body: unknown, status = 200): Response {
   return new Response(status === 204 ? null : body === '' ? '' : JSON.stringify(body), { status });
 }
 
-function setup(routes: Record<string, { body: unknown; status?: number }>) {
+function setup(
+  routes: Record<string, { body: unknown; status?: number }>,
+  storage?: {
+    getString(key: string): Promise<string | null>;
+    setString(key: string, value: string): Promise<void>;
+    remove(key: string): Promise<void>;
+  },
+) {
   const calls: { url: string; init?: RequestInit }[] = [];
   const fetchImplementation = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const request = await readContractRequest(input, init);
@@ -35,7 +42,7 @@ function setup(routes: Record<string, { body: unknown; status?: number }>) {
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation: fetchImplementation as typeof fetch,
   });
-  return { service: new RankingsService(api), calls };
+  return { service: new RankingsService(api, storage), calls };
 }
 
 function query(overrides: Partial<RankingQuery> = {}): RankingQuery {
@@ -106,6 +113,46 @@ describe('RankingsService', () => {
 
     const locations = await service.fetchLocations();
     expect(locations.map((item) => item.name)).toEqual(['Worldwide', 'Afghanistan', 'Zimbabwe']);
+  });
+
+  test('persists the location catalog and reuses it without another request', async () => {
+    const values = new Map<string, string>();
+    const storage = {
+      getString: async (key: string) => values.get(key) ?? null,
+      setString: async (key: string, value: string) => {
+        values.set(key, value);
+      },
+      remove: async (key: string) => {
+        values.delete(key);
+      },
+    };
+    const routes = {
+      'https://api.test/proxy/v1/locations': {
+        body: {
+          items: [
+            {
+              id: 32000007,
+              name: 'United States',
+              isCountry: true,
+              countryCode: 'US',
+            },
+          ],
+        },
+      },
+    };
+    const first = setup(routes, storage);
+    expect((await first.service.fetchLocations()).map((item) => item.name)).toEqual([
+      'Worldwide',
+      'United States',
+    ]);
+    expect(first.calls).toHaveLength(1);
+
+    const second = setup({}, storage);
+    expect((await second.service.fetchLocations()).map((item) => item.name)).toEqual([
+      'Worldwide',
+      'United States',
+    ]);
+    expect(second.calls).toHaveLength(0);
   });
 
   test('uses the authenticated official proxy route for current rankings', async () => {

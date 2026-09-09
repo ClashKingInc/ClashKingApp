@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Limpar cache de imagens",
+  "settingsImageCacheCleared": "A cache de imagens foi limpa.",
+  "settingsImageCacheClearFailed": "Não foi possível limpar a cache de imagens. Tenta novamente.",
   "startupCheckingUpdate": "A procurar atualizações…",
   "startupDownloadingUpdate": "A descarregar atualização…",
   "startupUpdateInBackground": "Atualizar em segundo plano",

@@ -43,6 +43,7 @@ export const STORAGE_KEYS = {
   upgradeTrackerSnapshotIndex: 'upgrade_tracker_snapshot_index_v1',
   homeCardOrder: 'home_card_order_v1',
   mobileDrawerGestureHintSeen: 'mobile_drawer_gesture_hint_seen_v1',
+  rankingLocations: 'ranking_locations_v1',
 } as const;
 
 export const LEGACY_APP_PREFERENCE_KEYS = [

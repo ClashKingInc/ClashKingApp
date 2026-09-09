@@ -18,6 +18,7 @@ import { Effect } from 'effect';
 import { ApiResponseError } from '@clashking/api-client';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
+import { STORAGE_KEYS, type StringStorage } from '../../../core/storage/storage';
 import {
   RankingBoard,
   RankingEntry,
@@ -55,9 +56,14 @@ export class UnsupportedRankingHistoryError extends Error {
 }
 
 export class RankingsService implements RankingsServiceContract {
-  constructor(private readonly api: ContractApiService) {}
+  constructor(
+    private readonly api: ContractApiService,
+    private readonly storage?: StringStorage,
+  ) {}
 
   async fetchLocations(): Promise<readonly RankingLocation[]> {
+    const cached = await this.readCachedLocations();
+    if (cached) return cached;
     const decoded = await Effect.runPromise(
       this.api.execute(ProxyLocationsEndpoint, { path: {}, query: {}, body: {} }),
     );
@@ -77,7 +83,40 @@ export class RankingsService implements RankingsServiceContract {
         if (a.isCountry !== b.isCountry) return a.isCountry ? 1 : -1;
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
       });
-    return [RankingLocation.worldwide(), ...locations];
+    const result = [RankingLocation.worldwide(), ...locations];
+    await this.storage
+      ?.setString(
+        STORAGE_KEYS.rankingLocations,
+        JSON.stringify(
+          locations.map(({ id, name, isCountry, countryCode }) => ({
+            id,
+            name,
+            isCountry,
+            countryCode,
+          })),
+        ),
+      )
+      .catch(() => undefined);
+    return result;
+  }
+
+  private async readCachedLocations(): Promise<readonly RankingLocation[] | null> {
+    const encoded = await this.storage?.getString(STORAGE_KEYS.rankingLocations).catch(() => null);
+    if (!encoded) return null;
+    try {
+      const value: unknown = JSON.parse(encoded);
+      if (!Array.isArray(value)) return null;
+      const locations = value
+        .filter(isRecord)
+        .map((item) => RankingLocation.fromJson(item))
+        .filter(
+          (location) =>
+            location.id !== null && location.name.length > 0 && location.hasValidCountryCode,
+        );
+      return locations.length > 0 ? [RankingLocation.worldwide(), ...locations] : null;
+    } catch {
+      return null;
+    }
   }
 
   async fetchRankings(query: RankingQuery): Promise<RankingResult> {

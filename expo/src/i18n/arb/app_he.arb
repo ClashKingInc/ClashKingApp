@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "ניקוי מטמון התמונות",
+  "settingsImageCacheCleared": "מטמון התמונות נוקה.",
+  "settingsImageCacheClearFailed": "לא ניתן לנקות את מטמון התמונות. נסה שוב.",
   "startupCheckingUpdate": "מחפש עדכונים…",
   "startupDownloadingUpdate": "מוריד עדכון…",
   "startupUpdateInBackground": "עדכון ברקע",

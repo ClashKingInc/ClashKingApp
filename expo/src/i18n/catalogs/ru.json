@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Очистить кеш изображений",
+  "settingsImageCacheCleared": "Кеш изображений очищен.",
+  "settingsImageCacheClearFailed": "Не удалось очистить кеш изображений. Попробуйте еще раз.",
   "startupCheckingUpdate": "Проверка обновлений…",
   "startupDownloadingUpdate": "Загрузка обновления…",
   "startupUpdateInBackground": "Обновить в фоне",

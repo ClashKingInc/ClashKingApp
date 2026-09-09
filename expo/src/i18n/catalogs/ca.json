@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Neteja la memòria cau d'imatges",
+  "settingsImageCacheCleared": "S'ha netejat la memòria cau d'imatges.",
+  "settingsImageCacheClearFailed": "No s'ha pogut netejar la memòria cau d'imatges. Torna-ho a provar.",
   "startupCheckingUpdate": "S’estan cercant actualitzacions…",
   "startupDownloadingUpdate": "S’està baixant l’actualització…",
   "startupUpdateInBackground": "Actualitza en segon pla",

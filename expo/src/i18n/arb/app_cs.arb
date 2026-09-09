@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Vymazat mezipaměť obrázků",
+  "settingsImageCacheCleared": "Mezipaměť obrázků byla vymazána.",
+  "settingsImageCacheClearFailed": "Mezipaměť obrázků se nepodařilo vymazat. Zkuste to znovu.",
   "startupCheckingUpdate": "Kontrola aktualizací…",
   "startupDownloadingUpdate": "Stahování aktualizace…",
   "startupUpdateInBackground": "Aktualizovat na pozadí",

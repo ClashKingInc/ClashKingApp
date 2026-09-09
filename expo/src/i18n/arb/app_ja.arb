@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "画像キャッシュを消去",
+  "settingsImageCacheCleared": "画像キャッシュを消去しました。",
+  "settingsImageCacheClearFailed": "画像キャッシュを消去できませんでした。もう一度お試しください。",
   "startupCheckingUpdate": "アップデートを確認中…",
   "startupDownloadingUpdate": "アップデートをダウンロード中…",
   "startupUpdateInBackground": "バックグラウンドで更新",

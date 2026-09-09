@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Képgyorsítótár törlése",
+  "settingsImageCacheCleared": "A képgyorsítótár törölve.",
+  "settingsImageCacheClearFailed": "Nem sikerült törölni a képgyorsítótárat. Próbáld újra.",
   "startupCheckingUpdate": "Frissítések keresése…",
   "startupDownloadingUpdate": "Frissítés letöltése…",
   "startupUpdateInBackground": "Frissítés a háttérben",

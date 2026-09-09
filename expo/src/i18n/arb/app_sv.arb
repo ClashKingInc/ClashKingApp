@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Rensa bildcache",
+  "settingsImageCacheCleared": "Bildcachen har rensats.",
+  "settingsImageCacheClearFailed": "Det gick inte att rensa bildcachen. Försök igen.",
   "startupCheckingUpdate": "Söker efter uppdateringar…",
   "startupDownloadingUpdate": "Hämtar uppdatering…",
   "startupUpdateInBackground": "Uppdatera i bakgrunden",

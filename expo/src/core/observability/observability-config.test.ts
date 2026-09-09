@@ -1,7 +1,11 @@
-import { resolveObservabilityConfig, sentryEnvironment } from './observability-config';
+import {
+  DEFAULT_SENTRY_DSN,
+  resolveObservabilityConfig,
+  sentryEnvironment,
+} from './observability-config';
 
 describe('observability config', () => {
-  it('keeps reporting disabled without a dedicated DSN and uses package metadata', () => {
+  it('uses the app Sentry project by default and includes package metadata', () => {
     expect(
       resolveObservabilityConfig(
         {},
@@ -12,7 +16,7 @@ describe('observability config', () => {
         },
       ),
     ).toEqual({
-      dsn: undefined,
+      dsn: DEFAULT_SENTRY_DSN,
       environment: 'production',
       release: 'com.clashking.apps@0.3.5',
       dist: '25',

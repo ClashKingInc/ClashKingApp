@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Xóa bộ nhớ đệm hình ảnh",
+  "settingsImageCacheCleared": "Đã xóa bộ nhớ đệm hình ảnh.",
+  "settingsImageCacheClearFailed": "Không thể xóa bộ nhớ đệm hình ảnh. Vui lòng thử lại.",
   "startupCheckingUpdate": "Đang kiểm tra bản cập nhật…",
   "startupDownloadingUpdate": "Đang tải bản cập nhật…",
   "startupUpdateInBackground": "Cập nhật trong nền",

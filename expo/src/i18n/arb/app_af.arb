@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Maak beeldkas skoon",
+  "settingsImageCacheCleared": "Beeldkas is skoongemaak.",
+  "settingsImageCacheClearFailed": "Kon nie die beeldkas skoonmaak nie. Probeer asseblief weer.",
   "startupCheckingUpdate": "Soek tans opdaterings…",
   "startupDownloadingUpdate": "Laai opdatering af…",
   "startupUpdateInBackground": "Werk op in die agtergrond",

@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "مسح ذاكرة التخزين المؤقت للصور",
+  "settingsImageCacheCleared": "تم مسح ذاكرة التخزين المؤقت للصور.",
+  "settingsImageCacheClearFailed": "تعذر مسح ذاكرة التخزين المؤقت للصور. يُرجى المحاولة مرة أخرى.",
   "startupCheckingUpdate": "جارٍ البحث عن تحديثات…",
   "startupDownloadingUpdate": "جارٍ تنزيل التحديث…",
   "startupUpdateInBackground": "التحديث في الخلفية",

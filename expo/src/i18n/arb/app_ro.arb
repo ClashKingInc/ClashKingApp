@@ -1,8 +1,7 @@
 {
-  "settingsClearImageCache": "Clear image cache",
-  "settingsClearImageCacheDescription": "Remove downloaded images from this phone. Your accounts and saved data stay unchanged.",
-  "settingsImageCacheCleared": "Image cache cleared.",
-  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "settingsClearImageCache": "Golește memoria cache a imaginilor",
+  "settingsImageCacheCleared": "Memoria cache a imaginilor a fost golită.",
+  "settingsImageCacheClearFailed": "Memoria cache a imaginilor nu a putut fi golită. Încearcă din nou.",
   "startupCheckingUpdate": "Se caută actualizări…",
   "startupDownloadingUpdate": "Se descarcă actualizarea…",
   "startupUpdateInBackground": "Actualizează în fundal",
