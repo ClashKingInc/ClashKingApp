@@ -7,7 +7,6 @@ import {
   PlayerTownhallCountsEndpoint,
   StatsCwlEndpoint,
   StatsRankedEndpoint,
-  StatsOverviewEndpoint,
   StatsWarEndpoint,
 } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
@@ -19,19 +18,16 @@ import {
   StatsClanCountsResponse,
   StatsDateRange,
   StatsItemsResponse,
-  StatsOverviewResponse,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
   type StatsArmiesQuery,
   type StatsCwlQuery,
-  type StatsDateFilter,
   type StatsItemsQuery,
   type StatsRankedQuery,
   type StatsWarQuery,
 } from '../models';
 
 export interface StatsRepositoryContract {
-  loadOverview(dates: StatsDateFilter): Promise<StatsOverviewResponse>;
   loadPlayerCounts(): Promise<StatsPlayerCountsResponse>;
   loadClanCounts(): Promise<StatsClanCountsResponse>;
   loadArmies(request: StatsArmiesQuery): Promise<StatsArmiesResponse>;
@@ -43,18 +39,6 @@ export interface StatsRepositoryContract {
 
 export class StatsRepository implements StatsRepositoryContract {
   constructor(private readonly contractApi: ContractApiService) {}
-
-  async loadOverview(dates: StatsDateFilter): Promise<StatsOverviewResponse> {
-    return StatsOverviewResponse.fromJson(
-      await Effect.runPromise(
-        this.contractApi.execute(StatsOverviewEndpoint, {
-          path: {},
-          query: { start_date: formatDate(dates.start), end_date: formatDate(dates.end) },
-          body: {},
-        }),
-      ),
-    );
-  }
   async loadPlayerCounts(): Promise<StatsPlayerCountsResponse> {
     const responses = await Promise.all([
       Effect.runPromise(
@@ -139,8 +123,4 @@ export class StatsRepository implements StatsRepositoryContract {
       ),
     );
   }
-}
-
-function formatDate(value: Date): string {
-  return `${value.getFullYear().toString().padStart(4, '0')}-${(value.getMonth() + 1).toString().padStart(2, '0')}-${value.getDate().toString().padStart(2, '0')}`;
 }

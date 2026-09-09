@@ -5,7 +5,7 @@ import { StatsProvider, StatsRepository } from '../data';
 import { StatsScreen } from './stats-screen';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { StatsDateFilter, type StatsSectionValue } from '../models';
-import { battleStatsLinkSections } from './stats-link-sections';
+import { battleStatsLinkSections, worldStatsLinkSections } from './stats-link-sections';
 
 export interface StatsRootProps {
   readonly onBack: () => void;
@@ -18,7 +18,7 @@ export function StatsRoot({ onBack }: StatsRootProps) {
     const value = new StatsProvider(new StatsRepository(runtime.contractApi));
     value.audience = linkChoice(link.audience, ['battle', 'world'], 'battle');
     const sections: readonly StatsSectionValue[] =
-      value.audience === 'battle' ? battleStatsLinkSections : ['overview', 'players', 'clans'];
+      value.audience === 'battle' ? battleStatsLinkSections : worldStatsLinkSections;
     value.section = linkChoice(link.section, sections, sections[0]!);
     if (link.start && link.end) {
       const dates = new StatsDateFilter(

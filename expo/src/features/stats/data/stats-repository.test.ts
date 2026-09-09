@@ -130,7 +130,7 @@ describe('StatsRepository', () => {
     expect(executeStatus).not.toHaveBeenCalled();
   });
 
-  it('uses the exact public overview/count routes', async () => {
+  it('uses the exact public player-count routes', async () => {
     const execute = jest.fn(() => Effect.succeed({ items: [] })) as unknown as jest.MockedFunction<
       ContractApiService['execute']
     >;

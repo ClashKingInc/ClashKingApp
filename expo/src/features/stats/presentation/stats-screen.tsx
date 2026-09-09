@@ -43,7 +43,6 @@ import {
   ErrorState,
   GlassSurface,
   MobileWebImage,
-  ResponsiveGrid,
   Skeleton,
   Surface,
   ckRadius,
@@ -61,7 +60,6 @@ import {
   StatsItemQuantityFilter,
   StatsItemType,
   StatsItemsResponse,
-  StatsOverviewResponse,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
   StatsSection,
@@ -71,14 +69,7 @@ import {
   type StatsMetrics,
   type StatsSectionValue,
 } from '../models';
-
-const battleSections = [
-  StatsSection.ranked,
-  StatsSection.armies,
-  StatsSection.war,
-  StatsSection.cwl,
-] as const;
-const worldSections = [StatsSection.overview, StatsSection.players, StatsSection.clans] as const;
+import { battleStatsLinkSections, worldStatsLinkSections } from './stats-link-sections';
 
 export function StatsScreen({ provider, onBack }: { provider: StatsProvider; onBack: () => void }) {
   const { t, locale } = useI18n();
@@ -88,7 +79,7 @@ export function StatsScreen({ provider, onBack }: { provider: StatsProvider; onB
   const desktop = Platform.OS === 'web' && width >= 900;
   const horizontal = Math.max(16, (width - 1120) / 2);
   const sections: readonly StatsSectionValue[] =
-    provider.audience === StatsAudience.battle ? battleSections : worldSections;
+    provider.audience === StatsAudience.battle ? battleStatsLinkSections : worldStatsLinkSections;
   return (
     <SafeAreaView
       edges={['left', 'right']}
@@ -207,9 +198,6 @@ function StatsSectionContent({ provider }: { provider: StatsProvider }) {
   if (!state.data) return <StatsSkeleton section={provider.section} />;
   let content: ReactNode;
   switch (provider.section) {
-    case StatsSection.overview:
-      content = <OverviewSection data={state.data as StatsOverviewResponse} />;
-      break;
     case StatsSection.players:
       content = <PlayersSection data={state.data as StatsPlayerCountsResponse} />;
       break;
@@ -242,30 +230,6 @@ function StatsSectionContent({ provider }: { provider: StatsProvider }) {
       {content}
       {state.updatedAt ? <Badge>{t('statsUpdated')}</Badge> : null}
     </View>
-  );
-}
-
-function OverviewSection({ data }: { data: StatsOverviewResponse }) {
-  const { t, locale } = useI18n();
-  const metrics = [
-    [t('statsPlayers'), data.counts.playerCount],
-    [t('statsClans'), data.counts.clanCount],
-    [t('statsPlayersInWar'), data.counts.playersInWar],
-    [t('statsClansInWar'), data.counts.clansInWar],
-    [t('statsPlayersInLegends'), data.counts.playersInLegends],
-    [t('statsWarsStored'), data.counts.warsStored],
-    [t('statsJoinLeaves'), data.counts.totalJoinLeaves],
-  ] as const;
-  return (
-    <Section>
-      <SectionTitle>{t('statsGlobalCounts')}</SectionTitle>
-      <ResponsiveGrid minItemWidth={145} maxColumns={4} gap={10}>
-        {metrics.map(([label, value]) => (
-          <MetricPanel key={label} label={label} value={compact(value, locale)} />
-        ))}
-      </ResponsiveGrid>
-      <ComingSoon title={t('statsWarsOverTime')} />
-    </Section>
   );
 }
 function PlayersSection({ data }: { data: StatsPlayerCountsResponse }) {
@@ -1322,16 +1286,6 @@ function Progress({ label, value }: { label: string; value: number }) {
     </View>
   );
 }
-function MetricPanel({ label, value }: { label: string; value: string }) {
-  return (
-    <Surface style={styles.metricPanel}>
-      <CKText role="titleLarge">{value}</CKText>
-      <CKText role="bodySmall" muted>
-        {label}
-      </CKText>
-    </Surface>
-  );
-}
 function MetricPill({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.metricPill}>
@@ -1386,21 +1340,6 @@ function InlineNotice({ icon, text }: { icon: ReactNode; text: string }) {
 function StatsSkeleton({ section }: { section: StatsSectionValue }) {
   const { t } = useI18n();
   const loadingLabel = t('generalLoading');
-  if (section === StatsSection.overview) {
-    return (
-      <View style={styles.section} accessibilityLabel={loadingLabel}>
-        <ResponsiveGrid minItemWidth={145} gap={10}>
-          {Array.from({ length: 8 }, (_, key) => (
-            <Surface key={key} style={styles.metricPanel}>
-              <Skeleton width={84} height={10} />
-              <Skeleton width={64} height={24} />
-            </Surface>
-          ))}
-        </ResponsiveGrid>
-        <ChartSkeleton height={112} />
-      </View>
-    );
-  }
   if (section === StatsSection.players || section === StatsSection.clans) {
     return (
       <View style={styles.section} accessibilityLabel={loadingLabel}>
@@ -1515,8 +1454,6 @@ function IconButton({
 type Translate = ReturnType<typeof useI18n>['t'];
 export function sectionLabel(section: StatsSectionValue, t: Translate): string {
   switch (section) {
-    case StatsSection.overview:
-      return t('statsOverview');
     case StatsSection.players:
       return t('statsPlayers');
     case StatsSection.clans:
@@ -1545,8 +1482,6 @@ function sectionImage(section: StatsSectionValue): string {
       return ImageAssets.war;
     case StatsSection.cwl:
       return ImageAssets.getWarLeagueImage('Champion League I');
-    case StatsSection.overview:
-      return ImageAssets.darkModeLogo;
     case StatsSection.players:
       return ImageAssets.townHall(18);
     case StatsSection.clans:
@@ -1555,8 +1490,6 @@ function sectionImage(section: StatsSectionValue): string {
 }
 function sectionBackground(section: StatsSectionValue): string {
   switch (section) {
-    case StatsSection.overview:
-      return ImageAssets.homeBaseBackground;
     case StatsSection.players:
     case StatsSection.ranked:
       return ImageAssets.legendPageBackground;
@@ -1712,7 +1645,6 @@ const styles = StyleSheet.create({
   card: { padding: 16, gap: 12 },
   resultSkeleton: { flexDirection: 'row', alignItems: 'center' },
   summary: { padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 },
-  metricPanel: { padding: 14, minHeight: 88, justifyContent: 'center' },
   bars: { height: 190, flexDirection: 'row', alignItems: 'flex-end', gap: 4, paddingTop: 16 },
   barColumn: { flex: 1, height: 165, justifyContent: 'flex-end', alignItems: 'center', gap: 6 },
   bar: { width: '70%', maxWidth: 14, borderTopLeftRadius: 5, borderTopRightRadius: 5 },

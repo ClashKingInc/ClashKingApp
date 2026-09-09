@@ -7,8 +7,6 @@ import {
   StatsItemQuantityFilter,
   StatsItemsResponse,
   StatsMetrics,
-  StatsGlobalCounts,
-  StatsOverviewResponse,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
   StatsSection,
@@ -22,16 +20,6 @@ const performance = (available = true) =>
 
 function repository(overrides: Partial<StatsRepositoryContract> = {}): StatsRepositoryContract {
   return {
-    loadOverview: jest.fn(
-      async () =>
-        new StatsOverviewResponse(
-          range,
-          new StatsGlobalCounts(0, 0, 0, 0, 0, 0, 0),
-          performance().metrics,
-          performance().metrics,
-          performance().metrics,
-        ),
-    ),
     loadPlayerCounts: jest.fn(async () => new StatsPlayerCountsResponse([], [])),
     loadClanCounts: jest.fn(async () => new StatsClanCountsResponse([], [], [])),
     loadArmies: jest.fn(async () => new StatsArmiesResponse(range, [], 0)),
@@ -199,10 +187,10 @@ describe('StatsProvider state and query coverage', () => {
     expect(provider.stateFor(StatsSection.players).status).toBe(StatsLoadStatus.idle);
 
     const failed = new StatsProvider(
-      repository({ loadOverview: jest.fn(async () => Promise.reject(new Error('boom'))) }),
+      repository({ loadPlayerCounts: jest.fn(async () => Promise.reject(new Error('boom'))) }),
     );
-    await failed.load(StatsSection.overview);
-    expect(failed.stateFor(StatsSection.overview)).toMatchObject({
+    await failed.load(StatsSection.players);
+    expect(failed.stateFor(StatsSection.players)).toMatchObject({
       status: StatsLoadStatus.error,
       isRefreshing: false,
     });

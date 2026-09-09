@@ -100,7 +100,7 @@ export class StatsProvider {
   selectAudience(value: StatsAudienceValue): void {
     if (this.audience === value) return;
     this.audience = value;
-    this.section = value === StatsAudience.battle ? StatsSection.ranked : StatsSection.overview;
+    this.section = value === StatsAudience.battle ? StatsSection.ranked : StatsSection.players;
     this.notify();
     if (this.currentState.status === StatsLoadStatus.idle) void this.load(this.section);
   }
@@ -236,8 +236,6 @@ export class StatsProvider {
   }
   private loadSection(target: StatsSectionValue): Promise<object> {
     switch (target) {
-      case StatsSection.overview:
-        return this.repository.loadOverview(this.dates);
       case StatsSection.players:
         return this.repository.loadPlayerCounts();
       case StatsSection.clans:

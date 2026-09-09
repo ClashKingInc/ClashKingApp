@@ -31,7 +31,6 @@ export const StatsSection = {
   items: 'items',
   war: 'war',
   cwl: 'cwl',
-  overview: 'overview',
   players: 'players',
   clans: 'clans',
 } as const;
@@ -274,21 +273,6 @@ export class StatsDailyPoint {
       optionalDecimal(j.usageRate),
     );
   }
-  static fromOverviewJson(value: unknown): StatsDailyPoint {
-    const j = record(value);
-    return new StatsDailyPoint(
-      text(j.date),
-      integer(j.sample_size),
-      decimal(j.average_stars),
-      decimal(j.average_destruction),
-      decimal(j.zero_star_rate),
-      decimal(j.one_star_rate),
-      decimal(j.two_star_rate),
-      decimal(j.three_star_rate),
-      optionalInteger(j.use_count),
-      optionalDecimal(j.usage_rate),
-    );
-  }
 }
 export class StatsMetrics {
   constructor(
@@ -316,44 +300,6 @@ export class StatsMetrics {
       decimal(j.threeStarRate),
       list(j.daily).map(StatsDailyPoint.fromJson),
       optionalDecimal(j.usageRate),
-    );
-  }
-  static fromOverviewJson(value: unknown): StatsMetrics {
-    const j = record(value);
-    return new StatsMetrics(
-      j.available === true,
-      integer(j.sample_size),
-      decimal(j.average_stars),
-      decimal(j.average_destruction),
-      decimal(j.zero_star_rate),
-      decimal(j.one_star_rate),
-      decimal(j.two_star_rate),
-      decimal(j.three_star_rate),
-      list(j.daily).map(StatsDailyPoint.fromOverviewJson),
-      optionalDecimal(j.usage_rate),
-    );
-  }
-}
-export class StatsGlobalCounts {
-  constructor(
-    readonly playersInWar: number,
-    readonly clansInWar: number,
-    readonly totalJoinLeaves: number,
-    readonly playersInLegends: number,
-    readonly playerCount: number,
-    readonly clanCount: number,
-    readonly warsStored: number,
-  ) {}
-  static fromJson(value: unknown): StatsGlobalCounts {
-    const j = record(value);
-    return new StatsGlobalCounts(
-      integer(j.players_in_war),
-      integer(j.clans_in_war),
-      integer(j.total_join_leaves),
-      integer(j.players_in_legends),
-      integer(j.player_count),
-      integer(j.clan_count),
-      integer(j.wars_stored),
     );
   }
 }
@@ -385,25 +331,6 @@ export function decodeStatsGroupedCounts(
   key: string,
 ): readonly StatsGroupedCount[] {
   return list(record(value).items).map((item) => StatsGroupedCount.fromJson(item, key));
-}
-export class StatsOverviewResponse {
-  constructor(
-    readonly dateRange: StatsDateRange,
-    readonly counts: StatsGlobalCounts,
-    readonly ranked: StatsMetrics,
-    readonly war: StatsMetrics,
-    readonly cwl: StatsMetrics,
-  ) {}
-  static fromJson(value: unknown): StatsOverviewResponse {
-    const j = record(value);
-    return new StatsOverviewResponse(
-      StatsDateRange.fromJson(j.date_range),
-      StatsGlobalCounts.fromJson(j.counts),
-      StatsMetrics.fromOverviewJson(j.ranked),
-      StatsMetrics.fromOverviewJson(j.war),
-      StatsMetrics.fromOverviewJson(j.cwl),
-    );
-  }
 }
 export class StatsArmyResult {
   constructor(
