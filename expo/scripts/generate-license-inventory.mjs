@@ -21,7 +21,11 @@ const packageRecords = Object.entries(lock.packages)
         ?.map(({ type }) => type)
         .filter(Boolean)
         .join(' OR ');
-    const licenseFile = fs.existsSync(directory)
+    // Platform-restricted optional packages are present in the lockfile on every
+    // OS but npm only installs them on matching hosts. Do not let the host that
+    // generated this file decide which license text represents that package.
+    const platformRestricted = metadata.optional && (metadata.os || metadata.cpu);
+    const licenseFile = !platformRestricted && fs.existsSync(directory)
       ? fs
           .readdirSync(directory)
           .find(
