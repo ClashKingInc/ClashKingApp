@@ -334,26 +334,26 @@ export function decodeStatsGroupedCounts(
 }
 export class StatsArmyResult {
   constructor(
-    readonly armyShareCode: string | null,
-    readonly armyItems: readonly string[],
-    readonly armyCounts: Readonly<Record<string, number>>,
+    readonly familyId: string,
+    readonly name: string | null,
+    readonly armyShareCode: string,
+    readonly players: number | null,
+    readonly totalLegendAttacks: number,
+    readonly averageDuration: number | null,
     readonly metrics: StatsMetrics,
   ) {}
   static fromJson(value: unknown): StatsArmyResult {
     const j = record(value);
-    const items = list(j.items).map((value) => {
-      const item = record(value);
-      return {
-        key: `${text(item.type)}:${integer(item.itemId)}`,
-        quantity: integer(item.quantity),
-      };
-    });
     const starCounts = record(j.starCounts);
     const attacks = integer(j.attacks);
+    const totalLegendAttacks = integer(j.totalLegendAttacks);
     return new StatsArmyResult(
-      j.shareCode == null ? null : text(j.shareCode),
-      items.length ? items.map((item) => item.key) : [text(j.name)],
-      Object.fromEntries(items.map((item) => [item.key, item.quantity])),
+      text(j.familyId),
+      j.name == null ? null : text(j.name),
+      text(j.shareCode),
+      j.players == null ? null : integer(j.players),
+      totalLegendAttacks,
+      j.averageDuration == null ? null : decimal(j.averageDuration),
       new StatsMetrics(
         attacks > 0,
         attacks,
@@ -369,6 +369,7 @@ export class StatsArmyResult {
         attacks === 0 ? 0 : integer(starCounts.two) / attacks,
         attacks === 0 ? 0 : integer(starCounts.three) / attacks,
         [],
+        totalLegendAttacks === 0 ? 0 : attacks / totalLegendAttacks,
       ),
     );
   }

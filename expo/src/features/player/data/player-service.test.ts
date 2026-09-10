@@ -266,8 +266,6 @@ test('coalesces CWL and ranked loads and caches global league tiers', async () =
           opponent: { tag: '#OPPONENT', name: 'Opponent', townHallLevel: 18 },
           stars: 3,
           destructionPercentage: 100,
-          lootedResources: { gold: 0, elixir: 0, darkElixir: 0 },
-          armyHash: '0'.repeat(64),
           shareCode: null,
           trophies: 40,
         },

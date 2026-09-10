@@ -301,8 +301,9 @@ function ArmiesSection({ provider, data }: { provider: StatsProvider; data: Stat
   const items = data.items.filter(
     (army) =>
       !needle ||
-      (army.armyShareCode ?? '').toLowerCase().includes(needle) ||
-      Object.keys(army.armyCounts).some((item) => item.toLowerCase().includes(needle)),
+      army.familyId.toLowerCase().includes(needle) ||
+      (army.name ?? '').toLowerCase().includes(needle) ||
+      army.armyShareCode.toLowerCase().includes(needle),
   );
   return (
     <Section>
@@ -356,26 +357,16 @@ function ArmiesSection({ provider, data }: { provider: StatsProvider; data: Stat
         <>
           <ArmyScatter items={items.slice(0, 30)} />
           <SectionTitle>{t('statsExactLoadouts')}</SectionTitle>
-          {items.map((army, index) => (
+          {items.map((army) => (
             <MetricsCard
-              key={`${army.armyShareCode ?? army.armyItems.join(',')}-${index}`}
-              title={t('statsExactComposition')}
+              key={army.familyId}
+              title={army.name ?? army.armyShareCode}
               metrics={army.metrics}
               extra={
                 <View style={styles.cardExtra}>
-                  <ArmyComposition counts={army.armyCounts} />
-                  <CKText>
-                    {Object.entries(army.armyCounts).length
-                      ? Object.entries(army.armyCounts)
-                          .map(([name, count]) => `${count}× ${name}`)
-                          .join(' · ')
-                      : army.armyItems.join(' · ')}
+                  <CKText selectable role="labelSmall" muted>
+                    {`${t('statsArmyShareCode')}: ${army.armyShareCode}`}
                   </CKText>
-                  {army.armyShareCode ? (
-                    <CKText selectable role="labelSmall" muted>
-                      {`${t('statsArmyShareCode')}: ${army.armyShareCode}`}
-                    </CKText>
-                  ) : null}
                 </View>
               }
             />
@@ -608,28 +599,6 @@ function DistributionCard({
     </Surface>
   );
 }
-function ArmyComposition({ counts }: { counts: Readonly<Record<string, number>> }) {
-  return (
-    <View style={styles.armyItems}>
-      {Object.entries(counts)
-        .slice(0, 8)
-        .map(([name, count]) => (
-          <View key={name} style={styles.armyIconWrap}>
-            <MobileWebImage
-              imageUrl={ImageAssets.getTroopImage(name)}
-              style={styles.armyIcon}
-              contentFit="contain"
-            />
-            <View style={styles.armyCount}>
-              <CKText role="bodySmall" style={styles.white}>
-                {count}
-              </CKText>
-            </View>
-          </View>
-        ))}
-    </View>
-  );
-}
 function ArmyScatter({ items }: { items: StatsArmiesResponse['items'] }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -643,12 +612,7 @@ function ArmyScatter({ items }: { items: StatsArmiesResponse['items'] }) {
       </CKText>
       {selectedArmy ? (
         <Badge>
-          {`${Object.entries(selectedArmy.armyCounts)
-            .slice(0, 2)
-            .map(([name, count]) => `${count}× ${name}`)
-            .join(
-              ' · ',
-            )} · ${percent(selectedArmy.metrics.usageRate ?? 0)} ${t('statsUsage')} · ${percent(selectedArmy.metrics.threeStarRate)} ${t('statsThreeStarRate')}`}
+          {`${selectedArmy.name ?? selectedArmy.armyShareCode} · ${percent(selectedArmy.metrics.usageRate ?? 0)} ${t('statsUsage')} · ${percent(selectedArmy.metrics.threeStarRate)} ${t('statsThreeStarRate')}`}
         </Badge>
       ) : null}
       <View style={styles.scatterChart}>
@@ -1668,20 +1632,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   armyItems: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  armyIconWrap: { width: 44, height: 44 },
-  armyIcon: { width: 40, height: 40 },
-  armyCount: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    minWidth: 18,
-    minHeight: 16,
-    borderRadius: 999,
-    backgroundColor: '#111',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 3,
-  },
   scatterChart: { height: 210, position: 'relative' },
   trendChart: { height: 150, position: 'relative' },
   chartHitTarget: {

@@ -74,6 +74,34 @@ describe('player history row parity', () => {
     expect(screen.queryByText('×8')).toBeNull();
   });
 
+  it('never renders loot for a defense row', async () => {
+    const defense = new PlayerBattlelogEntry(
+      '2',
+      'ranked',
+      'official',
+      false,
+      '#ATTACKER',
+      'Attacker',
+      18,
+      2,
+      85,
+      1234,
+      2345,
+      345,
+      new Date('2026-08-30T13:00:00Z'),
+      45,
+      '',
+      {},
+    );
+    const screen = await wrap(
+      <PlayerBattlelogTab data={new PlayerBattlelogData([defense], true, true)} />,
+    );
+
+    expect(screen.queryByLabelText('Gold: 1234')).toBeNull();
+    expect(screen.queryByLabelText('Elixir: 2345')).toBeNull();
+    expect(screen.queryByLabelText('Dark Elixir: 345')).toBeNull();
+  });
+
   it('suppresses super-troop detail and uses value-change detail for XP', async () => {
     const screen = await wrap(
       <PlayerActivityTab

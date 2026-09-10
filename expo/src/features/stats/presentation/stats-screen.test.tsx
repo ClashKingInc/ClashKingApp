@@ -27,11 +27,11 @@ import { StatsScreen } from './stats-screen';
 
 afterEach(() => resetGameDataStateForTesting());
 
-test('renders Flutter army discovery copy, exact composition, and share code', async () => {
+test('renders an army family and its representative share code', async () => {
   const metrics = new StatsMetrics(true, 1200, 2.4, 88, 0.02, 0.08, 0.3, 0.6, [], 0.14);
   const data = new StatsArmiesResponse(
     new StatsDateRange(new Date(2026, 7, 1), new Date(2026, 7, 30)),
-    [new StatsArmyResult('u1x10-s1x2', ['Root Rider'], { 'Root Rider': 10 }, metrics)],
+    [new StatsArmyResult('123', 'Root Rider', 'u1x10-s1x2', 250, 10_000, 120, metrics)],
     1,
   );
   const provider = {
@@ -77,8 +77,7 @@ test('renders Flutter army discovery copy, exact composition, and share code', a
       'Automated discovery should surface similar loadout clusters for human naming; it should not infer tactics from composition alone.',
     ),
   ).toBeTruthy();
-  expect(view.getByText('Exact composition')).toBeTruthy();
-  expect(view.getByText('10× Root Rider')).toBeTruthy();
+  expect(view.getByText('Root Rider')).toBeTruthy();
   expect(view.getByText('Army share code: u1x10-s1x2')).toBeTruthy();
 });
 

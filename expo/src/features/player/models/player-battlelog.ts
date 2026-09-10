@@ -28,7 +28,7 @@ export class PlayerBattlelogEntry {
     return this.gold + this.elixir + this.darkElixir;
   }
   get mergeKey() {
-    return `${this.attack ? 1 : 0}|${this.opponentTag.toUpperCase()}|${this.timestamp?.getTime() ?? 0}`;
+    return `${this.attack ? 1 : 0}|${this.timestamp?.getTime() ?? 0}`;
   }
   static fromOfficial(json: JsonRecord) {
     const resources: Record<string, number> = {};
@@ -56,27 +56,25 @@ export class PlayerBattlelogEntry {
     );
   }
   static fromHistory(json: JsonRecord) {
-    const share = string(json.army_share_code);
-    const stored = Object.fromEntries(
-      Object.entries(record(json.army_counts)).map(([key, value]) => [key, int(value)]),
-    );
+    const share = string(json.shareCode);
+    const loot = record(json.lootedResources);
     return new PlayerBattlelogEntry(
-      string(json.battle_id),
-      battlelogMode(json.battle_type),
+      string(json.battleTime),
+      battlelogMode(json.battleMode),
       'history',
-      json.attack === true,
-      string(json.opponent_tag),
-      string(json.opponent_name),
-      zeroIndexedTownHall(json.opponent_townhall),
+      true,
+      '',
+      '',
+      0,
       int(json.stars),
-      int(json.destruction_percentage),
-      int(json.gold),
-      int(json.elixir),
-      int(json.dark_elixir),
-      apiDate(json.timestamp),
+      int(json.destructionPercentage),
+      int(loot.gold),
+      int(loot.elixir),
+      int(loot.darkElixir),
+      apiDate(json.battleTime),
       int(json.duration),
       share,
-      Object.keys(stored).length ? stored : parseArmyCounts(share),
+      parseArmyCounts(share),
     );
   }
 }

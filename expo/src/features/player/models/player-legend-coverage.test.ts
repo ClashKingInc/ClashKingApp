@@ -80,20 +80,30 @@ describe('legend model behavior', () => {
           opponent: { tag: '#O', name: 'Opponent', townHallLevel: 18 },
           stars: 3,
           destructionPercentage: 100,
-          lootedResources: { gold: 100, elixir: 200, darkElixir: 3 },
-          armyHash: '0'.repeat(64),
           shareCode: null,
           trophies: 40,
         },
       ],
-      defenses: [{ trophies: -12, automatic: true }],
+      defenses: [
+        { trophies: -12, automatic: true },
+        {
+          time: '2026-08-01T13:00:00Z',
+          duration: 95,
+          townHallLevel: 18,
+          opponent: { tag: '#D', name: 'Attacker', townHallLevel: 18 },
+          stars: 2,
+          destructionPercentage: 85,
+          shareCode: null,
+          trophies: -20,
+        },
+      ],
     });
 
     expect(battlelog).toMatchObject({
       closed: true,
       trophyChange: 28,
-      lootedResources: { gold: 100, elixir: 200, darkElixir: 3 },
     });
+    expect(battlelog).not.toHaveProperty('lootedResources');
     expect(battlelog.attacks[0]).toMatchObject({
       automatic: false,
       opponentTag: '#O',
@@ -101,11 +111,17 @@ describe('legend model behavior', () => {
       shareCode: null,
       items: [],
     });
+    expect(battlelog.attacks[0]).not.toHaveProperty('lootedResources');
     expect(battlelog.defenses[0]).toMatchObject({
       automatic: true,
       trophies: -12,
       stars: null,
     });
+    expect(battlelog.defenses[1]).toMatchObject({
+      automatic: false,
+      opponentTag: '#D',
+    });
+    expect(battlelog.defenses[1]).not.toHaveProperty('lootedResources');
   });
 
   it('parses attacks and days, calculates remaining attacks, usage, and profile-backed gear', () => {

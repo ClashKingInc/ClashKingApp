@@ -1139,25 +1139,27 @@ function BattleRow({ item }: { item: PlayerBattlelogEntry }) {
           ))}
           <CKText role="rowTitle">{item.destructionPercentage}%</CKText>
         </View>
-        <View style={styles.wrap}>
-          {[
-            [ImageAssets.gold, t('resourceGold'), item.gold],
-            [ImageAssets.elixir, t('resourceElixir'), item.elixir],
-            [ImageAssets.darkElixir, t('resourceDarkElixir'), item.darkElixir],
-          ].map(([image, label, value]) =>
-            Number(value) > 0 ? (
-              <View
-                key={String(label)}
-                accessible
-                accessibilityLabel={`${label}: ${value}`}
-                style={styles.lootValue}
-              >
-                <MobileWebImage imageUrl={String(image)} style={styles.resourceIcon} />
-                <CKText role="labelSmall">{compactNumber(Number(value), locale)}</CKText>
-              </View>
-            ) : null,
-          )}
-        </View>
+        {item.attack ? (
+          <View style={styles.wrap}>
+            {[
+              [ImageAssets.gold, t('resourceGold'), item.gold],
+              [ImageAssets.elixir, t('resourceElixir'), item.elixir],
+              [ImageAssets.darkElixir, t('resourceDarkElixir'), item.darkElixir],
+            ].map(([image, label, value]) =>
+              Number(value) > 0 ? (
+                <View
+                  key={String(label)}
+                  accessible
+                  accessibilityLabel={`${label}: ${value}`}
+                  style={styles.lootValue}
+                >
+                  <MobileWebImage imageUrl={String(image)} style={styles.resourceIcon} />
+                  <CKText role="labelSmall">{compactNumber(Number(value), locale)}</CKText>
+                </View>
+              ) : null,
+            )}
+          </View>
+        ) : null}
       </View>
       {army.length ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>

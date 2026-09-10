@@ -107,28 +107,33 @@ describe('stats models', () => {
     const response = StatsArmiesResponse.fromJson({
       items: [
         {
-          armyHash: '0'.repeat(64),
-          name: 'Queen Charge',
+          familyId: '123',
+          name: null,
           shareCode: 'u1x2',
           attacks: 20,
           players: 12,
           starCounts: { zero: 1, one: 2, two: 7, three: 10 },
           averageDuration: 97,
           averageDestruction: 92.5,
+          totalLegendAttacks: 200,
         },
       ],
       nextCursor: null,
     });
     expect(response.count).toBe(1);
     expect(response.items[0]).toMatchObject({
+      familyId: '123',
+      name: null,
       armyShareCode: 'u1x2',
-      armyItems: ['Queen Charge'],
-      armyCounts: {},
+      players: 12,
+      totalLegendAttacks: 200,
+      averageDuration: 97,
       metrics: {
         sampleSize: 20,
         averageStars: 2.3,
         averageDestruction: 92.5,
         threeStarRate: 0.5,
+        usageRate: 0.1,
       },
     });
   });

@@ -65,13 +65,22 @@ test('parses official battle resources/share codes and lets history win a merge'
       armyShareCode: 'u8x5-2x6s1x1',
     }),
     history = PlayerBattlelogEntry.fromHistory({
-      battle_id: 'id',
-      battle_type: 'farming',
-      attack: true,
-      opponent_tag: '#OTHER',
-      opponent_townhall: 15,
-      timestamp: '2026-08-16T12:00:00Z',
-      army_counts: { u_5: 8 },
+      battleTime: '2026-08-16T12:00:00Z',
+      battleMode: 'farming',
+      stars: 3,
+      destructionPercentage: 100,
+      duration: 30,
+      lootedResources: { gold: 100, elixir: 200, darkElixir: 30 },
+      shareCode: 'u8x5',
+    }),
+    legendHistory = PlayerBattlelogEntry.fromHistory({
+      battleTime: '2026-08-16T13:00:00Z',
+      battleMode: 'legend',
+      stars: 2,
+      destructionPercentage: 90,
+      duration: null,
+      lootedResources: { gold: 50, elixir: 60, darkElixir: 7 },
+      shareCode: null,
     }),
     merged = PlayerBattlelogData.merge({
       official: [official],
@@ -81,7 +90,16 @@ test('parses official battle resources/share codes and lets history win a merge'
     });
   expect(official.darkElixir).toBe(300);
   expect(official.opponentTownHall).toBe(17);
-  expect(history.opponentTownHall).toBe(16);
+  expect(history).toMatchObject({
+    mode: 'farming',
+    attack: true,
+    opponentTownHall: 0,
+    gold: 100,
+    elixir: 200,
+    darkElixir: 30,
+    armyCounts: { u_5: 8 },
+  });
+  expect(legendHistory).toMatchObject({ mode: 'ranked', attack: true, duration: 0 });
   expect(parseArmyCounts('u8x5-2x6s1x1')).toEqual({ u_5: 8, u_6: 2, s_1: 1 });
   expect(merged.items).toHaveLength(1);
   expect(merged.items[0]?.source).toBe('history');
