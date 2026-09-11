@@ -7,7 +7,15 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ArrowLeft, Shield, Swords, Trophy, Upload } from 'lucide-react-native';
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Shield,
+  Swords,
+  Trophy,
+  Upload,
+} from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -20,7 +28,6 @@ import {
   LoadingIndicator,
   MobileWebImage,
   ResponsiveGrid,
-  Snackbar,
   Surface,
   ckRadius,
   colorWithAlpha,
@@ -28,7 +35,9 @@ import {
 } from '../../../ui';
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import type { Player, PlayerLegendBattle, PlayerLegendLeagueData } from '../../player/models';
-import { exportLegends } from './legends-export';
+import { currentLegendDay } from '../../player/models';
+import { LegendsShareModal } from './legends-share';
+import { canMoveToNextLegendDay, legendDayOffset } from './legend-day';
 
 export function LegendsRoot({
   player,
@@ -38,20 +47,19 @@ export function LegendsRoot({
   readonly onBack: () => void;
 }) {
   const runtime = useAppRuntime();
-  const { t } = useI18n();
+  const [selectedDay, setSelectedDay] = useState(() => currentLegendDay());
   const [data, setData] = useState<PlayerLegendLeagueData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string>();
-  const [exporting, setExporting] = useState(false);
+  const [shareVisible, setShareVisible] = useState(false);
   const load = useCallback(
     async (force: boolean) => {
       if (force) setRefreshing(true);
       else setLoading(true);
       setError(null);
       try {
-        setData(await runtime.players.loadLegendLeagueData(player.tag, force));
+        setData(await runtime.players.loadLegendLeagueData(player.tag, force, selectedDay));
       } catch (caught) {
         setError(caught instanceof Error ? caught.message : String(caught));
       } finally {
@@ -59,12 +67,12 @@ export function LegendsRoot({
         setRefreshing(false);
       }
     },
-    [player.tag, runtime.players],
+    [player.tag, runtime.players, selectedDay],
   );
   useEffect(() => {
     let current = true;
     void runtime.players
-      .loadLegendLeagueData(player.tag, false)
+      .loadLegendLeagueData(player.tag, false, selectedDay)
       .then((value) => {
         if (current) setData(value);
       })
@@ -77,28 +85,32 @@ export function LegendsRoot({
     return () => {
       current = false;
     };
-  }, [player.tag, runtime.players]);
+  }, [player.tag, runtime.players, selectedDay]);
 
   return (
     <View style={styles.fill}>
       <LegendsScreen
         data={data}
         error={error}
-        exporting={exporting}
         loading={loading}
         refreshing={refreshing}
+        selectedDay={selectedDay}
         onBack={onBack}
         onRefresh={() => load(true)}
-        onExport={() => {
-          if (!data || exporting) return;
-          setExporting(true);
-          void exportLegends(data)
-            .then(() => setMessage(t('exportSuccess')))
-            .catch((caught) => setMessage(String(caught)))
-            .finally(() => setExporting(false));
+        onSelectDay={(day) => {
+          setData(null);
+          setLoading(true);
+          setSelectedDay(day);
         }}
+        onExport={() => setShareVisible(true)}
       />
-      <Snackbar message={message} onDismiss={() => setMessage(undefined)} />
+      {data ? (
+        <LegendsShareModal
+          data={data}
+          onClose={() => setShareVisible(false)}
+          visible={shareVisible}
+        />
+      ) : null}
     </View>
   );
 }
@@ -106,20 +118,22 @@ export function LegendsRoot({
 export function LegendsScreen({
   data,
   error,
-  exporting,
   loading,
   refreshing,
+  selectedDay,
   onBack,
   onRefresh,
+  onSelectDay,
   onExport,
 }: {
   readonly data: PlayerLegendLeagueData | null;
   readonly error: string | null;
-  readonly exporting: boolean;
   readonly loading: boolean;
   readonly refreshing: boolean;
+  readonly selectedDay: string;
   readonly onBack: () => void;
   readonly onRefresh: () => Promise<void>;
+  readonly onSelectDay: (day: string) => void;
   readonly onExport: () => void;
 }) {
   const { t, locale } = useI18n();
@@ -161,11 +175,11 @@ export function LegendsScreen({
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={t('generalExport')}
-                disabled={!data || exporting}
+                disabled={!data}
                 onPress={onExport}
                 style={[styles.exportButton, { backgroundColor: colorWithAlpha('#000', 0.36) }]}
               >
-                {exporting ? <LoadingIndicator /> : <Upload color="#FFF" size={20} />}
+                <Upload color="#FFF" size={20} />
                 <CKText role="labelLarge" style={styles.white}>
                   {t('generalExport')}
                 </CKText>
@@ -189,11 +203,24 @@ export function LegendsScreen({
                   value={data.bestTrophies}
                   icon={<Trophy color="#FFF" size={20} />}
                 />
+                {data.currentRank ? (
+                  <HeroMetric
+                    label={t('legendsGlobalRankTitle')}
+                    value={data.currentRank.globalRank}
+                    icon={<Trophy color="#FFF" size={20} />}
+                    prefix="#"
+                  />
+                ) : null}
               </View>
             ) : null}
           </View>
         </View>
         <View style={[styles.content, { paddingHorizontal: horizontal }]}>
+          <LegendDayNavigation
+            day={selectedDay}
+            onSelect={onSelectDay}
+            today={currentLegendDay()}
+          />
           {loading && !data ? (
             <LoadingIndicator />
           ) : error && !data ? (
@@ -204,6 +231,17 @@ export function LegendsScreen({
             />
           ) : data ? (
             <>
+              {data.historicalRank ? (
+                <Surface radius={ckRadius.tile} style={styles.rankSummary}>
+                  <Trophy color={theme.primary} size={20} />
+                  <CKText muted style={styles.grow}>
+                    {t('legendsGlobalRankTitle')}
+                  </CKText>
+                  <CKText role="titleMedium">
+                    #{data.historicalRank.globalRank.toLocaleString()}
+                  </CKText>
+                </Surface>
+              ) : null}
               {current ? (
                 <CurrentLegendDay data={current} locale={locale} />
               ) : (
@@ -250,6 +288,47 @@ export function LegendsScreen({
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function LegendDayNavigation({
+  day,
+  today,
+  onSelect,
+}: {
+  readonly day: string;
+  readonly today: string;
+  readonly onSelect: (day: string) => void;
+}) {
+  const { locale } = useI18n();
+  const theme = useCKTheme();
+  const nextDisabled = !canMoveToNextLegendDay(day, today);
+  return (
+    <Surface radius={ckRadius.tile} style={styles.dayNavigation}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={materialBackLabel(locale)}
+        onPress={() => onSelect(legendDayOffset(day, -1))}
+        style={styles.dayNavigationButton}
+      >
+        <ChevronLeft color={theme.onSurface} />
+      </Pressable>
+      <CKText role="titleMedium">
+        {new Intl.DateTimeFormat(toIntlLocale(locale), {
+          dateStyle: 'long',
+          timeZone: 'UTC',
+        }).format(new Date(`${day}T00:00:00.000Z`))}
+      </CKText>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ disabled: nextDisabled }}
+        disabled={nextDisabled}
+        onPress={() => onSelect(legendDayOffset(day, 1))}
+        style={[styles.dayNavigationButton, nextDisabled && styles.disabled]}
+      >
+        <ChevronRight color={theme.onSurface} />
+      </Pressable>
+    </Surface>
   );
 }
 
@@ -361,10 +440,12 @@ function HeroMetric({
   label,
   value,
   icon,
+  prefix = '',
 }: {
   label: string;
   value: number;
   icon: React.ReactNode;
+  prefix?: string;
 }) {
   return (
     <View style={styles.heroMetric}>
@@ -374,6 +455,7 @@ function HeroMetric({
           {label}
         </CKText>
         <CKText role="titleMedium" style={styles.white}>
+          {prefix}
           {value.toLocaleString()}
         </CKText>
       </View>
@@ -447,8 +529,29 @@ const styles = StyleSheet.create({
   },
   content: { width: '100%', maxWidth: 1120, alignSelf: 'center', paddingTop: 16, gap: 12 },
   sectionGap: { gap: 10 },
+  dayNavigation: {
+    minHeight: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
+  },
+  dayNavigationButton: {
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  disabled: { opacity: 0.35 },
   sectionTitle: { marginTop: 8 },
   daySummary: { minHeight: 92, padding: 14, gap: 4 },
+  rankSummary: {
+    minHeight: 52,
+    paddingHorizontal: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   battleRow: {
     minHeight: 64,
     paddingHorizontal: 12,

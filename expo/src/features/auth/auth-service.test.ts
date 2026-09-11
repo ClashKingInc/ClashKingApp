@@ -93,6 +93,9 @@ const privacyExport = {
   discord_sessions: [],
   notification_accounts: [],
   notification_devices: [],
+  notification_preferences: [],
+  saved_bases: [],
+  base_slots: [],
   billing_subscription: [],
   subscription_entitlements: [],
 };
@@ -205,9 +208,7 @@ describe('AuthService', () => {
       .fn<Promise<string | null>, []>()
       .mockResolvedValueOnce('stored')
       .mockResolvedValueOnce(null);
-    const auth = new AuthService(
-      serviceOptions({ api, tokenService: tokens({ getAccessToken }) }),
-    );
+    const auth = new AuthService(serviceOptions({ api, tokenService: tokens({ getAccessToken }) }));
 
     await auth.initializeAuth();
     expect(auth.state.isAuthenticated).toBe(true);

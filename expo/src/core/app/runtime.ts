@@ -24,6 +24,7 @@ import { createTranslator, systemLocale } from '../../i18n';
 import { CocAccountService } from '../../features/auth/account-service';
 import { AccountBootstrapService } from '../../features/auth/account-bootstrap-service';
 import { AuthService } from '../../features/auth/auth-service';
+import { PersonalBasesService } from '../../features/bases-armies';
 import { AchievementsRepository } from '../../features/achievements/data';
 import { ClanService } from '../../features/clan/data';
 import { AnnouncementPresentationService, AnnouncementService } from '../../features/home/data';
@@ -79,6 +80,7 @@ export interface AppRuntime {
   readonly accountBootstrap: AccountBootstrapService;
   readonly achievements: AchievementsRepository;
   readonly bookmarks: BookmarkService;
+  readonly personalBases: PersonalBasesService;
   readonly players: PlayerService;
   readonly playerCardPreferences: PlayerCardPreferencesService;
   readonly rankings: RankingsService;
@@ -190,6 +192,7 @@ export function createAppRuntime(): AppRuntime {
   );
   const achievements = new AchievementsRepository(contractApi);
   const bookmarks = new BookmarkService(contractApi);
+  const personalBases = new PersonalBasesService(contractApi);
   const players = new PlayerService(
     contractApi,
     preferences,
@@ -320,6 +323,7 @@ export function createAppRuntime(): AppRuntime {
     accountBootstrap,
     achievements,
     bookmarks,
+    personalBases,
     players,
     playerCardPreferences,
     rankings,

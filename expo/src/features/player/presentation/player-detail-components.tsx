@@ -92,6 +92,7 @@ import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { PlayerSuperTroop } from '../models/player-items';
 import { PlayerBattlelogArmyCatalog } from '../models/player-battlelog';
 import { exportPlayerBattlelog } from './player-battlelog-export';
+import { battlelogLootTimeline, PlayerBattlelogShareModal } from './player-battlelog-share';
 import type {
   EnemyTownhallStats as EnemyThStats,
   PlayerWarStatsData,
@@ -982,6 +983,7 @@ export function PlayerBattlelogTab({
   const [mode, setMode] = useState<PlayerBattlelogMode>('ranked');
   const [direction, setDirection] = useState<'all' | 'attacks' | 'defenses'>('all');
   const [exporting, setExporting] = useState(false);
+  const [shareVisible, setShareVisible] = useState(false);
   if (!data)
     return <EmptyState title={t('playerBattlelogLoadError')} body={t('generalNoDataAvailable')} />;
   const battles = data.forMode(mode);
@@ -1098,6 +1100,20 @@ export function PlayerBattlelogTab({
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('generalExport')}
+          disabled={items.length === 0}
+          onPress={() => setShareVisible(true)}
+          style={[
+            styles.battleExport,
+            { backgroundColor: colorWithAlpha(theme.primary, 0.14) },
+            items.length === 0 && styles.disabled,
+          ]}
+        >
+          <Upload color={theme.primary} size={18} />
+          <CKText role="labelLarge">{t('generalExport')}</CKText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="CSV"
           disabled={exporting || items.length === 0}
           onPress={() => {
             setExporting(true);
@@ -1108,16 +1124,11 @@ export function PlayerBattlelogTab({
           }}
           style={[
             styles.battleExport,
-            { backgroundColor: colorWithAlpha(theme.primary, 0.14) },
+            { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.5) },
             (exporting || items.length === 0) && styles.disabled,
           ]}
         >
-          {exporting ? (
-            <LoadingIndicator />
-          ) : (
-            <Upload color={theme.primary} size={18} />
-          )}
-          <CKText role="labelLarge">{t('generalExport')}</CKText>
+          {exporting ? <LoadingIndicator /> : <CKText role="labelLarge">CSV</CKText>}
         </Pressable>
       </View>
       <View testID="battle-responsive-grid">
@@ -1135,6 +1146,13 @@ export function PlayerBattlelogTab({
       ) : !items.length ? (
         <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
       ) : null}
+      <PlayerBattlelogShareModal
+        items={items}
+        mode={mode}
+        onClose={() => setShareVisible(false)}
+        playerName={playerName}
+        visible={shareVisible}
+      />
     </View>
   );
 }
@@ -1147,6 +1165,8 @@ function BattlelogLootGrid({
   locale: string;
 }) {
   const { t } = useI18n();
+  const theme = useCKTheme();
+  const [resource, setResource] = useState<'gold' | 'elixir' | 'darkElixir'>('gold');
   const rows = [
     [ImageAssets.gold, t('resourceGold'), attacks.reduce((sum, item) => sum + item.gold, 0)],
     [ImageAssets.elixir, t('resourceElixir'), attacks.reduce((sum, item) => sum + item.elixir, 0)],
@@ -1156,8 +1176,9 @@ function BattlelogLootGrid({
       attacks.reduce((sum, item) => sum + item.darkElixir, 0),
     ],
   ] as const;
+  const timeline = battlelogLootTimeline(attacks, resource);
   return (
-    <View testID="battlelog-loot-grid">
+    <View testID="battlelog-loot-grid" style={styles.sections}>
       <ResponsiveGrid minItemWidth={150} maxColumns={3}>
         {rows.map(([image, label, total]) => (
           <Surface key={label} radius={ckRadius.tile} style={styles.lootSummaryTile}>
@@ -1168,13 +1189,46 @@ function BattlelogLootGrid({
               </CKText>
               <CKText role="titleMedium">{formatPlayerResourceAmount(total, locale)}</CKText>
               <CKText muted role="labelSmall">
-                {t('generalAverage')} ·{' '}
-                {formatPlayerResourceAmount(total / attacks.length, locale)}
+                {t('generalAverage')} · {formatPlayerResourceAmount(total / attacks.length, locale)}
               </CKText>
             </View>
           </Surface>
         ))}
       </ResponsiveGrid>
+      <Surface radius={ckRadius.tile} style={styles.lootContributionCard}>
+        <Segmented
+          choices={[
+            ['gold', t('resourceGold')],
+            ['elixir', t('resourceElixir')],
+            ['darkElixir', t('resourceDarkElixir')],
+          ]}
+          selected={resource}
+          onSelect={(value) => setResource(value as typeof resource)}
+        />
+        <View style={styles.lootContributionGrid}>
+          {timeline.map((day) => (
+            <View
+              accessible
+              accessibilityLabel={`${day.day}: ${day.value}`}
+              key={day.day}
+              style={[
+                styles.lootContributionCell,
+                {
+                  backgroundColor: colorWithAlpha(
+                    theme.primary,
+                    day.value === 0 ? 0.08 : 0.18 + day.intensity * 0.82,
+                  ),
+                },
+              ]}
+            >
+              <CKText muted role="labelSmall">
+                {day.day.slice(5)}
+              </CKText>
+              <CKText role="labelSmall">{compactNumber(day.value, locale)}</CKText>
+            </View>
+          ))}
+        </View>
+      </Surface>
     </View>
   );
 }
@@ -4397,6 +4451,16 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   lootSummaryImage: { width: 34, height: 34 },
+  lootContributionCard: { padding: 12, gap: 12 },
+  lootContributionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  lootContributionCell: {
+    width: '12.5%',
+    minWidth: 62,
+    aspectRatio: 1.25,
+    borderRadius: 8,
+    padding: 6,
+    justifyContent: 'space-between',
+  },
   battleResult: { alignItems: 'center' },
   directionImage: { width: 20, height: 20, resizeMode: 'contain' },
   starImage: { width: 19, height: 19, resizeMode: 'contain' },

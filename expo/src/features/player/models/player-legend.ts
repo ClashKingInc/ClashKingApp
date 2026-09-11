@@ -99,6 +99,42 @@ export class PlayerLegendHistoryEntry {
   }
 }
 
+export class PlayerLegendRank {
+  constructor(
+    readonly tag: string,
+    readonly name: string,
+    readonly trophies: number,
+    readonly globalRank: number,
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    return new PlayerLegendRank(
+      string(json.tag),
+      string(json.name),
+      int(json.trophies),
+      int(json.globalRank),
+    );
+  }
+}
+
+export class PlayerLegendDaySummary {
+  constructor(
+    readonly day: string,
+    readonly attackTrophies: number,
+    readonly defenseTrophies: number,
+    readonly trophyChange: number,
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    return new PlayerLegendDaySummary(
+      string(json.day),
+      int(json.attackTrophies),
+      int(json.defenseTrophies),
+      int(json.trophies),
+    );
+  }
+}
+
 export class PlayerLegendLeagueData {
   constructor(
     readonly playerTag: string,
@@ -108,6 +144,10 @@ export class PlayerLegendLeagueData {
     readonly bestTrophies: number,
     readonly currentDay: PlayerLegendBattlelog | null,
     readonly history: readonly PlayerLegendHistoryEntry[],
+    readonly selectedDay: string = currentDay?.day ?? currentLegendDay(),
+    readonly currentRank: PlayerLegendRank | null = null,
+    readonly historicalRank: PlayerLegendRank | null = null,
+    readonly recentDays: readonly PlayerLegendDaySummary[] = currentDay ? [currentDay] : [],
   ) {}
 }
 

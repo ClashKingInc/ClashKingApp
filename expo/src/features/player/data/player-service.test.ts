@@ -521,6 +521,12 @@ test('loads a separate Legend experience from current-day and completed-season c
       ],
     },
     [`/v2/player/%23P1/legend/${day}/battlelog`]: legendBattlelog({ day }),
+    '/v2/legends/ranks': {
+      items: [{ tag: '#P1', name: 'One', trophies: 5600, globalRank: 42 }],
+    },
+    '/v2/legends/ranks/history': {
+      items: [{ tag: '#P1', name: 'One', trophies: 5575, globalRank: 51 }],
+    },
   });
   const service = new PlayerService(api);
 
@@ -530,12 +536,51 @@ test('loads a separate Legend experience from current-day and completed-season c
     playerTag: '#P1',
     trophies: 5600,
     currentDay: { day },
+    selectedDay: day,
+    currentRank: { globalRank: 42 },
+    historicalRank: { globalRank: 51 },
     history: [{ season: '2026-08', rank: 123 }],
   });
   await second;
   await service.loadLegendLeagueData('#P1');
   expect(calls.get('/v2/player/%23P1/league/history')).toBe(1);
   expect(calls.get(`/v2/player/%23P1/legend/${day}/battlelog`)).toBe(1);
+  expect(calls.get('/v2/legends/ranks')).toBe(1);
+  expect(calls.get('/v2/legends/ranks/history')).toBe(1);
+});
+
+test('loads and caches a separately selected Legend day', async () => {
+  const day = '2026-08-15';
+  const previousDay = '2026-08-14';
+  const seriesPath =
+    '/v2/player/%23P1/legend/series?time%5Bafter%5D=2026-07-19&time%5Bbefore%5D=2026-08-15';
+  const { api, calls } = setup({
+    '/proxy/v1/players/%23P1': officialPlayer({ trophies: 5600, bestTrophies: 5900 }),
+    '/v2/player/%23P1/league/history': { items: [] },
+    [`/v2/player/%23P1/legend/${day}/battlelog`]: legendBattlelog({ day }),
+    [seriesPath]: {
+      tag: '#P1',
+      items: [
+        { day: previousDay, attackTrophies: 10, defenseTrophies: -15, trophies: -5 },
+        { day, attackTrophies: 20, defenseTrophies: -10, trophies: 10 },
+      ],
+    },
+    '/v2/legends/ranks': { items: [] },
+    '/v2/legends/ranks/history': {
+      items: [{ tag: '#P1', name: 'One', trophies: 5500, globalRank: 80 }],
+    },
+  });
+  const service = new PlayerService(api);
+  await expect(service.loadLegendLeagueData('#P1', false, day)).resolves.toMatchObject({
+    selectedDay: day,
+    currentDay: { day },
+    historicalRank: { globalRank: 80 },
+    recentDays: [{ day: previousDay }, { day }],
+  });
+  await service.loadLegendLeagueData('#P1', false, day);
+  expect(calls.get(`/v2/player/%23P1/legend/${day}/battlelog`)).toBe(1);
+  expect(calls.get(seriesPath)).toBe(1);
+  expect(calls.get(`/v2/player/%23P1/legend/${previousDay}/battlelog`)).toBeUndefined();
 });
 
 test.each([

@@ -1,5 +1,8 @@
 import {
+  expoEndpoints,
   LegendBattlelogEndpoint,
+  LegendHistoricalRanksEndpoint,
+  LegendRanksEndpoint,
   PlayerBattlelogHistoryEndpoint,
   PlayerChangesEndpoint,
   PlayerCwlHistoryEndpoint,
@@ -41,6 +44,8 @@ import {
   PlayerLegendBattlelog,
   PlayerLegendHistoryEntry,
   PlayerLegendLeagueData,
+  PlayerLegendRank,
+  PlayerLegendDaySummary,
 } from '../models/player-legend';
 import {
   RankedLeagueData,
@@ -427,24 +432,34 @@ export class PlayerService {
     }
   }
 
-  async loadLegendLeagueData(rawTag: string, forceRefresh = false) {
+  async loadLegendLeagueData(rawTag: string, forceRefresh = false, day = currentLegendDay()) {
     const tag = canonicalTag(rawTag);
-    if (!forceRefresh && this.legendLeagueCache.has(tag)) return this.legendLeagueCache.get(tag)!;
-    const pending = this.legendLeagueLoads.get(tag);
+    const key = `${tag}|${day}`;
+    if (!forceRefresh && this.legendLeagueCache.has(key)) return this.legendLeagueCache.get(key)!;
+    const pending = this.legendLeagueLoads.get(key);
     if (pending) return pending;
-    const load = this.fetchLegendLeagueData(tag, forceRefresh);
-    this.legendLeagueLoads.set(tag, load);
+    const load = this.fetchLegendLeagueData(tag, day, forceRefresh);
+    this.legendLeagueLoads.set(key, load);
     try {
       const data = await load;
-      this.legendLeagueCache.set(tag, data);
+      this.legendLeagueCache.set(key, data);
       return data;
     } finally {
-      if (this.legendLeagueLoads.get(tag) === load) this.legendLeagueLoads.delete(tag);
+      if (this.legendLeagueLoads.get(key) === load) this.legendLeagueLoads.delete(key);
     }
   }
 
-  private async fetchLegendLeagueData(tag: string, forceRefresh: boolean) {
-    const [player, historyResponse, currentDay] = await Promise.all([
+  private async fetchLegendLeagueData(tag: string, day: string, forceRefresh: boolean) {
+    const seriesStart = new Date(`${day}T00:00:00.000Z`);
+    seriesStart.setUTCDate(seriesStart.getUTCDate() - 27);
+    const [
+      player,
+      historyResponse,
+      currentDay,
+      currentRankResponse,
+      historicalRankResponse,
+      recentDays,
+    ] = await Promise.all([
       Effect.runPromise(
         this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
       ),
@@ -455,12 +470,44 @@ export class PlayerService {
           body: {},
         }),
       ),
-      this.loadLegendBattlelog(tag, currentLegendDay(), forceRefresh),
+      this.loadLegendBattlelog(tag, day, forceRefresh),
+      Effect.runPromise(
+        this.api.execute(LegendRanksEndpoint, {
+          path: {},
+          query: {},
+          body: { tags: [tag] },
+        }),
+      ).catch(() => null),
+      Effect.runPromise(
+        this.api.execute(LegendHistoricalRanksEndpoint, {
+          path: {},
+          query: {},
+          body: { day, tags: [tag] },
+        }),
+      ).catch(() => null),
+      Effect.runPromise(
+        this.api.execute(expoEndpoints.legendPlayerDailySeries, {
+          path: { playerTag: tag },
+          query: {
+            'time[after]': seriesStart.toISOString().slice(0, 10),
+            'time[before]': day,
+          },
+          body: {},
+        }),
+      ).catch(() => null),
     ]);
     const history = records(historyResponse.items)
       .filter((item) => string(item.mode) === 'legend')
       .map(PlayerLegendHistoryEntry.fromJson)
       .sort((a, b) => b.season.localeCompare(a.season));
+    const currentRank =
+      records(currentRankResponse?.items)
+        .map(PlayerLegendRank.fromJson)
+        .find((item) => canonicalTag(item.tag) === tag) ?? null;
+    const historicalRank =
+      records(historicalRankResponse?.items)
+        .map(PlayerLegendRank.fromJson)
+        .find((item) => canonicalTag(item.tag) === tag) ?? null;
     return new PlayerLegendLeagueData(
       string(player.tag, tag),
       string(player.name),
@@ -469,6 +516,10 @@ export class PlayerService {
       int(player.bestTrophies),
       currentDay,
       history,
+      day,
+      currentRank,
+      historicalRank,
+      records(recentDays?.items).map(PlayerLegendDaySummary.fromJson),
     );
   }
   async prefetchRankedLeagueData(tags: Iterable<string>, forceRefresh = false) {
