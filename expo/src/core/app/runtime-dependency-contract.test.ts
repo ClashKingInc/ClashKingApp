@@ -46,6 +46,12 @@ describe('app runtime dependency contract', () => {
     expect(bootstrap).toContain('await initializeApplication({');
     const config = readFileSync(resolve(process.cwd(), 'app.config.ts'), 'utf8');
     expect(config).toContain("const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';");
+    expect(config).toContain("'https://api.clashk.ing/v2/app/updates/manifest'");
+    expect(config).toContain("requestHeaders: { 'expo-channel-name': updateChannel }");
+    expect(config).toContain("codeSigningMetadata: { keyid: 'main', alg: 'rsa-v1_5-sha256' as const }");
+    expect(config).toContain(
+      "throw new Error('CK_UPDATES_CERTIFICATE_PATH is required when release updates are enabled.')",
+    );
     expect(config).toContain("checkAutomatically: 'NEVER'");
     expect(config).not.toContain("checkAutomatically: 'ON_LOAD'");
   });

@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Dimensions, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -100,6 +100,56 @@ describe('player history row parity', () => {
     expect(screen.queryByLabelText('Gold: 1234')).toBeNull();
     expect(screen.queryByLabelText('Elixir: 2345')).toBeNull();
     expect(screen.queryByLabelText('Dark Elixir: 345')).toBeNull();
+  });
+
+  it('keeps Legend separate and summarizes farming loot by resource', async () => {
+    const farming = new PlayerBattlelogEntry(
+      'farm',
+      'farming',
+      'history',
+      true,
+      '',
+      '',
+      0,
+      2,
+      80,
+      1_000,
+      2_000,
+      300,
+      new Date('2026-08-30T12:00:00Z'),
+      30,
+      '',
+      {},
+    );
+    const legend = new PlayerBattlelogEntry(
+      'legend',
+      'legend',
+      'history',
+      true,
+      '',
+      '',
+      0,
+      3,
+      100,
+      0,
+      0,
+      0,
+      new Date('2026-08-30T13:00:00Z'),
+      45,
+      '',
+      {},
+    );
+    const screen = await wrap(
+      <PlayerBattlelogTab data={new PlayerBattlelogData([farming, legend], true, true)} />,
+    );
+
+    expect(screen.getByText('Legend League')).toBeTruthy();
+    await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Farming' })));
+    expect(screen.getByTestId('battlelog-loot-grid')).toBeTruthy();
+    expect(screen.getAllByText('1K').length).toBeGreaterThan(0);
+    await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Legend League' })));
+    expect(screen.queryByTestId('battlelog-loot-grid')).toBeNull();
+    expect(screen.getByText('1 battles')).toBeTruthy();
   });
 
   it('suppresses super-troop detail and uses value-change detail for XP', async () => {

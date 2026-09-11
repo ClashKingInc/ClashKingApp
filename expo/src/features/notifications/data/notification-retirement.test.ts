@@ -8,19 +8,18 @@ import {
   serializeNotificationPreferencesForPut,
 } from '../../../core/dto/notification-preferences';
 
-describe('user-confirmed Legend notification retirement', () => {
-  it('keeps retired preferences out of defaults, decoded state, requests, and local storage', () => {
-    const defaults = createDefaultNotificationPreferences('device-1', 'production');
-    const request = serializeNotificationPreferencesForPut(defaults, 'device-1', 'production');
+describe('Legend defense notification contract', () => {
+  it('keeps attacks retired while carrying defenses through every preference shape', () => {
+    const defaults = createDefaultNotificationPreferences();
+    const request = serializeNotificationPreferencesForPut(defaults);
     const decoded = parseNotificationPreferences({ ...request, accounts: [] });
     const stored = serializeNotificationPreferencesForLocalStorage(decoded);
 
     for (const value of [defaults, request, decoded, stored]) {
-      expect(Object.keys(value).filter((key) => /legend/i.test(key))).toEqual([]);
-      expect(value.notificationsEnabled).toBe(false);
+      expect(Object.keys(value).filter((key) => /legendAttacks/i.test(key))).toEqual([]);
     }
-    expect(request).toMatchObject({ warAttacksEnabled: false, raidRemindersEnabled: false });
-    expect(decoded).toMatchObject({ warAttacks: false, raidReminders: false });
+    expect(request).toMatchObject({ legendDefensesEnabled: false });
+    expect(decoded).toMatchObject({ legendDefenses: false });
   });
 
   it('does not reintroduce retired model fields or settings controls', () => {
@@ -34,9 +33,11 @@ describe('user-confirmed Legend notification retirement', () => {
     );
     for (const source of [dto, settings]) {
       expect(source).not.toMatch(
-        /legendAttacks|legendDefenses|legend_attacks_enabled|legend_defenses_enabled/,
+        /legendAttacks|legend_attacks_enabled/,
       );
     }
+    expect(dto).toContain('legendDefenses');
+    expect(settings).toContain("category: 'legendDefenses'");
     expect(settings).toContain("category: 'warAttacks'");
     expect(settings).toContain("category: 'warState'");
   });

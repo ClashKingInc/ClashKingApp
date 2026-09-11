@@ -39,7 +39,11 @@ describe('StatsRepository', () => {
       const request = new Request(input, init);
       captured.push(request.clone());
       const path = new URL(request.url).pathname;
-      return Response.json(path === '/v2/stats/armies' ? { items: [] } : { dateRange, metrics });
+      return Response.json(
+        path === '/v2/stats/armies'
+          ? { cohort: 'legend_i', items: [] }
+          : { dateRange, metrics },
+      );
     };
     const repository = new StatsRepository(
       createContractTestApi({

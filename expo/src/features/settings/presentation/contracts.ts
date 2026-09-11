@@ -1,4 +1,7 @@
-import type { NotificationPreferences } from '../../../core/dto/notification-preferences';
+import type {
+  NotificationAccount,
+  NotificationPreferences,
+} from '../../../core/dto/notification-preferences';
 import type { AuthUser } from '../../auth/models';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 
@@ -23,9 +26,11 @@ export interface NotificationSettingsPresentationService {
   loadLocal(): Promise<NotificationPreferences>;
   load(): Promise<NotificationPreferences>;
   save(settings: NotificationPreferences): Promise<NotificationPreferences>;
+  setAccountEnabled(tag: string, enabled: boolean): Promise<NotificationAccount>;
+  deviceEnabled(): Promise<boolean>;
+  setDeviceEnabled(enabled: boolean): Promise<PushNotificationSetupResult>;
   lastPushResult(): PushNotificationSetupResult | null;
   initializePush(): Promise<PushNotificationSetupResult>;
-  requestPermissionAndRegister(): Promise<PushNotificationSetupResult>;
   tokenPreview(): Promise<string | null>;
   sendTestNotification?(): Promise<string>;
 }

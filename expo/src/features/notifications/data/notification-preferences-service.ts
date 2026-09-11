@@ -33,8 +33,6 @@ export class NotificationPreferencesHttpError extends Error {
 
 export interface NotificationPreferencesServiceOptions {
   readonly api: ContractApiService;
-  readonly deviceIdProvider: () => Promise<string>;
-  readonly environmentProvider: () => string;
   readonly preferences: StringStore;
   readonly pushApiV2BaseUrlOverride?: string;
 }
@@ -43,45 +41,45 @@ export class NotificationPreferencesService {
   constructor(private readonly options: NotificationPreferencesServiceOptions) {}
 
   async load(): Promise<NotificationPreferences> {
-    const [deviceId, environment] = await Promise.all([
-      this.options.deviceIdProvider(),
-      Promise.resolve(this.options.environmentProvider()),
-    ]);
-    const response = await Effect.runPromise(this.options.api.execute(NotificationPreferencesGetEndpoint, { path: {}, query: { device_id: deviceId, environment: environment === 'production' ? 'production' : 'sandbox' }, body: {} }, this.executeOptions()));
+    const response = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationPreferencesGetEndpoint,
+        { path: {}, query: {}, body: {} },
+        this.executeOptions(),
+      ),
+    );
     const settings = parseNotificationPreferences(response);
     await this.persistBestEffort(settings);
     return settings;
   }
 
   async save(settings: NotificationPreferences): Promise<NotificationPreferences> {
-    const [deviceId, environment] = await Promise.all([
-      this.options.deviceIdProvider(),
-      Promise.resolve(this.options.environmentProvider()),
-    ]);
-    const response = await Effect.runPromise(this.options.api.execute(NotificationPreferencesPutEndpoint, { path: {}, query: {}, body: serializeNotificationPreferencesForPut(settings, deviceId, environment === 'production' ? 'production' : 'sandbox') }, this.executeOptions()));
+    const response = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationPreferencesPutEndpoint,
+        { path: {}, query: {}, body: serializeNotificationPreferencesForPut(settings) },
+        this.executeOptions(),
+      ),
+    );
     const saved = parseNotificationPreferences(response);
     await this.persistBestEffort(saved);
     return saved;
   }
 
-  async setDeviceEnabled(enabled: boolean): Promise<NotificationPreferences> {
-    const current = await this.load();
-    return this.save({ ...current, notificationsEnabled: enabled });
-  }
-
-  async setAccountEnabled(playerTag: string, enabled: boolean): Promise<NotificationAccount> {
-    const response = await Effect.runPromise(this.options.api.execute(NotificationAccountPutEndpoint, { path: { playerTag }, query: {}, body: { enabled } }, this.executeOptions()));
+  async setAccountEnabled(tag: string, enabled: boolean): Promise<NotificationAccount> {
+    const response = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationAccountPutEndpoint,
+        { path: { tag }, query: {}, body: { enabled } },
+        this.executeOptions(),
+      ),
+    );
     return parseNotificationAccount(response);
   }
 
   async loadLocal(): Promise<NotificationPreferences> {
     const raw = await this.options.preferences.getItem(STORAGE_KEYS.notificationSettings);
-    if (raw === null) {
-      return createDefaultNotificationPreferences(
-        await this.options.deviceIdProvider(),
-        this.options.environmentProvider(),
-      );
-    }
+    if (raw === null) return createDefaultNotificationPreferences();
     return parseLocalNotificationPreferences(JSON.parse(raw) as unknown);
   }
 
@@ -89,10 +87,6 @@ export class NotificationPreferencesService {
     await this.options.preferences.setItem(
       STORAGE_KEYS.notificationSettings,
       JSON.stringify(serializeNotificationPreferencesForLocalStorage(settings)),
-    );
-    await this.options.preferences.setItem(
-      STORAGE_KEYS.notificationsEnabled,
-      String(settings.notificationsEnabled),
     );
     await Promise.all(
       LEGACY_NOTIFICATION_PREFERENCE_KEYS.map((key) => this.options.preferences.removeItem(key)),

@@ -133,9 +133,12 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
       loadLocal: () => runtime.notificationPreferences.loadLocal(),
       load: () => runtime.notificationPreferences.load(),
       save: (settings) => runtime.notificationPreferences.save(settings),
+      setAccountEnabled: (playerTag, enabled) =>
+        runtime.notificationPreferences.setAccountEnabled(playerTag, enabled),
+      deviceEnabled: () => runtime.push.areNotificationsEnabled(),
+      setDeviceEnabled: (enabled) => runtime.push.setCurrentDeviceEnabled(enabled),
       lastPushResult: () => runtime.push.lastResult,
       initializePush: () => runtime.push.initialize(),
-      requestPermissionAndRegister: () => runtime.push.requestPermissionAndRegister(),
       tokenPreview: () => runtime.push.tokenPreview(),
       ...(runtime.notificationSettingsDebug
         ? { sendTestNotification: runtime.notificationSettingsDebug.service.sendTestNotification }

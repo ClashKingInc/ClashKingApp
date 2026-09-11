@@ -196,7 +196,14 @@ function renderTab(
 ) {
   if (tab === 'home') return <PlayerBaseTab player={model.player} village="home" />;
   if (tab === 'builder') return <PlayerBaseTab player={model.player} village="builder" />;
-  if (tab === 'battles') return <PlayerBattlelogTab data={model.battlelog} />;
+  if (tab === 'battles')
+    return (
+      <PlayerBattlelogTab
+        data={model.battlelog}
+        playerName={model.player.name}
+        showMessage={actions.showMessage}
+      />
+    );
   if (tab === 'history')
     return (
       <PlayerActivityTab

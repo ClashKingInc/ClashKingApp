@@ -32,6 +32,7 @@ export interface NotificationDeviceRegistrationPayload {
   readonly provider: 'fcm';
   readonly platform: 'ios' | 'android';
   readonly environment: 'sandbox' | 'production';
+  readonly enabled: boolean;
   readonly app_version: string;
   readonly locale: string;
   readonly authorization_status: NotificationDeviceAuthorizationStatus;
@@ -69,6 +70,7 @@ export function buildNotificationDeviceRegistrationPayload(input: {
   appVersion: string;
   locale: string;
   authorizationStatus: PushAuthorizationStatus;
+  enabled: boolean;
 }): NotificationDeviceRegistrationPayload {
   return {
     token: input.token,
@@ -76,6 +78,7 @@ export function buildNotificationDeviceRegistrationPayload(input: {
     provider: 'fcm',
     platform: input.platform,
     environment: input.environment,
+    enabled: input.enabled,
     app_version: input.appVersion,
     locale: input.locale,
     authorization_status: apiAuthorizationStatus(input.authorizationStatus),
@@ -196,7 +199,13 @@ export class PushNotificationService {
         });
       }
       await this.cacheToken(token);
-      await this.registerCurrentDeviceToken({ token, allowDisabled: true });
+      await this.registerCurrentDeviceToken({
+        token,
+        enabled: true,
+        allowDisabled: true,
+        throwOnFailure: true,
+      });
+      await this.options.preferences.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
       return this.setResult({ state: 'ready', authorizationStatus, token });
     } catch (error) {
       await this.report('permission', error);
@@ -204,7 +213,7 @@ export class PushNotificationService {
     }
   }
 
-  async showPermissionPrimerOnce(onPermissionAccepted?: () => void | Promise<void>): Promise<void> {
+  async showPermissionPrimerOnce(): Promise<void> {
     if (!this.supportsPushNotifications) return;
     const prompted = await this.options.preferences.getItem(
       STORAGE_KEYS.notificationPermissionPrimerShown,
@@ -217,26 +226,40 @@ export class PushNotificationService {
     await this.options.preferences.setItem(STORAGE_KEYS.notificationPermissionPrimerShown, 'true');
     if (!shouldEnable) return;
 
-    const result = await this.requestPermissionAndRegister();
-    if (canReceivePush(result) && onPermissionAccepted !== undefined) {
-      try {
-        await onPermissionAccepted();
-      } catch (error) {
-        await this.report('primer-callback', error);
-      }
+    await this.requestPermissionAndRegister();
+  }
+
+  async setCurrentDeviceEnabled(enabled: boolean): Promise<PushNotificationSetupResult> {
+    if (enabled) return this.requestPermissionAndRegister();
+    if (!supportsPush(this.options.platform) || this.options.runtime === undefined) {
+      return this.setResult({ state: 'unsupported' });
     }
+    const token = (await this.cachedToken()) ?? (await this.options.runtime.getToken());
+    if (!token) throw new Error('Push token is unavailable.');
+    await this.cacheToken(token);
+    await this.registerCurrentDeviceToken({
+      token,
+      enabled: false,
+      allowDisabled: true,
+      throwOnFailure: true,
+    });
+    await this.options.preferences.setItem(STORAGE_KEYS.notificationsEnabled, 'false');
+    return this.setResult({ state: 'ready', token });
   }
 
   async registerCurrentDeviceToken(
     options: {
       token?: string;
       allowDisabled?: boolean;
+      enabled?: boolean;
+      throwOnFailure?: boolean;
     } = {},
   ): Promise<void> {
     if (!supportsPush(this.options.platform) || this.options.runtime === undefined) {
       return;
     }
-    if (!options.allowDisabled && !(await this.areNotificationsEnabled())) {
+    const enabled = options.enabled ?? (await this.areNotificationsEnabled());
+    if (!options.allowDisabled && !enabled) {
       this.options.log?.('Push registration skipped: notifications disabled.');
       return;
     }
@@ -252,22 +275,27 @@ export class PushNotificationService {
         deviceId: await this.options.tokenService.getDeviceId(),
         platform: this.options.platform,
         environment: this.environment,
+        enabled,
         appVersion: this.options.appVersion(),
         locale: this.options.locale(),
         authorizationStatus: await this.options.runtime.getAuthorizationStatus(),
       });
-      await Effect.runPromise(
+      const response = await Effect.runPromise(
         this.options.api.execute(
           NotificationDeviceRegisterEndpoint,
           { path: {}, query: {}, body: payload },
           this.executeOptions(),
         ),
       );
+      if (response.enabled !== enabled) {
+        throw new Error('Push device enabled state did not match the requested state.');
+      }
       await this.options.preferences.setItem(STORAGE_KEYS.pushLastRegistrationToken, token);
       this.options.log?.('Push device token registered.');
     } catch (error) {
       // Registration remains non-fatal while the API endpoint is unavailable.
       await this.report('register', error);
+      if (options.throwOnFailure) throw error;
     }
   }
 

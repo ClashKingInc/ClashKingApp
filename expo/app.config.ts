@@ -95,6 +95,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
               '/search',
               '/todo',
               '/ranked',
+              '/legends',
               '/upgrade-tracker',
               '/rankings',
               '/stats',

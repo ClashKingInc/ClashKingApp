@@ -83,9 +83,7 @@ function ApplicationContent() {
     if (shouldPrompt) {
       if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
       permissionTimer.current = setTimeout(() => {
-        void runtime.push.showPermissionPrimerOnce(() =>
-          runtime.notificationPreferences.setDeviceEnabled(true).then(() => undefined),
-        );
+        void runtime.push.showPermissionPrimerOnce();
       }, 1000);
     }
     return runtime.accounts.accounts;
@@ -136,9 +134,7 @@ function ApplicationContent() {
       if (result.requestPushPermission) {
         if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
         permissionTimer.current = setTimeout(() => {
-          void runtime.push.showPermissionPrimerOnce(() =>
-            runtime.notificationPreferences.setDeviceEnabled(true).then(() => undefined),
-          );
+          void runtime.push.showPermissionPrimerOnce();
         }, 1000);
       }
     } catch (error) {

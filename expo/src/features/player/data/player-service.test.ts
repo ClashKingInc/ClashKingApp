@@ -4,6 +4,7 @@ import type { StringStorage } from '@/core/storage/storage';
 import { PlayerCardPreferencesService } from './player-card-preferences';
 import { PlayerService } from './player-service';
 import { WarStatsFilter } from '../models/war-stats-filter';
+import { currentLegendDay } from '../models/player-legend';
 
 class MemoryStorage implements StringStorage {
   readonly values = new Map<string, string>();
@@ -266,9 +267,8 @@ test('coalesces CWL and ranked loads and caches global league tiers', async () =
           opponent: { tag: '#OPPONENT', name: 'Opponent', townHallLevel: 18 },
           stars: 3,
           destructionPercentage: 100,
-          lootedResources: { gold: 0, elixir: 0, darkElixir: 0 },
           shareCode: null,
-          armyHash: '0000000000000000000000000000000000000000000000000000000000000000',
+          familyId: null,
           trophies: 40,
         },
       ],
@@ -501,6 +501,41 @@ test('treats only a Legend-day 404 as optional absence', async () => {
   await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).resolves.toBeNull();
   await expect(service.loadLegendBattlelog('#P1', '2026-08-01')).resolves.toBeNull();
   expect(calls.get(path)).toBe(1);
+});
+
+test('loads a separate Legend experience from current-day and completed-season contracts', async () => {
+  const day = currentLegendDay();
+  const { api, calls } = setup({
+    '/proxy/v1/players/%23P1': officialPlayer({ trophies: 5600, bestTrophies: 5900 }),
+    '/v2/player/%23P1/league/history': {
+      items: [
+        {
+          mode: 'legend',
+          season: '2026-08',
+          league: { id: 1, name: 'Legend League' },
+          trophies: 5800,
+          attackWins: 200,
+          defenseWins: 190,
+          rank: 123,
+        },
+      ],
+    },
+    [`/v2/player/%23P1/legend/${day}/battlelog`]: legendBattlelog({ day }),
+  });
+  const service = new PlayerService(api);
+
+  const first = service.loadLegendLeagueData('#P1');
+  const second = service.loadLegendLeagueData('p1');
+  await expect(first).resolves.toMatchObject({
+    playerTag: '#P1',
+    trophies: 5600,
+    currentDay: { day },
+    history: [{ season: '2026-08', rank: 123 }],
+  });
+  await second;
+  await service.loadLegendLeagueData('#P1');
+  expect(calls.get('/v2/player/%23P1/league/history')).toBe(1);
+  expect(calls.get(`/v2/player/%23P1/legend/${day}/battlelog`)).toBe(1);
 });
 
 test.each([

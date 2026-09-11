@@ -107,9 +107,9 @@ describe('legend model behavior', () => {
     expect(battlelog.attacks[0]).toMatchObject({
       automatic: false,
       opponentTag: '#O',
+      opponentName: 'Opponent',
       stars: 3,
       shareCode: null,
-      items: [],
     });
     expect(battlelog.attacks[0]).not.toHaveProperty('lootedResources');
     expect(battlelog.defenses[0]).toMatchObject({

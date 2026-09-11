@@ -35,7 +35,7 @@ const packageRecords = Object.entries(lock.packages)
           )
       : undefined;
     return {
-      name: manifest.name ?? packagePath.slice('node_modules/'.length),
+      name: manifest.name ?? packagePath.split('node_modules/').at(-1),
       version: metadata.version ?? manifest.version ?? '',
       license: declaredLicense ?? '',
       text: licenseFile

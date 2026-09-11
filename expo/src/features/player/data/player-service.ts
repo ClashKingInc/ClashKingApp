@@ -5,6 +5,7 @@ import {
   PlayerCwlHistoryEndpoint,
   PlayerJoinLeaveEndpoint,
   PlayerJoinLeaveTotalsEndpoint,
+  PlayerLeagueHistoryEndpoint,
   PlayerSearchEndpoint,
   PlayerTimersEndpoint,
   PlayerWarStatsEndpoint,
@@ -35,7 +36,12 @@ import {
   type PlayerHistoryTypeValue,
 } from '../models/player-history';
 import { PlayerBattlelogData, PlayerBattlelogEntry } from '../models/player-battlelog';
-import { PlayerLegendBattlelog } from '../models/player-legend';
+import {
+  currentLegendDay,
+  PlayerLegendBattlelog,
+  PlayerLegendHistoryEntry,
+  PlayerLegendLeagueData,
+} from '../models/player-legend';
 import {
   RankedLeagueData,
   RankedLeagueBattlelog,
@@ -72,6 +78,8 @@ export class PlayerService {
   private readonly rankedLoads = new Map<string, Promise<RankedLeagueData>>();
   private readonly legendBattlelogCache = new Map<string, PlayerLegendBattlelog | null>();
   private readonly legendBattlelogLoads = new Map<string, Promise<PlayerLegendBattlelog | null>>();
+  private readonly legendLeagueCache = new Map<string, PlayerLegendLeagueData>();
+  private readonly legendLeagueLoads = new Map<string, Promise<PlayerLegendLeagueData>>();
   private leagueTiersLoad: Promise<ReadonlyMap<number, RankedLeagueTier> | null> | null = null;
   private leagueTiersCache: ReadonlyMap<number, RankedLeagueTier> | null = null;
   private rankedGeneration = 0;
@@ -376,6 +384,8 @@ export class PlayerService {
     this.rankedLoads.clear();
     this.legendBattlelogCache.clear();
     this.legendBattlelogLoads.clear();
+    this.legendLeagueCache.clear();
+    this.legendLeagueLoads.clear();
     this.rankedGeneration += 1;
   }
 
@@ -415,6 +425,51 @@ export class PlayerService {
     } finally {
       if (this.legendBattlelogLoads.get(key) === load) this.legendBattlelogLoads.delete(key);
     }
+  }
+
+  async loadLegendLeagueData(rawTag: string, forceRefresh = false) {
+    const tag = canonicalTag(rawTag);
+    if (!forceRefresh && this.legendLeagueCache.has(tag)) return this.legendLeagueCache.get(tag)!;
+    const pending = this.legendLeagueLoads.get(tag);
+    if (pending) return pending;
+    const load = this.fetchLegendLeagueData(tag, forceRefresh);
+    this.legendLeagueLoads.set(tag, load);
+    try {
+      const data = await load;
+      this.legendLeagueCache.set(tag, data);
+      return data;
+    } finally {
+      if (this.legendLeagueLoads.get(tag) === load) this.legendLeagueLoads.delete(tag);
+    }
+  }
+
+  private async fetchLegendLeagueData(tag: string, forceRefresh: boolean) {
+    const [player, historyResponse, currentDay] = await Promise.all([
+      Effect.runPromise(
+        this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
+      ),
+      Effect.runPromise(
+        this.api.execute(PlayerLeagueHistoryEndpoint, {
+          path: { playerTag: tag },
+          query: {},
+          body: {},
+        }),
+      ),
+      this.loadLegendBattlelog(tag, currentLegendDay(), forceRefresh),
+    ]);
+    const history = records(historyResponse.items)
+      .filter((item) => string(item.mode) === 'legend')
+      .map(PlayerLegendHistoryEntry.fromJson)
+      .sort((a, b) => b.season.localeCompare(a.season));
+    return new PlayerLegendLeagueData(
+      string(player.tag, tag),
+      string(player.name),
+      int(player.townHallLevel),
+      int(player.trophies),
+      int(player.bestTrophies),
+      currentDay,
+      history,
+    );
   }
   async prefetchRankedLeagueData(tags: Iterable<string>, forceRefresh = false) {
     await mapWithConcurrencyLimit(uniqueTags(tags), async (tag) => {

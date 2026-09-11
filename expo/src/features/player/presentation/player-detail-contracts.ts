@@ -54,6 +54,7 @@ export interface PlayerDetailPresentationActions {
   openCwl(cwl: PlayerCurrentCwl): void;
   openPlayer(tag: string): void | Promise<void>;
   openRanked(player: Player): void;
+  openLegends(player: Player): void;
   openAchievements(achievement?: Achievement): void;
   updateWarFilter(filter: WarStatsFilter): Promise<void>;
   exportWarStats(filter: WarStatsFilter): Promise<string>;

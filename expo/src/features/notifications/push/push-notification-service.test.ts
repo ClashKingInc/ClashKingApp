@@ -33,7 +33,16 @@ type MockContractApi = ContractApiService & {
 };
 
 function mockContractApi(
-  implementation: () => Effect.Effect<unknown, unknown> = () => Effect.succeed({}),
+  implementation: () => Effect.Effect<unknown, unknown> = () =>
+    Effect.succeed({
+      device_id: 'device-1',
+      provider: 'fcm',
+      platform: 'ios',
+      environment: 'sandbox',
+      authorization_status: 'authorized',
+      enabled: true,
+      last_seen_at: '2026-09-11T00:00:00Z',
+    }),
 ): MockContractApi {
   return {
     execute: jest.fn(implementation),
@@ -140,6 +149,7 @@ describe('push notification pure contracts', () => {
         appVersion: '1.2.3',
         locale: 'fr-FR',
         authorizationStatus: 'provisional',
+        enabled: false,
       }),
     ).toEqual({
       token: 'token',
@@ -147,6 +157,7 @@ describe('push notification pure contracts', () => {
       provider: 'fcm',
       platform: 'android',
       environment: 'sandbox',
+      enabled: false,
       app_version: '1.2.3',
       locale: 'fr-FR',
       authorization_status: 'provisional',
@@ -260,6 +271,7 @@ describe('PushNotificationService setup', () => {
       expect.objectContaining({ body: expect.any(Object) }),
       undefined,
     );
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('true');
   });
 });
 
@@ -280,6 +292,7 @@ describe('PushNotificationService registration lifecycle', () => {
           provider: 'fcm',
           platform: 'ios',
           environment: 'sandbox',
+          enabled: true,
           app_version: '0.3.5',
           locale: 'en-US',
           authorization_status: 'authorized',
@@ -302,6 +315,39 @@ describe('PushNotificationService registration lifecycle', () => {
       { baseUrl: 'https://push.example' },
     );
     expect(h.reportError).toHaveBeenCalledWith(expect.objectContaining({ operation: 'register' }));
+  });
+
+  test('disables the current device with POST and preserves local state when the write fails', async () => {
+    const h = harness();
+    await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
+    await h.store.setItem(STORAGE_KEYS.pushFcmToken, 'token');
+    h.api.execute.mockReturnValueOnce(
+      Effect.succeed({
+        device_id: 'device-1',
+        provider: 'fcm',
+        platform: 'ios',
+        environment: 'sandbox',
+        authorization_status: 'authorized',
+        enabled: false,
+        last_seen_at: '2026-09-11T00:00:00Z',
+      }),
+    );
+
+    await expect(h.service.setCurrentDeviceEnabled(false)).resolves.toEqual({
+      state: 'ready',
+      token: 'token',
+    });
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceRegisterEndpoint,
+      expect.objectContaining({ body: expect.objectContaining({ token: 'token', enabled: false }) }),
+      undefined,
+    );
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('false');
+
+    h.api.execute.mockReturnValue(Effect.fail(new Error('offline')));
+    await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
+    await expect(h.service.setCurrentDeviceEnabled(false)).rejects.toThrow('offline');
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('true');
   });
 
   test('handles foreground messages and only persists refreshed tokens when enabled', async () => {
@@ -391,14 +437,13 @@ describe('PushNotificationService navigation and primer', () => {
     expect(h.openAdminPost).toHaveBeenCalledWith('post-1');
   });
 
-  test('shows the injected primer once and syncs preferences after accepted permission', async () => {
+  test('shows the injected primer once and enables the registered device after acceptance', async () => {
     const showPermissionPrimer = jest.fn(async () => true);
-    const accepted = jest.fn(async () => undefined);
     const h = harness({ showPermissionPrimer });
-    await h.service.showPermissionPrimerOnce(accepted);
-    await h.service.showPermissionPrimerOnce(accepted);
+    await h.service.showPermissionPrimerOnce();
+    await h.service.showPermissionPrimerOnce();
     expect(showPermissionPrimer).toHaveBeenCalledTimes(1);
-    expect(accepted).toHaveBeenCalledTimes(1);
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('true');
     expect(await h.store.getItem(STORAGE_KEYS.notificationPermissionPrimerShown)).toBe('true');
   });
 

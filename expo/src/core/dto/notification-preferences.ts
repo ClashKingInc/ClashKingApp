@@ -1,5 +1,3 @@
-export type NotificationAccountSource = 'verified' | 'bookmarked';
-
 export type NotificationCategory =
   | 'warAttacks'
   | 'warState'
@@ -7,18 +5,15 @@ export type NotificationCategory =
   | 'raidReminders'
   | 'events'
   | 'announcements'
-  | 'monthlySupport';
+  | 'monthlySupport'
+  | 'legendDefenses';
 
 export interface NotificationAccount {
-  readonly playerTag: string;
-  readonly source: NotificationAccountSource;
-  readonly active: boolean;
+  readonly tag: string;
+  readonly enabled: boolean;
 }
 
 export interface NotificationPreferences {
-  readonly deviceId: string;
-  readonly environment: string;
-  readonly notificationsEnabled: boolean;
   readonly warAttacks: boolean;
   readonly warState: boolean;
   readonly warReminders: boolean;
@@ -26,19 +21,14 @@ export interface NotificationPreferences {
   readonly events: boolean;
   readonly announcements: boolean;
   readonly monthlySupport: boolean;
+  readonly legendDefenses: boolean;
   readonly reminderTimings: readonly number[];
   readonly raidReminderTimings: readonly number[];
   readonly accounts: readonly NotificationAccount[];
 }
 
-export function createDefaultNotificationPreferences(
-  deviceId = '',
-  environment = 'production',
-): NotificationPreferences {
+export function createDefaultNotificationPreferences(): NotificationPreferences {
   return {
-    deviceId,
-    environment,
-    notificationsEnabled: false,
     warAttacks: false,
     warState: false,
     warReminders: false,
@@ -46,6 +36,7 @@ export function createDefaultNotificationPreferences(
     events: false,
     announcements: false,
     monthlySupport: false,
+    legendDefenses: false,
     reminderTimings: [],
     raidReminderTimings: [],
     accounts: [],
@@ -69,25 +60,7 @@ export function withNotificationCategory(
 
 export function parseNotificationPreferences(value: unknown): NotificationPreferences {
   const json = expectRecord(value, 'notification preferences');
-  const reminderTimings = parseReminderTimings(
-    json.reminderTimings,
-    2820,
-    false,
-    'reminder timings',
-  );
-  const raidReminderTimings = parseReminderTimings(
-    json.raidReminderTimings,
-    4320,
-    true,
-    'Raid Weekend reminder timings',
-  );
-  const accounts = expectArray(json.accounts, 'notification accounts').map(
-    parseNotificationAccount,
-  );
   return {
-    deviceId: expectString(json.deviceId, 'deviceId'),
-    environment: expectString(json.environment, 'environment'),
-    notificationsEnabled: expectBoolean(json.notificationsEnabled, 'notificationsEnabled'),
     warAttacks: expectBoolean(json.warAttacksEnabled, 'warAttacksEnabled'),
     warState: expectBoolean(json.warStateEnabled, 'warStateEnabled'),
     warReminders: expectBoolean(json.warRemindersEnabled, 'warRemindersEnabled'),
@@ -95,36 +68,46 @@ export function parseNotificationPreferences(value: unknown): NotificationPrefer
     events: expectBoolean(json.eventsEnabled, 'eventsEnabled'),
     announcements: expectBoolean(json.announcementsEnabled, 'announcementsEnabled'),
     monthlySupport: expectBoolean(json.monthlySupportEnabled, 'monthlySupportEnabled'),
-    reminderTimings,
-    raidReminderTimings,
-    accounts,
+    legendDefenses: expectBoolean(json.legendDefensesEnabled, 'legendDefensesEnabled'),
+    reminderTimings: parseReminderTimings(json.reminderTimings, 2820, false, 'reminder timings'),
+    raidReminderTimings: parseReminderTimings(
+      json.raidReminderTimings,
+      4320,
+      true,
+      'Raid Weekend reminder timings',
+    ),
+    accounts: expectArray(json.accounts, 'notification accounts').map(parseNotificationAccount),
   };
 }
 
+/** Reads the prior on-device snapshot only; network payloads remain strict RC19 shapes. */
 export function parseLocalNotificationPreferences(value: unknown): NotificationPreferences {
   const json = expectRecord(value, 'local notification preferences');
   const accounts = Array.isArray(json.accounts)
-    ? json.accounts.filter(
-        (account) => isRecord(account) && String(account.source ?? '') === 'verified',
-      )
-    : json.accounts;
+    ? json.accounts.flatMap((value) => {
+        if (!isRecord(value)) return [];
+        if (typeof value.tag === 'string' && typeof value.enabled === 'boolean') return [value];
+        if (
+          value.source === 'verified' &&
+          typeof value.playerTag === 'string' &&
+          typeof value.active === 'boolean'
+        ) {
+          return [{ tag: value.playerTag, enabled: value.active }];
+        }
+        return [];
+      })
+    : [];
   return parseNotificationPreferences({
     ...json,
     raidRemindersEnabled: json.raidRemindersEnabled ?? false,
     raidReminderTimings: json.raidReminderTimings ?? [],
+    legendDefensesEnabled: json.legendDefensesEnabled ?? false,
     accounts,
   });
 }
 
-export function serializeNotificationPreferencesForPut(
-  preferences: NotificationPreferences,
-  deviceId: string,
-  environment: 'production' | 'sandbox',
-) {
+export function serializeNotificationPreferencesForPut(preferences: NotificationPreferences) {
   return {
-    deviceId,
-    environment,
-    notificationsEnabled: preferences.notificationsEnabled,
     warAttacksEnabled: preferences.warAttacks,
     warStateEnabled: preferences.warState,
     warRemindersEnabled: preferences.warReminders,
@@ -132,6 +115,7 @@ export function serializeNotificationPreferencesForPut(
     eventsEnabled: preferences.events,
     announcementsEnabled: preferences.announcements,
     monthlySupportEnabled: preferences.monthlySupport,
+    legendDefensesEnabled: preferences.legendDefenses,
     reminderTimings: [...preferences.reminderTimings],
     raidReminderTimings: [...preferences.raidReminderTimings],
   };
@@ -141,25 +125,16 @@ export function serializeNotificationPreferencesForLocalStorage(
   preferences: NotificationPreferences,
 ): Record<string, unknown> {
   return {
-    ...serializeNotificationPreferencesForPut(
-      preferences,
-      preferences.deviceId,
-      preferences.environment === 'production' ? 'production' : 'sandbox',
-    ),
+    ...serializeNotificationPreferencesForPut(preferences),
     accounts: preferences.accounts.map((account) => ({ ...account })),
   };
 }
 
 export function parseNotificationAccount(value: unknown): NotificationAccount {
   const json = expectRecord(value, 'notification account');
-  const source = expectString(json.source, 'notification account source');
-  if (source !== 'verified' && source !== 'bookmarked') {
-    throw new TypeError('Unsupported notification account source');
-  }
   return {
-    playerTag: expectString(json.playerTag, 'notification account', true),
-    source,
-    active: typeof json.active === 'boolean' ? json.active : true,
+    tag: expectString(json.tag, 'notification account tag', true),
+    enabled: expectBoolean(json.enabled, 'notification account enabled'),
   };
 }
 

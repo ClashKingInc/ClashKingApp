@@ -14,6 +14,7 @@ export function generateStaticParams() {
     'subscription',
     'todo',
     'ranked',
+    'legends',
     'upgrade-tracker',
     'bases-armies',
     'game-assets',

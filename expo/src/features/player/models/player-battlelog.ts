@@ -3,7 +3,7 @@ import { localizedNameForItem } from '@/core/game-data/game-data-localization';
 import { gameDataState } from '@/core/game-data/game-data-state';
 import { apiDate, int, isRecord, record, records, string, type JsonRecord } from './parsing';
 
-export type PlayerBattlelogMode = 'ranked' | 'farming';
+export type PlayerBattlelogMode = 'ranked' | 'farming' | 'legend';
 export type PlayerBattlelogSource = 'official' | 'history';
 export class PlayerBattlelogEntry {
   constructor(
@@ -28,7 +28,7 @@ export class PlayerBattlelogEntry {
     return this.gold + this.elixir + this.darkElixir;
   }
   get mergeKey() {
-    return `${this.attack ? 1 : 0}|${this.timestamp?.getTime() ?? 0}`;
+    return `${this.mode}|${this.attack ? 1 : 0}|${this.timestamp?.getTime() ?? this.id}`;
   }
   static fromOfficial(json: JsonRecord) {
     const resources: Record<string, number> = {};
@@ -198,7 +198,8 @@ function battlelogMode(value: unknown): PlayerBattlelogMode {
     .trim()
     .toLowerCase()
     .replace(/[^a-z]/g, '');
-  return normalized === 'ranked' || normalized === 'legend' ? 'ranked' : 'farming';
+  if (normalized === 'legend') return 'legend';
+  return normalized === 'ranked' ? 'ranked' : 'farming';
 }
 export function parseArmyCounts(shareCode: string): Record<string, number> {
   let payload = shareCode;

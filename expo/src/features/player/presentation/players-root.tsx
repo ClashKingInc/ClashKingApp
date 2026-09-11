@@ -27,6 +27,7 @@ export function PlayersRoot(props: PlayersRootProps) {
   const appState = useAppState();
   const [serviceRevision, setServiceRevision] = useState(0);
   const [notificationPreferences, setNotificationPreferences] = useState<NotificationPreferences>();
+  const [deviceNotificationsEnabled, setDeviceNotificationsEnabled] = useState(false);
   const [updatingNotificationTags, setUpdatingNotificationTags] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
@@ -46,10 +47,15 @@ export function PlayersRoot(props: PlayersRootProps) {
   useEffect(() => {
     if (Platform.OS === 'web') return;
     let current = true;
-    void runtime.notificationPreferences
-      .load()
-      .then((preferences) => {
-        if (current) setNotificationPreferences(preferences);
+    void Promise.all([
+      runtime.notificationPreferences.load(),
+      runtime.push.areNotificationsEnabled(),
+    ])
+      .then(([preferences, enabled]) => {
+        if (current) {
+          setNotificationPreferences(preferences);
+          setDeviceNotificationsEnabled(enabled);
+        }
       })
       .catch(() => {
         // Flutter keeps per-account controls unavailable when the authenticated
@@ -70,8 +76,8 @@ export function PlayersRoot(props: PlayersRootProps) {
     );
     const notificationAccountTags = new Set(
       (notificationPreferences?.accounts ?? [])
-        .filter((account) => account.active)
-        .map((account) => canonicalTag(account.playerTag)),
+        .filter((account) => account.enabled)
+        .map((account) => canonicalTag(account.tag)),
     );
     return {
       profiles: runtime.players.profiles,
@@ -87,8 +93,7 @@ export function PlayersRoot(props: PlayersRootProps) {
         leagueUrl: bookmark.leagueUrl,
       })),
       optionsByTag,
-      notificationsEnabled:
-        Platform.OS !== 'web' && notificationPreferences?.notificationsEnabled === true,
+      notificationsEnabled: Platform.OS !== 'web' && deviceNotificationsEnabled,
       notificationAccountTags,
       updatingNotificationTags,
       ...(runtime.accounts.lastRefresh ? { lastRefresh: runtime.accounts.lastRefresh } : {}),
@@ -101,6 +106,7 @@ export function PlayersRoot(props: PlayersRootProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     appState.features,
+    deviceNotificationsEnabled,
     notificationPreferences,
     runtime,
     serviceRevision,

@@ -244,8 +244,6 @@ export function createAppRuntime(): AppRuntime {
   });
   const notificationPreferences = new NotificationPreferencesService({
     api: contractApi,
-    deviceIdProvider: () => tokens.getDeviceId(),
-    environmentProvider: () => push.environment,
     preferences,
     pushApiV2BaseUrlOverride: process.env.EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL,
   });

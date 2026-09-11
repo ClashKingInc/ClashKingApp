@@ -45,6 +45,7 @@ import type { WarCwl, WarInfo } from '../../features/war/models';
 import { SubscriptionRoot } from '../../features/subscription';
 import { SearchRoot } from '../../features/search';
 import { RankedRoot } from '../../features/ranked';
+import { LegendsRoot } from '../../features/legends';
 import { RankingsRoot } from '../../features/rankings';
 import { StatsRoot } from '../../features/stats';
 import { BasesArmiesRoot } from '../../features/bases-armies';
@@ -578,6 +579,28 @@ export function AuthenticatedRoot() {
         />
       );
     }
+    if (route === 'legends') {
+      const verified = new Set(
+        runtime.accounts.verifiedAccounts.map((account) => canonicalTag(account.playerTag)),
+      );
+      const available = runtime.players.profiles.filter((candidate) =>
+        verified.has(canonicalTag(candidate.tag)),
+      );
+      const player = playerTag
+        ? available.find((candidate) => canonicalTag(candidate.tag) === canonicalTag(playerTag))
+        : available[0];
+      if (!player)
+        return (
+          <View style={styles.boundary}>
+            <EmptyState
+              title={t('generalNoDataAvailable')}
+              body={t('legendsNoDataToday')}
+              icon={<Trophy color={theme.onSurfaceVariant} size={28} />}
+            />
+          </View>
+        );
+      return <LegendsRoot key={`legends:${player.tag}`} player={player} onBack={closeSecondary} />;
+    }
     if (route === 'calculators')
       return (
         <CalculatorsRoot
@@ -617,6 +640,7 @@ export function AuthenticatedRoot() {
             openCwl: pushCwl,
             openPlayer: loadPlayer,
             openRanked: (player) => pushUtility('ranked', player.tag),
+            openLegends: (player) => pushUtility('legends', player.tag),
             openAchievements: () => pushUtility('achievements'),
             showMessage: setSnackbar,
           }}

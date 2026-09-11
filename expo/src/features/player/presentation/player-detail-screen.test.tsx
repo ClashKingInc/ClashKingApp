@@ -79,6 +79,7 @@ const actions = (): PlayerDetailPresentationActions => ({
   openCwl: jest.fn(),
   openPlayer: jest.fn(),
   openRanked: jest.fn(),
+  openLegends: jest.fn(),
   openAchievements: jest.fn(),
   updateWarFilter: jest.fn(async () => undefined),
   exportWarStats: jest.fn(async () => 'war-stats.xlsx'),

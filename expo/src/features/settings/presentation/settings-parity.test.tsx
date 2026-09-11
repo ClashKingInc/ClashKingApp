@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import lockfile from '../../../../package-lock.json';
 
 import { I18nProvider, type SupportedLocale } from '../../../i18n';
@@ -100,9 +100,11 @@ it('keeps notification page chrome and skeletons while hydration is pending', as
           loadLocal: () => pending,
           load: () => pending,
           save: () => pending,
+          setAccountEnabled: () => pending,
+          deviceEnabled: () => pending,
+          setDeviceEnabled: () => pending,
           lastPushResult: () => null,
           initializePush: () => pending,
-          requestPermissionAndRegister: () => pending,
           tokenPreview: () => pending,
         }}
       />,
@@ -111,6 +113,47 @@ it('keeps notification page chrome and skeletons while hydration is pending', as
   expect(screen.getByText('Notifications')).toBeTruthy();
   expect(screen.getByLabelText('Loading...')).toBeTruthy();
   expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy();
+});
+
+it('updates one verified account even when notifications are disabled on this device', async () => {
+  const preferences = {
+    warAttacks: false,
+    warState: false,
+    warReminders: false,
+    raidReminders: false,
+    events: false,
+    announcements: false,
+    monthlySupport: false,
+    legendDefenses: true,
+    reminderTimings: [],
+    raidReminderTimings: [],
+    accounts: [{ tag: '#PLAYER', enabled: true }],
+  };
+  const setAccountEnabled = jest.fn(async (tag: string, enabled: boolean) => ({
+    tag,
+    enabled,
+  }));
+  const screen = await render(
+    wrapped(
+      <NotificationSettingsScreen
+        service={{
+          loadLocal: async () => preferences,
+          load: async () => preferences,
+          save: async (settings) => settings,
+          setAccountEnabled,
+          deviceEnabled: async () => false,
+          setDeviceEnabled: async () => ({ state: 'ready', token: 'token' }),
+          lastPushResult: () => ({ state: 'ready', token: 'token' }),
+          initializePush: async () => ({ state: 'ready', token: 'token' }),
+          tokenPreview: async () => 'token',
+        }}
+      />,
+    ),
+  );
+
+  await waitFor(() => expect(screen.getByText('#PLAYER')).toBeTruthy());
+  await act(async () => fireEvent.press(screen.getAllByRole('switch')[1]!));
+  await waitFor(() => expect(setAccountEnabled).toHaveBeenCalledWith('#PLAYER', false));
 });
 
 it('copies the version with Flutter-equivalent confirmation', async () => {

@@ -99,7 +99,7 @@ test('parses official battle resources/share codes and lets history win a merge'
     darkElixir: 30,
     armyCounts: { u_5: 8 },
   });
-  expect(legendHistory).toMatchObject({ mode: 'ranked', attack: true, duration: 0 });
+  expect(legendHistory).toMatchObject({ mode: 'legend', attack: true, duration: 0 });
   expect(parseArmyCounts('u8x5-2x6s1x1')).toEqual({ u_5: 8, u_6: 2, s_1: 1 });
   expect(merged.items).toHaveLength(1);
   expect(merged.items[0]?.source).toBe('history');
