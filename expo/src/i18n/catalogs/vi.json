@@ -613,6 +613,8 @@
   "legendsCountryTitle": "Quốc gia",
   "legendsLocalRankTitle": "Xếp hạng địa phương",
   "legendsGlobalRankTitle": "Xếp hạng toàn cầu",
+  "legendsYourArmy": "Đội quân của bạn",
+  "legendsArmyUsedAgainstYou": "Đội quân được dùng để tấn công bạn",
   "warWinsTitle": "Thắng",
   "warLossesTitle": "Tổn thất",
   "warDrawsTitle": "Hòa",

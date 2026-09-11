@@ -613,6 +613,8 @@
   "legendsCountryTitle": "País",
   "legendsLocalRankTitle": "Classificação local",
   "legendsGlobalRankTitle": "Classificação global",
+  "legendsYourArmy": "O teu exército",
+  "legendsArmyUsedAgainstYou": "Exército usado contra ti",
   "warWinsTitle": "Vitórias",
   "warLossesTitle": "Perdas",
   "warDrawsTitle": "Empates",

@@ -613,6 +613,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokal rang",
   "legendsGlobalRankTitle": "Global rang",
+  "legendsYourArmy": "Din hær",
+  "legendsArmyUsedAgainstYou": "Hæren brugt mod dig",
   "warWinsTitle": "Vinder",
   "warLossesTitle": "Tab",
   "warDrawsTitle": "Tegner",

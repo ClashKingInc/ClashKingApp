@@ -18,6 +18,11 @@ export interface LegendsShareSummary {
   readonly favoriteArmy: string | null;
   readonly favoriteArmyUses: number;
   readonly battleChanges: readonly { readonly key: string; readonly change: number }[];
+  readonly dailyContributions: readonly {
+    readonly key: string;
+    readonly change: number;
+    readonly attackTrophies: number;
+  }[];
   readonly graph: readonly { readonly label: string; readonly trophies: number }[];
 }
 
@@ -29,9 +34,14 @@ export function legendsShareSummary(data: PlayerLegendLeagueData): LegendsShareS
   const favorite = [...armyUses.entries()].sort(
     ([left, leftUses], [right, rightUses]) => rightUses - leftUses || left.localeCompare(right),
   )[0];
-  const dailyChanges = [...data.recentDays]
+  const dailyContributions = [...data.recentDays]
     .sort((left, right) => left.day.localeCompare(right.day))
-    .map((day) => ({ key: day.day, change: day.trophyChange }));
+    .map((day) => ({
+      key: day.day,
+      change: day.trophyChange,
+      attackTrophies: day.attackTrophies,
+    }));
+  const dailyChanges = dailyContributions.map(({ key, change }) => ({ key, change }));
   const selectedClosingTrophies = data.historicalRank?.trophies ?? data.trophies;
   let running =
     selectedClosingTrophies - dailyChanges.reduce((sum, battle) => sum + battle.change, 0);
@@ -41,6 +51,7 @@ export function legendsShareSummary(data: PlayerLegendLeagueData): LegendsShareS
     favoriteArmy: favorite?.[0] ?? null,
     favoriteArmyUses: favorite?.[1] ?? 0,
     battleChanges: dailyChanges,
+    dailyContributions,
     graph: dailyChanges.map((day) => {
       running += day.change;
       return { label: day.key.slice(5), trophies: running };

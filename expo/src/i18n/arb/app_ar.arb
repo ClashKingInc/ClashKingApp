@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "دولة",
   "legendsLocalRankTitle": "الرتبة المحلية",
   "legendsGlobalRankTitle": "المرتبة العالمية",
+  "legendsYourArmy": "جيشك",
+  "legendsArmyUsedAgainstYou": "الجيش المستخدم ضدك",
   "warWinsTitle": "انتصارات",
   "warLossesTitle": "خسائر",
   "warDrawsTitle": "يرسم",

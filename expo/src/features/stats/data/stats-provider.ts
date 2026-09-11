@@ -6,8 +6,9 @@ import {
   StatsClanCountsResponse,
   StatsCwlQuery,
   StatsDateFilter,
-  StatsItemsQuery,
-  StatsItemsResponse,
+  StatsLegendCohort,
+  StatsLegendQuery,
+  StatsLegendResponse,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
   StatsRankedQuery,
@@ -16,7 +17,7 @@ import {
   statsSections,
   type StatsAudienceValue,
   type StatsItemQuantityFilter,
-  type StatsItemSelector,
+  type StatsLegendCohortValue,
   type StatsSectionValue,
 } from '../models';
 import type { StatsRepositoryContract } from './stats-repository';
@@ -52,9 +53,7 @@ export class StatsProvider {
   armiesSortBy: StatsArmiesQuery['sortBy'] = 'usage';
   armiesInclude: readonly StatsItemQuantityFilter[] = [];
   armiesExclude: readonly string[] = [];
-  itemsTownHall?: number;
-  itemsLeagueTier?: number;
-  itemSelectors: readonly StatsItemSelector[] = [];
+  legendCohort: StatsLegendCohortValue = StatsLegendCohort.legend;
   warTownHall?: number;
   warOpponentTownHall?: number;
   warEqualTownHalls = true;
@@ -136,16 +135,9 @@ export class StatsProvider {
     this.invalidate(StatsSection.armies);
     this.notify();
   }
-  updateItemFilters(value: { townHall?: number | null; leagueTier?: number | null }): void {
-    this.itemsTownHall =
-      value.townHall === null ? undefined : (value.townHall ?? this.itemsTownHall);
-    this.itemsLeagueTier =
-      value.leagueTier === null ? undefined : (value.leagueTier ?? this.itemsLeagueTier);
-    this.invalidate(StatsSection.items);
-    this.notify();
-  }
-  setItemSelectors(value: readonly StatsItemSelector[]): void {
-    this.itemSelectors = value.filter((item) => item.isValid);
+  updateLegendCohort(value: StatsLegendCohortValue): void {
+    if (this.legendCohort === value) return;
+    this.legendCohort = value;
     this.invalidate(StatsSection.items);
     this.notify();
   }
@@ -199,11 +191,6 @@ export class StatsProvider {
         old.status === StatsLoadStatus.empty)
     )
       return;
-    if (target === StatsSection.items && this.itemSelectors.length === 0) {
-      this.states.set(target, { status: StatsLoadStatus.empty, isRefreshing: false });
-      this.notify();
-      return;
-    }
     const version = (this.requestVersions.get(target) ?? 0) + 1;
     this.requestVersions.set(target, version);
     this.states.set(target, {
@@ -258,18 +245,7 @@ export class StatsProvider {
           ),
         );
       case StatsSection.items:
-        return this.repository.loadItems(
-          new StatsItemsQuery(
-            new StatsBattleFilters(
-              this.dates,
-              this.itemsTownHall,
-              undefined,
-              undefined,
-              this.itemsLeagueTier,
-            ),
-            this.itemSelectors,
-          ),
-        );
+        return this.repository.loadItems(new StatsLegendQuery(this.dates, this.legendCohort));
       case StatsSection.war:
         return this.repository.loadWar(
           new StatsWarQuery(
@@ -305,7 +281,7 @@ export class StatsProvider {
   }
 }
 function isEmpty(value: object): boolean {
-  if (value instanceof StatsItemsResponse) return value.items.length === 0;
+  if (value instanceof StatsLegendResponse) return value.items.length === 0;
   if (value instanceof StatsPerformanceResponse) return !value.metrics.available;
   if (value instanceof StatsPlayerCountsResponse)
     return value.townHalls.length + value.leagueTiers.length === 0;

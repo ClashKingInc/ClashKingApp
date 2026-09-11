@@ -613,6 +613,8 @@
   "legendsCountryTitle": "País",
   "legendsLocalRankTitle": "Grau local",
   "legendsGlobalRankTitle": "Classificació global",
+  "legendsYourArmy": "El teu exèrcit",
+  "legendsArmyUsedAgainstYou": "Exèrcit utilitzat contra tu",
   "warWinsTitle": "Guanya",
   "warLossesTitle": "Pèrdues",
   "warDrawsTitle": "Empates",

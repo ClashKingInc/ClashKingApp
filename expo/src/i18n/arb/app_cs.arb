@@ -1467,6 +1467,8 @@
   "legendsCountryTitle": "Země",
   "legendsLocalRankTitle": "Místní hodnost",
   "legendsGlobalRankTitle": "Globální hodnost",
+  "legendsYourArmy": "Tvá armáda",
+  "legendsArmyUsedAgainstYou": "Armáda použitá proti tobě",
   "warWinsTitle": "Vyhrává",
   "warLossesTitle": "Ztráty",
   "warDrawsTitle": "Kreslí",

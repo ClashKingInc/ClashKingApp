@@ -613,6 +613,8 @@
   "legendsCountryTitle": "国",
   "legendsLocalRankTitle": "ローカルランク",
   "legendsGlobalRankTitle": "グローバルランク",
+  "legendsYourArmy": "自分の編成",
+  "legendsArmyUsedAgainstYou": "相手が使用した編成",
   "warWinsTitle": "勝利",
   "warLossesTitle": "損失",
   "warDrawsTitle": "ドロー",

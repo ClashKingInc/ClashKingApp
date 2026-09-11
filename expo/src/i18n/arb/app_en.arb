@@ -1652,6 +1652,8 @@
   "legendsCountryTitle": "Country",
   "legendsLocalRankTitle": "Local rank",
   "legendsGlobalRankTitle": "Global rank",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Wins",
   "warLossesTitle": "Losses",
   "warDrawsTitle": "Draws",

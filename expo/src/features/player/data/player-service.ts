@@ -41,9 +41,11 @@ import {
 import { PlayerBattlelogData, PlayerBattlelogEntry } from '../models/player-battlelog';
 import {
   currentLegendDay,
+  PlayerLegendBattle,
   PlayerLegendBattlelog,
   PlayerLegendHistoryEntry,
   PlayerLegendLeagueData,
+  PlayerLegendOpponentInsight,
   PlayerLegendRank,
   PlayerLegendDaySummary,
 } from '../models/player-legend';
@@ -452,49 +454,61 @@ export class PlayerService {
   private async fetchLegendLeagueData(tag: string, day: string, forceRefresh: boolean) {
     const seriesStart = new Date(`${day}T00:00:00.000Z`);
     seriesStart.setUTCDate(seriesStart.getUTCDate() - 27);
-    const [
-      player,
-      historyResponse,
-      currentDay,
-      currentRankResponse,
-      historicalRankResponse,
-      recentDays,
-    ] = await Promise.all([
-      Effect.runPromise(
-        this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
-      ),
-      Effect.runPromise(
-        this.api.execute(PlayerLeagueHistoryEndpoint, {
-          path: { playerTag: tag },
-          query: {},
-          body: {},
-        }),
-      ),
-      this.loadLegendBattlelog(tag, day, forceRefresh),
+    const [player, historyResponse, currentDay, historicalRankResponse, recentDays] =
+      await Promise.all([
+        Effect.runPromise(
+          this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
+        ),
+        Effect.runPromise(
+          this.api.execute(PlayerLeagueHistoryEndpoint, {
+            path: { playerTag: tag },
+            query: {},
+            body: {},
+          }),
+        ),
+        this.loadLegendBattlelog(tag, day, forceRefresh),
+        Effect.runPromise(
+          this.api.execute(LegendHistoricalRanksEndpoint, {
+            path: {},
+            query: {},
+            body: { day, tags: [tag] },
+          }),
+        ).catch(() => null),
+        Effect.runPromise(
+          this.api.execute(expoEndpoints.legendPlayerDailySeries, {
+            path: { playerTag: tag },
+            query: {
+              'time[after]': seriesStart.toISOString().slice(0, 10),
+              'time[before]': day,
+            },
+            body: {},
+          }),
+        ).catch(() => null),
+      ]);
+    const opponentTags = uniqueTags(
+      currentDay
+        ? [...currentDay.attacks, ...currentDay.defenses]
+            .filter((battle) => !battle.automatic && battle.opponentTag)
+            .map((battle) => battle.opponentTag)
+        : [],
+    ).slice(0, 99);
+    const [currentRankResponse, opponentDayResponse] = await Promise.all([
       Effect.runPromise(
         this.api.execute(LegendRanksEndpoint, {
           path: {},
           query: {},
-          body: { tags: [tag] },
+          body: { tags: [tag, ...opponentTags] },
         }),
       ).catch(() => null),
-      Effect.runPromise(
-        this.api.execute(LegendHistoricalRanksEndpoint, {
-          path: {},
-          query: {},
-          body: { day, tags: [tag] },
-        }),
-      ).catch(() => null),
-      Effect.runPromise(
-        this.api.execute(expoEndpoints.legendPlayerDailySeries, {
-          path: { playerTag: tag },
-          query: {
-            'time[after]': seriesStart.toISOString().slice(0, 10),
-            'time[before]': day,
-          },
-          body: {},
-        }),
-      ).catch(() => null),
+      opponentTags.length
+        ? Effect.runPromise(
+            this.api.execute(expoEndpoints.legendDaySummaries, {
+              path: {},
+              query: {},
+              body: { day, tags: opponentTags },
+            }),
+          ).catch(() => null)
+        : Promise.resolve(null),
     ]);
     const history = records(historyResponse.items)
       .filter((item) => string(item.mode) === 'legend')
@@ -508,13 +522,43 @@ export class PlayerService {
       records(historicalRankResponse?.items)
         .map(PlayerLegendRank.fromJson)
         .find((item) => canonicalTag(item.tag) === tag) ?? null;
+    const opponentRanks = new Map(
+      records(currentRankResponse?.items)
+        .map(PlayerLegendRank.fromJson)
+        .filter((item) => canonicalTag(item.tag) !== tag)
+        .map((item) => [canonicalTag(item.tag), item] as const),
+    );
+    const opponentDays = new Map(
+      records(opponentDayResponse?.items).map((item) => [
+        canonicalTag(string(item.tag)),
+        int(item.netTrophies),
+      ]),
+    );
+    const enrichedCurrentDay = currentDay
+      ? new PlayerLegendBattlelog(
+          currentDay.tag,
+          currentDay.day,
+          currentDay.startsAt,
+          currentDay.endsAt,
+          currentDay.closed,
+          currentDay.attackTrophies,
+          currentDay.defenseTrophies,
+          currentDay.trophyChange,
+          currentDay.attacks.map((battle) =>
+            enrichLegendOpponent(battle, opponentRanks, opponentDays),
+          ),
+          currentDay.defenses.map((battle) =>
+            enrichLegendOpponent(battle, opponentRanks, opponentDays),
+          ),
+        )
+      : null;
     return new PlayerLegendLeagueData(
       string(player.tag, tag),
       string(player.name),
       int(player.townHallLevel),
       int(player.trophies),
       int(player.bestTrophies),
-      currentDay,
+      enrichedCurrentDay,
       history,
       day,
       currentRank,
@@ -795,6 +839,36 @@ export class PlayerService {
       }),
     );
   }
+}
+
+function enrichLegendOpponent(
+  battle: PlayerLegendBattle,
+  ranks: ReadonlyMap<string, PlayerLegendRank>,
+  days: ReadonlyMap<string, number>,
+) {
+  if (battle.automatic || !battle.opponentTag) return battle;
+  const opponentTag = canonicalTag(battle.opponentTag);
+  const rank = ranks.get(opponentTag);
+  const dayNetTrophies = days.get(opponentTag) ?? null;
+  if (!rank && dayNetTrophies === null) return battle;
+  return new PlayerLegendBattle(
+    battle.trophies,
+    battle.automatic,
+    battle.battleTime,
+    battle.duration,
+    battle.townHallLevel,
+    battle.opponentTag,
+    battle.opponentName,
+    battle.opponentTownHallLevel,
+    battle.stars,
+    battle.destructionPercentage,
+    battle.shareCode,
+    new PlayerLegendOpponentInsight(
+      rank?.trophies ?? null,
+      rank?.globalRank ?? null,
+      dayNetTrophies,
+    ),
+  );
 }
 
 function playerWarHistoryQuery(filter: {

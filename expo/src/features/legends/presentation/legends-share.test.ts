@@ -94,6 +94,10 @@ test('uses live and selected-day ranks, favorite army, and daily trophy changes'
       { key: '2026-09-10', change: 20 },
       { key: '2026-09-11', change: 20 },
     ],
+    dailyContributions: [
+      { key: '2026-09-10', change: 20, attackTrophies: 30 },
+      { key: '2026-09-11', change: 20, attackTrophies: 40 },
+    ],
     graph: [
       { label: '09-10', trophies: 5560 },
       { label: '09-11', trophies: 5580 },

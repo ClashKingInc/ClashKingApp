@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { I18nProvider } from '../../../i18n';
@@ -17,9 +17,11 @@ import {
   StatsDateFilter,
   StatsDateRange,
   StatsGroupedCount,
-  StatsItemSelector,
-  StatsItemType,
-  StatsItemsResponse,
+  StatsLegendCohort,
+  StatsLegendDay,
+  StatsLegendItemUse,
+  StatsLegendPetAssignmentUse,
+  StatsLegendResponse,
   StatsMetrics,
   StatsSection,
 } from '../models';
@@ -81,29 +83,37 @@ test('renders an army family and its representative share code', async () => {
   expect(view.getByText('Army share code: u1x10-s1x2')).toBeTruthy();
 });
 
-test('reloads item stats after removing a selector instead of leaving the section idle', async () => {
-  const selector = new StatsItemSelector('Fireball', StatsItemType.equipment, 'Grand Warden');
+test('renders Legend daily stats and applies the selected cohort filter', async () => {
+  const data = new StatsLegendResponse(StatsLegendCohort.legend, [
+    new StatsLegendDay(
+      '2026-08-30',
+      10,
+      3,
+      [0, 1, 4, 5],
+      90,
+      95,
+      [new StatsLegendItemUse(100, 10, 5)],
+      [new StatsLegendItemUse(200, 8, 4)],
+      [new StatsLegendItemUse(300, 6, 3)],
+      [new StatsLegendPetAssignmentUse(200, 100, 8, 4)],
+    ),
+  ]);
   const provider = {
     audience: StatsAudience.battle,
     section: StatsSection.items,
     dates: new StatsDateFilter(new Date(2026, 7, 1), new Date(2026, 7, 30)),
-    itemsTownHall: 18,
-    itemsLeagueTier: 1,
-    itemSelectors: [selector],
+    legendCohort: StatsLegendCohort.legend,
     currentState: {
       status: StatsLoadStatus.data,
-      data: new StatsItemsResponse(
-        new StatsDateRange(new Date(2026, 7, 1), new Date(2026, 7, 30)),
-        [],
-        0,
-      ),
+      data,
       isRefreshing: false,
     },
     selectAudience: jest.fn(),
     selectSection: jest.fn(),
     refresh: jest.fn(async () => undefined),
     load: jest.fn(async () => undefined),
-    setItemSelectors: jest.fn(),
+    updateLegendCohort: jest.fn(),
+    setDates: jest.fn(async () => undefined),
   } as unknown as StatsProvider;
 
   const view = await render(
@@ -121,10 +131,20 @@ test('reloads item stats after removing a selector instead of leaving the sectio
     </SafeAreaProvider>,
   );
 
-  fireEvent.press(view.getByText('Fireball ×'));
+  expect(view.getAllByText('Legend League').length).toBeGreaterThan(0);
+  expect(view.getByTestId('legend-stats-summary')).toBeTruthy();
+  expect(view.getAllByText('#100').length).toBeGreaterThan(0);
 
-  expect(provider.setItemSelectors).toHaveBeenCalledWith([]);
-  expect(provider.load).toHaveBeenCalledWith(StatsSection.items);
+  fireEvent.press(view.getByLabelText('Filters'));
+  const cohort = await waitFor(() => view.getByLabelText('Legend League: Legend League'));
+  fireEvent.press(cohort);
+  fireEvent.press(await waitFor(() => view.getByText('Top 200')));
+  await waitFor(() => view.getByLabelText('Legend League: Top 200'));
+  fireEvent.press(view.getByText('Apply'));
+  await waitFor(() =>
+    expect(provider.updateLegendCohort).toHaveBeenCalledWith(StatsLegendCohort.top200),
+  );
+  expect(provider.setDates).toHaveBeenCalled();
 });
 
 test('uses current static game data for CWL league labels beyond the fallback list', async () => {

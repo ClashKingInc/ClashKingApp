@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "Ülke",
   "legendsLocalRankTitle": "Yerel sıralama",
   "legendsGlobalRankTitle": "Küresel sıralama",
+  "legendsYourArmy": "Ordun",
+  "legendsArmyUsedAgainstYou": "Sana karşı kullanılan ordu",
   "warWinsTitle": "galibiyet",
   "warLossesTitle": "kayıplar",
   "warDrawsTitle": "Beraberlik",

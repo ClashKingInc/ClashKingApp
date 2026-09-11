@@ -117,8 +117,10 @@ function warStatsItem(overrides: Record<string, unknown> = {}) {
 }
 function setup(routes: Record<string, unknown | (() => Promise<Response>)>) {
   const calls = new Map<string, number>();
+  const requests: Request[] = [];
   const fetchMock = jest.fn(async (input: RequestInfo | URL, _init?: RequestInit) => {
     const request = input as Request;
+    requests.push(request.clone());
     const url = request.url,
       path = new URL(url).pathname + new URL(url).search;
     calls.set(path, (calls.get(path) ?? 0) + 1);
@@ -133,7 +135,7 @@ function setup(routes: Record<string, unknown | (() => Promise<Response>)>) {
     tokenProvider: { getAccessToken: async () => 'token' },
     fetchImplementation: fetchMock as typeof fetch,
   });
-  return { api, calls, fetchMock };
+  return { api, calls, fetchMock, requests };
 }
 test('loads an official player whose achievement completion text is explicitly null', async () => {
   const { api } = setup({
@@ -547,6 +549,71 @@ test('loads a separate Legend experience from current-day and completed-season c
   expect(calls.get(`/v2/player/%23P1/legend/${day}/battlelog`)).toBe(1);
   expect(calls.get('/v2/legends/ranks')).toBe(1);
   expect(calls.get('/v2/legends/ranks/history')).toBe(1);
+});
+
+test('batches selected-day opponent rank and trophy insights without enriching automatic battles', async () => {
+  const day = '2026-08-15';
+  const attack = {
+    trophies: 40,
+    time: '20260815T060000.000Z',
+    duration: 120,
+    townHallLevel: 18,
+    opponent: { tag: '#O1', name: 'Opponent', townHallLevel: 18 },
+    stars: 3,
+    destructionPercentage: 100,
+    shareCode: 'u8x5-2x6',
+    familyId: null,
+  };
+  const automaticDefense = { trophies: -40, automatic: true };
+  const { api, calls, requests } = setup({
+    '/proxy/v1/players/%23P1': officialPlayer({ trophies: 5600, bestTrophies: 5900 }),
+    '/v2/player/%23P1/league/history': { items: [] },
+    [`/v2/player/%23P1/legend/${day}/battlelog`]: legendBattlelog({
+      day,
+      attacks: [attack],
+      defenses: [attack, automaticDefense],
+    }),
+    '/v2/legends/ranks': {
+      items: [
+        { tag: '#P1', name: 'One', trophies: 5600, globalRank: 42 },
+        { tag: '#O1', name: 'Opponent', trophies: 5700, globalRank: 24 },
+      ],
+    },
+    '/v2/legends/days': {
+      items: [
+        {
+          tag: '#O1',
+          attackTrophies: 120,
+          defenseTrophies: -80,
+          netTrophies: 40,
+          attacks: 4,
+          defenses: 3,
+        },
+      ],
+    },
+    '/v2/legends/ranks/history': { items: [] },
+  });
+  const service = new PlayerService(api);
+
+  await expect(service.loadLegendLeagueData('#P1', false, day)).resolves.toMatchObject({
+    currentDay: {
+      attacks: [{ opponentInsight: { trophies: 5700, globalRank: 24, dayNetTrophies: 40 } }],
+      defenses: [
+        { opponentInsight: { trophies: 5700, globalRank: 24, dayNetTrophies: 40 } },
+        { automatic: true, opponentInsight: null },
+      ],
+    },
+  });
+  expect(calls.get('/v2/legends/ranks')).toBe(1);
+  expect(calls.get('/v2/legends/days')).toBe(1);
+  const ranksRequest = requests.find(
+    (request) => new URL(request.url).pathname === '/v2/legends/ranks',
+  );
+  const daysRequest = requests.find(
+    (request) => new URL(request.url).pathname === '/v2/legends/days',
+  );
+  await expect(ranksRequest?.json()).resolves.toEqual({ tags: ['#P1', '#O1'] });
+  await expect(daysRequest?.json()).resolves.toEqual({ day, tags: ['#O1'] });
 });
 
 test('loads and caches a separately selected Legend day', async () => {

@@ -16,6 +16,7 @@ export class PlayerLegendBattle {
     readonly stars: number | null = null,
     readonly destructionPercentage: number | null = null,
     readonly shareCode: string | null = null,
+    readonly opponentInsight: PlayerLegendOpponentInsight | null = null,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -37,6 +38,14 @@ export class PlayerLegendBattle {
       json.shareCode === null ? null : string(json.shareCode),
     );
   }
+}
+
+export class PlayerLegendOpponentInsight {
+  constructor(
+    readonly trophies: number | null,
+    readonly globalRank: number | null,
+    readonly dayNetTrophies: number | null,
+  ) {}
 }
 
 export class PlayerLegendBattlelog {

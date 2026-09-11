@@ -613,6 +613,8 @@
   "legendsCountryTitle": "국가",
   "legendsLocalRankTitle": "지역 순위",
   "legendsGlobalRankTitle": "글로벌 순위",
+  "legendsYourArmy": "내 군대",
+  "legendsArmyUsedAgainstYou": "나를 상대로 사용한 군대",
   "warWinsTitle": "승리",
   "warLossesTitle": "사상자 수",
   "warDrawsTitle": "무승부",

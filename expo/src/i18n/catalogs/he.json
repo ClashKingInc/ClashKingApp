@@ -613,6 +613,8 @@
   "legendsCountryTitle": "מְדִינָה",
   "legendsLocalRankTitle": "דרגה מקומית",
   "legendsGlobalRankTitle": "דרגה עולמית",
+  "legendsYourArmy": "הצבא שלך",
+  "legendsArmyUsedAgainstYou": "הצבא ששימש נגדך",
   "warWinsTitle": "מנצח",
   "warLossesTitle": "אֲבֵדוֹת",
   "warDrawsTitle": "ציור",

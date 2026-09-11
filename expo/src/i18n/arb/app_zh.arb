@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "国家",
   "legendsLocalRankTitle": "当地排名",
   "legendsGlobalRankTitle": "全球排名",
+  "legendsYourArmy": "你的军队",
+  "legendsArmyUsedAgainstYou": "用于攻击你的军队",
   "warWinsTitle": "胜利",
   "warLossesTitle": "损失",
   "warDrawsTitle": "抽奖",

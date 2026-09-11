@@ -613,6 +613,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokale rang",
   "legendsGlobalRankTitle": "Wereldrang",
+  "legendsYourArmy": "Jouw leger",
+  "legendsArmyUsedAgainstYou": "Leger dat tegen jou is gebruikt",
   "warWinsTitle": "Overwinningen",
   "warLossesTitle": "Nederlagen",
   "warDrawsTitle": "Gelijkspel",

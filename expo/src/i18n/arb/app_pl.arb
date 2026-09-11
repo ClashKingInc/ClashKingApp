@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "Kraj",
   "legendsLocalRankTitle": "Ranga lokalna",
   "legendsGlobalRankTitle": "Globalna ranga",
+  "legendsYourArmy": "Twoja armia",
+  "legendsArmyUsedAgainstYou": "Armia użyta przeciwko tobie",
   "warWinsTitle": "Wygrywa",
   "warLossesTitle": "Straty",
   "warDrawsTitle": "Rysuje",

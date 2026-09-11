@@ -1,5 +1,6 @@
 import {
   ArmySearchEndpoint,
+  LegendDaysEndpoint,
   PlayerLeagueTierCountsEndpoint,
   PlayerTownhallCountsEndpoint,
   StatsCwlEndpoint,
@@ -15,6 +16,8 @@ import {
   StatsBattleFilters,
   StatsCwlQuery,
   StatsDateFilter,
+  StatsLegendCohort,
+  StatsLegendQuery,
   StatsRankedQuery,
   StatsWarQuery,
 } from '../models';
@@ -42,7 +45,9 @@ describe('StatsRepository', () => {
       return Response.json(
         path === '/v2/stats/armies'
           ? { cohort: 'legend_i', items: [] }
-          : { dateRange, metrics },
+          : path === '/v2/stats/legend/days'
+            ? { cohort: 'top_200', items: [] }
+            : { dateRange, metrics },
       );
     };
     const repository = new StatsRepository(
@@ -54,15 +59,18 @@ describe('StatsRepository', () => {
     const dates = new StatsDateFilter(new Date(2026, 7, 1), new Date(2026, 7, 30));
     const filters = new StatsBattleFilters(dates, 18);
     const armies = new StatsArmiesQuery(filters);
+    const legends = new StatsLegendQuery(dates, StatsLegendCohort.top200);
     const ranked = new StatsRankedQuery(dates, 18, 1);
     const war = new StatsWarQuery(dates, 18);
     const cwl = new StatsCwlQuery(dates, 18);
     await repository.loadArmies(armies);
+    await repository.loadItems(legends);
     await repository.loadRanked(ranked);
     await repository.loadWar(war);
     await repository.loadCwl(cwl);
     const expected = [
       ['/v2/stats/armies', armies.toQuery()],
+      ['/v2/stats/legend/days', legends.toQuery()],
       ['/v2/stats/ranked', ranked.toQuery()],
       ['/v2/stats/war', war.toQuery()],
       ['/v2/stats/cwl', cwl.toQuery()],
@@ -107,17 +115,20 @@ describe('StatsRepository', () => {
     const dates = new StatsDateFilter(new Date(2026, 7, 1), new Date(2026, 7, 30));
     const filters = new StatsBattleFilters(dates, 18);
     const armies = new StatsArmiesQuery(filters);
+    const legends = new StatsLegendQuery(dates, StatsLegendCohort.top200);
     const ranked = new StatsRankedQuery(dates, 18, 1);
     const war = new StatsWarQuery(dates, 18);
     const cwl = new StatsCwlQuery(dates, 18);
 
     await repo.loadArmies(armies);
+    await repo.loadItems(legends);
     await repo.loadRanked(ranked);
     await repo.loadWar(war);
     await repo.loadCwl(cwl);
 
     const expected = [
       [ArmySearchEndpoint, armies],
+      [LegendDaysEndpoint, legends],
       [StatsRankedEndpoint, ranked],
       [StatsWarEndpoint, war],
       [StatsCwlEndpoint, cwl],

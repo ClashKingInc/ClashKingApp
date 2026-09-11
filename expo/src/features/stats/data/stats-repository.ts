@@ -3,6 +3,7 @@ import {
   ClanCapitalLeagueCountsEndpoint,
   ClanLocationCountsEndpoint,
   CwlLeagueCountsEndpoint,
+  LegendDaysEndpoint,
   PlayerLeagueTierCountsEndpoint,
   PlayerTownhallCountsEndpoint,
   StatsCwlEndpoint,
@@ -17,12 +18,12 @@ import {
   StatsArmiesResponse,
   StatsClanCountsResponse,
   StatsDateRange,
-  StatsItemsResponse,
+  StatsLegendQuery,
+  StatsLegendResponse,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
   type StatsArmiesQuery,
   type StatsCwlQuery,
-  type StatsItemsQuery,
   type StatsRankedQuery,
   type StatsWarQuery,
 } from '../models';
@@ -31,7 +32,7 @@ export interface StatsRepositoryContract {
   loadPlayerCounts(): Promise<StatsPlayerCountsResponse>;
   loadClanCounts(): Promise<StatsClanCountsResponse>;
   loadArmies(request: StatsArmiesQuery): Promise<StatsArmiesResponse>;
-  loadItems(request: StatsItemsQuery): Promise<StatsItemsResponse>;
+  loadItems(request: StatsLegendQuery): Promise<StatsLegendResponse>;
   loadRanked(request: StatsRankedQuery): Promise<StatsPerformanceResponse>;
   loadWar(request: StatsWarQuery): Promise<StatsPerformanceResponse>;
   loadCwl(request: StatsCwlQuery): Promise<StatsPerformanceResponse>;
@@ -87,8 +88,16 @@ export class StatsRepository implements StatsRepositoryContract {
       new StatsDateRange(request.filters.dates.start, request.filters.dates.end),
     );
   }
-  async loadItems(_request: StatsItemsQuery): Promise<StatsItemsResponse> {
-    throw new RangeError('Item statistics are no longer available.');
+  async loadItems(request: StatsLegendQuery): Promise<StatsLegendResponse> {
+    return StatsLegendResponse.fromJson(
+      await Effect.runPromise(
+        this.contractApi.execute(LegendDaysEndpoint, {
+          path: {},
+          query: request.toQuery(),
+          body: {},
+        }),
+      ),
+    );
   }
   async loadRanked(request: StatsRankedQuery): Promise<StatsPerformanceResponse> {
     return StatsPerformanceResponse.fromJson(

@@ -2,10 +2,10 @@ import {
   StatsArmiesResponse,
   StatsClanCountsResponse,
   StatsDateRange,
-  StatsItemSelector,
-  StatsItemType,
   StatsItemQuantityFilter,
-  StatsItemsResponse,
+  StatsLegendCohort,
+  StatsLegendDay,
+  StatsLegendResponse,
   StatsMetrics,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
@@ -23,7 +23,7 @@ function repository(overrides: Partial<StatsRepositoryContract> = {}): StatsRepo
     loadPlayerCounts: jest.fn(async () => new StatsPlayerCountsResponse([], [])),
     loadClanCounts: jest.fn(async () => new StatsClanCountsResponse([], [], [])),
     loadArmies: jest.fn(async () => new StatsArmiesResponse(range, [], 0)),
-    loadItems: jest.fn(async () => new StatsItemsResponse(range, [], 0)),
+    loadItems: jest.fn(async () => new StatsLegendResponse(StatsLegendCohort.legend, [])),
     loadRanked: jest.fn(async () => performance()),
     loadWar: jest.fn(async () => performance()),
     loadCwl: jest.fn(async () => performance()),
@@ -114,28 +114,27 @@ describe('StatsProvider state and query coverage', () => {
     });
   });
 
-  it('keeps items empty without selectors, filters invalid selectors, and loads valid items', async () => {
+  it('loads Legend items without selectors and reloads a changed cohort', async () => {
     const repo = repository({
-      loadItems: jest.fn(async () => new StatsItemsResponse(range, [{ id: 1 }] as never, 1)),
+      loadItems: jest.fn(
+        async () =>
+          new StatsLegendResponse(StatsLegendCohort.top200, [
+            new StatsLegendDay('2026-08-01', 10, 2, [0, 1, 4, 5], 90, 95, [], [], [], []),
+          ]),
+      ),
     });
     const provider = new StatsProvider(repo);
 
     await provider.load(StatsSection.items);
-    expect(provider.stateFor(StatsSection.items).status).toBe(StatsLoadStatus.empty);
-    expect(repo.loadItems).not.toHaveBeenCalled();
-
-    const invalid = new StatsItemSelector('', StatsItemType.troop);
-    const valid = new StatsItemSelector('Wizard', StatsItemType.troop);
-    provider.setItemSelectors([invalid, valid]);
-    provider.updateItemFilters({ townHall: 17, leagueTier: 1 });
-    await provider.load(StatsSection.items);
-    expect(provider.itemSelectors).toEqual([valid]);
-    expect((repo.loadItems as jest.Mock).mock.calls[0]![0]).toMatchObject({ items: [valid] });
     expect(provider.stateFor(StatsSection.items).status).toBe(StatsLoadStatus.data);
-
-    provider.updateItemFilters({ townHall: null, leagueTier: null });
-    expect(provider.itemsTownHall).toBeUndefined();
-    expect(provider.itemsLeagueTier).toBeUndefined();
+    expect((repo.loadItems as jest.Mock).mock.calls[0]![0]).toMatchObject({
+      cohort: StatsLegendCohort.legend,
+    });
+    provider.updateLegendCohort(StatsLegendCohort.top200);
+    await provider.load(StatsSection.items);
+    expect((repo.loadItems as jest.Mock).mock.calls[1]![0]).toMatchObject({
+      cohort: StatsLegendCohort.top200,
+    });
   });
 
   it('classifies empty response models and preserves cached data across refresh failures', async () => {

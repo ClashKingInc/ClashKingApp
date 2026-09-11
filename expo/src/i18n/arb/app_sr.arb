@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "Држава",
   "legendsLocalRankTitle": "Локални ранг",
   "legendsGlobalRankTitle": "Глобални ранг",
+  "legendsYourArmy": "Tvoja vojska",
+  "legendsArmyUsedAgainstYou": "Vojska korišćena protiv tebe",
   "warWinsTitle": "Побеђује",
   "warLossesTitle": "Губици",
   "warDrawsTitle": "Дравс",

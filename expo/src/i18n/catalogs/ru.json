@@ -613,6 +613,8 @@
   "legendsCountryTitle": "Страна",
   "legendsLocalRankTitle": "Местный ранг",
   "legendsGlobalRankTitle": "Глобальный рейтинг",
+  "legendsYourArmy": "Ваша армия",
+  "legendsArmyUsedAgainstYou": "Армия, использованная против вас",
   "warWinsTitle": "Победы",
   "warLossesTitle": "Потери",
   "warDrawsTitle": "Ничьи",

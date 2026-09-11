@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "देश",
   "legendsLocalRankTitle": "स्थानीय पद",
   "legendsGlobalRankTitle": "वैश्विक रैंक",
+  "legendsYourArmy": "आपकी सेना",
+  "legendsArmyUsedAgainstYou": "आपके विरुद्ध इस्तेमाल की गई सेना",
   "warWinsTitle": "जीत",
   "warLossesTitle": "हानि",
   "warDrawsTitle": "खींचता",

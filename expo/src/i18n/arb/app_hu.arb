@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "Ország",
   "legendsLocalRankTitle": "Helyi rang",
   "legendsGlobalRankTitle": "Globális rang",
+  "legendsYourArmy": "A sereged",
+  "legendsArmyUsedAgainstYou": "Az ellened használt sereg",
   "warWinsTitle": "Győzelem",
   "warLossesTitle": "Veszteség",
   "warDrawsTitle": "Döntetlen",

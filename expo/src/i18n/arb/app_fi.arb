@@ -1467,6 +1467,8 @@
   "legendsCountryTitle": "Maa",
   "legendsLocalRankTitle": "Paikallinen arvosana",
   "legendsGlobalRankTitle": "Globaali sijoitus",
+  "legendsYourArmy": "Armeijasi",
+  "legendsArmyUsedAgainstYou": "Sinua vastaan käytetty armeija",
   "warWinsTitle": "Voittoja",
   "warLossesTitle": "Tappiot",
   "warDrawsTitle": "Tasoittaa",

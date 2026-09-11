@@ -17,6 +17,7 @@ import {
   Upload,
 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Polyline } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
@@ -36,7 +37,8 @@ import {
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import type { Player, PlayerLegendBattle, PlayerLegendLeagueData } from '../../player/models';
 import { currentLegendDay } from '../../player/models';
-import { LegendsShareModal } from './legends-share';
+import { parseArmyCounts, PlayerBattlelogArmyCatalog } from '../../player/models/player-battlelog';
+import { LegendsShareModal, legendsShareSummary } from './legends-share';
 import { canMoveToNextLegendDay, legendDayOffset } from './legend-day';
 
 export function LegendsRoot({
@@ -231,6 +233,7 @@ export function LegendsScreen({
             />
           ) : data ? (
             <>
+              <LegendRecentSummary data={data} locale={locale} />
               {data.historicalRank ? (
                 <Surface radius={ckRadius.tile} style={styles.rankSummary}>
                   <Trophy color={theme.primary} size={20} />
@@ -288,6 +291,109 @@ export function LegendsScreen({
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function LegendRecentSummary({ data, locale }: { data: PlayerLegendLeagueData; locale: string }) {
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const summary = legendsShareSummary(data);
+  const favoriteItems = summary.favoriteArmy
+    ? Object.entries(parseArmyCounts(summary.favoriteArmy)).map(([code, count]) => ({
+        count,
+        item: PlayerBattlelogArmyCatalog.resolve(code),
+      }))
+    : [];
+  if (!summary.dailyContributions.length && !favoriteItems.length) return null;
+  const graphValues = summary.graph.map((point) => point.trophies);
+  const minimum = Math.min(...graphValues);
+  const maximum = Math.max(...graphValues);
+  const spread = Math.max(1, maximum - minimum);
+  const points = summary.graph
+    .map((point, index) => {
+      const x = summary.graph.length === 1 ? 160 : (index * 320) / (summary.graph.length - 1);
+      const y = 76 - ((point.trophies - minimum) / spread) * 64;
+      return `${x},${y}`;
+    })
+    .join(' ');
+  return (
+    <Surface radius={ckRadius.tile} style={styles.recentSummary} testID="legend-recent-summary">
+      <View style={styles.row}>
+        <CKText role="titleMedium" style={styles.grow}>
+          {t('statsDailyTrend')}
+        </CKText>
+        {summary.graph.at(-1) ? (
+          <CKText muted role="labelSmall">
+            {summary.graph.at(-1)!.trophies.toLocaleString(toIntlLocale(locale))}
+          </CKText>
+        ) : null}
+      </View>
+      {summary.graph.length ? (
+        <Svg
+          accessibilityLabel={summary.graph
+            .map((point) => `${point.label} ${point.trophies}`)
+            .join(', ')}
+          height={88}
+          viewBox="0 0 320 88"
+          width="100%"
+        >
+          <Polyline
+            fill="none"
+            points={points}
+            stroke={theme.primary}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={3}
+          />
+        </Svg>
+      ) : null}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.contributionRow}>
+          {summary.dailyContributions.map((day) => (
+            <View
+              key={day.key}
+              accessibilityLabel={`${day.key}, ${day.change >= 0 ? '+' : ''}${day.change}`}
+              style={[
+                styles.contributionCell,
+                {
+                  backgroundColor: colorWithAlpha(day.change >= 0 ? '#14A37F' : theme.error, 0.12),
+                },
+                day.attackTrophies === 320 && styles.perfectContributionCell,
+              ]}
+              testID={day.attackTrophies === 320 ? `legend-perfect-day-${day.key}` : undefined}
+            >
+              <CKText muted role="labelSmall">
+                {day.key.slice(5)}
+              </CKText>
+              <CKText
+                role="labelLarge"
+                style={{ color: day.change >= 0 ? '#14A37F' : theme.error }}
+              >
+                {day.change >= 0 ? '+' : ''}
+                {day.change}
+              </CKText>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      {favoriteItems.length ? (
+        <View style={styles.favoriteArmy}>
+          <CKText muted role="labelSmall">
+            {t('playerBattlelogPopularTroops')} · ×{summary.favoriteArmyUses}
+          </CKText>
+          <View style={styles.armyItems}>
+            {favoriteItems.map(({ count, item }) => (
+              <View key={item.code} style={styles.armyItem}>
+                <MobileWebImage imageUrl={item.imageUrl} style={styles.armyImage} />
+                <CKText muted role="labelSmall">
+                  ×{count}
+                </CKText>
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : null}
+    </Surface>
   );
 }
 
@@ -384,6 +490,7 @@ function CurrentLegendDay({
           key={`${attack ? 'a' : 'd'}-${battle.battleTime?.getTime() ?? index}`}
           battle={battle}
           attack={attack}
+          day={data.day}
           locale={locale}
         />
       ))}
@@ -394,14 +501,22 @@ function CurrentLegendDay({
 function LegendBattleRow({
   battle,
   attack,
+  day,
   locale,
 }: {
   battle: PlayerLegendBattle;
   attack: boolean;
+  day: string;
   locale: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const army = battle.shareCode
+    ? Object.entries(parseArmyCounts(battle.shareCode)).map(([code, count]) => ({
+        count,
+        item: PlayerBattlelogArmyCatalog.resolve(code),
+      }))
+    : [];
   return (
     <Surface radius={ckRadius.tile} style={styles.battleRow}>
       {attack ? (
@@ -421,6 +536,44 @@ function LegendBattleRow({
               battle.battleTime,
             )}
           </CKText>
+        ) : null}
+        {!battle.automatic && battle.opponentInsight ? (
+          <View style={styles.opponentMetrics}>
+            {battle.opponentInsight.trophies !== null ? (
+              <CKText muted role="labelSmall">
+                {t('rankedLeagueTrophies')} · {battle.opponentInsight.trophies.toLocaleString()}
+              </CKText>
+            ) : null}
+            {battle.opponentInsight.globalRank !== null ? (
+              <CKText muted role="labelSmall">
+                {t('legendsGlobalRankTitle')} · #
+                {battle.opponentInsight.globalRank.toLocaleString()}
+              </CKText>
+            ) : null}
+            {battle.opponentInsight.dayNetTrophies !== null ? (
+              <CKText muted role="labelSmall">
+                {day} · {battle.opponentInsight.dayNetTrophies >= 0 ? '+' : ''}
+                {battle.opponentInsight.dayNetTrophies}
+              </CKText>
+            ) : null}
+          </View>
+        ) : null}
+        {!battle.automatic && army.length ? (
+          <View style={styles.armyBlock}>
+            <CKText muted role="labelSmall">
+              {attack ? t('legendsYourArmy') : t('legendsArmyUsedAgainstYou')}
+            </CKText>
+            <View style={styles.armyItems}>
+              {army.map(({ count, item }) => (
+                <View key={item.code} style={styles.armyItem}>
+                  <MobileWebImage imageUrl={item.imageUrl} style={styles.armyImage} />
+                  <CKText muted role="labelSmall">
+                    ×{count}
+                  </CKText>
+                </View>
+              ))}
+            </View>
+          </View>
         ) : null}
       </View>
       {!battle.automatic ? (
@@ -552,14 +705,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
+  recentSummary: { padding: 14, gap: 9 },
+  contributionRow: { flexDirection: 'row', gap: 7, paddingVertical: 2 },
+  contributionCell: {
+    minWidth: 64,
+    paddingHorizontal: 8,
+    paddingVertical: 7,
+    borderRadius: ckRadius.control,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    alignItems: 'center',
+    gap: 2,
+  },
+  perfectContributionCell: { borderColor: '#E7B946', borderWidth: 2 },
+  favoriteArmy: { gap: 5 },
   battleRow: {
-    minHeight: 64,
+    minHeight: 72,
     paddingHorizontal: 12,
     paddingVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
+  opponentMetrics: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 3 },
+  armyBlock: { gap: 3, marginTop: 7 },
+  armyItems: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  armyItem: { flexDirection: 'row', alignItems: 'center', gap: 2 },
+  armyImage: { width: 28, height: 28, borderRadius: 6 },
   seasonCard: { padding: 14, gap: 8 },
   metricRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
 });

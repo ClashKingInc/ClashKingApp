@@ -1467,6 +1467,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokal rang",
   "legendsGlobalRankTitle": "Global rang",
+  "legendsYourArmy": "Din armé",
+  "legendsArmyUsedAgainstYou": "Armén som användes mot dig",
   "warWinsTitle": "Vinner",
   "warLossesTitle": "Förluster",
   "warDrawsTitle": "Ritar",

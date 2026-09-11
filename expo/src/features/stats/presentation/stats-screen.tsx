@@ -18,6 +18,8 @@ import {
   CalendarDays,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Filter,
   Network,
   RefreshCw,
@@ -33,6 +35,7 @@ import { localizedNameForItemOrFallback } from '../../../core/game-data/game-dat
 import { warLeaguesByApiId } from '../../../core/game-data/game-data-normalization';
 import {
   gameDataState,
+  isRecord,
   subscribeToGameDataRevision,
 } from '../../../core/game-data/game-data-state';
 import { formatCompactNumber, materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
@@ -56,17 +59,17 @@ import {
   StatsAudience,
   StatsClanCountsResponse,
   StatsDateFilter,
-  StatsItemSelector,
+  StatsDailyPoint,
   StatsItemQuantityFilter,
-  StatsItemType,
-  StatsItemsResponse,
+  StatsLegendCohort,
+  StatsLegendResponse,
   StatsPerformanceResponse,
   StatsPlayerCountsResponse,
   StatsSection,
   type StatsAudienceValue,
   type StatsGroupedCount,
-  type StatsItemTypeValue,
-  type StatsMetrics,
+  type StatsLegendCohortValue,
+  StatsMetrics,
   type StatsSectionValue,
 } from '../models';
 import { battleStatsLinkSections, worldStatsLinkSections } from './stats-link-sections';
@@ -183,8 +186,6 @@ function StatsSectionContent({ provider }: { provider: StatsProvider }) {
       />
     );
   if (state.status === StatsLoadStatus.empty) {
-    if (provider.section === StatsSection.items && provider.itemSelectors.length === 0)
-      return <ItemsSection provider={provider} data={undefined} />;
     return (
       <EmptyState
         title={t('statsNoDataTitle')}
@@ -208,7 +209,7 @@ function StatsSectionContent({ provider }: { provider: StatsProvider }) {
       content = <ArmiesSection provider={provider} data={state.data as StatsArmiesResponse} />;
       break;
     case StatsSection.items:
-      content = <ItemsSection provider={provider} data={state.data as StatsItemsResponse} />;
+      content = <ItemsSection provider={provider} data={state.data as StatsLegendResponse} />;
       break;
     case StatsSection.ranked:
     case StatsSection.war:
@@ -386,65 +387,102 @@ function ArmiesSection({ provider, data }: { provider: StatsProvider; data: Stat
   );
 }
 
-function ItemsSection({ provider, data }: { provider: StatsProvider; data?: StatsItemsResponse }) {
-  const { t } = useI18n();
+function LegendRangeNavigation({ provider }: { readonly provider: StatsProvider }) {
+  const { locale } = useI18n();
+  const theme = useCKTheme();
+  const days = provider.dates.inclusiveDays;
+  const shift = (amount: number) => {
+    const start = new Date(provider.dates.start);
+    const end = new Date(provider.dates.end);
+    start.setDate(start.getDate() + amount * days);
+    end.setDate(end.getDate() + amount * days);
+    void provider.setDates(start, end);
+  };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const nextEnd = new Date(provider.dates.end);
+  nextEnd.setDate(nextEnd.getDate() + days);
+  const nextDisabled = nextEnd > today;
+  return (
+    <Surface radius={ckRadius.tile} style={styles.dayNavigation}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={StatsDateFilter.formatDate(
+          new Date(provider.dates.start.getTime() - days * 86_400_000),
+        )}
+        onPress={() => shift(-1)}
+        style={styles.dayNavigationButton}
+      >
+        <ChevronLeft color={theme.onSurface} />
+      </Pressable>
+      <CKText role="rowTitle">{dateSummary(provider, locale)}</CKText>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ disabled: nextDisabled }}
+        accessibilityLabel={StatsDateFilter.formatDate(nextEnd)}
+        disabled={nextDisabled}
+        onPress={() => shift(1)}
+        style={[styles.dayNavigationButton, nextDisabled && styles.disabled]}
+      >
+        <ChevronRight color={theme.onSurface} />
+      </Pressable>
+    </Surface>
+  );
+}
+
+function ItemsSection({ provider, data }: { provider: StatsProvider; data?: StatsLegendResponse }) {
+  const { t, locale } = useI18n();
   const [filters, setFilters] = useState(false);
-  const [adding, setAdding] = useState(false);
+  if (!data) return null;
+  const metrics = legendMetrics(data);
+  const latestPlayers = data.items.at(-1)?.players ?? 0;
+  const averageDuration = weightedLegendAverage(data, 'averageDuration');
+  const heroes = aggregateLegendUses(data, 'heroes');
+  const pets = aggregateLegendUses(data, 'pets');
+  const equipment = aggregateLegendUses(data, 'equipment');
+  const assignments = aggregateLegendAssignments(data);
   return (
     <Section>
       <BattleContext
         provider={provider}
-        summary={`${townHallSummary(provider.itemsTownHall, t)} · ${t('statsLeagueTier')}: ${provider.itemsLeagueTier == null ? t('generalAll') : leagueTierSummary(provider.itemsLeagueTier, t)} · ${t('statsItems')}: ${provider.itemSelectors.length}`}
+        summary={legendCohortLabel(data.cohort, t)}
         onFilters={() => setFilters(true)}
       />
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => setAdding(true)}
-        style={styles.primaryButton}
-      >
-        <CKText role="rowTitle" style={styles.primaryText}>
-          {t('statsAddItem')}
-        </CKText>
-      </Pressable>
-      {provider.itemSelectors.length ? (
-        <View style={styles.armyItems}>
-          {provider.itemSelectors.map((selector, index) => (
-            <Pressable
-              key={`${selector.type}:${selector.item}:${selector.hero ?? ''}:${index}`}
-              accessibilityRole="button"
-              accessibilityLabel={t('presetsDelete')}
-              onPress={() => {
-                provider.setItemSelectors(
-                  provider.itemSelectors.filter((_, itemIndex) => itemIndex !== index),
-                );
-                void provider.load(StatsSection.items);
-              }}
-            >
-              <Badge>{`${selector.item} ×`}</Badge>
-            </Pressable>
-          ))}
-        </View>
-      ) : null}
-      {provider.itemSelectors.length === 0 ? (
-        <EmptyState title={t('statsAddItemsTitle')} body={t('statsAddItemsBody')} />
-      ) : (
-        data?.items.map((item) => (
-          <MetricsCard
-            key={`${item.type}:${item.item}:${item.hero ?? ''}`}
-            title={item.item}
-            metrics={item.metrics}
-            extra={
-              <View style={styles.titleRow}>
-                <Badge>{item.type}</Badge>
-                {item.hero ? <Badge>{item.hero}</Badge> : null}
-                {item.compositionShare != null ? (
-                  <Badge>{`${t('statsCompositionShare')}: ${percent(item.compositionShare)}`}</Badge>
-                ) : null}
-              </View>
-            }
+      <LegendRangeNavigation provider={provider} />
+      <Surface style={styles.card} testID="legend-stats-summary">
+        <SectionTitle>{t('legendsTitle')}</SectionTitle>
+        <View style={styles.pills}>
+          <MetricPill
+            label={t('rankedLeagueAttacks')}
+            value={compact(metrics.sampleSize, locale)}
           />
-        ))
-      )}
+          <MetricPill label={t('statsPlayers')} value={compact(latestPlayers, locale)} />
+          <MetricPill
+            label={t('warAttacksDetailsDuration')}
+            value={`${Math.round(averageDuration)}s`}
+          />
+        </View>
+        <CKText role="labelLarge">{t('statsStarRates')}</CKText>
+        {[
+          metrics.zeroStarRate,
+          metrics.oneStarRate,
+          metrics.twoStarRate,
+          metrics.threeStarRate,
+        ].map((rate, index) => (
+          <Progress key={index} label={`${index}★`} value={rate} />
+        ))}
+        <CKText role="labelLarge">{t('statsDailyTrend')}</CKText>
+        <Trend metrics={metrics} />
+      </Surface>
+      <LegendUsageRanking title={t('statsHero')} type="hero" values={heroes} locale={locale} />
+      <LegendUsageRanking title={t('statsPet')} type="pet" values={pets} locale={locale} />
+      <LegendUsageRanking
+        title={t('statsEquipment')}
+        type="equipment"
+        values={equipment}
+        locale={locale}
+      />
+      <LegendAssignmentRanking values={assignments} locale={locale} />
       {filters ? (
         <BattleFilters
           section={StatsSection.items}
@@ -452,17 +490,179 @@ function ItemsSection({ provider, data }: { provider: StatsProvider; data?: Stat
           onClose={() => setFilters(false)}
         />
       ) : null}
-      <AddItemDialog
-        visible={adding}
-        onClose={() => setAdding(false)}
-        onAdd={(selector) => {
-          provider.setItemSelectors([...provider.itemSelectors, selector]);
-          setAdding(false);
-          void provider.load(StatsSection.items);
-        }}
-      />
     </Section>
   );
+}
+
+function legendMetrics(data: StatsLegendResponse): StatsMetrics {
+  const attacks = data.items.reduce((sum, day) => sum + day.attacks, 0);
+  const stars = [0, 1, 2, 3].map((index) =>
+    data.items.reduce((sum, day) => sum + day.starCounts[index]!, 0),
+  );
+  const weightedDestruction = data.items.reduce(
+    (sum, day) => sum + (day.averageDestruction ?? 0) * day.attacks,
+    0,
+  );
+  const daily = data.items.map((day) => {
+    const value = day.metrics;
+    return new StatsDailyPoint(
+      day.day,
+      day.attacks,
+      value.averageStars,
+      value.averageDestruction,
+      value.zeroStarRate,
+      value.oneStarRate,
+      value.twoStarRate,
+      value.threeStarRate,
+    );
+  });
+  return new StatsMetrics(
+    attacks > 0,
+    attacks,
+    attacks === 0 ? 0 : stars.reduce((sum, count, index) => sum + count * index, 0) / attacks,
+    attacks === 0 ? 0 : weightedDestruction / attacks,
+    attacks === 0 ? 0 : stars[0]! / attacks,
+    attacks === 0 ? 0 : stars[1]! / attacks,
+    attacks === 0 ? 0 : stars[2]! / attacks,
+    attacks === 0 ? 0 : stars[3]! / attacks,
+    daily,
+  );
+}
+
+function weightedLegendAverage(
+  data: StatsLegendResponse,
+  key: 'averageDuration' | 'averageDestruction',
+): number {
+  const available = data.items.filter((day) => day[key] !== null && day.attacks > 0);
+  const attacks = available.reduce((sum, day) => sum + day.attacks, 0);
+  return attacks === 0
+    ? 0
+    : available.reduce((sum, day) => sum + day[key]! * day.attacks, 0) / attacks;
+}
+
+function aggregateLegendUses(data: StatsLegendResponse, type: 'heroes' | 'pets' | 'equipment') {
+  const values = new Map<number, { id: number; uses: number; triples: number }>();
+  for (const day of data.items) {
+    for (const item of day[type]) {
+      const current = values.get(item.id) ?? { id: item.id, uses: 0, triples: 0 };
+      current.uses += item.uses;
+      current.triples += item.triples;
+      values.set(item.id, current);
+    }
+  }
+  return [...values.values()].sort((left, right) => right.uses - left.uses || left.id - right.id);
+}
+
+function aggregateLegendAssignments(data: StatsLegendResponse) {
+  const values = new Map<
+    string,
+    { petId: number; heroId: number; uses: number; triples: number }
+  >();
+  for (const day of data.items) {
+    for (const item of day.petAssignments) {
+      const key = `${item.petId}:${item.heroId}`;
+      const current = values.get(key) ?? { ...item, uses: 0, triples: 0 };
+      current.uses += item.uses;
+      current.triples += item.triples;
+      values.set(key, current);
+    }
+  }
+  return [...values.values()].sort((left, right) => right.uses - left.uses);
+}
+
+function LegendUsageRanking({
+  title,
+  type,
+  values,
+  locale,
+}: {
+  readonly title: string;
+  readonly type: 'hero' | 'pet' | 'equipment';
+  readonly values: readonly { id: number; uses: number; triples: number }[];
+  readonly locale: string;
+}) {
+  const { t } = useI18n();
+  return (
+    <Surface style={styles.card}>
+      <SectionTitle>{title}</SectionTitle>
+      {values.slice(0, 12).map((value, index) => {
+        const item = legendItemPresentation(type, value.id, locale);
+        return (
+          <View key={value.id} style={styles.strategy}>
+            <CKText role="labelLarge">#{index + 1}</CKText>
+            <MobileWebImage imageUrl={item.imageUrl} style={styles.strategyImage} />
+            <CKText role="rowTitle" style={styles.grow}>
+              {item.name}
+            </CKText>
+            <Badge>{`${t('statsUsage')}: ${compact(value.uses, locale)}`}</Badge>
+            <Badge>{`${t('statsThreeStarRate')}: ${percent(value.uses ? value.triples / value.uses : 0)}`}</Badge>
+          </View>
+        );
+      })}
+    </Surface>
+  );
+}
+
+function LegendAssignmentRanking({
+  values,
+  locale,
+}: {
+  readonly values: readonly { petId: number; heroId: number; uses: number; triples: number }[];
+  readonly locale: string;
+}) {
+  const { t } = useI18n();
+  return (
+    <Surface style={styles.card}>
+      <SectionTitle>{`${t('statsPet')} → ${t('statsHero')}`}</SectionTitle>
+      {values.slice(0, 12).map((value, index) => {
+        const pet = legendItemPresentation('pet', value.petId, locale);
+        const hero = legendItemPresentation('hero', value.heroId, locale);
+        return (
+          <View key={`${value.petId}:${value.heroId}`} style={styles.strategy}>
+            <CKText role="labelLarge">#{index + 1}</CKText>
+            <MobileWebImage imageUrl={pet.imageUrl} style={styles.strategyImage} />
+            <CKText role="rowTitle" style={styles.grow}>{`${pet.name} → ${hero.name}`}</CKText>
+            <Badge>{`${t('statsUsage')}: ${compact(value.uses, locale)}`}</Badge>
+            <Badge>{`${t('statsThreeStarRate')}: ${percent(value.uses ? value.triples / value.uses : 0)}`}</Badge>
+          </View>
+        );
+      })}
+    </Surface>
+  );
+}
+
+function legendItemPresentation(type: 'hero' | 'pet' | 'equipment', id: number, locale: string) {
+  const root =
+    type === 'hero'
+      ? gameDataState.heroesData
+      : type === 'pet'
+        ? gameDataState.petsData
+        : gameDataState.gearsData;
+  const recordValue = Object.values(root)
+    .flatMap((value) => (isRecord(value) ? Object.entries(value) : []))
+    .find(([, value]) => isRecord(value) && Number(value._id) === id);
+  const raw = recordValue?.[1];
+  const fallback = recordValue?.[0] ?? `#${id}`;
+  const name = localizedNameForItemOrFallback(
+    isRecord(raw) ? raw : undefined,
+    { languageCode: locale.split('_')[0]! },
+    fallback,
+  );
+  return {
+    name,
+    imageUrl:
+      type === 'hero'
+        ? ImageAssets.getHeroImage(name)
+        : type === 'pet'
+          ? ImageAssets.getPetImage(name)
+          : ImageAssets.getGearImage(name),
+  };
+}
+
+function legendCohortLabel(cohort: StatsLegendCohortValue, t: Translate) {
+  return cohort === StatsLegendCohort.legend
+    ? t('legendsTitle')
+    : t('rankingsTopCount', { count: cohort === StatsLegendCohort.top200 ? 200 : 1000 });
 }
 
 function PerformanceSection({
@@ -784,6 +984,21 @@ function BattleFilters({
   provider: StatsProvider;
   onClose: () => void;
 }) {
+  return section === StatsSection.items ? (
+    <LegendFilters provider={provider} onClose={onClose} />
+  ) : (
+    <BattleFiltersCore section={section} provider={provider} onClose={onClose} />
+  );
+}
+function BattleFiltersCore({
+  section,
+  provider,
+  onClose,
+}: {
+  section: StatsSectionValue;
+  provider: StatsProvider;
+  onClose: () => void;
+}) {
   const { t, locale } = useI18n();
   const cwlLeagues = useLocalizedCwlLeagues(t, locale);
   const theme = useCKTheme();
@@ -792,11 +1007,9 @@ function BattleFilters({
       ? provider.rankedTownHall
       : section === StatsSection.armies
         ? provider.armiesTownHall
-        : section === StatsSection.items
-          ? provider.itemsTownHall
-          : section === StatsSection.war
-            ? provider.warTownHall
-            : provider.cwlTownHall;
+        : section === StatsSection.war
+          ? provider.warTownHall
+          : provider.cwlTownHall;
   const [townHall, setTownHall] = useState<number | undefined>(initialTh);
   const initialOpponent =
     section === StatsSection.war ? provider.warOpponentTownHall : provider.cwlOpponentTownHall;
@@ -809,9 +1022,7 @@ function BattleFilters({
       ? provider.rankedLeagueTier
       : section === StatsSection.armies
         ? provider.armiesLeagueTier
-        : section === StatsSection.items
-          ? provider.itemsLeagueTier
-          : provider.cwlLeagueId;
+        : provider.cwlLeagueId;
   const [league, setLeague] = useState<number | undefined>(initialLeague);
   const [minimum, setMinimum] = useState(provider.armiesMinimumSample);
   const [sortBy, setSortBy] = useState(provider.armiesSortBy);
@@ -824,7 +1035,6 @@ function BattleFilters({
   const [end, setEnd] = useState(StatsDateFilter.formatDate(provider.dates.end));
   const [dateError, setDateError] = useState<string>();
   const [showDates, setShowDates] = useState(false);
-  const [resetItemSelectors, setResetItemSelectors] = useState(false);
   const apply = () => {
     const parsedStart = parseLocalDate(start);
     const parsedEnd = parseLocalDate(end);
@@ -851,10 +1061,7 @@ function BattleFilters({
           .map((value) => value.trim())
           .filter(isArmyItemIdentity),
       });
-    else if (section === StatsSection.items) {
-      provider.updateItemFilters({ townHall: townHall ?? null, leagueTier: league ?? null });
-      if (resetItemSelectors) provider.setItemSelectors([]);
-    } else if (section === StatsSection.war)
+    else if (section === StatsSection.war)
       provider.updateWarFilters({
         townHall: townHall ?? null,
         opponentTownHall: opponent ?? null,
@@ -893,7 +1100,6 @@ function BattleFilters({
     setInclude([]);
     setExclude('');
     setSeasons('');
-    setResetItemSelectors(section === StatsSection.items);
     setShowDates(false);
     last30Days();
   };
@@ -950,7 +1156,7 @@ function BattleFilters({
                 {dateError}
               </CKText>
             ) : null}
-            {section !== StatsSection.armies && section !== StatsSection.items ? (
+            {section !== StatsSection.armies ? (
               <ChoiceField
                 label={t('statsTownHall')}
                 value={townHall}
@@ -1069,66 +1275,89 @@ function BattleFilters({
     </Modal>
   );
 }
-function AddItemDialog({
-  visible,
-  onClose,
-  onAdd,
-}: {
-  visible: boolean;
-  onClose: () => void;
-  onAdd: (value: StatsItemSelector) => void;
-}) {
+function LegendFilters({ provider, onClose }: { provider: StatsProvider; onClose: () => void }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [item, setItem] = useState('');
-  const [type, setType] = useState<StatsItemTypeValue>(StatsItemType.troop);
-  const [hero, setHero] = useState('Barbarian King');
-  const selector = new StatsItemSelector(
-    item,
-    type,
-    type === StatsItemType.equipment ? hero : undefined,
-  );
+  const [cohort, setCohort] = useState(provider.legendCohort);
+  const [start, setStart] = useState(StatsDateFilter.formatDate(provider.dates.start));
+  const [end, setEnd] = useState(StatsDateFilter.formatDate(provider.dates.end));
+  const [dateError, setDateError] = useState<string>();
+  const [showDates, setShowDates] = useState(false);
+  const apply = () => {
+    const parsedStart = parseLocalDate(start);
+    const parsedEnd = parseLocalDate(end);
+    if (!parsedStart || !parsedEnd) {
+      setDateError(t('statsDateRangeHint'));
+      return;
+    }
+    const dates = new StatsDateFilter(parsedStart, parsedEnd);
+    if (parsedEnd < parsedStart || dates.inclusiveDays > 35) {
+      setDateError(t('statsDateRangeTooLong'));
+      return;
+    }
+    provider.updateLegendCohort(cohort);
+    onClose();
+    void provider.setDates(parsedStart, parsedEnd);
+  };
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
-        <View style={[styles.dialog, { backgroundColor: theme.surface }]}>
-          <CKText role="titleLarge">{t('statsAddItem')}</CKText>
-          <InlineNotice
-            icon={<BarChart3 size={20} color={theme.secondary} />}
-            text={`${t('statsNoLevels')} ${t('statsRankedCompositionOnly')}`}
-          />
-          <TextInput
-            value={item}
-            onChangeText={setItem}
-            placeholder={t('statsItemId')}
-            placeholderTextColor={theme.onSurfaceVariant}
-            style={[styles.input, { color: theme.onSurface, borderColor: theme.outlineVariant }]}
-          />
-          <ChoiceField
-            label={t('statsItemType')}
-            value={type}
-            values={Object.values(StatsItemType)}
-            format={(value) => itemTypeLabel(value, t)}
-            onChange={setType}
-          />
-          {type === StatsItemType.equipment ? (
+        <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
+          <View style={styles.sheetHeader}>
+            <CKText role="titleLarge">{t('generalFilters')}</CKText>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('generalCancel')}
+              onPress={onClose}
+            >
+              <X color={theme.onSurfaceVariant} />
+            </Pressable>
+          </View>
+          <ScrollView contentContainerStyle={styles.sheetBody}>
+            <Pressable accessibilityRole="button" onPress={() => setShowDates((value) => !value)}>
+              <FilterLabel
+                label={t('filtersDateRange')}
+                value={`${start} – ${end}`}
+                icon={<CalendarDays color={theme.onSurfaceVariant} />}
+              />
+            </Pressable>
+            {showDates ? (
+              <CalendarPicker
+                range
+                start={parseLocalDate(start) ?? provider.dates.start}
+                end={parseLocalDate(end) ?? undefined}
+                minimum={new Date(2024, 0, 1)}
+                maximum={new Date()}
+                onChange={(nextStart, nextEnd) => {
+                  setStart(StatsDateFilter.formatDate(nextStart));
+                  if (nextEnd) {
+                    setEnd(StatsDateFilter.formatDate(nextEnd));
+                    setShowDates(false);
+                  } else {
+                    setEnd('');
+                  }
+                  setDateError(undefined);
+                }}
+              />
+            ) : null}
+            {dateError ? (
+              <CKText role="bodySmall" style={{ color: theme.error }}>
+                {dateError}
+              </CKText>
+            ) : null}
             <ChoiceField
-              label={t('statsOwningHero')}
-              value={hero}
-              values={[...StatsItemSelector.validEquipmentHeroes]}
-              format={(value) => value}
-              onChange={setHero}
+              label={t('legendsTitle')}
+              value={cohort}
+              values={Object.values(StatsLegendCohort)}
+              format={(value) => legendCohortLabel(value, t)}
+              onChange={setCohort}
             />
-          ) : null}
+          </ScrollView>
           <View style={styles.actions}>
-            <Pressable onPress={onClose} style={styles.secondaryButton}>
+            <Pressable accessibilityRole="button" onPress={onClose} style={styles.secondaryButton}>
               <CKText role="rowTitle">{t('generalCancel')}</CKText>
             </Pressable>
-            <Pressable
-              disabled={!selector.isValid}
-              onPress={() => onAdd(selector)}
-              style={[styles.primaryButton, !selector.isValid && { opacity: 0.4 }]}
-            >
+            <Pressable accessibilityRole="button" onPress={apply} style={styles.primaryButton}>
               <CKText role="rowTitle" style={styles.primaryText}>
                 {t('generalApply')}
               </CKText>
@@ -1139,7 +1368,6 @@ function AddItemDialog({
     </Modal>
   );
 }
-
 function ChoiceField<T>({
   label,
   value,
@@ -1425,7 +1653,7 @@ export function sectionLabel(section: StatsSectionValue, t: Translate): string {
     case StatsSection.armies:
       return t('statsArmies');
     case StatsSection.items:
-      return t('statsItems');
+      return t('legendsTitle');
     case StatsSection.war:
       return t('statsWar');
     case StatsSection.cwl:
@@ -1441,7 +1669,7 @@ function sectionImage(section: StatsSectionValue): string {
     case StatsSection.armies:
       return ImageAssets.getTroopImage('Super Bowler');
     case StatsSection.items:
-      return ImageAssets.getGearImage('Eternal Tome');
+      return ImageAssets.legendBlazon;
     case StatsSection.war:
       return ImageAssets.war;
     case StatsSection.cwl:
@@ -1462,7 +1690,7 @@ function sectionBackground(section: StatsSectionValue): string {
     case StatsSection.armies:
       return ImageAssets.playerWarStatsPageBackground;
     case StatsSection.items:
-      return ImageAssets.playerAchievementPageBackground;
+      return ImageAssets.legendPageBackground;
     case StatsSection.war:
       return ImageAssets.warPageBackground;
     case StatsSection.cwl:
@@ -1551,21 +1779,6 @@ function parseLocalDate(value: string): Date | null {
     ? result
     : null;
 }
-function itemTypeLabel(value: StatsItemTypeValue, t: Translate): string {
-  switch (value) {
-    case StatsItemType.troop:
-      return t('statsTroop');
-    case StatsItemType.spell:
-      return t('statsSpell');
-    case StatsItemType.hero:
-      return t('statsHero');
-    case StatsItemType.pet:
-      return t('statsPet');
-    case StatsItemType.equipment:
-      return t('statsEquipment');
-  }
-}
-
 const styles = StyleSheet.create({
   fill: { flex: 1 },
   grow: { flex: 1, minWidth: 0 },
@@ -1650,6 +1863,20 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', borderRadius: 999 },
   context: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12 },
   contextButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
+  dayNavigation: {
+    minHeight: 50,
+    paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  dayNavigationButton: {
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  disabled: { opacity: 0.35 },
   search: {
     minHeight: 54,
     flexDirection: 'row',

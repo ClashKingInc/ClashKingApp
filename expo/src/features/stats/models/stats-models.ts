@@ -1,12 +1,14 @@
 import type {
   ArmySearchEndpoint,
   EndpointRequest,
+  LegendDaysEndpoint,
   StatsCwlEndpoint,
   StatsRankedEndpoint,
   StatsWarEndpoint,
 } from '@clashking/api-contracts/expo';
 
 type ArmySearchQueryContract = EndpointRequest<typeof ArmySearchEndpoint>['query'];
+type LegendDaysQueryContract = EndpointRequest<typeof LegendDaysEndpoint>['query'];
 type StatsCwlQueryContract = EndpointRequest<typeof StatsCwlEndpoint>['query'];
 interface StatsItemsQueryContract {
   readonly startDate?: string;
@@ -44,6 +46,12 @@ export const StatsItemType = {
   equipment: 'equipment',
 } as const;
 export type StatsItemTypeValue = (typeof StatsItemType)[keyof typeof StatsItemType];
+export const StatsLegendCohort = {
+  legend: 'legend_i',
+  top1000: 'top_1000',
+  top200: 'top_200',
+} as const;
+export type StatsLegendCohortValue = (typeof StatsLegendCohort)[keyof typeof StatsLegendCohort];
 const armyItemIdentityPattern =
   /^(?:troop|super_troop|spell|siege_machine|hero|hero_equipment|pet):\d+$/u;
 
@@ -181,6 +189,19 @@ export class StatsItemsQuery {
     return {
       ...this.filters.toQuery(),
       items: this.items.map((item) => item.toQueryValue()),
+    };
+  }
+}
+export class StatsLegendQuery {
+  constructor(
+    readonly dates: StatsDateFilter,
+    readonly cohort: StatsLegendCohortValue = StatsLegendCohort.legend,
+  ) {}
+  toQuery(): LegendDaysQueryContract {
+    return {
+      'time[after]': StatsDateFilter.formatDate(this.dates.start),
+      'time[before]': StatsDateFilter.formatDate(this.dates.end),
+      cohort: this.cohort,
     };
   }
 }
@@ -419,6 +440,94 @@ export class StatsItemsResponse {
       StatsDateRange.fromJson(j.dateRange),
       list(j.items).map(StatsItemResult.fromJson),
       integer(j.count),
+    );
+  }
+}
+export class StatsLegendItemUse {
+  constructor(
+    readonly id: number,
+    readonly uses: number,
+    readonly triples: number,
+  ) {}
+  static fromJson(value: unknown): StatsLegendItemUse {
+    const j = record(value);
+    return new StatsLegendItemUse(integer(j.id), integer(j.uses), integer(j.triples));
+  }
+}
+export class StatsLegendPetAssignmentUse {
+  constructor(
+    readonly petId: number,
+    readonly heroId: number,
+    readonly uses: number,
+    readonly triples: number,
+  ) {}
+  static fromJson(value: unknown): StatsLegendPetAssignmentUse {
+    const j = record(value);
+    return new StatsLegendPetAssignmentUse(
+      integer(j.petId),
+      integer(j.heroId),
+      integer(j.uses),
+      integer(j.triples),
+    );
+  }
+}
+export class StatsLegendDay {
+  constructor(
+    readonly day: string,
+    readonly attacks: number,
+    readonly players: number,
+    readonly starCounts: readonly [number, number, number, number],
+    readonly averageDuration: number | null,
+    readonly averageDestruction: number | null,
+    readonly heroes: readonly StatsLegendItemUse[],
+    readonly pets: readonly StatsLegendItemUse[],
+    readonly equipment: readonly StatsLegendItemUse[],
+    readonly petAssignments: readonly StatsLegendPetAssignmentUse[],
+  ) {}
+  static fromJson(value: unknown): StatsLegendDay {
+    const j = record(value);
+    const stars = record(j.starCounts);
+    return new StatsLegendDay(
+      text(j.day),
+      integer(j.attacks),
+      integer(j.players),
+      [integer(stars.zero), integer(stars.one), integer(stars.two), integer(stars.three)],
+      j.averageDuration == null ? null : decimal(j.averageDuration),
+      j.averageDestruction == null ? null : decimal(j.averageDestruction),
+      list(j.heroes).map(StatsLegendItemUse.fromJson),
+      list(j.pets).map(StatsLegendItemUse.fromJson),
+      list(j.equipment).map(StatsLegendItemUse.fromJson),
+      list(j.petAssignments).map(StatsLegendPetAssignmentUse.fromJson),
+    );
+  }
+  get metrics(): StatsMetrics {
+    const weightedStars = this.starCounts.reduce((sum, count, stars) => sum + count * stars, 0);
+    return new StatsMetrics(
+      this.attacks > 0,
+      this.attacks,
+      this.attacks === 0 ? 0 : weightedStars / this.attacks,
+      this.averageDestruction ?? 0,
+      this.attacks === 0 ? 0 : this.starCounts[0] / this.attacks,
+      this.attacks === 0 ? 0 : this.starCounts[1] / this.attacks,
+      this.attacks === 0 ? 0 : this.starCounts[2] / this.attacks,
+      this.attacks === 0 ? 0 : this.starCounts[3] / this.attacks,
+      [],
+    );
+  }
+}
+export class StatsLegendResponse {
+  constructor(
+    readonly cohort: StatsLegendCohortValue,
+    readonly items: readonly StatsLegendDay[],
+  ) {}
+  static fromJson(value: unknown): StatsLegendResponse {
+    const j = record(value);
+    const cohort = text(j.cohort);
+    return new StatsLegendResponse(
+      Object.values(StatsLegendCohort).includes(cohort as StatsLegendCohortValue)
+        ? (cohort as StatsLegendCohortValue)
+        : StatsLegendCohort.legend,
+      list(j.items).map(StatsLegendDay.fromJson),
     );
   }
 }

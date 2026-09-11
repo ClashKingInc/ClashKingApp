@@ -1562,6 +1562,8 @@
   "legendsCountryTitle": "Χώρα",
   "legendsLocalRankTitle": "Τοπική κατάταξη",
   "legendsGlobalRankTitle": "Παγκόσμια κατάταξη",
+  "legendsYourArmy": "Ο στρατός σου",
+  "legendsArmyUsedAgainstYou": "Στρατός που χρησιμοποιήθηκε εναντίον σου",
   "warWinsTitle": "Κερδίζει",
   "warLossesTitle": "Απώλειες",
   "warDrawsTitle": "Ισοπαλίες",

@@ -7,6 +7,9 @@ import {
   StatsItemQuantityFilter,
   StatsItemSelector,
   StatsItemType,
+  StatsLegendCohort,
+  StatsLegendQuery,
+  StatsLegendResponse,
   StatsMetrics,
   StatsRankedQuery,
 } from './stats-models';
@@ -48,6 +51,36 @@ describe('stats models', () => {
 
     expect(query['time[after]']).toBe('2026-08-01');
     expect(query['time[before]']).toBe('2026-08-01');
+  });
+
+  it('maps the exact Legend day range and cohort without inventing item dimensions', () => {
+    expect(new StatsLegendQuery(dates, StatsLegendCohort.top1000).toQuery()).toEqual({
+      'time[after]': '2026-08-01',
+      'time[before]': '2026-08-30',
+      cohort: 'top_1000',
+    });
+    const response = StatsLegendResponse.fromJson({
+      cohort: 'top_1000',
+      items: [
+        {
+          day: '2026-08-30',
+          attacks: 10,
+          players: 3,
+          starCounts: { zero: 0, one: 1, two: 4, three: 5 },
+          averageDuration: 90,
+          averageDestruction: 95,
+          heroes: [{ id: 100, uses: 10, triples: 5 }],
+          pets: [{ id: 200, uses: 8, triples: 4 }],
+          equipment: [{ id: 300, uses: 6, triples: 3 }],
+          petAssignments: [{ petId: 200, heroId: 100, uses: 8, triples: 4 }],
+        },
+      ],
+    });
+    expect(response).toMatchObject({
+      cohort: 'top_1000',
+      items: [{ day: '2026-08-30', attacks: 10, heroes: [{ id: 100, uses: 10 }] }],
+    });
+    expect(response.items[0]?.metrics).toMatchObject({ averageStars: 2.4, threeStarRate: 0.5 });
   });
 
   it('maps supported hero and equipment identities onto family filters', () => {
