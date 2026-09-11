@@ -22,7 +22,7 @@ android {
 
 dependencies {
   implementation project(':expo-modules-core')
-  implementation 'host.exp.exponent:expo.modules.backgroundtask:57.0.14'
+  implementation 'host.exp.exponent:expo.modules.backgroundtask:57.0.16'
   implementation 'androidx.annotation:annotation:1.9.1'
   implementation 'androidx.work:work-runtime-ktx:2.9.1'
   implementation 'com.google.crypto.tink:tink-android:1.21.0'

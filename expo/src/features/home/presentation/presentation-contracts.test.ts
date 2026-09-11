@@ -6,12 +6,20 @@ import {
   homeRecapWidth,
   isDesktopHome,
   normalizedProgress,
+  normalizeHomeCardOrder,
   visibleHomeCards,
   type HomeDashboardModel,
 } from './contracts';
 import { formatLastRefresh, homeBottomPadding } from './dashboard-screen';
-import { buildHomeBannerItems } from './event-banner';
+import { buildHomeBannerItems, homeBannerPageIndex } from './event-banner';
 import { clampHomePageIndex, formatHomeDuration } from './home-cards';
+
+jest.mock('react-native-draggable-flatlist', () => ({
+  __esModule: true,
+  ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
+  NestableScrollContainer: () => null,
+  NestableDraggableFlatList: () => null,
+}));
 
 const base: HomeDashboardModel = {
   loading: false,
@@ -43,6 +51,16 @@ describe('home presentation contracts', () => {
       'todo',
       'ranked',
     ]);
+    expect(visibleHomeCards({ ...model, cardOrder: ['upgrade', 'todo', 'ranked'] })).toEqual([
+      'upgrade',
+      'todo',
+      'ranked',
+    ]);
+    expect(normalizeHomeCardOrder(['ranked', 'ranked', 'unknown'])).toEqual([
+      'ranked',
+      'todo',
+      'upgrade',
+    ]);
   });
 
   it('keeps the web-only desktop breakpoint and bounded content canvases', () => {
@@ -63,6 +81,12 @@ describe('home presentation contracts', () => {
     expect(clampHomePageIndex(3, 4)).toBe(3);
     expect(clampHomePageIndex(3, 1)).toBe(0);
     expect(clampHomePageIndex(3, 0)).toBe(0);
+  });
+
+  it('updates the mobile web banner indicator from live scrolling', () => {
+    expect(homeBannerPageIndex(390, 390, 6)).toBe(1);
+    expect(homeBannerPageIndex(2_500, 390, 6)).toBe(5);
+    expect(homeBannerPageIndex(-100, 390, 6)).toBe(0);
   });
 
   it('keeps the bottom overlay clear without double-counting safe area', () => {

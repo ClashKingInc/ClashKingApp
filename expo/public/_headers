@@ -1,6 +1,14 @@
 /sw.js
   Cache-Control: no-cache
 
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/.well-known/assetlinks.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
 /auth/*
   Cache-Control: no-store
   Referrer-Policy: no-referrer

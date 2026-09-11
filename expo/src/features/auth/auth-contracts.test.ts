@@ -1,4 +1,4 @@
-import { ApiClient } from '../../core/api/client';
+import { createContractTestApi } from '../../core/api/contract-api.testing';
 import type { DiscordOAuthClient } from '../../services/auth/discord-oauth';
 import {
   DISCORD_CLIENT_ID,
@@ -66,18 +66,23 @@ describe('auth endpoint contracts', () => {
   });
 
   it('uses web email endpoints and stores only the returned access token', async () => {
-    let request: { input: RequestInfo | URL; init?: RequestInit } | undefined;
+    const requests: Request[] = [];
     let savedAccess: string | null = null;
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       platform: 'web',
-      fetchImplementation: async (input, init) => {
-        request = { input, init };
+      fetchImplementation: async (input) => {
+        requests.push(input as Request);
         return new Response(
           JSON.stringify({
             access_token: 'access',
-            user: { user_id: 'user-1', username: 'Name' },
+            user: {
+              user_id: 'user-1',
+              username: 'Name',
+              avatar_url: '',
+              auth_methods: ['email'],
+            },
           }),
           { status: 200 },
         );
@@ -98,8 +103,9 @@ describe('auth endpoint contracts', () => {
     });
 
     await auth.signInWithEmail('a@example.com', 'secret');
-    expect(request?.input).toBe('https://api.example/v2/auth/web/email');
-    expect(JSON.parse(String(request?.init?.body))).toEqual({
+    const request = requests.find((candidate) => candidate.url.endsWith('/auth/web/email'));
+    expect(request?.url).toBe('https://api.example/v2/auth/web/email');
+    expect(await request?.clone().json()).toEqual({
       email: 'a@example.com',
       password: 'secret',
       device_id: 'device-id',
@@ -111,7 +117,7 @@ describe('auth endpoint contracts', () => {
 
   it('unregisters push before clearing the local session', async () => {
     const order: string[] = [];
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       fetchImplementation: async () => new Response('{}'),
@@ -153,15 +159,15 @@ describe('account and startup contracts', () => {
 
   it('fetches only the encoded user links endpoint', async () => {
     const requested: string[] = [];
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       tokenProvider: { getAccessToken: async () => 'token' },
       fetchImplementation: async (input) => {
-        requested.push(String(input));
+        requested.push((input as Request).url);
         return new Response(
           JSON.stringify({
-            items: [{ player_tag: '#ABC', hidden: false, is_verified: true }],
+            items: [linkedAccount('#ABC', true)],
           }),
         );
       },
@@ -174,14 +180,14 @@ describe('account and startup contracts', () => {
   });
 
   it('publishes account changes and clears the Flutter-compatible refresh timestamp on logout', async () => {
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       tokenProvider: { getAccessToken: async () => 'token' },
       fetchImplementation: async () =>
         new Response(
           JSON.stringify({
-            items: [{ player_tag: '#ABC', hidden: false, is_verified: true }],
+            items: [linkedAccount('#ABC', true)],
           }),
         ),
     });
@@ -204,17 +210,14 @@ describe('account and startup contracts', () => {
   it('preserves the stored selection even when that linked account is unverified', async () => {
     const preferences = new MemoryPreferences();
     await preferences.setItem('selectedTag', '#UNVERIFIED');
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       tokenProvider: { getAccessToken: async () => 'token' },
       fetchImplementation: async () =>
         new Response(
           JSON.stringify({
-            items: [
-              { player_tag: '#UNVERIFIED', hidden: false, is_verified: false },
-              { player_tag: '#VERIFIED', hidden: false, is_verified: true },
-            ],
+            items: [linkedAccount('#UNVERIFIED', false), linkedAccount('#VERIFIED', true)],
           }),
         ),
     });
@@ -231,17 +234,14 @@ describe('account and startup contracts', () => {
 
   it('defaults to the first linked account when no selection is stored', async () => {
     const preferences = new MemoryPreferences();
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       tokenProvider: { getAccessToken: async () => 'token' },
       fetchImplementation: async () =>
         new Response(
           JSON.stringify({
-            items: [
-              { player_tag: '#UNVERIFIED', hidden: false, is_verified: false },
-              { player_tag: '#VERIFIED', hidden: false, is_verified: true },
-            ],
+            items: [linkedAccount('#UNVERIFIED', false), linkedAccount('#VERIFIED', true)],
           }),
         ),
     });
@@ -260,9 +260,9 @@ describe('account and startup contracts', () => {
     const responses = [
       new Response('not-json', { status: 200 }),
       new Response('{"detail":"failed"}', { status: 500 }),
-      new Response('{"detail":"invalid token"}', { status: 403 }),
+      new Response('{"code":"forbidden","message":"invalid token"}', { status: 403 }),
     ];
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       tokenProvider: { getAccessToken: async () => 'token' },
@@ -285,7 +285,7 @@ describe('account and startup contracts', () => {
 
   it('reports linked-account mutation failures with Flutter operation names', async () => {
     const reportError = jest.fn();
-    const api = new ApiClient({
+    const api = createContractTestApi({
       baseUrl: 'https://api.example/v2',
       environment: 'production',
       tokenProvider: { getAccessToken: async () => 'token' },
@@ -309,3 +309,15 @@ describe('account and startup contracts', () => {
     ]);
   });
 });
+
+function linkedAccount(playerTag: string, isVerified: boolean) {
+  return {
+    user_id: 'user-1',
+    player_tag: playerTag,
+    order_index: 0,
+    is_verified: isVerified,
+    hidden: false,
+    added_at: '2026-08-29T12:00:00.000Z',
+    last_login: null,
+  };
+}

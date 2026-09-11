@@ -47,7 +47,7 @@ export function buildClanRoster(model: ClansPresentationModel): {
   const linked = Array.from(linkedByTag.values()).map<ClanRosterItem>((clan) => ({
     tag: clan.tag,
     name: clan.name,
-    badgeUrl: clan.badgeUrls.smallest,
+    badgeUrl: ImageAssets.clanBadgeForTag(clan.tag),
     members: clan.members,
     warLeague: clan.warLeague?.name ?? 'Unranked',
     clanPoints: clan.clanPoints,
@@ -65,7 +65,7 @@ export function buildClanRoster(model: ClansPresentationModel): {
       return {
         tag: bookmark.tag,
         name: clan?.name ?? bookmark.name,
-        badgeUrl: clan?.badgeUrls.smallest || bookmark.badgeUrl,
+        badgeUrl: ImageAssets.clanBadgeForTag(bookmark.tag),
         members: clan?.members ?? bookmark.memberCount,
         warLeague: clan?.warLeague?.name ?? '',
         clanPoints: clan?.clanPoints ?? 0,
@@ -86,3 +86,4 @@ export function buildClanRoster(model: ClansPresentationModel): {
 export function clanMemberCapacityLabel(members: number): string {
   return `${members}/50`;
 }
+import { ImageAssets } from '../../../core/assets/image-assets';

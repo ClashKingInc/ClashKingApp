@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Vider le cache des images",
+  "settingsImageCacheCleared": "Le cache des images a été vidé.",
+  "settingsImageCacheClearFailed": "Impossible de vider le cache des images. Réessayez.",
+  "startupCheckingUpdate": "Recherche de mises à jour…",
+  "startupDownloadingUpdate": "Téléchargement de la mise à jour…",
+  "startupUpdateInBackground": "Mettre à jour en arrière-plan",
   "warStatsRangeTitle": "Période des statistiques de guerre",
   "warStatsRangeDescription": "Choisissez si les statistiques couvrent un nombre fixe de guerres récentes ou une période récente en jours.",
   "warStatsRangeDays": "Jours",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "Pays",
   "legendsLocalRankTitle": "Rang local",
   "legendsGlobalRankTitle": "Rang mondial",
+  "legendsYourArmy": "Votre armée",
+  "legendsArmyUsedAgainstYou": "Armée utilisée contre vous",
   "warWinsTitle": "Victoires",
   "warLossesTitle": "Défaites",
   "warDrawsTitle": "Égalités",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "A rejoint",
   "playerJoinLeaveLeft": "A quitté",
   "playerJoinLeaveNoHistory": "Aucun historique des arrivées et départs",
-  "playerJoinLeaveNoClanTotals": "Aucun total de clan disponible"
+  "playerJoinLeaveNoClanTotals": "Aucun total de clan disponible",
+  "cwlRegisteredRoster": "Effectif inscrit",
+  "cwlMatches": "Rencontres",
+  "cwlNextMatchup": "Prochaine rencontre",
+  "cwlOtherMatches": "Autres rencontres",
+  "cwlOutlook": "Prévisions de saison",
+  "cwlFirstPlace": "Première place",
+  "cwlTopTwo": "Deux premiers",
+  "cwlRemainingOpponents": "Adversaires restants",
+  "cwlWinBonusNote": "Les étoiles incluent 10 étoiles bonus par victoire terminée.",
+  "cwlEstimateNote": "Les estimations utilisent les guerres terminées et les adversaires restants, sans tenir compte des changements de composition. Il faut au moins deux guerres terminées par clan. Ces estimations ne sont pas calibrées ; les règles de promotion varient selon la ligue.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# heure} other {# heures}}} other {{count, plural, one {# minute} other {# minutes}}}}"
 }

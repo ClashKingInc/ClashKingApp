@@ -53,7 +53,7 @@ describe('war presentation roster', () => {
     expect(roster.items[0]).toMatchObject({
       sortWeight: 0,
       bookmarked: false,
-      badgeUrl: 'small',
+      badgeUrl: 'https://badges.clashk.ing/CLAN.avif',
       accounts: [{ tag: '#P1', name: 'Main', bookmarked: false }],
     });
     expect(roster.items[2]).toMatchObject({ bookmarked: true, name: 'Book Clan', accounts: [] });

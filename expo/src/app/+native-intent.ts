@@ -1,5 +1,5 @@
 import { isDiscordNativeCallbackUrl } from '../services/auth/discord-callback';
-import { extractDeepLinkRoute } from '../core/deep-links/deep-link-handler';
+import { parseAppLink } from '../core/deep-links/app-link';
 
 interface NativeIntentOptions {
   readonly path: string;
@@ -11,12 +11,5 @@ export function redirectSystemPath({ path }: NativeIntentOptions): string {
 }
 
 function isSupportedNativeAppLink(path: string): boolean {
-  try {
-    const url = new URL(path);
-    if (url.protocol.toLowerCase() !== 'clashking:') return false;
-    const route = extractDeepLinkRoute(url);
-    return route === 'player' || route === 'clan' || route === 'war';
-  } catch {
-    return false;
-  }
+  return parseAppLink(path) !== null;
 }

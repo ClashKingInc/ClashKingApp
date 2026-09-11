@@ -28,12 +28,17 @@ export const HOME_METRIC_GAP = 6;
 
 export function HomeCardFrame({
   children,
+  dragTestID,
+  onLongPress,
   onPress,
 }: {
   children: ReactNode;
+  dragTestID?: string;
+  onLongPress?: () => void;
   onPress?: () => void;
 }) {
   const theme = useCKTheme();
+  const longPressActivated = useRef(false);
   const body = (
     <View
       style={[
@@ -47,8 +52,23 @@ export function HomeCardFrame({
       {children}
     </View>
   );
-  return onPress ? (
-    <Pressable accessibilityRole="button" onPress={onPress}>
+  return onPress || onLongPress ? (
+    <Pressable
+      accessibilityRole="button"
+      delayLongPress={300}
+      onLongPress={() => {
+        longPressActivated.current = true;
+        onLongPress?.();
+      }}
+      onPress={() => {
+        if (longPressActivated.current) {
+          longPressActivated.current = false;
+          return;
+        }
+        onPress?.();
+      }}
+      testID={dragTestID}
+    >
       {body}
     </Pressable>
   ) : (

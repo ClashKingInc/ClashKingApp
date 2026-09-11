@@ -9,15 +9,16 @@ import {
   meetsMinimumVersion,
   stableFeatureBucket,
 } from '../feature-flags/feature-flags.ts';
-import {
-  NOTIFICATION_RAID_BACKEND_INCOMPATIBILITY,
-  parseNotificationPreferences,
-} from '../dto/notification-preferences.ts';
+import { parseNotificationPreferences } from '../dto/notification-preferences.ts';
 import { serializeStoredAuthSession, tryParseStoredAuthSession } from '../dto/auth-session.ts';
 
 test('API environment aliases and overrides use supported environments', () => {
   assert.equal(apiEnvironmentForName('development'), 'development');
   assert.equal(apiEnvironmentForName('anything'), 'production');
+  assert.equal(
+    resolveApiConfiguration({ CK_API_ENV: 'local' }).apiBaseUrl,
+    'http://localhost:8787',
+  );
   assert.deepEqual(
     resolveApiConfiguration({
       CK_API_ENV: 'local',
@@ -77,14 +78,11 @@ test('feature evaluation preserves version, time, platform, and rollout rules', 
   );
 });
 
-test('notification DTO deliberately exposes the unresolved raid backend mismatch', () => {
-  assert.match(NOTIFICATION_RAID_BACKEND_INCOMPATIBILITY, /clashking_api/);
+test('notification DTO requires the supported raid reminder fields', () => {
   const currentBackendShape = {
     deviceId: 'device',
     environment: 'production',
     notificationsEnabled: true,
-    legendAttacksEnabled: true,
-    legendDefensesEnabled: true,
     warAttacksEnabled: true,
     warStateEnabled: true,
     warRemindersEnabled: true,

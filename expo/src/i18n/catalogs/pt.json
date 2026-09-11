@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Limpar cache de imagens",
+  "settingsImageCacheCleared": "A cache de imagens foi limpa.",
+  "settingsImageCacheClearFailed": "Não foi possível limpar a cache de imagens. Tenta novamente.",
+  "startupCheckingUpdate": "A procurar atualizações…",
+  "startupDownloadingUpdate": "A descarregar atualização…",
+  "startupUpdateInBackground": "Atualizar em segundo plano",
   "warStatsRangeTitle": "Intervalo das estatísticas de guerra",
   "warStatsRangeDescription": "Escolhe se as estatísticas abrangem um número fixo de guerras recentes ou um período recente em dias.",
   "warStatsRangeDays": "Dias",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "País",
   "legendsLocalRankTitle": "Classificação local",
   "legendsGlobalRankTitle": "Classificação global",
+  "legendsYourArmy": "O teu exército",
+  "legendsArmyUsedAgainstYou": "Exército usado contra ti",
   "warWinsTitle": "Vitórias",
   "warLossesTitle": "Perdas",
   "warDrawsTitle": "Empates",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "Entrou",
   "playerJoinLeaveLeft": "Saiu",
   "playerJoinLeaveNoHistory": "Não há histórico de entradas e saídas",
-  "playerJoinLeaveNoClanTotals": "Não há totais de clãs"
+  "playerJoinLeaveNoClanTotals": "Não há totais de clãs",
+  "cwlRegisteredRoster": "Elenco inscrito",
+  "cwlMatches": "Confrontos",
+  "cwlNextMatchup": "Próximo confronto",
+  "cwlOtherMatches": "Outros confrontos",
+  "cwlOutlook": "Previsão da temporada",
+  "cwlFirstPlace": "Primeiro lugar",
+  "cwlTopTwo": "Dois primeiros",
+  "cwlRemainingOpponents": "Adversários restantes",
+  "cwlWinBonusNote": "As estrelas incluem 10 estrelas extras por vitória concluída.",
+  "cwlEstimateNote": "As estimativas usam guerras concluídas e adversários restantes, não mudanças na escalação. São necessárias pelo menos duas guerras concluídas por clã. As estimativas não são calibradas; as regras de promoção variam por liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# horas}}} other {{count, plural, one {# minuto} other {# minutos}}}}"
 }

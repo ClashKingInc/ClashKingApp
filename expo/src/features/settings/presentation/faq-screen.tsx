@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import {
   Bot,
@@ -253,8 +254,11 @@ export function FaqScreen({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [query, setQuery] = useState('');
-  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
+  const link = useLinkParameters();
+  const [query, setQuery] = useState(link.q ?? '');
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(
+    () => new Set(FAQ_ENTRIES.some((entry) => entry.id === link.question) ? [link.question!] : []),
+  );
   const [mailFallback, setMailFallback] = useState(false);
   const [notice, setNotice] = useState<string>();
   const showMailFallback = () => {

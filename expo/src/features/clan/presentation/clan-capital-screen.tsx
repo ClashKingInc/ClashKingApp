@@ -1,4 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import {
   ArrowDown,
@@ -68,8 +69,16 @@ export function ClanCapitalScreen({ clan, linkedPlayerTags = [], goBack }: ClanC
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const raids = clan.clanCapitalRaid?.items ?? [];
-  const [tab, setTab] = useState<CapitalTab>('summary');
-  const [week, setWeek] = useState(0);
+  const link = useLinkParameters();
+  const [tab, setTab] = useState<CapitalTab>(
+    linkChoice(link.tab, ['summary', 'members', 'breakdown', 'history'], 'summary'),
+  );
+  const [week, setWeek] = useState(
+    Math.max(
+      0,
+      raids.findIndex((raid) => raid.startTime?.toISOString().slice(0, 10) === link.day),
+    ),
+  );
   const selectedWeek = Math.min(week, Math.max(0, raids.length - 1));
   const raid = raids[selectedWeek];
   const tabs: readonly { key: CapitalTab; label: string; icon: ReactNode }[] = [

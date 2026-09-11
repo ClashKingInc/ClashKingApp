@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Svuota la cache delle immagini",
+  "settingsImageCacheCleared": "La cache delle immagini è stata svuotata.",
+  "settingsImageCacheClearFailed": "Impossibile svuotare la cache delle immagini. Riprova.",
+  "startupCheckingUpdate": "Ricerca aggiornamenti…",
+  "startupDownloadingUpdate": "Download dell’aggiornamento…",
+  "startupUpdateInBackground": "Aggiorna in background",
   "warStatsRangeTitle": "Intervallo statistiche di guerra",
   "warStatsRangeDescription": "Scegli se le statistiche devono includere un numero fisso di guerre recenti o un periodo recente espresso in giorni.",
   "warStatsRangeDays": "Giorni",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "Paese",
   "legendsLocalRankTitle": "Rango locale",
   "legendsGlobalRankTitle": "Classifica globale",
+  "legendsYourArmy": "Il tuo esercito",
+  "legendsArmyUsedAgainstYou": "Esercito usato contro di te",
   "warWinsTitle": "Vince",
   "warLossesTitle": "Perdite",
   "warDrawsTitle": "Disegna",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Rosa iscritta",
+  "cwlMatches": "Incontri",
+  "cwlNextMatchup": "Prossimo incontro",
+  "cwlOtherMatches": "Altri incontri",
+  "cwlOutlook": "Previsioni stagionali",
+  "cwlFirstPlace": "Primo posto",
+  "cwlTopTwo": "Primi due",
+  "cwlRemainingOpponents": "Avversari rimanenti",
+  "cwlWinBonusNote": "Le stelle includono 10 stelle bonus per ogni vittoria conclusa.",
+  "cwlEstimateNote": "Le stime usano guerre concluse e avversari rimanenti, non i cambi di formazione. Servono almeno due guerre concluse per clan. Le stime non sono calibrate; le regole di promozione variano per lega.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# ora} other {# ore}}} other {{count, plural, one {# minuto} other {# minuti}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

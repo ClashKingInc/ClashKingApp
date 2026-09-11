@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Borrar caché de imágenes",
+  "settingsImageCacheCleared": "Se borró la caché de imágenes.",
+  "settingsImageCacheClearFailed": "No se pudo borrar la caché de imágenes. Inténtalo de nuevo.",
+  "startupCheckingUpdate": "Buscando actualizaciones…",
+  "startupDownloadingUpdate": "Descargando actualización…",
+  "startupUpdateInBackground": "Actualizar en segundo plano",
   "warStatsRangeTitle": "Intervalo de estadísticas de guerra",
   "warStatsRangeDescription": "Elige si las estadísticas abarcan un número fijo de guerras recientes o un periodo reciente de días.",
   "warStatsRangeDays": "Días",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "País",
   "legendsLocalRankTitle": "rango local",
   "legendsGlobalRankTitle": "Clasificación global",
+  "legendsYourArmy": "Tu ejército",
+  "legendsArmyUsedAgainstYou": "Ejército usado contra ti",
   "warWinsTitle": "gana",
   "warLossesTitle": "Pérdidas",
   "warDrawsTitle": "Sorteos",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Plantilla inscrita",
+  "cwlMatches": "Enfrentamientos",
+  "cwlNextMatchup": "Próximo enfrentamiento",
+  "cwlOtherMatches": "Otros enfrentamientos",
+  "cwlOutlook": "Previsión de temporada",
+  "cwlFirstPlace": "Primer puesto",
+  "cwlTopTwo": "Dos primeros",
+  "cwlRemainingOpponents": "Rivales restantes",
+  "cwlWinBonusNote": "Las estrellas incluyen 10 estrellas extra por victoria completada.",
+  "cwlEstimateNote": "Las estimaciones usan guerras completadas y rivales restantes, no cambios de alineación. Se necesitan al menos dos guerras completadas por clan. Son estimaciones sin calibrar; las reglas de ascenso varían según la liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# horas}}} other {{count, plural, one {# minuto} other {# minutos}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

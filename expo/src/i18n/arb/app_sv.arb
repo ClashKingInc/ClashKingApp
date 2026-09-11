@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Rensa bildcache",
+  "settingsImageCacheCleared": "Bildcachen har rensats.",
+  "settingsImageCacheClearFailed": "Det gick inte att rensa bildcachen. Försök igen.",
+  "startupCheckingUpdate": "Söker efter uppdateringar…",
+  "startupDownloadingUpdate": "Hämtar uppdatering…",
+  "startupUpdateInBackground": "Uppdatera i bakgrunden",
   "warStatsRangeTitle": "Intervall för krigsstatistik",
   "warStatsRangeDescription": "Välj om statistiken ska omfatta ett fast antal nyliga krig eller en nylig period i dagar.",
   "warStatsRangeDays": "Dagar",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokal rang",
   "legendsGlobalRankTitle": "Global rang",
+  "legendsYourArmy": "Din armé",
+  "legendsArmyUsedAgainstYou": "Armén som användes mot dig",
   "warWinsTitle": "Vinner",
   "warLossesTitle": "Förluster",
   "warDrawsTitle": "Ritar",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Anmäld trupp",
+  "cwlMatches": "Matcher",
+  "cwlNextMatchup": "Nästa match",
+  "cwlOtherMatches": "Övriga matcher",
+  "cwlOutlook": "Säsongsutsikter",
+  "cwlFirstPlace": "Första plats",
+  "cwlTopTwo": "Topp två",
+  "cwlRemainingOpponents": "Återstående motståndare",
+  "cwlWinBonusNote": "Stjärnorna inkluderar 10 bonusstjärnor per avslutad seger.",
+  "cwlEstimateNote": "Uppskattningar använder avslutade krig och återstående motståndare, inte ändringar i laguppställningen. Minst två avslutade krig per klan krävs. Uppskattningarna är inte kalibrerade; uppflyttningsregler varierar mellan ligor.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# timme} other {# timmar}}} other {{count, plural, one {# minut} other {# minuter}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

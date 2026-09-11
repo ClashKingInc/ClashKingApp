@@ -1,8 +1,13 @@
-import { ApiClient, EmailVerificationRequiredException } from '../../core/api/client';
+import { createContractTestApi, readContractRequest } from '../../core/api/contract-api.testing';
+import {
+  EmailVerificationRequiredException,
+  type ContractApiService,
+} from '../../core/api/contract-api';
 import type { DiscordOAuthClient } from '../../services/auth/discord-oauth';
 import type { TokenService } from '../../services/auth/token-service';
 import type { StringStore } from '../../services/storage/auth-storage';
 import { AuthFlowException, AuthService, type AuthObservability } from './auth-service';
+import { ResponseDecodeError, TransportError } from '@clashking/api-client';
 
 class MemoryPreferences implements StringStore {
   readonly values = new Map<string, string>();
@@ -40,19 +45,20 @@ function tokens(overrides: Partial<TokenService> = {}): TokenService {
 }
 
 function apiWith(responder: (path: string, init?: RequestInit) => Response | Promise<Response>): {
-  api: ApiClient;
+  api: ContractApiService;
   requests: { path: string; init?: RequestInit }[];
 } {
   const requests: { path: string; init?: RequestInit }[] = [];
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.example/v2',
     environment: 'production',
     tokenProvider: { getAccessToken: async () => 'access' },
     fetchImplementation: jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = new URL(String(input));
+      const parsed = await readContractRequest(input, init);
+      const url = parsed.url;
       const path = `${url.pathname}${url.search}`;
-      requests.push({ path, init });
-      return responder(path, init);
+      requests.push({ path, init: parsed.init });
+      return responder(path, parsed.init);
     }) as typeof fetch,
   });
   return { api, requests };
@@ -62,14 +68,40 @@ function authResponse(overrides: Record<string, unknown> = {}) {
   return {
     access_token: 'access',
     refresh_token: 'refresh',
-    user: { user_id: 'user-1', username: 'Player' },
-    account_summary: { follower_count: '7' },
+    user: currentUser(),
     ...overrides,
   };
 }
 
+function currentUser(overrides: Record<string, unknown> = {}) {
+  return {
+    user_id: 'user-1',
+    username: 'Player',
+    avatar_url: '',
+    auth_methods: ['email'],
+    account_summary: { follower_count: 7 },
+    ...overrides,
+  };
+}
+
+const privacyExport = {
+  account: {},
+  player_links: [],
+  bookmarks: [],
+  recent_searches: [],
+  legacy_search_settings: [],
+  discord_sessions: [],
+  notification_accounts: [],
+  notification_devices: [],
+  notification_preferences: [],
+  saved_bases: [],
+  base_slots: [],
+  billing_subscription: [],
+  subscription_entitlements: [],
+};
+
 function serviceOptions(options: {
-  api: ApiClient;
+  api: ContractApiService;
   tokenService?: TokenService;
   preferences?: MemoryPreferences;
   platform?: 'web' | 'native';
@@ -97,7 +129,9 @@ describe('AuthService', () => {
     const { api, requests } = apiWith(
       () =>
         new Response(
-          JSON.stringify({ user_id: 'local-user', account_summary: { follower_count: 3 } }),
+          JSON.stringify(
+            currentUser({ user_id: 'local-user', account_summary: { follower_count: 3 } }),
+          ),
         ),
     );
     const preferenceStore = new MemoryPreferences();
@@ -131,7 +165,7 @@ describe('AuthService', () => {
   });
 
   test('restores a remote session, keeps it during network failure, and clears invalid sessions', async () => {
-    const restore = apiWith(() => new Response(JSON.stringify({ user_id: 'user-1' })));
+    const restore = apiWith(() => new Response(JSON.stringify(currentUser())));
     const storedTokens = tokens({ getAccessToken: jest.fn(async () => 'stored') });
     const restored = new AuthService(
       serviceOptions({ api: restore.api, tokenService: storedTokens }),
@@ -145,7 +179,7 @@ describe('AuthService', () => {
     const offlineAuth = new AuthService(
       serviceOptions({ api: offline.api, tokenService: storedTokens }),
     );
-    await expect(offlineAuth.initializeAuth()).rejects.toThrow('offline');
+    await expect(offlineAuth.initializeAuth()).rejects.toBeInstanceOf(TransportError);
     expect(offlineAuth.state).toMatchObject({ accessToken: 'stored', isAuthenticated: true });
 
     const rejected = apiWith(() => new Response('{"detail":"invalid"}', { status: 401 }));
@@ -168,12 +202,31 @@ describe('AuthService', () => {
     expect(rejectedAuth.state.isAuthenticated).toBe(false);
   });
 
+  test('returns to logged out state when a previously restored native session is rejected', async () => {
+    const { api } = apiWith(() => new Response(JSON.stringify(currentUser())));
+    const getAccessToken = jest
+      .fn<Promise<string | null>, []>()
+      .mockResolvedValueOnce('stored')
+      .mockResolvedValueOnce(null);
+    const auth = new AuthService(serviceOptions({ api, tokenService: tokens({ getAccessToken }) }));
+
+    await auth.initializeAuth();
+    expect(auth.state.isAuthenticated).toBe(true);
+
+    await auth.initializeAuth();
+
+    expect(auth.state).toEqual({
+      accessToken: null,
+      isAuthenticated: false,
+      currentUser: null,
+      followerCount: null,
+    });
+  });
+
   test('uses native Discord exchange details and wraps cancellation and exchange failures', async () => {
     const { api, requests } = apiWith(
       (path) =>
-        new Response(
-          JSON.stringify(path.endsWith('/auth/me') ? { user_id: 'user-1' } : authResponse()),
-        ),
+        new Response(JSON.stringify(path.endsWith('/auth/me') ? currentUser() : authResponse())),
     );
     const tokenService = tokens();
     const oauth = {
@@ -195,6 +248,7 @@ describe('AuthService', () => {
       device_id: 'device-id',
     });
     expect(tokenService.saveTokens).toHaveBeenCalledWith('access', 'refresh');
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(auth.state.followerCount).toBe(7);
 
     const cancelled = new AuthService(
@@ -210,25 +264,34 @@ describe('AuthService', () => {
   });
 
   test('supports registration, verification, password reset, export, and deletion contracts', async () => {
-    const { api, requests } = apiWith((path) => {
-      if (path.endsWith('/auth/me')) return new Response('{}');
-      if (path.endsWith('/auth/export')) return new Response('{"ready":true}');
-      if (path.endsWith('/auth/register')) return new Response('{"registered":true}');
-      if (path.endsWith('/auth/resend-verification')) return new Response('{"sent":true}');
-      if (path.endsWith('/auth/forgot-password')) return new Response('{"sent":true}');
+    const { api, requests } = apiWith((path, init) => {
+      if (path.endsWith('/auth/me'))
+        return new Response(
+          JSON.stringify(
+            init?.method === 'DELETE'
+              ? { ok: true, message: 'Deleted', deleted: {} }
+              : currentUser(),
+          ),
+        );
+      if (path.endsWith('/auth/export')) return new Response(JSON.stringify(privacyExport));
+      if (path.endsWith('/auth/register')) return new Response('{"message":"registered"}');
+      if (path.endsWith('/auth/resend-verification')) return new Response('{"message":"sent"}');
+      if (path.endsWith('/auth/forgot-password')) return new Response('{"message":"sent"}');
       return new Response(JSON.stringify(authResponse()));
     });
     const tokenService = tokens();
     const auth = new AuthService(serviceOptions({ api, tokenService }));
 
     await expect(auth.registerWithEmail('a@example.com', 'password', 'Name')).resolves.toEqual({
-      registered: true,
+      message: 'registered',
     });
     await auth.verifyEmailWithCode('a@example.com', '123456');
-    await expect(auth.resendVerificationEmail('a@example.com')).resolves.toEqual({ sent: true });
-    await expect(auth.forgotPassword('a@example.com')).resolves.toEqual({ sent: true });
+    await expect(auth.resendVerificationEmail('a@example.com')).resolves.toEqual({
+      message: 'sent',
+    });
+    await expect(auth.forgotPassword('a@example.com')).resolves.toEqual({ message: 'sent' });
     await auth.resetPassword('a@example.com', 'reset', 'new-password');
-    await expect(auth.requestDataExport()).resolves.toEqual({ ready: true });
+    await expect(auth.requestDataExport()).resolves.toEqual(privacyExport);
     await auth.deleteAccount();
 
     expect(requests.map(({ path }) => path)).toEqual(
@@ -248,7 +311,7 @@ describe('AuthService', () => {
 
   test('preserves email-verification errors and rejects malformed authentication payloads', async () => {
     const verificationRequired = apiWith(
-      () => new Response('{"detail":"verify"}', { status: 409 }),
+      () => new Response('{"code":"conflict","message":"verify"}', { status: 409 }),
     );
     const auth = new AuthService(serviceOptions({ api: verificationRequired.api }));
     await expect(auth.signInWithEmail('a@example.com', 'password')).rejects.toBeInstanceOf(
@@ -259,7 +322,7 @@ describe('AuthService', () => {
     const malformedAuth = new AuthService(serviceOptions({ api: malformed.api }));
     await expect(malformedAuth.signInWithEmail('a@example.com', 'password')).rejects.toMatchObject({
       name: 'AuthFlowException',
-      cause: expect.any(TypeError),
+      cause: expect.any(ResponseDecodeError),
     });
 
     const nativeMissingRefresh = apiWith(
@@ -270,7 +333,7 @@ describe('AuthService', () => {
         'a@example.com',
         'password',
       ),
-    ).rejects.toMatchObject({ name: 'AuthFlowException', cause: expect.any(TypeError) });
+    ).rejects.toMatchObject({ name: 'AuthFlowException', cause: expect.any(ResponseDecodeError) });
   });
 
   test('sign out is local-first when remote cleanup and preference clearing fail', async () => {

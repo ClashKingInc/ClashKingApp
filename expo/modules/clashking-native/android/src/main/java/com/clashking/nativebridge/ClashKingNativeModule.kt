@@ -41,6 +41,12 @@ private const val WIDGET_PREFERENCES = "HomeWidgetPreferences"
 private const val WIDGET_ACTION_PREFERENCES = "ClashKingWidgetActions"
 private const val PENDING_WIDGET_ACTION = "pending_widget_action"
 private const val SECURE_STORAGE_TIMEOUT_SECONDS = 30L
+private val APP_ICON_ALIASES = linkedMapOf<String?, String>(
+    null to "MainActivityDefault",
+    "AppIconChristmas" to "MainActivityChristmas",
+    "AppIconBlackWhite" to "MainActivityBlackWhite",
+    "AppIconDarkLogo" to "MainActivityDarkLogo"
+)
 private val LEGACY_WIDGET_KEYS = setOf(
     "warWidgetClans",
     "warWidgetSelectedClan",
@@ -79,12 +85,14 @@ class ClashKingNativeModule : Module() {
         }
         AsyncFunction("releaseSharedAuthRefreshLock") { refreshLock.release() }
 
-        AsyncFunction("supportsAlternateIcons") { false }
-        AsyncFunction("getAlternateIconName") { null as String? }
+        AsyncFunction("supportsAlternateIcons") {
+            supportsAlternateIcons(requireContext())
+        }
+        AsyncFunction("getAlternateIconName") {
+            currentAlternateIconName(requireContext())
+        }
         AsyncFunction("setAlternateIconName") { iconName: String? ->
-            require(iconName == null) {
-                "Alternate app icons are only supported by the ClashKing iOS build."
-            }
+            setAlternateIconName(requireContext(), iconName)
         }
 
         AsyncFunction("showDebugNotification") { _: Map<String, Any?> ->
@@ -199,6 +207,58 @@ class ClashKingNativeModule : Module() {
 
     private fun requireContext(): Context = appContext.reactContext
         ?: throw IllegalStateException("React context is unavailable.")
+
+    private fun iconAliasComponent(context: Context, className: String) =
+        ComponentName(context.packageName, "${context.packageName}.$className")
+
+    private fun supportsAlternateIcons(context: Context): Boolean = APP_ICON_ALIASES.values.all {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getActivityInfo(
+                    iconAliasComponent(context, it),
+                    PackageManager.ComponentInfoFlags.of(PackageManager.MATCH_DISABLED_COMPONENTS.toLong())
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getActivityInfo(
+                    iconAliasComponent(context, it),
+                    PackageManager.MATCH_DISABLED_COMPONENTS
+                )
+            }
+            true
+        } catch (_: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+
+    private fun currentAlternateIconName(context: Context): String? {
+        val packageManager = context.packageManager
+        return APP_ICON_ALIASES.entries.firstOrNull { (_, className) ->
+            packageManager.getComponentEnabledSetting(iconAliasComponent(context, className)) ==
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        }?.key
+    }
+
+    private fun setAlternateIconName(context: Context, iconName: String?) {
+        val targetClassName = APP_ICON_ALIASES[iconName]
+            ?: throw IllegalArgumentException("Unknown ClashKing app icon: $iconName")
+        check(supportsAlternateIcons(context)) {
+            "Alternate app icon launcher aliases are unavailable in this Android build."
+        }
+        val packageManager = context.packageManager
+        packageManager.setComponentEnabledSetting(
+            iconAliasComponent(context, targetClassName),
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+        APP_ICON_ALIASES.values.filterNot { it == targetClassName }.forEach { className ->
+            packageManager.setComponentEnabledSetting(
+                iconAliasComponent(context, className),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
+    }
 
     private fun reloadWidgets(context: Context) {
         val manager = AppWidgetManager.getInstance(context)

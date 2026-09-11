@@ -40,7 +40,7 @@ export function createAppStateStore(
 
   const store = createStore<AppStateSnapshot>((set, get) => ({
     locale: 'en',
-    themePreference: 'system',
+    themePreference: 'dark',
     features: defaultFeatureState(),
     initialized: false,
 
@@ -127,7 +127,7 @@ function currentFeatureState(
 }
 
 function parseThemePreference(value: string | null): AppThemePreference {
-  return value === 'dark' || value === 'light' ? value : 'system';
+  return value === 'dark' || value === 'light' || value === 'system' ? value : 'dark';
 }
 
 function appLocale(locale: SupportedLocale): {

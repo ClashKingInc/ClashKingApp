@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "مسح ذاكرة التخزين المؤقت للصور",
+  "settingsImageCacheCleared": "تم مسح ذاكرة التخزين المؤقت للصور.",
+  "settingsImageCacheClearFailed": "تعذر مسح ذاكرة التخزين المؤقت للصور. يُرجى المحاولة مرة أخرى.",
+  "startupCheckingUpdate": "جارٍ البحث عن تحديثات…",
+  "startupDownloadingUpdate": "جارٍ تنزيل التحديث…",
+  "startupUpdateInBackground": "التحديث في الخلفية",
   "warStatsRangeTitle": "نطاق إحصاءات الحرب",
   "warStatsRangeDescription": "اختر ما إذا كانت الإحصاءات تغطي عددًا ثابتًا من الحروب الأخيرة أو فترة حديثة بالأيام.",
   "warStatsRangeDays": "الأيام",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "دولة",
   "legendsLocalRankTitle": "الرتبة المحلية",
   "legendsGlobalRankTitle": "المرتبة العالمية",
+  "legendsYourArmy": "جيشك",
+  "legendsArmyUsedAgainstYou": "الجيش المستخدم ضدك",
   "warWinsTitle": "انتصارات",
   "warLossesTitle": "خسائر",
   "warDrawsTitle": "يرسم",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "انضم",
   "playerJoinLeaveLeft": "غادر",
   "playerJoinLeaveNoHistory": "لا يتوفر سجل انضمام / مغادرة",
-  "playerJoinLeaveNoClanTotals": "لا تتوفر إجماليات للقبائل"
+  "playerJoinLeaveNoClanTotals": "لا تتوفر إجماليات للقبائل",
+  "cwlRegisteredRoster": "القائمة المسجلة",
+  "cwlMatches": "المواجهات",
+  "cwlNextMatchup": "المواجهة التالية",
+  "cwlOtherMatches": "المواجهات الأخرى",
+  "cwlOutlook": "توقعات الموسم",
+  "cwlFirstPlace": "المركز الأول",
+  "cwlTopTwo": "أفضل مركزين",
+  "cwlRemainingOpponents": "الخصوم المتبقون",
+  "cwlWinBonusNote": "تشمل النجوم 10 نجوم إضافية لكل انتصار مكتمل.",
+  "cwlEstimateNote": "تعتمد التقديرات على الحروب المكتملة والخصوم المتبقين، لا على تغييرات التشكيلة. يلزم إكمال حربين على الأقل لكل قبيلة. هذه تقديرات غير معايرة؛ تختلف قواعد الترقية حسب الدوري.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# ساعة} other {# ساعة}}} other {{count, plural, one {# دقيقة} other {# دقيقة}}}}"
 }

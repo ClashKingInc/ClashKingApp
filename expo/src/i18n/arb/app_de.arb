@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Bildcache leeren",
+  "settingsImageCacheCleared": "Bildcache wurde geleert.",
+  "settingsImageCacheClearFailed": "Der Bildcache konnte nicht geleert werden. Bitte versuche es erneut.",
+  "startupCheckingUpdate": "Suche nach Updates…",
+  "startupDownloadingUpdate": "Update wird heruntergeladen…",
+  "startupUpdateInBackground": "Im Hintergrund aktualisieren",
   "warStatsRangeTitle": "Zeitraum der Kriegsstatistik",
   "warStatsRangeDescription": "Wähle, ob die Statistik eine feste Anzahl vergangener Kriege oder einen vergangenen Zeitraum in Tagen abdeckt.",
   "warStatsRangeDays": "Tage",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokaler Rang",
   "legendsGlobalRankTitle": "Globaler Rang",
+  "legendsYourArmy": "Deine Armee",
+  "legendsArmyUsedAgainstYou": "Gegen dich eingesetzte Armee",
   "warWinsTitle": "Siege",
   "warLossesTitle": "Verluste",
   "warDrawsTitle": "Zieht",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Gemeldeter Kader",
+  "cwlMatches": "Begegnungen",
+  "cwlNextMatchup": "Nächste Begegnung",
+  "cwlOtherMatches": "Weitere Begegnungen",
+  "cwlOutlook": "Saisonausblick",
+  "cwlFirstPlace": "Erster Platz",
+  "cwlTopTwo": "Top zwei",
+  "cwlRemainingOpponents": "Verbleibende Gegner",
+  "cwlWinBonusNote": "Sterne enthalten 10 Bonussterne pro abgeschlossenem Sieg.",
+  "cwlEstimateNote": "Schätzungen berücksichtigen abgeschlossene Kriege und verbleibende Gegner, keine Aufstellungsänderungen. Mindestens zwei abgeschlossene Kriege pro Clan sind nötig. Die Schätzungen sind nicht kalibriert; Aufstiegsregeln variieren je nach Liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# Stunde} other {# Stunden}}} other {{count, plural, one {# Minute} other {# Minuten}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

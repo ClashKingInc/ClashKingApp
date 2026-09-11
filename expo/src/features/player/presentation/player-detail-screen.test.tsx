@@ -79,6 +79,7 @@ const actions = (): PlayerDetailPresentationActions => ({
   openCwl: jest.fn(),
   openPlayer: jest.fn(),
   openRanked: jest.fn(),
+  openLegends: jest.fn(),
   openAchievements: jest.fn(),
   updateWarFilter: jest.fn(async () => undefined),
   exportWarStats: jest.fn(async () => 'war-stats.xlsx'),
@@ -176,6 +177,7 @@ describe('PlayerDetailScreen', () => {
     const screenActions = actions();
     const service = {
       apiV2Url: 'https://api.test',
+      downloadWarStatsExport: jest.fn(),
       loadCachedClanTag: jest.fn(async () => '#CACHED'),
       loadPlayerBattlelog: jest.fn(async () => undefined),
       loadPlayerActivity: jest.fn(async () => undefined),
@@ -199,7 +201,7 @@ describe('PlayerDetailScreen', () => {
     expect(playerHeaderClanIdentity(fallbackPlayer, '#CACHED')).toMatchObject({
       tag: '#CACHED',
       name: '#CACHED',
-      badgeUrl: '',
+      badgeUrl: 'https://badges.clashk.ing/CACHED.avif',
     });
     expect(screen.queryByText('|')).toBeNull();
     await fireEvent.press(screen.getByText('#CACHED'));
@@ -215,6 +217,7 @@ describe('PlayerDetailScreen', () => {
     screenActions.toggleBookmark = jest.fn(() => pending);
     const service = {
       apiV2Url: 'https://api.test',
+      downloadWarStatsExport: jest.fn(),
       loadCachedClanTag: jest.fn(async () => ''),
       loadPlayerBattlelog: jest.fn(async () => undefined),
       loadPlayerActivity: jest.fn(async () => undefined),

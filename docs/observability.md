@@ -1,76 +1,45 @@
-# Observability and Better Stack
+# Error reporting
 
-The Expo app uses the Sentry React Native SDK as the client-side error reporting
-library. By default it sends events to the ClashKing Better Stack
-Sentry-compatible application. The default DSN is intentionally hardcoded because
-Sentry-style DSNs are client ingestion identifiers, not account passwords.
+The Expo app uses the Sentry React Native SDK for error reporting. Its public
+Sentry DSN is built into the app, so native, OTA, web, and local bundles use the
+same project without a CI secret. `EXPO_PUBLIC_CK_SENTRY_DSN` can override that
+destination for a temporary test project.
 
-`EXPO_PUBLIC_CK_SENTRY_DSN` can still be used to override the destination for local testing
-or if the Better Stack application is rotated later. The Better Stack
-environment is derived from `EXPO_PUBLIC_CK_API_ENV`.
+## Current behavior
 
-## Better Stack setup
+The integration sends error events only. Tracing, profiling, replay, logs,
+sessions, HTTP breadcrumbs, screenshots, view hierarchy, failed-request
+capture, and client reports are disabled.
 
-1. In Better Stack, open **Errors → Applications**.
-2. Create or select the ClashKing mobile application.
-3. Open **Data ingestion**.
-4. Copy the Sentry-compatible DSN:
+Before an event is sent, the app removes user, request, context, extra,
+breadcrumb, frame-variable, and server-name data. It sanitizes URLs, link user
+ids, query strings, fragments, email addresses, IP addresses, bearer tokens,
+and common secret parameters. Events retain the release, build number,
+sanitized exception and stack, and a sanitized operation tag.
 
-   ```txt
-   https://$APPLICATION_TOKEN@$INGESTING_HOST/$APPLICATION_ID
-   ```
+The same exception object is reported once. Equivalent sanitized error
+signatures are also reported once per app session, with the in-memory signature
+index capped at 256 entries. Restarting the app starts a new session, so a
+persistent failure remains visible across launches without generating an event
+for every retry.
 
-Better Stack documents this Sentry SDK flow here:
-https://betterstack.com/docs/errors/collecting-errors/sentry-sdk/
-
-## Optional build-time configuration
-
-The app works without extra variables. To override the DSN for an Expo run or build:
+## Optional destination override
 
 ```sh
-EXPO_PUBLIC_CK_SENTRY_DSN="https://APPLICATION_TOKEN@INGESTING_HOST/APPLICATION_ID" npm start
+EXPO_PUBLIC_CK_SENTRY_DSN="https://PUBLIC_KEY@INGEST_HOST/PROJECT_ID" npm start
 ```
 
-Production example:
+The DSN is a public ingestion identifier embedded in every client bundle. It is
+not an account credential. Source-map and native-symbol uploads, if added later,
+must use a separate private Sentry auth token in CI.
 
-```sh
-EXPO_PUBLIC_CK_SENTRY_DSN="https://APPLICATION_TOKEN@INGESTING_HOST/APPLICATION_ID" \
-EXPO_PUBLIC_CK_SENTRY_TRACES_SAMPLE_RATE_PERCENT=5 \
-npx expo export
-```
+The Sentry environment follows `EXPO_PUBLIC_CK_API_ENV`: `local` and
+`development` map to `development`, production maps to `production`, and other
+named environments are preserved.
 
-If `EXPO_PUBLIC_CK_SENTRY_DSN` is empty, the built-in Better Stack DSN is used.
+## Profiling
 
-## Available Expo environment variables
-
-| Define                                                      | Default                   | Notes                                                                                                                                       |
-| ----------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EXPO_PUBLIC_CK_SENTRY_DSN`                                 | built-in Better Stack DSN | Optional override for local/staging/rotation.                                                                                               |
-| `EXPO_PUBLIC_CK_API_ENV`                                    | `production`              | Also drives the Better Stack environment: `production` -> `production`, `staging` -> `staging`, and `local`/`development` -> `development`. |
-| `EXPO_PUBLIC_CK_SENTRY_TRACES_SAMPLE_RATE_PERCENT`          | `0`                       | Use a low value in production, for example `1` to `5`. Values are clamped to `0` through `100`.                                             |
-| `EXPO_PUBLIC_CK_SENTRY_REPLAY_SESSION_SAMPLE_RATE_PERCENT`  | `0`                       | Keep disabled for Better Stack; debug symbols/replay support is not equivalent to Sentry.                                                   |
-| `EXPO_PUBLIC_CK_SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE_PERCENT` | `0`                       | Keep disabled unless we intentionally test replay support.                                                                                  |
-
-## Current app behavior
-
-- Error reporting is enabled by default through Better Stack.
-- The app sets:
-  - `environment`
-  - `release`
-  - `dist`
-  - authenticated user id only
-- The selected-player context is explicitly removed and isn't sent with events.
-- `sendDefaultPii` is disabled.
-- Session replay defaults to `0%`.
-- Centralized API calls add sanitized HTTP breadcrumbs. `/links/{id}` paths are
-  redacted to `/links/:user_id`, and query strings/fragments are removed from
-  breadcrumbs.
-- The SDK's automatic network and navigation-history breadcrumbs are disabled so
-  they cannot duplicate those requests with raw account ids or query strings;
-  safe default integrations such as error handlers remain enabled.
-
-## Release pipeline note
-
-No CI secret is required for the default Better Stack app. If a separate staging
-or temporary Better Stack application is needed, pass it with
-`EXPO_PUBLIC_CK_SENTRY_DSN=...`.
+Profiling remains disabled. Enabling mobile UI profiling would require an
+explicit sampling policy and Sentry billing decision; it should not be coupled
+to basic error reporting. A temporary local-only profiling project can be used
+for focused investigations without changing production collection.

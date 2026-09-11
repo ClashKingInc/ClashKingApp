@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "이미지 캐시 지우기",
+  "settingsImageCacheCleared": "이미지 캐시를 지웠습니다.",
+  "settingsImageCacheClearFailed": "이미지 캐시를 지우지 못했습니다. 다시 시도해 주세요.",
+  "startupCheckingUpdate": "업데이트 확인 중…",
+  "startupDownloadingUpdate": "업데이트 다운로드 중…",
+  "startupUpdateInBackground": "백그라운드에서 업데이트",
   "warStatsRangeTitle": "클랜전 통계 범위",
   "warStatsRangeDescription": "최근 클랜전의 고정 횟수 또는 최근 기간의 일수 중 통계 범위를 선택하세요.",
   "warStatsRangeDays": "일",
@@ -1556,6 +1562,8 @@
   "legendsCountryTitle": "국가",
   "legendsLocalRankTitle": "지역 순위",
   "legendsGlobalRankTitle": "글로벌 순위",
+  "legendsYourArmy": "내 군대",
+  "legendsArmyUsedAgainstYou": "나를 상대로 사용한 군대",
   "warWinsTitle": "승리",
   "warLossesTitle": "사상자 수",
   "warDrawsTitle": "무승부",
@@ -4756,6 +4764,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "등록 명단",
+  "cwlMatches": "대진",
+  "cwlNextMatchup": "다음 대진",
+  "cwlOtherMatches": "다른 대진",
+  "cwlOutlook": "시즌 전망",
+  "cwlFirstPlace": "1위",
+  "cwlTopTwo": "상위 2위",
+  "cwlRemainingOpponents": "남은 상대",
+  "cwlWinBonusNote": "완료된 승리마다 보너스 별 10개가 포함됩니다.",
+  "cwlEstimateNote": "추정치는 완료된 전쟁과 남은 상대를 기반으로 하며 라인업 변경은 반영하지 않습니다. 클랜당 최소 두 번의 완료된 전쟁이 필요합니다. 보정되지 않은 추정치이며 승급 규칙은 리그마다 다릅니다.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# 시간} other {# 시간}}} other {{count, plural, one {# 분} other {# 분}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

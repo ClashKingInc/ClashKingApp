@@ -10,11 +10,40 @@ private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
 private let sharedAuthSessionKey = "shared_auth_session_v1"
 private let sharedAuthKeychainService = "flutter_secure_storage_service"
 
+private func widgetBadgeURL(_ url: URL) -> URL? {
+  guard url.host == "badges.clashk.ing" else { return url }
+  var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+  components?.path = url.deletingPathExtension().path + ".png"
+  components?.queryItems = [URLQueryItem(name: "size", value: "256")]
+  components?.fragment = nil
+  return components?.url
+}
+
+private func widgetClanBadge(_ tag: String?) -> String? {
+  let normalized = (tag ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    .replacingOccurrences(of: "#", with: "").uppercased()
+  guard !normalized.isEmpty,
+        normalized.range(of: "^[A-Z0-9]+$", options: .regularExpression) != nil else { return nil }
+  return "https://badges.clashk.ing/\(normalized).png?size=256"
+}
+
+private func widgetDestination(tag: String?, upgrade: Bool) -> URL? {
+  let normalized = (tag ?? "").replacingOccurrences(of: "#", with: "").uppercased()
+  guard !normalized.isEmpty,
+        normalized.range(of: "^[A-Z0-9]+$", options: .regularExpression) != nil else {
+    return URL(string: upgrade ? "clashking://upgrade-tracker" : "clashking://war")
+  }
+  return URL(string: upgrade
+    ? "clashking://upgrade-tracker?player=\(normalized)"
+    : "clashking://clan/\(normalized)/war")
+}
+
 struct WarWidgetEntry: TimelineEntry {
   let date: Date
   let data: WarWidgetData
   let clanBadgeData: Data?
   let opponentBadgeData: Data?
+  var selectedClanTag: String? = nil
 }
 
 struct WarWidgetData: Codable {
@@ -78,9 +107,8 @@ struct WarWidgetData: Codable {
       return .empty
     }
 
-    let selectedClanTag = clanTag ?? defaults.string(forKey: "warWidgetSelectedClan")
-    let clanSpecificKey = selectedClanTag.map { "warInfo_\(Self.normalizedClanTag($0))" }
-    let raw = clanSpecificKey.flatMap { defaults.string(forKey: $0) } ?? defaults.string(forKey: "warInfo")
+    guard let clanTag, !clanTag.isEmpty else { return .empty }
+    let raw = defaults.string(forKey: "warInfo_\(Self.normalizedClanTag(clanTag))")
 
     guard
       let raw,
@@ -168,30 +196,32 @@ struct WarTimelineProvider: AppIntentTimelineProvider {
   }
 
   func snapshot(for configuration: SelectWarClanIntent, in context: Context) async -> WarWidgetEntry {
-    makeEntry(data: context.isPreview ? .placeholder : .current(clanTag: configuration.clan?.id))
+    makeEntry(data: context.isPreview ? .placeholder : .current(clanTag: configuration.clan?.id), clanTag: configuration.clan?.id)
   }
 
   func timeline(for configuration: SelectWarClanIntent, in context: Context) async -> Timeline<WarWidgetEntry> {
-    let clanTag = configuration.clan?.id ?? UserDefaults(suiteName: appGroupIdentifier)?.string(forKey: "warWidgetSelectedClan")
+    let clanTag = configuration.clan?.id
     let data = await WarWidgetFreshFetcher().fetch(clanTag: clanTag) ?? .current(clanTag: clanTag)
-    let entry = makeEntry(data: data)
+    let entry = makeEntry(data: data, clanTag: clanTag)
     let next = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date().addingTimeInterval(900)
     return Timeline(entries: [entry], policy: .after(next))
   }
 
-  private func makeEntry(data: WarWidgetData) -> WarWidgetEntry {
+  private func makeEntry(data: WarWidgetData, clanTag: String? = nil) -> WarWidgetEntry {
     WarWidgetEntry(
       date: Date(),
       data: data,
       clanBadgeData: fetchBadgeData(data.clan?.badgeUrlMedium),
-      opponentBadgeData: fetchBadgeData(data.opponent?.badgeUrlMedium)
+      opponentBadgeData: fetchBadgeData(data.opponent?.badgeUrlMedium),
+      selectedClanTag: clanTag
     )
   }
 
   private func fetchBadgeData(_ urlString: String?) -> Data? {
     guard
       let urlString,
-      let url = URL(string: urlString),
+      let originalURL = URL(string: urlString),
+      let url = widgetBadgeURL(originalURL),
       url.scheme == "https"
     else {
       return nil
@@ -466,7 +496,44 @@ private struct WarWidgetFreshFetcher {
       else {
         return nil
       }
-      let widgetData = buildProxyCurrentWarData(from: raw, clanTag: clanTag, defaults: defaults)
+      // currentwar can be tomorrow's CWL preparation while today's round is still live.
+      // Resolve the league rounds before replacing the cached widget snapshot.
+      var resolvedWar = raw
+      var isCwl = false
+      if let group = try await fetchJSON(path: "/clans/\(encodedTag)/currentwar/leaguegroup", baseUrl: baseUrl, token: token),
+         let rounds = group["rounds"] as? [[String: Any]] {
+        var fallback: [String: Any]?
+        for round in rounds.reversed() {
+          let tags = (round["warTags"] as? [String] ?? []).filter { $0 != "#0" }
+          var ourWar: [String: Any]?
+          for tag in tags {
+            guard let encoded = tag.addingPercentEncoding(withAllowedCharacters: allowed),
+                  let war = try await fetchJSON(path: "/clanwarleagues/wars/\(encoded)", baseUrl: baseUrl, token: token) else { continue }
+            if normalizedClanTag(string(dictionary(war["clan"])["tag"]) ?? "") == normalizedClanTag(clanTag) ||
+               normalizedClanTag(string(dictionary(war["opponent"])["tag"]) ?? "") == normalizedClanTag(clanTag) {
+              ourWar = war
+              break
+            }
+          }
+          guard let war = ourWar else { continue }
+          if string(war["state"]) == "inWar" {
+            fallback = war
+            break
+          }
+          if fallback == nil { fallback = war }
+          if string(war["state"]) == "warEnded" { break }
+        }
+        if let war = fallback {
+          resolvedWar = war
+          isCwl = true
+        }
+      }
+      if normalizedClanTag(string(dictionary(resolvedWar["opponent"])["tag"]) ?? "") == normalizedClanTag(clanTag) {
+        let originalClan = resolvedWar["clan"]
+        resolvedWar["clan"] = resolvedWar["opponent"]
+        resolvedWar["opponent"] = originalClan
+      }
+      let widgetData = buildProxyCurrentWarData(from: resolvedWar, clanTag: clanTag, defaults: defaults, isCwl: isCwl)
       cache(widgetData, clanTag: clanTag, defaults: defaults)
       return widgetData
     } catch {
@@ -474,16 +541,26 @@ private struct WarWidgetFreshFetcher {
     }
   }
 
+  private func fetchJSON(path: String, baseUrl: String, token: String) async throws -> [String: Any]? {
+    guard let url = URL(string: baseUrl + path) else { return nil }
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 10
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard let response = response as? HTTPURLResponse else { return nil }
+    if response.statusCode == 403 || response.statusCode == 404 { return nil }
+    guard response.statusCode == 200 else { throw URLError(.badServerResponse) }
+    return try JSONSerialization.jsonObject(with: data) as? [String: Any]
+  }
+
   private func cache(_ data: WarWidgetData, clanTag: String, defaults: UserDefaults) {
     guard let encoded = try? JSONEncoder().encode(data), let raw = String(data: encoded, encoding: .utf8) else {
       return
     }
     defaults.set(raw, forKey: "warInfo_\(normalizedClanTag(clanTag))")
-    defaults.set(raw, forKey: "warInfo")
-    defaults.set(clanTag, forKey: "warWidgetSelectedClan")
   }
 
-  private func buildProxyCurrentWarData(from currentWar: [String: Any], clanTag: String, defaults: UserDefaults) -> WarWidgetData {
+  private func buildProxyCurrentWarData(from currentWar: [String: Any], clanTag: String, defaults: UserDefaults, isCwl: Bool = false) -> WarWidgetData {
     let state = string(currentWar["state"]) ?? "notInWar"
     guard ["preparation", "inWar", "warEnded"].contains(state) else {
       let selectedClan = cachedClanSide(clanTag: clanTag, defaults: defaults)
@@ -503,10 +580,10 @@ private struct WarWidgetFreshFetcher {
         cwlLeague: nil
       )
     }
-    return buildRegularWarData(currentWar: currentWar, state: state)
+    return buildRegularWarData(currentWar: currentWar, state: state, isCwl: isCwl)
   }
 
-  private func buildRegularWarData(currentWar: [String: Any], state: String) -> WarWidgetData {
+  private func buildRegularWarData(currentWar: [String: Any], state: String, isCwl: Bool = false) -> WarWidgetData {
     let clan = dictionary(currentWar["clan"])
     let opponent = dictionary(currentWar["opponent"])
     let clanStars = int(clan["stars"])
@@ -560,7 +637,7 @@ private struct WarWidgetFreshFetcher {
 
     return WarWidgetData(
       state: state,
-      mode: "war",
+      mode: isCwl ? "cwl" : "war",
       updatedAt: updatedAt(),
       timeState: timeState,
       score: score,
@@ -568,20 +645,20 @@ private struct WarWidgetFreshFetcher {
       primaryText: primaryText,
       secondaryText: secondaryText,
       colorTheme: colorTheme,
-      clan: side(from: clan, stars: clanStars, teamSize: teamSize),
-      opponent: side(from: opponent, stars: opponentStars, teamSize: teamSize),
+      clan: side(from: clan, stars: clanStars, teamSize: teamSize, attacksPerMember: isCwl ? 1 : 2),
+      opponent: side(from: opponent, stars: opponentStars, teamSize: teamSize, attacksPerMember: isCwl ? 1 : 2),
       cwlRank: nil,
       cwlLeague: nil
     )
   }
 
-  private func side(from raw: [String: Any], stars: Int, teamSize: Int) -> WarWidgetData.Side {
+  private func side(from raw: [String: Any], stars: Int, teamSize: Int, attacksPerMember: Int) -> WarWidgetData.Side {
     let destruction = double(raw["destructionPercentage"])
     return WarWidgetData.Side(
       name: string(raw["name"]) ?? "Unknown",
-      badgeUrlMedium: string(dictionary(raw["badgeUrls"])["medium"]) ?? "https://assets.clashk.ing/clashkinglogo.png",
+      badgeUrlMedium: widgetClanBadge(string(raw["tag"])) ?? "https://assets.clashk.ing/clashkinglogo.png",
       percent: String(format: "%.2f%%", destruction),
-      attacks: "\(int(raw["attacks"]))/\(teamSize * 2)",
+      attacks: "\(int(raw["attacks"]))/\(teamSize * attacksPerMember)",
       stars: stars,
       maxStars: teamSize * 3
     )
@@ -677,14 +754,17 @@ struct WarWidgetView: View {
   let entry: WarWidgetEntry
 
   var body: some View {
-    switch family {
-    case .systemSmall:
-      compactWarView
-    case .accessoryRectangular:
-      accessoryView
-    default:
-      mediumWarView
+    Group {
+      switch family {
+      case .systemSmall:
+        compactWarView
+      case .accessoryRectangular:
+        accessoryView
+      default:
+        mediumWarView
+      }
     }
+    .widgetURL(widgetDestination(tag: entry.selectedClanTag, upgrade: false))
   }
 
   private var compactWarView: some View {
@@ -1284,8 +1364,6 @@ private struct UpgradeWidgetData: Codable {
     let candidateTags: [String]
     if let selected, !selected.isEmpty {
       candidateTags = [selected]
-    } else if let firstLinkedTag = linkedTags.first {
-      candidateTags = [firstLinkedTag]
     } else {
       candidateTags = []
     }
@@ -1329,6 +1407,7 @@ private struct UpgradeWidgetEntry: TimelineEntry {
   let images: [String: Data]
   let mediumTaskIndex: Int
   let showBuilderBase: Bool
+  var selectedAccountTag: String? = nil
 }
 
 private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
@@ -1351,7 +1430,8 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
       data: data,
       images: await images(for: data, showBuilderBase: configuration.showBuilderBase),
       mediumTaskIndex: 0,
-      showBuilderBase: configuration.showBuilderBase
+      showBuilderBase: configuration.showBuilderBase,
+      selectedAccountTag: configuration.account?.id
     )
   }
 
@@ -1366,7 +1446,8 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
       data: data,
       images: imageData,
       mediumTaskIndex: 0,
-      showBuilderBase: showBuilderBase
+      showBuilderBase: showBuilderBase,
+      selectedAccountTag: configuration.account?.id
     )
     let entries: [UpgradeWidgetEntry]
     if context.family == .systemMedium && rotationCount > 1 {
@@ -1377,7 +1458,8 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
           data: data,
           images: imageData,
           mediumTaskIndex: index,
-          showBuilderBase: showBuilderBase
+          showBuilderBase: showBuilderBase,
+          selectedAccountTag: configuration.account?.id
         )
       }
     } else {
@@ -1468,6 +1550,7 @@ private struct UpgradeWidgetView: View {
       }
     }
     .containerBackground(for: .widget) { Color(.systemBackground) }
+    .widgetURL(widgetDestination(tag: entry.selectedAccountTag, upgrade: true))
   }
 
   private var largeBody: some View {

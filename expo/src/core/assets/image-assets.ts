@@ -1,3 +1,4 @@
+import { rememberBadgeToken } from './badge-token-hints';
 import { gameDataState, isRecord, type JsonRecord } from '../game-data/game-data-state';
 
 export class ImageAssets {
@@ -110,7 +111,16 @@ export class ImageAssets {
 
   static readonly planet = `${ImageAssets.baseUrl}/icons/Icon_HV_Planet.png`;
 
-  static clanBadgeForTag(tag: string): string {
+  static clanBadgeForTag(tag: string, badgeData?: unknown): string {
+    rememberBadgeToken(tag, badgeData);
+    const trimmed = tag.trim();
+    const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
+    return normalized
+      ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}.avif`
+      : '';
+  }
+
+  static widgetClanBadgeForTag(tag: string): string {
     const trimmed = tag.trim();
     const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
     return normalized ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}` : '';
@@ -118,6 +128,14 @@ export class ImageAssets {
 
   static clanBadge(badgeUrl: string): string {
     return badgeUrl || `${ImageAssets.baseUrl}/icons/default_clan_badge.png`;
+  }
+
+  static clanBadgeUrls(
+    tag: string,
+    badgeData?: unknown,
+  ): { small: string; medium: string; large: string } {
+    const url = ImageAssets.clanBadgeForTag(tag, badgeData);
+    return { small: url, medium: url, large: url };
   }
 
   static getClanBadgeImage(url: string): string {

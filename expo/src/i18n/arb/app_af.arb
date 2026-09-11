@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Maak beeldkas skoon",
+  "settingsImageCacheCleared": "Beeldkas is skoongemaak.",
+  "settingsImageCacheClearFailed": "Kon nie die beeldkas skoonmaak nie. Probeer asseblief weer.",
+  "startupCheckingUpdate": "Soek tans opdaterings…",
+  "startupDownloadingUpdate": "Laai opdatering af…",
+  "startupUpdateInBackground": "Werk op in die agtergrond",
   "warStatsRangeTitle": "Oorlogstatistiekreeks",
   "warStatsRangeDescription": "Kies of die statistieke 'n vaste aantal onlangse oorloë of 'n onlangse tydperk in dae dek.",
   "warStatsRangeDays": "Dae",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Plaaslike rang",
   "legendsGlobalRankTitle": "Globale rangorde",
+  "legendsYourArmy": "Jou leër",
+  "legendsArmyUsedAgainstYou": "Leër wat teen jou gebruik is",
   "warWinsTitle": "Wen",
   "warLossesTitle": "Verliese",
   "warDrawsTitle": "Tekens",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Geregistreerde spanlys",
+  "cwlMatches": "Wedstryde",
+  "cwlNextMatchup": "Volgende wedstryd",
+  "cwlOtherMatches": "Ander wedstryde",
+  "cwlOutlook": "Seisoenvooruitsig",
+  "cwlFirstPlace": "Eerste plek",
+  "cwlTopTwo": "Top twee",
+  "cwlRemainingOpponents": "Oorblywende teenstanders",
+  "cwlWinBonusNote": "Sterre sluit 10 bonussterre per voltooide oorwinning in.",
+  "cwlEstimateNote": "Ramings gebruik voltooide oorloë en oorblywende teenstanders, nie spanveranderings nie. Minstens twee voltooide oorloë per stam word vereis. Dit is ongekalibreerde ramings; promosiereëls verskil per liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minute}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

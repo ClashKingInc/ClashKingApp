@@ -23,7 +23,11 @@ self.addEventListener('activate', (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))),
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith('clashking-expo-') && key !== CACHE_NAME)
+            .map((key) => caches.delete(key)),
+        ),
       ),
   );
   self.clients.claim();
@@ -42,17 +46,20 @@ self.addEventListener('fetch', (event) => {
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
+        .then(async (response) => {
           if (response.ok) {
-            const copy = response.clone();
-            void caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+            await storeResponse(request, response);
+          } else if (response.status >= 500) {
+            return (
+              (await cachedResponse(request)) ?? (await cachedResponse('/index.html')) ?? response
+            );
           }
           return response;
         })
         .catch(
           async () =>
-            (await caches.match(request)) ??
-            (await caches.match('/index.html')) ??
+            (await cachedResponse(request)) ??
+            (await cachedResponse('/index.html')) ??
             Response.error(),
         ),
     );
@@ -60,16 +67,35 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    caches.match(request).then(
+    cachedResponse(request).then(
       (cached) =>
         cached ??
-        fetch(request).then((response) => {
+        fetch(request).then(async (response) => {
           if (response.ok) {
-            const copy = response.clone();
-            void caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+            await storeResponse(request, response);
           }
           return response;
         }),
     ),
   );
 });
+
+async function cachedResponse(request) {
+  try {
+    return await (await caches.open(CACHE_NAME)).match(request);
+  } catch {
+    return undefined;
+  }
+}
+
+async function storeResponse(request, response) {
+  // Private/no-store responses must never enter the offline cache. Cache quota
+  // errors must also never turn a successful request into a failed page load.
+  if (/no-store|private/i.test(response.headers.get('Cache-Control') || '')) return;
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(request, response.clone());
+  } catch {
+    /* The network response is still usable when storage is full. */
+  }
+}

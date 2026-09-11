@@ -6,6 +6,56 @@ import { CKThemeProvider } from '../../../ui';
 import type { HomeDashboardActions } from './contracts';
 import { DashboardScreen } from './dashboard-screen';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+}));
+
+const mockHomeDrag = jest.fn();
+
+jest.mock('react-native-draggable-flatlist', () => {
+  const ReactModule = jest.requireActual<typeof import('react')>('react');
+  const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
+  return {
+    __esModule: true,
+    default: ({
+      data,
+      ListEmptyComponent,
+      ListHeaderComponent,
+      renderItem,
+      scrollEnabled,
+    }: {
+      data: readonly unknown[];
+      ListEmptyComponent?: React.ReactNode;
+      ListHeaderComponent?: React.ReactNode;
+      renderItem: (parameters: Record<string, unknown>) => React.ReactNode;
+      scrollEnabled?: boolean;
+    }) =>
+      ReactModule.createElement(
+        MockView,
+        {
+          accessibilityLabel: scrollEnabled ? 'scroll-enabled' : 'scroll-disabled',
+          testID: 'home-draggable-list',
+        },
+        ListHeaderComponent,
+        data.length
+          ? data.map((item, index) =>
+              ReactModule.createElement(
+                ReactModule.Fragment,
+                { key: index },
+                renderItem({
+                  item,
+                  drag: mockHomeDrag,
+                  isActive: false,
+                  getIndex: () => index,
+                }),
+              ),
+            )
+          : ListEmptyComponent,
+      ),
+    ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 const actions = (): HomeDashboardActions => ({
   refresh: jest.fn(async () => undefined),
   showRefreshError: jest.fn(),
@@ -14,6 +64,7 @@ const actions = (): HomeDashboardActions => ({
   openTodo: jest.fn(),
   openRanked: jest.fn(),
   openUpgradeTracker: jest.fn(),
+  reorderCards: jest.fn(),
 });
 
 describe('DashboardScreen states', () => {
@@ -79,5 +130,12 @@ describe('DashboardScreen states', () => {
     expect(screen.getByText('Open the tracker to import or refresh upgrade data.')).toBeTruthy();
     expect(screen.getByText('2 accounts')).toBeTruthy();
     expect(screen.getAllByText('-')).toHaveLength(3);
+    expect(screen.queryByTestId('home-card-drag-upgrade')).toBeNull();
+    expect(screen.getByTestId('home-draggable-list').props.accessibilityLabel).toBe(
+      'scroll-enabled',
+    );
+    mockHomeDrag.mockClear();
+    await fireEvent(screen.getByTestId('home-card-upgrade'), 'longPress');
+    expect(mockHomeDrag).toHaveBeenCalledTimes(1);
   });
 });

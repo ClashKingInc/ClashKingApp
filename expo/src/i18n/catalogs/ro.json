@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Golește memoria cache a imaginilor",
+  "settingsImageCacheCleared": "Memoria cache a imaginilor a fost golită.",
+  "settingsImageCacheClearFailed": "Memoria cache a imaginilor nu a putut fi golită. Încearcă din nou.",
+  "startupCheckingUpdate": "Se caută actualizări…",
+  "startupDownloadingUpdate": "Se descarcă actualizarea…",
+  "startupUpdateInBackground": "Actualizează în fundal",
   "warStatsRangeTitle": "Intervalul statisticilor de război",
   "warStatsRangeDescription": "Alege dacă statisticile acoperă un număr fix de războaie recente sau o perioadă recentă exprimată în zile.",
   "warStatsRangeDays": "Zile",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "Ţară",
   "legendsLocalRankTitle": "Rang local",
   "legendsGlobalRankTitle": "Rang global",
+  "legendsYourArmy": "Armata ta",
+  "legendsArmyUsedAgainstYou": "Armata folosită împotriva ta",
   "warWinsTitle": "Câștigă",
   "warLossesTitle": "Pierderi",
   "warDrawsTitle": "Remiză",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "A intrat",
   "playerJoinLeaveLeft": "A ieșit",
   "playerJoinLeaveNoHistory": "Nu există istoric al intrărilor și ieșirilor",
-  "playerJoinLeaveNoClanTotals": "Nu există totaluri pentru clanuri"
+  "playerJoinLeaveNoClanTotals": "Nu există totaluri pentru clanuri",
+  "cwlRegisteredRoster": "Lot înscris",
+  "cwlMatches": "Confruntări",
+  "cwlNextMatchup": "Următoarea confruntare",
+  "cwlOtherMatches": "Alte confruntări",
+  "cwlOutlook": "Perspectivele sezonului",
+  "cwlFirstPlace": "Primul loc",
+  "cwlTopTwo": "Primele două",
+  "cwlRemainingOpponents": "Adversari rămași",
+  "cwlWinBonusNote": "Stelele includ 10 stele bonus pentru fiecare victorie încheiată.",
+  "cwlEstimateNote": "Estimările folosesc războaiele încheiate și adversarii rămași, nu schimbările de componență. Sunt necesare cel puțin două războaie încheiate per clan. Estimările nu sunt calibrate; regulile de promovare diferă în funcție de ligă.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# oră} other {# ore}}} other {{count, plural, one {# minut} other {# minute}}}}"
 }

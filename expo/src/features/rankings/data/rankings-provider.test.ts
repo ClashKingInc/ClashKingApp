@@ -94,29 +94,21 @@ test('ignores an older response that completes after a newer reload', async () =
   expect(provider.isLoading).toBe(false);
 });
 
-test('starts the initial worldwide leaderboard without waiting for locations', async () => {
-  let resolveLocations!: (locations: readonly RankingLocation[]) => void;
-  const fetchRankings = jest.fn(async (query: RankingQuery) => resultFor(query, '#IMMEDIATE'));
-  const provider = new RankingsProvider(
-    {
-      fetchLocations: () =>
-        new Promise((resolve) => {
-          resolveLocations = resolve;
-        }),
-      fetchRankings,
-    },
-    { leagueOptions: [RankingLeagueOption.legendTwo] },
-  );
+test('loads locations before the initial location-only leaderboard', async () => {
+  const service = new RecordingService();
+  const provider = new RankingsProvider(service, {
+    leagueOptions: [RankingLeagueOption.legendTwo],
+  });
+  provider.audience = RankingAudience.clans;
+  provider.clanBoard = RankingBoard.clanDonations;
 
-  const initializing = provider.initialize();
-  await Promise.resolve();
-  expect(fetchRankings).toHaveBeenCalledWith(
-    expect.objectContaining({ board: RankingBoard.playerHome, location: provider.location }),
-  );
-  expect(provider.result?.entries[0]?.tag).toBe('#IMMEDIATE');
+  await provider.initialize();
 
-  resolveLocations([RankingLocation.worldwide()]);
-  await initializing;
+  expect(service.queries).toHaveLength(1);
+  expect(service.queries[0]).toMatchObject({
+    board: RankingBoard.clanDonations,
+    location: expect.objectContaining({ id: 32000007 }),
+  });
 });
 
 class RecordingService implements RankingsServiceContract {

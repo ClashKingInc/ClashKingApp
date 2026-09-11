@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Обриши кеш слика",
+  "settingsImageCacheCleared": "Кеш слика је обрисан.",
+  "settingsImageCacheClearFailed": "Није могуће обрисати кеш слика. Покушај поново.",
+  "startupCheckingUpdate": "Провера ажурирања…",
+  "startupDownloadingUpdate": "Преузимање ажурирања…",
+  "startupUpdateInBackground": "Ажурирај у позадини",
   "warStatsRangeTitle": "Опсег ратне статистике",
   "warStatsRangeDescription": "Изаберите да ли статистика обухвата одређени број недавних ратова или недавни период у данима.",
   "warStatsRangeDays": "Дани",
@@ -1556,6 +1562,8 @@
   "legendsCountryTitle": "Држава",
   "legendsLocalRankTitle": "Локални ранг",
   "legendsGlobalRankTitle": "Глобални ранг",
+  "legendsYourArmy": "Tvoja vojska",
+  "legendsArmyUsedAgainstYou": "Vojska korišćena protiv tebe",
   "warWinsTitle": "Побеђује",
   "warLossesTitle": "Губици",
   "warDrawsTitle": "Дравс",
@@ -4756,6 +4764,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Пријављени састав",
+  "cwlMatches": "Мечеви",
+  "cwlNextMatchup": "Следећи меч",
+  "cwlOtherMatches": "Остали мечеви",
+  "cwlOutlook": "Изгледи за сезону",
+  "cwlFirstPlace": "Прво место",
+  "cwlTopTwo": "Прва два",
+  "cwlRemainingOpponents": "Преостали противници",
+  "cwlWinBonusNote": "Звезде укључују 10 бонус звезда за сваку завршену победу.",
+  "cwlEstimateNote": "Процене користе завршене ратове и преостале противнике, не промене састава. Потребна су бар два завршена рата по клану. Процене нису калибрисане; правила напредовања зависе од лиге.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# сат} few {# сата} other {# сати}}} other {{count, plural, one {# минут} few {# минута} other {# минута}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

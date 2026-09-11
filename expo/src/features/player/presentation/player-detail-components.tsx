@@ -76,6 +76,7 @@ import type {
   PlayerActivityFeed,
   PlayerBattlelogData,
   PlayerBattlelogEntry,
+  PlayerBattlelogMode,
   PlayerPopularArmyItem,
   PlayerCwlHistory,
   PlayerCwlSeason,
@@ -90,6 +91,8 @@ import type {
 import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { PlayerSuperTroop } from '../models/player-items';
 import { PlayerBattlelogArmyCatalog } from '../models/player-battlelog';
+import { exportPlayerBattlelog } from './player-battlelog-export';
+import { battlelogLootTimeline, PlayerBattlelogShareModal } from './player-battlelog-share';
 import type {
   EnemyTownhallStats as EnemyThStats,
   PlayerWarStatsData,
@@ -200,7 +203,11 @@ export function PlayerDetailHeader({
           key={`${String(name)}-${index}`}
           accessibilityRole={ranked ? 'button' : undefined}
           disabled={!ranked}
-          onPress={() => actions.openRanked(player)}
+          onPress={() =>
+            String(name).toLowerCase().includes('legend')
+              ? actions.openLegends(player)
+              : actions.openRanked(player)
+          }
           style={styles.leagueTilePressable}
         >
           <PillSurface style={styles.leagueBlock}>
@@ -499,11 +506,7 @@ export function playerHeaderClanIdentity(
   return {
     tag,
     name: linked?.name || player.clanOverview.name || tag,
-    badgeUrl:
-      linked?.badgeUrls?.small ||
-      linked?.badgeUrls?.medium ||
-      player.clanOverview.badgeUrls.small ||
-      player.clanOverview.badgeUrls.medium,
+    badgeUrl: ImageAssets.clanBadgeForTag(tag),
   };
 }
 
@@ -693,7 +696,13 @@ export function PlayerItemSection({
         )}
       </Pressable>
       {expanded ? (
-        <ResponsiveGrid minItemWidth={54} maxColumns={10} gap={8}>
+        <ResponsiveGrid
+          minItemWidth={54}
+          maxColumns={10}
+          gap={8}
+          waitForLayout
+          testID="player-item-grid"
+        >
           {visible.map((item, index) => {
             const thMax = maxLevelForItemAtTH(item, townHallLevel);
             const isGlobalMax = item.maxLevel > 0 && item.level >= item.maxLevel;
@@ -960,11 +969,21 @@ function resourceImage(key: string) {
   return `${ImageAssets.baseUrl}/resources/${key}.webp`;
 }
 
-export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null | undefined }) {
+export function PlayerBattlelogTab({
+  data,
+  playerName = '',
+  showMessage,
+}: {
+  data: PlayerBattlelogData | null | undefined;
+  playerName?: string;
+  showMessage?: (message: string) => void;
+}) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const [mode, setMode] = useState<'ranked' | 'farming'>('ranked');
+  const [mode, setMode] = useState<PlayerBattlelogMode>('ranked');
   const [direction, setDirection] = useState<'all' | 'attacks' | 'defenses'>('all');
+  const [exporting, setExporting] = useState(false);
+  const [shareVisible, setShareVisible] = useState(false);
   if (!data)
     return <EmptyState title={t('playerBattlelogLoadError')} body={t('generalNoDataAvailable')} />;
   const battles = data.forMode(mode);
@@ -997,6 +1016,7 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
       <Segmented
         choices={[
           ['ranked', t('playerBattlelogRanked')],
+          ['legend', t('legendsTitle')],
           ['farming', t('playerBattlelogFarming')],
         ]}
         selected={mode}
@@ -1007,7 +1027,9 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
           <CKText role="titleLarge" style={styles.grow}>
             {mode === 'ranked'
               ? t('playerBattlelogRankedOverview')
-              : t('playerBattlelogFarmingOverview')}
+              : mode === 'legend'
+                ? t('legendsTitle')
+                : t('playerBattlelogFarmingOverview')}
           </CKText>
           <CKText muted>{t('playerBattlelogBattleCount', { count: battles.length })}</CKText>
         </View>
@@ -1049,6 +1071,9 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
           popular={popularDefenses}
         />
       </Surface>
+      {mode === 'farming' && attacks.length ? (
+        <BattlelogLootGrid attacks={attacks} locale={locale} />
+      ) : null}
       {!data.officialAvailable || !data.historyAvailable ? (
         <Surface radius={ckRadius.tile} style={styles.notice}>
           <Info size={18} color={theme.onSurfaceVariant} />
@@ -1072,6 +1097,39 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
           value={direction}
           onSelect={(value) => setDirection(value as typeof direction)}
         />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('generalExport')}
+          disabled={items.length === 0}
+          onPress={() => setShareVisible(true)}
+          style={[
+            styles.battleExport,
+            { backgroundColor: colorWithAlpha(theme.primary, 0.14) },
+            items.length === 0 && styles.disabled,
+          ]}
+        >
+          <Upload color={theme.primary} size={18} />
+          <CKText role="labelLarge">{t('generalExport')}</CKText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="CSV"
+          disabled={exporting || items.length === 0}
+          onPress={() => {
+            setExporting(true);
+            void exportPlayerBattlelog(items, playerName, mode)
+              .then(() => showMessage?.(t('exportSuccess')))
+              .catch((error) => showMessage?.(String(error)))
+              .finally(() => setExporting(false));
+          }}
+          style={[
+            styles.battleExport,
+            { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.5) },
+            (exporting || items.length === 0) && styles.disabled,
+          ]}
+        >
+          {exporting ? <LoadingIndicator /> : <CKText role="labelLarge">CSV</CKText>}
+        </Pressable>
       </View>
       <View testID="battle-responsive-grid">
         <ResponsiveGrid minItemWidth={430} maxColumns={2}>
@@ -1088,6 +1146,89 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
       ) : !items.length ? (
         <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
       ) : null}
+      <PlayerBattlelogShareModal
+        items={items}
+        mode={mode}
+        onClose={() => setShareVisible(false)}
+        playerName={playerName}
+        visible={shareVisible}
+      />
+    </View>
+  );
+}
+
+function BattlelogLootGrid({
+  attacks,
+  locale,
+}: {
+  attacks: readonly PlayerBattlelogEntry[];
+  locale: string;
+}) {
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const [resource, setResource] = useState<'gold' | 'elixir' | 'darkElixir'>('gold');
+  const rows = [
+    [ImageAssets.gold, t('resourceGold'), attacks.reduce((sum, item) => sum + item.gold, 0)],
+    [ImageAssets.elixir, t('resourceElixir'), attacks.reduce((sum, item) => sum + item.elixir, 0)],
+    [
+      ImageAssets.darkElixir,
+      t('resourceDarkElixir'),
+      attacks.reduce((sum, item) => sum + item.darkElixir, 0),
+    ],
+  ] as const;
+  const timeline = battlelogLootTimeline(attacks, resource);
+  return (
+    <View testID="battlelog-loot-grid" style={styles.sections}>
+      <ResponsiveGrid minItemWidth={150} maxColumns={3}>
+        {rows.map(([image, label, total]) => (
+          <Surface key={label} radius={ckRadius.tile} style={styles.lootSummaryTile}>
+            <MobileWebImage imageUrl={image} style={styles.lootSummaryImage} />
+            <View style={styles.grow}>
+              <CKText muted role="labelSmall">
+                {label} · {t('generalTotal')}
+              </CKText>
+              <CKText role="titleMedium">{formatPlayerResourceAmount(total, locale)}</CKText>
+              <CKText muted role="labelSmall">
+                {t('generalAverage')} · {formatPlayerResourceAmount(total / attacks.length, locale)}
+              </CKText>
+            </View>
+          </Surface>
+        ))}
+      </ResponsiveGrid>
+      <Surface radius={ckRadius.tile} style={styles.lootContributionCard}>
+        <Segmented
+          choices={[
+            ['gold', t('resourceGold')],
+            ['elixir', t('resourceElixir')],
+            ['darkElixir', t('resourceDarkElixir')],
+          ]}
+          selected={resource}
+          onSelect={(value) => setResource(value as typeof resource)}
+        />
+        <View style={styles.lootContributionGrid}>
+          {timeline.map((day) => (
+            <View
+              accessible
+              accessibilityLabel={`${day.day}: ${day.value}`}
+              key={day.day}
+              style={[
+                styles.lootContributionCell,
+                {
+                  backgroundColor: colorWithAlpha(
+                    theme.primary,
+                    day.value === 0 ? 0.08 : 0.18 + day.intensity * 0.82,
+                  ),
+                },
+              ]}
+            >
+              <CKText muted role="labelSmall">
+                {day.day.slice(5)}
+              </CKText>
+              <CKText role="labelSmall">{compactNumber(day.value, locale)}</CKText>
+            </View>
+          ))}
+        </View>
+      </Surface>
     </View>
   );
 }
@@ -1137,25 +1278,27 @@ function BattleRow({ item }: { item: PlayerBattlelogEntry }) {
           ))}
           <CKText role="rowTitle">{item.destructionPercentage}%</CKText>
         </View>
-        <View style={styles.wrap}>
-          {[
-            [ImageAssets.gold, t('resourceGold'), item.gold],
-            [ImageAssets.elixir, t('resourceElixir'), item.elixir],
-            [ImageAssets.darkElixir, t('resourceDarkElixir'), item.darkElixir],
-          ].map(([image, label, value]) =>
-            Number(value) > 0 ? (
-              <View
-                key={String(label)}
-                accessible
-                accessibilityLabel={`${label}: ${value}`}
-                style={styles.lootValue}
-              >
-                <MobileWebImage imageUrl={String(image)} style={styles.resourceIcon} />
-                <CKText role="labelSmall">{compactNumber(Number(value), locale)}</CKText>
-              </View>
-            ) : null,
-          )}
-        </View>
+        {item.attack ? (
+          <View style={styles.wrap}>
+            {[
+              [ImageAssets.gold, t('resourceGold'), item.gold],
+              [ImageAssets.elixir, t('resourceElixir'), item.elixir],
+              [ImageAssets.darkElixir, t('resourceDarkElixir'), item.darkElixir],
+            ].map(([image, label, value]) =>
+              Number(value) > 0 ? (
+                <View
+                  key={String(label)}
+                  accessible
+                  accessibilityLabel={`${label}: ${value}`}
+                  style={styles.lootValue}
+                >
+                  <MobileWebImage imageUrl={String(image)} style={styles.resourceIcon} />
+                  <CKText role="labelSmall">{compactNumber(Number(value), locale)}</CKText>
+                </View>
+              ) : null,
+            )}
+          </View>
+        ) : null}
       </View>
       {army.length ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -3955,6 +4098,7 @@ function average(values: readonly number[]) {
 
 const styles = StyleSheet.create({
   grow: { flex: 1 },
+  disabled: { opacity: 0.46 },
   centerText: { textAlign: 'center' },
   centeredWrap: { justifyContent: 'center' },
   superTroopImage: { width: 50, height: 50, borderRadius: 6 },
@@ -4289,6 +4433,34 @@ const styles = StyleSheet.create({
   rowCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
   joinLeaveMovement: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   battleCard: { minHeight: 120, gap: 8, paddingHorizontal: 12, paddingVertical: 8 },
+  battleExport: {
+    minHeight: 40,
+    paddingHorizontal: 12,
+    borderRadius: ckRadius.control,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  lootSummaryTile: {
+    minHeight: 78,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  lootSummaryImage: { width: 34, height: 34 },
+  lootContributionCard: { padding: 12, gap: 12 },
+  lootContributionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  lootContributionCell: {
+    width: '12.5%',
+    minWidth: 62,
+    aspectRatio: 1.25,
+    borderRadius: 8,
+    padding: 6,
+    justifyContent: 'space-between',
+  },
   battleResult: { alignItems: 'center' },
   directionImage: { width: 20, height: 20, resizeMode: 'contain' },
   starImage: { width: 19, height: 19, resizeMode: 'contain' },

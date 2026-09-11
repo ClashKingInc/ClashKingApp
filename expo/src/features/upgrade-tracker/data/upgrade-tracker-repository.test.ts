@@ -1,4 +1,4 @@
-import { ApiClient } from '../../../core/api/client';
+import { createContractTestApi } from '../../../core/api/contract-api.testing';
 import type { StringStore } from '../../../services/storage/auth-storage';
 import { UpgradeTrackerFormatError, UpgradeTrackerRepository } from './upgrade-tracker-repository';
 
@@ -27,24 +27,30 @@ const bundle = {
   ],
 };
 function reply(body: unknown, status = 200): Response {
-  return {
-    status,
-    url: '',
-    headers: new Headers(),
-    text: async () => JSON.stringify(body),
-  } as Response;
+  return new Response(JSON.stringify(body), { status });
+}
+function upgradeResponse(data: Record<string, unknown>) {
+  return { player_tag: '#TEST', data, updated_at: null };
+}
+function preferencesResponse(preferences: Record<string, unknown>) {
+  return { player_tag: '#TEST', preferences, updated_at: null };
 }
 function setup(
   handler: (path: string, init: RequestInit) => Promise<Response> = async () => reply({}, 404),
 ) {
   const calls: { path: string; init: RequestInit }[] = [];
   const fetchImplementation = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = new URL(String(input)),
-      request = init ?? {};
+    const original = input as Request;
+    const url = new URL(original.url),
+      request: RequestInit = {
+        method: original.method,
+        headers: Object.fromEntries(original.headers.entries()),
+        ...(original.body === null ? {} : { body: await original.clone().text() }),
+      };
     calls.push({ path: url.pathname, init: request });
     return handler(url.pathname, request);
   });
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.test',
     environment: 'development',
     tokenProvider: { getAccessToken: async () => 'token' },
@@ -112,7 +118,9 @@ test('coalesces normalized remote loads and persists successful remote data', as
   repository.configureRemote({ accountId: 'user-1', verifiedPlayerTags: ['#TEST'] });
   const first = repository.load('test', true),
     second = repository.load('#TEST', true);
-  resolve?.(reply({ data: { tag: '#TEST', name: 'Remote', buildings: [{ data: 1, lvl: 18 }] } }));
+  resolve?.(
+    reply(upgradeResponse({ tag: '#TEST', name: 'Remote', buildings: [{ data: 1, lvl: 18 }] })),
+  );
   const [one, two] = await Promise.all([first, second]);
   expect(one).toBe(two);
   expect(repository.peekCached('#TEST')?.name).toBe('Remote');
@@ -126,7 +134,7 @@ test('validated import prevents an older remote load from repopulating cache', a
   });
   const { repository } = setup(async (path, init) => {
     if (path.endsWith('/upgrades') && init.method === 'GET') return pending;
-    if (path.endsWith('/upgrades') && init.method === 'PUT') return reply({});
+    if (path.endsWith('/upgrades') && init.method === 'PUT') return reply(upgradeResponse({}));
     return reply({}, 404);
   });
   repository.configureRemote({ accountId: 'user1', verifiedPlayerTags: ['#TEST'] });
@@ -138,21 +146,25 @@ test('validated import prevents an older remote load from repopulating cache', a
     ),
     { allowedTags: new Set(['#TEST']) },
   );
-  resolveGet?.(reply({ data: { tag: '#TEST', name: 'Stale remote', buildings: [] } }));
+  resolveGet?.(reply(upgradeResponse({ tag: '#TEST', name: 'Stale remote', buildings: [] })));
   await stale;
   expect(imported.name).toBe('Imported');
   expect(repository.peekCached('#TEST')?.name).toBe('Imported');
 });
 
 test('verified remote writes use whole-object PUT/PATCH and unverified writes fail', async () => {
-  const { repository, calls } = setup(async () => reply({}));
+  const { repository, calls } = setup(async (path) =>
+    path.endsWith('/upgrade-preferences')
+      ? reply(preferencesResponse({}))
+      : reply(upgradeResponse({})),
+  );
   repository.configureRemote({ accountId: 'user-1', verifiedPlayerTags: ['#TEST'] });
   await repository.saveRawSnapshot('#TEST', { tag: '#TEST', buildings: [{ data: 1, lvl: 18 }] });
   await repository.savePlanPreferences('#TEST', 20, 'shortest');
   expect(calls.map((call) => [call.init.method, call.path])).toEqual(
     expect.arrayContaining([
-      ['PUT', '/links/user-1/%23TEST/upgrades'],
-      ['PATCH', '/links/user-1/%23TEST/upgrade-preferences'],
+      ['PUT', '/v2/links/user-1/%23TEST/upgrades'],
+      ['PATCH', '/v2/links/user-1/%23TEST/upgrade-preferences'],
     ]),
   );
   repository.configureRemote({ accountId: 'user-1', verifiedPlayerTags: ['#OTHER'] });
@@ -173,7 +185,7 @@ test('persists plan preferences locally per normalized account tag', async () =>
 test('uses a warmed snapshot unless force refresh explicitly revalidates remote data', async () => {
   const { repository, calls } = setup(async (path) =>
     path.endsWith('/upgrades')
-      ? reply({ data: { tag: '#TEST', name: 'Remote', buildings: [] } })
+      ? reply(upgradeResponse({ tag: '#TEST', name: 'Remote', buildings: [] }))
       : reply({}, 404),
   );
   await repository.importSnapshotBytes(
@@ -259,7 +271,7 @@ test('loads saved snapshot batches, filters malformed index entries, and reuses 
 test('uses remote preferences when valid and keeps local preferences for invalid or failed responses', async () => {
   const { repository, store, calls } = setup(async (path) => {
     if (path.endsWith('/upgrade-preferences')) {
-      return reply({ preferences: { strategy: 'cheapest', gold_pass_percent: 10 } });
+      return reply(preferencesResponse({ strategy: 'cheapest', gold_pass_percent: 10 }));
     }
     return reply({}, 404);
   });
@@ -268,7 +280,7 @@ test('uses remote preferences when valid and keeps local preferences for invalid
     strategy: 'cheapest',
     gold_pass_percent: 10,
   });
-  expect(calls[0]?.path).toBe('/links/user/%23TEST/upgrade-preferences');
+  expect(calls[0]?.path).toBe('/v2/links/user/%23TEST/upgrade-preferences');
 
   await store.setItem(
     'upgrade_tracker_preferences_v2_#TEST',
@@ -295,7 +307,7 @@ test('surfaces rejected remote writes and ignores empty remote snapshot response
     'Could not save upgrade preferences (503)',
   );
 
-  const empty = setup(async () => reply({ data: {} }));
+  const empty = setup(async () => reply(upgradeResponse({})));
   empty.repository.configureRemote({ accountId: 'user', verifiedPlayerTags: ['#TEST'] });
   await expect(empty.repository.load('#TEST', true)).resolves.toBeNull();
 });

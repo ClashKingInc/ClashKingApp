@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import { canonicalTag } from '../../../core/domain/tags';
 import { APP_FEATURE_FLAGS } from '../../../core/feature-flags/feature-flags';
+import { STORAGE_KEYS } from '../../../core/storage/storage';
 import { useAppRuntime, useAppState } from '../../../core/app/runtime-context';
 import { useI18n } from '../../../i18n';
 import { Snackbar } from '../../../ui';
@@ -15,7 +16,14 @@ import {
   type AppAnnouncement,
 } from '../data';
 import { loadHomeUpgradeSnapshots } from '../data/home-upgrade-loader';
-import type { HomeAnnouncement, HomeDashboardActions, HomeDashboardModel } from './contracts';
+import {
+  DEFAULT_HOME_CARD_ORDER,
+  normalizeHomeCardOrder,
+  type HomeAnnouncement,
+  type HomeCardId,
+  type HomeDashboardActions,
+  type HomeDashboardModel,
+} from './contracts';
 import { DashboardScreen } from './dashboard-screen';
 
 export interface HomeDashboardRootProps {
@@ -42,8 +50,24 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   }>({ signature: '', data: new Map() });
   const [announcements, setAnnouncements] = useState<readonly AppAnnouncement[]>([]);
   const [snackbar, setSnackbar] = useState<string>();
+  const [cardOrder, setCardOrder] = useState<readonly HomeCardId[]>(DEFAULT_HOME_CARD_ORDER);
   const rankedRefreshGeneration = useRef(0);
   const upgradeRefreshGeneration = useRef(0);
+
+  useEffect(() => {
+    let current = true;
+    void runtime.preferences.getString(STORAGE_KEYS.homeCardOrder).then((stored) => {
+      if (!current || !stored) return;
+      try {
+        setCardOrder(normalizeHomeCardOrder(JSON.parse(stored)));
+      } catch {
+        // Invalid local preferences fall back to the stable default order.
+      }
+    });
+    return () => {
+      current = false;
+    };
+  }, [runtime.preferences]);
 
   useEffect(() => {
     const changed = () => setServiceRevision((value) => value + 1);
@@ -187,9 +211,11 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
           }
         : {}),
       upgradeTrackerEnabled: upgradeEnabled,
+      cardOrder,
     }),
     [
       announcements,
+      cardOrder,
       linkedPlayers,
       locale,
       rankedLoading,
@@ -221,8 +247,13 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
       openTodo: props.openTodo,
       openRanked: props.openRanked,
       openUpgradeTracker: props.openUpgradeTracker,
+      reorderCards: (order) => {
+        const normalized = normalizeHomeCardOrder(order);
+        setCardOrder(normalized);
+        void runtime.preferences.setString(STORAGE_KEYS.homeCardOrder, JSON.stringify(normalized));
+      },
     }),
-    [announcements, props, refresh],
+    [announcements, props, refresh, runtime.preferences],
   );
 
   return (

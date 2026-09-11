@@ -1,6 +1,7 @@
 import {
   PlayerLegendSeason,
   RankedLeagueBattle,
+  RankedLeagueBattlelog,
   RankedLeagueData,
   RankedLeagueGroup,
   RankedLeagueHistoryEntry,
@@ -23,10 +24,21 @@ describe('Ranked and Legend view models', () => {
   const currentMember = new RankedLeagueMember('#P', 'Player', '#C', 'Clan', 1200, 2, 1, 1, 2);
   const attack = new RankedLeagueBattle('#A', 'A', 3, 100, 40, new Date('2026-08-25T12:00:00Z'));
   const defense = new RankedLeagueBattle('#D', 'D', 2, 80, 20, new Date('2026-08-26T12:00:00Z'));
-  const currentGroup = new RankedLeagueGroup(
+  const currentGroup = new RankedLeagueGroup('#G', 1_777_000_000, [currentMember]);
+  const currentBattlelog = new RankedLeagueBattlelog(
+    '#P',
+    '1777000000',
     '#G',
-    1_777_000_000,
-    [currentMember],
+    2,
+    false,
+    true,
+    1,
+    0,
+    true,
+    2,
+    1,
+    14,
+    14,
     [attack],
     [defense],
   );
@@ -47,6 +59,8 @@ describe('Ranked and Legend view models', () => {
     ]),
     history,
     currentGroup,
+    null,
+    currentBattlelog,
   );
 
   test('builds the live period from group logs and historical periods from official summaries', () => {
@@ -54,18 +68,47 @@ describe('Ranked and Legend view models', () => {
     expect(periods).toHaveLength(3);
     expect(periods[0]).toMatchObject({
       isCurrent: true,
-      attackCount: 1,
+      attackCount: 2,
       defenseCount: 1,
       attackStars: 3,
       defenseStars: 2,
       placement: 1,
       hasDetails: true,
+      attacksComplete: false,
+      defensesComplete: true,
+      missingRealAttacks: 1,
+      automaticDefensesDerived: true,
+      attackMaxBattles: 14,
+      defenseMaxBattles: 14,
     });
     expect(periods[1]).toMatchObject({
       isCurrent: false,
       attackCount: 5,
       defenseCount: 5,
       hasDetails: false,
+    });
+  });
+
+  test('uses the canonical battlelog season when the optional group is unavailable', () => {
+    const withoutGroup = new RankedLeagueData(
+      '#P',
+      'Player',
+      18,
+      1200,
+      1300,
+      gold,
+      new Map([[2, gold]]),
+      [],
+      null,
+      null,
+      currentBattlelog,
+    );
+
+    expect(rankedPeriods(withoutGroup)[0]).toMatchObject({
+      seasonId: 1_777_000_000,
+      hasDetails: true,
+      attackCount: 2,
+      defenseCount: 1,
     });
   });
 
@@ -108,6 +151,7 @@ describe('Ranked and Legend view models', () => {
       trophyAverage: null,
       remaining: null,
     });
+    expect(rankedBattleSummary([attack], 2, 14, false).remaining).toBeNull();
   });
 
   test('sorts ranked trophy history chronologically', () => {

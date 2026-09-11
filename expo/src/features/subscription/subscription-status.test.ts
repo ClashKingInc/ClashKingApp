@@ -1,5 +1,5 @@
 import { SubscriptionStatus } from './subscription-status';
-import type { ApiClient } from '../../core/api/client';
+import { createContractTestApi } from '../../core/api/contract-api.testing';
 import { SubscriptionService } from './subscription-service';
 
 describe('SubscriptionStatus', () => {
@@ -24,12 +24,33 @@ describe('SubscriptionStatus', () => {
 
 describe('SubscriptionService', () => {
   it('uses the authenticated Flutter endpoint and parses its response', async () => {
-    const requestRecord = jest.fn(async () => ({ active: true, status: 'active' }));
-    const service = new SubscriptionService({ requestRecord } as unknown as ApiClient);
+    const fetchImplementation = jest.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            provider: 'stripe',
+            active: true,
+            status: 'active',
+            checkoutEnabled: true,
+            assignedServerId: null,
+            rosterAssistantSpentUsd: 0,
+            rosterAssistantRemainingUsd: 5,
+            bookmarkNotificationsLimit: 10,
+            rosterAssistantMonthlyCreditUsd: 5,
+          }),
+        ),
+    );
+    const service = new SubscriptionService(
+      createContractTestApi({
+        baseUrl: 'https://api.test',
+        tokenProvider: { getAccessToken: async () => 'token' },
+        fetchImplementation,
+      }),
+    );
 
     await expect(service.load()).resolves.toMatchObject({ active: true, status: 'active' });
-    expect(requestRecord).toHaveBeenCalledWith('/billing/subscription', {
-      requiresAuth: true,
-    });
+    const request = (fetchImplementation.mock.calls as unknown as [Request][])[0]![0];
+    expect(request.url).toBe('https://api.test/v2/billing/subscription');
+    expect(request.headers.get('authorization')).toBe('Bearer token');
   });
 });

@@ -1,9 +1,9 @@
-import type { ApiClient } from '../../core/api/client';
+import type { ContractApiService } from '../../core/api/contract-api';
 import { WarCwlService } from '../war/data/war-cwl-service';
 import type { CwlLeague, WarCwl, WarInfo } from '../war/models';
 
 /** Resolves the current regular-war/CWL state and adapts it for the native widget payload. */
-export async function fetchWarWidgetSummary(api: ApiClient, clanTag: string): Promise<unknown> {
+export async function fetchWarWidgetSummary(api: ContractApiService, clanTag: string): Promise<unknown> {
   const tag = normalizeTag(clanTag);
   const service = new WarCwlService(api);
   await service.loadAllWarData([tag], { notify: false, throwOnError: true });

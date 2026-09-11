@@ -1,4 +1,5 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import lockfile from '../../../../package-lock.json';
 
 import { I18nProvider, type SupportedLocale } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
@@ -8,6 +9,9 @@ import { GENERATED_LICENSE_INVENTORY } from './generated-license-inventory';
 import { LicensesScreen } from './licenses-screen';
 import { NotificationSettingsScreen } from './notification-settings-screen';
 import { SettingsScreen } from './settings-screen';
+import { LinkParametersContext } from '../../../core/deep-links/link-parameters';
+
+jest.mock('../../../core/assets/local-asset-cache', () => ({ localImageCache: { subscribe: () => () => {}, getRevision: () => 0, peek: () => undefined, clear: jest.fn() } }));
 
 jest.mock('../../../ui/accessibility', () => ({
   useCKAccessibility: () => ({
@@ -25,6 +29,24 @@ function wrapped(node: React.ReactNode) {
   );
 }
 
+it('opens the requested dependency license directly without a tap', async () => {
+  const view = await render(
+    wrapped(
+      <LinkParametersContext.Provider value={{ package: 'example' }}>
+        <LicensesScreen
+          applicationName="ClashKing"
+          applicationVersion="0.4.2"
+          onBack={jest.fn()}
+          packages={[
+            { packages: ['example@1.0.0'], license: 'MIT', text: 'The requested license text' },
+          ]}
+        />
+      </LinkParametersContext.Provider>,
+    ),
+  );
+  expect(view.getByText('The requested license text')).toBeTruthy();
+});
+
 function wrappedWithLocale(node: React.ReactNode, locale: SupportedLocale) {
   return (
     <I18nProvider locale={locale}>
@@ -35,7 +57,20 @@ function wrappedWithLocale(node: React.ReactNode, locale: SupportedLocale) {
 
 it('ships complete verbatim production dependency licenses and opens their text', async () => {
   const covered = GENERATED_LICENSE_INVENTORY.flatMap(({ packages }) => packages);
-  expect(covered.length).toBeGreaterThan(850);
+  const productionPackages = Object.entries(lockfile.packages)
+    .filter(
+      ([path, metadata]) =>
+        path.startsWith('node_modules/') &&
+        !(metadata as { dev?: boolean }).dev &&
+        !path.endsWith('/@clashking/native'),
+    )
+    .map(([path, metadata]) => {
+      // npm aliases retain the actual licensed package name in lock metadata.
+      // For example, @jest/react-is-18 installs the react-is package.
+      const { name, version } = metadata as { name?: string; version?: string };
+      return `${name ?? path.split('node_modules/').at(-1)}@${version}`;
+    });
+  expect([...new Set(covered)].sort()).toEqual([...new Set(productionPackages)].sort());
   expect(covered.some((name) => name.startsWith('react@'))).toBe(true);
   expect(covered.some((name) => name.startsWith('react-native@'))).toBe(true);
   expect(GENERATED_LICENSE_INVENTORY.every(({ text }) => text.length > 40)).toBe(true);
@@ -65,9 +100,11 @@ it('keeps notification page chrome and skeletons while hydration is pending', as
           loadLocal: () => pending,
           load: () => pending,
           save: () => pending,
+          setAccountEnabled: () => pending,
+          deviceEnabled: () => pending,
+          setDeviceEnabled: () => pending,
           lastPushResult: () => null,
           initializePush: () => pending,
-          requestPermissionAndRegister: () => pending,
           tokenPreview: () => pending,
         }}
       />,
@@ -76,6 +113,47 @@ it('keeps notification page chrome and skeletons while hydration is pending', as
   expect(screen.getByText('Notifications')).toBeTruthy();
   expect(screen.getByLabelText('Loading...')).toBeTruthy();
   expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy();
+});
+
+it('updates one verified account even when notifications are disabled on this device', async () => {
+  const preferences = {
+    warAttacks: false,
+    warState: false,
+    warReminders: false,
+    raidReminders: false,
+    events: false,
+    announcements: false,
+    monthlySupport: false,
+    legendDefenses: true,
+    reminderTimings: [],
+    raidReminderTimings: [],
+    accounts: [{ tag: '#PLAYER', enabled: true }],
+  };
+  const setAccountEnabled = jest.fn(async (tag: string, enabled: boolean) => ({
+    tag,
+    enabled,
+  }));
+  const screen = await render(
+    wrapped(
+      <NotificationSettingsScreen
+        service={{
+          loadLocal: async () => preferences,
+          load: async () => preferences,
+          save: async (settings) => settings,
+          setAccountEnabled,
+          deviceEnabled: async () => false,
+          setDeviceEnabled: async () => ({ state: 'ready', token: 'token' }),
+          lastPushResult: () => ({ state: 'ready', token: 'token' }),
+          initializePush: async () => ({ state: 'ready', token: 'token' }),
+          tokenPreview: async () => 'token',
+        }}
+      />,
+    ),
+  );
+
+  await waitFor(() => expect(screen.getByText('#PLAYER')).toBeTruthy());
+  await act(async () => fireEvent.press(screen.getAllByRole('switch')[1]!));
+  await waitFor(() => expect(setAccountEnabled).toHaveBeenCalledWith('#PLAYER', false));
 });
 
 it('copies the version with Flutter-equivalent confirmation', async () => {
@@ -107,6 +185,57 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
   await fireEvent.press(screen.getByText('Version & Device'));
   expect(copyVersion).toHaveBeenCalledWith('Version 1.2.3\nDevice');
   await waitFor(() => expect(screen.getByText('Copied to clipboard')).toBeTruthy());
+});
+
+it.each(['en', 'en_GB'])('formats cache size for %s and clears images without signing out', async (currentLocale) => {
+  const clearImageCache = jest.fn(async () => {});
+  const logout = jest.fn(async () => {});
+  const screen = await render(wrapped(
+    <SettingsScreen
+      actions={{ changeLocale: async () => {}, changeTheme: async () => {},
+        open: jest.fn(), openDiscord: jest.fn(), showLicenses: jest.fn(),
+        copyVersion: jest.fn(), logout, clearImageCache }}
+      alternateIconsSupported={false} currentLocale={currentLocale} localeChoices={[]}
+      notificationsEnabled={false} themeMode="dark"
+      user={{ username: 'Person', email: null, avatarUrl: '' }}
+      versionLabel="Version 1" imageCacheBytes={44_669_338} warWidgetsEnabled={false}
+    />
+  ));
+  expect(screen.getByText('42.6 MB')).toBeTruthy();
+  expect(screen.queryByText('Remove downloaded images from this phone. Your accounts and saved data stay unchanged.')).toBeNull();
+  await fireEvent.press(screen.getByText('Clear image cache'));
+  await waitFor(() => expect(screen.getByText('Image cache cleared.')).toBeTruthy());
+  expect(clearImageCache).toHaveBeenCalledTimes(1);
+  expect(logout).not.toHaveBeenCalled();
+});
+
+it('hides notifications on web even when enabled by the feature flag', async () => {
+  const screen = await render(
+    wrapped(
+      <SettingsScreen
+        actions={{
+          changeLocale: async () => undefined,
+          changeTheme: async () => undefined,
+          open: jest.fn(),
+          openDiscord: jest.fn(),
+          showLicenses: jest.fn(),
+          copyVersion: jest.fn(),
+          logout: async () => undefined,
+        }}
+        alternateIconsSupported={false}
+        currentLocale="en"
+        localeChoices={[]}
+        notificationsEnabled
+        platform="web"
+        themeMode="system"
+        user={{ username: 'Person', email: null, avatarUrl: '' }}
+        versionLabel="Version 0.4.2"
+        warWidgetsEnabled={false}
+      />,
+    ),
+  );
+  expect(screen.queryByText('Notifications')).toBeNull();
+  expect(screen.getByText('Version & Device')).toBeTruthy();
 });
 
 it('localizes the iOS war widget setup dialog', async () => {

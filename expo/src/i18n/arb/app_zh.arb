@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "清除图片缓存",
+  "settingsImageCacheCleared": "图片缓存已清除。",
+  "settingsImageCacheClearFailed": "无法清除图片缓存。请重试。",
+  "startupCheckingUpdate": "正在检查更新…",
+  "startupDownloadingUpdate": "正在下载更新…",
+  "startupUpdateInBackground": "在后台更新",
   "warStatsRangeTitle": "部落战统计范围",
   "warStatsRangeDescription": "选择统计固定场数的近期部落战，或按天数统计近期时段。",
   "warStatsRangeDays": "天数",
@@ -1556,6 +1562,8 @@
   "legendsCountryTitle": "国家",
   "legendsLocalRankTitle": "当地排名",
   "legendsGlobalRankTitle": "全球排名",
+  "legendsYourArmy": "你的军队",
+  "legendsArmyUsedAgainstYou": "用于攻击你的军队",
   "warWinsTitle": "胜利",
   "warLossesTitle": "损失",
   "warDrawsTitle": "抽奖",
@@ -4756,6 +4764,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "已报名阵容",
+  "cwlMatches": "对战",
+  "cwlNextMatchup": "下一场对战",
+  "cwlOtherMatches": "其他对战",
+  "cwlOutlook": "赛季展望",
+  "cwlFirstPlace": "第一名",
+  "cwlTopTwo": "前两名",
+  "cwlRemainingOpponents": "剩余对手",
+  "cwlWinBonusNote": "星数包含每场已结束的胜利所获的10颗奖励星。",
+  "cwlEstimateNote": "估计基于已结束的对战和剩余对手，不考虑阵容变化。每个部落至少需要完成两场对战。这些估计未经校准；晋级规则因联赛而异。",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# 小时} other {# 小时}}} other {{count, plural, one {# 分钟} other {# 分钟}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

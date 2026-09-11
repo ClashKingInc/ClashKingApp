@@ -3,14 +3,13 @@ import {
   StatsAudience,
   StatsDateRange,
   StatsMetrics,
-  StatsOverviewResponse,
   StatsPerformanceResponse,
+  StatsPlayerCountsResponse,
   StatsSection,
 } from '../models';
 import { StatsLoadStatus, StatsProvider } from './stats-provider';
 import type { StatsRepositoryContract } from './stats-repository';
 
-const emptyMetrics = new StatsMetrics(false, 0, 0, 0, 0, 0, 0, 0, []);
 const performance = new StatsPerformanceResponse(
   new StatsDateRange(null, null),
   new StatsMetrics(true, 100, 2, 80, 1, 9, 50, 40, []),
@@ -19,17 +18,7 @@ const performance = new StatsPerformanceResponse(
 
 function repository(overrides: Partial<StatsRepositoryContract> = {}): StatsRepositoryContract {
   return {
-    loadOverview: jest.fn(
-      async () =>
-        new StatsOverviewResponse(
-          new StatsDateRange(null, null),
-          {} as never,
-          emptyMetrics,
-          emptyMetrics,
-          emptyMetrics,
-        ),
-    ),
-    loadPlayerCounts: jest.fn(),
+    loadPlayerCounts: jest.fn(async () => new StatsPlayerCountsResponse([], [])),
     loadClanCounts: jest.fn(),
     loadArmies: jest.fn(async () => new StatsArmiesResponse(new StatsDateRange(null, null), [], 0)),
     loadItems: jest.fn(),
@@ -52,14 +41,14 @@ describe('StatsProvider', () => {
     expect(provider.currentState.status).toBe(StatsLoadStatus.data);
   });
 
-  it('switches audience to overview and retains section caches', async () => {
+  it('switches audience to player counts and retains section caches', async () => {
     const repo = repository();
     const provider = new StatsProvider(repo);
     provider.selectAudience(StatsAudience.world);
     await Promise.resolve();
     await Promise.resolve();
-    expect(provider.section).toBe(StatsSection.overview);
-    expect(repo.loadOverview).toHaveBeenCalledTimes(1);
+    expect(provider.section).toBe(StatsSection.players);
+    expect(repo.loadPlayerCounts).toHaveBeenCalledTimes(1);
     provider.selectAudience(StatsAudience.battle);
     expect(provider.section).toBe(StatsSection.ranked);
   });

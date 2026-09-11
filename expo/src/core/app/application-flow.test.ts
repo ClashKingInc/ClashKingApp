@@ -28,4 +28,19 @@ describe('application route decisions', () => {
       }),
     ).toEqual({ kind: 'error', networkError: true });
   });
+
+  it.each(['login', 'account-setup', 'home'] as const)(
+    'preserves the existing %s startup destination',
+    (destination) => {
+      expect(
+        sceneForStartupResult({
+          destination,
+          authenticated: true,
+          hasVerifiedAccount: false,
+          failure: null,
+          requestPushPermission: false,
+        }),
+      ).toEqual({ kind: destination });
+    },
+  );
 });

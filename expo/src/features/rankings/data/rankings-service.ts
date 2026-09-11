@@ -1,4 +1,24 @@
-import type { ApiClient, ApiResponse } from '../../../core/api/client';
+import {
+  LeaderboardClanDonationsEndpoint,
+  LeaderboardClanWarWinsEndpoint,
+  LeaderboardClanWinStreakEndpoint,
+  LeaderboardHistoryEndpoint,
+  LeaderboardLeagueEndpoint,
+  LeaderboardTownhallsEndpoint,
+} from '@clashking/api-contracts/expo';
+import {
+  ProxyBuilderClanRankingsEndpoint,
+  ProxyBuilderPlayerRankingsEndpoint,
+  ProxyCapitalRankingsEndpoint,
+  ProxyClanRankingsEndpoint,
+  ProxyLocationsEndpoint,
+  ProxyPlayerRankingsEndpoint,
+} from '../../../core/api/proxy-contracts';
+import { Effect } from 'effect';
+import { ApiResponseError } from '@clashking/api-client';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
+import { STORAGE_KEYS, type StringStorage } from '../../../core/storage/storage';
 import {
   RankingBoard,
   RankingEntry,
@@ -7,8 +27,6 @@ import {
   type RankingQuery,
   RankingLocation,
 } from '../models';
-
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
 
 export interface RankingsServiceContract {
   fetchLocations(): Promise<readonly RankingLocation[]>;
@@ -38,13 +56,17 @@ export class UnsupportedRankingHistoryError extends Error {
 }
 
 export class RankingsService implements RankingsServiceContract {
-  constructor(private readonly api: ApiClient) {}
+  constructor(
+    private readonly api: ContractApiService,
+    private readonly storage?: StringStorage,
+  ) {}
 
   async fetchLocations(): Promise<readonly RankingLocation[]> {
-    const response = await this.api.proxyGet('/locations', {
-      acceptedStatuses: ALL_HTTP_STATUSES,
-    });
-    const decoded = decodeSuccessful(response);
+    const cached = await this.readCachedLocations();
+    if (cached) return cached;
+    const decoded = await Effect.runPromise(
+      this.api.execute(ProxyLocationsEndpoint, { path: {}, query: {}, body: {} }),
+    );
     const rawItems = isRecord(decoded) ? decoded.items : null;
     if (!Array.isArray(rawItems)) {
       throw new TypeError('Locations response does not contain items.');
@@ -61,15 +83,53 @@ export class RankingsService implements RankingsServiceContract {
         if (a.isCountry !== b.isCountry) return a.isCountry ? 1 : -1;
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
       });
-    return [RankingLocation.worldwide(), ...locations];
+    const result = [RankingLocation.worldwide(), ...locations];
+    await this.storage
+      ?.setString(
+        STORAGE_KEYS.rankingLocations,
+        JSON.stringify(
+          locations.map(({ id, name, isCountry, countryCode }) => ({
+            id,
+            name,
+            isCountry,
+            countryCode,
+          })),
+        ),
+      )
+      .catch(() => undefined);
+    return result;
+  }
+
+  private async readCachedLocations(): Promise<readonly RankingLocation[] | null> {
+    const encoded = await this.storage?.getString(STORAGE_KEYS.rankingLocations).catch(() => null);
+    if (!encoded) return null;
+    try {
+      const value: unknown = JSON.parse(encoded);
+      if (!Array.isArray(value)) return null;
+      const locations = value
+        .filter(isRecord)
+        .map((item) => RankingLocation.fromJson(item))
+        .filter(
+          (location) =>
+            location.id !== null && location.name.length > 0 && location.hasValidCountryCode,
+        );
+      return locations.length > 0 ? [RankingLocation.worldwide(), ...locations] : null;
+    } catch {
+      return null;
+    }
   }
 
   async fetchRankings(query: RankingQuery): Promise<RankingResult> {
     const route = routeFor(query);
-    const response = route.official
-      ? await this.api.proxyGet(route.path, { acceptedStatuses: ALL_HTTP_STATUSES })
-      : await this.api.get(route.path, { acceptedStatuses: ALL_HTTP_STATUSES });
-    const decoded = decodeSuccessful(response, true);
+    let decoded: Record<string, unknown>;
+    try {
+      decoded = await this.fetchRankingPayload(query);
+    } catch (error) {
+      if (!(error instanceof ApiResponseError)) throw error;
+      const failure = new RankingsRequestException(error.status);
+      if (failure.isNoData) return new RankingResult([], query.board.source, route.limit);
+      throw failure;
+    }
     const rawItems = isRecord(decoded) ? decoded.items : null;
     if (decoded === null || rawItems == null) {
       return new RankingResult([], query.board.source, route.limit);
@@ -89,6 +149,100 @@ export class RankingsService implements RankingsServiceContract {
       )
       .filter((entry) => entry.tag.length > 0);
     return new RankingResult(entries, query.board.source, route.limit);
+  }
+
+  private fetchRankingPayload(query: RankingQuery): Promise<Record<string, unknown>> {
+    const body = {};
+    if (query.period === RankingPeriod.history) {
+      const leaderboardType = leaderboardHistoryType(query.board);
+      return Effect.runPromise(
+        this.api.execute(LeaderboardHistoryEndpoint, {
+          path: {
+            leaderboardType,
+            locationId: query.location.apiPath,
+            date: formatLocalDate(query.historyDate),
+          },
+          query: {},
+          body,
+        }),
+      );
+    }
+    const locationId = query.location.apiPath;
+    if (query.board === RankingBoard.playerHome)
+      return Effect.runPromise(
+        this.api.execute(ProxyPlayerRankingsEndpoint, {
+          path: { locationId },
+          query: { limit: 200 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.playerBuilder)
+      return Effect.runPromise(
+        this.api.execute(ProxyBuilderPlayerRankingsEndpoint, {
+          path: { locationId },
+          query: { limit: 200 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.playerTownHall)
+      return Effect.runPromise(
+        this.api.execute(LeaderboardTownhallsEndpoint, {
+          path: { townhallLevel: query.townHallLevel },
+          query: { limit: 500 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.playerRanked)
+      return Effect.runPromise(
+        this.api.execute(LeaderboardLeagueEndpoint, {
+          path: { leagueTierId: query.leagueTier.id },
+          query: { limit: 500 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.clanHome)
+      return Effect.runPromise(
+        this.api.execute(ProxyClanRankingsEndpoint, {
+          path: { locationId },
+          query: { limit: 200 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.clanBuilder)
+      return Effect.runPromise(
+        this.api.execute(ProxyBuilderClanRankingsEndpoint, {
+          path: { locationId },
+          query: { limit: 200 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.clanCapital)
+      return Effect.runPromise(
+        this.api.execute(ProxyCapitalRankingsEndpoint, {
+          path: { locationId },
+          query: { limit: 200 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.clanDonations)
+      return Effect.runPromise(
+        this.api.execute(LeaderboardClanDonationsEndpoint, {
+          path: { locationId: query.location.id! },
+          query: { limit: 500 },
+          body,
+        }),
+      );
+    if (query.board === RankingBoard.clanWarWins)
+      return Effect.runPromise(
+        this.api.execute(LeaderboardClanWarWinsEndpoint, {
+          path: { locationId: query.location.id! },
+          query: { limit: 500 },
+          body,
+        }),
+      );
+    return Effect.runPromise(
+      this.api.execute(LeaderboardClanWinStreakEndpoint, { path: {}, query: { limit: 500 }, body }),
+    );
   }
 }
 
@@ -162,11 +316,13 @@ function clashKingRoute(path: string): RankingRoute {
   return { path, official: false, limit: 500 };
 }
 
-function decodeSuccessful(response: ApiResponse, emptyOnNoData = false): unknown {
-  if (emptyOnNoData && (response.status === 204 || response.status === 404)) return null;
-  if (response.status !== 200) throw new RankingsRequestException(response.status);
-  if (response.bodyText.trim().length === 0) return null;
-  return JSON.parse(response.bodyText) as unknown;
+function leaderboardHistoryType(board: RankingQuery['board']): string {
+  if (board === RankingBoard.playerHome) return 'player_home_trophies';
+  if (board === RankingBoard.playerBuilder) return 'player_builder_base_trophies';
+  if (board === RankingBoard.clanHome) return 'clan_home_points';
+  if (board === RankingBoard.clanBuilder) return 'clan_builder_base_points';
+  if (board === RankingBoard.clanCapital) return 'clan_capital_points';
+  throw new UnsupportedRankingHistoryError(board.name);
 }
 
 function formatLocalDate(value: Date): string {

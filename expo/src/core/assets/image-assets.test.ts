@@ -63,6 +63,12 @@ describe('ImageAssets', () => {
     );
     expect(ImageAssets.getHeroImage('')).toBe(ImageAssets.defaultImage);
     expect(ImageAssets.getHomeVillageBuildingImage('Town Hall', 0)).toBe(ImageAssets.defaultImage);
-    expect(ImageAssets.clanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC');
+    expect(ImageAssets.clanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC.avif');
   });
+});
+
+test('uses explicit PNG widget badges while app badges remain AVIF', () => {
+  expect(ImageAssets.widgetClanBadgeForTag(' #AbC ')).toBe('https://badges.clashk.ing/ABC');
+  expect(ImageAssets.clanBadgeForTag('#ABC')).toBe('https://badges.clashk.ing/ABC.avif');
+  expect(ImageAssets.widgetClanBadgeForTag('')).toBe('');
 });

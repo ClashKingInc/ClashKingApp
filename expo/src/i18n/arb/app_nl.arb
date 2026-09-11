@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Afbeeldingscache wissen",
+  "settingsImageCacheCleared": "Afbeeldingscache gewist.",
+  "settingsImageCacheClearFailed": "Kan de afbeeldingscache niet wissen. Probeer het opnieuw.",
+  "startupCheckingUpdate": "Zoeken naar updates…",
+  "startupDownloadingUpdate": "Update downloaden…",
+  "startupUpdateInBackground": "Op de achtergrond bijwerken",
   "warStatsRangeTitle": "Bereik van oorlogsstatistieken",
   "warStatsRangeDescription": "Kies of de statistieken een vast aantal recente oorlogen of een recente periode in dagen omvatten.",
   "warStatsRangeDays": "Dagen",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokale rang",
   "legendsGlobalRankTitle": "Wereldrang",
+  "legendsYourArmy": "Jouw leger",
+  "legendsArmyUsedAgainstYou": "Leger dat tegen jou is gebruikt",
   "warWinsTitle": "Overwinningen",
   "warLossesTitle": "Nederlagen",
   "warDrawsTitle": "Gelijkspel",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Ingeschreven selectie",
+  "cwlMatches": "Wedstrijden",
+  "cwlNextMatchup": "Volgende wedstrijd",
+  "cwlOtherMatches": "Andere wedstrijden",
+  "cwlOutlook": "Seizoensverwachting",
+  "cwlFirstPlace": "Eerste plaats",
+  "cwlTopTwo": "Top twee",
+  "cwlRemainingOpponents": "Resterende tegenstanders",
+  "cwlWinBonusNote": "Sterren bevatten 10 bonussterren per afgeronde overwinning.",
+  "cwlEstimateNote": "Schattingen gebruiken afgeronde oorlogen en resterende tegenstanders, geen wijzigingen in de opstelling. Minstens twee afgeronde oorlogen per clan zijn nodig. De schattingen zijn niet gekalibreerd; promotieregels verschillen per divisie.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minuten}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

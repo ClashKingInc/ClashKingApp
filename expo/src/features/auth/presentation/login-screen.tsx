@@ -1,3 +1,4 @@
+import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
 import { useState, type ReactNode } from 'react';
 import {
   KeyboardAvoidingView,
@@ -78,7 +79,7 @@ export function LoginScreen({
       setAuthenticated(true);
     } catch (error) {
       if (isVerificationRequired(error)) onVerificationRequired(email.trim());
-      else if (/\b(?:500|503)\b/.test(String(error))) onMaintenance();
+      else if (defaultIsMaintenanceError(error)) onMaintenance();
       else setErrors({ action: errorText(error) });
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ export function LoginScreen({
       await auth.signInWithDiscord();
       setAuthenticated(true);
     } catch (error) {
-      if (/\b(?:500|503)\b/.test(String(error))) onMaintenance();
+      if (defaultIsMaintenanceError(error)) onMaintenance();
       else setErrors({ action: errorText(error) });
     } finally {
       setLoading(false);
@@ -211,6 +212,8 @@ function DiscordMark({ color, size, testID }: { color: string; size: number; tes
 
 function LoginSurface({ children }: { children: ReactNode }) {
   const theme = useCKTheme();
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
   return (
     <View testID="login-background" style={[styles.fill, { backgroundColor: theme.background }]}>
       <SafeAreaView style={styles.fill} edges={['top', 'bottom']}>
@@ -219,6 +222,13 @@ function LoginSurface({ children }: { children: ReactNode }) {
           style={styles.fill}
         >
           <ScrollView
+            testID="login-scroll"
+            onLayout={(event) => setViewportHeight(event.nativeEvent.layout.height)}
+            onContentSizeChange={(_width, height) => setContentHeight(height)}
+            scrollEnabled={viewportHeight > 0 && contentHeight > viewportHeight + 1}
+            bounces={false}
+            alwaysBounceVertical={false}
+            overScrollMode="never"
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.page}

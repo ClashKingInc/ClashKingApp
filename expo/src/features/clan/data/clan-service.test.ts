@@ -1,4 +1,4 @@
-import { ApiClient } from '../../../core/api/client';
+import { createContractTestApi } from '../../../core/api/contract-api.testing';
 import { Clan, ClanLeaderboardType, ClanWarStatsFilter } from '../models';
 import { ClanService } from './clan-service';
 
@@ -7,11 +7,15 @@ type RequestLog = { url: string; init?: RequestInit };
 function harness(responder: (url: string, init?: RequestInit) => Response | Promise<Response>) {
   const requests: RequestLog[] = [];
   const fetchImplementation = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = String(input);
-    requests.push({ url, init });
-    return responder(url, init);
+    const request = input as Request;
+    const requestInit: RequestInit = {
+      method: request.method,
+      headers: Object.fromEntries(request.headers.entries()),
+    };
+    requests.push({ url: request.url, init: requestInit });
+    return responder(request.url, requestInit);
   }) as typeof fetch;
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.example',
     proxyUrl: 'https://api.example/proxy/v1',
     environment: 'development',
@@ -29,10 +33,97 @@ function json(value: unknown, status = 200) {
   });
 }
 
+function officialClan(overrides: Record<string, unknown> = {}) {
+  const memberList = Array.isArray(overrides.memberList)
+    ? overrides.memberList.map((member) => ({
+        role: 'member',
+        clanRank: 1,
+        previousClanRank: 1,
+        townHallLevel: 18,
+        expLevel: 200,
+        trophies: 5000,
+        donations: 0,
+        donationsReceived: 0,
+        ...(member as Record<string, unknown>),
+      }))
+    : [];
+  return {
+    tag: '#C',
+    name: 'Clan',
+    type: 'open',
+    description: '',
+    isFamilyFriendly: true,
+    badgeUrls: { large: 'https://assets.example/clan.png' },
+    clanLevel: 1,
+    clanPoints: 0,
+    clanBuilderBasePoints: 0,
+    clanCapitalPoints: 0,
+    clanCapital: { clanGoldSinkTotal: 0 },
+    requiredTrophies: 0,
+    warFrequency: 'always',
+    warWinStreak: 0,
+    warWins: 0,
+    isWarLogPublic: true,
+    members: memberList.length,
+    labels: [],
+    ...overrides,
+    memberList,
+  };
+}
+
+function officialPlayer(overrides: Record<string, unknown> = {}) {
+  return {
+    tag: '#P',
+    name: 'Enriched',
+    townHallLevel: 18,
+    expLevel: 200,
+    trophies: 5000,
+    bestTrophies: 5100,
+    warStars: 1000,
+    attackWins: 100,
+    defenseWins: 20,
+    achievements: [],
+    heroes: [],
+    troops: [],
+    spells: [],
+    ...overrides,
+  };
+}
+
+function capitalSeason() {
+  return {
+    state: 'ended',
+    startTime: '20260820T070000.000Z',
+    endTime: '20260823T070000.000Z',
+    capitalTotalLoot: 1000,
+    raidsCompleted: 1,
+    totalAttacks: 6,
+    enemyDistrictsDestroyed: 3,
+    offensiveReward: 100,
+    defensiveReward: 50,
+    members: [],
+    attackLog: [],
+    defenseLog: [],
+  };
+}
+
+function warSide(tag: string, name: string, members: readonly Record<string, unknown>[]) {
+  return {
+    tag,
+    name,
+    badgeUrls: { small: '', medium: '', large: '' },
+    clanLevel: 1,
+    attacks: 1,
+    stars: 3,
+    destructionPercentage: 100,
+    members,
+  };
+}
+
 describe('ClanService', () => {
   test('normalizes, deduplicates, bounds, stores, and notifies bulk official loads', async () => {
     const { service, requests } = harness((url) =>
-      json({ tag: decodeURIComponent(url.split('/').at(-1)!), name: 'Clan' }),
+      json(officialClan({ tag: decodeURIComponent(url.split('/').at(-1)!) })),
     );
     let notifications = 0;
     service.subscribe(() => (notifications += 1));
@@ -51,7 +142,7 @@ describe('ClanService', () => {
     const pending = new Promise<void>((resolve) => (release = resolve));
     const { service, requests } = harness(async () => {
       await pending;
-      return json({ tag: '#ABC', name: 'Clan' });
+      return json(officialClan({ tag: '#ABC' }));
     });
     const first = service.loadClanData('#abc');
     const second = service.loadClanData('ABC');
@@ -64,22 +155,26 @@ describe('ClanService', () => {
   });
 
   test('history methods use canonical tags, exact endpoints, and unauthenticated GET', async () => {
-    const { service, requests } = harness(() => json({ items: [] }));
+    const { service, requests } = harness((url) =>
+      json(url.includes('/legends/summary') ? { seasons: [], topFinishes: [] } : { items: [] }),
+    );
     await service.getClanLeaderboardHistory(' abc ', ClanLeaderboardType.homeVillage, {
       after: new Date('2026-01-01T00:00:00Z'),
     });
     await service.getClanLegendHistorySummary('abc');
     expect(requests[0]?.url).toContain(
-      '/clan/%23ABC/history/leaderboards?type=clan_home_points&limit=250&time%5Bafter%5D=',
+      '/v2/clan/%23ABC/history/leaderboards?type=clan_home_points&limit=250&time%5Bafter%5D=',
     );
-    expect(requests[1]?.url).toBe('https://api.example/clan/%23ABC/history/legends/summary?top=10');
-    expect(requests[0]?.init?.headers).not.toHaveProperty('Authorization');
+    expect(requests[1]?.url).toBe(
+      'https://api.example/v2/clan/%23ABC/history/legends/summary?top=10',
+    );
+    expect(requests[0]?.init?.headers).not.toHaveProperty('authorization');
   });
 
   test('CWL history preserves the caller tag rather than canonicalizing it', async () => {
     const { service, requests } = harness(() => json({ items: [] }));
     await service.getCwlRankingHistory('abc');
-    expect(requests[0]?.url).toBe('https://api.example/cwl/abc/seasons?limit=100');
+    expect(requests[0]?.url).toBe('https://api.example/v2/cwl/abc/seasons?limit=100');
   });
 
   test('join/leave is authenticated GET and transport failures become per-clan misses', async () => {
@@ -89,8 +184,8 @@ describe('ClanService', () => {
     await expect(service.loadClanJoinLeaveData(['#C'], { throwOnError: true })).resolves.toEqual(
       [],
     );
-    expect(requests[0]?.url).toBe('https://api.example/clan/%23C/join-leave?limit=50');
-    expect(requests[0]?.init?.headers).toMatchObject({ Authorization: 'Bearer token' });
+    expect(requests[0]?.url).toBe('https://api.example/v2/clan/%23C/join-leave?limit=50');
+    expect(requests[0]?.init?.headers).toMatchObject({ authorization: 'Bearer token' });
   });
 
   test('join/leave paging subtracts one microsecond and deduplicates appended events', async () => {
@@ -113,8 +208,17 @@ describe('ClanService', () => {
     expect(clan.joinLeave.joinLeaveList).toHaveLength(2);
   });
 
+  test('keeps successful capital history when another clan has an HTTP failure', async () => {
+    const { service } = harness((url) =>
+      url.includes('%23GOOD') ? json({ items: [capitalSeason()] }) : json({}, 503),
+    );
+    const result = await service.loadCapitalData(['#GOOD', '#UNAVAILABLE'], 10);
+    expect(result).toHaveLength(1);
+    expect(service.capitalHistory).toHaveLength(1);
+  });
+
   test('capital uses the official proxy without tag normalization and preserves limit', async () => {
-    const { service, requests } = harness(() => json({ items: [{ state: 'ended' }] }));
+    const { service, requests } = harness(() => json({ items: [capitalSeason()] }));
     const result = await service.loadCapitalData(['abc'], 10);
     expect(requests[0]?.url).toBe(
       'https://api.example/proxy/v1/clans/abc/capitalraidseasons?limit=10',
@@ -126,10 +230,10 @@ describe('ClanService', () => {
     const { service, requests } = harness(() => json({ items: [] }));
     await service.loadWarLogData(['abc']);
     await service.loadWarLogData(['def']);
-    expect(requests[0]?.url).toBe('https://api.example/clan/%23ABC/warlog?limit=50');
-    expect(requests[1]?.url).toBe('https://api.example/clan/%23DEF/warlog?limit=50');
-    expect(requests[0]?.init?.headers).toMatchObject({ Authorization: 'Bearer token' });
-    expect(requests[1]?.init?.headers).toMatchObject({ Authorization: 'Bearer token' });
+    expect(requests[0]?.url).toBe('https://api.example/v2/clan/%23ABC/warlog?limit=50');
+    expect(requests[1]?.url).toBe('https://api.example/v2/clan/%23DEF/warlog?limit=50');
+    expect(requests[0]?.init?.headers).toMatchObject({ authorization: 'Bearer token' });
+    expect(requests[1]?.init?.headers).toMatchObject({ authorization: 'Bearer token' });
   });
 
   test('war stats use live typed clan-war history reads and preserve the requested clan tag', async () => {
@@ -141,33 +245,29 @@ describe('ClanService', () => {
                 state: 'warEnded',
                 teamSize: 1,
                 attacksPerMember: 2,
+                preparationStartTime: '20260819T120000.000Z',
                 endTime: '20260820T120000.000Z',
-                clan: {
-                  tag: '#C',
-                  members: [
-                    {
-                      tag: '#P',
-                      name: 'Player',
-                      townhallLevel: 18,
-                      mapPosition: 1,
-                      attacks: [
-                        {
-                          attackerTag: '#P',
-                          defenderTag: '#D',
-                          stars: 3,
-                          destructionPercentage: 100,
-                          order: 1,
-                        },
-                      ],
-                    },
-                  ],
-                },
-                opponent: {
-                  tag: '#O',
-                  members: [
-                    { tag: '#D', name: 'Defender', townhallLevel: 18, mapPosition: 1, attacks: [] },
-                  ],
-                },
+                clan: warSide('#C', 'Clan', [
+                  {
+                    tag: '#P',
+                    name: 'Player',
+                    townhallLevel: 18,
+                    mapPosition: 1,
+                    attacks: [
+                      {
+                        attackerTag: '#P',
+                        defenderTag: '#D',
+                        stars: 3,
+                        destructionPercentage: 100,
+                        order: 1,
+                        duration: 30,
+                      },
+                    ],
+                  },
+                ]),
+                opponent: warSide('#O', 'Opponent', [
+                  { tag: '#D', name: 'Defender', townhallLevel: 18, mapPosition: 1, attacks: [] },
+                ]),
               },
             ]
           : [],
@@ -179,14 +279,14 @@ describe('ClanService', () => {
       new ClanWarStatsFilter({ limit: 25, sameTownHall: true }),
     );
     expect(requests.slice(0, 3).map((request) => request.url)).toEqual([
-      'https://api.example/clan/%23C/wars?type=random&limit=50',
-      'https://api.example/clan/%23C/wars?type=cwl&limit=50',
-      'https://api.example/clan/%23C/wars?type=friendly&limit=50',
+      'https://api.example/v2/clan/%23C/wars?type=random&limit=50',
+      'https://api.example/v2/clan/%23C/wars?type=cwl&limit=50',
+      'https://api.example/v2/clan/%23C/wars?type=friendly&limit=50',
     ]);
     expect(requests.slice(3).map((request) => request.url)).toEqual([
-      'https://api.example/clan/%23C/wars?type=random&limit=25',
-      'https://api.example/clan/%23C/wars?type=cwl&limit=25',
-      'https://api.example/clan/%23C/wars?type=friendly&limit=25',
+      'https://api.example/v2/clan/%23C/wars?type=random&limit=25',
+      'https://api.example/v2/clan/%23C/wars?type=cwl&limit=25',
+      'https://api.example/v2/clan/%23C/wars?type=friendly&limit=25',
     ]);
     expect(requests.every((request) => request.init?.method === 'GET')).toBe(true);
     expect(filtered?.clanTag).toBe('#C');
@@ -227,12 +327,52 @@ describe('ClanService', () => {
 
   test('decodes all clan history resources and applies both range boundaries', async () => {
     const { service, requests } = harness((url) => {
-      if (url.includes('/leaderboards/summary')) return json({ seasons: [{ season: '2026-08' }] });
-      if (url.includes('/history/leaderboards')) return json({ items: [{ rank: 1 }] });
+      if (url.includes('/leaderboards/summary')) {
+        return json({
+          seasons: [
+            {
+              season: '2026-08',
+              after: '2026-08-01',
+              before: '2026-08-31',
+              daysInTop200: 30,
+              bestRank: 1,
+              peakPoints: 60000,
+            },
+          ],
+        });
+      }
+      if (url.includes('/history/leaderboards')) {
+        return json({ items: [{ date: '2026-08-01', rank: 1, members: 50 }] });
+      }
       if (url.includes('/history/legends/summary')) return json({ seasons: [], topFinishes: [] });
-      if (url.includes('/history/legends')) return json({ items: [{ rank: 2 }] });
-      if (url.endsWith('/records')) return json({ clanPoints: { value: 123 } });
-      return json({ items: [{ type: 'description', current: 'New' }] });
+      if (url.includes('/history/legends')) {
+        return json({
+          items: [
+            {
+              season: '2026-08',
+              tag: '#P',
+              name: 'Player',
+              trophies: 5000,
+              attackWins: 100,
+              defenseWins: 20,
+              rank: 2,
+            },
+          ],
+        });
+      }
+      if (url.endsWith('/records')) {
+        return json({ clanPoints: { value: 123, time: '2026-08-01T00:00:00Z' } });
+      }
+      return json({
+        items: [
+          {
+            time: '2026-08-01T00:00:00Z',
+            type: 'description',
+            previous: 'Old',
+            current: 'New',
+          },
+        ],
+      });
     });
     const after = new Date('2026-01-01T00:00:00Z');
     const before = new Date('2026-02-01T00:00:00Z');
@@ -260,22 +400,21 @@ describe('ClanService', () => {
   test('enriches incomplete members, coalesces duplicate tags, and preserves clan role data', async () => {
     const { service, requests } = harness((url) => {
       if (url.includes('/clans/')) {
-        return json({
-          tag: '#C',
-          name: 'Clan',
-          memberList: [
-            { tag: '#P', name: 'Original', role: 'admin', donations: 4 },
-            { tag: '#P', name: 'Duplicate', role: 'member', donations: 1 },
-          ],
-        });
+        return json(
+          officialClan({
+            memberList: [
+              { tag: '#P', name: 'Original', role: 'admin', donations: 4 },
+              { tag: '#P', name: 'Duplicate', role: 'member', donations: 1 },
+            ],
+          }),
+        );
       }
-      return json({
-        tag: '#P',
-        name: 'Enriched',
-        townHallLevel: 18,
-        leagueTier: { id: 1, name: 'League' },
-        donations: 9,
-      });
+      return json(
+        officialPlayer({
+          leagueTier: { id: 1, name: 'League' },
+          donations: 9,
+        }),
+      );
     });
 
     const clan = await service.getClanAndWarData('#C');
@@ -292,7 +431,7 @@ describe('ClanService', () => {
   });
 
   test('links loaded auxiliaries and war ownership to matching clans', async () => {
-    const { service } = harness(() => json({ tag: '#C', name: 'Clan' }));
+    const { service } = harness(() => json(officialClan()));
     await service.loadClanData('#C');
     const clan = service.getClanByTag('#C')!;
     const war = { tag: '#C' };

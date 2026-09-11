@@ -5,6 +5,15 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { CKThemeProvider } from '../../../ui';
 import { SelectionModal } from './war-components';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
+}));
+
 async function renderSelectionModal(optionCount: number) {
   const onClose = jest.fn();
   const onSelect = jest.fn();

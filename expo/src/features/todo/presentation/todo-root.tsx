@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { canonicalTag } from '../../../core/domain/tags';
@@ -15,7 +16,8 @@ export interface TodoRootProps {
 export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
   const runtime = useAppRuntime();
   const [revision, setRevision] = useState(0);
-  const [query, setQuery] = useState('');
+  const link = useLinkParameters();
+  const [query, setQuery] = useState(link.player ?? link.q ?? '');
   const [filter, setFilter] = useState<TodoAccountFilter>('all');
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {

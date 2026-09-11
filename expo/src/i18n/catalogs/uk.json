@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Очистити кеш зображень",
+  "settingsImageCacheCleared": "Кеш зображень очищено.",
+  "settingsImageCacheClearFailed": "Не вдалося очистити кеш зображень. Спробуйте ще раз.",
+  "startupCheckingUpdate": "Перевірка оновлень…",
+  "startupDownloadingUpdate": "Завантаження оновлення…",
+  "startupUpdateInBackground": "Оновити у фоні",
   "warStatsRangeTitle": "Діапазон воєнної статистики",
   "warStatsRangeDescription": "Виберіть, чи охоплює статистика задану кількість нещодавніх воєн, чи нещодавній період у днях.",
   "warStatsRangeDays": "Дні",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "Країна",
   "legendsLocalRankTitle": "Місцевий чин",
   "legendsGlobalRankTitle": "Глобальний рейтинг",
+  "legendsYourArmy": "Ваша армія",
+  "legendsArmyUsedAgainstYou": "Армія, використана проти вас",
   "warWinsTitle": "Перемоги",
   "warLossesTitle": "Втрати",
   "warDrawsTitle": "Розігрує",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "Вступив",
   "playerJoinLeaveLeft": "Вийшов",
   "playerJoinLeaveNoHistory": "Історія вступів і виходів відсутня",
-  "playerJoinLeaveNoClanTotals": "Підсумки за кланами відсутні"
+  "playerJoinLeaveNoClanTotals": "Підсумки за кланами відсутні",
+  "cwlRegisteredRoster": "Заявлений склад",
+  "cwlMatches": "Матчі",
+  "cwlNextMatchup": "Наступний матч",
+  "cwlOtherMatches": "Інші матчі",
+  "cwlOutlook": "Прогноз сезону",
+  "cwlFirstPlace": "Перше місце",
+  "cwlTopTwo": "Перші два місця",
+  "cwlRemainingOpponents": "Решта суперників",
+  "cwlWinBonusNote": "Зірки включають 10 бонусних зірок за кожну завершену перемогу.",
+  "cwlEstimateNote": "Оцінки враховують завершені війни та решту суперників, але не зміни складів. Потрібно щонайменше дві завершені війни на клан. Оцінки не відкалібровані; правила підвищення залежать від ліги.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# година} few {# години} other {# годин}}} other {{count, plural, one {# хвилина} few {# хвилини} other {# хвилин}}}}"
 }

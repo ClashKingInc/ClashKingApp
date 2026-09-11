@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Képgyorsítótár törlése",
+  "settingsImageCacheCleared": "A képgyorsítótár törölve.",
+  "settingsImageCacheClearFailed": "Nem sikerült törölni a képgyorsítótárat. Próbáld újra.",
+  "startupCheckingUpdate": "Frissítések keresése…",
+  "startupDownloadingUpdate": "Frissítés letöltése…",
+  "startupUpdateInBackground": "Frissítés a háttérben",
   "warStatsRangeTitle": "Háborús statisztikák tartománya",
   "warStatsRangeDescription": "Válaszd ki, hogy a statisztikák meghatározott számú legutóbbi háborút vagy egy napokban megadott időszakot fedjenek le.",
   "warStatsRangeDays": "Napok",
@@ -1556,6 +1562,8 @@
   "legendsCountryTitle": "Ország",
   "legendsLocalRankTitle": "Helyi rang",
   "legendsGlobalRankTitle": "Globális rang",
+  "legendsYourArmy": "A sereged",
+  "legendsArmyUsedAgainstYou": "Az ellened használt sereg",
   "warWinsTitle": "Győzelem",
   "warLossesTitle": "Veszteség",
   "warDrawsTitle": "Döntetlen",
@@ -4756,6 +4764,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Regisztrált keret",
+  "cwlMatches": "Párosítások",
+  "cwlNextMatchup": "Következő párosítás",
+  "cwlOtherMatches": "További párosítások",
+  "cwlOutlook": "Szezonkilátások",
+  "cwlFirstPlace": "Első hely",
+  "cwlTopTwo": "Első kettő",
+  "cwlRemainingOpponents": "Hátralévő ellenfelek",
+  "cwlWinBonusNote": "A csillagok lezárt győzelmenként 10 bónuszcsillagot tartalmaznak.",
+  "cwlEstimateNote": "A becslések lezárt háborúkon és hátralévő ellenfeleken alapulnak, nem a felállás változásain. Klánonként legalább két lezárt háború szükséges. A becslések nincsenek kalibrálva; a feljutási szabályok ligánként eltérnek.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# óra} other {# óra}}} other {{count, plural, one {# perc} other {# perc}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

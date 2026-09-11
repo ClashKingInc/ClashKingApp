@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
 import { View } from 'react-native';
 
 import { useAppRuntime } from '../../core/app/runtime-context';
@@ -50,9 +51,15 @@ export function SearchRoot({
 }: SearchRootProps) {
   const runtime = useAppRuntime();
   const { t } = useI18n();
-  const service = useMemo(() => new SearchService(runtime.api), [runtime.api]);
-  const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<SearchMode>('players');
+  const service = useMemo(
+    () => new SearchService(runtime.contractApi),
+    [runtime.contractApi],
+  );
+  const link = useLinkParameters();
+  const [query, setQuery] = useState(link.q ?? '');
+  const [mode, setMode] = useState<SearchMode>(
+    linkChoice(link.type, ['players', 'clans'], 'players'),
+  );
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [playerFilters, setPlayerFiltersState] = useState(emptyPlayerSearchFilters);
   const [clanFilters, setClanFiltersState] = useState(emptyClanSearchFilters);
@@ -173,8 +180,14 @@ export function SearchRoot({
         try {
           clan = await runtime.clans.getClanAndWarData(tag, { extraHeaders: trackingHeaders });
         } catch {
-          clan = Clan.fromJson(await service.loadClanFallback(tag, trackingHeaders));
-          await runtime.clans.loadJoinLeaveForClan(clan);
+          try {
+            clan = Clan.fromJson(await service.loadClanFallback(tag, trackingHeaders));
+          } catch {
+            // Search already returned enough identity data to open a useful clan detail shell.
+            // This keeps web navigation responsive when the follow-up proxy request is blocked.
+            clan = Clan.fromJson(result);
+          }
+          void runtime.clans.loadJoinLeaveForClan(clan);
         }
         void loadRecents();
         onOpenClan(clan);
@@ -212,7 +225,7 @@ export function SearchRoot({
         onFiltersExpandedChange={setFiltersExpanded}
         onPlayerFiltersChange={changePlayerFilters}
         onClanFiltersChange={changeClanFilters}
-        onOpenResult={(result, type) => void openResult(result, type)}
+        onOpenResult={openResult}
         onOpenRecent={(item) => void openRecent(item)}
         onCancel={onCancel}
       />

@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Görsel önbelleğini temizle",
+  "settingsImageCacheCleared": "Görsel önbelleği temizlendi.",
+  "settingsImageCacheClearFailed": "Görsel önbelleği temizlenemedi. Lütfen tekrar deneyin.",
+  "startupCheckingUpdate": "Güncellemeler kontrol ediliyor…",
+  "startupDownloadingUpdate": "Güncelleme indiriliyor…",
+  "startupUpdateInBackground": "Arka planda güncelle",
   "warStatsRangeTitle": "Savaş istatistikleri aralığı",
   "warStatsRangeDescription": "İstatistiklerin sabit sayıda son savaşı mı yoksa gün cinsinden yakın bir dönemi mi kapsayacağını seç.",
   "warStatsRangeDays": "Gün",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "Ülke",
   "legendsLocalRankTitle": "Yerel sıralama",
   "legendsGlobalRankTitle": "Küresel sıralama",
+  "legendsYourArmy": "Ordun",
+  "legendsArmyUsedAgainstYou": "Sana karşı kullanılan ordu",
   "warWinsTitle": "galibiyet",
   "warLossesTitle": "kayıplar",
   "warDrawsTitle": "Beraberlik",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "Katıldı",
   "playerJoinLeaveLeft": "Ayrıldı",
   "playerJoinLeaveNoHistory": "Katılma / ayrılma geçmişi yok",
-  "playerJoinLeaveNoClanTotals": "Klan toplamı yok"
+  "playerJoinLeaveNoClanTotals": "Klan toplamı yok",
+  "cwlRegisteredRoster": "Kayıtlı kadro",
+  "cwlMatches": "Eşleşmeler",
+  "cwlNextMatchup": "Sonraki eşleşme",
+  "cwlOtherMatches": "Diğer eşleşmeler",
+  "cwlOutlook": "Sezon tahmini",
+  "cwlFirstPlace": "Birincilik",
+  "cwlTopTwo": "İlk iki",
+  "cwlRemainingOpponents": "Kalan rakipler",
+  "cwlWinBonusNote": "Yıldızlar, tamamlanan her galibiyet için 10 bonus yıldız içerir.",
+  "cwlEstimateNote": "Tahminler tamamlanan savaşları ve kalan rakipleri kullanır, kadro değişikliklerini dikkate almaz. Klan başına en az iki tamamlanmış savaş gerekir. Tahminler kalibre edilmemiştir; yükselme kuralları lige göre değişir.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# saat} other {# saat}}} other {{count, plural, one {# dakika} other {# dakika}}}}"
 }

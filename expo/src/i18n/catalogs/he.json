@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "ניקוי מטמון התמונות",
+  "settingsImageCacheCleared": "מטמון התמונות נוקה.",
+  "settingsImageCacheClearFailed": "לא ניתן לנקות את מטמון התמונות. נסה שוב.",
+  "startupCheckingUpdate": "מחפש עדכונים…",
+  "startupDownloadingUpdate": "מוריד עדכון…",
+  "startupUpdateInBackground": "עדכון ברקע",
   "warStatsRangeTitle": "טווח סטטיסטיקות מלחמה",
   "warStatsRangeDescription": "בחר אם הסטטיסטיקות יכללו מספר קבוע של מלחמות אחרונות או תקופה אחרונה בימים.",
   "warStatsRangeDays": "ימים",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "מְדִינָה",
   "legendsLocalRankTitle": "דרגה מקומית",
   "legendsGlobalRankTitle": "דרגה עולמית",
+  "legendsYourArmy": "הצבא שלך",
+  "legendsArmyUsedAgainstYou": "הצבא ששימש נגדך",
   "warWinsTitle": "מנצח",
   "warLossesTitle": "אֲבֵדוֹת",
   "warDrawsTitle": "ציור",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "הצטרף",
   "playerJoinLeaveLeft": "עזב",
   "playerJoinLeaveNoHistory": "אין היסטוריית הצטרפות / עזיבה",
-  "playerJoinLeaveNoClanTotals": "אין סיכומי שבטים זמינים"
+  "playerJoinLeaveNoClanTotals": "אין סיכומי שבטים זמינים",
+  "cwlRegisteredRoster": "סגל רשום",
+  "cwlMatches": "מפגשים",
+  "cwlNextMatchup": "המפגש הבא",
+  "cwlOtherMatches": "מפגשים נוספים",
+  "cwlOutlook": "תחזית העונה",
+  "cwlFirstPlace": "מקום ראשון",
+  "cwlTopTwo": "שני הראשונים",
+  "cwlRemainingOpponents": "היריבים שנותרו",
+  "cwlWinBonusNote": "הכוכבים כוללים 10 כוכבי בונוס לכל ניצחון שהושלם.",
+  "cwlEstimateNote": "ההערכות מבוססות על מלחמות שהושלמו ויריבים שנותרו, ולא על שינויי הרכב. נדרשות לפחות שתי מלחמות שהושלמו לכל שבט. ההערכות אינן מכוילות; כללי העלייה משתנים לפי הליגה.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# שעה} other {# שעות}}} other {{count, plural, one {# דקה} other {# דקות}}}}"
 }

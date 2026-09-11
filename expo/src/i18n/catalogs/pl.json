@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Wyczyść pamięć podręczną obrazów",
+  "settingsImageCacheCleared": "Pamięć podręczna obrazów została wyczyszczona.",
+  "settingsImageCacheClearFailed": "Nie udało się wyczyścić pamięci podręcznej obrazów. Spróbuj ponownie.",
+  "startupCheckingUpdate": "Sprawdzanie aktualizacji…",
+  "startupDownloadingUpdate": "Pobieranie aktualizacji…",
+  "startupUpdateInBackground": "Aktualizuj w tle",
   "warStatsRangeTitle": "Zakres statystyk wojennych",
   "warStatsRangeDescription": "Wybierz, czy statystyki mają obejmować stałą liczbę ostatnich wojen, czy ostatni okres podany w dniach.",
   "warStatsRangeDays": "Dni",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "Kraj",
   "legendsLocalRankTitle": "Ranga lokalna",
   "legendsGlobalRankTitle": "Globalna ranga",
+  "legendsYourArmy": "Twoja armia",
+  "legendsArmyUsedAgainstYou": "Armia użyta przeciwko tobie",
   "warWinsTitle": "Wygrywa",
   "warLossesTitle": "Straty",
   "warDrawsTitle": "Rysuje",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "Dołączył",
   "playerJoinLeaveLeft": "Odszedł",
   "playerJoinLeaveNoHistory": "Brak historii dołączeń i odejść",
-  "playerJoinLeaveNoClanTotals": "Brak podsumowań klanów"
+  "playerJoinLeaveNoClanTotals": "Brak podsumowań klanów",
+  "cwlRegisteredRoster": "Zgłoszony skład",
+  "cwlMatches": "Starcia",
+  "cwlNextMatchup": "Następne starcie",
+  "cwlOtherMatches": "Pozostałe starcia",
+  "cwlOutlook": "Prognoza sezonu",
+  "cwlFirstPlace": "Pierwsze miejsce",
+  "cwlTopTwo": "Pierwsza dwójka",
+  "cwlRemainingOpponents": "Pozostali rywale",
+  "cwlWinBonusNote": "Gwiazdy obejmują 10 dodatkowych gwiazd za każde zakończone zwycięstwo.",
+  "cwlEstimateNote": "Szacunki uwzględniają zakończone wojny i pozostałych rywali, a nie zmiany składu. Wymagane są co najmniej dwie zakończone wojny na klan. Szacunki nie są skalibrowane; zasady awansu zależą od ligi.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# godzina} few {# godziny} other {# godzin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}"
 }

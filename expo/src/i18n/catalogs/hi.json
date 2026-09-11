@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "इमेज कैश साफ़ करें",
+  "settingsImageCacheCleared": "इमेज कैश साफ़ कर दिया गया।",
+  "settingsImageCacheClearFailed": "इमेज कैश साफ़ नहीं किया जा सका। कृपया फिर से कोशिश करें।",
+  "startupCheckingUpdate": "अपडेट की जाँच हो रही है…",
+  "startupDownloadingUpdate": "अपडेट डाउनलोड हो रहा है…",
+  "startupUpdateInBackground": "बैकग्राउंड में अपडेट करें",
   "warStatsRangeTitle": "युद्ध आँकड़ों की सीमा",
   "warStatsRangeDescription": "चुनें कि आँकड़ों में हाल के युद्धों की एक निश्चित संख्या शामिल हो या दिनों की हाल की अवधि।",
   "warStatsRangeDays": "दिन",
@@ -607,6 +613,8 @@
   "legendsCountryTitle": "देश",
   "legendsLocalRankTitle": "स्थानीय पद",
   "legendsGlobalRankTitle": "वैश्विक रैंक",
+  "legendsYourArmy": "आपकी सेना",
+  "legendsArmyUsedAgainstYou": "आपके विरुद्ध इस्तेमाल की गई सेना",
   "warWinsTitle": "जीत",
   "warLossesTitle": "हानि",
   "warDrawsTitle": "खींचता",
@@ -2013,5 +2021,16 @@
   "playerJoinLeaveJoined": "शामिल हुआ",
   "playerJoinLeaveLeft": "चला गया",
   "playerJoinLeaveNoHistory": "शामिल होने / छोड़ने का इतिहास उपलब्ध नहीं है",
-  "playerJoinLeaveNoClanTotals": "क्लान का कुल डेटा उपलब्ध नहीं है"
+  "playerJoinLeaveNoClanTotals": "क्लान का कुल डेटा उपलब्ध नहीं है",
+  "cwlRegisteredRoster": "पंजीकृत रोस्टर",
+  "cwlMatches": "मुकाबले",
+  "cwlNextMatchup": "अगला मुकाबला",
+  "cwlOtherMatches": "अन्य मुकाबले",
+  "cwlOutlook": "सीज़न का अनुमान",
+  "cwlFirstPlace": "पहला स्थान",
+  "cwlTopTwo": "शीर्ष दो",
+  "cwlRemainingOpponents": "बाकी विरोधी",
+  "cwlWinBonusNote": "हर पूरी हुई जीत के 10 बोनस सितारे शामिल हैं।",
+  "cwlEstimateNote": "अनुमान पूरी हुई लड़ाइयों और बाकी विरोधियों पर आधारित हैं, दल में बदलाव पर नहीं। हर क्लैन की कम से कम दो लड़ाइयाँ पूरी होनी चाहिए। ये अप्रमाणित अनुमान हैं; पदोन्नति के नियम लीग के अनुसार बदलते हैं।",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# घंटा} other {# घंटे}}} other {{count, plural, one {# मिनट} other {# मिनट}}}}"
 }

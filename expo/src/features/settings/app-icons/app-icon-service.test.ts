@@ -18,7 +18,7 @@ describe('AppIconService', () => {
     expect(APP_ICON_OPTIONS).toEqual(nativeContract.alternateIconOptions);
   });
 
-  test('uses the native bridge only on iOS', async () => {
+  test('uses the native bridge on iOS and Android', async () => {
     const native = nativeBridge();
     const ios = new AppIconService('ios', native);
     await expect(ios.supportsAlternateIcons()).resolves.toBe(true);
@@ -27,12 +27,10 @@ describe('AppIconService', () => {
     expect(native.setAlternateIconName).toHaveBeenCalledWith(null);
 
     const android = new AppIconService('android', native);
-    await expect(android.supportsAlternateIcons()).resolves.toBe(false);
-    await expect(android.getAlternateIconName()).resolves.toBeNull();
-    await expect(android.setAlternateIconName('AppIconChristmas')).rejects.toMatchObject({
-      code: 'unsupported',
-    });
-    expect(native.setAlternateIconName).toHaveBeenCalledTimes(1);
+    await expect(android.supportsAlternateIcons()).resolves.toBe(true);
+    await expect(android.getAlternateIconName()).resolves.toBe('AppIconChristmas');
+    await android.setAlternateIconName('AppIconChristmas');
+    expect(native.setAlternateIconName).toHaveBeenCalledTimes(2);
   });
 
   test('falls back to the default option for null and unknown native names', () => {

@@ -1,6 +1,7 @@
-import { ApiClient } from '../../core/api/client';
+import { createContractTestApi, readContractRequest } from '../../core/api/contract-api.testing';
 import type { StringStore } from '../../services/storage/auth-storage';
 import { AccountHttpException, CocAccountService } from './account-service';
+import { ResponseDecodeError } from '@clashking/api-client';
 
 class MemoryPreferences implements StringStore {
   readonly values = new Map<string, string>();
@@ -25,16 +26,17 @@ function harness(
   reportError = jest.fn(),
 ) {
   const requests: Request[] = [];
-  const api = new ApiClient({
+  const api = createContractTestApi({
     baseUrl: 'https://api.example/v2',
     environment: 'production',
     tokenProvider: { getAccessToken: async () => 'access' },
     fetchImplementation: jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = new URL(String(input));
-      const body = init?.body ? JSON.parse(String(init.body)) : undefined;
+      const parsed = await readContractRequest(input, init);
+      const url = parsed.url;
+      const body = parsed.init.body ? JSON.parse(String(parsed.init.body)) : undefined;
       const request = {
         path: `${url.pathname}${url.search}`,
-        method: init?.method ?? 'GET',
+        method: parsed.init.method!,
         body,
       };
       requests.push(request);
@@ -50,6 +52,11 @@ function harness(
 function account(playerTag: string, overrides: Record<string, unknown> = {}) {
   return {
     player_tag: playerTag,
+    tag: playerTag,
+    user_id: 'user/id',
+    order_index: 0,
+    added_at: '2026-01-01T00:00:00Z',
+    last_login: null,
     hidden: false,
     is_verified: false,
     name: `Player ${playerTag}`,
@@ -76,6 +83,31 @@ describe('CocAccountService', () => {
     expect(requests).toHaveLength(1);
   });
 
+  test('replaces a stored selection that is no longer linked', async () => {
+    const { service, preferences } = harness(
+      () => new Response(JSON.stringify({ items: [account('#FIRST'), account('#SECOND')] })),
+    );
+    await preferences.setItem('selectedTag', '#REMOVED');
+
+    await service.initializeForCurrentUser('user/id');
+
+    expect(service.selectedTag).toBe('#FIRST');
+    expect(preferences.values.get('selectedTag')).toBe('#FIRST');
+  });
+
+  test('reconciles the selection when a refreshed link list removes it', async () => {
+    let items = [account('#ONE'), account('#TWO')];
+    const { service, preferences } = harness(() => new Response(JSON.stringify({ items })));
+    await service.fetchAccounts();
+    await service.setSelectedTag('#ONE');
+    items = [account('#TWO')];
+
+    await service.fetchAccounts();
+
+    expect(service.selectedTag).toBe('#TWO');
+    expect(preferences.values.get('selectedTag')).toBe('#TWO');
+  });
+
   test('adds accounts with and without verification and parses top-level conflict accounts', async () => {
     const { service, requests, reportError } = harness(({ body }) => {
       const requestBody = body as Record<string, unknown>;
@@ -97,6 +129,7 @@ describe('CocAccountService', () => {
       }
       return new Response(
         JSON.stringify({
+          message: 'Linked',
           account: account(String(requestBody.player_tag), {
             is_verified: requestBody.api_token !== undefined,
           }),
@@ -131,6 +164,7 @@ describe('CocAccountService', () => {
         postComplete = true;
         return new Response(
           JSON.stringify({
+            message: 'Linked',
             account: account('#ONE', { name: 'Fresh Name', townHallLevel: 18 }),
           }),
         );
@@ -158,11 +192,69 @@ describe('CocAccountService', () => {
     [404, 'Account not found'],
     [500, 'Failed to add account. Please try again.'],
   ])('maps add-with-token HTTP %i to a stable message', async (status, message) => {
-    const { service } = harness(() => new Response('{}', { status }));
+    const { service } = harness(
+      () =>
+        new Response(
+          JSON.stringify({
+            code: status === 403 ? 'forbidden' : status === 404 ? 'not_found' : 'internal_error',
+            message: 'Error',
+          }),
+          { status },
+        ),
+    );
     await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
       success: false,
       message,
     });
+  });
+
+  test('does not expose decoder internals when the post-verification list is malformed', async () => {
+    const { service, reportError } = harness(
+      ({ method }) =>
+        new Response(
+          JSON.stringify(
+            method === 'POST'
+              ? { message: 'Linked', account: account('#ONE', { is_verified: true }) }
+              : { items: [{ ...account('#ONE'), last_login: undefined }] },
+          ),
+        ),
+    );
+    await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
+      success: false,
+      message: 'Failed to add account. Please try again.',
+    });
+    expect(reportError).toHaveBeenCalledWith('accounts.fetch', expect.any(ResponseDecodeError));
+  });
+
+  test('refreshes a newly verified account with no last-login timestamp', async () => {
+    const { service } = harness(
+      ({ method }) =>
+        new Response(
+          JSON.stringify(
+            method === 'POST'
+              ? { message: 'Linked', account: account('#ONE', { is_verified: true }) }
+              : {
+                  items: [
+                    {
+                      user_id: 'user/id',
+                      player_tag: '#ONE',
+                      order_index: 0,
+                      is_verified: true,
+                      hidden: false,
+                      added_at: '2026-09-05T00:00:00Z',
+                      verified_at: '2026-09-05T00:00:00Z',
+                      last_login: null,
+                    },
+                  ],
+                },
+          ),
+        ),
+    );
+    await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
+      success: true,
+      message: null,
+    });
+    expect(service.accounts[0]?.isVerified).toBe(true);
   });
 
   test('verifies, hides, reorders, removes, and persists selection through successful mutations', async () => {
@@ -172,7 +264,11 @@ describe('CocAccountService', () => {
           JSON.stringify({ items: [account('#ONE'), account('#TWO'), account('#THREE')] }),
         );
       }
-      return new Response('{}');
+      if (method === 'POST')
+        return new Response(JSON.stringify({ message: 'Linked', account: account('#ONE') }));
+      if (method === 'PATCH')
+        return new Response(JSON.stringify(account('#TWO', { hidden: true })));
+      return new Response('{"message":"ok"}');
     });
     await service.fetchAccounts();
     const listener = jest.fn();
@@ -196,6 +292,43 @@ describe('CocAccountService', () => {
     expect(listener).toHaveBeenCalledTimes(6);
   });
 
+  test('selects the next linked account and updates dependents after removing the selection', async () => {
+    const { service, preferences } = harness(({ method }) =>
+      method === 'GET'
+        ? new Response(JSON.stringify({ items: [account('#ONE'), account('#TWO')] }))
+        : new Response('{"message":"ok"}'),
+    );
+    const selectionChanged = jest.fn(async () => undefined);
+    service.setSelectedTagChangeHandler(selectionChanged);
+    await service.fetchAccounts();
+    await service.setSelectedTag('#ONE');
+    selectionChanged.mockClear();
+
+    await expect(service.removeAccount('#ONE')).resolves.toBe(true);
+
+    expect(service.selectedTag).toBe('#TWO');
+    expect(preferences.values.get('selectedTag')).toBe('#TWO');
+    expect(selectionChanged).toHaveBeenCalledWith('#TWO');
+  });
+
+  test('clears the selection and updates dependents after removing the final account', async () => {
+    const { service, preferences } = harness(({ method }) =>
+      method === 'GET'
+        ? new Response(JSON.stringify({ items: [account('#ONLY')] }))
+        : new Response('{"message":"ok"}'),
+    );
+    const selectionChanged = jest.fn(async () => undefined);
+    service.setSelectedTagChangeHandler(selectionChanged);
+    await service.fetchAccounts();
+    selectionChanged.mockClear();
+
+    await expect(service.removeAccount('#ONLY')).resolves.toBe(true);
+
+    expect(service.selectedTag).toBeNull();
+    expect(preferences.values.has('selectedTag')).toBe(false);
+    expect(selectionChanged).toHaveBeenCalledWith(null);
+  });
+
   test('normalizes an empty user id and reports authentication and malformed payload failures', async () => {
     const { service, reportError } = harness(() => new Response('{}'));
     service.setCurrentUserId('   ');
@@ -209,12 +342,14 @@ describe('CocAccountService', () => {
     expect(reportError).toHaveBeenCalledTimes(1);
 
     service.setCurrentUserId('user');
-    await expect(service.fetchAccounts()).rejects.toThrow('Invalid CoC accounts payload');
-    expect(reportError).toHaveBeenLastCalledWith('accounts.fetch', expect.any(TypeError));
+    await expect(service.fetchAccounts()).rejects.toBeInstanceOf(ResponseDecodeError);
+    expect(reportError).toHaveBeenLastCalledWith('accounts.fetch', expect.any(ResponseDecodeError));
   });
 
   test('maps verification errors without reporting expected authentication failures', async () => {
-    const { service, reportError } = harness(() => new Response('{}', { status: 403 }));
+    const { service, reportError } = harness(
+      () => new Response('{"code":"forbidden","message":"Invalid token"}', { status: 403 }),
+    );
     await expect(service.verifyAccount('#ONE', 'bad')).resolves.toEqual({
       success: false,
       message: 'Invalid API token for this account',

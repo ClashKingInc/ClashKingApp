@@ -67,9 +67,6 @@ export class RankingsProvider {
   }
 
   async initialize(): Promise<void> {
-    // Worldwide is the initial Flutter-compatible selection, so its leaderboard can load
-    // immediately instead of waiting on the much larger location catalogue request.
-    const initialRankings = this.reload();
     this.isLoadingLocations = true;
     this.locationError = null;
     this.notifyListeners();
@@ -80,7 +77,9 @@ export class RankingsProvider {
       );
       if (this.locations.length === 0) this.locations = [RankingLocation.worldwide()];
       this.location =
-        this.locations.find((item) => item.isWorldwide) ??
+        (this.board.supportsWorldwide
+          ? this.locations.find((item) => item.isWorldwide)
+          : this.locations.find((item) => !item.isWorldwide)) ??
         this.locations[0] ??
         RankingLocation.worldwide();
     } catch (error) {
@@ -89,7 +88,7 @@ export class RankingsProvider {
       this.isLoadingLocations = false;
       this.notifyListeners();
     }
-    await initialRankings;
+    await this.reload();
   }
 
   async reload(): Promise<void> {

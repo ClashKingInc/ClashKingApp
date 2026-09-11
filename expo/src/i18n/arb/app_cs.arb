@@ -1,4 +1,10 @@
 {
+  "settingsClearImageCache": "Vymazat mezipaměť obrázků",
+  "settingsImageCacheCleared": "Mezipaměť obrázků byla vymazána.",
+  "settingsImageCacheClearFailed": "Mezipaměť obrázků se nepodařilo vymazat. Zkuste to znovu.",
+  "startupCheckingUpdate": "Kontrola aktualizací…",
+  "startupDownloadingUpdate": "Stahování aktualizace…",
+  "startupUpdateInBackground": "Aktualizovat na pozadí",
   "warStatsRangeTitle": "Rozsah válečných statistik",
   "warStatsRangeDescription": "Zvolte, zda statistiky zahrnují pevný počet nedávných válek, nebo nedávné období ve dnech.",
   "warStatsRangeDays": "Dny",
@@ -1461,6 +1467,8 @@
   "legendsCountryTitle": "Země",
   "legendsLocalRankTitle": "Místní hodnost",
   "legendsGlobalRankTitle": "Globální hodnost",
+  "legendsYourArmy": "Tvá armáda",
+  "legendsArmyUsedAgainstYou": "Armáda použitá proti tobě",
   "warWinsTitle": "Vyhrává",
   "warLossesTitle": "Ztráty",
   "warDrawsTitle": "Kreslí",
@@ -4661,6 +4669,28 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registrovaná soupiska",
+  "cwlMatches": "Souboje",
+  "cwlNextMatchup": "Příští souboj",
+  "cwlOtherMatches": "Ostatní souboje",
+  "cwlOutlook": "Výhled sezóny",
+  "cwlFirstPlace": "První místo",
+  "cwlTopTwo": "První dva",
+  "cwlRemainingOpponents": "Zbývající soupeři",
+  "cwlWinBonusNote": "Hvězdy zahrnují 10 bonusových hvězd za každou dokončenou výhru.",
+  "cwlEstimateNote": "Odhady vycházejí z dokončených válek a zbývajících soupeřů, ne ze změn sestav. Každý klan musí mít alespoň dvě dokončené války. Odhady nejsou kalibrované; pravidla postupu se liší podle ligy.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hodina} few {# hodiny} other {# hodin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }
