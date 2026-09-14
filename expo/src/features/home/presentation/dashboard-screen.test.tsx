@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { I18nProvider } from '../../../i18n';
@@ -7,7 +7,12 @@ import type { HomeDashboardActions } from './contracts';
 import { DashboardScreen } from './dashboard-screen';
 
 jest.mock('../../../core/assets/local-asset-cache', () => ({
-  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
 }));
 
 const mockHomeDrag = jest.fn();
@@ -21,21 +26,42 @@ jest.mock('react-native-draggable-flatlist', () => {
       data,
       ListEmptyComponent,
       ListHeaderComponent,
+      onScrollBeginDrag,
+      onScrollEndDrag,
+      onScrollOffsetChange,
       renderItem,
+      refreshControl,
       scrollEnabled,
     }: {
       data: readonly unknown[];
       ListEmptyComponent?: React.ReactNode;
       ListHeaderComponent?: React.ReactNode;
+      onScrollBeginDrag?: () => void;
+      onScrollEndDrag?: () => void;
+      onScrollOffsetChange?: (offset: number) => void;
+      refreshControl?: React.ReactElement<{
+        onRefresh?: () => void;
+        refreshing?: boolean;
+      }>;
       renderItem: (parameters: Record<string, unknown>) => React.ReactNode;
       scrollEnabled?: boolean;
-    }) =>
-      ReactModule.createElement(
+    }) => {
+      const refreshProps = ReactModule.isValidElement(refreshControl)
+        ? refreshControl.props
+        : undefined;
+      const mockProps = {
+        accessibilityLabel: scrollEnabled ? 'scroll-enabled' : 'scroll-disabled',
+        accessibilityState: { busy: refreshProps?.refreshing },
+        onRefresh: refreshProps?.onRefresh,
+        onScrollBeginDrag,
+        onScrollEndDrag,
+        onScrollOffsetChange,
+        refreshControl,
+        testID: 'home-draggable-list',
+      } as unknown as React.ComponentProps<typeof MockView>;
+      return ReactModule.createElement(
         MockView,
-        {
-          accessibilityLabel: scrollEnabled ? 'scroll-enabled' : 'scroll-disabled',
-          testID: 'home-draggable-list',
-        },
+        mockProps,
         ListHeaderComponent,
         data.length
           ? data.map((item, index) =>
@@ -51,7 +77,8 @@ jest.mock('react-native-draggable-flatlist', () => {
               ),
             )
           : ListEmptyComponent,
-      ),
+      );
+    },
     ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
   };
 });
@@ -137,5 +164,155 @@ describe('DashboardScreen states', () => {
     mockHomeDrag.mockClear();
     await fireEvent(screen.getByTestId('home-card-upgrade'), 'longPress');
     expect(mockHomeDrag).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the todo card progress label at zero percent', async () => {
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <DashboardScreen
+              platform="ios"
+              model={{
+                loading: false,
+                linkedAccountCount: 1,
+                announcements: [],
+                upgradeTrackerEnabled: false,
+                todo: {
+                  accounts: [
+                    {
+                      account: {
+                        tag: '#TODO',
+                        name: 'Todo account',
+                        subtitle: 'TH16',
+                        imageUrl:
+                          'https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png',
+                      },
+                      status: 'Todo account has tasks left',
+                      metrics: [{ id: 'legend', kind: 'legendAttacks', done: 0, total: 4 }],
+                      done: 0,
+                      total: 4,
+                    },
+                  ],
+                },
+              }}
+              actions={actions()}
+            />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    expect(screen.getByText('0%')).toBeTruthy();
+  });
+
+  it('uses a native Android scroll view with a visible refresh control', async () => {
+    const callbacks = actions();
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <DashboardScreen
+              platform="android"
+              model={{
+                loading: false,
+                linkedAccountCount: 1,
+                announcements: [],
+                upgradeTrackerEnabled: false,
+                todo: {
+                  accounts: [
+                    {
+                      account: {
+                        tag: '#TODO',
+                        name: 'Todo account',
+                        subtitle: 'TH16',
+                        imageUrl:
+                          'https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png',
+                      },
+                      status: 'Todo account has tasks left',
+                      metrics: [{ id: 'legend', kind: 'legendAttacks', done: 0, total: 4 }],
+                      done: 0,
+                      total: 4,
+                    },
+                  ],
+                },
+              }}
+              actions={callbacks}
+            />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    const scrollView = screen.getByTestId('home-scroll-view');
+    await act(async () => {
+      scrollView.props.refreshControl.props.onRefresh();
+    });
+
+    expect(callbacks.refresh).toHaveBeenCalledTimes(1);
+    expect(scrollView.props.refreshControl).toBeTruthy();
+    expect(screen.queryByTestId('home-draggable-list')).toBeNull();
+  });
+
+  it('refreshes after one full pull even if the native refresh control misses it', async () => {
+    const callbacks = actions();
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <DashboardScreen
+              platform="android"
+              model={{
+                loading: false,
+                linkedAccountCount: 1,
+                lastRefresh: new Date('2026-09-14T12:00:00Z'),
+                announcements: [],
+                upgradeTrackerEnabled: false,
+                todo: {
+                  accounts: [
+                    {
+                      account: {
+                        tag: '#TODO',
+                        name: 'Todo account',
+                        subtitle: 'TH16',
+                        imageUrl:
+                          'https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png',
+                      },
+                      status: 'Todo account has tasks left',
+                      metrics: [{ id: 'legend', kind: 'legendAttacks', done: 0, total: 4 }],
+                      done: 0,
+                      total: 4,
+                    },
+                  ],
+                },
+              }}
+              actions={callbacks}
+            />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    const list = screen.getByTestId('home-scroll-view');
+    await fireEvent(list, 'scrollBeginDrag');
+    await fireEvent.scroll(list, { nativeEvent: { contentOffset: { y: -80 } } });
+    await fireEvent(list, 'scrollEndDrag');
+
+    expect(callbacks.refresh).toHaveBeenCalledTimes(1);
   });
 });

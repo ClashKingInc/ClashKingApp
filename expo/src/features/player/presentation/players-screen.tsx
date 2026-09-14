@@ -48,15 +48,18 @@ import { formatLastRefresh } from './presentation-utils';
 export function PlayersScreen({
   model,
   actions,
+  platform = Platform.OS,
 }: {
   model: PlayersPresentationModel;
   actions: PlayersPresentationActions;
+  platform?: string;
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const desktop = platform === 'web' && width >= 900;
+  const usesNativeRefreshScroll = platform === 'android';
   const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
   const link = useLinkParameters();
   const [mode, setMode] = useState<PlayerRosterMode>(
@@ -67,7 +70,25 @@ export function PlayersScreen({
     ),
   );
   const [refreshing, setRefreshing] = useState(false);
-  const pullRefresh = usePullRefreshHint();
+  const refreshingRef = useRef(false);
+  const refresh = useCallback(async () => {
+    if (refreshingRef.current) return;
+    refreshingRef.current = true;
+    setRefreshing(true);
+    try {
+      await actions.refresh();
+    } catch (error) {
+      actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+    } finally {
+      refreshingRef.current = false;
+      setRefreshing(false);
+    }
+  }, [actions, t]);
+  const pullRefresh = usePullRefreshHint({
+    onRefresh: () => void refresh(),
+    refreshing,
+    showOnAndroid: true,
+  });
   const [verification, setVerification] = useState<Player>();
   const [loadingBookmark, setLoadingBookmark] = useState(false);
   const requestedBookmarks = useRef(new Set<string>());
@@ -80,16 +101,6 @@ export function PlayersScreen({
     missing.forEach((tag) => requestedBookmarks.current.add(normalizeRosterTag(tag)));
     void actions.hydrateBookmarkedPlayers(missing);
   }, [actions, rosters.missingBookmarkTags]);
-  const refresh = async () => {
-    setRefreshing(true);
-    try {
-      await actions.refresh();
-    } catch (error) {
-      actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
-    } finally {
-      setRefreshing(false);
-    }
-  };
   const openBookmark = async (tag: string) => {
     setLoadingBookmark(true);
     try {
@@ -186,9 +197,12 @@ export function PlayersScreen({
   );
   const refreshControl = (
     <RefreshControl
+      colors={[theme.primary]}
+      progressBackgroundColor={theme.surface}
+      progressViewOffset={insets.top}
       refreshing={refreshing}
-      onRefresh={() => void refresh()}
       tintColor={theme.primary}
+      onRefresh={() => void refresh()}
     />
   );
   return (
@@ -196,7 +210,7 @@ export function PlayersScreen({
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {desktop ? (
+      {desktop || usesNativeRefreshScroll ? (
         <ScrollView
           onScroll={pullRefresh.onScroll}
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
@@ -205,10 +219,19 @@ export function PlayersScreen({
           alwaysBounceVertical
           contentContainerStyle={{ paddingHorizontal: horizontal, paddingBottom: 32 }}
           refreshControl={refreshControl}
+          testID={usesNativeRefreshScroll ? 'player-scroll-view' : undefined}
         >
           {listHeader}
           {entries.length === 0 ? (
             emptyRoster
+          ) : usesNativeRefreshScroll ? (
+            <View style={styles.mobileCards}>
+              {entries.map((entry) => (
+                <View key={playerRosterEntryTag(entry)} style={styles.cardItem}>
+                  {cardForEntry(entry)}
+                </View>
+              ))}
+            </View>
           ) : (
             <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
               {entries.map((entry) => (
@@ -442,6 +465,7 @@ const styles = StyleSheet.create({
   segmentItem: { flex: 1, alignItems: 'center', justifyContent: 'center', borderRadius: 14 },
   segmentLabel: { width: '100%', textAlign: 'center', fontSize: 13, fontWeight: '600' },
   cardItem: { marginBottom: 10 },
+  mobileCards: { gap: 0 },
   activeCard: { opacity: 0.96 },
   empty: { padding: 0 },
   modalOverlay: {

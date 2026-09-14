@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { BookmarkedClan } from '../../../core/bookmarks/bookmark-service';
@@ -8,7 +8,12 @@ import type { ClansPresentationActions, ClansPresentationModel } from './contrac
 import { ClansScreen } from './clans-screen';
 
 jest.mock('../../../core/assets/local-asset-cache', () => ({
-  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
 }));
 
 const makeActions = (): ClansPresentationActions => ({
@@ -41,6 +46,20 @@ function renderScreen(model: ClansPresentationModel, actions: ClansPresentationA
 }
 
 describe('ClansScreen states', () => {
+  it('refreshes after one full pull on the native scroll view', async () => {
+    const actions = makeActions();
+    const screen = await renderScreen({ profiles: [], bookmarks: [], hydratedClans: [] }, actions);
+    const scroll = screen.getByTestId('clans-scroll-view');
+
+    await act(async () => {
+      fireEvent(scroll, 'scrollBeginDrag');
+      fireEvent.scroll(scroll, { nativeEvent: { contentOffset: { y: -80 } } });
+      fireEvent(scroll, 'scrollEndDrag');
+    });
+
+    expect(actions.refresh).toHaveBeenCalledTimes(1);
+  });
+
   it('renders the exact no-clan state', async () => {
     const screen = await renderScreen(
       { profiles: [], bookmarks: [], hydratedClans: [] },

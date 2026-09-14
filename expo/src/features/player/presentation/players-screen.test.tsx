@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -11,7 +11,12 @@ import type { PlayersPresentationActions, PlayersPresentationModel } from './con
 import { PlayersScreen } from './players-screen';
 
 jest.mock('../../../core/assets/local-asset-cache', () => ({
-  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
 }));
 
 const mockRosterDrag = jest.fn();
@@ -97,6 +102,34 @@ const emptyModel: PlayersPresentationModel = {
 };
 
 describe('PlayersScreen roster states', () => {
+  it('uses a native Android scroll view and refreshes after one full pull', async () => {
+    const callbacks = actions();
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <PlayersScreen model={emptyModel} actions={callbacks} platform="android" />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    const scroll = screen.getByTestId('player-scroll-view');
+    await act(async () => {
+      fireEvent(scroll, 'scrollBeginDrag');
+      fireEvent.scroll(scroll, { nativeEvent: { contentOffset: { y: -80 } } });
+      fireEvent(scroll, 'scrollEndDrag');
+    });
+
+    expect(callbacks.refresh).toHaveBeenCalledTimes(1);
+    expect(screen.queryByTestId('player-roster-list')).toBeNull();
+  });
+
   it('switches exact empty states and delegates linked-account management', async () => {
     const callbacks = actions();
     const screen = await render(

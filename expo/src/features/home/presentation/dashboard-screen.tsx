@@ -1,6 +1,13 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { useState } from 'react';
-import { Platform, RefreshControl, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import {
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { EyeOff, UserCircle } from 'lucide-react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -42,20 +49,29 @@ export function DashboardScreen({
   const { width: windowWidth } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(windowWidth);
   const desktop = isDesktopHome(platform, windowWidth);
+  const usesNativeRefreshScroll = platform === 'android';
   const maxContent = desktop ? homeContentWidth(windowWidth) : 840;
   const horizontal = centeredContentPadding(contentWidth, maxContent);
   const [refreshing, setRefreshing] = useState(false);
-  const pullRefresh = usePullRefreshHint();
-  const refresh = async () => {
+  const refreshingRef = useRef(false);
+  const refresh = useCallback(async () => {
+    if (refreshingRef.current) return;
+    refreshingRef.current = true;
     setRefreshing(true);
     try {
       await actions.refresh();
     } catch (error) {
       actions.showRefreshError(t('generalRefreshFailed', { error: String(error) }));
     } finally {
+      refreshingRef.current = false;
       setRefreshing(false);
     }
-  };
+  }, [actions, t]);
+  const pullRefresh = usePullRefreshHint({
+    onRefresh: () => void refresh(),
+    refreshing,
+    showOnAndroid: true,
+  });
   const cards = visibleHomeCards(model);
   let emptyBody;
   if (model.loading && model.linkedAccountCount === 0)
@@ -86,102 +102,132 @@ export function DashboardScreen({
         style={styles.empty}
       />
     );
+  const contentContainerStyle = {
+    paddingHorizontal: horizontal,
+    paddingBottom: homeBottomPadding(desktop, insets.bottom),
+  };
+  const header = (
+    <>
+      <HomeEventBanner
+        announcements={model.announcements}
+        desktop={desktop}
+        onOpen={actions.openAnnouncement}
+      />
+      <View style={{ height: desktop ? 24 : 16 }} />
+    </>
+  );
+  const refreshControl = (
+    <RefreshControl
+      colors={[theme.primary]}
+      progressBackgroundColor={theme.surface}
+      progressViewOffset={insets.top}
+      refreshing={refreshing}
+      tintColor={theme.primary}
+      onRefresh={() => void refresh()}
+    />
+  );
+  const renderCard = (
+    card: HomeCardId,
+    index: number,
+    isActive = false,
+    dragProps?: { onLongPress: () => void; dragTestID: string },
+  ) => {
+    const title = homeCardTitle(card, t);
+    const cardDragProps = dragProps ?? {};
+    return (
+      <View
+        key={card}
+        style={[
+          styles.recap,
+          desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
+          index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
+          isActive && styles.activeCard,
+        ]}
+      >
+        {desktop ? (
+          <>
+            <CKText role="titleMedium" style={styles.sectionTitle}>
+              {title}
+            </CKText>
+            <View style={styles.sectionGap} />
+          </>
+        ) : null}
+        {card === 'todo' && model.todo ? (
+          <HomeTodoCard model={model.todo} desktop={desktop} actions={actions} {...cardDragProps} />
+        ) : card === 'ranked' && model.ranked ? (
+          <HomeRankedCard
+            model={model.ranked}
+            desktop={desktop}
+            actions={actions}
+            {...cardDragProps}
+          />
+        ) : card === 'upgrade' && model.upgrade ? (
+          <HomeUpgradeCard
+            model={model.upgrade}
+            desktop={desktop}
+            actions={actions}
+            {...cardDragProps}
+          />
+        ) : null}
+      </View>
+    );
+  };
+  const emptyContent = (
+    <View
+      style={[
+        styles.recap,
+        desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
+      ]}
+    >
+      {emptyBody}
+    </View>
+  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <DraggableFlatList
-        onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-        onScrollEndDrag={pullRefresh.onScrollEndDrag}
-        activationDistance={8}
-        alwaysBounceVertical
-        data={cards}
-        keyExtractor={(card) => card}
-        onDragEnd={({ data }) => actions.reorderCards(data)}
-        scrollEnabled
-        contentContainerStyle={{
-          paddingHorizontal: horizontal,
-          paddingBottom: homeBottomPadding(desktop, insets.bottom),
-        }}
-        ListEmptyComponent={
-          <View
-            style={[
-              styles.recap,
-              desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
-            ]}
-          >
-            {emptyBody}
-          </View>
-        }
-        ListHeaderComponent={
-          <>
-            <HomeEventBanner
-              announcements={model.announcements}
-              desktop={desktop}
-              onOpen={actions.openAnnouncement}
-            />
-            <View style={{ height: desktop ? 24 : 16 }} />
-          </>
-        }
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => void refresh()}
-            tintColor={theme.primary}
-          />
-        }
-        renderItem={({ item: card, drag, isActive, getIndex }) => {
-          const title = homeCardTitle(card, t);
-          const index = getIndex() ?? 0;
-          const dragProps = { onLongPress: drag, dragTestID: `home-card-${card}` };
-          return (
-            <ScaleDecorator activeScale={1.015}>
-              <View
-                style={[
-                  styles.recap,
-                  desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
-                  index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
-                  isActive && styles.activeCard,
-                ]}
-              >
-                {desktop ? (
-                  <>
-                    <CKText role="titleMedium" style={styles.sectionTitle}>
-                      {title}
-                    </CKText>
-                    <View style={styles.sectionGap} />
-                  </>
-                ) : null}
-                {card === 'todo' && model.todo ? (
-                  <HomeTodoCard
-                    model={model.todo}
-                    desktop={desktop}
-                    actions={actions}
-                    {...dragProps}
-                  />
-                ) : card === 'ranked' && model.ranked ? (
-                  <HomeRankedCard
-                    model={model.ranked}
-                    desktop={desktop}
-                    actions={actions}
-                    {...dragProps}
-                  />
-                ) : card === 'upgrade' && model.upgrade ? (
-                  <HomeUpgradeCard
-                    model={model.upgrade}
-                    desktop={desktop}
-                    actions={actions}
-                    {...dragProps}
-                  />
-                ) : null}
-              </View>
-            </ScaleDecorator>
-          );
-        }}
-      />
+      {usesNativeRefreshScroll ? (
+        <ScrollView
+          alwaysBounceVertical
+          contentContainerStyle={contentContainerStyle}
+          onScroll={pullRefresh.onScroll}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
+          refreshControl={refreshControl}
+          scrollEventThrottle={16}
+          testID="home-scroll-view"
+        >
+          {header}
+          {cards.length ? cards.map((card, index) => renderCard(card, index)) : emptyContent}
+        </ScrollView>
+      ) : (
+        <DraggableFlatList
+          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
+          activationDistance={24}
+          alwaysBounceVertical
+          data={cards}
+          keyExtractor={(card) => card}
+          onDragEnd={({ data }) => actions.reorderCards(data)}
+          scrollEnabled
+          contentContainerStyle={contentContainerStyle}
+          ListEmptyComponent={emptyContent}
+          ListHeaderComponent={header}
+          refreshControl={refreshControl}
+          renderItem={({ item: card, drag, isActive, getIndex }) => {
+            const index = getIndex() ?? 0;
+            const dragProps = { onLongPress: drag, dragTestID: `home-card-${card}` };
+            return (
+              <ScaleDecorator activeScale={1.015}>
+                {renderCard(card, index, isActive, dragProps)}
+              </ScaleDecorator>
+            );
+          }}
+        />
+      )}
       <PullRefreshHint
         distance={pullRefresh.distance}
         refreshing={refreshing}

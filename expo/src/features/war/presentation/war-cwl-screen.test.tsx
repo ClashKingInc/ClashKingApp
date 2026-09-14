@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ClanBadgeUrls, type Clan } from '../../clan/models';
@@ -90,6 +90,20 @@ function renderRoot() {
 }
 
 describe('WarCwlPresentationRoot', () => {
+  it('refreshes after one full pull on the native war scroll view', async () => {
+    jest.mocked(actions.refresh).mockClear();
+    const screen = await renderRoot();
+    const scroll = screen.getByTestId('war-scroll-view');
+
+    await act(async () => {
+      fireEvent(scroll, 'scrollBeginDrag');
+      fireEvent.scroll(scroll, { nativeEvent: { contentOffset: { y: -80 } } });
+      fireEvent(scroll, 'scrollEndDrag');
+    });
+
+    expect(actions.refresh).toHaveBeenCalledTimes(1);
+  });
+
   it('hides unavailable CWL details until attacks or defenses exist', () => {
     const pendingMember = new CwlMember('#PENDING', 'Pending', 18);
     const activeMember = new CwlMember(

@@ -7,7 +7,7 @@ jest.mock('./theme', () => ({
 }));
 
 describe('pull refresh hint', () => {
-  it('only exposes the gap during an initial active pull, never during rebound', async () => {
+  it('exposes the gap during an initial active pull, never during rebound', async () => {
     const { result } = await renderHook(() => usePullRefreshHint());
     expect(result.current.distance).toBe(0);
     await act(() => result.current.onScrollOffsetChange(-40));
@@ -20,12 +20,29 @@ describe('pull refresh hint', () => {
     await act(() => result.current.onScrollOffsetChange(-40));
     expect(result.current.distance).toBe(40);
     await act(() => result.current.onScrollOffsetChange(-70));
-    expect(result.current.distance).toBe(0);
+    expect(result.current.distance).toBe(70);
     await act(() => result.current.onScrollOffsetChange(-40));
     await act(() => result.current.onScrollEndDrag());
     expect(result.current.distance).toBe(0);
     await act(() => result.current.onScrollOffsetChange(-40));
     expect(result.current.distance).toBe(0);
+  });
+
+  it('can trigger refresh on release after a full pull', async () => {
+    const onRefresh = jest.fn();
+    const { result } = await renderHook(() =>
+      usePullRefreshHint({ onRefresh, releaseThreshold: 72 }),
+    );
+
+    await act(() => result.current.onScrollBeginDrag());
+    await act(() => result.current.onScrollOffsetChange(-60));
+    await act(() => result.current.onScrollEndDrag());
+    expect(onRefresh).not.toHaveBeenCalled();
+
+    await act(() => result.current.onScrollBeginDrag());
+    await act(() => result.current.onScrollOffsetChange(-80));
+    await act(() => result.current.onScrollEndDrag());
+    expect(onRefresh).toHaveBeenCalledTimes(1);
   });
 
   it('keeps the label inside the overscroll gap and hides it during refresh', async () => {

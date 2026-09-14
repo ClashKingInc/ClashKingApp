@@ -10,14 +10,32 @@ import {
 import { CKText } from './text';
 import { useCKTheme } from './theme';
 
+type PullRefreshHintOptions = {
+  readonly onRefresh?: () => void;
+  readonly refreshing?: boolean;
+  readonly releaseThreshold?: number;
+  readonly showOnAndroid?: boolean;
+};
+
 // Only occupy the empty iOS overscroll area, before the native refresh control takes over.
-export function usePullRefreshHint() {
+export function usePullRefreshHint(options: PullRefreshHintOptions = {}) {
+  const { onRefresh, refreshing = false, releaseThreshold = 72, showOnAndroid = false } = options;
   const dragging = useRef(false);
+  const pullDistance = useRef(0);
   const [distance, setDistance] = useState(0);
-  const onScrollOffsetChange = useCallback((offset: number) => {
-    const pull = Math.max(0, -offset);
-    setDistance(Platform.OS === 'ios' && dragging.current && pull >= 24 && pull < 60 ? pull : 0);
-  }, []);
+  const onScrollOffsetChange = useCallback(
+    (offset: number) => {
+      const pull = Math.max(0, -offset);
+      pullDistance.current = pull;
+      const showsHint = Platform.OS === 'ios' || showOnAndroid;
+      setDistance(
+        !refreshing && showsHint && dragging.current && pull >= 24
+          ? Math.min(pull, releaseThreshold)
+          : 0,
+      );
+    },
+    [refreshing, releaseThreshold, showOnAndroid],
+  );
   const onScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       onScrollOffsetChange(event.nativeEvent.contentOffset.y);
@@ -28,9 +46,12 @@ export function usePullRefreshHint() {
     dragging.current = true;
   }, []);
   const onScrollEndDrag = useCallback(() => {
+    const shouldRefresh = !refreshing && pullDistance.current >= releaseThreshold;
     dragging.current = false;
+    pullDistance.current = 0;
     setDistance(0);
-  }, []);
+    if (shouldRefresh) onRefresh?.();
+  }, [onRefresh, refreshing, releaseThreshold]);
   return { distance, onScroll, onScrollOffsetChange, onScrollBeginDrag, onScrollEndDrag };
 }
 
