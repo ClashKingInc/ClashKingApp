@@ -1,10 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { CKThemeProvider } from '../../ui';
-import { STORAGE_KEYS } from '../../core/storage/storage';
 import { DesktopSidebar } from '../desktop-sidebar';
 import { NavigationShell, type NavigationShellProps } from '../navigation-shell';
 import { RetainedPrimaryPager } from '../retained-pager';
@@ -369,7 +368,7 @@ describe('navigation shell components', () => {
     expect(view.getByTestId('primary-page-home', { includeHiddenElements: true })).toBeTruthy();
   });
 
-  it('uses a continuously interactive narrow-edge drawer and opens it from the avatar', async () => {
+  it('uses a reachable edge drawer gesture and opens it from the avatar', async () => {
     mockDrawerOpen.mockClear();
     const view = await providers(
       <NavigationShell
@@ -395,17 +394,60 @@ describe('navigation shell components', () => {
       />,
     );
     const drawer = view.getByTestId('reanimated-drawer-layout');
-    expect(drawer.props.edgeWidth).toBe(20);
-    expect(drawer.props.minSwipeDistance).toBe(8);
+    expect(drawer.props.edgeWidth).toBe(36);
+    expect(drawer.props.minSwipeDistance).toBe(6);
     expect(drawer.props.drawerLockMode).toBe(0);
     expect(drawer.props.drawerPosition).toBe(0);
+    expect(
+      view.getByTestId('profile-menu-indicator', { includeHiddenElements: true }),
+    ).toBeTruthy();
     await fireEvent.press(view.getByRole('button', { name: 'profile' }));
     expect(mockDrawerOpen).toHaveBeenCalledTimes(1);
     expect(fallbackTabBarBottomPadding(24)).toBe(24);
     expect(fallbackTabBarBottomPadding(0)).toBe(10);
   });
 
-  it('shows the edge hint until the drawer first opens, then persists its dismissal', async () => {
+  it('keeps Android drawer swipe available without showing the edge hint', async () => {
+    mockDrawerOpen.mockClear();
+    const drawerHintStore = {
+      getString: jest.fn(async () => null),
+      setString: jest.fn(async () => undefined),
+      remove: jest.fn(async () => undefined),
+    };
+    const view = await providers(
+      <NavigationShell
+        selectedPrimary="home"
+        primaryScreens={screens}
+        features={{}}
+        t={t as never}
+        isRtl={false}
+        avatar={<View />}
+        displayName="User"
+        followerCount={0}
+        productLabel="ClashKing"
+        hasUser
+        profileMenuLabel="profile"
+        closeDrawerLabel="close"
+        drawerHintStore={drawerHintStore}
+        onPrimarySelect={jest.fn()}
+        onUtilityNavigate={jest.fn()}
+        onAchievements={jest.fn()}
+        onAddAccount={jest.fn()}
+        onAccounts={jest.fn()}
+        viewportWidth={390}
+        platform="android"
+      />,
+    );
+    const drawer = view.getByTestId('reanimated-drawer-layout');
+    expect(drawer.props.edgeWidth).toBe(36);
+    expect(view.queryByTestId('mobile-drawer-gesture-hint')).toBeNull();
+    expect(drawerHintStore.getString).not.toHaveBeenCalled();
+
+    await fireEvent.press(view.getByRole('button', { name: 'profile' }));
+    expect(mockDrawerOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps iOS drawer swipe available without showing the edge hint', async () => {
     const drawerHintStore = {
       getString: jest.fn(async () => null),
       setString: jest.fn(async () => undefined),
@@ -436,19 +478,10 @@ describe('navigation shell components', () => {
       />,
     );
 
-    await waitFor(() =>
-      expect(
-        view.getByTestId('mobile-drawer-gesture-hint', { includeHiddenElements: true }),
-      ).toBeTruthy(),
-    );
-    await fireEvent(view.getByTestId('reanimated-drawer-layout'), 'drawerOpen');
-    expect(
-      view.queryByTestId('mobile-drawer-gesture-hint', { includeHiddenElements: true }),
-    ).toBeNull();
-    expect(drawerHintStore.setString).toHaveBeenCalledWith(
-      `${STORAGE_KEYS.mobileDrawerGestureHintSeen}_preview_v2`,
-      'true',
-    );
+    const drawer = view.getByTestId('reanimated-drawer-layout');
+    expect(drawer.props.edgeWidth).toBe(36);
+    expect(view.queryByTestId('mobile-drawer-gesture-hint')).toBeNull();
+    expect(drawerHintStore.getString).not.toHaveBeenCalled();
   });
 
   it('mirrors the drawer edge in RTL and locks it closed on a secondary route', async () => {
@@ -481,7 +514,7 @@ describe('navigation shell components', () => {
     const drawer = view.getByTestId('reanimated-drawer-layout');
     expect(drawer.props.drawerPosition).toBe(1);
     expect(drawer.props.drawerLockMode).toBe(1);
-    expect(drawer.props.edgeWidth).toBe(20);
+    expect(drawer.props.edgeWidth).toBe(36);
     expect(mockDrawerClose).toHaveBeenCalled();
   });
 

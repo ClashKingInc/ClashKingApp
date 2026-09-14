@@ -92,7 +92,9 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const [drawerHintVisible, setDrawerHintVisible] = useState(false);
   const drawerRef = useRef<DrawerLayoutMethods>(null);
   const pendingDrawerAction = useRef<(() => void) | undefined>(undefined);
-  const drawerEdgeWidth = 20;
+  const allowsDrawerEdgeGesture = platformAllowsDrawerEdgeGesture(platform);
+  const showsDrawerEdgeHint = platformShowsDrawerEdgeHint(platform);
+  const drawerEdgeWidth = allowsDrawerEdgeGesture ? 36 : 0;
   const drawerWidth = resolveMobileDrawerWidth(width);
   // Replay this revised hint once in development without resetting production preferences.
   const hintStorageKey = __DEV__
@@ -100,7 +102,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     : STORAGE_KEYS.mobileDrawerGestureHintSeen;
   useEffect(() => {
     let current = true;
-    if (!props.drawerHintStore) return;
+    if (!showsDrawerEdgeHint || !props.drawerHintStore) return;
     void props.drawerHintStore
       .getString(hintStorageKey)
       .then((seen) => {
@@ -112,7 +114,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     return () => {
       current = false;
     };
-  }, [props.drawerHintStore, hintStorageKey]);
+  }, [showsDrawerEdgeHint, props.drawerHintStore, hintStorageKey]);
   const secondaryLayers = props.secondaryLayers?.length
     ? props.secondaryLayers
     : props.secondaryContent
@@ -181,7 +183,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
       drawerWidth={drawerWidth}
       edgeWidth={drawerEdgeWidth}
       hideStatusBar={false}
-      minSwipeDistance={8}
+      minSwipeDistance={6}
       onDrawerClose={handleDrawerClose}
       onDrawerOpen={handleDrawerOpen}
       overlayColor="#00000066"
@@ -236,7 +238,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
               isRtl={props.isRtl}
             />
           </View>
-          {drawerHintVisible ? <DrawerEdgeHint isRtl={isRtl} /> : null}
+          {showsDrawerEdgeHint && drawerHintVisible ? <DrawerEdgeHint isRtl={isRtl} /> : null}
         </View>
         {secondaryActive
           ? mountedSecondaryLayers.map((layer, index) => {
@@ -421,6 +423,15 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
 
 function platformAllowsTabSwipe(platform?: string): boolean {
   return (platform ?? Platform.OS) !== 'web';
+}
+
+function platformAllowsDrawerEdgeGesture(platform?: string): boolean {
+  return (platform ?? Platform.OS) !== 'web';
+}
+
+function platformShowsDrawerEdgeHint(platform?: string): boolean {
+  void platform;
+  return false;
 }
 
 const styles = StyleSheet.create({
