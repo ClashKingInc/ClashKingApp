@@ -200,7 +200,7 @@ export function HomeTodoCard({
                   <ProgressRing
                     progress={page.total === 0 ? 1 : page.done / page.total}
                     size={54}
-                    showLabel={false}
+                    labelFontSize={15}
                   />
                 }
               />
@@ -233,7 +233,7 @@ export function HomeTodoCard({
           <ProgressRing
             progress={current.total === 0 ? 1 : current.done / current.total}
             size={46}
-            showLabel={false}
+            labelFontSize={13}
           />
         }
       />
