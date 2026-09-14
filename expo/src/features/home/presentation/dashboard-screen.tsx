@@ -2,13 +2,14 @@ import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hi
 import { useCallback, useRef, useState } from 'react';
 import {
   Platform,
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { EyeOff, UserCircle } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, EyeOff, UserCircle } from 'lucide-react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -73,6 +74,16 @@ export function DashboardScreen({
     showOnAndroid: true,
   });
   const cards = visibleHomeCards(model);
+  const moveCard = useCallback(
+    (index: number, direction: -1 | 1) => {
+      const target = index + direction;
+      if (target < 0 || target >= cards.length) return;
+      const next = [...cards];
+      [next[index], next[target]] = [next[target]!, next[index]!];
+      actions.reorderCards(next);
+    },
+    [actions, cards],
+  );
   let emptyBody;
   if (model.loading && model.linkedAccountCount === 0)
     emptyBody = (
@@ -131,6 +142,7 @@ export function DashboardScreen({
     index: number,
     isActive = false,
     dragProps?: { onLongPress: () => void; dragTestID: string },
+    showReorderControls = false,
   ) => {
     const title = homeCardTitle(card, t);
     const cardDragProps = dragProps ?? {};
@@ -169,6 +181,15 @@ export function DashboardScreen({
             {...cardDragProps}
           />
         ) : null}
+        {showReorderControls ? (
+          <HomeCardReorderControls
+            card={card}
+            canMoveUp={index > 0}
+            canMoveDown={index < cards.length - 1}
+            onMoveUp={() => moveCard(index, -1)}
+            onMoveDown={() => moveCard(index, 1)}
+          />
+        ) : null}
       </View>
     );
   };
@@ -200,7 +221,9 @@ export function DashboardScreen({
           testID="home-scroll-view"
         >
           {header}
-          {cards.length ? cards.map((card, index) => renderCard(card, index)) : emptyContent}
+          {cards.length
+            ? cards.map((card, index) => renderCard(card, index, false, undefined, true))
+            : emptyContent}
         </ScrollView>
       ) : (
         <DraggableFlatList
@@ -243,6 +266,59 @@ export function DashboardScreen({
   );
 }
 
+function HomeCardReorderControls({
+  card,
+  canMoveUp,
+  canMoveDown,
+  onMoveUp,
+  onMoveDown,
+}: {
+  card: HomeCardId;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+}) {
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  return (
+    <View style={styles.reorderControls}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('upgradeTrackerPreviousPeriod')}
+        accessibilityState={{ disabled: !canMoveUp }}
+        disabled={!canMoveUp}
+        onPress={onMoveUp}
+        style={({ pressed }) => [
+          styles.reorderButton,
+          { borderColor: theme.outlineVariant, backgroundColor: theme.surfaceContainerHighest },
+          !canMoveUp && styles.reorderButtonDisabled,
+          pressed && styles.reorderButtonPressed,
+        ]}
+        testID={`home-card-move-up-${card}`}
+      >
+        <ChevronUp color={canMoveUp ? theme.onSurface : theme.outlineVariant} size={20} />
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('upgradeTrackerNextPeriod')}
+        accessibilityState={{ disabled: !canMoveDown }}
+        disabled={!canMoveDown}
+        onPress={onMoveDown}
+        style={({ pressed }) => [
+          styles.reorderButton,
+          { borderColor: theme.outlineVariant, backgroundColor: theme.surfaceContainerHighest },
+          !canMoveDown && styles.reorderButtonDisabled,
+          pressed && styles.reorderButtonPressed,
+        ]}
+        testID={`home-card-move-down-${card}`}
+      >
+        <ChevronDown color={canMoveDown ? theme.onSurface : theme.outlineVariant} size={20} />
+      </Pressable>
+    </View>
+  );
+}
+
 function homeCardTitle(card: HomeCardId, t: ReturnType<typeof useI18n>['t']): string {
   if (card === 'todo') return t('todoTitle');
   if (card === 'ranked') return t('rankedLeagueTitle');
@@ -275,5 +351,16 @@ const styles = StyleSheet.create({
   sectionTitle: { fontWeight: '900' },
   sectionGap: { height: ckSpacing.sm },
   mobileGap: { height: 16 },
+  reorderControls: { flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginTop: 8 },
+  reorderButton: {
+    width: 44,
+    height: 36,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  reorderButtonDisabled: { opacity: 0.45 },
+  reorderButtonPressed: { opacity: 0.72 },
   empty: { paddingHorizontal: 24, paddingVertical: 52 },
 });

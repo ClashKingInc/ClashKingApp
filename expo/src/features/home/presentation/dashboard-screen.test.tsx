@@ -264,6 +264,58 @@ describe('DashboardScreen states', () => {
     expect(screen.queryByTestId('home-draggable-list')).toBeNull();
   });
 
+  it('keeps Android home cards reorderable with explicit controls', async () => {
+    const callbacks = actions();
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <DashboardScreen
+              platform="android"
+              model={{
+                loading: false,
+                linkedAccountCount: 1,
+                announcements: [],
+                upgradeTrackerEnabled: false,
+                todo: {
+                  accounts: [
+                    {
+                      account: {
+                        tag: '#TODO',
+                        name: 'Todo account',
+                        subtitle: 'TH16',
+                        imageUrl:
+                          'https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png',
+                      },
+                      status: 'Todo account has tasks left',
+                      metrics: [{ id: 'legend', kind: 'legendAttacks', done: 0, total: 4 }],
+                      done: 0,
+                      total: 4,
+                    },
+                  ],
+                },
+                ranked: { state: 'empty', configuredCount: 1 },
+              }}
+              actions={callbacks}
+            />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    expect(screen.getByTestId('home-card-move-down-todo')).toBeTruthy();
+    expect(screen.getByTestId('home-card-move-up-todo').props.accessibilityState.disabled).toBe(
+      true,
+    );
+    await fireEvent.press(screen.getByTestId('home-card-move-down-todo'));
+    expect(callbacks.reorderCards).toHaveBeenCalledWith(['ranked', 'todo']);
+  });
+
   it('refreshes after one full pull even if the native refresh control misses it', async () => {
     const callbacks = actions();
     const screen = await render(
