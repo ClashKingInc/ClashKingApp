@@ -197,6 +197,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ['expo-secure-store', { configureAndroidBackup: true }],
       'expo-background-task',
       'expo-sharing',
+      'expo-web-browser',
       ['react-native-share', { android: [], ios: [], enableBase64ShareAndroid: false }],
       [
         'expo-audio',
