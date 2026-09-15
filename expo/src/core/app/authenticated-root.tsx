@@ -82,6 +82,7 @@ import { WarCwlService } from '../../features/war/data';
 import { apiDate } from '../../features/war/models';
 import { isRouteEnabled } from '../../navigation/route-manifest';
 import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
+import { selectLegendsPlayer } from './legends-player-selection';
 
 type PushedScene = { readonly linkParams?: AppLinkParams; readonly linkKey?: number } & (
   | { readonly kind: 'player'; readonly player: Player }
@@ -580,15 +581,11 @@ export function AuthenticatedRoot() {
       );
     }
     if (route === 'legends') {
-      const verified = new Set(
-        runtime.accounts.verifiedAccounts.map((account) => canonicalTag(account.playerTag)),
+      const player = selectLegendsPlayer(
+        runtime.players.profiles,
+        runtime.accounts.verifiedAccounts.map((account) => account.playerTag),
+        playerTag,
       );
-      const available = runtime.players.profiles.filter((candidate) =>
-        verified.has(canonicalTag(candidate.tag)),
-      );
-      const player = playerTag
-        ? available.find((candidate) => canonicalTag(candidate.tag) === canonicalTag(playerTag))
-        : available[0];
       if (!player)
         return (
           <View style={styles.boundary}>
