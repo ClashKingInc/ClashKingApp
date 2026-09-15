@@ -45,3 +45,17 @@ export function startupDecision(
     hasVerifiedAccount: authenticated && hasVerifiedAccount,
   };
 }
+
+/** Validate current account links without making navigation depend on optional
+ * player/clan/widget hydration. Callers refresh those after navigation. */
+export async function refreshLinkedAccountsForCurrentAuth(
+  auth: Pick<AuthService, 'canUseApp' | 'state'>,
+  accounts: Pick<CocAccountService, 'setCurrentUserId' | 'fetchAccounts' | 'hasVerifiedAccounts'>,
+): Promise<StartupResult> {
+  const userId = auth.state.currentUser?.userId;
+  if (!auth.canUseApp || !userId) return startupDecision(false, false);
+  accounts.setCurrentUserId(userId);
+  await accounts.fetchAccounts();
+  const sameSession = auth.canUseApp && auth.state.currentUser?.userId === userId;
+  return startupDecision(sameSession, accounts.hasVerifiedAccounts);
+}

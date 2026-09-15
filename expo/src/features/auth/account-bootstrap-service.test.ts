@@ -1,7 +1,13 @@
 import { BookmarkedClan, BookmarkedPlayer } from '../../core/bookmarks';
 import { AccountBootstrapService } from './account-bootstrap-service';
 
-function harness(options: { noAccounts?: boolean; bookmarkError?: unknown } = {}) {
+function harness(
+  options: {
+    noAccounts?: boolean;
+    bookmarkError?: unknown;
+    includeBookmarkedProfile?: boolean;
+  } = {},
+) {
   const calls: string[] = [];
   const linkedAccounts = options.noAccounts ? [] : [{ playerTag: '#P', isVerified: true, raw: {} }];
   const accounts = {
@@ -28,7 +34,12 @@ function harness(options: { noAccounts?: boolean; bookmarkError?: unknown } = {}
   };
   const clansByTag = new Map<string, { tag: string }>();
   const players = {
-    profiles: [{ tag: '#P', clanTag: '#DISCOVERED' }],
+    profiles: [
+      { tag: '#P', clanTag: '#DISCOVERED' },
+      ...(options.includeBookmarkedProfile
+        ? [{ tag: '#BP', clanTag: '#BOOKMARKEDPLAYERCLAN' }]
+        : []),
+    ],
     hydrateBookmarkedPlayers: async (tags: readonly string[]) =>
       calls.push(`bookmarked-players:${tags.join(',')}`),
     prefetchRankedLeagueData: async (_tags: readonly string[], force = false) =>
@@ -86,7 +97,7 @@ function harness(options: { noAccounts?: boolean; bookmarkError?: unknown } = {}
     remove: async () => undefined,
   };
   const warWidgets = {
-    seedClanOptionsFromProfiles: async () => calls.push('widgets'),
+    seedClanOptionsFromProfiles: jest.fn(async () => calls.push('widgets')),
   };
   const service = new AccountBootstrapService({
     accounts: accounts as never,
@@ -100,10 +111,21 @@ function harness(options: { noAccounts?: boolean; bookmarkError?: unknown } = {}
     storage,
     warWidgets: warWidgets as never,
   });
-  return { service, calls };
+  return { service, calls, warWidgets };
 }
 
 describe('AccountBootstrapService', () => {
+  test('does not seed widget clans from bookmarked player profiles', async () => {
+    const { service, warWidgets } = harness({ includeBookmarkedProfile: true });
+    await service.initialize('user');
+    expect(warWidgets.seedClanOptionsFromProfiles).toHaveBeenCalledWith(
+      [{ tag: '#P', clanTag: '#DISCOVERED' }],
+      expect.objectContaining({
+        bookmarkedClans: [expect.objectContaining({ tag: '#BC' })],
+        hydratedClans: expect.arrayContaining([expect.objectContaining({ tag: '#BC' })]),
+      }),
+    );
+  });
   test('hydrates bookmarks, accounts, cached and discovered clans, wars, links, and selection', async () => {
     const { service, calls } = harness();
     await service.initialize('user');
@@ -137,13 +159,13 @@ describe('AccountBootstrapService', () => {
     );
   });
 
-  test('preserves Flutter early return when the user has no account links', async () => {
+  test('clears a stale selection before returning when the user has no account links', async () => {
     const { service, calls } = harness({ noAccounts: true });
     await service.initialize('user');
     await Promise.resolve();
     expect(calls).toContain('accounts-fetch');
     expect(calls).toContain('bookmarked-players:#BP');
-    expect(calls).not.toContain('selected-init');
+    expect(calls).toContain('selected-init');
     expect(calls).not.toContain('players');
     expect(calls).toContain('widgets');
   });

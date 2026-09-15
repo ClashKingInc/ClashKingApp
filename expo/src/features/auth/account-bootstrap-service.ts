@@ -59,11 +59,19 @@ export class AccountBootstrapService {
     ]);
 
     void this.dependencies.warWidgets
-      ?.seedClanOptionsFromProfiles(players.profiles, {
-        bookmarkedClans: bookmarks.clans,
-        selectedPlayerTag: accounts.selectedTag,
-        refreshWarData: true,
-      })
+      ?.seedClanOptionsFromProfiles(
+        players.profiles.filter((player) =>
+          accounts.accounts.some(
+            (account) => account.playerTag.toUpperCase() === player.tag.toUpperCase(),
+          ),
+        ),
+        {
+          bookmarkedClans: bookmarks.clans,
+          hydratedClans: [...this.dependencies.clans.clans.values()],
+          selectedPlayerTag: accounts.selectedTag,
+          refreshWarData: true,
+        },
+      )
       .catch((error: unknown) => this.report('accountBootstrap.warWidgets', error));
   }
 
@@ -92,7 +100,10 @@ export class AccountBootstrapService {
       accountId: links.length ? accounts.userId : null,
       verifiedPlayerTags: links.filter((link) => link.isVerified).map((link) => link.playerTag),
     });
-    if (!links.length) return;
+    if (!links.length) {
+      await accounts.initializeSelectedTag();
+      return;
+    }
 
     const playerTags = links.map((account) => account.playerTag);
     const rankedWarmup = players.prefetchRankedLeagueData(

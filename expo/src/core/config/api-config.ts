@@ -16,7 +16,6 @@ export interface ApiConfiguration {
 
 export const API_ASSET_URL = 'https://assets.clashk.ing';
 export const COC_ASSET_PROXY_URL = 'https://assets-proxy.clashk.ing';
-export const CDN_URL = 'https://cdn.clashk.ing';
 export const DISCORD_URL = 'https://discord.gg/clashking';
 
 export function apiEnvironmentForName(name: string | undefined): ApiEnvironment {
@@ -35,7 +34,7 @@ export function apiEnvironmentForName(name: string | undefined): ApiEnvironment 
 export function defaultApiBaseUrl(environment: ApiEnvironment): string {
   switch (environment) {
     case 'local':
-      return 'http://localhost:8000';
+      return 'http://localhost:8787';
     case 'development':
       return 'https://dev-api.clashk.ing';
     case 'production':

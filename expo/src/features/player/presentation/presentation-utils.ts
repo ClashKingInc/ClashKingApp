@@ -51,19 +51,13 @@ export function playerClanPresentation(player: Player): { label: string; imageUr
     player.clan && typeof player.clan === 'object'
       ? (player.clan as {
           name?: unknown;
+          tag?: unknown;
           badgeUrls?: { small?: unknown; medium?: unknown };
         })
       : null;
   const linkedName = typeof clan?.name === 'string' ? clan.name : '';
-  const linkedSmall = typeof clan?.badgeUrls?.small === 'string' ? clan.badgeUrls.small : '';
-  const linkedMedium = typeof clan?.badgeUrls?.medium === 'string' ? clan.badgeUrls.medium : '';
   return {
     label: linkedName || player.clanOverview.name,
-    imageUrl:
-      linkedSmall ||
-      linkedMedium ||
-      player.clanOverview.badgeUrls.small ||
-      player.clanOverview.badgeUrls.medium ||
-      ImageAssets.clanCastle,
+    imageUrl: ImageAssets.clanBadgeForTag(typeof clan?.tag === 'string' ? clan.tag : player.clanOverview.tag) || ImageAssets.clanCastle,
   };
 }

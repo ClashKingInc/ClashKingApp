@@ -6,6 +6,7 @@ internal object UpgradeWidgetSelectionStore {
     private const val PREFERENCES = "UpgradeWidgetPreferences"
     private const val SELECTED_TAG_PREFIX = "selectedTag_"
     private const val SHOW_BUILDER_BASE_PREFIX = "showBuilderBase_"
+    private const val TRANSPARENT_BACKGROUND_PREFIX = "transparentBackground_"
 
     fun selectedTag(context: Context, appWidgetId: Int): String? {
         return context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
@@ -35,11 +36,23 @@ internal object UpgradeWidgetSelectionStore {
             .apply()
     }
 
+    fun transparentBackground(context: Context, appWidgetId: Int): Boolean =
+        context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
+            .getBoolean("$TRANSPARENT_BACKGROUND_PREFIX$appWidgetId", false)
+
+    fun saveTransparentBackground(context: Context, appWidgetId: Int, enabled: Boolean) {
+        context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean("$TRANSPARENT_BACKGROUND_PREFIX$appWidgetId", enabled)
+            .apply()
+    }
+
     fun delete(context: Context, appWidgetIds: IntArray) {
         val editor = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE).edit()
         appWidgetIds.forEach {
             editor.remove("$SELECTED_TAG_PREFIX$it")
             editor.remove("$SHOW_BUILDER_BASE_PREFIX$it")
+            editor.remove("$TRANSPARENT_BACKGROUND_PREFIX$it")
         }
         editor.apply()
     }

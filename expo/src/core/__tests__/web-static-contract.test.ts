@@ -30,13 +30,13 @@ describe('static web authentication contract', () => {
   it('preserves the install manifest and iOS PWA chrome', () => {
     const manifest = JSON.parse(readPublicFile('manifest.webmanifest')) as Record<string, unknown>;
     expect(manifest).toMatchObject({
-      name: 'clashkingapp',
-      short_name: 'clashkingapp',
+      name: 'ClashKing',
+      short_name: 'ClashKing',
       start_url: '.',
       display: 'standalone',
       orientation: 'portrait-primary',
-      background_color: '#0175C2',
-      theme_color: '#0175C2',
+      background_color: '#FFFFFF',
+      theme_color: '#000000',
       description:
         'ClashKing helps players and clans track wars, upgrades, rankings, and account progress.',
       prefer_related_applications: false,
@@ -45,9 +45,10 @@ describe('static web authentication contract', () => {
     expect(manifest).not.toHaveProperty('scope');
 
     const document = readFileSync(resolve(process.cwd(), 'src', 'app', '+html.tsx'), 'utf8');
-    expect(document).toContain('content="width=device-width, initial-scale=1.0"');
+    expect(document).toContain('viewport-fit=cover, interactive-widget=resizes-content');
+    expect(document).toContain('height:100dvh');
     expect(document).toContain('content="black"');
-    expect(document).toContain('name="theme-color" content="#0175C2"');
+    expect(document).toContain('name="theme-color" content="#000000"');
     expect(document).toContain('<link rel="icon" type="image/png" href="/favicon.png" />');
     expect(document).not.toContain('maximum-scale=1');
     expect(document).not.toContain('black-translucent');
@@ -72,7 +73,7 @@ describe('static web authentication contract', () => {
 
     const favicon = readFileSync(resolve(process.cwd(), 'public', 'favicon.png'));
     expect(createHash('sha256').update(favicon).digest('hex')).toBe(
-      '7ab2525f4b86b65d3e4c70358a17e5a1aaf6f437f99cbcc046dad73d59bb9015',
+      '92ebccaef52b9da3ac91aa19824620152c6e08327b09bec8a6d9a1e3589cd6c0',
     );
     const expoConfig = readFileSync(resolve(process.cwd(), 'app.config.ts'), 'utf8');
     expect(expoConfig).not.toContain('favicon:');

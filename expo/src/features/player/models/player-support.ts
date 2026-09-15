@@ -55,12 +55,7 @@ export class PlayerClanOverview {
     readonly badgeUrls: ClanBadgeUrls,
   ) {}
   static fromJson(json: JsonRecord) {
-    const badge = record(json.badgeUrls);
-    return new PlayerClanOverview(string(json.tag), string(json.name), int(json.clanLevel), {
-      small: string(badge.small),
-      medium: string(badge.medium),
-      large: string(badge.large),
-    });
+    return new PlayerClanOverview(string(json.tag), string(json.name), int(json.clanLevel), ImageAssets.clanBadgeUrls(string(json.tag), json));
   }
   static empty() {
     return new PlayerClanOverview('', '', 0, { small: '', medium: '', large: '' });

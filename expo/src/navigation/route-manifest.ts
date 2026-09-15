@@ -26,6 +26,7 @@ export type AppRouteId =
   | 'subscription'
   | 'todo'
   | 'ranked'
+  | 'legends'
   | 'upgradeTracker'
   | 'basesArmies'
   | 'gameAssets'
@@ -171,6 +172,14 @@ export const appRoutes = [
     id: 'ranked',
     href: '/ranked',
     labelKey: 'rankedLeagueTitle',
+    icon: 'trophy',
+    mobileDrawer: true,
+    desktopSidebar: true,
+  },
+  {
+    id: 'legends',
+    href: '/legends',
+    labelKey: 'legendsTitle',
     icon: 'trophy',
     mobileDrawer: true,
     desktopSidebar: true,

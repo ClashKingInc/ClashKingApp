@@ -1,25 +1,18 @@
-name: Deploy to TestFlight
+name: Build and deploy iOS
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      version:
-        description: "Version to deploy (e.g., 0.2.0-alpha)"
-        required: true
-        type: string
-      testflight_track:
-        description: "TestFlight track"
-        required: true
-        default: "internal"
-        type: choice
-        options:
-          - internal
-          - external
-
+      ref: { required: true, type: string }
+      version: { required: true, type: string }
+      build_number: { required: true, type: string }
+      track: { required: true, type: string }
+      runtime_version: { required: true, type: string }
 jobs:
   deploy-ios:
-    name: iOS TestFlight Release
+    name: iOS Store Release
     runs-on: macos-latest
+    environment: ${{ inputs.track }}
     timeout-minutes: 60
     defaults:
       run:
@@ -36,6 +29,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Extract version and build number
         id: version
@@ -48,18 +43,10 @@ jobs:
             echo "Resolved version '$VERSION_NAME' is not semantic x.y.z." >&2
             exit 1
           }
-          BUILD_NUMBER="$(date +%s)"
+          BUILD_NUMBER="${{ inputs.build_number }}"
+          [[ -n "$BUILD_NUMBER" ]] || BUILD_NUMBER="$(date +%s)"
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
-
-      - name: Determine TestFlight track
-        id: release
-        shell: bash
-        run: |
-          TRACK="${{ inputs.testflight_track }}"
-          [[ "$TRACK" == external ]] && EXTERNAL_TESTING=true || EXTERNAL_TESTING=false
-          echo "track=$TRACK" >> "$GITHUB_OUTPUT"
-          echo "external_testing=$EXTERNAL_TESTING" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -74,6 +61,7 @@ jobs:
       - name: Verify Expo project
         run: |
           npm run test:native-plugin
+          npm run test:api-boundary
           npm run typecheck
           npm run lint
           npm test
@@ -81,11 +69,19 @@ jobs:
           npx expo-doctor
 
       - name: Generate iOS project
+        shell: bash
         env:
           CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
           CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
+          CK_ENABLE_UPDATES: true
+          CK_RELEASE_TRACK: ${{ inputs.track }}
+          CK_RUNTIME_VERSION: ${{ inputs.runtime_version }}
+          EXPO_UPDATES_CODE_SIGNING_CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
           EXPO_PUBLIC_CK_API_ENV: production
-        run: npx expo prebuild --platform ios --clean --no-install
+        run: |
+          test -n "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE"
+          printf '%s' "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
+          CK_UPDATES_CERTIFICATE_PATH="$RUNNER_TEMP/expo-updates-certificate.pem" npx expo prebuild --platform ios --clean --no-install
 
       - name: Install CocoaPods dependencies
         working-directory: expo/ios
@@ -249,6 +245,7 @@ jobs:
           cp "$IPA" build/ClashKing.ipa
 
       - name: Upload to TestFlight
+        if: inputs.track == 'beta'
         env:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
@@ -262,9 +259,36 @@ jobs:
             --apiKey "$API_KEY_ID" \
             --apiIssuer "$API_ISSUER_ID"
 
-      - name: Report external testing requirement
-        if: steps.release.outputs.external_testing == 'true'
-        run: echo 'The uploaded build requires App Store Connect external TestFlight review/group assignment.'
+      - name: Submit production build for App Store review
+        if: inputs.track == 'production'
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          VERSION_NAME: ${{ steps.version.outputs.version_name }}
+        run: |
+          gem install fastlane --no-document
+          ruby -rjson -e 'File.write(ARGV[0], JSON.generate({key_id: ENV.fetch("API_KEY_ID"), issuer_id: ENV.fetch("API_ISSUER_ID"), key: ENV.fetch("API_PRIVATE_KEY"), in_house: false}))' "$RUNNER_TEMP/app-store-api-key.json"
+          fastlane deliver \
+            --api_key_path "$RUNNER_TEMP/app-store-api-key.json" \
+            --app_identifier "$APP_BUNDLE_ID" \
+            --ipa ios/build/ClashKing.ipa \
+            --app_version "$VERSION_NAME" \
+            --build_number "${{ steps.version.outputs.build_number }}" \
+            --skip_metadata true \
+            --skip_screenshots true \
+            --submit_for_review true \
+            --automatic_release true \
+            --run_precheck_before_submit false \
+            --force true
+
+      - name: Report App Store Connect destination
+        run: |
+          if [[ "${{ inputs.track }}" == beta ]]; then
+            echo 'The uploaded build is available for TestFlight assignment.'
+          else
+            echo 'The uploaded build was submitted for App Store review.'
+          fi
 
       - name: Upload IPA artifact
         if: always()

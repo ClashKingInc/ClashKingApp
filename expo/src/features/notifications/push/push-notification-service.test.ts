@@ -1,4 +1,10 @@
-import type { ApiResponse } from '../../../core/api/client';
+import {
+  NotificationDeviceDeleteEndpoint,
+  NotificationDeviceRegisterEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { STORAGE_KEYS } from '../../../core/storage/storage';
 import type { StringStore } from '../../../services/storage/auth-storage';
 import type {
@@ -21,12 +27,28 @@ import {
   tokenPreview,
 } from './push-notification-service';
 
-const response = (status: number): ApiResponse => ({
-  status,
-  headers: new Headers(),
-  bodyText: '',
-  url: 'https://api.example/notifications/devices',
-});
+type MockContractApi = ContractApiService & {
+  readonly execute: jest.Mock;
+  readonly executeStatus: jest.Mock;
+};
+
+function mockContractApi(
+  implementation: () => Effect.Effect<unknown, unknown> = () =>
+    Effect.succeed({
+      device_id: 'device-1',
+      provider: 'fcm',
+      platform: 'ios',
+      environment: 'sandbox',
+      authorization_status: 'authorized',
+      enabled: true,
+      last_seen_at: '2026-09-11T00:00:00Z',
+    }),
+): MockContractApi {
+  return {
+    execute: jest.fn(implementation),
+    executeStatus: jest.fn(),
+  } as MockContractApi;
+}
 
 class MemoryStore implements StringStore {
   readonly values = new Map<string, string>();
@@ -76,7 +98,7 @@ function harness(overrides: Partial<PushNotificationServiceOptions> = {}) {
     getInitialMessage: jest.fn(async () => null),
     getInitialLocalResponse: jest.fn(async () => null),
   };
-  const api = { request: jest.fn(async () => response(201)) };
+  const api = mockContractApi();
   const openRoute = jest.fn(async () => undefined);
   const openAdminPost = jest.fn(async () => undefined);
   const reportError = jest.fn(async () => undefined);
@@ -127,6 +149,7 @@ describe('push notification pure contracts', () => {
         appVersion: '1.2.3',
         locale: 'fr-FR',
         authorizationStatus: 'provisional',
+        enabled: false,
       }),
     ).toEqual({
       token: 'token',
@@ -134,6 +157,7 @@ describe('push notification pure contracts', () => {
       provider: 'fcm',
       platform: 'android',
       environment: 'sandbox',
+      enabled: false,
       app_version: '1.2.3',
       locale: 'fr-FR',
       authorization_status: 'provisional',
@@ -184,7 +208,7 @@ describe('PushNotificationService setup', () => {
     const h = harness({ platform: 'web', runtime: undefined });
     await expect(h.service.initialize()).resolves.toEqual({ state: 'unsupported' });
     await expect(h.service.unregisterCurrentDeviceToken()).resolves.toBe(false);
-    expect(h.api.request).not.toHaveBeenCalled();
+    expect(h.api.execute).not.toHaveBeenCalled();
   });
 
   test.each([
@@ -242,10 +266,12 @@ describe('PushNotificationService setup', () => {
       authorizationStatus: 'authorized',
       token: 'fcm-token',
     });
-    expect(h.api.request).toHaveBeenCalledWith(
-      '/notifications/devices',
-      expect.objectContaining({ method: 'POST', requiresAuth: true }),
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceRegisterEndpoint,
+      expect.objectContaining({ body: expect.any(Object) }),
+      undefined,
     );
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('true');
   });
 });
 
@@ -253,41 +279,75 @@ describe('PushNotificationService registration lifecycle', () => {
   test('skips disabled registration and posts the exact authenticated payload when enabled', async () => {
     const h = harness();
     await h.service.registerCurrentDeviceToken({ token: 'new-token' });
-    expect(h.api.request).not.toHaveBeenCalled();
+    expect(h.api.execute).not.toHaveBeenCalled();
 
     await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
     await h.service.registerCurrentDeviceToken({ token: 'new-token' });
-    expect(h.api.request).toHaveBeenCalledWith(
-      '/notifications/devices',
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceRegisterEndpoint,
       expect.objectContaining({
-        method: 'POST',
-        requiresAuth: true,
         body: {
           token: 'new-token',
           device_id: 'device-1',
           provider: 'fcm',
           platform: 'ios',
           environment: 'sandbox',
+          enabled: true,
           app_version: '0.3.5',
           locale: 'en-US',
           authorization_status: 'authorized',
         },
       }),
+      undefined,
     );
     expect(await h.store.getItem(STORAGE_KEYS.pushLastRegistrationToken)).toBe('new-token');
   });
 
   test('uses an override URL and keeps registration failures non-fatal', async () => {
     const h = harness({ pushApiV2BaseUrlOverride: 'https://push.example/' });
-    h.api.request.mockRejectedValue(new Error('not deployed'));
+    h.api.execute.mockReturnValue(Effect.fail(new Error('not deployed')));
     await expect(
       h.service.registerCurrentDeviceToken({ token: 'token', allowDisabled: true }),
     ).resolves.toBeUndefined();
-    expect(h.api.request).toHaveBeenCalledWith(
-      '/notifications/devices',
-      expect.objectContaining({ url: 'https://push.example/notifications/devices' }),
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceRegisterEndpoint,
+      expect.any(Object),
+      { baseUrl: 'https://push.example' },
     );
     expect(h.reportError).toHaveBeenCalledWith(expect.objectContaining({ operation: 'register' }));
+  });
+
+  test('disables the current device with POST and preserves local state when the write fails', async () => {
+    const h = harness();
+    await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
+    await h.store.setItem(STORAGE_KEYS.pushFcmToken, 'token');
+    h.api.execute.mockReturnValueOnce(
+      Effect.succeed({
+        device_id: 'device-1',
+        provider: 'fcm',
+        platform: 'ios',
+        environment: 'sandbox',
+        authorization_status: 'authorized',
+        enabled: false,
+        last_seen_at: '2026-09-11T00:00:00Z',
+      }),
+    );
+
+    await expect(h.service.setCurrentDeviceEnabled(false)).resolves.toEqual({
+      state: 'ready',
+      token: 'token',
+    });
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceRegisterEndpoint,
+      expect.objectContaining({ body: expect.objectContaining({ token: 'token', enabled: false }) }),
+      undefined,
+    );
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('false');
+
+    h.api.execute.mockReturnValue(Effect.fail(new Error('offline')));
+    await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
+    await expect(h.service.setCurrentDeviceEnabled(false)).rejects.toThrow('offline');
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('true');
   });
 
   test('handles foreground messages and only persists refreshed tokens when enabled', async () => {
@@ -307,7 +367,7 @@ describe('PushNotificationService registration lifecycle', () => {
     h.refreshed()?.('refreshed-token');
     await flush();
     expect(await h.store.getItem(STORAGE_KEYS.pushFcmToken)).toBe('refreshed-token');
-    expect(h.api.request).toHaveBeenCalled();
+    expect(h.api.execute).toHaveBeenCalled();
   });
 
   test('attempts authenticated DELETE before clearing and always deletes FCM on failure', async () => {
@@ -317,12 +377,10 @@ describe('PushNotificationService registration lifecycle', () => {
     store.values.set(STORAGE_KEYS.pushLastRegistrationToken, 'token');
     const h = harness({
       preferences: store,
-      api: {
-        request: jest.fn(async () => {
-          trace.push('delete-request');
-          throw new Error('offline');
-        }),
-      },
+      api: mockContractApi(() => {
+        trace.push('delete-request');
+        return Effect.fail(new Error('offline'));
+      }),
     });
     h.runtime.deleteToken.mockImplementation(async () => {
       trace.push('delete-fcm');
@@ -340,21 +398,13 @@ describe('PushNotificationService registration lifecycle', () => {
 
   test('returns true only for 2xx DELETE but clears local and FCM state for every status', async () => {
     const h = harness();
-    h.api.request.mockResolvedValue(response(204));
     await expect(h.service.unregisterCurrentDeviceToken()).resolves.toBe(true);
     expect(h.runtime.deleteToken).toHaveBeenCalledTimes(1);
-    expect(h.api.request).toHaveBeenCalledWith(
-      '/notifications/devices?device_id=device-1',
-      expect.objectContaining({
-        method: 'DELETE',
-        requiresAuth: true,
-      }),
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceDeleteEndpoint,
+      { path: {}, query: { device_id: 'device-1', environment: h.service.environment }, body: {} },
+      undefined,
     );
-    const [, requestOptions] = h.api.request.mock.calls.at(-1) as unknown as [
-      string,
-      Record<string, unknown>,
-    ];
-    expect(requestOptions).not.toHaveProperty('body');
   });
 });
 
@@ -387,14 +437,13 @@ describe('PushNotificationService navigation and primer', () => {
     expect(h.openAdminPost).toHaveBeenCalledWith('post-1');
   });
 
-  test('shows the injected primer once and syncs preferences after accepted permission', async () => {
+  test('shows the injected primer once and enables the registered device after acceptance', async () => {
     const showPermissionPrimer = jest.fn(async () => true);
-    const accepted = jest.fn(async () => undefined);
     const h = harness({ showPermissionPrimer });
-    await h.service.showPermissionPrimerOnce(accepted);
-    await h.service.showPermissionPrimerOnce(accepted);
+    await h.service.showPermissionPrimerOnce();
+    await h.service.showPermissionPrimerOnce();
     expect(showPermissionPrimer).toHaveBeenCalledTimes(1);
-    expect(accepted).toHaveBeenCalledTimes(1);
+    expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('true');
     expect(await h.store.getItem(STORAGE_KEYS.notificationPermissionPrimerShown)).toBe('true');
   });
 

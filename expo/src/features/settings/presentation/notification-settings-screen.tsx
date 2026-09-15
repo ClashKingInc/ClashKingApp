@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  Animated,
   Modal,
   Pressable,
   ScrollView,
@@ -30,6 +29,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   createDefaultNotificationPreferences,
   withNotificationCategory,
+  type NotificationAccount,
   type NotificationCategory,
   type NotificationPreferences,
 } from '../../../core/dto/notification-preferences';
@@ -42,7 +42,6 @@ import {
   ckRadius,
   ckSpacing,
   colorWithAlpha,
-  useCKAccessibility,
   useCKTheme,
 } from '../../../ui';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
@@ -55,18 +54,6 @@ const categoryRows: readonly {
   description: MessageKey;
   icon: (color: string) => ReactNode;
 }[] = [
-  {
-    category: 'legendAttacks',
-    title: 'notifGroupLegendAttacks',
-    description: 'notifLegendAttacksDescription',
-    icon: (color) => <Swords color={color} size={22} />,
-  },
-  {
-    category: 'legendDefenses',
-    title: 'notifGroupLegendDefenses',
-    description: 'notifLegendDefensesDescription',
-    icon: (color) => <Shield color={color} size={22} />,
-  },
   {
     category: 'warAttacks',
     title: 'notifGroupWarAttacks',
@@ -92,6 +79,12 @@ const categoryRows: readonly {
     icon: (color) => <Megaphone color={color} size={22} />,
   },
   {
+    category: 'legendDefenses',
+    title: 'notifGroupLegendDefenses',
+    description: 'notifLegendDefensesDescription',
+    icon: (color) => <Shield color={color} size={22} />,
+  },
+  {
     category: 'monthlySupport',
     title: 'notifGroupMonthlySupport',
     description: 'notifSupportReminderDescription',
@@ -111,12 +104,14 @@ export function NotificationSettingsScreen({
   const { t } = useI18n();
   const theme = useCKTheme();
   const [settings, setSettings] = useState<NotificationPreferences>();
+  const [deviceEnabled, setDeviceEnabled] = useState(false);
   const [push, setPush] = useState<PushNotificationSetupResult | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [configuringPush, setConfiguringPush] = useState(false);
   const [sendingSample, setSendingSample] = useState(false);
+  const [savingAccounts, setSavingAccounts] = useState<ReadonlySet<string>>(new Set());
   const [snackbar, setSnackbar] = useState<string>();
   const savingRef = useRef(false);
   const configuringRef = useRef(false);
@@ -136,12 +131,17 @@ export function NotificationSettingsScreen({
     } catch {
       // The local V2 snapshot is the offline fallback, matching Flutter.
     }
-    const active = local.notificationsEnabled
-      ? await service.initializePush()
-      : service.lastPushResult();
-    setPush(active);
-    setToken(await service.tokenPreview());
-    setLoading(false);
+    try {
+      const enabled = await service.deviceEnabled();
+      setDeviceEnabled(enabled);
+      const active = enabled ? await service.initializePush() : service.lastPushResult();
+      setPush(active);
+      setToken(await service.tokenPreview());
+    } catch {
+      setPush(service.lastPushResult());
+    } finally {
+      setLoading(false);
+    }
   }, [service]);
 
   useEffect(() => {
@@ -179,24 +179,23 @@ export function NotificationSettingsScreen({
 
   const setDevice = async (enabled: boolean) => {
     if (savingRef.current || configuringRef.current) return;
-    const previous = settings;
-    if (enabled) {
-      configuringRef.current = true;
-      setConfiguringPush(true);
-      try {
-        const result = await service.requestPermissionAndRegister();
-        setPush(result);
-        setToken(await service.tokenPreview());
-        if (result.state !== 'ready' || !result.token) {
-          setSnackbar(result.message ?? pushFallback(t, result));
-          return;
-        }
-      } finally {
-        configuringRef.current = false;
-        setConfiguringPush(false);
+    configuringRef.current = true;
+    setConfiguringPush(true);
+    try {
+      const result = await service.setDeviceEnabled(enabled);
+      setPush(result);
+      setToken(await service.tokenPreview());
+      if (result.state !== 'ready' || !result.token) {
+        setSnackbar(result.message ?? pushFallback(t, result));
+        return;
       }
+      setDeviceEnabled(enabled);
+    } catch {
+      setSnackbar(t('notifSettingsSaveFailed'));
+    } finally {
+      configuringRef.current = false;
+      setConfiguringPush(false);
     }
-    await save({ ...settings, notificationsEnabled: enabled }, previous);
   };
 
   const sendSample = async () => {
@@ -209,6 +208,25 @@ export function NotificationSettingsScreen({
       setSnackbar(String(error));
     } finally {
       setSendingSample(false);
+    }
+  };
+
+  const setAccount = async (account: NotificationAccount, enabled: boolean) => {
+    if (savingAccounts.has(account.tag)) return;
+    setSavingAccounts((current) => new Set(current).add(account.tag));
+    setSettings((current) => replaceNotificationAccount(current, { ...account, enabled }));
+    try {
+      const saved = await service.setAccountEnabled(account.tag, enabled);
+      setSettings((current) => replaceNotificationAccount(current, saved));
+    } catch {
+      setSettings((current) => replaceNotificationAccount(current, account));
+      setSnackbar(t('notifSettingsSaveFailed'));
+    } finally {
+      setSavingAccounts((current) => {
+        const next = new Set(current);
+        next.delete(account.tag);
+        return next;
+      });
     }
   };
 
@@ -225,12 +243,12 @@ export function NotificationSettingsScreen({
             )}
             <View style={styles.copy}>
               <CKText role="titleMedium" style={styles.strong}>
-                {settings.notificationsEnabled
+                {deviceEnabled
                   ? t('notifPushEnabled')
                   : t('notifReceiveNotifications')}
               </CKText>
               <CKText muted role="bodySmall">
-                {settings.notificationsEnabled
+                {deviceEnabled
                   ? token
                     ? t('notifTokenPreview', { token })
                     : t('notifEnabledDeliveryDescription')
@@ -238,13 +256,45 @@ export function NotificationSettingsScreen({
               </CKText>
             </View>
             <SettingSwitch
-              value={settings.notificationsEnabled}
+              value={deviceEnabled}
               disabled={busy}
               onChange={(value) => void setDevice(value)}
             />
           </View>
         </SettingsSection>
-        <SettingsAvailability enabled={settings.notificationsEnabled && !saving}>
+        <>
+          <SettingsSection title={t('notifAccountScope')} variant="notification">
+            <View style={styles.accountIntro}>
+              <CKText muted role="bodySmall">
+                {t('notifAudienceAcrossDevicesDescription')}
+              </CKText>
+            </View>
+            {settings.accounts.length ? (
+              settings.accounts.map((account) => (
+                <View key={account.tag} style={styles.row}>
+                  <View style={styles.icon}>
+                    <BadgeCheck color={theme.primary} size={22} />
+                  </View>
+                  <View style={styles.copy}>
+                    <CKText role="bodyLarge" style={styles.semi}>
+                      {account.tag}
+                    </CKText>
+                  </View>
+                  <SettingSwitch
+                    value={account.enabled}
+                    disabled={savingAccounts.has(account.tag)}
+                    onChange={(value) => void setAccount(account, value)}
+                  />
+                </View>
+              ))
+            ) : (
+              <View style={styles.accountIntro}>
+                <CKText muted role="bodySmall">
+                  {t('notifNoAccountsLoadedYet')}
+                </CKText>
+              </View>
+            )}
+          </SettingsSection>
           <SettingsSection title={t('notifChooseAlerts')} variant="notification">
             {categoryRows.slice(0, 4).map((row) => (
               <ToggleRow
@@ -295,7 +345,7 @@ export function NotificationSettingsScreen({
               />
             ))}
           </SettingsSection>
-        </SettingsAvailability>
+        </>
         {debugEnabled && service.sendTestNotification ? (
           <SettingsSection title={t('notifTestNotification')} variant="notification">
             <View style={styles.debugWrap}>
@@ -317,21 +367,17 @@ export function NotificationSettingsScreen({
   );
 }
 
-function SettingsAvailability({ enabled, children }: { enabled: boolean; children: ReactNode }) {
-  const { reduceMotion } = useCKAccessibility();
-  const [opacity] = useState(() => new Animated.Value(enabled ? 1 : 0.46));
-  useEffect(() => {
-    Animated.timing(opacity, {
-      toValue: enabled ? 1 : 0.46,
-      duration: reduceMotion ? 0 : 180,
-      useNativeDriver: true,
-    }).start();
-  }, [enabled, opacity, reduceMotion]);
-  return (
-    <Animated.View pointerEvents={enabled ? 'auto' : 'none'} style={{ opacity }}>
-      {children}
-    </Animated.View>
-  );
+function replaceNotificationAccount(
+  settings: NotificationPreferences | undefined,
+  account: NotificationAccount,
+): NotificationPreferences | undefined {
+  if (!settings) return settings;
+  return {
+    ...settings,
+    accounts: settings.accounts.map((item) =>
+      item.tag === account.tag ? account : item,
+    ),
+  };
 }
 
 function ToggleRow({
@@ -641,6 +687,7 @@ const styles = StyleSheet.create({
   },
   disabled: { opacity: 0.46 },
   debugWrap: { padding: 12 },
+  accountIntro: { paddingHorizontal: 14, paddingVertical: 10 },
   debug: {
     minHeight: 44,
     borderRadius: ckRadius.control,

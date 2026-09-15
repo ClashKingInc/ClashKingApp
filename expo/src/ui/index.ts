@@ -5,6 +5,7 @@ export * from './destination-picker';
 export * from './feedback';
 export * from './glass';
 export * from './header';
+export * from './horizontal-image-share';
 export * from './icon-slot';
 export * from './layout';
 export * from './mobile-web-image';

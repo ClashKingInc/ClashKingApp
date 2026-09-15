@@ -1,9 +1,17 @@
-import { UnauthorizedException, type ApiClient, type ApiResponse } from '../../core/api/client';
+import {
+  LinksAddEndpoint,
+  LinksListEndpoint,
+  LinksOrderEndpoint,
+  LinksRemoveEndpoint,
+  LinksVisibilityEndpoint,
+} from '@clashking/api-contracts/expo';
+import { ApiResponseError } from '@clashking/api-client';
+import { Effect } from 'effect';
+
+import { UnauthorizedException, type ContractApiService } from '../../core/api/contract-api';
 import { STORAGE_KEYS } from '../../core/storage/storage';
 import type { StringStore } from '../../services/storage/auth-storage';
-import { expectRecord, parseCocAccountLink, type CocAccountLink } from './models';
-
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
+import { parseCocAccountLink, type CocAccountLink } from './models';
 
 export interface AccountMutationResult {
   readonly code: number;
@@ -17,6 +25,7 @@ export interface AccountVerificationResult {
 }
 
 export type AccountErrorReporter = (operation: string, error: unknown) => void;
+export type SelectedTagChangeHandler = (tag: string | null) => Promise<void>;
 
 export class AccountHttpException extends Error {
   constructor(
@@ -34,10 +43,11 @@ export class CocAccountService {
   private selectedPlayerTag: string | null = null;
   private lastRefreshedAt: Date | null = null;
   private bootstrapCoordinator: ((userId: string | null) => Promise<void>) | null = null;
+  private selectedTagChangeHandler: SelectedTagChangeHandler | null = null;
   private readonly listeners = new Set<() => void>();
 
   constructor(
-    private readonly api: ApiClient,
+    private readonly api: ContractApiService,
     private readonly preferences: StringStore,
     private readonly reportError?: AccountErrorReporter,
   ) {}
@@ -75,14 +85,18 @@ export class CocAccountService {
     this.bootstrapCoordinator = coordinator;
   }
 
+  setSelectedTagChangeHandler(handler: SelectedTagChangeHandler): void {
+    this.selectedTagChangeHandler = handler;
+  }
+
   async initializeForCurrentUser(userId: string | null): Promise<void> {
     if (this.bootstrapCoordinator !== null) {
       await this.bootstrapCoordinator(userId);
       return;
     }
     this.setCurrentUserId(userId);
-    await Promise.all([this.loadSelectedTag(), this.fetchAccounts()]);
-    await this.initializeSelectedTag();
+    await this.loadSelectedTag();
+    await this.fetchAccounts();
   }
 
   setCurrentUserId(userId: string | null): void {
@@ -104,19 +118,17 @@ export class CocAccountService {
 
   async fetchAccounts(): Promise<readonly CocAccountLink[]> {
     try {
-      const response = await this.rawRequest(this.linksEndpoint(), 'GET');
-      if (response.status !== 200) {
-        throw new AccountHttpException(
-          response.status,
-          `Failed to fetch CoC accounts (${response.status})`,
-        );
-      }
-      const data = parseResponseRecord(response, 'CoC accounts payload');
-      if (!Array.isArray(data.items)) {
-        throw new TypeError('Invalid CoC accounts payload');
-      }
+      const data = await Effect.runPromise(
+        this.api.execute(LinksListEndpoint, {
+          path: { userId: this.requireUserId() },
+          query: {},
+          body: {},
+        }),
+      );
       this.accountLinks = data.items.map(parseCocAccountLink);
-      this.notify();
+      const previousSelection = this.selectedPlayerTag;
+      await this.initializeSelectedTag();
+      if (this.selectedPlayerTag === previousSelection) this.notify();
       return this.accountLinks;
     } catch (error) {
       this.report('accounts.fetch', error);
@@ -140,13 +152,15 @@ export class CocAccountService {
     apiToken: string,
   ): Promise<AccountVerificationResult> {
     try {
-      const response = await this.rawRequest(this.linksEndpoint(), 'POST', {
-        player_tag: playerTag,
-        api_token: apiToken,
-      });
-      if (response.status >= 200 && response.status < 300) {
-        const data = parseOptionalResponseRecord(response);
-        const returnedAccount = normalizeAccount(data.account);
+      const response = await Effect.runPromise(
+        this.api.executeStatus(LinksAddEndpoint, {
+          path: { userId: this.requireUserId() },
+          query: {},
+          body: { player_tag: playerTag, api_token: apiToken },
+        }),
+      );
+      if (response.ok) {
+        const returnedAccount = normalizeAccount(response.value.account);
         await this.fetchAccounts();
         if (returnedAccount !== null) {
           this.accountLinks = this.accountLinks.map((account) =>
@@ -182,18 +196,21 @@ export class CocAccountService {
         message:
           error instanceof UnauthorizedException
             ? 'User not authenticated'
-            : `Failed to add account: ${String(error)}`,
+            : 'Failed to add account. Please try again.',
       };
     }
   }
 
   async verifyAccount(playerTag: string, apiToken: string): Promise<AccountVerificationResult> {
     try {
-      const response = await this.rawRequest(this.linksEndpoint(), 'POST', {
-        player_tag: playerTag,
-        api_token: apiToken,
-      });
-      if (response.status >= 200 && response.status < 300) {
+      const response = await Effect.runPromise(
+        this.api.executeStatus(LinksAddEndpoint, {
+          path: { userId: this.requireUserId() },
+          query: {},
+          body: { player_tag: playerTag, api_token: apiToken },
+        }),
+      );
+      if (response.ok) {
         this.accountLinks = this.accountLinks.map((account) =>
           account.playerTag === playerTag
             ? {
@@ -223,29 +240,24 @@ export class CocAccountService {
         message:
           error instanceof UnauthorizedException
             ? 'User not authenticated'
-            : `Verification failed: ${String(error)}`,
+            : 'Verification failed. Please try again.',
       };
     }
   }
 
   async removeAccount(playerTag: string): Promise<boolean> {
     try {
-      const response = await this.rawRequest(
-        this.linksEndpoint(encodeURIComponent(playerTag)),
-        'DELETE',
+      await Effect.runPromise(
+        this.api.execute(LinksRemoveEndpoint, {
+          path: { userId: this.requireUserId(), playerTag },
+          query: {},
+          body: {},
+        }),
       );
-      if (response.status < 200 || response.status >= 300) {
-        this.report(
-          'accounts.remove',
-          new AccountHttpException(
-            response.status,
-            `Failed to remove CoC account (${response.status})`,
-          ),
-        );
-        return false;
-      }
       this.accountLinks = this.accountLinks.filter((account) => account.playerTag !== playerTag);
-      this.notify();
+      const previousSelection = this.selectedPlayerTag;
+      await this.initializeSelectedTag();
+      if (this.selectedPlayerTag === previousSelection) this.notify();
       return true;
     } catch (error) {
       this.report('accounts.remove', error);
@@ -255,17 +267,13 @@ export class CocAccountService {
 
   async updateAccountHidden(playerTag: string, hidden: boolean): Promise<void> {
     try {
-      const response = await this.rawRequest(
-        this.linksEndpoint(encodeURIComponent(playerTag)),
-        'PATCH',
-        { hidden },
+      await Effect.runPromise(
+        this.api.execute(LinksVisibilityEndpoint, {
+          path: { userId: this.requireUserId(), playerTag },
+          query: {},
+          body: { hidden },
+        }),
       );
-      if (response.status < 200 || response.status >= 300) {
-        throw new AccountHttpException(
-          response.status,
-          `Failed to update account visibility (${response.status})`,
-        );
-      }
       this.accountLinks = this.accountLinks.map((account) =>
         account.playerTag === playerTag
           ? { ...account, hidden, raw: { ...account.raw, hidden } }
@@ -274,24 +282,15 @@ export class CocAccountService {
       this.notify();
     } catch (error) {
       this.report('accounts.visibility', error);
-      throw error;
+      throw new AccountHttpException(
+        error instanceof ApiResponseError ? error.status : 500,
+        'Failed to update account visibility',
+      );
     }
   }
 
   async updateAccountOrder(playerTags: readonly string[]): Promise<boolean> {
-    const response = await this.rawRequest(this.linksEndpoint('order'), 'PUT', {
-      ordered_tags: playerTags,
-    });
-    if (response.status < 200 || response.status >= 300) {
-      this.report(
-        'accounts.order',
-        new AccountHttpException(
-          response.status,
-          `Failed to update account order (${response.status})`,
-        ),
-      );
-      return false;
-    }
+    const previous = [...this.accountLinks];
     const requested = playerTags.map((tag) => tag.toUpperCase());
     const byTag = new Map(
       this.accountLinks.map((account) => [account.playerTag.toUpperCase(), account]),
@@ -303,7 +302,21 @@ export class CocAccountService {
       ),
     ];
     this.notify();
-    return true;
+    try {
+      await Effect.runPromise(
+        this.api.execute(LinksOrderEndpoint, {
+          path: { userId: this.requireUserId() },
+          query: {},
+          body: { ordered_tags: [...playerTags] },
+        }),
+      );
+      return true;
+    } catch (error) {
+      this.accountLinks = previous;
+      this.notify();
+      this.report('accounts.order', error);
+      return false;
+    }
   }
 
   async loadSelectedTag(): Promise<string | null> {
@@ -314,9 +327,11 @@ export class CocAccountService {
   }
 
   async initializeSelectedTag(): Promise<string | null> {
-    if (this.accountLinks.length > 0 && this.selectedPlayerTag === null) {
-      await this.setSelectedTag(this.accountLinks[0]!.playerTag);
-    }
+    const selected = this.accountLinks.find(
+      (account) => account.playerTag.toUpperCase() === this.selectedPlayerTag?.toUpperCase(),
+    );
+    const next = selected?.playerTag ?? this.accountLinks[0]?.playerTag ?? null;
+    if (next !== this.selectedPlayerTag) await this.setSelectedTag(next);
     return this.selectedPlayerTag;
   }
 
@@ -325,6 +340,13 @@ export class CocAccountService {
     if (tag === null) await this.preferences.removeItem(STORAGE_KEYS.selectedTag);
     else await this.preferences.setItem(STORAGE_KEYS.selectedTag, tag);
     this.notify();
+    if (this.selectedTagChangeHandler !== null) {
+      try {
+        await this.selectedTagChangeHandler(tag);
+      } catch (error) {
+        this.report('accounts.selection', error);
+      }
+    }
   }
 
   private async addAccountRequest(
@@ -332,11 +354,17 @@ export class CocAccountService {
     apiToken?: string,
   ): Promise<AccountMutationResult> {
     try {
-      const response = await this.rawRequest(this.linksEndpoint(), 'POST', {
-        player_tag: playerTag,
-        ...(apiToken === undefined ? {} : { api_token: apiToken }),
-      });
-      if (response.status < 200 || response.status >= 300) {
+      const response = await Effect.runPromise(
+        this.api.executeStatus(LinksAddEndpoint, {
+          path: { userId: this.requireUserId() },
+          query: {},
+          body: {
+            player_tag: playerTag,
+            ...(apiToken === undefined ? {} : { api_token: apiToken }),
+          },
+        }),
+      );
+      if (!response.ok) {
         this.report(
           'coc_account.add',
           new AccountHttpException(
@@ -345,9 +373,13 @@ export class CocAccountService {
           ),
         );
       }
-      const data = parseOptionalResponseRecord(response);
-      const account = normalizeAccount(data.account);
-      if (response.status === 200 && account !== null) {
+      const data = response.ok ? response.value : response.body;
+      const account = response.ok
+        ? normalizeAccount(response.value.account)
+        : response.status === 409
+          ? normalizeAccount(response.body.account)
+          : null;
+      if (response.ok && account !== null) {
         this.accountLinks = [
           ...this.accountLinks.filter((existing) => existing.playerTag !== account.playerTag),
           account,
@@ -362,7 +394,12 @@ export class CocAccountService {
     } catch (error) {
       if (!(error instanceof UnauthorizedException)) this.report('coc_account.add', error);
       return {
-        code: error instanceof UnauthorizedException ? 401 : 500,
+        code:
+          error instanceof UnauthorizedException
+            ? 401
+            : error instanceof ApiResponseError
+              ? error.status
+              : 500,
         message:
           error instanceof UnauthorizedException
             ? 'User not authenticated'
@@ -372,25 +409,11 @@ export class CocAccountService {
     }
   }
 
-  private linksEndpoint(path?: string): string {
+  private requireUserId(): string {
     if (this.currentUserId === null) {
       throw new UnauthorizedException('User not authenticated');
     }
-    const root = `/links/${encodeURIComponent(this.currentUserId)}`;
-    return path === undefined ? root : `${root}/${path}`;
-  }
-
-  private rawRequest(
-    endpoint: string,
-    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
-    body?: unknown,
-  ): Promise<ApiResponse> {
-    return this.api.request(endpoint, {
-      method,
-      body,
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-    });
+    return this.currentUserId;
   }
 
   private report(operation: string, error: unknown): void {
@@ -399,20 +422,6 @@ export class CocAccountService {
 
   private notify(): void {
     for (const listener of this.listeners) listener();
-  }
-}
-
-function parseResponseRecord(response: ApiResponse, label: string): Record<string, unknown> {
-  return expectRecord(JSON.parse(response.bodyText) as unknown, label);
-}
-
-function parseOptionalResponseRecord(response: ApiResponse): Record<string, unknown> {
-  if (response.bodyText.trim().length === 0) return {};
-  try {
-    const decoded: unknown = JSON.parse(response.bodyText);
-    return isRecord(decoded) ? decoded : {};
-  } catch {
-    return {};
   }
 }
 

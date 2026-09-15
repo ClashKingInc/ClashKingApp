@@ -1,8 +1,15 @@
-import { UnauthorizedException, type ApiClient, type ApiResponse } from '../api/client';
+import {
+  BookmarksAddEndpoint,
+  BookmarksDeleteEndpoint,
+  BookmarksListEndpoint,
+  BookmarksOrderEndpoint,
+} from '@clashking/api-contracts/expo';
+import { ApiResponseError, ResponseDecodeError } from '@clashking/api-client';
+import { Effect } from 'effect';
+
+import { UnauthorizedException, type ContractApiService } from '../api/contract-api';
 import type { Clan } from '../../features/clan/models';
 import type { Player } from '../../features/player/models/player';
-
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
 
 export type BookmarkType = 'player' | 'clan';
 export type BookmarkListener = () => void;
@@ -97,7 +104,7 @@ export class BookmarkService {
   private readonly listeners = new Set<BookmarkListener>();
   private disposed = false;
 
-  constructor(private readonly api: ApiClient) {}
+  constructor(private readonly api: ContractApiService) {}
 
   get loaded(): boolean {
     return this.hasLoaded;
@@ -141,10 +148,9 @@ export class BookmarkService {
       return;
     }
 
-    const userId = encodeURIComponent(this.currentUserId!);
     const [playerResponse, clanResponse] = await Promise.all([
-      this.request(`/links/${userId}/bookmarks?type=player`, 'GET'),
-      this.request(`/links/${userId}/bookmarks?type=clan`, 'GET'),
+      this.listBookmarks('player'),
+      this.listBookmarks('clan'),
     ]);
     const players = this.decodeBookmarkItems(playerResponse).map(BookmarkedPlayer.fromApiJson);
     const clans = this.decodeBookmarkItems(clanResponse).map(BookmarkedClan.fromApiJson);
@@ -226,6 +232,41 @@ export class BookmarkService {
     }
   }
 
+  async reorderPlayers(orderedTags: readonly string[]): Promise<void> {
+    const normalized = orderedTags.map((tag) => tag.trim().toUpperCase());
+    if (new Set(normalized).size !== normalized.length) {
+      throw new RangeError('Player bookmark order contains duplicate tags.');
+    }
+    const requested = new Map(
+      this.playerBookmarks.map((player) => [player.tag.trim().toUpperCase(), player]),
+    );
+    const visibleOrder = normalized.flatMap((tag) => {
+      const player = requested.get(tag);
+      return player ? [player] : [];
+    });
+    const visibleTags = new Set(visibleOrder.map((player) => player.tag.trim().toUpperCase()));
+    let visibleIndex = 0;
+    const reordered = this.playerBookmarks.map((player) =>
+      visibleTags.has(player.tag.trim().toUpperCase()) ? visibleOrder[visibleIndex++]! : player,
+    );
+    if (reordered.every((player, index) => player === this.playerBookmarks[index])) return;
+
+    const previous = [...this.playerBookmarks];
+    this.playerBookmarks = reordered;
+    this.notify();
+    try {
+      this.requireCurrentUser();
+      await this.saveBookmarkOrder(
+        'player',
+        reordered.map((player) => player.tag),
+      );
+    } catch (error) {
+      this.playerBookmarks = previous;
+      this.notify();
+      throw error;
+    }
+  }
+
   async toggleClan(clan: Clan): Promise<void> {
     if (this.isClanBookmarked(clan.tag)) await this.removeClan(clan.tag);
     else await this.addClan(BookmarkedClan.fromClan(clan));
@@ -288,67 +329,67 @@ export class BookmarkService {
     return this.currentUserId !== null && this.currentUserId.length > 0;
   }
 
-  private requireCurrentUser(): void {
+  private requireCurrentUser(): string {
     if (!this.hasCurrentUser) throw new UnauthorizedException('User not authenticated');
+    return this.currentUserId!;
   }
 
-  private decodeBookmarkItems(response: ApiResponse): Record<string, unknown>[] {
-    if (response.status === 404) return [];
-    if (response.status < 200 || response.status >= 300) {
-      throw new BookmarkHttpException(response.status, 'load', response.url);
-    }
-    let data: unknown;
-    try {
-      data = JSON.parse(response.bodyText) as unknown;
-    } catch {
-      throw new BookmarkFormatException();
-    }
-    if (!isRecord(data) || !Array.isArray(data.items)) throw new BookmarkFormatException();
-    return data.items.filter(isRecord);
+  private decodeBookmarkItems(response: Awaited<ReturnType<typeof this.listBookmarks>>): readonly Record<string, unknown>[] {
+    if (!response.ok) return [];
+    return response.value.items;
   }
 
   private async createBookmark(type: BookmarkType, tag: string): Promise<void> {
-    const response = await this.request(this.bookmarksEndpoint(), 'POST', { type, tag });
-    this.throwOnMutationFailure(response, 'create');
+    const userId = this.requireCurrentUser();
+    await this.bookmarkRequest(
+      Effect.runPromise(this.api.execute(BookmarksAddEndpoint, { path: { userId }, query: {}, body: { type, tag } })),
+      'create',
+      BookmarksAddEndpoint.path,
+    );
   }
 
   private async deleteBookmark(type: BookmarkType, tag: string): Promise<void> {
-    const endpoint = `${this.bookmarksEndpoint()}/${type}/${encodeURIComponent(tag)}`;
-    const response = await this.request(endpoint, 'DELETE');
-    this.throwOnMutationFailure(response, 'delete');
+    const userId = this.requireCurrentUser();
+    const response = await this.bookmarkRequest(
+      Effect.runPromise(this.api.executeStatus(BookmarksDeleteEndpoint, { path: { userId, type, tag }, query: {}, body: {} })),
+      'delete',
+      BookmarksDeleteEndpoint.path,
+    );
+    if (!response.ok) throw new BookmarkHttpException(response.status, 'delete', BookmarksDeleteEndpoint.path);
   }
 
   private async saveBookmarkOrder(type: BookmarkType, tags: readonly string[]): Promise<void> {
-    const response = await this.request(`${this.bookmarksEndpoint()}/order`, 'PUT', {
-      type,
-      ordered_tags: tags,
-    });
-    this.throwOnMutationFailure(response, 'reorder');
+    const userId = this.requireCurrentUser();
+    await this.bookmarkRequest(
+      Effect.runPromise(this.api.execute(BookmarksOrderEndpoint, { path: { userId }, query: {}, body: { type, ordered_tags: [...tags] } })),
+      'reorder',
+      BookmarksOrderEndpoint.path,
+    );
   }
 
-  private bookmarksEndpoint(): string {
-    return `/links/${encodeURIComponent(this.currentUserId ?? '')}/bookmarks`;
+  private listBookmarks(type: BookmarkType) {
+    const userId = this.requireCurrentUser();
+    return this.bookmarkRequest(
+      Effect.runPromise(this.api.executeStatus(BookmarksListEndpoint, { path: { userId }, query: { type }, body: {} })),
+      'load',
+      BookmarksListEndpoint.path,
+    );
   }
 
-  private request(
-    endpoint: string,
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    body?: unknown,
-  ): Promise<ApiResponse> {
-    return this.api.request(endpoint, {
-      method,
-      body,
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-    });
-  }
-
-  private throwOnMutationFailure(
-    response: ApiResponse,
-    action: 'create' | 'delete' | 'reorder',
-  ): void {
-    if (response.status >= 200 && response.status < 300) return;
-    throw new BookmarkHttpException(response.status, action, response.url);
+  private async bookmarkRequest<T>(
+    request: Promise<T>,
+    action: 'load' | 'create' | 'delete' | 'reorder',
+    path: string,
+  ): Promise<T> {
+    try {
+      return await request;
+    } catch (error) {
+      if (error instanceof ResponseDecodeError) throw new BookmarkFormatException();
+      if (error instanceof ApiResponseError) {
+        throw new BookmarkHttpException(error.status, action, path);
+      }
+      throw error;
+    }
   }
 
   private notify(): void {

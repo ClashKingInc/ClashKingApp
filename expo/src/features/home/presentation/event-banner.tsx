@@ -37,6 +37,10 @@ export interface HomeBannerItem {
   readonly sortKey?: Date;
 }
 
+export function homeBannerPageIndex(offset: number, width: number, itemCount: number): number {
+  return Math.min(Math.max(0, itemCount - 1), Math.max(0, Math.round(offset / Math.max(1, width))));
+}
+
 export function buildHomeBannerItems(
   now: Date,
   announcements: readonly HomeAnnouncement[],
@@ -94,7 +98,7 @@ export function buildHomeBannerItems(
     event(
       'league-reset',
       t('todoEventLeagueReset'),
-      ImageAssets.legendBlazonNoPadding,
+      ImageAssets.legendLeagueOne,
       ckColors.legendBlue,
       'rank',
       season(now),
@@ -371,18 +375,23 @@ export function HomeEventBanner({
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
+        scrollEventThrottle={16}
         style={isRtl ? styles.rtlScroll : undefined}
+        onScroll={(event) =>
+          setIndex(
+            homeBannerPageIndex(
+              event.nativeEvent.contentOffset.x,
+              event.nativeEvent.layoutMeasurement.width,
+              items.length,
+            ),
+          )
+        }
         onMomentumScrollEnd={(event) =>
           setIndex(
-            Math.min(
-              Math.max(0, items.length - 1),
-              Math.max(
-                0,
-                Math.round(
-                  event.nativeEvent.contentOffset.x /
-                    Math.max(1, event.nativeEvent.layoutMeasurement.width),
-                ),
-              ),
+            homeBannerPageIndex(
+              event.nativeEvent.contentOffset.x,
+              event.nativeEvent.layoutMeasurement.width,
+              items.length,
             ),
           )
         }

@@ -131,7 +131,7 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
       clan,
       tag: clan.tag,
       name: clan.name,
-      badgeUrl: clan.badgeUrls.smallest,
+      badgeUrl: ImageAssets.clanBadgeForTag(clan.tag),
       bookmarked: false,
     })),
     ...bookmarkedClanTags.map((tag) => {
@@ -141,7 +141,7 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
         clan,
         tag,
         name: clan?.name || snapshot?.name || bookmarkNameByTag.get(tag) || tag,
-        badgeUrl: clan?.badgeUrls.smallest || snapshot?.badgeUrl || '',
+        badgeUrl: ImageAssets.clanBadgeForTag(tag),
         bookmarked: true,
       };
     }),
@@ -224,3 +224,4 @@ function asClan(value: unknown): Clan | null {
   const clan = value as Partial<Clan>;
   return typeof clan.tag === 'string' && typeof clan.name === 'string' ? (value as Clan) : null;
 }
+import { ImageAssets } from '../../../core/assets/image-assets';

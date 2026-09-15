@@ -216,7 +216,7 @@ function PlayerDetailRootState({
       loadMoreJoinLeave,
       updateWarFilter,
       exportWarStats: (filter) =>
-        exportPlayerWarStats(service.apiV2Url, player.tag, player.name, filter),
+        exportPlayerWarStats((body) => service.downloadWarStatsExport(body), player.tag, player.name, filter),
       loadWarFilterPresets: () => service.loadWarFilterPresets(),
       saveWarFilterPresets: (presets) => service.saveWarFilterPresets(presets),
     }),

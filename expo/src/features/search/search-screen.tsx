@@ -954,13 +954,7 @@ function resultImage(result: JsonRecord, mode: SearchMode): string | null {
   if (mode === 'players') {
     return ImageAssets.townHall(numberValue(result.townHallLevel, numberValue(result.townhall, 1)));
   }
-  const badgeUrls = recordValue(result.badgeUrls);
-  return (
-    stringValue(badgeUrls.small) ||
-    stringValue(badgeUrls.medium) ||
-    stringValue(badgeUrls.large) ||
-    null
-  );
+  return ImageAssets.clanBadgeForTag(stringValue(result.tag)) || null;
 }
 
 const styles = StyleSheet.create({

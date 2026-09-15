@@ -122,8 +122,17 @@ jobs:
       - name: Verify Expo E2E migration structure
         run: npm run e2e:structure
 
+      - name: Verify Expo API package boundary
+        run: npm run test:api-boundary
+
       - name: Verify localization generation
         run: npm run l10n:check
+
+      - name: Verify production license inventory
+        run: npm run licenses:check
+
+      - name: Verify release planning and manifests
+        run: npm run test:release
 
       - name: Verify native config plugins
         run: npm run test:native-plugin

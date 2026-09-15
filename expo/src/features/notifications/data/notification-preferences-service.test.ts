@@ -1,4 +1,4 @@
-import { ApiClient } from '../../../core/api/client';
+import { createContractTestApi } from '../../../core/api/contract-api.testing';
 import { parseNotificationPreferences } from '../../../core/dto/notification-preferences';
 import { STORAGE_KEYS } from '../../../core/storage/storage';
 import type { StringStore } from '../../../services/storage/auth-storage';
@@ -8,11 +8,6 @@ import {
 } from './notification-preferences-service';
 
 const responseBody = {
-  deviceId: 'device-1',
-  environment: 'sandbox',
-  notificationsEnabled: true,
-  legendAttacksEnabled: true,
-  legendDefensesEnabled: false,
   warAttacksEnabled: false,
   warStateEnabled: true,
   warRemindersEnabled: true,
@@ -20,9 +15,10 @@ const responseBody = {
   eventsEnabled: true,
   announcementsEnabled: false,
   monthlySupportEnabled: false,
+  legendDefensesEnabled: true,
   reminderTimings: [15, 30, 60],
   raidReminderTimings: [60, 180],
-  accounts: [{ playerTag: '#VERIFIED', source: 'verified', active: true }],
+  accounts: [{ tag: '#VERIFIED', enabled: true }],
 };
 
 class MemoryStore implements StringStore {
@@ -49,15 +45,13 @@ function serviceWith(
   pushApiV2BaseUrlOverride?: string,
 ): NotificationPreferencesService {
   return new NotificationPreferencesService({
-    api: new ApiClient({
+    api: createContractTestApi({
       baseUrl: 'https://push.example/v2',
       environment: 'production',
       platform: 'native',
       tokenProvider: { getAccessToken: async () => 'token' },
       fetchImplementation,
     }),
-    deviceIdProvider: async () => 'device-1',
-    environmentProvider: () => 'sandbox',
     preferences,
     pushApiV2BaseUrlOverride,
   });
@@ -68,7 +62,7 @@ describe('NotificationPreferencesService', () => {
     const requested: string[] = [];
     const service = serviceWith(
       async (input) => {
-        requested.push(String(input));
+        requested.push((input as Request).url);
         return new Response(JSON.stringify(responseBody));
       },
       new MemoryStore(),
@@ -78,7 +72,7 @@ describe('NotificationPreferencesService', () => {
     await service.load();
 
     expect(requested).toEqual([
-      'https://override.example/v2/notifications/preferences?device_id=device-1&environment=sandbox',
+      'https://override.example/v2/notifications/preferences',
     ]);
   });
 
@@ -86,35 +80,30 @@ describe('NotificationPreferencesService', () => {
     const requested: string[] = [];
     const preferences = new MemoryStore();
     const service = serviceWith(async (input) => {
-      requested.push(String(input));
+      requested.push((input as Request).url);
       return new Response(JSON.stringify(responseBody));
     }, preferences);
 
     const settings = await service.load();
 
     expect(requested).toEqual([
-      'https://push.example/v2/notifications/preferences?device_id=device-1&environment=sandbox',
+      'https://push.example/v2/notifications/preferences',
     ]);
     expect(settings.reminderTimings).toEqual([15, 30, 60]);
-    expect(settings.accounts.map((account) => account.source)).toEqual(['verified']);
-    expect(preferences.values.get(STORAGE_KEYS.notificationsEnabled)).toBe('true');
+    expect(settings.accounts).toEqual([{ tag: '#VERIFIED', enabled: true }]);
+    expect(settings.legendDefenses).toBe(true);
   });
 
   it('PUT sends categories without rewriting account selection', async () => {
     let body: unknown;
-    const service = serviceWith(async (_input, init) => {
-      body = JSON.parse(String(init?.body)) as unknown;
+    const service = serviceWith(async (input) => {
+      body = await (input as Request).clone().json();
       return new Response(JSON.stringify(responseBody));
     });
 
     await service.save(parseNotificationPreferences(responseBody));
 
     expect(body).toEqual({
-      deviceId: 'device-1',
-      environment: 'sandbox',
-      notificationsEnabled: true,
-      legendAttacksEnabled: true,
-      legendDefensesEnabled: false,
       warAttacksEnabled: false,
       warStateEnabled: true,
       warRemindersEnabled: true,
@@ -122,6 +111,7 @@ describe('NotificationPreferencesService', () => {
       eventsEnabled: true,
       announcementsEnabled: false,
       monthlySupportEnabled: false,
+      legendDefensesEnabled: true,
       reminderTimings: [15, 30, 60],
       raidReminderTimings: [60, 180],
     });
@@ -136,18 +126,18 @@ describe('NotificationPreferencesService', () => {
     );
 
     await expect(service.save(parseNotificationPreferences(responseBody))).resolves.toMatchObject({
-      notificationsEnabled: true,
+      legendDefenses: true,
     });
   });
 
   it('uses the dedicated encoded per-player endpoint', async () => {
     let request = '';
     let body = '';
-    const service = serviceWith(async (input, init) => {
-      request = String(input);
-      body = String(init?.body);
+    const service = serviceWith(async (input) => {
+      request = (input as Request).url;
+      body = await (input as Request).clone().text();
       return new Response(
-        JSON.stringify({ playerTag: '#VERIFIED', source: 'verified', active: true }),
+        JSON.stringify({ tag: '#VERIFIED', enabled: true }),
       );
     });
 
@@ -155,14 +145,14 @@ describe('NotificationPreferencesService', () => {
 
     expect(request).toBe('https://push.example/v2/notifications/accounts/%23VERIFIED');
     expect(JSON.parse(body)).toEqual({ enabled: true });
-    expect(account.active).toBe(true);
+    expect(account).toEqual({ tag: '#VERIFIED', enabled: true });
   });
 
   it('loads disabled defaults and migrates retired bookmarked accounts locally', async () => {
     const preferences = new MemoryStore();
     const service = serviceWith(async () => new Response('{}'), preferences);
     const defaults = await service.loadLocal();
-    expect(defaults.notificationsEnabled).toBe(false);
+    expect(defaults.legendDefenses).toBe(false);
     expect(defaults.accounts).toEqual([]);
 
     const legacy: Record<string, unknown> = {
@@ -179,7 +169,7 @@ describe('NotificationPreferencesService', () => {
     const migrated = await service.loadLocal();
     expect(migrated.raidReminders).toBe(false);
     expect(migrated.raidReminderTimings).toEqual([]);
-    expect(migrated.accounts.map((account) => account.playerTag)).toEqual(['#VERIFIED']);
+    expect(migrated.accounts).toEqual([{ tag: '#VERIFIED', enabled: true }]);
   });
 
   it('never exposes the removed verified-player tracking route', () => {

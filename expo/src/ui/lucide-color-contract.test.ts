@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import ts from 'typescript';
+import { parse } from '@babel/parser';
+import traverse from '@babel/traverse';
+import * as t from '@babel/types';
 
 const productionRoots = ['app', 'core', 'features', 'navigation', 'shell', 'ui'];
 
@@ -27,47 +29,33 @@ function findTsxFiles(root: string): string[] {
 
 function findUntintedLucideElements(filePath: string): string[] {
   const source = fs.readFileSync(filePath, 'utf8');
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    source,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TSX,
-  );
+  const sourceFile = parse(source, { sourceType: 'module', plugins: ['typescript', 'jsx'] });
   const iconNames = new Set<string>();
-  for (const statement of sourceFile.statements) {
-    if (
-      !ts.isImportDeclaration(statement) ||
-      statement.moduleSpecifier.getText(sourceFile).slice(1, -1) !== 'lucide-react-native'
-    )
+  for (const statement of sourceFile.program.body) {
+    if (!t.isImportDeclaration(statement) || statement.source.value !== 'lucide-react-native')
       continue;
-    const bindings = statement.importClause?.namedBindings;
-    if (!bindings || !ts.isNamedImports(bindings)) continue;
-    bindings.elements.forEach((element) => iconNames.add(element.name.text));
+    statement.specifiers.forEach((specifier) => {
+      if (t.isImportSpecifier(specifier)) iconNames.add(specifier.local.name);
+    });
   }
 
   const violations: string[] = [];
-  const visit = (node: ts.Node) => {
-    if (
-      (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
-      ts.isIdentifier(node.tagName) &&
-      iconNames.has(node.tagName.text)
-    ) {
-      const attributes = node.attributes.properties;
-      const hasColour = attributes.some(
-        (attribute) =>
-          ts.isJsxAttribute(attribute) && attribute.name.getText(sourceFile) === 'color',
-      );
-      const delegatesProps = attributes.some(ts.isJsxSpreadAttribute);
-      if (!hasColour && !delegatesProps) {
-        const { line } = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
-        violations.push(
-          `${path.relative(process.cwd(), filePath)}:${line + 1} ${node.tagName.text}`,
+  traverse(sourceFile, {
+    JSXOpeningElement: ({ node }) => {
+      if (t.isJSXIdentifier(node.name) && iconNames.has(node.name.name)) {
+        const attributes = node.attributes;
+        const hasColour = attributes.some(
+          (attribute) =>
+            t.isJSXAttribute(attribute) && t.isJSXIdentifier(attribute.name, { name: 'color' }),
         );
+        const delegatesProps = attributes.some((attribute) => t.isJSXSpreadAttribute(attribute));
+        if (!hasColour && !delegatesProps) {
+          violations.push(
+            `${path.relative(process.cwd(), filePath)}:${node.loc?.start.line ?? 0} ${node.name.name}`,
+          );
+        }
       }
-    }
-    ts.forEachChild(node, visit);
-  };
-  visit(sourceFile);
+    },
+  });
   return violations;
 }

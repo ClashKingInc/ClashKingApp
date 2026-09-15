@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
   Modal,
   type NativeScrollEvent,
@@ -11,7 +12,6 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ImageBackground } from 'expo-image';
 import {
   ArrowLeft,
   Bookmark,
@@ -89,9 +89,14 @@ export function RankedScreen(props: RankedScreenProps) {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && width >= 900;
-  const [tab, setTab] = useState<'period' | 'history'>('period');
-  const [periodIndex, setPeriodIndex] = useState(0);
-  const [mode, setMode] = useState<'details' | 'ranking'>('details');
+  const link = useLinkParameters();
+  const [tab, setTab] = useState<'period' | 'history'>(
+    linkChoice(link.tab, ['period', 'history'], 'period'),
+  );
+  const [periodIndex, setPeriodIndex] = useState<number | undefined>();
+  const [mode, setMode] = useState<'details' | 'ranking'>(
+    linkChoice(link.mode, ['details', 'ranking'], 'details'),
+  );
   const [showHistoryTable, setShowHistoryTable] = useState(false);
   const [info, setInfo] = useState(false);
   const [accountPicker, setAccountPicker] = useState(false);
@@ -125,7 +130,15 @@ export function RankedScreen(props: RankedScreenProps) {
     setScrollOffsets((current) => ({ ...current, [tab]: y }));
   };
   const periods = useMemo(() => (props.data ? rankedPeriods(props.data) : []), [props.data]);
-  const safePeriodIndex = Math.min(periodIndex, Math.max(0, periods.length - 1));
+  const linkedPeriodIndex = periods.findIndex((period) =>
+    link.day
+      ? period.startsAt.toISOString().slice(0, 10) === link.day
+      : Boolean(link.season && period.startsAt.toISOString().startsWith(link.season)),
+  );
+  const safePeriodIndex = Math.min(
+    periodIndex ?? Math.max(0, linkedPeriodIndex),
+    Math.max(0, periods.length - 1),
+  );
   const period = periods[safePeriodIndex] ?? null;
   const openPlayerTag = async (tag: string) => {
     setOpeningPlayer(true);
@@ -196,8 +209,8 @@ export function RankedScreen(props: RankedScreenProps) {
       mode={mode}
       locale={locale}
       onMode={setMode}
-      onPrevious={() => setPeriodIndex((value) => Math.min(periods.length - 1, value + 1))}
-      onNext={() => setPeriodIndex((value) => Math.max(0, value - 1))}
+      onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
+      onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
       onOpenPlayerTag={openPlayerTag}
       onJumpToPlayer={(target) => {
         target.measure((_x, _y, _width, _height, _pageX, pageY) => {
@@ -354,13 +367,14 @@ function RankedHeader({
   );
   return (
     <View testID="ranked-player-header" style={styles.rankedHeader}>
-      <ImageBackground
-        testID="ranked-header-background"
-        source={{ uri: ImageAssets.homeBaseBackground }}
-        cachePolicy="disk"
-        contentFit="cover"
-        style={styles.headerBackground}
-      >
+      <View style={styles.headerBackground}>
+        <MobileWebImage
+          testID="ranked-header-background"
+          imageUrl={ImageAssets.homeBaseBackground}
+          cachePolicy="disk"
+          contentFit="cover"
+          style={StyleSheet.absoluteFill}
+        />
         <View
           testID="ranked-header-scrim"
           style={[StyleSheet.absoluteFill, { backgroundColor: colorWithAlpha('#000000', 0.5) }]}
@@ -537,7 +551,7 @@ function RankedHeader({
             style={styles.headerFadeTail}
           />
         </View>
-      </ImageBackground>
+      </View>
     </View>
   );
 }
@@ -643,19 +657,21 @@ function PeriodDetails({ period, locale }: { period: RankedPeriod; locale: strin
           imageUrl={ImageAssets.sword}
           battles={period.attacks}
           count={period.attackCount}
-          max={period.maxBattles}
+          max={period.attackMaxBattles}
           attack
           locale={locale}
           hasDetails={period.hasDetails}
+          complete={period.attacksComplete}
         />
         <BattleCard
           title={t('rankedLeagueDefenses')}
           imageUrl={ImageAssets.shieldWithArrow}
           battles={period.defenses}
           count={period.defenseCount}
-          max={period.maxBattles}
+          max={period.defenseMaxBattles}
           locale={locale}
           hasDetails={period.hasDetails}
+          complete={period.defensesComplete}
         />
       </View>
       <Surface style={styles.notice}>
@@ -678,6 +694,7 @@ function BattleCard({
   attack = false,
   locale,
   hasDetails,
+  complete,
 }: {
   title: string;
   imageUrl: string;
@@ -687,13 +704,14 @@ function BattleCard({
   attack?: boolean;
   locale: string;
   hasDetails: boolean;
+  complete: boolean;
 }) {
   const { t } = useI18n();
   const {
     remaining,
     trophyTotal,
     trophyAverage: average,
-  } = rankedBattleSummary(battles, count, max);
+  } = rankedBattleSummary(battles, count, max, complete);
   const sign = attack ? '+' : '-';
   return (
     <Surface style={styles.battleCard}>
@@ -722,15 +740,16 @@ function BattleCard({
           {average === null ? '—' : `${sign}${Math.abs(average).toFixed(1)}`}
         </CKText>
       </View>
-      {!hasDetails ? (
+      {!hasDetails || !complete ? (
         <CKText style={styles.unavailableBattles}>
           {t('rankedLeagueBattleDetailsUnavailable')}
         </CKText>
-      ) : (
+      ) : null}
+      {hasDetails ? (
         <View style={styles.battleList}>
           {battles.map((battle, index) => (
             <BattleRow
-              key={`${battle.opponentPlayerTag}-${index}`}
+              key={`${battle.opponentPlayerTag || 'automatic'}-${index}`}
               battle={battle}
               attack={attack}
               locale={locale}
@@ -740,7 +759,7 @@ function BattleCard({
             <EmptyBattleRow key={`remaining-${index}`} attack={attack} />
           ))}
         </View>
-      )}
+      ) : null}
       <View style={styles.footerStats}>
         <View style={styles.divider} />
         <StatLine label={t('rankedLeagueBattles')} value={max > 0 ? `${count} / ${max}` : count} />
@@ -799,6 +818,7 @@ function BattleRow({
   locale: string;
 }) {
   const sign = attack ? '+' : '-';
+  const automatic = battle.automatic;
   return (
     <View style={styles.battleRow}>
       <MobileWebImage
@@ -811,24 +831,33 @@ function BattleRow({
             <MobileWebImage
               key={star}
               imageUrl={ImageAssets.builderBaseStar}
-              style={[styles.battleStar, star >= battle.stars && styles.dimmed]}
+              style={[
+                styles.battleStar,
+                (battle.stars === null || star >= battle.stars) && styles.dimmed,
+              ]}
             />
           ))}
-          <CKText role="labelLarge">{Math.round(battle.destructionPercentage)}%</CKText>
+          <CKText role="labelLarge">
+            {battle.destructionPercentage === null
+              ? '—'
+              : `${Math.round(battle.destructionPercentage)}%`}
+          </CKText>
           <CKText role="labelSmall" style={{ color: attack ? '#2E7D32' : '#C62828' }}>
             ({sign}
             {Math.abs(battle.trophies)})
           </CKText>
         </View>
         <CKText muted role="labelSmall">
-          {battle.creationTime
-            ? new Intl.DateTimeFormat(toIntlLocale(locale), {
-                weekday: 'short',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-              }).format(battle.creationTime)
-            : '—'}
+          {automatic
+            ? '—'
+            : battle.creationTime
+              ? new Intl.DateTimeFormat(toIntlLocale(locale), {
+                  weekday: 'short',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                }).format(battle.creationTime)
+              : '—'}
         </CKText>
       </View>
     </View>
@@ -1288,16 +1317,13 @@ function rankedClanIdentity(player: Player) {
   if (typeof clan === 'object' && clan !== null) {
     const record = clan as Record<string, unknown>;
     const name = typeof record.name === 'string' ? record.name : '';
-    const badges = record.badgeUrls;
-    const badgeUrl =
-      typeof badges === 'object' &&
-      badges !== null &&
-      typeof (badges as Record<string, unknown>).small === 'string'
-        ? ((badges as Record<string, unknown>).small as string)
-        : '';
+    const badgeUrl = ImageAssets.clanBadgeForTag(typeof record.tag === 'string' ? record.tag : '');
     if (name) return { name, badgeUrl };
   }
-  return { name: player.clanOverview.name, badgeUrl: player.clanOverview.badgeUrls.small };
+  return {
+    name: player.clanOverview.name,
+    badgeUrl: ImageAssets.clanBadgeForTag(player.clanOverview.tag),
+  };
 }
 
 const styles = StyleSheet.create({

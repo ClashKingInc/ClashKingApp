@@ -1,3 +1,4 @@
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
   useCallback,
   useEffect,
@@ -140,7 +141,8 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const insets = useSafeAreaInsets();
   const viewportWidth = useWindowDimensions().width;
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
-  const [tab, setTab] = useState<TrackerTab>('home');
+  const link = useLinkParameters();
+  const [tab, setTab] = useState<TrackerTab>(linkChoice(link.tab, trackerTabs, 'home'));
   const [accountOpen, setAccountOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);

@@ -28,12 +28,17 @@ export const HOME_METRIC_GAP = 6;
 
 export function HomeCardFrame({
   children,
+  dragTestID,
+  onLongPress,
   onPress,
 }: {
   children: ReactNode;
+  dragTestID?: string;
+  onLongPress?: () => void;
   onPress?: () => void;
 }) {
   const theme = useCKTheme();
+  const longPressActivated = useRef(false);
   const body = (
     <View
       style={[
@@ -47,8 +52,23 @@ export function HomeCardFrame({
       {children}
     </View>
   );
-  return onPress ? (
-    <Pressable accessibilityRole="button" onPress={onPress}>
+  return onPress || onLongPress ? (
+    <Pressable
+      accessibilityRole="button"
+      delayLongPress={300}
+      onLongPress={() => {
+        longPressActivated.current = true;
+        onLongPress?.();
+      }}
+      onPress={() => {
+        if (longPressActivated.current) {
+          longPressActivated.current = false;
+          return;
+        }
+        onPress?.();
+      }}
+      testID={dragTestID}
+    >
       {body}
     </Pressable>
   ) : (
@@ -261,7 +281,8 @@ export function ProgressRing({
   showLabel?: boolean;
 }) {
   const theme = useCKTheme();
-  const value = Math.max(0, Math.min(1, progress));
+  const value = normalizeHomeProgress(progress);
+  const progressLabel = label ?? formatHomeProgressRingLabel(value);
   const stroke = 4;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -296,13 +317,25 @@ export function ProgressRing({
       </Svg>
       {showLabel ? (
         <View style={styles.ringLabel}>
-          <CKText role="titleSmall" style={[styles.heavy, { fontSize: labelFontSize }]}>
-            {label ?? `${Math.round(value * 100)}%`}
+          <CKText
+            role="titleSmall"
+            numberOfLines={1}
+            style={[styles.heavy, { fontSize: labelFontSize ?? Math.max(12, size * 0.28) }]}
+          >
+            {progressLabel}
           </CKText>
         </View>
       ) : null}
     </View>
   );
+}
+
+export function formatHomeProgressRingLabel(progress: number): string {
+  return `${Math.round(normalizeHomeProgress(progress) * 100)}%`;
+}
+
+function normalizeHomeProgress(progress: number): number {
+  return Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
 }
 
 export function DesktopComparison({

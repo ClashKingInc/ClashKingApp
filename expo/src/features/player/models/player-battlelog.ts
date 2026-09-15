@@ -3,7 +3,7 @@ import { localizedNameForItem } from '@/core/game-data/game-data-localization';
 import { gameDataState } from '@/core/game-data/game-data-state';
 import { apiDate, int, isRecord, record, records, string, type JsonRecord } from './parsing';
 
-export type PlayerBattlelogMode = 'ranked' | 'farming';
+export type PlayerBattlelogMode = 'ranked' | 'farming' | 'legend';
 export type PlayerBattlelogSource = 'official' | 'history';
 export class PlayerBattlelogEntry {
   constructor(
@@ -28,7 +28,7 @@ export class PlayerBattlelogEntry {
     return this.gold + this.elixir + this.darkElixir;
   }
   get mergeKey() {
-    return `${this.attack ? 1 : 0}|${this.opponentTag.toUpperCase()}|${this.timestamp?.getTime() ?? 0}`;
+    return `${this.mode}|${this.attack ? 1 : 0}|${this.timestamp?.getTime() ?? this.id}`;
   }
   static fromOfficial(json: JsonRecord) {
     const resources: Record<string, number> = {};
@@ -43,7 +43,7 @@ export class PlayerBattlelogEntry {
       json.attack === true,
       string(json.opponentPlayerTag),
       string(json.opponentName),
-      int(json.opponentTownHallLevel),
+      zeroIndexedTownHall(json.opponentTownHallLevel),
       int(json.stars),
       int(json.destructionPercentage),
       resources.gold ?? 0,
@@ -56,29 +56,33 @@ export class PlayerBattlelogEntry {
     );
   }
   static fromHistory(json: JsonRecord) {
-    const share = string(json.army_share_code);
-    const stored = Object.fromEntries(
-      Object.entries(record(json.army_counts)).map(([key, value]) => [key, int(value)]),
-    );
+    const share = string(json.shareCode);
+    const loot = record(json.lootedResources);
     return new PlayerBattlelogEntry(
-      string(json.battle_id),
-      battlelogMode(json.battle_type),
+      string(json.battleTime),
+      battlelogMode(json.battleMode),
       'history',
-      json.attack === true,
-      string(json.opponent_tag),
-      string(json.opponent_name),
-      int(json.opponent_townhall),
+      true,
+      '',
+      '',
+      0,
       int(json.stars),
-      int(json.destruction_percentage),
-      int(json.gold),
-      int(json.elixir),
-      int(json.dark_elixir),
-      apiDate(json.timestamp),
+      int(json.destructionPercentage),
+      int(loot.gold),
+      int(loot.elixir),
+      int(loot.darkElixir),
+      apiDate(json.battleTime),
       int(json.duration),
       share,
-      Object.keys(stored).length ? stored : parseArmyCounts(share),
+      parseArmyCounts(share),
     );
   }
+}
+
+function zeroIndexedTownHall(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 0;
+  const level = Math.trunc(value);
+  return level >= 0 ? level + 1 : 0;
 }
 export class PlayerBattlelogData {
   constructor(
@@ -194,7 +198,8 @@ function battlelogMode(value: unknown): PlayerBattlelogMode {
     .trim()
     .toLowerCase()
     .replace(/[^a-z]/g, '');
-  return normalized === 'ranked' || normalized === 'legend' ? 'ranked' : 'farming';
+  if (normalized === 'legend') return 'legend';
+  return normalized === 'ranked' ? 'ranked' : 'farming';
 }
 export function parseArmyCounts(shareCode: string): Record<string, number> {
   let payload = shareCode;

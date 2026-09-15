@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BackHandler,
   Platform,
@@ -7,21 +7,13 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import {
-  ChevronLeft,
-  GripVertical,
-  LogOut,
-  PlusCircle,
-  Shield,
-  Trash2,
-  UserRound,
-} from 'lucide-react-native';
+import { ChevronLeft, LogOut, PlusCircle, Shield, Trash2, UserRound } from 'lucide-react-native';
 import DraggableFlatList, {
   ScaleDecorator,
   type DragEndParams,
   type RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { canonicalTag } from '../../../core/domain/tags';
@@ -93,6 +85,7 @@ export function ManageLinkedAccountsScreen({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const mode = useCKThemeMode();
+  const insets = useSafeAreaInsets();
   const measuredWidth = useWindowDimensions().width;
   const desktopWeb = platform === 'web' && (viewportWidth ?? measuredWidth) >= 900;
   const [accounts, setAccounts] = useState([...initialAccounts]);
@@ -105,6 +98,24 @@ export function ManageLinkedAccountsScreen({
   const [verification, setVerification] = useState<LinkedAccountItem>();
   const [notice, setNotice] = useState<string>();
   const [addServerFailure, setAddServerFailure] = useState(false);
+  const refreshVersion = useRef(0);
+  const refreshError = (failure: unknown) => {
+    const message =
+      failure instanceof Error ? failure.message : typeof failure === 'string' ? failure : '';
+    return t('generalRefreshFailed', {
+      error: message.replace('Exception: ', '').trim() || t('apiErrorOperationFailed'),
+    });
+  };
+  const refreshAfterMutation = async () => {
+    const version = ++refreshVersion.current;
+    setError(undefined);
+    try {
+      await onRefresh?.();
+      if (version === refreshVersion.current) setError(undefined);
+    } catch (failure) {
+      if (version === refreshVersion.current) setError(refreshError(failure));
+    }
+  };
   const hasVerified = accounts.some((account) => account.isVerified);
   const requiresVerifiedAccount = firstConnection || !hasVerified;
   const byTag = useMemo(
@@ -155,9 +166,11 @@ export function ManageLinkedAccountsScreen({
     const result = await service.addAccount(normalized);
     setAdding(false);
     if (result.code === 200 && result.account) {
-      setAccounts((current) => [...current, presentAccount(result.account!)]);
+      const addedAccount = presentAccount(result.account);
+      setAccounts((current) => [...current, addedAccount]);
       setTag('');
-      await onRefresh?.();
+      if (!addedAccount.isVerified) setVerification(addedAccount);
+      await refreshAfterMutation();
       return;
     }
     if (result.code === 409 && result.account) {
@@ -167,7 +180,11 @@ export function ManageLinkedAccountsScreen({
     if (result.code === 500) setAddServerFailure(true);
     else
       setError(
-        result.code === 404 ? t('accountsErrorTagNotExists') : t('accountsErrorFailedToAdd'),
+        result.code === 404
+          ? t('accountsErrorTagNotExists')
+          : result.code >= 500
+            ? t('authErrorServerUnavailable')
+            : t('accountsErrorFailedToAdd'),
       );
   };
   const finishReorder = ({ data, from, to }: DragEndParams<LinkedAccountItem>) => {
@@ -186,6 +203,13 @@ export function ManageLinkedAccountsScreen({
     else setError(t('accountsErrorFailedToAdd'));
   };
   const continueAfterPersist = async () => {
+    if (continuing) return;
+    const version = ++refreshVersion.current;
+    setError(undefined);
+    if (!hasVerified) {
+      setError(t('homeVerifiedAccountRequiredBody'));
+      return;
+    }
     setContinuing(true);
     try {
       if (orderChanged) {
@@ -198,14 +222,15 @@ export function ManageLinkedAccountsScreen({
       }
       await onContinue();
     } catch (failure) {
-      const message = failure instanceof Error ? failure.message : String(failure);
-      setError(t('generalRefreshFailed', { error: message.replace('Exception: ', '') }));
+      if (version === refreshVersion.current) setError(refreshError(failure));
     } finally {
       setContinuing(false);
     }
   };
   const leaveAfterPersist = async () => {
     if (!onBack || continuing) return;
+    const version = ++refreshVersion.current;
+    setError(undefined);
     setContinuing(true);
     try {
       if (orderChanged) {
@@ -222,8 +247,7 @@ export function ManageLinkedAccountsScreen({
       }
       await onBack();
     } catch (failure) {
-      const message = failure instanceof Error ? failure.message : String(failure);
-      setError(t('generalRefreshFailed', { error: message.replace('Exception: ', '') }));
+      if (version === refreshVersion.current) setError(refreshError(failure));
     } finally {
       setContinuing(false);
     }
@@ -242,7 +266,7 @@ export function ManageLinkedAccountsScreen({
     setVerification(undefined);
     setTag('');
     setNotice(t('accountVerificationSuccess'));
-    await onRefresh?.();
+    await refreshAfterMutation();
   };
   if (addServerFailure) {
     return (
@@ -262,7 +286,10 @@ export function ManageLinkedAccountsScreen({
     );
   }
   return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+    <SafeAreaView
+      edges={['top', 'left', 'right']}
+      style={[styles.safe, { backgroundColor: theme.background }]}
+    >
       {!desktopWeb ? (
         <View style={styles.appBar}>
           <Pressable
@@ -300,11 +327,20 @@ export function ManageLinkedAccountsScreen({
       ) : null}
       <View style={styles.container}>
         <DraggableFlatList
+          activationDistance={8}
           data={presentedAccounts}
           keyExtractor={(account) => account.playerTag}
           onDragEnd={finishReorder}
           keyboardDismissMode="on-drag"
-          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+          // The draggable list has its own outer View; size it as well as the list
+          // so the linking form remains visible even before the first account.
+          containerStyle={styles.accountList}
+          style={styles.accountList}
+          contentContainerStyle={[
+            styles.scroll,
+            !requiresVerifiedAccount && { paddingBottom: insets.bottom + 24 },
+          ]}
           ListHeaderComponent={
             <>
               <View style={styles.intro}>
@@ -377,12 +413,11 @@ export function ManageLinkedAccountsScreen({
           )}
         />
         {requiresVerifiedAccount ? (
-          <View style={styles.continue}>
-            <PrimaryAction
-              label={continueLabel}
-              disabled={!hasVerified}
-              onPress={() => void continueAfterPersist()}
-            />
+          <View
+            testID="linked-accounts-continue"
+            style={[styles.continue, { paddingBottom: Math.max(16, insets.bottom + 8) }]}
+          >
+            <PrimaryAction label={continueLabel} onPress={() => void continueAfterPersist()} />
           </View>
         ) : null}
       </View>
@@ -422,69 +457,65 @@ export function AccountRow({
   const theme = useCKTheme();
   return (
     <ScaleDecorator activeScale={1.02}>
-      <Surface radius={ckRadius.chip} style={[styles.account, isActive && styles.activeAccount]}>
-        <MobileWebImage
-          imageUrl={ImageAssets.townHall(account.townHallLevel)}
-          errorFallback={
-            <Shield color={theme.onSurfaceVariant} size={32} style={styles.townHall} />
-          }
-          style={styles.townHall}
-        />
-        <View style={styles.accountCopy}>
-          <CKText style={styles.strong} numberOfLines={1}>
-            {account.name}
-          </CKText>
-          <CKText muted role="bodySmall" numberOfLines={1}>
-            {account.playerTag}
-          </CKText>
-        </View>
-        <Pressable
-          disabled={account.isVerified}
-          accessibilityRole={account.isVerified ? undefined : 'button'}
-          onPress={onVerify}
-        >
-          <PillSurface
-            style={[
-              styles.status,
-              {
-                backgroundColor: colorWithAlpha(
-                  account.isVerified ? statColors.win : statColors.capitalProjected,
-                  0.14,
-                ),
-              },
-            ]}
-          >
-            <CKText
-              role="labelMedium"
-              style={{
-                color: account.isVerified ? statColors.win : statColors.capitalProjected,
-                fontWeight: '700',
-              }}
-            >
-              {account.isVerified ? t('accountVerified') : t('accountVerify')}
+      <Pressable
+        delayLongPress={300}
+        onLongPress={isActive ? undefined : drag}
+        testID={`account-card-${account.playerTag}`}
+      >
+        <Surface radius={ckRadius.chip} style={[styles.account, isActive && styles.activeAccount]}>
+          <MobileWebImage
+            imageUrl={ImageAssets.townHall(account.townHallLevel)}
+            errorFallback={
+              <Shield color={theme.onSurfaceVariant} size={32} style={styles.townHall} />
+            }
+            style={styles.townHall}
+          />
+          <View style={styles.accountCopy}>
+            <CKText style={styles.strong} numberOfLines={1}>
+              {account.name}
             </CKText>
-          </PillSurface>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          onLongPress={drag}
-          delayLongPress={150}
-          disabled={isActive}
-          style={styles.dragHandle}
-          testID={`account-drag-handle-${account.playerTag}`}
-        >
-          <GripVertical color={theme.onSurfaceVariant} size={20} />
-        </Pressable>
-        <Pressable
-          accessibilityLabel={t('tooltipRemoveAccount')}
-          accessibilityRole="button"
-          disabled={deleting}
-          onPress={onRemove}
-          style={styles.iconButton}
-        >
-          {deleting ? <LoadingIndicator /> : <Trash2 color={theme.primary} />}
-        </Pressable>
-      </Surface>
+            <CKText muted role="bodySmall" numberOfLines={1}>
+              {account.playerTag}
+            </CKText>
+          </View>
+          <Pressable
+            disabled={account.isVerified}
+            accessibilityRole={account.isVerified ? undefined : 'button'}
+            onPress={onVerify}
+          >
+            <PillSurface
+              style={[
+                styles.status,
+                {
+                  backgroundColor: colorWithAlpha(
+                    account.isVerified ? statColors.win : statColors.capitalProjected,
+                    0.14,
+                  ),
+                },
+              ]}
+            >
+              <CKText
+                role="labelMedium"
+                style={{
+                  color: account.isVerified ? statColors.win : statColors.capitalProjected,
+                  fontWeight: '700',
+                }}
+              >
+                {account.isVerified ? t('accountVerified') : t('accountVerify')}
+              </CKText>
+            </PillSurface>
+          </Pressable>
+          <Pressable
+            accessibilityLabel={t('tooltipRemoveAccount')}
+            accessibilityRole="button"
+            disabled={deleting}
+            onPress={onRemove}
+            style={styles.iconButton}
+          >
+            {deleting ? <LoadingIndicator /> : <Trash2 color={theme.primary} />}
+          </Pressable>
+        </Surface>
+      </Pressable>
     </ScaleDecorator>
   );
 }
@@ -515,7 +546,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pressed: { opacity: 0.72 },
-  container: { flex: 1, width: '100%', maxWidth: 1040, alignSelf: 'center' },
+  container: { flex: 1, minHeight: 0, width: '100%', maxWidth: 1040, alignSelf: 'center' },
+  accountList: { flex: 1, minHeight: 0 },
   retryError: { flex: 1, justifyContent: 'center', padding: 24 },
   scroll: { paddingBottom: 24 },
   intro: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16, gap: 4, alignItems: 'center' },
@@ -547,7 +579,6 @@ const styles = StyleSheet.create({
   townHall: { width: 44, height: 44, resizeMode: 'contain' },
   accountCopy: { flex: 1 },
   status: { paddingHorizontal: 8, paddingVertical: 5 },
-  dragHandle: { width: 32, height: 44, alignItems: 'center', justifyContent: 'center' },
   iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  continue: { paddingHorizontal: 16, paddingBottom: 16 },
+  continue: { flexShrink: 0, paddingHorizontal: 16, paddingTop: 8 },
 });

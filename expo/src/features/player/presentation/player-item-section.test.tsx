@@ -55,8 +55,11 @@ describe('PlayerItemSection modal routing', () => {
         initiallyExpanded
       />,
     );
+    await fireEvent(screen.getByTestId('player-item-grid'), 'layout', {
+      nativeEvent: { layout: { width: 320 } },
+    });
     await fireEvent.press(screen.getByRole('button', { name: /Barbarian/ }));
-    expect(await screen.findByRole('adjustable', { name: 'Level 7' })).toBeTruthy();
+    expect(await screen.findByLabelText('Level 7')).toBeTruthy();
     expect(screen.getByText('First sentence. Second sentence.').props.numberOfLines).toBe(4);
     expect(screen.getByTestId('breakdown-fixed-content')).toBeTruthy();
     expect(screen.queryByTestId('breakdown-scroll')).toBeNull();
@@ -81,11 +84,11 @@ describe('PlayerItemSection modal routing', () => {
     expect(upgradeDetailGradientEnd).toBe('100%');
 
     await fireEvent.press(screen.getByTestId('upgrade-detail-dialog'));
-    expect(screen.getByRole('adjustable', { name: 'Level 7' })).toBeTruthy();
+    expect(screen.getByLabelText('Level 7')).toBeTruthy();
     await fireEvent.press(
       screen.getByTestId('upgrade-detail-backdrop', { includeHiddenElements: true }),
     );
-    expect(screen.queryByRole('adjustable', { name: 'Level 7' })).toBeNull();
+    expect(screen.queryByLabelText('Level 7')).toBeNull();
   });
 
   it('matches Flutter resource abbreviation and category accents', () => {
@@ -159,6 +162,9 @@ describe('PlayerItemSection modal routing', () => {
         initiallyExpanded
       />,
     );
+    await fireEvent(screen.getByTestId('player-item-grid'), 'layout', {
+      nativeEvent: { layout: { width: 320 } },
+    });
     expect(screen.queryByText(/%/)).toBeNull();
     await fireEvent.press(screen.getByRole('button', { name: 'Super Barbarian' }));
     expect(await screen.findByText('Localized Super Barbarian')).toBeTruthy();

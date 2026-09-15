@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import ts from 'typescript';
+import { parse } from '@babel/parser';
+import traverse from '@babel/traverse';
+import * as t from '@babel/types';
 
 describe('app-wide Intl locale contract', () => {
   it('normalizes ARB locale tags before passing them to Intl', () => {
@@ -25,39 +27,42 @@ function findProductionTypeScript(root: string): string[] {
 }
 
 function findUnsafeLocaleUsage(filePath: string): string[] {
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    fs.readFileSync(filePath, 'utf8'),
-    ts.ScriptTarget.Latest,
-    true,
-    filePath.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
-  );
+  const sourceFile = parse(fs.readFileSync(filePath, 'utf8'), {
+    sourceType: 'module',
+    plugins: ['typescript', ...(filePath.endsWith('.tsx') ? (['jsx'] as const) : [])],
+  });
   const lines = new Set<number>();
-  const record = (node: ts.Node) => {
-    lines.add(sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1);
-  };
-  const visit = (node: ts.Node) => {
-    if (ts.isCallExpression(node) && isRawLocaleReplacement(node)) record(node);
-    if ((ts.isCallExpression(node) || ts.isNewExpression(node)) && isLocaleConsumer(node)) {
-      const argument = node.arguments?.[0];
-      if (argument && isUnsafeLocaleArgument(argument)) record(argument);
+  const record = (node: t.Node) => lines.add(node.loc?.start.line ?? 0);
+  const inspect = (node: t.CallExpression | t.NewExpression) => {
+    if (t.isCallExpression(node) && isRawLocaleReplacement(node)) record(node);
+    if (!isLocaleConsumer(node)) return;
+    const argument = node.arguments[0];
+    if (argument !== undefined && t.isExpression(argument) && isUnsafeLocaleArgument(argument)) {
+      record(argument);
     }
-    ts.forEachChild(node, visit);
   };
-  visit(sourceFile);
+  traverse(sourceFile, {
+    CallExpression: ({ node }) => inspect(node),
+    NewExpression: ({ node }) => inspect(node),
+  });
   return [...lines]
+    .filter((line) => line > 0)
     .sort((left, right) => left - right)
     .map((line) => `${path.relative(process.cwd(), filePath)}:${line}`);
 }
 
-function isLocaleConsumer(node: ts.CallExpression | ts.NewExpression): boolean {
-  const expression = node.expression;
-  if (!ts.isPropertyAccessExpression(expression)) return false;
-  if (['toLocaleString', 'toLocaleDateString', 'toLocaleTimeString'].includes(expression.name.text))
+function isLocaleConsumer(node: t.CallExpression | t.NewExpression): boolean {
+  const expression = node.callee;
+  if (!t.isMemberExpression(expression) || expression.computed) return false;
+  if (!t.isIdentifier(expression.property)) return false;
+  if (
+    ['toLocaleString', 'toLocaleDateString', 'toLocaleTimeString'].includes(
+      expression.property.name,
+    )
+  )
     return true;
   return (
-    ts.isIdentifier(expression.expression) &&
-    expression.expression.text === 'Intl' &&
+    t.isIdentifier(expression.object, { name: 'Intl' }) &&
     [
       'NumberFormat',
       'DateTimeFormat',
@@ -65,33 +70,47 @@ function isLocaleConsumer(node: ts.CallExpression | ts.NewExpression): boolean {
       'PluralRules',
       'ListFormat',
       'DisplayNames',
-    ].includes(expression.name.text)
+    ].includes(expression.property.name)
   );
 }
 
-function isRawLocaleReplacement(node: ts.CallExpression): boolean {
+function isRawLocaleReplacement(node: t.CallExpression): boolean {
   return (
-    ts.isPropertyAccessExpression(node.expression) &&
-    ['replace', 'replaceAll'].includes(node.expression.name.text) &&
-    isRawLocaleReference(node.expression.expression)
+    t.isMemberExpression(node.callee) &&
+    !node.callee.computed &&
+    t.isIdentifier(node.callee.property) &&
+    ['replace', 'replaceAll'].includes(node.callee.property.name) &&
+    t.isExpression(node.callee.object) &&
+    isRawLocaleReference(node.callee.object)
   );
 }
 
-function isUnsafeLocaleArgument(node: ts.Expression): boolean {
-  if (ts.isParenthesizedExpression(node) || ts.isAsExpression(node) || ts.isNonNullExpression(node))
-    return isUnsafeLocaleArgument(node.expression);
-  if (ts.isConditionalExpression(node))
-    return isUnsafeLocaleArgument(node.whenTrue) || isUnsafeLocaleArgument(node.whenFalse);
-  if (ts.isBinaryExpression(node))
-    return isUnsafeLocaleArgument(node.left) || isUnsafeLocaleArgument(node.right);
-  if (ts.isCallExpression(node)) {
-    if (ts.isIdentifier(node.expression) && node.expression.text === 'toIntlLocale') return false;
+function isUnsafeLocaleArgument(node: t.Expression): boolean {
+  if (
+    t.isParenthesizedExpression(node) ||
+    t.isTSAsExpression(node) ||
+    t.isTSNonNullExpression(node)
+  )
+    return isUnsafeLocaleArgument(node.expression as t.Expression);
+  if (t.isConditionalExpression(node))
+    return isUnsafeLocaleArgument(node.consequent) || isUnsafeLocaleArgument(node.alternate);
+  if (t.isBinaryExpression(node) || t.isLogicalExpression(node))
+    return (
+      (t.isExpression(node.left) && isUnsafeLocaleArgument(node.left)) ||
+      isUnsafeLocaleArgument(node.right)
+    );
+  if (t.isCallExpression(node)) {
+    if (t.isIdentifier(node.callee, { name: 'toIntlLocale' })) return false;
     return isRawLocaleReplacement(node);
   }
   return isRawLocaleReference(node);
 }
 
-function isRawLocaleReference(node: ts.Expression): boolean {
-  if (ts.isIdentifier(node)) return node.text === 'locale';
-  return ts.isPropertyAccessExpression(node) && node.name.text === 'locale';
+function isRawLocaleReference(node: t.Expression): boolean {
+  if (t.isIdentifier(node)) return node.name === 'locale';
+  return (
+    t.isMemberExpression(node) &&
+    !node.computed &&
+    t.isIdentifier(node.property, { name: 'locale' })
+  );
 }

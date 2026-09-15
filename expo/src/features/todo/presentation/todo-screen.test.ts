@@ -1,5 +1,5 @@
 import { createTranslator } from '../../../i18n';
-import { formatTimerRemaining } from './todo-screen';
+import { formatProgressRingLabel, formatTimerRemaining } from './todo-screen';
 
 const t = createTranslator('en');
 
@@ -11,5 +11,18 @@ describe('Todo timer parity', () => {
     [-1, '0m'],
   ])('formats %i milliseconds using Flutter duration branches', (milliseconds, expected) => {
     expect(formatTimerRemaining(milliseconds, t)).toBe(expected);
+  });
+});
+
+describe('Todo progress ring', () => {
+  test.each([
+    [0, '0%'],
+    [0.004, '0%'],
+    [0.42, '42%'],
+    [1, '100%'],
+    [Number.NaN, '0%'],
+    [Number.POSITIVE_INFINITY, '0%'],
+  ])('formats %p as %s', (progress, expected) => {
+    expect(formatProgressRingLabel(progress)).toBe(expected);
   });
 });

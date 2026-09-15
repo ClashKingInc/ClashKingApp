@@ -67,7 +67,7 @@ describe('deep-link parsing', () => {
     expect(extractNormalizedDeepLinkTag(new URL('clashking://clan?clan_tag='))).toBeNull();
   });
 
-  test('the Expo runtime is deliberately unsupported on web', async () => {
+  test('the web runtime is safe without a browser location during SSR', async () => {
     const runtime = new ExpoDeepLinkRuntime('web');
     const listener = jest.fn();
     await expect(runtime.getInitialUrl()).resolves.toBeNull();
@@ -83,6 +83,30 @@ describe('deep-link parsing', () => {
 });
 
 describe('DeepLinkHandler', () => {
+  test('routes canonical destinations after auth and drains links received while loading', async () => {
+    let release!: () => void;
+    const waiting = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    const openDestination = jest
+      .fn()
+      .mockImplementationOnce(() => waiting)
+      .mockResolvedValue(undefined);
+    const h = harness({ openDestination });
+    h.setAuthenticated(false);
+    h.handler.queueDeepLink('https://app.clashk.ing/clan/ABC/war');
+    await h.handler.tryHandlePendingDeepLink();
+    expect(openDestination).not.toHaveBeenCalled();
+    h.setAuthenticated(true);
+    const pending = h.handler.tryHandlePendingDeepLink();
+    await flush();
+    h.handler.queueDeepLink('clashking://settings/privacy');
+    release();
+    await pending;
+    expect(openDestination.mock.calls.map(([link]) => link.kind)).toEqual(['war', 'page']);
+    expect(h.handler.pendingDeepLink).toBeNull();
+    expect(h.loadClan).not.toHaveBeenCalled();
+  });
   test('consumes OAuth before authentication and defers player links until authenticated', async () => {
     const h = harness();
     h.setAuthenticated(false);

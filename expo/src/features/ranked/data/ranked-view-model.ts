@@ -25,8 +25,15 @@ export interface RankedPeriod {
   readonly attacks: readonly RankedLeagueBattle[];
   readonly defenses: readonly RankedLeagueBattle[];
   readonly hasDetails: boolean;
+  readonly attacksComplete: boolean;
+  readonly defensesComplete: boolean;
+  readonly missingRealAttacks: number;
+  readonly missingRealDefenses: number;
+  readonly automaticDefensesDerived: boolean;
   readonly attackCount: number;
   readonly defenseCount: number;
+  readonly attackMaxBattles: number;
+  readonly defenseMaxBattles: number;
 }
 
 export interface RankedTierHighlights {
@@ -51,35 +58,61 @@ export function rankedBattleSummary(
   battles: readonly RankedLeagueBattle[],
   count: number,
   maxBattles: number,
+  complete = true,
 ): RankedBattleSummary {
   const trophyTotal = battles.reduce((sum, battle) => sum + battle.trophies, 0);
   return {
     trophyTotal,
     trophyAverage: battles.length === 0 ? null : trophyTotal / battles.length,
-    remaining: maxBattles > 0 ? Math.max(0, Math.min(maxBattles, maxBattles - count)) : null,
+    remaining:
+      complete && maxBattles > 0 ? Math.max(0, Math.min(maxBattles, maxBattles - count)) : null,
   };
 }
 
 export function rankedPeriods(data: RankedLeagueData, now = new Date()): readonly RankedPeriod[] {
   const group = data.currentGroup;
   const member = data.currentMember;
-  const currentSeasonId = group?.seasonId ?? Math.floor(now.getTime() / 1000);
+  const battlelogSeasonId = Number(data.currentBattlelog?.seasonId);
+  const currentSeasonId =
+    group?.seasonId ??
+    (Number.isSafeInteger(battlelogSeasonId) && battlelogSeasonId > 0
+      ? battlelogSeasonId
+      : Math.floor(now.getTime() / 1000));
   const create = (
     input: Omit<
       RankedPeriod,
-      'attacks' | 'defenses' | 'hasDetails' | 'attackCount' | 'defenseCount'
+      | 'attacks'
+      | 'defenses'
+      | 'hasDetails'
+      | 'attacksComplete'
+      | 'defensesComplete'
+      | 'missingRealAttacks'
+      | 'missingRealDefenses'
+      | 'automaticDefensesDerived'
+      | 'attackCount'
+      | 'defenseCount'
+      | 'attackMaxBattles'
+      | 'defenseMaxBattles'
     >,
   ): RankedPeriod => {
-    const attacks = input.group?.attackLogs ?? [];
-    const defenses = input.group?.defenseLogs ?? [];
-    const hasDetails = input.group !== null;
+    const battlelog = data.battlelogForSeason(input.seasonId);
+    const attacks = battlelog?.attacks ?? [];
+    const defenses = battlelog?.defenses ?? [];
+    const hasDetails = battlelog !== null;
     return {
       ...input,
       attacks,
       defenses,
       hasDetails,
-      attackCount: hasDetails ? attacks.length : input.attackWins + input.attackLosses,
-      defenseCount: hasDetails ? defenses.length : input.defenseWins + input.defenseLosses,
+      attacksComplete: battlelog?.attacksComplete ?? false,
+      defensesComplete: battlelog?.defensesComplete ?? false,
+      missingRealAttacks: battlelog?.missingRealAttacks ?? 0,
+      missingRealDefenses: battlelog?.missingRealDefenses ?? 0,
+      automaticDefensesDerived: battlelog?.automaticDefensesDerived ?? false,
+      attackCount: battlelog?.registeredAttacks ?? input.attackWins + input.attackLosses,
+      defenseCount: battlelog?.registeredDefenses ?? input.defenseWins + input.defenseLosses,
+      attackMaxBattles: battlelog?.maxAttacks ?? input.maxBattles,
+      defenseMaxBattles: battlelog?.maxDefenses ?? input.maxBattles,
     };
   };
   const periods: RankedPeriod[] = [
@@ -90,10 +123,12 @@ export function rankedPeriods(data: RankedLeagueData, now = new Date()): readonl
       placement: data.currentRank ?? 0,
       attackWins: member?.attackWinCount ?? 0,
       attackLosses: member?.attackLoseCount ?? 0,
-      attackStars: (group?.attackLogs ?? []).reduce((sum, battle) => sum + battle.stars, 0),
+      attackStars:
+        data.currentBattlelog?.attacks.reduce((sum, battle) => sum + (battle.stars ?? 0), 0) ?? 0,
       defenseWins: member?.defenseWinCount ?? 0,
       defenseLosses: member?.defenseLoseCount ?? 0,
-      defenseStars: (group?.defenseLogs ?? []).reduce((sum, battle) => sum + battle.stars, 0),
+      defenseStars:
+        data.currentBattlelog?.defenses.reduce((sum, battle) => sum + (battle.stars ?? 0), 0) ?? 0,
       maxBattles: data.currentMaxBattles ?? 0,
       tier: data.currentTier,
       group,

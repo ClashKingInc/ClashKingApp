@@ -1,3 +1,4 @@
+import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
 import { createRef, useMemo, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
@@ -49,7 +50,7 @@ export function EmailVerificationScreen({
       setAuthenticated(true);
     } catch (nextError) {
       const raw = String(nextError).toLowerCase();
-      if (/\b(?:500|503)\b/.test(raw)) onMaintenance();
+      if (defaultIsMaintenanceError(nextError)) onMaintenance();
       else if (raw.includes('already verified') || raw.includes('try logging in instead'))
         onBackToLogin(email);
       else {

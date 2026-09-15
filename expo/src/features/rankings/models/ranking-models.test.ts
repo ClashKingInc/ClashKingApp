@@ -38,7 +38,7 @@ describe('ranking models', () => {
     );
 
     expect(entry.subtitle).toBe('Clan One');
-    expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/CLAN');
+    expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/CLAN.avif');
     expect(entry.score).toBe(6012);
     expect(entry.movement).toBe('+6');
     expect(entry.imageUrl).toBe('https://example.com/league.png');
@@ -64,7 +64,7 @@ describe('ranking models', () => {
       'https://assets.clashk.ing/leagues/builder-base/copper_league_3.png',
     );
     expect(entry.metricImageUrl).toBe(ImageAssets.builderBaseTrophy);
-    expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/BUILDER');
+    expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/BUILDER.avif');
   });
 
   test.each([
@@ -93,7 +93,7 @@ describe('ranking models', () => {
       RankingBoard.playerTownHall,
     );
 
-    expect(entry.clanBadgeUrl).toBe('https://example.com/clan.png');
+    expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/CLAN.avif');
   });
 
   test('uses selected ranked-tier art unless a town hall is present', () => {
@@ -127,7 +127,7 @@ describe('ranking models', () => {
     );
 
     expect(entry.score).toBe(4_321);
-    expect(entry.imageUrl).toBe('https://example.com/badge.png');
+    expect(entry.imageUrl).toBe('https://badges.clashk.ing/CLAN.avif');
     expect(entry.movement).toBe('+3');
   });
 

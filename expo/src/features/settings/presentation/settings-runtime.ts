@@ -1,5 +1,6 @@
 import * as Application from 'expo-application';
 import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
@@ -26,15 +27,61 @@ export function versionDeviceLabel(details: VersionDeviceDetails): string {
 export async function getVersionDeviceLabel(): Promise<string> {
   return versionDeviceLabel({
     platform: Platform.OS,
-    version: Application.nativeApplicationVersion ?? Constants.expoConfig?.version ?? '0.3.5',
-    buildNumber:
-      Application.nativeBuildVersion ??
-      String(
-        Constants.expoConfig?.ios?.buildNumber ?? Constants.expoConfig?.android?.versionCode ?? '',
-      ),
+    ...runningAppVersion({
+      platform: Platform.OS,
+      nativeVersion: Application.nativeApplicationVersion,
+      nativeBuild: Application.nativeBuildVersion,
+      config: Constants.expoConfig,
+      isDevelopment: __DEV__,
+      isEmbeddedLaunch: !Updates.isEnabled || Updates.isEmbeddedLaunch,
+      manifest: Updates.manifest,
+    }),
     modelName: Device.modelName,
     modelId: typeof Device.modelId === 'string' ? Device.modelId : null,
     osVersion: Device.osVersion,
     platformApiLevel: Device.platformApiLevel,
   });
+}
+
+export function runningAppVersion(details: {
+  platform: string;
+  nativeVersion?: string | null;
+  nativeBuild?: string | null;
+  config?: {
+    version?: string;
+    ios?: { buildNumber?: string };
+    android?: { versionCode?: number };
+    extra?: Record<string, unknown>;
+  } | null;
+  isDevelopment?: boolean;
+  isEmbeddedLaunch?: boolean;
+  manifest?: unknown;
+}): { version: string; buildNumber: string } {
+  const config = details.config;
+  const configuredBuild =
+    details.platform === 'android'
+      ? config?.android?.versionCode?.toString()
+      : config?.ios?.buildNumber;
+  if (details.isDevelopment) {
+    return {
+      version: config?.version || details.nativeVersion || 'unknown',
+      buildNumber: configuredBuild || details.nativeBuild || 'unknown',
+    };
+  }
+  if (details.isEmbeddedLaunch === false) {
+    const metadata = (details.manifest as { metadata?: { version?: unknown } } | undefined)
+      ?.metadata;
+    return {
+      version:
+        (typeof metadata?.version === 'string' && metadata.version) ||
+        config?.version ||
+        details.nativeVersion ||
+        'unknown',
+      buildNumber: configuredBuild || details.nativeBuild || 'unknown',
+    };
+  }
+  return {
+    version: details.nativeVersion || config?.version || 'unknown',
+    buildNumber: details.nativeBuild || configuredBuild || 'unknown',
+  };
 }

@@ -51,6 +51,13 @@ class UpgradeWidgetConfigureActivity : WidgetConfigureActivity() {
         UpgradeWidgetSelectionStore.saveShowBuilderBase(this, appWidgetId, enabled)
     }
 
+    override fun transparentBackgroundEnabled(appWidgetId: Int): Boolean =
+        UpgradeWidgetSelectionStore.transparentBackground(this, appWidgetId)
+
+    override fun saveTransparentBackgroundEnabled(appWidgetId: Int, enabled: Boolean) {
+        UpgradeWidgetSelectionStore.saveTransparentBackground(this, appWidgetId, enabled)
+    }
+
     override fun widgetProviderClass(): Class<out AppWidgetProvider> =
         UpgradeAppWidgetProvider::class.java
 

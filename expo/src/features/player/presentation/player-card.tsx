@@ -1,5 +1,5 @@
-import { useState, type ReactElement } from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { useRef, useState, type ReactElement } from 'react';
+import { Platform, Pressable, StyleSheet, Switch, View } from 'react-native';
 import {
   Bell,
   Bookmark,
@@ -52,6 +52,8 @@ export function PlayerDataCard({
   notificationUpdating,
   actions,
   onVerify,
+  onLongPress,
+  dragTestID,
 }: {
   player: Player;
   link?: CocAccountLink;
@@ -63,11 +65,14 @@ export function PlayerDataCard({
   notificationUpdating: boolean;
   actions: PlayersPresentationActions;
   onVerify: () => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const [expanded, setExpanded] = useState(false);
   const [visibilityUpdating, setVisibilityUpdating] = useState(false);
+  const longPressActivated = useRef(false);
   const verified = link?.isVerified;
   const clan = playerClanPresentation(player);
   const notificationAvailable = verified === true && notificationsEnabled && !notificationUpdating;
@@ -92,8 +97,24 @@ export function PlayerDataCard({
     <Surface radius={ckRadius.control} style={styles.card}>
       <Pressable
         accessibilityRole="button"
-        onPress={() => actions.openPlayer(player)}
+        delayLongPress={300}
+        onLongPress={
+          onLongPress
+            ? () => {
+                longPressActivated.current = true;
+                onLongPress();
+              }
+            : undefined
+        }
+        onPress={() => {
+          if (longPressActivated.current) {
+            longPressActivated.current = false;
+            return;
+          }
+          actions.openPlayer(player);
+        }}
         style={styles.main}
+        testID={dragTestID}
       >
         <View style={styles.artColumn}>
           <View>
@@ -169,19 +190,21 @@ export function PlayerDataCard({
           </Pressable>
           {expanded ? (
             <View style={styles.options}>
-              <PlayerOptionSwitch
-                icon={<Bell color={theme.onSurfaceVariant} />}
-                title={t('playerOptionNotificationsTitle')}
-                subtitle={notificationSubtitle}
-                value={notificationActive}
-                enabled={notificationAvailable}
-                loading={notificationUpdating}
-                onChange={(value) =>
-                  void actions
-                    .setAccountNotifications(player.tag, value)
-                    .catch(() => actions.showMessage('Couldn’t update account notifications.'))
-                }
-              />
+              {Platform.OS !== 'web' ? (
+                <PlayerOptionSwitch
+                  icon={<Bell color={theme.onSurfaceVariant} />}
+                  title={t('playerOptionNotificationsTitle')}
+                  subtitle={notificationSubtitle}
+                  value={notificationActive}
+                  enabled={notificationAvailable}
+                  loading={notificationUpdating}
+                  onChange={(value) =>
+                    void actions
+                      .setAccountNotifications(player.tag, value)
+                      .catch(() => actions.showMessage('Couldn’t update account notifications.'))
+                  }
+                />
+              ) : null}
               {verified === false ? (
                 <PlayerOptionAction
                   title={t('homeVerifyAccountAction')}
@@ -260,15 +283,40 @@ export function PlayerDataCard({
 export function BookmarkedPlayerCard({
   bookmark,
   onPress,
+  onLongPress,
+  dragTestID,
 }: {
   bookmark: BookmarkedPlayerSummary;
   onPress: () => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const longPressActivated = useRef(false);
   return (
     <Surface radius={ckRadius.control}>
-      <Pressable accessibilityRole="button" onPress={onPress} style={styles.main}>
+      <Pressable
+        accessibilityRole="button"
+        delayLongPress={300}
+        onLongPress={
+          onLongPress
+            ? () => {
+                longPressActivated.current = true;
+                onLongPress();
+              }
+            : undefined
+        }
+        onPress={() => {
+          if (longPressActivated.current) {
+            longPressActivated.current = false;
+            return;
+          }
+          onPress();
+        }}
+        style={styles.main}
+        testID={dragTestID}
+      >
         <View style={styles.artColumn}>
           <MobileWebImage
             imageUrl={bookmark.townHallPic || ImageAssets.townHall(bookmark.townHallLevel)}

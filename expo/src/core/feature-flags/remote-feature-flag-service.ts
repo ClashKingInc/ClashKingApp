@@ -1,17 +1,18 @@
-import type { ApiClient } from '../api/client';
+import type { AppConfigResponse } from '@clashking/api-contracts/expo';
+
 import { STORAGE_KEYS } from '../storage/storage';
 import type { StringStore } from '../../services/storage/auth-storage';
 import {
   defaultFeatureFlagValue,
+  featureFlagsFromConfig,
   isFeatureFlagEnabled,
-  parseFeatureFlagResponse,
   type FeatureFlagEvaluation,
   type FeaturePlatform,
   type RemoteFeatureFlag,
 } from './feature-flags';
 
 export interface RemoteFeatureFlagServiceOptions {
-  readonly api: ApiClient;
+  readonly loadConfig: () => Promise<AppConfigResponse>;
   readonly preferences: StringStore;
   readonly platform: FeaturePlatform;
   readonly appVersionProvider: () => Promise<string>;
@@ -31,10 +32,8 @@ export class RemoteFeatureFlagService {
       this.loadInstallationSeed(),
       this.options.appVersionProvider(),
     ]);
-    const response = await this.options.api.requestRecord('/app/config', {
-      requiresAuth: false,
-    });
-    this.flags = parseFeatureFlagResponse(response);
+    const response = await this.options.loadConfig();
+    this.flags = featureFlagsFromConfig(response);
   }
 
   isEnabled(key: string, fallback = defaultFeatureFlagValue(key)): boolean {

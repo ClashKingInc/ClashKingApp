@@ -42,6 +42,8 @@ const makeActions = (): PlayersPresentationActions => ({
   verifyAccount: jest.fn(async () => ({ success: true, message: null })),
   refreshAccounts: jest.fn(async () => undefined),
   openGameSettings: jest.fn(),
+  reorderLinkedPlayers: jest.fn(async () => undefined),
+  reorderBookmarkedPlayers: jest.fn(async () => undefined),
   setAccountNotifications: jest.fn(async () => undefined),
   setAccountHidden: jest.fn(async () => undefined),
   setCardOption: jest.fn(async () => undefined),
@@ -127,5 +129,38 @@ describe('PlayerDataCard options', () => {
     );
 
     expect(screen.getByText('Parsed Clan')).toBeTruthy();
+  });
+
+  it('starts a drag on hold without opening the player when the press releases', async () => {
+    const actions = makeActions();
+    const onLongPress = jest.fn();
+    const screen = await render(
+      <I18nProvider locale="en">
+        <CKThemeProvider preference="dark">
+          <PlayerDataCard
+            player={player}
+            link={link}
+            options={new PlayerCardOptions()}
+            featureFlags={{ upgradeTracker: false, rankedLeague: false }}
+            notificationsEnabled={false}
+            notificationActive={false}
+            notificationUpdating={false}
+            actions={actions}
+            onVerify={jest.fn()}
+            onLongPress={onLongPress}
+            dragTestID="draggable-player"
+          />
+        </CKThemeProvider>
+      </I18nProvider>,
+    );
+
+    await fireEvent(screen.getByTestId('draggable-player'), 'longPress');
+    await fireEvent.press(screen.getByTestId('draggable-player'));
+
+    expect(onLongPress).toHaveBeenCalledTimes(1);
+    expect(actions.openPlayer).not.toHaveBeenCalled();
+
+    await fireEvent.press(screen.getByTestId('draggable-player'));
+    expect(actions.openPlayer).toHaveBeenCalledWith(player);
   });
 });

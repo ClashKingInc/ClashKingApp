@@ -1,6 +1,168 @@
 import { gameDataState } from '@/core/game-data/game-data-state';
+import { ImageAssets } from '../../../core/assets/image-assets';
 import { PlayerEquipment } from './player-items';
-import { date, int, number, record, records, string, type JsonRecord } from './parsing';
+import { apiDate, date, int, number, record, records, string, type JsonRecord } from './parsing';
+
+export class PlayerLegendBattle {
+  constructor(
+    readonly trophies: number,
+    readonly automatic: boolean,
+    readonly battleTime: Date | null = null,
+    readonly duration = 0,
+    readonly townHallLevel = 0,
+    readonly opponentTag = '',
+    readonly opponentName = '',
+    readonly opponentTownHallLevel = 0,
+    readonly stars: number | null = null,
+    readonly destructionPercentage: number | null = null,
+    readonly shareCode: string | null = null,
+    readonly opponentInsight: PlayerLegendOpponentInsight | null = null,
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    if (json.automatic === true) {
+      return new PlayerLegendBattle(int(json.trophies), true);
+    }
+    const opponent = record(json.opponent);
+    return new PlayerLegendBattle(
+      int(json.trophies),
+      false,
+      apiDate(json.time),
+      int(json.duration),
+      int(json.townHallLevel),
+      string(opponent.tag),
+      string(opponent.name),
+      int(opponent.townHallLevel),
+      int(json.stars),
+      number(json.destructionPercentage),
+      json.shareCode === null ? null : string(json.shareCode),
+    );
+  }
+}
+
+export class PlayerLegendOpponentInsight {
+  constructor(
+    readonly trophies: number | null,
+    readonly globalRank: number | null,
+    readonly dayNetTrophies: number | null,
+  ) {}
+}
+
+export class PlayerLegendBattlelog {
+  constructor(
+    readonly tag: string,
+    readonly day: string,
+    readonly startsAt: Date,
+    readonly endsAt: Date,
+    readonly closed: boolean,
+    readonly attackTrophies: number,
+    readonly defenseTrophies: number,
+    readonly trophyChange: number,
+    readonly attacks: readonly PlayerLegendBattle[],
+    readonly defenses: readonly PlayerLegendBattle[],
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    const day = string(json.day);
+    const startsAt = new Date(`${day}T05:00:00.000Z`);
+    const endsAt = new Date(startsAt.getTime() + 86_400_000);
+    const attacks = records(json.attacks);
+    const defenses = records(json.defenses);
+    return new PlayerLegendBattlelog(
+      string(json.tag),
+      day,
+      startsAt,
+      endsAt,
+      endsAt.getTime() <= Date.now(),
+      int(json.attackTrophies),
+      int(json.defenseTrophies),
+      int(json.trophies),
+      attacks.map(PlayerLegendBattle.fromJson),
+      defenses.map(PlayerLegendBattle.fromJson),
+    );
+  }
+}
+
+export class PlayerLegendHistoryEntry {
+  constructor(
+    readonly season: string,
+    readonly leagueId: number | null,
+    readonly leagueName: string | null,
+    readonly trophies: number,
+    readonly attackWins: number,
+    readonly defenseWins: number,
+    readonly rank: number,
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    const league = json.league === null ? null : record(json.league);
+    return new PlayerLegendHistoryEntry(
+      string(json.season),
+      league ? int(league.id) : null,
+      league ? string(league.name) : null,
+      int(json.trophies),
+      int(json.attackWins),
+      int(json.defenseWins),
+      int(json.rank),
+    );
+  }
+}
+
+export class PlayerLegendRank {
+  constructor(
+    readonly tag: string,
+    readonly name: string,
+    readonly trophies: number,
+    readonly globalRank: number,
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    return new PlayerLegendRank(
+      string(json.tag),
+      string(json.name),
+      int(json.trophies),
+      int(json.globalRank),
+    );
+  }
+}
+
+export class PlayerLegendDaySummary {
+  constructor(
+    readonly day: string,
+    readonly attackTrophies: number,
+    readonly defenseTrophies: number,
+    readonly trophyChange: number,
+  ) {}
+
+  static fromJson(json: JsonRecord) {
+    return new PlayerLegendDaySummary(
+      string(json.day),
+      int(json.attackTrophies),
+      int(json.defenseTrophies),
+      int(json.trophies),
+    );
+  }
+}
+
+export class PlayerLegendLeagueData {
+  constructor(
+    readonly playerTag: string,
+    readonly playerName: string,
+    readonly townHallLevel: number,
+    readonly trophies: number,
+    readonly bestTrophies: number,
+    readonly currentDay: PlayerLegendBattlelog | null,
+    readonly history: readonly PlayerLegendHistoryEntry[],
+    readonly selectedDay: string = currentDay?.day ?? currentLegendDay(),
+    readonly currentRank: PlayerLegendRank | null = null,
+    readonly historicalRank: PlayerLegendRank | null = null,
+    readonly recentDays: readonly PlayerLegendDaySummary[] = currentDay ? [currentDay] : [],
+  ) {}
+}
+
+export function currentLegendDay(now = new Date()): string {
+  return new Date(now.getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
 
 export class LegendHeroGear {
   constructor(
@@ -200,9 +362,7 @@ export class PlayerLegendClan {
     return new PlayerLegendClan(
       string(json.tag),
       string(json.name),
-      Object.fromEntries(
-        Object.entries(record(json.badgeUrls)).map(([key, value]) => [key, string(value)]),
-      ),
+      ImageAssets.clanBadgeUrls(string(json.tag), json),
     );
   }
 }

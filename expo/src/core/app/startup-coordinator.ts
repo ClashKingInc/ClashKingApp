@@ -1,4 +1,5 @@
 import type { StoreApi } from 'zustand/vanilla';
+import { ApiResponseError, TransportError } from '@clashking/api-client';
 
 import type { AuthService } from '../../features/auth/auth-service';
 import type { CocAccountService } from '../../features/auth/account-service';
@@ -58,7 +59,7 @@ export async function initializeApplication(
   } catch (error) {
     const isNetworkError = dependencies.isNetworkError ?? defaultIsNetworkError;
     const isMaintenanceError = dependencies.isMaintenanceError ?? defaultIsMaintenanceError;
-    if (isNetworkError(error) || isMaintenanceError(error)) {
+    if (isNetworkError(error) || isMaintenanceError(error) || isServerError(error)) {
       dependencies.reportError?.('startup.bootstrap', error);
       return failureResult(error, dependencies.auth.canUseApp, {
         network: isNetworkError(error),
@@ -77,12 +78,16 @@ export async function initializeApplication(
     );
     if (accountResult.authenticated) {
       await dependencies.initializeAuthenticatedData?.();
-      await initializeAuthenticatedPush({
-        notificationsEnabled: dependencies.appState
-          .getState()
-          .isFeatureEnabled(APP_FEATURE_FLAGS.notifications),
-        push: dependencies.push,
-      });
+      try {
+        await initializeAuthenticatedPush({
+          notificationsEnabled: dependencies.appState
+            .getState()
+            .isFeatureEnabled(APP_FEATURE_FLAGS.notifications),
+          push: dependencies.push,
+        });
+      } catch (error) {
+        dependencies.reportError?.('startup.push', error);
+      }
     }
   } catch (error) {
     dependencies.reportError?.('startup.bootstrap', error);
@@ -110,19 +115,42 @@ export async function initializeApplication(
 export async function initializeAuthenticatedPush({
   notificationsEnabled,
   push,
+  timeoutMs = 10_000,
 }: {
   notificationsEnabled: boolean;
   push: Pick<
     PushNotificationService,
     'supportsPushNotifications' | 'initialize' | 'registerCurrentDeviceToken'
   >;
+  timeoutMs?: number;
 }): Promise<boolean> {
   if (!push.supportsPushNotifications || !notificationsEnabled) return false;
-  const result = await push.initialize();
-  if (result.token !== undefined) {
-    void push.registerCurrentDeviceToken({ token: result.token });
-  }
-  return true;
+  return withTimeout(
+    (async () => {
+      const result = await push.initialize();
+      if (result.token !== undefined) {
+        await push.registerCurrentDeviceToken({ token: result.token });
+      }
+      return true;
+    })(),
+    timeoutMs,
+  );
+}
+
+function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Push initialization timed out')), timeoutMs);
+    void operation.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
 }
 
 function failureResult(
@@ -141,6 +169,7 @@ function failureResult(
 }
 
 export function defaultIsNetworkError(error: unknown): boolean {
+  if (error instanceof TransportError) return true;
   const text = String(error).toLowerCase();
   return (
     text.includes('network') ||
@@ -155,6 +184,14 @@ export function defaultIsNetworkError(error: unknown): boolean {
 }
 
 export function defaultIsMaintenanceError(error: unknown): boolean {
-  const text = String(error);
-  return text.includes('503') || text.includes('500');
+  if (!(error instanceof ApiResponseError) || error.status !== 503) return false;
+  const body = error.body;
+  if (!body || typeof body !== 'object') return false;
+  // HTTP 500/503 also cover our backend and database failures, not just game maintenance.
+  return 'reason' in body && body.reason === 'maintenance';
+}
+
+function isServerError(error: unknown): boolean {
+  if (error instanceof ApiResponseError) return error.status >= 500;
+  return /\bHTTP\s+5\d\d\b/i.test(String(error));
 }

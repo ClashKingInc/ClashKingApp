@@ -7,6 +7,10 @@ import { CKThemeProvider } from '../../../ui';
 import type { ClansPresentationActions, ClansPresentationModel } from './contracts';
 import { ClansScreen } from './clans-screen';
 
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+}));
+
 const makeActions = (): ClansPresentationActions => ({
   refresh: jest.fn(async () => undefined),
   isNetworkError: jest.fn(() => false),
