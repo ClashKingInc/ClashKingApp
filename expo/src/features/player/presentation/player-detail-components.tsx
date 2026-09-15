@@ -32,7 +32,6 @@ import {
   MapPin,
   Percent,
   Repeat2,
-  Share2,
   Shield,
   Star,
   Swords,
@@ -333,7 +332,7 @@ export function PlayerDetailHeader({
           ) : null}
           {selectedTab === 'battles' ? (
             <IconAction label={t('generalExport')} onPress={onBattlelogExport ?? (() => undefined)}>
-              <Share2 color="#fff" />
+              <Upload color="#fff" />
             </IconAction>
           ) : null}
           <IconAction label={t('playerOpenInGame')} onPress={() => actions.openInGame(player.tag)}>

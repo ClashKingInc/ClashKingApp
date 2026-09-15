@@ -132,7 +132,7 @@ export function LegendsRoot({
 export function legendLeagueDataFromPlayer(player: Player, day: string) {
   const season = player.legendsBySeason?.getSpecificSeason(new Date(`${day}T00:00:00.000Z`));
   const storedDay = season?.days[day] ?? null;
-  const startsAt = new Date(`${day}T05:00:00.000Z`);
+  const startsAt = new Date(`${day}T05:10:00.000Z`);
   const currentDay = storedDay
     ? new PlayerLegendBattlelog(
         player.tag,

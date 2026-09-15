@@ -116,6 +116,8 @@ test('renders stored player Legends immediately and retains them while another d
   } as never;
   const initial = legendLeagueDataFromPlayer(player, today);
   expect(initial.currentDay).toMatchObject({ day: today, trophyChange: 60 });
+  expect(initial.currentDay?.startsAt.toISOString()).toBe(`${today}T05:10:00.000Z`);
+  expect(initial.currentDay?.endsAt.toISOString()).toBe('2026-09-16T05:10:00.000Z');
 
   const pending = new Promise<PlayerLegendLeagueData>(() => undefined);
   const loadLegendLeagueData = jest.fn(
