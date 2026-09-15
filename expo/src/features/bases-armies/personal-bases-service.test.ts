@@ -4,7 +4,7 @@ import { Effect } from 'effect';
 import type { ContractApiService } from '../../core/api/contract-api';
 import { PersonalBasesService, type PersonalBasesState } from './personal-bases-service';
 
-const state: PersonalBasesState = { items: [], slots: [] };
+const state: PersonalBasesState = { items: [] };
 
 function setup() {
   const execute = jest.fn(() => Effect.succeed(state)) as unknown as jest.MockedFunction<
@@ -26,11 +26,11 @@ test('loads the authenticated personal base library', async () => {
 
 test('saves and unsaves canonical shared bases using decimal string IDs', async () => {
   const { execute, service } = setup();
-  await service.save('9223372036854775807');
+  await service.save('9223372036854775807', 'legend');
   expect(execute).toHaveBeenLastCalledWith(expoEndpoints.savePersonalBase, {
     path: { baseId: '9223372036854775807' },
     query: {},
-    body: {},
+    body: { kind: 'legend' },
   });
   await service.unsave('9223372036854775807');
   expect(execute).toHaveBeenLastCalledWith(expoEndpoints.unsavePersonalBase, {
@@ -40,17 +40,11 @@ test('saves and unsaves canonical shared bases using decimal string IDs', async 
   });
 });
 
-test('assigns and clears bounded account slots', async () => {
+test('cleans up saved bases older than 90 days through the fixed endpoint', async () => {
   const { execute, service } = setup();
-  await service.assign('#P0Y', 'legend', 3, '42');
-  expect(execute).toHaveBeenLastCalledWith(expoEndpoints.assignPersonalBaseSlot, {
-    path: { playerTag: '#P0Y', kind: 'legend', number: '3' },
-    query: {},
-    body: { baseId: '42' },
-  });
-  await service.clear('#P0Y', 'legend', 3);
-  expect(execute).toHaveBeenLastCalledWith(expoEndpoints.clearPersonalBaseSlot, {
-    path: { playerTag: '#P0Y', kind: 'legend', number: '3' },
+  await service.deleteOld();
+  expect(execute).toHaveBeenLastCalledWith(expoEndpoints.deleteOldPersonalBases, {
+    path: {},
     query: {},
     body: {},
   });

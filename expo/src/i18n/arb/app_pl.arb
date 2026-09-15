@@ -4779,6 +4779,16 @@
   "cwlWinBonusNote": "Gwiazdy obejmują 10 dodatkowych gwiazd za każde zakończone zwycięstwo.",
   "cwlEstimateNote": "Szacunki uwzględniają zakończone wojny i pozostałych rywali, a nie zmiany składu. Wymagane są co najmniej dwie zakończone wojny na klan. Szacunki nie są skalibrowane; zasady awansu zależą od ligi.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# godzina} few {# godziny} other {# godzin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
+  "personalBasesDeleteOld": "Usuń bazy starsze niż 90 dni",
+  "personalBasesDeleteOldConfirm": "Zostanie usuniętych {count} zapisanych baz starszych niż 90 dni. Historia pobierania i udostępnione bazy pozostaną.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

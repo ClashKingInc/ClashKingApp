@@ -4684,6 +4684,16 @@
   "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
   "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

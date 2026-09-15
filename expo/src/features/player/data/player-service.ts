@@ -434,13 +434,18 @@ export class PlayerService {
     }
   }
 
-  async loadLegendLeagueData(rawTag: string, forceRefresh = false, day = currentLegendDay()) {
+  async loadLegendLeagueData(
+    rawTag: string,
+    forceRefresh = false,
+    day = currentLegendDay(),
+    baseline?: PlayerLegendLeagueData,
+  ) {
     const tag = canonicalTag(rawTag);
     const key = `${tag}|${day}`;
     if (!forceRefresh && this.legendLeagueCache.has(key)) return this.legendLeagueCache.get(key)!;
     const pending = this.legendLeagueLoads.get(key);
     if (pending) return pending;
-    const load = this.fetchLegendLeagueData(tag, day, forceRefresh);
+    const load = this.fetchLegendLeagueData(tag, day, forceRefresh, baseline);
     this.legendLeagueLoads.set(key, load);
     try {
       const data = await load;
@@ -451,22 +456,35 @@ export class PlayerService {
     }
   }
 
-  private async fetchLegendLeagueData(tag: string, day: string, forceRefresh: boolean) {
+  private async fetchLegendLeagueData(
+    tag: string,
+    day: string,
+    forceRefresh: boolean,
+    baseline?: PlayerLegendLeagueData,
+  ) {
     const seriesStart = new Date(`${day}T00:00:00.000Z`);
     seriesStart.setUTCDate(seriesStart.getUTCDate() - 27);
     const [player, historyResponse, currentDay, historicalRankResponse, recentDays] =
       await Promise.all([
-        Effect.runPromise(
-          this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
-        ),
+        baseline
+          ? Promise.resolve(null)
+          : Effect.runPromise(
+              this.api.execute(ProxyPlayerEndpoint, {
+                path: { playerTag: tag },
+                query: {},
+                body: {},
+              }),
+            ),
         Effect.runPromise(
           this.api.execute(PlayerLeagueHistoryEndpoint, {
             path: { playerTag: tag },
             query: {},
             body: {},
           }),
-        ),
-        this.loadLegendBattlelog(tag, day, forceRefresh),
+        ).catch(() => null),
+        this.loadLegendBattlelog(tag, day, forceRefresh)
+          .then((value) => value ?? baseline?.currentDay ?? null)
+          .catch(() => baseline?.currentDay ?? null),
         Effect.runPromise(
           this.api.execute(LegendHistoricalRanksEndpoint, {
             path: {},
@@ -510,18 +528,24 @@ export class PlayerService {
           ).catch(() => null)
         : Promise.resolve(null),
     ]);
-    const history = records(historyResponse.items)
-      .filter((item) => string(item.mode) === 'legend')
-      .map(PlayerLegendHistoryEntry.fromJson)
-      .sort((a, b) => b.season.localeCompare(a.season));
+    const history = historyResponse
+      ? records(historyResponse.items)
+          .filter((item) => string(item.mode) === 'legend')
+          .map(PlayerLegendHistoryEntry.fromJson)
+          .sort((a, b) => b.season.localeCompare(a.season))
+      : (baseline?.history ?? []);
     const currentRank =
       records(currentRankResponse?.items)
         .map(PlayerLegendRank.fromJson)
-        .find((item) => canonicalTag(item.tag) === tag) ?? null;
+        .find((item) => canonicalTag(item.tag) === tag) ??
+      baseline?.currentRank ??
+      null;
     const historicalRank =
       records(historicalRankResponse?.items)
         .map(PlayerLegendRank.fromJson)
-        .find((item) => canonicalTag(item.tag) === tag) ?? null;
+        .find((item) => canonicalTag(item.tag) === tag) ??
+      baseline?.historicalRank ??
+      null;
     const opponentRanks = new Map(
       records(currentRankResponse?.items)
         .map(PlayerLegendRank.fromJson)
@@ -553,17 +577,19 @@ export class PlayerService {
         )
       : null;
     return new PlayerLegendLeagueData(
-      string(player.tag, tag),
-      string(player.name),
-      int(player.townHallLevel),
-      int(player.trophies),
-      int(player.bestTrophies),
+      player ? string(player.tag, tag) : (baseline?.playerTag ?? tag),
+      player ? string(player.name) : (baseline?.playerName ?? ''),
+      player ? int(player.townHallLevel) : (baseline?.townHallLevel ?? 0),
+      player ? int(player.trophies) : (baseline?.trophies ?? 0),
+      player ? int(player.bestTrophies) : (baseline?.bestTrophies ?? 0),
       enrichedCurrentDay,
       history,
       day,
       currentRank,
       historicalRank,
-      records(recentDays?.items).map(PlayerLegendDaySummary.fromJson),
+      recentDays
+        ? records(recentDays.items).map(PlayerLegendDaySummary.fromJson)
+        : (baseline?.recentDays ?? []),
     );
   }
   async prefetchRankedLeagueData(tags: Iterable<string>, forceRefresh = false) {

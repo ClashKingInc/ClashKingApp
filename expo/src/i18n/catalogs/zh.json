@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "剩余对手",
   "cwlWinBonusNote": "星数包含每场已结束的胜利所获的10颗奖励星。",
   "cwlEstimateNote": "估计基于已结束的对战和剩余对手，不考虑阵容变化。每个部落至少需要完成两场对战。这些估计未经校准；晋级规则因联赛而异。",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# 小时} other {# 小时}}} other {{count, plural, one {# 分钟} other {# 分钟}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# 小时} other {# 小时}}} other {{count, plural, one {# 分钟} other {# 分钟}}}}",
+  "personalBasesDeleteOld": "移除超过 90 天的阵型",
+  "personalBasesDeleteOldConfirm": "将移除 {count} 个保存超过 90 天的阵型。下载历史和共享阵型将保留。"
 }

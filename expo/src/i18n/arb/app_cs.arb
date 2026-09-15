@@ -4684,6 +4684,16 @@
   "cwlWinBonusNote": "Hvězdy zahrnují 10 bonusových hvězd za každou dokončenou výhru.",
   "cwlEstimateNote": "Odhady vycházejí z dokončených válek a zbývajících soupeřů, ne ze změn sestav. Každý klan musí mít alespoň dvě dokončené války. Odhady nejsou kalibrované; pravidla postupu se liší podle ligy.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# hodina} few {# hodiny} other {# hodin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
+  "personalBasesDeleteOld": "Odebrat základny starší než 90 dní",
+  "personalBasesDeleteOldConfirm": "Bude odebráno {count} uložených základen starších než 90 dní. Historie stažení a sdílené základny zůstanou zachovány.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

@@ -4,7 +4,15 @@ import type { StringStorage } from '@/core/storage/storage';
 import { PlayerCardPreferencesService } from './player-card-preferences';
 import { PlayerService } from './player-service';
 import { WarStatsFilter } from '../models/war-stats-filter';
-import { currentLegendDay } from '../models/player-legend';
+import {
+  currentLegendDay,
+  PlayerLegendBattle,
+  PlayerLegendBattlelog,
+  PlayerLegendDaySummary,
+  PlayerLegendHistoryEntry,
+  PlayerLegendLeagueData,
+  PlayerLegendRank,
+} from '../models/player-legend';
 
 class MemoryStorage implements StringStorage {
   readonly values = new Map<string, string>();
@@ -549,6 +557,57 @@ test('loads a separate Legend experience from current-day and completed-season c
   expect(calls.get(`/v2/player/%23P1/legend/${day}/battlelog`)).toBe(1);
   expect(calls.get('/v2/legends/ranks')).toBe(1);
   expect(calls.get('/v2/legends/ranks/history')).toBe(1);
+});
+
+test('retains player-backed Legends data when every optional analytics endpoint fails', async () => {
+  const day = '2026-08-15';
+  const seriesPath =
+    '/v2/player/%23P1/legend/series?time%5Bafter%5D=2026-07-19&time%5Bbefore%5D=2026-08-15';
+  const failure = () => reply({ code: 'upstream_unavailable', message: 'down' }, 503);
+  const { api, calls } = setup({
+    '/v2/player/%23P1/league/history': failure,
+    [`/v2/player/%23P1/legend/${day}/battlelog`]: failure,
+    '/v2/legends/ranks/history': failure,
+    [seriesPath]: failure,
+    '/v2/legends/ranks': failure,
+    '/v2/legends/days': failure,
+  });
+  const service = new PlayerService(api);
+  const currentDay = new PlayerLegendBattlelog(
+    '#P1',
+    day,
+    new Date(`${day}T05:00:00.000Z`),
+    new Date('2026-08-16T05:00:00.000Z'),
+    true,
+    40,
+    -20,
+    20,
+    [new PlayerLegendBattle(40, false, null, 0, 18, '#O1', 'Opponent', 18)],
+    [new PlayerLegendBattle(-20, true)],
+  );
+  const baseline = new PlayerLegendLeagueData(
+    '#P1',
+    'One',
+    18,
+    5600,
+    5900,
+    currentDay,
+    [new PlayerLegendHistoryEntry('2026-07', 1, 'Legend League', 5700, 200, 190, 50)],
+    day,
+    new PlayerLegendRank('#P1', 'One', 5600, 42),
+    new PlayerLegendRank('#P1', 'One', 5575, 51),
+    [new PlayerLegendDaySummary(day, 40, -20, 20)],
+  );
+
+  await expect(service.loadLegendLeagueData('#P1', false, day, baseline)).resolves.toMatchObject({
+    playerName: 'One',
+    currentDay: { day, trophyChange: 20 },
+    history: [{ season: '2026-07' }],
+    currentRank: { globalRank: 42 },
+    historicalRank: { globalRank: 51 },
+    recentDays: [{ day }],
+  });
+  expect(calls.get('/proxy/v1/players/%23P1')).toBeUndefined();
 });
 
 test('batches selected-day opponent rank and trophy insights without enriching automatic battles', async () => {

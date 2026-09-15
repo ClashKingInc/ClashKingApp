@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Adversari rămași",
   "cwlWinBonusNote": "Stelele includ 10 stele bonus pentru fiecare victorie încheiată.",
   "cwlEstimateNote": "Estimările folosesc războaiele încheiate și adversarii rămași, nu schimbările de componență. Sunt necesare cel puțin două războaie încheiate per clan. Estimările nu sunt calibrate; regulile de promovare diferă în funcție de ligă.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# oră} other {# ore}}} other {{count, plural, one {# minut} other {# minute}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# oră} other {# ore}}} other {{count, plural, one {# minut} other {# minute}}}}",
+  "personalBasesDeleteOld": "Elimină bazele mai vechi de 90 de zile",
+  "personalBasesDeleteOldConfirm": "Vor fi eliminate {count} baze salvate mai vechi de 90 de zile. Istoricul descărcărilor și bazele partajate vor rămâne."
 }

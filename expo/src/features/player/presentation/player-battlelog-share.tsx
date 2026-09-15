@@ -5,59 +5,67 @@ import { toIntlLocale, useI18n } from '../../../i18n';
 import { CKText, HorizontalImageShareModal, MobileWebImage, colorWithAlpha } from '../../../ui';
 import type { PlayerBattlelogEntry, PlayerBattlelogMode } from '../models';
 
+export interface BattlelogLootDay {
+  readonly day: string;
+  readonly gold: number;
+  readonly elixir: number;
+  readonly darkElixir: number;
+  readonly total: number;
+  readonly intensity: 0 | 0.25 | 0.5 | 0.75 | 1;
+}
+
 export interface BattlelogShareSummary {
-  readonly battleCount: number;
   readonly attackCount: number;
   readonly totalLoot: number;
-  readonly averageLoot: number;
-  readonly tripleRate: number;
-  readonly lootTimelines: Readonly<
-    Record<'gold' | 'elixir' | 'darkElixir', ReturnType<typeof battlelogLootTimeline>>
-  >;
+  readonly lootTimeline: readonly BattlelogLootDay[];
 }
 
 export function battlelogShareSummary(
   items: readonly PlayerBattlelogEntry[],
+  now = new Date(),
 ): BattlelogShareSummary {
-  const attacks = items.filter((item) => item.attack);
-  const totalLoot = attacks.reduce((sum, item) => sum + item.totalLoot, 0);
+  const lootTimeline = battlelogLootTimeline(items, now);
   return {
-    battleCount: items.length,
-    attackCount: attacks.length,
-    totalLoot,
-    averageLoot: attacks.length === 0 ? 0 : totalLoot / attacks.length,
-    tripleRate:
-      attacks.length === 0
-        ? 0
-        : (attacks.filter((item) => item.stars === 3).length / attacks.length) * 100,
-    lootTimelines: {
-      gold: battlelogLootTimeline(attacks, 'gold'),
-      elixir: battlelogLootTimeline(attacks, 'elixir'),
-      darkElixir: battlelogLootTimeline(attacks, 'darkElixir'),
-    },
+    attackCount: items.filter((item) => isAttackInLootWindow(item, now)).length,
+    totalLoot: lootTimeline.reduce((sum, item) => sum + item.total, 0),
+    lootTimeline,
   };
 }
 
-export function battlelogLootTimeline(
-  attacks: readonly PlayerBattlelogEntry[],
-  resource: 'gold' | 'elixir' | 'darkElixir',
-) {
-  const dated = attacks.filter((item) => item.timestamp !== null);
-  const end = new Date(Math.max(...dated.map((item) => item.timestamp!.getTime()), 0));
-  if (end.getTime() === 0) return [];
+export function battlelogLootTimeline(attacks: readonly PlayerBattlelogEntry[], now = new Date()) {
+  const end = new Date(now);
   end.setUTCHours(0, 0, 0, 0);
-  const totals = new Map<string, number>();
-  for (const item of dated) {
+  const totals = new Map<string, Omit<BattlelogLootDay, 'day' | 'intensity'>>();
+  for (const item of attacks.filter((entry) => isAttackInLootWindow(entry, now))) {
     const day = item.timestamp!.toISOString().slice(0, 10);
-    totals.set(day, (totals.get(day) ?? 0) + item[resource]);
+    const current = totals.get(day) ?? { gold: 0, elixir: 0, darkElixir: 0, total: 0 };
+    totals.set(day, {
+      gold: current.gold + item.gold,
+      elixir: current.elixir + item.elixir,
+      darkElixir: current.darkElixir + item.darkElixir,
+      total: current.total + item.totalLoot,
+    });
   }
-  const values = Array.from({ length: 28 }, (_, index) => {
-    const date = new Date(end.getTime() - (27 - index) * 86_400_000);
+  const values = Array.from({ length: 30 }, (_, index) => {
+    const date = new Date(end.getTime() - (29 - index) * 86_400_000);
     const day = date.toISOString().slice(0, 10);
-    return { day, value: totals.get(day) ?? 0 };
+    return { day, ...(totals.get(day) ?? { gold: 0, elixir: 0, darkElixir: 0, total: 0 }) };
   });
-  const maximum = Math.max(1, ...values.map((item) => item.value));
-  return values.map((item) => ({ ...item, intensity: item.value / maximum }));
+  const maximum = Math.max(1, ...values.map((item) => item.total));
+  return values.map((item): BattlelogLootDay => {
+    const ratio = item.total / maximum;
+    const intensity =
+      ratio === 0 ? 0 : ratio <= 0.25 ? 0.25 : ratio <= 0.5 ? 0.5 : ratio <= 0.75 ? 0.75 : 1;
+    return { ...item, intensity };
+  });
+}
+
+function isAttackInLootWindow(item: PlayerBattlelogEntry, now: Date) {
+  if (!item.attack || !item.timestamp) return false;
+  const end = new Date(now);
+  end.setUTCHours(24, 0, 0, 0);
+  const start = new Date(end.getTime() - 30 * 86_400_000);
+  return item.timestamp >= start && item.timestamp < end;
 }
 
 export function PlayerBattlelogShareModal({
@@ -98,18 +106,9 @@ export function PlayerBattlelogShareModal({
         </View>
         <View style={styles.metrics}>
           <ShareMetric
-            label={t('playerBattlelogBattleCount', { count: summary.battleCount })}
-            value={`${summary.battleCount}`}
-          />
-          <ShareMetric
-            label={t('generalTotal')}
+            label={`${t('capitalRaidLoot')} · ${t('filtersLast30Days')}`}
             value={formatPlayerResourceAmount(summary.totalLoot, locale)}
           />
-          <ShareMetric
-            label={t('generalAverage')}
-            value={formatPlayerResourceAmount(summary.averageLoot, locale)}
-          />
-          <ShareMetric label={t('warStarsThree')} value={`${summary.tripleRate.toFixed(1)}%`} />
         </View>
         <View style={styles.timelineHeader}>
           <CKText role="titleMedium" style={styles.white}>
@@ -120,27 +119,7 @@ export function PlayerBattlelogShareModal({
           </CKText>
         </View>
         <View style={styles.timelines}>
-          {summary.lootTimelines.gold.length === 0 ? (
-            <CKText style={styles.soft}>{t('generalNoDataAvailable')}</CKText>
-          ) : (
-            <>
-              <LootTimelineRow
-                color="#F8C94A"
-                label={t('resourceGold')}
-                timeline={summary.lootTimelines.gold}
-              />
-              <LootTimelineRow
-                color="#D77BFF"
-                label={t('resourceElixir')}
-                timeline={summary.lootTimelines.elixir}
-              />
-              <LootTimelineRow
-                color="#7E4BC6"
-                label={t('resourceDarkElixir')}
-                timeline={summary.lootTimelines.darkElixir}
-              />
-            </>
-          )}
+          <LootTimelineGrid timeline={summary.lootTimeline} />
         </View>
       </View>
     </HorizontalImageShareModal>
@@ -181,30 +160,26 @@ function ShareMetric({ label, value }: { readonly label: string; readonly value:
   );
 }
 
-function LootTimelineRow({
-  color,
-  label,
-  timeline,
-}: {
-  readonly color: string;
-  readonly label: string;
-  readonly timeline: ReturnType<typeof battlelogLootTimeline>;
-}) {
+function LootTimelineGrid({ timeline }: { readonly timeline: readonly BattlelogLootDay[] }) {
+  const columns = Array.from({ length: Math.ceil(timeline.length / 7) }, (_, index) =>
+    timeline.slice(index * 7, index * 7 + 7),
+  );
   return (
-    <View style={styles.timelineRow}>
-      <CKText role="labelSmall" style={[styles.soft, styles.timelineLabel]} numberOfLines={1}>
-        {label}
-      </CKText>
-      {timeline.map((day) => (
-        <View
-          accessible
-          accessibilityLabel={`${label}, ${day.day}: ${day.value}`}
-          key={day.day}
-          style={[
-            styles.day,
-            { backgroundColor: colorWithAlpha(color, 0.12 + day.intensity * 0.88) },
-          ]}
-        />
+    <View style={styles.timelineGrid}>
+      {columns.map((column, columnIndex) => (
+        <View key={columnIndex} style={styles.timelineColumn}>
+          {column.map((day) => (
+            <View
+              accessible
+              accessibilityLabel={`${day.day}: ${day.total}`}
+              key={day.day}
+              style={[
+                styles.day,
+                { backgroundColor: colorWithAlpha('#14A37F', 0.1 + day.intensity * 0.9) },
+              ]}
+            />
+          ))}
+        </View>
       ))}
     </View>
   );
@@ -220,7 +195,7 @@ const styles = StyleSheet.create({
   metric: { flex: 1, padding: 14, borderRadius: 14, backgroundColor: '#162033' },
   timelineHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   timelines: { flex: 1, gap: 8, justifyContent: 'center' },
-  timelineRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  timelineLabel: { width: 78 },
-  day: { flex: 1, height: 40, borderRadius: 5 },
+  timelineGrid: { flexDirection: 'row', gap: 6, justifyContent: 'center' },
+  timelineColumn: { gap: 6 },
+  day: { width: 42, height: 42, borderRadius: 5 },
 });

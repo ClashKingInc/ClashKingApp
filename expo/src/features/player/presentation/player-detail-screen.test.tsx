@@ -269,6 +269,28 @@ describe('PlayerDetailScreen', () => {
     expect(screenActions.openInGame).toHaveBeenCalledWith('#ALPHA');
   });
 
+  it('shows the image export action in the player header only for Battlelogs', async () => {
+    const screen = await wrap(
+      <PlayerDetailScreen
+        model={{
+          player,
+          bookmarked: false,
+          verifiedTracking: true,
+          battlelog: new PlayerBattlelogData([], true, true),
+        }}
+        actions={actions()}
+      />,
+    );
+
+    expect(screen.queryByLabelText('Export')).toBeNull();
+    await fireEvent.press(screen.getByLabelText('Home Base'));
+    await fireEvent.press(screen.getByLabelText('Battles'));
+    expect(screen.getByLabelText('Export')).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('Battles'));
+    await fireEvent.press(screen.getByLabelText('Home Base'));
+    expect(screen.queryByLabelText('Export')).toBeNull();
+  });
+
   it('warms every Flutter stateful history tab through the root service adapter', async () => {
     const screenActions = actions();
     const service = {

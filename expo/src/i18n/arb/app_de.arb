@@ -4684,6 +4684,16 @@
   "cwlWinBonusNote": "Sterne enthalten 10 Bonussterne pro abgeschlossenem Sieg.",
   "cwlEstimateNote": "Schätzungen berücksichtigen abgeschlossene Kriege und verbleibende Gegner, keine Aufstellungsänderungen. Mindestens zwei abgeschlossene Kriege pro Clan sind nötig. Die Schätzungen sind nicht kalibriert; Aufstiegsregeln variieren je nach Liga.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# Stunde} other {# Stunden}}} other {{count, plural, one {# Minute} other {# Minuten}}}}",
+  "personalBasesDeleteOld": "Basen entfernen, die älter als 90 Tage sind",
+  "personalBasesDeleteOldConfirm": "{count} gespeicherte Basen, die älter als 90 Tage sind, werden entfernt. Downloadverlauf und geteilte Basen bleiben erhalten.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

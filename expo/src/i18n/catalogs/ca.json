@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Rivals restants",
   "cwlWinBonusNote": "Les estrelles inclouen 10 estrelles extra per victòria completada.",
   "cwlEstimateNote": "Les estimacions utilitzen guerres completades i rivals restants, no canvis en les alineacions. Calen almenys dues guerres completades per clan. Són estimacions no calibrades; les regles de promoció varien segons la lliga.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# hores}}} other {{count, plural, one {# minut} other {# minuts}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# hores}}} other {{count, plural, one {# minut} other {# minuts}}}}",
+  "personalBasesDeleteOld": "Elimina les bases de més de 90 dies",
+  "personalBasesDeleteOldConfirm": "S'eliminaran {count} bases desades de més de 90 dies. L'historial de baixades i les bases compartides es conservaran."
 }

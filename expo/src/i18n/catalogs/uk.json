@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Решта суперників",
   "cwlWinBonusNote": "Зірки включають 10 бонусних зірок за кожну завершену перемогу.",
   "cwlEstimateNote": "Оцінки враховують завершені війни та решту суперників, але не зміни складів. Потрібно щонайменше дві завершені війни на клан. Оцінки не відкалібровані; правила підвищення залежать від ліги.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# година} few {# години} other {# годин}}} other {{count, plural, one {# хвилина} few {# хвилини} other {# хвилин}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# година} few {# години} other {# годин}}} other {{count, plural, one {# хвилина} few {# хвилини} other {# хвилин}}}}",
+  "personalBasesDeleteOld": "Видалити бази, старші за 90 днів",
+  "personalBasesDeleteOldConfirm": "Буде видалено збережених баз, старших за 90 днів: {count}. Історія завантажень і спільні бази залишаться."
 }

@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Hátralévő ellenfelek",
   "cwlWinBonusNote": "A csillagok lezárt győzelmenként 10 bónuszcsillagot tartalmaznak.",
   "cwlEstimateNote": "A becslések lezárt háborúkon és hátralévő ellenfeleken alapulnak, nem a felállás változásain. Klánonként legalább két lezárt háború szükséges. A becslések nincsenek kalibrálva; a feljutási szabályok ligánként eltérnek.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# óra} other {# óra}}} other {{count, plural, one {# perc} other {# perc}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# óra} other {# óra}}} other {{count, plural, one {# perc} other {# perc}}}}",
+  "personalBasesDeleteOld": "90 napnál régebbi bázisok eltávolítása",
+  "personalBasesDeleteOldConfirm": "{count} darab, 90 napnál régebbi mentett bázis lesz eltávolítva. A letöltési előzmények és a megosztott bázisok megmaradnak."
 }

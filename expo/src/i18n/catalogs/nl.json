@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Resterende tegenstanders",
   "cwlWinBonusNote": "Sterren bevatten 10 bonussterren per afgeronde overwinning.",
   "cwlEstimateNote": "Schattingen gebruiken afgeronde oorlogen en resterende tegenstanders, geen wijzigingen in de opstelling. Minstens twee afgeronde oorlogen per clan zijn nodig. De schattingen zijn niet gekalibreerd; promotieregels verschillen per divisie.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minuten}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minuten}}}}",
+  "personalBasesDeleteOld": "Basissen ouder dan 90 dagen verwijderen",
+  "personalBasesDeleteOldConfirm": "{count} opgeslagen basissen ouder dan 90 dagen worden verwijderd. De downloadgeschiedenis en gedeelde basissen blijven behouden."
 }

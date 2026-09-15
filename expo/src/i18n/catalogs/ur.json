@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "باقی مخالفین",
   "cwlWinBonusNote": "ہر مکمل جیت کے 10 بونس ستارے شامل ہیں۔",
   "cwlEstimateNote": "اندازے مکمل جنگوں اور باقی مخالفین پر مبنی ہیں، ٹیم کی تبدیلیوں پر نہیں۔ ہر کلین کی کم از کم دو جنگیں مکمل ہونی چاہئیں۔ یہ غیر مصدقہ اندازے ہیں؛ ترقی کے اصول لیگ کے لحاظ سے مختلف ہوتے ہیں۔",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# گھنٹہ} other {# گھنٹے}}} other {{count, plural, one {# منٹ} other {# منٹ}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# گھنٹہ} other {# گھنٹے}}} other {{count, plural, one {# منٹ} other {# منٹ}}}}",
+  "personalBasesDeleteOld": "90 دن سے پرانے بیس ہٹائیں",
+  "personalBasesDeleteOldConfirm": "90 دن سے پرانے {count} محفوظ بیس ہٹا دیے جائیں گے۔ ڈاؤن لوڈ ہسٹری اور شیئر کیے گئے بیس برقرار رہیں گے۔"
 }

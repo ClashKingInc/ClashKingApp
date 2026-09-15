@@ -147,6 +147,17 @@ describe('player history row parity', () => {
     await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Farming' })));
     expect(screen.getByTestId('battlelog-loot-grid')).toBeTruthy();
     expect(screen.getAllByText('1K').length).toBeGreaterThan(0);
+    expect(
+      screen
+        .getAllByRole('button')
+        .filter((item) => /^2026-\d{2}-\d{2}:/.test(item.props.accessibilityLabel)),
+    ).toHaveLength(30);
+    await act(async () =>
+      fireEvent.press(screen.getByLabelText(`${new Date().toISOString().slice(0, 10)}: 0`)),
+    );
+    expect(screen.getByText('Gold')).toBeTruthy();
+    expect(screen.getByText('Elixir')).toBeTruthy();
+    expect(screen.getByText('Dark Elixir')).toBeTruthy();
     await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Legend League' })));
     expect(screen.queryByTestId('battlelog-loot-grid')).toBeNull();
     expect(screen.getByText('1 battles')).toBeTruthy();

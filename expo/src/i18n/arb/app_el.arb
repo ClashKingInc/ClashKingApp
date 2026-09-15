@@ -4779,6 +4779,16 @@
   "cwlWinBonusNote": "Τα αστέρια περιλαμβάνουν 10 επιπλέον αστέρια ανά ολοκληρωμένη νίκη.",
   "cwlEstimateNote": "Οι εκτιμήσεις βασίζονται σε ολοκληρωμένους πολέμους και εναπομείναντες αντιπάλους, όχι σε αλλαγές σύνθεσης. Απαιτούνται τουλάχιστον δύο ολοκληρωμένοι πόλεμοι ανά φυλή. Οι εκτιμήσεις δεν είναι βαθμονομημένες· οι κανόνες ανόδου διαφέρουν ανά λίγκα.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# ώρα} other {# ώρες}}} other {{count, plural, one {# λεπτό} other {# λεπτά}}}}",
+  "personalBasesDeleteOld": "Αφαίρεση βάσεων παλαιότερων των 90 ημερών",
+  "personalBasesDeleteOldConfirm": "Θα αφαιρεθούν {count} αποθηκευμένες βάσεις παλαιότερες των 90 ημερών. Το ιστορικό λήψεων και οι κοινόχρηστες βάσεις θα διατηρηθούν.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

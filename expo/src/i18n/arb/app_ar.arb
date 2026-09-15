@@ -4779,6 +4779,16 @@
   "cwlWinBonusNote": "تشمل النجوم 10 نجوم إضافية لكل انتصار مكتمل.",
   "cwlEstimateNote": "تعتمد التقديرات على الحروب المكتملة والخصوم المتبقين، لا على تغييرات التشكيلة. يلزم إكمال حربين على الأقل لكل قبيلة. هذه تقديرات غير معايرة؛ تختلف قواعد الترقية حسب الدوري.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# ساعة} other {# ساعة}}} other {{count, plural, one {# دقيقة} other {# دقيقة}}}}",
+  "personalBasesDeleteOld": "إزالة القواعد الأقدم من 90 يومًا",
+  "personalBasesDeleteOldConfirm": "ستتم إزالة {count} من القواعد المحفوظة الأقدم من 90 يومًا. سيبقى سجل التنزيل والقواعد المشتركة.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

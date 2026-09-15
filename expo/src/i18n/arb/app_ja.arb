@@ -4779,6 +4779,16 @@
   "cwlWinBonusNote": "終了した対戦での勝利ごとにボーナスの星10個を含みます。",
   "cwlEstimateNote": "推定は終了した対戦と残りの相手に基づき、編成変更は考慮しません。各クランに最低2回の終了した対戦が必要です。精度の検証はされていません。昇格ルールはリーグごとに異なります。",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# 時間} other {# 時間}}} other {{count, plural, one {# 分} other {# 分}}}}",
+  "personalBasesDeleteOld": "90日より古い配置を削除",
+  "personalBasesDeleteOldConfirm": "90日より古い保存済み配置を{count}件削除します。ダウンロード履歴と共有配置は残ります。",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

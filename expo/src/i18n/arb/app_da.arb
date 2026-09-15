@@ -4684,6 +4684,16 @@
   "cwlWinBonusNote": "Stjerner inkluderer 10 bonusstjerner pr. afsluttet sejr.",
   "cwlEstimateNote": "Estimater bruger afsluttede krige og resterende modstandere, ikke ændringer i opstillingen. Der kræves mindst to afsluttede krige pr. klan. Estimaterne er ikke kalibrerede; oprykningsregler varierer efter liga.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# time} other {# timer}}} other {{count, plural, one {# minut} other {# minutter}}}}",
+  "personalBasesDeleteOld": "Fjern baser, der er ældre end 90 dage",
+  "personalBasesDeleteOldConfirm": "{count} gemte baser, der er ældre end 90 dage, fjernes. Downloadhistorik og delte baser bevares.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

@@ -4684,6 +4684,16 @@
   "cwlWinBonusNote": "Tähtiin sisältyy 10 bonustähteä jokaisesta päättyneestä voitosta.",
   "cwlEstimateNote": "Arviot perustuvat päättyneisiin sotiin ja jäljellä oleviin vastustajiin, eivät kokoonpanomuutoksiin. Jokaiselta klaanilta tarvitaan vähintään kaksi päättynyttä sotaa. Arvioita ei ole kalibroitu; noususäännöt vaihtelevat liigoittain.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# tunti} other {# tuntia}}} other {{count, plural, one {# minuutti} other {# minuuttia}}}}",
+  "personalBasesDeleteOld": "Poista yli 90 päivää vanhat tukikohdat",
+  "personalBasesDeleteOldConfirm": "{count} yli 90 päivää vanhaa tallennettua tukikohtaa poistetaan. Lataushistoria ja jaetut tukikohdat säilyvät.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

@@ -32,6 +32,7 @@ import {
   MapPin,
   Percent,
   Repeat2,
+  Share2,
   Shield,
   Star,
   Swords,
@@ -91,8 +92,7 @@ import type {
 import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { PlayerSuperTroop } from '../models/player-items';
 import { PlayerBattlelogArmyCatalog } from '../models/player-battlelog';
-import { exportPlayerBattlelog } from './player-battlelog-export';
-import { battlelogLootTimeline, PlayerBattlelogShareModal } from './player-battlelog-share';
+import { battlelogLootTimeline, type BattlelogLootDay } from './player-battlelog-share';
 import type {
   EnemyTownhallStats as EnemyThStats,
   PlayerWarStatsData,
@@ -138,11 +138,13 @@ export function PlayerDetailHeader({
   model,
   actions,
   selectedTab,
+  onBattlelogExport,
   safeTop = 0,
 }: {
   model: PlayerDetailPresentationModel;
   actions: PlayerDetailPresentationActions;
   selectedTab: PlayerDetailTabKey;
+  onBattlelogExport?: () => void;
   safeTop?: number;
 }) {
   const { player } = model;
@@ -327,6 +329,11 @@ export function PlayerDetailHeader({
           {warAction ? (
             <IconAction label={warAction.label} onPress={warAction.onPress}>
               <MobileWebImage imageUrl={warAction.image} style={styles.statIcon} />
+            </IconAction>
+          ) : null}
+          {selectedTab === 'battles' ? (
+            <IconAction label={t('generalExport')} onPress={onBattlelogExport ?? (() => undefined)}>
+              <Share2 color="#fff" />
             </IconAction>
           ) : null}
           <IconAction label={t('playerOpenInGame')} onPress={() => actions.openInGame(player.tag)}>
@@ -969,21 +976,11 @@ function resourceImage(key: string) {
   return `${ImageAssets.baseUrl}/resources/${key}.webp`;
 }
 
-export function PlayerBattlelogTab({
-  data,
-  playerName = '',
-  showMessage,
-}: {
-  data: PlayerBattlelogData | null | undefined;
-  playerName?: string;
-  showMessage?: (message: string) => void;
-}) {
+export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null | undefined }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const [mode, setMode] = useState<PlayerBattlelogMode>('ranked');
   const [direction, setDirection] = useState<'all' | 'attacks' | 'defenses'>('all');
-  const [exporting, setExporting] = useState(false);
-  const [shareVisible, setShareVisible] = useState(false);
   if (!data)
     return <EmptyState title={t('playerBattlelogLoadError')} body={t('generalNoDataAvailable')} />;
   const battles = data.forMode(mode);
@@ -1071,9 +1068,7 @@ export function PlayerBattlelogTab({
           popular={popularDefenses}
         />
       </Surface>
-      {mode === 'farming' && attacks.length ? (
-        <BattlelogLootGrid attacks={attacks} locale={locale} />
-      ) : null}
+      {mode === 'farming' ? <BattlelogLootGrid attacks={attacks} locale={locale} /> : null}
       {!data.officialAvailable || !data.historyAvailable ? (
         <Surface radius={ckRadius.tile} style={styles.notice}>
           <Info size={18} color={theme.onSurfaceVariant} />
@@ -1097,39 +1092,6 @@ export function PlayerBattlelogTab({
           value={direction}
           onSelect={(value) => setDirection(value as typeof direction)}
         />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('generalExport')}
-          disabled={items.length === 0}
-          onPress={() => setShareVisible(true)}
-          style={[
-            styles.battleExport,
-            { backgroundColor: colorWithAlpha(theme.primary, 0.14) },
-            items.length === 0 && styles.disabled,
-          ]}
-        >
-          <Upload color={theme.primary} size={18} />
-          <CKText role="labelLarge">{t('generalExport')}</CKText>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="CSV"
-          disabled={exporting || items.length === 0}
-          onPress={() => {
-            setExporting(true);
-            void exportPlayerBattlelog(items, playerName, mode)
-              .then(() => showMessage?.(t('exportSuccess')))
-              .catch((error) => showMessage?.(String(error)))
-              .finally(() => setExporting(false));
-          }}
-          style={[
-            styles.battleExport,
-            { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.5) },
-            (exporting || items.length === 0) && styles.disabled,
-          ]}
-        >
-          {exporting ? <LoadingIndicator /> : <CKText role="labelLarge">CSV</CKText>}
-        </Pressable>
       </View>
       <View testID="battle-responsive-grid">
         <ResponsiveGrid minItemWidth={430} maxColumns={2}>
@@ -1146,13 +1108,6 @@ export function PlayerBattlelogTab({
       ) : !items.length ? (
         <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
       ) : null}
-      <PlayerBattlelogShareModal
-        items={items}
-        mode={mode}
-        onClose={() => setShareVisible(false)}
-        playerName={playerName}
-        visible={shareVisible}
-      />
     </View>
   );
 }
@@ -1166,69 +1121,84 @@ function BattlelogLootGrid({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [resource, setResource] = useState<'gold' | 'elixir' | 'darkElixir'>('gold');
-  const rows = [
-    [ImageAssets.gold, t('resourceGold'), attacks.reduce((sum, item) => sum + item.gold, 0)],
-    [ImageAssets.elixir, t('resourceElixir'), attacks.reduce((sum, item) => sum + item.elixir, 0)],
-    [
-      ImageAssets.darkElixir,
-      t('resourceDarkElixir'),
-      attacks.reduce((sum, item) => sum + item.darkElixir, 0),
-    ],
-  ] as const;
-  const timeline = battlelogLootTimeline(attacks, resource);
+  const [selected, setSelected] = useState<BattlelogLootDay | null>(null);
+  const timeline = battlelogLootTimeline(attacks);
+  const total = timeline.reduce((sum, item) => sum + item.total, 0);
+  const columns = Array.from({ length: Math.ceil(timeline.length / 7) }, (_, index) =>
+    timeline.slice(index * 7, index * 7 + 7),
+  );
   return (
     <View testID="battlelog-loot-grid" style={styles.sections}>
-      <ResponsiveGrid minItemWidth={150} maxColumns={3}>
-        {rows.map(([image, label, total]) => (
-          <Surface key={label} radius={ckRadius.tile} style={styles.lootSummaryTile}>
-            <MobileWebImage imageUrl={image} style={styles.lootSummaryImage} />
-            <View style={styles.grow}>
-              <CKText muted role="labelSmall">
-                {label} · {t('generalTotal')}
-              </CKText>
-              <CKText role="titleMedium">{formatPlayerResourceAmount(total, locale)}</CKText>
-              <CKText muted role="labelSmall">
-                {t('generalAverage')} · {formatPlayerResourceAmount(total / attacks.length, locale)}
-              </CKText>
-            </View>
-          </Surface>
-        ))}
-      </ResponsiveGrid>
+      <Surface radius={ckRadius.tile} style={styles.lootSummaryTile}>
+        <MobileWebImage imageUrl={ImageAssets.lootCart} style={styles.lootSummaryImage} />
+        <View style={styles.grow}>
+          <CKText muted role="labelSmall">
+            {t('capitalRaidLoot')} · {t('filtersLast30Days')}
+          </CKText>
+          <CKText role="titleMedium">{formatPlayerResourceAmount(total, locale)}</CKText>
+        </View>
+      </Surface>
       <Surface radius={ckRadius.tile} style={styles.lootContributionCard}>
-        <Segmented
-          choices={[
-            ['gold', t('resourceGold')],
-            ['elixir', t('resourceElixir')],
-            ['darkElixir', t('resourceDarkElixir')],
-          ]}
-          selected={resource}
-          onSelect={(value) => setResource(value as typeof resource)}
-        />
         <View style={styles.lootContributionGrid}>
-          {timeline.map((day) => (
-            <View
-              accessible
-              accessibilityLabel={`${day.day}: ${day.value}`}
-              key={day.day}
-              style={[
-                styles.lootContributionCell,
-                {
-                  backgroundColor: colorWithAlpha(
-                    theme.primary,
-                    day.value === 0 ? 0.08 : 0.18 + day.intensity * 0.82,
-                  ),
-                },
-              ]}
-            >
-              <CKText muted role="labelSmall">
-                {day.day.slice(5)}
-              </CKText>
-              <CKText role="labelSmall">{compactNumber(day.value, locale)}</CKText>
+          {columns.map((column, columnIndex) => (
+            <View key={columnIndex} style={styles.lootContributionColumn}>
+              {column.map((day) => (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`${day.day}: ${day.total}`}
+                  key={day.day}
+                  onPress={() => setSelected(day)}
+                  style={[
+                    styles.lootContributionCell,
+                    { backgroundColor: colorWithAlpha(theme.primary, 0.1 + day.intensity * 0.9) },
+                  ]}
+                />
+              ))}
             </View>
           ))}
         </View>
       </Surface>
+      <Modal transparent visible={selected !== null} onRequestClose={() => setSelected(null)}>
+        <Pressable style={styles.modalBackdrop} onPress={() => setSelected(null)}>
+          <Surface radius={ckRadius.card} style={styles.lootDetailModal}>
+            <View style={styles.row}>
+              <CKText role="titleMedium" style={styles.grow}>
+                {selected
+                  ? new Intl.DateTimeFormat(toIntlLocale(locale), {
+                      dateStyle: 'long',
+                      timeZone: 'UTC',
+                    }).format(new Date(`${selected.day}T00:00:00.000Z`))
+                  : ''}
+              </CKText>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('generalCancel')}
+                onPress={() => setSelected(null)}
+                style={styles.iconButton}
+              >
+                <X color={theme.onSurface} />
+              </Pressable>
+            </View>
+            {selected
+              ? [
+                  [t('resourceGold'), selected.gold],
+                  [t('resourceElixir'), selected.elixir],
+                  [t('resourceDarkElixir'), selected.darkElixir],
+                  [t('generalTotal'), selected.total],
+                ].map(([label, value]) => (
+                  <View key={String(label)} style={styles.row}>
+                    <CKText muted style={styles.grow}>
+                      {label}
+                    </CKText>
+                    <CKText role="labelLarge">
+                      {formatPlayerResourceAmount(Number(value), locale)}
+                    </CKText>
+                  </View>
+                ))
+              : null}
+          </Surface>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -4433,15 +4403,6 @@ const styles = StyleSheet.create({
   rowCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
   joinLeaveMovement: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   battleCard: { minHeight: 120, gap: 8, paddingHorizontal: 12, paddingVertical: 8 },
-  battleExport: {
-    minHeight: 40,
-    paddingHorizontal: 12,
-    borderRadius: ckRadius.control,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-  },
   lootSummaryTile: {
     minHeight: 78,
     paddingHorizontal: 12,
@@ -4452,15 +4413,22 @@ const styles = StyleSheet.create({
   },
   lootSummaryImage: { width: 34, height: 34 },
   lootContributionCard: { padding: 12, gap: 12 },
-  lootContributionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  lootContributionGrid: { flexDirection: 'row', gap: 6, justifyContent: 'center' },
+  lootContributionColumn: { gap: 6 },
   lootContributionCell: {
-    width: '12.5%',
-    minWidth: 62,
-    aspectRatio: 1.25,
-    borderRadius: 8,
-    padding: 6,
-    justifyContent: 'space-between',
+    width: 34,
+    height: 34,
+    borderRadius: 6,
   },
+  lootDetailModal: { width: '88%', maxWidth: 380, padding: 20, gap: 12 },
+  modalBackdrop: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#00000088',
+  },
+  iconButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   battleResult: { alignItems: 'center' },
   directionImage: { width: 20, height: 20, resizeMode: 'contain' },
   starImage: { width: 19, height: 19, resizeMode: 'contain' },

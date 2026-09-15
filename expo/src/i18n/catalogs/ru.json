@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Оставшиеся соперники",
   "cwlWinBonusNote": "Звёзды включают 10 бонусных звёзд за каждую завершённую победу.",
   "cwlEstimateNote": "Оценки учитывают завершённые войны и оставшихся соперников, но не изменения составов. Нужно хотя бы две завершённые войны на клан. Оценки не откалиброваны; правила повышения зависят от лиги.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# час} few {# часа} other {# часов}}} other {{count, plural, one {# минута} few {# минуты} other {# минут}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# час} few {# часа} other {# часов}}} other {{count, plural, one {# минута} few {# минуты} other {# минут}}}}",
+  "personalBasesDeleteOld": "Удалить базы старше 90 дней",
+  "personalBasesDeleteOldConfirm": "Будет удалено сохранённых баз старше 90 дней: {count}. История скачиваний и общие базы останутся."
 }

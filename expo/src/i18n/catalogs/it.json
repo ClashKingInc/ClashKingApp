@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Avversari rimanenti",
   "cwlWinBonusNote": "Le stelle includono 10 stelle bonus per ogni vittoria conclusa.",
   "cwlEstimateNote": "Le stime usano guerre concluse e avversari rimanenti, non i cambi di formazione. Servono almeno due guerre concluse per clan. Le stime non sono calibrate; le regole di promozione variano per lega.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# ora} other {# ore}}} other {{count, plural, one {# minuto} other {# minuti}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# ora} other {# ore}}} other {{count, plural, one {# minuto} other {# minuti}}}}",
+  "personalBasesDeleteOld": "Rimuovi le basi più vecchie di 90 giorni",
+  "personalBasesDeleteOldConfirm": "Verranno rimosse {count} basi salvate più vecchie di 90 giorni. La cronologia dei download e le basi condivise resteranno disponibili."
 }

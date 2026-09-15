@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
   RefreshControl,
@@ -35,8 +35,15 @@ import {
   useCKTheme,
 } from '../../../ui';
 import { useAppRuntime } from '../../../core/app/runtime-context';
-import type { Player, PlayerLegendBattle, PlayerLegendLeagueData } from '../../player/models';
-import { currentLegendDay } from '../../player/models';
+import {
+  PlayerLegendBattle,
+  PlayerLegendBattlelog,
+  PlayerLegendDaySummary,
+  PlayerLegendHistoryEntry,
+  PlayerLegendLeagueData,
+  currentLegendDay,
+  type Player,
+} from '../../player/models';
 import { parseArmyCounts, PlayerBattlelogArmyCatalog } from '../../player/models/player-battlelog';
 import { LegendsShareModal, legendsShareSummary } from './legends-share';
 import { canMoveToNextLegendDay, legendDayOffset } from './legend-day';
@@ -50,7 +57,11 @@ export function LegendsRoot({
 }) {
   const runtime = useAppRuntime();
   const [selectedDay, setSelectedDay] = useState(() => currentLegendDay());
-  const [data, setData] = useState<PlayerLegendLeagueData | null>(null);
+  const baseline = useMemo(
+    () => legendLeagueDataFromPlayer(player, selectedDay),
+    [player, selectedDay],
+  );
+  const [data, setData] = useState<PlayerLegendLeagueData | null>(baseline);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +72,9 @@ export function LegendsRoot({
       else setLoading(true);
       setError(null);
       try {
-        setData(await runtime.players.loadLegendLeagueData(player.tag, force, selectedDay));
+        setData(
+          await runtime.players.loadLegendLeagueData(player.tag, force, selectedDay, baseline),
+        );
       } catch (caught) {
         setError(caught instanceof Error ? caught.message : String(caught));
       } finally {
@@ -69,12 +82,12 @@ export function LegendsRoot({
         setRefreshing(false);
       }
     },
-    [player.tag, runtime.players, selectedDay],
+    [baseline, player.tag, runtime.players, selectedDay],
   );
   useEffect(() => {
     let current = true;
     void runtime.players
-      .loadLegendLeagueData(player.tag, false, selectedDay)
+      .loadLegendLeagueData(player.tag, false, selectedDay, baseline)
       .then((value) => {
         if (current) setData(value);
       })
@@ -87,7 +100,7 @@ export function LegendsRoot({
     return () => {
       current = false;
     };
-  }, [player.tag, runtime.players, selectedDay]);
+  }, [baseline, player.tag, runtime.players, selectedDay]);
 
   return (
     <View style={styles.fill}>
@@ -100,7 +113,6 @@ export function LegendsRoot({
         onBack={onBack}
         onRefresh={() => load(true)}
         onSelectDay={(day) => {
-          setData(null);
           setLoading(true);
           setSelectedDay(day);
         }}
@@ -114,6 +126,66 @@ export function LegendsRoot({
         />
       ) : null}
     </View>
+  );
+}
+
+export function legendLeagueDataFromPlayer(player: Player, day: string) {
+  const season = player.legendsBySeason?.getSpecificSeason(new Date(`${day}T00:00:00.000Z`));
+  const storedDay = season?.days[day] ?? null;
+  const startsAt = new Date(`${day}T05:00:00.000Z`);
+  const currentDay = storedDay
+    ? new PlayerLegendBattlelog(
+        player.tag,
+        day,
+        startsAt,
+        new Date(startsAt.getTime() + 86_400_000),
+        startsAt.getTime() + 86_400_000 <= Date.now(),
+        storedDay.trophiesGainedTotal,
+        storedDay.trophiesLostTotal,
+        storedDay.trophiesTotal,
+        storedDay.attacks.map((trophies) => new PlayerLegendBattle(trophies, false)),
+        storedDay.defenses.map((trophies) => new PlayerLegendBattle(trophies, false)),
+      )
+    : null;
+  const recentDays = season
+    ? Object.entries(season.days)
+        .filter(([stored]) => stored <= day)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .slice(-28)
+        .map(
+          ([stored, value]) =>
+            new PlayerLegendDaySummary(
+              stored,
+              value.trophiesGainedTotal,
+              value.trophiesLostTotal,
+              value.trophiesTotal,
+            ),
+        )
+    : [];
+  const history = player.legendRanking.map(
+    (entry) =>
+      new PlayerLegendHistoryEntry(
+        entry.season,
+        null,
+        'Legend League',
+        entry.trophies,
+        entry.attackWins,
+        entry.defenseWins,
+        entry.rank,
+      ),
+  );
+  return new PlayerLegendLeagueData(
+    player.tag,
+    player.name,
+    player.townHallLevel,
+    player.trophies,
+    player.bestTrophies,
+    currentDay,
+    history,
+    day,
+    null,
+    null,
+    recentDays,
   );
 }
 
@@ -245,7 +317,9 @@ export function LegendsScreen({
                   </CKText>
                 </Surface>
               ) : null}
-              {current ? (
+              {loading && data.selectedDay !== selectedDay ? (
+                <LoadingIndicator />
+              ) : current ? (
                 <CurrentLegendDay data={current} locale={locale} />
               ) : (
                 <EmptyState title={t('legendsNotInLeague')} body={t('legendsNoDataToday')} />

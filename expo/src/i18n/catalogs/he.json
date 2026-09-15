@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "היריבים שנותרו",
   "cwlWinBonusNote": "הכוכבים כוללים 10 כוכבי בונוס לכל ניצחון שהושלם.",
   "cwlEstimateNote": "ההערכות מבוססות על מלחמות שהושלמו ויריבים שנותרו, ולא על שינויי הרכב. נדרשות לפחות שתי מלחמות שהושלמו לכל שבט. ההערכות אינן מכוילות; כללי העלייה משתנים לפי הליגה.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# שעה} other {# שעות}}} other {{count, plural, one {# דקה} other {# דקות}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# שעה} other {# שעות}}} other {{count, plural, one {# דקה} other {# דקות}}}}",
+  "personalBasesDeleteOld": "הסרת בסיסים בני יותר מ-90 יום",
+  "personalBasesDeleteOldConfirm": "יוסרו {count} בסיסים שמורים בני יותר מ-90 יום. היסטוריית ההורדות והבסיסים המשותפים יישמרו."
 }

@@ -95,7 +95,6 @@ const privacyExport = {
   notification_devices: [],
   notification_preferences: [],
   saved_bases: [],
-  base_slots: [],
   billing_subscription: [],
   subscription_entitlements: [],
 };

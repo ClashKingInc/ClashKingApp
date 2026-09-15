@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Kalan rakipler",
   "cwlWinBonusNote": "Yıldızlar, tamamlanan her galibiyet için 10 bonus yıldız içerir.",
   "cwlEstimateNote": "Tahminler tamamlanan savaşları ve kalan rakipleri kullanır, kadro değişikliklerini dikkate almaz. Klan başına en az iki tamamlanmış savaş gerekir. Tahminler kalibre edilmemiştir; yükselme kuralları lige göre değişir.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# saat} other {# saat}}} other {{count, plural, one {# dakika} other {# dakika}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# saat} other {# saat}}} other {{count, plural, one {# dakika} other {# dakika}}}}",
+  "personalBasesDeleteOld": "90 günden eski düzenleri kaldır",
+  "personalBasesDeleteOldConfirm": "90 günden eski {count} kayıtlı düzen kaldırılacak. İndirme geçmişi ve paylaşılan düzenler kalacak."
 }

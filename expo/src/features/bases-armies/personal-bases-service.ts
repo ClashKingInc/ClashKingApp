@@ -5,25 +5,13 @@ import type { ContractApiService } from '../../core/api/contract-api';
 
 export type PersonalBasesState = EndpointResponse<typeof expoEndpoints.personalBases>;
 export type PersonalBase = PersonalBasesState['items'][number];
-export type PersonalBaseSlot = PersonalBasesState['slots'][number];
-export type PersonalBaseSlotKind = PersonalBaseSlot['kind'];
-export type PersonalBaseSlotNumber = 1 | 2 | 3;
+export type PersonalBaseKind = NonNullable<PersonalBase['kind']>;
 
 export interface PersonalBasesServiceContract {
   load(): Promise<PersonalBasesState>;
-  save(baseId: string): Promise<PersonalBasesState>;
+  save(baseId: string, kind: PersonalBaseKind | null): Promise<PersonalBasesState>;
   unsave(baseId: string): Promise<PersonalBasesState>;
-  assign(
-    playerTag: string,
-    kind: PersonalBaseSlotKind,
-    number: PersonalBaseSlotNumber,
-    baseId: string,
-  ): Promise<PersonalBasesState>;
-  clear(
-    playerTag: string,
-    kind: PersonalBaseSlotKind,
-    number: PersonalBaseSlotNumber,
-  ): Promise<PersonalBasesState>;
+  deleteOld(): Promise<PersonalBasesState>;
 }
 
 export class PersonalBasesService implements PersonalBasesServiceContract {
@@ -35,12 +23,12 @@ export class PersonalBasesService implements PersonalBasesServiceContract {
     );
   }
 
-  save(baseId: string): Promise<PersonalBasesState> {
+  save(baseId: string, kind: PersonalBaseKind | null): Promise<PersonalBasesState> {
     return Effect.runPromise(
       this.api.execute(expoEndpoints.savePersonalBase, {
         path: { baseId },
         query: {},
-        body: {},
+        body: { kind },
       }),
     );
   }
@@ -55,29 +43,10 @@ export class PersonalBasesService implements PersonalBasesServiceContract {
     );
   }
 
-  assign(
-    playerTag: string,
-    kind: PersonalBaseSlotKind,
-    number: PersonalBaseSlotNumber,
-    baseId: string,
-  ): Promise<PersonalBasesState> {
+  deleteOld(): Promise<PersonalBasesState> {
     return Effect.runPromise(
-      this.api.execute(expoEndpoints.assignPersonalBaseSlot, {
-        path: { playerTag, kind, number: String(number) as '1' | '2' | '3' },
-        query: {},
-        body: { baseId },
-      }),
-    );
-  }
-
-  clear(
-    playerTag: string,
-    kind: PersonalBaseSlotKind,
-    number: PersonalBaseSlotNumber,
-  ): Promise<PersonalBasesState> {
-    return Effect.runPromise(
-      this.api.execute(expoEndpoints.clearPersonalBaseSlot, {
-        path: { playerTag, kind, number: String(number) as '1' | '2' | '3' },
+      this.api.execute(expoEndpoints.deleteOldPersonalBases, {
+        path: {},
         query: {},
         body: {},
       }),

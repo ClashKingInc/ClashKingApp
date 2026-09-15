@@ -25,6 +25,7 @@ import {
 } from './player-detail-components';
 import { PlayerAchievementsTab } from './player-achievements-tab';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
+import { PlayerBattlelogShareModal } from './player-battlelog-share';
 
 export function PlayerDetailScreen({
   model,
@@ -46,6 +47,7 @@ export function PlayerDetailScreen({
     initialTabKey,
   ]);
   const [refreshing, setRefreshing] = useState(false);
+  const [battlelogShareVisible, setBattlelogShareVisible] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const scrollOffsets = useRef(new Map<PlayerDetailTabKey, number>());
   const current = tabs.find((item) => item.key === tab) ?? tabs[0]!;
@@ -131,6 +133,7 @@ export function PlayerDetailScreen({
             model={model}
             actions={actions}
             selectedTab={tab}
+            onBattlelogExport={() => setBattlelogShareVisible(true)}
             safeTop={insets.top}
           />
         </View>
@@ -166,6 +169,13 @@ export function PlayerDetailScreen({
           )}
         </View>
       </ScrollView>
+      <PlayerBattlelogShareModal
+        items={(model.battlelog?.forMode('farming') ?? []).filter((item) => item.attack)}
+        mode="farming"
+        onClose={() => setBattlelogShareVisible(false)}
+        playerName={model.player.name}
+        visible={battlelogShareVisible}
+      />
     </SafeAreaView>
   );
 }
@@ -196,14 +206,7 @@ function renderTab(
 ) {
   if (tab === 'home') return <PlayerBaseTab player={model.player} village="home" />;
   if (tab === 'builder') return <PlayerBaseTab player={model.player} village="builder" />;
-  if (tab === 'battles')
-    return (
-      <PlayerBattlelogTab
-        data={model.battlelog}
-        playerName={model.player.name}
-        showMessage={actions.showMessage}
-      />
-    );
+  if (tab === 'battles') return <PlayerBattlelogTab data={model.battlelog} />;
   if (tab === 'history')
     return (
       <PlayerActivityTab

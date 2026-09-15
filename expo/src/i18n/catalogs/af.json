@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Oorblywende teenstanders",
   "cwlWinBonusNote": "Sterre sluit 10 bonussterre per voltooide oorwinning in.",
   "cwlEstimateNote": "Ramings gebruik voltooide oorloë en oorblywende teenstanders, nie spanveranderings nie. Minstens twee voltooide oorloë per stam word vereis. Dit is ongekalibreerde ramings; promosiereëls verskil per liga.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minute}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minute}}}}",
+  "personalBasesDeleteOld": "Verwyder basisse ouer as 90 dae",
+  "personalBasesDeleteOldConfirm": "{count} gestoorde basisse ouer as 90 dae sal verwyder word. Aflaaigeskiedenis en gedeelde basisse sal behoue bly."
 }

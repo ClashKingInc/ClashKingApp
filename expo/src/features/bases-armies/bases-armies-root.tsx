@@ -1,7 +1,8 @@
 import { cloneElement, useCallback, useEffect, useState, type ReactElement } from 'react';
-import { ArrowLeft, Bookmark, Download, ExternalLink } from 'lucide-react-native';
+import { ArrowLeft, Bookmark, Download, ExternalLink, Tag, Trash2, X } from 'lucide-react-native';
 import {
   Linking,
+  Modal,
   Platform,
   Pressable,
   RefreshControl,
@@ -31,31 +32,21 @@ import type {
   PersonalBase,
   PersonalBasesServiceContract,
   PersonalBasesState,
-  PersonalBaseSlotKind,
-  PersonalBaseSlotNumber,
+  PersonalBaseKind,
 } from './personal-bases-service';
 
-const SLOT_NUMBERS = [1, 2, 3] as const;
-const EMPTY_SLOT = '__empty__';
+const CLEAR_KIND = '__clear__';
 
 export function BasesArmiesRoot({ onBack }: { readonly onBack: () => void }) {
   const runtime = useAppRuntime();
-  return (
-    <BasesArmiesScreen
-      onBack={onBack}
-      playerTags={runtime.accounts.verifiedAccounts.map((account) => account.playerTag)}
-      service={runtime.personalBases}
-    />
-  );
+  return <BasesArmiesScreen onBack={onBack} service={runtime.personalBases} />;
 }
 
 export function BasesArmiesScreen({
   onBack,
-  playerTags,
   service,
 }: {
   readonly onBack: () => void;
-  readonly playerTags: readonly string[];
   readonly service: PersonalBasesServiceContract;
 }) {
   const { t, locale } = useI18n();
@@ -69,6 +60,8 @@ export function BasesArmiesScreen({
   const [loadError, setLoadError] = useState(false);
   const [mutationError, setMutationError] = useState(false);
   const [busyKey, setBusyKey] = useState<string | null>(null);
+  const [cleanupVisible, setCleanupVisible] = useState(false);
+  const [cleanupNow, setCleanupNow] = useState(Date.now);
 
   const load = useCallback(
     async (refresh = false) => {
@@ -120,6 +113,12 @@ export function BasesArmiesScreen({
     },
     [busyKey],
   );
+  const savedItems = state?.items.filter((base) => base.saved) ?? [];
+  const historyItems = state?.items.filter((base) => base.downloadedAt !== null) ?? [];
+  const cutoff = cleanupNow - 90 * 86_400_000;
+  const oldSavedCount = savedItems.filter(
+    (base) => base.savedAt !== null && new Date(base.savedAt).getTime() < cutoff,
+  ).length;
 
   return (
     <SafeAreaView
@@ -174,51 +173,88 @@ export function BasesArmiesScreen({
           ) : null}
 
           <SectionTitle title={t('sideSavedBases')} />
-          {(state?.items.length ?? 0) === 0 ? (
+          <ActionButton
+            disabled={busyKey !== null || oldSavedCount === 0}
+            icon={<Trash2 color={theme.primary} />}
+            label={t('personalBasesDeleteOld')}
+            onPress={() => {
+              setCleanupNow(Date.now());
+              setCleanupVisible(true);
+            }}
+          />
+          {savedItems.length === 0 ? (
             <EmptyState title={t('sideSavedBases')} />
           ) : (
-            state?.items.map((base) => (
+            savedItems.map((base) => (
               <BaseCard
                 base={base}
                 busy={busyKey === `base:${base.id}`}
                 key={base.id}
                 onOpen={() => void Linking.openURL(base.baseLink)}
-                onToggleSaved={() =>
-                  void mutate(`base:${base.id}`, () =>
-                    base.saved ? service.unsave(base.id) : service.save(base.id),
-                  )
-                }
+                onKind={(kind) => void mutate(`base:${base.id}`, () => service.save(base.id, kind))}
+                onToggleSaved={() => void mutate(`base:${base.id}`, () => service.unsave(base.id))}
               />
             ))
           )}
 
-          {playerTags.length === 0 ? (
-            <EmptyState
-              showSticker={false}
-              title={t('dashboardNoLinkedAccountsTitle')}
-              body={t('dashboardNoLinkedAccountsBody')}
-            />
+          <SectionTitle title={t('generalHistory')} />
+          {historyItems.length === 0 ? (
+            <EmptyState title={t('generalHistory')} />
           ) : (
-            playerTags.map((playerTag) => (
-              <AccountSlots
-                bases={state?.items.filter((base) => base.saved) ?? []}
-                busy={busyKey !== null}
-                key={playerTag}
-                playerTag={playerTag}
-                slots={state?.slots ?? []}
-                onSelect={(kind, number, baseId) => {
-                  const key = `slot:${playerTag}:${kind}:${number}`;
-                  void mutate(key, () =>
-                    baseId === null
-                      ? service.clear(playerTag, kind, number)
-                      : service.assign(playerTag, kind, number, baseId),
-                  );
-                }}
+            historyItems.map((base) => (
+              <BaseCard
+                base={base}
+                busy={busyKey === `history:${base.id}`}
+                key={`history:${base.id}`}
+                onOpen={() => void Linking.openURL(base.baseLink)}
+                onToggleSaved={
+                  base.saved
+                    ? undefined
+                    : () => void mutate(`history:${base.id}`, () => service.save(base.id, null))
+                }
               />
             ))
           )}
         </ScrollView>
       )}
+      <Modal transparent visible={cleanupVisible} onRequestClose={() => setCleanupVisible(false)}>
+        <Pressable style={styles.modalBackdrop} onPress={() => setCleanupVisible(false)}>
+          <Surface radius={18} style={styles.confirmation}>
+            <View style={styles.confirmationHeader}>
+              <CKText role="titleLarge" style={styles.grow}>
+                {t('generalConfirm')}
+              </CKText>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('generalCancel')}
+                onPress={() => setCleanupVisible(false)}
+                style={styles.closeButton}
+              >
+                <X color={theme.onSurface} />
+              </Pressable>
+            </View>
+            <CKText>{t('personalBasesDeleteOldConfirm', { count: oldSavedCount })}</CKText>
+            <View style={styles.confirmationActions}>
+              <ActionButton
+                label={t('generalCancel')}
+                icon={<X color={theme.primary} />}
+                onPress={() => setCleanupVisible(false)}
+              />
+              <ActionButton
+                label={t('generalConfirm')}
+                icon={<Trash2 color={theme.primary} />}
+                onPress={() => {
+                  setCleanupVisible(false);
+                  void mutate('cleanup', async () => {
+                    await service.deleteOld();
+                    return service.load();
+                  });
+                }}
+              />
+            </View>
+          </Surface>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -235,12 +271,14 @@ function BaseCard({
   base,
   busy,
   onOpen,
+  onKind,
   onToggleSaved,
 }: {
   readonly base: PersonalBase;
   readonly busy: boolean;
   readonly onOpen: () => void;
-  readonly onToggleSaved: () => void;
+  readonly onKind?: (kind: PersonalBaseKind | null) => void;
+  readonly onToggleSaved?: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -275,12 +313,32 @@ function BaseCard({
             label={t('generalOpen')}
             onPress={onOpen}
           />
-          <ActionButton
-            disabled={busy}
-            icon={<Bookmark color={theme.primary} />}
-            label={base.saved ? t('generalRemoveBookmark') : t('gameAssetsSave')}
-            onPress={onToggleSaved}
-          />
+          {onKind ? (
+            <View style={styles.kindPicker}>
+              <Tag color={theme.onSurfaceVariant} size={16} />
+              <SelectionPicker
+                accessibilityLabel={`#${base.id} kind`}
+                onSelect={(kind) => {
+                  if (!busy) onKind(kind === CLEAR_KIND ? null : (kind as PersonalBaseKind));
+                }}
+                options={[
+                  { key: CLEAR_KIND, label: t('searchClear'), disabled: busy },
+                  { key: 'war', label: t('warTitle'), disabled: busy },
+                  { key: 'legend', label: t('legendsTitle'), disabled: busy },
+                ]}
+                selectedKey={base.kind ?? CLEAR_KIND}
+                title={t('sideSavedBases')}
+              />
+            </View>
+          ) : null}
+          {onToggleSaved ? (
+            <ActionButton
+              disabled={busy}
+              icon={<Bookmark color={theme.primary} />}
+              label={base.saved ? t('generalRemoveBookmark') : t('gameAssetsSave')}
+              onPress={onToggleSaved}
+            />
+          ) : null}
         </View>
       </View>
     </Surface>
@@ -337,78 +395,6 @@ function ActionButton({
   );
 }
 
-function AccountSlots({
-  bases,
-  busy,
-  playerTag,
-  slots,
-  onSelect,
-}: {
-  readonly bases: readonly PersonalBase[];
-  readonly busy: boolean;
-  readonly playerTag: string;
-  readonly slots: PersonalBasesState['slots'];
-  readonly onSelect: (
-    kind: PersonalBaseSlotKind,
-    number: PersonalBaseSlotNumber,
-    baseId: string | null,
-  ) => void;
-}) {
-  const { t } = useI18n();
-  return (
-    <Surface radius={18} style={styles.accountSlots}>
-      <CKText role="rowTitle">{playerTag}</CKText>
-      {(['war', 'legend'] as const).map((kind) => (
-        <View key={kind} style={styles.slotGroup}>
-          <CKText muted role="labelLarge">
-            {kind === 'war' ? t('sideWarBaseSlots') : t('sideLegendBaseSlots')}
-          </CKText>
-          {SLOT_NUMBERS.map((number) => {
-            const assigned = slots.find(
-              (slot) =>
-                slot.playerTag === playerTag && slot.kind === kind && slot.number === number,
-            );
-            const options = [
-              { key: EMPTY_SLOT, label: t('searchClear') },
-              ...bases.map((base) => ({
-                key: base.id,
-                label: base.description || `#${base.id}`,
-                subtitle: `#${base.id}`,
-                disabled:
-                  busy ||
-                  slots.some(
-                    (slot) =>
-                      slot.playerTag === playerTag &&
-                      slot.kind === kind &&
-                      slot.baseId === base.id &&
-                      slot.number !== number,
-                  ),
-              })),
-            ];
-            return (
-              <View key={number} style={styles.slotRow}>
-                <CKText role="labelLarge" style={styles.slotNumber}>
-                  {number}
-                </CKText>
-                <SelectionPicker
-                  accessibilityLabel={`${playerTag} ${kind} ${number}`}
-                  fillWidth
-                  onSelect={(baseId) => {
-                    if (!busy) onSelect(kind, number, baseId === EMPTY_SLOT ? null : baseId);
-                  }}
-                  options={options}
-                  selectedKey={assigned?.baseId ?? EMPTY_SLOT}
-                  title={kind === 'war' ? t('sideWarBaseSlots') : t('sideLegendBaseSlots')}
-                />
-              </View>
-            );
-          })}
-        </View>
-      ))}
-    </Surface>
-  );
-}
-
 const styles = StyleSheet.create({
   fill: { flex: 1 },
   header: {
@@ -439,8 +425,17 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   disabled: { opacity: 0.5 },
-  accountSlots: { padding: 14, marginBottom: 12, gap: 14 },
-  slotGroup: { gap: 8 },
-  slotRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  slotNumber: { width: 18, textAlign: 'center' },
+  kindPicker: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 170 },
+  modalBackdrop: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#00000088',
+  },
+  confirmation: { width: '100%', maxWidth: 440, padding: 20, gap: 16 },
+  confirmationHeader: { flexDirection: 'row', alignItems: 'center' },
+  confirmationActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 8 },
+  closeButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  grow: { flex: 1 },
 });

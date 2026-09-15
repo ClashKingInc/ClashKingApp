@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "बाकी विरोधी",
   "cwlWinBonusNote": "हर पूरी हुई जीत के 10 बोनस सितारे शामिल हैं।",
   "cwlEstimateNote": "अनुमान पूरी हुई लड़ाइयों और बाकी विरोधियों पर आधारित हैं, दल में बदलाव पर नहीं। हर क्लैन की कम से कम दो लड़ाइयाँ पूरी होनी चाहिए। ये अप्रमाणित अनुमान हैं; पदोन्नति के नियम लीग के अनुसार बदलते हैं।",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# घंटा} other {# घंटे}}} other {{count, plural, one {# मिनट} other {# मिनट}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# घंटा} other {# घंटे}}} other {{count, plural, one {# मिनट} other {# मिनट}}}}",
+  "personalBasesDeleteOld": "90 दिन से पुराने बेस हटाएँ",
+  "personalBasesDeleteOldConfirm": "90 दिन से पुराने {count} सहेजे गए बेस हटा दिए जाएँगे। डाउनलोड इतिहास और साझा बेस बने रहेंगे।"
 }

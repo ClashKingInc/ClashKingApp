@@ -2032,5 +2032,7 @@
   "cwlRemainingOpponents": "Преостали противници",
   "cwlWinBonusNote": "Звезде укључују 10 бонус звезда за сваку завршену победу.",
   "cwlEstimateNote": "Процене користе завршене ратове и преостале противнике, не промене састава. Потребна су бар два завршена рата по клану. Процене нису калибрисане; правила напредовања зависе од лиге.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# сат} few {# сата} other {# сати}}} other {{count, plural, one {# минут} few {# минута} other {# минута}}}}"
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# сат} few {# сата} other {# сати}}} other {{count, plural, one {# минут} few {# минута} other {# минута}}}}",
+  "personalBasesDeleteOld": "Уклони базе старије од 90 дана",
+  "personalBasesDeleteOldConfirm": "Биће уклоњено {count} сачуваних база старијих од 90 дана. Историја преузимања и дељене базе ће остати."
 }

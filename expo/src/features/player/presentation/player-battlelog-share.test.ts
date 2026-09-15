@@ -26,21 +26,33 @@ function entry(day: string, gold: number, stars = 3) {
   );
 }
 
-test('summarizes only the selected battlelog entries with independently scaled loot timelines', () => {
+test('summarizes exactly 30 UTC calendar days ending today across all loot resources', () => {
   const first = entry('2026-09-10', 1_000_000);
   const second = entry('2026-09-11', 2_000_000, 2);
-  const summary = battlelogShareSummary([first, second]);
+  const summary = battlelogShareSummary([first, second], new Date('2026-09-11T23:59:59.000Z'));
   expect(summary).toMatchObject({
-    battleCount: 2,
     attackCount: 2,
     totalLoot: first.totalLoot + second.totalLoot,
-    tripleRate: 50,
   });
-  expect(summary.lootTimelines.gold.slice(-2)).toEqual([
-    { day: '2026-09-10', value: 1_000_000, intensity: 0.5 },
-    { day: '2026-09-11', value: 2_000_000, intensity: 1 },
+  expect(summary.lootTimeline).toHaveLength(30);
+  expect(summary.lootTimeline.slice(-2)).toEqual([
+    {
+      day: '2026-09-10',
+      gold: 1_000_000,
+      elixir: 500_000,
+      darkElixir: 1_000,
+      total: 1_501_000,
+      intensity: 0.75,
+    },
+    {
+      day: '2026-09-11',
+      gold: 2_000_000,
+      elixir: 1_000_000,
+      darkElixir: 1_000,
+      total: 3_001_000,
+      intensity: 1,
+    },
   ]);
-  expect(summary.lootTimelines.darkElixir.slice(-2).map((day) => day.intensity)).toEqual([1, 1]);
 });
 
 test('uses the selected mode in a stable PNG filename', () => {
@@ -49,19 +61,13 @@ test('uses the selected mode in a stable PNG filename', () => {
   );
 });
 
-test('keeps unlike loot resources on independent contribution scales', () => {
+test('uses combined daily loot intensity and includes zero-value days', () => {
   const first = entry('2026-09-10', 1_000_000);
   const second = entry('2026-09-11', 2_000_000);
-  expect(battlelogLootTimeline([first, second], 'gold').slice(-2)).toMatchObject([
-    { day: '2026-09-10', value: 1_000_000, intensity: 0.5 },
-    { day: '2026-09-11', value: 2_000_000, intensity: 1 },
-  ]);
-  expect(battlelogLootTimeline([first, second], 'elixir').slice(-2)).toMatchObject([
-    { value: 500_000, intensity: 0.5 },
-    { value: 1_000_000, intensity: 1 },
-  ]);
-  expect(battlelogLootTimeline([first, second], 'darkElixir').slice(-2)).toMatchObject([
-    { value: 1_000, intensity: 1 },
-    { value: 1_000, intensity: 1 },
+  const timeline = battlelogLootTimeline([first, second], new Date('2026-09-11T12:00:00Z'));
+  expect(timeline[0]).toMatchObject({ day: '2026-08-13', total: 0, intensity: 0 });
+  expect(timeline.slice(-2)).toMatchObject([
+    { day: '2026-09-10', total: 1_501_000, intensity: 0.75 },
+    { day: '2026-09-11', total: 3_001_000, intensity: 1 },
   ]);
 });

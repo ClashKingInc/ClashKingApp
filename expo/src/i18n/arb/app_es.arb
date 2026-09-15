@@ -4684,6 +4684,16 @@
   "cwlWinBonusNote": "Las estrellas incluyen 10 estrellas extra por victoria completada.",
   "cwlEstimateNote": "Las estimaciones usan guerras completadas y rivales restantes, no cambios de alineación. Se necesitan al menos dos guerras completadas por clan. Son estimaciones sin calibrar; las reglas de ascenso varían según la liga.",
   "cwlDuration": "{unit, select, hours {{count, plural, one {# hora} other {# horas}}} other {{count, plural, one {# minuto} other {# minutos}}}}",
+  "personalBasesDeleteOld": "Eliminar bases de más de 90 días",
+  "personalBasesDeleteOldConfirm": "Se eliminarán {count} bases guardadas de más de 90 días. El historial de descargas y las bases compartidas se conservarán.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {

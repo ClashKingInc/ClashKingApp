@@ -22,16 +22,16 @@ const base = {
   downloadCount: 4,
   upvotes: 3,
   downvotes: 0,
+  kind: null,
   saved: false,
   savedAt: null,
   downloadedAt: '2026-09-11T01:00:00.000Z',
 } as const;
 
-const empty: PersonalBasesState = { items: [], slots: [] };
-const downloaded: PersonalBasesState = { items: [base], slots: [] };
+const empty: PersonalBasesState = { items: [] };
+const downloaded: PersonalBasesState = { items: [base] };
 const saved: PersonalBasesState = {
-  items: [{ ...base, saved: true, savedAt: '2026-09-11T02:00:00.000Z' }],
-  slots: [],
+  items: [{ ...base, kind: 'war', saved: true, savedAt: '2026-09-11T02:00:00.000Z' }],
 };
 
 function service(
@@ -41,13 +41,12 @@ function service(
     load: jest.fn().mockResolvedValue(downloaded),
     save: jest.fn().mockResolvedValue(saved),
     unsave: jest.fn().mockResolvedValue(downloaded),
-    assign: jest.fn().mockResolvedValue(saved),
-    clear: jest.fn().mockResolvedValue(saved),
+    deleteOld: jest.fn().mockResolvedValue(saved),
     ...overrides,
   };
 }
 
-function screen(api: PersonalBasesServiceContract, playerTags: readonly string[] = ['#P0Y']) {
+function screen(api: PersonalBasesServiceContract) {
   return render(
     <SafeAreaProvider
       initialMetrics={{
@@ -57,7 +56,7 @@ function screen(api: PersonalBasesServiceContract, playerTags: readonly string[]
     >
       <I18nProvider locale="en">
         <CKThemeProvider preference="light">
-          <BasesArmiesScreen onBack={jest.fn()} playerTags={playerTags} service={api} />
+          <BasesArmiesScreen onBack={jest.fn()} service={api} />
         </CKThemeProvider>
       </I18nProvider>
     </SafeAreaProvider>,
@@ -78,9 +77,8 @@ test('loads downloaded bases and opens the canonical layout link', async () => {
 });
 
 test('renders empty base and account states', async () => {
-  const emptyView = await screen(service({ load: jest.fn().mockResolvedValue(empty) }), []);
+  const emptyView = await screen(service({ load: jest.fn().mockResolvedValue(empty) }));
   await waitFor(() => expect(emptyView.getAllByTestId('empty-state')).toHaveLength(2));
-  expect(emptyView.getByText('No linked accounts')).toBeTruthy();
   await emptyView.unmount();
 });
 
@@ -96,42 +94,55 @@ test('renders failed loads with a retry action', async () => {
 test('uses authoritative save and unsave responses', async () => {
   const api = service();
   const view = await screen(api);
-  await view.findByText('First base');
+  await view.findAllByText('First base');
   await fireEvent.press(view.getByText('Save'));
-  await waitFor(() => expect(api.save).toHaveBeenCalledWith(base.id));
+  await waitFor(() => expect(api.save).toHaveBeenCalledWith(base.id, null));
   expect(await view.findByText('Remove bookmark')).toBeTruthy();
   await fireEvent.press(view.getByText('Remove bookmark'));
   await waitFor(() => expect(api.unsave).toHaveBeenCalledWith(base.id));
   await view.unmount();
 });
 
-test('assigns and clears an account slot from the saved library', async () => {
-  const assigned: PersonalBasesState = {
-    ...saved,
-    slots: [
-      {
-        playerTag: '#P0Y',
-        kind: 'war',
-        number: 1,
-        baseId: base.id,
-        assignedAt: '2026-09-11T03:00:00.000Z',
-      },
-    ],
-  };
+test('relabels and clears the optional kind on a saved base', async () => {
   const api = service({
     load: jest.fn().mockResolvedValue(saved),
-    assign: jest.fn().mockResolvedValue(assigned),
-    clear: jest.fn().mockResolvedValue(saved),
+    save: jest.fn().mockResolvedValue(saved),
   });
   const view = await screen(api);
-  await view.findByText('First base');
+  await view.findAllByText('First base');
 
-  await fireEvent.press(view.getByLabelText('#P0Y war 1'));
-  await fireEvent.press(view.getByRole('radio', { name: 'First base' }));
-  await waitFor(() => expect(api.assign).toHaveBeenCalledWith('#P0Y', 'war', 1, base.id));
+  await fireEvent.press(view.getByLabelText(`#${base.id} kind`));
+  await fireEvent.press(view.getByRole('radio', { name: 'Legend League' }));
+  await waitFor(() => expect(api.save).toHaveBeenCalledWith(base.id, 'legend'));
 
-  await fireEvent.press(view.getByLabelText('#P0Y war 1'));
+  await fireEvent.press(view.getByLabelText(`#${base.id} kind`));
   await fireEvent.press(view.getByRole('radio', { name: 'Clear' }));
-  await waitFor(() => expect(api.clear).toHaveBeenCalledWith('#P0Y', 'war', 1));
+  await waitFor(() => expect(api.save).toHaveBeenCalledWith(base.id, null));
+  await view.unmount();
+});
+
+test('confirms the exact old-base count, runs fixed cleanup, and refreshes history', async () => {
+  const oldSaved: PersonalBasesState = {
+    items: [
+      { ...base, id: '1', saved: true, savedAt: '2026-01-01T00:00:00.000Z' },
+      { ...base, id: '2', saved: true, savedAt: '2026-02-01T00:00:00.000Z' },
+      { ...base, id: '3', saved: false, savedAt: null },
+    ],
+  };
+  const load = jest.fn().mockResolvedValue(oldSaved);
+  const deleteOld = jest.fn().mockResolvedValue({ items: [oldSaved.items[2]!] });
+  const api = service({ load, deleteOld });
+  const view = await screen(api);
+  await view.findAllByText('First base');
+
+  fireEvent.press(view.getByRole('button', { name: 'Remove bases older than 90 days' }));
+  expect(
+    await view.findByText(
+      '2 saved bases older than 90 days will be removed. Download history and shared bases will remain.',
+    ),
+  ).toBeTruthy();
+  fireEvent.press(view.getByRole('button', { name: 'Confirm' }));
+  await waitFor(() => expect(deleteOld).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(load).toHaveBeenCalledTimes(2));
   await view.unmount();
 });
