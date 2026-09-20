@@ -160,22 +160,25 @@ export function WarCwlScreen({
   const [now, setNow] = useState(() => new Date());
   const roster = useMemo(() => buildWarRoster(model), [model]);
   const refreshingRef = useRef(false);
-  const refresh = useCallback(async () => {
-    if (refreshingRef.current) return;
-    refreshingRef.current = true;
-    setRefreshing(true);
-    try {
-      await actions.refresh();
-      if (roster.missingWarClanTags.length)
-        await actions.loadWarSummaries(roster.missingWarClanTags);
-    } catch (error) {
-      if (actions.isNetworkError(error)) actions.openNetworkError(refresh);
-      else actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
-    } finally {
-      refreshingRef.current = false;
-      setRefreshing(false);
-    }
-  }, [actions, roster.missingWarClanTags, t]);
+  const refresh = useCallback(
+    async function refreshWarCwl() {
+      if (refreshingRef.current) return;
+      refreshingRef.current = true;
+      setRefreshing(true);
+      try {
+        await actions.refresh();
+        if (roster.missingWarClanTags.length)
+          await actions.loadWarSummaries(roster.missingWarClanTags);
+      } catch (error) {
+        if (actions.isNetworkError(error)) actions.openNetworkError(refreshWarCwl);
+        else actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+      } finally {
+        refreshingRef.current = false;
+        setRefreshing(false);
+      }
+    },
+    [actions, roster.missingWarClanTags, t],
+  );
   const pullRefresh = usePullRefreshHint({
     onRefresh: () => void refresh(),
     refreshing,
