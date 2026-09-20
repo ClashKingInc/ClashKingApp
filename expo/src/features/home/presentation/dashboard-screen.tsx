@@ -1,6 +1,7 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, type ReactNode } from 'react';
 import {
+  Animated,
   Platform,
   Pressable,
   RefreshControl,
@@ -8,13 +9,24 @@ import {
   StyleSheet,
   View,
   useWindowDimensions,
+  type LayoutChangeEvent,
+  type StyleProp,
+  type ViewStyle,
 } from 'react-native';
-import { ChevronDown, ChevronUp, EyeOff, UserCircle } from 'lucide-react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { EyeOff, GripVertical, UserCircle } from 'lucide-react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { toIntlLocale, useI18n } from '../../../i18n';
-import { CKText, EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
+import {
+  CKText,
+  EmptyState,
+  centeredContentPadding,
+  ckSpacing,
+  colorWithAlpha,
+  useCKTheme,
+} from '../../../ui';
 import {
   homeContentWidth,
   homeRecapWidth,
@@ -30,6 +42,14 @@ import { HomeCardSkeleton } from './home-components';
 import { HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
 
 export const MOBILE_HOME_OVERLAY_CLEARANCE = 96;
+
+type HomeCardLayout = { y: number; height: number };
+
+const homeCardTranslations = () => ({
+  todo: new Animated.Value(0),
+  ranked: new Animated.Value(0),
+  upgrade: new Animated.Value(0),
+});
 
 export function homeBottomPadding(desktop: boolean, bottomInset: number): number {
   return desktop ? 32 : bottomInset + MOBILE_HOME_OVERLAY_CLEARANCE;
@@ -74,15 +94,126 @@ export function DashboardScreen({
     showOnAndroid: true,
   });
   const cards = visibleHomeCards(model);
-  const moveCard = useCallback(
-    (index: number, direction: -1 | 1) => {
-      const target = index + direction;
-      if (target < 0 || target >= cards.length) return;
+  const [draggingCard, setDraggingCard] = useState<HomeCardId | null>(null);
+  const draggingCardRef = useRef<HomeCardId | null>(null);
+  const dragTargetIndexRef = useRef<number | null>(null);
+  const [cardLayouts, setCardLayouts] = useState<Partial<Record<HomeCardId, HomeCardLayout>>>({});
+  const [cardTranslations] = useState(homeCardTranslations);
+  const recordCardLayout = useCallback((card: HomeCardId, layout: HomeCardLayout) => {
+    setCardLayouts((current) => ({ ...current, [card]: layout }));
+  }, []);
+
+  const resetCardTranslations = useCallback(
+    (animated: boolean) => {
+      Object.values(cardTranslations).forEach((translation) => {
+        translation.stopAnimation();
+        if (animated) {
+          Animated.spring(translation, {
+            toValue: 0,
+            useNativeDriver: true,
+            speed: 28,
+            bounciness: 1,
+          }).start();
+        } else {
+          translation.setValue(0);
+        }
+      });
+    },
+    [cardTranslations],
+  );
+
+  const startAndroidDrag = useCallback(
+    (card: HomeCardId) => {
+      const index = cards.indexOf(card);
+      if (index < 0) return;
+      resetCardTranslations(false);
+      draggingCardRef.current = card;
+      dragTargetIndexRef.current = index;
+      setDraggingCard(card);
+    },
+    [cards, resetCardTranslations],
+  );
+
+  const updateAndroidDrag = useCallback(
+    (card: HomeCardId, translationY: number) => {
+      if (draggingCardRef.current !== card) return;
+      const source = cards.indexOf(card);
+      const sourceLayout = cardLayouts[card];
+      if (source < 0 || !sourceLayout) return;
+
+      cardTranslations[card].setValue(translationY);
+      const activeCenter = sourceLayout.y + sourceLayout.height / 2 + translationY;
+      let target = source;
+      if (translationY > 0) {
+        for (let index = source + 1; index < cards.length; index += 1) {
+          const layout = cardLayouts[cards[index]!];
+          if (layout && activeCenter > layout.y + layout.height / 2) target = index;
+        }
+      } else if (translationY < 0) {
+        for (let index = source - 1; index >= 0; index -= 1) {
+          const layout = cardLayouts[cards[index]!];
+          if (layout && activeCenter < layout.y + layout.height / 2) target = index;
+        }
+      }
+
+      if (dragTargetIndexRef.current === target) return;
+      dragTargetIndexRef.current = target;
+      const nextLayout = cards[source + 1] ? cardLayouts[cards[source + 1]!] : undefined;
+      const previousLayout = cards[source - 1] ? cardLayouts[cards[source - 1]!] : undefined;
+      const gap = nextLayout
+        ? Math.max(0, nextLayout.y - sourceLayout.y - sourceLayout.height)
+        : previousLayout
+          ? Math.max(0, sourceLayout.y - previousLayout.y - previousLayout.height)
+          : 0;
+      const displacement = sourceLayout.height + gap;
+
+      cards.forEach((item, index) => {
+        if (item === card) return;
+        const toValue =
+          source < target && index > source && index <= target
+            ? -displacement
+            : source > target && index >= target && index < source
+              ? displacement
+              : 0;
+        Animated.spring(cardTranslations[item], {
+          toValue,
+          useNativeDriver: true,
+          speed: 24,
+          bounciness: 2,
+        }).start();
+      });
+    },
+    [cardLayouts, cardTranslations, cards],
+  );
+
+  const finishAndroidDrag = useCallback(
+    (card: HomeCardId, translationY: number) => {
+      updateAndroidDrag(card, translationY);
+      if (draggingCardRef.current !== card) return;
+      const source = cards.indexOf(card);
+      const target = dragTargetIndexRef.current ?? source;
+      draggingCardRef.current = null;
+      dragTargetIndexRef.current = null;
+      setDraggingCard(null);
+      resetCardTranslations(false);
+      if (source < 0 || target === source) return;
       const next = [...cards];
-      [next[index], next[target]] = [next[target]!, next[index]!];
+      next.splice(source, 1);
+      next.splice(target, 0, card);
       actions.reorderCards(next);
     },
-    [actions, cards],
+    [actions, cards, resetCardTranslations, updateAndroidDrag],
+  );
+
+  const cancelAndroidDrag = useCallback(
+    (card: HomeCardId) => {
+      if (draggingCardRef.current !== card) return;
+      draggingCardRef.current = null;
+      dragTargetIndexRef.current = null;
+      setDraggingCard(null);
+      resetCardTranslations(true);
+    },
+    [resetCardTranslations],
   );
   let emptyBody;
   if (model.loading && model.linkedAccountCount === 0)
@@ -140,21 +271,24 @@ export function DashboardScreen({
   const renderCard = (
     card: HomeCardId,
     index: number,
+    dragHandle?: ReactNode,
     isActive = false,
-    dragProps?: { onLongPress: () => void; dragTestID: string },
-    showReorderControls = false,
+    animatedStyle?: StyleProp<ViewStyle>,
+    onLayout?: (event: LayoutChangeEvent) => void,
   ) => {
     const title = homeCardTitle(card, t);
-    const cardDragProps = dragProps ?? {};
     return (
-      <View
+      <Animated.View
         key={card}
+        onLayout={onLayout}
         style={[
           styles.recap,
           desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
           index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
           isActive && styles.activeCard,
+          animatedStyle,
         ]}
+        testID={`home-card-shell-${card}`}
       >
         {desktop ? (
           <>
@@ -165,32 +299,14 @@ export function DashboardScreen({
           </>
         ) : null}
         {card === 'todo' && model.todo ? (
-          <HomeTodoCard model={model.todo} desktop={desktop} actions={actions} {...cardDragProps} />
+          <HomeTodoCard model={model.todo} desktop={desktop} actions={actions} />
         ) : card === 'ranked' && model.ranked ? (
-          <HomeRankedCard
-            model={model.ranked}
-            desktop={desktop}
-            actions={actions}
-            {...cardDragProps}
-          />
+          <HomeRankedCard model={model.ranked} desktop={desktop} actions={actions} />
         ) : card === 'upgrade' && model.upgrade ? (
-          <HomeUpgradeCard
-            model={model.upgrade}
-            desktop={desktop}
-            actions={actions}
-            {...cardDragProps}
-          />
+          <HomeUpgradeCard model={model.upgrade} desktop={desktop} actions={actions} />
         ) : null}
-        {showReorderControls ? (
-          <HomeCardReorderControls
-            card={card}
-            canMoveUp={index > 0}
-            canMoveDown={index < cards.length - 1}
-            onMoveUp={() => moveCard(index, -1)}
-            onMoveDown={() => moveCard(index, 1)}
-          />
-        ) : null}
-      </View>
+        {dragHandle}
+      </Animated.View>
     );
   };
   const emptyContent = (
@@ -217,38 +333,72 @@ export function DashboardScreen({
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
           onScrollEndDrag={pullRefresh.onScrollEndDrag}
           refreshControl={refreshControl}
+          scrollEnabled={draggingCard === null}
           scrollEventThrottle={16}
           testID="home-scroll-view"
         >
           {header}
           {cards.length
-            ? cards.map((card, index) => renderCard(card, index, false, undefined, true))
+            ? cards.map((card, index) =>
+                renderCard(
+                  card,
+                  index,
+                  cards.length > 1 ? (
+                    <AndroidHomeCardDragHandle
+                      card={card}
+                      label={t('upgradeTrackerPlanReorder', {
+                        category: homeCardTitle(card, t),
+                      })}
+                      onCancel={cancelAndroidDrag}
+                      onEnd={finishAndroidDrag}
+                      onStart={startAndroidDrag}
+                      onUpdate={updateAndroidDrag}
+                    />
+                  ) : undefined,
+                  draggingCard === card,
+                  {
+                    transform: [{ translateY: cardTranslations[card] }],
+                    zIndex: draggingCard === card ? 2 : 0,
+                  },
+                  (event) => recordCardLayout(card, event.nativeEvent.layout),
+                ),
+              )
             : emptyContent}
         </ScrollView>
       ) : (
         <DraggableFlatList
-          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          activationDistance={24}
+          activationDistance={4}
           alwaysBounceVertical
+          contentContainerStyle={contentContainerStyle}
           data={cards}
           keyExtractor={(card) => card}
-          onDragEnd={({ data }) => actions.reorderCards(data)}
-          scrollEnabled
-          contentContainerStyle={contentContainerStyle}
           ListEmptyComponent={emptyContent}
           ListHeaderComponent={header}
+          onDragEnd={({ data }) => actions.reorderCards(data)}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
+          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
           refreshControl={refreshControl}
-          renderItem={({ item: card, drag, isActive, getIndex }) => {
-            const index = getIndex() ?? 0;
-            const dragProps = { onLongPress: drag, dragTestID: `home-card-${card}` };
-            return (
-              <ScaleDecorator activeScale={1.015}>
-                {renderCard(card, index, isActive, dragProps)}
-              </ScaleDecorator>
-            );
-          }}
+          renderItem={({ item: card, drag, isActive, getIndex }) => (
+            <ScaleDecorator activeScale={1.012}>
+              {renderCard(
+                card,
+                getIndex() ?? 0,
+                cards.length > 1 ? (
+                  <HomeCardDragHandle
+                    label={t('upgradeTrackerPlanReorder', {
+                      category: homeCardTitle(card, t),
+                    })}
+                    onLongPress={drag}
+                    testID={`home-card-drag-${card}`}
+                  />
+                ) : undefined,
+                isActive,
+              )}
+            </ScaleDecorator>
+          )}
+          scrollEnabled
+          testID="home-draggable-list"
         />
       )}
       <PullRefreshHint
@@ -266,56 +416,77 @@ export function DashboardScreen({
   );
 }
 
-function HomeCardReorderControls({
-  card,
-  canMoveUp,
-  canMoveDown,
-  onMoveUp,
-  onMoveDown,
+function HomeCardDragHandle({
+  label,
+  onLongPress,
+  testID,
 }: {
-  card: HomeCardId;
-  canMoveUp: boolean;
-  canMoveDown: boolean;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
+  label: string;
+  onLongPress?: () => void;
+  testID: string;
 }) {
-  const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <View style={styles.reorderControls}>
+    <Pressable
+      accessibilityLabel={label}
+      accessibilityRole="button"
+      delayLongPress={140}
+      hitSlop={8}
+      onLongPress={onLongPress}
+      onPress={(event) => event.stopPropagation()}
+      style={({ pressed }) => [
+        styles.dragHandle,
+        pressed && { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.8) },
+      ]}
+      testID={testID}
+    >
+      <GripVertical color={theme.onSurfaceVariant} opacity={0.58} size={14} strokeWidth={2.2} />
+    </Pressable>
+  );
+}
+
+function AndroidHomeCardDragHandle({
+  card,
+  label,
+  onStart,
+  onUpdate,
+  onEnd,
+  onCancel,
+}: {
+  card: HomeCardId;
+  label: string;
+  onStart: (card: HomeCardId) => void;
+  onUpdate: (card: HomeCardId, translationY: number) => void;
+  onEnd: (card: HomeCardId, translationY: number) => void;
+  onCancel: (card: HomeCardId) => void;
+}) {
+  const theme = useCKTheme();
+  const gesture = Gesture.Pan()
+    .minDistance(2)
+    .hitSlop(8)
+    .shouldCancelWhenOutside(false)
+    .runOnJS(true)
+    .onStart(() => onStart(card))
+    .onUpdate((event) => onUpdate(card, event.translationY))
+    .onEnd((event) => onEnd(card, event.translationY))
+    .onFinalize(() => onCancel(card));
+
+  return (
+    <GestureDetector gesture={gesture}>
       <Pressable
+        accessibilityLabel={label}
         accessibilityRole="button"
-        accessibilityLabel={t('upgradeTrackerPreviousPeriod')}
-        accessibilityState={{ disabled: !canMoveUp }}
-        disabled={!canMoveUp}
-        onPress={onMoveUp}
+        hitSlop={8}
+        onPress={(event) => event.stopPropagation()}
         style={({ pressed }) => [
-          styles.reorderButton,
-          { borderColor: theme.outlineVariant, backgroundColor: theme.surfaceContainerHighest },
-          !canMoveUp && styles.reorderButtonDisabled,
-          pressed && styles.reorderButtonPressed,
+          styles.dragHandle,
+          pressed && { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.8) },
         ]}
-        testID={`home-card-move-up-${card}`}
+        testID={`home-card-drag-${card}`}
       >
-        <ChevronUp color={canMoveUp ? theme.onSurface : theme.outlineVariant} size={20} />
+        <GripVertical color={theme.onSurfaceVariant} opacity={0.58} size={14} strokeWidth={2.2} />
       </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('upgradeTrackerNextPeriod')}
-        accessibilityState={{ disabled: !canMoveDown }}
-        disabled={!canMoveDown}
-        onPress={onMoveDown}
-        style={({ pressed }) => [
-          styles.reorderButton,
-          { borderColor: theme.outlineVariant, backgroundColor: theme.surfaceContainerHighest },
-          !canMoveDown && styles.reorderButtonDisabled,
-          pressed && styles.reorderButtonPressed,
-        ]}
-        testID={`home-card-move-down-${card}`}
-      >
-        <ChevronDown color={canMoveDown ? theme.onSurface : theme.outlineVariant} size={20} />
-      </Pressable>
-    </View>
+    </GestureDetector>
   );
 }
 
@@ -346,21 +517,21 @@ export function formatLastRefresh(
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  recap: { width: '100%' },
-  activeCard: { opacity: 0.94 },
+  recap: { width: '100%', position: 'relative' },
+  activeCard: { opacity: 0.96 },
   sectionTitle: { fontWeight: '900' },
   sectionGap: { height: ckSpacing.sm },
   mobileGap: { height: 16 },
-  reorderControls: { flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginTop: 8 },
-  reorderButton: {
-    width: 44,
-    height: 36,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 8,
+  dragHandle: {
+    position: 'absolute',
+    top: 0,
+    right: 6,
+    zIndex: 4,
+    width: 28,
+    height: 28,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 12,
   },
-  reorderButtonDisabled: { opacity: 0.45 },
-  reorderButtonPressed: { opacity: 0.72 },
   empty: { paddingHorizontal: 24, paddingVertical: 52 },
 });

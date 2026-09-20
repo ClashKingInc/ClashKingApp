@@ -149,7 +149,7 @@ function MobileRailHeader({
         <View style={styles.railGap} />
         {rail}
       </View>
-      {trailing}
+      {trailing ? <View style={styles.mobileHeaderTrailing}>{trailing}</View> : null}
     </View>
   );
 }
@@ -158,14 +158,10 @@ export function HomeTodoCard({
   model,
   desktop,
   actions,
-  onLongPress,
-  dragTestID,
 }: {
   model: HomeTodoCardModel;
   desktop: boolean;
   actions: HomeDashboardActions;
-  onLongPress?: () => void;
-  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const hasSummary = model.accounts.length > 1 && model.combined !== undefined;
@@ -183,11 +179,7 @@ export function HomeTodoCard({
         renderItem={(index) => {
           const page = pages[index]!;
           return (
-            <HomeCardFrame
-              dragTestID={dragTestID}
-              onLongPress={onLongPress}
-              onPress={actions.openTodo}
-            >
+            <HomeCardFrame onPress={actions.openTodo}>
               <CardHeader
                 imageUrl={page.account?.imageUrl ?? ImageAssets.iconBuilderPotion}
                 title={page.account?.name ?? t('todoAllAccounts')}
@@ -217,7 +209,7 @@ export function HomeTodoCard({
   }));
   const current = pages[safeSelected]!;
   return (
-    <HomeCardFrame dragTestID={dragTestID} onLongPress={onLongPress} onPress={actions.openTodo}>
+    <HomeCardFrame onPress={actions.openTodo}>
       <MobileRailHeader
         imageUrl={ImageAssets.iconBuilderPotion}
         title={t('todoTitle')}
@@ -333,21 +325,17 @@ export function HomeRankedCard({
   model,
   desktop,
   actions,
-  onLongPress,
-  dragTestID,
 }: {
   model: HomeRankedCardModel;
   desktop: boolean;
   actions: HomeDashboardActions;
-  onLongPress?: () => void;
-  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const [selected, setSelected] = useState(0);
   if (model.state === 'loading') return <HomeCardSkeleton rows={1} />;
   if (model.state === 'empty' || model.accounts.length === 0)
     return (
-      <HomeCardFrame dragTestID={dragTestID} onLongPress={onLongPress}>
+      <HomeCardFrame>
         <CardHeader
           imageUrl={ImageAssets.shieldWithArrow}
           title={t('rankedLeagueTitle')}
@@ -368,11 +356,7 @@ export function HomeRankedCard({
         renderItem={(index) => {
           const account = pages[index];
           return (
-            <HomeCardFrame
-              dragTestID={dragTestID}
-              onLongPress={onLongPress}
-              onPress={account ? () => actions.openRanked(account.tag) : undefined}
-            >
+            <HomeCardFrame onPress={account ? () => actions.openRanked(account.tag) : undefined}>
               <CardHeader
                 imageUrl={account?.tierIconUrl || ImageAssets.shieldWithArrow}
                 title={account?.name ?? t('todoAllAccounts')}
@@ -393,11 +377,7 @@ export function HomeRankedCard({
   }));
   const current = pages[safeSelected];
   return (
-    <HomeCardFrame
-      dragTestID={dragTestID}
-      onLongPress={onLongPress}
-      onPress={current ? () => actions.openRanked(current.tag) : undefined}
-    >
+    <HomeCardFrame onPress={current ? () => actions.openRanked(current.tag) : undefined}>
       <MobileRailHeader
         imageUrl={current?.tierIconUrl || ImageAssets.shieldWithArrow}
         title={t('rankedLeagueTitle')}
@@ -477,14 +457,10 @@ export function HomeUpgradeCard({
   model,
   desktop,
   actions,
-  onLongPress,
-  dragTestID,
 }: {
   model: HomeUpgradeCardModel;
   desktop: boolean;
   actions: HomeDashboardActions;
-  onLongPress?: () => void;
-  dragTestID?: string;
 }) {
   const { t, locale } = useI18n();
   const [selected, setSelected] = useState(0);
@@ -494,7 +470,7 @@ export function HomeUpgradeCard({
     (model.accounts.length === 0 && model.missingAccounts.length === 0)
   )
     return (
-      <HomeCardFrame dragTestID={dragTestID} onLongPress={onLongPress}>
+      <HomeCardFrame>
         <CardHeader
           imageUrl={ImageAssets.builderWave}
           title={t('drawerUpgradeTracker')}
@@ -596,8 +572,6 @@ export function HomeUpgradeCard({
           const entry = pages[index];
           return (
             <HomeCardFrame
-              dragTestID={dragTestID}
-              onLongPress={onLongPress}
               onPress={entry ? () => actions.openUpgradeTracker(entry.tag) : undefined}
             >
               <CardHeader
@@ -621,11 +595,7 @@ export function HomeUpgradeCard({
   }));
   const current = pages[safeSelected];
   return (
-    <HomeCardFrame
-      dragTestID={dragTestID}
-      onLongPress={onLongPress}
-      onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}
-    >
+    <HomeCardFrame onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}>
       <MobileRailHeader
         imageUrl={ImageAssets.builderWave}
         title={t('drawerUpgradeTracker')}
@@ -653,6 +623,7 @@ const styles = StyleSheet.create({
   heavy: { fontWeight: '900' },
   body: { gap: 10 },
   mobileHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  mobileHeaderTrailing: { alignItems: 'center', justifyContent: 'center' },
   mobileHeaderImage: { width: 46, height: 46, resizeMode: 'contain' },
   railGap: { height: 4 },
   trophy: {
