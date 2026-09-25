@@ -95,6 +95,7 @@ const privacyExport = {
   notification_devices: [],
   notification_preferences: [],
   saved_bases: [],
+  saved_armies: [{ share_code: 'army-code', saved_at: '2026-09-25T00:00:00.000Z' }],
   billing_subscription: [],
   subscription_entitlements: [],
 };
@@ -306,6 +307,14 @@ describe('AuthService', () => {
     );
     expect(tokenService.clearTokens).toHaveBeenCalled();
     expect(auth.state.isAuthenticated).toBe(false);
+  });
+
+  test('requires the rc.27 privacy export shape before the app can request saved armies', async () => {
+    const { saved_armies: _savedArmies, ...legacyExport } = privacyExport;
+    const { api } = apiWith(() => new Response(JSON.stringify(legacyExport)));
+    const auth = new AuthService(serviceOptions({ api }));
+
+    await expect(auth.requestDataExport()).rejects.toBeInstanceOf(ResponseDecodeError);
   });
 
   test('preserves email-verification errors and rejects malformed authentication payloads', async () => {
