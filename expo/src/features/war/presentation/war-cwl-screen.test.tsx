@@ -37,13 +37,16 @@ jest.mock('react-native-draggable-flatlist', () => {
   const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
   return {
     __esModule: true,
-    default: ({ data, ListHeaderComponent, ListEmptyComponent, renderItem, onDragEnd }: {
+    default: ({ data, ListHeaderComponent, ListEmptyComponent, renderItem, onDragEnd, onScrollBeginDrag, onScrollEndDrag, onScrollOffsetChange }: {
       data: readonly unknown[];
       ListHeaderComponent?: React.ReactNode;
       ListEmptyComponent?: React.ReactNode;
       renderItem: (params: Record<string, unknown>) => React.ReactNode;
       onDragEnd: (params: { data: unknown[]; from: number; to: number }) => void;
-    }) => ReactModule.createElement(MockView as React.ComponentType<Record<string, unknown>>, { testID: 'war-draggable-list', onDragEnd },
+      onScrollBeginDrag?: () => void;
+      onScrollEndDrag?: () => void;
+      onScrollOffsetChange?: (offset: number) => void;
+    }) => ReactModule.createElement(MockView as React.ComponentType<Record<string, unknown>>, { testID: 'war-draggable-list', onDragEnd, onScrollBeginDrag, onScrollEndDrag, onScroll: (event: { nativeEvent: { contentOffset: { y: number } } }) => onScrollOffsetChange?.(event.nativeEvent.contentOffset.y) },
       ListHeaderComponent,
       data.length ? data.map((item, index) => ReactModule.createElement(ReactModule.Fragment,
         { key: index }, renderItem({ item, drag: jest.fn(), isActive: false }))) : ListEmptyComponent,
@@ -156,6 +159,19 @@ describe('WarCwlPresentationRoot', () => {
       data: [roster.items[3], roster.items[2]], from: 0, to: 1,
     }));
     expect(callbacks.reorderBookmarkedClans).toHaveBeenCalledWith(['#BOOK2', '#BOOK1']);
+  });
+  it('refreshes after one full pull on the native war scroll view', async () => {
+    jest.mocked(actions.refresh).mockClear();
+    const screen = await renderRoot();
+    const scroll = screen.getByTestId('war-draggable-list');
+
+    await act(async () => {
+      fireEvent(scroll, 'scrollBeginDrag');
+      fireEvent.scroll(scroll, { nativeEvent: { contentOffset: { y: -80 } } });
+      fireEvent(scroll, 'scrollEndDrag');
+    });
+
+    expect(actions.refresh).toHaveBeenCalledTimes(1);
   });
   it('hides unavailable CWL details until attacks or defenses exist', () => {
     const pendingMember = new CwlMember('#PENDING', 'Pending', 18);

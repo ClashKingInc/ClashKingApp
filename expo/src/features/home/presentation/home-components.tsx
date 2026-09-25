@@ -28,17 +28,12 @@ export const HOME_METRIC_GAP = 6;
 
 export function HomeCardFrame({
   children,
-  dragTestID,
-  onLongPress,
   onPress,
 }: {
   children: ReactNode;
-  dragTestID?: string;
-  onLongPress?: () => void;
   onPress?: () => void;
 }) {
   const theme = useCKTheme();
-  const longPressActivated = useRef(false);
   const body = (
     <View
       style={[
@@ -52,23 +47,8 @@ export function HomeCardFrame({
       {children}
     </View>
   );
-  return onPress || onLongPress ? (
-    <Pressable
-      accessibilityRole="button"
-      delayLongPress={300}
-      onLongPress={() => {
-        longPressActivated.current = true;
-        onLongPress?.();
-      }}
-      onPress={() => {
-        if (longPressActivated.current) {
-          longPressActivated.current = false;
-          return;
-        }
-        onPress?.();
-      }}
-      testID={dragTestID}
-    >
+  return onPress ? (
+    <Pressable accessibilityRole="button" onPress={onPress}>
       {body}
     </Pressable>
   ) : (
@@ -454,7 +434,7 @@ export function CardHeader({
           </CKText>
         ) : null}
       </View>
-      {trailing}
+      {trailing ? <View style={styles.headerTrailing}>{trailing}</View> : null}
     </View>
   );
 }
@@ -546,6 +526,7 @@ const styles = StyleSheet.create({
   comparisonButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   headerCopy: { flex: 1, gap: 2 },
+  headerTrailing: { alignSelf: 'flex-start', alignItems: 'center' },
   statusRow: { minHeight: 22, flexDirection: 'row', alignItems: 'center' },
   caughtUp: {
     minHeight: 56,

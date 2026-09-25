@@ -1,5 +1,5 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ShieldAlert } from 'lucide-react-native';
 import DraggableFlatList, { ScaleDecorator, type RenderItemParams } from 'react-native-draggable-flatlist';
@@ -160,7 +160,6 @@ export function WarCwlScreen({
   const requestedPlayers = useRef(new Set<string>());
   const requestedWars = useRef(new Set<string>());
   const [refreshing, setRefreshing] = useState(false);
-  const pullRefresh = usePullRefreshHint();
   const [now, setNow] = useState(() => new Date());
   const link = useLinkParameters();
   const [mode, setMode] = useState<'linked' | 'bookmarked'>(
@@ -168,6 +167,31 @@ export function WarCwlScreen({
   );
   const roster = useMemo(() => buildWarRoster(model), [model]);
   const entries = roster.items.filter((item) => mode === 'linked' ? !item.bookmarked : item.bookmarked);
+  const refreshingRef = useRef(false);
+  const refresh = useCallback(
+    async function refreshWarCwl() {
+      if (refreshingRef.current) return;
+      refreshingRef.current = true;
+      setRefreshing(true);
+      try {
+        await actions.refresh();
+        if (roster.missingWarClanTags.length)
+          await actions.loadWarSummaries(roster.missingWarClanTags);
+      } catch (error) {
+        if (actions.isNetworkError(error)) actions.openNetworkError(refreshWarCwl);
+        else actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+      } finally {
+        refreshingRef.current = false;
+        setRefreshing(false);
+      }
+    },
+    [actions, roster.missingWarClanTags, t],
+  );
+  const pullRefresh = usePullRefreshHint({
+    onRefresh: () => void refresh(),
+    refreshing,
+    showOnAndroid: true,
+  });
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 30_000);
     return () => clearInterval(timer);
@@ -189,19 +213,6 @@ export function WarCwlScreen({
     void actions.loadWarSummaries(missingWars).catch((error) => actions.showMessage(String(error)));
   }, [actions, roster.missingWarClanTags]);
 
-  const refresh = async () => {
-    setRefreshing(true);
-    try {
-      await actions.refresh();
-      if (roster.missingWarClanTags.length)
-        await actions.loadWarSummaries(roster.missingWarClanTags);
-    } catch (error) {
-      if (actions.isNetworkError(error)) actions.openNetworkError(refresh);
-      else actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
-    } finally {
-      setRefreshing(false);
-    }
-  };
   const desktop = width >= 900;
   const reorder = ({ data, from, to }: { data: typeof entries; from: number; to: number }) => {
     if (from === to) return;
@@ -234,6 +245,7 @@ export function WarCwlScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       {desktop ? <ScrollView
+        testID="war-scroll-view"
         onScroll={pullRefresh.onScroll}
         onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
         onScrollEndDrag={pullRefresh.onScrollEndDrag}
@@ -270,6 +282,7 @@ export function WarCwlScreen({
         activationDistance={8}
         alwaysBounceVertical
         data={entries}
+        testID="war-scroll-view"
         key={`${mode}-war-roster`}
         keyExtractor={(item) => item.tag}
         onDragEnd={reorder}

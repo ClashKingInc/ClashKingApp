@@ -10,7 +10,12 @@ import { buildClanRoster, type ClansPresentationActions, type ClansPresentationM
 import { ClansScreen } from './clans-screen';
 
 jest.mock('../../../core/assets/local-asset-cache', () => ({
-  localImageCache: { subscribe: () => () => {}, peek: () => undefined, resolve: jest.fn(), getRevision: () => 0 },
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
 }));
 
 jest.mock('react-native-draggable-flatlist', () => {
@@ -18,13 +23,16 @@ jest.mock('react-native-draggable-flatlist', () => {
   const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
   return {
     __esModule: true,
-    default: ({ data, ListHeaderComponent, ListEmptyComponent, renderItem, onDragEnd }: {
+    default: ({ data, ListHeaderComponent, ListEmptyComponent, renderItem, onDragEnd, onScrollBeginDrag, onScrollEndDrag, onScrollOffsetChange }: {
       data: readonly unknown[];
       ListHeaderComponent?: React.ReactNode;
       ListEmptyComponent?: React.ReactNode;
       renderItem: (params: Record<string, unknown>) => React.ReactNode;
       onDragEnd: (params: { data: unknown[]; from: number; to: number }) => void;
-    }) => ReactModule.createElement(MockView as React.ComponentType<Record<string, unknown>>, { testID: 'clan-draggable-list', onDragEnd },
+      onScrollBeginDrag?: () => void;
+      onScrollEndDrag?: () => void;
+      onScrollOffsetChange?: (offset: number) => void;
+    }) => ReactModule.createElement(MockView as React.ComponentType<Record<string, unknown>>, { testID: 'clan-draggable-list', onDragEnd, onScrollBeginDrag, onScrollEndDrag, onScroll: (event: { nativeEvent: { contentOffset: { y: number } } }) => onScrollOffsetChange?.(event.nativeEvent.contentOffset.y) },
       ListHeaderComponent,
       data.length ? data.map((item, index) => ReactModule.createElement(ReactModule.Fragment,
         { key: index }, renderItem({ item, drag: jest.fn(), isActive: false }))) : ListEmptyComponent,
@@ -103,6 +111,19 @@ describe('ClansScreen states', () => {
       data: [roster.items[3], roster.items[2]], from: 0, to: 1,
     }));
     expect(callbacks.reorderBookmarkedClans).toHaveBeenCalledWith(['#D', '#C']);
+  });
+  it('refreshes after one full pull on the native scroll view', async () => {
+    const actions = makeActions();
+    const screen = await renderScreen({ profiles: [], bookmarks: [], hydratedClans: [] }, actions);
+    const scroll = screen.getByTestId('clan-draggable-list');
+
+    await act(async () => {
+      fireEvent(scroll, 'scrollBeginDrag');
+      fireEvent.scroll(scroll, { nativeEvent: { contentOffset: { y: -80 } } });
+      fireEvent(scroll, 'scrollEndDrag');
+    });
+
+    expect(actions.refresh).toHaveBeenCalledTimes(1);
   });
   it('renders the exact no-clan state', async () => {
     const screen = await renderScreen(

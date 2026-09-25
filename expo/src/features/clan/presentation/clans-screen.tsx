@@ -1,5 +1,5 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Platform,
   RefreshControl,
@@ -38,7 +38,29 @@ export function ClansScreen({
   const desktop = Platform.OS === 'web' && width >= 900;
   const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
   const [refreshing, setRefreshing] = useState(false);
-  const pullRefresh = usePullRefreshHint();
+  const refreshingRef = useRef(false);
+  const refresh = useCallback(async () => {
+    if (refreshingRef.current) return;
+    refreshingRef.current = true;
+    setRefreshing(true);
+    try {
+      await actions.refresh();
+    } catch (error) {
+      if (actions.isNetworkError(error)) {
+        actions.openNetworkError(actions.refresh);
+      } else {
+        actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+      }
+    } finally {
+      refreshingRef.current = false;
+      setRefreshing(false);
+    }
+  }, [actions, t]);
+  const pullRefresh = usePullRefreshHint({
+    onRefresh: () => void refresh(),
+    refreshing,
+    showOnAndroid: true,
+  });
   const requestedBookmarks = useRef(new Set<string>());
   const link = useLinkParameters();
   const [mode, setMode] = useState<'linked' | 'bookmarked'>(
@@ -54,20 +76,6 @@ export function ClansScreen({
     missing.forEach((tag) => requestedBookmarks.current.add(tag));
     void actions.hydrateBookmarkedClans(missing);
   }, [actions, roster.missingBookmarkTags]);
-  const refresh = async () => {
-    setRefreshing(true);
-    try {
-      await actions.refresh();
-    } catch (error) {
-      if (actions.isNetworkError(error)) {
-        actions.openNetworkError(actions.refresh);
-      } else {
-        actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
-      }
-    } finally {
-      setRefreshing(false);
-    }
-  };
   const open = async (item: (typeof entries)[number]) => {
     if (item.clan) {
       actions.openClan(item.clan);
@@ -121,6 +129,7 @@ export function ClansScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       {desktop ? <ScrollView
+        testID="clans-scroll-view"
         onScroll={pullRefresh.onScroll}
         onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
         onScrollEndDrag={pullRefresh.onScrollEndDrag}
@@ -146,6 +155,7 @@ export function ClansScreen({
         activationDistance={8}
         alwaysBounceVertical
         data={entries}
+        testID="clans-scroll-view"
         key={`${mode}-clan-roster`}
         keyExtractor={(item) => item.tag}
         onDragEnd={reorder}
