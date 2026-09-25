@@ -5,6 +5,7 @@ function harness(
   options: {
     noAccounts?: boolean;
     bookmarkError?: unknown;
+    playerError?: unknown;
     includeBookmarkedProfile?: boolean;
   } = {},
 ) {
@@ -46,6 +47,7 @@ function harness(
       calls.push(`ranked:${force}`),
     loadOfficialPlayerData: async () => {
       calls.push('players');
+      if (options.playerError) throw options.playerError;
       return { '#P': '#DISCOVERED' };
     },
     linkClansToPlayer: () => calls.push('link-players'),
@@ -99,6 +101,11 @@ function harness(
   const warWidgets = {
     seedClanOptionsFromProfiles: jest.fn(async () => calls.push('widgets')),
   };
+  const legendsWidgets = {
+    syncBookmarkedPlayers: jest.fn(async () => undefined),
+    clear: jest.fn(async () => undefined),
+  };
+  const reportError = jest.fn();
   const service = new AccountBootstrapService({
     accounts: accounts as never,
     bookmarks: bookmarks as never,
@@ -110,11 +117,27 @@ function harness(
     wars: wars as never,
     storage,
     warWidgets: warWidgets as never,
+    legendsWidgets,
+    reportError,
   });
-  return { service, calls, warWidgets };
+  return { service, calls, warWidgets, legendsWidgets, reportError };
 }
 
 describe('AccountBootstrapService', () => {
+  test('seeds Legends selection from bookmarks, not linked accounts', async () => {
+    const { service, legendsWidgets } = harness({ includeBookmarkedProfile: true });
+    await service.initialize('user');
+    expect(legendsWidgets.syncBookmarkedPlayers).toHaveBeenCalledWith([
+      expect.objectContaining({ tag: '#BP' }),
+    ]);
+  });
+
+  test('clears Legends snapshots without reseeding them when signed out', async () => {
+    const { service, legendsWidgets } = harness();
+    await service.initialize(null);
+    expect(legendsWidgets.clear).toHaveBeenCalled();
+    expect(legendsWidgets.syncBookmarkedPlayers).not.toHaveBeenCalled();
+  });
   test('does not seed widget clans from bookmarked player profiles', async () => {
     const { service, warWidgets } = harness({ includeBookmarkedProfile: true });
     await service.initialize('user');
@@ -159,6 +182,20 @@ describe('AccountBootstrapService', () => {
     );
   });
 
+  test('reuses freshly loaded account links and selected tag during startup', async () => {
+    const { service, calls } = harness();
+    await service.initialize('user', {
+      links: [{ playerTag: '#P', isVerified: true, hidden: false, raw: {} }],
+      selectedTagLoaded: true,
+    });
+
+    expect(calls).not.toContain('accounts-fetch');
+    expect(calls).not.toContain('selected-load');
+    expect(calls).toEqual(
+      expect.arrayContaining(['players', 'clans:#CACHED,#BC', 'wars:#CACHED,#BC']),
+    );
+  });
+
   test('clears a stale selection before returning when the user has no account links', async () => {
     const { service, calls } = harness({ noAccounts: true });
     await service.initialize('user');
@@ -175,6 +212,25 @@ describe('AccountBootstrapService', () => {
     const { service, calls } = harness({ bookmarkError: failure });
     await expect(service.initialize('user')).rejects.toBe(failure);
     expect(calls).not.toContain('accounts-fetch');
+  });
+
+  test('player hydration failure is reported without blocking authenticated bootstrap', async () => {
+    const failure = new Error('player network');
+    const { service, calls, reportError } = harness({ playerError: failure });
+
+    await expect(service.initialize('user')).resolves.toBeUndefined();
+
+    expect(reportError).toHaveBeenCalledWith('accountBootstrap.players', failure);
+    expect(calls).toEqual(
+      expect.arrayContaining([
+        'players',
+        'notify-players',
+        'notify-clans',
+        'notify-wars',
+        'refresh-time',
+        'selected-init',
+      ]),
+    );
   });
 
   test('loads player card preferences once across repeated authenticated bootstrap', async () => {

@@ -44,6 +44,7 @@ export interface AppRouteDefinition {
   primaryTab?: boolean;
   mobileDrawer?: boolean;
   desktopSidebar?: boolean;
+  visibleWhenDisabled?: boolean;
 }
 
 export type RouteIconName =
@@ -148,6 +149,7 @@ export const appRoutes = [
     labelKey: 'drawerCalculators',
     icon: 'calculator',
     feature: 'calculators',
+    visibleWhenDisabled: true,
     mobileDrawer: true,
     desktopSidebar: true,
   },
@@ -165,16 +167,16 @@ export const appRoutes = [
     href: '/todo',
     labelKey: 'todoTitle',
     icon: 'list-checks',
-    mobileDrawer: true,
-    desktopSidebar: true,
+    mobileDrawer: false,
+    desktopSidebar: false,
   },
   {
     id: 'ranked',
     href: '/ranked',
     labelKey: 'rankedLeagueTitle',
     icon: 'trophy',
-    mobileDrawer: true,
-    desktopSidebar: true,
+    mobileDrawer: false,
+    desktopSidebar: false,
   },
   {
     id: 'legends',
@@ -250,8 +252,6 @@ export const mobileDrawerBodyRoutes = [
   'stats',
   'calculators',
   'subscription',
-  'todo',
-  'ranked',
   'upgradeTracker',
   'basesArmies',
   'gameAssets',
@@ -266,8 +266,6 @@ export const desktopSidebarBodyRoutes = [
   'rankings',
   'stats',
   'calculators',
-  'todo',
-  'ranked',
   'upgradeTracker',
   'gameAssets',
 ].map(route);
@@ -283,6 +281,15 @@ export function filterEnabledRoutes<T extends AppRouteDefinition>(
   features: FeatureState,
 ): T[] {
   return routes.filter((definition) => isRouteEnabled(definition, features));
+}
+
+export function filterVisibleRoutes<T extends AppRouteDefinition>(
+  routes: readonly T[],
+  features: FeatureState,
+): T[] {
+  return routes.filter(
+    (definition) => definition.visibleWhenDisabled || isRouteEnabled(definition, features),
+  );
 }
 
 export function playerHref(tag: string): string {

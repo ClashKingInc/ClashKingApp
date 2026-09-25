@@ -21,6 +21,14 @@ class MemoryPreferences implements StringStore {
 
 type Request = { path: string; method: string; body: unknown };
 
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => {
+    resolve = done;
+  });
+  return { promise, resolve };
+}
+
 function harness(
   responder: (request: Request) => Response | Promise<Response>,
   reportError = jest.fn(),
@@ -108,7 +116,86 @@ describe('CocAccountService', () => {
     expect(preferences.values.get('selectedTag')).toBe('#TWO');
   });
 
-  test('adds accounts with and without verification and parses top-level conflict accounts', async () => {
+  test('does not let an older empty response overwrite a newer verified account response', async () => {
+    const older = deferred<Response>();
+    const newer = deferred<Response>();
+    let getCount = 0;
+    const { service } = harness(() => {
+      getCount += 1;
+      return getCount === 1 ? older.promise : newer.promise;
+    });
+
+    const olderLoad = service.fetchAccounts();
+    const newerLoad = service.fetchAccounts();
+    newer.resolve(
+      new Response(
+        JSON.stringify({
+          items: [account('#GCPVU8CCG', { is_verified: true, townHallLevel: 18 })],
+        }),
+      ),
+    );
+    await newerLoad;
+    older.resolve(new Response(JSON.stringify({ items: [] })));
+    await olderLoad;
+
+    expect(service.verifiedAccounts).toEqual([
+      expect.objectContaining({ playerTag: '#GCPVU8CCG', isVerified: true }),
+    ]);
+  });
+
+  test('does not apply a prior-user response after the current session changes', async () => {
+    const oldUserResponse = deferred<Response>();
+    const { service } = harness(() => oldUserResponse.promise);
+
+    const oldUserLoad = service.fetchAccounts();
+    service.setCurrentUserId('new-user');
+    oldUserResponse.resolve(
+      new Response(JSON.stringify({ items: [account('#OLD-USER-ACCOUNT')] })),
+    );
+    await oldUserLoad;
+
+    expect(service.userId).toBe('new-user');
+    expect(service.accounts).toEqual([]);
+  });
+
+  test('does not let an obsolete fetch resurrect an account removed by a newer mutation', async () => {
+    const obsolete = deferred<Response>();
+    let getCount = 0;
+    const { service } = harness(({ method }) => {
+      if (method === 'DELETE') return new Response(JSON.stringify({ message: 'Removed' }));
+      getCount += 1;
+      if (getCount === 1) {
+        return new Response(
+          JSON.stringify({
+            items: [
+              account('#LOW'),
+              account('#GCPVU8CCG', { is_verified: true, townHallLevel: 18 }),
+            ],
+          }),
+        );
+      }
+      return obsolete.promise;
+    });
+    await service.fetchAccounts();
+
+    const staleLoad = service.fetchAccounts();
+    await expect(service.removeAccount('#LOW')).resolves.toBe(true);
+    obsolete.resolve(
+      new Response(
+        JSON.stringify({
+          items: [
+            account('#LOW'),
+            account('#GCPVU8CCG', { is_verified: true, townHallLevel: 18 }),
+          ],
+        }),
+      ),
+    );
+    await staleLoad;
+
+    expect(service.accounts.map((item) => item.playerTag)).toEqual(['#GCPVU8CCG']);
+  });
+
+  test('requires a token on every account-link request and reports conflicts', async () => {
     const { service, requests, reportError } = harness(({ body }) => {
       const requestBody = body as Record<string, unknown>;
       if (requestBody.player_tag === '#ERROR') {
@@ -137,29 +224,31 @@ describe('CocAccountService', () => {
       );
     });
 
-    await expect(service.addAccount('#ONE')).resolves.toMatchObject({
+    await expect(service.addAccount('#ONE', 'token-one')).resolves.toMatchObject({
       code: 200,
-      account: { playerTag: '#ONE', isVerified: false },
+      account: { playerTag: '#ONE', isVerified: true },
     });
-    await expect(service.addAccountWithVerification('#TWO', 'token')).resolves.toMatchObject({
+    await expect(service.addAccountWithVerification('#TWO', 'token-two')).resolves.toMatchObject({
       code: 200,
       account: { playerTag: '#TWO', isVerified: true },
     });
-    await expect(service.addAccount('#ERROR')).resolves.toMatchObject({
+    await expect(service.addAccount('#ERROR', 'token-error')).resolves.toMatchObject({
       code: 409,
       message: 'Already linked',
-      account: { playerTag: '#ERROR', isVerified: false },
+      account: null,
     });
     expect(service.accounts.map(({ playerTag }) => playerTag)).toEqual(['#ONE', '#TWO']);
-    expect(requests[0]?.body).toEqual({ player_tag: '#ONE' });
-    expect(requests[1]?.body).toEqual({ player_tag: '#TWO', api_token: 'token' });
-    expect(requests[2]?.body).toEqual({ player_tag: '#ERROR' });
+    expect(requests.map(({ body }) => body)).toEqual([
+      { player_tag: '#ONE', api_token: 'token-one' },
+      { player_tag: '#TWO', api_token: 'token-two' },
+      { player_tag: '#ERROR', api_token: 'token-error' },
+    ]);
     expect(reportError).toHaveBeenCalledWith('coc_account.add', expect.any(AccountHttpException));
   });
 
   test('adds with a token, refreshes links, and uses returned profile metadata', async () => {
     let postComplete = false;
-    const { service } = harness(({ method }) => {
+    const { service, requests } = harness(({ method }) => {
       if (method === 'POST') {
         postComplete = true;
         return new Response(
@@ -180,6 +269,10 @@ describe('CocAccountService', () => {
     await expect(service.addAccountWithToken('#ONE', 'token')).resolves.toEqual({
       success: true,
       message: null,
+    });
+    expect(requests.find(({ method }) => method === 'POST')?.body).toEqual({
+      player_tag: '#ONE',
+      api_token: 'token',
     });
     expect(service.accounts[0]?.raw).toMatchObject({
       name: 'Fresh Name',
@@ -329,11 +422,51 @@ describe('CocAccountService', () => {
     expect(selectionChanged).toHaveBeenCalledWith(null);
   });
 
+  test('reconciles an already-absent stale link without removing the remaining verified account', async () => {
+    let getCount = 0;
+    const { service, requests, reportError } = harness(({ method }) => {
+      if (method === 'GET') {
+        getCount += 1;
+        return new Response(
+          JSON.stringify({
+            items:
+              getCount === 1
+                ? [account('#LOW'), account('#GCPVU8CCG', { is_verified: true, townHallLevel: 18 })]
+                : [account('#GCPVU8CCG', { is_verified: true, townHallLevel: 18 })],
+          }),
+        );
+      }
+      return new Response(JSON.stringify({ message: 'Link not found' }), { status: 404 });
+    });
+    await service.fetchAccounts();
+
+    await expect(service.removeAccount('#LOW')).resolves.toBe(true);
+
+    expect(service.accounts.map((item) => item.playerTag)).toEqual(['#GCPVU8CCG']);
+    expect(service.verifiedAccounts.map((item) => item.playerTag)).toEqual(['#GCPVU8CCG']);
+    expect(requests.map(({ method }) => method)).toEqual(['GET', 'DELETE', 'GET']);
+    expect(reportError).not.toHaveBeenCalledWith('accounts.remove', expect.anything());
+  });
+
+  test('does not claim a failed removal succeeded or discard local links for arbitrary errors', async () => {
+    const { service, requests } = harness(({ method }) =>
+      method === 'GET'
+        ? new Response(JSON.stringify({ items: [account('#LOW'), account('#GCPVU8CCG')] }))
+        : new Response(JSON.stringify({ message: 'Unavailable' }), { status: 503 }),
+    );
+    await service.fetchAccounts();
+
+    await expect(service.removeAccount('#LOW')).resolves.toBe(false);
+
+    expect(service.accounts.map((item) => item.playerTag)).toEqual(['#LOW', '#GCPVU8CCG']);
+    expect(requests.map(({ method }) => method)).toEqual(['GET', 'DELETE']);
+  });
+
   test('normalizes an empty user id and reports authentication and malformed payload failures', async () => {
     const { service, reportError } = harness(() => new Response('{}'));
     service.setCurrentUserId('   ');
     await expect(service.fetchAccounts()).rejects.toThrow('User not authenticated');
-    await expect(service.addAccount('#ONE')).resolves.toEqual({
+    await expect(service.addAccount('#ONE', 'token')).resolves.toEqual({
       code: 401,
       message: 'User not authenticated',
       account: null,

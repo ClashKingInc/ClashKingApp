@@ -158,6 +158,7 @@ export function DashboardScreen({
                 {card === 'todo' && model.todo ? (
                   <HomeTodoCard
                     model={model.todo}
+                    selectedAccountTag={model.selectedAccountTag}
                     desktop={desktop}
                     actions={actions}
                     {...dragProps}
@@ -165,6 +166,7 @@ export function DashboardScreen({
                 ) : card === 'ranked' && model.ranked ? (
                   <HomeRankedCard
                     model={model.ranked}
+                    selectedAccountTag={model.selectedAccountTag}
                     desktop={desktop}
                     actions={actions}
                     {...dragProps}
@@ -172,6 +174,7 @@ export function DashboardScreen({
                 ) : card === 'upgrade' && model.upgrade ? (
                   <HomeUpgradeCard
                     model={model.upgrade}
+                    selectedAccountTag={model.selectedAccountTag}
                     desktop={desktop}
                     actions={actions}
                     {...dragProps}

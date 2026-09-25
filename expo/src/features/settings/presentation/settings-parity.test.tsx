@@ -1,4 +1,4 @@
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import lockfile from '../../../../package-lock.json';
 
 import { I18nProvider, type SupportedLocale } from '../../../i18n';
@@ -11,7 +11,14 @@ import { NotificationSettingsScreen } from './notification-settings-screen';
 import { SettingsScreen } from './settings-screen';
 import { LinkParametersContext } from '../../../core/deep-links/link-parameters';
 
-jest.mock('../../../core/assets/local-asset-cache', () => ({ localImageCache: { subscribe: () => () => {}, getRevision: () => 0, peek: () => undefined, clear: jest.fn() } }));
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: {
+    subscribe: () => () => {},
+    getRevision: () => 0,
+    peek: () => undefined,
+    clear: jest.fn(),
+  },
+}));
 
 jest.mock('../../../ui/accessibility', () => ({
   useCKAccessibility: () => ({
@@ -100,12 +107,9 @@ it('keeps notification page chrome and skeletons while hydration is pending', as
           loadLocal: () => pending,
           load: () => pending,
           save: () => pending,
-          setAccountEnabled: () => pending,
-          deviceEnabled: () => pending,
-          setDeviceEnabled: () => pending,
-          lastPushResult: () => null,
           initializePush: () => pending,
-          tokenPreview: () => pending,
+          enablePush: () => pending,
+          openSystemSettings: () => pending,
         }}
       />,
     ),
@@ -115,7 +119,7 @@ it('keeps notification page chrome and skeletons while hydration is pending', as
   expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy();
 });
 
-it('updates one verified account even when notifications are disabled on this device', async () => {
+it('uses system settings and linked players instead of duplicate permission and account switches', async () => {
   const preferences = {
     warAttacks: false,
     warState: false,
@@ -129,31 +133,36 @@ it('updates one verified account even when notifications are disabled on this de
     raidReminderTimings: [],
     accounts: [{ tag: '#PLAYER', enabled: true }],
   };
-  const setAccountEnabled = jest.fn(async (tag: string, enabled: boolean) => ({
-    tag,
-    enabled,
-  }));
+  const openSystemSettings = jest.fn(async () => undefined);
+  const onManagePlayers = jest.fn();
+  const enablePush = jest.fn(async () => ({ state: 'ready' as const, token: 'secret-token' }));
   const screen = await render(
     wrapped(
       <NotificationSettingsScreen
+        onManagePlayers={onManagePlayers}
         service={{
           loadLocal: async () => preferences,
           load: async () => preferences,
           save: async (settings) => settings,
-          setAccountEnabled,
-          deviceEnabled: async () => false,
-          setDeviceEnabled: async () => ({ state: 'ready', token: 'token' }),
-          lastPushResult: () => ({ state: 'ready', token: 'token' }),
-          initializePush: async () => ({ state: 'ready', token: 'token' }),
-          tokenPreview: async () => 'token',
+          initializePush: async () => ({ state: 'ready', token: 'secret-token' }),
+          enablePush,
+          openSystemSettings,
         }}
       />,
     ),
   );
 
-  await waitFor(() => expect(screen.getByText('#PLAYER')).toBeTruthy());
-  await act(async () => fireEvent.press(screen.getAllByRole('switch')[1]!));
-  await waitFor(() => expect(setAccountEnabled).toHaveBeenCalledWith('#PLAYER', false));
+  await waitFor(() => expect(screen.getByText('Open notification settings')).toBeTruthy());
+  expect(screen.queryByText('#PLAYER')).toBeNull();
+  expect(screen.queryByText('secret-token')).toBeNull();
+  expect(screen.queryByText('War attacks')).toBeNull();
+  expect(screen.queryByText('War state')).toBeNull();
+  expect(screen.getAllByRole('switch')).toHaveLength(6);
+  await fireEvent.press(screen.getByText('Open notification settings'));
+  expect(openSystemSettings).toHaveBeenCalledTimes(1);
+  expect(enablePush).not.toHaveBeenCalled();
+  await fireEvent.press(screen.getByText('Players'));
+  expect(onManagePlayers).toHaveBeenCalledTimes(1);
 });
 
 it('copies the version with Flutter-equivalent confirmation', async () => {
@@ -178,7 +187,6 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
         themeMode="system"
         user={{ username: 'Person', email: null, avatarUrl: '' }}
         versionLabel={'Version 1.2.3\nDevice'}
-        warWidgetsEnabled={false}
       />,
     ),
   );
@@ -187,27 +195,47 @@ it('copies the version with Flutter-equivalent confirmation', async () => {
   await waitFor(() => expect(screen.getByText('Copied to clipboard')).toBeTruthy());
 });
 
-it.each(['en', 'en_GB'])('formats cache size for %s and clears images without signing out', async (currentLocale) => {
-  const clearImageCache = jest.fn(async () => {});
-  const logout = jest.fn(async () => {});
-  const screen = await render(wrapped(
-    <SettingsScreen
-      actions={{ changeLocale: async () => {}, changeTheme: async () => {},
-        open: jest.fn(), openDiscord: jest.fn(), showLicenses: jest.fn(),
-        copyVersion: jest.fn(), logout, clearImageCache }}
-      alternateIconsSupported={false} currentLocale={currentLocale} localeChoices={[]}
-      notificationsEnabled={false} themeMode="dark"
-      user={{ username: 'Person', email: null, avatarUrl: '' }}
-      versionLabel="Version 1" imageCacheBytes={44_669_338} warWidgetsEnabled={false}
-    />
-  ));
-  expect(screen.getByText('42.6 MB')).toBeTruthy();
-  expect(screen.queryByText('Remove downloaded images from this phone. Your accounts and saved data stay unchanged.')).toBeNull();
-  await fireEvent.press(screen.getByText('Clear image cache'));
-  await waitFor(() => expect(screen.getByText('Image cache cleared.')).toBeTruthy());
-  expect(clearImageCache).toHaveBeenCalledTimes(1);
-  expect(logout).not.toHaveBeenCalled();
-});
+it.each(['en', 'en_GB'])(
+  'formats cache size for %s and clears images without signing out',
+  async (currentLocale) => {
+    const clearImageCache = jest.fn(async () => {});
+    const logout = jest.fn(async () => {});
+    const screen = await render(
+      wrapped(
+        <SettingsScreen
+          actions={{
+            changeLocale: async () => {},
+            changeTheme: async () => {},
+            open: jest.fn(),
+            openDiscord: jest.fn(),
+            showLicenses: jest.fn(),
+            copyVersion: jest.fn(),
+            logout,
+            clearImageCache,
+          }}
+          alternateIconsSupported={false}
+          currentLocale={currentLocale}
+          localeChoices={[]}
+          notificationsEnabled={false}
+          themeMode="dark"
+          user={{ username: 'Person', email: null, avatarUrl: '' }}
+          versionLabel="Version 1"
+          imageCacheBytes={44_669_338}
+        />,
+      ),
+    );
+    expect(screen.getByText('42.6 MB')).toBeTruthy();
+    expect(
+      screen.queryByText(
+        'Remove downloaded images from this phone. Your accounts and saved data stay unchanged.',
+      ),
+    ).toBeNull();
+    await fireEvent.press(screen.getByText('Clear image cache'));
+    await waitFor(() => expect(screen.getByText('Image cache cleared.')).toBeTruthy());
+    expect(clearImageCache).toHaveBeenCalledTimes(1);
+    expect(logout).not.toHaveBeenCalled();
+  },
+);
 
 it('hides notifications on web even when enabled by the feature flag', async () => {
   const screen = await render(
@@ -230,7 +258,6 @@ it('hides notifications on web even when enabled by the feature flag', async () 
         themeMode="system"
         user={{ username: 'Person', email: null, avatarUrl: '' }}
         versionLabel="Version 0.4.2"
-        warWidgetsEnabled={false}
       />,
     ),
   );
@@ -238,7 +265,7 @@ it('hides notifications on web even when enabled by the feature flag', async () 
   expect(screen.getByText('Version & Device')).toBeTruthy();
 });
 
-it('localizes the iOS war widget setup dialog', async () => {
+it('does not offer war widget setup in Settings', async () => {
   const actions: SettingsPresentationActions = {
     changeLocale: async () => undefined,
     changeTheme: async () => undefined,
@@ -260,17 +287,13 @@ it('localizes the iOS war widget setup dialog', async () => {
         themeMode="system"
         user={{ username: 'Personne', email: null, avatarUrl: '' }}
         versionLabel="Version 1.2.3"
-        warWidgetClans={[]}
-        warWidgetsEnabled
       />,
       'fr',
     ),
   );
 
-  await fireEvent.press(screen.getByText('Ajouter un widget guerre'));
-  expect(screen.getByText(/Après avoir ajouté le widget/)).toBeTruthy();
-  expect(screen.getByText(/Aucun de vos comptes liés/)).toBeTruthy();
-  expect(screen.getByText(/Ajoutez plusieurs widgets de guerre/)).toBeTruthy();
+  expect(screen.queryByText('Ajouter un widget guerre')).toBeNull();
+  expect(screen.queryByText(/Après avoir ajouté le widget/)).toBeNull();
 });
 
 it('uses structured FAQ search and copies support email when mail launch fails', async () => {

@@ -26,6 +26,11 @@ export interface SelectionPickerOption<T extends string = string> {
   readonly subtitle?: string;
   readonly searchText?: string;
   readonly disabled?: boolean;
+  readonly trailingAction?: {
+    readonly label: string;
+    readonly icon: ReactNode;
+    readonly onPress: () => void;
+  };
 }
 
 export function SelectionPicker<T extends string>({
@@ -304,6 +309,20 @@ export function SelectionPickerModal<T extends string>({
                           ) : null}
                         </View>
                         {selected ? <Check color={theme.primary} size={20} /> : null}
+                        {option.trailingAction ? (
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={option.trailingAction.label}
+                            hitSlop={8}
+                            onPress={(event) => {
+                              event.stopPropagation();
+                              option.trailingAction?.onPress();
+                            }}
+                            style={styles.trailingAction}
+                          >
+                            {option.trailingAction.icon}
+                          </Pressable>
+                        ) : null}
                       </Pressable>
                     );
                   }}
@@ -417,5 +436,6 @@ const styles = StyleSheet.create({
     borderRadius: ckRadius.control,
   },
   selectedLabel: { fontWeight: '700' },
+  trailingAction: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   disabled: { opacity: 0.46 },
 });

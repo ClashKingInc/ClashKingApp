@@ -92,6 +92,8 @@ describe('NotificationPreferencesService', () => {
     expect(settings.reminderTimings).toEqual([15, 30, 60]);
     expect(settings.accounts).toEqual([{ tag: '#VERIFIED', enabled: true }]);
     expect(settings.legendDefenses).toBe(true);
+    expect(settings.announcements).toBe(false);
+    expect(settings.monthlySupport).toBe(false);
   });
 
   it('PUT sends categories without rewriting account selection', async () => {
@@ -148,11 +150,22 @@ describe('NotificationPreferencesService', () => {
     expect(account).toEqual({ tag: '#VERIFIED', enabled: true });
   });
 
-  it('loads disabled defaults and migrates retired bookmarked accounts locally', async () => {
+  it('loads new-user non-reminder defaults and migrates retired bookmarked accounts locally', async () => {
     const preferences = new MemoryStore();
     const service = serviceWith(async () => new Response('{}'), preferences);
     const defaults = await service.loadLocal();
-    expect(defaults.legendDefenses).toBe(false);
+    expect(defaults).toMatchObject({
+      warAttacks: false,
+      warState: false,
+      warReminders: false,
+      raidReminders: false,
+      events: true,
+      announcements: true,
+      monthlySupport: true,
+      legendDefenses: true,
+      reminderTimings: [],
+      raidReminderTimings: [],
+    });
     expect(defaults.accounts).toEqual([]);
 
     const legacy: Record<string, unknown> = {
@@ -170,6 +183,8 @@ describe('NotificationPreferencesService', () => {
     expect(migrated.raidReminders).toBe(false);
     expect(migrated.raidReminderTimings).toEqual([]);
     expect(migrated.accounts).toEqual([{ tag: '#VERIFIED', enabled: true }]);
+    expect(migrated.announcements).toBe(false);
+    expect(migrated.monthlySupport).toBe(false);
   });
 
   it('never exposes the removed verified-player tracking route', () => {

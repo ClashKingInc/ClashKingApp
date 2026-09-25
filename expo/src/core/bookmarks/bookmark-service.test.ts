@@ -199,6 +199,36 @@ describe('BookmarkService Flutter contract', () => {
     expect(service.players.map((item) => item.tag)).toEqual(['#VISIBLE2', '#HIDDEN', '#VISIBLE1']);
   });
 
+  test('clan card order persists shared Clan and War bookmark order and preserves linked duplicates', async () => {
+    let failOrder = false;
+    const { service, requests } = harness(async (url, init) => {
+      if (init?.method === 'GET') {
+        return response(
+          url.searchParams.get('type') === 'clan'
+            ? { items: [bookmark('clan', '#VISIBLE1'), bookmark('clan', '#LINKED', 1), bookmark('clan', '#VISIBLE2', 2)] }
+            : { items: [] },
+        );
+      }
+      return response(mutationBody(init), failOrder ? 409 : 200);
+    });
+    service.setCurrentUserId('u');
+    await service.load();
+
+    await service.reorderClans(['#VISIBLE2', '#VISIBLE1']);
+    expect(service.clans.map((item) => item.tag)).toEqual(['#VISIBLE2', '#LINKED', '#VISIBLE1']);
+    expect(JSON.parse(String(requests.at(-1)?.init?.body))).toEqual({
+      type: 'clan',
+      ordered_tags: ['#VISIBLE2', '#LINKED', '#VISIBLE1'],
+    });
+
+    failOrder = true;
+    await expect(service.reorderClans(['#VISIBLE1', '#VISIBLE2'])).rejects.toBeInstanceOf(
+      BookmarkHttpException,
+    );
+    expect(service.clans.map((item) => item.tag)).toEqual(['#VISIBLE2', '#LINKED', '#VISIBLE1']);
+    await expect(service.reorderClans(['#VISIBLE1', '#VISIBLE1'])).rejects.toBeInstanceOf(RangeError);
+  });
+
   test('reorder preserves Flutter removal-before-range-error quirk at original length', async () => {
     const { service } = harness(async (_url, init) => response(mutationBody(init)));
     service.setCurrentUserId('u');

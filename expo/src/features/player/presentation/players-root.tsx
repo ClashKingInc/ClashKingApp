@@ -6,6 +6,8 @@ import { canonicalTag } from '../../../core/domain/tags';
 import { APP_FEATURE_FLAGS } from '../../../core/feature-flags/feature-flags';
 import { useAppRuntime, useAppState } from '../../../core/app/runtime-context';
 import { Snackbar } from '../../../ui';
+import { useI18n } from '../../../i18n';
+import { HomeAccountLimitError } from '../data/player-card-preferences';
 import type { Player } from '../models/player';
 import type {
   PlayerCardOption,
@@ -24,6 +26,7 @@ export interface PlayersRootProps {
 /** Connects the reviewed Flutter Players page presentation to live app services. */
 export function PlayersRoot(props: PlayersRootProps) {
   const runtime = useAppRuntime();
+  const { t } = useI18n();
   const appState = useAppState();
   const [serviceRevision, setServiceRevision] = useState(0);
   const [notificationPreferences, setNotificationPreferences] = useState<NotificationPreferences>();
@@ -43,6 +46,18 @@ export function PlayersRoot(props: PlayersRootProps) {
     ];
     return () => unsubscribe.forEach((remove) => remove());
   }, [runtime]);
+
+  const verifiedTags = runtime.accounts.verifiedAccounts.map((account) => account.playerTag);
+  const verifiedSignature = verifiedTags.map(canonicalTag).join('|');
+  const preferencesLoaded = runtime.playerCardPreferences.loaded;
+  useEffect(() => {
+    if (!preferencesLoaded || verifiedTags.length === 0) return;
+    void runtime.playerCardPreferences
+      .reconcileHomeIncluded(verifiedTags, runtime.accounts.selectedTag)
+      .catch(() => undefined);
+    // The signature tracks service-owned account arrays without looping on preference notifications.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runtime, verifiedSignature, preferencesLoaded]);
 
   useEffect(() => {
     if (Platform.OS === 'web') return;
@@ -93,6 +108,9 @@ export function PlayersRoot(props: PlayersRootProps) {
         leagueUrl: bookmark.leagueUrl,
       })),
       optionsByTag,
+      homeIncludedAccountTags: new Set(
+        runtime.playerCardPreferences.homeIncludedTags(verifiedTags, runtime.accounts.selectedTag),
+      ),
       notificationsEnabled: Platform.OS !== 'web' && deviceNotificationsEnabled,
       notificationAccountTags,
       updatingNotificationTags,
@@ -153,10 +171,25 @@ export function PlayersRoot(props: PlayersRootProps) {
       },
       setAccountHidden: (playerTag, hidden) =>
         runtime.accounts.updateAccountHidden(playerTag, hidden),
-      setCardOption: (playerTag, option, enabled) =>
-        setPlayerCardOption(runtime, playerTag, option, enabled),
+      setCardOption: async (playerTag, option, enabled) => {
+        if (option !== 'home') return setPlayerCardOption(runtime, playerTag, option, enabled);
+        try {
+          await runtime.playerCardPreferences.setShownOnHome(
+            playerTag,
+            enabled,
+            runtime.accounts.verifiedAccounts.map((account) => account.playerTag),
+            runtime.accounts.selectedTag,
+          );
+        } catch (error) {
+          if (error instanceof HomeAccountLimitError) {
+            setSnackbar(t('homeIncludedAccountsLimit'));
+            return;
+          }
+          throw error;
+        }
+      },
     }),
-    [props, runtime, updatingNotificationTags],
+    [props, runtime, t, updatingNotificationTags],
   );
 
   return (
@@ -170,7 +203,7 @@ export function PlayersRoot(props: PlayersRootProps) {
 function setPlayerCardOption(
   runtime: ReturnType<typeof useAppRuntime>,
   playerTag: string,
-  option: Exclude<PlayerCardOption, 'notifications' | 'hidden'>,
+  option: Exclude<PlayerCardOption, 'notifications' | 'hidden' | 'home'>,
   enabled: boolean,
 ): Promise<void> {
   switch (option) {

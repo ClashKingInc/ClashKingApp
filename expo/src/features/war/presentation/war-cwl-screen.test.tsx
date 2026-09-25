@@ -1,7 +1,9 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ClanBadgeUrls, type Clan } from '../../clan/models';
+import { BookmarkedClan, BookmarkedPlayer } from '../../../core/bookmarks/bookmark-service';
 import type { Player } from '../../player/models/player';
 import { I18nProvider } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
@@ -17,7 +19,7 @@ import {
   WarInfo,
   WarMember,
 } from '../models';
-import type { WarPresentationActions, WarPresentationModel } from './contracts';
+import { buildWarRoster, type WarPresentationActions, type WarPresentationModel } from './contracts';
 import { CwlScreen, hasCwlClanStats, hasCwlMemberStats } from './cwl-screen';
 import { WarCwlPresentationRoot } from './war-cwl-screen';
 
@@ -29,6 +31,26 @@ jest.mock('../../../core/assets/local-asset-cache', () => ({
     getRevision: () => 0,
   },
 }));
+
+jest.mock('react-native-draggable-flatlist', () => {
+  const ReactModule = jest.requireActual<typeof import('react')>('react');
+  const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
+  return {
+    __esModule: true,
+    default: ({ data, ListHeaderComponent, ListEmptyComponent, renderItem, onDragEnd }: {
+      data: readonly unknown[];
+      ListHeaderComponent?: React.ReactNode;
+      ListEmptyComponent?: React.ReactNode;
+      renderItem: (params: Record<string, unknown>) => React.ReactNode;
+      onDragEnd: (params: { data: unknown[]; from: number; to: number }) => void;
+    }) => ReactModule.createElement(MockView as React.ComponentType<Record<string, unknown>>, { testID: 'war-draggable-list', onDragEnd },
+      ListHeaderComponent,
+      data.length ? data.map((item, index) => ReactModule.createElement(ReactModule.Fragment,
+        { key: index }, renderItem({ item, drag: jest.fn(), isActive: false }))) : ListEmptyComponent,
+    ),
+    ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
 
 const badge = new ClanBadgeUrls('', '', 'badge.png');
 const attack = new WarAttack('#P1', '#E1', 3, 100, 1, 135);
@@ -70,9 +92,11 @@ const actions: WarPresentationActions = {
   openClan: jest.fn(),
   openPlayer: jest.fn(),
   copyText: jest.fn(async () => undefined),
+  reorderLinkedClans: jest.fn(async () => undefined),
+  reorderBookmarkedClans: jest.fn(async () => undefined),
 };
 
-function renderRoot() {
+function renderRoot(input: WarPresentationModel = model, callbacks: WarPresentationActions = actions) {
   return render(
     <SafeAreaProvider
       initialMetrics={{
@@ -82,7 +106,7 @@ function renderRoot() {
     >
       <I18nProvider locale="en">
         <CKThemeProvider preference="light">
-          <WarCwlPresentationRoot model={model} actions={actions} />
+          <WarCwlPresentationRoot model={input} actions={callbacks} />
         </CKThemeProvider>
       </I18nProvider>
     </SafeAreaProvider>,
@@ -90,6 +114,49 @@ function renderRoot() {
 }
 
 describe('WarCwlPresentationRoot', () => {
+  it('isolates linked and directly bookmarked clan wars and persists their shared order', async () => {
+    const secondClan = { ...clan, tag: '#SECOND', name: 'Second linked clan' } as Clan;
+    const mixed: WarPresentationModel = {
+      profiles: [
+        ...model.profiles,
+        { tag: '#P2', name: 'Second', clanTag: '#SECOND', clan: secondClan } as Player,
+        { tag: '#BOOKPLAYER', name: 'Scout', clanTag: '#SCOUT', clan: { ...clan, tag: '#SCOUT' } } as Player,
+      ],
+      ownedPlayerTags: ['#P1', '#P2'],
+      bookmarkedPlayers: [new BookmarkedPlayer('#BOOKPLAYER', 'Scout', 18, '', '#SCOUT', 'Scout clan', 0, '', '')],
+      bookmarkedClans: [
+        new BookmarkedClan('#CLAN', 'Linked duplicate', '', 1, 1),
+        new BookmarkedClan('#BOOK1', 'Bookmarked One', '', 1, 1),
+        new BookmarkedClan('#BOOK2', 'Bookmarked Two', '', 1, 1),
+      ],
+      hydratedBookmarkedClans: [],
+      summaries: model.summaries,
+    };
+    const callbacks = { ...actions,
+      reorderLinkedClans: jest.fn(async () => undefined),
+      reorderBookmarkedClans: jest.fn(async () => undefined),
+    };
+    const screen = await renderRoot(mixed, callbacks);
+    expect(screen.getByRole('tab', { name: 'Linked' }).props.accessibilityState.selected).toBe(true);
+    expect(screen.getByTestId('war-roster-card-#CLAN')).toBeTruthy();
+    expect(screen.getByTestId('war-roster-card-#SECOND')).toBeTruthy();
+    expect(screen.queryByTestId('war-roster-card-#BOOK1')).toBeNull();
+    const roster = buildWarRoster(mixed);
+    await act(async () => fireEvent(screen.getByTestId('war-draggable-list'), 'dragEnd', {
+      data: [roster.items[1], roster.items[0]], from: 0, to: 1,
+    }));
+    expect(callbacks.reorderLinkedClans).toHaveBeenCalledWith(['#SECOND', '#CLAN']);
+
+    await act(async () => fireEvent.press(screen.getByRole('tab', { name: 'Bookmarked' })));
+    expect(screen.queryByTestId('war-roster-card-#CLAN')).toBeNull();
+    expect(screen.getByTestId('war-roster-card-#BOOK1')).toBeTruthy();
+    expect(screen.getByTestId('war-roster-card-#BOOK2')).toBeTruthy();
+    expect(screen.queryByTestId('war-roster-card-#SCOUT')).toBeNull();
+    await act(async () => fireEvent(screen.getByTestId('war-draggable-list'), 'dragEnd', {
+      data: [roster.items[3], roster.items[2]], from: 0, to: 1,
+    }));
+    expect(callbacks.reorderBookmarkedClans).toHaveBeenCalledWith(['#BOOK2', '#BOOK1']);
+  });
   it('hides unavailable CWL details until attacks or defenses exist', () => {
     const pendingMember = new CwlMember('#PENDING', 'Pending', 18);
     const activeMember = new CwlMember(
@@ -150,10 +217,10 @@ describe('WarCwlPresentationRoot', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Linked Clan versus Enemy Clan' }));
     expect(screen.getByRole('tab', { name: 'Overview' })).toBeTruthy();
     await fireEvent.press(screen.getByRole('tab', { name: 'Attacks' }));
-    await fireEvent.press(screen.getByRole('button', { name: 'Main 3 stars' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Main, Stars: 3 / 3' }));
     expect(screen.getByText('Attack Details')).toBeTruthy();
     expect(screen.getByText('random')).toBeTruthy();
-    expect(screen.getAllByText('Destruction').length).toBeGreaterThan(0);
+    expect(screen.getByText('Duration')).toBeTruthy();
     expect(screen.getByText('2m 15s')).toBeTruthy();
   });
 
@@ -269,9 +336,15 @@ describe('WarCwlPresentationRoot', () => {
     );
 
     const score = screen.getByTestId('war-summary-score');
-    expect(score.props.children.join('')).toBe('110 - 103');
+    expect(score.props.children).toBe('110 - 103');
     expect(score.props.numberOfLines).toBe(1);
-    expect(score.props.adjustsFontSizeToFit).toBe(true);
+    expect(score.props.adjustsFontSizeToFit).toBeUndefined();
+    expect(StyleSheet.flatten(score.props.style)).toMatchObject({ fontSize: 28, lineHeight: 34 });
+    expect(StyleSheet.flatten(screen.getByTestId('war-summary-account-chips').props.style))
+      .toMatchObject({ paddingBottom: 6 });
+    const bodyStyle = StyleSheet.flatten(screen.getByTestId('war-summary-body').props.style);
+    expect(bodyStyle.minHeight).toBeUndefined();
+    expect(bodyStyle.paddingBottom).toBe(8);
   });
 
   it('shows Flutter-equivalent CWL round timing, attack counts, and perfect-war state', async () => {

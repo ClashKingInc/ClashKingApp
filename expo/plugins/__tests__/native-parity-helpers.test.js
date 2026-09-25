@@ -327,6 +327,10 @@ test('retained native contract is Expo-owned and complete', () => {
     name: '.WarWidgetConfigureActivity',
     theme: '@style/UpgradeWidgetConfigurationTheme',
   });
+  assert.deepEqual(contract.android.legendsWidgetConfigurationActivity, {
+    name: '.LegendsWidgetConfigureActivity',
+    theme: '@style/UpgradeWidgetConfigurationTheme',
+  });
   assert.deepEqual(contract.notificationDebug, {
     supportedPlatform: 'ios',
     identifierPrefix: 'clashking-debug-',
@@ -937,6 +941,101 @@ test('Android war widget mirrors the iOS matchup hierarchy', () => {
   );
   assert.match(kotlin, /if \(score\.length >= 7\) 24f else 28f/);
   assert.doesNotMatch(kotlin, /applyColorTheme|setBackgroundColor|text_update_time|refresh_icon/);
+});
+
+test('Android Legends widget is bookmark-selected, adaptive, and cache-only', () => {
+  const expoRoot = path.resolve(__dirname, '../..');
+  const androidRoot = path.join(expoRoot, 'native/android/app/src/main');
+  const contract = require('../../native/parity-contract.json');
+  const kotlin = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/LegendsAppWidgetProvider.kt'),
+    'utf8',
+  );
+  const configuration = fs.readFileSync(
+    path.join(androidRoot, 'kotlin/com/clashking/clashkingapp/LegendsWidgetConfigureActivity.kt'),
+    'utf8',
+  );
+  const provider = fs.readFileSync(
+    path.join(androidRoot, 'res/xml/legends_widget_provider.xml'),
+    'utf8',
+  );
+  const bridge = fs.readFileSync(
+    path.join(
+      expoRoot,
+      'modules/clashking-native/android/src/main/java/com/clashking/nativebridge/ClashKingNativeModule.kt',
+    ),
+    'utf8',
+  );
+
+  assert.match(configuration, /getString\("legendsWidgetPlayers", null\)/);
+  assert.match(configuration, /LegendsWidgetSelectionStore\.saveSelectedTag/);
+  assert.match(kotlin, /PAYLOAD_PREFIX = "legendsWidget_"/);
+  assert.match(kotlin, /payload\.getString\("dayEndsAt"\)/);
+  assert.match(kotlin, /payload\.getString\("updatedAt"\)/);
+  assert.match(kotlin, /!now\.isBefore\(dayEndsAt\)/);
+  assert.match(kotlin, /Duration\.between\(updatedAt, now\)\.toMinutes\(\) >= 60/);
+  assert.match(kotlin, /OPTION_APPWIDGET_MIN_WIDTH/);
+  assert.match(kotlin, /R\.layout\.legends_widget_layout_wide/);
+  assert.match(kotlin, /clashking:\/\/player\/\$tag\?tab=legends/);
+  assert.doesNotMatch(kotlin, /HttpClient|\/v2\/|Authorization|shared_auth_session/);
+  assert.match(
+    provider,
+    /android:configure="com\.clashking\.clashkingapp\.LegendsWidgetConfigureActivity"/,
+  );
+  assert.match(provider, /android:resizeMode="horizontal\|vertical"/);
+  assert.match(provider, /android:widgetFeatures="reconfigurable"/);
+  assert.match(bridge, /"LegendsAppWidgetProvider"/);
+  const localizedResources = fs
+    .readdirSync(path.join(androidRoot, 'res'), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith('values'))
+    .map((entry) => `res/${entry.name}/legends_widget_strings.xml`)
+    .filter((relativePath) => fs.existsSync(path.join(androidRoot, relativePath)))
+    .sort();
+  assert.equal(localizedResources.length, 33);
+  assert.deepEqual(
+    contract.android.widgetRequiredFiles
+      .filter((relativePath) => relativePath.endsWith('/legends_widget_strings.xml'))
+      .sort(),
+    localizedResources,
+  );
+});
+
+test('iOS Legends widget prioritizes daily results over redundant identity metadata', () => {
+  const swift = fs.readFileSync(path.resolve(__dirname, '../../native/ios/WarWidget/WarWidget.swift'), 'utf8');
+  const view = swift.slice(swift.indexOf('private struct LegendsWidgetView:'), swift.indexOf('private struct LegendsWidget:'));
+  assert.doesNotMatch(view, /labels\.updated|Text\(time, style: \.relative\)|opponentTownHallLevel/);
+  assert.match(view, /RelativeDateTimeFormatter\(\)/);
+  assert.match(view, /formatter\.localizedString\(from: components\)/);
+  assert.match(view, /netValue\(compact: true\)/);
+  assert.match(view, /total: compact \? nil : signed\(entry.data.attackTrophies\)/);
+  assert.match(view, /total: compact \? nil : signed\(entry.data.defenseTrophies\)/);
+  const medium = view.slice(view.indexOf('private var mediumBody:'), view.indexOf('private var rankLabel:'));
+  assert.match(medium, /HStack\(spacing: 8\)\s*\{\s*Text\(dayLabel\)[^\n]*\n\s*rankLabel/);
+  assert.match(view, /frame\(height: compact \? 42 : 58/);
+  assert.match(view, /legends_widget_recent/);
+  assert.match(view, /legends_widget_rank/);
+  assert.match(view, /Text\(relativeTime\(time\)\)/);
+  assert.match(view, /clanIdentity\(clan, compact: compact\)/);
+  assert.match(view, /minimumScaleFactor\(0\.8\)/);
+});
+
+test('iOS Legends widget keeps partial refresh freshness honest', () => {
+  const expoRoot = path.resolve(__dirname, '../..');
+  const swift = fs.readFileSync(
+    path.join(expoRoot, 'native/ios/WarWidget/WarWidget.swift'),
+    'utf8',
+  );
+
+  assert.match(swift, /updatedAt: refreshedDay \? refreshedAt : updatedAt/);
+  assert.match(
+    swift,
+    /trophies: refreshedRank \? rankLookup\?\.item\?\.trophies : \(refreshedDay \? nil : trophies\)/,
+  );
+  assert.match(
+    swift,
+    /globalRank: refreshedRank \? rankLookup\?\.item\?\.globalRank : \(refreshedDay \? nil : globalRank\)/,
+  );
+  assert.match(swift, /attackTrophies: battlelog\?\.attackTrophies \?\? attackTrophies/);
 });
 
 test('Android upgrade widget follows the system night mode palette', () => {

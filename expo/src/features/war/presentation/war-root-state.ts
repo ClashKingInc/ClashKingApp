@@ -19,12 +19,11 @@ export function hiddenWarPlayerTags(
 export function extraWarClanTags(
   profiles: readonly Player[],
   ownedPlayerTags: readonly string[],
-  bookmarkedPlayers: readonly BookmarkedPlayer[],
+  _bookmarkedPlayers: readonly BookmarkedPlayer[],
   bookmarkedClans: readonly BookmarkedClan[],
   preferences: Pick<PlayerCardPreferencesService, 'isShownInWarTab'>,
 ): string[] {
   const owned = new Set(ownedPlayerTags.map(canonicalTag));
-  const profilesByTag = new Map(profiles.map((player) => [canonicalTag(player.tag), player]));
   const linkedClanTags = new Set(
     profiles
       .filter(
@@ -33,14 +32,9 @@ export function extraWarClanTags(
       .map((player) => player.clanTag)
       .filter(Boolean),
   );
-  const fromPlayers = bookmarkedPlayers
-    .filter(
-      (player) => !owned.has(canonicalTag(player.tag)) && preferences.isShownInWarTab(player.tag),
-    )
-    .map((bookmark) => profilesByTag.get(canonicalTag(bookmark.tag))?.clanTag || bookmark.clanTag);
   return [
     ...new Set(
-      [...bookmarkedClans.map((clan) => clan.tag), ...fromPlayers].filter(
+      bookmarkedClans.map((clan) => clan.tag).filter(
         (tag) => tag.length > 0 && !linkedClanTags.has(tag),
       ),
     ),

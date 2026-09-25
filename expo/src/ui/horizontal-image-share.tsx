@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  type LayoutChangeEvent,
   type View as ViewType,
 } from 'react-native';
 import { Share2, X } from 'lucide-react-native';
@@ -19,6 +20,22 @@ import { ckRadius } from './tokens';
 import { useCKTheme } from './theme';
 
 const CAPTURE_TIMEOUT_MS = 12_000;
+const CAPTURE_WIDTH = 1200;
+const CAPTURE_HEIGHT = 675;
+
+export interface HorizontalImageCanvasSize {
+  readonly width: number;
+  readonly height: number;
+}
+
+const defaultCanvasSize: HorizontalImageCanvasSize = { width: 600, height: 337.5 };
+
+export function horizontalImagePreviewScale(availableWidth: number, canvasWidth: number): number {
+  if (!Number.isFinite(availableWidth) || !Number.isFinite(canvasWidth) || canvasWidth <= 0) {
+    return 0;
+  }
+  return Math.min(1, Math.max(0, availableWidth) / canvasWidth);
+}
 
 export function horizontalImageFilename(
   kind: 'battlelog' | 'legends',
@@ -58,9 +75,11 @@ export function HorizontalImageShareModal({
   title,
   visible,
   onClose,
+  canvasSize = defaultCanvasSize,
 }: {
   readonly children: ReactNode;
   readonly artworkUrls?: readonly string[];
+  readonly canvasSize?: HorizontalImageCanvasSize;
   readonly fileName: string;
   readonly message: string;
   readonly title: string;
@@ -70,6 +89,7 @@ export function HorizontalImageShareModal({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const boundary = useRef<ViewType>(null);
+  const [previewWidth, setPreviewWidth] = useState(0);
   const [sharing, setSharing] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -92,8 +112,8 @@ export function HorizontalImageShareModal({
               quality: 1,
               result: Platform.OS === 'web' ? 'data-uri' : 'tmpfile',
               fileName: fileName.replace(/\.png$/u, ''),
-              width: 1200,
-              height: 675,
+              width: CAPTURE_WIDTH,
+              height: CAPTURE_HEIGHT,
             }),
             CAPTURE_TIMEOUT_MS,
           );
@@ -134,8 +154,37 @@ export function HorizontalImageShareModal({
             </Pressable>
           </View>
           <ScrollView contentContainerStyle={styles.content}>
-            <View ref={boundary} collapsable={false} style={styles.graphicBoundary}>
-              {children}
+            <View
+              onLayout={(event: LayoutChangeEvent) =>
+                setPreviewWidth(event.nativeEvent.layout.width)
+              }
+              style={styles.previewFrame}
+            >
+              <View
+                pointerEvents="none"
+                style={[
+                  styles.canvasScaler,
+                  {
+                    width: canvasSize.width,
+                    height: canvasSize.height,
+                    opacity: previewWidth > 0 ? 1 : 0,
+                    transform: [
+                      { scale: horizontalImagePreviewScale(previewWidth, canvasSize.width) },
+                    ],
+                  },
+                ]}
+              >
+                <View
+                  ref={boundary}
+                  collapsable={false}
+                  style={[
+                    styles.graphicBoundary,
+                    { width: canvasSize.width, height: canvasSize.height },
+                  ]}
+                >
+                  {children}
+                </View>
+              </View>
             </View>
             {failed ? <CKText muted>{t('generalError')}</CKText> : null}
             <PressableSurface
@@ -184,14 +233,20 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', padding: 16, gap: 12 },
   grow: { flex: 1 },
   content: { padding: 16, paddingTop: 0, gap: 14 },
-  graphicBoundary: {
+  previewFrame: {
     width: '100%',
-    maxWidth: 1200,
     aspectRatio: 16 / 9,
     alignSelf: 'center',
     overflow: 'hidden',
     backgroundColor: '#111827',
   },
+  canvasScaler: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    transformOrigin: 'top left',
+  },
+  graphicBoundary: { backgroundColor: '#111827', overflow: 'hidden' },
   action: {
     minHeight: 50,
     flexDirection: 'row',

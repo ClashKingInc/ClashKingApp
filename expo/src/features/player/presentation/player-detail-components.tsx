@@ -59,6 +59,7 @@ import {
   LoadingIndicator,
   MobileWebImage,
   PillSurface,
+  ProfileStatChip as QuickStat,
   ResponsiveGrid,
   SelectionPicker,
   Skeleton,
@@ -441,32 +442,6 @@ export function PlayerDetailHeader({
         )}
       </View>
     </View>
-  );
-}
-
-function QuickStat({
-  label,
-  value,
-  icon,
-  iconElement,
-}: {
-  label: string;
-  value: number | string;
-  icon?: string;
-  iconElement?: ReactNode;
-}) {
-  const { locale } = useI18n();
-  return (
-    <PillSurface style={styles.quickStat} accessible accessibilityLabel={`${label}: ${value}`}>
-      {icon ? <MobileWebImage imageUrl={icon} style={styles.statIcon} /> : iconElement}
-      <View>
-        <CKText role="labelLarge">
-          {typeof value === 'number'
-            ? new Intl.NumberFormat(toIntlLocale(locale)).format(value)
-            : value}
-        </CKText>
-      </View>
-    </PillSurface>
   );
 }
 
@@ -977,8 +952,7 @@ function resourceImage(key: string) {
 
 export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null | undefined }) {
   const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const [mode, setMode] = useState<PlayerBattlelogMode>('ranked');
+  const [mode, setMode] = useState<Exclude<PlayerBattlelogMode, 'legend'>>('ranked');
   const [direction, setDirection] = useState<'all' | 'attacks' | 'defenses'>('all');
   if (!data)
     return <EmptyState title={t('playerBattlelogLoadError')} body={t('generalNoDataAvailable')} />;
@@ -1012,7 +986,6 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
       <Segmented
         choices={[
           ['ranked', t('playerBattlelogRanked')],
-          ['legend', t('legendsTitle')],
           ['farming', t('playerBattlelogFarming')],
         ]}
         selected={mode}
@@ -1023,9 +996,7 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
           <CKText role="titleLarge" style={styles.grow}>
             {mode === 'ranked'
               ? t('playerBattlelogRankedOverview')
-              : mode === 'legend'
-                ? t('legendsTitle')
-                : t('playerBattlelogFarmingOverview')}
+              : t('playerBattlelogFarmingOverview')}
           </CKText>
           <CKText muted>{t('playerBattlelogBattleCount', { count: battles.length })}</CKText>
         </View>
@@ -1068,16 +1039,6 @@ export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null 
         />
       </Surface>
       {mode === 'farming' ? <BattlelogLootGrid attacks={attacks} locale={locale} /> : null}
-      {!data.officialAvailable || !data.historyAvailable ? (
-        <Surface radius={ckRadius.tile} style={styles.notice}>
-          <Info size={18} color={theme.onSurfaceVariant} />
-          <CKText muted style={styles.grow}>
-            {!data.officialAvailable
-              ? t('playerBattlelogOfficialUnavailable')
-              : t('playerBattlelogHistoryUnavailable')}
-          </CKText>
-        </Surface>
-      ) : null}
       <View style={styles.toolbar}>
         <CKText role="titleLarge" style={styles.grow}>
           {t('playerBattlelogRecentBattles')}
@@ -4132,13 +4093,6 @@ const styles = StyleSheet.create({
   mobileStats: { paddingTop: 11, gap: 8 },
   mobileQuickStats: { gap: 8, paddingHorizontal: 16 },
   quickStatsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, justifyContent: 'center' },
-  quickStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
   statIcon: { width: 19, height: 19, resizeMode: 'contain' },
   resourceIcon: { width: 22, height: 22, resizeMode: 'contain' },
   rankedLink: {

@@ -16,15 +16,21 @@ export const localFileIndex = new FileUpdateIndex({
 function cacheDirectory() {
   return new Directory(Paths.cache, 'clashking-images-v2');
 }
+function isOwnedFile(uri: string): boolean {
+  return uri.startsWith(cacheDirectory().uri.replace(/\/$/, '') + '/');
+}
 function ownedFile(uri: string): File {
-  if (!uri.startsWith(cacheDirectory().uri.replace(/\/$/, '') + '/'))
-    throw new Error('Invalid image cache path');
+  if (!isOwnedFile(uri)) throw new Error('Invalid image cache path');
   return new File(uri);
 }
 const MAX_IMAGE_BYTES = 16 * 1024 * 1024;
 export const localImageCache = new ManagedImageCache(localFileIndex, {
-  exists: async (uri) => ownedFile(uri).exists,
+  // Absolute cache URLs can outlive an iOS app-container replacement. Treat
+  // those stale records as cache misses, and never try to delete outside the
+  // currently owned cache directory.
+  exists: async (uri) => isOwnedFile(uri) && ownedFile(uri).exists,
   remove: async (uri) => {
+    if (!isOwnedFile(uri)) return;
     const file = ownedFile(uri);
     if (file.exists) file.delete();
   },

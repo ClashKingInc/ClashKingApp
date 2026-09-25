@@ -4,6 +4,7 @@ import {
   homeComparisonNeedsNavigation,
   homeContentWidth,
   homeRecapWidth,
+  homeSelectedAccountIndex,
   isDesktopHome,
   normalizedProgress,
   normalizeHomeCardOrder,
@@ -12,7 +13,7 @@ import {
 } from './contracts';
 import { formatLastRefresh, homeBottomPadding } from './dashboard-screen';
 import { buildHomeBannerItems, homeBannerPageIndex } from './event-banner';
-import { clampHomePageIndex, formatHomeDuration } from './home-cards';
+import { formatHomeDuration } from './home-cards';
 
 jest.mock('react-native-draggable-flatlist', () => ({
   __esModule: true,
@@ -77,10 +78,10 @@ describe('home presentation contracts', () => {
     expect(homeComparisonNeedsNavigation(1560, 4)).toBe(false);
   });
 
-  it('clamps a selected account when refreshed data shrinks', () => {
-    expect(clampHomePageIndex(3, 4)).toBe(3);
-    expect(clampHomePageIndex(3, 1)).toBe(0);
-    expect(clampHomePageIndex(3, 0)).toBe(0);
+  it('restores a valid saved account and falls back when it is unavailable', () => {
+    expect(homeSelectedAccountIndex(['#ONE', '#TWO'], 'two')).toBe(1);
+    expect(homeSelectedAccountIndex(['#ONE', '#TWO'], '#REMOVED')).toBe(0);
+    expect(homeSelectedAccountIndex(['#ONE'], null)).toBe(0);
   });
 
   it('updates the mobile web banner indicator from live scrolling', () => {

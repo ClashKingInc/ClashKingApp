@@ -2,6 +2,7 @@ import type { AppConfigResponse } from '@clashking/api-contracts/expo';
 
 import { STORAGE_KEYS } from '../storage/storage';
 import type { StringStore } from '../../services/storage/auth-storage';
+import type { ApiEnvironment } from '../config/api-config';
 import {
   defaultFeatureFlagValue,
   featureFlagsFromConfig,
@@ -12,6 +13,7 @@ import {
 } from './feature-flags';
 
 export interface RemoteFeatureFlagServiceOptions {
+  readonly environment?: ApiEnvironment;
   readonly loadConfig: () => Promise<AppConfigResponse>;
   readonly preferences: StringStore;
   readonly platform: FeaturePlatform;
@@ -37,6 +39,9 @@ export class RemoteFeatureFlagService {
   }
 
   isEnabled(key: string, fallback = defaultFeatureFlagValue(key)): boolean {
+    // Keep unfinished calculators unavailable on production, including deep links.
+    if (key === 'calculators' && (this.options.environment ?? 'production') === 'production')
+      return false;
     const evaluation: FeatureFlagEvaluation = {
       platform: this.options.platform,
       appVersion: this.appVersion,

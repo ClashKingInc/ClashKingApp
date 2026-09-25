@@ -4,9 +4,9 @@ import {
   PlayerLegendLeagueData,
   PlayerLegendRank,
 } from '../../player/models';
-import { legendsImageFileName, legendsShareSummary } from './legends-share';
+import { legendSeasonLabel, legendsImageFileName, legendsShareSummary } from './legends-share';
 
-test('uses live and selected-day ranks, favorite army, and daily trophy changes', () => {
+test('uses live and selected-day ranks, season armies, and daily trophy changes', () => {
   const shareCode = 'u2x1-1x2';
   const data = new PlayerLegendLeagueData(
     '#P1',
@@ -83,6 +83,7 @@ test('uses live and selected-day ranks, favorite army, and daily trophy changes'
         [],
       ),
     ],
+    [shareCode, shareCode],
   );
 
   expect(legendsShareSummary(data)).toMatchObject({
@@ -98,11 +99,15 @@ test('uses live and selected-day ranks, favorite army, and daily trophy changes'
       { key: '2026-09-10', change: 20, attackTrophies: 30 },
       { key: '2026-09-11', change: 20, attackTrophies: 40 },
     ],
-    graph: [
-      { label: '09-10', trophies: 5560 },
-      { label: '09-11', trophies: 5580 },
-    ],
+    graph: [],
   });
+});
+
+test('formats the real season window without inventing one', () => {
+  expect(legendSeasonLabel('2026-08-31T05:00:00.000Z', '2026-09-28T05:00:00.000Z')).toBe(
+    'Aug 31 – Sep 28',
+  );
+  expect(legendSeasonLabel(null, null)).toBe('Current season');
 });
 
 test('builds a stable Legends PNG filename', () => {

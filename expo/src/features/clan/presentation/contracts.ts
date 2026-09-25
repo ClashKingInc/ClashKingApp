@@ -17,6 +17,8 @@ export interface ClansPresentationActions {
   hydrateBookmarkedClans(tags: readonly string[]): Promise<void>;
   loadClan(tag: string): Promise<Clan>;
   openClan(clan: Clan): void;
+  reorderLinkedClans(orderedTags: readonly string[]): Promise<void>;
+  reorderBookmarkedClans(orderedTags: readonly string[]): Promise<void>;
 }
 
 export interface ClanRosterItem {

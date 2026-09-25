@@ -1,4 +1,4 @@
-import { refreshLinkedAccountsForCurrentAuth } from './startup';
+import { initializeAccountsForCurrentAuth, refreshLinkedAccountsForCurrentAuth } from './startup';
 
 function fixture() {
   const auth = {
@@ -18,6 +18,7 @@ function fixture() {
   };
   const accounts = {
     setCurrentUserId: jest.fn(),
+    loadSelectedTag: jest.fn(async () => undefined),
     fetchAccounts: jest.fn(async () => []),
     hasVerifiedAccounts: true,
     initializeForCurrentUser: jest.fn(async () => {
@@ -26,6 +27,21 @@ function fixture() {
   };
   return { auth, accounts };
 }
+
+it('decides authenticated startup from fresh links without awaiting optional hydration', async () => {
+  const { auth, accounts } = fixture();
+
+  await expect(initializeAccountsForCurrentAuth(auth, accounts as never)).resolves.toMatchObject({
+    destination: 'home',
+    authenticated: true,
+    hasVerifiedAccount: true,
+  });
+
+  expect(accounts.setCurrentUserId).toHaveBeenCalledWith('user');
+  expect(accounts.loadSelectedTag).toHaveBeenCalledTimes(1);
+  expect(accounts.fetchAccounts).toHaveBeenCalledTimes(1);
+  expect(accounts.initializeForCurrentUser).not.toHaveBeenCalled();
+});
 
 it('continues with freshly verified links without awaiting optional profile hydration', async () => {
   const { auth, accounts } = fixture();
@@ -64,5 +80,22 @@ it('does not continue when the session changes while links are refreshing', asyn
   await expect(refreshLinkedAccountsForCurrentAuth(auth, accounts)).resolves.toMatchObject({
     destination: 'login',
     authenticated: false,
+  });
+});
+
+it('does not enter Home when the user changes during initial account loading', async () => {
+  const { auth, accounts } = fixture();
+  accounts.fetchAccounts.mockImplementationOnce(async () => {
+    auth.state.currentUser = {
+      ...auth.state.currentUser!,
+      userId: 'other-user',
+    };
+    return [];
+  });
+
+  await expect(initializeAccountsForCurrentAuth(auth, accounts as never)).resolves.toMatchObject({
+    destination: 'login',
+    authenticated: false,
+    hasVerifiedAccount: false,
   });
 });

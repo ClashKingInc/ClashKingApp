@@ -1,15 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-} from 'react-native';
+import { type ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n, type MessageKey } from '../../../i18n';
 import { CKText, MobileWebImage, PillSurface } from '../../../ui';
+import { homeSelectedAccountIndex } from './contracts';
 import type {
   HomeAccountIdentity,
   HomeDashboardActions,
@@ -25,7 +20,6 @@ import type {
 import {
   CardHeader,
   CaughtUp,
-  DesktopComparison,
   HomeAccountRail,
   HomeCardFrame,
   HomeCardSkeleton,
@@ -51,10 +45,6 @@ const metricKeys: Record<HomeMetricKind, MessageKey> = {
   walls: 'dashboardUpgradeTrackerWalls',
 };
 
-export function clampHomePageIndex(selected: number, pageCount: number): number {
-  return Math.max(0, Math.min(selected, Math.max(0, pageCount - 1)));
-}
-
 function Metrics({ metrics }: { metrics: readonly HomeMetricModel[] }) {
   const { t } = useI18n();
   if (metrics.length === 0) return <CaughtUp label={t('todoAllCaughtUpForNow')} />;
@@ -64,54 +54,6 @@ function Metrics({ metrics }: { metrics: readonly HomeMetricModel[] }) {
         <HomeMetricPill key={metric.id} metric={metric} label={t(metricKeys[metric.kind])} />
       ))}
     </HomeMetricGrid>
-  );
-}
-
-function MobilePager({
-  selected,
-  onSelect,
-  children,
-}: {
-  selected: number;
-  onSelect: (index: number) => void;
-  children: readonly ReactNode[];
-}) {
-  const ref = useRef<ScrollView>(null);
-  const { isRtl } = useI18n();
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    if (width > 0) ref.current?.scrollTo({ x: selected * width, animated: true });
-  }, [selected, width]);
-  const finish = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (width > 0)
-      onSelect(
-        clampHomePageIndex(
-          Math.round(Math.max(0, event.nativeEvent.contentOffset.x) / width),
-          children.length,
-        ),
-      );
-  };
-  return (
-    <View onLayout={(event) => setWidth(event.nativeEvent.layout.width)}>
-      <ScrollView
-        ref={ref}
-        horizontal
-        pagingEnabled
-        bounces={false}
-        alwaysBounceHorizontal={false}
-        overScrollMode="never"
-        contentInsetAdjustmentBehavior="never"
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={finish}
-        style={isRtl ? styles.rtlScroll : undefined}
-      >
-        {children.map((child, index) => (
-          <View key={index} style={[{ width: width || 1 }, isRtl && styles.rtlItem]}>
-            {child}
-          </View>
-        ))}
-      </ScrollView>
-    </View>
   );
 }
 
@@ -140,95 +82,79 @@ function MobileRailHeader({
   trailing?: ReactNode;
 }) {
   return (
-    <View style={styles.mobileHeader}>
-      <MobileWebImage imageUrl={imageUrl} style={styles.mobileHeaderImage} />
-      <View style={styles.flex}>
-        <CKText role="titleSmall" style={styles.heavy} numberOfLines={1}>
-          {title}
-        </CKText>
-        <View style={styles.railGap} />
-        {rail}
+    <View style={styles.mobileHeaderBlock}>
+      <View style={styles.mobileHeader}>
+        <MobileWebImage imageUrl={imageUrl} style={styles.mobileHeaderImage} />
+        <View style={styles.flex}>
+          <CKText role="titleSmall" style={styles.heavy} numberOfLines={1}>
+            {title}
+          </CKText>
+          <View style={styles.railGap} />
+          {rail}
+        </View>
+        {trailing}
       </View>
-      {trailing}
     </View>
   );
 }
 
 export function HomeTodoCard({
   model,
+  selectedAccountTag,
   desktop,
   actions,
   onLongPress,
   dragTestID,
 }: {
   model: HomeTodoCardModel;
+  selectedAccountTag?: string | null;
   desktop: boolean;
   actions: HomeDashboardActions;
   onLongPress?: () => void;
   dragTestID?: string;
 }) {
   const { t } = useI18n();
-  const hasSummary = model.accounts.length > 1 && model.combined !== undefined;
-  const pages = useMemo(
-    () => (hasSummary ? [model.combined!, ...model.accounts] : [...model.accounts]),
-    [hasSummary, model],
+  const pages = model.accounts;
+  const safeSelected = homeSelectedAccountIndex(
+    pages.map((page) => page.account?.tag ?? ''),
+    selectedAccountTag,
   );
-  const [selected, setSelected] = useState(0);
-  const safeSelected = clampHomePageIndex(selected, pages.length);
-  if (desktop) {
-    return (
-      <DesktopComparison
-        items={pages.map((page, index) => page.account?.tag ?? `summary-${index}`)}
-        summaryFirst={hasSummary}
-        renderItem={(index) => {
-          const page = pages[index]!;
-          return (
-            <HomeCardFrame
-              dragTestID={dragTestID}
-              onLongPress={onLongPress}
-              onPress={actions.openTodo}
-            >
-              <CardHeader
-                imageUrl={page.account?.imageUrl ?? ImageAssets.iconBuilderPotion}
-                title={page.account?.name ?? t('todoAllAccounts')}
-                subtitle={
-                  page.account?.subtitle ??
-                  t('todoAccountsNumber', { number: model.accounts.length })
-                }
-                size={54}
-                trailing={
-                  <ProgressRing
-                    progress={page.total === 0 ? 1 : page.done / page.total}
-                    size={54}
-                    labelFontSize={15}
-                  />
-                }
-              />
-              <TodoBody summary={page} />
-            </HomeCardFrame>
-          );
-        }}
-      />
-    );
-  }
   const rail: HomeRailEntry[] = model.accounts.map((summary) => ({
     ...summary.account!,
     pending: summary.done < summary.total,
   }));
   const current = pages[safeSelected]!;
+  const select = (index: number) => {
+    const tag = pages[index]?.account?.tag;
+    if (tag) actions.selectAccount?.(tag);
+  };
+  if (desktop) {
+    return (
+      <HomeCardFrame dragTestID={dragTestID} onLongPress={onLongPress} onPress={actions.openTodo}>
+        <CardHeader
+          imageUrl={current.account?.imageUrl ?? ImageAssets.iconBuilderPotion}
+          title={current.account?.name ?? ''}
+          subtitle={current.account?.subtitle ?? ''}
+          size={54}
+          trailing={
+            <ProgressRing
+              progress={current.total === 0 ? 1 : current.done / current.total}
+              size={54}
+              labelFontSize={15}
+            />
+          }
+        />
+        <HomeAccountRail entries={rail} selectedIndex={safeSelected} onSelect={select} />
+        <TodoBody summary={current} />
+      </HomeCardFrame>
+    );
+  }
   return (
     <HomeCardFrame dragTestID={dragTestID} onLongPress={onLongPress} onPress={actions.openTodo}>
       <MobileRailHeader
         imageUrl={ImageAssets.iconBuilderPotion}
         title={t('todoTitle')}
-        rail={
-          <HomeAccountRail
-            entries={rail}
-            selectedIndex={safeSelected}
-            onSelect={setSelected}
-            allLabel={hasSummary ? t('todoAllAccounts') : undefined}
-          />
-        }
+        rail={<HomeAccountRail entries={rail} selectedIndex={safeSelected} onSelect={select} />}
         trailing={
           <ProgressRing
             progress={current.total === 0 ? 1 : current.done / current.total}
@@ -237,11 +163,7 @@ export function HomeTodoCard({
           />
         }
       />
-      <MobilePager selected={safeSelected} onSelect={setSelected}>
-        {pages.map((page) => (
-          <TodoBody key={page.account?.tag ?? 'all'} summary={page} />
-        ))}
-      </MobilePager>
+      <TodoBody summary={current} />
     </HomeCardFrame>
   );
 }
@@ -331,19 +253,20 @@ function RankedBody({
 
 export function HomeRankedCard({
   model,
+  selectedAccountTag,
   desktop,
   actions,
   onLongPress,
   dragTestID,
 }: {
   model: HomeRankedCardModel;
+  selectedAccountTag?: string | null;
   desktop: boolean;
   actions: HomeDashboardActions;
   onLongPress?: () => void;
   dragTestID?: string;
 }) {
   const { t } = useI18n();
-  const [selected, setSelected] = useState(0);
   if (model.state === 'loading') return <HomeCardSkeleton rows={1} />;
   if (model.state === 'empty' || model.accounts.length === 0)
     return (
@@ -355,43 +278,37 @@ export function HomeRankedCard({
         />
       </HomeCardFrame>
     );
-  const hasSummary = model.accounts.length > 1;
-  const pages: (HomeRankedAccount | undefined)[] = hasSummary
-    ? [undefined, ...model.accounts]
-    : [...model.accounts];
-  const safeSelected = clampHomePageIndex(selected, pages.length);
-  if (desktop)
-    return (
-      <DesktopComparison
-        items={pages.map((page, index) => page?.tag ?? `summary-${index}`)}
-        summaryFirst={hasSummary}
-        renderItem={(index) => {
-          const account = pages[index];
-          return (
-            <HomeCardFrame
-              dragTestID={dragTestID}
-              onLongPress={onLongPress}
-              onPress={account ? () => actions.openRanked(account.tag) : undefined}
-            >
-              <CardHeader
-                imageUrl={account?.tierIconUrl || ImageAssets.shieldWithArrow}
-                title={account?.name ?? t('todoAllAccounts')}
-                subtitle={
-                  account?.subtitle ?? t('todoAccountsNumber', { number: model.accounts.length })
-                }
-                size={54}
-              />
-              <RankedBody account={account} combined={account ? undefined : model.accounts} />
-            </HomeCardFrame>
-          );
-        }}
-      />
-    );
+  const pages = model.accounts;
+  const safeSelected = homeSelectedAccountIndex(
+    pages.map((page) => page.tag),
+    selectedAccountTag,
+  );
   const rail = model.accounts.map((account) => ({
     ...account,
     pending: account.maxBattles === null ? null : account.attacksDone < account.maxBattles,
   }));
   const current = pages[safeSelected];
+  const select = (index: number) => {
+    const tag = pages[index]?.tag;
+    if (tag) actions.selectAccount?.(tag);
+  };
+  if (desktop)
+    return (
+      <HomeCardFrame
+        dragTestID={dragTestID}
+        onLongPress={onLongPress}
+        onPress={current ? () => actions.openRanked(current.tag) : undefined}
+      >
+        <CardHeader
+          imageUrl={current?.tierIconUrl || ImageAssets.shieldWithArrow}
+          title={current?.name ?? ''}
+          subtitle={current?.subtitle ?? ''}
+          size={54}
+        />
+        <HomeAccountRail entries={rail} selectedIndex={safeSelected} onSelect={select} />
+        <RankedBody account={current} />
+      </HomeCardFrame>
+    );
   return (
     <HomeCardFrame
       dragTestID={dragTestID}
@@ -401,24 +318,9 @@ export function HomeRankedCard({
       <MobileRailHeader
         imageUrl={current?.tierIconUrl || ImageAssets.shieldWithArrow}
         title={t('rankedLeagueTitle')}
-        rail={
-          <HomeAccountRail
-            entries={rail}
-            selectedIndex={safeSelected}
-            onSelect={setSelected}
-            allLabel={hasSummary ? t('todoAllAccounts') : undefined}
-          />
-        }
+        rail={<HomeAccountRail entries={rail} selectedIndex={safeSelected} onSelect={select} />}
       />
-      <MobilePager selected={safeSelected} onSelect={setSelected}>
-        {pages.map((account, index) => (
-          <RankedBody
-            key={account?.tag ?? `all-${index}`}
-            account={account}
-            combined={account ? undefined : model.accounts}
-          />
-        ))}
-      </MobilePager>
+      <RankedBody account={current} />
     </HomeCardFrame>
   );
 }
@@ -475,19 +377,20 @@ function snapshotAge(capturedAt: Date, t: ReturnType<typeof useI18n>['t'], local
 
 export function HomeUpgradeCard({
   model,
+  selectedAccountTag,
   desktop,
   actions,
   onLongPress,
   dragTestID,
 }: {
   model: HomeUpgradeCardModel;
+  selectedAccountTag?: string | null;
   desktop: boolean;
   actions: HomeDashboardActions;
   onLongPress?: () => void;
   dragTestID?: string;
 }) {
   const { t, locale } = useI18n();
-  const [selected, setSelected] = useState(0);
   if (model.state === 'loading') return <HomeCardSkeleton rows={2} />;
   if (
     model.state === 'empty' ||
@@ -520,11 +423,20 @@ export function HomeUpgradeCard({
       </HomeCardFrame>
     );
   const entries = [...model.accounts, ...model.missingAccounts];
-  const hasSummary = entries.length > 1;
-  const pages: (HomeUpgradeAccount | HomeAccountIdentity | undefined)[] = hasSummary
-    ? [undefined, ...entries]
-    : entries;
-  const safeSelected = clampHomePageIndex(selected, pages.length);
+  const pages = entries;
+  const safeSelected = homeSelectedAccountIndex(
+    pages.map((entry) => entry.tag),
+    selectedAccountTag,
+  );
+  const rail = entries.map((entry) => ({
+    ...entry,
+    pending: 'capturedAt' in entry ? entry.needsUpdate || entry.hasActionableQueueWork : true,
+  }));
+  const current = pages[safeSelected];
+  const select = (index: number) => {
+    const tag = pages[index]?.tag;
+    if (tag) actions.selectAccount?.(tag);
+  };
   const renderBody = (entry: HomeUpgradeAccount | HomeAccountIdentity | undefined) => {
     if (!entry)
       return (
@@ -589,37 +501,22 @@ export function HomeUpgradeCard({
     !entry ? model.combined.completion : 'completion' in entry ? entry.completion : 0;
   if (desktop)
     return (
-      <DesktopComparison
-        items={pages.map((page, index) => page?.tag ?? `summary-${index}`)}
-        summaryFirst={hasSummary}
-        renderItem={(index) => {
-          const entry = pages[index];
-          return (
-            <HomeCardFrame
-              dragTestID={dragTestID}
-              onLongPress={onLongPress}
-              onPress={entry ? () => actions.openUpgradeTracker(entry.tag) : undefined}
-            >
-              <CardHeader
-                imageUrl={entry?.imageUrl ?? ImageAssets.builderWave}
-                title={entry?.name ?? t('todoAllAccounts')}
-                subtitle={entry?.subtitle ?? t('todoAccountsNumber', { number: entries.length })}
-                size={54}
-                trailing={
-                  <ProgressRing progress={completion(entry)} size={54} labelFontSize={15} />
-                }
-              />
-              {renderBody(entry)}
-            </HomeCardFrame>
-          );
-        }}
-      />
+      <HomeCardFrame
+        dragTestID={dragTestID}
+        onLongPress={onLongPress}
+        onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}
+      >
+        <CardHeader
+          imageUrl={current?.imageUrl ?? ImageAssets.builderWave}
+          title={current?.name ?? ''}
+          subtitle={current?.subtitle ?? ''}
+          size={54}
+          trailing={<ProgressRing progress={completion(current)} size={54} labelFontSize={15} />}
+        />
+        <HomeAccountRail entries={rail} selectedIndex={safeSelected} onSelect={select} />
+        {renderBody(current)}
+      </HomeCardFrame>
     );
-  const rail = entries.map((entry) => ({
-    ...entry,
-    pending: 'capturedAt' in entry ? entry.needsUpdate || entry.hasActionableQueueWork : true,
-  }));
-  const current = pages[safeSelected];
   return (
     <HomeCardFrame
       dragTestID={dragTestID}
@@ -629,21 +526,10 @@ export function HomeUpgradeCard({
       <MobileRailHeader
         imageUrl={ImageAssets.builderWave}
         title={t('drawerUpgradeTracker')}
-        rail={
-          <HomeAccountRail
-            entries={rail}
-            selectedIndex={safeSelected}
-            onSelect={setSelected}
-            allLabel={hasSummary ? t('todoAllAccounts') : undefined}
-          />
-        }
+        rail={<HomeAccountRail entries={rail} selectedIndex={safeSelected} onSelect={select} />}
         trailing={<ProgressRing progress={completion(current)} size={46} labelFontSize={13} />}
       />
-      <MobilePager selected={safeSelected} onSelect={setSelected}>
-        {pages.map((entry, index) => (
-          <View key={entry?.tag ?? `all-${index}`}>{renderBody(entry)}</View>
-        ))}
-      </MobilePager>
+      {renderBody(current)}
     </HomeCardFrame>
   );
 }
@@ -652,6 +538,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '900' },
   body: { gap: 10 },
+  mobileHeaderBlock: { gap: 6 },
   mobileHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   mobileHeaderImage: { width: 46, height: 46, resizeMode: 'contain' },
   railGap: { height: 4 },
@@ -663,6 +550,4 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   trophyImage: { width: 18, height: 18, resizeMode: 'contain' },
-  rtlScroll: { transform: [{ scaleX: -1 }] },
-  rtlItem: { transform: [{ scaleX: -1 }] },
 });

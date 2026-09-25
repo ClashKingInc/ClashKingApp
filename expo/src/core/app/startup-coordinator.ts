@@ -77,17 +77,15 @@ export async function initializeApplication(
       dependencies.accounts,
     );
     if (accountResult.authenticated) {
-      await dependencies.initializeAuthenticatedData?.();
-      try {
-        await initializeAuthenticatedPush({
-          notificationsEnabled: dependencies.appState
-            .getState()
-            .isFeatureEnabled(APP_FEATURE_FLAGS.notifications),
-          push: dependencies.push,
-        });
-      } catch (error) {
-        dependencies.reportError?.('startup.push', error);
-      }
+      void dependencies
+        .initializeAuthenticatedData?.()
+        .catch((error) => dependencies.reportError?.('startup.authenticatedData', error));
+      void initializeAuthenticatedPush({
+        notificationsEnabled: dependencies.appState
+          .getState()
+          .isFeatureEnabled(APP_FEATURE_FLAGS.notifications),
+        push: dependencies.push,
+      }).catch((error) => dependencies.reportError?.('startup.push', error));
     }
   } catch (error) {
     dependencies.reportError?.('startup.bootstrap', error);

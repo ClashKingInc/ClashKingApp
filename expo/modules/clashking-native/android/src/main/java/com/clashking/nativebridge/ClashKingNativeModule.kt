@@ -262,7 +262,11 @@ class ClashKingNativeModule : Module() {
 
     private fun reloadWidgets(context: Context) {
         val manager = AppWidgetManager.getInstance(context)
-        listOf("WarAppWidgetProvider", "UpgradeAppWidgetProvider").forEach { className ->
+        listOf(
+            "WarAppWidgetProvider",
+            "UpgradeAppWidgetProvider",
+            "LegendsAppWidgetProvider"
+        ).forEach { className ->
             val component = ComponentName(context.packageName, "${context.packageName}.$className")
             val widgetIds = manager.getAppWidgetIds(component)
             if (widgetIds.isNotEmpty()) {

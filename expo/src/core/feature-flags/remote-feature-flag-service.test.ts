@@ -38,6 +38,55 @@ function config(overrides: Partial<AppConfigResponse> = {}): AppConfigResponse {
 }
 
 describe('RemoteFeatureFlagService', () => {
+  it.each(['production', undefined] as const)(
+    'keeps calculators disabled in %s even when enabled remotely',
+    async (environment) => {
+      const loadConfig = jest.fn(async () =>
+        config({
+          flags: [
+            { key: 'calculators', enabled: true, rollout_percentage: 100, platforms: ['ios'] },
+          ],
+        }),
+      );
+      const service = new RemoteFeatureFlagService({
+        environment,
+        loadConfig,
+        preferences: new MemoryStore(),
+        platform: 'ios',
+        appVersionProvider: async () => '0.4.2',
+        installationSeedProvider: async () => 42,
+      });
+      expect(service.isEnabled('calculators')).toBe(false);
+      await service.refresh();
+      expect(service.isEnabled('calculators')).toBe(false);
+      loadConfig.mockRejectedValueOnce(new Error('offline'));
+      await expect(service.refresh()).rejects.toThrow('offline');
+      expect(service.isEnabled('calculators')).toBe(false);
+    },
+  );
+
+  it.each(['local', 'development'] as const)(
+    'retains calculator feature flags in %s',
+    async (environment) => {
+      const service = new RemoteFeatureFlagService({
+        environment,
+        loadConfig: async () =>
+          config({
+            flags: [
+              { key: 'calculators', enabled: false, rollout_percentage: 100, platforms: ['ios'] },
+            ],
+          }),
+        preferences: new MemoryStore(),
+        platform: 'ios',
+        appVersionProvider: async () => '0.4.2',
+        installationSeedProvider: async () => 42,
+      });
+      expect(service.isEnabled('calculators')).toBe(true);
+      await service.refresh();
+      expect(service.isEnabled('calculators')).toBe(false);
+    },
+  );
+
   it.each(['ios', 'android', 'web'] as const)(
     'loads flags without adding a mandatory-update policy on %s',
     async (platform) => {
@@ -138,7 +187,7 @@ describe('RemoteFeatureFlagService', () => {
     await service.refresh();
 
     expect(service.isEnabled('notifications')).toBe(true);
-    expect(service.isEnabled('bases_armies')).toBe(false);
+    expect(service.isEnabled('bases_armies')).toBe(true);
     expect(service.isEnabled('unknown-production-surface')).toBe(true);
   });
 });

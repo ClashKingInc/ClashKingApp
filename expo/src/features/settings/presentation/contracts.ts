@@ -1,7 +1,5 @@
-import type {
-  NotificationAccount,
-  NotificationPreferences,
-} from '../../../core/dto/notification-preferences';
+import type { NotificationPreferences } from '../../../core/dto/notification-preferences';
+import type { MessageKey } from '../../../i18n';
 import type { AuthUser } from '../../auth/models';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 
@@ -26,13 +24,11 @@ export interface NotificationSettingsPresentationService {
   loadLocal(): Promise<NotificationPreferences>;
   load(): Promise<NotificationPreferences>;
   save(settings: NotificationPreferences): Promise<NotificationPreferences>;
-  setAccountEnabled(tag: string, enabled: boolean): Promise<NotificationAccount>;
-  deviceEnabled(): Promise<boolean>;
-  setDeviceEnabled(enabled: boolean): Promise<PushNotificationSetupResult>;
-  lastPushResult(): PushNotificationSetupResult | null;
   initializePush(): Promise<PushNotificationSetupResult>;
-  tokenPreview(): Promise<string | null>;
-  sendTestNotification?(): Promise<string>;
+  enablePush(): Promise<PushNotificationSetupResult>;
+  openSystemSettings(): Promise<void>;
+  readonly testNotificationTypes?: readonly { id: string; labelKey: MessageKey }[];
+  sendTestNotification?(sampleId: string): Promise<string>;
 }
 
 export interface PrivacyPresentationActions {

@@ -24,7 +24,8 @@ import { createTranslator, systemLocale } from '../../i18n';
 import { CocAccountService } from '../../features/auth/account-service';
 import { AccountBootstrapService } from '../../features/auth/account-bootstrap-service';
 import { AuthService } from '../../features/auth/auth-service';
-import { PersonalBasesService } from '../../features/bases-armies';
+import { PersonalArmiesService } from '../../features/bases-armies/personal-armies-service';
+import { PersonalBasesService } from '../../features/bases-armies/personal-bases-service';
 import { AchievementsRepository } from '../../features/achievements/data';
 import { ClanService } from '../../features/clan/data';
 import { AnnouncementPresentationService, AnnouncementService } from '../../features/home/data';
@@ -48,6 +49,8 @@ import {
   ExpoWidgetBackgroundScheduler,
 } from '../../features/widgets/expo-background-runtime';
 import { WarWidgetService } from '../../features/widgets';
+import { LegendsWidgetService } from '../../features/widgets/legends-widget-service';
+import { fetchLegendsWidgetData } from '../../features/widgets/legends-widget-api';
 import { fetchWarWidgetSummary } from '../../features/widgets/war-widget-api';
 import { WarCwlService } from '../../features/war/data';
 import { ExpoDeviceIdentity } from '../../services/auth/device-identity';
@@ -81,6 +84,7 @@ export interface AppRuntime {
   readonly achievements: AchievementsRepository;
   readonly bookmarks: BookmarkService;
   readonly personalBases: PersonalBasesService;
+  readonly personalArmies: PersonalArmiesService;
   readonly players: PlayerService;
   readonly playerCardPreferences: PlayerCardPreferencesService;
   readonly rankings: RankingsService;
@@ -100,6 +104,7 @@ export interface AppRuntime {
   readonly notificationSettingsDebug: NotificationSettingsDebugAdapter | null;
   readonly appIcons: AppIconService;
   readonly warWidgets: WarWidgetService;
+  readonly legendsWidgets: LegendsWidgetService;
   readonly effects: RuntimeEffects;
   readonly discordSignInEnabled: boolean;
 }
@@ -157,6 +162,7 @@ export function createAppRuntime(): AppRuntime {
   );
   const gameData = createExpoGameDataService();
   const featureFlags = new RemoteFeatureFlagService({
+    environment: configuration.environment,
     loadConfig: () =>
       Effect.runPromise(contractApi.execute(AppConfigEndpoint, { path: {}, query: {}, body: {} })),
     preferences,
@@ -192,7 +198,8 @@ export function createAppRuntime(): AppRuntime {
   );
   const achievements = new AchievementsRepository(contractApi);
   const bookmarks = new BookmarkService(contractApi);
-  const personalBases = new PersonalBasesService(contractApi);
+  const personalBases = new PersonalBasesService(contractApi, configuration.apiV2Url);
+  const personalArmies = new PersonalArmiesService(contractApi);
   const players = new PlayerService(
     contractApi,
     preferences,
@@ -215,11 +222,33 @@ export function createAppRuntime(): AppRuntime {
     mirror: preferences,
     translate: (key, values) => createTranslator(appState.getState().locale)(key, values),
   });
+  const legendsWidgets = new LegendsWidgetService({
+    platform: runtimePlatform,
+    native: ClashKingNative,
+    mirror: preferences,
+    loadPlayer: async (tag) => {
+      const cached = players.profiles.find((player) => player.tag === tag);
+      if (cached) return cached;
+      if (!auth.state.isAuthenticated)
+        throw new Error('Use cached widget identity while signed out.');
+      return players.getPlayerAndClanData(tag);
+    },
+    loadLegendData: (tag, day) => fetchLegendsWidgetData(contractApi, tag, day),
+    t: (key, values) => createTranslator(appState.getState().locale)(key, values),
+    reportError: ({ operation, error }) => reportException(error, operation),
+  });
+  bookmarks.subscribe(() => {
+    if (!bookmarks.loaded) return;
+    void legendsWidgets
+      .syncBookmarkedPlayers(bookmarks.players)
+      .catch((error) => reportException(error, 'legends_widget.sync'));
+  });
   const clans = new ClanService(contractApi);
   const wars = new WarCwlService(contractApi);
   const discordOAuth = new DiscordOAuthClient({
     platform: nativePlatform,
     runtime: new PlatformDiscordOAuthRuntime(),
+    clientId: process.env.EXPO_PUBLIC_CK_DISCORD_CLIENT_ID,
     webOrigin: webOrigin(),
     webHost: webHost(),
     webRedirectOverride: process.env.EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI,
@@ -243,6 +272,7 @@ export function createAppRuntime(): AppRuntime {
       players.clearRankedLeagueCache();
       upgrades.clearCache();
       void upgradeWidgets.clear();
+      void legendsWidgets.clear().catch((error) => reportException(error, 'legends_widget.clear'));
     },
   });
   const notificationPreferences = new NotificationPreferencesService({
@@ -281,7 +311,13 @@ export function createAppRuntime(): AppRuntime {
     },
     reportError: ({ operation, error }) => reportException(error, operation),
   });
-  configureWarWidgetBackgroundExecutor((taskName) => warWidgets.executeBackgroundTask(taskName));
+  configureWarWidgetBackgroundExecutor(async (taskName) => {
+    const results = await Promise.allSettled([
+      warWidgets.executeBackgroundTask(taskName),
+      legendsWidgets.refreshCachedBookmarks(),
+    ]);
+    return results.every((result) => result.status === 'fulfilled' && result.value !== false);
+  });
   accounts.setSelectedTagChangeHandler(async (selectedTag) => {
     if (accounts.accounts.length === 0) await upgradeWidgets.clear();
     else await upgradeWidgets.syncSelectedTag(selectedTag);
@@ -308,6 +344,7 @@ export function createAppRuntime(): AppRuntime {
     wars,
     storage: preferences,
     warWidgets,
+    legendsWidgets,
     reportError: (operation, error) => reportException(error, operation),
   });
   accounts.setBootstrapCoordinator((userId) => accountBootstrap.initialize(userId));
@@ -324,6 +361,7 @@ export function createAppRuntime(): AppRuntime {
     achievements,
     bookmarks,
     personalBases,
+    personalArmies,
     players,
     playerCardPreferences,
     rankings,
@@ -343,6 +381,7 @@ export function createAppRuntime(): AppRuntime {
     notificationSettingsDebug,
     appIcons,
     warWidgets,
+    legendsWidgets,
     effects,
     discordSignInEnabled: envBoolean(process.env.EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED, true),
   };

@@ -325,6 +325,38 @@ export class BookmarkService {
     }
   }
 
+  async reorderClans(orderedTags: readonly string[]): Promise<void> {
+    const normalized = orderedTags.map((tag) => tag.trim().toUpperCase());
+    if (new Set(normalized).size !== normalized.length) {
+      throw new RangeError('Clan bookmark order contains duplicate tags.');
+    }
+    const requested = new Map(
+      this.clanBookmarks.map((clan) => [clan.tag.trim().toUpperCase(), clan]),
+    );
+    const visibleOrder = normalized.flatMap((tag) => {
+      const clan = requested.get(tag);
+      return clan ? [clan] : [];
+    });
+    const visibleTags = new Set(visibleOrder.map((clan) => clan.tag.trim().toUpperCase()));
+    let visibleIndex = 0;
+    const reordered = this.clanBookmarks.map((clan) =>
+      visibleTags.has(clan.tag.trim().toUpperCase()) ? visibleOrder[visibleIndex++]! : clan,
+    );
+    if (reordered.every((clan, index) => clan === this.clanBookmarks[index])) return;
+
+    const previous = [...this.clanBookmarks];
+    this.clanBookmarks = reordered;
+    this.notify();
+    try {
+      this.requireCurrentUser();
+      await this.saveBookmarkOrder('clan', reordered.map((clan) => clan.tag));
+    } catch (error) {
+      this.clanBookmarks = previous;
+      this.notify();
+      throw error;
+    }
+  }
+
   private get hasCurrentUser(): boolean {
     return this.currentUserId !== null && this.currentUserId.length > 0;
   }

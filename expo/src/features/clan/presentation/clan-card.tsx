@@ -17,7 +17,7 @@ import type { ClanRosterItem } from './contracts';
 import { clanMemberCapacityLabel } from './contracts';
 import { clanTypeLabel } from './presentation-utils';
 
-export function ClanRosterCard({ item, onOpen }: { item: ClanRosterItem; onOpen: () => void }) {
+export function ClanRosterCard({ item, onOpen, onLongPress, dragTestID }: { item: ClanRosterItem; onOpen: () => void; onLongPress?: () => void; dragTestID?: string }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   return (
@@ -26,6 +26,8 @@ export function ClanRosterCard({ item, onOpen }: { item: ClanRosterItem; onOpen:
         accessibilityRole="button"
         accessibilityLabel={`Open clan ${item.name}`}
         onPress={onOpen}
+        onLongPress={onLongPress}
+        testID={dragTestID}
         style={styles.pressable}
       >
         <View style={styles.content}>

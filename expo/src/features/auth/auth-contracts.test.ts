@@ -272,7 +272,7 @@ describe('account and startup contracts', () => {
     accounts.setCurrentUserId('user-1');
 
     await expect(accounts.fetchAccounts()).rejects.toThrow();
-    await expect(accounts.addAccount('#ABC')).resolves.toMatchObject({ code: 500 });
+    await expect(accounts.addAccount('#ABC', 'token')).resolves.toMatchObject({ code: 500 });
     await expect(accounts.verifyAccount('#ABC', 'invalid')).resolves.toMatchObject({
       success: false,
       message: 'Invalid API token for this account',

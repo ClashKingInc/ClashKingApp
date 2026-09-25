@@ -105,11 +105,10 @@ describe('first linked-account continuation', () => {
     expect(screen.queryByText(/Refresh failed:/)).toBeNull();
   });
 
-  it('keeps verification successful when optional hydration fails, then clears that error on a successful refresh', async () => {
+  it('keeps verification successful when optional hydration fails after token submission', async () => {
     const onRefresh = jest
       .fn()
-      .mockRejectedValueOnce(new Error('Profile unavailable'))
-      .mockResolvedValueOnce(undefined);
+      .mockRejectedValueOnce(new Error('Profile unavailable'));
     const linked = {
       playerTag: '#ONE',
       isVerified: true,
@@ -129,11 +128,6 @@ describe('first linked-account continuation', () => {
             service={{
               ...service,
               accounts: [linked],
-              addAccount: async () => ({
-                code: 200,
-                message: null,
-                account: { ...linked, isVerified: false },
-              }),
               addAccountWithToken: async () => ({ success: true, message: null }),
             }}
           />
@@ -142,33 +136,28 @@ describe('first linked-account continuation', () => {
     );
     await fireEvent.changeText(screen.getByLabelText('Player Tag (#ABC123)'), '#ONE');
     await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
+    expect(screen.getByText('Verify Account')).toBeTruthy();
+    expect(onRefresh).not.toHaveBeenCalled();
+    await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
     await waitFor(() =>
       expect(screen.getByText('Refresh failed: Profile unavailable')).toBeTruthy(),
     );
-    await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
-    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
-    await waitFor(() => expect(onRefresh).toHaveBeenCalledTimes(2));
     expect(screen.getByText('Account verified successfully!')).toBeTruthy();
-    expect(screen.queryByText(/Refresh failed:/)).toBeNull();
+    expect(onRefresh).toHaveBeenCalledTimes(1);
   });
 
-  it('explains an unavailable linking provider and keeps the entered tag ready to retry', async () => {
-    const addAccount = jest
+  it('explains an unavailable linking provider and keeps the token ready to retry', async () => {
+    const addAccount = jest.fn();
+    const addAccountWithToken = jest
       .fn()
       .mockResolvedValueOnce({
-        code: 503,
+        success: false,
         message: 'Clash account lookup is unavailable',
-        account: null,
       })
       .mockResolvedValueOnce({
-        code: 200,
+        success: true,
         message: null,
-        account: {
-          playerTag: '#2J8V28GV0',
-          isVerified: false,
-          hidden: false,
-          raw: { name: 'Linked Player', townHallLevel: 18 },
-        },
       });
     const screen = await render(
       <I18nProvider locale="en">
@@ -178,27 +167,35 @@ describe('first linked-account continuation', () => {
             initialAccounts={[]}
             onContinue={jest.fn()}
             onOpenGameSettings={jest.fn()}
-            service={{ ...service, addAccount }}
+            service={{
+              ...service,
+              accounts: [{
+                playerTag: '#2J8V28GV0',
+                isVerified: true,
+                hidden: false,
+                raw: { name: 'Linked Player', townHallLevel: 18 },
+              }],
+              addAccount,
+              addAccountWithToken,
+            }}
           />
         </CKThemeProvider>
       </I18nProvider>,
     );
     await fireEvent.changeText(screen.getByLabelText('Player Tag (#ABC123)'), '#2J8V28GV0');
     await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
+    expect(addAccount).not.toHaveBeenCalled();
+    expect(addAccountWithToken).not.toHaveBeenCalled();
+    await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
     await waitFor(() =>
-      expect(
-        screen.getByText('Server is temporarily unavailable. Please try again later.'),
-      ).toBeTruthy(),
+      expect(screen.getByText('Clash account lookup is unavailable')).toBeTruthy(),
     );
-    expect(screen.getByLabelText('Player Tag (#ABC123)').props.value).toBe('#2J8V28GV0');
-    expect(screen.queryByText('Failed to add the account. Please try again later.')).toBeNull();
-    await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
-    await waitFor(() => expect(screen.getAllByText('Linked Player')).toHaveLength(2));
-    expect(screen.getByText('Verify Account')).toBeTruthy();
-    expect(addAccount).toHaveBeenNthCalledWith(2, '#2J8V28GV0');
-    expect(
-      screen.queryByText('Server is temporarily unavailable. Please try again later.'),
-    ).toBeNull();
+    expect(screen.getByLabelText('Account API Token').props.value).toBe('token');
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
+    await waitFor(() => expect(screen.getByText('Linked Player')).toBeTruthy());
+    expect(addAccountWithToken).toHaveBeenNthCalledWith(2, '#2J8V28GV0', 'token');
+    expect(addAccount).not.toHaveBeenCalled();
   });
 
   it('gives the empty linking form a sized container and supports adding, verifying, and continuing', async () => {
@@ -208,7 +205,7 @@ describe('first linked-account continuation', () => {
       hidden: false,
       raw: { name: 'New Player', townHallLevel: 18 },
     };
-    const addAccount = jest.fn(async () => ({ code: 200, message: null, account }));
+    const addAccount = jest.fn();
     const addAccountWithToken = jest.fn(async () => ({ success: true, message: null }));
     const onContinue = jest.fn();
     const screen = await render(
@@ -247,17 +244,20 @@ describe('first linked-account continuation', () => {
     expect(onContinue).not.toHaveBeenCalled();
     await fireEvent.changeText(screen.getByLabelText('Player Tag (#ABC123)'), '#NEW');
     await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
-    await waitFor(() => expect(screen.getAllByText('New Player')).toHaveLength(2));
-    expect(addAccount).toHaveBeenCalledWith('#NEW');
-    expect(screen.queryByText('No account linked to your profile found')).toBeNull();
     expect(screen.getByText('Verify Account')).toBeTruthy();
     expect(screen.getByLabelText('Account API Token')).toBeTruthy();
+    expect(addAccount).not.toHaveBeenCalled();
+    expect(addAccountWithToken).not.toHaveBeenCalled();
     expect(onContinue).not.toHaveBeenCalled();
 
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
+    expect(addAccountWithToken).not.toHaveBeenCalled();
     await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
     await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
     await waitFor(() => expect(screen.getByText('Account verified successfully!')).toBeTruthy());
     expect(addAccountWithToken).toHaveBeenCalledWith('#NEW', 'token');
+    expect(screen.getByText('New Player')).toBeTruthy();
+    expect(screen.queryByText('No account linked to your profile found')).toBeNull();
     await fireEvent.press(screen.getByRole('button', { name: 'Continue' }));
     await waitFor(() => expect(onContinue).toHaveBeenCalledTimes(1));
   });
@@ -336,6 +336,52 @@ describe('first linked-account continuation', () => {
     });
 
     await waitFor(() => expect(screen.getByText('Hydrated Player')).toBeTruthy());
+  });
+
+  it('reconciles a refreshed verified account snapshot into local screen state', async () => {
+    const onContinue = jest.fn();
+    const commonProps = {
+      continueLabel: 'Continue',
+      firstConnection: false,
+      onContinue,
+      onOpenGameSettings: jest.fn(),
+      service,
+    } as const;
+    const account = {
+      playerTag: '#GCPVU8CCG',
+      name: 'Linked Player',
+      townHallLevel: 17,
+      hidden: false,
+      raw: {},
+    } as const;
+    const screen = await render(
+      <I18nProvider locale="en">
+        <CKThemeProvider preference="light">
+          <ManageLinkedAccountsScreen
+            {...commonProps}
+            initialAccounts={[{ ...account, isVerified: false }]}
+          />
+        </CKThemeProvider>
+      </I18nProvider>,
+    );
+    expect(screen.getByRole('button', { name: 'Verify' })).toBeTruthy();
+
+    await act(async () => {
+      screen.rerender(
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <ManageLinkedAccountsScreen
+              {...commonProps}
+              initialAccounts={[{ ...account, isVerified: true }]}
+            />
+          </CKThemeProvider>
+        </I18nProvider>,
+      );
+    });
+
+    await waitFor(() => expect(screen.getByText('Verified')).toBeTruthy());
+    expect(screen.queryByRole('button', { name: 'Verify' })).toBeNull();
+    expect(onContinue).not.toHaveBeenCalled();
   });
 
   it('keeps Flutter blocking skeleton visible until account bootstrap completes', async () => {
@@ -427,19 +473,14 @@ describe('first linked-account continuation', () => {
     expect(onContinue).not.toHaveBeenCalled();
   });
 
-  it('shows Flutter retry UI for a 500 and refreshes bootstrap after retry succeeds', async () => {
-    const addAccount = jest
+  it('keeps the verification dialog open after a failed link and refreshes after retry succeeds', async () => {
+    const addAccount = jest.fn();
+    const addAccountWithToken = jest
       .fn()
-      .mockResolvedValueOnce({ code: 500, message: null, account: null })
+      .mockResolvedValueOnce({ success: false, message: 'Failed to add account. Please try again.' })
       .mockResolvedValueOnce({
-        code: 200,
+        success: true,
         message: null,
-        account: {
-          playerTag: '#NEW',
-          isVerified: true,
-          hidden: false,
-          raw: { name: 'New Player', townHallLevel: 18 },
-        },
       });
     const onRefresh = jest.fn(async () => undefined);
     const screen = await render(
@@ -451,7 +492,17 @@ describe('first linked-account continuation', () => {
             onContinue={jest.fn()}
             onOpenGameSettings={jest.fn()}
             onRefresh={onRefresh}
-            service={{ ...service, addAccount }}
+            service={{
+              ...service,
+              accounts: [{
+                playerTag: '#NEW',
+                isVerified: true,
+                hidden: false,
+                raw: { name: 'New Player', townHallLevel: 18 },
+              }],
+              addAccount,
+              addAccountWithToken,
+            }}
           />
         </CKThemeProvider>
       </I18nProvider>,
@@ -459,10 +510,18 @@ describe('first linked-account continuation', () => {
 
     await fireEvent.changeText(screen.getByLabelText('Player Tag (#ABC123)'), '#NEW');
     await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Retry' })).toBeTruthy());
-    await fireEvent.press(screen.getByRole('button', { name: 'Retry' }));
+    expect(addAccount).not.toHaveBeenCalled();
+    expect(addAccountWithToken).not.toHaveBeenCalled();
+    await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
+    await waitFor(() =>
+      expect(screen.getByText('Failed to add account. Please try again.')).toBeTruthy(),
+    );
+    expect(onRefresh).not.toHaveBeenCalled();
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
     await waitFor(() => expect(screen.getByText('New Player')).toBeTruthy());
-    expect(addAccount).toHaveBeenCalledTimes(2);
+    expect(addAccountWithToken).toHaveBeenCalledTimes(2);
+    expect(addAccount).not.toHaveBeenCalled();
     expect(onRefresh).toHaveBeenCalledTimes(1);
   });
 
@@ -528,7 +587,7 @@ describe('first linked-account continuation', () => {
     expect(names).toEqual(['One', 'Two']);
   });
 
-  it('opens API-token verification instead of generic failure for an account linked elsewhere', async () => {
+  it('requires API-token verification before linking an account linked elsewhere', async () => {
     const transferred = {
       playerTag: '#NEW',
       isVerified: true,
@@ -536,6 +595,7 @@ describe('first linked-account continuation', () => {
       raw: { name: 'Transferred', townHallLevel: 16 },
     };
     const addAccountWithToken = jest.fn(async () => ({ success: true, message: null }));
+    const addAccount = jest.fn();
     const screen = await render(
       <I18nProvider locale="en">
         <CKThemeProvider preference="light">
@@ -548,11 +608,7 @@ describe('first linked-account continuation', () => {
             service={{
               ...service,
               accounts: [transferred],
-              addAccount: async () => ({
-                code: 409,
-                message: 'Account linked elsewhere',
-                account: transferred,
-              }),
+              addAccount,
               addAccountWithToken,
             }}
           />
@@ -564,14 +620,16 @@ describe('first linked-account continuation', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Add account' }));
     await waitFor(() => expect(screen.getByText('Verify Account')).toBeTruthy());
     expect(screen.getByLabelText('Account API Token')).toBeTruthy();
-    expect(screen.getByText('#NEW')).toBeTruthy();
+    expect(screen.getAllByText('#NEW').length).toBeGreaterThan(0);
     expect(screen.queryByText('Failed to add the account. Please try again later.')).toBeNull();
     expect(addAccountWithToken).not.toHaveBeenCalled();
+    expect(addAccount).not.toHaveBeenCalled();
 
     await fireEvent.changeText(screen.getByLabelText('Account API Token'), 'token');
     await fireEvent.press(screen.getAllByRole('button', { name: 'Verify' }).at(-1)!);
 
     await waitFor(() => expect(addAccountWithToken).toHaveBeenCalledWith('#NEW', 'token'));
     await waitFor(() => expect(screen.getByText('Transferred')).toBeTruthy());
+    expect(addAccount).not.toHaveBeenCalled();
   });
 });

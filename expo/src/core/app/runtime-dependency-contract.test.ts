@@ -2,6 +2,14 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 describe('app runtime dependency contract', () => {
+  it('routes the Legends widget player link directly to daily Legends', () => {
+    const root = readFileSync(
+      resolve(process.cwd(), 'src/core/app/authenticated-root.tsx'),
+      'utf8',
+    );
+    expect(root).toContain("link.params.tab === 'legends'");
+    expect(root).toContain("{ kind: 'utility', route: 'legends', playerTag: player.tag }");
+  });
   it('captures links before authentication and consumes that inbox inside the authenticated shell', () => {
     const layout = readFileSync(resolve(process.cwd(), 'src/app/_layout.tsx'), 'utf8');
     const authenticatedRoot = readFileSync(
@@ -48,7 +56,9 @@ describe('app runtime dependency contract', () => {
     expect(config).toContain("const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';");
     expect(config).toContain("'https://api.clashk.ing/v2/app/updates/manifest'");
     expect(config).toContain("requestHeaders: { 'expo-channel-name': updateChannel }");
-    expect(config).toContain("codeSigningMetadata: { keyid: 'main', alg: 'rsa-v1_5-sha256' as const }");
+    expect(config).toContain(
+      "codeSigningMetadata: { keyid: 'main', alg: 'rsa-v1_5-sha256' as const }",
+    );
     expect(config).toContain(
       "throw new Error('CK_UPDATES_CERTIFICATE_PATH is required when release updates are enabled.')",
     );
@@ -56,17 +66,20 @@ describe('app runtime dependency contract', () => {
     expect(config).not.toContain("checkAutomatically: 'ON_LOAD'");
   });
 
-  it('hydrates linked account data before leaving account setup', () => {
+  it('finishes best-effort account hydration before showing Home', () => {
     const root = readFileSync(resolve(process.cwd(), 'src/core/app/application-root.tsx'), 'utf8');
     const authenticatedRoot = readFileSync(
       resolve(process.cwd(), 'src/core/app/authenticated-root.tsx'),
       'utf8',
     );
     expect(root).toMatch(
-      /await runtime\.accountBootstrap\.initialize\([\s\S]*?\);\s*setScene\(\{ kind: 'home' \}\)/,
+      /await runtime\.accountBootstrap\s*\.initialize\([\s\S]*?\.catch\([\s\S]*?\);\s*setScene\(\{ kind: 'home' \}\)/,
+    );
+    expect(root).toMatch(
+      /if \(result\.authenticated\) \{\s*await runtime\.accountBootstrap[\s\S]*?\}\s*if \(generation !== startupGeneration\.current\) return;\s*setScene\(sceneForStartupResult\(result\)\)/,
     );
     expect(authenticatedRoot).toMatch(
-      /await runtime\.accountBootstrap\.initialize\(user\?\.userId \?\? null\);\s*closeSecondary\(\)/,
+      /await runtime\.accountBootstrap\s*\.initialize\(user\?\.userId \?\? null,[\s\S]*?\.catch\([\s\S]*?\);\s*closeSecondary\(\)/,
     );
   });
 

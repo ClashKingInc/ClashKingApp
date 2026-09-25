@@ -69,9 +69,9 @@ import {
 import { useAppRuntime, useAppState } from './runtime-context';
 import { subscribeSecondaryBackHandler } from './secondary-back-handler';
 import {
+  applyNativeSecondaryRouteTransition,
   nativeSecondaryRouteTransition,
   publishNativeSecondaryLayer,
-  removeNativeSecondaryLayer,
   removeNativeSecondaryLayers,
 } from './native-secondary-navigation';
 import { supportCreatorUrl } from './runtime-effects';
@@ -405,7 +405,10 @@ export function AuthenticatedRoot() {
         } else if (link.kind === 'player') {
           const player = await runtime.players.getPlayerAndClanData(link.tag);
           if (!player) throw new Error('Player unavailable');
-          scene = { kind: 'player', player };
+          scene =
+            link.params.tab === 'legends'
+              ? { kind: 'utility', route: 'legends', playerTag: player.tag }
+              : { kind: 'player', player };
         } else if (link.kind === 'clan' || link.kind === 'capital') {
           const clan = await runtime.clans.getClanAndWarData(link.tag);
           if (!clan) throw new Error('Clan unavailable');
@@ -483,7 +486,20 @@ export function AuthenticatedRoot() {
     route: AppRouteId,
     playerTag: string | undefined = utilityPlayerTag,
   ) => {
-    if (route === 'settings') return <SettingsRoot onClose={closeSecondary} />;
+    if (route === 'settings')
+      return (
+        <SettingsRoot
+          onClose={closeSecondary}
+          onManagePlayers={() => {
+            selectPrimary('players');
+            const key = ++navigationGeneration.current;
+            setPrimaryLinks((current) => ({
+              ...current,
+              players: { key, params: { tab: 'linked' } },
+            }));
+          }}
+        />
+      );
     if (route === 'accounts')
       return (
         <ManageLinkedAccountsScreen
@@ -505,7 +521,12 @@ export function AuthenticatedRoot() {
             );
             if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
             if (!result.hasVerifiedAccount) throw new Error(t('homeVerifiedAccountRequiredBody'));
-            await runtime.accountBootstrap.initialize(user?.userId ?? null);
+            await runtime.accountBootstrap
+              .initialize(user?.userId ?? null, {
+                links: runtime.accounts.accounts,
+                selectedTagLoaded: true,
+              })
+              .catch((error) => reportException(error, 'accounts.bootstrap'));
             closeSecondary();
           }}
           onContinue={async () => {
@@ -515,7 +536,12 @@ export function AuthenticatedRoot() {
             );
             if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
             if (!result.hasVerifiedAccount) throw new Error(t('homeVerifiedAccountRequiredBody'));
-            await runtime.accountBootstrap.initialize(user?.userId ?? null);
+            await runtime.accountBootstrap
+              .initialize(user?.userId ?? null, {
+                links: runtime.accounts.accounts,
+                selectedTagLoaded: true,
+              })
+              .catch((error) => reportException(error, 'accounts.bootstrap'));
             closeSecondary();
           }}
           onOpenGameSettings={() =>
@@ -596,7 +622,23 @@ export function AuthenticatedRoot() {
             />
           </View>
         );
-      return <LegendsRoot key={`legends:${player.tag}`} player={player} onBack={closeSecondary} />;
+      return (
+        <LegendsRoot
+          key={`legends:${player.tag}`}
+          player={player}
+          onBack={closeSecondary}
+          onOpenOpponent={(tag) => {
+            const generation = ++navigationGeneration.current;
+            void runtime.players
+              .getPlayerAndClanData(tag)
+              .then((opponent) => {
+                if (generation === navigationGeneration.current)
+                  pushUtility('legends', opponent.tag);
+              })
+              .catch((error) => setSnackbar(String(error)));
+          }}
+        />
+      );
     }
     if (route === 'calculators')
       return (
@@ -730,14 +772,8 @@ export function AuthenticatedRoot() {
     });
 
     const transition = nativeSecondaryRouteTransition(nativeRouteKeys.current, expected);
-    transition.staleKeys.forEach(removeNativeSecondaryLayer);
     nativeRouteKeys.current = transition.routeKeys;
-    if (transition.type === 'push') {
-      const nextKey = transition.key;
-      router.push({ pathname: '/detail' as never, params: { layer: nextKey } });
-    } else if (transition.type === 'replace') {
-      router.replace({ pathname: '/detail' as never, params: { layer: transition.key } });
-    }
+    applyNativeSecondaryRouteTransition(transition, router);
   });
 
   useEffect(

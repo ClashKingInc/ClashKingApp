@@ -80,17 +80,39 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
     return () => unsubscribe.forEach((remove) => remove());
   }, [runtime]);
 
+  const verifiedTags = useMemo(
+    () => runtime.accounts.verifiedAccounts.map((account) => account.playerTag),
+    // Service revision intentionally invalidates stable service-owned arrays.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [runtime, serviceRevision],
+  );
+  const homeIncludedTags = useMemo(
+    () =>
+      runtime.playerCardPreferences.homeIncludedTags(verifiedTags, runtime.accounts.selectedTag),
+    // Preference changes publish a service revision.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [runtime, verifiedTags, serviceRevision],
+  );
+  useEffect(() => {
+    if (!runtime.playerCardPreferences.loaded || verifiedTags.length === 0) return;
+    void runtime.playerCardPreferences
+      .reconcileHomeIncluded(verifiedTags, runtime.accounts.selectedTag)
+      .catch(() => undefined);
+  }, [runtime, verifiedTags]);
+
   const linkedPlayers = useMemo(() => {
     const byTag = new Map(
       runtime.players.profiles.map((player) => [canonicalTag(player.tag), player]),
     );
+    const included = new Set(homeIncludedTags);
     return runtime.accounts.verifiedAccounts.flatMap((account) => {
+      if (!included.has(canonicalTag(account.playerTag).slice(1))) return [];
       const player = byTag.get(canonicalTag(account.playerTag));
       return player ? [player] : [];
     });
     // Service revision intentionally invalidates stable service-owned arrays.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [runtime, serviceRevision]);
+  }, [runtime, serviceRevision, homeIncludedTags]);
   const todoPlayers = useMemo(
     () =>
       linkedPlayers.filter((player) => runtime.playerCardPreferences.isShownInTodoPage(player.tag)),
@@ -194,7 +216,8 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   const model = useMemo<HomeDashboardModel>(
     () => ({
       loading: runtime.players.isLoading,
-      linkedAccountCount: linkedPlayers.length,
+      selectedAccountTag: runtime.accounts.selectedTag,
+      linkedAccountCount: runtime.accounts.verifiedAccounts.length,
       ...(runtime.accounts.lastRefresh ? { lastRefresh: runtime.accounts.lastRefresh } : {}),
       announcements: announcements.map(homeAnnouncement),
       ...(todoPlayers.length
@@ -216,7 +239,6 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
     [
       announcements,
       cardOrder,
-      linkedPlayers,
       locale,
       rankedLoading,
       rankedPlayers,
@@ -247,13 +269,16 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
       openTodo: props.openTodo,
       openRanked: props.openRanked,
       openUpgradeTracker: props.openUpgradeTracker,
+      selectAccount: (tag) => {
+        void runtime.accounts.setSelectedTag(tag);
+      },
       reorderCards: (order) => {
         const normalized = normalizeHomeCardOrder(order);
         setCardOrder(normalized);
         void runtime.preferences.setString(STORAGE_KEYS.homeCardOrder, JSON.stringify(normalized));
       },
     }),
-    [announcements, props, refresh, runtime.preferences],
+    [announcements, props, refresh, runtime.accounts, runtime.preferences],
   );
 
   return (

@@ -122,6 +122,7 @@ export interface HomeAnnouncement {
 
 export interface HomeDashboardModel {
   readonly loading: boolean;
+  readonly selectedAccountTag?: string | null;
   readonly linkedAccountCount: number;
   readonly lastRefresh?: Date;
   readonly announcements: readonly HomeAnnouncement[];
@@ -140,11 +141,21 @@ export interface HomeDashboardActions {
   openTodo(): void;
   openRanked(playerTag: string): void;
   openUpgradeTracker(playerTag: string): void;
+  selectAccount?(playerTag: string): void;
   reorderCards(order: readonly HomeCardId[]): void;
 }
 
 export type HomeCardId = 'todo' | 'ranked' | 'upgrade';
 export const DEFAULT_HOME_CARD_ORDER: readonly HomeCardId[] = ['todo', 'ranked', 'upgrade'];
+
+export function homeSelectedAccountIndex(
+  tags: readonly string[],
+  selectedTag: string | null | undefined,
+): number {
+  if (!selectedTag) return 0;
+  const normalized = selectedTag.replaceAll('#', '').toUpperCase();
+  return Math.max(0, tags.findIndex((tag) => tag.replaceAll('#', '').toUpperCase() === normalized));
+}
 
 export function normalizeHomeCardOrder(value: unknown): HomeCardId[] {
   const valid = Array.isArray(value)

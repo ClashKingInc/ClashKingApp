@@ -159,7 +159,7 @@ export function warLeaguesByApiId(): ReadonlyMap<number, JsonRecord> {
   const indexed = new Map<number, JsonRecord>();
   for (const league of Object.values(leagues)) {
     if (!isRecord(league) || typeof league._id !== 'number') continue;
-    indexed.set(Math.trunc(league._id) - 1, { ...league });
+    indexed.set(Math.trunc(league._id), { ...league });
   }
   return indexed;
 }

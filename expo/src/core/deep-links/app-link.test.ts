@@ -3,6 +3,11 @@ import { appLinkPath, parseAppLink } from './app-link';
 import { appLinkInbox, queueAppLink } from './link-inbox';
 
 describe('public app links', () => {
+  test('preserves the selected Legends widget player and destination', () => {
+    expect(parseAppLink('clashking://player/GLQU82YQU?tab=legends')).toEqual({
+      kind: 'player', tag: '#GLQU82YQU', params: { tab: 'legends' },
+    });
+  });
   test.each(appRoutes.map((route) => [route.id, route.href]))(
     'opens %s via HTTPS and custom scheme',
     (page, path) => {

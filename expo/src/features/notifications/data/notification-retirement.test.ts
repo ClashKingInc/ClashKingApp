@@ -18,8 +18,8 @@ describe('Legend defense notification contract', () => {
     for (const value of [defaults, request, decoded, stored]) {
       expect(Object.keys(value).filter((key) => /legendAttacks/i.test(key))).toEqual([]);
     }
-    expect(request).toMatchObject({ legendDefensesEnabled: false });
-    expect(decoded).toMatchObject({ legendDefenses: false });
+    expect(request).toMatchObject({ legendDefensesEnabled: true });
+    expect(decoded).toMatchObject({ legendDefenses: true });
   });
 
   it('does not reintroduce retired model fields or settings controls', () => {
@@ -38,7 +38,7 @@ describe('Legend defense notification contract', () => {
     }
     expect(dto).toContain('legendDefenses');
     expect(settings).toContain("category: 'legendDefenses'");
-    expect(settings).toContain("category: 'warAttacks'");
-    expect(settings).toContain("category: 'warState'");
+    expect(settings).not.toContain("category: 'warAttacks'");
+    expect(settings).not.toContain("category: 'warState'");
   });
 });

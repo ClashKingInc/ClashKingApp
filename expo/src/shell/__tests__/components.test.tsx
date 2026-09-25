@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { CKThemeProvider } from '../../ui';
 import { DesktopSidebar } from '../desktop-sidebar';
+import { MobileDrawer } from '../mobile-drawer';
 import { NavigationShell, type NavigationShellProps } from '../navigation-shell';
 import { RetainedPrimaryPager } from '../retained-pager';
 import { fallbackTabBarBottomPadding } from '../primary-tab-bar';
@@ -225,10 +226,55 @@ describe('navigation shell components', () => {
     );
     expect(view.getByText('postsTitle')).toBeTruthy();
     expect(view.queryByText('generalStats')).toBeNull();
-    expect(view.getByText('todoTitle')).toBeTruthy();
+    expect(view.queryByText('todoTitle')).toBeNull();
+    expect(view.queryByText('rankedLeagueTitle')).toBeNull();
+    expect(
+      view.getByRole('button', { name: 'drawerCalculators' }).props.accessibilityState.disabled,
+    ).toBe(true);
+    await fireEvent.press(view.getByText('drawerCalculators'));
+    expect(onUtility).not.toHaveBeenCalled();
+    expect(view.getByTestId('desktop-sidebar-scroll').props).toMatchObject({
+      bounces: false,
+      alwaysBounceVertical: false,
+      overScrollMode: 'never',
+    });
     expect(view.getByText('navigationHome').parent?.props.accessibilityState.selected).toBe(true);
-    await fireEvent.press(view.getByText('todoTitle'));
-    expect(onUtility).toHaveBeenCalledWith(expect.objectContaining({ id: 'todo' }), false);
+    await fireEvent.press(view.getByText('postsTitle'));
+    expect(onUtility).toHaveBeenCalledWith(expect.objectContaining({ id: 'posts' }), false);
+  });
+
+  it('keeps mobile calculators visible but inert and disables empty drawer overscroll', async () => {
+    const onNavigate = jest.fn();
+    const onRequestClose = jest.fn();
+    const view = await providers(
+      <MobileDrawer
+        isRtl={false}
+        features={{ calculators: false }}
+        t={t as never}
+        avatar={<View />}
+        displayName="User"
+        followerCount={0}
+        closeLabel="Close"
+        onRequestClose={onRequestClose}
+        onNavigate={onNavigate}
+        onAchievements={jest.fn()}
+        onAddAccount={jest.fn()}
+        hasUser
+      />,
+    );
+    expect(view.queryByText('todoTitle')).toBeNull();
+    expect(view.queryByText('rankedLeagueTitle')).toBeNull();
+    expect(
+      view.getByRole('button', { name: 'drawerCalculators' }).props.accessibilityState.disabled,
+    ).toBe(true);
+    await fireEvent.press(view.getByText('drawerCalculators'));
+    expect(onRequestClose).not.toHaveBeenCalled();
+    expect(onNavigate).not.toHaveBeenCalled();
+    expect(view.getByTestId('mobile-drawer-scroll').props).toMatchObject({
+      bounces: false,
+      alwaysBounceVertical: false,
+      overScrollMode: 'never',
+    });
   });
 
   it('selects desktop at 900px and resets nested content before a primary route', async () => {

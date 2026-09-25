@@ -60,13 +60,17 @@ export function AccountVerificationDialog({
               {t('accountVerificationTitle')}
             </CKText>
             <Surface muted radius={ckRadius.chip} style={styles.player}>
-              <MobileWebImage
-                imageUrl={ImageAssets.townHall(townHallLevel > 0 ? townHallLevel : 1)}
-                errorFallback={
-                  <Shield color={theme.onSurfaceVariant} size={40} style={styles.townHall} />
-                }
-                style={styles.townHall}
-              />
+              {townHallLevel > 0 ? (
+                <MobileWebImage
+                  imageUrl={ImageAssets.townHall(townHallLevel)}
+                  errorFallback={
+                    <Shield color={theme.onSurfaceVariant} size={40} style={styles.townHall} />
+                  }
+                  style={styles.townHall}
+                />
+              ) : (
+                <Shield color={theme.onSurfaceVariant} size={40} style={styles.townHall} />
+              )}
               <View style={styles.playerCopy}>
                 <CKText role="titleSmall" numberOfLines={1} style={styles.strong}>
                   {playerName}

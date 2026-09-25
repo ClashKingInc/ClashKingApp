@@ -90,15 +90,24 @@ export function ManageLinkedAccountsScreen({
   const desktopWeb = platform === 'web' && (viewportWidth ?? measuredWidth) >= 900;
   const [accounts, setAccounts] = useState([...initialAccounts]);
   const [tag, setTag] = useState('');
-  const [adding, setAdding] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [orderChanged, setOrderChanged] = useState(false);
   const [continuing, setContinuing] = useState(false);
   const [error, setError] = useState<string>();
   const [verification, setVerification] = useState<LinkedAccountItem>();
+  const [pendingTag, setPendingTag] = useState<string>();
   const [notice, setNotice] = useState<string>();
-  const [addServerFailure, setAddServerFailure] = useState(false);
   const refreshVersion = useRef(0);
+  const initialAccountsSignature = JSON.stringify(
+    initialAccounts.map((account) => [
+      canonicalTag(account.playerTag),
+      account.name,
+      account.townHallLevel,
+      account.isVerified,
+      account.hidden,
+    ]),
+  );
+  const synchronizedAccountsSignature = useRef(initialAccountsSignature);
   const refreshError = (failure: unknown) => {
     const message =
       failure instanceof Error ? failure.message : typeof failure === 'string' ? failure : '';
@@ -151,7 +160,7 @@ export function ManageLinkedAccountsScreen({
       }),
     [accounts, profilesByTag],
   );
-  const add = async () => {
+  const add = () => {
     const normalized = normalizePlayerTag(tag);
     if (!normalized) {
       setError(t('accountsEnterPlayerTag'));
@@ -161,31 +170,8 @@ export function ManageLinkedAccountsScreen({
       setError(t('accountsErrorAlreadyLinkedToYou'));
       return;
     }
-    setAdding(true);
     setError(undefined);
-    const result = await service.addAccount(normalized);
-    setAdding(false);
-    if (result.code === 200 && result.account) {
-      const addedAccount = presentAccount(result.account);
-      setAccounts((current) => [...current, addedAccount]);
-      setTag('');
-      if (!addedAccount.isVerified) setVerification(addedAccount);
-      await refreshAfterMutation();
-      return;
-    }
-    if (result.code === 409 && result.account) {
-      setVerification(presentAccount(result.account));
-      return;
-    }
-    if (result.code === 500) setAddServerFailure(true);
-    else
-      setError(
-        result.code === 404
-          ? t('accountsErrorTagNotExists')
-          : result.code >= 500
-            ? t('authErrorServerUnavailable')
-            : t('accountsErrorFailedToAdd'),
-      );
+    setPendingTag(normalized);
   };
   const finishReorder = ({ data, from, to }: DragEndParams<LinkedAccountItem>) => {
     if (from === to) return;
@@ -253,6 +239,12 @@ export function ManageLinkedAccountsScreen({
     }
   };
   useEffect(() => {
+    if (synchronizedAccountsSignature.current === initialAccountsSignature) return;
+    synchronizedAccountsSignature.current = initialAccountsSignature;
+    setAccounts([...initialAccounts]);
+    setOrderChanged(false);
+  }, [initialAccounts, initialAccountsSignature]);
+  useEffect(() => {
     if (!onBack) return;
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
       void leaveAfterPersist();
@@ -261,30 +253,14 @@ export function ManageLinkedAccountsScreen({
     return () => subscription.remove();
   });
   const verified = async () => {
-    if (!verification) return;
+    if (!verification && !pendingTag) return;
     setAccounts(service.accounts.map((account) => presentAccount(account)));
     setVerification(undefined);
+    setPendingTag(undefined);
     setTag('');
     setNotice(t('accountVerificationSuccess'));
     await refreshAfterMutation();
   };
-  if (addServerFailure) {
-    return (
-      <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
-        <View style={styles.retryError}>
-          <EmptyState
-            title={t('errorTitle')}
-            body={t('errorSubtitle')}
-            actionLabel={t('generalRetry')}
-            onAction={() => {
-              setAddServerFailure(false);
-              void add();
-            }}
-          />
-        </View>
-      </SafeAreaView>
-    );
-  }
   return (
     <SafeAreaView
       edges={['top', 'left', 'right']}
@@ -382,18 +358,16 @@ export function ManageLinkedAccountsScreen({
                   label={t('accountsPlayerTag')}
                   value={tag}
                   autoCapitalize="characters"
-                  editable={!adding}
                   onChangeText={setTag}
                   onSubmitEditing={() => void add()}
                 />
                 <Pressable
                   accessibilityLabel={t('accountsAdd')}
                   accessibilityRole="button"
-                  disabled={adding}
                   onPress={() => void add()}
                   style={styles.add}
                 >
-                  {adding ? <LoadingIndicator /> : <PlusCircle color={theme.primary} size={28} />}
+                  <PlusCircle color={theme.primary} size={28} />
                 </Pressable>
                 <InlineError message={error} />
                 <CKText muted role="bodySmall">
@@ -422,17 +396,20 @@ export function ManageLinkedAccountsScreen({
         ) : null}
       </View>
       <AccountVerificationDialog
-        visible={verification !== undefined}
-        playerTag={verification?.playerTag ?? ''}
-        playerName={verification?.name ?? ''}
-        townHallLevel={verification?.townHallLevel ?? 1}
+        visible={verification !== undefined || pendingTag !== undefined}
+        playerTag={verification?.playerTag ?? pendingTag ?? ''}
+        playerName={verification?.name ?? pendingTag ?? ''}
+        townHallLevel={verification?.townHallLevel ?? 0}
         onVerify={(token) =>
-          verification
-            ? service.addAccountWithToken(verification.playerTag, token)
+          verification || pendingTag
+            ? service.addAccountWithToken(verification?.playerTag ?? pendingTag!, token)
             : Promise.resolve({ success: false, message: null })
         }
         onOpenSettings={onOpenGameSettings}
-        onCancel={() => setVerification(undefined)}
+        onCancel={() => {
+          setVerification(undefined);
+          setPendingTag(undefined);
+        }}
         onVerified={() => void verified()}
       />
       <SkeletonLoadingDialog visible={continuing} />
@@ -548,7 +525,6 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.72 },
   container: { flex: 1, minHeight: 0, width: '100%', maxWidth: 1040, alignSelf: 'center' },
   accountList: { flex: 1, minHeight: 0 },
-  retryError: { flex: 1, justifyContent: 'center', padding: 24 },
   scroll: { paddingBottom: 24 },
   intro: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16, gap: 4, alignItems: 'center' },
   logo: { width: 70, height: 70, resizeMode: 'contain' },

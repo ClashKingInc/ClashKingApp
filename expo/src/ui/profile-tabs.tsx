@@ -21,6 +21,7 @@ export type ProfileTabsProps = {
   overflowLabel?: string;
   onOverflowPress?: () => void;
   variant?: 'glass' | 'underline' | 'compact';
+  overflow?: 'menu' | 'scroll';
 };
 
 export function ProfileTabs({
@@ -30,11 +31,12 @@ export function ProfileTabs({
   overflowLabel,
   onOverflowPress,
   variant = 'glass',
+  overflow = 'menu',
 }: ProfileTabsProps) {
   const theme = useCKTheme();
   const selected = tabs.find((tab) => tab.key === selectedKey) ?? tabs[0];
 
-  if (tabs.length > 3) {
+  if (tabs.length > 3 && overflow === 'menu') {
     return (
       <DestinationPicker
         accessibilityLabel={overflowLabel ?? selected?.label}
@@ -49,39 +51,51 @@ export function ProfileTabs({
   }
 
   if (variant === 'underline') {
-    return (
+    const underlineTabs = tabs.map((tab) => {
+      const isSelected = tab.key === selectedKey;
+      return (
+        <Pressable
+          key={tab.key}
+          testID={`profile-tabs-underline-tab-${tab.key}`}
+          accessibilityRole="tab"
+          accessibilityState={{ selected: isSelected }}
+          accessibilityLabel={tab.label}
+          onPress={() => onSelect(tab.key)}
+          style={[styles.underlineTab, overflow === 'scroll' && styles.underlineScrollTab]}
+        >
+          {tintIcon(tab.icon, colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64))}
+          <CKText
+            role="labelLarge"
+            style={{ color: colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64) }}
+          >
+            {tab.label}
+          </CKText>
+          {isSelected ? (
+            <View style={[styles.underlineIndicator, { backgroundColor: theme.primary }]} />
+          ) : null}
+        </Pressable>
+      );
+    });
+    const underlineStyle = [
+      styles.underlineBar,
+      { borderBottomColor: colorWithAlpha(theme.outlineVariant, 0.35) },
+    ];
+    return overflow === 'scroll' ? (
+      <ScrollView
+        testID="profile-tabs-underline-scroll"
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={underlineStyle}
+        contentContainerStyle={styles.underlineScrollContent}
+      >
+        {underlineTabs}
+      </ScrollView>
+    ) : (
       <View
         testID="profile-tabs-underline"
-        style={[
-          styles.underlineBar,
-          { borderBottomColor: colorWithAlpha(theme.outlineVariant, 0.35) },
-        ]}
+        style={underlineStyle}
       >
-        {tabs.map((tab) => {
-          const isSelected = tab.key === selectedKey;
-          return (
-            <Pressable
-              key={tab.key}
-              testID={`profile-tabs-underline-tab-${tab.key}`}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: isSelected }}
-              accessibilityLabel={tab.label}
-              onPress={() => onSelect(tab.key)}
-              style={styles.underlineTab}
-            >
-              {tintIcon(tab.icon, colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64))}
-              <CKText
-                role="labelLarge"
-                style={{ color: colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64) }}
-              >
-                {tab.label}
-              </CKText>
-              {isSelected ? (
-                <View style={[styles.underlineIndicator, { backgroundColor: theme.primary }]} />
-              ) : null}
-            </Pressable>
-          );
-        })}
+        {underlineTabs}
       </View>
     );
   }
@@ -168,6 +182,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: ckSpacing.sm,
   },
+  underlineScrollContent: { flexDirection: 'row', alignItems: 'stretch' },
+  underlineScrollTab: { flex: 0, paddingHorizontal: ckSpacing.lg },
   underlineIndicator: {
     position: 'absolute',
     right: 0,

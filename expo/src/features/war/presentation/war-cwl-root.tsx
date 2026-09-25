@@ -11,6 +11,7 @@ import { canonicalTag } from '../../../core/domain/tags';
 import { StartupErrorScreen } from '../../../core/app/startup-feedback';
 import { useI18n } from '../../../i18n';
 import { Snackbar } from '../../../ui';
+import { accountTagsForClanOrder } from '../../clan/presentation/clan-root-state';
 import { WarCwlService } from '../data';
 import type { WarCwl, WarInfo } from '../models';
 import type { WarPresentationActions, WarPresentationModel } from './contracts';
@@ -111,6 +112,12 @@ export function WarCwlRoot(props: WarCwlRootProps) {
       },
       fetchPreviousWar: (clanTag, before) =>
         WarCwlService.fetchWarDataFromTime(runtime.contractApi, clanTag, before),
+      reorderLinkedClans: async (orderedTags) => {
+        const accounts = runtime.accounts.accounts.map((account) => account.playerTag);
+        const order = accountTagsForClanOrder(orderedTags, accounts, runtime.players.profiles);
+        if (!await runtime.accounts.updateAccountOrder(order)) throw new Error('Couldn’t update clan order.');
+      },
+      reorderBookmarkedClans: (orderedTags) => runtime.bookmarks.reorderClans(orderedTags),
     }),
     [additionalClanTags, props, runtime, t],
   );

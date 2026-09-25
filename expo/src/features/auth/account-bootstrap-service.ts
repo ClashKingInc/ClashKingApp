@@ -7,6 +7,7 @@ import type { PlayerCardPreferencesService, PlayerService } from '../player/data
 import type { UpgradeTrackerRepository, UpgradeWidgetSyncService } from '../upgrade-tracker/data';
 import type { WarCwlService } from '../war/data';
 import type { WarWidgetService } from '../widgets';
+import type { LegendsWidgetService } from '../widgets/legends-widget-service';
 import type { CocAccountService } from './account-service';
 import type { CocAccountLink } from './models';
 
@@ -21,14 +22,23 @@ export interface AccountBootstrapDependencies {
   readonly upgradeWidgets?: UpgradeWidgetSyncService;
   readonly storage: StringStorage;
   readonly warWidgets?: Pick<WarWidgetService, 'seedClanOptionsFromProfiles'>;
+  readonly legendsWidgets?: Pick<LegendsWidgetService, 'syncBookmarkedPlayers' | 'clear'>;
   readonly reportError?: (operation: string, error: unknown) => void;
+}
+
+interface AccountBootstrapInitializeOptions {
+  readonly links?: readonly CocAccountLink[];
+  readonly selectedTagLoaded?: boolean;
 }
 
 /** Shared post-session hydration used by both cold start and completed login. */
 export class AccountBootstrapService {
   constructor(private readonly dependencies: AccountBootstrapDependencies) {}
 
-  async initialize(userId: string | null): Promise<void> {
+  async initialize(
+    userId: string | null,
+    options: AccountBootstrapInitializeOptions = {},
+  ): Promise<void> {
     const { accounts, bookmarks, players, playerCardPreferences, upgrades, upgradeWidgets } =
       this.dependencies;
     accounts.setCurrentUserId(userId);
@@ -39,10 +49,11 @@ export class AccountBootstrapService {
       players.clearRankedLeagueCache();
       upgrades?.clearCache();
       await upgradeWidgets?.clear();
+      await this.dependencies.legendsWidgets?.clear();
     }
 
     await Promise.all([
-      accounts.loadSelectedTag(),
+      ...(options.selectedTagLoaded ? [] : [accounts.loadSelectedTag()]),
       ...(bookmarks.loaded ? [] : [bookmarks.load()]),
       ...(userId !== null && playerCardPreferences && !playerCardPreferences.loaded
         ? [playerCardPreferences.load()]
@@ -52,11 +63,17 @@ export class AccountBootstrapService {
     const bookmarkedPlayerTags = bookmarks.players.map((player) => player.tag);
     const bookmarkedClanTags = bookmarks.clans.map((clan) => clan.tag);
     await Promise.all([
-      this.loadLinkedAccountData(bookmarkedClanTags),
+      this.loadLinkedAccountData(bookmarkedClanTags, { links: options.links }),
       ...(bookmarkedPlayerTags.length
         ? [players.hydrateBookmarkedPlayers(bookmarkedPlayerTags)]
         : []),
     ]);
+
+    if (userId !== null) {
+      void this.dependencies.legendsWidgets
+        ?.syncBookmarkedPlayers(bookmarks.players)
+        .catch((error: unknown) => this.report('accountBootstrap.legendsWidgets', error));
+    }
 
     void this.dependencies.warWidgets
       ?.seedClanOptionsFromProfiles(
@@ -131,10 +148,15 @@ export class AccountBootstrapService {
       ? this.loadInitialClanData(optimisticClanTags)
       : Promise.resolve();
 
-    const clanTagsByPlayer = await players.loadOfficialPlayerData(playerTags, {
-      notify: false,
-      throwOnError: true,
-    });
+    let clanTagsByPlayer: Readonly<Record<string, string>> = {};
+    try {
+      clanTagsByPlayer = await players.loadOfficialPlayerData(playerTags, {
+        notify: false,
+        throwOnError: false,
+      });
+    } catch (error) {
+      this.report('accountBootstrap.players', error);
+    }
     const discoveredClanTags = uniqueNonEmpty([
       ...players.profiles.map((profile) => profile.clanTag),
       ...Object.values(clanTagsByPlayer),

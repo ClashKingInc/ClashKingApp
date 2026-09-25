@@ -3,7 +3,7 @@ set -euo pipefail
 
 readonly SESSION="clashking-app-dev"
 readonly PORT="7357"
-readonly PUBLIC_URL="https://dev-app.clashk.ing"
+readonly PUBLIC_URL="Metro on port 7357 (use logs or attach for the device URL)"
 readonly SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
 readonly SCRIPT_REPO_ROOT="$(git -C "$(dirname "$SCRIPT_PATH")/.." rev-parse --show-toplevel)"
 readonly COMMON_GIT_DIR="$(git -C "$SCRIPT_REPO_ROOT" rev-parse --path-format=absolute --git-common-dir)"
@@ -123,7 +123,8 @@ start_worktree() {
     EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL="$api_origin/v2"
     EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=http://localhost:7357/auth/callback
     EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
-    npm run start -- --web --host "${DEV_APP_HOST:-localhost}" --port "$PORT"
+    EXPO_PUBLIC_CK_DISCORD_CLIENT_ID="${DEV_APP_DISCORD_CLIENT_ID:-}"
+    npm run start -- --host "${DEV_APP_HOST:-lan}" --port "$PORT"
   )
 
   printf -v command_line '%q ' "${command[@]}"
@@ -170,8 +171,13 @@ if [[ "${1:-}" == attach ]]; then
 fi
 
 if [[ "${DEV_APP_COMMAND_LOCKED:-}" != 1 ]]; then
-  command -v lockf >/dev/null 2>&1 || fail "lockf is required to coordinate dev-app commands"
-  exec lockf -t 0 "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+  if command -v lockf >/dev/null 2>&1; then
+    exec lockf -t 0 "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+  elif command -v flock >/dev/null 2>&1; then
+    exec flock -n "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+  else
+    fail "install flock (util-linux on Ubuntu) or lockf to coordinate dev-app commands"
+  fi
 fi
 
 case "${1:-}" in

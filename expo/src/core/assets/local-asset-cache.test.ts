@@ -51,3 +51,13 @@ test('does not save failed HTTP responses as a successfully downloaded image', a
   ).rejects.toThrow('Image download failed');
   expect(jest.mocked(File).mock.calls).toHaveLength(before);
 });
+
+test('treats cache URLs from a replaced app container as missing and never deletes them', async () => {
+  const stale = 'file:///previous-app-container/clashking-images-v2/old.avif';
+  const before = jest.mocked(File).mock.calls.length;
+
+  await expect(files.exists(stale)).resolves.toBe(false);
+  await expect(files.remove(stale)).resolves.toBeUndefined();
+
+  expect(jest.mocked(File).mock.calls).toHaveLength(before);
+});

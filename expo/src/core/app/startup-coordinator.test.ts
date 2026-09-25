@@ -54,13 +54,6 @@ function harness(
   } as unknown as AuthService;
   const accounts = {
     hasVerifiedAccounts: options.verified ?? true,
-    initializeForCurrentUser: async () => {
-      calls.push('user');
-      calls.push('selected');
-      calls.push('accounts');
-      if (options.accountError !== undefined) throw options.accountError;
-      calls.push('selection');
-    },
     setCurrentUserId: () => calls.push('user'),
     loadSelectedTag: async () => {
       calls.push('selected');
@@ -197,7 +190,42 @@ describe('startup coordinator parity', () => {
       destination: 'home',
       authenticated: true,
     });
+    for (let turn = 0; turn < 10; turn += 1) await Promise.resolve();
     expect(test.reportError).toHaveBeenCalledWith('startup.push', expect.any(Error));
+  });
+
+  it('starts optional authenticated work without extending the startup critical path', async () => {
+    const test = harness();
+    let finishData!: () => void;
+    let finishPush!: () => void;
+    let dataStarted = false;
+    let pushStarted = false;
+    const data = new Promise<void>((resolve) => {
+      finishData = resolve;
+    });
+    const push = new Promise<{ readonly state: 'permissionRequired' }>((resolve) => {
+      finishPush = () => resolve({ state: 'permissionRequired' });
+    });
+    test.dependencies.initializeAuthenticatedData = () => {
+      dataStarted = true;
+      return data;
+    };
+    test.dependencies.push.initialize = () => {
+      pushStarted = true;
+      return push;
+    };
+
+    await expect(initializeApplication(test.dependencies)).resolves.toMatchObject({
+      destination: 'home',
+      authenticated: true,
+    });
+    expect(test.calls).toEqual(expect.arrayContaining(['accounts']));
+    expect(dataStarted).toBe(true);
+    expect(pushStarted).toBe(true);
+
+    finishData();
+    finishPush();
+    await Promise.all([data, push]);
   });
 
   it('keeps a valid authenticated startup when push permission is denied', async () => {

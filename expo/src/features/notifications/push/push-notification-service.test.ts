@@ -276,6 +276,27 @@ describe('PushNotificationService setup', () => {
 });
 
 describe('PushNotificationService registration lifecycle', () => {
+  test('follows system permission after a legacy device toggle was off without asking again', async () => {
+    const h = harness();
+    await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'false');
+    await h.service.initialize(true);
+    expect(await h.service.areNotificationsEnabled()).toBe(true);
+    expect(h.runtime.requestAuthorization).not.toHaveBeenCalled();
+    expect(h.api.execute).toHaveBeenCalledWith(
+      NotificationDeviceRegisterEndpoint,
+      expect.objectContaining({
+        body: expect.objectContaining({ enabled: true, authorization_status: 'authorized' }),
+      }),
+      undefined,
+    );
+    h.runtime.getAuthorizationStatus.mockResolvedValue('denied');
+    h.api.execute.mockClear();
+    await expect(h.service.initialize(true)).resolves.toMatchObject({ state: 'permissionDenied' });
+    expect(await h.service.areNotificationsEnabled()).toBe(false);
+    expect(h.api.execute).not.toHaveBeenCalled();
+    expect(h.runtime.requestAuthorization).not.toHaveBeenCalled();
+  });
+
   test('skips disabled registration and posts the exact authenticated payload when enabled', async () => {
     const h = harness();
     await h.service.registerCurrentDeviceToken({ token: 'new-token' });
@@ -339,7 +360,9 @@ describe('PushNotificationService registration lifecycle', () => {
     });
     expect(h.api.execute).toHaveBeenCalledWith(
       NotificationDeviceRegisterEndpoint,
-      expect.objectContaining({ body: expect.objectContaining({ token: 'token', enabled: false }) }),
+      expect.objectContaining({
+        body: expect.objectContaining({ token: 'token', enabled: false }),
+      }),
       undefined,
     );
     expect(await h.store.getItem(STORAGE_KEYS.notificationsEnabled)).toBe('false');
@@ -360,10 +383,13 @@ describe('PushNotificationService registration lifecycle', () => {
       data: { title: 'War' },
     });
 
+    h.runtime.getAuthorizationStatus.mockResolvedValue('denied');
+    await h.service.initialize();
     h.refreshed()?.('disabled-token');
     await flush();
     expect(await h.store.getItem(STORAGE_KEYS.pushFcmToken)).toBe('fcm-token');
-    await h.store.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
+    h.runtime.getAuthorizationStatus.mockResolvedValue('authorized');
+    await h.service.initialize();
     h.refreshed()?.('refreshed-token');
     await flush();
     expect(await h.store.getItem(STORAGE_KEYS.pushFcmToken)).toBe('refreshed-token');

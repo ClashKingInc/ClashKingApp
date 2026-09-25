@@ -5,9 +5,11 @@ import {
   Bookmark,
   CheckSquare,
   ChevronDown,
+  ChevronUp,
   ChevronRight,
   Construction,
   EyeOff,
+  House,
   Shield,
   ShieldCheck,
   SlidersHorizontal,
@@ -47,6 +49,7 @@ export function PlayerDataCard({
   link,
   bookmarked = false,
   options,
+  homeIncluded = true,
   notificationsEnabled,
   notificationActive,
   notificationUpdating,
@@ -59,6 +62,7 @@ export function PlayerDataCard({
   link?: CocAccountLink;
   bookmarked?: boolean;
   options: PlayerCardOptions;
+  homeIncluded?: boolean;
   featureFlags: PlayersFeatureFlags;
   notificationsEnabled: boolean;
   notificationActive: boolean;
@@ -182,11 +186,22 @@ export function PlayerDataCard({
             <CKText muted role="labelLarge" style={styles.optionTitle}>
               Options
             </CKText>
-            <ChevronDown
-              size={20}
-              color={theme.onSurfaceVariant}
-              style={{ transform: [{ rotate: expanded ? '180deg' : '0deg' }] }}
-            />
+            <View
+              testID={`player-options-${expanded ? 'collapse' : 'expand'}-caret-${player.tag}`}
+              style={{
+                width: 20,
+                height: 20,
+                flexShrink: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {expanded ? (
+                <ChevronUp size={20} color={theme.onSurfaceVariant} />
+              ) : (
+                <ChevronDown size={20} color={theme.onSurfaceVariant} />
+              )}
+            </View>
           </Pressable>
           {expanded ? (
             <View style={styles.options}>
@@ -212,6 +227,20 @@ export function PlayerDataCard({
                   onPress={onVerify}
                 />
               ) : null}
+              {link ? (
+                <PlayerOptionSwitch
+                  icon={<House color={theme.onSurfaceVariant} />}
+                  title={t('playerOptionShowOnHomeTitle')}
+                  subtitle={
+                    verified
+                      ? t('playerOptionShowOnHomeSubtitle')
+                      : t('playerOptionShowOnHomeVerifyFirst')
+                  }
+                  value={homeIncluded}
+                  enabled={verified === true}
+                  onChange={(value) => void actions.setCardOption(player.tag, 'home', value)}
+                />
+              ) : null}
               <PlayerOptionSwitch
                 icon={<CheckSquare color={theme.onSurfaceVariant} />}
                 title={t('playerOptionShowTodoPageTitle')}
@@ -228,24 +257,28 @@ export function PlayerDataCard({
                 icon={<Construction color={theme.onSurfaceVariant} />}
                 title={t('playerOptionShowUpgradeTrackerHomeTitle')}
                 subtitle={
-                  verified
+                  verified && homeIncluded
                     ? t('playerOptionShowUpgradeTrackerHomeSubtitle')
-                    : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
+                    : verified
+                      ? t('playerOptionHomeInclusionFirst')
+                      : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
                 }
                 value={options.showUpgradeTrackerOnHome}
-                enabled={verified === true}
+                enabled={verified === true && homeIncluded}
                 onChange={(value) => void actions.setCardOption(player.tag, 'upgrade', value)}
               />
               <PlayerOptionSwitch
                 icon={<Trophy color={theme.onSurfaceVariant} />}
                 title={t('playerOptionShowRankedHomeTitle')}
                 subtitle={
-                  verified
+                  verified && homeIncluded
                     ? t('playerOptionShowRankedHomeSubtitle')
-                    : t('playerOptionShowRankedHomeVerifyFirst')
+                    : verified
+                      ? t('playerOptionHomeInclusionFirst')
+                      : t('playerOptionShowRankedHomeVerifyFirst')
                 }
                 value={options.showRankedOnHome}
-                enabled={verified === true}
+                enabled={verified === true && homeIncluded}
                 onChange={(value) => void actions.setCardOption(player.tag, 'ranked', value)}
               />
               <PlayerOptionSwitch

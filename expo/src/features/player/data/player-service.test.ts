@@ -527,10 +527,21 @@ test('loads a separate Legend experience from current-day and completed-season c
           attackWins: 200,
           defenseWins: 190,
           rank: 123,
+          population: 11724,
         },
       ],
     },
     [`/v2/player/%23P1/legend/${day}/battlelog`]: legendBattlelog({ day }),
+    '/v2/player/%23P1/legend/season': {
+      seasonStart: '2026-08-31T05:00:00Z', seasonEnd: '2026-09-28T05:00:00Z',
+      armyShareCodes: ['u2x1', 'u2x1'],
+      stats: { attacks: 2, defenses: 1, attackTriples: 1, defenseTriples: 0, averageOffense: 35, averageDefense: -20 },
+    },
+    '/v2/player/%23P1/legend/comparisons': { items: [
+      { cohort: 'top_200', days: 2, attacks: 800, triples: 600, playerAttacks: 2, playerTriples: 1 },
+    ], army: { familyId: '42', name: null, shareCode: 'u2x1', items: [
+      { cohort: 'top_200', days: 2, attacks: 40, triples: 25, playerAttacks: 2, playerTriples: 1 },
+    ] } },
     '/v2/legends/ranks': {
       items: [{ tag: '#P1', name: 'One', trophies: 5600, globalRank: 42 }],
     },
@@ -549,7 +560,12 @@ test('loads a separate Legend experience from current-day and completed-season c
     selectedDay: day,
     currentRank: { globalRank: 42 },
     historicalRank: { globalRank: 51 },
-    history: [{ season: '2026-08', rank: 123 }],
+    history: [{ season: '2026-08', rank: 123, population: 11724 }],
+    seasonStart: '2026-08-31T05:00:00Z',
+    seasonArmyShareCodes: ['u2x1', 'u2x1'],
+    seasonStats: { attacks: 2, averageDefense: -20 },
+    comparisons: [{ cohort: 'top_200', playerAttacks: 2 }],
+    armyComparison: { familyId: '42', shareCode: 'u2x1', items: [{ cohort: 'top_200', playerAttacks: 2 }] },
   });
   await second;
   await service.loadLegendLeagueData('#P1');
@@ -608,6 +624,26 @@ test('retains player-backed Legends data when every optional analytics endpoint 
     recentDays: [{ day }],
   });
   expect(calls.get('/proxy/v1/players/%23P1')).toBeUndefined();
+});
+
+test('rejects total Legend API failure when the player has no stored Legend records', async () => {
+  const day = '2026-08-15';
+  const seriesPath =
+    '/v2/player/%23P1/legend/series?time%5Bafter%5D=2026-07-19&time%5Bbefore%5D=2026-08-15';
+  const failure = () => reply({ code: 'upstream_unavailable', message: 'down' }, 503);
+  const { api } = setup({
+    '/v2/player/%23P1/league/history': failure,
+    [`/v2/player/%23P1/legend/${day}/battlelog`]: failure,
+    '/v2/legends/ranks/history': failure,
+    [seriesPath]: failure,
+    '/v2/legends/ranks': failure,
+  });
+  const service = new PlayerService(api);
+  const baseline = new PlayerLegendLeagueData('#P1', 'One', 18, 5030, 6233, null, [], day);
+
+  await expect(service.loadLegendLeagueData('#P1', false, day, baseline)).rejects.toThrow(
+    'Legend League data is temporarily unavailable.',
+  );
 });
 
 test('batches selected-day opponent rank and trophy insights without enriching automatic battles', async () => {
@@ -678,8 +714,10 @@ test('batches selected-day opponent rank and trophy insights without enriching a
 test('loads and caches a separately selected Legend day', async () => {
   const day = '2026-08-15';
   const previousDay = '2026-08-14';
-  const seriesPath =
-    '/v2/player/%23P1/legend/series?time%5Bafter%5D=2026-07-19&time%5Bbefore%5D=2026-08-15';
+  const seriesToday = currentLegendDay();
+  const seriesStart = new Date(`${seriesToday}T00:00:00Z`);
+  seriesStart.setUTCDate(seriesStart.getUTCDate() - 27);
+  const seriesPath = `/v2/player/%23P1/legend/series?time%5Bafter%5D=${seriesStart.toISOString().slice(0, 10)}&time%5Bbefore%5D=${seriesToday}`;
   const { api, calls } = setup({
     '/proxy/v1/players/%23P1': officialPlayer({ trophies: 5600, bestTrophies: 5900 }),
     '/v2/player/%23P1/league/history': { items: [] },

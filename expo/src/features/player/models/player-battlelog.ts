@@ -139,6 +139,8 @@ export class PlayerBattlelogArmyItem {
     readonly code: string,
     readonly name: string,
     readonly imageUrl: string,
+    readonly housingSpace = 0,
+    readonly siege = false,
   ) {}
 }
 export class PlayerBattlelogArmyCatalog {
@@ -158,7 +160,7 @@ export class PlayerBattlelogArmyCatalog {
             : prefix === 'e'
               ? ImageAssets.getGearImage(name)
               : ImageAssets.getTroopImage(name);
-    return new PlayerBattlelogArmyItem(code, name, image);
+    return new PlayerBattlelogArmyItem(code, name, image, int(item?.housing_space), item?.type === 'siege-machine');
   }
 }
 function findItem(prefix: string, id: number): JsonRecord | null {

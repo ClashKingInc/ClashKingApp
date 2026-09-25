@@ -65,7 +65,7 @@ export function GlassSurface({
     return (
       <GlassView
         colorScheme={mode}
-        glassEffectStyle="clear"
+        glassEffectStyle="regular"
         isInteractive={interactive}
         tintColor={tintColor ?? colorWithAlpha(theme.surface, selected ? 0.34 : 0.22)}
         style={commonStyle}

@@ -30,6 +30,7 @@ import { canonicalTag } from '@/core/domain/tags';
 import { playerClanTagStorageKey, STORAGE_KEYS, type StringStorage } from '@/core/storage/storage';
 import { mapWithConcurrencyLimit } from '@/core/utils/bounded-concurrency';
 import { Player } from '../models/player';
+import { currentLegendSeasonStart } from '../models/legend-season-window';
 import {
   PlayerActivityFeed,
   PlayerCwlHistory,
@@ -462,9 +463,10 @@ export class PlayerService {
     forceRefresh: boolean,
     baseline?: PlayerLegendLeagueData,
   ) {
-    const seriesStart = new Date(`${day}T00:00:00.000Z`);
+    const seriesToday = currentLegendDay();
+    const seriesStart = new Date(`${seriesToday}T00:00:00.000Z`);
     seriesStart.setUTCDate(seriesStart.getUTCDate() - 27);
-    const [player, historyResponse, currentDay, historicalRankResponse, recentDays] =
+    const [player, historySource, currentDaySource, historicalRankSource, recentDaysSource, seasonSource, comparisonsSource] =
       await Promise.all([
         baseline
           ? Promise.resolve(null)
@@ -475,34 +477,54 @@ export class PlayerService {
                 body: {},
               }),
             ),
-        Effect.runPromise(
-          this.api.execute(PlayerLeagueHistoryEndpoint, {
-            path: { playerTag: tag },
-            query: {},
-            body: {},
-          }),
-        ).catch(() => null),
-        this.loadLegendBattlelog(tag, day, forceRefresh)
-          .then((value) => value ?? baseline?.currentDay ?? null)
-          .catch(() => baseline?.currentDay ?? null),
-        Effect.runPromise(
-          this.api.execute(LegendHistoricalRanksEndpoint, {
-            path: {},
-            query: {},
-            body: { day, tags: [tag] },
-          }),
-        ).catch(() => null),
-        Effect.runPromise(
-          this.api.execute(expoEndpoints.legendPlayerDailySeries, {
-            path: { playerTag: tag },
-            query: {
-              'time[after]': seriesStart.toISOString().slice(0, 10),
-              'time[before]': day,
-            },
-            body: {},
-          }),
-        ).catch(() => null),
+        legendSource(
+          Effect.runPromise(
+            this.api.execute(PlayerLeagueHistoryEndpoint, {
+              path: { playerTag: tag },
+              query: {},
+              body: {},
+            }),
+          ),
+          null,
+        ),
+        legendSource(
+          this.loadLegendBattlelog(tag, day, forceRefresh),
+          baseline?.currentDay ?? null,
+        ),
+        legendSource(
+          Effect.runPromise(
+            this.api.execute(LegendHistoricalRanksEndpoint, {
+              path: {},
+              query: {},
+              body: { day, tags: [tag] },
+            }),
+          ),
+          null,
+        ),
+        legendSource(
+          Effect.runPromise(
+            this.api.execute(expoEndpoints.legendPlayerDailySeries, {
+              path: { playerTag: tag },
+              query: {
+                'time[after]': seriesStart.toISOString().slice(0, 10),
+                'time[before]': seriesToday,
+              },
+              body: {},
+            }),
+          ),
+          null,
+        ),
+        legendSource(Effect.runPromise(this.api.execute(expoEndpoints.legendPlayerSeason, {
+          path: { playerTag: tag }, query: {}, body: {},
+        })), null),
+        legendSource(Effect.runPromise(this.api.execute(expoEndpoints.legendPlayerComparisons, {
+          path: { playerTag: tag }, query: {}, body: {},
+        })), null),
       ]);
+    const historyResponse = historySource.value;
+    const currentDay = currentDaySource.value;
+    const historicalRankResponse = historicalRankSource.value;
+    const recentDays = recentDaysSource.value;
     const opponentTags = uniqueTags(
       currentDay
         ? [...currentDay.attacks, ...currentDay.defenses]
@@ -510,14 +532,17 @@ export class PlayerService {
             .map((battle) => battle.opponentTag)
         : [],
     ).slice(0, 99);
-    const [currentRankResponse, opponentDayResponse] = await Promise.all([
-      Effect.runPromise(
-        this.api.execute(LegendRanksEndpoint, {
-          path: {},
-          query: {},
-          body: { tags: [tag, ...opponentTags] },
-        }),
-      ).catch(() => null),
+    const [currentRankSource, opponentDayResponse] = await Promise.all([
+      legendSource(
+        Effect.runPromise(
+          this.api.execute(LegendRanksEndpoint, {
+            path: {},
+            query: {},
+            body: { tags: [tag, ...opponentTags] },
+          }),
+        ),
+        null,
+      ),
       opponentTags.length
         ? Effect.runPromise(
             this.api.execute(expoEndpoints.legendDaySummaries, {
@@ -528,11 +553,30 @@ export class PlayerService {
           ).catch(() => null)
         : Promise.resolve(null),
     ]);
+    const currentRankResponse = currentRankSource.value;
+    const anyLegendSourceAvailable =
+      historySource.available ||
+      currentDaySource.available ||
+      historicalRankSource.available ||
+      recentDaysSource.available ||
+      seasonSource.available ||
+      comparisonsSource.available ||
+      currentRankSource.available;
+    const hasStoredLegendData = Boolean(
+      baseline &&
+      (baseline.currentDay ||
+        baseline.history.length ||
+        baseline.currentRank ||
+        baseline.historicalRank ||
+        baseline.recentDays.length || baseline.seasonStats),
+    );
+    if (!anyLegendSourceAvailable && !hasStoredLegendData) {
+      throw new Error('Legend League data is temporarily unavailable.');
+    }
     const history = historyResponse
       ? records(historyResponse.items)
           .filter((item) => string(item.mode) === 'legend')
           .map(PlayerLegendHistoryEntry.fromJson)
-          .sort((a, b) => b.season.localeCompare(a.season))
       : (baseline?.history ?? []);
     const currentRank =
       records(currentRankResponse?.items)
@@ -546,6 +590,8 @@ export class PlayerService {
         .find((item) => canonicalTag(item.tag) === tag) ??
       baseline?.historicalRank ??
       null;
+    const season = seasonSource.value;
+    const seasonStart = season?.seasonStart.slice(0, 10) ?? currentLegendSeasonStart(history.map(entry => entry.season), seriesToday);
     const opponentRanks = new Map(
       records(currentRankResponse?.items)
         .map(PlayerLegendRank.fromJson)
@@ -580,7 +626,7 @@ export class PlayerService {
       player ? string(player.tag, tag) : (baseline?.playerTag ?? tag),
       player ? string(player.name) : (baseline?.playerName ?? ''),
       player ? int(player.townHallLevel) : (baseline?.townHallLevel ?? 0),
-      player ? int(player.trophies) : (baseline?.trophies ?? 0),
+      currentRank?.trophies ?? (player ? int(player.trophies) : (baseline?.trophies ?? 0)),
       player ? int(player.bestTrophies) : (baseline?.bestTrophies ?? 0),
       enrichedCurrentDay,
       history,
@@ -588,8 +634,14 @@ export class PlayerService {
       currentRank,
       historicalRank,
       recentDays
-        ? records(recentDays.items).map(PlayerLegendDaySummary.fromJson)
+        ? records(recentDays.items).map(PlayerLegendDaySummary.fromJson).filter(value => seasonStart === null || value.day >= seasonStart)
         : (baseline?.recentDays ?? []),
+      season?.armyShareCodes ?? baseline?.seasonArmyShareCodes ?? [],
+      season?.seasonStart ?? baseline?.seasonStart ?? null,
+      season?.seasonEnd ?? baseline?.seasonEnd ?? null,
+      season?.stats ?? baseline?.seasonStats ?? null,
+      comparisonsSource.value?.items ?? baseline?.comparisons ?? [],
+      comparisonsSource.value?.army ?? baseline?.armyComparison ?? null,
     );
   }
   async prefetchRankedLeagueData(tags: Iterable<string>, forceRefresh = false) {
@@ -894,6 +946,7 @@ function enrichLegendOpponent(
       rank?.globalRank ?? null,
       dayNetTrophies,
     ),
+    battle.familyId,
   );
 }
 
@@ -928,6 +981,13 @@ function optionalApiResponse<T>(request: Promise<T>): Promise<T | null> {
     if (error instanceof ApiResponseError && error.status === 404) return null;
     throw error;
   });
+}
+
+function legendSource<T>(request: Promise<T | null>, fallback: T | null) {
+  return request.then(
+    (value) => ({ available: true, value: value ?? fallback }),
+    () => ({ available: false, value: fallback }),
+  );
 }
 
 function parseRankedBattlelog(

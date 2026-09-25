@@ -33,6 +33,6 @@ describe('WarCwlRoot state adapters', () => {
         [new BookmarkedClan('#LINKED', '', '', 0, 0), new BookmarkedClan('#OTHER', '', '', 0, 0)],
         preferences as never,
       ),
-    ).toEqual(['#OTHER', '#HYDRATED']);
+    ).toEqual(['#OTHER']);
   });
 });

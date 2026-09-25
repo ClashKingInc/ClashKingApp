@@ -601,6 +601,7 @@ function withAndroidWidgetComponents(config, contract) {
     for (const activity of [
       contract.android.widgetConfigurationActivity,
       contract.android.warWidgetConfigurationActivity,
+      contract.android.legendsWidgetConfigurationActivity,
     ]) {
       application.activity = upsertAndroidComponent(application.activity, {
         $: {
@@ -802,6 +803,11 @@ function withIosWidgetTarget(config, contract) {
       }
       configureWidgetTarget(project, target, contract, version);
       configureWidgetEmbedding(project, targetUuid, target);
+      project.addResourceFile(
+        'WarWidget/LegendsWidget.xcstrings',
+        { target: targetUuid, lastKnownFileType: 'text.json.xcstrings' },
+        project.getFirstProject().firstProject.mainGroup,
+      );
       return mod;
     }
 
@@ -819,7 +825,7 @@ function withIosWidgetTarget(config, contract) {
       'app_extension',
     );
     project.addBuildPhase(
-      ['WarWidget/PrivacyInfo.xcprivacy'],
+      ['WarWidget/PrivacyInfo.xcprivacy', 'WarWidget/LegendsWidget.xcstrings'],
       'PBXResourcesBuildPhase',
       'Resources',
       target.uuid,
@@ -834,9 +840,18 @@ function withIosWidgetTarget(config, contract) {
     );
     attachFileReferencesToGroup(
       project,
-      ['WarWidget/WarWidget.swift', 'WarWidget/PrivacyInfo.xcprivacy'],
+      [
+        'WarWidget/WarWidget.swift',
+        'WarWidget/PrivacyInfo.xcprivacy',
+        'WarWidget/LegendsWidget.xcstrings',
+      ],
       project.getFirstProject().firstProject.mainGroup,
     );
+    for (const [key, file] of Object.entries(project.pbxFileReferenceSection())) {
+      if (!key.endsWith('_comment') && unquote(file.path) === 'WarWidget/LegendsWidget.xcstrings') {
+        file.lastKnownFileType = 'text.json.xcstrings';
+      }
+    }
     configureWidgetTarget(project, target.pbxNativeTarget, contract, version);
     configureWidgetEmbedding(project, target.uuid, target.pbxNativeTarget);
     return mod;

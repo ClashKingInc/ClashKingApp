@@ -1,7 +1,26 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { RankingBoard, RankingEntry, RankingLocation } from './ranking-models';
+import { gameDataState } from '../../../core/game-data/game-data-state';
+import { RankingBoard, RankingEntry, RankingLocation, rankingBoardArtwork } from './ranking-models';
 
 describe('ranking models', () => {
+  test('uses current maximum Town Hall art and distinct authentic War Win Streak art', () => {
+    const previous = gameDataState.gameData.max_TownHall;
+    try {
+      gameDataState.gameData.max_TownHall = 17;
+      expect(rankingBoardArtwork(RankingBoard.playerTownHall)).toBe(ImageAssets.townHall(17));
+      gameDataState.gameData.max_TownHall = 18;
+      expect(rankingBoardArtwork(RankingBoard.playerTownHall)).toBe(ImageAssets.townHall(18));
+      gameDataState.gameData.max_TownHall = 0;
+      expect(rankingBoardArtwork(RankingBoard.playerTownHall)).toBe(ImageAssets.townHall(18));
+      expect(rankingBoardArtwork(RankingBoard.clanWinStreak)).toBe(ImageAssets.attackStar);
+      expect(rankingBoardArtwork(RankingBoard.clanWinStreak)).not.toBe(
+        rankingBoardArtwork(RankingBoard.clanWarWins),
+      );
+    } finally {
+      if (previous === undefined) delete gameDataState.gameData.max_TownHall;
+      else gameDataState.gameData.max_TownHall = previous;
+    }
+  });
   test('keeps regions distinct from synthetic Worldwide and validates country codes', () => {
     const europe = RankingLocation.fromJson({ id: 32000000, name: 'Europe', isCountry: false });
     const unitedStates = RankingLocation.fromJson({
@@ -44,6 +63,35 @@ describe('ranking models', () => {
     expect(entry.imageUrl).toBe('https://example.com/league.png');
   });
 
+  test('uses the historical league name when the snapshot omits icon URLs', () => {
+    const entry = RankingEntry.fromJson(
+      {
+        tag: '#PLAYER',
+        name: 'Player One',
+        rank: 1,
+        trophies: 6500,
+        leagueTier: { id: 105000036, name: 'Legend League 1' },
+      },
+      RankingBoard.playerHome,
+    );
+    expect(entry.imageUrl).toBe(ImageAssets.legendLeagueOne);
+    expect(entry.metricImageUrl).toBe(ImageAssets.legendLeagueOne);
+  });
+
+  test('uses the historical tier id when static metadata omits its name', () => {
+    const entry = RankingEntry.fromJson(
+      {
+        tag: '#PLAYER',
+        name: 'Player One',
+        rank: 1,
+        trophies: 6500,
+        leagueTier: { id: 105000036 },
+      },
+      RankingBoard.playerHome,
+    );
+    expect(entry.imageUrl).toBe(ImageAssets.legendLeagueOne);
+  });
+
   test('uses builder league art, the builder trophy metric, and the canonical clan badge', () => {
     const entry = RankingEntry.fromJson(
       {
@@ -65,6 +113,66 @@ describe('ranking models', () => {
     );
     expect(entry.metricImageUrl).toBe(ImageAssets.builderBaseTrophy);
     expect(entry.clanBadgeUrl).toBe('https://badges.clashk.ing/BUILDER.avif');
+  });
+
+  test('resolves historical Builder Base league IDs from the loaded static bundle', () => {
+    const previous = gameDataState.bundleData.builder_leagues;
+    try {
+      gameDataState.bundleData.builder_leagues = [{ _id: 44000017, name: 'Copper League III' }];
+      const entry = RankingEntry.fromJson(
+        {
+          tag: '#PLAYER',
+          name: 'Builder Player',
+          builderBaseTrophies: 6462,
+          builderBaseLeague: { id: 44000017 },
+        },
+        RankingBoard.playerBuilder,
+      );
+      expect(entry.imageUrl).toBe(
+        'https://assets.clashk.ing/leagues/builder-base/copper_league_3.png',
+      );
+      expect(entry.metricImageUrl).toBe(ImageAssets.builderBaseTrophy);
+    } finally {
+      if (previous === undefined) delete gameDataState.bundleData.builder_leagues;
+      else gameDataState.bundleData.builder_leagues = previous;
+    }
+  });
+
+  test('uses a valid Builder Base icon when an ID-only snapshot has no loaded metadata', () => {
+    const entry = RankingEntry.fromJson(
+      {
+        tag: '#PLAYER',
+        name: 'Builder Player',
+        builderBaseTrophies: 6462,
+        builderBaseLeague: { id: 44000017 },
+      },
+      RankingBoard.playerBuilder,
+    );
+    expect(entry.imageUrl).toBe(ImageAssets.builderBaseStar);
+  });
+
+  test('resolves an ID-only snapshot after its static metadata arrives', () => {
+    const previous = gameDataState.bundleData.builder_leagues;
+    try {
+      delete gameDataState.bundleData.builder_leagues;
+      const entry = RankingEntry.fromJson(
+        {
+          tag: '#PLAYER',
+          name: 'Builder Player',
+          builderBaseTrophies: 6462,
+          builderBaseLeague: { id: 44000017 },
+        },
+        RankingBoard.playerBuilder,
+      );
+      expect(entry.displayImageUrl).toBe(ImageAssets.builderBaseStar);
+      gameDataState.bundleData.builder_leagues = [{ _id: 44000017, name: 'Copper League III' }];
+      expect(entry.displayImageUrl).toBe(
+        'https://assets.clashk.ing/leagues/builder-base/copper_league_3.png',
+      );
+    } finally {
+      if (previous === undefined) delete gameDataState.bundleData.builder_leagues;
+      else gameDataState.bundleData.builder_leagues = previous;
+    }
   });
 
   test.each([

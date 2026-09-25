@@ -152,6 +152,12 @@ export class PushNotificationService {
       this.initialized = true;
 
       const authorizationStatus = await this.options.runtime.getAuthorizationStatus();
+      // Device delivery follows OS permission; there is no second app-level master switch.
+      // Reading permission never requests it, and preserves per-type/account preferences.
+      await this.options.preferences.setItem(
+        STORAGE_KEYS.notificationsEnabled,
+        String(hasDisplayPermission(authorizationStatus)),
+      );
       if (!hasDisplayPermission(authorizationStatus)) {
         return this.setResult({
           state: permissionState(authorizationStatus),

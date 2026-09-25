@@ -61,10 +61,18 @@ export class ImageAssets {
 
   static getBuilderBaseLeagueImage(league: unknown): string {
     if (isRecord(league)) {
-      if (typeof league.name === 'string')
-        return ImageAssets.getBuilderBaseLeagueImage(league.name);
       const iconUrls = league.iconUrls;
       if (isRecord(iconUrls) && typeof iconUrls.medium === 'string') return iconUrls.medium;
+      if (typeof league.name === 'string')
+        return ImageAssets.getBuilderBaseLeagueImage(league.name);
+      const id = Number(league.id);
+      const knownLeagues = gameDataState.bundleData.builder_leagues;
+      if (Number.isInteger(id) && Array.isArray(knownLeagues)) {
+        const known = knownLeagues.find((item) => isRecord(item) && Number(item._id) === id);
+        if (isRecord(known) && typeof known.name === 'string')
+          return ImageAssets.getBuilderBaseLeagueImage(known.name);
+      }
+      return ImageAssets.builderBaseStar;
     }
     const name = league === undefined || league === null ? '' : String(league).trim();
     return name
@@ -102,6 +110,7 @@ export class ImageAssets {
   static readonly legendBlazonBorders = `${ImageAssets.baseUrl}/icons/Icon_HV_League_Legend_3_Border.png`;
   static readonly legendBlazonBordersNoPadding = `${ImageAssets.baseUrl}/icons/Icon_HV_League_Legend_3_Border_No_Padding.png`;
   static readonly legendLeagueOne = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_1.png`;
+  static readonly legacyLegendLeague = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league.png`;
   static readonly legendLeagueTwo = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_2.png`;
   static readonly legendLeagueThree = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_3.png`;
 

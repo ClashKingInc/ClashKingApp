@@ -97,7 +97,7 @@ it('always shows registered rosters and keeps war lineups with each matchup', as
   expect(screen.getByLabelText('Town Hall 18: 1')).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'Registered roster' })).toBeNull();
   await fireEvent.press(screen.getByRole('tab', { name: 'Matchups' }));
-  await fireEvent.press(screen.getByRole('button', { name: 'Town Hall distribution' }));
+  await fireEvent.press(screen.getByRole('button', { name: 'Town Halls' }));
   expect(screen.getByLabelText('Town Hall 18: Alpha 1, Beta 0')).toBeTruthy();
   expect(screen.queryByLabelText('Town Hall 16: Alpha 1, Beta 0')).toBeNull();
 });

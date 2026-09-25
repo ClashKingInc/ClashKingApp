@@ -22,6 +22,35 @@ export function buildClansPresentationModel(input: {
   };
 }
 
+export function ownedClanProfiles(
+  profiles: readonly Player[],
+  ownedPlayerTags: readonly string[],
+): Player[] {
+  const byTag = new Map(profiles.map((profile) => [canonicalTag(profile.tag), profile]));
+  return ownedPlayerTags.flatMap((tag) => {
+    const profile = byTag.get(canonicalTag(tag));
+    return profile ? [profile] : [];
+  });
+}
+
+export function accountTagsForClanOrder(
+  orderedClanTags: readonly string[],
+  accountTags: readonly string[],
+  profiles: readonly Player[],
+): string[] {
+  const clanByAccount = new Map(
+    profiles.map((profile) => [canonicalTag(profile.tag), canonicalTag(profile.clanTag)]),
+  );
+  const accountGroup = (tag: string) => clanByAccount.get(canonicalTag(tag)) ?? '';
+  const desired = orderedClanTags.map(canonicalTag);
+  const visible = new Set(desired);
+  const orderedAccounts = desired.flatMap((clanTag) =>
+    accountTags.filter((accountTag) => accountGroup(accountTag) === clanTag),
+  );
+  let cursor = 0;
+  return accountTags.map((tag) => visible.has(accountGroup(tag)) ? orderedAccounts[cursor++]! : tag);
+}
+
 export function buildClanInfoPresentationModel(input: {
   readonly clan: Clan;
   readonly bookmarked: boolean;

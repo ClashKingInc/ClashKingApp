@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { useI18n } from '../../../i18n';
+import { toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
   HorizontalImageShareModal,
@@ -10,7 +10,8 @@ import {
   horizontalImageFilename,
 } from '../../../ui';
 import type { PlayerLegendLeagueData } from '../../player/models';
-import { parseArmyCounts, PlayerBattlelogArmyCatalog } from '../../player/models/player-battlelog';
+import { popularLegendItems } from './legend-army';
+import { LegendChart } from './legend-chart';
 
 export interface LegendsShareSummary {
   readonly currentRank: number | null;
@@ -28,8 +29,8 @@ export interface LegendsShareSummary {
 
 export function legendsShareSummary(data: PlayerLegendLeagueData): LegendsShareSummary {
   const armyUses = new Map<string, number>();
-  for (const battle of data.currentDay?.attacks ?? []) {
-    if (battle.shareCode) armyUses.set(battle.shareCode, (armyUses.get(battle.shareCode) ?? 0) + 1);
+  for (const shareCode of data.seasonArmyShareCodes) {
+    armyUses.set(shareCode, (armyUses.get(shareCode) ?? 0) + 1);
   }
   const favorite = [...armyUses.entries()].sort(
     ([left, leftUses], [right, rightUses]) => rightUses - leftUses || left.localeCompare(right),
@@ -42,9 +43,6 @@ export function legendsShareSummary(data: PlayerLegendLeagueData): LegendsShareS
       attackTrophies: day.attackTrophies,
     }));
   const dailyChanges = dailyContributions.map(({ key, change }) => ({ key, change }));
-  const selectedClosingTrophies = data.historicalRank?.trophies ?? data.trophies;
-  let running =
-    selectedClosingTrophies - dailyChanges.reduce((sum, battle) => sum + battle.change, 0);
   return {
     currentRank: data.currentRank?.globalRank ?? null,
     historicalRank: data.historicalRank?.globalRank ?? null,
@@ -52,11 +50,30 @@ export function legendsShareSummary(data: PlayerLegendLeagueData): LegendsShareS
     favoriteArmyUses: favorite?.[1] ?? 0,
     battleChanges: dailyChanges,
     dailyContributions,
-    graph: dailyChanges.map((day) => {
-      running += day.change;
-      return { label: day.key.slice(5), trophies: running };
-    }),
+    graph: data.recentDays.flatMap((day) =>
+      day.closingTrophies == null
+        ? []
+        : [{ label: day.day.slice(5), trophies: day.closingTrophies }],
+    ),
   };
+}
+
+export function legendSeasonLabel(
+  start: string | null,
+  end: string | null,
+  fallback = 'Current season',
+  locale = 'en',
+): string {
+  if (!start || !end) return fallback;
+  const formatter = new Intl.DateTimeFormat(toIntlLocale(locale), {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime())) return fallback;
+  return `${formatter.format(startDate)} – ${formatter.format(endDate)}`;
 }
 
 export function LegendsShareModal({
@@ -68,18 +85,21 @@ export function LegendsShareModal({
   readonly visible: boolean;
   readonly onClose: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const summary = legendsShareSummary(data);
-  const maximum = Math.max(1, ...summary.graph.map((point) => point.trophies));
-  const favoriteItems = summary.favoriteArmy
-    ? Object.entries(parseArmyCounts(summary.favoriteArmy)).slice(0, 7)
-    : [];
+  const favoriteItems = popularLegendItems(data.seasonArmyShareCodes);
+  const location = data.currentRank?.location ?? null;
+  const locationFlag = location?.countryCode ? ImageAssets.flag(location.countryCode) : null;
+  const seasonNet = data.recentDays.reduce((total, day) => total + day.trophyChange, 0);
+  const seasonStats = data.seasonStats;
   return (
     <HorizontalImageShareModal
       artworkUrls={[
-        ImageAssets.legendBlazon,
-        ...favoriteItems.map(([code]) => PlayerBattlelogArmyCatalog.resolve(code).imageUrl),
+        ImageAssets.legendLeagueOne,
+        ...(locationFlag ? [locationFlag] : []),
+        ...favoriteItems.map(({ item }) => item.imageUrl),
       ]}
+      canvasSize={{ width: 1200, height: 675 }}
       fileName={legendsImageFileName(data.playerName)}
       message={`${data.playerName} in Legend League on ClashKing`}
       onClose={onClose}
@@ -88,95 +108,117 @@ export function LegendsShareModal({
     >
       <View style={styles.graphic}>
         <View style={styles.heading}>
-          <View>
-            <CKText role="screenTitle" style={styles.white}>
-              {data.playerName}
-            </CKText>
-            <CKText role="titleMedium" style={styles.soft}>
-              {t('legendsTitle')}
-            </CKText>
+          <View style={styles.identity}>
+            <MobileWebImage imageUrl={ImageAssets.legendLeagueOne} style={styles.logo} />
+            <View style={styles.identityCopy}>
+              <CKText style={styles.playerName} numberOfLines={1}>
+                {data.playerName}
+              </CKText>
+              <CKText style={styles.playerMeta} numberOfLines={1}>
+                {data.playerTag} · {t('legendsTitle')}
+              </CKText>
+            </View>
           </View>
-          <MobileWebImage imageUrl={ImageAssets.legendBlazon} style={styles.logo} />
+          {location ? (
+            <View style={styles.location}>
+              {locationFlag ? <MobileWebImage imageUrl={locationFlag} style={styles.flag} /> : null}
+              <CKText style={styles.locationName} numberOfLines={1}>
+                {location.name}
+              </CKText>
+            </View>
+          ) : null}
         </View>
         <View style={styles.metrics}>
-          <Metric label={t('rankedLeagueTrophies')} value={data.trophies.toLocaleString()} />
-          <Metric label={t('legendsBestTrophies')} value={data.bestTrophies.toLocaleString()} />
           <Metric
-            label={t('legendsGlobalRankTitle')}
-            value={summary.currentRank ? `#${summary.currentRank}` : '—'}
+            label={t('rankedLeagueTrophies')}
+            value={(data.currentRank?.trophies ?? data.trophies).toLocaleString()}
           />
           <Metric
-            label={data.selectedDay}
-            value={summary.historicalRank ? `#${summary.historicalRank}` : '—'}
+            label={t('legendsGlobalRankTitle')}
+            value={summary.currentRank ? `#${summary.currentRank.toLocaleString()}` : '—'}
+          />
+          <Metric
+            label={`${t('filtersSeason')} · ${t('rankedLeagueAttacks')}`}
+            value={seasonStats ? seasonStats.attacks.toLocaleString() : '—'}
+          />
+          <Metric
+            label={t('legendsInaccurateNetGainTitle')
+              .replace(/^\d+\.\s*/u, '')
+              .replace(/:$/u, '')}
+            value={`${seasonNet >= 0 ? '+' : ''}${seasonNet.toLocaleString()}`}
           />
         </View>
         <View style={styles.lower}>
-          <View style={styles.panel}>
-            <CKText role="titleMedium" style={styles.white}>
-              {data.currentDay?.day ?? t('generalNoDataAvailable')}
-            </CKText>
-            <View style={styles.changeGrid}>
-              {summary.battleChanges.map((battle) => (
-                <View
-                  key={battle.key}
-                  style={[
-                    styles.changeCell,
-                    {
-                      backgroundColor: colorWithAlpha(
-                        battle.change >= 0 ? '#2DD4BF' : '#FB7185',
-                        0.72,
-                      ),
-                    },
-                  ]}
-                >
-                  <CKText role="labelSmall" style={styles.white}>
-                    {battle.change >= 0 ? '+' : ''}
-                    {battle.change}
-                  </CKText>
-                </View>
-              ))}
-            </View>
-            <View style={styles.armyRow}>
-              <CKText role="labelSmall" style={styles.soft}>
-                {t('playerBattlelogPopularTroops')} · ×{summary.favoriteArmyUses}
+          <View style={[styles.panel, styles.overviewPanel]}>
+            <View style={styles.panelHeading}>
+              <CKText style={styles.panelTitle}>{t('statsSeasonStats')}</CKText>
+              <CKText style={styles.panelMeta}>
+                {legendSeasonLabel(data.seasonStart, data.seasonEnd, t('filtersSeason'), locale)}
               </CKText>
-              {favoriteItems.map(([code, count]) => {
-                const item = PlayerBattlelogArmyCatalog.resolve(code);
-                return (
-                  <View key={code} style={styles.armyItem}>
-                    <MobileWebImage imageUrl={item.imageUrl} style={styles.armyImage} />
-                    <CKText role="labelSmall" style={styles.white}>
-                      ×{count}
-                    </CKText>
-                  </View>
-                );
-              })}
             </View>
-          </View>
-          <View style={styles.panel}>
-            <CKText role="titleMedium" style={styles.white}>
-              {t('generalHistory')}
+            <View style={styles.statGrid}>
+              <SeasonStat label={t('rankedLeagueAttacks')} value={seasonStats?.attacks ?? null} />
+              <SeasonStat
+                label={`3★ ${t('rankedLeagueAttacks')}`}
+                value={seasonStats?.attackTriples ?? null}
+              />
+              <SeasonStat
+                label={t('legendsAvgOffense')}
+                value={seasonStats?.averageOffense ?? null}
+                signed
+              />
+              <SeasonStat label={t('rankedLeagueDefenses')} value={seasonStats?.defenses ?? null} />
+              <SeasonStat
+                label={`3★ ${t('rankedLeagueDefenses')}`}
+                value={seasonStats?.defenseTriples ?? null}
+              />
+              <SeasonStat
+                label={t('legendsAvgDefense')}
+                value={seasonStats?.averageDefense ?? null}
+                signed
+              />
+            </View>
+            <CKText style={styles.subheading}>
+              {t('filtersSeason')} · {t('legendsYourArmy')}
             </CKText>
-            <View style={styles.graph}>
-              {summary.graph.map((point, index) => (
-                <View key={`${point.label}-${index}`} style={styles.graphColumn}>
-                  <CKText role="labelSmall" style={styles.soft}>
-                    {point.trophies}
-                  </CKText>
-                  <View style={styles.barTrack}>
-                    <View
-                      style={[
-                        styles.bar,
-                        { height: `${Math.max(8, (point.trophies / maximum) * 100)}%` },
-                      ]}
-                    />
-                  </View>
-                  <CKText role="labelSmall" style={styles.soft}>
-                    {point.label}
-                  </CKText>
-                </View>
-              ))}
-            </View>
+            {favoriteItems.length ? (
+              <View style={styles.armyRow}>
+                {favoriteItems.map(({ category, item }) => (
+                  <MobileWebImage
+                    key={item.code}
+                    accessibilityLabel={`${favoriteItemCategoryLabel(category, t)}: ${item.name}`}
+                    imageUrl={item.imageUrl}
+                    style={styles.armyImage}
+                  />
+                ))}
+              </View>
+            ) : (
+              <CKText style={styles.emptyText}>{t('generalNoDataAvailable')}</CKText>
+            )}
+          </View>
+          <View style={[styles.panel, styles.chartsPanel]}>
+            <LegendChart
+              dark
+              large
+              height={118}
+              title={t('rankedLeagueTrophies')}
+              points={data.recentDays.map((day) => ({
+                day: day.day,
+                value: day.closingTrophies ?? null,
+              }))}
+            />
+            <View style={styles.chartDivider} />
+            <LegendChart
+              dark
+              large
+              rank
+              height={118}
+              title={t('legendsGlobalRankTitle')}
+              points={data.recentDays.map((day) => ({
+                day: day.day,
+                value: day.globalRank ?? null,
+              }))}
+            />
           </View>
         </View>
       </View>
@@ -191,10 +233,39 @@ export function legendsImageFileName(playerName: string, now = new Date()) {
 function Metric({ label, value }: { readonly label: string; readonly value: string }) {
   return (
     <View style={styles.metric}>
-      <CKText role="titleLarge" style={styles.white}>
+      <CKText style={styles.metricValue} numberOfLines={1}>
         {value}
       </CKText>
-      <CKText role="labelSmall" style={styles.soft} numberOfLines={1}>
+      <CKText style={styles.metricLabel} numberOfLines={1}>
+        {label}
+      </CKText>
+    </View>
+  );
+}
+
+function favoriteItemCategoryLabel(category: string, t: ReturnType<typeof useI18n>['t']): string {
+  if (category === 'Troop') return t('statsTroop');
+  if (category === 'Spell') return t('statsSpell');
+  return t('gameSiegeMachines');
+}
+
+function SeasonStat({
+  label,
+  value,
+  signed = false,
+}: {
+  readonly label: string;
+  readonly value: number | null;
+  readonly signed?: boolean;
+}) {
+  const display =
+    value == null
+      ? '—'
+      : `${signed && value > 0 ? '+' : ''}${value.toLocaleString(undefined, { maximumFractionDigits: 1 })}`;
+  return (
+    <View style={styles.seasonStat}>
+      <CKText style={styles.seasonStatValue}>{display}</CKText>
+      <CKText style={styles.seasonStatLabel} numberOfLines={1}>
         {label}
       </CKText>
     </View>
@@ -202,35 +273,64 @@ function Metric({ label, value }: { readonly label: string; readonly value: stri
 }
 
 const styles = StyleSheet.create({
-  graphic: { flex: 1, padding: 28, gap: 18, backgroundColor: '#0B1220' },
-  heading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  white: { color: '#FFF' },
-  soft: { color: '#B8C4D8' },
-  logo: { width: 68, height: 68 },
-  metrics: { flexDirection: 'row', gap: 10 },
-  metric: { flex: 1, padding: 12, borderRadius: 12, backgroundColor: '#162033' },
-  lower: { flex: 1, flexDirection: 'row', gap: 14 },
-  panel: { flex: 1, padding: 14, borderRadius: 14, backgroundColor: '#121C2E', gap: 10 },
-  changeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  changeCell: {
-    width: 42,
-    height: 34,
-    borderRadius: 7,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  armyRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, marginTop: 'auto' },
-  armyItem: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  armyImage: { width: 30, height: 30, borderRadius: 6 },
-  graph: { flex: 1, flexDirection: 'row', alignItems: 'flex-end', gap: 7 },
-  graphColumn: { flex: 1, height: '100%', alignItems: 'center', gap: 4 },
-  barTrack: {
+  graphic: {
     flex: 1,
-    width: '70%',
-    justifyContent: 'flex-end',
-    backgroundColor: '#1E293B',
-    borderRadius: 6,
-    overflow: 'hidden',
+    padding: 40,
+    gap: 18,
+    backgroundColor: '#0C0C12',
+    borderTopWidth: 8,
+    borderTopColor: '#B58AF2',
   },
-  bar: { width: '100%', backgroundColor: '#A78BFA' },
+  heading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  identity: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 18 },
+  identityCopy: { flex: 1, gap: 3 },
+  playerName: { color: '#FFFFFF', fontSize: 40, lineHeight: 44, fontWeight: '800' },
+  playerMeta: { color: '#C8CBD8', fontSize: 20, lineHeight: 25 },
+  logo: { width: 84, height: 84 },
+  location: {
+    maxWidth: 310,
+    minHeight: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 18,
+    borderRadius: 26,
+    backgroundColor: '#20202B',
+  },
+  flag: { width: 36, height: 25, borderRadius: 5 },
+  locationName: { color: '#FFFFFF', fontSize: 20, lineHeight: 24 },
+  metrics: { flexDirection: 'row', gap: 14 },
+  metric: {
+    flex: 1,
+    minHeight: 88,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: '#181820',
+  },
+  metricValue: { color: '#FFFFFF', fontSize: 31, lineHeight: 35, fontWeight: '800' },
+  metricLabel: { color: '#B8BAC7', fontSize: 17, lineHeight: 22 },
+  lower: { flex: 1, flexDirection: 'row', gap: 18 },
+  panel: { padding: 22, borderRadius: 24, backgroundColor: '#181820' },
+  overviewPanel: { width: 410, gap: 14 },
+  chartsPanel: { flex: 1, justifyContent: 'space-between', gap: 8 },
+  panelHeading: { gap: 2 },
+  panelTitle: { color: '#FFFFFF', fontSize: 25, lineHeight: 29, fontWeight: '700' },
+  panelMeta: { color: '#B8BAC7', fontSize: 17, lineHeight: 21 },
+  statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  seasonStat: {
+    width: 116,
+    minHeight: 58,
+    justifyContent: 'center',
+    paddingHorizontal: 11,
+    borderRadius: 14,
+    backgroundColor: '#23232E',
+  },
+  seasonStatValue: { color: '#FFFFFF', fontSize: 22, lineHeight: 25, fontWeight: '700' },
+  seasonStatLabel: { color: '#B8BAC7', fontSize: 14, lineHeight: 18 },
+  subheading: { color: '#FFFFFF', fontSize: 20, lineHeight: 24, fontWeight: '700' },
+  armyRow: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  armyImage: { width: 64, height: 64, borderRadius: 14 },
+  emptyText: { color: '#B8BAC7', fontSize: 17, lineHeight: 22 },
+  chartDivider: { height: 1, backgroundColor: colorWithAlpha('#C8CBD8', 0.16) },
 });

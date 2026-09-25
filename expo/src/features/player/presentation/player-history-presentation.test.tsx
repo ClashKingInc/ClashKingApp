@@ -102,7 +102,7 @@ describe('player history row parity', () => {
     expect(screen.queryByLabelText('Dark Elixir: 345')).toBeNull();
   });
 
-  it('keeps Legend separate and summarizes farming loot by resource', async () => {
+  it('offers only Ranked and Farming and summarizes farming loot by resource', async () => {
     const farming = new PlayerBattlelogEntry(
       'farm',
       'farming',
@@ -140,10 +140,11 @@ describe('player history row parity', () => {
       {},
     );
     const screen = await wrap(
-      <PlayerBattlelogTab data={new PlayerBattlelogData([farming, legend], true, true)} />,
+      <PlayerBattlelogTab data={new PlayerBattlelogData([farming, legend], false, false)} />,
     );
 
-    expect(screen.getByText('Legend League')).toBeTruthy();
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
+    expect(screen.queryByRole('radio', { name: 'Legend League' })).toBeNull();
     await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Farming' })));
     expect(screen.getByTestId('battlelog-loot-grid')).toBeTruthy();
     expect(screen.getAllByText('1K').length).toBeGreaterThan(0);
@@ -158,9 +159,7 @@ describe('player history row parity', () => {
     expect(screen.getByText('Gold')).toBeTruthy();
     expect(screen.getByText('Elixir')).toBeTruthy();
     expect(screen.getByText('Dark Elixir')).toBeTruthy();
-    await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Legend League' })));
-    expect(screen.queryByTestId('battlelog-loot-grid')).toBeNull();
-    expect(screen.getByText('1 battles')).toBeTruthy();
+    expect(screen.queryByText(/temporarily unavailable/u)).toBeNull();
   });
 
   it('suppresses super-troop detail and uses value-change detail for XP', async () => {

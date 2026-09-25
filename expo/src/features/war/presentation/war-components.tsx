@@ -49,11 +49,15 @@ export function WarSummaryCard({
   now = new Date(),
   onOpenWar,
   onOpenCwl,
+  onLongPress,
+  dragTestID,
 }: {
   item: WarRosterItem;
   now?: Date;
   onOpenWar: (war: WarInfo) => void;
   onOpenCwl: () => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -61,6 +65,7 @@ export function WarSummaryCard({
   if (!war || ['notInWar', 'unknown', 'accessDenied'].includes(war.state)) {
     const privateLog = item.summary?.warInfo.state === 'accessDenied';
     return (
+      <Pressable onLongPress={onLongPress} testID={dragTestID}>
       <Surface style={styles.emptyWarCard}>
         <MobileWebImage
           imageUrl={item.badgeUrl || ImageAssets.clanCastle}
@@ -72,6 +77,7 @@ export function WarSummaryCard({
             : t('warIsNotInWar', { clan: item.name })}
         </CKText>
       </Surface>
+      </Pressable>
     );
   }
   const statuses = item.accountStatuses.filter((status) => status.inWar);
@@ -103,7 +109,7 @@ export function WarSummaryCard({
   return (
     <Surface style={styles.warCard}>
       {cwlBanner && canOpenCwl ? (
-        <Pressable accessibilityRole="button" onPress={onOpenCwl}>
+        <Pressable accessibilityRole="button" onPress={onOpenCwl} onLongPress={onLongPress}>
           {cwlBanner}
         </Pressable>
       ) : (
@@ -113,8 +119,10 @@ export function WarSummaryCard({
         accessibilityRole="button"
         accessibilityLabel={`${war.clan?.name} versus ${war.opponent?.name}`}
         onPress={() => onOpenWar(war)}
+        onLongPress={onLongPress}
+        testID={dragTestID}
       >
-        <View style={[styles.warBody, war.state === 'preparation' && styles.preparationWarBody]}>
+        <View testID="war-summary-body" style={[styles.warBody, war.state === 'preparation' && styles.preparationWarBody]}>
           <WarSide clan={war.clan} />
           <View style={styles.scoreColumn}>
             {allSpectators ? (
@@ -153,7 +161,7 @@ export function WarSummaryCard({
           <WarSide clan={war.opponent} />
         </View>
         {statuses.length ? (
-          <View style={styles.attackStatusWrap}>
+          <View testID="war-summary-account-chips" style={styles.attackStatusWrap}>
             {[...statuses]
               .sort(
                 (left, right) =>
@@ -335,10 +343,18 @@ export function AttackDetailsModal({
               </RoundButton>
             </View>
             <View style={styles.resultHero}>
-              <CKText role="heroMetric">
-                {'★'.repeat(attack.stars)}
-                {'☆'.repeat(3 - attack.stars)}
-              </CKText>
+              <View
+                style={styles.resultStars}
+                accessibilityLabel={`${attack.stars}/3 ${t('warStarsTitle')}`}
+              >
+                {[0, 1, 2].map((index) => (
+                  <MobileWebImage
+                    key={index}
+                    imageUrl={ImageAssets.attackStar}
+                    style={[styles.resultStar, index >= attack.stars && styles.unearnedStar]}
+                  />
+                ))}
+              </View>
               <CKText role="titleLarge">{formatPercent(attack.destructionPercentage)}</CKText>
             </View>
             <Participant
@@ -357,12 +373,6 @@ export function AttackDetailsModal({
               onPress={() => onOpenPlayer(attack.defenderTag)}
             />
             <Surface muted style={styles.detailsPanel}>
-              <DetailRow label={t('warStarsTitle')} value={String(attack.stars)} />
-              <DetailRow
-                label={t('warDestructionTitle')}
-                value={formatPercent(attack.destructionPercentage)}
-              />
-              <DetailRow label={t('warAttacksDetailsAttackOrder')} value={`#${attack.order}`} />
               {attack.duration !== null ? (
                 <DetailRow
                   label={t('warAttacksDetailsDuration')}
@@ -487,11 +497,9 @@ function WarScoreRow({ left, right }: { left: number; right: number }) {
         testID="war-summary-score"
         role="titleMedium"
         numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={0.75}
         style={styles.scoreValue}
       >
-        {left} - {right}
+        {`${left} - ${right}`}
       </CKText>
     </View>
   );
@@ -533,21 +541,32 @@ export function WarMatchup({
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <MobileWebImage
           imageUrl={war.clan?.badgeUrls.smallest || ImageAssets.clanCastle}
-          style={{ width: 72, height: 72, flex: 1 }}
+          style={{ width: 56, height: 56 }}
         />
         <View style={{ alignItems: 'center', flex: 1 }}>
-          <CKText role="screenTitle" style={{ color: foreground, fontVariant: ['tabular-nums'] }}>
+          <CKText
+            numberOfLines={1}
+            style={{
+              color: foreground,
+              fontSize: 28,
+              lineHeight: 34,
+              fontWeight: '700',
+              fontVariant: ['tabular-nums'],
+            }}
+          >
             {war.state === 'preparation'
               ? '—'
               : `${war.clan?.stars ?? 0} – ${war.opponent?.stars ?? 0}`}
           </CKText>
-          <CKText role="body" style={{ color: secondary }}>
-            {t('warStarsTitle')}
-          </CKText>
+          <MobileWebImage
+            imageUrl={ImageAssets.attackStar}
+            style={{ width: 22, height: 22 }}
+            accessibilityLabel={t('warStarsTitle')}
+          />
         </View>
         <MobileWebImage
           imageUrl={war.opponent?.badgeUrls.smallest || ImageAssets.clanCastle}
-          style={{ width: 72, height: 72, flex: 1 }}
+          style={{ width: 56, height: 56 }}
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 24 }}>
@@ -577,29 +596,28 @@ export function WarMatchup({
         ))}
       </View>
       {war.state !== 'preparation' ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <CKText role="body" style={{ flex: 1, color: foreground, textAlign: 'center' }}>
-            {formatPercent(war.clan?.destructionPercentage ?? 0)}
-          </CKText>
-          <CKText role="body" style={{ color: secondary }}>
-            {t('warDestructionTitle')}
-          </CKText>
-          <CKText role="body" style={{ flex: 1, color: foreground, textAlign: 'center' }}>
-            {formatPercent(war.opponent?.destructionPercentage ?? 0)}
-          </CKText>
-        </View>
-      ) : null}
-      {!hero && war.state !== 'preparation' ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <CKText role="body" style={{ flex: 1, color: secondary, textAlign: 'center' }}>
-            {war.clan?.attacks ?? 0}/{capacity}
-          </CKText>
-          <CKText role="body" style={{ color: secondary }}>
-            {t('warAttacksTitle')}
-          </CKText>
-          <CKText role="body" style={{ flex: 1, color: secondary, textAlign: 'center' }}>
-            {war.opponent?.attacks ?? 0}/{capacity}
-          </CKText>
+        <View style={{ flexDirection: 'row', gap: 16 }}>
+          {[war.clan, war.opponent].map((clan, index) => (
+            <View key={index} style={styles.matchupMetrics}>
+              <CKText
+                role="body"
+                accessibilityLabel={`${t('warDestructionTitle')}: ${formatPercent(clan?.destructionPercentage ?? 0)}`}
+                style={{ color: foreground, fontVariant: ['tabular-nums'] }}
+              >
+                {formatPercent(clan?.destructionPercentage ?? 0)}
+              </CKText>
+              <View
+                style={styles.matchupAttackCount}
+                accessible
+                accessibilityLabel={`${t('warAttacksTitle')}: ${clan?.attacks ?? 0}/${capacity}`}
+              >
+                <MobileWebImage imageUrl={ImageAssets.sword} style={{ width: 18, height: 18 }} />
+                <CKText role="body" style={{ color: secondary, fontVariant: ['tabular-nums'] }}>
+                  {clan?.attacks ?? 0}/{capacity}
+                </CKText>
+              </View>
+            </View>
+          ))}
         </View>
       ) : null}
     </View>
@@ -743,19 +761,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   stripIcon: { width: 16, height: 16, resizeMode: 'contain' },
-  warBody: { minHeight: 124, flexDirection: 'row', alignItems: 'center', padding: 8 },
+  warBody: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
   preparationWarBody: { minHeight: 112 },
   warSide: { flex: 3, alignItems: 'center', gap: 3 },
   warBadge: { width: 70, height: 70, resizeMode: 'contain' },
-  scoreColumn: { flex: 4, alignItems: 'center', justifyContent: 'center', gap: 5 },
+  scoreColumn: { flex: 5, minWidth: 0, alignItems: 'center', justifyContent: 'center', gap: 5 },
   stateLabel: { textAlign: 'center', fontWeight: '700', flexShrink: 1, lineHeight: 18 },
   resultLabel: { fontWeight: '800' },
   scoreRow: { width: '100%', alignItems: 'center', justifyContent: 'center' },
   scoreValue: {
-    width: '100%',
-    paddingHorizontal: 2,
-    fontSize: 24,
-    lineHeight: 28,
+    fontSize: 28,
+    lineHeight: 34,
+    fontVariant: ['tabular-nums'],
     fontWeight: '800',
     textAlign: 'center',
   },
@@ -774,7 +797,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    paddingBottom: 6,
   },
   attackStatus: {
     minHeight: 26,
@@ -785,6 +808,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
   },
   hero: { overflow: 'hidden', paddingBottom: 24, gap: 16 },
+  matchupMetrics: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    columnGap: 14,
+    rowGap: 6,
+  },
+  matchupAttackCount: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   heroStatus: { alignItems: 'center', gap: 8, paddingHorizontal: 16 },
   sideMetrics: { alignItems: 'center', marginTop: 12, gap: 2 },
   heroActions: {
@@ -842,6 +875,9 @@ const styles = StyleSheet.create({
   detailMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, paddingTop: 8 },
   detailMetaPill: { paddingHorizontal: 9, paddingVertical: 5 },
   resultHero: { alignItems: 'center', gap: 4 },
+  resultStars: { flexDirection: 'row', gap: 4 },
+  resultStar: { width: 32, height: 32 },
+  unearnedStar: { opacity: 0.2 },
   participant: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 10 },
   participantImage: { width: 54, height: 54, resizeMode: 'contain' },
   mapPill: { paddingHorizontal: 10, paddingVertical: 6 },

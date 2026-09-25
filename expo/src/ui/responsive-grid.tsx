@@ -18,6 +18,8 @@ export type ResponsiveGridProps = {
   gap?: number;
   style?: StyleProp<ViewStyle>;
   waitForLayout?: boolean;
+  fillLastRow?: boolean;
+  initialWidth?: number;
   testID?: string;
 };
 
@@ -29,9 +31,11 @@ export function ResponsiveGrid({
   gap = ckSpacing.md,
   style,
   waitForLayout = false,
+  fillLastRow = false,
+  initialWidth = 0,
   testID,
 }: ResponsiveGridProps) {
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(initialWidth);
   const columns = resolveGridColumns({ width, minItemWidth, minColumns, maxColumns, gap });
   const itemWidth = width > 0 ? Math.max(0, (width - gap * (columns - 1)) / columns) : '100%';
   const onLayout = (event: LayoutChangeEvent) => setWidth(event.nativeEvent.layout.width);
@@ -47,7 +51,7 @@ export function ResponsiveGrid({
     <View testID={testID} onLayout={onLayout} style={[styles.grid, { gap }, style]}>
       {(!waitForLayout || width > 0) &&
         entries.map((entry) => (
-          <View key={entry.key} style={{ width: itemWidth }}>
+          <View key={entry.key} style={{ width: itemWidth, flexGrow: fillLastRow ? 1 : 0 }}>
             {entry.child}
           </View>
         ))}

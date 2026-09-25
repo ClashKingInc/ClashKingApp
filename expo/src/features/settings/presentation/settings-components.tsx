@@ -101,6 +101,7 @@ export function SettingsTile({
   icon,
   title,
   subtitle,
+  subtitleNumberOfLines = 1,
   trailing,
   destructive = false,
   disabled = false,
@@ -110,6 +111,7 @@ export function SettingsTile({
   icon: ReactNode;
   title: string;
   subtitle?: string;
+  subtitleNumberOfLines?: number;
   trailing?: string | ReactNode;
   destructive?: boolean;
   disabled?: boolean;
@@ -126,6 +128,7 @@ export function SettingsTile({
       style={({ pressed }) => [
         styles.tile,
         subtitle ? styles.tileWithSubtitle : styles.tileWithoutSubtitle,
+        subtitle && subtitleNumberOfLines > 1 && styles.multilineTile,
         disabled && styles.disabled,
         pressed && styles.pressed,
       ]}
@@ -134,13 +137,18 @@ export function SettingsTile({
       <View style={styles.tileCopy}>
         <CKText
           role="bodyLarge"
-          numberOfLines={1}
+          numberOfLines={subtitleNumberOfLines > 1 ? 2 : 1}
           style={[styles.tileTitle, { color: destructive ? theme.error : theme.onSurface }]}
         >
           {title}
         </CKText>
         {subtitle ? (
-          <CKText muted role="bodySmall" numberOfLines={1} style={styles.tileSubtitle}>
+          <CKText
+            muted
+            role="bodySmall"
+            numberOfLines={subtitleNumberOfLines}
+            style={styles.tileSubtitle}
+          >
             {subtitle}
           </CKText>
         ) : null}
@@ -314,6 +322,7 @@ const styles = StyleSheet.create({
   },
   tileWithoutSubtitle: { height: 50 },
   tileWithSubtitle: { height: 62 },
+  multilineTile: { height: undefined, minHeight: 62, paddingVertical: 12 },
   icon: { width: 28, alignItems: 'center' },
   tileCopy: { flex: 1, gap: 2 },
   tileTitle: { fontWeight: '500', fontSize: 17 },

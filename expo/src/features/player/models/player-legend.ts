@@ -17,25 +17,25 @@ export class PlayerLegendBattle {
     readonly destructionPercentage: number | null = null,
     readonly shareCode: string | null = null,
     readonly opponentInsight: PlayerLegendOpponentInsight | null = null,
+    readonly familyId: string | null = null,
   ) {}
 
   static fromJson(json: JsonRecord) {
-    if (json.automatic === true) {
-      return new PlayerLegendBattle(int(json.trophies), true);
-    }
     const opponent = record(json.opponent);
     return new PlayerLegendBattle(
       int(json.trophies),
-      false,
+      json.automatic === true,
       apiDate(json.time),
       int(json.duration),
       int(json.townHallLevel),
       string(opponent.tag),
       string(opponent.name),
       int(opponent.townHallLevel),
-      int(json.stars),
-      number(json.destructionPercentage),
+      json.stars == null ? null : int(json.stars),
+      json.destructionPercentage == null ? null : number(json.destructionPercentage),
       json.shareCode === null ? null : string(json.shareCode),
+      null,
+      typeof json.familyId === 'string' ? json.familyId : null,
     );
   }
 }
@@ -64,7 +64,7 @@ export class PlayerLegendBattlelog {
 
   static fromJson(json: JsonRecord) {
     const day = string(json.day);
-    const startsAt = new Date(`${day}T05:00:00.000Z`);
+    const startsAt = new Date(`${day}T05:10:00.000Z`);
     const endsAt = new Date(startsAt.getTime() + 86_400_000);
     const attacks = records(json.attacks);
     const defenses = records(json.defenses);
@@ -92,6 +92,7 @@ export class PlayerLegendHistoryEntry {
     readonly attackWins: number,
     readonly defenseWins: number,
     readonly rank: number,
+    readonly population: number | null = null,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -104,6 +105,7 @@ export class PlayerLegendHistoryEntry {
       int(json.attackWins),
       int(json.defenseWins),
       int(json.rank),
+      json.population == null ? null : int(json.population),
     );
   }
 }
@@ -114,6 +116,7 @@ export class PlayerLegendRank {
     readonly name: string,
     readonly trophies: number,
     readonly globalRank: number,
+    readonly location: { readonly id: number; readonly name: string; readonly countryCode?: string } | null = null,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -122,6 +125,9 @@ export class PlayerLegendRank {
       string(json.name),
       int(json.trophies),
       int(json.globalRank),
+      json.location && typeof json.location === 'object'
+        ? { id: int(record(json.location).id), name: string(record(json.location).name), countryCode: string(record(json.location).countryCode) || undefined }
+        : null,
     );
   }
 }
@@ -132,6 +138,8 @@ export class PlayerLegendDaySummary {
     readonly attackTrophies: number,
     readonly defenseTrophies: number,
     readonly trophyChange: number,
+    readonly closingTrophies?: number | null,
+    readonly globalRank?: number | null,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -140,8 +148,33 @@ export class PlayerLegendDaySummary {
       int(json.attackTrophies),
       int(json.defenseTrophies),
       int(json.trophies),
+      json.closingTrophies == null ? null : int(json.closingTrophies),
+      json.globalRank == null ? null : int(json.globalRank),
     );
   }
+}
+
+export interface LegendSeasonStats {
+  readonly attacks: number;
+  readonly defenses: number;
+  readonly attackTriples: number;
+  readonly defenseTriples: number;
+  readonly averageOffense: number | null;
+  readonly averageDefense: number | null;
+}
+export interface LegendPerformanceComparison {
+  readonly cohort: 'legend_i' | 'top_1000' | 'top_200';
+  readonly days: number;
+  readonly attacks: number;
+  readonly triples: number;
+  readonly playerAttacks: number;
+  readonly playerTriples: number;
+}
+export interface LegendArmyPerformanceComparison {
+  readonly familyId: string;
+  readonly name: string | null;
+  readonly shareCode: string;
+  readonly items: readonly LegendPerformanceComparison[];
 }
 
 export class PlayerLegendLeagueData {
@@ -157,11 +190,17 @@ export class PlayerLegendLeagueData {
     readonly currentRank: PlayerLegendRank | null = null,
     readonly historicalRank: PlayerLegendRank | null = null,
     readonly recentDays: readonly PlayerLegendDaySummary[] = currentDay ? [currentDay] : [],
+    readonly seasonArmyShareCodes: readonly string[] = [],
+    readonly seasonStart: string | null = null,
+    readonly seasonEnd: string | null = null,
+    readonly seasonStats: LegendSeasonStats | null = null,
+    readonly comparisons: readonly LegendPerformanceComparison[] = [],
+    readonly armyComparison: LegendArmyPerformanceComparison | null = null,
   ) {}
 }
 
 export function currentLegendDay(now = new Date()): string {
-  return new Date(now.getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return new Date(now.getTime() - (5 * 60 + 10) * 60 * 1000).toISOString().slice(0, 10);
 }
 
 export class LegendHeroGear {
@@ -282,9 +321,7 @@ export class PlayerLegendSeason {
     this.dayOfSeason = Math.min(elapsed, duration);
   }
   get currentDay() {
-    const now = new Date();
-    if (now.getUTCHours() < 5) now.setUTCDate(now.getUTCDate() - 1);
-    return this.days[now.toISOString().split('T')[0]!] ?? null;
+    return this.days[currentLegendDay()] ?? null;
   }
   static fromJson(json: JsonRecord) {
     const start = date(json.season_start) ?? new Date(0),

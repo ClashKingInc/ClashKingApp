@@ -109,6 +109,7 @@ export function PlayersScreen({
           player={entry.player}
           link={entry.link}
           options={model.optionsByTag[key] ?? new PlayerCardOptions()}
+          homeIncluded={model.homeIncludedAccountTags?.has(key.replace(/^#/, '')) ?? true}
           featureFlags={model.featureFlags}
           notificationsEnabled={model.notificationsEnabled}
           notificationActive={model.notificationAccountTags.has(key)}
@@ -296,7 +297,7 @@ function playerRosterEntryTag(entry: PlayerRosterEntry): string {
   return normalizeRosterTag(entry.kind === 'linked' ? entry.player.tag : entry.bookmark.tag);
 }
 
-function PlayerRosterControl({
+export function PlayerRosterControl({
   mode,
   linkedLabel,
   bookmarkedLabel,

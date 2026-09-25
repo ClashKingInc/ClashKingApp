@@ -1,5 +1,15 @@
 import { cloneElement, useCallback, useEffect, useState, type ReactElement } from 'react';
-import { ArrowLeft, Bookmark, Download, ExternalLink, Tag, Trash2, X } from 'lucide-react-native';
+import {
+  ArrowLeft,
+  Bookmark,
+  CalendarDays,
+  Download,
+  ExternalLink,
+  ThumbsUp,
+  ThumbsDown,
+  Trash2,
+  X,
+} from 'lucide-react-native';
 import {
   Linking,
   Modal,
@@ -15,6 +25,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useAppRuntime } from '../../core/app/runtime-context';
 import { ImageAssets } from '../../core/assets/image-assets';
+import { PlayerBattlelogArmyCatalog } from '../player/models/player-battlelog';
 import { materialBackLabel, useI18n } from '../../i18n';
 import {
   CKText,
@@ -23,31 +34,44 @@ import {
   HeaderIconButton,
   LoadingScreen,
   MobileWebImage,
+  ProfileTabs,
   SelectionPicker,
   Surface,
   colorWithAlpha,
   useCKTheme,
 } from '../../ui';
 import type {
+  PersonalArmiesServiceContract,
+  PersonalArmiesState,
+  PersonalArmy,
+} from './personal-armies-service';
+import type {
   PersonalBase,
   PersonalBasesServiceContract,
   PersonalBasesState,
-  PersonalBaseKind,
 } from './personal-bases-service';
-
-const CLEAR_KIND = '__clear__';
+import { townHallLevelFromBaseLink } from './base-link';
+import { armyDisplayItems } from './army-presentation';
 
 export function BasesArmiesRoot({ onBack }: { readonly onBack: () => void }) {
   const runtime = useAppRuntime();
-  return <BasesArmiesScreen onBack={onBack} service={runtime.personalBases} />;
+  return (
+    <BasesArmiesScreen
+      armyService={runtime.personalArmies}
+      baseService={runtime.personalBases}
+      onBack={onBack}
+    />
+  );
 }
 
 export function BasesArmiesScreen({
+  armyService,
+  baseService,
   onBack,
-  service,
 }: {
+  readonly armyService: PersonalArmiesServiceContract;
+  readonly baseService: PersonalBasesServiceContract;
   readonly onBack: () => void;
-  readonly service: PersonalBasesServiceContract;
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
@@ -55,6 +79,7 @@ export function BasesArmiesScreen({
   const { width } = useWindowDimensions();
   const horizontal = Platform.OS === 'web' && width >= 900 ? Math.max(16, (width - 1200) / 2) : 16;
   const [state, setState] = useState<PersonalBasesState | null>(null);
+  const [armyState, setArmyState] = useState<PersonalArmiesState | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadError, setLoadError] = useState(false);
@@ -62,6 +87,9 @@ export function BasesArmiesScreen({
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [cleanupVisible, setCleanupVisible] = useState(false);
   const [cleanupNow, setCleanupNow] = useState(Date.now);
+  const [section, setSection] = useState('bases');
+  const [collection, setCollection] = useState('all');
+  const [townHallFilter, setTownHallFilter] = useState('all');
 
   const load = useCallback(
     async (refresh = false) => {
@@ -69,7 +97,9 @@ export function BasesArmiesScreen({
       else setLoading(true);
       setLoadError(false);
       try {
-        setState(await service.load());
+        const [bases, armies] = await Promise.all([baseService.load(), armyService.load()]);
+        setState(bases);
+        setArmyState(armies);
       } catch {
         setLoadError(true);
       } finally {
@@ -77,15 +107,17 @@ export function BasesArmiesScreen({
         setRefreshing(false);
       }
     },
-    [service],
+    [armyService, baseService],
   );
 
   useEffect(() => {
     let current = true;
-    void service
-      .load()
-      .then((value) => {
-        if (current) setState(value);
+    void Promise.all([baseService.load(), armyService.load()])
+      .then(([bases, armies]) => {
+        if (current) {
+          setState(bases);
+          setArmyState(armies);
+        }
       })
       .catch(() => {
         if (current) setLoadError(true);
@@ -96,15 +128,15 @@ export function BasesArmiesScreen({
     return () => {
       current = false;
     };
-  }, [service]);
+  }, [armyService, baseService]);
 
   const mutate = useCallback(
-    async (key: string, operation: () => Promise<PersonalBasesState>) => {
+    async (key: string, operation: () => Promise<void>) => {
       if (busyKey !== null) return;
       setBusyKey(key);
       setMutationError(false);
       try {
-        setState(await operation());
+        await operation();
       } catch {
         setMutationError(true);
       } finally {
@@ -113,8 +145,23 @@ export function BasesArmiesScreen({
     },
     [busyKey],
   );
-  const savedItems = state?.items.filter((base) => base.saved) ?? [];
-  const historyItems = state?.items.filter((base) => base.downloadedAt !== null) ?? [];
+  const items = [...new Map(state?.items.map((base) => [base.id, base])).values()];
+  const armies = armyState?.items ?? [];
+  const savedItems = items.filter((base) => base.saved);
+  const townHallLevels = [
+    ...new Set(
+      items
+        .map((base) => townHallLevelFromBaseLink(base.baseLink))
+        .filter((level): level is number => level !== null),
+    ),
+  ].sort((left, right) => right - left);
+  const visibleItems = items.filter(
+    (base) =>
+      (collection === 'all' ||
+        (collection === 'saved' ? base.saved : base.downloadedAt !== null)) &&
+      (townHallFilter === 'all' ||
+        townHallLevelFromBaseLink(base.baseLink) === Number(townHallFilter)),
+  );
   const cutoff = cleanupNow - 90 * 86_400_000;
   const oldSavedCount = savedItems.filter(
     (base) => base.savedAt !== null && new Date(base.savedAt).getTime() < cutoff,
@@ -136,11 +183,21 @@ export function BasesArmiesScreen({
           <CKText role="sectionTitle" numberOfLines={1}>
             {t('sideBasesArmiesTitle')}
           </CKText>
-          <CKText muted role="bodySmall" numberOfLines={1}>
-            {t('sideBasesArmiesSubtitle')}
-          </CKText>
         </View>
-        <View style={styles.headerSpacer} />
+        {section === 'bases' && oldSavedCount > 0 ? (
+          <HeaderIconButton
+            glass={false}
+            icon={<Trash2 color={theme.onSurfaceVariant} size={20} />}
+            label={t('personalBasesDeleteOld')}
+            onPress={() => {
+              if (busyKey !== null) return;
+              setCleanupNow(Date.now());
+              setCleanupVisible(true);
+            }}
+          />
+        ) : (
+          <View style={styles.headerSpacer} />
+        )}
       </View>
 
       {loading && state === null ? (
@@ -171,46 +228,80 @@ export function BasesArmiesScreen({
               style={styles.mutationError}
             />
           ) : null}
-
-          <SectionTitle title={t('sideSavedBases')} />
-          <ActionButton
-            disabled={busyKey !== null || oldSavedCount === 0}
-            icon={<Trash2 color={theme.primary} />}
-            label={t('personalBasesDeleteOld')}
-            onPress={() => {
-              setCleanupNow(Date.now());
-              setCleanupVisible(true);
-            }}
+          <ProfileTabs
+            variant="compact"
+            selectedKey={section}
+            onSelect={setSection}
+            tabs={[
+              { key: 'bases', label: t('sideSavedBases') },
+              { key: 'armies', label: t('sideSavedArmies') },
+            ]}
           />
-          {savedItems.length === 0 ? (
-            <EmptyState title={t('sideSavedBases')} />
+          {section === 'bases' ? (
+            <>
+              <View style={styles.filters}>
+                <SelectionPicker
+                  fillWidth
+                  title={t('sideFilter')}
+                  accessibilityLabel={t('sideFilter')}
+                  selectedKey={collection}
+                  onSelect={setCollection}
+                  options={[
+                    { key: 'all', label: t('generalAll') },
+                    { key: 'saved', label: t('sideSavedBases') },
+                    { key: 'history', label: t('generalHistory') },
+                  ]}
+                />
+                <SelectionPicker
+                  fillWidth
+                  title={t('filtersTownHall')}
+                  accessibilityLabel={t('filtersTownHall')}
+                  selectedKey={townHallFilter}
+                  onSelect={setTownHallFilter}
+                  options={[
+                    { key: 'all', label: t('statsAllTownHalls') },
+                    ...townHallLevels.map((level) => ({
+                      key: String(level),
+                      label: t('gameTownHallShortLevel', { level }),
+                    })),
+                  ]}
+                />
+              </View>
+              {visibleItems.length === 0 ? (
+                <EmptyState title={t('generalNoDataAvailable')} />
+              ) : (
+                visibleItems.map((base) => (
+                  <BaseCard
+                    base={base}
+                    busy={busyKey !== null}
+                    key={base.id}
+                    onOpen={() => void Linking.openURL(base.baseLink)}
+                    onToggleSaved={() =>
+                      void mutate(`base:${base.id}`, async () => {
+                        setState(
+                          await (base.saved
+                            ? baseService.unsave(base.id)
+                            : baseService.save(base.id)),
+                        );
+                      })
+                    }
+                  />
+                ))
+              )}
+            </>
+          ) : armies.length === 0 ? (
+            <EmptyState title={t('generalNoDataAvailable')} />
           ) : (
-            savedItems.map((base) => (
-              <BaseCard
-                base={base}
-                busy={busyKey === `base:${base.id}`}
-                key={base.id}
-                onOpen={() => void Linking.openURL(base.baseLink)}
-                onKind={(kind) => void mutate(`base:${base.id}`, () => service.save(base.id, kind))}
-                onToggleSaved={() => void mutate(`base:${base.id}`, () => service.unsave(base.id))}
-              />
-            ))
-          )}
-
-          <SectionTitle title={t('generalHistory')} />
-          {historyItems.length === 0 ? (
-            <EmptyState title={t('generalHistory')} />
-          ) : (
-            historyItems.map((base) => (
-              <BaseCard
-                base={base}
-                busy={busyKey === `history:${base.id}`}
-                key={`history:${base.id}`}
-                onOpen={() => void Linking.openURL(base.baseLink)}
-                onToggleSaved={
-                  base.saved
-                    ? undefined
-                    : () => void mutate(`history:${base.id}`, () => service.save(base.id, null))
+            armies.map((army) => (
+              <ArmyCard
+                army={army}
+                busy={busyKey !== null}
+                key={army.shareCode}
+                onOpen={() => void Linking.openURL(army.armyLink)}
+                onRemove={() =>
+                  void mutate(`army:${army.shareCode}`, async () => {
+                    setArmyState(await armyService.remove(army.shareCode));
+                  })
                 }
               />
             ))
@@ -246,8 +337,8 @@ export function BasesArmiesScreen({
                 onPress={() => {
                   setCleanupVisible(false);
                   void mutate('cleanup', async () => {
-                    await service.deleteOld();
-                    return service.load();
+                    await baseService.deleteOld();
+                    setState(await baseService.load());
                   });
                 }}
               />
@@ -259,11 +350,66 @@ export function BasesArmiesScreen({
   );
 }
 
-function SectionTitle({ title }: { readonly title: string }) {
+function ArmyCard({
+  army,
+  busy,
+  onOpen,
+  onRemove,
+}: {
+  readonly army: PersonalArmy;
+  readonly busy: boolean;
+  readonly onOpen: () => void;
+  readonly onRemove: () => void;
+}) {
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const items = armyDisplayItems(army);
+
   return (
-    <CKText role="sectionTitle" style={styles.sectionTitle}>
-      {title}
-    </CKText>
+    <Surface radius={18} style={styles.armyCard}>
+      <View style={styles.armyItems}>
+        {items.map(({ code, quantity }, index) => {
+          const item = PlayerBattlelogArmyCatalog.resolve(code);
+          return (
+            <View key={`${code}:${index}`} style={styles.armyItem}>
+              <MobileWebImage imageUrl={item.imageUrl} style={styles.armyItemImage} />
+              {quantity > 1 ? (
+                <View style={[styles.quantityBadge, { backgroundColor: theme.surface }]}>
+                  <CKText role="labelSmall">{quantity}</CKText>
+                </View>
+              ) : null}
+            </View>
+          );
+        })}
+      </View>
+      <View style={styles.metaRow}>
+        <Meta
+          icon={<CalendarDays color={theme.onSurfaceVariant} />}
+          label={new Date(army.savedAt).toLocaleDateString()}
+        />
+      </View>
+      <View style={styles.actions}>
+        <ActionButton
+          icon={<ExternalLink color={theme.primary} />}
+          label={t('generalOpen')}
+          onPress={onOpen}
+        />
+        <View style={styles.grow} />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('generalRemoveBookmark')}
+          accessibilityState={{ disabled: busy }}
+          disabled={busy}
+          onPress={onRemove}
+          style={({ pressed }) => [
+            styles.bookmarkButton,
+            { opacity: busy ? 0.4 : pressed ? 0.6 : 1 },
+          ]}
+        >
+          <Bookmark size={22} color={theme.onSurface} fill={theme.onSurface} />
+        </Pressable>
+      </View>
+    </Surface>
   );
 }
 
@@ -271,13 +417,11 @@ function BaseCard({
   base,
   busy,
   onOpen,
-  onKind,
   onToggleSaved,
 }: {
   readonly base: PersonalBase;
   readonly busy: boolean;
   readonly onOpen: () => void;
-  readonly onKind?: (kind: PersonalBaseKind | null) => void;
   readonly onToggleSaved?: () => void;
 }) {
   const { t } = useI18n();
@@ -285,27 +429,24 @@ function BaseCard({
   return (
     <Surface radius={18} style={styles.baseCard}>
       <MobileWebImage
-        contentFit="cover"
+        contentFit="contain"
         imageUrl={base.images[0] ?? ImageAssets.clanCastle}
         style={styles.baseImage}
       />
       <View style={styles.baseContent}>
-        <CKText role="rowTitle" numberOfLines={2}>
-          {base.description || `#${base.id}`}
-        </CKText>
         <View style={styles.metaRow}>
+          <Meta icon={<ThumbsUp color={theme.onSurfaceVariant} />} label={String(base.upvotes)} />
+          <Meta
+            icon={<ThumbsDown color={theme.onSurfaceVariant} />}
+            label={String(base.downvotes)}
+          />
+          <View style={styles.grow} />
           {base.downloadedAt !== null ? (
             <Meta
               icon={<Download color={theme.onSurfaceVariant} />}
               label={new Date(base.downloadedAt).toLocaleDateString()}
             />
           ) : null}
-          {base.saved ? (
-            <Meta icon={<Bookmark color={theme.onSurfaceVariant} />} label={t('gameAssetsSaved')} />
-          ) : null}
-          <CKText muted role="labelSmall">
-            #{base.id}
-          </CKText>
         </View>
         <View style={styles.actions}>
           <ActionButton
@@ -313,31 +454,25 @@ function BaseCard({
             label={t('generalOpen')}
             onPress={onOpen}
           />
-          {onKind ? (
-            <View style={styles.kindPicker}>
-              <Tag color={theme.onSurfaceVariant} size={16} />
-              <SelectionPicker
-                accessibilityLabel={`#${base.id} kind`}
-                onSelect={(kind) => {
-                  if (!busy) onKind(kind === CLEAR_KIND ? null : (kind as PersonalBaseKind));
-                }}
-                options={[
-                  { key: CLEAR_KIND, label: t('searchClear'), disabled: busy },
-                  { key: 'war', label: t('warTitle'), disabled: busy },
-                  { key: 'legend', label: t('legendsTitle'), disabled: busy },
-                ]}
-                selectedKey={base.kind ?? CLEAR_KIND}
-                title={t('sideSavedBases')}
-              />
-            </View>
-          ) : null}
+          <View style={styles.grow} />
           {onToggleSaved ? (
-            <ActionButton
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={base.saved ? t('generalRemoveBookmark') : t('gameAssetsSave')}
+              accessibilityState={{ disabled: busy, selected: base.saved }}
               disabled={busy}
-              icon={<Bookmark color={theme.primary} />}
-              label={base.saved ? t('generalRemoveBookmark') : t('gameAssetsSave')}
               onPress={onToggleSaved}
-            />
+              style={({ pressed }) => [
+                styles.bookmarkButton,
+                { opacity: busy ? 0.4 : pressed ? 0.6 : 1 },
+              ]}
+            >
+              <Bookmark
+                size={22}
+                color={theme.onSurface}
+                fill={base.saved ? theme.onSurface : 'transparent'}
+              />
+            </Pressable>
           ) : null}
         </View>
       </View>
@@ -409,13 +544,29 @@ const styles = StyleSheet.create({
   feedbackWrap: { paddingTop: 16 },
   content: { width: '100%', maxWidth: 1200, alignSelf: 'center', paddingTop: 12 },
   mutationError: { marginTop: 12 },
-  sectionTitle: { marginTop: 18, marginBottom: 8 },
-  baseCard: { flexDirection: 'row', padding: 12, marginBottom: 10, gap: 12 },
-  baseImage: { width: 104, minHeight: 104, borderRadius: 12 },
-  baseContent: { flex: 1, gap: 8 },
+  filters: { flexDirection: 'row', gap: 12, marginVertical: 16 },
+  baseCard: { overflow: 'hidden', marginBottom: 20 },
+  armyCard: { marginBottom: 16, padding: 14, gap: 14 },
+  armyItems: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  armyItem: { width: 52, height: 52 },
+  armyItemImage: { width: 52, height: 52 },
+  quantityBadge: {
+    position: 'absolute',
+    right: -3,
+    bottom: -3,
+    minWidth: 20,
+    height: 20,
+    paddingHorizontal: 4,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  baseImage: { width: '100%', aspectRatio: 4 / 3 },
+  baseContent: { padding: 12, gap: 12 },
   metaRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 10 },
   meta: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 'auto' },
+  actions: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 8 },
+  bookmarkButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   actionButton: {
     minHeight: 40,
     paddingHorizontal: 12,
@@ -425,7 +576,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   disabled: { opacity: 0.5 },
-  kindPicker: { flexDirection: 'row', alignItems: 'center', gap: 6, minWidth: 170 },
   modalBackdrop: {
     flex: 1,
     alignItems: 'center',

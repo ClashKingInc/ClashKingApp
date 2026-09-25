@@ -152,6 +152,35 @@ describe('MobileWebImage resolution', () => {
     ]);
   });
 
+  it('tries the original first-party URL directly when its managed transform cannot be cached', async () => {
+    applyAssetManifest({
+      version: 2,
+      assets: {
+        icons: [{ path: 'icons/cache-failure.png', sha: 'a'.repeat(64), animated: false }],
+      },
+      data: { stats: [{ path: 'static_data/troops.json', sha: 'a'.repeat(64) }], translations: [] },
+    });
+    jest.mocked(localImageCache.peek).mockReturnValue(undefined as unknown as string);
+    jest.mocked(localImageCache.resolve).mockRejectedValueOnce(new Error('cache unavailable'));
+
+    const image = await render(
+      createElement(MobileWebImage, {
+        testID: 'cache-failure',
+        imageUrl: 'https://assets.clashk.ing/icons/cache-failure.png',
+        style: { width: 64, height: 64 },
+      }),
+    );
+    await act(async () => undefined);
+
+    expect(localImageCache.resolve).toHaveBeenCalledTimes(1);
+    expect(image.getByTestId('cache-failure').props.source).toEqual([
+      {
+        uri: 'https://assets.clashk.ing/icons/cache-failure.png',
+        headers: { 'Cache-Control': 'no-cache' },
+      },
+    ]);
+  });
+
   it('leaves explicitly animated images on their original URL', async () => {
     const original = 'https://assets.clashk.ing/animation.webp';
     const image = await render(

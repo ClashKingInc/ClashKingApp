@@ -17,6 +17,25 @@ import { RankingsRequestException, type RankingsServiceContract } from './rankin
 
 afterEach(resetGameDataStateForTesting);
 
+test('Capital rejects non-Monday calendar dates and normalizes legacy archive selections', async () => {
+  const service = new RecordingService();
+  const provider = new RankingsProvider(service, { clock: () => new Date(2026, 8, 23) });
+  await provider.openBoard(RankingBoard.clanCapital, false);
+  await provider.selectDate(new Date(2026, 8, 22));
+  expect(service.queries).toHaveLength(0);
+  await provider.selectDate(new Date(2026, 8, 21));
+  expect(service.queries.at(-1)).toMatchObject({
+    period: RankingPeriod.history,
+    historyDate: new Date(2026, 8, 21),
+  });
+  await provider.selectDate(provider.today);
+  expect(service.queries.at(-1)?.period).toBe(RankingPeriod.current);
+  provider.period = RankingPeriod.history;
+  provider.historyDate = new Date(2026, 8, 20);
+  await provider.reload();
+  expect(service.queries.at(-1)?.historyDate).toEqual(new Date(2026, 8, 14));
+});
+
 test('builds every game-data tier except Legend League 1 in descending ID order', () => {
   gameDataState.playerLeagueData.leagues = {
     'Legend 1': { _id: 105000036, name: 'Legend League' },
@@ -51,6 +70,46 @@ test('preserves board/filter behavior and matching village board across audience
   expect(provider.period).toBe(RankingPeriod.current);
   await provider.selectAudience(RankingAudience.players);
   expect(provider.board).toBe(RankingBoard.playerHome);
+});
+
+test('maps daily navigation and calendar selection between live and history with one request each', async () => {
+  const service = new RecordingService();
+  const provider = new RankingsProvider(service, {
+    leagueOptions: [RankingLeagueOption.legendTwo],
+    clock: () => new Date(2026, 8, 23, 17),
+  });
+  await provider.initialize();
+  const baseline = service.queries.length;
+
+  await provider.selectDate(new Date(2026, 8, 22));
+  expect(provider.period).toBe(RankingPeriod.history);
+  expect(provider.historyDate).toEqual(new Date(2026, 8, 22));
+  expect(service.queries).toHaveLength(baseline + 1);
+  expect(service.queries.at(-1)).toMatchObject({
+    period: RankingPeriod.history,
+    historyDate: new Date(2026, 8, 22),
+  });
+
+  await provider.selectDate(new Date(2026, 8, 23));
+  expect(provider.period).toBe(RankingPeriod.current);
+  expect(service.queries).toHaveLength(baseline + 2);
+  expect(service.queries.at(-1)).toMatchObject({ period: RankingPeriod.current });
+
+  await provider.selectDate(new Date(2026, 8, 23));
+  await provider.selectDate(new Date(2026, 8, 24));
+  await provider.selectDate(new Date(2023, 8, 22));
+  expect(service.queries).toHaveLength(baseline + 2);
+});
+
+test('does not offer daily selection for current-only boards', async () => {
+  const service = new RecordingService();
+  const provider = new RankingsProvider(service, { clock: () => new Date(2026, 8, 23) });
+  await provider.initialize();
+  await provider.openBoard(RankingBoard.playerTownHall);
+  const baseline = service.queries.length;
+  await provider.selectDate(new Date(2026, 8, 22));
+  expect(provider.period).toBe(RankingPeriod.current);
+  expect(service.queries).toHaveLength(baseline);
 });
 
 test('treats explicit and message-based not-found failures as empty results', async () => {

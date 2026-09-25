@@ -72,15 +72,22 @@ function ApplicationContent() {
     void runtime.gameData.refreshGameDataIfChanged().catch(() => undefined);
     const result = await initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts);
     if (!result.authenticated) throw new Error('Authentication expired.');
+    await runtime.accountBootstrap
+      .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+        links: runtime.accounts.accounts,
+        selectedTagLoaded: true,
+      })
+      .catch((error) => reportException(error, 'postAuth.bootstrap'));
     runtime.achievements.bindSession(runtime.auth.state.currentUser?.userId ?? null);
     void runtime.achievements
       .check()
       .catch((error) => reportException(error, 'startup.achievements'));
-    const shouldPrompt = await initializeAuthenticatedPush({
-      notificationsEnabled: runtime.appState.getState().isFeatureEnabled('notifications'),
+    const notificationsEnabled = runtime.appState.getState().isFeatureEnabled('notifications');
+    void initializeAuthenticatedPush({
+      notificationsEnabled,
       push: runtime.push,
-    });
-    if (shouldPrompt) {
+    }).catch((error) => reportException(error, 'postAuth.push'));
+    if (notificationsEnabled && runtime.push.supportsPushNotifications) {
       if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
       permissionTimer.current = setTimeout(() => {
         void runtime.push.showPermissionPrimerOnce();
@@ -122,13 +129,22 @@ function ApplicationContent() {
             .check()
             .catch((error) => reportException(error, 'startup.achievements'));
           await runtime.warWidgets.migrateLegacyWidgetValues();
+          // One OS-managed job serves both War and Legends widgets.
+          await runtime.warWidgets.registerPeriodicRefresh();
           if (runtime.appState.getState().isFeatureEnabled('war_widgets')) {
-            await runtime.warWidgets.registerPeriodicRefresh();
             await runtime.warWidgets.consumePendingWidgetAction();
           }
         },
         reportError: (operation, error) => reportException(error, operation),
       });
+      if (result.authenticated) {
+        await runtime.accountBootstrap
+          .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+            links: runtime.accounts.accounts,
+            selectedTagLoaded: true,
+          })
+          .catch((error) => reportException(error, 'startup.accountBootstrap'));
+      }
       if (generation !== startupGeneration.current) return;
       setScene(sceneForStartupResult(result));
       if (result.requestPushPermission) {
@@ -184,6 +200,21 @@ function ApplicationContent() {
   );
 
   useEffect(() => () => primerResolver.current?.(false), []);
+
+  useEffect(() => {
+    const refresh = () => {
+      if (AppState.currentState !== 'active' || !runtime.auth.state.isAuthenticated) return;
+      void runtime.legendsWidgets
+        .refreshCachedBookmarks()
+        .catch((error) => reportException(error, 'legends_widget.refresh'));
+    };
+    const subscription = AppState.addEventListener('change', refresh);
+    const timer = setInterval(refresh, 15 * 60_000);
+    return () => {
+      subscription.remove();
+      clearInterval(timer);
+    };
+  }, [runtime]);
 
   useEffect(
     () =>
@@ -292,9 +323,12 @@ function ApplicationContent() {
             if (!result.hasVerifiedAccount) {
               throw new Error(t('homeVerifiedAccountRequiredBody'));
             }
-            await runtime.accountBootstrap.initialize(
-              runtime.auth.state.currentUser?.userId ?? null,
-            );
+            await runtime.accountBootstrap
+              .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+                links: runtime.accounts.accounts,
+                selectedTagLoaded: true,
+              })
+              .catch((error) => reportException(error, 'accountSetup.bootstrap'));
             setScene({ kind: 'home' });
           }}
           onOpenGameSettings={() => openExternal(CLASH_SETTINGS_URL)}

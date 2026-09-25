@@ -40,6 +40,9 @@ export class AccountHttpException extends Error {
 export class CocAccountService {
   private currentUserId: string | null = null;
   private accountLinks: CocAccountLink[] = [];
+  private accountRevision = 0;
+  private fetchSequence = 0;
+  private latestFetchSequence = 0;
   private selectedPlayerTag: string | null = null;
   private lastRefreshedAt: Date | null = null;
   private bootstrapCoordinator: ((userId: string | null) => Promise<void>) | null = null;
@@ -101,10 +104,14 @@ export class CocAccountService {
 
   setCurrentUserId(userId: string | null): void {
     const normalized = userId?.trim() ?? '';
-    this.currentUserId = normalized.length === 0 ? null : normalized;
+    const next = normalized.length === 0 ? null : normalized;
+    if (next === this.currentUserId) return;
+    this.currentUserId = next;
+    this.invalidateAccountRequests();
   }
 
   clearAccountData(): void {
+    this.invalidateAccountRequests();
     this.accountLinks = [];
     this.selectedPlayerTag = null;
     this.lastRefreshedAt = null;
@@ -118,13 +125,24 @@ export class CocAccountService {
 
   async fetchAccounts(): Promise<readonly CocAccountLink[]> {
     try {
+      const userId = this.requireUserId();
+      const revision = this.accountRevision;
+      const fetchSequence = ++this.fetchSequence;
+      this.latestFetchSequence = fetchSequence;
       const data = await Effect.runPromise(
         this.api.execute(LinksListEndpoint, {
-          path: { userId: this.requireUserId() },
+          path: { userId },
           query: {},
           body: {},
         }),
       );
+      if (
+        this.currentUserId !== userId ||
+        this.accountRevision !== revision ||
+        this.latestFetchSequence !== fetchSequence
+      ) {
+        return this.accountLinks;
+      }
       this.accountLinks = data.items.map(parseCocAccountLink);
       const previousSelection = this.selectedPlayerTag;
       await this.initializeSelectedTag();
@@ -136,8 +154,8 @@ export class CocAccountService {
     }
   }
 
-  async addAccount(playerTag: string): Promise<AccountMutationResult> {
-    return this.addAccountRequest(playerTag);
+  async addAccount(playerTag: string, apiToken: string): Promise<AccountMutationResult> {
+    return this.addAccountRequest(playerTag, apiToken);
   }
 
   async addAccountWithVerification(
@@ -152,6 +170,7 @@ export class CocAccountService {
     apiToken: string,
   ): Promise<AccountVerificationResult> {
     try {
+      const mutation = this.beginAccountMutation();
       const response = await Effect.runPromise(
         this.api.executeStatus(LinksAddEndpoint, {
           path: { userId: this.requireUserId() },
@@ -159,10 +178,13 @@ export class CocAccountService {
           body: { player_tag: playerTag, api_token: apiToken },
         }),
       );
+      if (!this.isCurrentMutation(mutation)) {
+        return { success: false, message: 'User not authenticated' };
+      }
       if (response.ok) {
         const returnedAccount = normalizeAccount(response.value.account);
         await this.fetchAccounts();
-        if (returnedAccount !== null) {
+        if (returnedAccount !== null && this.isCurrentMutation(mutation)) {
           this.accountLinks = this.accountLinks.map((account) =>
             account.playerTag === playerTag
               ? {
@@ -203,6 +225,7 @@ export class CocAccountService {
 
   async verifyAccount(playerTag: string, apiToken: string): Promise<AccountVerificationResult> {
     try {
+      const mutation = this.beginAccountMutation();
       const response = await Effect.runPromise(
         this.api.executeStatus(LinksAddEndpoint, {
           path: { userId: this.requireUserId() },
@@ -210,6 +233,9 @@ export class CocAccountService {
           body: { player_tag: playerTag, api_token: apiToken },
         }),
       );
+      if (!this.isCurrentMutation(mutation)) {
+        return { success: false, message: 'User not authenticated' };
+      }
       if (response.ok) {
         this.accountLinks = this.accountLinks.map((account) =>
           account.playerTag === playerTag
@@ -246,7 +272,9 @@ export class CocAccountService {
   }
 
   async removeAccount(playerTag: string): Promise<boolean> {
+    let mutation: { readonly userId: string; readonly revision: number } | null = null;
     try {
+      mutation = this.beginAccountMutation();
       await Effect.runPromise(
         this.api.execute(LinksRemoveEndpoint, {
           path: { userId: this.requireUserId(), playerTag },
@@ -254,12 +282,27 @@ export class CocAccountService {
           body: {},
         }),
       );
+      if (!this.isCurrentMutation(mutation)) return false;
       this.accountLinks = this.accountLinks.filter((account) => account.playerTag !== playerTag);
       const previousSelection = this.selectedPlayerTag;
       await this.initializeSelectedTag();
       if (this.selectedPlayerTag === previousSelection) this.notify();
       return true;
     } catch (error) {
+      if (error instanceof ApiResponseError && error.status === 404) {
+        if (mutation === null || !this.isCurrentMutation(mutation)) return false;
+        try {
+          await this.fetchAccounts();
+          return (
+            this.isCurrentMutation(mutation) &&
+            !this.accountLinks.some(
+              (account) => account.playerTag.toUpperCase() === playerTag.toUpperCase(),
+            )
+          );
+        } catch {
+          return false;
+        }
+      }
       this.report('accounts.remove', error);
       return false;
     }
@@ -267,6 +310,7 @@ export class CocAccountService {
 
   async updateAccountHidden(playerTag: string, hidden: boolean): Promise<void> {
     try {
+      const mutation = this.beginAccountMutation();
       await Effect.runPromise(
         this.api.execute(LinksVisibilityEndpoint, {
           path: { userId: this.requireUserId(), playerTag },
@@ -274,6 +318,7 @@ export class CocAccountService {
           body: { hidden },
         }),
       );
+      if (!this.isCurrentMutation(mutation)) return;
       this.accountLinks = this.accountLinks.map((account) =>
         account.playerTag === playerTag
           ? { ...account, hidden, raw: { ...account.raw, hidden } }
@@ -291,18 +336,20 @@ export class CocAccountService {
 
   async updateAccountOrder(playerTags: readonly string[]): Promise<boolean> {
     const previous = [...this.accountLinks];
-    const requested = playerTags.map((tag) => tag.toUpperCase());
-    const byTag = new Map(
-      this.accountLinks.map((account) => [account.playerTag.toUpperCase(), account]),
-    );
-    this.accountLinks = [
-      ...requested.flatMap((tag) => (byTag.has(tag) ? [byTag.get(tag)!] : [])),
-      ...this.accountLinks.filter(
-        (account) => !requested.includes(account.playerTag.toUpperCase()),
-      ),
-    ];
-    this.notify();
+    let mutation: { readonly userId: string; readonly revision: number } | null = null;
     try {
+      mutation = this.beginAccountMutation();
+      const requested = playerTags.map((tag) => tag.toUpperCase());
+      const byTag = new Map(
+        this.accountLinks.map((account) => [account.playerTag.toUpperCase(), account]),
+      );
+      this.accountLinks = [
+        ...requested.flatMap((tag) => (byTag.has(tag) ? [byTag.get(tag)!] : [])),
+        ...this.accountLinks.filter(
+          (account) => !requested.includes(account.playerTag.toUpperCase()),
+        ),
+      ];
+      this.notify();
       await Effect.runPromise(
         this.api.execute(LinksOrderEndpoint, {
           path: { userId: this.requireUserId() },
@@ -310,10 +357,12 @@ export class CocAccountService {
           body: { ordered_tags: [...playerTags] },
         }),
       );
-      return true;
+      return this.isCurrentMutation(mutation);
     } catch (error) {
-      this.accountLinks = previous;
-      this.notify();
+      if (mutation !== null && this.isCurrentMutation(mutation)) {
+        this.accountLinks = previous;
+        this.notify();
+      }
       this.report('accounts.order', error);
       return false;
     }
@@ -351,19 +400,20 @@ export class CocAccountService {
 
   private async addAccountRequest(
     playerTag: string,
-    apiToken?: string,
+    apiToken: string,
   ): Promise<AccountMutationResult> {
     try {
+      const mutation = this.beginAccountMutation();
       const response = await Effect.runPromise(
         this.api.executeStatus(LinksAddEndpoint, {
           path: { userId: this.requireUserId() },
           query: {},
-          body: {
-            player_tag: playerTag,
-            ...(apiToken === undefined ? {} : { api_token: apiToken }),
-          },
+          body: { player_tag: playerTag, api_token: apiToken },
         }),
       );
+      if (!this.isCurrentMutation(mutation)) {
+        return { code: 401, message: 'User not authenticated', account: null };
+      }
       if (!response.ok) {
         this.report(
           'coc_account.add',
@@ -389,7 +439,7 @@ export class CocAccountService {
       return {
         code: response.status,
         message: extractErrorMessage(data),
-        account: apiToken === undefined || response.status === 200 ? account : null,
+        account: response.status === 200 ? account : null,
       };
     } catch (error) {
       if (!(error instanceof UnauthorizedException)) this.report('coc_account.add', error);
@@ -414,6 +464,24 @@ export class CocAccountService {
       throw new UnauthorizedException('User not authenticated');
     }
     return this.currentUserId;
+  }
+
+  private beginAccountMutation(): { readonly userId: string; readonly revision: number } {
+    const userId = this.requireUserId();
+    this.invalidateAccountRequests();
+    return { userId, revision: this.accountRevision };
+  }
+
+  private isCurrentMutation(mutation: {
+    readonly userId: string;
+    readonly revision: number;
+  }): boolean {
+    return this.currentUserId === mutation.userId && this.accountRevision === mutation.revision;
+  }
+
+  private invalidateAccountRequests(): void {
+    this.accountRevision += 1;
+    this.latestFetchSequence = ++this.fetchSequence;
   }
 
   private report(operation: string, error: unknown): void {

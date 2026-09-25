@@ -49,6 +49,7 @@ export type StatsItemTypeValue = (typeof StatsItemType)[keyof typeof StatsItemTy
 export const StatsLegendCohort = {
   legend: 'legend_i',
   top1000: 'top_1000',
+  top100: 'top_100',
   top200: 'top_200',
 } as const;
 export type StatsLegendCohortValue = (typeof StatsLegendCohort)[keyof typeof StatsLegendCohort];
@@ -133,8 +134,11 @@ export class StatsArmiesQuery {
     readonly filters: StatsBattleFilters,
     readonly limit = 25,
     readonly sortBy: NonNullable<ArmySearchQueryContract['sort']> = 'usage',
+    readonly cohort: StatsLegendCohortValue = StatsLegendCohort.legend,
   ) {}
   toQuery(): ArmySearchQueryContract {
+    const maximumLimit = this.filters.dates.inclusiveDays === 1 ? 250 : 10;
+    const limit = Math.max(1, Math.min(Math.trunc(this.limit), maximumLimit));
     const identities = this.filters.includeItems.map((item) => item.item.trim().split(':'));
     const heroIds = identities
       .filter(([type]) => type === 'hero')
@@ -150,9 +154,10 @@ export class StatsArmiesQuery {
       ...(heroIds.length ? { heroIds: heroIds.join(',') } : {}),
       ...(equipmentIds.length ? { equipmentIds: equipmentIds.join(',') } : {}),
       minimumAttacks: this.filters.minimumSampleSize,
-      limit: this.limit,
+      limit,
       sort: this.sortBy,
       direction: 'desc',
+      cohort: this.cohort,
     };
   }
 }
@@ -237,23 +242,84 @@ export class StatsWarQuery {
     };
   }
 }
-export class StatsCwlQuery extends StatsWarQuery {
-  constructor(
-    dates: StatsDateFilter,
-    townHallLevel?: number,
-    opponentTownHallLevel?: number,
-    equalTownHalls = true,
-    readonly cwlLeagueId?: number,
-    readonly seasons: readonly string[] = [],
-  ) {
-    super(dates, townHallLevel, opponentTownHallLevel, equalTownHalls);
+export class StatsCwlQuery {
+  constructor(readonly season?: string) {}
+  toQuery(): StatsCwlQueryContract {
+    return this.season ? { season: this.season } : {};
   }
-  override toQuery(): StatsCwlQueryContract {
-    return {
-      ...super.toQuery(),
-      ...(this.cwlLeagueId == null ? {} : { cwlLeagueId: this.cwlLeagueId }),
-      ...(this.seasons.length ? { seasons: [...this.seasons] } : {}),
-    };
+}
+
+export interface StatsCwlTownHallCount { readonly level: number; readonly count: number }
+export interface StatsCwlHitRate {
+  readonly level: number;
+  readonly attacks: number;
+  readonly threeStarAttacks: number;
+  readonly threeStarRate: number | null;
+}
+export interface StatsCwlBucket {
+  readonly leagueId: number;
+  readonly warSize: number;
+  readonly groupCount: number;
+  readonly clanCount: number;
+  readonly registeredPlayerCount: number;
+  readonly townHallDistribution: readonly StatsCwlTownHallCount[];
+  readonly sameTownHallHitRates: readonly StatsCwlHitRate[] | null;
+  readonly finalizedWars: number;
+  readonly archivedWars: number;
+  readonly calculatedAt: string;
+}
+export interface StatsCwlSeasonSummary {
+  readonly season: string;
+  readonly clanCount: number;
+  readonly registeredPlayerCount: number;
+  readonly groupCount: number;
+}
+export class StatsCwlResponse {
+  constructor(
+    readonly season: string | null,
+    readonly clanCount: number,
+    readonly registeredPlayerCount: number,
+    readonly groupCount: number,
+    readonly items: readonly StatsCwlBucket[],
+    readonly availableSeasons: readonly string[] = [],
+    readonly history: readonly StatsCwlSeasonSummary[] = [],
+  ) {}
+  static fromJson(value: unknown): StatsCwlResponse {
+    const j = record(value);
+    return new StatsCwlResponse(
+      j.season == null ? null : text(j.season),
+      integer(j.clanCount), integer(j.registeredPlayerCount), integer(j.groupCount),
+      list(j.items).map((value) => {
+        const item = record(value);
+        return {
+          leagueId: integer(item.leagueId), warSize: integer(item.warSize),
+          groupCount: integer(item.groupCount), clanCount: integer(item.clanCount),
+          registeredPlayerCount: integer(item.registeredPlayerCount),
+          townHallDistribution: list(item.townHallDistribution).map((value) => {
+            const count = record(value);
+            return { level: integer(count.level), count: integer(count.count) };
+          }),
+          sameTownHallHitRates: item.sameTownHallHitRates == null ? null : list(item.sameTownHallHitRates).map((value) => {
+            const hit = record(value);
+            return { level: integer(hit.level), attacks: integer(hit.attacks),
+              threeStarAttacks: integer(hit.threeStarAttacks),
+              threeStarRate: hit.threeStarRate == null ? null : decimal(hit.threeStarRate) };
+          }),
+          finalizedWars: integer(item.finalizedWars), archivedWars: integer(item.archivedWars),
+          calculatedAt: text(item.calculatedAt),
+        };
+      }),
+      list(j.availableSeasons).map(text).filter(Boolean),
+      list(j.history).map((value) => {
+        const summary = record(value);
+        return {
+          season: text(summary.season),
+          clanCount: integer(summary.clanCount),
+          registeredPlayerCount: integer(summary.registeredPlayerCount),
+          groupCount: integer(summary.groupCount),
+        };
+      }).filter((summary) => summary.season.length > 0),
+    );
   }
 }
 export class StatsDateRange {
@@ -340,11 +406,33 @@ export class StatsPlayerCountsResponse {
     readonly leagueTiers: readonly StatsGroupedCount[],
   ) {}
 }
+export interface StatsLocationMetadata {
+  readonly id: number;
+  readonly name: string;
+  readonly countryCode: string;
+}
+export interface StatsClanMemberBin {
+  readonly minMembers: number;
+  readonly maxMembers: number;
+  readonly count: number;
+}
+export function decodeStatsLocationMetadata(value: unknown): readonly StatsLocationMetadata[] {
+  return list(record(value).items).flatMap((item) => {
+    const json = record(item);
+    const id = integer(json.id);
+    const name = text(json.name).trim();
+    if (id <= 0 || !name) return [];
+    const countryCode = text(json.countryCode).trim().toUpperCase();
+    return [{ id, name, countryCode: /^[A-Z]{2}$/u.test(countryCode) ? countryCode : '' }];
+  });
+}
 export class StatsClanCountsResponse {
   constructor(
     readonly locations: readonly StatsGroupedCount[],
     readonly cwlLeagues: readonly StatsGroupedCount[],
     readonly capitalLeagues: readonly StatsGroupedCount[],
+    readonly locationMetadata: readonly StatsLocationMetadata[] = [],
+    readonly memberBins: readonly StatsClanMemberBin[] | null = null,
   ) {}
 }
 export function decodeStatsGroupedCounts(
@@ -483,6 +571,20 @@ export class StatsLegendDay {
     readonly pets: readonly StatsLegendItemUse[],
     readonly equipment: readonly StatsLegendItemUse[],
     readonly petAssignments: readonly StatsLegendPetAssignmentUse[],
+    readonly troops: readonly StatsLegendItemUse[] = [],
+    readonly spells: readonly StatsLegendItemUse[] = [],
+    readonly sieges: readonly StatsLegendItemUse[] = [],
+    readonly equipmentPairs: readonly {
+      heroId: number;
+      equipmentIds: readonly number[];
+      uses: number;
+      triples: number;
+    }[] = [],
+    readonly petCombos: readonly {
+      petIds: readonly number[];
+      uses: number;
+      triples: number;
+    }[] = [],
   ) {}
   static fromJson(value: unknown): StatsLegendDay {
     const j = record(value);
@@ -498,6 +600,26 @@ export class StatsLegendDay {
       list(j.pets).map(StatsLegendItemUse.fromJson),
       list(j.equipment).map(StatsLegendItemUse.fromJson),
       list(j.petAssignments).map(StatsLegendPetAssignmentUse.fromJson),
+      list(j.troops).map(StatsLegendItemUse.fromJson),
+      list(j.spells).map(StatsLegendItemUse.fromJson),
+      list(j.sieges).map(StatsLegendItemUse.fromJson),
+      list(j.equipmentPairs).map((value) => {
+        const item = record(value);
+        return {
+          heroId: integer(item.heroId),
+          equipmentIds: list(item.equipmentIds).map(integer),
+          uses: integer(item.uses),
+          triples: integer(item.triples),
+        };
+      }),
+      list(j.petCombos).map((value) => {
+        const item = record(value);
+        return {
+          petIds: list(item.petIds).map(integer),
+          uses: integer(item.uses),
+          triples: integer(item.triples),
+        };
+      }),
     );
   }
   get metrics(): StatsMetrics {
@@ -531,6 +653,13 @@ export class StatsLegendResponse {
     );
   }
 }
+export class StatsTroopStatsResponse {
+  constructor(
+    readonly legend: StatsLegendResponse,
+    readonly top1000: StatsLegendResponse | null,
+    readonly top200: StatsLegendResponse | null,
+  ) {}
+}
 export class StatsBreakdown {
   constructor(
     readonly key: string,
@@ -541,11 +670,33 @@ export class StatsBreakdown {
     return new StatsBreakdown(text(j.key), StatsMetrics.fromJson(j.metrics));
   }
 }
+export interface StatsWarHitRate {
+  readonly period: string;
+  readonly townHall: number;
+  readonly attacks: number;
+  readonly stars: readonly { readonly stars: number; readonly count: number }[];
+  readonly averageStars: number;
+  readonly averageDestruction: number;
+  readonly averageDuration: number;
+}
+export interface StatsWarSummary {
+  readonly period: string;
+  readonly warSize?: number;
+  readonly wars: number;
+  readonly accounts: number;
+  readonly townHalls: readonly { readonly level: number; readonly count: number }[];
+  readonly draws: number;
+  readonly missedAttacks?: number;
+}
 export class StatsPerformanceResponse {
   constructor(
     readonly dateRange: StatsDateRange,
     readonly metrics: StatsMetrics,
     readonly breakdowns: readonly StatsBreakdown[],
+    readonly comparisons: readonly StatsBreakdown[] = [],
+    readonly warHitRates: readonly StatsWarHitRate[] = [],
+    readonly warSummaries: readonly StatsWarSummary[] = [],
+    readonly warSizes: readonly StatsWarSummary[] = [],
   ) {}
   static fromJson(value: unknown): StatsPerformanceResponse {
     const j = record(value);
@@ -553,6 +704,7 @@ export class StatsPerformanceResponse {
       StatsDateRange.fromJson(j.dateRange),
       StatsMetrics.fromJson(j.metrics),
       list(j.breakdowns).map(StatsBreakdown.fromJson),
+      list(j.comparisons).map(StatsBreakdown.fromJson),
     );
   }
 }

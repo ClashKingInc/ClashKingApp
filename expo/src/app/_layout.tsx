@@ -90,7 +90,7 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <AppRuntimeProvider>
             <AppStatusBar />
-            <Stack screenOptions={{ headerShown: false }}>
+            <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
               <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
               <Stack.Screen name="detail" options={{ gestureEnabled: true }} />
             </Stack>

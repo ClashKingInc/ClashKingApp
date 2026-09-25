@@ -183,7 +183,10 @@ function CandidateImage({
   }, [candidate, onExhausted]);
   const metadata = manifestImage(originalUrl);
   const managed =
-    Platform.OS !== 'web' && metadata && candidate?.startsWith('https://assets.clashk.ing/');
+    Platform.OS !== 'web' &&
+    metadata &&
+    candidate !== originalUrl &&
+    candidate?.startsWith('https://assets.clashk.ing/');
   const cachedFile = useSyncExternalStore(
     localImageCache.subscribe,
     useCallback(
