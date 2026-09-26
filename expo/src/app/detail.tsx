@@ -1,9 +1,11 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useEffect, useSyncExternalStore } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { ClanSpringTransition } from '../features/clan/presentation/clan-spring-transition';
 
 import {
   nativeSecondaryContent,
+  nativeSecondaryClanSpring,
   notifyNativeSecondaryRemoved,
   subscribeNativeSecondaryLayer,
 } from '../core/app/native-secondary-navigation';
@@ -25,7 +27,17 @@ export default function NativeSecondaryRoute() {
     return navigation.addListener('beforeRemove', () => notifyNativeSecondaryRemoved(key));
   }, [key, navigation]);
 
-  return <View style={[styles.root, { backgroundColor: theme.background }]}>{content}</View>;
+  const origin = key ? nativeSecondaryClanSpring(key) : undefined;
+  return origin ? (
+    <ClanSpringTransition
+      origin={origin}
+      onComplete={() => navigation.setOptions({ animation: 'slide_from_right' })}
+    >
+      {content}
+    </ClanSpringTransition>
+  ) : (
+    <View style={[styles.root, { backgroundColor: theme.background }]}>{content}</View>
+  );
 }
 
 const styles = StyleSheet.create({ root: { flex: 1 } });

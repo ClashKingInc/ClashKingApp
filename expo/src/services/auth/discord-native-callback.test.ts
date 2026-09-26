@@ -29,11 +29,17 @@ describe('native intent routing', () => {
   );
 
   it('leaves unrelated and malformed incoming links unchanged', () => {
-    const appLink = 'clashking://settings';
+    const appLink = 'clashking://unknown';
 
     expect(isDiscordNativeCallbackUrl(appLink)).toBe(false);
     expect(redirectSystemPath({ path: appLink, initial: false })).toBe(appLink);
     expect(redirectSystemPath({ path: 'not a url', initial: false })).toBe('not a url');
     expect(isDiscordNativeCallbackUrl('not a url')).toBe(false);
+  });
+  it('mounts public settings links without exposing auth screens as shareable destinations', () => {
+    expect(redirectSystemPath({ path: 'clashking://settings', initial: false })).toBe('/');
+    expect(redirectSystemPath({ path: 'clashking://auth/login', initial: false })).toBe(
+      'clashking://auth/login',
+    );
   });
 });

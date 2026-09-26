@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Notifications système",
+  "notifSystemSettings": "Ouvrir les réglages des notifications",
+  "notifSystemSettingsDescription": "Gère les alertes, les sons et les pastilles dans les réglages de ton appareil.",
+  "notifSystemSettingsFailed": "Impossible d'ouvrir les réglages des notifications. Ouvre Réglages sur ton appareil.",
+  "notifManagePlayersDescription": "Gère les notifications des comptes dans Joueurs → Liés → Options.",
+  "notifCustomReminders": "Rappels personnalisés",
+  "notifTestType": "Type de notification",
+  "statsBattlelogsGroup": "Journaux de combat",
+  "statsGlobalStatsGroup": "Statistiques mondiales",
+  "playerOptionShowOnHomeTitle": "Afficher le compte sur l'accueil",
+  "playerOptionShowOnHomeSubtitle": "Inclure ce compte vérifié dans les cartes d'accueil (jusqu'à 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Vérifiez ce compte pour l'afficher sur l'accueil.",
+  "playerOptionHomeInclusionFirst": "Activez d'abord Afficher le compte sur l'accueil.",
+  "homeIncludedAccountsLimit": "L'accueil peut afficher jusqu'à 5 comptes. Retirez-en un d'abord.",
+  "statsHitratesByTownHall": "Taux de réussite par hôtel de ville",
+  "statsChartGranularity": "Intervalle du graphique",
+  "statsDaily": "Quotidien",
+  "statsWeekly": "Hebdomadaire",
+  "statsMonthly": "Mensuel",
+  "statsCompareCohorts": "Comparer les groupes",
+  "statsAcrossCohorts": "Utilisation par groupe",
+  "legendsTrophyGrid": "Grille des trophées",
+  "legendsPopularArmyItems": "Éléments d’armée les plus populaires",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Taux de réussite",
+  "legendsAvgOffense": "Attaque moy.",
+  "legendsAvgDefense": "Défense moy.",
+  "settingsClearImageCache": "Vider le cache des images",
+  "settingsImageCacheCleared": "Le cache des images a été vidé.",
+  "settingsImageCacheClearFailed": "Impossible de vider le cache des images. Réessayez.",
+  "startupCheckingUpdate": "Recherche de mises à jour…",
+  "startupDownloadingUpdate": "Téléchargement de la mise à jour…",
+  "startupUpdateInBackground": "Mettre à jour en arrière-plan",
   "warStatsRangeTitle": "Période des statistiques de guerre",
   "warStatsRangeDescription": "Choisissez si les statistiques couvrent un nombre fixe de guerres récentes ou une période récente en jours.",
   "warStatsRangeDays": "Jours",
@@ -77,7 +110,7 @@
   "notifPushUnsupported": "Les notifications push ne sont pas prises en charge sur cette plateforme.",
   "notifPushInitializing": "Configuration des notifications push…",
   "notificationPrimerTitle": "Activer les notifications ?",
-  "notificationPrimerBody": "ClashKing peut t’avertir des actualités concernant les guerres, la LGC, ton compte et tes projets. Tu peux modifier ce réglage à tout moment dans Paramètres > Notifications.",
+  "notificationPrimerBody": "ClashKing peut envoyer des actualités sur les événements, les annonces, les défenses en ligue Légende et l'assistance. Les rappels de guerre et de week-end de raid restent désactivés jusqu'à ce que tu les configures. Tu peux modifier ces choix dans Paramètres > Notifications.",
   "notificationPrimerNotNow": "Plus tard",
   "notificationPrimerAllow": "Autoriser",
   "achievementsTitle": "Succès",
@@ -1461,6 +1494,8 @@
   "legendsCountryTitle": "Pays",
   "legendsLocalRankTitle": "Rang local",
   "legendsGlobalRankTitle": "Rang mondial",
+  "legendsYourArmy": "Votre armée",
+  "legendsArmyUsedAgainstYou": "Armée utilisée contre vous",
   "warWinsTitle": "Victoires",
   "warLossesTitle": "Défaites",
   "warDrawsTitle": "Égalités",
@@ -2514,7 +2549,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Choisis les alertes et envoie des aperçus de test locaux.",
+  "settingsNotificationsSubtitle": "Choisis les alertes que tu souhaites recevoir.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3159,6 +3194,9 @@
   "statsHero": "Héros",
   "statsPet": "Familier",
   "statsEquipment": "Équipement",
+  "statsPetCombinations": "Combinaisons de familiers",
+  "statsEquipmentPairs": "Paires d’équipements",
+  "statsArmyFallback": "Armée {id}",
   "statsOwningHero": "Héros associé",
   "statsAddItem": "Ajouter un objet",
   "statsAnalyzeItems": "Analyser les objets",
@@ -3908,19 +3946,32 @@
   "homeActivityJoined": "a rejoint",
   "homeActivityLeft": "a quitté",
   "homeActivityAClan": "un clan",
+  "statsCwlSeasonGroups": "Groupes",
+  "statsCwlSeasonHistory": "Ligue de guerre de clans au fil du temps",
+  "statsCwlRosterNotLineup": "Répartition des inscrits ramenée à {size} places ; les compositions réelles peuvent varier.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Statistiques des troupes",
+  "statsWarSizes": "Tailles des guerres",
+  "statsMissedAttacks": "Attaques manquées",
+  "statsCopyChart": "Copier le graphique",
+  "statsCompareItems": "Comparer les éléments",
+  "statsCompareItemsHint": "Sélectionnez jusqu’à 5 éléments à comparer.",
+  "statsVsOverall": "par rapport à l’ensemble",
+  "statsCopyChartFailed": "Impossible de copier le graphique. Réessayez.",
+  "statsPercentagePoints": "points de pourcentage",
   "statsMeta": "Méta",
   "statsBattle": "Bataille",
   "statsWorld": "Monde",
   "statsHeaderSubtitle": "Explore les performances de combat et le monde que nous suivons.",
   "statsPreview": "Aperçu",
-  "statsTownHallDistribution": "Répartition des hôtels de ville",
+  "statsTownHallDistribution": "Hôtels de ville",
   "statsBuilderHallDistribution": "Répartition des hôtels des ouvriers",
-  "statsLeagueDistribution": "Répartition des ligues classées",
+  "statsLeagueDistribution": "Ligues classées",
   "statsTrackedPlayers": "Population actuelle des joueurs suivis",
   "statsTrackedClans": "Population actuelle des clans suivis",
-  "statsCwlLeagueDistribution": "Répartition des ligues CWL",
-  "statsCapitalLeagueDistribution": "Répartition des ligues de capitale",
-  "statsTrackedLocations": "Localisations des clans suivis",
+  "statsCwlLeagueDistribution": "Ligues CWL",
+  "statsCapitalLeagueDistribution": "Ligues de capitale",
+  "statsTrackedLocations": "Emplacements des clans",
   "statsLocationCountHelp": "Pays et lieux représentés par les clans suivis.",
   "statsLeagueId": "Ligue {id}",
   "@statsLeagueId": {
@@ -4661,6 +4712,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Effectif inscrit",
+  "cwlMatches": "Rencontres",
+  "cwlNextMatchup": "Prochaine rencontre",
+  "cwlOtherMatches": "Autres rencontres",
+  "cwlOutlook": "Prévisions de saison",
+  "cwlFirstPlace": "Première place",
+  "cwlTopTwo": "Deux premiers",
+  "cwlRemainingOpponents": "Adversaires restants",
+  "cwlWinBonusNote": "Les étoiles incluent 10 étoiles bonus par victoire terminée.",
+  "cwlEstimateNote": "Les estimations utilisent les guerres terminées et les adversaires restants, sans tenir compte des changements de composition. Il faut au moins deux guerres terminées par clan. Ces estimations ne sont pas calibrées ; les règles de promotion varient selon la ligue.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# heure} other {# heures}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Supprimer les bases de plus de 90 jours",
+  "personalBasesDeleteOldConfirm": "{count} bases enregistrées datant de plus de 90 jours seront supprimées. L'historique des téléchargements et les bases partagées seront conservés.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Défense automatique",
+  "legendsPopularArmyItem": "Élément d'armée le plus populaire",
+  "legendsClanCastle": "Château de clan",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

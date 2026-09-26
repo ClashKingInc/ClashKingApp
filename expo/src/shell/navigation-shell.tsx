@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import { BackHandler, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
+import {
+  Animated,
+  BackHandler,
+  Easing,
+  Platform,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import ReanimatedDrawerLayout, {
   DrawerKeyboardDismissMode,
   DrawerLockMode,
@@ -7,7 +15,9 @@ import ReanimatedDrawerLayout, {
   DrawerType,
   type DrawerLayoutMethods,
 } from 'react-native-gesture-handler/ReanimatedDrawerLayout';
+import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 
+import { STORAGE_KEYS, type StringStorage } from '../core/storage/storage';
 import type { MessageKey } from '../i18n';
 import {
   appRoutes,
@@ -15,7 +25,7 @@ import {
   type AppRouteId,
   type FeatureState,
 } from '../navigation';
-import { useCKTheme } from '../ui';
+import { colorWithAlpha, useCKAccessibility, useCKTheme } from '../ui';
 import { DESKTOP_SIDEBAR_WIDTH, resolveMobileDrawerWidth, resolveShellLayout } from './contracts';
 import { DesktopHeader } from './desktop-header';
 import { DesktopSidebar } from './desktop-sidebar';
@@ -51,6 +61,7 @@ export interface NavigationShellProps {
   hasUser: boolean;
   profileMenuLabel: string;
   closeDrawerLabel: string;
+  drawerHintStore?: StringStorage;
   onPrimarySelect: (route: PrimaryRouteId) => void;
   onUtilityNavigate: (route: AppRouteDefinition, options: { replace: boolean }) => void;
   onResetDesktopContent?: () => void;
@@ -78,10 +89,32 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const { isRtl, width } = props;
   const platform = props.platform ?? Platform.OS;
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerHintVisible, setDrawerHintVisible] = useState(false);
   const drawerRef = useRef<DrawerLayoutMethods>(null);
   const pendingDrawerAction = useRef<(() => void) | undefined>(undefined);
-  const drawerEdgeWidth = 20;
+  const allowsDrawerEdgeGesture = platformAllowsDrawerEdgeGesture(platform);
+  const showsDrawerEdgeHint = platformShowsDrawerEdgeHint(platform);
+  const drawerEdgeWidth = allowsDrawerEdgeGesture ? 36 : 0;
   const drawerWidth = resolveMobileDrawerWidth(width);
+  // Replay this revised hint once in development without resetting production preferences.
+  const hintStorageKey = __DEV__
+    ? `${STORAGE_KEYS.mobileDrawerGestureHintSeen}_preview_v2`
+    : STORAGE_KEYS.mobileDrawerGestureHintSeen;
+  useEffect(() => {
+    let current = true;
+    if (!showsDrawerEdgeHint || !props.drawerHintStore) return;
+    void props.drawerHintStore
+      .getString(hintStorageKey)
+      .then((seen) => {
+        if (current) setDrawerHintVisible(seen !== 'true');
+      })
+      .catch(() => {
+        // A discovery hint should never make navigation unavailable.
+      });
+    return () => {
+      current = false;
+    };
+  }, [showsDrawerEdgeHint, props.drawerHintStore, hintStorageKey]);
   const secondaryLayers = props.secondaryLayers?.length
     ? props.secondaryLayers
     : props.secondaryContent
@@ -117,6 +150,13 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     pendingDrawerAction.current = undefined;
     pending?.();
   }, []);
+  const handleDrawerOpen = useCallback(() => {
+    setDrawerOpen(true);
+    setDrawerHintVisible(false);
+    void props.drawerHintStore?.setString(hintStorageKey, 'true').catch(() => {
+      // The drawer remains usable when persistence is unavailable.
+    });
+  }, [props.drawerHintStore, hintStorageKey]);
   useEffect(() => {
     if (!secondaryActive) return;
     pendingDrawerAction.current = undefined;
@@ -143,9 +183,9 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
       drawerWidth={drawerWidth}
       edgeWidth={drawerEdgeWidth}
       hideStatusBar={false}
-      minSwipeDistance={8}
+      minSwipeDistance={6}
       onDrawerClose={handleDrawerClose}
-      onDrawerOpen={() => setDrawerOpen(true)}
+      onDrawerOpen={handleDrawerOpen}
       overlayColor="#00000066"
       renderNavigationView={() => (
         <MobileDrawer
@@ -198,6 +238,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
               isRtl={props.isRtl}
             />
           </View>
+          {showsDrawerEdgeHint && drawerHintVisible ? <DrawerEdgeHint isRtl={isRtl} /> : null}
         </View>
         {secondaryActive
           ? mountedSecondaryLayers.map((layer, index) => {
@@ -221,6 +262,70 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
           : null}
       </View>
     </ReanimatedDrawerLayout>
+  );
+}
+
+function DrawerEdgeHint({ isRtl }: { isRtl: boolean }) {
+  const theme = useCKTheme();
+  const { reduceMotion } = useCKAccessibility();
+  const [progress] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    if (reduceMotion) {
+      progress.setValue(0.45);
+      return;
+    }
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(progress, {
+          toValue: 1,
+          duration: 700,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(progress, {
+          toValue: 0,
+          duration: 700,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.delay(900),
+      ]),
+      { iterations: 3 },
+    );
+    animation.start();
+    return () => animation.stop();
+  }, [progress, reduceMotion]);
+
+  const translateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: isRtl ? [0, -5] : [0, 5],
+  });
+  return (
+    <Animated.View
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      pointerEvents="none"
+      style={[
+        styles.drawerHint,
+        isRtl ? styles.drawerHintRight : styles.drawerHintLeft,
+        {
+          backgroundColor: 'transparent',
+          opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.58, 0.9] }),
+          transform: [{ translateX }],
+        },
+      ]}
+      testID="mobile-drawer-gesture-hint"
+    >
+      <View
+        style={[styles.drawerHintBar, { backgroundColor: colorWithAlpha(theme.onSurface, 0.5) }]}
+      />
+      {isRtl ? (
+        <ChevronLeft color={theme.onSurfaceVariant} size={12} strokeWidth={2} />
+      ) : (
+        <ChevronRight color={theme.onSurfaceVariant} size={12} strokeWidth={2} />
+      )}
+    </Animated.View>
   );
 }
 
@@ -320,8 +425,39 @@ function platformAllowsTabSwipe(platform?: string): boolean {
   return (platform ?? Platform.OS) !== 'web';
 }
 
+function platformAllowsDrawerEdgeGesture(platform?: string): boolean {
+  return (platform ?? Platform.OS) !== 'web';
+}
+
+function platformShowsDrawerEdgeHint(platform?: string): boolean {
+  void platform;
+  return false;
+}
+
 const styles = StyleSheet.create({
   shell: { flex: 1 },
+  drawerHint: {
+    position: 'absolute',
+    top: '36%',
+    zIndex: 3,
+    width: 22,
+    height: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  drawerHintLeft: {
+    left: 2,
+    borderTopRightRadius: 14,
+    borderBottomRightRadius: 14,
+  },
+  drawerHintRight: {
+    right: 2,
+    flexDirection: 'row-reverse',
+    borderTopLeftRadius: 14,
+    borderBottomLeftRadius: 14,
+  },
+  drawerHintBar: { height: 30, width: 3, borderRadius: 2 },
   desktopFrame: { flex: 1, position: 'relative' },
   desktopRow: { flex: 1, flexDirection: 'row' },
   desktopRowRtl: { flexDirection: 'row-reverse' },

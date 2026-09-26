@@ -145,15 +145,18 @@ and feature services.
 
 ## Release delivery
 
-GitHub Actions regenerates native projects from `expo/app.config.ts`, the native parity contract, config plugins, and local native sources. Android releases produce a signed AAB and APK before uploading the AAB to the selected Play track; iOS releases archive the `ClashKing` app and `WarWidgetExtension` together before uploading the IPA to TestFlight; web releases export static Expo Router output to Cloudflare Pages. These workflows preserve `com.clashking.clashkingapp`, `com.clashking.apps`, `com.clashking.apps.warwidget`, Apple team `MZYXD43RX5`, and app group `group.com.clashking.apps`.
+The manual `Release mobile app` workflow requires a ref, an exact numeric version, and an independent `beta` or `production` track. The entered version is authoritative: `x.y.0` creates a native release, while `x.y.1` and later patches create OTA releases only when both fingerprints still match that track's `x.y.0` native build. Beta adds the `-beta` prerelease suffix, uploads Android to Play internal testing, and uploads iOS to TestFlight; production keeps the plain version, uploads Android to production, and submits iOS for App Store review. Signed APKs are attached to native GitHub releases.
+
+OTA assets are content-addressed and uploaded to R2 before `releases/<track>/<version>/release.json` is written. Native markers include a signed copy of their embedded JavaScript baseline; each OTA marker includes pre-signed republishes of earlier compatible releases, allowing the Admin Panel to perform a real rollback without holding the signing key. The marker is the immutable commit record used by the API and Admin Panel. Development builds keep updates disabled and continue to run from Metro.
 
 Repository or environment secrets required by the release workflows are:
 
 - Android: `KEY_STORE_FILE`, `KEY_ALIAS`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD`, `GOOGLE_PLAY_JSON_KEY`, and `PACKAGE_NAME`.
 - iOS: `IOS_CERTIFICATE_BASE64`, `IOS_CERTIFICATE_PASSWORD`, `IOS_PROVISIONING_PROFILE_BASE64`, `IOS_WIDGET_PROVISIONING_PROFILE_BASE64`, `APP_STORE_CONNECT_API_KEY_ID`, `APP_STORE_CONNECT_API_ISSUER_ID`, and `APP_STORE_CONNECT_API_KEY`. The app and widget provisioning profiles must both be App Store distribution profiles and include the shared app group; the app profile must also retain its push entitlement.
+- OTA: `EXPO_UPDATES_CODE_SIGNING_CERTIFICATE`, `EXPO_UPDATES_PRIVATE_KEY`, `R2_ACCOUNT_ID`, `R2_UPDATES_ACCESS_KEY_ID`, `R2_UPDATES_SECRET_ACCESS_KEY`, and `R2_UPDATES_BUCKET_NAME`. Set the repository variable `R2_UPDATES_PUBLIC_ORIGIN` to the HTTPS custom domain serving the bucket.
 - Web: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` for the existing `clashkingapp` Pages project.
 
-The TestFlight workflow uploads the build but leaves external TestFlight review and group assignment in App Store Connect. Local validation can verify generated targets, compilation, and plist contracts, but production signing and store acceptance require the real credentials above.
+Release jobs use GitHub Environments named `beta` and `production`. Configure the release and OTA secrets separately in each environment so beta and production signing access stay isolated. Keep approval protection on `production`; beta can remain unreviewed while the app is in testing.
 
 ## 🌍 Internationalization
 

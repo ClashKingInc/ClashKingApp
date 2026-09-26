@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
 
 interface NativeSecondaryLayer {
+  readonly clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin;
   readonly content: ReactNode;
   readonly onRemove: () => void;
 }
 
 export type NativeSecondaryRouteTransition =
   | {
-      readonly type: 'none';
+      readonly type: 'none' | 'dismiss';
       readonly routeKeys: readonly string[];
       readonly staleKeys: readonly string[];
     }
@@ -37,6 +38,10 @@ export function removeNativeSecondaryLayers(keys: Iterable<string>) {
 
 export function nativeSecondaryContent(key: string): ReactNode {
   return layers.get(key)?.content ?? null;
+}
+
+export function nativeSecondaryClanSpring(key: string) {
+  return layers.get(key)?.clanSpring;
 }
 
 export function notifyNativeSecondaryRemoved(key: string) {
@@ -69,6 +74,9 @@ export function nativeSecondaryRouteTransition(
 
   const staleKeys = current.slice(prefixLength);
   const nextKey = expected[prefixLength];
+  if (!expected.length && current.length) {
+    return { type: 'dismiss', routeKeys: [], staleKeys };
+  }
   if (nextKey === undefined) return { type: 'none', routeKeys: current, staleKeys };
 
   return {
@@ -77,4 +85,30 @@ export function nativeSecondaryRouteTransition(
     routeKeys: [...current.slice(0, prefixLength), nextKey],
     staleKeys,
   };
+}
+
+export function applyNativeSecondaryRouteTransition(
+  transition: NativeSecondaryRouteTransition,
+  navigation: {
+    dismissTo: (href: '/') => void;
+    push: (href: { pathname: '/detail'; params: { layer: string } }) => void;
+    replace: (href: { pathname: '/detail'; params: { layer: string } }) => void;
+  },
+) {
+  if (transition.type === 'dismiss') {
+    // Target the outer app route, not the nested Settings/Stats navigator.
+    // Keep its content alive until beforeRemove runs, avoiding a blank exit.
+    navigation.dismissTo('/');
+    return;
+  }
+  transition.staleKeys.forEach(removeNativeSecondaryLayer);
+  if (transition.type === 'push' || transition.type === 'replace') {
+    navigation[transition.type]({
+      pathname: '/detail',
+      params: {
+        layer: transition.key,
+        ...(layers.get(transition.key)?.clanSpring ? { clanSpring: '1' } : {}),
+      },
+    });
+  }
 }

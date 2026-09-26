@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react';
+import { retainRecentSections } from '../../../ui/retained-sections';
+import { WarLineupComparison } from './town-hall-breakdown';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Linking,
   Platform,
@@ -15,7 +17,6 @@ import {
   ChevronDown,
   ListFilter,
   Search,
-  Sword,
   Users,
 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -31,6 +32,7 @@ import {
   PillSurface,
   ProfileTabs,
   SearchSortBar,
+  SelectionPicker,
   Surface,
   colorWithAlpha,
   useCKTheme,
@@ -69,7 +71,24 @@ export function WarDetailScreen({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const [tab, setTab] = useState<WarTab>('statistics');
+  const [retained, setRetained] = useState<readonly WarTab[]>(['statistics']);
+  const scrollRef = useRef<ScrollView>(null);
+  const scrollY = useRef(0);
+  const headerHeight = useRef(0);
+  const tabStart = useRef(0);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      scrollRef.current?.scrollTo({ y: tabStart.current, animated: false });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [tab]);
+  const selectTab = (key: string) => {
+    tabStart.current = Math.max(0, Math.min(scrollY.current, headerHeight.current));
+    setTab(key as WarTab);
+    setRetained((current) => retainRecentSections(current, key as WarTab, 3));
+  };
   const [handoffUrl, setHandoffUrl] = useState<string>();
   const openClan = (tag: string) => {
     if (
@@ -84,7 +103,7 @@ export function WarDetailScreen({
   const tabs = [
     {
       key: 'statistics',
-      label: t('navigationStatistics'),
+      label: t('statsOverview'),
       icon: (
         <ArrowDownUp
           size={18}
@@ -94,46 +113,68 @@ export function WarDetailScreen({
     },
     {
       key: 'events',
-      label: t('warEventsTitle'),
-      icon: <Sword size={18} color={tab === 'events' ? theme.primary : theme.onSurfaceVariant} />,
+      label: t('warAttacksTitle'),
+      icon: <MobileWebImage imageUrl={ImageAssets.sword} style={styles.tabImage} />,
     },
     {
       key: 'team',
-      label: t('navigationTeam'),
+      label: t('warPlayersTitle'),
       icon: <Users size={18} color={tab === 'team' ? theme.primary : theme.onSurfaceVariant} />,
     },
   ];
   return (
     <SafeAreaView
-      edges={['left', 'right']}
+      edges={['top', 'left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 18 }}>
-        <WarHero
-          war={war}
-          cwlRoundNumber={cwlRoundNumber}
-          onBack={onBack}
-          onOpenClan={openClan}
-          onCopy={(tag) =>
-            void actions
-              .copyText(tag)
-              .then(() => actions.showMessage(t('generalCopiedToClipboard')))
-          }
-          onOpenCwl={onOpenCwl}
-        />
-        <View style={styles.tabs}>
-          <ProfileTabs tabs={tabs} selectedKey={tab} onSelect={(key) => setTab(key as WarTab)} />
+      <ScrollView
+        ref={scrollRef}
+        scrollEventThrottle={100}
+        onScroll={(event) => {
+          scrollY.current = event.nativeEvent.contentOffset.y;
+        }}
+        stickyHeaderIndices={[1]}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 18 }}
+      >
+        <View
+          onLayout={(event) => {
+            headerHeight.current = event.nativeEvent.layout.height;
+          }}
+        >
+          <WarHero
+            war={war}
+            cwlRoundNumber={cwlRoundNumber}
+            onBack={onBack}
+            onOpenClan={openClan}
+            onCopy={(tag) =>
+              void actions
+                .copyText(tag)
+                .then(() => actions.showMessage(t('generalCopiedToClipboard')))
+            }
+            onOpenCwl={onOpenCwl}
+          />
         </View>
-        <View style={styles.content}>
-          {tab === 'statistics' ? <WarStatistics war={war} /> : null}
-          {tab === 'events' ? (
-            <WarEvents
-              war={war}
-              linkedPlayerTags={linkedPlayerTags}
-              onOpenPlayer={actions.openPlayer}
-            />
-          ) : null}
-          {tab === 'team' ? <WarTeam war={war} onOpenPlayer={actions.openPlayer} /> : null}
+        <View style={[styles.tabs, { backgroundColor: theme.background }]}>
+          <ProfileTabs tabs={tabs} selectedKey={tab} onSelect={selectTab} />
+        </View>
+        <View style={[styles.content, width >= 600 && styles.contentWide]}>
+          {(['statistics', 'events', 'team'] as const)
+            .filter((key) => retained.includes(key))
+            .map((key) => (
+              <View key={key} style={key === tab ? undefined : { display: 'none' }}>
+                {key === 'statistics' ? (
+                  <WarStatistics war={war} />
+                ) : key === 'events' ? (
+                  <WarEvents
+                    war={war}
+                    linkedPlayerTags={linkedPlayerTags}
+                    onOpenPlayer={actions.openPlayer}
+                  />
+                ) : (
+                  <WarTeam war={war} onOpenPlayer={actions.openPlayer} />
+                )}
+              </View>
+            ))}
         </View>
       </ScrollView>
       <ClashHandoffDialog
@@ -149,7 +190,7 @@ export function WarDetailScreen({
   );
 }
 
-function WarStatistics({ war }: { war: WarInfo }) {
+const WarStatistics = memo(function WarStatistics({ war }: { war: WarInfo }) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
@@ -158,11 +199,35 @@ function WarStatistics({ war }: { war: WarInfo }) {
   const analysis = useMemo(() => analyzeWarState(war), [war]);
   if (!war.clan || !war.opponent) return <EmptyState title={t('generalNoDataAvailable')} />;
   const teamSize = war.teamSize ?? 15;
-  const maxStars = teamSize * 3;
   const capacity = teamSize * war.effectiveAttacksPerMember;
   const progress = (value: number) => Math.min(1, capacity ? value / capacity : 0);
   return (
     <View style={styles.stack}>
+      <SectionPanel>
+        <ComparisonMetric
+          label={t('warAttacksTitle')}
+          left={`${war.clan.attacks}/${capacity}`}
+          right={`${war.opponent.attacks}/${capacity}`}
+          leftProgress={progress(war.clan.attacks)}
+          rightProgress={progress(war.opponent.attacks)}
+          image={ImageAssets.sword}
+          leftColor="#2EAD70"
+          rightColor={theme.error}
+        />
+        <View style={styles.starBreakdown}>
+          {[3, 2, 1, 0].map((stars) => (
+            <ComparisonRow
+              key={stars}
+              stars={stars}
+              left={String(stats.clanStarCounts[stars] ?? 0)}
+              right={String(stats.opponentStarCounts[stars] ?? 0)}
+            />
+          ))}
+        </View>
+      </SectionPanel>
+      <SectionPanel title={t('statsTownHallDistribution')}>
+        <WarLineupComparison war={war} />
+      </SectionPanel>
       <View style={styles.calculatorActionRow}>
         <Pressable
           accessibilityRole="button"
@@ -176,7 +241,7 @@ function WarStatistics({ war }: { war: WarInfo }) {
             style={[styles.calculatorButton, width < 360 && styles.calculatorButtonCompact]}
           >
             {width >= 360 ? (
-              <CKText role="labelMedium" numberOfLines={1} style={styles.grow}>
+              <CKText role="body" numberOfLines={1} style={styles.grow}>
                 {t('warCalculatorFast')}
               </CKText>
             ) : null}
@@ -185,64 +250,14 @@ function WarStatistics({ war }: { war: WarInfo }) {
         </Pressable>
       </View>
       {showCalculator ? <WarCalculator war={war} initiallyExpanded /> : null}
-      <SectionPanel title={t('navigationStatistics')}>
-        <ComparisonMetric
-          label={t('warStarsTitle')}
-          left={`${war.clan.stars}/${maxStars}`}
-          right={`${war.opponent.stars}/${maxStars}`}
-          leftProgress={maxStars ? war.clan.stars / maxStars : 0}
-          rightProgress={maxStars ? war.opponent.stars / maxStars : 0}
-          image={ImageAssets.attackStar}
-          leftColor={war.clan.stars >= war.opponent.stars ? '#2EAD70' : theme.error}
-          rightColor={war.opponent.stars >= war.clan.stars ? '#2EAD70' : theme.error}
-        />
-        <ComparisonMetric
-          label={t('warDestructionRate')}
-          left={formatPercent(war.clan.destructionPercentage)}
-          right={formatPercent(war.opponent.destructionPercentage)}
-          leftProgress={war.clan.destructionPercentage / 100}
-          rightProgress={war.opponent.destructionPercentage / 100}
-          symbol="%"
-          leftColor={
-            war.clan.destructionPercentage >= war.opponent.destructionPercentage
-              ? '#2EAD70'
-              : theme.error
-          }
-          rightColor={
-            war.opponent.destructionPercentage >= war.clan.destructionPercentage
-              ? '#2EAD70'
-              : theme.error
-          }
-        />
-        <ComparisonMetric
-          label={t('warAttacksTitle')}
-          left={`${war.clan.attacks}/${capacity}`}
-          right={`${war.opponent.attacks}/${capacity}`}
-          leftProgress={progress(war.clan.attacks)}
-          rightProgress={progress(war.opponent.attacks)}
-          image={ImageAssets.sword}
-          leftColor="#2EAD70"
-          rightColor={theme.error}
-        />
-      </SectionPanel>
-      <SectionPanel title={t('warStarsNumber')}>
-        {[3, 2, 1, 0].map((stars) => (
-          <ComparisonRow
-            key={stars}
-            label={`${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`}
-            left={String(stats.clanStarCounts[stars] ?? 0)}
-            right={String(stats.opponentStarCounts[stars] ?? 0)}
-          />
-        ))}
-      </SectionPanel>
       {analysis ? <WarAnalysisPanel analysis={analysis} clanName={war.clan.name} /> : null}
     </View>
   );
-}
+});
 
 type WarEventFilter = 'all' | 'clan' | 'opponent' | '3' | '2' | '1' | '0';
 
-function WarEvents({
+const WarEvents = memo(function WarEvents({
   war,
   linkedPlayerTags,
   onOpenPlayer,
@@ -270,10 +285,10 @@ function WarEvents({
     { key: 'all', label: t('generalAll') },
     { key: 'clan', label: war.clan?.name ?? t('clanTitle') },
     { key: 'opponent', label: war.opponent?.name ?? t('capitalOpponentsSection') },
-    { key: '3', label: '★★★' },
-    { key: '2', label: '★★☆' },
-    { key: '1', label: '★☆☆' },
-    { key: '0', label: '☆☆☆' },
+    { key: '3', label: t('warStarsThree') },
+    { key: '2', label: t('warStarsTwo') },
+    { key: '1', label: t('warStarsOne') },
+    { key: '0', label: t('warStarsZero') },
   ];
   const linked = new Set(linkedPlayerTags);
   return (
@@ -298,7 +313,7 @@ function WarEvents({
             <Pressable
               key={`${event.attack.order}:${event.attack.attackerTag}`}
               accessibilityRole="button"
-              accessibilityLabel={`${event.attacker?.name} ${event.attack.stars} stars`}
+              accessibilityLabel={`${event.attacker?.name ?? '—'}, ${t('warStarsTitle')}: ${event.attack.stars} / 3`}
               onPress={() => setSelected(event.attack)}
             >
               <Surface
@@ -315,11 +330,11 @@ function WarEvents({
                 </View>
                 <MemberMini member={event.attacker} />
                 <View style={styles.eventResult}>
-                  <CKText role="titleMedium">
-                    {'★'.repeat(event.attack.stars)}
-                    {'☆'.repeat(3 - event.attack.stars)}
-                  </CKText>
-                  <CKText muted role="labelSmall">
+                  <WarResultStars
+                    stars={event.attack.stars}
+                    testID={`war-event-${event.attack.order}-stars`}
+                  />
+                  <CKText role="rowTitle">
                     {formatPercent(event.attack.destructionPercentage)}
                   </CKText>
                 </View>
@@ -346,9 +361,15 @@ function WarEvents({
       />
     </View>
   );
-}
+});
 
-function WarTeam({ war, onOpenPlayer }: { war: WarInfo; onOpenPlayer: (tag: string) => void }) {
+const WarTeam = memo(function WarTeam({
+  war,
+  onOpenPlayer,
+}: {
+  war: WarInfo;
+  onOpenPlayer: (tag: string) => void;
+}) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const [side, setSide] = useState<'clan' | 'opponent'>('clan');
@@ -356,36 +377,29 @@ function WarTeam({ war, onOpenPlayer }: { war: WarInfo; onOpenPlayer: (tag: stri
   const [filter, setFilter] = useState<WarMemberFilter>('all');
   const [filterOpen, setFilterOpen] = useState(false);
   const [selected, setSelected] = useState<WarAttack | null>(null);
-  const members = useMemo(
-    () =>
-      filterWarMembers(
-        side === 'clan' ? (war.clan?.members ?? []) : (war.opponent?.members ?? []),
-        filter,
-        query,
-      ),
-    [filter, query, side, war],
-  );
+  const [retainedSides, setRetainedSides] = useState<readonly ('clan' | 'opponent')[]>(['clan']);
+  const selectSide = (side: 'clan' | 'opponent') => {
+    setSide(side);
+    setRetainedSides((current) => retainRecentSections(current, side));
+  };
   const options = warFilterOptions(t);
   return (
     <View style={styles.stack}>
-      <View style={styles.segment}>
-        {(['clan', 'opponent'] as const).map((value) => (
-          <Pressable
-            key={value}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: side === value }}
-            onPress={() => setSide(value)}
-            style={[
-              styles.segmentButton,
-              side === value && { backgroundColor: colorWithAlpha(theme.primary, 0.16) },
-            ]}
-          >
-            <CKText role="labelLarge" style={side === value ? { color: theme.primary } : undefined}>
-              {value === 'clan' ? war.clan?.name : war.opponent?.name}
-            </CKText>
-          </Pressable>
-        ))}
-      </View>
+      <SelectionPicker
+        title={t('navigationTeam')}
+        selectedKey={side}
+        onSelect={selectSide}
+        options={(['clan', 'opponent'] as const).map((key) => ({
+          key,
+          label: war[key]?.name ?? '',
+          icon: (
+            <MobileWebImage
+              imageUrl={war[key]?.badgeUrls.smallest ?? ''}
+              style={{ width: 28, height: 28 }}
+            />
+          ),
+        }))}
+      />
       <SearchSortBar
         value={query}
         onChangeText={setQuery}
@@ -396,19 +410,19 @@ function WarTeam({ war, onOpenPlayer }: { war: WarInfo; onOpenPlayer: (tag: stri
         sortIcon={<ListFilter size={18} color={theme.onSurface} />}
         onSortPress={() => setFilterOpen(true)}
       />
-      {!members.length ? (
-        <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
-      ) : (
-        members.map((member) => (
-          <WarMemberCard
-            key={member.tag}
-            member={member}
-            war={war}
-            attacksPerMember={war.effectiveAttacksPerMember}
-            onOpenAttack={setSelected}
-          />
-        ))
-      )}
+      {(['clan', 'opponent'] as const)
+        .filter((key) => retainedSides.includes(key))
+        .map((key) => (
+          <View key={key} style={key === side ? undefined : { display: 'none' }}>
+            <WarTeamMembers
+              war={war}
+              side={key}
+              filter={filter}
+              query={query}
+              onOpenAttack={setSelected}
+            />
+          </View>
+        ))}
       <SelectionModal
         visible={filterOpen}
         title={t('generalFilters')}
@@ -426,9 +440,46 @@ function WarTeam({ war, onOpenPlayer }: { war: WarInfo; onOpenPlayer: (tag: stri
       />
     </View>
   );
-}
+});
 
-function WarMemberCard({
+const WarTeamMembers = memo(function WarTeamMembers({
+  war,
+  side,
+  filter,
+  query,
+  onOpenAttack,
+}: {
+  war: WarInfo;
+  side: 'clan' | 'opponent';
+  filter: WarMemberFilter;
+  query: string;
+  onOpenAttack: (attack: WarAttack) => void;
+}) {
+  const { t } = useI18n();
+  const members = useMemo(
+    () => filterWarMembers(war[side]?.members ?? [], filter, query),
+    [war, side, filter, query],
+  );
+  return (
+    <View style={styles.stack}>
+      {members.length ? (
+        members.map((member) => (
+          <WarMemberCard
+            key={member.tag}
+            member={member}
+            war={war}
+            attacksPerMember={war.effectiveAttacksPerMember}
+            onOpenAttack={onOpenAttack}
+          />
+        ))
+      ) : (
+        <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
+      )}
+    </View>
+  );
+});
+
+const WarMemberCard = memo(function WarMemberCard({
   member,
   war,
   attacksPerMember,
@@ -440,6 +491,7 @@ function WarMemberCard({
   onOpenAttack: (attack: WarAttack) => void;
 }) {
   const { t } = useI18n();
+  const { width } = useWindowDimensions();
   const attacks = member.attacks ?? [];
   return (
     <Surface style={styles.memberCard}>
@@ -449,19 +501,15 @@ function WarMemberCard({
           style={styles.thImage}
         />
         <View style={styles.grow}>
-          <CKText muted role="labelSmall">
-            N°{member.mapPosition}
-          </CKText>
+          <CKText muted role="labelLarge">#{member.mapPosition}</CKText>
           <CKText role="rowTitle">{member.name}</CKText>
         </View>
-        <View style={styles.attackCount}>
+        <PillSurface style={styles.attackCount}>
           <MobileWebImage imageUrl={ImageAssets.sword} style={styles.inlineIcon} />
-          <CKText role="labelMedium">
-            {attacks.length}/{attacksPerMember}
-          </CKText>
-        </View>
+          <CKText role="labelLarge">{attacks.length}/{attacksPerMember}</CKText>
+        </PillSurface>
       </View>
-      <View style={styles.memberColumns}>
+      <View style={[styles.memberColumns, width < 600 && styles.memberColumnsCompact]}>
         <View style={styles.memberColumn}>
           <ActionColumnHeader image={ImageAssets.sword} label={t('warAttacksTitle')} />
           {Array.from({ length: attacksPerMember }, (_, index) => {
@@ -498,13 +546,13 @@ function WarMemberCard({
       </View>
     </Surface>
   );
-}
+});
 
 function ActionColumnHeader({ image, label }: { image: string; label: string }) {
   return (
     <View style={styles.actionHeader}>
       <MobileWebImage imageUrl={image} style={styles.inlineIcon} />
-      <CKText muted role="labelSmall" numberOfLines={1}>
+      <CKText muted role="body" style={{ flex: 1 }}>
         {label}
       </CKText>
     </View>
@@ -524,34 +572,45 @@ function AttackLine({
   emptyLabel: string;
   onPress: () => void;
 }) {
+  const theme = useCKTheme();
+  if (!attack)
+    return (
+      <View
+        style={[
+          styles.emptyAttackLine,
+          { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.3) },
+        ]}
+      >
+        <MobileWebImage
+          imageUrl={ImageAssets.townHall(placeholderTownHall)}
+          style={[styles.actionTownHall, styles.mutedImage]}
+        />
+        <CKText muted role="metadata">{emptyLabel}</CKText>
+      </View>
+    );
   return (
     <Pressable
       accessibilityRole={attack ? 'button' : undefined}
       accessibilityLabel={attack ? member?.name : emptyLabel}
       disabled={!attack}
       onPress={onPress}
-      style={styles.attackLine}
+      style={[
+        styles.attackLine,
+        { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.3) },
+      ]}
     >
       <MobileWebImage
         imageUrl={ImageAssets.townHall(member?.townhallLevel ?? placeholderTownHall)}
         style={[styles.actionTownHall, !attack && styles.mutedImage]}
       />
       <View style={styles.grow}>
-        <CKText role="labelMedium" numberOfLines={1} style={!attack ? styles.mutedText : undefined}>
+        <CKText role="rowTitle" numberOfLines={1}>
           {attack ? `${member?.mapPosition ?? '-'}. ${member?.name ?? '—'}` : '-'}
         </CKText>
         <View style={styles.starLine}>
-          {[0, 1, 2].map((index) => (
-            <MobileWebImage
-              key={index}
-              imageUrl={
-                index < (attack?.stars ?? 0) ? ImageAssets.builderBaseStar : ImageAssets.emptyStar
-              }
-              style={[styles.starIcon, !attack && styles.mutedImage]}
-            />
-          ))}
-          <CKText muted role="labelSmall">
-            {attack ? formatPercent(attack.destructionPercentage, 0) : '-%'}
+          <WarResultStars stars={attack.stars} compact />
+          <CKText muted role="labelLarge">
+            {formatPercent(attack.destructionPercentage, 0)}
           </CKText>
         </View>
       </View>
@@ -599,7 +658,7 @@ function WarCalculator({
         <View style={styles.calculatorBody}>
           <View style={styles.calculatorFields}>
             <View style={styles.calculatorField}>
-              <CKText muted role="labelMedium">
+              <CKText muted role="body">
                 {t('warTeamSize')}
               </CKText>
               <View
@@ -617,7 +676,7 @@ function WarCalculator({
               </View>
             </View>
             <View style={styles.calculatorField}>
-              <CKText muted role="labelMedium">
+              <CKText muted role="body">
                 {t('warCalculatorNeededOverall')}
               </CKText>
               <View
@@ -705,7 +764,7 @@ function WarAnalysisPanel({
         </CKText>
         {badge ? (
           <PillSurface>
-            <CKText role="labelSmall">{badge}</CKText>
+            <CKText role="labelLarge">{badge}</CKText>
           </PillSurface>
         ) : null}
       </View>
@@ -713,7 +772,7 @@ function WarAnalysisPanel({
       {summary ? <CKText muted>{summary}</CKText> : null}
       {objective ? (
         <View style={styles.analysisObjective}>
-          <CKText role="labelSmall">{t('warAnalysisToWin')}</CKText>
+          <CKText role="labelLarge">{t('warAnalysisToWin')}</CKText>
           <CKText muted>{objective}</CKText>
         </View>
       ) : null}
@@ -721,18 +780,51 @@ function WarAnalysisPanel({
   );
 }
 
-function ComparisonRow({ label, left, right }: { label: string; left: string; right: string }) {
+function ComparisonRow({ stars, left, right }: { stars: number; left: string; right: string }) {
   return (
     <View style={styles.comparison}>
       <CKText role="titleMedium" style={styles.comparisonValue}>
         {left}
       </CKText>
-      <CKText muted style={styles.comparisonLabel}>
-        {label}
-      </CKText>
+      <View style={styles.comparisonLabel}>
+        <WarResultStars stars={stars} compact />
+      </View>
       <CKText role="titleMedium" style={styles.comparisonValue}>
         {right}
       </CKText>
+    </View>
+  );
+}
+
+export function WarResultStars({
+  stars,
+  compact = false,
+  testID,
+}: {
+  readonly stars: number;
+  readonly compact?: boolean;
+  readonly testID?: string;
+}) {
+  const { t } = useI18n();
+  const earned = Math.max(0, Math.min(3, stars));
+  return (
+    <View
+      accessible
+      accessibilityLabel={`${t('warStarsTitle')}: ${earned} / 3`}
+      style={styles.warStars}
+      testID={testID}
+    >
+      {[0, 1, 2].map((index) => (
+        <MobileWebImage
+          key={index}
+          imageUrl={ImageAssets.attackStar}
+          style={[
+            compact ? styles.warStarCompact : styles.warStar,
+            index >= earned && styles.warStarUnearned,
+          ]}
+          testID={testID ? `${testID}-${index}` : undefined}
+        />
+      ))}
     </View>
   );
 }
@@ -767,7 +859,7 @@ function ComparisonMetric({
         <View style={styles.comparisonMetricLabel}>
           {image ? <MobileWebImage imageUrl={image} style={styles.comparisonIcon} /> : null}
           {symbol ? <CKText role="labelLarge">{symbol}</CKText> : null}
-          <CKText muted role="labelMedium" numberOfLines={1}>
+          <CKText muted role="body" numberOfLines={1}>
             {label}
           </CKText>
         </View>
@@ -817,11 +909,11 @@ function MemberMini({
         imageUrl={ImageAssets.townHall(member?.townhallLevel ?? 1)}
         style={styles.miniTh}
       />
-      <View style={styles.grow}>
-        <CKText role="labelMedium" numberOfLines={1}>
+      <View style={[styles.grow, align === 'right' && styles.memberMiniCopyRight]}>
+        <CKText role="rowTitle" numberOfLines={1}>
           {member?.name ?? '—'}
         </CKText>
-        <CKText muted role="labelSmall">
+        <CKText muted role="labelLarge">
           #{member?.mapPosition ?? '—'}
         </CKText>
       </View>
@@ -841,27 +933,30 @@ function warFilterOptions(
     { key: 'bestPerformance', label: t('warStarsBestPerformance') },
     { key: 'noattacks', label: t('warAttacksNone') },
     { key: 'nodefenses', label: t('warDefensesNone') },
-    { key: '3stars', label: `⚔ 3 ★` },
-    { key: '2stars', label: `⚔ 2 ★` },
-    { key: '1star', label: `⚔ 1 ★` },
-    { key: '0star', label: `⚔ 0 ★` },
-    { key: 'def_3stars', label: `🛡 3 ★` },
-    { key: 'def_2stars', label: `🛡 2 ★` },
-    { key: 'def_1star', label: `🛡 1 ★` },
-    { key: 'def_0star', label: `🛡 0 ★` },
+    { key: '3stars', label: `${t('warAttacksTitle')} · ${t('warStarsThree')}` },
+    { key: '2stars', label: `${t('warAttacksTitle')} · ${t('warStarsTwo')}` },
+    { key: '1star', label: `${t('warAttacksTitle')} · ${t('warStarsOne')}` },
+    { key: '0star', label: `${t('warAttacksTitle')} · ${t('warStarsZero')}` },
+    { key: 'def_3stars', label: `${t('warDefensesTitle')} · ${t('warStarsThree')}` },
+    { key: 'def_2stars', label: `${t('warDefensesTitle')} · ${t('warStarsTwo')}` },
+    { key: 'def_1star', label: `${t('warDefensesTitle')} · ${t('warStarsOne')}` },
+    { key: 'def_0star', label: `${t('warDefensesTitle')} · ${t('warStarsZero')}` },
   ];
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   tabs: { paddingHorizontal: 12, marginTop: -12 },
+  tabImage: { width: 20, height: 20 },
   content: { width: '100%', maxWidth: 1320, alignSelf: 'center', padding: 10 },
+  contentWide: { paddingHorizontal: 18, paddingVertical: 14 },
   stack: { gap: 10 },
   grow: { flex: 1 },
   comparison: { minHeight: 34, flexDirection: 'row', alignItems: 'center' },
   comparisonValue: { width: 82, textAlign: 'center' },
-  comparisonLabel: { flex: 1, textAlign: 'center' },
+  comparisonLabel: { flex: 1, alignItems: 'center' },
   comparisonMetric: { gap: 5, marginBottom: 9 },
+  starBreakdown: { gap: 3, paddingTop: 4 },
   comparisonMetricLabel: {
     flex: 1,
     flexDirection: 'row',
@@ -900,7 +995,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  eventRow: { minHeight: 78, padding: 9, flexDirection: 'row', alignItems: 'center', gap: 7 },
+  eventRow: { minHeight: 84, padding: 12, flexDirection: 'row', alignItems: 'center', gap: 8 },
   orderBadge: {
     minWidth: 34,
     height: 34,
@@ -909,10 +1004,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  memberMini: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 5 },
+  memberMini: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 6 },
   memberMiniRight: { flexDirection: 'row-reverse' },
-  miniTh: { width: 34, height: 34, resizeMode: 'contain' },
-  eventResult: { width: 90, alignItems: 'center' },
+  memberMiniCopyRight: { alignItems: 'flex-end' },
+  miniTh: { width: 38, height: 38, resizeMode: 'contain' },
+  eventResult: { width: 96, alignItems: 'center', gap: 3 },
   segment: {
     minHeight: 44,
     borderRadius: 16,
@@ -927,26 +1023,45 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     paddingHorizontal: 8,
   },
-  memberCard: { padding: 11, gap: 10 },
-  memberHeader: { flexDirection: 'row', alignItems: 'center', gap: 9 },
-  thImage: { width: 48, height: 48, resizeMode: 'contain' },
-  memberColumns: { flexDirection: 'row', gap: 10 },
-  memberColumn: { flex: 1, gap: 5 },
-  attackCount: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  actionHeader: { flexDirection: 'row', alignItems: 'center', gap: 5, minHeight: 20 },
+  memberCard: { padding: 14, gap: 12 },
+  memberHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  thImage: { width: 52, height: 52, resizeMode: 'contain' },
+  memberColumns: { flexDirection: 'row', gap: 12 },
+  memberColumnsCompact: { flexDirection: 'column' },
+  memberColumn: { flex: 1, gap: 6 },
+  attackCount: {
+    minHeight: 32,
+    paddingHorizontal: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  actionHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 24 },
   inlineIcon: { width: 18, height: 18 },
   attackLine: {
-    minHeight: 43,
-    paddingVertical: 2,
+    minHeight: 54,
+    paddingHorizontal: 9,
+    paddingVertical: 7,
+    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
   },
-  actionTownHall: { width: 28, height: 28 },
-  starLine: { flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: 3 },
-  starIcon: { width: 13, height: 13 },
+  emptyAttackLine: {
+    minHeight: 54,
+    paddingHorizontal: 9,
+    borderRadius: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  actionTownHall: { width: 34, height: 34 },
+  starLine: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 3 },
+  warStars: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 1 },
+  warStar: { width: 20, height: 20 },
+  warStarCompact: { width: 15, height: 15 },
+  warStarUnearned: { opacity: 0.22 },
   mutedImage: { opacity: 0.42 },
-  mutedText: { opacity: 0.56 },
   calculatorSheet: { width: '100%', padding: 0, overflow: 'hidden' },
   calculatorHeader: {
     minHeight: 52,

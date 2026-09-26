@@ -1,5 +1,7 @@
-import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { useRef, type ReactNode } from 'react';
+import { Pressable, StyleSheet, View, Platform, useWindowDimensions } from 'react-native';
+import { useCKAccessibility } from '../../../ui/accessibility';
+import { validClanSpringOrigin, type ClanSpringOrigin } from './clan-spring-transition';
 import { Bookmark, ChevronRight, Mail, Shield, Users } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -17,84 +19,162 @@ import type { ClanRosterItem } from './contracts';
 import { clanMemberCapacityLabel } from './contracts';
 import { clanTypeLabel } from './presentation-utils';
 
-export function ClanRosterCard({ item, onOpen }: { item: ClanRosterItem; onOpen: () => void }) {
+export function ClanRosterCard({
+  item,
+  onOpen,
+  onLongPress,
+  dragTestID,
+}: {
+  item: ClanRosterItem;
+  onOpen: (origin?: ClanSpringOrigin) => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
+}) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const cardRef = useRef<View>(null);
+  const badgeRef = useRef<View>(null);
+  const nameRef = useRef<View>(null);
+  const nameWidth = useRef(0);
+  const generation = useRef(0);
+  const measured = useRef<ClanSpringOrigin | undefined>(undefined);
+  const viewport = useWindowDimensions();
+  const { reduceMotion } = useCKAccessibility();
+  const capture = () => {
+    measured.current = undefined;
+    const request = ++generation.current;
+    if (Platform.OS !== 'ios' || reduceMotion || viewport.fontScale > 1.2 || !item.badgeUrl) return;
+    const rects: Partial<Record<'card' | 'badge' | 'name', ClanSpringOrigin['card']>> = {};
+    for (const [part, ref] of [
+      ['card', cardRef],
+      ['badge', badgeRef],
+      ['name', nameRef],
+    ] as const) {
+      ref.current?.measureInWindow((x, y, width, height) => {
+        if (request !== generation.current) return;
+        rects[part] = { x, y, width: part === 'name' ? nameWidth.current : width, height };
+        if (!rects.card || !rects.badge || !rects.name) return;
+        const origin: ClanSpringOrigin = {
+          card: rects.card,
+          badge: rects.badge,
+          name: rects.name,
+          viewport,
+          badgeUrl: item.badgeUrl,
+          title: item.name,
+        };
+        if (validClanSpringOrigin(origin, viewport.width, viewport.height))
+          measured.current = origin;
+      });
+    }
+  };
   return (
-    <Surface radius={ckRadius.control} style={styles.card}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`Open clan ${item.name}`}
-        onPress={onOpen}
-        style={styles.pressable}
-      >
-        <View style={styles.content}>
-          <View style={styles.badgeColumn}>
-            {item.badgeUrl ? (
-              <MobileWebImage imageUrl={item.badgeUrl} style={styles.badge} />
-            ) : (
-              <View style={styles.badgeFallback}>
-                <Users size={32} color={theme.onSurfaceVariant} />
-              </View>
-            )}
-            <View style={styles.memberGap} />
-            <ClanIconChip
-              label={clanMemberCapacityLabel(item.members)}
-              icon={<Users size={14} color={theme.onSurfaceVariant} />}
-            />
-          </View>
-          <View style={styles.copy}>
-            <CKText
-              role="titleMedium"
-              numberOfLines={1}
-              style={[styles.title, { paddingRight: item.bookmarked ? 28 : 86 }]}
-            >
-              {item.name}
-            </CKText>
-            {item.countryCode && item.locationName ? (
-              <View style={styles.location}>
-                <MobileWebImage imageUrl={ImageAssets.flag(item.countryCode)} style={styles.flag} />
-                <CKText muted role="labelLarge" numberOfLines={1} style={styles.locationName}>
-                  {item.locationName}
+    <View ref={cardRef} collapsable={false}>
+      <Surface radius={ckRadius.control} style={styles.card}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Open clan ${item.name}`}
+          onPressIn={capture}
+          onPress={() => {
+            const origin = measured.current;
+            measured.current = undefined;
+            generation.current += 1;
+            onOpen(origin);
+          }}
+          onLongPress={
+            onLongPress
+              ? () => {
+                  generation.current += 1;
+                  measured.current = undefined;
+                  onLongPress();
+                }
+              : undefined
+          }
+          testID={dragTestID}
+          style={styles.pressable}
+        >
+          <View style={styles.content}>
+            <View style={styles.badgeColumn}>
+              {item.badgeUrl ? (
+                <View ref={badgeRef} collapsable={false}>
+                  <MobileWebImage
+                    imageUrl={item.badgeUrl}
+                    displaySize={{ width: 94, height: 94 }}
+                    cachePolicy="memory-disk"
+                    style={styles.badge}
+                  />
+                </View>
+              ) : (
+                <View style={styles.badgeFallback}>
+                  <Users size={32} color={theme.onSurfaceVariant} />
+                </View>
+              )}
+              <View style={styles.memberGap} />
+              <ClanIconChip
+                label={clanMemberCapacityLabel(item.members)}
+                icon={<Users size={14} color={theme.onSurfaceVariant} />}
+              />
+            </View>
+            <View style={styles.copy}>
+              <View ref={nameRef} collapsable={false}>
+                <CKText
+                  role="titleMedium"
+                  onTextLayout={(event) => {
+                    nameWidth.current = event.nativeEvent.lines[0]?.width ?? 0;
+                  }}
+                  numberOfLines={1}
+                  style={[styles.title, { paddingRight: item.bookmarked ? 28 : 86 }]}
+                >
+                  {item.name}
                 </CKText>
               </View>
-            ) : null}
-            <View style={styles.chips}>
-              {item.clanPoints > 0 ? (
-                <ClanImageChip
-                  label={new Intl.NumberFormat(toIntlLocale(locale)).format(item.clanPoints)}
-                  imageUrl={ImageAssets.trophies}
-                />
+              {item.countryCode && item.locationName ? (
+                <View style={styles.location}>
+                  <MobileWebImage
+                    imageUrl={ImageAssets.flag(item.countryCode)}
+                    style={styles.flag}
+                  />
+                  <CKText muted role="labelLarge" numberOfLines={1} style={styles.locationName}>
+                    {item.locationName}
+                  </CKText>
+                </View>
               ) : null}
-              {item.warLeague ? (
-                <ClanImageChip
-                  label={item.warLeague}
-                  imageUrl={ImageAssets.getWarLeagueImage(item.warLeague)}
-                />
-              ) : null}
-              {item.type ? (
-                <ClanIconChip
-                  label={clanTypeLabel(item.type, t)}
-                  icon={<Mail size={14} color={theme.onSurfaceVariant} />}
-                />
-              ) : null}
+              <View style={styles.chips}>
+                {item.clanPoints > 0 ? (
+                  <ClanImageChip
+                    label={new Intl.NumberFormat(toIntlLocale(locale)).format(item.clanPoints)}
+                    imageUrl={ImageAssets.trophies}
+                  />
+                ) : null}
+                {item.warLeague ? (
+                  <ClanImageChip
+                    label={item.warLeague}
+                    imageUrl={ImageAssets.getWarLeagueImage(item.warLeague)}
+                  />
+                ) : null}
+                {item.type ? (
+                  <ClanIconChip
+                    label={clanTypeLabel(item.type, t)}
+                    icon={<Mail size={14} color={theme.onSurfaceVariant} />}
+                  />
+                ) : null}
+              </View>
             </View>
           </View>
-        </View>
-        <View style={styles.trailingStatus}>
-          {item.bookmarked ? (
-            <Bookmark size={24} color={theme.onSurfaceVariant} />
-          ) : (
-            <PillSurface style={styles.accountCount}>
-              <CKText role="labelMedium" style={styles.accountCountText}>
-                {item.accountCount} {item.accountCount === 1 ? 'account' : 'accounts'}
-              </CKText>
-            </PillSurface>
-          )}
-        </View>
-        <ChevronRight size={30} color={theme.onSurfaceVariant} style={styles.chevron} />
-      </Pressable>
-    </Surface>
+          <View style={styles.trailingStatus}>
+            {item.bookmarked ? (
+              <Bookmark size={24} color={theme.onSurfaceVariant} />
+            ) : (
+              <PillSurface style={styles.accountCount}>
+                <CKText role="labelMedium" style={styles.accountCountText}>
+                  {item.accountCount} {item.accountCount === 1 ? 'account' : 'accounts'}
+                </CKText>
+              </PillSurface>
+            )}
+          </View>
+          <ChevronRight size={30} color={theme.onSurfaceVariant} style={styles.chevron} />
+        </Pressable>
+      </Surface>
+    </View>
   );
 }
 

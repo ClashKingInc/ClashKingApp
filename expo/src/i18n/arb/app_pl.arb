@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Powiadomienia systemowe",
+  "notifSystemSettings": "Otwórz ustawienia powiadomień",
+  "notifSystemSettingsDescription": "Zarządzaj alertami, dźwiękami i odznakami w ustawieniach urządzenia.",
+  "notifSystemSettingsFailed": "Nie udało się otworzyć ustawień powiadomień. Otwórz Ustawienia na urządzeniu.",
+  "notifManagePlayersDescription": "Zarządzaj powiadomieniami kont w Gracze → Połączone → Opcje.",
+  "notifCustomReminders": "Własne przypomnienia",
+  "notifTestType": "Typ powiadomienia",
+  "statsBattlelogsGroup": "Dzienniki bitew",
+  "statsGlobalStatsGroup": "Statystyki globalne",
+  "playerOptionShowOnHomeTitle": "Pokaż konto na stronie głównej",
+  "playerOptionShowOnHomeSubtitle": "Uwzględnij to zweryfikowane konto na kartach strony głównej (maksymalnie 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Zweryfikuj to konto, aby pokazać je na stronie głównej.",
+  "playerOptionHomeInclusionFirst": "Najpierw włącz opcję Pokaż konto na stronie głównej.",
+  "homeIncludedAccountsLimit": "Na stronie głównej można pokazać maksymalnie 5 kont. Najpierw usuń jedno.",
+  "statsHitratesByTownHall": "Skuteczność według ratusza",
+  "statsChartGranularity": "Przedział wykresu",
+  "statsDaily": "Dziennie",
+  "statsWeekly": "Tygodniowo",
+  "statsMonthly": "Miesięcznie",
+  "statsCompareCohorts": "Porównaj grupy",
+  "statsAcrossCohorts": "Użycie według grup",
+  "legendsTrophyGrid": "Siatka trofeów",
+  "legendsPopularArmyItems": "Najpopularniejsze elementy armii",
+  "legendsPopularTroop": "Ulubiony",
+  "legendsHitrate": "Skuteczność",
+  "legendsAvgOffense": "Śr. atak",
+  "legendsAvgDefense": "Śr. obrona",
+  "settingsClearImageCache": "Wyczyść pamięć podręczną obrazów",
+  "settingsImageCacheCleared": "Pamięć podręczna obrazów została wyczyszczona.",
+  "settingsImageCacheClearFailed": "Nie udało się wyczyścić pamięci podręcznej obrazów. Spróbuj ponownie.",
+  "startupCheckingUpdate": "Sprawdzanie aktualizacji…",
+  "startupDownloadingUpdate": "Pobieranie aktualizacji…",
+  "startupUpdateInBackground": "Aktualizuj w tle",
   "warStatsRangeTitle": "Zakres statystyk wojennych",
   "warStatsRangeDescription": "Wybierz, czy statystyki mają obejmować stałą liczbę ostatnich wojen, czy ostatni okres podany w dniach.",
   "warStatsRangeDays": "Dni",
@@ -172,7 +205,7 @@
   "notifPushUnsupported": "Powiadomienia push nie są obsługiwane na tej platformie.",
   "notifPushInitializing": "Konfigurowanie powiadomień push…",
   "notificationPrimerTitle": "Włączyć powiadomienia?",
-  "notificationPrimerBody": "ClashKing może powiadamiać Cię o aktualizacjach wojen, CWL, konta i projektów. Możesz to zmienić w dowolnym momencie w Ustawieniach > Powiadomienia.",
+  "notificationPrimerBody": "ClashKing może wysyłać informacje o wydarzeniach, ogłoszeniach, obronach w Lidze Legend i wsparciu. Przypomnienia o wojnach i weekendach najazdów pozostają wyłączone, dopóki ich nie skonfigurujesz. Możesz zmienić te opcje w Ustawienia > Powiadomienia.",
   "notificationPrimerNotNow": "Nie teraz",
   "notificationPrimerAllow": "Zezwól",
   "achievementsTitle": "Osiągnięcia",
@@ -1556,6 +1589,8 @@
   "legendsCountryTitle": "Kraj",
   "legendsLocalRankTitle": "Ranga lokalna",
   "legendsGlobalRankTitle": "Globalna ranga",
+  "legendsYourArmy": "Twoja armia",
+  "legendsArmyUsedAgainstYou": "Armia użyta przeciwko tobie",
   "warWinsTitle": "Wygrywa",
   "warLossesTitle": "Straty",
   "warDrawsTitle": "Rysuje",
@@ -2609,7 +2644,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Wybierz alerty i wyślij lokalne podglądy testów.",
+  "settingsNotificationsSubtitle": "Wybierz alerty, które chcesz otrzymywać.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3254,6 +3289,9 @@
   "statsHero": "Bohaterowie",
   "statsPet": "Zwierzak",
   "statsEquipment": "Wyposażenie",
+  "statsPetCombinations": "Kombinacje zwierzaków",
+  "statsEquipmentPairs": "Pary wyposażenia",
+  "statsArmyFallback": "Armia {id}",
   "statsOwningHero": "Posiadanie bohatera",
   "statsAddItem": "Dodaj przedmiot",
   "statsAnalyzeItems": "Analizuj elementy",
@@ -4003,19 +4041,32 @@
   "homeActivityJoined": "dołączenie",
   "homeActivityLeft": "odejście",
   "homeActivityAClan": "klan",
+  "statsCwlSeasonGroups": "Grupy",
+  "statsCwlSeasonHistory": "Liga wojen klanów w czasie",
+  "statsCwlRosterNotLineup": "Rozkład zapisanych graczy przeliczony na {size} miejsc; rzeczywiste składy wojenne mogą się różnić.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Statystyki jednostek",
+  "statsWarSizes": "Rozmiary wojen",
+  "statsMissedAttacks": "Pominięte ataki",
+  "statsCopyChart": "Kopiuj wykres",
+  "statsCompareItems": "Porównaj elementy",
+  "statsCompareItemsHint": "Wybierz maksymalnie 5 elementów do porównania.",
+  "statsVsOverall": "w porównaniu z ogółem",
+  "statsCopyChartFailed": "Nie udało się skopiować wykresu. Spróbuj ponownie.",
+  "statsPercentagePoints": "punktów procentowych",
   "statsMeta": "Meta",
   "statsBattle": "Bitwa",
   "statsWorld": "Świat",
   "statsHeaderSubtitle": "Poznaj wyniki bitew i śledzone przez nas dane ze świata gry.",
   "statsPreview": "Podgląd",
-  "statsTownHallDistribution": "Rozkład ratusza",
+  "statsTownHallDistribution": "Ratusze",
   "statsBuilderHallDistribution": "Dystrybucja Builder Hall",
-  "statsLeagueDistribution": "Dystrybucja lig rankingowych",
+  "statsLeagueDistribution": "Ligi rankingowe",
   "statsTrackedPlayers": "Aktualnie śledzona populacja graczy",
   "statsTrackedClans": "Aktualnie śledzona populacja klanów",
-  "statsCwlLeagueDistribution": "Dystrybucja ligi CWL",
-  "statsCapitalLeagueDistribution": "Dystrybucja ligi stołecznej",
-  "statsTrackedLocations": "Śledzone lokalizacje klanów",
+  "statsCwlLeagueDistribution": "Ligi CWL",
+  "statsCapitalLeagueDistribution": "Ligi stolicy",
+  "statsTrackedLocations": "Lokalizacje klanów",
   "statsLocationCountHelp": "Kraje i lokalizacje reprezentowane przez śledzone klany.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4756,6 +4807,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Zgłoszony skład",
+  "cwlMatches": "Starcia",
+  "cwlNextMatchup": "Następne starcie",
+  "cwlOtherMatches": "Pozostałe starcia",
+  "cwlOutlook": "Prognoza sezonu",
+  "cwlFirstPlace": "Pierwsze miejsce",
+  "cwlTopTwo": "Pierwsza dwójka",
+  "cwlRemainingOpponents": "Pozostali rywale",
+  "cwlWinBonusNote": "Gwiazdy obejmują 10 dodatkowych gwiazd za każde zakończone zwycięstwo.",
+  "cwlEstimateNote": "Szacunki uwzględniają zakończone wojny i pozostałych rywali, a nie zmiany składu. Wymagane są co najmniej dwie zakończone wojny na klan. Szacunki nie są skalibrowane; zasady awansu zależą od ligi.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# godzina} few {# godziny} other {# godzin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
+  "personalBasesDeleteOld": "Usuń bazy starsze niż 90 dni",
+  "personalBasesDeleteOldConfirm": "Zostanie usuniętych {count} zapisanych baz starszych niż 90 dni. Historia pobierania i udostępnione bazy pozostaną.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Automatyczna obrona",
+  "legendsPopularArmyItem": "Najpopularniejszy element armii",
+  "legendsClanCastle": "Zamek klanowy",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

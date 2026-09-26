@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Systembenachrichtigungen",
+  "notifSystemSettings": "Benachrichtigungseinstellungen öffnen",
+  "notifSystemSettingsDescription": "Verwalte Hinweise, Töne und Kennzeichen in den Geräteeinstellungen.",
+  "notifSystemSettingsFailed": "Benachrichtigungseinstellungen konnten nicht geöffnet werden. Öffne die Einstellungen auf deinem Gerät.",
+  "notifManagePlayersDescription": "Verwalte Kontobenachrichtigungen unter Spieler → Verknüpft → Optionen.",
+  "notifCustomReminders": "Eigene Erinnerungen",
+  "notifTestType": "Benachrichtigungstyp",
+  "statsBattlelogsGroup": "Kampfprotokolle",
+  "statsGlobalStatsGroup": "Globale Statistiken",
+  "playerOptionShowOnHomeTitle": "Konto auf der Startseite anzeigen",
+  "playerOptionShowOnHomeSubtitle": "Dieses verifizierte Konto in die Startseitenkarten aufnehmen (bis zu 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verifiziere dieses Konto, um es auf der Startseite anzuzeigen.",
+  "playerOptionHomeInclusionFirst": "Aktiviere zuerst „Konto auf der Startseite anzeigen“.",
+  "homeIncludedAccountsLimit": "Auf der Startseite können bis zu 5 Konten angezeigt werden. Entferne zuerst eines.",
+  "statsHitratesByTownHall": "Erfolgsquoten nach Rathaus",
+  "statsChartGranularity": "Diagrammintervall",
+  "statsDaily": "Täglich",
+  "statsWeekly": "Wöchentlich",
+  "statsMonthly": "Monatlich",
+  "statsCompareCohorts": "Gruppen vergleichen",
+  "statsAcrossCohorts": "Nutzung nach Gruppen",
+  "legendsTrophyGrid": "Trophäenraster",
+  "legendsPopularArmyItems": "Beliebteste Armee-Elemente",
+  "legendsPopularTroop": "Favorit",
+  "legendsHitrate": "Erfolgsquote",
+  "legendsAvgOffense": "Ø Angriff",
+  "legendsAvgDefense": "Ø Verteidigung",
+  "settingsClearImageCache": "Bildcache leeren",
+  "settingsImageCacheCleared": "Bildcache wurde geleert.",
+  "settingsImageCacheClearFailed": "Der Bildcache konnte nicht geleert werden. Bitte versuche es erneut.",
+  "startupCheckingUpdate": "Suche nach Updates…",
+  "startupDownloadingUpdate": "Update wird heruntergeladen…",
+  "startupUpdateInBackground": "Im Hintergrund aktualisieren",
   "warStatsRangeTitle": "Zeitraum der Kriegsstatistik",
   "warStatsRangeDescription": "Wähle, ob die Statistik eine feste Anzahl vergangener Kriege oder einen vergangenen Zeitraum in Tagen abdeckt.",
   "warStatsRangeDays": "Tage",
@@ -77,7 +110,7 @@
   "notifPushUnsupported": "Push-Benachrichtigungen werden auf dieser Plattform nicht unterstützt.",
   "notifPushInitializing": "Push-Benachrichtigungen werden eingerichtet…",
   "notificationPrimerTitle": "Benachrichtigungen aktivieren?",
-  "notificationPrimerBody": "ClashKing kann dich über Neuigkeiten zu Kriegen, der CWL, deinem Konto und Projekten informieren. Du kannst dies jederzeit unter Einstellungen > Benachrichtigungen ändern.",
+  "notificationPrimerBody": "ClashKing kann Updates zu Ereignissen, Ankündigungen, Legend-Verteidigungen und Support senden. Erinnerungen an Kriege und Überfallwochenenden bleiben aus, bis du sie einrichtest. Du kannst diese Auswahl unter Einstellungen > Benachrichtigungen ändern.",
   "notificationPrimerNotNow": "Nicht jetzt",
   "notificationPrimerAllow": "Zulassen",
   "achievementsTitle": "Erfolge",
@@ -1461,6 +1494,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokaler Rang",
   "legendsGlobalRankTitle": "Globaler Rang",
+  "legendsYourArmy": "Deine Armee",
+  "legendsArmyUsedAgainstYou": "Gegen dich eingesetzte Armee",
   "warWinsTitle": "Siege",
   "warLossesTitle": "Verluste",
   "warDrawsTitle": "Zieht",
@@ -2514,7 +2549,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Wähle Benachrichtigungen aus und sende lokale Testvorschauen.",
+  "settingsNotificationsSubtitle": "Wähle aus, welche Hinweise du erhältst.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3159,6 +3194,9 @@
   "statsHero": "Held",
   "statsPet": "Haustier",
   "statsEquipment": "Ausrüstung",
+  "statsPetCombinations": "Begleiterkombinationen",
+  "statsEquipmentPairs": "Ausrüstungspaare",
+  "statsArmyFallback": "Armee {id}",
   "statsOwningHero": "Besitzender Held",
   "statsAddItem": "Element hinzufügen",
   "statsAnalyzeItems": "Elemente analysieren",
@@ -3908,19 +3946,32 @@
   "homeActivityJoined": "ist beigetreten",
   "homeActivityLeft": "hat verlassen",
   "homeActivityAClan": "einem Clan",
+  "statsCwlSeasonGroups": "Gruppen",
+  "statsCwlSeasonHistory": "Clankriegs-Liga im Zeitverlauf",
+  "statsCwlRosterNotLineup": "Verteilung der registrierten Spieler auf {size} Plätze skaliert; tatsächliche Kriegsaufstellungen können abweichen.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Truppenstatistik",
+  "statsWarSizes": "Kriegsgrößen",
+  "statsMissedAttacks": "Verpasste Angriffe",
+  "statsCopyChart": "Diagramm kopieren",
+  "statsCompareItems": "Elemente vergleichen",
+  "statsCompareItemsHint": "Wähle bis zu 5 Elemente zum Vergleichen aus.",
+  "statsVsOverall": "im Vergleich zum Gesamtdurchschnitt",
+  "statsCopyChartFailed": "Diagramm konnte nicht kopiert werden. Versuch es erneut.",
+  "statsPercentagePoints": "Prozentpunkte",
   "statsMeta": "Meta",
   "statsBattle": "Schlacht",
   "statsWorld": "Welt",
   "statsHeaderSubtitle": "Erkunde Kampfleistungen und die von uns erfasste Spielwelt.",
   "statsPreview": "Vorschau",
-  "statsTownHallDistribution": "Rathausverteilung",
+  "statsTownHallDistribution": "Rathäuser",
   "statsBuilderHallDistribution": "Builder Hall-Verteilung",
-  "statsLeagueDistribution": "Ranglisten-Ligenverteilung",
+  "statsLeagueDistribution": "Ranglistenligen",
   "statsTrackedPlayers": "Derzeit verfolgte Spielerpopulation",
   "statsTrackedClans": "Derzeit verfolgte Clan-Bevölkerung",
-  "statsCwlLeagueDistribution": "CWL-Ligaverteilung",
-  "statsCapitalLeagueDistribution": "Verteilung der Hauptstadtliga",
-  "statsTrackedLocations": "Verfolgte Clan-Standorte",
+  "statsCwlLeagueDistribution": "CWL-Ligen",
+  "statsCapitalLeagueDistribution": "Hauptstadtligen",
+  "statsTrackedLocations": "Clanstandorte",
   "statsLocationCountHelp": "Länder und Orte, die durch verfolgte Clans repräsentiert werden.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4661,6 +4712,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Gemeldeter Kader",
+  "cwlMatches": "Begegnungen",
+  "cwlNextMatchup": "Nächste Begegnung",
+  "cwlOtherMatches": "Weitere Begegnungen",
+  "cwlOutlook": "Saisonausblick",
+  "cwlFirstPlace": "Erster Platz",
+  "cwlTopTwo": "Top zwei",
+  "cwlRemainingOpponents": "Verbleibende Gegner",
+  "cwlWinBonusNote": "Sterne enthalten 10 Bonussterne pro abgeschlossenem Sieg.",
+  "cwlEstimateNote": "Schätzungen berücksichtigen abgeschlossene Kriege und verbleibende Gegner, keine Aufstellungsänderungen. Mindestens zwei abgeschlossene Kriege pro Clan sind nötig. Die Schätzungen sind nicht kalibriert; Aufstiegsregeln variieren je nach Liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# Stunde} other {# Stunden}}} other {{count, plural, one {# Minute} other {# Minuten}}}}",
+  "personalBasesDeleteOld": "Basen entfernen, die älter als 90 Tage sind",
+  "personalBasesDeleteOldConfirm": "{count} gespeicherte Basen, die älter als 90 Tage sind, werden entfernt. Downloadverlauf und geteilte Basen bleiben erhalten.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Automatische Verteidigung",
+  "legendsPopularArmyItem": "Beliebtester Armeegegenstand",
+  "legendsClanCastle": "Clanburg",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

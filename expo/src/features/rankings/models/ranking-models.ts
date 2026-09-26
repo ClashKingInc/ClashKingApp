@@ -1,4 +1,5 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { getMaxTownHallLevel } from '../../../core/game-data/game-data-service';
 
 export const RankingAudience = {
   players: 'players',
@@ -143,11 +144,19 @@ export const RankingBoard = {
     RankingSource.clashKing,
     false,
     false,
-    ImageAssets.war,
+    ImageAssets.attackStar,
   ),
 } as const;
 
 export const rankingBoards = Object.values(RankingBoard);
+
+export function rankingBoardArtwork(board: RankingBoardValue): string {
+  if (board === RankingBoard.playerTownHall) {
+    const maxTownHall = getMaxTownHallLevel();
+    return ImageAssets.townHall(maxTownHall > 0 ? maxTownHall : 18);
+  }
+  return board.iconUrl;
+}
 
 export class RankingLocation {
   constructor(
@@ -238,7 +247,15 @@ export class RankingEntry {
     readonly metricImageUrl: string,
     readonly townHallLevel: number,
     readonly clanBadgeUrl = '',
+    readonly leagueGroupId = '',
+    readonly builderBaseLeagueId: number | null = null,
   ) {}
+
+  get displayImageUrl(): string {
+    return this.imageUrl === ImageAssets.builderBaseStar && this.builderBaseLeagueId !== null
+      ? ImageAssets.getBuilderBaseLeagueImage({ id: this.builderBaseLeagueId })
+      : this.imageUrl;
+  }
 
   get movement(): string {
     if (this.previousRank <= 0 || this.rank <= 0) return '=';
@@ -263,21 +280,19 @@ export class RankingEntry {
           ...(!clanName && !clanTag && tag ? [tag] : []),
         ].join(' · ')
       : clanName;
-    const includedClanBadge =
-      nestedString(json.clan, 'badgeUrls.small') ??
-      nestedString(json.clan, 'badge_urls.small') ??
-      nestedString(json.clan, 'badgeUrls.medium') ??
-      nestedString(json.clan, 'badge_urls.medium') ??
-      nestedString(json.clan, 'badgeUrls.large') ??
-      nestedString(json.clan, 'badge_urls.large') ??
-      nestedString(json.clan, 'badge') ??
-      firstString(json, ['clan_badge', 'clanBadge']);
     const clanBadgeUrl =
-      rankingBoard.isClan || !clanTag
-        ? ''
-        : rankingBoard.source === RankingSource.official
-          ? ImageAssets.clanBadgeForTag(clanTag)
-          : includedClanBadge;
+      rankingBoard.isClan || !clanTag ? '' : ImageAssets.clanBadgeForTag(clanTag, json.clan);
+    const leagueName = nestedString(json.leagueTier, 'name') ?? nestedString(json.league, 'name');
+    const imageForLeagueName = leagueName ? ImageAssets.getLeagueImage(leagueName) : null;
+    const tierId = isRecord(json.leagueTier) ? asIntOrNull(json.leagueTier.id) : null;
+    const knownTierIcon =
+      tierId === RankingLeagueOption.legendOne.id
+        ? RankingLeagueOption.legendOne.iconUrl
+        : tierId === RankingLeagueOption.legendTwo.id
+          ? RankingLeagueOption.legendTwo.iconUrl
+          : tierId === RankingLeagueOption.legendThree.id
+            ? RankingLeagueOption.legendThree.iconUrl
+            : null;
     const leagueIcon =
       nestedString(json.leagueTier, 'iconUrls.medium') ??
       nestedString(json.leagueTier, 'iconUrls.large') ??
@@ -286,19 +301,14 @@ export class RankingEntry {
       nestedString(json.league, 'iconUrls.medium') ??
       nestedString(json.league, 'iconUrls.large') ??
       nestedString(json.league, 'iconUrls.small') ??
-      nestedString(json.league, 'badge');
+      nestedString(json.league, 'badge') ??
+      (imageForLeagueName === ImageAssets.defaultImage ? null : imageForLeagueName) ??
+      knownTierIcon;
     const builderIcon =
       rankingBoard === RankingBoard.playerBuilder
         ? ImageAssets.getBuilderBaseLeagueImage(json.builderBaseLeague)
         : null;
-    const badgeUrl =
-      nestedString(json.badgeUrls, 'small') ??
-      nestedString(json.badge_urls, 'small') ??
-      nestedString(json.badgeUrls, 'medium') ??
-      nestedString(json.badge_urls, 'medium') ??
-      nestedString(json.badgeUrls, 'large') ??
-      nestedString(json.badge_urls, 'large') ??
-      firstString(json, ['badge_url']);
+    const badgeUrl = ImageAssets.clanBadgeForTag(tag, rankingBoard.isClan ? json : undefined);
     const rankedIcon =
       rankingBoard === RankingBoard.playerRanked
         ? (rankedLeagueIconUrl ?? rankingBoard.iconUrl)
@@ -323,6 +333,10 @@ export class RankingEntry {
         : (rankedIcon ?? leagueIcon ?? rankingBoard.iconUrl),
       townHall,
       clanBadgeUrl,
+      rankingBoard === RankingBoard.playerRanked ? firstString(json, ['leagueGroupId']) : '',
+      rankingBoard === RankingBoard.playerBuilder && isRecord(json.builderBaseLeague)
+        ? asIntOrNull(json.builderBaseLeague.id)
+        : null,
     );
   }
 }

@@ -1,3 +1,4 @@
+import { rememberBadgeToken } from './badge-token-hints';
 import { gameDataState, isRecord, type JsonRecord } from '../game-data/game-data-state';
 
 export class ImageAssets {
@@ -60,10 +61,18 @@ export class ImageAssets {
 
   static getBuilderBaseLeagueImage(league: unknown): string {
     if (isRecord(league)) {
-      if (typeof league.name === 'string')
-        return ImageAssets.getBuilderBaseLeagueImage(league.name);
       const iconUrls = league.iconUrls;
       if (isRecord(iconUrls) && typeof iconUrls.medium === 'string') return iconUrls.medium;
+      if (typeof league.name === 'string')
+        return ImageAssets.getBuilderBaseLeagueImage(league.name);
+      const id = Number(league.id);
+      const knownLeagues = gameDataState.bundleData.builder_leagues;
+      if (Number.isInteger(id) && Array.isArray(knownLeagues)) {
+        const known = knownLeagues.find((item) => isRecord(item) && Number(item._id) === id);
+        if (isRecord(known) && typeof known.name === 'string')
+          return ImageAssets.getBuilderBaseLeagueImage(known.name);
+      }
+      return ImageAssets.builderBaseStar;
     }
     const name = league === undefined || league === null ? '' : String(league).trim();
     return name
@@ -101,6 +110,7 @@ export class ImageAssets {
   static readonly legendBlazonBorders = `${ImageAssets.baseUrl}/icons/Icon_HV_League_Legend_3_Border.png`;
   static readonly legendBlazonBordersNoPadding = `${ImageAssets.baseUrl}/icons/Icon_HV_League_Legend_3_Border_No_Padding.png`;
   static readonly legendLeagueOne = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_1.png`;
+  static readonly legacyLegendLeague = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league.png`;
   static readonly legendLeagueTwo = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_2.png`;
   static readonly legendLeagueThree = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_3.png`;
 
@@ -110,7 +120,16 @@ export class ImageAssets {
 
   static readonly planet = `${ImageAssets.baseUrl}/icons/Icon_HV_Planet.png`;
 
-  static clanBadgeForTag(tag: string): string {
+  static clanBadgeForTag(tag: string, badgeData?: unknown): string {
+    rememberBadgeToken(tag, badgeData);
+    const trimmed = tag.trim();
+    const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
+    return normalized
+      ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}.avif`
+      : '';
+  }
+
+  static widgetClanBadgeForTag(tag: string): string {
     const trimmed = tag.trim();
     const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
     return normalized ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}` : '';
@@ -118,6 +137,14 @@ export class ImageAssets {
 
   static clanBadge(badgeUrl: string): string {
     return badgeUrl || `${ImageAssets.baseUrl}/icons/default_clan_badge.png`;
+  }
+
+  static clanBadgeUrls(
+    tag: string,
+    badgeData?: unknown,
+  ): { small: string; medium: string; large: string } {
+    const url = ImageAssets.clanBadgeForTag(tag, badgeData);
+    return { small: url, medium: url, large: url };
   }
 
   static getClanBadgeImage(url: string): string {

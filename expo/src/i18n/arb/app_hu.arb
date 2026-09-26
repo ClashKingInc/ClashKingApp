@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Rendszerértesítések",
+  "notifSystemSettings": "Értesítési beállítások megnyitása",
+  "notifSystemSettingsDescription": "A riasztásokat, hangokat és jelvényeket az eszköz beállításaiban kezelheted.",
+  "notifSystemSettingsFailed": "Nem sikerült megnyitni az értesítési beállításokat. Nyisd meg az eszköz Beállítások alkalmazását.",
+  "notifManagePlayersDescription": "A fiókértesítések kezelése: Játékosok → Kapcsolt → Beállítások.",
+  "notifCustomReminders": "Egyéni emlékeztetők",
+  "notifTestType": "Értesítés típusa",
+  "statsBattlelogsGroup": "Csatanaplók",
+  "statsGlobalStatsGroup": "Globális statisztikák",
+  "playerOptionShowOnHomeTitle": "Fiók megjelenítése a Kezdőlapon",
+  "playerOptionShowOnHomeSubtitle": "A hitelesített fiók megjelenítése a Kezdőlap kártyáin (legfeljebb 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Hitelesítsd ezt a fiókot, hogy megjelenjen a Kezdőlapon.",
+  "playerOptionHomeInclusionFirst": "Előbb kapcsold be a Fiók megjelenítése a Kezdőlapon beállítást.",
+  "homeIncludedAccountsLimit": "A Kezdőlapon legfeljebb 5 fiók jelenhet meg. Előbb távolíts el egyet.",
+  "statsHitratesByTownHall": "Sikerességi arány városházánként",
+  "statsChartGranularity": "Diagram időköze",
+  "statsDaily": "Naponta",
+  "statsWeekly": "Hetente",
+  "statsMonthly": "Havonta",
+  "statsCompareCohorts": "Csoportok összehasonlítása",
+  "statsAcrossCohorts": "Használat csoportonként",
+  "legendsTrophyGrid": "Trófearács",
+  "legendsPopularArmyItems": "Legnépszerűbb seregelemek",
+  "legendsPopularTroop": "Kedvenc",
+  "legendsHitrate": "Sikerarány",
+  "legendsAvgOffense": "Átl. támadás",
+  "legendsAvgDefense": "Átl. védekezés",
+  "settingsClearImageCache": "Képgyorsítótár törlése",
+  "settingsImageCacheCleared": "A képgyorsítótár törölve.",
+  "settingsImageCacheClearFailed": "Nem sikerült törölni a képgyorsítótárat. Próbáld újra.",
+  "startupCheckingUpdate": "Frissítések keresése…",
+  "startupDownloadingUpdate": "Frissítés letöltése…",
+  "startupUpdateInBackground": "Frissítés a háttérben",
   "warStatsRangeTitle": "Háborús statisztikák tartománya",
   "warStatsRangeDescription": "Válaszd ki, hogy a statisztikák meghatározott számú legutóbbi háborút vagy egy napokban megadott időszakot fedjenek le.",
   "warStatsRangeDays": "Napok",
@@ -172,7 +205,7 @@
   "notifPushUnsupported": "A push értesítések nem támogatottak ezen a platformon.",
   "notifPushInitializing": "Push értesítések beállítása…",
   "notificationPrimerTitle": "Értesítések engedélyezése?",
-  "notificationPrimerBody": "A ClashKing értesíthet a háborúk, a CWL, a fiókod és a projektek frissítéseiről. Ezt bármikor módosíthatod a Beállítások > Értesítések menüben.",
+  "notificationPrimerBody": "A ClashKing eseményekről, bejelentésekről, Legend-védelmekről és támogatásról küldhet frissítéseket. A háborús és rajtaütési hétvégi emlékeztetők kikapcsolva maradnak, amíg be nem állítod őket. A döntéseidet a Beállítások > Értesítések alatt módosíthatod.",
   "notificationPrimerNotNow": "Most nem",
   "notificationPrimerAllow": "Engedélyezés",
   "achievementsTitle": "Teljesítmények",
@@ -1556,6 +1589,8 @@
   "legendsCountryTitle": "Ország",
   "legendsLocalRankTitle": "Helyi rang",
   "legendsGlobalRankTitle": "Globális rang",
+  "legendsYourArmy": "A sereged",
+  "legendsArmyUsedAgainstYou": "Az ellened használt sereg",
   "warWinsTitle": "Győzelem",
   "warLossesTitle": "Veszteség",
   "warDrawsTitle": "Döntetlen",
@@ -2609,7 +2644,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Válassza ki a figyelmeztetéseket, és küldjön helyi tesztelőnézeteket.",
+  "settingsNotificationsSubtitle": "Válaszd ki, milyen riasztásokat kapsz.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3254,6 +3289,9 @@
   "statsHero": "Hős",
   "statsPet": "Kisállat",
   "statsEquipment": "Eszközök",
+  "statsPetCombinations": "Kisállat-kombinációk",
+  "statsEquipmentPairs": "Felszereléspárok",
+  "statsArmyFallback": "Hadsereg {id}",
   "statsOwningHero": "A tulajdonos hős",
   "statsAddItem": "Elem hozzáadása",
   "statsAnalyzeItems": "Elemek elemzése",
@@ -4003,19 +4041,32 @@
   "homeActivityJoined": "csatlakozott",
   "homeActivityLeft": "kilépett",
   "homeActivityAClan": "egy klánhoz",
+  "statsCwlSeasonGroups": "Csoportok",
+  "statsCwlSeasonHistory": "Klánháborús liga időbeli alakulása",
+  "statsCwlRosterNotLineup": "A regisztrált játékosok megoszlása {size} helyre vetítve; a tényleges háborús felállás eltérhet.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Csapatstatisztikák",
+  "statsWarSizes": "Háborúk mérete",
+  "statsMissedAttacks": "Elmulasztott támadások",
+  "statsCopyChart": "Diagram másolása",
+  "statsCompareItems": "Elemek összehasonlítása",
+  "statsCompareItemsHint": "Válassz legfeljebb 5 elemet az összehasonlításhoz.",
+  "statsVsOverall": "az összeshez képest",
+  "statsCopyChartFailed": "A diagram nem másolható. Próbáld újra.",
+  "statsPercentagePoints": "százalékpont",
   "statsMeta": "Meta",
   "statsBattle": "Csata",
   "statsWorld": "Világ",
   "statsHeaderSubtitle": "Fedezd fel a harci teljesítményt és az általunk követett világot.",
   "statsPreview": "Előnézet",
-  "statsTownHallDistribution": "Városháza megoszlása",
+  "statsTownHallDistribution": "Városházák",
   "statsBuilderHallDistribution": "Builder Hall elosztása",
-  "statsLeagueDistribution": "Rangsorolt ​​ligaeloszlás",
+  "statsLeagueDistribution": "Rangsorolt ligák",
   "statsTrackedPlayers": "Jelenlegi nyomon követett játékospopuláció",
   "statsTrackedClans": "Jelenlegi nyomon követett klánpopuláció",
-  "statsCwlLeagueDistribution": "CWL liga eloszlás",
-  "statsCapitalLeagueDistribution": "Fővárosi Liga elosztása",
-  "statsTrackedLocations": "Nyomon követett klánhelyek",
+  "statsCwlLeagueDistribution": "CWL-ligák",
+  "statsCapitalLeagueDistribution": "Fővárosi ligák",
+  "statsTrackedLocations": "Klánok helyei",
   "statsLocationCountHelp": "A nyomon követett klánok által képviselt országok és helyek.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4756,6 +4807,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Regisztrált keret",
+  "cwlMatches": "Párosítások",
+  "cwlNextMatchup": "Következő párosítás",
+  "cwlOtherMatches": "További párosítások",
+  "cwlOutlook": "Szezonkilátások",
+  "cwlFirstPlace": "Első hely",
+  "cwlTopTwo": "Első kettő",
+  "cwlRemainingOpponents": "Hátralévő ellenfelek",
+  "cwlWinBonusNote": "A csillagok lezárt győzelmenként 10 bónuszcsillagot tartalmaznak.",
+  "cwlEstimateNote": "A becslések lezárt háborúkon és hátralévő ellenfeleken alapulnak, nem a felállás változásain. Klánonként legalább két lezárt háború szükséges. A becslések nincsenek kalibrálva; a feljutási szabályok ligánként eltérnek.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# óra} other {# óra}}} other {{count, plural, one {# perc} other {# perc}}}}",
+  "personalBasesDeleteOld": "90 napnál régebbi bázisok eltávolítása",
+  "personalBasesDeleteOldConfirm": "{count} darab, 90 napnál régebbi mentett bázis lesz eltávolítva. A letöltési előzmények és a megosztott bázisok megmaradnak.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Automatikus védelem",
+  "legendsPopularArmyItem": "Legnépszerűbb seregelem",
+  "legendsClanCastle": "Klánvár",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

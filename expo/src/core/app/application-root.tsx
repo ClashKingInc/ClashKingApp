@@ -1,7 +1,9 @@
 import * as Linking from 'expo-linking';
+import { AppState } from 'react-native';
+import { startGameDataRefresh } from '../game-data/game-data-refresh';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
-import { EmailVerificationRequiredException } from '../api/client';
+import { EmailVerificationRequiredException } from '../api/contract-api';
 import { canonicalTag } from '../domain/tags';
 import { reportException } from '../observability/observability';
 import {
@@ -16,7 +18,10 @@ import {
   ResetPasswordScreen,
   type PostAuthDestination,
 } from '../../features/auth/presentation';
-import { initializeAccountsForCurrentAuth } from '../../features/auth/startup';
+import {
+  initializeAccountsForCurrentAuth,
+  refreshLinkedAccountsForCurrentAuth,
+} from '../../features/auth/startup';
 import { materialContinueLabel, useI18n } from '../../i18n';
 import {
   sceneForPostAuthDestination,
@@ -34,12 +39,21 @@ import {
 } from './startup-coordinator';
 import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
 import { StartupLoadingScreen } from './startup-loading';
+import { StartupUpdateGate } from './startup-update-gate';
 
 const DISCORD_URL = 'https://discord.gg/clashking';
 const SUPPORT_EMAIL_URL = 'mailto:devs@clashk.ing?subject=ClashKing%20App%20Support';
 const CLASH_SETTINGS_URL = 'https://link.clashofclans.com/?action=OpenMoreSettings';
 
 export function ApplicationRoot() {
+  return (
+    <StartupUpdateGate>
+      <ApplicationContent />
+    </StartupUpdateGate>
+  );
+}
+
+function ApplicationContent() {
   const runtime = useAppRuntime();
   const { locale, t } = useI18n();
   const [scene, setScene] = useState<ApplicationScene>({ kind: 'startup' });
@@ -55,22 +69,28 @@ export function ApplicationRoot() {
   }, [scene]);
 
   const loadAccounts = useCallback(async () => {
+    void runtime.gameData.refreshGameDataIfChanged().catch(() => undefined);
     const result = await initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts);
     if (!result.authenticated) throw new Error('Authentication expired.');
+    await runtime.accountBootstrap
+      .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+        links: runtime.accounts.accounts,
+        selectedTagLoaded: true,
+      })
+      .catch((error) => reportException(error, 'postAuth.bootstrap'));
     runtime.achievements.bindSession(runtime.auth.state.currentUser?.userId ?? null);
     void runtime.achievements
       .check()
       .catch((error) => reportException(error, 'startup.achievements'));
-    const shouldPrompt = await initializeAuthenticatedPush({
-      notificationsEnabled: runtime.appState.getState().isFeatureEnabled('notifications'),
+    const notificationsEnabled = runtime.appState.getState().isFeatureEnabled('notifications');
+    void initializeAuthenticatedPush({
+      notificationsEnabled,
       push: runtime.push,
-    });
-    if (shouldPrompt) {
+    }).catch((error) => reportException(error, 'postAuth.push'));
+    if (notificationsEnabled && runtime.push.supportsPushNotifications) {
       if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
       permissionTimer.current = setTimeout(() => {
-        void runtime.push.showPermissionPrimerOnce(() =>
-          runtime.notificationPreferences.setDeviceEnabled(true).then(() => undefined),
-        );
+        void runtime.push.showPermissionPrimerOnce();
       }, 1000);
     }
     return runtime.accounts.accounts;
@@ -109,21 +129,28 @@ export function ApplicationRoot() {
             .check()
             .catch((error) => reportException(error, 'startup.achievements'));
           await runtime.warWidgets.migrateLegacyWidgetValues();
+          // One OS-managed job serves both War and Legends widgets.
+          await runtime.warWidgets.registerPeriodicRefresh();
           if (runtime.appState.getState().isFeatureEnabled('war_widgets')) {
-            await runtime.warWidgets.registerPeriodicRefresh();
             await runtime.warWidgets.consumePendingWidgetAction();
           }
         },
         reportError: (operation, error) => reportException(error, operation),
       });
+      if (result.authenticated) {
+        await runtime.accountBootstrap
+          .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+            links: runtime.accounts.accounts,
+            selectedTagLoaded: true,
+          })
+          .catch((error) => reportException(error, 'startup.accountBootstrap'));
+      }
       if (generation !== startupGeneration.current) return;
       setScene(sceneForStartupResult(result));
       if (result.requestPushPermission) {
         if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
         permissionTimer.current = setTimeout(() => {
-          void runtime.push.showPermissionPrimerOnce(() =>
-            runtime.notificationPreferences.setDeviceEnabled(true).then(() => undefined),
-          );
+          void runtime.push.showPermissionPrimerOnce();
         }, 1000);
       }
     } catch (error) {
@@ -173,6 +200,34 @@ export function ApplicationRoot() {
   );
 
   useEffect(() => () => primerResolver.current?.(false), []);
+
+  useEffect(() => {
+    const refresh = () => {
+      if (AppState.currentState !== 'active' || !runtime.auth.state.isAuthenticated) return;
+      void runtime.legendsWidgets
+        .refreshCachedBookmarks()
+        .catch((error) => reportException(error, 'legends_widget.refresh'));
+    };
+    const subscription = AppState.addEventListener('change', refresh);
+    const timer = setInterval(refresh, 15 * 60_000);
+    return () => {
+      subscription.remove();
+      clearInterval(timer);
+    };
+  }, [runtime]);
+
+  useEffect(
+    () =>
+      startGameDataRefresh(
+        () => runtime.gameData.refreshGameDataIfChanged(),
+        () => AppState.currentState === 'active',
+        (check) => {
+          const subscription = AppState.addEventListener('change', check);
+          return () => subscription.remove();
+        },
+      ),
+    [runtime],
+  );
 
   const closePrimer = (enabled: boolean) => {
     setPrimerVisible(false);
@@ -260,10 +315,20 @@ export function ApplicationRoot() {
           )}
           playerProfiles={runtime.players.profiles}
           onContinue={async () => {
-            const accounts = await loadAccounts();
-            if (!accounts.some((account) => account.isVerified)) {
+            const result = await refreshLinkedAccountsForCurrentAuth(
+              runtime.auth,
+              runtime.accounts,
+            );
+            if (!result.authenticated) throw new Error(t('authErrorUserNotAuthenticated'));
+            if (!result.hasVerifiedAccount) {
               throw new Error(t('homeVerifiedAccountRequiredBody'));
             }
+            await runtime.accountBootstrap
+              .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+                links: runtime.accounts.accounts,
+                selectedTagLoaded: true,
+              })
+              .catch((error) => reportException(error, 'accountSetup.bootstrap'));
             setScene({ kind: 'home' });
           }}
           onOpenGameSettings={() => openExternal(CLASH_SETTINGS_URL)}

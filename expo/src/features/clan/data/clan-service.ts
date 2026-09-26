@@ -1,4 +1,24 @@
-import { ApiClient, ResponseFormatException } from '../../../core/api/client';
+import {
+  ClanChangesEndpoint,
+  ClanCwlSeasonsEndpoint,
+  ClanJoinLeaveEndpoint,
+  ClanLeaderboardHistoryEndpoint,
+  ClanLeaderboardSummaryEndpoint,
+  ClanLegendHistoryEndpoint,
+  ClanLegendSummaryEndpoint,
+  ClanRecordsEndpoint,
+  ClanWarlogEndpoint,
+  ClanWarsEndpoint,
+} from '@clashking/api-contracts/expo';
+import {
+  ProxyCapitalRaidSeasonsEndpoint,
+  ProxyClanEndpoint,
+  ProxyPlayerEndpoint,
+} from '../../../core/api/proxy-contracts';
+import { Effect } from 'effect';
+import { ApiResponseError } from '@clashking/api-client';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { canonicalTag } from '../../../core/domain/tags';
 import { mapWithConcurrencyLimit } from '../../../core/utils/bounded-concurrency';
 import {
@@ -28,8 +48,6 @@ import {
   type WarCwlLike,
 } from '../models';
 
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
-
 export type ClanServiceListener = () => void;
 
 export class ClanService {
@@ -46,7 +64,7 @@ export class ClanService {
   warLogList: ClanWarLog[] = [];
   warStatsList: ClanWarStats[] = [];
 
-  constructor(private readonly api: ApiClient) {}
+  constructor(private readonly api: ContractApiService) {}
 
   get isLoading(): boolean {
     return this.loading;
@@ -130,7 +148,13 @@ export class ClanService {
 
   async getCwlRankingHistory(clanTag: string): Promise<readonly CwlRankingHistoryEntry[]> {
     // Flutter intentionally sends the caller's tag verbatim for this endpoint.
-    const data = await this.getRecord(`/cwl/${encodeURIComponent(clanTag)}/seasons?limit=100`);
+    const data = await Effect.runPromise(
+      this.api.execute(ClanCwlSeasonsEndpoint, {
+        path: { clanTag },
+        query: { limit: 100 },
+        body: {},
+      }),
+    );
     return records(data.items).map(CwlRankingHistoryEntry.fromJson);
   }
 
@@ -139,43 +163,80 @@ export class ClanService {
     type: ClanLeaderboardTypeValue,
     options: { after?: Date; before?: Date } = {},
   ): Promise<ClanLeaderboardHistory> {
-    let endpoint = `/clan/${encodedCanonicalTag(clanTag)}/history/leaderboards?type=${clanLeaderboardApiValue(type)}&limit=250`;
-    endpoint += historyRangeQuery(options);
-    return ClanLeaderboardHistory.fromJson(await this.getRecord(endpoint));
+    return ClanLeaderboardHistory.fromJson(
+      await Effect.runPromise(
+        this.api.execute(ClanLeaderboardHistoryEndpoint, {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: historyQuery({ ...options, type: clanLeaderboardApiValue(type), limit: 250 }),
+          body: {},
+        }),
+      ),
+    );
   }
 
   async getClanLeaderboardHistorySummary(
     clanTag: string,
     type: ClanLeaderboardTypeValue,
   ): Promise<ClanLeaderboardHistorySummary> {
-    const endpoint = `/clan/${encodedCanonicalTag(clanTag)}/history/leaderboards/summary?type=${clanLeaderboardApiValue(type)}`;
-    return ClanLeaderboardHistorySummary.fromJson(await this.getRecord(endpoint));
+    return ClanLeaderboardHistorySummary.fromJson(
+      await Effect.runPromise(
+        this.api.execute(ClanLeaderboardSummaryEndpoint, {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: { type: clanLeaderboardApiValue(type) },
+          body: {},
+        }),
+      ),
+    );
   }
 
   async getClanLegendHistory(
     clanTag: string,
     options: { after?: Date; before?: Date } = {},
   ): Promise<ClanLegendHistory> {
-    let endpoint = `/clan/${encodedCanonicalTag(clanTag)}/history/legends?limit=250`;
-    endpoint += historyRangeQuery(options);
-    return ClanLegendHistory.fromJson(await this.getRecord(endpoint));
+    return ClanLegendHistory.fromJson(
+      await Effect.runPromise(
+        this.api.execute(ClanLegendHistoryEndpoint, {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: historyQuery({ ...options, limit: 250 }),
+          body: {},
+        }),
+      ),
+    );
   }
 
   async getClanLegendHistorySummary(clanTag: string): Promise<ClanLegendHistorySummary> {
     return ClanLegendHistorySummary.fromJson(
-      await this.getRecord(`/clan/${encodedCanonicalTag(clanTag)}/history/legends/summary?top=10`),
+      await Effect.runPromise(
+        this.api.execute(ClanLegendSummaryEndpoint, {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: { top: 10 },
+          body: {},
+        }),
+      ),
     );
   }
 
   async getClanRecords(clanTag: string): Promise<ClanRecords> {
     return ClanRecords.fromJson(
-      await this.getRecord(`/clan/${encodedCanonicalTag(clanTag)}/records`),
+      await Effect.runPromise(
+        this.api.execute(ClanRecordsEndpoint, {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: {},
+          body: {},
+        }),
+      ),
     );
   }
 
   async getClanProfileHistory(clanTag: string): Promise<ClanProfileHistory> {
     return ClanProfileHistory.fromJson(
-      await this.getRecord(`/clan/${encodedCanonicalTag(clanTag)}/history/changes?limit=500`),
+      await Effect.runPromise(
+        this.api.execute(ClanChangesEndpoint, {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: { limit: 500 },
+          body: {},
+        }),
+      ),
     );
   }
 
@@ -245,15 +306,17 @@ export class ClanService {
     try {
       const results = await Promise.all(
         clanTags.map(async (tag) => {
-          const response = await this.api.proxyGet(
-            `/clans/${encodeURIComponent(tag)}/capitalraidseasons?limit=${limit}`,
-            { acceptedStatuses: ALL_HTTP_STATUSES },
-          );
-          if (response.status !== 200) {
-            if (throwOnError) throw new Error(`Failed to load capital data (${response.status})`);
-            return null;
-          }
-          const data = decodeRecord(response.bodyText, response.url);
+          const data = await Effect.runPromise(
+            this.api.execute(ProxyCapitalRaidSeasonsEndpoint, {
+              path: { clanTag: tag },
+              query: { limit },
+              body: {},
+            }),
+          ).catch((error: unknown) => {
+            if (!throwOnError && error instanceof ApiResponseError) return null;
+            throw error;
+          });
+          if (data === null) return null;
           return Array.isArray(data.items)
             ? CapitalHistoryItems.fromJson({ history: data.items }, tag)
             : null;
@@ -262,7 +325,7 @@ export class ClanService {
       this.capitalHistory = results.filter((item): item is CapitalHistoryItems => item !== null);
       return this.capitalHistory;
     } catch (error) {
-      if (throwOnError) throw error;
+      if (throwOnError) throw new Error('Failed to load capital data', { cause: error });
       return [];
     } finally {
       this.loading = false;
@@ -285,9 +348,14 @@ export class ClanService {
       const warLogs = await Promise.all(
         clanTags.map(async (tag) => {
           const normalized = canonicalTag(tag);
-          const endpoint = `/clan/${encodeURIComponent(normalized)}/warlog?limit=50`;
-          const response = await this.api.get(endpoint, { requiresAuth: true });
-          const warLog = ClanWarLog.fromJson(decodeRecord(response.bodyText, endpoint), tag);
+          const response = await Effect.runPromise(
+            this.api.execute(ClanWarlogEndpoint, {
+              path: { clanTag: normalized },
+              query: { limit: 50 },
+              body: {},
+            }),
+          );
+          const warLog = ClanWarLog.fromJson(response, tag);
           warLog.warLogStats = analyzeWarLogs(warLog.items);
           return warLog;
         }),
@@ -343,14 +411,17 @@ export class ClanService {
         : ['random', 'cwl', 'friendly'];
     const responses = await Promise.all(
       types.map(async (type) => {
-        const query = new URLSearchParams({
-          type,
-          limit: String(Math.min(500, Math.max(1, filter.limit))),
-        });
-        if (filter.startDate) query.set('time[after]', filter.startDate.toISOString());
-        if (filter.endDate) query.set('time[before]', filter.endDate.toISOString());
-        const data = await this.getRecord(
-          `/clan/${encodeURIComponent(clanTag)}/wars?${query.toString()}`,
+        const data = await Effect.runPromise(
+          this.api.execute(ClanWarsEndpoint, {
+            path: { clanTag },
+            query: historyQuery({
+              type,
+              limit: Math.min(500, Math.max(1, filter.limit)),
+              after: filter.startDate ?? undefined,
+              before: filter.endDate ?? undefined,
+            }),
+            body: {},
+          }),
         );
         return records(data.items).map((war): JsonRecord => ({ ...war, type }));
       }),
@@ -452,15 +523,14 @@ export class ClanService {
     extraHeaders?: Readonly<Record<string, string>>,
   ): Promise<Clan | null> {
     try {
-      const response = await this.api.proxyGet(`/clans/${encodeURIComponent(clanTag)}`, {
-        headers: extraHeaders,
-        acceptedStatuses: ALL_HTTP_STATUSES,
-      });
-      if (response.status !== 200) {
-        if (throwOnError) throw new Error(`Failed to load clan data (${response.status})`);
-        return null;
-      }
-      return Clan.fromJson(decodeRecord(response.bodyText, response.url));
+      const response = await Effect.runPromise(
+        this.api.execute(
+          ProxyClanEndpoint,
+          { path: { clanTag }, query: {}, body: {} },
+          { headers: extraHeaders },
+        ),
+      );
+      return Clan.fromJson(response);
     } catch (error) {
       if (throwOnError) throw error;
       return null;
@@ -505,8 +575,13 @@ export class ClanService {
     normalizedTag: string,
   ): Promise<ClanMember | null> {
     try {
-      const response = await this.api.proxyGet(`/players/${encodeURIComponent(normalizedTag)}`);
-      const data = decodeRecord(response.bodyText, response.url);
+      const data = await Effect.runPromise(
+        this.api.execute(ProxyPlayerEndpoint, {
+          path: { playerTag: normalizedTag },
+          query: {},
+          body: {},
+        }),
+      );
       return ClanMember.fromJson({
         ...data,
         tag: normalizedTag,
@@ -527,26 +602,21 @@ export class ClanService {
     tag: string,
     before?: string,
   ): Promise<ClanJoinLeave | null> {
-    let endpoint = `/clan/${encodeURIComponent(tag)}/join-leave?limit=50`;
-    if (before) endpoint += `&time%5Bbefore%5D=${encodeURIComponent(before)}`;
     try {
-      const response = await this.api.get(endpoint, {
-        requiresAuth: true,
-        acceptedStatuses: ALL_HTTP_STATUSES,
-      });
-      if (response.status !== 200) return null;
+      const response = await Effect.runPromise(
+        this.api.execute(ClanJoinLeaveEndpoint, {
+          path: { clanTag: tag },
+          query: { limit: 50, ...(before ? { 'time[before]': before } : {}) },
+          body: {},
+        }),
+      );
       return ClanJoinLeave.fromJson({
         clan_tag: tag,
-        ...decodeRecord(response.bodyText, response.url),
+        ...response,
       });
     } catch {
       return null;
     }
-  }
-
-  private async getRecord(endpoint: string): Promise<JsonRecord> {
-    const response = await this.api.get(endpoint);
-    return decodeRecord(response.bodyText, response.url);
   }
 
   private notify(): void {
@@ -559,16 +629,13 @@ function uniqueCanonicalTags(tags: readonly string[]): string[] {
   return [...new Set(tags.map(canonicalTag).filter(Boolean))];
 }
 
-function encodedCanonicalTag(tag: string): string {
-  return encodeURIComponent(canonicalTag(tag));
-}
-
-function historyRangeQuery(options: { after?: Date; before?: Date }): string {
-  let query = '';
-  if (options.after) query += `&time%5Bafter%5D=${encodeURIComponent(options.after.toISOString())}`;
-  if (options.before)
-    query += `&time%5Bbefore%5D=${encodeURIComponent(options.before.toISOString())}`;
-  return query;
+function historyQuery(options: { type?: string; limit?: number; after?: Date; before?: Date }) {
+  return {
+    ...(options.type === undefined ? {} : { type: options.type }),
+    ...(options.limit === undefined ? {} : { limit: options.limit }),
+    ...(options.after === undefined ? {} : { 'time[after]': options.after.toISOString() }),
+    ...(options.before === undefined ? {} : { 'time[before]': options.before.toISOString() }),
+  };
 }
 
 function oneMicrosecondBefore(date: Date): string {
@@ -577,15 +644,4 @@ function oneMicrosecondBefore(date: Date): string {
     /\.(\d{3})Z$/,
     (_match, milliseconds: string) => `.${milliseconds}999Z`,
   );
-}
-
-function decodeRecord(bodyText: string, endpoint: string): JsonRecord {
-  let value: unknown;
-  try {
-    value = JSON.parse(bodyText);
-  } catch {
-    throw new ResponseFormatException(`Invalid JSON response for ${endpoint}.`);
-  }
-  if (!isRecord(value)) throw new ResponseFormatException(`Invalid response type for ${endpoint}.`);
-  return value;
 }

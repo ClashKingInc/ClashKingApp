@@ -14,15 +14,18 @@ import type { ClanInfoPresentationActions } from './clan-info-contracts';
 import {
   buildClanInfoPresentationModel,
   buildClansPresentationModel,
+  accountTagsForClanOrder,
   clanInfoStateKey,
   clanGameUrl,
   loadClanJoinLeave,
   loadClanWarLog,
   loadClanWarStats,
   loadMoreClanJoinLeave,
+  ownedClanProfiles,
 } from './clan-root-state';
 import { ClansScreen } from './clans-screen';
 import type { ClansPresentationActions } from './contracts';
+import type { ClanSpringOrigin } from './clan-spring-transition';
 
 export interface ClanNavigationActions {
   readonly openPlayer: (player: Player) => void;
@@ -40,7 +43,7 @@ export function ClanRoot({
 }: {
   readonly navigation: ClanNavigationActions;
   /** Lets the app shell present detail as a pushed route that hides mobile chrome. */
-  readonly onOpenClan?: (clan: Clan) => void;
+  readonly onOpenClan?: (clan: Clan, origin?: ClanSpringOrigin) => void;
 }) {
   const runtime = useAppRuntime();
   const { t } = useI18n();
@@ -68,7 +71,10 @@ export function ClanRoot({
   }
 
   const model = buildClansPresentationModel({
-    profiles: runtime.players.profiles,
+    profiles: ownedClanProfiles(
+      runtime.players.profiles,
+      runtime.accounts.accounts.map((account) => account.playerTag),
+    ),
     bookmarks: runtime.bookmarks.clans,
     clans: runtime.clans.clans,
     lastRefresh: runtime.accounts.lastRefresh,
@@ -81,6 +87,13 @@ export function ClanRoot({
     hydrateBookmarkedClans: (tags) => runtime.clans.loadAllClanData(tags, { notify: true }),
     loadClan: (tag) => runtime.clans.getClanAndWarData(tag),
     openClan: onOpenClan ?? setSelectedClan,
+    reorderLinkedClans: async (orderedTags) => {
+      const accounts = runtime.accounts.accounts.map((account) => account.playerTag);
+      const order = accountTagsForClanOrder(orderedTags, accounts, runtime.players.profiles);
+      if (!(await runtime.accounts.updateAccountOrder(order)))
+        throw new Error('Couldn’t update clan order.');
+    },
+    reorderBookmarkedClans: (orderedTags) => runtime.bookmarks.reorderClans(orderedTags),
   };
 
   // The revision is consumed through service-owned collections above.

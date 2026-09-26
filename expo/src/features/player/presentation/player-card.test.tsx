@@ -42,12 +42,52 @@ const makeActions = (): PlayersPresentationActions => ({
   verifyAccount: jest.fn(async () => ({ success: true, message: null })),
   refreshAccounts: jest.fn(async () => undefined),
   openGameSettings: jest.fn(),
+  reorderLinkedPlayers: jest.fn(async () => undefined),
+  reorderBookmarkedPlayers: jest.fn(async () => undefined),
   setAccountNotifications: jest.fn(async () => undefined),
   setAccountHidden: jest.fn(async () => undefined),
   setCardOption: jest.fn(async () => undefined),
 });
 
 describe('PlayerDataCard options', () => {
+  it('uses the linked-player Options switch to include Home accounts before enabling its card switches', async () => {
+    const actions = makeActions();
+    const screen = await render(
+      <I18nProvider locale="en">
+        <CKThemeProvider preference="light">
+          <PlayerDataCard
+            player={player}
+            link={{ ...link, isVerified: true }}
+            options={new PlayerCardOptions()}
+            homeIncluded={false}
+            featureFlags={{ upgradeTracker: true, rankedLeague: true }}
+            notificationsEnabled={false}
+            notificationActive={false}
+            notificationUpdating={false}
+            actions={actions}
+            onVerify={jest.fn()}
+          />
+        </CKThemeProvider>
+      </I18nProvider>,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Options' }));
+    expect(
+      screen.getByRole('switch', { name: 'Show account on Home' }).props.accessibilityState,
+    ).toEqual({
+      checked: false,
+      disabled: false,
+    });
+    expect(
+      screen.getByRole('switch', { name: 'Show Upgrade Tracker on Home' }).props.accessibilityState
+        .disabled,
+    ).toBe(true);
+    expect(
+      screen.getByRole('switch', { name: 'Show Ranked on Home' }).props.accessibilityState.disabled,
+    ).toBe(true);
+    await fireEvent.press(screen.getByRole('switch', { name: 'Show account on Home' }));
+    expect(actions.setCardOption).toHaveBeenCalledWith('#ALPHA', 'home', true);
+  });
+
   it('keeps Flutter option order, verification rules, and feature gates', async () => {
     const actions = makeActions();
     const onVerify = jest.fn();
@@ -70,13 +110,19 @@ describe('PlayerDataCard options', () => {
     );
 
     expect(screen.getByText('Clan')).toBeTruthy();
+    expect(screen.getByTestId('player-options-expand-caret-#ALPHA')).toBeTruthy();
 
     await fireEvent.press(screen.getByRole('button', { name: 'Options' }));
+    expect(screen.getByTestId('player-options-collapse-caret-#ALPHA')).toHaveStyle({
+      flexShrink: 0,
+    });
+    expect(screen.queryByTestId('player-options-expand-caret-#ALPHA')).toBeNull();
 
     expect(
       screen.getAllByRole('switch').map((control) => control.props.accessibilityLabel),
     ).toEqual([
       'Notifications',
+      'Show account on Home',
       'Show on to-do page',
       'Show Upgrade Tracker on Home',
       'Show Ranked on Home',
@@ -87,6 +133,12 @@ describe('PlayerDataCard options', () => {
       checked: false,
       disabled: true,
     });
+    expect(
+      screen.getByRole('switch', { name: 'Show account on Home' }).props.accessibilityState,
+    ).toEqual({
+      checked: true,
+      disabled: true,
+    });
 
     await fireEvent.press(screen.getByRole('switch', { name: 'Show in War tab' }));
     expect(actions.setCardOption).toHaveBeenCalledWith('#ALPHA', 'war', false);
@@ -94,6 +146,9 @@ describe('PlayerDataCard options', () => {
       screen.getAllByRole('button', { name: 'Link or verify account' }).at(-1)!,
     );
     expect(onVerify).toHaveBeenCalledTimes(1);
+    await fireEvent.press(screen.getByRole('button', { name: 'Options' }));
+    expect(screen.getByTestId('player-options-expand-caret-#ALPHA')).toBeTruthy();
+    expect(screen.queryByTestId('player-options-collapse-caret-#ALPHA')).toBeNull();
   });
 
   it('keeps the parsed API clan name visible before a full clan object is linked', async () => {
@@ -127,5 +182,38 @@ describe('PlayerDataCard options', () => {
     );
 
     expect(screen.getByText('Parsed Clan')).toBeTruthy();
+  });
+
+  it('starts a drag on hold without opening the player when the press releases', async () => {
+    const actions = makeActions();
+    const onLongPress = jest.fn();
+    const screen = await render(
+      <I18nProvider locale="en">
+        <CKThemeProvider preference="dark">
+          <PlayerDataCard
+            player={player}
+            link={link}
+            options={new PlayerCardOptions()}
+            featureFlags={{ upgradeTracker: false, rankedLeague: false }}
+            notificationsEnabled={false}
+            notificationActive={false}
+            notificationUpdating={false}
+            actions={actions}
+            onVerify={jest.fn()}
+            onLongPress={onLongPress}
+            dragTestID="draggable-player"
+          />
+        </CKThemeProvider>
+      </I18nProvider>,
+    );
+
+    await fireEvent(screen.getByTestId('draggable-player'), 'longPress');
+    await fireEvent.press(screen.getByTestId('draggable-player'));
+
+    expect(onLongPress).toHaveBeenCalledTimes(1);
+    expect(actions.openPlayer).not.toHaveBeenCalled();
+
+    await fireEvent.press(screen.getByTestId('draggable-player'));
+    expect(actions.openPlayer).toHaveBeenCalledWith(player);
   });
 });

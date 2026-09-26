@@ -159,14 +159,13 @@ export class PlayerCwlClan {
     readonly globalPlacement: number | null,
   ) {}
   static fromJson(json: JsonRecord) {
-    const badges = record(json.badgeUrls),
-      league = record(json.warLeague),
+    const league = record(json.warLeague),
       wars = record(json.wars),
       placement = record(json.placement);
     return new PlayerCwlClan(
       string(json.tag),
       string(json.name),
-      string(badges.small ?? badges.medium ?? badges.large),
+      ImageAssets.clanBadgeForTag(string(json.tag)),
       string(league.name),
       int(wars.won),
       int(wars.lost),

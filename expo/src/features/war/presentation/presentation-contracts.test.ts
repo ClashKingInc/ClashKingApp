@@ -29,6 +29,23 @@ const linkedClan = {
 } as Clan;
 
 describe('war presentation roster', () => {
+  it('uses linked account and direct clan bookmark order across the two tabs', () => {
+    const first = { tag: '#P1', name: 'First', clanTag: '#CLAN', clan: linkedClan } as Player;
+    const secondClan = { ...linkedClan, tag: '#SECOND', name: 'Second Clan' } as Clan;
+    const second = { tag: '#P2', name: 'Second', clanTag: '#SECOND', clan: secondClan } as Player;
+    const roster = buildWarRoster({
+      profiles: [first, second],
+      ownedPlayerTags: ['#P2', '#P1'],
+      bookmarkedPlayers: [],
+      bookmarkedClans: [
+        new BookmarkedClan('#BOOK2', 'Second bookmark', '', 1, 1),
+        new BookmarkedClan('#BOOK1', 'First bookmark', '', 1, 1),
+      ],
+      hydratedBookmarkedClans: [],
+      summaries: new Map(),
+    });
+    expect(roster.items.map((item) => item.tag)).toEqual(['#SECOND', '#CLAN', '#BOOK2', '#BOOK1']);
+  });
   it('keeps hydrated bookmarked profiles out of linked clans and preserves Flutter sort priority', () => {
     const linked = { tag: '#P1', name: 'Main', clanTag: '#CLAN', clan: linkedClan } as Player;
     const hydratedBookmark = {
@@ -49,15 +66,15 @@ describe('war presentation roster', () => {
     };
 
     const roster = buildWarRoster(model);
-    expect(roster.items.map((item) => item.tag)).toEqual(['#CLAN', '#EMPTY', '#BOOK']);
+    expect(roster.items.map((item) => item.tag)).toEqual(['#CLAN', '#EMPTY']);
     expect(roster.items[0]).toMatchObject({
       sortWeight: 0,
       bookmarked: false,
-      badgeUrl: 'small',
+      badgeUrl: 'https://badges.clashk.ing/CLAN.avif',
       accounts: [{ tag: '#P1', name: 'Main', bookmarked: false }],
     });
-    expect(roster.items[2]).toMatchObject({ bookmarked: true, name: 'Book Clan', accounts: [] });
-    expect(roster.missingWarClanTags).toEqual(['#EMPTY', '#BOOK']);
+    expect(roster.items[1]).toMatchObject({ bookmarked: true, name: 'Empty Bookmark', accounts: [] });
+    expect(roster.missingWarClanTags).toEqual(['#EMPTY']);
     expect(roster.missingBookmarkedPlayerTags).toEqual([]);
   });
 

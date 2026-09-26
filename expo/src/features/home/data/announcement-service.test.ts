@@ -1,11 +1,48 @@
 import { AppAnnouncement } from './app-announcement';
 import { AnnouncementService, announcementTarget } from './announcement-service';
+import { createContractTestApi } from '../../../core/api/contract-api.testing';
+
+const announcement = {
+  id: 'a',
+  version: '1',
+  title: 'T',
+  subtitle: 'S',
+  body_blocks: [],
+  presentation_type: 'article',
+  show_on_home: true,
+  pinned_on_home: false,
+  status: 'live',
+};
+const apiFor = (fetchImplementation: typeof fetch) =>
+  createContractTestApi({ baseUrl: 'https://api.test', fetchImplementation });
 
 describe('announcements', () => {
   it('maps targets exactly', () => {
     expect(announcementTarget('ios')).toBe('ios');
     expect(announcementTarget('android')).toBe('android');
     expect(announcementTarget('web')).toBe('all');
+  });
+
+  it('preserves API-returned media URLs without a client CDN rewrite', async () => {
+    const bannerUrl = 'https://api.clashk.ing/v2/media/announcement-hero.png';
+    const storyUrl = 'https://api.clashk.ing/v2/media/announcement-story.html';
+    const fetchImplementation = jest.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          item: {
+            ...announcement,
+            banner_image_url: bannerUrl,
+            presentation_type: 'story',
+            story_url: storyUrl,
+          },
+        }),
+      ),
+    );
+    const service = new AnnouncementService(apiFor(fetchImplementation), 'ios', () => 'en');
+    await expect(service.getAnnouncement('a')).resolves.toMatchObject({
+      bannerImageUrl: bannerUrl,
+      storyUrl,
+    });
   });
 
   it('converts supported body blocks to the same safe document structure', () => {
@@ -29,37 +66,46 @@ describe('announcements', () => {
   });
 
   it('keeps active fetch best-effort and uses language-only locale', async () => {
-    const requestRecord = jest
+    const fetchImplementation = jest
       .fn()
-      .mockResolvedValueOnce({ items: [{ id: 'a', title: 'T', subtitle: 'S' }] })
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ item: announcement, items: [announcement] })),
+      )
       .mockRejectedValueOnce(new Error('offline'));
-    const service = new AnnouncementService({ requestRecord } as never, 'ios', () => 'en_GB');
+    const service = new AnnouncementService(apiFor(fetchImplementation), 'ios', () => 'en_GB');
     await expect(service.getActiveAnnouncements()).resolves.toHaveLength(1);
-    expect(requestRecord).toHaveBeenCalledWith('/app/announcements/active?target=ios&locale=en', {
-      requiresAuth: false,
-    });
+    const request = fetchImplementation.mock.calls[0]![0] as Request;
+    expect(request.url).toBe('https://api.test/v2/app/announcements/active?target=ios&locale=en');
+    expect(request.headers.has('authorization')).toBe(false);
     await expect(service.getActiveAnnouncements()).resolves.toEqual([]);
   });
 
   it('resolves an exact notification through the public announcement route', async () => {
-    const requestRecord = jest.fn().mockResolvedValue({
-      id: 'target',
-      title: 'Target',
-      subtitle: 'Notification',
-    });
-    const service = new AnnouncementService({ requestRecord } as never, 'android', () => 'fr_CA');
+    const fetchImplementation = jest.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          item: {
+            ...announcement,
+            id: 'target',
+            title: 'Target',
+            subtitle: 'Notification',
+          },
+        }),
+      ),
+    );
+    const service = new AnnouncementService(apiFor(fetchImplementation), 'android', () => 'fr_CA');
 
     await expect(service.getAnnouncement(' target ')).resolves.toMatchObject({ id: 'target' });
-    expect(requestRecord).toHaveBeenCalledWith('/app/announcements/target?locale=fr', {
-      requiresAuth: false,
-    });
+    const request = fetchImplementation.mock.calls[0]![0] as Request;
+    expect(request.url).toBe('https://api.test/v2/app/announcements/target?locale=fr');
+    expect(request.headers.has('authorization')).toBe(false);
   });
 
   it('keeps exact notification lookup best-effort', async () => {
-    const requestRecord = jest.fn().mockRejectedValue(new Error('missing'));
-    const service = new AnnouncementService({ requestRecord } as never, 'web', () => 'en');
+    const fetchImplementation = jest.fn().mockRejectedValue(new Error('missing'));
+    const service = new AnnouncementService(apiFor(fetchImplementation), 'web', () => 'en');
 
     await expect(service.getAnnouncement('missing')).resolves.toBeNull();
-    expect(requestRecord).toHaveBeenCalledTimes(1);
+    expect(fetchImplementation).toHaveBeenCalledTimes(1);
   });
 });

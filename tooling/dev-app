@@ -3,12 +3,13 @@ set -euo pipefail
 
 readonly SESSION="clashking-app-dev"
 readonly PORT="7357"
-readonly PUBLIC_URL="https://dev-app.clashk.ing"
+readonly PUBLIC_URL="Metro on port 7357 (use logs or attach for the device URL)"
 readonly SCRIPT_PATH="$(realpath "${BASH_SOURCE[0]}")"
 readonly SCRIPT_REPO_ROOT="$(git -C "$(dirname "$SCRIPT_PATH")/.." rev-parse --show-toplevel)"
 readonly COMMON_GIT_DIR="$(git -C "$SCRIPT_REPO_ROOT" rev-parse --path-format=absolute --git-common-dir)"
 readonly STATE_DIR="$COMMON_GIT_DIR/dev-app"
 readonly STATE_FILE="$STATE_DIR/worktree"
+readonly API_ORIGIN_FILE="$STATE_DIR/api-origin"
 readonly LOCK_FILE="$STATE_DIR/command.lock"
 
 usage() {
@@ -24,6 +25,8 @@ Commands:
   status             Show the active worktree, branch, tmux session, and URL
   logs               Print recent Expo output
   attach             Attach to the shared tmux session
+
+Set DEV_APP_API_ORIGIN on start/restart to change the saved API origin.
 EOF
 }
 
@@ -101,23 +104,35 @@ start_worktree() {
   fi
 
   ensure_port_free
+  local api_origin="${DEV_APP_API_ORIGIN:-}"
+  if [[ -z "$api_origin" && -s "$API_ORIGIN_FILE" ]]; then
+    api_origin="$(cat "$API_ORIGIN_FILE")"
+  fi
+  api_origin="${api_origin:-https://api.clashk.ing}"
+  api_origin="${api_origin%/}"
+  [[ "$api_origin" =~ ^https?://[^/[:space:]]+$ ]] || fail "DEV_APP_API_ORIGIN must be an HTTP(S) origin"
+  local api_environment=local
+  [[ "$api_origin" == https://api.clashk.ing ]] && api_environment=production
   command=(
     env
     BROWSER=none
-    EXPO_PUBLIC_CK_API_ENV=production
-    EXPO_PUBLIC_CK_API_BASE_URL=https://api.clashk.ing
-    EXPO_PUBLIC_CK_API_V2_BASE_URL=https://api.clashk.ing/v2
-    EXPO_PUBLIC_CK_PROXY_BASE_URL=https://api.clashk.ing/proxy/v1
-    EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL=https://api.clashk.ing/v2
+    EXPO_PUBLIC_CK_API_ENV="$api_environment"
+    EXPO_PUBLIC_CK_API_BASE_URL="$api_origin"
+    EXPO_PUBLIC_CK_API_V2_BASE_URL="$api_origin/v2"
+    EXPO_PUBLIC_CK_PROXY_BASE_URL="$api_origin/proxy/v1"
+    EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL="$api_origin/v2"
     EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=http://localhost:7357/auth/callback
     EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
-    npm run start -- --web --host localhost --port "$PORT"
+    EXPO_PUBLIC_CK_DISCORD_CLIENT_ID="${DEV_APP_DISCORD_CLIENT_ID:-}"
+    npm run start -- --host "${DEV_APP_HOST:-lan}" --port "$PORT"
   )
 
   printf -v command_line '%q ' "${command[@]}"
   tmux new-session -d -s "$SESSION" -c "$worktree/expo" "exec $command_line"
   tmux set-environment -t "$SESSION" DEV_APP_WORKTREE "$worktree"
   remember_worktree "$worktree"
+  printf '%s\n' "$api_origin" > "$API_ORIGIN_FILE"
+  printf 'API: %s\n' "$api_origin"
   printf 'Started %s in tmux session %s\n%s\n' "$worktree" "$SESSION" "$PUBLIC_URL"
 }
 
@@ -156,8 +171,13 @@ if [[ "${1:-}" == attach ]]; then
 fi
 
 if [[ "${DEV_APP_COMMAND_LOCKED:-}" != 1 ]]; then
-  command -v lockf >/dev/null 2>&1 || fail "lockf is required to coordinate dev-app commands"
-  exec lockf -t 0 "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+  if command -v lockf >/dev/null 2>&1; then
+    exec lockf -t 0 "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+  elif command -v flock >/dev/null 2>&1; then
+    exec flock -n "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+  else
+    fail "install flock (util-linux on Ubuntu) or lockf to coordinate dev-app commands"
+  fi
 fi
 
 case "${1:-}" in

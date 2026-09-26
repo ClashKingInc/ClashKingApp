@@ -1,11 +1,66 @@
-import { fireEvent, render } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { I18nProvider } from '../../../i18n';
 import { CKThemeProvider } from '../../../ui';
+import { Player } from '../models/player';
+import { PlayerClanOverview } from '../models/player-support';
+import { buildPlayerRosters } from './contracts';
 import type { PlayersPresentationActions, PlayersPresentationModel } from './contracts';
 import { PlayersScreen } from './players-screen';
+
+jest.mock('../../../core/assets/local-asset-cache', () => ({
+  localImageCache: {
+    subscribe: () => () => {},
+    peek: () => undefined,
+    resolve: jest.fn(),
+    getRevision: () => 0,
+  },
+}));
+
+const mockRosterDrag = jest.fn();
+
+jest.mock('react-native-draggable-flatlist', () => {
+  const ReactModule = jest.requireActual<typeof import('react')>('react');
+  const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
+  return {
+    __esModule: true,
+    ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
+    default: ({
+      data,
+      renderItem,
+      ListHeaderComponent,
+      ListEmptyComponent,
+      onDragEnd,
+    }: {
+      data: readonly unknown[];
+      renderItem: (parameters: Record<string, unknown>) => React.ReactNode;
+      ListHeaderComponent?: React.ReactNode;
+      ListEmptyComponent?: React.ReactNode;
+      onDragEnd: (parameters: Record<string, unknown>) => void;
+    }) =>
+      ReactModule.createElement(
+        MockView,
+        { testID: 'player-roster-list', ...({ onDragEnd } as Record<string, unknown>) },
+        ListHeaderComponent,
+        data.length === 0 ? ListEmptyComponent : null,
+        data.map((item, index) =>
+          ReactModule.createElement(
+            ReactModule.Fragment,
+            { key: index },
+            renderItem({
+              item,
+              index,
+              drag: mockRosterDrag,
+              isActive: false,
+              getIndex: () => index,
+            }),
+          ),
+        ),
+      ),
+  };
+});
 
 jest.mock('expo-glass-effect', () => {
   const { View } = jest.requireActual<typeof import('react-native')>('react-native');
@@ -28,6 +83,8 @@ const actions = (): PlayersPresentationActions => ({
   verifyAccount: jest.fn(async () => ({ success: true, message: null })),
   refreshAccounts: jest.fn(async () => undefined),
   openGameSettings: jest.fn(),
+  reorderLinkedPlayers: jest.fn(async () => undefined),
+  reorderBookmarkedPlayers: jest.fn(async () => undefined),
   setAccountNotifications: jest.fn(async () => undefined),
   setAccountHidden: jest.fn(async () => undefined),
   setCardOption: jest.fn(async () => undefined),
@@ -45,6 +102,34 @@ const emptyModel: PlayersPresentationModel = {
 };
 
 describe('PlayersScreen roster states', () => {
+  it('uses a native Android scroll view and refreshes after one full pull', async () => {
+    const callbacks = actions();
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <PlayersScreen model={emptyModel} actions={callbacks} platform="android" />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    const scroll = screen.getByTestId('player-scroll-view');
+    await act(async () => {
+      fireEvent(scroll, 'scrollBeginDrag');
+      fireEvent.scroll(scroll, { nativeEvent: { contentOffset: { y: -80 } } });
+      fireEvent(scroll, 'scrollEndDrag');
+    });
+
+    expect(callbacks.refresh).toHaveBeenCalledTimes(1);
+    expect(screen.queryByTestId('player-roster-list')).toBeNull();
+  });
+
   it('switches exact empty states and delegates linked-account management', async () => {
     const callbacks = actions();
     const screen = await render(
@@ -70,4 +155,97 @@ describe('PlayersScreen roster states', () => {
     await fireEvent.press(screen.getByRole('tab', { name: 'Bookmarked' }));
     expect(screen.getByText('No bookmarked players yet')).toBeTruthy();
   });
+
+  it('reorders linked and bookmarked cards by holding the card body', async () => {
+    const callbacks = actions();
+    const players = [player('#ONE', 'One'), player('#TWO', 'Two')];
+    const model: PlayersPresentationModel = {
+      ...emptyModel,
+      profiles: players,
+      accountLinks: players.map((item) => ({
+        playerTag: item.tag,
+        isVerified: true,
+        hidden: false,
+        raw: {},
+      })),
+      bookmarks: [
+        {
+          tag: '#BOOKMARK-ONE',
+          name: 'Bookmark One',
+          townHallLevel: 17,
+          townHallPic: 'town-hall.png',
+          clanName: '',
+          trophies: 0,
+          league: '',
+          leagueUrl: '',
+        },
+        {
+          tag: '#BOOKMARK-TWO',
+          name: 'Bookmark Two',
+          townHallLevel: 17,
+          townHallPic: 'town-hall.png',
+          clanName: '',
+          trophies: 0,
+          league: '',
+          leagueUrl: '',
+        },
+      ],
+    };
+    const screen = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, right: 0, bottom: 34, left: 0 },
+        }}
+      >
+        <I18nProvider locale="en">
+          <CKThemeProvider preference="light">
+            <PlayersScreen model={model} actions={callbacks} />
+          </CKThemeProvider>
+        </I18nProvider>
+      </SafeAreaProvider>,
+    );
+
+    await fireEvent(screen.getByTestId('player-roster-card-#ONE'), 'longPress');
+    expect(mockRosterDrag).toHaveBeenCalledTimes(1);
+    const linked = [...buildPlayerRosters(model).linked].reverse();
+    await fireEvent(screen.getByTestId('player-roster-list'), 'dragEnd', {
+      data: linked,
+      from: 0,
+      to: 1,
+    });
+    expect(callbacks.reorderLinkedPlayers).toHaveBeenCalledWith(['#TWO', '#ONE']);
+
+    await fireEvent.press(screen.getByRole('tab', { name: 'Bookmarked' }));
+    await waitFor(() =>
+      expect(screen.getByTestId('player-roster-card-#BOOKMARK-ONE')).toBeTruthy(),
+    );
+    await fireEvent(screen.getByTestId('player-roster-card-#BOOKMARK-ONE'), 'longPress');
+    expect(mockRosterDrag).toHaveBeenCalledTimes(2);
+    const bookmarked = [...buildPlayerRosters(model).bookmarked].reverse();
+    await fireEvent(screen.getByTestId('player-roster-list'), 'dragEnd', {
+      data: bookmarked,
+      from: 0,
+      to: 1,
+    });
+    expect(callbacks.reorderBookmarkedPlayers).toHaveBeenCalledWith([
+      '#BOOKMARK-TWO',
+      '#BOOKMARK-ONE',
+    ]);
+  });
 });
+
+function player(tag: string, name: string): Player {
+  return {
+    tag,
+    name,
+    townHallLevel: 17,
+    townHallPic: 'town-hall.png',
+    trophies: 5500,
+    league: 'Legend League',
+    leagueUrl: 'league.png',
+    lastOnline: new Date(0),
+    clan: null,
+    clanOverview: new PlayerClanOverview('', '', 0, { small: '', medium: '', large: '' }),
+  } as Player;
+}

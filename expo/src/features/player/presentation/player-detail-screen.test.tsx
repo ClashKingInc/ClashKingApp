@@ -79,6 +79,7 @@ const actions = (): PlayerDetailPresentationActions => ({
   openCwl: jest.fn(),
   openPlayer: jest.fn(),
   openRanked: jest.fn(),
+  openLegends: jest.fn(),
   openAchievements: jest.fn(),
   updateWarFilter: jest.fn(async () => undefined),
   exportWarStats: jest.fn(async () => 'war-stats.xlsx'),
@@ -176,6 +177,7 @@ describe('PlayerDetailScreen', () => {
     const screenActions = actions();
     const service = {
       apiV2Url: 'https://api.test',
+      downloadWarStatsExport: jest.fn(),
       loadCachedClanTag: jest.fn(async () => '#CACHED'),
       loadPlayerBattlelog: jest.fn(async () => undefined),
       loadPlayerActivity: jest.fn(async () => undefined),
@@ -199,7 +201,7 @@ describe('PlayerDetailScreen', () => {
     expect(playerHeaderClanIdentity(fallbackPlayer, '#CACHED')).toMatchObject({
       tag: '#CACHED',
       name: '#CACHED',
-      badgeUrl: '',
+      badgeUrl: 'https://badges.clashk.ing/CACHED.avif',
     });
     expect(screen.queryByText('|')).toBeNull();
     await fireEvent.press(screen.getByText('#CACHED'));
@@ -215,6 +217,7 @@ describe('PlayerDetailScreen', () => {
     screenActions.toggleBookmark = jest.fn(() => pending);
     const service = {
       apiV2Url: 'https://api.test',
+      downloadWarStatsExport: jest.fn(),
       loadCachedClanTag: jest.fn(async () => ''),
       loadPlayerBattlelog: jest.fn(async () => undefined),
       loadPlayerActivity: jest.fn(async () => undefined),
@@ -264,6 +267,28 @@ describe('PlayerDetailScreen', () => {
     expect(screenActions.copyTag).toHaveBeenCalledTimes(2);
     expect(screenActions.copyTag).toHaveBeenCalledWith('#ALPHA');
     expect(screenActions.openInGame).toHaveBeenCalledWith('#ALPHA');
+  });
+
+  it('shows the image export action in the player header only for Battlelogs', async () => {
+    const screen = await wrap(
+      <PlayerDetailScreen
+        model={{
+          player,
+          bookmarked: false,
+          verifiedTracking: true,
+          battlelog: new PlayerBattlelogData([], true, true),
+        }}
+        actions={actions()}
+      />,
+    );
+
+    expect(screen.queryByLabelText('Export')).toBeNull();
+    await fireEvent.press(screen.getByLabelText('Home Base'));
+    await fireEvent.press(screen.getByLabelText('Battles'));
+    expect(screen.getByLabelText('Export')).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText('Battles'));
+    await fireEvent.press(screen.getByLabelText('Home Base'));
+    expect(screen.queryByLabelText('Export')).toBeNull();
   });
 
   it('warms every Flutter stateful history tab through the root service adapter', async () => {

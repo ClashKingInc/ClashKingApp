@@ -44,12 +44,25 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
-        views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId))
+        views.setInt(
+            R.id.root_layout,
+            "setBackgroundResource",
+            if (WarWidgetSelectionStore.transparentBackground(context, appWidgetId)) {
+                android.R.color.transparent
+            } else {
+                R.drawable.war_widget_background
+            }
+        )
 
+        // Migrate old automatic widgets once, then keep each instance pinned to that clan.
         val selectedTag = WarWidgetSelectionStore.selectedTag(context, appWidgetId)
+            ?: widgetData.getString("warWidgetSelectedClan", null)?.takeIf { it.isNotBlank() }?.also {
+                WarWidgetSelectionStore.saveSelectedTag(context, appWidgetId, it)
+            }
+        views.setOnClickPendingIntent(R.id.root_layout, launchAppIntent(context, appWidgetId, selectedTag))
         var payloadKey = selectedTag?.let {
             "warInfo_${WarWidgetSelectionStore.normalizeTag(it)}"
-        } ?: "warInfo"
+        } ?: "warInfo_unconfigured"
         var rawWarInfo = widgetData.getString(payloadKey, null)
         val selectedDefaultTag = widgetData.getString("warWidgetSelectedClan", null)
             ?.let(WarWidgetSelectionStore::normalizeTag)
@@ -215,7 +228,11 @@ private fun downloadBitmap(url: String): Bitmap? {
     if (url.isBlank()) return null
     var connection: HttpURLConnection? = null
     return try {
-        connection = URL(url).openConnection() as HttpURLConnection
+        val source = URL(url)
+        val badgeUrl = if (source.host == "badges.clashk.ing") {
+            URL("https", source.host, source.path.replace(Regex("\\.[^/]+$"), "") + ".png?size=256")
+        } else source
+        connection = badgeUrl.openConnection() as HttpURLConnection
         connection.connectTimeout = 5_000
         connection.readTimeout = 5_000
         connection.doInput = true
@@ -228,9 +245,12 @@ private fun downloadBitmap(url: String): Bitmap? {
     }
 }
 
-private fun launchAppIntent(context: Context, appWidgetId: Int): PendingIntent {
+private fun launchAppIntent(context: Context, appWidgetId: Int, selectedTag: String?): PendingIntent {
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
         ?: Intent(Intent.ACTION_MAIN).setPackage(context.packageName)
+    intent.action = Intent.ACTION_VIEW
+    val tag = selectedTag?.let { android.net.Uri.encode(WarWidgetSelectionStore.normalizeTag(it)) }
+    intent.data = android.net.Uri.parse(if (tag.isNullOrBlank()) "clashking://war" else "clashking://clan/$tag/war")
     return PendingIntent.getActivity(
         context,
         appWidgetId,

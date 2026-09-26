@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Systeemmeldingen",
+  "notifSystemSettings": "Meldingsinstellingen openen",
+  "notifSystemSettingsDescription": "Beheer waarschuwingen, geluiden en badges in de instellingen van je apparaat.",
+  "notifSystemSettingsFailed": "Kan de meldingsinstellingen niet openen. Open Instellingen op je apparaat.",
+  "notifManagePlayersDescription": "Beheer accountmeldingen via Spelers → Gekoppeld → Opties.",
+  "notifCustomReminders": "Aangepaste herinneringen",
+  "notifTestType": "Meldingstype",
+  "statsBattlelogsGroup": "Gevechtslogboeken",
+  "statsGlobalStatsGroup": "Wereldwijde statistieken",
+  "playerOptionShowOnHomeTitle": "Account op Home tonen",
+  "playerOptionShowOnHomeSubtitle": "Neem dit geverifieerde account op in de Home-kaarten (maximaal 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verifieer dit account om het op Home te tonen.",
+  "playerOptionHomeInclusionFirst": "Zet eerst Account op Home tonen aan.",
+  "homeIncludedAccountsLimit": "Home kan maximaal 5 accounts tonen. Verwijder er eerst één.",
+  "statsHitratesByTownHall": "Slagingspercentages per stadhuis",
+  "statsChartGranularity": "Grafiekinterval",
+  "statsDaily": "Dagelijks",
+  "statsWeekly": "Wekelijks",
+  "statsMonthly": "Maandelijks",
+  "statsCompareCohorts": "Groepen vergelijken",
+  "statsAcrossCohorts": "Gebruik per groep",
+  "legendsTrophyGrid": "Trofeeënraster",
+  "legendsPopularArmyItems": "Populairste legeronderdelen",
+  "legendsPopularTroop": "Favoriet",
+  "legendsHitrate": "Succespercentage",
+  "legendsAvgOffense": "Gem. aanval",
+  "legendsAvgDefense": "Gem. verdediging",
+  "settingsClearImageCache": "Afbeeldingscache wissen",
+  "settingsImageCacheCleared": "Afbeeldingscache gewist.",
+  "settingsImageCacheClearFailed": "Kan de afbeeldingscache niet wissen. Probeer het opnieuw.",
+  "startupCheckingUpdate": "Zoeken naar updates…",
+  "startupDownloadingUpdate": "Update downloaden…",
+  "startupUpdateInBackground": "Op de achtergrond bijwerken",
   "warStatsRangeTitle": "Bereik van oorlogsstatistieken",
   "warStatsRangeDescription": "Kies of de statistieken een vast aantal recente oorlogen of een recente periode in dagen omvatten.",
   "warStatsRangeDays": "Dagen",
@@ -77,7 +110,7 @@
   "notifPushUnsupported": "Pushmeldingen worden niet ondersteund op dit platform.",
   "notifPushInitializing": "Pushmeldingen configureren…",
   "notificationPrimerTitle": "Meldingen inschakelen?",
-  "notificationPrimerBody": "ClashKing kan je informeren over updates voor oorlogen, CWL, je account en projecten. Je kunt dit altijd wijzigen via Instellingen > Meldingen.",
+  "notificationPrimerBody": "ClashKing kan updates sturen over evenementen, aankondigingen, Legend-verdedigingen en ondersteuning. Herinneringen voor oorlogen en raidweekenden blijven uit totdat je ze instelt. Je kunt dit wijzigen via Instellingen > Meldingen.",
   "notificationPrimerNotNow": "Niet nu",
   "notificationPrimerAllow": "Toestaan",
   "achievementsTitle": "Prestaties",
@@ -1461,6 +1494,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Lokale rang",
   "legendsGlobalRankTitle": "Wereldrang",
+  "legendsYourArmy": "Jouw leger",
+  "legendsArmyUsedAgainstYou": "Leger dat tegen jou is gebruikt",
   "warWinsTitle": "Overwinningen",
   "warLossesTitle": "Nederlagen",
   "warDrawsTitle": "Gelijkspel",
@@ -2514,7 +2549,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Kies meldingen en stuur lokale testvoorbeelden.",
+  "settingsNotificationsSubtitle": "Kies welke waarschuwingen je ontvangt.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3159,6 +3194,9 @@
   "statsHero": "Held",
   "statsPet": "Huisdier",
   "statsEquipment": "Uitrusting",
+  "statsPetCombinations": "Huisdiercombinaties",
+  "statsEquipmentPairs": "Uitrustingsparen",
+  "statsArmyFallback": "Leger {id}",
   "statsOwningHero": "Held bezitten",
   "statsAddItem": "Item toevoegen",
   "statsAnalyzeItems": "Analyseer items",
@@ -3908,19 +3946,32 @@
   "homeActivityJoined": "trad toe tot",
   "homeActivityLeft": "verliet",
   "homeActivityAClan": "een clan",
+  "statsCwlSeasonGroups": "Groepen",
+  "statsCwlSeasonHistory": "Clanoorlogscompetitie door de tijd",
+  "statsCwlRosterNotLineup": "Verdeling van geregistreerde spelers omgerekend naar {size} plaatsen; de werkelijke oorlogsopstelling kan afwijken.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Troepenstatistieken",
+  "statsWarSizes": "Oorlogsgroottes",
+  "statsMissedAttacks": "Gemiste aanvallen",
+  "statsCopyChart": "Grafiek kopiëren",
+  "statsCompareItems": "Items vergelijken",
+  "statsCompareItemsHint": "Selecteer maximaal 5 items om te vergelijken.",
+  "statsVsOverall": "ten opzichte van totaal",
+  "statsCopyChartFailed": "Kan grafiek niet kopiëren. Probeer opnieuw.",
+  "statsPercentagePoints": "procentpunten",
   "statsMeta": "Meta",
   "statsBattle": "Gevecht",
   "statsWorld": "Wereld",
   "statsHeaderSubtitle": "Ontdek gevechtsprestaties en de wereld die we volgen.",
   "statsPreview": "Voorbeeld",
-  "statsTownHallDistribution": "Stadhuisdistributie",
+  "statsTownHallDistribution": "Stadhuizen",
   "statsBuilderHallDistribution": "Verdeling bouwzaal",
-  "statsLeagueDistribution": "Gerangschikte competitieverdeling",
+  "statsLeagueDistribution": "Gerangschikte competities",
   "statsTrackedPlayers": "Huidige gevolgde spelerspopulatie",
   "statsTrackedClans": "Huidige gevolgde clanpopulatie",
-  "statsCwlLeagueDistribution": "CWL-competitieverdeling",
-  "statsCapitalLeagueDistribution": "Verdeling hoofdklasse",
-  "statsTrackedLocations": "Bijgehouden clanlocaties",
+  "statsCwlLeagueDistribution": "CWL-competities",
+  "statsCapitalLeagueDistribution": "Hoofdstadcompetities",
+  "statsTrackedLocations": "Clanlocaties",
   "statsLocationCountHelp": "Landen en locaties vertegenwoordigd door gevolgde clans.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4661,6 +4712,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Ingeschreven selectie",
+  "cwlMatches": "Wedstrijden",
+  "cwlNextMatchup": "Volgende wedstrijd",
+  "cwlOtherMatches": "Andere wedstrijden",
+  "cwlOutlook": "Seizoensverwachting",
+  "cwlFirstPlace": "Eerste plaats",
+  "cwlTopTwo": "Top twee",
+  "cwlRemainingOpponents": "Resterende tegenstanders",
+  "cwlWinBonusNote": "Sterren bevatten 10 bonussterren per afgeronde overwinning.",
+  "cwlEstimateNote": "Schattingen gebruiken afgeronde oorlogen en resterende tegenstanders, geen wijzigingen in de opstelling. Minstens twee afgeronde oorlogen per clan zijn nodig. De schattingen zijn niet gekalibreerd; promotieregels verschillen per divisie.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minuten}}}}",
+  "personalBasesDeleteOld": "Basissen ouder dan 90 dagen verwijderen",
+  "personalBasesDeleteOldConfirm": "{count} opgeslagen basissen ouder dan 90 dagen worden verwijderd. De downloadgeschiedenis en gedeelde basissen blijven behouden.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Automatische verdediging",
+  "legendsPopularArmyItem": "Populairste legeronderdeel",
+  "legendsClanCastle": "Clankasteel",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

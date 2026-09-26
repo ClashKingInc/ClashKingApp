@@ -1,3 +1,4 @@
+import { HeaderIconButton } from '../../../ui/header';
 import { useEffect, useState, type ReactNode } from 'react';
 import {
   Modal,
@@ -5,17 +6,14 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  useWindowDimensions,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Bookmark,
   ArrowLeft,
   ChevronRight,
-  Copy,
   Eye,
   Link2,
   Shield,
@@ -39,18 +37,27 @@ import {
 } from '../../../ui';
 import type { WarAttack, WarInfo, WarMember } from '../models';
 import type { WarRosterItem } from './contracts';
-import { formatDuration, formatPercent, remainingWarTime } from './presentation-utils';
+import {
+  formatDuration,
+  formatPercent,
+  remainingWarTime,
+  warTimeRemaining,
+} from './presentation-utils';
 
 export function WarSummaryCard({
   item,
   now = new Date(),
   onOpenWar,
   onOpenCwl,
+  onLongPress,
+  dragTestID,
 }: {
   item: WarRosterItem;
   now?: Date;
   onOpenWar: (war: WarInfo) => void;
   onOpenCwl: () => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -58,6 +65,7 @@ export function WarSummaryCard({
   if (!war || ['notInWar', 'unknown', 'accessDenied'].includes(war.state)) {
     const privateLog = item.summary?.warInfo.state === 'accessDenied';
     return (
+      <Pressable onLongPress={onLongPress} testID={dragTestID}>
       <Surface style={styles.emptyWarCard}>
         <MobileWebImage
           imageUrl={item.badgeUrl || ImageAssets.clanCastle}
@@ -69,6 +77,7 @@ export function WarSummaryCard({
             : t('warIsNotInWar', { clan: item.name })}
         </CKText>
       </Surface>
+      </Pressable>
     );
   }
   const statuses = item.accountStatuses.filter((status) => status.inWar);
@@ -100,7 +109,7 @@ export function WarSummaryCard({
   return (
     <Surface style={styles.warCard}>
       {cwlBanner && canOpenCwl ? (
-        <Pressable accessibilityRole="button" onPress={onOpenCwl}>
+        <Pressable accessibilityRole="button" onPress={onOpenCwl} onLongPress={onLongPress}>
           {cwlBanner}
         </Pressable>
       ) : (
@@ -110,8 +119,10 @@ export function WarSummaryCard({
         accessibilityRole="button"
         accessibilityLabel={`${war.clan?.name} versus ${war.opponent?.name}`}
         onPress={() => onOpenWar(war)}
+        onLongPress={onLongPress}
+        testID={dragTestID}
       >
-        <View style={[styles.warBody, war.state === 'preparation' && styles.preparationWarBody]}>
+        <View testID="war-summary-body" style={[styles.warBody, war.state === 'preparation' && styles.preparationWarBody]}>
           <WarSide clan={war.clan} />
           <View style={styles.scoreColumn}>
             {allSpectators ? (
@@ -150,7 +161,7 @@ export function WarSummaryCard({
           <WarSide clan={war.opponent} />
         </View>
         {statuses.length ? (
-          <View style={styles.attackStatusWrap}>
+          <View testID="war-summary-account-chips" style={styles.attackStatusWrap}>
             {[...statuses]
               .sort(
                 (left, right) =>
@@ -186,6 +197,39 @@ export function WarSummaryCard({
   );
 }
 
+export function WarStatePill({ war, clanTag }: { war: WarInfo; clanTag: string }) {
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const label =
+    war.state === 'warEnded'
+      ? resultLabel(war, clanTag, t)
+      : war.state === 'preparation'
+        ? t('warPreparation')
+        : war.state === 'inWar'
+          ? t('warOngoing')
+          : t('generalNoDataAvailable');
+  const color =
+    war.state === 'warEnded'
+      ? warResultColor(war, clanTag, theme)
+      : war.state === 'inWar'
+        ? theme.primary
+        : theme.onSurfaceVariant;
+  return (
+    <PillSurface
+      style={{
+        paddingHorizontal: 12,
+        paddingVertical: 7,
+        flexShrink: 1,
+        backgroundColor: colorWithAlpha(color, 0.12),
+      }}
+    >
+      <CKText role="body" style={{ color }}>
+        {label}
+      </CKText>
+    </PillSurface>
+  );
+}
+
 export function WarHero({
   war,
   cwlRoundNumber,
@@ -202,19 +246,10 @@ export function WarHero({
   onOpenCwl?: () => void;
 }) {
   const { t, locale } = useI18n();
-  const insets = useSafeAreaInsets();
   const theme = useCKTheme();
   const themeMode = useCKThemeMode();
-  const { width } = useWindowDimensions();
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(timer);
-  }, []);
-  const desktop = width >= 900;
-  const leading = leadingSide(war);
   return (
-    <View style={[styles.hero, { paddingTop: insets.top }]}>
+    <View style={styles.hero}>
       <MobileWebImage
         imageUrl={ImageAssets.warPageBackground}
         style={StyleSheet.absoluteFill}
@@ -233,14 +268,12 @@ export function WarHero({
         <Rect width="100%" height="100%" fill="url(#war-header-scrim)" />
       </Svg>
       <View style={styles.heroActions}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={materialBackLabel(locale)}
+        <HeaderIconButton
+          icon={<ArrowLeft color="#fff" size={24} />}
+          label={materialBackLabel(locale)}
           onPress={onBack}
-          style={styles.heroBackButton}
-        >
-          <ArrowLeft color="#fff" size={22} />
-        </Pressable>
+          glass={false}
+        />
         {cwlRoundNumber && onOpenCwl ? (
           <View pointerEvents="box-none" style={styles.heroRoundCenter}>
             <Pressable
@@ -250,7 +283,7 @@ export function WarHero({
             >
               <PillSurface style={styles.roundPill}>
                 <MobileWebImage imageUrl={ImageAssets.cwlSwordsNoBorder} style={styles.roundIcon} />
-                <CKText role="labelLarge" numberOfLines={1} style={styles.roundLabel}>
+                <CKText role="body" numberOfLines={1} style={styles.roundLabel}>
                   {t('cwlRoundNumber', { number: cwlRoundNumber })}
                 </CKText>
                 <ChevronRight size={18} color={theme.onSurfaceVariant} />
@@ -259,37 +292,8 @@ export function WarHero({
           </View>
         ) : null}
       </View>
-      <CKText style={styles.countdown}>{warCountdown(war, now, t)}</CKText>
-      <View style={styles.heroScore}>
-        <WarHeroSide
-          clan={war.clan}
-          leading={leading === 'clan'}
-          desktop={desktop}
-          onOpenClan={onOpenClan}
-          onCopy={onCopy}
-        />
-        <View style={styles.heroScoreCore}>
-          <MobileWebImage
-            imageUrl={ImageAssets.war}
-            style={desktop ? styles.warIconDesktop : styles.warIcon}
-          />
-          <CKText
-            role="heroMetric"
-            style={[
-              styles.heroText,
-              { fontSize: desktop ? 34 : 30, lineHeight: desktop ? 34 : 30 },
-            ]}
-          >
-            {war.clan?.stars ?? 0} - {war.opponent?.stars ?? 0}
-          </CKText>
-        </View>
-        <WarHeroSide
-          clan={war.opponent}
-          leading={leading === 'opponent'}
-          desktop={desktop}
-          onOpenClan={onOpenClan}
-          onCopy={onCopy}
-        />
+      <View style={{ paddingHorizontal: 16, width: '100%', maxWidth: 720, alignSelf: 'center' }}>
+        <WarMatchup war={war} hero onOpenClan={onOpenClan} onCopy={onCopy} />
       </View>
     </View>
   );
@@ -339,10 +343,18 @@ export function AttackDetailsModal({
               </RoundButton>
             </View>
             <View style={styles.resultHero}>
-              <CKText role="heroMetric">
-                {'★'.repeat(attack.stars)}
-                {'☆'.repeat(3 - attack.stars)}
-              </CKText>
+              <View
+                style={styles.resultStars}
+                accessibilityLabel={`${attack.stars}/3 ${t('warStarsTitle')}`}
+              >
+                {[0, 1, 2].map((index) => (
+                  <MobileWebImage
+                    key={index}
+                    imageUrl={ImageAssets.attackStar}
+                    style={[styles.resultStar, index >= attack.stars && styles.unearnedStar]}
+                  />
+                ))}
+              </View>
               <CKText role="titleLarge">{formatPercent(attack.destructionPercentage)}</CKText>
             </View>
             <Participant
@@ -361,12 +373,6 @@ export function AttackDetailsModal({
               onPress={() => onOpenPlayer(attack.defenderTag)}
             />
             <Surface muted style={styles.detailsPanel}>
-              <DetailRow label={t('warStarsTitle')} value={String(attack.stars)} />
-              <DetailRow
-                label={t('warDestructionTitle')}
-                value={formatPercent(attack.destructionPercentage)}
-              />
-              <DetailRow label={t('warAttacksDetailsAttackOrder')} value={`#${attack.order}`} />
               {attack.duration !== null ? (
                 <DetailRow
                   label={t('warAttacksDetailsDuration')}
@@ -428,11 +434,14 @@ export function MetricPill({
   image?: string;
   icon?: ReactNode;
   value: string;
-  label: string;
+  label?: string;
 }) {
   const theme = useCKTheme();
   return (
-    <PillSurface style={styles.metricPill} accessibilityLabel={`${label}: ${value}`}>
+    <PillSurface
+      style={styles.metricPill}
+      accessibilityLabel={label ? `${label}: ${value}` : value}
+    >
       {image ? (
         <MobileWebImage imageUrl={image} style={styles.metricIcon} />
       ) : (
@@ -440,9 +449,11 @@ export function MetricPill({
       )}
       <View>
         <CKText role="labelLarge">{value}</CKText>
-        <CKText muted role="labelSmall">
-          {label}
-        </CKText>
+        {label ? (
+          <CKText muted role="labelSmall">
+            {label}
+          </CKText>
+        ) : null}
       </View>
     </PillSurface>
   );
@@ -486,11 +497,9 @@ function WarScoreRow({ left, right }: { left: number; right: number }) {
         testID="war-summary-score"
         role="titleMedium"
         numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={0.75}
         style={styles.scoreValue}
       >
-        {left} - {right}
+        {`${left} - ${right}`}
       </CKText>
     </View>
   );
@@ -509,54 +518,138 @@ function WarDestructionRow({ left, right }: { left: number; right: number }) {
   );
 }
 
-function WarHeroSide({
-  clan,
-  leading,
-  desktop,
+/** One competitive identity, shared by the season's current matchup and war detail. */
+export function WarMatchup({
+  war,
+  hero = false,
   onOpenClan,
   onCopy,
 }: {
-  clan: WarInfo['clan'];
-  leading: boolean;
-  desktop: boolean;
-  onOpenClan: (tag: string) => void;
-  onCopy: (tag: string) => void;
+  war: WarInfo;
+  hero?: boolean;
+  onOpenClan?: (tag: string) => void;
+  onCopy?: (tag: string) => void;
 }) {
-  if (!clan) return <View style={styles.heroSide} />;
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const foreground = hero ? '#fff' : theme.onSurface;
+  const secondary = hero ? '#ffffffcc' : theme.onSurfaceVariant;
+  const capacity = (war.teamSize ?? 0) * war.effectiveAttacksPerMember;
   return (
-    <View style={styles.heroSide}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={clan.name}
-        onPress={() => onOpenClan(clan.tag)}
-      >
+    <View style={{ gap: 16 }}>
+      <WarTiming war={war} hero={hero} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <MobileWebImage
-          imageUrl={clan.badgeUrls.smallest}
-          style={[
-            styles.heroBadge,
-            {
-              width: desktop ? (leading ? 116 : 108) : leading ? 76 : 70,
-              height: desktop ? (leading ? 116 : 108) : leading ? 76 : 70,
-            },
-          ]}
+          imageUrl={war.clan?.badgeUrls.smallest || ImageAssets.clanCastle}
+          style={{ width: 56, height: 56 }}
         />
-        <CKText
-          role="titleMedium"
-          style={[styles.heroText, styles.heroClanName, leading && styles.heroLeadingClanName]}
-          numberOfLines={1}
-        >
-          {clan.name}
+        <View style={{ alignItems: 'center', flex: 1 }}>
+          <CKText
+            numberOfLines={1}
+            style={{
+              color: foreground,
+              fontSize: 28,
+              lineHeight: 34,
+              fontWeight: '700',
+              fontVariant: ['tabular-nums'],
+            }}
+          >
+            {war.state === 'preparation'
+              ? '—'
+              : `${war.clan?.stars ?? 0} – ${war.opponent?.stars ?? 0}`}
+          </CKText>
+          <MobileWebImage
+            imageUrl={ImageAssets.attackStar}
+            style={{ width: 22, height: 22 }}
+            accessibilityLabel={t('warStarsTitle')}
+          />
+        </View>
+        <MobileWebImage
+          imageUrl={war.opponent?.badgeUrls.smallest || ImageAssets.clanCastle}
+          style={{ width: 56, height: 56 }}
+        />
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 24 }}>
+        {[war.clan, war.opponent].map((clan, index) => (
+          <View key={index} style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 8 }}>
+            <Pressable
+              disabled={!onOpenClan || !clan}
+              accessibilityRole={onOpenClan ? 'button' : undefined}
+              accessibilityLabel={clan?.name}
+              onPress={() => clan && onOpenClan?.(clan.tag)}
+              onLongPress={() => clan && onCopy?.(clan.tag)}
+              style={{
+                alignItems: 'center',
+                width: '100%',
+                minHeight: onOpenClan ? 44 : undefined,
+              }}
+            >
+              <CKText
+                role="bodyLarge"
+                numberOfLines={2}
+                style={{ color: foreground, textAlign: 'center' }}
+              >
+                {clan?.name ?? '—'}
+              </CKText>
+            </Pressable>
+          </View>
+        ))}
+      </View>
+      {war.state !== 'preparation' ? (
+        <View style={{ flexDirection: 'row', gap: 16 }}>
+          {[war.clan, war.opponent].map((clan, index) => (
+            <View key={index} style={styles.matchupMetrics}>
+              <CKText
+                role="body"
+                accessibilityLabel={`${t('warDestructionTitle')}: ${formatPercent(clan?.destructionPercentage ?? 0)}`}
+                style={{ color: foreground, fontVariant: ['tabular-nums'] }}
+              >
+                {formatPercent(clan?.destructionPercentage ?? 0)}
+              </CKText>
+              <View
+                style={styles.matchupAttackCount}
+                accessible
+                accessibilityLabel={`${t('warAttacksTitle')}: ${clan?.attacks ?? 0}/${capacity}`}
+              >
+                <MobileWebImage imageUrl={ImageAssets.sword} style={{ width: 18, height: 18 }} />
+                <CKText role="body" style={{ color: secondary, fontVariant: ['tabular-nums'] }}>
+                  {clan?.attacks ?? 0}/{capacity}
+                </CKText>
+              </View>
+            </View>
+          ))}
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
+export function WarTiming({ war, hero = false }: { war: WarInfo; hero?: boolean }) {
+  const { t, locale } = useI18n();
+  const theme = useCKTheme();
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <View style={{ alignItems: 'center', gap: 8 }}>
+      {hero ? (
+        <CKText style={{ color: '#ffffffcc' }}>
+          {war.state === 'warEnded'
+            ? resultLabel(war, war.clan?.tag ?? '', t)
+            : war.state === 'preparation'
+              ? t('warPreparation')
+              : t('warOngoing')}
         </CKText>
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`Copy ${clan.tag}`}
-        onPress={() => onCopy(clan.tag)}
-        style={styles.copyTag}
-      >
-        <CKText style={styles.heroMuted}>{clan.tag}</CKText>
-        <Copy size={12} color="#ffffff99" />
-      </Pressable>
+      ) : (
+        <WarStatePill war={war} clanTag={war.clan?.tag ?? ''} />
+      )}
+      {war.state !== 'warEnded' ? (
+        <CKText style={{ color: hero ? '#fff' : theme.onSurface, textAlign: 'center' }}>
+          {warCountdown(war, now, t, locale)}
+        </CKText>
+      ) : null}
     </View>
   );
 }
@@ -633,23 +726,17 @@ function warResultColor(war: WarInfo, clanTag: string, theme: ReturnType<typeof 
   return theme.onSurface;
 }
 
-function leadingSide(war: WarInfo): 'clan' | 'opponent' | null {
-  if (!war.clan || !war.opponent) return null;
-  if (war.clan.stars !== war.opponent.stars)
-    return war.clan.stars > war.opponent.stars ? 'clan' : 'opponent';
-  if (war.clan.destructionPercentage === war.opponent.destructionPercentage) return null;
-  return war.clan.destructionPercentage > war.opponent.destructionPercentage ? 'clan' : 'opponent';
-}
-
-function warCountdown(war: WarInfo, now: Date, t: ReturnType<typeof useI18n>['t']): string {
+function warCountdown(
+  war: WarInfo,
+  now: Date,
+  t: ReturnType<typeof useI18n>['t'],
+  locale: string,
+): string {
   if (war.state === 'warEnded') return t('warEnded');
   const target =
     war.state === 'preparation' ? war.startTime : war.state === 'inWar' ? war.endTime : null;
   if (!target) return '';
-  const minutes = Math.floor((target.getTime() - now.getTime()) / 60_000);
-  const hoursPart = Math.trunc(minutes / 60);
-  const minutesPart = minutes % 60;
-  const time = `${String(hoursPart).padStart(2, '0')}:${String(minutesPart).padStart(2, '0')}`;
+  const time = warTimeRemaining(target, now, locale);
   return war.state === 'preparation' ? t('timeStartsIn', { time }) : t('timeEndsIn', { time });
 }
 
@@ -674,19 +761,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   stripIcon: { width: 16, height: 16, resizeMode: 'contain' },
-  warBody: { minHeight: 124, flexDirection: 'row', alignItems: 'center', padding: 8 },
+  warBody: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
   preparationWarBody: { minHeight: 112 },
   warSide: { flex: 3, alignItems: 'center', gap: 3 },
   warBadge: { width: 70, height: 70, resizeMode: 'contain' },
-  scoreColumn: { flex: 4, alignItems: 'center', justifyContent: 'center', gap: 5 },
+  scoreColumn: { flex: 5, minWidth: 0, alignItems: 'center', justifyContent: 'center', gap: 5 },
   stateLabel: { textAlign: 'center', fontWeight: '700', flexShrink: 1, lineHeight: 18 },
   resultLabel: { fontWeight: '800' },
   scoreRow: { width: '100%', alignItems: 'center', justifyContent: 'center' },
   scoreValue: {
-    width: '100%',
-    paddingHorizontal: 2,
-    fontSize: 24,
-    lineHeight: 28,
+    fontSize: 28,
+    lineHeight: 34,
+    fontVariant: ['tabular-nums'],
     fontWeight: '800',
     textAlign: 'center',
   },
@@ -705,7 +797,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    paddingBottom: 6,
   },
   attackStatus: {
     minHeight: 26,
@@ -715,7 +807,19 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingHorizontal: 9,
   },
-  hero: { overflow: 'hidden', paddingBottom: 14, gap: 6 },
+  hero: { overflow: 'hidden', paddingBottom: 24, gap: 16 },
+  matchupMetrics: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    columnGap: 14,
+    rowGap: 6,
+  },
+  matchupAttackCount: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  heroStatus: { alignItems: 'center', gap: 8, paddingHorizontal: 16 },
+  sideMetrics: { alignItems: 'center', marginTop: 12, gap: 2 },
   heroActions: {
     height: 44,
     flexDirection: 'row',
@@ -745,7 +849,7 @@ const styles = StyleSheet.create({
   heroSide: { flex: 3, alignItems: 'center' },
   heroBadge: { alignSelf: 'center' },
   heroText: { color: '#fff', textAlign: 'center' },
-  heroClanName: { marginTop: 5, fontWeight: '700' },
+  heroClanName: { marginTop: 8, minHeight: 42, fontWeight: '700' },
   heroLeadingClanName: { fontWeight: '900' },
   heroMuted: { color: '#ffffffa8', textAlign: 'center' },
   copyTag: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4 },
@@ -771,6 +875,9 @@ const styles = StyleSheet.create({
   detailMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, paddingTop: 8 },
   detailMetaPill: { paddingHorizontal: 9, paddingVertical: 5 },
   resultHero: { alignItems: 'center', gap: 4 },
+  resultStars: { flexDirection: 'row', gap: 4 },
+  resultStar: { width: 32, height: 32 },
+  unearnedStar: { opacity: 0.2 },
   participant: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 10 },
   participantImage: { width: 54, height: 54, resizeMode: 'contain' },
   mapPill: { paddingHorizontal: 10, paddingVertical: 6 },

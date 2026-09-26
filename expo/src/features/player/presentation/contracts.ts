@@ -3,7 +3,7 @@ import type { PlayerCardOptions } from '../models/player-support';
 import type { Player } from '../models/player';
 
 export type PlayerRosterMode = 'linked' | 'bookmarked';
-export type PlayerCardOption = 'notifications' | 'todo' | 'upgrade' | 'ranked' | 'war' | 'hidden';
+export type PlayerCardOption = 'notifications' | 'home' | 'todo' | 'upgrade' | 'ranked' | 'war' | 'hidden';
 
 export interface BookmarkedPlayerSummary {
   readonly tag: string;
@@ -26,6 +26,7 @@ export interface PlayersPresentationModel {
   readonly accountLinks: readonly CocAccountLink[];
   readonly bookmarks: readonly BookmarkedPlayerSummary[];
   readonly optionsByTag: Readonly<Record<string, PlayerCardOptions>>;
+  readonly homeIncludedAccountTags?: ReadonlySet<string>;
   readonly notificationsEnabled: boolean;
   readonly notificationAccountTags: ReadonlySet<string>;
   readonly updatingNotificationTags: ReadonlySet<string>;
@@ -46,6 +47,8 @@ export interface PlayersPresentationActions {
   ): Promise<{ success: boolean; message: string | null }>;
   refreshAccounts(): Promise<void>;
   openGameSettings(): void;
+  reorderLinkedPlayers(orderedTags: readonly string[]): Promise<void>;
+  reorderBookmarkedPlayers(orderedTags: readonly string[]): Promise<void>;
   setAccountNotifications(playerTag: string, enabled: boolean): Promise<void>;
   setAccountHidden(playerTag: string, hidden: boolean): Promise<void>;
   setCardOption(

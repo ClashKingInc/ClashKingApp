@@ -37,7 +37,7 @@ describe('AnnouncementPresentationService', () => {
   test('respects the announcement preference and versioned dismissal', async () => {
     const store = new MemoryStore();
     const enabled = {
-      ...createDefaultNotificationPreferences('device-1', 'production'),
+      ...createDefaultNotificationPreferences(),
       announcements: true,
     };
     await store.setItem(

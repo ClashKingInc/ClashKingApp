@@ -7,6 +7,8 @@ import {
   desktopSidebarBodyRoutes,
   desktopSidebarFooterRoutes,
   filterEnabledRoutes,
+  filterVisibleRoutes,
+  isRouteEnabled,
   primaryTabRoutes,
   RouteIcon,
   type AppRouteDefinition,
@@ -45,7 +47,7 @@ export function DesktopSidebar({
   isRtl?: boolean;
 }) {
   const theme = useCKTheme();
-  const body = filterEnabledRoutes(desktopSidebarBodyRoutes, features);
+  const body = filterVisibleRoutes(desktopSidebarBodyRoutes, features);
   const footer = filterEnabledRoutes(desktopSidebarFooterRoutes, features);
   return (
     <SafeAreaView
@@ -86,6 +88,10 @@ export function DesktopSidebar({
         ))}
       </View>
       <ScrollView
+        testID="desktop-sidebar-scroll"
+        bounces={false}
+        alwaysBounceVertical={false}
+        overScrollMode="never"
         contentContainerStyle={[
           styles.utilities,
           { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.2) },
@@ -97,6 +103,7 @@ export function DesktopSidebar({
             route={route}
             label={t(route.labelKey)}
             selected={route.id === selectedUtility}
+            disabled={!isRouteEnabled(route, features)}
             onPress={() => onUtility(route, selectedUtility !== undefined)}
             isRtl={isRtl}
             compact

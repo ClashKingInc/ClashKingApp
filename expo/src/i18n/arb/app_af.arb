@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Stelselkennisgewings",
+  "notifSystemSettings": "Maak kennisgewinginstellings oop",
+  "notifSystemSettingsDescription": "Bestuur waarskuwings, klanke en kentekens in jou toestelinstellings.",
+  "notifSystemSettingsFailed": "Kon nie kennisgewinginstellings oopmaak nie. Maak Instellings op jou toestel oop.",
+  "notifManagePlayersDescription": "Bestuur rekeningkennisgewings by Spelers → Gekoppel → Opsies.",
+  "notifCustomReminders": "Pasgemaakte herinnerings",
+  "notifTestType": "Kennisgewingtipe",
+  "statsBattlelogsGroup": "Gevegslogboeke",
+  "statsGlobalStatsGroup": "Wêreldwye statistieke",
+  "playerOptionShowOnHomeTitle": "Wys rekening op Tuis",
+  "playerOptionShowOnHomeSubtitle": "Sluit hierdie geverifieerde rekening by Tuis-kaarte in (tot 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verifieer hierdie rekening om dit op Tuis te wys.",
+  "playerOptionHomeInclusionFirst": "Skakel eers Wys rekening op Tuis aan.",
+  "homeIncludedAccountsLimit": "Tuis kan tot 5 rekeninge wys. Verwyder eers een.",
+  "statsHitratesByTownHall": "Trefkoerse per Stadsaal",
+  "statsChartGranularity": "Grafiekinterval",
+  "statsDaily": "Daagliks",
+  "statsWeekly": "Weekliks",
+  "statsMonthly": "Maandeliks",
+  "statsCompareCohorts": "Vergelyk groepe",
+  "statsAcrossCohorts": "Gebruik oor groepe",
+  "legendsTrophyGrid": "Trofeerooster",
+  "legendsPopularArmyItems": "Gewildste weermagitems",
+  "legendsPopularTroop": "Gunsteling",
+  "legendsHitrate": "Trefkoers",
+  "legendsAvgOffense": "Gem. aanval",
+  "legendsAvgDefense": "Gem. verdediging",
+  "settingsClearImageCache": "Maak beeldkas skoon",
+  "settingsImageCacheCleared": "Beeldkas is skoongemaak.",
+  "settingsImageCacheClearFailed": "Kon nie die beeldkas skoonmaak nie. Probeer asseblief weer.",
+  "startupCheckingUpdate": "Soek tans opdaterings…",
+  "startupDownloadingUpdate": "Laai opdatering af…",
+  "startupUpdateInBackground": "Werk op in die agtergrond",
   "warStatsRangeTitle": "Oorlogstatistiekreeks",
   "warStatsRangeDescription": "Kies of die statistieke 'n vaste aantal onlangse oorloë of 'n onlangse tydperk in dae dek.",
   "warStatsRangeDays": "Dae",
@@ -77,7 +110,7 @@
   "notifPushUnsupported": "Stootkennisgewings word nie op hierdie platform ondersteun nie.",
   "notifPushInitializing": "Stootkennisgewings word opgestel…",
   "notificationPrimerTitle": "Aktiveer kennisgewings?",
-  "notificationPrimerBody": "ClashKing kan jou in kennis stel van oorlog-, CWL-, rekening- en projekopdaterings. Jy kan dit enige tyd verander onder Instellings > Kennisgewings.",
+  "notificationPrimerBody": "ClashKing kan opdaterings oor gebeure, aankondigings, Legende-verdedigings en ondersteuning stuur. Oorlog- en Strooptognaweek-herinnerings bly af totdat jy dit opstel. Jy kan hierdie keuses onder Instellings > Kennisgewings verander.",
   "notificationPrimerNotNow": "Nie nou nie",
   "notificationPrimerAllow": "Laat toe",
   "achievementsTitle": "Prestasies",
@@ -1461,6 +1494,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Plaaslike rang",
   "legendsGlobalRankTitle": "Globale rangorde",
+  "legendsYourArmy": "Jou leër",
+  "legendsArmyUsedAgainstYou": "Leër wat teen jou gebruik is",
   "warWinsTitle": "Wen",
   "warLossesTitle": "Verliese",
   "warDrawsTitle": "Tekens",
@@ -2514,7 +2549,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Kies waarskuwings en stuur plaaslike toetsvoorskoue.",
+  "settingsNotificationsSubtitle": "Kies watter waarskuwings jy ontvang.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3159,6 +3194,9 @@
   "statsHero": "Held",
   "statsPet": "Troeteldier",
   "statsEquipment": "Toerusting",
+  "statsPetCombinations": "Troeteldierkombinasies",
+  "statsEquipmentPairs": "Toerustingpare",
+  "statsArmyFallback": "Leër {id}",
   "statsOwningHero": "Besit held",
   "statsAddItem": "Voeg item by",
   "statsAnalyzeItems": "Ontleed items",
@@ -3908,19 +3946,32 @@
   "homeActivityJoined": "het aangesluit",
   "homeActivityLeft": "het vertrek",
   "homeActivityAClan": "'n stam",
+  "statsCwlSeasonGroups": "Groepe",
+  "statsCwlSeasonHistory": "CWL oor tyd",
+  "statsCwlRosterNotLineup": "Geregistreerde spanverspreiding, afgeskaal na {size} plekke; werklike oorlogspanne kan verskil.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Troepstatistieke",
+  "statsWarSizes": "Oorlogsgroottes",
+  "statsMissedAttacks": "Gemiste aanvalle",
+  "statsCopyChart": "Kopieer grafiek",
+  "statsCompareItems": "Vergelyk items",
+  "statsCompareItemsHint": "Kies tot 5 items om te vergelyk.",
+  "statsVsOverall": "teenoor algeheel",
+  "statsCopyChartFailed": "Kon nie grafiek kopieer nie. Probeer weer.",
+  "statsPercentagePoints": "persentasiepunte",
   "statsMeta": "Metaspel",
   "statsBattle": "Slag",
   "statsWorld": "Wêreld",
   "statsHeaderSubtitle": "Verken gevegsprestasie en die wêreld wat ons naspoor.",
   "statsPreview": "Voorskou",
-  "statsTownHallDistribution": "Stadsaalverspreiding",
+  "statsTownHallDistribution": "Stadsale",
   "statsBuilderHallDistribution": "Bouersaalverspreiding",
-  "statsLeagueDistribution": "Gerangskik liga verspreiding",
+  "statsLeagueDistribution": "Gerangskikte ligas",
   "statsTrackedPlayers": "Huidige nagespoorde spelerpopulasie",
   "statsTrackedClans": "Huidige nagespoorde stambevolking",
-  "statsCwlLeagueDistribution": "CWL-liga verspreiding",
-  "statsCapitalLeagueDistribution": "Kapitaalliga verspreiding",
-  "statsTrackedLocations": "Nagespoor clan-liggings",
+  "statsCwlLeagueDistribution": "CWL-ligas",
+  "statsCapitalLeagueDistribution": "Hoofstadligas",
+  "statsTrackedLocations": "Clanliggings",
   "statsLocationCountHelp": "Lande en liggings verteenwoordig deur nagespoorde stamme.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4661,6 +4712,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Geregistreerde spanlys",
+  "cwlMatches": "Wedstryde",
+  "cwlNextMatchup": "Volgende wedstryd",
+  "cwlOtherMatches": "Ander wedstryde",
+  "cwlOutlook": "Seisoenvooruitsig",
+  "cwlFirstPlace": "Eerste plek",
+  "cwlTopTwo": "Top twee",
+  "cwlRemainingOpponents": "Oorblywende teenstanders",
+  "cwlWinBonusNote": "Sterre sluit 10 bonussterre per voltooide oorwinning in.",
+  "cwlEstimateNote": "Ramings gebruik voltooide oorloë en oorblywende teenstanders, nie spanveranderings nie. Minstens twee voltooide oorloë per stam word vereis. Dit is ongekalibreerde ramings; promosiereëls verskil per liga.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minute}}}}",
+  "personalBasesDeleteOld": "Verwyder basisse ouer as 90 dae",
+  "personalBasesDeleteOldConfirm": "{count} gestoorde basisse ouer as 90 dae sal verwyder word. Aflaaigeskiedenis en gedeelde basisse sal behoue bly.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Outomatiese verdediging",
+  "legendsPopularArmyItem": "Gewildste leëritem",
+  "legendsClanCastle": "Stamslot",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

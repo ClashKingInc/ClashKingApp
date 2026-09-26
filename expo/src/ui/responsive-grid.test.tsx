@@ -1,9 +1,21 @@
-import { render } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import { Text } from 'react-native';
 
 import { ResponsiveGrid } from './responsive-grid';
 
 describe('ResponsiveGrid', () => {
+  it('does not mount image tiles at a temporary full width before measuring', async () => {
+    const screen = await render(
+      <ResponsiveGrid testID="grid" waitForLayout minItemWidth={54} gap={8} maxColumns={10}>
+        <Text>Tile</Text>
+      </ResponsiveGrid>,
+    );
+    expect(screen.queryByText('Tile')).toBeNull();
+    await fireEvent(screen.getByTestId('grid'), 'layout', {
+      nativeEvent: { layout: { width: 320 } },
+    });
+    expect(screen.getByText('Tile')).toBeTruthy();
+  });
   afterEach(() => jest.restoreAllMocks());
 
   it('preserves children with duplicate semantic keys without forwarding duplicate wrapper keys', async () => {

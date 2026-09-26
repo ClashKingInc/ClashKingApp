@@ -48,6 +48,23 @@ describe('ClashKing UI contracts', () => {
     expect(
       resolveGlassMode({
         platform: 'ios',
+        nativeGlassAvailable: false,
+        reduceTransparency: false,
+        highContrast: false,
+      }),
+    ).toBe('decorated');
+    expect(
+      resolveGlassMode({
+        platform: 'ios',
+        nativeGlassAvailable: true,
+        nativeGlassEnabled: false,
+        reduceTransparency: false,
+        highContrast: false,
+      }),
+    ).toBe('decorated');
+    expect(
+      resolveGlassMode({
+        platform: 'ios',
         nativeGlassAvailable: true,
         reduceTransparency: true,
         highContrast: false,

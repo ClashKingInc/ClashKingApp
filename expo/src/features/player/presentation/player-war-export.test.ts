@@ -2,13 +2,14 @@ import { WarStatsFilter } from '../models';
 import { buildPlayerWarExportBody, playerWarExportFileName } from './player-war-export';
 
 describe('player war export parity', () => {
-  it('sends only player tags for the default filter', () => {
+  it('sends the selected player and limit for the default filter', () => {
     expect(buildPlayerWarExportBody('#P1', WarStatsFilter.defaultFilter())).toEqual({
-      player_tags: ['#P1'],
+      player_tag: '#P1',
+      limit: 50,
     });
   });
 
-  it('maps only the fields supported by the Flutter export endpoint', () => {
+  it('maps only the fields supported by the authoritative export endpoint', () => {
     const filter = new WarStatsFilter({
       season: '2026-08',
       startDate: new Date('2026-08-01T00:00:00Z'),
@@ -26,19 +27,10 @@ describe('player war export parity', () => {
       limit: 25,
     });
     expect(buildPlayerWarExportBody('#P1', filter)).toEqual({
-      player_tags: ['#P1'],
-      season: '2026-08',
+      player_tag: '#P1',
       timestamp_start: 1785542400,
       timestamp_end: 1788134400,
-      type: ['cwl'],
-      own_th: [16, 17],
-      enemy_th: [17],
-      stars: [2, 3],
-      min_destruction: 50,
-      max_destruction: 100,
-      map_position_min: 1,
-      map_position_max: 15,
-      fresh_only: true,
+      limit: 25,
     });
   });
 

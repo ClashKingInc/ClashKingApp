@@ -186,22 +186,29 @@ function FeedbackState({ title, body, icon, actionLabel, onAction, style }: Feed
 
 export function EmptyState({
   showSticker = true,
-  stickerHeight = 170,
-  stickerWidth = 140,
+  stickerHeight = 112,
+  stickerWidth = 96,
   style,
-  ...props
+  title, body, icon, actionLabel, onAction,
 }: FeedbackStateProps) {
+  const theme = useCKTheme();
   return (
-    <View style={[styles.emptyState, style]}>
-      <FeedbackState {...props} />
-      {showSticker ? (
+    <View testID="empty-state" accessibilityRole="summary" style={[styles.emptyState, style]}>
+      {icon ?? (showSticker ? (
         <MobileWebImage
           accessibilityIgnoresInvertColors
           contentFit="contain"
           imageUrl={ImageAssets.thinkingBuilder}
-          style={{ width: stickerWidth, height: stickerHeight, marginTop: 18 }}
+          style={{ width: stickerWidth, height: stickerHeight }}
           testID="empty-state-sticker"
         />
+      ) : null)}
+      <CKText role="bodyMedium" style={styles.emptyTitle}>{title}</CKText>
+      {body ? <CKText muted role="bodySmall" style={styles.emptyBody}>{body}</CKText> : null}
+      {actionLabel && onAction ? (
+        <Pressable accessibilityRole="button" onPress={onAction} style={styles.emptyAction}>
+          <CKText role="bodyMedium" style={{ color: theme.primary }}>{actionLabel}</CKText>
+        </Pressable>
       ) : null}
     </View>
   );
@@ -320,7 +327,10 @@ const styles = StyleSheet.create({
   },
   feedbackTitle: { fontWeight: '900' },
   feedbackBody: { fontWeight: '600' },
-  emptyState: { width: '100%', alignItems: 'center' },
+  emptyState: { width: '100%', minHeight: 240, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 32, gap: 10 },
+  emptyTitle: { textAlign: 'center', fontWeight: '800', maxWidth: 320 },
+  emptyBody: { textAlign: 'center', maxWidth: 300 },
+  emptyAction: { minHeight: 44, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, marginTop: 4 },
   action: {
     minHeight: 32,
     alignSelf: 'flex-start',

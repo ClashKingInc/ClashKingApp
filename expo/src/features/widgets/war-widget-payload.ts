@@ -181,14 +181,10 @@ function sidePayload(
   fallbackName: string,
   fallbackBadge: boolean,
 ) {
-  const badgeUrls = record(side.badgeUrls);
-  const badge =
-    nullableString(badgeUrls.small) ??
-    nullableString(badgeUrls.medium) ??
-    nullableString(badgeUrls.large);
+  const badge = ImageAssets.widgetClanBadgeForTag(nullableString(side.tag) ?? '') || null;
   return {
     name: nullableString(side.name) ?? fallbackName,
-    badgeUrlMedium: fallbackBadge ? (badge ?? FALLBACK_BADGE) : badge,
+    badgeUrlMedium: fallbackBadge ? badge || FALLBACK_BADGE : badge,
     percent: `${number(side.destructionPercentage).toFixed(2)}%`,
     attacks: `${integer(side.attacks)}/${attackMaximum}`,
     stars,
@@ -262,3 +258,4 @@ function date(value: unknown): Date | undefined {
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
+import { ImageAssets } from '../../core/assets/image-assets';

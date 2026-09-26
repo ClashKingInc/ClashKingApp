@@ -40,6 +40,13 @@ function renderPickerWithTheme(node: ReactElement) {
 }
 
 describe('shared UI semantics', () => {
+  it('can keep setup variants as scrollable peer tabs above three choices', async () => {
+    const onSelect = jest.fn();
+    const view = await renderWithTheme(<ProfileTabs overflow="scroll" tabs={['All', 'A', 'B', 'C', 'D'].map((label) => ({ key: label, label }))} selectedKey="All" onSelect={onSelect} />);
+    expect(view.getAllByRole('tab')).toHaveLength(5);
+    await fireEvent.press(view.getByRole('tab', { name: 'D' }));
+    expect(onSelect).toHaveBeenCalledWith('D');
+  });
   it('allows the uncapped platform text scaling used by Flutter', async () => {
     const screen = await renderWithTheme(<CKText>Scalable</CKText>);
     const text = screen.getByText('Scalable');
@@ -54,6 +61,9 @@ describe('shared UI semantics', () => {
     expect(empty.getByText('No wars')).toBeTruthy();
     expect(empty.getByText('Check back later')).toBeTruthy();
     expect(empty.getByTestId('empty-state-sticker')).toBeTruthy();
+    expect(empty.getByTestId('empty-state')).toHaveStyle({ alignItems: 'center', justifyContent: 'center' });
+    expect(empty.getByText('No wars')).toHaveStyle({ textAlign: 'center' });
+    expect(empty.getByText('Check back later')).toHaveStyle({ textAlign: 'center' });
     await empty.unmount();
 
     const error = await renderWithTheme(

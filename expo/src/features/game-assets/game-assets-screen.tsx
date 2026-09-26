@@ -49,6 +49,7 @@ import {
 } from '../../ui';
 import type { GameAssetActions } from './actions';
 import { GameAssetImage } from './game-asset-image';
+import { useLinkParameters } from '../../core/deep-links/link-parameters';
 import {
   filterGameAssets,
   formatGameAssetCategory,
@@ -78,10 +79,16 @@ export function GameAssetsScreen({
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
   const categories = manifest?.categories ?? [];
-  const [categoryId, setCategoryId] = useState<string>();
-  const [query, setQuery] = useState('');
-  const [extension, setExtension] = useState('');
-  const [selectedAsset, setSelectedAsset] = useState<GameAsset>();
+  const link = useLinkParameters();
+  const [categoryId, setCategoryId] = useState<string | undefined>(link.category);
+  const [query, setQuery] = useState(link.q ?? '');
+  const [extension, setExtension] = useState(link.format ?? '');
+  const [selectedAssetOverride, setSelectedAssetOverride] = useState<GameAsset | null>();
+  const selectedAsset =
+    selectedAssetOverride === undefined
+      ? manifest?.assets.find((asset) => asset.path === link.asset)
+      : (selectedAssetOverride ?? undefined);
+  const setSelectedAsset = (asset?: GameAsset) => setSelectedAssetOverride(asset ?? null);
   const [snackbar, setSnackbar] = useState<string>();
   const snackbarTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const selectedCategory =

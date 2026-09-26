@@ -183,67 +183,69 @@ export function HomeAccountRail({
     );
   }
   return (
-    <ScrollView
-      horizontal
-      alwaysBounceHorizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.rail}
-      style={isRtl ? styles.rtlScroll : undefined}
-    >
-      {railEntries.map((entry, index) => {
-        const selected = index === selectedIndex;
-        const pending = 'pending' in entry ? entry.pending : null;
-        return (
-          <Pressable
-            key={entry.tag}
-            accessibilityRole="button"
-            accessibilityState={{ selected }}
-            accessibilityLabel={entry.name}
-            onPress={() => onSelect(index)}
-            style={[
-              styles.railTarget,
-              isRtl && styles.rtlItem,
-              {
-                backgroundColor: colorWithAlpha(
-                  theme.surfaceContainerHighest,
-                  selected ? 0.55 : 0.25,
-                ),
-                borderColor: selected ? theme.primary : colorWithAlpha(theme.outlineVariant, 0.24),
-                borderWidth: selected ? 1.6 : 1,
-              },
-            ]}
-          >
-            {entry.imageUrl ? (
-              <View>
-                <MobileWebImage
-                  imageUrl={entry.imageUrl}
-                  style={[styles.railImage, !selected && styles.recede]}
-                />
-                {pending !== null && pending !== undefined ? (
-                  <View
-                    style={[
-                      styles.pending,
-                      {
-                        backgroundColor: pending ? statColors.loss : 'transparent',
-                        borderColor: pending ? theme.surface : statColors.win,
-                        borderWidth: pending ? 1.4 : 2,
-                      },
-                    ]}
+    <View testID="home-account-rail" style={styles.railContainer}>
+      <View style={[styles.rail, isRtl && styles.rowRtl]}>
+        {railEntries.map((entry, index) => {
+          const selected = index === selectedIndex;
+          const pending = 'pending' in entry ? entry.pending : null;
+          return (
+            <Pressable
+              key={entry.tag}
+              accessibilityRole="button"
+              accessibilityState={{ selected }}
+              accessibilityLabel={entry.name}
+              onPress={() => onSelect(index)}
+              style={[
+                styles.railTarget,
+                {
+                  backgroundColor: colorWithAlpha(
+                    theme.surfaceContainerHighest,
+                    selected ? 0.55 : 0.25,
+                  ),
+                  borderColor: selected
+                    ? theme.primary
+                    : colorWithAlpha(theme.outlineVariant, 0.24),
+                  borderWidth: selected ? 1.6 : 1,
+                },
+              ]}
+            >
+              {entry.imageUrl ? (
+                <View>
+                  <MobileWebImage
+                    imageUrl={entry.imageUrl}
+                    style={[styles.railImage, !selected && styles.recede]}
                   />
-                ) : null}
-              </View>
-            ) : (
-              <Group size={18} color={theme.onSurfaceVariant} />
-            )}
-            {selected ? (
-              <CKText role="labelMedium" numberOfLines={1} style={styles.railName}>
-                {entry.name}
-              </CKText>
-            ) : null}
-          </Pressable>
-        );
-      })}
-    </ScrollView>
+                  {pending !== null && pending !== undefined ? (
+                    <View
+                      style={[
+                        styles.pending,
+                        {
+                          backgroundColor: pending ? statColors.loss : 'transparent',
+                          borderColor: pending ? theme.surface : statColors.win,
+                          borderWidth: pending ? 1.4 : 2,
+                        },
+                      ]}
+                    />
+                  ) : null}
+                </View>
+              ) : (
+                <Group size={18} color={theme.onSurfaceVariant} />
+              )}
+              {selected ? (
+                <CKText
+                  testID="home-account-rail-selection"
+                  role="labelMedium"
+                  numberOfLines={1}
+                  style={styles.railName}
+                >
+                  {entry.name}
+                </CKText>
+              ) : null}
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
   );
 }
 
@@ -261,7 +263,8 @@ export function ProgressRing({
   showLabel?: boolean;
 }) {
   const theme = useCKTheme();
-  const value = Math.max(0, Math.min(1, progress));
+  const value = normalizeHomeProgress(progress);
+  const progressLabel = label ?? formatHomeProgressRingLabel(value);
   const stroke = 4;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -296,13 +299,25 @@ export function ProgressRing({
       </Svg>
       {showLabel ? (
         <View style={styles.ringLabel}>
-          <CKText role="titleSmall" style={[styles.heavy, { fontSize: labelFontSize }]}>
-            {label ?? `${Math.round(value * 100)}%`}
+          <CKText
+            role="titleSmall"
+            numberOfLines={1}
+            style={[styles.heavy, { fontSize: labelFontSize ?? Math.max(12, size * 0.28) }]}
+          >
+            {progressLabel}
           </CKText>
         </View>
       ) : null}
     </View>
   );
+}
+
+export function formatHomeProgressRingLabel(progress: number): string {
+  return `${Math.round(normalizeHomeProgress(progress) * 100)}%`;
+}
+
+function normalizeHomeProgress(progress: number): number {
+  return Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
 }
 
 export function DesktopComparison({
@@ -419,7 +434,7 @@ export function CardHeader({
           </CKText>
         ) : null}
       </View>
-      {trailing}
+      {trailing ? <View style={styles.headerTrailing}>{trailing}</View> : null}
     </View>
   );
 }
@@ -479,7 +494,8 @@ const styles = StyleSheet.create({
   gridCell: { width: '50%', padding: HOME_METRIC_GAP / 2 },
   singleRail: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 3 },
   singleRailImage: { width: 20, height: 20, resizeMode: 'contain' },
-  rail: { minHeight: 44, alignItems: 'center', gap: 4 },
+  railContainer: { minWidth: 0 },
+  rail: { minHeight: 44, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 },
   railTarget: {
     height: 28,
     minWidth: 28,
@@ -496,7 +512,7 @@ const styles = StyleSheet.create({
   rtlScroll: { transform: [{ scaleX: -1 }] },
   rtlItem: { transform: [{ scaleX: -1 }] },
   rowRtl: { flexDirection: 'row-reverse' },
-  railName: { flexShrink: 1, fontWeight: '900' },
+  railName: { flexShrink: 1, minWidth: 0, fontWeight: '900' },
   pending: { position: 'absolute', width: 9, height: 9, borderRadius: 5, right: 0, top: 0 },
   ringLabel: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
   comparison: { flexDirection: 'row', alignItems: 'stretch' },
@@ -510,6 +526,7 @@ const styles = StyleSheet.create({
   comparisonButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   headerCopy: { flex: 1, gap: 2 },
+  headerTrailing: { alignSelf: 'flex-start', alignItems: 'center' },
   statusRow: { minHeight: 22, flexDirection: 'row', alignItems: 'center' },
   caughtUp: {
     minHeight: 56,

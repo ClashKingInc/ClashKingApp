@@ -37,4 +37,19 @@ describe('Discord OAuth client', () => {
       }),
     );
   });
+
+  it('uses the explicit local Discord application without changing the production default', async () => {
+    const authorize = jest.fn(async (authorizationUrl: string) => {
+      const url = new URL(authorizationUrl);
+      return `clashking://com.clashking.clashkingapp/oauth?code=code&state=${url.searchParams.get('state')}`;
+    });
+    const client = new DiscordOAuthClient({
+      platform: 'native',
+      runtime: { authorize },
+      clientId: '123456789',
+    });
+
+    await expect(client.authorize()).resolves.toEqual(expect.objectContaining({ code: 'code' }));
+    expect(new URL(authorize.mock.calls[0]![0]).searchParams.get('client_id')).toBe('123456789');
+  });
 });

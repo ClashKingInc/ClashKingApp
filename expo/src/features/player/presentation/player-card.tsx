@@ -1,13 +1,15 @@
-import { useState, type ReactElement } from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { useRef, useState, type ReactElement } from 'react';
+import { Platform, Pressable, StyleSheet, Switch, View } from 'react-native';
 import {
   Bell,
   Bookmark,
   CheckSquare,
   ChevronDown,
+  ChevronUp,
   ChevronRight,
   Construction,
   EyeOff,
+  House,
   Shield,
   ShieldCheck,
   SlidersHorizontal,
@@ -47,27 +49,34 @@ export function PlayerDataCard({
   link,
   bookmarked = false,
   options,
+  homeIncluded = true,
   notificationsEnabled,
   notificationActive,
   notificationUpdating,
   actions,
   onVerify,
+  onLongPress,
+  dragTestID,
 }: {
   player: Player;
   link?: CocAccountLink;
   bookmarked?: boolean;
   options: PlayerCardOptions;
+  homeIncluded?: boolean;
   featureFlags: PlayersFeatureFlags;
   notificationsEnabled: boolean;
   notificationActive: boolean;
   notificationUpdating: boolean;
   actions: PlayersPresentationActions;
   onVerify: () => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const [expanded, setExpanded] = useState(false);
   const [visibilityUpdating, setVisibilityUpdating] = useState(false);
+  const longPressActivated = useRef(false);
   const verified = link?.isVerified;
   const clan = playerClanPresentation(player);
   const notificationAvailable = verified === true && notificationsEnabled && !notificationUpdating;
@@ -92,8 +101,24 @@ export function PlayerDataCard({
     <Surface radius={ckRadius.control} style={styles.card}>
       <Pressable
         accessibilityRole="button"
-        onPress={() => actions.openPlayer(player)}
+        delayLongPress={300}
+        onLongPress={
+          onLongPress
+            ? () => {
+                longPressActivated.current = true;
+                onLongPress();
+              }
+            : undefined
+        }
+        onPress={() => {
+          if (longPressActivated.current) {
+            longPressActivated.current = false;
+            return;
+          }
+          actions.openPlayer(player);
+        }}
         style={styles.main}
+        testID={dragTestID}
       >
         <View style={styles.artColumn}>
           <View>
@@ -161,32 +186,59 @@ export function PlayerDataCard({
             <CKText muted role="labelLarge" style={styles.optionTitle}>
               Options
             </CKText>
-            <ChevronDown
-              size={20}
-              color={theme.onSurfaceVariant}
-              style={{ transform: [{ rotate: expanded ? '180deg' : '0deg' }] }}
-            />
+            <View
+              testID={`player-options-${expanded ? 'collapse' : 'expand'}-caret-${player.tag}`}
+              style={{
+                width: 20,
+                height: 20,
+                flexShrink: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {expanded ? (
+                <ChevronUp size={20} color={theme.onSurfaceVariant} />
+              ) : (
+                <ChevronDown size={20} color={theme.onSurfaceVariant} />
+              )}
+            </View>
           </Pressable>
           {expanded ? (
             <View style={styles.options}>
-              <PlayerOptionSwitch
-                icon={<Bell color={theme.onSurfaceVariant} />}
-                title={t('playerOptionNotificationsTitle')}
-                subtitle={notificationSubtitle}
-                value={notificationActive}
-                enabled={notificationAvailable}
-                loading={notificationUpdating}
-                onChange={(value) =>
-                  void actions
-                    .setAccountNotifications(player.tag, value)
-                    .catch(() => actions.showMessage('Couldn’t update account notifications.'))
-                }
-              />
+              {Platform.OS !== 'web' ? (
+                <PlayerOptionSwitch
+                  icon={<Bell color={theme.onSurfaceVariant} />}
+                  title={t('playerOptionNotificationsTitle')}
+                  subtitle={notificationSubtitle}
+                  value={notificationActive}
+                  enabled={notificationAvailable}
+                  loading={notificationUpdating}
+                  onChange={(value) =>
+                    void actions
+                      .setAccountNotifications(player.tag, value)
+                      .catch(() => actions.showMessage('Couldn’t update account notifications.'))
+                  }
+                />
+              ) : null}
               {verified === false ? (
                 <PlayerOptionAction
                   title={t('homeVerifyAccountAction')}
                   subtitle={t('playerOptionVerifyAccountBody')}
                   onPress={onVerify}
+                />
+              ) : null}
+              {link ? (
+                <PlayerOptionSwitch
+                  icon={<House color={theme.onSurfaceVariant} />}
+                  title={t('playerOptionShowOnHomeTitle')}
+                  subtitle={
+                    verified
+                      ? t('playerOptionShowOnHomeSubtitle')
+                      : t('playerOptionShowOnHomeVerifyFirst')
+                  }
+                  value={homeIncluded}
+                  enabled={verified === true}
+                  onChange={(value) => void actions.setCardOption(player.tag, 'home', value)}
                 />
               ) : null}
               <PlayerOptionSwitch
@@ -205,24 +257,28 @@ export function PlayerDataCard({
                 icon={<Construction color={theme.onSurfaceVariant} />}
                 title={t('playerOptionShowUpgradeTrackerHomeTitle')}
                 subtitle={
-                  verified
+                  verified && homeIncluded
                     ? t('playerOptionShowUpgradeTrackerHomeSubtitle')
-                    : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
+                    : verified
+                      ? t('playerOptionHomeInclusionFirst')
+                      : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
                 }
                 value={options.showUpgradeTrackerOnHome}
-                enabled={verified === true}
+                enabled={verified === true && homeIncluded}
                 onChange={(value) => void actions.setCardOption(player.tag, 'upgrade', value)}
               />
               <PlayerOptionSwitch
                 icon={<Trophy color={theme.onSurfaceVariant} />}
                 title={t('playerOptionShowRankedHomeTitle')}
                 subtitle={
-                  verified
+                  verified && homeIncluded
                     ? t('playerOptionShowRankedHomeSubtitle')
-                    : t('playerOptionShowRankedHomeVerifyFirst')
+                    : verified
+                      ? t('playerOptionHomeInclusionFirst')
+                      : t('playerOptionShowRankedHomeVerifyFirst')
                 }
                 value={options.showRankedOnHome}
-                enabled={verified === true}
+                enabled={verified === true && homeIncluded}
                 onChange={(value) => void actions.setCardOption(player.tag, 'ranked', value)}
               />
               <PlayerOptionSwitch
@@ -260,15 +316,40 @@ export function PlayerDataCard({
 export function BookmarkedPlayerCard({
   bookmark,
   onPress,
+  onLongPress,
+  dragTestID,
 }: {
   bookmark: BookmarkedPlayerSummary;
   onPress: () => void;
+  onLongPress?: () => void;
+  dragTestID?: string;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const longPressActivated = useRef(false);
   return (
     <Surface radius={ckRadius.control}>
-      <Pressable accessibilityRole="button" onPress={onPress} style={styles.main}>
+      <Pressable
+        accessibilityRole="button"
+        delayLongPress={300}
+        onLongPress={
+          onLongPress
+            ? () => {
+                longPressActivated.current = true;
+                onLongPress();
+              }
+            : undefined
+        }
+        onPress={() => {
+          if (longPressActivated.current) {
+            longPressActivated.current = false;
+            return;
+          }
+          onPress();
+        }}
+        style={styles.main}
+        testID={dragTestID}
+      >
         <View style={styles.artColumn}>
           <MobileWebImage
             imageUrl={bookmark.townHallPic || ImageAssets.townHall(bookmark.townHallLevel)}

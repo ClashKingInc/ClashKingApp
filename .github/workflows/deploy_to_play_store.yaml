@@ -1,29 +1,13 @@
 name: Deploy to Play Store
 
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      ref:
-        description: "Branch or tag to deploy (e.g., main, v1.0.0)"
-        required: true
-        default: "main"
-        type: string
-      version:
-        description: "Version to deploy (e.g., 0.2.0-alpha) - only needed if not deploying a tag"
-        required: false
-        type: string
-      track:
-        description: "Play Store track"
-        required: true
-        default: "alpha"
-        type: choice
-        options:
-          - alpha
-          - beta
-          - production
-
+      ref: { required: true, type: string }
+      version: { required: true, type: string }
+      build_number: { required: true, type: string }
+      track: { required: true, type: string }
+      runtime_version: { required: true, type: string }
 permissions:
   contents: write
 
@@ -31,6 +15,7 @@ jobs:
   store_deploy_android:
     name: Android Store Release
     runs-on: blacksmith-8vcpu-ubuntu-2404
+    environment: ${{ inputs.track }}
     timeout-minutes: 60
     defaults:
       run:
@@ -48,31 +33,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || github.event.release.tag_name }}
+          ref: ${{ inputs.ref }}
 
       - name: Extract version and build number
         id: version
         shell: bash
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            if [[ "${{ inputs.ref }}" =~ ^v[0-9] ]] && [[ -z "${{ inputs.version }}" ]]; then
-              VERSION_NAME="${{ inputs.ref }}"
-            elif [[ -n "${{ inputs.version }}" ]]; then
-              VERSION_NAME="${{ inputs.version }}"
-            else
-              echo "Version is required when the selected ref is not a version tag." >&2
-              exit 1
-            fi
-          else
-            VERSION_NAME="${{ github.event.release.tag_name }}"
-          fi
+          VERSION_NAME="${{ inputs.version }}"
           VERSION_NAME="${VERSION_NAME#v}"
           VERSION_NAME="$(printf '%s' "$VERSION_NAME" | sed -E 's/-(alpha|beta).*//')"
           [[ "$VERSION_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
             echo "Resolved version '$VERSION_NAME' is not semantic x.y.z." >&2
             exit 1
           }
-          BUILD_NUMBER="$(date +%s)"
+          BUILD_NUMBER="${{ inputs.build_number }}"
+          [[ -n "$BUILD_NUMBER" ]] || BUILD_NUMBER="$(date +%s)"
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
@@ -80,20 +55,10 @@ jobs:
         id: release
         shell: bash
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            TRACK="${{ inputs.track }}"
-          else
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
-            if [[ "$RELEASE_TAG" == *alpha* ]]; then
-              TRACK=alpha
-            elif [[ "$RELEASE_TAG" == *beta* ]]; then
-              TRACK=beta
-            else
-              TRACK=production
-            fi
-          fi
+          RELEASE_TRACK="${{ inputs.track }}"
+          [[ "$RELEASE_TRACK" == beta ]] && TRACK=internal || TRACK=production
           case "$TRACK" in
-            alpha|beta|production) ;;
+            internal|production) ;;
             *) echo "Unsupported Play track: $TRACK" >&2; exit 1 ;;
           esac
           echo "track=$TRACK" >> "$GITHUB_OUTPUT"
@@ -117,6 +82,7 @@ jobs:
       - name: Verify Expo project
         run: |
           npm run test:native-plugin
+          npm run test:api-boundary
           npm run typecheck
           npm run lint
           npm test
@@ -124,11 +90,19 @@ jobs:
           npx expo-doctor
 
       - name: Generate Android project
+        shell: bash
         env:
           CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
           CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
+          CK_ENABLE_UPDATES: true
+          CK_RELEASE_TRACK: ${{ inputs.track }}
+          CK_RUNTIME_VERSION: ${{ inputs.runtime_version }}
+          EXPO_UPDATES_CODE_SIGNING_CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
           EXPO_PUBLIC_CK_API_ENV: production
-        run: npx expo prebuild --platform android --clean --no-install
+        run: |
+          test -n "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE"
+          printf '%s' "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
+          CK_UPDATES_CERTIFICATE_PATH="$RUNNER_TEMP/expo-updates-certificate.pem" npx expo prebuild --platform android --clean --no-install
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
@@ -172,13 +146,6 @@ jobs:
             ${{ env.AAB_PATH }}
             ${{ env.APK_PATH }}
           if-no-files-found: error
-
-      - name: Upload APK to GitHub release
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ env.APK_PATH }}
-          tag_name: ${{ github.event.release.tag_name }}
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1

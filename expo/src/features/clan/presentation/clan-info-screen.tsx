@@ -23,6 +23,7 @@ import {
 } from './clan-history-tabs';
 import { ClanMembersTab } from './clan-members-tab';
 import { ClanCwlHistoryTab, ClanRankingsTab, ClanStatisticsTab } from './clan-statistics-tabs';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 
 export function ClanInfoScreen({
   model,
@@ -37,7 +38,12 @@ export function ClanInfoScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const tabs = useMemo(() => visibleClanInfoTabs(model.featureFlags), [model.featureFlags]);
-  const initialIndex = Math.max(0, Math.min(initialTab, tabs.length - 1));
+  const link = useLinkParameters();
+  const linkedIndex = tabs.findIndex((tab) => tab === link.tab);
+  const initialIndex = Math.max(
+    0,
+    Math.min(linkedIndex >= 0 ? linkedIndex : initialTab, tabs.length - 1),
+  );
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [retainedTabs, setRetainedTabs] = useState<readonly ClanInfoTabKey[]>(() => [
     tabs[initialIndex] ?? 'members',

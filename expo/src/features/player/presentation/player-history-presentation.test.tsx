@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Dimensions, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -72,6 +72,94 @@ describe('player history row parity', () => {
     expect(screen.getByLabelText('Dark Elixir: 345')).toBeTruthy();
     for (const count of [2, 3, 4, 5, 6, 7]) expect(screen.getByText(`×${count}`)).toBeTruthy();
     expect(screen.queryByText('×8')).toBeNull();
+  });
+
+  it('never renders loot for a defense row', async () => {
+    const defense = new PlayerBattlelogEntry(
+      '2',
+      'ranked',
+      'official',
+      false,
+      '#ATTACKER',
+      'Attacker',
+      18,
+      2,
+      85,
+      1234,
+      2345,
+      345,
+      new Date('2026-08-30T13:00:00Z'),
+      45,
+      '',
+      {},
+    );
+    const screen = await wrap(
+      <PlayerBattlelogTab data={new PlayerBattlelogData([defense], true, true)} />,
+    );
+
+    expect(screen.queryByLabelText('Gold: 1234')).toBeNull();
+    expect(screen.queryByLabelText('Elixir: 2345')).toBeNull();
+    expect(screen.queryByLabelText('Dark Elixir: 345')).toBeNull();
+  });
+
+  it('offers only Ranked and Farming and summarizes farming loot by resource', async () => {
+    const farming = new PlayerBattlelogEntry(
+      'farm',
+      'farming',
+      'history',
+      true,
+      '',
+      '',
+      0,
+      2,
+      80,
+      1_000,
+      2_000,
+      300,
+      new Date('2026-08-30T12:00:00Z'),
+      30,
+      '',
+      {},
+    );
+    const legend = new PlayerBattlelogEntry(
+      'legend',
+      'legend',
+      'history',
+      true,
+      '',
+      '',
+      0,
+      3,
+      100,
+      0,
+      0,
+      0,
+      new Date('2026-08-30T13:00:00Z'),
+      45,
+      '',
+      {},
+    );
+    const screen = await wrap(
+      <PlayerBattlelogTab data={new PlayerBattlelogData([farming, legend], false, false)} />,
+    );
+
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
+    expect(screen.queryByRole('radio', { name: 'Legend League' })).toBeNull();
+    await act(async () => fireEvent.press(screen.getByRole('radio', { name: 'Farming' })));
+    expect(screen.getByTestId('battlelog-loot-grid')).toBeTruthy();
+    expect(screen.getAllByText('1K').length).toBeGreaterThan(0);
+    expect(
+      screen
+        .getAllByRole('button')
+        .filter((item) => /^2026-\d{2}-\d{2}:/.test(item.props.accessibilityLabel)),
+    ).toHaveLength(30);
+    await act(async () =>
+      fireEvent.press(screen.getByLabelText(`${new Date().toISOString().slice(0, 10)}: 0`)),
+    );
+    expect(screen.getByText('Gold')).toBeTruthy();
+    expect(screen.getByText('Elixir')).toBeTruthy();
+    expect(screen.getByText('Dark Elixir')).toBeTruthy();
+    expect(screen.queryByText(/temporarily unavailable/u)).toBeNull();
   });
 
   it('suppresses super-troop detail and uses value-change detail for XP', async () => {

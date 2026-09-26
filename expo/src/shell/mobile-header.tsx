@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search } from 'lucide-react-native';
+import { Menu, Search } from 'lucide-react-native';
 
 import { CKText, GlassSurface, colorWithAlpha, useCKTheme, useCKThemeMode } from '../ui';
 
@@ -43,6 +43,22 @@ export function MobileHeader({
             style={({ pressed }) => [styles.profileButton, pressed && styles.pressed]}
           >
             <View style={styles.avatar}>{avatar}</View>
+            <View
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+              pointerEvents="none"
+              style={[
+                styles.menuBadge,
+                isRtl ? styles.menuBadgeRtl : styles.menuBadgeLtr,
+                {
+                  backgroundColor: theme.surface,
+                  borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.24 : 0.36),
+                },
+              ]}
+              testID="profile-menu-indicator"
+            >
+              <Menu color={theme.onSurfaceVariant} size={11} strokeWidth={2.4} />
+            </View>
           </Pressable>
         </GlassSurface>
         {onSearch && (
@@ -89,7 +105,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   profileGlass: { width: 46, height: 46 },
-  profileButton: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  profileButton: { flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' },
   avatar: {
     width: 36,
     height: 36,
@@ -98,6 +114,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  menuBadge: {
+    position: 'absolute',
+    bottom: 2,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menuBadgeLtr: { right: 1 },
+  menuBadgeRtl: { left: 1 },
   searchGlass: {
     flex: 1,
     height: 48,

@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "Daily",
+  "statsWeekly": "Weekly",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Trophy grid",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "War stats range",
   "warStatsRangeDescription": "Choose whether the stats cover a fixed number of recent wars or a recent span of days.",
   "warStatsRangeDays": "Days",
@@ -77,7 +110,7 @@
   "notifPushUnsupported": "Push notifications are not supported on this platform.",
   "notifPushInitializing": "Configuring push notifications…",
   "notificationPrimerTitle": "Enable notifications?",
-  "notificationPrimerBody": "ClashKing can notify you about war, CWL, account, and project updates. You can change this anytime in Settings > Notifications.",
+  "notificationPrimerBody": "ClashKing can send event, announcement, Legend defense, and support updates. War and Raid Weekend reminders stay off until you set them up. You can change these choices in Settings > Notifications.",
   "notificationPrimerNotNow": "Not now",
   "notificationPrimerAllow": "Allow",
   "achievementsTitle": "Achievements",
@@ -431,7 +464,7 @@
   "accountsAdd": "Add account",
   "accountsAddInstruction": "Tap the + button to add your account",
   "accountsApiToken": "Account API Token",
-  "accountsEnterApiToken": "Please enter the account API token to confirm it's yours. You can find it in Clash of Clans:",
+  "accountsEnterApiToken": "Please enter the account API token to confirm the account is yours, you can find this in game or via the link below.",
   "accountsApiTokenLocation": "Settings > More Settings > API Token",
   "accountsOpenMoreSettings": "Open More Settings",
   "accountsCouldNotOpenClash": "Could not open Clash of Clans. Please open it manually.",
@@ -731,7 +764,7 @@
       }
     }
   },
-  "legendsTitle": "Inaccurate data?",
+  "legendsTitle": "Legend League",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -1461,6 +1494,8 @@
   "legendsCountryTitle": "Country",
   "legendsLocalRankTitle": "Local rank",
   "legendsGlobalRankTitle": "Global rank",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Wins",
   "warLossesTitle": "Losses",
   "warDrawsTitle": "Draws",
@@ -2514,7 +2549,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Choose alerts and send local test previews.",
+  "settingsNotificationsSubtitle": "Choose which alerts you receive.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3159,6 +3194,9 @@
   "statsHero": "Hero",
   "statsPet": "Pet",
   "statsEquipment": "Equipment",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
   "statsOwningHero": "Owning hero",
   "statsAddItem": "Add item",
   "statsAnalyzeItems": "Analyze items",
@@ -3908,19 +3946,32 @@
   "homeActivityJoined": "joined",
   "homeActivityLeft": "left",
   "homeActivityAClan": "a clan",
+  "statsCwlSeasonGroups": "Groups",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Meta",
   "statsBattle": "Battle",
   "statsWorld": "World",
   "statsHeaderSubtitle": "Explore battle performance and the world we track.",
   "statsPreview": "Preview",
-  "statsTownHallDistribution": "Town Hall distribution",
+  "statsTownHallDistribution": "Town Halls",
   "statsBuilderHallDistribution": "Builder Hall distribution",
-  "statsLeagueDistribution": "Ranked league distribution",
+  "statsLeagueDistribution": "Ranked leagues",
   "statsTrackedPlayers": "Current tracked player population",
   "statsTrackedClans": "Current tracked clan population",
-  "statsCwlLeagueDistribution": "CWL league distribution",
-  "statsCapitalLeagueDistribution": "Capital league distribution",
-  "statsTrackedLocations": "Tracked clan locations",
+  "statsCwlLeagueDistribution": "CWL leagues",
+  "statsCapitalLeagueDistribution": "Capital leagues",
+  "statsTrackedLocations": "Clan Locations",
   "statsLocationCountHelp": "Countries and locations represented by tracked clans.",
   "statsLeagueId": "League {id}",
   "@statsLeagueId": {
@@ -4661,6 +4712,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

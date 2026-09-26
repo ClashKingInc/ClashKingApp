@@ -1,4 +1,5 @@
-import { ApiClient } from '../api/client';
+import type { AppConfigResponse } from '@clashking/api-contracts/expo';
+
 import type { StringStore } from '../../services/storage/auth-storage';
 import { RemoteFeatureFlagService } from './remote-feature-flag-service';
 
@@ -15,38 +16,132 @@ class MemoryStore implements StringStore {
   }
 }
 
+function config(overrides: Partial<AppConfigResponse> = {}): AppConfigResponse {
+  return {
+    flags: [],
+    updates: {
+      ios: {
+        minimum_version: '0.3.5',
+        store_url: 'https://apps.apple.com/app/id123',
+        message: 'Update ClashKing to continue.',
+      },
+      android: {
+        minimum_version: '0.3.5',
+        store_url: 'https://play.google.com/store/apps/details?id=com.clashking',
+        message: 'Update ClashKing to continue.',
+      },
+      web: null,
+    },
+    generated_at: '2026-08-29T00:00:00Z',
+    ...overrides,
+  };
+}
+
 describe('RemoteFeatureFlagService', () => {
-  it('fetches the public config and applies platform, version, dates, and rollout', async () => {
-    const preferences = new MemoryStore();
-    let seedCalls = 0;
-    const api = new ApiClient({
-      baseUrl: 'https://api.example/v2',
-      environment: 'production',
-      fetchImplementation: async () =>
-        new Response(
-          JSON.stringify({
+  it.each(['production', undefined] as const)(
+    'keeps calculators disabled in %s even when enabled remotely',
+    async (environment) => {
+      const loadConfig = jest.fn(async () =>
+        config({
+          flags: [
+            { key: 'calculators', enabled: true, rollout_percentage: 100, platforms: ['ios'] },
+          ],
+        }),
+      );
+      const service = new RemoteFeatureFlagService({
+        environment,
+        loadConfig,
+        preferences: new MemoryStore(),
+        platform: 'ios',
+        appVersionProvider: async () => '0.4.2',
+        installationSeedProvider: async () => 42,
+      });
+      expect(service.isEnabled('calculators')).toBe(false);
+      await service.refresh();
+      expect(service.isEnabled('calculators')).toBe(false);
+      loadConfig.mockRejectedValueOnce(new Error('offline'));
+      await expect(service.refresh()).rejects.toThrow('offline');
+      expect(service.isEnabled('calculators')).toBe(false);
+    },
+  );
+
+  it.each(['local', 'development'] as const)(
+    'retains calculator feature flags in %s',
+    async (environment) => {
+      const service = new RemoteFeatureFlagService({
+        environment,
+        loadConfig: async () =>
+          config({
             flags: [
-              {
-                key: 'upgrade_tracker',
-                enabled: true,
-                rollout_percentage: 100,
-                platforms: ['ios'],
-                min_app_version: '0.3.5',
-                starts_at: '2026-01-01T00:00:00Z',
-                ends_at: '2027-01-01T00:00:00Z',
-              },
-              {
-                key: 'game_assets',
-                enabled: true,
-                rollout_percentage: 100,
-                platforms: ['android'],
-              },
+              { key: 'calculators', enabled: false, rollout_percentage: 100, platforms: ['ios'] },
             ],
           }),
-        ),
-    });
+        preferences: new MemoryStore(),
+        platform: 'ios',
+        appVersionProvider: async () => '0.4.2',
+        installationSeedProvider: async () => 42,
+      });
+      expect(service.isEnabled('calculators')).toBe(true);
+      await service.refresh();
+      expect(service.isEnabled('calculators')).toBe(false);
+    },
+  );
+
+  it.each(['ios', 'android', 'web'] as const)(
+    'loads flags without adding a mandatory-update policy on %s',
+    async (platform) => {
+      const policy = config();
+      const service = new RemoteFeatureFlagService({
+        loadConfig: async () => policy,
+        preferences: new MemoryStore(),
+        platform,
+        appVersionProvider: async () => '0.1.0',
+        installationSeedProvider: async () => 42,
+      });
+      await service.refresh();
+      expect(service).not.toHaveProperty('requiredUpdate');
+      expect(service.isEnabled('notifications')).toBe(true);
+    },
+  );
+
+  it('preserves feature defaults when the initial config request fails', async () => {
     const service = new RemoteFeatureFlagService({
-      api,
+      loadConfig: async () => {
+        throw new Error('Config unavailable');
+      },
+      preferences: new MemoryStore(),
+      platform: 'android',
+      appVersionProvider: async () => '0.3.4',
+      installationSeedProvider: async () => 42,
+    });
+    await expect(service.refresh()).rejects.toThrow('Config unavailable');
+    expect(service.isEnabled('notifications')).toBe(true);
+  });
+
+  it('loads typed config and applies platform, version, dates, and rollout', async () => {
+    const preferences = new MemoryStore();
+    let seedCalls = 0;
+    const service = new RemoteFeatureFlagService({
+      loadConfig: async () =>
+        config({
+          flags: [
+            {
+              key: 'upgrade_tracker',
+              enabled: true,
+              rollout_percentage: 100,
+              platforms: ['ios'],
+              min_app_version: '0.3.5',
+              starts_at: '2026-01-01T00:00:00Z',
+              ends_at: '2027-01-01T00:00:00Z',
+            },
+            {
+              key: 'game_assets',
+              enabled: true,
+              rollout_percentage: 100,
+              platforms: ['android'],
+            },
+          ],
+        }),
       preferences,
       platform: 'ios',
       appVersionProvider: async () => '0.3.5+25',
@@ -65,15 +160,22 @@ describe('RemoteFeatureFlagService', () => {
     expect(seedCalls).toBe(1);
   });
 
-  it('reuses the persisted installation seed and preserves fail-open defaults', async () => {
+  it('preserves fail-open feature defaults and the stored rollout seed on web', async () => {
     const preferences = new MemoryStore();
     await preferences.setItem('remoteFeatureFlagSeed', '99');
     const service = new RemoteFeatureFlagService({
-      api: new ApiClient({
-        baseUrl: 'https://api.example/v2',
-        environment: 'production',
-        fetchImplementation: async () => new Response(JSON.stringify({ flags: [] })),
-      }),
+      loadConfig: async () =>
+        config({
+          updates: {
+            ios: { minimum_version: '9.0.0', store_url: 'https://ios', message: 'Update.' },
+            android: {
+              minimum_version: '9.0.0',
+              store_url: 'https://android',
+              message: 'Update.',
+            },
+            web: null,
+          },
+        }),
       preferences,
       platform: 'web',
       appVersionProvider: async () => '0.3.5',
@@ -85,7 +187,7 @@ describe('RemoteFeatureFlagService', () => {
     await service.refresh();
 
     expect(service.isEnabled('notifications')).toBe(true);
-    expect(service.isEnabled('bases_armies')).toBe(false);
+    expect(service.isEnabled('bases_armies')).toBe(true);
     expect(service.isEnabled('unknown-production-surface')).toBe(true);
   });
 });

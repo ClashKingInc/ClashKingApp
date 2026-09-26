@@ -281,6 +281,7 @@ function TodoHeaderStats({
           progress={summary.progressRatio}
           size={52}
           color={summary.openTasks === 0 ? statColors.win : theme.primary}
+          labelColor="#FFF"
         />
         <View style={styles.flex}>
           <CKText style={styles.progressTitle} numberOfLines={1}>
@@ -520,13 +521,16 @@ function ProgressRing({
   progress,
   size,
   color,
+  labelColor,
 }: {
   progress: number;
   size: number;
   color: string;
+  labelColor?: string;
 }) {
   const theme = useCKTheme();
-  const value = Math.max(0, Math.min(1, progress));
+  const value = normalizeProgress(progress);
+  const label = formatProgressRingLabel(value);
   const stroke = 4;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -534,7 +538,7 @@ function ProgressRing({
     <View
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: 100, now: Math.round(value * 100) }}
-      style={{ width: size, height: size }}
+      style={{ position: 'relative', width: size, height: size }}
     >
       <Svg width={size} height={size} style={StyleSheet.absoluteFill}>
         <Circle
@@ -559,8 +563,40 @@ function ProgressRing({
           origin={`${size / 2}, ${size / 2}`}
         />
       </Svg>
+      <View pointerEvents="none" style={styles.progressRingLabel}>
+        <View
+          style={[
+            styles.progressRingLabelPill,
+            {
+              minWidth: Math.round(size * 0.52),
+              minHeight: Math.round(size * 0.3),
+              borderRadius: Math.round(size * 0.16),
+              backgroundColor: colorWithAlpha(theme.card, 0.9),
+            },
+          ]}
+        >
+          <CKText
+            role="labelSmall"
+            style={[
+              styles.heavy,
+              { color: labelColor ?? theme.onSurface, fontSize: Math.max(11, size * 0.24) },
+            ]}
+          >
+            {label}
+          </CKText>
+        </View>
+      </View>
     </View>
   );
+}
+
+export function formatProgressRingLabel(progress: number): string {
+  const percentage = Math.round(normalizeProgress(progress) * 100);
+  return `${percentage}%`;
+}
+
+function normalizeProgress(progress: number): number {
+  return Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
 }
 
 function FilterPopover({
@@ -759,6 +795,22 @@ const styles = StyleSheet.create({
   },
   progressTitle: { color: '#FFF', fontWeight: '800', lineHeight: 20 },
   progressSubtitle: { color: '#FFFFFFB8', fontWeight: '700', marginTop: 5 },
+  progressRingLabel: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 1,
+    elevation: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  progressRingLabelPill: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
   quickStats: {
     flexGrow: 1,
     justifyContent: 'center',

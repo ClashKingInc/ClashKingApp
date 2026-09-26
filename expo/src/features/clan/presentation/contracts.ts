@@ -1,6 +1,8 @@
 import type { BookmarkedClan } from '../../../core/bookmarks/bookmark-service';
 import type { Player } from '../../player/models/player';
 import type { Clan } from '../models';
+import type { ClanSpringOrigin } from './clan-spring-transition';
+import { ImageAssets } from '../../../core/assets/image-assets';
 
 export interface ClansPresentationModel {
   readonly profiles: readonly Player[];
@@ -16,7 +18,9 @@ export interface ClansPresentationActions {
   showMessage(message: string): void;
   hydrateBookmarkedClans(tags: readonly string[]): Promise<void>;
   loadClan(tag: string): Promise<Clan>;
-  openClan(clan: Clan): void;
+  openClan(clan: Clan, origin?: ClanSpringOrigin): void;
+  reorderLinkedClans(orderedTags: readonly string[]): Promise<void>;
+  reorderBookmarkedClans(orderedTags: readonly string[]): Promise<void>;
 }
 
 export interface ClanRosterItem {
@@ -47,7 +51,7 @@ export function buildClanRoster(model: ClansPresentationModel): {
   const linked = Array.from(linkedByTag.values()).map<ClanRosterItem>((clan) => ({
     tag: clan.tag,
     name: clan.name,
-    badgeUrl: clan.badgeUrls.smallest,
+    badgeUrl: ImageAssets.clanBadgeForTag(clan.tag),
     members: clan.members,
     warLeague: clan.warLeague?.name ?? 'Unranked',
     clanPoints: clan.clanPoints,
@@ -65,7 +69,7 @@ export function buildClanRoster(model: ClansPresentationModel): {
       return {
         tag: bookmark.tag,
         name: clan?.name ?? bookmark.name,
-        badgeUrl: clan?.badgeUrls.smallest || bookmark.badgeUrl,
+        badgeUrl: ImageAssets.clanBadgeForTag(bookmark.tag),
         members: clan?.members ?? bookmark.memberCount,
         warLeague: clan?.warLeague?.name ?? '',
         clanPoints: clan?.clanPoints ?? 0,

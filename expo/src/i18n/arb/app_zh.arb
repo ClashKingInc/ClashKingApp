@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "系统通知",
+  "notifSystemSettings": "打开通知设置",
+  "notifSystemSettingsDescription": "在设备设置中管理提醒、声音和角标。",
+  "notifSystemSettingsFailed": "无法打开通知设置。请在设备上打开“设置”。",
+  "notifManagePlayersDescription": "在玩家 → 已关联 → 选项中管理账号通知。",
+  "notifCustomReminders": "自定义提醒",
+  "notifTestType": "通知类型",
+  "statsBattlelogsGroup": "战斗日志",
+  "statsGlobalStatsGroup": "全球统计",
+  "playerOptionShowOnHomeTitle": "在主页显示账号",
+  "playerOptionShowOnHomeSubtitle": "将此已验证账号加入主页卡片（最多 5 个）。",
+  "playerOptionShowOnHomeVerifyFirst": "验证此账号后才能在主页显示。",
+  "playerOptionHomeInclusionFirst": "请先开启“在主页显示账号”。",
+  "homeIncludedAccountsLimit": "主页最多可显示 5 个账号。请先移除一个。",
+  "statsHitratesByTownHall": "按大本营查看成功率",
+  "statsChartGranularity": "图表间隔",
+  "statsDaily": "每日",
+  "statsWeekly": "每周",
+  "statsMonthly": "每月",
+  "statsCompareCohorts": "比较群组",
+  "statsAcrossCohorts": "各群组使用率",
+  "legendsTrophyGrid": "奖杯网格",
+  "legendsPopularArmyItems": "最热门的军队配置",
+  "legendsPopularTroop": "最爱",
+  "legendsHitrate": "成功率",
+  "legendsAvgOffense": "平均进攻",
+  "legendsAvgDefense": "平均防守",
+  "settingsClearImageCache": "清除图片缓存",
+  "settingsImageCacheCleared": "图片缓存已清除。",
+  "settingsImageCacheClearFailed": "无法清除图片缓存。请重试。",
+  "startupCheckingUpdate": "正在检查更新…",
+  "startupDownloadingUpdate": "正在下载更新…",
+  "startupUpdateInBackground": "在后台更新",
   "warStatsRangeTitle": "部落战统计范围",
   "warStatsRangeDescription": "选择统计固定场数的近期部落战，或按天数统计近期时段。",
   "warStatsRangeDays": "天数",
@@ -172,7 +205,7 @@
   "notifPushUnsupported": "此平台不支持推送通知。",
   "notifPushInitializing": "正在配置推送通知…",
   "notificationPrimerTitle": "开启通知？",
-  "notificationPrimerBody": "ClashKing 可以向你发送部落战、CWL、账号和项目更新通知。你可以随时在“设置”>“通知”中更改此选项。",
+  "notificationPrimerBody": "ClashKing 可以发送活动、公告、传奇联赛防守和支持方面的更新。部落战和突袭周末提醒会保持关闭，直到你主动设置。你可以在“设置”>“通知”中更改这些选择。",
   "notificationPrimerNotNow": "暂不",
   "notificationPrimerAllow": "允许",
   "achievementsTitle": "成就",
@@ -1556,6 +1589,8 @@
   "legendsCountryTitle": "国家",
   "legendsLocalRankTitle": "当地排名",
   "legendsGlobalRankTitle": "全球排名",
+  "legendsYourArmy": "你的军队",
+  "legendsArmyUsedAgainstYou": "用于攻击你的军队",
   "warWinsTitle": "胜利",
   "warLossesTitle": "损失",
   "warDrawsTitle": "抽奖",
@@ -2609,7 +2644,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "选择警报并发送本地测试预览。",
+  "settingsNotificationsSubtitle": "选择你想接收的提醒。",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3254,6 +3289,9 @@
   "statsHero": "英雄",
   "statsPet": "宠物",
   "statsEquipment": "装备",
+  "statsPetCombinations": "宠物组合",
+  "statsEquipmentPairs": "装备搭配",
+  "statsArmyFallback": "军队 {id}",
   "statsOwningHero": "拥有英雄",
   "statsAddItem": "添加物品",
   "statsAnalyzeItems": "分析物品",
@@ -4003,19 +4041,32 @@
   "homeActivityJoined": "加入",
   "homeActivityLeft": "离开",
   "homeActivityAClan": "一个部落",
+  "statsCwlSeasonGroups": "小组",
+  "statsCwlSeasonHistory": "部落对战联赛趋势",
+  "statsCwlRosterNotLineup": "将报名成员比例折算为 {size} 个位置；实际参战阵容可能不同。",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "兵种统计",
+  "statsWarSizes": "对战规模",
+  "statsMissedAttacks": "未使用的进攻",
+  "statsCopyChart": "复制图表",
+  "statsCompareItems": "比较项目",
+  "statsCompareItemsHint": "最多选择 5 个项目进行比较。",
+  "statsVsOverall": "与整体相比",
+  "statsCopyChartFailed": "无法复制图表。请重试。",
+  "statsPercentagePoints": "个百分点",
   "statsMeta": "元数据",
   "statsBattle": "战斗",
   "statsWorld": "世界",
   "statsHeaderSubtitle": "探索对战表现与我们所追踪的世界。",
   "statsPreview": "预览",
-  "statsTownHallDistribution": "市政厅分布",
+  "statsTownHallDistribution": "市政厅",
   "statsBuilderHallDistribution": "建造者大厅分布",
-  "statsLeagueDistribution": "排名联赛分布",
+  "statsLeagueDistribution": "排名联赛",
   "statsTrackedPlayers": "当前追踪玩家人数",
   "statsTrackedClans": "当前追踪的氏族人口",
-  "statsCwlLeagueDistribution": "CWL联赛分布",
-  "statsCapitalLeagueDistribution": "首都联赛分布",
-  "statsTrackedLocations": "追踪部落位置",
+  "statsCwlLeagueDistribution": "CWL联赛",
+  "statsCapitalLeagueDistribution": "首都联赛",
+  "statsTrackedLocations": "部落位置",
   "statsLocationCountHelp": "追踪部落代表的国家和地区。",
   "statsLeagueId": "联盟 {id}",
   "@statsLeagueId": {
@@ -4756,6 +4807,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "已报名阵容",
+  "cwlMatches": "对战",
+  "cwlNextMatchup": "下一场对战",
+  "cwlOtherMatches": "其他对战",
+  "cwlOutlook": "赛季展望",
+  "cwlFirstPlace": "第一名",
+  "cwlTopTwo": "前两名",
+  "cwlRemainingOpponents": "剩余对手",
+  "cwlWinBonusNote": "星数包含每场已结束的胜利所获的10颗奖励星。",
+  "cwlEstimateNote": "估计基于已结束的对战和剩余对手，不考虑阵容变化。每个部落至少需要完成两场对战。这些估计未经校准；晋级规则因联赛而异。",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# 小时} other {# 小时}}} other {{count, plural, one {# 分钟} other {# 分钟}}}}",
+  "personalBasesDeleteOld": "移除超过 90 天的阵型",
+  "personalBasesDeleteOldConfirm": "将移除 {count} 个保存超过 90 天的阵型。下载历史和共享阵型将保留。",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "自动防守",
+  "legendsPopularArmyItem": "最常用的军队单位",
+  "legendsClanCastle": "部落城堡",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

@@ -77,15 +77,15 @@ describe('Flutter GameDataService normalization parity', () => {
     );
   });
 
-  test('indexes war leagues using one-less public API IDs', () => {
+  test('indexes war leagues by their public API IDs', () => {
     applyGameDataBundle({
       war_leagues: [
         { _id: 48_000_007, name: 'Gold League III' },
         { _id: 48_000_019, name: 'Titan League III' },
       ],
     });
-    expect(warLeaguesByApiId().get(48_000_006)?.name).toBe('Gold League III');
-    expect(warLeaguesByApiId().get(48_000_018)?.name).toBe('Titan League III');
+    expect(warLeaguesByApiId().get(48_000_007)?.name).toBe('Gold League III');
+    expect(warLeaguesByApiId().get(48_000_019)?.name).toBe('Titan League III');
   });
 
   test('keeps the ARB fallback when Clash lacks the app locale', () => {

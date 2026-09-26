@@ -5,6 +5,8 @@ import {
   desktopSidebarFooterRoutes,
   desktopSidebarRoutes,
   filterEnabledRoutes,
+  filterVisibleRoutes,
+  isRouteEnabled,
   mobileDrawerBodyRoutes,
   mobileDrawerFooterRoutes,
   mobileDrawerHeaderActionRoutes,
@@ -25,7 +27,7 @@ describe('Flutter navigation parity manifest', () => {
     expect(desktopSidebarRoutes.map((route) => route.id)).not.toContain('basesArmies');
   });
 
-  it('matches Flutter drawer, sidebar, and header membership exactly', () => {
+  it('keeps the intended drawer, sidebar, and header membership', () => {
     expect(mobileDrawerHeaderActionRoutes.map(({ id }) => id)).toEqual([
       'achievements',
       'accounts',
@@ -36,8 +38,6 @@ describe('Flutter navigation parity manifest', () => {
       'stats',
       'calculators',
       'subscription',
-      'todo',
-      'ranked',
       'upgradeTracker',
       'basesArmies',
       'gameAssets',
@@ -50,8 +50,6 @@ describe('Flutter navigation parity manifest', () => {
       'rankings',
       'stats',
       'calculators',
-      'todo',
-      'ranked',
       'upgradeTracker',
       'gameAssets',
     ]);
@@ -60,8 +58,6 @@ describe('Flutter navigation parity manifest', () => {
 
   it('hides gated routes unless their exact Flutter feature flag is enabled', () => {
     expect(filterEnabledRoutes(mobileDrawerBodyRoutes, {}).map(({ id }) => id)).toEqual([
-      'todo',
-      'ranked',
       'accounts',
     ]);
     expect(
@@ -69,7 +65,18 @@ describe('Flutter navigation parity manifest', () => {
         posts: true,
         bases_armies: true,
       }).map(({ id }) => id),
-    ).toEqual(['posts', 'todo', 'ranked', 'basesArmies', 'accounts']);
+    ).toEqual(['posts', 'basesArmies', 'accounts']);
+  });
+
+  it('shows disabled calculators without allowing navigation and retains non-sidebar routes', () => {
+    expect(filterVisibleRoutes(mobileDrawerBodyRoutes, {}).map(({ id }) => id)).toEqual([
+      'calculators',
+      'accounts',
+    ]);
+    const calculator = appRoutes.find(({ id }) => id === 'calculators')!;
+    expect(isRouteEnabled(calculator, {})).toBe(false);
+    expect(isRouteEnabled(calculator, { calculators: true })).toBe(true);
+    expect(appRoutes.map(({ id }) => id)).toEqual(expect.arrayContaining(['todo', 'ranked']));
   });
 
   it('keeps route identifiers and hrefs unique', () => {

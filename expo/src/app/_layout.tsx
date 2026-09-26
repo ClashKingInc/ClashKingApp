@@ -20,9 +20,12 @@ import {
   reportException,
 } from '../core/observability/observability';
 import { AppRuntimeProvider } from '../core/app/runtime-context';
+import { NavigationTheme } from '../core/app/navigation-theme';
 import { loadClashKingFont } from '../core/fonts/clashking-font-service';
 import { hideWebLaunchScreen } from '../core/app/launch-screen-runtime';
 import { useCKThemeMode } from '../ui';
+import { ExpoDeepLinkRuntime } from '../core/deep-links/expo-deep-link-runtime';
+import { queueAppLink } from '../core/deep-links/link-inbox';
 
 void SplashScreen.preventAutoHideAsync();
 initializeObservability();
@@ -38,6 +41,26 @@ const queryClient = new QueryClient({
 });
 
 export default function RootLayout() {
+  // Capture navigation before authentication so a sign-in does not lose the destination.
+  useEffect(() => {
+    const links = new ExpoDeepLinkRuntime();
+    let active = true;
+    let receivedEvent = false;
+    const stop = links.subscribe((url) => {
+      receivedEvent = true;
+      queueAppLink(url);
+    });
+    void links
+      .getInitialUrl()
+      .then((url) => {
+        if (active && !receivedEvent && url) queueAppLink(url);
+      })
+      .catch((error) => reportException(error, 'deep_link.capture'));
+    return () => {
+      active = false;
+      stop();
+    };
+  }, []);
   const [fontReady, setFontReady] = useState(false);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();
@@ -67,11 +90,26 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AppRuntimeProvider>
-            <AppStatusBar />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
-              <Stack.Screen name="detail" options={{ gestureEnabled: true }} />
-            </Stack>
+            <NavigationTheme>
+              <AppStatusBar />
+              <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
+                <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
+                <Stack.Screen
+                  name="detail"
+                  options={({ route }) => ({
+                    gestureEnabled: true,
+                    ...((route.params as { clanSpring?: string } | undefined)?.clanSpring === '1'
+                      ? {
+                          // A modal disables iOS's interactive pop gesture, even with gestureEnabled.
+                          presentation: 'card' as const,
+                          animation: 'none' as const,
+                          gestureDirection: 'horizontal' as const,
+                        }
+                      : {}),
+                  })}
+                />
+              </Stack>
+            </NavigationTheme>
           </AppRuntimeProvider>
         </QueryClientProvider>
       </SafeAreaProvider>

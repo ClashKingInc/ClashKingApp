@@ -40,6 +40,8 @@ jobs:
         run: npm ci
 
       - name: Build static Expo web export
+        env:
+          CK_ANDROID_APP_LINKS_SHA256: ${{ vars.CK_ANDROID_APP_LINKS_SHA256 }}
         run: npm run web:export
 
       - name: Publish to Cloudflare Pages

@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { CKThemeProvider } from '../../ui';
 import { DesktopSidebar } from '../desktop-sidebar';
+import { MobileDrawer } from '../mobile-drawer';
 import { NavigationShell, type NavigationShellProps } from '../navigation-shell';
 import { RetainedPrimaryPager } from '../retained-pager';
 import { fallbackTabBarBottomPadding } from '../primary-tab-bar';
@@ -225,10 +226,55 @@ describe('navigation shell components', () => {
     );
     expect(view.getByText('postsTitle')).toBeTruthy();
     expect(view.queryByText('generalStats')).toBeNull();
-    expect(view.getByText('todoTitle')).toBeTruthy();
+    expect(view.queryByText('todoTitle')).toBeNull();
+    expect(view.queryByText('rankedLeagueTitle')).toBeNull();
+    expect(
+      view.getByRole('button', { name: 'drawerCalculators' }).props.accessibilityState.disabled,
+    ).toBe(true);
+    await fireEvent.press(view.getByText('drawerCalculators'));
+    expect(onUtility).not.toHaveBeenCalled();
+    expect(view.getByTestId('desktop-sidebar-scroll').props).toMatchObject({
+      bounces: false,
+      alwaysBounceVertical: false,
+      overScrollMode: 'never',
+    });
     expect(view.getByText('navigationHome').parent?.props.accessibilityState.selected).toBe(true);
-    await fireEvent.press(view.getByText('todoTitle'));
-    expect(onUtility).toHaveBeenCalledWith(expect.objectContaining({ id: 'todo' }), false);
+    await fireEvent.press(view.getByText('postsTitle'));
+    expect(onUtility).toHaveBeenCalledWith(expect.objectContaining({ id: 'posts' }), false);
+  });
+
+  it('keeps mobile calculators visible but inert and disables empty drawer overscroll', async () => {
+    const onNavigate = jest.fn();
+    const onRequestClose = jest.fn();
+    const view = await providers(
+      <MobileDrawer
+        isRtl={false}
+        features={{ calculators: false }}
+        t={t as never}
+        avatar={<View />}
+        displayName="User"
+        followerCount={0}
+        closeLabel="Close"
+        onRequestClose={onRequestClose}
+        onNavigate={onNavigate}
+        onAchievements={jest.fn()}
+        onAddAccount={jest.fn()}
+        hasUser
+      />,
+    );
+    expect(view.queryByText('todoTitle')).toBeNull();
+    expect(view.queryByText('rankedLeagueTitle')).toBeNull();
+    expect(
+      view.getByRole('button', { name: 'drawerCalculators' }).props.accessibilityState.disabled,
+    ).toBe(true);
+    await fireEvent.press(view.getByText('drawerCalculators'));
+    expect(onRequestClose).not.toHaveBeenCalled();
+    expect(onNavigate).not.toHaveBeenCalled();
+    expect(view.getByTestId('mobile-drawer-scroll').props).toMatchObject({
+      bounces: false,
+      alwaysBounceVertical: false,
+      overScrollMode: 'never',
+    });
   });
 
   it('selects desktop at 900px and resets nested content before a primary route', async () => {
@@ -368,7 +414,7 @@ describe('navigation shell components', () => {
     expect(view.getByTestId('primary-page-home', { includeHiddenElements: true })).toBeTruthy();
   });
 
-  it('uses a continuously interactive narrow-edge drawer and opens it from the avatar', async () => {
+  it('uses a reachable edge drawer gesture and opens it from the avatar', async () => {
     mockDrawerOpen.mockClear();
     const view = await providers(
       <NavigationShell
@@ -394,14 +440,94 @@ describe('navigation shell components', () => {
       />,
     );
     const drawer = view.getByTestId('reanimated-drawer-layout');
-    expect(drawer.props.edgeWidth).toBe(20);
-    expect(drawer.props.minSwipeDistance).toBe(8);
+    expect(drawer.props.edgeWidth).toBe(36);
+    expect(drawer.props.minSwipeDistance).toBe(6);
     expect(drawer.props.drawerLockMode).toBe(0);
     expect(drawer.props.drawerPosition).toBe(0);
+    expect(
+      view.getByTestId('profile-menu-indicator', { includeHiddenElements: true }),
+    ).toBeTruthy();
     await fireEvent.press(view.getByRole('button', { name: 'profile' }));
     expect(mockDrawerOpen).toHaveBeenCalledTimes(1);
     expect(fallbackTabBarBottomPadding(24)).toBe(24);
     expect(fallbackTabBarBottomPadding(0)).toBe(10);
+  });
+
+  it('keeps Android drawer swipe available without showing the edge hint', async () => {
+    mockDrawerOpen.mockClear();
+    const drawerHintStore = {
+      getString: jest.fn(async () => null),
+      setString: jest.fn(async () => undefined),
+      remove: jest.fn(async () => undefined),
+    };
+    const view = await providers(
+      <NavigationShell
+        selectedPrimary="home"
+        primaryScreens={screens}
+        features={{}}
+        t={t as never}
+        isRtl={false}
+        avatar={<View />}
+        displayName="User"
+        followerCount={0}
+        productLabel="ClashKing"
+        hasUser
+        profileMenuLabel="profile"
+        closeDrawerLabel="close"
+        drawerHintStore={drawerHintStore}
+        onPrimarySelect={jest.fn()}
+        onUtilityNavigate={jest.fn()}
+        onAchievements={jest.fn()}
+        onAddAccount={jest.fn()}
+        onAccounts={jest.fn()}
+        viewportWidth={390}
+        platform="android"
+      />,
+    );
+    const drawer = view.getByTestId('reanimated-drawer-layout');
+    expect(drawer.props.edgeWidth).toBe(36);
+    expect(view.queryByTestId('mobile-drawer-gesture-hint')).toBeNull();
+    expect(drawerHintStore.getString).not.toHaveBeenCalled();
+
+    await fireEvent.press(view.getByRole('button', { name: 'profile' }));
+    expect(mockDrawerOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps iOS drawer swipe available without showing the edge hint', async () => {
+    const drawerHintStore = {
+      getString: jest.fn(async () => null),
+      setString: jest.fn(async () => undefined),
+      remove: jest.fn(async () => undefined),
+    };
+    const view = await providers(
+      <NavigationShell
+        selectedPrimary="home"
+        primaryScreens={screens}
+        features={{}}
+        t={t as never}
+        isRtl={false}
+        avatar={<View />}
+        displayName="User"
+        followerCount={0}
+        productLabel="ClashKing"
+        hasUser
+        profileMenuLabel="profile"
+        closeDrawerLabel="close"
+        drawerHintStore={drawerHintStore}
+        onPrimarySelect={jest.fn()}
+        onUtilityNavigate={jest.fn()}
+        onAchievements={jest.fn()}
+        onAddAccount={jest.fn()}
+        onAccounts={jest.fn()}
+        viewportWidth={390}
+        platform="ios"
+      />,
+    );
+
+    const drawer = view.getByTestId('reanimated-drawer-layout');
+    expect(drawer.props.edgeWidth).toBe(36);
+    expect(view.queryByTestId('mobile-drawer-gesture-hint')).toBeNull();
+    expect(drawerHintStore.getString).not.toHaveBeenCalled();
   });
 
   it('mirrors the drawer edge in RTL and locks it closed on a secondary route', async () => {
@@ -434,7 +560,7 @@ describe('navigation shell components', () => {
     const drawer = view.getByTestId('reanimated-drawer-layout');
     expect(drawer.props.drawerPosition).toBe(1);
     expect(drawer.props.drawerLockMode).toBe(1);
-    expect(drawer.props.edgeWidth).toBe(20);
+    expect(drawer.props.edgeWidth).toBe(36);
     expect(mockDrawerClose).toHaveBeenCalled();
   });
 

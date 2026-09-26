@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "Системные уведомления",
+  "notifSystemSettings": "Открыть настройки уведомлений",
+  "notifSystemSettingsDescription": "Управляйте оповещениями, звуками и значками в настройках устройства.",
+  "notifSystemSettingsFailed": "Не удалось открыть настройки уведомлений. Откройте «Настройки» на устройстве.",
+  "notifManagePlayersDescription": "Управляйте уведомлениями аккаунтов в Игроки → Привязанные → Параметры.",
+  "notifCustomReminders": "Свои напоминания",
+  "notifTestType": "Тип уведомления",
+  "statsBattlelogsGroup": "Журналы боёв",
+  "statsGlobalStatsGroup": "Глобальная статистика",
+  "playerOptionShowOnHomeTitle": "Показывать аккаунт на главной",
+  "playerOptionShowOnHomeSubtitle": "Добавить этот подтверждённый аккаунт в карточки на главной (до 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Подтвердите этот аккаунт, чтобы показывать его на главной.",
+  "playerOptionHomeInclusionFirst": "Сначала включите «Показывать аккаунт на главной».",
+  "homeIncludedAccountsLimit": "На главной можно показывать до 5 аккаунтов. Сначала удалите один.",
+  "statsHitratesByTownHall": "Успешность по ратушам",
+  "statsChartGranularity": "Интервал графика",
+  "statsDaily": "По дням",
+  "statsWeekly": "По неделям",
+  "statsMonthly": "По месяцам",
+  "statsCompareCohorts": "Сравнить группы",
+  "statsAcrossCohorts": "Использование по группам",
+  "legendsTrophyGrid": "Сетка трофеев",
+  "legendsPopularArmyItems": "Популярные элементы армии",
+  "legendsPopularTroop": "Любимый",
+  "legendsHitrate": "Успешность",
+  "legendsAvgOffense": "Сред. атака",
+  "legendsAvgDefense": "Сред. защита",
+  "settingsClearImageCache": "Очистить кеш изображений",
+  "settingsImageCacheCleared": "Кеш изображений очищен.",
+  "settingsImageCacheClearFailed": "Не удалось очистить кеш изображений. Попробуйте еще раз.",
+  "startupCheckingUpdate": "Проверка обновлений…",
+  "startupDownloadingUpdate": "Загрузка обновления…",
+  "startupUpdateInBackground": "Обновить в фоне",
   "warStatsRangeTitle": "Диапазон военной статистики",
   "warStatsRangeDescription": "Выберите, охватывает ли статистика заданное число недавних войн или недавний период в днях.",
   "warStatsRangeDays": "Дни",
@@ -172,7 +205,7 @@
   "notifPushUnsupported": "Push-уведомления не поддерживаются на этой платформе.",
   "notifPushInitializing": "Настройка push-уведомлений…",
   "notificationPrimerTitle": "Включить уведомления?",
-  "notificationPrimerBody": "ClashKing может уведомлять вас об обновлениях войн, CWL, аккаунта и проектов. Это можно изменить в любое время в разделе «Настройки» > «Уведомления».",
+  "notificationPrimerBody": "ClashKing может присылать новости о событиях, объявлениях, защитах в Лиге легенд и поддержке. Напоминания о войнах и рейдовых выходных остаются выключенными, пока вы их не настроите. Эти параметры можно изменить в Настройки > Уведомления.",
   "notificationPrimerNotNow": "Не сейчас",
   "notificationPrimerAllow": "Разрешить",
   "achievementsTitle": "Достижения",
@@ -1556,6 +1589,8 @@
   "legendsCountryTitle": "Страна",
   "legendsLocalRankTitle": "Местный ранг",
   "legendsGlobalRankTitle": "Глобальный рейтинг",
+  "legendsYourArmy": "Ваша армия",
+  "legendsArmyUsedAgainstYou": "Армия, использованная против вас",
   "warWinsTitle": "Победы",
   "warLossesTitle": "Потери",
   "warDrawsTitle": "Ничьи",
@@ -2609,7 +2644,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Выбирайте оповещения и отправляйте предварительные просмотры локальных тестов.",
+  "settingsNotificationsSubtitle": "Выберите, какие оповещения получать.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3254,6 +3289,9 @@
   "statsHero": "Героев",
   "statsPet": "Питомцы",
   "statsEquipment": "Оборудование",
+  "statsPetCombinations": "Комбинации питомцев",
+  "statsEquipmentPairs": "Пары снаряжения",
+  "statsArmyFallback": "Армия {id}",
   "statsOwningHero": "Владелец героя",
   "statsAddItem": "Добавить предмет",
   "statsAnalyzeItems": "Анализ предметов",
@@ -4003,19 +4041,32 @@
   "homeActivityJoined": "вступил(а) в",
   "homeActivityLeft": "покинул(а)",
   "homeActivityAClan": "какой-либо клан",
+  "statsCwlSeasonGroups": "Группы",
+  "statsCwlSeasonHistory": "Лига войн кланов во времени",
+  "statsCwlRosterNotLineup": "Состав зарегистрированных игроков приведён к {size} местам; фактический состав в войне может отличаться.",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "Статистика войск",
+  "statsWarSizes": "Размеры войн",
+  "statsMissedAttacks": "Пропущенные атаки",
+  "statsCopyChart": "Скопировать график",
+  "statsCompareItems": "Сравнить элементы",
+  "statsCompareItemsHint": "Выберите до 5 элементов для сравнения.",
+  "statsVsOverall": "по сравнению с общим показателем",
+  "statsCopyChartFailed": "Не удалось скопировать график. Попробуйте ещё раз.",
+  "statsPercentagePoints": "процентных пункта",
   "statsMeta": "Мета",
   "statsBattle": "Битва",
   "statsWorld": "Мир",
   "statsHeaderSubtitle": "Изучайте результаты боёв и статистику отслеживаемого игрового мира.",
   "statsPreview": "Предварительный просмотр",
-  "statsTownHallDistribution": "Распределение ратуши",
+  "statsTownHallDistribution": "Ратуши",
   "statsBuilderHallDistribution": "Распределение Залов Строителей",
-  "statsLeagueDistribution": "Распределение рейтинговых лиг",
+  "statsLeagueDistribution": "Рейтинговые лиги",
   "statsTrackedPlayers": "Текущая отслеживаемая численность игроков",
   "statsTrackedClans": "Текущая отслеживаемая численность клана",
-  "statsCwlLeagueDistribution": "Распределение лиг CWL",
-  "statsCapitalLeagueDistribution": "Распределение Столичной лиги",
-  "statsTrackedLocations": "Отслеживаемые местоположения кланов",
+  "statsCwlLeagueDistribution": "Лиги CWL",
+  "statsCapitalLeagueDistribution": "Лиги столицы",
+  "statsTrackedLocations": "Местоположения кланов",
   "statsLocationCountHelp": "Страны и локации, представленные отслеживаемыми кланами.",
   "statsLeagueId": "Лига {id}",
   "@statsLeagueId": {
@@ -4756,6 +4807,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Заявленный состав",
+  "cwlMatches": "Матчи",
+  "cwlNextMatchup": "Следующий матч",
+  "cwlOtherMatches": "Другие матчи",
+  "cwlOutlook": "Прогноз сезона",
+  "cwlFirstPlace": "Первое место",
+  "cwlTopTwo": "Два первых места",
+  "cwlRemainingOpponents": "Оставшиеся соперники",
+  "cwlWinBonusNote": "Звёзды включают 10 бонусных звёзд за каждую завершённую победу.",
+  "cwlEstimateNote": "Оценки учитывают завершённые войны и оставшихся соперников, но не изменения составов. Нужно хотя бы две завершённые войны на клан. Оценки не откалиброваны; правила повышения зависят от лиги.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# час} few {# часа} other {# часов}}} other {{count, plural, one {# минута} few {# минуты} other {# минут}}}}",
+  "personalBasesDeleteOld": "Удалить базы старше 90 дней",
+  "personalBasesDeleteOldConfirm": "Будет удалено сохранённых баз старше 90 дней: {count}. История скачиваний и общие базы останутся.",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "Автоматическая защита",
+  "legendsPopularArmyItem": "Самый популярный элемент армии",
+  "legendsClanCastle": "Крепость клана",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

@@ -176,10 +176,19 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
         val compactTaskCapacity = if (isLarge) 0 else taskCapacity(appWidgetManager, appWidgetId)
         val views = RemoteViews(context.packageName, layoutId)
-        views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context))
+        views.setInt(
+            R.id.upgrade_root_layout,
+            "setBackgroundResource",
+            if (UpgradeWidgetSelectionStore.transparentBackground(context, appWidgetId)) {
+                android.R.color.transparent
+            } else {
+                R.drawable.upgrade_widget_background
+            }
+        )
         val showBuilderBase = UpgradeWidgetSelectionStore.showBuilderBase(context, appWidgetId)
 
         val data = readCurrentUpgradeData(context, appWidgetId, widgetData)
+        views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context, appWidgetId))
         if (data == null) {
             renderEmptyState(context, views)
             appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -229,14 +238,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
 
         val instanceTag = UpgradeWidgetSelectionStore.selectedTag(context, appWidgetId)
-        val globalTag = widgetData.getString("upgradeWidgetSelectedTag", null)
-            ?.let(::normalizedTag)
+            ?: (widgetData.getString("upgradeWidgetSelectedTag", null)?.let(::normalizedTag)
+                ?.takeIf { it.isNotEmpty() } ?: linkedTags.firstOrNull())?.also {
+                UpgradeWidgetSelectionStore.saveSelectedTag(context, appWidgetId, it)
+            }
         val candidateTags = if (instanceTag != null) {
             listOf(instanceTag)
-        } else if (!globalTag.isNullOrEmpty()) {
-            listOf(globalTag)
         } else {
-            listOfNotNull(linkedTags.firstOrNull())
+            emptyList()
         }
         for (tag in candidateTags) {
             if (tag !in linkedTags) continue
@@ -249,7 +258,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
 
         // Compatibility with payloads written before per-account storage existed.
         if (linkedTags.isNotEmpty()) return null
-        return legacyUpgradeData(widgetData, instanceTag ?: globalTag)
+        return instanceTag?.let { legacyUpgradeData(widgetData, it) }
     }
 
     private fun legacyUpgradeData(
@@ -1082,9 +1091,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
     }
 }
 
-private fun getUpgradePendingIntent(context: Context): PendingIntent {
+private fun getUpgradePendingIntent(context: Context, appWidgetId: Int): PendingIntent {
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-    return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        ?: android.content.Intent(android.content.Intent.ACTION_MAIN).setPackage(context.packageName)
+    intent.action = android.content.Intent.ACTION_VIEW
+    val tag = UpgradeWidgetSelectionStore.selectedTag(context, appWidgetId)
+    intent.data = android.net.Uri.parse(if (tag.isNullOrBlank()) "clashking://upgrade-tracker"
+        else "clashking://upgrade-tracker?player=${android.net.Uri.encode(tag)}")
+    return PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 private fun loadUpgradeBitmap(context: Context, url: String): Bitmap? {

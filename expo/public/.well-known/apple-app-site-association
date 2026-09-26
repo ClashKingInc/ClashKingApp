@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "details": [{
+      "appIDs": ["MZYXD43RX5.com.clashking.apps"],
+      "components": [
+        {"/": "/auth/*", "exclude": true},
+        {"/": "/oauth*", "exclude": true},
+        {"/": "/"}, {"/": "/players"}, {"/": "/clans"},
+        {"/": "/player/*"}, {"/": "/clan/*"}, {"/": "/war"}, {"/": "/war/*"},
+        {"/": "/search"}, {"/": "/todo"}, {"/": "/ranked"}, {"/": "/upgrade-tracker"},
+        {"/": "/rankings"}, {"/": "/stats"}, {"/": "/calculators"},
+        {"/": "/posts"}, {"/": "/posts/*"}, {"/": "/bases-armies"}, {"/": "/game-assets"},
+        {"/": "/achievements"}, {"/": "/accounts"}, {"/": "/subscription"},
+        {"/": "/settings"}, {"/": "/settings/*"}
+      ]
+    }]
+  }
+}

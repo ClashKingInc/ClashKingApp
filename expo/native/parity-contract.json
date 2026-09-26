@@ -14,6 +14,7 @@
       "Info.plist",
       "PrivacyInfo.xcprivacy",
       "WarWidget.entitlements",
+      "LegendsWidget.xcstrings",
       "WarWidget.swift"
     ]
   },
@@ -70,14 +71,60 @@
       "kotlin/com/clashking/clashkingapp/UpgradeWidgetSelectionStore.kt",
       "kotlin/com/clashking/clashkingapp/WarWidgetConfigureActivity.kt",
       "kotlin/com/clashking/clashkingapp/WarWidgetSelectionStore.kt",
+      "kotlin/com/clashking/clashkingapp/LegendsAppWidgetProvider.kt",
+      "kotlin/com/clashking/clashkingapp/LegendsWidgetConfigureActivity.kt",
+      "kotlin/com/clashking/clashkingapp/LegendsWidgetSelectionStore.kt",
       "kotlin/com/clashking/clashkingapp/WidgetConfigureActivity.kt",
       "res/layout/widget_layout.xml",
+      "res/layout/legends_widget_layout.xml",
+      "res/layout/legends_widget_layout_wide.xml",
+      "res/layout/legends_widget_stat_net.xml",
+      "res/layout/legends_widget_stat_attack.xml",
+      "res/layout/legends_widget_stat_defense.xml",
+      "res/layout/legends_widget_stat_rank.xml",
+      "res/drawable/legends_widget_background.xml",
+      "res/drawable/legends_widget_surface.xml",
+      "res/drawable/legends_widget_stale_chip.xml",
       "res/drawable/war_widget_background.xml",
       "res/values/widget_colors.xml",
       "res/values-night/widget_colors.xml",
       "res/values/widget_strings.xml",
       "res/values-fr/widget_strings.xml",
+      "res/values/legends_widget_strings.xml",
+      "res/values-af/legends_widget_strings.xml",
+      "res/values-ar/legends_widget_strings.xml",
+      "res/values-ca/legends_widget_strings.xml",
+      "res/values-cs/legends_widget_strings.xml",
+      "res/values-da/legends_widget_strings.xml",
+      "res/values-de/legends_widget_strings.xml",
+      "res/values-el/legends_widget_strings.xml",
+      "res/values-en-rGB/legends_widget_strings.xml",
+      "res/values-en-rUS/legends_widget_strings.xml",
+      "res/values-es/legends_widget_strings.xml",
+      "res/values-es-rES/legends_widget_strings.xml",
+      "res/values-fi/legends_widget_strings.xml",
+      "res/values-fr/legends_widget_strings.xml",
+      "res/values-hi/legends_widget_strings.xml",
+      "res/values-hu/legends_widget_strings.xml",
+      "res/values-it/legends_widget_strings.xml",
+      "res/values-iw/legends_widget_strings.xml",
+      "res/values-ja/legends_widget_strings.xml",
+      "res/values-ko/legends_widget_strings.xml",
+      "res/values-nl/legends_widget_strings.xml",
+      "res/values-no/legends_widget_strings.xml",
+      "res/values-pl/legends_widget_strings.xml",
+      "res/values-pt/legends_widget_strings.xml",
+      "res/values-ro/legends_widget_strings.xml",
+      "res/values-ru/legends_widget_strings.xml",
+      "res/values-sr/legends_widget_strings.xml",
+      "res/values-sv/legends_widget_strings.xml",
+      "res/values-tr/legends_widget_strings.xml",
+      "res/values-uk/legends_widget_strings.xml",
+      "res/values-ur/legends_widget_strings.xml",
+      "res/values-vi/legends_widget_strings.xml",
+      "res/values-zh/legends_widget_strings.xml",
       "res/xml/widget_provider.xml",
+      "res/xml/legends_widget_provider.xml",
       "res/xml/upgrade_widget_provider.xml"
     ],
     "widgetReceivers": [
@@ -90,6 +137,11 @@
         "name": ".UpgradeAppWidgetProvider",
         "providerResource": "@xml/upgrade_widget_provider",
         "label": "@string/upgrade_widget_label"
+      },
+      {
+        "name": ".LegendsAppWidgetProvider",
+        "providerResource": "@xml/legends_widget_provider",
+        "label": "@string/legends_widget_label"
       }
     ],
     "widgetConfigurationActivity": {
@@ -98,6 +150,10 @@
     },
     "warWidgetConfigurationActivity": {
       "name": ".WarWidgetConfigureActivity",
+      "theme": "@style/UpgradeWidgetConfigurationTheme"
+    },
+    "legendsWidgetConfigurationActivity": {
+      "name": ".LegendsWidgetConfigureActivity",
       "theme": "@style/UpgradeWidgetConfigurationTheme"
     }
   },

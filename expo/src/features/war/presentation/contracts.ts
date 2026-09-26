@@ -1,3 +1,4 @@
+import { ImageAssets } from '../../../core/assets/image-assets';
 import type { BookmarkedClan, BookmarkedPlayer } from '../../../core/bookmarks/bookmark-service';
 import type { Clan } from '../../clan/models';
 import type { Player } from '../../player/models/player';
@@ -27,6 +28,8 @@ export interface WarPresentationActions {
   copyText(value: string): Promise<void>;
   exportCwl?(clanTag: string): Promise<void>;
   fetchPreviousWar?(clanTag: string, before: Date): Promise<WarInfo | null>;
+  reorderLinkedClans?(orderedTags: readonly string[]): Promise<void>;
+  reorderBookmarkedClans?(orderedTags: readonly string[]): Promise<void>;
 }
 
 export interface WarAccountItem {
@@ -70,22 +73,12 @@ export function normalizeTagKey(tag: string): string {
 export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResult {
   const owned = new Set(model.ownedPlayerTags.map(normalizeTagKey));
   const hidden = new Set(Array.from(model.hiddenPlayerTags ?? []).map(normalizeTagKey));
-  const profilesByTag = new Map(
-    model.profiles.map((profile) => [normalizeTagKey(profile.tag), profile]),
-  );
-  const ownedProfiles = model.profiles.filter(
-    (profile) =>
-      owned.has(normalizeTagKey(profile.tag)) && !hidden.has(normalizeTagKey(profile.tag)),
-  );
-  const bookmarkedPlayers = model.bookmarkedPlayers.filter(
-    (bookmark) =>
-      !owned.has(normalizeTagKey(bookmark.tag)) &&
-      !hidden.has(normalizeTagKey(bookmark.tag)) &&
-      bookmark.clanTag.length > 0,
-  );
-  const missingBookmarkedPlayerTags = bookmarkedPlayers
-    .filter((bookmark) => !profilesByTag.has(normalizeTagKey(bookmark.tag)))
-    .map((bookmark) => bookmark.tag);
+  const profilesByTag = new Map(model.profiles.map((profile) => [normalizeTagKey(profile.tag), profile]));
+  const ownedProfiles = model.ownedPlayerTags.flatMap((tag) => {
+    const key = normalizeTagKey(tag);
+    const profile = profilesByTag.get(key);
+    return profile && owned.has(key) && !hidden.has(key) ? [profile] : [];
+  });
 
   const linkedClans = new Map<string, Clan>();
   for (const profile of ownedProfiles) {
@@ -105,23 +98,12 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
   );
 
   const hydratedByTag = new Map(model.hydratedBookmarkedClans.map((clan) => [clan.tag, clan]));
-  for (const bookmark of bookmarkedPlayers) {
-    const clan = asClan(profilesByTag.get(normalizeTagKey(bookmark.tag))?.clan);
-    if (clan) hydratedByTag.set(clan.tag, clan);
-  }
   const bookmarkSnapshotByTag = new Map(
     model.bookmarkedClans.map((bookmark) => [bookmark.tag, bookmark]),
   );
-  const bookmarkNameByTag = new Map(
-    bookmarkedPlayers.map((bookmark) => [bookmark.clanTag, bookmark.clanName]),
-  );
   const bookmarkedClanTags = unique([
     ...model.bookmarkedClans.map((bookmark) => bookmark.tag),
-    ...bookmarkedPlayers.map((bookmark) => {
-      const profile = profilesByTag.get(normalizeTagKey(bookmark.tag));
-      return profile?.clanTag || bookmark.clanTag;
-    }),
-  ]).filter((tag) => tag && !linkedClans.has(tag));
+  ]).filter((tag) => tag && !Array.from(linkedClans.keys()).some((linkedTag) => normalizeTagKey(linkedTag) === normalizeTagKey(tag)));
 
   const summaries = new Map(
     Array.from(model.summaries.entries()).map(([tag, summary]) => [normalizeHash(tag), summary]),
@@ -131,7 +113,7 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
       clan,
       tag: clan.tag,
       name: clan.name,
-      badgeUrl: clan.badgeUrls.smallest,
+      badgeUrl: ImageAssets.clanBadgeForTag(clan.tag),
       bookmarked: false,
     })),
     ...bookmarkedClanTags.map((tag) => {
@@ -140,8 +122,8 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
       return {
         clan,
         tag,
-        name: clan?.name || snapshot?.name || bookmarkNameByTag.get(tag) || tag,
-        badgeUrl: clan?.badgeUrls.smallest || snapshot?.badgeUrl || '',
+        name: clan?.name || snapshot?.name || tag,
+        badgeUrl: ImageAssets.clanBadgeForTag(tag),
         bookmarked: true,
       };
     }),
@@ -187,11 +169,9 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
       accountStatuses,
     };
   });
-  items.sort((left, right) => left.sortWeight - right.sortWeight);
-
   return {
     items,
-    missingBookmarkedPlayerTags,
+    missingBookmarkedPlayerTags: [],
     missingWarClanTags: bookmarkedClanTags.filter((tag) => !summaries.has(normalizeHash(tag))),
   };
 }

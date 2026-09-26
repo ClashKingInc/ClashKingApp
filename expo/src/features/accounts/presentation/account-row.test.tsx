@@ -11,8 +11,8 @@ jest.mock('react-native-draggable-flatlist', () => {
   };
 });
 
-describe('linked-account drag handle', () => {
-  it('starts continuous reordering only from the handle', async () => {
+describe('linked-account card reordering', () => {
+  it('starts continuous reordering by holding the card without a visible handle', async () => {
     const drag = jest.fn();
     const verify = jest.fn();
     const remove = jest.fn();
@@ -39,10 +39,8 @@ describe('linked-account drag handle', () => {
       </I18nProvider>,
     );
 
-    await fireEvent(screen.getByText('Player'), 'longPress');
-    expect(drag).not.toHaveBeenCalled();
-
-    await fireEvent(screen.getByTestId('account-drag-handle-#ABC'), 'longPress');
+    expect(screen.queryByTestId('account-drag-handle-#ABC')).toBeNull();
+    await fireEvent(screen.getByTestId('account-card-#ABC'), 'longPress');
     expect(drag).toHaveBeenCalledTimes(1);
 
     await fireEvent.press(screen.getByRole('button', { name: 'Verify' }));

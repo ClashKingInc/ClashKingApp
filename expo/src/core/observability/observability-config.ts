@@ -1,6 +1,3 @@
-export const DEFAULT_BETTER_STACK_DSN =
-  'https://6wB3LFzRuW4wyEj1MJVx3SvG@s2574992.eu-fsn-3.betterstackdata.com/2574992';
-
 export interface ObservabilityEnvironment {
   readonly EXPO_PUBLIC_CK_SENTRY_DSN?: string;
   readonly EXPO_PUBLIC_CK_API_ENV?: string;
@@ -15,22 +12,31 @@ export interface ObservabilityMetadata {
   readonly buildNumber?: string;
 }
 
+// Sentry DSNs are public client ingestion identifiers. Keeping the app's default
+// here ensures native, OTA, web, and local bundles all report to the same project.
+export const DEFAULT_SENTRY_DSN =
+  'https://dd63e00ff0707d03b77f7837e60718b3@o4509853737353216.ingest.de.sentry.io/4512054295461968';
+
 export function resolveObservabilityConfig(
   environment: ObservabilityEnvironment,
   metadata: ObservabilityMetadata,
 ) {
   return {
-    dsn: environment.EXPO_PUBLIC_CK_SENTRY_DSN?.trim() || DEFAULT_BETTER_STACK_DSN,
+    dsn: environment.EXPO_PUBLIC_CK_SENTRY_DSN?.trim() || DEFAULT_SENTRY_DSN,
     environment: sentryEnvironment(environment.EXPO_PUBLIC_CK_API_ENV),
     release: `${metadata.packageName}@${metadata.version}`,
     dist: metadata.buildNumber?.trim() || undefined,
-    tracesSampleRate: percentageRate(environment.EXPO_PUBLIC_CK_SENTRY_TRACES_SAMPLE_RATE_PERCENT),
-    replaysSessionSampleRate: percentageRate(
-      environment.EXPO_PUBLIC_CK_SENTRY_REPLAY_SESSION_SAMPLE_RATE_PERCENT,
-    ),
-    replaysOnErrorSampleRate: percentageRate(
-      environment.EXPO_PUBLIC_CK_SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE_PERCENT,
-    ),
+    tracesSampleRate: undefined,
+    profilesSampleRate: undefined,
+    replaysSessionSampleRate: undefined,
+    replaysOnErrorSampleRate: undefined,
+    enableLogs: false,
+    enableAutoSessionTracking: false,
+    enableAutoPerformanceTracing: false,
+    enableAppStartTracking: false,
+    enableNativeFramesTracking: false,
+    enableStallTracking: false,
+    enableUserInteractionTracing: false,
   };
 }
 
@@ -47,10 +53,4 @@ export function sentryEnvironment(value: string | undefined): string {
     default:
       return value?.trim() || 'production';
   }
-}
-
-export function percentageRate(value: string | undefined): number {
-  const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 0;
-  return Math.min(100, Math.max(0, parsed)) / 100;
 }

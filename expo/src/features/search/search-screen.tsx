@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import { Keyboard, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,13 +23,10 @@ import { useI18n } from '../../i18n';
 import {
   CKText,
   GlassPill,
-  GlassSurface,
   LoadingIndicator,
   MobileWebImage,
   PressableSurface,
   SelectionPicker,
-  ckRadius,
-  colorWithAlpha,
   useCKTheme,
 } from '../../ui';
 import {
@@ -291,7 +289,6 @@ function filtersPanel(props: SearchScreenProps): ReactNode {
 
 function ModeSelector({
   mode,
-  compact = false,
   isRtl,
   onChange,
 }: {
@@ -301,34 +298,17 @@ function ModeSelector({
   onChange: (mode: SearchMode) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
   return (
-    <GlassSurface
-      cornerRadius={ckRadius.card}
+    <SlidingSegmentControl
+      value={mode}
+      isRtl={isRtl}
+      onChange={onChange}
+      options={[
+        { value: 'players', label: t('searchTabPlayers') },
+        { value: 'clans', label: t('searchTabClans') },
+      ]}
       testID="search-mode-selector"
-      style={[styles.segment, compact && styles.compactSegment, isRtl && styles.rowRtl]}
-    >
-      {(['players', 'clans'] as const).map((value) => {
-        const selected = value === mode;
-        return (
-          <Pressable
-            key={value}
-            accessibilityRole="tab"
-            accessibilityState={{ selected }}
-            onPress={() => onChange(value)}
-            style={[
-              styles.segmentButton,
-              compact && styles.compactSegmentButton,
-              selected && { backgroundColor: colorWithAlpha(theme.primary, 0.14) },
-            ]}
-          >
-            <CKText role="labelLarge" style={selected ? { color: theme.primary } : undefined}>
-              {value === 'players' ? t('searchTabPlayers') : t('searchTabClans')}
-            </CKText>
-          </Pressable>
-        );
-      })}
-    </GlassSurface>
+    />
   );
 }
 
@@ -954,13 +934,7 @@ function resultImage(result: JsonRecord, mode: SearchMode): string | null {
   if (mode === 'players') {
     return ImageAssets.townHall(numberValue(result.townHallLevel, numberValue(result.townhall, 1)));
   }
-  const badgeUrls = recordValue(result.badgeUrls);
-  return (
-    stringValue(badgeUrls.small) ||
-    stringValue(badgeUrls.medium) ||
-    stringValue(badgeUrls.large) ||
-    null
-  );
+  return ImageAssets.clanBadgeForTag(stringValue(result.tag)) || null;
 }
 
 const styles = StyleSheet.create({
@@ -999,15 +973,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   fieldAction: { width: 38, height: 44, alignItems: 'center', justifyContent: 'center' },
-  segment: { height: 52, flexDirection: 'row', padding: 4 },
-  compactSegment: { height: 40 },
-  segmentButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: ckRadius.tile,
-  },
-  compactSegmentButton: { minHeight: 32 },
   pageResultSpacer: { paddingTop: 14 },
   overlayResults: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 20 },
   overlayResultSpacer: { paddingTop: 12 },

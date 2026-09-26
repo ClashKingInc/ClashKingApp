@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/legends_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/legends_widget_background"
+    android:padding="10dp">
+
+    <LinearLayout android:id="@+id/legends_content" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="38dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <ImageView android:id="@+id/legends_town_hall" android:layout_width="34dp" android:layout_height="34dp" android:contentDescription="@string/legends_widget_town_hall_description" android:scaleType="centerInside" android:src="@drawable/ic_upgrade_hall_placeholder" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginStart="8dp" android:layout_weight="1" android:gravity="center_vertical" android:orientation="vertical">
+                <TextView android:id="@+id/legends_player_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="16sp" android:textStyle="bold" />
+                <LinearLayout android:id="@+id/legends_clan_group" android:layout_width="match_parent" android:layout_height="17dp" android:gravity="center_vertical" android:orientation="horizontal">
+                    <ImageView android:id="@+id/legends_clan_badge" android:layout_width="16dp" android:layout_height="16dp" android:contentDescription="@string/legends_widget_clan_badge_description" android:scaleType="centerInside" />
+                    <TextView android:id="@+id/legends_clan_name" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView android:id="@+id/legends_net_value" android:layout_width="112dp" android:layout_height="match_parent" android:layout_marginStart="8dp" android:autoSizeMaxTextSize="34sp" android:autoSizeMinTextSize="20sp" android:autoSizeStepGranularity="1sp" android:autoSizeTextType="uniform" android:gravity="end|center_vertical" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="30sp" android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="4dp" android:layout_weight="1" android:baselineAligned="false" android:orientation="horizontal">
+            <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical" android:paddingEnd="10dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:gravity="center" android:orientation="horizontal">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:orientation="horizontal">
+                            <ImageView android:id="@+id/legends_attack_icon" android:layout_width="18dp" android:layout_height="18dp" android:contentDescription="@string/legends_widget_attacks" android:scaleType="centerInside" />
+                            <TextView android:id="@+id/legends_attack_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="15sp" android:textStyle="bold" />
+                        </LinearLayout>
+                        <TextView android:id="@+id/legends_attack_trophies" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="11sp" android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:orientation="horizontal">
+                            <ImageView android:id="@+id/legends_defense_icon" android:layout_width="18dp" android:layout_height="18dp" android:contentDescription="@string/legends_widget_defenses" android:scaleType="centerInside" />
+                            <TextView android:id="@+id/legends_defense_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="15sp" android:textStyle="bold" />
+                        </LinearLayout>
+                        <TextView android:id="@+id/legends_defense_trophies" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="11sp" android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="18dp" android:gravity="center" android:orientation="horizontal">
+                    <TextView android:id="@+id/legends_day" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" />
+                    <TextView android:id="@+id/legends_rank_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" />
+                    <TextView android:id="@+id/legends_rank_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="12sp" android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/legends_recent_row" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginStart="8dp" android:layout_weight="1.15" android:background="@drawable/legends_widget_surface" android:gravity="center_vertical" android:orientation="vertical" android:paddingHorizontal="9dp" android:paddingVertical="4dp">
+                <TextView android:id="@+id/legends_recent_heading" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" android:textStyle="bold" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:id="@+id/legends_recent_opponent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="13sp" android:textStyle="bold" />
+                    <ImageView android:id="@+id/legends_recent_kind_icon" android:layout_width="16dp" android:layout_height="16dp" android:layout_marginStart="6dp" android:contentDescription="@null" android:scaleType="centerInside" />
+                    <TextView android:id="@+id/legends_recent_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="13sp" android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:gravity="center_vertical" android:orientation="horizontal">
+                    <ImageView android:id="@+id/legends_recent_star_one" android:layout_width="13dp" android:layout_height="13dp" android:contentDescription="@null" android:scaleType="centerInside" />
+                    <ImageView android:id="@+id/legends_recent_star_two" android:layout_width="13dp" android:layout_height="13dp" android:contentDescription="@null" android:scaleType="centerInside" />
+                    <ImageView android:id="@+id/legends_recent_star_three" android:layout_width="13dp" android:layout_height="13dp" android:contentDescription="@null" android:scaleType="centerInside" />
+                    <TextView android:id="@+id/legends_recent_percentage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="5dp" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+                    <TextView android:id="@+id/legends_recent_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:id="@+id/legends_stale_chip" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/legends_empty_state" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/legends_widget_surface" android:gravity="center" android:padding="16dp" android:textColor="@color/widget_text_secondary" android:textSize="12sp" android:visibility="gone" />
+</FrameLayout>

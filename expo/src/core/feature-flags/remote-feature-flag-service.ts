@@ -1,17 +1,20 @@
-import type { ApiClient } from '../api/client';
+import type { AppConfigResponse } from '@clashking/api-contracts/expo';
+
 import { STORAGE_KEYS } from '../storage/storage';
 import type { StringStore } from '../../services/storage/auth-storage';
+import type { ApiEnvironment } from '../config/api-config';
 import {
   defaultFeatureFlagValue,
+  featureFlagsFromConfig,
   isFeatureFlagEnabled,
-  parseFeatureFlagResponse,
   type FeatureFlagEvaluation,
   type FeaturePlatform,
   type RemoteFeatureFlag,
 } from './feature-flags';
 
 export interface RemoteFeatureFlagServiceOptions {
-  readonly api: ApiClient;
+  readonly environment?: ApiEnvironment;
+  readonly loadConfig: () => Promise<AppConfigResponse>;
   readonly preferences: StringStore;
   readonly platform: FeaturePlatform;
   readonly appVersionProvider: () => Promise<string>;
@@ -31,13 +34,14 @@ export class RemoteFeatureFlagService {
       this.loadInstallationSeed(),
       this.options.appVersionProvider(),
     ]);
-    const response = await this.options.api.requestRecord('/app/config', {
-      requiresAuth: false,
-    });
-    this.flags = parseFeatureFlagResponse(response);
+    const response = await this.options.loadConfig();
+    this.flags = featureFlagsFromConfig(response);
   }
 
   isEnabled(key: string, fallback = defaultFeatureFlagValue(key)): boolean {
+    // Keep unfinished calculators unavailable on production, including deep links.
+    if (key === 'calculators' && (this.options.environment ?? 'production') === 'production')
+      return false;
     const evaluation: FeatureFlagEvaluation = {
       platform: this.options.platform,
       appVersion: this.appVersion,

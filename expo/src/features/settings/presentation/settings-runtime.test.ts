@@ -1,4 +1,4 @@
-import { versionDeviceLabel } from './settings-runtime';
+import { versionDeviceLabel, runningAppVersion } from './settings-runtime';
 
 describe('versionDeviceLabel', () => {
   it('matches Flutter Android copy exactly', () => {
@@ -31,5 +31,45 @@ describe('versionDeviceLabel', () => {
     expect(versionDeviceLabel({ platform: 'web', version: '0.3.5', buildNumber: '25' })).toBe(
       'Version: 0.3.5 (Build 25)\nUnknown Platform',
     );
+  });
+});
+
+describe('runningAppVersion', () => {
+  const config = { version: '0.4.2', ios: { buildNumber: '42' }, android: { versionCode: 43 } };
+
+  it('uses the Metro config version and build during local development', () => {
+    expect(
+      runningAppVersion({
+        platform: 'ios',
+        nativeVersion: '0.3.5',
+        nativeBuild: '25',
+        config,
+        isDevelopment: true,
+        isEmbeddedLaunch: true,
+      }),
+    ).toEqual({ version: '0.4.2', buildNumber: '42' });
+  });
+  it('reports the running OTA version and platform-specific build instead of the installed binary', () => {
+    expect(
+      runningAppVersion({
+        platform: 'android',
+        nativeVersion: '0.3.5',
+        nativeBuild: '25',
+        config,
+        isEmbeddedLaunch: false,
+        manifest: { metadata: { version: '0.4.2-beta' } },
+      }),
+    ).toEqual({ version: '0.4.2-beta', buildNumber: '43' });
+  });
+  it('keeps the installed version authoritative for embedded builds', () => {
+    expect(
+      runningAppVersion({
+        platform: 'ios',
+        nativeVersion: '0.4.1',
+        nativeBuild: '41',
+        config,
+        isEmbeddedLaunch: true,
+      }),
+    ).toEqual({ version: '0.4.1', buildNumber: '41' });
   });
 });

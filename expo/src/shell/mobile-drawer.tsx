@@ -6,6 +6,8 @@ import { CircleHelp, Goal, UserPlus } from 'lucide-react-native';
 import type { MessageKey } from '../i18n';
 import {
   filterEnabledRoutes,
+  filterVisibleRoutes,
+  isRouteEnabled,
   mobileDrawerBodyRoutes,
   mobileDrawerFooterRoutes,
   RouteIcon,
@@ -44,7 +46,7 @@ export function MobileDrawer({
   hasUser: boolean;
 }) {
   const theme = useCKTheme();
-  const bodyRoutes = filterEnabledRoutes(mobileDrawerBodyRoutes, features);
+  const bodyRoutes = filterVisibleRoutes(mobileDrawerBodyRoutes, features);
   const footerRoutes = filterEnabledRoutes(mobileDrawerFooterRoutes, features);
   const [showFollowerHelp, setShowFollowerHelp] = useState(false);
   const helpTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -79,6 +81,10 @@ export function MobileDrawer({
       testID="mobile-drawer"
     >
       <ScrollView
+        testID="mobile-drawer-scroll"
+        bounces={false}
+        alwaysBounceVertical={false}
+        overScrollMode="never"
         automaticallyAdjustContentInsets={false}
         contentContainerStyle={styles.scrollContent}
         contentInsetAdjustmentBehavior="never"
@@ -135,6 +141,7 @@ export function MobileDrawer({
               route={route}
               t={t}
               isRtl={isRtl}
+              disabled={!isRouteEnabled(route, features)}
               onPress={() => navigate(route)}
             />
           ))}

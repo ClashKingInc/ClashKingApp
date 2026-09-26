@@ -1,4 +1,37 @@
 {
+  "notifSystemNotifications": "سسٹم اطلاعات",
+  "notifSystemSettings": "اطلاعات کی ترتیبات کھولیں",
+  "notifSystemSettingsDescription": "اپنے آلے کی ترتیبات میں الرٹس، آوازیں اور بیجز کا نظم کریں۔",
+  "notifSystemSettingsFailed": "اطلاعات کی ترتیبات نہیں کھل سکیں۔ براہ کرم اپنے آلے پر ترتیبات کھولیں۔",
+  "notifManagePlayersDescription": "کھلاڑی → منسلک → اختیارات میں اکاؤنٹ کی اطلاعات کا نظم کریں۔",
+  "notifCustomReminders": "اپنی مرضی کی یاد دہانیاں",
+  "notifTestType": "اطلاع کی قسم",
+  "statsBattlelogsGroup": "جنگی ریکارڈ",
+  "statsGlobalStatsGroup": "عالمی اعداد و شمار",
+  "playerOptionShowOnHomeTitle": "ہوم پر اکاؤنٹ دکھائیں",
+  "playerOptionShowOnHomeSubtitle": "اس تصدیق شدہ اکاؤنٹ کو ہوم کارڈز میں شامل کریں (زیادہ سے زیادہ 5)۔",
+  "playerOptionShowOnHomeVerifyFirst": "اس اکاؤنٹ کو ہوم پر دکھانے کے لیے اس کی تصدیق کریں۔",
+  "playerOptionHomeInclusionFirst": "پہلے ہوم پر اکاؤنٹ دکھائیں فعال کریں۔",
+  "homeIncludedAccountsLimit": "ہوم پر زیادہ سے زیادہ 5 اکاؤنٹس دکھائے جا سکتے ہیں۔ پہلے ایک ہٹائیں۔",
+  "statsHitratesByTownHall": "ٹاؤن ہال کے لحاظ سے کامیابی کی شرح",
+  "statsChartGranularity": "چارٹ کا وقفہ",
+  "statsDaily": "روزانہ",
+  "statsWeekly": "ہفتہ وار",
+  "statsMonthly": "ماہانہ",
+  "statsCompareCohorts": "گروہوں کا موازنہ کریں",
+  "statsAcrossCohorts": "گروہوں میں استعمال",
+  "legendsTrophyGrid": "ٹرافی گرڈ",
+  "legendsPopularArmyItems": "مقبول ترین فوجی اکائیاں",
+  "legendsPopularTroop": "پسندیدہ",
+  "legendsHitrate": "کامیابی کی شرح",
+  "legendsAvgOffense": "اوسط حملہ",
+  "legendsAvgDefense": "اوسط دفاع",
+  "settingsClearImageCache": "تصاویر کی کیش صاف کریں",
+  "settingsImageCacheCleared": "تصاویر کی کیش صاف کر دی گئی۔",
+  "settingsImageCacheClearFailed": "تصاویر کی کیش صاف نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
+  "startupCheckingUpdate": "اپ ڈیٹس کی جانچ ہو رہی ہے…",
+  "startupDownloadingUpdate": "اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے…",
+  "startupUpdateInBackground": "پس منظر میں اپ ڈیٹ کریں",
   "warStatsRangeTitle": "جنگ کے اعداد و شمار کی حد",
   "warStatsRangeDescription": "منتخب کریں کہ اعداد و شمار حالیہ جنگوں کی مقررہ تعداد یا دنوں کی حالیہ مدت پر مشتمل ہوں۔",
   "warStatsRangeDays": "دن",
@@ -172,7 +205,7 @@
   "notifPushUnsupported": "اس پلیٹ فارم پر پش اطلاعات معاون نہیں ہیں۔",
   "notifPushInitializing": "پش اطلاعات ترتیب دی جا رہی ہیں…",
   "notificationPrimerTitle": "اطلاعات فعال کریں؟",
-  "notificationPrimerBody": "ClashKing آپ کو جنگ، CWL، اکاؤنٹ اور پروجیکٹ کی اپ ڈیٹس کے بارے میں مطلع کر سکتا ہے۔ آپ اسے کسی بھی وقت ترتیبات > اطلاعات میں تبدیل کر سکتے ہیں۔",
+  "notificationPrimerBody": "ClashKing ایونٹس، اعلانات، لیجنڈ دفاع اور معاونت کی تازہ خبریں بھیج سکتا ہے۔ جنگ اور ریڈ ویک اینڈ کی یاد دہانیاں تب تک بند رہتی ہیں جب تک آپ انہیں ترتیب نہیں دیتے۔ آپ یہ انتخاب ترتیبات > اطلاعات میں بدل سکتے ہیں۔",
   "notificationPrimerNotNow": "ابھی نہیں",
   "notificationPrimerAllow": "اجازت دیں",
   "achievementsTitle": "کامیابیاں",
@@ -1556,6 +1589,8 @@
   "legendsCountryTitle": "ملک",
   "legendsLocalRankTitle": "مقامی درجہ",
   "legendsGlobalRankTitle": "عالمی درجہ بندی",
+  "legendsYourArmy": "آپ کی فوج",
+  "legendsArmyUsedAgainstYou": "آپ کے خلاف استعمال ہونے والی فوج",
   "warWinsTitle": "جیتتا ہے۔",
   "warLossesTitle": "نقصانات",
   "warDrawsTitle": "ڈرا کرتا ہے۔",
@@ -2609,7 +2644,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "انتباہات کا انتخاب کریں اور مقامی ٹیسٹ کے مناظر بھیجیں۔",
+  "settingsNotificationsSubtitle": "منتخب کریں کہ آپ کون سے الرٹس وصول کریں۔",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3254,6 +3289,9 @@
   "statsHero": "ہیرو",
   "statsPet": "پالتو",
   "statsEquipment": "سازوسامان",
+  "statsPetCombinations": "پالتو جانوروں کے مجموعے",
+  "statsEquipmentPairs": "سازوسامان کے جوڑے",
+  "statsArmyFallback": "فوج {id}",
   "statsOwningHero": "مالک ہیرو",
   "statsAddItem": "آئٹم شامل کریں",
   "statsAnalyzeItems": "آئٹمز کا تجزیہ کریں۔",
@@ -4003,19 +4041,32 @@
   "homeActivityJoined": "شامل ہوا",
   "homeActivityLeft": "چھوڑ گیا",
   "homeActivityAClan": "ایک کلین",
+  "statsCwlSeasonGroups": "گروپس",
+  "statsCwlSeasonHistory": "وقت کے ساتھ قبیلہ جنگ لیگ",
+  "statsCwlRosterNotLineup": "رجسٹرڈ کھلاڑیوں کی تقسیم کو {size} جگہوں کے مطابق دکھایا گیا ہے؛ اصل جنگی ٹیم مختلف ہو سکتی ہے۔",
+  "@statsCwlRosterNotLineup": {"placeholders": {"size": {"type": "int"}}},
+  "statsTroopStats": "فوجیوں کے اعداد و شمار",
+  "statsWarSizes": "جنگوں کے سائز",
+  "statsMissedAttacks": "چھوٹ جانے والے حملے",
+  "statsCopyChart": "چارٹ کاپی کریں",
+  "statsCompareItems": "آئٹمز کا موازنہ کریں",
+  "statsCompareItemsHint": "موازنے کے لیے زیادہ سے زیادہ 5 آئٹمز منتخب کریں۔",
+  "statsVsOverall": "مجموعی اعداد سے موازنہ",
+  "statsCopyChartFailed": "چارٹ کاپی نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+  "statsPercentagePoints": "فیصد پوائنٹس",
   "statsMeta": "میٹا",
   "statsBattle": "جنگ",
   "statsWorld": "دنیا",
   "statsHeaderSubtitle": "جنگی کارکردگی اور ہماری ٹریک کردہ دنیا دریافت کریں۔",
   "statsPreview": "پیش نظارہ",
-  "statsTownHallDistribution": "ٹاؤن ہال کی تقسیم",
+  "statsTownHallDistribution": "ٹاؤن ہال",
   "statsBuilderHallDistribution": "بلڈر ہال کی تقسیم",
-  "statsLeagueDistribution": "درجہ بندی شدہ لیگ کی تقسیم",
+  "statsLeagueDistribution": "درجہ بندی والی لیگز",
   "statsTrackedPlayers": "موجودہ ٹریک کردہ کھلاڑی کی آبادی",
   "statsTrackedClans": "موجودہ ٹریک شدہ قبیلہ کی آبادی",
-  "statsCwlLeagueDistribution": "CWL لیگ کی تقسیم",
-  "statsCapitalLeagueDistribution": "کیپٹل لیگ کی تقسیم",
-  "statsTrackedLocations": "ٹریک شدہ قبیلے کے مقامات",
+  "statsCwlLeagueDistribution": "CWL لیگز",
+  "statsCapitalLeagueDistribution": "کیپٹل لیگز",
+  "statsTrackedLocations": "کلین کے مقامات",
   "statsLocationCountHelp": "ممالک اور مقامات جن کی نمائندگی ٹریک شدہ قبیلوں کے ذریعے کی جاتی ہے۔",
   "statsLeagueId": "لیگ {id}",
   "@statsLeagueId": {
@@ -4756,6 +4807,41 @@
   "@playerUpgradeSectionMaxed": {
     "placeholders": {
       "townHallLevel": {
+        "type": "int"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "رجسٹرڈ فہرست",
+  "cwlMatches": "مقابلے",
+  "cwlNextMatchup": "اگلا مقابلہ",
+  "cwlOtherMatches": "دیگر مقابلے",
+  "cwlOutlook": "سیزن کا اندازہ",
+  "cwlFirstPlace": "پہلی پوزیشن",
+  "cwlTopTwo": "پہلی دو پوزیشنیں",
+  "cwlRemainingOpponents": "باقی مخالفین",
+  "cwlWinBonusNote": "ہر مکمل جیت کے 10 بونس ستارے شامل ہیں۔",
+  "cwlEstimateNote": "اندازے مکمل جنگوں اور باقی مخالفین پر مبنی ہیں، ٹیم کی تبدیلیوں پر نہیں۔ ہر کلین کی کم از کم دو جنگیں مکمل ہونی چاہئیں۔ یہ غیر مصدقہ اندازے ہیں؛ ترقی کے اصول لیگ کے لحاظ سے مختلف ہوتے ہیں۔",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# گھنٹہ} other {# گھنٹے}}} other {{count, plural, one {# منٹ} other {# منٹ}}}}",
+  "personalBasesDeleteOld": "90 دن سے پرانے بیس ہٹائیں",
+  "personalBasesDeleteOldConfirm": "90 دن سے پرانے {count} محفوظ بیس ہٹا دیے جائیں گے۔ ڈاؤن لوڈ ہسٹری اور شیئر کیے گئے بیس برقرار رہیں گے۔",
+  "@personalBasesDeleteOldConfirm": {
+    "description": "Confirms cleanup while preserving lifetime download history.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legendsAutomaticDefense": "خودکار دفاع",
+  "legendsPopularArmyItem": "سب سے مقبول فوجی آئٹم",
+  "legendsClanCastle": "قبیلے کا قلعہ",
+  "@cwlDuration": {
+    "description": "Explicit countdown units; avoid native unit conversion.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
         "type": "int"
       }
     }

@@ -1,13 +1,17 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { localImageCache } from '../../../core/assets/local-asset-cache';
+import { useEffect, useMemo, useReducer, useState, useSyncExternalStore } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import * as Clipboard from 'expo-clipboard';
 import { File, Paths } from 'expo-file-system';
 import * as Linking from 'expo-linking';
 import * as Sharing from 'expo-sharing';
 import { Platform } from 'react-native';
+import { clearMobileImageCache } from '../../../ui/mobile-web-image';
 
 import { APP_FEATURE_FLAGS } from '../../../core/feature-flags/feature-flags';
 import { useI18n, type SupportedLocale } from '../../../i18n';
 import { ClashHandoffDialog } from '../../../ui';
+import { DestinationStack } from '../../../ui/destination-stack';
 import { useAppRuntime, useAppState } from '../../../core/app/runtime-context';
 import { APP_ICON_OPTIONS } from '../app-icons/app-icon-service';
 import { clanOptionsFromProfiles } from '../../widgets';
@@ -27,6 +31,7 @@ import { SETTINGS_LOCALES } from './settings-locales';
 import { getVersionDeviceLabel } from './settings-runtime';
 import { SettingsScreen, type SettingsAppIconChoice } from './settings-screen';
 import { TranslationScreen } from './translation-screen';
+import { openSystemNotificationSettings } from './system-notification-settings';
 
 type SettingsScene = 'main' | SettingsDestination | 'licenses';
 
@@ -44,12 +49,33 @@ const SUPPORT_EMAIL_URL = 'mailto:devs@clashk.ing?subject=App%20Inquiry';
 const PRIVACY_EMAIL_URL =
   'mailto:devs@clashk.ing?subject=ClashKing%20privacy%20request&body=Hello%20ClashKing%20team%2C%0A%0AI%20want%20to%20exercise%20a%20privacy%20right%20for%20my%20account.%20Please%20help%20me%20with%3A%0A%0A-%20Access%2Fexport%0A-%20Correction%0A-%20Deletion%0A-%20Consent%20withdrawal%0A-%20Other%3A%0A%0AAccount%20email%20or%20Discord%20username%3A%0A%0AThank%20you.';
 
-export function SettingsRoot({ onClose }: { onClose: () => void }) {
+export function SettingsRoot({
+  onClose,
+  onManagePlayers,
+}: {
+  onClose: () => void;
+  onManagePlayers?: () => void;
+}) {
   const runtime = useAppRuntime();
   const appState = useAppState();
   const { t, locale } = useI18n();
   const [domainRevision, refreshDomainState] = useReducer((value: number) => value + 1, 0);
-  const [scene, setScene] = useState<SettingsScene>('main');
+  const link = useLinkParameters();
+  const [scene, setScene] = useState<SettingsScene>(
+    linkChoice(
+      link.section === 'notifications' &&
+        (Platform.OS === 'web' || !appState.isFeatureEnabled(APP_FEATURE_FLAGS.notifications))
+        ? 'main'
+        : link.section,
+      ['main', 'notifications', 'faq', 'translation', 'privacy', 'licenses'],
+      'main',
+    ),
+  );
+  const imageCacheBytes = useSyncExternalStore(
+    localImageCache.subscribe,
+    localImageCache.getSize,
+    localImageCache.getSize,
+  );
   const [versionLabel, setVersionLabel] = useState(t('generalLoading'));
   const [alternateIconsSupported, setAlternateIconsSupported] = useState(false);
   const [selectedAppIcon, setSelectedAppIcon] = useState<string>('');
@@ -57,9 +83,13 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const unsubscribePlayers = runtime.players.subscribe(refreshDomainState);
     const unsubscribeBookmarks = runtime.bookmarks.subscribe(refreshDomainState);
+    const unsubscribeAccounts = runtime.accounts.subscribe(refreshDomainState);
+    const unsubscribeClans = runtime.clans.subscribe(refreshDomainState);
     return () => {
       unsubscribePlayers();
       unsubscribeBookmarks();
+      unsubscribeAccounts();
+      unsubscribeClans();
     };
   }, [runtime]);
 
@@ -92,11 +122,17 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
 
   const widgetClans = useMemo(() => {
     void domainRevision;
-    return clanOptionsFromProfiles(runtime.players.profiles, runtime.bookmarks.clans);
+    const linkedTags = new Set(
+      runtime.accounts.accounts.map((account) => account.playerTag.toUpperCase()),
+    );
+    return clanOptionsFromProfiles(
+      runtime.players.profiles.filter((player) => linkedTags.has(player.tag.toUpperCase())),
+      runtime.bookmarks.clans,
+      [...runtime.clans.clans.values()],
+    );
   }, [domainRevision, runtime]);
   useEffect(() => {
-    if (!appState.isFeatureEnabled(APP_FEATURE_FLAGS.warWidgets) || widgetClans.length === 0)
-      return;
+    if (!appState.isFeatureEnabled(APP_FEATURE_FLAGS.warWidgets)) return;
     void runtime.warWidgets.cacheClanOptions(widgetClans).catch(() => undefined);
   }, [appState, runtime, widgetClans]);
 
@@ -105,12 +141,14 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
       loadLocal: () => runtime.notificationPreferences.loadLocal(),
       load: () => runtime.notificationPreferences.load(),
       save: (settings) => runtime.notificationPreferences.save(settings),
-      lastPushResult: () => runtime.push.lastResult,
-      initializePush: () => runtime.push.initialize(),
-      requestPermissionAndRegister: () => runtime.push.requestPermissionAndRegister(),
-      tokenPreview: () => runtime.push.tokenPreview(),
+      initializePush: () => runtime.push.initialize(true),
+      enablePush: () => runtime.push.requestPermissionAndRegister(),
+      openSystemSettings: openSystemNotificationSettings,
       ...(runtime.notificationSettingsDebug
-        ? { sendTestNotification: runtime.notificationSettingsDebug.service.sendTestNotification }
+        ? {
+            testNotificationTypes: runtime.notificationSettingsDebug.testNotificationTypes,
+            sendTestNotification: runtime.notificationSettingsDebug.service.sendTestNotification,
+          }
         : undefined),
     }),
     [runtime],
@@ -153,44 +191,49 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
     [runtime],
   );
 
-  if (scene === 'notifications') {
-    return (
-      <NotificationSettingsScreen
-        debugEnabled={runtime.notificationSettingsDebug !== null}
-        onBack={() => setScene('main')}
-        service={notificationService}
-      />
-    );
-  }
-  if (scene === 'faq') {
-    return <FaqScreen actions={faqActions} onBack={() => setScene('main')} />;
-  }
-  if (scene === 'translation') {
-    return (
-      <TranslationScreen
-        actions={{
-          openCrowdin: () => void openExternal(CROWDIN_INVITE_URL),
-          openDiscord: () => void openExternal(DISCORD_URL),
-        }}
-        onBack={() => setScene('main')}
-      />
-    );
-  }
-  if (scene === 'privacy') {
-    return <PrivacyControlsScreen actions={privacyActions} onBack={() => setScene('main')} />;
-  }
-  if (scene === 'licenses') {
-    return (
-      <LicensesScreen
-        applicationName={t('appTitle')}
-        applicationVersion={versionLabel.split('\n', 1)[0] ?? versionLabel}
-        onBack={() => setScene('main')}
-        packages={GENERATED_LICENSE_INVENTORY}
-      />
-    );
-  }
+  const detail = (() => {
+    if (scene === 'notifications') {
+      return (
+        <NotificationSettingsScreen
+          debugEnabled={runtime.notificationSettingsDebug !== null}
+          onBack={() => setScene('main')}
+          onManagePlayers={onManagePlayers}
+          service={notificationService}
+        />
+      );
+    }
+    if (scene === 'faq') {
+      return <FaqScreen actions={faqActions} onBack={() => setScene('main')} />;
+    }
+    if (scene === 'translation') {
+      return (
+        <TranslationScreen
+          actions={{
+            openCrowdin: () => void openExternal(CROWDIN_INVITE_URL),
+            openDiscord: () => void openExternal(DISCORD_URL),
+          }}
+          onBack={() => setScene('main')}
+        />
+      );
+    }
+    if (scene === 'privacy') {
+      return <PrivacyControlsScreen actions={privacyActions} onBack={() => setScene('main')} />;
+    }
+    if (scene === 'licenses') {
+      return (
+        <LicensesScreen
+          applicationName={t('appTitle')}
+          applicationVersion={versionLabel.split('\n', 1)[0] ?? versionLabel}
+          onBack={() => setScene('main')}
+          packages={GENERATED_LICENSE_INVENTORY}
+        />
+      );
+    }
+    return null;
+  })();
 
   const settingsActions: SettingsPresentationActions = {
+    clearImageCache: Platform.OS === 'web' ? undefined : clearMobileImageCache,
     changeLocale: (nextLocale) =>
       runtime.appState.getState().changeLanguage(nextLocale as SupportedLocale),
     changeTheme: (mode) => runtime.appState.getState().setThemePreference(mode),
@@ -222,25 +265,29 @@ export function SettingsRoot({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <SettingsScreen
-        actions={settingsActions}
-        alternateIconsSupported={alternateIconsSupported}
-        appIcons={appIcons}
-        currentLocale={locale}
-        localeChoices={SETTINGS_LOCALES}
-        notificationsEnabled={appState.isFeatureEnabled(APP_FEATURE_FLAGS.notifications)}
-        onBack={onClose}
-        onPrepareWarWidget={async (clanTag, requestPin) => {
-          await runtime.warWidgets.prepareClanWidgets(widgetClans, clanTag);
-          if (requestPin) await runtime.warWidgets.requestPinnedWarWidget();
-        }}
-        platform={Platform.OS}
-        selectedAppIcon={selectedAppIcon}
-        themeMode={appState.themePreference}
-        user={runtime.auth.state.currentUser!}
-        versionLabel={versionLabel}
-        warWidgetClans={widgetClans}
-        warWidgetsEnabled={appState.isFeatureEnabled(APP_FEATURE_FLAGS.warWidgets)}
+      <DestinationStack
+        focused={scene !== 'main'}
+        onCloseDetail={() => setScene('main')}
+        detail={detail}
+        grid={
+          <SettingsScreen
+            actions={settingsActions}
+            alternateIconsSupported={alternateIconsSupported}
+            appIcons={appIcons}
+            currentLocale={locale}
+            localeChoices={SETTINGS_LOCALES}
+            notificationsEnabled={
+              Platform.OS !== 'web' && appState.isFeatureEnabled(APP_FEATURE_FLAGS.notifications)
+            }
+            onBack={onClose}
+            platform={Platform.OS}
+            selectedAppIcon={selectedAppIcon}
+            themeMode={appState.themePreference}
+            user={runtime.auth.state.currentUser!}
+            imageCacheBytes={imageCacheBytes}
+            versionLabel={versionLabel}
+          />
+        }
       />
       <ClashHandoffDialog
         onCancel={() => setClashHandoffUrl(undefined)}

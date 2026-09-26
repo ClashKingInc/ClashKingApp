@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  Animated,
+  AppState,
   Modal,
   Pressable,
   ScrollView,
@@ -11,18 +11,16 @@ import {
 } from 'react-native';
 import {
   AlarmClock,
-  BadgeCheck,
   Bell,
   CalendarDays,
   Castle,
   ChevronDown,
   ChevronUp,
-  Flag,
   HeartHandshake,
   Megaphone,
   Plus,
   Shield,
-  Swords,
+  Users,
   Trash2,
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -38,16 +36,16 @@ import {
   CKText,
   LoadingIndicator,
   Skeleton,
+  SelectionPicker,
   Surface,
   ckRadius,
   ckSpacing,
   colorWithAlpha,
-  useCKAccessibility,
   useCKTheme,
 } from '../../../ui';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 import type { NotificationSettingsPresentationService } from './contracts';
-import { SettingSwitch, SettingsPage, SettingsSection } from './settings-components';
+import { SettingSwitch, SettingsPage, SettingsSection, SettingsTile } from './settings-components';
 
 const categoryRows: readonly {
   category: NotificationCategory;
@@ -55,30 +53,6 @@ const categoryRows: readonly {
   description: MessageKey;
   icon: (color: string) => ReactNode;
 }[] = [
-  {
-    category: 'legendAttacks',
-    title: 'notifGroupLegendAttacks',
-    description: 'notifLegendAttacksDescription',
-    icon: (color) => <Swords color={color} size={22} />,
-  },
-  {
-    category: 'legendDefenses',
-    title: 'notifGroupLegendDefenses',
-    description: 'notifLegendDefensesDescription',
-    icon: (color) => <Shield color={color} size={22} />,
-  },
-  {
-    category: 'warAttacks',
-    title: 'notifGroupWarAttacks',
-    description: 'notifWarAttackOptionsDescription',
-    icon: (color) => <Swords color={color} size={22} />,
-  },
-  {
-    category: 'warState',
-    title: 'notifGroupWarState',
-    description: 'notifWarAlertsDescription',
-    icon: (color) => <Flag color={color} size={22} />,
-  },
   {
     category: 'events',
     title: 'notifGroupEvents',
@@ -92,6 +66,12 @@ const categoryRows: readonly {
     icon: (color) => <Megaphone color={color} size={22} />,
   },
   {
+    category: 'legendDefenses',
+    title: 'notifGroupLegendDefenses',
+    description: 'notifLegendDefensesDescription',
+    icon: (color) => <Shield color={color} size={22} />,
+  },
+  {
     category: 'monthlySupport',
     title: 'notifGroupMonthlySupport',
     description: 'notifSupportReminderDescription',
@@ -102,27 +82,28 @@ const categoryRows: readonly {
 export function NotificationSettingsScreen({
   service,
   debugEnabled = false,
+  onManagePlayers,
   onBack,
 }: {
   service: NotificationSettingsPresentationService;
   debugEnabled?: boolean;
+  onManagePlayers?: () => void;
   onBack?: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const [settings, setSettings] = useState<NotificationPreferences>();
   const [push, setPush] = useState<PushNotificationSetupResult | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [configuringPush, setConfiguringPush] = useState(false);
   const [sendingSample, setSendingSample] = useState(false);
+  const [sampleId, setSampleId] = useState(service.testNotificationTypes?.[0]?.id ?? '');
   const [snackbar, setSnackbar] = useState<string>();
   const savingRef = useRef(false);
   const configuringRef = useRef(false);
 
   const initialize = useCallback(async () => {
-    setLoading(true);
     let local: NotificationPreferences;
     try {
       local = await service.loadLocal();
@@ -136,18 +117,26 @@ export function NotificationSettingsScreen({
     } catch {
       // The local V2 snapshot is the offline fallback, matching Flutter.
     }
-    const active = local.notificationsEnabled
-      ? await service.initializePush()
-      : service.lastPushResult();
-    setPush(active);
-    setToken(await service.tokenPreview());
-    setLoading(false);
+    try {
+      setPush(await service.initializePush());
+    } catch {
+      setPush({ state: 'notConfigured' });
+    } finally {
+      setLoading(false);
+    }
   }, [service]);
 
   useEffect(() => {
     // Mounting this route is the external event that starts preference hydration.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void initialize();
+  }, [initialize]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active' && !savingRef.current) void initialize();
+    });
+    return () => subscription.remove();
   }, [initialize]);
 
   const save = async (next: NotificationPreferences, rollback = settings) => {
@@ -177,33 +166,31 @@ export function NotificationSettingsScreen({
       </SettingsPage>
     );
 
-  const setDevice = async (enabled: boolean) => {
+  const openSystemSettings = async () => {
     if (savingRef.current || configuringRef.current) return;
-    const previous = settings;
-    if (enabled) {
-      configuringRef.current = true;
-      setConfiguringPush(true);
-      try {
-        const result = await service.requestPermissionAndRegister();
+    configuringRef.current = true;
+    setConfiguringPush(true);
+    try {
+      if (push?.state === 'permissionRequired') {
+        const result = await service.enablePush();
         setPush(result);
-        setToken(await service.tokenPreview());
-        if (result.state !== 'ready' || !result.token) {
-          setSnackbar(result.message ?? pushFallback(t, result));
-          return;
-        }
-      } finally {
-        configuringRef.current = false;
-        setConfiguringPush(false);
+        if (result.state !== 'ready') setSnackbar(pushFallback(t, result));
+      } else {
+        await service.openSystemSettings();
       }
+    } catch {
+      setSnackbar(t('notifSystemSettingsFailed'));
+    } finally {
+      configuringRef.current = false;
+      setConfiguringPush(false);
     }
-    await save({ ...settings, notificationsEnabled: enabled }, previous);
   };
 
   const sendSample = async () => {
     if (!service.sendTestNotification || sendingSample) return;
     setSendingSample(true);
     try {
-      const title = await service.sendTestNotification();
+      const title = await service.sendTestNotification(sampleId);
       setSnackbar(t('notifScheduledMessage', { title }));
     } catch (error) {
       setSnackbar(String(error));
@@ -216,53 +203,52 @@ export function NotificationSettingsScreen({
   return (
     <View style={styles.screen}>
       <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack}>
-        <SettingsSection title={t('notifDevicePushSetup')} variant="notification">
-          <View style={styles.push}>
-            {push?.state === 'ready' ? (
-              <BadgeCheck color="#14A37F" size={24} />
-            ) : (
-              <Bell color={theme.primary} size={24} />
-            )}
-            <View style={styles.copy}>
-              <CKText role="titleMedium" style={styles.strong}>
-                {settings.notificationsEnabled
-                  ? t('notifPushEnabled')
-                  : t('notifReceiveNotifications')}
-              </CKText>
-              <CKText muted role="bodySmall">
-                {settings.notificationsEnabled
-                  ? token
-                    ? t('notifTokenPreview', { token })
-                    : t('notifEnabledDeliveryDescription')
-                  : t('notifDisabledAccountDescription')}
-              </CKText>
-            </View>
-            <SettingSwitch
-              value={settings.notificationsEnabled}
-              disabled={busy}
-              onChange={(value) => void setDevice(value)}
-            />
-          </View>
+        <SettingsSection title={t('notifSystemNotifications')}>
+          <SettingsTile
+            icon={<Bell color={theme.onSurface} size={22} />}
+            title={
+              push?.state === 'permissionRequired'
+                ? t('notifReceiveNotifications')
+                : t('notifSystemSettings')
+            }
+            subtitle={t('notifSystemSettingsDescription')}
+            subtitleNumberOfLines={3}
+            disabled={busy}
+            onPress={() => void openSystemSettings()}
+          />
         </SettingsSection>
-        <SettingsAvailability enabled={settings.notificationsEnabled && !saving}>
-          <SettingsSection title={t('notifChooseAlerts')} variant="notification">
-            {categoryRows.slice(0, 4).map((row) => (
+        <>
+          <SettingsSection title={t('playersLinked')}>
+            <SettingsTile
+              icon={<Users color={theme.onSurface} size={22} />}
+              title={t('searchTabPlayers')}
+              subtitle={t('notifManagePlayersDescription')}
+              subtitleNumberOfLines={3}
+              onPress={onManagePlayers}
+            />
+          </SettingsSection>
+          <SettingsSection title={t('notifChooseAlerts')}>
+            {categoryRows.map((row) => (
               <ToggleRow
                 key={row.category}
                 icon={row.icon(theme.onSurface)}
                 title={t(row.title)}
                 description={t(row.description)}
                 value={settings[row.category]}
+                disabled={busy}
                 onChange={(value) =>
                   void save(withNotificationCategory(settings, row.category, value))
                 }
               />
             ))}
+          </SettingsSection>
+          <SettingsSection title={t('notifCustomReminders')}>
             <ReminderRow
               icon={<AlarmClock color={theme.onSurface} size={22} />}
               title={t('notifGroupWarReminders')}
               description={t('notifWarRemindersDescription')}
               enabled={settings.warReminders}
+              disabled={busy}
               values={settings.reminderTimings}
               maxHours={47}
               onToggle={(value) =>
@@ -275,6 +261,7 @@ export function NotificationSettingsScreen({
               title={t('notifGroupRaidReminders')}
               description={t('notifRaidRemindersDescription')}
               enabled={settings.raidReminders}
+              disabled={busy}
               values={settings.raidReminderTimings}
               maxHours={72}
               onToggle={(value) =>
@@ -282,26 +269,25 @@ export function NotificationSettingsScreen({
               }
               onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
             />
-            {categoryRows.slice(4).map((row) => (
-              <ToggleRow
-                key={row.category}
-                icon={row.icon(theme.onSurface)}
-                title={t(row.title)}
-                description={t(row.description)}
-                value={settings[row.category]}
-                onChange={(value) =>
-                  void save(withNotificationCategory(settings, row.category, value))
-                }
-              />
-            ))}
           </SettingsSection>
-        </SettingsAvailability>
+        </>
         {debugEnabled && service.sendTestNotification ? (
-          <SettingsSection title={t('notifTestNotification')} variant="notification">
+          <SettingsSection title={t('notifTestNotification')}>
             <View style={styles.debugWrap}>
+              <SelectionPicker
+                options={(service.testNotificationTypes ?? []).map(({ id, labelKey }) => ({
+                  key: id,
+                  label: t(labelKey),
+                }))}
+                selectedKey={sampleId}
+                onSelect={setSampleId}
+                title={t('notifTestType')}
+                accessibilityLabel={t('notifTestType')}
+                fillWidth
+              />
               <Pressable
                 accessibilityRole="button"
-                disabled={sendingSample}
+                disabled={sendingSample || !sampleId}
                 onPress={() => void sendSample()}
                 style={[styles.debug, { backgroundColor: colorWithAlpha(theme.primary, 0.14) }]}
               >
@@ -317,34 +303,19 @@ export function NotificationSettingsScreen({
   );
 }
 
-function SettingsAvailability({ enabled, children }: { enabled: boolean; children: ReactNode }) {
-  const { reduceMotion } = useCKAccessibility();
-  const [opacity] = useState(() => new Animated.Value(enabled ? 1 : 0.46));
-  useEffect(() => {
-    Animated.timing(opacity, {
-      toValue: enabled ? 1 : 0.46,
-      duration: reduceMotion ? 0 : 180,
-      useNativeDriver: true,
-    }).start();
-  }, [enabled, opacity, reduceMotion]);
-  return (
-    <Animated.View pointerEvents={enabled ? 'auto' : 'none'} style={{ opacity }}>
-      {children}
-    </Animated.View>
-  );
-}
-
 function ToggleRow({
   icon,
   title,
   description,
   value,
+  disabled,
   onChange,
 }: {
   icon: ReactNode;
   title: string;
   description: string;
   value: boolean;
+  disabled?: boolean;
   onChange: (value: boolean) => void;
 }) {
   return (
@@ -358,7 +329,7 @@ function ToggleRow({
           {description}
         </CKText>
       </View>
-      <SettingSwitch value={value} onChange={onChange} />
+      <SettingSwitch value={value} disabled={disabled} onChange={onChange} />
     </View>
   );
 }
@@ -368,6 +339,7 @@ function ReminderRow({
   title,
   description,
   enabled,
+  disabled,
   values,
   maxHours,
   onToggle,
@@ -377,6 +349,7 @@ function ReminderRow({
   title: string;
   description: string;
   enabled: boolean;
+  disabled?: boolean;
   values: readonly number[];
   maxHours: number;
   onToggle: (value: boolean) => void;
@@ -390,6 +363,8 @@ function ReminderRow({
     <View>
       <Pressable
         accessibilityRole="button"
+        accessibilityState={{ expanded: enabled && expanded, disabled }}
+        disabled={disabled}
         onPress={() => enabled && setExpanded((value) => !value)}
         style={styles.row}
       >
@@ -407,7 +382,14 @@ function ReminderRow({
         ) : (
           <ChevronDown color={theme.onSurfaceVariant} />
         )}
-        <SettingSwitch value={enabled} onChange={onToggle} />
+        <SettingSwitch
+          value={enabled}
+          disabled={disabled}
+          onChange={(value) => {
+            setExpanded(value);
+            onToggle(value);
+          }}
+        />
       </Pressable>
       {enabled && expanded ? (
         <View
@@ -640,7 +622,8 @@ const styles = StyleSheet.create({
     gap: ckSpacing.sm,
   },
   disabled: { opacity: 0.46 },
-  debugWrap: { padding: 12 },
+  debugWrap: { padding: 12, gap: 12 },
+  accountIntro: { paddingHorizontal: 14, paddingVertical: 10 },
   debug: {
     minHeight: 44,
     borderRadius: ckRadius.control,

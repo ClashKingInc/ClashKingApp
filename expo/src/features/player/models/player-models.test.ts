@@ -59,17 +59,28 @@ test('parses official battle resources/share codes and lets history win a merge'
       battleType: 'homeVillage',
       attack: true,
       opponentPlayerTag: '#OTHER',
+      opponentTownHallLevel: 16,
       battleTimestamp: '20260816T120000.000Z',
       lootedResources: [{ name: 'Dark Elixir', amount: 300 }],
       armyShareCode: 'u8x5-2x6s1x1',
     }),
     history = PlayerBattlelogEntry.fromHistory({
-      battle_id: 'id',
-      battle_type: 'farming',
-      attack: true,
-      opponent_tag: '#OTHER',
-      timestamp: '2026-08-16T12:00:00Z',
-      army_counts: { u_5: 8 },
+      battleTime: '2026-08-16T12:00:00Z',
+      battleMode: 'farming',
+      stars: 3,
+      destructionPercentage: 100,
+      duration: 30,
+      lootedResources: { gold: 100, elixir: 200, darkElixir: 30 },
+      shareCode: 'u8x5',
+    }),
+    legendHistory = PlayerBattlelogEntry.fromHistory({
+      battleTime: '2026-08-16T13:00:00Z',
+      battleMode: 'legend',
+      stars: 2,
+      destructionPercentage: 90,
+      duration: null,
+      lootedResources: { gold: 50, elixir: 60, darkElixir: 7 },
+      shareCode: null,
     }),
     merged = PlayerBattlelogData.merge({
       official: [official],
@@ -78,6 +89,17 @@ test('parses official battle resources/share codes and lets history win a merge'
       historyAvailable: true,
     });
   expect(official.darkElixir).toBe(300);
+  expect(official.opponentTownHall).toBe(17);
+  expect(history).toMatchObject({
+    mode: 'farming',
+    attack: true,
+    opponentTownHall: 0,
+    gold: 100,
+    elixir: 200,
+    darkElixir: 30,
+    armyCounts: { u_5: 8 },
+  });
+  expect(legendHistory).toMatchObject({ mode: 'legend', attack: true, duration: 0 });
   expect(parseArmyCounts('u8x5-2x6s1x1')).toEqual({ u_5: 8, u_6: 2, s_1: 1 });
   expect(merged.items).toHaveLength(1);
   expect(merged.items[0]?.source).toBe('history');
@@ -175,7 +197,7 @@ test('parses CWL, timer, join-leave, and ranking wire shapes', () => {
     });
   expect(cwl.items[0]?.stars).toBe(3);
   expect(timers.items.map((item) => item.type)).toEqual(['war', 'cwl', 'capital']);
-  expect(join.items[0]?.clan?.badge).toBe('https://badges.clashk.ing/CLAN');
+  expect(join.items[0]?.clan?.badge).toBe('https://badges.clashk.ing/CLAN.avif');
   expect(rankings.homeVillage.globalRank).toBe(42);
 });
 test('player parser accepts leagueTier, builds complete lists, and enriches tracked seasons', () => {

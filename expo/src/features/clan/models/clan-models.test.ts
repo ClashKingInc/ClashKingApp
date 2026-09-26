@@ -41,20 +41,21 @@ describe('clan model contracts', () => {
     expect(clan.warFrequency).toBe('unknown');
     expect(clan.isWarLogPublic).toBe(true);
     expect(clan.memberList).toEqual([]);
-    expect(clan.badgeUrls.medium).toBe('https://assets-proxy.clashk.ing/badges/a.png');
+    expect(clan.badgeUrls.medium).toBe('https://badges.clashk.ing/CLAN.avif');
   });
 
-  test('selects the smallest supplied clan badge with ordered fallbacks', () => {
+  test('uses the clan tag instead of supplied badge URLs', () => {
     expect(
       Clan.fromJson({
+        tag: '#CLAN',
         badgeUrls: { small: 'small.png', medium: 'medium.png', large: 'large.png' },
       }).badgeUrls.smallest,
-    ).toBe('small.png');
+    ).toBe('https://badges.clashk.ing/CLAN.avif');
     expect(
       Clan.fromJson({ badgeUrls: { medium: 'medium.png', large: 'large.png' } }).badgeUrls.smallest,
-    ).toBe('medium.png');
+    ).toBe('');
     expect(Clan.fromJson({ badgeUrls: { large: 'large.png' } }).badgeUrls.smallest).toBe(
-      'large.png',
+      '',
     );
   });
 

@@ -21,7 +21,10 @@ export async function initializeAuthAndAccounts(
 /** Shared by cold start and the post-login gate after AuthService has a session. */
 export async function initializeAccountsForCurrentAuth(
   auth: Pick<AuthService, 'canUseApp' | 'state'>,
-  accounts: CocAccountService,
+  accounts: Pick<
+    CocAccountService,
+    'setCurrentUserId' | 'loadSelectedTag' | 'fetchAccounts' | 'hasVerifiedAccounts'
+  >,
 ): Promise<StartupResult> {
   if (!auth.canUseApp) {
     return {
@@ -31,8 +34,12 @@ export async function initializeAccountsForCurrentAuth(
     };
   }
   const userId = auth.state.currentUser?.userId ?? null;
-  await accounts.initializeForCurrentUser(userId);
-  return startupDecision(auth.canUseApp, accounts.hasVerifiedAccounts);
+  accounts.setCurrentUserId(userId);
+  await accounts.loadSelectedTag();
+  await accounts.fetchAccounts();
+  const sameSession =
+    auth.canUseApp && auth.state.currentUser?.userId === userId;
+  return startupDecision(sameSession, sameSession && accounts.hasVerifiedAccounts);
 }
 
 export function startupDecision(
@@ -44,4 +51,18 @@ export function startupDecision(
     authenticated,
     hasVerifiedAccount: authenticated && hasVerifiedAccount,
   };
+}
+
+/** Validate current account links without making navigation depend on optional
+ * player/clan/widget hydration. Callers refresh those after navigation. */
+export async function refreshLinkedAccountsForCurrentAuth(
+  auth: Pick<AuthService, 'canUseApp' | 'state'>,
+  accounts: Pick<CocAccountService, 'setCurrentUserId' | 'fetchAccounts' | 'hasVerifiedAccounts'>,
+): Promise<StartupResult> {
+  const userId = auth.state.currentUser?.userId;
+  if (!auth.canUseApp || !userId) return startupDecision(false, false);
+  accounts.setCurrentUserId(userId);
+  await accounts.fetchAccounts();
+  const sameSession = auth.canUseApp && auth.state.currentUser?.userId === userId;
+  return startupDecision(sameSession, accounts.hasVerifiedAccounts);
 }

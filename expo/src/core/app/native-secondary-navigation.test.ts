@@ -1,4 +1,5 @@
 import {
+  applyNativeSecondaryRouteTransition,
   nativeSecondaryContent,
   nativeSecondaryRouteTransition,
   notifyNativeSecondaryRemoved,
@@ -7,6 +8,70 @@ import {
   removeNativeSecondaryLayers,
   subscribeNativeSecondaryLayer,
 } from './native-secondary-navigation';
+
+test('only a roster-origin clan push requests the custom opening route', () => {
+  const key = 'clan-spring-test';
+  const rect = { x: 16, y: 200, width: 300, height: 130 };
+  publishNativeSecondaryLayer(key, {
+    content: 'Clan',
+    onRemove: jest.fn(),
+    clanSpring: {
+      card: rect,
+      badge: rect,
+      name: rect,
+      viewport: { width: 390, height: 844 },
+      title: 'Clan',
+      badgeUrl: 'badge.png',
+    },
+  });
+  const navigation = { dismissTo: jest.fn(), push: jest.fn(), replace: jest.fn() };
+  applyNativeSecondaryRouteTransition(nativeSecondaryRouteTransition([], [key]), navigation);
+  expect(navigation.push).toHaveBeenCalledWith({
+    pathname: '/detail',
+    params: { layer: key, clanSpring: '1' },
+  });
+  removeNativeSecondaryLayer(key);
+  applyNativeSecondaryRouteTransition(
+    nativeSecondaryRouteTransition([], ['normal-clan']),
+    navigation,
+  );
+  expect(navigation.push).toHaveBeenLastCalledWith({
+    pathname: '/detail',
+    params: { layer: 'normal-clan' },
+  });
+});
+
+test('dismisses the outer detail route when a settings link selects a primary tab', () => {
+  const key = 'utility:settings::0';
+  publishNativeSecondaryLayer(key, { content: 'Notifications', onRemove: jest.fn() });
+  const navigation = { dismissTo: jest.fn(), push: jest.fn(), replace: jest.fn() };
+  const transition = nativeSecondaryRouteTransition([key], []);
+  expect(transition).toEqual({ type: 'dismiss', routeKeys: [], staleKeys: [key] });
+  applyNativeSecondaryRouteTransition(transition, navigation);
+  expect(navigation.dismissTo).toHaveBeenCalledWith('/');
+  expect(navigation.push).not.toHaveBeenCalled();
+  expect(navigation.replace).not.toHaveBeenCalled();
+  // The outgoing screen must not turn black before the native route is removed.
+  expect(nativeSecondaryContent(key)).toBe('Notifications');
+  notifyNativeSecondaryRemoved(key);
+  expect(nativeSecondaryContent(key)).toBeNull();
+  expect(nativeSecondaryRouteTransition(transition.routeKeys, []).type).toBe('none');
+});
+
+test('dismissing several secondary routes targets the shell once, not the inner stack', () => {
+  const navigation = { dismissTo: jest.fn(), push: jest.fn(), replace: jest.fn() };
+  const transition = nativeSecondaryRouteTransition(['utility:settings', 'pushed:0:player'], []);
+  applyNativeSecondaryRouteTransition(transition, navigation);
+  expect(navigation.dismissTo).toHaveBeenCalledTimes(1);
+  expect(navigation.dismissTo).toHaveBeenCalledWith('/');
+  expect(transition.routeKeys).toEqual([]);
+});
+
+test('a completed native back needs no second dismissal', () => {
+  const navigation = { dismissTo: jest.fn(), push: jest.fn(), replace: jest.fn() };
+  applyNativeSecondaryRouteTransition(nativeSecondaryRouteTransition([], []), navigation);
+  expect(navigation.dismissTo).not.toHaveBeenCalled();
+});
 
 test('publishes native route content and removes the matching app-owned layer on pop', () => {
   const onRemove = jest.fn();

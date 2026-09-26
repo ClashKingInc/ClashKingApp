@@ -58,12 +58,16 @@ export class RankedLeagueBattle {
   constructor(
     readonly opponentPlayerTag: string,
     readonly opponentName: string,
-    readonly stars: number,
-    readonly destructionPercentage: number,
+    readonly stars: number | null,
+    readonly destructionPercentage: number | null,
     readonly trophies: number,
     readonly creationTime: Date | null,
+    readonly automatic = false,
+    readonly opponentTownHallLevel = 0,
+    readonly townHallLevel = 0,
+    readonly duration = 0,
   ) {}
-  static fromJson(json: JsonRecord) {
+  static fromOfficial(json: JsonRecord) {
     return new RankedLeagueBattle(
       string(json.opponentPlayerTag),
       string(json.opponentName),
@@ -73,6 +77,109 @@ export class RankedLeagueBattle {
       apiDate(json.creationTime),
     );
   }
+  static fromAnalytics(json: JsonRecord) {
+    if (json.automatic === true) {
+      return new RankedLeagueBattle('', '', null, null, int(json.trophies), null, true);
+    }
+    const opponent = record(json.opponent);
+    return new RankedLeagueBattle(
+      string(opponent.tag),
+      '',
+      int(json.stars),
+      number(json.destructionPercentage),
+      int(json.trophies),
+      apiDate(json.time),
+      false,
+      int(opponent.townHallLevel),
+      int(json.townHallLevel),
+      int(json.duration),
+    );
+  }
+}
+
+export class RankedLeagueBattlelog {
+  constructor(
+    readonly tag: string,
+    readonly seasonId: string,
+    readonly leagueGroupId: string,
+    readonly leagueTierId: number,
+    readonly attacksComplete: boolean,
+    readonly defensesComplete: boolean,
+    readonly missingRealAttacks: number,
+    readonly missingRealDefenses: number,
+    readonly automaticDefensesDerived: boolean,
+    readonly registeredAttacks: number,
+    readonly registeredDefenses: number,
+    readonly maxAttacks: number,
+    readonly maxDefenses: number,
+    readonly attacks: readonly RankedLeagueBattle[],
+    readonly defenses: readonly RankedLeagueBattle[],
+  ) {}
+
+  // The official group response is scoped to the requested player by playerTag.
+  // Archived analytics may not have a membership snapshot for a live period yet.
+  static fromOfficialGroup(
+    json: JsonRecord,
+    playerTag: string,
+    group: RankedLeagueGroup,
+    leagueTierId: number,
+  ): RankedLeagueBattlelog | null {
+    const member = group.members.find(
+      (entry) => canonicalTag(entry.playerTag) === canonicalTag(playerTag),
+    );
+    const hasAttacks = Array.isArray(json.attackLogs);
+    const hasDefenses = Array.isArray(json.defenseLogs);
+    if (!member || (!hasAttacks && !hasDefenses)) return null;
+    const attacks = records(json.attackLogs).map(RankedLeagueBattle.fromOfficial);
+    const defenses = records(json.defenseLogs).map(RankedLeagueBattle.fromOfficial);
+    const attackCount = member.attackWinCount + member.attackLoseCount;
+    const defenseCount = member.defenseWinCount + member.defenseLoseCount;
+    return new RankedLeagueBattlelog(
+      playerTag,
+      String(group.seasonId),
+      group.tag,
+      leagueTierId,
+      hasAttacks && attacks.length === attackCount,
+      hasDefenses && defenses.length === defenseCount,
+      Math.max(0, attackCount - attacks.length),
+      Math.max(0, defenseCount - defenses.length),
+      false,
+      attackCount,
+      defenseCount,
+      0, // The official group contract does not supply a battle limit.
+      0,
+      attacks,
+      defenses,
+    );
+  }
+
+  static fromJson(json: JsonRecord) {
+    const league = record(json.league);
+    const attacks = records(json.attacks);
+    const defenses = records(json.defenses);
+    const registeredAttacks = int(json.registeredAttacks);
+    const registeredDefenses = int(json.registeredDefenses);
+    const missingRealAttacks = Math.max(0, registeredAttacks - attacks.length);
+    const missingRealDefenses = Math.max(0, registeredDefenses - defenses.length);
+    const maxBattles = int(json.maxBattles);
+    return new RankedLeagueBattlelog(
+      string(json.tag),
+      string(json.seasonId),
+      string(json.leagueGroupId),
+      int(league.id),
+      missingRealAttacks === 0,
+      missingRealDefenses === 0,
+      missingRealAttacks,
+      missingRealDefenses,
+      defenses.some((defense) => defense.automatic === true),
+      registeredAttacks,
+      registeredDefenses,
+      maxBattles,
+      maxBattles,
+      attacks.map(RankedLeagueBattle.fromAnalytics),
+      defenses.map(RankedLeagueBattle.fromAnalytics),
+    );
+  }
 }
 export class RankedLeagueGroup {
   readonly members: readonly RankedLeagueMember[];
@@ -80,8 +187,6 @@ export class RankedLeagueGroup {
     readonly tag: string,
     readonly seasonId: number,
     members: readonly RankedLeagueMember[],
-    readonly attackLogs: readonly RankedLeagueBattle[],
-    readonly defenseLogs: readonly RankedLeagueBattle[],
   ) {
     this.members = [...members].sort((a, b) => b.leagueTrophies - a.leagueTrophies);
   }
@@ -90,8 +195,6 @@ export class RankedLeagueGroup {
       tag,
       seasonId,
       records(json.members).map(RankedLeagueMember.fromJson),
-      records(json.attackLogs).map(RankedLeagueBattle.fromJson),
-      records(json.defenseLogs).map(RankedLeagueBattle.fromJson),
     );
   }
 }
@@ -140,12 +243,22 @@ export class RankedLeagueData {
     readonly history: readonly RankedLeagueHistoryEntry[],
     readonly currentGroup: RankedLeagueGroup | null = null,
     readonly previousGroup: RankedLeagueGroup | null = null,
+    readonly currentBattlelog: RankedLeagueBattlelog | null = null,
+    readonly previousBattlelog: RankedLeagueBattlelog | null = null,
   ) {}
   groupForSeason(id: number) {
     return this.currentGroup?.seasonId === id
       ? this.currentGroup
       : this.previousGroup?.seasonId === id
         ? this.previousGroup
+        : null;
+  }
+  battlelogForSeason(id: number) {
+    const seasonId = String(id);
+    return this.currentBattlelog?.seasonId === seasonId
+      ? this.currentBattlelog
+      : this.previousBattlelog?.seasonId === seasonId
+        ? this.previousBattlelog
         : null;
   }
   get currentMember() {
@@ -160,6 +273,9 @@ export class RankedLeagueData {
     return !member || !this.currentGroup ? null : this.currentGroup.members.indexOf(member) + 1;
   }
   get currentMaxBattles() {
+    if (this.currentBattlelog && this.currentBattlelog.maxAttacks > 0) {
+      return this.currentBattlelog.maxAttacks;
+    }
     const tierId = this.currentTier?.id;
     if (tierId === undefined) return null;
     return (

@@ -1,3 +1,4 @@
+import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
 import { useState } from 'react';
 import { View } from 'react-native';
 
@@ -18,7 +19,7 @@ export type RegistrationRedirect = 'verification' | 'login' | 'maintenance';
 
 export function classifyRegistrationError(error: unknown): RegistrationRedirect | null {
   const value = String(error).toLowerCase();
-  if (value.includes('503') || value.includes('500')) return 'maintenance';
+  if (defaultIsMaintenanceError(error)) return 'maintenance';
   if (value.includes('already registered') || value.includes('please try logging in'))
     return 'login';
   if (
