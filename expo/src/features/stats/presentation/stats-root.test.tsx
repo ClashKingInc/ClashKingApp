@@ -77,6 +77,7 @@ jest.mock('./stats-screen', () => {
   return {
     sectionLabel: (section: string) => labels[section] ?? section,
     sectionImage: () => '',
+    sectionBackdrop: () => '',
     StatsScreen: ({
       provider,
       revision,

@@ -111,8 +111,10 @@ export function rankedPeriods(data: RankedLeagueData, now = new Date()): readonl
       automaticDefensesDerived: battlelog?.automaticDefensesDerived ?? false,
       attackCount: battlelog?.registeredAttacks ?? input.attackWins + input.attackLosses,
       defenseCount: battlelog?.registeredDefenses ?? input.defenseWins + input.defenseLosses,
-      attackMaxBattles: battlelog?.maxAttacks ?? input.maxBattles,
-      defenseMaxBattles: battlelog?.maxDefenses ?? input.maxBattles,
+      attackMaxBattles:
+        battlelog && battlelog.maxAttacks > 0 ? battlelog.maxAttacks : input.maxBattles,
+      defenseMaxBattles:
+        battlelog && battlelog.maxDefenses > 0 ? battlelog.maxDefenses : input.maxBattles,
     };
   };
   const periods: RankedPeriod[] = [

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { ImageAssets } from '../core/assets/image-assets';
 import { CKText } from './text';
-import { MobileWebImage } from './mobile-web-image';
+import { MobileWebImage, headerArtworkSize } from './mobile-web-image';
 import { useCKThemeMode } from './theme';
 
 export interface ProfilePageHeaderProps {
@@ -34,11 +34,16 @@ export function ProfilePageHeader({
   testID = 'profile-page-header',
 }: ProfilePageHeaderProps) {
   const themeMode = useCKThemeMode();
+  const { width } = useWindowDimensions();
   return (
     <View testID={testID} style={[styles.header, { paddingTop: safeTop }]}>
       <View testID="profile-page-header-backdrop" pointerEvents="none" style={styles.backdrop}>
         <MobileWebImage
           imageUrl={backgroundUrl}
+          displaySize={headerArtworkSize(width)}
+          cachePolicy="memory-disk"
+          priority="high"
+          transition={0}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
         />
@@ -71,6 +76,9 @@ export function ProfilePageHeader({
         <View style={styles.identity}>
           <MobileWebImage
             imageUrl={imageUrl}
+            cachePolicy="memory-disk"
+            priority="high"
+            transition={0}
             style={styles.identityImage}
             contentFit="contain"
             testID="profile-page-header-image"

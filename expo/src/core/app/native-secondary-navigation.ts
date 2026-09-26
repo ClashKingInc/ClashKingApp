@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 interface NativeSecondaryLayer {
+  readonly clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin;
   readonly content: ReactNode;
   readonly onRemove: () => void;
 }
@@ -37,6 +38,10 @@ export function removeNativeSecondaryLayers(keys: Iterable<string>) {
 
 export function nativeSecondaryContent(key: string): ReactNode {
   return layers.get(key)?.content ?? null;
+}
+
+export function nativeSecondaryClanSpring(key: string) {
+  return layers.get(key)?.clanSpring;
 }
 
 export function notifyNativeSecondaryRemoved(key: string) {
@@ -98,6 +103,12 @@ export function applyNativeSecondaryRouteTransition(
   }
   transition.staleKeys.forEach(removeNativeSecondaryLayer);
   if (transition.type === 'push' || transition.type === 'replace') {
-    navigation[transition.type]({ pathname: '/detail', params: { layer: transition.key } });
+    navigation[transition.type]({
+      pathname: '/detail',
+      params: {
+        layer: transition.key,
+        ...(layers.get(transition.key)?.clanSpring ? { clanSpring: '1' } : {}),
+      },
+    });
   }
 }

@@ -12,6 +12,8 @@ import {
   mobileWebImageCandidates,
   resetMobileWebImageCacheForTesting,
   clearMobileImageCache,
+  prefetchMobileImage,
+  headerArtworkSize,
 } from '../mobile-web-image';
 
 jest.mock('../../core/assets/local-asset-cache', () => ({
@@ -41,6 +43,24 @@ beforeEach(() => {
 });
 
 describe('MobileWebImage resolution', () => {
+  it('warms the rendered managed variant and coalesces simultaneous header requests', async () => {
+    const url = 'https://assets.clashk.ing/landscape/warm.png';
+    applyAssetManifest({
+      version: 2,
+      assets: { landscape: [{ path: 'landscape/warm.png', sha: 'b'.repeat(64), animated: false }] },
+      data: { stats: [{ path: 'static_data/troops.json', sha: 'b'.repeat(64) }], translations: [] },
+    });
+    const prefetch = jest.spyOn(Image, 'prefetch').mockResolvedValue(true);
+    jest.mocked(localImageCache.resolve).mockResolvedValueOnce('file:///warm.avif');
+    const size = headerArtworkSize(390);
+    await Promise.all([
+      prefetchMobileImage(url, size.width, size.height),
+      prefetchMobileImage(url, size.width, size.height),
+    ]);
+    expect(localImageCache.resolve).toHaveBeenCalledTimes(1);
+    expect(prefetch).toHaveBeenCalledWith('file:///warm.avif', { cachePolicy: 'memory-disk' });
+    expect(Math.max(size.width, size.height) * PixelRatio.get()).toBeLessThanOrEqual(1024);
+  });
   it('shows a slow managed download without reopening or an index notification', async () => {
     applyAssetManifest({
       version: 2,

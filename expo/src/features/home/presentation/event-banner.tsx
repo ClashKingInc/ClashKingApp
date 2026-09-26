@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Animated, Easing, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, AppState, Easing, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import {
   Castle,
   ChevronLeft,
@@ -81,11 +81,11 @@ export function buildHomeBannerItems(
     ),
     event(
       'cwl',
-      t('todoEventCwl'),
+      `${t('todoEventCwl')} · ${t('authSignUp')}`,
       ImageAssets.cwlSwordsNoBorder,
       ckColors.capitalPurple,
       'medal',
-      monthly(now, 1, 0, 13, 0),
+      monthly(now, 1, 8, 3, 8),
     ),
     event(
       'season',
@@ -93,7 +93,7 @@ export function buildHomeBannerItems(
       ImageAssets.iconGoldPass,
       ckColors.warGold,
       'hourglass',
-      season(now),
+      goldPassSeason(now),
     ),
     event(
       'league-reset',
@@ -101,7 +101,7 @@ export function buildHomeBannerItems(
       ImageAssets.legendLeagueOne,
       ckColors.legendBlue,
       'rank',
-      season(now),
+      leagueSeason(now),
     ),
     event(
       'raid',
@@ -147,24 +147,28 @@ function monthly(now: Date, startDay: number, startHour: number, endDay: number,
   return { start, end };
 }
 
-function seasonEnd(year: number, month: number) {
-  const last = new Date(Date.UTC(year, month + 1, 0));
-  const daysBack = (last.getUTCDay() + 6) % 7;
-  return new Date(Date.UTC(year, month, last.getUTCDate() - daysBack, 5));
+function goldPassSeason(now: Date) {
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth();
+  const offset = now.getTime() < Date.UTC(year, month, 1, 8) ? -1 : 0;
+  return {
+    start: new Date(Date.UTC(year, month + offset, 1, 8)),
+    end: new Date(Date.UTC(year, month + offset + 1, 1, 8)),
+  };
 }
 
-function season(now: Date) {
-  let end = seasonEnd(now.getUTCFullYear(), now.getUTCMonth());
-  if (now >= end) end = seasonEnd(now.getUTCFullYear(), now.getUTCMonth() + 1);
-  return { start: new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)), end };
+function leagueSeason(now: Date) {
+  // The monthly last-Monday rule was replaced by fixed 28-day seasons in Nov 2025.
+  const anchor = Date.UTC(2025, 10, 3, 5);
+  const period = 28 * 86400000;
+  const start = anchor + Math.floor((now.getTime() - anchor) / period) * period;
+  return { start: new Date(start), end: new Date(start + period) };
 }
 
 function raid(now: Date) {
-  const day = now.getUTCDay();
-  let daysUntilFriday = (5 - day + 7) % 7;
-  if (day === 5 && now.getUTCHours() >= 7) daysUntilFriday = 0;
+  const daysSinceFriday = (now.getUTCDay() - 5 + 7) % 7;
   let start = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilFriday, 7),
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - daysSinceFriday, 7),
   );
   let end = new Date(start.getTime() + 3 * 86400000);
   if (now >= end) {
@@ -175,7 +179,7 @@ function raid(now: Date) {
 }
 
 function remaining(milliseconds: number) {
-  const minutes = Math.max(0, Math.floor(milliseconds / 60000));
+  const minutes = Math.max(0, Math.ceil(milliseconds / 60000));
   if (minutes >= 1440)
     return `${Math.floor(minutes / 1440)}d ${Math.floor((minutes % 1440) / 60)}h`;
   if (minutes >= 60) return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
@@ -329,13 +333,42 @@ export function HomeEventBanner({
 }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
+  const { reduceMotion } = useCKAccessibility();
+  const [now, setNow] = useState(() => new Date());
+  const [foreground, setForeground] = useState(
+    AppState.currentState !== 'background' && AppState.currentState !== 'inactive',
+  );
+  const [interacting, setInteracting] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      setForeground(state === 'active');
+      setInteracting(false);
+      if (state === 'active') setNow(new Date());
+    });
+    return () => subscription.remove();
+  }, []);
+  useEffect(() => {
+    if (!foreground) return;
+    const timer = setTimeout(() => setNow(new Date()), 60000 - (Date.now() % 60000));
+    return () => clearTimeout(timer);
+  }, [foreground, now]);
   const items = useMemo(
-    () => buildHomeBannerItems(new Date(), announcements, t, theme.background === '#030304'),
-    [announcements, t, theme.background],
+    () => buildHomeBannerItems(now, announcements, t, theme.background === '#030304'),
+    [now, announcements, t, theme.background],
   );
   const [index, setIndex] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(680);
   const safeIndex = Math.min(index, Math.max(0, items.length - 1));
+  useEffect(() => {
+    if (desktop || !foreground || interacting || reduceMotion || items.length < 2) return;
+    const timer = setTimeout(() => {
+      const next = (safeIndex + 1) % items.length;
+      scrollRef.current?.scrollTo({ x: next * availableWidth, animated: next !== 0 });
+      setIndex(next);
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, [desktop, foreground, interacting, reduceMotion, items.length, safeIndex, availableWidth]);
   const action = (item: HomeBannerItem) =>
     item.announcement && isHomeAnnouncementOpenable(item.announcement)
       ? () => onOpen(item.announcement!)
@@ -372,6 +405,11 @@ export function HomeEventBanner({
       onLayout={(event) => setAvailableWidth(event.nativeEvent.layout.width)}
     >
       <ScrollView
+        ref={scrollRef}
+        testID="home-event-carousel"
+        onTouchStart={() => setInteracting(true)}
+        onTouchEnd={() => setInteracting(false)}
+        onTouchCancel={() => setInteracting(false)}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -409,6 +447,7 @@ export function HomeEventBanner({
         {items.map((item, dot) => (
           <View
             key={item.id}
+            testID={`home-event-dot-${dot}`}
             style={[
               styles.dot,
               { backgroundColor: dot === safeIndex ? theme.primary : theme.outlineVariant },

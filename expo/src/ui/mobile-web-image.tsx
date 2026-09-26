@@ -27,6 +27,55 @@ const FAILURE_TTL_MS = 20_000;
 const EMPTY_FALLBACKS: readonly string[] = [];
 
 const resolvedImages = new Map<string, string>();
+const prefetchingImages = new Map<string, Promise<void>>();
+
+/** Warm the same variant/file cache used by rendering, rather than a separate URL cache. */
+export function prefetchMobileImage(
+  imageUrl: string,
+  width: number,
+  height: number,
+): Promise<void> {
+  const requested = sizedAssetUrl(
+    sizedBadgeUrl(imageUrl, width, height, PixelRatio.get()),
+    width,
+    height,
+    PixelRatio.get(),
+  );
+  const existing = prefetchingImages.get(requested);
+  if (existing) return existing;
+  const pending = (async () => {
+    const metadata = manifestImage(imageUrl);
+    for (const candidate of mobileWebImageCandidates(requested, [imageUrl])) {
+      try {
+        const uri =
+          Platform.OS !== 'web' &&
+          metadata &&
+          candidate !== imageUrl &&
+          candidate.startsWith('https://assets.clashk.ing/')
+            ? await localImageCache.resolve(
+                candidate,
+                decodeURIComponent(new URL(imageUrl).pathname.slice(1)),
+                metadata.sha,
+                () => {},
+              )
+            : candidate;
+        if (await Image.prefetch(uri, { cachePolicy: 'memory-disk' })) {
+          rememberResolved(requested, candidate);
+          return;
+        }
+      } catch {
+        /* Optional warmup must never prevent navigation. */
+      }
+    }
+  })().finally(() => prefetchingImages.delete(requested));
+  prefetchingImages.set(requested, pending);
+  return pending;
+}
+
+export function headerArtworkSize(width: number) {
+  const maximum = 1024 / PixelRatio.get();
+  return { width: Math.min(width, maximum), height: Math.min(320, maximum) };
+}
 const failedImages = new Map<string, number>();
 subscribeAssetManifest(() => {
   resolvedImages.clear();

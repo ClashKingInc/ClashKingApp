@@ -9,6 +9,38 @@ import {
   subscribeNativeSecondaryLayer,
 } from './native-secondary-navigation';
 
+test('only a roster-origin clan push requests the custom opening route', () => {
+  const key = 'clan-spring-test';
+  const rect = { x: 16, y: 200, width: 300, height: 130 };
+  publishNativeSecondaryLayer(key, {
+    content: 'Clan',
+    onRemove: jest.fn(),
+    clanSpring: {
+      card: rect,
+      badge: rect,
+      name: rect,
+      viewport: { width: 390, height: 844 },
+      title: 'Clan',
+      badgeUrl: 'badge.png',
+    },
+  });
+  const navigation = { dismissTo: jest.fn(), push: jest.fn(), replace: jest.fn() };
+  applyNativeSecondaryRouteTransition(nativeSecondaryRouteTransition([], [key]), navigation);
+  expect(navigation.push).toHaveBeenCalledWith({
+    pathname: '/detail',
+    params: { layer: key, clanSpring: '1' },
+  });
+  removeNativeSecondaryLayer(key);
+  applyNativeSecondaryRouteTransition(
+    nativeSecondaryRouteTransition([], ['normal-clan']),
+    navigation,
+  );
+  expect(navigation.push).toHaveBeenLastCalledWith({
+    pathname: '/detail',
+    params: { layer: 'normal-clan' },
+  });
+});
+
 test('dismisses the outer detail route when a settings link selects a primary tab', () => {
   const key = 'utility:settings::0';
   publishNativeSecondaryLayer(key, { content: 'Notifications', onRemove: jest.fn() });

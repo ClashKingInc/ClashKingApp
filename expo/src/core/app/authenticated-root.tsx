@@ -84,7 +84,11 @@ import { isRouteEnabled } from '../../navigation/route-manifest';
 import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
 import { selectLegendsPlayer } from './legends-player-selection';
 
-type PushedScene = { readonly linkParams?: AppLinkParams; readonly linkKey?: number } & (
+type PushedScene = {
+  readonly linkParams?: AppLinkParams;
+  readonly linkKey?: number;
+  readonly clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin;
+} & (
   | { readonly kind: 'player'; readonly player: Player }
   | { readonly kind: 'clan'; readonly clan: Clan }
   | { readonly kind: 'capital'; readonly clan: Clan }
@@ -205,10 +209,13 @@ export function AuthenticatedRoot() {
     navigationGeneration.current += 1;
     setPushedScenes((current) => [...current, { kind: 'player', player }]);
   };
-  const pushClan = (clan: Clan) => {
+  const pushClan = (
+    clan: Clan,
+    clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin,
+  ) => {
     recordBrowserPath(appLinkPath({ kind: 'clan', tag: clan.tag, params: {} }));
     navigationGeneration.current += 1;
-    setPushedScenes((current) => [...current, { kind: 'clan', clan }]);
+    setPushedScenes((current) => [...current, { kind: 'clan', clan, clanSpring }]);
   };
   const pushCapital = (clan: Clan) => {
     recordBrowserPath(appLinkPath({ kind: 'capital', tag: clan.tag, params: {} }));
@@ -728,6 +735,7 @@ export function AuthenticatedRoot() {
         ]
       : []),
     ...pushedScenes.map((scene, index) => ({
+      clanSpring: scene.clanSpring,
       key: `pushed:${index}:${scene.kind}:${scene.linkKey ?? ''}`,
       content: (
         <LinkParametersContext.Provider
@@ -753,6 +761,7 @@ export function AuthenticatedRoot() {
     expectedNativeRouteKeys.current = expected;
     secondaryLayers.forEach((layer) => {
       publishNativeSecondaryLayer(layer.key, {
+        clanSpring: 'clanSpring' in layer ? layer.clanSpring : undefined,
         content: layer.content,
         onRemove: () => {
           if (!expectedNativeRouteKeys.current.includes(layer.key)) return;

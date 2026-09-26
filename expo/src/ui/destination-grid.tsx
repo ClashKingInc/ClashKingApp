@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { CKText } from './text';
-import { MobileWebImage } from './mobile-web-image';
+import { MobileWebImage, prefetchMobileImage, headerArtworkSize } from './mobile-web-image';
 import { PressableSurface } from './surfaces';
 import { ckRadius, ckSpacing, colorWithAlpha } from './tokens';
 import { ResponsiveGrid } from './responsive-grid';
@@ -16,6 +17,7 @@ export type DestinationGridGroup = {
     key: string;
     label: string;
     imageUrl?: string;
+    backgroundUrl?: string;
     accentColor?: string;
     onPress: () => void;
   }[];
@@ -29,7 +31,19 @@ export function DestinationGrid({
   groups: readonly DestinationGridGroup[];
   initialWidth?: number;
 }) {
-  const { fontScale } = useWindowDimensions();
+  const { fontScale, width } = useWindowDimensions();
+  const artwork = JSON.stringify([
+    ...new Set(
+      groups.flatMap((group) =>
+        group.items.flatMap((item) => (item.backgroundUrl ? [item.backgroundUrl] : [])),
+      ),
+    ),
+  ]);
+  useEffect(() => {
+    const size = headerArtworkSize(width);
+    for (const url of JSON.parse(artwork) as string[])
+      void prefetchMobileImage(url, size.width, size.height);
+  }, [artwork, width]);
   const theme = useCKTheme();
   return (
     <View style={{ gap: ckSpacing.lg }}>
@@ -100,6 +114,8 @@ export function DestinationGrid({
                   <MobileWebImage
                     testID={`destination-art-${item.key}`}
                     imageUrl={item.imageUrl}
+                    displaySize={{ width: 64, height: 64 }}
+                    cachePolicy="memory-disk"
                     contentFit="contain"
                     style={{ width: 44, height: 44, flexShrink: 0 }}
                   />

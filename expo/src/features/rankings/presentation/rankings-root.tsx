@@ -21,7 +21,7 @@ import {
   type RankingEntry,
   type RankingLocation,
 } from '../models';
-import { RankingsScreen, boardLabel } from './rankings-screen';
+import { RankingsScreen, boardLabel, rankingBackground } from './rankings-screen';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { useI18n, materialBackLabel } from '../../../i18n';
 import {
@@ -209,6 +209,7 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
                   key: board.name,
                   label: boardLabel(board, t),
                   imageUrl: rankingBoardArtwork(board),
+                  backgroundUrl: rankingBackground(board),
                   accentColor: rankingBoardAccentColor(board),
                   onPress: () => openBoard(board),
                 })),
@@ -222,6 +223,7 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
                   key: board.name,
                   label: boardLabel(board, t),
                   imageUrl: rankingBoardArtwork(board),
+                  backgroundUrl: rankingBackground(board),
                   accentColor: rankingBoardAccentColor(board),
                   onPress: () => openBoard(board),
                 })),

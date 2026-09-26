@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react-native';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { StatsProvider, StatsRepository } from '../data';
-import { StatsScreen, sectionImage, sectionLabel } from './stats-screen';
+import { StatsScreen, sectionImage, sectionLabel, sectionBackdrop } from './stats-screen';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { StatsAudience, StatsDateFilter, StatsSection, statsSections } from '../models';
 import { battleStatsLinkSections, worldStatsLinkSections } from './stats-link-sections';
@@ -109,6 +109,7 @@ export function StatsRoot({ onBack }: StatsRootProps) {
                 key: choice,
                 label: sectionLabel(choice, t),
                 imageUrl: sectionImage(choice),
+                backgroundUrl: sectionBackdrop(choice),
                 accentColor: {
                   war: ckColors.warGold,
                   armies: ckColors.legendBlue,

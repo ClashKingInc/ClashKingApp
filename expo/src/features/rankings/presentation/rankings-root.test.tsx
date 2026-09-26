@@ -78,6 +78,7 @@ jest.mock('./rankings-screen', () => {
   const actual = jest.requireActual<typeof import('./rankings-screen')>('./rankings-screen');
   return {
     boardLabel: actual.boardLabel,
+    rankingBackground: actual.rankingBackground,
     RankingsScreen: React.memo(function MockRankingsScreen({
       provider,
       onBack,

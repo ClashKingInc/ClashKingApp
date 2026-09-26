@@ -157,13 +157,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         'expo-splash-screen',
         {
           ios: {
-            backgroundColor: '#FFFFFF',
-            image: './assets/clashking/icons/splashIOSlight.png',
-            enableFullScreenImage_legacy: true,
+            // Match the opening frame of the default-dark, JS-driven brand animation.
+            backgroundColor: '#0B0B0C',
+            image: './assets/clashking/icons/startup-crown.svg',
+            imageWidth: 330,
             resizeMode: 'contain',
             dark: {
-              backgroundColor: '#000000',
-              image: './assets/clashking/icons/splashIOSdark.png',
+              backgroundColor: '#0B0B0C',
+              image: './assets/clashking/icons/startup-crown.svg',
             },
           },
           android: {

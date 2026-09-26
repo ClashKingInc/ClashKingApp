@@ -1,5 +1,5 @@
 import { act, cleanup, fireEvent, render } from '@testing-library/react-native';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated } from 'react-native';
 
 import { I18nProvider } from '../../i18n';
 import { CKThemeProvider } from '../../ui';
@@ -45,7 +45,7 @@ describe('startup loading sequence', () => {
     expect(background).toHaveBeenCalledTimes(1);
   });
 
-  it('advances through Flutter statuses while real bootstrap remains mounted', async () => {
+  it('plays once without fictional request stages or progress dots', async () => {
     const timingSpy = jest.spyOn(Animated, 'timing');
     const screen = await render(
       <I18nProvider locale="en">
@@ -55,20 +55,18 @@ describe('startup loading sequence', () => {
       </I18nProvider>,
     );
 
-    const readFirstMessageOpacity = () =>
-      StyleSheet.flatten(screen.getByText('Loading your villages...').props.style).opacity;
-    expect(readFirstMessageOpacity()).toBe(0);
+    expect(screen.getByTestId('startup-brand')).toBeTruthy();
     expect(timingSpy).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ duration: 200, toValue: 1 }),
+      expect.objectContaining({ duration: 770, toValue: 1, useNativeDriver: true }),
     );
     await act(async () => {
-      jest.advanceTimersByTime(1_200);
+      jest.advanceTimersByTime(10_000);
     });
-    expect(screen.getByText('Fetching clan data...')).toBeTruthy();
-    await act(async () => {
-      jest.advanceTimersByTime(1_200);
-    });
-    expect(screen.getByText('Analyzing war stats...')).toBeTruthy();
+    expect(screen.queryByText('Loading your villages...')).toBeNull();
+    expect(screen.queryByText('Fetching clan data...')).toBeNull();
+    expect(screen.queryByRole('progressbar')).toBeNull();
+    expect(timingSpy).toHaveBeenCalledTimes(1);
+    timingSpy.mockRestore();
   });
 });

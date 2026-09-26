@@ -1,9 +1,17 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { useCallback, useRef, useState, type ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import {
   Animated,
+  AppState,
   Platform,
-  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -14,19 +22,11 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { EyeOff, GripVertical, UserCircle } from 'lucide-react-native';
-import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import { EyeOff, UserCircle } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { toIntlLocale, useI18n } from '../../../i18n';
-import {
-  CKText,
-  EmptyState,
-  centeredContentPadding,
-  ckSpacing,
-  colorWithAlpha,
-  useCKTheme,
-} from '../../../ui';
+import { CKText, EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
 import {
   homeContentWidth,
   homeRecapWidth,
@@ -70,7 +70,6 @@ export function DashboardScreen({
   const { width: windowWidth } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(windowWidth);
   const desktop = isDesktopHome(platform, windowWidth);
-  const usesNativeRefreshScroll = platform === 'android';
   const maxContent = desktop ? homeContentWidth(windowWidth) : 840;
   const horizontal = centeredContentPadding(contentWidth, maxContent);
   const [refreshing, setRefreshing] = useState(false);
@@ -122,7 +121,7 @@ export function DashboardScreen({
     [cardTranslations],
   );
 
-  const startAndroidDrag = useCallback(
+  const startCardDrag = useCallback(
     (card: HomeCardId) => {
       const index = cards.indexOf(card);
       if (index < 0) return;
@@ -131,10 +130,10 @@ export function DashboardScreen({
       dragTargetIndexRef.current = index;
       setDraggingCard(card);
     },
-    [cards, resetCardTranslations],
+    [cards, resetCardTranslations, setDraggingCard],
   );
 
-  const updateAndroidDrag = useCallback(
+  const updateCardDrag = useCallback(
     (card: HomeCardId, translationY: number) => {
       if (draggingCardRef.current !== card) return;
       const source = cards.indexOf(card);
@@ -186,26 +185,47 @@ export function DashboardScreen({
     [cardLayouts, cardTranslations, cards],
   );
 
-  const finishAndroidDrag = useCallback(
+  const finishCardDrag = useCallback(
     (card: HomeCardId, translationY: number) => {
-      updateAndroidDrag(card, translationY);
+      updateCardDrag(card, translationY);
       if (draggingCardRef.current !== card) return;
       const source = cards.indexOf(card);
       const target = dragTargetIndexRef.current ?? source;
       draggingCardRef.current = null;
       dragTargetIndexRef.current = null;
       setDraggingCard(null);
+      if (source < 0 || target === source) {
+        resetCardTranslations(true);
+        return;
+      }
       resetCardTranslations(false);
-      if (source < 0 || target === source) return;
+      const sourceLayout = cardLayouts[card];
+      const targetLayout = cardLayouts[cards[target]!];
+      if (sourceLayout && targetLayout) {
+        const destinationY =
+          targetLayout.y + (source < target ? targetLayout.height - sourceLayout.height : 0);
+        // Preserve the released position across the layout reorder, then settle
+        // without keeping the scroll view locked for the spring's lifetime.
+        cardTranslations[card].setValue(translationY - (destinationY - sourceLayout.y));
+      }
       const next = [...cards];
       next.splice(source, 1);
       next.splice(target, 0, card);
       actions.reorderCards(next);
+      resetCardTranslations(true);
     },
-    [actions, cards, resetCardTranslations, updateAndroidDrag],
+    [
+      actions,
+      cardLayouts,
+      cardTranslations,
+      cards,
+      resetCardTranslations,
+      updateCardDrag,
+      setDraggingCard,
+    ],
   );
 
-  const cancelAndroidDrag = useCallback(
+  const cancelCardDrag = useCallback(
     (card: HomeCardId) => {
       if (draggingCardRef.current !== card) return;
       draggingCardRef.current = null;
@@ -213,8 +233,18 @@ export function DashboardScreen({
       setDraggingCard(null);
       resetCardTranslations(true);
     },
-    [resetCardTranslations],
+    [resetCardTranslations, setDraggingCard],
   );
+  const cancelActiveDrag = useCallback(() => {
+    const card = draggingCardRef.current;
+    if (card !== null) cancelCardDrag(card);
+  }, [cancelCardDrag]);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state !== 'active') cancelActiveDrag();
+    });
+    return () => subscription.remove();
+  }, [cancelActiveDrag]);
   let emptyBody;
   if (model.loading && model.linkedAccountCount === 0)
     emptyBody = (
@@ -271,13 +301,12 @@ export function DashboardScreen({
   const renderCard = (
     card: HomeCardId,
     index: number,
-    dragHandle?: ReactNode,
     isActive = false,
     animatedStyle?: StyleProp<ViewStyle>,
     onLayout?: (event: LayoutChangeEvent) => void,
   ) => {
     const title = homeCardTitle(card, t);
-    return (
+    const body = (
       <Animated.View
         key={card}
         onLayout={onLayout}
@@ -299,14 +328,42 @@ export function DashboardScreen({
           </>
         ) : null}
         {card === 'todo' && model.todo ? (
-          <HomeTodoCard model={model.todo} selectedAccountTag={model.selectedAccountTag} desktop={desktop} actions={actions} />
+          <HomeTodoCard
+            model={model.todo}
+            selectedAccountTag={model.selectedAccountTag}
+            desktop={desktop}
+            actions={actions}
+          />
         ) : card === 'ranked' && model.ranked ? (
-          <HomeRankedCard model={model.ranked} selectedAccountTag={model.selectedAccountTag} desktop={desktop} actions={actions} />
+          <HomeRankedCard
+            model={model.ranked}
+            selectedAccountTag={model.selectedAccountTag}
+            desktop={desktop}
+            actions={actions}
+          />
         ) : card === 'upgrade' && model.upgrade ? (
-          <HomeUpgradeCard model={model.upgrade} selectedAccountTag={model.selectedAccountTag} desktop={desktop} actions={actions} />
+          <HomeUpgradeCard
+            model={model.upgrade}
+            selectedAccountTag={model.selectedAccountTag}
+            desktop={desktop}
+            actions={actions}
+          />
         ) : null}
-        {dragHandle}
       </Animated.View>
+    );
+    return cards.length > 1 ? (
+      <HomeCardDragRegion
+        key={card}
+        card={card}
+        onStart={startCardDrag}
+        onUpdate={updateCardDrag}
+        onEnd={finishCardDrag}
+        onCancel={cancelCardDrag}
+      >
+        {body}
+      </HomeCardDragRegion>
+    ) : (
+      body
     );
   };
   const emptyContent = (
@@ -325,82 +382,43 @@ export function DashboardScreen({
       onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {usesNativeRefreshScroll ? (
-        <ScrollView
-          alwaysBounceVertical
-          contentContainerStyle={contentContainerStyle}
-          onScroll={pullRefresh.onScroll}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          refreshControl={refreshControl}
-          scrollEnabled={draggingCard === null}
-          scrollEventThrottle={16}
-          testID="home-scroll-view"
-        >
-          {header}
-          {cards.length
-            ? cards.map((card, index) =>
-                renderCard(
-                  card,
-                  index,
-                  cards.length > 1 ? (
-                    <AndroidHomeCardDragHandle
-                      card={card}
-                      label={t('upgradeTrackerPlanReorder', {
-                        category: homeCardTitle(card, t),
-                      })}
-                      onCancel={cancelAndroidDrag}
-                      onEnd={finishAndroidDrag}
-                      onStart={startAndroidDrag}
-                      onUpdate={updateAndroidDrag}
-                    />
-                  ) : undefined,
-                  draggingCard === card,
-                  {
-                    transform: [{ translateY: cardTranslations[card] }],
-                    zIndex: draggingCard === card ? 2 : 0,
-                  },
-                  (event) => recordCardLayout(card, event.nativeEvent.layout),
-                ),
-              )
-            : emptyContent}
-        </ScrollView>
-      ) : (
-        <DraggableFlatList
-          activationDistance={4}
-          alwaysBounceVertical
-          contentContainerStyle={contentContainerStyle}
-          data={cards}
-          keyExtractor={(card) => card}
-          ListEmptyComponent={emptyContent}
-          ListHeaderComponent={header}
-          onDragEnd={({ data }) => actions.reorderCards(data)}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-          refreshControl={refreshControl}
-          renderItem={({ item: card, drag, isActive, getIndex }) => (
-            <ScaleDecorator activeScale={1.012}>
-              {renderCard(
+      <ScrollView
+        alwaysBounceVertical
+        contentContainerStyle={contentContainerStyle}
+        onScroll={pullRefresh.onScroll}
+        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+        onScrollEndDrag={pullRefresh.onScrollEndDrag}
+        refreshControl={refreshControl}
+        scrollEnabled={draggingCard === null}
+        onTouchStart={(event) => {
+          // A fresh finger must never inherit a previous, interrupted drag lock.
+          if (event.nativeEvent.touches.length === 1) cancelActiveDrag();
+        }}
+        onTouchEnd={(event) => {
+          // Release scrolling independently of RNGH finalization. Its onEnd still
+          // owns committing the reorder, so callback ordering cannot lose a drop.
+          if (event.nativeEvent.touches.length === 0) setDraggingCard(null);
+        }}
+        onTouchCancel={cancelActiveDrag}
+        scrollEventThrottle={16}
+        testID="home-scroll-view"
+      >
+        {header}
+        {cards.length
+          ? cards.map((card, index) =>
+              renderCard(
                 card,
-                getIndex() ?? 0,
-                cards.length > 1 ? (
-                  <HomeCardDragHandle
-                    label={t('upgradeTrackerPlanReorder', {
-                      category: homeCardTitle(card, t),
-                    })}
-                    onLongPress={drag}
-                    testID={`home-card-drag-${card}`}
-                  />
-                ) : undefined,
-                isActive,
-              )}
-            </ScaleDecorator>
-          )}
-          scrollEnabled
-          testID="home-draggable-list"
-        />
-      )}
+                index,
+                draggingCard === card,
+                {
+                  transform: [{ translateY: cardTranslations[card] }],
+                  zIndex: draggingCard === card ? 2 : 0,
+                },
+                (event) => recordCardLayout(card, event.nativeEvent.layout),
+              ),
+            )
+          : emptyContent}
+      </ScrollView>
       <PullRefreshHint
         distance={pullRefresh.distance}
         refreshing={refreshing}
@@ -416,78 +434,49 @@ export function DashboardScreen({
   );
 }
 
-function HomeCardDragHandle({
-  label,
-  onLongPress,
-  testID,
-}: {
-  label: string;
-  onLongPress?: () => void;
-  testID: string;
-}) {
-  const theme = useCKTheme();
-  return (
-    <Pressable
-      accessibilityLabel={label}
-      accessibilityRole="button"
-      delayLongPress={140}
-      hitSlop={8}
-      onLongPress={onLongPress}
-      onPress={(event) => event.stopPropagation()}
-      style={({ pressed }) => [
-        styles.dragHandle,
-        pressed && { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.8) },
-      ]}
-      testID={testID}
-    >
-      <GripVertical color={theme.onSurfaceVariant} opacity={0.58} size={14} strokeWidth={2.2} />
-    </Pressable>
-  );
-}
-
-function AndroidHomeCardDragHandle({
+function HomeCardDragRegion({
   card,
-  label,
+  children,
   onStart,
   onUpdate,
   onEnd,
   onCancel,
 }: {
   card: HomeCardId;
-  label: string;
+  children: ReactNode;
   onStart: (card: HomeCardId) => void;
   onUpdate: (card: HomeCardId, translationY: number) => void;
   onEnd: (card: HomeCardId, translationY: number) => void;
   onCancel: (card: HomeCardId) => void;
 }) {
-  const theme = useCKTheme();
-  const gesture = Gesture.Pan()
-    .minDistance(2)
-    .hitSlop(8)
-    .shouldCancelWhenOutside(false)
-    .runOnJS(true)
-    .onStart(() => onStart(card))
-    .onUpdate((event) => onUpdate(card, event.translationY))
-    .onEnd((event) => onEnd(card, event.translationY))
-    .onFinalize(() => onCancel(card));
-
-  return (
-    <GestureDetector gesture={gesture}>
-      <Pressable
-        accessibilityLabel={label}
-        accessibilityRole="button"
-        hitSlop={8}
-        onPress={(event) => event.stopPropagation()}
-        style={({ pressed }) => [
-          styles.dragHandle,
-          pressed && { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.8) },
-        ]}
-        testID={`home-card-drag-${card}`}
-      >
-        <GripVertical color={theme.onSurfaceVariant} opacity={0.58} size={14} strokeWidth={2.2} />
-      </Pressable>
-    </GestureDetector>
+  // Keep the recognizer stable while layout and drag state update. A normal
+  // swipe fails the long-press gate and remains owned by the scroll view.
+  const callbacks = useRef({ onStart, onUpdate, onEnd, onCancel });
+  useLayoutEffect(() => {
+    callbacks.current = { onStart, onUpdate, onEnd, onCancel };
+  }, [onStart, onUpdate, onEnd, onCancel]);
+  useEffect(() => () => callbacks.current.onCancel(card), [card]);
+  // Gesture builder methods register these callbacks; they do not call them
+  // during render. The refs are only read when the native gesture fires.
+  /* eslint-disable react-hooks/refs */
+  const gesture = useMemo(
+    () =>
+      Gesture.Pan()
+        .activateAfterLongPress(350)
+        .minDistance(2)
+        .shouldCancelWhenOutside(false)
+        .runOnJS(true)
+        .onStart(() => callbacks.current.onStart(card))
+        .onUpdate((event) => callbacks.current.onUpdate(card, event.translationY))
+        .onEnd((event, success) => {
+          if (success === false) callbacks.current.onCancel(card);
+          else callbacks.current.onEnd(card, event.translationY);
+        })
+        .onFinalize(() => callbacks.current.onCancel(card)),
+    [card],
   );
+  /* eslint-enable react-hooks/refs */
+  return <GestureDetector gesture={gesture}>{children}</GestureDetector>;
 }
 
 function homeCardTitle(card: HomeCardId, t: ReturnType<typeof useI18n>['t']): string {
@@ -522,16 +511,5 @@ const styles = StyleSheet.create({
   sectionTitle: { fontWeight: '900' },
   sectionGap: { height: ckSpacing.sm },
   mobileGap: { height: 16 },
-  dragHandle: {
-    position: 'absolute',
-    top: 0,
-    right: 6,
-    zIndex: 4,
-    width: 28,
-    height: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
-  },
   empty: { paddingHorizontal: 24, paddingVertical: 52 },
 });

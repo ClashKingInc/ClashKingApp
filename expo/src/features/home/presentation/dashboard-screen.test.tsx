@@ -1,5 +1,5 @@
 import { act, fireEvent, render, within } from '@testing-library/react-native';
-import { Animated } from 'react-native';
+import { Animated, AppState, type AppStateStatus } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { I18nProvider } from '../../../i18n';
@@ -40,6 +40,10 @@ jest.mock('react-native-gesture-handler', () => {
     const callbacks: Record<string, (...args: never[]) => void> = {};
     const gesture = {
       callbacks,
+      activateAfterLongPress(duration: number) {
+        callbacks.holdDuration = (() => duration) as never;
+        return this;
+      },
       minDistance() {
         return this;
       },
@@ -82,84 +86,12 @@ jest.mock('react-native-gesture-handler', () => {
       gesture: ReturnType<typeof Pan>;
     }) =>
       ReactModule.cloneElement(children, {
+        longPressDuration: gesture.callbacks.holdDuration?.(),
         onGestureStart: gesture.callbacks.start,
         onGestureUpdate: gesture.callbacks.update,
         onGestureEnd: gesture.callbacks.end,
         onGestureFinalize: gesture.callbacks.finalize,
       } as Record<string, unknown>),
-  };
-});
-
-const mockHomeDrag = jest.fn();
-
-jest.mock('react-native-draggable-flatlist', () => {
-  const ReactModule = jest.requireActual<typeof import('react')>('react');
-  const { View: MockView } = jest.requireActual<typeof import('react-native')>('react-native');
-  return {
-    __esModule: true,
-    default: ({
-      data,
-      ListEmptyComponent,
-      ListHeaderComponent,
-      onScrollBeginDrag,
-      onScrollEndDrag,
-      onScrollOffsetChange,
-      renderItem,
-      refreshControl,
-      scrollEnabled,
-      testID = 'home-draggable-list',
-      onDragEnd,
-    }: {
-      data: readonly unknown[];
-      ListEmptyComponent?: React.ReactNode;
-      ListHeaderComponent?: React.ReactNode;
-      onScrollBeginDrag?: () => void;
-      onScrollEndDrag?: () => void;
-      onScrollOffsetChange?: (offset: number) => void;
-      refreshControl?: React.ReactElement<{
-        onRefresh?: () => void;
-        refreshing?: boolean;
-      }>;
-      renderItem: (parameters: Record<string, unknown>) => React.ReactNode;
-      scrollEnabled?: boolean;
-      testID?: string;
-      onDragEnd?: (parameters: Record<string, unknown>) => void;
-    }) => {
-      const refreshProps = ReactModule.isValidElement(refreshControl)
-        ? refreshControl.props
-        : undefined;
-      const mockProps = {
-        accessibilityLabel: scrollEnabled ? 'scroll-enabled' : 'scroll-disabled',
-        accessibilityState: { busy: refreshProps?.refreshing },
-        onRefresh: refreshProps?.onRefresh,
-        onDragEnd,
-        onScrollBeginDrag,
-        onScrollEndDrag,
-        onScrollOffsetChange,
-        refreshControl,
-        testID,
-      } as unknown as React.ComponentProps<typeof MockView>;
-      return ReactModule.createElement(
-        MockView,
-        mockProps,
-        ListHeaderComponent,
-        data.length
-          ? data.map((item, index) =>
-              ReactModule.createElement(
-                ReactModule.Fragment,
-                { key: index },
-                renderItem({
-                  item,
-                  drag: mockHomeDrag,
-                  isActive: false,
-                  getIndex: () => index,
-                }),
-              ),
-            )
-          : ListEmptyComponent,
-      );
-    },
-    ScaleDecorator: ({ children }: { children: React.ReactNode }) => children,
   };
 });
 
@@ -435,9 +367,7 @@ describe('DashboardScreen states', () => {
     expect(screen.getByText('2 accounts')).toBeTruthy();
     expect(screen.getAllByText('-')).toHaveLength(3);
     expect(screen.queryByTestId('home-card-drag-upgrade')).toBeNull();
-    expect(screen.getByTestId('home-draggable-list').props.accessibilityLabel).toBe(
-      'scroll-enabled',
-    );
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(true);
   });
 
   it('shows the todo card progress label at zero percent', async () => {
@@ -538,7 +468,14 @@ describe('DashboardScreen states', () => {
     expect(screen.queryByTestId('home-draggable-list')).toBeNull();
   });
 
-  const verifyAndroidCardReordering = async () => {
+  const verifyCardReordering = async (platform: 'ios' | 'android' | 'web') => {
+    let changeAppState: ((state: AppStateStatus) => void) | undefined;
+    const subscription = jest
+      .spyOn(AppState, 'addEventListener')
+      .mockImplementation((event, callback) => {
+        if (event === 'change') changeAppState = callback;
+        return { remove: jest.fn() };
+      });
     const callbacks = actions();
     const screen = await render(
       <SafeAreaProvider
@@ -550,7 +487,7 @@ describe('DashboardScreen states', () => {
         <I18nProvider locale="en">
           <CKThemeProvider preference="light">
             <DashboardScreen
-              platform="android"
+              platform={platform}
               model={{
                 loading: false,
                 linkedAccountCount: 1,
@@ -582,32 +519,64 @@ describe('DashboardScreen states', () => {
       </SafeAreaProvider>,
     );
 
-    const handle = screen.getByTestId('home-card-drag-todo');
-    expect(handle.props.accessibilityLabel).toBe('Reorder To-do list');
-    fireEvent(screen.getByTestId('home-card-shell-todo'), 'layout', {
+    const handle = screen.getByTestId('home-card-shell-todo');
+    expect(handle.props.longPressDuration).toBe(350);
+    expect(screen.queryByTestId('home-card-drag-todo')).toBeNull();
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'layout', {
       nativeEvent: { layout: { x: 0, y: 0, width: 390, height: 200 } },
     });
-    fireEvent(screen.getByTestId('home-card-shell-ranked'), 'layout', {
+    await fireEvent(screen.getByTestId('home-card-shell-ranked'), 'layout', {
       nativeEvent: { layout: { x: 0, y: 212, width: 390, height: 180 } },
     });
     await act(async () => {
-      fireEvent(handle, 'gestureStart');
+      await fireEvent(handle, 'gestureStart');
     });
     expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(false);
     mockAnimatedSpring.mockClear();
     await act(async () => {
-      fireEvent(screen.getByTestId('home-card-drag-todo'), 'gestureUpdate', {
+      await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureUpdate', {
         translationY: 300,
       });
     });
     expect(mockAnimatedSpring).toHaveBeenCalled();
     expect(callbacks.reorderCards).not.toHaveBeenCalled();
     await act(async () => {
-      fireEvent(screen.getByTestId('home-card-drag-todo'), 'gestureEnd', {
+      await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureEnd', {
         translationY: 300,
       });
     });
     expect(callbacks.reorderCards).toHaveBeenCalledWith(['ranked', 'todo']);
+    // The spring mock never completes: scrolling must already be available.
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(true);
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureFinalize');
+    expect(callbacks.reorderCards).toHaveBeenCalledTimes(1);
+    // Raw release must unlock even when RNGH never delivers End/Finalize.
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureStart');
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(false);
+    await fireEvent(screen.getByTestId('home-scroll-view'), 'touchEnd', {
+      nativeEvent: { touches: [] },
+    });
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(true);
+    // The next touch clears the abandoned drag without saving an accidental order.
+    await fireEvent(screen.getByTestId('home-scroll-view'), 'touchStart', {
+      nativeEvent: { touches: [{}] },
+    });
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureEnd', {
+      translationY: 300,
+    });
+    expect(callbacks.reorderCards).toHaveBeenCalledTimes(1);
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureStart');
+    await fireEvent(screen.getByTestId('home-scroll-view'), 'touchCancel');
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(true);
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureStart');
+    await act(async () => changeAppState?.('inactive'));
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(true);
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureStart');
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(false);
+    await fireEvent(screen.getByTestId('home-card-shell-todo'), 'gestureFinalize');
+    expect(screen.getByTestId('home-scroll-view').props.scrollEnabled).toBe(true);
+    expect(callbacks.reorderCards).toHaveBeenCalledTimes(1);
+    subscription.mockRestore();
   };
 
   it('refreshes after one full pull even if the native refresh control misses it', async () => {
@@ -662,8 +631,8 @@ describe('DashboardScreen states', () => {
     expect(callbacks.refresh).toHaveBeenCalledTimes(1);
   });
 
-  it(
-    'moves Android home cards before committing the order from the corner handle',
-    verifyAndroidCardReordering,
+  it.each(['ios', 'android', 'web'] as const)(
+    'reorders by holding the card body and immediately releases scrolling on %s',
+    verifyCardReordering,
   );
 });

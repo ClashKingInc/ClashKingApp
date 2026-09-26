@@ -1,6 +1,8 @@
 import type { BookmarkedClan } from '../../../core/bookmarks/bookmark-service';
 import type { Player } from '../../player/models/player';
 import type { Clan } from '../models';
+import type { ClanSpringOrigin } from './clan-spring-transition';
+import { ImageAssets } from '../../../core/assets/image-assets';
 
 export interface ClansPresentationModel {
   readonly profiles: readonly Player[];
@@ -16,7 +18,7 @@ export interface ClansPresentationActions {
   showMessage(message: string): void;
   hydrateBookmarkedClans(tags: readonly string[]): Promise<void>;
   loadClan(tag: string): Promise<Clan>;
-  openClan(clan: Clan): void;
+  openClan(clan: Clan, origin?: ClanSpringOrigin): void;
   reorderLinkedClans(orderedTags: readonly string[]): Promise<void>;
   reorderBookmarkedClans(orderedTags: readonly string[]): Promise<void>;
 }
@@ -88,4 +90,3 @@ export function buildClanRoster(model: ClansPresentationModel): {
 export function clanMemberCapacityLabel(members: number): string {
   return `${members}/50`;
 }
-import { ImageAssets } from '../../../core/assets/image-assets';

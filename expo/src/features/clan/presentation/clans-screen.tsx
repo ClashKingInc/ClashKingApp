@@ -9,13 +9,19 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Users } from 'lucide-react-native';
-import DraggableFlatList, { ScaleDecorator, type RenderItemParams } from 'react-native-draggable-flatlist';
+import DraggableFlatList, {
+  ScaleDecorator,
+  type RenderItemParams,
+} from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
 import { EmptyState, ResponsiveGrid, Surface, ckRadius, useCKTheme } from '../../../ui';
 import { PlayerRosterControl } from '../../player/presentation/players-screen';
 import { ClanRosterCard } from './clan-card';
+import type { ClanSpringOrigin } from './clan-spring-transition';
+import { ImageAssets } from '../../../core/assets/image-assets';
+import { prefetchMobileImage, headerArtworkSize } from '../../../ui/mobile-web-image';
 import {
   buildClanRoster,
   type ClansPresentationActions,
@@ -35,6 +41,10 @@ export function ClansScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  useEffect(() => {
+    const size = headerArtworkSize(width);
+    void prefetchMobileImage(ImageAssets.homeBaseBackground, size.width, size.height);
+  }, [width]);
   const desktop = Platform.OS === 'web' && width >= 900;
   const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
   const [refreshing, setRefreshing] = useState(false);
@@ -64,10 +74,16 @@ export function ClansScreen({
   const requestedBookmarks = useRef(new Set<string>());
   const link = useLinkParameters();
   const [mode, setMode] = useState<'linked' | 'bookmarked'>(
-    linkChoice(link.tab === 'bookmarks' ? 'bookmarked' : link.tab, ['linked', 'bookmarked'], 'linked'),
+    linkChoice(
+      link.tab === 'bookmarks' ? 'bookmarked' : link.tab,
+      ['linked', 'bookmarked'],
+      'linked',
+    ),
   );
   const roster = useMemo(() => buildClanRoster(model), [model]);
-  const entries = roster.items.filter((item) => mode === 'linked' ? !item.bookmarked : item.bookmarked);
+  const entries = roster.items.filter((item) =>
+    mode === 'linked' ? !item.bookmarked : item.bookmarked,
+  );
   useEffect(() => {
     const missing = roster.missingBookmarkTags.filter(
       (tag) => !requestedBookmarks.current.has(tag),
@@ -76,9 +92,10 @@ export function ClansScreen({
     missing.forEach((tag) => requestedBookmarks.current.add(tag));
     void actions.hydrateBookmarkedClans(missing);
   }, [actions, roster.missingBookmarkTags]);
-  const open = async (item: (typeof entries)[number]) => {
+  const open = async (item: (typeof entries)[number], origin?: ClanSpringOrigin) => {
     if (item.clan) {
-      actions.openClan(item.clan);
+      if (origin) actions.openClan(item.clan, origin);
+      else actions.openClan(item.clan);
       return;
     }
     try {
@@ -91,89 +108,107 @@ export function ClansScreen({
     <ClanRosterCard
       key={`${item.bookmarked ? 'bookmark' : 'linked'}:${item.tag}`}
       item={item}
-      onOpen={() => void open(item)}
+      onOpen={(origin) => void open(item, origin)}
     />
   ));
   const reorder = ({ data, from, to }: { data: typeof entries; from: number; to: number }) => {
     if (from === to) return;
-    const operation = mode === 'linked'
-      ? actions.reorderLinkedClans(data.map((item) => item.tag))
-      : actions.reorderBookmarkedClans(data.map((item) => item.tag));
+    const operation =
+      mode === 'linked'
+        ? actions.reorderLinkedClans(data.map((item) => item.tag))
+        : actions.reorderBookmarkedClans(data.map((item) => item.tag));
     void operation.catch(() => actions.showMessage(t('accountsErrorFailedToUpdateOrder')));
   };
-  const listHeader = <View style={styles.segmentWrap}>
-    <PlayerRosterControl
-      mode={mode}
-      linkedLabel={t('playersLinked')}
-      bookmarkedLabel={t('playersBookmarked')}
-      isRtl={isRtl}
-      onChange={setMode}
+  const listHeader = (
+    <View style={styles.segmentWrap}>
+      <PlayerRosterControl
+        mode={mode}
+        linkedLabel={t('playersLinked')}
+        bookmarkedLabel={t('playersBookmarked')}
+        isRtl={isRtl}
+        onChange={setMode}
+      />
+    </View>
+  );
+  const emptyRoster = (
+    <Surface radius={ckRadius.control}>
+      <EmptyState
+        title={mode === 'linked' ? t('clanNone') : t('generalNoDataAvailable')}
+        body={mode === 'linked' ? t('clanJoinToUnlock') : undefined}
+        icon={<Users color={theme.onSurfaceVariant} />}
+        style={styles.empty}
+      />
+    </Surface>
+  );
+  const refreshControl = (
+    <RefreshControl
+      refreshing={refreshing}
+      onRefresh={() => void refresh()}
+      tintColor={theme.primary}
     />
-  </View>;
-  const emptyRoster = <Surface radius={ckRadius.control}>
-    <EmptyState
-      title={mode === 'linked' ? t('clanNone') : t('generalNoDataAvailable')}
-      body={mode === 'linked' ? t('clanJoinToUnlock') : undefined}
-      icon={<Users color={theme.onSurfaceVariant} />}
-      style={styles.empty}
-    />
-  </Surface>;
-  const refreshControl = <RefreshControl
-    refreshing={refreshing}
-    onRefresh={() => void refresh()}
-    tintColor={theme.primary}
-  />;
+  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {desktop ? <ScrollView
-        testID="clans-scroll-view"
-        onScroll={pullRefresh.onScroll}
-        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-        onScrollEndDrag={pullRefresh.onScrollEndDrag}
-        scrollEventThrottle={16}
-        contentContainerStyle={{
-          paddingHorizontal: horizontal,
-          paddingBottom: 32,
-        }}
-        refreshControl={refreshControl}
-      >
-        {listHeader}
-        <View style={styles.roster}>
-          {entries.length === 0 ? emptyRoster : (
-            <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
-              {cards}
-            </ResponsiveGrid>
-          )}
-        </View>
-      </ScrollView> : <DraggableFlatList
-        onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-        onScrollEndDrag={pullRefresh.onScrollEndDrag}
-        activationDistance={8}
-        alwaysBounceVertical
-        data={entries}
-        testID="clans-scroll-view"
-        key={`${mode}-clan-roster`}
-        keyExtractor={(item) => item.tag}
-        onDragEnd={reorder}
-        contentContainerStyle={{ paddingHorizontal: horizontal, paddingBottom: insets.bottom + 96 }}
-        ListHeaderComponent={listHeader}
-        ListEmptyComponent={emptyRoster}
-        refreshControl={refreshControl}
-        renderItem={(params: RenderItemParams<(typeof entries)[number]>) => <ScaleDecorator activeScale={1.015}>
-          <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
-            <ClanRosterCard
-              item={params.item}
-              onOpen={() => void open(params.item)}
-              onLongPress={params.drag}
-              dragTestID={`clan-roster-card-${params.item.tag}`}
-            />
+      {desktop ? (
+        <ScrollView
+          testID="clans-scroll-view"
+          onScroll={pullRefresh.onScroll}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
+          scrollEventThrottle={16}
+          contentContainerStyle={{
+            paddingHorizontal: horizontal,
+            paddingBottom: 32,
+          }}
+          refreshControl={refreshControl}
+        >
+          {listHeader}
+          <View style={styles.roster}>
+            {entries.length === 0 ? (
+              emptyRoster
+            ) : (
+              <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
+                {cards}
+              </ResponsiveGrid>
+            )}
           </View>
-        </ScaleDecorator>}
-      />}
+        </ScrollView>
+      ) : (
+        <DraggableFlatList
+          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+          onScrollEndDrag={pullRefresh.onScrollEndDrag}
+          activationDistance={8}
+          alwaysBounceVertical
+          data={entries}
+          testID="clans-scroll-view"
+          key={`${mode}-clan-roster`}
+          keyExtractor={(item) => item.tag}
+          onDragEnd={reorder}
+          contentContainerStyle={{
+            paddingHorizontal: horizontal,
+            paddingBottom: insets.bottom + 96,
+          }}
+          ListHeaderComponent={listHeader}
+          ListEmptyComponent={emptyRoster}
+          refreshControl={refreshControl}
+          renderItem={(params: RenderItemParams<(typeof entries)[number]>) => (
+            <ScaleDecorator activeScale={1.015}>
+              <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+                <ClanRosterCard
+                  item={params.item}
+                  onOpen={(origin) => void open(params.item, origin)}
+                  onLongPress={params.drag}
+                  dragTestID={`clan-roster-card-${params.item.tag}`}
+                />
+              </View>
+            </ScaleDecorator>
+          )}
+        />
+      )}
       <PullRefreshHint
         distance={pullRefresh.distance}
         refreshing={refreshing}

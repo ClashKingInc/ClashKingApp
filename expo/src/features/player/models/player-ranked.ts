@@ -67,6 +67,16 @@ export class RankedLeagueBattle {
     readonly townHallLevel = 0,
     readonly duration = 0,
   ) {}
+  static fromOfficial(json: JsonRecord) {
+    return new RankedLeagueBattle(
+      string(json.opponentPlayerTag),
+      string(json.opponentName),
+      int(json.stars),
+      number(json.destructionPercentage),
+      int(json.trophies),
+      apiDate(json.creationTime),
+    );
+  }
   static fromAnalytics(json: JsonRecord) {
     if (json.automatic === true) {
       return new RankedLeagueBattle('', '', null, null, int(json.trophies), null, true);
@@ -105,6 +115,43 @@ export class RankedLeagueBattlelog {
     readonly attacks: readonly RankedLeagueBattle[],
     readonly defenses: readonly RankedLeagueBattle[],
   ) {}
+
+  // The official group response is scoped to the requested player by playerTag.
+  // Archived analytics may not have a membership snapshot for a live period yet.
+  static fromOfficialGroup(
+    json: JsonRecord,
+    playerTag: string,
+    group: RankedLeagueGroup,
+    leagueTierId: number,
+  ): RankedLeagueBattlelog | null {
+    const member = group.members.find(
+      (entry) => canonicalTag(entry.playerTag) === canonicalTag(playerTag),
+    );
+    const hasAttacks = Array.isArray(json.attackLogs);
+    const hasDefenses = Array.isArray(json.defenseLogs);
+    if (!member || (!hasAttacks && !hasDefenses)) return null;
+    const attacks = records(json.attackLogs).map(RankedLeagueBattle.fromOfficial);
+    const defenses = records(json.defenseLogs).map(RankedLeagueBattle.fromOfficial);
+    const attackCount = member.attackWinCount + member.attackLoseCount;
+    const defenseCount = member.defenseWinCount + member.defenseLoseCount;
+    return new RankedLeagueBattlelog(
+      playerTag,
+      String(group.seasonId),
+      group.tag,
+      leagueTierId,
+      hasAttacks && attacks.length === attackCount,
+      hasDefenses && defenses.length === defenseCount,
+      Math.max(0, attackCount - attacks.length),
+      Math.max(0, defenseCount - defenses.length),
+      false,
+      attackCount,
+      defenseCount,
+      0, // The official group contract does not supply a battle limit.
+      0,
+      attacks,
+      defenses,
+    );
+  }
 
   static fromJson(json: JsonRecord) {
     const league = record(json.league);

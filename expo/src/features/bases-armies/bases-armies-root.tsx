@@ -1,4 +1,5 @@
 import { cloneElement, useCallback, useEffect, useState, type ReactElement } from 'react';
+import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import {
   ArrowLeft,
   Bookmark,
@@ -34,7 +35,6 @@ import {
   HeaderIconButton,
   LoadingScreen,
   MobileWebImage,
-  ProfileTabs,
   SelectionPicker,
   Surface,
   colorWithAlpha,
@@ -73,7 +73,7 @@ export function BasesArmiesScreen({
   readonly baseService: PersonalBasesServiceContract;
   readonly onBack: () => void;
 }) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -228,13 +228,13 @@ export function BasesArmiesScreen({
               style={styles.mutationError}
             />
           ) : null}
-          <ProfileTabs
-            variant="compact"
-            selectedKey={section}
-            onSelect={setSection}
-            tabs={[
-              { key: 'bases', label: t('sideSavedBases') },
-              { key: 'armies', label: t('sideSavedArmies') },
+          <SlidingSegmentControl
+            value={section}
+            isRtl={isRtl}
+            onChange={setSection}
+            options={[
+              { value: 'bases', label: t('sideSavedBases') },
+              { value: 'armies', label: t('sideSavedArmies') },
             ]}
           />
           {section === 'bases' ? (

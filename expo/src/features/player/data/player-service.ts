@@ -742,11 +742,29 @@ export class PlayerService {
         previousTag && previousResponse
           ? RankedLeagueGroup.fromJson(previousResponse as JsonRecord, previousTag, previousSeason)
           : null,
-      currentBattlelog = parseRankedBattlelog(currentLog, tag, currentTag, currentSeason),
-      previousBattlelog = parseRankedBattlelog(previousLog, tag, previousTag, previousSeason),
       history = records(historyJson.items)
         .map(RankedLeagueHistoryEntry.fromJson)
         .sort((a, b) => b.leagueSeasonId - a.leagueSeasonId);
+    const currentBattlelog =
+      parseRankedBattlelog(currentLog, tag, currentTag, currentSeason) ??
+      (current && currentResponse
+        ? RankedLeagueBattlelog.fromOfficialGroup(
+            currentResponse as JsonRecord,
+            tag,
+            current,
+            int(tierJson?.id),
+          )
+        : null);
+    const previousBattlelog =
+      parseRankedBattlelog(previousLog, tag, previousTag, previousSeason) ??
+      (previous && previousResponse
+        ? RankedLeagueBattlelog.fromOfficialGroup(
+            previousResponse as JsonRecord,
+            tag,
+            previous,
+            history.find((entry) => entry.leagueSeasonId === previousSeason)?.leagueTierId ?? 0,
+          )
+        : null);
     return new RankedLeagueData(
       string(player.tag, tag),
       string(player.name),

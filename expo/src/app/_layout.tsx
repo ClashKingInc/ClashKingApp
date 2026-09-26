@@ -20,6 +20,7 @@ import {
   reportException,
 } from '../core/observability/observability';
 import { AppRuntimeProvider } from '../core/app/runtime-context';
+import { NavigationTheme } from '../core/app/navigation-theme';
 import { loadClashKingFont } from '../core/fonts/clashking-font-service';
 import { hideWebLaunchScreen } from '../core/app/launch-screen-runtime';
 import { useCKThemeMode } from '../ui';
@@ -89,11 +90,26 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AppRuntimeProvider>
-            <AppStatusBar />
-            <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
-              <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
-              <Stack.Screen name="detail" options={{ gestureEnabled: true }} />
-            </Stack>
+            <NavigationTheme>
+              <AppStatusBar />
+              <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
+                <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
+                <Stack.Screen
+                  name="detail"
+                  options={({ route }) => ({
+                    gestureEnabled: true,
+                    ...((route.params as { clanSpring?: string } | undefined)?.clanSpring === '1'
+                      ? {
+                          // A modal disables iOS's interactive pop gesture, even with gestureEnabled.
+                          presentation: 'card' as const,
+                          animation: 'none' as const,
+                          gestureDirection: 'horizontal' as const,
+                        }
+                      : {}),
+                  })}
+                />
+              </Stack>
+            </NavigationTheme>
           </AppRuntimeProvider>
         </QueryClientProvider>
       </SafeAreaProvider>

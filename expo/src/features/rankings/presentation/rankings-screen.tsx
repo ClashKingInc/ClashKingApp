@@ -359,7 +359,7 @@ function RankingLocationPicker({
   );
 }
 
-function rankingBackground(board: RankingBoardValue): string {
+export function rankingBackground(board: RankingBoardValue): string {
   if (board === RankingBoard.clanCapital) return ImageAssets.clanCapitalPageBackground;
   return board.isClan ? ImageAssets.clanPageBackground : ImageAssets.legendPageBackground;
 }

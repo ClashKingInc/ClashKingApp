@@ -2311,7 +2311,7 @@ export function sectionImage(section: StatsSectionValue): string {
       return ImageAssets.clanCastle;
   }
 }
-function sectionBackdrop(section: StatsSectionValue): string {
+export function sectionBackdrop(section: StatsSectionValue): string {
   if (section === StatsSection.war) return ImageAssets.warPageBackground;
   if (section === StatsSection.cwl) return ImageAssets.cwlPageBackground;
   if (section === StatsSection.armies || section === StatsSection.items)

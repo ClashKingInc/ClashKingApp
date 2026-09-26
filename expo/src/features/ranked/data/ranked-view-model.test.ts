@@ -89,6 +89,52 @@ describe('Ranked and Legend view models', () => {
     });
   });
 
+  test('official logs retain the existing known battle limit without inventing one', () => {
+    const official = RankedLeagueBattlelog.fromOfficialGroup(
+      { attackLogs: [], defenseLogs: [] },
+      '#P',
+      currentGroup,
+      gold.id,
+    );
+    const withHistory = new RankedLeagueData(
+      '#P',
+      'Player',
+      18,
+      1200,
+      1300,
+      gold,
+      data.tiers,
+      history,
+      currentGroup,
+      null,
+      official,
+    );
+    expect(rankedPeriods(withHistory)[0]).toMatchObject({
+      hasDetails: true,
+      attacksComplete: false,
+      attackMaxBattles: 14,
+      defenseMaxBattles: 14,
+    });
+    const withoutHistory = new RankedLeagueData(
+      '#P',
+      'Player',
+      18,
+      1200,
+      1300,
+      gold,
+      data.tiers,
+      [],
+      currentGroup,
+      null,
+      official,
+    );
+    expect(rankedPeriods(withoutHistory)[0]).toMatchObject({
+      hasDetails: true,
+      attackMaxBattles: 0,
+      defenseMaxBattles: 0,
+    });
+  });
+
   test('uses the canonical battlelog season when the optional group is unavailable', () => {
     const withoutGroup = new RankedLeagueData(
       '#P',

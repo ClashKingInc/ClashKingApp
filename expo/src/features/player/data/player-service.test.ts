@@ -440,6 +440,100 @@ test.each(['current', 'previous'] as const)(
   },
 );
 
+test.each(['current', 'previous'] as const)(
+  'uses official %s group battle logs when the archived period is not found',
+  async (period) => {
+    const { api } = setup({
+      '/proxy/v1/players/%23P1': officialPlayer({
+        [`${period}LeagueGroupTag`]: '#GROUP',
+        [`${period}LeagueSeasonId`]: 123,
+      }),
+      '/proxy/v1/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/proxy/v1/leaguegroup/%23GROUP/123?playerTag=%23P1': {
+        members: [rankedMember('#P1', 'One', 40)],
+        attackLogs: [
+          {
+            opponentPlayerTag: '#P2',
+            opponentName: 'Opponent',
+            stars: 3,
+            destructionPercentage: 100,
+            trophies: 40,
+            creationTime: '20260922T120000.000Z',
+          },
+        ],
+        defenseLogs: [
+          {
+            opponentPlayerTag: '#P3',
+            opponentName: 'Defender',
+            stars: 2,
+            destructionPercentage: 80,
+            trophies: -24,
+            creationTime: '20260922T130000.000Z',
+          },
+        ],
+      },
+    });
+    const data = await new PlayerService(api).loadRankedLeagueData('#P1');
+    const log = period === 'current' ? data.currentBattlelog : data.previousBattlelog;
+    expect(log).toMatchObject({
+      tag: '#P1',
+      seasonId: '123',
+      leagueGroupId: '#GROUP',
+      attacksComplete: true,
+      defensesComplete: true,
+      registeredAttacks: 1,
+      registeredDefenses: 1,
+      automaticDefensesDerived: false,
+      maxAttacks: 0,
+      maxDefenses: 0,
+    });
+    expect(log?.attacks[0]).toMatchObject({
+      opponentPlayerTag: '#P2',
+      opponentName: 'Opponent',
+      stars: 3,
+      trophies: 40,
+      creationTime: new Date('2026-09-22T12:00:00Z'),
+    });
+    expect(log?.defenses[0]?.trophies).toBe(-24);
+  },
+);
+
+test.each([
+  { logs: {}, included: true, available: false },
+  { logs: { attackLogs: [], defenseLogs: [] }, included: false, available: false },
+  { logs: { attackLogs: [], defenseLogs: [] }, included: true, available: true },
+  { logs: { attackLogs: [] }, included: true, available: true },
+])(
+  'official ranked logs preserve missing or partial data: %j',
+  async ({ logs, included, available }) => {
+    const { api } = setup({
+      '/proxy/v1/players/%23P1': officialPlayer({
+        currentLeagueGroupTag: '#GROUP',
+        currentLeagueSeasonId: 123,
+      }),
+      '/proxy/v1/leaguetiers': { items: [] },
+      '/proxy/v1/players/%23P1/leaguehistory': { items: [] },
+      '/proxy/v1/leaguegroup/%23GROUP/123?playerTag=%23P1': {
+        members: [rankedMember(included ? '#P1' : '#P2', 'One', 40)],
+        ...logs,
+      },
+    });
+    const { currentBattlelog } = await new PlayerService(api).loadRankedLeagueData('#P1');
+    if (!available) expect(currentBattlelog).toBeNull();
+    else
+      expect(currentBattlelog).toMatchObject({
+        attacksComplete: false,
+        defensesComplete: false,
+        missingRealAttacks: 1,
+        missingRealDefenses: 1,
+        attacks: [],
+        defenses: [],
+        automaticDefensesDerived: false,
+      });
+  },
+);
+
 test('ranked battlelog decode failures propagate and a later load retries', async () => {
   let battlelogCalls = 0;
   const { api, calls } = setup({

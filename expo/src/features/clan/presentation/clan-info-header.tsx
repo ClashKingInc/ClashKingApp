@@ -23,6 +23,8 @@ import { clanMemberCapacityLabel } from './contracts';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
 import { extractDiscordInviteCode } from './clan-info-contracts';
 import { clanTypeLabel } from './presentation-utils';
+import { ClanSpringTarget } from './clan-spring-transition';
+import { headerArtworkSize } from '../../../ui/mobile-web-image';
 
 export function ClanInfoHeader({
   model,
@@ -90,6 +92,9 @@ export function ClanInfoHeader({
     <View style={styles.hero}>
       <MobileWebImage
         imageUrl={ImageAssets.homeBaseBackground}
+        displaySize={headerArtworkSize(width)}
+        cachePolicy="memory-disk"
+        transition={0}
         style={StyleSheet.absoluteFill}
         contentFit="cover"
         contentPosition="bottom"
@@ -152,10 +157,14 @@ export function ClanInfoHeader({
       </View>
       <View style={[styles.body, desktop ? styles.desktopBody : styles.mobileBody]}>
         <View style={[styles.identity, desktop && styles.desktopIdentity]}>
-          <MobileWebImage
-            imageUrl={clan.badgeUrls.smallest}
-            style={[styles.badge, desktop && styles.desktopBadge]}
-          />
+          <ClanSpringTarget part="badge">
+            <MobileWebImage
+              imageUrl={clan.badgeUrls.smallest}
+              cachePolicy="memory-disk"
+              transition={0}
+              style={[styles.badge, desktop && styles.desktopBadge]}
+            />
+          </ClanSpringTarget>
           <View style={desktop ? styles.desktopIdentityCopy : styles.centered}>
             <Pressable
               accessibilityRole="button"
@@ -163,9 +172,11 @@ export function ClanInfoHeader({
               testID="clan-header-name-copy"
               onPress={copyClanTag}
             >
-              <CKText numberOfLines={1} style={styles.name}>
-                {clan.name}
-              </CKText>
+              <ClanSpringTarget part="name">
+                <CKText numberOfLines={1} style={styles.name}>
+                  {clan.name}
+                </CKText>
+              </ClanSpringTarget>
             </Pressable>
             <Pressable
               accessibilityRole="button"
