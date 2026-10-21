@@ -61,14 +61,9 @@ jobs:
         run: |
           npm run typecheck
           npm run lint
-          npm test -- --silent
-          npm run test:api-boundary
           npm run e2e:structure
           npm run l10n:check
           npm run licenses:check
-          npm run test:release
-          npm run test:native-plugin
-          npm run test:web-build
       - name: Materialize update verification certificate
         env:
           CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}

@@ -1,4 +1,4 @@
-name: Deploy Expo Web to Cloudflare Pages
+name: Deploy App Link Landing to Cloudflare Pages
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
       - name: Install Expo dependencies
         run: npm ci
 
-      - name: Build static Expo web export
+      - name: Build native-app link landing
         env:
           CK_ANDROID_APP_LINKS_SHA256: ${{ vars.CK_ANDROID_APP_LINKS_SHA256 }}
         run: npm run web:export

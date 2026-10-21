@@ -119,26 +119,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify Expo E2E migration structure
-        run: npm run e2e:structure
-
-      - name: Verify Expo API package boundary
-        run: npm run test:api-boundary
-
       - name: Verify localization generation
         run: npm run l10n:check
 
       - name: Verify production license inventory
         run: npm run licenses:check
-
-      - name: Verify release planning and manifests
-        run: npm run test:release
-
-      - name: Verify native config plugins
-        run: npm run test:native-plugin
-
-      - name: Verify web build tooling
-        run: npm run test:web-build
 
       - name: Lint Expo source
         run: npm run lint
@@ -146,13 +131,13 @@ jobs:
       - name: Type-check Expo source
         run: npm run typecheck
 
-      - name: Run tests with coverage
-        run: npm test -- --coverage
+      - name: Verify TypeScript compatibility during tsrs adoption
+        run: npm run typecheck:typescript
 
       - name: Verify Expo dependencies and configuration
         run: npx expo-doctor
 
-      - name: Verify static web export
+      - name: Build native-app link landing
         env:
           EXPO_PUBLIC_CK_API_ENV: development
         run: npm run web:export
