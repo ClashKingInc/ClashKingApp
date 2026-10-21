@@ -1,4 +1,5 @@
 import { createNativeStackNavigator, type NativeStackScreenProps } from 'expo-router/native-stack';
+import { useIsFocused } from 'expo-router';
 import {
   createContext,
   useContext,
@@ -21,6 +22,8 @@ export type DestinationStackProps = {
   onCloseDetail: () => void;
   grid: ReactNode;
   detail: ReactNode;
+  backgroundColor?: string;
+  gestureEnabled?: boolean;
 };
 
 const Stack = createNativeStackNavigator<DestinationRoutes>();
@@ -39,6 +42,7 @@ function useDestination() {
 
 function GridRoute({ navigation }: NativeStackScreenProps<DestinationRoutes, 'Grid'>) {
   const { focused, grid, dismissedByNativeBackRef, closingFromOwnerRef } = useDestination();
+  const routeFocused = useIsFocused();
 
   useLayoutEffect(() => {
     const state = navigation.getState();
@@ -55,7 +59,9 @@ function GridRoute({ navigation }: NativeStackScreenProps<DestinationRoutes, 'Gr
       closingFromOwnerRef.current = false;
       navigation.navigate('Detail');
     }
-  }, [closingFromOwnerRef, dismissedByNativeBackRef, focused, navigation]);
+  // A new selection can arrive during the previous native pop. Reconcile again
+  // when Grid regains focus; owner state alone does not change when pop finishes.
+  }, [closingFromOwnerRef, dismissedByNativeBackRef, focused, navigation, routeFocused]);
 
   // The native stack retains this route while Detail is presented. Its React
   // content (and any provider state above the stack) is not reconstructed on back.
@@ -96,10 +102,10 @@ export function DestinationStack(props: DestinationStackProps) {
         initialRouteName="Grid"
         screenOptions={{
           headerShown: false,
-          gestureEnabled: true,
+          gestureEnabled: props.gestureEnabled ?? true,
           fullScreenGestureEnabled: false,
           freezeOnBlur: false,
-          contentStyle: { backgroundColor: theme.background },
+          contentStyle: { backgroundColor: props.backgroundColor ?? theme.background },
         }}
       >
         <Stack.Screen name="Grid" component={GridRoute} options={{ gestureEnabled: false }} />

@@ -98,7 +98,7 @@ const NOTIFICATION_TEST_SAMPLES = [
   {
     id: 'monthly-support', labelKey: 'notifGroupMonthlySupport', label: 'Creator support reminder',
     group: 'Monthly support', title: 'New Season is Live',
-    body: "A new season has started. If you're getting the Gold Pass, consider using creator code ClashKing.",
+    body: "A new season has started. If you're getting the Gold Pass, consider using our creator code ClashKing.",
     assetUrl: ImageAssets.iconGoldPass,
   },
 ] as const satisfies readonly (NotificationSample & { readonly labelKey: MessageKey })[];

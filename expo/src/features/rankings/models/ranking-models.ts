@@ -55,6 +55,7 @@ export type RankingBoardName =
   | 'playerHome'
   | 'playerBuilder'
   | 'playerTownHall'
+  | 'playerWarTripleStreak'
   | 'playerRanked'
   | 'clanHome'
   | 'clanBuilder'
@@ -64,6 +65,14 @@ export type RankingBoardName =
   | 'clanWinStreak';
 
 export const RankingBoard = {
+  playerWarTripleStreak: board(
+    'playerWarTripleStreak',
+    RankingAudience.players,
+    RankingSource.clashKing,
+    false,
+    false,
+    ImageAssets.attackStar,
+  ),
   playerHome: board(
     'playerHome',
     RankingAudience.players,
@@ -126,8 +135,8 @@ export const RankingBoard = {
     RankingSource.clashKing,
     true,
     false,
-    ImageAssets.clanGamesMedals,
-    false,
+    ImageAssets.donations,
+    true,
   ),
   clanWarWins: board(
     'clanWarWins',
@@ -136,7 +145,7 @@ export const RankingBoard = {
     true,
     false,
     ImageAssets.war,
-    false,
+    true,
   ),
   clanWinStreak: board(
     'clanWinStreak',
@@ -330,7 +339,9 @@ export class RankingEntry {
       rankingBoard.isClan ? badgeUrl || ImageAssets.clanCastle : playerImage,
       rankingBoard.isClan
         ? rankingBoard.iconUrl
-        : (rankedIcon ?? leagueIcon ?? rankingBoard.iconUrl),
+        : rankingBoard === RankingBoard.playerWarTripleStreak
+          ? rankingBoard.iconUrl
+          : (rankedIcon ?? leagueIcon ?? rankingBoard.iconUrl),
       townHall,
       clanBadgeUrl,
       rankingBoard === RankingBoard.playerRanked ? firstString(json, ['leagueGroupId']) : '',
@@ -364,7 +375,9 @@ function scoreFor(json: Record<string, unknown>, rankingBoard: RankingBoardValue
                   ? ['war_wins', 'warWins']
                   : rankingBoard === RankingBoard.clanWinStreak
                     ? ['war_win_streak', 'warWinStreak']
-                    : ['trophies'];
+                    : rankingBoard === RankingBoard.playerWarTripleStreak
+                      ? ['streak']
+                      : ['trophies'];
   return firstInt(json, keys);
 }
 

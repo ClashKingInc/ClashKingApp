@@ -1,12 +1,15 @@
 import { useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, Platform, StyleSheet, View } from 'react-native';
 import { WebView, type WebViewNavigation } from 'react-native-webview';
 
-import { useCKTheme } from '../../../ui';
+import { ErrorState, useCKTheme } from '../../../ui';
+import { useI18n } from '../../../i18n';
 import {
   ANNOUNCEMENT_STORY_BRIDGE_JAVASCRIPT,
+  ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT,
   announcementNavigationDecision,
   announcementStoryMessageFromNavigation,
+  externalArticleLink,
   type AnnouncementWebViewProps,
 } from './announcement-webview-contract';
 
@@ -21,6 +24,7 @@ export function AnnouncementWebView({
   showLoadingProgress = true,
 }: AnnouncementWebViewProps) {
   const theme = useCKTheme();
+  const { t } = useI18n();
   const webView = useRef<WebView>(null);
   const [progress, setProgress] = useState(0);
   const isTrustedLocalStory = Boolean(fileUri && trustedStory && onStoryMessage);
@@ -39,6 +43,15 @@ export function AnnouncementWebView({
       onStoryMessage?.(storyMessage);
       return false;
     }
+    const externalUrl = externalArticleLink(request, {
+      trustedStory,
+      platform: Platform.OS,
+      initialUrl: url,
+    });
+    if (externalUrl) {
+      void Linking.openURL(externalUrl).catch(() => undefined);
+      return false;
+    }
     return (
       announcementNavigationDecision({
         requestedUrl: request.url,
@@ -51,11 +64,23 @@ export function AnnouncementWebView({
   return (
     <View style={styles.container}>
       <WebView
+        testID="announcement-webview"
         ref={webView}
+        scalesPageToFit={isTrustedLocalStory ? false : undefined}
+        setBuiltInZoomControls={!isTrustedLocalStory}
+        setDisplayZoomControls={false}
+        bounces={!isTrustedLocalStory}
+        injectedJavaScriptBeforeContentLoaded={
+          isTrustedLocalStory
+            ? ANNOUNCEMENT_STORY_BRIDGE_JAVASCRIPT + ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT
+            : undefined
+        }
         javaScriptEnabled={isTrustedLocalStory}
         onLoadEnd={({ nativeEvent }) => {
           if (isTrustedLocalStory) {
-            webView.current?.injectJavaScript(ANNOUNCEMENT_STORY_BRIDGE_JAVASCRIPT);
+            webView.current?.injectJavaScript(
+              ANNOUNCEMENT_STORY_BRIDGE_JAVASCRIPT + ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT,
+            );
           }
           if (pageFinishedJavaScript) webView.current?.injectJavaScript(pageFinishedJavaScript);
           onPageFinished?.(nativeEvent.url);
@@ -68,7 +93,22 @@ export function AnnouncementWebView({
         originWhitelist={['about:*', 'data:*', 'file:*', 'https://*', 'clashking-story://*']}
         setSupportMultipleWindows={false}
         source={source}
-        style={[styles.webView, { backgroundColor: 'transparent' }]}
+        renderError={() => (
+          <View
+            style={[
+              styles.container,
+              { backgroundColor: theme.background, justifyContent: 'center' },
+            ]}
+          >
+            <ErrorState
+              title={t('generalError')}
+              body={t('generalTryAgain')}
+              actionLabel={t('generalRetry')}
+              onAction={() => webView.current?.reload()}
+            />
+          </View>
+        )}
+        style={[styles.webView, { backgroundColor: theme.background }]}
       />
       {showLoadingProgress && progress < 1 ? (
         <View style={[styles.progressTrack, { backgroundColor: theme.surfaceContainerHighest }]}>

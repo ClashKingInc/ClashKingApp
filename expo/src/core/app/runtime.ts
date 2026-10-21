@@ -4,12 +4,14 @@ import * as Crypto from 'expo-crypto';
 import { Platform } from 'react-native';
 import ClashKingNative from '@clashking/native';
 import { AppConfigEndpoint } from '@clashking/api-contracts/expo';
-import { createApiClient, httpTransport } from '@clashking/api-client';
+import { httpTransport } from '@clashking/api-client';
 import { Effect } from 'effect';
 
 import { withBearerToken, type ContractApiService } from '../api/contract-api';
+import { createAppContractClient } from '../api/app-contract-client';
 import { observedTransport, withApiDiagnostics } from '../api/contract-api-observability';
 import { BookmarkService } from '../bookmarks';
+import { queueAppLink } from '../deep-links/link-inbox';
 import { resolveApiConfiguration } from '../config/api-config';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
 import { RemoteFeatureFlagService } from '../feature-flags/remote-feature-flag-service';
@@ -151,10 +153,10 @@ export function createAppRuntime(): AppRuntime {
   });
   const contractApi = withApiDiagnostics(
     withBearerToken(
-      createApiClient({
+      createAppContractClient({
         baseUrl: configuration.apiV2Url.replace(/\/v2\/?$/, ''),
         transport: observedTransport(httpTransport(), { addHttpBreadcrumb }),
-        ...(nativePlatform === 'web' ? { credentials: 'include' } : {}),
+        web: nativePlatform === 'web',
       }),
       tokens,
     ),
@@ -188,7 +190,11 @@ export function createAppRuntime(): AppRuntime {
     appVersion,
     locale: () => appState.getState().locale,
     isFeatureEnabled: (feature) => isPushFeatureEnabled(appState, feature),
-    openRoute: (route) => effects.openRoute(route),
+    openRoute: (route) => {
+      if (route.startsWith('/player/') || route.startsWith('/clan/')) {
+        queueAppLink(`https://app.clashk.ing${route}`);
+      } else effects.openRoute(route);
+    },
     openAdminPost: (postId) => effects.openRoute(`/posts/${encodeURIComponent(postId)}`),
     showPermissionPrimer: () => effects.showPermissionPrimer(),
     reportError: ({ operation, error }) => reportException(error, operation),
@@ -227,12 +233,12 @@ export function createAppRuntime(): AppRuntime {
     native: ClashKingNative,
     mirror: preferences,
     loadPlayer: async (tag) => {
-      const cached = players.profiles.find((player) => player.tag === tag);
-      if (cached) return cached;
       if (!auth.state.isAuthenticated)
         throw new Error('Use cached widget identity while signed out.');
       return players.getPlayerAndClanData(tag);
     },
+    cachedPlayer: (tag) =>
+      players.profiles.find((player) => player.tag.toUpperCase() === tag.toUpperCase()) ?? null,
     loadLegendData: (tag, day) => fetchLegendsWidgetData(contractApi, tag, day),
     t: (key, values) => createTranslator(appState.getState().locale)(key, values),
     reportError: ({ operation, error }) => reportException(error, operation),
@@ -265,6 +271,7 @@ export function createAppRuntime(): AppRuntime {
       await push.unregisterCurrentDeviceToken();
     },
     clearAccountData: () => {
+      notificationPreferences.clearClans();
       effects.clearPendingRoutes();
       accounts.clearAccountData();
       achievements.bindSession(null);
@@ -295,7 +302,7 @@ export function createAppRuntime(): AppRuntime {
       runtimePlatform === 'android' ? new ExpoWidgetBackgroundScheduler() : undefined,
     proxyUrl: configuration.proxyUrl,
     apiV2Url: configuration.apiV2Url,
-    loadWarSummary: (clanTag) => fetchWarWidgetSummary(contractApi, clanTag),
+    loadWarSummary: (clanTag) => fetchWarWidgetSummary(contractApi, clanTag, wars),
     getFirstAvailableAccount: async () => {
       const current = accounts.accounts[0]?.playerTag;
       if (current !== undefined) return current;

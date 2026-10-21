@@ -22,6 +22,8 @@ export function announcementTarget(platform: string): AnnouncementTarget {
 }
 
 export class AnnouncementService {
+  private readonly activeLoads = new Map<string, Promise<readonly AppAnnouncement[]>>();
+  private readonly activeCache = new Map<string, { at: number; items: readonly AppAnnouncement[] }>();
   constructor(
     private readonly api: ContractApiService,
     private readonly platform: string,
@@ -32,19 +34,34 @@ export class AnnouncementService {
     return (await this.getActiveAnnouncements())[0] ?? null;
   }
 
-  async getActiveAnnouncements(): Promise<readonly AppAnnouncement[]> {
+  async getActiveAnnouncements(forceRefresh = false): Promise<readonly AppAnnouncement[]> {
+    const locale = this.languageCode();
+    const cached = this.activeCache.get(locale);
+    if (!forceRefresh && cached && Date.now() >= cached.at && Date.now() - cached.at < 60_000) return cached.items;
+    const pending = this.activeLoads.get(locale);
+    if (pending) return pending;
+    const load = this.fetchActiveAnnouncements(locale).finally(() => {
+      if (this.activeLoads.get(locale) === load) this.activeLoads.delete(locale);
+    });
+    this.activeLoads.set(locale, load);
+    return load;
+  }
+
+  private async fetchActiveAnnouncements(locale: string): Promise<readonly AppAnnouncement[]> {
     try {
       const response = await Effect.runPromise(
         this.api.execute(ActiveAnnouncementsEndpoint, {
           path: {},
           query: {
             target: announcementTarget(this.platform),
-            locale: this.languageCode(),
+            locale,
           },
           body: {},
         }),
       );
-      return decodeAnnouncementCollection(response);
+      const items = decodeAnnouncementCollection(response);
+      this.activeCache.set(locale, { at: Date.now(), items });
+      return items;
     } catch {
       return [];
     }

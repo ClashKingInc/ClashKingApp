@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronDown, ChevronRight } from 'lucide-react-native';
 import { AnalyticsLineChart } from './analytics-chart';
 import { LeagueStatsPicker } from './league-stats-picker';
@@ -8,6 +8,7 @@ import { useI18n } from '../../../i18n';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import {
   CKText,
+  PageSkeleton,
   MobileWebImage,
   SelectionPicker,
   ProfileTabs,
@@ -148,7 +149,7 @@ export function ArmySetupSection({
         }}
       />
       {listLoading ? (
-        <ActivityIndicator color={theme.primary} accessibilityLabel={t('generalLoading')} />
+        <PageSkeleton kind="cards" />
       ) : null}
       {data?.items.map((item, index) => (
         <Surface key={item.groupKey} radius={ckRadius.tile} style={styles.family}>
@@ -224,7 +225,7 @@ export function ArmySetupSection({
                   ) : null
                 }
               />
-              {loading ? <ActivityIndicator color={theme.primary} /> : null}
+              {loading ? <PageSkeleton kind="stats" rows={2} /> : null}
               {timeline ? <SetupTimeline data={timeline} /> : null}
               {error ? (
                 <Pressable

@@ -1,9 +1,9 @@
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { DragJiggle } from '../../../ui/drag-jiggle';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
-  Modal,
   Platform,
   RefreshControl,
   ScrollView,
@@ -22,8 +22,7 @@ import { useI18n } from '../../../i18n';
 import {
   EmptyState,
   ResponsiveGrid,
-  Skeleton,
-  ckSpacing,
+  PageLoading,
   useCKTheme,
 } from '../../../ui';
 import { AccountVerificationDialog } from '../../accounts/presentation/account-verification-dialog';
@@ -115,6 +114,7 @@ export function PlayersScreen({
           player={entry.player}
           link={entry.link}
           options={model.optionsByTag[key] ?? new PlayerCardOptions()}
+          hideAccountsEnabled={model.hideAccountsEnabled}
           homeIncluded={model.homeIncludedAccountTags?.has(key.replace(/^#/, '')) ?? true}
           featureFlags={model.featureFlags}
           notificationsEnabled={model.notificationsEnabled}
@@ -256,31 +256,20 @@ export function PlayersScreen({
           refreshControl={refreshControl}
           renderItem={(params: RenderItemParams<PlayerRosterEntry>) => (
             <ScaleDecorator activeScale={1.015}>
-              <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
-                {cardForEntry(
-                  params.item,
-                  params.drag,
-                  `player-roster-card-${playerRosterEntryTag(params.item)}`,
-                )}
-              </View>
+              <DragJiggle active={params.isActive}>
+                <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+                  {cardForEntry(
+                    params.item,
+                    params.drag,
+                    `player-roster-card-${playerRosterEntryTag(params.item)}`,
+                  )}
+                </View>
+              </DragJiggle>
             </ScaleDecorator>
           )}
         />
       )}
-      <Modal
-        transparent
-        visible={loadingBookmark}
-        animationType="fade"
-        onRequestClose={() => undefined}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.loadingDialog, { backgroundColor: theme.card }]}>
-            <Skeleton width={48} height={48} radius={24} />
-            <Skeleton width={180} />
-            <Skeleton width={120} height={12} />
-          </View>
-        </View>
-      </Modal>
+      <PageLoading visible={loadingBookmark} kind="profile" />
       <AccountVerificationDialog
         visible={verification !== undefined}
         playerTag={verification?.tag ?? ''}
@@ -350,18 +339,4 @@ const styles = StyleSheet.create({
   mobileCards: { gap: 0 },
   activeCard: { opacity: 0.96 },
   empty: { padding: 0 },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: '#00000066',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  loadingDialog: {
-    width: 280,
-    borderRadius: 20,
-    padding: ckSpacing.xl,
-    alignItems: 'center',
-    gap: ckSpacing.md,
-  },
 });

@@ -5,6 +5,7 @@ import {
   LeaderboardHistoryEndpoint,
   LeaderboardLeagueEndpoint,
   LeaderboardTownhallsEndpoint,
+  WarTripleStreakEndpoint,
 } from '@clashking/api-contracts/expo';
 import {
   ProxyBuilderClanRankingsEndpoint,
@@ -15,7 +16,7 @@ import {
   ProxyPlayerRankingsEndpoint,
 } from '../../../core/api/proxy-contracts';
 import { Effect } from 'effect';
-import { ApiResponseError } from '@clashking/api-client';
+import { ApiResponseError, TransportError } from '@clashking/api-client';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
 import { STORAGE_KEYS, type StringStorage } from '../../../core/storage/storage';
@@ -123,7 +124,17 @@ export class RankingsService implements RankingsServiceContract {
     const route = routeFor(query);
     let decoded: Record<string, unknown>;
     try {
-      decoded = await this.fetchRankingPayload(query);
+      try {
+        decoded = await this.fetchRankingPayload(query);
+      } catch (error) {
+        // Official GETs occasionally fail during a proxy/network interruption.
+        // Retry once; authentication, schema and ordinary 4xx failures need attention.
+        const temporary = error instanceof TransportError ||
+          (error instanceof ApiResponseError && (error.status === 429 || error.status >= 500));
+        if (!route.official || !temporary) throw error;
+        await new Promise(resolve => setTimeout(resolve, 250));
+        decoded = await this.fetchRankingPayload(query);
+      }
     } catch (error) {
       if (!(error instanceof ApiResponseError)) throw error;
       const failure = new RankingsRequestException(error.status);
@@ -168,6 +179,14 @@ export class RankingsService implements RankingsServiceContract {
       );
     }
     const locationId = query.location.apiPath;
+    if (query.board === RankingBoard.playerWarTripleStreak)
+      return Effect.runPromise(
+        this.api.execute(WarTripleStreakEndpoint, {
+          path: { townhallLevel: query.townHallLevel },
+          query: { limit: 500 },
+          body,
+        }),
+      );
     if (query.board === RankingBoard.playerHome)
       return Effect.runPromise(
         this.api.execute(ProxyPlayerRankingsEndpoint, {
@@ -227,7 +246,7 @@ export class RankingsService implements RankingsServiceContract {
     if (query.board === RankingBoard.clanDonations)
       return Effect.runPromise(
         this.api.execute(LeaderboardClanDonationsEndpoint, {
-          path: { locationId: query.location.id! },
+          path: { locationId },
           query: { limit: 500 },
           body,
         }),
@@ -235,7 +254,7 @@ export class RankingsService implements RankingsServiceContract {
     if (query.board === RankingBoard.clanWarWins)
       return Effect.runPromise(
         this.api.execute(LeaderboardClanWarWinsEndpoint, {
-          path: { locationId: query.location.id! },
+          path: { locationId },
           query: { limit: 500 },
           body,
         }),
@@ -254,6 +273,8 @@ interface RankingRoute {
 
 export function routeFor(query: RankingQuery): RankingRoute {
   const board = query.board;
+  if (board === RankingBoard.playerWarTripleStreak)
+    return clashKingRoute(`/leaderboard/war-triples/${query.townHallLevel}?limit=500`);
   if (query.period === RankingPeriod.history) {
     const date = formatLocalDate(query.historyDate);
     let leaderboardType: string;
@@ -300,10 +321,10 @@ export function routeFor(query: RankingQuery): RankingRoute {
     return officialRoute(`/locations/${query.location.apiPath}/rankings/capitals?limit=200`);
   }
   if (board === RankingBoard.clanDonations) {
-    return clashKingRoute(`/leaderboard/${query.location.id}/clan/donations?limit=500`);
+    return clashKingRoute(`/leaderboard/${query.location.apiPath}/clan/donations?limit=500`);
   }
   if (board === RankingBoard.clanWarWins) {
-    return clashKingRoute(`/leaderboard/${query.location.id}/clan/war-wins?limit=500`);
+    return clashKingRoute(`/leaderboard/${query.location.apiPath}/clan/war-wins?limit=500`);
   }
   return clashKingRoute('/leaderboard/clan/win-streak?limit=500');
 }

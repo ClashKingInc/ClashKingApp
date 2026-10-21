@@ -27,6 +27,7 @@ export interface PlayersPresentationModel {
   readonly bookmarks: readonly BookmarkedPlayerSummary[];
   readonly optionsByTag: Readonly<Record<string, PlayerCardOptions>>;
   readonly homeIncludedAccountTags?: ReadonlySet<string>;
+  readonly hideAccountsEnabled?: boolean;
   readonly notificationsEnabled: boolean;
   readonly notificationAccountTags: ReadonlySet<string>;
   readonly updatingNotificationTags: ReadonlySet<string>;

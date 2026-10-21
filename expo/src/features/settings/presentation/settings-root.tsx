@@ -5,11 +5,12 @@ import * as Clipboard from 'expo-clipboard';
 import { File, Paths } from 'expo-file-system';
 import * as Linking from 'expo-linking';
 import * as Sharing from 'expo-sharing';
-import { Platform } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { clearMobileImageCache } from '../../../ui/mobile-web-image';
+import { DISCORD_BOT_INVITE_URL, DISCORD_URL } from '../../../core/config/api-config';
 
 import { APP_FEATURE_FLAGS } from '../../../core/feature-flags/feature-flags';
-import { useI18n, type SupportedLocale } from '../../../i18n';
+import { materialContinueLabel, useI18n, type SupportedLocale } from '../../../i18n';
 import { ClashHandoffDialog } from '../../../ui';
 import { DestinationStack } from '../../../ui/destination-stack';
 import { useAppRuntime, useAppState } from '../../../core/app/runtime-context';
@@ -26,19 +27,18 @@ import { FaqScreen } from './faq-screen';
 import { GENERATED_LICENSE_INVENTORY } from './generated-license-inventory';
 import { LicensesScreen } from './licenses-screen';
 import { NotificationSettingsScreen } from './notification-settings-screen';
+import { EntityNotificationSettings } from './entity-notification-settings';
 import { PrivacyControlsScreen } from './privacy-controls-screen';
 import { SETTINGS_LOCALES } from './settings-locales';
 import { getVersionDeviceLabel } from './settings-runtime';
 import { SettingsScreen, type SettingsAppIconChoice } from './settings-screen';
 import { TranslationScreen } from './translation-screen';
 import { openSystemNotificationSettings } from './system-notification-settings';
+import { tutorials } from '../../tutorials/tutorial-service';
 
 type SettingsScene = 'main' | SettingsDestination | 'licenses';
 
-const DISCORD_URL = 'https://discord.gg/clashking';
 const GITHUB_URL = 'https://github.com/ClashKingInc';
-const BOT_INVITE_URL =
-  'https://discord.com/api/oauth2/authorize?client_id=824653933347209227&permissions=8&scope=bot%20applications.commands';
 const FAN_CONTENT_URL = 'https://supercell.com/en/fan-content-policy/';
 const PATREON_URL = 'https://www.patreon.com/clashking?utm_campaign=creatorshare_creator';
 const CROWDIN_URL = 'https://crowdin.com/project/clashkingapp';
@@ -52,9 +52,11 @@ const PRIVACY_EMAIL_URL =
 export function SettingsRoot({
   onClose,
   onManagePlayers,
+  onManageClans,
 }: {
   onClose: () => void;
   onManagePlayers?: () => void;
+  onManageClans?: () => void;
 }) {
   const runtime = useAppRuntime();
   const appState = useAppState();
@@ -85,11 +87,13 @@ export function SettingsRoot({
     const unsubscribeBookmarks = runtime.bookmarks.subscribe(refreshDomainState);
     const unsubscribeAccounts = runtime.accounts.subscribe(refreshDomainState);
     const unsubscribeClans = runtime.clans.subscribe(refreshDomainState);
+    const unsubscribePreferences = runtime.playerCardPreferences.subscribe(refreshDomainState);
     return () => {
       unsubscribePlayers();
       unsubscribeBookmarks();
       unsubscribeAccounts();
       unsubscribeClans();
+      unsubscribePreferences();
     };
   }, [runtime]);
 
@@ -159,7 +163,7 @@ export function SettingsRoot({
       openCrowdin: () => void openExternal(CROWDIN_URL),
       openDiscord: () => void openExternal(DISCORD_URL),
       openGitHub: () => void openExternal(GITHUB_URL),
-      inviteBot: () => void openExternal(BOT_INVITE_URL),
+      inviteBot: () => void openExternal(DISCORD_BOT_INVITE_URL),
       openFanContentPolicy: () => void openExternal(FAN_CONTENT_URL),
       openPatreon: () => void openExternal(PATREON_URL),
       useCreatorCode: () => {
@@ -191,6 +195,11 @@ export function SettingsRoot({
     [runtime],
   );
 
+  // Native routes can remain mounted while the auth root switches to Login.
+  // Keep every hook above this guard, but never render account UI after logout.
+  const user = runtime.auth.state.currentUser;
+  if (!user) return null;
+
   const detail = (() => {
     if (scene === 'notifications') {
       return (
@@ -198,7 +207,9 @@ export function SettingsRoot({
           debugEnabled={runtime.notificationSettingsDebug !== null}
           onBack={() => setScene('main')}
           onManagePlayers={onManagePlayers}
+          onManageClans={onManageClans}
           service={notificationService}
+          entityControls={<EntityNotificationSettings clans={widgetClans} />}
         />
       );
     }
@@ -217,7 +228,16 @@ export function SettingsRoot({
       );
     }
     if (scene === 'privacy') {
-      return <PrivacyControlsScreen actions={privacyActions} onBack={() => setScene('main')} />;
+      return (
+        <PrivacyControlsScreen
+          actions={privacyActions}
+          onBack={() => setScene('main')}
+          hideAccountsEnabled={runtime.playerCardPreferences.hideAccountsEnabled}
+          onHideAccountsChange={(enabled) =>
+            runtime.playerCardPreferences.setHideAccountsEnabled(enabled)
+          }
+        />
+      );
     }
     if (scene === 'licenses') {
       return (
@@ -233,11 +253,26 @@ export function SettingsRoot({
   })();
 
   const settingsActions: SettingsPresentationActions = {
+    resetTutorials: tutorials.reset,
     clearImageCache: Platform.OS === 'web' ? undefined : clearMobileImageCache,
     changeLocale: (nextLocale) =>
       runtime.appState.getState().changeLanguage(nextLocale as SupportedLocale),
     changeTheme: (mode) => runtime.appState.getState().setThemePreference(mode),
     changeAppIcon: async (iconName) => {
+      if (Platform.OS === 'android') {
+        const proceed = await new Promise<boolean>((resolve) =>
+          Alert.alert(
+            t('generalWarning'),
+            t('appIconChangeWarning'),
+            [
+              { text: t('generalCancel'), style: 'cancel', onPress: () => resolve(false) },
+              { text: materialContinueLabel(locale), onPress: () => resolve(true) },
+            ],
+            { cancelable: true, onDismiss: () => resolve(false) },
+          ),
+        );
+        if (!proceed) return;
+      }
       await runtime.appIcons.setAlternateIconName(iconName);
       setSelectedAppIcon(iconName ?? '');
     },
@@ -283,7 +318,7 @@ export function SettingsRoot({
             platform={Platform.OS}
             selectedAppIcon={selectedAppIcon}
             themeMode={appState.themePreference}
-            user={runtime.auth.state.currentUser!}
+            user={user}
             imageCacheBytes={imageCacheBytes}
             versionLabel={versionLabel}
           />

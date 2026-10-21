@@ -1,6 +1,8 @@
+import { ApiResponseError, TransportError } from '@clashking/api-client';
+
 import type { StoredAuthSession } from '../../core/dto/auth-session';
 import type { AuthSessionRepository, RuntimePlatform } from '../storage/auth-storage';
-import type { AuthRefreshLock } from './refresh-lock';
+import { withWebAuthRefreshLock, type AuthRefreshLock } from './refresh-lock';
 
 export interface DeviceIdentity {
   getDeviceId(): Promise<string>;
@@ -28,7 +30,9 @@ export class TokenService {
   private readonly nowSeconds: () => number;
 
   constructor(private readonly options: TokenServiceOptions) {
-    this.fetchImplementation = options.fetchImplementation ?? fetch;
+    // Browser fetch requires its Window receiver in WebKit. Calling an unbound
+    // copy as this.fetchImplementation makes every session restore fail.
+    this.fetchImplementation = options.fetchImplementation ?? globalThis.fetch.bind(globalThis);
     this.nowSeconds = options.nowSeconds ?? (() => Math.floor(Date.now() / 1000));
   }
 
@@ -172,30 +176,63 @@ export class TokenService {
   private async refreshWebAccessToken(): Promise<string | null> {
     if (this.refreshInFlight !== null) return this.refreshInFlight;
     const generation = this.sessionGeneration;
-    const refresh = (async () => {
-      try {
-        const response = await this.fetchWithTimeout(
-          `${withoutTrailingSlash(this.options.apiV2Url)}/auth/web/refresh`,
-          { method: 'POST', credentials: 'include' },
-        );
-        if (response.status !== 200) {
-          this.cachedAccessToken = null;
-          return null;
+    const refresh = withWebAuthRefreshLock(
+      withoutTrailingSlash(this.options.apiV2Url),
+      async () => {
+        try {
+          if (generation !== this.sessionGeneration) return null;
+          const request = () =>
+            this.fetchWithTimeout(
+              `${withoutTrailingSlash(this.options.apiV2Url)}/auth/web/refresh`,
+              { method: 'POST', credentials: 'include' },
+            );
+          let response = await request();
+          if (response.status === 401 && (await canRetryWebRotation(response))) {
+            // Another origin can rotate the same API cookie outside our Web Lock.
+            // Let its Set-Cookie settle, then retry once with the browser's cookie.
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            if (generation !== this.sessionGeneration) return null;
+            response = await request();
+          }
+          if (generation !== this.sessionGeneration) return null;
+          if (response.status === 401) {
+            if (await isWebRotationRace(response)) {
+              throw new TransportError({
+                cause: null,
+                message: 'Browser session refresh is busy. Retry startup.',
+              });
+            }
+            this.cachedAccessToken = null;
+            return null;
+          }
+          // Only an explicit rejected session means anonymous. Outages and bad
+          // responses must reach startup's retry UI without discarding a session.
+          if (response.status !== 200) {
+            throw new ApiResponseError({
+              status: response.status,
+              body: await response.json().catch(() => null),
+            });
+          }
+          const data = await parseResponseRecord(response);
+          const token = nonEmptyString(data.access_token);
+          if (token === null) throw new TypeError('Invalid browser session refresh response.');
+          if (generation !== this.sessionGeneration) return null;
+          this.cachedAccessToken = token;
+          this.cachedRefreshToken = null;
+          this.tokensLoaded = true;
+          await this.options.sessions.clearWebLegacyTokens();
+          if (generation !== this.sessionGeneration) return null;
+          return token;
+        } catch (cause) {
+          if (generation !== this.sessionGeneration) return null;
+          if (cause instanceof ApiResponseError || cause instanceof TransportError) throw cause;
+          throw new TransportError({
+            cause,
+            message: 'Browser session refresh failed. Retry startup.',
+          });
         }
-        const data = await parseResponseRecord(response);
-        const token = nonEmptyString(data.access_token);
-        if (token === null) return null;
-        if (generation !== this.sessionGeneration) return null;
-        this.cachedAccessToken = token;
-        this.cachedRefreshToken = null;
-        this.tokensLoaded = true;
-        await this.options.sessions.clearWebLegacyTokens();
-        if (generation !== this.sessionGeneration) return null;
-        return token;
-      } catch {
-        return null;
-      }
-    })();
+      },
+    );
     this.refreshInFlight = refresh;
     try {
       return await refresh;
@@ -269,6 +306,31 @@ export class TokenService {
       clearTimeout(timer);
     }
   }
+}
+
+async function canRetryWebRotation(response: Response): Promise<boolean> {
+  const data: unknown = await response
+    .clone()
+    .json()
+    .catch(() => null);
+  // A delayed loser may reach SELECT after the winning transaction deleted the
+  // old token; the API then uses "Invalid session" for the same race.
+  return isRecord(data) && (data.message === 'Invalid session' || isRotationMessage(data.message));
+}
+
+async function isWebRotationRace(response: Response): Promise<boolean> {
+  const data: unknown = await response
+    .clone()
+    .json()
+    .catch(() => null);
+  return isRecord(data) && isRotationMessage(data.message);
+}
+
+function isRotationMessage(message: unknown): boolean {
+  return (
+    message === 'Session was already refreshed' ||
+    message === 'Browser session was already refreshed'
+  );
 }
 
 function decodeBase64Url(value: string): string {

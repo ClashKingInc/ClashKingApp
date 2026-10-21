@@ -6,6 +6,7 @@ import type {
   PlayerActivityFeed,
   PlayerBattlelogData,
   PlayerCwlHistory,
+  PlayerLegendHistoryEntry,
   PlayerJoinLeavePage,
   PlayerJoinLeaveTotal,
   PlayerHistoryTypeValue,
@@ -14,7 +15,15 @@ import type {
 } from '../models';
 
 export type PlayerDetailTabKey =
-  'home' | 'builder' | 'battles' | 'history' | 'war' | 'cwl' | 'achievements' | 'joinLeave';
+  | 'home'
+  | 'builder'
+  | 'battles'
+  | 'history'
+  | 'legendHistory'
+  | 'war'
+  | 'cwl'
+  | 'achievements'
+  | 'joinLeave';
 
 export interface PlayerCurrentCwl {
   readonly summary: WarCwl;
@@ -30,6 +39,7 @@ export interface PlayerDetailPresentationModel {
   readonly verifiedTracking: boolean;
   readonly battlelog?: PlayerBattlelogData | null;
   readonly activity?: PlayerActivityFeed | null;
+  readonly legendHistory?: readonly PlayerLegendHistoryEntry[] | null;
   readonly cwlHistory?: PlayerCwlHistory | null;
   readonly warStats?: PlayerWarStats | null;
   readonly currentWar?: WarInfo | null;
@@ -74,6 +84,7 @@ export interface PlayerDetailRootProps {
       type?: PlayerHistoryTypeValue,
       force?: boolean,
     ): Promise<PlayerActivityFeed>;
+    loadPlayerLegendHistory(tag: string): Promise<readonly PlayerLegendHistoryEntry[]>;
     loadPlayerCwlHistory(tag: string, force?: boolean): Promise<PlayerCwlHistory>;
     loadPlayerWarStatsWithFilter(
       tag: string,

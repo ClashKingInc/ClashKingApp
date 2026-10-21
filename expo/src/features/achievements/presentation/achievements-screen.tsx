@@ -3,6 +3,7 @@ import {
   Modal,
   Platform,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -63,7 +64,7 @@ export function AchievementsScreen({
 
   useEffect(() => {
     if (achievements === undefined && repository !== undefined) {
-      void repository.check().catch(() => undefined);
+      void repository.load().catch(() => undefined);
     }
   }, [achievements, repository]);
 
@@ -74,6 +75,15 @@ export function AchievementsScreen({
     >
       <ScrollView
         alwaysBounceVertical
+        refreshControl={
+          repository ? (
+            <RefreshControl
+              refreshing={snapshot.isRefreshing}
+              onRefresh={() => void repository.check().catch(() => undefined)}
+              tintColor={theme.primary}
+            />
+          ) : undefined
+        }
         contentContainerStyle={{
           paddingHorizontal: horizontalPadding,
           paddingTop: ckSpacing.md,
@@ -142,7 +152,7 @@ export function AchievementsScreen({
   );
 }
 
-function AchievementTile({
+export function AchievementTile({
   achievement,
   modelRenderer: ModelRenderer,
   name,
@@ -175,13 +185,17 @@ function AchievementTile({
         importantForAccessibility="no-hide-descendants"
         style={styles.tileBody}
       >
-        <View style={[styles.artwork, !unlocked && styles.lockedArtwork]}>
-          <ModelRenderer
-            achievement={achievement}
-            enableIdleRotation={false}
-            interactive={false}
-            semanticLabel={name}
-          />
+        <View style={styles.artwork}>
+          {/* Tiles and details must represent the same badge. Idle rotation is
+              reserved for the open detail to keep the collection still. */}
+          <View style={[styles.modelFrame, achievement.id === 'verified_accounts' && styles.verifiedModelFrame]}>
+            <ModelRenderer
+              achievement={achievement}
+              semanticLabel={name}
+              interactive={false}
+              enableIdleRotation={false}
+            />
+          </View>
           {!unlocked ? (
             <View style={[styles.lock, { backgroundColor: colorWithAlpha(theme.surface, 0.9) }]}>
               <Lock color={theme.onSurfaceVariant} size={18} />
@@ -190,7 +204,7 @@ function AchievementTile({
         </View>
         <CKText
           numberOfLines={2}
-          role="compactLabel"
+          role="metadata"
           style={[styles.tileLabel, { color: unlocked ? theme.onSurface : theme.onSurfaceVariant }]}
         >
           {name}
@@ -203,7 +217,7 @@ function AchievementTile({
   );
 }
 
-function AchievementDetail({
+export function AchievementDetail({
   achievement,
   bottomInset,
   enableIdleRotation,
@@ -314,10 +328,13 @@ const styles = StyleSheet.create({
   backActionRtl: { marginLeft: ckSpacing.md },
   headerCopy: { flex: 1, gap: ckSpacing.xs },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: ckSpacing.lg },
-  tile: { height: 220, borderRadius: ckRadius.tile, overflow: 'hidden' },
+  tile: { height: 174, borderRadius: ckRadius.tile, overflow: 'hidden' },
   tileBody: { flex: 1, padding: ckSpacing.xs, alignItems: 'stretch' },
   artwork: { flex: 1, overflow: 'hidden' },
-  lockedArtwork: { opacity: 0.48 },
+  modelFrame: { flex: 1 },
+  // This open-outline badge fills its model bounds more than the other badges.
+  // Normalize only its collection framing; keep the detail model full-size.
+  verifiedModelFrame: { transform: [{ scale: 0.82 }] },
   lock: {
     position: 'absolute',
     top: ckSpacing.sm,

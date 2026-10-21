@@ -15,9 +15,13 @@ import type {
   CwlRankingHistoryEntry,
 } from '../models';
 import type { ClanWarStatsFilter } from '../models/clan-war-stats-filter';
+import type { ClanNotificationControls } from './clan-notification-options';
+import type { ClanCompetitiveDay } from '../models/clan-competitive';
+import type { ClanCurrentRankings } from '../data/clan-service';
 
 export type ClanInfoTabKey =
   | 'members'
+  | 'competitive'
   | 'warLog'
   | 'joinLeave'
   | 'statistics'
@@ -32,6 +36,7 @@ export type ClanInfoFeatureFlags = Readonly<Partial<Record<ClanInfoTabKey, boole
 export interface ClanInfoPresentationModel {
   readonly clan: Clan;
   readonly bookmarked: boolean;
+  readonly notifications?: ClanNotificationControls;
   readonly activeUserTags: ReadonlySet<string>;
   readonly featureFlags?: ClanInfoFeatureFlags;
   readonly ongoingWar?: 'war' | 'cwl';
@@ -40,6 +45,8 @@ export interface ClanInfoPresentationModel {
 }
 
 export interface ClanInfoPresentationActions {
+  loadCurrentRankings(tag: string): Promise<ClanCurrentRankings>;
+  loadCompetitiveDay(clan: Clan, day?: string): Promise<ClanCompetitiveDay>;
   goBack(): void;
   copyClanTag(tag: string): Promise<void>;
   toggleClanBookmark(clan: Clan): Promise<void>;
@@ -48,6 +55,7 @@ export interface ClanInfoPresentationActions {
   openWar(clan: Clan): void;
   openHistoricalWar(war: WarInfo): void;
   openCwl(clan: Clan): void;
+  openHistoricalCwl(clan: Clan, season: string, leagueName?: string): void;
   openCapital(clan: Clan): void;
   showMessage(message: string): void;
   loadPlayer(tag: string): Promise<Player>;
@@ -55,6 +63,7 @@ export interface ClanInfoPresentationActions {
   loadJoinLeave(clan: Clan): Promise<ClanJoinLeave>;
   loadMoreJoinLeave(clan: Clan, current: ClanJoinLeave): Promise<ClanJoinLeave>;
   loadWarLog(clan: Clan): Promise<ClanWarLog | null>;
+  loadWarLogDetails(clan: Clan, log: ClanWarLog): Promise<ClanWarLog>;
   loadWarStats(clan: Clan, filter: ClanWarStatsFilter): Promise<ClanWarStats>;
   loadCwlHistory(clanTag: string): Promise<readonly CwlRankingHistoryEntry[]>;
   loadLeaderboardSummary(
@@ -75,6 +84,7 @@ export interface ClanInfoPresentationActions {
 
 export const clanInfoTabOrder: readonly ClanInfoTabKey[] = [
   'members',
+  'competitive',
   'warLog',
   'joinLeave',
   'statistics',

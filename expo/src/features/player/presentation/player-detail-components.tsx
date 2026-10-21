@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Animated,
   Linking,
   Modal,
   PanResponder,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -22,6 +23,7 @@ import {
   ChevronRight,
   Clock3,
   Crosshair,
+  ExternalLink,
   Filter,
   Flag,
   Gamepad2,
@@ -32,6 +34,7 @@ import {
   MapPin,
   Percent,
   Repeat2,
+  Share2,
   Shield,
   Star,
   Swords,
@@ -42,7 +45,14 @@ import {
   X,
 } from 'lucide-react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { sharePageLink } from '../../../core/deep-links/share-page-link';
+import { playerProfileClanIdentity } from './player-clan-identity';
 
+import {
+  ChartInteractionBoundary,
+  useChartDismissal,
+} from '../../stats/presentation/chart-interaction-boundary';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import {
   localizedInfoForItem,
@@ -56,9 +66,11 @@ import {
   EmptyState,
   ErrorState,
   GlassSurface,
-  LoadingIndicator,
+  PageSkeleton,
   MobileWebImage,
   PillSurface,
+  ProfileHeaderAction,
+  ProfileTabs,
   ProfileStatChip as QuickStat,
   ResponsiveGrid,
   SelectionPicker,
@@ -77,7 +89,6 @@ import type {
   PlayerActivityFeed,
   PlayerBattlelogData,
   PlayerBattlelogEntry,
-  PlayerBattlelogMode,
   PlayerPopularArmyItem,
   PlayerCwlHistory,
   PlayerCwlSeason,
@@ -92,7 +103,11 @@ import type {
 import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { PlayerSuperTroop } from '../models/player-items';
 import { PlayerBattlelogArmyCatalog } from '../models/player-battlelog';
-import { battlelogLootTimeline, type BattlelogLootDay } from './player-battlelog-share';
+import {
+  battlelogLootTimeline,
+  battlelogLootWeeks,
+  type BattlelogLootDay,
+} from './player-battlelog-share';
 import type {
   EnemyTownhallStats as EnemyThStats,
   PlayerWarStatsData,
@@ -128,6 +143,7 @@ export const PLAYER_DETAIL_TABS: readonly {
   { key: 'builder', labelKey: 'gameBaseBuilder' },
   { key: 'battles', labelKey: 'playerBattlelogTab' },
   { key: 'history', labelKey: 'generalHistory' },
+  { key: 'legendHistory', labelKey: 'clanLegendHistoryTab' },
   { key: 'war', labelKey: 'warStats' },
   { key: 'cwl', labelKey: 'cwlHistoryTitle' },
   { key: 'achievements', labelKey: 'gameAchievements' },
@@ -152,7 +168,10 @@ export function PlayerDetailHeader({
   const theme = useCKTheme();
   const themeMode = useCKThemeMode();
   const { width } = useWindowDimensions();
-  const compact = width < 900;
+  const [headerWidth, setHeaderWidth] = useState(width);
+  // A desktop sidebar consumes part of the window. Base the web header on
+  // its actual pane, not the viewport, so identity text cannot collapse.
+  const compact = (Platform.OS === 'web' ? Math.min(width, headerWidth) : width) < 900;
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
   const copyPlayerTag = () =>
@@ -179,7 +198,7 @@ export function PlayerDetailHeader({
   const leagueTiles = (
     <View
       testID="player-league-tiles"
-      style={[styles.leagueTiles, compact && styles.leagueTilesCompact]}
+      style={[styles.leagueTiles, compact ? styles.leagueTilesCompact : Platform.OS === 'web' ? styles.leagueTilesDesktop : undefined]}
     >
       {(selectedTab === 'builder'
         ? [
@@ -206,7 +225,7 @@ export function PlayerDetailHeader({
           accessibilityRole={ranked ? 'button' : undefined}
           disabled={!ranked}
           onPress={() =>
-            String(name).toLowerCase().includes('legend')
+            player.isLegendLeague
               ? actions.openLegends(player)
               : actions.openRanked(player)
           }
@@ -291,6 +310,7 @@ export function PlayerDetailHeader({
   return (
     <View
       testID={compact ? 'player-header-mobile' : 'player-header-desktop'}
+      onLayout={Platform.OS === 'web' ? (event) => setHeaderWidth(event.nativeEvent.layout.width) : undefined}
       style={[styles.header, { paddingTop: safeTop }]}
     >
       <View testID="player-header-backdrop" pointerEvents="none" style={styles.headerBackdrop}>
@@ -322,30 +342,49 @@ export function PlayerDetailHeader({
             compact ? styles.headerActionsCompact : styles.headerActionsDesktop,
           ]}
         >
-          <IconAction label={materialBackLabel(locale)} onPress={actions.goBack}>
-            <ArrowLeft color="#fff" />
-          </IconAction>
+          <ProfileHeaderAction
+            label={materialBackLabel(locale)}
+            onPress={actions.goBack}
+            icon={<ArrowLeft color="#fff" />}
+          />
           <View style={styles.grow} />
           {warAction ? (
-            <IconAction label={warAction.label} onPress={warAction.onPress}>
-              <MobileWebImage imageUrl={warAction.image} style={styles.statIcon} />
-            </IconAction>
+            <ProfileHeaderAction
+              label={warAction.label}
+              onPress={warAction.onPress}
+              icon={<MobileWebImage imageUrl={warAction.image} style={styles.statIcon} />}
+            />
           ) : null}
           {selectedTab === 'battles' ? (
-            <IconAction label={t('generalExport')} onPress={onBattlelogExport ?? (() => undefined)}>
-              <Upload color="#fff" />
-            </IconAction>
+            <ProfileHeaderAction
+              label={t('generalExport')}
+              onPress={onBattlelogExport ?? (() => undefined)}
+              icon={<Upload color="#fff" />}
+            />
           ) : null}
-          <IconAction label={t('playerOpenInGame')} onPress={() => actions.openInGame(player.tag)}>
-            <Gamepad2 color="#fff" />
-          </IconAction>
+          <ProfileHeaderAction
+            label={t('gameAssetsShare')}
+            onPress={() =>
+              void sharePageLink(
+                { kind: 'player', tag: player.tag, params: { tab: selectedTab } },
+                player.name,
+              ).catch(() => actions.showMessage(t('errorCannotOpenLink')))
+            }
+            icon={<Share2 color="#fff" />}
+          />
+          <ProfileHeaderAction
+            label={t('playerOpenInGame')}
+            onPress={() => actions.openInGame(player.tag)}
+            icon={<ExternalLink color="#fff" />}
+          />
           {model.bookmarked || !model.linkedAccount ? (
-            <IconAction
+            <ProfileHeaderAction
               label={model.bookmarked ? t('playerBookmarkRemove') : t('playerBookmarkAdd')}
               onPress={() => void actions.toggleBookmark(player)}
-            >
-              {model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#fff" />}
-            </IconAction>
+              icon={
+                model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#fff" />
+              }
+            />
           ) : null}
         </View>
         <View style={[styles.identity, compact ? styles.identityCompact : styles.identityDesktop]}>
@@ -373,7 +412,7 @@ export function PlayerDetailHeader({
               </View>
             ) : null}
           </View>
-          <View style={[styles.identityCopy, compact && styles.identityCopyCompact]}>
+          <View style={[styles.identityCopy, compact && styles.identityCopyCompact, compact && Platform.OS === 'web' && styles.identityCopyWeb]}>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`${player.name}. ${t('generalCopiedToClipboard')}`}
@@ -445,24 +484,6 @@ export function PlayerDetailHeader({
   );
 }
 
-function IconAction({
-  label,
-  onPress,
-  children,
-}: {
-  label: string;
-  onPress: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress}>
-      <View style={styles.iconAction}>
-        <View style={{ opacity: 0.9 }}>{children}</View>
-      </View>
-    </Pressable>
-  );
-}
-
 function playerRoleLabel(role: string, t: ReturnType<typeof useI18n>['t']) {
   if (role === 'leader') return t('clanRoleLeader');
   if (role === 'coLeader') return t('clanRoleCoLeader');
@@ -475,20 +496,7 @@ export function playerHeaderClanIdentity(
   player: Player,
   cachedClanTag: string | null | undefined = '',
 ) {
-  const linked =
-    player.clan && typeof player.clan === 'object'
-      ? (player.clan as {
-          tag?: string;
-          name?: string;
-          badgeUrls?: { small?: string; medium?: string };
-        })
-      : null;
-  const tag = linked?.tag || player.clanOverview.tag || player.clanTag || cachedClanTag || '';
-  return {
-    tag,
-    name: linked?.name || player.clanOverview.name || tag,
-    badgeUrl: ImageAssets.clanBadgeForTag(tag),
-  };
+  return playerProfileClanIdentity(player, cachedClanTag);
 }
 
 export function PlayerBaseTab({
@@ -506,12 +514,14 @@ export function PlayerBaseTab({
           <PlayerItemSection
             title={t('gameHeroes')}
             items={player.bbHeroes}
+            categoryIcon={ImageAssets.upgradeCategoryIcons.heroes}
             townHallLevel={player.builderHallLevel}
             initiallyExpanded
           />
           <PlayerItemSection
             title={t('gameTroops')}
             items={player.bbTroops}
+            categoryIcon={ImageAssets.upgradeCategoryIcons.troops}
             townHallLevel={player.builderHallLevel}
             initiallyExpanded
           />
@@ -531,33 +541,39 @@ export function PlayerBaseTab({
         <PlayerItemSection
           title={t('gameHeroes')}
           items={player.heroes}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.heroes}
           townHallLevel={player.townHallLevel}
           initiallyExpanded
         />
         <PlayerItemSection
           title={t('gameEquipment')}
           items={player.equipments}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.equipment}
           townHallLevel={player.townHallLevel}
           initiallyExpanded
         />
         <PlayerItemSection
           title={t('gameTroops')}
           items={player.troops}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.troops}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSpells')}
           items={player.spells}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.spells}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSiegeMachines')}
           items={player.siegeMachines}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.siege}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gamePets')}
           items={player.pets}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.pets}
           townHallLevel={player.townHallLevel}
         />
       </ResponsiveGrid>
@@ -601,11 +617,13 @@ function PlayerSuperTroopSection({
 export function PlayerItemSection({
   title,
   items,
+  categoryIcon,
   townHallLevel,
   initiallyExpanded = false,
 }: {
   title: string;
   items: readonly PlayerItem[];
+  categoryIcon?: string;
   townHallLevel: number;
   initiallyExpanded?: boolean;
 }) {
@@ -649,20 +667,33 @@ export function PlayerItemSection({
   if (!items.length) return null;
   return (
     <Surface radius={ckRadius.card} style={styles.section}>
+      {/* Expansion and remaining-upgrade details are sibling actions. A
+          button inside a button is invalid HTML and breaks keyboard focus. */}
+      <View style={styles.sectionTitle}>
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel={title}
         accessibilityState={{ expanded }}
         onPress={() => setExpanded(!expanded)}
-        style={styles.sectionTitle}
+        style={[styles.sectionTitle, styles.grow]}
       >
         <ChevronRight
           size={22}
           color={colorWithAlpha(theme.onSurface, 0.72)}
           style={{ transform: [{ rotate: expanded ? '90deg' : '0deg' }] }}
         />
+        {categoryIcon ? (
+          <MobileWebImage
+            imageUrl={categoryIcon}
+            style={{ width: 28, height: 28 }}
+            accessible={false}
+            contentFit="contain"
+          />
+        ) : null}
         <CKText role="sectionTitle" style={styles.grow}>
           {title}
         </CKText>
+      </Pressable>
         {items[0] instanceof PlayerSuperTroop ? null : (
           <Pressable
             accessibilityRole="button"
@@ -675,7 +706,7 @@ export function PlayerItemSection({
             <SectionProgressBadge progress={progress / 100} label={`${badgeProgress}%`} />
           </Pressable>
         )}
-      </Pressable>
+      </View>
       {expanded ? (
         <ResponsiveGrid
           minItemWidth={54}
@@ -950,215 +981,365 @@ function resourceImage(key: string) {
   return `${ImageAssets.baseUrl}/resources/${key}.webp`;
 }
 
-export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null | undefined }) {
+export function PlayerBattlelogTab({
+  data,
+  visibleCount = 20,
+  onLootGridScrubChange,
+}: {
+  data: PlayerBattlelogData | null | undefined;
+  visibleCount?: number;
+  onLootGridScrubChange?: (active: boolean) => void;
+}) {
   const { t, locale } = useI18n();
-  const [mode, setMode] = useState<Exclude<PlayerBattlelogMode, 'legend'>>('ranked');
-  const [direction, setDirection] = useState<'all' | 'attacks' | 'defenses'>('all');
+  const mode = 'farming';
+  const attacks = useMemo(() => data?.forMode(mode).filter((item) => item.attack) ?? [], [data]);
+  const lootTimeline = useMemo(() => battlelogLootTimeline(attacks, new Date(), 180), [attacks]);
   if (!data)
     return <EmptyState title={t('playerBattlelogLoadError')} body={t('generalNoDataAvailable')} />;
-  const battles = data.forMode(mode);
-  const items = battles.filter(
-    (item) => direction === 'all' || item.attack === (direction === 'attacks'),
-  );
-  const attacks = battles.filter((item) => item.attack);
-  const defenses = battles.filter((item) => !item.attack);
   const averageStars = attacks.length
     ? attacks.reduce((sum, item) => sum + item.stars, 0) / attacks.length
     : 0;
   const averageDestruction = attacks.length
     ? attacks.reduce((sum, item) => sum + item.destructionPercentage, 0) / attacks.length
     : 0;
-  const tripleRate = attacks.length
-    ? (attacks.filter((item) => item.stars === 3).length / attacks.length) * 100
-    : 0;
   const averageLoot = attacks.length
     ? attacks.reduce((sum, item) => sum + item.totalLoot, 0) / attacks.length
     : 0;
-  const defenseAverageStars = average(defenses.map((item) => item.stars));
-  const defenseAverageDestruction = average(defenses.map((item) => item.destructionPercentage));
-  const defenseTripleRate = defenses.length
-    ? (defenses.filter((item) => item.stars === 3).length / defenses.length) * 100
-    : 0;
-  const popularAttacks = data.popularTroops(mode, { limit: 5 });
-  const popularDefenses = data.popularTroops(mode, { limit: 5, attack: false });
+  const popularAttacks = data.popularTroops(mode, { limit: 5, weightByHousing: true });
   return (
-    <View style={styles.sections}>
-      <Segmented
-        choices={[
-          ['ranked', t('playerBattlelogRanked')],
-          ['farming', t('playerBattlelogFarming')],
-        ]}
-        selected={mode}
-        onSelect={(value) => setMode(value as typeof mode)}
-      />
-      <Surface radius={ckRadius.card} style={styles.section}>
-        <View style={styles.sectionTitle}>
+    <ChartInteractionBoundary>
+      <View style={styles.sections}>
+        <Surface radius={ckRadius.card} style={styles.section}>
+          <BattleOverviewBand
+            title={t('warAttacksTitle')}
+            image={ImageAssets.sword}
+            metrics={[
+              [ImageAssets.attacksNoShield, t('generalTotal'), `${attacks.length}`],
+              [ImageAssets.attackStar, t('warAbbreviationAvg'), averageStars.toFixed(2)],
+              [
+                ImageAssets.hitrate,
+                t('warAbbreviationAvgPercentage'),
+                `${averageDestruction.toFixed(1)}%`,
+              ],
+              [
+                ImageAssets.lootCart,
+                t('generalAverage'),
+                compactNumber(Math.round(averageLoot), locale),
+              ],
+            ]}
+            popular={popularAttacks}
+          />
+          <BattlelogLootGrid
+            timeline={lootTimeline}
+            locale={locale}
+            onScrubActiveChange={onLootGridScrubChange}
+          />
+        </Surface>
+        <View style={styles.toolbar}>
           <CKText role="titleLarge" style={styles.grow}>
-            {mode === 'ranked'
-              ? t('playerBattlelogRankedOverview')
-              : t('playerBattlelogFarmingOverview')}
+            {t('playerBattlelogRecentBattles')}
           </CKText>
-          <CKText muted>{t('playerBattlelogBattleCount', { count: battles.length })}</CKText>
         </View>
-        <BattleOverviewBand
-          title={t('warAttacksTitle')}
-          image={ImageAssets.sword}
-          metrics={[
-            [ImageAssets.attacksNoShield, t('generalTotal'), `${attacks.length}`],
-            [ImageAssets.attackStar, t('warAbbreviationAvg'), averageStars.toFixed(2)],
-            [
-              ImageAssets.hitrate,
-              t('warAbbreviationAvgPercentage'),
-              `${averageDestruction.toFixed(1)}%`,
-            ],
-            [
-              mode === 'farming' ? ImageAssets.lootCart : ImageAssets.attackStar,
-              mode === 'farming' ? t('generalAverage') : t('warStarsThree'),
-              mode === 'farming'
-                ? compactNumber(Math.round(averageLoot), locale)
-                : `${tripleRate.toFixed(1)}%`,
-            ],
-          ]}
-          popular={popularAttacks}
-        />
-        <View style={styles.battleSummaryDivider} />
-        <BattleOverviewBand
-          title={t('warDefensesTitle')}
-          image={ImageAssets.shieldWithArrow}
-          metrics={[
-            [ImageAssets.shieldWithArrow, t('generalTotal'), `${defenses.length}`],
-            [ImageAssets.attackStar, t('warAbbreviationAvg'), defenseAverageStars.toFixed(2)],
-            [
-              ImageAssets.hitrate,
-              t('warAbbreviationAvgPercentage'),
-              `${defenseAverageDestruction.toFixed(1)}%`,
-            ],
-            [ImageAssets.attackStar, t('warStarsThree'), `${defenseTripleRate.toFixed(1)}%`],
-          ]}
-          popular={popularDefenses}
-        />
-      </Surface>
-      {mode === 'farming' ? <BattlelogLootGrid attacks={attacks} locale={locale} /> : null}
-      <View style={styles.toolbar}>
-        <CKText role="titleLarge" style={styles.grow}>
-          {t('playerBattlelogRecentBattles')}
-        </CKText>
-        <FilterDropdown
-          choices={[
-            ['all', t('generalAll')],
-            ['attacks', t('warAttacksTitle')],
-            ['defenses', t('warDefensesTitle')],
-          ]}
-          value={direction}
-          onSelect={(value) => setDirection(value as typeof direction)}
-        />
+        <View testID="battle-responsive-grid">
+          <ResponsiveGrid minItemWidth={430} maxColumns={2}>
+            {attacks.slice(0, visibleCount).map((item, index) => (
+              <BattleRow key={`${item.mergeKey}-${index}`} item={item} />
+            ))}
+          </ResponsiveGrid>
+        </View>
+        {!attacks.length ? (
+          <EmptyState
+            title={t('playerBattlelogNoBattlesTitle')}
+            body={t('playerBattlelogNoBattlesBody')}
+          />
+        ) : null}
       </View>
-      <View testID="battle-responsive-grid">
-        <ResponsiveGrid minItemWidth={430} maxColumns={2}>
-          {items.map((item, index) => (
-            <BattleRow key={`${item.mergeKey}-${index}`} item={item} />
-          ))}
-        </ResponsiveGrid>
-      </View>
-      {!battles.length ? (
-        <EmptyState
-          title={t('playerBattlelogNoBattlesTitle')}
-          body={t('playerBattlelogNoBattlesBody')}
-        />
-      ) : !items.length ? (
-        <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
-      ) : null}
-    </View>
+    </ChartInteractionBoundary>
+  );
+}
+
+export function lootGridIndexAtPoint(
+  x: number,
+  y: number,
+  width: number,
+  columns: number,
+): number | null {
+  if (![x, y, width, columns].every(Number.isFinite) || columns < 1 || !Number.isInteger(columns))
+    return null;
+  const cell = (width - (columns - 1) * 3) / columns;
+  if (cell <= 0 || x < 0 || x > width || y < 0 || y > 7 * (cell + 3) - 3) return null;
+  return (
+    Math.min(columns - 1, Math.floor(x / (cell + 3))) * 7 + Math.min(6, Math.floor(y / (cell + 3)))
   );
 }
 
 function BattlelogLootGrid({
-  attacks,
+  timeline,
   locale,
+  onScrubActiveChange,
 }: {
-  attacks: readonly PlayerBattlelogEntry[];
+  timeline: readonly BattlelogLootDay[];
   locale: string;
+  onScrubActiveChange?: (active: boolean) => void;
 }) {
-  const { t } = useI18n();
+  const { t, isRtl } = useI18n();
   const theme = useCKTheme();
-  const [selected, setSelected] = useState<BattlelogLootDay | null>(null);
-  const timeline = battlelogLootTimeline(attacks);
-  const total = timeline.reduce((sum, item) => sum + item.total, 0);
-  const columns = Array.from({ length: Math.ceil(timeline.length / 7) }, (_, index) =>
-    timeline.slice(index * 7, index * 7 + 7),
+  const [gridMode, setGridMode] = useState<'daily' | 'weekly' | 'cumulative'>('daily');
+  const [selected, setSelected] = useState<{ day: string; total: number; index: number } | null>(
+    null,
   );
+  const clearSelection = useCallback(() => setSelected(null), []);
+  useChartDismissal(clearSelection);
+  const gridRef = useRef<View>(null);
+  const origin = useRef({ x: 0, y: 0 });
+  const [gridWidth, setGridWidth] = useState(0);
+  const weeks = useMemo(() => battlelogLootWeeks(timeline), [timeline]);
+  const padded = useMemo(() => {
+    const offset = new Date(`${timeline[0]!.day}T00:00:00Z`).getUTCDay();
+    const days: (BattlelogLootDay | null)[] = [...Array<null>(offset).fill(null), ...timeline];
+    while (days.length % 7) days.push(null);
+    return days;
+  }, [timeline]);
+  const columnCount = padded.length / 7;
+  const columns = Array.from({ length: padded.length / 7 }, (_, index) =>
+    padded.slice(index * 7, index * 7 + 7),
+  );
+  const cellSize = Math.max(0, (gridWidth - (columns.length - 1) * 3) / columns.length);
+  const weekValues = weeks.map((week) => (gridMode === 'weekly' ? week.total : week.cumulative));
+  const weekMaximum = Math.max(1, ...weekValues);
+  const selectIndex = useCallback(
+    (index: number) => {
+      if (gridMode === 'daily') {
+        const day = padded[index];
+        if (day)
+          setSelected((current) =>
+            current?.day === day.day ? current : { day: day.day, total: day.total, index },
+          );
+        return;
+      }
+      const column = Math.floor(index / 7);
+      const week = weeks[column];
+      if (!week) return;
+      const total = gridMode === 'weekly' ? week.total : week.cumulative;
+      setSelected((current) =>
+        current?.index === column * 7 + 3
+          ? current
+          : { day: week.day, total, index: column * 7 + 3 },
+      );
+    },
+    [gridMode, padded, weeks],
+  );
+  const selectPoint = useCallback(
+    (pageX: number, pageY: number) => {
+      const index = lootGridIndexAtPoint(
+        pageX - origin.current.x,
+        pageY - origin.current.y,
+        gridWidth,
+        columnCount,
+      );
+      if (index !== null) selectIndex(index);
+    },
+    [gridWidth, columnCount, selectIndex],
+  );
+  const beginTouch = useCallback(
+    (pageX: number, pageY: number) => {
+      gridRef.current?.measureInWindow((x, y) => {
+        origin.current = { x, y };
+        selectPoint(pageX, pageY);
+      });
+    },
+    [selectPoint],
+  );
+  const finishScrub = useCallback(() => onScrubActiveChange?.(false), [onScrubActiveChange]);
+  // Keep the active responder alive when moving to another day updates the tooltip.
+  const responder = useMemo(
+    () =>
+      // PanResponder stores these callbacks; refs are read only when a touch invokes them.
+      // eslint-disable-next-line react-hooks/refs
+      PanResponder.create({
+        // A touch inside the grid is a 2D scrub, including vertical movement between days.
+        // Own it from touch-down so the parent scroll view cannot begin scrolling first.
+        onStartShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: (event) => {
+          onScrubActiveChange?.(true);
+          beginTouch(event.nativeEvent.pageX, event.nativeEvent.pageY);
+        },
+        onPanResponderMove: (event) =>
+          selectPoint(event.nativeEvent.pageX, event.nativeEvent.pageY),
+        onPanResponderRelease: finishScrub,
+        onPanResponderTerminationRequest: () => false,
+        onShouldBlockNativeResponder: () => true,
+        onPanResponderTerminate: () => {
+          finishScrub();
+          clearSelection();
+        },
+      }),
+    [beginTouch, selectPoint, clearSelection, finishScrub, onScrubActiveChange],
+  );
+  const selectedIndex = selected?.index ?? -1;
+  const selectedRow = selectedIndex % 7;
   return (
     <View testID="battlelog-loot-grid" style={styles.sections}>
-      <Surface radius={ckRadius.tile} style={styles.lootSummaryTile}>
-        <MobileWebImage imageUrl={ImageAssets.lootCart} style={styles.lootSummaryImage} />
-        <View style={styles.grow}>
-          <CKText muted role="labelSmall">
-            {t('capitalRaidLoot')} · {t('filtersLast30Days')}
-          </CKText>
-          <CKText role="titleMedium">{formatPlayerResourceAmount(total, locale)}</CKText>
-        </View>
-      </Surface>
-      <Surface radius={ckRadius.tile} style={styles.lootContributionCard}>
-        <View style={styles.lootContributionGrid}>
-          {columns.map((column, columnIndex) => (
-            <View key={columnIndex} style={styles.lootContributionColumn}>
-              {column.map((day) => (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={`${day.day}: ${day.total}`}
-                  key={day.day}
-                  onPress={() => setSelected(day)}
-                  style={[
-                    styles.lootContributionCell,
-                    { backgroundColor: colorWithAlpha(theme.primary, 0.1 + day.intensity * 0.9) },
-                  ]}
-                />
-              ))}
-            </View>
-          ))}
-        </View>
-      </Surface>
-      <Modal transparent visible={selected !== null} onRequestClose={() => setSelected(null)}>
-        <Pressable style={styles.modalBackdrop} onPress={() => setSelected(null)}>
-          <Surface radius={ckRadius.card} style={styles.lootDetailModal}>
-            <View style={styles.row}>
-              <CKText role="titleMedium" style={styles.grow}>
-                {selected
-                  ? new Intl.DateTimeFormat(toIntlLocale(locale), {
-                      dateStyle: 'long',
-                      timeZone: 'UTC',
-                    }).format(new Date(`${selected.day}T00:00:00.000Z`))
-                  : ''}
-              </CKText>
+      <SlidingSegmentControl
+        testID="battlelog-loot-mode"
+        value={gridMode}
+        options={[
+          { value: 'daily', label: t('statsDaily') },
+          { value: 'weekly', label: t('statsWeekly') },
+          { value: 'cumulative', label: t('playerBattlelogCumulative') },
+        ]}
+        isRtl={isRtl}
+        onChange={(key) => {
+          setSelected(null);
+          setGridMode(key);
+        }}
+      />
+      <View style={styles.lootContributionCard}>
+        <View
+          ref={gridRef}
+          testID="loot-grid-touch-area"
+          style={styles.lootContributionGrid}
+          {...responder.panHandlers}
+          onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}
+          onTouchStart={(event) => {
+            onScrubActiveChange?.(true);
+            beginTouch(event.nativeEvent.pageX, event.nativeEvent.pageY);
+          }}
+          onTouchEnd={finishScrub}
+          onTouchCancel={() => {
+            finishScrub();
+            clearSelection();
+          }}
+          onAccessibilityEscape={clearSelection}
+        >
+          {columns.map((column, columnIndex) =>
+            gridMode === 'daily' ? (
+              <View key={columnIndex} style={styles.lootContributionColumn}>
+                {column.map((day, rowIndex) =>
+                  day ? (
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={`${day.day}: ${day.total}`}
+                      key={day.day}
+                      onPress={() => selectIndex(columnIndex * 7 + rowIndex)}
+                      onHoverIn={() => selectIndex(columnIndex * 7 + rowIndex)}
+                      accessibilityState={{
+                        selected: selectedIndex === columnIndex * 7 + rowIndex,
+                      }}
+                      style={[
+                        styles.lootContributionCell,
+                        selectedIndex === columnIndex * 7 + rowIndex && {
+                          borderWidth: 1.5,
+                          borderColor: theme.onSurface,
+                        },
+                        {
+                          backgroundColor:
+                            day.total > 0
+                              ? colorWithAlpha(theme.primary, 0.25 + day.intensity * 0.75)
+                              : colorWithAlpha(theme.surfaceContainerHighest, 0.45),
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <View key={`empty-${rowIndex}`} style={styles.lootContributionCell} />
+                  ),
+                )}
+              </View>
+            ) : (
               <Pressable
+                key={columnIndex}
                 accessibilityRole="button"
-                accessibilityLabel={t('generalCancel')}
-                onPress={() => setSelected(null)}
-                style={styles.iconButton}
+                accessibilityLabel={`${weeks[columnIndex]?.day}: ${weekValues[columnIndex] ?? 0}`}
+                accessibilityState={{ selected: Math.floor(selectedIndex / 7) === columnIndex }}
+                onPress={() => selectIndex(columnIndex * 7 + 3)}
+                onHoverIn={() => selectIndex(columnIndex * 7 + 3)}
+                style={styles.lootContributionColumn}
               >
-                <X color={theme.onSurface} />
+                {Array.from({ length: 7 }, (_, rowIndex) => {
+                  const value = weekValues[columnIndex] ?? 0;
+                  const filled = value > 0 && rowIndex >= 7 - Math.ceil((value / weekMaximum) * 7);
+                  return (
+                    <View
+                      key={rowIndex}
+                      style={[
+                        styles.lootContributionCell,
+                        Math.floor(selectedIndex / 7) === columnIndex && {
+                          borderWidth: 1,
+                          borderColor: theme.onSurface,
+                        },
+                        {
+                          backgroundColor: filled
+                            ? colorWithAlpha(theme.primary, 0.25 + (value / weekMaximum) * 0.75)
+                            : colorWithAlpha(theme.surfaceContainerHighest, 0.45),
+                        },
+                      ]}
+                    />
+                  );
+                })}
               </Pressable>
-            </View>
-            {selected
-              ? [
-                  [t('resourceGold'), selected.gold],
-                  [t('resourceElixir'), selected.elixir],
-                  [t('resourceDarkElixir'), selected.darkElixir],
-                  [t('generalTotal'), selected.total],
-                ].map(([label, value]) => (
-                  <View key={String(label)} style={styles.row}>
-                    <CKText muted style={styles.grow}>
-                      {label}
-                    </CKText>
-                    <CKText role="labelLarge">
-                      {formatPlayerResourceAmount(Number(value), locale)}
-                    </CKText>
-                  </View>
-                ))
-              : null}
-          </Surface>
-        </Pressable>
-      </Modal>
+            ),
+          )}
+        </View>
+        {selected ? (
+          <View
+            testID="loot-grid-tooltip"
+            pointerEvents="none"
+            style={[
+              styles.lootTooltip,
+              {
+                backgroundColor: theme.surfaceContainerHighest,
+                left: Math.max(
+                  0,
+                  Math.min(
+                    Math.max(0, gridWidth - 240),
+                    Math.floor(selectedIndex / 7) * (cellSize + 3) - 120,
+                  ),
+                ),
+                top:
+                  selectedRow < 3
+                    ? (selectedRow + 1) * (cellSize + 3) + 4
+                    : selectedRow * (cellSize + 3) - 38,
+              },
+            ]}
+          >
+            <CKText role="labelLarge" numberOfLines={2}>
+              {formatPlayerResourceAmount(selected.total, locale)} ·{' '}
+              {gridMode === 'weekly'
+                ? `${t('statsWeekly')} · `
+                : gridMode === 'cumulative'
+                  ? `${t('playerBattlelogCumulative')} · `
+                  : ''}
+              {new Intl.DateTimeFormat(toIntlLocale(locale), {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: 'UTC',
+              }).format(new Date(selected.day + 'T00:00:00Z'))}
+            </CKText>
+          </View>
+        ) : null}
+        <View style={styles.lootContributionGrid}>
+          {columns.map((column, index) => {
+            const first = column.find((day) => day !== null);
+            const monthStart = column.find((day) => day?.day.endsWith('-01'));
+            const label = monthStart ?? (index === 0 ? first : null);
+            return (
+              <View key={index} style={styles.lootContributionColumn}>
+                {label ? (
+                  <CKText muted role="labelSmall" style={styles.lootMonthLabel}>
+                    {new Intl.DateTimeFormat(toIntlLocale(locale), {
+                      month: 'short',
+                      timeZone: 'UTC',
+                    }).format(new Date(`${label.day}T00:00:00Z`))}
+                  </CKText>
+                ) : null}
+              </View>
+            );
+          })}
+        </View>
+      </View>
     </View>
   );
 }
@@ -1167,24 +1348,11 @@ function BattleRow({ item }: { item: PlayerBattlelogEntry }) {
   const { t, locale } = useI18n();
   const army = Object.entries(item.armyCounts).slice(0, 6);
   return (
-    <Surface radius={ckRadius.tile} style={styles.battleCard}>
+    <Surface testID="farming-battle-row" radius={ckRadius.tile} style={styles.battleCard}>
       <View style={styles.row}>
-        <MobileWebImage
-          imageUrl={
-            item.opponentTownHall > 0
-              ? ImageAssets.townHall(item.opponentTownHall)
-              : item.attack
-                ? ImageAssets.attacks
-                : ImageAssets.shield
-          }
-          style={styles.rowImage}
-        />
         <View style={styles.grow}>
-          <CKText role="rowTitle" numberOfLines={1}>
-            {item.opponentName || item.opponentTag || t('generalUnknown')}
-          </CKText>
           {item.timestamp ? (
-            <CKText muted role="labelSmall">
+            <CKText muted role="labelLarge">
               {new Intl.DateTimeFormat(toIntlLocale(locale), {
                 dateStyle: 'medium',
                 timeStyle: 'short',
@@ -1504,7 +1672,7 @@ function CwlSeasonCard({ season, recordId }: { season: PlayerCwlSeason; recordId
               </CKText>
             </View>
           </View>
-          <View style={styles.cwlTrailing}>
+          <View testID={`cwl-season-summary-${recordId}`} style={styles.cwlTrailing}>
             <CKText muted role="labelSmall" style={styles.cwlSeasonDate}>
               {month}
             </CKText>
@@ -1516,10 +1684,7 @@ function CwlSeasonCard({ season, recordId }: { season: PlayerCwlSeason; recordId
             ) : (
               <View style={styles.cwlActionRow}>
                 <View testID={`cwl-season-stars-${recordId}`} style={styles.cwlStars}>
-                  <MobileWebImage
-                    imageUrl={ImageAssets.builderBaseStar}
-                    style={styles.cwlStarIcon}
-                  />
+                  <MobileWebImage imageUrl={ImageAssets.attackStar} style={styles.cwlStarIcon} />
                   <CKText role="titleMedium" style={styles.cwlStarValue}>
                     {season.stars}
                   </CKText>
@@ -1606,19 +1771,24 @@ export function PlayerWarTab({
   );
   if (!data || !stats) return <EmptyState title={t('generalNoDataAvailable')} />;
   return (
-    <View style={styles.sections}>
-      <View style={styles.toolbar}>
-        <Segmented
-          choices={[
-            ['stats', t('generalStats')],
-            ['attacks', t('warAttacksTitle')],
-            ['defenses', t('warDefensesTitle')],
-            ['charts', t('generalCharts')],
-          ]}
-          selected={section}
-          onSelect={(v) => setSection(v as typeof section)}
-        />
-        <CKText muted style={styles.grow}>
+    <View testID="player-war-content" style={styles.sections}>
+      {/* Do not share a horizontal row with the filter controls. Their fixed
+          widths starve the summary text on phones; Android measures that text
+          as a very tall column and pushes the stats below a screenful of space. */}
+      <ProfileTabs
+        variant="compact"
+        overflow="scroll"
+        tabs={[
+          { key: 'stats', label: t('generalStats') },
+          { key: 'attacks', label: t('warAttacksTitle') },
+          { key: 'defenses', label: t('warDefensesTitle') },
+          { key: 'charts', label: t('generalCharts') },
+        ]}
+        selectedKey={section}
+        onSelect={(value) => setSection(value as typeof section)}
+      />
+      <View testID="player-war-filter-toolbar" style={styles.toolbar}>
+        <CKText muted numberOfLines={2} style={[styles.grow, { minWidth: 0 }]}>
           {filter.hasActiveFilters()
             ? warFilterSummary(filter, t, locale)
             : t('filtersShowingDefaultData', { count: 50 })}
@@ -2513,7 +2683,22 @@ function EnhancedWarStatCard({
       <CKText role="rowTitle">{title}</CKText>
       <View style={styles.warStatHeadline}>
         <View style={styles.metric}>
-          <CKText role="titleLarge">{'★'.repeat(Math.round(stats.averageStars))}</CKText>
+          <View
+            style={{ flexDirection: 'row', gap: 2 }}
+            accessibilityLabel={`${stats.averageStars.toFixed(2)} ${t('warStarsTitle')}`}
+          >
+            {[0, 1, 2].map((index) => (
+              <MobileWebImage
+                key={index}
+                imageUrl={
+                  index < Math.round(stats.averageStars)
+                    ? ImageAssets.attackStar
+                    : ImageAssets.emptyStar
+                }
+                style={{ width: 22, height: 22 }}
+              />
+            ))}
+          </View>
           <CKText role="labelLarge">{stats.averageStars.toFixed(2)}</CKText>
         </View>
         <View style={styles.metric}>
@@ -2544,9 +2729,18 @@ function EnhancedWarStatCard({
       <View style={styles.warStarBreakdown}>
         {[0, 1, 2, 3].map((stars) => (
           <View key={stars} style={styles.warStarBreakdownRow}>
-            <CKText role="labelSmall" style={styles.warStarLabel}>
-              {'★'.repeat(stars) || '☆'}
-            </CKText>
+            <View
+              style={{ width: 54, flexDirection: 'row', gap: 1 }}
+              accessibilityLabel={`${stars} ${t('warStarsTitle')}`}
+            >
+              {Array.from({ length: Math.max(1, stars) }, (_, index) => (
+                <MobileWebImage
+                  key={index}
+                  imageUrl={stars ? ImageAssets.attackStar : ImageAssets.emptyStar}
+                  style={{ width: 14, height: 14 }}
+                />
+              ))}
+            </View>
             <CKText
               role="labelSmall"
               style={{ color: warStarColor(stars, isAttack), fontWeight: '700' }}
@@ -3561,7 +3755,7 @@ export function TabState({
     !(tab === 'joinLeave' && model.joinLeave?.items.length) &&
     !(tab === 'war' && model.warStats)
   )
-    return <LoadingIndicator label={t('generalLoading')} />;
+    return <PageSkeleton kind={tab === 'war' ? 'stats' : tab === 'legendHistory' ? 'stats' : 'list'} />;
   const error = model.errorByTab?.[tab];
   if (
     error &&
@@ -4022,9 +4216,6 @@ function parseFilterDate(value: string) {
 function formatLocalFilterDate(value: Date) {
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
 }
-function average(values: readonly number[]) {
-  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
-}
 
 const styles = StyleSheet.create({
   grow: { flex: 1 },
@@ -4051,12 +4242,12 @@ const styles = StyleSheet.create({
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   headerActionsCompact: { paddingHorizontal: 12 },
   headerActionsDesktop: { paddingHorizontal: 20 },
-  iconAction: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   identity: { alignItems: 'center', justifyContent: 'center' },
   identityDesktop: { flexDirection: 'row', gap: 52, paddingHorizontal: 28 },
   identityCompact: { flexDirection: 'column', gap: 2, paddingHorizontal: 4, marginTop: 6 },
   identityCopy: { flex: 1, minWidth: 0, gap: 4 },
   identityCopyCompact: { flex: 0, alignItems: 'center', width: '100%', gap: 2 },
+  identityCopyWeb: { flexBasis: 'auto', flexShrink: 0 },
   hallBadge: { width: 104, height: 104, alignItems: 'center', justifyContent: 'center' },
   hall: { width: 96, height: 96, resizeMode: 'contain' },
   hallCompact: { width: 94, height: 94 },
@@ -4078,6 +4269,7 @@ const styles = StyleSheet.create({
   leagueSubtitleIcon: { width: 16, height: 16, resizeMode: 'contain' },
   leagueTiles: { flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' },
   leagueTilesCompact: { paddingHorizontal: 16 },
+  leagueTilesDesktop: { width: '44%', maxWidth: 460, flexShrink: 0 },
   leagueTilePressable: { flex: 1 },
   clanLine: { flexDirection: 'row', alignItems: 'center', maxWidth: 320 },
   clanBadge: { width: 16, height: 16, resizeMode: 'contain', marginRight: 4 },
@@ -4199,8 +4391,8 @@ const styles = StyleSheet.create({
   cwlClanBadge: { width: 20, height: 20, resizeMode: 'contain' },
   cwlTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   cwlTownHallLeading: { width: 54, height: 54, resizeMode: 'contain' },
-  cwlTrailing: { minWidth: 108, alignItems: 'flex-end', alignSelf: 'stretch' },
-  cwlSeasonDate: { fontWeight: '700', marginBottom: 10 },
+  cwlTrailing: { alignItems: 'flex-end', justifyContent: 'center', gap: 8, maxWidth: '40%' },
+  cwlSeasonDate: { fontWeight: '700', textAlign: 'right' },
   cwlActionRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   cwlStars: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   cwlStarIcon: { width: 21, height: 21, resizeMode: 'contain' },
@@ -4354,26 +4546,31 @@ const styles = StyleSheet.create({
   warPlayerDetail: { gap: 4, padding: 12, borderWidth: StyleSheet.hairlineWidth, borderRadius: 8 },
   alignEnd: { textAlign: 'right' },
   rowCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
-  joinLeaveMovement: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  battleCard: { minHeight: 120, gap: 8, paddingHorizontal: 12, paddingVertical: 8 },
-  lootSummaryTile: {
-    minHeight: 78,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+  joinLeaveMovement: {
+    width: 104,
+    flexShrink: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 4,
   },
-  lootSummaryImage: { width: 34, height: 34 },
-  lootContributionCard: { padding: 12, gap: 12 },
-  lootContributionGrid: { flexDirection: 'row', gap: 6, justifyContent: 'center' },
-  lootContributionColumn: { gap: 6 },
+  battleCard: { minHeight: 120, gap: 8, paddingHorizontal: 12, paddingVertical: 8 },
+  lootContributionCard: { paddingVertical: 6, gap: 12, position: 'relative' },
+  lootTooltip: {
+    position: 'absolute',
+    zIndex: 2,
+    maxWidth: 240,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  lootContributionGrid: { flexDirection: 'row', gap: 3 },
+  lootContributionColumn: { gap: 3, flex: 1, minWidth: 0 },
+  lootMonthLabel: { width: 38, fontSize: 9 },
   lootContributionCell: {
-    width: 34,
-    height: 34,
-    borderRadius: 6,
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: 3,
   },
-  lootDetailModal: { width: '88%', maxWidth: 380, padding: 20, gap: 12 },
   modalBackdrop: {
     flex: 1,
     alignItems: 'center',

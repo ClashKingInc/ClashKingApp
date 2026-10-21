@@ -70,9 +70,11 @@ export function DesktopSidebar({
           <CKText role="titleMedium" numberOfLines={1} style={styles.strong}>
             {displayName}
           </CKText>
-          <CKText muted role="labelMedium" numberOfLines={1}>
-            {productLabel}
-          </CKText>
+          {productLabel ? (
+            <CKText muted role="labelMedium" numberOfLines={1}>
+              {productLabel}
+            </CKText>
+          ) : null}
         </View>
       </View>
       <View style={styles.primary}>

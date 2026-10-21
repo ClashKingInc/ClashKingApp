@@ -119,7 +119,7 @@ export function GameAssetsScreen({
         <View style={styles.feedbackWrap}>
           <ErrorState
             title={t('gameAssetsLoadError')}
-            body={String(error)}
+            body={t('generalTryAgain')}
             actionLabel={t('generalRetry')}
             onAction={onRefresh}
           />

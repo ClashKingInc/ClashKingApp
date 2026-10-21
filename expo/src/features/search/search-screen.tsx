@@ -19,11 +19,12 @@ import {
 } from 'lucide-react-native';
 
 import { ImageAssets } from '../../core/assets/image-assets';
-import { useI18n } from '../../i18n';
+import { materialBackLabel, useI18n } from '../../i18n';
 import {
   CKText,
   GlassPill,
   LoadingIndicator,
+  PageSkeleton,
   MobileWebImage,
   PressableSurface,
   SelectionPicker,
@@ -72,7 +73,7 @@ export interface SearchScreenProps {
 }
 
 export function SearchScreen(props: SearchScreenProps) {
-  const { t, isRtl } = useI18n();
+  const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
   const inputRef = useRef<TextInput>(null);
   const activeFilters =
@@ -190,7 +191,7 @@ export function SearchScreen(props: SearchScreenProps) {
           {t('searchNoResult')}
         </CKText>
       ) : (
-        props.results.map((result, index) => (
+        props.isSearching && props.results.length === 0 ? <PageSkeleton kind="list" /> : props.results.map((result, index) => (
           <EntityTile
             key={`${stringValue(result.tag)}:${index}`}
             name={stringValue(result.name)}
@@ -213,11 +214,11 @@ export function SearchScreen(props: SearchScreenProps) {
           <View style={styles.grow}>{searchField}</View>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('generalCancel')}
+            accessibilityLabel={materialBackLabel(locale)}
             onPress={props.onCancel}
             style={styles.cancelButton}
           >
-            <X size={24} color={theme.onSurface} />
+            <ChevronLeft size={24} color={theme.onSurface} style={isRtl && styles.mirrorHorizontal} />
           </Pressable>
         </View>
         <View style={styles.overlayMode}>
@@ -934,7 +935,7 @@ function resultImage(result: JsonRecord, mode: SearchMode): string | null {
   if (mode === 'players') {
     return ImageAssets.townHall(numberValue(result.townHallLevel, numberValue(result.townhall, 1)));
   }
-  return ImageAssets.clanBadgeForTag(stringValue(result.tag)) || null;
+  return ImageAssets.clanBadgeForTag(stringValue(result.tag), result) || null;
 }
 
 const styles = StyleSheet.create({

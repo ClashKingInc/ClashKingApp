@@ -11,6 +11,8 @@
         {"/": "/rankings"}, {"/": "/stats"}, {"/": "/calculators"},
         {"/": "/posts"}, {"/": "/posts/*"}, {"/": "/bases-armies"}, {"/": "/game-assets"},
         {"/": "/achievements"}, {"/": "/accounts"}, {"/": "/subscription"},
+        {"/": "/esports"}, {"/": "/tournaments"}, {"/": "/tournaments/*"},
+        {"/": "/profile"}, {"/": "/profile/*"},
         {"/": "/settings"}, {"/": "/settings/*"}
       ]
     }]

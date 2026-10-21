@@ -1,5 +1,5 @@
 import type {
-  ArmySearchEndpoint,
+  ArmySearchQuery,
   EndpointRequest,
   LegendDaysEndpoint,
   StatsCwlEndpoint,
@@ -7,7 +7,7 @@ import type {
   StatsWarEndpoint,
 } from '@clashking/api-contracts/expo';
 
-type ArmySearchQueryContract = EndpointRequest<typeof ArmySearchEndpoint>['query'];
+type ArmySearchQueryContract = typeof ArmySearchQuery.Type;
 type LegendDaysQueryContract = EndpointRequest<typeof LegendDaysEndpoint>['query'];
 type StatsCwlQueryContract = EndpointRequest<typeof StatsCwlEndpoint>['query'];
 interface StatsItemsQueryContract {
@@ -49,7 +49,6 @@ export type StatsItemTypeValue = (typeof StatsItemType)[keyof typeof StatsItemTy
 export const StatsLegendCohort = {
   legend: 'legend_i',
   top1000: 'top_1000',
-  top100: 'top_100',
   top200: 'top_200',
 } as const;
 export type StatsLegendCohortValue = (typeof StatsLegendCohort)[keyof typeof StatsLegendCohort];
@@ -249,7 +248,10 @@ export class StatsCwlQuery {
   }
 }
 
-export interface StatsCwlTownHallCount { readonly level: number; readonly count: number }
+export interface StatsCwlTownHallCount {
+  readonly level: number;
+  readonly count: number;
+}
 export interface StatsCwlHitRate {
   readonly level: number;
   readonly attacks: number;
@@ -288,37 +290,50 @@ export class StatsCwlResponse {
     const j = record(value);
     return new StatsCwlResponse(
       j.season == null ? null : text(j.season),
-      integer(j.clanCount), integer(j.registeredPlayerCount), integer(j.groupCount),
+      integer(j.clanCount),
+      integer(j.registeredPlayerCount),
+      integer(j.groupCount),
       list(j.items).map((value) => {
         const item = record(value);
         return {
-          leagueId: integer(item.leagueId), warSize: integer(item.warSize),
-          groupCount: integer(item.groupCount), clanCount: integer(item.clanCount),
+          leagueId: integer(item.leagueId),
+          warSize: integer(item.warSize),
+          groupCount: integer(item.groupCount),
+          clanCount: integer(item.clanCount),
           registeredPlayerCount: integer(item.registeredPlayerCount),
           townHallDistribution: list(item.townHallDistribution).map((value) => {
             const count = record(value);
             return { level: integer(count.level), count: integer(count.count) };
           }),
-          sameTownHallHitRates: item.sameTownHallHitRates == null ? null : list(item.sameTownHallHitRates).map((value) => {
-            const hit = record(value);
-            return { level: integer(hit.level), attacks: integer(hit.attacks),
-              threeStarAttacks: integer(hit.threeStarAttacks),
-              threeStarRate: hit.threeStarRate == null ? null : decimal(hit.threeStarRate) };
-          }),
-          finalizedWars: integer(item.finalizedWars), archivedWars: integer(item.archivedWars),
+          sameTownHallHitRates:
+            item.sameTownHallHitRates == null
+              ? null
+              : list(item.sameTownHallHitRates).map((value) => {
+                  const hit = record(value);
+                  return {
+                    level: integer(hit.level),
+                    attacks: integer(hit.attacks),
+                    threeStarAttacks: integer(hit.threeStarAttacks),
+                    threeStarRate: hit.threeStarRate == null ? null : decimal(hit.threeStarRate),
+                  };
+                }),
+          finalizedWars: integer(item.finalizedWars),
+          archivedWars: integer(item.archivedWars),
           calculatedAt: text(item.calculatedAt),
         };
       }),
       list(j.availableSeasons).map(text).filter(Boolean),
-      list(j.history).map((value) => {
-        const summary = record(value);
-        return {
-          season: text(summary.season),
-          clanCount: integer(summary.clanCount),
-          registeredPlayerCount: integer(summary.registeredPlayerCount),
-          groupCount: integer(summary.groupCount),
-        };
-      }).filter((summary) => summary.season.length > 0),
+      list(j.history)
+        .map((value) => {
+          const summary = record(value);
+          return {
+            season: text(summary.season),
+            clanCount: integer(summary.clanCount),
+            registeredPlayerCount: integer(summary.registeredPlayerCount),
+            groupCount: integer(summary.groupCount),
+          };
+        })
+        .filter((summary) => summary.season.length > 0),
     );
   }
 }
@@ -344,6 +359,12 @@ export class StatsDailyPoint {
     readonly threeStarRate: number,
     readonly useCount?: number,
     readonly usageRate?: number,
+    readonly airCount?: number,
+    readonly groundCount?: number,
+    readonly mixedCount?: number,
+    readonly unknownCount?: number,
+    readonly classifiedCount?: number,
+    readonly classificationCoverage?: number,
   ) {}
   static fromJson(value: unknown): StatsDailyPoint {
     const j = record(value);
@@ -358,6 +379,12 @@ export class StatsDailyPoint {
       decimal(j.threeStarRate),
       optionalInteger(j.useCount),
       optionalDecimal(j.usageRate),
+      optionalInteger(j.airCount),
+      optionalInteger(j.groundCount),
+      optionalInteger(j.mixedCount),
+      optionalInteger(j.unknownCount),
+      optionalInteger(j.classifiedCount),
+      optionalDecimal(j.classificationCoverage),
     );
   }
 }
@@ -373,6 +400,12 @@ export class StatsMetrics {
     readonly threeStarRate: number,
     readonly daily: readonly StatsDailyPoint[],
     readonly usageRate?: number,
+    readonly airCount?: number,
+    readonly groundCount?: number,
+    readonly mixedCount?: number,
+    readonly unknownCount?: number,
+    readonly classifiedCount?: number,
+    readonly classificationCoverage?: number,
   ) {}
   static fromJson(value: unknown): StatsMetrics {
     const j = record(value);
@@ -387,6 +420,12 @@ export class StatsMetrics {
       decimal(j.threeStarRate),
       list(j.daily).map(StatsDailyPoint.fromJson),
       optionalDecimal(j.usageRate),
+      optionalInteger(j.airCount),
+      optionalInteger(j.groundCount),
+      optionalInteger(j.mixedCount),
+      optionalInteger(j.unknownCount),
+      optionalInteger(j.classifiedCount),
+      optionalDecimal(j.classificationCoverage),
     );
   }
 }
@@ -585,6 +624,12 @@ export class StatsLegendDay {
       uses: number;
       triples: number;
     }[] = [],
+    readonly attackTypes?: {
+      readonly air: number;
+      readonly ground: number;
+      readonly mixed: number;
+      readonly unknown: number;
+    },
   ) {}
   static fromJson(value: unknown): StatsLegendDay {
     const j = record(value);
@@ -620,6 +665,14 @@ export class StatsLegendDay {
           triples: integer(item.triples),
         };
       }),
+      j.attackTypes == null
+        ? undefined
+        : {
+            air: integer(record(j.attackTypes).air),
+            ground: integer(record(j.attackTypes).ground),
+            mixed: integer(record(j.attackTypes).mixed),
+            unknown: integer(record(j.attackTypes).unknown),
+          },
     );
   }
   get metrics(): StatsMetrics {

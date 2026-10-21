@@ -15,6 +15,9 @@ export interface VersionDeviceDetails {
 }
 
 export function versionDeviceLabel(details: VersionDeviceDetails): string {
+  // Browsers have no native build number or device model. Show the real app
+  // version instead of treating a supported web platform as an unknown device.
+  if (details.platform === 'web') return details.version;
   let deviceData = 'Unknown Platform';
   if (details.platform === 'android') {
     deviceData = `Device: ${details.modelName ?? 'Unknown'}, OS: Android ${details.osVersion ?? 'Unknown'} (SDK ${details.platformApiLevel ?? 'Unknown'})`;

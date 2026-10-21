@@ -46,6 +46,7 @@ import {
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 import type { NotificationSettingsPresentationService } from './contracts';
 import { SettingSwitch, SettingsPage, SettingsSection, SettingsTile } from './settings-components';
+import { TutorialTarget } from '../../tutorials/tutorial-ui';
 
 const categoryRows: readonly {
   category: NotificationCategory;
@@ -53,6 +54,18 @@ const categoryRows: readonly {
   description: MessageKey;
   icon: (color: string) => ReactNode;
 }[] = [
+  {
+    category: 'warState',
+    title: 'notifGroupWarState',
+    description: 'notifWarAlertsDescription',
+    icon: (color) => <Shield color={color} size={22} />,
+  },
+  {
+    category: 'warAttacks',
+    title: 'notifGroupWarAttacks',
+    description: 'notifWarAttackOptionsDescription',
+    icon: (color) => <Shield color={color} size={22} />,
+  },
   {
     category: 'events',
     title: 'notifGroupEvents',
@@ -83,12 +96,16 @@ export function NotificationSettingsScreen({
   service,
   debugEnabled = false,
   onManagePlayers,
+  onManageClans,
   onBack,
+  entityControls,
 }: {
   service: NotificationSettingsPresentationService;
   debugEnabled?: boolean;
   onManagePlayers?: () => void;
+  onManageClans?: () => void;
   onBack?: () => void;
+  entityControls?: ReactNode;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -204,6 +221,7 @@ export function NotificationSettingsScreen({
     <View style={styles.screen}>
       <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack}>
         <SettingsSection title={t('notifSystemNotifications')}>
+          <TutorialTarget id="notifications-permission" offer="notifications">
           <SettingsTile
             icon={<Bell color={theme.onSurface} size={22} />}
             title={
@@ -216,16 +234,28 @@ export function NotificationSettingsScreen({
             disabled={busy}
             onPress={() => void openSystemSettings()}
           />
+          </TutorialTarget>
         </SettingsSection>
         <>
-          <SettingsSection title={t('playersLinked')}>
-            <SettingsTile
-              icon={<Users color={theme.onSurface} size={22} />}
-              title={t('searchTabPlayers')}
-              subtitle={t('notifManagePlayersDescription')}
-              subtitleNumberOfLines={3}
-              onPress={onManagePlayers}
-            />
+          <SettingsSection title={`${t('searchTabPlayers')} · ${t('searchTabClans')}`}>
+            <TutorialTarget id="notifications-entities">{entityControls ?? (
+              <>
+                <SettingsTile
+                  icon={<Users color={theme.onSurface} size={22} />}
+                  title={t('searchTabPlayers')}
+                  subtitle={t('notifManagePlayersDescription')}
+                  subtitleNumberOfLines={3}
+                  onPress={onManagePlayers}
+                />
+                {onManageClans ? (
+                  <SettingsTile
+                    icon={<Shield color={theme.onSurface} size={22} />}
+                    title={t('searchTabClans')}
+                    onPress={onManageClans}
+                  />
+                ) : null}
+              </>
+            )}</TutorialTarget>
           </SettingsSection>
           <SettingsSection title={t('notifChooseAlerts')}>
             {categoryRows.map((row) => (
@@ -242,7 +272,7 @@ export function NotificationSettingsScreen({
               />
             ))}
           </SettingsSection>
-          <SettingsSection title={t('notifCustomReminders')}>
+          <TutorialTarget id="notifications-reminders"><SettingsSection title={t('notifCustomReminders')}>
             <ReminderRow
               icon={<AlarmClock color={theme.onSurface} size={22} />}
               title={t('notifGroupWarReminders')}
@@ -259,7 +289,6 @@ export function NotificationSettingsScreen({
             <ReminderRow
               icon={<Castle color={theme.onSurface} size={22} />}
               title={t('notifGroupRaidReminders')}
-              description={t('notifRaidRemindersDescription')}
               enabled={settings.raidReminders}
               disabled={busy}
               values={settings.raidReminderTimings}
@@ -269,7 +298,7 @@ export function NotificationSettingsScreen({
               }
               onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
             />
-          </SettingsSection>
+          </SettingsSection></TutorialTarget>
         </>
         {debugEnabled && service.sendTestNotification ? (
           <SettingsSection title={t('notifTestNotification')}>
@@ -347,7 +376,7 @@ function ReminderRow({
 }: {
   icon: ReactNode;
   title: string;
-  description: string;
+  description?: string;
   enabled: boolean;
   disabled?: boolean;
   values: readonly number[];
@@ -373,9 +402,11 @@ function ReminderRow({
           <CKText role="bodyLarge" style={styles.semi}>
             {title}
           </CKText>
-          <CKText muted role="bodySmall">
-            {description}
-          </CKText>
+          {description ? (
+            <CKText muted role="bodySmall">
+              {description}
+            </CKText>
+          ) : null}
         </View>
         {expanded ? (
           <ChevronUp color={theme.onSurfaceVariant} />

@@ -260,6 +260,6 @@ export class JoinLeaveClan {
 
   static fromJson(json: JsonRecord): JoinLeaveClan {
     const tag = string(json.tag);
-    return new JoinLeaveClan(string(json.name), tag, ImageAssets.clanBadgeForTag(tag));
+    return new JoinLeaveClan(string(json.name), tag, ImageAssets.clanBadgeForTag(tag, json));
   }
 }

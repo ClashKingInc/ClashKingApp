@@ -26,6 +26,10 @@ import { hideWebLaunchScreen } from '../core/app/launch-screen-runtime';
 import { useCKThemeMode } from '../ui';
 import { ExpoDeepLinkRuntime } from '../core/deep-links/expo-deep-link-runtime';
 import { queueAppLink } from '../core/deep-links/link-inbox';
+import { nativeDetailScreenOptions } from '../core/app/native-secondary-navigation';
+import { WebDocumentTitle } from '../core/app/web-document-title';
+import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
+import { TutorialOverlay } from '../features/tutorials/tutorial-ui';
 
 void SplashScreen.preventAutoHideAsync();
 initializeObservability();
@@ -62,6 +66,9 @@ export default function RootLayout() {
     };
   }, []);
   const [fontReady, setFontReady] = useState(false);
+  useEffect(() => {
+    if (fontReady) void warmRankedCheckerBackgrounds();
+  }, [fontReady]);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();
   useEffect(() => {
@@ -87,6 +94,7 @@ export default function RootLayout() {
   if (!fontReady) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={handleRootLayout}>
+      <WebDocumentTitle />
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AppRuntimeProvider>
@@ -94,21 +102,9 @@ export default function RootLayout() {
               <AppStatusBar />
               <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
                 <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
-                <Stack.Screen
-                  name="detail"
-                  options={({ route }) => ({
-                    gestureEnabled: true,
-                    ...((route.params as { clanSpring?: string } | undefined)?.clanSpring === '1'
-                      ? {
-                          // A modal disables iOS's interactive pop gesture, even with gestureEnabled.
-                          presentation: 'card' as const,
-                          animation: 'none' as const,
-                          gestureDirection: 'horizontal' as const,
-                        }
-                      : {}),
-                  })}
-                />
+                <Stack.Screen name="detail" options={nativeDetailScreenOptions} />
               </Stack>
+              <TutorialOverlay />
             </NavigationTheme>
           </AppRuntimeProvider>
         </QueryClientProvider>

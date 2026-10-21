@@ -4,6 +4,17 @@ import type { DeepLinkHandler } from './deep-link-handler';
 import type { DeepLinkRuntime } from './contracts';
 import { parseAppLink } from './app-link';
 
+const localBrowserNavigationHandlers = new Set<(event: PopStateEvent) => boolean>();
+
+/** Let a mounted destination consume its own history before URL routing can
+ * reconstruct that destination and discard its retained page state. */
+export function subscribeLocalBrowserNavigation(handler: (event: PopStateEvent) => boolean) {
+  localBrowserNavigationHandlers.add(handler);
+  return () => {
+    localBrowserNavigationHandlers.delete(handler);
+  };
+}
+
 export class ExpoDeepLinkRuntime implements DeepLinkRuntime {
   constructor(
     private readonly platform: 'ios' | 'android' | 'web' = Platform.OS === 'ios' ||
@@ -24,10 +35,12 @@ export class ExpoDeepLinkRuntime implements DeepLinkRuntime {
   subscribe(listener: (url: string) => void): () => void {
     if (this.platform === 'web') {
       if (typeof window === 'undefined' || !window.addEventListener) return () => undefined;
-      const onPop = () =>
+      const onPop = (event: PopStateEvent) => {
+        if ([...localBrowserNavigationHandlers].reverse().some((handler) => handler(event))) return;
         listener(
           new URL(window.location.pathname + window.location.search, 'https://app.clashk.ing').href,
         );
+      };
       window.addEventListener('popstate', onPop);
       return () => window.removeEventListener('popstate', onPop);
     }

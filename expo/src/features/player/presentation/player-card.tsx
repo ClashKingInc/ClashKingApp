@@ -1,19 +1,18 @@
-import { useRef, useState, type ReactElement } from 'react';
-import { Platform, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import {
-  Bell,
+  ProfileOptionSwitch as PlayerOptionSwitch,
+  profileOptionStyles,
+} from '../../../ui/profile-option-switch';
+import {
   Bookmark,
   CheckSquare,
-  ChevronDown,
-  ChevronUp,
   ChevronRight,
   Construction,
   EyeOff,
   House,
-  Shield,
   ShieldCheck,
   SlidersHorizontal,
-  Trophy,
   TriangleAlert,
 } from 'lucide-react-native';
 
@@ -21,7 +20,6 @@ import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
 import {
   CKText,
-  LoadingIndicator,
   MobileWebImage,
   PillSurface,
   Surface,
@@ -50,9 +48,7 @@ export function PlayerDataCard({
   bookmarked = false,
   options,
   homeIncluded = true,
-  notificationsEnabled,
-  notificationActive,
-  notificationUpdating,
+  hideAccountsEnabled = false,
   actions,
   onVerify,
   onLongPress,
@@ -63,6 +59,7 @@ export function PlayerDataCard({
   bookmarked?: boolean;
   options: PlayerCardOptions;
   homeIncluded?: boolean;
+  hideAccountsEnabled?: boolean;
   featureFlags: PlayersFeatureFlags;
   notificationsEnabled: boolean;
   notificationActive: boolean;
@@ -79,13 +76,6 @@ export function PlayerDataCard({
   const longPressActivated = useRef(false);
   const verified = link?.isVerified;
   const clan = playerClanPresentation(player);
-  const notificationAvailable = verified === true && notificationsEnabled && !notificationUpdating;
-  const notificationSubtitle =
-    verified === false
-      ? t('playerOptionNotificationsVerifyFirst')
-      : !notificationsEnabled
-        ? t('playerOptionNotificationsEnableMaster')
-        : t('playerOptionNotificationsSubtitle');
   const updateHidden = async () => {
     if (!link || !link.isVerified) return;
     setVisibilityUpdating(true);
@@ -98,7 +88,7 @@ export function PlayerDataCard({
     }
   };
   return (
-    <Surface radius={ckRadius.control} style={styles.card}>
+    <Surface radius={ckRadius.card} style={styles.card}>
       <Pressable
         accessibilityRole="button"
         delayLongPress={300}
@@ -117,7 +107,7 @@ export function PlayerDataCard({
           }
           actions.openPlayer(player);
         }}
-        style={styles.main}
+        style={[styles.main, !bookmarked && styles.mainWithOptions]}
         testID={dragTestID}
       >
         <View style={styles.artColumn}>
@@ -139,7 +129,7 @@ export function PlayerDataCard({
               {bookmarked ? (
                 <Bookmark size={14} color={theme.onSurfaceVariant} />
               ) : verified ? (
-                <ShieldCheck size={14} color={theme.primary} />
+                <ShieldCheck size={14} color={statColors.win} />
               ) : (
                 <TriangleAlert size={14} color={statColors.capitalProjected} />
               )}
@@ -172,54 +162,21 @@ export function PlayerDataCard({
       </Pressable>
       {!bookmarked ? (
         <>
-          <View
-            style={[styles.divider, { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.4) }]}
-          />
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Options"
+            hitSlop={{ top: 2, bottom: 2 }}
             accessibilityState={{ expanded }}
             onPress={() => setExpanded(!expanded)}
-            style={styles.optionsToggle}
+            style={[profileOptionStyles.optionsToggle, styles.optionsToggle]}
           >
             <SlidersHorizontal size={16} color={theme.onSurfaceVariant} />
-            <CKText muted role="labelLarge" style={styles.optionTitle}>
+            <CKText muted role="labelLarge" style={styles.optionsTitle}>
               Options
             </CKText>
-            <View
-              testID={`player-options-${expanded ? 'collapse' : 'expand'}-caret-${player.tag}`}
-              style={{
-                width: 20,
-                height: 20,
-                flexShrink: 0,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {expanded ? (
-                <ChevronUp size={20} color={theme.onSurfaceVariant} />
-              ) : (
-                <ChevronDown size={20} color={theme.onSurfaceVariant} />
-              )}
-            </View>
           </Pressable>
           {expanded ? (
-            <View style={styles.options}>
-              {Platform.OS !== 'web' ? (
-                <PlayerOptionSwitch
-                  icon={<Bell color={theme.onSurfaceVariant} />}
-                  title={t('playerOptionNotificationsTitle')}
-                  subtitle={notificationSubtitle}
-                  value={notificationActive}
-                  enabled={notificationAvailable}
-                  loading={notificationUpdating}
-                  onChange={(value) =>
-                    void actions
-                      .setAccountNotifications(player.tag, value)
-                      .catch(() => actions.showMessage('Couldn’t update account notifications.'))
-                  }
-                />
-              ) : null}
+            <View style={profileOptionStyles.options}>
               {verified === false ? (
                 <PlayerOptionAction
                   title={t('homeVerifyAccountAction')}
@@ -233,7 +190,7 @@ export function PlayerDataCard({
                   title={t('playerOptionShowOnHomeTitle')}
                   subtitle={
                     verified
-                      ? t('playerOptionShowOnHomeSubtitle')
+                      ? `${t('todoTitle')} · ${t('playerBattlelogFarming')}`
                       : t('playerOptionShowOnHomeVerifyFirst')
                   }
                   value={homeIncluded}
@@ -257,47 +214,22 @@ export function PlayerDataCard({
                 icon={<Construction color={theme.onSurfaceVariant} />}
                 title={t('playerOptionShowUpgradeTrackerHomeTitle')}
                 subtitle={
-                  verified && homeIncluded
+                  verified
                     ? t('playerOptionShowUpgradeTrackerHomeSubtitle')
-                    : verified
-                      ? t('playerOptionHomeInclusionFirst')
-                      : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
+                    : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
                 }
                 value={options.showUpgradeTrackerOnHome}
-                enabled={verified === true && homeIncluded}
+                enabled={verified === true}
                 onChange={(value) => void actions.setCardOption(player.tag, 'upgrade', value)}
               />
-              <PlayerOptionSwitch
-                icon={<Trophy color={theme.onSurfaceVariant} />}
-                title={t('playerOptionShowRankedHomeTitle')}
-                subtitle={
-                  verified && homeIncluded
-                    ? t('playerOptionShowRankedHomeSubtitle')
-                    : verified
-                      ? t('playerOptionHomeInclusionFirst')
-                      : t('playerOptionShowRankedHomeVerifyFirst')
-                }
-                value={options.showRankedOnHome}
-                enabled={verified === true && homeIncluded}
-                onChange={(value) => void actions.setCardOption(player.tag, 'ranked', value)}
-              />
-              <PlayerOptionSwitch
-                icon={<Shield color={theme.onSurfaceVariant} />}
-                title={t('playerOptionShowWarTabTitle')}
-                subtitle={t('playerOptionShowWarTabSubtitle')}
-                value={options.showInWarTab}
-                onChange={(value) => void actions.setCardOption(player.tag, 'war', value)}
-              />
-              {link ? (
+              {link && hideAccountsEnabled ? (
                 <PlayerOptionSwitch
                   icon={<EyeOff color={theme.onSurfaceVariant} />}
-                  title="Hide account"
+                  title={t('playerHideAccountTitle')}
                   subtitle={
                     link.isVerified
-                      ? link.hidden
-                        ? 'This account is hidden from public lookups.'
-                        : 'This account is visible in public lookups.'
-                      : 'Verify this account to change visibility.'
+                      ? t('playerHideAccountExplanation')
+                      : t('playerHideAccountVerify')
                   }
                   value={link.hidden}
                   enabled={link.isVerified && !visibilityUpdating}
@@ -328,7 +260,7 @@ export function BookmarkedPlayerCard({
   const theme = useCKTheme();
   const longPressActivated = useRef(false);
   return (
-    <Surface radius={ckRadius.control}>
+    <Surface radius={ckRadius.card} style={styles.card}>
       <Pressable
         accessibilityRole="button"
         delayLongPress={300}
@@ -409,10 +341,10 @@ function PlayerOptionAction({
 }) {
   const theme = useCKTheme();
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={styles.option}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={profileOptionStyles.option}>
       <TriangleAlert size={20} color={statColors.capitalProjected} />
-      <View style={styles.optionCopy}>
-        <CKText style={styles.optionTitle}>{title}</CKText>
+      <View style={profileOptionStyles.optionCopy}>
+        <CKText style={profileOptionStyles.rowTitle}>{title}</CKText>
         <CKText muted role="bodySmall" numberOfLines={2}>
           {subtitle}
         </CKText>
@@ -422,55 +354,12 @@ function PlayerOptionAction({
   );
 }
 
-function PlayerOptionSwitch({
-  icon,
-  title,
-  subtitle,
-  value,
-  enabled = true,
-  loading = false,
-  onChange,
-}: {
-  icon: ReactElement;
-  title: string;
-  subtitle: string;
-  value: boolean;
-  enabled?: boolean;
-  loading?: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  const theme = useCKTheme();
-  return (
-    <Pressable
-      accessibilityRole="switch"
-      accessibilityLabel={title}
-      accessibilityState={{ checked: value, disabled: !enabled }}
-      disabled={!enabled}
-      onPress={() => onChange(!value)}
-      style={[styles.option, !enabled && styles.disabled]}
-    >
-      <View style={styles.optionIcon}>{loading ? <LoadingIndicator /> : icon}</View>
-      <View style={styles.optionCopy}>
-        <CKText style={styles.optionTitle}>{title}</CKText>
-        <CKText muted role="bodySmall" numberOfLines={2}>
-          {subtitle}
-        </CKText>
-      </View>
-      <Switch
-        accessible={false}
-        pointerEvents="none"
-        value={value}
-        disabled={!enabled}
-        trackColor={{ true: theme.primary }}
-        style={styles.switch}
-      />
-    </Pressable>
-  );
-}
-
 const styles = StyleSheet.create({
-  card: { width: '100%' },
+  card: { width: '100%', borderWidth: 0 },
+  optionsToggle: { justifyContent: 'flex-end' },
+  optionsTitle: { fontWeight: '700' },
   main: { padding: 14, flexDirection: 'row', alignItems: 'flex-start' },
+  mainWithOptions: { paddingBottom: 2 },
   artColumn: { width: 66, alignItems: 'center' },
   townHall: { width: 62, height: 62, resizeMode: 'contain' },
   status: {
@@ -495,27 +384,4 @@ const styles = StyleSheet.create({
   },
   chipImage: { width: 18, height: 18, resizeMode: 'contain' },
   chipLabel: { maxWidth: 172, fontWeight: '700' },
-  divider: { height: StyleSheet.hairlineWidth },
-  optionsToggle: {
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-    gap: 8,
-  },
-  optionTitle: { flex: 1, fontWeight: '700' },
-  options: { paddingHorizontal: 8, paddingBottom: 8 },
-  option: {
-    minHeight: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 6,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  optionIcon: { width: 30, alignItems: 'center' },
-  optionCopy: { flex: 1, gap: 1 },
-  switch: { transform: [{ scale: 0.85 }] },
-  disabled: { opacity: 0.45 },
 });

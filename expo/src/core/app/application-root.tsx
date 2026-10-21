@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 
 import { EmailVerificationRequiredException } from '../api/contract-api';
 import { canonicalTag } from '../domain/tags';
+import { pendingAppLink } from '../deep-links/link-inbox';
 import { reportException } from '../observability/observability';
 import {
   accountPresentationItem,
@@ -38,7 +39,7 @@ import {
   initializeAuthenticatedPush,
 } from './startup-coordinator';
 import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
-import { StartupLoadingScreen } from './startup-loading';
+import { StartupHandoff } from './startup-loading';
 import { StartupUpdateGate } from './startup-update-gate';
 
 const DISCORD_URL = 'https://discord.gg/clashking';
@@ -58,6 +59,10 @@ function ApplicationContent() {
   const { locale, t } = useI18n();
   const [scene, setScene] = useState<ApplicationScene>({ kind: 'startup' });
   const [retrying, setRetrying] = useState(false);
+  const [homeReady, setHomeReady] = useState(false);
+  const onHomeReady = useCallback(() => {
+    setHomeReady(true);
+  }, []);
   const [primerVisible, setPrimerVisible] = useState(false);
   const sceneRef = useRef(scene);
   const startupGeneration = useRef(0);
@@ -69,6 +74,7 @@ function ApplicationContent() {
   }, [scene]);
 
   const loadAccounts = useCallback(async () => {
+    setHomeReady(false);
     void runtime.gameData.refreshGameDataIfChanged().catch(() => undefined);
     const result = await initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts);
     if (!result.authenticated) throw new Error('Authentication expired.');
@@ -115,6 +121,7 @@ function ApplicationContent() {
     const generation = ++startupGeneration.current;
     setRetrying(true);
     setScene({ kind: 'startup' });
+    setHomeReady(false);
     try {
       const result = await initializeApplication({
         preferenceMigration: runtime.preferenceMigration,
@@ -138,12 +145,22 @@ function ApplicationContent() {
         reportError: (operation, error) => reportException(error, operation),
       });
       if (result.authenticated) {
-        await runtime.accountBootstrap
-          .initialize(runtime.auth.state.currentUser?.userId ?? null, {
-            links: runtime.accounts.accounts,
-            selectedTagLoaded: true,
-          })
-          .catch((error) => reportException(error, 'startup.accountBootstrap'));
+        const link = pendingAppLink();
+        const hydrate = () =>
+          runtime.accountBootstrap
+            .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+              links: runtime.accounts.accounts,
+              selectedTagLoaded: true,
+            })
+            .catch((error) => reportException(error, 'startup.accountBootstrap'));
+        if (link?.kind === 'player' && result.destination === 'home') {
+          // Resolve the actual destination first. All four Home tabs still hydrate,
+          // but no longer stand between an authenticated link and its player.
+          await runtime.players
+            .getPlayerAndClanData(link.tag)
+            .catch((error) => reportException(error, 'startup.linkedPlayer'));
+          void hydrate();
+        } else await hydrate();
       }
       if (generation !== startupGeneration.current) return;
       setScene(sceneForStartupResult(result));
@@ -239,7 +256,7 @@ function ApplicationContent() {
   let content: ReactNode;
   switch (scene.kind) {
     case 'startup':
-      content = <StartupLoadingScreen />;
+      content = null;
       break;
     case 'login':
       content = (
@@ -345,7 +362,7 @@ function ApplicationContent() {
       );
       break;
     case 'home':
-      content = <AuthenticatedRoot />;
+      content = <AuthenticatedRoot onHomeReady={onHomeReady} />;
       break;
     case 'maintenance':
       content = <MaintenanceScreen onRetry={() => void runStartup()} />;
@@ -368,14 +385,14 @@ function ApplicationContent() {
   }
 
   return (
-    <>
+    <StartupHandoff loading={scene.kind === 'startup' || (scene.kind === 'home' && !homeReady)}>
       {content}
       <NotificationPermissionPrimer
         onAllow={() => closePrimer(true)}
         onDecline={() => closePrimer(false)}
         visible={primerVisible}
       />
-    </>
+    </StartupHandoff>
   );
 }
 

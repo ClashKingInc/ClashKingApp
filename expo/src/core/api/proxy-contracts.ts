@@ -74,6 +74,8 @@ export const ProxyClanRankingsEndpoint = {
 };
 export const ProxyBuilderClanRankingsEndpoint = {
   ...Api.ProxyBuilderClanRankingsEndpoint,
+  // The wire contract permits absent locations on worldwide clan rankings.
+  // Do not substitute a country or discard these clans when decoding the list.
   response: Wire.ClanBuilderBaseRankingListResponse,
   errors,
 };

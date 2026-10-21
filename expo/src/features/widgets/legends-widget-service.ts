@@ -5,8 +5,6 @@ import type { NativeWidgetBridge, WidgetPlatform } from './contracts';
 import {
   buildLegendsWidgetPayload,
   canonicalPlayerTag,
-  type LegendsWidgetPayload,
-  type LegendsWidgetPlayer,
   type LegendsWidgetTranslate,
 } from './legends-widget-payload';
 
@@ -29,6 +27,7 @@ export interface LegendsWidgetServiceOptions {
   readonly native: Pick<NativeWidgetBridge, 'setWidgetValue' | 'reloadWidgets'>;
   readonly mirror: StringStore;
   readonly loadPlayer: (tag: string) => Promise<Player>;
+  readonly cachedPlayer?: (tag: string) => Pick<Player, 'name' | 'townHallLevel'> | null;
   readonly loadLegendData: (tag: string, day: string) => Promise<PlayerLegendLeagueData>;
   readonly t: LegendsWidgetTranslate;
   readonly now?: () => Date;
@@ -43,6 +42,8 @@ export function legendsWidgetKeyForPlayer(tag: string): string {
 export class LegendsWidgetService {
   private generation = 0;
   private writeChain: Promise<void> = Promise.resolve();
+  private readonly legendLoads = new Map<string, Promise<PlayerLegendLeagueData>>();
+  private readonly legendCache = new Map<string, { value: PlayerLegendLeagueData; at: number }>();
 
   constructor(private readonly options: LegendsWidgetServiceOptions) {}
 
@@ -51,7 +52,7 @@ export class LegendsWidgetService {
     const generation = ++this.generation;
     try {
       const previous = await this.getCachedPlayers();
-      const next = normalizeBookmarks(bookmarks, previous);
+      const next = normalizeBookmarks(bookmarks, previous, this.options.cachedPlayer);
       const nextTags = new Set(next.map((player) => canonicalPlayerTag(player.tag)));
       for (const player of previous) {
         if (!nextTags.has(canonicalPlayerTag(player.tag))) {
@@ -96,6 +97,8 @@ export class LegendsWidgetService {
             townHallLevel: finiteInteger(value.townHallLevel),
           }];
         }),
+        [],
+        this.options.cachedPlayer,
       );
     } catch (error) {
       await this.report({ operation: 'legends_widget.refresh', error });
@@ -106,6 +109,8 @@ export class LegendsWidgetService {
   async clear(): Promise<void> {
     if (this.options.platform === 'web') return;
     const generation = ++this.generation;
+    this.legendLoads.clear();
+    this.legendCache.clear();
     const cached = await this.getCachedPlayers();
     for (const player of cached) {
       await this.writeValue(generation, legendsWidgetKeyForPlayer(player.tag), null);
@@ -125,34 +130,49 @@ export class LegendsWidgetService {
       try {
         const now = this.now();
         const day = currentLegendDay(now);
-        const [playerResult, legendResult] = await Promise.allSettled([
-          this.options.loadPlayer(tag),
-          this.options.loadLegendData(tag, day),
-        ]);
+        const player = await this.options.loadPlayer(tag);
         if (generation !== this.generation) return;
-        if (legendResult.status === 'rejected') throw legendResult.reason;
-        if (!legendResult.value.currentDay && !legendResult.value.currentRank) {
-          throw new Error('Legend refresh returned neither current day nor rank data');
-        }
-        const previousPayload = await this.readPayload(tag);
-        const player = playerResult.status === 'fulfilled'
-          ? playerResult.value
-          : fallbackPlayer(bookmark, previousPayload);
-        if (playerResult.status === 'rejected') {
-          await this.report({ operation: 'legends_widget.player', error: playerResult.reason, tag });
-        }
-        const payload = buildLegendsWidgetPayload(player, legendResult.value, this.options.t, now);
         hydrated.set(tag, {
           tag,
           name: player.name,
           townHallLevel: player.townHallLevel,
         });
+        if (!/^Legend League(?: (?:\d+|[IVX]+))?$/iu.test(player.league)) {
+          await this.writeValue(generation, legendsWidgetKeyForPlayer(tag), null);
+          return;
+        }
+        const data = await this.loadLegendData(tag, day);
+        if (generation !== this.generation) return;
+        if (!data.currentDay && !data.currentRank) {
+          throw new Error('Legend refresh returned neither current day nor rank data');
+        }
+        const payload = buildLegendsWidgetPayload(player, data, this.options.t, now);
         await this.writeValue(generation, legendsWidgetKeyForPlayer(tag), JSON.stringify(payload));
       } catch (error) {
         await this.report({ operation: 'legends_widget.player', error, tag });
       }
     });
     return players.map((player) => hydrated.get(canonicalPlayerTag(player.tag)) ?? player);
+  }
+
+  private loadLegendData(tag: string, day: string): Promise<PlayerLegendLeagueData> {
+    const key = `${tag}:${day}`;
+    const pending = this.legendLoads.get(key);
+    if (pending) return pending;
+    const cached = this.legendCache.get(key);
+    const age = cached ? this.now().getTime() - cached.at : Infinity;
+    if (cached && age >= 0 && age < 60_000) return Promise.resolve(cached.value);
+    const load = this.options.loadLegendData(tag, day).then((value) => {
+      if (this.legendLoads.get(key) === load) {
+        if (this.legendCache.size >= 100) this.legendCache.delete(this.legendCache.keys().next().value!);
+        this.legendCache.set(key, { value, at: this.now().getTime() });
+      }
+      return value;
+    }).finally(() => {
+      if (this.legendLoads.get(key) === load) this.legendLoads.delete(key);
+    });
+    this.legendLoads.set(key, load);
+    return load;
   }
 
   private async writePlayers(
@@ -181,19 +201,6 @@ export class LegendsWidgetService {
     return this.options.now?.() ?? new Date();
   }
 
-  private async readPayload(tag: string): Promise<LegendsWidgetPayload | null> {
-    try {
-      const raw = await this.options.mirror.getItem(legendsWidgetKeyForPlayer(tag));
-      if (!raw) return null;
-      const decoded: unknown = JSON.parse(raw);
-      return isRecord(decoded) && decoded.schemaVersion === 1
-        ? decoded as unknown as LegendsWidgetPayload
-        : null;
-    } catch {
-      return null;
-    }
-  }
-
   private async report(context: LegendsWidgetErrorContext): Promise<void> {
     try {
       await this.options.reportError?.(context);
@@ -203,31 +210,10 @@ export class LegendsWidgetService {
   }
 }
 
-function fallbackPlayer(
-  bookmark: LegendsWidgetBookmark,
-  previous: LegendsWidgetPayload | null,
-): LegendsWidgetPlayer {
-  const clan = previous?.clan;
-  return {
-    tag: canonicalPlayerTag(bookmark.tag),
-    name: bookmark.name,
-    townHallLevel: bookmark.townHallLevel,
-    ...(clan
-      ? {
-          clanOverview: {
-            tag: clan.tag,
-            name: clan.name,
-            clanLevel: 0,
-            badgeUrls: { small: '', medium: clan.badgeUrl, large: '' },
-          },
-        }
-      : undefined),
-  };
-}
-
 function normalizeBookmarks(
   bookmarks: readonly LegendsWidgetBookmark[],
   fallbacks: readonly LegendsWidgetBookmark[] = [],
+  cachedPlayer?: (tag: string) => Pick<Player, 'name' | 'townHallLevel'> | null,
 ): LegendsWidgetBookmark[] {
   const fallbackByTag = new Map(fallbacks.map((item) => [canonicalPlayerTag(item.tag), item]));
   const normalized = new Map<string, LegendsWidgetBookmark>();
@@ -235,14 +221,28 @@ function normalizeBookmarks(
     const tag = canonicalPlayerTag(bookmark.tag);
     if (!tag || normalized.has(tag)) continue;
     const fallback = fallbackByTag.get(tag);
+    const profile = cachedPlayer?.(tag);
     normalized.set(tag, {
       tag,
-      name: bookmark.name || fallback?.name || tag,
+      name:
+        resolvedName(profile?.name, tag) ||
+        resolvedName(bookmark.name, tag) ||
+        resolvedName(fallback?.name, tag) ||
+        tag,
       townHallLevel:
-        bookmark.townHallLevel > 0 ? bookmark.townHallLevel : (fallback?.townHallLevel ?? 0),
+        profile && profile.townHallLevel > 0
+          ? profile.townHallLevel
+          : bookmark.townHallLevel > 0
+            ? bookmark.townHallLevel
+            : (fallback?.townHallLevel ?? 0),
     });
   }
   return [...normalized.values()];
+}
+
+function resolvedName(name: string | undefined, tag: string): string {
+  const value = name?.trim() ?? '';
+  return value && canonicalPlayerTag(value) !== tag ? value : '';
 }
 
 async function mapWithConcurrency<T>(

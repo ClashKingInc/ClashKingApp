@@ -24,7 +24,7 @@ export const FEATURE_FLAG_DEFAULTS: Readonly<Record<KnownFeatureFlag, boolean>> 
   leaderboards: true,
   global_stats: true,
   calculators: true,
-  subscription_support: true,
+  subscription_support: false,
   upgrade_tracker: true,
   bases_armies: true,
   game_assets: true,

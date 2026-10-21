@@ -1,6 +1,7 @@
-import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
+  Alert,
   Modal,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
@@ -26,6 +27,7 @@ import {
   Info,
   List,
   LocateFixed,
+  Share2,
   Trophy,
   UsersRound,
 } from 'lucide-react-native';
@@ -33,19 +35,22 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { sharePageLink } from '../../../core/deep-links/share-page-link';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
 import { canonicalTag } from '../../../core/domain/tags';
 import {
   CKText,
   EmptyState,
   GlassSurface,
-  HeaderIconButton,
   MobileWebImage,
+  ProfileHeaderAction,
+  ProfileStatChip,
   ProfileTabs,
   SelectionPickerModal,
   Skeleton,
-  SkeletonLoadingDialog,
+  PageLoading,
   Surface,
+  PillSurface,
   ckRadius,
   colorWithAlpha,
   useCKTheme,
@@ -65,6 +70,8 @@ import {
   type RankedPeriod,
 } from '../data';
 import { RankedLineChart } from './line-chart';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { playerProfileClanIdentity } from '../../player/presentation/player-clan-identity';
 
 export interface RankedScreenProps {
   readonly player: Player;
@@ -102,19 +109,20 @@ export function RankedScreen(props: RankedScreenProps) {
   const [accountPicker, setAccountPicker] = useState(false);
   const [openingPlayer, setOpeningPlayer] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
-  const [scrollOffsets, setScrollOffsets] = useState<Record<'period' | 'history', number>>({
+  const scrollOffsets = useRef<Record<'period' | 'history', number>>({
     period: 0,
     history: 0,
   });
-  const [activeScrollOffset, setActiveScrollOffset] = useState(0);
   const liveScrollOffset = useRef(0);
   const selectRankedTab = (next: 'period' | 'history') => {
-    const nextOffsets = { ...scrollOffsets, [tab]: liveScrollOffset.current };
-    setScrollOffsets(nextOffsets);
-    liveScrollOffset.current = nextOffsets[next];
-    setActiveScrollOffset(nextOffsets[next]);
+    if (next === tab) return;
+    scrollOffsets.current[tab] = liveScrollOffset.current;
+    liveScrollOffset.current = scrollOffsets.current[next];
     setTab(next);
   };
+  useLayoutEffect(() => {
+    scrollRef.current?.scrollTo({ y: scrollOffsets.current[tab], animated: false });
+  }, [tab]);
   const readScrollY = (
     event: NativeSyntheticEvent<NativeScrollEvent> | null | undefined,
   ): number | null => {
@@ -127,7 +135,7 @@ export function RankedScreen(props: RankedScreenProps) {
     const y = readScrollY(event);
     if (y === null) return;
     liveScrollOffset.current = y;
-    setScrollOffsets((current) => ({ ...current, [tab]: y }));
+    scrollOffsets.current[tab] = y;
   };
   const periods = useMemo(() => (props.data ? rankedPeriods(props.data) : []), [props.data]);
   const linkedPeriodIndex = periods.findIndex((period) =>
@@ -151,36 +159,32 @@ export function RankedScreen(props: RankedScreenProps) {
   if (!props.data) {
     return (
       <SafeAreaView style={[styles.fill, { backgroundColor: theme.background }]}>
-        <View style={styles.simpleAppBar}>
-          <HeaderIconButton
-            label={materialBackLabel(locale)}
-            onPress={props.onBack}
-            icon={<ArrowLeft color={theme.onSurface} />}
+        <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}>
+          <RankedHeader
+            {...props}
+            desktop={desktop}
+            top={insets.top}
+            onInfo={() => setInfo(true)}
+            onAccounts={() => setAccountPicker(true)}
+            onShare={() =>
+              void sharePageLink(
+                { kind: 'page', page: 'ranked', params: { player: props.player.tag } },
+                props.player.name,
+              )
+            }
           />
-          <CKText role="titleMedium" style={styles.simpleAppBarTitle} numberOfLines={1}>
-            {t('rankedLeagueTitle')}
-          </CKText>
-          {props.accounts.length > 1 ? (
-            <HeaderIconButton
-              label={t('upgradeTrackerSwitchAccount', { account: props.player.name })}
-              onPress={() => setAccountPicker(true)}
-              icon={<List color={theme.onSurface} />}
-            />
-          ) : (
-            <View style={styles.appBarSpacer} />
-          )}
-        </View>
-        <View style={styles.emptyBody}>
-          {props.loading ? (
-            <RankedSkeleton />
-          ) : (
-            <EmptyState
-              title={t('generalNoDataAvailable')}
-              actionLabel={t('sideRefresh')}
-              onAction={() => void props.onRefresh()}
-            />
-          )}
-        </View>
+          <View style={styles.emptyBody}>
+            {props.loading ? (
+              <RankedSkeleton />
+            ) : (
+              <EmptyState
+                title={t('generalNoDataAvailable')}
+                actionLabel={t('sideRefresh')}
+                onAction={() => void props.onRefresh()}
+              />
+            )}
+          </View>
+        </ScrollView>
         <AccountPicker
           visible={accountPicker}
           selected={props.player.tag}
@@ -236,10 +240,8 @@ export function RankedScreen(props: RankedScreenProps) {
       style={[styles.fill, { backgroundColor: theme.background }]}
     >
       <ScrollView
-        key={tab}
         testID={`ranked-scroll-${tab}`}
         ref={scrollRef}
-        contentOffset={{ x: 0, y: activeScrollOffset }}
         onScroll={(event) => {
           const y = readScrollY(event);
           if (y !== null) liveScrollOffset.current = y;
@@ -262,6 +264,12 @@ export function RankedScreen(props: RankedScreenProps) {
           top={insets.top}
           onInfo={() => setInfo(true)}
           onAccounts={() => setAccountPicker(true)}
+          onShare={() =>
+            void sharePageLink(
+              { kind: 'page', page: 'ranked', params: { player: props.player.tag, tab, mode } },
+              props.player.name,
+            ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')))
+          }
         />
         <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
           <ProfileTabs
@@ -298,7 +306,7 @@ export function RankedScreen(props: RankedScreenProps) {
           props.onSwitchPlayer(player);
         }}
       />
-      <SkeletonLoadingDialog visible={openingPlayer} />
+      <PageLoading visible={openingPlayer} kind="profile" />
     </SafeAreaView>
   );
 }
@@ -315,20 +323,23 @@ function RankedHeader({
   onToggleBookmark,
   onOpenInGame,
   onInfo,
+  onShare,
   onAccounts,
 }: RankedScreenProps & {
   desktop: boolean;
   top: number;
   onInfo: () => void;
+  onShare: () => void;
   onAccounts: () => void;
 }) {
   const { t, locale } = useI18n();
+  const theme = useCKTheme();
   const intlLocale = toIntlLocale(locale);
   const member = data?.currentMember;
   const attackCount = member ? member.attackWinCount + member.attackLoseCount : 0;
   const defenseCount = member ? member.defenseWinCount + member.defenseLoseCount : 0;
   const maxBattles = data?.currentMaxBattles;
-  const clanIdentity = rankedClanIdentity(player);
+  const clanIdentity = playerProfileClanIdentity(player);
   const canBookmark = !linked || bookmarked;
   const tile = (
     label: string,
@@ -336,58 +347,38 @@ function RankedHeader({
     imageUrl: string,
     subtitleIconUrl?: string,
   ) => (
-    <GlassSurface cornerRadius={ckRadius.tile} style={styles.headerMetric}>
+    <PillSurface style={styles.headerMetric}>
       <MobileWebImage imageUrl={imageUrl} style={styles.headerMetricImage} />
       <View style={styles.grow}>
-        <CKText role="labelSmall" style={styles.whiteSoft}>
+        <CKText role="labelSmall" muted>
           {label}
         </CKText>
         <View style={styles.headerMetricValue}>
           {subtitleIconUrl ? (
             <MobileWebImage imageUrl={subtitleIconUrl} style={styles.headerMetricSubtitleImage} />
           ) : null}
-          <CKText role="labelSmall" style={styles.whiteSoft}>
+          <CKText role="labelSmall" muted>
             {value}
           </CKText>
         </View>
       </View>
-    </GlassSurface>
+    </PillSurface>
   );
   const quick = (label: string, value: string | number, icon: ReactNode) => (
-    <GlassSurface
-      cornerRadius={ckRadius.pill}
-      style={styles.headerQuick}
-      accessibilityLabel={label}
-    >
-      {icon}
-      <CKText role="labelLarge" style={styles.white}>
-        {value}
-      </CKText>
-    </GlassSurface>
+    <ProfileStatChip label={label} value={value} iconElement={icon} />
   );
   return (
     <View testID="ranked-player-header" style={styles.rankedHeader}>
       <View style={styles.headerBackground}>
-        <MobileWebImage
-          testID="ranked-header-background"
-          imageUrl={ImageAssets.homeBaseBackground}
-          cachePolicy="disk"
-          contentFit="cover"
-          style={StyleSheet.absoluteFill}
-        />
-        <View
-          testID="ranked-header-scrim"
-          style={[StyleSheet.absoluteFill, { backgroundColor: colorWithAlpha('#000000', 0.5) }]}
-        />
+        <MobileWebImage testID="ranked-header-background" imageUrl={ImageAssets.homeBaseBackground} cachePolicy="disk" contentFit="cover" style={StyleSheet.absoluteFill} />
+        <View testID="ranked-header-scrim" pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
         <Svg pointerEvents="none" style={StyleSheet.absoluteFill} width="100%" height="100%">
-          <Defs>
-            <SvgLinearGradient id="ranked-hero-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
-              <Stop offset="0" stopColor="#000" stopOpacity={0.34} />
-              <Stop offset="0.6" stopColor="#000" stopOpacity={0.52} />
-              <Stop offset="0.84" stopColor="#000" stopOpacity={0.76} />
-              <Stop offset="1" stopColor="#000" stopOpacity={1} />
-            </SvgLinearGradient>
-          </Defs>
+          <Defs><SvgLinearGradient id="ranked-hero-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
+            <Stop offset="0" stopColor="#000" stopOpacity={0.34} />
+            <Stop offset="0.6" stopColor="#000" stopOpacity={0.52} />
+            <Stop offset="0.84" stopColor="#000" stopOpacity={0.76} />
+            <Stop offset="1" stopColor="#000" stopOpacity={1} />
+          </SvgLinearGradient></Defs>
           <Rect width="100%" height="100%" fill="url(#ranked-hero-scrim)" />
         </Svg>
         <View
@@ -399,25 +390,30 @@ function RankedHeader({
           ]}
         >
           <View style={styles.headerRow}>
-            <HeaderIconButton
+            <ProfileHeaderAction
               label={materialBackLabel(locale)}
               onPress={onBack}
               icon={<ArrowLeft color="#FFF" />}
             />
             <View style={styles.headerActions}>
-              <HeaderIconButton
+              <ProfileHeaderAction
+                label={t('gameAssetsShare')}
+                onPress={onShare}
+                icon={<Share2 color="#FFF" />}
+              />
+              <ProfileHeaderAction
                 label={t('playerOpenInGame')}
                 onPress={onOpenInGame}
                 icon={<ExternalLink color="#FFF" />}
               />
               {canBookmark ? (
-                <HeaderIconButton
+                <ProfileHeaderAction
                   label={bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
                   onPress={() => void onToggleBookmark()}
                   icon={bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
                 />
               ) : null}
-              <HeaderIconButton
+              <ProfileHeaderAction
                 label={t('rankedLeagueAbout')}
                 onPress={onInfo}
                 icon={<Info color="#FFF" />}
@@ -444,7 +440,7 @@ function RankedHeader({
               {data?.currentTier?.largeIconUrl ? (
                 <View style={styles.tierBadgeShell}>
                   <MobileWebImage
-                    imageUrl={data.currentTier.smallIconUrl || data.currentTier.largeIconUrl}
+                    imageUrl={data.currentTier.iconUrl}
                     style={styles.tierBadge}
                     contentFit="contain"
                   />
@@ -507,7 +503,7 @@ function RankedHeader({
                   data?.currentRank
                     ? `#${data.currentRank.toLocaleString(intlLocale)}`
                     : t('legendsNoRank'),
-                  <ChartLine size={19} color="#FFF" />,
+                  <ChartLine size={19} color={theme.onSurface} />,
                 )
               : null}
             {desktop
@@ -541,7 +537,7 @@ function RankedHeader({
               ? quick(
                   t('rankedLeagueGroupRanking'),
                   t('rankedLeaguePlayers', { count: data!.currentGroup!.members.length }),
-                  <UsersRound size={19} color="#FFF" />,
+                  <UsersRound size={19} color={theme.onSurface} />,
                 )
               : null}
           </View>
@@ -581,26 +577,19 @@ function PeriodPanel({
   onOpenPlayerTag: (tag: string) => Promise<void>;
   onJumpToPlayer: (target: View) => void;
 }) {
-  const { t } = useI18n();
+  const { t, isRtl } = useI18n();
   const theme = useCKTheme();
   return (
     <View style={styles.section}>
-      <ProfileTabs
-        variant="compact"
-        tabs={[
-          {
-            key: 'details',
-            label: t('generalDetails'),
-            icon: <Info size={18} color={theme.onSurfaceVariant} />,
-          },
-          {
-            key: 'ranking',
-            label: t('sideRankingsTitle'),
-            icon: <ChartLine size={18} color={theme.onSurfaceVariant} />,
-          },
+      <SlidingSegmentControl
+        value={mode}
+        options={[
+          { value: 'details', label: t('generalDetails') },
+          { value: 'ranking', label: t('sideRankingsTitle') },
         ]}
-        selectedKey={mode}
-        onSelect={(value) => onMode(value as 'details' | 'ranking')}
+        isRtl={isRtl}
+        onChange={onMode}
+        testID="ranked-mode-control"
       />
       <View style={styles.periodNav}>
         <Pressable disabled={index >= count - 1} onPress={onPrevious} style={styles.arrow}>
@@ -1279,12 +1268,17 @@ function MiniStat({ label, value }: { label: string; value: string | number }) {
 function RankedSkeleton() {
   return (
     <View style={styles.section}>
-      <Skeleton height={64} />
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <Skeleton height={44} />
+        <Skeleton height={44} />
+      </View>
+      <Skeleton width="65%" height={32} />
       <View style={styles.grid}>
-        <Skeleton height={160} />
+        <Skeleton height={100} radius={20} />
         <Skeleton height={160} />
       </View>
-      <Skeleton height={360} />
+      <Skeleton height={100} radius={20} />
+      <Skeleton height={70} radius={20} />
     </View>
   );
 }
@@ -1310,20 +1304,6 @@ function formatLongDate(date: Date, locale: string) {
     month: 'short',
     day: 'numeric',
   }).format(date);
-}
-
-function rankedClanIdentity(player: Player) {
-  const clan = player.clan;
-  if (typeof clan === 'object' && clan !== null) {
-    const record = clan as Record<string, unknown>;
-    const name = typeof record.name === 'string' ? record.name : '';
-    const badgeUrl = ImageAssets.clanBadgeForTag(typeof record.tag === 'string' ? record.tag : '');
-    if (name) return { name, badgeUrl };
-  }
-  return {
-    name: player.clanOverview.name,
-    badgeUrl: ImageAssets.clanBadgeForTag(player.clanOverview.tag),
-  };
 }
 
 const styles = StyleSheet.create({
@@ -1383,6 +1363,7 @@ const styles = StyleSheet.create({
   headerMetric: {
     width: 220,
     height: 64,
+    borderRadius: 16,
     paddingHorizontal: 10,
     paddingVertical: 8,
     flexDirection: 'row',
@@ -1392,13 +1373,6 @@ const styles = StyleSheet.create({
   headerMetricImage: { width: 34, height: 34 },
   headerMetricValue: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 },
   headerMetricSubtitleImage: { width: 14, height: 14 },
-  headerQuick: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
   headerQuickImage: { width: 19, height: 19 },
   content: { gap: 12, paddingTop: 12 },
   infoDialogTitle: { textAlign: 'center' },

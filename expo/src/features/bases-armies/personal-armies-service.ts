@@ -10,6 +10,10 @@ export interface PersonalArmiesServiceContract {
   load(): Promise<PersonalArmiesState>;
   save(shareCode: string): Promise<PersonalArmiesState>;
   remove(shareCode: string): Promise<PersonalArmiesState>;
+  update(
+    shareCode: string,
+    metadata: { name: string; notes: string | null },
+  ): Promise<PersonalArmiesState>;
 }
 
 export class PersonalArmiesService implements PersonalArmiesServiceContract {
@@ -37,6 +41,19 @@ export class PersonalArmiesService implements PersonalArmiesServiceContract {
         path: { shareCode },
         query: {},
         body: {},
+      }),
+    );
+  }
+
+  update(
+    shareCode: string,
+    metadata: { name: string; notes: string | null },
+  ): Promise<PersonalArmiesState> {
+    return Effect.runPromise(
+      this.api.execute(expoEndpoints.updatePersonalArmy, {
+        path: { shareCode },
+        query: {},
+        body: metadata,
       }),
     );
   }

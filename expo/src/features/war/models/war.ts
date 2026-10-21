@@ -170,6 +170,7 @@ export class WarInfo {
     readonly endTime: Date | null = null,
     readonly preparationStartTime: Date | null = null,
     readonly warType: string | null = null,
+    readonly battleModifier: string | null = null,
   ) {}
   static fromJson(value: unknown): WarInfo {
     try {
@@ -185,6 +186,7 @@ export class WarInfo {
         apiDate(json.endTime),
         apiDate(json.preparationStartTime),
         string(json.warType ?? json.type, 'unknown'),
+        json.battleModifier == null ? null : string(json.battleModifier),
       );
     } catch {
       return new WarInfo('unknown');
@@ -279,6 +281,7 @@ export class WarInfo {
       this.endTime,
       this.preparationStartTime,
       this.warType,
+      this.battleModifier,
     );
   }
 }

@@ -23,6 +23,7 @@ import {
   PlayerWarTab,
   TabState,
 } from './player-detail-components';
+import { LegendHistoryList } from '../../legends/presentation/legend-history';
 import { PlayerAchievementsTab } from './player-achievements-tab';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { PlayerBattlelogShareModal } from './player-battlelog-share';
@@ -39,14 +40,25 @@ export function PlayerDetailScreen({
   const theme = useCKTheme();
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
-  const tabs = useMemo(() => PLAYER_DETAIL_TABS, []);
+  const hasLegendHistory = !!model.legendHistory?.length;
+  // Availability comes from retained finishes, never from the player's current league.
+  const tabs = useMemo(
+    () => PLAYER_DETAIL_TABS.filter((item) => item.key !== 'legendHistory' || hasLegendHistory),
+    [hasLegendHistory],
+  );
   const link = useLinkParameters();
-  const initialTabKey = tabs.find((item) => item.key === (link.tab ?? initialTab))?.key ?? 'home';
-  const [tab, setTab] = useState<PlayerDetailTabKey>(initialTabKey);
+  const initialTabKey =
+    PLAYER_DETAIL_TABS.find((item) => item.key === (link.tab ?? initialTab))?.key ?? 'home';
+  const [requestedTab, setTab] = useState<PlayerDetailTabKey>(initialTabKey);
+  // Shared history links wait on availability without exposing an empty page option.
+  const tab = tabs.some((item) => item.key === requestedTab) ? requestedTab : 'home';
   const [retainedTabs, setRetainedTabs] = useState<readonly PlayerDetailTabKey[]>(() => [
+    'home',
     initialTabKey,
   ]);
   const [refreshing, setRefreshing] = useState(false);
+  const [visibleBattles, setVisibleBattles] = useState(20);
+  const [lootGridScrubbing, setLootGridScrubbing] = useState(false);
   const [battlelogShareVisible, setBattlelogShareVisible] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const scrollOffsets = useRef(new Map<PlayerDetailTabKey, number>());
@@ -82,6 +94,7 @@ export function PlayerDetailScreen({
   const selectTab = (next: PlayerDetailTabKey) => {
     const nextIndex = tabs.findIndex((item) => item.key === next);
     if (nextIndex < 0) return;
+    setLootGridScrubbing(false);
     setTab(next);
     setRetainedTabs((retained) => retainRecentSections(retained, next));
   };
@@ -100,11 +113,20 @@ export function PlayerDetailScreen({
       <ScrollView
         ref={scrollRef}
         testID="player-detail-scroll"
+        scrollEnabled={!(tab === 'battles' && lootGridScrubbing)}
         stickyHeaderIndices={[1]}
         scrollEventThrottle={100}
         onScroll={(event) => {
           const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
           scrollOffsets.current.set(tab, contentOffset.y);
+          if (
+            tab === 'battles' &&
+            contentSize.height - layoutMeasurement.height - contentOffset.y <= 500
+          ) {
+            const total =
+              model.battlelog?.forMode('farming').filter((entry) => entry.attack).length ?? 0;
+            setVisibleBattles((count) => Math.min(Math.max(count, total), count + 20));
+          }
           if (
             tab === 'joinLeave' &&
             contentSize.height - layoutMeasurement.height - contentOffset.y <= 500
@@ -162,7 +184,7 @@ export function PlayerDetailScreen({
                 style={item.key === tab ? undefined : styles.hiddenTab}
               >
                 <TabState model={model} tab={item.key} actions={actions}>
-                  {renderTab(item.key, model, actions)}
+                  {renderTab(item.key, model, actions, visibleBattles, setLootGridScrubbing)}
                 </TabState>
               </View>
             ) : null,
@@ -189,7 +211,7 @@ const PLAYER_DETAIL_PRELOAD_TABS: readonly PlayerDetailTabKey[] = [
 ];
 
 export function isPlayerDetailTabRefreshable(tab: PlayerDetailTabKey): boolean {
-  return tab === 'battles' || tab === 'history' || tab === 'cwl';
+  return tab === 'battles' || tab === 'history' || tab === 'cwl' || tab === 'legendHistory';
 }
 
 export function refreshPlayerDetailTab(
@@ -203,10 +225,25 @@ function renderTab(
   tab: PlayerDetailTabKey,
   model: PlayerDetailPresentationModel,
   actions: PlayerDetailPresentationActions,
+  visibleBattles: number,
+  onLootGridScrubChange: (active: boolean) => void,
 ) {
+  if (tab === 'legendHistory')
+    return (
+      <View style={styles.historyContent}>
+        <LegendHistoryList history={model.legendHistory ?? []} />
+      </View>
+    );
   if (tab === 'home') return <PlayerBaseTab player={model.player} village="home" />;
   if (tab === 'builder') return <PlayerBaseTab player={model.player} village="builder" />;
-  if (tab === 'battles') return <PlayerBattlelogTab data={model.battlelog} />;
+  if (tab === 'battles')
+    return (
+      <PlayerBattlelogTab
+        data={model.battlelog}
+        visibleCount={visibleBattles}
+        onLootGridScrubChange={onLootGridScrubChange}
+      />
+    );
   if (tab === 'history')
     return (
       <PlayerActivityTab
@@ -257,6 +294,8 @@ function tabIcon(
     );
   if (tab === 'battles')
     return <MobileWebImage imageUrl={ImageAssets.attacks} style={styles.tabImage} />;
+  if (tab === 'legendHistory')
+    return <MobileWebImage imageUrl={ImageAssets.legendLeagueOne} style={styles.tabImage} />;
   if (tab === 'history') return <History size={20} color={color} />;
   if (tab === 'war') return <MobileWebImage imageUrl={ImageAssets.war} style={styles.tabImage} />;
   if (tab === 'cwl')
@@ -279,5 +318,6 @@ const styles = StyleSheet.create({
   navigationContent: { width: '100%', maxWidth: 520, alignSelf: 'center' },
   tabImage: { width: 24, height: 24, resizeMode: 'contain' },
   tabBody: { minHeight: 360 },
+  historyContent: { padding: 16, maxWidth: 1120, width: '100%', alignSelf: 'center' },
   hiddenTab: { display: 'none' },
 });

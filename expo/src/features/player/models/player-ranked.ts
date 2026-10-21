@@ -10,6 +10,7 @@ import {
   type JsonRecord,
 } from './parsing';
 import { canonicalTag } from '../../../core/domain/tags';
+import { ImageAssets } from '../../../core/assets/image-assets';
 
 export class RankedLeagueTier {
   constructor(
@@ -18,6 +19,12 @@ export class RankedLeagueTier {
     readonly smallIconUrl: string,
     readonly largeIconUrl: string,
   ) {}
+  get iconUrl(): string {
+    // Small official icons omit the tier plaque. Use our full league artwork
+    // consistently so numbered tiers remain visible on cards and detail pages.
+    const fullBadge = ImageAssets.getLeagueImage(this.name);
+    return fullBadge !== ImageAssets.defaultImage ? fullBadge : this.largeIconUrl || this.smallIconUrl;
+  }
   static fromJson(json: JsonRecord) {
     const icons = record(json.iconUrls);
     return new RankedLeagueTier(

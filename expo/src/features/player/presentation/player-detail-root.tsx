@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View } from 'react-native';
 
 import type {
   PlayerActivityFeed,
   PlayerBattlelogData,
   PlayerCwlHistory,
+  PlayerLegendHistoryEntry,
   PlayerJoinLeavePage,
   PlayerJoinLeaveTotal,
   PlayerHistoryTypeValue,
@@ -12,6 +14,8 @@ import type {
 } from '../models';
 import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { canonicalTag } from '../../../core/domain/tags';
+import { ClashHandoffDialog } from '../../../ui';
+import { useClashGameHandoff } from '../../../ui/use-clash-game-handoff';
 import type {
   PlayerDetailPresentationActions,
   PlayerDetailRootProps,
@@ -37,11 +41,15 @@ function PlayerDetailRootState({
   initialTab,
 }: PlayerDetailRootProps) {
   const [battlelog, setBattlelog] = useState<PlayerBattlelogData | null>(null);
+  const [legendHistory, setLegendHistory] = useState<readonly PlayerLegendHistoryEntry[] | null>(
+    null,
+  );
   const [activity, setActivity] = useState<PlayerActivityFeed | null>(null);
   const [cwlHistory, setCwlHistory] = useState<PlayerCwlHistory | null>(null);
   const [warStats, setWarStats] = useState<PlayerWarStats | null>(player.warStats);
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const [cachedClanTag, setCachedClanTag] = useState<string | null>(null);
+  const handoff = useClashGameHandoff(externalActions.openInGame);
   const [joinLeave, setJoinLeave] = useState<PlayerJoinLeavePage | null>(null);
   const [joinLeaveTotals, setJoinLeaveTotals] = useState<readonly PlayerJoinLeaveTotal[] | null>(
     null,
@@ -68,6 +76,8 @@ function PlayerDetailRootState({
         if (tab === 'battles') setBattlelog(await service.loadPlayerBattlelog(player.tag, force));
         else if (tab === 'history')
           setActivity(await service.loadPlayerActivity(player.tag, activityTypeRef.current, force));
+        else if (tab === 'legendHistory')
+          setLegendHistory(await service.loadPlayerLegendHistory(player.tag));
         else if (tab === 'cwl')
           setCwlHistory(await service.loadPlayerCwlHistory(player.tag, force));
         else if (tab === 'war')
@@ -113,7 +123,8 @@ function PlayerDetailRootState({
     // Flutter keeps each profile page attached, so its stateful history tabs
     // begin loading as soon as the player opens. Warm the equivalent Expo
     // datasets here so switching destinations never starts a cold request.
-    for (const tab of ['battles', 'history', 'cwl', 'joinLeave'] as const) void loadTab(tab);
+    for (const tab of ['legendHistory', 'battles', 'history', 'cwl', 'joinLeave'] as const)
+      void loadTab(tab);
   }, [loadTab]);
 
   useEffect(() => {
@@ -201,6 +212,7 @@ function PlayerDetailRootState({
   const actions = useMemo<PlayerDetailPresentationActions>(
     () => ({
       ...externalActions,
+      openInGame: handoff.request,
       toggleBookmark: async (nextPlayer) => {
         const previous = isBookmarked;
         setIsBookmarked(!previous);
@@ -216,12 +228,18 @@ function PlayerDetailRootState({
       loadMoreJoinLeave,
       updateWarFilter,
       exportWarStats: (filter) =>
-        exportPlayerWarStats((body) => service.downloadWarStatsExport(body), player.tag, player.name, filter),
+        exportPlayerWarStats(
+          (body) => service.downloadWarStatsExport(body),
+          player.tag,
+          player.name,
+          filter,
+        ),
       loadWarFilterPresets: () => service.loadWarFilterPresets(),
       saveWarFilterPresets: (presets) => service.saveWarFilterPresets(presets),
     }),
     [
       externalActions,
+      handoff.request,
       isBookmarked,
       loadActivity,
       loadMoreJoinLeave,
@@ -234,26 +252,35 @@ function PlayerDetailRootState({
   );
 
   return (
-    <PlayerDetailScreen
-      initialTab={initialTab}
-      actions={actions}
-      model={{
-        player,
-        bookmarked: isBookmarked,
-        linkedAccount,
-        verifiedTracking,
-        battlelog,
-        activity,
-        cwlHistory,
-        warStats,
-        currentWar,
-        currentCwl,
-        cachedClanTag,
-        joinLeave,
-        joinLeaveTotals,
-        loadingTabs,
-        errorByTab,
-      }}
-    />
+    <View style={{ flex: 1 }}>
+      <PlayerDetailScreen
+        initialTab={initialTab}
+        actions={actions}
+        model={{
+          player,
+          bookmarked: isBookmarked,
+          linkedAccount,
+          verifiedTracking,
+          battlelog,
+          activity,
+          cwlHistory,
+          legendHistory,
+          warStats,
+          currentWar,
+          currentCwl,
+          cachedClanTag,
+          joinLeave,
+          joinLeaveTotals,
+          loadingTabs,
+          errorByTab,
+        }}
+      />
+      <ClashHandoffDialog
+        visible={handoff.visible}
+        onCancel={handoff.cancel}
+        onConfirm={handoff.confirm}
+        allowRemember
+      />
+    </View>
   );
 }

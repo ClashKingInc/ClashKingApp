@@ -1,5 +1,6 @@
 import {
   StoredCwlGroupEndpoint,
+  ClanWarsEndpoint,
   WarBasicEndpoint,
   WarPreviousEndpoint,
 } from '@clashking/api-contracts/expo';
@@ -40,6 +41,8 @@ interface InFlightWarLoad {
 export class WarCwlService {
   readonly summaries = new Map<string, WarCwl>();
   private readonly inFlightLoads = new Map<string, InFlightWarLoad>();
+  private readonly loadedAt = new Map<string, number>();
+  private readonly clanLoads = new Map<string, Promise<WarCwl>>();
   private readonly latestRequestByTag = new Map<string, number>();
   private readonly listeners = new Set<() => void>();
   private readonly detailSnapshots = new Map<string, WarCwl>();
@@ -63,9 +66,12 @@ export class WarCwlService {
 
   loadAllWarData(
     clanTags: readonly string[],
-    options: { notify?: boolean; throwOnError?: boolean } = {},
+    options: { notify?: boolean; throwOnError?: boolean; maxAgeMs?: number } = {},
   ): Promise<void> {
-    const tags = normalizeTags(clanTags);
+    const tags = normalizeTags(clanTags).filter((tag) => {
+      const age = Date.now() - (this.loadedAt.get(tag) ?? -Infinity);
+      return !this.summaries.has(tag) || age < 0 || age >= (options.maxAgeMs ?? 0);
+    });
     if (!tags.length) return Promise.resolve();
     const notify = options.notify ?? true;
     const throwOnError = options.throwOnError ?? false;
@@ -81,6 +87,7 @@ export class WarCwlService {
     let load!: InFlightWarLoad;
     const future = this.loadWarData(tags, requestId)
       .then((outcome) => {
+        if (!outcome.errors.length) for (const tag of tags) this.loadedAt.set(tag, Date.now());
         if (outcome.changed && load.shouldNotify) this.notify();
         return outcome;
       })
@@ -110,6 +117,35 @@ export class WarCwlService {
 
   notifyDataChanged(): void {
     this.notify();
+  }
+
+  static async fetchScoutingWars(
+    api: ContractApiService,
+    tag: string,
+    before: Date,
+    type: string,
+  ): Promise<readonly WarInfo[]> {
+    const response = await Effect.runPromise(
+      api.execute(ClanWarsEndpoint, {
+        path: { clanTag: tag },
+        query: { type, limit: 10, 'time[before]': before.toISOString() },
+        body: {},
+      }),
+    );
+    // The query bounds scouting to wars before this matchup, even when viewing
+    // an archive. Never leak later results into historical opponent scouting.
+    return records(response.items)
+      .map((item) => WarInfo.fromJson({ ...item, warType: type }))
+      .filter(
+        (war) =>
+          war.state === 'warEnded' &&
+          war.endTime &&
+          war.endTime < before &&
+          (war.clan?.tag === tag || war.opponent?.tag === tag),
+      )
+      .sort((a, b) => b.endTime!.getTime() - a.endTime!.getTime())
+      .slice(0, 10)
+      .map((war) => war.reorderForClan(tag));
   }
 
   static async fetchWarDataFromTime(
@@ -155,6 +191,10 @@ export class WarCwlService {
   }
 
   private async fetchCwlDetail(tag: string, season: string): Promise<WarCwl> {
+    // The live endpoint only knows this month's group. Archived seasons must
+    // go directly to their exact stored group, never through today's CWL first.
+    if (season !== new Date().toISOString().slice(0, 7))
+      return (await this.loadLinkedCwl(tag, season)).summary;
     const response = await Effect.runPromise(
       this.api.executeStatus(ProxyCurrentLeagueGroupEndpoint, {
         path: { clanTag: tag },
@@ -181,8 +221,9 @@ export class WarCwlService {
       const batch = await Promise.all(
         tags.slice(index, index + 8).map((warTag) => this.fetchCwlWar(warTag)),
       );
-      if (batch.some((war) => !war || !isFullWar(war))) throw new Error('CWL round unavailable');
-      wars.push(...(batch as WarInfo[]));
+      // Keep readable matchups if one live war has expired or is unavailable.
+      // Original group tags remain intact, so coverage gates ranks and forecasts.
+      wars.push(...batch.filter((war): war is WarInfo => !!war && isFullWar(war)));
     }
     return new WarCwl(
       tag,
@@ -213,7 +254,12 @@ export class WarCwlService {
     }
     if (!response.ok) throw new Error('Requested CWL season unavailable');
     const group = response.value;
-    if (season && string(group.season) !== season)
+    if (
+      season &&
+      (season.length === 7
+        ? string(group.season).slice(0, 7) !== season
+        : string(group.season) !== season)
+    )
       throw new Error('Requested CWL season unavailable');
     const wars: WarInfo[] = [];
     const rounds = records(group.rounds).map((round) => ({
@@ -223,10 +269,9 @@ export class WarCwlService {
         return string(item.tag);
       }),
     }));
-    const missingTags = [...new Set(rounds.flatMap((round) => round.warTags))].filter(
-      (warTag) => warTag && warTag !== '#0' && !wars.some((war) => war.tag === warTag),
-    );
-    if (missingTags.length) throw new Error('Stored CWL round unavailable');
+    // A stored group can outlive individual war archives. Preserve every tag
+    // so the screen can report coverage, but never discard the available wars
+    // or invent zero-score matches to make an incomplete group look complete.
     const summary = new WarCwl(
       tag,
       false,
@@ -274,7 +319,17 @@ export class WarCwlService {
     };
   }
 
-  private async resolveCurrentWar(clanTag: string): Promise<WarCwl> {
+  private resolveCurrentWar(clanTag: string): Promise<WarCwl> {
+    const pending = this.clanLoads.get(clanTag);
+    if (pending) return pending;
+    const load = this.fetchCurrentWar(clanTag).finally(() => {
+      if (this.clanLoads.get(clanTag) === load) this.clanLoads.delete(clanTag);
+    });
+    this.clanLoads.set(clanTag, load);
+    return load;
+  }
+
+  private async fetchCurrentWar(clanTag: string): Promise<WarCwl> {
     const response = await Effect.runPromise(
       this.api.executeStatus(WarBasicEndpoint, { path: { clanTag }, query: {}, body: {} }),
     );
@@ -307,7 +362,7 @@ export class WarCwlService {
       ...(opponentTag && opponent.publicWarLog !== false ? [opponentTag] : []),
     ];
     for (const candidate of candidates) {
-      const war = await this.fetchRegularWar(candidate);
+      const war = await this.fetchRegularWar(candidate, string(basic.type));
       if (war && isFullWar(war)) return regularResult(clanTag, war.reorderForClan(clanTag));
     }
     return privateResult(clanTag);
@@ -322,12 +377,12 @@ export class WarCwlService {
     return regular?.state === 'accessDenied' ? privateResult(clanTag) : notInWarResult(clanTag);
   }
 
-  private async fetchRegularWar(clanTag: string): Promise<WarInfo | null> {
+  private async fetchRegularWar(clanTag: string, warType?: string): Promise<WarInfo | null> {
     const response = await Effect.runPromise(
       this.api.executeStatus(ProxyCurrentWarEndpoint, { path: { clanTag }, query: {}, body: {} }),
     );
     if (!response.ok) return response.status === 403 ? new WarInfo('accessDenied') : null;
-    return WarInfo.fromJson(response.value);
+    return WarInfo.fromJson({ ...response.value, ...(warType ? { warType } : {}) });
   }
 
   private async loadCwl(clanTag: string, preferredWarTag?: string | null): Promise<WarCwl | null> {

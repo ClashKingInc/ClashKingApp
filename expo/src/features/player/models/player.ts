@@ -29,6 +29,13 @@ import { PlayerRankings } from './player-ranked';
 import { PlayerWarStats, WarInfoSnapshot } from './player-war';
 
 export class Player {
+  leagueTierId: number;
+  get isLegendLeague() {
+    // Only Legend I uses the daily Legend format; Legend II/III are weekly Ranked.
+    return (
+      this.leagueTierId === 105000036 || (!this.leagueTierId && this.league === 'Legend League')
+    );
+  }
   name: string;
   tag: string;
   townHallLevel: number;
@@ -105,6 +112,7 @@ export class Player {
     donationsReceived: number;
     clanCapitalContributions: number;
     league: string;
+    leagueTierId?: number;
     townHallPic: string;
     builderHallPic: string;
     leagueUrl: string;
@@ -143,6 +151,7 @@ export class Player {
     this.donationsReceived = input.donationsReceived;
     this.clanCapitalContributions = input.clanCapitalContributions;
     this.league = input.league;
+    this.leagueTierId = input.leagueTierId ?? 0;
     this.townHallPic = input.townHallPic;
     this.builderHallPic = input.builderHallPic;
     this.leagueUrl = input.leagueUrl;
@@ -219,7 +228,7 @@ export class Player {
   }
   getTodoProgressMetrics(memberCwl: WarMemberPresenceLike, now = new Date()): TodoProgressMetric[] {
     const metrics: TodoProgressMetric[] = [];
-    if (this.league === 'Legend League' && this.currentLegendSeason?.currentDay)
+    if (this.isLegendLeague && this.currentLegendSeason?.currentDay)
       metrics.push(
         new TodoProgressMetric(
           'legend_attacks',
@@ -307,6 +316,7 @@ export class Player {
         donationsReceived: intString(json.donationsReceived),
         clanCapitalContributions: intString(json.clanCapitalContributions),
         league: string(league.name, 'Unranked'),
+        leagueTierId: int(league.id),
         townHallPic: ImageAssets.townHall(int(json.townHallLevel)),
         builderHallPic: ImageAssets.builderHall(int(json.builderHallLevel)),
         leagueUrl: ImageAssets.getLeagueImage(string(league.name, 'Unranked')),

@@ -8,6 +8,7 @@ import {
   PlayerCwlHistoryEndpoint,
   PlayerJoinLeaveEndpoint,
   PlayerJoinLeaveTotalsEndpoint,
+  PlayerLastActivityEndpoint,
   PlayerLeagueHistoryEndpoint,
   PlayerSearchEndpoint,
   PlayerTimersEndpoint,
@@ -78,12 +79,18 @@ export class PlayerService {
   private disposed = false;
   private readonly listeners = new Set<() => void>();
   private readonly officialLoads = new Map<string, Promise<Player>>();
+  private readonly profileJsonLoads = new Map<string, Promise<JsonRecord>>();
+  private readonly profileJsonCache = new Map<string, { value: JsonRecord; at: number }>();
   private readonly battlelogCache = new Map<string, PlayerBattlelogData>();
+  private readonly battlelogLoads = new Map<string, Promise<PlayerBattlelogData>>();
   private readonly activityCache = new Map<string, PlayerActivityFeed>();
   private readonly cwlCache = new Map<string, PlayerCwlHistory>();
   private readonly cwlLoads = new Map<string, Promise<PlayerCwlHistory>>();
   private readonly rankedCache = new Map<string, RankedLeagueData>();
   private readonly rankedLoads = new Map<string, Promise<RankedLeagueData>>();
+  private readonly rankedCacheTimes = new Map<string, number>();
+  private readonly rankedGroupLoads = new Map<string, Promise<JsonRecord | null>>();
+  private readonly rankedGroupCache = new Map<string, { value: JsonRecord | null; at: number }>();
   private readonly legendBattlelogCache = new Map<string, PlayerLegendBattlelog | null>();
   private readonly legendBattlelogLoads = new Map<string, Promise<PlayerLegendBattlelog | null>>();
   private readonly legendLeagueCache = new Map<string, PlayerLegendLeagueData>();
@@ -169,6 +176,7 @@ export class PlayerService {
       notify?: boolean;
       throwOnError?: boolean;
       extraHeaders?: Readonly<Record<string, string>>;
+      forceRefresh?: boolean;
     } = {},
   ): Promise<Record<string, string>> {
     this.loading = true;
@@ -179,7 +187,11 @@ export class PlayerService {
       const normalized = uniqueTags(tags);
       const loaded = await mapWithConcurrencyLimit(normalized, async (tag) => {
         try {
-          const player = await this.fetchOfficialPlayer(tag, options.extraHeaders);
+          const player = await this.fetchOfficialPlayer(
+            tag,
+            options.extraHeaders,
+            options.forceRefresh,
+          );
           if (player.clanOverview.tag) {
             clanTags[player.tag] = player.clanOverview.tag;
             await this.storage?.setString(
@@ -210,32 +222,113 @@ export class PlayerService {
       if (options.notify ?? true) this.notify();
     }
   }
-  private fetchOfficialPlayer(tag: string, headers?: Readonly<Record<string, string>>) {
-    const key = `${tag}|${headers?.['x-ck-user-id'] ?? ''}`,
+  private fetchOfficialPlayer(
+    tag: string,
+    headers?: Readonly<Record<string, string>>,
+    forceRefresh = false,
+  ) {
+    const key = `${tag}|${JSON.stringify(Object.entries(headers ?? {}).sort())}`,
       existing = this.officialLoads.get(key);
     if (existing) return existing;
-    const load = this.fetchOfficialPlayerOnce(tag, headers).finally(() => {
+    const load = this.fetchOfficialPlayerOnce(tag, headers, forceRefresh).finally(() => {
       if (this.officialLoads.get(key) === load) this.officialLoads.delete(key);
     });
     this.officialLoads.set(key, load);
     return load;
   }
-  private async fetchOfficialPlayerOnce(tag: string, headers?: Readonly<Record<string, string>>) {
-    const json = await Effect.runPromise(
+  private loadProfileJson(
+    tag: string,
+    headers?: Readonly<Record<string, string>>,
+    forceRefresh = false,
+  ): Promise<JsonRecord> {
+    const key = `${tag}|${JSON.stringify(Object.entries(headers ?? {}).sort())}`;
+    const pending = this.profileJsonLoads.get(key);
+    if (pending) return pending;
+    const cached = this.profileJsonCache.get(key);
+    const age = cached ? Date.now() - cached.at : Infinity;
+    if (!forceRefresh && cached && age >= 0 && age < 30_000) return Promise.resolve(cached.value);
+    const generation = this.rankedGeneration;
+    const load = Effect.runPromise(
       this.api.execute(
         ProxyPlayerEndpoint,
         { path: { playerTag: tag }, query: {}, body: {} },
         { headers },
       ),
-    );
+    )
+      .then((json) => {
+        if (!string(json.tag) || canonicalTag(string(json.tag)) !== canonicalTag(tag))
+          throw new TypeError('Official player response omitted or mismatched the player tag.');
+        if (generation === this.rankedGeneration) {
+          // Bound caches for long-running browsing sessions. Never persist credentials.
+          if (this.profileJsonCache.size >= 200)
+            this.profileJsonCache.delete(this.profileJsonCache.keys().next().value!);
+          this.profileJsonCache.set(key, { value: json, at: Date.now() });
+          if (!headers)
+            void this.storage
+              ?.setString(
+                `rankedHint:v1:${tag}`,
+                JSON.stringify({
+                  at: Date.now(),
+                  group: json.currentLeagueGroupTag,
+                  season: json.currentLeagueSeasonId,
+                }),
+              )
+              .catch(() => undefined);
+        }
+        return json;
+      })
+      .finally(() => {
+        if (this.profileJsonLoads.get(key) === load) this.profileJsonLoads.delete(key);
+      });
+    this.profileJsonLoads.set(key, load);
+    return load;
+  }
+  private async fetchOfficialPlayerOnce(
+    tag: string,
+    headers?: Readonly<Record<string, string>>,
+    forceRefresh = false,
+  ) {
+    const json = await this.loadProfileJson(tag, headers, forceRefresh);
     const responseTag = string(json.tag);
     if (!responseTag || canonicalTag(responseTag) !== canonicalTag(tag))
       throw new TypeError('Official player response omitted or mismatched the player tag.');
-    return Player.fromJson(json);
+    const player = Player.fromJson(json);
+    try {
+      const activity = await Effect.runPromise(
+        this.api.execute(
+          PlayerLastActivityEndpoint,
+          {
+            path: { playerTag: tag },
+            query: {},
+            body: {},
+          },
+          { headers },
+        ),
+      );
+      if (activity.lastObservedAt) {
+        const observedAt = new Date(activity.lastObservedAt);
+        if (Number.isFinite(observedAt.getTime())) player.lastOnline = observedAt;
+      }
+    } catch {
+      // Official player details remain usable when tracked activity is unavailable.
+    }
+    return player;
   }
   async loadPlayerBattlelog(rawTag: string, forceRefresh = false) {
     const tag = canonicalTag(rawTag);
     if (!forceRefresh && this.battlelogCache.has(tag)) return this.battlelogCache.get(tag)!;
+    const pending = this.battlelogLoads.get(tag);
+    if (pending) return pending;
+    const load = this.fetchPlayerBattlelog(tag);
+    this.battlelogLoads.set(tag, load);
+    try {
+      return await load;
+    } finally {
+      if (this.battlelogLoads.get(tag) === load) this.battlelogLoads.delete(tag);
+    }
+  }
+
+  private async fetchPlayerBattlelog(tag: string) {
     let official: PlayerBattlelogEntry[] = [],
       history: PlayerBattlelogEntry[] = [],
       officialError: unknown = null,
@@ -260,7 +353,9 @@ export class PlayerService {
           const json = await Effect.runPromise(
             this.api.execute(PlayerBattlelogHistoryEndpoint, {
               path: { playerTag: tag },
-              query: {},
+              query: {
+                'time[after]': new Date(Date.now() - 179 * 86_400_000).toISOString().slice(0, 10),
+              },
               body: {},
             }),
           );
@@ -299,6 +394,21 @@ export class PlayerService {
     this.activityCache.set(key, result);
     return result;
   }
+  async loadPlayerLegendHistory(rawTag: string): Promise<readonly PlayerLegendHistoryEntry[]> {
+    // Finished seasons belong to the player even after they leave Legend League.
+    // Do not gate this request on their current league or substitute current-season data.
+    const response = await Effect.runPromise(
+      this.api.execute(PlayerLeagueHistoryEndpoint, {
+        path: { playerTag: canonicalTag(rawTag) },
+        query: {},
+        body: {},
+      }),
+    );
+    return records(response.items)
+      .filter((item) => string(item.mode) === 'legend')
+      .map(PlayerLegendHistoryEntry.fromJson);
+  }
+
   loadPlayerCwlHistory(rawTag: string, forceRefresh = false) {
     const tag = canonicalTag(rawTag);
     if (!forceRefresh) {
@@ -388,6 +498,12 @@ export class PlayerService {
     return (await this.storage?.getString(playerClanTagStorageKey(canonicalTag(rawTag)))) ?? '';
   }
   clearRankedLeagueCache() {
+    this.profileJsonCache.clear();
+    this.profileJsonLoads.clear();
+    this.officialLoads.clear();
+    this.rankedCacheTimes.clear();
+    this.rankedGroupLoads.clear();
+    this.rankedGroupCache.clear();
     this.rankedCache.clear();
     this.rankedLoads.clear();
     this.legendBattlelogCache.clear();
@@ -466,61 +582,79 @@ export class PlayerService {
     const seriesToday = currentLegendDay();
     const seriesStart = new Date(`${seriesToday}T00:00:00.000Z`);
     seriesStart.setUTCDate(seriesStart.getUTCDate() - 27);
-    const [player, historySource, currentDaySource, historicalRankSource, recentDaysSource, seasonSource, comparisonsSource] =
-      await Promise.all([
-        baseline
-          ? Promise.resolve(null)
-          : Effect.runPromise(
-              this.api.execute(ProxyPlayerEndpoint, {
-                path: { playerTag: tag },
-                query: {},
-                body: {},
-              }),
-            ),
-        legendSource(
-          Effect.runPromise(
-            this.api.execute(PlayerLeagueHistoryEndpoint, {
+    const [
+      player,
+      historySource,
+      currentDaySource,
+      historicalRankSource,
+      recentDaysSource,
+      seasonSource,
+      comparisonsSource,
+    ] = await Promise.all([
+      baseline
+        ? Promise.resolve(null)
+        : Effect.runPromise(
+            this.api.execute(ProxyPlayerEndpoint, {
               path: { playerTag: tag },
               query: {},
               body: {},
             }),
           ),
-          null,
+      legendSource(
+        Effect.runPromise(
+          this.api.execute(PlayerLeagueHistoryEndpoint, {
+            path: { playerTag: tag },
+            query: {},
+            body: {},
+          }),
         ),
-        legendSource(
-          this.loadLegendBattlelog(tag, day, forceRefresh),
-          baseline?.currentDay ?? null,
+        null,
+      ),
+      legendSource(this.loadLegendBattlelog(tag, day, forceRefresh), baseline?.currentDay ?? null),
+      legendSource(
+        Effect.runPromise(
+          this.api.execute(LegendHistoricalRanksEndpoint, {
+            path: {},
+            query: {},
+            body: { day, tags: [tag] },
+          }),
         ),
-        legendSource(
-          Effect.runPromise(
-            this.api.execute(LegendHistoricalRanksEndpoint, {
-              path: {},
-              query: {},
-              body: { day, tags: [tag] },
-            }),
-          ),
-          null,
+        null,
+      ),
+      legendSource(
+        Effect.runPromise(
+          this.api.execute(expoEndpoints.legendPlayerDailySeries, {
+            path: { playerTag: tag },
+            query: {
+              'time[after]': seriesStart.toISOString().slice(0, 10),
+              'time[before]': seriesToday,
+            },
+            body: {},
+          }),
         ),
-        legendSource(
-          Effect.runPromise(
-            this.api.execute(expoEndpoints.legendPlayerDailySeries, {
-              path: { playerTag: tag },
-              query: {
-                'time[after]': seriesStart.toISOString().slice(0, 10),
-                'time[before]': seriesToday,
-              },
-              body: {},
-            }),
-          ),
-          null,
+        null,
+      ),
+      legendSource(
+        Effect.runPromise(
+          this.api.execute(expoEndpoints.legendPlayerSeason, {
+            path: { playerTag: tag },
+            query: {},
+            body: {},
+          }),
         ),
-        legendSource(Effect.runPromise(this.api.execute(expoEndpoints.legendPlayerSeason, {
-          path: { playerTag: tag }, query: {}, body: {},
-        })), null),
-        legendSource(Effect.runPromise(this.api.execute(expoEndpoints.legendPlayerComparisons, {
-          path: { playerTag: tag }, query: {}, body: {},
-        })), null),
-      ]);
+        null,
+      ),
+      legendSource(
+        Effect.runPromise(
+          this.api.execute(expoEndpoints.legendPlayerComparisons, {
+            path: { playerTag: tag },
+            query: {},
+            body: {},
+          }),
+        ),
+        null,
+      ),
+    ]);
     const historyResponse = historySource.value;
     const currentDay = currentDaySource.value;
     const historicalRankResponse = historicalRankSource.value;
@@ -568,7 +702,8 @@ export class PlayerService {
         baseline.history.length ||
         baseline.currentRank ||
         baseline.historicalRank ||
-        baseline.recentDays.length || baseline.seasonStats),
+        baseline.recentDays.length ||
+        baseline.seasonStats),
     );
     if (!anyLegendSourceAvailable && !hasStoredLegendData) {
       throw new Error('Legend League data is temporarily unavailable.');
@@ -591,7 +726,12 @@ export class PlayerService {
       baseline?.historicalRank ??
       null;
     const season = seasonSource.value;
-    const seasonStart = season?.seasonStart.slice(0, 10) ?? currentLegendSeasonStart(history.map(entry => entry.season), seriesToday);
+    const seasonStart =
+      season?.seasonStart.slice(0, 10) ??
+      currentLegendSeasonStart(
+        history.map((entry) => entry.season),
+        seriesToday,
+      );
     const opponentRanks = new Map(
       records(currentRankResponse?.items)
         .map(PlayerLegendRank.fromJson)
@@ -634,37 +774,48 @@ export class PlayerService {
       currentRank,
       historicalRank,
       recentDays
-        ? records(recentDays.items).map(PlayerLegendDaySummary.fromJson).filter(value => seasonStart === null || value.day >= seasonStart)
+        ? records(recentDays.items)
+            .map(PlayerLegendDaySummary.fromJson)
+            .filter((value) => seasonStart === null || value.day >= seasonStart)
         : (baseline?.recentDays ?? []),
       season?.armyShareCodes ?? baseline?.seasonArmyShareCodes ?? [],
       season?.seasonStart ?? baseline?.seasonStart ?? null,
       season?.seasonEnd ?? baseline?.seasonEnd ?? null,
       season?.stats ?? baseline?.seasonStats ?? null,
       comparisonsSource.value?.items ?? baseline?.comparisons ?? [],
-      comparisonsSource.value?.army ?? baseline?.armyComparison ?? null,
+      season ?? baseline?.posterSeason ?? null,
     );
   }
   async prefetchRankedLeagueData(tags: Iterable<string>, forceRefresh = false) {
     await mapWithConcurrencyLimit(uniqueTags(tags), async (tag) => {
       try {
-        await this.loadRankedLeagueData(tag, forceRefresh);
+        await this.loadRankedLeagueData(tag, forceRefresh, false, 'home');
       } catch {
         return;
       }
     });
   }
-  async loadRankedLeagueData(rawTag: string, forceRefresh = false, notifyOnChange = false) {
+  async loadRankedLeagueData(
+    rawTag: string,
+    forceRefresh = false,
+    notifyOnChange = false,
+    scope: 'home' | 'detail' = 'detail',
+  ) {
     const tag = canonicalTag(rawTag);
-    if (!forceRefresh && this.rankedCache.has(tag)) return this.rankedCache.get(tag)!;
-    const pending = this.rankedLoads.get(tag);
+    const key = `${tag}:${scope}`;
+    const age = Date.now() - (this.rankedCacheTimes.get(key) ?? -Infinity);
+    if (!forceRefresh && age >= 0 && age < 60_000 && this.rankedCache.has(key))
+      return this.rankedCache.get(key)!;
+    const pending = this.rankedLoads.get(key);
     if (pending) return pending;
     const generation = this.rankedGeneration,
-      load = this.fetchRankedLeagueData(tag);
-    this.rankedLoads.set(tag, load);
+      load = this.fetchRankedLeagueData(tag, scope, forceRefresh);
+    this.rankedLoads.set(key, load);
     try {
       const data = await load;
       if (generation === this.rankedGeneration) {
-        this.rankedCache.set(tag, data);
+        this.rankedCache.set(key, data);
+        this.rankedCacheTimes.set(key, Date.now());
         // Flutter recomputes its mounted Home Ranked card after returning from
         // detail. Detail owners opt into this notification; background Home
         // loads do not, preventing their own subscription from reloading.
@@ -672,13 +823,77 @@ export class PlayerService {
       }
       return data;
     } finally {
-      if (this.rankedLoads.get(tag) === load) this.rankedLoads.delete(tag);
+      if (this.rankedLoads.get(key) === load) this.rankedLoads.delete(key);
     }
   }
-  private async fetchRankedLeagueData(tag: string) {
-    const player = await Effect.runPromise(
-        this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
+  private loadRankedGroup(
+    tag: string,
+    group: string | null,
+    season: number,
+    force: boolean,
+  ): Promise<JsonRecord | null> {
+    if (!group || season <= 0) return Promise.resolve(null);
+    const key = `${tag}:${group}:${season}`;
+    const pending = this.rankedGroupLoads.get(key);
+    if (pending) return pending;
+    const cached = this.rankedGroupCache.get(key);
+    const age = cached ? Date.now() - cached.at : Infinity;
+    if (!force && cached && age >= 0 && age < 60_000) return Promise.resolve(cached.value);
+    const generation = this.rankedGeneration;
+    const load = optionalApiResponse(
+      Effect.runPromise(
+        this.api.execute(ProxyLeagueGroupEndpoint, {
+          path: { leagueGroupTag: group, seasonId: season },
+          query: { playerTag: tag },
+          body: {},
+        }),
       ),
+    )
+      .then((value) => {
+        if (generation === this.rankedGeneration) {
+          if (this.rankedGroupCache.size >= 200)
+            this.rankedGroupCache.delete(this.rankedGroupCache.keys().next().value!);
+          this.rankedGroupCache.set(key, { value, at: Date.now() });
+        }
+        return value;
+      })
+      .finally(() => {
+        if (this.rankedGroupLoads.get(key) === load) this.rankedGroupLoads.delete(key);
+      });
+    this.rankedGroupLoads.set(key, load);
+    return load;
+  }
+  private async warmRankedHint(tag: string): Promise<void> {
+    const generation = this.rankedGeneration;
+    try {
+      const raw = await this.storage?.getString(`rankedHint:v1:${tag}`);
+      if (generation !== this.rankedGeneration) return;
+      const hint: unknown = raw ? JSON.parse(raw) : null;
+      if (
+        !isRecord(hint) ||
+        typeof hint.at !== 'number' ||
+        Date.now() < hint.at ||
+        Date.now() - hint.at > 30 * 60_000
+      )
+        return;
+      if (
+        typeof hint.group !== 'string' ||
+        !/^#[A-Z0-9]+$/u.test(hint.group) ||
+        !Number.isInteger(hint.season)
+      )
+        return;
+      await this.loadRankedGroup(tag, hint.group, int(hint.season), false);
+    } catch {
+      // Hints are speculative only. The fresh profile remains authoritative.
+    }
+  }
+  private async fetchRankedLeagueData(
+    tag: string,
+    scope: 'home' | 'detail',
+    forceRefresh: boolean,
+  ) {
+    if (!forceRefresh) void this.warmRankedHint(tag);
+    const player = await this.loadProfileJson(tag, undefined, forceRefresh),
       tierJson = isRecord(player.leagueTier)
         ? player.leagueTier
         : isRecord(player.league)
@@ -691,19 +906,9 @@ export class PlayerService {
         typeof player.previousLeagueGroupTag === 'string' ? player.previousLeagueGroupTag : null,
       previousSeason = int(player.previousLeagueSeasonId);
     const loadGroup = (groupTag: string | null, seasonId: number) =>
-      groupTag && seasonId > 0
-        ? optionalApiResponse(
-            Effect.runPromise(
-              this.api.execute(ProxyLeagueGroupEndpoint, {
-                path: { leagueGroupTag: groupTag, seasonId },
-                query: { playerTag: tag },
-                body: {},
-              }),
-            ),
-          )
-        : Promise.resolve(null);
-    const loadBattlelog = (seasonId: number) =>
-      seasonId > 0
+      this.loadRankedGroup(tag, groupTag, seasonId, forceRefresh);
+    const loadBattlelog = (groupTag: string | null, seasonId: number) =>
+      scope === 'detail' && groupTag && seasonId > 0
         ? optionalApiResponse(
             Effect.runPromise(
               this.api.execute(RankedBattlelogEndpoint, {
@@ -716,20 +921,24 @@ export class PlayerService {
         : Promise.resolve(null);
     const [historyResponse, tiers, currentResponse, previousResponse, currentLog, previousLog] =
       await Promise.all([
-        optionalApiResponse(
-          Effect.runPromise(
-            this.api.execute(ProxyPlayerLeagueHistoryEndpoint, {
-              path: { playerTag: tag },
-              query: {},
-              body: {},
-            }),
-          ),
-        ),
-        this.loadLeagueTiers(),
+        scope === 'detail'
+          ? optionalApiResponse(
+              Effect.runPromise(
+                this.api.execute(ProxyPlayerLeagueHistoryEndpoint, {
+                  path: { playerTag: tag },
+                  query: {},
+                  body: {},
+                }),
+              ),
+            )
+          : Promise.resolve(null),
+        scope === 'detail' || (currentTag && currentSeason > 0)
+          ? this.loadLeagueTiers()
+          : Promise.resolve(new Map<number, RankedLeagueTier>()),
         loadGroup(currentTag, currentSeason),
-        loadGroup(previousTag, previousSeason),
-        loadBattlelog(currentSeason),
-        loadBattlelog(previousSeason),
+        scope === 'detail' ? loadGroup(previousTag, previousSeason) : Promise.resolve(null),
+        loadBattlelog(currentTag, currentSeason),
+        loadBattlelog(previousTag, previousSeason),
       ]);
     const historyJson: JsonRecord = historyResponse
         ? (historyResponse as unknown as JsonRecord)

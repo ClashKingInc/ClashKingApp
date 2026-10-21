@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Filter, RotateCcw } from 'lucide-react-native';
+import { Filter } from 'lucide-react-native';
 
 import { useI18n } from '../../../i18n';
 import {
@@ -174,13 +174,11 @@ export function ClanTabEmpty({
   body?: string;
   onRetry?: () => void;
 }) {
-  const theme = useCKTheme();
   const { t } = useI18n();
   return (
     <EmptyState
       title={title}
       body={body}
-      icon={<RotateCcw color={theme.onSurfaceVariant} />}
       actionLabel={onRetry ? t('generalRetry') : undefined}
       onAction={onRetry}
     />

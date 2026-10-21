@@ -1,3 +1,4 @@
+import { warLeaguesByApiId } from '../../../core/game-data/game-data-normalization';
 import {
   int,
   isRecord,
@@ -16,6 +17,7 @@ export class CwlRankingHistoryEntry {
     readonly league: string | null,
     readonly rank: number,
     readonly stars: number,
+    /** Sum of completed war destruction percentages, not the per-war average. */
     readonly destruction: number,
     readonly roundsWon: number,
     readonly roundsTied: number,
@@ -26,11 +28,18 @@ export class CwlRankingHistoryEntry {
     const standing = record(json.standing);
     const rounds = record(json.rounds);
     const warLeague = record(json.warLeague);
+    const leagueId = nullableInt(warLeague.id);
+    // Some cached history responses contain a valid league ID but an empty name.
+    // Recover from authoritative game data, rather than rendering unknown art.
+    const leagueName =
+      nullableString(warLeague.name)?.trim() ||
+      nullableString(json.league)?.trim() ||
+      nullableString(warLeaguesByApiId().get(leagueId ?? -1)?.name);
     const hasStandingObject = isRecord(json.standing);
     return new CwlRankingHistoryEntry(
       string(json.season),
-      nullableInt(warLeague.id),
-      nullableString(warLeague.name ?? json.league),
+      leagueId,
+      leagueName,
       int(standing.groupRank, int(json.rank)),
       int(standing.stars, int(json.stars)),
       number(standing.destruction, number(json.destruction)),

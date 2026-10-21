@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from 'react';
+import { RankedCheckerBackground, type RankedCheckerColor } from '../../../ui/ranked-checker-background';
 import {
   ActivityIndicator,
   FlatList,
@@ -48,6 +49,7 @@ import {
   ErrorState,
   MobileWebImage,
   ProfileTabs,
+  PageSkeleton,
   Surface,
   ProfilePageHeader,
   ProfileStatChip,
@@ -81,6 +83,7 @@ import { CwlParticipationSection } from './cwl-participation-section';
 import { AnalyticsLineChart } from './analytics-chart';
 import { ChartInteractionBoundary } from './chart-interaction-boundary';
 import { LeagueStatsPicker } from './league-stats-picker';
+import { hasRankedCompositionData, RankedCompositionChart } from './ranked-composition-chart';
 import { StatsChartFrame } from './stats-chart-frame';
 import {
   StatsChartPreferencesProvider,
@@ -136,6 +139,9 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
         title={sectionLabel(provider.section, t)}
         imageUrl={sectionImage(provider.section)}
         backgroundUrl={sectionBackdrop(provider.section)}
+        backgroundElement={<RankedCheckerBackground color={statsCheckerColor(provider.section)} />}
+        compactIdentity
+        controlsTopPadding={4}
         safeTop={insets.top}
         onBack={onBack}
         backLabel={materialBackLabel(locale)}
@@ -298,7 +304,7 @@ function StatsSectionContent({
       content = <ItemsSection data={state.data as StatsTroopStatsResponse} />;
       break;
     case StatsSection.ranked:
-      content = <RankedOverview data={state.data as StatsLegendResponse} />;
+      content = <RankedOverview data={state.data as StatsLegendResponse} dates={provider.datesFor(StatsSection.ranked)} />;
       break;
     case StatsSection.war:
       content = <WarOverview data={state.data as StatsPerformanceResponse} />;
@@ -509,43 +515,6 @@ function ItemsSection({
       }
       contentContainerStyle={{ paddingBottom: (bottomInset ?? 0) + 24 }}
     />
-  );
-}
-
-function legendMetrics(data: StatsLegendResponse): StatsMetrics {
-  const attacks = data.items.reduce((sum, day) => sum + day.attacks, 0);
-  const stars = [0, 1, 2, 3].map((index) =>
-    data.items.reduce((sum, day) => sum + day.starCounts[index]!, 0),
-  );
-  const weightedDestruction = data.items.reduce(
-    (sum, day) => sum + (day.averageDestruction ?? 0) * day.attacks,
-    0,
-  );
-  const daily = [...data.items]
-    .sort((left, right) => left.day.localeCompare(right.day))
-    .map((day) => {
-      const value = day.metrics;
-      return new StatsDailyPoint(
-        day.day,
-        day.attacks,
-        value.averageStars,
-        value.averageDestruction,
-        value.zeroStarRate,
-        value.oneStarRate,
-        value.twoStarRate,
-        value.threeStarRate,
-      );
-    });
-  return new StatsMetrics(
-    attacks > 0,
-    attacks,
-    attacks === 0 ? 0 : stars.reduce((sum, count, index) => sum + count * index, 0) / attacks,
-    attacks === 0 ? 0 : weightedDestruction / attacks,
-    attacks === 0 ? 0 : stars[0]! / attacks,
-    attacks === 0 ? 0 : stars[1]! / attacks,
-    attacks === 0 ? 0 : stars[2]! / attacks,
-    attacks === 0 ? 0 : stars[3]! / attacks,
-    daily,
   );
 }
 
@@ -908,11 +877,6 @@ function LegendCategoryRanking({
         ) : compareOpen ? (
           <CKText role="bodySmall" muted>
             {t('statsCompareItemsHint')}
-          </CKText>
-        ) : null}
-        {cohortValues ? (
-          <CKText role="bodySmall" muted>
-            {t('statsAcrossCohorts')}
           </CKText>
         ) : null}
       </View>
@@ -1338,9 +1302,7 @@ function legendCohortLabel(cohort: StatsLegendCohortValue, t: Translate) {
     ? t('legendsTitle')
     : t('rankingsTopCount', {
         count:
-          cohort === StatsLegendCohort.top100
-            ? 100
-            : cohort === StatsLegendCohort.top200
+          cohort === StatsLegendCohort.top200
               ? 200
               : 1000,
       });
@@ -1444,16 +1406,53 @@ function starSeries(daily: readonly StatsDailyPoint[], t: Translate) {
   ];
 }
 
-function RankedOverview({ data }: { readonly data: StatsLegendResponse }) {
+function legendMetrics(data: StatsLegendResponse): StatsMetrics {
+  const attacks = data.items.reduce((sum, day) => sum + day.attacks, 0);
+  const stars = [0, 1, 2, 3].map((index) =>
+    data.items.reduce((sum, day) => sum + day.starCounts[index]!, 0),
+  );
+  const weightedDestruction = data.items.reduce(
+    (sum, day) => sum + (day.averageDestruction ?? 0) * day.attacks,
+    0,
+  );
+  const daily = [...data.items]
+    .sort((left, right) => left.day.localeCompare(right.day))
+    .map((day) => {
+      const value = day.metrics;
+      return new StatsDailyPoint(
+        day.day,
+        day.attacks,
+        value.averageStars,
+        value.averageDestruction,
+        value.zeroStarRate,
+        value.oneStarRate,
+        value.twoStarRate,
+        value.threeStarRate,
+      );
+    });
+  return new StatsMetrics(
+    attacks > 0,
+    attacks,
+    attacks === 0 ? 0 : stars.reduce((sum, count, index) => sum + count * index, 0) / attacks,
+    attacks === 0 ? 0 : weightedDestruction / attacks,
+    attacks === 0 ? 0 : stars[0]! / attacks,
+    attacks === 0 ? 0 : stars[1]! / attacks,
+    attacks === 0 ? 0 : stars[2]! / attacks,
+    attacks === 0 ? 0 : stars[3]! / attacks,
+    daily,
+  );
+}
+
+function RankedOverview({ data, dates }: { readonly data: StatsLegendResponse; readonly dates: StatsDateFilter }) {
   const { t } = useI18n();
   const metrics = legendMetrics(data);
+  const hasComposition = hasRankedCompositionData(data.items, dates);
   return (
     <Section>
-      <LeagueStatsPicker />
       <StatsChartFrame
         title={t('statsRanked')}
         showTitle={false}
-        copyPlacement="footer"
+        copyEnabled={false}
         testID="ranked-overview-copy"
       >
         <View style={{ gap: 20 }}>
@@ -1467,17 +1466,21 @@ function RankedOverview({ data }: { readonly data: StatsLegendResponse }) {
           />
         </View>
       </StatsChartFrame>
-      <AnalyticsLineChart
-        title={t('warAttacksTitle')}
-        series={[
-          {
-            key: 'attacks',
-            label: t('warAttacksTitle'),
-            points: metrics.daily.map((point) => ({ day: point.date, value: point.sampleSize })),
-          },
-        ]}
-        includeZero
-      />
+      {hasComposition ? (
+        <RankedCompositionChart daily={data.items} dates={dates} />
+      ) : (
+        <AnalyticsLineChart
+          title={t('warAttacksTitle')}
+          series={[
+            {
+              key: 'attacks',
+              label: t('warAttacksTitle'),
+              points: metrics.daily.map((point) => ({ day: point.date, value: point.sampleSize })),
+            },
+          ]}
+          includeZero
+        />
+      )}
     </Section>
   );
 }
@@ -1808,7 +1811,7 @@ function BattleFiltersCore({
       return;
     }
     if (section === StatsSection.ranked)
-      provider.updateRankedFilters({ townHall: townHall ?? 18, leagueTier: league ?? 105000033 });
+      provider.updateRankedFilters({ townHall: townHall ?? 18, leagueTier: league ?? 105000036 });
     else if (section === StatsSection.armies) {
       provider.updateLegendCohort(armyCohort);
       provider.updateArmiesFilters({
@@ -1879,7 +1882,7 @@ function BattleFiltersCore({
     setTownHall(section === StatsSection.ranked ? 18 : undefined);
     setOpponent(undefined);
     setEqual(true);
-    setLeague(section === StatsSection.ranked ? 105000033 : undefined);
+    setLeague(section === StatsSection.ranked ? 105000036 : undefined);
     setMinimum(100);
     setArmyCohort(StatsLegendCohort.legend);
     setSortBy('usage');
@@ -2259,20 +2262,7 @@ function InlineNotice({ icon, text }: { icon: ReactNode; text: string }) {
   );
 }
 function StatsSkeleton() {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const loadingLabel = t('generalLoading');
-  return (
-    <View
-      style={[styles.section, { minHeight: 96, alignItems: 'center', justifyContent: 'center' }]}
-      accessibilityLabel={loadingLabel}
-    >
-      <ActivityIndicator color={theme.primary} />
-      <CKText role="bodySmall" muted>
-        {loadingLabel}
-      </CKText>
-    </View>
-  );
+  return <PageSkeleton kind="stats" />;
 }
 type Translate = ReturnType<typeof useI18n>['t'];
 export function sectionLabel(section: StatsSectionValue, t: Translate): string {
@@ -2317,6 +2307,13 @@ export function sectionBackdrop(section: StatsSectionValue): string {
   if (section === StatsSection.armies || section === StatsSection.items)
     return ImageAssets.playerWarStatsPageBackground;
   return ImageAssets.homeBaseBackground;
+}
+
+function statsCheckerColor(section: StatsSectionValue): RankedCheckerColor {
+  if (section === StatsSection.war || section === StatsSection.armies) return 'red';
+  if (section === StatsSection.ranked) return 'purple';
+  if (section === StatsSection.clans) return 'green';
+  return 'blue';
 }
 function compact(value: number, locale: string): string {
   return formatCompactNumber(value, locale);

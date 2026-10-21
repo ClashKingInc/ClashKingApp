@@ -11,6 +11,7 @@ export interface SettingsPresentationActions {
   changeTheme(mode: SettingsThemeMode): Promise<void>;
   changeAppIcon?(iconName: string | null): Promise<void>;
   clearImageCache?(): Promise<void>;
+  resetTutorials?(): Promise<void>;
   open(destination: SettingsDestination): void;
   openDiscord(): void;
   showLicenses(): void;

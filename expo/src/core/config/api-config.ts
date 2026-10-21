@@ -17,6 +17,20 @@ export interface ApiConfiguration {
 export const API_ASSET_URL = 'https://assets.clashk.ing';
 export const COC_ASSET_PROXY_URL = 'https://assets-proxy.clashk.ing';
 export const DISCORD_URL = 'https://discord.gg/clashking';
+export const DISCORD_BOT_INVITE_URL =
+  'https://discord.com/api/oauth2/authorize?client_id=824653933347209227&permissions=8&scope=bot%20applications.commands';
+export const DISCORD_PERSONAL_INSTALL_URL =
+  'https://discord.com/oauth2/authorize?client_id=824653933347209227&integration_type=1&scope=applications.commands';
+
+export function discordServerInstallUrl(serverId?: string): string {
+  const url = new URL(DISCORD_BOT_INVITE_URL);
+  url.searchParams.set('integration_type', '0');
+  if (serverId) {
+    url.searchParams.set('guild_id', serverId);
+    url.searchParams.set('disable_guild_select', 'true');
+  }
+  return url.toString();
+}
 
 export function apiEnvironmentForName(name: string | undefined): ApiEnvironment {
   switch ((name ?? 'prod').toLowerCase()) {

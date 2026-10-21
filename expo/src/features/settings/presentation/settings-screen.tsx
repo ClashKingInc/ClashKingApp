@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {
   AtSign,
+  RotateCcw,
   BellRing,
   FileText,
   Gamepad2,
@@ -40,6 +41,7 @@ import {
 } from '../../../ui';
 import type { SettingsPresentationActions, SettingsThemeMode, SettingsUser } from './contracts';
 import { ChoiceDialog, SettingsPage, SettingsSection, SettingsTile } from './settings-components';
+import { tutorialCopy } from '../../tutorials/tutorial-copy';
 
 export type SettingsAppIconChoice = {
   iconName: string;
@@ -136,6 +138,8 @@ export function SettingsScreen({
           trailing={themeLabel}
           onPress={() => setDialog('theme')}
         />
+        {actions.resetTutorials ? <SettingsTile icon={<RotateCcw color={iconColor} />} title={tutorialCopy.tutorialResetTitle}
+          onPress={() => { void actions.resetTutorials!().then(() => setSnackbar(tutorialCopy.tutorialResetDone)); }} /> : null}
         {alternateIconsSupported ? (
           <SettingsTile
             icon={<ImageIcon color={iconColor} />}

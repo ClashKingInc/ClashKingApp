@@ -1,14 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import {
-  ArrowDown,
-  ArrowUp,
-  BarChart3,
-  ChevronDown,
-  Search,
-  Star,
-  Users,
-} from 'lucide-react-native';
+import { ArrowDown, ArrowUp, BarChart3, Search, Star, Users } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -86,8 +78,8 @@ export function ClanMembersTab({
     setLoadingPlayer(true);
     try {
       actions.openPlayer(await actions.loadPlayer(member.tag));
-    } catch (error) {
-      actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+    } catch {
+      actions.showMessage(t('generalTryAgain'));
     } finally {
       setLoadingPlayer(false);
     }
@@ -111,7 +103,6 @@ export function ClanMembersTab({
         searchIcon={<Search size={18} color={theme.onSurfaceVariant} />}
         sortLabel={selectedSort}
         sortValue={selectedSort}
-        sortIcon={<ChevronDown size={18} color={theme.onSurfaceVariant} />}
         onSortPress={() => setShowSort(true)}
       />
       <View style={styles.summaryRow}>
@@ -168,7 +159,28 @@ export function ClanMembersTab({
       <SelectionPickerModal
         visible={showSort}
         title={selectedSort}
-        options={sortOptions.map((option) => ({ key: option.value, label: option.label }))}
+        options={sortOptions.map((option) => ({
+          key: option.value,
+          label: option.label,
+          icon: (
+            <MobileWebImage
+              imageUrl={
+                option.value === 'townHallLevel'
+                  ? ImageAssets.townHall(Math.max(1, Math.round(averageTownHall)))
+                  : option.value === 'expLevel'
+                    ? ImageAssets.xp
+                    : option.value === 'builderBaseTrophies'
+                      ? ImageAssets.builderBaseTrophy
+                      : option.value === 'role'
+                        ? ImageAssets.clanCastle
+                        : option.value === 'league' || option.value === 'trophies'
+                          ? ImageAssets.trophies
+                          : ImageAssets.clanCastle
+              }
+              style={styles.metricImage}
+            />
+          ),
+        }))}
         selectedKey={sort}
         onSelect={(value) => {
           setSort(value);
@@ -226,7 +238,7 @@ function MemberCard({
   linked: boolean;
   onPress: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
   const role =
     member.role === 'leader'
@@ -236,7 +248,7 @@ function MemberCard({
         : member.role === 'admin'
           ? t('clanRoleElder')
           : t('clanRoleMember');
-  const metric = memberMetric(member, sort, theme.onSurfaceVariant);
+  const metric = memberMetric(member, sort, theme.onSurfaceVariant, locale);
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={member.name} onPress={onPress}>
       <Surface
@@ -274,6 +286,7 @@ function memberMetric(
   member: ClanMember,
   sort: MemberSort,
   iconColor: string,
+  locale: string,
 ): { leading: ReactNode; value: string } {
   if (sort === 'expLevel')
     return {
@@ -288,11 +301,14 @@ function memberMetric(
       value: `${member.builderBaseTrophies}`,
     };
   if (sort === 'donations')
-    return { leading: <ArrowUp size={18} color="#22A35A" />, value: `${member.donations}` };
+    return {
+      leading: <ArrowUp size={18} color="#22A35A" />,
+      value: member.donations.toLocaleString(toIntlLocale(locale)),
+    };
   if (sort === 'donationsReceived')
     return {
       leading: <ArrowDown size={18} color="#E35D4F" />,
-      value: `${member.donationsReceived}`,
+      value: member.donationsReceived.toLocaleString(toIntlLocale(locale)),
     };
   if (sort === 'donationsRatio') {
     const ratio = donationRatio(member);

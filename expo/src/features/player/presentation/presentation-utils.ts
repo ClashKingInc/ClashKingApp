@@ -58,6 +58,10 @@ export function playerClanPresentation(player: Player): { label: string; imageUr
   const linkedName = typeof clan?.name === 'string' ? clan.name : '';
   return {
     label: linkedName || player.clanOverview.name,
-    imageUrl: ImageAssets.clanBadgeForTag(typeof clan?.tag === 'string' ? clan.tag : player.clanOverview.tag) || ImageAssets.clanCastle,
+    imageUrl:
+      ImageAssets.clanBadgeForTag(
+        typeof clan?.tag === 'string' ? clan.tag : player.clanOverview.tag,
+        clan ?? player.clanOverview,
+      ) || ImageAssets.clanCastle,
   };
 }

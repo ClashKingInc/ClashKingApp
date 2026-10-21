@@ -153,7 +153,7 @@ function countHeaderTasks(
   count(player.seasonPassRatio >= 1);
 
   const legendDone = player.currentLegendSeason?.currentDay?.totalAttacks;
-  if (player.league === 'Legend League' && legendDone !== undefined) {
+  if (player.isLegendLeague && legendDone !== undefined) {
     addDisplayMetric(metrics, 'legend_attacks', legendDone, 8);
     count(legendDone >= 8);
   }

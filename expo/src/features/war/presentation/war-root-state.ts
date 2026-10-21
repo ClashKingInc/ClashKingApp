@@ -29,12 +29,12 @@ export function extraWarClanTags(
       .filter(
         (player) => owned.has(canonicalTag(player.tag)) && preferences.isShownInWarTab(player.tag),
       )
-      .map((player) => player.clanTag)
+      .map((player) => canonicalTag(player.clanTag))
       .filter(Boolean),
   );
   return [
     ...new Set(
-      bookmarkedClans.map((clan) => clan.tag).filter(
+      bookmarkedClans.map((clan) => canonicalTag(clan.tag)).filter(
         (tag) => tag.length > 0 && !linkedClanTags.has(tag),
       ),
     ),

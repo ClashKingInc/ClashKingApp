@@ -76,10 +76,14 @@ export function HorizontalImageShareModal({
   visible,
   onClose,
   canvasSize = defaultCanvasSize,
+  exportSize = { width: CAPTURE_WIDTH, height: CAPTURE_HEIGHT },
+  ready = true,
 }: {
   readonly children: ReactNode;
   readonly artworkUrls?: readonly string[];
   readonly canvasSize?: HorizontalImageCanvasSize;
+  readonly exportSize?: HorizontalImageCanvasSize;
+  readonly ready?: boolean;
   readonly fileName: string;
   readonly message: string;
   readonly title: string;
@@ -94,7 +98,7 @@ export function HorizontalImageShareModal({
   const [failed, setFailed] = useState(false);
 
   async function share() {
-    if (!boundary.current || sharing) return;
+    if (!boundary.current || sharing || !ready) return;
     setSharing(true);
     setFailed(false);
     try {
@@ -112,8 +116,8 @@ export function HorizontalImageShareModal({
               quality: 1,
               result: Platform.OS === 'web' ? 'data-uri' : 'tmpfile',
               fileName: fileName.replace(/\.png$/u, ''),
-              width: CAPTURE_WIDTH,
-              height: CAPTURE_HEIGHT,
+              width: exportSize.width,
+              height: exportSize.height,
             }),
             CAPTURE_TIMEOUT_MS,
           );
@@ -158,7 +162,7 @@ export function HorizontalImageShareModal({
               onLayout={(event: LayoutChangeEvent) =>
                 setPreviewWidth(event.nativeEvent.layout.width)
               }
-              style={styles.previewFrame}
+              style={[styles.previewFrame, { aspectRatio: canvasSize.width / canvasSize.height }]}
             >
               <View
                 pointerEvents="none"
@@ -189,7 +193,7 @@ export function HorizontalImageShareModal({
             {failed ? <CKText muted>{t('generalError')}</CKText> : null}
             <PressableSurface
               accessibilityRole="button"
-              disabled={sharing}
+              disabled={sharing || !ready}
               onPress={() => void share()}
               style={styles.action}
             >

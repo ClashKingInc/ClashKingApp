@@ -1,5 +1,5 @@
 import { ImageAssets } from '@/core/assets/image-assets';
-import { int, record, string, type JsonRecord } from './parsing';
+import { int, string, type JsonRecord } from './parsing';
 
 export class PlayerAchievement {
   constructor(
@@ -55,7 +55,12 @@ export class PlayerClanOverview {
     readonly badgeUrls: ClanBadgeUrls,
   ) {}
   static fromJson(json: JsonRecord) {
-    return new PlayerClanOverview(string(json.tag), string(json.name), int(json.clanLevel), ImageAssets.clanBadgeUrls(string(json.tag), json));
+    return new PlayerClanOverview(
+      string(json.tag),
+      string(json.name),
+      int(json.clanLevel),
+      ImageAssets.clanBadgeUrls(string(json.tag), json),
+    );
   }
   static empty() {
     return new PlayerClanOverview('', '', 0, { small: '', medium: '', large: '' });
@@ -114,4 +119,5 @@ export class PlayerCardOptions {
     );
   }
 }
-export const playerClanBadge = (tag: string) => ImageAssets.clanBadgeForTag(tag);
+export const playerClanBadge = (tag: string, badgeData?: unknown) =>
+  ImageAssets.clanBadgeForTag(tag, badgeData);

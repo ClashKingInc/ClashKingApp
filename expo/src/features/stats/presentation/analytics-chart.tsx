@@ -53,8 +53,14 @@ export function AnalyticsLineChart({
   percent = false,
   height = 192,
   includeZero = false,
+  inverted = false,
+  connectGaps = true,
+  showPoints = false,
+  axisMinimum = 0,
+  formatAxisValue,
   formatValue,
   formatDay,
+  formatPointDetail,
   showTitle = true,
   exportable = true,
 }: {
@@ -63,8 +69,14 @@ export function AnalyticsLineChart({
   readonly percent?: boolean;
   readonly height?: number;
   readonly includeZero?: boolean;
+  readonly inverted?: boolean;
+  readonly connectGaps?: boolean;
+  readonly showPoints?: boolean;
+  readonly axisMinimum?: number;
+  readonly formatAxisValue?: (value: number) => string;
   readonly formatValue?: (value: number) => string;
   readonly formatDay?: (day: string) => string;
+  readonly formatPointDetail?: (seriesKey: string, day: string) => string | undefined;
   readonly showTitle?: boolean;
   readonly exportable?: boolean;
 }) {
@@ -107,7 +119,7 @@ export function AnalyticsLineChart({
   const low = values.length ? Math.min(...values) : 0;
   const high = values.length ? Math.max(...values) : 1;
   const padding = Math.max(percent ? 2 : 1, (high - low) * 0.15);
-  const minimum = includeZero ? 0 : Math.max(0, Math.floor(low - padding));
+  const minimum = includeZero ? axisMinimum : Math.max(axisMinimum, Math.floor(low - padding));
   const maximum = Math.max(
     minimum + 1,
     Math.min(percent ? 100 : Infinity, Math.ceil(high + padding)),
@@ -117,13 +129,24 @@ export function AnalyticsLineChart({
   const y = (value: number) =>
     Math.max(
       TOP,
-      Math.min(bottom, bottom - ((value - minimum) / (maximum - minimum)) * (bottom - TOP)),
+      Math.min(
+        bottom,
+        inverted
+          ? TOP + ((value - minimum) / (maximum - minimum)) * (bottom - TOP)
+          : bottom - ((value - minimum) / (maximum - minimum)) * (bottom - TOP),
+      ),
     );
   const activeIndex = Math.max(
     0,
     selectedDay && days.includes(selectedDay) ? days.indexOf(selectedDay) : days.length - 1,
   );
   const selected = selectedDay && days.includes(selectedDay) ? selectedDay : undefined;
+  const legendDay = selected ?? days.findLast((day) =>
+    series.some((line) => {
+      const value = pointMaps.get(line.key)?.get(day);
+      return value != null && Number.isFinite(value);
+    }),
+  );
   const dayLabel = (day: string) =>
     formatDay?.(day) ??
     new Date(`${day.length === 7 ? `${day}-01` : day}T12:00:00Z`).toLocaleDateString(
@@ -165,7 +188,7 @@ export function AnalyticsLineChart({
       {series.length > 1 ? (
         <View style={[styles.legend, !showTitle && exportable && { paddingRight: 38 }]}>
           {series.map((line, index) => {
-            const value = pointMaps.get(line.key)?.get(days[days.length - 1] ?? '');
+            const value = pointMaps.get(line.key)?.get(legendDay ?? '');
             return (
               <Pressable
                 key={line.key}
@@ -249,7 +272,7 @@ export function AnalyticsLineChart({
               <ViewlessTick
                 key={value}
                 y={y(value)}
-                label={format(value)}
+                label={formatAxisValue?.(value) ?? format(value)}
                 color={theme.onSurfaceVariant}
                 grid={colorWithAlpha(theme.onSurface, 0.1)}
               />
@@ -264,9 +287,16 @@ export function AnalyticsLineChart({
               const observed = points.flatMap((point, i) =>
                 point.value != null && Number.isFinite(point.value) ? [i] : [],
               );
-              return (observed.length ? [observed] : []).map((segment, part) =>
+              const segments: number[][] = [];
+              for (const i of observed) {
+                const previous = segments.at(-1);
+                if (previous && (connectGaps || previous.at(-1) === i - 1)) previous.push(i);
+                else segments.push([i]);
+              }
+              const lines = segments.map((segment, part) =>
                 segment.length === 1 ? (
                   <Circle
+                    testID={`chart-point-${line.key}-${points[segment[0]!]!.day}`}
                     key={`${line.key}-${part}`}
                     cx={x(segment[0]!)}
                     cy={y(points[segment[0]!]!.value!)}
@@ -295,6 +325,25 @@ export function AnalyticsLineChart({
                   />
                 ),
               );
+              return [
+                ...lines,
+                ...(showPoints
+                  ? segments.flatMap((segment) =>
+                      segment.length > 1
+                        ? segment.map((i) => (
+                            <Circle
+                              key={`${line.key}-dot-${i}`}
+                              testID={`chart-point-${line.key}-${points[i]!.day}`}
+                              cx={x(i)}
+                              cy={y(points[i]!.value!)}
+                              r={3}
+                              fill={color}
+                            />
+                          ))
+                        : [],
+                    )
+                  : []),
+              ];
             })}
             {selected ? (
               <Line
@@ -384,9 +433,16 @@ export function AnalyticsLineChart({
                         },
                       ]}
                     />
-                    <CKText role="bodySmall" style={{ flexShrink: 1 }}>
-                      {line.label} {value == null ? '—' : format(value)}
-                    </CKText>
+                    <View style={{ flexShrink: 1 }}>
+                      <CKText role="bodySmall">
+                        {line.label} {value == null ? '—' : format(value)}
+                      </CKText>
+                      {formatPointDetail?.(line.key, selected) ? (
+                        <CKText muted role="labelSmall">
+                          {formatPointDetail(line.key, selected)}
+                        </CKText>
+                      ) : null}
+                    </View>
                   </View>
                 );
               })}

@@ -15,6 +15,7 @@ import {
   useWindowDimensions,
   type LayoutRectangle,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CKText } from '../../../ui/text';
 import { MobileWebImage } from '../../../ui/mobile-web-image';
 import { useCKTheme } from '../../../ui/theme';
@@ -85,6 +86,7 @@ export function ClanSpringTransition({
   onComplete?: () => void;
 }) {
   const { width, height, fontScale } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
   const [progress] = useState(() => new Animated.Value(0));
@@ -114,18 +116,14 @@ export function ClanSpringTransition({
       return;
     setTargets((current) => (current[part] ? current : { ...current, [part]: rect }));
   }, []);
-  const ready = !!targets.badge && !!targets.name;
   useEffect(() => {
     if (!enabled) {
       finish();
       return;
     }
-    if (!ready) {
-      // Inaccessible/unmeasurable layouts get a normal page, never an invisible wait.
-      const timeout = setTimeout(finish, 120);
-      return () => clearTimeout(timeout);
-    }
     if (ended.current) return;
+    // Start the native-driver motion on mount. Waiting for the detail header's
+    // measurements made a fast tap fall through to an abrupt 120 ms cut.
     const animation = Animated.spring(progress, {
       toValue: 1,
       stiffness: 240,
@@ -140,28 +138,33 @@ export function ClanSpringTransition({
       if (settled) finish();
     });
     return () => animation.stop();
-  }, [enabled, ready, finish, progress]);
+  }, [enabled, finish, progress]);
   const active = enabled && !finished;
   const context = useMemo(() => ({ active, register }), [active, register]);
   const move = (start: number, end: number) =>
     progress.interpolate({ inputRange: [0, 1], outputRange: [start, end], extrapolate: 'clamp' });
-  const contentOpacity = progress.interpolate({
+  const coverOpacity = progress.interpolate({
     inputRange: [0, 0.15, 0.7, 1],
-    outputRange: [0, 0, 1, 1],
+    outputRange: [1, 1, 0, 0],
     extrapolate: 'clamp',
   });
   const identity = (part: IdentityPart, child: ReactNode) => {
     const source = origin[part];
+    // The native header has a deterministic initial layout. These positions
+    // give the spring a stable destination before async measureInWindow fires;
+    // the measured target replaces them when available.
+    const badgeTop = insets.top + 54;
+    const nameWidth = Math.min(width - 32, (source.width * 26) / 17);
     const target =
       targets[part] ??
       (part === 'name'
         ? {
-            x: source.x + source.width / 2 - (source.width * 26) / 17 / 2,
-            y: source.y + source.height / 2 - 13.5,
-            width: (source.width * 26) / 17,
+            x: (width - nameWidth) / 2,
+            y: badgeTop + 94,
+            width: nameWidth,
             height: 27,
           }
-        : source);
+        : { x: (width - 94) / 2, y: badgeTop, width: 94, height: 94 });
     return (
       <Animated.View
         style={{
@@ -188,6 +191,22 @@ export function ClanSpringTransition({
         testID="clan-spring-transition"
         onTouchStart={finish}
       >
+        <View
+          testID="clan-spring-content"
+          style={[styles.fill, { backgroundColor: theme.background }]}
+        >
+          {children}
+        </View>
+        {active ? (
+          <Animated.View
+            testID="clan-spring-cover"
+            pointerEvents="none"
+            style={[
+              StyleSheet.absoluteFill,
+              { backgroundColor: theme.background, opacity: coverOpacity },
+            ]}
+          />
+        ) : null}
         {active ? (
           <Animated.View
             pointerEvents="none"
@@ -196,6 +215,7 @@ export function ClanSpringTransition({
               {
                 backgroundColor: theme.card,
                 borderRadius: 12,
+                opacity: coverOpacity,
                 transform: [
                   { translateX: move(origin.card.x + origin.card.width / 2 - width / 2, 0) },
                   { translateY: move(origin.card.y + origin.card.height / 2 - height / 2, 0) },
@@ -206,14 +226,6 @@ export function ClanSpringTransition({
             ]}
           />
         ) : null}
-        <Animated.View
-          style={[
-            styles.fill,
-            { opacity: active ? contentOpacity : 1, backgroundColor: theme.background },
-          ]}
-        >
-          {children}
-        </Animated.View>
         {active ? (
           <View
             pointerEvents="none"

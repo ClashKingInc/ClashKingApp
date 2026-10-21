@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import * as Linking from 'expo-linking';
+import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CircleHelp, Goal, UserPlus } from 'lucide-react-native';
+import { Bot, CircleHelp, Goal, MessageCircle, UserPlus } from 'lucide-react-native';
+import { TutorialTarget } from '../features/tutorials/tutorial-ui';
 
+import { DISCORD_BOT_INVITE_URL, DISCORD_URL } from '../core/config/api-config';
 import type { MessageKey } from '../i18n';
 import {
   filterEnabledRoutes,
+  appRoutes,
   filterVisibleRoutes,
   isRouteEnabled,
   mobileDrawerBodyRoutes,
@@ -31,6 +35,7 @@ export function MobileDrawer({
   onAchievements,
   onAddAccount,
   hasUser,
+  hasManagedDiscordBot = false,
 }: {
   isRtl: boolean;
   features: FeatureState;
@@ -44,9 +49,16 @@ export function MobileDrawer({
   onAchievements: () => void;
   onAddAccount: () => void;
   hasUser: boolean;
+  hasManagedDiscordBot?: boolean;
 }) {
   const theme = useCKTheme();
-  const bodyRoutes = filterVisibleRoutes(mobileDrawerBodyRoutes, features);
+  // A narrow browser uses this drawer too. The embedded dashboard is native-only.
+  const bodyRoutes = filterVisibleRoutes(mobileDrawerBodyRoutes, features).filter(
+    (route) =>
+      !['servers', 'esports'].includes(route.id) ||
+      Platform.OS === 'ios' ||
+      Platform.OS === 'android',
+  );
   const footerRoutes = filterEnabledRoutes(mobileDrawerFooterRoutes, features);
   const [showFollowerHelp, setShowFollowerHelp] = useState(false);
   const helpTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -63,6 +75,11 @@ export function MobileDrawer({
   };
   const navigate = (route: AppRouteDefinition) => {
     onRequestClose(() => onNavigate(route));
+  };
+  const openExternal = (url: string) => {
+    onRequestClose(() => {
+      void Linking.openURL(url).catch(() => undefined);
+    });
   };
   return (
     <SafeAreaView
@@ -111,30 +128,40 @@ export function MobileDrawer({
           <CKText role="titleLarge" numberOfLines={1} style={styles.displayName}>
             {displayName}
           </CKText>
-          <View style={[styles.followerRow, isRtl && styles.rowRtl]}>
-            <CKText muted role="bodyMedium">
-              {followerCount ?? '—'} {t('drawerFollowers')}
-            </CKText>
-            <Pressable
-              accessibilityHint={t('drawerFollowersHelp')}
-              accessibilityLabel={t('drawerFollowersHelp')}
-              accessibilityRole="button"
-              hitSlop={8}
-              onPress={revealFollowerHelp}
-              style={styles.helpButton}
-            >
-              <CircleHelp color={theme.onSurfaceVariant} size={15} />
-            </Pressable>
-          </View>
-          {showFollowerHelp ? (
-            <View style={[styles.helpBubble, { backgroundColor: theme.surfaceContainerHighest }]}>
-              <CKText muted role="bodySmall">
-                {t('drawerFollowersHelp')}
+          <View style={styles.followerWrap}>
+            <View style={[styles.followerRow, isRtl && styles.rowRtl]}>
+              <CKText muted role="bodyMedium">
+                {followerCount ?? '—'} {t('drawerFollowers')}
               </CKText>
+              <Pressable
+                accessibilityHint={t('drawerFollowersHelp')}
+                accessibilityLabel={t('drawerFollowersHelp')}
+                accessibilityRole="button"
+                hitSlop={8}
+                onPress={revealFollowerHelp}
+                style={styles.helpButton}
+              >
+                <CircleHelp color={theme.onSurfaceVariant} size={15} />
+              </Pressable>
             </View>
-          ) : null}
+            {showFollowerHelp ? (
+              <View
+                pointerEvents="none"
+                testID="drawer-followers-tooltip"
+                style={[
+                  styles.helpBubble,
+                  isRtl ? styles.helpBubbleRtl : styles.helpBubbleLtr,
+                  { backgroundColor: theme.surfaceContainerHighest },
+                ]}
+              >
+                <CKText muted role="bodySmall">
+                  {t('drawerFollowersHelp')}
+                </CKText>
+              </View>
+            ) : null}
+          </View>
         </View>
-        <View style={styles.body}>
+        <TutorialTarget id="sidebar-links" style={styles.body}>
           {bodyRoutes.map((route) => (
             <DrawerRoute
               key={route.id}
@@ -145,9 +172,20 @@ export function MobileDrawer({
               onPress={() => navigate(route)}
             />
           ))}
-        </View>
+        </TutorialTarget>
       </ScrollView>
       <View style={[styles.footer, { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.2) }]}>
+        <DrawerAction
+          icon={<Bot color={theme.onSurface} size={18} />}
+          label={t(hasManagedDiscordBot ? 'discordBotDashboard' : 'drawerInviteDiscordBot')}
+          compact
+          isRtl={isRtl}
+          onPress={() => {
+            if (Platform.OS === 'web') openExternal(DISCORD_BOT_INVITE_URL);
+            else navigate(appRoutes.find((route) => route.id === 'servers')!);
+          }}
+          testID="drawer-discord-bot"
+        />
         {footerRoutes.map((route) => (
           <DrawerRoute
             key={route.id}
@@ -159,6 +197,14 @@ export function MobileDrawer({
             onPress={() => navigate(route)}
           />
         ))}
+        <DrawerAction
+          icon={<MessageCircle color={theme.onSurface} size={18} />}
+          label={t('faqJoinDiscord')}
+          compact
+          isRtl={isRtl}
+          onPress={() => openExternal(DISCORD_URL)}
+          testID="drawer-discord-server"
+        />
       </View>
     </SafeAreaView>
   );
@@ -202,11 +248,41 @@ function DrawerRoute({
 }) {
   const theme = useCKTheme();
   return (
+    <DrawerAction
+      icon={<RouteIcon route={route} color={theme.onSurface} size={compact ? 18 : 21} />}
+      label={t(route.labelKey)}
+      onPress={onPress}
+      compact={compact}
+      disabled={disabled}
+      isRtl={isRtl}
+    />
+  );
+}
+
+function DrawerAction({
+  icon,
+  label,
+  onPress,
+  compact = false,
+  disabled = false,
+  isRtl = false,
+  testID,
+}: {
+  icon: ReactNode;
+  label: string;
+  onPress: () => void;
+  compact?: boolean;
+  disabled?: boolean;
+  isRtl?: boolean;
+  testID?: string;
+}) {
+  return (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
+      testID={testID}
       style={({ pressed }) => [
         styles.route,
         isRtl && styles.rowRtl,
@@ -215,13 +291,13 @@ function DrawerRoute({
         pressed && styles.pressed,
       ]}
     >
-      <RouteIcon route={route} color={theme.onSurface} size={compact ? 18 : 21} />
+      {icon}
       <CKText
         role={compact ? 'bodyLarge' : 'titleMedium'}
         numberOfLines={1}
-        style={{ fontWeight: '700' }}
+        style={{ fontWeight: compact ? '500' : '700', fontSize: compact ? 16 : 17 }}
       >
-        {t(route.labelKey)}
+        {label}
       </CKText>
     </Pressable>
   );
@@ -229,7 +305,7 @@ function DrawerRoute({
 
 const styles = StyleSheet.create({
   drawer: { flex: 1, overflow: 'hidden' },
-  header: { paddingLeft: 20, paddingTop: 12, paddingRight: 16, paddingBottom: 8 },
+  header: { paddingLeft: 20, paddingTop: 12, paddingRight: 16, paddingBottom: 8, zIndex: 2 },
   headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   avatar: {
     width: 48,
@@ -241,8 +317,21 @@ const styles = StyleSheet.create({
   },
   headerActions: { flexDirection: 'row', gap: 4 },
   followerRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
+  followerWrap: { position: 'relative' },
   helpButton: { width: 28, height: 28, alignItems: 'center', justifyContent: 'center' },
-  helpBubble: { marginTop: 2, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 8 },
+  helpBubble: {
+    position: 'absolute',
+    top: 30,
+    width: '100%',
+    maxWidth: 280,
+    zIndex: 3,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    elevation: 8,
+  },
+  helpBubbleLtr: { left: 0 },
+  helpBubbleRtl: { right: 0 },
   headerAction: {
     width: 44,
     height: 44,
@@ -254,9 +343,9 @@ const styles = StyleSheet.create({
   scrollContent: { flexGrow: 1 },
   body: { paddingHorizontal: 12, paddingBottom: 8 },
   route: {
-    minHeight: 59,
+    minHeight: 49,
     paddingHorizontal: 8,
-    paddingVertical: 9.5,
+    paddingVertical: 7,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,

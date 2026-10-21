@@ -83,9 +83,11 @@ export function GlassSurface({
         styles.fallback,
         {
           backgroundColor:
-            glassMode === 'opaque'
-              ? colorWithAlpha(theme.surface, mode === 'dark' ? 0.94 : 0.9)
-              : colorWithAlpha(theme.surface, mode === 'dark' ? 0.74 : 0.82),
+            Platform.OS === 'android'
+              ? theme.surface
+              : glassMode === 'opaque'
+                ? colorWithAlpha(theme.surface, mode === 'dark' ? 0.94 : 0.9)
+                : colorWithAlpha(theme.surface, mode === 'dark' ? 0.74 : 0.82),
           shadowOpacity: mode === 'dark' ? 0.35 : 0.16,
         },
       ]}
@@ -100,6 +102,27 @@ export function GlassPill(props: GlassSurfaceProps) {
   return <GlassSurface cornerRadius={ckRadius.pill} {...props} />;
 }
 
+// Keep search fields and picker triggers on the same native material as the main search bar.
+export function GlassControlSurface({ style, ...props }: GlassSurfaceProps) {
+  const theme = useCKTheme();
+  const mode = useCKThemeMode();
+  return (
+    <GlassSurface
+      cornerRadius={24}
+      interactive
+      style={[
+        styles.control,
+        {
+          borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.14 : 0.3),
+          shadowOpacity: mode === 'dark' ? 0.12 : 0.08,
+        },
+        style,
+      ]}
+      {...props}
+    />
+  );
+}
+
 const styles = StyleSheet.create({
   base: {
     borderWidth: StyleSheet.hairlineWidth,
@@ -110,5 +133,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 12,
     elevation: 4,
+  },
+  control: {
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 12,
   },
 });

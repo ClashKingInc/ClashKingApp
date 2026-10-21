@@ -113,9 +113,7 @@ export function buildLegendsWidgetPayload(
     ? {
         tag: player.clanOverview.tag,
         name: player.clanOverview.name,
-        badgeUrl:
-          player.clanOverview.badgeUrls.medium ||
-          ImageAssets.clanBadgeForTag(player.clanOverview.tag),
+        badgeUrl: ImageAssets.widgetClanBadgeForTag(player.clanOverview.tag),
       }
     : undefined;
   return {

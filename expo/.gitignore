@@ -7,6 +7,8 @@ node_modules/
 .expo/
 dist/
 web-build/
+/public/landing/app-link.js
+/public/landing/route-manifest.js
 expo-env.d.ts
 **/build/
 

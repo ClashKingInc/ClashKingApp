@@ -808,6 +808,18 @@ function withIosWidgetTarget(config, contract) {
         { target: targetUuid, lastKnownFileType: 'text.json.xcstrings' },
         project.getFirstProject().firstProject.mainGroup,
       );
+      project.addResourceFile(
+        'WarWidget/TownHalls.xcassets',
+        { target: targetUuid, lastKnownFileType: 'folder.assetcatalog' },
+        project.getFirstProject().firstProject.mainGroup,
+      );
+      for (const icon of ['Icon_HV_Sword.png', 'Icon_HV_Shield_Arrow.png']) {
+        project.addResourceFile(
+          `WarWidget/${icon}`,
+          { target: targetUuid, lastKnownFileType: 'image.png' },
+          project.getFirstProject().firstProject.mainGroup,
+        );
+      }
       return mod;
     }
 
@@ -825,7 +837,7 @@ function withIosWidgetTarget(config, contract) {
       'app_extension',
     );
     project.addBuildPhase(
-      ['WarWidget/PrivacyInfo.xcprivacy', 'WarWidget/LegendsWidget.xcstrings'],
+      ['WarWidget/PrivacyInfo.xcprivacy', 'WarWidget/LegendsWidget.xcstrings', 'WarWidget/TownHalls.xcassets', 'WarWidget/Icon_HV_Sword.png', 'WarWidget/Icon_HV_Shield_Arrow.png'],
       'PBXResourcesBuildPhase',
       'Resources',
       target.uuid,
@@ -844,6 +856,9 @@ function withIosWidgetTarget(config, contract) {
         'WarWidget/WarWidget.swift',
         'WarWidget/PrivacyInfo.xcprivacy',
         'WarWidget/LegendsWidget.xcstrings',
+        'WarWidget/TownHalls.xcassets',
+        'WarWidget/Icon_HV_Sword.png',
+        'WarWidget/Icon_HV_Shield_Arrow.png',
       ],
       project.getFirstProject().firstProject.mainGroup,
     );

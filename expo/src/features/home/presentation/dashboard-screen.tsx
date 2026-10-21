@@ -1,32 +1,22 @@
-import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
-import {
-  Animated,
   AppState,
   Platform,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
-  type LayoutChangeEvent,
-  type StyleProp,
-  type ViewStyle,
+  type NativeTouchEvent,
+  type GestureResponderEvent,
 } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import DraggableFlatList, { type RenderItemParams } from 'react-native-draggable-flatlist';
 import { EyeOff, UserCircle } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import { toIntlLocale, useI18n } from '../../../i18n';
-import { CKText, EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
+import { EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
+import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
+import { CardAppearanceProvider } from '../../../ui/card-appearance';
+import { CARD_REORDER_HOLD_MS, DragJiggle } from '../../../ui/drag-jiggle';
 import {
   homeContentWidth,
   homeRecapWidth,
@@ -38,19 +28,13 @@ import {
   type HomePlatform,
 } from './contracts';
 import { HomeEventBanner } from './event-banner';
-import { HomeCardSkeleton } from './home-components';
+import { HomeCardSkeleton, HomeDragContext } from './home-components';
 import { HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
+import { HomeActivityCard } from './home-activity-card';
+import { tutorials } from '../../tutorials/tutorial-service';
+import { TutorialTarget } from '../../tutorials/tutorial-ui';
 
 export const MOBILE_HOME_OVERLAY_CLEARANCE = 96;
-
-type HomeCardLayout = { y: number; height: number };
-
-const homeCardTranslations = () => ({
-  todo: new Animated.Value(0),
-  ranked: new Animated.Value(0),
-  upgrade: new Animated.Value(0),
-});
-
 export function homeBottomPadding(desktop: boolean, bottomInset: number): number {
   return desktop ? 32 : bottomInset + MOBILE_HOME_OVERLAY_CLEARANCE;
 }
@@ -65,15 +49,19 @@ export function DashboardScreen({
   platform?: HomePlatform;
 }) {
   const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const insets = useSafeAreaInsets();
+  const theme = useCKTheme(),
+    insets = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
   const [contentWidth, setContentWidth] = useState(windowWidth);
-  const desktop = isDesktopHome(platform, windowWidth);
-  const maxContent = desktop ? homeContentWidth(windowWidth) : 840;
-  const horizontal = centeredContentPadding(contentWidth, maxContent);
+  const [cardAccounts, setCardAccounts] = useState<Partial<Record<HomeCardId, string>>>({});
   const [refreshing, setRefreshing] = useState(false);
   const refreshingRef = useRef(false);
+  const desktop = isDesktopHome(platform, windowWidth);
+  const horizontal = centeredContentPadding(
+    contentWidth,
+    desktop ? homeContentWidth(windowWidth) : 840,
+  );
+  const cards = visibleHomeCards(model);
   const refresh = useCallback(async () => {
     if (refreshingRef.current) return;
     refreshingRef.current = true;
@@ -92,159 +80,26 @@ export function DashboardScreen({
     refreshing,
     showOnAndroid: true,
   });
-  const cards = visibleHomeCards(model);
-  const [draggingCard, setDraggingCard] = useState<HomeCardId | null>(null);
-  const draggingCardRef = useRef<HomeCardId | null>(null);
-  const dragTargetIndexRef = useRef<number | null>(null);
-  const [cardLayouts, setCardLayouts] = useState<Partial<Record<HomeCardId, HomeCardLayout>>>({});
-  const [cardTranslations] = useState(homeCardTranslations);
-  const recordCardLayout = useCallback((card: HomeCardId, layout: HomeCardLayout) => {
-    setCardLayouts((current) => ({ ...current, [card]: layout }));
-  }, []);
-
-  const resetCardTranslations = useCallback(
-    (animated: boolean) => {
-      Object.values(cardTranslations).forEach((translation) => {
-        translation.stopAnimation();
-        if (animated) {
-          Animated.spring(translation, {
-            toValue: 0,
-            useNativeDriver: true,
-            speed: 28,
-            bounciness: 1,
-          }).start();
-        } else {
-          translation.setValue(0);
-        }
-      });
-    },
-    [cardTranslations],
+  const refreshControl = (
+    <RefreshControl
+      colors={[theme.primary]}
+      progressBackgroundColor={theme.surface}
+      progressViewOffset={insets.top}
+      refreshing={refreshing}
+      tintColor={theme.primary}
+      onRefresh={() => void refresh()}
+    />
   );
-
-  const startCardDrag = useCallback(
-    (card: HomeCardId) => {
-      const index = cards.indexOf(card);
-      if (index < 0) return;
-      resetCardTranslations(false);
-      draggingCardRef.current = card;
-      dragTargetIndexRef.current = index;
-      setDraggingCard(card);
-    },
-    [cards, resetCardTranslations, setDraggingCard],
+  const header = (
+    <>
+      <HomeEventBanner
+        announcements={model.announcements}
+        desktop={desktop}
+        onOpen={actions.openAnnouncement}
+      />
+      <View style={{ height: ckSpacing.lg }} />
+    </>
   );
-
-  const updateCardDrag = useCallback(
-    (card: HomeCardId, translationY: number) => {
-      if (draggingCardRef.current !== card) return;
-      const source = cards.indexOf(card);
-      const sourceLayout = cardLayouts[card];
-      if (source < 0 || !sourceLayout) return;
-
-      cardTranslations[card].setValue(translationY);
-      const activeCenter = sourceLayout.y + sourceLayout.height / 2 + translationY;
-      let target = source;
-      if (translationY > 0) {
-        for (let index = source + 1; index < cards.length; index += 1) {
-          const layout = cardLayouts[cards[index]!];
-          if (layout && activeCenter > layout.y + layout.height / 2) target = index;
-        }
-      } else if (translationY < 0) {
-        for (let index = source - 1; index >= 0; index -= 1) {
-          const layout = cardLayouts[cards[index]!];
-          if (layout && activeCenter < layout.y + layout.height / 2) target = index;
-        }
-      }
-
-      if (dragTargetIndexRef.current === target) return;
-      dragTargetIndexRef.current = target;
-      const nextLayout = cards[source + 1] ? cardLayouts[cards[source + 1]!] : undefined;
-      const previousLayout = cards[source - 1] ? cardLayouts[cards[source - 1]!] : undefined;
-      const gap = nextLayout
-        ? Math.max(0, nextLayout.y - sourceLayout.y - sourceLayout.height)
-        : previousLayout
-          ? Math.max(0, sourceLayout.y - previousLayout.y - previousLayout.height)
-          : 0;
-      const displacement = sourceLayout.height + gap;
-
-      cards.forEach((item, index) => {
-        if (item === card) return;
-        const toValue =
-          source < target && index > source && index <= target
-            ? -displacement
-            : source > target && index >= target && index < source
-              ? displacement
-              : 0;
-        Animated.spring(cardTranslations[item], {
-          toValue,
-          useNativeDriver: true,
-          speed: 24,
-          bounciness: 2,
-        }).start();
-      });
-    },
-    [cardLayouts, cardTranslations, cards],
-  );
-
-  const finishCardDrag = useCallback(
-    (card: HomeCardId, translationY: number) => {
-      updateCardDrag(card, translationY);
-      if (draggingCardRef.current !== card) return;
-      const source = cards.indexOf(card);
-      const target = dragTargetIndexRef.current ?? source;
-      draggingCardRef.current = null;
-      dragTargetIndexRef.current = null;
-      setDraggingCard(null);
-      if (source < 0 || target === source) {
-        resetCardTranslations(true);
-        return;
-      }
-      resetCardTranslations(false);
-      const sourceLayout = cardLayouts[card];
-      const targetLayout = cardLayouts[cards[target]!];
-      if (sourceLayout && targetLayout) {
-        const destinationY =
-          targetLayout.y + (source < target ? targetLayout.height - sourceLayout.height : 0);
-        // Preserve the released position across the layout reorder, then settle
-        // without keeping the scroll view locked for the spring's lifetime.
-        cardTranslations[card].setValue(translationY - (destinationY - sourceLayout.y));
-      }
-      const next = [...cards];
-      next.splice(source, 1);
-      next.splice(target, 0, card);
-      actions.reorderCards(next);
-      resetCardTranslations(true);
-    },
-    [
-      actions,
-      cardLayouts,
-      cardTranslations,
-      cards,
-      resetCardTranslations,
-      updateCardDrag,
-      setDraggingCard,
-    ],
-  );
-
-  const cancelCardDrag = useCallback(
-    (card: HomeCardId) => {
-      if (draggingCardRef.current !== card) return;
-      draggingCardRef.current = null;
-      dragTargetIndexRef.current = null;
-      setDraggingCard(null);
-      resetCardTranslations(true);
-    },
-    [resetCardTranslations, setDraggingCard],
-  );
-  const cancelActiveDrag = useCallback(() => {
-    const card = draggingCardRef.current;
-    if (card !== null) cancelCardDrag(card);
-  }, [cancelCardDrag]);
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', (state) => {
-      if (state !== 'active') cancelActiveDrag();
-    });
-    return () => subscription.remove();
-  }, [cancelActiveDrag]);
   let emptyBody;
   if (model.loading && model.linkedAccountCount === 0)
     emptyBody = (
@@ -265,7 +120,7 @@ export function DashboardScreen({
         style={styles.empty}
       />
     );
-  else if (cards.length === 0)
+  else
     emptyBody = (
       <EmptyState
         title={t('dashboardTodoHiddenTitle')}
@@ -274,151 +129,94 @@ export function DashboardScreen({
         style={styles.empty}
       />
     );
-  const contentContainerStyle = {
-    paddingHorizontal: horizontal,
-    paddingBottom: homeBottomPadding(desktop, insets.bottom),
-  };
-  const header = (
-    <>
-      <HomeEventBanner
-        announcements={model.announcements}
-        desktop={desktop}
-        onOpen={actions.openAnnouncement}
-      />
-      <View style={{ height: desktop ? 24 : 16 }} />
-    </>
-  );
-  const refreshControl = (
-    <RefreshControl
-      colors={[theme.primary]}
-      progressBackgroundColor={theme.surface}
-      progressViewOffset={insets.top}
-      refreshing={refreshing}
-      tintColor={theme.primary}
-      onRefresh={() => void refresh()}
-    />
-  );
-  const renderCard = (
-    card: HomeCardId,
-    index: number,
-    isActive = false,
-    animatedStyle?: StyleProp<ViewStyle>,
-    onLayout?: (event: LayoutChangeEvent) => void,
-  ) => {
-    const title = homeCardTitle(card, t);
-    const body = (
-      <Animated.View
-        key={card}
-        onLayout={onLayout}
+  const renderCard = (card: HomeCardId, index: number, isActive = false) => {
+    const cardActions = {
+      ...actions,
+      selectAccount: (tag: string) => setCardAccounts((current) => ({ ...current, [card]: tag })),
+    };
+    return (
+      <View
         style={[
           styles.recap,
           desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
-          index > 0 ? { marginTop: desktop ? ckSpacing.lg : ckSpacing.md } : undefined,
           isActive && styles.activeCard,
-          animatedStyle,
         ]}
         testID={`home-card-shell-${card}`}
       >
-        {desktop ? (
-          <>
-            <CKText role="titleMedium" style={styles.sectionTitle}>
-              {title}
-            </CKText>
-            <View style={styles.sectionGap} />
-          </>
-        ) : null}
-        {card === 'todo' && model.todo ? (
-          <HomeTodoCard
-            model={model.todo}
-            selectedAccountTag={model.selectedAccountTag}
-            desktop={desktop}
-            actions={actions}
-          />
-        ) : card === 'ranked' && model.ranked ? (
-          <HomeRankedCard
-            model={model.ranked}
-            selectedAccountTag={model.selectedAccountTag}
-            desktop={desktop}
-            actions={actions}
-          />
-        ) : card === 'upgrade' && model.upgrade ? (
-          <HomeUpgradeCard
-            model={model.upgrade}
-            selectedAccountTag={model.selectedAccountTag}
-            desktop={desktop}
-            actions={actions}
-          />
-        ) : null}
-      </Animated.View>
-    );
-    return cards.length > 1 ? (
-      <HomeCardDragRegion
-        key={card}
-        card={card}
-        onStart={startCardDrag}
-        onUpdate={updateCardDrag}
-        onEnd={finishCardDrag}
-        onCancel={cancelCardDrag}
-      >
-        {body}
-      </HomeCardDragRegion>
-    ) : (
-      body
+        <TutorialTarget id="home-reorder" enabled={index === 0} style={{ width: '100%' }}>
+          <DragJiggle active={isActive} scale={1.015}>
+            <HomeDragContext.Provider value={isActive}>
+              <CardAppearanceProvider value={index === 0 ? 'glow' : 'edge'}>
+                {card === 'activity' && model.activityAccounts ? (
+                  <HomeActivityCard
+                    accounts={model.activityAccounts}
+                    refreshKey={model.lastRefresh?.toISOString()}
+                  />
+                ) : card === 'todo' && model.todo ? (
+                  <HomeTodoCard
+                    model={model.todo}
+                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                    desktop={desktop}
+                    actions={cardActions}
+                  />
+                ) : card === 'ranked' && model.ranked ? (
+                  <HomeRankedCard
+                    model={model.ranked}
+                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                    desktop={desktop}
+                    actions={cardActions}
+                  />
+                ) : card === 'upgrade' && model.upgrade ? (
+                  <HomeUpgradeCard
+                    model={model.upgrade}
+                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                    desktop={desktop}
+                    actions={cardActions}
+                  />
+                ) : null}
+              </CardAppearanceProvider>
+            </HomeDragContext.Provider>
+          </DragJiggle>
+        </TutorialTarget>
+      </View>
     );
   };
-  const emptyContent = (
-    <View
-      style={[
-        styles.recap,
-        desktop && { maxWidth: homeRecapWidth(windowWidth), alignSelf: 'center' },
-      ]}
-    >
-      {emptyBody}
-    </View>
-  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <ScrollView
+      <DraggableFlatList
+        testID="home-scroll-view"
+        data={cards}
+        keyExtractor={(card) => card}
+        activationDistance={8}
         alwaysBounceVertical
-        contentContainerStyle={contentContainerStyle}
-        onScroll={pullRefresh.onScroll}
+        contentContainerStyle={{
+          paddingHorizontal: horizontal,
+          paddingBottom: homeBottomPadding(desktop, insets.bottom),
+        }}
+        ListHeaderComponent={header}
+        ListEmptyComponent={emptyBody}
+        ItemSeparatorComponent={HomeCardSeparator}
+        refreshControl={refreshControl}
+        onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
         onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
         onScrollEndDrag={pullRefresh.onScrollEndDrag}
-        refreshControl={refreshControl}
-        scrollEnabled={draggingCard === null}
-        onTouchStart={(event) => {
-          // A fresh finger must never inherit a previous, interrupted drag lock.
-          if (event.nativeEvent.touches.length === 1) cancelActiveDrag();
+        onDragEnd={({ data, from, to }) => {
+          if (from === to) return;
+          // The shared list owns offsets and completes its native settling before
+          // this callback. Do not keep a second JS/native transform map for Home.
+          if (actions.reorderCards(data) !== false)
+            requestAnimationFrame(() => tutorials.event('card-reordered'));
         }}
-        onTouchEnd={(event) => {
-          // Release scrolling independently of RNGH finalization. Its onEnd still
-          // owns committing the reorder, so callback ordering cannot lose a drop.
-          if (event.nativeEvent.touches.length === 0) setDraggingCard(null);
-        }}
-        onTouchCancel={cancelActiveDrag}
-        scrollEventThrottle={16}
-        testID="home-scroll-view"
-      >
-        {header}
-        {cards.length
-          ? cards.map((card, index) =>
-              renderCard(
-                card,
-                index,
-                draggingCard === card,
-                {
-                  transform: [{ translateY: cardTranslations[card] }],
-                  zIndex: draggingCard === card ? 2 : 0,
-                },
-                (event) => recordCardLayout(card, event.nativeEvent.layout),
-              ),
-            )
-          : emptyContent}
-      </ScrollView>
+        renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
+          <HomeCardHold onHold={cards.length > 1 ? drag : undefined} active={isActive}>
+            {renderCard(item, getIndex() ?? 0, isActive)}
+          </HomeCardHold>
+        )}
+      />
       <PullRefreshHint
         distance={pullRefresh.distance}
         refreshing={refreshing}
@@ -434,55 +232,98 @@ export function DashboardScreen({
   );
 }
 
-function HomeCardDragRegion({
-  card,
-  children,
-  onStart,
-  onUpdate,
-  onEnd,
-  onCancel,
-}: {
-  card: HomeCardId;
-  children: ReactNode;
-  onStart: (card: HomeCardId) => void;
-  onUpdate: (card: HomeCardId, translationY: number) => void;
-  onEnd: (card: HomeCardId, translationY: number) => void;
-  onCancel: (card: HomeCardId) => void;
-}) {
-  // Keep the recognizer stable while layout and drag state update. A normal
-  // swipe fails the long-press gate and remains owned by the scroll view.
-  const callbacks = useRef({ onStart, onUpdate, onEnd, onCancel });
-  useLayoutEffect(() => {
-    callbacks.current = { onStart, onUpdate, onEnd, onCancel };
-  }, [onStart, onUpdate, onEnd, onCancel]);
-  useEffect(() => () => callbacks.current.onCancel(card), [card]);
-  // Gesture builder methods register these callbacks; they do not call them
-  // during render. The refs are only read when the native gesture fires.
-  /* eslint-disable react-hooks/refs */
-  const gesture = useMemo(
-    () =>
-      Gesture.Pan()
-        .activateAfterLongPress(350)
-        .minDistance(2)
-        .shouldCancelWhenOutside(false)
-        .runOnJS(true)
-        .onStart(() => callbacks.current.onStart(card))
-        .onUpdate((event) => callbacks.current.onUpdate(card, event.translationY))
-        .onEnd((event, success) => {
-          if (success === false) callbacks.current.onCancel(card);
-          else callbacks.current.onEnd(card, event.translationY);
-        })
-        .onFinalize(() => callbacks.current.onCancel(card)),
-    [card],
-  );
-  /* eslint-enable react-hooks/refs */
-  return <GestureDetector gesture={gesture}>{children}</GestureDetector>;
+function HomeCardSeparator() {
+  return <View style={{ height: ckSpacing.md }} />;
 }
 
-function homeCardTitle(card: HomeCardId, t: ReturnType<typeof useI18n>['t']): string {
-  if (card === 'todo') return t('todoTitle');
-  if (card === 'ranked') return t('rankedLeagueTitle');
-  return t('drawerUpgradeTracker');
+/** Observe bubbled touches without stealing card buttons or horizontal pagers.
+ * Cancel a pending hold as soon as the user starts scrolling. The shared list
+ * takes ownership only after the same 300ms hold used by Players and Clans. */
+function HomeCardHold({
+  onHold,
+  active,
+  children,
+}: {
+  onHold?: () => void;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const origin = useRef<{ x: number; y: number } | null>(null);
+  const callback = useRef(onHold);
+  useEffect(() => {
+    callback.current = onHold;
+  }, [onHold]);
+  const cancel = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+    origin.current = null;
+  }, []);
+  useEffect(() => cancel, [cancel]);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state !== 'active') cancel();
+    });
+    return () => subscription.remove();
+  }, [cancel]);
+  const start = (event: GestureResponderEvent) => {
+    cancel();
+    if (active || !onHold || event.nativeEvent.touches.length !== 1) return;
+    origin.current = { x: event.nativeEvent.pageX, y: event.nativeEvent.pageY };
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      callback.current?.();
+    }, CARD_REORDER_HOLD_MS);
+  };
+  const startPointer = (x: number, y: number) => {
+    cancel();
+    if (active || !onHold) return;
+    origin.current = { x, y };
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      callback.current?.();
+    }, CARD_REORDER_HOLD_MS);
+  };
+  const move = ({ nativeEvent }: { nativeEvent: NativeTouchEvent }) => {
+    if (
+      timer.current &&
+      origin.current &&
+      (Math.abs(nativeEvent.pageX - origin.current.x) > 8 ||
+        Math.abs(nativeEvent.pageY - origin.current.y) > 8)
+    )
+      cancel();
+  };
+  return (
+    <View
+      collapsable={false}
+      onTouchStart={start}
+      onTouchMove={move}
+      onTouchEnd={cancel}
+      onTouchCancel={cancel}
+      onPointerDown={
+        Platform.OS === 'web'
+          ? (event) => startPointer(event.nativeEvent.pageX, event.nativeEvent.pageY)
+          : undefined
+      }
+      onPointerMove={
+        Platform.OS === 'web'
+          ? (event) => {
+              if (
+                timer.current &&
+                origin.current &&
+                (Math.abs(event.nativeEvent.pageX - origin.current.x) > 8 ||
+                  Math.abs(event.nativeEvent.pageY - origin.current.y) > 8)
+              )
+                cancel();
+            }
+          : undefined
+      }
+      onPointerUp={Platform.OS === 'web' ? cancel : undefined}
+      onPointerCancel={Platform.OS === 'web' ? cancel : undefined}
+    >
+      {children}
+    </View>
+  );
 }
 
 export function formatLastRefresh(
@@ -503,13 +344,10 @@ export function formatLastRefresh(
     hourCycle: 'h23',
   });
 }
-
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   recap: { width: '100%', position: 'relative' },
   activeCard: { opacity: 0.96 },
-  sectionTitle: { fontWeight: '900' },
-  sectionGap: { height: ckSpacing.sm },
   mobileGap: { height: 16 },
   empty: { paddingHorizontal: 24, paddingVertical: 52 },
 });

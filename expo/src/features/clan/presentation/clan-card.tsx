@@ -1,4 +1,5 @@
 import { useRef, type ReactNode } from 'react';
+import { CARD_REORDER_HOLD_MS } from '../../../ui/drag-jiggle';
 import { Pressable, StyleSheet, View, Platform, useWindowDimensions } from 'react-native';
 import { useCKAccessibility } from '../../../ui/accessibility';
 import { validClanSpringOrigin, type ClanSpringOrigin } from './clan-spring-transition';
@@ -18,6 +19,7 @@ import {
 import type { ClanRosterItem } from './contracts';
 import { clanMemberCapacityLabel } from './contracts';
 import { clanTypeLabel } from './presentation-utils';
+import { type ClanNotificationControls } from './clan-notification-options';
 
 export function ClanRosterCard({
   item,
@@ -29,6 +31,7 @@ export function ClanRosterCard({
   onOpen: (origin?: ClanSpringOrigin) => void;
   onLongPress?: () => void;
   dragTestID?: string;
+  notifications?: ClanNotificationControls;
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
@@ -69,7 +72,7 @@ export function ClanRosterCard({
   };
   return (
     <View ref={cardRef} collapsable={false}>
-      <Surface radius={ckRadius.control} style={styles.card}>
+      <Surface radius={ckRadius.card} style={styles.card}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Open clan ${item.name}`}
@@ -80,6 +83,7 @@ export function ClanRosterCard({
             generation.current += 1;
             onOpen(origin);
           }}
+          delayLongPress={CARD_REORDER_HOLD_MS}
           onLongPress={
             onLongPress
               ? () => {
@@ -229,6 +233,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   badgeColumn: { alignItems: 'center' },
+  contentWithOptions: { paddingBottom: 2 },
   badge: { width: 64, height: 64, resizeMode: 'contain' },
   badgeFallback: { width: 64, height: 64, alignItems: 'center', justifyContent: 'center' },
   memberGap: { height: 6 },

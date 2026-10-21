@@ -16,27 +16,34 @@ function countLevels(members: readonly Member[]) {
 /** Registered rosters show unboxed artwork and counts, with no scope picker. */
 export const TownHallBreakdown = memo(function TownHallBreakdown({
   members,
+  compact = false,
 }: {
   members: readonly Member[];
+  compact?: boolean;
 }) {
   const { t } = useI18n();
   const levels = useMemo(() => [...countLevels(members)].sort(([a], [b]) => b - a), [members]);
   return (
-    <View style={styles.levels}>
+    <View style={[styles.levels, compact && { gap: 12, justifyContent: 'center' }]}>
       {levels.length ? (
         levels.map(([level, count]) => (
           <View
             key={level}
-            style={styles.level}
+            style={[styles.level, compact && { minWidth: 62, gap: 5 }]}
             accessible
             accessibilityLabel={`${t('gameTownHallLevelNumber', { level })}: ${count}`}
           >
-            <MobileWebImage imageUrl={ImageAssets.townHall(level)} style={styles.icon} />
+            <MobileWebImage
+              imageUrl={ImageAssets.townHall(level)}
+              style={compact ? styles.compactIcon : styles.icon}
+            />
             <View>
               <CKText role="bodyLarge">×{count}</CKText>
-              <CKText muted role="labelLarge">
-                TH{level}
-              </CKText>
+              {!compact ? (
+                <CKText muted role="labelLarge">
+                  TH{level}
+                </CKText>
+              ) : null}
             </View>
           </View>
         ))
@@ -47,7 +54,15 @@ export const TownHallBreakdown = memo(function TownHallBreakdown({
   );
 });
 /** Align identical levels on one axis so matchup differences can be read across a row. */
-export const WarLineupComparison = memo(function WarLineupComparison({ war }: { war: WarInfo }) {
+export const WarLineupComparison = memo(function WarLineupComparison({
+  war,
+  showNames = true,
+  compact = false,
+}: {
+  war: WarInfo;
+  showNames?: boolean;
+  compact?: boolean;
+}) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const left = countLevels(war.clan?.members ?? []),
@@ -56,12 +71,14 @@ export const WarLineupComparison = memo(function WarLineupComparison({ war }: { 
   const maximum = Math.max(1, ...left.values(), ...right.values());
   if (!levels.length) return <CKText muted>{t('generalNoDataAvailable')}</CKText>;
   return (
-    <View style={styles.comparison}>
-      <View style={styles.row}>
-        <CKText style={styles.name}>{war.clan?.name}</CKText>
-        <View style={styles.axis} />
-        <CKText style={styles.name}>{war.opponent?.name}</CKText>
-      </View>
+    <View style={[styles.comparison, compact && { gap: 6 }]}>
+      {showNames ? (
+        <View style={styles.row}>
+          <CKText style={styles.name}>{war.clan?.name}</CKText>
+          <View style={styles.axis} />
+          <CKText style={styles.name}>{war.opponent?.name}</CKText>
+        </View>
+      ) : null}
       {levels.map((level) => (
         <View
           key={level}
@@ -81,9 +98,12 @@ export const WarLineupComparison = memo(function WarLineupComparison({ war }: { 
               ]}
             />
           </View>
-          <View style={styles.axis}>
-            <MobileWebImage imageUrl={ImageAssets.townHall(level)} style={styles.icon} />
-            <CKText role="labelLarge">TH{level}</CKText>
+          <View style={[styles.axis, compact && { width: 40 }]}>
+            <MobileWebImage
+              imageUrl={ImageAssets.townHall(level)}
+              style={compact ? styles.compactIcon : styles.icon}
+            />
+            {!compact ? <CKText role="labelLarge">TH{level}</CKText> : null}
           </View>
           <View style={styles.barColumn}>
             <CKText role="bodyLarge">{right.get(level) ?? 0}</CKText>
@@ -106,6 +126,7 @@ const styles = StyleSheet.create({
   levels: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
   level: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 78 },
   icon: { width: 40, height: 40 },
+  compactIcon: { width: 30, height: 30 },
   comparison: { gap: 12 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   name: { flex: 1, textAlign: 'center' },

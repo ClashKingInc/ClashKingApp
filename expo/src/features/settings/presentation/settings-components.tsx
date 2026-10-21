@@ -1,4 +1,5 @@
 import { Children, Fragment, type ReactElement, type ReactNode } from 'react';
+import { TutorialScrollView } from '../../tutorials/tutorial-ui';
 import {
   Modal,
   Pressable,
@@ -11,6 +12,7 @@ import { ArrowLeft, Check, ChevronRight } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { materialBackLabel, useI18n } from '../../../i18n';
+import { SwitchIndicator } from '../../../ui/switch-indicator';
 import { CKText, Surface, ckRadius, ckSpacing, colorWithAlpha, useCKTheme } from '../../../ui';
 
 export function SettingsPage({
@@ -47,9 +49,9 @@ export function SettingsPage({
         ) : null}
         <CKText role="screenTitle">{title}</CKText>
       </View>
-      <ScrollView contentContainerStyle={styles.page} refreshControl={refreshControl}>
+      <TutorialScrollView contentContainerStyle={styles.page} refreshControl={refreshControl}>
         {children}
-      </ScrollView>
+      </TutorialScrollView>
     </SafeAreaView>
   );
 }
@@ -278,19 +280,15 @@ export function SettingSwitch({
   disabled?: boolean;
   onChange: (value: boolean) => void;
 }) {
-  const theme = useCKTheme();
   return (
     <Pressable
       accessibilityRole="switch"
       accessibilityState={{ checked: value, disabled }}
       disabled={disabled}
       onPress={() => onChange(!value)}
-      style={[
-        styles.switch,
-        { backgroundColor: value ? theme.primary : colorWithAlpha(theme.outlineVariant, 0.6) },
-      ]}
+      style={{ flexShrink: 0, opacity: disabled ? 0.5 : 1 }}
     >
-      <View style={[styles.knob, { alignSelf: value ? 'flex-end' : 'flex-start' }]} />
+      <SwitchIndicator value={value} />
     </Pressable>
   );
 }

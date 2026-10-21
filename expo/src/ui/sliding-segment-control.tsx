@@ -22,7 +22,11 @@ export function SlidingSegmentControl<T extends string>({
   onChange,
 }: {
   value: T;
-  options: readonly [{ value: T; label: string }, { value: T; label: string }];
+  options: readonly [
+    { value: T; label: string },
+    { value: T; label: string },
+    ...{ value: T; label: string }[],
+  ];
   style?: StyleProp<ViewStyle>;
   testID?: string;
   isRtl: boolean;
@@ -31,10 +35,13 @@ export function SlidingSegmentControl<T extends string>({
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
   const [segmentWidth, setSegmentWidth] = useState(0);
-  const [position] = useState(() => new Animated.Value(value === options[0].value ? 0 : 1));
-  const startIndex = value === options[0].value ? 0 : 1;
+  const [position] = useState(
+    () => new Animated.Value(Math.max(0, options.findIndex((option) => option.value === value))),
+  );
+  const startIndex = Math.max(0, options.findIndex((option) => option.value === value));
+  const lastIndex = options.length - 1;
   const animateTo = useCallback(
-    (index: 0 | 1) => {
+    (index: number) => {
       if (reduceMotion) {
         position.setValue(index);
         return;
@@ -63,7 +70,7 @@ export function SlidingSegmentControl<T extends string>({
           position.setValue(
             Math.max(
               0,
-              Math.min(1, startIndex + direction * (gesture.translationX / segmentWidth)),
+              Math.min(lastIndex, startIndex + direction * (gesture.translationX / segmentWidth)),
             ),
           );
         })
@@ -74,21 +81,23 @@ export function SlidingSegmentControl<T extends string>({
             startIndex +
             direction *
               (gesture.translationX / segmentWidth + (gesture.velocityX / segmentWidth) * 0.08);
-          const target: 0 | 1 = projected >= 0.5 ? 1 : 0;
+          const target = Math.max(0, Math.min(lastIndex, Math.round(projected)));
+          const selected = options[target];
+          if (!selected) return;
           animateTo(target);
-          onChange(options[target].value);
+          onChange(selected.value);
         })
         .onFinalize((_event, success) => {
           if (success) return;
           animateTo(startIndex);
         }),
-    [animateTo, isRtl, onChange, options, position, segmentWidth, startIndex],
+    [animateTo, isRtl, lastIndex, onChange, options, position, segmentWidth, startIndex],
   );
   return (
     <GestureDetector gesture={pan}>
       <View
         testID={testID}
-        onLayout={(event) => setSegmentWidth((event.nativeEvent.layout.width - 4) / 2)}
+        onLayout={(event) => setSegmentWidth((event.nativeEvent.layout.width - 4) / options.length)}
         style={[
           styles.segment,
           style,
@@ -110,8 +119,10 @@ export function SlidingSegmentControl<T extends string>({
                 transform: [
                   {
                     translateX: position.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: isRtl ? [segmentWidth, 0] : [0, segmentWidth],
+                      inputRange: [0, lastIndex],
+                      outputRange: isRtl
+                        ? [segmentWidth * lastIndex, 0]
+                        : [0, segmentWidth * lastIndex],
                     }),
                   },
                 ],

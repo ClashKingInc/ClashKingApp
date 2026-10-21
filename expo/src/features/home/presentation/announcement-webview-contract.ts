@@ -1,5 +1,17 @@
 export type AnnouncementNavigationDecision = 'navigate' | 'prevent';
 
+export function externalArticleLink(
+  request: { url: string; navigationType: string; isTopFrame?: boolean },
+  options: { trustedStory: boolean; platform: string; initialUrl?: string | null },
+): string | null {
+  if (options.trustedStory || request.isTopFrame === false) return null;
+  const clicked =
+    request.navigationType === 'click' ||
+    (options.platform === 'android' && !options.initialUrl && request.navigationType === 'other');
+  const url = parseUrl(request.url);
+  return clicked && url?.protocol === 'https:' && !url.username && !url.password ? url.href : null;
+}
+
 export interface AnnouncementWebViewProps {
   readonly html?: string | null;
   readonly url?: string | null;
@@ -70,6 +82,35 @@ window.AnnouncementStory = Object.freeze({
     window.ReactNativeWebView.postMessage(String(message));
   }
 });
+true;
+`;
+
+// Stories are fixed-size interactive canvases, unlike zoomable article content.
+// Install before content and again after load for both cached and older stories.
+export const ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT = `
+(function() {
+  function lockViewport() {
+    var viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport && document.head) {
+      viewport = document.createElement('meta');
+      viewport.name = 'viewport';
+      document.head.appendChild(viewport);
+    }
+    if (viewport) viewport.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
+    if (document.documentElement) document.documentElement.style.touchAction = 'pan-x pan-y';
+  }
+  lockViewport();
+  if (!window.__clashkingStoryViewportLocked) {
+    window.__clashkingStoryViewportLocked = true;
+    document.addEventListener('DOMContentLoaded', lockViewport, { once: true });
+    ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach(function(type) {
+      document.addEventListener(type, function(event) { event.preventDefault(); }, { passive: false });
+    });
+    document.addEventListener('touchmove', function(event) {
+      if (event.touches && event.touches.length > 1) event.preventDefault();
+    }, { passive: false });
+  }
+})();
 true;
 `;
 

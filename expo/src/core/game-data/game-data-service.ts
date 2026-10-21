@@ -5,6 +5,7 @@ import {
   type AppLocale,
 } from './game-data-localization';
 import { applyGameDataBundle } from './game-data-normalization';
+import { applyLocalGameAssets } from './local-game-assets';
 import { gameDataState, isRecord, type JsonRecord } from './game-data-state';
 import {
   applyAssetManifest,
@@ -88,9 +89,11 @@ export class GameDataService {
   private readonly files: GameDataFileStore;
   private readonly preferences: GameDataPreferences;
   private readonly fetchImplementation: typeof fetch;
+  private readonly platform: GameDataPlatform;
   private readonly now: () => Date;
   private readonly systemLocales: () => readonly AppLocale[];
   private bundleLoad: Promise<void> | null = null;
+  private appliedSections: string | null = null;
   private readonly refreshes = new Map<string, Promise<JsonRecord>>();
   private readonly attempts = new Map<string, number>();
   private readonly translationLoads = new Map<string, Promise<void>>();
@@ -100,7 +103,11 @@ export class GameDataService {
     this.fileIndex = options.fileIndex ?? new FileUpdateIndex(options.preferences);
     this.files = options.files;
     this.preferences = options.preferences;
-    this.fetchImplementation = options.fetchImplementation ?? fetch;
+    // A raw Window.fetch stored on this service is invoked with the service
+    // as `this`, which browsers reject with "Illegal invocation". Keep the
+    // browser receiver intact without changing injected transports.
+    this.fetchImplementation = options.fetchImplementation ?? ((input, init) => fetch(input, init));
+    this.platform = options.platform;
     this.now = options.now ?? (() => new Date());
     this.systemLocales = options.systemLocales ?? (() => []);
   }
@@ -240,6 +247,8 @@ export class GameDataService {
   private async loadSections(manifest: JsonRecord, refresh: boolean): Promise<void> {
     const entries = manifestData(manifest).stats;
     if (!entries.length) throw new Error('Empty static data index');
+    const signature = JSON.stringify(entries.map((entry) => [entry.path, entry.sha]));
+    if (this.appliedSections === signature) return;
     const bundle: JsonRecord = {};
     // Bound concurrency instead of starting every section request at once.
     for (let offset = 0; offset < entries.length; offset += 4) {
@@ -265,7 +274,8 @@ export class GameDataService {
       );
     }
     // Never replace the in-memory bundle with a partially downloaded set.
-    applyGameDataBundle(bundle);
+    applyGameDataBundle(await applyLocalGameAssets(bundle, this.fetchImplementation));
+    this.appliedSections = signature;
   }
 
   private async readCache(asset: CachedJsonAsset): Promise<JsonCache | null> {
@@ -400,7 +410,10 @@ export class GameDataService {
       throw new Error('Metadata retry is waiting for the next refresh interval');
     }
     this.attempts.set(attemptKey, now);
-    const headers: Record<string, string> = { 'User-Agent': GAME_DATA_USER_AGENT };
+    // A native User-Agent override is not a portable browser request header;
+    // it can cause a rejected cross-origin preflight instead of loading data.
+    const headers: Record<string, string> =
+      this.platform === 'web' ? {} : { 'User-Agent': GAME_DATA_USER_AGENT };
     if (cache?.etag) headers['If-None-Match'] = cache.etag;
     else if (cache?.lastModified) headers['If-Modified-Since'] = cache.lastModified;
     const controller = new AbortController();

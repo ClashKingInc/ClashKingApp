@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Easing,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
   View,
@@ -33,6 +34,27 @@ export function AnnouncementStoryModal({
   const [reveal] = useState(() => new Animated.Value(0));
   const revealTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [ready, setReady] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const finishResult = useRef<AnnouncementStoryResult | null>(null);
+  const didFinish = useRef(false);
+  const finishDismissal = useCallback(() => {
+    if (didFinish.current || finishResult.current === null) return;
+    didFinish.current = true;
+    onFinish(finishResult.current);
+  }, [onFinish]);
+  const requestDismissal = (result: AnnouncementStoryResult) => {
+    if (finishResult.current !== null) return;
+    finishResult.current = result;
+    if (revealTimer.current) clearTimeout(revealTimer.current);
+    entrance.stopAnimation();
+    reveal.stopAnimation();
+    setVisible(false);
+  };
+  useEffect(() => {
+    // Android has no onDismiss callback. iOS must keep the modal mounted until
+    // its native presentation controller has released the touch-blocking view.
+    if (!visible && Platform.OS !== 'ios') finishDismissal();
+  }, [visible, finishDismissal]);
   const dimension = Math.max(
     0,
     Math.min(560, width - 24, height - insets.top - insets.bottom - 24),
@@ -57,7 +79,7 @@ export function AnnouncementStoryModal({
   );
 
   const scheduleReveal = (delay: number) => {
-    if (ready) return;
+    if (ready || finishResult.current !== null) return;
     if (revealTimer.current) clearTimeout(revealTimer.current);
     revealTimer.current = setTimeout(() => {
       setReady(true);
@@ -73,17 +95,18 @@ export function AnnouncementStoryModal({
   const handleMessage = (rawMessage: string) => {
     const type = parseAnnouncementStoryMessage(rawMessage);
     if (type === 'ready') scheduleReveal(120);
-    else if (type === 'close') onFinish('closed');
-    else if (type === 'complete') onFinish('completed');
+    else if (type === 'close') requestDismissal('closed');
+    else if (type === 'complete') requestDismissal('completed');
   };
 
   return (
     <Modal
       animationType="none"
-      onRequestClose={() => onFinish('closed')}
+      onRequestClose={() => requestDismissal('closed')}
+      onDismiss={finishDismissal}
       presentationStyle="overFullScreen"
       transparent
-      visible
+      visible={visible}
     >
       <View
         accessibilityLabel={`Close ${announcement.title}`}
@@ -93,7 +116,7 @@ export function AnnouncementStoryModal({
         <Pressable
           accessibilityLabel={`Close ${announcement.title}`}
           accessibilityRole="button"
-          onPress={() => onFinish('closed')}
+          onPress={() => requestDismissal('closed')}
           style={StyleSheet.absoluteFill}
         />
         <Animated.View

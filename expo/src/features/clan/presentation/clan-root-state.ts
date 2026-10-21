@@ -95,7 +95,8 @@ export async function loadMoreClanJoinLeave(
 
 export async function loadClanWarLog(service: ClanService, clan: Clan): Promise<ClanWarLog | null> {
   const logs = await service.loadWarLogData([clan.tag], {
-    throwOnError: false,
+    throwOnError: true,
+    publicClanTags: clan.isWarLogPublic ? [clan.tag] : [],
   });
   const log = logs.find((item) => item.clanTag === clan.tag) ?? null;
   clan.clanWarLog = log;

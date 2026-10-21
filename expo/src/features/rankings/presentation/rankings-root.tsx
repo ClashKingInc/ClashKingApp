@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BackHandler, View } from 'react-native';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import {
@@ -10,9 +8,12 @@ import {
 } from '../../../core/game-data/game-data-state';
 import type { Clan } from '../../clan/models';
 import type { Player } from '../../player/models';
-import { CKText, Snackbar, useCKTheme } from '../../../ui';
+import { Snackbar, ckColors } from '../../../ui';
+import { StatsRoot } from '../../stats';
+import { statsSections, type StatsSectionValue } from '../../stats/models';
+import { sectionImage, sectionLabel, sectionBackdrop } from '../../stats/presentation/stats-screen';
 import { DestinationStack } from '../../../ui/destination-stack';
-import { DestinationGrid } from '../../../ui/destination-grid';
+import { DestinationHub } from '../../../ui/destination-hub';
 import {
   RankingAudience,
   rankingBoardArtwork,
@@ -23,7 +24,7 @@ import {
 } from '../models';
 import { RankingsScreen, boardLabel, rankingBackground } from './rankings-screen';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
-import { useI18n, materialBackLabel } from '../../../i18n';
+import { useI18n } from '../../../i18n';
 import {
   emptyLocationPreferences,
   readLocationPreferences,
@@ -93,12 +94,14 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
   const locationPreferencesRef = useRef<LocationPreferences>(emptyLocationPreferences);
   const preferenceRevisionRef = useRef(0);
   const preferenceWriteRef = useRef<Promise<void>>(Promise.resolve());
-  const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { t } = useI18n();
   const [revision, setRevision] = useState(0);
   const [message, setMessage] = useState<string>();
+  const [activeStats, setActiveStats] = useState<StatsSectionValue | null>(() =>
+    statsSections.includes(link.section as StatsSectionValue)
+      ? (link.section as StatsSectionValue)
+      : null,
+  );
   useEffect(() => {
     activeBoardRef.current = deepLinkedBoard ?? null;
     locationsReadyRef.current = false;
@@ -152,9 +155,26 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
     void provider.openBoard(board, locationsReadyRef.current);
   };
   const closeFocused = () => {
+    if (activeStats) {
+      setActiveStats(null);
+      return;
+    }
     activeBoardRef.current = null;
     setLocalSelection({ linkKey, board: null });
   };
+  useEffect(() => {
+    if (!activeBoard && !activeStats) return;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (activeStats) {
+        setActiveStats(null);
+        return true;
+      }
+      activeBoardRef.current = null;
+      setLocalSelection({ linkKey, board: null });
+      return true;
+    });
+    return () => subscription.remove();
+  }, [activeBoard, linkKey, activeStats]);
 
   const openEntry = async (entry: RankingEntry) => {
     if (entry.audience === 'players')
@@ -177,32 +197,25 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
     />
   );
   const grid = (
-    <SafeAreaView edges={['left', 'right']} style={{ flex: 1, backgroundColor: theme.background }}>
-      <ScrollView
-        contentContainerStyle={{
-          paddingTop: insets.top + 8,
-          paddingBottom: insets.bottom + 24,
-          paddingHorizontal: Math.max(16, (width - 1120) / 2),
-          gap: 12,
-        }}
-      >
-        <View style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={materialBackLabel(locale)}
-            onPress={onBack}
-            style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}
-          >
-            <ArrowLeft color={theme.onSurface} />
-          </Pressable>
-          <CKText role="screenTitle">{t('sideRankingsTitle')}</CKText>
-        </View>
-        <DestinationGrid
-          initialWidth={width - 2 * Math.max(16, (width - 1120) / 2)}
+        <DestinationHub
+          title={t('homeRankingsAndStats')}
+          onBack={onBack}
           groups={[
             {
+              key: 'statistics',
+              title: t('sideStatsTitle'),
+              items: statsSections.map((section) => ({
+                key: 'stats-' + section,
+                label: sectionLabel(section, t),
+                imageUrl: sectionImage(section),
+                backgroundUrl: sectionBackdrop(section),
+                accentColor: { war: ckColors.lossRed, ranked: ckColors.capitalPurple, cwl: ckColors.warGold, armies: ckColors.legendBlue, items: ckColors.upgradePets, players: ckColors.builderBlue, clans: ckColors.donationGreen }[section],
+                onPress: () => setActiveStats(section),
+              })),
+            },
+            {
               key: 'players',
-              title: t('searchTabPlayers'),
+              title: t('rankingsPlayerSection'),
               items: rankingBoards
                 .filter((board) => board.audience === RankingAudience.players)
                 .map((board) => ({
@@ -216,7 +229,7 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
             },
             {
               key: 'clans',
-              title: t('searchTabClans'),
+              title: t('rankingsClanSection'),
               items: rankingBoards
                 .filter((board) => board.audience === RankingAudience.clans)
                 .map((board) => ({
@@ -230,17 +243,19 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
             },
           ]}
         />
-      </ScrollView>
-    </SafeAreaView>
   );
 
   return (
     <View style={{ flex: 1 }}>
+      {/* Stats and leaderboards share the retained launcher stack. Replacing
+          the stack with StatsRoot lets the native swipe pop the whole utility. */}
       <DestinationStack
-        focused={Boolean(activeBoard)}
+        focused={Boolean(activeBoard) || Boolean(activeStats)}
         onCloseDetail={closeFocused}
         grid={grid}
-        detail={detail}
+        detail={
+          activeStats ? <StatsRoot initialSection={activeStats} onBack={closeFocused} /> : detail
+        }
       />
       <Snackbar message={message} onDismiss={() => setMessage(undefined)} />
     </View>
@@ -255,6 +270,8 @@ export function rankingBoardAccentColor(board: RankingBoardValue): string {
       return '#A98258';
     case 'playerTownHall':
       return '#B77555';
+    case 'playerWarTripleStreak':
+      return '#C4844C';
     case 'playerRanked':
       return '#AD6464';
     case 'clanHome':

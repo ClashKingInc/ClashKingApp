@@ -9,6 +9,17 @@ export class PlayerCardPreferencesService {
   private readonly listeners = new Set<() => void>();
   private homeIncluded: readonly string[] | null = null;
   private homeWrite = Promise.resolve();
+  private hideControls = false;
+  get hideAccountsEnabled() {
+    return this.hideControls;
+  }
+  async setHideAccountsEnabled(enabled: boolean) {
+    // This exposes controls only. Never rewrite account-link privacy from an
+    // app preference, especially when disabling the controls again.
+    await this.storage.setString(STORAGE_KEYS.hideAccountsControls, String(enabled));
+    this.hideControls = enabled;
+    this.notify();
+  }
   constructor(private readonly storage: StringStorage) {}
   get loaded() {
     return this.loadedValue;
@@ -23,8 +34,9 @@ export class PlayerCardPreferencesService {
   optionsFor(tag: string) {
     return this.options.get(normalizeTag(tag)) ?? new PlayerCardOptions();
   }
-  isShownInWarTab(tag: string) {
-    return this.optionsFor(tag).showInWarTab;
+  isShownInWarTab(_tag: string) {
+    // Retired switches must not keep silently hiding accounts saved by old builds.
+    return true;
   }
   isShownInTodoPage(tag: string) {
     return this.optionsFor(tag).showInTodoPage;
@@ -32,20 +44,23 @@ export class PlayerCardPreferencesService {
   isUpgradeTrackerShownOnHome(tag: string) {
     return this.optionsFor(tag).showUpgradeTrackerOnHome;
   }
-  isRankedShownOnHome(tag: string) {
-    return this.optionsFor(tag).showRankedOnHome;
+  isRankedShownOnHome(_tag: string) {
+    return true;
   }
   clear() {
     this.options.clear();
     this.homeIncluded = null;
+    this.hideControls = false;
     this.loadedValue = false;
     this.notify();
   }
   async load() {
-    const [raw, homeRaw] = await Promise.all([
+    const [raw, homeRaw, hideRaw] = await Promise.all([
       this.storage.getString(STORAGE_KEYS.playerCardOptions),
       this.storage.getString(STORAGE_KEYS.homeIncludedAccounts),
+      this.storage.getString(STORAGE_KEYS.hideAccountsControls),
     ]);
+    this.hideControls = hideRaw === 'true';
     this.options.clear();
     if (raw)
       try {

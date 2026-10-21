@@ -1,5 +1,6 @@
 import { gameDataState } from '@/core/game-data/game-data-state';
 import { ImageAssets } from '../../../core/assets/image-assets';
+import type { LegendPosterInput } from '../../../core/graphics/legend-poster-layout';
 import { PlayerEquipment } from './player-items';
 import { apiDate, date, int, number, record, records, string, type JsonRecord } from './parsing';
 
@@ -116,7 +117,11 @@ export class PlayerLegendRank {
     readonly name: string,
     readonly trophies: number,
     readonly globalRank: number,
-    readonly location: { readonly id: number; readonly name: string; readonly countryCode?: string } | null = null,
+    readonly location: {
+      readonly id: number;
+      readonly name: string;
+      readonly countryCode?: string;
+    } | null = null,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -126,7 +131,11 @@ export class PlayerLegendRank {
       int(json.trophies),
       int(json.globalRank),
       json.location && typeof json.location === 'object'
-        ? { id: int(record(json.location).id), name: string(record(json.location).name), countryCode: string(record(json.location).countryCode) || undefined }
+        ? {
+            id: int(record(json.location).id),
+            name: string(record(json.location).name),
+            countryCode: string(record(json.location).countryCode) || undefined,
+          }
         : null,
     );
   }
@@ -140,6 +149,9 @@ export class PlayerLegendDaySummary {
     readonly trophyChange: number,
     readonly closingTrophies?: number | null,
     readonly globalRank?: number | null,
+    readonly attacks?: number,
+    readonly defenses?: number,
+    readonly recordedDefenses?: number,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -150,6 +162,9 @@ export class PlayerLegendDaySummary {
       int(json.trophies),
       json.closingTrophies == null ? null : int(json.closingTrophies),
       json.globalRank == null ? null : int(json.globalRank),
+      json.attacks == null ? undefined : int(json.attacks),
+      json.defenses == null ? undefined : int(json.defenses),
+      json.recordedDefenses == null ? undefined : int(json.recordedDefenses),
     );
   }
 }
@@ -170,12 +185,6 @@ export interface LegendPerformanceComparison {
   readonly playerAttacks: number;
   readonly playerTriples: number;
 }
-export interface LegendArmyPerformanceComparison {
-  readonly familyId: string;
-  readonly name: string | null;
-  readonly shareCode: string;
-  readonly items: readonly LegendPerformanceComparison[];
-}
 
 export class PlayerLegendLeagueData {
   constructor(
@@ -189,13 +198,27 @@ export class PlayerLegendLeagueData {
     readonly selectedDay: string = currentDay?.day ?? currentLegendDay(),
     readonly currentRank: PlayerLegendRank | null = null,
     readonly historicalRank: PlayerLegendRank | null = null,
-    readonly recentDays: readonly PlayerLegendDaySummary[] = currentDay ? [currentDay] : [],
+    readonly recentDays: readonly PlayerLegendDaySummary[] = currentDay
+      ? [
+          new PlayerLegendDaySummary(
+            currentDay.day,
+            currentDay.attackTrophies,
+            currentDay.defenseTrophies,
+            currentDay.trophyChange,
+            null,
+            null,
+            currentDay.attacks.length,
+            currentDay.defenses.length,
+            currentDay.defenses.filter((battle) => !battle.automatic).length,
+          ),
+        ]
+      : [],
     readonly seasonArmyShareCodes: readonly string[] = [],
     readonly seasonStart: string | null = null,
     readonly seasonEnd: string | null = null,
     readonly seasonStats: LegendSeasonStats | null = null,
     readonly comparisons: readonly LegendPerformanceComparison[] = [],
-    readonly armyComparison: LegendArmyPerformanceComparison | null = null,
+    readonly posterSeason: LegendPosterInput['season'] | null = null,
   ) {}
 }
 

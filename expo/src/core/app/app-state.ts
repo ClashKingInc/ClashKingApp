@@ -37,6 +37,15 @@ export function createAppStateStore(
   dependencies: AppStateDependencies,
 ): StoreApi<AppStateSnapshot> {
   let initializeInFlight: Promise<void> | null = null;
+  let featureFlagsLoaded = false;
+  const refreshFeatureFlags = async () => {
+    try {
+      await dependencies.featureFlags.refresh();
+      featureFlagsLoaded = true;
+    } catch {
+      // Startup can proceed with defaults, but its next retry must reload config.
+    }
+  };
 
   const store = createStore<AppStateSnapshot>((set, get) => ({
     locale: 'en',
@@ -45,9 +54,14 @@ export function createAppStateStore(
     initialized: false,
 
     initialize: async () => {
-      if (get().initialized) return;
+      if (get().initialized && featureFlagsLoaded) return;
       if (initializeInFlight !== null) return initializeInFlight;
       const initialize = (async () => {
+        if (get().initialized) {
+          await refreshFeatureFlags();
+          set({ features: currentFeatureState(dependencies.featureFlags) });
+          return;
+        }
         const [storedLocale, storedTheme] = await Promise.all([
           dependencies.preferences.getItem('languageCode'),
           dependencies.preferences.getItem('themeMode'),
@@ -60,7 +74,7 @@ export function createAppStateStore(
 
         await Promise.all([
           dependencies.gameData.loadTranslationsForLocale(appLocale(locale)),
-          dependencies.featureFlags.refresh().catch(() => undefined),
+          refreshFeatureFlags(),
         ]);
         set({
           locale,

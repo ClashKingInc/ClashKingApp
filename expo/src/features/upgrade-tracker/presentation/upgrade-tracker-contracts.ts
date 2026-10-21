@@ -5,6 +5,7 @@ import type { UpgradeTrackerRepository, UpgradeWidgetSyncService } from '../data
 export interface UpgradeTrackerRootProps {
   readonly initialTag?: string;
   readonly onBack: () => void;
+  readonly onOpenAccounts?: () => void;
   readonly repository?: UpgradeTrackerRepository;
   readonly widgetSync?: UpgradeWidgetSyncService;
   readonly accounts?: readonly CocAccountLink[];

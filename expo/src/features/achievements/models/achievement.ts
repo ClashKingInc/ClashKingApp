@@ -3,6 +3,8 @@ export const ACHIEVEMENT_IDS = [
   'war_warrior',
   'mr_legend',
   'defense_doesnt_matter',
+  'first_tournament',
+  'verified_accounts',
 ] as const;
 
 export type AchievementId = (typeof ACHIEVEMENT_IDS)[number];
@@ -23,6 +25,12 @@ export function isAchievementUnlocked(achievement: Achievement): boolean {
 }
 
 export const ACHIEVEMENT_CATALOG_FALLBACK: readonly Achievement[] = Object.freeze([
+  {
+    id: 'verified_accounts',
+    modelUrl: 'derived:verified_accounts',
+    earnedCount: 0,
+    isRepeatable: false,
+  },
   {
     id: 'townhall_18',
     modelUrl: 'https://assets.clashk.ing/achievements/town-hall-18-achievement-badge.glb',

@@ -12,17 +12,65 @@ import { legendArmyGroups, legendHeroLoadouts, type LegendArmyItem } from './leg
 
 const warmedArtwork = new Set<string>();
 
+/** Compact library preview; full parsing and artwork remain shared with the expanded army. */
+export function LegendArmyPreview({ shareCode }: { readonly shareCode: string }) {
+  const groups = new Map(legendArmyGroups(shareCode));
+  const all = [...groups.values()].flat();
+  const preferred = [
+    ...(groups.get('Troops') ?? []).slice(0, 4),
+    ...(groups.get('Spells') ?? []).slice(0, 2),
+  ];
+  const preview = preferred.length ? preferred : all.slice(0, 6);
+  const remaining = all.length - preview.length;
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, minHeight: 48 }}>
+      {preview.map(({ code, count }) => {
+        const item = PlayerBattlelogArmyCatalog.resolve(code);
+        return (
+          <View
+            key={code}
+            accessibilityLabel={`${item.name}, ${count}`}
+            style={{ alignItems: 'center', width: 34 }}
+          >
+            <MobileWebImage
+              imageUrl={item.imageUrl}
+              style={{ width: 32, height: 32 }}
+              contentFit="contain"
+            />
+            <CKText muted role="labelMedium">
+              ×{count}
+            </CKText>
+          </View>
+        );
+      })}
+      {remaining > 0 ? (
+        <CKText muted role="labelLarge">
+          +{remaining}
+        </CKText>
+      ) : null}
+    </View>
+  );
+}
+
 /** Only the first two visible setups are warmed; expansion can show many new images at once. */
 export async function prefetchLegendArmyArtwork(shareCodes: readonly string[]): Promise<void> {
-  const artwork = shareCodes.slice(0, 2).flatMap((shareCode) => {
-    const groups = new Map(legendArmyGroups(shareCode));
-    return ['Heroes', 'Troops', 'Spells', 'Clan Castle', 'Siege'].flatMap((label) =>
-      (groups.get(label) ?? []).map(({ code }) => ({
-      url: PlayerBattlelogArmyCatalog.resolve(code).imageUrl,
-      size: code.startsWith('h_') ? 76 : code.startsWith('p_') || code.startsWith('e_') ? 30 : 40,
-      })),
-    );
-  }).filter(({ url }) => Boolean(url)).slice(0, 24);
+  const artwork = shareCodes
+    .slice(0, 2)
+    .flatMap((shareCode) => {
+      const groups = new Map(legendArmyGroups(shareCode));
+      return ['Heroes', 'Troops', 'Spells', 'Clan Castle', 'Siege'].flatMap((label) =>
+        (groups.get(label) ?? []).map(({ code }) => ({
+          url: PlayerBattlelogArmyCatalog.resolve(code).imageUrl,
+          size: code.startsWith('h_')
+            ? 76
+            : code.startsWith('p_') || code.startsWith('e_')
+              ? 30
+              : 40,
+        })),
+      );
+    })
+    .filter(({ url }) => Boolean(url))
+    .slice(0, 24);
   const pending = artwork.filter(({ url, size }) => !warmedArtwork.has(`${url}:${size}`));
   for (const { url, size } of pending) warmedArtwork.add(`${url}:${size}`);
   while (warmedArtwork.size > 128) {
@@ -32,15 +80,22 @@ export async function prefetchLegendArmyArtwork(shareCodes: readonly string[]): 
   // Four downloads at a time leave bandwidth for the visible list and charts.
   for (let offset = 0; offset < pending.length; offset += 4) {
     const batch = pending.slice(offset, offset + 4);
-    const results = await Promise.allSettled(batch.map(async ({ url, size }) => {
-      const candidate = sizedAssetUrl(url, size, size, PixelRatio.get());
-      const metadata = manifestImage(url);
-      if (Platform.OS !== 'web' && metadata && url.startsWith('https://assets.clashk.ing/')) {
-        await localImageCache.resolve(candidate, decodeURIComponent(new URL(url).pathname.slice(1)), metadata.sha, () => {});
-      } else {
-        await Image.prefetch(candidate);
-      }
-    }));
+    const results = await Promise.allSettled(
+      batch.map(async ({ url, size }) => {
+        const candidate = sizedAssetUrl(url, size, size, PixelRatio.get());
+        const metadata = manifestImage(url);
+        if (Platform.OS !== 'web' && metadata && url.startsWith('https://assets.clashk.ing/')) {
+          await localImageCache.resolve(
+            candidate,
+            decodeURIComponent(new URL(url).pathname.slice(1)),
+            metadata.sha,
+            () => {},
+          );
+        } else {
+          await Image.prefetch(candidate);
+        }
+      }),
+    );
     results.forEach((result, index) => {
       if (result.status === 'rejected') {
         const item = batch[index];

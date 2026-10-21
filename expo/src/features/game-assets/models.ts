@@ -1,5 +1,5 @@
 export const SUPPORTED_GAME_ASSET_EXTENSIONS = Object.freeze(
-  new Set(['gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']),
+  new Set(['avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']),
 );
 
 export class GameAssetManifest {
@@ -17,6 +17,24 @@ export class GameAssetManifest {
 
   static fromJson(value: unknown): GameAssetManifest {
     if (!isRecord(value)) throw new TypeError('Game asset manifest must be an object');
+    if (value.version === 2 && isRecord(value.assets)) {
+      const assets = Object.entries(value.assets).flatMap(([category, entries]) => {
+        if (!Array.isArray(entries)) throw new TypeError(`Invalid asset category: ${category}`);
+        return entries.map((entry) => {
+          if (!isRecord(entry)) throw new TypeError(`Invalid asset in category: ${category}`);
+          const path = requiredString(entry, 'path');
+          if (path.startsWith('/') || path.split('/').includes('..'))
+            throw new TypeError('Invalid asset path');
+          return GameAsset.fromJson({
+            ...entry,
+            category,
+            extension: path.split('.').at(-1)?.toLowerCase(),
+            url: `https://assets.clashk.ing/${path.split('/').map(encodeURIComponent).join('/')}`,
+          });
+        });
+      });
+      return new GameAssetManifest(2, assets);
+    }
     if (value.version !== 1) {
       throw new TypeError(`Unsupported game asset manifest version: ${String(value.version)}`);
     }

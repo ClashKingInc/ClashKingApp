@@ -86,7 +86,10 @@ export function resolveDiscordRedirectUri(
   if (options.webOrigin === undefined || options.webHost === undefined) {
     throw new Error('The web origin and host are required for Discord OAuth.');
   }
-  if (options.webHost === 'localhost' || options.webHost === '127.0.0.1') {
+  // The local HTTPS tunnel must return to itself, not the dev launcher's
+  // localhost override. The popup and API both require a same-origin callback.
+  if (options.webHost === 'localhost' || options.webHost === '127.0.0.1' ||
+      options.webHost === 'local-app.clashk.ing') {
     return `${options.webOrigin}/auth/callback`;
   }
   if ((options.webRedirectOverride ?? '').length > 0) {

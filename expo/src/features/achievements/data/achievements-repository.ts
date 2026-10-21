@@ -2,6 +2,7 @@ import { AchievementsCheckEndpoint } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
+import { BUNDLED_TOURNAMENT_MODEL, sharedAchievementModelCache } from './achievement-model-cache';
 import {
   ACHIEVEMENT_CATALOG_FALLBACK,
   isAchievementId,
@@ -24,6 +25,8 @@ export class AchievementsRepository {
   private readonly listeners = new Set<Listener>();
   private sessionGeneration = 0;
   private sessionUserId: string | null = null;
+  private lastLoadedAt = 0;
+  private pendingLoad: Promise<void> | undefined;
 
   constructor(private readonly api: ContractApiService) {}
 
@@ -44,14 +47,28 @@ export class AchievementsRepository {
 
   clear(): void {
     this.sessionGeneration += 1;
+    this.lastLoadedAt = 0;
+    this.pendingLoad = undefined;
     this.setSnapshot([], false);
   }
 
   async load(): Promise<void> {
+    if (this.lastLoadedAt > Date.now() - 5 * 60_000) return;
+    if (this.pendingLoad) return this.pendingLoad;
     const generation = this.sessionGeneration;
-    const response = await this.fetchCatalog();
-    if (generation !== this.sessionGeneration) return;
-    this.replaceFromResponse(response);
+    // Startup and the achievement screen share one request. Never reuse earned
+    // counts across identities, or cache a failed request as a successful load.
+    const pending = this.fetchCatalog()
+      .then((response) => {
+        if (generation !== this.sessionGeneration) return;
+        this.replaceFromResponse(response);
+        this.lastLoadedAt = Date.now();
+      })
+      .finally(() => {
+        if (this.pendingLoad === pending) this.pendingLoad = undefined;
+      });
+    this.pendingLoad = pending;
+    return pending;
   }
 
   async check(): Promise<void> {
@@ -62,6 +79,7 @@ export class AchievementsRepository {
       const response = await this.fetchCatalog();
       if (generation !== this.sessionGeneration) return;
       this.replaceFromResponse(response, true);
+      this.lastLoadedAt = Date.now();
     } finally {
       if (generation === this.sessionGeneration) {
         this.setSnapshot(this.snapshotValue.achievements, false);
@@ -83,7 +101,14 @@ export class AchievementsRepository {
     for (const rawItem of response.items) {
       if (!isRecord(rawItem)) continue;
       const id = typeof rawItem.id === 'string' ? rawItem.id : '';
-      const modelUrl = rawItem.asset_url;
+      // Participation uses the shipped model until an asset release publishes
+      // it. The server still owns catalog inclusion and every earned count.
+      const modelUrl =
+        id === 'first_tournament'
+          ? BUNDLED_TOURNAMENT_MODEL
+          : id === 'verified_accounts'
+            ? 'derived:verified_accounts'
+            : rawItem.asset_url;
       const earnedCount = rawItem.earned_count;
       const repeatable = rawItem.repeatable;
       if (
@@ -107,7 +132,18 @@ export class AchievementsRepository {
       const remote = remoteById.get(catalogItem.id);
       return remote ? [remote] : [];
     });
+    // New achievements appear only when the server includes their catalog row
+    // and actual earned count. The participation artwork is bundled locally.
+    const debut = remoteById.get('first_tournament');
+    if (debut) achievements.push(debut);
     this.setSnapshot(achievements, preserveRefreshing && this.snapshotValue.isRefreshing);
+    // Startup already fetches earned counts. Warm only earned artwork through
+    // the existing shared cache, so opening Profile does not begin a fresh GLB
+    // download. This best-effort work must never delay or fail the catalog load.
+    for (const achievement of achievements) {
+      if (achievement.earnedCount > 0)
+        void sharedAchievementModelCache.resolve(achievement.modelUrl);
+    }
   }
 
   private setSnapshot(achievements: readonly Achievement[], isRefreshing: boolean): void {

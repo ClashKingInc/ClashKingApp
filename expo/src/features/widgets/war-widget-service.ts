@@ -4,6 +4,7 @@ import {
   playerClanTagStorageKey,
   warWidgetInfoStorageKey,
 } from '../../core/storage/storage';
+import { ImageAssets } from '../../core/assets/image-assets';
 import { APP_FEATURE_FLAGS, defaultFeatureFlagValue } from '../../core/feature-flags/feature-flags';
 import type {
   WarWidgetBookmarkedClan,
@@ -46,7 +47,7 @@ export function clanOptionsFromProfiles(
     byTag.set(normalizedClanTag(clan.tag), {
       tag: clan.tag,
       name: clan.name,
-      badgeUrl: ImageAssets.clanBadgeForTag(clan.tag),
+      badgeUrl: ImageAssets.clanBadgeForTag(clan.tag, clan),
     });
   }
   for (const clan of bookmarkedClans) {
@@ -54,7 +55,7 @@ export function clanOptionsFromProfiles(
     const key = normalizedClanTag(clan.tag);
     if (!byTag.has(key)) {
       const hydrated = hydratedByTag.get(key);
-      const badgeUrl = ImageAssets.clanBadgeForTag(clan.tag);
+      const badgeUrl = ImageAssets.clanBadgeForTag(clan.tag, hydrated ?? clan);
       byTag.set(key, {
         tag: clan.tag,
         name: hydrated?.name || clan.name,
@@ -399,4 +400,3 @@ function compareNames(left: string, right: string): number {
   const normalizedRight = right.toLowerCase();
   return normalizedLeft < normalizedRight ? -1 : normalizedLeft > normalizedRight ? 1 : 0;
 }
-import { ImageAssets } from '../../core/assets/image-assets';

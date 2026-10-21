@@ -1,4 +1,5 @@
 import { HeaderIconButton } from '../../../ui/header';
+import { CARD_REORDER_HOLD_MS } from '../../../ui/drag-jiggle';
 import { useEffect, useState, type ReactNode } from 'react';
 import {
   Modal,
@@ -10,16 +11,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
-import {
-  Bookmark,
-  ArrowLeft,
-  ChevronRight,
-  Eye,
-  Link2,
-  Shield,
-  Sword,
-  X,
-} from 'lucide-react-native';
+import { ArrowLeft, ChevronRight, Eye, Shield, Sword, X } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { materialBackLabel, useI18n } from '../../../i18n';
@@ -27,7 +19,9 @@ import {
   CKText,
   GlassSurface,
   MobileWebImage,
+  ckColors,
   PillSurface,
+  PageSkeleton,
   SelectionPickerModal,
   Surface,
   colorWithAlpha,
@@ -51,6 +45,7 @@ export function WarSummaryCard({
   onOpenCwl,
   onLongPress,
   dragTestID,
+  loading = false,
 }: {
   item: WarRosterItem;
   now?: Date;
@@ -58,25 +53,37 @@ export function WarSummaryCard({
   onOpenCwl: () => void;
   onLongPress?: () => void;
   dragTestID?: string;
+  loading?: boolean;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const war = item.displayWar;
+  if (loading && !item.summary) {
+    return (
+      <Surface style={styles.warCard}>
+        <PageSkeleton kind="war" rows={0} />
+      </Surface>
+    );
+  }
   if (!war || ['notInWar', 'unknown', 'accessDenied'].includes(war.state)) {
     const privateLog = item.summary?.warInfo.state === 'accessDenied';
     return (
-      <Pressable onLongPress={onLongPress} testID={dragTestID}>
-      <Surface style={styles.emptyWarCard}>
-        <MobileWebImage
-          imageUrl={item.badgeUrl || ImageAssets.clanCastle}
-          style={styles.emptyBadge}
-        />
-        <CKText muted style={styles.emptyMessage}>
-          {privateLog
-            ? t('warLogClosed', { clan: item.name })
-            : t('warIsNotInWar', { clan: item.name })}
-        </CKText>
-      </Surface>
+      <Pressable
+        delayLongPress={CARD_REORDER_HOLD_MS}
+        onLongPress={onLongPress}
+        testID={dragTestID}
+      >
+        <Surface style={styles.emptyWarCard}>
+          <MobileWebImage
+            imageUrl={item.badgeUrl || ImageAssets.clanCastle}
+            style={styles.emptyBadge}
+          />
+          <CKText muted style={styles.emptyMessage}>
+            {privateLog
+              ? t('warLogClosed', { clan: item.name })
+              : t('warIsNotInWar', { clan: item.name })}
+          </CKText>
+        </Surface>
       </Pressable>
     );
   }
@@ -106,10 +113,74 @@ export function WarSummaryCard({
               time: remainingWarTime(war.endTime, now, t),
             })
           : t('warOngoing');
+  const accountStatus = statuses.length ? (
+    <ScrollView
+      horizontal
+      testID="war-summary-account-status"
+      showsHorizontalScrollIndicator={statuses.length > 1}
+      contentContainerStyle={styles.accountStatusContent}
+      style={[
+        styles.accountStatusFooter,
+        { backgroundColor: colorWithAlpha(theme.onSurface, 0.035) },
+      ]}
+    >
+      {[...statuses]
+        .sort(
+          (left, right) =>
+            right.left - left.left || left.account.name.localeCompare(right.account.name),
+        )
+        .map((status) => {
+          const statusColor =
+            status.left === 0
+              ? ckColors.donationGreen
+              : war.state === 'preparation'
+                ? theme.onSurfaceVariant
+                : ckColors.lossRed;
+          return (
+            <View
+              key={status.account.tag}
+              style={styles.accountStatusItem}
+              accessible
+              accessibilityLabel={`${status.account.name}, ${t('warAttacksTitle')}: ${status.done}/${war.effectiveAttacksPerMember}`}
+            >
+              <View style={[styles.accountStatusDot, { backgroundColor: statusColor }]} />
+              <CKText role="labelMedium" numberOfLines={1}>
+                {status.account.name}
+              </CKText>
+              <MobileWebImage imageUrl={ImageAssets.sword} style={{ width: 13, height: 13 }} />
+              <CKText
+                role="labelMedium"
+                style={{ color: statusColor, fontVariant: ['tabular-nums'] }}
+              >
+                {status.done}/{war.effectiveAttacksPerMember}
+              </CKText>
+            </View>
+          );
+        })}
+    </ScrollView>
+  ) : allSpectators ? (
+    <View
+      style={[
+        styles.accountStatusFooter,
+        styles.spectatorFooter,
+        { backgroundColor: colorWithAlpha(theme.onSurface, 0.035) },
+      ]}
+    >
+      <Eye size={13} color={theme.onSurfaceVariant} />
+      <CKText role="labelMedium" muted>
+        Spectator
+      </CKText>
+    </View>
+  ) : null;
   return (
     <Surface style={styles.warCard}>
       {cwlBanner && canOpenCwl ? (
-        <Pressable accessibilityRole="button" onPress={onOpenCwl} onLongPress={onLongPress}>
+        <Pressable
+          accessibilityRole="button"
+          onPress={onOpenCwl}
+          delayLongPress={CARD_REORDER_HOLD_MS}
+          onLongPress={onLongPress}
+        >
           {cwlBanner}
         </Pressable>
       ) : (
@@ -119,79 +190,39 @@ export function WarSummaryCard({
         accessibilityRole="button"
         accessibilityLabel={`${war.clan?.name} versus ${war.opponent?.name}`}
         onPress={() => onOpenWar(war)}
+        delayLongPress={CARD_REORDER_HOLD_MS}
         onLongPress={onLongPress}
         testID={dragTestID}
       >
-        <View testID="war-summary-body" style={[styles.warBody, war.state === 'preparation' && styles.preparationWarBody]}>
-          <WarSide clan={war.clan} />
-          <View style={styles.scoreColumn}>
-            {allSpectators ? (
-              <PillSurface style={styles.statusPill}>
-                <Eye size={13} color={theme.onSurfaceVariant} />
-                <CKText role="labelSmall">Spectator</CKText>
-              </PillSurface>
-            ) : null}
-            {war.state === 'warEnded' ? (
-              <CKText
-                role="titleMedium"
-                style={[styles.resultLabel, { color: warResultColor(war, item.tag, theme) }]}
-              >
-                {stateLabel}
-              </CKText>
-            ) : (
-              <CKText
-                testID="war-summary-state-label"
-                role="labelLarge"
-                numberOfLines={2}
-                style={styles.stateLabel}
-              >
-                {stateLabel}
-              </CKText>
-            )}
-            {war.state !== 'preparation' ? (
-              <>
-                <WarScoreRow left={war.clan?.stars ?? 0} right={war.opponent?.stars ?? 0} />
-                <WarDestructionRow
-                  left={war.clan?.destructionPercentage ?? 0}
-                  right={war.opponent?.destructionPercentage ?? 0}
-                />
-              </>
-            ) : null}
-          </View>
-          <WarSide clan={war.opponent} />
-        </View>
-        {statuses.length ? (
-          <View testID="war-summary-account-chips" style={styles.attackStatusWrap}>
-            {[...statuses]
-              .sort(
-                (left, right) =>
-                  right.left - left.left || left.account.name.localeCompare(right.account.name),
+        <View testID="war-summary-body" style={styles.summaryBody}>
+          <CompactWarScoreboard
+            war={war}
+            aboveScore={
+              war.state === 'warEnded' ? (
+                <CKText
+                  testID="war-summary-result-label"
+                  role="bodyMedium"
+                  style={[styles.resultLabel, { color: warResultColor(war, item.tag, theme) }]}
+                >
+                  {stateLabel}
+                </CKText>
+              ) : (
+                <CKText
+                  testID="war-summary-state-label"
+                  role="labelLarge"
+                  numberOfLines={2}
+                  style={styles.stateLabel}
+                >
+                  {stateLabel}
+                </CKText>
               )
-              .map((status) => {
-                const complete = status.left === 0;
-                return (
-                  <View
-                    key={status.account.tag}
-                    style={[
-                      styles.attackStatus,
-                      {
-                        backgroundColor: colorWithAlpha(complete ? '#2EAD70' : theme.primary, 0.14),
-                      },
-                    ]}
-                  >
-                    {status.account.bookmarked ? (
-                      <Bookmark size={13} color={theme.onSurfaceVariant} />
-                    ) : (
-                      <Link2 size={13} color={theme.onSurfaceVariant} />
-                    )}
-                    <CKText role="labelSmall">
-                      {status.account.name} {status.done}/{war.effectiveAttacksPerMember}
-                    </CKText>
-                  </View>
-                );
-              })}
-          </View>
-        ) : null}
+            }
+          />
+        </View>
+        {/* Keep participation separate from the scoreboard. A horizontal rail
+            supports every account without stretching the card or hiding names
+            behind an aggregate count. Any participant suppresses Spectator. */}
+        {accountStatus}
       </Pressable>
     </Surface>
   );
@@ -317,6 +348,9 @@ export function AttackDetailsModal({
   if (!attack) return null;
   const attacker = war.getMemberByTag(attack.attackerTag) ?? attack.attacker;
   const defender = war.getMemberByTag(attack.defenderTag) ?? attack.defender;
+  const clanFor = (tag: string) =>
+    [war.clan, war.opponent].find((clan) => clan?.members.some((member) => member.tag === tag)) ??
+    null;
   return (
     <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.modalOverlay} onPress={onClose}>
@@ -333,9 +367,13 @@ export function AttackDetailsModal({
                   <PillSurface style={styles.detailMetaPill}>
                     <CKText role="labelMedium">#{attack.order}</CKText>
                   </PillSurface>
-                  <PillSurface style={styles.detailMetaPill}>
-                    <CKText role="labelMedium">{war.warType ?? t('generalUnknown')}</CKText>
-                  </PillSurface>
+                  {war.isClanWarLeague || war.warType === 'friendly' ? (
+                    <PillSurface style={styles.detailMetaPill}>
+                      <CKText role="labelMedium">
+                        {t(war.isClanWarLeague ? 'cwlTitle' : 'warFiltersFriendly')}
+                      </CKText>
+                    </PillSurface>
+                  ) : null}
                 </View>
               </View>
               <RoundButton label={t('generalCancel')} onPress={onClose}>
@@ -360,6 +398,7 @@ export function AttackDetailsModal({
             <Participant
               title={t('warAttacksDetailsAttacker')}
               member={attacker}
+              clan={clanFor(attack.attackerTag)}
               onPress={() => onOpenPlayer(attack.attackerTag)}
             />
             <View style={styles.versus}>
@@ -370,6 +409,7 @@ export function AttackDetailsModal({
             <Participant
               title={t('warAttacksDetailsDefender')}
               member={defender}
+              clan={clanFor(attack.defenderTag)}
               onPress={() => onOpenPlayer(attack.defenderTag)}
             />
             <Surface muted style={styles.detailsPanel}>
@@ -476,43 +516,160 @@ export function SectionPanel({
   );
 }
 
-function WarSide({ clan }: { clan: WarInfo['clan'] }) {
+/** Shared compact score layout; participation belongs outside the score area. */
+export function CompactWarScoreboard({
+  war,
+  leftColor,
+  rightColor,
+  aboveScore,
+  lightText = false,
+  onOpenClan,
+  onCopyClan,
+}: {
+  war: WarInfo;
+  leftColor?: string;
+  rightColor?: string;
+  aboveScore?: ReactNode;
+  lightText?: boolean;
+  onOpenClan?: (tag: string) => void;
+  onCopyClan?: (tag: string) => void;
+}) {
+  const attackCapacity = (war.teamSize ?? 0) * war.effectiveAttacksPerMember;
+  return (
+    <View style={styles.scoreboard}>
+      <View style={styles.warBody}>
+        <WarSide
+          clan={war.clan}
+          nameColor={leftColor ?? (lightText ? '#fff' : undefined)}
+          attackCapacity={attackCapacity}
+          onOpenClan={onOpenClan}
+          onCopyClan={onCopyClan}
+          lightText={lightText}
+        />
+        <View style={styles.scoreColumn}>
+          {aboveScore}
+          {war.state === 'preparation' ? (
+            <CKText style={[styles.scoreValue, lightText && { color: '#fff' }]}>—</CKText>
+          ) : (
+            <>
+              <WarScoreRow
+                left={war.clan?.stars ?? 0}
+                right={war.opponent?.stars ?? 0}
+                color={lightText ? '#fff' : undefined}
+              />
+              <View style={styles.destructionRow}>
+                <CKText
+                  role="labelSmall"
+                  muted
+                  style={[styles.destructionValue, lightText && { color: '#D8DEE8' }]}
+                >
+                  {formatPercent(war.clan?.destructionPercentage ?? 0)}
+                </CKText>
+                <CKText
+                  role="labelSmall"
+                  muted
+                  style={[styles.destructionValue, lightText && { color: '#D8DEE8' }]}
+                >
+                  {formatPercent(war.opponent?.destructionPercentage ?? 0)}
+                </CKText>
+              </View>
+            </>
+          )}
+        </View>
+        <WarSide
+          clan={war.opponent}
+          nameColor={rightColor ?? (lightText ? '#fff' : undefined)}
+          onOpenClan={onOpenClan}
+          onCopyClan={onCopyClan}
+          attackCapacity={attackCapacity}
+          lightText={lightText}
+        />
+      </View>
+    </View>
+  );
+}
+
+function WarSide({
+  clan,
+  attackCapacity,
+  nameColor,
+  onOpenClan,
+  lightText = false,
+  onCopyClan,
+}: {
+  clan: WarInfo['clan'];
+  attackCapacity?: number;
+  nameColor?: string;
+  onOpenClan?: (tag: string) => void;
+  lightText?: boolean;
+  onCopyClan?: (tag: string) => void;
+}) {
+  const { t } = useI18n();
   return (
     <View style={styles.warSide}>
-      <MobileWebImage
-        imageUrl={clan?.badgeUrls.smallest || ImageAssets.clanCastle}
-        style={styles.warBadge}
-      />
-      <CKText role="labelMedium" numberOfLines={1}>
+      {onOpenClan && clan ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={clan.name}
+          onPress={() => onOpenClan(clan.tag)}
+          onLongPress={onCopyClan ? () => onCopyClan(clan.tag) : undefined}
+        >
+          <MobileWebImage
+            imageUrl={clan.badgeUrls.smallest || ImageAssets.clanCastle}
+            style={styles.warBadge}
+          />
+        </Pressable>
+      ) : (
+        <MobileWebImage
+          imageUrl={clan?.badgeUrls.smallest || ImageAssets.clanCastle}
+          style={styles.warBadge}
+        />
+      )}
+      <CKText
+        role="labelMedium"
+        style={[styles.sideName, nameColor ? { color: nameColor } : undefined]}
+      >
         {clan?.name ?? '—'}
       </CKText>
+      {attackCapacity !== undefined ? (
+        <View
+          style={styles.sideAttacks}
+          accessible
+          accessibilityLabel={`${t('warAttacksTitle')}: ${clan?.attacks ?? 0}/${attackCapacity}`}
+        >
+          <MobileWebImage imageUrl={ImageAssets.sword} style={{ width: 12, height: 12 }} />
+          <CKText
+            role="labelSmall"
+            muted
+            style={[{ fontVariant: ['tabular-nums'] }, lightText && { color: '#D8DEE8' }]}
+          >
+            {clan?.attacks ?? 0}/{attackCapacity}
+          </CKText>
+        </View>
+      ) : null}
     </View>
   );
 }
 
-function WarScoreRow({ left, right }: { left: number; right: number }) {
+function WarScoreRow({ left, right, color }: { left: number; right: number; color?: string }) {
   return (
-    <View style={styles.scoreRow}>
+    <View testID="war-summary-score" style={styles.scoreRow}>
       <CKText
-        testID="war-summary-score"
         role="titleMedium"
         numberOfLines={1}
-        style={styles.scoreValue}
+        adjustsFontSizeToFit
+        style={[styles.scoreValue, styles.leftScore, color ? { color } : undefined]}
       >
-        {`${left} - ${right}`}
+        {left}
       </CKText>
-    </View>
-  );
-}
-
-function WarDestructionRow({ left, right }: { left: number; right: number }) {
-  return (
-    <View style={styles.destructionRow}>
-      <CKText muted role="labelSmall" style={styles.destructionValue}>
-        {formatPercent(left)}
-      </CKText>
-      <CKText muted role="labelSmall" style={styles.destructionValue}>
-        {formatPercent(right)}
+      <MobileWebImage imageUrl={ImageAssets.attackStar} style={{ width: 19, height: 19 }} />
+      <CKText
+        role="titleMedium"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        style={[styles.scoreValue, styles.rightScore, color ? { color } : undefined]}
+      >
+        {right}
       </CKText>
     </View>
   );
@@ -657,10 +814,12 @@ export function WarTiming({ war, hero = false }: { war: WarInfo; hero?: boolean 
 function Participant({
   title,
   member,
+  clan,
   onPress,
 }: {
   title: string;
   member: Pick<WarMember, 'tag' | 'name' | 'townhallLevel' | 'mapPosition'> | null;
+  clan: WarInfo['clan'];
   onPress: () => void;
 }) {
   return (
@@ -675,6 +834,14 @@ function Participant({
         </CKText>
         <CKText role="rowTitle">{member?.name ?? '—'}</CKText>
         <CKText muted>{member?.tag ?? '—'}</CKText>
+        {clan ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <MobileWebImage imageUrl={clan.badgeUrls.smallest} style={{ width: 18, height: 20 }} />
+            <CKText role="metadata" muted>
+              {clan.name}
+            </CKText>
+          </View>
+        ) : null}
       </View>
       <PillSurface style={styles.mapPill}>
         <CKText role="labelMedium">#{member?.mapPosition ?? '—'}</CKText>
@@ -761,51 +928,63 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   stripIcon: { width: 16, height: 16, resizeMode: 'contain' },
+  summaryBody: { paddingHorizontal: 8, paddingTop: 16, paddingBottom: 8 },
+  scoreboard: { gap: 8, width: '100%' },
   warBody: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingTop: 16,
-    paddingBottom: 8,
   },
-  preparationWarBody: { minHeight: 112 },
-  warSide: { flex: 3, alignItems: 'center', gap: 3 },
-  warBadge: { width: 70, height: 70, resizeMode: 'contain' },
+  // Each identity is a single stack: badge, name, then attacks. Do not split the
+  // names into another row; that disconnects them from their badge on wider cards.
+  warSide: { flex: 3, minWidth: 0, alignItems: 'center', gap: 3 },
+  warBadge: { width: 54, height: 54, resizeMode: 'contain' },
+  sideName: { textAlign: 'center' },
+  sideAttacks: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 1 },
   scoreColumn: { flex: 5, minWidth: 0, alignItems: 'center', justifyContent: 'center', gap: 5 },
   stateLabel: { textAlign: 'center', fontWeight: '700', flexShrink: 1, lineHeight: 18 },
-  resultLabel: { fontWeight: '800' },
-  scoreRow: { width: '100%', alignItems: 'center', justifyContent: 'center' },
+  resultLabel: { fontWeight: '600', textAlign: 'center', lineHeight: 18 },
+  scoreRow: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
   scoreValue: {
     fontSize: 28,
     lineHeight: 34,
+    flexShrink: 1,
     fontVariant: ['tabular-nums'],
     fontWeight: '800',
     textAlign: 'center',
   },
-  destructionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 },
-  destructionValue: { width: 56, textAlign: 'center' },
-  statusPill: {
-    minHeight: 26,
+  leftScore: { flex: 1, textAlign: 'right' },
+  rightScore: { flex: 1, textAlign: 'left' },
+  destructionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 8,
-  },
-  attackStatusWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingBottom: 6,
+    gap: 12,
+    marginTop: -3,
   },
-  attackStatus: {
-    minHeight: 26,
-    borderRadius: 999,
+  destructionValue: { width: 56, textAlign: 'center' },
+  accountStatusFooter: { borderBottomLeftRadius: 28, borderBottomRightRadius: 28 },
+  accountStatusContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexGrow: 1,
+  },
+  accountStatusItem: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  accountStatusDot: { width: 5, height: 5, borderRadius: 3 },
+  spectatorFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
-    paddingHorizontal: 9,
+    padding: 9,
   },
   hero: { overflow: 'hidden', paddingBottom: 24, gap: 16 },
   matchupMetrics: {

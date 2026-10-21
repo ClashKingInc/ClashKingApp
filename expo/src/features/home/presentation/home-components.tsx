@@ -1,9 +1,21 @@
-import { Children, useRef, useState, type ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Children,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
+import { Animated, PanResponder, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
+import { useCKAccessibility } from '../../../ui/accessibility';
 import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-native';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { CardAtmosphere } from '../../../ui/card-appearance';
 import { materialNextPageTooltip, materialPreviousPageTooltip, useI18n } from '../../../i18n';
 import {
   CKText,
@@ -25,34 +37,141 @@ import {
 
 export const HOME_METRIC_HEIGHT = 44;
 export const HOME_METRIC_GAP = 6;
+export const HomeDragContext = createContext(false);
 
 export function HomeCardFrame({
   children,
+  header,
   onPress,
+  actionLabel,
+  accent,
+  footer,
+  onPage,
 }: {
   children: ReactNode;
+  header?: ReactNode;
   onPress?: () => void;
+  actionLabel?: string;
+  accent?: string;
+  footer?: ReactNode;
+  onPage?: (direction: -1 | 1) => void;
 }) {
   const theme = useCKTheme();
-  const body = (
-    <View
+  const guard = usePrimarySwipeGuard();
+  const { reduceMotion } = useCKAccessibility();
+  const dragging = useContext(HomeDragContext);
+  const touchEligible = useRef(true);
+  const pressStart = useRef({ x: 0, y: 0 });
+  const pressDelta = useRef({ x: 0, y: 0 });
+  const [offset] = useState(() => new Animated.Value(0));
+  const paging = useRef({ onPage, reduceMotion, dragging });
+  useEffect(() => {
+    paging.current = { onPage, reduceMotion, dragging };
+  }, [onPage, reduceMotion, dragging]);
+  useEffect(() => () => guard(false), [guard]);
+  // PanResponder stores callbacks; these refs are read on gestures, not render.
+  /* eslint-disable react-hooks/refs */
+  const pan = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponderCapture: (_, gesture) =>
+          !!paging.current.onPage &&
+          !paging.current.dragging &&
+          touchEligible.current &&
+          Math.abs(gesture.dx) > 18 &&
+          Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.8,
+        onMoveShouldSetPanResponder: (_, gesture) =>
+          !!paging.current.onPage &&
+          !paging.current.dragging &&
+          touchEligible.current &&
+          Math.abs(gesture.dx) > 18 &&
+          Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.8,
+        onPanResponderMove: (_, gesture) =>
+          offset.setValue(
+            paging.current.reduceMotion ? 0 : Math.max(-24, Math.min(24, gesture.dx * 0.2)),
+          ),
+        onPanResponderRelease: (_, gesture) => {
+          if (!paging.current.dragging && Math.abs(gesture.dx) > 40)
+            paging.current.onPage?.(gesture.dx < 0 ? 1 : -1);
+          Animated.spring(offset, {
+            toValue: 0,
+            useNativeDriver: true,
+            speed: 30,
+            bounciness: 0,
+          }).start();
+          guard(false);
+        },
+        onPanResponderTerminate: () => {
+          offset.setValue(0);
+          guard(false);
+        },
+        onPanResponderTerminationRequest: () => false,
+      }),
+    [guard, offset],
+  );
+  /* eslint-enable react-hooks/refs */
+  return (
+    <Animated.View
+      collapsable={false}
+      {...(onPage ? pan.panHandlers : {})}
+      onTouchStart={(event) => {
+        touchEligible.current = event.nativeEvent.pageX >= 32;
+        if (onPage && event.nativeEvent.pageX >= 32) guard(true);
+      }}
+      onTouchEnd={() => guard(false)}
+      onTouchCancel={() => guard(false)}
       style={[
         styles.frame,
+        { transform: [{ translateX: offset }] },
         {
           backgroundColor: theme.surface,
           borderColor: colorWithAlpha(theme.outlineVariant, 0.32),
         },
       ]}
     >
-      {children}
-    </View>
-  );
-  return onPress ? (
-    <Pressable accessibilityRole="button" onPress={onPress}>
-      {body}
-    </Pressable>
-  ) : (
-    body
+      <CardAtmosphere color={accent} />
+      {/* Account selectors belong in the header, outside the details button.
+          A nested button is invalid on web and also conflates the two actions. */}
+      {header}
+      {onPress ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={actionLabel}
+          onPressIn={(event) => {
+            pressStart.current = { x: event.nativeEvent.pageX, y: event.nativeEvent.pageY };
+            pressDelta.current = { x: 0, y: 0 };
+          }}
+          onTouchMove={(event) => {
+            pressDelta.current = {
+              x: event.nativeEvent.pageX - pressStart.current.x,
+              y: event.nativeEvent.pageY - pressStart.current.y,
+            };
+          }}
+          onPress={(event) => {
+            if (dragging) return;
+            const dx = event.nativeEvent.pageX - pressStart.current.x;
+            const dy = event.nativeEvent.pageY - pressStart.current.y;
+            const travel = Math.max(Math.abs(dx), Math.abs(pressDelta.current.x));
+            // A browser may preserve a nested button's press after a drag.
+            // Never turn that swipe into navigation, even when it was too short.
+            if (travel > 18 && onPage) {
+              if (travel > 40 && Math.abs(dx) > Math.abs(dy) * 1.8 && touchEligible.current)
+                onPage(dx < 0 ? 1 : -1);
+              return;
+            }
+            if (Math.abs(dy) > 12 || Math.abs(pressDelta.current.y) > 12) return;
+            onPress();
+          }}
+        >
+          {children}
+        </Pressable>
+      ) : (
+        children
+      )}
+      {footer ? (
+        <View style={{ alignItems: 'center', marginTop: -6, marginBottom: -10 }}>{footer}</View>
+      ) : null}
+    </Animated.View>
   );
 }
 
@@ -106,8 +225,7 @@ export function HomeMetricPill({ metric, label }: { metric: HomeMetricModel; lab
       style={[
         styles.metric,
         {
-          backgroundColor: colorWithAlpha(theme.surface, 0.5),
-          borderColor: colorWithAlpha(theme.outlineVariant, 0.18),
+          backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.18),
         },
       ]}
     >
@@ -151,6 +269,55 @@ export function HomeMetricGrid({ children }: { children: ReactNode }) {
 
 export interface HomeRailEntry extends HomeAccountIdentity {
   readonly pending?: boolean | null;
+}
+
+/** Account changes are explicit taps; horizontal drags belong to the app pager. */
+export function HomeAccountDots({
+  entries,
+  selectedIndex,
+  onSelect,
+}: {
+  entries: readonly HomeRailEntry[];
+  selectedIndex: number;
+  onSelect: (index: number) => void;
+}) {
+  const theme = useCKTheme();
+  if (entries.length < 2) return null;
+  return (
+    <View style={{ height: 8, width: Math.min(220, entries.length * 22) }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ position: 'absolute', top: -12, left: 0, right: 0, height: 32 }}
+        contentContainerStyle={{ alignItems: 'center' }}
+        testID="home-account-dots"
+      >
+        {entries.map((entry, index) => (
+          <Pressable
+            key={entry.tag}
+            accessibilityRole="button"
+            accessibilityLabel={entry.name}
+            accessibilityState={{ selected: index === selectedIndex }}
+            onPress={() => onSelect(index)}
+            hitSlop={{ top: 8, bottom: 8 }}
+            style={{ width: 22, height: 32, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <View
+              style={{
+                width: index === selectedIndex ? 14 : 6,
+                height: 6,
+                borderRadius: 3,
+                backgroundColor: colorWithAlpha(
+                  theme.onSurface,
+                  index === selectedIndex ? 0.88 : 0.24,
+                ),
+              }}
+            />
+          </Pressable>
+        ))}
+      </ScrollView>
+    </View>
+  );
 }
 
 export function HomeAccountRail({
@@ -293,8 +460,9 @@ export function ProgressRing({
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference * (1 - value)}
           strokeLinecap="round"
-          rotation="-90"
-          origin={`${size / 2}, ${size / 2}`}
+          // Keep the pivot in the SVG transform: origin emits an invalid
+          // transform-origin DOM prop on web. Both platforms start at noon.
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </Svg>
       {showLabel ? (
@@ -411,19 +579,38 @@ export function CardHeader({
   subtitle,
   trailing,
   size = 46,
+  cornerImageUrl,
+  detail,
 }: {
   imageUrl: string;
   title: string;
   subtitle?: string;
   trailing?: ReactNode;
   size?: number;
+  cornerImageUrl?: string;
+  detail?: ReactNode;
 }) {
   return (
     <View style={styles.header}>
-      <MobileWebImage
-        imageUrl={imageUrl}
-        style={{ width: size, height: size, resizeMode: 'contain' }}
-      />
+      <View style={{ width: size, height: size }}>
+        <MobileWebImage
+          imageUrl={imageUrl}
+          style={{ width: size, height: size, resizeMode: 'contain' }}
+        />
+        {cornerImageUrl ? (
+          <MobileWebImage
+            imageUrl={cornerImageUrl}
+            style={{
+              position: 'absolute',
+              right: -5,
+              top: -5,
+              width: 26,
+              height: 26,
+              resizeMode: 'contain',
+            }}
+          />
+        ) : null}
+      </View>
       <View style={styles.headerCopy}>
         <CKText role="titleSmall" numberOfLines={1} style={styles.heavy}>
           {title}
@@ -433,6 +620,7 @@ export function CardHeader({
             {subtitle}
           </CKText>
         ) : null}
+        {detail}
       </View>
       {trailing ? <View style={styles.headerTrailing}>{trailing}</View> : null}
     </View>
@@ -486,7 +674,7 @@ const styles = StyleSheet.create({
     gap: 7,
     paddingHorizontal: 11,
     borderRadius: ckRadius.pill,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 0,
   },
   metricImage: { width: 20, height: 20, resizeMode: 'contain' },
   metricLabelRow: { flexDirection: 'row', gap: 5 },

@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import {
-  Animated,
-  Easing,
   FlatList,
   Modal,
   Pressable,
@@ -16,10 +14,12 @@ import {
   History,
   ChartNoAxesColumnIncreasing,
   Star,
+  Info,
 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { RankedCheckerBackground, type RankedCheckerColor } from '../../../ui/ranked-checker-background';
 import {
   gameDataState,
   subscribeToGameDataRevision,
@@ -33,8 +33,11 @@ import {
   ErrorState,
   MobileWebImage,
   ProfilePageHeader,
+  ProfileHeaderAction,
+  Surface,
   SelectionPicker,
-  SkeletonLoadingDialog,
+  Skeleton,
+  PageLoading,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
@@ -90,8 +93,12 @@ export function RankingsScreen({
     () => gameDataState.revision,
   );
   const [dateOpen, setDateOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
   const [opening, setOpening] = useState(false);
-  const entries = useMemo(() => provider.result?.entries ?? [], [provider.result]);
+  const entries = useMemo(
+    () => (provider.isLoading ? [] : (provider.result?.entries ?? [])),
+    [provider.isLoading, provider.result],
+  );
   const listItems = useMemo<readonly RankingListItem[]>(
     () => [{ kind: 'content' }, ...entries.map((entry) => ({ kind: 'entry' as const, entry }))],
     [entries],
@@ -111,7 +118,9 @@ export function RankingsScreen({
     }
   };
   const hasFilter =
-    provider.board === RankingBoard.playerTownHall || provider.board === RankingBoard.playerRanked;
+    provider.board === RankingBoard.playerTownHall ||
+    provider.board === RankingBoard.playerWarTripleStreak ||
+    provider.board === RankingBoard.playerRanked;
   const today = provider.today;
   const displayedDate = provider.period === RankingPeriod.current ? today : provider.historyDate;
   const previousDate = previousRankingDate(provider.board, displayedDate);
@@ -145,10 +154,22 @@ export function RankingsScreen({
             title={boardLabel(provider.board, t)}
             imageUrl={rankingBoardArtwork(provider.board)}
             backgroundUrl={rankingBackground(provider.board)}
+            backgroundElement={<RankedCheckerBackground color={rankingCheckerColor(provider.board)} />}
+            compactIdentity
+            controlsTopPadding={4}
             onBack={onBack}
             backLabel={materialBackLabel(locale)}
             safeTop={insets.top}
-            bottomPadding={0}
+            bottomPadding={28}
+            actions={
+              provider.board === RankingBoard.playerWarTripleStreak ? (
+                <ProfileHeaderAction
+                  icon={<Info color="#fff" />}
+                  label={t('rankingsWarTripleRulesTitle')}
+                  onPress={() => setRulesOpen(true)}
+                />
+              ) : undefined
+            }
           >
             {provider.board.supportsLocation ? (
               <RankingLocationPicker
@@ -158,6 +179,7 @@ export function RankingsScreen({
                 onToggleStar={onToggleStar}
               />
             ) : null}
+            {hasFilter ? <View style={styles.locationInHeader}><RankingControls provider={provider} /></View> : null}
           </ProfilePageHeader>
         }
         renderItem={({ item }) => {
@@ -184,14 +206,29 @@ export function RankingsScreen({
                     accessibilityLabel={t('rankingsSnapshotDate')}
                   />
                 ) : null}
-                {hasFilter ? <RankingControls provider={provider} /> : null}
                 {provider.isLoading ? (
-                  <IndeterminateProgressBar horizontalInset={horizontal} />
+                  <View
+                    style={{ gap: 12, paddingVertical: 16 }}
+                    accessibilityLabel={t('generalLoading')}
+                  >
+                    {[0, 1, 2, 3, 4].map((index) => (
+                      <View
+                        key={index}
+                        style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
+                      >
+                        <Skeleton width={48} height={48} radius={16} />
+                        <View style={{ flex: 1, gap: 8 }}>
+                          <Skeleton height={16} />
+                          <Skeleton width="55%" height={12} />
+                        </View>
+                      </View>
+                    ))}
+                  </View>
                 ) : null}
                 {provider.error ? (
                   <ErrorState
                     title={t('sideRankingsLoadError')}
-                    body={String(provider.error)}
+                    body={t('generalTryAgain')}
                     actionLabel={t('generalRetry')}
                     onAction={() => void provider.reload()}
                     style={styles.feedback}
@@ -234,7 +271,35 @@ export function RankingsScreen({
       {dateOpen ? (
         <RankingDateSheet provider={provider} onClose={() => setDateOpen(false)} />
       ) : null}
-      <SkeletonLoadingDialog visible={opening} />
+      <PageLoading visible={opening} kind="profile" />
+      <Modal
+        visible={rulesOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setRulesOpen(false)}
+      >
+        <Pressable
+          style={{ flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#00000066' }}
+          onPress={() => setRulesOpen(false)}
+        >
+          <Pressable onPress={(event) => event.stopPropagation()}>
+            <Surface
+              style={{ padding: 20, gap: 16, maxWidth: 520, width: '100%', alignSelf: 'center' }}
+              accessibilityViewIsModal
+            >
+              <CKText role="titleSmall">{t('rankingsWarTripleRulesTitle')}</CKText>
+              <CKText>{t('rankingsWarTripleRulesBody')}</CKText>
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => setRulesOpen(false)}
+                style={{ minHeight: 44, justifyContent: 'center', alignSelf: 'flex-end' }}
+              >
+                <CKText style={{ color: theme.primary }}>{t('generalOk')}</CKText>
+              </Pressable>
+            </Surface>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -242,7 +307,10 @@ export function RankingsScreen({
 function RankingControls({ provider }: { provider: RankingsProvider }) {
   'use no memo';
   const { t } = useI18n();
-  if (provider.board === RankingBoard.playerTownHall)
+  if (
+    provider.board === RankingBoard.playerTownHall ||
+    provider.board === RankingBoard.playerWarTripleStreak
+  )
     return (
       <View style={styles.controls}>
         <SelectionPicker
@@ -312,6 +380,7 @@ function RankingLocationPicker({
         accessibilityLabel={`${t('sideLocation')}: ${provider.location.isWorldwide ? t('rankingsWorldwide') : provider.location.name}`}
         fillWidth
         title={t('rankingsSelectLocation')}
+        searchPlaceholder={t('sideLocation')}
         selectedKey={provider.location.apiPath}
         options={orderedLocations(provider.locations, locationPreferences).map((location) => ({
           key: location.apiPath,
@@ -364,47 +433,11 @@ export function rankingBackground(board: RankingBoardValue): string {
   return board.isClan ? ImageAssets.clanPageBackground : ImageAssets.legendPageBackground;
 }
 
-function IndeterminateProgressBar({ horizontalInset }: { horizontalInset: number }) {
-  const theme = useCKTheme();
-  const [progress] = useState(() => new Animated.Value(0));
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    const loop = Animated.loop(
-      Animated.timing(progress, {
-        toValue: 1,
-        duration: 900,
-        easing: Easing.inOut(Easing.linear),
-        useNativeDriver: true,
-      }),
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [progress]);
-  const translateX = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-Math.max(1, width) * 0.35, Math.max(1, width)],
-  });
-  return (
-    <View
-      accessibilityRole="progressbar"
-      testID="rankings-loading-progress"
-      onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
-      style={[
-        styles.progressTrack,
-        {
-          backgroundColor: colorWithAlpha(theme.primary, 0.18),
-          marginHorizontal: -horizontalInset,
-        },
-      ]}
-    >
-      <Animated.View
-        style={[
-          styles.progressIndicator,
-          { backgroundColor: theme.primary, transform: [{ translateX }] },
-        ]}
-      />
-    </View>
-  );
+function rankingCheckerColor(board: RankingBoardValue): RankedCheckerColor {
+  if (board === RankingBoard.playerTownHall || board === RankingBoard.clanDonations) return 'green';
+  if (board === RankingBoard.playerWarTripleStreak || board === RankingBoard.clanWarWins || board === RankingBoard.clanWinStreak) return 'red';
+  if (board === RankingBoard.playerRanked || board === RankingBoard.clanCapital || board === RankingBoard.clanHome) return 'purple';
+  return 'blue';
 }
 
 function RankingRow({ entry, onPress }: { entry: RankingEntry; onPress: () => void }) {
@@ -512,6 +545,8 @@ function RankingDateSheet({
 type Translate = ReturnType<typeof useI18n>['t'];
 export function boardLabel(board: RankingBoardValue, t: Translate): string {
   switch (board.name) {
+    case 'playerWarTripleStreak':
+      return t('rankingsWarTripleStreak');
     case 'playerHome':
     case 'clanHome':
       return t('upgradeTrackerHomeVillage');

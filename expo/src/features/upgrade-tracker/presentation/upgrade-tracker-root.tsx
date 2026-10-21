@@ -3,7 +3,7 @@ import * as Linking from 'expo-linking';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { useI18n } from '../../../i18n';
-import { Snackbar } from '../../../ui';
+import { ConfirmationDialog, Snackbar } from '../../../ui';
 import { UpgradePlanPreferences, type UpgradeTrackerSnapshot } from '../models';
 import { UpgradeTrackerFormatError, UpgradeTrackerRepository } from '../data';
 import type { UpgradeTrackerRootProps } from './upgrade-tracker-contracts';
@@ -13,6 +13,7 @@ import { buildUpgradeTrackerAccountOptions } from './upgrade-tracker-logic';
 export function UpgradeTrackerRoot({
   initialTag,
   onBack,
+  onOpenAccounts,
   repository: injectedRepository,
   widgetSync: injectedWidgetSync,
   accounts: injectedAccounts,
@@ -23,7 +24,7 @@ export function UpgradeTrackerRoot({
   const { t } = useI18n();
   const repository = injectedRepository ?? runtime.upgrades;
   const widgetSync = injectedWidgetSync ?? runtime.upgradeWidgets;
-  const rawLinked = injectedAccounts ?? runtime.accounts.verifiedAccounts;
+  const rawLinked = injectedAccounts ?? runtime.accounts.accounts;
   const players = injectedPlayers ?? runtime.players.profiles;
   const linkedKey = rawLinked
     .map((account) => `${account.playerTag}:${account.isVerified}`)
@@ -39,8 +40,10 @@ export function UpgradeTrackerRoot({
   const [snapshot, setSnapshot] = useState<UpgradeTrackerSnapshot | null>(null);
   const [saved, setSaved] = useState<readonly UpgradeTrackerAccountOption[]>([]);
   const [loading, setLoading] = useState(true);
+  const [accountLoading, setAccountLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string>();
+  const [verificationRequired, setVerificationRequired] = useState(false);
   const [goldPassPercent, setGoldPassPercent] = useState(0);
   const [preferences, setPreferences] = useState(new UpgradePlanPreferences());
   const generation = useRef(0);
@@ -120,6 +123,7 @@ export function UpgradeTrackerRoot({
       const normalized = UpgradeTrackerRepository.normalizeTag(tag);
       const current = ++generation.current;
       setSelectedTag(normalized);
+      setAccountLoading(true);
       const cached = repository.peekCached(normalized);
       setSnapshot(cached);
       setLoading(cached === null);
@@ -142,7 +146,7 @@ export function UpgradeTrackerRoot({
           setGoldPassPercent(cachedPreferences.goldPassPercent);
           setPreferences(cachedPreferences.preferences);
         }
-        const next = await repository.load(normalized, force || cached !== null);
+        const next = await repository.load(normalized, force);
         if (current !== generation.current) return;
         const nextPreferences = next ? await resolvePreferences(next) : null;
         if (current !== generation.current) return;
@@ -157,10 +161,12 @@ export function UpgradeTrackerRoot({
         await refreshMetadata().catch(() => undefined);
         if (current !== generation.current) return;
         setLoading(false);
+        setAccountLoading(false);
         scheduleWidgetSync(normalized);
       } catch (cause) {
         if (current !== generation.current) return;
         setLoading(false);
+        setAccountLoading(false);
         if (!cached) {
           setSnapshot(null);
           setError(cause instanceof Error ? cause.message : String(cause));
@@ -218,6 +224,7 @@ export function UpgradeTrackerRoot({
         accounts={accounts}
         selectedTag={selectedTag}
         loading={loading}
+        accountLoading={accountLoading}
         error={error}
         goldPassPercent={goldPassPercent}
         preferences={preferences}
@@ -228,13 +235,23 @@ export function UpgradeTrackerRoot({
           try {
             const next = await repository.importSnapshotBytes(new TextEncoder().encode(json), {
               allowedTags: new Set(verifiedTags),
+              linkedTags: new Set(linked.map((account) => account.playerTag)),
               linkedNamesByTag: Object.fromEntries(
                 accounts.map((account) => [account.tag, account.name]),
               ),
             });
-            await load(next.tag, true);
+            await load(next.tag);
             setMessage(t('upgradeTrackerImportSuccess', { player: next.name }));
           } catch (cause) {
+            if (
+              cause instanceof UpgradeTrackerFormatError &&
+              cause.reason === 'unverified-account'
+            ) {
+              setVerificationRequired(true);
+              const message = t('upgradeTrackerUnverifiedAccount');
+              if (!onOpenAccounts) setMessage(message);
+              throw new UpgradeTrackerFormatError(message, 'unverified-account');
+            }
             if (
               cause instanceof UpgradeTrackerFormatError &&
               cause.reason === 'invalid-account-json'
@@ -263,6 +280,17 @@ export function UpgradeTrackerRoot({
         }
       />
       <Snackbar message={message} onDismiss={() => setMessage(undefined)} />
+      <ConfirmationDialog
+        visible={verificationRequired && !!onOpenAccounts}
+        title={t('homeVerifyAccountAction')}
+        message={t('upgradeTrackerUnverifiedAccount')}
+        confirmLabel={t('homeVerifyAccountAction')}
+        onCancel={() => setVerificationRequired(false)}
+        onConfirm={() => {
+          setVerificationRequired(false);
+          onOpenAccounts?.();
+        }}
+      />
     </>
   );
 }

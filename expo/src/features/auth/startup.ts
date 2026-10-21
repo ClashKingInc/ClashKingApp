@@ -35,8 +35,7 @@ export async function initializeAccountsForCurrentAuth(
   }
   const userId = auth.state.currentUser?.userId ?? null;
   accounts.setCurrentUserId(userId);
-  await accounts.loadSelectedTag();
-  await accounts.fetchAccounts();
+  await Promise.all([accounts.loadSelectedTag(), accounts.fetchAccounts()]);
   const sameSession =
     auth.canUseApp && auth.state.currentUser?.userId === userId;
   return startupDecision(sameSession, sameSession && accounts.hasVerifiedAccounts);

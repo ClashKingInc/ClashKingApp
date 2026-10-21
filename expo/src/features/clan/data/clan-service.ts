@@ -1,5 +1,7 @@
 import {
   ClanChangesEndpoint,
+  ClanCurrentRankingsEndpoint,
+  type ClanRankingsResponse,
   ClanCwlSeasonsEndpoint,
   ClanJoinLeaveEndpoint,
   ClanLeaderboardHistoryEndpoint,
@@ -14,12 +16,16 @@ import {
   ProxyCapitalRaidSeasonsEndpoint,
   ProxyClanEndpoint,
   ProxyPlayerEndpoint,
+  ProxyClanWarlogEndpoint,
 } from '../../../core/api/proxy-contracts';
 import { Effect } from 'effect';
 import { ApiResponseError } from '@clashking/api-client';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
+import { WarInfo } from '../../war/models';
 import { canonicalTag } from '../../../core/domain/tags';
+import type { ClanCompetitiveDay } from '../models/clan-competitive';
+import { loadClanCompetitiveDay } from './clan-competitive-service';
 import { mapWithConcurrencyLimit } from '../../../core/utils/bounded-concurrency';
 import {
   CapitalHistoryItems,
@@ -49,6 +55,7 @@ import {
 } from '../models';
 
 export type ClanServiceListener = () => void;
+export type ClanCurrentRankings = typeof ClanRankingsResponse.Type;
 
 export class ClanService {
   private readonly clanMap = new Map<string, Clan>();
@@ -57,6 +64,8 @@ export class ClanService {
   private readonly listeners = new Set<ClanServiceListener>();
   private readonly officialClanLoads = new Map<string, Promise<Clan | null>>();
   private readonly memberLoads = new Map<string, Promise<ClanMember | null>>();
+  private readonly warLogLoads = new Map<string, Promise<ClanWarLog>>();
+  private readonly warLogDetailLoads = new Map<string, Promise<ClanWarLog>>();
 
   fetchedClans: Clan[] = [];
   joinLeaveList: ClanJoinLeave[] = [];
@@ -65,6 +74,20 @@ export class ClanService {
   warStatsList: ClanWarStats[] = [];
 
   constructor(private readonly api: ContractApiService) {}
+
+  async getCurrentRankings(tag: string): Promise<ClanCurrentRankings> {
+    return Effect.runPromise(
+      this.api.execute(ClanCurrentRankingsEndpoint, {
+        path: { tag: canonicalTag(tag) },
+        query: {},
+        body: {},
+      }),
+    );
+  }
+
+  async getCompetitiveDay(clan: Clan, day?: string): Promise<ClanCompetitiveDay> {
+    return loadClanCompetitiveDay(this.api, clan.memberList, day);
+  }
 
   get isLoading(): boolean {
     return this.loading;
@@ -341,23 +364,47 @@ export class ClanService {
 
   async loadWarLogData(
     clanTags: readonly string[],
-    options: { throwOnError?: boolean } = {},
+    options: { throwOnError?: boolean; publicClanTags?: readonly string[] } = {},
   ): Promise<readonly ClanWarLog[]> {
     if (!clanTags.length) return [];
     try {
       const warLogs = await Promise.all(
         clanTags.map(async (tag) => {
           const normalized = canonicalTag(tag);
-          const response = await Effect.runPromise(
-            this.api.execute(ClanWarlogEndpoint, {
-              path: { clanTag: normalized },
-              query: { limit: 50 },
-              body: {},
-            }),
-          );
-          const warLog = ClanWarLog.fromJson(response, tag);
-          warLog.warLogStats = analyzeWarLogs(warLog.items);
-          return warLog;
+          const existing = this.warLogLoads.get(normalized);
+          if (existing) return existing;
+          const load = (async () => {
+            // Public logs are small official summaries. Avoid reading fifty
+            // archived wars just to discard their member/attack data for a list.
+            if (options.publicClanTags?.some((value) => canonicalTag(value) === normalized)) {
+              try {
+                const summary = await Effect.runPromise(
+                  this.api.execute(ProxyClanWarlogEndpoint, {
+                    path: { clanTag: normalized },
+                    query: { limit: 50 },
+                    body: {},
+                  }),
+                );
+                const log = ClanWarLog.fromJson(summary, normalized);
+                log.warLogStats = analyzeWarLogs(log.items);
+                return log;
+              } catch {
+                // Privacy can change after the profile loads; keep the archive fallback.
+              }
+            }
+            const response = await Effect.runPromise(
+              this.api.execute(ClanWarlogEndpoint, {
+                path: { clanTag: normalized },
+                query: { limit: 50 },
+                body: {},
+              }),
+            );
+            const warLog = ClanWarLog.fromJson(response, normalized);
+            warLog.warLogStats = analyzeWarLogs(warLog.items);
+            return warLog;
+          })().finally(() => this.warLogLoads.delete(normalized));
+          this.warLogLoads.set(normalized, load);
+          return load;
         }),
       );
       this.warLogList = warLogs;
@@ -366,6 +413,53 @@ export class ClanService {
       if (options.throwOnError ?? false) throw error;
       return [];
     }
+  }
+
+  loadWarLogDetails(clan: Clan, log: ClanWarLog): Promise<ClanWarLog> {
+    if (log.detailsLoaded) return Promise.resolve(log);
+    const tag = canonicalTag(clan.tag);
+    const key = `${tag}:${log.items[0]?.endTime.getTime() ?? 0}`;
+    const existing = this.warLogDetailLoads.get(key);
+    if (existing) return existing;
+    // The summary endpoint deliberately omits rosters. Check the real archive
+    // separately; missing fields in that summary do not mean missing war data.
+    const load = (async () => {
+      const types = [
+        'random',
+        ...(log.items.some((item) => item.warType === 'friendly') ? ['friendly'] : []),
+      ];
+      const pages = await Promise.all(
+        types.map((type) =>
+          Effect.runPromise(
+            this.api.execute(ClanWarsEndpoint, {
+              path: { clanTag: tag },
+              query: { type, limit: 50 },
+              body: {},
+            }),
+          ),
+        ),
+      );
+      const wars = [
+        ...log.wars,
+        ...pages.flatMap((page) => records(page.items).map((item) => WarInfo.fromJson(item))),
+      ].filter(
+        (war) =>
+          !war.isClanWarLeague && !!war.clan?.members.length && !!war.opponent?.members.length,
+      );
+      const enriched = new ClanWarLog(
+        log.items,
+        log.clanTag,
+        wars,
+        log.isPrivate,
+        log.reconstructed,
+        true,
+      );
+      enriched.warLogStats = log.warLogStats;
+      clan.clanWarLog = enriched;
+      return enriched;
+    })().finally(() => this.warLogDetailLoads.delete(key));
+    this.warLogDetailLoads.set(key, load);
+    return load;
   }
 
   linkWarLogToClans(): void {

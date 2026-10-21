@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useState, type ReactNode } from 'react';
+import { Animated, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { DestinationPicker } from './destination-picker';
 import { GlassSurface } from './glass';
@@ -20,8 +20,14 @@ export type ProfileTabsProps = {
   onSelect: (key: string) => void;
   overflowLabel?: string;
   onOverflowPress?: () => void;
+  // Compact is legacy dense data chrome, not a section-navigation style.
+  // For two-choice content switches use SlidingSegmentControl; profile
+  // sections use underline. Do not revive compact tabs on new screens.
   variant?: 'glass' | 'underline' | 'compact';
   overflow?: 'menu' | 'scroll';
+  /** Optional continuous position from a pager; other profile tabs keep their existing behavior. */
+  animatedPosition?: Animated.Value;
+  indicatorRtl?: boolean;
 };
 
 export function ProfileTabs({
@@ -32,8 +38,12 @@ export function ProfileTabs({
   onOverflowPress,
   variant = 'glass',
   overflow = 'menu',
+  animatedPosition,
+  indicatorRtl = false,
 }: ProfileTabsProps) {
   const theme = useCKTheme();
+  const [underlineWidth, setUnderlineWidth] = useState(0);
+  const followsPager = !!animatedPosition && overflow !== 'scroll' && tabs.length > 1;
   const selected = tabs.find((tab) => tab.key === selectedKey) ?? tabs[0];
 
   if (tabs.length > 3 && overflow === 'menu') {
@@ -61,7 +71,10 @@ export function ProfileTabs({
           accessibilityState={{ selected: isSelected }}
           accessibilityLabel={tab.label}
           onPress={() => onSelect(tab.key)}
-          style={[styles.underlineTab, overflow === 'scroll' && styles.underlineScrollTab]}
+          style={[
+            styles.underlineTab,
+            overflow === 'scroll' ? styles.underlineScrollTab : { flex: 1 },
+          ]}
         >
           {tintIcon(tab.icon, colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64))}
           <CKText
@@ -70,7 +83,7 @@ export function ProfileTabs({
           >
             {tab.label}
           </CKText>
-          {isSelected ? (
+          {isSelected && !followsPager ? (
             <View style={[styles.underlineIndicator, { backgroundColor: theme.primary }]} />
           ) : null}
         </Pressable>
@@ -93,9 +106,37 @@ export function ProfileTabs({
     ) : (
       <View
         testID="profile-tabs-underline"
-        style={underlineStyle}
+        style={[
+          underlineStyle,
+          followsPager && { flexDirection: indicatorRtl ? 'row-reverse' : 'row' },
+        ]}
+        onLayout={(event) => setUnderlineWidth(event.nativeEvent.layout.width)}
       >
         {underlineTabs}
+        {followsPager && underlineWidth > 0 ? (
+          <Animated.View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              left: 0,
+              bottom: 0,
+              height: 2.5,
+              width: underlineWidth / tabs.length,
+              backgroundColor: theme.primary,
+              transform: [
+                {
+                  translateX: animatedPosition!.interpolate({
+                    inputRange: [0, tabs.length - 1],
+                    outputRange: indicatorRtl
+                      ? [underlineWidth - underlineWidth / tabs.length, 0]
+                      : [0, underlineWidth - underlineWidth / tabs.length],
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
+            }}
+          />
+        ) : null}
       </View>
     );
   }
@@ -175,7 +216,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   underlineTab: {
-    flex: 1,
     height: 50,
     flexDirection: 'row',
     alignItems: 'center',
@@ -183,7 +223,9 @@ const styles = StyleSheet.create({
     gap: ckSpacing.sm,
   },
   underlineScrollContent: { flexDirection: 'row', alignItems: 'stretch' },
-  underlineScrollTab: { flex: 0, paddingHorizontal: ckSpacing.lg },
+  // Keep intrinsic label widths in horizontal web scroll views. `flex: 0`
+  // becomes a zero flex-basis there and makes the labels overlap.
+  underlineScrollTab: { flexGrow: 0, flexShrink: 0, paddingHorizontal: ckSpacing.lg },
   underlineIndicator: {
     position: 'absolute',
     right: 0,

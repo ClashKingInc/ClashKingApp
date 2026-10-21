@@ -14,6 +14,28 @@ export interface BattlelogLootDay {
   readonly intensity: 0 | 0.25 | 0.5 | 0.75 | 1;
 }
 
+export interface BattlelogLootWeek {
+  readonly day: string;
+  readonly total: number;
+  readonly cumulative: number;
+}
+
+/** Group the visible daily history into Sunday-start weeks. The first and last may be partial. */
+export function battlelogLootWeeks(days: readonly BattlelogLootDay[]): BattlelogLootWeek[] {
+  const totals = new Map<string, number>();
+  for (const item of days) {
+    const date = new Date(`${item.day}T00:00:00Z`);
+    date.setUTCDate(date.getUTCDate() - date.getUTCDay());
+    const week = date.toISOString().slice(0, 10);
+    totals.set(week, (totals.get(week) ?? 0) + item.total);
+  }
+  let cumulative = 0;
+  return [...totals].map(([day, total]) => {
+    cumulative += total;
+    return { day, total, cumulative };
+  });
+}
+
 export interface BattlelogShareSummary {
   readonly attackCount: number;
   readonly totalLoot: number;
@@ -32,11 +54,15 @@ export function battlelogShareSummary(
   };
 }
 
-export function battlelogLootTimeline(attacks: readonly PlayerBattlelogEntry[], now = new Date()) {
+export function battlelogLootTimeline(
+  attacks: readonly PlayerBattlelogEntry[],
+  now = new Date(),
+  days = 30,
+) {
   const end = new Date(now);
   end.setUTCHours(0, 0, 0, 0);
   const totals = new Map<string, Omit<BattlelogLootDay, 'day' | 'intensity'>>();
-  for (const item of attacks.filter((entry) => isAttackInLootWindow(entry, now))) {
+  for (const item of attacks.filter((entry) => isAttackInLootWindow(entry, now, days))) {
     const day = item.timestamp!.toISOString().slice(0, 10);
     const current = totals.get(day) ?? { gold: 0, elixir: 0, darkElixir: 0, total: 0 };
     totals.set(day, {
@@ -46,8 +72,8 @@ export function battlelogLootTimeline(attacks: readonly PlayerBattlelogEntry[], 
       total: current.total + item.totalLoot,
     });
   }
-  const values = Array.from({ length: 30 }, (_, index) => {
-    const date = new Date(end.getTime() - (29 - index) * 86_400_000);
+  const values = Array.from({ length: days }, (_, index) => {
+    const date = new Date(end.getTime() - (days - 1 - index) * 86_400_000);
     const day = date.toISOString().slice(0, 10);
     return { day, ...(totals.get(day) ?? { gold: 0, elixir: 0, darkElixir: 0, total: 0 }) };
   });
@@ -60,11 +86,11 @@ export function battlelogLootTimeline(attacks: readonly PlayerBattlelogEntry[], 
   });
 }
 
-function isAttackInLootWindow(item: PlayerBattlelogEntry, now: Date) {
+function isAttackInLootWindow(item: PlayerBattlelogEntry, now: Date, days = 30) {
   if (!item.attack || !item.timestamp) return false;
   const end = new Date(now);
   end.setUTCHours(24, 0, 0, 0);
-  const start = new Date(end.getTime() - 30 * 86_400_000);
+  const start = new Date(end.getTime() - days * 86_400_000);
   return item.timestamp >= start && item.timestamp < end;
 }
 

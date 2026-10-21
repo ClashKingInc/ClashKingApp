@@ -1,7 +1,7 @@
 import type { ExpoConfig, ConfigContext } from 'expo/config';
 
 const version = process.env.CK_APP_VERSION?.trim() || '0.4.2';
-const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '25';
+const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '26';
 const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
 const updateChannel = process.env.CK_RELEASE_TRACK?.trim() || 'production';
 const updateCertificatePath = process.env.CK_UPDATES_CERTIFICATE_PATH?.trim();
@@ -57,7 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         CADisableMinimumFrameDurationOnPhone: true,
         ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
-          'ClashKing uses photo library access only when you choose to share generated progress images with a compatible app.',
+          'Choose a profile photo or banner, or save and share ClashKing progress images.',
         UIFileSharingEnabled: true,
         LSSupportsOpeningDocumentsInPlace: true,
         UISupportsDocumentBrowser: true,
@@ -104,11 +104,22 @@ export default ({ config }: ConfigContext): ExpoConfig => {
               '/bases-armies',
               '/game-assets',
               '/achievements',
+              '/esports',
+              '/tournaments',
+              '/profile',
               '/accounts',
               '/subscription',
               '/settings',
             ].map((path) => ({ scheme: 'https', host: 'app.clashk.ing', path })),
-            ...['/player/', '/clan/', '/war/', '/posts/', '/settings/'].map((pathPrefix) => ({
+            ...[
+              '/player/',
+              '/clan/',
+              '/war/',
+              '/posts/',
+              '/settings/',
+              '/tournaments/',
+              '/profile/',
+            ].map((pathPrefix) => ({
               scheme: 'https',
               host: 'app.clashk.ing',
               pathPrefix,
@@ -143,6 +154,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       'expo-router',
       'expo-localization',
       'expo-image',
+      ['expo-image-picker', {
+        photosPermission: 'Choose a profile photo or banner for ClashKing.',
+        cameraPermission: false,
+        microphonePermission: false,
+      }],
       '@react-native-firebase/app',
       '@react-native-firebase/messaging',
       [
@@ -159,12 +175,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           ios: {
             // Match the opening frame of the default-dark, JS-driven brand animation.
             backgroundColor: '#0B0B0C',
-            image: './assets/clashking/icons/startup-crown.svg',
+            image: './assets/clashking/icons/startup-crown.png',
             imageWidth: 330,
             resizeMode: 'contain',
             dark: {
               backgroundColor: '#0B0B0C',
-              image: './assets/clashking/icons/startup-crown.svg',
+              image: './assets/clashking/icons/startup-crown.png',
             },
           },
           android: {
@@ -217,6 +233,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           stageAndroidWidgetInputs: true,
         },
       ],
+      './plugins/with-notification-service',
       './plugins/with-android-release-signing',
     ],
     experiments: {

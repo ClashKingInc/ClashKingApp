@@ -1,4 +1,5 @@
-import type { AppConfigResponse } from '@clashking/api-contracts/expo';
+import { AppConfigResponse } from '@clashking/api-contracts/expo';
+import { Schema } from 'effect';
 
 import { STORAGE_KEYS } from '../storage/storage';
 import type { StringStore } from '../../services/storage/auth-storage';
@@ -29,19 +30,31 @@ export class RemoteFeatureFlagService {
 
   constructor(private readonly options: RemoteFeatureFlagServiceOptions) {}
 
-  async refresh(): Promise<void> {
+  async refresh(forceRefresh = false): Promise<void> {
     [this.installationSeed, this.appVersion] = await Promise.all([
       this.loadInstallationSeed(),
       this.options.appVersionProvider(),
     ]);
+    const key = `appConfig:v1:${this.options.environment ?? 'production'}:${this.options.platform}:${this.appVersion}`;
+    const now = (this.options.now?.() ?? new Date()).getTime();
+    try {
+      const raw = await this.options.preferences.getItem(key);
+      const cached = raw ? JSON.parse(raw) : null;
+      if (!forceRefresh && cached && typeof cached.at === 'number' && now >= cached.at && now - cached.at < 60_000) {
+        this.flags = featureFlagsFromConfig(Schema.decodeUnknownSync(AppConfigResponse)(cached.value));
+        return;
+      }
+    } catch {
+      // Corrupt or unavailable local metadata must fall back to the live config.
+    }
     const response = await this.options.loadConfig();
     this.flags = featureFlagsFromConfig(response);
+    await this.options.preferences.setItem(key, JSON.stringify({ at: now, value: response })).catch(() => undefined);
   }
 
   isEnabled(key: string, fallback = defaultFeatureFlagValue(key)): boolean {
-    // Keep unfinished calculators unavailable on production, including deep links.
-    if (key === 'calculators' && (this.options.environment ?? 'production') === 'production')
-      return false;
+    // Calculator availability follows the normal remote rollout. The unfinished
+    // Farming tool is blocked at the calculator router, including deep links.
     const evaluation: FeatureFlagEvaluation = {
       platform: this.options.platform,
       appVersion: this.appVersion,

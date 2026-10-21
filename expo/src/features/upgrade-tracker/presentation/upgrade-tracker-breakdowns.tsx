@@ -1,14 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import {
-  Animated,
-  Modal,
-  PanResponder,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import { useState, type ReactNode } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Clock3, Coins, Layers3, X } from 'lucide-react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
@@ -37,6 +28,9 @@ import {
   type UpgradeTrackerSnapshot,
 } from '../models';
 import { formatTrackerDuration } from './upgrade-tracker-logic';
+import { AbilityDetails, abilityFieldLabel, formatAbilityValue } from './ability-details';
+import { LevelSlider } from '../../../ui/level-slider';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 
 export function UpgradeCollectionSummaryModal({
   visible,
@@ -157,12 +151,13 @@ function UpgradeItemDetailContent({
   item: UpgradeTrackerItem;
   onClose: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const minimum = minimumDetailLevel(item);
   const [selectedLevel, setSelectedLevel] = useState(() =>
     Math.max(minimumDetailLevel(item), item.currentLevel),
   );
+  const [displayMode, setDisplayMode] = useState('detail');
   const accent = detailAccent(item.category);
   const selected = Math.max(minimum, Math.min(item.targetLevel, selectedLevel));
   const stats = findLevelStats(item.meta, selected);
@@ -170,12 +165,22 @@ function UpgradeItemDetailContent({
   const steps = upgradeStepsFromLevel(item, selected);
   const unlocks = unlocksAtLevel(item, selected);
   const description = firstSentences(localizedInfoForItem(item.meta).replaceAll('\\n', ' '), 2);
+  const abilityItems = gameDataState.bundleData.abilities;
+  const abilityItem = Array.isArray(abilityItems)
+    ? abilityItems.find(
+        (entry) => isRecord(entry) && (entry._id === item.id || entry.name === item.name),
+      )
+    : undefined;
+  const abilities =
+    isRecord(abilityItem) && Array.isArray(abilityItem.abilities)
+      ? abilityItem.abilities.filter(isRecord)
+      : [];
   return (
     <BreakdownModal
       visible
       title={item.name}
       onClose={onClose}
-      scrollable={false}
+      scrollable
       accent={accent}
       customHeader
     >
@@ -225,254 +230,207 @@ function UpgradeItemDetailContent({
           <X color={theme.onSurface} size={22} />
         </Pressable>
       </View>
-      <DetailLevelSlider
+      <SlidingSegmentControl
+        isRtl={isRtl}
+        value={displayMode}
+        onChange={setDisplayMode}
+        options={[
+          { value: 'detail', label: t('gameItemLevels') },
+          { value: 'table', label: t('tooltipShowTable') },
+        ]}
+      />
+      <LevelSlider
+        label={t('gameItemLevels')}
         value={selected}
         minimum={minimum}
         maximum={item.targetLevel}
         accent={accent}
         onChange={setSelectedLevel}
       />
-      {unlocks.length ? (
-        <>
-          <SectionLabel>Unlocks</SectionLabel>
-          <View style={breakdownStyles.wrap}>
-            {unlocks.map((unlock) => (
-              <Surface
-                key={`${unlock.name}-${unlock.subtitle}`}
-                radius={999}
-                style={breakdownStyles.unlock}
-              >
-                <MobileWebImage imageUrl={unlock.imageUrl} style={breakdownStyles.unlockImage} />
-                <CKText role="labelSmall">{unlock.name}</CKText>
-                {unlock.subtitle ? (
-                  <CKText muted role="labelSmall">
-                    {unlock.subtitle}
-                  </CKText>
-                ) : null}
-              </Surface>
-            ))}
-          </View>
-        </>
-      ) : null}
-      <SectionLabel>Stats</SectionLabel>
-      <StatRow
-        icon={<Clock3 size={18} color={accent} />}
-        label={t('gameItemUpgradeTime')}
-        value={steps.length ? formatTrackerDuration(steps[0]!.seconds) : 'Max'}
-        accent={accent}
-      />
-      {steps[0]?.costs.length ? (
-        <CostRow costs={steps[0].costs} accent={accent} />
+      {displayMode === 'table' ? (
+        <LevelStatsTable
+          item={item}
+          minimum={minimum}
+          abilities={abilities}
+          locale={toIntlLocale(locale)}
+        />
       ) : (
-        <StatRow
-          icon={<Coins size={18} color={accent} />}
-          label={t('gameItemUpgradeCost')}
-          value={steps.length ? 'None' : 'Max'}
-          accent={accent}
-        />
-      )}
-      {showsWardenThreshold(item.category) && item.meta?.housing_space != null ? (
-        <StatRow
-          icon={<Layers3 size={18} color={accent} />}
-          label={t('gameItemHousingSpace')}
-          value={String(item.meta.housing_space)}
-          accent={accent}
-        />
-      ) : null}
-      {item.wardenWeight != null ? (
-        <StatRow
-          imageUrl={ImageAssets.getHeroImage('Grand Warden')}
-          label={t('gameItemWardenWeight')}
-          value={weightValue(item.wardenWeight)}
-          accent={accent}
-          detail={
-            showsWardenThreshold(item.category)
-              ? item.wardenWeight > 0
-                ? `${Math.ceil(20 / item.wardenWeight)} copies to follow`
-                : 'No threshold contribution'
-              : undefined
-          }
-        />
-      ) : null}
-      {item.healerWeight != null ? (
-        <StatRow
-          imageUrl={ImageAssets.getTroopImage('Healer')}
-          label={t('gameItemHealerWeight')}
-          value={weightValue(item.healerWeight)}
-          accent={accent}
-        />
-      ) : null}
-      {stats
-        ? trackerStatRows(item, stats, nextStats).map((row) => (
+        <>
+          {unlocks.length ? (
+            <>
+              <SectionLabel>Unlocks</SectionLabel>
+              <View style={breakdownStyles.wrap}>
+                {unlocks.map((unlock) => (
+                  <Surface
+                    key={`${unlock.name}-${unlock.subtitle}`}
+                    radius={999}
+                    style={breakdownStyles.unlock}
+                  >
+                    <MobileWebImage
+                      imageUrl={unlock.imageUrl}
+                      style={breakdownStyles.unlockImage}
+                    />
+                    <CKText role="labelSmall">{unlock.name}</CKText>
+                    {unlock.subtitle ? (
+                      <CKText muted role="labelSmall">
+                        {unlock.subtitle}
+                      </CKText>
+                    ) : null}
+                  </Surface>
+                ))}
+              </View>
+            </>
+          ) : null}
+          <SectionLabel>Stats</SectionLabel>
+          <StatRow
+            icon={<Clock3 size={18} color={accent} />}
+            label={t('gameItemUpgradeTime')}
+            value={steps.length ? formatTrackerDuration(steps[0]!.seconds) : 'Max'}
+            accent={accent}
+          />
+          {steps[0]?.costs.length ? (
+            <CostRow costs={steps[0].costs} accent={accent} />
+          ) : (
             <StatRow
-              key={row.label}
-              icon={<Layers3 size={18} color={accent} />}
-              label={row.label}
-              value={row.value}
+              icon={<Coins size={18} color={accent} />}
+              label={t('gameItemUpgradeCost')}
+              value={steps.length ? 'None' : 'Max'}
               accent={accent}
             />
-          ))
-        : null}
+          )}
+          {showsWardenThreshold(item.category) && item.meta?.housing_space != null ? (
+            <StatRow
+              icon={<Layers3 size={18} color={accent} />}
+              label={t('gameItemHousingSpace')}
+              value={String(item.meta.housing_space)}
+              accent={accent}
+            />
+          ) : null}
+          {item.wardenWeight != null ? (
+            <StatRow
+              imageUrl={ImageAssets.getHeroImage('Grand Warden')}
+              label={t('gameItemWardenWeight')}
+              value={weightValue(item.wardenWeight)}
+              accent={accent}
+              detail={
+                showsWardenThreshold(item.category)
+                  ? item.wardenWeight > 0
+                    ? `${Math.ceil(20 / item.wardenWeight)} copies to follow`
+                    : 'No threshold contribution'
+                  : undefined
+              }
+            />
+          ) : null}
+          {item.healerWeight != null ? (
+            <StatRow
+              imageUrl={ImageAssets.getTroopImage('Healer')}
+              label={t('gameItemHealerWeight')}
+              value={weightValue(item.healerWeight)}
+              accent={accent}
+            />
+          ) : null}
+          {stats
+            ? trackerStatRows(item, stats, nextStats).map((row) => (
+                <StatRow
+                  key={row.label}
+                  icon={<Layers3 size={18} color={accent} />}
+                  label={row.label}
+                  value={row.value}
+                  accent={accent}
+                />
+              ))
+            : null}
+          {abilities.map((ability, index) => (
+            <AbilityDetails
+              key={`${String(ability.name)}-${index}`}
+              ability={ability}
+              level={selected}
+              maximum={item.targetLevel}
+              renderStat={(row) => (
+                <StatRow
+                  key={row.key}
+                  icon={<Layers3 size={18} color={accent} />}
+                  label={row.label}
+                  value={row.value}
+                  accent={accent}
+                />
+              )}
+            />
+          ))}
+        </>
+      )}
     </BreakdownModal>
   );
 }
 
-function DetailLevelSlider({
-  value,
+function LevelStatsTable({
+  item,
   minimum,
-  maximum,
-  accent,
-  onChange,
+  abilities,
+  locale,
 }: {
-  value: number;
+  item: UpgradeTrackerItem;
   minimum: number;
-  maximum: number;
-  accent: string;
-  onChange: (value: number) => void;
+  abilities: readonly Record<string, unknown>[];
+  locale: string;
 }) {
-  const [width, setWidth] = useState(1);
-  const range = Math.max(0, maximum - minimum);
-  const fraction = range === 0 ? 0 : (value - minimum) / range;
-  const [liveFraction] = useState(() => new Animated.Value(fraction));
-  const valueRef = useRef(value);
-
-  useEffect(() => {
-    valueRef.current = value;
-  }, [value]);
-
-  const updateFromPosition = useCallback(
-    (position: number) => {
-      if (range <= 0) return;
-      const nextFraction = detailSliderFractionFromPosition(position, width);
-      liveFraction.setValue(nextFraction);
-      const nextLevel = detailLevelFromSliderPosition(position, width, minimum, maximum);
-      if (nextLevel === valueRef.current) return nextLevel;
-      valueRef.current = nextLevel;
-      onChange(nextLevel);
-      return nextLevel;
-    },
-    [liveFraction, maximum, minimum, onChange, range, width],
-  );
-
-  const settleToSelectedLevel = useCallback(
-    (selectedLevel: number) => {
-      const selectedFraction =
-        range === 0 ? 0 : Math.max(0, Math.min(1, (selectedLevel - minimum) / range));
-      Animated.spring(liveFraction, {
-        toValue: selectedFraction,
-        damping: 24,
-        stiffness: 280,
-        mass: 0.8,
-        useNativeDriver: false,
-      }).start();
-    },
-    [liveFraction, minimum, range],
-  );
-
-  /* eslint-disable react-hooks/refs -- PanResponder registers these closures during render but only invokes them for touch events. */
-  const responder = useMemo(() => {
-    const finish = (position: number) => {
-      const selectedLevel = detailLevelFromSliderPosition(position, width, minimum, maximum);
-      if (selectedLevel !== valueRef.current) {
-        valueRef.current = selectedLevel;
-        onChange(selectedLevel);
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const number = new Intl.NumberFormat(locale, { maximumFractionDigits: 3 });
+  const rows = Array.from({ length: Math.max(0, item.targetLevel - minimum + 1) }, (_, index) => {
+    const level = minimum + index;
+    const stats = findLevelStats(item.meta, level);
+    const cells = new Map(
+      stats ? trackerStatRows(item, stats, null, true).map((row) => [row.label, row.value]) : [],
+    );
+    for (const ability of abilities) {
+      const data = Array.isArray(ability.levels)
+        ? ability.levels.filter(isRecord).find((row) => row.level === level)
+        : undefined;
+      if (!data) continue;
+      for (const [key, value] of Object.entries(data)) {
+        if (key === 'level') continue;
+        const label = `${String(ability.name ?? '')} · ${abilityFieldLabel(key)}`;
+        cells.set(label, formatAbilityValue(key, value, number));
       }
-      settleToSelectedLevel(selectedLevel);
-    };
-    return PanResponder.create({
-      onStartShouldSetPanResponder: () => range > 0,
-      onMoveShouldSetPanResponder: (_event, gesture) =>
-        range > 0 && Math.abs(gesture.dx) >= Math.abs(gesture.dy),
-      onPanResponderGrant: (event) => {
-        liveFraction.stopAnimation();
-        updateFromPosition(event.nativeEvent.locationX);
-      },
-      onPanResponderMove: (event) => updateFromPosition(event.nativeEvent.locationX),
-      onPanResponderRelease: (event) => finish(event.nativeEvent.locationX),
-      onPanResponderTerminate: (event) => finish(event.nativeEvent.locationX),
-      onPanResponderTerminationRequest: () => false,
-    });
-  }, [
-    liveFraction,
-    maximum,
-    minimum,
-    onChange,
-    range,
-    settleToSelectedLevel,
-    updateFromPosition,
-    width,
-  ]);
-  /* eslint-enable react-hooks/refs */
-
-  const animatedWidth = liveFraction.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
+    }
+    return { level, cells };
   });
+  const columns = [...new Set(rows.flatMap((row) => [...row.cells.keys()]))];
   return (
-    <View style={breakdownStyles.levelSliderWrap}>
-      <View
-        accessibilityRole="adjustable"
-        accessibilityLabel={`Level ${value}`}
-        accessibilityValue={{ min: minimum, max: maximum, now: value }}
-        accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-        onAccessibilityAction={(event) => {
-          const nextValue =
-            event.nativeEvent.actionName === 'increment'
-              ? Math.min(maximum, value + 1)
-              : event.nativeEvent.actionName === 'decrement'
-                ? Math.max(minimum, value - 1)
-                : value;
-          if (nextValue === value) return;
-          settleToSelectedLevel(nextValue);
-          onChange(nextValue);
-        }}
-        onLayout={(event) => setWidth(Math.max(1, event.nativeEvent.layout.width))}
-        style={breakdownStyles.levelSlider}
-        {...responder.panHandlers}
-      >
-        <View style={breakdownStyles.levelSliderTrack} />
-        <Animated.View
-          style={[
-            breakdownStyles.levelSliderFill,
-            { width: animatedWidth, backgroundColor: accent },
-          ]}
-        />
-        <Animated.View
-          style={[
-            breakdownStyles.levelSliderThumb,
-            { left: animatedWidth, backgroundColor: accent },
-          ]}
-        />
+    <ScrollView horizontal testID="item-level-stats-table">
+      <View style={{ gap: 4 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingVertical: 10,
+            backgroundColor: theme.surfaceContainerHighest,
+            borderRadius: 12,
+          }}
+        >
+          <CKText role="rowTitle" style={{ width: 80, paddingHorizontal: 10 }}>
+            {t('gameItemLevels')}
+          </CKText>
+          {columns.map((column) => (
+            <CKText key={column} role="rowTitle" style={{ width: 156, paddingHorizontal: 10 }}>
+              {column}
+            </CKText>
+          ))}
+        </View>
+        {rows.map((row) => (
+          <View key={row.level} style={{ flexDirection: 'row', paddingVertical: 10 }}>
+            <CKText role="bodySmall" style={{ width: 80, paddingHorizontal: 10 }}>
+              {row.level}
+            </CKText>
+            {columns.map((column) => (
+              <CKText key={column} role="bodySmall" style={{ width: 156, paddingHorizontal: 10 }}>
+                {row.cells.get(column) ?? '—'}
+              </CKText>
+            ))}
+          </View>
+        ))}
       </View>
-      <View style={breakdownStyles.levelLabels}>
-        <CKText role="labelSmall" style={{ color: accent, fontWeight: '800' }}>
-          Level {value}
-        </CKText>
-        <CKText role="labelSmall">Max {maximum}</CKText>
-      </View>
-    </View>
-  );
-}
-
-export function detailSliderFractionFromPosition(position: number, width: number) {
-  if (!Number.isFinite(position) || !Number.isFinite(width) || width <= 0) return 0;
-  return Math.max(0, Math.min(1, position / width));
-}
-
-export function detailLevelFromSliderPosition(
-  position: number,
-  width: number,
-  minimum: number,
-  maximum: number,
-) {
-  const range = Math.max(0, maximum - minimum);
-  if (range === 0) return minimum;
-  return Math.max(
-    minimum,
-    Math.min(
-      maximum,
-      Math.round(minimum + detailSliderFractionFromPosition(position, width) * range),
-    ),
+    </ScrollView>
   );
 }
 
@@ -547,7 +505,11 @@ function BreakdownModal({
           {scrollable ? (
             <>
               {customHeader ? null : titleRow}
-              <ScrollView testID="breakdown-scroll" contentContainerStyle={breakdownStyles.content}>
+              <ScrollView
+                testID="breakdown-scroll"
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={breakdownStyles.content}
+              >
                 {children}
               </ScrollView>
             </>
@@ -648,7 +610,7 @@ function StatRow({
       <View style={[breakdownStyles.statIcon, { backgroundColor: colorWithAlpha(accent, 0.13) }]}>
         {imageUrl ? <MobileWebImage imageUrl={imageUrl} style={breakdownStyles.statImage} /> : icon}
       </View>
-      <View style={breakdownStyles.grow}>
+      <View style={[breakdownStyles.grow, { minWidth: 80 }]}>
         <CKText muted>{label}</CKText>
         {detail ? (
           <CKText muted role="labelSmall">
@@ -656,7 +618,9 @@ function StatRow({
           </CKText>
         ) : null}
       </View>
-      <CKText role="rowTitle">{value}</CKText>
+      <CKText role="rowTitle" style={{ maxWidth: '55%', flexShrink: 1, textAlign: 'right' }}>
+        {value}
+      </CKText>
     </View>
   );
 }
@@ -671,11 +635,19 @@ function CostRow({ costs, accent }: { costs: readonly UpgradeCost[]; accent: str
       <CKText muted style={breakdownStyles.grow}>
         Upgrade cost
       </CKText>
-      <View>
+      <View style={{ gap: 4 }}>
         {costs.map((cost) => (
-          <CKText key={cost.resource} role="rowTitle">
-            {compact(cost.amount, intlLocale)} {resourceLabel(cost.resource)}
-          </CKText>
+          <View key={cost.resource} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <MobileWebImage
+              imageUrl={resourceImage(cost.resource)}
+              contentFit="contain"
+              style={{ width: 24, height: 24 }}
+              accessible={false}
+            />
+            <CKText role="rowTitle">
+              {compact(cost.amount, intlLocale)} {resourceLabel(cost.resource)}
+            </CKText>
+          </View>
         ))}
       </View>
     </View>
@@ -770,10 +742,13 @@ function trackerStatRows(
   item: UpgradeTrackerItem,
   level: Record<string, unknown>,
   next: Record<string, unknown> | null,
+  includeZero = false,
 ) {
   const rows: { label: string; value: string }[] = [];
   const add = (label: string, value: unknown, nextValue: unknown, suffix = '') => {
-    if (value == null || value === '' || value === 0) return;
+    // Tables distinguish an exported zero from an absent field; compact detail
+    // rows still hide zero-only mechanics that do not apply at this level.
+    if (value == null || value === '' || (!includeZero && value === 0)) return;
     const changed = nextValue != null && nextValue !== value;
     const current = Number(value),
       following = Number(nextValue);
@@ -1060,25 +1035,6 @@ const breakdownStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   heroImage: { width: 56, height: 56, resizeMode: 'contain' },
-  levelSliderWrap: { gap: 2 },
-  levelSlider: { height: 34, justifyContent: 'center', marginHorizontal: 7 },
-  levelSliderTrack: { height: 5, borderRadius: 999, backgroundColor: '#80808044' },
-  levelSliderFill: {
-    position: 'absolute',
-    left: 0,
-    height: 5,
-    borderRadius: 999,
-    backgroundColor: '#4F91FF',
-  },
-  levelSliderThumb: {
-    position: 'absolute',
-    width: 14,
-    height: 14,
-    marginLeft: -7,
-    borderRadius: 7,
-    backgroundColor: '#4F91FF',
-  },
-  levelLabels: { flexDirection: 'row', justifyContent: 'space-between' },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   unlock: {
     flexDirection: 'row',

@@ -134,9 +134,10 @@ function score(hits: { hit: WarAttack; other: WarMember | undefined }[]) {
     '0_star': {},
   };
   for (const { hit, other } of hits) {
-    if (!other || other.townhallLevel <= 0) continue;
     const bucket = buckets[['0_star', '1_star', '2_stars', '3_stars'][hit.stars]!]!;
-    bucket[other.townhallLevel] = (bucket[other.townhallLevel] ?? 0) + 1;
+    // Missing defender metadata must not remove an observed hit from the totals.
+    const level = other?.townhallLevel ?? 0;
+    bucket[level] = (bucket[level] ?? 0) + 1;
   }
   return {
     ...buckets,

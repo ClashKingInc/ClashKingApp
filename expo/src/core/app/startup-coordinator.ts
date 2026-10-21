@@ -6,6 +6,7 @@ import type { CocAccountService } from '../../features/auth/account-service';
 import { initializeAccountsForCurrentAuth, type StartupResult } from '../../features/auth/startup';
 import type { PushNotificationService } from '../../features/notifications/push';
 import type { FlutterPreferenceMigration } from '../../services/storage/auth-storage';
+import { UnauthorizedException } from '../api/contract-api';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
 import type { GameDataService } from '../game-data';
 import type { AppStateSnapshot } from './app-state';
@@ -29,7 +30,7 @@ export interface StartupCoordinatorDependencies {
   readonly appState: StoreApi<AppStateSnapshot>;
   readonly auth: AuthService;
   readonly accounts: CocAccountService;
-  readonly gameData: Pick<GameDataService, 'loadFreshGameData'>;
+  readonly gameData: Pick<GameDataService, 'loadGameData'>;
   readonly push: Pick<
     PushNotificationService,
     'supportsPushNotifications' | 'initialize' | 'registerCurrentDeviceToken'
@@ -53,21 +54,25 @@ export async function initializeApplication(
   try {
     await Promise.all([
       dependencies.auth.initializeAuth(),
-      dependencies.gameData.loadFreshGameData(),
+      dependencies.gameData.loadGameData(),
       dependencies.appState.getState().initialize(),
     ]);
   } catch (error) {
     const isNetworkError = dependencies.isNetworkError ?? defaultIsNetworkError;
     const isMaintenanceError = dependencies.isMaintenanceError ?? defaultIsMaintenanceError;
-    if (isNetworkError(error) || isMaintenanceError(error) || isServerError(error)) {
+    const rejectedSession =
+      error instanceof UnauthorizedException ||
+      (error instanceof ApiResponseError && error.status === 401);
+    if (!rejectedSession) {
       dependencies.reportError?.('startup.bootstrap', error);
       return failureResult(error, dependencies.auth.canUseApp, {
         network: isNetworkError(error),
         maintenance: isMaintenanceError(error),
       });
     }
-    // AuthService clears an expired/revoked session before rethrowing. Flutter
-    // deliberately continues to Login instead of trapping the user on Error.
+    // Only a definitive rejected session may continue to Login. A profile
+    // decode error, forbidden request, or unavailable service needs retry;
+    // none proves that the browser's refresh cookie is invalid.
   }
 
   let accountResult: StartupResult;
@@ -187,9 +192,4 @@ export function defaultIsMaintenanceError(error: unknown): boolean {
   if (!body || typeof body !== 'object') return false;
   // HTTP 500/503 also cover our backend and database failures, not just game maintenance.
   return 'reason' in body && body.reason === 'maintenance';
-}
-
-function isServerError(error: unknown): boolean {
-  if (error instanceof ApiResponseError) return error.status >= 500;
-  return /\bHTTP\s+5\d\d\b/i.test(String(error));
 }

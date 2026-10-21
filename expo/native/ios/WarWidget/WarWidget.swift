@@ -880,6 +880,7 @@ struct WarWidgetView: View {
           .lineLimit(1)
       }
     }
+    .widgetBackground
   }
 
   private var header: some View {
@@ -1336,6 +1337,7 @@ private struct LegendsWidgetData: Codable {
   func merging(
     battlelog: LegendsFreshBattlelog?,
     rankLookup: LegendsFreshRankLookup?,
+    player: LegendsFreshPlayer?,
     day: LegendsDayWindow,
     refreshedAt: Date
   ) -> LegendsWidgetData {
@@ -1352,9 +1354,9 @@ private struct LegendsWidgetData: Codable {
     return LegendsWidgetData(
       schemaVersion: schemaVersion,
       tag: tag,
-      name: name,
-      townHallLevel: townHallLevel,
-      townHallImageUrl: townHallImageUrl,
+      name: player?.name ?? name,
+      townHallLevel: player?.townHallLevel ?? townHallLevel,
+      townHallImageUrl: player?.townHallImageUrl ?? townHallImageUrl,
       // This timestamp describes the Legend-day snapshot. A rank-only refresh must not
       // make older daily attack and defense metrics appear fresh.
       updatedAt: refreshedDay ? refreshedAt : updatedAt,
@@ -1374,7 +1376,7 @@ private struct LegendsWidgetData: Codable {
       defensesTaken: battlelog?.defenses.count ?? defensesTaken,
       latestAttack: refreshedDay ? latestAttack : self.latestAttack,
       latestDefense: refreshedDay ? latestDefense : self.latestDefense,
-      clan: clan,
+      clan: player == nil ? clan : player?.widgetClan,
       artwork: artwork,
       labels: labels
     )
@@ -1471,6 +1473,28 @@ private struct LegendsFreshRankLookup {
   let item: LegendsFreshRank?
 }
 
+private struct LegendsFreshPlayer: Decodable {
+  struct Clan: Decodable {
+    let tag: String
+    let name: String
+  }
+
+  let tag: String
+  let name: String
+  let townHallLevel: Int
+  let clan: Clan?
+
+  var townHallImageUrl: String? {
+    guard townHallLevel > 0 else { return nil }
+    return "https://assets.clashk.ing/buildings/home-village/town_hall/level_\(townHallLevel).webp"
+  }
+
+  var widgetClan: LegendsWidgetClan? {
+    guard let clan, !clan.tag.isEmpty else { return nil }
+    return LegendsWidgetClan(tag: clan.tag, name: clan.name, badgeUrl: widgetClanBadge(clan.tag))
+  }
+}
+
 private struct LegendsWidgetFreshFetcher {
   func fetch(player: LegendsWidgetPlayerEntity, cached: LegendsWidgetData, now: Date) async -> LegendsWidgetData? {
     let normalized = LegendsWidgetPlayerQuery.normalizedTag(player.id)
@@ -1485,17 +1509,49 @@ private struct LegendsWidgetFreshFetcher {
     let day = LegendsDayWindow.current(at: now)
     async let battlelogRequest = fetchBattlelog(player: player, day: day, baseURL: baseURL)
     async let rankRequest = fetchRank(player: player, baseURL: baseURL)
-    let (battlelog, rankLookup) = await (battlelogRequest, rankRequest)
-    guard battlelog != nil || rankLookup != nil else { return nil }
+    async let playerRequest = fetchPlayer(player: player, defaults: defaults)
+    let (battlelog, rankLookup, profile) = await (battlelogRequest, rankRequest, playerRequest)
+    guard battlelog != nil || rankLookup != nil || profile != nil else { return nil }
 
     let merged = cached.merging(
       battlelog: battlelog,
       rankLookup: rankLookup,
+      player: profile,
       day: day,
       refreshedAt: now
     )
     cache(merged, player: player, defaults: defaults)
     return merged
+  }
+
+  private func fetchPlayer(
+    player: LegendsWidgetPlayerEntity,
+    defaults: UserDefaults
+  ) async -> LegendsFreshPlayer? {
+    let normalized = LegendsWidgetPlayerQuery.normalizedTag(player.id)
+    let rawBase = defaults.string(forKey: "warWidgetProxyUrl") ?? "https://api.clashk.ing/proxy/v1"
+    guard
+      let token = await WidgetAuthSessionProvider().validAccessToken(defaults: defaults),
+      var components = URLComponents(string: rawBase),
+      components.scheme == "https",
+      components.user == nil,
+      components.password == nil,
+      components.query == nil,
+      components.fragment == nil,
+      components.path == "/proxy/v1" || components.path == "/proxy/v1/"
+    else { return nil }
+    // Clash player endpoints require a # prefixed tag; URLComponents encodes it as %23.
+    components.path = "/proxy/v1/players/#\(normalized)"
+    guard let url = components.url else { return nil }
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 8
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+    guard let profile: LegendsFreshPlayer = await execute(request),
+          LegendsWidgetPlayerQuery.normalizedTag(profile.tag) == normalized,
+          !profile.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+          profile.townHallLevel > 0 else { return nil }
+    return profile
   }
 
   private func fetchBattlelog(
@@ -1660,15 +1716,29 @@ private struct LegendsTimelineProvider: AppIntentTimelineProvider {
       data.artwork?.starFilledIconUrl,
       data.artwork?.starEmptyIconUrl,
     ].compactMap { $0 }
-    var result: [String: Data] = [:]
-    for value in urls where result[value] == nil && !value.isEmpty {
-      guard let url = URL(string: value), url.scheme == "https" else { continue }
-      if let (bytes, response) = try? await URLSession.shared.data(from: widgetBadgeURL(url) ?? url),
-         (response as? HTTPURLResponse)?.statusCode == 200 {
-        result[value] = bytes
+    return await withTaskGroup(of: (String, Data)?.self) { group in
+      for value in Set(urls) where !value.isEmpty {
+        guard let url = URL(string: value), url.scheme == "https" else { continue }
+        group.addTask {
+          let request = URLRequest(
+            url: widgetBadgeURL(url) ?? url,
+            cachePolicy: .returnCacheDataElseLoad,
+            timeoutInterval: 8
+          )
+          guard
+            let (bytes, response) = try? await URLSession.shared.data(for: request),
+            (response as? HTTPURLResponse)?.statusCode == 200,
+            UIImage(data: bytes) != nil
+          else { return nil }
+          return (value, bytes)
+        }
       }
+      var result: [String: Data] = [:]
+      for await image in group {
+        if let (url, bytes) = image { result[url] = bytes }
+      }
+      return result
     }
-    return result
   }
 }
 
@@ -1700,7 +1770,7 @@ private struct LegendsWidgetView: View {
   }
 
   private var smallBody: some View {
-    VStack(alignment: .leading, spacing: 7) {
+    VStack(alignment: .leading, spacing: 5) {
       HStack(spacing: 4) {
         identityArtwork(size: 22)
         Text(entry.data.name)
@@ -1708,6 +1778,9 @@ private struct LegendsWidgetView: View {
           .lineLimit(1).minimumScaleFactor(0.8)
           .frame(maxWidth: .infinity, alignment: .leading)
         netValue(compact: true)
+      }
+      if let clan = entry.data.clan, clan.name != nil || clan.badgeUrl != nil {
+        clanIdentity(clan, compact: true)
       }
       HStack(spacing: 4) {
         Text(dayLabel)
@@ -1718,7 +1791,9 @@ private struct LegendsWidgetView: View {
       .foregroundStyle(.secondary)
       .lineLimit(1).minimumScaleFactor(0.85)
       dailyMetrics(compact: true)
-      recentBattleSlot(compact: true)
+      if showsRecentBattleSlot {
+        recentBattleSlot(compact: true)
+      }
     }
   }
 
@@ -1736,8 +1811,10 @@ private struct LegendsWidgetView: View {
           .lineLimit(1).minimumScaleFactor(0.85)
         }
         .frame(maxWidth: .infinity, minHeight: 74)
-        recentBattleSlot(compact: false)
-          .frame(maxWidth: .infinity)
+        if showsRecentBattleSlot {
+          recentBattleSlot(compact: false)
+            .frame(maxWidth: .infinity)
+        }
       }
     }
   }
@@ -1761,13 +1838,17 @@ private struct LegendsWidgetView: View {
   private func dailyMetrics(compact: Bool) -> some View {
     HStack(spacing: 8) {
       compactCountMetric(artworkURL: entry.data.artwork?.attackIconUrl,
-        value: dailyCount(entry.data.attacksUsed), label: labels.attacks,
+        bundledAsset: "Icon_HV_Sword",
+        value: dailyCount(entry.data.attacksUsed), label: labels.attacks, symbol: "arrow.up.right",
         total: compact ? nil : signed(entry.data.attackTrophies))
       compactCountMetric(artworkURL: entry.data.artwork?.defenseIconUrl,
-        value: dailyCount(entry.data.defensesTaken), label: labels.defenses,
+        bundledAsset: "Icon_HV_Shield_Arrow",
+        value: dailyCount(entry.data.defensesTaken), label: labels.defenses, symbol: "shield.fill",
         total: compact ? nil : signed(entry.data.defenseTrophies))
     }
   }
+
+  private var showsRecentBattleSlot: Bool { stale || latestBattle != nil }
 
   private func recentBattleSlot(compact: Bool) -> some View {
     VStack(alignment: .leading, spacing: 3) {
@@ -1777,8 +1858,6 @@ private struct LegendsWidgetView: View {
         Text(String(localized: "legends_widget_recent", table: "LegendsWidget") + ":")
           .font(.system(size: 10, weight: .medium)).foregroundStyle(.secondary)
         battleRow(latest.battle, attack: latest.attack, compact: compact)
-      } else {
-        Color.clear
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -1816,6 +1895,9 @@ private struct LegendsWidgetView: View {
         .font(.headline)
         .lineLimit(1)
         .minimumScaleFactor(0.75)
+      if let clan = entry.data.clan, clan.name != nil || clan.badgeUrl != nil {
+        clanIdentity(clan, compact: true)
+      }
       Text(labels.noData)
         .font(.caption)
         .foregroundStyle(.secondary)
@@ -1849,15 +1931,19 @@ private struct LegendsWidgetView: View {
          let data = entry.images[url],
          let image = UIImage(data: data) {
         Image(uiImage: image).resizable().scaledToFit()
+      } else if (1...18).contains(entry.data.townHallLevel) {
+        Image("town_hall_\(entry.data.townHallLevel)", bundle: .main)
+          .resizable().scaledToFit()
       } else {
-        Text(String(entry.data.name.prefix(1)))
-          .font(.system(size: size * 0.42, weight: .bold, design: .rounded))
+        Text(entry.data.townHallLevel > 0 ? "TH\(entry.data.townHallLevel)" : "TH")
+          .font(.system(size: size * 0.38, weight: .bold, design: .rounded))
           .foregroundStyle(.purple)
           .frame(maxWidth: .infinity, maxHeight: .infinity)
           .background(.purple.opacity(0.14), in: RoundedRectangle(cornerRadius: size * 0.28))
       }
     }
     .frame(width: size, height: size)
+    .accessibilityLabel("Town Hall \(entry.data.townHallLevel)")
   }
 
   private func clanIdentity(_ clan: LegendsWidgetClan, compact: Bool) -> some View {
@@ -1884,10 +1970,10 @@ private struct LegendsWidgetView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
-  private func compactCountMetric(artworkURL: String?, value: String, label: String, total: String? = nil) -> some View {
+  private func compactCountMetric(artworkURL: String?, bundledAsset: String, value: String, label: String, symbol: String, total: String? = nil) -> some View {
     VStack(spacing: 3) {
       HStack(spacing: 4) {
-        gameArtwork(artworkURL, size: 18, fallback: String(label.prefix(1)))
+        gameArtwork(artworkURL, size: 18, fallback: "", symbol: symbol, bundledAsset: bundledAsset)
         Text(value)
           .font(.system(size: 15, weight: .bold, design: .rounded))
           .monospacedDigit()
@@ -1929,7 +2015,9 @@ private struct LegendsWidgetView: View {
         gameArtwork(
           attack ? entry.data.artwork?.attackIconUrl : entry.data.artwork?.defenseIconUrl,
           size: compact ? 12 : 16,
-          fallback: String((attack ? labels.attacks : labels.defenses).prefix(1))
+          fallback: "",
+          symbol: attack ? "arrow.up.right" : "shield.fill",
+          bundledAsset: attack ? "Icon_HV_Sword" : "Icon_HV_Shield_Arrow"
         )
         Text(signed(battle.trophies))
           .font(.system(size: compact ? 11 : 13, weight: .semibold).monospacedDigit())
@@ -1975,12 +2063,18 @@ private struct LegendsWidgetView: View {
     return date.formatted(.dateTime.month(.abbreviated).day())
   }
 
-  private func gameArtwork(_ url: String?, size: CGFloat, fallback: String) -> some View {
+  private func gameArtwork(_ url: String?, size: CGFloat, fallback: String, symbol: String? = nil, bundledAsset: String? = nil) -> some View {
     Group {
-      if let url,
+      // Static battle icons must also work for native-only refreshes with no app payload.
+      if let bundledAsset, let image = UIImage(named: bundledAsset) {
+        Image(uiImage: image).renderingMode(.original).resizable().scaledToFit()
+      } else if let url,
          let data = entry.images[url],
          let image = UIImage(data: data) {
         Image(uiImage: image).resizable().scaledToFit()
+      } else if let symbol {
+        Image(systemName: symbol)
+          .resizable().scaledToFit().foregroundStyle(.secondary)
       } else {
         Text(fallback)
           .font(.system(size: max(12, size * 0.62), weight: .bold, design: .rounded))

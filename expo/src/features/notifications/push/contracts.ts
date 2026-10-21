@@ -87,4 +87,4 @@ export interface PushNotificationServiceOptions {
 }
 
 export type SupportedPushRoute =
-  '/support-creator' | '/settings/support' | '/posts' | '/search' | '/upgrade-tracker';
+  '/support-creator' | '/settings/support' | '/posts' | '/search' | '/upgrade-tracker' | `/player/${string}?tab=legends` | `/clan/${string}/war`;

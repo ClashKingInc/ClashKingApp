@@ -123,8 +123,10 @@ export class AccountBootstrapService {
     }
 
     const playerTags = links.map((account) => account.playerTag);
+    const verifiedTags = links.filter((link) => link.isVerified).map((link) => link.playerTag);
+    const rankedTags = verifiedTags;
     const rankedWarmup = players.prefetchRankedLeagueData(
-      playerTags,
+      rankedTags,
       options.forceAuxiliaryRefresh ?? false,
     );
     const upgradeWarmup = this.warmUpgradeTracker(links, options.forceAuxiliaryRefresh ?? false);
@@ -153,6 +155,7 @@ export class AccountBootstrapService {
       clanTagsByPlayer = await players.loadOfficialPlayerData(playerTags, {
         notify: false,
         throwOnError: false,
+        forceRefresh: options.forceAuxiliaryRefresh ?? false,
       });
     } catch (error) {
       this.report('accountBootstrap.players', error);
@@ -193,8 +196,13 @@ export class AccountBootstrapService {
     const { upgrades, upgradeWidgets, accounts } = this.dependencies;
     if (!upgrades) return;
     const verified = links.filter((link) => link.isVerified);
+    const homeAccounts = verified.filter(
+      (link) =>
+        !this.dependencies.playerCardPreferences ||
+        this.dependencies.playerCardPreferences.isUpgradeTrackerShownOnHome(link.playerTag),
+    );
     const snapshots = (
-      await mapWithConcurrencyLimit(verified, async (link) => {
+      await mapWithConcurrencyLimit(homeAccounts, async (link) => {
         try {
           return await upgrades.load(link.playerTag, forceRefresh);
         } catch {

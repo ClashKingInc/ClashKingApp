@@ -1,15 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ArrowLeft,
   ArrowRight,
@@ -35,7 +26,6 @@ import {
 import { ImageAssets } from '../../core/assets/image-assets';
 import { translationForTid } from '../../core/game-data/game-data-localization';
 import {
-  materialBackLabel,
   materialCloseLabel,
   toIntlLocale,
   useI18n,
@@ -44,14 +34,12 @@ import {
 import {
   CKText,
   EmptyState,
-  HeaderIconButton,
   MobileWebImage,
   PillSurface,
   Skeleton,
   Surface,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../ui';
 import {
   DamageCalculatorEngine,
@@ -86,9 +74,11 @@ import {
 } from './calculator-logic';
 
 import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
+import { CalcHeader } from './calculator-controls';
 export type CalculatorMode = 'damage' | 'farmGoal';
 
 export interface CalculatorsScreenProps {
+  readonly damageOnly?: boolean;
   readonly session: DamageCalculatorSession;
   readonly accountPresets: readonly DamageAccountPreset[];
   readonly trackerSnapshot: UpgradeTrackerSnapshot | null;
@@ -107,7 +97,7 @@ export function CalculatorsScreen(props: CalculatorsScreenProps) {
   const theme = useCKTheme();
   const link = useLinkParameters();
   const [mode, setMode] = useState<CalculatorMode>(
-    linkChoice(link.mode, ['damage', 'farmGoal'], 'damage'),
+    props.damageOnly ? 'damage' : linkChoice(link.mode, ['damage', 'farmGoal'], 'damage'),
   );
   const [revision, setRevision] = useState(0);
   const mutate = (operation: () => void) => {
@@ -117,13 +107,21 @@ export function CalculatorsScreen(props: CalculatorsScreenProps) {
   const catalogMissing =
     props.session.catalog.buildings.length === 0 || props.session.catalog.sources.length === 0;
   void revision;
-  return (
-    <View style={[styles.screen, { backgroundColor: theme.background }]}>
+  const header = (
+    <View style={{ marginHorizontal: -16, marginTop: -16, marginBottom: 16 }}>
       <CalculatorHero mode={mode} onBack={props.onBack} />
-      <ModeTabs mode={mode} onChange={setMode} />
+      {!props.damageOnly && <ModeTabs mode={mode} onChange={setMode} />}
+    </View>
+  );
+  return (
+    <View
+      testID={props.damageOnly ? 'damage-manual' : 'legacy-calculators'}
+      style={[styles.screen, { backgroundColor: theme.background }]}
+    >
       {mode === 'damage' ? (
         catalogMissing ? (
           <View style={styles.emptyPage}>
+            {header}
             <EmptyState
               icon={<CloudOff color={theme.onSurfaceVariant} />}
               title={t('damageNoStaticDataTitle')}
@@ -131,82 +129,24 @@ export function CalculatorsScreen(props: CalculatorsScreenProps) {
             />
           </View>
         ) : (
-          <DamageMode {...props} mutate={mutate} />
+          <DamageMode {...props} mutate={mutate} header={header} />
         )
       ) : (
-        <FarmGoalMode {...props} mutate={mutate} />
+        <FarmGoalMode {...props} mutate={mutate} header={header} />
       )}
     </View>
   );
 }
 
 function CalculatorHero({ mode, onBack }: { mode: CalculatorMode; onBack: () => void }) {
-  const { t, isRtl, locale } = useI18n();
-  const themeMode = useCKThemeMode();
-  const insets = useSafeAreaInsets();
-  const { width, fontScale } = useWindowDimensions();
-  const desktop = width >= 900;
-  const scaleAllowance = Math.max(0, Math.min(72, (16 * fontScale - 16) * 1.5));
-  const height = insets.top + (desktop ? 292 : 332 + scaleAllowance);
+  const { t } = useI18n();
   const damage = mode === 'damage';
   return (
-    <View style={[styles.hero, { height }]}>
-      <MobileWebImage
-        imageUrl={
-          damage ? ImageAssets.playerWarStatsPageBackground : ImageAssets.homeBaseBackground
-        }
-        contentFit="cover"
-        contentPosition="bottom center"
-        style={StyleSheet.absoluteFill}
-      />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Defs>
-          <LinearGradient id="calculatorGradient" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.5 : 0.34} />
-            <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.72 : 0.52} />
-            <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.94 : 0.72} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#calculatorGradient)" />
-      </Svg>
-      <SafeAreaView
-        edges={['top', 'left', 'right']}
-        style={[styles.heroSafe, { paddingHorizontal: desktop ? 20 : 12 }]}
-      >
-        <HeaderIconButton
-          glass={false}
-          label={materialBackLabel(locale)}
-          onPress={onBack}
-          icon={isRtl ? <ArrowRight color="#fff" /> : <ArrowLeft color="#fff" />}
-        />
-        <View style={[styles.heroIdentity, desktop && styles.heroHorizontal]}>
-          <MobileWebImage
-            imageUrl={damage ? ImageAssets.getSpellImage('Lightning Spell') : ImageAssets.lootCart}
-            contentFit="contain"
-            style={{ width: desktop ? 104 : 112, height: desktop ? 104 : 112 }}
-            errorFallback={
-              damage ? <Bolt color="#fff" size={42} /> : <Rocket color="#fff" size={42} />
-            }
-          />
-          <View
-            style={[
-              styles.heroCopy,
-              { maxWidth: desktop ? 520 : 330, alignItems: desktop ? 'flex-start' : 'center' },
-            ]}
-          >
-            <CKText role="screenTitle" numberOfLines={1} style={styles.heroTitle}>
-              {t('calculatorsTitle')}
-            </CKText>
-            <CKText
-              numberOfLines={2}
-              style={[styles.heroSubtitle, { textAlign: desktop ? 'left' : 'center' }]}
-            >
-              {t(damage ? 'damageCalculatorSubtitle' : 'farmGoalFormTitle')}
-            </CKText>
-          </View>
-        </View>
-      </SafeAreaView>
-    </View>
+    <CalcHeader
+      title={t(damage ? 'damageCalculatorTitle' : 'farmGoalFormTitle')}
+      image={damage ? ImageAssets.getSpellImage('Lightning Spell') : ImageAssets.lootCart}
+      onBack={onBack}
+    />
   );
 }
 
@@ -264,7 +204,9 @@ function ModeTab({
   );
 }
 
-function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => void) => void }) {
+function DamageMode(
+  props: CalculatorsScreenProps & { mutate: (operation: () => void) => void; header: ReactNode },
+) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const session = props.session;
@@ -305,6 +247,7 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
     });
   return (
     <ScrollView contentContainerStyle={styles.pageContent} keyboardShouldPersistTaps="handled">
+      {props.header}
       <SectionTitle>{t('damageAccountPresetShort')}</SectionTitle>
       <AccountPanel
         accounts={props.accountPresets}
@@ -323,7 +266,7 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
               key={target.id}
               target={target}
               result={resultById.get(target.id)}
-              townHall={session.townHall}
+              townHall={session.targetTownHall ?? session.townHall}
               onLevel={(level) => props.mutate(() => session.setTargetLevel(target.id, level))}
               onRemove={() => props.mutate(() => session.removeTarget(target.id))}
             />
@@ -423,7 +366,7 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
         visible={buildingPicker}
         buildings={session.availableBuildings}
         excluded={new Set(session.targets.map((target) => target.buildingId))}
-        townHall={session.townHall}
+        townHall={session.targetTownHall ?? session.townHall}
         onClose={() => setBuildingPicker(false)}
         onSelect={(id) => {
           setBuildingPicker(false);
@@ -434,7 +377,9 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
   );
 }
 
-function FarmGoalMode(props: CalculatorsScreenProps & { mutate: (operation: () => void) => void }) {
+function FarmGoalMode(
+  props: CalculatorsScreenProps & { mutate: (operation: () => void) => void; header: ReactNode },
+) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const [accountTag, setAccountTag] = useState(
@@ -561,6 +506,7 @@ function FarmGoalMode(props: CalculatorsScreenProps & { mutate: (operation: () =
     suggestion.plannedStep?.targetLevel === level.level;
   return (
     <ScrollView contentContainerStyle={styles.pageContent} keyboardShouldPersistTaps="handled">
+      {props.header}
       <SectionTitle>{t('farmGoalAccountTitle')}</SectionTitle>
       <AccountPanel
         accounts={props.accountPresets}
@@ -1316,7 +1262,16 @@ function BuildingPicker({
   const byName = new Map(buildings.map((building) => [building.name, building]));
   const common = hasQuery
     ? []
-    : ['Town Hall', 'Inferno Tower', 'Eagle Artillery', 'Scattershot', 'X-Bow', 'Air Defense']
+    : [
+        'Town Hall',
+        'Clan Castle',
+        'Monolith',
+        'Inferno Tower',
+        'Eagle Artillery',
+        'Scattershot',
+        'X-Bow',
+        'Air Defense',
+      ]
         .map((name) => byName.get(name))
         .filter(
           (building): building is BuildingDefinition =>
@@ -1737,7 +1692,7 @@ function setupLabel(id: string, t: Translator) {
       : fallback;
 }
 function sourceName(source: DamageSourceDefinition, t: Translator) {
-  const keys: Record<DamageSourceKind, MessageKey> = {
+  const keys: Partial<Record<DamageSourceKind, MessageKey>> = {
     [DamageSourceKind.Lightning]: 'damageSourceLightning',
     [DamageSourceKind.Earthquake]: 'damageSourceEarthquake',
     [DamageSourceKind.GiantArrow]: 'damageSourceGiantArrow',
@@ -1746,7 +1701,8 @@ function sourceName(source: DamageSourceDefinition, t: Translator) {
     [DamageSourceKind.BalloonDeath]: 'damageSourceBalloonDeath',
     [DamageSourceKind.RocketBalloonDeath]: 'damageSourceRocketBalloonDeath',
   };
-  const fallback = t(keys[source.kind]);
+  const key = keys[source.kind];
+  const fallback = key ? t(key) : source.name;
   return source.kind === DamageSourceKind.GiantArrow
     ? (translationForTid('TID_GEAR_PIERCING_ARROW') ?? fallback)
     : source.kind === DamageSourceKind.Fireball

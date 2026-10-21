@@ -24,7 +24,7 @@ import {
   LoadingIndicator,
   MobileWebImage,
   PillSurface,
-  SkeletonLoadingDialog,
+  PageLoading,
   Snackbar,
   Surface,
   ckRadius,
@@ -412,7 +412,7 @@ export function ManageLinkedAccountsScreen({
         }}
         onVerified={() => void verified()}
       />
-      <SkeletonLoadingDialog visible={continuing} />
+      <PageLoading visible={continuing} kind="list" />
       <Snackbar message={notice} onDismiss={() => setNotice(undefined)} />
     </SafeAreaView>
   );

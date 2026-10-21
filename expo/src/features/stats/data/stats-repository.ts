@@ -1,5 +1,4 @@
 import {
-  ArmySearchEndpoint,
   ArmySetupsEndpoint,
   ArmySetupTimelineEndpoint,
   ClanCapitalLeagueCountsEndpoint,
@@ -23,12 +22,10 @@ import { gameDataState, isRecord } from '../../../core/game-data/game-data-state
 import {
   decodeStatsLocationMetadata,
   decodeStatsGroupedCounts,
-  StatsArmiesResponse,
   StatsBreakdown,
   StatsClanCountsResponse,
   StatsCwlResponse,
   StatsDateFilter,
-  StatsDateRange,
   StatsLegendQuery,
   StatsLegendResponse,
   StatsMetrics,
@@ -36,7 +33,6 @@ import {
   StatsPlayerCountsResponse,
   StatsRankedQuery,
   StatsWarQuery,
-  type StatsArmiesQuery,
   type StatsArmySetupQuery,
   type StatsArmySetupResponse,
   type StatsArmySetupTimelineResponse,
@@ -48,7 +44,6 @@ import {
 export interface StatsRepositoryContract {
   loadPlayerCounts(fresh?: boolean): Promise<StatsPlayerCountsResponse>;
   loadClanCounts(fresh?: boolean): Promise<StatsClanCountsResponse>;
-  loadArmies(request: StatsArmiesQuery, fresh?: boolean): Promise<StatsArmiesResponse>;
   loadArmySetups(request: StatsArmySetupQuery, fresh?: boolean): Promise<StatsArmySetupResponse>;
   loadArmySetupTimeline(
     request: StatsArmySetupQuery,
@@ -147,20 +142,6 @@ export class StatsRepository implements StatsRepositoryContract {
       responses[4]?.items ?? null,
     );
   }
-  async loadArmies(request: StatsArmiesQuery, fresh = false): Promise<StatsArmiesResponse> {
-    return this.cached(`armies:${JSON.stringify(request.toQuery())}`, fresh, async () =>
-      StatsArmiesResponse.fromJson(
-        await Effect.runPromise(
-          this.contractApi.execute(ArmySearchEndpoint, {
-            path: {},
-            query: request.toQuery(),
-            body: {},
-          }),
-        ),
-        new StatsDateRange(request.filters.dates.start, request.filters.dates.end),
-      ),
-    );
-  }
   async loadArmySetups(
     request: StatsArmySetupQuery,
     fresh = false,
@@ -236,15 +217,27 @@ export class StatsRepository implements StatsRepositoryContract {
         interval: 'day' as const,
       };
       const [hitRates, summaries, sizes] = await Promise.all([
-        Effect.runPromise(this.contractApi.execute(WarHitratesEndpoint, {
-          path: {}, query: window, body: {},
-        })),
-        Effect.runPromise(this.contractApi.execute(WarSummaryEndpoint, {
-          path: {}, query: window, body: {},
-        })),
-        Effect.runPromise(this.contractApi.execute(WarSummaryEndpoint, {
-          path: {}, query: { ...window, groupBy: 'warSize' }, body: {},
-        })),
+        Effect.runPromise(
+          this.contractApi.execute(WarHitratesEndpoint, {
+            path: {},
+            query: window,
+            body: {},
+          }),
+        ),
+        Effect.runPromise(
+          this.contractApi.execute(WarSummaryEndpoint, {
+            path: {},
+            query: window,
+            body: {},
+          }),
+        ),
+        Effect.runPromise(
+          this.contractApi.execute(WarSummaryEndpoint, {
+            path: {},
+            query: { ...window, groupBy: 'warSize' },
+            body: {},
+          }),
+        ),
       ]);
       const unfiltered = request.townHallLevel == null && request.opponentTownHallLevel == null;
       const byTownHall = new Map(current.breakdowns.map((entry) => [entry.key, entry.metrics]));
@@ -259,7 +252,10 @@ export class StatsRepository implements StatsRepositoryContract {
             )
           : current.breakdowns;
       return new StatsPerformanceResponse(
-        current.dateRange, current.metrics, [], comparisons,
+        current.dateRange,
+        current.metrics,
+        [],
+        comparisons,
         hitRates.items as readonly StatsWarHitRate[],
         summaries.items as readonly StatsWarSummary[],
         sizes.items as readonly StatsWarSummary[],

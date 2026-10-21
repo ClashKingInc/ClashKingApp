@@ -1,4 +1,5 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { canonicalTag } from '../../../core/domain/tags';
 import type { BookmarkedClan, BookmarkedPlayer } from '../../../core/bookmarks/bookmark-service';
 import type { Clan } from '../../clan/models';
 import type { Player } from '../../player/models/player';
@@ -28,6 +29,7 @@ export interface WarPresentationActions {
   copyText(value: string): Promise<void>;
   exportCwl?(clanTag: string): Promise<void>;
   fetchPreviousWar?(clanTag: string, before: Date): Promise<WarInfo | null>;
+  loadScoutingWars?(clanTag: string, before: Date, type: string): Promise<readonly WarInfo[]>;
   reorderLinkedClans?(orderedTags: readonly string[]): Promise<void>;
   reorderBookmarkedClans?(orderedTags: readonly string[]): Promise<void>;
 }
@@ -73,49 +75,72 @@ export function normalizeTagKey(tag: string): string {
 export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResult {
   const owned = new Set(model.ownedPlayerTags.map(normalizeTagKey));
   const hidden = new Set(Array.from(model.hiddenPlayerTags ?? []).map(normalizeTagKey));
-  const profilesByTag = new Map(model.profiles.map((profile) => [normalizeTagKey(profile.tag), profile]));
+  const profilesByTag = new Map(
+    model.profiles.map((profile) => [normalizeTagKey(profile.tag), profile]),
+  );
   const ownedProfiles = model.ownedPlayerTags.flatMap((tag) => {
     const key = normalizeTagKey(tag);
     const profile = profilesByTag.get(key);
-    return profile && owned.has(key) && !hidden.has(key) ? [profile] : [];
+    return profile && owned.has(key) ? [profile] : [];
   });
-
-  const linkedClans = new Map<string, Clan>();
+  const visibleProfiles = ownedProfiles.filter(
+    (profile) => !hidden.has(normalizeTagKey(profile.tag)),
+  );
+  const bookmarkedTags = new Set(model.bookmarkedClans.map((clan) => canonicalTag(clan.tag)));
+  const visibleClanTags = new Set(visibleProfiles.map((profile) => canonicalTag(profile.clanTag)));
+  // Membership survives hydration failures and account visibility preferences.
+  // Hidden accounts stay out of status rows, but cannot turn an owned clan into
+  // a bookmark when that same clan is explicitly bookmarked.
+  const linkedProfilesByClan = new Map<string, Player[]>();
   for (const profile of ownedProfiles) {
-    const clan = asClan(profile.clan);
-    if (clan?.tag) linkedClans.set(clan.tag, clan);
+    const tag = canonicalTag(profile.clanTag);
+    if (!tag) continue;
+    const profiles = linkedProfilesByClan.get(tag) ?? [];
+    profiles.push(profile);
+    linkedProfilesByClan.set(tag, profiles);
   }
 
   const accountsByClan = new Map<string, WarAccountItem[]>();
   const addAccount = (clanTag: string, account: WarAccountItem) => {
-    if (!clanTag) return;
-    const accounts = accountsByClan.get(clanTag) ?? [];
+    const tag = canonicalTag(clanTag);
+    if (!tag) return;
+    const accounts = accountsByClan.get(tag) ?? [];
     accounts.push(account);
-    accountsByClan.set(clanTag, accounts);
+    accountsByClan.set(tag, accounts);
   };
-  ownedProfiles.forEach((profile) =>
+  visibleProfiles.forEach((profile) =>
     addAccount(profile.clanTag, { tag: profile.tag, name: profile.name, bookmarked: false }),
   );
 
-  const hydratedByTag = new Map(model.hydratedBookmarkedClans.map((clan) => [clan.tag, clan]));
+  const hydratedByTag = new Map(
+    model.hydratedBookmarkedClans.map((clan) => [canonicalTag(clan.tag), clan]),
+  );
   const bookmarkSnapshotByTag = new Map(
-    model.bookmarkedClans.map((bookmark) => [bookmark.tag, bookmark]),
+    model.bookmarkedClans.map((bookmark) => [canonicalTag(bookmark.tag), bookmark]),
   );
   const bookmarkedClanTags = unique([
-    ...model.bookmarkedClans.map((bookmark) => bookmark.tag),
-  ]).filter((tag) => tag && !Array.from(linkedClans.keys()).some((linkedTag) => normalizeTagKey(linkedTag) === normalizeTagKey(tag)));
+    ...model.bookmarkedClans.map((bookmark) => canonicalTag(bookmark.tag)),
+  ]).filter((tag) => tag && !linkedProfilesByClan.has(tag));
 
   const summaries = new Map(
     Array.from(model.summaries.entries()).map(([tag, summary]) => [normalizeHash(tag), summary]),
   );
   const inputs = [
-    ...Array.from(linkedClans.values()).map((clan) => ({
-      clan,
-      tag: clan.tag,
-      name: clan.name,
-      badgeUrl: ImageAssets.clanBadgeForTag(clan.tag),
-      bookmarked: false,
-    })),
+    ...Array.from(linkedProfilesByClan)
+      .filter(([tag]) => visibleClanTags.has(tag) || bookmarkedTags.has(tag))
+      .map(([tag, profiles]) => {
+        const attached = profiles
+          .map((profile) => asClan(profile.clan))
+          .find((clan) => clan && canonicalTag(clan.tag) === tag);
+        const clan = hydratedByTag.get(tag) ?? attached ?? null;
+        return {
+          clan,
+          tag,
+          name: clan?.name || profiles[0]!.clanOverview.name || tag,
+          badgeUrl: ImageAssets.clanBadgeForTag(tag, clan ?? profiles[0]!.clanOverview),
+          bookmarked: false,
+        };
+      }),
     ...bookmarkedClanTags.map((tag) => {
       const clan = hydratedByTag.get(tag) ?? null;
       const snapshot = bookmarkSnapshotByTag.get(tag);
@@ -123,7 +148,7 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
         clan,
         tag,
         name: clan?.name || snapshot?.name || tag,
-        badgeUrl: ImageAssets.clanBadgeForTag(tag),
+        badgeUrl: ImageAssets.clanBadgeForTag(tag, clan ?? snapshot),
         bookmarked: true,
       };
     }),
@@ -140,7 +165,7 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
     const accountStatuses = displayWar
       ? accounts.map((account) => accountStatus(account, displayWar, input.tag))
       : [];
-    const linked = accounts.length > 0 && !input.bookmarked;
+    const linked = !input.bookmarked;
     const inLineup = accountStatuses.some((status) => status.inWar);
     const active =
       displayWar !== null && !['notInWar', 'unknown', 'accessDenied'].includes(displayWar.state);
@@ -172,7 +197,9 @@ export function buildWarRoster(model: WarPresentationModel): WarRosterBuildResul
   return {
     items,
     missingBookmarkedPlayerTags: [],
-    missingWarClanTags: bookmarkedClanTags.filter((tag) => !summaries.has(normalizeHash(tag))),
+    missingWarClanTags: inputs
+      .map((input) => input.tag)
+      .filter((tag) => !summaries.has(normalizeHash(tag))),
   };
 }
 

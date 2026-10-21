@@ -15,6 +15,11 @@
       "PrivacyInfo.xcprivacy",
       "WarWidget.entitlements",
       "LegendsWidget.xcstrings",
+      "Icon_HV_Sword.png",
+      "Icon_HV_Shield_Arrow.png",
+      "TownHalls.xcassets/Contents.json",
+      "TownHalls.xcassets/town_hall_18.imageset/Contents.json",
+      "TownHalls.xcassets/town_hall_18.imageset/town_hall_18.png",
       "WarWidget.swift"
     ]
   },

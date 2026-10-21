@@ -22,6 +22,16 @@ export type NativeSecondaryRouteTransition =
 const layers = new Map<string, NativeSecondaryLayer>();
 const listeners = new Map<string, Set<() => void>>();
 
+// Every detail is a real native push, even if a clan card could not be measured
+// on press. Keep this static: changing a native-stack screen's animation after
+// navigation starts cannot animate the transition that already occurred.
+export const nativeDetailScreenOptions = {
+  gestureEnabled: true,
+  presentation: 'card',
+  animation: 'slide_from_right',
+  gestureDirection: 'horizontal',
+} as const;
+
 export function publishNativeSecondaryLayer(key: string, layer: NativeSecondaryLayer) {
   layers.set(key, layer);
   listeners.get(key)?.forEach((listener) => listener());

@@ -4,7 +4,8 @@ import { View } from 'react-native';
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { canonicalTag } from '../../../core/domain/tags';
 import { useI18n } from '../../../i18n';
-import { Snackbar } from '../../../ui';
+import { ClashHandoffDialog, Snackbar } from '../../../ui';
+import { useClashGameHandoff } from '../../../ui/use-clash-game-handoff';
 import type { Player, RankedLeagueData } from '../../player/models';
 import { RankedScreen } from './ranked-screen';
 
@@ -31,6 +32,7 @@ export function RankedRoot({
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string>();
+  const handoff = useClashGameHandoff(openInGame);
   const [revision, setRevision] = useState(0);
   const generation = useRef(0);
 
@@ -151,10 +153,16 @@ export function RankedRoot({
         }}
         onSwitchPlayer={switchPlayer}
         onToggleBookmark={toggleBookmark}
-        onOpenInGame={() => openInGame(player.tag)}
+        onOpenInGame={() => handoff.request(player.tag)}
         onOpenPlayerTag={openPlayerTag}
       />
       <Snackbar message={message} onDismiss={() => setMessage(undefined)} />
+      <ClashHandoffDialog
+        visible={handoff.visible}
+        onCancel={handoff.cancel}
+        onConfirm={handoff.confirm}
+        allowRemember
+      />
     </View>
   );
 }

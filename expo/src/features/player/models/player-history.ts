@@ -165,7 +165,7 @@ export class PlayerCwlClan {
     return new PlayerCwlClan(
       string(json.tag),
       string(json.name),
-      ImageAssets.clanBadgeForTag(string(json.tag)),
+      ImageAssets.clanBadgeForTag(string(json.tag), json),
       string(league.name),
       int(wars.won),
       int(wars.lost),
@@ -244,7 +244,7 @@ export class JoinLeaveClan {
   ) {}
   static fromJson(json: JsonRecord) {
     const tag = string(json.tag);
-    return new JoinLeaveClan(string(json.name), tag, ImageAssets.clanBadgeForTag(tag));
+    return new JoinLeaveClan(string(json.name), tag, ImageAssets.clanBadgeForTag(tag, json));
   }
 }
 export class JoinLeaveEvent {

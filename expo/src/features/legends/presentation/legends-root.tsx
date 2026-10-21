@@ -1,5 +1,7 @@
+import { LegendHistoryList } from './legend-history';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   Pressable,
   Platform,
   RefreshControl,
@@ -9,7 +11,7 @@ import {
   useWindowDimensions,
   type GestureResponderEvent,
 } from 'react-native';
-import { ArrowLeft, ChevronRight, Upload } from 'lucide-react-native';
+import { ArrowLeft, ChevronRight, Download, Share2 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
 import {
@@ -18,19 +20,18 @@ import {
   DestinationPicker,
   EmptyState,
   ErrorState,
-  LoadingIndicator,
+  PageSkeleton,
   MobileWebImage,
   PillSurface,
-  ResponsiveGrid,
+  ProfileHeaderAction,
   statColors,
   Surface,
   ckRadius,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
 import { ImageAssets } from '../../../core/assets/image-assets';
-import type { ContractApiService } from '../../../core/api/contract-api';
+import { sharePageLink } from '../../../core/deep-links/share-page-link';
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import {
   PlayerLegendBattle,
@@ -46,18 +47,22 @@ import { legendDayOffset } from './legend-day';
 import { LegendChart } from './legend-chart';
 import { popularLegendItems } from './legend-army';
 import { LegendBattlePanel } from './legend-battle-panel';
-import { ArmyDetailModal } from '../../stats/presentation/army-detail-modal';
+import { playerProfileClanIdentity } from '../../player/presentation/player-clan-identity';
+export { legendHistoryTopPercent } from './legend-history';
 
 export function LegendsRoot({
   player,
   onBack,
   onOpenOpponent,
+  onOpenClan,
 }: {
   readonly player: Player;
   readonly onBack: () => void;
   readonly onOpenOpponent?: (tag: string) => void;
+  readonly onOpenClan?: (tag: string) => void;
 }) {
   const runtime = useAppRuntime();
+  const { t } = useI18n();
   const [selectedDay, setSelectedDay] = useState(() => currentLegendDay());
   const baseline = useMemo(
     () => legendLeagueDataFromPlayer(player, selectedDay),
@@ -107,14 +112,21 @@ export function LegendsRoot({
   return (
     <View style={styles.fill}>
       <LegendsScreen
+        player={player}
         data={data}
         error={error}
         loading={loading}
         refreshing={refreshing}
         selectedDay={selectedDay}
         onBack={onBack}
-        api={runtime.contractApi}
         onOpenOpponent={onOpenOpponent}
+        onOpenClan={onOpenClan}
+        onShareLink={() =>
+          void sharePageLink(
+            { kind: 'player', tag: player.tag, params: { tab: 'legends' } },
+            player.name,
+          ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')))
+        }
         onRefresh={() => load(true)}
         onSelectDay={(day) => {
           setLoading(true);
@@ -125,6 +137,7 @@ export function LegendsRoot({
       {data ? (
         <LegendsShareModal
           data={data}
+          player={player}
           onClose={() => setShareVisible(false)}
           visible={shareVisible}
         />
@@ -194,7 +207,7 @@ export function legendLeagueDataFromPlayer(player: Player, day: string) {
 }
 
 export function LegendsScreen({
-  api,
+  player,
   data,
   error,
   loading,
@@ -204,9 +217,11 @@ export function LegendsScreen({
   onRefresh,
   onSelectDay,
   onExport,
+  onShareLink,
+  onOpenClan,
   onOpenOpponent,
 }: {
-  readonly api?: ContractApiService;
+  readonly player?: Player;
   readonly data: PlayerLegendLeagueData | null;
   readonly error: string | null;
   readonly loading: boolean;
@@ -216,23 +231,19 @@ export function LegendsScreen({
   readonly onRefresh: () => Promise<void>;
   readonly onSelectDay: (day: string) => void;
   readonly onExport: () => void;
+  readonly onShareLink?: () => void;
+  readonly onOpenClan?: (tag: string) => void;
   readonly onOpenOpponent?: (tag: string) => void;
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const horizontal = Math.max(16, (width - 1120) / 2);
   const current = data?.currentDay;
+  const clanIdentity = player ? playerProfileClanIdentity(player) : null;
   const [page, setPage] = useState('daily');
-  const [selectedArmy, setSelectedArmy] = useState<string | null>(null);
   const headerFavorite = data ? popularLegendItems(data.seasonArmyShareCodes)[0] : undefined;
-  const seasonRange = legendSeasonDateRange(
-    data?.seasonStart ?? null,
-    data?.seasonEnd ?? null,
-    selectedDay,
-  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
@@ -245,19 +256,8 @@ export function LegendsScreen({
         contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}
       >
         <View testID="legends-hero" style={[styles.hero, { minHeight: 238 + insets.top }]}>
-          <MobileWebImage
-            imageUrl={ImageAssets.homeBaseBackground}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-            contentPosition="center"
-          />
-          <View
-            style={[
-              StyleSheet.absoluteFill,
-              styles.heroScrim,
-              { backgroundColor: themeMode === 'dark' ? '#000000A8' : '#00000082' },
-            ]}
-          />
+          <MobileWebImage imageUrl={ImageAssets.homeBaseBackground} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition="center" />
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: theme.background === '#030304' ? '#000000A8' : '#00000082' }]} />
           <View
             style={[
               styles.heroContent,
@@ -271,28 +271,33 @@ export function LegendsScreen({
                 { top: insets.top + 4, left: horizontal, right: horizontal },
               ]}
             >
-              <HeroAction
+              <ProfileHeaderAction
                 label={materialBackLabel(locale)}
                 onPress={onBack}
                 icon={<ArrowLeft color="#FFF" />}
               />
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t('generalExport')}
-                disabled={!data}
-                onPress={onExport}
-                style={styles.exportButton}
-              >
-                <Upload color="#FFF" size={20} />
-                <CKText role="labelLarge" style={styles.white}>
-                  {t('generalExport')}
-                </CKText>
-              </Pressable>
+              <View style={styles.heroActionGroup}>
+                {onShareLink ? (
+                  <ProfileHeaderAction
+                    label={t('gameAssetsShare')}
+                    onPress={onShareLink}
+                    icon={<Share2 color="#FFF" />}
+                  />
+                ) : null}
+                <ProfileHeaderAction
+                  label={t('generalExport')}
+                  onPress={onExport}
+                  disabled={!data}
+                  icon={<Download color="#FFF" />}
+                />
+              </View>
             </View>
             <View style={styles.heroIdentity}>
               <MobileWebImage
-                imageUrl={ImageAssets.townHall(data?.townHallLevel ?? 1)}
+                testID="legends-town-hall"
+                imageUrl={player?.townHallPic || ImageAssets.townHall(data?.townHallLevel ?? 1)}
                 style={styles.townHallIdentity}
+                contentFit="contain"
               />
               <CKText numberOfLines={1} role="screenTitle" style={styles.white}>
                 {data?.playerName ?? ''}
@@ -300,6 +305,20 @@ export function LegendsScreen({
               <CKText role="metadata" style={styles.whiteSoft}>
                 {data?.playerTag}
               </CKText>
+              {clanIdentity?.tag ? (
+                <Pressable
+                  accessibilityRole={onOpenClan ? 'button' : undefined}
+                  disabled={!onOpenClan}
+                  onPress={() => onOpenClan?.(clanIdentity.tag)}
+                  style={styles.clanLine}
+                >
+                  <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
+                  <CKText numberOfLines={1} role="labelLarge" style={styles.white}>
+                    {clanIdentity.name}
+                  </CKText>
+                  {onOpenClan ? <ChevronRight size={18} color="#FFFFFFAD" /> : null}
+                </Pressable>
+              ) : null}
             </View>
             {data ? (
               <View style={styles.heroChips}>
@@ -346,7 +365,7 @@ export function LegendsScreen({
             />
           )}
           {loading && !data ? (
-            <LoadingIndicator />
+            <PageSkeleton kind="stats" />
           ) : error ? (
             <ErrorState
               title={t('apiErrorServer')}
@@ -355,19 +374,13 @@ export function LegendsScreen({
             />
           ) : data ? (
             <>
-              {page === 'season' && (
-                <LegendRecentSummary data={data} onOpenArmy={api ? setSelectedArmy : undefined} />
-              )}
+              {page === 'season' && <LegendRecentSummary data={data} />}
 
               {page === 'daily' &&
                 (loading && data.selectedDay !== selectedDay ? (
-                  <LoadingIndicator />
+                  <PageSkeleton kind="war" />
                 ) : current ? (
-                  <LegendBattlePanel
-                    data={current}
-                    onOpenOpponent={onOpenOpponent}
-                    onOpenArmy={api ? setSelectedArmy : undefined}
-                  />
+                  <LegendBattlePanel data={current} onOpenOpponent={onOpenOpponent} />
                 ) : (
                   <EmptyState
                     title={t('legendsNotInLeague')}
@@ -375,49 +388,16 @@ export function LegendsScreen({
                     style={styles.currentDayEmptyState}
                   />
                 ))}
-              {page === 'history' && (
-                <>
-                  {data.history.length ? (
-                    <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
-                      {data.history.map((season) => (
-                        <LegendHistoryRow key={season.season} season={season} locale={locale} />
-                      ))}
-                    </ResponsiveGrid>
-                  ) : (
-                    <EmptyState
-                      showSticker={false}
-                      title={t('generalNoDataAvailable')}
-                      style={styles.historyEmptyState}
-                    />
-                  )}
-                </>
-              )}
+              {page === 'history' && <LegendHistoryList history={data.history} />}
             </>
           ) : null}
         </View>
       </ScrollView>
-      {api && selectedArmy ? (
-        <ArmyDetailModal
-          api={api}
-          shareCode={selectedArmy}
-          cohort="legend_i"
-          start={seasonRange.start}
-          end={seasonRange.end}
-          visible
-          onClose={() => setSelectedArmy(null)}
-        />
-      ) : null}
     </SafeAreaView>
   );
 }
 
-function LegendRecentSummary({
-  data,
-  onOpenArmy,
-}: {
-  readonly data: PlayerLegendLeagueData;
-  readonly onOpenArmy?: (shareCode: string) => void;
-}) {
+function LegendRecentSummary({ data }: { readonly data: PlayerLegendLeagueData }) {
   const { locale, t } = useI18n();
   const summary = legendsShareSummary(data);
   const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
@@ -506,9 +486,6 @@ function LegendRecentSummary({
         )}
       </Surface>
       {data.comparisons.length ? <LegendPerformanceComparisons data={data} /> : null}
-      {data.armyComparison ? (
-        <LegendArmyPerformanceComparisons data={data} onOpenArmy={onOpenArmy} />
-      ) : null}
     </View>
   );
 }
@@ -597,60 +574,6 @@ function LegendPerformanceComparisons({ data }: { readonly data: PlayerLegendLea
       <CKText role="titleMedium">{t('statsPerformance')}</CKText>
       <PerformanceComparisonPanel
         comparisons={data.comparisons}
-        playerName={data.playerName}
-        cohortLabel={cohortLabel}
-      />
-    </View>
-  );
-}
-
-function LegendArmyPerformanceComparisons({
-  data,
-  onOpenArmy,
-}: {
-  readonly data: PlayerLegendLeagueData;
-  readonly onOpenArmy?: (shareCode: string) => void;
-}) {
-  const { locale, t } = useI18n();
-  const theme = useCKTheme();
-  const comparison = data.armyComparison;
-  if (!comparison) return null;
-  const cues = popularLegendItems([comparison.shareCode]);
-  const format = new Intl.NumberFormat(toIntlLocale(locale));
-  const cohortLabel = (cohort: (typeof comparison.items)[number]['cohort']) =>
-    cohort === 'top_200'
-      ? t('rankingsTopCount', { count: format.format(200) })
-      : cohort === 'top_1000'
-        ? t('rankingsTopCount', { count: format.format(1000) })
-        : t('statsLegendLeagueOne');
-  return (
-    <View style={styles.comparisons} testID="legend-army-performance-comparisons">
-      <CKText muted role="metadata">
-        {t('statsArmies')}
-      </CKText>
-      <Pressable
-        accessibilityLabel={`${t('statsArmies')}: ${comparison.name ?? t('statsArmyFallback', { id: comparison.familyId })}`}
-        accessibilityRole={onOpenArmy ? 'button' : undefined}
-        disabled={!onOpenArmy}
-        onPress={() => onOpenArmy?.(comparison.shareCode)}
-        style={styles.armyComparisonIdentity}
-      >
-        <View style={styles.armyComparisonImages}>
-          {cues.map((cue) => (
-            <MobileWebImage
-              key={cue.category}
-              imageUrl={cue.item.imageUrl}
-              style={styles.armyComparisonImage}
-            />
-          ))}
-        </View>
-        <CKText numberOfLines={1} role="titleMedium" style={styles.grow}>
-          {comparison.name ?? t('statsArmyFallback', { id: comparison.familyId })}
-        </CKText>
-        {onOpenArmy ? <ChevronRight color={theme.onSurfaceVariant} size={20} /> : null}
-      </Pressable>
-      <PerformanceComparisonPanel
-        comparisons={comparison.items}
         playerName={data.playerName}
         cohortLabel={cohortLabel}
       />
@@ -894,88 +817,6 @@ function ContributionCalendar({
   );
 }
 
-export function legendHistoryTopPercent(rank: number, population: number | null) {
-  if (
-    population === null ||
-    !Number.isFinite(population) ||
-    !Number.isFinite(rank) ||
-    population <= 0 ||
-    rank <= 0 ||
-    rank > population
-  )
-    return null;
-  return Math.ceil((rank / population) * 1000) / 10;
-}
-
-function LegendHistoryRow({
-  season,
-  locale,
-}: {
-  readonly season: PlayerLegendHistoryEntry;
-  readonly locale: string;
-}) {
-  const { t } = useI18n();
-  const format = new Intl.NumberFormat(toIntlLocale(locale));
-  const topPercent = legendHistoryTopPercent(season.rank, season.population);
-  return (
-    <Surface radius={ckRadius.tile} style={styles.seasonCard}>
-      <View style={styles.historyHeader}>
-        <MobileWebImage imageUrl={ImageAssets.legendLeagueOne} style={styles.historyBadge} />
-        <CKText role="titleMedium" style={styles.grow}>
-          {formatSeason(season.season, locale)}
-        </CKText>
-        <View style={styles.historyRank}>
-          <CKText role="rowTitle">{season.rank ? `#${format.format(season.rank)}` : '—'}</CKText>
-          {topPercent === null ? null : (
-            <CKText muted role="metadata">
-              {t('rankingsTopCount', { count: `${format.format(topPercent)}%` })}
-            </CKText>
-          )}
-        </View>
-      </View>
-      <View style={styles.historyMetrics}>
-        <HistoryMetric
-          imageUrl={ImageAssets.trophies}
-          label={t('rankedLeagueTrophies')}
-          value={format.format(season.trophies)}
-        />
-        <HistoryMetric
-          imageUrl={ImageAssets.sword}
-          label={t('rankedLeagueAttacks')}
-          value={format.format(season.attackWins)}
-        />
-        <HistoryMetric
-          imageUrl={ImageAssets.shieldWithArrow}
-          label={t('rankedLeagueDefenses')}
-          value={format.format(season.defenseWins)}
-        />
-      </View>
-    </Surface>
-  );
-}
-
-function HistoryMetric({
-  imageUrl,
-  label,
-  value,
-}: {
-  readonly imageUrl: string;
-  readonly label: string;
-  readonly value: string;
-}) {
-  return (
-    <View style={styles.historyMetric}>
-      <MobileWebImage imageUrl={imageUrl} style={styles.historyMetricImage} />
-      <View style={styles.grow}>
-        <CKText muted numberOfLines={1} role="metadata">
-          {label}
-        </CKText>
-        <CKText role="rowTitle">{value}</CKText>
-      </View>
-    </View>
-  );
-}
-
 export function SeasonDayTable({ days }: { readonly days: readonly PlayerLegendDaySummary[] }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -1092,27 +933,6 @@ function LegendDayNavigation({
   );
 }
 
-function HeroAction({
-  label,
-  onPress,
-  icon,
-}: {
-  label: string;
-  onPress: () => void;
-  icon: React.ReactNode;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      onPress={onPress}
-      style={styles.heroAction}
-    >
-      {icon}
-    </Pressable>
-  );
-}
-
 export function legendSeasonDateRange(
   seasonStart: string | null,
   exclusiveSeasonEnd: string | null,
@@ -1140,22 +960,6 @@ function localCalendarDate(day: string) {
   return new Date(year!, month! - 1, date!);
 }
 
-function formatSeason(season: string, locale: string) {
-  const value = season.startsWith('v2-')
-    ? season.slice(3)
-    : season.length === 7
-      ? `${season}-01T00:00:00Z`
-      : season;
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return season;
-  return new Intl.DateTimeFormat(toIntlLocale(locale), {
-    month: 'long',
-    year: 'numeric',
-    ...(season.length === 7 ? {} : { day: 'numeric' as const }),
-    timeZone: 'UTC',
-  }).format(date);
-}
-
 const styles = StyleSheet.create({
   fill: { flex: 1 },
   grow: { flex: 1 },
@@ -1171,25 +975,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  exportButton: {
-    minHeight: 42,
-    paddingHorizontal: 12,
-    borderRadius: ckRadius.control,
+  heroActionGroup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  heroIdentity: { alignItems: 'center', gap: 2 },
+  townHallIdentity: { width: 104, height: 104 },
+  clanLine: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#00000066',
-  },
-  heroAction: {
-    width: 44,
-    height: 44,
-    borderRadius: ckRadius.pill,
-    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00000066',
+    gap: 5,
+    marginTop: 4,
+    maxWidth: '100%',
   },
-  heroIdentity: { alignItems: 'center', gap: 2 },
-  townHallIdentity: { width: 62, height: 62 },
+  clanBadge: { width: 18, height: 18 },
   heroChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -1210,7 +1007,6 @@ const styles = StyleSheet.create({
   heroChipText: { minWidth: 0, flexShrink: 1 },
   content: { width: '100%', maxWidth: 1120, alignSelf: 'center', paddingTop: 16, gap: 12 },
   currentDayEmptyState: { minHeight: 180, paddingVertical: 20 },
-  historyEmptyState: { minHeight: 88, paddingVertical: 16 },
   seasonContent: { gap: 12 },
   comparisons: { gap: 10, paddingTop: 4 },
   comparisonCard: { padding: 14, gap: 12 },
@@ -1225,9 +1021,6 @@ const styles = StyleSheet.create({
     marginLeft: -1,
     borderRadius: 1,
   },
-  armyComparisonIdentity: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 10 },
-  armyComparisonImages: { flexDirection: 'row' },
-  armyComparisonImage: { width: 38, height: 38, marginRight: -6 },
   recentSummary: { padding: 14, gap: 12 },
   contributionGrid: { width: '100%', gap: 4, paddingVertical: 4, paddingHorizontal: 8 },
   contributionRow: { flexDirection: 'row', gap: 4 },
@@ -1252,11 +1045,5 @@ const styles = StyleSheet.create({
   numberColumn: { flex: 1, textAlign: 'right' },
   netColumn: { flex: 0.85, textAlign: 'right' },
   rankColumn: { flex: 1.35, textAlign: 'right' },
-  seasonCard: { padding: 14, gap: 8 },
-  historyHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  historyRank: { alignItems: 'flex-end', gap: 3 },
-  historyBadge: { width: 40, height: 40 },
-  historyMetrics: { flexDirection: 'row', gap: 8 },
-  historyMetric: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 6 },
   historyMetricImage: { width: 24, height: 24 },
 });

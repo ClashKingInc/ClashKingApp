@@ -5,6 +5,8 @@ export interface HomeAccountIdentity {
   readonly name: string;
   readonly subtitle: string;
   readonly imageUrl: string;
+  readonly clanName?: string;
+  readonly clanBadgeUrl?: string;
 }
 
 export type HomeMetricKind =
@@ -45,6 +47,11 @@ export interface HomeTodoCardModel {
 }
 
 export interface HomeRankedAccount extends HomeAccountIdentity {
+  readonly mode: 'ranked' | 'legend';
+  readonly statsAvailable: boolean;
+  readonly tierName?: string;
+  readonly tierColor: string;
+  readonly groupSize: number;
   readonly tierIconUrl: string;
   readonly trophies: number;
   readonly rank: number | null;
@@ -121,6 +128,7 @@ export interface HomeAnnouncement {
 }
 
 export interface HomeDashboardModel {
+  readonly activityAccounts?: readonly HomeAccountIdentity[];
   readonly loading: boolean;
   readonly selectedAccountTag?: string | null;
   readonly linkedAccountCount: number;
@@ -134,6 +142,7 @@ export interface HomeDashboardModel {
 }
 
 export interface HomeDashboardActions {
+  moveCard?(id: string, delta: number): void;
   refresh(): Promise<void>;
   showRefreshError(message: string): void;
   openManageAccounts(): void;
@@ -141,12 +150,18 @@ export interface HomeDashboardActions {
   openTodo(): void;
   openRanked(playerTag: string): void;
   openUpgradeTracker(playerTag: string): void;
+  openUpgradeImport?(playerTag: string): void;
   selectAccount?(playerTag: string): void;
-  reorderCards(order: readonly HomeCardId[]): void;
+  reorderCards(order: readonly HomeCardId[]): void | boolean;
 }
 
-export type HomeCardId = 'todo' | 'ranked' | 'upgrade';
-export const DEFAULT_HOME_CARD_ORDER: readonly HomeCardId[] = ['todo', 'ranked', 'upgrade'];
+export type HomeCardId = 'todo' | 'ranked' | 'upgrade' | 'activity';
+export const DEFAULT_HOME_CARD_ORDER: readonly HomeCardId[] = [
+  'todo',
+  'ranked',
+  'upgrade',
+  'activity',
+];
 
 export function homeSelectedAccountIndex(
   tags: readonly string[],
@@ -154,14 +169,19 @@ export function homeSelectedAccountIndex(
 ): number {
   if (!selectedTag) return 0;
   const normalized = selectedTag.replaceAll('#', '').toUpperCase();
-  return Math.max(0, tags.findIndex((tag) => tag.replaceAll('#', '').toUpperCase() === normalized));
+  return Math.max(
+    0,
+    tags.findIndex((tag) => tag.replaceAll('#', '').toUpperCase() === normalized),
+  );
 }
 
 export function normalizeHomeCardOrder(value: unknown): HomeCardId[] {
   const valid = Array.isArray(value)
     ? value.filter(
         (item, index, values): item is HomeCardId =>
-          DEFAULT_HOME_CARD_ORDER.includes(item as HomeCardId) && values.indexOf(item) === index,
+          typeof item === 'string' &&
+          DEFAULT_HOME_CARD_ORDER.includes(item as HomeCardId) &&
+          values.indexOf(item) === index,
       )
     : [];
   return [...valid, ...DEFAULT_HOME_CARD_ORDER.filter((item) => !valid.includes(item))];
@@ -170,8 +190,9 @@ export function normalizeHomeCardOrder(value: unknown): HomeCardId[] {
 export function visibleHomeCards(model: HomeDashboardModel): HomeCardId[] {
   const visible = new Set<HomeCardId>();
   if (model.todo && model.todo.accounts.length > 0) visible.add('todo');
-  if (model.ranked) visible.add('ranked');
+  if (model.ranked && model.ranked.state !== 'empty') visible.add('ranked');
   if (model.upgradeTrackerEnabled && model.upgrade) visible.add('upgrade');
+  if (model.activityAccounts?.length) visible.add('activity');
   return normalizeHomeCardOrder(model.cardOrder).filter((card) => visible.has(card));
 }
 

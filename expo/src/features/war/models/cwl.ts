@@ -345,6 +345,7 @@ export class CwlLeague {
     readonly season: string,
     readonly clans: CwlClan[],
     readonly rounds: CwlLeagueRound[],
+    readonly warLeagueName: string | null = null,
   ) {}
   static fromJson(value: unknown): CwlLeague {
     try {
@@ -358,6 +359,7 @@ export class CwlLeague {
         string(json.season, 'unknown'),
         records(json.clans).map(CwlClan.fromJson),
         rounds,
+        string(record(json.warLeague).name) || null,
       );
     } catch {
       return new CwlLeague('unknown', 'unknown', [], []);

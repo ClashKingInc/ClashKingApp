@@ -19,10 +19,11 @@ import {
   type EndpointResponse,
 } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
-import { TransportError } from '@clashking/api-client';
+import { ApiResponseError, TransportError } from '@clashking/api-client';
 
 import {
   EmailVerificationRequiredException,
+  UnauthorizedException,
   type ContractApiService,
 } from '../../core/api/contract-api';
 import type { ApiEnvironment } from '../../core/config/api-config';
@@ -129,7 +130,12 @@ export class AuthService {
           accessToken,
           isAuthenticated: true,
         });
-      } else {
+      } else if (
+        error instanceof UnauthorizedException ||
+        (error instanceof ApiResponseError && error.status === 401)
+      ) {
+        // Failed profile loading is not proof that refresh credentials were
+        // revoked. Preserve the session for retry unless the API rejects it.
         await this.options.tokens.clearTokens();
         await this.options.observability?.clearUser();
         this.publish({

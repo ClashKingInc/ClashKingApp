@@ -2,8 +2,16 @@ import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Menu, Search } from 'lucide-react-native';
+import { TutorialTarget } from '../features/tutorials/tutorial-ui';
 
-import { CKText, GlassSurface, colorWithAlpha, useCKTheme, useCKThemeMode } from '../ui';
+import {
+  CKText,
+  GlassControlSurface,
+  GlassSurface,
+  colorWithAlpha,
+  useCKTheme,
+  useCKThemeMode,
+} from '../ui';
 
 export function MobileHeader({
   avatar,
@@ -25,7 +33,7 @@ export function MobileHeader({
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
       <View style={[styles.header, isRtl && styles.rowRtl]}>
-        <GlassSurface
+        <TutorialTarget id="sidebar-open"><GlassSurface
           cornerRadius={23}
           interactive
           style={[
@@ -60,19 +68,9 @@ export function MobileHeader({
               <Menu color={theme.onSurfaceVariant} size={11} strokeWidth={2.4} />
             </View>
           </Pressable>
-        </GlassSurface>
+        </GlassSurface></TutorialTarget>
         {onSearch && (
-          <GlassSurface
-            cornerRadius={24}
-            interactive
-            style={[
-              styles.searchGlass,
-              {
-                borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.14 : 0.3),
-                shadowOpacity: mode === 'dark' ? 0.12 : 0.08,
-              },
-            ]}
-          >
+          <GlassControlSurface style={styles.searchGlass} testID="mobile-global-search-glass">
             <Pressable
               accessibilityLabel={searchHint}
               accessibilityRole="search"
@@ -88,7 +86,7 @@ export function MobileHeader({
                 {searchHint}
               </CKText>
             </Pressable>
-          </GlassSurface>
+          </GlassControlSurface>
         )}
       </View>
     </SafeAreaView>
@@ -129,9 +127,6 @@ const styles = StyleSheet.create({
   searchGlass: {
     flex: 1,
     height: 48,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 12,
   },
   searchButton: {
     flex: 1,

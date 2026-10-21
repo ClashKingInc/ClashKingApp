@@ -559,8 +559,9 @@ function ProgressRing({
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference * (1 - value)}
           strokeLinecap="round"
-          rotation="-90"
-          origin={`${size / 2}, ${size / 2}`}
+          // Use an SVG pivot instead of origin, which leaks transform-origin
+          // to React DOM on web; preserve the same noon start on native.
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </Svg>
       <View pointerEvents="none" style={styles.progressRingLabel}>

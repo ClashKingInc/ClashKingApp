@@ -31,6 +31,7 @@ import { DesktopHeader } from './desktop-header';
 import { DesktopSidebar } from './desktop-sidebar';
 import { MobileDrawer } from './mobile-drawer';
 import { MobileHeader } from './mobile-header';
+import { tutorials } from '../features/tutorials/tutorial-service';
 import { PrimaryTabBar } from './primary-tab-bar';
 import {
   RetainedPrimaryPager,
@@ -39,6 +40,12 @@ import {
 } from './retained-pager';
 
 type Translate = (key: MessageKey) => string;
+
+// Native accessibility flags do not hide retained layers from browser focus.
+// inert keeps background controls out of both keyboard and assistive navigation.
+const hiddenWebLayer = (hidden: boolean) => Platform.OS === 'web'
+  ? { inert: hidden, 'aria-hidden': hidden }
+  : {};
 
 export interface NavigationShellProps {
   selectedPrimary: PrimaryRouteId;
@@ -59,12 +66,12 @@ export interface NavigationShellProps {
   followerCount: number | null;
   productLabel: string;
   hasUser: boolean;
+  hasManagedDiscordBot?: boolean;
   profileMenuLabel: string;
   closeDrawerLabel: string;
   drawerHintStore?: StringStorage;
   onPrimarySelect: (route: PrimaryRouteId) => void;
   onUtilityNavigate: (route: AppRouteDefinition, options: { replace: boolean }) => void;
-  onResetDesktopContent?: () => void;
   onSearch?: () => void;
   onAchievements: () => void;
   onAddAccount: () => void;
@@ -134,8 +141,10 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const mountedSecondaryLayers = secondaryLayers.slice(-2);
   const openDrawer = useCallback(() => {
     if (secondaryActive) return;
+    setDrawerOpen(true);
     drawerRef.current?.openDrawer();
   }, [secondaryActive]);
+  useEffect(() => tutorials.registerAction('open-sidebar', openDrawer), [openDrawer]);
   const closeDrawer = useCallback((after?: () => void) => {
     pendingDrawerAction.current = after;
     if (drawerRef.current) drawerRef.current.closeDrawer();
@@ -151,12 +160,24 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     pending?.();
   }, []);
   const handleDrawerOpen = useCallback(() => {
+    tutorials.event('sidebar-opened');
     setDrawerOpen(true);
     setDrawerHintVisible(false);
     void props.drawerHintStore?.setString(hintStorageKey, 'true').catch(() => {
       // The drawer remains usable when persistence is unavailable.
     });
   }, [props.drawerHintStore, hintStorageKey]);
+  useEffect(() => {
+    if (platform !== 'web' || !drawerOpen) return;
+    const dismiss = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeDrawer();
+      }
+    };
+    window.addEventListener('keydown', dismiss);
+    return () => window.removeEventListener('keydown', dismiss);
+  }, [platform, drawerOpen, closeDrawer]);
   useEffect(() => {
     if (!secondaryActive) return;
     pendingDrawerAction.current = undefined;
@@ -188,6 +209,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
       onDrawerOpen={handleDrawerOpen}
       overlayColor="#00000066"
       renderNavigationView={() => (
+        <View style={styles.shell} {...hiddenWebLayer(!drawerOpen)}>
         <MobileDrawer
           isRtl={props.isRtl}
           features={props.features}
@@ -201,7 +223,9 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
           onAchievements={props.onAchievements}
           onAddAccount={props.onAddAccount}
           hasUser={props.hasUser}
+          hasManagedDiscordBot={props.hasManagedDiscordBot}
         />
+        </View>
       )}
     >
       <View
@@ -209,6 +233,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
         testID={secondaryActive ? 'mobile-utility-shell' : 'mobile-navigation-shell'}
       >
         <View
+          {...hiddenWebLayer(secondaryActive || drawerOpen)}
           accessibilityElementsHidden={secondaryActive}
           importantForAccessibility={secondaryActive ? 'no-hide-descendants' : 'auto'}
           pointerEvents={secondaryActive ? 'none' : 'auto'}
@@ -224,6 +249,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
             isRtl={props.isRtl}
           />
           <RetainedPrimaryPager
+            visible={!secondaryActive && !drawerOpen}
             selected={props.selectedPrimary}
             screens={props.primaryScreens}
             onSelect={props.onPrimarySelect}
@@ -245,6 +271,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
               const isTop = index === mountedSecondaryLayers.length - 1;
               return (
                 <View
+                  {...hiddenWebLayer(!isTop)}
                   accessibilityElementsHidden={!isTop}
                   importantForAccessibility={isTop ? 'auto' : 'no-hide-descendants'}
                   key={layer.key}
@@ -341,7 +368,8 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
   );
   if (!selectedDefinition) throw new Error('NavigationShell selected an unknown route.');
   const selectPrimary = (route: PrimaryRouteId) => {
-    props.onResetDesktopContent?.();
+    // The primary-selection owner clears secondary scenes. Calling its Back
+    // action first races an async browser popstate against the new selection.
     props.onPrimarySelect(route);
   };
   return (
@@ -350,13 +378,14 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
       testID="desktop-navigation-shell"
     >
       <View
+        {...hiddenWebLayer(Boolean(props.secondaryFullScreen))}
         accessibilityElementsHidden={Boolean(props.secondaryFullScreen)}
         importantForAccessibility={props.secondaryFullScreen ? 'no-hide-descendants' : 'auto'}
         pointerEvents={props.secondaryFullScreen ? 'none' : 'auto'}
         style={[styles.desktopRow, props.isRtl && styles.desktopRowRtl]}
       >
         <DesktopSidebar
-          selectedPrimary={utilitySecondary ? undefined : props.selectedPrimary}
+          selectedPrimary={utilitySecondary ? undefined : (effectiveSecondary ?? props.selectedPrimary) as PrimaryRouteId}
           selectedUtility={effectiveUtility}
           features={props.features}
           t={props.t}
@@ -384,6 +413,7 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
           ) : null}
           <View style={styles.desktopBody}>
             <View
+              {...hiddenWebLayer(Boolean(props.secondaryRouteId ?? props.selectedUtility))}
               accessibilityElementsHidden={Boolean(props.secondaryRouteId ?? props.selectedUtility)}
               importantForAccessibility={
                 (props.secondaryRouteId ?? props.selectedUtility) ? 'no-hide-descendants' : 'auto'

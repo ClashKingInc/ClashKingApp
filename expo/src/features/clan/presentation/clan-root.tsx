@@ -5,7 +5,10 @@ import { Linking, View } from 'react-native';
 import { defaultIsNetworkError } from '../../../core/app/startup-coordinator';
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { useI18n } from '../../../i18n';
-import { ClashHandoffDialog, Snackbar } from '../../../ui';
+import { ClashHandoffDialog, ConfirmationDialog, Snackbar } from '../../../ui';
+import type { ClanNotificationControls } from './clan-notification-options';
+import type { ClanNotificationSettings } from '../../notifications/data/notification-preferences-service';
+import { useClashGameHandoff } from '../../../ui/use-clash-game-handoff';
 import type { Player } from '../../player/models/player';
 import type { WarCwl, WarInfo } from '../../war/models';
 import type { Clan } from '../models';
@@ -32,6 +35,7 @@ export interface ClanNavigationActions {
   readonly openWar: (clan: Clan, war: WarCwl) => void;
   readonly openHistoricalWar: (war: WarInfo) => void;
   readonly openCwl: (clan: Clan, war: WarCwl) => void;
+  readonly openHistoricalCwl: (clan: Clan, season: string, leagueName?: string) => void;
   readonly openCapital: (clan: Clan) => void;
   readonly openNetworkError?: (retry: () => Promise<void>) => void;
 }
@@ -50,6 +54,7 @@ export function ClanRoot({
   const [revision, setRevision] = useState(0);
   const [selectedClan, setSelectedClan] = useState<Clan>();
   const [snackbar, setSnackbar] = useState<string>();
+  const notifications = useClanNotificationControls(runtime, setSnackbar);
 
   useEffect(() => {
     const changed = () => setRevision((value) => value + 1);
@@ -70,15 +75,18 @@ export function ClanRoot({
     );
   }
 
-  const model = buildClansPresentationModel({
-    profiles: ownedClanProfiles(
-      runtime.players.profiles,
-      runtime.accounts.accounts.map((account) => account.playerTag),
-    ),
-    bookmarks: runtime.bookmarks.clans,
-    clans: runtime.clans.clans,
-    lastRefresh: runtime.accounts.lastRefresh,
-  });
+  const model = {
+    ...buildClansPresentationModel({
+      profiles: ownedClanProfiles(
+        runtime.players.profiles,
+        runtime.accounts.accounts.map((account) => account.playerTag),
+      ),
+      bookmarks: runtime.bookmarks.clans,
+      clans: runtime.clans.clans,
+      lastRefresh: runtime.accounts.lastRefresh,
+    }),
+    notifications,
+  };
   const actions: ClansPresentationActions = {
     refresh: () => runtime.accountBootstrap.refresh(),
     isNetworkError: defaultIsNetworkError,
@@ -117,10 +125,15 @@ export function ClanInfoRoot({
   readonly navigation: ClanNavigationActions;
 }) {
   const runtime = useAppRuntime();
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const [revision, setRevision] = useState(0);
   const [snackbar, setSnackbar] = useState<string>();
-  const [handoffUrl, setHandoffUrl] = useState<string>();
+  const notifications = useClanNotificationControls(runtime, setSnackbar);
+  const [removeBookmark, setRemoveBookmark] = useState<string>();
+  const handoff = useClashGameHandoff((url) => {
+    void Linking.openURL(url).catch(() => setSnackbar(t('deepLinkFailedToOpenClan')));
+  });
+  const requestGameHandoff = handoff.request;
 
   useEffect(() => {
     const changed = () => setRevision((value) => value + 1);
@@ -149,18 +162,34 @@ export function ClanInfoRoot({
   );
   const actions = useMemo<ClanInfoPresentationActions>(
     () => ({
+      loadCurrentRankings: (tag) => runtime.clans.getCurrentRankings(tag),
+      loadCompetitiveDay: (nextClan, day) => runtime.clans.getCompetitiveDay(nextClan, day),
       goBack,
       copyClanTag: async (tag) => {
         await Clipboard.setStringAsync(tag);
       },
-      toggleClanBookmark: (nextClan) => runtime.bookmarks.toggleClan(nextClan),
-      openClanInGame: (nextClan) => setHandoffUrl(clanGameUrl(nextClan.tag, locale)),
+      toggleClanBookmark: async (nextClan) => {
+        const followed = runtime.notificationPreferences.clans?.clans.find(
+          (item) => item.tag === nextClan.tag,
+        );
+        if (followed?.warEnabled || followed?.raidEnabled) {
+          setRemoveBookmark(nextClan.tag);
+          return;
+        }
+        try {
+          await runtime.bookmarks.toggleClan(nextClan);
+        } catch {
+          setSnackbar(t('generalFailed'));
+        }
+      },
+      openClanInGame: (nextClan) => requestGameHandoff(clanGameUrl(nextClan.tag, locale)),
       openDiscord: (inviteCode) => Linking.openURL(`https://discord.gg/${inviteCode}`),
       openWar: (nextClan) => {
         const nextWar = runtime.wars.getWarCwlByTag(nextClan.tag);
         if (nextWar) navigation.openWar(nextClan, nextWar);
       },
       openHistoricalWar: navigation.openHistoricalWar,
+      openHistoricalCwl: navigation.openHistoricalCwl,
       openCwl: (nextClan) => {
         const nextWar = runtime.wars.getWarCwlByTag(nextClan.tag);
         if (nextWar?.leagueInfo?.clans.length) navigation.openCwl(nextClan, nextWar);
@@ -173,6 +202,7 @@ export function ClanInfoRoot({
       loadMoreJoinLeave: (nextClan, current) =>
         loadMoreClanJoinLeave(runtime.clans, nextClan, current),
       loadWarLog: (nextClan) => loadClanWarLog(runtime.clans, nextClan),
+      loadWarLogDetails: (nextClan, log) => runtime.clans.loadWarLogDetails(nextClan, log),
       loadWarStats: (nextClan, filter) => loadClanWarStats(runtime.clans, nextClan, filter),
       loadCwlHistory: (tag) => runtime.clans.getCwlRankingHistory(tag),
       loadLeaderboardSummary: (tag, type) =>
@@ -185,22 +215,70 @@ export function ClanInfoRoot({
       loadRecords: (tag) => runtime.clans.getClanRecords(tag),
       loadProfileHistory: (tag) => runtime.clans.getClanProfileHistory(tag),
     }),
-    [goBack, locale, navigation, runtime],
+    [goBack, locale, navigation, requestGameHandoff, runtime, t],
   );
 
   return (
     <View style={{ flex: 1 }}>
-      <ClanInfoScreen key={clanInfoStateKey(currentClan.tag)} model={model} actions={actions} />
+      <ClanInfoScreen
+        key={clanInfoStateKey(currentClan.tag)}
+        model={{ ...model, notifications }}
+        actions={actions}
+      />
+      <ConfirmationDialog
+        visible={removeBookmark !== undefined}
+        title={t('generalRemoveBookmark')}
+        message={t('clanNotificationRemoveConfirmation')}
+        confirmLabel={t('generalRemoveBookmark')}
+        onCancel={() => setRemoveBookmark(undefined)}
+        onConfirm={() => {
+          const tag = removeBookmark;
+          setRemoveBookmark(undefined);
+          if (tag)
+            void runtime.notificationPreferences
+              .removeClanBookmark(tag)
+              .then(() => runtime.bookmarks.load())
+              .catch(() => setSnackbar(t('generalFailed')));
+        }}
+      />
       <Snackbar avoidBottomNavigation message={snackbar} onDismiss={() => setSnackbar(undefined)} />
       <ClashHandoffDialog
-        visible={handoffUrl !== undefined}
-        onCancel={() => setHandoffUrl(undefined)}
-        onConfirm={() => {
-          const url = handoffUrl;
-          setHandoffUrl(undefined);
-          if (url) void Linking.openURL(url);
-        }}
+        visible={handoff.visible}
+        onCancel={handoff.cancel}
+        onConfirm={handoff.confirm}
+        allowRemember
       />
     </View>
   );
+}
+
+function useClanNotificationControls(
+  runtime: ReturnType<typeof useAppRuntime>,
+  showMessage: (message: string) => void,
+): ClanNotificationControls {
+  const [settings, setSettings] = useState<ClanNotificationSettings>();
+  useEffect(() => {
+    let mounted = true;
+    const remove = runtime.notificationPreferences.subscribeClans(() => {
+      if (mounted) setSettings(runtime.notificationPreferences.clans);
+    });
+    void runtime.notificationPreferences
+      .loadClans()
+      .then(() => {
+        if (mounted) setSettings(runtime.notificationPreferences.clans);
+      })
+      .catch(() => undefined);
+    return () => {
+      mounted = false;
+      remove();
+    };
+  }, [runtime]);
+  return {
+    settings,
+    showMessage,
+    setEnabled: async (tag, type, enabled) => {
+      await runtime.notificationPreferences.setClanEnabled(tag, type, enabled);
+      await runtime.bookmarks.load();
+    },
+  };
 }

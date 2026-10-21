@@ -1,11 +1,16 @@
 import { cloneElement, useCallback, useEffect, useState, type ReactElement } from 'react';
+import * as Clipboard from 'expo-clipboard';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import {
-  ArrowLeft,
   Bookmark,
   CalendarDays,
+  Check,
+  ChevronDown,
+  ChevronUp,
   Download,
   ExternalLink,
+  Link2,
+  Pencil,
   ThumbsUp,
   ThumbsDown,
   Trash2,
@@ -13,12 +18,14 @@ import {
 } from 'lucide-react-native';
 import {
   Linking,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
+  TextInput,
   View,
   useWindowDimensions,
 } from 'react-native';
@@ -26,14 +33,15 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useAppRuntime } from '../../core/app/runtime-context';
 import { ImageAssets } from '../../core/assets/image-assets';
-import { PlayerBattlelogArmyCatalog } from '../player/models/player-battlelog';
+import { LegendArmy, LegendArmyPreview } from '../legends/presentation/legend-army-presentation';
 import { materialBackLabel, useI18n } from '../../i18n';
 import {
   CKText,
   EmptyState,
   ErrorState,
   HeaderIconButton,
-  LoadingScreen,
+  Skeleton,
+  ProfilePageHeader,
   MobileWebImage,
   SelectionPicker,
   Surface,
@@ -51,7 +59,7 @@ import type {
   PersonalBasesState,
 } from './personal-bases-service';
 import { townHallLevelFromBaseLink } from './base-link';
-import { armyDisplayItems } from './army-presentation';
+import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
 
 export function BasesArmiesRoot({ onBack }: { readonly onBack: () => void }) {
   const runtime = useAppRuntime();
@@ -87,9 +95,14 @@ export function BasesArmiesScreen({
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [cleanupVisible, setCleanupVisible] = useState(false);
   const [cleanupNow, setCleanupNow] = useState(Date.now);
-  const [section, setSection] = useState('bases');
-  const [collection, setCollection] = useState('all');
+  const link = useLinkParameters();
+  const [section, setSection] = useState(linkChoice(link.section, ['bases', 'armies'], 'bases'));
   const [townHallFilter, setTownHallFilter] = useState('all');
+  const [armyTownHallFilter, setArmyTownHallFilter] = useState('all');
+  const [editingArmy, setEditingArmy] = useState<PersonalArmy | null>(null);
+  const [armyName, setArmyName] = useState('');
+  const [armyNotes, setArmyNotes] = useState('');
+  const [editError, setEditError] = useState(false);
 
   const load = useCallback(
     async (refresh = false) => {
@@ -147,6 +160,18 @@ export function BasesArmiesScreen({
   );
   const items = [...new Map(state?.items.map((base) => [base.id, base])).values()];
   const armies = armyState?.items ?? [];
+  const armyTownHallLevels = [
+    ...new Set(
+      armies.flatMap((army) => (army.minimumTownHall == null ? [] : [army.minimumTownHall])),
+    ),
+  ].sort((a, b) => b - a);
+  const visibleArmies = armies.filter(
+    (army) =>
+      armyTownHallFilter === 'all' ||
+      (armyTownHallFilter === 'unknown'
+        ? army.minimumTownHall == null
+        : army.minimumTownHall === Number(armyTownHallFilter)),
+  );
   const savedItems = items.filter((base) => base.saved);
   const townHallLevels = [
     ...new Set(
@@ -157,10 +182,8 @@ export function BasesArmiesScreen({
   ].sort((left, right) => right - left);
   const visibleItems = items.filter(
     (base) =>
-      (collection === 'all' ||
-        (collection === 'saved' ? base.saved : base.downloadedAt !== null)) &&
-      (townHallFilter === 'all' ||
-        townHallLevelFromBaseLink(base.baseLink) === Number(townHallFilter)),
+      townHallFilter === 'all' ||
+      townHallLevelFromBaseLink(base.baseLink) === Number(townHallFilter),
   );
   const cutoff = cleanupNow - 90 * 86_400_000;
   const oldSavedCount = savedItems.filter(
@@ -172,36 +195,85 @@ export function BasesArmiesScreen({
       edges={['left', 'right']}
       style={[styles.fill, { backgroundColor: theme.background }]}
     >
-      <View style={[styles.header, { backgroundColor: theme.surface, paddingTop: insets.top }]}>
-        <HeaderIconButton
-          glass={false}
-          icon={<ArrowLeft color={theme.onSurface} size={24} />}
-          label={materialBackLabel(locale)}
-          onPress={onBack}
+      <ProfilePageHeader
+        title={t('sideBasesArmiesTitle')}
+        imageUrl={ImageAssets.clanCastle}
+        safeTop={insets.top}
+        onBack={onBack}
+        backLabel={materialBackLabel(locale)}
+        controlsTopPadding={9}
+        bottomPadding={12}
+        actions={
+          section === 'bases' && oldSavedCount > 0 ? (
+            <HeaderIconButton
+              icon={<Trash2 color="white" size={20} />}
+              label={t('personalBasesDeleteOld')}
+              onPress={() => {
+                if (busyKey !== null) return;
+                setCleanupNow(Date.now());
+                setCleanupVisible(true);
+              }}
+            />
+          ) : undefined
+        }
+      >
+        {/* Keep navigation outside the list scroller, including loading/error
+            states. Never reduce the device safe-area inset to compact it. */}
+        <SlidingSegmentControl
+          value={section}
+          isRtl={isRtl}
+          onChange={setSection}
+          options={[
+            { value: 'bases', label: t('personalBasesTab') },
+            { value: 'armies', label: t('statsArmies') },
+          ]}
         />
-        <View style={styles.headerText}>
-          <CKText role="sectionTitle" numberOfLines={1}>
-            {t('sideBasesArmiesTitle')}
-          </CKText>
-        </View>
-        {section === 'bases' && oldSavedCount > 0 ? (
-          <HeaderIconButton
-            glass={false}
-            icon={<Trash2 color={theme.onSurfaceVariant} size={20} />}
-            label={t('personalBasesDeleteOld')}
-            onPress={() => {
-              if (busyKey !== null) return;
-              setCleanupNow(Date.now());
-              setCleanupVisible(true);
-            }}
-          />
-        ) : (
-          <View style={styles.headerSpacer} />
-        )}
+      </ProfilePageHeader>
+
+      {/* Both the section tabs and its filters stay outside the scrolling list. */}
+      <View
+        testID="personal-library-filters"
+        style={[styles.filters, { paddingHorizontal: horizontal }]}
+      >
+        <SelectionPicker
+          fillWidth
+          title={t('filtersTownHall')}
+          accessibilityLabel={t('filtersTownHall')}
+          selectedKey={section === 'bases' ? townHallFilter : armyTownHallFilter}
+          onSelect={section === 'bases' ? setTownHallFilter : setArmyTownHallFilter}
+          options={[
+            { key: 'all', label: t('statsAllTownHalls') },
+            ...(section === 'bases' ? townHallLevels : armyTownHallLevels).map((level) => ({
+              key: String(level),
+              label: t('gameTownHallShortLevel', { level }),
+              icon: (
+                <MobileWebImage
+                  imageUrl={ImageAssets.townHall(level)}
+                  style={{ width: 30, height: 30 }}
+                  contentFit="contain"
+                />
+              ),
+            })),
+            ...(section === 'armies' && armies.some((army) => army.minimumTownHall == null)
+              ? [{ key: 'unknown', label: t('personalArmyUnknownTownHall') }]
+              : []),
+          ]}
+        />
       </View>
 
       {loading && state === null ? (
-        <LoadingScreen label={t('generalLoading')} />
+        <View
+          accessibilityRole="progressbar"
+          accessibilityLabel={t('generalLoading')}
+          style={[styles.content, { paddingHorizontal: horizontal, gap: 12 }]}
+        >
+          {[0, 1, 2].map((index) => (
+            <Surface key={index} radius={20} style={{ padding: 16, gap: 12 }}>
+              <Skeleton width="55%" height={18} />
+              <Skeleton height={96} radius={12} />
+            </Surface>
+          ))}
+        </View>
       ) : loadError && state === null ? (
         <View style={[styles.feedbackWrap, { paddingHorizontal: horizontal }]}>
           <ErrorState
@@ -212,6 +284,7 @@ export function BasesArmiesScreen({
         </View>
       ) : (
         <ScrollView
+          style={styles.list}
           contentContainerStyle={[
             styles.content,
             { paddingHorizontal: horizontal, paddingBottom: insets.bottom + 28 },
@@ -228,47 +301,13 @@ export function BasesArmiesScreen({
               style={styles.mutationError}
             />
           ) : null}
-          <SlidingSegmentControl
-            value={section}
-            isRtl={isRtl}
-            onChange={setSection}
-            options={[
-              { value: 'bases', label: t('sideSavedBases') },
-              { value: 'armies', label: t('sideSavedArmies') },
-            ]}
-          />
           {section === 'bases' ? (
             <>
-              <View style={styles.filters}>
-                <SelectionPicker
-                  fillWidth
-                  title={t('sideFilter')}
-                  accessibilityLabel={t('sideFilter')}
-                  selectedKey={collection}
-                  onSelect={setCollection}
-                  options={[
-                    { key: 'all', label: t('generalAll') },
-                    { key: 'saved', label: t('sideSavedBases') },
-                    { key: 'history', label: t('generalHistory') },
-                  ]}
-                />
-                <SelectionPicker
-                  fillWidth
-                  title={t('filtersTownHall')}
-                  accessibilityLabel={t('filtersTownHall')}
-                  selectedKey={townHallFilter}
-                  onSelect={setTownHallFilter}
-                  options={[
-                    { key: 'all', label: t('statsAllTownHalls') },
-                    ...townHallLevels.map((level) => ({
-                      key: String(level),
-                      label: t('gameTownHallShortLevel', { level }),
-                    })),
-                  ]}
-                />
-              </View>
               {visibleItems.length === 0 ? (
-                <EmptyState title={t('generalNoDataAvailable')} />
+                <EmptyState
+                  title={t('personalBasesEmptyTitle')}
+                  body={t('personalBasesEmptyBody')}
+                />
               ) : (
                 visibleItems.map((base) => (
                   <BaseCard
@@ -289,22 +328,35 @@ export function BasesArmiesScreen({
                 ))
               )}
             </>
-          ) : armies.length === 0 ? (
-            <EmptyState title={t('generalNoDataAvailable')} />
           ) : (
-            armies.map((army) => (
-              <ArmyCard
-                army={army}
-                busy={busyKey !== null}
-                key={army.shareCode}
-                onOpen={() => void Linking.openURL(army.armyLink)}
-                onRemove={() =>
-                  void mutate(`army:${army.shareCode}`, async () => {
-                    setArmyState(await armyService.remove(army.shareCode));
-                  })
-                }
-              />
-            ))
+            <>
+              {visibleArmies.length === 0 ? (
+                <EmptyState
+                  title={t('personalArmiesEmptyTitle')}
+                  body={t('personalArmiesEmptyBody')}
+                />
+              ) : (
+                visibleArmies.map((army) => (
+                  <ArmyCard
+                    army={army}
+                    busy={busyKey !== null}
+                    key={army.shareCode}
+                    onOpen={() => void Linking.openURL(army.armyLink)}
+                    onEdit={() => {
+                      setEditingArmy(army);
+                      setArmyName(army.name ?? '');
+                      setArmyNotes(army.notes ?? '');
+                      setEditError(false);
+                    }}
+                    onRemove={() =>
+                      void mutate(`army:${army.shareCode}`, async () => {
+                        setArmyState(await armyService.remove(army.shareCode));
+                      })
+                    }
+                  />
+                ))
+              )}
+            </>
           )}
         </ScrollView>
       )}
@@ -346,6 +398,82 @@ export function BasesArmiesScreen({
           </Surface>
         </Pressable>
       </Modal>
+      <Modal
+        transparent
+        visible={editingArmy !== null}
+        onRequestClose={() => {
+          if (busyKey === null) setEditingArmy(null);
+        }}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalBackdrop}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <Surface radius={18} style={styles.confirmation}>
+            <CKText role="titleLarge">{t('personalArmyEdit')}</CKText>
+            <CKText>{t('personalArmyName')}</CKText>
+            <TextInput
+              value={armyName}
+              onChangeText={setArmyName}
+              maxLength={100}
+              editable={busyKey === null}
+              accessibilityLabel={t('personalArmyName')}
+              placeholder={t('personalArmyUnnamed')}
+              placeholderTextColor={theme.onSurfaceVariant}
+              style={[
+                styles.editInput,
+                { color: theme.onSurface, backgroundColor: theme.surfaceContainerHighest },
+              ]}
+            />
+            <CKText>{t('personalArmyNotes')}</CKText>
+            <TextInput
+              value={armyNotes}
+              onChangeText={setArmyNotes}
+              maxLength={450}
+              multiline
+              editable={busyKey === null}
+              accessibilityLabel={t('personalArmyNotes')}
+              style={[
+                styles.editInput,
+                styles.notesInput,
+                { color: theme.onSurface, backgroundColor: theme.surfaceContainerHighest },
+              ]}
+            />
+            {editError ? <CKText style={{ color: theme.error }}>{t('generalError')}</CKText> : null}
+            <View style={styles.confirmationActions}>
+              <ActionButton
+                disabled={busyKey !== null}
+                label={t('generalCancel')}
+                icon={<X />}
+                onPress={() => setEditingArmy(null)}
+              />
+              <ActionButton
+                disabled={busyKey !== null || !armyName.trim()}
+                label={t('gameAssetsSave')}
+                icon={<Bookmark />}
+                onPress={() => {
+                  if (!editingArmy) return;
+                  setEditError(false);
+                  void mutate(`army-edit:${editingArmy.shareCode}`, async () => {
+                    try {
+                      setArmyState(
+                        await armyService.update(editingArmy.shareCode, {
+                          name: armyName.trim(),
+                          notes: armyNotes.trim() || null,
+                        }),
+                      );
+                      setEditingArmy(null);
+                    } catch (error) {
+                      setEditError(true);
+                      throw error;
+                    }
+                  });
+                }}
+              />
+            </View>
+          </Surface>
+        </KeyboardAvoidingView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -355,60 +483,128 @@ function ArmyCard({
   busy,
   onOpen,
   onRemove,
+  onEdit,
 }: {
   readonly army: PersonalArmy;
   readonly busy: boolean;
   readonly onOpen: () => void;
   readonly onRemove: () => void;
+  readonly onEdit: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const items = armyDisplayItems(army);
+  const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+  const copyLink = async () => {
+    try {
+      await Clipboard.setStringAsync(army.armyLink);
+      setCopyFailed(false);
+      setCopied(true);
+    } catch {
+      setCopyFailed(true);
+    }
+  };
+  const expandLabel = t(expanded ? 'generalCollapse' : 'generalExpand');
 
   return (
     <Surface radius={18} style={styles.armyCard}>
-      <View style={styles.armyItems}>
-        {items.map(({ code, quantity }, index) => {
-          const item = PlayerBattlelogArmyCatalog.resolve(code);
-          return (
-            <View key={`${code}:${index}`} style={styles.armyItem}>
-              <MobileWebImage imageUrl={item.imageUrl} style={styles.armyItemImage} />
-              {quantity > 1 ? (
-                <View style={[styles.quantityBadge, { backgroundColor: theme.surface }]}>
-                  <CKText role="labelSmall">{quantity}</CKText>
-                </View>
-              ) : null}
-            </View>
-          );
-        })}
-      </View>
-      <View style={styles.metaRow}>
-        <Meta
-          icon={<CalendarDays color={theme.onSurfaceVariant} />}
-          label={new Date(army.savedAt).toLocaleDateString()}
-        />
-      </View>
-      <View style={styles.actions}>
-        <ActionButton
-          icon={<ExternalLink color={theme.primary} />}
-          label={t('generalOpen')}
-          onPress={onOpen}
-        />
-        <View style={styles.grow} />
+      <View style={styles.armyIdentity}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={t('generalRemoveBookmark')}
-          accessibilityState={{ disabled: busy }}
-          disabled={busy}
-          onPress={onRemove}
-          style={({ pressed }) => [
-            styles.bookmarkButton,
-            { opacity: busy ? 0.4 : pressed ? 0.6 : 1 },
-          ]}
+          accessibilityLabel={`${expandLabel}: ${army.name || t('personalArmyUnnamed')}`}
+          accessibilityState={{ expanded }}
+          onPress={() => setExpanded((value) => !value)}
+          style={[styles.armyIdentity, styles.grow, { minHeight: 44 }]}
         >
-          <Bookmark size={22} color={theme.onSurface} fill={theme.onSurface} />
+          {army.minimumTownHall != null ? (
+            <MobileWebImage
+              imageUrl={ImageAssets.townHall(army.minimumTownHall)}
+              accessibilityLabel={t('gameTownHallShortLevel', { level: army.minimumTownHall })}
+              style={{ width: 38, height: 38 }}
+              contentFit="contain"
+            />
+          ) : null}
+          <CKText role="titleMedium" style={styles.grow}>
+            {army.name || t('personalArmyUnnamed')}
+          </CKText>
+          {expanded ? (
+            <ChevronUp size={18} color={theme.onSurfaceVariant} />
+          ) : (
+            <ChevronDown size={18} color={theme.onSurfaceVariant} />
+          )}
         </Pressable>
+        <HeaderIconButton
+          glass={false}
+          label={copied ? t('generalCopiedToClipboard') : t('gameAssetsCopyUrl')}
+          icon={
+            copied ? (
+              <Check size={21} color={theme.primary} />
+            ) : (
+              <Link2 size={21} color={theme.onSurface} />
+            )
+          }
+          onPress={() => void copyLink()}
+        />
       </View>
+      {copyFailed ? (
+        <CKText accessibilityRole="alert" style={{ color: theme.error }}>
+          {t('generalError')}
+        </CKText>
+      ) : null}
+      {expanded ? (
+        <>
+          {army.notes ? <CKText>{army.notes}</CKText> : null}
+          <LegendArmy shareCode={army.shareCode} />
+          <View style={styles.metaRow}>
+            <Meta
+              icon={<CalendarDays color={theme.onSurfaceVariant} />}
+              label={new Date(army.savedAt).toLocaleDateString()}
+            />
+          </View>
+          <View style={styles.actions}>
+            <ActionButton
+              icon={<ExternalLink color={theme.primary} />}
+              label={t('generalOpen')}
+              onPress={onOpen}
+            />
+            <View style={styles.grow} />
+            <ActionButton
+              disabled={busy}
+              icon={<Pencil />}
+              label={t('personalArmyEdit')}
+              onPress={onEdit}
+            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('generalRemoveBookmark')}
+              accessibilityState={{ disabled: busy }}
+              disabled={busy}
+              onPress={onRemove}
+              style={({ pressed }) => [
+                styles.bookmarkButton,
+                { opacity: busy ? 0.4 : pressed ? 0.6 : 1 },
+              ]}
+            >
+              <Bookmark size={22} color={theme.onSurface} fill={theme.onSurface} />
+            </Pressable>
+          </View>
+        </>
+      ) : (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`${expandLabel}: ${army.name || t('personalArmyUnnamed')}`}
+          accessibilityState={{ expanded: false }}
+          onPress={() => setExpanded(true)}
+        >
+          <LegendArmyPreview shareCode={army.shareCode} />
+        </Pressable>
+      )}
     </Surface>
   );
 }
@@ -544,23 +740,18 @@ const styles = StyleSheet.create({
   feedbackWrap: { paddingTop: 16 },
   content: { width: '100%', maxWidth: 1200, alignSelf: 'center', paddingTop: 12 },
   mutationError: { marginTop: 12 },
-  filters: { flexDirection: 'row', gap: 12, marginVertical: 16 },
+  filters: {
+    width: '100%',
+    maxWidth: 1200,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    gap: 12,
+    marginVertical: 12,
+  },
+  list: { flex: 1, minHeight: 0 },
+  armyIdentity: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   baseCard: { overflow: 'hidden', marginBottom: 20 },
   armyCard: { marginBottom: 16, padding: 14, gap: 14 },
-  armyItems: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  armyItem: { width: 52, height: 52 },
-  armyItemImage: { width: 52, height: 52 },
-  quantityBadge: {
-    position: 'absolute',
-    right: -3,
-    bottom: -3,
-    minWidth: 20,
-    height: 20,
-    paddingHorizontal: 4,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   baseImage: { width: '100%', aspectRatio: 4 / 3 },
   baseContent: { padding: 12, gap: 12 },
   metaRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 10 },
@@ -587,5 +778,7 @@ const styles = StyleSheet.create({
   confirmationHeader: { flexDirection: 'row', alignItems: 'center' },
   confirmationActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 8 },
   closeButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  editInput: { minHeight: 44, borderRadius: 12, padding: 12, fontSize: 16 },
+  notesInput: { minHeight: 100, textAlignVertical: 'top' },
   grow: { flex: 1 },
 });

@@ -18,13 +18,6 @@ import type {
 } from './contracts';
 
 export const PUSH_DEVICE_ENDPOINT = '/notifications/devices';
-const SUPPORTED_ROUTES = new Set<SupportedPushRoute>([
-  '/support-creator',
-  '/settings/support',
-  '/posts',
-  '/search',
-  '/upgrade-tracker',
-]);
 
 export interface NotificationDeviceRegistrationPayload {
   readonly token: string;
@@ -399,6 +392,16 @@ export class PushNotificationService {
   }
 
   private handleDataNavigation(data: PushData): void {
+    const type = String(data.type ?? '');
+    if (type === 'legend_defense' || type === 'war_reminder') {
+      const tag = String(data.target_tag ?? '').trim().replace(/^#/, '').toUpperCase();
+      if (!/^[0289PYLQGRJCUV]{3,15}$/.test(tag)) return;
+      const route: SupportedPushRoute = type === 'legend_defense'
+        ? `/player/${tag}?tab=legends`
+        : `/clan/${tag}/war`;
+      void Promise.resolve(this.options.openRoute(route)).catch((error) => this.report('navigation', error));
+      return;
+    }
     if (String(data.type ?? '') === 'admin_post') {
       if (!this.options.isFeatureEnabled('posts')) return;
       const postId = String(data.post_id ?? '');
@@ -411,15 +414,8 @@ export class PushNotificationService {
     }
 
     const route = String(data.route ?? '');
-    if (!SUPPORTED_ROUTES.has(route as SupportedPushRoute)) return;
-    const supportedRoute = route as SupportedPushRoute;
-    if (
-      (supportedRoute === '/posts' && !this.options.isFeatureEnabled('posts')) ||
-      (supportedRoute === '/upgrade-tracker' && !this.options.isFeatureEnabled('upgradeTracker'))
-    ) {
-      return;
-    }
-    void Promise.resolve(this.options.openRoute(supportedRoute)).catch((error) =>
+    if (type !== 'admin_campaign' || route !== '/posts' || !this.options.isFeatureEnabled('posts')) return;
+    void Promise.resolve(this.options.openRoute('/posts')).catch((error) =>
       this.report('navigation', error),
     );
   }

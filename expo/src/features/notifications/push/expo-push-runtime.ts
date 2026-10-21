@@ -9,6 +9,7 @@ import {
   setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
+import { File, Paths } from 'expo-file-system';
 import { Platform } from 'react-native';
 import type {
   PushAuthorizationStatus,
@@ -126,6 +127,23 @@ export class ExpoPushRuntime implements PushRuntime {
 
   async showLocalNotification(message: PushMessage): Promise<void> {
     const content = foregroundNotificationContent(message);
+    // iOS local notifications require an on-disk attachment; remote pushes use
+    // NotificationService instead. Never let an image failure swallow the alert.
+    const attachment = content.attachments?.[0];
+    if (Platform.OS === 'ios' && attachment) {
+      try {
+        const file = await File.downloadFileAsync(
+          attachment.url,
+          new File(Paths.cache, `push-${Date.now()}-${this.localNotificationSequence}.png`),
+        );
+        const native = (await import('@clashking/native')).default;
+        attachment.url = await native.padNotificationThumbnail(file.uri);
+      } catch {
+        delete content.attachments;
+      }
+    } else {
+      delete content.attachments;
+    }
     await Notifications.scheduleNotificationAsync({
       identifier: `${LOCAL_NOTIFICATION_IDENTIFIER_PREFIX}${Date.now()}_${this.localNotificationSequence++}`,
       content: {

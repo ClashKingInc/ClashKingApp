@@ -1,4 +1,5 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
+import { DragJiggle } from '../../../ui/drag-jiggle';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Platform,
@@ -59,7 +60,7 @@ export function ClansScreen({
       if (actions.isNetworkError(error)) {
         actions.openNetworkError(actions.refresh);
       } else {
-        actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+        actions.showMessage(t('generalTryAgain'));
       }
     } finally {
       refreshingRef.current = false;
@@ -85,13 +86,13 @@ export function ClansScreen({
     mode === 'linked' ? !item.bookmarked : item.bookmarked,
   );
   useEffect(() => {
-    const missing = roster.missingBookmarkTags.filter(
+    const missing = roster.missingClanTags.filter(
       (tag) => !requestedBookmarks.current.has(tag),
     );
     if (missing.length === 0) return;
     missing.forEach((tag) => requestedBookmarks.current.add(tag));
     void actions.hydrateBookmarkedClans(missing);
-  }, [actions, roster.missingBookmarkTags]);
+  }, [actions, roster.missingClanTags]);
   const open = async (item: (typeof entries)[number], origin?: ClanSpringOrigin) => {
     if (item.clan) {
       if (origin) actions.openClan(item.clan, origin);
@@ -108,6 +109,7 @@ export function ClansScreen({
     <ClanRosterCard
       key={`${item.bookmarked ? 'bookmark' : 'linked'}:${item.tag}`}
       item={item}
+      notifications={model.notifications}
       onOpen={(origin) => void open(item, origin)}
     />
   ));
@@ -197,14 +199,17 @@ export function ClansScreen({
           refreshControl={refreshControl}
           renderItem={(params: RenderItemParams<(typeof entries)[number]>) => (
             <ScaleDecorator activeScale={1.015}>
-              <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
-                <ClanRosterCard
-                  item={params.item}
-                  onOpen={(origin) => void open(params.item, origin)}
-                  onLongPress={params.drag}
-                  dragTestID={`clan-roster-card-${params.item.tag}`}
-                />
-              </View>
+              <DragJiggle active={params.isActive}>
+                <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+                  <ClanRosterCard
+                    item={params.item}
+                    notifications={model.notifications}
+                    onOpen={(origin) => void open(params.item, origin)}
+                    onLongPress={params.drag}
+                    dragTestID={`clan-roster-card-${params.item.tag}`}
+                  />
+                </View>
+              </DragJiggle>
             </ScaleDecorator>
           )}
         />

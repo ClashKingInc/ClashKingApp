@@ -110,21 +110,33 @@ export class PlayerBattlelogData {
       input.historyAvailable,
     );
   }
-  popularTroops(mode: PlayerBattlelogMode, options: { limit?: number; attack?: boolean } = {}) {
+  popularTroops(
+    mode: PlayerBattlelogMode,
+    options: { limit?: number; attack?: boolean; weightByHousing?: boolean } = {},
+  ) {
     const uses = new Map<string, number>();
+    const quantities = new Map<string, number>();
     for (const battle of this.items.filter(
       (item) => item.mode === mode && item.attack === (options.attack ?? true),
     ))
       for (const code of Object.keys(battle.armyCounts).filter(
         (code) => code.startsWith('u_') || code.startsWith('i_'),
-      ))
+      )) {
         uses.set(code, (uses.get(code) ?? 0) + 1);
+        quantities.set(code, (quantities.get(code) ?? 0) + battle.armyCounts[code]!);
+      }
     return [...uses]
       .map(
         ([code, count]) =>
           new PlayerPopularArmyItem(PlayerBattlelogArmyCatalog.resolve(code), count),
       )
-      .sort((a, b) => b.uses - a.uses || a.item.name.localeCompare(b.item.name))
+      .sort((a, b) => {
+        const score = (entry: PlayerPopularArmyItem) =>
+          options.weightByHousing
+            ? (quantities.get(entry.item.code) ?? 0) * entry.item.housingSpace
+            : entry.uses;
+        return score(b) - score(a) || b.uses - a.uses || a.item.name.localeCompare(b.item.name);
+      })
       .slice(0, options.limit ?? 3);
   }
 }
@@ -160,7 +172,13 @@ export class PlayerBattlelogArmyCatalog {
             : prefix === 'e'
               ? ImageAssets.getGearImage(name)
               : ImageAssets.getTroopImage(name);
-    return new PlayerBattlelogArmyItem(code, name, image, int(item?.housing_space), item?.type === 'siege-machine');
+    return new PlayerBattlelogArmyItem(
+      code,
+      name,
+      image,
+      int(item?.housing_space),
+      item?.type === 'siege-machine',
+    );
   }
 }
 function findItem(prefix: string, id: number): JsonRecord | null {

@@ -1,4 +1,4 @@
-import { badgeImageSource } from '../core/assets/badge-token-hints';
+import { badgeImageSource, badgeTokenForUrl, subscribeBadgeTokens } from '../core/assets/badge-token-hints';
 import { Image, type ImageProps, type ImageLoadEventData } from 'expo-image';
 import {
   useCallback,
@@ -13,6 +13,7 @@ import { Platform, StyleSheet, PixelRatio, View } from 'react-native';
 import { sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } from './image-delivery';
 
 import { ImageAssets } from '../core/assets/image-assets';
+import { useCKThemeMode } from './theme';
 import {
   assetManifestRevision,
   manifestImage,
@@ -124,6 +125,7 @@ export function MobileWebImage({
   onLoad,
   ...imageProps
 }: MobileWebImageProps) {
+  const themeMode = useCKThemeMode();
   const revision = useSyncExternalStore(subscribeCache, getCacheRevision, getCacheRevision);
   useSyncExternalStore(subscribeAssetManifest, assetManifestRevision, assetManifestRevision);
   const [measured, setMeasured] = useState({ width: 0, height: 0 });
@@ -139,6 +141,11 @@ export function MobileWebImage({
   const renderedWidth = width || (ratio && height ? height * ratio : 0);
   const renderedHeight = height || (ratio && width ? width / ratio : 0);
   const badgeUrl = sizedBadgeUrl(imageUrl, renderedWidth, renderedHeight, PixelRatio.get());
+  const badgeToken = useSyncExternalStore(
+    subscribeBadgeTokens,
+    () => badgeTokenForUrl(badgeUrl),
+    () => undefined,
+  );
   const metadata = manifestImage(imageUrl);
   const originalUrl = originalBadgeUrl(badgeUrl);
   const requestedUrl =
@@ -170,9 +177,9 @@ export function MobileWebImage({
     () => mobileWebImageCandidates(requestedUrl, [originalUrl, ...fallbackImageUrls]),
     // Cache clearing must also retry previously failed candidates.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fallbackImageUrls, requestedUrl, originalUrl, revision, metadata?.sha, retryAttempt],
+    [fallbackImageUrls, requestedUrl, originalUrl, revision, metadata?.sha, retryAttempt, badgeToken],
   );
-  const identity = `${retryAttempt}\u0000${revision}\u0000${metadata?.sha}\u0000${imageUrl}\u0000${candidates.join('\u0000')}`;
+  const identity = `${badgeToken ?? ''}\u0000${retryAttempt}\u0000${revision}\u0000${metadata?.sha}\u0000${imageUrl}\u0000${candidates.join('\u0000')}`;
   const onLayout: NonNullable<ImageProps['onLayout']> = (event) => {
     const { width, height } = event.nativeEvent.layout;
     setMeasured((current) =>
@@ -194,6 +201,9 @@ export function MobileWebImage({
     <CandidateImage
       key={identity}
       {...imageProps}
+      // The exported empty-star asset is nearly white, just like an earned
+      // star. Apply its semantic inactive color here so all battle views agree.
+      tintColor={imageUrl === ImageAssets.emptyStar ? (themeMode === 'dark' ? '#464852' : '#C8CBD2') : imageProps.tintColor}
       onLayout={onLayout}
       allowDownscaling={allowDownscaling}
       cachePolicy={cachePolicy}

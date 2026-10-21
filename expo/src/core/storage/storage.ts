@@ -28,6 +28,7 @@ export const STORAGE_KEYS = {
   selectedTag: 'selectedTag',
   remoteFeatureFlagSeed: 'remoteFeatureFlagSeed',
   playerCardOptions: 'player_card_options_v1',
+  hideAccountsControls: 'hide_accounts_controls_v1',
   warStatsFilterPresets: 'war_stats_filter_presets',
   notificationSettings: 'notification_settings_v2',
   notificationsEnabled: 'notif_settings_notifications_enabled',

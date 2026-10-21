@@ -11,6 +11,7 @@ import {
 } from 'react';
 import {
   Animated,
+  ActivityIndicator,
   Modal,
   Platform,
   Pressable,
@@ -62,6 +63,8 @@ import {
   PillSurface,
   PressableSurface,
   ProfileTabs,
+  ProfilePageHeader,
+  ProfileHeaderAction,
   ResponsiveGrid,
   SearchField,
   Skeleton,
@@ -123,6 +126,7 @@ export interface UpgradeTrackerScreenProps {
   readonly accounts: readonly UpgradeTrackerAccountOption[];
   readonly selectedTag: string | null;
   readonly loading: boolean;
+  readonly accountLoading?: boolean;
   readonly error: string | null;
   readonly goldPassPercent: number;
   readonly preferences: UpgradePlanPreferencesType;
@@ -144,7 +148,9 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const link = useLinkParameters();
   const [tab, setTab] = useState<TrackerTab>(linkChoice(link.tab, trackerTabs, 'home'));
   const [accountOpen, setAccountOpen] = useState(false);
-  const [importOpen, setImportOpen] = useState(false);
+  // A Home shortcut opens the same importer once. Closing it must not reopen
+  // it on loading updates, so this is initial state rather than a link effect.
+  const [importOpen, setImportOpen] = useState(() => link.import === '1');
   const [shareOpen, setShareOpen] = useState(false);
   const [shareKind, setShareKind] = useState<'home' | 'builder' | 'collection' | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -153,6 +159,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const [trackerScrollY] = useState(() => new Animated.Value(0));
   const [trackerOffsets, setTrackerOffsets] = useState<Partial<Record<TrackerTab, number>>>({});
   const snapshot = props.snapshot;
+  const selectedAccount = props.accounts.find((account) => account.tag === props.selectedTag);
   const clock = useTrackerClock(snapshot);
   const plan = useMemo(
     () =>
@@ -201,7 +208,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
     trackerScrollY.setValue(trackerOffsets[next] ?? 0);
     pager.current?.setPage(trackerTabs.indexOf(next));
   };
-  const trackerHeaderHeight = (desktop ? 214 : 276) + insets.top;
+  const trackerHeaderHeight = (desktop ? 260 : 276) + insets.top;
   const trackerTabHeight = 54;
   const trackerChromeInset = trackerHeaderHeight + trackerTabHeight;
   const trackerCollapseDistance = trackerHeaderHeight - insets.top;
@@ -227,26 +234,39 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.safe}>
       {!snapshot ? (
-        <View
+        <ProfilePageHeader
           testID="upgrade-tracker-empty-header"
-          style={[styles.header, { paddingTop: insets.top + 12 }]}
-        >
-          <IconButton label={materialBackLabel(locale)} onPress={props.onBack}>
-            <ArrowLeft color={theme.onSurface} />
-          </IconButton>
-          <View style={styles.grow}>
-            <CKText role="screenTitle">{t('upgradeTrackerTitle')}</CKText>
-            <CKText muted role="labelSmall" numberOfLines={1}>
-              {t('upgradeTrackerChooseAccount')}
-            </CKText>
-          </View>
-          <IconButton label={t('upgradeTrackerChooseAccount')} onPress={() => setAccountOpen(true)}>
-            <Users color={theme.onSurface} />
-          </IconButton>
-          <IconButton label={t('upgradeTrackerPasteJson')} onPress={() => setImportOpen(true)}>
-            <Upload color={theme.onSurface} />
-          </IconButton>
-        </View>
+          title={selectedAccount?.name ?? t('upgradeTrackerTitle')}
+          subtitle={selectedAccount?.tag ?? t('upgradeTrackerChooseAccount')}
+          imageUrl={
+            selectedAccount?.townHallLevel
+              ? ImageAssets.townHall(selectedAccount.townHallLevel)
+              : ImageAssets.hammerOfBuilding
+          }
+          safeTop={insets.top}
+          onBack={props.onBack}
+          backLabel={materialBackLabel(locale)}
+          actions={
+            <>
+              <ProfileHeaderAction
+                label={t('upgradeTrackerChooseAccount')}
+                onPress={() => setAccountOpen(true)}
+                icon={
+                  props.accountLoading ? (
+                    <ActivityIndicator accessibilityLabel={t('generalLoading')} color="white" />
+                  ) : (
+                    <Users color="white" />
+                  )
+                }
+              />
+              <ProfileHeaderAction
+                label={t('upgradeTrackerPasteJson')}
+                onPress={() => setImportOpen(true)}
+                icon={<Upload color="white" />}
+              />
+            </>
+          }
+        />
       ) : null}
       {props.loading ? (
         <TrackerSkeleton />
@@ -280,9 +300,14 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
             <PressableSurface
               accessibilityRole="button"
               onPress={props.onOpenGameSettings}
-              style={styles.secondaryButton}
+              style={[
+                styles.secondaryButton,
+                { backgroundColor: theme.primary, paddingHorizontal: 20, borderRadius: 16 },
+              ]}
             >
-              <CKText>{t('upgradeTrackerOpenMoreSettings')}</CKText>
+              <CKText style={{ color: theme.onPrimary }}>
+                {t('upgradeTrackerOpenMoreSettings')}
+              </CKText>
             </PressableSurface>
           ) : null}
         </View>
@@ -319,6 +344,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
               locale={locale}
               onBack={props.onBack}
               onAccount={() => setAccountOpen(true)}
+              accountLoading={props.accountLoading}
               onGoldPass={() => setGoldPassOpen(true)}
               onPriorities={() => setSettingsOpen(true)}
               onShare={() => setShareOpen(true)}
@@ -351,6 +377,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
         visible={accountOpen}
         accounts={props.accounts}
         selectedTag={props.selectedTag}
+        loading={props.accountLoading ?? false}
         onClose={() => setAccountOpen(false)}
         onSelect={(tag) => {
           props.onSelectAccount(tag);
@@ -453,6 +480,7 @@ function TrackerHeader({
   locale,
   onBack,
   onAccount,
+  accountLoading,
   onGoldPass,
   onPriorities,
   onShare,
@@ -465,6 +493,7 @@ function TrackerHeader({
   locale: Parameters<typeof materialBackLabel>[0];
   onBack: () => void;
   onAccount: () => void;
+  accountLoading?: boolean;
   onGoldPass: () => void;
   onPriorities: () => void;
   onShare: () => void;
@@ -478,6 +507,7 @@ function TrackerHeader({
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
   const village = tab === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home;
   const collection = tab === 'collection';
+  const [headerSize, setHeaderSize] = useState({ width: 0, height: 0 });
   const summary = snapshot.overallSummary(village);
   const owned = snapshot.collections.filter((item) => item.owned).length;
   const builders = snapshot.buildersFor(village);
@@ -548,18 +578,44 @@ function TrackerHeader({
         },
       ];
   return (
-    <View style={[styles.heroHeader, { height: (desktop ? 214 : 276) + insets.top }]}>
+    <View
+      style={[styles.heroHeader, { height: (desktop ? 260 : 276) + insets.top }]}
+      onLayout={({ nativeEvent }) => {
+        const { width, height } = nativeEvent.layout;
+        setHeaderSize((old) =>
+          old.width === width && old.height === height ? old : { width, height },
+        );
+      }}
+    >
       <MobileWebImage imageUrl={background} contentFit="cover" style={styles.heroBackdrop} />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Defs>
-          <LinearGradient id="tracker-header-scrim" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.5 : 0.34} />
-            <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.72 : 0.52} />
-            <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.94 : 0.72} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#tracker-header-scrim)" />
-      </Svg>
+      {/* SVG's default viewport is 300 by 150 on web. Explicit measured
+          dimensions keep the scrim over the entire header on every platform. */}
+      {headerSize.width > 0 ? (
+        <Svg
+          pointerEvents="none"
+          width={headerSize.width}
+          height={headerSize.height}
+          viewBox={`0 0 ${headerSize.width} ${headerSize.height}`}
+          style={StyleSheet.absoluteFill}
+        >
+          <Defs>
+            <LinearGradient id="tracker-header-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
+              <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.5 : 0.34} />
+              <Stop
+                offset="0.5"
+                stopColor="#000"
+                stopOpacity={themeMode === 'dark' ? 0.72 : 0.52}
+              />
+              <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.94 : 0.72} />
+            </LinearGradient>
+          </Defs>
+          <Rect
+            width={headerSize.width}
+            height={headerSize.height}
+            fill="url(#tracker-header-scrim)"
+          />
+        </Svg>
+      ) : null}
       <View
         style={[
           styles.heroActions,
@@ -589,10 +645,12 @@ function TrackerHeader({
         onPress={onAccount}
         style={styles.heroProfile}
       >
-        <MobileWebImage
-          imageUrl={hall}
-          style={[styles.heroHall, desktop && styles.heroHallDesktop]}
-        />
+        <View style={styles.heroHallBadge}>
+          <MobileWebImage
+            imageUrl={hall}
+            style={[styles.heroHall, desktop && styles.heroHallDesktop]}
+          />
+        </View>
         <View style={styles.heroNameRow}>
           <CKText
             role="titleLarge"
@@ -601,7 +659,11 @@ function TrackerHeader({
           >
             {snapshot.name}
           </CKText>
-          <ChevronDown color="white" size={20} />
+          {accountLoading ? (
+            <ActivityIndicator accessibilityLabel={t('generalLoading')} color="white" />
+          ) : (
+            <ChevronDown color="white" size={20} />
+          )}
         </View>
         <CKText role="labelSmall" style={styles.heroSecondary}>
           {snapshot.tag}
@@ -1063,35 +1125,39 @@ function UpgradesTab({
                 desktop && styles.desktopSection,
               ]}
             >
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={upgradeGroupLabel(group, village, t)}
-                onPress={() =>
-                  setExpanded((current) => {
-                    const next = new Set(current);
-                    if (next.has(group)) next.delete(group);
-                    else next.add(group);
-                    return next;
-                  })
-                }
-                style={styles.collapsibleHeader}
-              >
-                <ChevronRight
-                  size={22}
-                  color={colorWithAlpha(theme.onSurface, 0.72)}
-                  style={{ transform: [{ rotate: open ? '90deg' : '0deg' }] }}
-                />
-                <MobileWebImage
-                  imageUrl={items[0]?.imageUrl ?? ImageAssets.defaultImage}
-                  style={styles.groupImage}
-                />
-                <View style={styles.grow}>
-                  <CKText role="sectionTitle">{upgradeGroupLabel(group, village, t)}</CKText>
-                  <CKText muted role="labelSmall">
-                    {t('upgradeTrackerLevelsLeft', { count: summary.levelsRemaining })} ·{' '}
-                    {t('upgradeTrackerItemCount', { count: items.length })}
-                  </CKText>
-                </View>
+              {/* Expand and summary are sibling controls, never nested buttons. */}
+              <View style={styles.toolbar}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={upgradeGroupLabel(group, village, t)}
+                  accessibilityState={{ expanded: open }}
+                  onPress={() =>
+                    setExpanded((current) => {
+                      const next = new Set(current);
+                      if (next.has(group)) next.delete(group);
+                      else next.add(group);
+                      return next;
+                    })
+                  }
+                  style={[styles.collapsibleHeader, styles.grow]}
+                >
+                  <ChevronRight
+                    size={22}
+                    color={colorWithAlpha(theme.onSurface, 0.72)}
+                    style={{ transform: [{ rotate: open ? '90deg' : '0deg' }] }}
+                  />
+                  <MobileWebImage
+                    imageUrl={items[0]?.imageUrl ?? ImageAssets.defaultImage}
+                    style={styles.groupImage}
+                  />
+                  <View style={styles.grow}>
+                    <CKText role="sectionTitle">{upgradeGroupLabel(group, village, t)}</CKText>
+                    <CKText muted role="labelSmall">
+                      {t('upgradeTrackerLevelsLeft', { count: summary.levelsRemaining })} ·{' '}
+                      {t('upgradeTrackerItemCount', { count: items.length })}
+                    </CKText>
+                  </View>
+                </Pressable>
                 <SectionProgressBadge
                   progress={summary.completion}
                   accessibilityLabel={t('upgradeTrackerGroupSummary', {
@@ -1101,7 +1167,7 @@ function UpgradesTab({
                     setSummary({ title: upgradeGroupLabel(group, village, t), value: summary })
                   }
                 />
-              </Pressable>
+              </View>
               {open ? (
                 <UpgradeGroupTiles
                   group={group}
@@ -1741,7 +1807,7 @@ function CalendarTab({
                       </PillSurface>
                       {nextFinish ? (
                         <PillSurface style={styles.calendarPill}>
-                          <CKText role="labelSmall">
+                          <CKText role="labelSmall" numberOfLines={1} ellipsizeMode="tail">
                             ⚑{' '}
                             {formatTrackerDuration(
                               (nextFinish.endsAt.getTime() - now.getTime()) / 1000,
@@ -1826,7 +1892,7 @@ function CalendarTab({
                                   },
                                 ]}
                               >
-                                <CKText muted role="labelSmall">
+                                <CKText muted role="labelSmall" numberOfLines={1}>
                                   {planLaneLabel(queue, lane.index, capacity)}
                                 </CKText>
                               </Animated.View>
@@ -2631,37 +2697,40 @@ function CollectionTab({
                 desktop && styles.desktopSection,
               ]}
             >
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={collectionTypeLabel(type, t)}
-                onPress={() =>
-                  setExpanded((current) => {
-                    const next = new Set(current);
-                    if (next.has(type)) next.delete(type);
-                    else next.add(type);
-                    return next;
-                  })
-                }
-                style={styles.collapsibleHeader}
-              >
-                <ChevronRight
-                  size={22}
-                  color={colorWithAlpha(theme.onSurface, 0.72)}
-                  style={{ transform: [{ rotate: expanded.has(type) ? '90deg' : '0deg' }] }}
-                />
-                <MobileWebImage
-                  imageUrl={scoped[0]?.imageUrl ?? ImageAssets.defaultImage}
-                  style={styles.groupImage}
-                />
-                <View style={styles.grow}>
-                  <CKText role="sectionTitle">{collectionTypeLabel(type, t)}</CKText>
-                  <CKText muted role="labelSmall">
-                    {t('upgradeTrackerOwnedCount', {
-                      owned: scopedOwned,
-                      total: scoped.length,
-                    })}
-                  </CKText>
-                </View>
+              <View style={styles.toolbar}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={collectionTypeLabel(type, t)}
+                  accessibilityState={{ expanded: expanded.has(type) }}
+                  onPress={() =>
+                    setExpanded((current) => {
+                      const next = new Set(current);
+                      if (next.has(type)) next.delete(type);
+                      else next.add(type);
+                      return next;
+                    })
+                  }
+                  style={[styles.collapsibleHeader, styles.grow]}
+                >
+                  <ChevronRight
+                    size={22}
+                    color={colorWithAlpha(theme.onSurface, 0.72)}
+                    style={{ transform: [{ rotate: expanded.has(type) ? '90deg' : '0deg' }] }}
+                  />
+                  <MobileWebImage
+                    imageUrl={scoped[0]?.imageUrl ?? ImageAssets.defaultImage}
+                    style={styles.groupImage}
+                  />
+                  <View style={styles.grow}>
+                    <CKText role="sectionTitle">{collectionTypeLabel(type, t)}</CKText>
+                    <CKText muted role="labelSmall">
+                      {t('upgradeTrackerOwnedCount', {
+                        owned: scopedOwned,
+                        total: scoped.length,
+                      })}
+                    </CKText>
+                  </View>
+                </Pressable>
                 <SectionProgressBadge
                   progress={scopedOwned / scoped.length}
                   accessibilityLabel={t('upgradeTrackerGroupSummary', {
@@ -2669,7 +2738,7 @@ function CollectionTab({
                   })}
                   onPress={() => setSummaryType(type)}
                 />
-              </Pressable>
+              </View>
               {expanded.has(type) ? (
                 values.length ? (
                   <ResponsiveGrid minItemWidth={104} maxColumns={7}>
@@ -2927,6 +2996,8 @@ function SceneryPlayer({ source }: { source: string }) {
   );
 }
 
+export { ImportModal as UpgradeImportModal };
+
 function ImportModal({
   visible,
   onClose,
@@ -2965,6 +3036,7 @@ function AccountModal({
   visible,
   accounts,
   selectedTag,
+  loading,
   onClose,
   onSelect,
   onImport,
@@ -2972,6 +3044,7 @@ function AccountModal({
   visible: boolean;
   accounts: readonly UpgradeTrackerAccountOption[];
   selectedTag: string | null;
+  loading: boolean;
   onClose: () => void;
   onSelect: (tag: string) => void;
   onImport: () => void;
@@ -3001,6 +3074,7 @@ function AccountModal({
             .filter(Boolean)
             .join('\n')}
           selected={account.tag === selectedTag}
+          loading={loading && account.tag === selectedTag}
           icon={
             <MobileWebImage
               imageUrl={
@@ -3074,12 +3148,14 @@ function ChoiceRow({
   detail,
   icon,
   selected,
+  loading = false,
   onPress,
 }: {
   label: string;
   detail?: string;
   icon?: ReactNode;
   selected?: boolean;
+  loading?: boolean;
   onPress: () => void;
 }) {
   const theme = useCKTheme();
@@ -3099,7 +3175,13 @@ function ChoiceRow({
           </CKText>
         ) : null}
       </View>
-      {selected ? <Check color={theme.primary} /> : <ChevronRight color={theme.onSurfaceVariant} />}
+      {loading ? (
+        <ActivityIndicator accessibilityLabel={label} color={theme.primary} />
+      ) : selected ? (
+        <Check color={theme.primary} />
+      ) : (
+        <ChevronRight color={theme.onSurfaceVariant} />
+      )}
     </PressableSurface>
   );
 }
@@ -3239,7 +3321,7 @@ const styles = StyleSheet.create({
   skeletonPage: { flex: 1, gap: 10, padding: 16 },
   skeletonCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
   heroHeader: { height: 276, overflow: 'hidden' },
-  heroHeaderDesktop: { height: 214 },
+  heroHeaderDesktop: { height: 260 },
   heroBackdrop: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   heroActions: {
     minHeight: 52,
@@ -3250,8 +3332,9 @@ const styles = StyleSheet.create({
   heroIconButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   heroActionImage: { width: 26, height: 26 },
   heroProfile: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  heroHall: { width: 70, height: 70 },
-  heroHallDesktop: { width: 58, height: 58 },
+  heroHallBadge: { width: 104, height: 104, alignItems: 'center', justifyContent: 'center' },
+  heroHall: { width: 94, height: 94 },
+  heroHallDesktop: { width: 96, height: 96 },
   heroNameRow: { maxWidth: '80%', flexDirection: 'row', alignItems: 'center', gap: 3 },
   heroText: { color: 'white' },
   heroSecondary: { color: '#FFFFFFC7' },
@@ -3399,7 +3482,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   calendarGroupImage: { width: 28, height: 25 },
-  calendarPill: { paddingHorizontal: 8, paddingVertical: 5 },
+  calendarPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    minWidth: 0,
+    maxWidth: 160,
+    flexShrink: 1,
+    overflow: 'hidden',
+  },
   calendarLane: { height: 60, position: 'relative' },
   calendarGrid: { position: 'absolute', top: 0, height: 60, overflow: 'hidden' },
   calendarGridDay: {
@@ -3411,6 +3501,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#80808009',
   },
   calendarLaneLabel: {
+    overflow: 'hidden',
     position: 'absolute',
     left: 0,
     top: 0,

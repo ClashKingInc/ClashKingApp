@@ -108,6 +108,7 @@ export function PlayersRoot(props: PlayersRootProps) {
         leagueUrl: bookmark.leagueUrl,
       })),
       optionsByTag,
+      hideAccountsEnabled: runtime.playerCardPreferences.hideAccountsEnabled,
       homeIncludedAccountTags: new Set(
         runtime.playerCardPreferences.homeIncludedTags(verifiedTags, runtime.accounts.selectedTag),
       ),

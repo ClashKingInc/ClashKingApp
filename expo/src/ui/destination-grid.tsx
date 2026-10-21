@@ -16,6 +16,7 @@ export type DestinationGridGroup = {
   items: readonly {
     key: string;
     label: string;
+    subtitle?: string;
     imageUrl?: string;
     backgroundUrl?: string;
     accentColor?: string;
@@ -27,14 +28,23 @@ export type DestinationGridGroup = {
 export function DestinationGrid({
   groups,
   initialWidth,
+  compact = false,
+  featured = false,
+  tileHeight,
 }: {
   groups: readonly DestinationGridGroup[];
   initialWidth?: number;
+  /** Centered three-column launcher; other destination pages keep the roomy layout. */
+  compact?: boolean;
+  featured?: boolean;
+  tileHeight?: number;
 }) {
-  const { fontScale, width } = useWindowDimensions();
+  const { fontScale, width, height } = useWindowDimensions();
+  const shortViewport = height < 750;
+  const imageSize = featured ? ((tileHeight ?? 76) < 65 ? 28 : 34) : compact ? (shortViewport ? 20 : 24) : 44;
   const artwork = JSON.stringify([
     ...new Set(
-      groups.flatMap((group) =>
+      (featured ? [] : groups).flatMap((group) =>
         group.items.flatMap((item) => (item.backgroundUrl ? [item.backgroundUrl] : [])),
       ),
     ),
@@ -46,13 +56,24 @@ export function DestinationGrid({
   }, [artwork, width]);
   const theme = useCKTheme();
   return (
-    <View style={{ gap: ckSpacing.lg }}>
+    <View style={{ gap: featured ? 10 : compact ? ckSpacing.md : ckSpacing.lg }}>
       {groups.map((group) => (
-        <View key={group.key} style={{ gap: ckSpacing.md }}>
-          {group.title ? <CKText role="sectionTitle">{group.title}</CKText> : null}
+        <View key={group.key} style={{ gap: compact ? ckSpacing.sm : ckSpacing.md }}>
+          {group.title ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            {featured ? <View style={{ width: 4, height: 18, borderRadius: 2, backgroundColor: group.items[0]?.accentColor ?? theme.secondary }} /> : null}
+            <CKText
+              role="sectionTitle"
+              style={compact ? { fontSize: shortViewport ? 15 : 17, lineHeight: 22 } : undefined}
+            >
+              {group.title}
+            </CKText>
+            </View>
+          ) : null}
           <ResponsiveGrid
-            minItemWidth={136 * Math.max(1, fontScale)}
-            maxColumns={4}
+            minItemWidth={(compact ? 88 : 136) * Math.max(1, fontScale)}
+            maxColumns={compact ? 3 : 4}
+            gap={compact ? ckSpacing.sm : ckSpacing.md}
             fillLastRow={group.fillLastRow}
             initialWidth={initialWidth}
             testID={`destination-grid-${group.key}`}
@@ -62,22 +83,29 @@ export function DestinationGrid({
                 key={item.key}
                 testID={`destination-${item.key}`}
                 accessibilityRole="button"
-                accessibilityLabel={item.label}
+                accessibilityLabel={[item.label, item.subtitle].filter(Boolean).join('. ')}
                 onPress={item.onPress}
-                radius={ckRadius.tile}
+                radius={compact ? ckRadius.chip : ckRadius.tile}
                 style={{
                   flex: 1,
                   minWidth: 0,
-                  minHeight: 84,
-                  padding: ckSpacing.md,
-                  gap: ckSpacing.sm,
-                  flexDirection: 'row',
+                  // Keep full wrapping labels and a 44px+ touch target. Large
+                  // accessibility type may use fewer columns and scroll.
+                  minHeight: featured ? (tileHeight ?? 76) : compact ? (shortViewport ? 59 : 70) : 84,
+                  padding: featured ? 3 : compact ? (shortViewport ? 3 : 6) : ckSpacing.md,
+                  gap: compact ? (shortViewport ? 3 : 4) : ckSpacing.sm,
+                  flexDirection: compact ? 'column' : 'row',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   overflow: 'hidden',
-                  borderColor: colorWithAlpha(item.accentColor ?? theme.secondary, 0.18),
+                  backgroundColor: featured ? colorWithAlpha(group.items[0]?.accentColor ?? theme.secondary, 0.08) : undefined,
+                  borderWidth: featured ? 0 : undefined,
+                  borderColor: featured ? 'transparent' : compact
+                    ? 'transparent'
+                    : colorWithAlpha(item.accentColor ?? theme.secondary, 0.18),
                 }}
               >
-                <View
+                {!featured ? <View
                   testID={`destination-tint-${item.key}`}
                   pointerEvents="none"
                   style={StyleSheet.absoluteFill}
@@ -94,12 +122,12 @@ export function DestinationGrid({
                         <Stop
                           offset="0"
                           stopColor={item.accentColor ?? theme.secondary}
-                          stopOpacity={0.16}
+                          stopOpacity={featured ? 0.32 : compact ? 0.09 : 0.16}
                         />
                         <Stop
                           offset="1"
                           stopColor={item.accentColor ?? theme.secondary}
-                          stopOpacity={0.015}
+                          stopOpacity={featured ? 0.08 : 0.015}
                         />
                       </LinearGradient>
                     </Defs>
@@ -109,7 +137,7 @@ export function DestinationGrid({
                       fill={`url(#destination-tint-${group.key}-${item.key})`}
                     />
                   </Svg>
-                </View>
+                </View> : null}
                 {item.imageUrl ? (
                   <MobileWebImage
                     testID={`destination-art-${item.key}`}
@@ -117,11 +145,23 @@ export function DestinationGrid({
                     displaySize={{ width: 64, height: 64 }}
                     cachePolicy="memory-disk"
                     contentFit="contain"
-                    style={{ width: 44, height: 44, flexShrink: 0 }}
+                    style={{ width: imageSize, height: imageSize, flexShrink: 0 }}
                   />
                 ) : null}
-                <View style={{ flex: 1, minWidth: 0, justifyContent: 'center' }}>
-                  <CKText role="bodyMedium">{item.label}</CKText>
+                <View
+                  style={{ flex: compact ? undefined : 1, minWidth: 0, justifyContent: 'center' }}
+                >
+                  <CKText
+                    role={compact ? 'bodySmall' : 'bodyMedium'}
+                    style={compact ? { textAlign: 'center', lineHeight: featured ? 15 : 14, ...(featured ? { fontSize: 12, fontWeight: '600' } : {}) } : undefined}
+                  >
+                    {item.label}
+                  </CKText>
+                  {item.subtitle ? (
+                    <CKText muted role="bodySmall">
+                      {item.subtitle}
+                    </CKText>
+                  ) : null}
                 </View>
               </PressableSurface>
             ))}

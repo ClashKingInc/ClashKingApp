@@ -24,6 +24,8 @@ const SUPER_TROOP_NAMES = new Set([
 ]);
 
 export function applyGameDataBundle(rawBundle: JsonRecord): JsonRecord {
+  // The loaded bundle is authoritative, including an absent abilities section.
+  // Local testing overrides belong in the explicitly configured data loader.
   const bundle = normalizeGameDataBundle(rawBundle);
   replaceGameDataSection(gameDataState.bundleData, bundle);
   replaceGameDataSection(gameDataState.petsData, bundle.pets_data);

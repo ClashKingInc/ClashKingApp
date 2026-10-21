@@ -6,10 +6,37 @@ export interface CwlStanding {
   stars: number;
   destruction: number;
   wins: number;
+  draws: number;
   played: number;
   rank: number;
   firstChance: number | null;
   topTwoChance: number | null;
+  promotionChance: number | null;
+}
+/** Coverage is about published matchups, not future rounds still represented by #0. */
+export function cwlCoverage(summary: WarCwl) {
+  const expected = new Set(
+    summary.leagueInfo?.rounds
+      .flatMap((round) => round.warTags)
+      .filter((tag) => tag && tag !== '#0') ?? [],
+  );
+  const available = summary.warLeagueInfos.filter(
+    (war) => expected.has(war.tag ?? '') && war.clan && war.opponent,
+  );
+  return {
+    expected: expected.size,
+    available: available.length,
+    complete: available.length === expected.size,
+  };
+}
+export function cwlFinished(summary: WarCwl) {
+  const count = summary.leagueInfo?.clans.length ?? 0;
+  return (
+    ['ended', 'warEnded'].includes(summary.leagueInfo?.state ?? '') ||
+    (count > 1 &&
+      summary.warLeagueInfos.length === (count * (count - 1)) / 2 &&
+      summary.warLeagueInfos.every((war) => war.state === 'warEnded'))
+  );
 }
 /** Season standings include completed-win bonuses; player attack stars remain separate. */
 export function cwlStandings(summary: WarCwl): CwlStanding[] {
@@ -20,15 +47,18 @@ export function cwlStandings(summary: WarCwl): CwlStanding[] {
       );
       const completed = wars.filter((war) => war.state === 'warEnded');
       const wins = completed.filter((war) => winner(war) === clan.tag).length;
+      const draws = completed.filter((war) => winner(war) === null).length;
       return {
         tag: clan.tag,
         stars: wars.reduce((sum, war) => sum + side(war, clan.tag)!.stars, 0) + wins * 10,
         destruction: wars.reduce((sum, war) => sum + side(war, clan.tag)!.destructionPercentage, 0),
         wins,
+        draws,
         played: completed.length,
         rank: 0,
         firstChance: null,
         topTwoChance: null,
+        promotionChance: null,
       } as CwlStanding;
     })
     .sort(
@@ -39,19 +69,26 @@ export function cwlStandings(summary: WarCwl): CwlStanding[] {
     const started = summary.warLeagueInfos.some(
       (war) => war.state === 'inWar' || war.state === 'warEnded',
     );
-    row.rank = !started
-      ? 0
-      : previous && previous.stars === row.stars && previous.destruction === row.destruction
-        ? previous.rank
-        : index + 1;
+    row.rank =
+      !started || !cwlCoverage(summary).complete
+        ? 0
+        : previous && previous.stars === row.stars && previous.destruction === row.destruction
+          ? previous.rank
+          : index + 1;
   });
   return rows;
 }
 
 /** Bootstrap outlook, not calibrated promotion odds. Only enabled with two finished wars per clan. */
-export function cwlOutlook(summary: WarCwl): CwlStanding[] {
+export function cwlOutlook(summary: WarCwl, promotionPlaces?: number): CwlStanding[] {
   const standings = cwlStandings(summary);
-  if (standings.length < 2 || standings.some((row) => row.played < 2) || !summary.teamSize)
+  if (
+    !cwlCoverage(summary).complete ||
+    cwlFinished(summary) ||
+    standings.length < 2 ||
+    standings.some((row) => row.played < 2) ||
+    !summary.teamSize
+  )
     return standings;
   const samples = new Map(
     standings.map((row) => [
@@ -77,7 +114,7 @@ export function cwlOutlook(summary: WarCwl): CwlStanding[] {
     const values = samples.get(tag)!;
     return values[Math.floor(random() * values.length)]!;
   };
-  const totals = new Map(standings.map((row) => [row.tag, [0, 0]]));
+  const totals = new Map(standings.map((row) => [row.tag, [0, 0, 0]]));
   const simulations = 1000;
   for (let iteration = 0; iteration < simulations; iteration++) {
     const scores = new Map(standings.map((row) => [row.tag, { stars: 0, destruction: 0 }]));
@@ -142,12 +179,15 @@ export function cwlOutlook(summary: WarCwl): CwlStanding[] {
       ).length;
       totals.get(tag)![0]! += Math.max(0, Math.min(tied, 1 - ahead)) / tied;
       totals.get(tag)![1]! += Math.max(0, Math.min(tied, 2 - ahead)) / tied;
+      if (promotionPlaces !== undefined)
+        totals.get(tag)![2]! += Math.max(0, Math.min(tied, promotionPlaces - ahead)) / tied;
     }
   }
   return standings.map((row) => ({
     ...row,
     firstChance: totals.get(row.tag)![0]! / simulations,
     topTwoChance: totals.get(row.tag)![1]! / simulations,
+    promotionChance: promotionPlaces === undefined ? null : totals.get(row.tag)![2]! / simulations,
   }));
 }
 export function remainingCwlOpponents(summary: WarCwl, tag: string) {
