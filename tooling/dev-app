@@ -195,7 +195,9 @@ if [[ "${DEV_APP_COMMAND_LOCKED:-}" != 1 ]]; then
   if command -v lockf >/dev/null 2>&1; then
     exec lockf -t 0 "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
   elif command -v flock >/dev/null 2>&1; then
-    exec flock -n "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
+    # The detached tmux server must not inherit the lock descriptor on Linux,
+    # or it holds the command lock for the entire Expo lifetime.
+    exec flock --close -n "$LOCK_FILE" env DEV_APP_COMMAND_LOCKED=1 "$SCRIPT_PATH" "$@"
   else
     fail "install flock (util-linux on Ubuntu) or lockf to coordinate dev-app commands"
   fi
