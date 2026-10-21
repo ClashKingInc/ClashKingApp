@@ -1,0 +1,10 @@
+{
+  "source": "https://game-assets.clashofclans.com/7839fe492f55e0c5cb096b788649cd82f2a99f01/sc/ui.sc",
+  "source_sha1": "491f1f3479dff18cb532707e68d16ce7a1345f56",
+  "export": "mini_level_popup_info_screen",
+  "resource_id": 10935,
+  "resource_type": "shape",
+  "width": 212,
+  "height": 169,
+  "note": "High-resolution blue lightning cluster from the Supercharge information popup title, exported at native size with WebP quality 100. No enlargement of the 27x36 toolbar bolt. Historical 18.600.6 game assets; not a claim of latest asset version."
+}
