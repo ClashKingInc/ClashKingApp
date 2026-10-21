@@ -11,6 +11,7 @@ readonly STATE_DIR="$COMMON_GIT_DIR/dev-app"
 readonly STATE_FILE="$STATE_DIR/worktree"
 readonly API_ORIGIN_FILE="$STATE_DIR/api-origin"
 readonly DISCORD_CLIENT_FILE="$STATE_DIR/discord-client-id"
+readonly ASSET_ORIGIN_FILE="$STATE_DIR/asset-origin"
 readonly PUBLIC_URL_FILE="$STATE_DIR/public-url"
 readonly LOCK_FILE="$STATE_DIR/command.lock"
 
@@ -126,6 +127,12 @@ start_worktree() {
   fi
   public_url="${public_url%/}"
   [[ -z "$public_url" || "$public_url" =~ ^https://[^/[:space:]]+$ ]] || fail "DEV_APP_PUBLIC_URL must be an HTTPS origin or empty"
+  local asset_origin="${DEV_APP_ASSET_ORIGIN:-}"
+  if [[ ! ${DEV_APP_ASSET_ORIGIN+x} && -s "$ASSET_ORIGIN_FILE" ]]; then
+    asset_origin="$(cat "$ASSET_ORIGIN_FILE")"
+  fi
+  asset_origin="${asset_origin%/}"
+  [[ -z "$asset_origin" || "$asset_origin" =~ ^https?://[^[:space:]]+$ ]] || fail "DEV_APP_ASSET_ORIGIN must be an HTTP(S) URL or empty"
   local api_environment=local
   [[ "$api_origin" == https://api.clashk.ing ]] && api_environment=production
   command=(
@@ -134,6 +141,7 @@ start_worktree() {
     # Expo must advertise the tunnel port, not Metro's private listening port.
     # Persist this origin so ordinary restarts do not break remote devices.
     EXPO_PACKAGER_PROXY_URL="$public_url"
+    EXPO_PUBLIC_CK_ASSET_ORIGIN="$asset_origin"
     EXPO_PUBLIC_CK_API_ENV="$api_environment"
     EXPO_PUBLIC_CK_API_BASE_URL="$api_origin"
     EXPO_PUBLIC_CK_API_V2_BASE_URL="$api_origin/v2"
@@ -152,6 +160,7 @@ start_worktree() {
   remember_worktree "$worktree"
   printf '%s\n' "$api_origin" > "$API_ORIGIN_FILE"
   printf '%s\n' "$discord_client_id" > "$DISCORD_CLIENT_FILE"
+  printf '%s\n' "$asset_origin" > "$ASSET_ORIGIN_FILE"
   printf '%s\n' "$public_url" > "$PUBLIC_URL_FILE"
   printf 'API: %s\n' "$api_origin"
   printf 'Started %s in tmux session %s\n%s\n' "$worktree" "$SESSION" "$PUBLIC_URL"

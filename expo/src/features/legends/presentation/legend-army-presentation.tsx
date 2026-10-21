@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { type ReactNode } from 'react';
 import { Image } from 'expo-image';
 import { PixelRatio, Platform, StyleSheet, View } from 'react-native';
@@ -84,7 +85,7 @@ export async function prefetchLegendArmyArtwork(shareCodes: readonly string[]): 
       batch.map(async ({ url, size }) => {
         const candidate = sizedAssetUrl(url, size, size, PixelRatio.get());
         const metadata = manifestImage(url);
-        if (Platform.OS !== 'web' && metadata && url.startsWith('https://assets.clashk.ing/')) {
+        if (Platform.OS !== 'web' && metadata && url.startsWith(`${ASSET_ORIGIN}/`)) {
           await localImageCache.resolve(
             candidate,
             decodeURIComponent(new URL(url).pathname.slice(1)),

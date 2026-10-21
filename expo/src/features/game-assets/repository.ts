@@ -1,7 +1,8 @@
+import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
 import type { StringStore } from '../../services/storage/auth-storage';
 import { GameAssetManifest } from './models';
 
-export const GAME_ASSET_MANIFEST_URL = 'https://assets.clashk.ing/manifest.json';
+export const GAME_ASSET_MANIFEST_URL = `${ASSET_ORIGIN}/manifest.json`;
 export const GAME_ASSET_CACHE_DURATION_MS = 30 * 60 * 1000;
 export const GAME_ASSET_REQUEST_TIMEOUT_MS = 20 * 1000;
 

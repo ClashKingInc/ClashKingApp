@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../assets/asset-origin';
 import {
   bumpGameDataRevision,
   gameDataState,
@@ -6,7 +7,7 @@ import {
   type JsonRecord,
 } from './game-data-state';
 
-export const GAME_ASSET_BASE_URL = 'https://assets.clashk.ing';
+export const GAME_ASSET_BASE_URL = ASSET_ORIGIN;
 
 const SUPER_TROOP_NAMES = new Set([
   'Sneaky Goblin',

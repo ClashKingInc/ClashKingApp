@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ArrowDown, ArrowUp, ChevronRight, Globe2, Trophy } from 'lucide-react-native';
@@ -353,8 +354,8 @@ export function CwlCard({
                   accessibilityLabel={movement === 'up' ? 'Promoted' : 'Demoted'}
                   imageUrl={
                     movement === 'up'
-                      ? 'https://assets.clashk.ing/bot/icons/up_green_arrow.png'
-                      : 'https://assets.clashk.ing/bot/icons/down_red_arrow.png'
+                      ? `${ASSET_ORIGIN}/bot/icons/up_green_arrow.png`
+                      : `${ASSET_ORIGIN}/bot/icons/down_red_arrow.png`
                   }
                   style={styles.movementIcon}
                 />

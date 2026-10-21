@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN, resolveAssetUrl, assetPath } from '../core/assets/asset-origin';
 import { badgeImageSource, badgeTokenForUrl, subscribeBadgeTokens } from '../core/assets/badge-token-hints';
 import { Image, type ImageProps, type ImageLoadEventData } from 'expo-image';
 import {
@@ -52,10 +53,10 @@ export function prefetchMobileImage(
           Platform.OS !== 'web' &&
           metadata &&
           candidate !== imageUrl &&
-          candidate.startsWith('https://assets.clashk.ing/')
+          candidate.startsWith(`${ASSET_ORIGIN}/`)
             ? await localImageCache.resolve(
                 candidate,
-                decodeURIComponent(new URL(imageUrl).pathname.slice(1)),
+                assetPath(imageUrl),
                 metadata.sha,
                 () => {},
               )
@@ -245,7 +246,7 @@ function CandidateImage({
     Platform.OS !== 'web' &&
     metadata &&
     candidate !== originalUrl &&
-    candidate?.startsWith('https://assets.clashk.ing/');
+    candidate?.startsWith(`${ASSET_ORIGIN}/`);
   const cachedFile = useSyncExternalStore(
     localImageCache.subscribe,
     useCallback(
@@ -269,7 +270,7 @@ function CandidateImage({
     void localImageCache
       .resolve(
         candidate,
-        decodeURIComponent(new URL(originalUrl).pathname.slice(1)),
+        assetPath(originalUrl),
         metadata.sha,
         display,
       )
@@ -306,7 +307,7 @@ function CandidateImage({
             : null
           : {
               ...badgeImageSource(candidate, Platform.OS),
-              ...(Platform.OS !== 'web' && candidate.startsWith('https://assets.clashk.ing/')
+              ...(Platform.OS !== 'web' && candidate.startsWith(`${ASSET_ORIGIN}/`)
                 ? { headers: { 'Cache-Control': 'no-cache' } }
                 : {}),
             }
@@ -332,7 +333,7 @@ export function mobileWebImageCandidates(
   const resolved = resolvedImages.get(requested);
   for (const rawCandidate of [requested, resolved, ...fallbacks]) {
     if (!rawCandidate) continue;
-    for (const candidate of candidateVariants(cocAssetsProxyUrl(rawCandidate))) {
+    for (const candidate of candidateVariants(cocAssetsProxyUrl(resolveAssetUrl(rawCandidate)))) {
       const failedAt = failedImages.get(candidate);
       if (failedAt !== undefined && now - failedAt > FAILURE_TTL_MS) {
         failedImages.delete(candidate);

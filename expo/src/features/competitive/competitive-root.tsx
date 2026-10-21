@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as Linking from 'expo-linking';
 import {
@@ -618,7 +619,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
                     </CKText>
                   </View>
                   <MobileWebImage
-                    imageUrl={`https://assets.clashk.ing/decorations/home-village/${sculpture}.webp`}
+                    imageUrl={`${ASSET_ORIGIN}/decorations/home-village/${sculpture}.webp`}
                     contentFit="contain"
                     style={{ width: 110, height: 150 }}
                   />

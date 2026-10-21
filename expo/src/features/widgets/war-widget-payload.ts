@@ -1,6 +1,7 @@
+import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
 type JsonRecord = Record<string, unknown>;
 
-const FALLBACK_BADGE = 'https://assets.clashk.ing/clashkinglogo.png';
+const FALLBACK_BADGE = `${ASSET_ORIGIN}/clashkinglogo.png`;
 
 export function buildWarWidgetPayload(value: unknown, clanTag: string, now = new Date()): string {
   const data = record(value);

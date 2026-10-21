@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../assets/asset-origin';
 import {
   applyGameTranslations,
   clashyLocaleCodeForAppLocale,
@@ -16,8 +17,8 @@ import {
 import { FileUpdateIndex, type FileIndexStorage } from '../assets/file-update-index';
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto';
 
-export const STATIC_DATA_URL = 'https://assets.clashk.ing/static_data';
-export const TRANSLATIONS_URL = 'https://assets.clashk.ing/translations';
+export const STATIC_DATA_URL = `${ASSET_ORIGIN}/static_data`;
+export const TRANSLATIONS_URL = `${ASSET_ORIGIN}/translations`;
 export const GAME_DATA_USER_AGENT = 'ClashKing-App/1.0';
 export const GAME_DATA_CACHE_FRESHNESS_MS = 60 * 1_000;
 
@@ -259,7 +260,7 @@ export class GameDataService {
           const path = String(entry.path);
           const name = path.slice('static_data/'.length, -5);
           const asset = dataCache(`static_data_${name}.json`, entry.sha);
-          const url = `https://assets.clashk.ing/${path}`;
+          const url = `${ASSET_ORIGIN}/${path}`;
           const cached = await this.readCache(asset).catch(() => null);
           if (cached?.sha === entry.sha) await this.reconcileSavedFile(asset, url, cached);
           const data =

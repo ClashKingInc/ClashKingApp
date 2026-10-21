@@ -1,9 +1,10 @@
+import { ASSET_ORIGIN } from './asset-origin';
 import { rememberBadgeToken } from './badge-token-hints';
 import { localGameAssetsUrl } from '../game-data/local-game-assets';
 import { gameDataState, isRecord, type JsonRecord } from '../game-data/game-data-state';
 
 export class ImageAssets {
-  static readonly baseUrl = 'https://assets.clashk.ing';
+  static readonly baseUrl = ASSET_ORIGIN;
   static readonly clanBadgeBaseUrl = 'https://badges.clashk.ing';
   static readonly defaultImage = `${ImageAssets.baseUrl}/icons/Icon_Unknown_Troop.png`;
   static readonly thinkingBuilder = `${ImageAssets.baseUrl}/stickers/thinking_bk.webp`;

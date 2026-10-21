@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import {
   Children,
   createContext,
@@ -198,14 +199,14 @@ export function HomeCardSkeleton({ rows }: { rows: number }) {
 }
 
 const metricAssets: Record<HomeMetricModel['kind'], string> = {
-  legendAttacks: 'https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png',
-  warAttacks: 'https://assets.clashk.ing/icons/Icon_DC_War.png',
-  cwlAttacks: 'https://assets.clashk.ing/icons/Icon_DC_CWL_No_Border.png',
-  raidAttacks: 'https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png',
-  clanGames: 'https://assets.clashk.ing/icons/Icon_HV_Clan_Games_Medal.png',
-  seasonPass: 'https://assets.clashk.ing/icons/Icon_HV_Gold_Pass.png',
-  rankedAttacks: 'https://assets.clashk.ing/icons/Icon_HV_Sword.png',
-  rankedDefenses: 'https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png',
+  legendAttacks: `${ASSET_ORIGIN}/icons/Icon_HV_League_Legend_3_No_Padding.png`,
+  warAttacks: `${ASSET_ORIGIN}/icons/Icon_DC_War.png`,
+  cwlAttacks: `${ASSET_ORIGIN}/icons/Icon_DC_CWL_No_Border.png`,
+  raidAttacks: `${ASSET_ORIGIN}/icons/Icon_HV_Raid_Attack.png`,
+  clanGames: `${ASSET_ORIGIN}/icons/Icon_HV_Clan_Games_Medal.png`,
+  seasonPass: `${ASSET_ORIGIN}/icons/Icon_HV_Gold_Pass.png`,
+  rankedAttacks: `${ASSET_ORIGIN}/icons/Icon_HV_Sword.png`,
+  rankedDefenses: `${ASSET_ORIGIN}/icons/Icon_HV_Shield_Arrow.png`,
   builders: ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1),
   laboratory: ImageAssets.getHomeVillageBuildingImage('Laboratory', 1),
   pets: ImageAssets.getHomeVillageBuildingImage('Pet House', 1),

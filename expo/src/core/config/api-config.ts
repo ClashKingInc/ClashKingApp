@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../assets/asset-origin';
 export type ApiEnvironment = 'production' | 'development' | 'local';
 
 export interface ApiEnvironmentVariables {
@@ -14,7 +15,7 @@ export interface ApiConfiguration {
   readonly proxyUrl: string;
 }
 
-export const API_ASSET_URL = 'https://assets.clashk.ing';
+export const API_ASSET_URL = ASSET_ORIGIN;
 export const COC_ASSET_PROXY_URL = 'https://assets-proxy.clashk.ing';
 export const DISCORD_URL = 'https://discord.gg/clashking';
 export const DISCORD_BOT_INVITE_URL =

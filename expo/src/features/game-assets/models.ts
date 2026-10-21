@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
 export const SUPPORTED_GAME_ASSET_EXTENSIONS = Object.freeze(
   new Set(['avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']),
 );
@@ -29,7 +30,7 @@ export class GameAssetManifest {
             ...entry,
             category,
             extension: path.split('.').at(-1)?.toLowerCase(),
-            url: `https://assets.clashk.ing/${path.split('/').map(encodeURIComponent).join('/')}`,
+            url: `${ASSET_ORIGIN}/${path.split('/').map(encodeURIComponent).join('/')}`,
           });
         });
       });

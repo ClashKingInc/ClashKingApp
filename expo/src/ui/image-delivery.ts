@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN, resolveAssetUrl } from '../core/assets/asset-origin';
 import { manifestImage } from '../core/assets/asset-manifest';
 
 export const ASSET_IMAGE_SIZES = [64, 128, 256, 512, 1024] as const;
@@ -16,7 +17,10 @@ export function sizedAssetUrl(
   scale: number,
   preserveAnimation = false,
 ): string {
-  if (!url.startsWith('https://assets.clashk.ing/')) return url;
+  url = resolveAssetUrl(url);
+  if (!url.startsWith(`${ASSET_ORIGIN}/`)) return url;
+  // The local file server serves originals; CDN-only image transforms are unavailable.
+  if (__DEV__ && process.env.EXPO_PUBLIC_CK_ASSET_ORIGIN) return url;
   const value = new URL(url);
   if (!/\.(png|webp|jpe?g|avif)$/i.test(value.pathname)) return url;
   const metadata = manifestImage(url);

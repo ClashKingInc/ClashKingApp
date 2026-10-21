@@ -1,3 +1,4 @@
+import { ASSET_ORIGIN } from '../core/assets/asset-origin';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
@@ -28,7 +29,7 @@ export function BundledModelScene({
               cameraOrbit,
               cameraTarget,
             }),
-            baseUrl: 'https://assets.clashk.ing/',
+            baseUrl: `${ASSET_ORIGIN}/`,
           }
         : undefined,
     [model.uri, label, cameraOrbit, cameraTarget],

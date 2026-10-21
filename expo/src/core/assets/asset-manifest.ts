@@ -1,4 +1,5 @@
-export const ASSET_MANIFEST_URL = 'https://assets.clashk.ing/manifest.json';
+import { ASSET_ORIGIN, resolveAssetUrl, assetPath } from './asset-origin';
+export const ASSET_MANIFEST_URL = `${ASSET_ORIGIN}/manifest.json`;
 export interface ManifestImage { readonly sha: string; readonly animated: boolean }
 export interface ManifestDataEntry { path: string; sha: string }
 export function manifestData(value: Record<string, unknown>): { stats: ManifestDataEntry[]; translations: ManifestDataEntry[] } {
@@ -53,8 +54,9 @@ export function applyAssetManifest(value: Record<string, unknown>): void {
 }
 
 export function manifestImage(url: string): ManifestImage | undefined {
-  if (!url.startsWith('https://assets.clashk.ing/')) return undefined;
-  try { return images.get(decodeURIComponent(new URL(url).pathname.slice(1))); }
+  url = resolveAssetUrl(url);
+  if (!url.startsWith(`${ASSET_ORIGIN}/`)) return undefined;
+  try { return images.get(assetPath(url)); }
   catch { return undefined; }
 }
 
