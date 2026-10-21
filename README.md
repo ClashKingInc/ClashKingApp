@@ -82,7 +82,7 @@ The Clash of Clans companion app for tracking stats, managing clans, and analyzi
 - `npm test` - Run the Expo test suite
 - `npm run test:native-plugin` - Verify the retained native/widget contract
 - `npx expo prebuild --clean` - Generate native projects through CNG
-- `npm run web:export` - Build the Cloudflare Pages artifact and stamp its release cache
+- `npm run web:export` - Build the native-app handoff landing for Cloudflare Pages (not the application UI)
 
 The shared web process is managed from the repository root with
 `tooling/dev-app start`. It serves Expo web at `https://dev-app.clashk.ing`

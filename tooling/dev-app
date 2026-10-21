@@ -10,6 +10,8 @@ readonly COMMON_GIT_DIR="$(git -C "$SCRIPT_REPO_ROOT" rev-parse --path-format=ab
 readonly STATE_DIR="$COMMON_GIT_DIR/dev-app"
 readonly STATE_FILE="$STATE_DIR/worktree"
 readonly API_ORIGIN_FILE="$STATE_DIR/api-origin"
+readonly DISCORD_CLIENT_FILE="$STATE_DIR/discord-client-id"
+readonly PUBLIC_URL_FILE="$STATE_DIR/public-url"
 readonly LOCK_FILE="$STATE_DIR/command.lock"
 
 usage() {
@@ -27,6 +29,8 @@ Commands:
   attach             Attach to the shared tmux session
 
 Set DEV_APP_API_ORIGIN on start/restart to change the saved API origin.
+Set DEV_APP_PUBLIC_URL on start/restart to save and advertise an existing HTTPS Metro tunnel.
+Set it to an empty string to return to LAN URLs.
 EOF
 }
 
@@ -111,19 +115,34 @@ start_worktree() {
   api_origin="${api_origin:-https://api.clashk.ing}"
   api_origin="${api_origin%/}"
   [[ "$api_origin" =~ ^https?://[^/[:space:]]+$ ]] || fail "DEV_APP_API_ORIGIN must be an HTTP(S) origin"
+  local discord_client_id="${DEV_APP_DISCORD_CLIENT_ID:-}"
+  if [[ ! ${DEV_APP_DISCORD_CLIENT_ID+x} && -s "$DISCORD_CLIENT_FILE" ]]; then
+    discord_client_id="$(cat "$DISCORD_CLIENT_FILE")"
+  fi
+  [[ -z "$discord_client_id" || "$discord_client_id" =~ ^[0-9]+$ ]] || fail "DEV_APP_DISCORD_CLIENT_ID must contain only digits"
+  local public_url="${DEV_APP_PUBLIC_URL:-}"
+  if [[ ! ${DEV_APP_PUBLIC_URL+x} && -s "$PUBLIC_URL_FILE" ]]; then
+    public_url="$(cat "$PUBLIC_URL_FILE")"
+  fi
+  public_url="${public_url%/}"
+  [[ -z "$public_url" || "$public_url" =~ ^https://[^/[:space:]]+$ ]] || fail "DEV_APP_PUBLIC_URL must be an HTTPS origin or empty"
   local api_environment=local
   [[ "$api_origin" == https://api.clashk.ing ]] && api_environment=production
   command=(
     env
     BROWSER=none
+    # Expo must advertise the tunnel port, not Metro's private listening port.
+    # Persist this origin so ordinary restarts do not break remote devices.
+    EXPO_PACKAGER_PROXY_URL="$public_url"
     EXPO_PUBLIC_CK_API_ENV="$api_environment"
     EXPO_PUBLIC_CK_API_BASE_URL="$api_origin"
     EXPO_PUBLIC_CK_API_V2_BASE_URL="$api_origin/v2"
     EXPO_PUBLIC_CK_PROXY_BASE_URL="$api_origin/proxy/v1"
     EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL="$api_origin/v2"
-    EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI=http://localhost:7357/auth/callback
+    # OAuth must return to the configured public dev host when accessed remotely.
+    EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI="${public_url:-http://localhost:7357}/auth/callback"
     EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
-    EXPO_PUBLIC_CK_DISCORD_CLIENT_ID="${DEV_APP_DISCORD_CLIENT_ID:-}"
+    EXPO_PUBLIC_CK_DISCORD_CLIENT_ID="$discord_client_id"
     npm run start -- --host "${DEV_APP_HOST:-lan}" --port "$PORT"
   )
 
@@ -132,6 +151,8 @@ start_worktree() {
   tmux set-environment -t "$SESSION" DEV_APP_WORKTREE "$worktree"
   remember_worktree "$worktree"
   printf '%s\n' "$api_origin" > "$API_ORIGIN_FILE"
+  printf '%s\n' "$discord_client_id" > "$DISCORD_CLIENT_FILE"
+  printf '%s\n' "$public_url" > "$PUBLIC_URL_FILE"
   printf 'API: %s\n' "$api_origin"
   printf 'Started %s in tmux session %s\n%s\n' "$worktree" "$SESSION" "$PUBLIC_URL"
 }
