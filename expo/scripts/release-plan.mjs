@@ -37,7 +37,13 @@ function validMarker(marker) {
   return marker.type === 'native' ? version.patch === 0 : version.patch > 0;
 }
 
-export function decideRelease({ markers, track, version: requestedVersion, fingerprints }) {
+export function decideRelease({
+  markers,
+  track,
+  version: requestedVersion,
+  fingerprints,
+  nativeOnly = false,
+}) {
   if (!RELEASE_TRACKS.includes(track)) {
     throw new Error('Release track must be alpha, beta, or production.');
   }
@@ -47,6 +53,9 @@ export function decideRelease({ markers, track, version: requestedVersion, finge
   const suffix = track === 'production' ? '' : `-${track}`;
   const version = `${requestedVersion}${suffix}`;
   const requested = parseVersion(version);
+  if (nativeOnly && track !== 'alpha') {
+    throw new Error('Standalone native releases without OTA are supported only on alpha.');
+  }
   const valid = markers.filter(validMarker);
   const trackMarkers = valid
     .filter((marker) => marker.track === track)
@@ -57,7 +66,9 @@ export function decideRelease({ markers, track, version: requestedVersion, finge
   if (trackMarkers[0] && compareVersions(version, trackMarkers[0].version) <= 0) {
     throw new Error(`Release ${version} must be newer than ${trackMarkers[0].version}.`);
   }
-  if (requested.patch === 0) {
+  // A standalone alpha has no OTA baseline. Patch releases on this track must
+  // still rebuild the binary when embedded configuration (such as OAuth) changes.
+  if (requested.patch === 0 || nativeOnly) {
     return {
       type: 'native',
       version,
@@ -143,7 +154,7 @@ async function main() {
     throw new Error('CK_RELEASE_TRACK must be alpha, beta, or production.');
   const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
   const version = process.env.CK_RELEASE_VERSION;
-  if (!updatesEnabled && (track !== 'alpha' || parseVersion(version)?.patch !== 0)) {
+  if (!updatesEnabled && (track !== 'alpha' || !parseVersion(version))) {
     throw new Error('Only a native alpha release may be published without OTA infrastructure.');
   }
   const required = [
@@ -170,6 +181,7 @@ async function main() {
     track,
     version,
     fingerprints,
+    nativeOnly: !updatesEnabled,
   });
   const result = {
     ...plan,

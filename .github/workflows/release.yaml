@@ -11,7 +11,7 @@ on:
         default: main
         type: string
       version:
-        description: Exact numeric version (x.y.0 builds native; x.y.1+ publishes OTA)
+        description: Exact numeric version (standalone alpha always builds native; otherwise x.y.1+ publishes OTA)
         required: true
         type: string
       track:
@@ -101,7 +101,7 @@ jobs:
           R2_UPDATES_BUCKET_NAME: ${{ secrets.R2_UPDATES_BUCKET_NAME }}
         run: |
           if [[ "$GITHUB_EVENT_NAME" == push ]]; then
-            [[ "$CK_RELEASE_VERSION" =~ ^v[0-9]+\.[0-9]+\.0-alpha$ ]] || { echo 'Alpha tags must use vX.Y.0-alpha.' >&2; exit 1; }
+            [[ "$CK_RELEASE_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-alpha$ ]] || { echo 'Alpha tags must use vX.Y.Z-alpha.' >&2; exit 1; }
             export CK_RELEASE_VERSION="${CK_RELEASE_VERSION#v}"
             export CK_RELEASE_VERSION="${CK_RELEASE_VERSION%-alpha}"
           fi

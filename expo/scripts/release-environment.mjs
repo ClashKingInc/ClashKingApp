@@ -20,6 +20,10 @@ export function releaseEnvironment(track) {
     EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL: `${apiOrigin}/v2`,
     EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI: `${appOrigin}/auth/callback`,
     EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED: 'true',
+    // Local API token exchange uses the beta Discord application. The native
+    // client must authorize with that same ID, not the production fallback.
+    EXPO_PUBLIC_CK_DISCORD_CLIENT_ID:
+      track === 'alpha' ? '808566437199216691' : '824653933347209227',
     CK_UPDATES_URL: `${apiOrigin}/v2/app/updates/manifest`,
   };
 }
