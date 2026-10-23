@@ -6,14 +6,11 @@ const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const expoRoot = resolve(scriptDirectory, '..');
 const arbRoot = resolve(expoRoot, 'src/i18n/arb');
 const androidRoot = resolve(expoRoot, 'native/android/app/src/main/res');
-const iosCatalogPath = resolve(
-  expoRoot,
-  'native/ios/WarWidget/LegendsWidget.xcstrings',
-);
+const iosCatalogPath = resolve(expoRoot, 'native/ios/WarWidget/LegendsWidget.xcstrings');
 
 const resources = {
-  legends_widget_label: 'legendsTitle',
-  legends_widget_description: 'legendsTitle',
+  legends_widget_label: 'rankedLegendsWidgetTitle',
+  legends_widget_description: 'rankedLegendsWidgetTitle',
   legends_widget_player_label: 'exportLabelPlayer',
   legends_widget_town_hall_description: 'filtersTownHall',
   legends_widget_clan_badge_description: 'clanTitle',
@@ -26,7 +23,9 @@ const resources = {
   legends_widget_stale: 'widgetDataStale',
   legends_widget_updated: 'upgradeTrackerHeaderUpdated',
   legends_widget_no_data: 'generalNoDataAvailable',
-  legends_widget_configure_eyebrow: 'legendsTitle',
+  legends_widget_no_activity: 'statsNoDataTitle',
+  legends_widget_history_unavailable: 'rankedLeagueBattleDetailsUnavailable',
+  legends_widget_configure_eyebrow: 'rankedLegendsWidgetTitle',
   legends_widget_configure_title: 'upgradeTrackerChooseAccount',
   legends_widget_configure_description: 'upgradeTrackerChooseAccount',
   legends_widget_configure_empty: 'playersNoBookmarkedTitle',
@@ -59,8 +58,9 @@ const english = catalogs.find(({ locale }) => locale === 'en')?.messages;
 if (!english) throw new Error('Missing source catalog app_en.arb');
 for (const { locale, messages } of catalogs) {
   if (locale === 'en' || locale.startsWith('en_')) continue;
-  const copiedEnglish = [...new Set(Object.values(resources))]
-    .every((sourceKey) => messages[sourceKey] === english[sourceKey]);
+  const copiedEnglish = [...new Set(Object.values(resources))].every(
+    (sourceKey) => messages[sourceKey] === english[sourceKey],
+  );
   if (copiedEnglish) {
     throw new Error(`${locale} native widget messages unexpectedly match English`);
   }
@@ -94,7 +94,10 @@ if (process.argv.includes('--check')) {
 }
 
 function readArb(file) {
-  return JSON.parse(readFileSync(resolve(arbRoot, file), 'utf8'));
+  const messages = JSON.parse(readFileSync(resolve(arbRoot, file), 'utf8'));
+  // Reuse each locale's established league names in the combined picker title.
+  messages.rankedLegendsWidgetTitle = `${messages.rankedLeagueTitle} / ${messages.legendsTitle}`;
+  return messages;
 }
 
 function androidValuesDirectory(locale) {
@@ -117,9 +120,7 @@ function androidDocument({ messages }) {
 }
 
 function androidValue(message, sourceKey) {
-  const formatted = sourceKey === 'statsDayIndex'
-    ? message.replace('{index}', '%1$d')
-    : message;
+  const formatted = sourceKey === 'statsDayIndex' ? message.replace('{index}', '%1$d') : message;
   return formatted
     .replaceAll('\\', '\\\\')
     .replaceAll('&', '&amp;')

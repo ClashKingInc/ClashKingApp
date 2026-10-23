@@ -7,6 +7,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
@@ -301,7 +304,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         )
 
         views.setTextViewText(R.id.upgrade_account_name, data.optString("name", "Upgrade Progress"))
-        views.setTextViewText(R.id.upgrade_account_tag, data.optString("tag", ""))
+        renderCompletion(context, views, data)
         addImageTarget(
             imageTargets,
             R.id.upgrade_hall_image,
@@ -400,7 +403,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             R.drawable.ic_upgrade_hall_placeholder
         )
         views.setTextViewText(R.id.upgrade_account_name, data.optString("name", "Upgrade Progress"))
-        views.setTextViewText(R.id.upgrade_account_tag, data.optString("tag", ""))
+        renderCompletion(context, views, data)
         addImageTarget(
             imageTargets,
             R.id.upgrade_hall_image,
@@ -1015,6 +1018,33 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         } else {
             label(labels, "noActiveUpgrades", "No active upgrades")
         }
+    }
+
+    // Match the Home card's Home Village completion, not elapsed calendar time.
+    // Older payloads omit the metric; keep that unknown rather than inventing 0%.
+    private fun renderCompletion(context: Context, views: RemoteViews, data: JSONObject) {
+        val completion = if (data.has("completion") && !data.isNull("completion"))
+            data.optDouble("completion").takeIf { it.isFinite() }?.coerceIn(0.0, 1.0) else null
+        val bitmap = Bitmap.createBitmap(126, 126, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 12f
+        paint.color = context.getColor(R.color.widget_text)
+        paint.alpha = 40
+        val bounds = RectF(6f, 6f, 120f, 120f)
+        canvas.drawOval(bounds, paint)
+        paint.alpha = 255
+        paint.color = context.getColor(R.color.widget_stat_positive)
+        paint.strokeCap = Paint.Cap.ROUND
+        canvas.drawArc(bounds, -90f, ((completion ?: 0.0) * 360).toFloat(), false, paint)
+        val text = completion?.let { Math.round(it * 100).toString() + "%" } ?: "—"
+        // RemoteViews may retain bitmaps across a launcher theme change. Keep the
+        // number in a theme-aware TextView so light-cached black never stays black
+        // on a dark widget (or the reverse).
+        views.setTextViewText(R.id.upgrade_completion_value, text)
+        views.setImageViewBitmap(R.id.upgrade_completion_ring, bitmap)
+        views.setContentDescription(R.id.upgrade_completion_ring, text)
     }
 
     private fun labels(data: JSONObject?): JSONObject? = data?.optJSONObject("labels")

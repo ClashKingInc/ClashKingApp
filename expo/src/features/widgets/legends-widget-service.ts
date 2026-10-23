@@ -1,9 +1,11 @@
 import type { StringStore } from '../../services/storage/auth-storage';
 import type { Player } from '../player/models';
+import type { RankedLeagueData } from '../player/models/player-ranked';
 import { currentLegendDay, type PlayerLegendLeagueData } from '../player/models/player-legend';
 import type { NativeWidgetBridge, WidgetPlatform } from './contracts';
 import {
   buildLegendsWidgetPayload,
+  buildRankedWidgetPayload,
   canonicalPlayerTag,
   type LegendsWidgetTranslate,
 } from './legends-widget-payload';
@@ -29,7 +31,9 @@ export interface LegendsWidgetServiceOptions {
   readonly loadPlayer: (tag: string) => Promise<Player>;
   readonly cachedPlayer?: (tag: string) => Pick<Player, 'name' | 'townHallLevel'> | null;
   readonly loadLegendData: (tag: string, day: string) => Promise<PlayerLegendLeagueData>;
+  readonly loadRankedData: (tag: string) => Promise<RankedLeagueData>;
   readonly t: LegendsWidgetTranslate;
+  readonly locale?: () => string;
   readonly now?: () => Date;
   readonly concurrency?: number;
   readonly reportError?: (context: LegendsWidgetErrorContext) => void | Promise<void>;
@@ -91,11 +95,13 @@ export class LegendsWidgetService {
       return normalizeBookmarks(
         decoded.flatMap((value) => {
           if (!isRecord(value)) return [];
-          return [{
-            tag: String(value.tag ?? ''),
-            name: String(value.name ?? ''),
-            townHallLevel: finiteInteger(value.townHallLevel),
-          }];
+          return [
+            {
+              tag: String(value.tag ?? ''),
+              name: String(value.name ?? ''),
+              townHallLevel: finiteInteger(value.townHallLevel),
+            },
+          ];
         }),
         [],
         this.options.cachedPlayer,
@@ -137,8 +143,26 @@ export class LegendsWidgetService {
           name: player.name,
           townHallLevel: player.townHallLevel,
         });
-        if (!/^Legend League(?: (?:\d+|[IVX]+))?$/iu.test(player.league)) {
-          await this.writeValue(generation, legendsWidgetKeyForPlayer(tag), null);
+        // Legend II/III use the weekly Ranked source, not the daily Legend I feed.
+        if (!player.isLegendLeague) {
+          const data = await this.options.loadRankedData(tag);
+          if (generation !== this.generation) return;
+          // Missing membership is not a zero-attack week. Retain the previous
+          // snapshot as stale until the authoritative period can be refreshed.
+          if (!data.currentGroup && !data.currentBattlelog)
+            throw new Error('Ranked refresh returned no current period');
+          const payload = buildRankedWidgetPayload(
+            player,
+            data,
+            this.options.t,
+            now,
+            this.options.locale?.(),
+          );
+          await this.writeValue(
+            generation,
+            legendsWidgetKeyForPlayer(tag),
+            JSON.stringify(payload),
+          );
           return;
         }
         const data = await this.loadLegendData(tag, day);
@@ -162,15 +186,19 @@ export class LegendsWidgetService {
     const cached = this.legendCache.get(key);
     const age = cached ? this.now().getTime() - cached.at : Infinity;
     if (cached && age >= 0 && age < 60_000) return Promise.resolve(cached.value);
-    const load = this.options.loadLegendData(tag, day).then((value) => {
-      if (this.legendLoads.get(key) === load) {
-        if (this.legendCache.size >= 100) this.legendCache.delete(this.legendCache.keys().next().value!);
-        this.legendCache.set(key, { value, at: this.now().getTime() });
-      }
-      return value;
-    }).finally(() => {
-      if (this.legendLoads.get(key) === load) this.legendLoads.delete(key);
-    });
+    const load = this.options
+      .loadLegendData(tag, day)
+      .then((value) => {
+        if (this.legendLoads.get(key) === load) {
+          if (this.legendCache.size >= 100)
+            this.legendCache.delete(this.legendCache.keys().next().value!);
+          this.legendCache.set(key, { value, at: this.now().getTime() });
+        }
+        return value;
+      })
+      .finally(() => {
+        if (this.legendLoads.get(key) === load) this.legendLoads.delete(key);
+      });
     this.legendLoads.set(key, load);
     return load;
   }
@@ -182,11 +210,7 @@ export class LegendsWidgetService {
     await this.writeValue(generation, LEGENDS_WIDGET_PLAYERS_KEY, JSON.stringify(players));
   }
 
-  private async writeValue(
-    generation: number,
-    key: string,
-    value: string | null,
-  ): Promise<void> {
+  private async writeValue(generation: number, key: string, value: string | null): Promise<void> {
     const write = this.writeChain.then(async () => {
       if (generation !== this.generation) return;
       await this.options.native.setWidgetValue(key, value);

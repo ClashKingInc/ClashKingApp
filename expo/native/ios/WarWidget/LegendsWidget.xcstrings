@@ -2,409 +2,409 @@
   "sourceLanguage": "en",
   "strings": {
     "legends_widget_label": {
-      "comment": "Generated from ARB key legendsTitle.",
+      "comment": "Generated from ARB key rankedLegendsWidgetTitle.",
       "extractionState": "manual",
       "localizations": {
         "af": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legende-liga"
+            "value": "Gerangskikte Liga / Legende-liga"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "دوري الأساطير"
+            "value": "الدوري المصنف / دوري الأساطير"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lliga de Llegendes"
+            "value": "Lliga classificada / Lliga de Llegendes"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendární liga"
+            "value": "Hodnocená liga / Legendární liga"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legende-ligaen"
+            "value": "Rangeret liga / Legende-ligaen"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legenden-Liga"
+            "value": "Ranglistenliga / Legenden-Liga"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Λίγκα Θρύλων"
+            "value": "Πρωτάθλημα Κατάταξης / Λίγκα Θρύλων"
           }
         },
         "en-GB": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "Ranked League / Legend League"
           }
         },
         "en-US": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "Ranked League / Legend League"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "Ranked League / Legend League"
           }
         },
         "es-ES": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga de Leyendas"
+            "value": "Liga Clasificatoria / Liga de Leyendas"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga de Leyendas"
+            "value": "Liga Clasificatoria / Liga de Leyendas"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendaliiga"
+            "value": "Sijoitusliiga / Legendaliiga"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ligue légende"
+            "value": "Ligue classée / Ligue légende"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "ליגת האגדות"
+            "value": "ליגה מדורגת / ליגת האגדות"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "लीजेंड लीग"
+            "value": "रैंक्ड लीग / लीजेंड लीग"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendák Ligája"
+            "value": "Rangsorolt Liga / Legendák Ligája"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lega Leggenda"
+            "value": "Lega classificata / Lega Leggenda"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "レジェンドリーグ"
+            "value": "ランクリーグ / レジェンドリーグ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "전설 리그"
+            "value": "랭크 리그 / 전설 리그"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendarische Divisie"
+            "value": "Klassementsdivisie / Legendarische Divisie"
           }
         },
         "no": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendeligaen"
+            "value": "Rangeret liga / Legendeligaen"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Legend"
+            "value": "Rozgrywki rankingowe / Liga Legend"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Lendária"
+            "value": "Liga Classificada / Liga Lendária"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Legendelor"
+            "value": "Liga Clasată / Liga Legendelor"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Легендарная лига"
+            "value": "Рейтинговая лига Clash / Легендарная лига"
           }
         },
         "sr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga legendi"
+            "value": "Рангирана лига / Liga legendi"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendligan"
+            "value": "Rankad liga / Legendligan"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Efsane Ligi"
+            "value": "Dereceli Lig / Efsane Ligi"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ліга Легенд"
+            "value": "Рейтингові змагання / Ліга Легенд"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "لیجنڈ لیگ"
+            "value": "رینکڈ لیگ / لیجنڈ لیگ"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Giải đấu Huyền thoại"
+            "value": "Giải đấu Xếp hạng / Giải đấu Huyền thoại"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "传奇杯联赛"
+            "value": "排位联赛 / 传奇杯联赛"
           }
         }
       }
     },
     "legends_widget_description": {
-      "comment": "Generated from ARB key legendsTitle.",
+      "comment": "Generated from ARB key rankedLegendsWidgetTitle.",
       "extractionState": "manual",
       "localizations": {
         "af": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legende-liga"
+            "value": "Gerangskikte Liga / Legende-liga"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "دوري الأساطير"
+            "value": "الدوري المصنف / دوري الأساطير"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lliga de Llegendes"
+            "value": "Lliga classificada / Lliga de Llegendes"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendární liga"
+            "value": "Hodnocená liga / Legendární liga"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legende-ligaen"
+            "value": "Rangeret liga / Legende-ligaen"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legenden-Liga"
+            "value": "Ranglistenliga / Legenden-Liga"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Λίγκα Θρύλων"
+            "value": "Πρωτάθλημα Κατάταξης / Λίγκα Θρύλων"
           }
         },
         "en-GB": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "Ranked League / Legend League"
           }
         },
         "en-US": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "Ranked League / Legend League"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "Ranked League / Legend League"
           }
         },
         "es-ES": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga de Leyendas"
+            "value": "Liga Clasificatoria / Liga de Leyendas"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga de Leyendas"
+            "value": "Liga Clasificatoria / Liga de Leyendas"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendaliiga"
+            "value": "Sijoitusliiga / Legendaliiga"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ligue légende"
+            "value": "Ligue classée / Ligue légende"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "ליגת האגדות"
+            "value": "ליגה מדורגת / ליגת האגדות"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "लीजेंड लीग"
+            "value": "रैंक्ड लीग / लीजेंड लीग"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendák Ligája"
+            "value": "Rangsorolt Liga / Legendák Ligája"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lega Leggenda"
+            "value": "Lega classificata / Lega Leggenda"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "レジェンドリーグ"
+            "value": "ランクリーグ / レジェンドリーグ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "전설 리그"
+            "value": "랭크 리그 / 전설 리그"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendarische Divisie"
+            "value": "Klassementsdivisie / Legendarische Divisie"
           }
         },
         "no": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendeligaen"
+            "value": "Rangeret liga / Legendeligaen"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Legend"
+            "value": "Rozgrywki rankingowe / Liga Legend"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Lendária"
+            "value": "Liga Classificada / Liga Lendária"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Legendelor"
+            "value": "Liga Clasată / Liga Legendelor"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Легендарная лига"
+            "value": "Рейтинговая лига Clash / Легендарная лига"
           }
         },
         "sr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga legendi"
+            "value": "Рангирана лига / Liga legendi"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendligan"
+            "value": "Rankad liga / Legendligan"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Efsane Ligi"
+            "value": "Dereceli Lig / Efsane Ligi"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ліга Легенд"
+            "value": "Рейтингові змагання / Ліга Легенд"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "لیجنڈ لیگ"
+            "value": "رینکڈ لیگ / لیجنڈ لیگ"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Giải đấu Huyền thoại"
+            "value": "Giải đấu Xếp hạng / Giải đấu Huyền thoại"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "传奇杯联赛"
+            "value": "排位联赛 / 传奇杯联赛"
           }
         }
       }
@@ -2857,206 +2857,614 @@
         }
       }
     },
-    "legends_widget_configure_eyebrow": {
-      "comment": "Generated from ARB key legendsTitle.",
+    "legends_widget_no_activity": {
+      "comment": "Generated from ARB key statsNoDataTitle.",
       "extractionState": "manual",
       "localizations": {
         "af": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legende-liga"
+            "value": "Nog geen gevegsdata nie"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "دوري الأساطير"
+            "value": "لا توجد بيانات معركة حتى الآن"
           }
         },
         "ca": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lliga de Llegendes"
+            "value": "Encara no hi ha dades de batalla"
           }
         },
         "cs": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendární liga"
+            "value": "Zatím žádné bitevní údaje"
           }
         },
         "da": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legende-ligaen"
+            "value": "Ingen kampdata endnu"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legenden-Liga"
+            "value": "Noch keine Kampfdaten"
           }
         },
         "el": {
           "stringUnit": {
             "state": "translated",
-            "value": "Λίγκα Θρύλων"
+            "value": "Δεν υπάρχουν ακόμη δεδομένα μάχης"
           }
         },
         "en-GB": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "No battle data yet"
           }
         },
         "en-US": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "No battle data yet"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legend League"
+            "value": "No battle data yet"
           }
         },
         "es-ES": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga de Leyendas"
+            "value": "Aún no hay datos de batalla"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga de Leyendas"
+            "value": "Aún no hay datos de batalla"
           }
         },
         "fi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendaliiga"
+            "value": "Ei vielä taistelutietoja"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ligue légende"
+            "value": "Aucune donnée de combat disponible"
           }
         },
         "he": {
           "stringUnit": {
             "state": "translated",
-            "value": "ליגת האגדות"
+            "value": "עדיין אין נתוני קרב"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "लीजेंड लीग"
+            "value": "अभी तक कोई युद्ध डेटा नहीं"
           }
         },
         "hu": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendák Ligája"
+            "value": "Még nincsenek csataadatok"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lega Leggenda"
+            "value": "Ancora nessun dato di battaglia"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "レジェンドリーグ"
+            "value": "戦闘データはまだありません"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "전설 리그"
+            "value": "아직 전투 데이터가 없습니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendarische Divisie"
+            "value": "Nog geen gevechtsgegevens"
           }
         },
         "no": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendeligaen"
+            "value": "Ingen kampdata ennå"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Legend"
+            "value": "Brak jeszcze danych bitewnych"
           }
         },
         "pt": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Lendária"
+            "value": "Ainda não há dados de batalha"
           }
         },
         "ro": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga Legendelor"
+            "value": "Încă nu există date de luptă"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Легендарная лига"
+            "value": "Данных о боях пока нет."
           }
         },
         "sr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Liga legendi"
+            "value": "Још нема података о борби"
           }
         },
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Legendligan"
+            "value": "Inga stridsdata ännu"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Efsane Ligi"
+            "value": "Henüz savaş verisi yok"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ліга Легенд"
+            "value": "Поки що немає даних про битви"
           }
         },
         "ur": {
           "stringUnit": {
             "state": "translated",
-            "value": "لیجنڈ لیگ"
+            "value": "ابھی تک کوئی جنگ کا ڈیٹا نہیں ہے۔"
           }
         },
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Giải đấu Huyền thoại"
+            "value": "Chưa có dữ liệu trận chiến"
           }
         },
         "zh": {
           "stringUnit": {
             "state": "translated",
-            "value": "传奇杯联赛"
+            "value": "尚无战斗数据"
+          }
+        }
+      }
+    },
+    "legends_widget_history_unavailable": {
+      "comment": "Generated from ARB key rankedLeagueBattleDetailsUnavailable.",
+      "extractionState": "manual",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedetailleerde gevegslogboeke is nie vir hierdie tydperk beskikbaar nie."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا تتوفر سجلات معارك مفصلة لهذه الفترة."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hi ha registres detallats de batalla disponibles per a aquest període."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podrobné záznamy bitev nejsou pro toto období dostupné."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detaljerede kamplogbøger er ikke tilgængelige for denne periode."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für diesen Zeitraum sind keine detaillierten Kampfprotokolle verfügbar."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Λεπτομερή αρχεία καταγραφής μάχης δεν είναι διαθέσιμα για αυτήν την περίοδο."
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detailed battle logs are not available for this period."
+          }
+        },
+        "en-US": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detailed battle logs are not available for this period."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detailed battle logs are not available for this period."
+          }
+        },
+        "es-ES": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los registros detallados de batalla no están disponibles para este periodo."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los registros detallados de batalla no están disponibles para este periodo."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tämän kauden yksityiskohtaisia taistelulokeja ei ole saatavilla."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les journaux détaillés des combats ne sont pas disponibles pour cette période."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "יומני קרב מפורטים אינם זמינים לתקופה זו."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इस अवधि के लिए विस्तृत युद्ध लॉग उपलब्ध नहीं हैं।"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ehhez az időszakhoz nem érhető el részletes csatanapló."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I registri dettagliati delle battaglie non sono disponibili per questo periodo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この期間の詳細な戦闘ログはありません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 기간의 상세 전투 기록은 제공되지 않습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedetailleerde gevechtslogboeken zijn voor deze periode niet beschikbaar."
+          }
+        },
+        "no": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detaljerte kamplogger er ikke tilgjengelige for denne perioden."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Szczegółowe rejestry bitew nie są dostępne dla tego okresu."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os registos detalhados de batalhas não estão disponíveis para este período."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jurnalele detaliate de luptă nu sunt disponibile pentru această perioadă."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Для этого периода подробные журналы сражений недоступны."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Детаљни записи битака нису доступни за овај период."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detaljerade stridsloggar är inte tillgängliga för den här perioden."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu dönem için ayrıntılı savaş günlükleri mevcut değil."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Докладні журнали битв для цього періоду недоступні."
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اس مدت کے لیے تفصیلی جنگی لاگز دستیاب نہیں۔"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không có nhật ký chiến đấu chi tiết cho kỳ này."
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该周期的详细战报不可用。"
+          }
+        }
+      }
+    },
+    "legends_widget_configure_eyebrow": {
+      "comment": "Generated from ARB key rankedLegendsWidgetTitle.",
+      "extractionState": "manual",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerangskikte Liga / Legende-liga"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الدوري المصنف / دوري الأساطير"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lliga classificada / Lliga de Llegendes"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hodnocená liga / Legendární liga"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rangeret liga / Legende-ligaen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ranglistenliga / Legenden-Liga"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πρωτάθλημα Κατάταξης / Λίγκα Θρύλων"
+          }
+        },
+        "en-GB": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ranked League / Legend League"
+          }
+        },
+        "en-US": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ranked League / Legend League"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ranked League / Legend League"
+          }
+        },
+        "es-ES": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liga Clasificatoria / Liga de Leyendas"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liga Clasificatoria / Liga de Leyendas"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sijoitusliiga / Legendaliiga"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligue classée / Ligue légende"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ליגה מדורגת / ליגת האגדות"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "रैंक्ड लीग / लीजेंड लीग"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rangsorolt Liga / Legendák Ligája"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lega classificata / Lega Leggenda"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ランクリーグ / レジェンドリーグ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "랭크 리그 / 전설 리그"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klassementsdivisie / Legendarische Divisie"
+          }
+        },
+        "no": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rangeret liga / Legendeligaen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozgrywki rankingowe / Liga Legend"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liga Classificada / Liga Lendária"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liga Clasată / Liga Legendelor"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рейтинговая лига Clash / Легендарная лига"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рангирана лига / Liga legendi"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rankad liga / Legendligan"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dereceli Lig / Efsane Ligi"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рейтингові змагання / Ліга Легенд"
+          }
+        },
+        "ur": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رینکڈ لیگ / لیجنڈ لیگ"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giải đấu Xếp hạng / Giải đấu Huyền thoại"
+          }
+        },
+        "zh": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "排位联赛 / 传奇杯联赛"
           }
         }
       }

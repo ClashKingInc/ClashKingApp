@@ -5,10 +5,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RadioButton
@@ -49,17 +53,43 @@ abstract class WidgetConfigureActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setResult(RESULT_CANCELED)
-        appWidgetId = intent?.extras?.getInt(
+        appWidgetId = savedInstanceState?.takeIf {
+            it.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)
+        }?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
+            ?: intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            setResult(RESULT_CANCELED)
             finish()
             return
         }
+        // Launcher owns this ID. Return it on cancellation too, and retain it through
+        // recreation; never infer an ID from another widget or turn Back into success.
+        setResult(RESULT_CANCELED, resultIntent())
         setContentView(buildContent())
+        val light = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK !=
+            Configuration.UI_MODE_NIGHT_YES
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or
+                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+            window.insetsController?.setSystemBarsAppearance(if (light) mask else 0, mask)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = if (light) {
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            } else 0
+        }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun resultIntent() =
+        Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 
     private fun buildContent(): ScrollView {
         val padding = dp(20)
@@ -199,6 +229,23 @@ abstract class WidgetConfigureActivity : Activity() {
         return ScrollView(this).apply {
             setBackgroundColor(getColor(R.color.widget_background))
             isFillViewport = true
+            // SDK 35+ draws edge-to-edge. Insets must move the entire scrolling
+            // form below system bars, including landscape cutouts and the keyboard.
+            setOnApplyWindowInsetsListener { view, insets ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val safe = insets.getInsets(
+                        WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout() or
+                            WindowInsets.Type.ime()
+                    )
+                    view.setPadding(safe.left, safe.top, safe.right, safe.bottom)
+                } else {
+                    @Suppress("DEPRECATION")
+                    view.setPadding(insets.systemWindowInsetLeft, insets.systemWindowInsetTop,
+                        insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
+                }
+                insets
+            }
+            requestApplyInsets()
             addView(
                 container,
                 ViewGroup.LayoutParams(
@@ -250,7 +297,7 @@ abstract class WidgetConfigureActivity : Activity() {
         })
         setResult(
             RESULT_OK,
-            Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            resultIntent()
         )
         finish()
     }

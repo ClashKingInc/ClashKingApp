@@ -4,5 +4,5 @@
         <ImageView android:id="@+id/legends_attack_icon" android:layout_width="16dp" android:layout_height="16dp" android:contentDescription="@null" android:scaleType="centerInside" />
         <TextView android:id="@+id/legends_attack_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="2dp" android:gravity="center" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="13sp" android:textStyle="bold" />
     </LinearLayout>
-    <TextView android:id="@+id/legends_attack_label" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:textColor="@color/widget_text_secondary" android:textSize="11sp" />
+    <TextView android:id="@+id/legends_attack_label" android:layout_width="match_parent" android:layout_height="wrap_content" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:textColor="@color/widget_text" android:textSize="11sp" />
 </LinearLayout>

@@ -1,4 +1,5 @@
 import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
+import { ImageAssets } from '../../core/assets/image-assets';
 type JsonRecord = Record<string, unknown>;
 
 const FALLBACK_BADGE = `${ASSET_ORIGIN}/clashkinglogo.png`;
@@ -80,6 +81,7 @@ function regularWarPayload(warInfo: JsonRecord, updatedAt: string, now: Date) {
     mode: 'war',
     updatedAt,
     ...display,
+    attackIconUrl: ImageAssets.sword,
     clan: sidePayload(clan, teamSize * 2, teamSize * 3, clanStars, 'Unknown', true),
     opponent: sidePayload(opponent, teamSize * 2, teamSize * 3, opponentStars, 'Unknown', true),
   };
@@ -122,6 +124,7 @@ function cwlWarPayload(data: JsonRecord, updatedAt: string, clanTag: string, now
     mode: 'cwl',
     updatedAt,
     ...display,
+    attackIconUrl: ImageAssets.sword,
     clan: sidePayload(clan, teamSize, teamSize * 3, clanStars, 'CWL Clan', false),
     cwlRank: leagueClan === undefined ? null : (nullableInteger(leagueClan.rank) ?? null),
     cwlLeague: nullableString(league.season) ?? 'unknown',
@@ -259,4 +262,3 @@ function date(value: unknown): Date | undefined {
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
-import { ImageAssets } from '../../core/assets/image-assets';

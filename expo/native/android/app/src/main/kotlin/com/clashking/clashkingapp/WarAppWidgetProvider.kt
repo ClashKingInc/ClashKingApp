@@ -165,21 +165,26 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         )
         views.setTextViewText(R.id.text_state, status)
         views.setTextViewText(R.id.clan_name, clan.name)
-        views.setTextViewText(R.id.clan_percent, clan.percent)
+        views.setTextViewText(R.id.clan_attacks, clan.attacks)
         views.setTextViewText(R.id.opponent_name, opponent.name)
-        views.setTextViewText(R.id.opponent_percent, opponent.percent)
+        views.setTextViewText(R.id.opponent_attacks, opponent.attacks)
         views.setImageViewBitmap(R.id.clan_flag, null)
         views.setImageViewBitmap(R.id.opponent_flag, null)
 
         Thread {
             val clanBadge = downloadBitmap(clan.badgeUrl)
             val opponentBadge = downloadBitmap(opponent.badgeUrl)
+            val attackIcon = downloadBitmap(warInfo.optString("attackIconUrl"))
             val currentPayload = context
                 .getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
                 .getString(payloadKey, null)
             if (currentPayload == sourcePayload) {
                 if (clanBadge != null) views.setImageViewBitmap(R.id.clan_flag, clanBadge)
                 if (opponentBadge != null) views.setImageViewBitmap(R.id.opponent_flag, opponentBadge)
+                if (attackIcon != null) {
+                    views.setImageViewBitmap(R.id.clan_attack_icon, attackIcon)
+                    views.setImageViewBitmap(R.id.opponent_attack_icon, attackIcon)
+                }
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             }
         }.start()
@@ -189,14 +194,14 @@ class WarAppWidgetProvider : AppWidgetProvider() {
 private data class WarSideDetails(
     val name: String,
     val badgeUrl: String,
-    val percent: String
+    val attacks: String
 )
 
 private fun JSONObject.toSideDetails(): WarSideDetails {
     return WarSideDetails(
         name = optString("name", "Unknown"),
         badgeUrl = optString("badgeUrlMedium", ""),
-        percent = optString("percent", "")
+        attacks = optString("attacks", "—")
     )
 }
 

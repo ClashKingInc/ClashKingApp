@@ -9,6 +9,8 @@ private let appGroupIdentifier = "group.com.clashking.apps"
 private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
 private let sharedAuthSessionKey = "shared_auth_session_v1"
 private let sharedAuthKeychainService = "flutter_secure_storage_service"
+// Keep positive scores and the completion ring on the same ClashKing accent.
+private let widgetPositiveColor = Color(red: 0.078, green: 0.639, blue: 0.498)
 
 private func widgetBadgeURL(_ url: URL) -> URL? {
   guard url.host == "badges.clashk.ing" else { return url }
@@ -789,7 +791,7 @@ struct WarWidgetView: View {
       } else {
         Text(entry.data.primaryText ?? entry.data.timeState ?? "")
           .font(.caption2.weight(.semibold))
-          .foregroundStyle(.secondary)
+          .foregroundStyle(.primary)
           .lineLimit(1)
           .minimumScaleFactor(0.72)
         HStack(alignment: .top, spacing: 10) {
@@ -800,7 +802,8 @@ struct WarWidgetView: View {
         }
         compactSplitScoreRow
         compactNameRow
-        compactPercentRow
+        // Keep the small War widget focused on identity, score and timing.
+        // Attack counts remain available in the medium layout and app.
       }
     }
     .padding(10)
@@ -816,14 +819,14 @@ struct WarWidgetView: View {
           sideView(entry.data.clan, badgeData: entry.clanBadgeData, badgeSize: 52)
             .layoutPriority(1)
           VStack(spacing: 4) {
-            scoreLabel(size: scoreText == "-" ? 22 : 29, minScale: 0.72)
             Text(entry.data.primaryText ?? entry.data.timeState ?? "")
               .font(.caption.weight(.semibold))
-              .foregroundStyle(.secondary)
+              .foregroundStyle(.primary)
               .lineLimit(1)
               .minimumScaleFactor(0.75)
+            scoreLabel(size: scoreText == "-" ? 22 : 29, minScale: 0.72)
           }
-          .frame(minWidth: 112, idealWidth: 124, maxWidth: 136)
+          .frame(minWidth: 100, idealWidth: 110, maxWidth: 120)
           .layoutPriority(4)
           sideView(entry.data.opponent, badgeData: entry.opponentBadgeData, badgeSize: 52)
             .layoutPriority(1)
@@ -847,7 +850,7 @@ struct WarWidgetView: View {
               .font(.system(size: 42, weight: .bold, design: .rounded).monospacedDigit())
             Text(entry.data.primaryText ?? entry.data.timeState ?? "")
               .font(.headline)
-              .foregroundStyle(.secondary)
+              .foregroundStyle(.primary)
               .lineLimit(1)
           }
           .frame(minWidth: 88)
@@ -891,7 +894,7 @@ struct WarWidgetView: View {
       Spacer(minLength: 4)
       Text(entry.data.updatedAt ?? "")
         .font(.caption2)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
         .lineLimit(1)
         .minimumScaleFactor(0.7)
     }
@@ -900,21 +903,32 @@ struct WarWidgetView: View {
   private var footer: some View {
     Text(entry.data.secondaryText ?? entry.data.timeState ?? "")
       .font(.caption2)
-      .foregroundStyle(.secondary)
+      .foregroundStyle(.primary)
       .lineLimit(1)
       .minimumScaleFactor(0.7)
   }
 
-  private var compactPercentRow: some View {
-    HStack(spacing: 6) {
-      Text(entry.data.clan?.percent ?? "")
-      Spacer(minLength: 4)
-      Text(entry.data.opponent?.percent ?? "")
+  private func attacksMetric(_ side: WarWidgetData.Side?) -> some View {
+    HStack(spacing: 3) {
+      Group {
+        if let sword = UIImage(named: "Icon_HV_Sword") {
+          Image(uiImage: sword).resizable().scaledToFit()
+        } else {
+          Image(systemName: "sword").resizable().scaledToFit()
+        }
+      }
+      .frame(width: 14, height: 14)
+      // The shared payload already uses two attacks/member for regular wars
+      // and one for CWL. Do not infer a denominator from stars or destruction.
+      Text(side?.attacks ?? "—")
+        .font(.caption2.weight(.semibold).monospacedDigit())
+        .foregroundStyle(.primary)
+        .lineLimit(1)
+        .minimumScaleFactor(0.72)
     }
-    .font(.caption2.monospacedDigit())
-    .foregroundStyle(.secondary)
-    .lineLimit(1)
-    .minimumScaleFactor(0.72)
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel(String(localized: "legends_widget_attacks", table: "LegendsWidget"))
+    .accessibilityValue(side?.attacks ?? "—")
   }
 
   private var compactNameRow: some View {
@@ -940,7 +954,7 @@ struct WarWidgetView: View {
         .minimumScaleFactor(0.6)
       Text(entry.data.primaryText ?? "Not in War")
         .font((family == .systemSmall ? Font.caption2 : Font.caption).weight(.bold))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
         .multilineTextAlignment(.center)
         .lineLimit(1)
         .minimumScaleFactor(0.7)
@@ -1010,12 +1024,9 @@ struct WarWidgetView: View {
       Text(side?.name ?? "Unknown")
         .font(.caption.weight(.semibold))
         .multilineTextAlignment(.center)
-        .lineLimit(2)
-        .minimumScaleFactor(0.7)
-      Text(side?.percent ?? "")
-        .font(.caption2.monospacedDigit())
-        .foregroundStyle(.secondary)
         .lineLimit(1)
+        .minimumScaleFactor(0.7)
+      attacksMetric(side)
     }
     .frame(maxWidth: .infinity)
   }
@@ -1044,7 +1055,7 @@ struct WarWidgetView: View {
 
   private func stat(label: String, value: String) -> some View {
     VStack(alignment: .leading, spacing: 2) {
-      Text(label).font(.caption2).foregroundStyle(.secondary)
+      Text(label).font(.caption2).foregroundStyle(.primary)
       Text(value).font(.caption.weight(.semibold)).monospacedDigit().lineLimit(1)
     }
   }
@@ -1196,6 +1207,11 @@ private struct LegendsWidgetClan: Codable {
   let badgeUrl: String?
 }
 
+private struct LegendsWidgetLeague: Codable {
+  let name: String
+  let iconUrl: String?
+}
+
 private struct LegendsWidgetArtwork: Codable {
   let attackIconUrl: String?
   let defenseIconUrl: String?
@@ -1234,6 +1250,12 @@ private struct LegendsWidgetLabels: Codable {
 
 private struct LegendsWidgetData: Codable {
   let schemaVersion: Int
+  var mode: String? = nil
+  var destinationUrl: String? = nil
+  var periodLabel: String? = nil
+  var attacksLimit: Int? = nil
+  var defensesLimit: Int? = nil
+  var league: LegendsWidgetLeague? = nil
   let tag: String
   let name: String
   let townHallLevel: Int
@@ -1258,7 +1280,9 @@ private struct LegendsWidgetData: Codable {
 
   var localizedLabels: LegendsWidgetLabels { labels ?? .fallback }
   var hasData: Bool {
-    trophies != nil || globalRank != nil || netTrophies != nil || attacksUsed != nil ||
+    // Preserve a selected player's identity while the battle feed is unavailable;
+    // optional counters still show unknown instead of fabricating an empty day.
+    (!tag.isEmpty && !name.isEmpty) || trophies != nil || globalRank != nil || netTrophies != nil || attacksUsed != nil ||
       defensesTaken != nil || latestAttack != nil || latestDefense != nil
   }
 
@@ -1353,6 +1377,10 @@ private struct LegendsWidgetData: Codable {
       .widgetBattle
     return LegendsWidgetData(
       schemaVersion: schemaVersion,
+      mode: "legends",
+      destinationUrl: destinationUrl,
+      attacksLimit: 8,
+      defensesLimit: 8,
       tag: tag,
       name: player?.name ?? name,
       townHallLevel: player?.townHallLevel ?? townHallLevel,
@@ -1497,6 +1525,9 @@ private struct LegendsFreshPlayer: Decodable {
 
 private struct LegendsWidgetFreshFetcher {
   func fetch(player: LegendsWidgetPlayerEntity, cached: LegendsWidgetData, now: Date) async -> LegendsWidgetData? {
+    // Ranked is hydrated by the app's existing group/battlelog service. Never
+    // replace a weekly snapshot with the unrelated daily Legend endpoint.
+    if cached.mode == "ranked" { return nil }
     let normalized = LegendsWidgetPlayerQuery.normalizedTag(player.id)
     let stillBookmarked = LegendsWidgetPlayerQuery().allEntities()
       .contains { LegendsWidgetPlayerQuery.normalizedTag($0.id) == normalized }
@@ -1710,6 +1741,7 @@ private struct LegendsTimelineProvider: AppIntentTimelineProvider {
     let urls = [
       data.townHallImageUrl,
       data.clan?.badgeUrl,
+      data.league?.iconUrl,
       data.artwork?.attackIconUrl,
       data.artwork?.defenseIconUrl,
       data.artwork?.trophyIconUrl,
@@ -1765,35 +1797,39 @@ private struct LegendsWidgetView: View {
         emptyBody
       }
     }
-    .containerBackground(for: .widget) { Color(.systemBackground) }
-    .widgetURL(legendsWidgetDestination(tag: entry.selectedPlayerTag))
+    .widgetBackground
+    .widgetURL(entry.data.destinationUrl.flatMap(URL.init(string:)) ?? legendsWidgetDestination(tag: entry.selectedPlayerTag))
   }
 
   private var smallBody: some View {
-    VStack(alignment: .leading, spacing: 5) {
+    VStack(alignment: .leading, spacing: 10) {
       HStack(spacing: 4) {
         identityArtwork(size: 22)
         Text(entry.data.name)
           .font(.system(size: 12, weight: .bold))
           .lineLimit(1).minimumScaleFactor(0.8)
           .frame(maxWidth: .infinity, alignment: .leading)
-        netValue(compact: true)
+        if entry.data.mode != "ranked" {
+          // Keep the Legend day visible without bringing back the crowded
+          // clan/date row. Ranked periods use different, weekly semantics.
+          Text(dayLabel)
+            .font(.system(size: 10, weight: .medium))
+            .foregroundStyle(.primary)
+            .lineLimit(1)
+            .fixedSize(horizontal: true, vertical: false)
+        }
       }
-      if let clan = entry.data.clan, clan.name != nil || clan.badgeUrl != nil {
-        clanIdentity(clan, compact: true)
+      HStack(spacing: 6) {
+        gameArtwork(entry.data.artwork?.trophyIconUrl, size: 20, fallback: "🏆")
+        trophyValue(compact: true)
+          .fixedSize(horizontal: true, vertical: false)
       }
-      HStack(spacing: 4) {
-        Text(dayLabel)
-        Spacer(minLength: 2)
-        rankLabel
-      }
+      // Small cards have one clear focal point; rank belongs to medium only.
+      .frame(maxWidth: .infinity, alignment: .center)
       .font(.system(size: 10, weight: .medium))
-      .foregroundStyle(.secondary)
+      .foregroundStyle(.primary)
       .lineLimit(1).minimumScaleFactor(0.85)
       dailyMetrics(compact: true)
-      if showsRecentBattleSlot {
-        recentBattleSlot(compact: true)
-      }
     }
   }
 
@@ -1804,17 +1840,15 @@ private struct LegendsWidgetView: View {
         VStack(spacing: 8) {
           dailyMetrics(compact: false)
           HStack(spacing: 8) {
-            Text(dayLabel).foregroundStyle(.secondary)
+            Text(dayLabel).foregroundStyle(.primary)
             rankLabel
           }
           .font(.system(size: 11, weight: .medium))
           .lineLimit(1).minimumScaleFactor(0.85)
         }
         .frame(maxWidth: .infinity, minHeight: 74)
-        if showsRecentBattleSlot {
-          recentBattleSlot(compact: false)
-            .frame(maxWidth: .infinity)
-        }
+        recentBattleSlot(compact: false)
+          .frame(maxWidth: .infinity)
       }
     }
   }
@@ -1825,26 +1859,31 @@ private struct LegendsWidgetView: View {
       Text(rank(entry.data.globalRank)).monospacedDigit()
     }
     .lineLimit(1)
+    .accessibilityLabel("\(labels.globalRank) \(rank(entry.data.globalRank))")
   }
 
-  private func netValue(compact: Bool) -> some View {
-    Text(signed(entry.data.netTrophies))
-      .font(.system(size: compact ? 20 : 32, weight: .bold, design: .rounded).monospacedDigit())
-      .foregroundStyle(changeColor(entry.data.netTrophies))
-      .lineLimit(1).minimumScaleFactor(0.85)
-      .fixedSize(horizontal: true, vertical: false)
+  private func trophyValue(compact: Bool) -> some View {
+    // The header is the current total. Daily/weekly gains belong below their
+    // respective attack and defense counters, never in place of the total.
+    Text(entry.data.trophies.map { $0.formatted() } ?? "—")
+      .font(.system(size: compact ? 24 : 32, weight: .bold, design: .rounded).monospacedDigit())
+      .foregroundStyle(.secondary)
+      .lineLimit(1).minimumScaleFactor(compact ? 0.65 : 0.85)
+      .allowsTightening(true)
+      // Keep the whole number readable; small cards now reserve a centered row.
+      .fixedSize(horizontal: !compact, vertical: false)
   }
 
   private func dailyMetrics(compact: Bool) -> some View {
     HStack(spacing: 8) {
       compactCountMetric(artworkURL: entry.data.artwork?.attackIconUrl,
         bundledAsset: "Icon_HV_Sword",
-        value: dailyCount(entry.data.attacksUsed), label: labels.attacks, symbol: "arrow.up.right",
-        total: compact ? nil : signed(entry.data.attackTrophies))
+        value: battleCount(entry.data.attacksUsed, limit: entry.data.attacksLimit), label: labels.attacks, symbol: "arrow.up.right",
+        total: counterChange(entry.data.attackTrophies, defense: false), totalColor: changeColor(entry.data.attackTrophies))
       compactCountMetric(artworkURL: entry.data.artwork?.defenseIconUrl,
         bundledAsset: "Icon_HV_Shield_Arrow",
-        value: dailyCount(entry.data.defensesTaken), label: labels.defenses, symbol: "shield.fill",
-        total: compact ? nil : signed(entry.data.defenseTrophies))
+        value: battleCount(entry.data.defensesTaken, limit: entry.data.defensesLimit), label: labels.defenses, symbol: "shield.fill",
+        total: counterChange(entry.data.defenseTrophies, defense: true), totalColor: changeColor(entry.data.defenseTrophies))
     }
   }
 
@@ -1854,14 +1893,26 @@ private struct LegendsWidgetView: View {
     VStack(alignment: .leading, spacing: 3) {
       if stale {
         staleLabel
-      } else if let latest = latestBattle {
+      } else {
         Text(String(localized: "legends_widget_recent", table: "LegendsWidget") + ":")
-          .font(.system(size: 10, weight: .medium)).foregroundStyle(.secondary)
-        battleRow(latest.battle, attack: latest.attack, compact: compact)
+          .font(.system(size: 10, weight: .medium)).foregroundStyle(.primary)
+        if let attack = entry.data.latestAttack {
+          battleRow(attack, attack: true, compact: true)
+        }
+        if let defense = entry.data.latestDefense {
+          battleRow(defense, attack: false, compact: true)
+        }
+        if entry.data.latestAttack == nil && entry.data.latestDefense == nil {
+          Text(String(localized: entry.data.attacksUsed == 0 && entry.data.defensesTaken == 0
+            ? "legends_widget_no_activity" : "legends_widget_history_unavailable", table: "LegendsWidget"))
+            .font(.system(size: 10, weight: .medium))
+            .foregroundStyle(.primary)
+            .lineLimit(3)
+        }
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
-    .frame(height: compact ? 42 : 58, alignment: .center)
+    .frame(height: compact ? 42 : 74, alignment: .center)
     .padding(compact ? 6 : 8)
     .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
   }
@@ -1895,12 +1946,10 @@ private struct LegendsWidgetView: View {
         .font(.headline)
         .lineLimit(1)
         .minimumScaleFactor(0.75)
-      if let clan = entry.data.clan, clan.name != nil || clan.badgeUrl != nil {
-        clanIdentity(clan, compact: true)
-      }
+      secondaryIdentity(compact: true)
       Text(labels.noData)
         .font(.caption)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
         .multilineTextAlignment(.center)
         .lineLimit(2)
     }
@@ -1916,12 +1965,13 @@ private struct LegendsWidgetView: View {
           .font(.system(size: compact ? 13 : 18, weight: .bold))
           .lineLimit(1)
           .minimumScaleFactor(0.8)
-        if let clan = entry.data.clan, clan.name != nil || clan.badgeUrl != nil {
-          clanIdentity(clan, compact: compact)
-        }
+        secondaryIdentity(compact: compact)
       }
       .frame(maxWidth: .infinity, alignment: .leading)
-      netValue(compact: compact)
+      HStack(spacing: 4) {
+        gameArtwork(entry.data.artwork?.trophyIconUrl, size: compact ? 17 : 22, fallback: "🏆")
+        trophyValue(compact: compact)
+      }
     }
   }
 
@@ -1946,6 +1996,27 @@ private struct LegendsWidgetView: View {
     .accessibilityLabel("Town Hall \(entry.data.townHallLevel)")
   }
 
+  @ViewBuilder
+  private func secondaryIdentity(compact: Bool) -> some View {
+    if entry.data.mode == "ranked" {
+      // Older cached payloads have no league yet. Omit the row until refresh;
+      // showing the clan here would mislabel the requested Ranked context.
+      if let league = entry.data.league {
+        HStack(spacing: 3) {
+          gameArtwork(league.iconUrl, size: 14, fallback: "")
+          Text(league.name)
+            .font(.system(size: compact ? 10 : 11, weight: .medium))
+            .foregroundStyle(.primary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+      }
+    } else if let clan = entry.data.clan, clan.name != nil || clan.badgeUrl != nil {
+      clanIdentity(clan, compact: compact)
+    }
+  }
+
   private func clanIdentity(_ clan: LegendsWidgetClan, compact: Bool) -> some View {
     HStack(spacing: 3) {
       if let url = clan.badgeUrl,
@@ -1962,7 +2033,7 @@ private struct LegendsWidgetView: View {
       if let name = clan.name, !name.isEmpty {
         Text(name)
           .font(.system(size: compact ? 10 : 11, weight: .medium))
-          .foregroundStyle(.secondary)
+          .foregroundStyle(.primary)
           .lineLimit(1)
           .minimumScaleFactor(0.8)
       }
@@ -1970,7 +2041,7 @@ private struct LegendsWidgetView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
-  private func compactCountMetric(artworkURL: String?, bundledAsset: String, value: String, label: String, symbol: String, total: String? = nil) -> some View {
+  private func compactCountMetric(artworkURL: String?, bundledAsset: String, value: String, label: String, symbol: String, total: String? = nil, totalColor: Color = .secondary) -> some View {
     VStack(spacing: 3) {
       HStack(spacing: 4) {
         gameArtwork(artworkURL, size: 18, fallback: "", symbol: symbol, bundledAsset: bundledAsset)
@@ -1978,11 +2049,14 @@ private struct LegendsWidgetView: View {
           .font(.system(size: 15, weight: .bold, design: .rounded))
           .monospacedDigit()
           .lineLimit(1)
+          .minimumScaleFactor(0.65)
+          .allowsTightening(true)
+          .layoutPriority(1)
       }
       if let total {
         Text(total)
           .font(.system(size: 11, weight: .medium).monospacedDigit())
-          .foregroundStyle(.secondary)
+          .foregroundStyle(totalColor)
           .lineLimit(1)
       }
     }
@@ -1998,7 +2072,7 @@ private struct LegendsWidgetView: View {
         gameArtwork(artworkURL, size: 15, fallback: String(label.prefix(1)))
         Text(value).font(.callout.weight(.bold)).monospacedDigit().lineLimit(1)
       }
-      Text(label).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+      Text(label).font(.caption).foregroundStyle(.primary).lineLimit(1)
     }
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(label)
@@ -2031,7 +2105,7 @@ private struct LegendsWidgetView: View {
         if let time = battle.battleTime {
           Text(relativeTime(time))
             .font(.system(size: compact ? 10 : 11, weight: .medium))
-            .foregroundStyle(.secondary)
+            .foregroundStyle(.primary)
             .lineLimit(1)
             .minimumScaleFactor(0.85)
         }
@@ -2048,6 +2122,7 @@ private struct LegendsWidgetView: View {
   }
 
   private var dayLabel: String {
+    if let period = entry.data.periodLabel, !period.isEmpty { return period }
     if let index = entry.data.legendDayIndex, index > 0 {
       if let formatted = labels.dayFormatted, !formatted.isEmpty {
         return formatted
@@ -2060,7 +2135,11 @@ private struct LegendsWidgetView: View {
     formatter.timeZone = TimeZone(secondsFromGMT: 0)
     formatter.dateFormat = "yyyy-MM-dd"
     guard let date = formatter.date(from: day) else { return day }
-    return date.formatted(.dateTime.month(.abbreviated).day())
+    // legendDay is a calendar label, not an instant. Local-time formatting of
+    // midnight UTC turns Oct 22 into Oct 21 west of UTC, despite fresh data.
+    formatter.locale = .current
+    formatter.setLocalizedDateFormatFromTemplate("MMMd")
+    return formatter.string(from: date)
   }
 
   private func gameArtwork(_ url: String?, size: CGFloat, fallback: String, symbol: String? = nil, bundledAsset: String? = nil) -> some View {
@@ -2074,11 +2153,11 @@ private struct LegendsWidgetView: View {
         Image(uiImage: image).resizable().scaledToFit()
       } else if let symbol {
         Image(systemName: symbol)
-          .resizable().scaledToFit().foregroundStyle(.secondary)
+          .resizable().scaledToFit().foregroundStyle(.primary)
       } else {
         Text(fallback)
           .font(.system(size: max(12, size * 0.62), weight: .bold, design: .rounded))
-          .foregroundStyle(.secondary)
+          .foregroundStyle(.primary)
       }
     }
     .frame(width: size, height: size)
@@ -2110,7 +2189,7 @@ private struct LegendsWidgetView: View {
       }
     }
     .font(.system(size: 10, weight: .medium))
-    .foregroundStyle(.secondary)
+    .foregroundStyle(.primary)
     .lineLimit(1)
   }
 
@@ -2125,17 +2204,28 @@ private struct LegendsWidgetView: View {
     else { components = DateComponents(minute: -Int(elapsed / 60)) }
     return formatter.localizedString(from: components)
   }
-  private func dailyCount(_ value: Int?) -> String { value.map { "\($0)/8" } ?? "—" }
+  private func battleCount(_ value: Int?, limit: Int?) -> String {
+    guard let value else { return "—" }
+    let effectiveLimit = limit ?? (entry.data.mode == "ranked" ? nil : 8)
+    return effectiveLimit.map { "\(value)/\($0)" } ?? "\(value)/—"
+  }
   private func rank(_ value: Int?) -> String { value.map { "#\($0.formatted())" } ?? "—" }
+  private func counterChange(_ value: Int?, defense: Bool) -> String {
+    guard let value else { return "—" }
+    // Explicit signs identify the two subtotals even before the first battle.
+    // Ranked defenses can earn points: preserve their real sign, including +0.
+    if value == 0 { return defense && entry.data.mode != "ranked" ? "−0" : "+0" }
+    return signed(value)
+  }
   private func signed(_ value: Int?) -> String {
     guard let value else { return "—" }
     return value > 0 ? "+\(value.formatted())" : value.formatted()
   }
   private func changeColor(_ value: Int?) -> Color {
-    guard let value else { return .secondary }
-    if value > 0 { return .green }
+    guard let value else { return .primary }
+    if value > 0 { return widgetPositiveColor }
     if value < 0 { return .red }
-    return .secondary
+    return .primary
   }
 }
 
@@ -2367,6 +2457,7 @@ private struct UpgradeWidgetData: Codable {
   let hallImageUrl: String
   let updatedAt: Date
   let hasStaleData: Bool?
+  let completion: Double?
   let boosts: [UpgradeWidgetBoost]
   let helpers: [UpgradeWidgetHelper]
   let labels: UpgradeWidgetLabels?
@@ -2383,6 +2474,7 @@ private struct UpgradeWidgetData: Codable {
     hallImageUrl: "https://assets.clashk.ing/buildings/home-village/town_hall/level_18.webp",
     updatedAt: Date(),
     hasStaleData: false,
+    completion: 0.72,
     boosts: [UpgradeWidgetBoost(kind: "builderPotion", label: "Builder Potion", imageUrl: "https://assets.clashk.ing/magic_items/builder_potion.webp", expiresAt: Date().addingTimeInterval(1800))],
     helpers: [UpgradeWidgetHelper(name: "Builder Apprentice", imageUrl: "https://assets.clashk.ing/helpers/builder's_apprentice.webp", status: "Helping Archer Tower", statusUntil: Date().addingTimeInterval(1200))],
     labels: .fallback,
@@ -2417,6 +2509,7 @@ private struct UpgradeWidgetData: Codable {
     hallImageUrl: "",
     updatedAt: Date(),
     hasStaleData: false,
+    completion: nil,
     boosts: [],
     helpers: [],
     labels: .fallback,
@@ -2622,7 +2715,7 @@ private struct UpgradeWidgetView: View {
         largeBody
       }
     }
-    .containerBackground(for: .widget) { Color(.systemBackground) }
+    .widgetBackground
     .widgetURL(widgetDestination(tag: entry.selectedAccountTag, upgrade: true))
   }
 
@@ -2702,7 +2795,7 @@ private struct UpgradeWidgetView: View {
     VStack(alignment: .leading, spacing: 3) {
       Text(choice.title)
         .font(.system(size: 8, weight: .bold))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
       taskRow(choice.task)
     }
     .padding(6)
@@ -2718,20 +2811,35 @@ private struct UpgradeWidgetView: View {
         .lineLimit(1)
         .minimumScaleFactor(0.75)
       Spacer(minLength: 4)
-      Text(entry.data.tag)
-        .font(.caption2.weight(.semibold))
-        .foregroundStyle(.secondary)
+      completionRing
     }
   }
 
   private var staleChip: some View {
     Text(labels.staleData ?? "Update needed")
       .font(.system(size: 8.5, weight: .bold))
-      .foregroundStyle(.orange)
+      .foregroundStyle(.primary)
       .lineLimit(1)
       .padding(.horizontal, 8)
       .padding(.vertical, 3)
       .background(.orange.opacity(0.16), in: Capsule())
+  }
+
+  private var completionRing: some View {
+    let progress = min(1, max(0, entry.data.completion ?? 0))
+    let percent = Int((progress * 100).rounded())
+    return ZStack {
+      Circle().stroke(.primary.opacity(0.16), lineWidth: 4)
+      Circle().trim(from: 0, to: progress)
+        .stroke(widgetPositiveColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+        .rotationEffect(.degrees(-90))
+      Text(entry.data.completion == nil ? "—" : "\(percent)%")
+        .font(.system(size: 10, weight: .bold)).monospacedDigit()
+        .foregroundStyle(.primary)
+    }
+    .frame(width: 38, height: 38)
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel(entry.data.completion == nil ? "—" : "\(percent)%")
   }
 
   private func boostPill(_ boost: UpgradeWidgetBoost) -> some View {
@@ -2747,7 +2855,7 @@ private struct UpgradeWidgetView: View {
               if let expiresAt = boost.expiresAt {
                 Text(humanDuration(until: expiresAt, now: context.date))
                   .monospacedDigit()
-                  .foregroundStyle(.secondary)
+                  .foregroundStyle(.primary)
               }
             }
             Spacer(minLength: 0)
@@ -2773,7 +2881,7 @@ private struct UpgradeWidgetView: View {
           if let expiresAt = boost.expiresAt, expiresAt > context.date {
             Text(humanDuration(until: expiresAt, now: context.date))
               .monospacedDigit()
-              .foregroundStyle(.secondary)
+              .foregroundStyle(.primary)
           }
         }
         .font(.system(size: 7.5))
@@ -2794,7 +2902,7 @@ private struct UpgradeWidgetView: View {
         VStack(alignment: .leading, spacing: 0) {
           Text(helper.shortName ?? shortHelperName(helper.name)).fontWeight(.semibold)
           Text(helper.statusUntil != nil && helper.statusUntil! <= context.date ? labels.ready : helper.status)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(.primary)
         }
         .font(.system(size: 7.5))
         .lineLimit(1)
@@ -2835,7 +2943,7 @@ private struct UpgradeWidgetView: View {
         }
       }
       .font(.system(size: 8))
-      .foregroundStyle(.secondary)
+      .foregroundStyle(.primary)
       .lineLimit(1)
       .minimumScaleFactor(0.75)
       Spacer(minLength: 0)
@@ -2849,13 +2957,13 @@ private struct UpgradeWidgetView: View {
     VStack(alignment: .leading, spacing: 3) {
       Text(title)
         .font(.system(size: 8, weight: .bold))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
       if let task = section.tasks.first {
         taskRow(task)
       } else {
         Text(emptySectionLabel(section))
           .font(.system(size: 8, weight: .medium))
-          .foregroundStyle(.tertiary)
+          .foregroundStyle(.primary)
       }
     }
     .padding(6)
@@ -2867,14 +2975,14 @@ private struct UpgradeWidgetView: View {
     VStack(alignment: .leading, spacing: 3) {
       Text(labels.research)
         .font(.system(size: 8, weight: .bold))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
       let builderTask = entry.showBuilderBase ? entry.data.builderBase.tasks.first : nil
       if let task = entry.data.laboratory.tasks.first ?? entry.data.pets.tasks.first ?? builderTask {
         taskRow(task)
       } else {
         Text(labels.noActiveResearch)
           .font(.system(size: 8, weight: .medium))
-          .foregroundStyle(.tertiary)
+          .foregroundStyle(.primary)
       }
     }
     .padding(6)
@@ -2950,7 +3058,7 @@ private struct UpgradeWidgetView: View {
       HStack(spacing: 5) {
         Text(title)
           .font(.system(size: 9, weight: .bold))
-          .foregroundStyle(.secondary)
+          .foregroundStyle(.primary)
           .lineLimit(1)
         Spacer(minLength: 3)
         let status = sectionStatus(section)
@@ -2974,7 +3082,7 @@ private struct UpgradeWidgetView: View {
       } else {
         Text(emptySectionLabel(section))
           .font(.system(size: 9, weight: .medium))
-          .foregroundStyle(.tertiary)
+          .foregroundStyle(.primary)
           .frame(height: 21)
       }
     }
@@ -2998,7 +3106,7 @@ private struct UpgradeWidgetView: View {
               .monospacedDigit()
           }
           .font(.system(size: 8, weight: .medium))
-          .foregroundStyle(.secondary)
+          .foregroundStyle(.primary)
           .lineLimit(1)
           .minimumScaleFactor(0.75)
         }
@@ -3060,7 +3168,7 @@ private struct UpgradeWidgetView: View {
         Image(uiImage: image).resizable().scaledToFit()
       } else {
         Image(systemName: "person.crop.circle.badge.clock")
-          .foregroundStyle(.secondary)
+          .foregroundStyle(.primary)
       }
     }
     .frame(width: 18, height: 18)
