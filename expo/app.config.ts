@@ -204,6 +204,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             ccacheEnabled: true,
           },
           android: {
+            // CMake 3.31 includes the newer Ninja needed for long Windows paths.
+            cmakeVersion: '3.31.6',
             minSdkVersion: 24,
             // Let the installed SDK choose matching compile/target/Kotlin
             // versions; pinning SDK 57's toolchain breaks SDK 58 native modules.
