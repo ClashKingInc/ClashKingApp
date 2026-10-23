@@ -141,7 +141,13 @@ jobs:
           ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew :app:bundleRelease :app:assembleRelease --no-daemon
+        # Expo prebuild restores its 512 MiB Metaspace default. Override the
+        # build JVM here so release compilation keeps the larger budget even
+        # after a clean prebuild; bound worker concurrency for native builds.
+        run: >-
+          ./gradlew :app:bundleRelease :app:assembleRelease
+          --no-daemon --max-workers=4
+          -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=2g -Dfile.encoding=UTF-8"
 
       - name: Verify release outputs
         working-directory: .
