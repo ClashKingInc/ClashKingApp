@@ -5,6 +5,7 @@ node_modules/
 
 # Expo
 .expo/
+.release/
 dist/
 web-build/
 /public/landing/app-link.js

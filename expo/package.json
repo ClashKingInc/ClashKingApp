@@ -1,7 +1,7 @@
 {
   "name": "clashking-expo",
   "main": "expo-router/entry",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "dependencies": {
     "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.28.tgz",
     "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.28-home-restored.tgz",
@@ -104,6 +104,7 @@
     "licenses:generate": "node ./scripts/generate-license-inventory.mjs",
     "licenses:check": "node ./scripts/generate-license-inventory.mjs --check",
     "e2e:structure": "node ./scripts/check-expo-e2e-structure.mjs",
+    "release:check": "node --test scripts/release.test.mjs",
     "typecheck": "tsrs --noEmit",
     "typecheck:typescript": "tsc --noEmit"
   },
