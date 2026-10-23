@@ -9,6 +9,7 @@ import { UpgradeTrackerFormatError, UpgradeTrackerRepository } from '../data';
 import type { UpgradeTrackerRootProps } from './upgrade-tracker-contracts';
 import { UpgradeTrackerScreen, type UpgradeTrackerAccountOption } from './upgrade-tracker-screen';
 import { buildUpgradeTrackerAccountOptions } from './upgrade-tracker-logic';
+import { reconcileTrackerEquipmentOwnership } from '../data/upgrade-tracker-parser';
 
 export function UpgradeTrackerRoot({
   initialTag,
@@ -47,6 +48,20 @@ export function UpgradeTrackerRoot({
   const [goldPassPercent, setGoldPassPercent] = useState(0);
   const [preferences, setPreferences] = useState(new UpgradePlanPreferences());
   const generation = useRef(0);
+  const widgetContext = useRef({
+    linked,
+    players,
+    verifiedTags,
+    selectedTag: runtime.accounts.selectedTag,
+  });
+  useEffect(() => {
+    widgetContext.current = {
+      linked,
+      players,
+      verifiedTags,
+      selectedTag: runtime.accounts.selectedTag,
+    };
+  }, [linked, players, verifiedTags, runtime.accounts.selectedTag]);
 
   useEffect(() => {
     repository.configureRemote({
@@ -90,6 +105,7 @@ export function UpgradeTrackerRoot({
 
   const scheduleWidgetSync = useCallback(
     (normalized: string) => {
+      const { linked, players, verifiedTags, selectedTag } = widgetContext.current;
       void repository
         .loadSavedSnapshots(verifiedTags)
         .then((snapshots) =>
@@ -107,7 +123,7 @@ export function UpgradeTrackerRoot({
                 playerForTag(players, account.playerTag)?.builderHallLevel ??
                 linkedAccountHallLevel(account, 'builderHallLevel'),
             })),
-            selectedTag: runtime.accounts.selectedTag ?? normalized,
+            selectedTag: selectedTag ?? normalized,
           }),
         )
         .catch(() => {
@@ -115,7 +131,9 @@ export function UpgradeTrackerRoot({
           // loading. Native widget failures must not replace valid screen data.
         });
     },
-    [linked, players, repository, runtime.accounts.selectedTag, verifiedTags, widgetSync],
+    // Profile service notifications must not recreate `load` and restart the
+    // account initialization effect while a snapshot is already loading.
+    [repository, widgetSync],
   );
 
   const load = useCallback(
@@ -140,15 +158,21 @@ export function UpgradeTrackerRoot({
         setPreferences(new UpgradePlanPreferences());
       }
       try {
+        let cachedPreferences: Awaited<ReturnType<typeof resolvePreferences>> | null = null;
         if (cached) {
-          const cachedPreferences = await resolvePreferences(cached);
+          cachedPreferences = await resolvePreferences(cached);
           if (current !== generation.current) return;
           setGoldPassPercent(cachedPreferences.goldPassPercent);
           setPreferences(cachedPreferences.preferences);
         }
         const next = await repository.load(normalized, force);
         if (current !== generation.current) return;
-        const nextPreferences = next ? await resolvePreferences(next) : null;
+        const nextPreferences =
+          next === cached && cachedPreferences
+            ? cachedPreferences
+            : next
+              ? await resolvePreferences(next)
+              : null;
         if (current !== generation.current) return;
         setSnapshot(next);
         if (nextPreferences) {
@@ -217,10 +241,22 @@ export function UpgradeTrackerRoot({
     [goldPassPercent, repository, selectedTag],
   );
 
+  const ownershipProfile = snapshot ? playerForTag(players, snapshot.tag) : undefined;
+  const ownershipKey = ownershipProfile?.hasEquipmentOwnershipData
+    ? `${ownershipProfile.tag}:${ownershipProfile.equipments.map((item) => `${item.name}:${item.isUnlocked}`).join('|')}`
+    : '';
+  // Service getters can return a new array on an unrelated loading update.
+  // Only actual ownership changes should rebuild the derived snapshot and plan.
+  const displaySnapshot = useMemo(
+    () => (snapshot ? reconcileTrackerEquipmentOwnership(snapshot, ownershipProfile) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [snapshot, ownershipKey],
+  );
+
   return (
     <>
       <UpgradeTrackerScreen
-        snapshot={snapshot}
+        snapshot={displaySnapshot}
         accounts={accounts}
         selectedTag={selectedTag}
         loading={loading}
@@ -249,7 +285,6 @@ export function UpgradeTrackerRoot({
             ) {
               setVerificationRequired(true);
               const message = t('upgradeTrackerUnverifiedAccount');
-              if (!onOpenAccounts) setMessage(message);
               throw new UpgradeTrackerFormatError(message, 'unverified-account');
             }
             if (
@@ -257,15 +292,15 @@ export function UpgradeTrackerRoot({
               cause.reason === 'invalid-account-json'
             ) {
               const message = t('upgradeTrackerSnapshotUnreadable');
-              setMessage(message);
               throw new UpgradeTrackerFormatError(message);
             }
-            setMessage(
+            // The importer owns failures while it is open. A second snackbar
+            // obscures the same error and can outlive the modal.
+            throw new Error(
               t('upgradeTrackerImportFailed', {
                 error: cause instanceof Error ? cause.message : String(cause),
               }),
             );
-            throw cause;
           }
         }}
         onGoldPassChange={(value) => {
@@ -295,17 +330,12 @@ export function UpgradeTrackerRoot({
   );
 }
 
-function playerForTag(players: readonly { tag: string }[], tag: string) {
+function playerForTag<T extends { tag: string }>(
+  players: readonly T[],
+  tag: string,
+): T | undefined {
   const normalized = UpgradeTrackerRepository.normalizeTag(tag);
-  return players.find(
-    (player) => UpgradeTrackerRepository.normalizeTag(player.tag) === normalized,
-  ) as
-    | ((typeof players)[number] & {
-        name?: string;
-        townHallLevel?: number;
-        builderHallLevel?: number;
-      })
-    | undefined;
+  return players.find((player) => UpgradeTrackerRepository.normalizeTag(player.tag) === normalized);
 }
 function linkedAccountName(account: { raw: Readonly<Record<string, unknown>> }) {
   const value = account.raw.name;

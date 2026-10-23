@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import {
   FlatList,
@@ -272,7 +273,7 @@ export function RankingsScreen({
         <RankingDateSheet provider={provider} onClose={() => setDateOpen(false)} />
       ) : null}
       <PageLoading visible={opening} kind="profile" />
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         visible={rulesOpen}
         transparent
         animationType="fade"
@@ -510,7 +511,7 @@ function RankingDateSheet({
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.overlay} onPress={onClose}>
         <Pressable
           style={[styles.sheet, { backgroundColor: theme.surface }]}

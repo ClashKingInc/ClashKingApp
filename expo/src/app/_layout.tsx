@@ -26,7 +26,7 @@ import { hideWebLaunchScreen } from '../core/app/launch-screen-runtime';
 import { useCKThemeMode } from '../ui';
 import { ExpoDeepLinkRuntime } from '../core/deep-links/expo-deep-link-runtime';
 import { queueAppLink } from '../core/deep-links/link-inbox';
-import { nativeDetailScreenOptions } from '../core/app/native-secondary-navigation';
+import { nativeSecondaryScreenOptions } from '../core/app/native-secondary-navigation';
 import { WebDocumentTitle } from '../core/app/web-document-title';
 import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
 import { TutorialOverlay } from '../features/tutorials/tutorial-ui';
@@ -102,7 +102,14 @@ export default function RootLayout() {
               <AppStatusBar />
               <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
                 <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
-                <Stack.Screen name="detail" options={nativeDetailScreenOptions} />
+                <Stack.Screen
+                  name="detail"
+                  options={({ route }) =>
+                    nativeSecondaryScreenOptions(
+                      (route.params as { layer?: string } | undefined)?.layer,
+                    )
+                  }
+                />
               </Stack>
               <TutorialOverlay />
             </NavigationTheme>

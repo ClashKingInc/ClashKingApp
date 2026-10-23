@@ -78,12 +78,16 @@ async function fetchLeaderboardData(
 export function ClanLeaderboardHistoryTab({
   model,
   actions,
+  availableTypes = Object.values(ClanLeaderboardType),
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
+  availableTypes?: readonly ClanLeaderboardTypeValue[];
 }) {
   const { t, locale } = useI18n();
-  const [type, setType] = useState<ClanLeaderboardTypeValue>(ClanLeaderboardType.homeVillage);
+  const [type, setType] = useState<ClanLeaderboardTypeValue>(
+    availableTypes[0] ?? ClanLeaderboardType.homeVillage,
+  );
   const [seasonIndex, setSeasonIndex] = useState(0);
   const [data, setData] = useState<LeaderboardData>();
   const [error, setError] = useState(false);
@@ -141,30 +145,36 @@ export function ClanLeaderboardHistoryTab({
   return (
     <View style={styles.tab}>
       <View style={styles.pills}>
-        <FilterPill
-          label={t('gameBaseHome')}
-          selected={type === ClanLeaderboardType.homeVillage}
-          onPress={() => {
-            setSeasonIndex(0);
-            setType(ClanLeaderboardType.homeVillage);
-          }}
-        />
-        <FilterPill
-          label={t('gameBaseBuilder')}
-          selected={type === ClanLeaderboardType.builderBase}
-          onPress={() => {
-            setSeasonIndex(0);
-            setType(ClanLeaderboardType.builderBase);
-          }}
-        />
-        <FilterPill
-          label={t('gameClanCapital')}
-          selected={type === ClanLeaderboardType.clanCapital}
-          onPress={() => {
-            setSeasonIndex(0);
-            setType(ClanLeaderboardType.clanCapital);
-          }}
-        />
+        {availableTypes.includes(ClanLeaderboardType.homeVillage) ? (
+          <FilterPill
+            label={t('gameBaseHome')}
+            selected={type === ClanLeaderboardType.homeVillage}
+            onPress={() => {
+              setSeasonIndex(0);
+              setType(ClanLeaderboardType.homeVillage);
+            }}
+          />
+        ) : null}
+        {availableTypes.includes(ClanLeaderboardType.builderBase) ? (
+          <FilterPill
+            label={t('gameBaseBuilder')}
+            selected={type === ClanLeaderboardType.builderBase}
+            onPress={() => {
+              setSeasonIndex(0);
+              setType(ClanLeaderboardType.builderBase);
+            }}
+          />
+        ) : null}
+        {availableTypes.includes(ClanLeaderboardType.clanCapital) ? (
+          <FilterPill
+            label={t('gameClanCapital')}
+            selected={type === ClanLeaderboardType.clanCapital}
+            onPress={() => {
+              setSeasonIndex(0);
+              setType(ClanLeaderboardType.clanCapital);
+            }}
+          />
+        ) : null}
       </View>
       {error ? (
         <ClanTabEmpty

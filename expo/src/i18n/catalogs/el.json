@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Καλύτερα τρόπαια",
   "clanLoadFailed": "Αποτυχία φόρτωσης clan.",
   "gameItemLevels": "Επίπεδα",
+  "gameItemLevelCount": "{count, plural, one {# επίπεδο} other {# επίπεδα}}",
   "resourceDarkElixir": "Σκοτεινό ελιξίριο",
   "resourceBuilderElixir": "Ελιξίριο Κατασκευαστή",
   "resourceBuilderGold": "Χρυσός Κατασκευαστή",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Επιλέξτε λογαριασμό",
   "upgradeTrackerSwitchAccount": "Εναλλαγή λογαριασμού, {account}",
   "upgradeTrackerShare": "Κοινή χρήση ιχνηλάτη",
+  "trackerPosterCopied": "Η εικόνα αντιγράφηκε",
+  "trackerPosterCopy": "Αντιγραφή εικόνας",
+  "trackerPosterShareAll": "Κοινοποίηση και των 3",
   "upgradeTrackerPasteJson": "Επικόλληση λογαριασμού JSON",
   "upgradeTrackerImportTitle": "Εισαγωγή δεδομένων λογαριασμού",
   "upgradeTrackerImportDescription": "Επικολλήστε τον ακατέργαστο λογαριασμό JSON. Παραμένει σε αυτήν τη συσκευή.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Βάρος {value}%",
   "upgradeTrackerPlanUntilMaxed": "Μέχρι το μέγιστο",
   "upgradeTrackerPlanUntilPercent": "Έως {value}%",
-  "upgradeTrackerPlanRuleNote": "Τα αριθμημένα επίπεδα τρέχουν πρώτα. Οι κοινόχρηστες σειρές διατηρούν τον ίδιο αριθμό βαθμίδων και το μείγμα τους κανονικοποιείται από τα σχετικά βάρη, έτσι το 50 + 25 γίνεται 67% / 33%. Ένας στόχος κάνει μια απόδοση κατηγορίας αφού φτάσει σε αυτό το ποσοστό, ενώ παραμένει κατάλληλος αργότερα.",
+  "upgradeTrackerPlanRuleNote": "Σύρε τις κατηγορίες για να ορίσεις τη σειρά αναβάθμισης. Οι ρυθμίσεις σειράς επιτρέπουν κοινή προτεραιότητα ή παύση σε στόχο ολοκλήρωσης.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max πριν προχωρήσετε",
   "upgradeTrackerPlanGoalRushNextHall": "Φτάστε γρήγορα στην επόμενη αίθουσα",
   "upgradeTrackerPlanGoalCatchUp": "Προλάβετε τα βιαστικά επίπεδα",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Υποθέτει τέλειες εναπομείνασες επιθέσεις. Είναι μαθηματικό όριο, όχι πρόβλεψη.",
   "warScoutTitle": "Ανάλυση σύνθεσης",
   "warScoutOpponent": "Πρόσφατοι πόλεμοι αντιπάλου",
-  "warScoutScope": "Τρέχουσα σύνθεση · ίδιοι κανόνες · έως 10 προηγούμενοι πόλεμοι"
+  "warScoutScope": "Τρέχουσα σύνθεση · ίδιοι κανόνες · έως 10 προηγούμενοι πόλεμοι",
+  "upgradeTrackerCapturedWork": "Από την τελευταία ενημέρωσή σου"
 }

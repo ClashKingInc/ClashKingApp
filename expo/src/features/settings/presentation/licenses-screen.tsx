@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useState } from 'react';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -72,7 +73,7 @@ export function LicensesScreen({
           </View>
         ))}
       </Surface>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         animationType="slide"
         onRequestClose={() => setSelected(undefined)}
         presentationStyle="pageSheet"

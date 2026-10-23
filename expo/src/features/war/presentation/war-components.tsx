@@ -1,4 +1,7 @@
+import { HeroHeaderScrim } from "../../../ui/hero-header-scrim";
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { HeaderIconButton } from '../../../ui/header';
+import { AccountBarScrollView } from '../../../ui/account-bar-scroll-view';
 import { CARD_REORDER_HOLD_MS } from '../../../ui/drag-jiggle';
 import { useEffect, useState, type ReactNode } from 'react';
 import {
@@ -10,7 +13,6 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { ArrowLeft, ChevronRight, Eye, Shield, Sword, X } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -27,7 +29,6 @@ import {
   colorWithAlpha,
   tintIcon,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
 import type { WarAttack, WarInfo, WarMember } from '../models';
 import type { WarRosterItem } from './contracts';
@@ -114,7 +115,7 @@ export function WarSummaryCard({
             })
           : t('warOngoing');
   const accountStatus = statuses.length ? (
-    <ScrollView
+    <AccountBarScrollView
       horizontal
       testID="war-summary-account-status"
       showsHorizontalScrollIndicator={statuses.length > 1}
@@ -157,7 +158,7 @@ export function WarSummaryCard({
             </View>
           );
         })}
-    </ScrollView>
+    </AccountBarScrollView>
   ) : allSpectators ? (
     <View
       style={[
@@ -278,7 +279,6 @@ export function WarHero({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   return (
     <View style={styles.hero}>
       <MobileWebImage
@@ -288,16 +288,7 @@ export function WarHero({
         contentPosition="bottom"
       />
       <View style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Defs>
-          <LinearGradient id="war-header-scrim" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.36 : 0.2} />
-            <Stop offset="0.55" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.64 : 0.4} />
-            <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.92 : 0.65} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#war-header-scrim)" />
-      </Svg>
+<HeroHeaderScrim variant="war" />
       <View style={styles.heroActions}>
         <HeaderIconButton
           icon={<ArrowLeft color="#fff" size={24} />}
@@ -352,7 +343,7 @@ export function AttackDetailsModal({
     [war.clan, war.opponent].find((clan) => clan?.members.some((member) => member.tag === tag)) ??
     null;
   return (
-    <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent visible={visible} animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.modalOverlay} onPress={onClose}>
         <Pressable
           onPress={(event) => event.stopPropagation()}

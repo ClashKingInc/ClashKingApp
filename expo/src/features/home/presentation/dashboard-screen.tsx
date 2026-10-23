@@ -9,7 +9,12 @@ import {
   type NativeTouchEvent,
   type GestureResponderEvent,
 } from 'react-native';
-import DraggableFlatList, { type RenderItemParams } from 'react-native-draggable-flatlist';
+import type { FlatList } from 'react-native-gesture-handler';
+import { runOnJS, useFrameCallback, useSharedValue } from 'react-native-reanimated';
+import DraggableFlatList, {
+  type DraggableFlatListProps,
+  type RenderItemParams,
+} from 'react-native-draggable-flatlist';
 import { EyeOff, UserCircle } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -35,6 +40,9 @@ import { tutorials } from '../../tutorials/tutorial-service';
 import { TutorialTarget } from '../../tutorials/tutorial-ui';
 
 export const MOBILE_HOME_OVERLAY_CLEARANCE = 96;
+type HomeDragValues = Parameters<
+  NonNullable<DraggableFlatListProps<HomeCardId>['onAnimValInit']>
+>[0];
 export function homeBottomPadding(desktop: boolean, bottomInset: number): number {
   return desktop ? 32 : bottomInset + MOBILE_HOME_OVERLAY_CLEARANCE;
 }
@@ -56,12 +64,91 @@ export function DashboardScreen({
   const [cardAccounts, setCardAccounts] = useState<Partial<Record<HomeCardId, string>>>({});
   const [refreshing, setRefreshing] = useState(false);
   const refreshingRef = useRef(false);
+  const dragValues = useRef<HomeDragValues | null>(null);
+  const lastScrollOffset = useRef(0);
+  const list = useRef<FlatList<HomeCardId>>(null);
+  const [animationValues, setAnimationValues] = useState<HomeDragValues | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [dragLayoutRevision, setDragLayoutRevision] = useState(0);
+  const holdPageY = useSharedValue(0);
+  const listPageY = useSharedValue(0);
+  const lastAutoScroll = useSharedValue(0);
+  const scrollToOffset = useCallback((offset: number) => {
+    list.current?.scrollToOffset({ offset, animated: false });
+  }, []);
+  const autoScroll = useFrameCallback((frame) => {
+    // Home widgets can be taller than the viewport. Their bounds must not
+    // trigger automatic scrolling while a finger is stationary in the middle.
+    // Wait for deliberate movement, then use the finger's viewport position.
+    if (
+      !animationValues ||
+      !animationValues.isTouchActiveNative.value ||
+      animationValues.activeIndexAnim.value < 0 ||
+      Math.abs(animationValues.touchTranslate.value) < 8
+    ) {
+      lastAutoScroll.value = 0;
+      return;
+    }
+    const y = holdPageY.value + animationValues.touchTranslate.value - listPageY.value;
+    const height = animationValues.containerSize.value;
+    const edge = 48;
+    const direction =
+      y < edge
+        ? -Math.min(1, (edge - y) / edge)
+        : y > height - edge
+          ? Math.min(1, (y - height + edge) / edge)
+          : 0;
+    if (!direction || height <= 0) {
+      lastAutoScroll.value = 0;
+      return;
+    }
+    if (!lastAutoScroll.value) {
+      lastAutoScroll.value = frame.timestamp;
+      return;
+    }
+    const elapsed = frame.timestamp - lastAutoScroll.value;
+    if (elapsed < 32) return;
+    lastAutoScroll.value = frame.timestamp;
+    const offset = animationValues.scrollOffset.value;
+    const maxOffset = Math.max(0, animationValues.scrollViewSize.value - height);
+    const next = Math.max(
+      0,
+      Math.min(maxOffset, offset + (direction * 360 * Math.min(elapsed, 64)) / 1000),
+    );
+    if (Math.abs(next - offset) > 0.5) runOnJS(scrollToOffset)(next);
+  }, false);
+  useEffect(() => {
+    autoScroll.setActive(dragging);
+    return () => autoScroll.setActive(false);
+  }, [autoScroll, dragging]);
+  const holdEpoch = useRef(0);
+  const cancelPendingHolds = () => {
+    holdEpoch.current += 1;
+  };
   const desktop = isDesktopHome(platform, windowWidth);
   const horizontal = centeredContentPadding(
     contentWidth,
     desktop ? homeContentWidth(windowWidth) : 840,
   );
   const cards = visibleHomeCards(model);
+  // The native list holds translated cell positions until another onLayout.
+  // On iPad, a reorder or rotation can leave equal-size cells without that
+  // callback, retaining a card-sized hole. Start fresh native measurements for
+  // each committed order/width, while retaining page state and scroll position.
+  // Keep the established phone and web list lifecycle unchanged.
+  const listLayoutKey = Platform.OS === 'ios' && Platform.isPad
+    ? `ipad:${Math.round(contentWidth)}:${cards.join(',')}:${dragLayoutRevision}`
+    : 'home';
+  useEffect(() => {
+    if (Platform.OS !== 'ios' || !Platform.isPad) return;
+    holdEpoch.current += 1;
+    const offset = lastScrollOffset.current;
+    const frame = requestAnimationFrame(() => {
+      setDragging(false);
+      list.current?.scrollToOffset({ offset, animated: false });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [listLayoutKey]);
   const refresh = useCallback(async () => {
     if (refreshingRef.current) return;
     refreshingRef.current = true;
@@ -188,10 +275,29 @@ export function DashboardScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <DraggableFlatList
+        key={listLayoutKey}
+        ref={list}
         testID="home-scroll-view"
         data={cards}
         keyExtractor={(card) => card}
         activationDistance={8}
+        // Tall or partially visible widgets must not jump to fit the viewport
+        // when picked up. Preserve their grabbed position, even beyond its edge.
+        dragItemOverflow
+        autoscrollSpeed={0}
+        onAnimValInit={(values) => {
+          dragValues.current = values;
+          setAnimationValues(values);
+        }}
+        onContainerLayout={({ containerRef }) => {
+          containerRef.current?.measureInWindow((_x, y) => {
+            listPageY.value = y;
+          });
+        }}
+        onDragBegin={() => setDragging(true)}
+        onRelease={() => setDragging(false)}
+        onTouchEnd={cancelPendingHolds}
+        onTouchCancel={cancelPendingHolds}
         alwaysBounceVertical
         contentContainerStyle={{
           paddingHorizontal: horizontal,
@@ -201,10 +307,20 @@ export function DashboardScreen({
         ListEmptyComponent={emptyBody}
         ItemSeparatorComponent={HomeCardSeparator}
         refreshControl={refreshControl}
-        onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-        onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+        onScrollOffsetChange={(offset) => {
+          lastScrollOffset.current = offset;
+          pullRefresh.onScrollOffsetChange(offset);
+        }}
+        onScrollBeginDrag={() => {
+          cancelPendingHolds();
+          pullRefresh.onScrollBeginDrag();
+        }}
         onScrollEndDrag={pullRefresh.onScrollEndDrag}
         onDragEnd={({ data, from, to }) => {
+          setDragging(false);
+          // Also discard held transforms after a drop back in the original slot.
+          if (Platform.OS === 'ios' && Platform.isPad)
+            setDragLayoutRevision((revision) => revision + 1);
           if (from === to) return;
           // The shared list owns offsets and completes its native settling before
           // this callback. Do not keep a second JS/native transform map for Home.
@@ -212,7 +328,23 @@ export function DashboardScreen({
             requestAnimationFrame(() => tutorials.event('card-reordered'));
         }}
         renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
-          <HomeCardHold onHold={cards.length > 1 ? drag : undefined} active={isActive}>
+          <HomeCardHold
+            onHold={
+              cards.length > 1
+                ? (position) => {
+                    holdPageY.value = position.y;
+                    lastAutoScroll.value = 0;
+                    if (dragValues.current) dragValues.current.touchTranslate.value = 0;
+                    drag();
+                  }
+                : undefined
+            }
+            active={isActive}
+            getEpoch={() => holdEpoch.current}
+            canStart={() =>
+              Platform.OS === 'web' || dragValues.current?.isTouchActiveNative.value === true
+            }
+          >
             {renderCard(item, getIndex() ?? 0, isActive)}
           </HomeCardHold>
         )}
@@ -242,47 +374,70 @@ function HomeCardSeparator() {
 function HomeCardHold({
   onHold,
   active,
+  getEpoch,
+  canStart,
   children,
 }: {
-  onHold?: () => void;
+  onHold?: (position: { x: number; y: number }) => void;
   active: boolean;
+  getEpoch: () => number;
+  canStart: () => boolean;
   children: React.ReactNode;
 }) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const origin = useRef<{ x: number; y: number } | null>(null);
+  const touchDown = useRef(false);
+  const sequence = useRef(0);
   const callback = useRef(onHold);
   useEffect(() => {
     callback.current = onHold;
   }, [onHold]);
   const cancel = useCallback(() => {
+    sequence.current += 1;
+    touchDown.current = false;
     if (timer.current) clearTimeout(timer.current);
     timer.current = null;
     origin.current = null;
   }, []);
   useEffect(() => cancel, [cancel]);
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', state => {
+    if (active) cancel();
+  }, [active, cancel]);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
       if (state !== 'active') cancel();
     });
     return () => subscription.remove();
   }, [cancel]);
-  const start = (event: GestureResponderEvent) => {
-    cancel();
-    if (active || !onHold || event.nativeEvent.touches.length !== 1) return;
-    origin.current = { x: event.nativeEvent.pageX, y: event.nativeEvent.pageY };
-    timer.current = setTimeout(() => {
-      timer.current = null;
-      callback.current?.();
-    }, CARD_REORDER_HOLD_MS);
-  };
-  const startPointer = (x: number, y: number) => {
+  const startHold = (x: number, y: number) => {
     cancel();
     if (active || !onHold) return;
+    touchDown.current = true;
     origin.current = { x, y };
+    const touchSequence = sequence.current;
+    const epoch = getEpoch();
     timer.current = setTimeout(() => {
       timer.current = null;
-      callback.current?.();
+      // A delayed JS callback must never arm the list after a tap has ended.
+      // Check both this exact touch and the list's native touch state. Movement,
+      // release, scrolling, cancellation and a new touch invalidate the hold.
+      if (
+        touchSequence !== sequence.current ||
+        !touchDown.current ||
+        !origin.current ||
+        epoch !== getEpoch() ||
+        !canStart()
+      )
+        return;
+      callback.current?.(origin.current);
     }, CARD_REORDER_HOLD_MS);
+  };
+  const start = (event: GestureResponderEvent) => {
+    if (event.nativeEvent.touches.length !== 1) {
+      cancel();
+      return;
+    }
+    startHold(event.nativeEvent.pageX, event.nativeEvent.pageY);
   };
   const move = ({ nativeEvent }: { nativeEvent: NativeTouchEvent }) => {
     if (
@@ -302,7 +457,7 @@ function HomeCardHold({
       onTouchCancel={cancel}
       onPointerDown={
         Platform.OS === 'web'
-          ? (event) => startPointer(event.nativeEvent.pageX, event.nativeEvent.pageY)
+          ? (event) => startHold(event.nativeEvent.pageX, event.nativeEvent.pageY)
           : undefined
       }
       onPointerMove={

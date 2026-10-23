@@ -1,3 +1,4 @@
+import type { ScrollViewInstance } from 'react-native';
 import { memo, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Animated, Linking, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ChevronDown, ChevronUp, Clock3, ListFilter } from 'lucide-react-native';
@@ -65,7 +66,7 @@ function WarDetailContent({
   const [settledPage, setSettledPage] = useState<WarPage>('players');
   const { reduceMotion } = useCKAccessibility();
   const pager = useRef<PagerViewHandle>(null);
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const scrollY = useRef(0),
     headerHeight = useRef(0),
     tabStart = useRef(0);
@@ -642,6 +643,16 @@ function WarEventCard({ event, attacking }: { event: WarReplayEvent; attacking: 
   const { t } = useI18n();
   const own = attacking ? event.attacker : event.defender;
   const opponent = attacking ? event.defender : event.attacker;
+  // The disclosure represents the opposing player: defender for our attacks,
+  // attacker for our defenses. Keep its artwork and tooltip identity together.
+  const opponentIcon = (
+    <MobileWebImage
+      imageUrl={opponent?.townhallLevel
+        ? ImageAssets.townHall(opponent.townhallLevel)
+        : ImageAssets.defaultImage}
+      style={{ width: 18, height: 18 }}
+    />
+  );
   return (
     <Surface
       testID={'war-event-' + event.attack.order}
@@ -706,30 +717,24 @@ function WarEventCard({ event, attacking }: { event: WarReplayEvent; attacking: 
               {formatPercent(event.attack.destructionPercentage)}
             </CKText>
           </View>
-          {event.attack.duration != null ? (
-            <CKText role="metadata" muted>
-              {formatDuration(event.attack.duration)}
-            </CKText>
-          ) : null}
+          <InfoTooltip
+            label={t(attacking ? 'warAttacksDetailsDefender' : 'warAttacksDetailsAttacker')}
+            triggerStyle={{ width: 'auto', height: 28 }}
+            triggerContent={
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                {opponentIcon}
+                <CKText role="metadata" muted>
+                  {event.attack.duration != null ? formatDuration(event.attack.duration) : '—'}
+                </CKText>
+              </View>
+            }
+            message={
+              t(attacking ? 'warAttacksDetailsDefender' : 'warAttacksDetailsAttacker') +
+              ': ' +
+              (opponent?.name ?? (attacking ? event.attack.defenderTag : event.attack.attackerTag))
+            }
+          />
         </View>
-        <InfoTooltip
-          label={t(attacking ? 'warAttacksDetailsDefender' : 'warAttacksDetailsAttacker')}
-          icon={
-            <MobileWebImage
-              imageUrl={
-                opponent?.townhallLevel
-                  ? ImageAssets.townHall(opponent.townhallLevel)
-                  : ImageAssets.defaultImage
-              }
-              style={{ width: 32, height: 32 }}
-            />
-          }
-          message={
-            t(attacking ? 'warAttacksDetailsDefender' : 'warAttacksDetailsAttacker') +
-            ': ' +
-            (opponent?.name ?? (attacking ? event.attack.defenderTag : event.attack.attackerTag))
-          }
-        />
       </View>
     </Surface>
   );

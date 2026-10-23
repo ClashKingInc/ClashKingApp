@@ -1,4 +1,5 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { upgradeSnapshotNeedsRefresh } from '../../upgrade-tracker/models/snapshot-freshness';
 import { rankedLeagueDisplayColor } from '../../../ui/league-colors';
 import { formatCompactNumber, type I18nValue } from '../../../i18n';
 import type { Player } from '../../player/models';
@@ -309,8 +310,6 @@ function upgradeAccount(snapshot: UpgradeTrackerSnapshot, now: Date): HomeUpgrad
     village: UpgradeVillage.home,
     category: UpgradeCategory.walls,
   });
-  const tracked = snapshot.itemsFor({ village: UpgradeVillage.home });
-  const started = tracked.filter((item) => !item.recurrentHelper && (item.activeSeconds ?? 0) > 0);
   return {
     tag: snapshot.tag,
     name: snapshot.name,
@@ -318,7 +317,7 @@ function upgradeAccount(snapshot: UpgradeTrackerSnapshot, now: Date): HomeUpgrad
     imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
     completion: Math.max(0, Math.min(1, snapshot.overallSummary(UpgradeVillage.home).completion)),
     capturedAt: snapshot.capturedAt,
-    needsUpdate: started.length > 0 && started.every((item) => !active(item)),
+    needsUpdate: upgradeSnapshotNeedsRefresh(snapshot, now),
     hasActionableQueueWork:
       (activeBuilders < totalBuilders && idleWork(builderItems)) ||
       (!labActive && idleWork(labItems)) ||

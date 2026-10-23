@@ -1,3 +1,10 @@
+import { type ViewInstance,
+  Animated,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+  type LayoutRectangle,
+} from 'react-native';
 import {
   createContext,
   useCallback,
@@ -8,13 +15,6 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import {
-  Animated,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-  type LayoutRectangle,
-} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CKText } from '../../../ui/text';
 import { MobileWebImage } from '../../../ui/mobile-web-image';
@@ -55,7 +55,7 @@ const IdentityContext = createContext<{
 /** Measure the real destination, and hide only that identity while its stand-in owns it. */
 export function ClanSpringTarget({ part, children }: { part: IdentityPart; children: ReactNode }) {
   const context = useContext(IdentityContext);
-  const ref = useRef<View>(null);
+  const ref = useRef<ViewInstance>(null);
   const register = context?.register;
   return (
     <View

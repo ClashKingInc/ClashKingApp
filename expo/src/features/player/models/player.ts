@@ -74,6 +74,7 @@ export class Player {
   bbTroops: PlayerBuilderBaseTroop[];
   spells: PlayerSpell[];
   equipments: PlayerEquipment[];
+  readonly hasEquipmentOwnershipData: boolean;
   siegeMachines: PlayerSiegeMachine[];
   pets: PlayerPet[];
   legendsBySeason: PlayerLegendStats | null = null;
@@ -123,6 +124,7 @@ export class Player {
     bbTroops: PlayerBuilderBaseTroop[];
     spells: PlayerSpell[];
     equipments: PlayerEquipment[];
+    hasEquipmentOwnershipData?: boolean;
     siegeMachines: PlayerSiegeMachine[];
     pets: PlayerPet[];
   }) {
@@ -162,6 +164,7 @@ export class Player {
     this.bbTroops = input.bbTroops;
     this.spells = input.spells;
     this.equipments = input.equipments;
+    this.hasEquipmentOwnershipData = input.hasEquipmentOwnershipData ?? false;
     this.siegeMachines = input.siegeMachines;
     this.pets = input.pets;
   }
@@ -380,6 +383,9 @@ export class Player {
           gameData: record(gameDataState.gearsData.gears),
           factory: PlayerEquipment.fromRaw,
         }),
+        // A complete generated catalog is not proof that ownership was loaded.
+        // Thin account placeholders omit this field and must not lock every item.
+        hasEquipmentOwnershipData: Array.isArray(json.heroEquipment) && json.heroEquipment.length > 0,
       });
     } catch {
       return Player.empty();

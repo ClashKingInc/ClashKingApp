@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Mejores trofeos",
   "clanLoadFailed": "No se pudo cargar el clan.",
   "gameItemLevels": "Niveles",
+  "gameItemLevelCount": "{count, plural, one {# nivel} other {# niveles}}",
   "resourceDarkElixir": "Elixir oscuro",
   "resourceBuilderElixir": "Elixir del constructor",
   "resourceBuilderGold": "Oro del constructor",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Elegir cuenta",
   "upgradeTrackerSwitchAccount": "Cambiar a {account}",
   "upgradeTrackerShare": "Compartir seguimiento",
+  "trackerPosterCopied": "Imagen copiada",
+  "trackerPosterCopy": "Copiar imagen",
+  "trackerPosterShareAll": "Compartir las 3",
   "upgradeTrackerPasteJson": "Pegar JSON de la cuenta",
   "upgradeTrackerImportTitle": "Importar datos de la cuenta",
   "upgradeTrackerImportDescription": "Pega el JSON sin procesar de la cuenta. Permanecerá en este dispositivo.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Peso {value}%",
   "upgradeTrackerPlanUntilMaxed": "Hasta el máximo",
   "upgradeTrackerPlanUntilPercent": "Hasta {value}%",
-  "upgradeTrackerPlanRuleNote": "Los niveles numerados se ejecutan primero. Las filas compartidas mantienen el mismo número de nivel y su combinación se normaliza a partir de los pesos relativos, por lo que 50 + 25 se convierte en 67 %/33 %. Un objetivo genera rendimiento en una categoría después de alcanzar ese porcentaje, mientras que sigue siendo elegible más adelante.",
+  "upgradeTrackerPlanRuleNote": "Arrastra las categorías para elegir qué mejorar primero. Los ajustes de fila permiten compartir prioridad o detenerse en un objetivo de progreso.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max antes de avanzar",
   "upgradeTrackerPlanGoalRushNextHall": "Llega rápidamente al siguiente pasillo.",
   "upgradeTrackerPlanGoalCatchUp": "Ponte al día con los niveles apresurados",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Supone ataques restantes perfectos. Es un límite matemático, no una predicción.",
   "warScoutTitle": "Análisis de la alineación",
   "warScoutOpponent": "Guerras recientes del rival",
-  "warScoutScope": "Alineación actual · mismas reglas · hasta 10 guerras anteriores"
+  "warScoutScope": "Alineación actual · mismas reglas · hasta 10 guerras anteriores",
+  "upgradeTrackerCapturedWork": "De tu última actualización"
 }

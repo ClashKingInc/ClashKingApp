@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "최고 트로피",
   "clanLoadFailed": "클랜을 불러오지 못했습니다.",
   "gameItemLevels": "레벨",
+  "gameItemLevelCount": "{count} 레벨",
   "resourceDarkElixir": "다크 엘릭서",
   "resourceBuilderElixir": "장인 엘릭서",
   "resourceBuilderGold": "장인 골드",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "계정 선택",
   "upgradeTrackerSwitchAccount": "계정 전환: {account}",
   "upgradeTrackerShare": "추적기 공유",
+  "trackerPosterCopied": "이미지가 복사되었습니다",
+  "trackerPosterCopy": "이미지 복사",
+  "trackerPosterShareAll": "3개 모두 공유",
   "upgradeTrackerPasteJson": "계정 JSON 붙여넣기",
   "upgradeTrackerImportTitle": "계정 데이터 가져오기",
   "upgradeTrackerImportDescription": "가공하지 않은 계정 JSON을 붙여넣으세요. 데이터는 이 기기에만 저장됩니다.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "체중 {value}%",
   "upgradeTrackerPlanUntilMaxed": "최대치까지",
   "upgradeTrackerPlanUntilPercent": "{value}%까지",
-  "upgradeTrackerPlanRuleNote": "번호가 매겨진 계층이 먼저 실행됩니다. 공유 행은 동일한 계층 번호를 유지하고 해당 혼합은 상대 가중치로 정규화되므로 50 + 25는 67% / 33%가 됩니다. 목표는 해당 비율에 도달한 후 카테고리 수익을 창출하고 나중에 자격을 유지합니다.",
+  "upgradeTrackerPlanRuleNote": "카테고리를 드래그해 업그레이드 순서를 정하세요. 행 설정에서 우선순위를 공유하거나 목표 진행률에서 멈출 수 있습니다.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "진행 전 최대",
   "upgradeTrackerPlanGoalRushNextHall": "빨리 다음 홀에 도착하세요",
   "upgradeTrackerPlanGoalCatchUp": "급하게 레벨을 따라잡으세요",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "남은 공격이 모두 완벽하다고 가정한 수학적 한계이며 예측이 아닙니다.",
   "warScoutTitle": "라인업 분석",
   "warScoutOpponent": "상대의 최근 전쟁",
-  "warScoutScope": "현재 라인업 · 동일한 규칙 · 이전 최대 10개 전쟁"
+  "warScoutScope": "현재 라인업 · 동일한 규칙 · 이전 최대 10개 전쟁",
+  "upgradeTrackerCapturedWork": "마지막 업데이트 기준"
 }

@@ -1,3 +1,13 @@
+import { type ViewInstance, type ScrollViewInstance,
+  AccessibilityInfo,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+  type ScrollViewProps,
+  type ViewProps,
+} from 'react-native';
 import {
   createContext,
   forwardRef,
@@ -9,16 +19,6 @@ import {
   useSyncExternalStore,
   type PropsWithChildren,
 } from 'react';
-import {
-  AccessibilityInfo,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-  type ScrollViewProps,
-  type ViewProps,
-} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowUp, Hand, MoveHorizontal } from 'lucide-react-native';
 import { useI18n, materialContinueLabel } from '../../i18n';
@@ -31,7 +31,7 @@ import {
 } from './tutorial-service';
 import { tutorialCopy } from './tutorial-copy';
 
-const RevealContext = createContext<(node: View) => void>(() => {});
+const RevealContext = createContext<(node: ViewInstance) => void>(() => {});
 const villagerPoses = {
   neutral: require('../../../assets/clashking/tutorials/villager.webp'),
   happy: require('../../../assets/clashking/tutorials/villager-happy.webp'),
@@ -46,12 +46,12 @@ const targetLabels: Partial<Record<TutorialTargetId, string>> = {
   'notifications-reminders': 'Set reminder times',
 };
 /** Scroll real content into view; the guide never simulates a tap or changes a setting. */
-export const TutorialScrollView = forwardRef<ScrollView, ScrollViewProps>(
+export const TutorialScrollView = forwardRef<ScrollViewInstance, ScrollViewProps>(
   function TutorialScrollView({ children, onScroll, ...props }, forwardedRef) {
-    const ref = useRef<ScrollView>(null),
+    const ref = useRef<ScrollViewInstance>(null),
       offset = useRef(0);
     useImperativeHandle(forwardedRef, () => ref.current!);
-    const reveal = useCallback((node: View) => {
+    const reveal = useCallback((node: ViewInstance) => {
       node.measureInWindow((_x, y) => {
         if (y > 260 || y < 70)
           ref.current?.scrollTo({ y: Math.max(0, offset.current + y - 160), animated: false });
@@ -82,7 +82,7 @@ export function TutorialTarget({
   children,
   ...props
 }: PropsWithChildren<ViewProps & { id: TutorialTargetId; offer?: TutorialId; enabled?: boolean }>) {
-  const ref = useRef<View>(null),
+  const ref = useRef<ViewInstance>(null),
     reveal = useContext(RevealContext);
   const state = useSyncExternalStore(
     tutorials.subscribe,

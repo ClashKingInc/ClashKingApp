@@ -1,5 +1,6 @@
+import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { InteractionManager, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { History, Repeat2 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -60,7 +61,7 @@ export function PlayerDetailScreen({
   const [visibleBattles, setVisibleBattles] = useState(20);
   const [lootGridScrubbing, setLootGridScrubbing] = useState(false);
   const [battlelogShareVisible, setBattlelogShareVisible] = useState(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   const scrollOffsets = useRef(new Map<PlayerDetailTabKey, number>());
   const current = tabs.find((item) => item.key === tab) ?? tabs[0]!;
   const labelFor = (item: (typeof tabs)[number]) =>
@@ -73,7 +74,7 @@ export function PlayerDetailScreen({
 
   useEffect(() => {
     let cancelled = false;
-    const task = InteractionManager.runAfterInteractions(() => {
+    const task = requestIdleCallback(() => {
       void (async () => {
         for (const key of PLAYER_DETAIL_PRELOAD_TABS) {
           if (cancelled) return;
@@ -87,7 +88,7 @@ export function PlayerDetailScreen({
     });
     return () => {
       cancelled = true;
-      task.cancel();
+      cancelIdleCallback(task);
     };
   }, [loadTab]);
 
@@ -317,7 +318,9 @@ const styles = StyleSheet.create({
   },
   navigationContent: { width: '100%', maxWidth: 520, alignSelf: 'center' },
   tabImage: { width: 24, height: 24, resizeMode: 'contain' },
-  tabBody: { minHeight: 360 },
-  historyContent: { padding: 16, maxWidth: 1120, width: '100%', alignSelf: 'center' },
+  // Bound data rows independently of the full-bleed hero and sticky navigation.
+  // Tablet rotation must not turn a compact phone card into a screen-wide strip.
+  tabBody: { minHeight: 360, width: '100%', maxWidth: 760, alignSelf: 'center' },
+  historyContent: { padding: 16, width: '100%', alignSelf: 'center' },
   hiddenTab: { display: 'none' },
 });

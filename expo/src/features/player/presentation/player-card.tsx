@@ -89,83 +89,85 @@ export function PlayerDataCard({
   };
   return (
     <Surface radius={ckRadius.card} style={styles.card}>
-      <Pressable
-        accessibilityRole="button"
-        delayLongPress={300}
-        onLongPress={
-          onLongPress
-            ? () => {
-                longPressActivated.current = true;
-                onLongPress();
-              }
-            : undefined
-        }
-        onPress={() => {
-          if (longPressActivated.current) {
-            longPressActivated.current = false;
-            return;
+      <View>
+        <Pressable
+          accessibilityRole="button"
+          delayLongPress={300}
+          onLongPress={
+            onLongPress
+              ? () => {
+                  longPressActivated.current = true;
+                  onLongPress();
+                }
+              : undefined
           }
-          actions.openPlayer(player);
-        }}
-        style={[styles.main, !bookmarked && styles.mainWithOptions]}
-        testID={dragTestID}
-      >
-        <View style={styles.artColumn}>
-          <View>
-            <MobileWebImage imageUrl={player.townHallPic} style={styles.townHall} />
-            <Pressable
-              accessibilityRole={verified === false ? 'button' : undefined}
-              accessibilityLabel={verified === false ? t('homeVerifyAccountAction') : undefined}
-              disabled={verified !== false}
-              onPress={onVerify}
-              style={[
-                styles.status,
-                {
-                  backgroundColor: theme.card,
-                  borderColor: colorWithAlpha(theme.outlineVariant, 0.4),
-                },
-              ]}
-            >
-              {bookmarked ? (
-                <Bookmark size={14} color={theme.onSurfaceVariant} />
-              ) : verified ? (
-                <ShieldCheck size={14} color={statColors.win} />
-              ) : (
-                <TriangleAlert size={14} color={statColors.capitalProjected} />
-              )}
-            </Pressable>
+          onPress={() => {
+            if (longPressActivated.current) {
+              longPressActivated.current = false;
+              return;
+            }
+            actions.openPlayer(player);
+          }}
+          style={[styles.main, !bookmarked && styles.mainWithOptions]}
+          testID={dragTestID}
+        >
+          <View style={styles.artColumn}>
+            <View>
+              <MobileWebImage imageUrl={player.townHallPic} style={styles.townHall} />
+              <Pressable
+                accessibilityRole={verified === false ? 'button' : undefined}
+                accessibilityLabel={verified === false ? t('homeVerifyAccountAction') : undefined}
+                disabled={verified !== false}
+                onPress={onVerify}
+                style={[
+                  styles.status,
+                  {
+                    backgroundColor: theme.card,
+                    borderColor: colorWithAlpha(theme.outlineVariant, 0.4),
+                  },
+                ]}
+              >
+                {bookmarked ? (
+                  <Bookmark size={14} color={theme.onSurfaceVariant} />
+                ) : verified ? (
+                  <ShieldCheck size={14} color={statColors.win} />
+                ) : (
+                  <TriangleAlert size={14} color={statColors.capitalProjected} />
+                )}
+              </Pressable>
+            </View>
+            {!bookmarked ? (
+              <CKText muted role="labelSmall" style={styles.activity}>
+                {wrapActivityCaption(formatPlayerActivity(player.lastOnline, t))}
+              </CKText>
+            ) : null}
           </View>
-          {!bookmarked ? (
-            <CKText muted role="labelSmall" style={styles.activity}>
-              {wrapActivityCaption(formatPlayerActivity(player.lastOnline, t))}
+          <View style={styles.copy}>
+            <View style={styles.titleRow}>
+              <CKText role="titleMedium" numberOfLines={1} style={styles.title}>
+                {player.name}
+              </CKText>
+            </View>
+            <CKText muted role="labelLarge">
+              {player.tag}
             </CKText>
-          ) : null}
-        </View>
-        <View style={styles.copy}>
-          <View style={styles.titleRow}>
-            <CKText role="titleMedium" numberOfLines={1} style={styles.title}>
-              {player.name}
-            </CKText>
+            <View style={styles.chips}>
+              <InfoChip imageUrl={clan.imageUrl} label={clan.label || t('clanNone')} />
+              <InfoChip
+                imageUrl={player.leagueUrl || ImageAssets.getLeagueImage(player.league)}
+                label={`${player.trophies}`}
+              />
+            </View>
+          </View>
+          <View pointerEvents="none" style={styles.openArrow}>
             <ChevronRight color={theme.onSurfaceVariant} />
           </View>
-          <CKText muted role="labelLarge">
-            {player.tag}
-          </CKText>
-          <View style={styles.chips}>
-            <InfoChip imageUrl={clan.imageUrl} label={clan.label || t('clanNone')} />
-            <InfoChip
-              imageUrl={player.leagueUrl || ImageAssets.getLeagueImage(player.league)}
-              label={`${player.trophies}`}
-            />
-          </View>
-        </View>
-      </Pressable>
-      {!bookmarked ? (
-        <>
+        </Pressable>
+        {!bookmarked ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Options"
-            hitSlop={{ top: 2, bottom: 2 }}
+            hitSlop={{ top: 8, bottom: 8 }}
             accessibilityState={{ expanded }}
             onPress={() => setExpanded(!expanded)}
             style={[profileOptionStyles.optionsToggle, styles.optionsToggle]}
@@ -175,71 +177,69 @@ export function PlayerDataCard({
               Options
             </CKText>
           </Pressable>
-          {expanded ? (
-            <View style={profileOptionStyles.options}>
-              {verified === false ? (
-                <PlayerOptionAction
-                  title={t('homeVerifyAccountAction')}
-                  subtitle={t('playerOptionVerifyAccountBody')}
-                  onPress={onVerify}
-                />
-              ) : null}
-              {link ? (
-                <PlayerOptionSwitch
-                  icon={<House color={theme.onSurfaceVariant} />}
-                  title={t('playerOptionShowOnHomeTitle')}
-                  subtitle={
-                    verified
-                      ? `${t('todoTitle')} · ${t('playerBattlelogFarming')}`
-                      : t('playerOptionShowOnHomeVerifyFirst')
-                  }
-                  value={homeIncluded}
-                  enabled={verified === true}
-                  onChange={(value) => void actions.setCardOption(player.tag, 'home', value)}
-                />
-              ) : null}
-              <PlayerOptionSwitch
-                icon={<CheckSquare color={theme.onSurfaceVariant} />}
-                title={t('playerOptionShowTodoPageTitle')}
-                subtitle={
-                  verified
-                    ? t('playerOptionShowTodoPageSubtitle')
-                    : t('playerOptionShowTodoPageVerifyFirst')
-                }
-                value={options.showInTodoPage}
-                enabled={verified === true}
-                onChange={(value) => void actions.setCardOption(player.tag, 'todo', value)}
-              />
-              <PlayerOptionSwitch
-                icon={<Construction color={theme.onSurfaceVariant} />}
-                title={t('playerOptionShowUpgradeTrackerHomeTitle')}
-                subtitle={
-                  verified
-                    ? t('playerOptionShowUpgradeTrackerHomeSubtitle')
-                    : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
-                }
-                value={options.showUpgradeTrackerOnHome}
-                enabled={verified === true}
-                onChange={(value) => void actions.setCardOption(player.tag, 'upgrade', value)}
-              />
-              {link && hideAccountsEnabled ? (
-                <PlayerOptionSwitch
-                  icon={<EyeOff color={theme.onSurfaceVariant} />}
-                  title={t('playerHideAccountTitle')}
-                  subtitle={
-                    link.isVerified
-                      ? t('playerHideAccountExplanation')
-                      : t('playerHideAccountVerify')
-                  }
-                  value={link.hidden}
-                  enabled={link.isVerified && !visibilityUpdating}
-                  loading={visibilityUpdating}
-                  onChange={() => void updateHidden()}
-                />
-              ) : null}
-            </View>
+        ) : null}
+      </View>
+      {!bookmarked && expanded ? (
+        <View style={profileOptionStyles.options}>
+          {verified === false ? (
+            <PlayerOptionAction
+              title={t('homeVerifyAccountAction')}
+              subtitle={t('playerOptionVerifyAccountBody')}
+              onPress={onVerify}
+            />
           ) : null}
-        </>
+          {link ? (
+            <PlayerOptionSwitch
+              icon={<House color={theme.onSurfaceVariant} />}
+              title={t('playerOptionShowOnHomeTitle')}
+              subtitle={
+                verified
+                  ? `${t('todoTitle')} · ${t('playerBattlelogFarming')}`
+                  : t('playerOptionShowOnHomeVerifyFirst')
+              }
+              value={homeIncluded}
+              enabled={verified === true}
+              onChange={(value) => void actions.setCardOption(player.tag, 'home', value)}
+            />
+          ) : null}
+          <PlayerOptionSwitch
+            icon={<CheckSquare color={theme.onSurfaceVariant} />}
+            title={t('playerOptionShowTodoPageTitle')}
+            subtitle={
+              verified
+                ? t('playerOptionShowTodoPageSubtitle')
+                : t('playerOptionShowTodoPageVerifyFirst')
+            }
+            value={options.showInTodoPage}
+            enabled={verified === true}
+            onChange={(value) => void actions.setCardOption(player.tag, 'todo', value)}
+          />
+          <PlayerOptionSwitch
+            icon={<Construction color={theme.onSurfaceVariant} />}
+            title={t('playerOptionShowUpgradeTrackerHomeTitle')}
+            subtitle={
+              verified
+                ? t('playerOptionShowUpgradeTrackerHomeSubtitle')
+                : t('playerOptionShowUpgradeTrackerHomeVerifyFirst')
+            }
+            value={options.showUpgradeTrackerOnHome}
+            enabled={verified === true}
+            onChange={(value) => void actions.setCardOption(player.tag, 'upgrade', value)}
+          />
+          {link && hideAccountsEnabled ? (
+            <PlayerOptionSwitch
+              icon={<EyeOff color={theme.onSurfaceVariant} />}
+              title={t('playerHideAccountTitle')}
+              subtitle={
+                link.isVerified ? t('playerHideAccountExplanation') : t('playerHideAccountVerify')
+              }
+              value={link.hidden}
+              enabled={link.isVerified && !visibilityUpdating}
+              loading={visibilityUpdating}
+              onChange={() => void updateHidden()}
+            />
+          ) : null}
+        </View>
       ) : null}
     </Surface>
   );
@@ -296,7 +296,6 @@ export function BookmarkedPlayerCard({
             <CKText role="titleMedium" numberOfLines={1} style={styles.title}>
               {bookmark.name}
             </CKText>
-            <ChevronRight color={theme.onSurfaceVariant} />
           </View>
           <CKText muted role="labelLarge">
             {bookmark.tag}
@@ -313,6 +312,9 @@ export function BookmarkedPlayerCard({
               />
             ) : null}
           </View>
+        </View>
+        <View pointerEvents="none" style={styles.openArrow}>
+          <ChevronRight color={theme.onSurfaceVariant} />
         </View>
       </Pressable>
     </Surface>
@@ -356,10 +358,17 @@ function PlayerOptionAction({
 
 const styles = StyleSheet.create({
   card: { width: '100%', borderWidth: 0 },
-  optionsToggle: { justifyContent: 'flex-end' },
+  // Keep Options close to the identity row; the shared toggle's centered 40px
+  // row otherwise leaves a visible top gap. Hit slop retains a 44px target.
+  optionsToggle: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    minHeight: 28,
+    paddingTop: 2,
+  },
   optionsTitle: { fontWeight: '700' },
   main: { padding: 14, flexDirection: 'row', alignItems: 'flex-start' },
-  mainWithOptions: { paddingBottom: 2 },
+  mainWithOptions: { paddingBottom: 0 },
   artColumn: { width: 66, alignItems: 'center' },
   townHall: { width: 62, height: 62, resizeMode: 'contain' },
   status: {
@@ -371,7 +380,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
   },
   activity: { marginTop: 2, textAlign: 'center', fontSize: 10, lineHeight: 11 },
-  copy: { flex: 1, marginLeft: 12 },
+  copy: { flex: 1, marginLeft: 12, paddingRight: 24 },
+  // Center on the tappable player details only, excluding the separate Options row.
+  openArrow: { position: 'absolute', right: 14, top: '50%', transform: [{ translateY: -12 }] },
   titleRow: { flexDirection: 'row', alignItems: 'center' },
   title: { flex: 1, fontWeight: '800', fontSize: 17 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, marginTop: 10 },

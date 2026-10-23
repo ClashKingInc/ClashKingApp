@@ -1,3 +1,4 @@
+import type { ViewInstance } from 'react-native';
 import { useRef, type ReactNode } from 'react';
 import { CARD_REORDER_HOLD_MS } from '../../../ui/drag-jiggle';
 import { Pressable, StyleSheet, View, Platform, useWindowDimensions } from 'react-native';
@@ -35,9 +36,9 @@ export function ClanRosterCard({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const cardRef = useRef<View>(null);
-  const badgeRef = useRef<View>(null);
-  const nameRef = useRef<View>(null);
+  const cardRef = useRef<ViewInstance>(null);
+  const badgeRef = useRef<ViewInstance>(null);
+  const nameRef = useRef<ViewInstance>(null);
   const nameWidth = useRef(0);
   const generation = useRef(0);
   const measured = useRef<ClanSpringOrigin | undefined>(undefined);

@@ -1,3 +1,4 @@
+import type { ViewInstance, ScrollViewInstance } from 'react-native';
 import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as Linking from 'expo-linking';
@@ -78,7 +79,7 @@ export function CompetitiveRoot({
   });
   const current = useRef(navigation);
   const pendingBrowserBack = useRef<number | undefined>(undefined);
-  const host = useRef<View>(null);
+  const host = useRef<ViewInstance>(null);
   const updateNavigation = useCallback((next: typeof navigation) => {
     current.current = next;
     setNavigation(next);
@@ -420,7 +421,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
   const heroHeight = width < 600 ? 310 : 370;
   const { reduceMotion } = useCKAccessibility();
   const [scroll] = useState(() => new Animated.Value(0));
-  const rail = useRef<ScrollView>(null);
+  const rail = useRef<ScrollViewInstance>(null);
   const [active, setActive] = useState(0);
   const cardWidth = Math.min(width - 60, 330);
   const items = query.data?.items ?? [];

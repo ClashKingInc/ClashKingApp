@@ -25,9 +25,14 @@ export function AnnouncementWebView({
 }: AnnouncementWebViewProps) {
   const theme = useCKTheme();
   const { t } = useI18n();
-  const webView = useRef<WebView>(null);
+  const webView = useRef<WebView<object>>(null);
   const [progress, setProgress] = useState(0);
-  const isTrustedLocalStory = Boolean(fileUri && trustedStory && onStoryMessage);
+  const sourceKey = fileUri ?? url ?? html ?? '';
+  const [failedSource, setFailedSource] = useState<string | null>(null);
+  const loadFailed = failedSource === sourceKey;
+  const isTrustedLocalStory = Boolean(
+    fileUri?.startsWith('file:') && trustedStory && onStoryMessage,
+  );
   const source = useMemo(() => {
     if (fileUri) return { uri: fileUri };
     if (url) return { uri: url };
@@ -55,17 +60,23 @@ export function AnnouncementWebView({
     return (
       announcementNavigationDecision({
         requestedUrl: request.url,
-        initialUrl: url,
-        loadsLocalFile: Boolean(fileUri),
+        initialUrl: fileUri ?? url,
+        loadsLocalFile: isTrustedLocalStory,
       }) === 'navigate'
     );
   };
 
   return (
     <View style={styles.container}>
-      <WebView
+      <WebView<object>
         testID="announcement-webview"
         ref={webView}
+        // Android disables file reads by default. Only our prepared story gets
+        // local access; never grant a file page access to other files or origins.
+        allowFileAccess={isTrustedLocalStory}
+        allowFileAccessFromFileURLs={false}
+        allowUniversalAccessFromFileURLs={false}
+        allowingReadAccessToURL={isTrustedLocalStory ? (fileUri ?? undefined) : undefined}
         scalesPageToFit={isTrustedLocalStory ? false : undefined}
         setBuiltInZoomControls={!isTrustedLocalStory}
         setDisplayZoomControls={false}
@@ -86,6 +97,7 @@ export function AnnouncementWebView({
           onPageFinished?.(nativeEvent.url);
         }}
         onLoadProgress={({ nativeEvent }) => setProgress(nativeEvent.progress)}
+        onError={() => setFailedSource(sourceKey)}
         onMessage={
           isTrustedLocalStory ? ({ nativeEvent }) => onStoryMessage?.(nativeEvent.data) : undefined
         }
@@ -93,24 +105,24 @@ export function AnnouncementWebView({
         originWhitelist={['about:*', 'data:*', 'file:*', 'https://*', 'clashking-story://*']}
         setSupportMultipleWindows={false}
         source={source}
-        renderError={() => (
-          <View
-            style={[
-              styles.container,
-              { backgroundColor: theme.background, justifyContent: 'center' },
-            ]}
-          >
-            <ErrorState
-              title={t('generalError')}
-              body={t('generalTryAgain')}
-              actionLabel={t('generalRetry')}
-              onAction={() => webView.current?.reload()}
-            />
-          </View>
-        )}
-        style={[styles.webView, { backgroundColor: theme.background }]}
+        renderError={() => <View />}
+        style={[styles.webView, { backgroundColor: theme.background }, loadFailed && styles.hidden]}
       />
-      {showLoadingProgress && progress < 1 ? (
+      {loadFailed ? (
+        <View style={[styles.error, { backgroundColor: theme.background }]}>
+          <ErrorState
+            title={t('generalError')}
+            body={t('generalTryAgain')}
+            actionLabel={t('generalRetry')}
+            onAction={() => {
+                setFailedSource(null);
+              setProgress(0);
+              webView.current?.reload();
+            }}
+          />
+        </View>
+      ) : null}
+      {showLoadingProgress && !loadFailed && progress < 1 ? (
         <View style={[styles.progressTrack, { backgroundColor: theme.surfaceContainerHighest }]}>
           <View
             style={[
@@ -127,6 +139,8 @@ export function AnnouncementWebView({
 const styles = StyleSheet.create({
   container: { flex: 1 },
   webView: { flex: 1 },
+  hidden: { opacity: 0 },
+  error: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, justifyContent: 'center' },
   progressTrack: { position: 'absolute', left: 0, right: 0, top: 0, height: 3 },
   progress: { height: 3 },
 });

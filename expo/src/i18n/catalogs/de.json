@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Beste Trophäen",
   "clanLoadFailed": "Clan konnte nicht geladen werden.",
   "gameItemLevels": "Level",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Level}}",
   "resourceDarkElixir": "Dunkles Elixier",
   "resourceBuilderElixir": "Baumeister-Elixier",
   "resourceBuilderGold": "Baumeister-Gold",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Konto auswählen",
   "upgradeTrackerSwitchAccount": "Konto wechseln: {account}",
   "upgradeTrackerShare": "Planer teilen",
+  "trackerPosterCopied": "Bild kopiert",
+  "trackerPosterCopy": "Bild kopieren",
+  "trackerPosterShareAll": "Alle 3 teilen",
   "upgradeTrackerPasteJson": "Konto-JSON einfügen",
   "upgradeTrackerImportTitle": "Kontodaten importieren",
   "upgradeTrackerImportDescription": "Füge die unveränderte Konto-JSON ein. Sie bleibt auf diesem Gerät.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Gewicht {value}%",
   "upgradeTrackerPlanUntilMaxed": "Bis zum Maximum",
   "upgradeTrackerPlanUntilPercent": "Bis {value} %",
-  "upgradeTrackerPlanRuleNote": "Die nummerierten Ebenen laufen zuerst. Gemeinsame Zeilen behalten die gleiche Stufennummer und ihre Mischung wird anhand der relativen Gewichtungen normalisiert, sodass aus 50 + 25 67 % / 33 % werden. Ein Ziel erzielt eine Kategorieausbeute, nachdem es diesen Prozentsatz erreicht hat, während es später weiterhin förderfähig bleibt.",
+  "upgradeTrackerPlanRuleNote": "Ziehe Kategorien in die gewünschte Reihenfolge. In den Zeileneinstellungen können sie eine Priorität teilen oder bei einem Fortschrittsziel pausieren.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max bevor er weitergeht",
   "upgradeTrackerPlanGoalRushNextHall": "Erreiche schnell die nächste Halle",
   "upgradeTrackerPlanGoalCatchUp": "Erledige überstürzte Level",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Setzt perfekte verbleibende Angriffe voraus. Dies ist eine mathematische Grenze, keine Prognose.",
   "warScoutTitle": "Aufstellungsanalyse",
   "warScoutOpponent": "Letzte Kriege des Gegners",
-  "warScoutScope": "Aktuelle Aufstellung · gleiche Regeln · bis zu 10 vorherige Kriege"
+  "warScoutScope": "Aktuelle Aufstellung · gleiche Regeln · bis zu 10 vorherige Kriege",
+  "upgradeTrackerCapturedWork": "Aus deiner letzten Aktualisierung"
 }

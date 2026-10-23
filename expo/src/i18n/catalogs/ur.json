@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "بہترین ٹرافیاں",
   "clanLoadFailed": "کلین لوڈ کرنے میں ناکامی۔",
   "gameItemLevels": "لیولز",
+  "gameItemLevelCount": "{count, plural, one {# لیول} other {# لیولز}}",
   "resourceDarkElixir": "ڈارک ایلیکسیر",
   "resourceBuilderElixir": "بلڈر ایلیکسر",
   "resourceBuilderGold": "بلڈر گولڈ",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "اکاؤنٹ منتخب کریں",
   "upgradeTrackerSwitchAccount": "اکاؤنٹ تبدیل کریں، {account}",
   "upgradeTrackerShare": "ٹریکر شیئر کریں",
+  "trackerPosterCopied": "تصویر کاپی ہو گئی",
+  "trackerPosterCopy": "تصویر کاپی کریں",
+  "trackerPosterShareAll": "تینوں شیئر کریں",
   "upgradeTrackerPasteJson": "اکاؤنٹ JSON چسپاں کریں",
   "upgradeTrackerImportTitle": "اکاؤنٹ ڈیٹا درآمد کریں",
   "upgradeTrackerImportDescription": "خام اکاؤنٹ JSON چسپاں کریں۔ یہ اسی آلے پر رہتا ہے۔",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "وزن {value}%",
   "upgradeTrackerPlanUntilMaxed": "زیادہ سے زیادہ ہونے تک",
   "upgradeTrackerPlanUntilPercent": "{value}% تک",
-  "upgradeTrackerPlanRuleNote": "نمبر والے درجے پہلے چلتے ہیں۔ مشترکہ قطاریں ایک ہی درجے کا نمبر رکھتی ہیں، اور ان کے اختلاط کو رشتہ دار وزن سے معمول بنایا جاتا ہے، لہذا 50 + 25 67% / 33% بن جاتا ہے۔ ایک ہدف اس فیصد تک پہنچنے کے بعد زمرہ کی پیداوار دیتا ہے جبکہ یہ بعد میں اہل رہتا ہے۔",
+  "upgradeTrackerPlanRuleNote": "پہلے کیا اپ گریڈ ہو یہ طے کرنے کے لیے زمرے کھینچیں۔ قطار کی ترتیبات سے ترجیح مشترک کریں یا پیش رفت کے ہدف پر رکیں۔",
   "upgradeTrackerPlanGoalMaxCurrentHall": "آگے بڑھنے سے پہلے زیادہ سے زیادہ",
   "upgradeTrackerPlanGoalRushNextHall": "جلدی سے اگلے ہال میں پہنچو",
   "upgradeTrackerPlanGoalCatchUp": "جلدی کی سطح کو پکڑو",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "باقی حملوں کو کامل فرض کرتا ہے۔ یہ ریاضیاتی حد ہے، پیش گوئی نہیں۔",
   "warScoutTitle": "لائن اپ کا تجزیہ",
   "warScoutOpponent": "حریف کی حالیہ جنگیں",
-  "warScoutScope": "موجودہ لائن اپ · یکساں اصول · زیادہ سے زیادہ 10 پچھلی جنگیں"
+  "warScoutScope": "موجودہ لائن اپ · یکساں اصول · زیادہ سے زیادہ 10 پچھلی جنگیں",
+  "upgradeTrackerCapturedWork": "آپ کی آخری اپ ڈیٹ سے"
 }

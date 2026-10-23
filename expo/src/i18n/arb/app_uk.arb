@@ -3306,6 +3306,8 @@
   "playerBestTrophies": "Найкращі трофеї",
   "clanLoadFailed": "Не вдалося завантажити клан.",
   "gameItemLevels": "Рівні",
+  "gameItemLevelCount": "{count, plural, one {# рівень} few {# рівні} many {# рівнів} other {# рівня}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Темний еліксир",
   "resourceBuilderElixir": "Еліксир будівельника",
   "resourceBuilderGold": "Золото будівельника",
@@ -3923,6 +3925,9 @@
     }
   },
   "upgradeTrackerShare": "Поділитися прогресом",
+  "trackerPosterCopied": "Зображення скопійовано",
+  "trackerPosterCopy": "Копіювати зображення",
+  "trackerPosterShareAll": "Поділитися всіма 3",
   "upgradeTrackerPasteJson": "Вставити JSON облікового запису",
   "upgradeTrackerImportTitle": "Імпорт даних гравця",
   "upgradeTrackerImportDescription": "Вставте необроблений JSON облікового запису. Дані залишаться на цьому пристрої.",
@@ -4904,7 +4909,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Пронумеровані яруси запускаються першими. Спільні рядки зберігають той самий номер рівня, а їх суміш нормалізується на основі відносних ваг, тому 50 + 25 стає 67% / 33%. Ціль робить категорію прибутковою після того, як вона досягає цього відсотка, і залишається придатною пізніше.",
+  "upgradeTrackerPlanRuleNote": "Перетягніть категорії, щоб вибрати порядок покращень. Налаштування рядка дозволяють спільний пріоритет або зупинку на цільовому прогресі.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Макс перед наступним",
   "upgradeTrackerPlanGoalRushNextHall": "Швидко дійдіть до наступного залу",
   "upgradeTrackerPlanGoalCatchUp": "Наздоганяйте швидкі рівні",
@@ -5072,5 +5077,6 @@
   "warOutlookAssumption": "Передбачає ідеальні решту атак. Це математична межа, а не прогноз.",
   "warScoutTitle": "Аналіз складу",
   "warScoutOpponent": "Нещодавні війни суперника",
-  "warScoutScope": "Поточний склад · ті самі правила · до 10 попередніх війн"
+  "warScoutScope": "Поточний склад · ті самі правила · до 10 попередніх війн",
+  "upgradeTrackerCapturedWork": "З останнього оновлення"
 }

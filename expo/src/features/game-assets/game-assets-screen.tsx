@@ -1,3 +1,5 @@
+import { HeroHeaderScrim } from "../../ui/hero-header-scrim";
+import { modalOrientations } from "../../ui/modal-orientations";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   ActivityIndicator,
@@ -13,7 +15,6 @@ import {
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import {
   ArrowLeft,
   ArrowRight,
@@ -45,7 +46,6 @@ import {
   Surface,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../ui';
 import type { GameAssetActions } from './actions';
 import { GameAssetImage } from './game-asset-image';
@@ -248,7 +248,6 @@ function GameAssetsHero({
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
-  const mode = useCKThemeMode();
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const desktop = width >= 900;
@@ -282,16 +281,7 @@ function GameAssetsHero({
         style={StyleSheet.absoluteFill}
       />
       <View style={[StyleSheet.absoluteFill, styles.heroAdditionalDarken]} />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill} width="100%" height="100%">
-        <Defs>
-          <LinearGradient id="gameAssetsHeroGradient" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#000" stopOpacity={mode === 'dark' ? 0.5 : 0.34} />
-            <Stop offset="0.5" stopColor="#000" stopOpacity={mode === 'dark' ? 0.72 : 0.52} />
-            <Stop offset="1" stopColor="#000" stopOpacity={mode === 'dark' ? 0.94 : 0.72} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#gameAssetsHeroGradient)" />
-      </Svg>
+<HeroHeaderScrim variant="standard" />
       <SafeAreaView
         edges={['top', 'left', 'right']}
         style={[styles.heroSafe, { paddingHorizontal: desktop ? 24 : 12 }]}
@@ -531,7 +521,7 @@ function AssetSelector({
           <CKText muted>▾</CKText>
         </Surface>
       </Pressable>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         animationType="fade"
         visible={visible}
@@ -683,7 +673,7 @@ function GameAssetPreview({
     }
   };
   return (
-    <Modal visible transparent={false} animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible transparent={false} animationType="slide" onRequestClose={onClose}>
       <SafeAreaView style={[styles.preview, { backgroundColor: theme.background }]}>
         <View style={[styles.previewHeader, { backgroundColor: theme.surface }]}>
           <HeaderIconButton

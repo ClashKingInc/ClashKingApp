@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Migliori trofei",
   "clanLoadFailed": "Impossibile caricare il clan.",
   "gameItemLevels": "Livelli",
+  "gameItemLevelCount": "{count, plural, one {# livello} other {# livelli}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Elisir nero",
   "resourceBuilderElixir": "Elisir del costruttore",
   "resourceBuilderGold": "Oro del costruttore",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Condividi tracker",
+  "trackerPosterCopied": "Immagine copiata",
+  "trackerPosterCopy": "Copia immagine",
+  "trackerPosterShareAll": "Condividi tutte e 3",
   "upgradeTrackerPasteJson": "Incolla JSON dell'account",
   "upgradeTrackerImportTitle": "Importa dati dell'account",
   "upgradeTrackerImportDescription": "Incolla il JSON non elaborato dell'account. Rimarrà su questo dispositivo.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "I livelli numerati vengono eseguiti per primi. Le righe condivise mantengono lo stesso numero di livello e la loro combinazione è normalizzata dai pesi relativi, quindi 50 + 25 diventa 67%/33%. Un obiettivo fa fruttare una categoria dopo aver raggiunto tale percentuale mentre rimane idonea in seguito.",
+  "upgradeTrackerPlanRuleNote": "Trascina le categorie per scegliere cosa migliorare prima. Le impostazioni di riga consentono priorità condivise o una pausa a un obiettivo di progresso.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max prima di avanzare",
   "upgradeTrackerPlanGoalRushNextHall": "Raggiungi velocemente la sala successiva",
   "upgradeTrackerPlanGoalCatchUp": "Recupera i livelli affrettati",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Presuppone attacchi rimanenti perfetti. È un limite matematico, non una previsione.",
   "warScoutTitle": "Analisi della formazione",
   "warScoutOpponent": "Guerre recenti dell’avversario",
-  "warScoutScope": "Formazione attuale · stesse regole · fino a 10 guerre precedenti"
+  "warScoutScope": "Formazione attuale · stesse regole · fino a 10 guerre precedenti",
+  "upgradeTrackerCapturedWork": "Dal tuo ultimo aggiornamento"
 }

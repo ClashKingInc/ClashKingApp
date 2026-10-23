@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BackHandler, Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Asset } from 'expo-asset';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { HeroHeaderScrim } from '../../ui/hero-header-scrim';
 import { useI18n } from '../../i18n';
 import { CKText, DestinationStack, MobileWebImage, PressableSurface, ResponsiveGrid, useCKTheme } from '../../ui';
 import { CalculatorHeader } from './calculator-header';
@@ -107,15 +107,7 @@ export function CalculatorHub({
               style={[styles.destination, { height: cardHeight }]}
             >
               <MobileWebImage imageUrl={Asset.fromModule(card.image).uri} contentFit="cover" style={[StyleSheet.absoluteFill, card.id === 'farming' && styles.disabledArt]} transition={0} />
-              <Svg width="100%" height="100%" style={StyleSheet.absoluteFill} pointerEvents="none">
-                <Defs><LinearGradient id={`calculator-card-${card.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                  <Stop offset="0" stopColor="#030304" stopOpacity={card.id === 'farming' ? 0.35 : 0.2} />
-                  <Stop offset="0.45" stopColor="#030304" stopOpacity={0.32} />
-                  <Stop offset="0.7" stopColor="#030304" stopOpacity={0.65} />
-                  <Stop offset="1" stopColor="#030304" stopOpacity={0.94} />
-                </LinearGradient></Defs>
-                <Rect width="100%" height="100%" fill={`url(#calculator-card-${card.id})`} />
-              </Svg>
+              <HeroHeaderScrim variant={card.id === 'farming' ? 'calculatorDisabled' : 'calculator'} />
               <View style={styles.copy}>
                 {card.id === 'farming' ? <View style={styles.comingSoon}><CKText role="metadata" style={styles.disabledText}>{t('calcComingSoon')}</CKText></View> : null}
                 <CKText role="sectionTitle" style={[styles.cardTitle, card.id === 'farming' && styles.disabledText]}>{card.title}</CKText>

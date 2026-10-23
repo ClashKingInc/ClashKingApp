@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useMemo, useState, type ReactNode } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
@@ -1182,7 +1183,7 @@ function ChoiceDialog({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.modalBackdrop} onPress={onClose}>
         <CardSurface style={[styles.dialog, { backgroundColor: theme.sheet }]}>
           <CKText role="sectionTitle">{title}</CKText>
@@ -1209,7 +1210,7 @@ function OpponentDialog({ opponent, onClose }: { opponent?: OpponentStat; onClos
   const { locale } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal
+    <Modal supportedOrientations={modalOrientations}
       visible={opponent !== undefined}
       transparent
       animationType="fade"

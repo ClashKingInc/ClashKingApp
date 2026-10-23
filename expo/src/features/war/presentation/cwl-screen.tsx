@@ -1,3 +1,4 @@
+import type { ScrollViewInstance } from 'react-native';
 import {
   memo,
   useEffect,
@@ -122,7 +123,7 @@ export function CwlScreen({
   const [pagerSwipeEnabled, setPagerSwipeEnabled] = useState(true);
   const blockPrimarySwipe = usePrimarySwipeGuard();
   useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const scrollY = useRef(0);
   const headerHeight = useRef(0);
   const tabStart = useRef(0);
@@ -470,7 +471,7 @@ const CwlMatches = memo(function CwlMatches({
   const initial = Number(link.round) || summary.getRoundForWarTag(active?.tag ?? null).roundNumber;
   const [selected, setSelected] = useState(String(initial));
   const [lineup, setLineup] = useState(false);
-  const roundRail = useRef<ScrollView>(null);
+  const roundRail = useRef<ScrollViewInstance>(null);
   const index = Math.max(
     0,
     rounds.findIndex((round) => String(round.roundNumber) === selected),
@@ -1370,19 +1371,22 @@ const styles = StyleSheet.create({
   },
   grow: { flex: 1, minWidth: 0 },
   stack: { gap: ckSpacing.lg },
-  content: { padding: ckSpacing.lg, width: '100%', maxWidth: 840, alignSelf: 'center', gap: 16 },
+  // Keep scoreboards readable on tablets; the backdrop remains full bleed.
+  content: { padding: ckSpacing.lg, width: '100%', maxWidth: 680, alignSelf: 'center', gap: 16 },
   tabs: {
     paddingHorizontal: ckSpacing.lg,
     paddingTop: 0,
     paddingBottom: ckSpacing.sm,
     width: '100%',
-    maxWidth: 840,
+    maxWidth: 680,
     alignSelf: 'center',
   },
   hero: { overflow: 'hidden' },
   heroArtwork: { position: 'absolute', top: 0, left: 0, right: 0, height: 190 },
   tabIcon: { width: 22, height: 22 },
-  roundRail: { gap: 8, paddingBottom: 2 },
+  // Grow only to the viewport: center rounds when they fit, retain scrolling
+  // and the existing chip width when a narrow phone cannot show every round.
+  roundRail: { gap: 8, paddingBottom: 2, flexGrow: 1, justifyContent: 'center' },
   roundTile: {
     width: 68,
     minHeight: 62,

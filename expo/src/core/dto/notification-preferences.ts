@@ -61,7 +61,9 @@ export function withNotificationCategory(
 export function parseNotificationPreferences(value: unknown): NotificationPreferences {
   const json = expectRecord(value, 'notification preferences');
   return {
-    warAttacks: expectBoolean(json.warAttacksEnabled, 'warAttacksEnabled'),
+    // Retain the wire field for older APIs, but retired attack-by-attack pushes
+    // must never become enabled again from a saved preference or an old client.
+    warAttacks: false,
     warState: expectBoolean(json.warStateEnabled, 'warStateEnabled'),
     warReminders: expectBoolean(json.warRemindersEnabled, 'warRemindersEnabled'),
     raidReminders: expectBoolean(json.raidRemindersEnabled, 'raidRemindersEnabled'),
@@ -108,7 +110,7 @@ export function parseLocalNotificationPreferences(value: unknown): NotificationP
 
 export function serializeNotificationPreferencesForPut(preferences: NotificationPreferences) {
   return {
-    warAttacksEnabled: preferences.warAttacks,
+    warAttacksEnabled: false,
     warStateEnabled: preferences.warState,
     warRemindersEnabled: preferences.warReminders,
     raidRemindersEnabled: preferences.raidReminders,

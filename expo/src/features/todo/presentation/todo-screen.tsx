@@ -1,4 +1,6 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Asset } from 'expo-asset';
 import {
   Modal,
   Platform,
@@ -9,27 +11,13 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import {
-  ArrowLeft,
-  Bookmark,
-  Check,
-  CheckCircle2,
-  ChevronDown,
-  Info,
-  Search,
-  X,
-} from 'lucide-react-native';
-import Svg, {
-  Circle,
-  Defs,
-  LinearGradient as SvgLinearGradient,
-  Rect,
-  Stop,
-} from 'react-native-svg';
+import { ArrowLeft, Check, CheckCircle2, ChevronDown, Info, Search, X } from 'lucide-react-native';
+import Svg, { Circle } from 'react-native-svg';
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { materialBackLabel, toIntlLocale, useI18n, type I18nValue } from '../../../i18n';
+import { materialBackLabel, useI18n, type I18nValue } from '../../../i18n';
 import {
   CKText,
   EmptyState,
@@ -43,7 +31,6 @@ import {
   colorWithAlpha,
   statColors,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
 import type { Player, PlayerTimer, PlayerTimers, TodoProgressMetric } from '../../player/models';
 import { formatPlayerActivity } from '../../player/presentation/presentation-utils';
@@ -53,7 +40,6 @@ export interface TodoScreenProps {
   readonly model: TodoScreenModel;
   readonly query: string;
   readonly filter: TodoAccountFilter;
-  readonly isBookmarked: (tag: string) => boolean;
   readonly presenceFor: (player: Player) => { attacksAvailable: number; attacksDone: number };
   readonly loadTimers: (tag: string) => Promise<PlayerTimers>;
   readonly onQueryChange: (query: string) => void;
@@ -63,12 +49,14 @@ export interface TodoScreenProps {
   readonly now?: Date;
 }
 
-const FILTERS: readonly TodoAccountFilter[] = ['all', 'mine', 'needs_action', 'done', 'bookmarked'];
+const FILTERS: readonly TodoAccountFilter[] = ['all', 'needs_action', 'done'];
+const TODO_HEADER_ART = Asset.fromModule(
+  require('../../../../assets/clashking/todo/builder-meeting.jpg'),
+).uri;
 
 export function TodoScreen(props: TodoScreenProps) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const mode = useCKThemeMode();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const [filterOpen, setFilterOpen] = useState(false);
@@ -77,39 +65,33 @@ export function TodoScreen(props: TodoScreenProps) {
   const now = props.now ?? new Date();
   const emptyTitle = props.query.trim()
     ? t('todoNoMatchingAccounts')
-    : props.filter === 'mine'
-      ? t('todoNoLinkedAccounts')
-      : props.filter === 'needs_action'
-        ? t('todoNoAccountsNeedAction')
-        : props.filter === 'done'
-          ? t('todoNoCompletedAccounts')
-          : props.filter === 'bookmarked'
-            ? t('todoNoBookmarkedAccounts')
-            : t('todoNoConfiguredAccounts');
+    : props.filter === 'needs_action'
+      ? t('todoNoAccountsNeedAction')
+      : props.filter === 'done'
+        ? t('todoNoCompletedAccounts')
+        : t('todoNoLinkedAccounts');
   return (
     <SafeAreaView edges={['left', 'right']} style={{ flex: 1, backgroundColor: theme.background }}>
       <ScrollView
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ minHeight: insets.top + 224, overflow: 'hidden' }}>
+        <View
+          style={{
+            minHeight: insets.top + 224,
+            overflow: 'hidden',
+            backgroundColor: theme.background,
+          }}
+        >
           <MobileWebImage
-            imageUrl={ImageAssets.homeBaseBackground}
+            imageUrl={TODO_HEADER_ART}
+            // Artwork and scrim cover the same content-sized header. A
+            // width-based image height leaves a hard edge before the fade ends.
             style={StyleSheet.absoluteFill}
             contentFit="cover"
-            contentPosition="bottom center"
+            contentPosition="center"
           />
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
-          <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-            <Defs>
-              <SvgLinearGradient id="todo-hero-scrim" x1="0" y1="0" x2="0" y2="1">
-                <Stop offset="0" stopColor="#000" stopOpacity={mode === 'dark' ? 0.36 : 0.2} />
-                <Stop offset="0.5" stopColor="#000" stopOpacity={mode === 'dark' ? 0.64 : 0.4} />
-                <Stop offset="1" stopColor="#000" stopOpacity={mode === 'dark' ? 0.92 : 0.65} />
-              </SvgLinearGradient>
-            </Defs>
-            <Rect width="100%" height="100%" fill="url(#todo-hero-scrim)" />
-          </Svg>
+          <HeroHeaderScrim />
           <View style={{ paddingTop: insets.top }}>
             <View style={styles.headerActions}>
               <HeaderIconButton
@@ -125,8 +107,8 @@ export function TodoScreen(props: TodoScreenProps) {
                 onPress={() => setInfoOpen(true)}
               />
             </View>
+            <View style={{ height: Math.min(64, Math.max(24, width * 0.08)) }} />
             <TodoIdentity summary={props.model.header} />
-            <TodoHeaderStats summary={props.model.header} locale={locale} />
           </View>
         </View>
         <View style={{ maxWidth: 1120, width: '100%', alignSelf: 'center' }}>
@@ -172,7 +154,6 @@ export function TodoScreen(props: TodoScreenProps) {
                     <TodoPlayerCard
                       key={player.tag}
                       player={player}
-                      bookmarked={props.isBookmarked(player.tag)}
                       presence={props.presenceFor(player)}
                       loadTimers={props.loadTimers}
                       now={now}
@@ -230,7 +211,11 @@ function TodoIdentity({ summary }: { summary: TodoHeaderSummary }) {
   const { t } = useI18n();
   return (
     <View style={styles.identity}>
-      <MobileWebImage imageUrl={ImageAssets.iconBuilderPotion} style={styles.identityImage} />
+      <MobileWebImage
+        imageUrl={ImageAssets.todoTarget}
+        contentFit="contain"
+        style={styles.identityImage}
+      />
       <View style={styles.identityCopy}>
         <CKText numberOfLines={1} style={styles.heroTitle}>
           {t('todoTitle')}
@@ -243,94 +228,14 @@ function TodoIdentity({ summary }: { summary: TodoHeaderSummary }) {
   );
 }
 
-function TodoHeaderStats({
-  summary,
-  locale,
-}: {
-  summary: TodoHeaderSummary;
-  locale: I18nValue['locale'];
-}) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const totalTasks = summary.openTasks + summary.completedTasks;
-  const chips: { label: string; image: string; metric: string; compact?: boolean }[] = [
-    {
-      label: t('legendsTitle'),
-      image: ImageAssets.legendBlazonNoPadding,
-      metric: 'legend_attacks',
-    },
-    { label: t('warTitle'), image: ImageAssets.war, metric: 'war_attacks' },
-    { label: t('cwlTitle'), image: ImageAssets.cwlSwordsNoBorder, metric: 'cwl_attacks' },
-    {
-      label: t('gameClanGames'),
-      image: ImageAssets.clanGamesMedals,
-      metric: 'clan_games',
-      compact: true,
-    },
-    {
-      label: t('gameSeasonPass'),
-      image: ImageAssets.iconGoldPass,
-      metric: 'season_pass',
-      compact: true,
-    },
-  ];
-  return (
-    <View style={styles.headerStats}>
-      <View style={styles.progressSummary}>
-        <ProgressRing
-          progress={summary.progressRatio}
-          size={52}
-          color={summary.openTasks === 0 ? statColors.win : theme.primary}
-          labelColor="#FFF"
-        />
-        <View style={styles.flex}>
-          <CKText style={styles.progressTitle} numberOfLines={1}>
-            {summary.openTasks === 0
-              ? t('generalCompleted')
-              : `${summary.openTasks} ${t('generalRemaining')}`}
-          </CKText>
-          <CKText style={styles.progressSubtitle} numberOfLines={1}>
-            {`${summary.completedTasks}/${totalTasks} ${t('generalCompleted')} · ${t('todoAccountsNumber', { number: summary.totalAccounts })}`}
-          </CKText>
-        </View>
-      </View>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.quickStats}
-      >
-        {chips.flatMap((chip) => {
-          const metric = summary.metrics.get(chip.metric);
-          if (!metric || (chip.metric !== 'season_pass' && metric.total <= 0)) return [];
-          return [
-            <View
-              accessible
-              accessibilityLabel={chip.label}
-              key={chip.metric}
-              style={[styles.quickChip, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}
-            >
-              <MobileWebImage imageUrl={chip.image} style={styles.quickImage} />
-              <CKText style={styles.quickValue} numberOfLines={1}>
-                {formatMetric(metric.done, metric.total, locale, chip.compact)}
-              </CKText>
-            </View>,
-          ];
-        })}
-      </ScrollView>
-    </View>
-  );
-}
-
 function TodoPlayerCard({
   player,
-  bookmarked,
   presence,
   loadTimers,
   now,
   onPress,
 }: {
   player: Player;
-  bookmarked: boolean;
   presence: { attacksAvailable: number; attacksDone: number };
   loadTimers: (tag: string) => Promise<PlayerTimers>;
   now: Date;
@@ -338,6 +243,7 @@ function TodoPlayerCard({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const timers = usePlayerTimers(player.tag, loadTimers);
   const metrics = useMemo(
     () =>
       player
@@ -358,17 +264,24 @@ function TodoPlayerCard({
   );
   const ratio = player.getTodoProgressRatio(presence);
   const statusColor = metrics.every((entry) => entry.done) ? statColors.win : theme.primary;
+  // Counts and deadlines describe one task, not two separate War attacks rows.
+  // Match only one active deadline; retain any additional events as standalone
+  // timers so merging the presentation never silently drops event data.
+  const metricTimers = new Map(
+    metrics.map(({ metric }) => [
+      metric.label,
+      timers
+        .filter((timer) => timer.expiresAt > now && timerMetricLabel(timer) === metric.label)
+        .sort((left, right) => left.expiresAt.getTime() - right.expiresAt.getTime())[0],
+    ]),
+  );
+  const attachedTimers = new Set(metricTimers.values());
   return (
     <Pressable accessibilityRole="button" onPress={onPress}>
       <Surface radius={28} style={styles.playerCard}>
         <View style={styles.playerHeader}>
           <View style={styles.townHallBox}>
             <MobileWebImage imageUrl={player.townHallPic} style={styles.townHall} />
-            {bookmarked ? (
-              <View style={[styles.bookmarkBadge, { backgroundColor: theme.card }]}>
-                <Bookmark size={14} fill={theme.onSurfaceVariant} color={theme.onSurfaceVariant} />
-              </View>
-            ) : null}
           </View>
           <View style={styles.flex}>
             <CKText role="titleSmall" style={styles.playerName} numberOfLines={1}>
@@ -388,7 +301,13 @@ function TodoPlayerCard({
         {metrics.length ? (
           <View style={styles.metricGrid}>
             {metrics.map(({ metric, done }) => (
-              <TodoMetric key={metric.label} metric={metric} done={done} />
+              <TodoMetric
+                key={metric.label}
+                metric={metric}
+                done={done}
+                now={now}
+                timer={metricTimers.get(metric.label)}
+              />
             ))}
           </View>
         ) : (
@@ -399,20 +318,30 @@ function TodoPlayerCard({
             </CKText>
           </View>
         )}
-        <TimerChips playerTag={player.tag} loadTimers={loadTimers} now={now} />
+        <TimerChips timers={timers.filter((timer) => !attachedTimers.has(timer))} now={now} />
       </Surface>
     </Pressable>
   );
 }
 
-function TodoMetric({ metric, done }: { metric: TodoProgressMetric; done: boolean }) {
+function TodoMetric({
+  metric,
+  done,
+  timer,
+  now,
+}: {
+  metric: TodoProgressMetric;
+  done: boolean;
+  timer?: PlayerTimer;
+  now: Date;
+}) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const asset = metricAsset(metric.label);
   return (
     <View
       accessible
-      accessibilityLabel={`${metricLabel(metric, t)}: ${metric.done}/${metric.total}`}
+      accessibilityLabel={`${metricLabel(metric, t)}: ${metric.done}/${metric.total}${timer ? `. ${t('todoEventEndsIn', { duration: formatTimerRemaining(timer.expiresAt.getTime() - now.getTime(), t) })}` : ''}`}
       style={[
         styles.metric,
         {
@@ -433,20 +362,19 @@ function TodoMetric({ metric, done }: { metric: TodoProgressMetric; done: boolea
         >
           {metric.done}/{metric.total}
         </CKText>
+        {timer ? (
+          <CKText muted role="labelMedium" numberOfLines={1}>
+            {t('todoEventEndsIn', {
+              duration: formatTimerRemaining(timer.expiresAt.getTime() - now.getTime(), t),
+            })}
+          </CKText>
+        ) : null}
       </View>
     </View>
   );
 }
 
-function TimerChips({
-  playerTag,
-  loadTimers,
-  now,
-}: {
-  playerTag: string;
-  loadTimers: (tag: string) => Promise<PlayerTimers>;
-  now: Date;
-}) {
+function usePlayerTimers(playerTag: string, loadTimers: (tag: string) => Promise<PlayerTimers>) {
   const [timers, setTimers] = useState<readonly PlayerTimer[]>([]);
   useEffect(() => {
     let current = true;
@@ -459,6 +387,14 @@ function TimerChips({
       current = false;
     };
   }, [loadTimers, playerTag]);
+  return timers;
+}
+
+function timerMetricLabel(timer: PlayerTimer): string | undefined {
+  return timer.type === 'war' ? 'war_attacks' : timer.type === 'cwl' ? 'cwl_attacks' : undefined;
+}
+
+function TimerChips({ timers, now }: { timers: readonly PlayerTimer[]; now: Date }) {
   const active = timers
     .filter((timer) => timer.expiresAt > now)
     .sort((left, right) => left.expiresAt.getTime() - right.expiresAt.getTime());
@@ -619,7 +555,7 @@ function FilterPopover({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.modalBackdrop} onPress={onClose}>
         <Pressable
           accessibilityViewIsModal
@@ -672,7 +608,7 @@ function InfoDialog({
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.dialogBackdrop} onPress={onClose}>
         <Pressable style={styles.dialogPressable} onPress={(event) => event.stopPropagation()}>
           <Surface radius={ckRadius.card} style={styles.dialog} accessibilityViewIsModal>
@@ -707,24 +643,11 @@ function filterLabel(filter: TodoAccountFilter, model: TodoScreenModel) {
   const count =
     filter === 'all'
       ? model.filterCounts.all
-      : filter === 'mine'
-        ? model.filterCounts.mine
-        : filter === 'needs_action'
-          ? model.filterCounts.needsAction
-          : filter === 'done'
-            ? model.filterCounts.done
-            : model.filterCounts.bookmarked;
-  // Flutter intentionally hard-codes these five dropdown labels.
+      : filter === 'needs_action'
+        ? model.filterCounts.needsAction
+        : model.filterCounts.done;
   const label =
-    filter === 'all'
-      ? 'All accounts'
-      : filter === 'mine'
-        ? 'My accounts'
-        : filter === 'needs_action'
-          ? 'To do'
-          : filter === 'done'
-            ? 'Completed'
-            : 'Bookmarked';
+    filter === 'all' ? 'All accounts' : filter === 'needs_action' ? 'To do' : 'Completed';
   return `${label} (${count})`;
 }
 
@@ -760,12 +683,6 @@ export function formatTimerRemaining(milliseconds: number, t: I18nValue['t']) {
   return t('timeDurationShort', { unit: 'minutes', primary: totalMinutes, secondary: 0 });
 }
 
-function formatMetric(done: number, total: number, locale: I18nValue['locale'], compact = false) {
-  if (!compact || total < 1000) return `${done}/${total}`;
-  const formatter = new Intl.NumberFormat(toIntlLocale(locale), { notation: 'compact' });
-  return `${formatter.format(done)}/${formatter.format(total)}`;
-}
-
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '800' },
@@ -776,26 +693,29 @@ const styles = StyleSheet.create({
   },
   identity: {
     maxWidth: 360,
+    width: '100%',
     alignSelf: 'center',
-    flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: 16,
     marginTop: 6,
+    gap: 8,
   },
-  identityImage: { width: 64, height: 64 },
-  identityCopy: { flexShrink: 1, marginLeft: 10 },
-  heroTitle: { color: '#FFF', fontSize: 26, lineHeight: 27, fontWeight: '700' },
-  heroSubtitle: { color: '#FFFFFF9E', fontSize: 15, lineHeight: 16, fontWeight: '500' },
-  headerStats: { paddingTop: 11, paddingBottom: 8 },
-  progressSummary: {
-    paddingHorizontal: 28,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
+  identityImage: { width: 108, height: 108 },
+  identityCopy: { alignItems: 'center', gap: 4, width: '100%' },
+  heroTitle: {
+    color: '#FFF',
+    fontSize: 26,
+    lineHeight: 27,
+    fontWeight: '700',
+    textAlign: 'center',
   },
-  progressTitle: { color: '#FFF', fontWeight: '800', lineHeight: 20 },
-  progressSubtitle: { color: '#FFFFFFB8', fontWeight: '700', marginTop: 5 },
+  heroSubtitle: {
+    color: '#FFFFFF9E',
+    fontSize: 15,
+    lineHeight: 16,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
   progressRingLabel: {
     position: 'absolute',
     top: 0,
@@ -812,22 +732,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 3,
   },
-  quickStats: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    gap: 7,
-    paddingHorizontal: 16,
-    marginTop: 8,
-  },
-  quickChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
-  quickImage: { width: 19, height: 19 },
-  quickValue: { marginLeft: 5, maxWidth: 132, fontWeight: '700', lineHeight: 14 },
   controls: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   searchField: {
     height: 44,
@@ -858,16 +762,6 @@ const styles = StyleSheet.create({
   playerHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   townHallBox: { width: 66 },
   townHall: { width: 62, height: 62 },
-  bookmarkBadge: {
-    position: 'absolute',
-    right: -1,
-    top: 42,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   playerName: { fontSize: 17, fontWeight: '900' },
   lastActive: { marginTop: 3, fontWeight: '700' },
   metricGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },

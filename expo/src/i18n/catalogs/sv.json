@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Bästa troféer",
   "clanLoadFailed": "Kunde inte läsa in klan.",
   "gameItemLevels": "Nivåer",
+  "gameItemLevelCount": "{count, plural, one {# nivå} other {# nivåer}}",
   "resourceDarkElixir": "Mörk elixir",
   "resourceBuilderElixir": "Byggarelixir",
   "resourceBuilderGold": "Byggarguld",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Välj konto",
   "upgradeTrackerSwitchAccount": "Byt konto, {account}",
   "upgradeTrackerShare": "Dela spåraren",
+  "trackerPosterCopied": "Bild kopierad",
+  "trackerPosterCopy": "Kopiera bild",
+  "trackerPosterShareAll": "Dela alla 3",
   "upgradeTrackerPasteJson": "Klistra in konto-JSON",
   "upgradeTrackerImportTitle": "Importera kontodata",
   "upgradeTrackerImportDescription": "Klistra in kontots råa JSON. Den stannar på den här enheten.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Vikt {value}%",
   "upgradeTrackerPlanUntilMaxed": "Tills maxat",
   "upgradeTrackerPlanUntilPercent": "Till {value}%",
-  "upgradeTrackerPlanRuleNote": "Numrerade nivåer körs först. Delade rader behåller samma nivånummer och deras mix normaliseras från de relativa vikterna, så 50 + 25 blir 67% / 33%. Ett mål ger en kategori avkastning efter att det når den procentandelen medan det förblir kvalificerat senare.",
+  "upgradeTrackerPlanRuleNote": "Dra kategorier för att välja vad som uppgraderas först. Radinställningar låter kategorier dela prioritet eller stanna vid ett framstegsmål.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max innan du avancerar",
   "upgradeTrackerPlanGoalRushNextHall": "Nå nästa hall snabbt",
   "upgradeTrackerPlanGoalCatchUp": "Kom ikapp förhastade nivåer",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Förutsätter perfekta återstående attacker. Detta är en matematisk gräns, inte en prognos.",
   "warScoutTitle": "Analys av laguppställningen",
   "warScoutOpponent": "Motståndarens senaste krig",
-  "warScoutScope": "Nuvarande laguppställning · samma regler · upp till 10 tidigare krig"
+  "warScoutScope": "Nuvarande laguppställning · samma regler · upp till 10 tidigare krig",
+  "upgradeTrackerCapturedWork": "Från din senaste uppdatering"
 }

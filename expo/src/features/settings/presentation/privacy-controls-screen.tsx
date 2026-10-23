@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
@@ -199,7 +200,7 @@ export function PrivacyControlsScreen({
           ))}
         </View>
       </SettingsPage>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         visible={confirming}
         transparent
         animationType="fade"

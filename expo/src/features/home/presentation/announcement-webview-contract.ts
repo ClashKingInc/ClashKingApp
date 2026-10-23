@@ -35,9 +35,12 @@ export function announcementNavigationDecision({
   const requested = parseUrl(requestedUrl);
   if (requested === null) return 'prevent';
   if (requested.protocol === 'about:' || requested.protocol === 'data:') return 'navigate';
-  if (loadsLocalFile && requested.protocol === 'file:') return 'navigate';
-
   const initial = parseUrl(initialUrl ?? '');
+  // Same-document anchors are fine, but a trusted story must not navigate to
+  // another file in the app sandbox after Android file access is enabled.
+  if (loadsLocalFile && requested.protocol === 'file:' && initial?.protocol === 'file:') {
+    return requested.pathname === initial.pathname ? 'navigate' : 'prevent';
+  }
   if (
     requested.protocol === 'https:' &&
     initial?.protocol === 'https:' &&

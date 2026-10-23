@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "最高トロフィー",
   "clanLoadFailed": "クランの読み込みに失敗しました。",
   "gameItemLevels": "レベル",
+  "gameItemLevelCount": "{count} レベル",
   "resourceDarkElixir": "ダークエリクサー",
   "resourceBuilderElixir": "大工エリクサー",
   "resourceBuilderGold": "大工ゴールド",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "アカウントを選択",
   "upgradeTrackerSwitchAccount": "アカウントを切り替え：{account}",
   "upgradeTrackerShare": "トラッカーを共有",
+  "trackerPosterCopied": "画像をコピーしました",
+  "trackerPosterCopy": "画像をコピー",
+  "trackerPosterShareAll": "3枚すべて共有",
   "upgradeTrackerPasteJson": "アカウントJSONを貼り付け",
   "upgradeTrackerImportTitle": "アカウントデータをインポート",
   "upgradeTrackerImportDescription": "アカウントの生JSONを貼り付けます。データはこの端末に保存されます。",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "重量{value}%",
   "upgradeTrackerPlanUntilMaxed": "最大になるまで",
   "upgradeTrackerPlanUntilPercent": "{value}%まで",
-  "upgradeTrackerPlanRuleNote": "番号付きの層が最初に実行されます。共有行は同じ階層番号を維持し、その混合は相対的な重みから正規化されるため、50 + 25 は 67% / 33% になります。ターゲットは、そのパーセンテージに達した後にカテゴリの収益を上げますが、その後も資格を維持します。",
+  "upgradeTrackerPlanRuleNote": "カテゴリをドラッグしてアップグレードの優先順を決めます。行の設定で優先度を共有したり、達成率の目標で一時停止したりできます。",
   "upgradeTrackerPlanGoalMaxCurrentHall": "進む前にマックスにする",
   "upgradeTrackerPlanGoalRushNextHall": "早く次のホールに着いてね",
   "upgradeTrackerPlanGoalCatchUp": "急ぐレベルに追いつく",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "残りの攻撃がすべて完璧な場合の数学的な上限です。予測ではありません。",
   "warScoutTitle": "編成の分析",
   "warScoutOpponent": "相手の直近のクラン対戦",
-  "warScoutScope": "現在の編成 · 同じルール · 過去最大10戦"
+  "warScoutScope": "現在の編成 · 同じルール · 過去最大10戦",
+  "upgradeTrackerCapturedWork": "前回の更新時の情報"
 }

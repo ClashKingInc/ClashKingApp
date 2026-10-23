@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { Children, Fragment, type ReactElement, type ReactNode } from 'react';
 import { TutorialScrollView } from '../../tutorials/tutorial-ui';
 import {
@@ -188,7 +189,7 @@ export function ChoiceDialog<T extends string>({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
       <SafeAreaView style={styles.overlay}>
         <Pressable
           accessibilityElementsHidden

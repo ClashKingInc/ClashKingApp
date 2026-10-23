@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useCallback, useEffect, useState, useSyncExternalStore, type ComponentType } from 'react';
 import {
   Modal,
@@ -238,7 +239,7 @@ export function AchievementDetail({
   const keys = ACHIEVEMENT_COPY_KEYS[achievement.id];
   const name = t(keys.name);
   return (
-    <Modal
+    <Modal supportedOrientations={modalOrientations}
       animationType={enableIdleRotation ? 'slide' : 'none'}
       onRequestClose={onClose}
       presentationStyle="overFullScreen"

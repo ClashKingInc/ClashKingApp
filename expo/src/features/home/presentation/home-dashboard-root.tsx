@@ -358,7 +358,9 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
             setRefreshGeneration((value) => value + 1);
             setSnackbar(t('upgradeTrackerImportSuccess', { player: snapshot.name }));
           } catch (cause) {
-            setSnackbar(
+            // The shared importer displays its own failure. Do not also raise
+            // a snackbar underneath the modal or swallow the failed import.
+            throw new Error(
               t('upgradeTrackerImportFailed', {
                 error: cause instanceof Error ? cause.message : String(cause),
               }),

@@ -1,3 +1,4 @@
+import type { ViewInstance } from 'react-native';
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Check, Copy } from 'lucide-react-native';
@@ -29,7 +30,7 @@ export function StatsChartFrame({
   const exporting = useContext(ExportContext);
   const theme = useCKTheme();
   const { t } = useI18n();
-  const capture = useRef<View>(null);
+  const capture = useRef<ViewInstance>(null);
   const captureStarted = useRef(false);
   const [width, setWidth] = useState(360);
   const [status, setStatus] = useState<'idle' | 'copying' | 'copied' | 'failed'>('idle');

@@ -1,10 +1,5 @@
 import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
 import { useEffect, useState, type ComponentProps, type ReactNode } from 'react';
-import {
-  NavigationContainer,
-  NavigationIndependentTree,
-  DefaultTheme,
-} from 'expo-router/react-navigation';
 import { DestinationStack } from '../../../ui/destination-stack';
 import { Image } from 'expo-image';
 import { StatusBar } from 'expo-status-bar';
@@ -50,16 +45,9 @@ export function LoginScreen(props: ComponentProps<typeof EmailLoginScreen>) {
       >
         <LoginBrand />
       </SafeAreaView>
-      <NavigationIndependentTree>
-        <NavigationContainer
-          // This independent welcome/form stack has no route titles. Let the
-          // app router own the browser title instead of publishing "undefined".
-          documentTitle={{ enabled: false }}
-          theme={{ ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent' } }}
-        >
-          <LoginContent {...props} />
-        </NavigationContainer>
-      </NavigationIndependentTree>
+      {/* SDK 58 owns the navigation container. The welcome/form navigator
+          nests in that existing tree instead of creating a second root. */}
+      <LoginContent {...props} />
     </View>
   );
 }

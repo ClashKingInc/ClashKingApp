@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { useCKTheme } from '../../../ui';
@@ -22,6 +22,7 @@ const wallEmblemX = 532 / 1100;
 export function CwlLeagueBackdrop({ league }: { league?: string | null }) {
   const { width: windowWidth } = useWindowDimensions();
   const theme = useCKTheme();
+  const gradientId = `cwl-header-shade-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   const [bounds, setBounds] = useState({ width: 0, height: 0 });
   const width = bounds.width || windowWidth;
   const height = bounds.height || 170;
@@ -60,9 +61,17 @@ export function CwlLeagueBackdrop({ league }: { league?: string | null }) {
           }}
         />
       ) : null}
-      <Svg pointerEvents="none" width={width} height={height} style={StyleSheet.absoluteFill}>
+      {/* Bleed the shade past the clipped image edge. Fractional native layout
+          bounds otherwise expose a light row below the fully opaque stop. */}
+      <Svg
+        pointerEvents="none"
+        width={width + 2}
+        height={height + 2}
+        viewBox={`0 0 ${width + 2} ${height + 2}`}
+        style={styles.shade}
+      >
         <Defs>
-          <LinearGradient id="cwl-header-shade" x1="0" y1="0" x2="0" y2="1">
+          <LinearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
             <Stop offset="0" stopColor="#000000" stopOpacity={0.55} />
             <Stop offset="0.46" stopColor="#000000" stopOpacity={0.48} />
             <Stop offset="0.75" stopColor="#000000" stopOpacity={0.42} />
@@ -70,8 +79,12 @@ export function CwlLeagueBackdrop({ league }: { league?: string | null }) {
             <Stop offset="1" stopColor={theme.background} stopOpacity={1} />
           </LinearGradient>
         </Defs>
-        <Rect width={width} height={height} fill="url(#cwl-header-shade)" />
+        <Rect width={width + 2} height={height + 2} fill={`url(#${gradientId})`} />
       </Svg>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  shade: { position: 'absolute', top: -1, left: -1 },
+});

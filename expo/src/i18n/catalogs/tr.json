@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "En iyi kupalar",
   "clanLoadFailed": "Klan yüklenemedi.",
   "gameItemLevels": "Seviyeler",
+  "gameItemLevelCount": "{count} seviye",
   "resourceDarkElixir": "Kara İksir",
   "resourceBuilderElixir": "İnşaatçı İksiri",
   "resourceBuilderGold": "İnşaatçı Altını",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Hesap seç",
   "upgradeTrackerSwitchAccount": "Hesap değiştir, {account}",
   "upgradeTrackerShare": "Takipçiyi paylaş",
+  "trackerPosterCopied": "Görsel kopyalandı",
+  "trackerPosterCopy": "Görseli kopyala",
+  "trackerPosterShareAll": "Üçünü de paylaş",
   "upgradeTrackerPasteJson": "Hesap JSON'unu yapıştır",
   "upgradeTrackerImportTitle": "Hesap verilerini içe aktar",
   "upgradeTrackerImportDescription": "Ham hesap JSON'unu yapıştır. Veriler bu cihazda kalır.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Ağırlık {value}%",
   "upgradeTrackerPlanUntilMaxed": "Maksimuma ulaşana kadar",
   "upgradeTrackerPlanUntilPercent": "%{value}'a kadar",
-  "upgradeTrackerPlanRuleNote": "Numaralandırılmış katmanlar ilk önce çalıştırılır. Paylaşılan satırlar aynı katman numarasını korur ve karışımları göreceli ağırlıklardan normalleştirilir, böylece 50 + 25 %67 / %33 olur. Bir hedef, bu yüzdeye ulaştıktan sonra kategori getirisi sağlar ve daha sonra uygun kalır.",
+  "upgradeTrackerPlanRuleNote": "Önce neyin yükseltileceğini seçmek için kategorileri sürükleyin. Satır ayarlarıyla öncelikleri paylaşabilir veya ilerleme hedefinde durabilirsiniz.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "İlerlemeden önce maksimum",
   "upgradeTrackerPlanGoalRushNextHall": "Bir sonraki salona hızla ulaşın",
   "upgradeTrackerPlanGoalCatchUp": "Hızlandırılmış seviyeleri yakalayın",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Kalan saldırıların kusursuz olduğunu varsayar. Bu bir matematiksel sınırdır, tahmin değildir.",
   "warScoutTitle": "Kadro analizi",
   "warScoutOpponent": "Rakibin son savaşları",
-  "warScoutScope": "Mevcut kadro · aynı kurallar · önceki en fazla 10 savaş"
+  "warScoutScope": "Mevcut kadro · aynı kurallar · önceki en fazla 10 savaş",
+  "upgradeTrackerCapturedWork": "Son güncellemenden"
 }

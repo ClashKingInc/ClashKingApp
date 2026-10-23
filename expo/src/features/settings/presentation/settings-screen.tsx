@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useState } from 'react';
 import {
   Image,
@@ -388,7 +389,7 @@ function AppIconDialog({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
       <SafeAreaView style={styles.sheetOverlay}>
         <Pressable
           accessibilityElementsHidden
@@ -449,7 +450,7 @@ function ConfirmLogout({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
       <View style={styles.modal}>
         <Surface style={styles.confirm}>
           <CKText role="titleLarge">{title}</CKText>

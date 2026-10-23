@@ -3306,6 +3306,8 @@
   "playerBestTrophies": "最高奖杯",
   "clanLoadFailed": "加载部落失败。",
   "gameItemLevels": "等级",
+  "gameItemLevelCount": "{count} 级",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "暗黑重油",
   "resourceBuilderElixir": "建筑大师圣水",
   "resourceBuilderGold": "建筑大师金币",
@@ -3923,6 +3925,9 @@
     }
   },
   "upgradeTrackerShare": "分享追踪器",
+  "trackerPosterCopied": "图片已复制",
+  "trackerPosterCopy": "复制图片",
+  "trackerPosterShareAll": "分享全部3张",
   "upgradeTrackerPasteJson": "粘贴账号 JSON",
   "upgradeTrackerImportTitle": "导入账号数据",
   "upgradeTrackerImportDescription": "粘贴原始账号 JSON，数据仅保留在本设备。",
@@ -4904,7 +4909,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "编号层首先运行。共享行保持相同的层数，并且它们的组合根据相对权重进行标准化，因此 50 + 25 变为 67% / 33%。目标在达到该百分比后会产生类别收益，并在以后保持合格状态。",
+  "upgradeTrackerPlanRuleNote": "拖动类别以选择升级顺序。行设置可让类别共享优先级，或在达到进度目标时暂停。",
   "upgradeTrackerPlanGoalMaxCurrentHall": "前进前最大",
   "upgradeTrackerPlanGoalRushNextHall": "快速到达下一个大厅",
   "upgradeTrackerPlanGoalCatchUp": "赶上匆忙的水平",
@@ -5072,5 +5077,6 @@
   "warOutlookAssumption": "假设剩余进攻全部完美。这是数学上限，而非预测。",
   "warScoutTitle": "阵容分析",
   "warScoutOpponent": "对手近期部落对战",
-  "warScoutScope": "当前阵容 · 相同规则 · 最多10场此前对战"
+  "warScoutScope": "当前阵容 · 相同规则 · 最多10场此前对战",
+  "upgradeTrackerCapturedWork": "来自上次更新"
 }

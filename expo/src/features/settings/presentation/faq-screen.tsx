@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useMemo, useState } from 'react';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
@@ -377,7 +378,7 @@ export function FaqScreen({
             })}
         </View>
       ))}
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         animationType="fade"
         visible={mailFallback}

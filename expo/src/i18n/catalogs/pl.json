@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Najlepsze trofea",
   "clanLoadFailed": "Nie udało się załadować klanu.",
   "gameItemLevels": "Poziomy",
+  "gameItemLevelCount": "{count, plural, one {# poziom} few {# poziomy} many {# poziomów} other {# poziomu}}",
   "resourceDarkElixir": "Mroczny eliksir",
   "resourceBuilderElixir": "Eliksir budowniczego",
   "resourceBuilderGold": "Złoto budowniczego",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Wybierz profil",
   "upgradeTrackerSwitchAccount": "Przełącz na konto {account}",
   "upgradeTrackerShare": "Udostępnij postęp",
+  "trackerPosterCopied": "Obraz skopiowany",
+  "trackerPosterCopy": "Kopiuj obraz",
+  "trackerPosterShareAll": "Udostępnij wszystkie 3",
   "upgradeTrackerPasteJson": "Wklej dane JSON konta",
   "upgradeTrackerImportTitle": "Import danych gracza",
   "upgradeTrackerImportDescription": "Wklej nieprzetworzony JSON konta. Dane pozostaną na tym urządzeniu.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Waga {value}%",
   "upgradeTrackerPlanUntilMaxed": "Aż do maksimum",
   "upgradeTrackerPlanUntilPercent": "Do {value}%",
-  "upgradeTrackerPlanRuleNote": "Numerowane poziomy są uruchamiane jako pierwsze. Wspólne wiersze zachowują ten sam numer poziomu, a ich kombinacja jest normalizowana na podstawie względnych wag, więc 50 + 25 daje 67% / 33%. Cel generuje zysk w kategorii po osiągnięciu tego procentu, przy czym pozostaje on uprawniony później.",
+  "upgradeTrackerPlanRuleNote": "Przeciągnij kategorie, aby ustalić kolejność ulepszeń. Ustawienia wiersza pozwalają współdzielić priorytet lub zatrzymać się przy celu postępu.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Maks przed awansem",
   "upgradeTrackerPlanGoalRushNextHall": "Szybko dotrzyj do kolejnej sali",
   "upgradeTrackerPlanGoalCatchUp": "Nadrabiaj pośpieszne poziomy",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Zakłada idealne pozostałe ataki. To granica matematyczna, nie prognoza.",
   "warScoutTitle": "Analiza składu",
   "warScoutOpponent": "Ostatnie wojny przeciwnika",
-  "warScoutScope": "Obecny skład · te same zasady · do 10 poprzednich wojen"
+  "warScoutScope": "Obecny skład · te same zasady · do 10 poprzednich wojen",
+  "upgradeTrackerCapturedWork": "Z ostatniej aktualizacji"
 }

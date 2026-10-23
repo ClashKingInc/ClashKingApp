@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../ui/modal-orientations";
 import { useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Check, X } from 'lucide-react-native';
@@ -149,7 +150,7 @@ export function CalculatorSelectionModal({
   );
   if (inline) return visible ? <View testID={testID}>{content}</View> : null;
   return (
-    <Modal
+    <Modal supportedOrientations={modalOrientations}
       visible={visible}
       transparent
       animationType="fade"

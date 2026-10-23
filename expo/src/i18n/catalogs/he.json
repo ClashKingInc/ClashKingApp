@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "שיא גביעים",
   "clanLoadFailed": "טעינת הקלאן נכשלה.",
   "gameItemLevels": "רמות",
+  "gameItemLevelCount": "{count, plural, one {רמה אחת} two {# רמות} other {# רמות}}",
   "resourceDarkElixir": "דארק אליקסיר",
   "resourceBuilderElixir": "אליקסיר הבנאי",
   "resourceBuilderGold": "זהב הבנאי",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "בחירת חשבון",
   "upgradeTrackerSwitchAccount": "החלפת חשבון, {account}",
   "upgradeTrackerShare": "שיתוף המעקב",
+  "trackerPosterCopied": "התמונה הועתקה",
+  "trackerPosterCopy": "העתקת תמונה",
+  "trackerPosterShareAll": "שיתוף כל ה־3",
   "upgradeTrackerPasteJson": "הדבקת JSON של החשבון",
   "upgradeTrackerImportTitle": "ייבוא נתוני חשבון",
   "upgradeTrackerImportDescription": "הדביקו את ה-JSON הגולמי של החשבון. הוא נשאר במכשיר.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "משקל {value}%",
   "upgradeTrackerPlanUntilMaxed": "עד למקסימום",
   "upgradeTrackerPlanUntilPercent": "עד {value}%",
-  "upgradeTrackerPlanRuleNote": "שכבות ממוספרות פועלות ראשונות. שורות משותפות שומרות על אותו מספר שכבה, והתמהיל שלהן מנורמל מהמשקלים היחסיים, כך ש-50 + 25 הופך ל-67% / 33%. יעד מייצר תשואה של קטגוריה לאחר שהוא מגיע לאחוז הזה בזמן שהוא נשאר כשיר מאוחר יותר.",
+  "upgradeTrackerPlanRuleNote": "גררו קטגוריות כדי לבחור מה לשדרג קודם. הגדרות השורה מאפשרות עדיפות משותפת או עצירה ביעד התקדמות.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "מקסימום לפני התקדמות",
   "upgradeTrackerPlanGoalRushNextHall": "להגיע מהר לאולם הבא",
   "upgradeTrackerPlanGoalCatchUp": "להדביק רמות נמהרות",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "בהנחה שכל ההתקפות שנותרו מושלמות. זהו גבול מתמטי, לא תחזית.",
   "warScoutTitle": "סקירת ההרכב",
   "warScoutOpponent": "המלחמות האחרונות של היריב",
-  "warScoutScope": "ההרכב הנוכחי · אותם כללים · עד 10 מלחמות קודמות"
+  "warScoutScope": "ההרכב הנוכחי · אותם כללים · עד 10 מלחמות קודמות",
+  "upgradeTrackerCapturedWork": "מהעדכון האחרון שלך"
 }

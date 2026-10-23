@@ -21,7 +21,7 @@ import type {
 import {
   CardHeader,
   CaughtUp,
-  HomeAccountDots,
+  HomeAccountBar,
   HomeCardFrame,
   HomeCardSkeleton,
   HomeMetricGrid,
@@ -137,24 +137,17 @@ export function HomeTodoCard({
       accent={ckColors.donationGreen}
       onPress={actions.openTodo}
       actionLabel={t('todoTitle')}
-      onPage={
-        pages.length > 1
-          ? (direction) => {
-              const tag =
-                pages[(safeSelected + direction + pages.length) % pages.length]?.account?.tag;
-              if (tag) actions.selectAccount?.(tag);
-            }
-          : undefined
-      }
       footer={
-        <HomeAccountDots
-          entries={pages.flatMap((page) => (page.account ? [page.account] : []))}
-          selectedIndex={safeSelected}
-          onSelect={(index) => {
-            const tag = pages[index]?.account?.tag;
-            if (tag) actions.selectAccount?.(tag);
-          }}
-        />
+        pages.length > 1 ? (
+          <HomeAccountBar
+            entries={pages.flatMap((page) => (page.account ? [page.account] : []))}
+            selectedIndex={safeSelected}
+            onSelect={(index) => {
+              const tag = pages[index]?.account?.tag;
+              if (tag) actions.selectAccount?.(tag);
+            }}
+          />
+        ) : null
       }
       header={
         <HomeWidgetHeader
@@ -283,23 +276,17 @@ export function HomeRankedCard({
   return (
     <HomeCardFrame
       accent={current?.tierColor}
-      onPage={
-        pages.length > 1
-          ? (direction) =>
-              actions.selectAccount?.(
-                pages[(safeSelected + direction + pages.length) % pages.length]!.tag,
-              )
-          : undefined
-      }
       footer={
-        <HomeAccountDots
-          entries={pages}
-          selectedIndex={safeSelected}
-          onSelect={(index) => {
-            const tag = pages[index]?.tag;
-            if (tag) actions.selectAccount?.(tag);
-          }}
-        />
+        pages.length > 1 ? (
+          <HomeAccountBar
+            entries={pages}
+            selectedIndex={safeSelected}
+            onSelect={(index) => {
+              const tag = pages[index]?.tag;
+              if (tag) actions.selectAccount?.(tag);
+            }}
+          />
+        ) : null
       }
     >
       {[current!].map((account) => (
@@ -316,7 +303,7 @@ export function HomeRankedCard({
             title={account.name}
             subtitle={
               account.mode === 'legend'
-                ? `${account.tierName}${account.rank ? ` · ${t('cwlRankTitle')} #${account.rank}` : ''}`
+                ? (account.rank ? `${t('cwlRankTitle')} #${account.rank}` : undefined)
                 : account.rank !== null
                   ? `${t('cwlRankTitle')} #${account.rank} / ${account.groupSize}`
                   : `${account.tierName} · ${t('rankedLeagueNoGroup')}`
@@ -440,8 +427,13 @@ export function HomeUpgradeCard({
     return (
       <View style={styles.body}>
         <StatusRow chevron>
-          <CKText muted role="labelLarge" numberOfLines={1}>
-            {snapshotAge(entry.capturedAt, t, locale)}
+          <CKText
+            muted={!entry.needsUpdate}
+            role="labelLarge"
+            numberOfLines={1}
+            style={entry.needsUpdate ? { color: ckColors.warGold } : undefined}
+          >
+            {entry.needsUpdate ? t('widgetDataStale') : snapshotAge(entry.capturedAt, t, locale)}
           </CKText>
         </StatusRow>
         <Metrics metrics={upgradeMetrics(entry)} />
@@ -472,23 +464,17 @@ export function HomeUpgradeCard({
       accent={ckColors.builderBlue}
       onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}
       actionLabel={t('drawerUpgradeTracker')}
-      onPage={
-        pages.length > 1
-          ? (direction) =>
-              actions.selectAccount?.(
-                pages[(safeSelected + direction + pages.length) % pages.length]!.tag,
-              )
-          : undefined
-      }
       footer={
-        <HomeAccountDots
-          entries={pages}
-          selectedIndex={safeSelected}
-          onSelect={(index) => {
-            const tag = pages[index]?.tag;
-            if (tag) actions.selectAccount?.(tag);
-          }}
-        />
+        pages.length > 1 ? (
+          <HomeAccountBar
+            entries={pages}
+            selectedIndex={safeSelected}
+            onSelect={(index) => {
+              const tag = pages[index]?.tag;
+              if (tag) actions.selectAccount?.(tag);
+            }}
+          />
+        ) : null
       }
       header={
         <HomeWidgetHeader

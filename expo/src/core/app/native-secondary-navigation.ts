@@ -22,15 +22,20 @@ export type NativeSecondaryRouteTransition =
 const layers = new Map<string, NativeSecondaryLayer>();
 const listeners = new Map<string, Set<() => void>>();
 
-// Every detail is a real native push, even if a clan card could not be measured
-// on press. Keep this static: changing a native-stack screen's animation after
-// navigation starts cannot animate the transition that already occurred.
+// Choose transitions before navigation starts; changing options after mount
+// is too late. Search expands in place, while its results remain native pushes.
 export const nativeDetailScreenOptions = {
   gestureEnabled: true,
   presentation: 'card',
   animation: 'slide_from_right',
   gestureDirection: 'horizontal',
 } as const;
+
+export function nativeSecondaryScreenOptions(layer?: string) {
+  return layer?.startsWith('utility:search:')
+    ? { ...nativeDetailScreenOptions, animation: 'none' as const, gestureEnabled: false }
+    : nativeDetailScreenOptions;
+}
 
 export function publishNativeSecondaryLayer(key: string, layer: NativeSecondaryLayer) {
   layers.set(key, layer);

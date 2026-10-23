@@ -1,3 +1,4 @@
+import { modalOrientations } from "./modal-orientations";
 import { useRef, useState, type ReactNode } from 'react';
 import {
   Modal,
@@ -8,7 +9,7 @@ import {
   StyleSheet,
   View,
   type LayoutChangeEvent,
-  type View as ViewType,
+  type ViewInstance as ViewType,
 } from 'react-native';
 import { Share2, X } from 'lucide-react-native';
 import { captureRef } from 'react-native-view-shot';
@@ -38,7 +39,7 @@ export function horizontalImagePreviewScale(availableWidth: number, canvasWidth:
 }
 
 export function horizontalImageFilename(
-  kind: 'battlelog' | 'legends',
+  kind: 'battlelog' | 'legends' | 'ranked',
   playerName: string,
   qualifier = '',
   now = new Date(),
@@ -142,7 +143,7 @@ export function HorizontalImageShareModal({
   }
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <Surface radius={ckRadius.card} style={styles.sheet}>
           <View style={styles.header}>

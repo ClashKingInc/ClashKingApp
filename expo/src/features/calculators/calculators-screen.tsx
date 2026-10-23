@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../ui/modal-orientations";
 import { useEffect, useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -1183,7 +1184,7 @@ function AccountPicker({
     `${account.name} ${account.tag}`.toLowerCase().includes(query.trim().toLowerCase()),
   );
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
       <View style={styles.sheetBackdrop}>
         <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
@@ -1332,7 +1333,7 @@ function BuildingPicker({
     />
   );
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
       <View style={styles.sheetBackdrop}>
         <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
@@ -1539,7 +1540,7 @@ function SelectButton({
         <CKText numberOfLines={1}>{label}</CKText>
         <ChevronDown size={16} color={theme.onSurfaceVariant} />
       </Pressable>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={visible}
         animationType="fade"

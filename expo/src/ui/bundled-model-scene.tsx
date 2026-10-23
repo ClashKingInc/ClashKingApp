@@ -16,7 +16,7 @@ export function BundledModelScene({
   cameraTarget,
 }: BundledModelSceneProps) {
   const model = useBundledModelSource(source);
-  const viewer = useRef<WebView>(null);
+  const viewer = useRef<WebView<object>>(null);
   const [failedSource, setFailedSource] = useState<number>();
   const document = useMemo(
     () =>
@@ -48,7 +48,7 @@ export function BundledModelScene({
       style={styles.stage}
     >
       {model.failed || failedSource === source ? null : document ? (
-        <WebView
+        <WebView<object>
           ref={viewer}
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"

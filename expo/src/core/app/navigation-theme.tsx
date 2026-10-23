@@ -20,6 +20,11 @@ export function NavigationTheme({ children }: PropsWithChildren) {
         card: colors.background,
         text: colors.onSurface,
         primary: colors.primary,
+        // The embedded React Navigation tree shares the theme type namespace
+        // but requires concrete color strings. Preserve Router's string defaults.
+        border: typeof base.colors.border === 'string' ? base.colors.border : colors.outlineVariant,
+        notification:
+          typeof base.colors.notification === 'string' ? base.colors.notification : colors.primary,
       },
     };
   }, [colors, mode]);

@@ -1,3 +1,4 @@
+import { modalOrientations } from "./modal-orientations";
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from 'react';
 import { Modal, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
@@ -68,7 +69,7 @@ export function PageLoadingOverlay({
   );
   // Never present a UIKit modal while a native destination is being pushed.
   return Platform.OS === 'web' ? (
-    <Modal visible transparent animationType="none">
+    <Modal supportedOrientations={modalOrientations} visible transparent animationType="none">
       {content}
     </Modal>
   ) : (

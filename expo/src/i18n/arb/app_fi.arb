@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Parhaat pokaalit",
   "clanLoadFailed": "Klaanin lataus epäonnistui.",
   "gameItemLevels": "Tasot",
+  "gameItemLevelCount": "{count, plural, one {# taso} other {# tasoa}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Musta eliksiiri",
   "resourceBuilderElixir": "Rakentajaeliksiiri",
   "resourceBuilderGold": "Rakentajakulta",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Jaa seuranta",
+  "trackerPosterCopied": "Kuva kopioitu",
+  "trackerPosterCopy": "Kopioi kuva",
+  "trackerPosterShareAll": "Jaa kaikki 3",
   "upgradeTrackerPasteJson": "Liitä tilin JSON",
   "upgradeTrackerImportTitle": "Tuo tilitiedot",
   "upgradeTrackerImportDescription": "Liitä käsittelemätön tilin JSON. Se säilyy tällä laitteella.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Numeroidut tasot suoritetaan ensin. Jaetut rivit säilyttävät saman tasonumeron ja niiden sekoitus normalisoidaan suhteellisista painoista, joten 50 + 25 tulee 67 % / 33 %. Tavoite tuottaa kategorian tuoton saavutettuaan kyseisen prosenttiosuuden, mutta se pysyy kelvollisena myöhemmin.",
+  "upgradeTrackerPlanRuleNote": "Vedä kategoriat haluamaasi päivitysjärjestykseen. Riviasetuksissa voi jakaa prioriteetin tai pysähtyä tavoiteprosenttiin.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max ennen etenemistä",
   "upgradeTrackerPlanGoalRushNextHall": "Saavu nopeasti seuraavaan saliin",
   "upgradeTrackerPlanGoalCatchUp": "Pidä kiinni kiireisistä tasoista",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Olettaa jäljellä olevat hyökkäykset täydellisiksi. Tämä on matemaattinen raja, ei ennuste.",
   "warScoutTitle": "Kokoonpanon kartoitus",
   "warScoutOpponent": "Vastustajan viime sodat",
-  "warScoutScope": "Nykyinen kokoonpano · samat säännöt · enintään 10 aiempaa sotaa"
+  "warScoutScope": "Nykyinen kokoonpano · samat säännöt · enintään 10 aiempaa sotaa",
+  "upgradeTrackerCapturedWork": "Viimeisimmästä päivityksestäsi"
 }

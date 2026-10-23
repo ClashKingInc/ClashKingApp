@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import { Modal, Pressable, View } from 'react-native';
 import { SlidersHorizontal, X } from 'lucide-react-native';
@@ -101,7 +102,7 @@ export function StatsChartSettings({
           setOpen(true);
         }}
       />
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+      <Modal supportedOrientations={modalOrientations} visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
         <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: '#0008' }}>
           <Pressable
             accessibilityRole="button"

@@ -3306,6 +3306,8 @@
   "playerBestTrophies": "Лучшие трофеи",
   "clanLoadFailed": "Не удалось загрузить клан.",
   "gameItemLevels": "Уровни",
+  "gameItemLevelCount": "{count, plural, one {# уровень} few {# уровня} many {# уровней} other {# уровня}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Тёмный эликсир",
   "resourceBuilderElixir": "Эликсир строителя",
   "resourceBuilderGold": "Золото строителя",
@@ -3923,6 +3925,9 @@
     }
   },
   "upgradeTrackerShare": "Поделиться прогрессом",
+  "trackerPosterCopied": "Изображение скопировано",
+  "trackerPosterCopy": "Копировать изображение",
+  "trackerPosterShareAll": "Поделиться всеми 3",
   "upgradeTrackerPasteJson": "Вставить JSON с данными аккаунта",
   "upgradeTrackerImportTitle": "Загрузка данных аккаунта",
   "upgradeTrackerImportDescription": "Вставьте исходный JSON аккаунта. Данные останутся только на устройстве.",
@@ -4904,7 +4909,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Пронумерованные уровни запускаются первыми. Общие строки сохраняют тот же номер уровня, а их сочетание нормализуется на основе относительных весов, поэтому 50 + 25 становится 67%/33%. Цель дает доход по категории после достижения этого процента, но остается подходящей для нее позже.",
+  "upgradeTrackerPlanRuleNote": "Перетащите категории, чтобы выбрать порядок улучшений. В настройках строки можно задать общую приоритетность или остановку на целевом прогрессе.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Макс перед продвижением",
   "upgradeTrackerPlanGoalRushNextHall": "Быстро доберитесь до следующего зала",
   "upgradeTrackerPlanGoalCatchUp": "Проходите быстрые уровни",
@@ -5072,5 +5077,6 @@
   "warOutlookAssumption": "Оставшиеся атаки считаются идеальными. Это математический предел, а не прогноз.",
   "warScoutTitle": "Анализ состава",
   "warScoutOpponent": "Недавние войны соперника",
-  "warScoutScope": "Текущий состав · те же правила · до 10 предыдущих войн"
+  "warScoutScope": "Текущий состав · те же правила · до 10 предыдущих войн",
+  "upgradeTrackerCapturedWork": "Из последнего обновления"
 }

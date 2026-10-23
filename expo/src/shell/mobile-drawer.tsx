@@ -74,7 +74,10 @@ export function MobileDrawer({
     helpTimer.current = setTimeout(() => setShowFollowerHelp(false), 4000);
   };
   const navigate = (route: AppRouteDefinition) => {
-    onRequestClose(() => onNavigate(route));
+    // Select the destination behind the drawer first. Deferring navigation
+    // until the closing animation ends briefly reveals the previous page.
+    onNavigate(route);
+    onRequestClose();
   };
   const openExternal = (url: string) => {
     onRequestClose(() => {

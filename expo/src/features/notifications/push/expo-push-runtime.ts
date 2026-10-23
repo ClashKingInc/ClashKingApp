@@ -9,6 +9,7 @@ import {
   setBackgroundMessageHandler,
 } from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
+import { AndroidImportance } from 'expo-notifications';
 import { File, Paths } from 'expo-file-system';
 import { Platform } from 'react-native';
 import type {
@@ -83,7 +84,7 @@ export class ExpoPushRuntime implements PushRuntime {
       await Notifications.setNotificationChannelAsync(PUSH_NOTIFICATION_CHANNEL.id, {
         name: PUSH_NOTIFICATION_CHANNEL.name,
         description: PUSH_NOTIFICATION_CHANNEL.description,
-        importance: Notifications.AndroidImportance.HIGH,
+        importance: AndroidImportance.HIGH,
       });
     }
     this.responseSubscription?.remove();

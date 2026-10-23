@@ -1,3 +1,7 @@
+import { HeroHeaderScrim } from "../../../ui/hero-header-scrim";
+import { Image } from 'expo-image';
+import { modalOrientations } from "../../../ui/modal-orientations";
+import type { ViewInstance } from 'react-native';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Animated,
@@ -44,8 +48,10 @@ import {
   Users,
   X,
 } from 'lucide-react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { ExpandableProgressCard } from '../../../ui/expandable-progress-card';
+import { trackerCategoryImage } from '../../upgrade-tracker/presentation/tracker-category-art';
+import { UpgradeVillage } from '../../upgrade-tracker/models';
 import { sharePageLink } from '../../../core/deep-links/share-page-link';
 import { playerProfileClanIdentity } from './player-clan-identity';
 
@@ -54,6 +60,7 @@ import {
   useChartDismissal,
 } from '../../stats/presentation/chart-interaction-boundary';
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { formatUpgradeDuration } from '../../../core/utils/upgrade-duration';
 import {
   localizedInfoForItem,
   localizedNameForItem,
@@ -81,7 +88,6 @@ import {
   ckSpacing,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
 import type {
   Player,
@@ -166,12 +172,12 @@ export function PlayerDetailHeader({
   const { player } = model;
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   const { width } = useWindowDimensions();
-  const [headerWidth, setHeaderWidth] = useState(width);
-  // A desktop sidebar consumes part of the window. Base the web header on
-  // its actual pane, not the viewport, so identity text cannot collapse.
-  const compact = (Platform.OS === 'web' ? Math.min(width, headerWidth) : width) < 900;
+  const [headerSize, setHeaderSize] = useState({ width, height: 0 });
+  // Native tablets retain the centered profile composition in both orientations.
+  // The desktop row reserves space for a sidebar-sized league rail; applying it
+  // to a native landscape window let that rail consume the identity's width.
+  const compact = Platform.OS !== 'web' || Math.min(width, headerSize.width) < 900;
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
   const copyPlayerTag = () =>
@@ -198,7 +204,10 @@ export function PlayerDetailHeader({
   const leagueTiles = (
     <View
       testID="player-league-tiles"
-      style={[styles.leagueTiles, compact ? styles.leagueTilesCompact : Platform.OS === 'web' ? styles.leagueTilesDesktop : undefined]}
+      style={[
+        styles.leagueTiles,
+        compact ? styles.leagueTilesCompact : styles.leagueTilesDesktop,
+      ]}
     >
       {(selectedTab === 'builder'
         ? [
@@ -225,9 +234,7 @@ export function PlayerDetailHeader({
           accessibilityRole={ranked ? 'button' : undefined}
           disabled={!ranked}
           onPress={() =>
-            player.isLegendLeague
-              ? actions.openLegends(player)
-              : actions.openRanked(player)
+            player.isLegendLeague ? actions.openLegends(player) : actions.openRanked(player)
           }
           style={styles.leagueTilePressable}
         >
@@ -310,30 +317,29 @@ export function PlayerDetailHeader({
   return (
     <View
       testID={compact ? 'player-header-mobile' : 'player-header-desktop'}
-      onLayout={Platform.OS === 'web' ? (event) => setHeaderWidth(event.nativeEvent.layout.width) : undefined}
+      onLayout={({ nativeEvent: { layout } }) =>
+        setHeaderSize((current) =>
+          current.width === layout.width && current.height === layout.height
+            ? current
+            : { width: layout.width, height: layout.height },
+        )
+      }
       style={[styles.header, { paddingTop: safeTop }]}
     >
       <View testID="player-header-backdrop" pointerEvents="none" style={styles.headerBackdrop}>
-        <MobileWebImage
-          imageUrl={
-            selectedTab === 'builder'
-              ? ImageAssets.builderBaseBackground
-              : ImageAssets.homeBaseBackground
-          }
+        {/* All Player Info tabs share this artwork, including Builder Base. */}
+        <Image
+          testID="player-header-background-image"
+          source={require('../../../../assets/clashking/backgrounds/player-electro-dragon-quiet-v3.webp')}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
+          contentPosition="center"
+          transition={0}
+          cachePolicy="memory-disk"
         />
         <View style={[StyleSheet.absoluteFill, styles.headerScrim]} />
-        <Svg style={StyleSheet.absoluteFill} width="100%" height="100%" pointerEvents="none">
-          <Defs>
-            <LinearGradient id="player-header-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.36 : 0.2} />
-              <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.64 : 0.4} />
-              <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.92 : 0.65} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#player-header-gradient)" />
-        </Svg>
+        {/* Native image bounds follow rotation without a JS measurement frame. */}
+        <HeroHeaderScrim variant="player" />
       </View>
       <View testID="player-header-content" style={styles.headerContent}>
         <View
@@ -412,7 +418,13 @@ export function PlayerDetailHeader({
               </View>
             ) : null}
           </View>
-          <View style={[styles.identityCopy, compact && styles.identityCopyCompact, compact && Platform.OS === 'web' && styles.identityCopyWeb]}>
+          <View
+            style={[
+              styles.identityCopy,
+              compact && styles.identityCopyCompact,
+              compact && Platform.OS === 'web' && styles.identityCopyWeb,
+            ]}
+          >
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`${player.name}. ${t('generalCopiedToClipboard')}`}
@@ -514,7 +526,7 @@ export function PlayerBaseTab({
           <PlayerItemSection
             title={t('gameHeroes')}
             items={player.bbHeroes}
-            categoryIcon={ImageAssets.upgradeCategoryIcons.heroes}
+            categoryIcon={trackerCategoryImage('heroes', UpgradeVillage.builderBase)}
             townHallLevel={player.builderHallLevel}
             initiallyExpanded
           />
@@ -548,7 +560,7 @@ export function PlayerBaseTab({
         <PlayerItemSection
           title={t('gameEquipment')}
           items={player.equipments}
-          categoryIcon={ImageAssets.upgradeCategoryIcons.equipment}
+          categoryIcon={trackerCategoryImage('equipment', UpgradeVillage.home)}
           townHallLevel={player.townHallLevel}
           initiallyExpanded
         />
@@ -630,7 +642,6 @@ export function PlayerItemSection({
   const { t, locale } = useI18n();
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [selected, setSelected] = useState<PlayerItem | null>(null);
-  const [showSummary, setShowSummary] = useState(false);
   const theme = useCKTheme();
   const visible = useMemo(
     () => [...items].sort((a, b) => Number(b.isUnlocked) - Number(a.isUnlocked)),
@@ -646,8 +657,11 @@ export function PlayerItemSection({
         maxLevels) *
       100
     : 0;
-  const badgeProgress = progress % 1 === 0 ? String(progress) : progress.toFixed(1);
-  const formattedProgress = progress % 1 === 0 ? String(progress) : progress.toFixed(2);
+  const levelsRemaining = items.reduce(
+    (sum, item) =>
+      sum + Math.max(0, maxLevelForItemAtTH(item, townHallLevel) - Math.max(0, item.level)),
+    0,
+  );
   const summary = items.reduce(
     (result, item) => {
       const remaining = calculateRemainingUpgradeSummary(
@@ -666,48 +680,52 @@ export function PlayerItemSection({
   );
   if (!items.length) return null;
   return (
-    <Surface radius={ckRadius.card} style={styles.section}>
-      {/* Expansion and remaining-upgrade details are sibling actions. A
-          button inside a button is invalid HTML and breaks keyboard focus. */}
-      <View style={styles.sectionTitle}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={title}
-        accessibilityState={{ expanded }}
-        onPress={() => setExpanded(!expanded)}
-        style={[styles.sectionTitle, styles.grow]}
-      >
-        <ChevronRight
-          size={22}
-          color={colorWithAlpha(theme.onSurface, 0.72)}
-          style={{ transform: [{ rotate: expanded ? '90deg' : '0deg' }] }}
-        />
-        {categoryIcon ? (
-          <MobileWebImage
-            imageUrl={categoryIcon}
-            style={{ width: 28, height: 28 }}
-            accessible={false}
-            contentFit="contain"
-          />
-        ) : null}
-        <CKText role="sectionTitle" style={styles.grow}>
-          {title}
-        </CKText>
-      </Pressable>
-        {items[0] instanceof PlayerSuperTroop ? null : (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('playerUpgradeRemainingAccessibility', { townHallLevel })}
-            onPress={(event) => {
-              event.stopPropagation();
-              setShowSummary(true);
+    <>
+      <ExpandableProgressCard
+        title={title}
+        imageUrl={categoryIcon ?? items[0]!.imageUrl}
+        percent={progress}
+        open={expanded}
+        onToggle={() => setExpanded((value) => !value)}
+        footer={
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 6,
+              flexWrap: 'nowrap',
+              width: '100%',
             }}
           >
-            <SectionProgressBadge progress={progress / 100} label={`${badgeProgress}%`} />
-          </Pressable>
-        )}
-      </View>
-      {expanded ? (
+            <CKText role="bodySmall" muted numberOfLines={1} style={{ flexShrink: 1 }}>
+              {levelsRemaining === 0
+                ? t('homeRecentlyCompleted')
+                : t('gameItemLevelCount', { count: levelsRemaining })}
+            </CKText>
+            {levelsRemaining > 0 && summary.seconds > 0 ? (
+              <CKText role="bodySmall" muted numberOfLines={1} style={{ flexShrink: 1 }}>
+                · {formatUpgradeDuration(summary.seconds)}
+              </CKText>
+            ) : null}
+            {[...summary.resources]
+              .filter(([, amount]) => amount > 0)
+              .map(([resource, amount]) => (
+                <View
+                  key={resource}
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 3, flexShrink: 1 }}
+                >
+                  <MobileWebImage
+                    imageUrl={resourceImage(resource)}
+                    style={{ width: 15, height: 15 }}
+                  />
+                  <CKText role="bodySmall" numberOfLines={1} style={{ flexShrink: 1 }}>
+                    {formatPlayerResourceAmount(amount, locale)}
+                  </CKText>
+                </View>
+              ))}
+          </View>
+        }
+      >
         <ResponsiveGrid
           minItemWidth={54}
           maxColumns={10}
@@ -769,7 +787,7 @@ export function PlayerItemSection({
             );
           })}
         </ResponsiveGrid>
-      ) : null}
+      </ExpandableProgressCard>
       {selected instanceof PlayerSuperTroop ? (
         <ItemDetailModal item={selected} onClose={() => setSelected(null)} />
       ) : (
@@ -780,122 +798,7 @@ export function PlayerItemSection({
           onClose={() => setSelected(null)}
         />
       )}
-      <Modal
-        transparent
-        visible={showSummary}
-        animationType="fade"
-        onRequestClose={() => setShowSummary(false)}
-      >
-        <Pressable style={styles.overlay} onPress={() => setShowSummary(false)}>
-          <Surface radius={ckRadius.card} style={styles.dialog}>
-            <View style={styles.dialogTitle}>
-              <CKText role="titleLarge" style={styles.grow}>
-                {t('playerUpgradeSummaryTitle', {
-                  progress: formattedProgress,
-                  townHallLevel,
-                })}
-              </CKText>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={materialCloseLabel(locale)}
-                onPress={() => setShowSummary(false)}
-              >
-                <X color={theme.onSurfaceVariant} />
-              </Pressable>
-            </View>
-            {progress >= 100 ? (
-              <CKText>{t('playerUpgradeSectionMaxed', { townHallLevel })}</CKText>
-            ) : (
-              <>
-                <CKText role="rowTitle">{t('playerUpgradeTimeRemaining')}</CKText>
-                <CKText>{formatDurationSeconds(summary.seconds, locale)}</CKText>
-                <CKText role="rowTitle">{t('assetFolderResources')}</CKText>
-                {summary.resources.size ? (
-                  <View style={styles.wrap}>
-                    {[...summary.resources]
-                      .sort(([a], [b]) => a.localeCompare(b))
-                      .map(([resource, amount]) => (
-                        <PillSurface key={resource} style={styles.levelPill}>
-                          <MobileWebImage
-                            imageUrl={resourceImage(resource)}
-                            style={styles.resourceIcon}
-                          />
-                          <CKText>{formatPlayerResourceAmount(amount, locale)}</CKText>
-                        </PillSurface>
-                      ))}
-                  </View>
-                ) : (
-                  <CKText>{t('playerUpgradeNoResourceData')}</CKText>
-                )}
-              </>
-            )}
-          </Surface>
-        </Pressable>
-      </Modal>
-    </Surface>
-  );
-}
-
-function SectionProgressBadge({ progress, label }: { progress: number; label: string }) {
-  const theme = useCKTheme();
-  const normalized = Math.max(0, Math.min(1, progress));
-  const accent = normalized >= 1 ? '#E8A524' : '#E0302B';
-  const [size, setSize] = useState({ width: 0, height: 0 });
-  const innerWidth = Math.max(0, size.width - 2);
-  const innerHeight = Math.max(0, size.height - 2);
-  const radius = innerHeight / 2;
-  const perimeter = Math.max(0, 2 * (innerWidth - innerHeight) + 2 * Math.PI * radius);
-  return (
-    <View
-      testID="section-progress-badge"
-      onLayout={(event) => {
-        const { width, height } = event.nativeEvent.layout;
-        if (width !== size.width || height !== size.height) setSize({ width, height });
-      }}
-      style={[
-        styles.sectionProgress,
-        {
-          backgroundColor:
-            normalized >= 1
-              ? colorWithAlpha(accent, 0.14)
-              : colorWithAlpha(theme.surfaceContainerHighest, 0.55),
-        },
-      ]}
-    >
-      {size.width > 0 && size.height > 0 ? (
-        <Svg
-          style={StyleSheet.absoluteFill}
-          viewBox={`0 0 ${size.width} ${size.height}`}
-          pointerEvents="none"
-        >
-          <Rect
-            x="1"
-            y="1"
-            width={innerWidth}
-            height={innerHeight}
-            rx={radius}
-            fill="none"
-            stroke={colorWithAlpha(theme.outlineVariant, 0.58)}
-            strokeWidth="1.5"
-          />
-          <Rect
-            x="1"
-            y="1"
-            width={innerWidth}
-            height={innerHeight}
-            rx={radius}
-            fill="none"
-            stroke={accent}
-            strokeWidth="2"
-            strokeDasharray={`${perimeter * normalized} ${perimeter}`}
-            strokeLinecap="round"
-          />
-        </Svg>
-      ) : null}
-      <CKText role="labelMedium" style={styles.sectionProgressLabel}>
-        {label}
-      </CKText>
-    </View>
+    </>
   );
 }
 
@@ -905,7 +808,7 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
   const localizedName = item ? localizedNameForItem(item.meta) || item.name : '';
   const localizedDescription = item ? localizedInfoForItem(item.meta) : '';
   return (
-    <Modal transparent visible={item !== null} animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent visible={item !== null} animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <Pressable
           accessible={false}
@@ -952,20 +855,6 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
   );
 }
 
-export function formatDurationSeconds(seconds: number, locale: string) {
-  const formatUnit = (value: number, unit: 'day' | 'hour' | 'minute') =>
-    new Intl.NumberFormat(toIntlLocale(locale), {
-      style: 'unit',
-      unit,
-      unitDisplay: 'narrow',
-    }).format(value);
-  if (!seconds) return formatUnit(0, 'minute');
-  const days = Math.floor(seconds / 86400),
-    hours = Math.floor((seconds % 86400) / 3600);
-  return days
-    ? `${formatUnit(days, 'day')} ${formatUnit(hours, 'hour')}`
-    : formatUnit(Math.max(1, Math.ceil(seconds / 3600)), 'hour');
-}
 export function formatPlayerResourceAmount(value: number, locale: string) {
   const suffix = (amount: number, unit: string) =>
     `${amount.toFixed(1).replace(/\.0$/, '')}${unit}`;
@@ -1090,7 +979,7 @@ function BattlelogLootGrid({
   );
   const clearSelection = useCallback(() => setSelected(null), []);
   useChartDismissal(clearSelection);
-  const gridRef = useRef<View>(null);
+  const gridRef = useRef<ViewInstance>(null);
   const origin = useRef({ x: 0, y: 0 });
   const [gridWidth, setGridWidth] = useState(0);
   const weeks = useMemo(() => battlelogLootWeeks(timeline), [timeline]);
@@ -1524,6 +1413,7 @@ export function PlayerActivityTab({
           accessibilityRole="button"
           accessibilityLabel={`${verifiedTracking ? t('playerActivityTrackingActive') : t('playerActivityTrackingUnknown')}. ${verifiedTracking ? t('playerActivityTrackingActiveBody') : t('playerActivityTrackingUnknownBody')}`}
           onPress={() => setShowTracking(true)}
+          style={styles.trackingControl}
         >
           <PillSurface style={styles.dropdownControl}>
             {verifiedTracking ? (
@@ -1531,7 +1421,7 @@ export function PlayerActivityTab({
             ) : (
               <Info size={18} color={theme.onSurfaceVariant} />
             )}
-            <CKText numberOfLines={1} style={styles.trackingLabel}>
+            <CKText style={styles.trackingLabel}>
               {verifiedTracking
                 ? t('playerActivityTrackingActive')
                 : t('playerActivityTrackingUnknown')}
@@ -1556,7 +1446,7 @@ export function PlayerActivityTab({
           ))}
         </ResponsiveGrid>
       </View>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={showTracking}
         animationType="fade"
@@ -1866,7 +1756,7 @@ export function PlayerWarTab({
           <Skeleton width="100%" height={84} />
         </View>
       ) : null}
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={showExport}
         animationType="fade"
@@ -2108,7 +1998,7 @@ export function WarFilterModal({
   const toggle = <T,>(values: T[], value: T) =>
     values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
   return (
-    <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent visible={visible} animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.overlay} onPress={onClose}>
         <Surface
           testID="war-filter-dialog"
@@ -3068,7 +2958,7 @@ function WarAttackList({
           );
         })}
       </ResponsiveGrid>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={details !== null}
         animationType="slide"
@@ -3755,7 +3645,9 @@ export function TabState({
     !(tab === 'joinLeave' && model.joinLeave?.items.length) &&
     !(tab === 'war' && model.warStats)
   )
-    return <PageSkeleton kind={tab === 'war' ? 'stats' : tab === 'legendHistory' ? 'stats' : 'list'} />;
+    return (
+      <PageSkeleton kind={tab === 'war' ? 'stats' : tab === 'legendHistory' ? 'stats' : 'list'} />
+    );
   const error = model.errorByTab?.[tab];
   if (
     error &&
@@ -4268,7 +4160,8 @@ const styles = StyleSheet.create({
   leagueSubtitle: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   leagueSubtitleIcon: { width: 16, height: 16, resizeMode: 'contain' },
   leagueTiles: { flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' },
-  leagueTilesCompact: { paddingHorizontal: 16 },
+  // League summaries stay phone-sized instead of becoming full-width tablet tiles.
+  leagueTilesCompact: { paddingHorizontal: 16, maxWidth: 460, alignSelf: 'center' },
   leagueTilesDesktop: { width: '44%', maxWidth: 460, flexShrink: 0 },
   leagueTilePressable: { flex: 1 },
   clanLine: { flexDirection: 'row', alignItems: 'center', maxWidth: 320 },
@@ -4298,7 +4191,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    maxWidth: 1120,
+    maxWidth: 760,
     width: '100%',
     alignSelf: 'center',
   },
@@ -4424,7 +4317,10 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 12,
   },
-  trackingLabel: { maxWidth: 116 },
+  trackingControl: { maxWidth: '55%', flexShrink: 1 },
+  // Tracking status is meaningful copy, so wrap it instead of truncating it
+  // at an arbitrary width when the neighboring history filter needs space.
+  trackingLabel: { flexShrink: 1, paddingVertical: 6 },
   dropdownMenu: {
     position: 'absolute',
     zIndex: 20,

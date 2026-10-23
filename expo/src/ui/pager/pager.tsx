@@ -1,3 +1,11 @@
+import { type ScrollViewInstance,
+  ScrollView,
+  StyleSheet,
+  View,
+  type LayoutChangeEvent,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+} from 'react-native';
 import {
   Children,
   forwardRef,
@@ -7,14 +15,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  type LayoutChangeEvent,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-} from 'react-native';
 
 import type {
   PagerViewHandle,
@@ -65,7 +65,7 @@ export const PagerView = forwardRef<PagerViewHandle, PagerViewProps>(function Pa
   }
   const pages = Children.toArray(children);
   const isRtl = layoutDirection === 'rtl';
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const [width, setWidth] = useState(0);
   const selectedPage = useRef(initialPage);
   const reportedPage = useRef(initialPage);
@@ -99,7 +99,8 @@ export const PagerView = forwardRef<PagerViewHandle, PagerViewProps>(function Pa
         finish();
         return;
       }
-      const start = scroll.current?.getScrollableNode()?.scrollLeft ?? target;
+      const node = scroll.current?.getScrollableNode() as unknown as { scrollLeft?: number } | undefined;
+      const start = node?.scrollLeft ?? target;
       const startTime = performance.now();
       // Browser-native smooth scrolling can take >600ms across two tabs. Use
       // a bounded, interruptible transition and always report its settled page.

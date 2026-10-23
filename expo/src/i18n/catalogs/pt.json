@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Melhores troféus",
   "clanLoadFailed": "Falha ao carregar o clã.",
   "gameItemLevels": "Níveis",
+  "gameItemLevelCount": "{count, plural, one {# nível} other {# níveis}}",
   "resourceDarkElixir": "Elixir negro",
   "resourceBuilderElixir": "Elixir do construtor",
   "resourceBuilderGold": "Ouro do construtor",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Escolher conta",
   "upgradeTrackerSwitchAccount": "Mudar de conta, {account}",
   "upgradeTrackerShare": "Partilhar monitor",
+  "trackerPosterCopied": "Imagem copiada",
+  "trackerPosterCopy": "Copiar imagem",
+  "trackerPosterShareAll": "Compartilhar as 3",
   "upgradeTrackerPasteJson": "Colar JSON da conta",
   "upgradeTrackerImportTitle": "Importar dados da conta",
   "upgradeTrackerImportDescription": "Cole o JSON bruto da conta. Permanecerá neste dispositivo.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Peso {value}%",
   "upgradeTrackerPlanUntilMaxed": "Até atingir o máximo",
   "upgradeTrackerPlanUntilPercent": "Até {value}%",
-  "upgradeTrackerPlanRuleNote": "As camadas numeradas são executadas primeiro. As linhas compartilhadas mantêm o mesmo número de camada e seu mix é normalizado a partir dos pesos relativos, de modo que 50 + 25 se torna 67%/33%. Uma meta faz uma categoria render depois de atingir essa porcentagem, mas permanece elegível mais tarde.",
+  "upgradeTrackerPlanRuleNote": "Arraste as categorias para escolher o que melhorar primeiro. As definições da linha permitem partilhar prioridades ou parar num objetivo de progresso.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max antes de avançar",
   "upgradeTrackerPlanGoalRushNextHall": "Alcance o próximo corredor rapidamente",
   "upgradeTrackerPlanGoalCatchUp": "Alcance níveis apressados",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Pressupõe ataques restantes perfeitos. É um limite matemático, não uma previsão.",
   "warScoutTitle": "Análise da formação",
   "warScoutOpponent": "Guerras recentes do adversário",
-  "warScoutScope": "Formação atual · mesmas regras · até 10 guerras anteriores"
+  "warScoutScope": "Formação atual · mesmas regras · até 10 guerras anteriores",
+  "upgradeTrackerCapturedWork": "Da sua última atualização"
 }

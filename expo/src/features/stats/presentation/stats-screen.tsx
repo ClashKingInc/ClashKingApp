@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import {
   memo,
   useCallback,
@@ -1893,7 +1894,7 @@ function BattleFiltersCore({
     else recentDays(30);
   };
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
@@ -2106,7 +2107,7 @@ function LegendFilters({ provider, onClose }: { provider: StatsProvider; onClose
     void provider.setDates(parsedStart, parsedEnd);
   };
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>

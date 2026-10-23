@@ -47,7 +47,12 @@ import {
   type ClanNavigationActions,
 } from '../../features/clan/presentation';
 import type { Clan } from '../../features/clan/models';
-import { CwlInfoRoot, HistoricalCwlRoot, WarCwlRoot, WarInfoRoot } from '../../features/war/presentation';
+import {
+  CwlInfoRoot,
+  HistoricalCwlRoot,
+  WarCwlRoot,
+  WarInfoRoot,
+} from '../../features/war/presentation';
 import type { WarCwl, WarInfo } from '../../features/war/models';
 import { SubscriptionRoot } from '../../features/subscription';
 import { SearchRoot } from '../../features/search';
@@ -113,7 +118,12 @@ type PushedScene = {
       readonly cwl?: PlayerCurrentCwl;
     }
   | ({ readonly kind: 'cwl' } & PlayerCurrentCwl)
-  | { readonly kind: 'historicalCwl'; readonly clanTag: string; readonly season: string; readonly warLeagueName?: string }
+  | {
+      readonly kind: 'historicalCwl';
+      readonly clanTag: string;
+      readonly season: string;
+      readonly warLeagueName?: string;
+    }
   | { readonly kind: 'serverDashboard'; readonly server: DashboardServer }
   | {
       readonly kind: 'utility';
@@ -195,12 +205,21 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   const user = authState.currentUser;
   useEffect(() => {
     void tutorials.bind(runtime.preferences, user?.userId ?? null);
-    return () => { void tutorials.bind(runtime.preferences, null); };
+    return () => {
+      void tutorials.bind(runtime.preferences, null);
+    };
   }, [runtime.preferences, user?.userId]);
   const tutorialReady = useCallback(() => {
     onHomeReady?.();
-    if (primary === 'home' && !utility && !pushedScenes.length && runtime.accounts.verifiedAccounts.length) {
-      void tutorials.bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null).then(() => tutorials.visitHome(true));
+    if (
+      primary === 'home' &&
+      !utility &&
+      !pushedScenes.length &&
+      runtime.accounts.verifiedAccounts.length
+    ) {
+      void tutorials
+        .bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null)
+        .then(() => tutorials.visitHome(true));
     }
   }, [onHomeReady, runtime, primary, utility, pushedScenes.length]);
   const discordServers = useDiscordServers(user?.userId);
@@ -234,7 +253,13 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   );
   const openUtility = useCallback((route: AppRouteDefinition) => showUtility(route), [showUtility]);
   useEffect(() => {
-    if (primary === 'home' && !utility && !pushedScenes.length && runtime.accounts.verifiedAccounts.length) tutorials.visitHome();
+    if (
+      primary === 'home' &&
+      !utility &&
+      !pushedScenes.length &&
+      runtime.accounts.verifiedAccounts.length
+    )
+      tutorials.visitHome();
   }, [primary, utility, pushedScenes.length, runtime]);
   const openPlayerUtility = useCallback(
     (route: AppRouteDefinition, playerTag: string) => showUtility(route, playerTag),
@@ -252,7 +277,11 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   };
   const closeSecondary = useCallback(() => {
     navigationGeneration.current += 1;
-    if (tutorialClanVisit.current && pushedScenes.length === 1 && pushedScenes[0]?.kind === 'clan') {
+    if (
+      tutorialClanVisit.current &&
+      pushedScenes.length === 1 &&
+      pushedScenes[0]?.kind === 'clan'
+    ) {
       tutorialClanVisit.current = false;
       if (tutorials.getSnapshot().current === 'clanGuide') tutorials.dismiss();
     }
@@ -352,14 +381,17 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   useEffect(() => {
     const openTutorialClan = () => {
       const generation = ++navigationGeneration.current;
-      void runtime.clans.getClanAndWarData(TUTORIAL_CLAN_TAG).then(clan => {
-        if (generation !== navigationGeneration.current) return;
-        // This lesson is an excursion from Home, not another layer over all
-        // the setup screens. Native swipe-back and browser Back land on Home.
-        selectPrimary('home');
-        tutorialClanVisit.current = true;
-        pushClan(clan);
-      }).catch(error => setSnackbar(String(error)));
+      void runtime.clans
+        .getClanAndWarData(TUTORIAL_CLAN_TAG)
+        .then((clan) => {
+          if (generation !== navigationGeneration.current) return;
+          // This lesson is an excursion from Home, not another layer over all
+          // the setup screens. Native swipe-back and browser Back land on Home.
+          selectPrimary('home');
+          tutorialClanVisit.current = true;
+          pushClan(clan);
+        })
+        .catch((error) => setSnackbar(String(error)));
     };
     const removeClan = tutorials.registerAction('open-tutorial-clan', openTutorialClan);
     const removeNotifications = tutorials.registerAction('open-notifications', () => {
@@ -369,7 +401,10 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         showUtility(routeById('settings'), undefined, { section: 'notifications' });
       }
     });
-    return () => { removeNotifications(); removeClan(); };
+    return () => {
+      removeNotifications();
+      removeClan();
+    };
   });
   useEffect(() => {
     if (tutorialClanVisit.current && !pushedScenes.length && !utility) {
@@ -385,7 +420,10 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     openHistoricalCwl: (clan, season, warLeagueName) => {
       recordBrowserPath(appLinkPath({ kind: 'cwl', tag: clan.tag, params: { season } }));
       navigationGeneration.current += 1;
-      setPushedScenes(current => [...current, { kind: 'historicalCwl', clanTag: clan.tag, season, warLeagueName }]);
+      setPushedScenes((current) => [
+        ...current,
+        { kind: 'historicalCwl', clanTag: clan.tag, season, warLeagueName },
+      ]);
     },
     openCwl: (clan, war) =>
       pushCwl({
@@ -495,7 +533,17 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       openPlayer: pushPlayer,
       openClan: pushClan,
       openDestination: async (link: AppLink) => {
-        setDeepLinkLoadingKind(link.kind === 'war' || link.kind === 'cwl' ? 'war' : link.kind === 'page' ? (link.page === 'stats' || link.page === 'ranked' || link.page === 'legends' ? 'stats' : link.page === 'basesArmies' || link.page === 'calculators' ? 'cards' : 'list') : 'profile');
+        setDeepLinkLoadingKind(
+          link.kind === 'war' || link.kind === 'cwl'
+            ? 'war'
+            : link.kind === 'page'
+              ? link.page === 'stats' || link.page === 'ranked' || link.page === 'legends'
+                ? 'stats'
+                : link.page === 'basesArmies' || link.page === 'calculators'
+                  ? 'cards'
+                  : 'list'
+              : 'profile',
+        );
         const generation = ++navigationGeneration.current;
         let scene: PushedScene | undefined;
         if (link.kind === 'page') {
@@ -687,7 +735,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           onOpenClan={pushClan}
           onOpenDestination={(load) => {
             navigationGeneration.current += 1;
-            setPushedScenes(current => [...current, { kind: 'searchDestination', load }]);
+            setPushedScenes((current) => [...current, { kind: 'searchDestination', load }]);
           }}
         />
       );
@@ -800,9 +848,21 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
 
   const renderPushedScene = (scene: PushedScene) => {
     if (scene.kind === 'historicalCwl')
-      return <HistoricalCwlRoot clanTag={scene.clanTag} season={scene.season} warLeagueName={scene.warLeagueName} onBack={closeSecondary} onOpenWar={(war, round) => pushWar(war, round)} openClan={loadClan} openPlayer={loadPlayer} />;
+      return (
+        <HistoricalCwlRoot
+          clanTag={scene.clanTag}
+          season={scene.season}
+          warLeagueName={scene.warLeagueName}
+          onBack={closeSecondary}
+          onOpenWar={(war, round) => pushWar(war, round)}
+          openClan={loadClan}
+          openPlayer={loadPlayer}
+        />
+      );
     if (scene.kind === 'searchDestination')
-      return <SearchDestination load={scene.load} onBack={closeSecondary} render={renderPushedScene} />;
+      return (
+        <SearchDestination load={scene.load} onBack={closeSecondary} render={renderPushedScene} />
+      );
     if (scene.kind === 'serverDashboard')
       return <ServerDashboardScreen server={scene.server} onBack={closeSecondary} />;
     if (scene.kind === 'player')
@@ -912,7 +972,12 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         content: (
           <PageLoadingHost value={true}>
             {layer.content}
-            {layerIndex === secondaryLayers.length - 1 ? <PageLoadingOverlay visible={deepLinkLoading || pageLoading !== null} kind={deepLinkLoading ? deepLinkLoadingKind : pageLoading ?? 'profile'} /> : null}
+            {layerIndex === secondaryLayers.length - 1 ? (
+              <PageLoadingOverlay
+                visible={deepLinkLoading || pageLoading !== null}
+                kind={deepLinkLoading ? deepLinkLoadingKind : (pageLoading ?? 'profile')}
+              />
+            ) : null}
           </PageLoadingHost>
         ),
         onRemove: () => {
@@ -1014,7 +1079,12 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       />
       {announcementPresentation}
       <Snackbar avoidBottomNavigation message={snackbar} onDismiss={() => setSnackbar(undefined)} />
-      {!usesNativeSecondaryNavigation || secondaryLayers.length === 0 ? <PageLoadingOverlay visible={deepLinkLoading || pageLoading !== null} kind={deepLinkLoading ? deepLinkLoadingKind : pageLoading ?? 'profile'} /> : null}
+      {!usesNativeSecondaryNavigation || secondaryLayers.length === 0 ? (
+        <PageLoadingOverlay
+          visible={deepLinkLoading || pageLoading !== null}
+          kind={deepLinkLoading ? deepLinkLoadingKind : (pageLoading ?? 'profile')}
+        />
+      ) : null}
       <ClashHandoffDialog
         visible={supportCreatorHandoffUrl !== undefined}
         onCancel={() => setSupportCreatorHandoffUrl(undefined)}
@@ -1029,11 +1099,22 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
 }
 
 function secondaryRouteIdFor(scene: PushedScene | undefined): AppRouteId | undefined {
-  if (scene?.kind === 'serverDashboard') return 'servers';
-  if (scene?.kind === 'player') return 'players';
-  if (scene?.kind === 'clan' || scene?.kind === 'capital') return 'clans';
-  if (scene?.kind === 'war' || scene?.kind === 'cwl') return 'war';
-  return scene?.kind === 'utility' ? scene.route : undefined;
+  if (!scene) return undefined;
+  if (scene.kind === 'utility') return scene.route;
+  // Android renders secondary layers only when they have a shell route ID.
+  // Keep this exhaustive: an omitted kind silently reveals the primary list
+  // even when its pushed screen and API data are ready.
+  const routes = {
+    player: 'players',
+    clan: 'clans',
+    capital: 'clans',
+    war: 'war',
+    cwl: 'war',
+    historicalCwl: 'war',
+    searchDestination: 'search',
+    serverDashboard: 'servers',
+  } satisfies Record<Exclude<PushedScene['kind'], 'utility'>, AppRouteId>;
+  return routes[scene.kind];
 }
 
 function currentCwlRoute(

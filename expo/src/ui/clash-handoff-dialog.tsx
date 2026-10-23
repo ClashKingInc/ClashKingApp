@@ -1,3 +1,4 @@
+import { modalOrientations } from "./modal-orientations";
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
@@ -31,7 +32,7 @@ export function ClashHandoffDialog({
     onConfirm(remember);
   };
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={cancel}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={cancel}>
       <View style={styles.overlay}>
         <Surface style={styles.dialog} accessibilityViewIsModal>
           <CKText role="titleSmall" style={{ color: theme.error, textAlign: 'center' }}>
@@ -84,7 +85,7 @@ export function InfoDialog({
 }) {
   const { t } = useI18n();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <Surface style={styles.dialog} accessibilityViewIsModal>
           <CKText role="titleSmall">{title}</CKText>
@@ -115,7 +116,7 @@ export function ConfirmationDialog({
 }) {
   const { t } = useI18n();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
       <View style={styles.overlay}>
         <Surface style={styles.dialog} accessibilityViewIsModal>
           <CKText role="titleSmall">{title}</CKText>

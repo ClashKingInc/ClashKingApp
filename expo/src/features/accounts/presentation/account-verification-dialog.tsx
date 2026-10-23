@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ExternalLink, Shield } from 'lucide-react-native';
@@ -47,7 +48,7 @@ export function AccountVerificationDialog({
     } else setError(result.message ?? t('accountsErrorWrongApiToken'));
   };
   return (
-    <Modal
+    <Modal supportedOrientations={modalOrientations}
       animationType="fade"
       onRequestClose={loading ? undefined : onCancel}
       transparent

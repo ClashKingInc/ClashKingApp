@@ -1,8 +1,7 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Copy, SlidersHorizontal, Trash2, X } from 'lucide-react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { localizedNameForItem } from '../../core/game-data/game-data-localization';
@@ -130,7 +129,7 @@ function EquipmentEditor({
   const [editingRow, setEditingRow] = useState<string>();
   const [attributesOpen, setAttributesOpen] = useState(false);
   const [pinOpen, setPinOpen] = useState(false);
-  const [gradientBounds, setGradientBounds] = useState({ width: 390, height: 700 });
+  const [gradientHeight, setGradientHeight] = useState(700);
   const [pinned, setPinned] = useState('none');
   const [editorHeroId, setEditorHeroId] = useState(hero.id);
   // Reset hero-specific controls without remounting the editor/carousel. A
@@ -318,49 +317,18 @@ function EquipmentEditor({
   return (
     <ScrollView
       style={styles.mainScroll}
-      onLayout={({ nativeEvent }) =>
-        setGradientBounds((current) => ({
-          ...current,
-          width: Math.min(nativeEvent.layout.width, 1120),
-        }))
-      }
       contentContainerStyle={[s.content, { paddingTop: insets.top + 16, gap: 12 }]}
       keyboardShouldPersistTaps="handled"
     >
       <View
         pointerEvents="none"
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, height: gradientBounds.height }}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, height: gradientHeight }}
       >
-        <Svg
-          width={gradientBounds.width}
-          height={gradientBounds.height}
-          viewBox={`0 0 ${gradientBounds.width} ${gradientBounds.height}`}
-        >
-          <Defs>
-            <LinearGradient id="equipment-hero-atmosphere" x1="0" y1="0" x2="0" y2="1">
-              <Stop
-                offset="0"
-                stopColor={heroAccents[hero.name] ?? theme.secondary}
-                stopOpacity={0.28}
-              />
-              <Stop
-                offset="0.5"
-                stopColor={heroAccents[hero.name] ?? theme.secondary}
-                stopOpacity={0.1}
-              />
-              <Stop
-                offset="1"
-                stopColor={heroAccents[hero.name] ?? theme.secondary}
-                stopOpacity={0}
-              />
-            </LinearGradient>
-          </Defs>
-          <Rect
-            width={gradientBounds.width}
-            height={gradientBounds.height}
-            fill="url(#equipment-hero-atmosphere)"
-          />
-        </Svg>
+        <Image pointerEvents="none" accessible={false}
+          source={require("../../../assets/clashking/backgrounds/header-atmosphere.png")}
+          resizeMode="stretch"
+          style={[StyleSheet.absoluteFill, { tintColor: heroAccents[hero.name] ?? theme.secondary }]}
+        />
       </View>
       <View style={{ gap: 4 }}>
         <HeroCarousel
@@ -455,10 +423,7 @@ function EquipmentEditor({
       </View>
       <View
         onLayout={({ nativeEvent }) =>
-          setGradientBounds((current) => ({
-            ...current,
-            height: nativeEvent.layout.y + nativeEvent.layout.height + 20,
-          }))
+          setGradientHeight(nativeEvent.layout.y + nativeEvent.layout.height + 20)
         }
         style={[s.row, { alignItems: 'flex-end', flexWrap: 'nowrap' }]}
       >

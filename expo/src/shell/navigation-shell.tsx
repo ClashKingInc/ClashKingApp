@@ -8,13 +8,8 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import ReanimatedDrawerLayout, {
-  DrawerKeyboardDismissMode,
-  DrawerLockMode,
-  DrawerPosition,
-  DrawerType,
-  type DrawerLayoutMethods,
-} from 'react-native-gesture-handler/ReanimatedDrawerLayout';
+import { Drawer } from 'react-native-drawer-layout';
+import type { LegacyPanGesture as PanGesture } from 'react-native-gesture-handler';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 
 import { STORAGE_KEYS, type StringStorage } from '../core/storage/storage';
@@ -43,9 +38,8 @@ type Translate = (key: MessageKey) => string;
 
 // Native accessibility flags do not hide retained layers from browser focus.
 // inert keeps background controls out of both keyboard and assistive navigation.
-const hiddenWebLayer = (hidden: boolean) => Platform.OS === 'web'
-  ? { inert: hidden, 'aria-hidden': hidden }
-  : {};
+const hiddenWebLayer = (hidden: boolean) =>
+  Platform.OS === 'web' ? { inert: hidden, 'aria-hidden': hidden } : {};
 
 export interface NavigationShellProps {
   selectedPrimary: PrimaryRouteId;
@@ -97,12 +91,28 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const platform = props.platform ?? Platform.OS;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerHintVisible, setDrawerHintVisible] = useState(false);
-  const drawerRef = useRef<DrawerLayoutMethods>(null);
   const pendingDrawerAction = useRef<(() => void) | undefined>(undefined);
   const allowsDrawerEdgeGesture = platformAllowsDrawerEdgeGesture(platform);
   const showsDrawerEdgeHint = platformShowsDrawerEdgeHint(platform);
-  const drawerEdgeWidth = allowsDrawerEdgeGesture ? 36 : 0;
+  // Only Home opens by swipe. Other tabs use the profile button, so their
+  // horizontal interactions cannot accidentally pull the sidebar open.
+  const canSwipeOpenDrawer = allowsDrawerEdgeGesture && props.selectedPrimary === 'home';
+  const drawerEdgeWidth = canSwipeOpenDrawer ? width : 0;
   const drawerWidth = resolveMobileDrawerWidth(width);
+  const configureDrawerGesture = useCallback(
+    (gesture: PanGesture) => {
+      const openingDirection = isRtl ? -1 : 1;
+      const direction = drawerOpen ? -openingDirection : openingDirection;
+      // Reject the opposite direction before the native page swipe activates.
+      // A one-sided activation threshold without this fail threshold leaves the
+      // drawer waiting on page swipes and makes the two recognizers compete.
+      return gesture
+        .activeOffsetX(direction * 12)
+        .failOffsetX(-direction * 8)
+        .failOffsetY([-14, 14]);
+    },
+    [drawerOpen, isRtl],
+  );
   // Replay this revised hint once in development without resetting production preferences.
   const hintStorageKey = __DEV__
     ? `${STORAGE_KEYS.mobileDrawerGestureHintSeen}_preview_v2`
@@ -142,17 +152,19 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   const openDrawer = useCallback(() => {
     if (secondaryActive) return;
     setDrawerOpen(true);
-    drawerRef.current?.openDrawer();
   }, [secondaryActive]);
   useEffect(() => tutorials.registerAction('open-sidebar', openDrawer), [openDrawer]);
-  const closeDrawer = useCallback((after?: () => void) => {
-    pendingDrawerAction.current = after;
-    if (drawerRef.current) drawerRef.current.closeDrawer();
-    else {
-      pendingDrawerAction.current = undefined;
-      after?.();
-    }
-  }, []);
+  const closeDrawer = useCallback(
+    (after?: () => void) => {
+      pendingDrawerAction.current = after;
+      if (drawerOpen) setDrawerOpen(false);
+      else {
+        pendingDrawerAction.current = undefined;
+        after?.();
+      }
+    },
+    [drawerOpen],
+  );
   const handleDrawerClose = useCallback(() => {
     setDrawerOpen(false);
     const pending = pendingDrawerAction.current;
@@ -181,7 +193,8 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
   useEffect(() => {
     if (!secondaryActive) return;
     pendingDrawerAction.current = undefined;
-    drawerRef.current?.closeDrawer();
+    const frame = requestAnimationFrame(() => setDrawerOpen(false));
+    return () => cancelAnimationFrame(frame);
   }, [secondaryActive]);
   useEffect(() => {
     if (!drawerOpen || platform === 'web') return;
@@ -192,39 +205,43 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     return () => subscription.remove();
   }, [closeDrawer, drawerOpen, platform]);
   return (
-    <ReanimatedDrawerLayout
-      ref={drawerRef}
-      animationSpeed={1}
-      contentContainerStyle={styles.shell}
-      drawerBackgroundColor="transparent"
-      keyboardDismissMode={DrawerKeyboardDismissMode.ON_DRAG}
-      drawerLockMode={secondaryActive ? DrawerLockMode.LOCKED_CLOSED : DrawerLockMode.UNLOCKED}
-      drawerPosition={isRtl ? DrawerPosition.RIGHT : DrawerPosition.LEFT}
-      drawerType={DrawerType.FRONT}
-      drawerWidth={drawerWidth}
-      edgeWidth={drawerEdgeWidth}
-      hideStatusBar={false}
-      minSwipeDistance={6}
-      onDrawerClose={handleDrawerClose}
-      onDrawerOpen={handleDrawerOpen}
-      overlayColor="#00000066"
-      renderNavigationView={() => (
+    <Drawer
+      open={drawerOpen}
+      onOpen={() => setDrawerOpen(true)}
+      onClose={() => setDrawerOpen(false)}
+      onTransitionEnd={(closing) => (closing ? handleDrawerClose() : handleDrawerOpen())}
+      style={styles.shell}
+      drawerStyle={{ width: drawerWidth, backgroundColor: 'transparent' }}
+      keyboardDismissMode="on-drag"
+      swipeEnabled={!secondaryActive && (drawerOpen || canSwipeOpenDrawer)}
+      // Drawer 4.x creates a legacy Gesture.Pan at runtime; Gesture Handler 3
+      // renamed its public type without changing this builder's behavior.
+      configureGestureHandler={configureDrawerGesture as unknown as React.ComponentProps<typeof Drawer>['configureGestureHandler']}
+      direction={isRtl ? 'rtl' : 'ltr'}
+      drawerPosition={isRtl ? 'right' : 'left'}
+      drawerType="slide"
+      swipeEdgeWidth={drawerEdgeWidth}
+      hideStatusBarOnOpen={false}
+      swipeMinDistance={40}
+      overlayStyle={{ backgroundColor: '#00000066' }}
+      overlayAccessibilityLabel={props.closeDrawerLabel}
+      renderDrawerContent={() => (
         <View style={styles.shell} {...hiddenWebLayer(!drawerOpen)}>
-        <MobileDrawer
-          isRtl={props.isRtl}
-          features={props.features}
-          t={props.t}
-          avatar={props.avatar}
-          displayName={props.displayName}
-          followerCount={props.followerCount}
-          closeLabel={props.closeDrawerLabel}
-          onRequestClose={closeDrawer}
-          onNavigate={(route) => props.onUtilityNavigate(route, { replace: false })}
-          onAchievements={props.onAchievements}
-          onAddAccount={props.onAddAccount}
-          hasUser={props.hasUser}
-          hasManagedDiscordBot={props.hasManagedDiscordBot}
-        />
+          <MobileDrawer
+            isRtl={props.isRtl}
+            features={props.features}
+            t={props.t}
+            avatar={props.avatar}
+            displayName={props.displayName}
+            followerCount={props.followerCount}
+            closeLabel={props.closeDrawerLabel}
+            onRequestClose={closeDrawer}
+            onNavigate={(route) => props.onUtilityNavigate(route, { replace: false })}
+            onAchievements={props.onAchievements}
+            onAddAccount={props.onAddAccount}
+            hasUser={props.hasUser}
+            hasManagedDiscordBot={props.hasManagedDiscordBot}
+          />
         </View>
       )}
     >
@@ -288,7 +305,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
             })
           : null}
       </View>
-    </ReanimatedDrawerLayout>
+    </Drawer>
   );
 }
 
@@ -385,7 +402,11 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
         style={[styles.desktopRow, props.isRtl && styles.desktopRowRtl]}
       >
         <DesktopSidebar
-          selectedPrimary={utilitySecondary ? undefined : (effectiveSecondary ?? props.selectedPrimary) as PrimaryRouteId}
+          selectedPrimary={
+            utilitySecondary
+              ? undefined
+              : ((effectiveSecondary ?? props.selectedPrimary) as PrimaryRouteId)
+          }
           selectedUtility={effectiveUtility}
           features={props.features}
           t={props.t}

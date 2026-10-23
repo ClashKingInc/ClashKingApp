@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -100,7 +101,7 @@ export function AnnouncementStoryModal({
   };
 
   return (
-    <Modal
+    <Modal supportedOrientations={modalOrientations}
       animationType="none"
       onRequestClose={() => requestDismissal('closed')}
       onDismiss={finishDismissal}

@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Cele mai bune trofee",
   "clanLoadFailed": "Nu s-a putut încărca clanul.",
   "gameItemLevels": "Niveluri",
+  "gameItemLevelCount": "{count, plural, one {# nivel} few {# niveluri} other {# de niveluri}}",
   "resourceDarkElixir": "Elixir întunecat",
   "resourceBuilderElixir": "Elixir de constructor",
   "resourceBuilderGold": "Aur de constructor",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Alege contul",
   "upgradeTrackerSwitchAccount": "Schimbă contul, {account}",
   "upgradeTrackerShare": "Distribuie monitorizarea",
+  "trackerPosterCopied": "Imagine copiată",
+  "trackerPosterCopy": "Copiază imaginea",
+  "trackerPosterShareAll": "Distribuie toate 3",
   "upgradeTrackerPasteJson": "Lipește JSON-ul contului",
   "upgradeTrackerImportTitle": "Importă datele contului",
   "upgradeTrackerImportDescription": "Lipește JSON-ul brut al contului. Acesta rămâne pe dispozitiv.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Greutate {value}%",
   "upgradeTrackerPlanUntilMaxed": "Până la maxim",
   "upgradeTrackerPlanUntilPercent": "Până la {value}%",
-  "upgradeTrackerPlanRuleNote": "Nivelurile numerotate rulează primele. Rândurile partajate păstrează același număr de nivel, iar amestecul lor este normalizat din ponderile relative, astfel încât 50 + 25 devine 67% / 33%. O țintă produce randamentul unei categorii după ce atinge acel procent, în timp ce rămâne eligibilă mai târziu.",
+  "upgradeTrackerPlanRuleNote": "Trage categoriile pentru a alege ordinea îmbunătățirilor. Setările rândului permit priorități comune sau oprirea la un obiectiv de progres.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max înainte de a avansa",
   "upgradeTrackerPlanGoalRushNextHall": "Ajunge repede la următoarea sală",
   "upgradeTrackerPlanGoalCatchUp": "Reveniți din urmă nivelurile grăbite",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Presupune atacuri rămase perfecte. Este o limită matematică, nu o predicție.",
   "warScoutTitle": "Analiza formației",
   "warScoutOpponent": "Războaiele recente ale adversarului",
-  "warScoutScope": "Formația actuală · aceleași reguli · până la 10 războaie anterioare"
+  "warScoutScope": "Formația actuală · aceleași reguli · până la 10 războaie anterioare",
+  "upgradeTrackerCapturedWork": "Din ultima actualizare"
 }

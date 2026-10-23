@@ -1,3 +1,4 @@
+import type { ViewInstance } from 'react-native';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type PropsWithChildren } from 'react';
 import { Animated, AppState, Easing, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
@@ -15,7 +16,7 @@ const REPAIR_END = (BUILD_END + 250) / DURATION;
 type Bounds = { x: number; y: number; width: number; height: number };
 type Strike = Bounds & { image?: string; last: boolean; startX: number; startY: number; angle: string };
 const Context = createContext<{
-  attach: (node: View | null) => void;
+  attach: (node: ViewInstance | null) => void;
   launch: () => void;
   busy: boolean;
   retired: boolean;
@@ -33,7 +34,7 @@ export function CalculatorTitleTarget({ children, label }: PropsWithChildren<{ l
 
 export function CalculatorFireballPlayground({ children, visible }: PropsWithChildren<{ visible: boolean }>) {
   const { reduceMotion } = useCKAccessibility();
-  const root = useRef<View>(null), title = useRef<View | null>(null);
+  const root = useRef<ViewInstance>(null), title = useRef<ViewInstance | null>(null);
   const [clock] = useState(() => new Animated.Value(0));
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [strike, setStrike] = useState<Strike | null>(null);
@@ -42,7 +43,7 @@ export function CalculatorFireballPlayground({ children, visible }: PropsWithChi
   const hits = useRef(0), running = useRef(false), mounted = useRef(true), run = useRef(0);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const snapshot = useRef<string | undefined>(undefined);
-  const attach = useCallback((node: View | null) => { title.current = node; }, []);
+  const attach = useCallback((node: ViewInstance | null) => { title.current = node; }, []);
   const cancel = useCallback(() => {
     run.current++;
     timers.current.forEach(clearTimeout); timers.current = [];
@@ -62,7 +63,7 @@ export function CalculatorFireballPlayground({ children, visible }: PropsWithChi
     running.current = true; setBusy(true);
     const token = ++run.current;
     const node = title.current;
-    const measure = (view: View) => new Promise<Bounds>(resolve => view.measureInWindow((x, y, width, height) => resolve({ x, y, width, height })));
+    const measure = (view: ViewInstance) => new Promise<Bounds>(resolve => view.measureInWindow((x, y, width, height) => resolve({ x, y, width, height })));
     const [outer, target] = await Promise.all([measure(root.current), measure(node)]);
     if (!mounted.current || token !== run.current) return;
     let image: string | undefined, timeout: ReturnType<typeof setTimeout> | undefined;

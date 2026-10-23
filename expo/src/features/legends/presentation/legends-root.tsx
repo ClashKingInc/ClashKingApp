@@ -1,6 +1,6 @@
-import { LegendHistoryList } from './legend-history';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
+import { type ViewInstance,
+  type ScrollViewInstance,
+  Animated,
   Alert,
   Pressable,
   Platform,
@@ -11,13 +11,16 @@ import {
   useWindowDimensions,
   type GestureResponderEvent,
 } from 'react-native';
-import { ArrowLeft, ChevronRight, Download, Share2 } from 'lucide-react-native';
+import { LegendHistoryList } from './legend-history';
+import { Image } from 'expo-image';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ArrowLeft, CalendarDays, ChartLine, ChevronRight, Download, History, Share2 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
   DateNavigator,
-  DestinationPicker,
+  ProfileTabs,
   EmptyState,
   ErrorState,
   PageSkeleton,
@@ -48,7 +51,14 @@ import { LegendChart } from './legend-chart';
 import { popularLegendItems } from './legend-army';
 import { LegendBattlePanel } from './legend-battle-panel';
 import { playerProfileClanIdentity } from '../../player/presentation/player-clan-identity';
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
+import { PagerView, type PagerViewHandle } from '../../../ui/pager';
+import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
+import { useCKAccessibility } from '../../../ui/accessibility';
 export { legendHistoryTopPercent } from './legend-history';
+
+const LEGENDS_PAGES = ['daily', 'season', 'history'] as const;
+type LegendsPage = (typeof LEGENDS_PAGES)[number];
 
 export function LegendsRoot({
   player,
@@ -235,14 +245,37 @@ export function LegendsScreen({
   readonly onOpenClan?: (tag: string) => void;
   readonly onOpenOpponent?: (tag: string) => void;
 }) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const horizontal = Math.max(16, (width - 1120) / 2);
   const current = data?.currentDay;
   const clanIdentity = player ? playerProfileClanIdentity(player) : null;
-  const [page, setPage] = useState('daily');
+  const [page, setPage] = useState<LegendsPage>('daily');
+  const [settledPage, setSettledPage] = useState<LegendsPage>('daily');
+  const [pageHeights, setPageHeights] = useState<Partial<Record<LegendsPage, number>>>({});
+  const [sectionSwipeEnabled, setSectionSwipeEnabled] = useState(true);
+  const [tabPosition] = useState(() => new Animated.Value(0));
+  const pager = useRef<PagerViewHandle>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
+  const scrollY = useRef(0);
+  const headerHeight = useRef(0);
+  const { reduceMotion } = useCKAccessibility();
+  const blockPrimarySwipe = usePrimarySwipeGuard();
+  const setCalendarInteraction = (active: boolean) => {
+    // Calendar scrubbing selects a day; it must not also change the section.
+    pager.current?.setScrollEnabled?.(!active);
+    setSectionSwipeEnabled(!active);
+  };
+  useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
+  const selectPage = (next: LegendsPage) => {
+    setPage(next);
+    // A shorter section must not inherit a scroll position below its content.
+    // Keep the current header collapse instead of jumping back to the top.
+    const offset = Math.min(scrollY.current, headerHeight.current);
+    requestAnimationFrame(() => scroll.current?.scrollTo({ y: offset, animated: false }));
+  };
   const headerFavorite = data ? popularLegendItems(data.seasonArmyShareCodes)[0] : undefined;
   return (
     <SafeAreaView
@@ -250,14 +283,18 @@ export function LegendsScreen({
       style={[styles.fill, { backgroundColor: theme.background }]}
     >
       <ScrollView
+        ref={scroll}
+        scrollEventThrottle={16}
+        onScroll={(event) => { scrollY.current = event.nativeEvent.contentOffset.y; }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => void onRefresh()} />
         }
         contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}
       >
-        <View testID="legends-hero" style={[styles.hero, { minHeight: 238 + insets.top }]}>
-          <MobileWebImage imageUrl={ImageAssets.homeBaseBackground} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition="center" />
-          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: theme.background === '#030304' ? '#000000A8' : '#00000082' }]} />
+        <View testID="legends-hero" onLayout={(event) => { headerHeight.current = event.nativeEvent.layout.height; }} style={[styles.hero, { minHeight: 238 + insets.top }]}>
+          <Image source={require('../../../../assets/clashking/backgrounds/legends-pekka-classic-v1.webp')} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition="center" transition={0} />
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
+          <HeroHeaderScrim variant="ranked" />
           <View
             style={[
               styles.heroContent,
@@ -293,17 +330,24 @@ export function LegendsScreen({
               </View>
             </View>
             <View style={styles.heroIdentity}>
-              <MobileWebImage
-                testID="legends-town-hall"
-                imageUrl={player?.townHallPic || ImageAssets.townHall(data?.townHallLevel ?? 1)}
-                style={styles.townHallIdentity}
-                contentFit="contain"
-              />
+              <View>
+                <MobileWebImage
+                  testID="legends-league-badge"
+                  imageUrl={player?.leagueUrl || ImageAssets.legendLeagueOne}
+                  style={styles.leagueIdentity}
+                  contentFit="contain"
+                />
+                <View style={styles.townHallBadgeShell}>
+                  <MobileWebImage
+                    testID="legends-town-hall"
+                    imageUrl={player?.townHallPic || ImageAssets.townHall(data?.townHallLevel ?? 1)}
+                    style={styles.townHallBadge}
+                    contentFit="contain"
+                  />
+                </View>
+              </View>
               <CKText numberOfLines={1} role="screenTitle" style={styles.white}>
                 {data?.playerName ?? ''}
-              </CKText>
-              <CKText role="metadata" style={styles.whiteSoft}>
-                {data?.playerTag}
               </CKText>
               {clanIdentity?.tag ? (
                 <Pressable
@@ -321,83 +365,96 @@ export function LegendsScreen({
               ) : null}
             </View>
             {data ? (
-              <View style={styles.heroChips}>
-                <HeroChip
-                  label={t('rankedLeagueTrophies')}
-                  value={(data.currentRank?.trophies ?? data.trophies).toLocaleString(
-                    toIntlLocale(locale),
-                  )}
-                  imageUrl={ImageAssets.legendLeagueOne}
-                />
-                {data.currentRank ? (
-                  <HeroChip
-                    label={t('legendsGlobalRankTitle')}
-                    value={`#${data.currentRank.globalRank.toLocaleString(toIntlLocale(locale))}`}
-                    imageUrl={ImageAssets.trophies}
-                  />
-                ) : null}
-                <HeroSeasonSummary
-                  favorite={headerFavorite}
-                  location={data.currentRank?.location ?? null}
-                  stats={data.seasonStats}
-                />
-              </View>
+              <HeroSeasonSummary
+                favorite={headerFavorite}
+                location={data.currentRank?.location ?? null}
+                stats={data.seasonStats}
+                trophies={data.currentRank?.trophies ?? data.trophies}
+                rank={data.currentRank?.globalRank ?? null}
+              />
             ) : null}
           </View>
         </View>
         <View style={[styles.content, { paddingHorizontal: horizontal }]}>
-          <DestinationPicker
+          <ProfileTabs
+            variant="underline"
             selectedKey={page}
-            onSelect={setPage}
-            options={[
-              { key: 'daily', label: t('statsByDay') },
-              { key: 'season', label: t('filtersSeason') },
-              { key: 'history', label: t('generalHistory') },
+            animatedPosition={tabPosition}
+            indicatorRtl={isRtl}
+            onSelect={(key) => {
+              const next = key as LegendsPage;
+              const index = LEGENDS_PAGES.indexOf(next);
+              selectPage(next);
+              if (reduceMotion) {
+                pager.current?.setPageWithoutAnimation(index);
+                tabPosition.setValue(index);
+                setSettledPage(next);
+              } else pager.current?.setPage(index);
+            }}
+            tabs={[
+              { key: 'daily', label: t('statsByDay'), icon: <CalendarDays size={20} /> },
+              { key: 'season', label: t('filtersSeason'), icon: <ChartLine size={20} /> },
+              { key: 'history', label: t('generalHistory'), icon: <History size={20} /> },
             ]}
           />
-          {page === 'daily' && (
-            <LegendDayNavigation
-              day={selectedDay}
-              onSelect={onSelectDay}
-              today={currentLegendDay()}
-              days={data?.recentDays ?? []}
-              rank={data?.selectedDay === selectedDay ? data.historicalRank?.globalRank : undefined}
-            />
-          )}
-          {loading && !data ? (
-            <PageSkeleton kind="stats" />
-          ) : error ? (
-            <ErrorState
-              title={t('apiErrorServer')}
-              actionLabel={t('sideRefresh')}
-              onAction={() => void onRefresh()}
-            />
-          ) : data ? (
-            <>
-              {page === 'season' && <LegendRecentSummary data={data} />}
-
-              {page === 'daily' &&
-                (loading && data.selectedDay !== selectedDay ? (
-                  <PageSkeleton kind="war" />
-                ) : current ? (
-                  <LegendBattlePanel data={current} onOpenOpponent={onOpenOpponent} />
-                ) : (
-                  <EmptyState
-                    title={t('legendsNotInLeague')}
-                    body={t('legendsNoDataToday')}
-                    style={styles.currentDayEmptyState}
-                  />
-                ))}
-              {page === 'history' && <LegendHistoryList history={data.history} />}
-            </>
-          ) : null}
+          <View
+            onTouchStart={() => blockPrimarySwipe(true)}
+            onTouchEnd={() => { blockPrimarySwipe(false); setCalendarInteraction(false); }}
+            onTouchCancel={() => { blockPrimarySwipe(false); setCalendarInteraction(false); }}
+          >
+            <PagerView
+              ref={pager}
+              initialPage={0}
+              scrollEnabled={sectionSwipeEnabled}
+              layoutDirection={isRtl ? 'rtl' : 'ltr'}
+              testID="legends-section-pager"
+              style={{ height: Math.max(pageHeights[page] ?? 600, pageHeights[settledPage] ?? 600) }}
+              onPageScroll={(event) => tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)}
+              onPageSelected={(event) => {
+                const next = LEGENDS_PAGES[event.nativeEvent.position];
+                if (!next) return;
+                selectPage(next);
+                setSettledPage(next);
+              }}
+            >
+              {LEGENDS_PAGES.map((section) => (
+                <View key={section} collapsable={false} style={{ flex: 1 }}
+                  aria-hidden={section !== page}
+                  accessibilityElementsHidden={section !== page}
+                  importantForAccessibility={section !== page ? 'no-hide-descendants' : 'auto'}>
+                  <View style={styles.sectionPage} onLayout={(event) => {
+                    const height = Math.ceil(event.nativeEvent.layout.height);
+                    if (height > 0) setPageHeights((old) => old[section] === height ? old : { ...old, [section]: height });
+                  }}>
+                    {section === 'daily' ? (
+                      <LegendDayNavigation day={selectedDay} onSelect={onSelectDay}
+                        today={currentLegendDay()} days={data?.recentDays ?? []}
+                        rank={data?.selectedDay === selectedDay ? data.historicalRank?.globalRank : undefined} />
+                    ) : null}
+                    {loading && !data ? <PageSkeleton kind="stats" /> : error ? (
+                      <ErrorState title={t('apiErrorServer')} actionLabel={t('sideRefresh')} onAction={() => void onRefresh()} />
+                    ) : data ? (
+                      section === 'season' ? <LegendRecentSummary data={data} onCalendarInteraction={setCalendarInteraction} />
+                        : section === 'history' ? <LegendHistoryList history={data.history} />
+                          : loading && data.selectedDay !== selectedDay ? <PageSkeleton kind="war" />
+                            : current ? <LegendBattlePanel data={current} onOpenOpponent={onOpenOpponent} />
+                              : <EmptyState title={t('legendsNotInLeague')} body={t('legendsNoDataToday')} style={styles.currentDayEmptyState} />
+                    ) : null}
+                  </View>
+                </View>
+              ))}
+            </PagerView>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function LegendRecentSummary({ data }: { readonly data: PlayerLegendLeagueData }) {
+function LegendRecentSummary({ data, onCalendarInteraction }: {
+  readonly data: PlayerLegendLeagueData;
+  readonly onCalendarInteraction: (active: boolean) => void;
+}) {
   const { locale, t } = useI18n();
   const summary = legendsShareSummary(data);
   const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
@@ -438,7 +495,9 @@ function LegendRecentSummary({ data }: { readonly data: PlayerLegendLeagueData }
       {summary.dailyContributions.length ? (
         <Surface radius={ckRadius.tile} style={styles.recentSummary}>
           <CKText role="titleMedium">{t('legendsTrophyGrid')}</CKText>
-          <View>
+          <View onTouchStart={() => onCalendarInteraction(true)}
+            onTouchEnd={() => onCalendarInteraction(false)}
+            onTouchCancel={() => onCalendarInteraction(false)}>
             <ContributionCalendar
               days={summary.dailyContributions}
               selectedKey={activeContribution}
@@ -494,17 +553,21 @@ function HeroSeasonSummary({
   favorite,
   location,
   stats,
+  trophies,
+  rank,
 }: {
   readonly favorite: ReturnType<typeof popularLegendItems>[number] | undefined;
   readonly location: NonNullable<PlayerLegendLeagueData['currentRank']>['location'];
   readonly stats: PlayerLegendLeagueData['seasonStats'];
+  readonly trophies: number;
+  readonly rank: number | null;
 }) {
-  const { t } = useI18n();
-  if (!location && !stats && !favorite) return null;
+  const { t, locale } = useI18n();
   const tripleRate = (triples: number, attacks: number) =>
     attacks > 0 ? `${((triples / attacks) * 100).toFixed(1)}%` : '—';
   return (
     <>
+      <View style={styles.heroChips}>
       <HeroChip
         imageUrl={
           location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet
@@ -512,17 +575,24 @@ function HeroSeasonSummary({
         label={t('sideLocation')}
         value={location?.name ?? '—'}
       />
+      <HeroChip imageUrl={ImageAssets.trophies} label={t('rankedLeagueTrophies')}
+        value={trophies.toLocaleString(toIntlLocale(locale))} />
+      <HeroChip imageUrl={ImageAssets.bestTrophies} label={t('legendsGlobalRankTitle')}
+        value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'} />
       <HeroChip
         imageUrl={ImageAssets.attackStar}
         label={t('legendsHitrate')}
         value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'}
       />
+      </View>
       {favorite ? (
+        <View style={styles.favoriteChipRow}>
         <HeroChip
           imageUrl={favorite?.item.imageUrl ?? ImageAssets.defaultImage}
           label={favorite.item.name}
           value={t('legendsPopularTroop')}
         />
+        </View>
       ) : null}
     </>
   );
@@ -730,7 +800,7 @@ function ContributionCalendar({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const gridRef = useRef<View>(null);
+  const gridRef = useRef<ViewInstance>(null);
   const [width, setWidth] = useState(0);
   const columns = Math.max(1, Math.floor((width - 16 + 4) / 26));
   const rows = legendContributionRows(days, width ? columns : 12);
@@ -968,7 +1038,7 @@ const styles = StyleSheet.create({
   whiteSoft: { color: '#FFFFFFCC' },
   hero: { minHeight: 260, overflow: 'hidden' },
   heroScrim: {},
-  heroContent: { flex: 1, justifyContent: 'flex-end', paddingBottom: 24, gap: 4 },
+  heroContent: { flex: 1, justifyContent: 'flex-end', paddingBottom: 8, gap: 4 },
   heroActions: {
     position: 'absolute',
     flexDirection: 'row',
@@ -977,7 +1047,12 @@ const styles = StyleSheet.create({
   },
   heroActionGroup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   heroIdentity: { alignItems: 'center', gap: 2 },
-  townHallIdentity: { width: 104, height: 104 },
+  leagueIdentity: { width: 104, height: 104 },
+  townHallBadgeShell: {
+    position: 'absolute', left: -2, bottom: 0, width: 38, height: 38,
+    borderRadius: 19, padding: 3, backgroundColor: 'rgba(24,24,24,.82)',
+  },
+  townHallBadge: { width: 32, height: 32 },
   clanLine: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -995,6 +1070,8 @@ const styles = StyleSheet.create({
     gap: 7,
     marginTop: 10,
   },
+  favoriteChipRow: { alignItems: 'center', marginTop: 3 },
+  sectionPage: { gap: 12, paddingBottom: 8 },
   heroChip: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1005,7 +1082,7 @@ const styles = StyleSheet.create({
   },
   heroChipImage: { width: 19, height: 19, resizeMode: 'contain' },
   heroChipText: { minWidth: 0, flexShrink: 1 },
-  content: { width: '100%', maxWidth: 1120, alignSelf: 'center', paddingTop: 16, gap: 12 },
+  content: { width: '100%', maxWidth: 1120, alignSelf: 'center', gap: 12 },
   currentDayEmptyState: { minHeight: 180, paddingVertical: 20 },
   seasonContent: { gap: 12 },
   comparisons: { gap: 10, paddingTop: 4 },

@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Meilleurs trophées",
   "clanLoadFailed": "Échec du chargement du clan.",
   "gameItemLevels": "Niveaux",
+  "gameItemLevelCount": "{count, plural, one {# niveau} other {# niveaux}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Élixir noir",
   "resourceBuilderElixir": "Élixir ouvrier",
   "resourceBuilderGold": "Or ouvrier",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Partager le suivi",
+  "trackerPosterCopied": "Image copiée",
+  "trackerPosterCopy": "Copier l’image",
+  "trackerPosterShareAll": "Partager les 3",
   "upgradeTrackerPasteJson": "Coller les données JSON du compte",
   "upgradeTrackerImportTitle": "Importer les données du compte",
   "upgradeTrackerImportDescription": "Colle les données JSON brutes du compte. Elles restent sur cet appareil.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Les niveaux numérotés s’exécutent en premier. Les lignes partagées conservent le même numéro de niveau et leur mélange est normalisé à partir des pondérations relatives, donc 50 + 25 deviennent 67 %/33 %. Une cible génère un rendement pour une catégorie une fois qu'elle atteint ce pourcentage, tout en restant éligible plus tard.",
+  "upgradeTrackerPlanRuleNote": "Fais glisser les catégories pour choisir les améliorations prioritaires. Les réglages permettent de partager une priorité ou de s’arrêter à un objectif de progression.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max avant d'avancer",
   "upgradeTrackerPlanGoalRushNextHall": "Atteignez rapidement la salle suivante",
   "upgradeTrackerPlanGoalCatchUp": "Rattrapez les niveaux précipités",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Suppose des attaques restantes parfaites. Il s’agit d’une limite mathématique, pas d’une prédiction.",
   "warScoutTitle": "Analyse de la composition",
   "warScoutOpponent": "Guerres récentes de l’adversaire",
-  "warScoutScope": "Composition actuelle · mêmes règles · jusqu’à 10 guerres précédentes"
+  "warScoutScope": "Composition actuelle · mêmes règles · jusqu’à 10 guerres précédentes",
+  "upgradeTrackerCapturedWork": "Depuis ta dernière mise à jour"
 }

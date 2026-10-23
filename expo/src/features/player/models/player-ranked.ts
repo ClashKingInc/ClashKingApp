@@ -11,6 +11,7 @@ import {
 } from './parsing';
 import { canonicalTag } from '../../../core/domain/tags';
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { gameDataState } from '../../../core/game-data/game-data-state';
 
 export class RankedLeagueTier {
   constructor(
@@ -23,7 +24,9 @@ export class RankedLeagueTier {
     // Small official icons omit the tier plaque. Use our full league artwork
     // consistently so numbered tiers remain visible on cards and detail pages.
     const fullBadge = ImageAssets.getLeagueImage(this.name);
-    return fullBadge !== ImageAssets.defaultImage ? fullBadge : this.largeIconUrl || this.smallIconUrl;
+    return fullBadge !== ImageAssets.defaultImage
+      ? fullBadge
+      : this.largeIconUrl || this.smallIconUrl;
   }
   static fromJson(json: JsonRecord) {
     const icons = record(json.iconUrls);
@@ -287,9 +290,19 @@ export class RankedLeagueData {
     if (tierId === undefined) return null;
     return (
       this.history.find((entry) => entry.leagueTierId === tierId && entry.maxBattles > 0)
-        ?.maxBattles ?? null
+        ?.maxBattles ?? rankedTierBattleLimit(tierId)
     );
   }
+}
+
+/** The public group response omits its cap. Use the live published game-data
+ * tier's battle_count only after period-specific logs/history, never a guessed
+ * daily Legend cap or an old bundled table. */
+function rankedTierBattleLimit(tierId: number): number | null {
+  const tiers = Object.values(record(gameDataState.playerLeagueData.leagues));
+  const tier = tiers.find((value) => int(record(value)._id) === tierId);
+  const limit = int(record(tier).battle_count);
+  return limit > 0 ? limit : null;
 }
 
 export class PlayerRankings {

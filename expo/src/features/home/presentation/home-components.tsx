@@ -1,22 +1,13 @@
+import type { ScrollViewInstance } from 'react-native';
 import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
-import {
-  Children,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
-import { Animated, PanResponder, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
-import { useCKAccessibility } from '../../../ui/accessibility';
+import { Children, createContext, useContext, useRef, useState, type ReactNode } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-native';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { CardAtmosphere } from '../../../ui/card-appearance';
+import { AccountBarScrollView } from '../../../ui/account-bar-scroll-view';
 import { materialNextPageTooltip, materialPreviousPageTooltip, useI18n } from '../../../i18n';
 import {
   CKText,
@@ -47,7 +38,6 @@ export function HomeCardFrame({
   actionLabel,
   accent,
   footer,
-  onPage,
 }: {
   children: ReactNode;
   header?: ReactNode;
@@ -55,84 +45,19 @@ export function HomeCardFrame({
   actionLabel?: string;
   accent?: string;
   footer?: ReactNode;
-  onPage?: (direction: -1 | 1) => void;
 }) {
   const theme = useCKTheme();
-  const guard = usePrimarySwipeGuard();
-  const { reduceMotion } = useCKAccessibility();
   const dragging = useContext(HomeDragContext);
-  const touchEligible = useRef(true);
   const pressStart = useRef({ x: 0, y: 0 });
   const pressDelta = useRef({ x: 0, y: 0 });
-  const [offset] = useState(() => new Animated.Value(0));
-  const paging = useRef({ onPage, reduceMotion, dragging });
-  useEffect(() => {
-    paging.current = { onPage, reduceMotion, dragging };
-  }, [onPage, reduceMotion, dragging]);
-  useEffect(() => () => guard(false), [guard]);
-  // PanResponder stores callbacks; these refs are read on gestures, not render.
-  /* eslint-disable react-hooks/refs */
-  const pan = useMemo(
-    () =>
-      PanResponder.create({
-        onMoveShouldSetPanResponderCapture: (_, gesture) =>
-          !!paging.current.onPage &&
-          !paging.current.dragging &&
-          touchEligible.current &&
-          Math.abs(gesture.dx) > 18 &&
-          Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.8,
-        onMoveShouldSetPanResponder: (_, gesture) =>
-          !!paging.current.onPage &&
-          !paging.current.dragging &&
-          touchEligible.current &&
-          Math.abs(gesture.dx) > 18 &&
-          Math.abs(gesture.dx) > Math.abs(gesture.dy) * 1.8,
-        onPanResponderMove: (_, gesture) =>
-          offset.setValue(
-            paging.current.reduceMotion ? 0 : Math.max(-24, Math.min(24, gesture.dx * 0.2)),
-          ),
-        onPanResponderRelease: (_, gesture) => {
-          if (!paging.current.dragging && Math.abs(gesture.dx) > 40)
-            paging.current.onPage?.(gesture.dx < 0 ? 1 : -1);
-          Animated.spring(offset, {
-            toValue: 0,
-            useNativeDriver: true,
-            speed: 30,
-            bounciness: 0,
-          }).start();
-          guard(false);
-        },
-        onPanResponderTerminate: () => {
-          offset.setValue(0);
-          guard(false);
-        },
-        onPanResponderTerminationRequest: () => false,
-      }),
-    [guard, offset],
-  );
-  /* eslint-enable react-hooks/refs */
   return (
-    <Animated.View
-      collapsable={false}
-      {...(onPage ? pan.panHandlers : {})}
-      onTouchStart={(event) => {
-        touchEligible.current = event.nativeEvent.pageX >= 32;
-        if (onPage && event.nativeEvent.pageX >= 32) guard(true);
-      }}
-      onTouchEnd={() => guard(false)}
-      onTouchCancel={() => guard(false)}
+    <View
       style={[
         styles.frame,
-        { transform: [{ translateX: offset }] },
-        {
-          backgroundColor: theme.surface,
-          borderColor: colorWithAlpha(theme.outlineVariant, 0.32),
-        },
+        { backgroundColor: theme.surface, borderColor: colorWithAlpha(theme.outlineVariant, 0.32) },
       ]}
     >
       <CardAtmosphere color={accent} />
-      {/* Account selectors belong in the header, outside the details button.
-          A nested button is invalid on web and also conflates the two actions. */}
       {header}
       {onPress ? (
         <Pressable
@@ -150,17 +75,16 @@ export function HomeCardFrame({
           }}
           onPress={(event) => {
             if (dragging) return;
-            const dx = event.nativeEvent.pageX - pressStart.current.x;
-            const dy = event.nativeEvent.pageY - pressStart.current.y;
-            const travel = Math.max(Math.abs(dx), Math.abs(pressDelta.current.x));
-            // A browser may preserve a nested button's press after a drag.
-            // Never turn that swipe into navigation, even when it was too short.
-            if (travel > 18 && onPage) {
-              if (travel > 40 && Math.abs(dx) > Math.abs(dy) * 1.8 && touchEligible.current)
-                onPage(dx < 0 ? 1 : -1);
-              return;
-            }
-            if (Math.abs(dy) > 12 || Math.abs(pressDelta.current.y) > 12) return;
+            // Swipes belong to the outer page, never account selection or detail navigation.
+            const dx = Math.max(
+              Math.abs(event.nativeEvent.pageX - pressStart.current.x),
+              Math.abs(pressDelta.current.x),
+            );
+            const dy = Math.max(
+              Math.abs(event.nativeEvent.pageY - pressStart.current.y),
+              Math.abs(pressDelta.current.y),
+            );
+            if (dx > 12 || dy > 12) return;
             onPress();
           }}
         >
@@ -169,10 +93,8 @@ export function HomeCardFrame({
       ) : (
         children
       )}
-      {footer ? (
-        <View style={{ alignItems: 'center', marginTop: -6, marginBottom: -10 }}>{footer}</View>
-      ) : null}
-    </Animated.View>
+      {footer ? <View style={styles.footer}>{footer}</View> : null}
+    </View>
   );
 }
 
@@ -272,8 +194,8 @@ export interface HomeRailEntry extends HomeAccountIdentity {
   readonly pending?: boolean | null;
 }
 
-/** Account changes are explicit taps; horizontal drags belong to the app pager. */
-export function HomeAccountDots({
+/** Only the footer scrolls between account choices; the card itself never pages. */
+export function HomeAccountBar({
   entries,
   selectedIndex,
   onSelect,
@@ -283,137 +205,53 @@ export function HomeAccountDots({
   onSelect: (index: number) => void;
 }) {
   const theme = useCKTheme();
+  const { isRtl } = useI18n();
   if (entries.length < 2) return null;
   return (
-    <View style={{ height: 8, width: Math.min(220, entries.length * 22) }}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ position: 'absolute', top: -12, left: 0, right: 0, height: 32 }}
-        contentContainerStyle={{ alignItems: 'center' }}
-        testID="home-account-dots"
-      >
-        {entries.map((entry, index) => (
+    <AccountBarScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      testID="home-account-bar"
+      contentContainerStyle={[styles.accountBar, isRtl && styles.rowRtl]}
+      style={[{ backgroundColor: colorWithAlpha(theme.onSurface, 0.035) }]}
+    >
+      {entries.map((entry, index) => {
+        const selected = index === selectedIndex;
+        return (
           <Pressable
             key={entry.tag}
             accessibilityRole="button"
             accessibilityLabel={entry.name}
-            accessibilityState={{ selected: index === selectedIndex }}
+            accessibilityState={{ selected }}
+            hitSlop={{ top: 10, bottom: 10 }}
             onPress={() => onSelect(index)}
-            hitSlop={{ top: 8, bottom: 8 }}
-            style={{ width: 22, height: 32, justifyContent: 'center', alignItems: 'center' }}
-          >
-            <View
-              style={{
-                width: index === selectedIndex ? 14 : 6,
-                height: 6,
-                borderRadius: 3,
+            style={({ pressed }) => [
+              styles.accountTarget,
+              {
                 backgroundColor: colorWithAlpha(
                   theme.onSurface,
-                  index === selectedIndex ? 0.88 : 0.24,
+                  pressed ? 0.14 : selected ? 0.08 : 0,
                 ),
-              }}
-            />
-          </Pressable>
-        ))}
-      </ScrollView>
-    </View>
-  );
-}
-
-export function HomeAccountRail({
-  entries,
-  selectedIndex,
-  onSelect,
-  allLabel,
-}: {
-  entries: readonly HomeRailEntry[];
-  selectedIndex: number;
-  onSelect: (index: number) => void;
-  allLabel?: string;
-}) {
-  const theme = useCKTheme();
-  const { isRtl } = useI18n();
-  const railEntries: (HomeRailEntry | HomeAccountIdentity)[] = allLabel
-    ? [{ tag: '__all', name: allLabel, subtitle: '', imageUrl: '' }, ...entries]
-    : [...entries];
-  if (railEntries.length === 1) {
-    const entry = railEntries[0]!;
-    return (
-      <View style={styles.singleRail}>
-        {entry.imageUrl ? (
-          <MobileWebImage imageUrl={entry.imageUrl} style={styles.singleRailImage} />
-        ) : null}
-        <CKText muted role="labelLarge" numberOfLines={1}>
-          {entry.name}
-        </CKText>
-      </View>
-    );
-  }
-  return (
-    <View testID="home-account-rail" style={styles.railContainer}>
-      <View style={[styles.rail, isRtl && styles.rowRtl]}>
-        {railEntries.map((entry, index) => {
-          const selected = index === selectedIndex;
-          const pending = 'pending' in entry ? entry.pending : null;
-          return (
-            <Pressable
-              key={entry.tag}
-              accessibilityRole="button"
-              accessibilityState={{ selected }}
-              accessibilityLabel={entry.name}
-              onPress={() => onSelect(index)}
-              style={[
-                styles.railTarget,
-                {
-                  backgroundColor: colorWithAlpha(
-                    theme.surfaceContainerHighest,
-                    selected ? 0.55 : 0.25,
-                  ),
-                  borderColor: selected
-                    ? theme.primary
-                    : colorWithAlpha(theme.outlineVariant, 0.24),
-                  borderWidth: selected ? 1.6 : 1,
-                },
-              ]}
+              },
+            ]}
+          >
+            {entry.imageUrl ? (
+              <MobileWebImage imageUrl={entry.imageUrl} style={styles.accountImage} />
+            ) : (
+              <Group size={13} color={theme.onSurfaceVariant} />
+            )}
+            <CKText
+              role="labelMedium"
+              muted={!selected}
+              numberOfLines={1}
+              style={[styles.accountName, { opacity: selected ? 1 : 0.65 }]}
             >
-              {entry.imageUrl ? (
-                <View>
-                  <MobileWebImage
-                    imageUrl={entry.imageUrl}
-                    style={[styles.railImage, !selected && styles.recede]}
-                  />
-                  {pending !== null && pending !== undefined ? (
-                    <View
-                      style={[
-                        styles.pending,
-                        {
-                          backgroundColor: pending ? statColors.loss : 'transparent',
-                          borderColor: pending ? theme.surface : statColors.win,
-                          borderWidth: pending ? 1.4 : 2,
-                        },
-                      ]}
-                    />
-                  ) : null}
-                </View>
-              ) : (
-                <Group size={18} color={theme.onSurfaceVariant} />
-              )}
-              {selected ? (
-                <CKText
-                  testID="home-account-rail-selection"
-                  role="labelMedium"
-                  numberOfLines={1}
-                  style={styles.railName}
-                >
-                  {entry.name}
-                </CKText>
-              ) : null}
-            </Pressable>
-          );
-        })}
-      </View>
-    </View>
+              {entry.name}
+            </CKText>
+          </Pressable>
+        );
+      })}
+    </AccountBarScrollView>
   );
 }
 
@@ -503,7 +341,7 @@ export function DesktopComparison({
   const [availableWidth, setAvailableWidth] = useState(1120);
   const [scrollX, setScrollX] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
-  const railRef = useRef<ScrollView>(null);
+  const railRef = useRef<ScrollViewInstance>(null);
   const width = homeComparisonCardWidth(availableWidth, items.length, summaryFirst);
   const showsNavigation = homeComparisonNeedsNavigation(availableWidth, items.length);
   const start = summaryFirst ? 1 : 0;
@@ -665,7 +503,38 @@ export function CaughtUp({ label }: { label: string }) {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '900' },
-  frame: { borderWidth: StyleSheet.hairlineWidth, borderRadius: 28, padding: 14, gap: 10 },
+  frame: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 28,
+    padding: 14,
+    gap: 10,
+    overflow: 'hidden',
+  },
+  footer: { marginHorizontal: -14, marginBottom: -14 },
+  accountBar: {
+    // Fill spare width to center short rows; overflowing content still scrolls.
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  accountTarget: {
+    // Keep the footer height and label spacing unchanged while giving the
+    // selection/press fill breathing room and a rounded edge around the icon.
+    maxWidth: 120,
+    flexShrink: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 4,
+    paddingVertical: 4,
+    borderRadius: ckRadius.pill,
+  },
+  accountImage: { width: 13, height: 13 },
+  accountName: { flexShrink: 1, minWidth: 0, fontWeight: '700' },
   skeletonHeader: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   metricRow: { flexDirection: 'row', gap: HOME_METRIC_GAP },
   metric: {

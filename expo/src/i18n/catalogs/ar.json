@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "أفضل كؤوس",
   "clanLoadFailed": "فشل تحميل القبيلة.",
   "gameItemLevels": "المستويات",
+  "gameItemLevelCount": "{count, plural, zero {# مستوى} one {مستوى واحد} two {مستويان} few {# مستويات} many {# مستوى} other {# مستوى}}",
   "resourceDarkElixir": "إكسير الظلام",
   "resourceBuilderElixir": "إكسير البنّاء",
   "resourceBuilderGold": "ذهب البنّاء",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "اختر حسابًا",
   "upgradeTrackerSwitchAccount": "تبديل الحساب، {account}",
   "upgradeTrackerShare": "مشاركة المتتبع",
+  "trackerPosterCopied": "تم نسخ الصورة",
+  "trackerPosterCopy": "نسخ الصورة",
+  "trackerPosterShareAll": "مشاركة الصور الثلاث",
   "upgradeTrackerPasteJson": "لصق JSON الحساب",
   "upgradeTrackerImportTitle": "استيراد بيانات الحساب",
   "upgradeTrackerImportDescription": "ألصق JSON الخام للحساب. سيبقى على هذا الجهاز.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "الوزن {value}%",
   "upgradeTrackerPlanUntilMaxed": "حتى بلغ الحد الأقصى",
   "upgradeTrackerPlanUntilPercent": "حتى {value}%",
-  "upgradeTrackerPlanRuleNote": "يتم تشغيل المستويات المرقمة أولاً. تحتفظ الصفوف المشتركة بنفس رقم الطبقة، ويتم تسوية مزيجها من الأوزان النسبية، بحيث تصبح 50 + 25 67% / 33%. يحقق الهدف عائدًا للفئة بعد أن يصل إلى تلك النسبة بينما يظل مؤهلاً لاحقًا.",
+  "upgradeTrackerPlanRuleNote": "اسحب الفئات لاختيار ما تتم ترقيته أولاً. تتيح إعدادات الصف مشاركة الأولوية أو التوقف عند نسبة إكمال محددة.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "ماكس قبل التقدم",
   "upgradeTrackerPlanGoalRushNextHall": "الوصول إلى القاعة التالية بسرعة",
   "upgradeTrackerPlanGoalCatchUp": "اللحاق بمستويات هرع",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "بافتراض أن الهجمات المتبقية مثالية. هذا حد رياضي وليس توقعًا.",
   "warScoutTitle": "استطلاع التشكيلة",
   "warScoutOpponent": "حروب الخصم الأخيرة",
-  "warScoutScope": "التشكيلة الحالية · القواعد نفسها · حتى 10 حروب سابقة"
+  "warScoutScope": "التشكيلة الحالية · القواعد نفسها · حتى 10 حروب سابقة",
+  "upgradeTrackerCapturedWork": "من آخر تحديث لك"
 }

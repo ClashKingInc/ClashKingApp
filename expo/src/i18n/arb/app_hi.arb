@@ -3306,6 +3306,8 @@
   "playerBestTrophies": "सर्वश्रेष्ठ ट्रॉफियाँ",
   "clanLoadFailed": "क्लैन लोड करने में विफल।",
   "gameItemLevels": "स्तर",
+  "gameItemLevelCount": "{count} स्तर",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "डार्क एलिक्सिर",
   "resourceBuilderElixir": "बिल्डर एलिक्सिर",
   "resourceBuilderGold": "बिल्डर गोल्ड",
@@ -3923,6 +3925,9 @@
     }
   },
   "upgradeTrackerShare": "ट्रैकर साझा करें",
+  "trackerPosterCopied": "चित्र कॉपी किया गया",
+  "trackerPosterCopy": "चित्र कॉपी करें",
+  "trackerPosterShareAll": "तीनों साझा करें",
   "upgradeTrackerPasteJson": "खाता JSON चिपकाएँ",
   "upgradeTrackerImportTitle": "खाता डेटा आयात करें",
   "upgradeTrackerImportDescription": "खाते का मूल JSON चिपकाएँ। यह इसी डिवाइस पर रहता है।",
@@ -4904,7 +4909,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "क्रमांकित स्तर पहले चलते हैं। साझा पंक्तियाँ समान स्तर संख्या रखती हैं, और उनका मिश्रण सापेक्ष भार से सामान्यीकृत होता है, इसलिए 50 + 25 67% / 33% हो जाता है। कोई लक्ष्य उस प्रतिशत तक पहुंचने के बाद किसी श्रेणी को उपज देता है जबकि बाद में वह पात्र बना रहता है।",
+  "upgradeTrackerPlanRuleNote": "श्रेणियों को खींचकर तय करें कि पहले क्या अपग्रेड हो। पंक्ति सेटिंग से प्राथमिकता साझा करें या प्रगति लक्ष्य पर रुकें।",
   "upgradeTrackerPlanGoalMaxCurrentHall": "आगे बढ़ने से पहले अधिकतम",
   "upgradeTrackerPlanGoalRushNextHall": "जल्दी से अगले हॉल में पहुंचें",
   "upgradeTrackerPlanGoalCatchUp": "त्वरित स्तरों को पकड़ें",
@@ -5072,5 +5077,6 @@
   "warOutlookAssumption": "शेष हमलों को परिपूर्ण मानता है। यह गणितीय सीमा है, भविष्यवाणी नहीं।",
   "warScoutTitle": "लाइनअप का विश्लेषण",
   "warScoutOpponent": "प्रतिद्वंद्वी के हाल के युद्ध",
-  "warScoutScope": "वर्तमान लाइनअप · समान नियम · अधिकतम 10 पिछले युद्ध"
+  "warScoutScope": "वर्तमान लाइनअप · समान नियम · अधिकतम 10 पिछले युद्ध",
+  "upgradeTrackerCapturedWork": "आपके पिछले अपडेट से"
 }

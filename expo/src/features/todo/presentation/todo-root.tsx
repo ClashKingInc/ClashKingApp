@@ -25,7 +25,6 @@ export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
     const unsubscribers = [
       runtime.accounts.subscribe(changed),
       runtime.players.subscribe(changed),
-      runtime.bookmarks.subscribe(changed),
       runtime.playerCardPreferences.subscribe(changed),
       runtime.wars.subscribe(changed),
     ];
@@ -38,12 +37,6 @@ export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
   const linkedTags = useMemo(
     () =>
       new Set(runtime.accounts.verifiedAccounts.map((account) => canonicalTag(account.playerTag))),
-    // Service revision invalidates the service-owned array.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [runtime, revision],
-  );
-  const bookmarkedTags = useMemo(
-    () => new Set(runtime.bookmarks.players.map((bookmark) => canonicalTag(bookmark.tag))),
     // Service revision invalidates the service-owned array.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [runtime, revision],
@@ -70,7 +63,6 @@ export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
           linkedTags.has(canonicalTag(player.tag)),
         ),
         linkedTags,
-        bookmarkedTags,
         isShown: (tag) => runtime.playerCardPreferences.isShownInTodoPage(tag),
         presenceFor,
         query,
@@ -79,7 +71,7 @@ export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
       }),
     // Revision invalidates the service-owned profiles and preferences.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bookmarkedTags, filter, linkedTags, now, presenceFor, query, revision, runtime],
+    [filter, linkedTags, now, presenceFor, query, revision, runtime],
   );
   const loadTimers = useCallback((tag: string) => runtime.players.loadPlayerTimers(tag), [runtime]);
   return (
@@ -87,7 +79,6 @@ export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
       model={model}
       query={query}
       filter={filter}
-      isBookmarked={(tag) => bookmarkedTags.has(canonicalTag(tag))}
       presenceFor={presenceFor}
       loadTimers={loadTimers}
       onQueryChange={setQuery}

@@ -1,3 +1,6 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
+import { Image } from 'expo-image';
+import type { ViewInstance } from 'react-native';
 import { useRef, useState } from 'react';
 import { TutorialTarget } from '../../tutorials/tutorial-ui';
 import { tutorials, TUTORIAL_CLAN_TAG } from '../../tutorials/tutorial-service';
@@ -25,7 +28,7 @@ import {
   X,
 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { DiscordMark } from '../../../ui/discord-mark';
@@ -38,7 +41,6 @@ import {
   ProfileHeaderAction,
   ProfileStatChip,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
 import { clanMemberCapacityLabel } from './contracts';
 import type {
@@ -49,7 +51,6 @@ import type {
 import { extractDiscordInviteCode } from './clan-info-contracts';
 import { clanTypeLabel } from './presentation-utils';
 import { ClanSpringTarget } from './clan-spring-transition';
-import { headerArtworkSize } from '../../../ui/mobile-web-image';
 
 export function ClanInfoHeader({
   model,
@@ -65,9 +66,8 @@ export function ClanInfoHeader({
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   const desktop = Platform.OS === 'web' && width >= 900;
-  const descriptionTriggerRef = useRef<View>(null);
+  const descriptionTriggerRef = useRef<ViewInstance>(null);
   const descriptionMeasureGeneration = useRef(0);
   const [descriptionVisible, setDescriptionVisible] = useState(false);
   const [descriptionAnchor, setDescriptionAnchor] = useState<{
@@ -162,33 +162,18 @@ export function ClanInfoHeader({
   return (
     <View testID="clan-header-hero" style={styles.hero}>
       <View testID="clan-header-backdrop" pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <MobileWebImage
+        <Image
           testID="clan-header-background-image"
-          imageUrl={ImageAssets.homeBaseBackground}
-          displaySize={headerArtworkSize(width)}
+          source={require('../../../../assets/clashking/backgrounds/clan-clearing-v3.webp')}
           cachePolicy="memory-disk"
           transition={0}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
-          contentPosition="bottom"
+          contentPosition="center"
         />
+        {/* Keep artwork subdued and finish the fade behind the final chip row. */}
         <View style={styles.imageDarken} />
-        <Svg
-          testID="clan-header-gradient"
-          style={StyleSheet.absoluteFill}
-          width="100%"
-          height="100%"
-          pointerEvents="none"
-        >
-          <Defs>
-            <LinearGradient id="clan-header-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
-              <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.36 : 0.2} />
-              <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.64 : 0.4} />
-              <Stop offset="1" stopColor="#000" stopOpacity={1} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#clan-header-scrim)" />
-        </Svg>
+        <HeroHeaderScrim variant="clan" />
       </View>
       <View style={[styles.actions, { paddingTop: insets.top }, desktop && styles.desktopActions]}>
         <ProfileHeaderAction
@@ -239,11 +224,18 @@ export function ClanInfoHeader({
           onPress={() => actions.openClanInGame(clan)}
           icon={<ExternalLink color="#FFF" />}
         />
-        <TutorialTarget id="bookmark" offer={clan.tag === TUTORIAL_CLAN_TAG ? 'clanGuide' : undefined}><ProfileHeaderAction
-          label={model.bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
-          onPress={() => void actions.toggleClanBookmark(clan).then(() => tutorials.event('bookmarked'))}
-          icon={model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
-        /></TutorialTarget>
+        <TutorialTarget
+          id="bookmark"
+          offer={clan.tag === TUTORIAL_CLAN_TAG ? 'clanGuide' : undefined}
+        >
+          <ProfileHeaderAction
+            label={model.bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
+            onPress={() =>
+              void actions.toggleClanBookmark(clan).then(() => tutorials.event('bookmarked'))
+            }
+            icon={model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
+          />
+        </TutorialTarget>
       </View>
       <View style={[styles.body, desktop ? styles.desktopBody : styles.mobileBody]}>
         <View style={[styles.identity, desktop && styles.desktopIdentity]}>
@@ -319,7 +311,7 @@ export function ClanInfoHeader({
               leagueName={warLeagueLabel.replace(' League', '')}
               subtitle={t('cwlTitle')}
               imageUrl={ImageAssets.getWarLeagueImage(warLeagueAssetName)}
-              onPress={model.hasCwlLeagueData ? () => actions.openCwl(clan) : undefined}
+              onPress={() => actions.openCwl(clan)}
             />
             <LeagueTile
               leagueName={capitalLeagueLabel.replace(' League', '')}
@@ -350,7 +342,7 @@ export function ClanInfoHeader({
           </View>
         </View>
       </View>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         visible={descriptionVisible}
         transparent
         animationType="fade"
@@ -438,8 +430,10 @@ function LeagueTile({
 }
 
 const styles = StyleSheet.create({
-  hero: { width: '100%', backgroundColor: '#000', overflow: 'hidden' },
-  imageDarken: { ...StyleSheet.absoluteFill, backgroundColor: '#00000080' },
+  // The destination bar supplies the same 8px top gap as Player Info; avoid a
+  // second gutter here. The opaque gradient tail handles the artwork seam.
+  hero: { width: '100%', paddingBottom: 0, backgroundColor: '#000', overflow: 'hidden' },
+  imageDarken: { ...StyleSheet.absoluteFill, backgroundColor: '#00000094' },
   actions: {
     minHeight: 48,
     paddingHorizontal: 12,

@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Nejlepší trofeje",
   "clanLoadFailed": "Nepodařilo se načíst klan.",
   "gameItemLevels": "Úrovně",
+  "gameItemLevelCount": "{count, plural, one {# úroveň} few {# úrovně} other {# úrovní}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Temný elixír",
   "resourceBuilderElixir": "Elixír stavitele",
   "resourceBuilderGold": "Zlato stavitele",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Sdílet sledování",
+  "trackerPosterCopied": "Obrázek zkopírován",
+  "trackerPosterCopy": "Kopírovat obrázek",
+  "trackerPosterShareAll": "Sdílet všechny 3",
   "upgradeTrackerPasteJson": "Vložit JSON účtu",
   "upgradeTrackerImportTitle": "Importovat data účtu",
   "upgradeTrackerImportDescription": "Vložte nezpracovaný JSON účtu. Zůstane v tomto zařízení.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Číslované úrovně běží jako první. Sdílené řádky mají stejné číslo úrovně a jejich kombinace je normalizována z relativních vah, takže 50 + 25 se stává 67% / 33%. Cíl dosáhne výnosu kategorie poté, co dosáhne tohoto procenta, zatímco později zůstane způsobilý.",
+  "upgradeTrackerPlanRuleNote": "Přetažením kategorií určíte pořadí vylepšení. Nastavení řádku umožňuje sdílet prioritu nebo zastavit na cílovém dokončení.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max. před pokračováním",
   "upgradeTrackerPlanGoalRushNextHall": "Rychle se dostaň do další haly",
   "upgradeTrackerPlanGoalCatchUp": "Dohnat spěšné úrovně",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Předpokládá dokonalé zbývající útoky. Jde o matematickou hranici, ne předpověď.",
   "warScoutTitle": "Průzkum sestavy",
   "warScoutOpponent": "Poslední války soupeře",
-  "warScoutScope": "Aktuální sestava · stejná pravidla · až 10 předchozí války"
+  "warScoutScope": "Aktuální sestava · stejná pravidla · až 10 předchozí války",
+  "upgradeTrackerCapturedWork": "Z poslední aktualizace"
 }

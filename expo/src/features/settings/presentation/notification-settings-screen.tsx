@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   AppState,
@@ -58,12 +59,6 @@ const categoryRows: readonly {
     category: 'warState',
     title: 'notifGroupWarState',
     description: 'notifWarAlertsDescription',
-    icon: (color) => <Shield color={color} size={22} />,
-  },
-  {
-    category: 'warAttacks',
-    title: 'notifGroupWarAttacks',
-    description: 'notifWarAttackOptionsDescription',
     icon: (color) => <Shield color={color} size={22} />,
   },
   {
@@ -504,7 +499,7 @@ function ReminderTimingSheet({
     setHour(Math.max(1, Math.min(maxHours, index + 1)));
   };
   return (
-    <Modal transparent animationType="slide" visible onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible onRequestClose={onClose}>
       <SafeAreaView style={styles.overlay}>
         <Pressable accessibilityRole="button" onPress={onClose} style={styles.dismissArea} />
         <Surface accessibilityViewIsModal style={styles.sheet}>

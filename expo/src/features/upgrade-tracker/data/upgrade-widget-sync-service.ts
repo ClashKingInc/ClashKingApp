@@ -1,4 +1,5 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { upgradeSnapshotNeedsRefresh } from '../models/snapshot-freshness';
 import {
   localizedNameForItem,
   translationForTid,
@@ -127,12 +128,10 @@ export class UpgradeWidgetSyncService {
           ? ImageAssets.townHall(townHallLevel)
           : ImageAssets.builderHall(builderHallLevel),
       updatedAt: now.toISOString(),
-      hasStaleData: snapshot.items.some(
-        (item) =>
-          !item.isComplete &&
-          (item.activeSeconds ?? 0) > 0 &&
-          snapshot.remainingActiveSeconds(item, now) <= 0,
-      ),
+      hasStaleData: upgradeSnapshotNeedsRefresh(snapshot, now),
+      // Match the Home card exactly: Home Village overall progress excludes the
+      // helper/builders category and uses the existing time/resource weighting.
+      completion: Math.max(0, Math.min(1, snapshot.overallSummary(UpgradeVillage.home).completion)),
       labels: this.labels(),
       boosts: this.boostPayload(snapshot, now),
       helpers: this.helperPayload(snapshot, now),

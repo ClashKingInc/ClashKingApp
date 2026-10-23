@@ -3306,6 +3306,8 @@
   "playerBestTrophies": "Cúp cao nhất",
   "clanLoadFailed": "Không thể tải hội.",
   "gameItemLevels": "Cấp độ",
+  "gameItemLevelCount": "{count} cấp độ",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Dầu đen",
   "resourceBuilderElixir": "Dầu thợ xây",
   "resourceBuilderGold": "Vàng thợ xây",
@@ -3923,6 +3925,9 @@
     }
   },
   "upgradeTrackerShare": "Chia sẻ trình theo dõi",
+  "trackerPosterCopied": "Đã sao chép ảnh",
+  "trackerPosterCopy": "Sao chép ảnh",
+  "trackerPosterShareAll": "Chia sẻ cả 3",
   "upgradeTrackerPasteJson": "Dán JSON tài khoản",
   "upgradeTrackerImportTitle": "Nhập dữ liệu tài khoản",
   "upgradeTrackerImportDescription": "Dán JSON tài khoản nguyên bản. Dữ liệu chỉ được lưu trên thiết bị này.",
@@ -4904,7 +4909,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Các tầng được đánh số chạy đầu tiên. Các hàng được chia sẻ giữ nguyên số cấp và sự kết hợp của chúng được chuẩn hóa theo trọng số tương đối, do đó 50 + 25 trở thành 67% / 33%. Mục tiêu tạo ra lợi nhuận cho danh mục sau khi đạt đến tỷ lệ phần trăm đó trong khi sau đó vẫn đủ điều kiện.",
+  "upgradeTrackerPlanRuleNote": "Kéo các nhóm để chọn thứ tự nâng cấp. Cài đặt hàng cho phép chia sẻ ưu tiên hoặc dừng ở mục tiêu tiến độ.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max trước khi thăng tiến",
   "upgradeTrackerPlanGoalRushNextHall": "Nhanh chóng đến sảnh tiếp theo",
   "upgradeTrackerPlanGoalCatchUp": "Bắt kịp mức độ gấp rút",
@@ -5072,5 +5077,6 @@
   "warOutlookAssumption": "Giả định các đòn tấn công còn lại đều hoàn hảo. Đây là giới hạn toán học, không phải dự đoán.",
   "warScoutTitle": "Phân tích đội hình",
   "warScoutOpponent": "Các cuộc chiến gần đây của đối thủ",
-  "warScoutScope": "Đội hình hiện tại · cùng luật · tối đa 10 cuộc chiến trước"
+  "warScoutScope": "Đội hình hiện tại · cùng luật · tối đa 10 cuộc chiến trước",
+  "upgradeTrackerCapturedWork": "Từ lần cập nhật gần nhất"
 }

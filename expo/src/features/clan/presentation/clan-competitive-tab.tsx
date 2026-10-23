@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -113,7 +114,7 @@ export function ClanCompetitiveTab({
         accessibilityLabel={t('rankingsSnapshotDate')}
       />
       {dateOpen ? (
-        <Modal transparent animationType="slide" onRequestClose={() => setDateOpen(false)}>
+        <Modal supportedOrientations={modalOrientations} transparent animationType="slide" onRequestClose={() => setDateOpen(false)}>
           <Pressable style={styles.overlay} onPress={() => setDateOpen(false)}>
             <Pressable
               style={[styles.sheet, { backgroundColor: theme.surface }]}

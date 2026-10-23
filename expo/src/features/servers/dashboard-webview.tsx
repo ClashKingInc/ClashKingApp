@@ -11,10 +11,10 @@ export interface DashboardWebViewProps {
 
 export function DashboardWebView({ url, handoff, onExpired }: DashboardWebViewProps) {
   const theme = useCKTheme();
-  const ref = useRef<WebView>(null),
+  const ref = useRef<WebView<object>>(null),
     origin = new URL(url).origin;
   return (
-    <WebView
+    <WebView<object>
       ref={ref}
       source={{ uri: url }}
       style={{ flex: 1, backgroundColor: theme.background }}

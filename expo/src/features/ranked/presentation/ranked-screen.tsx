@@ -1,6 +1,7 @@
-import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
-import {
+import { HeroHeaderScrim } from "../../../ui/hero-header-scrim";
+import { Image } from 'expo-image';
+import { modalOrientations } from "../../../ui/modal-orientations";
+import { type ViewInstance, type ScrollViewInstance,
   Alert,
   Modal,
   type NativeScrollEvent,
@@ -13,6 +14,8 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import {
   ArrowLeft,
   Bookmark,
@@ -32,7 +35,6 @@ import {
   UsersRound,
 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient as SvgLinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { sharePageLink } from '../../../core/deep-links/share-page-link';
@@ -70,6 +72,7 @@ import {
   type RankedPeriod,
 } from '../data';
 import { RankedLineChart } from './line-chart';
+import { RankedShareModal } from './ranked-share';
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 import { playerProfileClanIdentity } from '../../player/presentation/player-clan-identity';
 
@@ -107,8 +110,9 @@ export function RankedScreen(props: RankedScreenProps) {
   const [showHistoryTable, setShowHistoryTable] = useState(false);
   const [info, setInfo] = useState(false);
   const [accountPicker, setAccountPicker] = useState(false);
+  const [posterOpen, setPosterOpen] = useState(false);
   const [openingPlayer, setOpeningPlayer] = useState(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   const scrollOffsets = useRef<Record<'period' | 'history', number>>({
     period: 0,
     history: 0,
@@ -264,12 +268,14 @@ export function RankedScreen(props: RankedScreenProps) {
           top={insets.top}
           onInfo={() => setInfo(true)}
           onAccounts={() => setAccountPicker(true)}
-          onShare={() =>
-            void sharePageLink(
-              { kind: 'page', page: 'ranked', params: { player: props.player.tag, tab, mode } },
-              props.player.name,
-            ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')))
-          }
+          onShare={() => {
+            if (period) setPosterOpen(true);
+            else
+              void sharePageLink(
+                { kind: 'page', page: 'ranked', params: { player: props.player.tag, tab, mode } },
+                props.player.name,
+              ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')));
+          }}
         />
         <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
           <ProfileTabs
@@ -293,6 +299,14 @@ export function RankedScreen(props: RankedScreenProps) {
         </View>
       </ScrollView>
       <InfoModal visible={info} onClose={() => setInfo(false)} />
+      {period && posterOpen ? (
+        <RankedShareModal
+          visible
+          player={props.player}
+          period={period}
+          onClose={() => setPosterOpen(false)}
+        />
+      ) : null}
       <AccountPicker
         visible={accountPicker}
         selected={props.player.tag}
@@ -370,17 +384,21 @@ function RankedHeader({
   return (
     <View testID="ranked-player-header" style={styles.rankedHeader}>
       <View style={styles.headerBackground}>
-        <MobileWebImage testID="ranked-header-background" imageUrl={ImageAssets.homeBaseBackground} cachePolicy="disk" contentFit="cover" style={StyleSheet.absoluteFill} />
-        <View testID="ranked-header-scrim" pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
-        <Svg pointerEvents="none" style={StyleSheet.absoluteFill} width="100%" height="100%">
-          <Defs><SvgLinearGradient id="ranked-hero-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
-            <Stop offset="0" stopColor="#000" stopOpacity={0.34} />
-            <Stop offset="0.6" stopColor="#000" stopOpacity={0.52} />
-            <Stop offset="0.84" stopColor="#000" stopOpacity={0.76} />
-            <Stop offset="1" stopColor="#000" stopOpacity={1} />
-          </SvgLinearGradient></Defs>
-          <Rect width="100%" height="100%" fill="url(#ranked-hero-scrim)" />
-        </Svg>
+        <Image
+          testID="ranked-header-background"
+          source={require('../../../../assets/clashking/backgrounds/ranked-cloud-trophy-v1.webp')}
+          cachePolicy="disk"
+          contentFit="cover"
+          contentPosition="center"
+          transition={0}
+          style={StyleSheet.absoluteFill}
+        />
+        <View
+          testID="ranked-header-scrim"
+          pointerEvents="none"
+          style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]}
+        />
+        <HeroHeaderScrim variant="ranked" />
         <View
           testID="ranked-header-content"
           style={[
@@ -433,19 +451,19 @@ function RankedHeader({
           >
             <View>
               <MobileWebImage
-                imageUrl={player.townHallPic}
+                // The resolved icon includes the numbered tier plaque; the
+                // API's large icon can be the generic unnumbered league crest.
+                imageUrl={data?.currentTier?.iconUrl || player.leagueUrl || ImageAssets.trophies}
                 style={{ width: 104, height: 104 }}
                 contentFit="contain"
               />
-              {data?.currentTier?.largeIconUrl ? (
-                <View style={styles.tierBadgeShell}>
-                  <MobileWebImage
-                    imageUrl={data.currentTier.iconUrl}
-                    style={styles.tierBadge}
-                    contentFit="contain"
-                  />
-                </View>
-              ) : null}
+              <View style={styles.tierBadgeShell}>
+                <MobileWebImage
+                  imageUrl={player.townHallPic}
+                  style={styles.tierBadge}
+                  contentFit="contain"
+                />
+              </View>
             </View>
             <View style={styles.identityCopy}>
               <CKText
@@ -455,7 +473,6 @@ function RankedHeader({
               >
                 {player.name}
               </CKText>
-              <CKText style={styles.whiteSoft}>{player.tag}</CKText>
               {clanIdentity.name ? (
                 <View style={styles.clanLine}>
                   {clanIdentity.badgeUrl ? (
@@ -484,7 +501,7 @@ function RankedHeader({
                   (member?.leagueTrophies ?? data?.trophies ?? player.trophies).toLocaleString(
                     intlLocale,
                   ),
-                  data?.currentTier?.largeIconUrl || ImageAssets.trophies,
+                  data?.currentTier?.iconUrl || player.leagueUrl || ImageAssets.trophies,
                   ImageAssets.trophies,
                 )
               : null}
@@ -575,7 +592,7 @@ function PeriodPanel({
   onPrevious: () => void;
   onNext: () => void;
   onOpenPlayerTag: (tag: string) => Promise<void>;
-  onJumpToPlayer: (target: View) => void;
+  onJumpToPlayer: (target: ViewInstance) => void;
 }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
@@ -862,11 +879,11 @@ function RankingTable({
   period: RankedPeriod;
   playerTag: string;
   onOpenPlayerTag: (tag: string) => Promise<void>;
-  onJumpToPlayer: (target: View) => void;
+  onJumpToPlayer: (target: ViewInstance) => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const ownRef = useRef<View>(null);
+  const ownRef = useRef<ViewInstance>(null);
   if (!period.group || period.group.members.length === 0)
     return <EmptyState title={t('rankedLeagueGroupRanking')} body={t('rankedLeagueNoGroup')} />;
   const normalizedPlayerTag = canonicalTag(playerTag);
@@ -975,7 +992,7 @@ function HistoryPanel({
   const highlights = rankedTierHighlights(periods);
   const [tierIndex, setTierIndex] = useState(0);
   const [pagerWidth, setPagerWidth] = useState(0);
-  const pagerRef = useRef<ScrollView>(null);
+  const pagerRef = useRef<ScrollViewInstance>(null);
   return (
     <View style={styles.section}>
       <Pressable
@@ -1227,7 +1244,7 @@ function InfoModal({ visible, onClose }: { visible: boolean; onClose: () => void
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.modalScrim}>
         <Surface style={[styles.infoDialog, { backgroundColor: theme.surface }]}>
           <CKText role="sectionTitle" style={[styles.infoDialogTitle, { color: theme.primary }]}>
@@ -1334,7 +1351,7 @@ const styles = StyleSheet.create({
   identityName: { maxWidth: 280, fontSize: 26, lineHeight: 27, fontWeight: '700' },
   tierBadgeShell: {
     position: 'absolute',
-    right: -2,
+    left: -2,
     bottom: 0,
     width: 38,
     height: 38,

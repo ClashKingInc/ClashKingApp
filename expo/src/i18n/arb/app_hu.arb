@@ -3306,6 +3306,8 @@
   "playerBestTrophies": "Legjobb trófeák",
   "clanLoadFailed": "A klán betöltése sikertelen.",
   "gameItemLevels": "Szintek",
+  "gameItemLevelCount": "{count} szint",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Sötét elixír",
   "resourceBuilderElixir": "Építő elixír",
   "resourceBuilderGold": "Építő arany",
@@ -3923,6 +3925,9 @@
     }
   },
   "upgradeTrackerShare": "Követő megosztása",
+  "trackerPosterCopied": "Kép másolva",
+  "trackerPosterCopy": "Kép másolása",
+  "trackerPosterShareAll": "Mindhárom megosztása",
   "upgradeTrackerPasteJson": "Fiók-JSON beillesztése",
   "upgradeTrackerImportTitle": "Fiókadatok importálása",
   "upgradeTrackerImportDescription": "Illeszd be a nyers fiók-JSON-t. Az adatok ezen az eszközön maradnak.",
@@ -4904,7 +4909,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "A számozott szintek futnak először. A megosztott sorok ugyanazt a rétegszámot tartják, és keveréküket a relatív súlyokból normalizálják, így az 50 + 25 67% / 33% lesz. A cél eléri ezt a százalékos arányt a kategória hozamával, míg később jogosult marad.",
+  "upgradeTrackerPlanRuleNote": "Húzd a kategóriákat a kívánt fejlesztési sorrendbe. A sorbeállításokkal közös prioritást vagy készültségi célt adhatsz meg.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max az előrehaladás előtt",
   "upgradeTrackerPlanGoalRushNextHall": "Gyorsan érje el a következő csarnokot",
   "upgradeTrackerPlanGoalCatchUp": "Felzárkózni rohanó szintek",
@@ -5072,5 +5077,6 @@
   "warOutlookAssumption": "Tökéletes hátralévő támadásokat feltételez. Ez matematikai határ, nem előrejelzés.",
   "warScoutTitle": "Felállás elemzése",
   "warScoutOpponent": "Az ellenfél legutóbbi háborúi",
-  "warScoutScope": "Jelenlegi felállás · azonos szabályok · legfeljebb 10 korábbi háború"
+  "warScoutScope": "Jelenlegi felállás · azonos szabályok · legfeljebb 10 korábbi háború",
+  "upgradeTrackerCapturedWork": "A legutóbbi frissítésedből"
 }

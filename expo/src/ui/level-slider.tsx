@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { PanResponder, Platform, View } from 'react-native';
+import { PanResponder, Platform, View, type KeyDownEvent } from 'react-native';
 import { useI18n } from '../i18n';
 import { CKText } from './text';
 import { useCKTheme } from './theme';
@@ -117,17 +117,18 @@ function LevelSliderControl({
         {...(Platform.OS === 'web'
           ? {
               tabIndex: 0,
-              onKeyDown: (event: { key: string; preventDefault: () => void }) => {
+              onKeyDown: (event: KeyDownEvent) => {
+                const key = event.nativeEvent.key;
                 const delta =
-                  event.key === 'ArrowRight' || event.key === 'ArrowUp'
+                  key === 'ArrowRight' || key === 'ArrowUp'
                     ? 1
-                    : event.key === 'ArrowLeft' || event.key === 'ArrowDown'
+                    : key === 'ArrowLeft' || key === 'ArrowDown'
                       ? -1
                       : 0;
-                if (!delta && event.key !== 'Home' && event.key !== 'End') return;
+                if (!delta && key !== 'Home' && key !== 'End') return;
                 event.preventDefault();
                 const next =
-                  event.key === 'Home' ? minimum : event.key === 'End' ? maximum : stepValue(delta);
+                  key === 'Home' ? minimum : key === 'End' ? maximum : stepValue(delta);
                 setPreview(next);
                 onChange(next);
               },

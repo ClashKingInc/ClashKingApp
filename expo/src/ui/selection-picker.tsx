@@ -1,3 +1,4 @@
+import { modalOrientations } from "./modal-orientations";
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   FlatList,
@@ -155,6 +156,7 @@ export function SelectionPickerModal<T extends string>({
   clearSearchAccessibilityLabel,
   onSelect,
   onClose,
+  optionHeight = 50,
 }: {
   visible: boolean;
   title: string;
@@ -166,6 +168,8 @@ export function SelectionPickerModal<T extends string>({
   clearSearchAccessibilityLabel?: string;
   onSelect: (key: T) => void;
   onClose: () => void;
+  /** Identity rows with artwork and subtitles need more room than simple choices. */
+  optionHeight?: number;
 }) {
   const theme = useCKTheme();
   const { height: viewportHeight } = useWindowDimensions();
@@ -180,14 +184,14 @@ export function SelectionPickerModal<T extends string>({
       `${option.label} ${option.searchText ?? ''}`.toLocaleLowerCase().includes(needle),
     );
   }, [options, query]);
-  const contentHeight = Math.max(1, filtered.length) * 50;
+  const contentHeight = Math.max(1, filtered.length) * optionHeight;
   const availableHeight = Math.max(1, viewportHeight - insets.top - insets.bottom - 24);
   const sheetChromeHeight = searchPlaceholder ? 121 : 65;
   const maximumVisibleOptions = 10;
   const maximumSheetHeight = availableHeight * 0.88;
   const listHeight = Math.min(
     contentHeight,
-    maximumVisibleOptions * 50,
+    maximumVisibleOptions * optionHeight,
     Math.max(50, maximumSheetHeight - sheetChromeHeight),
   );
   const listStateKey = `${visible ? 'open' : 'closed'}:${query}:${filtered
@@ -202,7 +206,7 @@ export function SelectionPickerModal<T extends string>({
     onClose();
   };
   return (
-    <Modal
+    <Modal supportedOrientations={modalOrientations}
       animationType="fade"
       navigationBarTranslucent
       onRequestClose={close}
@@ -303,6 +307,7 @@ export function SelectionPickerModal<T extends string>({
                         }}
                         style={[
                           styles.option,
+                          { minHeight: optionHeight },
                           selected && {
                             backgroundColor: colorWithAlpha(theme.primary, 0.13),
                           },
@@ -354,7 +359,9 @@ export function SelectionPickerModal<T extends string>({
                       atEnd: contentOffset.y + layoutMeasurement.height >= contentSize.height - 2,
                     });
                   }}
-                  scrollEnabled={canScroll}
+                  // Option subtitles and large text can make rows taller than
+                  // the estimate. Never disable native scrolling from that estimate.
+                  scrollEnabled
                   scrollEventThrottle={32}
                   style={styles.scroll}
                   testID="selection-picker-list"

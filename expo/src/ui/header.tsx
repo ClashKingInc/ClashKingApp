@@ -1,8 +1,26 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, type ViewProps } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GlassSurface } from './glass';
 import { ckRadius } from './tokens';
+
+// The global search field must stay anchored when its editable view opens.
+export const globalSearchHeaderLayout = {
+  height: 64,
+  paddingHorizontal: 16,
+  gap: 10,
+  leadingWidth: 46,
+  fieldHeight: 48,
+} as const;
+
+export function GlobalSearchHeaderFrame({ style, ...props }: ViewProps) {
+  const { top } = useSafeAreaInsets();
+  // Both inactive and editable headers consume the same provider inset on
+  // their first render. A newly mounted native SafeAreaView can apply padding
+  // after focus/layout, making Android search briefly jump toward the status bar.
+  return <View {...props} style={[{ paddingTop: top }, style]} />;
+}
 
 export function HeaderIconButton({
   icon,
@@ -28,7 +46,13 @@ export function HeaderIconButton({
   );
   // Size the material itself: a sized child does not stop a column parent
   // stretching the glass wrapper into a full-width pill.
-  return glass ? <GlassSurface cornerRadius={ckRadius.pill} style={styles.headerButtonFrame}>{button}</GlassSurface> : button;
+  return glass ? (
+    <GlassSurface cornerRadius={ckRadius.pill} style={styles.headerButtonFrame}>
+      {button}
+    </GlassSurface>
+  ) : (
+    button
+  );
 }
 
 /** Plain, consistent action used over player, clan, Ranked, and Legends artwork. */

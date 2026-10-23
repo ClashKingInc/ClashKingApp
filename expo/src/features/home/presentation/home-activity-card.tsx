@@ -17,19 +17,20 @@ import {
   useCKTheme,
 } from '../../../ui';
 import { toIntlLocale, useI18n } from '../../../i18n';
-import { HomeCardFrame, HomeAccountDots } from './home-components';
+import { HomeCardFrame, HomeAccountBar } from './home-components';
 import type { HomeAccountIdentity } from './contracts';
 
 type Summary = EndpointResponse<typeof PlayerActivityEndpoint>;
 type MetricKey =
   'gold' | 'elixir' | 'darkElixir' | 'donated' | 'received' | 'attacks' | 'upgradeLevels';
 export function HomeActivityCard({
-  accounts,
+  accounts: includedAccounts,
   refreshKey,
 }: {
   accounts: readonly HomeAccountIdentity[];
   refreshKey?: string;
 }) {
+  const accounts = includedAccounts;
   const runtime = useAppRuntime();
   const theme = useCKTheme();
   const { t, locale } = useI18n();
@@ -46,7 +47,7 @@ export function HomeActivityCard({
   const [loaded, setLoaded] = useState<{ signature: string; data: Record<string, Summary | null> }>(
     { signature: '', data: {} },
   );
-  // Load all verified links once. Changing the local scope reuses those results
+  // Load the included links once. Changing the local scope reuses those results
   // and never labels a partial/failed aggregate as an all-account total.
   const tags = accounts
     .map((account) => account.tag)
@@ -198,20 +199,9 @@ export function HomeActivityCard({
   return (
     <HomeCardFrame
       accent={accent}
-      onPage={
-        accounts.length > 1
-          ? (direction) => {
-              const page =
-                scope === 'all' ? 0 : accounts.findIndex((account) => account.tag === scope) + 1;
-              const next = (page + direction + accounts.length + 1) % (accounts.length + 1);
-              setScope(next === 0 ? 'all' : accounts[next - 1]!.tag);
-              setSelectedDay(undefined);
-            }
-          : undefined
-      }
       footer={
         accounts.length > 1 ? (
-          <HomeAccountDots
+          <HomeAccountBar
             entries={[
               { tag: 'all', name: t('todoAllAccounts'), subtitle: '', imageUrl: '' },
               ...accounts,

@@ -1,16 +1,26 @@
-import { createNativeStackNavigator, type NativeStackScreenProps } from 'expo-router/native-stack';
-import { useIsFocused } from 'expo-router';
+import {
+  createNativeStackNavigator,
+  type NativeStackScreenProps,
+} from '@react-navigation/native-stack';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+  NavigationIndependentTree,
+  useIsFocused,
+} from '@react-navigation/native';
 import {
   createContext,
   useContext,
   useLayoutEffect,
+  useMemo,
   useRef,
   type MutableRefObject,
   type ReactNode,
 } from 'react';
 import { Platform } from 'react-native';
 
-import { useCKTheme } from './theme';
+import { useCKTheme, useCKThemeMode } from './theme';
 
 type DestinationRoutes = {
   Grid: undefined;
@@ -59,8 +69,8 @@ function GridRoute({ navigation }: NativeStackScreenProps<DestinationRoutes, 'Gr
       closingFromOwnerRef.current = false;
       navigation.navigate('Detail');
     }
-  // A new selection can arrive during the previous native pop. Reconcile again
-  // when Grid regains focus; owner state alone does not change when pop finishes.
+    // A new selection can arrive during the previous native pop. Reconcile again
+    // when Grid regains focus; owner state alone does not change when pop finishes.
   }, [closingFromOwnerRef, dismissedByNativeBackRef, focused, navigation, routeFocused]);
 
   // The native stack retains this route while Detail is presented. Its React
@@ -90,6 +100,20 @@ function DetailRoute({ navigation }: NativeStackScreenProps<DestinationRoutes, '
 
 export function DestinationStack(props: DestinationStackProps) {
   const theme = useCKTheme();
+  const mode = useCKThemeMode();
+  const navigationTheme = useMemo(() => {
+    const base = mode === 'dark' ? DarkTheme : DefaultTheme;
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        background: props.backgroundColor ?? theme.background,
+        card: props.backgroundColor ?? theme.background,
+        text: theme.onSurface,
+        primary: theme.primary,
+      },
+    };
+  }, [mode, props.backgroundColor, theme]);
   const dismissedByNativeBackRef = useRef(false);
   const closingFromOwnerRef = useRef(false);
   if (Platform.OS === 'web') return props.focused ? props.detail : props.grid;
@@ -98,19 +122,27 @@ export function DestinationStack(props: DestinationStackProps) {
     <DestinationContext.Provider
       value={{ ...props, dismissedByNativeBackRef, closingFromOwnerRef }}
     >
-      <Stack.Navigator
-        initialRouteName="Grid"
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: props.gestureEnabled ?? true,
-          fullScreenGestureEnabled: false,
-          freezeOnBlur: false,
-          contentStyle: { backgroundColor: props.backgroundColor ?? theme.background },
-        }}
-      >
-        <Stack.Screen name="Grid" component={GridRoute} options={{ gestureEnabled: false }} />
-        <Stack.Screen name="Detail" component={DetailRoute} />
-      </Stack.Navigator>
+      {/* These local Grid/Detail routes are not filesystem routes. SDK 58's
+          Expo navigator requires globally seeded route state, so use React
+          Navigation's isolated tree for this retained, state-driven stack.
+          All hooks/events below must come from that same navigation package. */}
+      <NavigationIndependentTree>
+        <NavigationContainer theme={navigationTheme}>
+          <Stack.Navigator
+            initialRouteName="Grid"
+            screenOptions={{
+              headerShown: false,
+              gestureEnabled: props.gestureEnabled ?? true,
+              fullScreenGestureEnabled: false,
+              freezeOnBlur: false,
+              contentStyle: { backgroundColor: props.backgroundColor ?? theme.background },
+            }}
+          >
+            <Stack.Screen name="Grid" component={GridRoute} options={{ gestureEnabled: false }} />
+            <Stack.Screen name="Detail" component={DetailRoute} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NavigationIndependentTree>
     </DestinationContext.Provider>
   );
 }

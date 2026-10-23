@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Beste trofeer",
   "clanLoadFailed": "Kunne ikke laste klan.",
   "gameItemLevels": "Nivåer",
+  "gameItemLevelCount": "{count, plural, one {# nivå} other {# nivåer}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Mørk eliksir",
   "resourceBuilderElixir": "Byggereliksir",
   "resourceBuilderGold": "Byggergull",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Delingstracker",
+  "trackerPosterCopied": "Bilde kopiert",
+  "trackerPosterCopy": "Kopier bilde",
+  "trackerPosterShareAll": "Del alle 3",
   "upgradeTrackerPasteJson": "Lim inn konto JSON",
   "upgradeTrackerImportTitle": "Importer kontodata",
   "upgradeTrackerImportDescription": "Lim inn den rå konto-JSON-en. Den blir værende på denne enheten.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Nummererte nivåer kjører først. Delte rader beholder samme nivånummer, og blandingen deres er normalisert fra de relative vektene, så 50 + 25 blir 67% / 33%. Et mål gir en kategoriavkastning etter at den når denne prosentandelen, mens den forblir kvalifisert senere.",
+  "upgradeTrackerPlanRuleNote": "Dra kategorier for å velge hva som oppgraderes først. Radinnstillinger lar kategorier dele prioritet eller stoppe ved et mål.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Maks før avansering",
   "upgradeTrackerPlanGoalRushNextHall": "Kom raskt til neste hall",
   "upgradeTrackerPlanGoalCatchUp": "Ta igjen forhastede nivåer",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Forutsetter perfekte gjenværende angrep. Dette er en matematisk grense, ikke en prognose.",
   "warScoutTitle": "Analyse av lagoppstillingen",
   "warScoutOpponent": "Motstanderens siste kriger",
-  "warScoutScope": "Nåværende lagoppstilling · samme regler · opptil 10 tidligere kriger"
+  "warScoutScope": "Nåværende lagoppstilling · samme regler · opptil 10 tidligere kriger",
+  "upgradeTrackerCapturedWork": "Fra din siste oppdatering"
 }

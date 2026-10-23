@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Bedste trofæer",
   "clanLoadFailed": "Kunne ikke indlæse klan.",
   "gameItemLevels": "Niveauer",
+  "gameItemLevelCount": "{count, plural, one {# niveau} other {# niveauer}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Mørk eliksir",
   "resourceBuilderElixir": "Byggereliksir",
   "resourceBuilderGold": "Byggerguld",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Delingstracker",
+  "trackerPosterCopied": "Billede kopieret",
+  "trackerPosterCopy": "Kopiér billede",
+  "trackerPosterShareAll": "Del alle 3",
   "upgradeTrackerPasteJson": "Indsæt konto JSON",
   "upgradeTrackerImportTitle": "Importer kontodata",
   "upgradeTrackerImportDescription": "Indsæt den rå konto-JSON. Den bliver på denne enhed.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Nummererede niveauer kører først. Delte rækker beholder det samme niveaunummer, og deres blanding er normaliseret fra de relative vægte, så 50 + 25 bliver 67% / 33%. Et mål giver en kategori udbytte, efter at det når denne procentdel, mens det forbliver kvalificeret senere.",
+  "upgradeTrackerPlanRuleNote": "Træk kategorier for at vælge, hvad der opgraderes først. Rækkeindstillinger lader kategorier dele prioritet eller stoppe ved et mål.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max før du går videre",
   "upgradeTrackerPlanGoalRushNextHall": "Nå den næste hal hurtigt",
   "upgradeTrackerPlanGoalCatchUp": "Indhente forhastede niveauer",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Forudsætter perfekte resterende angreb. Dette er en matematisk grænse, ikke en forudsigelse.",
   "warScoutTitle": "Analyse af opstillingen",
   "warScoutOpponent": "Modstanderens seneste krige",
-  "warScoutScope": "Nuværende opstilling · samme regler · op til 10 tidligere krige"
+  "warScoutScope": "Nuværende opstilling · samme regler · op til 10 tidligere krige",
+  "upgradeTrackerCapturedWork": "Fra din seneste opdatering"
 }

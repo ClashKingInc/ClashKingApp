@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Beste trofeeën",
   "clanLoadFailed": "Clan laden mislukt.",
   "gameItemLevels": "Niveaus",
+  "gameItemLevelCount": "{count, plural, one {# niveau} other {# niveaus}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Donkere elixir",
   "resourceBuilderElixir": "Bouwerselixir",
   "resourceBuilderGold": "Bouwersgoud",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Tracker delen",
+  "trackerPosterCopied": "Afbeelding gekopieerd",
+  "trackerPosterCopy": "Afbeelding kopiëren",
+  "trackerPosterShareAll": "Alle 3 delen",
   "upgradeTrackerPasteJson": "Account-JSON plakken",
   "upgradeTrackerImportTitle": "Accountgegevens importeren",
   "upgradeTrackerImportDescription": "Plak de onbewerkte account-JSON. Deze blijft op dit apparaat.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Genummerde niveaus worden als eerste uitgevoerd. Gedeelde rijen behouden hetzelfde niveaunummer en hun mix wordt genormaliseerd op basis van de relatieve gewichten, dus 50 + 25 wordt 67% / 33%. Een doel genereert een categorierendement nadat het dat percentage heeft bereikt, terwijl het later in aanmerking blijft komen.",
+  "upgradeTrackerPlanRuleNote": "Sleep categorieën om de upgradevolgorde te bepalen. Rijinstellingen laten categorieën een prioriteit delen of bij een voortgangsdoel stoppen.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max voordat je verder gaat",
   "upgradeTrackerPlanGoalRushNextHall": "Bereik snel de volgende hal",
   "upgradeTrackerPlanGoalCatchUp": "Haal gehaaste niveaus in",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Gaat uit van perfecte resterende aanvallen. Dit is een wiskundige grens, geen voorspelling.",
   "warScoutTitle": "Opstellingsanalyse",
   "warScoutOpponent": "Recente oorlogen van de tegenstander",
-  "warScoutScope": "Huidige opstelling · dezelfde regels · maximaal 10 eerdere oorlogen"
+  "warScoutScope": "Huidige opstelling · dezelfde regels · maximaal 10 eerdere oorlogen",
+  "upgradeTrackerCapturedWork": "Van je laatste update"
 }

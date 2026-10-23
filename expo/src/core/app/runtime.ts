@@ -240,6 +240,8 @@ export function createAppRuntime(): AppRuntime {
     cachedPlayer: (tag) =>
       players.profiles.find((player) => player.tag.toUpperCase() === tag.toUpperCase()) ?? null,
     loadLegendData: (tag, day) => fetchLegendsWidgetData(contractApi, tag, day),
+    loadRankedData: (tag) => players.loadRankedLeagueData(tag, false, false, 'detail'),
+    locale: () => appState.getState().locale,
     t: (key, values) => createTranslator(appState.getState().locale)(key, values),
     reportError: ({ operation, error }) => reportException(error, operation),
   });

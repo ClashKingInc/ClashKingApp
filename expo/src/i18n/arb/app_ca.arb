@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Millors trofeus",
   "clanLoadFailed": "No s'ha pogut carregar el clan.",
   "gameItemLevels": "Nivells",
+  "gameItemLevelCount": "{count, plural, one {# nivell} other {# nivells}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Elixir fosc",
   "resourceBuilderElixir": "Elixir del Constructor",
   "resourceBuilderGold": "Or del Constructor",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Rastrejador de comparticions",
+  "trackerPosterCopied": "Imatge copiada",
+  "trackerPosterCopy": "Copia la imatge",
+  "trackerPosterShareAll": "Comparteix les 3",
   "upgradeTrackerPasteJson": "Enganxar el compte JSON",
   "upgradeTrackerImportTitle": "Importar dades del compte",
   "upgradeTrackerImportDescription": "Enganxa el JSON del compte en brut. Es queda en aquest dispositiu.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Els nivells numerats corren primer. Les files compartides mantenen el mateix nombre de nivell i la seva combinació es normalitza a partir dels pesos relatius, de manera que 50 + 25 es converteixen en 67% / 33%. Un objectiu genera un rendiment de categoria després d'arribar a aquest percentatge mentre segueix sent elegible més endavant.",
+  "upgradeTrackerPlanRuleNote": "Arrossega les categories per triar què es millora primer. Els ajustos de fila permeten compartir prioritat o aturar-se en un objectiu de progrés.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Màxim abans d'avançar",
   "upgradeTrackerPlanGoalRushNextHall": "Arribeu ràpidament a la següent sala",
   "upgradeTrackerPlanGoalCatchUp": "Aconsegueix nivells precipitats",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Suposa atacs restants perfectes. És un límit matemàtic, no una predicció.",
   "warScoutTitle": "Anàlisi de l’alineació",
   "warScoutOpponent": "Guerres recents del rival",
-  "warScoutScope": "Alineació actual · mateixes regles · fins a 10 guerres anteriors"
+  "warScoutScope": "Alineació actual · mateixes regles · fins a 10 guerres anteriors",
+  "upgradeTrackerCapturedWork": "De la teva última actualització"
 }

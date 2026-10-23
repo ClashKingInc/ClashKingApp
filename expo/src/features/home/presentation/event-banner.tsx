@@ -1,5 +1,6 @@
+import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, AppState, Easing, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Animated, AppState, Easing, Pressable, StyleSheet, View } from 'react-native';
 import {
   Castle,
   ChevronLeft,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { HorizontalSwipeScrollView } from '../../../ui/account-bar-scroll-view';
 import { useI18n, type I18nValue } from '../../../i18n';
 import {
   CKText,
@@ -339,7 +341,7 @@ export function HomeEventBanner({
     AppState.currentState !== 'background' && AppState.currentState !== 'inactive',
   );
   const [interacting, setInteracting] = useState(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
       setForeground(state === 'active');
@@ -404,14 +406,22 @@ export function HomeEventBanner({
       style={styles.mobile}
       onLayout={(event) => setAvailableWidth(event.nativeEvent.layout.width)}
     >
-      <ScrollView
+      <HorizontalSwipeScrollView
         ref={scrollRef}
         testID="home-event-carousel"
+        claimAndroidTouchOnStart
+        nestedScrollEnabled
         onTouchStart={() => setInteracting(true)}
         onTouchEnd={() => setInteracting(false)}
         onTouchCancel={() => setInteracting(false)}
+        onScrollBeginDrag={() => setInteracting(true)}
+        onScrollEndDrag={() => setInteracting(false)}
+        onMomentumScrollBegin={() => setInteracting(true)}
         horizontal
         pagingEnabled
+        snapToInterval={availableWidth}
+        disableIntervalMomentum
+        decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
         style={isRtl ? styles.rtlScroll : undefined}
@@ -424,15 +434,16 @@ export function HomeEventBanner({
             ),
           )
         }
-        onMomentumScrollEnd={(event) =>
+        onMomentumScrollEnd={(event) => {
+          setInteracting(false);
           setIndex(
             homeBannerPageIndex(
               event.nativeEvent.contentOffset.x,
               event.nativeEvent.layoutMeasurement.width,
               items.length,
             ),
-          )
-        }
+          );
+        }}
       >
         {items.map((item) => (
           <View
@@ -442,7 +453,7 @@ export function HomeEventBanner({
             <BannerCard item={item} mobile isRtl={isRtl} onPress={action(item)} />
           </View>
         ))}
-      </ScrollView>
+      </HorizontalSwipeScrollView>
       <View style={styles.dots}>
         {items.map((item, dot) => (
           <View

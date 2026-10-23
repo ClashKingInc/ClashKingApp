@@ -3,6 +3,7 @@ import { Image as BackgroundImage, Pressable, ScrollView, View } from 'react-nat
 import { Asset } from 'expo-asset';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SuperchargedBuildingArtwork } from './supercharged-building-artwork';
+import { SuperchargeBorder } from './supercharge-border';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { gameDataState } from '../../core/game-data/game-data-state';
 import { useI18n, toIntlLocale } from '../../i18n';
@@ -369,7 +370,11 @@ function TargetPanel({
   const activeCharge = preview === selectedLevel.level ? charge : 0;
   const hitpoints = level.superchargeHitpoints[activeCharge - 1] ?? level.hitpoints;
   return (
-    <Surface style={s.card}>
+    <Surface
+      style={[s.card, activeCharge > 0 && { overflow: 'visible', borderColor: 'transparent' }]}
+      testID="damage-target-card"
+    >
+      {activeCharge > 0 ? <SuperchargeBorder /> : null}
       <View accessible accessibilityLabel={t('damageHitpoints', { hitpoints: new Intl.NumberFormat(toIntlLocale(locale)).format(hitpoints) })}
         style={{ position: 'absolute', top: 16, left: 16, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
         <MobileWebImage imageUrl={ImageAssets.hitpoints} style={{ width: 18, height: 18 }} />

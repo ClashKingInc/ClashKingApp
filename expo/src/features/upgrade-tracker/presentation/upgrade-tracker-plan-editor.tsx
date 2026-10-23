@@ -1,17 +1,29 @@
-import { useCallback, useMemo, useState } from 'react';
-import { Modal, PanResponder, Pressable, StyleSheet, Switch, View } from 'react-native';
-import { ChevronDown, GripVertical, X } from 'lucide-react-native';
-import {
-  NestableDraggableFlatList,
-  NestableScrollContainer,
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
+import { modalOrientations } from "../../../ui/modal-orientations";
+import { type ViewInstance, type ScrollViewInstance,
+  Modal,
+  PanResponder,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  View,
+  type ScrollViewProps,
+} from 'react-native';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { GripVertical, SlidersHorizontal, X } from 'lucide-react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { trackerCategoryImage, trackerCategoryImageScale } from './tracker-category-art';
+import { InfoTooltip } from '../../../ui/info-tooltip';
+import { MobileWebImage } from '../../../ui/mobile-web-image';
+import DraggableFlatList, { type DraggableFlatListProps } from 'react-native-draggable-flatlist';
+import { runOnJS, useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
+import { CARD_REORDER_HOLD_MS, DragJiggle } from '../../../ui/drag-jiggle';
 
 import { useI18n } from '../../../i18n';
 import { CKText, PillSurface, PressableSurface, Surface, ckRadius, useCKTheme } from '../../../ui';
 import {
   UpgradeCategory,
-  UpgradePlanGoal,
   UpgradePlanPreferences,
   UpgradeQueue,
   UpgradeVillage,
@@ -22,6 +34,125 @@ import {
   type UpgradeTrackerSnapshot,
   type UpgradeVillageValue,
 } from '../models';
+
+type PriorityScrollState = {
+  viewport: React.RefObject<ViewInstance | null>;
+  scroll: React.RefObject<ScrollViewInstance | null>;
+  offset: ReturnType<typeof useSharedValue<number>>;
+  height: ReturnType<typeof useSharedValue<number>>;
+  contentHeight: ReturnType<typeof useSharedValue<number>>;
+  setDragging: (dragging: boolean) => void;
+};
+const PriorityScrollContext = createContext<PriorityScrollState | null>(null);
+
+function PriorityScrollContainer({ children, ...props }: ScrollViewProps) {
+  const viewport = useRef<ViewInstance>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
+  const offset = useSharedValue(0);
+  const height = useSharedValue(0);
+  const contentHeight = useSharedValue(0);
+  const [dragging, setDragging] = useState(false);
+  return (
+    <PriorityScrollContext.Provider
+      value={{ viewport, scroll, offset, height, contentHeight, setDragging }}
+    >
+      <View
+        ref={viewport}
+        collapsable={false}
+        style={{ flex: 1 }}
+        onLayout={(event) => {
+          height.value = event.nativeEvent.layout.height;
+        }}
+      >
+        <ScrollView
+          {...props}
+          ref={scroll}
+          scrollEnabled={!dragging}
+          scrollEventThrottle={16}
+          onScroll={(event) => {
+            offset.value = event.nativeEvent.contentOffset.y;
+          }}
+          onContentSizeChange={(_width, nextHeight) => {
+            contentHeight.value = nextHeight;
+          }}
+        >
+          {children}
+        </ScrollView>
+      </View>
+    </PriorityScrollContext.Provider>
+  );
+}
+
+function PriorityDraggableList<T>(props: DraggableFlatListProps<T>) {
+  const parent = useContext(PriorityScrollContext);
+  if (!parent) throw new Error('PriorityDraggableList requires PriorityScrollContainer');
+  const { viewport, scroll, offset, height, contentHeight, setDragging } = parent;
+  const listTop = useSharedValue(0);
+  const [animValues, setAnimValues] = useState<
+    Parameters<NonNullable<DraggableFlatListProps<T>['onAnimValInit']>>[0] | null
+  >(null);
+  const dragging = useSharedValue(false);
+  const pendingTarget = useSharedValue(-1);
+  const scrollOuter = useCallback(
+    (y: number) => scroll.current?.scrollTo({ y, animated: true }),
+    [scroll],
+  );
+  useAnimatedReaction(
+    () => {
+      if (!dragging.value || !animValues?.isTouchActiveNative.value || height.value <= 0) return -1;
+      if (pendingTarget.value >= 0 && Math.abs(pendingTarget.value - offset.value) > 2) return -1;
+      const top = listTop.value + animValues.hoverOffset.value - offset.value;
+      const bottom = height.value - top - animValues.activeCellSize.value;
+      if (top < 48) return Math.max(0, offset.value - 80);
+      if (bottom < 48)
+        return Math.min(Math.max(0, contentHeight.value - height.value), offset.value + 80);
+      return -1;
+    },
+    (target) => {
+      if (target < 0 || Math.abs(target - offset.value) < 2) return;
+      pendingTarget.value = target;
+      runOnJS(scrollOuter)(target);
+    },
+    [scrollOuter, animValues],
+  );
+  return (
+    <DraggableFlatList
+      {...props}
+      scrollEnabled={false}
+      outerScrollOffset={offset}
+      activationDistance={20}
+      onContainerLayout={({ containerRef }) => {
+        // RN Fabric requires host refs for measureLayout; the library's nesting adapter passes a
+        // numeric findNodeHandle. Window measurements also avoid measuring through a composite ScrollView.
+        containerRef.current?.measureInWindow((_x, y) => {
+          viewport.current?.measureInWindow((_outerX, outerY) => {
+            listTop.value = y - outerY + offset.value;
+          });
+        });
+      }}
+      onAnimValInit={(values) => {
+        // Keep the library's UI-thread shared values, including touch release, for edge auto-scroll.
+        setAnimValues(values);
+        props.onAnimValInit?.(values);
+      }}
+      onDragBegin={(index) => {
+        setDragging(true);
+        dragging.value = true;
+        pendingTarget.set(-1);
+        props.onDragBegin?.(index);
+      }}
+      onRelease={(index) => {
+        dragging.value = false;
+        props.onRelease?.(index);
+      }}
+      onDragEnd={(result) => {
+        dragging.value = false;
+        setDragging(false);
+        props.onDragEnd?.(result);
+      }}
+    />
+  );
+}
 
 export function planQueueOrder(
   snapshot: UpgradeTrackerSnapshot,
@@ -91,6 +222,7 @@ export function UpgradeTrackerPlanEditor({
 }) {
   const theme = useCKTheme();
   const { t } = useI18n();
+  const insets = useSafeAreaInsets();
   const [draft, setDraft] = useState(preferences);
   const sections = useMemo(
     () =>
@@ -126,16 +258,30 @@ export function UpgradeTrackerPlanEditor({
     [draft, t],
   );
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={editorStyles.overlay}>
-        <Surface radius={ckRadius.card} style={editorStyles.modal}>
+    <Modal supportedOrientations={modalOrientations}
+      visible={visible}
+      presentationStyle="fullScreen"
+      animationType="fade"
+      onRequestClose={onClose}
+      onShow={() => setDraft(preferences)}
+    >
+      {/* Native Modal creates a separate gesture root. Without this wrapper iOS can scroll but cannot reorder. */}
+      <GestureHandlerRootView style={[editorStyles.overlay, { backgroundColor: theme.background }]}>
+        <Surface
+          radius={0}
+          style={[
+            editorStyles.modal,
+            { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 },
+          ]}
+        >
           <View style={editorStyles.header}>
             <View style={editorStyles.grow}>
               <CKText role="titleLarge">{t('upgradeTrackerPlanPrioritiesTitle')}</CKText>
-              <CKText muted role="bodySmall">
-                {t('upgradeTrackerPlanPrioritiesDescription')}
-              </CKText>
             </View>
+            <InfoTooltip
+              label={t('upgradeTrackerPlanPrioritiesTitle')}
+              message={t('upgradeTrackerPlanRuleNote')}
+            />
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t('upgradeTrackerPlanClose')}
@@ -144,19 +290,7 @@ export function UpgradeTrackerPlanEditor({
               <X color={theme.onSurface} />
             </Pressable>
           </View>
-          <NestableScrollContainer contentContainerStyle={editorStyles.content}>
-            <RuleNote />
-            <SectionTitle title={t('upgradeTrackerPlanPlanningGoals')} />
-            <GoalSelector
-              title={t('upgradeTrackerHomeVillage')}
-              value={draft.homeGoal}
-              onChange={(homeGoal) => updateDraft(draft, setDraft, { homeGoal })}
-            />
-            <GoalSelector
-              title={t('upgradeTrackerBuilderBase')}
-              value={draft.builderBaseGoal}
-              onChange={(builderBaseGoal) => updateDraft(draft, setDraft, { builderBaseGoal })}
-            />
+          <PriorityScrollContainer contentContainerStyle={editorStyles.content}>
             {sections.map((section) => {
               const villageOrders = section.villages.map((village) => ({
                 village,
@@ -165,10 +299,9 @@ export function UpgradeTrackerPlanEditor({
               if (!villageOrders.some(({ order }) => order.length)) return null;
               return (
                 <View key={section.title} style={editorStyles.section}>
-                  <SectionTitle title={section.title} />
-                  <CKText muted role="labelSmall">
-                    {section.subtitle}
-                  </CKText>
+                  {section.queue !== UpgradeQueue.builders ? (
+                    <SectionTitle title={section.title} />
+                  ) : null}
                   <CompactToggle
                     label={t('upgradeTrackerPlanPrioritizeNewItems')}
                     description={t('upgradeTrackerPlanPrioritizeNewDescription')}
@@ -184,6 +317,8 @@ export function UpgradeTrackerPlanEditor({
                             : t('upgradeTrackerBuilderBase')}
                         </CKText>
                         <PriorityList
+                          snapshot={snapshot}
+                          village={village}
                           order={order}
                           targets={
                             village === UpgradeVillage.home
@@ -244,21 +379,23 @@ export function UpgradeTrackerPlanEditor({
                 })
               }
             />
-            <PressableSurface
-              accessibilityRole="button"
-              onPress={() => onSave(draft)}
-              style={editorStyles.primaryAction}
-            >
-              <CKText>{t('upgradeTrackerPlanApplyPriorities')}</CKText>
-            </PressableSurface>
-          </NestableScrollContainer>
+          </PriorityScrollContainer>
+          <PressableSurface
+            accessibilityRole="button"
+            onPress={() => onSave(draft)}
+            style={editorStyles.primaryAction}
+          >
+            <CKText>{t('upgradeTrackerPlanApplyPriorities')}</CKText>
+          </PressableSurface>
         </Surface>
-      </View>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
 
 function PriorityList({
+  snapshot,
+  village,
   order,
   targets,
   shares,
@@ -266,6 +403,8 @@ function PriorityList({
   onTarget,
   onShare,
 }: {
+  snapshot: UpgradeTrackerSnapshot;
+  village: UpgradeVillageValue;
   order: readonly UpgradeCategoryValue[];
   targets: ReadonlyMap<UpgradeCategoryValue, number>;
   shares: ReadonlyMap<UpgradeCategoryValue, number>;
@@ -275,6 +414,7 @@ function PriorityList({
 }) {
   const theme = useCKTheme();
   const { t } = useI18n();
+  const [expandedCategory, setExpandedCategory] = useState<UpgradeCategoryValue | null>(null);
   const [menu, setMenu] = useState<{
     category: UpgradeCategoryValue;
     kind: 'share' | 'target';
@@ -287,7 +427,7 @@ function PriorityList({
   const menuOptions = menu?.kind === 'share' ? [0, 20, 25, 33, 50, 67, 75, 80] : [50, 75, 90, 100];
   return (
     <View>
-      <NestableDraggableFlatList
+      <PriorityDraggableList
         data={[...order]}
         keyExtractor={(category) => category}
         onDragEnd={({ data, from, to }) => {
@@ -303,68 +443,95 @@ function PriorityList({
           const normalized =
             share > 0 && sharedWeightTotal > 0 ? Math.round((share * 100) / sharedWeightTotal) : 0;
           return (
-            <ScaleDecorator activeScale={1.01}>
+            <DragJiggle active={isActive} scale={1.01}>
               <View style={[editorStyles.priorityRow, isActive && editorStyles.activePriorityRow]}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t('upgradeTrackerPlanReorder', {
+                    category: categoryLabel(category, t),
+                  })}
+                  disabled={isActive}
+                  delayLongPress={CARD_REORDER_HOLD_MS}
+                  onLongPress={drag}
+                  style={editorStyles.reorder}
+                  testID={`upgrade-priority-drag-${category}`}
+                >
+                  <GripVertical size={20} color={theme.onSurfaceVariant} />
+                </Pressable>
                 <View style={editorStyles.tier}>
-                  <CKText role="labelSmall">{tier}</CKText>
+                  <CKText role="metadata">{tier}</CKText>
                 </View>
+                <MobileWebImage
+                  imageUrl={trackerCategoryImage(category, village)}
+                  style={{
+                    width: 38,
+                    height: 38,
+                    transform: [{ scale: trackerCategoryImageScale(category) }],
+                  }}
+                />
                 <View style={editorStyles.grow}>
                   <CKText role="rowTitle">{categoryLabel(category, t)}</CKText>
-                  <CKText muted role="labelSmall">
-                    {share > 0
-                      ? t('upgradeTrackerPlanSharedSummary', {
-                          tier,
-                          normalized,
-                          share,
-                          total: sharedWeightTotal,
-                          completion:
-                            target >= 100
-                              ? t('upgradeTrackerPlanRunsUntilMaxed')
-                              : t('upgradeTrackerPlanYieldsAfter', { target }),
-                        })
-                      : t('upgradeTrackerPlanStrictSummary', {
-                          tier,
-                          completion:
-                            target >= 100
-                              ? t('upgradeTrackerPlanRunsUntilMaxed')
-                              : t('upgradeTrackerPlanYieldsAfter', { target }),
-                        })}
-                  </CKText>
-                  <View style={editorStyles.priorityControls}>
-                    <PillButton
-                      label={share === 0 ? t('upgradeTrackerPlanStrict') : `${share}%`}
-                      selected={share > 0}
-                      onPress={() => setMenu({ category, kind: 'share' })}
-                      compact
-                    />
-                    <PillButton
-                      label={target === 100 ? t('upgradeTrackerPlanMax') : `${target}%`}
-                      selected={target < 100}
-                      onPress={() => setMenu({ category, kind: 'target' })}
-                      compact
-                    />
-                  </View>
+                  {expandedCategory === category ? (
+                    <>
+                      <CKText muted role="metadata">
+                        {share > 0
+                          ? t('upgradeTrackerPlanSharedSummary', {
+                              tier,
+                              normalized,
+                              share,
+                              total: sharedWeightTotal,
+                              completion:
+                                target >= 100
+                                  ? t('upgradeTrackerPlanRunsUntilMaxed')
+                                  : t('upgradeTrackerPlanYieldsAfter', { target }),
+                            })
+                          : t('upgradeTrackerPlanStrictSummary', {
+                              tier,
+                              completion:
+                                target >= 100
+                                  ? t('upgradeTrackerPlanRunsUntilMaxed')
+                                  : t('upgradeTrackerPlanYieldsAfter', { target }),
+                            })}
+                      </CKText>
+                      <View style={editorStyles.priorityControls}>
+                        <PillButton
+                          label={share === 0 ? t('upgradeTrackerPlanStrict') : `${share}%`}
+                          selected={share > 0}
+                          onPress={() => setMenu({ category, kind: 'share' })}
+                          compact
+                        />
+                        <PillButton
+                          label={target === 100 ? t('upgradeTrackerPlanMax') : `${target}%`}
+                          selected={target < 100}
+                          onPress={() => setMenu({ category, kind: 'target' })}
+                          compact
+                        />
+                      </View>
+                    </>
+                  ) : share > 0 || target < 100 ? (
+                    <CKText role="metadata" muted>
+                      {share > 0 ? `${share}% · ` : ''}
+                      {target < 100 ? `${target}%` : t('upgradeTrackerPlanMax')}
+                    </CKText>
+                  ) : null}
                 </View>
-                <View style={editorStyles.reorder}>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={t('upgradeTrackerPlanReorder', {
-                      category: categoryLabel(category, t),
-                    })}
-                    disabled={isActive}
-                    delayLongPress={150}
-                    onLongPress={drag}
-                    testID={`upgrade-priority-drag-${category}`}
-                  >
-                    <GripVertical size={18} color={theme.onSurfaceVariant} />
-                  </Pressable>
-                </View>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t('upgradeTrackerPlanPrioritiesTitle')}
+                  accessibilityState={{ expanded: expandedCategory === category }}
+                  style={editorStyles.reorder}
+                  onPress={() =>
+                    setExpandedCategory(expandedCategory === category ? null : category)
+                  }
+                >
+                  <SlidersHorizontal size={18} color={theme.onSurfaceVariant} />
+                </Pressable>
               </View>
-            </ScaleDecorator>
+            </DragJiggle>
           );
         }}
       />
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         visible={menu !== null}
         transparent
         animationType="fade"
@@ -408,71 +575,6 @@ function PriorityList({
   );
 }
 
-function RuleNote() {
-  const { t } = useI18n();
-  return (
-    <Surface radius={ckRadius.tile} style={editorStyles.note}>
-      <CKText muted role="bodySmall">
-        {t('upgradeTrackerPlanRuleNote')}
-      </CKText>
-    </Surface>
-  );
-}
-
-function GoalSelector({
-  title,
-  value,
-  onChange,
-}: {
-  title: string;
-  value: string;
-  onChange: (value: (typeof UpgradePlanGoal)[keyof typeof UpgradePlanGoal]) => void;
-}) {
-  const theme = useCKTheme();
-  const { t } = useI18n();
-  const [open, setOpen] = useState(false);
-  return (
-    <View style={editorStyles.village}>
-      <CKText muted role="labelSmall">
-        {title}
-      </CKText>
-      <PressableSurface
-        accessibilityRole="button"
-        accessibilityLabel={t('upgradeTrackerPlanGoalSelection', {
-          village: title,
-          goal: goalLabel(value, t),
-        })}
-        accessibilityState={{ expanded: open }}
-        onPress={() => setOpen(true)}
-        style={editorStyles.dropdown}
-      >
-        <CKText style={editorStyles.grow}>{goalLabel(value, t)}</CKText>
-        <ChevronDown size={18} color={theme.onSurfaceVariant} />
-      </PressableSurface>
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable style={editorStyles.menuOverlay} onPress={() => setOpen(false)}>
-          <Surface radius={ckRadius.card} style={editorStyles.menuCard}>
-            {Object.values(UpgradePlanGoal).map((goal) => (
-              <PressableSurface
-                key={goal}
-                accessibilityRole="button"
-                accessibilityState={{ selected: value === goal }}
-                onPress={() => {
-                  onChange(goal);
-                  setOpen(false);
-                }}
-                style={editorStyles.menuItem}
-              >
-                <CKText>{goalLabel(goal, t)}</CKText>
-              </PressableSurface>
-            ))}
-          </Surface>
-        </Pressable>
-      </Modal>
-    </View>
-  );
-}
-
 function CompactToggle({
   label,
   description,
@@ -487,8 +589,8 @@ function CompactToggle({
   return (
     <View style={editorStyles.toggle}>
       <View style={editorStyles.grow}>
-        <CKText role="labelLarge">{label}</CKText>
-        <CKText muted role="labelSmall">
+        <CKText role="bodyMedium">{label}</CKText>
+        <CKText muted role="metadata">
           {description}
         </CKText>
       </View>
@@ -599,7 +701,7 @@ function PillButton({
           selected && { borderColor: theme.primary },
         ]}
       >
-        <CKText role="labelSmall">{label}</CKText>
+        <CKText role="metadata">{label}</CKText>
       </PillSurface>
     </Pressable>
   );
@@ -651,6 +753,8 @@ function updateMap(
 
 function preferencesOptions(value: UpgradePlanPreferencesType) {
   return {
+    // Retain legacy goal fields on save, but do not expose controls while the
+    // planner forecasts current imported inventory rather than future halls.
     homeGoal: value.homeGoal,
     builderBaseGoal: value.builderBaseGoal,
     homeCategoryOrder: value.homeCategoryOrder,
@@ -669,12 +773,6 @@ function preferencesOptions(value: UpgradePlanPreferencesType) {
 
 type Translate = ReturnType<typeof useI18n>['t'];
 
-function goalLabel(goal: string, t: Translate) {
-  if (goal === UpgradePlanGoal.maxCurrentHall) return t('upgradeTrackerPlanGoalMaxCurrentHall');
-  if (goal === UpgradePlanGoal.rushNextHall) return t('upgradeTrackerPlanGoalRushNextHall');
-  if (goal === UpgradePlanGoal.catchUp) return t('upgradeTrackerPlanGoalCatchUp');
-  return t('upgradeTrackerPlanGoalUnlockFirst');
-}
 function categoryLabel(category: string, t: Translate) {
   const labels: Record<string, Parameters<Translate>[0]> = {
     defenses: 'warDefensesTitle',
@@ -697,8 +795,8 @@ function categoryLabel(category: string, t: Translate) {
   return labels[category] ? t(labels[category]) : category;
 }
 const editorStyles = StyleSheet.create({
-  overlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000070' },
-  modal: { height: '92%', width: '100%', maxWidth: 820, alignSelf: 'center', padding: 16 },
+  overlay: { flex: 1 },
+  modal: { flex: 1, width: '100%', maxWidth: 820, alignSelf: 'center', padding: 16 },
   header: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, paddingBottom: 8 },
   grow: { flex: 1 },
   content: { gap: 12, paddingBottom: 32 },
@@ -709,11 +807,14 @@ const editorStyles = StyleSheet.create({
   toggle: { minHeight: 52, flexDirection: 'row', alignItems: 'center', gap: 8 },
   priorityRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: 8,
-    paddingVertical: 8,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#80808055',
+    paddingVertical: 6,
+    paddingRight: 4,
+    marginVertical: 3,
+    minHeight: 56,
+    borderRadius: 16,
+    backgroundColor: '#80808012',
   },
   activePriorityRow: { opacity: 0.9, backgroundColor: '#80808018' },
   tier: {
@@ -724,15 +825,8 @@ const editorStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  reorder: { alignItems: 'center', gap: 2 },
+  reorder: { width: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   priorityControls: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 5 },
-  dropdown: {
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 12,
-  },
   menuOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -762,5 +856,11 @@ const editorStyles = StyleSheet.create({
   sliderLabels: { flexDirection: 'row', justifyContent: 'space-between' },
   pill: { borderWidth: 1, borderColor: 'transparent', paddingHorizontal: 10, paddingVertical: 7 },
   compactPill: { paddingHorizontal: 7, paddingVertical: 4 },
-  primaryAction: { minHeight: 50, alignItems: 'center', justifyContent: 'center', padding: 12 },
+  primaryAction: {
+    minHeight: 50,
+    marginTop: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+  },
 });

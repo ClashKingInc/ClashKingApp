@@ -1,5 +1,6 @@
+import { modalOrientations } from "./modal-orientations";
 import { useRef, useState, type ReactNode } from 'react';
-import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
+import { Modal, Pressable, View, useWindowDimensions, type ViewInstance, type StyleProp, type ViewStyle } from 'react-native';
 import { Info } from 'lucide-react-native';
 import { CKText } from './text';
 import { Surface } from './surfaces';
@@ -9,13 +10,17 @@ export function InfoTooltip({
   label,
   message,
   icon,
+  triggerContent,
+  triggerStyle,
 }: {
   label: string;
   message: string;
   icon?: ReactNode;
+  triggerContent?: ReactNode;
+  triggerStyle?: StyleProp<ViewStyle>;
 }) {
   const theme = useCKTheme();
-  const trigger = useRef<View>(null);
+  const trigger = useRef<ViewInstance>(null);
   const [anchor, setAnchor] = useState<{ x: number; y: number; width: number; height: number }>();
   const window = useWindowDimensions();
   const width = Math.min(200, window.width - 24);
@@ -30,11 +35,11 @@ export function InfoTooltip({
         onPress={() =>
           trigger.current?.measureInWindow((x, y, w, h) => setAnchor({ x, y, width: w, height: h }))
         }
-        style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}
+        style={[{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }, triggerStyle]}
       >
-        <Info size={17} color={theme.onSurfaceVariant} />
+        {triggerContent ?? <Info size={17} color={theme.onSurfaceVariant} />}
       </Pressable>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         visible={!!anchor}
         transparent
         animationType="fade"

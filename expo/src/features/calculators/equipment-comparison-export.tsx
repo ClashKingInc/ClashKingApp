@@ -1,3 +1,5 @@
+import { modalOrientations } from "../../ui/modal-orientations";
+import type { ViewInstance } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Modal, PixelRatio, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Check, Copy, Download } from 'lucide-react-native';
@@ -28,7 +30,7 @@ export interface EquipmentComparisonExportData {
 export function EquipmentComparisonCopy({ data }: { data: EquipmentComparisonExportData }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const boundary = useRef<View>(null);
+  const boundary = useRef<ViewInstance>(null);
   const started = useRef(false);
   const modalReady = useRef(false);
   const runId = useRef(0);
@@ -225,7 +227,7 @@ export function EquipmentComparisonCopy({ data }: { data: EquipmentComparisonExp
         </View>
       ) : null}
       {snapshot && Platform.OS !== 'web' ? (
-        <Modal
+        <Modal supportedOrientations={modalOrientations}
           transparent
           animationType="none"
           visible

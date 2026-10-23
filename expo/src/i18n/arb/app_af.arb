@@ -3211,6 +3211,8 @@
   "playerBestTrophies": "Beste trofeë",
   "clanLoadFailed": "Kon stam nie laai nie.",
   "gameItemLevels": "Vlakke",
+  "gameItemLevelCount": "{count, plural, one {# vlak} other {# vlakke}}",
+  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
   "resourceDarkElixir": "Donker eliksir",
   "resourceBuilderElixir": "Bouerseliksir",
   "resourceBuilderGold": "Bouersgoud",
@@ -3828,6 +3830,9 @@
     }
   },
   "upgradeTrackerShare": "Deel naspoorder",
+  "trackerPosterCopied": "Prent gekopieer",
+  "trackerPosterCopy": "Kopieer prent",
+  "trackerPosterShareAll": "Deel al 3",
   "upgradeTrackerPasteJson": "Plak rekening-JSON",
   "upgradeTrackerImportTitle": "Voer rekeningdata in",
   "upgradeTrackerImportDescription": "Plak die rou rekening-JSON. Dit bly op hierdie toestel.",
@@ -4809,7 +4814,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Genommerde vlakke loop eerste. Gedeelde rye hou dieselfde vlaknommer, en hul mengsel word genormaliseer vanaf die relatiewe gewigte, dus word 50 + 25 67% / 33%. 'n Teiken maak 'n kategorie-opbrengs nadat dit daardie persentasie bereik het terwyl dit later in aanmerking kom.",
+  "upgradeTrackerPlanRuleNote": "Sleep kategorieë om te kies wat eerste opgradeer. Ryinstellings laat kategorieë ’n prioriteit deel of by ’n voltooiingsteiken stop.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Maksimum voor vorder",
   "upgradeTrackerPlanGoalRushNextHall": "Bereik vinnig die volgende saal",
   "upgradeTrackerPlanGoalCatchUp": "Haal gejaagde vlakke in",
@@ -4977,5 +4982,6 @@
   "warOutlookAssumption": "Veronderstel perfekte oorblywende aanvalle. Dit is ’n wiskundige limiet, nie ’n voorspelling nie.",
   "warScoutTitle": "Spanverkenning",
   "warScoutOpponent": "Teenstander se onlangse oorloë",
-  "warScoutScope": "Huidige span · dieselfde reëls · tot 10 vorige oorloë"
+  "warScoutScope": "Huidige span · dieselfde reëls · tot 10 vorige oorloë",
+  "upgradeTrackerCapturedWork": "Van jou laaste opdatering"
 }

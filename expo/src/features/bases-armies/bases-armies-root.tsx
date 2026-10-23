@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../ui/modal-orientations";
 import { cloneElement, useCallback, useEffect, useState, type ReactElement } from 'react';
 import * as Clipboard from 'expo-clipboard';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
@@ -360,7 +361,7 @@ export function BasesArmiesScreen({
           )}
         </ScrollView>
       )}
-      <Modal transparent visible={cleanupVisible} onRequestClose={() => setCleanupVisible(false)}>
+      <Modal supportedOrientations={modalOrientations} transparent visible={cleanupVisible} onRequestClose={() => setCleanupVisible(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setCleanupVisible(false)}>
           <Surface radius={18} style={styles.confirmation}>
             <View style={styles.confirmationHeader}>
@@ -398,7 +399,7 @@ export function BasesArmiesScreen({
           </Surface>
         </Pressable>
       </Modal>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={editingArmy !== null}
         onRequestClose={() => {

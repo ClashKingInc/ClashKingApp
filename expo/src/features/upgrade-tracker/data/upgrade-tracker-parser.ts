@@ -20,6 +20,35 @@ import {
 
 type JsonRecord = Record<string, unknown>;
 
+export function reconcileTrackerEquipmentOwnership(
+  snapshot: UpgradeTrackerSnapshot,
+  profile: {
+    tag: string;
+    hasEquipmentOwnershipData: boolean;
+    equipments: readonly { name: string; isUnlocked: boolean }[];
+  } | undefined,
+): UpgradeTrackerSnapshot {
+  if (!profile?.hasEquipmentOwnershipData || profile.tag.toUpperCase() !== snapshot.tag.toUpperCase()) return snapshot;
+  const locked = new Set(profile.equipments.filter((item) => !item.isUnlocked).map((item) => item.name));
+  let changed = false;
+  const items = snapshot.items.map((item) => {
+    if (item.category !== UpgradeCategory.equipment || item.currentLevel <= 0 || !locked.has(item.name) || !item.meta) return item;
+    changed = true;
+    // Export JSON includes unowned equipment at level one. Only a covered
+    // profile can disambiguate it; owned imported levels are never replaced
+    // by newer API levels, and the saved JSON/timestamp remain untouched.
+    const steps = buildSteps(item.meta, 0, item.targetLevel, false);
+    const time = upgradeTimeTotals(item.meta, 0, steps, false);
+    const resources = resourceProgressTotals(item.meta, 0, false, UpgradeCategory.equipment, steps);
+    return new UpgradeTrackerItem({ ...item, currentLevel: 0, steps,
+      completedUpgradeSeconds: time.completed, totalUpgradeSeconds: time.total,
+      completedResourceWeight: resources.completed, totalResourceWeight: resources.total,
+      activeSeconds: null,
+    });
+  });
+  return changed ? new UpgradeTrackerSnapshot({ ...snapshot, items }) : snapshot;
+}
+
 export class UpgradeTrackerParser {
   private static cachedBundle: JsonRecord | null = null;
   private static cachedLookup: StaticLookup | null = null;

@@ -1462,6 +1462,7 @@
   "playerBestTrophies": "Najbolji trofeji",
   "clanLoadFailed": "Učitavanje klana nije uspelo.",
   "gameItemLevels": "Nivoi",
+  "gameItemLevelCount": "{count, plural, one {# nivo} few {# nivoa} other {# nivoa}}",
   "resourceDarkElixir": "Tamni eliksir",
   "resourceBuilderElixir": "Graditeljski eliksir",
   "resourceBuilderGold": "Graditeljsko zlato",
@@ -1771,6 +1772,9 @@
   "upgradeTrackerChooseAccount": "Изаберите налог",
   "upgradeTrackerSwitchAccount": "Промени налог, {account}",
   "upgradeTrackerShare": "Подели праћење",
+  "trackerPosterCopied": "Слика је копирана",
+  "trackerPosterCopy": "Копирај слику",
+  "trackerPosterShareAll": "Подели све 3",
   "upgradeTrackerPasteJson": "Налепи JSON налога",
   "upgradeTrackerImportTitle": "Увези податке налога",
   "upgradeTrackerImportDescription": "Налепите необрађени JSON налога. Остаје на овом уређају.",
@@ -2191,7 +2195,7 @@
   "upgradeTrackerPlanWeight": "Тежина {value}%",
   "upgradeTrackerPlanUntilMaxed": "До максимума",
   "upgradeTrackerPlanUntilPercent": "До {value}%",
-  "upgradeTrackerPlanRuleNote": "Нумерисани нивои покрећу први. Заједнички редови задржавају исти број нивоа, а њихова мешавина је нормализована из релативних тежина, тако да 50 + 25 постаје 67% / 33%. Циљ даје категорију принос након што достигне тај проценат док остаје квалификован касније.",
+  "upgradeTrackerPlanRuleNote": "Превуците категорије да одредите редослед надоградњи. Подешавања реда омогућавају заједнички приоритет или заустављање на циљном напретку.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Макс пре напредовања",
   "upgradeTrackerPlanGoalRushNextHall": "Брзо дођите до следеће сале",
   "upgradeTrackerPlanGoalCatchUp": "Достигните убрзане нивое",
@@ -2299,5 +2303,6 @@
   "warOutlookAssumption": "Претпоставља савршене преостале нападе. Ово је математичка граница, не предвиђање.",
   "warScoutTitle": "Анализа поставе",
   "warScoutOpponent": "Недавни ратови противника",
-  "warScoutScope": "Тренутна постава · иста правила · до 10 претходна рата"
+  "warScoutScope": "Тренутна постава · иста правила · до 10 претходна рата",
+  "upgradeTrackerCapturedWork": "Из последњег ажурирања"
 }

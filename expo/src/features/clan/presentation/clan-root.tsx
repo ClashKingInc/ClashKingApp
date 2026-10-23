@@ -192,7 +192,21 @@ export function ClanInfoRoot({
       openHistoricalCwl: navigation.openHistoricalCwl,
       openCwl: (nextClan) => {
         const nextWar = runtime.wars.getWarCwlByTag(nextClan.tag);
-        if (nextWar?.leagueInfo?.clans.length) navigation.openCwl(nextClan, nextWar);
+        if (nextWar?.leagueInfo?.clans.length) {
+          navigation.openCwl(nextClan, nextWar);
+          return;
+        }
+        // An archived season remains accessible outside CWL week. Do not make
+        // this tile depend on live group hydration (or silently ignore taps).
+        void runtime.clans
+          .getCwlRankingHistory(nextClan.tag)
+          .then((history) => {
+            const latest = history[0];
+            if (latest)
+              navigation.openHistoricalCwl(nextClan, latest.season, latest.league ?? undefined);
+            else setSnackbar(t('cwlHistoryEmptyTitle'));
+          })
+          .catch(() => setSnackbar(t('errorNetworkTitle')));
       },
       openCapital: navigation.openCapital,
       showMessage: setSnackbar,
