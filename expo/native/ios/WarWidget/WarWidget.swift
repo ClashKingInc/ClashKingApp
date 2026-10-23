@@ -815,8 +815,18 @@ struct WarWidgetView: View {
       if entry.data.opponent == nil {
         emptyStateView
       } else {
-        HStack(alignment: .center, spacing: 8) {
-          sideView(entry.data.clan, badgeData: entry.clanBadgeData, badgeSize: 52)
+        GeometryReader { geometry in
+          let centerWidth = min(120, max(100, geometry.size.width * 0.34))
+          let sideWidth = max(0, (geometry.size.width - centerWidth - 16) / 2)
+          let baseNameSize = UIFont.preferredFont(forTextStyle: .caption1).pointSize
+          let measuringFont = UIFont.systemFont(ofSize: baseNameSize, weight: .semibold)
+          let longestNameWidth = [entry.data.clan?.name ?? "Unknown", entry.data.opponent?.name ?? "Unknown"]
+            .map { ($0 as NSString).size(withAttributes: [.font: measuringFont]).width }
+            .max() ?? 1
+          let sharedNameSize = max(8, baseNameSize * min(1, sideWidth / max(1, longestNameWidth)))
+          HStack(alignment: .center, spacing: 8) {
+          sideView(entry.data.clan, badgeData: entry.clanBadgeData, badgeSize: 52, uniformText: true, nameFontSize: sharedNameSize)
+            .frame(width: sideWidth)
             .layoutPriority(1)
           VStack(spacing: 4) {
             Text(entry.data.primaryText ?? entry.data.timeState ?? "")
@@ -826,10 +836,13 @@ struct WarWidgetView: View {
               .minimumScaleFactor(0.75)
             scoreLabel(size: scoreText == "-" ? 22 : 29, minScale: 0.72)
           }
-          .frame(minWidth: 100, idealWidth: 110, maxWidth: 120)
+          .frame(width: centerWidth)
           .layoutPriority(4)
-          sideView(entry.data.opponent, badgeData: entry.opponentBadgeData, badgeSize: 52)
+          sideView(entry.data.opponent, badgeData: entry.opponentBadgeData, badgeSize: 52, uniformText: true, nameFontSize: sharedNameSize)
+            .frame(width: sideWidth)
             .layoutPriority(1)
+          }
+          .frame(height: geometry.size.height)
         }
       }
     }
@@ -908,7 +921,7 @@ struct WarWidgetView: View {
       .minimumScaleFactor(0.7)
   }
 
-  private func attacksMetric(_ side: WarWidgetData.Side?) -> some View {
+  private func attacksMetric(_ side: WarWidgetData.Side?, uniformText: Bool = false) -> some View {
     HStack(spacing: 3) {
       Group {
         if let sword = UIImage(named: "Icon_HV_Sword") {
@@ -924,7 +937,7 @@ struct WarWidgetView: View {
         .font(.caption2.weight(.semibold).monospacedDigit())
         .foregroundStyle(.primary)
         .lineLimit(1)
-        .minimumScaleFactor(0.72)
+        .minimumScaleFactor(uniformText ? 1 : 0.72)
     }
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(String(localized: "legends_widget_attacks", table: "LegendsWidget"))
@@ -1018,15 +1031,17 @@ struct WarWidgetView: View {
     .allowsTightening(true)
   }
 
-  private func sideView(_ side: WarWidgetData.Side?, badgeData: Data?, badgeSize: CGFloat = 54) -> some View {
+  private func sideView(_ side: WarWidgetData.Side?, badgeData: Data?, badgeSize: CGFloat = 54, uniformText: Bool = false, nameFontSize: CGFloat? = nil) -> some View {
     VStack(spacing: 5) {
       badgeView(side, badgeData: badgeData, size: badgeSize)
       Text(side?.name ?? "Unknown")
-        .font(.caption.weight(.semibold))
+        .font(nameFontSize.map { Font.system(size: $0, weight: .semibold) } ?? .caption.weight(.semibold))
         .multilineTextAlignment(.center)
         .lineLimit(1)
-        .minimumScaleFactor(0.7)
-      attacksMetric(side)
+        // Measure both medium names together so even the shorter name uses the
+        // same font size. Only unusually long names truncate at the shared floor.
+        .minimumScaleFactor(uniformText ? 1 : 0.7)
+      attacksMetric(side, uniformText: uniformText)
     }
     .frame(maxWidth: .infinity)
   }
