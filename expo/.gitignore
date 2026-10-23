@@ -13,6 +13,7 @@ expo-env.d.ts
 **/build/
 
 # Native
+.gradle/
 .kotlin/
 *.orig.*
 *.jks
