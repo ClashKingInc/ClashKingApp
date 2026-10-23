@@ -198,7 +198,6 @@ export function HomeActivityCard({
   );
   return (
     <HomeCardFrame
-      accent={accent}
       footer={
         accounts.length > 1 ? (
           <HomeAccountBar

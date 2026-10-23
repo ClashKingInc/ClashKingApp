@@ -20,7 +20,6 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { CardAppearanceProvider } from '../../../ui/card-appearance';
 import { CARD_REORDER_HOLD_MS, DragJiggle } from '../../../ui/drag-jiggle';
 import {
   homeContentWidth,
@@ -136,9 +135,10 @@ export function DashboardScreen({
   // callback, retaining a card-sized hole. Start fresh native measurements for
   // each committed order/width, while retaining page state and scroll position.
   // Keep the established phone and web list lifecycle unchanged.
-  const listLayoutKey = Platform.OS === 'ios' && Platform.isPad
-    ? `ipad:${Math.round(contentWidth)}:${cards.join(',')}:${dragLayoutRevision}`
-    : 'home';
+  const listLayoutKey =
+    Platform.OS === 'ios' && Platform.isPad
+      ? `ipad:${Math.round(contentWidth)}:${cards.join(',')}:${dragLayoutRevision}`
+      : 'home';
   useEffect(() => {
     if (Platform.OS !== 'ios' || !Platform.isPad) return;
     holdEpoch.current += 1;
@@ -233,35 +233,33 @@ export function DashboardScreen({
         <TutorialTarget id="home-reorder" enabled={index === 0} style={{ width: '100%' }}>
           <DragJiggle active={isActive} scale={1.015}>
             <HomeDragContext.Provider value={isActive}>
-              <CardAppearanceProvider value={index === 0 ? 'glow' : 'edge'}>
-                {card === 'activity' && model.activityAccounts ? (
-                  <HomeActivityCard
-                    accounts={model.activityAccounts}
-                    refreshKey={model.lastRefresh?.toISOString()}
-                  />
-                ) : card === 'todo' && model.todo ? (
-                  <HomeTodoCard
-                    model={model.todo}
-                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
-                    desktop={desktop}
-                    actions={cardActions}
-                  />
-                ) : card === 'ranked' && model.ranked ? (
-                  <HomeRankedCard
-                    model={model.ranked}
-                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
-                    desktop={desktop}
-                    actions={cardActions}
-                  />
-                ) : card === 'upgrade' && model.upgrade ? (
-                  <HomeUpgradeCard
-                    model={model.upgrade}
-                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
-                    desktop={desktop}
-                    actions={cardActions}
-                  />
-                ) : null}
-              </CardAppearanceProvider>
+              {card === 'activity' && model.activityAccounts ? (
+                <HomeActivityCard
+                  accounts={model.activityAccounts}
+                  refreshKey={model.lastRefresh?.toISOString()}
+                />
+              ) : card === 'todo' && model.todo ? (
+                <HomeTodoCard
+                  model={model.todo}
+                  selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                  desktop={desktop}
+                  actions={cardActions}
+                />
+              ) : card === 'ranked' && model.ranked ? (
+                <HomeRankedCard
+                  model={model.ranked}
+                  selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                  desktop={desktop}
+                  actions={cardActions}
+                />
+              ) : card === 'upgrade' && model.upgrade ? (
+                <HomeUpgradeCard
+                  model={model.upgrade}
+                  selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                  desktop={desktop}
+                  actions={cardActions}
+                />
+              ) : null}
             </HomeDragContext.Provider>
           </DragJiggle>
         </TutorialTarget>

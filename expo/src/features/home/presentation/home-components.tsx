@@ -6,7 +6,6 @@ import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { CardAtmosphere } from '../../../ui/card-appearance';
 import { AccountBarScrollView } from '../../../ui/account-bar-scroll-view';
 import { materialNextPageTooltip, materialPreviousPageTooltip, useI18n } from '../../../i18n';
 import {
@@ -36,14 +35,12 @@ export function HomeCardFrame({
   header,
   onPress,
   actionLabel,
-  accent,
   footer,
 }: {
   children: ReactNode;
   header?: ReactNode;
   onPress?: () => void;
   actionLabel?: string;
-  accent?: string;
   footer?: ReactNode;
 }) {
   const theme = useCKTheme();
@@ -51,13 +48,7 @@ export function HomeCardFrame({
   const pressStart = useRef({ x: 0, y: 0 });
   const pressDelta = useRef({ x: 0, y: 0 });
   return (
-    <View
-      style={[
-        styles.frame,
-        { backgroundColor: theme.surface, borderColor: colorWithAlpha(theme.outlineVariant, 0.32) },
-      ]}
-    >
-      <CardAtmosphere color={accent} />
+    <View style={[styles.frame, { backgroundColor: theme.surface }]}>
       {header}
       {onPress ? (
         <Pressable
@@ -504,7 +495,6 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '900' },
   frame: {
-    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 28,
     padding: 14,
     gap: 10,

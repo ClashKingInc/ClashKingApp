@@ -134,7 +134,6 @@ export function HomeTodoCard({
   const current = pages[safeSelected]!;
   return (
     <HomeCardFrame
-      accent={ckColors.donationGreen}
       onPress={actions.openTodo}
       actionLabel={t('todoTitle')}
       footer={
@@ -275,7 +274,6 @@ export function HomeRankedCard({
   const current = pages[safeSelected];
   return (
     <HomeCardFrame
-      accent={current?.tierColor}
       footer={
         pages.length > 1 ? (
           <HomeAccountBar
@@ -303,7 +301,9 @@ export function HomeRankedCard({
             title={account.name}
             subtitle={
               account.mode === 'legend'
-                ? (account.rank ? `${t('cwlRankTitle')} #${account.rank}` : undefined)
+                ? account.rank
+                  ? `${t('cwlRankTitle')} #${account.rank}`
+                  : undefined
                 : account.rank !== null
                   ? `${t('cwlRankTitle')} #${account.rank} / ${account.groupSize}`
                   : `${account.tierName} · ${t('rankedLeagueNoGroup')}`
@@ -461,7 +461,6 @@ export function HomeUpgradeCard({
   ) : null;
   return (
     <HomeCardFrame
-      accent={ckColors.builderBlue}
       onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}
       actionLabel={t('drawerUpgradeTracker')}
       footer={
