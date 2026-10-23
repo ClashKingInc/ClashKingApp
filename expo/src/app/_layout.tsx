@@ -20,9 +20,16 @@ import {
   reportException,
 } from '../core/observability/observability';
 import { AppRuntimeProvider } from '../core/app/runtime-context';
+import { NavigationTheme } from '../core/app/navigation-theme';
 import { loadClashKingFont } from '../core/fonts/clashking-font-service';
 import { hideWebLaunchScreen } from '../core/app/launch-screen-runtime';
 import { useCKThemeMode } from '../ui';
+import { ExpoDeepLinkRuntime } from '../core/deep-links/expo-deep-link-runtime';
+import { queueAppLink } from '../core/deep-links/link-inbox';
+import { nativeSecondaryScreenOptions } from '../core/app/native-secondary-navigation';
+import { WebDocumentTitle } from '../core/app/web-document-title';
+import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
+import { TutorialOverlay } from '../features/tutorials/tutorial-ui';
 
 void SplashScreen.preventAutoHideAsync();
 initializeObservability();
@@ -38,7 +45,30 @@ const queryClient = new QueryClient({
 });
 
 export default function RootLayout() {
+  // Capture navigation before authentication so a sign-in does not lose the destination.
+  useEffect(() => {
+    const links = new ExpoDeepLinkRuntime();
+    let active = true;
+    let receivedEvent = false;
+    const stop = links.subscribe((url) => {
+      receivedEvent = true;
+      queueAppLink(url);
+    });
+    void links
+      .getInitialUrl()
+      .then((url) => {
+        if (active && !receivedEvent && url) queueAppLink(url);
+      })
+      .catch((error) => reportException(error, 'deep_link.capture'));
+    return () => {
+      active = false;
+      stop();
+    };
+  }, []);
   const [fontReady, setFontReady] = useState(false);
+  useEffect(() => {
+    if (fontReady) void warmRankedCheckerBackgrounds();
+  }, [fontReady]);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();
   useEffect(() => {
@@ -64,14 +94,25 @@ export default function RootLayout() {
   if (!fontReady) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={handleRootLayout}>
+      <WebDocumentTitle />
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AppRuntimeProvider>
-            <AppStatusBar />
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
-              <Stack.Screen name="detail" options={{ gestureEnabled: true }} />
-            </Stack>
+            <NavigationTheme>
+              <AppStatusBar />
+              <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
+                <Stack.Screen name="index" options={{ animation: 'none', gestureEnabled: false }} />
+                <Stack.Screen
+                  name="detail"
+                  options={({ route }) =>
+                    nativeSecondaryScreenOptions(
+                      (route.params as { layer?: string } | undefined)?.layer,
+                    )
+                  }
+                />
+              </Stack>
+              <TutorialOverlay />
+            </NavigationTheme>
           </AppRuntimeProvider>
         </QueryClientProvider>
       </SafeAreaProvider>

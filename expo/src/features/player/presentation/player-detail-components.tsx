@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { HeroHeaderScrim } from "../../../ui/hero-header-scrim";
+import { Image } from 'expo-image';
+import { modalOrientations } from "../../../ui/modal-orientations";
+import type { ViewInstance } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Animated,
   Linking,
   Modal,
   PanResponder,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -22,6 +27,7 @@ import {
   ChevronRight,
   Clock3,
   Crosshair,
+  ExternalLink,
   Filter,
   Flag,
   Gamepad2,
@@ -32,6 +38,7 @@ import {
   MapPin,
   Percent,
   Repeat2,
+  Share2,
   Shield,
   Star,
   Swords,
@@ -41,9 +48,19 @@ import {
   Users,
   X,
 } from 'lucide-react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { ExpandableProgressCard } from '../../../ui/expandable-progress-card';
+import { trackerCategoryImage } from '../../upgrade-tracker/presentation/tracker-category-art';
+import { UpgradeVillage } from '../../upgrade-tracker/models';
+import { sharePageLink } from '../../../core/deep-links/share-page-link';
+import { playerProfileClanIdentity } from './player-clan-identity';
 
+import {
+  ChartInteractionBoundary,
+  useChartDismissal,
+} from '../../stats/presentation/chart-interaction-boundary';
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { formatUpgradeDuration } from '../../../core/utils/upgrade-duration';
 import {
   localizedInfoForItem,
   localizedNameForItem,
@@ -56,9 +73,12 @@ import {
   EmptyState,
   ErrorState,
   GlassSurface,
-  LoadingIndicator,
+  PageSkeleton,
   MobileWebImage,
   PillSurface,
+  ProfileHeaderAction,
+  ProfileTabs,
+  ProfileStatChip as QuickStat,
   ResponsiveGrid,
   SelectionPicker,
   Skeleton,
@@ -68,7 +88,6 @@ import {
   ckSpacing,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
 import type {
   Player,
@@ -90,6 +109,11 @@ import type {
 import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { PlayerSuperTroop } from '../models/player-items';
 import { PlayerBattlelogArmyCatalog } from '../models/player-battlelog';
+import {
+  battlelogLootTimeline,
+  battlelogLootWeeks,
+  type BattlelogLootDay,
+} from './player-battlelog-share';
 import type {
   EnemyTownhallStats as EnemyThStats,
   PlayerWarStatsData,
@@ -125,6 +149,7 @@ export const PLAYER_DETAIL_TABS: readonly {
   { key: 'builder', labelKey: 'gameBaseBuilder' },
   { key: 'battles', labelKey: 'playerBattlelogTab' },
   { key: 'history', labelKey: 'generalHistory' },
+  { key: 'legendHistory', labelKey: 'clanLegendHistoryTab' },
   { key: 'war', labelKey: 'warStats' },
   { key: 'cwl', labelKey: 'cwlHistoryTitle' },
   { key: 'achievements', labelKey: 'gameAchievements' },
@@ -135,19 +160,24 @@ export function PlayerDetailHeader({
   model,
   actions,
   selectedTab,
+  onBattlelogExport,
   safeTop = 0,
 }: {
   model: PlayerDetailPresentationModel;
   actions: PlayerDetailPresentationActions;
   selectedTab: PlayerDetailTabKey;
+  onBattlelogExport?: () => void;
   safeTop?: number;
 }) {
   const { player } = model;
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   const { width } = useWindowDimensions();
-  const compact = width < 900;
+  const [headerSize, setHeaderSize] = useState({ width, height: 0 });
+  // Native tablets retain the centered profile composition in both orientations.
+  // The desktop row reserves space for a sidebar-sized league rail; applying it
+  // to a native landscape window let that rail consume the identity's width.
+  const compact = Platform.OS !== 'web' || Math.min(width, headerSize.width) < 900;
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
   const copyPlayerTag = () =>
@@ -174,7 +204,10 @@ export function PlayerDetailHeader({
   const leagueTiles = (
     <View
       testID="player-league-tiles"
-      style={[styles.leagueTiles, compact && styles.leagueTilesCompact]}
+      style={[
+        styles.leagueTiles,
+        compact ? styles.leagueTilesCompact : styles.leagueTilesDesktop,
+      ]}
     >
       {(selectedTab === 'builder'
         ? [
@@ -200,7 +233,9 @@ export function PlayerDetailHeader({
           key={`${String(name)}-${index}`}
           accessibilityRole={ranked ? 'button' : undefined}
           disabled={!ranked}
-          onPress={() => actions.openRanked(player)}
+          onPress={() =>
+            player.isLegendLeague ? actions.openLegends(player) : actions.openRanked(player)
+          }
           style={styles.leagueTilePressable}
         >
           <PillSurface style={styles.leagueBlock}>
@@ -282,29 +317,29 @@ export function PlayerDetailHeader({
   return (
     <View
       testID={compact ? 'player-header-mobile' : 'player-header-desktop'}
+      onLayout={({ nativeEvent: { layout } }) =>
+        setHeaderSize((current) =>
+          current.width === layout.width && current.height === layout.height
+            ? current
+            : { width: layout.width, height: layout.height },
+        )
+      }
       style={[styles.header, { paddingTop: safeTop }]}
     >
       <View testID="player-header-backdrop" pointerEvents="none" style={styles.headerBackdrop}>
-        <MobileWebImage
-          imageUrl={
-            selectedTab === 'builder'
-              ? ImageAssets.builderBaseBackground
-              : ImageAssets.homeBaseBackground
-          }
+        {/* All Player Info tabs share this artwork, including Builder Base. */}
+        <Image
+          testID="player-header-background-image"
+          source={require('../../../../assets/clashking/backgrounds/player-electro-dragon-quiet-v3.webp')}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
+          contentPosition="center"
+          transition={0}
+          cachePolicy="memory-disk"
         />
         <View style={[StyleSheet.absoluteFill, styles.headerScrim]} />
-        <Svg style={StyleSheet.absoluteFill} width="100%" height="100%" pointerEvents="none">
-          <Defs>
-            <LinearGradient id="player-header-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.36 : 0.2} />
-              <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.64 : 0.4} />
-              <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.92 : 0.65} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#player-header-gradient)" />
-        </Svg>
+        {/* Native image bounds follow rotation without a JS measurement frame. */}
+        <HeroHeaderScrim variant="player" />
       </View>
       <View testID="player-header-content" style={styles.headerContent}>
         <View
@@ -313,25 +348,49 @@ export function PlayerDetailHeader({
             compact ? styles.headerActionsCompact : styles.headerActionsDesktop,
           ]}
         >
-          <IconAction label={materialBackLabel(locale)} onPress={actions.goBack}>
-            <ArrowLeft color="#fff" />
-          </IconAction>
+          <ProfileHeaderAction
+            label={materialBackLabel(locale)}
+            onPress={actions.goBack}
+            icon={<ArrowLeft color="#fff" />}
+          />
           <View style={styles.grow} />
           {warAction ? (
-            <IconAction label={warAction.label} onPress={warAction.onPress}>
-              <MobileWebImage imageUrl={warAction.image} style={styles.statIcon} />
-            </IconAction>
+            <ProfileHeaderAction
+              label={warAction.label}
+              onPress={warAction.onPress}
+              icon={<MobileWebImage imageUrl={warAction.image} style={styles.statIcon} />}
+            />
           ) : null}
-          <IconAction label={t('playerOpenInGame')} onPress={() => actions.openInGame(player.tag)}>
-            <Gamepad2 color="#fff" />
-          </IconAction>
+          {selectedTab === 'battles' ? (
+            <ProfileHeaderAction
+              label={t('generalExport')}
+              onPress={onBattlelogExport ?? (() => undefined)}
+              icon={<Upload color="#fff" />}
+            />
+          ) : null}
+          <ProfileHeaderAction
+            label={t('gameAssetsShare')}
+            onPress={() =>
+              void sharePageLink(
+                { kind: 'player', tag: player.tag, params: { tab: selectedTab } },
+                player.name,
+              ).catch(() => actions.showMessage(t('errorCannotOpenLink')))
+            }
+            icon={<Share2 color="#fff" />}
+          />
+          <ProfileHeaderAction
+            label={t('playerOpenInGame')}
+            onPress={() => actions.openInGame(player.tag)}
+            icon={<ExternalLink color="#fff" />}
+          />
           {model.bookmarked || !model.linkedAccount ? (
-            <IconAction
+            <ProfileHeaderAction
               label={model.bookmarked ? t('playerBookmarkRemove') : t('playerBookmarkAdd')}
               onPress={() => void actions.toggleBookmark(player)}
-            >
-              {model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#fff" />}
-            </IconAction>
+              icon={
+                model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#fff" />
+              }
+            />
           ) : null}
         </View>
         <View style={[styles.identity, compact ? styles.identityCompact : styles.identityDesktop]}>
@@ -359,7 +418,13 @@ export function PlayerDetailHeader({
               </View>
             ) : null}
           </View>
-          <View style={[styles.identityCopy, compact && styles.identityCopyCompact]}>
+          <View
+            style={[
+              styles.identityCopy,
+              compact && styles.identityCopyCompact,
+              compact && Platform.OS === 'web' && styles.identityCopyWeb,
+            ]}
+          >
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`${player.name}. ${t('generalCopiedToClipboard')}`}
@@ -431,50 +496,6 @@ export function PlayerDetailHeader({
   );
 }
 
-function QuickStat({
-  label,
-  value,
-  icon,
-  iconElement,
-}: {
-  label: string;
-  value: number | string;
-  icon?: string;
-  iconElement?: ReactNode;
-}) {
-  const { locale } = useI18n();
-  return (
-    <PillSurface style={styles.quickStat} accessible accessibilityLabel={`${label}: ${value}`}>
-      {icon ? <MobileWebImage imageUrl={icon} style={styles.statIcon} /> : iconElement}
-      <View>
-        <CKText role="labelLarge">
-          {typeof value === 'number'
-            ? new Intl.NumberFormat(toIntlLocale(locale)).format(value)
-            : value}
-        </CKText>
-      </View>
-    </PillSurface>
-  );
-}
-
-function IconAction({
-  label,
-  onPress,
-  children,
-}: {
-  label: string;
-  onPress: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress}>
-      <View style={styles.iconAction}>
-        <View style={{ opacity: 0.9 }}>{children}</View>
-      </View>
-    </Pressable>
-  );
-}
-
 function playerRoleLabel(role: string, t: ReturnType<typeof useI18n>['t']) {
   if (role === 'leader') return t('clanRoleLeader');
   if (role === 'coLeader') return t('clanRoleCoLeader');
@@ -487,24 +508,7 @@ export function playerHeaderClanIdentity(
   player: Player,
   cachedClanTag: string | null | undefined = '',
 ) {
-  const linked =
-    player.clan && typeof player.clan === 'object'
-      ? (player.clan as {
-          tag?: string;
-          name?: string;
-          badgeUrls?: { small?: string; medium?: string };
-        })
-      : null;
-  const tag = linked?.tag || player.clanOverview.tag || player.clanTag || cachedClanTag || '';
-  return {
-    tag,
-    name: linked?.name || player.clanOverview.name || tag,
-    badgeUrl:
-      linked?.badgeUrls?.small ||
-      linked?.badgeUrls?.medium ||
-      player.clanOverview.badgeUrls.small ||
-      player.clanOverview.badgeUrls.medium,
-  };
+  return playerProfileClanIdentity(player, cachedClanTag);
 }
 
 export function PlayerBaseTab({
@@ -522,12 +526,14 @@ export function PlayerBaseTab({
           <PlayerItemSection
             title={t('gameHeroes')}
             items={player.bbHeroes}
+            categoryIcon={trackerCategoryImage('heroes', UpgradeVillage.builderBase)}
             townHallLevel={player.builderHallLevel}
             initiallyExpanded
           />
           <PlayerItemSection
             title={t('gameTroops')}
             items={player.bbTroops}
+            categoryIcon={ImageAssets.upgradeCategoryIcons.troops}
             townHallLevel={player.builderHallLevel}
             initiallyExpanded
           />
@@ -547,33 +553,39 @@ export function PlayerBaseTab({
         <PlayerItemSection
           title={t('gameHeroes')}
           items={player.heroes}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.heroes}
           townHallLevel={player.townHallLevel}
           initiallyExpanded
         />
         <PlayerItemSection
           title={t('gameEquipment')}
           items={player.equipments}
+          categoryIcon={trackerCategoryImage('equipment', UpgradeVillage.home)}
           townHallLevel={player.townHallLevel}
           initiallyExpanded
         />
         <PlayerItemSection
           title={t('gameTroops')}
           items={player.troops}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.troops}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSpells')}
           items={player.spells}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.spells}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSiegeMachines')}
           items={player.siegeMachines}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.siege}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gamePets')}
           items={player.pets}
+          categoryIcon={ImageAssets.upgradeCategoryIcons.pets}
           townHallLevel={player.townHallLevel}
         />
       </ResponsiveGrid>
@@ -617,18 +629,19 @@ function PlayerSuperTroopSection({
 export function PlayerItemSection({
   title,
   items,
+  categoryIcon,
   townHallLevel,
   initiallyExpanded = false,
 }: {
   title: string;
   items: readonly PlayerItem[];
+  categoryIcon?: string;
   townHallLevel: number;
   initiallyExpanded?: boolean;
 }) {
   const { t, locale } = useI18n();
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [selected, setSelected] = useState<PlayerItem | null>(null);
-  const [showSummary, setShowSummary] = useState(false);
   const theme = useCKTheme();
   const visible = useMemo(
     () => [...items].sort((a, b) => Number(b.isUnlocked) - Number(a.isUnlocked)),
@@ -644,8 +657,11 @@ export function PlayerItemSection({
         maxLevels) *
       100
     : 0;
-  const badgeProgress = progress % 1 === 0 ? String(progress) : progress.toFixed(1);
-  const formattedProgress = progress % 1 === 0 ? String(progress) : progress.toFixed(2);
+  const levelsRemaining = items.reduce(
+    (sum, item) =>
+      sum + Math.max(0, maxLevelForItemAtTH(item, townHallLevel) - Math.max(0, item.level)),
+    0,
+  );
   const summary = items.reduce(
     (result, item) => {
       const remaining = calculateRemainingUpgradeSummary(
@@ -664,36 +680,59 @@ export function PlayerItemSection({
   );
   if (!items.length) return null;
   return (
-    <Surface radius={ckRadius.card} style={styles.section}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ expanded }}
-        onPress={() => setExpanded(!expanded)}
-        style={styles.sectionTitle}
-      >
-        <ChevronRight
-          size={22}
-          color={colorWithAlpha(theme.onSurface, 0.72)}
-          style={{ transform: [{ rotate: expanded ? '90deg' : '0deg' }] }}
-        />
-        <CKText role="sectionTitle" style={styles.grow}>
-          {title}
-        </CKText>
-        {items[0] instanceof PlayerSuperTroop ? null : (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('playerUpgradeRemainingAccessibility', { townHallLevel })}
-            onPress={(event) => {
-              event.stopPropagation();
-              setShowSummary(true);
+    <>
+      <ExpandableProgressCard
+        title={title}
+        imageUrl={categoryIcon ?? items[0]!.imageUrl}
+        percent={progress}
+        open={expanded}
+        onToggle={() => setExpanded((value) => !value)}
+        footer={
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 6,
+              flexWrap: 'nowrap',
+              width: '100%',
             }}
           >
-            <SectionProgressBadge progress={progress / 100} label={`${badgeProgress}%`} />
-          </Pressable>
-        )}
-      </Pressable>
-      {expanded ? (
-        <ResponsiveGrid minItemWidth={54} maxColumns={10} gap={8}>
+            <CKText role="bodySmall" muted numberOfLines={1} style={{ flexShrink: 1 }}>
+              {levelsRemaining === 0
+                ? t('homeRecentlyCompleted')
+                : t('gameItemLevelCount', { count: levelsRemaining })}
+            </CKText>
+            {levelsRemaining > 0 && summary.seconds > 0 ? (
+              <CKText role="bodySmall" muted numberOfLines={1} style={{ flexShrink: 1 }}>
+                · {formatUpgradeDuration(summary.seconds)}
+              </CKText>
+            ) : null}
+            {[...summary.resources]
+              .filter(([, amount]) => amount > 0)
+              .map(([resource, amount]) => (
+                <View
+                  key={resource}
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 3, flexShrink: 1 }}
+                >
+                  <MobileWebImage
+                    imageUrl={resourceImage(resource)}
+                    style={{ width: 15, height: 15 }}
+                  />
+                  <CKText role="bodySmall" numberOfLines={1} style={{ flexShrink: 1 }}>
+                    {formatPlayerResourceAmount(amount, locale)}
+                  </CKText>
+                </View>
+              ))}
+          </View>
+        }
+      >
+        <ResponsiveGrid
+          minItemWidth={54}
+          maxColumns={10}
+          gap={8}
+          waitForLayout
+          testID="player-item-grid"
+        >
           {visible.map((item, index) => {
             const thMax = maxLevelForItemAtTH(item, townHallLevel);
             const isGlobalMax = item.maxLevel > 0 && item.level >= item.maxLevel;
@@ -748,7 +787,7 @@ export function PlayerItemSection({
             );
           })}
         </ResponsiveGrid>
-      ) : null}
+      </ExpandableProgressCard>
       {selected instanceof PlayerSuperTroop ? (
         <ItemDetailModal item={selected} onClose={() => setSelected(null)} />
       ) : (
@@ -759,122 +798,7 @@ export function PlayerItemSection({
           onClose={() => setSelected(null)}
         />
       )}
-      <Modal
-        transparent
-        visible={showSummary}
-        animationType="fade"
-        onRequestClose={() => setShowSummary(false)}
-      >
-        <Pressable style={styles.overlay} onPress={() => setShowSummary(false)}>
-          <Surface radius={ckRadius.card} style={styles.dialog}>
-            <View style={styles.dialogTitle}>
-              <CKText role="titleLarge" style={styles.grow}>
-                {t('playerUpgradeSummaryTitle', {
-                  progress: formattedProgress,
-                  townHallLevel,
-                })}
-              </CKText>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={materialCloseLabel(locale)}
-                onPress={() => setShowSummary(false)}
-              >
-                <X color={theme.onSurfaceVariant} />
-              </Pressable>
-            </View>
-            {progress >= 100 ? (
-              <CKText>{t('playerUpgradeSectionMaxed', { townHallLevel })}</CKText>
-            ) : (
-              <>
-                <CKText role="rowTitle">{t('playerUpgradeTimeRemaining')}</CKText>
-                <CKText>{formatDurationSeconds(summary.seconds, locale)}</CKText>
-                <CKText role="rowTitle">{t('assetFolderResources')}</CKText>
-                {summary.resources.size ? (
-                  <View style={styles.wrap}>
-                    {[...summary.resources]
-                      .sort(([a], [b]) => a.localeCompare(b))
-                      .map(([resource, amount]) => (
-                        <PillSurface key={resource} style={styles.levelPill}>
-                          <MobileWebImage
-                            imageUrl={resourceImage(resource)}
-                            style={styles.resourceIcon}
-                          />
-                          <CKText>{formatPlayerResourceAmount(amount, locale)}</CKText>
-                        </PillSurface>
-                      ))}
-                  </View>
-                ) : (
-                  <CKText>{t('playerUpgradeNoResourceData')}</CKText>
-                )}
-              </>
-            )}
-          </Surface>
-        </Pressable>
-      </Modal>
-    </Surface>
-  );
-}
-
-function SectionProgressBadge({ progress, label }: { progress: number; label: string }) {
-  const theme = useCKTheme();
-  const normalized = Math.max(0, Math.min(1, progress));
-  const accent = normalized >= 1 ? '#E8A524' : '#E0302B';
-  const [size, setSize] = useState({ width: 0, height: 0 });
-  const innerWidth = Math.max(0, size.width - 2);
-  const innerHeight = Math.max(0, size.height - 2);
-  const radius = innerHeight / 2;
-  const perimeter = Math.max(0, 2 * (innerWidth - innerHeight) + 2 * Math.PI * radius);
-  return (
-    <View
-      testID="section-progress-badge"
-      onLayout={(event) => {
-        const { width, height } = event.nativeEvent.layout;
-        if (width !== size.width || height !== size.height) setSize({ width, height });
-      }}
-      style={[
-        styles.sectionProgress,
-        {
-          backgroundColor:
-            normalized >= 1
-              ? colorWithAlpha(accent, 0.14)
-              : colorWithAlpha(theme.surfaceContainerHighest, 0.55),
-        },
-      ]}
-    >
-      {size.width > 0 && size.height > 0 ? (
-        <Svg
-          style={StyleSheet.absoluteFill}
-          viewBox={`0 0 ${size.width} ${size.height}`}
-          pointerEvents="none"
-        >
-          <Rect
-            x="1"
-            y="1"
-            width={innerWidth}
-            height={innerHeight}
-            rx={radius}
-            fill="none"
-            stroke={colorWithAlpha(theme.outlineVariant, 0.58)}
-            strokeWidth="1.5"
-          />
-          <Rect
-            x="1"
-            y="1"
-            width={innerWidth}
-            height={innerHeight}
-            rx={radius}
-            fill="none"
-            stroke={accent}
-            strokeWidth="2"
-            strokeDasharray={`${perimeter * normalized} ${perimeter}`}
-            strokeLinecap="round"
-          />
-        </Svg>
-      ) : null}
-      <CKText role="labelMedium" style={styles.sectionProgressLabel}>
-        {label}
-      </CKText>
-    </View>
+    </>
   );
 }
 
@@ -884,7 +808,7 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
   const localizedName = item ? localizedNameForItem(item.meta) || item.name : '';
   const localizedDescription = item ? localizedInfoForItem(item.meta) : '';
   return (
-    <Modal transparent visible={item !== null} animationType="fade" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent visible={item !== null} animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <Pressable
           accessible={false}
@@ -931,20 +855,6 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
   );
 }
 
-export function formatDurationSeconds(seconds: number, locale: string) {
-  const formatUnit = (value: number, unit: 'day' | 'hour' | 'minute') =>
-    new Intl.NumberFormat(toIntlLocale(locale), {
-      style: 'unit',
-      unit,
-      unitDisplay: 'narrow',
-    }).format(value);
-  if (!seconds) return formatUnit(0, 'minute');
-  const days = Math.floor(seconds / 86400),
-    hours = Math.floor((seconds % 86400) / 3600);
-  return days
-    ? `${formatUnit(days, 'day')} ${formatUnit(hours, 'hour')}`
-    : formatUnit(Math.max(1, Math.ceil(seconds / 3600)), 'hour');
-}
 export function formatPlayerResourceAmount(value: number, locale: string) {
   const suffix = (amount: number, unit: string) =>
     `${amount.toFixed(1).replace(/\.0$/, '')}${unit}`;
@@ -960,134 +870,365 @@ function resourceImage(key: string) {
   return `${ImageAssets.baseUrl}/resources/${key}.webp`;
 }
 
-export function PlayerBattlelogTab({ data }: { data: PlayerBattlelogData | null | undefined }) {
+export function PlayerBattlelogTab({
+  data,
+  visibleCount = 20,
+  onLootGridScrubChange,
+}: {
+  data: PlayerBattlelogData | null | undefined;
+  visibleCount?: number;
+  onLootGridScrubChange?: (active: boolean) => void;
+}) {
   const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const [mode, setMode] = useState<'ranked' | 'farming'>('ranked');
-  const [direction, setDirection] = useState<'all' | 'attacks' | 'defenses'>('all');
+  const mode = 'farming';
+  const attacks = useMemo(() => data?.forMode(mode).filter((item) => item.attack) ?? [], [data]);
+  const lootTimeline = useMemo(() => battlelogLootTimeline(attacks, new Date(), 180), [attacks]);
   if (!data)
     return <EmptyState title={t('playerBattlelogLoadError')} body={t('generalNoDataAvailable')} />;
-  const battles = data.forMode(mode);
-  const items = battles.filter(
-    (item) => direction === 'all' || item.attack === (direction === 'attacks'),
-  );
-  const attacks = battles.filter((item) => item.attack);
-  const defenses = battles.filter((item) => !item.attack);
   const averageStars = attacks.length
     ? attacks.reduce((sum, item) => sum + item.stars, 0) / attacks.length
     : 0;
   const averageDestruction = attacks.length
     ? attacks.reduce((sum, item) => sum + item.destructionPercentage, 0) / attacks.length
     : 0;
-  const tripleRate = attacks.length
-    ? (attacks.filter((item) => item.stars === 3).length / attacks.length) * 100
-    : 0;
   const averageLoot = attacks.length
     ? attacks.reduce((sum, item) => sum + item.totalLoot, 0) / attacks.length
     : 0;
-  const defenseAverageStars = average(defenses.map((item) => item.stars));
-  const defenseAverageDestruction = average(defenses.map((item) => item.destructionPercentage));
-  const defenseTripleRate = defenses.length
-    ? (defenses.filter((item) => item.stars === 3).length / defenses.length) * 100
-    : 0;
-  const popularAttacks = data.popularTroops(mode, { limit: 5 });
-  const popularDefenses = data.popularTroops(mode, { limit: 5, attack: false });
+  const popularAttacks = data.popularTroops(mode, { limit: 5, weightByHousing: true });
   return (
-    <View style={styles.sections}>
-      <Segmented
-        choices={[
-          ['ranked', t('playerBattlelogRanked')],
-          ['farming', t('playerBattlelogFarming')],
-        ]}
-        selected={mode}
-        onSelect={(value) => setMode(value as typeof mode)}
-      />
-      <Surface radius={ckRadius.card} style={styles.section}>
-        <View style={styles.sectionTitle}>
-          <CKText role="titleLarge" style={styles.grow}>
-            {mode === 'ranked'
-              ? t('playerBattlelogRankedOverview')
-              : t('playerBattlelogFarmingOverview')}
-          </CKText>
-          <CKText muted>{t('playerBattlelogBattleCount', { count: battles.length })}</CKText>
-        </View>
-        <BattleOverviewBand
-          title={t('warAttacksTitle')}
-          image={ImageAssets.sword}
-          metrics={[
-            [ImageAssets.attacksNoShield, t('generalTotal'), `${attacks.length}`],
-            [ImageAssets.attackStar, t('warAbbreviationAvg'), averageStars.toFixed(2)],
-            [
-              ImageAssets.hitrate,
-              t('warAbbreviationAvgPercentage'),
-              `${averageDestruction.toFixed(1)}%`,
-            ],
-            [
-              mode === 'farming' ? ImageAssets.lootCart : ImageAssets.attackStar,
-              mode === 'farming' ? t('generalAverage') : t('warStarsThree'),
-              mode === 'farming'
-                ? compactNumber(Math.round(averageLoot), locale)
-                : `${tripleRate.toFixed(1)}%`,
-            ],
-          ]}
-          popular={popularAttacks}
-        />
-        <View style={styles.battleSummaryDivider} />
-        <BattleOverviewBand
-          title={t('warDefensesTitle')}
-          image={ImageAssets.shieldWithArrow}
-          metrics={[
-            [ImageAssets.shieldWithArrow, t('generalTotal'), `${defenses.length}`],
-            [ImageAssets.attackStar, t('warAbbreviationAvg'), defenseAverageStars.toFixed(2)],
-            [
-              ImageAssets.hitrate,
-              t('warAbbreviationAvgPercentage'),
-              `${defenseAverageDestruction.toFixed(1)}%`,
-            ],
-            [ImageAssets.attackStar, t('warStarsThree'), `${defenseTripleRate.toFixed(1)}%`],
-          ]}
-          popular={popularDefenses}
-        />
-      </Surface>
-      {!data.officialAvailable || !data.historyAvailable ? (
-        <Surface radius={ckRadius.tile} style={styles.notice}>
-          <Info size={18} color={theme.onSurfaceVariant} />
-          <CKText muted style={styles.grow}>
-            {!data.officialAvailable
-              ? t('playerBattlelogOfficialUnavailable')
-              : t('playerBattlelogHistoryUnavailable')}
-          </CKText>
+    <ChartInteractionBoundary>
+      <View style={styles.sections}>
+        <Surface radius={ckRadius.card} style={styles.section}>
+          <BattleOverviewBand
+            title={t('warAttacksTitle')}
+            image={ImageAssets.sword}
+            metrics={[
+              [ImageAssets.attacksNoShield, t('generalTotal'), `${attacks.length}`],
+              [ImageAssets.attackStar, t('warAbbreviationAvg'), averageStars.toFixed(2)],
+              [
+                ImageAssets.hitrate,
+                t('warAbbreviationAvgPercentage'),
+                `${averageDestruction.toFixed(1)}%`,
+              ],
+              [
+                ImageAssets.lootCart,
+                t('generalAverage'),
+                compactNumber(Math.round(averageLoot), locale),
+              ],
+            ]}
+            popular={popularAttacks}
+          />
+          <BattlelogLootGrid
+            timeline={lootTimeline}
+            locale={locale}
+            onScrubActiveChange={onLootGridScrubChange}
+          />
         </Surface>
-      ) : null}
-      <View style={styles.toolbar}>
-        <CKText role="titleLarge" style={styles.grow}>
-          {t('playerBattlelogRecentBattles')}
-        </CKText>
-        <FilterDropdown
-          choices={[
-            ['all', t('generalAll')],
-            ['attacks', t('warAttacksTitle')],
-            ['defenses', t('warDefensesTitle')],
-          ]}
-          value={direction}
-          onSelect={(value) => setDirection(value as typeof direction)}
-        />
+        <View style={styles.toolbar}>
+          <CKText role="titleLarge" style={styles.grow}>
+            {t('playerBattlelogRecentBattles')}
+          </CKText>
+        </View>
+        <View testID="battle-responsive-grid">
+          <ResponsiveGrid minItemWidth={430} maxColumns={2}>
+            {attacks.slice(0, visibleCount).map((item, index) => (
+              <BattleRow key={`${item.mergeKey}-${index}`} item={item} />
+            ))}
+          </ResponsiveGrid>
+        </View>
+        {!attacks.length ? (
+          <EmptyState
+            title={t('playerBattlelogNoBattlesTitle')}
+            body={t('playerBattlelogNoBattlesBody')}
+          />
+        ) : null}
       </View>
-      <View testID="battle-responsive-grid">
-        <ResponsiveGrid minItemWidth={430} maxColumns={2}>
-          {items.map((item, index) => (
-            <BattleRow key={`${item.mergeKey}-${index}`} item={item} />
-          ))}
-        </ResponsiveGrid>
+    </ChartInteractionBoundary>
+  );
+}
+
+export function lootGridIndexAtPoint(
+  x: number,
+  y: number,
+  width: number,
+  columns: number,
+): number | null {
+  if (![x, y, width, columns].every(Number.isFinite) || columns < 1 || !Number.isInteger(columns))
+    return null;
+  const cell = (width - (columns - 1) * 3) / columns;
+  if (cell <= 0 || x < 0 || x > width || y < 0 || y > 7 * (cell + 3) - 3) return null;
+  return (
+    Math.min(columns - 1, Math.floor(x / (cell + 3))) * 7 + Math.min(6, Math.floor(y / (cell + 3)))
+  );
+}
+
+function BattlelogLootGrid({
+  timeline,
+  locale,
+  onScrubActiveChange,
+}: {
+  timeline: readonly BattlelogLootDay[];
+  locale: string;
+  onScrubActiveChange?: (active: boolean) => void;
+}) {
+  const { t, isRtl } = useI18n();
+  const theme = useCKTheme();
+  const [gridMode, setGridMode] = useState<'daily' | 'weekly' | 'cumulative'>('daily');
+  const [selected, setSelected] = useState<{ day: string; total: number; index: number } | null>(
+    null,
+  );
+  const clearSelection = useCallback(() => setSelected(null), []);
+  useChartDismissal(clearSelection);
+  const gridRef = useRef<ViewInstance>(null);
+  const origin = useRef({ x: 0, y: 0 });
+  const [gridWidth, setGridWidth] = useState(0);
+  const weeks = useMemo(() => battlelogLootWeeks(timeline), [timeline]);
+  const padded = useMemo(() => {
+    const offset = new Date(`${timeline[0]!.day}T00:00:00Z`).getUTCDay();
+    const days: (BattlelogLootDay | null)[] = [...Array<null>(offset).fill(null), ...timeline];
+    while (days.length % 7) days.push(null);
+    return days;
+  }, [timeline]);
+  const columnCount = padded.length / 7;
+  const columns = Array.from({ length: padded.length / 7 }, (_, index) =>
+    padded.slice(index * 7, index * 7 + 7),
+  );
+  const cellSize = Math.max(0, (gridWidth - (columns.length - 1) * 3) / columns.length);
+  const weekValues = weeks.map((week) => (gridMode === 'weekly' ? week.total : week.cumulative));
+  const weekMaximum = Math.max(1, ...weekValues);
+  const selectIndex = useCallback(
+    (index: number) => {
+      if (gridMode === 'daily') {
+        const day = padded[index];
+        if (day)
+          setSelected((current) =>
+            current?.day === day.day ? current : { day: day.day, total: day.total, index },
+          );
+        return;
+      }
+      const column = Math.floor(index / 7);
+      const week = weeks[column];
+      if (!week) return;
+      const total = gridMode === 'weekly' ? week.total : week.cumulative;
+      setSelected((current) =>
+        current?.index === column * 7 + 3
+          ? current
+          : { day: week.day, total, index: column * 7 + 3 },
+      );
+    },
+    [gridMode, padded, weeks],
+  );
+  const selectPoint = useCallback(
+    (pageX: number, pageY: number) => {
+      const index = lootGridIndexAtPoint(
+        pageX - origin.current.x,
+        pageY - origin.current.y,
+        gridWidth,
+        columnCount,
+      );
+      if (index !== null) selectIndex(index);
+    },
+    [gridWidth, columnCount, selectIndex],
+  );
+  const beginTouch = useCallback(
+    (pageX: number, pageY: number) => {
+      gridRef.current?.measureInWindow((x, y) => {
+        origin.current = { x, y };
+        selectPoint(pageX, pageY);
+      });
+    },
+    [selectPoint],
+  );
+  const finishScrub = useCallback(() => onScrubActiveChange?.(false), [onScrubActiveChange]);
+  // Keep the active responder alive when moving to another day updates the tooltip.
+  const responder = useMemo(
+    () =>
+      // PanResponder stores these callbacks; refs are read only when a touch invokes them.
+      // eslint-disable-next-line react-hooks/refs
+      PanResponder.create({
+        // A touch inside the grid is a 2D scrub, including vertical movement between days.
+        // Own it from touch-down so the parent scroll view cannot begin scrolling first.
+        onStartShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: (event) => {
+          onScrubActiveChange?.(true);
+          beginTouch(event.nativeEvent.pageX, event.nativeEvent.pageY);
+        },
+        onPanResponderMove: (event) =>
+          selectPoint(event.nativeEvent.pageX, event.nativeEvent.pageY),
+        onPanResponderRelease: finishScrub,
+        onPanResponderTerminationRequest: () => false,
+        onShouldBlockNativeResponder: () => true,
+        onPanResponderTerminate: () => {
+          finishScrub();
+          clearSelection();
+        },
+      }),
+    [beginTouch, selectPoint, clearSelection, finishScrub, onScrubActiveChange],
+  );
+  const selectedIndex = selected?.index ?? -1;
+  const selectedRow = selectedIndex % 7;
+  return (
+    <View testID="battlelog-loot-grid" style={styles.sections}>
+      <SlidingSegmentControl
+        testID="battlelog-loot-mode"
+        value={gridMode}
+        options={[
+          { value: 'daily', label: t('statsDaily') },
+          { value: 'weekly', label: t('statsWeekly') },
+          { value: 'cumulative', label: t('playerBattlelogCumulative') },
+        ]}
+        isRtl={isRtl}
+        onChange={(key) => {
+          setSelected(null);
+          setGridMode(key);
+        }}
+      />
+      <View style={styles.lootContributionCard}>
+        <View
+          ref={gridRef}
+          testID="loot-grid-touch-area"
+          style={styles.lootContributionGrid}
+          {...responder.panHandlers}
+          onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}
+          onTouchStart={(event) => {
+            onScrubActiveChange?.(true);
+            beginTouch(event.nativeEvent.pageX, event.nativeEvent.pageY);
+          }}
+          onTouchEnd={finishScrub}
+          onTouchCancel={() => {
+            finishScrub();
+            clearSelection();
+          }}
+          onAccessibilityEscape={clearSelection}
+        >
+          {columns.map((column, columnIndex) =>
+            gridMode === 'daily' ? (
+              <View key={columnIndex} style={styles.lootContributionColumn}>
+                {column.map((day, rowIndex) =>
+                  day ? (
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={`${day.day}: ${day.total}`}
+                      key={day.day}
+                      onPress={() => selectIndex(columnIndex * 7 + rowIndex)}
+                      onHoverIn={() => selectIndex(columnIndex * 7 + rowIndex)}
+                      accessibilityState={{
+                        selected: selectedIndex === columnIndex * 7 + rowIndex,
+                      }}
+                      style={[
+                        styles.lootContributionCell,
+                        selectedIndex === columnIndex * 7 + rowIndex && {
+                          borderWidth: 1.5,
+                          borderColor: theme.onSurface,
+                        },
+                        {
+                          backgroundColor:
+                            day.total > 0
+                              ? colorWithAlpha(theme.primary, 0.25 + day.intensity * 0.75)
+                              : colorWithAlpha(theme.surfaceContainerHighest, 0.45),
+                        },
+                      ]}
+                    />
+                  ) : (
+                    <View key={`empty-${rowIndex}`} style={styles.lootContributionCell} />
+                  ),
+                )}
+              </View>
+            ) : (
+              <Pressable
+                key={columnIndex}
+                accessibilityRole="button"
+                accessibilityLabel={`${weeks[columnIndex]?.day}: ${weekValues[columnIndex] ?? 0}`}
+                accessibilityState={{ selected: Math.floor(selectedIndex / 7) === columnIndex }}
+                onPress={() => selectIndex(columnIndex * 7 + 3)}
+                onHoverIn={() => selectIndex(columnIndex * 7 + 3)}
+                style={styles.lootContributionColumn}
+              >
+                {Array.from({ length: 7 }, (_, rowIndex) => {
+                  const value = weekValues[columnIndex] ?? 0;
+                  const filled = value > 0 && rowIndex >= 7 - Math.ceil((value / weekMaximum) * 7);
+                  return (
+                    <View
+                      key={rowIndex}
+                      style={[
+                        styles.lootContributionCell,
+                        Math.floor(selectedIndex / 7) === columnIndex && {
+                          borderWidth: 1,
+                          borderColor: theme.onSurface,
+                        },
+                        {
+                          backgroundColor: filled
+                            ? colorWithAlpha(theme.primary, 0.25 + (value / weekMaximum) * 0.75)
+                            : colorWithAlpha(theme.surfaceContainerHighest, 0.45),
+                        },
+                      ]}
+                    />
+                  );
+                })}
+              </Pressable>
+            ),
+          )}
+        </View>
+        {selected ? (
+          <View
+            testID="loot-grid-tooltip"
+            pointerEvents="none"
+            style={[
+              styles.lootTooltip,
+              {
+                backgroundColor: theme.surfaceContainerHighest,
+                left: Math.max(
+                  0,
+                  Math.min(
+                    Math.max(0, gridWidth - 240),
+                    Math.floor(selectedIndex / 7) * (cellSize + 3) - 120,
+                  ),
+                ),
+                top:
+                  selectedRow < 3
+                    ? (selectedRow + 1) * (cellSize + 3) + 4
+                    : selectedRow * (cellSize + 3) - 38,
+              },
+            ]}
+          >
+            <CKText role="labelLarge" numberOfLines={2}>
+              {formatPlayerResourceAmount(selected.total, locale)} ·{' '}
+              {gridMode === 'weekly'
+                ? `${t('statsWeekly')} · `
+                : gridMode === 'cumulative'
+                  ? `${t('playerBattlelogCumulative')} · `
+                  : ''}
+              {new Intl.DateTimeFormat(toIntlLocale(locale), {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: 'UTC',
+              }).format(new Date(selected.day + 'T00:00:00Z'))}
+            </CKText>
+          </View>
+        ) : null}
+        <View style={styles.lootContributionGrid}>
+          {columns.map((column, index) => {
+            const first = column.find((day) => day !== null);
+            const monthStart = column.find((day) => day?.day.endsWith('-01'));
+            const label = monthStart ?? (index === 0 ? first : null);
+            return (
+              <View key={index} style={styles.lootContributionColumn}>
+                {label ? (
+                  <CKText muted role="labelSmall" style={styles.lootMonthLabel}>
+                    {new Intl.DateTimeFormat(toIntlLocale(locale), {
+                      month: 'short',
+                      timeZone: 'UTC',
+                    }).format(new Date(`${label.day}T00:00:00Z`))}
+                  </CKText>
+                ) : null}
+              </View>
+            );
+          })}
+        </View>
       </View>
-      {!battles.length ? (
-        <EmptyState
-          title={t('playerBattlelogNoBattlesTitle')}
-          body={t('playerBattlelogNoBattlesBody')}
-        />
-      ) : !items.length ? (
-        <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
-      ) : null}
     </View>
   );
 }
@@ -1096,24 +1237,11 @@ function BattleRow({ item }: { item: PlayerBattlelogEntry }) {
   const { t, locale } = useI18n();
   const army = Object.entries(item.armyCounts).slice(0, 6);
   return (
-    <Surface radius={ckRadius.tile} style={styles.battleCard}>
+    <Surface testID="farming-battle-row" radius={ckRadius.tile} style={styles.battleCard}>
       <View style={styles.row}>
-        <MobileWebImage
-          imageUrl={
-            item.opponentTownHall > 0
-              ? ImageAssets.townHall(item.opponentTownHall)
-              : item.attack
-                ? ImageAssets.attacks
-                : ImageAssets.shield
-          }
-          style={styles.rowImage}
-        />
         <View style={styles.grow}>
-          <CKText role="rowTitle" numberOfLines={1}>
-            {item.opponentName || item.opponentTag || t('generalUnknown')}
-          </CKText>
           {item.timestamp ? (
-            <CKText muted role="labelSmall">
+            <CKText muted role="labelLarge">
               {new Intl.DateTimeFormat(toIntlLocale(locale), {
                 dateStyle: 'medium',
                 timeStyle: 'short',
@@ -1137,25 +1265,27 @@ function BattleRow({ item }: { item: PlayerBattlelogEntry }) {
           ))}
           <CKText role="rowTitle">{item.destructionPercentage}%</CKText>
         </View>
-        <View style={styles.wrap}>
-          {[
-            [ImageAssets.gold, t('resourceGold'), item.gold],
-            [ImageAssets.elixir, t('resourceElixir'), item.elixir],
-            [ImageAssets.darkElixir, t('resourceDarkElixir'), item.darkElixir],
-          ].map(([image, label, value]) =>
-            Number(value) > 0 ? (
-              <View
-                key={String(label)}
-                accessible
-                accessibilityLabel={`${label}: ${value}`}
-                style={styles.lootValue}
-              >
-                <MobileWebImage imageUrl={String(image)} style={styles.resourceIcon} />
-                <CKText role="labelSmall">{compactNumber(Number(value), locale)}</CKText>
-              </View>
-            ) : null,
-          )}
-        </View>
+        {item.attack ? (
+          <View style={styles.wrap}>
+            {[
+              [ImageAssets.gold, t('resourceGold'), item.gold],
+              [ImageAssets.elixir, t('resourceElixir'), item.elixir],
+              [ImageAssets.darkElixir, t('resourceDarkElixir'), item.darkElixir],
+            ].map(([image, label, value]) =>
+              Number(value) > 0 ? (
+                <View
+                  key={String(label)}
+                  accessible
+                  accessibilityLabel={`${label}: ${value}`}
+                  style={styles.lootValue}
+                >
+                  <MobileWebImage imageUrl={String(image)} style={styles.resourceIcon} />
+                  <CKText role="labelSmall">{compactNumber(Number(value), locale)}</CKText>
+                </View>
+              ) : null,
+            )}
+          </View>
+        ) : null}
       </View>
       {army.length ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -1283,6 +1413,7 @@ export function PlayerActivityTab({
           accessibilityRole="button"
           accessibilityLabel={`${verifiedTracking ? t('playerActivityTrackingActive') : t('playerActivityTrackingUnknown')}. ${verifiedTracking ? t('playerActivityTrackingActiveBody') : t('playerActivityTrackingUnknownBody')}`}
           onPress={() => setShowTracking(true)}
+          style={styles.trackingControl}
         >
           <PillSurface style={styles.dropdownControl}>
             {verifiedTracking ? (
@@ -1290,7 +1421,7 @@ export function PlayerActivityTab({
             ) : (
               <Info size={18} color={theme.onSurfaceVariant} />
             )}
-            <CKText numberOfLines={1} style={styles.trackingLabel}>
+            <CKText style={styles.trackingLabel}>
               {verifiedTracking
                 ? t('playerActivityTrackingActive')
                 : t('playerActivityTrackingUnknown')}
@@ -1315,7 +1446,7 @@ export function PlayerActivityTab({
           ))}
         </ResponsiveGrid>
       </View>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={showTracking}
         animationType="fade"
@@ -1431,7 +1562,7 @@ function CwlSeasonCard({ season, recordId }: { season: PlayerCwlSeason; recordId
               </CKText>
             </View>
           </View>
-          <View style={styles.cwlTrailing}>
+          <View testID={`cwl-season-summary-${recordId}`} style={styles.cwlTrailing}>
             <CKText muted role="labelSmall" style={styles.cwlSeasonDate}>
               {month}
             </CKText>
@@ -1443,10 +1574,7 @@ function CwlSeasonCard({ season, recordId }: { season: PlayerCwlSeason; recordId
             ) : (
               <View style={styles.cwlActionRow}>
                 <View testID={`cwl-season-stars-${recordId}`} style={styles.cwlStars}>
-                  <MobileWebImage
-                    imageUrl={ImageAssets.builderBaseStar}
-                    style={styles.cwlStarIcon}
-                  />
+                  <MobileWebImage imageUrl={ImageAssets.attackStar} style={styles.cwlStarIcon} />
                   <CKText role="titleMedium" style={styles.cwlStarValue}>
                     {season.stars}
                   </CKText>
@@ -1533,19 +1661,24 @@ export function PlayerWarTab({
   );
   if (!data || !stats) return <EmptyState title={t('generalNoDataAvailable')} />;
   return (
-    <View style={styles.sections}>
-      <View style={styles.toolbar}>
-        <Segmented
-          choices={[
-            ['stats', t('generalStats')],
-            ['attacks', t('warAttacksTitle')],
-            ['defenses', t('warDefensesTitle')],
-            ['charts', t('generalCharts')],
-          ]}
-          selected={section}
-          onSelect={(v) => setSection(v as typeof section)}
-        />
-        <CKText muted style={styles.grow}>
+    <View testID="player-war-content" style={styles.sections}>
+      {/* Do not share a horizontal row with the filter controls. Their fixed
+          widths starve the summary text on phones; Android measures that text
+          as a very tall column and pushes the stats below a screenful of space. */}
+      <ProfileTabs
+        variant="compact"
+        overflow="scroll"
+        tabs={[
+          { key: 'stats', label: t('generalStats') },
+          { key: 'attacks', label: t('warAttacksTitle') },
+          { key: 'defenses', label: t('warDefensesTitle') },
+          { key: 'charts', label: t('generalCharts') },
+        ]}
+        selectedKey={section}
+        onSelect={(value) => setSection(value as typeof section)}
+      />
+      <View testID="player-war-filter-toolbar" style={styles.toolbar}>
+        <CKText muted numberOfLines={2} style={[styles.grow, { minWidth: 0 }]}>
           {filter.hasActiveFilters()
             ? warFilterSummary(filter, t, locale)
             : t('filtersShowingDefaultData', { count: 50 })}
@@ -1623,7 +1756,7 @@ export function PlayerWarTab({
           <Skeleton width="100%" height={84} />
         </View>
       ) : null}
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={showExport}
         animationType="fade"
@@ -1865,7 +1998,7 @@ export function WarFilterModal({
   const toggle = <T,>(values: T[], value: T) =>
     values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
   return (
-    <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent visible={visible} animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.overlay} onPress={onClose}>
         <Surface
           testID="war-filter-dialog"
@@ -2440,7 +2573,22 @@ function EnhancedWarStatCard({
       <CKText role="rowTitle">{title}</CKText>
       <View style={styles.warStatHeadline}>
         <View style={styles.metric}>
-          <CKText role="titleLarge">{'★'.repeat(Math.round(stats.averageStars))}</CKText>
+          <View
+            style={{ flexDirection: 'row', gap: 2 }}
+            accessibilityLabel={`${stats.averageStars.toFixed(2)} ${t('warStarsTitle')}`}
+          >
+            {[0, 1, 2].map((index) => (
+              <MobileWebImage
+                key={index}
+                imageUrl={
+                  index < Math.round(stats.averageStars)
+                    ? ImageAssets.attackStar
+                    : ImageAssets.emptyStar
+                }
+                style={{ width: 22, height: 22 }}
+              />
+            ))}
+          </View>
           <CKText role="labelLarge">{stats.averageStars.toFixed(2)}</CKText>
         </View>
         <View style={styles.metric}>
@@ -2471,9 +2619,18 @@ function EnhancedWarStatCard({
       <View style={styles.warStarBreakdown}>
         {[0, 1, 2, 3].map((stars) => (
           <View key={stars} style={styles.warStarBreakdownRow}>
-            <CKText role="labelSmall" style={styles.warStarLabel}>
-              {'★'.repeat(stars) || '☆'}
-            </CKText>
+            <View
+              style={{ width: 54, flexDirection: 'row', gap: 1 }}
+              accessibilityLabel={`${stars} ${t('warStarsTitle')}`}
+            >
+              {Array.from({ length: Math.max(1, stars) }, (_, index) => (
+                <MobileWebImage
+                  key={index}
+                  imageUrl={stars ? ImageAssets.attackStar : ImageAssets.emptyStar}
+                  style={{ width: 14, height: 14 }}
+                />
+              ))}
+            </View>
             <CKText
               role="labelSmall"
               style={{ color: warStarColor(stars, isAttack), fontWeight: '700' }}
@@ -2801,7 +2958,7 @@ function WarAttackList({
           );
         })}
       </ResponsiveGrid>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={details !== null}
         animationType="slide"
@@ -3488,7 +3645,9 @@ export function TabState({
     !(tab === 'joinLeave' && model.joinLeave?.items.length) &&
     !(tab === 'war' && model.warStats)
   )
-    return <LoadingIndicator label={t('generalLoading')} />;
+    return (
+      <PageSkeleton kind={tab === 'war' ? 'stats' : tab === 'legendHistory' ? 'stats' : 'list'} />
+    );
   const error = model.errorByTab?.[tab];
   if (
     error &&
@@ -3949,12 +4108,10 @@ function parseFilterDate(value: string) {
 function formatLocalFilterDate(value: Date) {
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
 }
-function average(values: readonly number[]) {
-  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
-}
 
 const styles = StyleSheet.create({
   grow: { flex: 1 },
+  disabled: { opacity: 0.46 },
   centerText: { textAlign: 'center' },
   centeredWrap: { justifyContent: 'center' },
   superTroopImage: { width: 50, height: 50, borderRadius: 6 },
@@ -3977,12 +4134,12 @@ const styles = StyleSheet.create({
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   headerActionsCompact: { paddingHorizontal: 12 },
   headerActionsDesktop: { paddingHorizontal: 20 },
-  iconAction: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   identity: { alignItems: 'center', justifyContent: 'center' },
   identityDesktop: { flexDirection: 'row', gap: 52, paddingHorizontal: 28 },
   identityCompact: { flexDirection: 'column', gap: 2, paddingHorizontal: 4, marginTop: 6 },
   identityCopy: { flex: 1, minWidth: 0, gap: 4 },
   identityCopyCompact: { flex: 0, alignItems: 'center', width: '100%', gap: 2 },
+  identityCopyWeb: { flexBasis: 'auto', flexShrink: 0 },
   hallBadge: { width: 104, height: 104, alignItems: 'center', justifyContent: 'center' },
   hall: { width: 96, height: 96, resizeMode: 'contain' },
   hallCompact: { width: 94, height: 94 },
@@ -4003,7 +4160,9 @@ const styles = StyleSheet.create({
   leagueSubtitle: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   leagueSubtitleIcon: { width: 16, height: 16, resizeMode: 'contain' },
   leagueTiles: { flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' },
-  leagueTilesCompact: { paddingHorizontal: 16 },
+  // League summaries stay phone-sized instead of becoming full-width tablet tiles.
+  leagueTilesCompact: { paddingHorizontal: 16, maxWidth: 460, alignSelf: 'center' },
+  leagueTilesDesktop: { width: '44%', maxWidth: 460, flexShrink: 0 },
   leagueTilePressable: { flex: 1 },
   clanLine: { flexDirection: 'row', alignItems: 'center', maxWidth: 320 },
   clanBadge: { width: 16, height: 16, resizeMode: 'contain', marginRight: 4 },
@@ -4019,13 +4178,6 @@ const styles = StyleSheet.create({
   mobileStats: { paddingTop: 11, gap: 8 },
   mobileQuickStats: { gap: 8, paddingHorizontal: 16 },
   quickStatsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, justifyContent: 'center' },
-  quickStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
   statIcon: { width: 19, height: 19, resizeMode: 'contain' },
   resourceIcon: { width: 22, height: 22, resizeMode: 'contain' },
   rankedLink: {
@@ -4039,7 +4191,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    maxWidth: 1120,
+    maxWidth: 760,
     width: '100%',
     alignSelf: 'center',
   },
@@ -4132,8 +4284,8 @@ const styles = StyleSheet.create({
   cwlClanBadge: { width: 20, height: 20, resizeMode: 'contain' },
   cwlTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   cwlTownHallLeading: { width: 54, height: 54, resizeMode: 'contain' },
-  cwlTrailing: { minWidth: 108, alignItems: 'flex-end', alignSelf: 'stretch' },
-  cwlSeasonDate: { fontWeight: '700', marginBottom: 10 },
+  cwlTrailing: { alignItems: 'flex-end', justifyContent: 'center', gap: 8, maxWidth: '40%' },
+  cwlSeasonDate: { fontWeight: '700', textAlign: 'right' },
   cwlActionRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   cwlStars: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   cwlStarIcon: { width: 21, height: 21, resizeMode: 'contain' },
@@ -4165,7 +4317,10 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 12,
   },
-  trackingLabel: { maxWidth: 116 },
+  trackingControl: { maxWidth: '55%', flexShrink: 1 },
+  // Tracking status is meaningful copy, so wrap it instead of truncating it
+  // at an arbitrary width when the neighboring history filter needs space.
+  trackingLabel: { flexShrink: 1, paddingVertical: 6 },
   dropdownMenu: {
     position: 'absolute',
     zIndex: 20,
@@ -4287,8 +4442,39 @@ const styles = StyleSheet.create({
   warPlayerDetail: { gap: 4, padding: 12, borderWidth: StyleSheet.hairlineWidth, borderRadius: 8 },
   alignEnd: { textAlign: 'right' },
   rowCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
-  joinLeaveMovement: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  joinLeaveMovement: {
+    width: 104,
+    flexShrink: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   battleCard: { minHeight: 120, gap: 8, paddingHorizontal: 12, paddingVertical: 8 },
+  lootContributionCard: { paddingVertical: 6, gap: 12, position: 'relative' },
+  lootTooltip: {
+    position: 'absolute',
+    zIndex: 2,
+    maxWidth: 240,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  lootContributionGrid: { flexDirection: 'row', gap: 3 },
+  lootContributionColumn: { gap: 3, flex: 1, minWidth: 0 },
+  lootMonthLabel: { width: 38, fontSize: 9 },
+  lootContributionCell: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: 3,
+  },
+  modalBackdrop: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#00000088',
+  },
+  iconButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   battleResult: { alignItems: 'center' },
   directionImage: { width: 20, height: 20, resizeMode: 'contain' },
   starImage: { width: 19, height: 19, resizeMode: 'contain' },

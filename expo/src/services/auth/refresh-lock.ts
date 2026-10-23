@@ -4,6 +4,13 @@ export interface AuthRefreshLock {
   run<T>(operation: () => Promise<T>): Promise<T | null>;
 }
 
+/** Web Locks coordinate tabs on this origin; the API cookie is shared across
+ * origins too, so callers must still recover from a server rotation race. */
+export function withWebAuthRefreshLock<T>(apiUrl: string, operation: () => Promise<T>): Promise<T> {
+  const locks = typeof navigator === 'undefined' ? undefined : navigator.locks;
+  return locks ? locks.request(`clashking.auth.refresh:${apiUrl}`, operation) : operation();
+}
+
 export class NativeAuthRefreshLock implements AuthRefreshLock {
   constructor(private readonly platform: RuntimePlatform) {}
 

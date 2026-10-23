@@ -1,6 +1,8 @@
+import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
+import { ImageAssets } from '../../core/assets/image-assets';
 type JsonRecord = Record<string, unknown>;
 
-const FALLBACK_BADGE = 'https://assets.clashk.ing/clashkinglogo.png';
+const FALLBACK_BADGE = `${ASSET_ORIGIN}/clashkinglogo.png`;
 
 export function buildWarWidgetPayload(value: unknown, clanTag: string, now = new Date()): string {
   const data = record(value);
@@ -79,6 +81,7 @@ function regularWarPayload(warInfo: JsonRecord, updatedAt: string, now: Date) {
     mode: 'war',
     updatedAt,
     ...display,
+    attackIconUrl: ImageAssets.sword,
     clan: sidePayload(clan, teamSize * 2, teamSize * 3, clanStars, 'Unknown', true),
     opponent: sidePayload(opponent, teamSize * 2, teamSize * 3, opponentStars, 'Unknown', true),
   };
@@ -121,6 +124,7 @@ function cwlWarPayload(data: JsonRecord, updatedAt: string, clanTag: string, now
     mode: 'cwl',
     updatedAt,
     ...display,
+    attackIconUrl: ImageAssets.sword,
     clan: sidePayload(clan, teamSize, teamSize * 3, clanStars, 'CWL Clan', false),
     cwlRank: leagueClan === undefined ? null : (nullableInteger(leagueClan.rank) ?? null),
     cwlLeague: nullableString(league.season) ?? 'unknown',
@@ -181,14 +185,10 @@ function sidePayload(
   fallbackName: string,
   fallbackBadge: boolean,
 ) {
-  const badgeUrls = record(side.badgeUrls);
-  const badge =
-    nullableString(badgeUrls.small) ??
-    nullableString(badgeUrls.medium) ??
-    nullableString(badgeUrls.large);
+  const badge = ImageAssets.widgetClanBadgeForTag(nullableString(side.tag) ?? '') || null;
   return {
     name: nullableString(side.name) ?? fallbackName,
-    badgeUrlMedium: fallbackBadge ? (badge ?? FALLBACK_BADGE) : badge,
+    badgeUrlMedium: fallbackBadge ? badge || FALLBACK_BADGE : badge,
     percent: `${number(side.destructionPercentage).toFixed(2)}%`,
     attacks: `${integer(side.attacks)}/${attackMaximum}`,
     stars,

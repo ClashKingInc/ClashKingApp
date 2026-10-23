@@ -1,8 +1,11 @@
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 export const ACHIEVEMENT_IDS = [
   'townhall_18',
   'war_warrior',
   'mr_legend',
   'defense_doesnt_matter',
+  'first_tournament',
+  'verified_accounts',
 ] as const;
 
 export type AchievementId = (typeof ACHIEVEMENT_IDS)[number];
@@ -24,26 +27,32 @@ export function isAchievementUnlocked(achievement: Achievement): boolean {
 
 export const ACHIEVEMENT_CATALOG_FALLBACK: readonly Achievement[] = Object.freeze([
   {
+    id: 'verified_accounts',
+    modelUrl: 'derived:verified_accounts',
+    earnedCount: 0,
+    isRepeatable: false,
+  },
+  {
     id: 'townhall_18',
-    modelUrl: 'https://assets.clashk.ing/achievements/town-hall-18-achievement-badge.glb',
+    modelUrl: `${ASSET_ORIGIN}/achievements/town-hall-18-achievement-badge.glb`,
     earnedCount: 0,
     isRepeatable: true,
   },
   {
     id: 'war_warrior',
-    modelUrl: 'https://assets.clashk.ing/achievements/war-champion-achievement-badge.glb',
+    modelUrl: `${ASSET_ORIGIN}/achievements/war-champion-achievement-badge.glb`,
     earnedCount: 0,
     isRepeatable: true,
   },
   {
     id: 'mr_legend',
-    modelUrl: 'https://assets.clashk.ing/achievements/perfect-legends-day-achievement-badge.glb',
+    modelUrl: `${ASSET_ORIGIN}/achievements/perfect-legends-day-achievement-badge.glb`,
     earnedCount: 0,
     isRepeatable: true,
   },
   {
     id: 'defense_doesnt_matter',
-    modelUrl: 'https://assets.clashk.ing/achievements/bad-legends-achievement-badge.glb',
+    modelUrl: `${ASSET_ORIGIN}/achievements/bad-legends-achievement-badge.glb`,
     earnedCount: 0,
     isRepeatable: true,
   },

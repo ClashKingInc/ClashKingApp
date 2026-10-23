@@ -6,6 +6,7 @@ const {
   AndroidConfig,
   IOSConfig,
   withAndroidManifest,
+  withAppDelegate,
   withDangerousMod,
   withEntitlementsPlist,
   withFinalizedMod,
@@ -17,11 +18,43 @@ const ExpoPlist = require('@expo/plist').default;
 const {
   appendUnique,
   assertExact,
+  copyFileIfChanged,
   copyTreeIfChanged,
   requirePath,
   validateRelativeTarget,
   validateRequiredFiles,
 } = require('./native-parity-helpers');
+
+const ANDROID_LAUNCHER_ALIASES = [
+  {
+    iconName: null,
+    aliasName: '.MainActivityDefault',
+    resourceName: 'app_icon_default',
+    sourcePath: './public/icons/Icon-maskable-512.png',
+    enabled: true,
+  },
+  {
+    iconName: 'AppIconChristmas',
+    aliasName: '.MainActivityChristmas',
+    resourceName: 'app_icon_christmas',
+    sourcePath: './assets/clashking/icons/app_icon_christmas.png',
+    enabled: false,
+  },
+  {
+    iconName: 'AppIconBlackWhite',
+    aliasName: '.MainActivityBlackWhite',
+    resourceName: 'app_icon_black_white',
+    sourcePath: './assets/clashking/icons/app_icon_black_white.png',
+    enabled: false,
+  },
+  {
+    iconName: 'AppIconDarkLogo',
+    aliasName: '.MainActivityDarkLogo',
+    resourceName: 'app_icon_dark_logo',
+    sourcePath: './assets/clashking/icons/app_icon_dark_logo.png',
+    enabled: false,
+  },
+];
 
 function loadContract(projectRoot, contractPath) {
   const resolved = requirePath(
@@ -325,9 +358,60 @@ function withClashKingAndroidLinks(config, contract) {
       ...common,
       data: [androidData(contract.urlScheme, contract.oauthHost, contract.oauthPath)],
     });
-    mainActivity['intent-filter'] = filters;
+    mainActivity['intent-filter'] = filters.filter(
+      (filter) =>
+        !(filter.action || []).some(
+          (action) => action.$?.['android:name'] === 'android.intent.action.MAIN',
+        ),
+    );
+    configureAndroidLauncherAliases(application, mainActivity.$?.['android:name']);
     return mod;
   });
+}
+
+function configureAndroidLauncherAliases(application, targetActivity) {
+  if (!targetActivity) throw new Error('Generated Android launcher activity has no name.');
+  const managedNames = new Set(ANDROID_LAUNCHER_ALIASES.map((option) => option.aliasName));
+  const unmanagedAliases = (application['activity-alias'] || []).filter(
+    (alias) => !managedNames.has(alias.$?.['android:name']),
+  );
+  application['activity-alias'] = [
+    ...unmanagedAliases,
+    ...ANDROID_LAUNCHER_ALIASES.map((option) => ({
+      $: {
+        'android:name': option.aliasName,
+        'android:targetActivity': targetActivity,
+        'android:enabled': String(option.enabled),
+        'android:exported': 'true',
+        'android:icon': `@drawable/${option.resourceName}`,
+        'android:roundIcon': `@drawable/${option.resourceName}`,
+      },
+      'intent-filter': [
+        {
+          action: [{ $: { 'android:name': 'android.intent.action.MAIN' } }],
+          category: [{ $: { 'android:name': 'android.intent.category.LAUNCHER' } }],
+        },
+      ],
+    })),
+  ];
+  return application;
+}
+
+function withAndroidAlternateIconAssets(config, projectRoot) {
+  return withDangerousMod(config, [
+    'android',
+    async (mod) => {
+      const destination = path.join(
+        mod.modRequest.platformProjectRoot,
+        'app/src/main/res/drawable-nodpi',
+      );
+      for (const option of ANDROID_LAUNCHER_ALIASES) {
+        const source = requirePath(projectRoot, option.sourcePath, option.resourceName);
+        copyFileIfChanged(source, path.join(destination, `${option.resourceName}.png`));
+      }
+      return mod;
+    },
+  ]);
 }
 
 function removeUnscopedAndroidScheme(filters, scheme) {
@@ -518,6 +602,7 @@ function withAndroidWidgetComponents(config, contract) {
     for (const activity of [
       contract.android.widgetConfigurationActivity,
       contract.android.warWidgetConfigurationActivity,
+      contract.android.legendsWidgetConfigurationActivity,
     ]) {
       application.activity = upsertAndroidComponent(application.activity, {
         $: {
@@ -719,6 +804,23 @@ function withIosWidgetTarget(config, contract) {
       }
       configureWidgetTarget(project, target, contract, version);
       configureWidgetEmbedding(project, targetUuid, target);
+      project.addResourceFile(
+        'WarWidget/LegendsWidget.xcstrings',
+        { target: targetUuid, lastKnownFileType: 'text.json.xcstrings' },
+        project.getFirstProject().firstProject.mainGroup,
+      );
+      project.addResourceFile(
+        'WarWidget/TownHalls.xcassets',
+        { target: targetUuid, lastKnownFileType: 'folder.assetcatalog' },
+        project.getFirstProject().firstProject.mainGroup,
+      );
+      for (const icon of ['Icon_HV_Sword.png', 'Icon_HV_Shield_Arrow.png']) {
+        project.addResourceFile(
+          `WarWidget/${icon}`,
+          { target: targetUuid, lastKnownFileType: 'image.png' },
+          project.getFirstProject().firstProject.mainGroup,
+        );
+      }
       return mod;
     }
 
@@ -736,7 +838,7 @@ function withIosWidgetTarget(config, contract) {
       'app_extension',
     );
     project.addBuildPhase(
-      ['WarWidget/PrivacyInfo.xcprivacy'],
+      ['WarWidget/PrivacyInfo.xcprivacy', 'WarWidget/LegendsWidget.xcstrings', 'WarWidget/TownHalls.xcassets', 'WarWidget/Icon_HV_Sword.png', 'WarWidget/Icon_HV_Shield_Arrow.png'],
       'PBXResourcesBuildPhase',
       'Resources',
       target.uuid,
@@ -751,9 +853,21 @@ function withIosWidgetTarget(config, contract) {
     );
     attachFileReferencesToGroup(
       project,
-      ['WarWidget/WarWidget.swift', 'WarWidget/PrivacyInfo.xcprivacy'],
+      [
+        'WarWidget/WarWidget.swift',
+        'WarWidget/PrivacyInfo.xcprivacy',
+        'WarWidget/LegendsWidget.xcstrings',
+        'WarWidget/TownHalls.xcassets',
+        'WarWidget/Icon_HV_Sword.png',
+        'WarWidget/Icon_HV_Shield_Arrow.png',
+      ],
       project.getFirstProject().firstProject.mainGroup,
     );
+    for (const [key, file] of Object.entries(project.pbxFileReferenceSection())) {
+      if (!key.endsWith('_comment') && unquote(file.path) === 'WarWidget/LegendsWidget.xcstrings') {
+        file.lastKnownFileType = 'text.json.xcstrings';
+      }
+    }
     configureWidgetTarget(project, target.pbxNativeTarget, contract, version);
     configureWidgetEmbedding(project, target.uuid, target.pbxNativeTarget);
     return mod;
@@ -915,6 +1029,25 @@ function withClashKingNative(config, options = {}) {
 
   config = assertAndApplyIdentity(config, contract);
   config = configureFirebaseFiles(config, projectRoot, contract);
+  config = withAppDelegate(config, (mod) => {
+    // SDK 58 moved window startup into SceneDelegate. RNFirebase's older
+    // insertion matcher misses that template, but Firebase still must be
+    // configured once before modules request its default app.
+    if (mod.modResults.language === 'swift' && !mod.modResults.contents.includes('FirebaseApp.configure()')) {
+      const marker = '    let delegate = ReactNativeDelegate()';
+      if (!mod.modResults.contents.includes(marker)) {
+        throw new Error('Cannot locate SDK 58 Firebase initialization point.');
+      }
+      mod.modResults.contents = mod.modResults.contents.replace(
+        marker,
+        `    if FirebaseApp.app() == nil { FirebaseApp.configure() }\n${marker}`,
+      );
+      if (!mod.modResults.contents.includes('import FirebaseCore')) {
+        mod.modResults.contents = `import FirebaseCore\n${mod.modResults.contents}`;
+      }
+    }
+    return mod;
+  });
   config = withClashKingInfoPlist(config, contract);
   config = withClashKingEntitlements(config, contract);
   config = withClashKingAndroidLinks(config, contract);
@@ -922,6 +1055,7 @@ function withClashKingNative(config, options = {}) {
   config = withGeneratedAndroidBuildTypePermissions(config);
   config = withAndroidNotificationMetadata(config, contract);
   config = withAndroidSplashResources(config, projectRoot, contract);
+  config = withAndroidAlternateIconAssets(config, projectRoot);
   config = withRNFirebaseCocoaPodsMode(config);
   config = withGeneratedIosPlatformPlist(config, contract);
   if (options.stageAlternateIcons !== false) {
@@ -948,6 +1082,7 @@ module.exports.configureAndroidPermissions = configureAndroidPermissions;
 module.exports.configureGeneratedAndroidBuildTypePermissions =
   configureGeneratedAndroidBuildTypePermissions;
 module.exports.configureIosPlatformPlist = configureIosPlatformPlist;
+module.exports.configureAndroidLauncherAliases = configureAndroidLauncherAliases;
 module.exports.removeUnscopedAndroidScheme = removeUnscopedAndroidScheme;
 module.exports.android12SplashStyleXml = android12SplashStyleXml;
 module.exports.copyAndroidSplashResources = copyAndroidSplashResources;

@@ -12,6 +12,7 @@ export interface PagerViewOnPageSelectedEventData {
 }
 
 export type PagerViewOnPageSelectedEvent = NativeSyntheticEvent<PagerViewOnPageSelectedEventData>;
+export type PagerViewOnPageScrollEvent = NativeSyntheticEvent<{ position: number; offset: number }>;
 
 export type PagerViewProps = PropsWithChildren<{
   readonly initialPage?: number;
@@ -19,6 +20,7 @@ export type PagerViewProps = PropsWithChildren<{
   readonly layoutDirection?: 'ltr' | 'rtl';
   readonly offscreenPageLimit?: number;
   readonly onPageSelected?: (event: PagerViewOnPageSelectedEvent) => void;
+  readonly onPageScroll?: (event: PagerViewOnPageScrollEvent) => void;
   readonly orientation?: 'horizontal' | 'vertical';
   readonly overdrag?: boolean;
   readonly overScrollMode?: 'auto' | 'always' | 'never';

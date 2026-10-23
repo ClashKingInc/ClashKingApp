@@ -1,10 +1,10 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useState } from 'react';
 import {
   Image,
   Modal,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {
   AtSign,
+  RotateCcw,
   BellRing,
   FileText,
   Gamepad2,
@@ -21,8 +22,6 @@ import {
   LogOut,
   MessageSquareText,
   Moon,
-  Plus,
-  PanelsTopLeft,
   SunMoon,
   Shield,
   Sun,
@@ -31,11 +30,10 @@ import {
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useI18n } from '../../../i18n';
+import { useI18n, toIntlLocale } from '../../../i18n';
 import {
   CKText,
   MobileWebImage,
-  Skeleton,
   Surface,
   ckRadius,
   ckSpacing,
@@ -44,13 +42,13 @@ import {
 } from '../../../ui';
 import type { SettingsPresentationActions, SettingsThemeMode, SettingsUser } from './contracts';
 import { ChoiceDialog, SettingsPage, SettingsSection, SettingsTile } from './settings-components';
+import { tutorialCopy } from '../../tutorials/tutorial-copy';
 
 export type SettingsAppIconChoice = {
   iconName: string;
   label: string;
   previewSource: ImageSourcePropType;
 };
-export type WarWidgetClanChoice = { tag: string; name: string; badgeUrl?: string | null };
 export type SettingsLocaleChoice = { locale: string; label: string; flagUrl: string };
 
 export function isDesktopSettings(platform: string, width: number): boolean {
@@ -63,14 +61,12 @@ export function SettingsScreen({
   localeChoices,
   themeMode,
   notificationsEnabled,
-  warWidgetsEnabled,
   alternateIconsSupported,
   selectedAppIcon = '',
   appIcons = [],
-  warWidgetClans = [],
+  imageCacheBytes = 0,
   versionLabel,
   actions,
-  onPrepareWarWidget,
   onBack,
   viewportWidth,
   platform = Platform.OS,
@@ -80,14 +76,12 @@ export function SettingsScreen({
   localeChoices: readonly SettingsLocaleChoice[];
   themeMode: SettingsThemeMode;
   notificationsEnabled: boolean;
-  warWidgetsEnabled: boolean;
   alternateIconsSupported: boolean;
   selectedAppIcon?: string;
   appIcons?: readonly SettingsAppIconChoice[];
-  warWidgetClans?: readonly WarWidgetClanChoice[];
+  imageCacheBytes?: number;
   versionLabel: string;
   actions: SettingsPresentationActions;
-  onPrepareWarWidget?: (clanTag: string, requestPin: boolean) => Promise<void>;
   onBack?: () => void;
   viewportWidth?: number;
   platform?: string;
@@ -96,7 +90,7 @@ export function SettingsScreen({
   const theme = useCKTheme();
   const measured = useWindowDimensions().width;
   const desktop = isDesktopSettings(platform, viewportWidth ?? measured);
-  const [dialog, setDialog] = useState<'language' | 'theme' | 'icon' | 'logout' | 'widget'>();
+  const [dialog, setDialog] = useState<'language' | 'theme' | 'icon' | 'logout'>();
   const [busy, setBusy] = useState(false);
   const [snackbar, setSnackbar] = useState<string>();
   const iconColor = theme.onSurface;
@@ -145,6 +139,8 @@ export function SettingsScreen({
           trailing={themeLabel}
           onPress={() => setDialog('theme')}
         />
+        {actions.resetTutorials ? <SettingsTile icon={<RotateCcw color={iconColor} />} title={tutorialCopy.tutorialResetTitle}
+          onPress={() => { void actions.resetTutorials!().then(() => setSnackbar(tutorialCopy.tutorialResetDone)); }} /> : null}
         {alternateIconsSupported ? (
           <SettingsTile
             icon={<ImageIcon color={iconColor} />}
@@ -159,24 +155,12 @@ export function SettingsScreen({
             onPress={() => setDialog('icon')}
           />
         ) : null}
-        {notificationsEnabled ? (
+        {platform !== 'web' && notificationsEnabled ? (
           <SettingsTile
             icon={<BellRing color={iconColor} />}
             title={t('settingsNotificationsTitle')}
             subtitle={t('settingsNotificationsSubtitle')}
             onPress={() => actions.open('notifications')}
-          />
-        ) : null}
-        {warWidgetsEnabled ? (
-          <SettingsTile
-            icon={<PanelsTopLeft color={iconColor} />}
-            title={t('settingsAddWarWidget')}
-            subtitle={
-              warWidgetClans.length === 0
-                ? t('settingsWarWidgetLinkClanFirst')
-                : t('settingsWarWidgetClanCount', { count: warWidgetClans.length })
-            }
-            onPress={() => setDialog('widget')}
           />
         ) : null}
       </SettingsSection>
@@ -225,6 +209,21 @@ export function SettingsScreen({
               : undefined
           }
         />
+        {actions.clearImageCache ? (
+          <SettingsTile
+            icon={<ImageIcon color={iconColor} />}
+            title={t('settingsClearImageCache')}
+            trailing={`${new Intl.NumberFormat(toIntlLocale(currentLocale), { maximumFractionDigits: 1 }).format(imageCacheBytes / (1024 * 1024))} MB`}
+            disabled={busy}
+            onPress={() => {
+              setBusy(true);
+              void actions.clearImageCache!()
+                .then(() => setSnackbar(t('settingsImageCacheCleared')))
+                .catch(() => setSnackbar(t('settingsImageCacheClearFailed')))
+                .finally(() => setBusy(false));
+            }}
+          />
+        ) : null}
       </SettingsSection>
       <SettingsSection title={t('settingsAccount')}>
         <SettingsTile
@@ -343,30 +342,6 @@ export function SettingsScreen({
         cancel={t('generalCancel')}
         confirm={t('generalOk')}
       />
-      <WarWidgetDialog
-        visible={dialog === 'widget'}
-        title={t('settingsAddWarWidget')}
-        subtitle={
-          platform === 'ios'
-            ? t('settingsWarWidgetIosInstructions')
-            : t('settingsWarWidgetAndroidInstructions')
-        }
-        emptyLabel={t('settingsWarWidgetEmpty')}
-        footer={platform === 'ios' ? t('settingsWarWidgetIosFooter') : undefined}
-        choices={warWidgetClans}
-        onPrepare={async (clan) => {
-          await onPrepareWarWidget?.(clan.tag, platform === 'android');
-          setSnackbar(
-            platform === 'ios'
-              ? t('settingsWarWidgetIosReady', { clanName: clan.name })
-              : t('settingsWarWidgetAndroidReady', { clanName: clan.name }),
-          );
-        }}
-        onError={(error) =>
-          setSnackbar(t('settingsWarWidgetPrepareFailed', { error: String(error) }))
-        }
-        onClose={() => setDialog(undefined)}
-      />
       {snackbar ? (
         <Pressable
           accessibilityLiveRegion="polite"
@@ -414,7 +389,7 @@ function AppIconDialog({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
       <SafeAreaView style={styles.sheetOverlay}>
         <Pressable
           accessibilityElementsHidden
@@ -456,134 +431,6 @@ function AppIconDialog({
   );
 }
 
-function WarWidgetDialog({
-  visible,
-  title,
-  subtitle,
-  emptyLabel,
-  footer,
-  choices,
-  onPrepare,
-  onError,
-  onClose,
-}: {
-  visible: boolean;
-  title: string;
-  subtitle: string;
-  emptyLabel: string;
-  footer?: string;
-  choices: readonly WarWidgetClanChoice[];
-  onPrepare: (clan: WarWidgetClanChoice) => Promise<void>;
-  onError: (error: unknown) => void;
-  onClose: () => void;
-}) {
-  const theme = useCKTheme();
-  const [pendingTag, setPendingTag] = useState<string>();
-  const prepare = async (clan: WarWidgetClanChoice) => {
-    setPendingTag(clan.tag);
-    try {
-      await onPrepare(clan);
-      onClose();
-    } catch (error) {
-      onError(error);
-    } finally {
-      setPendingTag(undefined);
-    }
-  };
-  return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
-      <SafeAreaView style={styles.sheetOverlay}>
-        <Pressable
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-          onPress={onClose}
-          style={StyleSheet.absoluteFill}
-        />
-        <Surface radius={ckRadius.card} style={styles.bottomSheet} accessibilityViewIsModal>
-          <View style={[styles.dragHandle, { backgroundColor: theme.onSurfaceVariant }]} />
-          <View style={styles.widgetSheetBody}>
-            <CKText role="titleLarge" style={styles.widgetTitle}>
-              {title}
-            </CKText>
-            <CKText muted>{subtitle}</CKText>
-            {choices.length === 0 ? (
-              <CKText muted style={styles.widgetEmpty}>
-                {emptyLabel}
-              </CKText>
-            ) : (
-              <ScrollView style={styles.widgetList}>
-                {choices.map((clan, index) => {
-                  const pending = pendingTag === clan.tag;
-                  return (
-                    <View key={clan.tag}>
-                      <Pressable
-                        accessibilityRole="button"
-                        disabled={pending}
-                        onPress={() => void prepare(clan)}
-                        style={({ pressed }) => [styles.widgetRow, pressed && styles.pressed]}
-                      >
-                        {clan.badgeUrl ? (
-                          <MobileWebImage
-                            imageUrl={clan.badgeUrl}
-                            contentFit="contain"
-                            errorFallback={
-                              <View
-                                style={[
-                                  styles.widgetBadgeFallback,
-                                  { backgroundColor: colorWithAlpha(theme.primary, 0.12) },
-                                ]}
-                              >
-                                <CKText style={{ color: theme.primary }}>
-                                  {clan.name[0] ?? '?'}
-                                </CKText>
-                              </View>
-                            }
-                            style={styles.widgetBadge}
-                          />
-                        ) : (
-                          <View
-                            style={[
-                              styles.widgetBadgeFallback,
-                              { backgroundColor: colorWithAlpha(theme.primary, 0.12) },
-                            ]}
-                          >
-                            <CKText style={{ color: theme.primary }}>{clan.name[0] ?? '?'}</CKText>
-                          </View>
-                        )}
-                        <View style={styles.widgetCopy}>
-                          <CKText numberOfLines={1}>{clan.name}</CKText>
-                          <CKText muted role="bodySmall">
-                            {clan.tag}
-                          </CKText>
-                        </View>
-                        {pending ? (
-                          <Skeleton width={18} height={6} />
-                        ) : (
-                          <Plus color={theme.onSurface} />
-                        )}
-                      </Pressable>
-                      {index < choices.length - 1 ? (
-                        <View
-                          style={[styles.widgetDivider, { backgroundColor: theme.outlineVariant }]}
-                        />
-                      ) : null}
-                    </View>
-                  );
-                })}
-              </ScrollView>
-            )}
-            {footer ? (
-              <CKText muted role="bodySmall" style={styles.widgetFooter}>
-                {footer}
-              </CKText>
-            ) : null}
-          </View>
-        </Surface>
-      </SafeAreaView>
-    </Modal>
-  );
-}
-
 function ConfirmLogout({
   visible,
   title,
@@ -603,7 +450,7 @@ function ConfirmLogout({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
+    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
       <View style={styles.modal}>
         <Surface style={styles.confirm}>
           <CKText role="titleLarge">{title}</CKText>
@@ -670,28 +517,6 @@ const styles = StyleSheet.create({
   appIconPreview: { width: 36, height: 36, borderRadius: 9 },
   appIconLabel: { flex: 1, fontWeight: '500', fontSize: 17 },
   appIconSelected: { fontSize: 16 },
-  widgetSheetBody: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 20 },
-  widgetTitle: { fontWeight: '700', marginBottom: 6 },
-  widgetEmpty: { paddingVertical: 20 },
-  widgetList: { marginTop: 14, flexShrink: 1 },
-  widgetRow: {
-    minHeight: 58,
-    paddingHorizontal: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  widgetBadge: { width: 42, height: 42, resizeMode: 'contain' },
-  widgetBadgeFallback: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  widgetCopy: { flex: 1 },
-  widgetDivider: { height: StyleSheet.hairlineWidth, opacity: 0.32 },
-  widgetFooter: { marginTop: 12 },
   snackbar: {
     position: 'absolute',
     left: 16,

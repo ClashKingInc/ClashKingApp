@@ -16,6 +16,8 @@
     <string>__APP_PROFILE_NAME__</string>
     <key>com.clashking.apps.warwidget</key>
     <string>__WIDGET_PROFILE_NAME__</string>
+    <key>com.clashking.apps.notificationservice</key>
+    <string>__NOTIFICATION_PROFILE_NAME__</string>
   </dict>
   <key>stripSwiftSymbols</key>
   <true/>

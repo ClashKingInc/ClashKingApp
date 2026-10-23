@@ -1,9 +1,17 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search } from 'lucide-react-native';
+import { Menu, Search } from 'lucide-react-native';
+import { TutorialTarget } from '../features/tutorials/tutorial-ui';
+import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../ui/header';
 
-import { CKText, GlassSurface, colorWithAlpha, useCKTheme, useCKThemeMode } from '../ui';
+import {
+  CKText,
+  GlassControlSurface,
+  GlassSurface,
+  colorWithAlpha,
+  useCKTheme,
+  useCKThemeMode,
+} from '../ui';
 
 export function MobileHeader({
   avatar,
@@ -23,40 +31,51 @@ export function MobileHeader({
   const theme = useCKTheme();
   const mode = useCKThemeMode();
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
+    <GlobalSearchHeaderFrame style={styles.safeArea}>
       <View style={[styles.header, isRtl && styles.rowRtl]}>
-        <GlassSurface
-          cornerRadius={23}
-          interactive
-          style={[
-            styles.profileGlass,
-            {
-              borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.16 : 0.32),
-              shadowOpacity: mode === 'dark' ? 0.14 : 0.1,
-            },
-          ]}
-        >
-          <Pressable
-            accessibilityLabel={profileLabel}
-            accessibilityRole="button"
-            onPress={onOpenProfile}
-            style={({ pressed }) => [styles.profileButton, pressed && styles.pressed]}
-          >
-            <View style={styles.avatar}>{avatar}</View>
-          </Pressable>
-        </GlassSurface>
-        {onSearch && (
+        <TutorialTarget id="sidebar-open">
           <GlassSurface
-            cornerRadius={24}
+            cornerRadius={23}
             interactive
             style={[
-              styles.searchGlass,
+              styles.profileGlass,
               {
-                borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.14 : 0.3),
-                shadowOpacity: mode === 'dark' ? 0.12 : 0.08,
+                borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.16 : 0.32),
+                shadowOpacity: mode === 'dark' ? 0.14 : 0.1,
               },
             ]}
           >
+            <Pressable
+              accessibilityLabel={profileLabel}
+              accessibilityRole="button"
+              onPress={onOpenProfile}
+              style={({ pressed }) => [styles.profileButton, pressed && styles.pressed]}
+            >
+              <View style={styles.avatar}>{avatar}</View>
+              <View
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+                pointerEvents="none"
+                style={[
+                  styles.menuBadge,
+                  isRtl ? styles.menuBadgeRtl : styles.menuBadgeLtr,
+                  {
+                    backgroundColor: theme.surface,
+                    borderColor: colorWithAlpha(
+                      theme.outlineVariant,
+                      mode === 'dark' ? 0.24 : 0.36,
+                    ),
+                  },
+                ]}
+                testID="profile-menu-indicator"
+              >
+                <Menu color={theme.onSurfaceVariant} size={11} strokeWidth={2.4} />
+              </View>
+            </Pressable>
+          </GlassSurface>
+        </TutorialTarget>
+        {onSearch && (
+          <GlassControlSurface style={styles.searchGlass} testID="mobile-global-search-glass">
             <Pressable
               accessibilityLabel={searchHint}
               accessibilityRole="search"
@@ -72,24 +91,24 @@ export function MobileHeader({
                 {searchHint}
               </CKText>
             </Pressable>
-          </GlassSurface>
+          </GlassControlSurface>
         )}
       </View>
-    </SafeAreaView>
+    </GlobalSearchHeaderFrame>
   );
 }
 
 const styles = StyleSheet.create({
   safeArea: { backgroundColor: 'transparent' },
   header: {
-    height: 64,
-    paddingHorizontal: 16,
+    height: globalSearchHeaderLayout.height,
+    paddingHorizontal: globalSearchHeaderLayout.paddingHorizontal,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: globalSearchHeaderLayout.gap,
   },
-  profileGlass: { width: 46, height: 46 },
-  profileButton: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  profileGlass: { width: globalSearchHeaderLayout.leadingWidth, height: 46 },
+  profileButton: { flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' },
   avatar: {
     width: 36,
     height: 36,
@@ -98,12 +117,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  menuBadge: {
+    position: 'absolute',
+    bottom: 2,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menuBadgeLtr: { right: 1 },
+  menuBadgeRtl: { left: 1 },
   searchGlass: {
     flex: 1,
-    height: 48,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 12,
+    height: globalSearchHeaderLayout.fieldHeight,
   },
   searchButton: {
     flex: 1,

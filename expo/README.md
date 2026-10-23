@@ -26,8 +26,12 @@ EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED=true
 ```
 
 Local API development can instead set `EXPO_PUBLIC_CK_API_ENV=local` and the
-corresponding URL overrides. TestFlight, Play Store, and deployed web builds
-always use the production API.
+corresponding URL overrides. Store releases select all API, proxy, push, and OTA
+endpoints together: alpha uses `https://local-api.clashk.ing`, beta uses
+`https://dev-api.clashk.ing`, and production uses `https://api.clashk.ing`.
+Store builds embed JavaScript; `local-app.clashk.ing` and `dev-app.clashk.ing`
+are Expo development server URLs. See the root README for tagged alpha releases
+and OTA setup.
 
 ## Verification
 
@@ -35,8 +39,7 @@ always use the production API.
 npm run l10n:check
 npm run lint
 npm run typecheck
-npm test
-npm run test:native-plugin
+npm run release:check
 npm run web:export
 ```
 

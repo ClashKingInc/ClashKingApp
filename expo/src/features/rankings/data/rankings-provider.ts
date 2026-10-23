@@ -14,6 +14,7 @@ import {
   type RankingPeriodValue,
 } from '../models';
 import { RankingsRequestException, type RankingsServiceContract } from './rankings-service';
+import { isRankingSnapshotDate, rankingSnapshotOnOrBefore } from '../models/ranking-dates';
 
 export class RankingsProvider {
   readonly leagueOptions: readonly RankingLeagueOption[];
@@ -34,6 +35,7 @@ export class RankingsProvider {
 
   private requestGeneration = 0;
   private readonly listeners = new Set<() => void>();
+  private readonly clock: () => Date;
 
   constructor(
     private readonly service: RankingsServiceContract,
@@ -44,7 +46,8 @@ export class RankingsProvider {
   ) {
     this.leagueOptions = options.leagueOptions ?? rankingLeagueOptionsFromGameData();
     this.selectedLeague = this.leagueOptions[0] ?? RankingLeagueOption.legendTwo;
-    const now = (options.clock ?? (() => new Date()))();
+    this.clock = options.clock ?? (() => new Date());
+    const now = this.clock();
     this.historyDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
   }
 
@@ -54,6 +57,16 @@ export class RankingsProvider {
 
   get boards(): readonly RankingBoardValue[] {
     return rankingBoards.filter((board) => board.audience === this.audience);
+  }
+
+  get today(): Date {
+    const now = this.clock();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+
+  get earliestHistoryDate(): Date {
+    const today = this.today;
+    return new Date(today.getFullYear() - 3, today.getMonth(), today.getDate());
   }
 
   subscribe(listener: () => void): () => void {
@@ -66,10 +79,7 @@ export class RankingsProvider {
     this.listeners.clear();
   }
 
-  async initialize(): Promise<void> {
-    // Worldwide is the initial Flutter-compatible selection, so its leaderboard can load
-    // immediately instead of waiting on the much larger location catalogue request.
-    const initialRankings = this.reload();
+  async initialize(loadRankings = true): Promise<void> {
     this.isLoadingLocations = true;
     this.locationError = null;
     this.notifyListeners();
@@ -80,7 +90,9 @@ export class RankingsProvider {
       );
       if (this.locations.length === 0) this.locations = [RankingLocation.worldwide()];
       this.location =
-        this.locations.find((item) => item.isWorldwide) ??
+        (this.board.supportsWorldwide
+          ? this.locations.find((item) => item.isWorldwide)
+          : this.locations.find((item) => !item.isWorldwide)) ??
         this.locations[0] ??
         RankingLocation.worldwide();
     } catch (error) {
@@ -89,11 +101,14 @@ export class RankingsProvider {
       this.isLoadingLocations = false;
       this.notifyListeners();
     }
-    await initialRankings;
+    if (loadRankings) await this.reload();
   }
 
   async reload(): Promise<void> {
     const selectedBoard = this.board;
+    if (this.period === RankingPeriod.history) {
+      this.historyDate = rankingSnapshotOnOrBefore(selectedBoard, this.historyDate);
+    }
     if (
       selectedBoard.supportsLocation &&
       !selectedBoard.supportsWorldwide &&
@@ -161,6 +176,19 @@ export class RankingsProvider {
     await this.reload();
   }
 
+  async openBoard(value: RankingBoardValue, loadRankings = true): Promise<void> {
+    if (this.board === value) {
+      if (loadRankings && this.result === null) await this.reload();
+      return;
+    }
+    this.audience = value.audience;
+    if (value.audience === RankingAudience.players) this.playerBoard = value;
+    else this.clanBoard = value;
+    this.period = RankingPeriod.current;
+    this.notifyListeners();
+    if (loadRankings) await this.reload();
+  }
+
   async selectLocation(value: RankingLocation): Promise<void> {
     if (this.location.equals(value) || (value.isWorldwide && !this.board.supportsWorldwide)) return;
     this.location = value;
@@ -181,6 +209,26 @@ export class RankingsProvider {
     const normalized = new Date(value.getFullYear(), value.getMonth(), value.getDate());
     if (this.historyDate.getTime() === normalized.getTime()) return;
     this.historyDate = normalized;
+    this.notifyListeners();
+    await this.reload();
+  }
+
+  /** Today is live; earlier Capital snapshots are Mondays, other archives are daily. */
+  async selectDate(value: Date): Promise<void> {
+    if (!this.board.supportsHistory || Number.isNaN(value.getTime())) return;
+    const normalized = new Date(value.getFullYear(), value.getMonth(), value.getDate());
+    const today = this.today;
+    if (normalized > today || normalized < this.earliestHistoryDate) return;
+    if (normalized < today && !isRankingSnapshotDate(this.board, normalized)) return;
+    const period =
+      normalized.getTime() === today.getTime() ? RankingPeriod.current : RankingPeriod.history;
+    if (
+      this.period === period &&
+      (period === RankingPeriod.current || this.historyDate.getTime() === normalized.getTime())
+    )
+      return;
+    this.period = period;
+    if (period === RankingPeriod.history) this.historyDate = normalized;
     this.notifyListeners();
     await this.reload();
   }

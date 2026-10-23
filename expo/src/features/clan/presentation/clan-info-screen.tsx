@@ -1,14 +1,14 @@
+import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { BarChart3, List, Repeat2, Trophy, Users } from 'lucide-react-native';
+import { BarChart3, List, Repeat2, Users } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
 import { DestinationPicker, MobileWebImage, useCKTheme } from '../../../ui';
 import { retainRecentSections } from '../../../ui/retained-sections';
-import { ClanLeaderboardType } from '../models';
-import { ClanJoinLeaveTab, ClanWarLogTab, type WarTypes } from './clan-activity-tabs';
+import { ClanJoinLeaveTab, ClanWarLogTab } from './clan-activity-tabs';
 import {
   type ClanInfoPresentationActions,
   type ClanInfoPresentationModel,
@@ -22,7 +22,14 @@ import {
   ClanRecordsHistoryTab,
 } from './clan-history-tabs';
 import { ClanMembersTab } from './clan-members-tab';
-import { ClanCwlHistoryTab, ClanRankingsTab, ClanStatisticsTab } from './clan-statistics-tabs';
+import { ClanCompetitiveTab } from './clan-competitive-tab';
+import { hasCompetitiveMembers } from '../models/clan-competitive';
+import { ClanLeaderboardType, type ClanLeaderboardTypeValue } from '../models';
+import { ClanCwlHistoryTab, ClanRankingsTab } from './clan-statistics-tabs';
+import { ClanStatisticsTab } from './clan-war-stats-tab';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
+import { TutorialScrollView, TutorialTarget } from '../../tutorials/tutorial-ui';
+import { tutorials, TUTORIAL_CLAN_TAG } from '../../tutorials/tutorial-service';
 
 export function ClanInfoScreen({
   model,
@@ -36,21 +43,43 @@ export function ClanInfoScreen({
   const { t } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
-  const tabs = useMemo(() => visibleClanInfoTabs(model.featureFlags), [model.featureFlags]);
-  const initialIndex = Math.max(0, Math.min(initialTab, tabs.length - 1));
-  const [selectedIndex, setSelectedIndex] = useState(initialIndex);
+  const [historyTypes, setHistoryTypes] = useState<readonly ClanLeaderboardTypeValue[] | null>(
+    null,
+  );
+  const tabs = useMemo(
+    () =>
+      visibleClanInfoTabs(model.featureFlags).filter(
+        (tab) =>
+          (tab !== 'competitive' || hasCompetitiveMembers(model.clan.memberList)) &&
+          (tab !== 'leaderboardHistory' || (historyTypes?.length ?? 0) > 0),
+      ),
+    [model.featureFlags, model.clan.memberList, historyTypes],
+  );
+  const link = useLinkParameters();
+  const linkedIndex = tabs.findIndex((tab) => tab === link.tab);
+  const initialIndex = Math.max(
+    0,
+    Math.min(linkedIndex >= 0 ? linkedIndex : initialTab, tabs.length - 1),
+  );
+  const [selectedTab, setSelectedTab] = useState<ClanInfoTabKey>(
+    visibleClanInfoTabs(model.featureFlags).includes(link.tab as ClanInfoTabKey)
+      ? (link.tab as ClanInfoTabKey)
+      : (tabs[initialIndex] ?? 'members'),
+  );
   const [retainedTabs, setRetainedTabs] = useState<readonly ClanInfoTabKey[]>(() => [
     tabs[initialIndex] ?? 'members',
   ]);
-  const [warTypes, setWarTypes] = useState<WarTypes>({ cwl: true, random: true, friendly: true });
   const [joinLeaveLoadSignal, setJoinLeaveLoadSignal] = useState(0);
   const joinLeaveEndArmed = useRef(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   const scrollOffsets = useRef(new Map<ClanInfoTabKey, number>());
-  const activeIndex = Math.max(0, Math.min(selectedIndex, tabs.length - 1));
+  const activeIndex = Math.max(0, tabs.indexOf(selectedTab));
   const active = tabs[activeIndex] ?? 'members';
+  const [historyCache] = useState(() => new Map<string, Promise<unknown>>());
   const historyActions = useMemo<ClanInfoPresentationActions>(() => {
-    const cache = new Map<string, Promise<unknown>>();
+    // Service updates recreate actions. Keep pending tab requests across those
+    // renders so a background update cannot restart the same history fetch.
+    const cache = historyCache;
     const cached = <T,>(key: string, loader: () => Promise<T>): Promise<T> => {
       const existing = cache.get(key) as Promise<T> | undefined;
       if (existing) return existing;
@@ -63,6 +92,7 @@ export function ClanInfoScreen({
     };
     return {
       ...actions,
+      loadWarLog: (clan) => cached(`warlog:${clan.tag}`, () => actions.loadWarLog(clan)),
       loadCwlHistory: (tag) => cached(`cwl:${tag}`, () => actions.loadCwlHistory(tag)),
       loadLeaderboardSummary: (tag, type) =>
         cached(`leaderboard:${tag}:${type}`, () => actions.loadLeaderboardSummary(tag, type)),
@@ -70,14 +100,36 @@ export function ClanInfoScreen({
       loadRecords: (tag) => cached(`records:${tag}`, () => actions.loadRecords(tag)),
       loadProfileHistory: (tag) => cached(`profile:${tag}`, () => actions.loadProfileHistory(tag)),
     };
-  }, [actions]);
+  }, [actions, historyCache]);
+  useEffect(() => {
+    let active = true;
+    const types = Object.values(ClanLeaderboardType);
+    // Only fetch the tiny availability summaries here. Retain these promises so
+    // opening the tab does not fetch them again. A failed check is not no data.
+    void Promise.allSettled(
+      types.map((type) => historyActions.loadLeaderboardSummary(model.clan.tag, type)),
+    ).then((results) => {
+      if (active)
+        setHistoryTypes(
+          types.filter((_, index) => {
+            const result = results[index]!;
+            return result.status === 'rejected' || result.value.seasons.length > 0;
+          }),
+        );
+    });
+    return () => {
+      active = false;
+    };
+  }, [historyActions, model.clan.tag]);
   const destinations = tabs.map((key) => tabDestination(key, t, theme.onSurfaceVariant));
   const selectTab = (nextIndex: number) => {
     const next = tabs[nextIndex];
     if (!next) return;
-    setSelectedIndex(nextIndex);
+    setSelectedTab(next);
     setRetainedTabs((retained) => retainRecentSections(retained, next));
     joinLeaveEndArmed.current = false;
+    if (nextIndex !== activeIndex && model.clan.tag === TUTORIAL_CLAN_TAG)
+      tutorials.event('clan-page-changed');
   };
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -85,22 +137,14 @@ export function ClanInfoScreen({
     });
     return () => cancelAnimationFrame(frame);
   }, [active]);
-  useEffect(() => {
-    const tag = model.clan.tag;
-    void Promise.all([
-      historyActions.loadCwlHistory(tag),
-      historyActions.loadLeaderboardSummary(tag, ClanLeaderboardType.homeVillage),
-      historyActions.loadLegendSummary(tag),
-      historyActions.loadRecords(tag),
-      historyActions.loadProfileHistory(tag),
-    ]).catch(() => undefined);
-  }, [historyActions, model.clan.tag]);
+  // Each retained tab fetches its own data on first use. Do not compete with
+  // the visible war log by eagerly fetching every unrelated history endpoint.
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <ScrollView
+      <TutorialScrollView
         ref={scrollRef}
         testID="clan-info-scroll"
         stickyHeaderIndices={[1]}
@@ -120,13 +164,13 @@ export function ClanInfoScreen({
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
       >
         <View testID="clan-info-header-scroll-child">
-          <ClanInfoHeader model={model} actions={actions} />
+          <ClanInfoHeader model={model} actions={actions} selectedTab={active} />
         </View>
         <View
           testID="clan-destination-bar"
           style={[styles.navigation, { backgroundColor: theme.background }]}
         >
-          <View style={styles.navigationControl}>
+          <TutorialTarget id="clan-pages" style={styles.navigationControl}>
             <DestinationPicker
               accessibilityLabel={destinations[activeIndex]?.label}
               onSelect={(key) => {
@@ -137,22 +181,22 @@ export function ClanInfoScreen({
               selectedKey={active}
               showPositionHint
             />
-          </View>
+          </TutorialTarget>
         </View>
         <View testID="clan-detail-body" style={styles.tabBody}>
           {tabs.map((key) =>
-            retainedTabs.includes(key) ? (
+            key === active || retainedTabs.includes(key) ? (
               <View
                 key={key}
                 testID={`clan-retained-tab-${key}`}
                 style={key === active ? undefined : styles.hiddenTab}
               >
-                {renderTab(key, model, historyActions, warTypes, setWarTypes, joinLeaveLoadSignal)}
+                {renderTab(key, model, historyActions, joinLeaveLoadSignal, historyTypes ?? [])}
               </View>
             ) : null,
           )}
         </View>
-      </ScrollView>
+      </TutorialScrollView>
     </SafeAreaView>
   );
 }
@@ -161,37 +205,23 @@ function renderTab(
   key: ClanInfoTabKey,
   model: ClanInfoPresentationModel,
   actions: ClanInfoPresentationActions,
-  warTypes: WarTypes,
-  setWarTypes: (value: WarTypes) => void,
   joinLeaveLoadSignal: number,
+  historyTypes: readonly ClanLeaderboardTypeValue[],
 ) {
   if (key === 'members') return <ClanMembersTab model={model} actions={actions} />;
-  if (key === 'warLog')
-    return (
-      <ClanWarLogTab
-        model={model}
-        actions={actions}
-        warTypes={warTypes}
-        setWarTypes={setWarTypes}
-      />
-    );
+  if (key === 'competitive') return <ClanCompetitiveTab model={model} actions={actions} />;
+  if (key === 'warLog') return <ClanWarLogTab model={model} actions={actions} />;
   if (key === 'joinLeave')
     return (
       <ClanJoinLeaveTab model={model} actions={actions} loadMoreSignal={joinLeaveLoadSignal} />
     );
-  if (key === 'statistics')
-    return (
-      <ClanStatisticsTab
-        model={model}
-        actions={actions}
-        warTypes={warTypes}
-        setWarTypes={setWarTypes}
-      />
-    );
-  if (key === 'rankings') return <ClanRankingsTab model={model} />;
+  if (key === 'statistics') return <ClanStatisticsTab model={model} actions={actions} />;
+  if (key === 'rankings') return <ClanRankingsTab model={model} actions={actions} />;
   if (key === 'cwlHistory') return <ClanCwlHistoryTab model={model} actions={actions} />;
   if (key === 'leaderboardHistory')
-    return <ClanLeaderboardHistoryTab model={model} actions={actions} />;
+    return (
+      <ClanLeaderboardHistoryTab model={model} actions={actions} availableTypes={historyTypes} />
+    );
   if (key === 'legendHistory') return <ClanLegendHistoryTab model={model} actions={actions} />;
   return <ClanRecordsHistoryTab model={model} actions={actions} />;
 }
@@ -203,6 +233,12 @@ function tabDestination(
 ): { key: ClanInfoTabKey; label: string; icon: ReactNode } {
   if (key === 'members')
     return { key, label: t('clanMembers'), icon: <Users size={20} color={iconColor} /> };
+  if (key === 'competitive')
+    return {
+      key,
+      label: t('clanLegendsRanked'),
+      icon: <MobileWebImage imageUrl={ImageAssets.legendLeagueOne} style={styles.tabImage} />,
+    };
   if (key === 'warLog')
     return {
       key,
@@ -220,7 +256,11 @@ function tabDestination(
   if (key === 'rankings')
     return { key, label: t('clanRankingsTab'), icon: <List size={20} color={iconColor} /> };
   if (key === 'cwlHistory')
-    return { key, label: t('cwlHistoryTitle'), icon: <Trophy size={20} color={iconColor} /> };
+    return {
+      key,
+      label: t('cwlHistoryTitle'),
+      icon: <MobileWebImage imageUrl={ImageAssets.cwlSwordsNoBorder} style={styles.tabImage} />,
+    };
   if (key === 'leaderboardHistory')
     return {
       key,
@@ -235,7 +275,7 @@ function tabDestination(
     };
   return {
     key,
-    label: `${t('clanRecordsTab')} & ${t('generalHistory')}`,
+    label: t('clanRecordsChangesTab'),
     icon: <MobileWebImage imageUrl={ImageAssets.bestTrophies} style={styles.tabImage} />,
   };
 }

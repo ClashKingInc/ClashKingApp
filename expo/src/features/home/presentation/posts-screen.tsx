@@ -74,9 +74,24 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
         setHasMore(true);
       }
       try {
-        const page = await service.getPublishedPosts(20, offset);
+        let cursor = offset;
+        let page = await service.getPublishedPosts(20, cursor);
+        // The public feed contains stories too. Advance past story-only pages so an
+        // archive visitor sees articles without having to repeatedly tap Load more.
+        for (
+          let skipped = 0;
+          skipped < 10 &&
+          page.items.every((item) => item.isStory) &&
+          page.hasMore &&
+          page.nextOffset > cursor;
+          skipped += 1
+        ) {
+          cursor = page.nextOffset;
+          page = await service.getPublishedPosts(20, cursor);
+        }
         if (requestGeneration !== generation.current) return;
-        setPosts((current) => (reset ? page.items : [...current, ...page.items]));
+        const articles = page.items.filter((item) => !item.isStory);
+        setPosts((current) => (reset ? articles : [...current, ...articles]));
         setNextOffset(page.nextOffset);
         setHasMore(page.hasMore);
       } catch (nextError) {
@@ -115,14 +130,14 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
         onAction={() => void load(true)}
         title={t('postsLoadFailed')}
       />
-    ) : posts.length === 0 ? (
+    ) : posts.length === 0 && !hasMore ? (
       <EmptyState
         icon={<FileText color={theme.onSurfaceVariant} size={28} />}
         title={t('postsEmpty')}
       />
     ) : (
       <>
-        {isDesktopWeb ? (
+        {posts.length && isDesktopWeb ? (
           <ResponsiveGrid gap={16} maxColumns={2} minItemWidth={360}>
             {posts.map((post) => (
               <PostArchiveCard
@@ -133,7 +148,7 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
               />
             ))}
           </ResponsiveGrid>
-        ) : (
+        ) : posts.length ? (
           <View style={styles.list}>
             {posts.map((post) => (
               <PostArchiveCard
@@ -144,7 +159,7 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
               />
             ))}
           </View>
-        )}
+        ) : null}
         {error ? (
           <EmptyState
             actionLabel={t('generalRetry')}
@@ -205,9 +220,6 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
           <RefreshControl refreshing={loading && posts.length > 0} onRefresh={() => load(true)} />
         }
       >
-        <CKText muted role="bodyMedium">
-          {t('postsDescription')}
-        </CKText>
         <View style={styles.archive}>{contents}</View>
       </ScrollView>
       {presentation}
@@ -230,7 +242,7 @@ function PostArchiveCard({
   const dateLabel = post.publishedAt
     ? new Intl.DateTimeFormat(intlLocale, { dateStyle: 'medium' }).format(post.publishedAt)
     : null;
-  const showLabels = post.isCurrent() || post.isStory || post.pinnedOnHome;
+  const showLabels = post.isCurrent() || post.pinnedOnHome;
 
   return (
     <PressableSurface
@@ -280,7 +292,6 @@ function PostArchiveCard({
             {post.isCurrent() ? (
               <PostDotLabel color={theme.primary} label={t('postsCurrent')} />
             ) : null}
-            {post.isStory ? <PostDotLabel color={theme.tertiary} label={t('postsStory')} /> : null}
             {post.pinnedOnHome ? (
               <PostDotLabel color={theme.secondary} label={t('postsPinned')} />
             ) : null}
@@ -351,7 +362,7 @@ const styles = StyleSheet.create({
   },
   back: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   content: { paddingTop: ckSpacing.lg },
-  archive: { marginTop: ckSpacing.lg, gap: ckSpacing.lg },
+  archive: { gap: ckSpacing.lg },
   list: { gap: 14 },
   card: { width: '100%' },
   cardImage: { width: '100%', height: 188 },

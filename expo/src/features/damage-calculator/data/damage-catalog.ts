@@ -6,10 +6,28 @@ import {
   DamageSourceKind,
 } from '../domain/damage-calculator-engine';
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { gameAbilitiesFor } from '../../../core/game-data/game-data-state';
 
 const unavailableFromTownHall: Readonly<Record<string, number>> = {
   'Eagle Artillery': 17,
 };
+
+// Current published building JSON omits HousingSpaceAlt. These thresholds come
+// from official buildings.csv, client 18.600.6, fingerprint
+// 7839fe492f55e0c5cb096b788649cd82f2a99f01. Sum both factories and the Clan
+// Castle: donation capacity is TH-dependent (including four spaces at TH18).
+const spellCapacityThresholds: readonly (readonly [number, number])[] = [
+  [1, 0],
+  [5, 2],
+  [6, 4],
+  [7, 6],
+  [8, 8],
+  [9, 10],
+  [10, 12],
+  [11, 13],
+  [14, 14],
+  [18, 15],
+];
 
 export class DamageCatalog {
   readonly maxTownHall: number;
@@ -40,11 +58,16 @@ export class DamageCatalog {
         DamageSourceKind.Lightning,
       ),
       ...earthquakeSource(bundle.spells, bundle.buildings),
-      ...equipmentSource(bundle.equipment, 'Giant Arrow', DamageSourceKind.GiantArrow),
-      ...equipmentSource(bundle.equipment, 'Fireball', DamageSourceKind.Fireball),
+      ...equipmentSource(bundle, 'Giant Arrow', DamageSourceKind.GiantArrow),
+      ...equipmentSource(bundle, 'Fireball', DamageSourceKind.Fireball),
+      ...equipmentSource(bundle, 'Spiky Ball', DamageSourceKind.SpikyBall),
+      ...equipmentSource(bundle, 'Seeking Shield', DamageSourceKind.SeekingShield),
+      ...equipmentSource(bundle, 'Flame Blower', DamageSourceKind.FlameBlower),
+      ...equipmentSource(bundle, 'Rocket Backpack', DamageSourceKind.RocketBackpack),
       ...flameFlingerSource(bundle.troops),
       ...troopDeathSource(bundle.troops, 'Balloon', DamageSourceKind.BalloonDeath),
       ...troopDeathSource(bundle.troops, 'Rocket Balloon', DamageSourceKind.RocketBalloonDeath),
+      ...rocketBalloonImpactSource(bundle.troops),
     ];
     const maxTownHall = buildings
       .flatMap((building) => building.levels)
@@ -54,6 +77,13 @@ export class DamageCatalog {
 
   source(kind: DamageSourceKind): DamageSourceDefinition | undefined {
     return this.sources.find((source) => source.kind === kind);
+  }
+
+  spellCapacityForTownHall(townHall: number): number {
+    return spellCapacityThresholds.reduce(
+      (capacity, [requiredTownHall, total]) => (townHall >= requiredTownHall ? total : capacity),
+      0,
+    );
   }
 
   isBuildingAvailableForTownHall(building: BuildingDefinition, townHall: number): boolean {
@@ -89,6 +119,13 @@ function parseBuildings(rawBuildings: unknown): readonly BuildingDefinition[] {
         requiredTownHall: name === 'Town Hall' ? levelNumber : intValue(level.required_townhall, 1),
         upgradeResource: optionalString(raw.upgrade_resource),
         upgradeCost: optionalIntValue(level.build_cost),
+        // Buffs in each supercharge row are totals, not increments to sum together.
+        superchargeHitpoints: (() => {
+          const charge = asRecord(level.supercharge);
+          return Array.isArray(charge?.levels)
+            ? charge.levels.map((value) => hitpoints + intValue(asRecord(value)?.hitpoints_buff))
+            : [];
+        })(),
       });
     });
     if (levels.length === 0) continue;
@@ -98,7 +135,11 @@ function parseBuildings(rawBuildings: unknown): readonly BuildingDefinition[] {
         name,
         imageName: name,
         levels,
-        zapQuakeEligible: !name.toLowerCase().includes('storage'),
+        // Lightning cannot damage either headquarters; Earthquake still can.
+        zapQuakeEligible:
+          !name.toLowerCase().includes('storage') && name !== 'Clan Castle' && name !== 'Town Hall',
+        earthquakeEligible: !name.toLowerCase().includes('storage'),
+        defensive: raw.type === 'Defense' || name === 'Town Hall' || name === "Builder's Hut",
       }),
     );
   }
@@ -179,17 +220,24 @@ function earthquakeSource(
 }
 
 function equipmentSource(
-  rawSources: unknown,
+  bundle: Readonly<Record<string, unknown>>,
   name: string,
   kind: DamageSourceKind,
 ): readonly DamageSourceDefinition[] {
-  const source = findNamed(rawSources, name);
+  const source = findNamed(bundle.equipment, name);
   if (!source) return [];
+  const abilities = gameAbilitiesFor(
+    typeof source._id === 'string' || typeof source._id === 'number' ? source._id : undefined,
+    name,
+    bundle,
+  );
   const levels = parseLevels(source.levels, (raw) => {
-    if (!Array.isArray(raw.abilities)) return undefined;
-    const ability = asRecord(raw.abilities[0]);
-    if (!ability) return undefined;
-    const damage = doubleValue(ability.Damage ?? ability.damage);
+    // The standalone export is indexed by equipment level. Legacy embedded ability
+    // levels are ability tiers and must not be treated as equipment levels.
+    const ability = abilities
+      .flatMap((item) => item.levels)
+      .find((item) => item.level === intValue(raw.level) && 'damage' in item);
+    const damage = doubleValue(ability?.damage);
     if (damage <= 0) return undefined;
     return new DamageLevel({
       level: intValue(raw.level),
@@ -205,6 +253,8 @@ function equipmentSource(
           name,
           imageUrl: ImageAssets.getGearImage(name),
           levels,
+          hero: optionalString(source.hero),
+          rarity: optionalString(source.rarity),
         }),
       ];
 }
@@ -234,6 +284,49 @@ function flameFlingerSource(rawSources: unknown): readonly DamageSourceDefinitio
           levels,
         }),
       ];
+}
+
+function rocketBalloonImpactSource(rawSources: unknown): readonly DamageSourceDefinition[] {
+  const source = findNamed(rawSources, 'Rocket Balloon');
+  if (!source) return [];
+  // Older published catalogs omit death_damage. These known-level values are
+  // from characters.csv, client 18.600.6 / fingerprint 7839fe492f55e0c5cb096b788649cd82f2a99f01.
+  // Prefer the exported field and never extrapolate unknown future levels.
+  const legacyDeathDamage: Readonly<Record<number, number>> = {
+    7: 500,
+    8: 580,
+    9: 620,
+    10: 650,
+    11: 700,
+    12: 730,
+    13: 760,
+  };
+  const interval = doubleValue(source.attack_speed) / 1000;
+  if (interval <= 0) return [];
+  const levels = parseLevels(source.levels, (raw) => {
+    const level = intValue(raw.level);
+    // SuperBalloon requires original Balloon level 7; lower client rows are not trainable.
+    if (level < 7) return undefined;
+    const deathDamage =
+      raw.death_damage === undefined ? legacyDeathDamage[level] : doubleValue(raw.death_damage);
+    const hitDamage = doubleValue(raw.dps) * interval;
+    if (deathDamage === undefined || hitDamage <= 0) return undefined;
+    return new DamageLevel({
+      level,
+      requiredTownHall: Math.max(11, intValue(raw.required_townhall, 1)),
+      damage: hitDamage + deathDamage,
+    });
+  });
+  return levels.length
+    ? [
+        new DamageSourceDefinition({
+          kind: DamageSourceKind.RocketBalloonImpact,
+          name: 'Rocket Balloon',
+          imageUrl: ImageAssets.getTroopImage('Rocket Balloon'),
+          levels,
+        }),
+      ]
+    : [];
 }
 
 function troopDeathSource(

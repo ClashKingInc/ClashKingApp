@@ -1,3 +1,11 @@
+export type UpgradeJsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | readonly UpgradeJsonValue[]
+  | { readonly [key: string]: UpgradeJsonValue };
+
 export const UpgradeVillage = { home: 'home', builderBase: 'builderBase' } as const;
 export type UpgradeVillageValue = (typeof UpgradeVillage)[keyof typeof UpgradeVillage];
 
@@ -392,7 +400,7 @@ export class UpgradePlanPreferences {
     }
     return 999;
   }
-  toJson(): Record<string, unknown> {
+  toJson(): Record<string, UpgradeJsonValue> {
     return {
       home_goal: this.homeGoal,
       builder_base_goal: this.builderBaseGoal,
@@ -809,6 +817,13 @@ export class UpgradeTrackerSnapshot {
       start = options.startsAt ?? new Date(),
       preferences = options.preferences ?? new UpgradePlanPreferences(),
       base = queue === UpgradeQueue.builders ? clamp(this.buildersFor(village), 1, 7) : 1;
+    const hallName = village === UpgradeVillage.home ? 'Town Hall' : 'Builder Hall';
+    const hall = this.itemsFor({ village }).find((item) => item.name === hallName);
+    const hallLevel =
+      hall?.currentLevel ??
+      (village === UpgradeVillage.home ? this.townHallLevel : this.builderHallLevel);
+    const hallRemaining = hall ? this.remainingActiveSeconds(hall, start) : 0;
+    const hallReady = addSeconds(start, hallRemaining);
     const active = this.itemsFor({ village, queue })
         .map((item) => ({ item, seconds: this.remainingActiveSeconds(item, start) }))
         .filter((x) => x.seconds > 0)
@@ -855,6 +870,27 @@ export class UpgradeTrackerSnapshot {
       return value;
     };
     const enqueue = (chain: UpgradeChain) => {
+      // Imports contain current-hall work, not permission to spend a hammer or unlock a future hall.
+      // A next-hall requirement is legal only after an actually running hall upgrade completes.
+      if (chain.item !== hall) {
+        const levels = Array.isArray(chain.item.meta?.levels) ? chain.item.meta.levels : [];
+        // Buildings store construction at the destination level; character research
+        // stores it at the source level. Queue alone cannot distinguish heroes.
+        const usesBuildLevel = levels.some(
+          (value) => isRecord(value) && ('build_time' in value || 'build_cost' in value),
+        );
+        const metadataLevel = usesBuildLevel
+          ? chain.nextStep.targetLevel
+          : chain.nextStep.targetLevel - 1;
+        const stats = levels.find(
+          (value) => isRecord(value) && intValue(value.level, -1) === metadataLevel,
+        );
+        const required = isRecord(stats) ? intValue(stats.required_townhall, 0) : 0;
+        if (required > hallLevel) {
+          if (hallRemaining <= 0 || required > hallLevel + 1) return;
+          chain.dependencyReadyAt = later(chain.dependencyReadyAt, hallReady);
+        }
+      }
       const pending = { chain, sequence: sequence++ };
       (chain.dependencyReadyAt > earliest() ? future : ready).push(pending);
     };

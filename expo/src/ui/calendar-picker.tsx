@@ -14,6 +14,7 @@ export function CalendarPicker({
   minimum,
   maximum,
   range = false,
+  isDateSelectable,
   onChange,
 }: {
   start: Date;
@@ -21,6 +22,7 @@ export function CalendarPicker({
   minimum: Date;
   maximum: Date;
   range?: boolean;
+  isDateSelectable?: (date: Date) => boolean;
   onChange: (start: Date, end?: Date) => void;
 }) {
   const { locale } = useI18n();
@@ -76,8 +78,12 @@ export function CalendarPicker({
       <View style={styles.grid}>
         {days.map((value, index) => {
           if (!value) return <View key={`blank-${index}`} style={styles.cell} />;
-          const disabled = value < minimum || value > maximum;
-          const selected = sameDay(value, start) || (end ? sameDay(value, end) : false);
+          const disabled =
+            value < minimum ||
+            value > maximum ||
+            (isDateSelectable ? !isDateSelectable(value) : false);
+          const selected =
+            !disabled && (sameDay(value, start) || (end ? sameDay(value, end) : false));
           const within = Boolean(range && end && value > start && value < end);
           return (
             <Pressable

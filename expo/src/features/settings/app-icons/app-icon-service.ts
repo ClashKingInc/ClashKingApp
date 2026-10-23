@@ -43,13 +43,13 @@ export class UnsupportedAppIconPlatformError extends Error {
   readonly code = 'unsupported';
 
   constructor() {
-    super('Alternate app icons are only supported on iOS.');
+    super('Alternate app icons are only supported in native iOS and Android builds.');
     this.name = 'UnsupportedAppIconPlatformError';
   }
 }
 
 export function isAppIconPlatformSupported(platform: AppIconPlatform): boolean {
-  return platform === 'ios';
+  return platform === 'ios' || platform === 'android';
 }
 
 export class AppIconService {

@@ -1,6 +1,8 @@
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { Skeleton } from '../../../ui';
 
 import {
   sharedAchievementModelCache,
@@ -34,7 +36,12 @@ export function AchievementModelViewer({
     };
   }, [cache, modelUrl]);
 
-  if (source === undefined) return <View style={styles.fill} />;
+  if (source === undefined)
+    return (
+      <View style={styles.loading}>
+        <Skeleton height="100%" radius={16} />
+      </View>
+    );
   return (
     <WebView
       accessibilityElementsHidden={!request.interactive}
@@ -50,7 +57,7 @@ export function AchievementModelViewer({
       setSupportMultipleWindows={false}
       source={{
         html: buildAchievementModelDocument(source, request),
-        baseUrl: 'https://assets.clashk.ing/',
+        baseUrl: `${ASSET_ORIGIN}/`,
       }}
       style={styles.webView}
     />
@@ -59,5 +66,6 @@ export function AchievementModelViewer({
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   webView: { flex: 1, backgroundColor: 'transparent' },
 });

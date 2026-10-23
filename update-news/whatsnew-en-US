@@ -1,6 +1,8 @@
-ClashKing 0.4.0 has been rebuilt for a faster, smoother mobile experience.
+ClashKing 0.5.0 alpha is ready for closed testing.
 
-- Refreshed player, clan, war, rankings, and Upgrade Tracker screens.
-- Improved navigation, search, filters, loading states, and dark mode.
-- Updated account management, notifications, widgets, and sign-in.
-- Fixed performance, reliability, and data refresh issues throughout the app.
+- Redesigned home, player, clan, war, and Upgrade Tracker screens.
+- Smoother native navigation, search, account switching, and data refresh.
+- Updated war and Legend League widgets, notifications, and sharing.
+- Improved dark mode, translations, performance, and reliability.
+
+Please report any issues you encounter during testing.

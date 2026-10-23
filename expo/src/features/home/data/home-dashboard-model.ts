@@ -1,7 +1,10 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { upgradeSnapshotNeedsRefresh } from '../../upgrade-tracker/models/snapshot-freshness';
+import { rankedLeagueDisplayColor } from '../../../ui/league-colors';
 import { formatCompactNumber, type I18nValue } from '../../../i18n';
 import type { Player } from '../../player/models';
 import type { RankedLeagueData } from '../../player/models/player-ranked';
+import type { PlayerLegendLeagueData } from '../../player/models/player-legend';
 import type { WarCwlService } from '../../war/data';
 import {
   UpgradeCategory,
@@ -40,6 +43,10 @@ export function homeAccountIdentity(player: Player): HomeAccountIdentity {
     name: player.name,
     subtitle: player.clanOverview.name || player.tag,
     imageUrl: player.townHallPic,
+    clanName: player.clanOverview.name || undefined,
+    clanBadgeUrl: player.clanTag
+      ? ImageAssets.clanBadgeForTag(player.clanTag, player.clan ?? player.clanOverview)
+      : undefined,
   };
 }
 
@@ -61,18 +68,47 @@ export function buildHomeRankedModel(
   players: readonly Player[],
   loaded: ReadonlyMap<string, RankedLeagueData>,
   loading = false,
+  legends: ReadonlyMap<string, PlayerLegendLeagueData> = new Map(),
 ): HomeRankedCardModel {
   if (loading) return { state: 'loading', configuredCount: players.length };
-  const accounts = players.flatMap((player) => {
+  const accounts = players.flatMap<HomeRankedAccount>((player) => {
+    if (player.isLegendLeague) {
+      const legend = legends.get(normalizeTag(player.tag));
+      return [
+        {
+          ...homeAccountIdentity(player),
+          mode: 'legend' as const,
+          statsAvailable: !!legend?.currentDay,
+          tierIconUrl: player.leagueUrl,
+          tierName: player.league,
+          tierColor: rankedLeagueDisplayColor(player.league),
+          groupSize: 0,
+          // The official profile is fresher than the periodically sampled rank
+          // feed; use the latter for rank, never to roll the trophy count back.
+          trophies: player.trophies,
+          rank: legend?.currentRank?.globalRank || null,
+          attacksDone: legend?.currentDay?.attacks.length ?? 0,
+          defensesDone: legend?.currentDay?.defenses.length ?? 0,
+          maxBattles: 8,
+        } satisfies HomeRankedAccount,
+      ];
+    }
     const data = loaded.get(normalizeTag(player.tag));
-    if (!data || (data.currentTier === null && data.history.length === 0)) return [];
-    const member = data.currentMember;
-    const tier = data.currentTier;
+    // Historical participation is not a current ranked placement. A Home card
+    // must never resurrect an unranked account from an old league season.
+    const member = data?.currentMember;
+    const tier = data?.currentTier;
+    if (!tier || data?.currentRank == null) return [];
     return [
       {
         ...homeAccountIdentity(player),
-        name: data.playerName,
-        tierIconUrl: tier?.smallIconUrl || tier?.largeIconUrl || '',
+        mode: 'ranked' as const,
+        statsAvailable: !!member,
+        name: data?.playerName ?? player.name,
+        tierIconUrl: tier.iconUrl || player.leagueUrl,
+        tierName: tier?.name ?? player.league,
+        tierColor: rankedLeagueDisplayColor(tier?.name ?? player.league),
+        groupSize: data.currentGroup?.members.length ?? 0,
         trophies: member?.leagueTrophies ?? data.trophies,
         rank: data.currentRank,
         attacksDone: member ? member.attackWinCount + member.attackLoseCount : 0,
@@ -99,7 +135,7 @@ export function buildHomeUpgradeModel(
   for (const player of players) {
     const snapshot = loaded.get(normalizeTag(player.tag));
     if (!snapshot) missingAccounts.push(homeAccountIdentity(player));
-    else accounts.push(upgradeAccount(snapshot, now));
+    else accounts.push({ ...upgradeAccount(snapshot, now), ...homeAccountIdentity(player) });
   }
   if (!accounts.length && !missingAccounts.length) {
     return { state: 'empty', configuredCount: players.length };
@@ -274,8 +310,6 @@ function upgradeAccount(snapshot: UpgradeTrackerSnapshot, now: Date): HomeUpgrad
     village: UpgradeVillage.home,
     category: UpgradeCategory.walls,
   });
-  const tracked = snapshot.itemsFor({ village: UpgradeVillage.home });
-  const started = tracked.filter((item) => !item.recurrentHelper && (item.activeSeconds ?? 0) > 0);
   return {
     tag: snapshot.tag,
     name: snapshot.name,
@@ -283,7 +317,7 @@ function upgradeAccount(snapshot: UpgradeTrackerSnapshot, now: Date): HomeUpgrad
     imageUrl: ImageAssets.townHall(snapshot.townHallLevel),
     completion: Math.max(0, Math.min(1, snapshot.overallSummary(UpgradeVillage.home).completion)),
     capturedAt: snapshot.capturedAt,
-    needsUpdate: started.length > 0 && started.every((item) => !active(item)),
+    needsUpdate: upgradeSnapshotNeedsRefresh(snapshot, now),
     hasActionableQueueWork:
       (activeBuilders < totalBuilders && idleWork(builderItems)) ||
       (!labActive && idleWork(labItems)) ||

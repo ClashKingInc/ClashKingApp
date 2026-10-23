@@ -1,14 +1,7 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useMemo, useState, type ReactNode } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import {
-  ArrowDown,
-  ArrowUp,
-  BarChart3,
-  ChevronDown,
-  Search,
-  Star,
-  Users,
-} from 'lucide-react-native';
+import { ArrowDown, ArrowUp, BarChart3, Star, Users } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -18,7 +11,7 @@ import {
   MobileWebImage,
   PillSurface,
   ResponsiveGrid,
-  SearchSortBar,
+  SelectionPicker,
   SelectionPickerModal,
   Skeleton,
   Surface,
@@ -31,7 +24,6 @@ import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './c
 
 type MemberSort =
   | 'league'
-  | 'trophies'
   | 'townHallLevel'
   | 'role'
   | 'donations'
@@ -47,27 +39,22 @@ export function ClanMembersTab({
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
 }) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && width >= 900;
-  const [query, setQuery] = useState('');
   const [sort, setSort] = useState<MemberSort>('league');
   const [showSort, setShowSort] = useState(false);
   const [showTotals, setShowTotals] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
   const allMembers = model.clan.memberList;
-  const number = useMemo(() => new Intl.NumberFormat(toIntlLocale(locale)), [locale]);
   const members = useMemo(() => {
-    const result = allMembers.filter((member) =>
-      member.name.toLowerCase().includes(query.trim().toLowerCase()),
-    );
+    const result = [...allMembers];
     result.sort((a, b) => compareMembers(a, b, sort));
     return result;
-  }, [allMembers, query, sort]);
+  }, [allMembers, sort]);
   const sortOptions: readonly { value: MemberSort; label: string }[] = [
-    { value: 'league', label: t('gameLeague') },
-    { value: 'trophies', label: t('gameTrophies') },
+    { value: 'league', label: `${t('gameLeague')} & ${t('gameTrophies')}` },
     { value: 'townHallLevel', label: t('gameTownHallLevel') },
     { value: 'role', label: t('generalRole') },
     { value: 'donations', label: t('gameDonations') },
@@ -77,8 +64,6 @@ export function ClanMembersTab({
     { value: 'expLevel', label: t('gameExpLevel') },
   ];
   const selectedSort = sortOptions.find((option) => option.value === sort)?.label ?? '';
-  const totalDonations = allMembers.reduce((sum, member) => sum + member.donations, 0);
-  const totalReceived = allMembers.reduce((sum, member) => sum + member.donationsReceived, 0);
   const averageTownHall = allMembers.length
     ? allMembers.reduce((sum, member) => sum + member.townHallLevel, 0) / allMembers.length
     : 0;
@@ -86,8 +71,8 @@ export function ClanMembersTab({
     setLoadingPlayer(true);
     try {
       actions.openPlayer(await actions.loadPlayer(member.tag));
-    } catch (error) {
-      actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+    } catch {
+      actions.showMessage(t('generalTryAgain'));
     } finally {
       setLoadingPlayer(false);
     }
@@ -104,16 +89,6 @@ export function ClanMembersTab({
   ));
   return (
     <View style={styles.tab}>
-      <SearchSortBar
-        value={query}
-        onChangeText={setQuery}
-        placeholder={t('clanMembersSearchPlaceholder')}
-        searchIcon={<Search size={18} color={theme.onSurfaceVariant} />}
-        sortLabel={selectedSort}
-        sortValue={selectedSort}
-        sortIcon={<ChevronDown size={18} color={theme.onSurfaceVariant} />}
-        onSortPress={() => setShowSort(true)}
-      />
       <View style={styles.summaryRow}>
         <Pressable
           accessibilityRole="button"
@@ -129,34 +104,22 @@ export function ClanMembersTab({
         >
           <BarChart3 size={23} color={showTotals ? theme.primary : theme.onSurfaceVariant} />
         </Pressable>
-        <SummaryChip
-          icon={<ArrowUp color="#22A35A" />}
-          value={number.format(totalDonations)}
-          label={t('gameDonations')}
-        />
-        <SummaryChip
-          icon={<ArrowDown color="#E35D4F" />}
-          value={number.format(totalReceived)}
-          label={t('clanMembersReceivedShort')}
-        />
-        <SummaryChip
-          image={ImageAssets.townHall(Math.round(averageTownHall))}
-          value={averageTownHall ? averageTownHall.toFixed(1) : '-'}
-          label={t('clanMembersAverageTh')}
-        />
+        <View style={styles.sortControl}>
+          <SelectionPicker
+            options={sortOptions.map(({ value, label }) => ({ key: value, label }))}
+            selectedKey={sort}
+            onSelect={setSort}
+            title={selectedSort}
+            externallyManaged
+            onOpen={() => setShowSort(true)}
+          />
+        </View>
       </View>
-      {showTotals ? <MemberBreakdown members={allMembers} /> : null}
+      {showTotals ? <MemberBreakdown members={allMembers} averageTownHall={averageTownHall} /> : null}
       {members.length === 0 ? (
         <EmptyState
-          title={query ? t('generalNoFilteredResults') : t('accountsNoneFound')}
-          body={query ? t('generalAdjustFilters') : undefined}
-          icon={
-            query ? (
-              <Search color={theme.onSurfaceVariant} />
-            ) : (
-              <Users color={theme.onSurfaceVariant} />
-            )
-          }
+          title={t('accountsNoneFound')}
+          icon={<Users color={theme.onSurfaceVariant} />}
         />
       ) : desktop ? (
         <ResponsiveGrid minItemWidth={340} maxColumns={3} gap={10}>
@@ -168,7 +131,28 @@ export function ClanMembersTab({
       <SelectionPickerModal
         visible={showSort}
         title={selectedSort}
-        options={sortOptions.map((option) => ({ key: option.value, label: option.label }))}
+        options={sortOptions.map((option) => ({
+          key: option.value,
+          label: option.label,
+          icon: (
+            <MobileWebImage
+              imageUrl={
+                option.value === 'townHallLevel'
+                  ? ImageAssets.townHall(Math.max(1, Math.round(averageTownHall)))
+                  : option.value === 'expLevel'
+                    ? ImageAssets.xp
+                    : option.value === 'builderBaseTrophies'
+                      ? ImageAssets.builderBaseTrophy
+                      : option.value === 'role'
+                        ? ImageAssets.clanCastle
+                        : option.value === 'league'
+                          ? ImageAssets.trophies
+                          : ImageAssets.clanCastle
+              }
+              style={styles.metricImage}
+            />
+          ),
+        }))}
         selectedKey={sort}
         onSelect={(value) => {
           setSort(value);
@@ -176,7 +160,7 @@ export function ClanMembersTab({
         }}
         onClose={() => setShowSort(false)}
       />
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         transparent
         visible={loadingPlayer}
         animationType="fade"
@@ -226,7 +210,7 @@ function MemberCard({
   linked: boolean;
   onPress: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
   const role =
     member.role === 'leader'
@@ -236,7 +220,7 @@ function MemberCard({
         : member.role === 'admin'
           ? t('clanRoleElder')
           : t('clanRoleMember');
-  const metric = memberMetric(member, sort, theme.onSurfaceVariant);
+  const metric = memberMetric(member, sort, theme.onSurfaceVariant, locale);
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={member.name} onPress={onPress}>
       <Surface
@@ -274,6 +258,7 @@ function memberMetric(
   member: ClanMember,
   sort: MemberSort,
   iconColor: string,
+  locale: string,
 ): { leading: ReactNode; value: string } {
   if (sort === 'expLevel')
     return {
@@ -288,11 +273,14 @@ function memberMetric(
       value: `${member.builderBaseTrophies}`,
     };
   if (sort === 'donations')
-    return { leading: <ArrowUp size={18} color="#22A35A" />, value: `${member.donations}` };
+    return {
+      leading: <ArrowUp size={18} color="#22A35A" />,
+      value: member.donations.toLocaleString(toIntlLocale(locale)),
+    };
   if (sort === 'donationsReceived')
     return {
       leading: <ArrowDown size={18} color="#E35D4F" />,
-      value: `${member.donationsReceived}`,
+      value: member.donationsReceived.toLocaleString(toIntlLocale(locale)),
     };
   if (sort === 'donationsRatio') {
     const ratio = donationRatio(member);
@@ -315,31 +303,11 @@ function memberMetric(
   };
 }
 
-function SummaryChip({
-  icon,
-  image,
-  value,
-  label,
-}: {
-  icon?: ReactNode;
-  image?: string;
-  value: string;
-  label: string;
+function MemberBreakdown({ members, averageTownHall }: {
+  members: readonly ClanMember[];
+  averageTownHall: number;
 }) {
-  return (
-    <PillSurface style={styles.summaryChip}>
-      {image ? <MobileWebImage imageUrl={image} style={styles.metricImage} /> : icon}
-      <View>
-        <CKText role="labelLarge">{value}</CKText>
-        <CKText muted role="labelSmall">
-          {label}
-        </CKText>
-      </View>
-    </PillSurface>
-  );
-}
-
-function MemberBreakdown({ members }: { members: readonly ClanMember[] }) {
+  const { t } = useI18n();
   const townHalls = countBy(members, (member) => member.townHallLevel).sort((a, b) => b[0] - a[0]);
   const leagues = countBy(members, (member) => member.league.id).sort((a, b) => b[0] - a[0]);
   const leagueById = new Map(members.map((member) => [member.league.id, member.league]));
@@ -355,6 +323,10 @@ function MemberBreakdown({ members }: { members: readonly ClanMember[] }) {
         ))}
       </View>
       <View style={styles.breakdownRow}>
+        <View style={styles.breakdownAverage}>
+          <CKText role="labelLarge">{averageTownHall ? averageTownHall.toFixed(1) : '—'}</CKText>
+          <CKText muted role="labelSmall">{t('clanMembersAverageTh')}</CKText>
+        </View>
         {townHalls.map(([level, count]) => (
           <Breakdown key={level} image={ImageAssets.townHall(level)} count={count} />
         ))}
@@ -381,21 +353,16 @@ function Breakdown({ image, count }: { image: string; count: number }) {
 
 const styles = StyleSheet.create({
   tab: { padding: 16, gap: 8 },
-  summaryRow: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  summaryRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  sortControl: { flexShrink: 1, maxWidth: 260 },
   statsToggle: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
+    flexShrink: 0,
     borderWidth: 1,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  summaryChip: {
-    minHeight: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 9,
   },
   list: { gap: 6 },
   memberCard: {
@@ -421,6 +388,7 @@ const styles = StyleSheet.create({
   breakdown: { padding: 12, gap: 10 },
   breakdownRow: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: 12 },
   breakdownCount: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  breakdownAverage: { alignItems: 'center', justifyContent: 'center' },
   breakdownImage: { width: 24, height: 24, resizeMode: 'contain' },
   overlay: {
     flex: 1,

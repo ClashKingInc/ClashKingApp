@@ -1,3 +1,4 @@
+import { modalOrientations } from "../../ui/modal-orientations";
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { useI18n } from '../../i18n';
@@ -15,7 +16,7 @@ export function NotificationPermissionPrimer({
   const theme = useCKTheme();
   const { t } = useI18n();
   return (
-    <Modal animationType="fade" onRequestClose={onDecline} transparent visible={visible}>
+    <Modal supportedOrientations={modalOrientations} animationType="fade" onRequestClose={onDecline} transparent visible={visible}>
       <View style={styles.backdrop}>
         <Surface accessibilityViewIsModal radius={ckRadius.card} style={styles.dialog}>
           <CKText role="sectionTitle">{t('notificationPrimerTitle')}</CKText>

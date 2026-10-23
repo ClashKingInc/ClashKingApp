@@ -42,6 +42,7 @@ export type SceneryAudioNativeStatus = {
 };
 
 export type ClashKingNativeModule = {
+  padNotificationThumbnail(uri: string): Promise<string>;
   addListener(
     event: 'onSceneryAudioStatus',
     listener: (status: SceneryAudioNativeStatus) => void,

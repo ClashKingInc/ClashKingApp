@@ -23,6 +23,7 @@ export function PrimaryTabBar({
   const theme = useCKTheme();
   const mode = useCKThemeMode();
   const ios = Platform.OS === 'ios';
+  const web = Platform.OS === 'web';
   const items = (
     <View style={[styles.items, isRtl && styles.itemsRtl]} accessibilityRole="tablist">
       {primaryTabRoutes.map((route) => {
@@ -36,7 +37,8 @@ export function PrimaryTabBar({
             onPress={() => onSelect(route.id as PrimaryRouteId)}
             style={({ pressed }) => [
               styles.item,
-              ios ? styles.iosItem : styles.fallbackItem,
+              !web ? styles.iosItem : styles.fallbackItem,
+              web && styles.webItem,
               active && {
                 backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, ios ? 0.42 : 0.58),
               },
@@ -47,16 +49,17 @@ export function PrimaryTabBar({
             <RouteIcon
               route={route}
               selected={active}
-              size={ios ? 22 : 25}
+              size={!web ? 22 : 25}
               color={active ? theme.primary : colorWithAlpha(theme.onSurface, 0.92)}
             />
-            {!ios && (
+            {web && (
               <CKText
                 role="labelMedium"
                 numberOfLines={1}
                 style={{
                   color: active ? theme.primary : colorWithAlpha(theme.onSurface, 0.92),
                   fontWeight: active ? '800' : '700',
+                  ...(web ? { fontSize: 12 } : {}),
                 }}
               >
                 {t(route.labelKey)}
@@ -74,6 +77,25 @@ export function PrimaryTabBar({
         <GlassSurface cornerRadius={31} interactive style={styles.iosGlass}>
           {items}
         </GlassSurface>
+      </View>
+    );
+  }
+
+  // In a mobile browser the page already sits above browser chrome. Keep
+  // tabs attached to the viewport instead of adding a second floating pill.
+  if (web) {
+    return (
+      <View
+        style={[
+          styles.webOuter,
+          {
+            backgroundColor: theme.surface,
+            borderTopColor: colorWithAlpha(theme.outlineVariant, 0.25),
+            paddingBottom: insets.bottom,
+          },
+        ]}
+      >
+        <View style={styles.webBar}>{items}</View>
       </View>
     );
   }
@@ -105,6 +127,9 @@ export function fallbackTabBarBottomPadding(bottomInset: number): number {
 }
 
 const styles = StyleSheet.create({
+  webOuter: { borderTopWidth: StyleSheet.hairlineWidth },
+  webBar: { height: 64, paddingHorizontal: 8 },
+  webItem: { borderRadius: 14, marginVertical: 6, gap: 2 },
   items: { flex: 1, flexDirection: 'row' },
   itemsRtl: { flexDirection: 'row-reverse' },
   item: { flex: 1, alignItems: 'center', justifyContent: 'center' },
@@ -113,10 +138,10 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.72 },
   iosOuter: { minHeight: 78, paddingHorizontal: 8, paddingTop: 4, justifyContent: 'flex-start' },
   iosGlass: { height: 62 },
-  fallbackOuter: { paddingHorizontal: 14, paddingTop: 2 },
+  fallbackOuter: { paddingHorizontal: 8, paddingTop: 4 },
   fallbackBar: {
-    height: 68,
-    borderRadius: 34,
+    height: 62,
+    borderRadius: 31,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 8 },
     shadowRadius: 18,

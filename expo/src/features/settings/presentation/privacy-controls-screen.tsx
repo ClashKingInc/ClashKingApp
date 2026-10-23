@@ -1,11 +1,23 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Baby, Download, Edit3, ExternalLink, Save, Shield, Trash2 } from 'lucide-react-native';
+import {
+  Baby,
+  Download,
+  Edit3,
+  EyeOff,
+  ExternalLink,
+  Save,
+  Share2,
+  Shield,
+  Trash2,
+} from 'lucide-react-native';
 
 import { useI18n } from '../../../i18n';
 import { CKText, LoadingIndicator, Surface, ckRadius, ckSpacing, useCKTheme } from '../../../ui';
 import type { PrivacyPresentationActions } from './contracts';
 import { SettingsPage } from './settings-components';
+import { ProfileOptionSwitch } from '../../../ui/profile-option-switch';
 
 export function privacyColumnCount(platform: string, viewportWidth: number): 1 | 2 {
   return platform === 'web' && viewportWidth >= 900 && Math.min(viewportWidth - 48, 1100) >= 780
@@ -19,12 +31,16 @@ export function PrivacyControlsScreen({
   platform = Platform.OS,
   now = () => new Date(),
   onBack,
+  hideAccountsEnabled = false,
+  onHideAccountsChange,
 }: {
   actions: PrivacyPresentationActions;
   viewportWidth?: number;
   platform?: string;
   now?: () => Date;
   onBack?: () => void;
+  hideAccountsEnabled?: boolean;
+  onHideAccountsChange?: (enabled: boolean) => Promise<void>;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -36,6 +52,7 @@ export function PrivacyControlsScreen({
   const [prepared, setPrepared] = useState<{ fileName: string; data: string }>();
   const [notice, setNotice] = useState<string>();
   const [confirming, setConfirming] = useState(false);
+  const [savingHideAccounts, setSavingHideAccounts] = useState(false);
   const prepare = async () => {
     setExporting(true);
     try {
@@ -60,7 +77,7 @@ export function PrivacyControlsScreen({
     }
     try {
       await actions.saveExport(prepared.fileName, prepared.data);
-      setNotice(t('settingsPrivacyExportSaved'));
+      setNotice(Platform.OS === 'web' ? t('settingsPrivacyExportSaved') : undefined);
     } catch {
       actions.contactSupport();
       setNotice(t('settingsPrivacyExportSaveFailed'));
@@ -107,8 +124,14 @@ export function PrivacyControlsScreen({
         />
         {prepared ? (
           <Action
-            label={t('settingsPrivacySaveExport')}
-            icon={<Save color={theme.primary} />}
+            label={Platform.OS === 'web' ? t('settingsPrivacySaveExport') : t('gameAssetsShare')}
+            icon={
+              Platform.OS === 'web' ? (
+                <Save color={theme.primary} />
+              ) : (
+                <Share2 color={theme.primary} />
+              )
+            }
             onPress={() => void save()}
           />
         ) : null}
@@ -150,6 +173,20 @@ export function PrivacyControlsScreen({
   return (
     <>
       <SettingsPage title={t('settingsPrivacyDataTitle')} onBack={onBack}>
+        <ProfileOptionSwitch
+          icon={<EyeOff color={theme.onSurfaceVariant} />}
+          title={t('settingsHideAccounts')}
+          subtitle={t('settingsHideAccountsDescription')}
+          value={hideAccountsEnabled}
+          enabled={!!onHideAccountsChange && !savingHideAccounts}
+          loading={savingHideAccounts}
+          onChange={(enabled) => {
+            setSavingHideAccounts(true);
+            void onHideAccountsChange?.(enabled)
+              .catch(() => setNotice(t('generalError')))
+              .finally(() => setSavingHideAccounts(false));
+          }}
+        />
         {notice ? (
           <CKText accessibilityLiveRegion="polite" style={styles.notice}>
             {notice}
@@ -163,7 +200,7 @@ export function PrivacyControlsScreen({
           ))}
         </View>
       </SettingsPage>
-      <Modal
+      <Modal supportedOrientations={modalOrientations}
         visible={confirming}
         transparent
         animationType="fade"

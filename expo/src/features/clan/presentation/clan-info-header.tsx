@@ -1,5 +1,18 @@
-import { useState, type ReactNode } from 'react';
-import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { modalOrientations } from "../../../ui/modal-orientations";
+import { Image } from 'expo-image';
+import type { ViewInstance } from 'react-native';
+import { useRef, useState } from 'react';
+import { TutorialTarget } from '../../tutorials/tutorial-ui';
+import { tutorials, TUTORIAL_CLAN_TAG } from '../../tutorials/tutorial-service';
+import {
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import {
   ArrowLeft,
   Bookmark,
@@ -8,37 +21,97 @@ import {
   Copy,
   ExternalLink,
   Mail,
-  MessageCircle,
   MoreHorizontal,
+  Share2,
   Shield,
   Users,
+  X,
 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { materialBackLabel, useI18n } from '../../../i18n';
-import { CKText, MobileWebImage, colorWithAlpha, useCKTheme, useCKThemeMode } from '../../../ui';
+import { DiscordMark } from '../../../ui/discord-mark';
+import { sharePageLink } from '../../../core/deep-links/share-page-link';
+import { materialBackLabel, materialCloseLabel, useI18n } from '../../../i18n';
+import {
+  CKText,
+  MobileWebImage,
+  PillSurface,
+  ProfileHeaderAction,
+  ProfileStatChip,
+  useCKTheme,
+} from '../../../ui';
 import { clanMemberCapacityLabel } from './contracts';
-import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
+import type {
+  ClanInfoPresentationActions,
+  ClanInfoPresentationModel,
+  ClanInfoTabKey,
+} from './clan-info-contracts';
 import { extractDiscordInviteCode } from './clan-info-contracts';
 import { clanTypeLabel } from './presentation-utils';
+import { ClanSpringTarget } from './clan-spring-transition';
 
 export function ClanInfoHeader({
   model,
   actions,
+  selectedTab = 'members',
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
+  selectedTab?: ClanInfoTabKey;
 }) {
   const { clan } = model;
   const { t, locale } = useI18n();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   const desktop = Platform.OS === 'web' && width >= 900;
-  const [expanded, setExpanded] = useState(false);
+  const descriptionTriggerRef = useRef<ViewInstance>(null);
+  const descriptionMeasureGeneration = useRef(0);
+  const [descriptionVisible, setDescriptionVisible] = useState(false);
+  const [descriptionAnchor, setDescriptionAnchor] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const description = clan.description.trim();
+  const tooltipWidth = Math.max(0, Math.min(width - 32, 320));
+  const tooltipMaxHeight = Math.min(height * 0.42, 280);
+  const tooltipLeft = descriptionAnchor
+    ? Math.max(
+        16,
+        Math.min(
+          descriptionAnchor.x + descriptionAnchor.width - tooltipWidth,
+          width - tooltipWidth - 16,
+        ),
+      )
+    : 16;
+  const tooltipBelow = descriptionAnchor
+    ? Math.max(insets.top + 8, descriptionAnchor.y + descriptionAnchor.height + 8)
+    : insets.top + 8;
+  const tooltipTop =
+    descriptionAnchor && height - insets.bottom - tooltipBelow < tooltipMaxHeight + 16
+      ? Math.max(insets.top + 8, descriptionAnchor.y - tooltipMaxHeight - 8)
+      : tooltipBelow;
+  const showDescription = () => {
+    const generation = ++descriptionMeasureGeneration.current;
+    // The measured anchor replaces this fallback before the fade finishes; the
+    // tooltip still opens if measurement is unavailable on a platform.
+    setDescriptionAnchor({ x: width - 40, y: insets.top + 260, width: 24, height: 24 });
+    setDescriptionVisible(true);
+    descriptionTriggerRef.current?.measureInWindow((x, y, anchorWidth, anchorHeight) => {
+      if (descriptionMeasureGeneration.current === generation)
+        setDescriptionAnchor({ x, y, width: anchorWidth, height: anchorHeight });
+    });
+  };
+  // Keep the anchor through Modal's exit fade, or the tooltip animates to its
+  // unanchored default before disappearing.
+  const hideDescription = () => {
+    descriptionMeasureGeneration.current += 1;
+    setDescriptionVisible(false);
+  };
   const discordCode = extractDiscordInviteCode(clan.description);
   const warLeagueAssetName = clan.warLeague?.name ?? 'Unranked';
   const capitalLeagueAssetName = clan.capitalLeague?.name ?? 'Unranked';
@@ -49,14 +122,14 @@ export function ClanInfoHeader({
       .copyClanTag(clan.tag)
       .then(() => actions.showMessage(t('generalCopiedToClipboard')));
   const primaryStats = [
-    { value: `${clan.clanPoints}`, image: ImageAssets.trophies, label: t('clanPointsTitle') },
+    { value: clan.clanPoints, image: ImageAssets.trophies, label: t('clanPointsTitle') },
     {
       value: clanMemberCapacityLabel(clan.members),
-      icon: <Users size={19} color={theme.onSurface} />,
+      iconElement: <Users size={19} color={theme.onSurface} />,
       label: t('clanMembers'),
     },
     {
-      value: `${clan.clanBuilderBasePoints}`,
+      value: clan.clanBuilderBasePoints,
       image: ImageAssets.builderBaseTrophy,
       label: t('clanBuilderBasePoints'),
     },
@@ -64,7 +137,7 @@ export function ClanInfoHeader({
   const secondaryStats = [
     {
       value: clanTypeLabel(clan.type, t),
-      icon: <Mail size={19} color={theme.onSurface} />,
+      iconElement: <Mail size={19} color={theme.onSurface} />,
       label: t('clanType'),
     },
     ...(clan.requiredTownhallLevel > 0
@@ -80,40 +153,37 @@ export function ClanInfoHeader({
       ? [
           {
             value: 'Family-friendly',
-            icon: <Users size={19} color={theme.onSurface} />,
+            iconElement: <Users size={19} color={theme.onSurface} />,
             label: 'Family-friendly',
           },
         ]
       : []),
   ];
   return (
-    <View style={styles.hero}>
-      <MobileWebImage
-        imageUrl={ImageAssets.homeBaseBackground}
-        style={StyleSheet.absoluteFill}
-        contentFit="cover"
-        contentPosition="bottom"
-      />
-      <View style={styles.imageDarken} />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Defs>
-          <LinearGradient id="clan-header-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
-            <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.36 : 0.2} />
-            <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.64 : 0.4} />
-            <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.92 : 0.65} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#clan-header-scrim)" />
-      </Svg>
+    <View testID="clan-header-hero" style={styles.hero}>
+      <View testID="clan-header-backdrop" pointerEvents="none" style={StyleSheet.absoluteFill}>
+        <Image
+          testID="clan-header-background-image"
+          source={require('../../../../assets/clashking/backgrounds/clan-clearing-v3.webp')}
+          cachePolicy="memory-disk"
+          transition={0}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          contentPosition="center"
+        />
+        {/* Keep artwork subdued and finish the fade behind the final chip row. */}
+        <View style={styles.imageDarken} />
+        <HeroHeaderScrim variant="clan" />
+      </View>
       <View style={[styles.actions, { paddingTop: insets.top }, desktop && styles.desktopActions]}>
-        <HeaderAction
+        <ProfileHeaderAction
           label={materialBackLabel(locale)}
           onPress={actions.goBack}
           icon={<ArrowLeft color="#FFF" />}
         />
         <View style={styles.actionSpacer} />
         {model.ongoingWar ? (
-          <HeaderAction
+          <ProfileHeaderAction
             label={model.ongoingWar === 'cwl' ? t('cwlOngoing') : t('warOngoing')}
             onPress={() =>
               model.ongoingWar === 'cwl' ? actions.openCwl(clan) : actions.openWar(clan)
@@ -129,33 +199,54 @@ export function ClanInfoHeader({
           />
         ) : null}
         {discordCode ? (
-          <HeaderAction
+          <ProfileHeaderAction
             label={t('generalDiscord')}
             onPress={() =>
               void actions
                 .openDiscord(discordCode)
                 .catch(() => actions.showMessage(t('errorCannotOpenLink')))
             }
-            icon={<MessageCircle color="#FFF" />}
+            icon={<DiscordMark color="#FFF" size={22} />}
           />
         ) : null}
-        <HeaderAction
+        <ProfileHeaderAction
+          label={t('gameAssetsShare')}
+          onPress={() =>
+            void sharePageLink(
+              { kind: 'clan', tag: clan.tag, params: { tab: selectedTab } },
+              clan.name,
+            ).catch(() => actions.showMessage(t('errorCannotOpenLink')))
+          }
+          icon={<Share2 color="#FFF" />}
+        />
+        <ProfileHeaderAction
           label={t('playerOpenInGame')}
           onPress={() => actions.openClanInGame(clan)}
           icon={<ExternalLink color="#FFF" />}
         />
-        <HeaderAction
-          label={model.bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
-          onPress={() => void actions.toggleClanBookmark(clan)}
-          icon={model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
-        />
+        <TutorialTarget
+          id="bookmark"
+          offer={clan.tag === TUTORIAL_CLAN_TAG ? 'clanGuide' : undefined}
+        >
+          <ProfileHeaderAction
+            label={model.bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
+            onPress={() =>
+              void actions.toggleClanBookmark(clan).then(() => tutorials.event('bookmarked'))
+            }
+            icon={model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
+          />
+        </TutorialTarget>
       </View>
       <View style={[styles.body, desktop ? styles.desktopBody : styles.mobileBody]}>
         <View style={[styles.identity, desktop && styles.desktopIdentity]}>
-          <MobileWebImage
-            imageUrl={clan.badgeUrls.smallest}
-            style={[styles.badge, desktop && styles.desktopBadge]}
-          />
+          <ClanSpringTarget part="badge">
+            <MobileWebImage
+              imageUrl={clan.badgeUrls.smallest}
+              cachePolicy="memory-disk"
+              transition={0}
+              style={[styles.badge, desktop && styles.desktopBadge]}
+            />
+          </ClanSpringTarget>
           <View style={desktop ? styles.desktopIdentityCopy : styles.centered}>
             <Pressable
               accessibilityRole="button"
@@ -163,9 +254,11 @@ export function ClanInfoHeader({
               testID="clan-header-name-copy"
               onPress={copyClanTag}
             >
-              <CKText numberOfLines={1} style={styles.name}>
-                {clan.name}
-              </CKText>
+              <ClanSpringTarget part="name">
+                <CKText numberOfLines={1} style={styles.name}>
+                  {clan.name}
+                </CKText>
+              </ClanSpringTarget>
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -197,35 +290,28 @@ export function ClanInfoHeader({
                   <Shield key={label.id} size={16} color="#FFFFFFC2" />
                 );
               })}
-              {clan.description.trim() ? (
+              {description ? (
                 <Pressable
+                  ref={descriptionTriggerRef}
+                  testID="clan-description-trigger"
                   accessibilityRole="button"
-                  accessibilityLabel={expanded ? t('generalCollapse') : t('generalExpand')}
-                  onPress={() => setExpanded(!expanded)}
+                  accessibilityLabel={t('generalExpand')}
+                  onPress={showDescription}
+                  hitSlop={8}
                 >
                   <MoreHorizontal size={18} color="#FFFFFFC2" />
                 </Pressable>
               ) : null}
             </View>
-            {desktop && expanded && clan.description.trim() ? (
-              <CKText style={[styles.description, styles.desktopDescription]}>
-                {clan.description.trim()}
-              </CKText>
-            ) : null}
           </View>
         </View>
         <View style={styles.stats}>
-          {!desktop && expanded && clan.description.trim() ? (
-            <CKText style={[styles.description, styles.mobilePanelDescription]}>
-              {clan.description.trim()}
-            </CKText>
-          ) : null}
           <View style={styles.leagues}>
             <LeagueTile
               leagueName={warLeagueLabel.replace(' League', '')}
               subtitle={t('cwlTitle')}
               imageUrl={ImageAssets.getWarLeagueImage(warLeagueAssetName)}
-              onPress={model.hasCwlLeagueData ? () => actions.openCwl(clan) : undefined}
+              onPress={() => actions.openCwl(clan)}
             />
             <LeagueTile
               leagueName={capitalLeagueLabel.replace(' League', '')}
@@ -240,43 +326,63 @@ export function ClanInfoHeader({
             />
           </View>
           <View style={styles.quickStats}>
-            <View style={styles.quickStatRow}>
-              {primaryStats.map((stat) => (
-                <QuickStat key={`${stat.label}:${stat.value}`} {...stat} />
-              ))}
-            </View>
-            {secondaryStats.length ? (
-              <View style={styles.quickStatRow}>
-                {secondaryStats.map((stat) => (
-                  <QuickStat key={`${stat.label}:${stat.value}`} {...stat} />
+            {[primaryStats, secondaryStats].map((stats, index) => (
+              <View key={index} style={styles.quickStatRow}>
+                {stats.map((stat) => (
+                  <ProfileStatChip
+                    key={`${stat.label}:${stat.value}`}
+                    label={stat.label}
+                    value={stat.value}
+                    icon={stat.image}
+                    iconElement={stat.iconElement}
+                  />
                 ))}
               </View>
-            ) : null}
+            ))}
           </View>
         </View>
       </View>
+      <Modal supportedOrientations={modalOrientations}
+        visible={descriptionVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={hideDescription}
+        statusBarTranslucent
+      >
+        <Pressable
+          testID="clan-description-overlay"
+          style={styles.tooltipBackdrop}
+          onPress={hideDescription}
+        >
+          <Pressable
+            testID="clan-description-tooltip"
+            accessibilityViewIsModal
+            onPress={(event) => event.stopPropagation()}
+            style={[
+              styles.tooltip,
+              {
+                top: tooltipTop,
+                left: tooltipLeft,
+                width: tooltipWidth,
+                maxHeight: tooltipMaxHeight,
+              },
+            ]}
+          >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={materialCloseLabel(locale)}
+              onPress={hideDescription}
+              style={styles.tooltipClose}
+            >
+              <X size={16} color="#FFFFFFC2" />
+            </Pressable>
+            <ScrollView bounces={false} contentContainerStyle={styles.tooltipContent}>
+              <CKText style={styles.tooltipText}>{description}</CKText>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
-  );
-}
-
-function HeaderAction({
-  label,
-  onPress,
-  icon,
-}: {
-  label: string;
-  onPress: () => void;
-  icon: ReactNode;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      onPress={onPress}
-      style={styles.headerAction}
-    >
-      {icon}
-    </Pressable>
   );
 }
 
@@ -302,7 +408,7 @@ function LeagueTile({
       disabled={!onPress}
       style={styles.leaguePressable}
     >
-      <View style={[styles.leagueTile, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}>
+      <PillSurface testID="clan-header-league-surface" style={styles.leagueTile}>
         <MobileWebImage imageUrl={imageUrl} style={styles.leagueImage} />
         <View style={styles.leagueCopy}>
           <CKText role="bodyMedium" numberOfLines={1} style={styles.leagueName}>
@@ -318,39 +424,16 @@ function LeagueTile({
           </View>
         </View>
         {onPress ? <ChevronRight size={20} color={theme.onSurfaceVariant} /> : null}
-      </View>
+      </PillSurface>
     </Pressable>
   );
 }
 
-function QuickStat({
-  value,
-  image,
-  icon,
-  label,
-}: {
-  value: string;
-  image?: string;
-  icon?: ReactNode;
-  label: string;
-}) {
-  const theme = useCKTheme();
-  return (
-    <View
-      accessibilityLabel={`${label}: ${value}`}
-      style={[styles.quickStat, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}
-    >
-      {image ? <MobileWebImage imageUrl={image} style={styles.quickImage} /> : icon}
-      <CKText role="labelLarge" numberOfLines={1}>
-        {value}
-      </CKText>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  hero: { width: '100%', backgroundColor: '#000' },
-  imageDarken: { ...StyleSheet.absoluteFill, backgroundColor: '#00000080' },
+  // The destination bar supplies the same 8px top gap as Player Info; avoid a
+  // second gutter here. The opaque gradient tail handles the artwork seam.
+  hero: { width: '100%', paddingBottom: 0, backgroundColor: '#000', overflow: 'hidden' },
+  imageDarken: { ...StyleSheet.absoluteFill, backgroundColor: '#00000094' },
   actions: {
     minHeight: 48,
     paddingHorizontal: 12,
@@ -360,13 +443,6 @@ const styles = StyleSheet.create({
   },
   desktopActions: { width: '100%', maxWidth: 1120, alignSelf: 'center', paddingHorizontal: 20 },
   actionSpacer: { flex: 1 },
-  headerAction: {
-    width: 48,
-    height: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-  },
   actionImage: { width: 24, height: 24, resizeMode: 'contain' },
   body: {},
   mobileBody: { paddingTop: 6 },
@@ -400,16 +476,32 @@ const styles = StyleSheet.create({
   metaDivider: { color: '#FFFFFF4D', marginHorizontal: 3 },
   flag: { width: 16, height: 16 },
   labelIcon: { width: 16, height: 16 },
-  description: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginTop: 6,
-    paddingHorizontal: 20,
+  tooltipBackdrop: { flex: 1 },
+  tooltip: {
+    position: 'absolute',
+    borderRadius: 18,
+    backgroundColor: '#242428F2',
+    borderWidth: 1,
+    borderColor: '#FFFFFF24',
+    shadowColor: '#000',
+    shadowOpacity: 0.35,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 12,
+    overflow: 'hidden',
   },
-  desktopDescription: { textAlign: 'left', paddingHorizontal: 0 },
-  mobilePanelDescription: { marginTop: 0, marginBottom: 8 },
+  tooltipClose: {
+    position: 'absolute',
+    zIndex: 1,
+    top: 4,
+    right: 4,
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tooltipContent: { paddingVertical: 16, paddingLeft: 16, paddingRight: 48 },
+  tooltipText: { color: '#FFF', fontSize: 14, lineHeight: 20 },
   stats: { flex: 6, paddingTop: 11, paddingHorizontal: 16, paddingBottom: 0 },
   leagues: { flexDirection: 'row', gap: 8 },
   leaguePressable: { flex: 1 },
@@ -436,13 +528,4 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 7,
   },
-  quickStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
-  quickImage: { width: 19, height: 19, resizeMode: 'contain' },
 });

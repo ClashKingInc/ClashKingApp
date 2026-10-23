@@ -28,6 +28,7 @@ export const STORAGE_KEYS = {
   selectedTag: 'selectedTag',
   remoteFeatureFlagSeed: 'remoteFeatureFlagSeed',
   playerCardOptions: 'player_card_options_v1',
+  hideAccountsControls: 'hide_accounts_controls_v1',
   warStatsFilterPresets: 'war_stats_filter_presets',
   notificationSettings: 'notification_settings_v2',
   notificationsEnabled: 'notif_settings_notifications_enabled',
@@ -41,6 +42,10 @@ export const STORAGE_KEYS = {
   gameAssetManifest: 'game_asset_manifest_v1',
   gameAssetManifestFetchedAt: 'game_asset_manifest_v1_fetched_at',
   upgradeTrackerSnapshotIndex: 'upgrade_tracker_snapshot_index_v1',
+  homeCardOrder: 'home_card_order_v1',
+  homeIncludedAccounts: 'home_included_accounts_v1',
+  mobileDrawerGestureHintSeen: 'mobile_drawer_gesture_hint_seen_v1',
+  rankingLocations: 'ranking_locations_v1',
 } as const;
 
 export const LEGACY_APP_PREFERENCE_KEYS = [

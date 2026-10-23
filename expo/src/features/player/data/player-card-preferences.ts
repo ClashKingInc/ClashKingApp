@@ -7,6 +7,19 @@ export class PlayerCardPreferencesService {
   private loadedValue = false;
   private readonly options = new Map<string, PlayerCardOptions>();
   private readonly listeners = new Set<() => void>();
+  private homeIncluded: readonly string[] | null = null;
+  private homeWrite = Promise.resolve();
+  private hideControls = false;
+  get hideAccountsEnabled() {
+    return this.hideControls;
+  }
+  async setHideAccountsEnabled(enabled: boolean) {
+    // This exposes controls only. Never rewrite account-link privacy from an
+    // app preference, especially when disabling the controls again.
+    await this.storage.setString(STORAGE_KEYS.hideAccountsControls, String(enabled));
+    this.hideControls = enabled;
+    this.notify();
+  }
   constructor(private readonly storage: StringStorage) {}
   get loaded() {
     return this.loadedValue;
@@ -21,8 +34,9 @@ export class PlayerCardPreferencesService {
   optionsFor(tag: string) {
     return this.options.get(normalizeTag(tag)) ?? new PlayerCardOptions();
   }
-  isShownInWarTab(tag: string) {
-    return this.optionsFor(tag).showInWarTab;
+  isShownInWarTab(_tag: string) {
+    // Retired switches must not keep silently hiding accounts saved by old builds.
+    return true;
   }
   isShownInTodoPage(tag: string) {
     return this.optionsFor(tag).showInTodoPage;
@@ -30,15 +44,23 @@ export class PlayerCardPreferencesService {
   isUpgradeTrackerShownOnHome(tag: string) {
     return this.optionsFor(tag).showUpgradeTrackerOnHome;
   }
-  isRankedShownOnHome(tag: string) {
-    return this.optionsFor(tag).showRankedOnHome;
+  isRankedShownOnHome(_tag: string) {
+    return true;
   }
   clear() {
     this.options.clear();
+    this.homeIncluded = null;
+    this.hideControls = false;
+    this.loadedValue = false;
     this.notify();
   }
   async load() {
-    const raw = await this.storage.getString(STORAGE_KEYS.playerCardOptions);
+    const [raw, homeRaw, hideRaw] = await Promise.all([
+      this.storage.getString(STORAGE_KEYS.playerCardOptions),
+      this.storage.getString(STORAGE_KEYS.homeIncludedAccounts),
+      this.storage.getString(STORAGE_KEYS.hideAccountsControls),
+    ]);
+    this.hideControls = hideRaw === 'true';
     this.options.clear();
     if (raw)
       try {
@@ -49,8 +71,77 @@ export class PlayerCardPreferencesService {
       } catch {
         /* malformed preferences are intentionally ignored */
       }
+    this.homeIncluded = null;
+    if (homeRaw)
+      try {
+        const decoded: unknown = JSON.parse(homeRaw);
+        if (Array.isArray(decoded))
+          this.homeIncluded = decoded.filter((tag): tag is string => typeof tag === 'string');
+      } catch {
+        /* malformed Home preferences fall back to verified accounts */
+      }
     this.loadedValue = true;
     this.notify();
+  }
+  homeIncludedTags(
+    verifiedTags: readonly string[],
+    selectedTag?: string | null,
+  ): readonly string[] {
+    const storedHasNoCurrentAccount =
+      this.homeIncluded !== null &&
+      this.homeIncluded.length > 0 &&
+      !this.homeIncluded.some((tag) =>
+        verifiedTags.some((verified) => normalizeTag(verified) === normalizeTag(tag)),
+      );
+    return normalizeHomeIncludedTags(
+      this.homeIncluded === null || storedHasNoCurrentAccount ? verifiedTags : this.homeIncluded,
+      verifiedTags,
+      selectedTag,
+      this.homeIncluded === null ||
+        storedHasNoCurrentAccount ||
+        this.homeIncluded.length > MAX_HOME_ACCOUNTS,
+    );
+  }
+  isShownOnHome(
+    tag: string,
+    verifiedTags: readonly string[],
+    selectedTag?: string | null,
+  ): boolean {
+    return this.homeIncludedTags(verifiedTags, selectedTag).includes(normalizeTag(tag));
+  }
+  async reconcileHomeIncluded(
+    verifiedTags: readonly string[],
+    selectedTag?: string | null,
+  ): Promise<void> {
+    if (verifiedTags.length === 0) return;
+    const normalized = this.homeIncludedTags(verifiedTags, selectedTag);
+    if (this.homeIncluded !== null && arraysEqual(this.homeIncluded, normalized)) return;
+    this.homeIncluded = normalized;
+    this.notify();
+    await this.persistHomeIncluded();
+  }
+  async setShownOnHome(
+    tag: string,
+    enabled: boolean,
+    verifiedTags: readonly string[],
+    selectedTag?: string | null,
+  ): Promise<void> {
+    const key = normalizeTag(tag);
+    const available = new Set(verifiedTags.map(normalizeTag).filter(Boolean));
+    if (!available.has(key)) return;
+    const current = this.homeIncludedTags(verifiedTags, selectedTag);
+    if ((enabled && current.includes(key)) || (!enabled && !current.includes(key))) return;
+    if (enabled && current.length >= MAX_HOME_ACCOUNTS) throw new HomeAccountLimitError();
+    this.homeIncluded = enabled ? [...current, key] : current.filter((item) => item !== key);
+    this.notify();
+    await this.persistHomeIncluded();
+  }
+  private persistHomeIncluded(): Promise<void> {
+    const value = JSON.stringify(this.homeIncluded);
+    this.homeWrite = this.homeWrite
+      .catch(() => undefined)
+      .then(() => this.storage.setString(STORAGE_KEYS.homeIncludedAccounts, value));
+    return this.homeWrite;
   }
   setShowInWarTab(tag: string, value: boolean) {
     return this.update(tag, (item) => item.copyWith({ showInWarTab: value }));
@@ -77,4 +168,44 @@ export class PlayerCardPreferencesService {
       ),
     );
   }
+}
+
+export const MAX_HOME_ACCOUNTS = 5;
+
+export class HomeAccountLimitError extends Error {
+  constructor() {
+    super('Home can include at most five accounts.');
+    this.name = 'HomeAccountLimitError';
+  }
+}
+
+export function normalizeHomeIncludedTags(
+  stored: unknown,
+  verifiedTags: readonly string[],
+  selectedTag?: string | null,
+  prioritizeSelected = false,
+): string[] {
+  const available = new Set(verifiedTags.map(normalizeTag).filter(Boolean));
+  const normalized: string[] = [];
+  if (Array.isArray(stored))
+    for (const value of stored) {
+      if (typeof value !== 'string') continue;
+      const key = normalizeTag(value);
+      if (available.has(key) && !normalized.includes(key)) normalized.push(key);
+    }
+  const selected = selectedTag ? normalizeTag(selectedTag) : '';
+  if (
+    prioritizeSelected &&
+    selected &&
+    available.has(selected) &&
+    normalized.includes(selected) &&
+    normalized.indexOf(selected) >= MAX_HOME_ACCOUNTS
+  ) {
+    normalized.splice(MAX_HOME_ACCOUNTS - 1, 1, selected);
+  }
+  return normalized.slice(0, MAX_HOME_ACCOUNTS);
+}
+
+function arraysEqual(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
 }
