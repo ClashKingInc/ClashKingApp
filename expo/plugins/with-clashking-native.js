@@ -6,6 +6,7 @@ const {
   AndroidConfig,
   IOSConfig,
   withAndroidManifest,
+  withAppDelegate,
   withDangerousMod,
   withEntitlementsPlist,
   withFinalizedMod,
@@ -1028,6 +1029,25 @@ function withClashKingNative(config, options = {}) {
 
   config = assertAndApplyIdentity(config, contract);
   config = configureFirebaseFiles(config, projectRoot, contract);
+  config = withAppDelegate(config, (mod) => {
+    // SDK 58 moved window startup into SceneDelegate. RNFirebase's older
+    // insertion matcher misses that template, but Firebase still must be
+    // configured once before modules request its default app.
+    if (mod.modResults.language === 'swift' && !mod.modResults.contents.includes('FirebaseApp.configure()')) {
+      const marker = '    let delegate = ReactNativeDelegate()';
+      if (!mod.modResults.contents.includes(marker)) {
+        throw new Error('Cannot locate SDK 58 Firebase initialization point.');
+      }
+      mod.modResults.contents = mod.modResults.contents.replace(
+        marker,
+        `    if FirebaseApp.app() == nil { FirebaseApp.configure() }\n${marker}`,
+      );
+      if (!mod.modResults.contents.includes('import FirebaseCore')) {
+        mod.modResults.contents = `import FirebaseCore\n${mod.modResults.contents}`;
+      }
+    }
+    return mod;
+  });
   config = withClashKingInfoPlist(config, contract);
   config = withClashKingEntitlements(config, contract);
   config = withClashKingAndroidLinks(config, contract);

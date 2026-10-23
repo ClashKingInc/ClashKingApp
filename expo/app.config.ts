@@ -205,9 +205,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           },
           android: {
             minSdkVersion: 24,
-            compileSdkVersion: 36,
-            targetSdkVersion: 36,
-            kotlinVersion: '2.1.20',
+            // Let the installed SDK choose matching compile/target/Kotlin
+            // versions; pinning SDK 57's toolchain breaks SDK 58 native modules.
           },
         },
       ],

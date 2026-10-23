@@ -3,6 +3,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const config = getDefaultConfig(__dirname);
+// SDK 58's Rust worker preserves Babel fallback for transforms it cannot run
+// (including worklets). Keep this at the actual Metro transformer boundary.
+config.transformer.unstable_noxcturnalTransformWorker = true;
 if (!config.resolver.assetExts.includes('glb')) config.resolver.assetExts.push('glb');
 
 config.server.enhanceMiddleware = (middleware) => (request, response, next) => {
