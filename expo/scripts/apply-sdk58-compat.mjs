@@ -29,3 +29,27 @@ for (const relative of [
   fs.writeFileSync(file, source);
 }
 console.log('Applied draggable-flatlist 4.0.3 compatibility for RN 0.88.');
+
+const updatesRoot = path.join(root, 'node_modules/expo-updates');
+const updatesVersion = JSON.parse(
+  fs.readFileSync(path.join(updatesRoot, 'package.json'), 'utf8'),
+).version;
+if (updatesVersion !== '58.0.18')
+  throw new Error(`Review expo-updates CMake 4 compatibility for ${updatesVersion}`);
+
+// CMake 4 dropped policies older than 3.5; this is CMake's suggested compatibility setting.
+const updatesGradleFile = path.join(updatesRoot, 'android/build.gradle');
+let updatesGradle = fs.readFileSync(updatesGradleFile, 'utf8');
+const policyArgument = '"-DCMAKE_POLICY_VERSION_MINIMUM=3.5"';
+if (!updatesGradle.includes(policyArgument)) {
+  const flexiblePageSizeArgument = '          "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"';
+  if (!updatesGradle.includes(flexiblePageSizeArgument)) {
+    throw new Error('Could not find expo-updates CMake arguments to apply CMake 4 compatibility');
+  }
+  updatesGradle = updatesGradle.replace(
+    flexiblePageSizeArgument,
+    `${flexiblePageSizeArgument},\n          ${policyArgument}`,
+  );
+  fs.writeFileSync(updatesGradleFile, updatesGradle);
+}
+console.log('Applied CMake 4 compatibility for expo-updates 58.0.18.');
