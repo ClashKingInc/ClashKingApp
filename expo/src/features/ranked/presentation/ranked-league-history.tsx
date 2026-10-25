@@ -94,7 +94,9 @@ export function RankedLeagueHistory({
     }).format(point.startsAt);
   return (
     <Surface testID="ranked-league-history-chart" style={{ padding: 16, gap: 12, borderWidth: 0 }}>
-      <CKText role="titleSmall">{t('rankedLeagueOverTime')}</CKText>
+      <CKText skeleton={false} role="titleSmall">
+        {t('rankedLeagueOverTime')}
+      </CKText>
       {selected || loading ? (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <MobileWebImage

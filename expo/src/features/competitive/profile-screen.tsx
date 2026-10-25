@@ -360,7 +360,9 @@ export function CompetitiveProfileScreen({
                     </View>
                   ) : (
                     <View style={styles.section}>
-                      <CKText role="sectionTitle">{t('navigationStatistics')}</CKText>
+                      <CKText skeleton={false} role="sectionTitle">
+                        {t('navigationStatistics')}
+                      </CKText>
                       {profile.statsAvailability ? (
                         <>
                           <View style={styles.metrics}>
@@ -400,7 +402,9 @@ export function CompetitiveProfileScreen({
                       ) : (
                         <ProfileEmpty />
                       )}
-                      <CKText role="sectionTitle">{t('generalHistory')}</CKText>
+                      <CKText skeleton={false} role="sectionTitle">
+                        {t('generalHistory')}
+                      </CKText>
                       {profile.tournamentHistory?.length ? (
                         profile.tournamentHistory.map((entry) => (
                           <ProfileRow
@@ -414,7 +418,9 @@ export function CompetitiveProfileScreen({
                       ) : (
                         <ProfileEmpty />
                       )}
-                      <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
+                      <CKText skeleton={false} role="sectionTitle">
+                        {t('competitiveTeams')}
+                      </CKText>
                       {allTeams.length ? (
                         allTeams.map((team) => (
                           <ProfileRow

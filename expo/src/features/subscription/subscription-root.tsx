@@ -59,7 +59,7 @@ export function SubscriptionRoot({ onBack }: { readonly onBack: () => void }) {
           label={materialBackLabel(locale)}
           onPress={onBack}
         />
-        <CKText role="sectionTitle" numberOfLines={1} style={styles.title}>
+        <CKText skeleton={false} role="sectionTitle" numberOfLines={1} style={styles.title}>
           {t('drawerSubscription')}
         </CKText>
         <View style={styles.headerSpacer} />

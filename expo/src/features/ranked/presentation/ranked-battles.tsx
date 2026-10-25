@@ -127,7 +127,9 @@ export function RankedBattles({
                   imageUrl={key === 'attacks' ? ImageAssets.sword : ImageAssets.shieldWithArrow}
                   style={styles.icon}
                 />
-                <CKText role="rowTitle">{label}</CKText>
+                <CKText skeleton={false} role="rowTitle">
+                  {label}
+                </CKText>
               </View>
               <View style={styles.summaryNumbers}>
                 <CKText role="titleLarge">
@@ -153,7 +155,7 @@ export function RankedBattles({
       <View style={styles.summaryStrip}>
         <View style={styles.inline}>
           <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.smallIcon} />
-          <CKText role="metadata" muted>
+          <CKText skeleton={false} role="metadata" muted>
             {t('rankedLeagueAverage')}
           </CKText>
           <CKText role="rowTitle">{average === null ? '—' : signed(average)}</CKText>

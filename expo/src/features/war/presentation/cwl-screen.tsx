@@ -538,7 +538,9 @@ const CwlMatches = memo(function CwlMatches({
   return (
     <View style={styles.stack}>
       <View style={styles.sectionHeading}>
-        <CKText role="sectionTitle">{t('cwlRounds')}</CKText>
+        <CKText skeleton={false} role="sectionTitle">
+          {t('cwlRounds')}
+        </CKText>
         <CKText role="metadata" muted>
           {t('cwlRoundNumber', { number: round?.roundNumber ?? 1 })}
         </CKText>
@@ -640,7 +642,9 @@ const CwlMatches = memo(function CwlMatches({
               onPress={() => onOpenWar(ours, round!.roundNumber)}
               style={[styles.detailLink, { marginLeft: 'auto' }]}
             >
-              <CKText role="metadata">{t('generalDetails')}</CKText>
+              <CKText skeleton={false} role="metadata">
+                {t('generalDetails')}
+              </CKText>
               <ChevronRight size={18} color={theme.onSurfaceVariant} />
             </Pressable>
           </View>
@@ -665,7 +669,9 @@ const CwlMatches = memo(function CwlMatches({
       )}
       {next && ours?.tag === active?.tag ? (
         <View style={styles.stack}>
-          <CKText role="sectionTitle">{t('cwlNextMatchup')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('cwlNextMatchup')}
+          </CKText>
           <MatchRow
             war={next}
             onPress={() => onOpenWar(next, summary.getRoundForWarTag(next.tag).roundNumber)}
@@ -675,7 +681,9 @@ const CwlMatches = memo(function CwlMatches({
       ) : null}
       {others.length ? (
         <View style={styles.stack}>
-          <CKText role="sectionTitle">{t('cwlOtherMatches')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('cwlOtherMatches')}
+          </CKText>
           {others.map((war) => (
             <MatchRow key={war.tag} war={war} onPress={() => onOpenWar(war, round!.roundNumber)} />
           ))}
@@ -875,7 +883,7 @@ const CwlClans = memo(function CwlClans({
                 <MobileWebImage imageUrl={ImageAssets.attackStar} style={styles.metricIcon} />
                 <CKText role="body">
                   {standing.stars}{' '}
-                  <CKText role="metadata" muted>
+                  <CKText skeleton={false} role="metadata" muted>
                     {t('warStarsTitle')}
                   </CKText>
                 </CKText>
@@ -887,7 +895,7 @@ const CwlClans = memo(function CwlClans({
                 />
                 <CKText role="body">
                   {standing.wins}{' '}
-                  <CKText role="metadata" muted>
+                  <CKText skeleton={false} role="metadata" muted>
                     {t('warWinsTitle')}
                   </CKText>
                 </CKText>
@@ -1058,7 +1066,11 @@ function SeasonOutlook({
           <CKText role="metadata" muted>
             {t('cwlEstimateNote')}
           </CKText>
-          {remaining.length ? <CKText role="rowTitle">{t('cwlRemainingOpponents')}</CKText> : null}
+          {remaining.length ? (
+            <CKText skeleton={false} role="rowTitle">
+              {t('cwlRemainingOpponents')}
+            </CKText>
+          ) : null}
           {remaining.map((opponent) => (
             <View key={opponent.tag} style={styles.clanHeading}>
               <MobileWebImage imageUrl={opponent.badgeUrls.smallest} style={styles.smallBadge} />

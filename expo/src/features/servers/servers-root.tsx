@@ -53,7 +53,7 @@ export function ServersRoot({
       ) : (
         <View style={styles.addLabel}>
           <Plus color={theme.primary} size={16} />
-          <CKText role="labelLarge" style={{ color: theme.primary }}>
+          <CKText skeleton={false} role="labelLarge" style={{ color: theme.primary }}>
             {t('discordAddBot')}
           </CKText>
         </View>
@@ -69,7 +69,7 @@ export function ServersRoot({
         <Pressable accessibilityRole="button" onPress={onBack} style={styles.headerAction}>
           <ChevronLeft color={theme.onSurface} />
         </Pressable>
-        <CKText role="titleMedium" style={styles.identity}>
+        <CKText skeleton={false} role="titleMedium" style={styles.identity}>
           {t('homeWidgetsServers')}
         </CKText>
       </View>
@@ -130,7 +130,9 @@ export function ServersRoot({
             </View>
             {installable.length > 0 ? (
               <View style={styles.section}>
-                <CKText role="titleSmall">{t('discordServersWithoutBot')}</CKText>
+                <CKText skeleton={false} role="titleSmall">
+                  {t('discordServersWithoutBot')}
+                </CKText>
                 {installable.map(row)}
               </View>
             ) : null}

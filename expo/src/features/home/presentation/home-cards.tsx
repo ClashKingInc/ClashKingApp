@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Plus } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -93,10 +93,10 @@ function HomeWidgetHeader({
   return (
     <View style={styles.mobileHeader}>
       <View>
-        <MobileWebImage imageUrl={imageUrl} style={{ width: 36, height: 36 }} />
+        <MobileWebImage skeleton={false} imageUrl={imageUrl} style={{ width: 36, height: 36 }} />
       </View>
       <View style={styles.flex}>
-        <CKText role="titleSmall" numberOfLines={1}>
+        <CKText skeleton={false} role="titleSmall" numberOfLines={1}>
           {title}
         </CKText>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -315,20 +315,30 @@ export function HomeRankedCard({
             cornerImageUrl={account.imageUrl}
             title={account.name}
             subtitle={
-              account.mode === 'legend'
-                ? account.rank
-                  ? `${t('cwlRankTitle')} #${account.rank}`
-                  : undefined
-                : account.rank !== null
-                  ? `${t('cwlRankTitle')} #${account.rank} / ${account.groupSize}`
-                  : `${account.tierName} · ${t('rankedLeagueNoGroup')}`
-            }
-            subtitleColor={
-              account.rankZone === 'promotion'
-                ? statColors.win
-                : account.rankZone === 'demotion'
-                  ? statColors.loss
-                  : undefined
+              account.mode === 'legend' ? (
+                account.rank ? (
+                  `${t('cwlRankTitle')} #${account.rank}`
+                ) : undefined
+              ) : account.rank !== null ? (
+                <>
+                  {t('cwlRankTitle')}{' '}
+                  <Text
+                    style={{
+                      color:
+                        account.rankZone === 'promotion'
+                          ? statColors.win
+                          : account.rankZone === 'demotion'
+                            ? statColors.loss
+                            : undefined,
+                    }}
+                  >
+                    #{account.rank}
+                  </Text>
+                  {` / ${account.groupSize}`}
+                </>
+              ) : (
+                `${account.tierName} · ${t('rankedLeagueNoGroup')}`
+              )
             }
             size={40}
             cornerSize={20}

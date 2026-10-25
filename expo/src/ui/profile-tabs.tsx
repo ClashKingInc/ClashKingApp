@@ -79,6 +79,7 @@ export function ProfileTabs({
         >
           {tintIcon(tab.icon, colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64))}
           <CKText
+            skeleton={false}
             role="labelLarge"
             style={{ color: colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64) }}
           >
@@ -169,7 +170,9 @@ export function ProfileTabs({
                 isSelected && { backgroundColor: colorWithAlpha(theme.onSurface, 0.12) },
               ]}
             >
-              <CKText role="labelSmall">{tab.label}</CKText>
+              <CKText skeleton={false} role="labelSmall">
+                {tab.label}
+              </CKText>
             </Pressable>
           );
         })}
@@ -199,7 +202,11 @@ export function ProfileTabs({
               ]}
             >
               {tintIcon(tab.icon, isSelected ? theme.primary : theme.onSurfaceVariant)}
-              <CKText role="labelLarge" style={isSelected ? { color: theme.primary } : undefined}>
+              <CKText
+                skeleton={false}
+                role="labelLarge"
+                style={isSelected ? { color: theme.primary } : undefined}
+              >
                 {tab.label}
               </CKText>
             </Pressable>

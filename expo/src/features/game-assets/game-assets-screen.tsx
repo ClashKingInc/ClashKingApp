@@ -281,8 +281,12 @@ function SimpleHeader({ onBack }: { onBack: () => void }) {
         }
       />
       <View style={styles.heroCopy}>
-        <CKText role="screenTitle">{t('sideGameAssetsTitle')}</CKText>
-        <CKText muted>{t('sideGameAssetsSubtitle')}</CKText>
+        <CKText skeleton={false} role="screenTitle">
+          {t('sideGameAssetsTitle')}
+        </CKText>
+        <CKText skeleton={false} muted>
+          {t('sideGameAssetsSubtitle')}
+        </CKText>
       </View>
     </View>
   );

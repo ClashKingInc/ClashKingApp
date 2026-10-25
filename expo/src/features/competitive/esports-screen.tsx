@@ -622,7 +622,9 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
         <View style={styles.heroCopy}>
           <CKText style={[styles.heroTitle, styles.white]}>{t('clanRankingsTab')} · Elo</CKText>
           <View style={styles.sourceAttribution}>
-            <CKText style={styles.heroSubtitle}>{t('esportsEloSubtitle')}</CKText>
+            <CKText skeleton={false} style={styles.heroSubtitle}>
+              {t('esportsEloSubtitle')}
+            </CKText>
             <MobileWebImage
               imageUrl="https://competitiveclash.network/img/logo.png"
               contentFit="contain"
@@ -666,7 +668,9 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
               ]}
             />
             <View style={styles.sectionHeading}>
-              <CKText role="sectionTitle">{t('esportsTeamRatings')}</CKText>
+              <CKText skeleton={false} role="sectionTitle">
+                {t('esportsTeamRatings')}
+              </CKText>
               <CKText muted role="metadata">
                 {ranking.data?.total.toLocaleString(toIntlLocale(locale)) ?? '—'}{' '}
                 {t('competitiveTeams')}
@@ -751,8 +755,10 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
         ) : (
           <>
             <View style={{ gap: 8 }}>
-              <CKText role="sectionTitle">{t('esportsMatches')}</CKText>
-              <CKText muted role="metadata">
+              <CKText skeleton={false} role="sectionTitle">
+                {t('esportsMatches')}
+              </CKText>
+              <CKText skeleton={false} muted role="metadata">
                 {t('esportsTopTeamsMatches')}
               </CKText>
             </View>
@@ -1183,7 +1189,9 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                 <CKText style={[styles.metricValue, styles.white]}>
                   #{placement.data.team.rank.toLocaleString(toIntlLocale(locale))}
                 </CKText>
-                <CKText style={styles.heroSubtitle}>{t('legendsGlobalRankTitle')}</CKText>
+                <CKText skeleton={false} style={styles.heroSubtitle}>
+                  {t('legendsGlobalRankTitle')}
+                </CKText>
               </View>
             ) : null}
             {team?.elo != null ? (
@@ -1197,7 +1205,9 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
             {team ? (
               <View style={styles.heroMetric}>
                 <CKText style={[styles.metricValue, styles.white]}>{team.players.length}</CKText>
-                <CKText style={styles.heroSubtitle}>{t('esportsRoster')}</CKText>
+                <CKText skeleton={false} style={styles.heroSubtitle}>
+                  {t('esportsRoster')}
+                </CKText>
               </View>
             ) : null}
           </View>
@@ -1208,7 +1218,9 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                 accessibilityRole="button"
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
               >
-                <CKText style={styles.heroSubtitle}>{t('esportsRoster')}</CKText>
+                <CKText skeleton={false} style={styles.heroSubtitle}>
+                  {t('esportsRoster')}
+                </CKText>
                 <ChevronRight color="#E8DCF9" size={16} />
               </Pressable>
               <ScrollView
@@ -1356,7 +1368,9 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                           ))}
                         </View>
                         {team?.clans.length ? (
-                          <CKText role="sectionTitle">{t('searchTabClans')}</CKText>
+                          <CKText skeleton={false} role="sectionTitle">
+                            {t('searchTabClans')}
+                          </CKText>
                         ) : null}
                         {team?.clans.map((clan) => (
                           <Row
@@ -1371,7 +1385,9 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                       <>
                         <Feedback query={upcoming} />
                         {upcoming.data?.upcoming_matches.length ? (
-                          <CKText role="sectionTitle">{t('homeUpcomingTitle')}</CKText>
+                          <CKText skeleton={false} role="sectionTitle">
+                            {t('homeUpcomingTitle')}
+                          </CKText>
                         ) : null}
                         <SkeletonContent loading={upcoming.loading && !upcoming.data}>
                           {(
@@ -1404,7 +1420,9 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                             </View>
                           ))}
                         </SkeletonContent>
-                        <CKText role="sectionTitle">{t('esportsRecentMatches')}</CKText>
+                        <CKText skeleton={false} role="sectionTitle">
+                          {t('esportsRecentMatches')}
+                        </CKText>
                         <Feedback query={matches} empty={matches.data?.length === 0} />
                         <SkeletonContent loading={matches.loading && !matches.data}>
                           {(matches.data ?? (matches.loading ? loadingMatches : [])).map(
@@ -1515,7 +1533,7 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
                     onPress={() => push({ kind: 'ccnPlayer', tag: attack.attacker.tag })}
                     style={styles.attackPlayer}
                   >
-                    <CKText muted role="metadata">
+                    <CKText skeleton={false} muted role="metadata">
                       {t('esportsAttack')}
                     </CKText>
                     <PlayerPortrait
@@ -1554,7 +1572,7 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
                     onPress={() => push({ kind: 'ccnPlayer', tag: attack.defender.tag })}
                     style={styles.attackPlayer}
                   >
-                    <CKText muted role="metadata">
+                    <CKText skeleton={false} muted role="metadata">
                       {t('esportsDefense')}
                     </CKText>
                     <PlayerPortrait
@@ -1618,7 +1636,9 @@ export function EsportsPlayer({ tag }: { tag: string }) {
               ).map(([label, stats]) =>
                 stats ? <PerformanceStats key={label} stats={stats} label={t(label)} /> : null,
               )}
-              <CKText role="sectionTitle">{t('esportsAccounts')}</CKText>
+              <CKText skeleton={false} role="sectionTitle">
+                {t('esportsAccounts')}
+              </CKText>
               {player.accounts.map((account) => (
                 <GameAccount key={account.tag} name={account.name} tag={account.tag} />
               ))}

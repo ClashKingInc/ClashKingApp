@@ -405,7 +405,7 @@ function WeekNavigator({
             onPress={() => undefined}
           >
             <View style={styles.dialogTitle}>
-              <CKText role="sectionTitle" style={styles.grow}>
+              <CKText skeleton={false} role="sectionTitle" style={styles.grow}>
                 {t('clanCapitalSelectedRaid')}
               </CKText>
               <HeaderIconButton
@@ -504,7 +504,7 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
           onPress={() => setOpponentOpen(true)}
         >
           <CardSurface style={styles.summaryCard}>
-            <CKText muted role="metadata">
+            <CKText skeleton={false} muted role="metadata">
               {t('capitalCurrentOpponent')}
             </CKText>
             <View style={styles.rewardRow}>
@@ -522,13 +522,13 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
                 <CKText role="bodyLarge">
                   {currentOpponent.districtsDestroyed}/{currentOpponent.districtCount}
                 </CKText>
-                <CKText muted role="metadata">
+                <CKText skeleton={false} muted role="metadata">
                   {t('raidsDistrictsDestroyed')}
                 </CKText>
               </View>
               <View style={styles.grow}>
                 <CKText role="bodyLarge">{currentOpponent.attacks}</CKText>
-                <CKText muted role="metadata">
+                <CKText skeleton={false} muted role="metadata">
                   {t('warAttacksTitle')}
                 </CKText>
               </View>
@@ -545,7 +545,7 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
         <View style={styles.rewardRow}>
           <MobileWebImage imageUrl={ImageAssets.raidMedal} style={styles.rewardImage} />
           <View style={styles.grow}>
-            <CKText muted role="metadata">
+            <CKText skeleton={false} muted role="metadata">
               {t('capitalRaidRewards')}
             </CKText>
             <CKText role="titleLarge" style={styles.rewardValue} numberOfLines={1}>
@@ -555,7 +555,7 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
           {ongoing ? (
             <PillSurface style={styles.estimated}>
               <BarChart3 size={12} color={theme.tertiary} />
-              <CKText role="labelMedium" style={{ color: theme.tertiary }}>
+              <CKText skeleton={false} role="labelMedium" style={{ color: theme.tertiary }}>
                 {t('capitalRaidEstimated')}
               </CKText>
             </PillSurface>
@@ -850,11 +850,11 @@ function CapitalStatsTab({
     ended.length > 1 ? (
       <CardSurface style={styles.chartCard}>
         <View style={styles.dialogTitle}>
-          <CKText role="sectionTitle" style={styles.grow}>
+          <CKText skeleton={false} role="sectionTitle" style={styles.grow}>
             {t('capitalHistoryChartTitle')}
           </CKText>
           {metric === 'trophies' ? (
-            <CKText muted role="metadata">
+            <CKText skeleton={false} muted role="metadata">
               {t('capitalRaidEstimated')}
             </CKText>
           ) : null}
@@ -1135,7 +1135,7 @@ function DataRow({
 function SectionTitle({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
     <View style={styles.sectionHeading}>
-      <CKText role="titleSmall" style={styles.bold}>
+      <CKText skeleton={false} role="titleSmall" style={styles.bold}>
         {title}
       </CKText>
       {subtitle ? (
@@ -1170,7 +1170,7 @@ function Metric({
         ) : (
           tintIcon(icon, theme.onSurfaceVariant)
         )}
-        <CKText muted role="labelMedium" style={styles.shrink}>
+        <CKText skeleton={false} muted role="labelMedium" style={styles.shrink}>
           {label}
         </CKText>
         {hint ? (
@@ -1197,7 +1197,7 @@ function MetricPill({ label, value }: { label: string; value: number }) {
       <CKText role="labelLarge" style={styles.bold}>
         {formatNumber(value, locale)}
       </CKText>
-      <CKText muted role="labelMedium">
+      <CKText skeleton={false} muted role="labelMedium">
         {label}
       </CKText>
     </PillSurface>

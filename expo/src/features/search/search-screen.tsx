@@ -186,6 +186,7 @@ export function SearchScreen(props: SearchScreenProps) {
       {props.query.trim().length === 0 && visibleRecents.length ? (
         <>
           <CKText
+            skeleton={false}
             role="titleMedium"
             style={[
               styles.recentTitle,

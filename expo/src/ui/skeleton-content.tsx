@@ -1,9 +1,12 @@
-import { createContext, useContext, type PropsWithChildren } from 'react';
-import { Animated, View, type StyleProp, type ViewStyle, type ViewProps } from 'react-native';
+import { createContext, useContext, useMemo, type PropsWithChildren } from 'react';
+import { View, type StyleProp, type ViewStyle, type ViewProps } from 'react-native';
 import { useI18n } from '../i18n';
 import { useSkeletonMotion } from './skeleton-motion';
 
-const SkeletonContentContext = createContext(false);
+const SkeletonContentContext = createContext<{
+  loading: boolean;
+  opacity: number | ReturnType<typeof useSkeletonMotion>;
+}>({ loading: false, opacity: 1 });
 
 /** Loading uses the real card tree. Placeholder values are presentation-only:
  * never pass them to stores, exports or actions. Keep known controls outside
@@ -24,14 +27,18 @@ export function SkeletonContent({
 }>) {
   const { t } = useI18n();
   const inherited = useContext(SkeletonContentContext);
-  const pending = inherited || loading;
-  const opacity = useSkeletonMotion(loading && !inherited);
+  const pending = inherited.loading || loading;
+  const ownOpacity = useSkeletonMotion(loading && !inherited.loading);
+  const opacity = inherited.loading ? inherited.opacity : ownOpacity;
+  const appearance = useMemo(() => ({ loading: pending, opacity }), [pending, opacity]);
   return (
-    <SkeletonContentContext.Provider value={pending}>
-      <Animated.View
+    <SkeletonContentContext.Provider value={appearance}>
+      <View
         testID={testID}
         onLayout={onLayout}
-        style={[style, { opacity }]}
+        // Animate placeholders, not their parent: fixed labels and controls
+        // must stay visible during the reveal delay and shared loading pulse.
+        style={style}
         pointerEvents={pending ? 'none' : 'auto'}
         accessibilityRole={pending ? 'progressbar' : undefined}
         accessibilityLabel={pending ? (label ?? t('generalLoading')) : undefined}
@@ -45,11 +52,16 @@ export function SkeletonContent({
         >
           {children}
         </View>
-      </Animated.View>
+      </View>
     </SkeletonContentContext.Provider>
   );
 }
 
 export function useSkeletonContent(): boolean {
+  return useContext(SkeletonContentContext).loading;
+}
+
+/** One boundary shares its reveal and pulse with every pending primitive. */
+export function useSkeletonAppearance() {
   return useContext(SkeletonContentContext);
 }

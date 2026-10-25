@@ -111,7 +111,11 @@ export function ClanRankingsTab({
   return (
     <View style={styles.tab}>
       <ClanFilterBar
-        middle={<CKText muted>{t('rankingsCurrent')}</CKText>}
+        middle={
+          <CKText skeleton={false} muted>
+            {t('rankingsCurrent')}
+          </CKText>
+        }
         chips={
           <>
             <FilterPill

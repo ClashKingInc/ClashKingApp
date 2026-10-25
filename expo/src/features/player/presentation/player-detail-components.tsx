@@ -842,7 +842,9 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
             </View>
             {localizedDescription ? (
               <>
-                <CKText role="rowTitle">{t('gameItemOverview')}</CKText>
+                <CKText skeleton={false} role="rowTitle">
+                  {t('gameItemOverview')}
+                </CKText>
                 <CKText muted>{localizedDescription}</CKText>
               </>
             ) : null}
@@ -923,7 +925,7 @@ export function PlayerBattlelogTab({
           />
         </Surface>
         <View style={styles.toolbar}>
-          <CKText role="titleLarge" style={styles.grow}>
+          <CKText skeleton={false} role="titleLarge" style={styles.grow}>
             {t('playerBattlelogRecentBattles')}
           </CKText>
         </View>
@@ -1330,8 +1332,10 @@ function BattleOverviewBand({
   return (
     <View style={styles.battleOverviewBand}>
       <View style={styles.battleBandTitle}>
-        <MobileWebImage imageUrl={image} style={styles.battleBandIcon} />
-        <CKText role="labelLarge">{title}</CKText>
+        <MobileWebImage skeleton={false} imageUrl={image} style={styles.battleBandIcon} />
+        <CKText skeleton={false} role="labelLarge">
+          {title}
+        </CKText>
       </View>
       <View style={styles.battleMetricRow}>
         {metrics.map(([metricImage, label, value]) => (
@@ -1341,8 +1345,12 @@ function BattleOverviewBand({
             accessibilityLabel={`${label}: ${value}`}
             style={styles.battleMetric}
           >
-            <MobileWebImage imageUrl={metricImage} style={styles.battleMetricIcon} />
-            <CKText muted role="labelSmall" numberOfLines={1}>
+            <MobileWebImage
+              skeleton={false}
+              imageUrl={metricImage}
+              style={styles.battleMetricIcon}
+            />
+            <CKText skeleton={false} muted role="labelSmall" numberOfLines={1}>
               {label}
             </CKText>
             <CKText role="rowTitle" numberOfLines={1}>
@@ -1353,7 +1361,7 @@ function BattleOverviewBand({
       </View>
       {popular.length ? (
         <>
-          <CKText muted role="labelSmall" style={styles.centerText}>
+          <CKText skeleton={false} muted role="labelSmall" style={styles.centerText}>
             {t('playerBattlelogPopularTroops')}
           </CKText>
           <View style={styles.popularTroopRow}>
@@ -1835,13 +1843,17 @@ export function PlayerJoinLeaveTab({
                 <CKText role="rowTitle">{total.clan.name || total.clan.tag}</CKText>
                 <View style={styles.row}>
                   <CKText style={{ color: '#009688' }}>{joinLeaveDuration(total.minutes)}</CKText>
-                  <CKText muted>{t('playerJoinLeaveTimeSpent')}</CKText>
+                  <CKText skeleton={false} muted>
+                    {t('playerJoinLeaveTimeSpent')}
+                  </CKText>
                 </View>
               </View>
               <PillSurface style={styles.joinLeaveVisitChip}>
                 <Repeat2 size={15} color={theme.primary} />
                 <CKText role="labelLarge">{total.visits}</CKText>
-                <CKText role="labelSmall">{t('playerJoinLeaveVisits')}</CKText>
+                <CKText skeleton={false} role="labelSmall">
+                  {t('playerJoinLeaveVisits')}
+                </CKText>
               </PillSurface>
             </Surface>
           ))}
@@ -1904,7 +1916,7 @@ function JoinLeaveSummaryChip({
     >
       {icon}
       <CKText role="labelLarge">{value}</CKText>
-      <CKText muted role="labelSmall">
+      <CKText skeleton={false} muted role="labelSmall">
         {label}
       </CKText>
     </View>
@@ -2019,7 +2031,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.metric}>
       <CKText role="titleMedium">{value}</CKText>
-      <CKText muted role="labelSmall">
+      <CKText skeleton={false} muted role="labelSmall">
         {label}
       </CKText>
     </View>

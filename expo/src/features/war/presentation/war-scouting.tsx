@@ -67,7 +67,9 @@ export function WarScouting({
       : (value ?? '').toLowerCase();
   return (
     <SkeletonContent loading={!results} style={{ gap: 16 }}>
-      <CKText role="sectionTitle">{t('warScoutTitle')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('warScoutTitle')}
+      </CKText>
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {[war.clan, war.opponent].map((clan, index) => {
           if (!clan) return null;
@@ -108,7 +110,7 @@ export function WarScouting({
               <CKText role="titleLarge">
                 {hits.length ? formatPercent((triples / hits.length) * 100, 0) : '—'}
               </CKText>
-              <CKText role="metadata" muted>
+              <CKText skeleton={false} role="metadata" muted>
                 {t('playerBattlelogTripleRate')}
               </CKText>
               <CKText role="metadata" muted>
@@ -132,7 +134,9 @@ export function WarScouting({
           <CKText style={{ color: theme.primary }}>{t('generalRetry')}</CKText>
         </Pressable>
       ) : null}
-      <CKText role="sectionTitle">{t('warScoutOpponent')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('warScoutOpponent')}
+      </CKText>
       {results?.[1]?.length || !results ? (
         (results?.[1] ?? [war, war, war]).slice(0, 3).map((previous, index) => {
           // History may arrive with either clan first. Keep the scouted clan

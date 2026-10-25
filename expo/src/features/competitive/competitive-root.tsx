@@ -525,6 +525,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
         </Svg>
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: 24, paddingBottom: 34 }}>
           <CKText
+            skeleton={false}
             style={{
               color: '#fff',
               fontSize: width < 600 ? 36 : 48,
@@ -535,7 +536,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
           >
             {t('competitiveFindYourNextWar')}
           </CKText>
-          <CKText style={{ color: '#ead5c1', marginTop: 10, maxWidth: 420 }}>
+          <CKText skeleton={false} style={{ color: '#ead5c1', marginTop: 10, maxWidth: 420 }}>
             {t('competitiveArenaSubtitle')}
           </CKText>
         </View>
@@ -544,7 +545,9 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
         <View
           style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <CKText role="sectionTitle">{t('competitiveTournaments')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('competitiveTournaments')}
+          </CKText>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             <PressableSurface
               accessibilityRole="button"
@@ -777,7 +780,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               timeStyle: 'short',
             })}
           </CKText>
-          <CKText role="sectionTitle">{t('competitiveRules')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('competitiveRules')}
+          </CKText>
           <CKText>
             {(typeof tournament.rules === 'string'
               ? tournament.rules
@@ -794,7 +799,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               </CKText>
               {tournament.rules.prizeDescription ? (
                 <View style={styles.group}>
-                  <CKText role="titleSmall">{t('capitalRaidRewards')}</CKText>
+                  <CKText skeleton={false} role="titleSmall">
+                    {t('capitalRaidRewards')}
+                  </CKText>
                   <CKText>{tournament.rules.prizeDescription}</CKText>
                 </View>
               ) : null}
@@ -860,7 +867,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
           )}
           {notice ? <CKText accessibilityLiveRegion="polite">{notice}</CKText> : null}
           {detail?.standings?.length ? (
-            <CKText role="sectionTitle">{t('clanRankingsTab')}</CKText>
+            <CKText skeleton={false} role="sectionTitle">
+              {t('clanRankingsTab')}
+            </CKText>
           ) : null}
           {detail?.standings?.map((standing, index) => (
             <Identity
@@ -870,7 +879,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               image={ImageAssets.trophies}
             />
           ))}
-          <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('competitiveTeams')}
+          </CKText>
           {!detail?.participants.length ? (
             <CKText muted>{t('competitiveRegisteredClansEmpty')}</CKText>
           ) : null}
@@ -896,7 +907,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               }
             />
           ))}
-          <CKText role="sectionTitle">{t('cwlMatches')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('cwlMatches')}
+          </CKText>
           {!detail?.matches.length ? <CKText muted>{t('competitiveMatchupsEmpty')}</CKText> : null}
           {rounds.length ? (
             <SelectionPicker
@@ -1113,7 +1126,9 @@ function TeamScreen({ team, push }: { team: CompetitiveTeam; push: (scene: Scene
         </View>
       ))}
       {notice ? <CKText accessibilityLiveRegion="polite">{notice}</CKText> : null}
-      <CKText role="sectionTitle">{t('clanMembers')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('clanMembers')}
+      </CKText>
       {current.members.map((member) => (
         <View key={member.playerTag} style={styles.group}>
           <Identity
@@ -1130,7 +1145,9 @@ function TeamScreen({ team, push }: { team: CompetitiveTeam; push: (scene: Scene
           ) : null}
         </View>
       ))}
-      <CKText role="sectionTitle">{t('competitiveTeamHistory')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('competitiveTeamHistory')}
+      </CKText>
       {query.data?.history?.map((entry, index) => (
         <Identity
           key={`${entry.playerTag}:${index}`}
@@ -1178,7 +1195,9 @@ export function ClanCompetitiveTeams({ clanTag }: { clanTag: string }) {
     );
   return (
     <View style={styles.page}>
-      <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('competitiveTeams')}
+      </CKText>
       {query.loading && !query.data ? (
         <SkeletonContent loading>
           {[0, 1, 2].map((index) => (

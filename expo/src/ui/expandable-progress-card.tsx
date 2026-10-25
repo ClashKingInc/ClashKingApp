@@ -68,6 +68,7 @@ export function ExpandableProgressCard({
           style={styles.trigger}
         >
           <MobileWebImage
+            skeleton={false}
             imageUrl={imageUrl}
             style={[
               styles.image,
@@ -76,6 +77,7 @@ export function ExpandableProgressCard({
             ]}
           />
           <CKText
+            skeleton={false}
             role={compactHeader ? 'rowTitle' : 'titleSmall'}
             style={[styles.title, compactHeader && styles.compactTitle]}
           >

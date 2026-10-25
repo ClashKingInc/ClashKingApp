@@ -111,7 +111,8 @@ export function DashboardMetric({
       {artwork}
       <View style={styles.flex}>
         <View style={styles.labelRow}>
-          <CKText muted role="labelMedium" numberOfLines={1} style={styles.flex}>
+          {/* The metric is known before its value arrives. */}
+          <CKText skeleton={false} muted role="labelMedium" numberOfLines={1} style={styles.flex}>
             {label}
           </CKText>
           {meta ? (

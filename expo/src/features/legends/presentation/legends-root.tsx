@@ -608,7 +608,7 @@ function LegendRecentSummary({
   return (
     <View style={styles.seasonContent} testID="legend-recent-summary">
       <View style={styles.row}>
-        <CKText role="sectionTitle" style={styles.grow}>
+        <CKText skeleton={false} role="sectionTitle" style={styles.grow}>
           {t('statsSeasonStats')}
         </CKText>
         <CKText muted role="metadata">
@@ -642,7 +642,9 @@ function LegendRecentSummary({
           header={
             summary.dailyContributions.length ? (
               <View style={styles.contributionSection}>
-                <CKText role="titleMedium">{t('legendsTrophyGrid')}</CKText>
+                <CKText skeleton={false} role="titleMedium">
+                  {t('legendsTrophyGrid')}
+                </CKText>
                 <View
                   onTouchStart={() => onCalendarInteraction(true)}
                   onTouchEnd={() => onCalendarInteraction(false)}
@@ -660,7 +662,9 @@ function LegendRecentSummary({
         />
       ) : null}
       <Surface radius={ckRadius.tile} style={styles.recentSummary}>
-        <CKText role="titleMedium">{t('legendsPopularArmyItems')}</CKText>
+        <CKText skeleton={false} role="titleMedium">
+          {t('legendsPopularArmyItems')}
+        </CKText>
         {popular.length ? (
           <View style={styles.popularItems}>
             {popular.map((entry) => (
@@ -784,7 +788,9 @@ function LegendPerformanceComparisons({ data }: { readonly data: PlayerLegendLea
         : t('statsLegendLeagueOne');
   return (
     <View style={styles.comparisons} testID="legend-performance-comparisons">
-      <CKText role="titleMedium">{t('statsPerformance')}</CKText>
+      <CKText skeleton={false} role="titleMedium">
+        {t('statsPerformance')}
+      </CKText>
       <PerformanceComparisonPanel
         comparisons={data.comparisons}
         playerName={data.playerName}
@@ -1053,19 +1059,19 @@ export function SeasonDayTable({
     <Surface radius={ckRadius.tile} style={styles.dayTable} testID="legend-season-days">
       {header}
       <View style={styles.dayTableRow}>
-        <CKText muted role="metadata" style={styles.dayColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.dayColumn}>
           {t('statsByDay')}
         </CKText>
-        <CKText muted role="metadata" style={styles.numberColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.numberColumn}>
           {t('rankedLeagueAttacks')}
         </CKText>
-        <CKText muted role="metadata" style={styles.numberColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.numberColumn}>
           {t('rankedLeagueDefenses')}
         </CKText>
         <CKText muted role="metadata" style={styles.netColumn}>
           +/-
         </CKText>
-        <CKText muted role="metadata" style={styles.rankColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.rankColumn}>
           {t('legendsGlobalRankTitle')}
         </CKText>
       </View>

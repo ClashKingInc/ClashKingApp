@@ -20,7 +20,11 @@ export function ProfileStatChip({
   const { locale } = useI18n();
   return (
     <PillSurface style={styles.quickStat} accessible accessibilityLabel={`${label}: ${value}`}>
-      {icon ? <MobileWebImage imageUrl={icon} style={styles.statIcon} /> : iconElement}
+      {icon ? (
+        <MobileWebImage skeleton={false} imageUrl={icon} style={styles.statIcon} />
+      ) : (
+        iconElement
+      )}
       <View style={styles.value}>
         <CKText role="labelLarge">
           {typeof value === 'number'

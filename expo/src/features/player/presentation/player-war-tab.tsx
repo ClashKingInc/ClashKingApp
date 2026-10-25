@@ -202,7 +202,9 @@ function PlayerWarBattles({
   }
   return (
     <View style={styles.sections} testID="player-war-battles">
-      <CKText role="sectionTitle">{t('esportsBattles')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('esportsBattles')}
+      </CKText>
       <View style={styles.battleFilters}>
         <View style={styles.battlePicker}>
           <SelectionPicker

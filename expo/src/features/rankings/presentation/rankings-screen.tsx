@@ -218,7 +218,7 @@ export function RankingsScreen({
                     accessibilityLabel={t('generalLoading')}
                   >
                     {[0, 1, 2, 3, 4].map((index) => (
-                      <RankingRow key={index} onPress={() => {}} />
+                      <RankingRow key={index} placeholderRank={index + 1} onPress={() => {}} />
                     ))}
                   </View>
                 ) : null}
@@ -449,16 +449,18 @@ function rankingCheckerColor(board: RankingBoardValue): RankedCheckerColor {
 
 function RankingRow({
   entry: loadedEntry,
+  placeholderRank = 1,
   onPress,
 }: {
   entry?: RankingEntry;
+  placeholderRank?: number;
   onPress: () => void;
 }) {
   const { locale } = useI18n();
   const theme = useCKTheme();
   // Placeholder values belong only to this disabled presentation tree.
   const entry = loadedEntry ?? {
-    rank: 100,
+    rank: placeholderRank,
     movement: '=',
     score: 5000,
     name: 'ClashKing player',
@@ -484,7 +486,7 @@ function RankingRow({
         ]}
       >
         <View style={styles.rank}>
-          <CKText role="labelLarge" muted>{`#${entry.rank}`}</CKText>
+          <CKText skeleton={false} role="labelLarge" muted>{`#${entry.rank}`}</CKText>
           {entry.movement !== '=' ? (
             <CKText
               role="bodySmall"
@@ -558,7 +560,9 @@ function RankingDateSheet({
               { backgroundColor: colorWithAlpha(theme.onSurfaceVariant, 0.3) },
             ]}
           />
-          <CKText role="titleLarge">{t('rankingsSnapshotDate')}</CKText>
+          <CKText skeleton={false} role="titleLarge">
+            {t('rankingsSnapshotDate')}
+          </CKText>
           <View style={styles.sheetBody}>
             <CalendarPicker
               start={

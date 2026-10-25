@@ -17,7 +17,7 @@ import { MobileWebImage } from './mobile-web-image';
 import { CKText } from './text';
 import { ckRadius, ckSpacing, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
-import { useSkeletonContent } from './skeleton-content';
+import { useSkeletonAppearance } from './skeleton-content';
 import { useSkeletonMotion } from './skeleton-motion';
 
 export function LoadingIndicator({ label }: { label?: string }) {
@@ -42,8 +42,9 @@ export function Skeleton({
   style?: StyleProp<ViewStyle>;
 }) {
   const theme = useCKTheme();
-  const inherited = useSkeletonContent();
-  const opacity = useSkeletonMotion(!inherited);
+  const inherited = useSkeletonAppearance();
+  const ownOpacity = useSkeletonMotion(!inherited.loading);
+  const opacity = inherited.loading ? inherited.opacity : ownOpacity;
 
   return (
     <Animated.View

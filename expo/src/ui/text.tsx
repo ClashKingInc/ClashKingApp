@@ -1,8 +1,8 @@
-import { Text, type TextProps } from 'react-native';
+import { Animated, type TextProps } from 'react-native';
 
 import { ckTypography, type CKTextRole } from './tokens';
 import { useCKTheme } from './theme';
-import { useSkeletonContent } from './skeleton-content';
+import { useSkeletonAppearance } from './skeleton-content';
 
 export type CKTextProps = Omit<TextProps, 'role'> & {
   role?: CKTextRole;
@@ -13,9 +13,10 @@ export type CKTextProps = Omit<TextProps, 'role'> & {
 
 export function CKText({ role = 'body', muted = false, skeleton, style, ...props }: CKTextProps) {
   const theme = useCKTheme();
-  const loading = useSkeletonContent() && skeleton !== false;
+  const appearance = useSkeletonAppearance();
+  const loading = appearance.loading && skeleton !== false;
   return (
-    <Text
+    <Animated.Text
       allowFontScaling
       style={[
         ckTypography[role],
@@ -26,6 +27,7 @@ export function CKText({ role = 'body', muted = false, skeleton, style, ...props
           backgroundColor: theme.surfaceContainerHighest,
           borderRadius: 4,
           textShadowColor: 'transparent',
+          opacity: appearance.opacity,
         },
       ]}
       {...props}

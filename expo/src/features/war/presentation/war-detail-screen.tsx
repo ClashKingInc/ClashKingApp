@@ -493,7 +493,9 @@ const PlayerWarCard = memo(function PlayerWarCard({
       {expanded ? (
         <Reveal>
           <View style={styles.playerLogs}>
-            <CKText role="rowTitle">{t('warAttacksTitle')}</CKText>
+            <CKText skeleton={false} role="rowTitle">
+              {t('warAttacksTitle')}
+            </CKText>
             {outgoing.map((hit) => (
               <AttackRow
                 key={hit.order}

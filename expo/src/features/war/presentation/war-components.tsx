@@ -364,7 +364,9 @@ export function AttackDetailsModal({
             <View style={styles.handle} />
             <View style={styles.modalTitleRow}>
               <View style={styles.grow}>
-                <CKText role="titleLarge">{t('warAttacksDetailsTitle')}</CKText>
+                <CKText skeleton={false} role="titleLarge">
+                  {t('warAttacksDetailsTitle')}
+                </CKText>
                 <View style={styles.detailMeta}>
                   <PillSurface style={styles.detailMetaPill}>
                     <CKText role="labelMedium">#{attack.order}</CKText>

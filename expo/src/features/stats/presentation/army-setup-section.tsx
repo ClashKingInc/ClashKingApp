@@ -284,7 +284,9 @@ function CohortUsageComparison({
   const maxRate = Math.max(0.001, ...cohorts.map(({ key }) => rates.get(key) ?? 0));
   return (
     <View style={styles.comparison}>
-      <CKText role="bodyMedium">{t('statsAcrossCohorts')}</CKText>
+      <CKText skeleton={false} role="bodyMedium">
+        {t('statsAcrossCohorts')}
+      </CKText>
       {cohorts.map(({ key, label }) => {
         const rate = rates.get(key);
         return (
@@ -355,7 +357,9 @@ function SetupRow({
       <View style={styles.row}>
         <View style={styles.rowHeader} testID="army-setup-card-row">
           <View style={styles.rankBlock} testID="army-setup-rank">
-            <CKText role="rowTitle">#{position}</CKText>
+            <CKText skeleton={false} role="rowTitle">
+              #{position}
+            </CKText>
             {item.rankChange != null && item.rankChange !== 0 ? (
               <CKText
                 role="bodySmall"
@@ -372,7 +376,7 @@ function SetupRow({
             <CoreTroopArtwork ids={item.coreTroops} />
           )}
           <View style={styles.usageMetric} testID="army-setup-usage">
-            <CKText role="bodySmall" muted numberOfLines={1}>
+            <CKText skeleton={false} role="bodySmall" muted numberOfLines={1}>
               {t('statsUsage')}
             </CKText>
             <CKText role="bodyMedium">{formatRate(item.usageRate)}</CKText>
@@ -444,13 +448,13 @@ function SetupMetrics({ item }: { readonly item: StatsArmySetupItem }) {
   return (
     <View style={styles.metrics}>
       <View style={styles.grow}>
-        <CKText role="bodySmall" muted>
+        <CKText skeleton={false} role="bodySmall" muted>
           {t('statsUsage')}
         </CKText>
         <CKText role="titleSmall">{formatRate(item.usageRate)}</CKText>
       </View>
       <View style={styles.grow}>
-        <CKText role="bodySmall" muted>
+        <CKText skeleton={false} role="bodySmall" muted>
           {t('statsThreeStarRate')}
         </CKText>
         <CKText role="titleSmall">{formatRate(item.threeStarRate)}</CKText>
@@ -506,7 +510,7 @@ function SiegeUsage({ item }: { readonly item: StatsArmySetupItem }) {
   if (!sieges.length) return null;
   return (
     <View style={styles.list}>
-      <CKText role="bodySmall" muted>
+      <CKText skeleton={false} role="bodySmall" muted>
         {t('gameSiegeMachines')}
       </CKText>
       <View style={styles.metrics}>

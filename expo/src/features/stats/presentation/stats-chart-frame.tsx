@@ -58,7 +58,11 @@ export function StatsChartFrame({
   if (exporting || !copyEnabled)
     return (
       <View style={styles.capture}>
-        {showTitle ? <CKText role="titleSmall">{title}</CKText> : null}
+        {showTitle ? (
+          <CKText skeleton={false} role="titleSmall">
+            {title}
+          </CKText>
+        ) : null}
         {children}
       </View>
     );
@@ -96,6 +100,7 @@ export function StatsChartFrame({
       <View style={styles.capture}>
         {showTitle ? (
           <CKText
+            skeleton={false}
             role="titleSmall"
             style={copyPlacement === 'overlay' ? styles.titleWithCopy : styles.title}
           >
@@ -122,7 +127,9 @@ export function StatsChartFrame({
             style={[styles.exportCanvas, { width: width + 40, backgroundColor: theme.surface }]}
           >
             <ExportContext.Provider value={true}>
-              <CKText role="titleSmall">{title}</CKText>
+              <CKText skeleton={false} role="titleSmall">
+                {title}
+              </CKText>
               {exportContent ?? children}
               <View style={styles.credit}>
                 <MobileWebImage

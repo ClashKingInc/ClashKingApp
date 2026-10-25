@@ -14,14 +14,14 @@ import {
   type ReactNode,
 } from 'react';
 import { localImageCache } from '../core/assets/local-asset-cache';
-import { Platform, StyleSheet, PixelRatio, View, type ViewStyle } from 'react-native';
+import { Animated, Platform, StyleSheet, PixelRatio, View, type ViewStyle } from 'react-native';
 import { sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } from './image-delivery';
 
 import { ImageAssets } from '../core/assets/image-assets';
 import { clearHeaderArtworkCache, headerArtworkForUrl } from '../core/assets/header-artwork-cache';
 import { HeaderArtwork } from './header-artwork';
 import { useCKTheme, useCKThemeMode } from './theme';
-import { useSkeletonContent } from './skeleton-content';
+import { useSkeletonAppearance } from './skeleton-content';
 import {
   assetManifestRevision,
   manifestImage,
@@ -108,6 +108,8 @@ export async function clearMobileImageCache(): Promise<void> {
 
 export interface MobileWebImageProps extends Omit<ImageProps, 'source' | 'onError'> {
   readonly imageUrl: string;
+  /** Keep known artwork visible while sibling values are loading. */
+  readonly skeleton?: boolean;
   readonly fallbackImageUrls?: readonly string[];
   readonly errorFallback?: ReactNode;
   readonly preserveAnimation?: boolean;
@@ -116,15 +118,19 @@ export interface MobileWebImageProps extends Omit<ImageProps, 'source' | 'onErro
 }
 
 /** Expo equivalent of Flutter's shared MobileWebImage resolution/fallback behavior. */
-export function MobileWebImage(props: MobileWebImageProps) {
-  const loading = useSkeletonContent();
+export function MobileWebImage({ skeleton, ...props }: MobileWebImageProps) {
+  const appearance = useSkeletonAppearance();
+  const loading = appearance.loading && skeleton !== false;
   const theme = useCKTheme();
   if (loading) {
     // Use the image's own geometry, without starting requests for placeholder
     // URLs or allowing its eventual load to move the surrounding content.
     return (
-      <View
-        style={[props.style as ViewStyle, { backgroundColor: theme.surfaceContainerHighest }]}
+      <Animated.View
+        style={[
+          props.style as ViewStyle,
+          { backgroundColor: theme.surfaceContainerHighest, opacity: appearance.opacity },
+        ]}
       />
     );
   }

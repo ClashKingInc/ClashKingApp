@@ -192,6 +192,7 @@ function DistributionGroup({
                   >
                     {artwork ? (
                       <MobileWebImage
+                        skeleton={overview === 'town-halls' ? false : undefined}
                         imageUrl={artwork(item.id)}
                         contentFit="contain"
                         accessible={false}
@@ -201,7 +202,12 @@ function DistributionGroup({
                     ) : null}
                     <View style={styles.rowBody}>
                       <View style={styles.rowCopy}>
-                        <CKText role="bodySmall" numberOfLines={1} style={styles.rowLabel}>
+                        <CKText
+                          skeleton={overview === 'town-halls' ? false : undefined}
+                          role="bodySmall"
+                          numberOfLines={1}
+                          style={styles.rowLabel}
+                        >
                           {label}
                         </CKText>
                         <CKText role="bodySmall" muted>

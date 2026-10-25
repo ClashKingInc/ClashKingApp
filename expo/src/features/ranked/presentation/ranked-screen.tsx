@@ -650,7 +650,7 @@ function RankedHeader({
                 {accounts.length > 1 ? (
                   <GlassSurface cornerRadius={ckRadius.pill} style={styles.accountPill}>
                     <UsersRound size={17} color="#FFFFFFD1" />
-                    <CKText role="labelSmall" style={styles.white}>
+                    <CKText skeleton={false} role="labelSmall" style={styles.white}>
                       {t('rankedLeagueAccountSelector')}
                     </CKText>
                     <ChevronDown size={18} color="#FFFFFFC7" />
@@ -878,7 +878,11 @@ function RankingRow({
         },
       ]}
     >
-      <CKText role="rowTitle" style={[styles.rankNumber, selected && { color: theme.primary }]}>
+      <CKText
+        skeleton={false}
+        role="rowTitle"
+        style={[styles.rankNumber, selected && { color: theme.primary }]}
+      >
         #{rank}
       </CKText>
       <View style={styles.grow}>
@@ -948,7 +952,9 @@ function HistoryPanel({
   return (
     <View style={styles.section}>
       <RankedLeagueHistory periods={periods} locale={locale} />
-      <CKText role="titleSmall">{t('generalHistory')}</CKText>
+      <CKText skeleton={false} role="titleSmall">
+        {t('generalHistory')}
+      </CKText>
       {completed.length ? (
         completed.map((period) => (
           <HistoryPeriodRow
@@ -1087,7 +1093,9 @@ function RankedPeriodPicker({
               marginBottom: 12,
             }}
           >
-            <CKText role="titleSmall">{t('clanRankingsSeason')}</CKText>
+            <CKText skeleton={false} role="titleSmall">
+              {t('clanRankingsSeason')}
+            </CKText>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={materialCloseLabel(locale)}

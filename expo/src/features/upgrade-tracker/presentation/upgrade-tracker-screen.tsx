@@ -294,7 +294,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
               ]}
             >
               <Upload size={20} color={theme.onPrimary} />
-              <CKText role="bodyMedium" style={{ color: theme.onPrimary }}>
+              <CKText skeleton={false} role="bodyMedium" style={{ color: theme.onPrimary }}>
                 {t('upgradeTrackerImportTitle')}
               </CKText>
             </PressableSurface>
@@ -2487,7 +2487,7 @@ function PlannedUpgradeModal({
           </View>
           {upgrade.costs.length ? (
             <>
-              <CKText role="bodyMedium" muted>
+              <CKText skeleton={false} role="bodyMedium" muted>
                 {t('gameItemUpgradeCost')}
               </CKText>
               <View style={styles.wrap}>
@@ -2642,7 +2642,7 @@ function PlanTab({
               imageUrl={ImageAssets.hammerOfBuilding}
               style={{ width: 28, height: 28 }}
             />
-            <CKText role="bodyMedium" style={styles.grow}>
+            <CKText skeleton={false} role="bodyMedium" style={styles.grow}>
               {t('upgradeTrackerPlanPrioritiesTitle')}
             </CKText>
             <ChevronRight size={18} color={theme.onSurfaceVariant} />
@@ -2792,7 +2792,7 @@ function LootOutlook({ plan }: { plan: ReturnType<typeof buildTrackerPlanData> }
     <Surface radius={ckRadius.card} style={styles.lootOutlook}>
       <View style={styles.lootOutlookHeader}>
         <MobileWebImage imageUrl={ImageAssets.lootCart} style={styles.lootOutlookImage} />
-        <CKText role="titleSmall" style={styles.grow}>
+        <CKText skeleton={false} role="titleSmall" style={styles.grow}>
           {t('upgradeTrackerLootOutlook')}
         </CKText>
         <View style={{ maxWidth: 155 }}>

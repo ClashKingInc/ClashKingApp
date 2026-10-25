@@ -91,6 +91,7 @@ export function HomeMetricPill({ metric, label }: { metric: HomeMetricModel; lab
       valueColor={progress === 1 ? statColors.win : undefined}
       artwork={
         <MobileWebImage
+          skeleton={false}
           imageUrl={metricAssets[metric.kind]}
           style={styles.metricImage}
           errorFallback={<ImageOff color={theme.onSurfaceVariant} size={18} />}
@@ -339,7 +340,6 @@ export function CardHeader({
   imageUrl,
   title,
   subtitle,
-  subtitleColor,
   trailing,
   size = 46,
   cornerImageUrl,
@@ -349,8 +349,7 @@ export function CardHeader({
 }: {
   imageUrl: string;
   title: string;
-  subtitle?: string;
-  subtitleColor?: string;
+  subtitle?: ReactNode;
   trailing?: ReactNode;
   size?: number;
   cornerImageUrl?: string;
@@ -384,12 +383,7 @@ export function CardHeader({
           {title}
         </CKText>
         {subtitle ? (
-          <CKText
-            muted
-            role="labelLarge"
-            numberOfLines={1}
-            style={subtitleColor ? { color: subtitleColor } : undefined}
-          >
+          <CKText muted role="labelLarge" numberOfLines={1}>
             {subtitle}
           </CKText>
         ) : null}

@@ -567,7 +567,7 @@ function FarmGoalMode(
               </View>
             </View>
             <View style={styles.controlRow}>
-              <CKText muted style={styles.flex}>
+              <CKText skeleton={false} muted style={styles.flex}>
                 {t('farmGoalTargetLevelLabel')}
               </CKText>
               <SelectButton
@@ -615,7 +615,9 @@ function FarmGoalMode(
           />
           <CKText muted>{resourceLabel}</CKText>
         </View>
-        <CKText muted>{t('farmGoalPerfectLootHint')}</CKText>
+        <CKText skeleton={false} muted>
+          {t('farmGoalPerfectLootHint')}
+        </CKText>
         <CKText muted>
           {account?.league && leagueEstimate?.loot
             ? t('farmGoalLeagueEstimate', {
@@ -787,7 +789,7 @@ function TargetCard({
         </Pressable>
       </View>
       <View style={styles.controlRow}>
-        <CKText muted style={styles.flex}>
+        <CKText skeleton={false} muted style={styles.flex}>
           {t('damageTargetLevelLabel')}
         </CKText>
         <SelectButton
@@ -811,7 +813,9 @@ function ResultSummary({ result }: { result: DamageResult }) {
   return (
     <View style={styles.resultSummary}>
       <View style={styles.between}>
-        <CKText muted>{t('damageResults')}</CKText>
+        <CKText skeleton={false} muted>
+          {t('damageResults')}
+        </CKText>
         <PillSurface style={{ backgroundColor: colorWithAlpha(accent, 0.14) }}>
           <View style={styles.statusPill}>
             <MobileWebImage
@@ -936,7 +940,7 @@ function ZapQuakePanel({
           style={styles.smallImage}
           errorFallback={<Bolt size={18} color={theme.secondary} />}
         />
-        <CKText role="bodyLarge" style={styles.flex}>
+        <CKText skeleton={false} role="bodyLarge" style={styles.flex}>
           {t('damageSpellCapacity')}
         </CKText>
         <Stepper
@@ -1016,7 +1020,9 @@ function FarmResults({
           errorFallback={<Rocket size={28} color={theme.onSurfaceVariant} />}
         />
         <View style={styles.flex}>
-          <CKText role="titleSmall">{t('farmGoalResultTitle')}</CKText>
+          <CKText skeleton={false} role="titleSmall">
+            {t('farmGoalResultTitle')}
+          </CKText>
           <CKText muted>
             {t('farmGoalResultSummary', {
               target: formatInt(upgradeCost, locale),
@@ -1040,11 +1046,15 @@ function FarmResults({
           </View>
           <View style={styles.alignEnd}>
             <CKText role="titleLarge">{scenario.attacks}</CKText>
-            <CKText muted>{t('farmGoalAttacks')}</CKText>
+            <CKText skeleton={false} muted>
+              {t('farmGoalAttacks')}
+            </CKText>
           </View>
         </View>
       ))}
-      <CKText muted>{t('farmGoalScenarioHint')}</CKText>
+      <CKText skeleton={false} muted>
+        {t('farmGoalScenarioHint')}
+      </CKText>
     </Surface>
   );
 }
@@ -1066,7 +1076,7 @@ function TrackerSuggestion({
   const level = target.plannedStep?.targetLevel ?? target.item.steps[0]?.targetLevel ?? 1;
   return (
     <View style={styles.trackerBlock}>
-      <CKText muted role="bodySmall">
+      <CKText skeleton={false} muted role="bodySmall">
         {t('farmGoalTrackerNextTitle')}
       </CKText>
       <Pressable onPress={onPress} style={styles.trackerRow}>
@@ -1196,7 +1206,7 @@ function AccountPicker({
       <View style={styles.sheetBackdrop}>
         <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
-            <CKText role="titleLarge" style={styles.flex}>
+            <CKText skeleton={false} role="titleLarge" style={styles.flex}>
               {t('damageAccountPresetShort')}
             </CKText>
             <Pressable

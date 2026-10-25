@@ -208,7 +208,9 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
             )}
           </Pressable>
         ) : null}
-        <CKText role="screenTitle">{t('postsTitle')}</CKText>
+        <CKText skeleton={false} role="screenTitle">
+          {t('postsTitle')}
+        </CKText>
       </View>
       <ScrollView
         alwaysBounceVertical

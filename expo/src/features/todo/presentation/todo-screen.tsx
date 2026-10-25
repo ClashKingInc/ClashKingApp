@@ -236,7 +236,7 @@ export function TodoScreen(props: TodoScreenProps) {
         title={t('todoExplanationTitle')}
         onClose={() => setInfoOpen(false)}
       >
-        <CKText>{t('todoExplanationIntro')}</CKText>
+        <CKText skeleton={false}>{t('todoExplanationIntro')}</CKText>
         <Explanation title={t('todoExplanationLegendsTitle')} body={t('todoExplanationLegends')} />
         <Explanation
           title={t('todoExplanationClanWarsTitle')}
@@ -247,7 +247,7 @@ export function TodoScreen(props: TodoScreenProps) {
           title={t('todoExplanationPassAndGamesTitle')}
           body={t('todoExplanationPassAndGames')}
         />
-        <CKText>{t('todoExplanationConclusion')}</CKText>
+        <CKText skeleton={false}>{t('todoExplanationConclusion')}</CKText>
       </InfoDialog>
     </SafeAreaView>
   );
@@ -263,7 +263,7 @@ function TodoIdentity({ summary }: { summary: TodoHeaderSummary }) {
         style={styles.identityImage}
       />
       <View style={styles.identityCopy}>
-        <CKText numberOfLines={1} style={styles.heroTitle}>
+        <CKText skeleton={false} numberOfLines={1} style={styles.heroTitle}>
           {t('todoTitle')}
         </CKText>
         <CKText numberOfLines={1} style={styles.heroSubtitle}>
@@ -396,9 +396,9 @@ function TodoMetric({
         },
       ]}
     >
-      <MobileWebImage imageUrl={asset} style={styles.metricImage} />
+      <MobileWebImage skeleton={false} imageUrl={asset} style={styles.metricImage} />
       <View style={styles.flex}>
-        <CKText muted role="labelMedium" numberOfLines={1}>
+        <CKText skeleton={false} muted role="labelMedium" numberOfLines={1}>
           {metricLabel(metric, t)}
         </CKText>
         <CKText
@@ -488,9 +488,9 @@ function TimerChip({ timer, now }: { timer: PlayerTimer; now: Date }) {
         },
       ]}
     >
-      <MobileWebImage imageUrl={image} style={styles.metricImage} />
+      <MobileWebImage skeleton={false} imageUrl={image} style={styles.metricImage} />
       <View style={styles.flex}>
-        <CKText muted role="labelMedium" numberOfLines={1}>
+        <CKText skeleton={false} muted role="labelMedium" numberOfLines={1}>
           {label}
         </CKText>
         <CKText role="labelLarge" numberOfLines={1}>

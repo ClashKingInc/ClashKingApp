@@ -347,7 +347,7 @@ function Metric({ value, label }: { value: string; label: string }) {
   return (
     <View style={styles.metric}>
       <CKText role="titleMedium">{value}</CKText>
-      <CKText muted role="labelSmall">
+      <CKText skeleton={false} muted role="labelSmall">
         {label}
       </CKText>
     </View>

@@ -138,7 +138,7 @@ export function AchievementsScreen({
             </Pressable>
           ) : null}
           <View style={styles.headerCopy}>
-            <CKText numberOfLines={1} role="screenTitle">
+            <CKText skeleton={false} numberOfLines={1} role="screenTitle">
               {t('achievementsTitle')}
             </CKText>
             <SkeletonContent loading={loading}>

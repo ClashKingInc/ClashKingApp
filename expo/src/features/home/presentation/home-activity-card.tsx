@@ -225,7 +225,7 @@ export function HomeActivityCard({
         <View style={styles.header}>
           <MobileWebImage imageUrl={ImageAssets.calendar} style={styles.headerImage} />
           <View style={styles.headerText}>
-            <CKText role="titleSmall" style={styles.headerTitle}>
+            <CKText skeleton={false} role="titleSmall" style={styles.headerTitle}>
               {t('filtersLast30Days')}
             </CKText>
           </View>
@@ -378,7 +378,7 @@ export function HomeActivityCard({
               ) : null}
             </View>
             <View style={styles.farming}>
-              <CKText muted role="labelMedium">
+              <CKText skeleton={false} muted role="labelMedium">
                 {t('playerBattlelogFarming')}
               </CKText>
               <View style={styles.resources}>
