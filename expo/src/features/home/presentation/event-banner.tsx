@@ -353,6 +353,7 @@ export function HomeEventBanner({
   // Use the same native horizontal scroll surface as account strips. Nesting
   // an Android ViewPager inside the primary ViewPager lets the outer page
   // intercept partial drags before the inner pager can settle.
+  const touchActive = useRef(false);
   const dragActive = useRef(false);
   const offset = useRef(0);
   const settledIndex = useRef(0);
@@ -385,21 +386,45 @@ export function HomeEventBanner({
   const settle = useCallback(() => {
     clearTimeout(settleTimer.current);
     const next = homeBannerPageIndex(offset.current, availableWidth, items.length);
-    // Some Android devices finish a short drag without a momentum-end event.
-    // Always reconcile the resting offset to the measured page, never leave a half card.
-    if (Math.abs(offset.current - next * availableWidth) > 0.5)
-      scrollRef.current?.scrollTo({ x: next * availableWidth, animated: !reduceMotion });
+    // Native paging owns dragging and deceleration. The fallback may only
+    // correct a released, quiet scroller; an animated correction starts another
+    // momentum cycle and can fight a new swipe on either native platform.
+    if (touchActive.current || dragActive.current) return;
+    const target = next * availableWidth;
+    if (Math.abs(offset.current - target) > 0.5) {
+      offset.current = target;
+      scrollRef.current?.scrollTo({ x: target, animated: false });
+    }
     settledIndex.current = next;
     setIndex(next);
     setInteracting(false);
-  }, [availableWidth, items.length, reduceMotion]);
-  const finishNativeGesture = useCallback(() => {
-    // A failed/cancelled native drag need not emit scroll-end or momentum-end.
-    // Wait for any remaining native scroll updates, then align and resume autoplay.
-    dragActive.current = false;
+  }, [availableWidth, items.length]);
+  const scheduleSettle = useCallback(() => {
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(settle, 180);
   }, [settle]);
+  const changeTouch = useCallback((touching: boolean) => {
+    touchActive.current = touching;
+    if (touching) {
+      clearTimeout(settleTimer.current);
+      setInteracting(true);
+    }
+  }, []);
+  const finishNativeGesture = useCallback(() => {
+    // Only native finalization (or web release) ends touch ownership. RN sends
+    // touch-cancel when the native scroll view takes over, while the finger is down.
+    touchActive.current = false;
+    dragActive.current = false;
+    scheduleSettle();
+  }, [scheduleSettle]);
+  useEffect(() => {
+    if (running) return;
+    clearTimeout(settleTimer.current);
+    touchActive.current = false;
+    dragActive.current = false;
+    const frame = requestAnimationFrame(() => setInteracting(false));
+    return () => cancelAnimationFrame(frame);
+  }, [running]);
   useEffect(() => () => clearTimeout(settleTimer.current), []);
   useEffect(() => {
     clearTimeout(settleTimer.current);
@@ -410,6 +435,8 @@ export function HomeEventBanner({
   useEffect(() => {
     if (desktop || !running || interacting || reduceMotion || items.length < 2) return;
     const timer = setTimeout(() => {
+      // A native touch can arrive before React commits interacting=true.
+      if (touchActive.current || dragActive.current) return;
       const next = (safeIndex + 1) % items.length;
       settledIndex.current = next;
       scrollRef.current?.scrollTo({ x: next * availableWidth, animated: next !== 0 });
@@ -462,32 +489,20 @@ export function HomeEventBanner({
         ref={scrollRef}
         testID="home-event-carousel"
         nestedScrollEnabled
+        onNativeTouchChange={changeTouch}
         onNativeGestureFinalize={finishNativeGesture}
-        onTouchStart={() => {
-          clearTimeout(settleTimer.current);
-          setInteracting(true);
-        }}
-        onTouchEnd={() => {
-          if (!dragActive.current) setInteracting(false);
-        }}
-        // Native scrolling cancels the JS touch responder when it takes over.
-        // That is not a cancelled scroll: snapping here would fight the finger.
-        onTouchCancel={
-          Platform.OS === 'android'
-            ? undefined
-            : () => {
-                dragActive.current = false;
-                settle();
-              }
-        }
+        onTouchStart={() => changeTouch(true)}
+        onTouchEnd={Platform.OS === 'web' ? finishNativeGesture : undefined}
+        onTouchCancel={Platform.OS === 'web' ? finishNativeGesture : undefined}
         onScrollBeginDrag={() => {
           dragActive.current = true;
           clearTimeout(settleTimer.current);
           setInteracting(true);
         }}
-        onScrollEndDrag={() => {
+        onScrollEndDrag={(event) => {
+          offset.current = event.nativeEvent.contentOffset.x;
           dragActive.current = false;
-          settleTimer.current = setTimeout(settle, 180);
+          scheduleSettle();
         }}
         onMomentumScrollBegin={() => setInteracting(true)}
         horizontal
@@ -500,13 +515,12 @@ export function HomeEventBanner({
         style={isRtl ? styles.rtlScroll : undefined}
         onScroll={(event) => {
           offset.current = event.nativeEvent.contentOffset.x;
-          if (!dragActive.current) {
-            clearTimeout(settleTimer.current);
-            settleTimer.current = setTimeout(settle, 180);
-          }
+          if (running && !touchActive.current && !dragActive.current) scheduleSettle();
         }}
         onMomentumScrollEnd={(event) => {
           offset.current = event.nativeEvent.contentOffset.x;
+          // A stale momentum-end can follow the next touch-down. The guarded
+          // fallback must never snap a card out from underneath that new touch.
           settle();
         }}
       >

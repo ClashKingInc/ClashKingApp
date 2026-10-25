@@ -257,12 +257,10 @@ export function DashboardScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <DraggableFlatList
-        // RNGH's underlying FlatList otherwise cancels its nested horizontal
-        // controls on Android. Forward this native scroll prop so account bars
-        // and the event pager can take ownership without disabling list scroll.
-        {...(Platform.OS === 'android'
-          ? { disallowInterruption: false, androidHoldToDrag: true }
-          : {})}
+        // Let nested horizontal controls take ownership on both platforms;
+        // the parent RNGH scroll wrapper otherwise disallows interruption.
+        {...{ disallowInterruption: false }}
+        {...(Platform.OS === 'android' ? { androidHoldToDrag: true } : {})}
         ref={list}
         testID="home-scroll-view"
         data={cards}
