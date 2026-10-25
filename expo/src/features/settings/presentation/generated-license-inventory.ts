@@ -26,7 +26,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "@babel/helper-remap-async-to-generator@7.29.7",
       "@babel/helper-replace-supers@7.29.7",
       "@babel/helper-skip-transparent-expression-wrappers@7.29.7",
-      "@babel/helper-string-parser@7.29.7",
+      "@babel/helper-string-parser@7.29.11",
       "@babel/helper-validator-identifier@7.29.7",
       "@babel/helper-validator-option@7.29.7",
       "@babel/helper-wrap-function@7.29.7",
@@ -43,10 +43,10 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "@babel/plugin-transform-arrow-functions@7.29.7",
       "@babel/plugin-transform-async-generator-functions@7.29.7",
       "@babel/plugin-transform-async-to-generator@7.29.7",
-      "@babel/plugin-transform-block-scoping@7.29.7",
+      "@babel/plugin-transform-block-scoping@7.29.11",
       "@babel/plugin-transform-class-properties@7.29.7",
       "@babel/plugin-transform-class-static-block@7.29.7",
-      "@babel/plugin-transform-classes@7.29.7",
+      "@babel/plugin-transform-classes@7.29.11",
       "@babel/plugin-transform-destructuring@7.29.7",
       "@babel/plugin-transform-export-namespace-from@7.29.7",
       "@babel/plugin-transform-flow-strip-types@7.29.7",
@@ -75,7 +75,9 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "@babel/preset-typescript@7.29.7",
       "@babel/runtime@7.29.10",
       "@babel/template@7.29.7",
+      "@babel/traverse@7.29.10",
       "@babel/traverse@7.29.8",
+      "@babel/types@7.29.11",
       "@babel/types@7.29.8",
       "@expo/modules-macros-linux-arm64@0.22.0",
       "@expo/modules-macros-linux-x64@0.22.0",
@@ -163,6 +165,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
+      "@babel/parser@7.29.11",
       "@babel/parser@7.29.8"
     ],
     "license": "MIT",
@@ -511,14 +514,14 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "@react-native-firebase/app@26.4.0"
+      "@react-native-firebase/app@26.4.1"
     ],
     "license": "Apache-2.0",
     "text": "Apache-2.0 License\n------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io>\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this library except in compliance with the License.\n\nYou may obtain a copy of the Apache-2.0 License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n\nCreative Commons Attribution 3.0 License\n----------------------------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io>\n\nDocumentation and other instructional materials provided for this project\n(including on a separate documentation repository or it's documentation website) are\nlicensed under the Creative Commons Attribution 3.0 License. Code samples/blocks\ncontained therein are licensed under the Apache License, Version 2.0 (the \"License\"), as above.\n\nYou may obtain a copy of the Creative Commons Attribution 3.0 License at\n\n    https://creativecommons.org/licenses/by/3.0/"
   },
   {
     "packages": [
-      "@react-native-firebase/messaging@26.4.0"
+      "@react-native-firebase/messaging@26.4.1"
     ],
     "license": "Apache-2.0",
     "text": "Apache-2.0 License\n------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io> & Contributors\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this library except in compliance with the License.\n\nYou may obtain a copy of the Apache-2.0 License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n\nCreative Commons Attribution 3.0 License\n----------------------------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io> & Contributors\n\nDocumentation and other instructional materials provided for this project\n(including on a separate documentation repository or it's documentation website) are\nlicensed under the Creative Commons Attribution 3.0 License. Code samples/blocks\ncontained therein are licensed under the Apache License, Version 2.0 (the \"License\"), as above.\n\nYou may obtain a copy of the Creative Commons Attribution 3.0 License at\n\n    https://creativecommons.org/licenses/by/3.0/"
@@ -837,7 +840,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "baseline-browser-mapping@2.11.31",
+      "baseline-browser-mapping@2.11.33",
       "long@5.3.2",
       "xcode@4.0.0"
     ],
@@ -1160,7 +1163,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "electron-to-chromium@1.5.463"
+      "electron-to-chromium@1.5.464"
     ],
     "license": "ISC",
     "text": "Copyright 2018 Kilian Valkhof\n\nPermission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
@@ -1828,7 +1831,6 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "react-native-drawer-layout@4.2.10",
       "react-native-drawer-layout@4.2.12"
     ],
     "license": "MIT",
