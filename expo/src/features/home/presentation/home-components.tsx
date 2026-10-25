@@ -1,6 +1,6 @@
 import type { ScrollViewInstance } from 'react-native';
 import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
-import { Children, createContext, useContext, useRef, useState, type ReactNode } from 'react';
+import { createContext, useContext, useRef, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-native';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
@@ -12,6 +12,7 @@ import {
   CKText,
   MobileWebImage,
   Skeleton,
+  useSkeletonContent,
   ckRadius,
   ckSpacing,
   colorWithAlpha,
@@ -26,8 +27,11 @@ import {
   type HomeMetricModel,
 } from './contracts';
 
-export const HOME_METRIC_HEIGHT = 44;
-export const HOME_METRIC_GAP = 6;
+import {
+  DashboardCardFrame,
+  DashboardMetric,
+  DashboardMetricGrid,
+} from '../../../ui/dashboard-card';
 export const HomeDragContext = createContext(false);
 
 export function HomeCardFrame({
@@ -43,71 +47,17 @@ export function HomeCardFrame({
   actionLabel?: string;
   footer?: ReactNode;
 }) {
-  const theme = useCKTheme();
   const dragging = useContext(HomeDragContext);
-  const pressStart = useRef({ x: 0, y: 0 });
-  const pressDelta = useRef({ x: 0, y: 0 });
   return (
-    <View style={[styles.frame, { backgroundColor: theme.surface }]}>
-      {header}
-      {onPress ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={actionLabel}
-          onPressIn={(event) => {
-            pressStart.current = { x: event.nativeEvent.pageX, y: event.nativeEvent.pageY };
-            pressDelta.current = { x: 0, y: 0 };
-          }}
-          onTouchMove={(event) => {
-            pressDelta.current = {
-              x: event.nativeEvent.pageX - pressStart.current.x,
-              y: event.nativeEvent.pageY - pressStart.current.y,
-            };
-          }}
-          onPress={(event) => {
-            if (dragging) return;
-            // Swipes belong to the outer page, never account selection or detail navigation.
-            const dx = Math.max(
-              Math.abs(event.nativeEvent.pageX - pressStart.current.x),
-              Math.abs(pressDelta.current.x),
-            );
-            const dy = Math.max(
-              Math.abs(event.nativeEvent.pageY - pressStart.current.y),
-              Math.abs(pressDelta.current.y),
-            );
-            if (dx > 12 || dy > 12) return;
-            onPress();
-          }}
-        >
-          {children}
-        </Pressable>
-      ) : (
-        children
-      )}
-      {footer ? <View style={styles.footer}>{footer}</View> : null}
-    </View>
-  );
-}
-
-export function HomeCardSkeleton({ rows }: { rows: number }) {
-  return (
-    <HomeCardFrame>
-      <View style={styles.skeletonHeader}>
-        <Skeleton width={46} height={46} radius={12} />
-        <View style={styles.flex}>
-          <Skeleton width={120} />
-          <Skeleton width={70} height={12} />
-        </View>
-        <Skeleton width={46} height={46} radius={23} />
-      </View>
-      <Skeleton height={14} />
-      {Array.from({ length: rows }, (_, index) => (
-        <View key={index} style={styles.metricRow}>
-          <Skeleton height={HOME_METRIC_HEIGHT} style={styles.flex} />
-          <Skeleton height={HOME_METRIC_HEIGHT} style={styles.flex} />
-        </View>
-      ))}
-    </HomeCardFrame>
+    <DashboardCardFrame
+      header={header}
+      onPress={onPress}
+      actionLabel={actionLabel}
+      footer={footer}
+      pressEnabled={!dragging}
+    >
+      {children}
+    </DashboardCardFrame>
   );
 }
 
@@ -133,53 +83,23 @@ export function HomeMetricPill({ metric, label }: { metric: HomeMetricModel; lab
     metric.displayValue ??
     (metric.total === null ? `${metric.done}` : `${metric.done}/${metric.total}`);
   return (
-    <View
-      accessible
-      accessibilityLabel={metric.detail ? `${label}, ${metric.detail}` : `${label}, ${value}`}
-      style={[
-        styles.metric,
-        {
-          backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.18),
-        },
-      ]}
-    >
-      <MobileWebImage
-        imageUrl={metricAssets[metric.kind]}
-        style={styles.metricImage}
-        errorFallback={<ImageOff color={theme.onSurfaceVariant} size={18} />}
-      />
-      <View style={styles.flex}>
-        <View style={styles.metricLabelRow}>
-          <CKText muted role="labelMedium" numberOfLines={1} style={styles.flex}>
-            {label}
-          </CKText>
-          {metric.meta ? (
-            <CKText muted role="labelMedium">
-              {metric.meta}
-            </CKText>
-          ) : null}
-        </View>
-        <CKText
-          role="labelLarge"
-          numberOfLines={1}
-          style={progress === 1 ? { color: statColors.win, fontWeight: '900' } : styles.heavy}
-        >
-          {value}
-        </CKText>
-      </View>
-    </View>
+    <DashboardMetric
+      label={label}
+      value={value}
+      meta={metric.meta}
+      detail={metric.detail}
+      valueColor={progress === 1 ? statColors.win : undefined}
+      artwork={
+        <MobileWebImage
+          imageUrl={metricAssets[metric.kind]}
+          style={styles.metricImage}
+          errorFallback={<ImageOff color={theme.onSurfaceVariant} size={18} />}
+        />
+      }
+    />
   );
 }
-
-export function HomeMetricGrid({ children }: { children: ReactNode }) {
-  return (
-    <View style={styles.grid}>
-      {Children.map(children, (child) => (
-        <View style={styles.gridCell}>{child}</View>
-      ))}
-    </View>
-  );
-}
+export const HomeMetricGrid = DashboardMetricGrid;
 
 export interface HomeRailEntry extends HomeAccountIdentity {
   readonly pending?: boolean | null;
@@ -197,13 +117,23 @@ export function HomeAccountBar({
 }) {
   const theme = useCKTheme();
   const { isRtl } = useI18n();
+  const [railWidth, setRailWidth] = useState(0);
+  const [contentWidth, setContentWidth] = useState(0);
   if (entries.length < 2) return null;
   return (
     <AccountBarScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       testID="home-account-bar"
-      contentContainerStyle={[styles.accountBar, isRtl && styles.rowRtl]}
+      onLayout={(event) => setRailWidth(event.nativeEvent.layout.width)}
+      onContentSizeChange={(width) => setContentWidth(width)}
+      contentContainerStyle={[
+        styles.accountBar,
+        // Center short rows, but anchor overflowing rows so their first chips
+        // remain reachable instead of centering outside the scrollable bounds.
+        contentWidth > railWidth + 1 && { justifyContent: 'flex-start' },
+        isRtl && styles.rowRtl,
+      ]}
       style={[{ backgroundColor: colorWithAlpha(theme.onSurface, 0.035) }]}
     >
       {entries.map((entry, index) => {
@@ -260,6 +190,8 @@ export function ProgressRing({
   showLabel?: boolean;
 }) {
   const theme = useCKTheme();
+  const loading = useSkeletonContent();
+  if (loading) return <Skeleton width={size} height={size} radius={size / 2} />;
   const value = normalizeHomeProgress(progress);
   const progressLabel = label ?? formatHomeProgressRingLabel(value);
   const stroke = 4;
@@ -494,13 +426,6 @@ export function CaughtUp({ label }: { label: string }) {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '900' },
-  frame: {
-    borderRadius: 28,
-    padding: 14,
-    gap: 10,
-    overflow: 'hidden',
-  },
-  footer: { marginHorizontal: -14, marginBottom: -14 },
   accountBar: {
     // Fill spare width to center short rows; overflowing content still scrolls.
     flexGrow: 1,
@@ -526,20 +451,7 @@ const styles = StyleSheet.create({
   accountImage: { width: 13, height: 13 },
   accountName: { flexShrink: 1, minWidth: 0, fontWeight: '700' },
   skeletonHeader: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  metricRow: { flexDirection: 'row', gap: HOME_METRIC_GAP },
-  metric: {
-    height: HOME_METRIC_HEIGHT,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    paddingHorizontal: 11,
-    borderRadius: ckRadius.pill,
-    borderWidth: 0,
-  },
   metricImage: { width: 20, height: 20, resizeMode: 'contain' },
-  metricLabelRow: { flexDirection: 'row', gap: 5 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', margin: -HOME_METRIC_GAP / 2 },
-  gridCell: { width: '50%', padding: HOME_METRIC_GAP / 2 },
   singleRail: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 3 },
   singleRailImage: { width: 20, height: 20, resizeMode: 'contain' },
   railContainer: { minWidth: 0 },

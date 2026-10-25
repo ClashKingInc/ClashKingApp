@@ -70,7 +70,12 @@ export function buildHomeRankedModel(
   loading = false,
   legends: ReadonlyMap<string, PlayerLegendLeagueData> = new Map(),
 ): HomeRankedCardModel {
-  if (loading) return { state: 'loading', configuredCount: players.length };
+  if (loading && loaded.size === 0 && legends.size === 0)
+    return {
+      state: 'loading',
+      configuredCount: players.length,
+      identities: players.map(homeAccountIdentity),
+    };
   const accounts = players.flatMap<HomeRankedAccount>((player) => {
     if (player.isLegendLeague) {
       const legend = legends.get(normalizeTag(player.tag));
@@ -128,7 +133,12 @@ export function buildHomeUpgradeModel(
   t: Translate,
   options: { loading?: boolean; now?: Date } = {},
 ): HomeUpgradeCardModel {
-  if (options.loading) return { state: 'loading', configuredCount: players.length };
+  if (options.loading && loaded.size === 0)
+    return {
+      state: 'loading',
+      configuredCount: players.length,
+      identities: players.map(homeAccountIdentity),
+    };
   const now = options.now ?? new Date();
   const accounts: HomeUpgradeAccount[] = [];
   const missingAccounts: HomeAccountIdentity[] = [];

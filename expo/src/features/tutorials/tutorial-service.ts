@@ -1,7 +1,6 @@
 import type { StringStorage } from '../../core/storage/storage';
 import type { TutorialTextKey } from './tutorial-copy';
 
-export const TUTORIAL_CLAN_TAG = '#2PP';
 export type TutorialId = 'welcome' | 'notifications' | 'clanGuide';
 export type TutorialTargetId =
   | 'home-reorder'
@@ -12,7 +11,7 @@ export type TutorialTargetId =
   | 'notifications-reminders'
   | 'bookmark'
   | 'clan-pages';
-type TutorialAction = 'open-sidebar' | 'open-notifications' | 'open-tutorial-clan';
+type TutorialAction = 'open-sidebar' | 'close-sidebar' | 'open-notifications' | 'go-home';
 export type TutorialStep = {
   title: TutorialTextKey;
   body: TutorialTextKey;
@@ -60,20 +59,8 @@ export const tutorialSteps: Record<TutorialId, readonly TutorialStep[]> = {
       target: 'notifications-reminders',
     },
   ],
-  clanGuide: [
-    {
-      title: 'tutorialBookmarksTitle',
-      body: 'tutorialBookmarksBody',
-      target: 'bookmark',
-      event: 'bookmarked',
-    },
-    {
-      title: 'tutorialClanPagesTitle',
-      body: 'tutorialClanPagesBody',
-      target: 'clan-pages',
-      event: 'clan-page-changed',
-    },
-  ],
+  // Retain the persisted ID for old installs, but retire this tour.
+  clanGuide: [],
 };
 type Target = { reveal: () => void };
 type Snapshot = { current: TutorialId | null; step: number; revision: number; ready: boolean };
@@ -91,7 +78,6 @@ class TutorialService {
   private generation = 0;
   private writes: Promise<void> = Promise.resolve();
   private homeLoaded = false;
-  private guidedMobileTour = false;
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
@@ -109,7 +95,6 @@ class TutorialService {
     this.storageKey = key;
     this.completed.clear();
     this.pending.clear();
-    this.guidedMobileTour = false;
     this.homeLoaded = false;
     this.publish({ current: null, step: 0, ready: false });
     if (!key) return;
@@ -138,6 +123,7 @@ class TutorialService {
       .catch(() => {});
   }
   offer(id: TutorialId) {
+    if (id === 'clanGuide') return;
     if (!this.storageKey || this.completed.has(id) || this.state.current === id) return;
     this.pending.add(id);
     if (this.state.ready) this.startPending();
@@ -170,11 +156,7 @@ class TutorialService {
     else this.finish();
     action?.();
   };
-  startMobileFollowThrough = () => {
-    this.guidedMobileTour = true;
-  };
   dismiss = () => {
-    this.guidedMobileTour = false;
     this.finish();
   };
   finish = () => {
@@ -185,11 +167,10 @@ class TutorialService {
     }
     this.persist();
     this.publish({ current: null, step: 0 });
-    // A fixed public clan makes the lesson independent of linked accounts and
-    // existing bookmarks. Never substitute a user's clan or auto-bookmark it.
-    if (this.guidedMobileTour && finished === 'notifications')
-      this.actions.get('open-tutorial-clan')?.();
-    if (finished === 'clanGuide') this.guidedMobileTour = false;
+    if (finished === 'notifications') {
+      this.actions.get('close-sidebar')?.();
+      this.actions.get('go-home')?.();
+    }
     this.startPending();
   };
   event(name: string) {
@@ -203,7 +184,6 @@ class TutorialService {
   reset = async () => {
     this.completed.clear();
     this.pending.clear();
-    this.guidedMobileTour = false;
     this.publish({ current: null, step: 0 });
     this.persist();
     await this.writes;

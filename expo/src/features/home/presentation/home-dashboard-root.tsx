@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 
 import { canonicalTag } from '../../../core/domain/tags';
 import { mapWithConcurrencyLimit } from '../../../core/utils/bounded-concurrency';
@@ -336,6 +336,13 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
       <UpgradeImportModal
         visible={importOpen}
         onClose={() => setImportOpen(false)}
+        onOpenGameSettings={() => {
+          void Linking.openURL('https://link.clashofclans.com/?action=OpenMoreSettings').catch(() =>
+            setSnackbar(
+              t('apiErrorOperationFailed', { operation: t('upgradeTrackerOpenMoreSettings') }),
+            ),
+          );
+        }}
         onImport={async (json) => {
           try {
             runtime.upgrades.configureRemote({

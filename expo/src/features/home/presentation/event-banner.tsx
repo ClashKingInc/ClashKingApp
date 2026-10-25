@@ -1,6 +1,6 @@
 import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, AppState, Easing, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, AppState, Easing, Platform, Pressable, StyleSheet, View } from 'react-native';
 import {
   Castle,
   ChevronLeft,
@@ -342,6 +342,13 @@ export function HomeEventBanner({
   );
   const [interacting, setInteracting] = useState(false);
   const scrollRef = useRef<ScrollViewInstance>(null);
+  // Use the same native horizontal scroll surface as account strips. Nesting
+  // an Android ViewPager inside the primary ViewPager lets the outer page
+  // intercept partial drags before the inner pager can settle.
+  const dragActive = useRef(false);
+  const offset = useRef(0);
+  const settledIndex = useRef(0);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
       setForeground(state === 'active');
@@ -362,10 +369,29 @@ export function HomeEventBanner({
   const [index, setIndex] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(680);
   const safeIndex = Math.min(index, Math.max(0, items.length - 1));
+  const settle = () => {
+    clearTimeout(settleTimer.current);
+    const next = homeBannerPageIndex(offset.current, availableWidth, items.length);
+    // Some Android devices finish a short drag without a momentum-end event.
+    // Always reconcile the resting offset to the measured page, never leave a half card.
+    if (Math.abs(offset.current - next * availableWidth) > 0.5)
+      scrollRef.current?.scrollTo({ x: next * availableWidth, animated: !reduceMotion });
+    settledIndex.current = next;
+    setIndex(next);
+    setInteracting(false);
+  };
+  useEffect(() => () => clearTimeout(settleTimer.current), []);
+  useEffect(() => {
+    clearTimeout(settleTimer.current);
+    dragActive.current = false;
+    offset.current = Math.min(settledIndex.current, Math.max(0, items.length - 1)) * availableWidth;
+    scrollRef.current?.scrollTo({ x: offset.current, animated: false });
+  }, [availableWidth, items.length]);
   useEffect(() => {
     if (desktop || !foreground || interacting || reduceMotion || items.length < 2) return;
     const timer = setTimeout(() => {
       const next = (safeIndex + 1) % items.length;
+      settledIndex.current = next;
       scrollRef.current?.scrollTo({ x: next * availableWidth, animated: next !== 0 });
       setIndex(next);
     }, 8000);
@@ -409,13 +435,30 @@ export function HomeEventBanner({
       <HorizontalSwipeScrollView
         ref={scrollRef}
         testID="home-event-carousel"
-        claimAndroidTouchOnStart
         nestedScrollEnabled
         onTouchStart={() => setInteracting(true)}
-        onTouchEnd={() => setInteracting(false)}
-        onTouchCancel={() => setInteracting(false)}
-        onScrollBeginDrag={() => setInteracting(true)}
-        onScrollEndDrag={() => setInteracting(false)}
+        onTouchEnd={() => {
+          if (!dragActive.current) setInteracting(false);
+        }}
+        // Native scrolling cancels the JS touch responder when it takes over.
+        // That is not a cancelled scroll: snapping here would fight the finger.
+        onTouchCancel={
+          Platform.OS === 'android'
+            ? undefined
+            : () => {
+                dragActive.current = false;
+                settle();
+              }
+        }
+        onScrollBeginDrag={() => {
+          dragActive.current = true;
+          clearTimeout(settleTimer.current);
+          setInteracting(true);
+        }}
+        onScrollEndDrag={() => {
+          dragActive.current = false;
+          settleTimer.current = setTimeout(settle, 180);
+        }}
         onMomentumScrollBegin={() => setInteracting(true)}
         horizontal
         pagingEnabled
@@ -425,24 +468,16 @@ export function HomeEventBanner({
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
         style={isRtl ? styles.rtlScroll : undefined}
-        onScroll={(event) =>
-          setIndex(
-            homeBannerPageIndex(
-              event.nativeEvent.contentOffset.x,
-              event.nativeEvent.layoutMeasurement.width,
-              items.length,
-            ),
-          )
-        }
+        onScroll={(event) => {
+          offset.current = event.nativeEvent.contentOffset.x;
+          if (!dragActive.current) {
+            clearTimeout(settleTimer.current);
+            settleTimer.current = setTimeout(settle, 180);
+          }
+        }}
         onMomentumScrollEnd={(event) => {
-          setInteracting(false);
-          setIndex(
-            homeBannerPageIndex(
-              event.nativeEvent.contentOffset.x,
-              event.nativeEvent.layoutMeasurement.width,
-              items.length,
-            ),
-          );
+          offset.current = event.nativeEvent.contentOffset.x;
+          settle();
         }}
       >
         {items.map((item) => (

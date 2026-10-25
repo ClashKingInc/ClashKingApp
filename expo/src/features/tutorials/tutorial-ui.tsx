@@ -1,4 +1,6 @@
-import { type ViewInstance, type ScrollViewInstance,
+import {
+  type ViewInstance,
+  type ScrollViewInstance,
   AccessibilityInfo,
   Image,
   Platform,
@@ -20,8 +22,9 @@ import {
   type PropsWithChildren,
 } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowUp, Hand, MoveHorizontal } from 'lucide-react-native';
+import { ArrowUp } from 'lucide-react-native';
 import { useI18n, materialContinueLabel } from '../../i18n';
+import type { MessageKey } from '../../i18n/catalogs.generated';
 import { CKText, PressableSurface, useCKTheme } from '../../ui';
 import {
   tutorials,
@@ -30,6 +33,7 @@ import {
   type TutorialTargetId,
 } from './tutorial-service';
 import { tutorialCopy } from './tutorial-copy';
+import { TutorialGestureCue } from './tutorial-gesture-cue';
 
 const RevealContext = createContext<(node: ViewInstance) => void>(() => {});
 const villagerPoses = {
@@ -37,13 +41,12 @@ const villagerPoses = {
   happy: require('../../../assets/clashking/tutorials/villager-happy.webp'),
   thinking: require('../../../assets/clashking/tutorials/villager-thinking.webp'),
 };
-const targetLabels: Partial<Record<TutorialTargetId, string>> = {
-  'home-reorder': 'Hold, then drag',
-  'sidebar-open': 'Tap your avatar',
-  'clan-pages': 'Switch pages here',
-  'notifications-permission': 'Device alerts',
-  'notifications-entities': 'Choose a player or clan',
-  'notifications-reminders': 'Set reminder times',
+const targetLabels: Partial<Record<TutorialTargetId, MessageKey>> = {
+  'home-reorder': 'homeWidgetsEdit',
+  'sidebar-open': 'navigationOpenProfileMenu',
+  'notifications-permission': 'notifSystemNotifications',
+  'notifications-entities': 'settingsNotificationsTitle',
+  'notifications-reminders': 'notifGroupReminders',
 };
 /** Scroll real content into view; the guide never simulates a tap or changes a setting. */
 export const TutorialScrollView = forwardRef<ScrollViewInstance, ScrollViewProps>(
@@ -84,6 +87,7 @@ export function TutorialTarget({
 }: PropsWithChildren<ViewProps & { id: TutorialTargetId; offer?: TutorialId; enabled?: boolean }>) {
   const ref = useRef<ViewInstance>(null),
     reveal = useContext(RevealContext);
+  const { t, isRtl } = useI18n();
   const state = useSyncExternalStore(
     tutorials.subscribe,
     tutorials.getSnapshot,
@@ -115,26 +119,37 @@ export function TutorialTarget({
     >
       {active && id === 'notifications-reminders' ? <TutorialOverlay inline /> : null}
       {children}
+      {active && id === 'home-reorder' ? (
+        <View pointerEvents="none" style={styles.reorderDemonstration}>
+          <TutorialGestureCue mode="hold" />
+        </View>
+      ) : null}
       {/* This cue is a child of the actual control: scrolling/sticky headers move it
         together with the target. Never measure a second screen-space rectangle. */}
-      {active && (targetLabels[id] || id === 'bookmark') && id !== 'home-reorder' && id !== 'notifications-reminders' ? (
+      {active &&
+      (targetLabels[id] || id === 'bookmark') &&
+      id !== 'home-reorder' &&
+      id !== 'sidebar-open' &&
+      id !== 'notifications-reminders' ? (
         <View
           pointerEvents="none"
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
-          style={[styles.targetCue, id === 'bookmark' ? styles.rightCue : styles.leftCue]}
+          style={[styles.targetCue, isRtl ? styles.rightCue : styles.leftCue]}
         >
           <ArrowUp
             color="#F8D88F"
             strokeWidth={3}
             size={28}
-            style={id === 'bookmark' ? { marginRight: 8 } : { marginLeft: 8 }}
+            style={isRtl ? { marginRight: 8 } : { marginLeft: 8 }}
           />
-          {targetLabels[id] ? <View style={styles.cueLabel}>
-            <CKText role="metadata" style={styles.cueText}>
-              {targetLabels[id]}
-            </CKText>
-          </View> : null}
+          {targetLabels[id] ? (
+            <View style={[styles.cueLabel, { width: 180 }]}>
+              <CKText role="metadata" style={styles.cueText}>
+                {t(targetLabels[id]!)}
+              </CKText>
+            </View>
+          ) : null}
         </View>
       ) : null}
     </View>
@@ -156,9 +171,9 @@ export function TutorialOverlay({ inline = false }: { inline?: boolean } = {}) {
     if ((step.target === 'notifications-reminders') !== inline) return;
     const body =
       step.action === 'open-notifications' && Platform.OS === 'web'
-        ? tutorialCopy.tutorialWebExploreBody
-        : tutorialCopy[step.body];
-    AccessibilityInfo.announceForAccessibility(`${tutorialCopy[step.title]}. ${body}`);
+        ? t(tutorialCopy.tutorialWebExploreBody)
+        : t(tutorialCopy[step.body]);
+    AccessibilityInfo.announceForAccessibility(`${t(tutorialCopy[step.title])}. ${body}`);
     if (step.target) tutorials.target(step.target)?.reveal();
   }, [step, t, state.revision, inline]);
   if (!step || !state.current) return null;
@@ -170,10 +185,26 @@ export function TutorialOverlay({ inline = false }: { inline?: boolean } = {}) {
         ? 'thinking'
         : 'neutral';
   return (
-    <View pointerEvents="box-none" style={inline ? styles.inlineGuide : styles.overlay} testID="tutorial-overlay">
+    <View
+      pointerEvents="box-none"
+      style={inline ? styles.inlineGuide : styles.overlay}
+      testID="tutorial-overlay"
+    >
+      {step.target === 'sidebar-open' && !inline && Platform.OS !== 'web' ? (
+        <View pointerEvents="none" style={styles.swipeDemonstration}>
+          <TutorialGestureCue
+            mode="swipe"
+            rtl={locale === 'ar' || locale === 'he' || locale === 'ur'}
+          />
+        </View>
+      ) : null}
       <View
         pointerEvents="box-none"
-        style={inline ? undefined : [styles.guidePosition, { left: 14, right: 14, bottom: insets.bottom + 78 }]}
+        style={
+          inline
+            ? undefined
+            : [styles.guidePosition, { left: 14, right: 14, bottom: insets.bottom + 78 }]
+        }
       >
         <View style={styles.guide}>
           <Image
@@ -187,32 +218,23 @@ export function TutorialOverlay({ inline = false }: { inline?: boolean } = {}) {
               {state.step + 1} / {tutorialSteps[state.current].length}
             </CKText>
             <CKText role="titleSmall" style={styles.title}>
-              {tutorialCopy[step.title]}
+              {t(tutorialCopy[step.title])}
             </CKText>
-            {step.target === 'home-reorder' ? (
-              <View style={styles.cueLabel}>
-                <Hand color="#4E3D27" size={18} />
-                <MoveHorizontal color="#4E3D27" size={16} />
-                <CKText role="metadata" style={styles.cueText}>
-                  {targetLabels['home-reorder']}
-                </CKText>
-              </View>
-            ) : null}
             <CKText role="body" style={styles.body}>
               {step.action === 'open-notifications' && Platform.OS === 'web'
-                ? tutorialCopy.tutorialWebExploreBody
-                : tutorialCopy[step.body]}
+                ? t(tutorialCopy.tutorialWebExploreBody)
+                : t(tutorialCopy[step.body])}
             </CKText>
             <View style={styles.actions}>
               <PressableSurface
                 testID="tutorial-skip"
                 accessibilityRole="button"
-                accessibilityLabel={tutorialCopy.tutorialNotNow}
+                accessibilityLabel={t(tutorialCopy.tutorialNotNow)}
                 onPress={tutorials.dismiss}
                 style={styles.skip}
               >
                 <CKText role="bodySmall" style={{ color: '#69563D' }}>
-                  {tutorialCopy.tutorialNotNow}
+                  {t(tutorialCopy.tutorialNotNow)}
                 </CKText>
               </PressableSurface>
               <PressableSurface
@@ -224,9 +246,11 @@ export function TutorialOverlay({ inline = false }: { inline?: boolean } = {}) {
                 <CKText role="labelLarge" style={{ color: '#FFFFFF' }}>
                   {step.action === 'open-notifications'
                     ? Platform.OS === 'web'
-                      ? tutorialCopy.tutorialExampleClan
+                      ? t('homeDone')
                       : t('settingsNotificationsTitle')
-                    : materialContinueLabel(locale)}
+                    : step.target === 'notifications-reminders'
+                      ? t('navigationHome')
+                      : materialContinueLabel(locale)}
                 </CKText>
               </PressableSurface>
             </View>
@@ -237,6 +261,15 @@ export function TutorialOverlay({ inline = false }: { inline?: boolean } = {}) {
   );
 }
 const styles = StyleSheet.create({
+  swipeDemonstration: { position: 'absolute', top: '33%', left: 0, right: 0, alignItems: 'center' },
+  reorderDemonstration: {
+    position: 'absolute',
+    top: 18,
+    right: 0,
+    width: 110,
+    height: 100,
+    alignItems: 'center',
+  },
   inlineGuide: { marginBottom: 20 },
   overlay: {
     position: 'absolute',
@@ -260,7 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  cueText: { color: '#4E3D27', fontSize: 12, fontWeight: '700' },
+  cueText: { color: '#4E3D27', fontSize: 12, fontWeight: '700', flexShrink: 1 },
   guidePosition: { position: 'absolute', maxWidth: 560, alignSelf: 'center' },
   guide: { flexDirection: 'row', alignItems: 'flex-end' },
   villager: { width: 84, height: 154, marginRight: -4, zIndex: 1 },

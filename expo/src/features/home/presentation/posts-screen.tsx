@@ -26,14 +26,14 @@ import {
   MobileWebImage,
   PressableSurface,
   ResponsiveGrid,
-  Skeleton,
+  SkeletonContent,
   centeredContentPadding,
   ckBreakpoints,
   ckRadius,
   ckSpacing,
   useCKTheme,
 } from '../../../ui';
-import type { AnnouncementService, AppAnnouncement } from '../data';
+import { AppAnnouncement, type AnnouncementService } from '../data';
 import { PostDateLabel } from './announcement-article-screen';
 import { useAnnouncementPresentation } from './announcement-presenter';
 
@@ -332,22 +332,25 @@ function PostsLoadingSkeleton({ isGrid }: { isGrid: boolean }) {
 }
 
 function PostSkeletonCard({ showImage }: { showImage: boolean }) {
+  const { t, locale } = useI18n();
+  const placeholder = new AppAnnouncement(
+    'pending',
+    t('generalLoading'),
+    t('generalLoading'),
+    null,
+    null,
+    showImage ? 'pending' : null,
+    null,
+    null,
+    null,
+    'article',
+    'pending',
+    new Date(0),
+  );
   return (
-    <View style={styles.skeletonCard}>
-      {showImage ? <Skeleton height={188} radius={0} /> : null}
-      <View style={styles.skeletonCopy}>
-        <View style={styles.cardTitleRow}>
-          <View style={styles.skeletonTitle}>
-            <Skeleton height={24} radius={6} />
-            <Skeleton height={24} radius={6} width={180} />
-          </View>
-          <Skeleton height={30} radius={ckRadius.pill} width={30} />
-        </View>
-        <Skeleton height={14} radius={6} width={108} />
-        <Skeleton height={16} radius={6} />
-        <Skeleton height={16} radius={6} width={220} />
-      </View>
-    </View>
+    <SkeletonContent>
+      <PostArchiveCard post={placeholder} intlLocale={toIntlLocale(locale)} onOpen={() => {}} />
+    </SkeletonContent>
   );
 }
 

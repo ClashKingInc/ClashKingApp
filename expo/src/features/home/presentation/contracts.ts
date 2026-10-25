@@ -61,7 +61,11 @@ export interface HomeRankedAccount extends HomeAccountIdentity {
 }
 
 export type HomeRankedCardModel =
-  | { readonly state: 'loading'; readonly configuredCount: number }
+  | {
+      readonly state: 'loading';
+      readonly configuredCount: number;
+      readonly identities?: readonly HomeAccountIdentity[];
+    }
   | { readonly state: 'empty'; readonly configuredCount: number }
   | {
       readonly state: 'ready';
@@ -106,7 +110,11 @@ export interface HomeUpgradeCombined {
 }
 
 export type HomeUpgradeCardModel =
-  | { readonly state: 'loading'; readonly configuredCount: number }
+  | {
+      readonly state: 'loading';
+      readonly configuredCount: number;
+      readonly identities?: readonly HomeAccountIdentity[];
+    }
   | { readonly state: 'empty'; readonly configuredCount: number }
   | {
       readonly state: 'ready';

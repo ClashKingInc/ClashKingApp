@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Asset } from 'expo-asset';
 import {
@@ -31,8 +31,15 @@ import {
   colorWithAlpha,
   statColors,
   useCKTheme,
+  SkeletonContent,
+  useSkeletonContent,
 } from '../../../ui';
-import type { Player, PlayerTimer, PlayerTimers, TodoProgressMetric } from '../../player/models';
+import {
+  Player,
+  type PlayerTimer,
+  type PlayerTimers,
+  type TodoProgressMetric,
+} from '../../player/models';
 import { formatPlayerActivity } from '../../player/presentation/presentation-utils';
 import type { TodoAccountFilter, TodoHeaderSummary, TodoScreenModel } from '../data';
 
@@ -47,6 +54,7 @@ export interface TodoScreenProps {
   readonly onBack: () => void;
   readonly openPlayer: (player: Player) => void;
   readonly now?: Date;
+  readonly pendingAccounts?: readonly { tag: string; name: string; townHallLevel: number }[];
 }
 
 const FILTERS: readonly TodoAccountFilter[] = ['all', 'needs_action', 'done'];
@@ -63,6 +71,27 @@ export function TodoScreen(props: TodoScreenProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const horizontal = 16;
   const now = props.now ?? new Date();
+  // These records only establish the real card geometry. They are masked,
+  // noninteractive and never enter the model, cache or timer service.
+  const pendingPlayers = useMemo(
+    () =>
+      (props.pendingAccounts ?? [])
+        .filter(
+          (account) =>
+            !props.query.trim() ||
+            `${account.name} ${account.tag}`
+              .toLocaleLowerCase()
+              .includes(props.query.trim().toLocaleLowerCase()),
+        )
+        .map((account) =>
+          Player.fromJson({
+            name: account.name || 'Player',
+            tag: account.tag,
+            townHallLevel: account.townHallLevel,
+          }),
+        ),
+    [props.pendingAccounts, props.query],
+  );
   const emptyTitle = props.query.trim()
     ? t('todoNoMatchingAccounts')
     : props.filter === 'needs_action'
@@ -79,6 +108,7 @@ export function TodoScreen(props: TodoScreenProps) {
         <View
           style={{
             minHeight: insets.top + 224,
+            paddingBottom: 24,
             overflow: 'hidden',
             backgroundColor: theme.background,
           }}
@@ -108,7 +138,12 @@ export function TodoScreen(props: TodoScreenProps) {
               />
             </View>
             <View style={{ height: Math.min(64, Math.max(24, width * 0.08)) }} />
-            <TodoIdentity summary={props.model.header} />
+            <TodoIdentity
+              summary={{
+                ...props.model.header,
+                totalAccounts: props.model.header.totalAccounts + pendingPlayers.length,
+              }}
+            />
           </View>
         </View>
         <View style={{ maxWidth: 1120, width: '100%', alignSelf: 'center' }}>
@@ -148,7 +183,7 @@ export function TodoScreen(props: TodoScreenProps) {
               </Pressable>
             </View>
             <View style={{ paddingTop: 10 }}>
-              {props.model.visiblePlayers.length ? (
+              {props.model.visiblePlayers.length || pendingPlayers.length ? (
                 <ResponsiveGrid minItemWidth={330} maxColumns={3} gap={12}>
                   {props.model.visiblePlayers.map((player) => (
                     <TodoPlayerCard
@@ -159,6 +194,17 @@ export function TodoScreen(props: TodoScreenProps) {
                       now={now}
                       onPress={() => props.openPlayer(player)}
                     />
+                  ))}
+                  {pendingPlayers.map((player) => (
+                    <SkeletonContent key={`loading-${player.tag}`}>
+                      <TodoPlayerCard
+                        player={player}
+                        presence={{ attacksAvailable: 0, attacksDone: 0 }}
+                        loadTimers={props.loadTimers}
+                        now={now}
+                        onPress={() => {}}
+                      />
+                    </SkeletonContent>
                   ))}
                 </ResponsiveGrid>
               ) : (
@@ -376,7 +422,9 @@ function TodoMetric({
 
 function usePlayerTimers(playerTag: string, loadTimers: (tag: string) => Promise<PlayerTimers>) {
   const [timers, setTimers] = useState<readonly PlayerTimer[]>([]);
+  const loading = useSkeletonContent();
   useEffect(() => {
+    if (loading) return;
     let current = true;
     void loadTimers(playerTag)
       .then((result) => {
@@ -386,7 +434,7 @@ function usePlayerTimers(playerTag: string, loadTimers: (tag: string) => Promise
     return () => {
       current = false;
     };
-  }, [loadTimers, playerTag]);
+  }, [loadTimers, playerTag, loading]);
   return timers;
 }
 
@@ -465,7 +513,8 @@ function ProgressRing({
   labelColor?: string;
 }) {
   const theme = useCKTheme();
-  const value = normalizeProgress(progress);
+  const loading = useSkeletonContent();
+  const value = loading ? 0 : normalizeProgress(progress);
   const label = formatProgressRingLabel(value);
   const stroke = 4;
   const radius = (size - stroke) / 2;
@@ -555,7 +604,13 @@ function FilterPopover({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <Pressable style={styles.modalBackdrop} onPress={onClose}>
         <Pressable
           accessibilityViewIsModal
@@ -608,7 +663,13 @@ function InfoDialog({
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <Pressable style={styles.dialogBackdrop} onPress={onClose}>
         <Pressable style={styles.dialogPressable} onPress={(event) => event.stopPropagation()}>
           <Surface radius={ckRadius.card} style={styles.dialog} accessibilityViewIsModal>
