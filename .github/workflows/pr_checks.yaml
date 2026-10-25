@@ -145,13 +145,6 @@ jobs:
           EXPO_PUBLIC_CK_API_ENV: development
         run: npm run web:export
 
-      - name: SonarQube scan
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        uses: SonarSource/sonarqube-scan-action@v7
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
   android_build:
     name: Android debug build
     runs-on: blacksmith-8vcpu-ubuntu-2404

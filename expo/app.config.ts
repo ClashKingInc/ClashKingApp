@@ -217,6 +217,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             ccacheEnabled: true,
           },
           android: {
+            // Pin CMake for reproducible native builds and reliable Windows long-path support.
+            cmakeVersion: '3.31.6',
+            // Ship only the ARM64 devices we support; prebuild and CI share this setting.
+            buildArchs: ['arm64-v8a'],
             minSdkVersion: 24,
             // Let the installed SDK choose matching compile/target/Kotlin
             // versions; pinning SDK 57's toolchain breaks SDK 58 native modules.
