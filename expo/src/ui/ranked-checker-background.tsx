@@ -1,6 +1,7 @@
 import { memo } from 'react';
-import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Asset } from 'expo-asset';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { HeaderArtwork } from './header-artwork';
+import { prepareHeaderArtwork } from '../core/assets/header-artwork-cache';
 import { useCKThemeMode } from './theme';
 
 export type RankedCheckerColor = 'blue' | 'purple' | 'green' | 'red';
@@ -21,7 +22,7 @@ let warmup: Promise<unknown> | undefined;
 export function warmRankedCheckerBackgrounds() {
   warmup ??= Promise.allSettled(
     [...Object.values(artwork), ...Object.values(fades)].map((source) =>
-      Image.prefetch(Asset.fromModule(source).uri),
+      prepareHeaderArtwork(source),
     ),
   );
   return warmup;
@@ -41,11 +42,9 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
       pointerEvents="none"
       style={[StyleSheet.absoluteFill, styles.clip, { backgroundColor: fallback[color] }]}
     >
-      <Image
+      <HeaderArtwork
         source={artwork[color]}
-        resizeMode="cover"
-        resizeMethod="resize"
-        fadeDuration={0}
+        contentFit="cover"
         style={{
           position: 'absolute',
           width,
@@ -61,12 +60,7 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
         testID="ranked-checker-tint"
         style={[StyleSheet.absoluteFill, { backgroundColor: '#0000007A' }]}
       />
-      <Image
-        source={fades[mode]}
-        resizeMode="stretch"
-        fadeDuration={0}
-        style={StyleSheet.absoluteFill}
-      />
+      <HeaderArtwork source={fades[mode]} contentFit="fill" style={StyleSheet.absoluteFill} />
     </View>
   );
 });

@@ -12,7 +12,6 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
-import { useI18n } from '../i18n';
 
 import { useCKAccessibility } from './accessibility';
 import { ImageAssets } from '../core/assets/image-assets';
@@ -30,131 +29,6 @@ export function LoadingIndicator({ label }: { label?: string }) {
     </View>
   );
 }
-
-export function LoadingScreen({
-  label,
-  mark,
-  kind = 'stats',
-}: {
-  label?: string;
-  mark?: ReactNode;
-  kind?: PageSkeletonKind;
-}) {
-  const theme = useCKTheme();
-  const insets = useContext(SafeAreaInsetsContext);
-  return (
-    <View style={{ flex: 1, paddingTop: insets?.top ?? 0, backgroundColor: theme.background }}>
-      {mark}
-      <PageSkeleton kind={kind} label={label} showHeader />
-    </View>
-  );
-}
-
-export type PageSkeletonKind = 'profile' | 'list' | 'stats' | 'war' | 'cards' | 'form' | 'media';
-
-/** Placeholder geometry follows the destination, never an animated interstitial. */
-export function PageSkeleton({
-  kind = 'list',
-  label,
-  showHeader = false,
-  rows = 4,
-}: {
-  kind?: PageSkeletonKind;
-  label?: string;
-  showHeader?: boolean;
-  rows?: number;
-}) {
-  const { t } = useI18n();
-  const row = (index: number) => (
-    <View key={index} style={skeletonStyles.row}>
-      <Skeleton width={48} height={48} radius={14} />
-      <View style={skeletonStyles.copy}>
-        <Skeleton width={index % 2 ? '58%' : '76%'} height={16} />
-        <Skeleton width="42%" height={11} />
-      </View>
-      <Skeleton width={32} height={16} />
-    </View>
-  );
-  return (
-    <View
-      accessibilityRole="progressbar"
-      accessibilityLabel={label ?? t('generalLoading')}
-      testID={`page-skeleton-${kind}`}
-      style={skeletonStyles.page}
-    >
-      {showHeader ? (
-        <View style={skeletonStyles.row}>
-          <Skeleton width={40} height={40} radius={20} />
-          <Skeleton width="42%" height={22} />
-        </View>
-      ) : null}
-      {kind === 'profile' ? (
-        <View style={skeletonStyles.identity}>
-          <Skeleton width={84} height={84} radius={24} />
-          <Skeleton width="48%" height={25} />
-          <Skeleton width="28%" height={13} />
-          <View style={skeletonStyles.row}>
-            {[0, 1, 2].map((key) => (
-              <Skeleton key={key} width={70} height={30} radius={15} />
-            ))}
-          </View>
-          <Skeleton height={44} radius={22} />
-        </View>
-      ) : null}
-      {kind === 'war' ? (
-        <>
-          <View style={[skeletonStyles.row, { justifyContent: 'space-around' }]}>
-            {[0, 1].map((key) => (
-              <View key={key} style={skeletonStyles.warIdentity}>
-                <Skeleton width={64} height={64} radius={20} />
-                <Skeleton width={105} height={17} />
-              </View>
-            ))}
-          </View>
-          <Skeleton height={52} radius={20} />
-        </>
-      ) : null}
-      {kind === 'stats' ? (
-        <>
-          <View style={skeletonStyles.row}>
-            {[0, 1, 2].map((key) => (
-              <View key={key} style={skeletonStyles.metric}>
-                <Skeleton width="60%" height={26} />
-                <Skeleton width="85%" height={11} />
-              </View>
-            ))}
-          </View>
-          <Skeleton height={150} radius={20} />
-        </>
-      ) : null}
-      {kind === 'media' ? <Skeleton height={220} radius={20} /> : null}
-      {kind === 'form'
-        ? [0, 1, 2, 3].map((key) => (
-            <View key={key} style={skeletonStyles.copy}>
-              <Skeleton width="32%" height={12} />
-              <Skeleton height={44} radius={12} />
-            </View>
-          ))
-        : kind === 'cards'
-          ? [0, 1, 2].map((key) => (
-              <View key={key} style={skeletonStyles.copy}>
-                <Skeleton height={130} radius={20} />
-                <Skeleton width="62%" height={18} />
-              </View>
-            ))
-          : Array.from({ length: rows }, (_, index) => row(index))}
-    </View>
-  );
-}
-
-const skeletonStyles = StyleSheet.create({
-  page: { width: '100%', maxWidth: 1120, alignSelf: 'center', padding: 16, gap: 20 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  copy: { flex: 1, gap: 10 },
-  identity: { alignItems: 'center', gap: 12, width: '100%' },
-  warIdentity: { flex: 1, alignItems: 'center', gap: 12 },
-  metric: { flex: 1, gap: 10, alignItems: 'center' },
-});
 
 export function Skeleton({
   width = '100%',

@@ -1,20 +1,27 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { HeroHeaderScrim } from './hero-header-scrim';
+import { HeaderArtwork } from './header-artwork';
 
 import { ImageAssets } from '../core/assets/image-assets';
 import { CKText } from './text';
 import { MobileWebImage, headerArtworkSize } from './mobile-web-image';
-import { useCKThemeMode } from './theme';
 
 export interface ProfilePageHeaderProps {
   title: string;
+  titleImageUrl?: string;
   subtitle?: string;
   imageUrl: string;
+  imageElement?: ReactNode;
+  imageSize?: number;
   backgroundUrl?: string;
+  backgroundSource?: number;
   backgroundElement?: ReactNode;
   compactIdentity?: boolean;
+  /** Compact library headers keep the artwork behind a single identity row. */
+  identityLayout?: 'stacked' | 'inline';
+  identityOffsetY?: number;
   onBack: () => void;
   backLabel: string;
   safeTop?: number;
@@ -27,11 +34,17 @@ export interface ProfilePageHeaderProps {
 
 export function ProfilePageHeader({
   title,
+  titleImageUrl,
   subtitle,
   imageUrl,
+  imageElement,
+  imageSize = 64,
   backgroundUrl = ImageAssets.homeBaseBackground,
+  backgroundSource,
   backgroundElement,
   compactIdentity = false,
+  identityLayout = 'stacked',
+  identityOffsetY = 0,
   onBack,
   backLabel,
   safeTop = 0,
@@ -41,64 +54,32 @@ export function ProfilePageHeader({
   children,
   testID = 'profile-page-header',
 }: ProfilePageHeaderProps) {
-  const themeMode = useCKThemeMode();
   const { width } = useWindowDimensions();
-  const [headerSize, setHeaderSize] = useState({ width: 0, height: 0 });
   return (
-    <View
-      testID={testID}
-      style={[styles.header, { paddingTop: safeTop }]}
-      onLayout={(event) => {
-        const { width, height } = event.nativeEvent.layout;
-        setHeaderSize((current) =>
-          current.width === width && current.height === height ? current : { width, height },
-        );
-      }}
-    >
+    <View testID={testID} style={[styles.header, { paddingTop: safeTop }]}>
       <View testID="profile-page-header-backdrop" pointerEvents="none" style={styles.backdrop}>
-        {backgroundElement ?? <>
-        <MobileWebImage
-          imageUrl={backgroundUrl}
-          displaySize={headerArtworkSize(width)}
-          cachePolicy="memory-disk"
-          priority="high"
-          transition={0}
-          style={StyleSheet.absoluteFill}
-          contentFit="cover"
-        />
-        <View style={[StyleSheet.absoluteFill, styles.scrim]} />
-        {/* Explicit bounds avoid native percentage clipping inside padded headers. */}
-        {headerSize.width > 0 ? (
-          <Svg
-            style={StyleSheet.absoluteFill}
-            width={headerSize.width}
-            height={headerSize.height}
-            viewBox={`0 0 ${headerSize.width} ${headerSize.height}`}
-            pointerEvents="none"
-          >
-            <Defs>
-              <LinearGradient id="profile-page-header-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.36 : 0.2} />
-                <Stop
-                  offset="0.5"
-                  stopColor="#000"
-                  stopOpacity={themeMode === 'dark' ? 0.64 : 0.4}
-                />
-                <Stop
-                  offset="1"
-                  stopColor="#000"
-                  stopOpacity={themeMode === 'dark' ? 0.92 : 0.65}
-                />
-              </LinearGradient>
-            </Defs>
-            <Rect
-              width={headerSize.width}
-              height={headerSize.height}
-              fill="url(#profile-page-header-gradient)"
-            />
-          </Svg>
-        ) : null}
-        </>}
+        {backgroundElement ?? (
+          <>
+            {backgroundSource ? (
+              <HeaderArtwork
+                source={backgroundSource}
+                style={StyleSheet.absoluteFill}
+                contentFit="cover"
+              />
+            ) : (
+              <MobileWebImage
+                imageUrl={backgroundUrl}
+                displaySize={headerArtworkSize(width)}
+                cachePolicy="memory-disk"
+                priority="high"
+                transition={0}
+                style={StyleSheet.absoluteFill}
+                contentFit="cover"
+              />
+            )}
+            <HeroHeaderScrim />
+          </>
+        )}
       </View>
       <View style={[styles.content, { paddingBottom: bottomPadding }]}>
         <View style={styles.actionRow}>
@@ -114,19 +95,37 @@ export function ProfilePageHeader({
           <View style={styles.actionSpacer} />
           {actions ? <View style={styles.actions}>{actions}</View> : null}
         </View>
-        <View style={[styles.identity, compactIdentity && { marginTop: -24 }]}>
-          <MobileWebImage
-            imageUrl={imageUrl}
-            cachePolicy="memory-disk"
-            priority="high"
-            transition={0}
-            style={styles.identityImage}
-            contentFit="contain"
-            testID="profile-page-header-image"
-          />
-          <CKText role="titleLarge" style={styles.title}>
-            {title}
-          </CKText>
+        <View
+          style={[
+            styles.identity,
+            compactIdentity && { marginTop: -24 },
+            identityLayout === 'inline' && styles.inlineIdentity,
+            identityOffsetY !== 0 && { transform: [{ translateY: identityOffsetY }] },
+          ]}
+        >
+          {imageElement ?? (
+            <MobileWebImage
+              imageUrl={imageUrl}
+              cachePolicy="memory-disk"
+              priority="high"
+              transition={0}
+              style={[styles.identityImage, { width: imageSize, height: imageSize }]}
+              contentFit="contain"
+              testID="profile-page-header-image"
+            />
+          )}
+          <View style={styles.titleRow}>
+            {titleImageUrl ? (
+              <MobileWebImage
+                imageUrl={titleImageUrl}
+                style={styles.titleImage}
+                contentFit="contain"
+              />
+            ) : null}
+            <CKText role="titleLarge" style={styles.title}>
+              {title}
+            </CKText>
+          </View>
           {subtitle ? (
             <CKText role="bodySmall" style={styles.subtitle}>
               {subtitle}
@@ -144,7 +143,6 @@ export function ProfilePageHeader({
 const styles = StyleSheet.create({
   header: { overflow: 'hidden' },
   backdrop: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, overflow: 'hidden' },
-  scrim: { backgroundColor: '#00000080' },
   content: { maxWidth: 1120, width: '100%', alignSelf: 'center' },
   actionRow: {
     minHeight: 48,
@@ -165,7 +163,16 @@ const styles = StyleSheet.create({
   },
   identity: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, gap: 4 },
   identityImage: { width: 64, height: 64 },
-  title: { color: '#fff', textAlign: 'center' },
+  inlineIdentity: { flexDirection: 'row', gap: 12, paddingTop: 4, paddingBottom: 8 },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    maxWidth: '100%',
+  },
+  titleImage: { width: 28, height: 32 },
+  title: { color: '#fff', textAlign: 'center', flexShrink: 1 },
   subtitle: { color: '#ffffffcc', textAlign: 'center', paddingHorizontal: 12 },
   controls: { paddingHorizontal: 16, paddingTop: 12, gap: 8, alignItems: 'stretch' },
 });

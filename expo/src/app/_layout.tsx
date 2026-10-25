@@ -29,6 +29,7 @@ import { queueAppLink } from '../core/deep-links/link-inbox';
 import { nativeSecondaryScreenOptions } from '../core/app/native-secondary-navigation';
 import { WebDocumentTitle } from '../core/app/web-document-title';
 import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
+import { warmHeaderArtwork } from '../core/assets/header-artwork-cache';
 import { TutorialOverlay } from '../features/tutorials/tutorial-ui';
 
 void SplashScreen.preventAutoHideAsync();
@@ -67,7 +68,10 @@ export default function RootLayout() {
   }, []);
   const [fontReady, setFontReady] = useState(false);
   useEffect(() => {
-    if (fontReady) void warmRankedCheckerBackgrounds();
+    if (fontReady) {
+      void warmHeaderArtwork();
+      void warmRankedCheckerBackgrounds();
+    }
   }, [fontReady]);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();

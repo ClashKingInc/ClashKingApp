@@ -24,7 +24,8 @@ export type ProfileTabsProps = {
   // For two-choice content switches use SlidingSegmentControl; profile
   // sections use underline. Do not revive compact tabs on new screens.
   variant?: 'glass' | 'underline' | 'compact';
-  overflow?: 'menu' | 'scroll';
+  /** Fit keeps every section visible; useful for four short, text-only tabs. */
+  overflow?: 'menu' | 'scroll' | 'fit';
   /** Optional continuous position from a pager; other profile tabs keep their existing behavior. */
   animatedPosition?: Animated.Value;
   indicatorRtl?: boolean;

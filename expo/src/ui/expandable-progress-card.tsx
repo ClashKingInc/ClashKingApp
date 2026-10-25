@@ -21,6 +21,9 @@ export function ExpandableProgressCard({
   onToggle,
   footer,
   trailing,
+  headerAccessory,
+  showProgress = true,
+  compactHeader = false,
   children,
 }: {
   title: string;
@@ -31,6 +34,9 @@ export function ExpandableProgressCard({
   onToggle: () => void;
   footer?: ReactNode;
   trailing?: ReactNode;
+  headerAccessory?: ReactNode;
+  showProgress?: boolean;
+  compactHeader?: boolean;
   children?: ReactNode;
 }) {
   const theme = useCKTheme();
@@ -63,29 +69,39 @@ export function ExpandableProgressCard({
         >
           <MobileWebImage
             imageUrl={imageUrl}
-            style={[styles.image, { transform: [{ scale: imageScale }] }]}
+            style={[
+              styles.image,
+              compactHeader && styles.compactImage,
+              { transform: [{ scale: imageScale }] },
+            ]}
           />
-          <CKText role="titleSmall" style={styles.title}>
+          <CKText
+            role={compactHeader ? 'rowTitle' : 'titleSmall'}
+            style={[styles.title, compactHeader && styles.compactTitle]}
+          >
             {title}
           </CKText>
-          <CKText role="bodyMedium">{displayedPercent}%</CKText>
+          {showProgress ? <CKText role="bodyMedium">{displayedPercent}%</CKText> : null}
+          {headerAccessory}
           <Reanimated.View style={arrowStyle}>
             <ChevronRight size={20} color={theme.onSurfaceVariant} />
           </Reanimated.View>
         </Pressable>
         {trailing}
       </View>
-      <View style={[styles.track, { backgroundColor: colorWithAlpha(theme.onSurface, 0.12) }]}>
-        <View
-          style={[
-            styles.fill,
-            {
-              width: `${boundedPercent}%`,
-              backgroundColor: boundedPercent >= 100 ? statColors.win : '#E8BC52',
-            },
-          ]}
-        />
-      </View>
+      {showProgress ? (
+        <View style={[styles.track, { backgroundColor: colorWithAlpha(theme.onSurface, 0.12) }]}>
+          <View
+            style={[
+              styles.fill,
+              {
+                width: `${boundedPercent}%`,
+                backgroundColor: boundedPercent >= 100 ? statColors.win : '#E8BC52',
+              },
+            ]}
+          />
+        </View>
+      ) : null}
       {footer ? <View style={styles.footer}>{footer}</View> : null}
       <Reanimated.View
         pointerEvents={open ? 'auto' : 'none'}
@@ -110,6 +126,8 @@ const styles = StyleSheet.create({
   trigger: { flex: 1, minHeight: 38, flexDirection: 'row', alignItems: 'center', gap: 8 },
   image: { width: 32, height: 32 },
   title: { flex: 1 },
+  compactTitle: { flex: 0, flexShrink: 1, maxWidth: '36%' },
+  compactImage: { width: 22, height: 22 },
   track: { height: 4, borderRadius: 4, overflow: 'hidden', marginTop: 4 },
   fill: { height: 4, borderRadius: 4, backgroundColor: '#E8BC52' },
   footer: { marginTop: 6, flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 8 },

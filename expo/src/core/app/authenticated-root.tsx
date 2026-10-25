@@ -1,6 +1,13 @@
 import * as Clipboard from 'expo-clipboard';
 import { router } from 'expo-router';
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from 'react';
 import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Trophy, UserRound } from 'lucide-react-native';
 
@@ -39,14 +46,19 @@ import {
   PlayerDetailRoot,
   type PlayerCurrentCwl,
 } from '../../features/player/presentation';
-import type { Player } from '../../features/player/models';
+import { Player, currentLegendDay } from '../../features/player/models';
 import {
   ClanCapitalRoot,
   ClanInfoRoot,
   ClanRoot,
   type ClanNavigationActions,
 } from '../../features/clan/presentation';
-import type { Clan } from '../../features/clan/models';
+import { Clan } from '../../features/clan/models';
+import { ClanCapitalScreen } from '../../features/clan/presentation/clan-capital-screen';
+import { RankedScreen } from '../../features/ranked/presentation/ranked-screen';
+import { LegendsScreen } from '../../features/legends/presentation/legends-root';
+import { loadingCwl, loadingWar } from '../../features/war/presentation/war-loading-model';
+import { DeferredDestination } from './deferred-destination';
 import {
   CwlInfoRoot,
   HistoricalCwlRoot,
@@ -56,8 +68,6 @@ import {
 import type { WarCwl, WarInfo } from '../../features/war/models';
 import { SubscriptionRoot } from '../../features/subscription';
 import { SearchRoot } from '../../features/search';
-import type { SearchDestinationResult } from '../../features/search';
-import { SearchDestination } from '../../features/search/search-destination';
 import { RankedRoot } from '../../features/ranked';
 import { LegendsRoot } from '../../features/legends';
 import { RankingsRoot } from '../../features/rankings';
@@ -78,7 +88,6 @@ import {
   PageLoadingOverlay,
   PageLoadingHost,
   usePageLoadingRequest,
-  type PageSkeletonKind,
   Snackbar,
   useCKTheme,
 } from '../../ui';
@@ -100,15 +109,14 @@ import { apiDate } from '../../features/war/models';
 import { isRouteEnabled } from '../../navigation/route-manifest';
 import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
 import { selectLegendsPlayer } from './legends-player-selection';
-import { tutorials, TUTORIAL_CLAN_TAG } from '../../features/tutorials/tutorial-service';
+import { tutorials } from '../../features/tutorials/tutorial-service';
 
-type PushedScene = {
+type ResolvedScene = {
   readonly linkParams?: AppLinkParams;
   readonly linkKey?: number;
   readonly clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin;
 } & (
   | { readonly kind: 'player'; readonly player: Player }
-  | { readonly kind: 'searchDestination'; readonly load: () => Promise<SearchDestinationResult> }
   | { readonly kind: 'clan'; readonly clan: Clan }
   | { readonly kind: 'capital'; readonly clan: Clan }
   | {
@@ -131,6 +139,18 @@ type PushedScene = {
       readonly playerTag?: string;
     }
 );
+
+type PushedScene =
+  | ResolvedScene
+  | {
+      readonly kind: 'deferred';
+      readonly preview: ResolvedScene;
+      readonly initial?: ResolvedScene;
+      readonly load: () => Promise<ResolvedScene>;
+      readonly linkParams?: AppLinkParams;
+      readonly linkKey?: number;
+      readonly clanSpring?: undefined;
+    };
 
 /** Production shell composition for the retained four-tab Flutter navigation model. */
 export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } = {}) {
@@ -183,7 +203,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   const [snackbar, setSnackbar] = useState<string>();
   const [supportCreatorHandoffUrl, setSupportCreatorHandoffUrl] = useState<string>();
   const [deepLinkLoading, setDeepLinkLoading] = useState(false);
-  const [deepLinkLoadingKind, setDeepLinkLoadingKind] = useState<PageSkeletonKind>('profile');
   const pageLoading = usePageLoadingRequest();
   const openPlayerInGame = (tag: string) => {
     void openExternal(playerGameUrl(tag, locale)).then((opened) => {
@@ -261,10 +280,10 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     )
       tutorials.visitHome();
   }, [primary, utility, pushedScenes.length, runtime]);
-  const openPlayerUtility = useCallback(
-    (route: AppRouteDefinition, playerTag: string) => showUtility(route, playerTag),
-    [showUtility],
-  );
+  const openPlayerUtility = (route: AppRouteDefinition, playerTag: string) => {
+    if (route.id === 'ranked' || route.id === 'legends') loadPlayerUtility(route.id, playerTag);
+    else showUtility(route, playerTag);
+  };
   const openPost = (postId?: string) => {
     setLinkState({ key: 0, params: {} });
     recordBrowserPath(
@@ -344,11 +363,48 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           params: {},
         }),
       );
-    navigationGeneration.current += 1;
-    setPushedScenes((current) => [
-      ...current,
-      { kind: 'war', war, roundNumber, ...(cwl ? { cwl } : {}) },
-    ]);
+    const generation = ++navigationGeneration.current;
+    const preview: ResolvedScene = { kind: 'war', war, roundNumber, ...(cwl ? { cwl } : {}) };
+    // Player history contains scores and personal hits, not either full roster.
+    // Push immediately, then resolve this exact archived war instead of displaying
+    // an empty player list or accidentally substituting the clan's current war.
+    if (
+      war.state === 'warEnded' &&
+      war.clan &&
+      war.endTime &&
+      !war.clan.members.length &&
+      !war.opponent?.members.length
+    ) {
+      const clanTag = war.clan.tag,
+        endTime = war.endTime;
+      setPushedScenes((current) => [
+        ...current,
+        {
+          kind: 'deferred',
+          preview,
+          linkKey: generation,
+          load: async (): Promise<ResolvedScene> => {
+            const full = await WarCwlService.fetchWarDataFromTime(
+              runtime.contractApi,
+              clanTag,
+              endTime,
+              war,
+            );
+            if (
+              !full ||
+              full.endTime?.getTime() !== endTime.getTime() ||
+              ![full.clan?.tag, full.opponent?.tag].includes(clanTag) ||
+              (!full.clan?.members.length && !full.opponent?.members.length)
+            ) {
+              throw new Error('Requested historical war roster unavailable');
+            }
+            return { ...preview, war: full.reorderForClan(clanTag) };
+          },
+        },
+      ]);
+      return;
+    }
+    setPushedScenes((current) => [...current, preview]);
   };
   const pushUtility = (route: AppRouteId, playerTag?: string) => {
     recordBrowserPath(
@@ -360,50 +416,93 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       { kind: 'utility', route, ...(playerTag ? { playerTag } : {}) },
     ]);
   };
+  const previewPlayer = (tag: string, seed: Record<string, unknown> = {}) =>
+    Player.fromJson({
+      tag,
+      name: 'Player name',
+      townHallLevel: 16,
+      expLevel: 100,
+      troops: [{ name: 'Barbarian', level: 1, maxLevel: 12, village: 'home' }],
+      heroes: [{ name: 'Barbarian King', level: 1, maxLevel: 100, village: 'home' }],
+      ...seed,
+    });
+  const previewClan = (tag: string, seed: Record<string, unknown> = {}) =>
+    Clan.fromJson({
+      tag,
+      name: 'Clan name',
+      clanLevel: 10,
+      members: 3,
+      memberList: [0, 1, 2].map((index) => ({
+        tag: `#PENDING${index}`,
+        name: 'Player name',
+        townHallLevel: 16,
+        role: 'member',
+      })),
+      ...seed,
+    });
+  const pushDeferred = (
+    preview: ResolvedScene,
+    load: () => Promise<ResolvedScene>,
+    link: AppLink,
+    initial?: ResolvedScene,
+  ) => {
+    const key = ++navigationGeneration.current;
+    recordBrowserPath(appLinkPath(link));
+    setPushedScenes((current) => [
+      ...current,
+      {
+        kind: 'deferred',
+        preview,
+        initial,
+        load,
+        linkKey: key,
+        linkParams: link.params,
+      },
+    ]);
+  };
   const loadPlayer = (tag: string) => {
-    const generation = ++navigationGeneration.current;
-    void runtime.players
-      .getPlayerAndClanData(tag)
-      .then((player) => {
-        if (generation === navigationGeneration.current) pushPlayer(player);
-      })
-      .catch((error) => setSnackbar(String(error)));
+    const cached = runtime.players.profiles.find(
+      (player) => canonicalTag(player.tag) === canonicalTag(tag),
+    );
+    pushDeferred(
+      { kind: 'player', player: previewPlayer(tag) },
+      async () => ({ kind: 'player', player: await runtime.players.getPlayerAndClanData(tag) }),
+      { kind: 'player', tag, params: {} },
+      cached ? { kind: 'player', player: cached } : undefined,
+    );
   };
   const loadClan = (tag: string) => {
-    const generation = ++navigationGeneration.current;
-    void runtime.clans
-      .getClanAndWarData(tag)
-      .then((clan) => {
-        if (generation === navigationGeneration.current) pushClan(clan);
-      })
-      .catch((error) => setSnackbar(String(error)));
+    const cached = runtime.clans.getClanByTag(tag);
+    pushDeferred(
+      { kind: 'clan', clan: previewClan(tag) },
+      async () => ({ kind: 'clan', clan: await runtime.clans.getClanAndWarData(tag) }),
+      { kind: 'clan', tag, params: {} },
+      cached ? { kind: 'clan', clan: cached } : undefined,
+    );
+  };
+  const loadPlayerUtility = (route: 'legends' | 'ranked', tag: string) => {
+    if (runtime.players.profiles.some((player) => canonicalTag(player.tag) === canonicalTag(tag)))
+      return pushUtility(route, tag);
+    pushDeferred(
+      { kind: 'utility', route, playerTag: tag },
+      async () => {
+        await runtime.players.getPlayerAndClanData(tag);
+        return { kind: 'utility', route, playerTag: tag };
+      },
+      { kind: 'page', page: route, params: { player: tag } },
+    );
   };
   useEffect(() => {
-    const openTutorialClan = () => {
-      const generation = ++navigationGeneration.current;
-      void runtime.clans
-        .getClanAndWarData(TUTORIAL_CLAN_TAG)
-        .then((clan) => {
-          if (generation !== navigationGeneration.current) return;
-          // This lesson is an excursion from Home, not another layer over all
-          // the setup screens. Native swipe-back and browser Back land on Home.
-          selectPrimary('home');
-          tutorialClanVisit.current = true;
-          pushClan(clan);
-        })
-        .catch((error) => setSnackbar(String(error)));
-    };
-    const removeClan = tutorials.registerAction('open-tutorial-clan', openTutorialClan);
+    const removeHome = tutorials.registerAction('go-home', () => selectPrimary('home'));
     const removeNotifications = tutorials.registerAction('open-notifications', () => {
-      if (Platform.OS === 'web') openTutorialClan();
+      if (Platform.OS === 'web') selectPrimary('home');
       else {
-        tutorials.startMobileFollowThrough();
         showUtility(routeById('settings'), undefined, { section: 'notifications' });
       }
     });
     return () => {
       removeNotifications();
-      removeClan();
+      removeHome();
     };
   });
   useEffect(() => {
@@ -414,6 +513,8 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   }, [pushedScenes.length, utility]);
   const clanNavigation: ClanNavigationActions = {
     openPlayer: pushPlayer,
+    openPlayerTag: loadPlayer,
+    openClanTag: loadClan,
     openWar: (clan, war) =>
       pushWar(war.warInfo, null, currentCwlRoute(war, clan.tag, clan.warLeague?.name)),
     openHistoricalWar: (war) => pushWar(war, null),
@@ -458,6 +559,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       <PlayersRoot
         openManageAccounts={() => openUtility(routeById('accounts'))}
         openPlayer={pushPlayer}
+        openPlayerTag={loadPlayer}
         openGameSettings={() =>
           void openExternal('https://link.clashofclans.com/?action=OpenMoreSettings')
         }
@@ -533,86 +635,110 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       openPlayer: pushPlayer,
       openClan: pushClan,
       openDestination: async (link: AppLink) => {
-        setDeepLinkLoadingKind(
-          link.kind === 'war' || link.kind === 'cwl'
-            ? 'war'
-            : link.kind === 'page'
-              ? link.page === 'stats' || link.page === 'ranked' || link.page === 'legends'
-                ? 'stats'
-                : link.page === 'basesArmies' || link.page === 'calculators'
-                  ? 'cards'
-                  : 'list'
-              : 'profile',
-        );
         const generation = ++navigationGeneration.current;
-        let scene: PushedScene | undefined;
-        if (link.kind === 'page') {
-          if (!isRouteEnabled(routeById(link.page), featureStateRef.current)) {
-            if (active) setSnackbar(t('generalNoDataAvailable'));
-            return;
-          }
-          if (link.page === 'ranked' && link.params.player)
-            await runtime.players.getPlayerAndClanData(link.params.player);
-          if (link.page === 'war' && link.params.clan) {
-            await runtime.wars.loadAllWarData([link.params.clan], { throwOnError: true });
-            const summary = runtime.wars.getWarCwlByTag(link.params.clan);
-            const war = summary?.isInCwl
-              ? summary.getActiveWarByTag(link.params.clan)
-              : summary?.warInfo;
-            if (war?.clan) scene = { kind: 'war', war, roundNumber: null };
-            else throw new Error('No war available for requested clan');
-          }
-        } else if (link.kind === 'player') {
-          const player = await runtime.players.getPlayerAndClanData(link.tag);
-          if (!player) throw new Error('Player unavailable');
-          scene =
-            link.params.tab === 'legends'
-              ? { kind: 'utility', route: 'legends', playerTag: player.tag }
-              : { kind: 'player', player };
-        } else if (link.kind === 'clan' || link.kind === 'capital') {
-          const clan = await runtime.clans.getClanAndWarData(link.tag);
-          if (!clan) throw new Error('Clan unavailable');
-          scene = { kind: link.kind, clan };
-        } else if (link.kind === 'cwl') {
-          const cwl = await runtime.wars.loadLinkedCwl(link.tag, link.params.season);
-          scene = { kind: 'cwl', ...cwl, clanTag: link.tag };
-        } else if (link.kind === 'war') {
-          if (link.warId) {
-            const end = apiDate(link.warId);
-            if (!end) throw new Error('Invalid historical war end time');
-            const war = await WarCwlService.fetchWarDataFromTime(
-              runtime.contractApi,
-              link.tag,
-              end,
-            );
-            if (!war?.clan || war.endTime?.getTime() !== end.getTime())
-              throw new Error('Requested historical war unavailable');
-            scene = { kind: 'war', war: war.reorderForClan(link.tag), roundNumber: null };
-          } else {
-            await runtime.wars.loadAllWarData([link.tag], { throwOnError: true });
-            const summary = runtime.wars.getWarCwlByTag(link.tag);
-            const war = summary?.isInCwl ? summary.getActiveWarByTag(link.tag) : summary?.warInfo;
-            if (!war?.clan) throw new Error('No current war available');
-            scene = {
-              kind: 'war',
-              war: war.reorderForClan(link.tag),
-              roundNumber: null,
-              ...(summary?.isInCwl ? { cwl: { summary, clanTag: link.tag } } : {}),
-            };
-          }
+        if (
+          link.kind === 'page' &&
+          !isRouteEnabled(routeById(link.page), featureStateRef.current)
+        ) {
+          if (active) setSnackbar(t('generalNoDataAvailable'));
+          return;
+        }
+        const waitsForData =
+          link.kind !== 'page' ||
+          ((link.page === 'ranked' || link.page === 'legends') && !!link.params.player) ||
+          (link.page === 'war' && !!link.params.clan);
+        if (waitsForData) {
+          const tag =
+            link.kind === 'page' ? (link.params.clan ?? link.params.player ?? '') : link.tag;
+          const preview: ResolvedScene =
+            link.kind === 'player'
+              ? link.params.tab === 'legends'
+                ? { kind: 'utility', route: 'legends', playerTag: tag }
+                : { kind: 'player', player: previewPlayer(tag) }
+              : link.kind === 'clan' || link.kind === 'capital'
+                ? { kind: link.kind, clan: previewClan(tag) }
+                : link.kind === 'cwl'
+                  ? { kind: 'cwl', summary: loadingCwl(tag, link.params.season), clanTag: tag }
+                  : link.kind === 'war' || (link.kind === 'page' && link.page === 'war')
+                    ? { kind: 'war', war: loadingWar(tag), roundNumber: null }
+                    : {
+                        kind: 'utility',
+                        route: link.kind === 'page' ? link.page : 'ranked',
+                        playerTag: tag,
+                      };
+          const load = async (): Promise<ResolvedScene> => {
+            let scene: ResolvedScene | undefined;
+            if (link.kind === 'page') {
+              if ((link.page === 'ranked' || link.page === 'legends') && link.params.player)
+                await runtime.players.getPlayerAndClanData(link.params.player);
+              if (link.page === 'war' && link.params.clan) {
+                await runtime.wars.loadAllWarData([link.params.clan], { throwOnError: true });
+                const summary = runtime.wars.getWarCwlByTag(link.params.clan);
+                const war = summary?.isInCwl
+                  ? summary.getActiveWarByTag(link.params.clan)
+                  : summary?.warInfo;
+                if (war?.clan) scene = { kind: 'war', war, roundNumber: null };
+                else throw new Error('No war available for requested clan');
+              }
+            } else if (link.kind === 'player') {
+              const player = await runtime.players.getPlayerAndClanData(link.tag);
+              if (!player) throw new Error('Player unavailable');
+              scene =
+                link.params.tab === 'legends'
+                  ? { kind: 'utility', route: 'legends', playerTag: player.tag }
+                  : { kind: 'player', player };
+            } else if (link.kind === 'clan' || link.kind === 'capital') {
+              const clan = await runtime.clans.getClanAndWarData(link.tag);
+              if (!clan) throw new Error('Clan unavailable');
+              scene = { kind: link.kind, clan };
+            } else if (link.kind === 'cwl') {
+              const cwl = await runtime.wars.loadLinkedCwl(link.tag, link.params.season);
+              scene = { kind: 'cwl', ...cwl, clanTag: link.tag };
+            } else if (link.kind === 'war') {
+              if (link.warId) {
+                const end = apiDate(link.warId);
+                if (!end) throw new Error('Invalid historical war end time');
+                const war = await WarCwlService.fetchWarDataFromTime(
+                  runtime.contractApi,
+                  link.tag,
+                  end,
+                );
+                if (!war?.clan || war.endTime?.getTime() !== end.getTime())
+                  throw new Error('Requested historical war unavailable');
+                scene = { kind: 'war', war: war.reorderForClan(link.tag), roundNumber: null };
+              } else {
+                await runtime.wars.loadAllWarData([link.tag], { throwOnError: true });
+                const summary = runtime.wars.getWarCwlByTag(link.tag);
+                const war = summary?.isInCwl
+                  ? summary.getActiveWarByTag(link.tag)
+                  : summary?.warInfo;
+                if (!war?.clan) throw new Error('No current war available');
+                scene = {
+                  kind: 'war',
+                  war: war.reorderForClan(link.tag),
+                  roundNumber: null,
+                  ...(summary?.isInCwl ? { cwl: { summary, clanTag: link.tag } } : {}),
+                };
+              }
+            }
+
+            if (scene) return scene;
+            if (link.kind === 'page')
+              return { kind: 'utility', route: link.page, playerTag: link.params.player };
+            throw new Error('Destination unavailable');
+          };
+          setPushedScenes((current) => [
+            ...current,
+            { kind: 'deferred', preview, load, linkParams: link.params, linkKey: generation },
+          ]);
+          recordBrowserPath(appLinkPath(link));
+          return;
         }
         if (!active || generation !== navigationGeneration.current) return;
-        // An entity opened from a retained utility owns its own link context.
-        // Changing the utility's key here would replace its native /detail
-        // route, unmount the parent, and let onRemove clear the new player/clan.
-        if (!scene) setLinkState({ key: generation, params: link.params });
-        // Entity links can originate inside Profile or a tournament roster.
-        // Keep that parent mounted so Back returns to the originating page.
-        if (!scene) setUtility(undefined);
-        setPushedScenes((current) =>
-          scene ? [...current, { ...scene, linkParams: link.params, linkKey: generation }] : [],
-        );
-        if (!scene && link.kind === 'page') {
+        setLinkState({ key: generation, params: link.params });
+        setUtility(undefined);
+        setPushedScenes([]);
+        if (link.kind === 'page') {
           if (routeById(link.page).primaryTab) {
             setPrimary(link.page as PrimaryRouteId);
             setPrimaryLinks((current) => ({
@@ -625,10 +751,8 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
             setUtility(link.page);
           }
         }
-        if (Platform.OS === 'web' && typeof window !== 'undefined') {
-          if (scene) recordBrowserPath(appLinkPath(link));
-          else window.history.replaceState(window.history.state, '', appLinkPath(link));
-        }
+        if (Platform.OS === 'web' && typeof window !== 'undefined')
+          window.history.replaceState(window.history.state, '', appLinkPath(link));
       },
       showLoading: (loading) => {
         if (active) {
@@ -733,9 +857,15 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           onCancel={closeSecondary}
           onOpenPlayer={pushPlayer}
           onOpenClan={pushClan}
-          onOpenDestination={(load) => {
-            navigationGeneration.current += 1;
-            setPushedScenes((current) => [...current, { kind: 'searchDestination', load }]);
+          onOpenDestination={({ kind, seed, load }) => {
+            const tag = String(seed.tag ?? '');
+            pushDeferred(
+              kind === 'player'
+                ? { kind, player: previewPlayer(tag, seed) }
+                : { kind, clan: previewClan(tag, seed) },
+              load,
+              { kind, tag, params: {} },
+            );
           }}
         />
       );
@@ -752,9 +882,25 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         />
       ) : null;
     if (route === 'rankings')
-      return <RankingsRoot onBack={closeSecondary} openPlayer={pushPlayer} openClan={pushClan} />;
+      return (
+        <RankingsRoot
+          onBack={closeSecondary}
+          openPlayer={pushPlayer}
+          openClan={pushClan}
+          openPlayerTag={loadPlayer}
+          openClanTag={loadClan}
+        />
+      );
     if (route === 'stats')
-      return <RankingsRoot onBack={closeSecondary} openPlayer={pushPlayer} openClan={pushClan} />;
+      return (
+        <RankingsRoot
+          onBack={closeSecondary}
+          openPlayer={pushPlayer}
+          openClan={pushClan}
+          openPlayerTag={loadPlayer}
+          openClanTag={loadClan}
+        />
+      );
     if (route === 'basesArmies')
       return hasDiscordAccount ? <BasesArmiesRoot onBack={closeSecondary} /> : null;
     if (route === 'todo') return <TodoRoot onBack={closeSecondary} openPlayer={pushPlayer} />;
@@ -789,6 +935,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           allowAccountSwitch={playerTag === undefined}
           onBack={closeSecondary}
           openPlayer={pushPlayer}
+          openPlayerTag={loadPlayer}
           openInGame={openPlayerInGame}
         />
       );
@@ -815,16 +962,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           player={player}
           onBack={closeSecondary}
           onOpenClan={loadClan}
-          onOpenOpponent={(tag) => {
-            const generation = ++navigationGeneration.current;
-            void runtime.players
-              .getPlayerAndClanData(tag)
-              .then((opponent) => {
-                if (generation === navigationGeneration.current)
-                  pushUtility('legends', opponent.tag);
-              })
-              .catch((error) => setSnackbar(String(error)));
-          }}
+          onOpenOpponent={(tag) => loadPlayerUtility('legends', tag)}
         />
       );
     }
@@ -846,7 +984,22 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     throw new Error(`Unsupported utility route: ${route}`);
   };
 
-  const renderPushedScene = (scene: PushedScene) => {
+  const renderPushedScene = (scene: PushedScene, loading = false): ReactNode => {
+    if (scene.kind === 'deferred')
+      return (
+        <DeferredDestination
+          load={scene.load}
+          initial={scene.initial}
+          pending={
+            <LinkParametersContext.Provider value={EMPTY_LINK_PARAMS}>
+              {renderPushedScene(scene.preview, true)}
+            </LinkParametersContext.Provider>
+          }
+          onBack={closeSecondary}
+        >
+          {(resolved) => renderPushedScene(resolved)}
+        </DeferredDestination>
+      );
     if (scene.kind === 'historicalCwl')
       return (
         <HistoricalCwlRoot
@@ -859,15 +1012,12 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           openPlayer={loadPlayer}
         />
       );
-    if (scene.kind === 'searchDestination')
-      return (
-        <SearchDestination load={scene.load} onBack={closeSecondary} render={renderPushedScene} />
-      );
     if (scene.kind === 'serverDashboard')
       return <ServerDashboardScreen server={scene.server} onBack={closeSecondary} />;
     if (scene.kind === 'player')
       return (
         <PlayerDetailRoot
+          loading={loading}
           player={scene.player}
           service={runtime.players}
           bookmarked={runtime.bookmarks.isPlayerBookmarked(scene.player.tag)}
@@ -887,7 +1037,12 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
               await Clipboard.setStringAsync(tag);
             },
             openClan: loadClan,
-            openWar: (war) => pushWar(war, null, playerCurrentCwl(scene.player)),
+            openWar: (war) =>
+              pushWar(
+                war,
+                null,
+                war.state === 'warEnded' ? undefined : playerCurrentCwl(scene.player),
+              ),
             openCwl: pushCwl,
             openPlayer: loadPlayer,
             openRanked: (player) => pushUtility('ranked', player.tag),
@@ -898,12 +1053,22 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         />
       );
     if (scene.kind === 'clan')
-      return <ClanInfoRoot clan={scene.clan} goBack={closeSecondary} navigation={clanNavigation} />;
+      return (
+        <ClanInfoRoot
+          loading={loading}
+          clan={scene.clan}
+          goBack={closeSecondary}
+          navigation={clanNavigation}
+        />
+      );
+    if (scene.kind === 'capital' && loading)
+      return <ClanCapitalScreen clan={scene.clan} goBack={closeSecondary} loading />;
     if (scene.kind === 'capital')
       return <ClanCapitalRoot clan={scene.clan} goBack={closeSecondary} />;
     if (scene.kind === 'war')
       return (
         <WarInfoRoot
+          loading={loading}
           war={scene.war}
           roundNumber={scene.roundNumber}
           onBack={closeSecondary}
@@ -915,6 +1080,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     if (scene.kind === 'cwl')
       return (
         <CwlInfoRoot
+          placeholder={loading}
           summary={scene.summary}
           clanTag={scene.clanTag}
           warLeagueName={scene.warLeagueName}
@@ -922,6 +1088,40 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           onOpenWar={(war, roundNumber) => pushWar(war, roundNumber)}
           openClan={loadClan}
           openPlayer={loadPlayer}
+        />
+      );
+    if (loading && scene.route === 'ranked')
+      return (
+        <RankedScreen
+          identityLoading
+          player={previewPlayer(scene.playerTag ?? '')}
+          data={null}
+          loading
+          refreshing={false}
+          error={null}
+          accounts={[]}
+          bookmarked={false}
+          linked={false}
+          onBack={closeSecondary}
+          onRefresh={async () => {}}
+          onSwitchPlayer={() => {}}
+          onToggleBookmark={async () => {}}
+          onOpenInGame={() => {}}
+          onOpenPlayerTag={async () => {}}
+        />
+      );
+    if (loading && scene.route === 'legends')
+      return (
+        <LegendsScreen
+          data={null}
+          error={null}
+          loading
+          refreshing={false}
+          selectedDay={currentLegendDay()}
+          onBack={closeSecondary}
+          onRefresh={async () => {}}
+          onSelectDay={() => {}}
+          onExport={() => {}}
         />
       );
     return renderUtilityContent(scene.route, scene.playerTag);
@@ -967,16 +1167,13 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     secondaryLayers.forEach((layer, layerIndex) => {
       publishNativeSecondaryLayer(layer.key, {
         clanSpring: 'clanSpring' in layer ? layer.clanSpring : undefined,
-        // Native detail routes render outside Home. Only the top retained route
-        // draws the destination skeleton; never present a second UIKit modal.
+        // Only the top retained route shows navigation progress; keep its real
+        // content visible and never present a second UIKit modal.
         content: (
           <PageLoadingHost value={true}>
             {layer.content}
             {layerIndex === secondaryLayers.length - 1 ? (
-              <PageLoadingOverlay
-                visible={deepLinkLoading || pageLoading !== null}
-                kind={deepLinkLoading ? deepLinkLoadingKind : (pageLoading ?? 'profile')}
-              />
+              <PageLoadingOverlay visible={deepLinkLoading || pageLoading} />
             ) : null}
           </PageLoadingHost>
         ),
@@ -1080,10 +1277,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       {announcementPresentation}
       <Snackbar avoidBottomNavigation message={snackbar} onDismiss={() => setSnackbar(undefined)} />
       {!usesNativeSecondaryNavigation || secondaryLayers.length === 0 ? (
-        <PageLoadingOverlay
-          visible={deepLinkLoading || pageLoading !== null}
-          kind={deepLinkLoading ? deepLinkLoadingKind : (pageLoading ?? 'profile')}
-        />
+        <PageLoadingOverlay visible={deepLinkLoading || pageLoading} />
       ) : null}
       <ClashHandoffDialog
         visible={supportCreatorHandoffUrl !== undefined}
@@ -1100,6 +1294,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
 
 function secondaryRouteIdFor(scene: PushedScene | undefined): AppRouteId | undefined {
   if (!scene) return undefined;
+  if (scene.kind === 'deferred') return secondaryRouteIdFor(scene.preview);
   if (scene.kind === 'utility') return scene.route;
   // Android renders secondary layers only when they have a shell route ID.
   // Keep this exhaustive: an omitted kind silently reveals the primary list
@@ -1111,9 +1306,8 @@ function secondaryRouteIdFor(scene: PushedScene | undefined): AppRouteId | undef
     war: 'war',
     cwl: 'war',
     historicalCwl: 'war',
-    searchDestination: 'search',
     serverDashboard: 'servers',
-  } satisfies Record<Exclude<PushedScene['kind'], 'utility'>, AppRouteId>;
+  } satisfies Record<Exclude<ResolvedScene['kind'], 'utility'>, AppRouteId>;
   return routes[scene.kind];
 }
 

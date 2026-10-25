@@ -171,6 +171,8 @@ export class ImageAssets {
   static readonly elixir = `${ImageAssets.baseUrl}/resources/elixir.webp`;
   static readonly darkElixir = `${ImageAssets.baseUrl}/resources/dark_elixir.webp`;
   static readonly researchPotion = `${ImageAssets.baseUrl}/magic_items/research_potion.webp`;
+  static readonly builderBite = `${ImageAssets.baseUrl}/magic_snacks/builder_bite.webp`;
+  static readonly studySoup = `${ImageAssets.baseUrl}/magic_snacks/study_soup.webp`;
   static readonly petPotion = `${ImageAssets.baseUrl}/magic_items/pet_potion.webp`;
   static readonly upgradeCategoryIcons = {
     heroes: `${ImageAssets.baseUrl}/heroes/barbarian_king/icon.webp`,
@@ -192,6 +194,10 @@ export class ImageAssets {
 
   static capitalHall(level: number): string {
     return `${ImageAssets.baseUrl}/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${level}.png`;
+  }
+
+  static capitalDistrictHall(level: number): string {
+    return `${ImageAssets.baseUrl}/capital-base/capital-hall-pics/Building_CC_District_Hall_level_${level}.png`;
   }
 
   static readonly defaultProfile = `${ImageAssets.baseUrl}/icons/default_profile.png`;

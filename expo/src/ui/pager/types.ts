@@ -21,6 +21,9 @@ export type PagerViewProps = PropsWithChildren<{
   readonly offscreenPageLimit?: number;
   readonly onPageSelected?: (event: PagerViewOnPageSelectedEvent) => void;
   readonly onPageScroll?: (event: PagerViewOnPageScrollEvent) => void;
+  readonly onPageScrollStateChanged?: (
+    event: NativeSyntheticEvent<{ pageScrollState: 'idle' | 'dragging' | 'settling' }>,
+  ) => void;
   readonly orientation?: 'horizontal' | 'vertical';
   readonly overdrag?: boolean;
   readonly overScrollMode?: 'auto' | 'always' | 'never';

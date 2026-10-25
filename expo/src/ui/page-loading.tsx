@@ -1,18 +1,17 @@
-import { modalOrientations } from "./modal-orientations";
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from 'react';
-import { Modal, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
-import { PageSkeleton, type PageSkeletonKind } from './feedback';
+import { LoadingIndicator } from './feedback';
 import { useCKTheme } from './theme';
 
 const LoadingHostContext = createContext(false);
 export const PageLoadingHost = LoadingHostContext.Provider;
-const requests = new Map<symbol, PageSkeletonKind>();
+const requests = new Set<symbol>();
 const listeners = new Set<() => void>();
-const snapshot = () => [...requests.values()].at(-1) ?? null;
-function setRequest(id: symbol, kind: PageSkeletonKind | null) {
+const snapshot = () => requests.size > 0;
+function setRequest(id: symbol, active: boolean) {
   const previous = snapshot();
-  if (kind) requests.set(id, kind);
+  if (active) requests.add(id);
   else requests.delete(id);
   if (previous !== snapshot()) listeners.forEach((listener) => listener());
 }
@@ -27,55 +26,35 @@ export function usePageLoadingRequest() {
 }
 
 /** Retained pages register loading; the top native route alone renders it. */
-export function PageLoading({
-  visible,
-  kind = 'profile',
-}: {
-  visible: boolean;
-  kind?: PageSkeletonKind;
-}) {
+export function PageLoading({ visible }: { visible: boolean }) {
   const hosted = useContext(LoadingHostContext);
   const [id] = useState(() => Symbol('page-loading'));
   useEffect(() => {
-    setRequest(id, hosted && visible ? kind : null);
-    return () => setRequest(id, null);
-  }, [hosted, id, kind, visible]);
-  return hosted ? null : <PageLoadingOverlay visible={visible} kind={kind} />;
+    setRequest(id, hosted && visible);
+    return () => setRequest(id, false);
+  }, [hosted, id, visible]);
+  return hosted ? null : <PageLoadingOverlay visible={visible} />;
 }
 
-export function PageLoadingOverlay({
-  visible,
-  kind = 'profile',
-}: {
-  visible: boolean;
-  kind?: PageSkeletonKind;
-}) {
+export function PageLoadingOverlay({ visible }: { visible: boolean }) {
   const theme = useCKTheme();
   const insets = useContext(SafeAreaInsetsContext);
   if (!visible) return null;
-  const content = (
+  return (
     <View
-      style={[styles.cover, { backgroundColor: theme.background }]}
-      accessibilityViewIsModal
+      style={[styles.status, { top: (insets?.top ?? 0) + 8 }]}
+      pointerEvents="none"
       importantForAccessibility="yes"
-      onStartShouldSetResponder={() => true}
     >
-      <ScrollView
-        contentContainerStyle={{ paddingTop: insets?.top ?? 0, paddingBottom: insets?.bottom ?? 0 }}
-      >
-        <PageSkeleton kind={kind} showHeader />
-      </ScrollView>
+      <View style={[styles.indicator, { backgroundColor: theme.background }]}>
+        <LoadingIndicator />
+      </View>
     </View>
-  );
-  // Never present a UIKit modal while a native destination is being pushed.
-  return Platform.OS === 'web' ? (
-    <Modal supportedOrientations={modalOrientations} visible transparent animationType="none">
-      {content}
-    </Modal>
-  ) : (
-    content
   );
 }
 const styles = StyleSheet.create({
-  cover: { position: 'absolute', inset: 0, zIndex: 1000, elevation: 1000 },
+  // Destination data is loaded before navigation. Keep the actual source page
+  // on screen; a guessed full-page skeleton hid its content and scroll state.
+  status: { position: 'absolute', alignSelf: 'center', zIndex: 1000, elevation: 1000 },
+  indicator: { padding: 10, borderRadius: 24 },
 });
