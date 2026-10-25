@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Copy, SlidersHorizontal, Trash2, X } from 'lucide-react-native';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
@@ -16,6 +16,7 @@ import {
 } from '../upgrade-tracker/presentation/ability-details';
 import { CalcChip, CalcHeader, CalcSelect, calcStyles as s } from './calculator-controls';
 import { HeroCarousel, heroAccents } from './hero-carousel';
+import { HeaderArtwork } from '../../ui/header-artwork';
 import { CalculatorSelectionModal } from './calculator-selection-modal';
 import {
   EquipmentComparisonCopy,
@@ -324,10 +325,15 @@ function EquipmentEditor({
         pointerEvents="none"
         style={{ position: 'absolute', top: 0, left: 0, right: 0, height: gradientHeight }}
       >
-        <Image pointerEvents="none" accessible={false}
-          source={require("../../../assets/clashking/backgrounds/header-atmosphere.png")}
-          resizeMode="stretch"
-          style={[StyleSheet.absoluteFill, { tintColor: heroAccents[hero.name] ?? theme.secondary }]}
+        <HeaderArtwork
+          pointerEvents="none"
+          accessible={false}
+          source={require('../../../assets/clashking/backgrounds/header-atmosphere.png')}
+          contentFit="fill"
+          tintColor={heroAccents[hero.name] ?? theme.secondary}
+          // A 2px-wide gradient can retain its intrinsic size on native even
+          // with edge constraints. Explicit dimensions fill the measured area.
+          style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]}
         />
       </View>
       <View style={{ gap: 4 }}>

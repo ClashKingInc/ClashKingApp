@@ -1,3 +1,4 @@
+import { maximumItemLevelAtHall } from '../../../core/game-data/hall-item-limits';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { gameDataState } from '../../../core/game-data/game-data-state';
 import {
@@ -22,17 +23,31 @@ type JsonRecord = Record<string, unknown>;
 
 export function reconcileTrackerEquipmentOwnership(
   snapshot: UpgradeTrackerSnapshot,
-  profile: {
-    tag: string;
-    hasEquipmentOwnershipData: boolean;
-    equipments: readonly { name: string; isUnlocked: boolean }[];
-  } | undefined,
+  profile:
+    | {
+        tag: string;
+        hasEquipmentOwnershipData: boolean;
+        equipments: readonly { name: string; isUnlocked: boolean }[];
+      }
+    | undefined,
 ): UpgradeTrackerSnapshot {
-  if (!profile?.hasEquipmentOwnershipData || profile.tag.toUpperCase() !== snapshot.tag.toUpperCase()) return snapshot;
-  const locked = new Set(profile.equipments.filter((item) => !item.isUnlocked).map((item) => item.name));
+  if (
+    !profile?.hasEquipmentOwnershipData ||
+    profile.tag.toUpperCase() !== snapshot.tag.toUpperCase()
+  )
+    return snapshot;
+  const locked = new Set(
+    profile.equipments.filter((item) => !item.isUnlocked).map((item) => item.name),
+  );
   let changed = false;
   const items = snapshot.items.map((item) => {
-    if (item.category !== UpgradeCategory.equipment || item.currentLevel <= 0 || !locked.has(item.name) || !item.meta) return item;
+    if (
+      item.category !== UpgradeCategory.equipment ||
+      item.currentLevel <= 0 ||
+      !locked.has(item.name) ||
+      !item.meta
+    )
+      return item;
     changed = true;
     // Export JSON includes unowned equipment at level one. Only a covered
     // profile can disambiguate it; owned imported levels are never replaced
@@ -40,9 +55,14 @@ export function reconcileTrackerEquipmentOwnership(
     const steps = buildSteps(item.meta, 0, item.targetLevel, false);
     const time = upgradeTimeTotals(item.meta, 0, steps, false);
     const resources = resourceProgressTotals(item.meta, 0, false, UpgradeCategory.equipment, steps);
-    return new UpgradeTrackerItem({ ...item, currentLevel: 0, steps,
-      completedUpgradeSeconds: time.completed, totalUpgradeSeconds: time.total,
-      completedResourceWeight: resources.completed, totalResourceWeight: resources.total,
+    return new UpgradeTrackerItem({
+      ...item,
+      currentLevel: 0,
+      steps,
+      completedUpgradeSeconds: time.completed,
+      totalUpgradeSeconds: time.total,
+      completedResourceWeight: resources.completed,
+      totalResourceWeight: resources.total,
       activeSeconds: null,
     });
   });
@@ -187,7 +207,7 @@ export class UpgradeTrackerParser {
       townHallLevel,
       builderHallLevel,
       homeBuilderCount: clamp(builderHuts + (bobUnlocked ? 1 : 0), 1, 7),
-      builderBaseBuilderCount: builderHallLevel >= 6 ? 2 : 1,
+      builderBaseBuilderCount: builderHallLevel <= 0 ? 0 : builderHallLevel >= 6 ? 2 : 1,
       items,
       collections: parseCollections(account, lookup),
       boosts: parseBoosts(account.boosts, mapList(account.helpers)),
@@ -214,7 +234,7 @@ function addBuildingItems(
   const itemVillage = village(data),
     current = int(raw.lvl),
     hall = itemVillage === UpgradeVillage.home ? townHall : builderHall,
-    target = maxLevelForHall(data, hall),
+    target = maximumItemLevelAtHall(data, hall, lookup.bundle),
     type = String(data.type ?? ''),
     name = itemName(data),
     category = buildingCategory(type, name, target),
@@ -230,6 +250,7 @@ function addBuildingItems(
       category === UpgradeCategory.walls
         ? resourceProgressTotals(data, current, true, category, steps)
         : null;
+  if (target <= 0) return;
   output.push(
     new UpgradeTrackerItem({
       id: int(data._id),
@@ -248,13 +269,19 @@ function addBuildingItems(
       progressBasis: resource ? UpgradeProgressBasis.resources : UpgradeProgressBasis.time,
       completedResourceWeight: resource?.completed ?? 0,
       totalResourceWeight: resource?.total ?? 0,
-      activeSeconds: seconds(raw, ['timer', 'upgrade_timer']),
+      // At the final base level the running building timer belongs to its
+      // supercharge. Do not show it twice or label it as another normal level.
+      activeSeconds:
+        activeSuperchargeSeconds(raw, data) === null
+          ? seconds(raw, ['timer', 'upgrade_timer'])
+          : null,
       helperSeconds: seconds(raw, ['helper_timer', 'helperTimer']),
       recurrentHelper: bool(raw.recurrent_helper ?? raw.helper_recurrent ?? raw.recurrentHelper),
       isExtra: bool(raw.extra),
     }),
   );
-  addSupercharge(output, raw, data, image, itemVillage);
+  if (target >= maxLevel(mapList(data.levels)))
+    addSupercharge(output, raw, data, image, itemVillage);
   addCraftedDefenses(output, raw, data, lookup, itemVillage, hall);
 }
 
@@ -291,10 +318,23 @@ function addSupercharge(
       completedUpgradeSeconds: totals.completed,
       totalUpgradeSeconds: totals.total,
       isSupercharge: true,
+      activeSeconds: activeSuperchargeSeconds(raw, data),
+      helperSeconds:
+        activeSuperchargeSeconds(raw, data) === null
+          ? null
+          : seconds(raw, ['helper_timer', 'helperTimer']),
+      recurrentHelper: bool(raw.recurrent_helper ?? raw.helper_recurrent ?? raw.recurrentHelper),
       parentName: itemName(data),
       meta: data,
     }),
   );
+}
+
+function activeSuperchargeSeconds(raw: JsonRecord, data: JsonRecord): number | null {
+  const levels = mapList(data.levels);
+  const last = levels.at(-1);
+  if (!last || !isRecord(last.supercharge) || int(raw.lvl) < maxLevel(levels)) return null;
+  return seconds(raw, ['timer', 'upgrade_timer']);
 }
 
 function addCraftedDefenses(
@@ -312,9 +352,10 @@ function addCraftedDefenses(
       const module = lookup.byId.get(int(moduleRaw.data));
       if (!module) continue;
       const current = int(moduleRaw.lvl),
-        target = maxLevelForHall(module, hall),
+        target = maximumItemLevelAtHall(module, hall, lookup.bundle),
         steps = buildSteps(module, current, target, true),
         totals = upgradeTimeTotals(module, current, steps, true);
+      if (target <= 0) continue;
       output.push(
         new UpgradeTrackerItem({
           id: int(module._id),
@@ -360,7 +401,7 @@ function addLeveledSection(
     const itemVillage = village(data),
       hall = itemVillage === UpgradeVillage.home ? townHall : builderHall,
       current = int(raw.lvl),
-      target = maxLevelForHall(data, hall),
+      target = maximumItemLevelAtHall(data, hall, lookup.bundle),
       itemCategory = category(data),
       itemQueue = queue(data),
       steps = buildSteps(data, current, target, usesBuildFields),
@@ -370,6 +411,7 @@ function addLeveledSection(
         (itemCategory === UpgradeCategory.builders && itemQueue === UpgradeQueue.none)
           ? resourceProgressTotals(data, current, usesBuildFields, itemCategory, steps)
           : null;
+    if (target <= 0) continue;
     output.push(
       new UpgradeTrackerItem({
         id: int(data._id),
@@ -629,6 +671,73 @@ function parseBoosts(raw: unknown, helpers: JsonRecord[]) {
       seconds(helper, ['helper_cooldown', 'helperCooldown', 'cooldown']) ?? 0,
     );
   return new UpgradeBoosts({
+    // Match cocpy's game-data Boosts contract: *_boost is a potion, while
+    // *_consumable is a snack. They can coexist and must retain separate clocks.
+    // Keep display identity separate from the legacy scheduling totals below.
+    activeEffects: [
+      {
+        keys: ['builder_boost', 'builderBoost', 'builder_potion', 'builderPotion'],
+        name: 'Builder Potion',
+        nameTid: 'TID_BOOSTER_BUILDERS',
+        imageUrl: ImageAssets.builderPotion,
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['lab_boost', 'labBoost', 'research_potion', 'researchPotion'],
+        name: 'Research Potion',
+        nameTid: 'TID_BOOSTER_LAB_POTION',
+        imageUrl: ImageAssets.researchPotion,
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['pet_potion', 'petPotion'],
+        name: 'Pet Potion',
+        nameTid: 'TID_BOOSTER_PET_POTION',
+        imageUrl: ImageAssets.petPotion,
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['builder_consumable'],
+        name: 'Builder Bite',
+        nameTid: 'TID_CONSUMABLE_BOOST_BUILDER',
+        imageUrl: ImageAssets.builderBite,
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['lab_consumable'],
+        name: 'Study Soup',
+        nameTid: 'TID_CONSUMABLE_BOOST_LAB',
+        imageUrl: ImageAssets.studySoup,
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['pet_boost', 'petBoost', 'pet_consumable'],
+        name: 'Pet boost',
+        imageUrl: ImageAssets.upgradeCategoryIcons.pets,
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['town_hall_builder_boost', 'townHallBuilderBoost'],
+        name: 'Town Hall builder boost',
+        imageUrl: ImageAssets.townHall(1),
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['town_hall_lab_boost', 'townHallLabBoost'],
+        name: 'Town Hall laboratory boost',
+        imageUrl: ImageAssets.townHall(1),
+        village: UpgradeVillage.home,
+      },
+      {
+        keys: ['clocktower_boost', 'clockTowerBoost'],
+        name: 'Clock Tower boost',
+        imageUrl: ImageAssets.getBuilderBaseBuildingImage('Clock Tower', 1),
+        village: UpgradeVillage.builderBase,
+      },
+    ].flatMap(({ keys, ...effect }) => {
+      const value = duration(keys);
+      return value > 0 ? [{ ...effect, key: keys[0]!, seconds: value }] : [];
+    }),
     builderBoostSeconds: duration(['town_hall_builder_boost', 'townHallBuilderBoost']),
     labBoostSeconds: duration(['town_hall_lab_boost', 'townHallLabBoost']),
     clockTowerBoostSeconds: duration(['clocktower_boost', 'clockTowerBoost']),
@@ -695,15 +804,6 @@ class StaticLookup {
 function hallLevel(rows: JsonRecord[], lookup: StaticLookup, name: string) {
   for (const row of rows) if (lookup.byId.get(int(row.data))?.name === name) return int(row.lvl);
   return 0;
-}
-function maxLevelForHall(data: JsonRecord, hall: number) {
-  const levels = mapList(data.levels);
-  let max = 0;
-  for (const level of levels) {
-    const required = optionalInt(level.required_townhall);
-    if (required == null || hall <= 0 || required <= hall) max = Math.max(max, int(level.level));
-  }
-  return max > 0 ? max : maxLevel(levels);
 }
 function maxLevel(levels: JsonRecord[]) {
   return levels.reduce((max, level) => Math.max(max, int(level.level)), 0);

@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { Asset } from 'expo-asset';
 import {
@@ -43,6 +43,7 @@ import * as Clipboard from 'expo-clipboard';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { translationForTid } from '../../../core/game-data/game-data-localization';
 import {
   materialBackLabel,
   toIntlLocale,
@@ -62,6 +63,8 @@ import {
   SearchField,
   SelectionPicker,
   Skeleton,
+  SkeletonContent,
+  useSkeletonContent,
   Surface,
   ckRadius,
   colorWithAlpha,
@@ -78,13 +81,15 @@ import {
   UpgradeCategory,
   UpgradeCollectionType,
   UpgradeQueue,
+  UpgradeBoosts,
+  UpgradeStep,
+  UpgradeTrackerItem,
+  UpgradeTrackerSnapshot,
+  UpgradeCollectionItem,
   UpgradeVillage,
-  type UpgradeCollectionItem,
   type UpgradeCollectionTypeValue,
   type UpgradePlanPreferences as UpgradePlanPreferencesType,
   type PlannedUpgrade,
-  type UpgradeTrackerItem,
-  type UpgradeTrackerSnapshot,
   type UpgradeVillageValue,
 } from '../models';
 import {
@@ -102,6 +107,7 @@ import { UpgradeItemDetailModal } from './upgrade-tracker-breakdowns';
 import { UpgradeTrackerPlanEditor } from './upgrade-tracker-plan-editor';
 import { UpgradeTrackerShareModal } from './upgrade-tracker-share';
 import { trackerCategoryImage, trackerCategoryImageScale } from './tracker-category-art';
+import { ongoingUpgradeQueues } from '../models/ongoing-upgrade-queues';
 import { TrackerSummaryCard } from './tracker-summary-card';
 import { upgradeSnapshotNeedsRefresh } from '../models/snapshot-freshness';
 
@@ -147,7 +153,13 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const pager = useRef<PagerViewHandle>(null);
   const [trackerScrollY] = useState(() => new Animated.Value(0));
   const [trackerOffsets, setTrackerOffsets] = useState<Partial<Record<TrackerTab, number>>>({});
-  const snapshot = props.snapshot;
+  const pending = props.loading && !props.snapshot;
+  const placeholder = useMemo(
+    () =>
+      trackerLoadingSnapshot(props.accounts.find((account) => account.tag === props.selectedTag)),
+    [props.accounts, props.selectedTag],
+  );
+  const snapshot = props.snapshot ?? (pending ? placeholder : null);
   const viewportWidth = useWindowDimensions().width;
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
   const selectedAccount = props.accounts.find((account) => account.tag === props.selectedTag);
@@ -242,9 +254,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           onImport={() => setImportOpen(true)}
         />
       ) : null}
-      {props.loading ? (
-        <TrackerSkeleton />
-      ) : props.error ? (
+      {props.error && !snapshot ? (
         <EmptyState
           title={t('upgradeTrackerSnapshotUnreadable')}
           body={props.error}
@@ -302,24 +312,26 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
         </View>
       ) : (
         <View style={styles.trackerBody}>
-          <TrackerPager
-            pager={pager}
-            tab={tab}
-            snapshot={snapshot}
-            plan={plan!}
-            now={clock}
-            contentInset={trackerChromeInset}
-            initialOffsets={trackerOffsets}
-            onScroll={handleTrackerScroll}
-            onScrollSettled={commitTrackerScroll}
-            onPriorities={() => setSettingsOpen(true)}
-            onGoldPass={() => setGoldPassOpen(true)}
-            goldPassPercent={props.goldPassPercent}
-            onSelect={(next) => {
-              setTab(next);
-              trackerScrollY.setValue(trackerOffsets[next] ?? 0);
-            }}
-          />
+          <SkeletonContent loading={pending} style={{ flex: 1 }}>
+            <TrackerPager
+              pager={pager}
+              tab={tab}
+              snapshot={snapshot}
+              plan={plan!}
+              now={clock}
+              contentInset={trackerChromeInset}
+              initialOffsets={trackerOffsets}
+              onScroll={handleTrackerScroll}
+              onScrollSettled={commitTrackerScroll}
+              onPriorities={() => setSettingsOpen(true)}
+              onGoldPass={() => setGoldPassOpen(true)}
+              goldPassPercent={props.goldPassPercent}
+              onSelect={(next) => {
+                setTab(next);
+                trackerScrollY.setValue(trackerOffsets[next] ?? 0);
+              }}
+            />
+          </SkeletonContent>
           <Animated.View
             testID="upgrade-tracker-collapsible-header"
             pointerEvents="box-none"
@@ -330,12 +342,14 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           >
             <TrackerHeader
               snapshot={snapshot}
+              loading={pending}
               tab={tab}
               plan={plan!}
               locale={locale}
               onBack={props.onBack}
               onAccount={() => setAccountOpen(true)}
               onShare={() =>
+                !pending &&
                 setShareKind(
                   tab === 'builder' ? 'builder' : tab === 'collection' ? 'collection' : 'home',
                 )
@@ -389,18 +403,18 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           setImportOpen(false);
         }}
       />
-      {snapshot && shareKind ? (
+      {props.snapshot && shareKind ? (
         <UpgradeTrackerShareModal
           visible
           initial={shareKind}
-          snapshot={snapshot}
+          snapshot={props.snapshot}
           onClose={() => setShareKind(null)}
         />
       ) : null}
-      {snapshot && settingsOpen ? (
+      {props.snapshot && settingsOpen ? (
         <UpgradeTrackerPlanEditor
           visible
-          snapshot={snapshot}
+          snapshot={props.snapshot}
           preferences={props.preferences}
           onClose={() => setSettingsOpen(false)}
           onSave={(value) => {
@@ -440,6 +454,7 @@ function TrackerHeader({
   onAccount,
   onShare,
   onImport,
+  loading = false,
 }: {
   snapshot: UpgradeTrackerSnapshot | null;
   account?: UpgradeTrackerAccountOption;
@@ -450,6 +465,7 @@ function TrackerHeader({
   onAccount: () => void;
   onShare: () => void;
   onImport: () => void;
+  loading?: boolean;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -553,97 +569,159 @@ function TrackerHeader({
           <Upload color="white" />
         </HeroIconButton>
       </View>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('upgradeTrackerChooseAccount')}
-        onPress={onAccount}
-        style={styles.heroProfile}
-      >
-        <View style={styles.heroHallBadge}>
-          <MobileWebImage
-            imageUrl={hall}
-            style={[styles.heroHall, desktop && styles.heroHallDesktop]}
-          />
-        </View>
-        <View style={styles.heroNameRow}>
-          <CKText
-            role="titleLarge"
-            style={[styles.heroText, { fontSize: desktop ? 24 : 26, fontWeight: '700' }]}
-            numberOfLines={1}
-          >
-            {snapshot?.name ?? account?.name ?? t('upgradeTrackerChooseAccount')}
-          </CKText>
-          <ChevronDown color="white" size={20} />
-        </View>
-        {snapshot && upgradeSnapshotNeedsRefresh(snapshot) ? (
-          <Pressable
-            onPress={(event) => {
-              event.stopPropagation();
-              onImport();
-            }}
-            accessibilityRole="button"
-            style={styles.freshnessAction}
-          >
-            <Upload size={14} color="#E8A524" />
-            <CKText role="metadata" style={{ color: '#E8A524' }}>
-              {t('widgetDataStale')}
-            </CKText>
-          </Pressable>
-        ) : snapshot ? (
-          <CKText role="metadata" style={styles.heroSecondary}>
-            {snapshotAgeLabel(snapshot.capturedAt, t)}
-          </CKText>
-        ) : null}
-      </Pressable>
-      <View
-        style={[
-          styles.quickStats,
-          { paddingHorizontal: desktop ? 24 : 16, paddingBottom: desktop ? 12 : 10 },
-        ]}
-      >
-        {values.map((value) => (
-          <View
-            key={value.label}
-            accessibilityLabel={value.label}
-            style={[styles.quickStat, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 5,
-              }}
+      <SkeletonContent loading={loading} style={{ flex: 1 }}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('upgradeTrackerChooseAccount')}
+          onPress={onAccount}
+          style={styles.heroProfile}
+        >
+          <View style={styles.heroHallBadge}>
+            <MobileWebImage
+              imageUrl={hall}
+              style={[styles.heroHall, desktop && styles.heroHallDesktop]}
+            />
+          </View>
+          <View style={styles.heroNameRow}>
+            <CKText
+              role="titleLarge"
+              style={[styles.heroText, { fontSize: desktop ? 24 : 26, fontWeight: '700' }]}
+              numberOfLines={1}
             >
-              <MobileWebImage imageUrl={value.image} style={styles.quickStatImage} />
-              <CKText role="bodyMedium" style={{ color: 'white' }}>
-                {value.value}
+              {snapshot?.name ?? account?.name ?? t('upgradeTrackerChooseAccount')}
+            </CKText>
+            <ChevronDown color="white" size={20} />
+          </View>
+          {snapshot && upgradeSnapshotNeedsRefresh(snapshot) ? (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation();
+                onImport();
+              }}
+              accessibilityRole="button"
+              style={styles.freshnessAction}
+            >
+              <Upload size={14} color="#E8A524" />
+              <CKText role="metadata" style={{ color: '#E8A524' }}>
+                {t('widgetDataStale')}
+              </CKText>
+            </Pressable>
+          ) : snapshot ? (
+            <CKText role="metadata" style={styles.heroSecondary}>
+              {snapshotAgeLabel(snapshot.capturedAt, t)}
+            </CKText>
+          ) : null}
+        </Pressable>
+        <View
+          style={[
+            styles.quickStats,
+            { paddingHorizontal: desktop ? 24 : 16, paddingBottom: desktop ? 12 : 10 },
+          ]}
+        >
+          {values.map((value) => (
+            <View
+              key={value.label}
+              accessibilityLabel={value.label}
+              style={[styles.quickStat, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 5,
+                }}
+              >
+                <MobileWebImage imageUrl={value.image} style={styles.quickStatImage} />
+                <CKText role="bodyMedium" style={{ color: 'white' }}>
+                  {value.value}
+                </CKText>
+              </View>
+              <CKText role="metadata" style={{ color: '#FFFFFFC7', textAlign: 'center' }}>
+                {value.label}
               </CKText>
             </View>
-            <CKText role="metadata" style={{ color: '#FFFFFFC7', textAlign: 'center' }}>
-              {value.label}
-            </CKText>
-          </View>
-        ))}
-      </View>
+          ))}
+        </View>
+      </SkeletonContent>
     </View>
   );
 }
 
-function TrackerSkeleton() {
-  return (
-    <View accessibilityRole="progressbar" style={styles.skeletonPage}>
-      {Array.from({ length: 5 }, (_, index) => (
-        <Surface key={index} radius={ckRadius.card} style={styles.skeletonCard}>
-          <Skeleton width={48} height={48} radius={ckRadius.tile} />
-          <View style={styles.grow}>
-            <Skeleton width="64%" height={16} />
-            <Skeleton width="42%" height={12} />
-          </View>
-        </Surface>
-      ))}
-    </View>
+/** Presentation-only records mount the real tab/card layout while its snapshot
+ * loads. Never send this snapshot to storage, widgets, sharing or plan edits. */
+function trackerLoadingSnapshot(account?: UpgradeTrackerAccountOption) {
+  const home = UpgradeVillage.home;
+  const builder = UpgradeVillage.builderBase;
+  const hall = account?.townHallLevel ?? 1;
+  const categories = [
+    UpgradeCategory.army,
+    UpgradeCategory.defenses,
+    UpgradeCategory.traps,
+    UpgradeCategory.troops,
+    UpgradeCategory.walls,
+    ...(hall >= 7 ? [UpgradeCategory.heroes] : []),
+    ...(hall >= 8 ? [UpgradeCategory.equipment] : []),
+    ...(hall >= 14 ? [UpgradeCategory.pets] : []),
+  ];
+  const items = [home, builder].flatMap((village) =>
+    categories
+      .filter(
+        (category) =>
+          village === home ||
+          (category !== UpgradeCategory.pets && category !== UpgradeCategory.equipment),
+      )
+      .map(
+        (category, index) =>
+          new UpgradeTrackerItem({
+            id: -(index + 1 + (village === builder ? 100 : 0)),
+            name: 'Upgrade',
+            imageUrl: '',
+            village,
+            category,
+            queue:
+              category === UpgradeCategory.troops
+                ? UpgradeQueue.laboratory
+                : category === UpgradeCategory.pets
+                  ? UpgradeQueue.pets
+                  : UpgradeQueue.builders,
+            currentLevel: 0,
+            targetLevel: 1,
+            count: 1,
+            steps: [new UpgradeStep(1, [], 3600)],
+            completedUpgradeSeconds: 0,
+            totalUpgradeSeconds: 3600,
+            activeSeconds:
+              index === 0 ||
+              category === UpgradeCategory.troops ||
+              category === UpgradeCategory.pets
+                ? 3600
+                : null,
+          }),
+      ),
   );
+  return new UpgradeTrackerSnapshot({
+    tag: account?.tag ?? '#LOADING',
+    name: account?.name ?? 'Player',
+    townHallLevel: hall,
+    builderHallLevel: account?.builderHallLevel ?? 1,
+    homeBuilderCount: 5,
+    builderBaseBuilderCount: 2,
+    items,
+    collections: Object.values(UpgradeCollectionType).map(
+      (type, index) =>
+        new UpgradeCollectionItem({
+          id: -(index + 1),
+          name: 'Collection',
+          imageUrl: '',
+          type,
+          owned: false,
+        }),
+    ),
+    boosts: new UpgradeBoosts(),
+    events: [],
+    capturedAt: new Date(),
+  });
 }
 
 function HeroIconButton({
@@ -815,6 +893,7 @@ function nextTrackerTick(snapshot: UpgradeTrackerSnapshot, now: Date): Date | nu
     considerRemaining(item.cooldownSeconds ?? 0);
   }
   const boosts = snapshot.boosts;
+  for (const effect of boosts.activeEffects ?? []) considerRemaining(effect.seconds);
   for (const seconds of [
     boosts.builderBoostSeconds,
     boosts.labBoostSeconds,
@@ -1002,6 +1081,11 @@ function UpgradesTab({
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
   const cachePrefix = village === UpgradeVillage.home ? 'home' : 'builder';
   const [query, setQuery] = useCachedPageState(stateStore, `${cachePrefix}.query`, '');
+  const [activeOpen, setActiveOpen] = useCachedPageState(
+    stateStore,
+    `${cachePrefix}.activeExpanded`,
+    false,
+  );
   const [selected, setSelected] = useState<UpgradeTrackerItem | null>(null);
   const [expanded, setExpanded] = useCachedPageState<ReadonlySet<UpgradeGroup>>(
     stateStore,
@@ -1038,18 +1122,72 @@ function UpgradesTab({
         onChange={setQuery}
         placeholder={t('upgradeTrackerSearchUpgrades')}
       />
-      {active.length ? (
-        <Section title={t('upgradeTrackerHeaderActive')}>
-          {active.map((item) => (
-            <CurrentUpgradeRow
-              key={`active-${upgradeItemRenderIdentity(item)}`}
-              item={item}
-              snapshot={snapshot}
-              onPress={() => setSelected(item)}
-            />
-          ))}
-        </Section>
-      ) : null}
+      <TrackerSummaryCard
+        title={t('upgradeTrackerOngoingUpgrades')}
+        imageUrl={ImageAssets.iconClock}
+        percent={0}
+        showProgress={false}
+        compactHeader
+        open={activeOpen}
+        onToggle={() => setActiveOpen((open) => !open)}
+        headerAccessory={
+          <View style={{ flex: 1, minWidth: 0 }}>
+            <ActiveUpgradeEffects snapshot={snapshot} village={village} />
+          </View>
+        }
+        footer={
+          !activeOpen ? <ActiveQueueSummary snapshot={snapshot} village={village} /> : undefined
+        }
+      >
+        {active.length === 0 ? (
+          <CKText muted role="metadata">
+            {t('widgetNoActiveUpgrades')}
+          </CKText>
+        ) : null}
+        <View style={{ gap: 16 }}>
+          {[
+            {
+              queue: UpgradeQueue.builders,
+              label: t('dashboardUpgradeTrackerBuilders'),
+              image: trackerCategoryImage('builders', village),
+            },
+            {
+              queue: UpgradeQueue.laboratory,
+              label: t('upgradeTrackerLaboratory'),
+              image: trackerCategoryImage('laboratory', village),
+            },
+            {
+              queue: UpgradeQueue.pets,
+              label: t('upgradeTrackerPetHouse'),
+              image: ImageAssets.getHomeVillageBuildingImage('Pet House', 1),
+            },
+            { queue: UpgradeQueue.none, label: t('generalOthers'), image: ImageAssets.iconClock },
+          ].map(({ queue, label, image }) => {
+            // Group by the scheduler queue, not item category: heroes and
+            // supercharges still use builders, while pets use their own slot.
+            const items = active.filter((item) => item.queue === queue);
+            if (!items.length) return null;
+            return (
+              <View key={queue}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <MobileWebImage imageUrl={image} style={{ width: 20, height: 20 }} />
+                  <CKText accessibilityRole="header" role="metadata" muted>
+                    {label}
+                  </CKText>
+                </View>
+                {items.map((item) => (
+                  <CurrentUpgradeRow
+                    key={`active-${upgradeItemRenderIdentity(item)}`}
+                    item={item}
+                    snapshot={snapshot}
+                    onPress={() => setSelected(item)}
+                  />
+                ))}
+              </View>
+            );
+          })}
+        </View>
+      </TrackerSummaryCard>
       <View style={desktop ? styles.desktopSectionGrid : styles.upgradeGroupList}>
         {groups.map(([group, items]) => {
           const open = expanded.has(group);
@@ -1350,6 +1488,102 @@ function equipmentHeroGroups(items: readonly UpgradeTrackerItem[], t: I18nValue[
   });
 }
 
+function ActiveQueueSummary({
+  snapshot,
+  village,
+}: {
+  snapshot: UpgradeTrackerSnapshot;
+  village: UpgradeVillageValue;
+}) {
+  const { t } = useI18n();
+  const queues = ongoingUpgradeQueues(snapshot, village);
+  return (
+    <ResponsiveGrid minItemWidth={90} maxColumns={3} gap={12} fillLastRow>
+      {queues.map(({ queue, capacity, used, free, times, extra }) => {
+        const label =
+          queue === UpgradeQueue.builders
+            ? t('dashboardUpgradeTrackerBuilders')
+            : queue === UpgradeQueue.laboratory
+              ? t('upgradeTrackerLaboratory')
+              : t('upgradeTrackerPetHouse');
+        const image =
+          queue === UpgradeQueue.builders
+            ? trackerCategoryImage('builders', village)
+            : queue === UpgradeQueue.laboratory
+              ? trackerCategoryImage('laboratory', village)
+              : ImageAssets.getHomeVillageBuildingImage('Pet House', 1);
+        const status =
+          capacity === 0
+            ? t('upgradeTrackerNotBuilt')
+            : free > 0
+              ? t('upgradeTrackerFreeSlots', { count: free })
+              : t('upgradeTrackerFreeIn', { duration: formatTrackerDuration(Math.min(...times)) });
+        return (
+          <View key={queue} style={{ gap: 3 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+              <MobileWebImage imageUrl={image} style={{ width: 20, height: 20 }} />
+              <CKText role="metadata" style={{ flexShrink: 1 }}>
+                {label}
+              </CKText>
+            </View>
+            <CKText role="rowTitle">
+              {used}/{capacity}
+            </CKText>
+            {extra > 0 ? (
+              <CKText muted role="metadata">
+                · {t('upgradeTrackerExtraSlots', { count: extra })}
+              </CKText>
+            ) : null}
+            <CKText muted role="metadata">
+              {status}
+            </CKText>
+          </View>
+        );
+      })}
+    </ResponsiveGrid>
+  );
+}
+
+function ActiveUpgradeEffects({
+  snapshot,
+  village,
+}: {
+  snapshot: UpgradeTrackerSnapshot;
+  village: UpgradeVillageValue;
+}) {
+  const theme = useCKTheme();
+  // Fast Refresh can retain snapshots built before this field existed.
+  // Treat those as having no parsed effect metadata until the next load.
+  const effects = (snapshot.boosts.activeEffects ?? []).flatMap((effect) => {
+    const remaining = snapshot.remainingCapturedSeconds(effect.seconds);
+    return effect.village === village && remaining > 0 ? [{ ...effect, remaining }] : [];
+  });
+  if (!effects.length) return null;
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 4 }}>
+      {effects.map((effect) => (
+        <View
+          key={effect.key}
+          accessible
+          accessibilityLabel={`${translationForTid(effect.nameTid) ?? effect.name}, ${formatTrackerDuration(effect.remaining)}`}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 3,
+            paddingHorizontal: 5,
+            paddingVertical: 4,
+            borderRadius: ckRadius.pill,
+            backgroundColor: theme.surface,
+          }}
+        >
+          <MobileWebImage imageUrl={effect.imageUrl} style={{ width: 20, height: 20 }} />
+          <CKText role="metadata">{formatTrackerDuration(effect.remaining)}</CKText>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 function CurrentUpgradeRow({
   item,
   snapshot,
@@ -1362,6 +1596,7 @@ function CurrentUpgradeRow({
   const { t } = useI18n();
   const theme = useCKTheme();
   const remaining = snapshot.remainingActiveSeconds(item);
+  const helperRemaining = snapshot.remainingHelperSeconds(item);
   return (
     <Pressable
       accessibilityRole="button"
@@ -1371,16 +1606,43 @@ function CurrentUpgradeRow({
     >
       <MobileWebImage imageUrl={item.imageUrl} style={{ width: 38, height: 38 }} />
       <View style={styles.grow}>
-        <CKText role="rowTitle" numberOfLines={1}>
-          {item.parentName ?? item.name}
-        </CKText>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+          <CKText role="rowTitle" numberOfLines={1} style={{ flexShrink: 1 }}>
+            {item.parentName ?? item.name}
+          </CKText>
+          {item.isSupercharge ? (
+            <MobileWebImage
+              imageUrl={trackerCategoryImage('supercharge', item.village)}
+              accessibilityLabel={t('upgradeTrackerPlanCategorySupercharge')}
+              style={{ width: 20, height: 20 }}
+            />
+          ) : null}
+        </View>
         <CKText muted role="metadata" numberOfLines={1}>
-          {item.parentName ? `${item.name.replace(`${item.parentName} `, '')} · ` : ''}
-          {t('gameLevel', {
-            level: item.currentLevel,
-            maxLevel: item.steps[0]?.targetLevel ?? item.currentLevel + 1,
+          {item.parentName && !item.isSupercharge
+            ? `${item.name.replace(`${item.parentName} `, '')} · `
+            : ''}
+          {t('upgradeTrackerToLevel', {
+            level: item.steps[0]?.targetLevel ?? item.currentLevel + 1,
           })}
         </CKText>
+        {helperRemaining > 0 ? (
+          <View
+            accessible
+            accessibilityLabel={`${snapshot.helperNameFor(item)}, ${formatTrackerDuration(helperRemaining)}`}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}
+          >
+            <MobileWebImage
+              imageUrl={ImageAssets.getHelperImage(
+                item.queue === UpgradeQueue.laboratory ? 'Lab Assistant' : "Builder's Apprentice",
+              )}
+              style={{ width: 20, height: 20 }}
+            />
+            <CKText muted role="metadata">
+              {formatTrackerDuration(helperRemaining)}
+            </CKText>
+          </View>
+        ) : null}
       </View>
       <CKText role="bodyMedium">{formatTrackerDuration(remaining)}</CKText>
       <ChevronRight size={18} color={theme.onSurfaceVariant} />
@@ -1616,6 +1878,7 @@ function CalendarTab({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const loading = useSkeletonContent();
   const [expanded, setExpanded] = useCachedPageState<ReadonlySet<string>>(
     stateStore,
     'calendar.expanded',
@@ -1806,87 +2069,98 @@ function CalendarTab({
                                     />
                                   ),
                                 )}
-                                {calendarTimelineEntries(
-                                  lane.upgrades.filter(
-                                    (upgrade) =>
-                                      upgrade.endsAt > renderStart && upgrade.startsAt < renderEnd,
-                                  ),
-                                  firstDay,
-                                  dayWidth,
-                                ).map((entry, index) => {
-                                  const upgrade = entry[0]!;
-                                  const visibleStart =
-                                    upgrade.startsAt < firstDay ? firstDay : upgrade.startsAt;
-                                  const entryEnd = entry[entry.length - 1]!.endsAt;
-                                  const visibleEnd = entryEnd > horizonEnd ? horizonEnd : entryEnd;
-                                  const left =
-                                    ((visibleStart.getTime() - firstDay.getTime()) / 86_400_000) *
-                                    dayWidth;
-                                  const width = Math.max(
-                                    1,
-                                    ((visibleEnd.getTime() - visibleStart.getTime()) / 86_400_000) *
-                                      dayWidth,
-                                  );
-                                  if (entry.length > 1 || width < 56)
-                                    return (
-                                      <Pressable
-                                        key={`short-${index}`}
-                                        accessibilityRole="button"
-                                        accessibilityLabel={t('upgradeTrackerItemCount', {
-                                          count: entry.length,
-                                        })}
-                                        onPress={() =>
-                                          entry.length > 1
-                                            ? setShortUpgrades(entry)
-                                            : setSelected(upgrade)
-                                        }
-                                        hitSlop={{
-                                          top: 8,
-                                          bottom: 8,
-                                          left: Math.max(0, (44 - width) / 2),
-                                          right: Math.max(0, (44 - width) / 2),
-                                        }}
-                                        style={[
-                                          styles.calendarShortBlock,
-                                          {
-                                            left,
-                                            width: Math.max(4, width - 2),
-                                            backgroundColor: colorWithAlpha(accent, 0.22),
-                                            borderColor: accent,
-                                          },
-                                        ]}
-                                      >
-                                        {width >= 26 ? (
-                                          <MobileWebImage
-                                            imageUrl={upgrade.item.imageUrl}
-                                            style={{ width: 26, height: 26 }}
-                                          />
-                                        ) : null}
-                                        {width >= 40 ? (
-                                          <CKText role="metadata" numberOfLines={1}>
-                                            {entry.length > 1
-                                              ? `×${entry.length}`
-                                              : formatTrackerDuration(
-                                                  (upgrade.endsAt.getTime() -
-                                                    upgrade.startsAt.getTime()) /
-                                                    1000,
-                                                )}
-                                          </CKText>
-                                        ) : null}
-                                      </Pressable>
+                                {loading ? (
+                                  <Skeleton
+                                    width={Math.max(240, viewportWidth - labelWidth - 32)}
+                                    height={56}
+                                    radius={12}
+                                  />
+                                ) : (
+                                  calendarTimelineEntries(
+                                    lane.upgrades.filter(
+                                      (upgrade) =>
+                                        upgrade.endsAt > renderStart &&
+                                        upgrade.startsAt < renderEnd,
+                                    ),
+                                    firstDay,
+                                    dayWidth,
+                                  ).map((entry, index) => {
+                                    const upgrade = entry[0]!;
+                                    const visibleStart =
+                                      upgrade.startsAt < firstDay ? firstDay : upgrade.startsAt;
+                                    const entryEnd = entry[entry.length - 1]!.endsAt;
+                                    const visibleEnd =
+                                      entryEnd > horizonEnd ? horizonEnd : entryEnd;
+                                    const left =
+                                      ((visibleStart.getTime() - firstDay.getTime()) / 86_400_000) *
+                                      dayWidth;
+                                    const width = Math.max(
+                                      1,
+                                      ((visibleEnd.getTime() - visibleStart.getTime()) /
+                                        86_400_000) *
+                                        dayWidth,
                                     );
-                                  return (
-                                    <TimelineBlock
-                                      key={`${upgrade.item.planKey}-${upgrade.instance}-${index}`}
-                                      upgrade={upgrade}
-                                      left={left}
-                                      width={width}
-                                      accent={accent}
-                                      onPress={() => setSelected(upgrade)}
-                                    />
-                                  );
-                                })}
-                                {now >= firstDay && now < horizonEnd ? (
+                                    if (entry.length > 1 || width < 56)
+                                      return (
+                                        <Pressable
+                                          key={`short-${index}`}
+                                          accessibilityRole="button"
+                                          accessibilityLabel={t('upgradeTrackerItemCount', {
+                                            count: entry.length,
+                                          })}
+                                          onPress={() =>
+                                            entry.length > 1
+                                              ? setShortUpgrades(entry)
+                                              : setSelected(upgrade)
+                                          }
+                                          hitSlop={{
+                                            top: 8,
+                                            bottom: 8,
+                                            left: Math.max(0, (44 - width) / 2),
+                                            right: Math.max(0, (44 - width) / 2),
+                                          }}
+                                          style={[
+                                            styles.calendarShortBlock,
+                                            {
+                                              left,
+                                              width: Math.max(4, width - 2),
+                                              backgroundColor: colorWithAlpha(accent, 0.22),
+                                              borderColor: accent,
+                                            },
+                                          ]}
+                                        >
+                                          {width >= 26 ? (
+                                            <MobileWebImage
+                                              imageUrl={upgrade.item.imageUrl}
+                                              style={{ width: 26, height: 26 }}
+                                            />
+                                          ) : null}
+                                          {width >= 40 ? (
+                                            <CKText role="metadata" numberOfLines={1}>
+                                              {entry.length > 1
+                                                ? `×${entry.length}`
+                                                : formatTrackerDuration(
+                                                    (upgrade.endsAt.getTime() -
+                                                      upgrade.startsAt.getTime()) /
+                                                      1000,
+                                                  )}
+                                            </CKText>
+                                          ) : null}
+                                        </Pressable>
+                                      );
+                                    return (
+                                      <TimelineBlock
+                                        key={`${upgrade.item.planKey}-${upgrade.instance}-${index}`}
+                                        upgrade={upgrade}
+                                        left={left}
+                                        width={width}
+                                        accent={accent}
+                                        onPress={() => setSelected(upgrade)}
+                                      />
+                                    );
+                                  })
+                                )}
+                                {!loading && now >= firstDay && now < horizonEnd ? (
                                   <View
                                     pointerEvents="none"
                                     style={[
@@ -2143,7 +2417,13 @@ function PlannedUpgradeModal({
       minute: '2-digit',
     }).format(date);
   return (
-    <Modal supportedOrientations={modalOrientations} visible transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <View style={[styles.overlay, { justifyContent: 'center', padding: 20 }]}>
         <Pressable
           testID="planned-upgrade-modal-backdrop"
@@ -3276,7 +3556,8 @@ function ChoiceModal({
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       visible={visible}
       transparent
       animationType="fade"
@@ -3346,31 +3627,6 @@ function SearchBar({
         </IconButton>
       ) : null}
     </View>
-  );
-}
-function Section({
-  title,
-  subtitle,
-  children,
-}: {
-  title: string;
-  subtitle?: string;
-  children: ReactNode;
-}) {
-  return (
-    <Surface radius={ckRadius.card} style={styles.section}>
-      <View style={styles.toolbar}>
-        <CKText role="sectionTitle" style={styles.grow}>
-          {title}
-        </CKText>
-        {subtitle ? (
-          <CKText muted role="labelSmall">
-            {subtitle}
-          </CKText>
-        ) : null}
-      </View>
-      {children}
-    </Surface>
   );
 }
 function IconButton({

@@ -7,6 +7,8 @@ const config = getDefaultConfig(__dirname);
 // (including worklets). Keep this at the actual Metro transformer boundary.
 config.transformer.unstable_noxcturnalTransformWorker = true;
 if (!config.resolver.assetExts.includes('glb')) config.resolver.assetExts.push('glb');
+// The pinned model-viewer source is read as text inside the local hero scene.
+if (!config.resolver.assetExts.includes('txt')) config.resolver.assetExts.push('txt');
 
 config.server.enhanceMiddleware = (middleware) => (request, response, next) => {
   const url = new URL(request.url || '/', 'http://localhost');

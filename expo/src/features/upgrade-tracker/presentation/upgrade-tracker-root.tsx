@@ -39,6 +39,10 @@ export function UpgradeTrackerRoot({
   );
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [snapshot, setSnapshot] = useState<UpgradeTrackerSnapshot | null>(null);
+  const snapshotRef = useRef(snapshot);
+  useEffect(() => {
+    snapshotRef.current = snapshot;
+  }, [snapshot]);
   const [saved, setSaved] = useState<readonly UpgradeTrackerAccountOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [accountLoading, setAccountLoading] = useState(false);
@@ -137,12 +141,16 @@ export function UpgradeTrackerRoot({
   );
 
   const load = useCallback(
-    async (tag: string, force = false) => {
+    async (tag: string, force = true) => {
       const normalized = UpgradeTrackerRepository.normalizeTag(tag);
       const current = ++generation.current;
       setSelectedTag(normalized);
       setAccountLoading(true);
-      const cached = repository.peekCached(normalized);
+      // Every opening/account selection checks the server, but disk/memory data
+      // stays visible while that request runs and remains the offline fallback.
+      const diskSnapshot = await repository.loadCached(normalized).catch(() => null);
+      const cached = snapshotRef.current?.tag === normalized ? snapshotRef.current : diskSnapshot;
+      if (current !== generation.current) return;
       setSnapshot(cached);
       setLoading(cached === null);
       setError(null);
