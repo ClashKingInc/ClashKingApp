@@ -1,6 +1,6 @@
 import type { ExpoConfig, ConfigContext } from 'expo/config';
 
-const version = process.env.CK_APP_VERSION?.trim() || '0.5.0';
+const version = process.env.CK_APP_VERSION?.trim() || '0.6.2';
 const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '26';
 const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
 const updateChannel = process.env.CK_RELEASE_TRACK?.trim() || 'production';
@@ -22,6 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     name: 'ClashKing',
     slug: 'clashking-app',
     version,
+    // Phone default; with-tablet-orientation unlocks Android tablets at launch.
     orientation: 'portrait',
     icon: './assets/clashking/icons/icon-play-store.png',
     scheme: 'clashking',
@@ -51,7 +52,15 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       supportsTablet: true,
       associatedDomains: ['applinks:app.clashk.ing'],
       requireFullScreen: true,
-      icon: './assets/clashking/icons/app_icon_ios_default.png',
+      // Native appearance variants follow the Home Screen setting without
+      // changing the user's manually selected seasonal/alternate app icon.
+      icon: {
+        light: './assets/clashking/icons/app_icon_ios_default.png',
+        dark: './assets/clashking/icons/app_icon_dark_logo.png',
+        // Keep the light mark on black for iOS tinted/Clear rendering. The
+        // black-on-white alternate icon reverses the foreground/background.
+        tinted: './assets/clashking/icons/app_icon_tinted.png',
+      },
       googleServicesFile: './config/firebase/GoogleService-Info.plist',
       infoPlist: {
         CADisableMinimumFrameDurationOnPhone: true,
@@ -78,7 +87,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       adaptiveIcon: {
         backgroundColor: '#FFFFFF',
         foregroundImage: './public/icons/Icon-maskable-512.png',
-        monochromeImage: './assets/clashking/icons/app_icon_black_white.png',
+        // with-clashking-native supplies the transparent vector monochrome
+        // layer for the application icon and every selectable launcher alias.
       },
       permissions: ['INTERNET', 'POST_NOTIFICATIONS'],
       intentFilters: [
@@ -154,11 +164,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       'expo-router',
       'expo-localization',
       'expo-image',
-      ['expo-image-picker', {
-        photosPermission: 'Choose a profile photo or banner for ClashKing.',
-        cameraPermission: false,
-        microphonePermission: false,
-      }],
+      [
+        'expo-image-picker',
+        {
+          photosPermission: 'Choose a profile photo or banner for ClashKing.',
+          cameraPermission: false,
+          microphonePermission: false,
+        },
+      ],
       '@react-native-firebase/app',
       '@react-native-firebase/messaging',
       [
@@ -234,6 +247,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ],
       './plugins/with-notification-service',
       './plugins/with-android-release-signing',
+      './plugins/with-tablet-orientation',
     ],
     experiments: {
       typedRoutes: true,

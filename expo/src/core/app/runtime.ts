@@ -239,16 +239,22 @@ export function createAppRuntime(): AppRuntime {
     },
     cachedPlayer: (tag) =>
       players.profiles.find((player) => player.tag.toUpperCase() === tag.toUpperCase()) ?? null,
+    eligiblePlayers: () =>
+      accounts.verifiedAccounts.map((account) => ({
+        tag: account.playerTag,
+        name: '',
+        townHallLevel: 0,
+      })),
     loadLegendData: (tag, day) => fetchLegendsWidgetData(contractApi, tag, day),
     loadRankedData: (tag) => players.loadRankedLeagueData(tag, false, false, 'detail'),
     locale: () => appState.getState().locale,
     t: (key, values) => createTranslator(appState.getState().locale)(key, values),
     reportError: ({ operation, error }) => reportException(error, operation),
   });
-  bookmarks.subscribe(() => {
-    if (!bookmarks.loaded) return;
+  accounts.subscribe(() => {
+    if (runtimePlatform === 'web') return;
     void legendsWidgets
-      .syncBookmarkedPlayers(bookmarks.players)
+      .syncBookmarkedPlayers([])
       .catch((error) => reportException(error, 'legends_widget.sync'));
   });
   const clans = new ClanService(contractApi);

@@ -43,6 +43,7 @@ private const val PENDING_WIDGET_ACTION = "pending_widget_action"
 private const val SECURE_STORAGE_TIMEOUT_SECONDS = 30L
 private val APP_ICON_ALIASES = linkedMapOf<String?, String>(
     null to "MainActivityDefault",
+    "AppIconHalloween" to "MainActivityHalloween",
     "AppIconChristmas" to "MainActivityChristmas",
     "AppIconBlackWhite" to "MainActivityBlackWhite",
     "AppIconDarkLogo" to "MainActivityDarkLogo"

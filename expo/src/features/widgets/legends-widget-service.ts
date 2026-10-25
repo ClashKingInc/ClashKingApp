@@ -30,6 +30,7 @@ export interface LegendsWidgetServiceOptions {
   readonly mirror: StringStore;
   readonly loadPlayer: (tag: string) => Promise<Player>;
   readonly cachedPlayer?: (tag: string) => Pick<Player, 'name' | 'townHallLevel'> | null;
+  readonly eligiblePlayers?: () => readonly LegendsWidgetBookmark[];
   readonly loadLegendData: (tag: string, day: string) => Promise<PlayerLegendLeagueData>;
   readonly loadRankedData: (tag: string) => Promise<RankedLeagueData>;
   readonly t: LegendsWidgetTranslate;
@@ -56,7 +57,11 @@ export class LegendsWidgetService {
     const generation = ++this.generation;
     try {
       const previous = await this.getCachedPlayers();
-      const next = normalizeBookmarks(bookmarks, previous, this.options.cachedPlayer);
+      const next = normalizeBookmarks(
+        this.options.eligiblePlayers?.() ?? bookmarks,
+        previous,
+        this.options.cachedPlayer,
+      );
       const nextTags = new Set(next.map((player) => canonicalPlayerTag(player.tag)));
       for (const player of previous) {
         if (!nextTags.has(canonicalPlayerTag(player.tag))) {
@@ -74,6 +79,13 @@ export class LegendsWidgetService {
 
   async refreshCachedBookmarks(): Promise<void> {
     if (this.options.platform === 'web') return;
+    // Reconcile ownership on every refresh, not just when the picker opens.
+    // A stale bookmark cache must never reintroduce an unverified player on
+    // either native platform; the shared picker and both widget types use it.
+    if (this.options.eligiblePlayers) {
+      await this.syncBookmarkedPlayers(this.options.eligiblePlayers());
+      return;
+    }
     const generation = ++this.generation;
     try {
       const cached = await this.getCachedPlayers();

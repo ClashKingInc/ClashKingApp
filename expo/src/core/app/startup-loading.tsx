@@ -1,9 +1,12 @@
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useI18n } from '../../i18n';
 import { CKText, useCKAccessibility, useCKTheme } from '../../ui';
 import { StartupBrand } from './startup-brand';
+import { StartupHalloweenBrand } from './startup-halloween-brand';
+import { useAppRuntime } from './runtime-context';
+import { HALLOWEEN_ICON_NAME } from '../../features/settings/app-icons/app-icon-service';
 
 /** Mount Home underneath the same splash so its requests settle before it is revealed. */
 export function StartupHandoff({ loading, children }: { loading: boolean; children: ReactNode }) {
@@ -38,7 +41,23 @@ export function StartupLoadingScreen({
   const { reduceMotion } = useCKAccessibility();
   const { width } = useWindowDimensions();
   const insets = useContext(SafeAreaInsetsContext);
+  const { appIcons } = useAppRuntime();
+  const selectedIcon = useSyncExternalStore(
+    appIcons.subscribeSelection,
+    appIcons.getSelectionSnapshot,
+    appIcons.getSelectionSnapshot,
+  );
+  const [selectionUnavailable, setSelectionUnavailable] = useState(false);
   const [statusIndex, setStatusIndex] = useState(-1);
+  useEffect(() => {
+    let active = true;
+    void appIcons.getAlternateIconName().catch(() => {
+      if (active) setSelectionUnavailable(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, [appIcons]);
   useEffect(() => {
     if (update) return;
     const reveal = setTimeout(() => setStatusIndex(0), 770);
@@ -60,13 +79,30 @@ export function StartupLoadingScreen({
     update && Number.isFinite(update.progress) ? Math.max(0, Math.min(1, update.progress)) : 0;
   return (
     <View style={[styles.screen, { backgroundColor: theme.surface }]} testID="startup-loading">
-      <StartupBrand
-        reduceMotion={reduceMotion}
-        foreground={theme.onSurface}
-        background={theme.surface}
-        label={t('appTitle')}
-        width={Math.min(width * 0.78, 330)}
-      />
+      {selectedIcon === undefined && !selectionUnavailable ? (
+        <View
+          style={{
+            width: Math.min(width * 0.78, 330),
+            height: 134 + 24 + (Math.min(width * 0.78, 330) * 23) / 163,
+          }}
+        />
+      ) : selectedIcon === HALLOWEEN_ICON_NAME ? (
+        <StartupHalloweenBrand
+          reduceMotion={reduceMotion}
+          foreground={theme.onSurface}
+          background={theme.surface}
+          label={t('appTitle')}
+          width={Math.min(width * 0.78, 330)}
+        />
+      ) : (
+        <StartupBrand
+          reduceMotion={reduceMotion}
+          foreground={theme.onSurface}
+          background={theme.surface}
+          label={t('appTitle')}
+          width={Math.min(width * 0.78, 330)}
+        />
+      )}
       {!update && statusIndex >= 0 ? (
         <View style={styles.status}>
           <CKText muted accessibilityLiveRegion="polite" style={{ textAlign: 'center' }}>
