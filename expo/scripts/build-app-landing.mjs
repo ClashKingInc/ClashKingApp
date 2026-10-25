@@ -23,25 +23,7 @@ for (const file of [
   await mkdir(dirname(join(output, file)), { recursive: true });
   await cp(join(root, 'public', file), join(output, file), { recursive: true });
 }
-let html = await readFile(join(root, 'public/app-landing.html'), 'utf8');
-const stores = {};
-for (const [label, value, host] of [
-  ['App Store', process.env.CK_IOS_STORE_URL, 'apps.apple.com'],
-  ['Google Play', process.env.CK_ANDROID_STORE_URL, 'play.google.com'],
-]) {
-  if (!value) continue;
-  const url = new URL(value);
-  if (url.protocol !== 'https:' || url.hostname !== host)
-    throw new Error('Invalid ' + label + ' URL');
-  stores[label] = url.href;
-}
-if (Object.keys(stores).length)
-  html = html.replace(
-    '</head>',
-    '<script>globalThis.CLASHKING_STORE_LINKS=' +
-      JSON.stringify(stores).replaceAll('<', '\\u003c') +
-      ';</script></head>',
-  );
+const html = await readFile(join(root, 'public/app-landing.html'), 'utf8');
 await writeFile(join(output, 'index.html'), html);
 await writeFile(join(output, '404.html'), html);
 console.log('Built native-app landing only; no Expo web application exported.');

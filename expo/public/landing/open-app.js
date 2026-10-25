@@ -1,4 +1,5 @@
 import { appLinkPath, parseAppLink } from './app-link.js';
+import { storeLinks } from './store-links.js';
 
 // Use the native router's parser, not a second list of destinations. Never
 // forward OAuth tokens or arbitrary query parameters through a public link.
@@ -15,14 +16,24 @@ open.addEventListener('click', () => {
     'If nothing opens, check that ClashKing is installed on this device.';
 });
 
-for (const [name, href] of Object.entries(globalThis.CLASHKING_STORE_LINKS || {})) {
-  const anchor = document.createElement('a');
-  anchor.href = href;
-  anchor.rel = 'noopener noreferrer';
-  anchor.textContent = name;
-  document.getElementById('stores').append(anchor);
+if (link && path !== '/') {
+  const destination = document.getElementById('destination');
+  destination.textContent = 'Your shared page will open directly in the app.';
+  destination.hidden = false;
 }
 
+for (const [name, id] of [
+  ['App Store', 'ios'],
+  ['Google Play', 'android'],
+]) {
+  const href = storeLinks[name];
+  if (!href) continue;
+  const anchor = document.getElementById('store-' + id);
+  anchor.href = href;
+  anchor.rel = 'noopener noreferrer';
+  anchor.removeAttribute('aria-disabled');
+  document.getElementById('store-' + id + '-status').textContent = 'Download the app';
+}
 // Retire only ClashKing's former offline shell. No new worker is registered.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
