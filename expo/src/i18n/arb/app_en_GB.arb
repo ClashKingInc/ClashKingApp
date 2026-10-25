@@ -206,7 +206,7 @@
   "statsMonthly": "Monthly",
   "statsCompareCohorts": "Compare cohorts",
   "statsAcrossCohorts": "Usage across cohorts",
-  "legendsTrophyGrid": "Trophy grid",
+  "legendsTrophyGrid": "Season overview",
   "legendsPopularArmyItems": "Most popular army items",
   "legendsPopularTroop": "Favorite",
   "legendsHitrate": "Hitrate",
@@ -5018,5 +5018,8 @@
   "playerWarLifetime": "Lifetime",
   "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
   "playerWarNoAttacks": "No attacks yet",
-  "playerWarRegularWars": "Regular war"
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan"
 }

@@ -205,7 +205,7 @@
   "statsMonthly": "每月",
   "statsCompareCohorts": "比较群组",
   "statsAcrossCohorts": "各群组使用率",
-  "legendsTrophyGrid": "奖杯网格",
+  "legendsTrophyGrid": "赛季概览",
   "legendsPopularArmyItems": "最热门的军队配置",
   "legendsPopularTroop": "最爱",
   "legendsHitrate": "成功率",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "全部历史",
   "playerWarThScope": "仅适用于统计卡片，不影响战斗列表。长按按钮可查看此说明。",
   "playerWarNoAttacks": "暂无进攻",
-  "playerWarRegularWars": "普通部落战"
+  "playerWarRegularWars": "普通部落战",
+  "warWidgetNoActiveWar": "没有进行中的部落对战",
+  "warWidgetPrivateWarLog": "对战日志不公开",
+  "warWidgetChooseClan": "选择部落"
 }

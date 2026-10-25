@@ -206,7 +206,7 @@
   "statsMonthly": "Maandeliks",
   "statsCompareCohorts": "Vergelyk groepe",
   "statsAcrossCohorts": "Gebruik oor groepe",
-  "legendsTrophyGrid": "Trofeerooster",
+  "legendsTrophyGrid": "Seisoenoorsig",
   "legendsPopularArmyItems": "Gewildste weermagitems",
   "legendsPopularTroop": "Gunsteling",
   "legendsHitrate": "Trefkoers",
@@ -5018,5 +5018,8 @@
   "playerWarLifetime": "Lewenslank",
   "playerWarThScope": "Pas net op die statistiekkaarte toe, nie op Gevegte nie. Hou die knoppie in vir hierdie verduideliking.",
   "playerWarNoAttacks": "Nog geen aanvalle nie",
-  "playerWarRegularWars": "Gewone oorlog"
+  "playerWarRegularWars": "Gewone oorlog",
+  "warWidgetNoActiveWar": "Geen aktiewe oorlog",
+  "warWidgetPrivateWarLog": "Privaat oorlogslogboek",
+  "warWidgetChooseClan": "Kies ’n stam"
 }

@@ -206,7 +206,7 @@
   "statsMonthly": "월별",
   "statsCompareCohorts": "그룹 비교",
   "statsAcrossCohorts": "그룹별 사용률",
-  "legendsTrophyGrid": "트로피 격자",
+  "legendsTrophyGrid": "시즌 개요",
   "legendsPopularArmyItems": "인기 군대 항목",
   "legendsPopularTroop": "즐겨찾기",
   "legendsHitrate": "성공률",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "전체 기간",
   "playerWarThScope": "통계 카드에만 적용되며 전투에는 적용되지 않습니다. 버튼을 길게 누르면 이 설명이 표시됩니다.",
   "playerWarNoAttacks": "아직 공격이 없습니다",
-  "playerWarRegularWars": "일반 클랜전"
+  "playerWarRegularWars": "일반 클랜전",
+  "warWidgetNoActiveWar": "진행 중인 전쟁 없음",
+  "warWidgetPrivateWarLog": "비공개 전쟁 기록",
+  "warWidgetChooseClan": "클랜 선택"
 }

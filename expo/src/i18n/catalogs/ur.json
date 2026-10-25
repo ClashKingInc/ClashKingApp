@@ -205,7 +205,7 @@
   "statsMonthly": "ماہانہ",
   "statsCompareCohorts": "گروہوں کا موازنہ کریں",
   "statsAcrossCohorts": "گروہوں میں استعمال",
-  "legendsTrophyGrid": "ٹرافی گرڈ",
+  "legendsTrophyGrid": "سیزن کا جائزہ",
   "legendsPopularArmyItems": "مقبول ترین فوجی اکائیاں",
   "legendsPopularTroop": "پسندیدہ",
   "legendsHitrate": "کامیابی کی شرح",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "مکمل تاریخ",
   "playerWarThScope": "صرف اعداد و شمار کے کارڈز پر لاگو ہوتا ہے، لڑائیوں پر نہیں۔ یہ وضاحت دیکھنے کے لیے بٹن دبائے رکھیں۔",
   "playerWarNoAttacks": "ابھی تک کوئی حملے نہیں",
-  "playerWarRegularWars": "عام جنگ"
+  "playerWarRegularWars": "عام جنگ",
+  "warWidgetNoActiveWar": "کوئی فعال جنگ نہیں",
+  "warWidgetPrivateWarLog": "نجی جنگی لاگ",
+  "warWidgetChooseClan": "کلین منتخب کریں"
 }

@@ -205,7 +205,7 @@
   "statsMonthly": "Kuukausittain",
   "statsCompareCohorts": "Vertaa ryhmiä",
   "statsAcrossCohorts": "Käyttö ryhmittäin",
-  "legendsTrophyGrid": "Pokaaliruudukko",
+  "legendsTrophyGrid": "Kauden yleiskatsaus",
   "legendsPopularArmyItems": "Suosituimmat armeijan osat",
   "legendsPopularTroop": "Suosikki",
   "legendsHitrate": "Onnistumisaste",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "Koko historia",
   "playerWarThScope": "Koskee vain tilastokortteja, ei taisteluja. Näet tämän selityksen pitämällä painiketta painettuna.",
   "playerWarNoAttacks": "Ei vielä hyökkäyksiä",
-  "playerWarRegularWars": "Tavallinen sota"
+  "playerWarRegularWars": "Tavallinen sota",
+  "warWidgetNoActiveWar": "Ei aktiivista sotaa",
+  "warWidgetPrivateWarLog": "Yksityinen sotaloki",
+  "warWidgetChooseClan": "Valitse klaani"
 }

@@ -206,7 +206,7 @@
   "statsMonthly": "Μηνιαία",
   "statsCompareCohorts": "Σύγκριση ομάδων",
   "statsAcrossCohorts": "Χρήση ανά ομάδα",
-  "legendsTrophyGrid": "Πλέγμα τροπαίων",
+  "legendsTrophyGrid": "Επισκόπηση σεζόν",
   "legendsPopularArmyItems": "Δημοφιλέστερα στοιχεία στρατού",
   "legendsPopularTroop": "Αγαπημένη",
   "legendsHitrate": "Ποσοστό επιτυχίας",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "Όλο το ιστορικό",
   "playerWarThScope": "Ισχύει μόνο για τις κάρτες στατιστικών, όχι για τις μάχες. Κρατήστε πατημένο το κουμπί για αυτή την εξήγηση.",
   "playerWarNoAttacks": "Δεν υπάρχουν επιθέσεις ακόμη",
-  "playerWarRegularWars": "Κανονικός πόλεμος"
+  "playerWarRegularWars": "Κανονικός πόλεμος",
+  "warWidgetNoActiveWar": "Δεν υπάρχει ενεργός πόλεμος",
+  "warWidgetPrivateWarLog": "Ιδιωτικό ημερολόγιο πολέμου",
+  "warWidgetChooseClan": "Επίλεξε φυλή"
 }

@@ -1,7 +1,7 @@
 import { createStore, type StoreApi } from 'zustand/vanilla';
 
 import type { SupportedLocale } from '../../i18n';
-import { resolveFlutterStartupLocale } from '../../i18n';
+import { resolveLocale } from '../../i18n';
 import type { StringStore } from '../../services/storage/auth-storage';
 import type { GameDataService } from '../game-data';
 import {
@@ -16,11 +16,13 @@ export type AppFeatureState = Readonly<Record<KnownFeatureFlag, boolean>>;
 
 export interface AppStateSnapshot {
   readonly locale: SupportedLocale;
+  readonly languagePreference: SupportedLocale | 'system';
   readonly themePreference: AppThemePreference;
   readonly features: AppFeatureState;
   readonly initialized: boolean;
   readonly initialize: () => Promise<void>;
-  readonly changeLanguage: (locale: SupportedLocale) => Promise<void>;
+  readonly changeLanguage: (locale: SupportedLocale | 'system') => Promise<void>;
+  readonly refreshSystemLocale: () => Promise<void>;
   readonly setThemePreference: (mode: AppThemePreference) => Promise<void>;
   readonly toggleTheme: () => Promise<void>;
   readonly isFeatureEnabled: (key: string, fallback?: boolean) => boolean;
@@ -48,7 +50,8 @@ export function createAppStateStore(
   };
 
   const store = createStore<AppStateSnapshot>((set, get) => ({
-    locale: 'en',
+    locale: dependencies.systemLocale(),
+    languagePreference: 'system',
     themePreference: 'dark',
     features: defaultFeatureState(),
     initialized: false,
@@ -66,10 +69,12 @@ export function createAppStateStore(
           dependencies.preferences.getItem('languageCode'),
           dependencies.preferences.getItem('themeMode'),
         ]);
+        const languagePreference =
+          storedLocale === null || storedLocale === 'system'
+            ? 'system'
+            : resolveLocale(storedLocale);
         const locale =
-          storedLocale === null
-            ? dependencies.systemLocale()
-            : resolveFlutterStartupLocale(storedLocale);
+          languagePreference === 'system' ? dependencies.systemLocale() : languagePreference;
         const themePreference = parseThemePreference(storedTheme);
 
         await Promise.all([
@@ -78,6 +83,7 @@ export function createAppStateStore(
         ]);
         set({
           locale,
+          languagePreference,
           themePreference,
           features: currentFeatureState(dependencies.featureFlags),
           initialized: true,
@@ -91,19 +97,31 @@ export function createAppStateStore(
       }
     },
 
-    changeLanguage: async (locale) => {
+    changeLanguage: async (languagePreference) => {
+      const locale =
+        languagePreference === 'system' ? dependencies.systemLocale() : languagePreference;
       const parsed = appLocale(locale);
+      set({ languagePreference });
       await Promise.all([
-        dependencies.preferences.setItem('languageCode', parsed.languageCode),
+        dependencies.preferences.setItem('languageCode', languagePreference),
         parsed.countryCode === undefined
-          ? Promise.resolve()
+          ? dependencies.preferences.removeItem('countryCode')
           : dependencies.preferences.setItem('countryCode', parsed.countryCode),
         parsed.scriptCode === undefined
-          ? Promise.resolve()
+          ? dependencies.preferences.removeItem('scriptCode')
           : dependencies.preferences.setItem('scriptCode', parsed.scriptCode),
         dependencies.gameData.loadTranslationsForLocale(parsed),
       ]);
-      set({ locale });
+      set({ locale, languagePreference });
+    },
+
+    refreshSystemLocale: async () => {
+      if (!get().initialized || get().languagePreference !== 'system') return;
+      const locale = dependencies.systemLocale();
+      if (locale === get().locale) return;
+      await dependencies.gameData.loadTranslationsForLocale(appLocale(locale));
+      // A manual selection during the fetch must win over a foreground refresh.
+      if (get().languagePreference === 'system') set({ locale });
     },
 
     setThemePreference: async (themePreference) => {

@@ -206,7 +206,7 @@
   "statsMonthly": "Mensual",
   "statsCompareCohorts": "Compara grups",
   "statsAcrossCohorts": "Ús entre grups",
-  "legendsTrophyGrid": "Graella de trofeus",
+  "legendsTrophyGrid": "Resum de la temporada",
   "legendsPopularArmyItems": "Elements d'exèrcit més populars",
   "legendsPopularTroop": "Preferida",
   "legendsHitrate": "Taxa d'èxit",
@@ -5018,5 +5018,8 @@
   "playerWarLifetime": "Tot l’historial",
   "playerWarThScope": "Només s’aplica a les targetes d’estadístiques, no a les batalles. Mantén premut el botó per veure aquesta explicació.",
   "playerWarNoAttacks": "Encara no hi ha atacs",
-  "playerWarRegularWars": "Guerra normal"
+  "playerWarRegularWars": "Guerra normal",
+  "warWidgetNoActiveWar": "Cap guerra activa",
+  "warWidgetPrivateWarLog": "Registre de guerra privat",
+  "warWidgetChooseClan": "Tria un clan"
 }

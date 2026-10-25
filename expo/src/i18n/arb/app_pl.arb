@@ -206,7 +206,7 @@
   "statsMonthly": "Miesięcznie",
   "statsCompareCohorts": "Porównaj grupy",
   "statsAcrossCohorts": "Użycie według grup",
-  "legendsTrophyGrid": "Siatka trofeów",
+  "legendsTrophyGrid": "Przegląd sezonu",
   "legendsPopularArmyItems": "Najpopularniejsze elementy armii",
   "legendsPopularTroop": "Ulubiony",
   "legendsHitrate": "Skuteczność",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "Cała historia",
   "playerWarThScope": "Dotyczy tylko kart statystyk, nie bitew. Przytrzymaj przycisk, aby zobaczyć to wyjaśnienie.",
   "playerWarNoAttacks": "Brak ataków",
-  "playerWarRegularWars": "Zwykła wojna"
+  "playerWarRegularWars": "Zwykła wojna",
+  "warWidgetNoActiveWar": "Brak aktywnej wojny",
+  "warWidgetPrivateWarLog": "Prywatny dziennik wojen",
+  "warWidgetChooseClan": "Wybierz klan"
 }

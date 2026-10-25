@@ -60,6 +60,7 @@ export function SettingsScreen({
   currentLocale,
   localeChoices,
   themeMode,
+  systemLanguage = false,
   notificationsEnabled,
   alternateIconsSupported,
   selectedAppIcon = '',
@@ -75,6 +76,7 @@ export function SettingsScreen({
   currentLocale: string;
   localeChoices: readonly SettingsLocaleChoice[];
   themeMode: SettingsThemeMode;
+  systemLanguage?: boolean;
   notificationsEnabled: boolean;
   alternateIconsSupported: boolean;
   selectedAppIcon?: string;
@@ -102,11 +104,12 @@ export function SettingsScreen({
       : themeMode === 'light'
         ? t('settingsThemeLight')
         : t('settingsThemeDark');
-  const selectedLocale =
-    localeChoices.find(({ locale }) => locale === currentLocale)?.locale ??
-    localeChoices.find(({ locale }) => locale.split('_', 1)[0] === currentLocale.split('_', 1)[0])
-      ?.locale ??
-    currentLocale;
+  const selectedLocale = systemLanguage
+    ? 'system'
+    : (localeChoices.find(({ locale }) => locale === currentLocale)?.locale ??
+      localeChoices.find(({ locale }) => locale.split('_', 1)[0] === currentLocale.split('_', 1)[0])
+        ?.locale ??
+      currentLocale);
   const versionAvailable =
     versionLabel !== t('generalLoading') && versionLabel !== t('errorLoadingVersion');
   const body = (
@@ -258,18 +261,25 @@ export function SettingsScreen({
         title={t('settingsLanguage')}
         subtitle={t('settingsSelectLanguage')}
         heightFactor={0.82}
-        choices={localeChoices.map(({ locale, label, flagUrl }) => ({
-          value: locale,
-          label,
-          icon: (
-            <MobileWebImage
-              imageUrl={flagUrl}
-              contentFit="cover"
-              errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />}
-              style={styles.flag}
-            />
-          ),
-        }))}
+        choices={[
+          {
+            value: 'system',
+            label: t('settingsThemeSystem'),
+            icon: <Languages color={theme.onSurfaceVariant} size={20} />,
+          },
+          ...localeChoices.map(({ locale, label, flagUrl }) => ({
+            value: locale,
+            label,
+            icon: (
+              <MobileWebImage
+                imageUrl={flagUrl}
+                contentFit="cover"
+                errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />}
+                style={styles.flag}
+              />
+            ),
+          })),
+        ]}
         selected={selectedLocale}
         onSelect={(locale) => void actions.changeLocale(locale)}
         onClose={() => setDialog(undefined)}

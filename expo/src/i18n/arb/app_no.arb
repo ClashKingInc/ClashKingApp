@@ -206,7 +206,7 @@
   "statsMonthly": "Månedlig",
   "statsCompareCohorts": "Sammenlign grupper",
   "statsAcrossCohorts": "Bruk på tvers av grupper",
-  "legendsTrophyGrid": "Troférutenett",
+  "legendsTrophyGrid": "Sesongoversikt",
   "legendsPopularArmyItems": "Mest populære hærtyper",
   "legendsPopularTroop": "Favoritt",
   "legendsHitrate": "Suksessrate",
@@ -5018,5 +5018,8 @@
   "playerWarLifetime": "Hele historikken",
   "playerWarThScope": "Gjelder bare statistikkortene, ikke kampene. Hold inne knappen for å se denne forklaringen.",
   "playerWarNoAttacks": "Ingen angrep ennå",
-  "playerWarRegularWars": "Vanlig krig"
+  "playerWarRegularWars": "Vanlig krig",
+  "warWidgetNoActiveWar": "Ingen aktiv krig",
+  "warWidgetPrivateWarLog": "Privat krigslogg",
+  "warWidgetChooseClan": "Velg en klan"
 }

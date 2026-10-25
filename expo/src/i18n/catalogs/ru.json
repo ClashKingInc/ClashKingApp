@@ -205,7 +205,7 @@
   "statsMonthly": "По месяцам",
   "statsCompareCohorts": "Сравнить группы",
   "statsAcrossCohorts": "Использование по группам",
-  "legendsTrophyGrid": "Сетка трофеев",
+  "legendsTrophyGrid": "Обзор сезона",
   "legendsPopularArmyItems": "Популярные элементы армии",
   "legendsPopularTroop": "Любимый",
   "legendsHitrate": "Успешность",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "Всё время",
   "playerWarThScope": "Применяется только к карточкам статистики, а не к боям. Удерживайте кнопку, чтобы увидеть это пояснение.",
   "playerWarNoAttacks": "Атак пока нет",
-  "playerWarRegularWars": "Обычная война"
+  "playerWarRegularWars": "Обычная война",
+  "warWidgetNoActiveWar": "Нет активной войны",
+  "warWidgetPrivateWarLog": "Закрытый журнал войн",
+  "warWidgetChooseClan": "Выбрать клан"
 }

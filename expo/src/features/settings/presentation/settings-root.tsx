@@ -265,7 +265,7 @@ export function SettingsRoot({
     resetTutorials: tutorials.reset,
     clearImageCache: Platform.OS === 'web' ? undefined : clearMobileImageCache,
     changeLocale: (nextLocale) =>
-      runtime.appState.getState().changeLanguage(nextLocale as SupportedLocale),
+      runtime.appState.getState().changeLanguage(nextLocale as SupportedLocale | 'system'),
     changeTheme: (mode) => runtime.appState.getState().setThemePreference(mode),
     changeAppIcon: async (iconName) => {
       if (Platform.OS === 'android') {
@@ -329,6 +329,7 @@ export function SettingsRoot({
             platform={Platform.OS}
             selectedAppIcon={selectedAppIcon}
             themeMode={appState.themePreference}
+            systemLanguage={appState.languagePreference === 'system'}
             user={user}
             imageCacheBytes={imageCacheBytes}
             versionLabel={versionLabel}

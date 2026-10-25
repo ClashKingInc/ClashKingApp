@@ -205,7 +205,7 @@
   "statsMonthly": "Havonta",
   "statsCompareCohorts": "Csoportok összehasonlítása",
   "statsAcrossCohorts": "Használat csoportonként",
-  "legendsTrophyGrid": "Trófearács",
+  "legendsTrophyGrid": "Szezonáttekintés",
   "legendsPopularArmyItems": "Legnépszerűbb seregelemek",
   "legendsPopularTroop": "Kedvenc",
   "legendsHitrate": "Sikerarány",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "Teljes előzmény",
   "playerWarThScope": "Csak a statisztikai kártyákra vonatkozik, a csatákra nem. A magyarázathoz tartsa nyomva a gombot.",
   "playerWarNoAttacks": "Még nincsenek támadások",
-  "playerWarRegularWars": "Normál háború"
+  "playerWarRegularWars": "Normál háború",
+  "warWidgetNoActiveWar": "Nincs aktív háború",
+  "warWidgetPrivateWarLog": "Privát háborús napló",
+  "warWidgetChooseClan": "Válassz klánt"
 }

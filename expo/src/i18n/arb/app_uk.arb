@@ -206,7 +206,7 @@
   "statsMonthly": "За місяцями",
   "statsCompareCohorts": "Порівняти групи",
   "statsAcrossCohorts": "Використання за групами",
-  "legendsTrophyGrid": "Сітка трофеїв",
+  "legendsTrophyGrid": "Огляд сезону",
   "legendsPopularArmyItems": "Найпопулярніші елементи армії",
   "legendsPopularTroop": "Улюблений",
   "legendsHitrate": "Успішність",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "Увесь час",
   "playerWarThScope": "Застосовується лише до карток статистики, а не до боїв. Утримуйте кнопку, щоб побачити це пояснення.",
   "playerWarNoAttacks": "Атак поки немає",
-  "playerWarRegularWars": "Звичайна війна"
+  "playerWarRegularWars": "Звичайна війна",
+  "warWidgetNoActiveWar": "Немає активної війни",
+  "warWidgetPrivateWarLog": "Приватний журнал війн",
+  "warWidgetChooseClan": "Вибрати клан"
 }

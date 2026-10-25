@@ -206,7 +206,7 @@
   "statsMonthly": "Månadsvis",
   "statsCompareCohorts": "Jämför grupper",
   "statsAcrossCohorts": "Användning per grupp",
-  "legendsTrophyGrid": "Troférutnät",
+  "legendsTrophyGrid": "Säsongsöversikt",
   "legendsPopularArmyItems": "Populäraste armédelarna",
   "legendsPopularTroop": "Favorit",
   "legendsHitrate": "Träffgrad",
@@ -5018,5 +5018,8 @@
   "playerWarLifetime": "Hela historiken",
   "playerWarThScope": "Gäller bara statistikkorten, inte striderna. Håll ned knappen för att se den här förklaringen.",
   "playerWarNoAttacks": "Inga attacker ännu",
-  "playerWarRegularWars": "Vanligt krig"
+  "playerWarRegularWars": "Vanligt krig",
+  "warWidgetNoActiveWar": "Inget aktivt krig",
+  "warWidgetPrivateWarLog": "Privat krigslogg",
+  "warWidgetChooseClan": "Välj en klan"
 }

@@ -212,6 +212,21 @@ export class ImageAssets {
   static readonly playerWarStatsPageBackground = `${ImageAssets.baseUrl}/landscape/war-stats.png`;
   static readonly playerAchievementPageBackground = `${ImageAssets.baseUrl}/landscape/achievement-landscape.png`;
 
+  /** Resolve artwork from catalog identity before producing translated display labels. */
+  static getItemImage(
+    kind: 'hero' | 'pet' | 'equipment' | 'spell' | 'siege' | 'troop',
+    item: { readonly name?: unknown } | null | undefined,
+    fallback: string,
+  ): string {
+    const name = typeof item?.name === 'string' && item.name.trim() ? item.name : fallback;
+    if (kind === 'hero') return ImageAssets.getHeroImage(name);
+    if (kind === 'pet') return ImageAssets.getPetImage(name);
+    if (kind === 'equipment') return ImageAssets.getGearImage(name);
+    if (kind === 'spell') return ImageAssets.getSpellImage(name);
+    return ImageAssets.getTroopImage(name);
+  }
+
+  // Name-based entry points accept canonical English catalog names only.
   static getHeroImage(name: string): string {
     return iconAsset(['heroes'], name);
   }

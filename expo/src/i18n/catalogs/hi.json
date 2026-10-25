@@ -205,7 +205,7 @@
   "statsMonthly": "मासिक",
   "statsCompareCohorts": "समूहों की तुलना करें",
   "statsAcrossCohorts": "समूहों में उपयोग",
-  "legendsTrophyGrid": "ट्रॉफ़ी ग्रिड",
+  "legendsTrophyGrid": "सीज़न का अवलोकन",
   "legendsPopularArmyItems": "सबसे लोकप्रिय सेना इकाइयाँ",
   "legendsPopularTroop": "पसंदीदा",
   "legendsHitrate": "सफलता दर",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "पूरा इतिहास",
   "playerWarThScope": "केवल आँकड़ों के कार्ड पर लागू होता है, लड़ाइयों पर नहीं। यह जानकारी देखने के लिए बटन दबाकर रखें।",
   "playerWarNoAttacks": "अभी कोई हमला नहीं",
-  "playerWarRegularWars": "सामान्य युद्ध"
+  "playerWarRegularWars": "सामान्य युद्ध",
+  "warWidgetNoActiveWar": "कोई सक्रिय युद्ध नहीं",
+  "warWidgetPrivateWarLog": "निजी युद्ध लॉग",
+  "warWidgetChooseClan": "क्लैन चुनें"
 }

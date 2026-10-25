@@ -205,7 +205,7 @@
   "statsMonthly": "Hằng tháng",
   "statsCompareCohorts": "So sánh nhóm",
   "statsAcrossCohorts": "Mức sử dụng theo nhóm",
-  "legendsTrophyGrid": "Lưới cúp",
+  "legendsTrophyGrid": "Tổng quan mùa giải",
   "legendsPopularArmyItems": "Thành phần quân đội phổ biến nhất",
   "legendsPopularTroop": "Yêu thích",
   "legendsHitrate": "Tỷ lệ thành công",
@@ -2338,5 +2338,8 @@
   "playerWarLifetime": "Toàn bộ lịch sử",
   "playerWarThScope": "Chỉ áp dụng cho thẻ thống kê, không áp dụng cho trận chiến. Nhấn giữ nút để xem giải thích này.",
   "playerWarNoAttacks": "Chưa có cuộc tấn công nào",
-  "playerWarRegularWars": "Chiến tranh thường"
+  "playerWarRegularWars": "Chiến tranh thường",
+  "warWidgetNoActiveWar": "Không có chiến tranh đang diễn ra",
+  "warWidgetPrivateWarLog": "Nhật ký chiến tranh riêng tư",
+  "warWidgetChooseClan": "Chọn bang hội"
 }

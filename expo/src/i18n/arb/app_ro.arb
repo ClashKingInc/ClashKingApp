@@ -206,7 +206,7 @@
   "statsMonthly": "Lunar",
   "statsCompareCohorts": "Compară grupurile",
   "statsAcrossCohorts": "Utilizare pe grupuri",
-  "legendsTrophyGrid": "Grilă de trofee",
+  "legendsTrophyGrid": "Prezentarea sezonului",
   "legendsPopularArmyItems": "Cele mai populare elemente ale armatei",
   "legendsPopularTroop": "Preferată",
   "legendsHitrate": "Rată de succes",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "Tot istoricul",
   "playerWarThScope": "Se aplică doar cardurilor de statistici, nu bătăliilor. Ține apăsat butonul pentru această explicație.",
   "playerWarNoAttacks": "Încă nu există atacuri",
-  "playerWarRegularWars": "Război obișnuit"
+  "playerWarRegularWars": "Război obișnuit",
+  "warWidgetNoActiveWar": "Niciun război activ",
+  "warWidgetPrivateWarLog": "Jurnal de război privat",
+  "warWidgetChooseClan": "Alege un clan"
 }

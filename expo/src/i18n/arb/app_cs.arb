@@ -206,7 +206,7 @@
   "statsMonthly": "Měsíčně",
   "statsCompareCohorts": "Porovnat skupiny",
   "statsAcrossCohorts": "Použití napříč skupinami",
-  "legendsTrophyGrid": "Mřížka trofejí",
+  "legendsTrophyGrid": "Přehled sezóny",
   "legendsPopularArmyItems": "Nejoblíbenější prvky armády",
   "legendsPopularTroop": "Oblíbená",
   "legendsHitrate": "Úspěšnost",
@@ -5018,5 +5018,8 @@
   "playerWarLifetime": "Celá historie",
   "playerWarThScope": "Platí jen pro statistické karty, ne pro bitvy. Toto vysvětlení zobrazíte podržením tlačítka.",
   "playerWarNoAttacks": "Zatím žádné útoky",
-  "playerWarRegularWars": "Běžná válka"
+  "playerWarRegularWars": "Běžná válka",
+  "warWidgetNoActiveWar": "Žádná aktivní válka",
+  "warWidgetPrivateWarLog": "Soukromý válečný deník",
+  "warWidgetChooseClan": "Vyber klan"
 }

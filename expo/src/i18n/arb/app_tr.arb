@@ -206,7 +206,7 @@
   "statsMonthly": "Aylık",
   "statsCompareCohorts": "Grupları karşılaştır",
   "statsAcrossCohorts": "Gruplara göre kullanım",
-  "legendsTrophyGrid": "Kupa tablosu",
+  "legendsTrophyGrid": "Sezona genel bakış",
   "legendsPopularArmyItems": "En popüler ordu öğeleri",
   "legendsPopularTroop": "Favori",
   "legendsHitrate": "Başarı oranı",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "Tüm zamanlar",
   "playerWarThScope": "Yalnızca istatistik kartlarına uygulanır, savaşlara değil. Bu açıklama için düğmeyi basılı tutun.",
   "playerWarNoAttacks": "Henüz saldırı yok",
-  "playerWarRegularWars": "Normal savaş"
+  "playerWarRegularWars": "Normal savaş",
+  "warWidgetNoActiveWar": "Aktif savaş yok",
+  "warWidgetPrivateWarLog": "Özel savaş günlüğü",
+  "warWidgetChooseClan": "Bir klan seç"
 }

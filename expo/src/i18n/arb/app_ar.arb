@@ -206,7 +206,7 @@
   "statsMonthly": "شهري",
   "statsCompareCohorts": "مقارنة الفئات",
   "statsAcrossCohorts": "الاستخدام عبر الفئات",
-  "legendsTrophyGrid": "شبكة الكؤوس",
+  "legendsTrophyGrid": "نظرة عامة على الموسم",
   "legendsPopularArmyItems": "أكثر عناصر الجيش شيوعًا",
   "legendsPopularTroop": "المفضّل",
   "legendsHitrate": "معدل النجاح",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "كل السجل",
   "playerWarThScope": "ينطبق على بطاقات الإحصاءات فقط، وليس المعارك. اضغط مطولًا على الزر لعرض هذا الشرح.",
   "playerWarNoAttacks": "لا توجد هجمات بعد",
-  "playerWarRegularWars": "حرب عادية"
+  "playerWarRegularWars": "حرب عادية",
+  "warWidgetNoActiveWar": "لا توجد حرب نشطة",
+  "warWidgetPrivateWarLog": "سجل الحرب خاص",
+  "warWidgetChooseClan": "اختر قبيلة"
 }

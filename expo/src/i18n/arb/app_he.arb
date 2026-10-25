@@ -206,7 +206,7 @@
   "statsMonthly": "חודשי",
   "statsCompareCohorts": "השוואת קבוצות",
   "statsAcrossCohorts": "שימוש לפי קבוצות",
-  "legendsTrophyGrid": "רשת גביעים",
+  "legendsTrophyGrid": "סקירת העונה",
   "legendsPopularArmyItems": "רכיבי הצבא הפופולריים ביותר",
   "legendsPopularTroop": "מועדף",
   "legendsHitrate": "שיעור הצלחה",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "כל ההיסטוריה",
   "playerWarThScope": "חל רק על כרטיסי הסטטיסטיקה, לא על הקרבות. לחיצה ממושכת על הכפתור מציגה את ההסבר.",
   "playerWarNoAttacks": "אין התקפות עדיין",
-  "playerWarRegularWars": "מלחמה רגילה"
+  "playerWarRegularWars": "מלחמה רגילה",
+  "warWidgetNoActiveWar": "אין מלחמה פעילה",
+  "warWidgetPrivateWarLog": "יומן מלחמה פרטי",
+  "warWidgetChooseClan": "בחירת קלאן"
 }

@@ -206,7 +206,7 @@
   "statsMonthly": "Месечно",
   "statsCompareCohorts": "Упореди групе",
   "statsAcrossCohorts": "Употреба по групама",
-  "legendsTrophyGrid": "Мрежа трофеја",
+  "legendsTrophyGrid": "Преглед сезоне",
   "legendsPopularArmyItems": "Најпопуларнији елементи војске",
   "legendsPopularTroop": "Омиљена",
   "legendsHitrate": "Успешност",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "Цела историја",
   "playerWarThScope": "Важи само за картице статистике, не за битке. Задржите дугме за ово објашњење.",
   "playerWarNoAttacks": "Још нема напада",
-  "playerWarRegularWars": "Обичан рат"
+  "playerWarRegularWars": "Обичан рат",
+  "warWidgetNoActiveWar": "Нема активног рата",
+  "warWidgetPrivateWarLog": "Приватан ратни дневник",
+  "warWidgetChooseClan": "Изабери клан"
 }

@@ -206,7 +206,7 @@
   "statsMonthly": "月ごと",
   "statsCompareCohorts": "グループを比較",
   "statsAcrossCohorts": "グループ別使用率",
-  "legendsTrophyGrid": "トロフィーグリッド",
+  "legendsTrophyGrid": "シーズン概要",
   "legendsPopularArmyItems": "人気の軍隊アイテム",
   "legendsPopularTroop": "お気に入り",
   "legendsHitrate": "成功率",
@@ -5113,5 +5113,8 @@
   "playerWarLifetime": "全期間",
   "playerWarThScope": "統計カードにのみ適用され、バトルには適用されません。ボタンを長押しすると、この説明を表示できます。",
   "playerWarNoAttacks": "まだ攻撃がありません",
-  "playerWarRegularWars": "通常対戦"
+  "playerWarRegularWars": "通常対戦",
+  "warWidgetNoActiveWar": "進行中の対戦なし",
+  "warWidgetPrivateWarLog": "対戦ログは非公開です",
+  "warWidgetChooseClan": "クランを選択"
 }
