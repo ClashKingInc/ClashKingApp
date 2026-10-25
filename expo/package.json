@@ -104,7 +104,7 @@
     "licenses:generate": "node ./scripts/generate-license-inventory.mjs",
     "licenses:check": "node ./scripts/generate-license-inventory.mjs --check",
     "e2e:structure": "node ./scripts/check-expo-e2e-structure.mjs",
-    "release:check": "node --check scripts/release-plan.mjs && node --check scripts/release-environment.mjs && node --check scripts/publish-release.mjs",
+    "release:check": "node scripts/check-release-notes.mjs && node --check scripts/release-plan.mjs && node --check scripts/release-environment.mjs && node --check scripts/publish-release.mjs",
     "typecheck": "tsrs --noEmit",
     "typecheck:typescript": "tsc --noEmit"
   },

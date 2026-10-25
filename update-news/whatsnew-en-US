@@ -1,10 +1,9 @@
-ClashKing 0.6.2 alpha is ready for closed testing.
+ClashKing 0.6.2 alpha
 
 - Redesigned Clan Capital, player war stats, Bases & Armies, and Game Assets.
-- Faster page navigation and loading with matching skeletons and bundled header artwork.
-- Smoother card reordering, scrolling, and account switching on iOS and Android.
-- Improved ranked and Legend League history, filters, and battle details.
-- Updated app icons, Halloween loading animation, widgets, and translations.
-- More accurate Town Hall upgrade limits and ongoing upgrade tracking.
+- Faster loading and smoother navigation, scrolling, and card reordering.
+- Improved ranked and Legend history, filters, and battle details.
+- Updated icons, Halloween animation, widgets, and translations.
+- More accurate upgrade limits and tracking.
 
-Please report any issues you encounter during testing.
+Please report issues found during testing.
