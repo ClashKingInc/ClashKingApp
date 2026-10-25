@@ -16,6 +16,7 @@ import {
   CwlLeague,
   WarCwl,
   WarInfo,
+  apiDate,
   isRecord,
   normalizeWarTag,
   record,
@@ -358,36 +359,44 @@ export class WarCwlService {
     const right = record(basic.opponent);
     const leftTag = normalizeWarTag(string(left.tag));
     const rightTag = normalizeWarTag(string(right.tag));
+    if (leftTag !== clanTag && rightTag !== clanTag) return this.loadManualCurrentWar(clanTag);
     const requestedIsRight = rightTag === clanTag;
-    const requested = requestedIsRight ? right : left;
     const opponent = requestedIsRight ? left : right;
     const opponentTag = requestedIsRight ? leftTag : rightTag;
-    const candidates = [
-      ...(requested.publicWarLog !== false ? [clanTag] : []),
-      ...(opponentTag && opponent.publicWarLog !== false ? [opponentTag] : []),
-    ];
-    for (const candidate of candidates) {
-      const war = await this.fetchRegularWar(candidate, string(basic.type));
-      if (war && isFullWar(war)) return regularResult(clanTag, war.reorderForClan(clanTag));
+    // Stored pointers (including publicWarLog) can outlive a matchup. Always
+    // ask our clan first; its live response may already describe a newer war.
+    const regular = await this.fetchRegularWar(clanTag, basic);
+    if (regular && isFullWar(regular) && warContainsClan(regular, clanTag))
+      return regularResult(clanTag, regular.reorderForClan(clanTag));
+    if (opponentTag && opponent.publicWarLog !== false) {
+      const war = await this.fetchRegularWar(opponentTag, basic);
+      // A public opponent can expose our private war, but only for this exact
+      // pairing and schedule. Never substitute that opponent's next war.
+      if (war && isFullWar(war) && warContainsClan(war, clanTag) && matchesScheduledWar(war, basic))
+        return regularResult(clanTag, war.reorderForClan(clanTag));
     }
-    return privateResult(clanTag);
+    return this.loadManualCurrentWar(clanTag, regular);
   }
 
-  private async loadManualCurrentWar(clanTag: string): Promise<WarCwl> {
-    const regular = await this.fetchRegularWar(clanTag);
-    if (regular && isFullWar(regular))
+  private async loadManualCurrentWar(clanTag: string, current?: WarInfo | null): Promise<WarCwl> {
+    const regular = current === undefined ? await this.fetchRegularWar(clanTag) : current;
+    if (regular && isFullWar(regular) && warContainsClan(regular, clanTag))
       return regularResult(clanTag, regular.reorderForClan(clanTag));
     const cwl = await this.loadCwl(clanTag);
     if (cwl) return cwl;
     return regular?.state === 'accessDenied' ? privateResult(clanTag) : notInWarResult(clanTag);
   }
 
-  private async fetchRegularWar(clanTag: string, warType?: string): Promise<WarInfo | null> {
+  private async fetchRegularWar(clanTag: string, basic?: JsonRecord): Promise<WarInfo | null> {
     const response = await Effect.runPromise(
       this.api.executeStatus(ProxyCurrentWarEndpoint, { path: { clanTag }, query: {}, body: {} }),
     );
     if (!response.ok) return response.status === 403 ? new WarInfo('accessDenied') : null;
-    return WarInfo.fromJson({ ...response.value, ...(warType ? { warType } : {}) });
+    const war = WarInfo.fromJson(response.value);
+    // A stale pointer's type must not label a newer live matchup as friendly.
+    return basic && matchesScheduledWar(war, basic)
+      ? WarInfo.fromJson({ ...response.value, warType: string(basic.type) })
+      : war;
   }
 
   private async loadCwl(clanTag: string, preferredWarTag?: string | null): Promise<WarCwl | null> {
@@ -474,6 +483,28 @@ function isFullWar(war: WarInfo): boolean {
     war.state !== 'accessDenied' &&
     war.clan !== null &&
     war.opponent !== null
+  );
+}
+
+function warContainsClan(war: WarInfo, tag: string): boolean {
+  return normalizeWarTag(war.clan?.tag) === tag || normalizeWarTag(war.opponent?.tag) === tag;
+}
+
+function matchesScheduledWar(war: WarInfo, basic: JsonRecord): boolean {
+  const left = normalizeWarTag(string(record(basic.clan).tag));
+  const right = normalizeWarTag(string(record(basic.opponent).tag));
+  const preparation = apiDate(basic.preparationStartTime);
+  const end = apiDate(basic.endTime);
+  return (
+    left !== null &&
+    right !== null &&
+    left !== right &&
+    warContainsClan(war, left) &&
+    warContainsClan(war, right) &&
+    preparation !== null &&
+    end !== null &&
+    war.preparationStartTime?.getTime() === preparation.getTime() &&
+    war.endTime?.getTime() === end.getTime()
   );
 }
 
