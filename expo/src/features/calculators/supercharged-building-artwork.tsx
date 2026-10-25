@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { View } from 'react-native';
-import { Image } from 'expo-image';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { Image, type ImageProps } from 'expo-image';
 import { useCKAccessibility } from '../../ui/accessibility';
 import { MobileWebImage } from '../../ui';
 
@@ -55,21 +56,39 @@ export function SuperchargedBuildingArtwork({
   const scale = size / Math.max(right - left, bottom - top);
   const effectScale = (source?.footprint ?? 3) / 3;
   const offsetY = (size - (bottom - top) * scale) / 2;
-  const paddingTop = source ? Math.max(0, (top - Math.min(top, groundBounds[1] * effectScale, sparkleBounds[1] * effectScale)) * scale - offsetY) : 0;
-  const paddingBottom = source ? Math.max(0, (Math.max(bottom, groundBounds[3] * effectScale, sparkleBounds[3] * effectScale) - bottom) * scale - offsetY) : 0;
+  const paddingTop = source
+    ? Math.max(
+        0,
+        (top - Math.min(top, groundBounds[1] * effectScale, sparkleBounds[1] * effectScale)) *
+          scale -
+          offsetY,
+      )
+    : 0;
+  const paddingBottom = source
+    ? Math.max(
+        0,
+        (Math.max(bottom, groundBounds[3] * effectScale, sparkleBounds[3] * effectScale) - bottom) *
+          scale -
+          offsetY,
+      )
+    : 0;
   return (
     <View style={{ paddingTop, paddingBottom }}>
-    {!source || source.level !== level ? (
-      <MobileWebImage imageUrl={imageUrl} contentFit="contain" style={{ width: size, height: size }} />
-    ) : (
-    <SourceArtwork
-      key={`${buildingId}-${level}-${imageUrl}`}
-      source={source}
-      imageUrl={imageUrl}
-      active={active}
-      size={size}
-    />
-    )}
+      {!source || source.level !== level ? (
+        <MobileWebImage
+          imageUrl={imageUrl}
+          contentFit="contain"
+          style={{ width: size, height: size }}
+        />
+      ) : (
+        <SourceArtwork
+          key={`${buildingId}-${level}-${imageUrl}`}
+          source={source}
+          imageUrl={imageUrl}
+          active={active}
+          size={size}
+        />
+      )}
     </View>
   );
 }
@@ -87,6 +106,15 @@ function SourceArtwork({
 }) {
   const { reduceMotion } = useCKAccessibility();
   const [matchesSource, setMatchesSource] = useState(false);
+  const focused = useIsFocused();
+  const [foreground, setForeground] = useState(AppState.currentState === 'active');
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) =>
+      setForeground(state === 'active'),
+    );
+    return () => subscription.remove();
+  }, []);
+  const animate = focused && foreground && !reduceMotion;
   const [left, top, right, bottom] = source.bounds;
   const effectScale = (source.footprint ?? 3) / 3;
   const scaledBounds = ([x1, y1, x2, y2]: Bounds): Bounds => [
@@ -115,10 +143,9 @@ function SourceArtwork({
   return (
     <View style={{ width: size, height: size }}>
       {showEffects ? (
-        <Image
+        <SuperchargeEffectLayer
           source={require('../../../assets/clashking/calculators/supercharge-ground.webp')}
-          contentFit="fill"
-          autoplay={!reduceMotion}
+          animate={animate}
           style={place(ground)}
         />
       ) : null}
@@ -133,13 +160,49 @@ function SourceArtwork({
         }}
       />
       {showEffects ? (
-        <Image
+        <SuperchargeEffectLayer
           source={require('../../../assets/clashking/calculators/supercharge-sparkles.webp')}
-          contentFit="fill"
-          autoplay={!reduceMotion}
+          animate={animate}
           style={place(sparkle)}
         />
       ) : null}
     </View>
+  );
+}
+
+function SuperchargeEffectLayer({
+  source,
+  style,
+  animate,
+}: {
+  source: ImageProps['source'];
+  style: ImageProps['style'];
+  animate: boolean;
+}) {
+  const image = useRef<Image>(null);
+  const updatePlayback = useCallback(() => {
+    const current = image.current;
+    if (!current) return;
+    // autoplay controls loading; native start/stop also updates already-loaded
+    // images on both platforms. A late load must respect the current focus state.
+    void (animate ? current.startAnimating() : current.stopAnimating()).catch(() => {
+      // The native view may disappear while this decorative update is queued.
+    });
+  }, [animate]);
+  useEffect(updatePlayback, [updatePlayback]);
+  return (
+    <Image
+      ref={image}
+      source={source}
+      style={style}
+      // Apple's animated-WebP codec can be slow on transparent animations.
+      // Decode with libwebp while retaining the original game frames.
+      useAppleWebpCodec={false}
+      contentFit="contain"
+      enforceEarlyResizing
+      transition={0}
+      autoplay={animate}
+      onLoad={updatePlayback}
+    />
   );
 }
