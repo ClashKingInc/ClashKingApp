@@ -76,6 +76,15 @@ The Clash of Clans companion app for tracking stats, managing clans, and analyzi
 
 ### Development Commands
 
+- `npm run device:hub` - Open the local device dashboard at `http://127.0.0.1:7358` (run from `expo/`).
+  This uses Expo Device Hub's standalone mode and binds only to loopback. Its Metro
+  plugin is excluded from devtools autolinking because the shared Metro server is
+  publicly tunneled. Keep that exclusion: the dashboard can control devices and
+  execute host commands. The standalone dashboard does not change the app UI or
+  require a new phone build. Starting it does not boot a simulator or emulator.
+  Device Hub 0.18 expects the semicolon-separated SDK package table emitted by
+  Android command-line tools 22. Version 23 changes that output and makes the
+  new-emulator image picker appear empty even with system images installed.
 - `npm ci` - Install locked dependencies from `expo/`
 - `npm run start` - Start Expo for native or web development
 - `npm run lint` / `npm run typecheck` - Run static checks
@@ -98,8 +107,8 @@ Set `EXPO_PUBLIC_CK_API_ENV` to `development`, `staging`, or `local` to select
 the non-production environment. Optional `EXPO_PUBLIC_CK_API_BASE_URL`,
 `EXPO_PUBLIC_CK_API_V2_BASE_URL`, `EXPO_PUBLIC_CK_PROXY_BASE_URL`, and
 `EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL` values override canonical environment
-URLs. CI alpha builds use `local-api.clashk.ing`, beta builds use
-`dev-api.clashk.ing`, and production builds use `api.clashk.ing`.
+URLs. CI alpha builds use development, beta builds use staging, and production
+builds use `api.clashk.ing`.
 
 ## 🌐 ClashKing Ecosystem
 
@@ -137,7 +146,7 @@ and feature services.
 
 ### Key Technologies
 
-- **Expo SDK 57 / React Native** - iOS, Android, and static web runtime
+- **Expo SDK 58 / React Native** - iOS, Android, and static web runtime
 - **Expo Router** - Cross-platform routing and static web export
 - **TanStack Query and Zustand** - Remote and local state
 - **Expo config plugins / CNG** - Reproducible native projects and widgets
@@ -155,7 +164,7 @@ The `Release mobile app` workflow accepts a ref, an exact numeric version, and a
 
 Store builds embed their JavaScript and do not connect to Metro. The Expo server URLs are for development clients only. Both alpha and beta use numeric native versions (for example `0.5.0`) and separate GitHub/OTA suffixes (`0.5.0-alpha`, `0.5.0-beta`). TestFlight groups control access on iOS; invited external testers require Apple's TestFlight review before testing.
 
-Pushing `v0.5.0-alpha` (or a later `vX.Y.0-alpha` tag) automatically starts both native store jobs from that exact commit. Tagged alpha builds disable OTA so the first Expo binaries can ship before API/R2 signing infrastructure exists. To enable OTA later, publish a new native `x.y.0` baseline with `enable_updates=true` in the manual workflow, then publish compatible patches on the same track. Beta and production require OTA infrastructure. `release.yaml` can run on a tag before it has been merged to the default branch; its manual dispatch becomes available after it reaches the default branch.
+Pushing an alpha tag such as `v0.6.2-alpha` automatically starts both native store jobs from that exact commit. Tagged alpha builds disable OTA and build native binaries, including patch versions, without requiring API/R2 signing infrastructure. To enable OTA later, publish a new native `x.y.0` baseline with `enable_updates=true` in the manual workflow, then publish compatible patches on the same track. Beta and production require OTA infrastructure. `release.yaml` can run on a tag before it has been merged to the default branch; its manual dispatch becomes available after it reaches the default branch.
 
 The existing Play closed track is `alpha`; set `PLAY_ALPHA_TRACK` if its identifier differs. `update-news/whatsnew-en-US` supplies the Play release notes, TestFlight What to Test, and default GitHub release notes. Alpha and beta never submit the app for public App Store release. TestFlight upload does not create tester groups or submit an external beta review.
 
