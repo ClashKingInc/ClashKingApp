@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { ChevronRight, Pencil, Settings2, Share2 } from 'lucide-react-native';
-import { Image } from 'expo-image';
+import { HeaderArtwork } from '../../ui/header-artwork';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageAssets } from '../../core/assets/image-assets';
@@ -18,7 +18,8 @@ import { sharePageLink } from '../../core/deep-links/share-page-link';
 import { toIntlLocale, useI18n } from '../../i18n';
 import {
   CKText,
-  PageSkeleton,
+  SkeletonContent,
+  useSkeletonContent,
   MobileWebImage,
   PressableSurface,
   ProfileHeaderAction,
@@ -77,7 +78,31 @@ export function CompetitiveProfileScreen({
   const [notice, setNotice] = useState('');
   const [saving, setSaving] = useState(false);
   const [headerSize, setHeaderSize] = useState({ width: 0, height: 0 });
-  const profile = draft ?? query.data;
+  const loadedProfile = draft ?? query.data;
+  const contentLoading = query.loading && !loadedProfile;
+  const profile: CompetitiveProfile | undefined =
+    loadedProfile ??
+    (contentLoading
+      ? {
+          userId: '',
+          displayName: 'ClashKing profile',
+          avatarUrl: null,
+          discordAvatarUrl: 'loading',
+          bannerUrl: null,
+          private: false,
+          hideDiscord: false,
+          bio: '',
+          socials: {},
+          achievements: [],
+          tournamentHistory: [],
+          teams: [],
+          accounts: [0, 1, 2].map((index) => ({
+            tag: `loading-${index}`,
+            name: 'Linked player',
+            townHallLevel: 1,
+          })),
+        }
+      : undefined);
   const signedInUser = runtime.auth.state.currentUser;
   // Identity photos come only from Discord. Never display a legacy upload
   // returned by an older API or persist a provider photo as custom media.
@@ -151,266 +176,273 @@ export function CompetitiveProfileScreen({
           onPress={query.refresh}
         />
       ) : null}
-      {query.loading && !profile ? <PageSkeleton kind="profile" /> : null}
-      {profile ? (
-        <>
-          <View
-            style={[styles.header, { minHeight: 236 + insets.top, paddingTop: ckSpacing.lg + insets.top }]}
-            onLayout={(event) => {
-              const { width, height } = event.nativeEvent.layout;
-              setHeaderSize((current) =>
-                current.width === width && current.height === height ? current : { width, height },
-              );
-            }}
-          >
-            <Image
-              // Original profile-only artwork; do not substitute another page's backdrop.
-              source={require('../../../assets/clashking/profile/profile-selected-banner.png')}
-              style={StyleSheet.absoluteFill}
-              contentFit="cover"
-              contentPosition="center"
-            />
-            {/* Native SVG percentages resolve against padded content bounds and
-                leave a rectangular seam. Match the entire measured backdrop. */}
-            {headerSize.width > 0 ? (
-              <Svg
+      <SkeletonContent loading={contentLoading}>
+        {profile ? (
+          <>
+            <View
+              style={[
+                styles.header,
+                { minHeight: 236 + insets.top, paddingTop: ckSpacing.lg + insets.top },
+              ]}
+              onLayout={(event) => {
+                const { width, height } = event.nativeEvent.layout;
+                setHeaderSize((current) =>
+                  current.width === width && current.height === height
+                    ? current
+                    : { width, height },
+                );
+              }}
+            >
+              <HeaderArtwork
+                // Original profile-only artwork; do not substitute another page's backdrop.
+                source={require('../../../assets/clashking/profile/profile-selected-banner.png')}
                 style={StyleSheet.absoluteFill}
-                width={headerSize.width}
-                height={headerSize.height}
-                viewBox={`0 0 ${headerSize.width} ${headerSize.height}`}
-                pointerEvents="none"
-              >
-                <Defs>
-                  <LinearGradient id="profile-identity-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <Stop offset="0" stopColor="#070811" stopOpacity={0.06} />
-                    <Stop offset="0.45" stopColor="#070811" stopOpacity={0.08} />
-                    <Stop offset="1" stopColor="#070811" stopOpacity={0.86} />
-                  </LinearGradient>
-                </Defs>
-                <Rect
+                contentFit="cover"
+                contentPosition="center"
+              />
+              {/* Native SVG percentages resolve against padded content bounds and
+                leave a rectangular seam. Match the entire measured backdrop. */}
+              {headerSize.width > 0 ? (
+                <Svg
+                  style={StyleSheet.absoluteFill}
                   width={headerSize.width}
                   height={headerSize.height}
-                  fill="url(#profile-identity-scrim)"
-                />
-              </Svg>
-            ) : null}
-            <View style={styles.identity}>
-              {avatarUrl ? (
-                <MobileWebImage imageUrl={avatarUrl} contentFit="cover" style={styles.avatar} />
-              ) : null}
-              <View style={styles.identityText}>
-                <CKText role="screenTitle" style={[styles.name, { color: '#FFFFFF' }]}>
-                  {profile.discordHandle || profile.displayName || t('competitiveProfile')}
-                </CKText>
-              </View>
-              <View style={styles.headerActions}>
-                {ownProfile && !editing ? (
-                  <ProfileHeaderAction
-                    label={t('competitiveEditProfile')}
-                    icon={<Pencil color="#FFFFFF" size={20} />}
-                    onPress={() => {
-                      setDraft(query.data);
-                      setEditing(true);
-                    }}
-                  />
-                ) : null}
-                <ProfileHeaderAction
-                  label={t('gameAssetsShare')}
-                  icon={<Share2 color="#FFFFFF" size={20} />}
-                  onPress={() =>
-                    void sharePageLink(
-                      { kind: 'page', page: 'profile', params: { userId: profile.userId } },
-                      profile.discordHandle || profile.displayName || t('competitiveProfile'),
-                    ).catch(() => setNotice(t('generalError')))
-                  }
-                />
-              </View>
-            </View>
-          </View>
-          {teams.length ? (
-            <View style={styles.teamBadges}>
-              {teams.map((team) => (
-                <PressableSurface
-                  key={team.id}
-                  onPress={() => openTeam(team.id)}
-                  accessibilityLabel={team.clanName}
-                  style={[
-                    styles.teamBadge,
-                    { backgroundColor: colorWithAlpha(theme.onSurface, 0.05) },
-                  ]}
+                  viewBox={`0 0 ${headerSize.width} ${headerSize.height}`}
+                  pointerEvents="none"
                 >
-                  <MobileWebImage
-                    imageUrl={ImageAssets.warClan}
-                    style={{ width: 24, height: 24 }}
+                  <Defs>
+                    <LinearGradient id="profile-identity-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <Stop offset="0" stopColor="#070811" stopOpacity={0.06} />
+                      <Stop offset="0.45" stopColor="#070811" stopOpacity={0.08} />
+                      <Stop offset="1" stopColor="#070811" stopOpacity={0.86} />
+                    </LinearGradient>
+                  </Defs>
+                  <Rect
+                    width={headerSize.width}
+                    height={headerSize.height}
+                    fill="url(#profile-identity-scrim)"
                   />
-                  <CKText role="metadata">{team.clanName}</CKText>
-                  <ChevronRight size={14} color={theme.onSurfaceVariant} />
-                </PressableSurface>
-              ))}
-            </View>
-          ) : null}
-          {notice ? <CKText accessibilityLiveRegion="polite">{notice}</CKText> : null}
-          {editing && ownProfile ? (
-            <View style={styles.section}>
-              <CKText role="sectionTitle">{t('competitiveEditProfile')}</CKText>
-              <View style={styles.toggle}>
-                <CKText style={{ flex: 1 }}>{t('competitivePrivate')}</CKText>
-                <Switch
-                  accessibilityLabel={t('competitivePrivate')}
-                  value={profile.private}
-                  onValueChange={(value) => change('private', value)}
-                />
-              </View>
-              <View style={styles.inline}>
-                <ProfileButton
-                  primary
-                  label={t('presetsSave')}
-                  disabled={saving}
-                  onPress={() => void save()}
-                />
-                <ProfileButton label={t('generalCancel')} disabled={saving} onPress={cancel} />
-              </View>
-            </View>
-          ) : (
-            <>
-              <ProfileTabs
-                variant="underline"
-                overflow="menu"
-                selectedKey={tab}
-                onSelect={setTab}
-                tabs={[
-                  { key: 'accounts', label: t('accountsMenuTitle') },
-                  { key: 'achievements', label: t('achievementsTitle') },
-                  { key: 'competition', label: t('competitiveCompetition') },
-                ]}
-              />
-              {/* Do not keep hidden model renderers running behind another tab. */}
-              {tab === 'achievements' ? (
-                <View>
-                  <ProfileAchievements
-                    awards={profile.achievements ?? []}
-                    verifiedCount={profile.verifiedAccountCount}
-                  />
-                </View>
+                </Svg>
               ) : null}
-              {tab === 'accounts' ? (
-                <View style={styles.section}>
-                  {ownProfile && onManageAccounts ? (
-                    <PressableSurface
-                      accessibilityRole="button"
-                      accessibilityLabel={t('drawerManageAccounts')}
-                      style={styles.manageAccounts}
-                      onPress={onManageAccounts}
-                    >
-                      <Settings2 size={16} color={theme.onSurfaceVariant} />
-                      <CKText role="metadata" muted>
-                        {t('drawerManageAccounts')}
-                      </CKText>
-                      <ChevronRight size={16} color={theme.onSurfaceVariant} />
-                    </PressableSurface>
+              <View style={styles.identity}>
+                {avatarUrl ? (
+                  <MobileWebImage imageUrl={avatarUrl} contentFit="cover" style={styles.avatar} />
+                ) : null}
+                <View style={styles.identityText}>
+                  <CKText role="screenTitle" style={[styles.name, { color: '#FFFFFF' }]}>
+                    {profile.discordHandle || profile.displayName || t('competitiveProfile')}
+                  </CKText>
+                </View>
+                <View style={styles.headerActions}>
+                  {ownProfile && !editing ? (
+                    <ProfileHeaderAction
+                      label={t('competitiveEditProfile')}
+                      icon={<Pencil color="#FFFFFF" size={20} />}
+                      onPress={() => {
+                        setDraft(query.data);
+                        setEditing(true);
+                      }}
+                    />
                   ) : null}
-                  {profile.accounts?.length ? (
-                    // The profile endpoint only returns verified accounts.
-                    // Keep this source even though the tab uses the shorter label.
-                    profile.accounts.map((account) => (
-                      <ProfileAccount key={account.tag} account={account} />
-                    ))
-                  ) : (
-                    <ProfileEmpty />
-                  )}
+                  <ProfileHeaderAction
+                    label={t('gameAssetsShare')}
+                    icon={<Share2 color="#FFFFFF" size={20} />}
+                    onPress={() =>
+                      void sharePageLink(
+                        { kind: 'page', page: 'profile', params: { userId: profile.userId } },
+                        profile.discordHandle || profile.displayName || t('competitiveProfile'),
+                      ).catch(() => setNotice(t('generalError')))
+                    }
+                  />
                 </View>
-              ) : null}
-              {tab === 'competition' ? (
-                !profile.tournamentHistory?.length &&
-                !allTeams.length &&
-                !profile.tournamentStats?.attacks ? (
-                  <View style={[styles.section, { paddingVertical: 22, gap: 10 }]}>
-                    <CKText role="sectionTitle">{t('competitiveNoHistory')}</CKText>
-                    <CKText muted>{t('competitiveHistoryHint')}</CKText>
+              </View>
+            </View>
+            {teams.length ? (
+              <View style={styles.teamBadges}>
+                {teams.map((team) => (
+                  <PressableSurface
+                    key={team.id}
+                    onPress={() => openTeam(team.id)}
+                    accessibilityLabel={team.clanName}
+                    style={[
+                      styles.teamBadge,
+                      { backgroundColor: colorWithAlpha(theme.onSurface, 0.05) },
+                    ]}
+                  >
+                    <MobileWebImage
+                      imageUrl={ImageAssets.warClan}
+                      style={{ width: 24, height: 24 }}
+                    />
+                    <CKText role="metadata">{team.clanName}</CKText>
+                    <ChevronRight size={14} color={theme.onSurfaceVariant} />
+                  </PressableSurface>
+                ))}
+              </View>
+            ) : null}
+            {notice ? <CKText accessibilityLiveRegion="polite">{notice}</CKText> : null}
+            {editing && ownProfile ? (
+              <View style={styles.section}>
+                <CKText role="sectionTitle">{t('competitiveEditProfile')}</CKText>
+                <View style={styles.toggle}>
+                  <CKText style={{ flex: 1 }}>{t('competitivePrivate')}</CKText>
+                  <Switch
+                    accessibilityLabel={t('competitivePrivate')}
+                    value={profile.private}
+                    onValueChange={(value) => change('private', value)}
+                  />
+                </View>
+                <View style={styles.inline}>
+                  <ProfileButton
+                    primary
+                    label={t('presetsSave')}
+                    disabled={saving}
+                    onPress={() => void save()}
+                  />
+                  <ProfileButton label={t('generalCancel')} disabled={saving} onPress={cancel} />
+                </View>
+              </View>
+            ) : (
+              <>
+                <ProfileTabs
+                  variant="underline"
+                  overflow="menu"
+                  selectedKey={tab}
+                  onSelect={setTab}
+                  tabs={[
+                    { key: 'accounts', label: t('accountsMenuTitle') },
+                    { key: 'achievements', label: t('achievementsTitle') },
+                    { key: 'competition', label: t('competitiveCompetition') },
+                  ]}
+                />
+                {/* Do not keep hidden model renderers running behind another tab. */}
+                {tab === 'achievements' ? (
+                  <View>
+                    <ProfileAchievements
+                      awards={profile.achievements ?? []}
+                      verifiedCount={profile.verifiedAccountCount}
+                    />
                   </View>
-                ) : (
+                ) : null}
+                {tab === 'accounts' ? (
                   <View style={styles.section}>
-                    <CKText role="sectionTitle">{t('navigationStatistics')}</CKText>
-                    {profile.statsAvailability ? (
-                      <>
-                        <View style={styles.metrics}>
-                          {(
-                            [
-                              ['warAttacksTitle', profile.tournamentStats?.attacks],
-                              [
-                                'statsThreeStarRate',
-                                profile.tournamentStats?.hitRatePercent == null
-                                  ? undefined
-                                  : `${profile.tournamentStats.hitRatePercent.toFixed(1)}%`,
-                              ],
-                              [
-                                'statsAverageDestruction',
-                                profile.tournamentStats?.averageDestruction == null
-                                  ? undefined
-                                  : `${profile.tournamentStats.averageDestruction.toFixed(1)}%`,
-                              ],
-                            ] as const
-                          ).map(([label, value]) => (
-                            <View
-                              key={label}
-                              style={[styles.metric, { backgroundColor: theme.card }]}
-                            >
-                              <CKText role="titleSmall">{value ?? '—'}</CKText>
-                              <CKText muted role="metadata">
-                                {t(label)}
-                              </CKText>
-                            </View>
-                          ))}
-                        </View>
-                        <CKText muted role="metadata">
-                          {profile.statsAvailability.observedMatches}/
-                          {profile.statsAvailability.totalCompletedMatches} · {t('cwlMatches')}
+                    {ownProfile && onManageAccounts ? (
+                      <PressableSurface
+                        accessibilityRole="button"
+                        accessibilityLabel={t('drawerManageAccounts')}
+                        style={styles.manageAccounts}
+                        onPress={onManageAccounts}
+                      >
+                        <Settings2 size={16} color={theme.onSurfaceVariant} />
+                        <CKText role="metadata" muted>
+                          {t('drawerManageAccounts')}
                         </CKText>
-                      </>
-                    ) : (
-                      <ProfileEmpty />
-                    )}
-                    <CKText role="sectionTitle">{t('generalHistory')}</CKText>
-                    {profile.tournamentHistory?.length ? (
-                      profile.tournamentHistory.map((entry) => (
-                        <ProfileRow
-                          key={`${entry.id}:${entry.teamId}`}
-                          title={entry.name}
-                          subtitle={entry.clanName}
-                          image={ImageAssets.war}
-                          onPress={() => onTournament(entry.id)}
-                        />
-                      ))
-                    ) : (
-                      <ProfileEmpty />
-                    )}
-                    <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
-                    {allTeams.length ? (
-                      allTeams.map((team) => (
-                        <ProfileRow
-                          key={team.id}
-                          title={team.clanName}
-                          subtitle={`${team.size}v${team.size}${team.leftAt ? ` · ${t('generalHistory')}` : ''}`}
-                          image={ImageAssets.warClan}
-                          onPress={() => openTeam(team.id)}
-                        />
+                        <ChevronRight size={16} color={theme.onSurfaceVariant} />
+                      </PressableSurface>
+                    ) : null}
+                    {profile.accounts?.length ? (
+                      // The profile endpoint only returns verified accounts.
+                      // Keep this source even though the tab uses the shorter label.
+                      profile.accounts.map((account) => (
+                        <ProfileAccount key={account.tag} account={account} />
                       ))
                     ) : (
                       <ProfileEmpty />
                     )}
                   </View>
-                )
-              ) : null}
-            </>
-          )}
-        </>
-      ) : null}
+                ) : null}
+                {tab === 'competition' ? (
+                  !profile.tournamentHistory?.length &&
+                  !allTeams.length &&
+                  !profile.tournamentStats?.attacks ? (
+                    <View style={[styles.section, { paddingVertical: 22, gap: 10 }]}>
+                      <CKText role="sectionTitle">{t('competitiveNoHistory')}</CKText>
+                      <CKText muted>{t('competitiveHistoryHint')}</CKText>
+                    </View>
+                  ) : (
+                    <View style={styles.section}>
+                      <CKText role="sectionTitle">{t('navigationStatistics')}</CKText>
+                      {profile.statsAvailability ? (
+                        <>
+                          <View style={styles.metrics}>
+                            {(
+                              [
+                                ['warAttacksTitle', profile.tournamentStats?.attacks],
+                                [
+                                  'statsThreeStarRate',
+                                  profile.tournamentStats?.hitRatePercent == null
+                                    ? undefined
+                                    : `${profile.tournamentStats.hitRatePercent.toFixed(1)}%`,
+                                ],
+                                [
+                                  'statsAverageDestruction',
+                                  profile.tournamentStats?.averageDestruction == null
+                                    ? undefined
+                                    : `${profile.tournamentStats.averageDestruction.toFixed(1)}%`,
+                                ],
+                              ] as const
+                            ).map(([label, value]) => (
+                              <View
+                                key={label}
+                                style={[styles.metric, { backgroundColor: theme.card }]}
+                              >
+                                <CKText role="titleSmall">{value ?? '—'}</CKText>
+                                <CKText muted role="metadata">
+                                  {t(label)}
+                                </CKText>
+                              </View>
+                            ))}
+                          </View>
+                          <CKText muted role="metadata">
+                            {profile.statsAvailability.observedMatches}/
+                            {profile.statsAvailability.totalCompletedMatches} · {t('cwlMatches')}
+                          </CKText>
+                        </>
+                      ) : (
+                        <ProfileEmpty />
+                      )}
+                      <CKText role="sectionTitle">{t('generalHistory')}</CKText>
+                      {profile.tournamentHistory?.length ? (
+                        profile.tournamentHistory.map((entry) => (
+                          <ProfileRow
+                            key={`${entry.id}:${entry.teamId}`}
+                            title={entry.name}
+                            subtitle={entry.clanName}
+                            image={ImageAssets.war}
+                            onPress={() => onTournament(entry.id)}
+                          />
+                        ))
+                      ) : (
+                        <ProfileEmpty />
+                      )}
+                      <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
+                      {allTeams.length ? (
+                        allTeams.map((team) => (
+                          <ProfileRow
+                            key={team.id}
+                            title={team.clanName}
+                            subtitle={`${team.size}v${team.size}${team.leftAt ? ` · ${t('generalHistory')}` : ''}`}
+                            image={ImageAssets.warClan}
+                            onPress={() => openTeam(team.id)}
+                          />
+                        ))
+                      ) : (
+                        <ProfileEmpty />
+                      )}
+                    </View>
+                  )
+                ) : null}
+              </>
+            )}
+          </>
+        ) : null}
+      </SkeletonContent>
     </ScrollView>
   );
 }
 
 function ProfileAccount({ account }: { account: CompetitiveProfile['accounts'][number] }) {
   const runtime = useAppRuntime();
+  const contentLoading = useSkeletonContent();
   const theme = useCKTheme();
   const { t, locale } = useI18n();
   const [player, setPlayer] = useState<Player | undefined>(() =>
@@ -418,6 +450,7 @@ function ProfileAccount({ account }: { account: CompetitiveProfile['accounts'][n
   );
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    if (contentLoading) return;
     let active = true;
     // Reuse the player service's deduplicated, short-lived current-data cache.
     // Only enrich accounts returned by the verified profile endpoint; never
@@ -434,7 +467,7 @@ function ProfileAccount({ account }: { account: CompetitiveProfile['accounts'][n
     return () => {
       active = false;
     };
-  }, [runtime.players, account.tag]);
+  }, [runtime.players, account.tag, contentLoading]);
   const townHall = player?.townHallLevel ?? account.townHallLevel;
   return (
     <PressableSurface

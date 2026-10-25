@@ -38,9 +38,17 @@ export interface RankingsRootProps {
   readonly onBack: () => void;
   readonly openPlayer: (player: Player) => void;
   readonly openClan: (clan: Clan) => void;
+  readonly openPlayerTag?: (tag: string) => void;
+  readonly openClanTag?: (tag: string) => void;
 }
 
-export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps) {
+export function RankingsRoot({
+  onBack,
+  openPlayer,
+  openClan,
+  openPlayerTag,
+  openClanTag,
+}: RankingsRootProps) {
   'use no memo';
   const runtime = useAppRuntime();
   useSyncExternalStore(
@@ -177,6 +185,8 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
   }, [activeBoard, linkKey, activeStats]);
 
   const openEntry = async (entry: RankingEntry) => {
+    if (entry.audience === 'players' && openPlayerTag) return openPlayerTag(entry.tag);
+    if (entry.audience !== 'players' && openClanTag) return openClanTag(entry.tag);
     if (entry.audience === 'players')
       openPlayer(await runtime.players.getPlayerAndClanData(entry.tag));
     else openClan(await runtime.clans.getClanAndWarData(entry.tag));
@@ -197,52 +207,60 @@ export function RankingsRoot({ onBack, openPlayer, openClan }: RankingsRootProps
     />
   );
   const grid = (
-        <DestinationHub
-          title={t('homeRankingsAndStats')}
-          onBack={onBack}
-          groups={[
-            {
-              key: 'statistics',
-              title: t('sideStatsTitle'),
-              items: statsSections.map((section) => ({
-                key: 'stats-' + section,
-                label: sectionLabel(section, t),
-                imageUrl: sectionImage(section),
-                backgroundUrl: sectionBackdrop(section),
-                accentColor: { war: ckColors.lossRed, ranked: ckColors.capitalPurple, cwl: ckColors.warGold, armies: ckColors.legendBlue, items: ckColors.upgradePets, players: ckColors.builderBlue, clans: ckColors.donationGreen }[section],
-                onPress: () => setActiveStats(section),
-              })),
-            },
-            {
-              key: 'players',
-              title: t('rankingsPlayerSection'),
-              items: rankingBoards
-                .filter((board) => board.audience === RankingAudience.players)
-                .map((board) => ({
-                  key: board.name,
-                  label: boardLabel(board, t),
-                  imageUrl: rankingBoardArtwork(board),
-                  backgroundUrl: rankingBackground(board),
-                  accentColor: rankingBoardAccentColor(board),
-                  onPress: () => openBoard(board),
-                })),
-            },
-            {
-              key: 'clans',
-              title: t('rankingsClanSection'),
-              items: rankingBoards
-                .filter((board) => board.audience === RankingAudience.clans)
-                .map((board) => ({
-                  key: board.name,
-                  label: boardLabel(board, t),
-                  imageUrl: rankingBoardArtwork(board),
-                  backgroundUrl: rankingBackground(board),
-                  accentColor: rankingBoardAccentColor(board),
-                  onPress: () => openBoard(board),
-                })),
-            },
-          ]}
-        />
+    <DestinationHub
+      title={t('homeRankingsAndStats')}
+      onBack={onBack}
+      groups={[
+        {
+          key: 'statistics',
+          title: t('sideStatsTitle'),
+          items: statsSections.map((section) => ({
+            key: 'stats-' + section,
+            label: sectionLabel(section, t),
+            imageUrl: sectionImage(section),
+            backgroundUrl: sectionBackdrop(section),
+            accentColor: {
+              war: ckColors.lossRed,
+              ranked: ckColors.capitalPurple,
+              cwl: ckColors.warGold,
+              armies: ckColors.legendBlue,
+              items: ckColors.upgradePets,
+              players: ckColors.builderBlue,
+              clans: ckColors.donationGreen,
+            }[section],
+            onPress: () => setActiveStats(section),
+          })),
+        },
+        {
+          key: 'players',
+          title: t('rankingsPlayerSection'),
+          items: rankingBoards
+            .filter((board) => board.audience === RankingAudience.players)
+            .map((board) => ({
+              key: board.name,
+              label: boardLabel(board, t),
+              imageUrl: rankingBoardArtwork(board),
+              backgroundUrl: rankingBackground(board),
+              accentColor: rankingBoardAccentColor(board),
+              onPress: () => openBoard(board),
+            })),
+        },
+        {
+          key: 'clans',
+          title: t('rankingsClanSection'),
+          items: rankingBoards
+            .filter((board) => board.audience === RankingAudience.clans)
+            .map((board) => ({
+              key: board.name,
+              label: boardLabel(board, t),
+              imageUrl: rankingBoardArtwork(board),
+              backgroundUrl: rankingBackground(board),
+              accentColor: rankingBoardAccentColor(board),
+              onPress: () => openBoard(board),
+            })),
+        },
+      ]}
+    />
   );
 
   return (

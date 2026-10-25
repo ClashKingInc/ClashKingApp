@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import {
   memo,
   useCallback,
@@ -9,7 +9,10 @@ import {
   type ReactNode,
   type SetStateAction,
 } from 'react';
-import { RankedCheckerBackground, type RankedCheckerColor } from '../../../ui/ranked-checker-background';
+import {
+  RankedCheckerBackground,
+  type RankedCheckerColor,
+} from '../../../ui/ranked-checker-background';
 import {
   ActivityIndicator,
   FlatList,
@@ -50,7 +53,7 @@ import {
   ErrorState,
   MobileWebImage,
   ProfileTabs,
-  PageSkeleton,
+  SkeletonContent,
   Surface,
   ProfilePageHeader,
   ProfileStatChip,
@@ -179,7 +182,9 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
   const troopState = provider.currentState;
   if (
     provider.section === StatsSection.items &&
-    troopState.data instanceof StatsTroopStatsResponse
+    (troopState.data instanceof StatsTroopStatsResponse ||
+      troopState.status === StatsLoadStatus.loading ||
+      troopState.status === StatsLoadStatus.idle)
   ) {
     return (
       <SafeAreaView
@@ -187,7 +192,12 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
         style={[styles.fill, { backgroundColor: theme.background }]}
       >
         <ItemsSection
-          data={troopState.data}
+          data={
+            troopState.data instanceof StatsTroopStatsResponse
+              ? troopState.data
+              : loadingTroopStats(provider.dates)
+          }
+          contentLoading={!(troopState.data instanceof StatsTroopStatsResponse)}
           hero={hero}
           horizontal={horizontal}
           bottomInset={insets.bottom}
@@ -228,12 +238,12 @@ function StatsSectionContent({
   const { t } = useI18n();
   const theme = useCKTheme();
   const [emptyFilters, setEmptyFilters] = useState(false);
-  if (state.status === StatsLoadStatus.loading) {
+  if (state.status === StatsLoadStatus.loading && !state.data) {
     if (provider.section === StatsSection.armies)
       return <ArmySetupSection key={armyControlsKey(provider)} provider={provider} listLoading />;
-    return <StatsSkeleton />;
+    return <StatsSkeleton provider={provider} />;
   }
-  if (state.status === StatsLoadStatus.error)
+  if (state.status === StatsLoadStatus.error && !state.data)
     return (
       <View style={styles.section}>
         {provider.section === StatsSection.armies ? (
@@ -282,7 +292,7 @@ function StatsSectionContent({
   if (!state.data) {
     if (provider.section === StatsSection.armies)
       return <ArmySetupSection key={armyControlsKey(provider)} provider={provider} listLoading />;
-    return <StatsSkeleton />;
+    return <StatsSkeleton provider={provider} />;
   }
   let content: ReactNode;
   switch (provider.section) {
@@ -305,7 +315,12 @@ function StatsSectionContent({
       content = <ItemsSection data={state.data as StatsTroopStatsResponse} />;
       break;
     case StatsSection.ranked:
-      content = <RankedOverview data={state.data as StatsLegendResponse} dates={provider.datesFor(StatsSection.ranked)} />;
+      content = (
+        <RankedOverview
+          data={state.data as StatsLegendResponse}
+          dates={provider.datesFor(StatsSection.ranked)}
+        />
+      );
       break;
     case StatsSection.war:
       content = <WarOverview data={state.data as StatsPerformanceResponse} />;
@@ -334,6 +349,7 @@ function StatsSectionContent({
 }
 function ItemsSection({
   data,
+  contentLoading = false,
   hero,
   horizontal,
   bottomInset,
@@ -341,6 +357,7 @@ function ItemsSection({
   error,
 }: {
   data?: StatsTroopStatsResponse;
+  contentLoading?: boolean;
   hero?: ReactNode;
   horizontal?: number;
   bottomInset?: number;
@@ -472,6 +489,7 @@ function ItemsSection({
   return index ? (
     // Keep the list and its header tabs mounted while local filters change; their native scroll offsets live here.
     <LegendCategoryRanking
+      contentLoading={contentLoading}
       category={category}
       index={index}
       locale={locale}
@@ -751,6 +769,7 @@ type ExpandedLegendItem = {
 };
 
 function LegendCategoryRanking({
+  contentLoading = false,
   category,
   index,
   locale,
@@ -766,6 +785,7 @@ function LegendCategoryRanking({
   cohort,
   onSelectCohort,
 }: {
+  readonly contentLoading?: boolean;
   readonly category: LegendCategory;
   readonly index: LegendCategoryIndex;
   readonly locale: string;
@@ -895,23 +915,29 @@ function LegendCategoryRanking({
       ListHeaderComponent={listHeader}
       contentContainerStyle={{ gap: 8, paddingBottom: bottomInset + 24 }}
       renderItem={({ item: value, index: position }) => (
-        <LegendRankingRow
-          value={value}
-          position={position}
-          category={category}
-          index={index}
-          locale={locale}
-          horizontal={horizontal}
-          expanded={expanded?.cohort === cohort && expanded.category === category && expanded.key === value.key}
-          selected={selectedKeys.includes(value.key)}
-          selectionLimitReached={selectedKeys.length >= 5}
-          compareOpen={compareOpen}
-          cohortValues={cohortValues}
-          cohort={cohort}
-          onSelectCohort={onSelectCohort}
-          onToggleExpanded={toggleExpanded}
-          onToggleSelected={toggleSelected}
-        />
+        <SkeletonContent loading={contentLoading}>
+          <LegendRankingRow
+            value={value}
+            position={position}
+            category={category}
+            index={index}
+            locale={locale}
+            horizontal={horizontal}
+            expanded={
+              expanded?.cohort === cohort &&
+              expanded.category === category &&
+              expanded.key === value.key
+            }
+            selected={selectedKeys.includes(value.key)}
+            selectionLimitReached={selectedKeys.length >= 5}
+            compareOpen={compareOpen}
+            cohortValues={cohortValues}
+            cohort={cohort}
+            onSelectCohort={onSelectCohort}
+            onToggleExpanded={toggleExpanded}
+            onToggleSelected={toggleSelected}
+          />
+        </SkeletonContent>
       )}
     />
   );
@@ -1075,7 +1101,13 @@ const LegendRankingRow = memo(function LegendRankingRow({
           </View>
           <View
             testID={`legend-${expanded ? 'collapse' : 'expand'}-caret-${value.key}`}
-            style={{ width: 18, height: 18, flexShrink: 0, alignItems: 'center', justifyContent: 'center' }}
+            style={{
+              width: 18,
+              height: 18,
+              flexShrink: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
             {expanded ? (
               <ChevronUp color={theme.onSurfaceVariant} size={18} />
@@ -1302,10 +1334,7 @@ function legendCohortLabel(cohort: StatsLegendCohortValue, t: Translate) {
   return cohort === StatsLegendCohort.legend
     ? t('legendsTitle')
     : t('rankingsTopCount', {
-        count:
-          cohort === StatsLegendCohort.top200
-              ? 200
-              : 1000,
+        count: cohort === StatsLegendCohort.top200 ? 200 : 1000,
       });
 }
 
@@ -1444,7 +1473,13 @@ function legendMetrics(data: StatsLegendResponse): StatsMetrics {
   );
 }
 
-function RankedOverview({ data, dates }: { readonly data: StatsLegendResponse; readonly dates: StatsDateFilter }) {
+function RankedOverview({
+  data,
+  dates,
+}: {
+  readonly data: StatsLegendResponse;
+  readonly dates: StatsDateFilter;
+}) {
   const { t } = useI18n();
   const metrics = legendMetrics(data);
   const hasComposition = hasRankedCompositionData(data.items, dates);
@@ -1552,7 +1587,7 @@ function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
           <View style={{ gap: 12 }}>
             {sizes.map(({ size, wars }) => (
               <View key={size} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                <CKText role="rowTitle" style={{ width: 52 }}>
+                <CKText role="rowTitle" numberOfLines={1} style={{ minWidth: 72, flexShrink: 0 }}>
                   {size}v{size}
                 </CKText>
                 <View
@@ -1894,7 +1929,13 @@ function BattleFiltersCore({
     else recentDays(30);
   };
   return (
-    <Modal supportedOrientations={modalOrientations} visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
@@ -2107,7 +2148,13 @@ function LegendFilters({ provider, onClose }: { provider: StatsProvider; onClose
     void provider.setDates(parsedStart, parsedEnd);
   };
   return (
-    <Modal supportedOrientations={modalOrientations} visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
       <View style={styles.overlay}>
         <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
@@ -2262,8 +2309,131 @@ function InlineNotice({ icon, text }: { icon: ReactNode; text: string }) {
     </View>
   );
 }
-function StatsSkeleton() {
-  return <PageSkeleton kind="stats" />;
+function loadingTroopStats(dates: StatsDateFilter) {
+  return new StatsTroopStatsResponse(
+    StatsLegendResponse.fromJson({
+      items: [
+        {
+          day: dates.start.toISOString().slice(0, 10),
+          attacks: 100,
+          troops: [4000000, 4000001, 4000002, 4000003, 4000004].map((id) => ({
+            id,
+            uses: 100,
+            triples: 50,
+          })),
+        },
+      ],
+    }),
+    null,
+    null,
+  );
+}
+
+function StatsSkeleton({ provider }: { provider: StatsProvider }) {
+  // These view-only values select the same chart/row structure as loaded data.
+  // They never become a provider response, selection, or exported snapshot.
+  const dates = provider.datesFor(provider.section);
+  const days = [0, 1, 2, 3, 4, 5, 6].map((offset) =>
+    new Date(dates.start.getTime() + offset * 86400000).toISOString().slice(0, 10),
+  );
+  const counts = [18, 17, 16, 15, 14, 13].map((id) => ({ id, count: 100 }));
+  let content: ReactNode;
+  switch (provider.section) {
+    case StatsSection.players:
+      content = (
+        <PlayersSection
+          data={
+            new StatsPlayerCountsResponse(
+              counts,
+              counts.map((entry, index) => ({ ...entry, id: 105000036 - index })),
+            )
+          }
+        />
+      );
+      break;
+    case StatsSection.clans:
+      content = (
+        <ClansSection
+          data={
+            new StatsClanCountsResponse(
+              counts,
+              counts.map((entry, index) => ({ ...entry, id: 48000018 - index })),
+              counts,
+            )
+          }
+        />
+      );
+      break;
+    case StatsSection.cwl:
+      content = (
+        <CwlParticipationSection
+          data={StatsCwlResponse.fromJson({
+            season: days[0]?.slice(0, 7),
+            clanCount: 100,
+            registeredPlayerCount: 1000,
+            groupCount: 20,
+            items: [
+              {
+                leagueId: 48000018,
+                warSize: 15,
+                clanCount: 100,
+                groupCount: 20,
+                registeredPlayerCount: 1000,
+                townHallDistribution: counts.map(({ id, count }) => ({ level: id, count })),
+              },
+            ],
+          })}
+        />
+      );
+      break;
+    case StatsSection.war:
+      content = (
+        <WarOverview
+          data={StatsPerformanceResponse.fromJson({
+            metrics: {
+              available: true,
+              sampleSize: 100,
+              daily: days.map((date) => ({ date, sampleSize: 100, threeStarRate: 0.5 })),
+            },
+          })}
+        />
+      );
+      break;
+    case StatsSection.items:
+      content = (
+        <ItemsSection
+          data={
+            new StatsTroopStatsResponse(
+              StatsLegendResponse.fromJson({
+                items: days.map((day) => ({
+                  day,
+                  attacks: 100,
+                  troops: [{ id: 4000000, uses: 100, triples: 50 }],
+                })),
+              }),
+              null,
+              null,
+            )
+          }
+        />
+      );
+      break;
+    default:
+      content = (
+        <RankedOverview
+          data={StatsLegendResponse.fromJson({
+            items: days.map((day) => ({
+              day,
+              attacks: 100,
+              players: 100,
+              starCounts: { three: 50, two: 50 },
+            })),
+          })}
+          dates={dates}
+        />
+      );
+  }
+  return <SkeletonContent loading>{content}</SkeletonContent>;
 }
 type Translate = ReturnType<typeof useI18n>['t'];
 export function sectionLabel(section: StatsSectionValue, t: Translate): string {

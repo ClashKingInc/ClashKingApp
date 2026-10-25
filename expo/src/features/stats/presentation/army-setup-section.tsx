@@ -8,7 +8,7 @@ import { useI18n } from '../../../i18n';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import {
   CKText,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   SelectionPicker,
   ProfileTabs,
@@ -148,8 +148,14 @@ export function ArmySetupSection({
           setVariantKey(undefined);
         }}
       />
-      {listLoading ? (
-        <PageSkeleton kind="cards" />
+      {listLoading && !data ? (
+        <SkeletonContent loading style={styles.list}>
+          {[0, 1, 2, 3].map((index) => (
+            <Surface key={index} radius={ckRadius.tile} style={styles.family}>
+              <SetupRow position={index + 1} onPress={() => {}} />
+            </Surface>
+          ))}
+        </SkeletonContent>
       ) : null}
       {data?.items.map((item, index) => (
         <Surface key={item.groupKey} radius={ckRadius.tile} style={styles.family}>
@@ -225,7 +231,11 @@ export function ArmySetupSection({
                   ) : null
                 }
               />
-              {loading ? <PageSkeleton kind="stats" rows={2} /> : null}
+              {loading && !timeline ? (
+                <SkeletonContent loading>
+                  <SetupTimeline />
+                </SkeletonContent>
+              ) : null}
               {timeline ? <SetupTimeline data={timeline} /> : null}
               {error ? (
                 <Pressable
@@ -311,18 +321,25 @@ function CohortUsageComparison({
 }
 
 function SetupRow({
-  item,
+  item: loadedItem,
   position,
   selected = false,
   onPress,
 }: {
-  readonly item: StatsArmySetupItem;
+  readonly item?: StatsArmySetupItem;
   readonly position: number;
   readonly selected?: boolean;
   readonly onPress: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const item = loadedItem ?? {
+    conditions: [],
+    coreTroops: [4000000, 4000001],
+    rankChange: null,
+    usageRate: 0.25,
+    threeStarRate: 0.5,
+  };
   const name = item.conditions.length
     ? conditionLabel(item.conditions)
     : item.coreTroops
@@ -515,7 +532,7 @@ function SiegeUsage({ item }: { readonly item: StatsArmySetupItem }) {
   );
 }
 
-export function SetupTimeline({ data }: { readonly data: StatsArmySetupTimelineResponse }) {
+export function SetupTimeline({ data }: { readonly data?: StatsArmySetupTimelineResponse } = {}) {
   const { t } = useI18n();
   return (
     <View style={styles.timeline}>
@@ -526,7 +543,7 @@ export function SetupTimeline({ data }: { readonly data: StatsArmySetupTimelineR
           {
             key: 'army',
             label: t('statsArmies'),
-            points: data.items.map((entry) => ({
+            points: (data?.items ?? []).map((entry) => ({
               day: entry.day,
               weight: entry.observation?.attacks ?? 0,
               value:
@@ -535,7 +552,7 @@ export function SetupTimeline({ data }: { readonly data: StatsArmySetupTimelineR
                   : entry.observation.threeStarRate * 100,
             })),
           },
-          ...(data.benchmarks ?? []).map((benchmark) => ({
+          ...(data?.benchmarks ?? []).map((benchmark) => ({
             key: `league-${benchmark.rankLimit}`,
             label: benchmark.rankLimit
               ? t('rankingsTopCount', { count: benchmark.rankLimit })
@@ -556,7 +573,7 @@ export function SetupTimeline({ data }: { readonly data: StatsArmySetupTimelineR
           {
             key: 'usage',
             label: t('statsUsage'),
-            points: data.items.map((entry) => ({
+            points: (data?.items ?? []).map((entry) => ({
               day: entry.day,
               weight: entry.totalAttacks,
               value:

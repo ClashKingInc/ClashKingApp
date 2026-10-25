@@ -34,6 +34,7 @@ export class RankingsProvider {
   isLoadingLocations = false;
 
   private requestGeneration = 0;
+  private resultSelectionKey: string | undefined;
   private readonly listeners = new Set<() => void>();
   private readonly clock: () => Date;
 
@@ -53,6 +54,23 @@ export class RankingsProvider {
 
   get board(): RankingBoardValue {
     return this.audience === RankingAudience.players ? this.playerBoard : this.clanBoard;
+  }
+
+  /** A background refresh can retain this board's rows, but a different board
+   * or filter must never display those rows under its new heading. */
+  get currentResult(): RankingResult | null {
+    return this.resultSelectionKey === this.selectionKey ? this.result : null;
+  }
+
+  private get selectionKey(): string {
+    return [
+      this.board.name,
+      this.location.apiPath,
+      this.period,
+      this.period === RankingPeriod.history ? this.historyDate.getTime() : '',
+      this.townHallLevel,
+      this.selectedLeague.id,
+    ].join(':');
   }
 
   get boards(): readonly RankingBoardValue[] {
@@ -117,6 +135,7 @@ export class RankingsProvider {
       const replacement = this.locations.find((item) => !item.isWorldwide);
       if (replacement === undefined) {
         this.result = emptyResultFor(selectedBoard);
+        this.resultSelectionKey = this.selectionKey;
         this.error = null;
         this.notifyListeners();
         return;
@@ -125,6 +144,7 @@ export class RankingsProvider {
     }
 
     const generation = ++this.requestGeneration;
+    const selectionKey = this.selectionKey;
     this.isLoading = true;
     this.error = null;
     this.notifyListeners();
@@ -139,13 +159,15 @@ export class RankingsProvider {
       });
       if (generation !== this.requestGeneration) return;
       this.result = result;
+      this.resultSelectionKey = selectionKey;
     } catch (error) {
       if (generation !== this.requestGeneration) return;
       if (isNoDataException(error)) {
         this.result = emptyResultFor(selectedBoard);
+        this.resultSelectionKey = selectionKey;
         this.error = null;
       } else {
-        this.result = null;
+        if (this.resultSelectionKey !== selectionKey) this.result = null;
         this.error = error;
       }
     } finally {

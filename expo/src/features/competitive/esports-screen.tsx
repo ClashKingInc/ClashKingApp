@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type ReactElement } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type ReactElement,
+} from 'react';
 import {
   Animated,
   Platform,
@@ -20,7 +28,8 @@ import { ImageAssets } from '../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../i18n';
 import {
   CKText,
-  PageSkeleton,
+  SkeletonContent,
+  useSkeletonContent,
   MobileWebImage,
   PressableSurface,
   SelectionPicker,
@@ -28,6 +37,8 @@ import {
   useCKTheme,
 } from '../../ui';
 import { ProfileTabs } from '../../ui/profile-tabs';
+import { PagerView, type PagerViewHandle } from '../../ui/pager';
+import { usePrimarySwipeGuard } from '../../ui/primary-swipe-guard';
 import { useCKAccessibility } from '../../ui/accessibility';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import { prefetchMobileImage } from '../../ui/mobile-web-image';
@@ -66,7 +77,13 @@ type Party = {
   team_name: string | null;
   logo_url: string | null;
   source_team: { name: string };
-  result: { stars: number | null; percentage: number | null; duration?: number | null; win?: boolean | null; final?: boolean | null } | null;
+  result: {
+    stars: number | null;
+    percentage: number | null;
+    duration?: number | null;
+    win?: boolean | null;
+    final?: boolean | null;
+  } | null;
   attacks: {
     attacker: { name: string; tag: string };
     defender: { name: string; tag: string };
@@ -97,13 +114,21 @@ type Upcoming = {
     match_date: string;
     team1: UpcomingParty;
     team2: UpcomingParty;
-    streams?: { stream_id: number; streamer_name: string; streamer_language: string | null; platform: string; link: string; start: string }[];
+    streams?: {
+      stream_id: number;
+      streamer_name: string;
+      streamer_language: string | null;
+      platform: string;
+      link: string;
+      start: string;
+    }[];
   }[];
 };
 type Scene =
   { kind: 'ccnTeam'; id: string } | { kind: 'ccnPlayer'; tag: string } | { kind: 'tournaments' };
 
 function useCcn<T>(path: string | null) {
+  const contentLoading = useSkeletonContent();
   const runtime = useAppRuntime();
   const service = useMemo(() => competitiveService(runtime), [runtime]);
   const [revision, setRevision] = useState(0);
@@ -114,7 +139,7 @@ function useCcn<T>(path: string | null) {
     error?: string;
   }>({ path, loading: !!path });
   useEffect(() => {
-    if (!path) return;
+    if (!path || contentLoading) return;
     let active = true;
     const controller = new AbortController();
     void service
@@ -138,7 +163,7 @@ function useCcn<T>(path: string | null) {
       active = false;
       controller.abort();
     };
-  }, [path, service, revision]);
+  }, [path, service, revision, contentLoading]);
   const refresh = useCallback(() => {
     setState((old) => ({ ...old, loading: true, error: undefined }));
     setRevision((value) => value + 1);
@@ -172,48 +197,42 @@ function Frame({
     if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 500) onEndReached?.();
   };
   const scrollProps = {
-      onScroll:
-        scrollY
-          ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-              useNativeDriver: Platform.OS !== 'web',
-              ...(onEndReached ? { listener: onScroll } : {}),
-            })
-          : onEndReached ? onScroll : undefined,
-      scrollEventThrottle: 16,
-      style: { backgroundColor: theme.background === '#030304' ? '#170D2A' : '#F4F0FC' },
-      contentContainerStyle: styles.page,
-      refreshControl:
-        refresh ? (
-          <RefreshControl onRefresh={refresh} refreshing={refreshing} tintColor={theme.primary} />
-        ) : undefined,
+    onScroll: scrollY
+      ? Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: Platform.OS !== 'web',
+          ...(onEndReached ? { listener: onScroll } : {}),
+        })
+      : onEndReached
+        ? onScroll
+        : undefined,
+    scrollEventThrottle: 16,
+    style: { backgroundColor: theme.background === '#030304' ? '#170D2A' : '#F4F0FC' },
+    contentContainerStyle: styles.page,
+    refreshControl: refresh ? (
+      <RefreshControl onRefresh={refresh} refreshing={refreshing} tintColor={theme.primary} />
+    ) : undefined,
   };
-  if (rows) return (
-    <Animated.FlatList
-      {...scrollProps}
-      data={rows}
-      ListHeaderComponent={<>{children}</>}
-      keyExtractor={(item, index) => String(item.key ?? index)}
-      renderItem={({ item }) => <View style={styles.virtualRow}>{item}</View>}
-      initialNumToRender={6}
-      maxToRenderPerBatch={4}
-      windowSize={7}
-      // Cards can expand to show attacks. Keep clipping off so dynamically
-      // resized rows do not disappear on iOS; virtualization still bounds mounts.
-      removeClippedSubviews={false}
-    />
-  );
-  return (
-    <Animated.ScrollView
-      {...scrollProps}
-    >
-      {children}
-    </Animated.ScrollView>
-  );
+  if (rows)
+    return (
+      <Animated.FlatList
+        {...scrollProps}
+        data={rows}
+        ListHeaderComponent={<>{children}</>}
+        keyExtractor={(item, index) => String(item.key ?? index)}
+        renderItem={({ item }) => <View style={styles.virtualRow}>{item}</View>}
+        initialNumToRender={6}
+        maxToRenderPerBatch={4}
+        windowSize={7}
+        // Cards can expand to show attacks. Keep clipping off so dynamically
+        // resized rows do not disappear on iOS; virtualization still bounds mounts.
+        removeClippedSubviews={false}
+      />
+    );
+  return <Animated.ScrollView {...scrollProps}>{children}</Animated.ScrollView>;
 }
 function Feedback({
   query,
   empty,
-  kind = 'list',
 }: {
   query: { loading: boolean; error?: string; data?: unknown; refresh: () => void };
   empty?: boolean;
@@ -231,10 +250,6 @@ function Feedback({
         <CKText>{t('competitiveUnavailable')}</CKText>
         <CKText style={{ color: theme.primary }}>{t('generalRetry')}</CKText>
       </Pressable>
-    );
-  if (query.loading && !query.data)
-    return (
-      <PageSkeleton kind={kind} />
     );
   return empty && !query.loading ? (
     <View style={styles.feedback}>
@@ -359,6 +374,49 @@ type EloFeed = {
   upcoming: Upcoming['upcoming_matches'];
   failures: { teamId: number; kind: string }[];
 };
+const loadingStats: Stats = {
+  attacks: 100,
+  triples: 50,
+  avg_stars: 2.5,
+  avg_perc: 95,
+  avg_duration: 150,
+  doubles: 20,
+  singles: 20,
+  zeros: 10,
+};
+const loadingParty: Party = {
+  clantag: '',
+  team_name: 'Esports team',
+  logo_url: 'loading',
+  source_team: { name: 'Esports team' },
+  result: { stars: 15, percentage: 100 },
+  attacks: [],
+};
+const loadingMatches: Match[] = [0, 1, 2].map((index) => ({
+  match_id: `loading-${index}`,
+  preparation_start: '2000-01-01T00:00:00Z',
+  event: { name: 'Tournament match' },
+  team1: loadingParty,
+  team2: loadingParty,
+}));
+const loadingUpcoming: Upcoming['upcoming_matches'] = [0, 1].map((index) => ({
+  upcoming_match_id: index,
+  match_date: '2000-01-01T00:00:00Z',
+  team1: {
+    ccn_team_id: null,
+    ccn_team_logo_url: 'loading',
+    ccn_team_name: 'Esports team',
+    source_team_name: 'Esports team',
+    source_team_logo_url: null,
+  },
+  team2: {
+    ccn_team_id: null,
+    ccn_team_logo_url: 'loading',
+    ccn_team_name: 'Esports team',
+    source_team_name: 'Esports team',
+    source_team_logo_url: null,
+  },
+}));
 function ccnDate(value: string) {
   return new Date(/(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : `${value}Z`);
 }
@@ -371,7 +429,13 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
   const [scrollY] = useState(() => new Animated.Value(0));
   const [month, setMonth] = useState('current');
   const [page, setPage] = useState(0);
-  const [loaded, setLoaded] = useState<{ month: string; page: number; teams: EloTeam[]; timestamp?: string; response?: EloRanking }>({ month: 'current', page: -1, teams: [] });
+  const [loaded, setLoaded] = useState<{
+    month: string;
+    page: number;
+    teams: EloTeam[];
+    timestamp?: string;
+    response?: EloRanking;
+  }>({ month: 'current', page: -1, teams: [] });
   const loadingNext = useRef(false);
   const [feedTab, setFeedTab] = useState('recent');
   const [viewTab, setViewTab] = useState('rankings');
@@ -393,20 +457,37 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
   const ranking = useCcn<EloRanking>(
     `elo?offset=${page * 50}${selectedMonth || (page > 0 && loaded.month === month && loaded.timestamp) ? `&timestamp=${encodeURIComponent(selectedMonth?.timestamp ?? loaded.timestamp!)}` : ''}`,
   );
-  const movement = useCcn<EloRanking>(month === 'current' && ranking.data
-    ? `elo?movement=1&offset=${page * 50}&timestamp=${encodeURIComponent(ccnDate(ranking.data.timestamp).toISOString())}`
-    : null);
-  const [rankChanges, setRankChanges] = useState<{ response?: EloRanking; teams: Map<number, EloTeam> }>({ teams: new Map() });
+  const movement = useCcn<EloRanking>(
+    month === 'current' && ranking.data
+      ? `elo?movement=1&offset=${page * 50}&timestamp=${encodeURIComponent(ccnDate(ranking.data.timestamp).toISOString())}`
+      : null,
+  );
+  const [rankChanges, setRankChanges] = useState<{
+    response?: EloRanking;
+    teams: Map<number, EloTeam>;
+  }>({ teams: new Map() });
   if (movement.data && movement.data !== rankChanges.response) {
-    setRankChanges({ response: movement.data, teams: new Map([...rankChanges.teams, ...movement.data.teams.map(team => [team.team_id, team] as const)]) });
+    setRankChanges({
+      response: movement.data,
+      teams: new Map([
+        ...rankChanges.teams,
+        ...movement.data.teams.map((team) => [team.team_id, team] as const),
+      ]),
+    });
   }
   if (ranking.data && !ranking.loading && ranking.data !== loaded.response) {
     const data = ranking.data;
     setLoaded((old) => {
       const previous = page === 0 || old.month !== month ? [] : old.teams;
-      const teams = new Map(previous.map(team => [team.team_id, team]));
-      data.teams.forEach(team => teams.set(team.team_id, team));
-      return { month, page, teams: [...teams.values()], timestamp: ccnDate(data.timestamp).toISOString(), response: data };
+      const teams = new Map(previous.map((team) => [team.team_id, team]));
+      data.teams.forEach((team) => teams.set(team.team_id, team));
+      return {
+        month,
+        page,
+        teams: [...teams.values()],
+        timestamp: ccnDate(data.timestamp).toISOString(),
+        response: data,
+      };
     });
   }
   useEffect(() => {
@@ -416,9 +497,19 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
   const loadNext = () => {
     // Gate repeated near-bottom scroll events until this page is appended.
     // Keep one timestamp across pages so live rank changes cannot skip teams.
-    if (viewTab !== 'rankings' || loadingNext.current || ranking.loading || ranking.error || !ranking.data || loaded.month !== month || loaded.page !== page || (page + 1) * 50 >= ranking.data.total) return;
+    if (
+      viewTab !== 'rankings' ||
+      loadingNext.current ||
+      ranking.loading ||
+      ranking.error ||
+      !ranking.data ||
+      loaded.month !== month ||
+      loaded.page !== page ||
+      (page + 1) * 50 >= ranking.data.total
+    )
+      return;
     loadingNext.current = true;
-    setPage(value => value + 1);
+    setPage((value) => value + 1);
   };
   // This feed deliberately stays current when browsing a historical ranking.
   // The server owns the bounded top-50 fan-out and shared five-minute cache.
@@ -431,9 +522,21 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
     <Frame
       scrollY={reduceMotion ? undefined : scrollY}
       onEndReached={viewTab === 'rankings' ? loadNext : undefined}
-      rows={viewTab === 'matches' ? (feedTab === 'recent'
-        ? (feed.data?.recent ?? []).map(match => <TeamMatch key={match.match_id!} match={match} push={push} />)
-        : (feed.data?.upcoming ?? []).map(match => <UpcomingMatch key={match.upcoming_match_id} match={match} push={push} />)) : undefined}
+      rows={
+        viewTab === 'matches'
+          ? feedTab === 'recent'
+            ? (feed.data?.recent ?? (feed.loading ? loadingMatches : [])).map((match) => (
+                <SkeletonContent key={match.match_id!} loading={feed.loading && !feed.data}>
+                  <TeamMatch match={match} push={push} />
+                </SkeletonContent>
+              ))
+            : (feed.data?.upcoming ?? (feed.loading ? loadingUpcoming : [])).map((match) => (
+                <SkeletonContent key={match.upcoming_match_id} loading={feed.loading && !feed.data}>
+                  <UpcomingMatch match={match} push={push} />
+                </SkeletonContent>
+              ))
+          : undefined
+      }
       refresh={() => {
         setPage(0);
         loadingNext.current = false;
@@ -478,7 +581,7 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
           <Svg
             pointerEvents="none"
             width={heroSize.width}
-            height={heroSize.height}
+            height={heroSize.height + 2}
             viewBox={`0 0 ${heroSize.width} ${heroSize.height}`}
             style={StyleSheet.absoluteFill}
           >
@@ -487,12 +590,35 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
                 <Stop offset="0" stopColor="#170D2A" stopOpacity={0.08} />
                 <Stop offset="0.45" stopColor="#170D2A" stopOpacity={0.08} />
                 <Stop offset="0.78" stopColor="#170D2A" stopOpacity={0.72} />
-                <Stop offset="1" stopColor="#170D2A" />
+                <Stop
+                  offset="0.99"
+                  stopColor={theme.background === '#030304' ? '#170D2A' : '#F4F0FC'}
+                />
+                <Stop
+                  offset="1"
+                  stopColor={theme.background === '#030304' ? '#170D2A' : '#F4F0FC'}
+                />
               </LinearGradient>
             </Defs>
-            <Rect width={heroSize.width} height={heroSize.height} fill="url(#esports-hero-fade)" />
+            <Rect
+              width={heroSize.width}
+              height={heroSize.height + 2}
+              fill="url(#esports-hero-fade)"
+            />
           </Svg>
         ) : null}
+        {/* Cover subpixel rounding at the image/SVG crop boundary on Android. */}
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: -1,
+            height: 3,
+            backgroundColor: theme.background === '#030304' ? '#170D2A' : '#F4F0FC',
+          }}
+        />
         <View style={styles.heroCopy}>
           <CKText style={[styles.heroTitle, styles.white]}>{t('clanRankingsTab')} · Elo</CKText>
           <View style={styles.sourceAttribution}>
@@ -546,9 +672,25 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
                 {t('competitiveTeams')}
               </CKText>
             </View>
-            {page === 0 ? <Feedback query={ranking} empty={!!ranking.data && !ranking.data.teams.length} /> : null}
-            <View style={styles.standings}>
-              {(loaded.month === month ? loaded.teams : []).map((team) => {
+            {page === 0 ? (
+              <Feedback query={ranking} empty={!!ranking.data && !ranking.data.teams.length} />
+            ) : null}
+            <SkeletonContent
+              loading={ranking.loading && (loaded.month !== month || !loaded.teams.length)}
+              style={styles.standings}
+            >
+              {(loaded.month === month && loaded.teams.length
+                ? loaded.teams
+                : ranking.loading
+                  ? [0, 1, 2, 3].map((index) => ({
+                      rank: index + 1,
+                      team_id: index,
+                      team: 'Esports team',
+                      logo_url: 'loading',
+                      elo: 1200,
+                    }))
+                  : []
+              ).map((team) => {
                 const medal =
                   team.rank <= 3 ? ['#E8AF3B', '#A4B4D1', '#C78A65'][team.rank - 1] : null;
                 return (
@@ -588,16 +730,22 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
                         {team.elo.toLocaleString(toIntlLocale(locale))}
                       </CKText>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                        {month === 'current' && rankChanges.teams.get(team.team_id)?.rankMovement30d != null
-                          ? <RankMovement value={rankChanges.teams.get(team.team_id)!.rankMovement30d!} /> : null}
-                        <CKText muted role="metadata">Elo</CKText>
+                        {month === 'current' &&
+                        rankChanges.teams.get(team.team_id)?.rankMovement30d != null ? (
+                          <RankMovement
+                            value={rankChanges.teams.get(team.team_id)!.rankMovement30d!}
+                          />
+                        ) : null}
+                        <CKText muted role="metadata">
+                          Elo
+                        </CKText>
                       </View>
                     </View>
                     <ChevronRight size={17} color={theme.onSurfaceVariant} />
                   </PressableSurface>
                 );
               })}
-            </View>
+            </SkeletonContent>
             {page > 0 ? <Feedback query={ranking} /> : null}
           </>
         ) : (
@@ -636,18 +784,38 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
     </Frame>
   );
 }
-function UpcomingMatch({ match, push }: { match: Upcoming['upcoming_matches'][number]; push: (scene: Scene) => void }) {
+function UpcomingMatch({
+  match,
+  push,
+}: {
+  match: Upcoming['upcoming_matches'][number];
+  push: (scene: Scene) => void;
+}) {
   const theme = useCKTheme();
   const { locale } = useI18n();
-  return <View style={[styles.match, { backgroundColor: theme.card }]}>
-    <CKText muted role="metadata">{ccnDate(match.match_date).toLocaleString(toIntlLocale(locale), { dateStyle: 'medium', timeStyle: 'short' })}</CKText>
-    {[match.team1, match.team2].map((party, index) => <Row key={index}
-      name={party.ccn_team_name ?? party.source_team_name}
-      logo={party.ccn_team_logo_url ?? party.source_team_logo_url}
-      onPress={party.ccn_team_id == null ? undefined : () => push({ kind: 'ccnTeam', id: String(party.ccn_team_id) })}
-    />)}
-    <MatchStreams streams={match.streams} />
-  </View>;
+  return (
+    <View style={[styles.match, { backgroundColor: theme.card }]}>
+      <CKText muted role="metadata">
+        {ccnDate(match.match_date).toLocaleString(toIntlLocale(locale), {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        })}
+      </CKText>
+      {[match.team1, match.team2].map((party, index) => (
+        <Row
+          key={index}
+          name={party.ccn_team_name ?? party.source_team_name}
+          logo={party.ccn_team_logo_url ?? party.source_team_logo_url}
+          onPress={
+            party.ccn_team_id == null
+              ? undefined
+              : () => push({ kind: 'ccnTeam', id: String(party.ccn_team_id) })
+          }
+        />
+      ))}
+      <MatchStreams streams={match.streams} />
+    </View>
+  );
 }
 
 function RankMovement({ value }: { value: number }) {
@@ -656,35 +824,74 @@ function RankMovement({ value }: { value: number }) {
   if (value === 0) return null;
   const color = value > 0 ? '#14A37F' : value < 0 ? theme.error : theme.onSurfaceVariant;
   const Icon = value < 0 ? ArrowDown : ArrowUp;
-  return <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}
-    accessible accessibilityLabel={`${value > 0 ? '+' : ''}${value}`}>
-    {value ? <Icon size={12} color={color} /> : null}
-    <CKText role="labelMedium" style={{ color }}>{Math.abs(value)}</CKText>
-  </View>;
+  return (
+    <View
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}
+      accessible
+      accessibilityLabel={`${value > 0 ? '+' : ''}${value}`}
+    >
+      {value ? <Icon size={12} color={color} /> : null}
+      <CKText role="labelMedium" style={{ color }}>
+        {Math.abs(value)}
+      </CKText>
+    </View>
+  );
 }
 
 function PerformanceStats({ stats, label }: { stats: Stats; label: string }) {
   const { t } = useI18n();
   const theme = useCKTheme();
   const duration = stats.avg_duration == null ? null : Math.round(stats.avg_duration);
-  return <View style={[styles.performance, { backgroundColor: theme.card }]}>
-    <CKText role="sectionTitle">{label}</CKText>
-    <View style={styles.metricRow}>
-      <Metric label={t('esportsBattles')} value={stats.attacks ?? '—'} />
-      <Metric label={t('legendsHitrate')} value={stats.attacks && stats.triples != null ? `${(100 * stats.triples / stats.attacks).toFixed(1)}%` : '—'} />
-      <Metric label={t('esportsAverageStars')} value={stats.avg_stars?.toFixed(2) ?? '—'} />
-      <Metric label={t('esportsDestruction')} value={stats.avg_perc == null ? '—' : `${stats.avg_perc.toFixed(1)}%`} />
-      <Metric label={t('warAttacksDetailsDuration')} value={duration == null ? '—' : `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`} />
+  return (
+    <View style={[styles.performance, { backgroundColor: theme.card }]}>
+      <CKText role="sectionTitle">{label}</CKText>
+      <View style={styles.metricRow}>
+        <Metric label={t('esportsBattles')} value={stats.attacks ?? '—'} />
+        <Metric
+          label={t('legendsHitrate')}
+          value={
+            stats.attacks && stats.triples != null
+              ? `${((100 * stats.triples) / stats.attacks).toFixed(1)}%`
+              : '—'
+          }
+        />
+        <Metric label={t('esportsAverageStars')} value={stats.avg_stars?.toFixed(2) ?? '—'} />
+        <Metric
+          label={t('esportsDestruction')}
+          value={stats.avg_perc == null ? '—' : `${stats.avg_perc.toFixed(1)}%`}
+        />
+        <Metric
+          label={t('warAttacksDetailsDuration')}
+          value={
+            duration == null
+              ? '—'
+              : `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`
+          }
+        />
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
+        {[stats.zeros, stats.singles, stats.doubles, stats.triples].map((count, stars) => (
+          <View
+            key={stars}
+            style={{ alignItems: 'center', gap: 5 }}
+            accessible
+            accessibilityLabel={`${stars} ${t('warStarsTitle')}: ${count ?? '—'}`}
+          >
+            <View style={{ flexDirection: 'row', gap: 1 }}>
+              {[0, 1, 2].map((index) => (
+                <MobileWebImage
+                  key={index}
+                  imageUrl={index < stars ? ImageAssets.attackStar : ImageAssets.emptyStar}
+                  style={{ width: 14, height: 14 }}
+                />
+              ))}
+            </View>
+            <CKText role="rowTitle">{count ?? '—'}</CKText>
+          </View>
+        ))}
+      </View>
     </View>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
-      {[stats.zeros, stats.singles, stats.doubles, stats.triples].map((count, stars) => <View key={stars} style={{ alignItems: 'center', gap: 5 }}
-        accessible accessibilityLabel={`${stars} ${t('warStarsTitle')}: ${count ?? '—'}`}>
-        <View style={{ flexDirection: 'row', gap: 1 }}>{[0, 1, 2].map(index => <MobileWebImage key={index}
-          imageUrl={index < stars ? ImageAssets.attackStar : ImageAssets.emptyStar} style={{ width: 14, height: 14 }} />)}</View>
-        <CKText role="rowTitle">{count ?? '—'}</CKText>
-      </View>)}
-    </View>
-  </View>;
+  );
 }
 
 function MatchStreams({ streams }: { streams: Upcoming['upcoming_matches'][number]['streams'] }) {
@@ -692,14 +899,18 @@ function MatchStreams({ streams }: { streams: Upcoming['upcoming_matches'][numbe
   const { t, locale } = useI18n();
   const [failed, setFailed] = useState(false);
   // Provider URLs are external data, not app deep links or executable schemes.
-  const available = (streams ?? []).filter(stream => {
-    try { const url = new URL(stream.link); return url.protocol === 'https:' && !url.username && !url.password; }
-    catch { return false; }
+  const available = (streams ?? []).filter((stream) => {
+    try {
+      const url = new URL(stream.link);
+      return url.protocol === 'https:' && !url.username && !url.password;
+    } catch {
+      return false;
+    }
   });
   if (!available.length) return null;
   return (
     <View style={{ gap: 8, marginTop: 8 }}>
-      {available.map(stream => (
+      {available.map((stream) => (
         <PressableSurface
           key={`${stream.stream_id}:${stream.platform}`}
           accessibilityRole="link"
@@ -708,18 +919,40 @@ function MatchStreams({ streams }: { streams: Upcoming['upcoming_matches'][numbe
             setFailed(false);
             void Linking.openURL(stream.link).catch(() => setFailed(true));
           }}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 16, backgroundColor: colorWithAlpha(theme.secondary, 0.1) }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            padding: 12,
+            borderRadius: 16,
+            backgroundColor: colorWithAlpha(theme.secondary, 0.1),
+          }}
         >
           <View style={styles.grow}>
             <CKText role="rowTitle">{stream.streamer_name}</CKText>
             <CKText muted role="metadata">
-              {[stream.platform, stream.streamer_language, Number.isFinite(ccnDate(stream.start).getTime()) ? ccnDate(stream.start).toLocaleString(toIntlLocale(locale), { dateStyle: 'short', timeStyle: 'short' }) : null].filter(Boolean).join(' · ')}
+              {[
+                stream.platform,
+                stream.streamer_language,
+                Number.isFinite(ccnDate(stream.start).getTime())
+                  ? ccnDate(stream.start).toLocaleString(toIntlLocale(locale), {
+                      dateStyle: 'short',
+                      timeStyle: 'short',
+                    })
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
             </CKText>
           </View>
           <ExternalLink size={18} color={theme.secondary} />
         </PressableSurface>
       ))}
-      {failed ? <CKText role="metadata" accessibilityLiveRegion="polite">{t('generalError')}</CKText> : null}
+      {failed ? (
+        <CKText role="metadata" accessibilityLiveRegion="polite">
+          {t('generalError')}
+        </CKText>
+      ) : null}
     </View>
   );
 }
@@ -808,8 +1041,10 @@ function useRosterPortraitWarmup(players: Team['players'] | undefined) {
 }
 function GameAccount({ tag, name }: { tag: string; name: string }) {
   const runtime = useAppRuntime();
+  const contentLoading = useSkeletonContent();
   const [townHall, setTownHall] = useState<number>();
   useEffect(() => {
+    if (contentLoading) return;
     let active = true;
     // Current account artwork comes from the existing player service. It must
     // not be reused as a historical Town Hall claim for an older match.
@@ -822,7 +1057,7 @@ function GameAccount({ tag, name }: { tag: string; name: string }) {
     return () => {
       active = false;
     };
-  }, [runtime.players, tag]);
+  }, [runtime.players, tag, contentLoading]);
   return (
     <Row
       name={name}
@@ -843,18 +1078,50 @@ function Metric({
   compact?: boolean;
 }) {
   return (
-    <View style={[styles.metric, compact && { flexBasis: 'auto', paddingRight: 0, alignItems: 'center' }]}>
-      <CKText style={[styles.metricValue, compact && { textAlign: 'center' }, accent ? { color: accent } : undefined]}>{value}</CKText>
+    <View
+      style={[
+        styles.metric,
+        compact && { flexBasis: 'auto', paddingRight: 0, alignItems: 'center' },
+      ]}
+    >
+      <CKText
+        style={[
+          styles.metricValue,
+          compact && { textAlign: 'center' },
+          accent ? { color: accent } : undefined,
+        ]}
+      >
+        {value}
+      </CKText>
       <CKText muted role="metadata" style={compact ? { textAlign: 'center' } : undefined}>
         {label}
       </CKText>
     </View>
   );
 }
+const TEAM_TABS = ['matches', 'roster', 'stats'] as const;
+type TeamTab = (typeof TEAM_TABS)[number];
+
 export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => void }) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
-  const [tab, setTab] = useState('matches');
+  const [tab, setTab] = useState<TeamTab>('matches');
+  const [settledTab, setSettledTab] = useState<TeamTab>('matches');
+  const [tabPosition] = useState(() => new Animated.Value(0));
+  const [pageHeights, setPageHeights] = useState<Partial<Record<TeamTab, number>>>({});
+  const pager = useRef<PagerViewHandle>(null);
+  const { reduceMotion } = useCKAccessibility();
+  const blockPrimarySwipe = usePrimarySwipeGuard();
+  useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
+  const selectTab = (next: TeamTab) => {
+    setTab(next);
+    const index = TEAM_TABS.indexOf(next);
+    if (reduceMotion) {
+      pager.current?.setPageWithoutAnimation(index);
+      tabPosition.setValue(index);
+      setSettledTab(next);
+    } else pager.current?.setPage(index);
+  };
   const query = useCcn<Team>(`team?teamId=${encodeURIComponent(id)}`);
   const placement = useCcn<{ team: { rank: number; elo: number } | null }>(
     `elo-team?teamId=${encodeURIComponent(id)}`,
@@ -862,8 +1129,23 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
   const matches = useCcn<Match[]>(`team-matches?teamId=${encodeURIComponent(id)}`);
   const upcoming = useCcn<Upcoming>(`team-upcoming?teamId=${encodeURIComponent(id)}`);
   const preview = teamPreviews.get(id);
-  const team = query.data;
-  useRosterPortraitWarmup(team?.players);
+  const contentLoading = query.loading && !query.data;
+  const team: Team | undefined =
+    query.data ??
+    (contentLoading
+      ? {
+          name: 'Esports team',
+          logo_url: 'loading',
+          elo: 1200,
+          players: [0, 1, 2, 3, 4].map((index) => ({
+            tag: `loading-${index}`,
+            name: 'Player name',
+          })),
+          clans: [],
+          stats: { wins: 100, ties: 10, losses: 20, offense: loadingStats, defense: loadingStats },
+        }
+      : undefined);
+  useRosterPortraitWarmup(query.data?.players);
   // Match parties carry the canonical team ID even when basicinfo is unavailable.
   // Do not use source_team.team_name: the provider can put the opponent there.
   const matchIdentity = matches.data
@@ -880,171 +1162,266 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
       }}
       refreshing={query.loading && !!team}
     >
-      <View style={styles.detailHero}>
-        <View style={styles.identity}>
-          <IdentityArt
-            url={team?.logo_url ?? preview?.logo_url ?? matchIdentity?.logo_url}
-            size={112}
-            name={name ?? ''}
-            inverse
-          />
-          <View style={styles.grow}>
-            <CKText style={[styles.detailTitle, styles.white]}>
-              {name ?? t('competitiveTeams')}
-            </CKText>
-          </View>
-        </View>
-        <View style={styles.heroMetrics}>
-          {placement.data?.team ? (
-            <View style={styles.heroMetric}>
-              <CKText style={[styles.metricValue, styles.white]}>
-                #{placement.data.team.rank.toLocaleString(toIntlLocale(locale))}
+      <SkeletonContent loading={contentLoading}>
+        <View style={styles.detailHero}>
+          <View style={styles.identity}>
+            <IdentityArt
+              url={team?.logo_url ?? preview?.logo_url ?? matchIdentity?.logo_url}
+              size={112}
+              name={name ?? ''}
+              inverse
+            />
+            <View style={styles.grow}>
+              <CKText style={[styles.detailTitle, styles.white]}>
+                {name ?? t('competitiveTeams')}
               </CKText>
-              <CKText style={styles.heroSubtitle}>{t('legendsGlobalRankTitle')}</CKText>
             </View>
-          ) : null}
-          {team?.elo != null ? (
-            <View style={styles.heroMetric}>
-              <CKText style={[styles.metricValue, styles.white]}>{placement.data?.team?.elo ?? team.elo}</CKText>
-              <CKText style={styles.heroSubtitle}>Elo</CKText>
-            </View>
-          ) : null}
-          {team ? (
-            <View style={styles.heroMetric}>
-              <CKText style={[styles.metricValue, styles.white]}>{team.players.length}</CKText>
-              <CKText style={styles.heroSubtitle}>{t('esportsRoster')}</CKText>
+          </View>
+          <View style={styles.heroMetrics}>
+            {placement.data?.team ? (
+              <View style={styles.heroMetric}>
+                <CKText style={[styles.metricValue, styles.white]}>
+                  #{placement.data.team.rank.toLocaleString(toIntlLocale(locale))}
+                </CKText>
+                <CKText style={styles.heroSubtitle}>{t('legendsGlobalRankTitle')}</CKText>
+              </View>
+            ) : null}
+            {team?.elo != null ? (
+              <View style={styles.heroMetric}>
+                <CKText style={[styles.metricValue, styles.white]}>
+                  {placement.data?.team?.elo ?? team.elo}
+                </CKText>
+                <CKText style={styles.heroSubtitle}>Elo</CKText>
+              </View>
+            ) : null}
+            {team ? (
+              <View style={styles.heroMetric}>
+                <CKText style={[styles.metricValue, styles.white]}>{team.players.length}</CKText>
+                <CKText style={styles.heroSubtitle}>{t('esportsRoster')}</CKText>
+              </View>
+            ) : null}
+          </View>
+          {team?.players.length ? (
+            <View style={{ width: '100%', maxWidth: 950, alignSelf: 'center', gap: 12 }}>
+              <Pressable
+                onPress={() => selectTab('roster')}
+                accessibilityRole="button"
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+              >
+                <CKText style={styles.heroSubtitle}>{t('esportsRoster')}</CKText>
+                <ChevronRight color="#E8DCF9" size={16} />
+              </Pressable>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ marginHorizontal: -8 }}
+                contentContainerStyle={{ gap: 16, paddingHorizontal: 8, paddingVertical: 4 }}
+              >
+                {team.players.slice(0, 5).map((player) => (
+                  <Pressable
+                    key={player.tag}
+                    accessibilityRole="button"
+                    accessibilityLabel={player.name}
+                    onPress={() => push({ kind: 'ccnPlayer', tag: player.tag })}
+                    style={{ width: 62, alignItems: 'center', gap: 6 }}
+                  >
+                    <PlayerPortrait tag={player.tag} name={player.name} size={52} />
+                    <CKText role="metadata" numberOfLines={1} style={styles.heroSubtitle}>
+                      {player.name}
+                    </CKText>
+                  </Pressable>
+                ))}
+              </ScrollView>
             </View>
           ) : null}
         </View>
-        {team?.players.length ? (
-          <View style={{ width: '100%', maxWidth: 950, alignSelf: 'center', gap: 12 }}>
-            <Pressable
-              onPress={() => setTab('roster')}
-              accessibilityRole="button"
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+        <View style={styles.content}>
+          <ProfileTabs
+            variant="underline"
+            overflow="fit"
+            selectedKey={tab}
+            animatedPosition={tabPosition}
+            indicatorRtl={isRtl}
+            onSelect={(key) => selectTab(key as TeamTab)}
+            tabs={[
+              { key: 'matches', label: t('esportsMatches') },
+              { key: 'roster', label: t('esportsRoster') },
+              { key: 'stats', label: t('navigationStatistics') },
+            ]}
+          />
+          <View
+            onTouchStart={() => blockPrimarySwipe(true)}
+            onTouchEnd={() => blockPrimarySwipe(false)}
+            onTouchCancel={() => blockPrimarySwipe(false)}
+          >
+            <PagerView
+              ref={pager}
+              initialPage={0}
+              layoutDirection={isRtl ? 'rtl' : 'ltr'}
+              testID="esports-team-pager"
+              style={{ height: Math.max(pageHeights[tab] ?? 400, pageHeights[settledTab] ?? 400) }}
+              onPageScroll={(event) =>
+                tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)
+              }
+              onPageSelected={(event) => {
+                const next = TEAM_TABS[event.nativeEvent.position];
+                if (next) {
+                  setTab(next);
+                  setSettledTab(next);
+                }
+              }}
             >
-              <CKText style={styles.heroSubtitle}>{t('esportsRoster')}</CKText>
-              <ChevronRight color="#E8DCF9" size={16} />
-            </Pressable>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ marginHorizontal: -8 }}
-              contentContainerStyle={{ gap: 16, paddingHorizontal: 8, paddingVertical: 4 }}
-            >
-              {team.players.slice(0, 5).map((player) => (
-                <Pressable
-                  key={player.tag}
-                  accessibilityRole="button"
-                  accessibilityLabel={player.name}
-                  onPress={() => push({ kind: 'ccnPlayer', tag: player.tag })}
-                  style={{ width: 62, alignItems: 'center', gap: 6 }}
+              {TEAM_TABS.map((page) => (
+                <View
+                  key={page}
+                  collapsable={false}
+                  style={{ flex: 1 }}
+                  accessibilityElementsHidden={page !== tab}
+                  importantForAccessibility={page !== tab ? 'no-hide-descendants' : 'auto'}
                 >
-                  <PlayerPortrait tag={player.tag} name={player.name} size={52} />
-                  <CKText role="metadata" numberOfLines={1} style={styles.heroSubtitle}>
-                    {player.name}
-                  </CKText>
-                </Pressable>
+                  <View
+                    style={{ gap: 20 }}
+                    onLayout={(event) => {
+                      const height = Math.ceil(event.nativeEvent.layout.height);
+                      if (height > 0)
+                        setPageHeights((old) =>
+                          old[page] === height ? old : { ...old, [page]: height },
+                        );
+                    }}
+                  >
+                    {page === 'stats' ? (
+                      <>
+                        {team?.stats ? (
+                          <>
+                            <View style={styles.recordRow}>
+                              <View style={styles.recordCell}>
+                                <Metric
+                                  compact
+                                  label={t('warWinsTitle')}
+                                  value={team.stats.wins}
+                                  accent="#14A37F"
+                                />
+                              </View>
+                              <View style={styles.recordCell}>
+                                <Metric
+                                  compact
+                                  label={t('warDrawsTitle')}
+                                  value={team.stats.ties}
+                                />
+                              </View>
+                              <View style={styles.recordCell}>
+                                <Metric
+                                  compact
+                                  label={t('warLossesTitle')}
+                                  value={team.stats.losses}
+                                  accent={theme.error}
+                                />
+                              </View>
+                            </View>
+                            <PerformanceStats
+                              stats={team.stats.offense}
+                              label={t('warAttacksTitle')}
+                            />
+                            <PerformanceStats
+                              stats={team.stats.defense}
+                              label={t('warDefensesTitle')}
+                            />
+                          </>
+                        ) : (
+                          <Feedback query={query} empty={!query.loading} />
+                        )}
+                      </>
+                    ) : page === 'roster' ? (
+                      <>
+                        <Feedback query={query} empty={!team?.players.length} />
+                        <View style={styles.rosterGrid}>
+                          {team?.players.map((player) => (
+                            <PressableSurface
+                              key={player.tag}
+                              accessibilityRole="button"
+                              onPress={() => push({ kind: 'ccnPlayer', tag: player.tag })}
+                              style={[styles.rosterCard, { backgroundColor: theme.card }]}
+                            >
+                              <PlayerPortrait tag={player.tag} name={player.name} size={80} />
+                              <CKText role="titleSmall" numberOfLines={2}>
+                                {player.name}
+                              </CKText>
+                              <View style={styles.inline}>
+                                <CKText muted role="metadata">
+                                  {t('esportsViewPlayer')}
+                                </CKText>
+                                <ChevronRight size={16} color={theme.onSurfaceVariant} />
+                              </View>
+                            </PressableSurface>
+                          ))}
+                        </View>
+                        {team?.clans.length ? (
+                          <CKText role="sectionTitle">{t('searchTabClans')}</CKText>
+                        ) : null}
+                        {team?.clans.map((clan) => (
+                          <Row
+                            key={clan.tag}
+                            name={clan.name}
+                            logo={ImageAssets.clanBadgeForTag(clan.tag, clan)}
+                            onPress={() => queueAppLink(`/clan/${encodeURIComponent(clan.tag)}`)}
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <Feedback query={upcoming} />
+                        {upcoming.data?.upcoming_matches.length ? (
+                          <CKText role="sectionTitle">{t('homeUpcomingTitle')}</CKText>
+                        ) : null}
+                        <SkeletonContent loading={upcoming.loading && !upcoming.data}>
+                          {(
+                            upcoming.data?.upcoming_matches ??
+                            (upcoming.loading ? loadingUpcoming : [])
+                          ).map((match) => (
+                            <View
+                              key={match.upcoming_match_id}
+                              style={[styles.match, { backgroundColor: theme.card }]}
+                            >
+                              <CKText muted role="metadata">
+                                {ccnDate(match.match_date).toLocaleString(toIntlLocale(locale), {
+                                  dateStyle: 'medium',
+                                  timeStyle: 'short',
+                                })}
+                              </CKText>
+                              {[match.team1, match.team2].map((party, index) => (
+                                <View style={styles.matchSide} key={index}>
+                                  <IdentityArt
+                                    name={party.ccn_team_name ?? party.source_team_name}
+                                    url={party.ccn_team_logo_url ?? party.source_team_logo_url}
+                                    size={44}
+                                  />
+                                  <CKText role="rowTitle">
+                                    {party.ccn_team_name ?? party.source_team_name}
+                                  </CKText>
+                                </View>
+                              ))}
+                              <MatchStreams streams={match.streams} />
+                            </View>
+                          ))}
+                        </SkeletonContent>
+                        <CKText role="sectionTitle">{t('esportsRecentMatches')}</CKText>
+                        <Feedback query={matches} empty={matches.data?.length === 0} />
+                        <SkeletonContent loading={matches.loading && !matches.data}>
+                          {(matches.data ?? (matches.loading ? loadingMatches : [])).map(
+                            (match, index) => (
+                              <TeamMatch key={match.match_id ?? index} match={match} push={push} />
+                            ),
+                          )}
+                        </SkeletonContent>
+                      </>
+                    )}
+                  </View>
+                </View>
               ))}
-            </ScrollView>
+            </PagerView>
           </View>
-        ) : null}
-      </View>
-      <View style={styles.content}>
-        <ProfileTabs
-          variant="underline"
-          selectedKey={tab}
-          onSelect={setTab}
-          tabs={[
-            { key: 'matches', label: t('esportsMatches') },
-            { key: 'roster', label: t('esportsRoster') },
-            { key: 'stats', label: t('navigationStatistics') },
-          ]}
-        />
-        {tab === 'stats' ? (
-          <>
-            {team?.stats ? <>
-              <View style={styles.recordRow}>
-                <View style={styles.recordCell}><Metric compact label={t('warWinsTitle')} value={team.stats.wins} accent="#14A37F" /></View>
-                <View style={styles.recordCell}><Metric compact label={t('warDrawsTitle')} value={team.stats.ties} /></View>
-                <View style={styles.recordCell}><Metric compact label={t('warLossesTitle')} value={team.stats.losses} accent={theme.error} /></View>
-              </View>
-              <PerformanceStats stats={team.stats.offense} label={t('warAttacksTitle')} />
-              <PerformanceStats stats={team.stats.defense} label={t('warDefensesTitle')} />
-            </> : <Feedback query={query} empty={!query.loading} />}
-          </>
-        ) : tab === 'roster' ? (
-          <>
-            <Feedback query={query} empty={!team?.players.length} />
-            <View style={styles.rosterGrid}>
-              {team?.players.map((player) => (
-                <PressableSurface
-                  key={player.tag}
-                  accessibilityRole="button"
-                  onPress={() => push({ kind: 'ccnPlayer', tag: player.tag })}
-                  style={[styles.rosterCard, { backgroundColor: theme.card }]}
-                >
-                  <PlayerPortrait tag={player.tag} name={player.name} size={80} />
-                  <CKText role="titleSmall" numberOfLines={2}>
-                    {player.name}
-                  </CKText>
-                  <View style={styles.inline}>
-                    <CKText muted role="metadata">
-                      {t('esportsViewPlayer')}
-                    </CKText>
-                    <ChevronRight size={16} color={theme.onSurfaceVariant} />
-                  </View>
-                </PressableSurface>
-              ))}
-            </View>
-            {team?.clans.length ? <CKText role="sectionTitle">{t('searchTabClans')}</CKText> : null}
-            {team?.clans.map((clan) => (
-              <Row
-                key={clan.tag}
-                name={clan.name}
-                logo={ImageAssets.clanBadgeForTag(clan.tag, clan)}
-                onPress={() => queueAppLink(`/clan/${encodeURIComponent(clan.tag)}`)}
-              />
-            ))}
-          </>
-        ) : (
-          <>
-            <Feedback query={upcoming} />
-            {upcoming.data?.upcoming_matches.length ? (
-              <CKText role="sectionTitle">{t('homeUpcomingTitle')}</CKText>
-            ) : null}
-            {upcoming.data?.upcoming_matches.map((match) => (
-              <View
-                key={match.upcoming_match_id}
-                style={[styles.match, { backgroundColor: theme.card }]}
-              >
-                <CKText muted role="metadata">
-                  {ccnDate(match.match_date).toLocaleString(toIntlLocale(locale), {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  })}
-                </CKText>
-                {[match.team1, match.team2].map((party, index) => (
-                  <View style={styles.matchSide} key={index}>
-                    <IdentityArt
-                      name={party.ccn_team_name ?? party.source_team_name}
-                      url={party.ccn_team_logo_url ?? party.source_team_logo_url}
-                      size={44}
-                    />
-                    <CKText role="rowTitle">{party.ccn_team_name ?? party.source_team_name}</CKText>
-                  </View>
-                ))}
-                <MatchStreams streams={match.streams} />
-              </View>
-            ))}
-            <CKText role="sectionTitle">{t('esportsRecentMatches')}</CKText>
-            <Feedback query={matches} empty={matches.data?.length === 0} />
-            {matches.data?.map((match, index) => (
-              <TeamMatch key={match.match_id ?? index} match={match} push={push} />
-            ))}
-          </>
-        )}
-      </View>
+        </View>
+      </SkeletonContent>
     </Frame>
   );
 }
@@ -1055,13 +1432,25 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
   return (
     <View style={[styles.match, { backgroundColor: theme.card }]}>
       <View>
-        <Pressable accessibilityRole="button" accessibilityState={{ expanded: open }}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ expanded: open }}
           accessibilityLabel={t(open ? 'esportsHideAttacks' : 'esportsViewAttacks')}
-          onPress={() => setOpen(value => !value)} style={styles.sectionHeading}>
+          onPress={() => setOpen((value) => !value)}
+          style={styles.sectionHeading}
+        >
           <View style={[styles.grow, { gap: 4 }]}>
             {match.event?.name ? <CKText role="rowTitle">{match.event.name}</CKText> : null}
-            {match.week?.name ? <CKText muted role="metadata">{match.week.name}</CKText> : null}
-            {match.team1?.result?.final === false || match.team2?.result?.final === false ? <CKText role="metadata" style={{ color: theme.secondary }}>{t('upgradeTrackerInProgress')}</CKText> : null}
+            {match.week?.name ? (
+              <CKText muted role="metadata">
+                {match.week.name}
+              </CKText>
+            ) : null}
+            {match.team1?.result?.final === false || match.team2?.result?.final === false ? (
+              <CKText role="metadata" style={{ color: theme.secondary }}>
+                {t('upgradeTrackerInProgress')}
+              </CKText>
+            ) : null}
             <CKText muted role="metadata">
               {ccnDate(match.preparation_start).toLocaleString(toIntlLocale(locale), {
                 dateStyle: 'medium',
@@ -1083,17 +1472,28 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
             score={party?.result?.stars ?? null}
             percentage={party?.result?.percentage ?? null}
             winner={party?.result?.win}
-            onPress={party?.team_id == null ? undefined : () => {
-              const id = String(party.team_id);
-              // Only canonical CCN IDs navigate; source-team IDs can identify
-              // an unrelated provider and must not be substituted here.
-              teamPreviews.set(id, { name: party.team_name ?? party.source_team?.name ?? '—', logo_url: party.logo_url });
-              push({ kind: 'ccnTeam', id });
-            }}
+            onPress={
+              party?.team_id == null
+                ? undefined
+                : () => {
+                    const id = String(party.team_id);
+                    // Only canonical CCN IDs navigate; source-team IDs can identify
+                    // an unrelated provider and must not be substituted here.
+                    teamPreviews.set(id, {
+                      name: party.team_name ?? party.source_team?.name ?? '—',
+                      logo_url: party.logo_url,
+                    });
+                    push({ kind: 'ccnTeam', id });
+                  }
+            }
           />
         ))}
-        <Pressable accessibilityRole="button" accessibilityState={{ expanded: open }}
-          onPress={() => setOpen(value => !value)} style={{ paddingVertical: 8 }}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ expanded: open }}
+          onPress={() => setOpen((value) => !value)}
+          style={{ paddingVertical: 8 }}
+        >
           <CKText role="metadata" style={{ color: theme.secondary }}>
             {t(open ? 'esportsHideAttacks' : 'esportsViewAttacks')}
           </CKText>
@@ -1112,9 +1512,7 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
                 <View style={styles.attackIdentities}>
                   <Pressable
                     accessibilityRole="button"
-                    onPress={() =>
-                      push({ kind: 'ccnPlayer', tag: attack.attacker.tag })
-                    }
+                    onPress={() => push({ kind: 'ccnPlayer', tag: attack.attacker.tag })}
                     style={styles.attackPlayer}
                   >
                     <CKText muted role="metadata">
@@ -1130,11 +1528,20 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
                     </CKText>
                   </Pressable>
                   <View style={styles.attackResult}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}
-                      accessible accessibilityLabel={`${attack.stars}/3 ${t('warStarsTitle')}`}>
-                      {[0, 1, 2].map(index => <MobileWebImage key={index}
-                        imageUrl={index < attack.stars ? ImageAssets.attackStar : ImageAssets.emptyStar}
-                        style={{ width: 20, height: 20 }} />)}
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}
+                      accessible
+                      accessibilityLabel={`${attack.stars}/3 ${t('warStarsTitle')}`}
+                    >
+                      {[0, 1, 2].map((index) => (
+                        <MobileWebImage
+                          key={index}
+                          imageUrl={
+                            index < attack.stars ? ImageAssets.attackStar : ImageAssets.emptyStar
+                          }
+                          style={{ width: 20, height: 20 }}
+                        />
+                      ))}
                     </View>
                     <CKText role="titleSmall">{attack.percentage}%</CKText>
                     <CKText muted role="metadata">
@@ -1144,9 +1551,7 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
                   </View>
                   <Pressable
                     accessibilityRole="button"
-                    onPress={() =>
-                      push({ kind: 'ccnPlayer', tag: attack.defender.tag })
-                    }
+                    onPress={() => push({ kind: 'ccnPlayer', tag: attack.defender.tag })}
                     style={styles.attackPlayer}
                   >
                     <CKText muted role="metadata">
@@ -1172,51 +1577,68 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
 export function EsportsPlayer({ tag }: { tag: string }) {
   const { t } = useI18n();
   const query = useCcn<Player>(`player?playerTag=${encodeURIComponent(tag)}`);
-  const player = query.data;
+  const contentLoading = query.loading && !query.data;
+  const player: Player | undefined | null =
+    query.data ??
+    (contentLoading
+      ? {
+          name: 'Esports player',
+          picture_url: 'loading',
+          accounts: [0, 1, 2].map((index) => ({ tag: `loading-${index}`, name: 'Linked player' })),
+          stats_offense: loadingStats,
+          stats_defense: loadingStats,
+        }
+      : undefined);
   return (
     <Frame refresh={query.refresh} refreshing={query.loading && !!player}>
-      <View style={styles.detailHero}>
-        <View style={styles.identity}>
-          <IdentityArt
-            url={player?.picture_url}
-            size={112}
-            name={player?.name ?? ''}
-            portrait
-            inverse
-          />
-          <View style={styles.grow}>
-            <CKText style={[styles.detailTitle, styles.white]}>{player?.name ?? '—'}</CKText>
+      <SkeletonContent loading={contentLoading}>
+        <View style={styles.detailHero}>
+          <View style={styles.identity}>
+            <IdentityArt
+              url={player?.picture_url}
+              size={112}
+              name={player?.name ?? ''}
+              portrait
+              inverse
+            />
+            <View style={styles.grow}>
+              <CKText style={[styles.detailTitle, styles.white]}>{player?.name ?? '—'}</CKText>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.content}>
-        <Feedback query={query} empty={query.data === null} kind="profile" />
-        {player ? (
-          <>
-            {(
-              [
-                ['warAttacksTitle', player.stats_offense],
-                ['warDefensesTitle', player.stats_defense],
-              ] as const
-            ).map(([label, stats]) =>
-              stats ? (
-                <PerformanceStats key={label} stats={stats} label={t(label)} />
-              ) : null,
-            )}
-            <CKText role="sectionTitle">{t('esportsAccounts')}</CKText>
-            {player.accounts.map((account) => (
-              <GameAccount key={account.tag} name={account.name} tag={account.tag} />
-            ))}
-          </>
-        ) : null}
-      </View>
+        <View style={styles.content}>
+          <Feedback query={query} empty={query.data === null} kind="profile" />
+          {player ? (
+            <>
+              {(
+                [
+                  ['warAttacksTitle', player.stats_offense],
+                  ['warDefensesTitle', player.stats_defense],
+                ] as const
+              ).map(([label, stats]) =>
+                stats ? <PerformanceStats key={label} stats={stats} label={t(label)} /> : null,
+              )}
+              <CKText role="sectionTitle">{t('esportsAccounts')}</CKText>
+              {player.accounts.map((account) => (
+                <GameAccount key={account.tag} name={account.name} tag={account.tag} />
+              ))}
+            </>
+          ) : null}
+        </View>
+      </SkeletonContent>
     </Frame>
   );
 }
 
 const styles = StyleSheet.create({
   page: { width: '100%', alignSelf: 'center', paddingBottom: 40 },
-  virtualRow: { width: '100%', maxWidth: 1000, alignSelf: 'center', paddingHorizontal: 20, paddingBottom: 20 },
+  virtualRow: {
+    width: '100%',
+    maxWidth: 1000,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
   content: { width: '100%', maxWidth: 1000, alignSelf: 'center', padding: 20, gap: 20 },
   hero: {
     minHeight: 330,
