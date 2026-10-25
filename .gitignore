@@ -1,7 +1,7 @@
 # Operating systems and editors
 .DS_Store
 .idea/
-.vscode/settings.json
+.vscode/
 *.iml
 *.swp
 
@@ -35,3 +35,7 @@ t3.json
 # Generated reports and local assets
 untranslated_messages.json
 assets/icons/project_icon.png
+
+# Local documentation and test plans
+docs/
+E2E_TEST_PLAN.md

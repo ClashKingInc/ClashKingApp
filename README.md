@@ -1,10 +1,10 @@
 # ClashKing Mobile App
 
 [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-blue)](https://github.com/ClashKingInc)
-[![Expo](https://img.shields.io/badge/Expo-SDK%2057-000020)](https://expo.dev)
+[![Expo](https://img.shields.io/badge/Expo-SDK%2058-000020)](https://expo.dev)
 [![License](https://img.shields.io/badge/license-Open%20Source-green)](https://github.com/ClashKingInc)
 
-The Clash of Clans companion app for tracking stats, managing clans, and analyzing performance. The shipping application is the Expo SDK 57 project under `expo/`.
+The Clash of Clans companion app for tracking stats, managing clans, and analyzing performance. The shipping application is the Expo SDK 58 project under `expo/`.
 
 ## ✨ Features
 
@@ -43,7 +43,7 @@ The Clash of Clans companion app for tracking stats, managing clans, and analyzi
 - Account verification with API tokens
 - Android home screen widgets
 - Offline data caching
-- Native and cross-platform glass surfaces with responsive iOS, Android, and web behavior
+- Native iOS and Android interfaces with shared components
 
 ## 🚀 Getting Started
 
@@ -74,6 +74,8 @@ The Clash of Clans companion app for tracking stats, managing clans, and analyzi
    npm run start
    ```
 
+Expo Go is not supported because the app includes custom native code and React Native Firebase. Use an Expo development build. From `expo/`, run `npx expo run:ios` or `npx expo run:android` to generate and launch a local native build. Android requires Android Studio; iOS requires Xcode on macOS.
+
 ### Development Commands
 
 - `npm run device:hub` - Open the local device dashboard at `http://127.0.0.1:7358` (run from `expo/`).
@@ -86,22 +88,14 @@ The Clash of Clans companion app for tracking stats, managing clans, and analyzi
   Android command-line tools 22. Version 23 changes that output and makes the
   new-emulator image picker appear empty even with system images installed.
 - `npm ci` - Install locked dependencies from `expo/`
-- `npm run start` - Start Expo for native or web development
+- `npm run start` - Start Metro for a native development build
 - `npm run lint` / `npm run typecheck` - Run static checks
-- `npm test` - Run the Expo test suite
-- `npm run test:native-plugin` - Verify the retained native/widget contract
 - `npx expo prebuild --clean` - Generate native projects through CNG
 - `npm run web:export` - Build the native-app handoff landing for Cloudflare Pages (not the application UI)
 
-The shared web process is managed from the repository root with
-`tooling/dev-app start`. It serves Expo web at `https://dev-app.clashk.ing`
-through the existing tunnel and owns port `7357`; use `reload`, `restart`,
-`logs`, and `status` instead of starting a second process.
+Browser URLs serve a static app-opening landing page, not the product UI or an installable PWA. `npm run web:export` builds that landing page and preserves app links and OAuth callback files. Native iOS and Android use the JSON access/refresh-token contract.
 
-The deployed production web build uses
-`EXPO_PUBLIC_CK_API_V2_BASE_URL=https://api.clashk.ing/v2`.
-Browser authentication uses the `/v2/auth/web/*` cookie endpoints; native iOS
-and Android builds keep the JSON access/refresh-token contract.
+Set `CK_IOS_STORE_URL` and `CK_ANDROID_STORE_URL` to the HTTPS store listings when building the landing page. Missing values leave the corresponding download controls disabled. `CK_ANDROID_APP_LINKS_SHA256` supplies the Play signing certificate fingerprint for Android association files.
 
 Set `EXPO_PUBLIC_CK_API_ENV` to `development`, `staging`, or `local` to select
 the non-production environment. Optional `EXPO_PUBLIC_CK_API_BASE_URL`,
@@ -133,7 +127,7 @@ expo/
 │   └── ui/         # Shared responsive components and tokens
 ├── native/         # Retained widget sources and native parity contract
 ├── plugins/        # Expo config plugins that generate native projects
-└── public/         # PWA, OAuth callback, and Cloudflare static assets
+└── public/         # App-opening landing, OAuth callbacks, and association files
 ```
 
 The Expo project uses CNG: `expo/ios` and `expo/android` are generated and
@@ -146,21 +140,21 @@ and feature services.
 
 ### Key Technologies
 
-- **Expo SDK 58 / React Native** - iOS, Android, and static web runtime
-- **Expo Router** - Cross-platform routing and static web export
+- **Expo SDK 58 / React Native** - Native iOS and Android runtime
+- **Expo Router** - Native routing and deep links
 - **TanStack Query and Zustand** - Remote and local state
 - **Expo config plugins / CNG** - Reproducible native projects and widgets
-- **Cloudflare Pages** - Production static web hosting
+- **Cloudflare Pages** - Static app-opening landing and association files
 
 ## Release delivery
 
 The `Release mobile app` workflow accepts a ref, an exact numeric version, and an independent `alpha`, `beta`, or `production` track. The entered version is authoritative: `x.y.0` creates a native release, while `x.y.1` and later patches create OTA releases only when both fingerprints still match that track's `x.y.0` native build. Native code changes require a new native release. Signed APKs are attached to native GitHub releases.
 
-| Track | API and OTA host | Expo development server | Store destination |
-| --- | --- | --- | --- |
-| alpha | `local-api.clashk.ing` | `local-app.clashk.ing` | Play closed testing (`alpha`) and TestFlight |
-| beta | `dev-api.clashk.ing` | `dev-app.clashk.ing` | Play beta and TestFlight |
-| production | `api.clashk.ing` | — | Play production and App Store review |
+| Track      | API and OTA host       | Expo development server | Store destination                            |
+| ---------- | ---------------------- | ----------------------- | -------------------------------------------- |
+| alpha      | `local-api.clashk.ing` | `local-app.clashk.ing`  | Play closed testing (`alpha`) and TestFlight |
+| beta       | `dev-api.clashk.ing`   | `dev-app.clashk.ing`    | Play beta and TestFlight                     |
+| production | `api.clashk.ing`       | —                       | Play production and App Store review         |
 
 Store builds embed their JavaScript and do not connect to Metro. The Expo server URLs are for development clients only. Both alpha and beta use numeric native versions (for example `0.5.0`) and separate GitHub/OTA suffixes (`0.5.0-alpha`, `0.5.0-beta`). TestFlight groups control access on iOS; invited external testers require Apple's TestFlight review before testing.
 
@@ -181,7 +175,7 @@ Release jobs use GitHub Environments named `alpha`, `beta`, and `production`. Co
 
 ## 🌍 Internationalization
 
-The app supports 20+ languages with community-driven translations:
+The app uses community-driven translations:
 
 - English (reference language)
 - French (developer-maintained)
