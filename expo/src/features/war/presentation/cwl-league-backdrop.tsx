@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
-import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { HeaderArtwork } from '../../../ui/header-artwork';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { useCKTheme } from '../../../ui';
 
@@ -47,10 +48,9 @@ export function CwlLeagueBackdrop({ league }: { league?: string | null }) {
       style={[StyleSheet.absoluteFill, { backgroundColor: theme.background, overflow: 'hidden' }]}
     >
       {index >= 0 ? (
-        <Image
+        <HeaderArtwork
           source={maps[index]}
-          resizeMode="contain"
-          fadeDuration={0}
+          contentFit="contain"
           style={{
             position: 'absolute',
             width: imageWidth,

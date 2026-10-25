@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -7,13 +7,14 @@ import {
   CKText,
   CalendarPicker,
   DateNavigator,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   PressableSurface,
   ckColors,
   useCKTheme,
 } from '../../../ui';
 import type { ClanCompetitiveDay } from '../models/clan-competitive';
+import { ClanMember } from '../models/clan-core';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
 import { ClanTabEmpty } from './clan-tab-components';
 
@@ -29,7 +30,9 @@ export function ClanCompetitiveTab({
   const { t, locale } = useI18n(),
     theme = useCKTheme();
   const [data, setData] = useState<ClanCompetitiveDay>();
-  const [today] = useState(() => new Date(Date.now() - (5 * 60 + 10) * 60_000).toISOString().slice(0, 10));
+  const [today] = useState(() =>
+    new Date(Date.now() - (5 * 60 + 10) * 60_000).toISOString().slice(0, 10),
+  );
   const [day, setDay] = useState(today);
   const [dateOpen, setDateOpen] = useState(false);
   const selectedDate = new Date(`${day}T12:00:00`);
@@ -82,6 +85,7 @@ export function ClanCompetitiveTab({
     };
   }, [actions, model.clan, day]);
   const open = async (tag: string) => {
+    if (actions.openPlayerTag) return actions.openPlayerTag(tag);
     try {
       actions.openPlayer(await actions.loadPlayer(tag));
     } catch {
@@ -96,12 +100,28 @@ export function ClanCompetitiveTab({
         onRetry={() => void load()}
       />
     );
-  if (!data)
-    return (
-      <View style={styles.loading}>
-        <PageSkeleton kind="list" />
-      </View>
-    );
+  // Placeholder rows are presentation-only: reuse the real member card tree,
+  // without adding invented statistics to the service's cached response.
+  const rows =
+    data?.legends ??
+    (model.clan.memberList.length
+      ? model.clan.memberList.slice(0, 3)
+      : [0, 1, 2].map(() =>
+          ClanMember.fromJson({ name: 'Player name', tag: '', townHallLevel: 16 }),
+        )
+    ).map((member) => ({
+      member,
+      globalRank: 100,
+      trophies: 5000,
+      stats: {
+        tag: member.tag,
+        attackTrophies: 100,
+        defenseTrophies: -100,
+        netTrophies: 0,
+        attacks: 8,
+        defenses: 8,
+      },
+    }));
   return (
     <View style={styles.page} testID="clan-competitive-page">
       <DateNavigator
@@ -114,7 +134,12 @@ export function ClanCompetitiveTab({
         accessibilityLabel={t('rankingsSnapshotDate')}
       />
       {dateOpen ? (
-        <Modal supportedOrientations={modalOrientations} transparent animationType="slide" onRequestClose={() => setDateOpen(false)}>
+        <Modal
+          supportedOrientations={modalOrientations}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setDateOpen(false)}
+        >
           <Pressable style={styles.overlay} onPress={() => setDateOpen(false)}>
             <Pressable
               style={[styles.sheet, { backgroundColor: theme.surface }]}
@@ -130,10 +155,9 @@ export function ClanCompetitiveTab({
           </Pressable>
         </Modal>
       ) : null}
-      {loading ? <PageSkeleton kind="list" /> : null}
-      {data.legends.length ? (
-        <>
-          {data.legends.map(({ member, globalRank, trophies, stats }) => (
+      {rows.length ? (
+        <SkeletonContent loading={!data && loading} style={{ gap: 12 }}>
+          {rows.map(({ member, globalRank, trophies, stats }) => (
             <PressableSurface
               key={member.tag}
               style={styles.player}
@@ -187,9 +211,9 @@ export function ClanCompetitiveTab({
               )}
             </PressableSurface>
           ))}
-        </>
+        </SkeletonContent>
       ) : null}
-      {!data.legends.length ? <ClanTabEmpty title={t('generalNoDataAvailable')} /> : null}
+      {data && !rows.length ? <ClanTabEmpty title={t('generalNoDataAvailable')} /> : null}
     </View>
   );
 }

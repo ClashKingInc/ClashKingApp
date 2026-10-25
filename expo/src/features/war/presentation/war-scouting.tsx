@@ -5,7 +5,7 @@ import {
   CKText,
   InfoTooltip,
   MobileWebImage,
-  PageSkeleton,
+  SkeletonContent,
   Surface,
   useCKTheme,
 } from '../../../ui';
@@ -61,19 +61,18 @@ export function WarScouting({
     !war.opponent
   )
     return null;
-  if (!results) return <PageSkeleton kind="list" showHeader={false} />;
   const modifier = (value: string | null) =>
     ['normal', 'none', 'default'].includes((value ?? '').toLowerCase())
       ? ''
       : (value ?? '').toLowerCase();
   return (
-    <View style={{ gap: 16 }}>
+    <SkeletonContent loading={!results} style={{ gap: 16 }}>
       <CKText role="sectionTitle">{t('warScoutTitle')}</CKText>
       <View style={{ flexDirection: 'row', gap: 10 }}>
         {[war.clan, war.opponent].map((clan, index) => {
           if (!clan) return null;
           const tags = new Set(clan.members.map((member) => member.tag));
-          const matching = (results[index] ?? []).filter(
+          const matching = (results?.[index] ?? []).filter(
             (previous) =>
               modifier(previous.battleModifier) === modifier(war.battleModifier) &&
               previous.clan?.members.some(
@@ -121,7 +120,7 @@ export function WarScouting({
           );
         })}
       </View>
-      {results.some((value) => value === null) ? (
+      {results?.some((value) => value === null) ? (
         <Pressable
           accessibilityRole="button"
           onPress={() => {
@@ -134,8 +133,8 @@ export function WarScouting({
         </Pressable>
       ) : null}
       <CKText role="sectionTitle">{t('warScoutOpponent')}</CKText>
-      {results[1]?.length ? (
-        results[1].slice(0, 3).map((previous) => {
+      {results?.[1]?.length || !results ? (
+        (results?.[1] ?? [war, war, war]).slice(0, 3).map((previous, index) => {
           // History may arrive with either clan first. Keep the scouted clan
           // on the left, and pair each score with that clan's identity.
           const oriented = previous.reorderForClan(war.opponent!.tag);
@@ -165,7 +164,7 @@ export function WarScouting({
                 : theme.onSurface;
           return (
             <Surface
-              key={previous.endTime?.toISOString()}
+              key={`${previous.endTime?.toISOString()}:${index}`}
               testID={'war-scout-history-' + previous.tag}
               style={{ padding: 14, borderWidth: 0, gap: 8 }}
             >
@@ -193,6 +192,6 @@ export function WarScouting({
           {t('generalNoDataAvailable')}
         </CKText>
       )}
-    </View>
+    </SkeletonContent>
   );
 }

@@ -9,7 +9,7 @@ import {
   CKText,
   EmptyState,
   GlassControlSurface,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   SearchField,
   SelectionPicker,
@@ -17,9 +17,11 @@ import {
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
-import type { PlayerWarStats, PlayerWarTypeStats } from '../../player/models/player-war';
+import { PlayerWarStats, PlayerWarTypeStats } from '../../player/models/player-war';
 import type { ClanWarStats } from '../models';
 import { ClanWarStatsFilter } from '../models/clan-war-stats-filter';
+import { warHistoryRangeFilter, type WarHistoryRange } from '../../war/models/war-history-range';
+import { WarRangePicker } from '../../war/presentation/war-range-picker';
 import { FilterPill } from './clan-tab-components';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
 
@@ -27,9 +29,6 @@ type WarType = 'cwl' | 'random' | 'friendly';
 type SortKey = 'hitrate' | 'stars' | 'missed';
 type Attacker = { player: PlayerWarStats; value: PlayerWarTypeStats; hitrate: number };
 const ALL_TYPES: readonly WarType[] = ['cwl', 'random', 'friendly'];
-const WAR_RANGES = [25, 50, 100] as const;
-type WarRange = (typeof WAR_RANGES)[number];
-
 export function ClanStatisticsTab({
   model,
   actions,
@@ -44,7 +43,7 @@ export function ClanStatisticsTab({
   const [stats, setStats] = useState<ClanWarStats | null>(clan.clanWarStats);
   const [loading, setLoading] = useState(!clan.clanWarStats?.players.length);
   const [error, setError] = useState(false);
-  const [range, setRange] = useState<WarRange>(50);
+  const [range, setRange] = useState<WarHistoryRange>('wars:50');
   const [sameTownHall, setSameTownHall] = useState(false);
   const [currentOnly, setCurrentOnly] = useState(true);
   const [types, setTypes] = useState<readonly WarType[]>(ALL_TYPES);
@@ -74,14 +73,18 @@ export function ClanStatisticsTab({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clan.tag]);
 
-  const load = async (nextRange: WarRange, nextSameTownHall: boolean) => {
+  const load = async (nextRange: WarHistoryRange, nextSameTownHall: boolean) => {
     const id = ++requestId.current;
     setLoading(true);
     setError(false);
+    setStats(null);
     try {
       const result = await actions.loadWarStats(
         clan,
-        new ClanWarStatsFilter({ limit: nextRange, sameTownHall: nextSameTownHall }),
+        new ClanWarStatsFilter({
+          ...warHistoryRangeFilter(nextRange),
+          sameTownHall: nextSameTownHall,
+        }),
       );
       if (id === requestId.current) setStats(result);
     } catch {
@@ -139,9 +142,8 @@ export function ClanStatisticsTab({
     ? attackers.reduce((sum, { value }) => sum + value.averageStars * value.totalAttacks, 0) /
       attacks
     : 0;
-  const changeRange = (key: string) => {
-    const next = Number(key) as WarRange;
-    if (!WAR_RANGES.includes(next) || next === range) return;
+  const changeRange = (next: WarHistoryRange) => {
+    if (next === range) return;
     setRange(next);
     void load(next, sameTownHall);
   };
@@ -158,16 +160,7 @@ export function ClanStatisticsTab({
     <View style={styles.tab}>
       <View style={styles.toolbar}>
         <View style={styles.grow}>
-          <SelectionPicker
-            accessibilityLabel={t('filtersDateRange')}
-            options={WAR_RANGES.map((value) => ({
-              key: String(value),
-              label: t('warStatsRangeWarsCompact', { number: value }),
-            }))}
-            selectedKey={String(range)}
-            onSelect={changeRange}
-            title={t('filtersDateRange')}
-          />
+          <WarRangePicker value={range} onChange={changeRange} />
         </View>
         <IconButton
           label={t('warStatsSearchPlaceholder')}
@@ -238,11 +231,39 @@ export function ClanStatisticsTab({
           />
         </View>
       ) : null}
-      {loading ? (
-        <View style={styles.loading}>
-          <PageSkeleton kind="stats" />
-        </View>
-      ) : error ? (
+      {loading && !stats ? (
+        <SkeletonContent loading style={{ gap: 12 }}>
+          <Surface radius={22} style={styles.overview}>
+            <Metric value="100.0%" label={t('legendsHitrate')} />
+            <Metric value="3.00" label={t('warStarsAverage')} />
+            <Metric value="10" label={t('warAttacksMissedShort')} />
+          </Surface>
+          <View style={styles.list}>
+            {(clan.memberList.length
+              ? clan.memberList.slice(0, 3)
+              : [{ name: 'Player name', tag: '', townHallLevel: 16 }]
+            ).map((member, index) => {
+              const value = new PlayerWarTypeStats(10, 10, 10, 0, 0, { '3': 10 }, {}, {}, {});
+              const player = new PlayerWarStats(
+                member.name,
+                member.tag,
+                member.townHallLevel,
+                {},
+                { all: value },
+                [],
+              );
+              return (
+                <AttackerRow
+                  key={index}
+                  item={{ player, value, hitrate: 100, rank: index + 1 }}
+                  linked={false}
+                  sort={sort}
+                />
+              );
+            })}
+          </View>
+        </SkeletonContent>
+      ) : error && !stats ? (
         <EmptyState
           title={t('generalError')}
           body={t('generalTryAgain')}

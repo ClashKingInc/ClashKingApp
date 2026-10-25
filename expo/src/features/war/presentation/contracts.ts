@@ -214,6 +214,9 @@ function resolveDisplayWar(summary: WarCwl | null, tag: string): WarInfo | null 
   if (!summary) return null;
   if (summary.isInWar) return summary.warInfo;
   if (summary.isInCwl) return summary.getActiveWarByTag(tag);
+  // A completed war is still useful after the live flag clears. Status filters
+  // decide whether its timestamp belongs in In war or Other; keep the card.
+  if (summary.warInfo.state === 'warEnded') return summary.warInfo;
   return null;
 }
 

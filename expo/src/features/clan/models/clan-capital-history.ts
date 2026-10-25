@@ -1,4 +1,5 @@
 import { apiDateOrEpoch, int, number, record, records, string, type JsonRecord } from './parsing';
+import { ImageAssets } from '../../../core/assets/image-assets';
 
 export class Attack {
   constructor(
@@ -48,7 +49,7 @@ export class RaidDefender {
     readonly tag: string,
     readonly name: string,
     readonly level: number,
-    readonly badgeUrls: Readonly<Record<string, string>>,
+    readonly badgeUrls: Readonly<ReturnType<typeof ImageAssets.clanBadgeUrls>>,
   ) {}
   static fromJson(json: JsonRecord) {
     const badges = ImageAssets.clanBadgeUrls(string(json.tag), json);
@@ -220,4 +221,3 @@ export class CapitalHistoryItems {
     return new CapitalHistoryItems([], '');
   }
 }
-import { ImageAssets } from '../../../core/assets/image-assets';

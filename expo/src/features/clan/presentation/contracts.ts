@@ -7,6 +7,7 @@ import { canonicalTag } from '../../../core/domain/tags';
 import type { ClanNotificationControls } from './clan-notification-options';
 
 export interface ClansPresentationModel {
+  readonly loading?: boolean;
   readonly profiles: readonly Player[];
   readonly bookmarks: readonly BookmarkedClan[];
   readonly hydratedClans: readonly Clan[];
@@ -22,6 +23,7 @@ export interface ClansPresentationActions {
   hydrateBookmarkedClans(tags: readonly string[]): Promise<void>;
   loadClan(tag: string): Promise<Clan>;
   openClan(clan: Clan, origin?: ClanSpringOrigin): void;
+  openClanTag?(tag: string): void;
   reorderLinkedClans(orderedTags: readonly string[]): Promise<void>;
   reorderBookmarkedClans(orderedTags: readonly string[]): Promise<void>;
 }
@@ -58,7 +60,8 @@ export function buildClanRoster(model: ClansPresentationModel): {
   });
   const hydratedByTag = new Map(model.hydratedClans.map((clan) => [canonicalTag(clan.tag), clan]));
   const linked = Array.from(linkedByTag, ([tag, accounts]): ClanRosterItem => {
-    const attached = accounts.map((player) => player.clan as Clan | null)
+    const attached = accounts
+      .map((player) => player.clan as Clan | null)
       .find((clan) => clan && canonicalTag(clan.tag) === tag);
     const clan = hydratedByTag.get(tag) ?? attached ?? undefined;
     return {

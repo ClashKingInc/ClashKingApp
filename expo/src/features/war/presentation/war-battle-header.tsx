@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Animated, Image, Pressable, StyleSheet, View } from 'react-native';
+import { HeaderArtwork } from '../../../ui/header-artwork';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { materialBackLabel, useI18n } from '../../../i18n';
-import { CKText, MobileWebImage, PillSurface, useCKTheme } from '../../../ui';
+import { CKText, MobileWebImage, PillSurface, SkeletonContent, useCKTheme } from '../../../ui';
 import { HeaderIconButton } from '../../../ui/header';
 import { useCKAccessibility } from '../../../ui/accessibility';
 import type { WarInfo } from '../models';
 import { formatPercent, relativeWarTime, warTimeRemaining } from './presentation-utils';
 
 export function WarBattleHeader({
+  loading = false,
   war,
   cwlRoundNumber,
   onBack,
@@ -19,6 +21,7 @@ export function WarBattleHeader({
   onOpenCwl,
 }: {
   war: WarInfo;
+  loading?: boolean;
   cwlRoundNumber?: number | null;
   onBack: () => void;
   onOpenClan: (tag: string) => void;
@@ -29,7 +32,6 @@ export function WarBattleHeader({
   const insets = useSafeAreaInsets();
   const { reduceMotion } = useCKAccessibility();
   const [settle] = useState(() => new Animated.Value(1));
-  const [bounds, setBounds] = useState({ width: 0, height: 0 });
   const [flagsHeight, setFlagsHeight] = useState(0);
   useEffect(() => {
     if (reduceMotion) {
@@ -82,54 +84,19 @@ export function WarBattleHeader({
   return (
     <View
       testID="war-battle-header"
-      onLayout={({ nativeEvent: { layout } }) =>
-        setBounds((old) =>
-          old.width === layout.width && old.height === layout.height
-            ? old
-            : { width: layout.width, height: layout.height },
-        )
-      }
       style={[styles.header, { paddingTop: insets.top + 4, backgroundColor: theme.background }]}
     >
-      {/* Artwork fills the header itself, including the safe area. The scrim
-          fades within one layer, rather than forming a separate black panel. */}
-      {bounds.height > 0 ? (
-        <View pointerEvents="none" style={StyleSheet.absoluteFill}>
-          <Image
-            testID="war-header-artwork"
-            source={require('../../../../assets/clashking/war/war-wood-header.webp')}
-            style={[styles.art, bounds]}
-            resizeMode="cover"
-          />
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: '#00000070' }]} />
-          {/* Native percentage-sized image/SVG layers can resolve against an
-          earlier auto-height pass. Use the final content bounds for both. */}
-          <Svg
-            pointerEvents="none"
-            style={StyleSheet.absoluteFill}
-            width={bounds.width}
-            height={bounds.height}
-          >
-            <Defs>
-              <LinearGradient
-                id="war-room-fade"
-                gradientUnits="userSpaceOnUse"
-                x1={0}
-                y1={0}
-                x2={0}
-                y2={bounds.height}
-              >
-                <Stop offset="0" stopColor={theme.background} stopOpacity={0} />
-                <Stop offset="0.4" stopColor={theme.background} stopOpacity={0} />
-                <Stop offset="0.65" stopColor={theme.background} stopOpacity={0.5} />
-                <Stop offset="0.84" stopColor={theme.background} stopOpacity={1} />
-                <Stop offset="1" stopColor={theme.background} />
-              </LinearGradient>
-            </Defs>
-            <Rect width={bounds.width + 1} height={bounds.height + 1} fill="url(#war-room-fade)" />
-          </Svg>
-        </View>
-      ) : null}
+      {/* Mount artwork on the first render. Waiting for onLayout left this
+          region black while native layout and the roster finished loading. */}
+      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+        <HeaderArtwork
+          testID="war-header-artwork"
+          source={require('../../../../assets/clashking/war/war-wood-header.webp')}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+        />
+        <HeroHeaderScrim variant="war" />
+      </View>
       <View style={styles.navigation}>
         <HeaderIconButton
           icon={<ArrowLeft size={24} color="#fff" />}
@@ -137,7 +104,7 @@ export function WarBattleHeader({
           onPress={onBack}
           glass={false}
         />
-        <View style={styles.timeSlot}>
+        <SkeletonContent loading={loading} style={styles.timeSlot}>
           {time ? (
             <View style={styles.timeChip}>
               <CKText role="metadata" style={styles.time}>
@@ -145,10 +112,10 @@ export function WarBattleHeader({
               </CKText>
             </View>
           ) : null}
-        </View>
+        </SkeletonContent>
         <View style={{ width: 44 }} />
       </View>
-      <View style={styles.content}>
+      <SkeletonContent loading={loading} style={styles.content}>
         <Animated.View style={{ gap: 4, paddingTop: 2, transform: [{ scale: settle }] }}>
           <View style={[styles.badgeRow, { minHeight: Math.max(54, hasFlags ? flagsHeight : 0) }]}>
             <Pressable
@@ -279,7 +246,7 @@ export function WarBattleHeader({
             <CKText style={styles.dash}>—</CKText>
           </View>
         </Animated.View>
-      </View>
+      </SkeletonContent>
       {/* Cover the final physical pixels independently of SVG rasterization.
           Red artwork must not peek through the native scroll/header seam. */}
       <View
@@ -298,11 +265,6 @@ export function WarBattleHeader({
 }
 const styles = StyleSheet.create({
   header: { overflow: 'hidden', paddingBottom: 14, flexShrink: 0 },
-  art: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
   navigation: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 },
   timeSlot: { flex: 1, alignItems: 'center' },
   timeChip: {

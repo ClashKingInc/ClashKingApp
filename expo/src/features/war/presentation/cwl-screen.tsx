@@ -44,7 +44,8 @@ import {
   ProfileTabs,
   SelectionPicker,
   Surface,
-  Skeleton,
+  SkeletonContent,
+  useSkeletonContent,
   useCKTheme,
 } from '../../../ui';
 import { HeaderIconButton } from '../../../ui/header';
@@ -63,13 +64,14 @@ import {
   type CwlStanding,
 } from '../models/cwl-outlook';
 import type { WarPresentationActions } from './contracts';
+import { loadingCwl } from './war-loading-model';
 import { formatPercent, sortCwlMembers, warTimeRemaining } from './presentation-utils';
 import { TownHallBreakdown, WarLineupComparison } from './town-hall-breakdown';
 
 type CwlTab = 'rounds' | 'teams' | 'members';
 export function CwlScreen({
   clanTag,
-  summary,
+  summary: sourceSummary,
   warLeagueName,
   actions,
   onBack,
@@ -78,6 +80,7 @@ export function CwlScreen({
   failed = false,
   refreshing = false,
   onRefresh,
+  placeholder = false,
 }: {
   clanTag: string;
   summary: WarCwl;
@@ -89,10 +92,17 @@ export function CwlScreen({
   failed?: boolean;
   refreshing?: boolean;
   onRefresh?: () => void;
+  placeholder?: boolean;
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const placeholderIdentity =
+    placeholder || (loading && !sourceSummary.leagueInfo?.getClanDetails(clanTag));
+  const summary =
+    loading && !sourceSummary.leagueInfo?.getClanDetails(clanTag)
+      ? loadingCwl(clanTag)
+      : sourceSummary;
   const link = useLinkParameters();
   const [tab, setTab] = useState<CwlTab>(
     linkChoice(link.tab, ['rounds', 'teams', 'members'], 'rounds'),
@@ -178,6 +188,7 @@ export function CwlScreen({
         >
           <CwlHero
             topInset={insets.top}
+            loading={placeholderIdentity}
             clan={clan}
             season={summary.leagueInfo?.season}
             league={warLeagueName ?? summary.leagueInfo?.warLeagueName}
@@ -266,11 +277,29 @@ export function CwlScreen({
             </Surface>
           ) : null}
           {loading ? (
-            <View style={styles.loading}>
-              <Skeleton width="100%" height={68} radius={20} />
-              <Skeleton width="100%" height={112} radius={20} />
-              <Skeleton width="100%" height={112} radius={20} />
-            </View>
+            <SkeletonContent loading>
+              {tab === 'rounds' ? (
+                <CwlMatches
+                  summary={loadingCwl(perspective)}
+                  clanTag={perspective}
+                  onOpenWar={onOpenWar}
+                />
+              ) : tab === 'teams' ? (
+                <CwlClans
+                  summary={loadingCwl(perspective)}
+                  clanTag={perspective}
+                  standings={cwlStandings(loadingCwl(perspective))}
+                  actions={actions}
+                  league={warLeagueName}
+                />
+              ) : (
+                <CwlPlayers
+                  summary={loadingCwl(perspective)}
+                  clanTag={perspective}
+                  actions={actions}
+                />
+              )}
+            </SkeletonContent>
           ) : failed ? (
             <EmptyState
               title={t('errorNetworkTitle')}
@@ -352,6 +381,7 @@ function CwlHero({
   totalRounds,
   clans,
   onSelectClan,
+  loading = false,
 }: {
   topInset: number;
   clan: CwlClan;
@@ -362,6 +392,7 @@ function CwlHero({
   totalRounds: number;
   clans: readonly CwlClan[];
   onSelectClan: (tag: string) => void;
+  loading?: boolean;
 }) {
   const { t, locale } = useI18n();
   const match = /^(\d{4})-(\d{2})/.exec(season ?? '');
@@ -378,61 +409,65 @@ function CwlHero({
     <View style={[styles.hero, { backgroundColor: theme.background, paddingTop: topInset }]}>
       <CwlLeagueBackdrop league={league} />
       {navigation}
-      <View style={styles.identity}>
-        <View style={styles.heroHeading}>
-          <MobileWebImage
-            imageUrl={ImageAssets.getWarLeagueImage(league ?? '')}
-            style={styles.heroBadge}
-          />
-          <View style={styles.heroTitleGroup}>
-            <CKText
-              role="screenTitle"
-              numberOfLines={2}
-              style={[styles.heroText, { color: theme.onSurface }]}
-            >
-              {league ?? t('cwlTitle')}
-            </CKText>
-            <View style={styles.league}>
-              <CKText role="metadata" muted>
-                {date}
+      <SkeletonContent loading={loading}>
+        <View style={styles.identity}>
+          <View style={styles.heroHeading}>
+            <MobileWebImage
+              imageUrl={ImageAssets.getWarLeagueImage(league ?? '')}
+              style={styles.heroBadge}
+            />
+            <View style={styles.heroTitleGroup}>
+              <CKText
+                role="screenTitle"
+                numberOfLines={2}
+                style={[styles.heroText, { color: theme.onSurface }]}
+              >
+                {league ?? t('cwlTitle')}
               </CKText>
+              <View style={styles.league}>
+                <CKText role="bodyMedium" style={styles.heroDate}>
+                  {date}
+                </CKText>
+              </View>
             </View>
           </View>
+          <View style={{ maxWidth: 320, alignSelf: 'center' }}>
+            <SelectionPicker
+              plain
+              wrapLabel
+              title={t('searchTabClans')}
+              selectedKey={clan.tag}
+              onSelect={onSelectClan}
+              options={clans.map((item) => ({
+                key: item.tag,
+                label: item.name,
+                icon: (
+                  <MobileWebImage imageUrl={item.badgeUrls.smallest} style={styles.smallBadge} />
+                ),
+              }))}
+            />
+          </View>
         </View>
-        <View style={{ maxWidth: 320, alignSelf: 'center' }}>
-          <SelectionPicker
-            plain
-            wrapLabel
-            title={t('searchTabClans')}
-            selectedKey={clan.tag}
-            onSelect={onSelectClan}
-            options={clans.map((item) => ({
-              key: item.tag,
-              label: item.name,
-              icon: <MobileWebImage imageUrl={item.badgeUrls.smallest} style={styles.smallBadge} />,
-            }))}
-          />
-        </View>
-      </View>
-      {standing ? (
-        <View style={styles.heroMetrics}>
-          <HeroMetric
-            label={t('cwlRankTitle')}
-            value={standing.rank ? `#${standing.rank}` : '—'}
-            image={ImageAssets.podium}
-          />
-          <HeroMetric
-            label={t('warStarsTitle')}
-            value={String(standing.stars)}
-            image={ImageAssets.attackStar}
-          />
-          <HeroMetric
-            label={t('warWinsTitle')}
-            value={`${standing.wins}/${totalRounds}`}
-            image={ImageAssets.cwlSwordsNoBorder}
-          />
-        </View>
-      ) : null}
+        {standing ? (
+          <View style={styles.heroMetrics}>
+            <HeroMetric
+              label={t('cwlRankTitle')}
+              value={standing.rank ? `#${standing.rank}` : '—'}
+              image={ImageAssets.podium}
+            />
+            <HeroMetric
+              label={t('warStarsTitle')}
+              value={String(standing.stars)}
+              image={ImageAssets.attackStar}
+            />
+            <HeroMetric
+              label={t('warWinsTitle')}
+              value={`${standing.wins}/${totalRounds}`}
+              image={ImageAssets.cwlSwordsNoBorder}
+            />
+          </View>
+        ) : null}
+      </SkeletonContent>
     </View>
   );
 }
@@ -465,6 +500,7 @@ const CwlMatches = memo(function CwlMatches({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const loading = useSkeletonContent();
   const link = useLinkParameters();
   const rounds = summary.leagueInfo?.rounds ?? [];
   const active = summary.getActiveWarByTag(clanTag);
@@ -540,7 +576,7 @@ const CwlMatches = memo(function CwlMatches({
                 {
                   // White scores need a dark base even in light mode. The
                   // result tint belongs to the tile, not individual digits.
-                  backgroundColor: '#0B0B0C',
+                  backgroundColor: loading ? theme.surfaceContainerHighest : '#0B0B0C',
                 },
               ]}
             >
@@ -551,7 +587,11 @@ const CwlMatches = memo(function CwlMatches({
                   {
                     // Selection is the white marker, not another outcome
                     // color. Keep every round's result equally readable.
-                    backgroundColor: colorWithAlpha(result?.color ?? '#757575', 0.55),
+                    // Placeholder scores do not represent a draw or any other
+                    // result. Reserve outcome colors for the loaded rounds.
+                    backgroundColor: loading
+                      ? theme.surfaceContainerHighest
+                      : colorWithAlpha(result?.color ?? '#757575', 0.55),
                   },
                 ]}
               />
@@ -567,7 +607,7 @@ const CwlMatches = memo(function CwlMatches({
                   {score}
                 </CKText>
               </View>
-              {picked ? (
+              {picked && !loading ? (
                 <View style={[styles.roundMarker, { backgroundColor: '#FFFFFF' }]} />
               ) : null}
             </Pressable>
@@ -582,7 +622,10 @@ const CwlMatches = memo(function CwlMatches({
             {
               backgroundColor: theme.card,
               borderWidth: 1,
-              borderColor: colorWithAlpha(selectedResult?.color ?? theme.outlineVariant, 0.7),
+              borderColor: colorWithAlpha(
+                loading ? theme.outlineVariant : (selectedResult?.color ?? theme.outlineVariant),
+                0.7,
+              ),
               overflow: 'hidden',
             },
           ]}
@@ -1382,6 +1425,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   hero: { overflow: 'hidden' },
+  heroDate: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: '600',
+    textShadowColor: '#000000B3',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
   heroArtwork: { position: 'absolute', top: 0, left: 0, right: 0, height: 190 },
   tabIcon: { width: 22, height: 22 },
   // Grow only to the viewport: center rounds when they fit, retain scrolling

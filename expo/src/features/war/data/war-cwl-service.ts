@@ -152,6 +152,7 @@ export class WarCwlService {
     api: ContractApiService,
     tag: string,
     end: Date,
+    context?: Pick<WarInfo, 'warType' | 'tag'>,
   ): Promise<WarInfo | null> {
     const endTime = formatClashTime(end);
     const response = await Effect.runPromise(
@@ -162,7 +163,11 @@ export class WarCwlService {
       }),
     );
     return response.ok
-      ? WarInfo.fromJson({ ...response.value, war_tag: response.value.tag })
+      ? WarInfo.fromJson({
+          ...response.value,
+          war_tag: response.value.tag ?? context?.tag,
+          warType: context?.warType ?? undefined,
+        })
       : null;
   }
 

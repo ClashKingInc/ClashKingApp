@@ -12,12 +12,13 @@ import { defaultIsNetworkError } from '../../../core/app/startup-coordinator';
 import { canonicalTag } from '../../../core/domain/tags';
 import { StartupErrorScreen } from '../../../core/app/startup-feedback';
 import { materialBackLabel, useI18n } from '../../../i18n';
-import { ErrorState, PageSkeleton, ProfileHeaderAction, Snackbar, useCKTheme } from '../../../ui';
+import { ErrorState, ProfileHeaderAction, Snackbar, useCKTheme } from '../../../ui';
 import { accountTagsForClanOrder } from '../../clan/presentation/clan-root-state';
 import { WarCwlService } from '../data';
 import type { WarCwl, WarInfo } from '../models';
 import type { WarPresentationActions, WarPresentationModel } from './contracts';
 import { CwlScreen } from './cwl-screen';
+import { loadingCwl } from './war-loading-model';
 import { WarCwlPresentationRoot } from './war-cwl-screen';
 import { WarDetailScreen } from './war-detail-screen';
 import { extraWarClanTags, hiddenWarPlayerTags, hydratedClanValues } from './war-root-state';
@@ -164,6 +165,7 @@ export function WarCwlRoot(props: WarCwlRootProps) {
 }
 
 export interface WarInfoRootProps {
+  readonly loading?: boolean;
   readonly war: WarInfo;
   readonly roundNumber?: number | null;
   readonly onBack: () => void;
@@ -174,6 +176,7 @@ export interface WarInfoRootProps {
 
 /** A shell-owned war detail route, used when Flutter would push above the current page. */
 export function WarInfoRoot({
+  loading = false,
   war,
   roundNumber,
   onBack,
@@ -188,6 +191,7 @@ export function WarInfoRoot({
   return (
     <View style={{ flex: 1 }}>
       <WarDetailScreen
+        loading={loading}
         war={war}
         linkedPlayerTags={ownedPlayerTags}
         cwlRoundNumber={roundNumber}
@@ -201,6 +205,7 @@ export function WarInfoRoot({
 }
 
 export interface CwlInfoRootProps {
+  readonly placeholder?: boolean;
   readonly summary: WarCwl;
   readonly clanTag: string;
   readonly warLeagueName?: string;
@@ -212,6 +217,7 @@ export interface CwlInfoRootProps {
 
 /** A shell-owned CWL route that keeps nested war navigation on the same app stack. */
 export function CwlInfoRoot({
+  placeholder = false,
   summary,
   clanTag,
   warLeagueName,
@@ -230,9 +236,10 @@ export function CwlInfoRoot({
   const [revision, setRevision] = useState(0);
   const season = summary.leagueInfo?.season ?? '';
   const requestKey = `${clanTag}:${season}:${revision}`;
-  const loading = completedKey !== requestKey;
+  const loading = placeholder || completedKey !== requestKey;
   const failed = failureKey === requestKey;
   useEffect(() => {
+    if (placeholder) return;
     let active = true;
     void runtime.wars
       .loadCwlDetail(clanTag, season)
@@ -248,7 +255,7 @@ export function CwlInfoRoot({
     return () => {
       active = false;
     };
-  }, [runtime, clanTag, season, requestKey]);
+  }, [runtime, clanTag, season, requestKey, placeholder]);
   const matchingDetail =
     detail?.tag === clanTag &&
     (season.length === 7
@@ -261,6 +268,7 @@ export function CwlInfoRoot({
     <View style={{ flex: 1 }}>
       <CwlScreen
         summary={matchingDetail ?? summary}
+        placeholder={placeholder}
         loading={loading && !matchingDetail}
         failed={failed && !matchingDetail}
         refreshing={loading && !!matchingDetail}
@@ -323,6 +331,19 @@ export function HistoricalCwlRoot({
       active = false;
     };
   }, [runtime, clanTag, season, revision]);
+  if (!summary && !failed)
+    return (
+      <CwlScreen
+        summary={loadingCwl(clanTag, season)}
+        loading
+        placeholder
+        clanTag={clanTag}
+        warLeagueName={warLeagueName}
+        actions={actions}
+        onBack={onBack}
+        onOpenWar={onOpenWar}
+      />
+    );
   if (!summary)
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
@@ -333,16 +354,12 @@ export function HistoricalCwlRoot({
             onPress={onBack}
           />
         </View>
-        {failed ? (
-          <ErrorState
-            title={t('generalError')}
-            body={t('generalTryAgain')}
-            actionLabel={t('generalRetry')}
-            onAction={reload}
-          />
-        ) : (
-          <PageSkeleton kind="war" />
-        )}
+        <ErrorState
+          title={t('generalError')}
+          body={t('generalTryAgain')}
+          actionLabel={t('generalRetry')}
+          onAction={reload}
+        />
       </SafeAreaView>
     );
   return (

@@ -132,10 +132,14 @@ export function ClanRosterCard({
                   {item.name}
                 </CKText>
               </View>
-              {item.countryCode && item.locationName ? (
+              {/* International has a location name but no country code. The
+                  optional flag must not determine whether the label appears. */}
+              {item.locationName ? (
                 <View style={styles.location}>
                   <MobileWebImage
-                    imageUrl={ImageAssets.flag(item.countryCode)}
+                    imageUrl={
+                      item.countryCode ? ImageAssets.flag(item.countryCode) : ImageAssets.planet
+                    }
                     style={styles.flag}
                   />
                   <CKText muted role="labelLarge" numberOfLines={1} style={styles.locationName}>

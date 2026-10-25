@@ -10,7 +10,7 @@ import {
   CKText,
   DestinationPicker,
   EmptyState,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   ResponsiveGrid,
   Surface,
@@ -183,9 +183,32 @@ export function ClanLeaderboardHistoryTab({
           onRetry={() => void load()}
         />
       ) : !data ? (
-        <View style={styles.center}>
-          <PageSkeleton kind="stats" />
-        </View>
+        <SkeletonContent loading>
+          <View style={styles.seasonPickerRow}>
+            <SeasonPicker
+              accessibilityLabel={t('clanRankingsSelectSeason')}
+              selectedKey="loading"
+              choices={[{ key: 'loading', label: 'Season' }]}
+              onSelect={() => undefined}
+            />
+          </View>
+          <View style={styles.historyCharts}>
+            <HistoryChart
+              items={[]}
+              metric="rank"
+              type={type}
+              label={t('cwlRankTitle')}
+              locale={locale}
+            />
+            <HistoryChart
+              items={[]}
+              metric="points"
+              type={type}
+              label={pointsLabel}
+              locale={locale}
+            />
+          </View>
+        </SkeletonContent>
       ) : !data.summary.seasons.length ? (
         <ClanTabEmpty title={t('generalNoDataAvailable')} />
       ) : (
@@ -362,9 +385,34 @@ export function ClanLegendHistoryTab({
     );
   if (!summary || !items)
     return (
-      <View style={styles.center}>
-        <PageSkeleton kind="list" />
-      </View>
+      <SkeletonContent loading style={styles.tab}>
+        <View style={styles.seasonPickerRow}>
+          <SeasonPicker
+            accessibilityLabel={t('clanRankingsSelectSeason')}
+            selectedKey="loading"
+            choices={[{ key: 'loading', label: 'Season' }]}
+            onSelect={() => undefined}
+          />
+        </View>
+        <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+          {[0, 1, 2].map((index) => (
+            <LegendRow
+              key={index}
+              entry={{
+                season: '2026-01',
+                tag: '',
+                name: 'Player name',
+                expLevel: 100,
+                trophies: 5000,
+                attackWins: 100,
+                defenseWins: 10,
+                rank: 100,
+              }}
+              showSeason={false}
+            />
+          ))}
+        </ResponsiveGrid>
+      </SkeletonContent>
     );
   if (!summary.seasons.length && !items.length)
     return <ClanTabEmpty title={t('generalNoDataAvailable')} />;
@@ -498,9 +546,27 @@ export function ClanRecordsHistoryTab({
     );
   if (!records || !history)
     return (
-      <View style={styles.center}>
-        <PageSkeleton kind="list" />
-      </View>
+      <SkeletonContent loading style={styles.tab}>
+        <ResponsiveGrid minItemWidth={360} maxColumns={2} gap={12}>
+          <RecordPanel
+            label={t('clanPointsTitle')}
+            record={{ value: 10000, time: new Date(0) }}
+            image={ImageAssets.bestTrophies}
+          />
+          <RecordPanel
+            label={t('rankingsWinStreak')}
+            record={{ value: 100, time: new Date(0) }}
+            image={ImageAssets.war}
+          />
+        </ResponsiveGrid>
+        {[0, 1, 2].map((index) => (
+          <ProfileChangeRow
+            key={index}
+            change={{ time: new Date(0), type: 'clanLevel', previous: 10, current: 11 }}
+            badge={model.clan.badgeUrls.smallest}
+          />
+        ))}
+      </SkeletonContent>
     );
   if (records.isEmpty && !history.items.length)
     return <ClanTabEmpty title={t('generalNoDataAvailable')} />;

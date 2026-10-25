@@ -1,22 +1,28 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
-import { useMemo, useState, type ReactNode } from 'react';
+import { modalOrientations } from '../../../ui/modal-orientations';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
-import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Modal,
+  Animated,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  useWindowDimensions,
+} from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ArrowDown,
-  ArrowLeft,
   ArrowUp,
   BarChart3,
   Building2,
   Check,
-  ChevronLeft,
   ChevronRight,
-  History,
   Info,
   LayoutDashboard,
   Link2,
   Search,
-  Shield,
   Swords,
   Users,
   X,
@@ -25,22 +31,35 @@ import {
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { canonicalTag } from '../../../core/domain/tags';
-import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
+import { materialBackLabel, materialCloseLabel, toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
   CardSurface,
   EmptyState,
   HeaderIconButton,
+  CalendarPicker,
+  DateNavigator,
+  ProfileTabs,
+  ProfilePageHeader,
+  ProfileStatChip,
+  InfoTooltip,
+  SelectionPicker,
   MobileWebImage,
   PillSurface,
   Surface,
+  SkeletonContent,
   ckRadius,
   colorWithAlpha,
   statColors,
   tintIcon,
   useCKTheme,
 } from '../../../ui';
-import type { CapitalHistoryItem, Clan, RaidMember } from '../models';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { PagerView, type PagerViewHandle } from '../../../ui/pager';
+import { useCKAccessibility } from '../../../ui/accessibility';
+import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
+import { AnalyticsLineChart } from '../../stats/presentation/analytics-chart';
+import { CapitalHistoryItem, RaidMember, type Clan } from '../models';
 import {
   attackEfficiency,
   districtDefenseStats,
@@ -55,7 +74,8 @@ import {
   type OpponentStat,
 } from './clan-capital-analytics';
 
-type CapitalTab = 'summary' | 'members' | 'breakdown' | 'history';
+type CapitalTab = 'summary' | 'members' | 'breakdown';
+const CAPITAL_TABS: readonly CapitalTab[] = ['summary', 'members', 'breakdown'];
 type MemberSort = 'loot' | 'attacks';
 type MemberFilter = 'all' | 'attacked' | 'notAttacked';
 
@@ -63,17 +83,74 @@ export type ClanCapitalScreenProps = {
   clan: Clan;
   linkedPlayerTags?: readonly string[];
   goBack: () => void;
+  loading?: boolean;
 };
 
-/** Frozen Flutter Clan Capital detail surface, kept independent for shell integration. */
-export function ClanCapitalScreen({ clan, linkedPlayerTags = [], goBack }: ClanCapitalScreenProps) {
-  const { t, locale } = useI18n();
+/** Raid navigation and reporting share the app's profile-page controls. */
+export function ClanCapitalScreen({
+  clan,
+  linkedPlayerTags = [],
+  goBack,
+  loading = false,
+}: ClanCapitalScreenProps) {
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
-  const raids = clan.clanCapitalRaid?.items ?? [];
+  const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const storedRaids = clan.clanCapitalRaid?.items ?? [];
+  const pending = loading && !storedRaids.length;
+  // This model exists only inside the skeleton scope; never attach it to the
+  // clan or its repository. The loaded screen and loading screen share cards.
+  const raids = pending
+    ? [
+        new CapitalHistoryItem(
+          'ongoing',
+          new Date(0),
+          new Date(3 * 86_400_000),
+          100000,
+          3,
+          100,
+          30,
+          1000,
+          100,
+          (clan.memberList.length
+            ? clan.memberList.slice(0, 4)
+            : [{ tag: '', name: 'Clan member' }]
+          ).map((member) => new RaidMember(member.tag, member.name, 6, 5, 1, 10000)),
+          [],
+          [],
+        ),
+      ]
+    : storedRaids;
   const link = useLinkParameters();
-  const [tab, setTab] = useState<CapitalTab>(
-    linkChoice(link.tab, ['summary', 'members', 'breakdown', 'history'], 'summary'),
-  );
+  const [tab, setTab] = useState<CapitalTab>(() => {
+    const requested = linkChoice(
+      link.tab,
+      ['summary', 'members', 'breakdown', 'history'],
+      'summary',
+    );
+    // Existing shared history links now open the combined Stats destination.
+    return requested === 'history' ? 'breakdown' : requested;
+  });
+  const [initialTab] = useState(tab);
+  const pager = useRef<PagerViewHandle>(null);
+  const [settledTab, setSettledTab] = useState(tab);
+  const [tabPosition] = useState(() => new Animated.Value(CAPITAL_TABS.indexOf(initialTab)));
+  const [pageHeights, setPageHeights] = useState<Partial<Record<CapitalTab, number>>>({});
+  const { reduceMotion } = useCKAccessibility();
+  const blockPrimarySwipe = usePrimarySwipeGuard();
+  useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
+  const selectTab = (next: CapitalTab) => {
+    setTab(next);
+    const index = CAPITAL_TABS.indexOf(next);
+    if (reduceMotion) {
+      pager.current?.setPageWithoutAnimation(index);
+      tabPosition.setValue(index);
+      setSettledTab(next);
+    } else {
+      pager.current?.setPage(index);
+    }
+  };
   const [week, setWeek] = useState(
     Math.max(
       0,
@@ -100,144 +177,162 @@ export function ClanCapitalScreen({ clan, linkedPlayerTags = [], goBack }: ClanC
     },
     {
       key: 'breakdown',
-      label: t('generalBreakdown'),
+      label: t('generalStats'),
       icon: (
-        <Swords size={17} color={tab === 'breakdown' ? theme.primary : theme.onSurfaceVariant} />
-      ),
-    },
-    {
-      key: 'history',
-      label: t('generalHistory'),
-      icon: (
-        <BarChart3 size={17} color={tab === 'history' ? theme.primary : theme.onSurfaceVariant} />
+        <BarChart3 size={17} color={tab === 'breakdown' ? theme.primary : theme.onSurfaceVariant} />
       ),
     },
   ];
 
   return (
-    <ScrollView
+    <SafeAreaView
+      edges={['left', 'right']}
       style={[styles.screen, { backgroundColor: theme.background }]}
-      contentContainerStyle={styles.screenContent}
-      testID="clan-capital-screen"
     >
-      <CapitalHeader clan={clan} goBack={goBack} />
-      {!raid ? (
-        <EmptyState
-          title={t('capitalRaidEmptyTitle')}
-          body={t('capitalRaidEmptyBody')}
-          icon={<Building2 color={theme.onSurfaceVariant} />}
-          style={styles.empty}
-        />
-      ) : (
-        <View style={styles.contentWidth}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.tabs}
-          >
-            {tabs.map((item) => (
-              <Chip
-                key={item.key}
-                label={item.label}
-                selected={tab === item.key}
-                icon={item.icon}
-                onPress={() => setTab(item.key)}
-              />
-            ))}
-          </ScrollView>
-          <WeekNavigator
-            raid={raid}
-            locale={locale}
-            canOlder={selectedWeek < raids.length - 1}
-            canNewer={selectedWeek > 0}
-            onOlder={() => setWeek(selectedWeek + 1)}
-            onNewer={() => setWeek(selectedWeek - 1)}
+      <ScrollView
+        style={[styles.screen, { backgroundColor: theme.background }]}
+        contentContainerStyle={[styles.screenContent, { paddingBottom: insets.bottom + 32 }]}
+        testID="clan-capital-screen"
+      >
+        <CapitalHeader clan={clan} goBack={goBack} />
+        {!raid ? (
+          <EmptyState
+            title={t('capitalRaidEmptyTitle')}
+            body={t('capitalRaidEmptyBody')}
+            icon={<Building2 color={theme.onSurfaceVariant} />}
+            style={styles.empty}
           />
-          {tab === 'summary' ? <RaidSummary raid={raid} points={clan.clanCapitalPoints} /> : null}
-          {tab === 'members' ? (
-            <MembersTab
-              clan={clan}
-              raid={raid}
-              allRaids={raids}
-              linkedPlayerTags={linkedPlayerTags}
-            />
-          ) : null}
-          {tab === 'breakdown' ? <BreakdownTab raid={raid} /> : null}
-          {tab === 'history' ? (
-            <HistoryTab raids={raids} clan={clan} points={clan.clanCapitalPoints} />
-          ) : null}
-        </View>
-      )}
-    </ScrollView>
+        ) : (
+          <View style={styles.contentWidth}>
+            <View style={styles.tabs}>
+              <ProfileTabs
+                variant="underline"
+                overflow="fit"
+                tabs={tabs.map((item) => ({ ...item, icon: width >= 600 ? item.icon : undefined }))}
+                selectedKey={tab}
+                animatedPosition={tabPosition}
+                indicatorRtl={isRtl}
+                onSelect={(key) => selectTab(key as CapitalTab)}
+              />
+            </View>
+            <SkeletonContent loading={pending}>
+              <WeekNavigator
+                raid={raid}
+                raids={raids}
+                onSelect={setWeek}
+                locale={locale}
+                canOlder={selectedWeek < raids.length - 1}
+                canNewer={selectedWeek > 0}
+                onOlder={() => setWeek(selectedWeek + 1)}
+                onNewer={() => setWeek(selectedWeek - 1)}
+              />
+            </SkeletonContent>
+            <View
+              onTouchStart={() => blockPrimarySwipe(true)}
+              onTouchEnd={() => blockPrimarySwipe(false)}
+              onTouchCancel={() => blockPrimarySwipe(false)}
+            >
+              <PagerView
+                ref={pager}
+                initialPage={CAPITAL_TABS.indexOf(initialTab)}
+                layoutDirection={isRtl ? 'rtl' : 'ltr'}
+                testID="capital-section-pager"
+                style={{
+                  height: Math.max(pageHeights[tab] ?? 500, pageHeights[settledTab] ?? 500),
+                }}
+                onPageScroll={(event) =>
+                  tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)
+                }
+                onPageSelected={(event) => {
+                  const next = CAPITAL_TABS[event.nativeEvent.position];
+                  if (next) {
+                    setTab(next);
+                    setSettledTab(next);
+                  }
+                }}
+              >
+                {CAPITAL_TABS.map((page) => (
+                  <View
+                    key={page}
+                    collapsable={false}
+                    style={{ flex: 1 }}
+                    aria-hidden={page !== tab}
+                    accessibilityElementsHidden={page !== tab}
+                    importantForAccessibility={page !== tab ? 'no-hide-descendants' : 'auto'}
+                  >
+                    <View
+                      onLayout={(event) => {
+                        const height = Math.ceil(event.nativeEvent.layout.height);
+                        if (height > 0)
+                          setPageHeights((old) =>
+                            old[page] === height ? old : { ...old, [page]: height },
+                          );
+                      }}
+                    >
+                      <SkeletonContent loading={pending}>
+                        {page === 'summary' ? (
+                          <RaidSummary raid={raid} points={clan.clanCapitalPoints} />
+                        ) : page === 'members' ? (
+                          <MembersTab clan={clan} raid={raid} linkedPlayerTags={linkedPlayerTags} />
+                        ) : (
+                          <CapitalStatsTab raids={raids} points={clan.clanCapitalPoints}>
+                            <BreakdownTab raid={raid} />
+                          </CapitalStatsTab>
+                        )}
+                      </SkeletonContent>
+                    </View>
+                  </View>
+                ))}
+              </PagerView>
+            </View>
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 function CapitalHeader({ clan, goBack }: { clan: Clan; goBack: () => void }) {
   const { t, locale } = useI18n();
-  const theme = useCKTheme();
+  const insets = useSafeAreaInsets();
   const hall = clan.clanCapital?.capitalHallLevel ?? 1;
-  const league = clan.capitalLeague?.name ?? 'Unranked';
   return (
-    <View style={styles.hero}>
-      <MobileWebImage
-        imageUrl={ImageAssets.clanCapitalPageBackground}
-        style={StyleSheet.absoluteFill}
-        contentFit="cover"
-        contentPosition="bottom"
-      />
-      <View style={styles.heroShade} />
-      <View style={styles.heroTop}>
-        <HeaderIconButton
-          label={materialBackLabel(locale)}
-          glass={false}
-          onPress={goBack}
-          icon={<ArrowLeft size={24} color="#FFF" />}
-        />
-      </View>
-      <MobileWebImage imageUrl={ImageAssets.capitalHall(hall)} style={styles.capitalHall} />
-      <CKText role="screenTitle" numberOfLines={1} style={styles.heroTitle}>
-        {clan.name}
-      </CKText>
-      <CKText style={styles.heroTag}>{clan.tag}</CKText>
+    <ProfilePageHeader
+      testID="capital-profile-header"
+      title={clan.name}
+      titleImageUrl={clan.badgeUrls.smallest}
+      imageUrl={ImageAssets.capitalHall(hall)}
+      imageSize={104}
+      backgroundUrl={ImageAssets.clanCapitalPageBackground}
+      onBack={goBack}
+      backLabel={materialBackLabel(locale)}
+      safeTop={insets.top}
+      bottomPadding={24}
+    >
       <View style={styles.heroStats}>
-        <HeroStat
-          image={
+        <ProfileStatChip
+          icon={
             clan.capitalLeague
               ? ImageAssets.getCapitalLeagueImage(clan.capitalLeague.name)
               : ImageAssets.capitalTrophy
           }
-          title={league.replace(' League', '')}
-          subtitle={formatNumber(clan.clanCapitalPoints, locale)}
+          label={clan.capitalLeague?.name ?? t('clanCapitalPoints')}
+          value={clan.clanCapitalPoints}
         />
-        <HeroStat
-          image={ImageAssets.capitalHall(hall)}
-          title={`${t('clanCapitalHallTitle')} ${hall}`}
-          subtitle={`${clan.clanCapital?.districts.length ?? 0} ${t('clanDistrictsTitle')}`}
+        <ProfileStatChip
+          icon={ImageAssets.capitalHall(hall)}
+          label={t('clanCapitalHallTitle')}
+          value={`${t('clanCapitalHallTitle')} ${hall}`}
         />
       </View>
-      <View style={[styles.heroBottom, { backgroundColor: theme.background }]} />
-    </View>
-  );
-}
-
-function HeroStat({ image, title, subtitle }: { image: string; title: string; subtitle: string }) {
-  return (
-    <View style={styles.heroStat}>
-      <MobileWebImage imageUrl={image} style={styles.heroStatImage} />
-      <View style={styles.grow}>
-        <CKText numberOfLines={1} style={styles.heroStatTitle}>
-          {title}
-        </CKText>
-        <CKText numberOfLines={1} style={styles.heroStatSubtitle}>
-          {subtitle}
-        </CKText>
-      </View>
-    </View>
+    </ProfilePageHeader>
   );
 }
 
 function WeekNavigator({
   raid,
+  raids,
+  onSelect,
   locale,
   canOlder,
   canNewer,
@@ -245,7 +340,9 @@ function WeekNavigator({
   onNewer,
 }: {
   raid: CapitalHistoryItem;
-  locale: string;
+  raids: readonly CapitalHistoryItem[];
+  onSelect: (index: number) => void;
+  locale: ReturnType<typeof useI18n>['locale'];
   canOlder: boolean;
   canNewer: boolean;
   onOlder: () => void;
@@ -253,19 +350,26 @@ function WeekNavigator({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const insets = useSafeAreaInsets();
+  // Raid dates are UTC calendar labels; do not shift Friday to Thursday for
+  // western time zones when matching the shared local-date calendar picker.
+  const localDay = (date: Date) =>
+    new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  const dayKey = (date: Date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  const days = raids.map((item) => localDay(item.startTime));
+  const available = new Set(days.map(dayKey));
   const ongoing = raid.state === 'ongoing';
   return (
-    <View style={styles.weekRow}>
-      <RoundButton
-        label={t('capitalRaidPreviousWeek')}
-        disabled={!canOlder}
-        onPress={onOlder}
-        icon={<ChevronLeft size={21} color={theme.onSurface} />}
-      />
-      <View style={styles.weekCenter}>
-        <CKText role="labelLarge" numberOfLines={1} style={styles.bold}>
-          {formatDate(raid.startTime, locale)} – {formatDate(raid.endTime, locale)}
-        </CKText>
+    <>
+      <DateNavigator
+        label={`${formatDate(raid.startTime, locale)} – ${formatDate(raid.endTime, locale)}`}
+        previousDisabled={!canOlder}
+        nextDisabled={!canNewer}
+        onPrevious={onOlder}
+        onNext={onNewer}
+        onPressLabel={() => setCalendarOpen(true)}
+      >
         <PillSurface
           style={[
             styles.status,
@@ -284,14 +388,50 @@ function WeekNavigator({
             {ongoing ? t('capitalRaidStatusOngoing') : t('capitalRaidStatusEnded')}
           </CKText>
         </PillSurface>
-      </View>
-      <RoundButton
-        label={t('capitalRaidNextWeek')}
-        disabled={!canNewer}
-        onPress={onNewer}
-        icon={<ChevronRight size={21} color={theme.onSurface} />}
-      />
-    </View>
+      </DateNavigator>
+      <Modal
+        supportedOrientations={modalOrientations}
+        visible={calendarOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setCalendarOpen(false)}
+      >
+        <Pressable style={styles.modalBackdrop} onPress={() => setCalendarOpen(false)}>
+          <Pressable
+            style={[
+              styles.calendarSheet,
+              { backgroundColor: theme.sheet, paddingBottom: insets.bottom + 20 },
+            ]}
+            onPress={() => undefined}
+          >
+            <View style={styles.dialogTitle}>
+              <CKText role="sectionTitle" style={styles.grow}>
+                {t('clanCapitalSelectedRaid')}
+              </CKText>
+              <HeaderIconButton
+                label={materialCloseLabel(locale)}
+                icon={<X color={theme.onSurface} size={22} />}
+                onPress={() => setCalendarOpen(false)}
+              />
+            </View>
+            <CalendarPicker
+              key={raid.startTime.toISOString()}
+              start={localDay(raid.startTime)}
+              minimum={new Date(Math.min(...days.map(Number)))}
+              maximum={new Date(Math.max(...days.map(Number)))}
+              isDateSelectable={(date) => available.has(dayKey(date))}
+              onChange={(date) => {
+                const index = days.findIndex((day) => dayKey(day) === dayKey(date));
+                if (index >= 0) {
+                  onSelect(index);
+                  setCalendarOpen(false);
+                }
+              }}
+            />
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </>
   );
 }
 
@@ -299,6 +439,13 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const ongoing = raid.state === 'ongoing';
+  const [opponentOpen, setOpponentOpen] = useState(false);
+  // Select the unfinished raid, not the first/highest-loot entry: completed
+  // opponents remain in the same weekly log and must never look current.
+  const currentRaid = ongoing
+    ? raid.attackLog.find((entry) => entry.districtCount > entry.districtsDestroyed)
+    : undefined;
+  const currentOpponent = currentRaid ? opponentStats([currentRaid])[0] : undefined;
   const estimate = Math.max(
     0,
     predictOffensiveReward(raid.attackLog) + predictDefensiveReward(raid.defenseLog),
@@ -310,17 +457,17 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
     {
       label: t('raidsCompleted'),
       value: raid.raidsCompleted,
-      icon: <Check size={18} color={theme.primary} />,
+      image: ImageAssets.capitalClanHouse,
     },
     {
       label: t('raidsDistrictsDestroyed'),
       value: raid.enemyDistrictsDestroyed,
-      icon: <Building2 size={18} color={statColors.capitalDistrict} />,
+      image: ImageAssets.capitalDistrictHall(5),
     },
     {
       label: t('warAttacksTitle'),
       value: raid.totalAttacks,
-      icon: <Zap size={18} color={statColors.capitalAttack} />,
+      image: ImageAssets.raidAttacks,
     },
     { label: t('capitalRaidLoot'), value: raid.capitalTotalLoot, image: ImageAssets.capitalGold },
     ...(projected === null
@@ -337,6 +484,7 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
       : [
           {
             label: t('capitalRaidTrophyPrediction'),
+            hint: t('capitalRaidTrophyPredictionTooltip'),
             value: `${formatNumber(prediction.predictedPoints, locale)} (${prediction.change >= 0 ? '+' : ''}${formatNumber(prediction.change, locale)})`,
             icon:
               prediction.change >= 0 ? (
@@ -348,42 +496,88 @@ function RaidSummary({ raid, points }: { raid: CapitalHistoryItem; points: numbe
         ]),
   ];
   return (
-    <CardSurface style={styles.summaryCard}>
-      <View style={styles.rewardRow}>
-        <MobileWebImage imageUrl={ImageAssets.raidMedal} style={styles.rewardImage} />
-        <CKText role="heroMetric" numberOfLines={1} style={styles.grow}>
-          {formatNumber(reward, locale)}
-        </CKText>
-        {ongoing ? (
-          <PillSurface style={styles.estimated}>
-            <BarChart3 size={12} color={theme.tertiary} />
-            <CKText role="labelMedium" style={{ color: theme.tertiary }}>
-              {t('capitalRaidEstimated')}
+    <View style={styles.section}>
+      {currentOpponent ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`${t('capitalCurrentOpponent')}: ${currentOpponent.clan.name}`}
+          onPress={() => setOpponentOpen(true)}
+        >
+          <CardSurface style={styles.summaryCard}>
+            <CKText muted role="metadata">
+              {t('capitalCurrentOpponent')}
             </CKText>
-          </PillSurface>
-        ) : null}
-        <CKText muted role="labelLarge">
-          {t('capitalRaidRewards')}
-        </CKText>
-      </View>
+            <View style={styles.rewardRow}>
+              <MobileWebImage
+                imageUrl={currentOpponent.clan.badgeUrls.medium}
+                style={styles.rowImage}
+              />
+              <CKText role="titleSmall" style={styles.grow}>
+                {currentOpponent.clan.name}
+              </CKText>
+              <ChevronRight size={18} color={theme.onSurfaceVariant} />
+            </View>
+            <View style={styles.currentRaidMetrics}>
+              <View style={styles.grow}>
+                <CKText role="bodyLarge">
+                  {currentOpponent.districtsDestroyed}/{currentOpponent.districtCount}
+                </CKText>
+                <CKText muted role="metadata">
+                  {t('raidsDistrictsDestroyed')}
+                </CKText>
+              </View>
+              <View style={styles.grow}>
+                <CKText role="bodyLarge">{currentOpponent.attacks}</CKText>
+                <CKText muted role="metadata">
+                  {t('warAttacksTitle')}
+                </CKText>
+              </View>
+              <CapitalGoldValues total={formatNumber(currentOpponent.loot, locale)} />
+            </View>
+          </CardSurface>
+        </Pressable>
+      ) : null}
+      <OpponentDialog
+        opponent={opponentOpen ? currentOpponent : undefined}
+        onClose={() => setOpponentOpen(false)}
+      />
+      <CardSurface style={styles.summaryCard}>
+        <View style={styles.rewardRow}>
+          <MobileWebImage imageUrl={ImageAssets.raidMedal} style={styles.rewardImage} />
+          <View style={styles.grow}>
+            <CKText muted role="metadata">
+              {t('capitalRaidRewards')}
+            </CKText>
+            <CKText role="titleLarge" style={styles.rewardValue} numberOfLines={1}>
+              {formatNumber(reward, locale)}
+            </CKText>
+          </View>
+          {ongoing ? (
+            <PillSurface style={styles.estimated}>
+              <BarChart3 size={12} color={theme.tertiary} />
+              <CKText role="labelMedium" style={{ color: theme.tertiary }}>
+                {t('capitalRaidEstimated')}
+              </CKText>
+            </PillSurface>
+          ) : null}
+        </View>
+      </CardSurface>
       <View style={styles.metricGrid}>
         {metrics.map((metric) => (
           <Metric key={metric.label} {...metric} />
         ))}
       </View>
-    </CardSurface>
+    </View>
   );
 }
 
 function MembersTab({
   clan,
   raid,
-  allRaids,
   linkedPlayerTags,
 }: {
   clan: Clan;
   raid: CapitalHistoryItem;
-  allRaids: readonly CapitalHistoryItem[];
   linkedPlayerTags: readonly string[];
 }) {
   const { t, locale } = useI18n();
@@ -391,9 +585,6 @@ function MembersTab({
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<MemberSort>('loot');
   const [filter, setFilter] = useState<MemberFilter>('all');
-  const [linkedOnly, setLinkedOnly] = useState(false);
-  const [historyMode, setHistoryMode] = useState(false);
-  const [showSort, setShowSort] = useState(false);
   const linked = useMemo(() => new Set(linkedPlayerTags.map(canonicalTag)), [linkedPlayerTags]);
   const membersByTag = useMemo(
     () => new Map(clan.memberList.map((member) => [canonicalTag(member.tag), member])),
@@ -407,93 +598,10 @@ function MembersTab({
 
   const rows = useMemo(() => {
     const search = query.trim().toLowerCase();
-    const accepts = (name: string, tag: string) =>
-      (!search || name.toLowerCase().includes(search)) &&
-      (!linkedOnly || linked.has(canonicalTag(tag)));
-    if (historyMode) {
-      const byTag = new Map<
-        string,
-        {
-          name: string;
-          tag: string;
-          raids: number;
-          attacks: number;
-          limit: number;
-          loot: number;
-          stars: number;
-          destruction: number;
-          perfect: number;
-        }
-      >();
-      for (const item of allRaids) {
-        if (item.members.length) {
-          for (const member of item.members) {
-            const key = canonicalTag(member.tag);
-            const value = byTag.get(key) ?? {
-              name: member.name,
-              tag: member.tag,
-              raids: 0,
-              attacks: 0,
-              limit: 0,
-              loot: 0,
-              stars: 0,
-              destruction: 0,
-              perfect: 0,
-            };
-            value.raids += 1;
-            value.attacks += member.attacks;
-            value.limit += member.attackLimit + member.bonusAttackLimit;
-            value.loot += member.capitalResourcesLooted;
-            byTag.set(key, value);
-          }
-        } else {
-          for (const member of playerAttackStats(item.attackLog)) {
-            const key = canonicalTag(member.tag);
-            const value = byTag.get(key) ?? {
-              name: member.name,
-              tag: member.tag,
-              raids: 0,
-              attacks: 0,
-              limit: 0,
-              loot: 0,
-              stars: 0,
-              destruction: 0,
-              perfect: 0,
-            };
-            value.raids += 1;
-            value.attacks += member.attacks;
-            value.stars += member.stars;
-            value.destruction += member.destruction;
-            value.perfect += member.perfectHits;
-            byTag.set(key, value);
-          }
-        }
-      }
-      return [...byTag.values()]
-        .filter((item) => accepts(item.name, item.tag))
-        .sort((a, b) =>
-          sort === 'attacks' ? b.attacks - a.attacks : b.loot - a.loot || b.stars - a.stars,
-        )
-        .map((item) => ({
-          key: item.tag,
-          name: item.name,
-          tag: item.tag,
-          townHall: membersByTag.get(canonicalTag(item.tag))?.townHallLevel ?? 0,
-          subtitle:
-            item.limit > 0
-              ? `${item.raids} raids · ${item.attacks}/${item.limit} attacks`
-              : `${item.raids} raids · ${item.attacks} hits · attack log`,
-          top: item.loot > 0 ? formatNumber(item.loot, locale) : `${item.stars}★`,
-          bottom:
-            item.loot > 0
-              ? `${formatNumber(Math.round(item.loot / Math.max(1, item.raids)), locale)}/raid`
-              : `${Math.round(item.destruction / Math.max(1, item.attacks))}% avg`,
-          linked: linked.has(canonicalTag(item.tag)),
-        }));
-    }
+    const accepts = (name: string) => !search || name.toLowerCase().includes(search);
     if (!selectedHasMembers) {
       return attackMembers
-        .filter((item) => accepts(item.name, item.tag))
+        .filter((item) => accepts(item.name))
         .map((item) => ({
           key: item.tag || item.name,
           name: item.name,
@@ -506,7 +614,7 @@ function MembersTab({
         }));
     }
     const participants = [...raid.members]
-      .filter((member) => filter !== 'notAttacked' && accepts(member.name, member.tag))
+      .filter((member) => filter !== 'notAttacked' && accepts(member.name))
       .sort((a, b) =>
         sort === 'attacks'
           ? b.attacks - a.attacks
@@ -521,12 +629,11 @@ function MembersTab({
         ),
       );
     if (raid.state !== 'ongoing' || filter === 'attacked') return participants;
-    const everRaided = new Set(
-      allRaids.flatMap((item) => item.members.map((member) => canonicalTag(member.tag))),
-    );
+    // A member who raided last week can still be missing this weekend.
+    const participantsThisWeek = new Set(raid.members.map((member) => canonicalTag(member.tag)));
     const absent = clan.memberList
       .filter(
-        (member) => !everRaided.has(canonicalTag(member.tag)) && accepts(member.name, member.tag),
+        (member) => !participantsThisWeek.has(canonicalTag(member.tag)) && accepts(member.name),
       )
       .map((member) => ({
         key: member.tag,
@@ -541,13 +648,10 @@ function MembersTab({
       }));
     return filter === 'notAttacked' ? absent : [...participants, ...absent];
   }, [
-    allRaids,
     attackMembers,
     clan.memberList,
     filter,
-    historyMode,
     linked,
-    linkedOnly,
     locale,
     membersByTag,
     query,
@@ -571,10 +675,14 @@ function MembersTab({
             style={[styles.searchInput, { color: theme.onSurface }]}
           />
         </Surface>
-        <Chip
-          label={sort === 'loot' ? t('capitalRaidLoot') : t('warAttacksTitle')}
-          selected
-          onPress={() => setShowSort(true)}
+        <SelectionPicker
+          title={t('statsSortBy')}
+          selectedKey={sort}
+          onSelect={setSort}
+          options={[
+            { key: 'loot', label: t('capitalRaidLoot') },
+            { key: 'attacks', label: t('warAttacksTitle') },
+          ]}
         />
       </View>
       <ScrollView
@@ -582,25 +690,7 @@ function MembersTab({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.chipRail}
       >
-        <Chip
-          label={t('clanCapitalSelectedRaid')}
-          selected={!historyMode}
-          icon={<History size={15} color={theme.onSurfaceVariant} />}
-          onPress={() => setHistoryMode(false)}
-        />
-        <Chip
-          label={t('generalHistory')}
-          selected={historyMode}
-          icon={<History size={15} color={theme.onSurfaceVariant} />}
-          onPress={() => setHistoryMode(true)}
-        />
-      </ScrollView>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.chipRail}
-      >
-        {!historyMode && selectedHasMembers ? (
+        {selectedHasMembers ? (
           <>
             <Chip
               label={t('generalAll')}
@@ -623,14 +713,8 @@ function MembersTab({
             ) : null}
           </>
         ) : null}
-        <Chip
-          label={t('capitalRaidFilterLinked')}
-          selected={linkedOnly}
-          icon={<Link2 size={15} color={theme.onSurfaceVariant} />}
-          onPress={() => setLinkedOnly(!linkedOnly)}
-        />
       </ScrollView>
-      {!historyMode && !selectedHasMembers ? (
+      {!selectedHasMembers ? (
         <InfoPanel
           text={
             attackMembers.length
@@ -652,29 +736,12 @@ function MembersTab({
       ) : (
         rows.map(({ key, ...row }) => <MemberRow key={key} {...row} />)
       )}
-      <ChoiceDialog
-        visible={showSort}
-        title={t('statsSortBy')}
-        options={[
-          {
-            label: t('capitalRaidLoot'),
-            selected: sort === 'loot',
-            onPress: () => setSort('loot'),
-          },
-          {
-            label: t('warAttacksTitle'),
-            selected: sort === 'attacks',
-            onPress: () => setSort('attacks'),
-          },
-        ]}
-        onClose={() => setShowSort(false)}
-      />
     </View>
   );
 }
 
 function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const [offense, setOffense] = useState(true);
   const [opponent, setOpponent] = useState<OpponentStat>();
@@ -684,30 +751,31 @@ function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
   const defense = offense ? [] : districtDefenseStats(log);
   const opponents = opponentStats(log);
   return (
-    <View style={styles.section}>
-      <View style={styles.chipRail}>
-        <Chip
-          label={t('capitalDetailsOffense')}
-          selected={offense}
-          icon={<Swords size={15} color={theme.onSurfaceVariant} />}
-          onPress={() => setOffense(true)}
-        />
-        <Chip
-          label={t('capitalDetailsDefense')}
-          selected={!offense}
-          icon={<Shield size={15} color={theme.onSurfaceVariant} />}
-          onPress={() => setOffense(false)}
-        />
-      </View>
+    <View style={styles.breakdownSection}>
+      <SlidingSegmentControl
+        value={offense ? 'offense' : 'defense'}
+        isRtl={isRtl}
+        options={[
+          { value: 'offense', label: t('capitalDetailsOffense') },
+          { value: 'defense', label: t('capitalDetailsDefense') },
+        ]}
+        onChange={(value) => setOffense(value === 'offense')}
+      />
       <View style={styles.chipRail}>
         <MetricPill label={t('capitalRaidOneshots')} value={efficiency.oneshots} />
         <MetricPill label={t('capitalRaidFails')} value={efficiency.fails} />
       </View>
-      {defense.length ? <SectionTitle title="District defense" /> : null}
+      {!opponents.length ? (
+        <EmptyState
+          title={t('generalNoDataAvailable')}
+          icon={<Swords color={theme.onSurfaceVariant} />}
+        />
+      ) : null}
+      {defense.length ? <SectionTitle title={t('capitalDetailsDefense')} /> : null}
       {defense.map((item) => (
         <DataRow
           key={item.id}
-          icon={<Shield size={18} color={item.held ? statColors.win : statColors.loss} />}
+          image={districtArtwork(raid.defenseLog, item.id)}
           title={item.name}
           subtitle={`${item.held} held / ${item.destroyed} destroyed · ${item.avgAttacksTaken.toFixed(1)} hits avg`}
           trailing={`${item.avgDestruction.toFixed(0)}%\n${formatNumber(item.lootLost, locale)}`}
@@ -717,20 +785,25 @@ function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
       {districts.map((item) => (
         <DataRow
           key={item.id}
-          icon={<Building2 size={18} color={theme.onSurfaceVariant} />}
+          image={districtArtwork(log, item.id)}
           title={item.name}
           subtitle={`${item.destroyedCount} destroyed · ${item.avgAttacksPerDestroy.toFixed(1)} ${t('capitalAvgAttacksPerDistrict')}`}
-          trailing={`${formatNumber(item.loot, locale)}\n${formatNumber(Math.round(item.avgLootPerAttack), locale)}/hit`}
+          trailing={
+            <CapitalGoldValues
+              total={formatNumber(item.loot, locale)}
+              perHit={`${formatNumber(Math.round(item.avgLootPerAttack), locale)}/hit`}
+            />
+          }
         />
       ))}
       {opponents.length ? <SectionTitle title={t('capitalOpponentsSection')} /> : null}
       {opponents.map((item) => (
         <Pressable key={item.clan.tag || item.clan.name} onPress={() => setOpponent(item)}>
           <DataRow
-            image={item.clan.badgeUrls.smallest}
+            image={item.clan.badgeUrls.small}
             title={item.clan.name}
             subtitle={`${item.districtsDestroyed}/${item.districtCount} districts · ${item.attacks} attacks`}
-            trailing={formatNumber(item.loot, locale)}
+            trailing={<CapitalGoldValues total={formatNumber(item.loot, locale)} />}
           />
         </Pressable>
       ))}
@@ -739,16 +812,16 @@ function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
   );
 }
 
-function HistoryTab({
+function CapitalStatsTab({
   raids,
-  clan,
   points,
+  children,
 }: {
   raids: readonly CapitalHistoryItem[];
-  clan: Clan;
   points: number;
+  children: ReactNode;
 }) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const [metric, setMetric] = useState<'loot' | 'rewards' | 'trophies'>('loot');
   const ended = raids
@@ -765,8 +838,6 @@ function HistoryTab({
     (value, raid) => (!value || rewards(raid) < rewards(value) ? raid : value),
     undefined,
   );
-  const trends = memberTrends(raids, clan);
-  const defense = districtDefenseStats(raids.flatMap((raid) => raid.defenseLog));
   const trophyTrend = estimatedTrophyTrend(ended, points);
   const values = ended.map((raid, index) =>
     metric === 'loot'
@@ -775,8 +846,99 @@ function HistoryTab({
         ? rewards(raid)
         : (trophyTrend[index] ?? 0),
   );
+  const chart =
+    ended.length > 1 ? (
+      <CardSurface style={styles.chartCard}>
+        <View style={styles.dialogTitle}>
+          <CKText role="sectionTitle" style={styles.grow}>
+            {t('capitalHistoryChartTitle')}
+          </CKText>
+          {metric === 'trophies' ? (
+            <CKText muted role="metadata">
+              {t('capitalRaidEstimated')}
+            </CKText>
+          ) : null}
+        </View>
+        <SlidingSegmentControl
+          value={metric}
+          isRtl={isRtl}
+          onChange={setMetric}
+          options={[
+            { value: 'loot', label: t('capitalRaidLoot') },
+            { value: 'rewards', label: t('capitalRaidMedals') },
+            ...(trophyTrend.length
+              ? [{ value: 'trophies' as const, label: t('gameTrophies') }]
+              : []),
+          ]}
+        />
+        <AnalyticsLineChart
+          key={metric}
+          title={t('capitalHistoryChartTitle')}
+          showTitle={false}
+          exportable={false}
+          xDomain="observations"
+          responsiveAxes
+          height={200}
+          showPoints
+          connectGaps={false}
+          formatAxisValue={(value) => formatCompact(value, locale)}
+          formatValue={(value) => formatNumber(Math.round(value), locale)}
+          formatDay={(day) => formatDate(new Date(`${day}T00:00:00Z`), locale)}
+          formatAxisDay={(day) =>
+            new Intl.DateTimeFormat(toIntlLocale(locale), {
+              month: 'short',
+              ...(ended[0]?.startTime.getUTCFullYear() !== ended.at(-1)?.startTime.getUTCFullYear()
+                ? { year: '2-digit' as const }
+                : { day: 'numeric' as const }),
+              timeZone: 'UTC',
+            }).format(new Date(`${day}T00:00:00Z`))
+          }
+          series={[
+            {
+              key: metric,
+              label: t(
+                metric === 'loot'
+                  ? 'capitalRaidLoot'
+                  : metric === 'rewards'
+                    ? 'capitalRaidMedals'
+                    : 'gameTrophies',
+              ),
+              color:
+                metric === 'rewards'
+                  ? statColors.capitalDistrict
+                  : metric === 'loot'
+                    ? statColors.capitalLoot
+                    : statColors.capitalTrophy,
+              // Keep missing raid weekends disconnected rather than drawing a
+              // smooth progression through unobserved results.
+              points: ended.flatMap((raid, index) => {
+                const point = {
+                  day: raid.startTime.toISOString().slice(0, 10),
+                  value: values[index] ?? null,
+                };
+                const previous = ended[index - 1];
+                return previous &&
+                  raid.startTime.getTime() - previous.startTime.getTime() > 8 * 86400000
+                  ? [
+                      {
+                        day: new Date(previous.startTime.getTime() + 7 * 86400000)
+                          .toISOString()
+                          .slice(0, 10),
+                        value: null,
+                      },
+                      point,
+                    ]
+                  : [point];
+              }),
+            },
+          ]}
+        />
+      </CardSurface>
+    ) : null;
   return (
     <View style={styles.section}>
+      {chart}
+      {children}
       {!ended.length ? (
         <EmptyState title={t('generalNoDataAvailable')} />
       ) : (
@@ -802,73 +964,6 @@ function HistoryTab({
               image={ImageAssets.raidMedal}
             />
           </View>
-          {trends.length ? (
-            <SectionTitle
-              title={t('clanCapitalTopAttackers')}
-              subtitle={t('clanCapitalPlayersTracked', { count: trends.length })}
-            />
-          ) : null}
-          {trends.slice(0, 10).map((item) => (
-            <DataRow
-              key={item.tag}
-              image={
-                item.townHall ? ImageAssets.townHall(item.townHall) : ImageAssets.capitalClanHouse
-              }
-              title={item.name}
-              subtitle={`${item.weeks} weeks · ${item.attacks} attacks${item.townHall ? ` · TH${item.townHall}` : ''}`}
-              trailing={`${formatNumber(item.loot, locale)}\n${formatNumber(Math.round(item.loot / item.weeks), locale)}/week`}
-            />
-          ))}
-          {defense.length ? (
-            <SectionTitle
-              title={t('clanCapitalDefenseOverTime')}
-              subtitle={t('clanCapitalDistrictsTracked', { count: defense.length })}
-            />
-          ) : null}
-          {defense.map((item) => (
-            <DataRow
-              key={item.id}
-              icon={<Shield size={18} color={item.held ? statColors.win : statColors.loss} />}
-              title={item.name}
-              subtitle={`${item.held} held / ${item.destroyed} destroyed`}
-              trailing={`${item.avgDestruction.toFixed(0)}%\n${formatNumber(item.lootLost, locale)}`}
-            />
-          ))}
-          {ended.length > 1 ? (
-            <CardSurface style={styles.chartCard}>
-              <CKText muted role="labelLarge">
-                {t('capitalHistoryChartTitle')}
-              </CKText>
-              <View style={styles.chipRail}>
-                <Chip
-                  label={t('capitalRaidLoot')}
-                  selected={metric === 'loot'}
-                  onPress={() => setMetric('loot')}
-                />
-                <Chip
-                  label={t('capitalRaidRewards')}
-                  selected={metric === 'rewards'}
-                  onPress={() => setMetric('rewards')}
-                />
-                {trophyTrend.length ? (
-                  <Chip
-                    label={t('gameTrophies')}
-                    selected={metric === 'trophies'}
-                    onPress={() => setMetric('trophies')}
-                  />
-                ) : null}
-              </View>
-              <BarTrend
-                values={values}
-                labels={ended.map((raid) =>
-                  new Intl.DateTimeFormat(toIntlLocale(locale), {
-                    month: 'numeric',
-                    day: 'numeric',
-                  }).format(raid.startTime),
-                )}
-              />
-            </CardSurface>
-          ) : null}
           {best ? (
             <Highlight
               raid={best}
@@ -906,33 +1001,6 @@ function memberRow(member: RaidMember, townHall: number, linked: boolean, locale
   };
 }
 
-function memberTrends(raids: readonly CapitalHistoryItem[], clan: Clan) {
-  const halls = new Map(
-    clan.memberList.map((member) => [canonicalTag(member.tag), member.townHallLevel]),
-  );
-  const values = new Map<
-    string,
-    { name: string; tag: string; townHall: number; weeks: number; attacks: number; loot: number }
-  >();
-  for (const raid of raids)
-    for (const member of raid.members) {
-      const key = canonicalTag(member.tag);
-      const value = values.get(key) ?? {
-        name: member.name,
-        tag: member.tag,
-        townHall: halls.get(key) ?? 0,
-        weeks: 0,
-        attacks: 0,
-        loot: 0,
-      };
-      value.weeks += 1;
-      value.attacks += member.attacks;
-      value.loot += member.capitalResourcesLooted;
-      values.set(key, value);
-    }
-  return [...values.values()].sort((a, b) => b.loot - a.loot || b.attacks - a.attacks);
-}
-
 function estimatedTrophyTrend(ended: readonly CapitalHistoryItem[], current: number): number[] {
   if (current <= 0 || !ended.length) return [];
   const values = Array<number>(ended.length).fill(0);
@@ -957,15 +1025,10 @@ function MemberRow(row: {
   const theme = useCKTheme();
   return (
     <Surface
-      strongBorder
       style={[
         styles.memberRow,
         {
-          borderColor: row.missing
-            ? statColors.loss
-            : row.linked
-              ? statColors.win
-              : colorWithAlpha(theme.outlineVariant, 0.32),
+          backgroundColor: row.missing ? colorWithAlpha(statColors.loss, 0.07) : theme.card,
         },
       ]}
     >
@@ -980,9 +1043,12 @@ function MemberRow(row: {
         style={styles.memberImage}
       />
       <View style={styles.grow}>
-        <CKText role="rowTitle" numberOfLines={1}>
-          {row.name}
-        </CKText>
+        <View style={styles.memberName}>
+          <CKText role="rowTitle" numberOfLines={1} style={styles.shrink}>
+            {row.name}
+          </CKText>
+          {row.linked ? <Link2 size={13} color={statColors.win} /> : null}
+        </View>
         <CKText muted role="metadata" numberOfLines={1}>
           {row.subtitle}
         </CKText>
@@ -1001,18 +1067,42 @@ function MemberRow(row: {
   );
 }
 
+function CapitalGoldValues({ total, perHit }: { total: string; perHit?: string }) {
+  const { t } = useI18n();
+  return (
+    <View
+      style={styles.trailing}
+      accessibilityLabel={`${t('capitalRaidLoot')}: ${total}${perHit ? `, ${perHit}` : ''}`}
+    >
+      <View style={styles.lootValue}>
+        <MobileWebImage imageUrl={ImageAssets.capitalGold} style={styles.lootIcon} />
+        <CKText role="labelLarge" style={styles.trailingText}>
+          {total}
+        </CKText>
+      </View>
+      {perHit ? (
+        <CKText muted role="labelLarge" style={styles.trailingText}>
+          ({perHit})
+        </CKText>
+      ) : null}
+    </View>
+  );
+}
+
 function DataRow({
   icon,
   image,
   title,
   subtitle,
   trailing,
+  disclosure = false,
 }: {
   icon?: ReactNode;
   image?: string;
   title: string;
   subtitle: string;
-  trailing: string;
+  trailing: ReactNode;
+  disclosure?: boolean;
 }) {
   const theme = useCKTheme();
   return (
@@ -1030,9 +1120,14 @@ function DataRow({
           {subtitle}
         </CKText>
       </View>
-      <CKText role="labelLarge" style={styles.trailingText}>
-        {trailing}
-      </CKText>
+      {typeof trailing === 'string' ? (
+        <CKText role="labelLarge" style={styles.trailingText}>
+          {trailing}
+        </CKText>
+      ) : (
+        trailing
+      )}
+      {disclosure ? <ChevronRight size={18} color={theme.onSurfaceVariant} /> : null}
     </Surface>
   );
 }
@@ -1057,28 +1152,41 @@ function Metric({
   value,
   icon,
   image,
+  hint,
 }: {
   label: string;
   value: string | number;
   icon?: ReactNode;
   image?: string;
+  hint?: string;
 }) {
   const { locale } = useI18n();
   const theme = useCKTheme();
   return (
-    <View style={styles.metric}>
-      {image ? (
-        <MobileWebImage imageUrl={image} style={styles.metricImage} />
-      ) : (
-        tintIcon(icon, theme.onSurfaceVariant)
-      )}
-      <CKText muted role="labelMedium" numberOfLines={1}>
-        {label}
-      </CKText>
-      <CKText role="labelLarge" numberOfLines={1} style={styles.bold}>
+    <Surface style={styles.metric}>
+      <View style={styles.metricTitle}>
+        {image ? (
+          <MobileWebImage imageUrl={image} style={styles.metricImage} />
+        ) : (
+          tintIcon(icon, theme.onSurfaceVariant)
+        )}
+        <CKText muted role="labelMedium" style={styles.shrink}>
+          {label}
+        </CKText>
+        {hint ? (
+          <InfoTooltip label={label} message={hint} triggerStyle={{ width: 18, height: 24 }} />
+        ) : null}
+      </View>
+      <CKText
+        role="titleMedium"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.7}
+        style={styles.bold}
+      >
         {typeof value === 'number' ? formatNumber(value, locale) : value}
       </CKText>
-    </View>
+    </Surface>
   );
 }
 
@@ -1115,12 +1223,8 @@ function Chip({
           styles.chip,
           {
             backgroundColor: colorWithAlpha(
-              selected ? theme.primary : theme.surfaceContainerHighest,
-              selected ? 0.14 : 0.38,
-            ),
-            borderColor: colorWithAlpha(
-              selected ? theme.primary : theme.outlineVariant,
-              selected ? 0.42 : 0.28,
+              selected ? theme.onSurface : theme.surfaceContainerHighest,
+              selected ? 0.12 : 0.38,
             ),
           },
         ]}
@@ -1130,30 +1234,6 @@ function Chip({
           {label}
         </CKText>
       </PillSurface>
-    </Pressable>
-  );
-}
-
-function RoundButton({
-  label,
-  disabled,
-  onPress,
-  icon,
-}: {
-  label: string;
-  disabled: boolean;
-  onPress: () => void;
-  icon: ReactNode;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      disabled={disabled}
-      onPress={onPress}
-      style={[styles.roundButton, disabled && styles.disabled]}
-    >
-      {icon}
     </Pressable>
   );
 }
@@ -1170,47 +1250,12 @@ function InfoPanel({ text }: { text: string }) {
   );
 }
 
-function ChoiceDialog({
-  visible,
-  title,
-  options,
-  onClose,
-}: {
-  visible: boolean;
-  title: string;
-  options: readonly { label: string; selected: boolean; onPress: () => void }[];
-  onClose: () => void;
-}) {
-  const theme = useCKTheme();
-  return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.modalBackdrop} onPress={onClose}>
-        <CardSurface style={[styles.dialog, { backgroundColor: theme.sheet }]}>
-          <CKText role="sectionTitle">{title}</CKText>
-          {options.map((option) => (
-            <Pressable
-              key={option.label}
-              style={styles.dialogOption}
-              onPress={() => {
-                option.onPress();
-                onClose();
-              }}
-            >
-              <CKText style={styles.grow}>{option.label}</CKText>
-              {option.selected ? <Check size={18} color={theme.primary} /> : null}
-            </Pressable>
-          ))}
-        </CardSurface>
-      </Pressable>
-    </Modal>
-  );
-}
-
 function OpponentDialog({ opponent, onClose }: { opponent?: OpponentStat; onClose: () => void }) {
   const { locale } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       visible={opponent !== undefined}
       transparent
       animationType="fade"
@@ -1230,7 +1275,11 @@ function OpponentDialog({ opponent, onClose }: { opponent?: OpponentStat; onClos
             {opponent?.districts.map((district) => (
               <DataRow
                 key={district.id}
-                icon={<Building2 size={18} color={theme.onSurfaceVariant} />}
+                image={
+                  district.id === 70_000_000
+                    ? ImageAssets.capitalHall(district.districtHallLevel)
+                    : ImageAssets.capitalDistrictHall(district.districtHallLevel)
+                }
                 title={district.name}
                 subtitle={`${district.attackCount} attacks · ${district.destructionPercent}%`}
                 trailing={`${district.stars}★\n${formatNumber(district.totalLooted, locale)}`}
@@ -1240,35 +1289,6 @@ function OpponentDialog({ opponent, onClose }: { opponent?: OpponentStat; onClos
         </CardSurface>
       </View>
     </Modal>
-  );
-}
-
-function BarTrend({ values, labels }: { values: readonly number[]; labels: readonly string[] }) {
-  const { locale } = useI18n();
-  const theme = useCKTheme();
-  const maximum = Math.max(1, ...values);
-  return (
-    <View style={styles.chart}>
-      {values.map((value, index) => (
-        <View key={`${labels[index]}-${index}`} style={styles.barSlot}>
-          <CKText role="labelSmall" numberOfLines={1}>
-            {formatCompact(value, locale)}
-          </CKText>
-          <View
-            style={[
-              styles.bar,
-              {
-                height: Math.max(3, (value / maximum) * 92),
-                backgroundColor: colorWithAlpha(theme.primary, 0.86),
-              },
-            ]}
-          />
-          <CKText muted role="labelSmall">
-            {labels[index]}
-          </CKText>
-        </View>
-      ))}
-    </View>
   );
 }
 
@@ -1311,16 +1331,32 @@ function formatDate(value: Date, locale: string): string {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: 'UTC',
   }).format(value);
+}
+
+function districtArtwork(log: CapitalHistoryItem['attackLog'], id: number): string {
+  const level = Math.max(
+    1,
+    ...log.flatMap((opponent) =>
+      opponent.districts
+        .filter((district) => district.id === id)
+        .map((district) => district.districtHallLevel),
+    ),
+  );
+  return id === 70_000_000
+    ? ImageAssets.capitalHall(level)
+    : ImageAssets.capitalDistrictHall(level);
 }
 function formatNumber(value: number, locale: string): string {
   return new Intl.NumberFormat(toIntlLocale(locale)).format(value);
 }
 function formatCompact(value: number, locale: string): string {
-  return new Intl.NumberFormat(toIntlLocale(locale), {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(value);
+  const unit = Math.abs(value) >= 1_000_000 ? 1_000_000 : Math.abs(value) >= 1_000 ? 1_000 : 1;
+  const number = new Intl.NumberFormat(toIntlLocale(locale), {
+    maximumFractionDigits: unit === 1 ? 0 : 2,
+  }).format(value / unit);
+  return `${number}${unit === 1_000_000 ? 'M' : unit === 1_000 ? 'K' : ''}`;
 }
 
 const styles = StyleSheet.create({
@@ -1328,49 +1364,27 @@ const styles = StyleSheet.create({
   screenContent: { paddingBottom: 32 },
   contentWidth: { width: '100%', maxWidth: 980, alignSelf: 'center' },
   grow: { flex: 1 },
-  bold: { fontWeight: '800' },
+  bold: { fontWeight: '700' },
+  shrink: { flexShrink: 1 },
+  memberName: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   trailing: { alignItems: 'flex-end' },
   disabled: { opacity: 0.35 },
-  hero: { minHeight: 330, alignItems: 'center', paddingHorizontal: 16, paddingBottom: 18 },
-  heroShade: { ...StyleSheet.absoluteFill, backgroundColor: '#0000008A' },
-  heroBottom: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: -1,
-    height: 10,
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
-  },
-  heroTop: { width: '100%', minHeight: 58, alignItems: 'flex-start', justifyContent: 'center' },
-  capitalHall: { width: 94, height: 94, resizeMode: 'contain' },
-  heroTitle: { color: '#FFF', fontSize: 26 },
-  heroTag: { color: '#FFFFFFA0' },
-  heroStats: { width: '100%', maxWidth: 620, flexDirection: 'row', gap: 8, marginTop: 14 },
-  heroStat: {
-    flex: 1,
-    minHeight: 64,
+  heroStats: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: 8,
-    borderRadius: 18,
-    backgroundColor: '#00000075',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#FFFFFF35',
   },
-  heroStatImage: { width: 42, height: 42, resizeMode: 'contain' },
-  heroStatTitle: { color: '#FFF', fontWeight: '800' },
-  heroStatSubtitle: { color: '#FFFFFFB5', fontSize: 11 },
   empty: { margin: 16 },
-  tabs: { paddingHorizontal: 16, paddingTop: 10, gap: 8 },
-  chipRail: { flexDirection: 'row', gap: 8 },
+  tabs: { paddingHorizontal: 12 },
+  chipRail: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     minHeight: 38,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     paddingHorizontal: 12,
+    borderWidth: 0,
   },
   weekRow: {
     flexDirection: 'row',
@@ -1394,12 +1408,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  summaryCard: { margin: 16, padding: 16, gap: 16 },
+  summaryCard: { padding: 20, gap: 12, borderWidth: 0 },
   rewardRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  rewardImage: { width: 34, height: 34, resizeMode: 'contain' },
+  rewardImage: { width: 42, height: 42, resizeMode: 'contain' },
+  rewardValue: { fontSize: 28, lineHeight: 34, fontWeight: '700' },
   estimated: { flexDirection: 'row', gap: 4, paddingHorizontal: 7, paddingVertical: 3 },
-  metricGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
-  metric: { width: 92, minHeight: 60, alignItems: 'center', justifyContent: 'center', gap: 3 },
+  metricGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  metric: {
+    flexGrow: 1,
+    flexBasis: '46%',
+    minHeight: 88,
+    padding: 14,
+    justifyContent: 'center',
+    gap: 10,
+    borderWidth: 0,
+    borderRadius: 24,
+  },
+  metricTitle: { flexDirection: 'row', alignItems: 'center', gap: 7 },
   metricImage: { width: 20, height: 20, resizeMode: 'contain' },
   metricPill: {
     minHeight: 42,
@@ -1407,8 +1432,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    borderWidth: 0,
   },
-  section: { padding: 16, gap: 8 },
+  section: { padding: 16, gap: 12 },
+  breakdownSection: { gap: 12 },
   searchRow: { flexDirection: 'row', gap: 8 },
   searchSurface: {
     minHeight: 48,
@@ -1417,28 +1444,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 12,
+    borderWidth: 0,
+    borderRadius: 26,
   },
   searchInput: { flex: 1, minHeight: 46, fontFamily: 'ClashKing', fontSize: 15 },
-  info: { flexDirection: 'row', padding: 10, alignItems: 'center', gap: 8 },
+  info: {
+    flexDirection: 'row',
+    padding: 14,
+    alignItems: 'center',
+    gap: 8,
+    borderWidth: 0,
+    borderRadius: 20,
+  },
   memberRow: {
-    minHeight: 56,
+    minHeight: 82,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    gap: 9,
-    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 12,
+    borderRadius: 24,
+    borderWidth: 0,
   },
-  memberImage: { width: 38, height: 38, resizeMode: 'contain' },
-  sectionHeading: { marginTop: 10, gap: 2 },
+  memberImage: { width: 44, height: 44, resizeMode: 'contain' },
+  sectionHeading: { marginTop: 18, marginBottom: 2, gap: 4 },
   dataRow: {
-    minHeight: 58,
+    minHeight: 82,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 24,
+    borderWidth: 0,
   },
   rowIcon: {
     width: 36,
@@ -1448,7 +1486,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   rowImage: { width: 36, height: 36, resizeMode: 'contain' },
-  trailingText: { width: 92, textAlign: 'right', lineHeight: 17 },
+  trailingText: { maxWidth: 104, textAlign: 'right', lineHeight: 20, fontWeight: '600' },
+  currentRaidMetrics: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  lootValue: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  lootIcon: { width: 14, height: 14, resizeMode: 'contain' },
   modalBackdrop: {
     flex: 1,
     backgroundColor: '#00000080',
@@ -1457,12 +1498,34 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   dialog: { width: '100%', maxWidth: 360, padding: 18, gap: 8 },
+  calendarSheet: { width: '100%', maxWidth: 480, padding: 20, gap: 16, borderRadius: 28 },
   dialogOption: { minHeight: 48, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 },
-  opponentDialog: { width: '100%', maxWidth: 520, maxHeight: '78%', padding: 16, gap: 12 },
+  opponentDialog: {
+    width: '100%',
+    maxWidth: 560,
+    maxHeight: '78%',
+    padding: 20,
+    gap: 12,
+    borderWidth: 0,
+  },
   dialogTitle: { flexDirection: 'row', alignItems: 'center' },
-  chartCard: { padding: 12, gap: 10 },
-  chart: { height: 130, flexDirection: 'row', alignItems: 'flex-end', gap: 5 },
-  barSlot: { flex: 1, height: 126, alignItems: 'center', justifyContent: 'flex-end', gap: 3 },
-  bar: { width: '68%', maxWidth: 28, borderRadius: 4 },
-  highlight: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10, borderRadius: 16 },
+  chartCard: { padding: 12, gap: 10, borderWidth: 0 },
+  chart: { minWidth: '100%', height: 160, flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
+  barSlot: {
+    flexGrow: 1,
+    minWidth: 52,
+    height: 156,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 6,
+  },
+  bar: { width: 24, borderRadius: 7 },
+  highlight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    padding: 16,
+    borderRadius: 24,
+    borderWidth: 0,
+  },
 });

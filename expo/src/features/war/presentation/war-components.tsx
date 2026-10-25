@@ -1,5 +1,5 @@
-import { HeroHeaderScrim } from "../../../ui/hero-header-scrim";
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { HeaderIconButton } from '../../../ui/header';
 import { AccountBarScrollView } from '../../../ui/account-bar-scroll-view';
 import { CARD_REORDER_HOLD_MS } from '../../../ui/drag-jiggle';
@@ -23,7 +23,7 @@ import {
   MobileWebImage,
   ckColors,
   PillSurface,
-  PageSkeleton,
+  SkeletonContent,
   SelectionPickerModal,
   Surface,
   colorWithAlpha,
@@ -32,6 +32,7 @@ import {
 } from '../../../ui';
 import type { WarAttack, WarInfo, WarMember } from '../models';
 import type { WarRosterItem } from './contracts';
+import { loadingWar } from './war-loading-model';
 import {
   formatDuration,
   formatPercent,
@@ -61,9 +62,14 @@ export function WarSummaryCard({
   const war = item.displayWar;
   if (loading && !item.summary) {
     return (
-      <Surface style={styles.warCard}>
-        <PageSkeleton kind="war" rows={0} />
-      </Surface>
+      <SkeletonContent loading>
+        <WarSummaryCard
+          item={{ ...item, displayWar: loadingWar(item.tag, item.name, item.badgeUrl) }}
+          now={now}
+          onOpenWar={onOpenWar}
+          onOpenCwl={onOpenCwl}
+        />
+      </SkeletonContent>
     );
   }
   if (!war || ['notInWar', 'unknown', 'accessDenied'].includes(war.state)) {
@@ -287,8 +293,7 @@ export function WarHero({
         contentFit="cover"
         contentPosition="bottom"
       />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
-<HeroHeaderScrim variant="war" />
+      <HeroHeaderScrim variant="war" />
       <View style={styles.heroActions}>
         <HeaderIconButton
           icon={<ArrowLeft color="#fff" size={24} />}
@@ -343,7 +348,13 @@ export function AttackDetailsModal({
     [war.clan, war.opponent].find((clan) => clan?.members.some((member) => member.tag === tag)) ??
     null;
   return (
-    <Modal supportedOrientations={modalOrientations} transparent visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      visible={visible}
+      animationType="slide"
+      onRequestClose={onClose}
+    >
       <Pressable style={styles.modalOverlay} onPress={onClose}>
         <Pressable
           onPress={(event) => event.stopPropagation()}

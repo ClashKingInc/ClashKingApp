@@ -9,9 +9,9 @@ import {
   CKText,
   ClashHandoffDialog,
   EmptyState,
-  InfoTooltip,
   MobileWebImage,
   Surface,
+  SkeletonContent,
   colorWithAlpha,
   useCKTheme,
   ProfileTabs,
@@ -25,16 +25,19 @@ import { clanGameUrl } from '../../clan/presentation/clan-root-state';
 import type { WarAttack, WarInfo, WarMember } from '../models';
 import { buildWarReplay, type WarReplayEvent } from '../models/war-replay';
 import type { WarPresentationActions } from './contracts';
-import { formatDuration, formatPercent } from './presentation-utils';
+import { formatPercent } from './presentation-utils';
 import { AttackDetailsModal } from './war-components';
 import { WarBattleHeader } from './war-battle-header';
 import { WarScouting } from './war-scouting';
+import { WarAttackCard, WarResultStars } from './war-attack-card';
 import { WarHistoryPanel } from './war-history-panel';
+import { loadingWar } from './war-loading-model';
 
 const WAR_PAGES = ['players', 'recent', 'details'] as const;
 type WarPage = (typeof WAR_PAGES)[number];
 
 type Props = {
+  loading?: boolean;
   war: WarInfo;
   linkedPlayerTags?: readonly string[];
   cwlRoundNumber?: number | null;
@@ -52,7 +55,8 @@ export function WarDetailScreen(props: Props) {
   );
 }
 function WarDetailContent({
-  war,
+  loading = false,
+  war: actualWar,
   linkedPlayerTags = [],
   cwlRoundNumber,
   actions,
@@ -64,6 +68,28 @@ function WarDetailContent({
   const insets = useSafeAreaInsets();
   const [mode, setMode] = useState<WarPage>('players');
   const [settledPage, setSettledPage] = useState<WarPage>('players');
+  const [bodyReady, setBodyReady] = useState(false);
+  useEffect(() => {
+    if (loading) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    // The native route push runs after commit. Keep its first render small so
+    // a 50-player roster and replay cannot postpone the navigation itself.
+    const frame = requestAnimationFrame(() => {
+      timer = setTimeout(() => setBodyReady(true), 0);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      if (timer !== undefined) clearTimeout(timer);
+    };
+  }, [loading]);
+  const bodyLoading = loading || !bodyReady;
+  const war = useMemo(
+    () =>
+      loading || bodyReady
+        ? actualWar
+        : loadingWar(actualWar.clan?.tag ?? '', actualWar.clan?.name),
+    [actualWar, bodyReady, loading],
+  );
   const { reduceMotion } = useCKAccessibility();
   const pager = useRef<PagerViewHandle>(null);
   const scroll = useRef<ScrollViewInstance>(null);
@@ -114,12 +140,13 @@ function WarDetailContent({
     );
   const linked = useMemo(() => new Set(linkedPlayerTags), [linkedPlayerTags]);
   const openClan = (tag: string) => {
-    if (Platform.OS !== 'web' && ['preparation', 'inWar', 'warInWar'].includes(war.state))
+    if (Platform.OS !== 'web' && ['preparation', 'inWar', 'warInWar'].includes(actualWar.state))
       setHandoffUrl(clanGameUrl(tag, locale));
     else actions.openClan(tag);
   };
   const renderPage = (page: WarPage) => (
-    <View
+    <SkeletonContent
+      loading={bodyLoading}
       style={styles.content}
       onLayout={(event) => {
         const height = Math.ceil(event.nativeEvent.layout.height);
@@ -248,9 +275,9 @@ function WarDetailContent({
         </>
       )}
       {page === 'details' ? (
-        <WarScouting war={war} actions={actions} enabled={mode === 'details'} />
+        <WarScouting war={war} actions={actions} enabled={!bodyLoading && mode === 'details'} />
       ) : null}
-    </View>
+    </SkeletonContent>
   );
   return (
     <SafeAreaView
@@ -275,7 +302,8 @@ function WarDetailContent({
           }}
         >
           <WarBattleHeader
-            war={war}
+            loading={loading}
+            war={actualWar}
             cwlRoundNumber={cwlRoundNumber}
             onBack={onBack}
             onOpenClan={openClan}
@@ -640,138 +668,17 @@ function WarComposition({ war, onOpenClan }: { war: WarInfo; onOpenClan: (tag: s
   );
 }
 function WarEventCard({ event, attacking }: { event: WarReplayEvent; attacking: boolean }) {
-  const { t } = useI18n();
-  const own = attacking ? event.attacker : event.defender;
-  const opponent = attacking ? event.defender : event.attacker;
-  // The disclosure represents the opposing player: defender for our attacks,
-  // attacker for our defenses. Keep its artwork and tooltip identity together.
-  const opponentIcon = (
-    <MobileWebImage
-      imageUrl={opponent?.townhallLevel
-        ? ImageAssets.townHall(opponent.townhallLevel)
-        : ImageAssets.defaultImage}
-      style={{ width: 18, height: 18 }}
+  return (
+    <WarAttackCard
+      testID={'war-event-' + event.attack.order}
+      attack={event.attack}
+      attacker={event.attacker}
+      defender={event.defender}
+      attacking={attacking}
     />
   );
-  return (
-    <Surface
-      testID={'war-event-' + event.attack.order}
-      style={[
-        styles.eventSurface,
-        { overflow: 'hidden', width: '95%', alignSelf: attacking ? 'flex-start' : 'flex-end' },
-      ]}
-    >
-      <View
-        style={{
-          position: 'absolute',
-          left: attacking ? 0 : undefined,
-          right: attacking ? undefined : 0,
-          top: 0,
-          bottom: 0,
-          width: 4,
-          backgroundColor: attacking ? ckColors.donationGreen : ckColors.primaryRed,
-        }}
-      />
-      <View
-        style={{
-          paddingVertical: 10,
-          paddingHorizontal: 14,
-          flexDirection: attacking ? 'row' : 'row-reverse',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        {/* Keep the home-clan player visible in both directions. Opponent
-            identity is secondary disclosure, not another competing name row. */}
-        <View
-          style={[
-            styles.grow,
-            styles.nameRow,
-            { flexDirection: attacking ? 'row' : 'row-reverse' },
-          ]}
-        >
-          <MobileWebImage
-            imageUrl={
-              own?.townhallLevel
-                ? ImageAssets.townHall(own.townhallLevel)
-                : ImageAssets.defaultImage
-            }
-            style={{ width: 32, height: 32 }}
-          />
-          <CKText
-            role="rowTitle"
-            style={[styles.grow, { textAlign: attacking ? 'left' : 'right' }]}
-          >
-            {own?.name ?? (attacking ? event.attack.attackerTag : event.attack.defenderTag)}
-          </CKText>
-        </View>
-        <View
-          style={[
-            styles.resultColumn,
-            { alignItems: attacking ? 'flex-end' : 'flex-start', gap: 2 },
-          ]}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <WarResultStars stars={event.attack.stars} />
-            <CKText style={{ fontSize: 16 }}>
-              {formatPercent(event.attack.destructionPercentage)}
-            </CKText>
-          </View>
-          <InfoTooltip
-            label={t(attacking ? 'warAttacksDetailsDefender' : 'warAttacksDetailsAttacker')}
-            triggerStyle={{ width: 'auto', height: 28 }}
-            triggerContent={
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                {opponentIcon}
-                <CKText role="metadata" muted>
-                  {event.attack.duration != null ? formatDuration(event.attack.duration) : '—'}
-                </CKText>
-              </View>
-            }
-            message={
-              t(attacking ? 'warAttacksDetailsDefender' : 'warAttacksDetailsAttacker') +
-              ': ' +
-              (opponent?.name ?? (attacking ? event.attack.defenderTag : event.attack.attackerTag))
-            }
-          />
-        </View>
-      </View>
-    </Surface>
-  );
 }
-export function WarResultStars({
-  stars,
-  compact = false,
-  testID,
-}: {
-  stars: number;
-  compact?: boolean;
-  testID?: string;
-}) {
-  const { t } = useI18n();
-  const earned = Math.max(0, Math.min(3, stars));
-  return (
-    <View
-      accessible
-      accessibilityLabel={t('warStarsTitle') + ': ' + earned + ' / 3'}
-      testID={testID}
-      style={styles.stars}
-    >
-      {[0, 1, 2].map((index) => (
-        <MobileWebImage
-          key={index}
-          imageUrl={ImageAssets.attackStar}
-          testID={testID ? testID + '-' + index : undefined}
-          style={{
-            width: compact ? 12 : 18,
-            height: compact ? 12 : 18,
-            opacity: index < earned ? 1 : 0.18,
-          }}
-        />
-      ))}
-    </View>
-  );
-}
+export { WarResultStars } from './war-attack-card';
 const styles = StyleSheet.create({
   grow: { flex: 1, minWidth: 0 },
   content: {
