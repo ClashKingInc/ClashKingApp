@@ -5,7 +5,15 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useAppRuntime } from '../../core/app/runtime-context';
 import { materialBackLabel, useI18n } from '../../i18n';
-import { CKText, HeaderIconButton, Surface, ckSpacing, colorWithAlpha, useCKTheme } from '../../ui';
+import {
+  CKText,
+  HeaderIconButton,
+  SkeletonContent,
+  Surface,
+  ckSpacing,
+  colorWithAlpha,
+  useCKTheme,
+} from '../../ui';
 import type { SubscriptionStatus } from './subscription-status';
 
 /** Exact replacement for Flutter's intentionally read-only subscription page. */
@@ -15,6 +23,7 @@ export function SubscriptionRoot({ onBack }: { readonly onBack: () => void }) {
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const [status, setStatus] = useState<SubscriptionStatus>();
+  const [loading, setLoading] = useState(true);
   const backDirection = subscriptionBackDirection(isRtl);
 
   useEffect(() => {
@@ -26,6 +35,9 @@ export function SubscriptionRoot({ onBack }: { readonly onBack: () => void }) {
       })
       .catch(() => {
         // Flutter leaves the public price visible when status loading fails.
+      })
+      .finally(() => {
+        if (current) setLoading(false);
       });
     return () => {
       current = false;
@@ -56,9 +68,11 @@ export function SubscriptionRoot({ onBack }: { readonly onBack: () => void }) {
         contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + ckSpacing.xl }]}
       >
         <Surface radius={18} style={styles.card}>
-          <CKText role="screenTitle">
-            {status?.active === true ? 'Active subscription' : '$6.99/month'}
-          </CKText>
+          <SkeletonContent loading={loading}>
+            <CKText role="screenTitle">
+              {status?.active === true ? 'Active subscription' : '$6.99/month'}
+            </CKText>
+          </SkeletonContent>
           <View style={styles.benefit}>
             <Heart color={theme.primary} size={22} />
             <CKText style={styles.benefitCopy}>

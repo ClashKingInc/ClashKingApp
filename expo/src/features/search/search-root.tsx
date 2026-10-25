@@ -34,7 +34,11 @@ import {
 } from './search-state';
 
 export interface SearchRootProps {
-  readonly onOpenDestination?: (load: () => Promise<SearchDestinationResult>) => void;
+  readonly onOpenDestination?: (request: {
+    kind: 'player' | 'clan';
+    seed: JsonRecord;
+    load: () => Promise<SearchDestinationResult>;
+  }) => void;
   readonly initialQuery?: string;
   readonly overlay?: boolean;
   readonly autofocus?: boolean;
@@ -74,6 +78,13 @@ export function SearchRoot({
   const [locations, setLocations] = useState<readonly SearchLocation[]>([]);
   const [leagues, setLeagues] = useState<readonly SearchLeague[]>([]);
   const [opening, setOpening] = useState(false);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const [snackbar, setSnackbar] = useState<string>();
   const userId = runtime.auth.state.currentUser?.userId.trim() || null;
 
@@ -190,6 +201,7 @@ export function SearchRoot({
   };
 
   const openResult = async (result: JsonRecord, type: SearchMode) => {
+    if (opening) return;
     const tag = typeof result.tag === 'string' ? result.tag : '';
     Keyboard.dismiss();
     const load = async (): Promise<SearchDestinationResult> => {
@@ -217,18 +229,19 @@ export function SearchRoot({
         return { kind: 'clan', clan };
       }
     };
-    // Push the destination before fetching. Its skeleton becomes its content,
-    // rather than covering Search and triggering another transition afterward.
     if (onOpenDestination) {
-      onOpenDestination(load);
+      onOpenDestination({ kind: type === 'players' ? 'player' : 'clan', seed: result, load });
       return;
     }
+    // Standalone consumers without shell navigation retain their existing handoff.
     setOpening(true);
     try {
       const destination = await load();
+      if (!mounted.current) return;
       if (destination.kind === 'player') onOpenPlayer(destination.player);
       else onOpenClan(destination.clan);
     } catch {
+      if (!mounted.current) return;
       setSnackbar(
         type === 'players' ? t('searchErrorPlayerLoadFailed') : t('searchErrorClanLoadFailed'),
       );
@@ -265,7 +278,7 @@ export function SearchRoot({
         onOpenRecent={(item) => void openRecent(item)}
         onCancel={onCancel}
       />
-      <PageLoading visible={opening} kind="profile" />
+      <PageLoading visible={opening} />
       <Snackbar message={snackbar} onDismiss={() => setSnackbar(undefined)} />
     </View>
   );

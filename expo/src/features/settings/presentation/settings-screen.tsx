@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import {
   Image,
@@ -90,7 +90,9 @@ export function SettingsScreen({
   const theme = useCKTheme();
   const measured = useWindowDimensions().width;
   const desktop = isDesktopSettings(platform, viewportWidth ?? measured);
-  const [dialog, setDialog] = useState<'language' | 'theme' | 'icon' | 'logout'>();
+  const [dialog, setDialog] = useState<
+    'language' | 'theme' | 'icon' | 'logout' | 'tutorial-reset'
+  >();
   const [busy, setBusy] = useState(false);
   const [snackbar, setSnackbar] = useState<string>();
   const iconColor = theme.onSurface;
@@ -139,8 +141,13 @@ export function SettingsScreen({
           trailing={themeLabel}
           onPress={() => setDialog('theme')}
         />
-        {actions.resetTutorials ? <SettingsTile icon={<RotateCcw color={iconColor} />} title={tutorialCopy.tutorialResetTitle}
-          onPress={() => { void actions.resetTutorials!().then(() => setSnackbar(tutorialCopy.tutorialResetDone)); }} /> : null}
+        {actions.resetTutorials ? (
+          <SettingsTile
+            icon={<RotateCcw color={iconColor} />}
+            title={t(tutorialCopy.tutorialResetTitle)}
+            onPress={() => setDialog('tutorial-reset')}
+          />
+        ) : null}
         {alternateIconsSupported ? (
           <SettingsTile
             icon={<ImageIcon color={iconColor} />}
@@ -331,6 +338,20 @@ export function SettingsScreen({
         onClose={() => setDialog(undefined)}
       />
       <ConfirmLogout
+        visible={dialog === 'tutorial-reset'}
+        onCancel={() => setDialog(undefined)}
+        onConfirm={() => {
+          setDialog(undefined);
+          void actions
+            .resetTutorials?.()
+            .then(() => setSnackbar(t(tutorialCopy.tutorialResetDone)));
+        }}
+        title={t(tutorialCopy.tutorialResetTitle)}
+        body={t('tutorialResetConfirm')}
+        cancel={t('generalCancel')}
+        confirm={t('generalReset')}
+      />
+      <ConfirmLogout
         visible={dialog === 'logout'}
         onCancel={() => setDialog(undefined)}
         onConfirm={() => {
@@ -389,7 +410,13 @@ function AppIconDialog({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
       <SafeAreaView style={styles.sheetOverlay}>
         <Pressable
           accessibilityElementsHidden
@@ -450,7 +477,13 @@ function ConfirmLogout({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onCancel}
+    >
       <View style={styles.modal}>
         <Surface style={styles.confirm}>
           <CKText role="titleLarge">{title}</CKText>

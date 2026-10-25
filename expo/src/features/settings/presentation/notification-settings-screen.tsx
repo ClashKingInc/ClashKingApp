@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   AppState,
@@ -36,7 +36,7 @@ import { useI18n, type I18nValue, type MessageKey } from '../../../i18n';
 import {
   CKText,
   LoadingIndicator,
-  Skeleton,
+  SkeletonContent,
   SelectionPicker,
   Surface,
   ckRadius,
@@ -104,7 +104,9 @@ export function NotificationSettingsScreen({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [settings, setSettings] = useState<NotificationPreferences>();
+  const [settings, setSettings] = useState<NotificationPreferences>(
+    createDefaultNotificationPreferences,
+  );
   const [push, setPush] = useState<PushNotificationSetupResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -167,17 +169,6 @@ export function NotificationSettingsScreen({
     }
   };
 
-  if (loading || !settings)
-    return (
-      <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack}>
-        <View accessibilityLabel={t('generalLoading')} style={styles.loadingSkeletons}>
-          {Array.from({ length: 4 }, (_, index) => (
-            <Skeleton key={index} height={88} radius={18} />
-          ))}
-        </View>
-      </SettingsPage>
-    );
-
   const openSystemSettings = async () => {
     if (savingRef.current || configuringRef.current) return;
     configuringRef.current = true;
@@ -211,116 +202,122 @@ export function NotificationSettingsScreen({
     }
   };
 
-  const busy = saving || configuringPush;
+  const busy = loading || saving || configuringPush;
   return (
     <View style={styles.screen}>
       <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack}>
-        <SettingsSection title={t('notifSystemNotifications')}>
-          <TutorialTarget id="notifications-permission" offer="notifications">
-          <SettingsTile
-            icon={<Bell color={theme.onSurface} size={22} />}
-            title={
-              push?.state === 'permissionRequired'
-                ? t('notifReceiveNotifications')
-                : t('notifSystemSettings')
-            }
-            subtitle={t('notifSystemSettingsDescription')}
-            subtitleNumberOfLines={3}
-            disabled={busy}
-            onPress={() => void openSystemSettings()}
-          />
-          </TutorialTarget>
-        </SettingsSection>
-        <>
-          <SettingsSection title={`${t('searchTabPlayers')} · ${t('searchTabClans')}`}>
-            <TutorialTarget id="notifications-entities">{entityControls ?? (
-              <>
-                <SettingsTile
-                  icon={<Users color={theme.onSurface} size={22} />}
-                  title={t('searchTabPlayers')}
-                  subtitle={t('notifManagePlayersDescription')}
-                  subtitleNumberOfLines={3}
-                  onPress={onManagePlayers}
-                />
-                {onManageClans ? (
-                  <SettingsTile
-                    icon={<Shield color={theme.onSurface} size={22} />}
-                    title={t('searchTabClans')}
-                    onPress={onManageClans}
-                  />
-                ) : null}
-              </>
-            )}</TutorialTarget>
-          </SettingsSection>
-          <SettingsSection title={t('notifChooseAlerts')}>
-            {categoryRows.map((row) => (
-              <ToggleRow
-                key={row.category}
-                icon={row.icon(theme.onSurface)}
-                title={t(row.title)}
-                description={t(row.description)}
-                value={settings[row.category]}
-                disabled={busy}
-                onChange={(value) =>
-                  void save(withNotificationCategory(settings, row.category, value))
+        <SkeletonContent loading={loading}>
+          <SettingsSection title={t('notifSystemNotifications')}>
+            <TutorialTarget id="notifications-permission" offer="notifications">
+              <SettingsTile
+                icon={<Bell color={theme.onSurface} size={22} />}
+                title={
+                  push?.state === 'permissionRequired'
+                    ? t('notifReceiveNotifications')
+                    : t('notifSystemSettings')
                 }
+                subtitle={t('notifSystemSettingsDescription')}
+                subtitleNumberOfLines={3}
+                disabled={busy}
+                onPress={() => void openSystemSettings()}
               />
-            ))}
+            </TutorialTarget>
           </SettingsSection>
-          <TutorialTarget id="notifications-reminders"><SettingsSection title={t('notifCustomReminders')}>
-            <ReminderRow
-              icon={<AlarmClock color={theme.onSurface} size={22} />}
-              title={t('notifGroupWarReminders')}
-              description={t('notifWarRemindersDescription')}
-              enabled={settings.warReminders}
-              disabled={busy}
-              values={settings.reminderTimings}
-              maxHours={47}
-              onToggle={(value) =>
-                void save(withNotificationCategory(settings, 'warReminders', value))
-              }
-              onValues={(values) => void save({ ...settings, reminderTimings: values })}
-            />
-            <ReminderRow
-              icon={<Castle color={theme.onSurface} size={22} />}
-              title={t('notifGroupRaidReminders')}
-              enabled={settings.raidReminders}
-              disabled={busy}
-              values={settings.raidReminderTimings}
-              maxHours={72}
-              onToggle={(value) =>
-                void save(withNotificationCategory(settings, 'raidReminders', value))
-              }
-              onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
-            />
-          </SettingsSection></TutorialTarget>
-        </>
-        {debugEnabled && service.sendTestNotification ? (
-          <SettingsSection title={t('notifTestNotification')}>
-            <View style={styles.debugWrap}>
-              <SelectionPicker
-                options={(service.testNotificationTypes ?? []).map(({ id, labelKey }) => ({
-                  key: id,
-                  label: t(labelKey),
-                }))}
-                selectedKey={sampleId}
-                onSelect={setSampleId}
-                title={t('notifTestType')}
-                accessibilityLabel={t('notifTestType')}
-                fillWidth
-              />
-              <Pressable
-                accessibilityRole="button"
-                disabled={sendingSample || !sampleId}
-                onPress={() => void sendSample()}
-                style={[styles.debug, { backgroundColor: colorWithAlpha(theme.primary, 0.14) }]}
-              >
-                {sendingSample ? <LoadingIndicator /> : <Bell color={theme.primary} size={20} />}
-                <CKText role="rowTitle">{t('notifSendTestNotification')}</CKText>
-              </Pressable>
-            </View>
-          </SettingsSection>
-        ) : null}
+          <>
+            <SettingsSection title={`${t('searchTabPlayers')} · ${t('searchTabClans')}`}>
+              <TutorialTarget id="notifications-entities">
+                {entityControls ?? (
+                  <>
+                    <SettingsTile
+                      icon={<Users color={theme.onSurface} size={22} />}
+                      title={t('searchTabPlayers')}
+                      subtitle={t('notifManagePlayersDescription')}
+                      subtitleNumberOfLines={3}
+                      onPress={onManagePlayers}
+                    />
+                    {onManageClans ? (
+                      <SettingsTile
+                        icon={<Shield color={theme.onSurface} size={22} />}
+                        title={t('searchTabClans')}
+                        onPress={onManageClans}
+                      />
+                    ) : null}
+                  </>
+                )}
+              </TutorialTarget>
+            </SettingsSection>
+            <SettingsSection title={t('notifChooseAlerts')}>
+              {categoryRows.map((row) => (
+                <ToggleRow
+                  key={row.category}
+                  icon={row.icon(theme.onSurface)}
+                  title={t(row.title)}
+                  description={t(row.description)}
+                  value={settings[row.category]}
+                  disabled={busy}
+                  onChange={(value) =>
+                    void save(withNotificationCategory(settings, row.category, value))
+                  }
+                />
+              ))}
+            </SettingsSection>
+            <TutorialTarget id="notifications-reminders">
+              <SettingsSection title={t('notifCustomReminders')}>
+                <ReminderRow
+                  icon={<AlarmClock color={theme.onSurface} size={22} />}
+                  title={t('notifGroupWarReminders')}
+                  description={t('notifWarRemindersDescription')}
+                  enabled={settings.warReminders}
+                  disabled={busy}
+                  values={settings.reminderTimings}
+                  maxHours={47}
+                  onToggle={(value) =>
+                    void save(withNotificationCategory(settings, 'warReminders', value))
+                  }
+                  onValues={(values) => void save({ ...settings, reminderTimings: values })}
+                />
+                <ReminderRow
+                  icon={<Castle color={theme.onSurface} size={22} />}
+                  title={t('notifGroupRaidReminders')}
+                  enabled={settings.raidReminders}
+                  disabled={busy}
+                  values={settings.raidReminderTimings}
+                  maxHours={72}
+                  onToggle={(value) =>
+                    void save(withNotificationCategory(settings, 'raidReminders', value))
+                  }
+                  onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
+                />
+              </SettingsSection>
+            </TutorialTarget>
+          </>
+          {debugEnabled && service.sendTestNotification ? (
+            <SettingsSection title={t('notifTestNotification')}>
+              <View style={styles.debugWrap}>
+                <SelectionPicker
+                  options={(service.testNotificationTypes ?? []).map(({ id, labelKey }) => ({
+                    key: id,
+                    label: t(labelKey),
+                  }))}
+                  selectedKey={sampleId}
+                  onSelect={setSampleId}
+                  title={t('notifTestType')}
+                  accessibilityLabel={t('notifTestType')}
+                  fillWidth
+                />
+                <Pressable
+                  accessibilityRole="button"
+                  disabled={sendingSample || !sampleId}
+                  onPress={() => void sendSample()}
+                  style={[styles.debug, { backgroundColor: colorWithAlpha(theme.primary, 0.14) }]}
+                >
+                  {sendingSample ? <LoadingIndicator /> : <Bell color={theme.primary} size={20} />}
+                  <CKText role="rowTitle">{t('notifSendTestNotification')}</CKText>
+                </Pressable>
+              </View>
+            </SettingsSection>
+          ) : null}
+        </SkeletonContent>
       </SettingsPage>
       <SettingsSnackbar message={snackbar} onDismiss={() => setSnackbar(undefined)} />
     </View>
@@ -499,7 +496,13 @@ function ReminderTimingSheet({
     setHour(Math.max(1, Math.min(maxHours, index + 1)));
   };
   return (
-    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible
+      onRequestClose={onClose}
+    >
       <SafeAreaView style={styles.overlay}>
         <Pressable accessibilityRole="button" onPress={onClose} style={styles.dismissArea} />
         <Surface accessibilityViewIsModal style={styles.sheet}>

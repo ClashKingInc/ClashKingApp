@@ -7,7 +7,7 @@ import {
   discordServerInstallUrl,
   DISCORD_PERSONAL_INSTALL_URL,
 } from '../../core/config/api-config';
-import { CKText, MobileWebImage, Skeleton, colorWithAlpha, useCKTheme } from '../../ui';
+import { CKText, MobileWebImage, SkeletonContent, colorWithAlpha, useCKTheme } from '../../ui';
 import { useI18n } from '../../i18n';
 import type { DashboardServer, DiscordServersState } from './use-discord-servers';
 
@@ -82,11 +82,22 @@ export function ServersRoot({
         overScrollMode="never"
       >
         {loading && !servers.length ? (
-          <View accessibilityLabel={t('generalLoading')} style={styles.section}>
-            {[0, 1, 2].map((key) => (
-              <Skeleton key={key} height={80} radius={24} />
-            ))}
-          </View>
+          <SkeletonContent loading style={styles.section}>
+            {[0, 1, 2].map((key) =>
+              row({
+                id: `loading-${key}`,
+                has_bot: true,
+                icon: 'loading',
+                name: 'Discord server',
+                role: 'Administrator',
+                owner: false,
+                features: [],
+                inactive: false,
+                permissions: '0',
+                delegated: false,
+              }),
+            )}
+          </SkeletonContent>
         ) : (
           <>
             {error ? (

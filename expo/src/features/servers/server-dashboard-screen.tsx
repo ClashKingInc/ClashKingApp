@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { BackHandler, Pressable } from 'react-native';
+import { BackHandler, Pressable, View, useWindowDimensions } from 'react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Effect } from 'effect';
 import * as Crypto from 'expo-crypto';
 import { DashboardGrantEndpoint } from '@clashking/api-contracts/expo';
 import { useAppRuntime } from '../../core/app/runtime-context';
-import { CKText, PageSkeleton, useCKTheme, useCKThemeMode } from '../../ui';
-import { useI18n } from '../../i18n';
+import { CKText, LoadingIndicator, useCKTheme, useCKThemeMode } from '../../ui';
+import { materialBackLabel, useI18n } from '../../i18n';
 import { DashboardWebView } from './dashboard-webview';
 import type { DashboardServer } from './servers-root';
 
@@ -21,6 +22,9 @@ export function ServerDashboardScreen({
     theme = useCKTheme(),
     { t, locale } = useI18n();
   const selected = server;
+  const { width, height } = useWindowDimensions();
+  // Use the short edge so rotating a phone cannot enable the tablet header.
+  const showNavigationBar = Math.min(width, height) >= 600 && width > height;
   const [handoff, setHandoff] = useState<{
       code: string;
       codeVerifier: string;
@@ -67,17 +71,40 @@ export function ServerDashboardScreen({
     } else setError(true);
   }, []);
   useEffect(() => {
-    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      onBack();
-      return true;
+    let subscription: ReturnType<typeof BackHandler.addEventListener> | undefined;
+    // Android keeps underlying navigators mounted. Register after their effects
+    // so the visible dashboard owns Back, not a hidden navigator's history.
+    const frame = requestAnimationFrame(() => {
+      subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+        onBack();
+        return true;
+      });
     });
-    return () => subscription.remove();
+    return () => {
+      cancelAnimationFrame(frame);
+      subscription?.remove();
+    };
   }, [onBack]);
   return (
     <SafeAreaView
       edges={['top', 'left', 'right', 'bottom']}
       style={{ flex: 1, backgroundColor: theme.background }}
     >
+      {showNavigationBar ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={materialBackLabel(locale)}
+            onPress={onBack}
+            style={{ minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}
+          >
+            <ChevronLeft color={theme.onSurface} size={24} />
+          </Pressable>
+          <CKText role="labelLarge" numberOfLines={1} style={{ flex: 1 }}>
+            {server.name}
+          </CKText>
+        </View>
+      ) : null}
       {error ? (
         <Pressable
           onPress={() => {
@@ -98,7 +125,10 @@ export function ServerDashboardScreen({
           onExpired={expired}
         />
       ) : (
-        <PageSkeleton kind="form" showHeader />
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <CKText role="titleMedium">{server.name}</CKText>
+          <LoadingIndicator label={t('generalLoading')} />
+        </View>
       )}
     </SafeAreaView>
   );

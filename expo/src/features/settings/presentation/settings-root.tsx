@@ -5,7 +5,7 @@ import * as Clipboard from 'expo-clipboard';
 import { File, Paths } from 'expo-file-system';
 import * as Linking from 'expo-linking';
 import * as Sharing from 'expo-sharing';
-import { Alert, Platform } from 'react-native';
+import { Alert, BackHandler, Platform } from 'react-native';
 import { clearMobileImageCache } from '../../../ui/mobile-web-image';
 import { DISCORD_BOT_INVITE_URL, DISCORD_URL } from '../../../core/config/api-config';
 
@@ -78,6 +78,15 @@ export function SettingsRoot({
     localImageCache.getSize,
     localImageCache.getSize,
   );
+  useEffect(() => {
+    if (Platform.OS !== 'android' || scene === 'main') return;
+    // Consume nested settings Back before the outer Home utility handler.
+    const back = BackHandler.addEventListener('hardwareBackPress', () => {
+      setScene('main');
+      return true;
+    });
+    return () => back.remove();
+  }, [scene]);
   const [versionLabel, setVersionLabel] = useState(t('generalLoading'));
   const [alternateIconsSupported, setAlternateIconsSupported] = useState(false);
   const [selectedAppIcon, setSelectedAppIcon] = useState<string>('');
@@ -290,11 +299,13 @@ export function SettingsRoot({
     label:
       option.labelKey === 'default'
         ? t('appIconDefault')
-        : option.labelKey === 'christmas'
-          ? t('appIconChristmas')
-          : option.labelKey === 'black_white'
-            ? t('appIconBlackWhite')
-            : t('appIconDarkMode'),
+        : option.labelKey === 'halloween'
+          ? t('appIconHalloween')
+          : option.labelKey === 'christmas'
+            ? t('appIconChristmas')
+            : option.labelKey === 'black_white'
+              ? t('appIconBlackWhite')
+              : t('appIconDarkMode'),
     previewSource: appIconPreview(option.iconName),
   }));
 
@@ -338,6 +349,9 @@ export function SettingsRoot({
 }
 
 function appIconPreview(iconName: string | null) {
+  if (iconName === 'AppIconHalloween') {
+    return require('../../../../assets/clashking/icons/app_icon_halloween.png');
+  }
   if (iconName === 'AppIconChristmas') {
     return require('../../../../assets/clashking/icons/app_icon_christmas.png');
   }
