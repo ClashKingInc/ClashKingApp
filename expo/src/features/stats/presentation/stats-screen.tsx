@@ -368,6 +368,11 @@ function ItemsSection({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const { width, fontScale } = useWindowDimensions();
+  const catalogRevision = useSyncExternalStore(
+    subscribeToGameDataRevision,
+    () => gameDataState.revision,
+    () => gameDataState.revision,
+  );
   const [category, setCategory] = useState<LegendCategory>('troops');
   const [cohort, setCohort] = useState<'overall' | 'top1000' | 'top200'>('overall');
   const [compareOpen, setCompareOpen] = useState(false);
@@ -376,8 +381,11 @@ function ItemsSection({
   const selectedData =
     cohort === 'overall' ? data?.legend : cohort === 'top1000' ? data?.top1000 : data?.top200;
   const index = useMemo(
-    () => (selectedData ? buildLegendCategoryIndex(selectedData, category, locale) : null),
-    [selectedData, category, locale],
+    () =>
+      selectedData
+        ? buildLegendCategoryIndex(selectedData, category, locale, catalogRevision)
+        : null,
+    [selectedData, category, locale, catalogRevision],
   );
   const cohortIndices = useMemo(() => {
     if (!data) return null;
@@ -591,7 +599,7 @@ function legendCategories(t: Translate): readonly { key: LegendCategory; label: 
 
 const legendCategoryIndexCache = new WeakMap<
   StatsLegendResponse,
-  Map<string, LegendCategoryIndex>
+  { revision: number; categories: Map<string, LegendCategoryIndex> }
 >();
 const legendCategoryUsageCache = new WeakMap<
   StatsLegendResponse,
@@ -643,9 +651,15 @@ function buildLegendCategoryIndex(
   data: StatsLegendResponse,
   category: LegendCategory,
   locale: string,
+  revision: number,
 ): LegendCategoryIndex {
   const cacheKey = `${locale}:${category}`;
-  const cached = legendCategoryIndexCache.get(data)?.get(cacheKey);
+  // Item labels and artwork depend on the catalog, not only the stats response.
+  // Do not retain unresolved identities from a request that beat game-data hydration.
+  const previous = legendCategoryIndexCache.get(data);
+  const dataCache =
+    previous?.revision === revision ? previous.categories : new Map<string, LegendCategoryIndex>();
+  const cached = dataCache.get(cacheKey);
   if (cached) return cached;
   const values = new Map<string, LegendCategoryValue>();
   const presentations = new Map<string, LegendPresentation>();
@@ -687,9 +701,8 @@ function buildLegendCategoryIndex(
     backgroundTriples,
     days,
   };
-  const dataCache = legendCategoryIndexCache.get(data) ?? new Map<string, LegendCategoryIndex>();
   dataCache.set(cacheKey, result);
-  legendCategoryIndexCache.set(data, dataCache);
+  legendCategoryIndexCache.set(data, { revision, categories: dataCache });
   return result;
 }
 
@@ -1009,7 +1022,7 @@ const LegendRankingRow = memo(function LegendRankingRow({
           onPress={() => onToggleExpanded(value.key)}
           style={({ pressed }) => [styles.rankingRow, { flex: 1 }, pressed && { opacity: 0.72 }]}
         >
-          <CKText role="labelLarge" style={styles.rankNumber}>
+          <CKText skeleton={false} role="labelLarge" style={styles.rankNumber}>
             #{position + 1}
           </CKText>
           <View style={styles.rankingImages} testID={`legend-artwork-${value.key}`}>
@@ -1067,6 +1080,7 @@ const LegendRankingRow = memo(function LegendRankingRow({
                   {[0, 1, 2].map((star) => (
                     <MobileWebImage
                       key={star}
+                      skeleton={false}
                       imageUrl={ImageAssets.attackStar}
                       style={{ width: 14, height: 14 }}
                     />
@@ -1084,6 +1098,7 @@ const LegendRankingRow = memo(function LegendRankingRow({
                   style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}
                 >
                   <MobileWebImage
+                    skeleton={false}
                     imageUrl={ImageAssets.attacks}
                     accessibilityElementsHidden
                     importantForAccessibility="no"
@@ -1188,7 +1203,7 @@ const LegendRankingRow = memo(function LegendRankingRow({
                     : colorWithAlpha(theme.onSurface, 0.05),
                 }}
               >
-                <CKText role="bodySmall" muted numberOfLines={1}>
+                <CKText skeleton={false} role="bodySmall" muted numberOfLines={1}>
                   {label}
                 </CKText>
                 <CKText role="rowTitle" style={active ? { color: theme.primary } : undefined}>
@@ -1271,12 +1286,14 @@ function LegendItemTrend({
 
 const legendCatalogCache = new WeakMap<
   object,
-  Map<number, { fallback: string; raw: Record<string, unknown> }>
+  { revision: number; items: Map<number, { fallback: string; raw: Record<string, unknown> }> }
 >();
 
 function indexedLegendCatalog(root: object) {
   const cached = legendCatalogCache.get(root);
-  if (cached) return cached;
+  // These root objects are mutated in place when the bundle loads or refreshes.
+  // Their identity alone cannot validate an index, especially an initially empty one.
+  if (cached?.revision === gameDataState.revision) return cached.items;
   const catalog = new Map<number, { fallback: string; raw: Record<string, unknown> }>();
   for (const group of Object.values(root)) {
     if (!isRecord(group)) continue;
@@ -1286,7 +1303,7 @@ function indexedLegendCatalog(root: object) {
       if (Number.isFinite(id) && !catalog.has(id)) catalog.set(id, { fallback, raw: candidate });
     }
   }
-  legendCatalogCache.set(root, catalog);
+  legendCatalogCache.set(root, { revision: gameDataState.revision, items: catalog });
   return catalog;
 }
 
@@ -1371,7 +1388,7 @@ function OverviewMetrics({
           >
             {value}
           </CKText>
-          <CKText role="bodySmall" muted>
+          <CKText skeleton={false} role="bodySmall" muted>
             {label}
           </CKText>
         </View>
@@ -1664,7 +1681,7 @@ function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
                       { label: t('statsAverageDestruction'), value: percent(averageDestruction) },
                     ].map(({ label, value }) => (
                       <View key={label} style={{ width: '50%', alignItems: 'center', gap: 4 }}>
-                        <CKText role="bodySmall" muted>
+                        <CKText skeleton={false} role="bodySmall" muted>
                           {label}
                         </CKText>
                         <CKText role="titleSmall">{value}</CKText>
@@ -1729,13 +1746,13 @@ function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
                 <View style={{ gap: 12 }}>
                   <View style={{ flexDirection: 'row', gap: 20 }}>
                     <View>
-                      <CKText role="bodySmall" muted>
+                      <CKText skeleton={false} role="bodySmall" muted>
                         {t('statsAverageStars')}
                       </CKText>
                       <CKText role="rowTitle">{averageStars.toFixed(2)}</CKText>
                     </View>
                     <View>
-                      <CKText role="bodySmall" muted>
+                      <CKText skeleton={false} role="bodySmall" muted>
                         {t('statsAverageDestruction')}
                       </CKText>
                       <CKText role="rowTitle">{percent(averageDestruction)}</CKText>
@@ -2235,7 +2252,7 @@ function ChoiceField<T>({
         style={[styles.choiceField, { borderColor: theme.outlineVariant }]}
       >
         <View style={styles.grow}>
-          <CKText role="labelSmall" muted>
+          <CKText skeleton={false} role="labelSmall" muted>
             {label}
           </CKText>
           <CKText role="rowTitle">{format(value)}</CKText>
@@ -2268,7 +2285,7 @@ function FilterLabel({ label, value, icon }: { label: string; value: string; ico
     <View style={[styles.choiceField, { borderColor: theme.outlineVariant }]}>
       {icon}
       <View style={styles.grow}>
-        <CKText role="labelSmall" muted>
+        <CKText skeleton={false} role="labelSmall" muted>
           {label}
         </CKText>
         <CKText role="rowTitle">{value}</CKText>
@@ -2280,7 +2297,11 @@ function Section({ children }: { children: ReactNode }) {
   return <View style={styles.section}>{children}</View>;
 }
 function SectionTitle({ children }: { children: ReactNode }) {
-  return <CKText role="titleMedium">{children}</CKText>;
+  return (
+    <CKText skeleton={false} role="titleMedium">
+      {children}
+    </CKText>
+  );
 }
 function InlineNotice({ icon, text }: { icon: ReactNode; text: string }) {
   const theme = useCKTheme();

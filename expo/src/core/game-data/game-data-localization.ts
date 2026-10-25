@@ -1,4 +1,4 @@
-import { gameDataState, isRecord, type JsonRecord } from './game-data-state';
+import { bumpGameDataRevision, gameDataState, isRecord, type JsonRecord } from './game-data-state';
 
 export interface AppLocale {
   readonly languageCode: string;
@@ -40,27 +40,26 @@ export function hasTranslationsForLocale(locale: AppLocale): boolean {
 }
 
 export function applyGameTranslations(response: JsonRecord, clashyLocale: string): void {
-  clearTranslations();
+  const next: Record<string, string> = {};
   const translations = response.translations ?? response;
   if (isRecord(translations)) {
     for (const [key, value] of Object.entries(translations)) {
       if (typeof value === 'string') {
-        gameDataState.translationsData[key] = value;
+        next[key] = value;
         continue;
       }
       if (!isRecord(value)) continue;
       const translated = value[clashyLocale] ?? value[clashyLocale.toLowerCase()];
       if (typeof translated === 'string') {
-        gameDataState.translationsData[key] = translated;
+        next[key] = translated;
       }
     }
   }
-  gameDataState.translationLocale = clashyLocale;
+  replaceTranslations(next, clashyLocale);
 }
 
 export function clearGameTranslations(locale = 'EN'): void {
-  clearTranslations();
-  gameDataState.translationLocale = locale;
+  replaceTranslations({}, locale);
 }
 
 export function translationForTid(tid: string | null | undefined): string | null {
@@ -111,10 +110,21 @@ export function localizedNameForTidOrFallback(
   return translated.length === 0 ? fallback : translated;
 }
 
-function clearTranslations(): void {
-  for (const key of Object.keys(gameDataState.translationsData)) {
-    delete gameDataState.translationsData[key];
-  }
+function replaceTranslations(next: Record<string, string>, locale: string): void {
+  const current = gameDataState.translationsData;
+  const keys = Object.keys(next);
+  if (
+    gameDataState.translationLocale === locale &&
+    Object.keys(current).length === keys.length &&
+    keys.every((key) => current[key] === next[key])
+  )
+    return;
+  for (const key of Object.keys(current)) delete current[key];
+  Object.assign(current, next);
+  gameDataState.translationLocale = locale;
+  // Same-language refreshes and late translation downloads must invalidate
+  // cached item labels too. Notify once, after the complete map is installed.
+  bumpGameDataRevision();
 }
 
 function stringValue(value: unknown): string {
