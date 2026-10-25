@@ -160,31 +160,28 @@
         android:id="@+id/empty_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:visibility="gone">
-
+        <ImageView
+            android:id="@+id/empty_badge"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:contentDescription="@string/war_widget_clan_badge_description"
+            android:scaleType="fitCenter" />
         <TextView
             android:id="@+id/empty_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textColor="@color/war_widget_text"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/empty_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
             android:fontFamily="sans-serif"
-            android:gravity="center"
+            android:gravity="start"
             android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textColor="@color/war_widget_text"
-            android:textSize="13sp" />
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textColor="@color/war_widget_text_secondary"
+            android:textSize="16sp" />
     </LinearLayout>
 </FrameLayout>

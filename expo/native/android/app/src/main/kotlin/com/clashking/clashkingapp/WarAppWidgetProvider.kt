@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -74,60 +75,61 @@ class WarAppWidgetProvider : AppWidgetProvider() {
             payloadKey = "warInfo"
             rawWarInfo = widgetData.getString(payloadKey, null)
         }
-        if (rawWarInfo == null) {
-            showEmptyState(
-                views,
-                context.getString(R.string.war_widget_empty_title),
-                context.getString(R.string.war_widget_empty_subtitle)
-            )
-            appWidgetManager.updateAppWidget(appWidgetId, views)
-            return
-        }
-
-        val warInfo = runCatching { JSONObject(rawWarInfo) }.getOrNull()
-        if (warInfo == null) {
-            showEmptyState(
-                views,
-                context.getString(R.string.war_widget_empty_title),
-                context.getString(R.string.war_widget_empty_subtitle)
-            )
-            appWidgetManager.updateAppWidget(appWidgetId, views)
-            return
-        }
-
-        when (warInfo.optString("state", "error")) {
-            "notInClan" -> showEmptyState(
-                views,
-                context.getString(R.string.war_widget_not_in_clan),
-                context.getString(R.string.war_widget_choose_account)
-            )
-            "notInWar" -> showEmptyState(
-                views,
-                displayText(warInfo, context.getString(R.string.war_widget_not_in_war)),
-                warInfo.optString("secondaryText", "")
-            )
-            "accessDenied" -> showEmptyState(
-                views,
-                displayText(warInfo, context.getString(R.string.war_widget_private)),
-                warInfo.optString("secondaryText", "")
-            )
-            "error" -> showEmptyState(
-                views,
-                displayText(warInfo, context.getString(R.string.war_widget_error)),
-                warInfo.optString("secondaryText", context.getString(R.string.war_widget_empty_subtitle))
-            )
-            else -> showMatchup(
-                context,
-                views,
-                appWidgetManager,
-                appWidgetId,
-                warInfo,
-                payloadKey,
-                rawWarInfo
-            )
+        val warInfo = rawWarInfo?.let { runCatching { JSONObject(it) }.getOrNull() }
+        val state = warInfo?.optString("state", "unavailable")
+            ?: if (selectedTag == null) "unconfigured" else "unavailable"
+        if (state in setOf("notInClan", "notInWar", "accessDenied", "error", "unavailable", "unconfigured") ||
+            warInfo?.optJSONObject("clan") == null || warInfo.optJSONObject("opponent") == null) {
+            showEmptyState(context, views, appWidgetManager, appWidgetId, widgetData, selectedTag, state, warInfo, payloadKey)
+        } else {
+            showMatchup(context, views, appWidgetManager, appWidgetId, warInfo, payloadKey, rawWarInfo!!)
         }
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+
+    private fun showEmptyState(
+        context: Context,
+        views: RemoteViews,
+        manager: AppWidgetManager,
+        widgetId: Int,
+        preferences: SharedPreferences,
+        selectedTag: String?,
+        state: String,
+        payload: JSONObject?,
+        payloadKey: String
+    ) {
+        // Identity comes from the selected clan even when the war payload is absent.
+        // Missing data must not be presented as a confirmed absence of war.
+        val options = runCatching { JSONArray(preferences.getString("warWidgetClans", "[]")) }.getOrNull()
+        val selected = (0 until (options?.length() ?: 0)).mapNotNull { options?.optJSONObject(it) }
+            .firstOrNull { WarWidgetSelectionStore.normalizeTag(it.optString("tag")) ==
+                selectedTag?.let(WarWidgetSelectionStore::normalizeTag) }
+        val clan = payload?.optJSONObject("clan")
+        val name = selected?.optString("name")?.takeIf { it.isNotBlank() }
+            ?: clan?.optString("name")?.takeIf { it.isNotBlank() } ?: "ClashKing"
+        val message = when (state) {
+            "notInWar", "cwl" -> context.getString(R.string.war_state_idle_message, name)
+            "accessDenied" -> context.getString(R.string.war_state_private_message, name)
+            "notInClan", "unconfigured" -> context.getString(R.string.war_state_choose)
+            else -> "$name\n${context.getString(R.string.war_state_unavailable)}"
+        }
+        views.setViewVisibility(R.id.matchup_content, View.GONE)
+        views.setViewVisibility(R.id.empty_content, View.VISIBLE)
+        views.setTextViewText(R.id.empty_title, message)
+        views.setImageViewResource(R.id.empty_badge, R.mipmap.launcher_icon)
+        val normalized = selectedTag?.let(WarWidgetSelectionStore::normalizeTag)
+        if (!normalized.isNullOrBlank()) {
+            val sourcePayload = preferences.getString(payloadKey, null)
+            Thread {
+                val badge = downloadBitmap("https://badges.clashk.ing/$normalized")
+                if (badge != null && preferences.getString(payloadKey, null) == sourcePayload &&
+                    WarWidgetSelectionStore.selectedTag(context, widgetId) == selectedTag) {
+                    views.setImageViewBitmap(R.id.empty_badge, badge)
+                    manager.updateAppWidget(widgetId, views)
+                }
+            }.start()
+        }
     }
 
     private fun showMatchup(
@@ -142,11 +144,9 @@ class WarAppWidgetProvider : AppWidgetProvider() {
         val clanInfo = warInfo.optJSONObject("clan")
         val opponentInfo = warInfo.optJSONObject("opponent")
         if (clanInfo == null || opponentInfo == null) {
-            showEmptyState(
-                views,
-                displayText(warInfo, context.getString(R.string.war_widget_empty_title)),
-                warInfo.optString("secondaryText", "")
-            )
+            val preferences = context.getSharedPreferences(HOME_WIDGET_PREFERENCES, Context.MODE_PRIVATE)
+            showEmptyState(context, views, appWidgetManager, appWidgetId, preferences,
+                WarWidgetSelectionStore.selectedTag(context, appWidgetId), warInfo.optString("state"), warInfo, payloadKey)
             return
         }
 
@@ -219,14 +219,6 @@ private fun displayText(warInfo: JSONObject, fallback: String): String {
     return warInfo.optString("primaryText", "").ifBlank {
         warInfo.optString("timeState", "")
     }.ifBlank { fallback }
-}
-
-private fun showEmptyState(views: RemoteViews, title: String, subtitle: String) {
-    views.setViewVisibility(R.id.matchup_content, View.GONE)
-    views.setViewVisibility(R.id.empty_content, View.VISIBLE)
-    views.setTextViewText(R.id.empty_title, title)
-    views.setTextViewText(R.id.empty_subtitle, subtitle)
-    views.setViewVisibility(R.id.empty_subtitle, if (subtitle.isBlank()) View.GONE else View.VISIBLE)
 }
 
 private fun downloadBitmap(url: String): Bitmap? {

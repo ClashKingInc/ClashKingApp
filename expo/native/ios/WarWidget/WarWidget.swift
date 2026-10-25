@@ -103,21 +103,16 @@ struct WarWidgetData: Codable {
     cwlLeague: nil
   )
 
-  static let empty = WarWidgetData(
-    state: "notInWar",
-    mode: "war",
-    updatedAt: "Open app",
-    timeState: "",
-    score: "-",
-    statusIcon: "shield",
-    primaryText: "No active war",
-    secondaryText: "Open ClashKing to refresh",
-    colorTheme: "neutral",
-    clan: Side(name: "ClashKing", badgeUrlMedium: nil, percent: "0%", attacks: "0/0", stars: 0, maxStars: 0),
-    opponent: nil,
-    cwlRank: nil,
-    cwlLeague: nil
-  )
+  // No cached payload is not evidence that the clan has no war.
+  static let empty = status("unconfigured")
+
+  static func status(_ state: String, clan: Side? = nil) -> WarWidgetData {
+    WarWidgetData(
+      state: state, mode: "war", updatedAt: nil, timeState: nil,
+      score: nil, statusIcon: nil, primaryText: nil, secondaryText: nil,
+      colorTheme: "neutral", clan: clan, opponent: nil, cwlRank: nil, cwlLeague: nil
+    )
+  }
 
   static func current(clanTag: String? = nil) -> WarWidgetData {
     guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
@@ -132,7 +127,7 @@ struct WarWidgetData: Codable {
       let data = raw.data(using: .utf8),
       let decoded = try? JSONDecoder().decode(WarWidgetData.self, from: data)
     else {
-      return .empty
+      return .status("unavailable")
     }
     return decoded
   }
@@ -228,7 +223,7 @@ struct WarTimelineProvider: AppIntentTimelineProvider {
     WarWidgetEntry(
       date: Date(),
       data: data,
-      clanBadgeData: fetchBadgeData(data.clan?.badgeUrlMedium),
+      clanBadgeData: fetchBadgeData(widgetClanBadge(clanTag) ?? data.clan?.badgeUrlMedium),
       opponentBadgeData: fetchBadgeData(data.opponent?.badgeUrlMedium),
       selectedClanTag: clanTag,
       selectedClanName: clanName
@@ -507,11 +502,16 @@ private struct WarWidgetFreshFetcher {
 
     do {
       let (data, response) = try await URLSession.shared.data(for: request)
-      guard
-        let httpResponse = response as? HTTPURLResponse,
-        httpResponse.statusCode == 200,
-        let raw = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-      else {
+      guard let httpResponse = response as? HTTPURLResponse else { return nil }
+      let raw: [String: Any]
+      if httpResponse.statusCode == 403 {
+        // Private regular logs can still have a readable CWL group. Keep that
+        // lookup below, then represent privacy rather than an empty/no-war state.
+        raw = ["state": "accessDenied"]
+      } else if httpResponse.statusCode == 200,
+                let decoded = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+        raw = decoded
+      } else {
         return nil
       }
       // currentwar can be tomorrow's CWL preparation while today's round is still live.
@@ -582,21 +582,8 @@ private struct WarWidgetFreshFetcher {
     let state = string(currentWar["state"]) ?? "notInWar"
     guard ["preparation", "inWar", "warEnded"].contains(state) else {
       let selectedClan = cachedClanSide(clanTag: clanTag, defaults: defaults)
-      return WarWidgetData(
-        state: state,
-        mode: "war",
-        updatedAt: updatedAt(),
-        timeState: "",
-        score: "",
-        statusIcon: "shield",
-        primaryText: "Not in War",
-        secondaryText: "",
-        colorTheme: "neutral",
-        clan: selectedClan,
-        opponent: nil,
-        cwlRank: nil,
-        cwlLeague: nil
-      )
+      let status = state == "notInWar" || state == "accessDenied" ? state : "unavailable"
+      return .status(status, clan: selectedClan)
     }
     return buildRegularWarData(currentWar: currentWar, state: state, isCwl: isCwl)
   }
@@ -896,10 +883,14 @@ struct WarWidgetView: View {
           .font(.system(size: 10, weight: .semibold))
           .lineLimit(1)
           .truncationMode(.tail)
-        scoreLabel(size: 17, minScale: 0.72, leading: true)
-        Text(entry.data.primaryText ?? entry.data.timeState ?? "War")
-          .font(.caption2)
-          .lineLimit(1)
+        if entry.data.opponent == nil {
+          Text(emptyStateTitle).font(.caption2).lineLimit(2)
+        } else {
+          scoreLabel(size: 17, minScale: 0.72, leading: true)
+          Text(entry.data.primaryText ?? entry.data.timeState ?? "War")
+            .font(.caption2)
+            .lineLimit(1)
+        }
       }
     }
     .widgetBackground
@@ -963,22 +954,71 @@ struct WarWidgetView: View {
     .minimumScaleFactor(0.58)
   }
 
-  private var emptyStateView: some View {
-    VStack(spacing: 7) {
-      badgeView(entry.data.clan, badgeData: entry.clanBadgeData, size: family == .systemSmall ? 48 : 56)
-      Text(entry.data.clan?.name ?? "Clan War")
-        .font((family == .systemSmall ? Font.caption : Font.callout).weight(.semibold))
-        .multilineTextAlignment(.center)
-        .lineLimit(1)
-        .minimumScaleFactor(0.6)
-      Text(entry.data.primaryText ?? "Not in War")
-        .font((family == .systemSmall ? Font.caption2 : Font.caption).weight(.bold))
-        .foregroundStyle(.primary)
-        .multilineTextAlignment(.center)
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
+  private var emptyStateTitle: String {
+    let key: String
+    switch entry.data.state {
+    case "notInWar": key = "war_state_idle"
+    case "accessDenied": key = "war_state_private"
+    case "unconfigured", "notInClan": key = "war_state_choose"
+    case "cwl": key = "war_state_idle"
+    default: key = "war_state_unavailable"
     }
-    .frame(maxWidth: .infinity)
+    return NSLocalizedString(key, tableName: "LegendsWidget", comment: "War widget status")
+  }
+
+  private var emptyClanName: String {
+    entry.selectedClanName ?? entry.data.clan?.name ?? "ClashKing"
+  }
+
+  private var emptyStateMessage: String {
+    let key: String
+    switch entry.data.state {
+    case "notInWar", "cwl": key = "war_state_idle_message"
+    case "accessDenied": key = "war_state_private_message"
+    default:
+      return entry.selectedClanName == nil ? emptyStateTitle : "\(emptyClanName)\n\(emptyStateTitle)"
+    }
+    return String(format: NSLocalizedString(key, tableName: "LegendsWidget", comment: "Clan war status"), emptyClanName)
+  }
+
+  private var emptyStateBadge: some View {
+    Group {
+      if let data = entry.clanBadgeData, let image = UIImage(data: data) {
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
+      } else {
+        Image("Icon_HV_Sword").resizable().widgetArtwork.scaledToFit()
+      }
+    }
+    .frame(width: family == .systemSmall ? 42 : 54, height: family == .systemSmall ? 42 : 54)
+    .accessibilityHidden(true)
+  }
+
+  private var emptyStateView: some View {
+    Group {
+      if family == .systemSmall {
+        VStack(spacing: 12) {
+          emptyStateBadge
+          Text(emptyStateMessage)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .lineLimit(4)
+            .minimumScaleFactor(0.8)
+        }
+      } else {
+        HStack(spacing: 16) {
+          emptyStateBadge
+          Text(emptyStateMessage)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .lineLimit(3)
+            .minimumScaleFactor(0.8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .accessibilityElement(children: .combine)
   }
 
   private var scoreText: String {
