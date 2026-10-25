@@ -8,14 +8,12 @@ import {
   type WarMemberPresenceLike,
 } from '../../player/models';
 
-export type TodoAccountFilter = 'all' | 'mine' | 'needs_action' | 'done' | 'bookmarked';
+export type TodoAccountFilter = 'all' | 'needs_action' | 'done';
 
 export interface TodoFilterCounts {
   readonly all: number;
-  readonly mine: number;
   readonly needsAction: number;
   readonly done: number;
-  readonly bookmarked: number;
 }
 
 export interface TodoHeaderSummary {
@@ -36,7 +34,6 @@ export interface TodoScreenModel {
 export interface BuildTodoScreenModelInput {
   readonly players: readonly Player[];
   readonly linkedTags: ReadonlySet<string>;
-  readonly bookmarkedTags: ReadonlySet<string>;
   readonly isShown: (tag: string) => boolean;
   readonly presenceFor: (player: Player) => WarMemberPresenceLike;
   readonly query: string;
@@ -46,32 +43,27 @@ export interface BuildTodoScreenModelInput {
 
 export function buildTodoScreenModel(input: BuildTodoScreenModelInput): TodoScreenModel {
   const linkedTags = normalizedSet(input.linkedTags);
-  const bookmarkedTags = normalizedSet(input.bookmarkedTags);
   const configured = input.players.filter((player) => {
     const tag = canonicalTag(player.tag);
-    return (linkedTags.has(tag) || bookmarkedTags.has(tag)) && input.isShown(player.tag);
+    // To-do work belongs only to linked accounts, regardless of which other
+    // player profiles happen to be cached or bookmarked elsewhere in the app.
+    return linkedTags.has(tag) && input.isShown(player.tag);
   });
   const query = input.query.trim().toLocaleLowerCase();
   const searchedPlayers = configured.filter((player) => matchesSearch(player, query));
   const state = searchedPlayers.map((player) => ({
     player,
     presence: input.presenceFor(player),
-    linked: linkedTags.has(canonicalTag(player.tag)),
-    bookmarked: bookmarkedTags.has(canonicalTag(player.tag)),
   }));
   const filterCounts: TodoFilterCounts = {
     all: state.length,
-    mine: state.filter((entry) => entry.linked).length,
     needsAction: state.filter((entry) => entry.player.getTodoProgressRatio(entry.presence) < 1)
       .length,
     done: state.filter((entry) => entry.player.getTodoProgressRatio(entry.presence) >= 1).length,
-    bookmarked: state.filter((entry) => entry.bookmarked).length,
   };
   const visiblePlayers = state
     .filter((entry) => {
       if (input.filter === 'all') return true;
-      if (input.filter === 'mine') return entry.linked;
-      if (input.filter === 'bookmarked') return entry.bookmarked;
       const needsAction = entry.player.getTodoProgressRatio(entry.presence) < 1;
       return input.filter === 'needs_action' ? needsAction : !needsAction;
     })
@@ -153,7 +145,7 @@ function countHeaderTasks(
   count(player.seasonPassRatio >= 1);
 
   const legendDone = player.currentLegendSeason?.currentDay?.totalAttacks;
-  if (player.league === 'Legend League' && legendDone !== undefined) {
+  if (player.isLegendLeague && legendDone !== undefined) {
     addDisplayMetric(metrics, 'legend_attacks', legendDone, 8);
     count(legendDone >= 8);
   }

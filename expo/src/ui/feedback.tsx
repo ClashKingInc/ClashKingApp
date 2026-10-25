@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useEffect, type ReactNode } from 'react';
 import {
   ActivityIndicator,
   Animated,
-  Easing,
-  Modal,
   Pressable,
   Platform,
   StyleSheet,
@@ -14,12 +12,13 @@ import {
 } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
-import { useCKAccessibility } from './accessibility';
 import { ImageAssets } from '../core/assets/image-assets';
 import { MobileWebImage } from './mobile-web-image';
 import { CKText } from './text';
 import { ckRadius, ckSpacing, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
+import { useSkeletonAppearance } from './skeleton-content';
+import { useSkeletonMotion } from './skeleton-motion';
 
 export function LoadingIndicator({ label }: { label?: string }) {
   const theme = useCKTheme();
@@ -31,15 +30,6 @@ export function LoadingIndicator({ label }: { label?: string }) {
   );
 }
 
-export function LoadingScreen({ label, mark }: { label?: string; mark?: ReactNode }) {
-  return (
-    <View style={styles.centered}>
-      {mark}
-      <LoadingIndicator label={label} />
-    </View>
-  );
-}
-
 export function Skeleton({
   width = '100%',
   height = 16,
@@ -47,38 +37,14 @@ export function Skeleton({
   style,
 }: {
   width?: ViewStyle['width'];
-  height?: number;
+  height?: ViewStyle['height'];
   radius?: number;
   style?: StyleProp<ViewStyle>;
 }) {
   const theme = useCKTheme();
-  const { reduceMotion } = useCKAccessibility();
-  const [opacity] = useState(() => new Animated.Value(0.42));
-
-  useEffect(() => {
-    if (reduceMotion) {
-      opacity.setValue(0.62);
-      return;
-    }
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 0.82,
-          duration: 900,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0.42,
-          duration: 900,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]),
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [opacity, reduceMotion]);
+  const inherited = useSkeletonAppearance();
+  const ownOpacity = useSkeletonMotion(!inherited.loading);
+  const opacity = inherited.loading ? inherited.opacity : ownOpacity;
 
   return (
     <Animated.View
@@ -95,35 +61,6 @@ export function Skeleton({
         style,
       ]}
     />
-  );
-}
-
-export function SkeletonLoadingDialog({ visible }: { visible: boolean }) {
-  const theme = useCKTheme();
-  return (
-    <Modal visible={visible} transparent animationType="fade">
-      <View
-        style={styles.skeletonDialogOverlay}
-        accessibilityViewIsModal
-        testID="skeleton-loading-dialog"
-      >
-        <View
-          style={[
-            styles.skeletonDialog,
-            {
-              backgroundColor: theme.surface,
-              borderColor: colorWithAlpha(theme.outlineVariant, 0.36),
-            },
-          ]}
-        >
-          <Skeleton width={48} height={48} radius={ckRadius.control} />
-          <View style={styles.skeletonDialogCopy}>
-            <Skeleton height={16} radius={ckSpacing.xs} />
-            <Skeleton width={140} height={12} radius={ckSpacing.xs} />
-          </View>
-        </View>
-      </View>
-    </Modal>
   );
 }
 
@@ -186,22 +123,42 @@ function FeedbackState({ title, body, icon, actionLabel, onAction, style }: Feed
 
 export function EmptyState({
   showSticker = true,
-  stickerHeight = 170,
-  stickerWidth = 140,
+  stickerHeight = 112,
+  stickerWidth = 96,
   style,
-  ...props
+  title,
+  body,
+  icon,
+  actionLabel,
+  onAction,
 }: FeedbackStateProps) {
+  const theme = useCKTheme();
   return (
-    <View style={[styles.emptyState, style]}>
-      <FeedbackState {...props} />
-      {showSticker ? (
-        <MobileWebImage
-          accessibilityIgnoresInvertColors
-          contentFit="contain"
-          imageUrl={ImageAssets.thinkingBuilder}
-          style={{ width: stickerWidth, height: stickerHeight, marginTop: 18 }}
-          testID="empty-state-sticker"
-        />
+    <View testID="empty-state" accessibilityRole="summary" style={[styles.emptyState, style]}>
+      {icon ??
+        (showSticker ? (
+          <MobileWebImage
+            accessibilityIgnoresInvertColors
+            contentFit="contain"
+            imageUrl={ImageAssets.thinkingBuilder}
+            style={{ width: stickerWidth, height: stickerHeight }}
+            testID="empty-state-sticker"
+          />
+        ) : null)}
+      <CKText role="bodyMedium" style={styles.emptyTitle}>
+        {title}
+      </CKText>
+      {body ? (
+        <CKText muted role="bodySmall" style={styles.emptyBody}>
+          {body}
+        </CKText>
+      ) : null}
+      {actionLabel && onAction ? (
+        <Pressable accessibilityRole="button" onPress={onAction} style={styles.emptyAction}>
+          <CKText role="bodyMedium" style={{ color: theme.primary }}>
+            {actionLabel}
+          </CKText>
+        </Pressable>
       ) : null}
     </View>
   );
@@ -234,7 +191,7 @@ export function Snackbar({
   const bottom =
     avoidBottomNavigation && !(Platform.OS === 'web' && width >= 900)
       ? insets.bottom + 96
-      : ckSpacing.xl;
+      : insets.bottom + ckSpacing.xl;
   useEffect(() => {
     if (!message || duration <= 0) return undefined;
     const timer = setTimeout(onDismiss, duration);
@@ -267,12 +224,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: ckSpacing.lg,
     padding: ckSpacing.xl,
-  },
-  skeletonDialogOverlay: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#00000052',
   },
   skeletonDialog: {
     width: '100%',
@@ -320,7 +271,24 @@ const styles = StyleSheet.create({
   },
   feedbackTitle: { fontWeight: '900' },
   feedbackBody: { fontWeight: '600' },
-  emptyState: { width: '100%', alignItems: 'center' },
+  emptyState: {
+    width: '100%',
+    minHeight: 240,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    gap: 10,
+  },
+  emptyTitle: { textAlign: 'center', fontWeight: '800', maxWidth: 320 },
+  emptyBody: { textAlign: 'center', maxWidth: 300 },
+  emptyAction: {
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 4,
+  },
   action: {
     minHeight: 32,
     alignSelf: 'flex-start',

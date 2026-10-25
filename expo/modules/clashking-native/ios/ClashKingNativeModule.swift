@@ -12,6 +12,7 @@ private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
 private let defaultKeychainAccessGroup = "MZYXD43RX5.com.clashking.apps"
 private let flutterSecureStorageService = "flutter_secure_storage_service"
 private let allowedAlternateIcons = Set([
+  "AppIconHalloween",
   "AppIconChristmas",
   "AppIconBlackWhite",
   "AppIconDarkLogo",
@@ -44,6 +45,23 @@ public final class ClashKingNativeModule: Module {
 
   public func definition() -> ModuleDefinition {
     Name("ClashKingNative")
+    AsyncFunction("padNotificationThumbnail") { (uri: String) throws -> String in
+      guard let file = URL(string: uri), file.isFileURL,
+            file.standardizedFileURL.path.hasPrefix(FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].path + "/"),
+            let image = UIImage(contentsOfFile: file.path), image.size.width > 0, image.size.height > 0 else {
+        throw NSError(domain: "NotificationThumbnail", code: 1)
+      }
+      let format = UIGraphicsImageRendererFormat()
+      format.scale = 1
+      format.opaque = false
+      let scale = 224 / max(image.size.width, image.size.height)
+      let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+      let data = UIGraphicsImageRenderer(size: CGSize(width: 256, height: 256), format: format).pngData { _ in
+        image.draw(in: CGRect(x: (256 - size.width) / 2, y: (256 - size.height) / 2, width: size.width, height: size.height))
+      }
+      try data.write(to: file, options: .atomic)
+      return file.absoluteString
+    }
     Events("onSceneryAudioStatus")
 
     AsyncFunction("prepareSceneryAudio") { (source: String) async throws in

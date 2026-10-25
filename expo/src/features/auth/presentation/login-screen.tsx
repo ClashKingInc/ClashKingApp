@@ -1,25 +1,232 @@
-import { useState, type ReactNode } from 'react';
+import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
+import { useEffect, useState, type ComponentProps, type ReactNode } from 'react';
+import { DestinationStack } from '../../../ui/destination-stack';
+import { Image } from 'expo-image';
+import { StatusBar } from 'expo-status-bar';
 import {
   KeyboardAvoidingView,
+  BackHandler,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import { LockKeyhole, Mail, Shield } from 'lucide-react-native';
+import { ArrowLeft, LockKeyhole, Mail } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Defs, G, LinearGradient, Mask, Path, Polygon, Rect, Stop } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { startupBrandPaths as brand } from '../../../core/assets/startup-brand-paths';
 import { useI18n } from '../../../i18n';
-import { CKText, MobileWebImage, ckColors, useCKTheme, useCKThemeMode } from '../../../ui';
+import { DiscordMark } from '../../../ui/discord-mark';
+import {
+  CKText,
+  CKThemeProvider,
+  GlassSurface,
+  MobileWebImage,
+  ckColors,
+  useCKTheme,
+} from '../../../ui';
 import type { AuthPresentationService, PostAuthPresentationProps } from './contracts';
 import { AuthField, InlineError, PrimaryAction, TextAction, errorText } from './auth-components';
 import { PostAuthGate } from './post-auth';
 import { isValidEmail } from './validation';
 
-export function LoginScreen({
+export function LoginScreen(props: ComponentProps<typeof EmailLoginScreen>) {
+  return (
+    <View style={[styles.fill, { backgroundColor: '#18251C' }]}>
+      <StatusBar style="light" />
+      <LoginBackdrop />
+      <SafeAreaView
+        pointerEvents="none"
+        edges={['top']}
+        style={[StyleSheet.absoluteFill, { paddingTop: 24 }]}
+      >
+        <LoginBrand />
+      </SafeAreaView>
+      {/* SDK 58 owns the navigation container. The welcome/form navigator
+          nests in that existing tree instead of creating a second root. */}
+      <LoginContent {...props} />
+    </View>
+  );
+}
+
+function LoginContent(props: ComponentProps<typeof EmailLoginScreen>) {
+  const { t } = useI18n();
+  const [emailPage, setEmailPage] = useState(Boolean(props.prefillEmail));
+  const [loading, setLoading] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [error, setError] = useState<string>();
+  const [emailBusy, setEmailBusy] = useState(false);
+  if (authenticated) return <PostAuthGate {...props.postAuth} />;
+  const signInDiscord = async () => {
+    setLoading(true);
+    setError(undefined);
+    try {
+      await props.auth.signInWithDiscord();
+      setAuthenticated(true);
+    } catch (cause) {
+      if (defaultIsMaintenanceError(cause)) props.onMaintenance();
+      else setError(errorText(cause));
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <DestinationStack
+      focused={emailPage}
+      onCloseDetail={() => setEmailPage(false)}
+      backgroundColor="transparent"
+      gestureEnabled={!emailBusy}
+      detail={
+        <CKThemeProvider preference="dark">
+          <EmailLoginScreen
+            {...props}
+            discordEnabled={false}
+            onBusyChange={setEmailBusy}
+            onBackToWelcome={() => setEmailPage(false)}
+          />
+        </CKThemeProvider>
+      }
+      grid={
+        <View testID="login-welcome" style={styles.fill}>
+          <SafeAreaView style={styles.fill} edges={['top', 'bottom']}>
+            <ScrollView bounces={false} contentContainerStyle={styles.welcomePage}>
+              <View style={{ height: 62 }} />
+              <View style={styles.welcomeSpace} />
+              <View style={styles.welcomeActions}>
+                {props.discordEnabled !== false ? (
+                  <PrimaryAction
+                    label={t('authDiscordContinue')}
+                    loading={loading}
+                    onPress={() => void signInDiscord()}
+                    color={ckColors.discordBlurple}
+                    foregroundColor="#FFFFFF"
+                    leading={<DiscordMark color="#FFFFFF" size={20} testID="discord-login-mark" />}
+                  />
+                ) : null}
+                <PrimaryAction
+                  label={t('authAccountEmailAndPassword')}
+                  disabled={loading}
+                  onPress={() => setEmailPage(true)}
+                  color="#FFFFFF24"
+                  foregroundColor="#FFFFFF"
+                  leading={<Mail color="#FFFFFF" size={20} />}
+                />
+                {error ? (
+                  <CKText
+                    accessibilityLiveRegion="assertive"
+                    style={{ color: '#FFFFFF', textAlign: 'center' }}
+                  >
+                    {error}
+                  </CKText>
+                ) : null}
+                <View style={styles.helpLinks}>
+                  <LoginHelpAction
+                    icon={<DiscordMark color="#FFFFFF" size={16} testID="discord-support-mark" />}
+                    label={t('helpJoinDiscord')}
+                    onPress={props.onJoinDiscord}
+                    color="#FFFFFF"
+                  />
+                  <LoginHelpAction
+                    icon={<Mail color="#FFFFFF" size={16} />}
+                    label={t('helpEmailUs')}
+                    onPress={props.onEmailSupport}
+                    color="#FFFFFF"
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+        </View>
+      }
+    />
+  );
+}
+
+function LoginBackdrop() {
+  return (
+    <View pointerEvents="none" accessible={false} style={StyleSheet.absoluteFill}>
+      <Image
+        testID="login-landscape"
+        source={require('../../../../assets/clashking/login-village.png')}
+        contentFit="cover"
+        transition={0}
+        style={StyleSheet.absoluteFill}
+      />
+      {/* The supplied artwork already defocuses the foreground grass. A gradual
+            scrim keeps that softness without a hard panel or an expensive live blur. */}
+      <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
+        <Defs>
+          <LinearGradient id="welcome-shade" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor="#10211C" stopOpacity={0.3} />
+            <Stop offset="0.35" stopColor="#10211C" stopOpacity={0.05} />
+            <Stop offset="0.58" stopColor="#17241C" stopOpacity={0.18} />
+            <Stop offset="0.78" stopColor="#17241C" stopOpacity={0.78} />
+            <Stop offset="1" stopColor="#111C16" stopOpacity={0.96} />
+          </LinearGradient>
+        </Defs>
+        <Rect width="100%" height="100%" fill="url(#welcome-shade)" />
+      </Svg>
+    </View>
+  );
+}
+
+function LoginBrand() {
+  const { t } = useI18n();
+  return (
+    <View accessibilityLabel={t('appTitle')} accessibilityRole="image" style={styles.brandLockup}>
+      <WelcomeCrown />
+      <MobileWebImage
+        imageUrl={ImageAssets.darkModeTextLogo}
+        contentFit="contain"
+        style={styles.textLogo}
+        errorFallback={
+          <CKText role="screenTitle" style={{ color: '#FFFFFF' }}>
+            {t('appTitle')}
+          </CKText>
+        }
+      />
+    </View>
+  );
+}
+
+function WelcomeCrown() {
+  return (
+    <Svg
+      testID="welcome-crown"
+      width={62}
+      height={62}
+      viewBox="0 0 84.5112 101.14"
+      fillRule="evenodd"
+    >
+      <Defs>
+        {/* Luminance is the native and SVG default. An explicit maskType leaks
+            through react-native-svg on web as an invalid React DOM prop. */}
+        <Mask
+          id="welcome-crown-cutout"
+          x="0"
+          y="0"
+          width="84.5112"
+          height="101.14"
+          maskUnits="userSpaceOnUse"
+        >
+          <Rect width="84.5112" height="101.14" fill="#FFFFFF" />
+          <Polygon testID="welcome-crown-shaft-mask" points={brand.cut} fill="#000000" />
+        </Mask>
+      </Defs>
+      <G mask="url(#welcome-crown-cutout)">
+        <Path d={brand.crown[0]} fill="#BF0000" />
+        <Path d={brand.crown[1]} fill="#D90709" />
+      </G>
+      <Path d={brand.crown[2]} fill="#FFFFFF" />
+      <Path d={brand.crown[3]} fill="#FFFFFF" />
+    </Svg>
+  );
+}
+
+function EmailLoginScreen({
   auth,
   postAuth,
   discordEnabled = true,
@@ -30,6 +237,8 @@ export function LoginScreen({
   onJoinDiscord,
   onEmailSupport,
   onMaintenance,
+  onBackToWelcome,
+  onBusyChange,
   isVerificationRequired = (error) => String(error).includes('EmailVerificationRequired'),
 }: {
   auth: Pick<AuthPresentationService, 'signInWithDiscord' | 'signInWithEmail'>;
@@ -42,13 +251,14 @@ export function LoginScreen({
   onJoinDiscord: () => void;
   onEmailSupport: () => void;
   onMaintenance: () => void;
+  onBackToWelcome?: () => void;
+  onBusyChange?: (busy: boolean) => void;
   viewportWidth?: number;
   platform?: string;
   isVerificationRequired?: (error: unknown) => boolean;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const themeMode = useCKThemeMode();
   const [email, setEmail] = useState(prefillEmail);
   const [password, setPassword] = useState('');
   const [passwordHidden, setPasswordHidden] = useState(true);
@@ -57,6 +267,20 @@ export function LoginScreen({
   });
   const [loading, setLoading] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (!onBackToWelcome) return;
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      // Never unmount the form while credentials or account bootstrap are in flight.
+      if (!loading && !authenticated) onBackToWelcome();
+      return true;
+    });
+    return () => subscription.remove();
+  }, [onBackToWelcome, loading, authenticated]);
+
+  useEffect(() => {
+    onBusyChange?.(loading || authenticated);
+  }, [loading, authenticated, onBusyChange]);
 
   if (authenticated) return <PostAuthGate {...postAuth} />;
 
@@ -78,7 +302,7 @@ export function LoginScreen({
       setAuthenticated(true);
     } catch (error) {
       if (isVerificationRequired(error)) onVerificationRequired(email.trim());
-      else if (/\b(?:500|503)\b/.test(String(error))) onMaintenance();
+      else if (defaultIsMaintenanceError(error)) onMaintenance();
       else setErrors({ action: errorText(error) });
     } finally {
       setLoading(false);
@@ -91,7 +315,7 @@ export function LoginScreen({
       await auth.signInWithDiscord();
       setAuthenticated(true);
     } catch (error) {
-      if (/\b(?:500|503)\b/.test(String(error))) onMaintenance();
+      if (defaultIsMaintenanceError(error)) onMaintenance();
       else setErrors({ action: errorText(error) });
     } finally {
       setLoading(false);
@@ -99,126 +323,140 @@ export function LoginScreen({
   };
 
   return (
-    <LoginSurface>
-      <View style={styles.content}>
-        <View
-          accessibilityLabel={t('appTitle')}
-          accessibilityRole="image"
-          style={styles.brandLockup}
-        >
-          <MobileWebImage
-            imageUrl={themeMode === 'dark' ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo}
-            contentFit="contain"
-            errorFallback={<Shield color={theme.onSurface} size={50} />}
-            style={styles.logo}
-          />
-          <MobileWebImage
-            imageUrl={
-              themeMode === 'dark' ? ImageAssets.darkModeTextLogo : ImageAssets.lightModeTextLogo
-            }
-            contentFit="contain"
-            errorFallback={<CKText role="screenTitle">{t('appTitle')}</CKText>}
-            style={styles.textLogo}
-          />
-        </View>
+    <View style={styles.fill}>
+      <LoginSurface>
+        <View style={styles.content}>
+          {onBackToWelcome ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('authBackToLogin')}
+              onPress={onBackToWelcome}
+              disabled={loading}
+              hitSlop={8}
+              style={{
+                width: 44,
+                height: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: loading ? 0.5 : 1,
+              }}
+            >
+              <ArrowLeft color="#FFFFFF" size={26} />
+            </Pressable>
+          ) : null}
+          <View style={{ height: 62 }} />
+          <View style={styles.emailSpace} />
 
-        <View testID="login-auth-panel" style={styles.authPanel}>
-          <View style={styles.tab}>
-            <AuthField
-              label={t('authEmail')}
-              value={email}
-              autoCapitalize="none"
-              autoComplete="email"
-              keyboardType="email-address"
-              editable={!loading}
-              onChangeText={setEmail}
-              error={errors.email}
-              leading={<Mail color={theme.onSurfaceVariant} size={20} />}
-            />
-            <AuthField
-              label={t('authPasswordLabel')}
-              value={password}
-              autoComplete="current-password"
-              editable={!loading}
-              onChangeText={setPassword}
-              error={errors.password}
-              leading={<LockKeyhole color={theme.onSurfaceVariant} size={20} />}
-              secure={passwordHidden}
-              onToggleSecure={() => setPasswordHidden((value) => !value)}
-              toggleLabel={passwordHidden ? t('tooltipShowPassword') : t('tooltipHidePassword')}
-            />
-            <View style={styles.links}>
-              <TextAction label={t('authSignUp')} onPress={onRegister} />
-              <TextAction label={t('authPasswordForgot')} onPress={onForgotPassword} />
-            </View>
-            <PrimaryAction
-              label={t('authLogin')}
-              loading={loading}
-              onPress={() => void signInEmail()}
-            />
-            {discordEnabled ? (
-              <>
-                <View
-                  accessibilityElementsHidden
-                  importantForAccessibility="no-hide-descendants"
-                  style={styles.divider}
-                >
-                  <View style={[styles.dividerLine, { backgroundColor: theme.outlineVariant }]} />
-                </View>
-                <PrimaryAction
-                  label={t('authDiscordContinue')}
-                  loading={loading}
-                  onPress={() => void signInDiscord()}
-                  color={ckColors.discordBlurple}
-                  leading={
-                    <DiscordMark color={theme.onPrimary} size={20} testID="discord-login-mark" />
-                  }
+          <GlassSurface
+            testID="login-auth-panel"
+            cornerRadius={28}
+            tintColor="#17241C66"
+            style={styles.authPanel}
+          >
+            <View style={styles.tab}>
+              <AuthField
+                appearance="glass"
+                label={t('authEmail')}
+                value={email}
+                autoCapitalize="none"
+                autoComplete="email"
+                keyboardType="email-address"
+                editable={!loading}
+                onChangeText={setEmail}
+                error={errors.email}
+                leading={<Mail color={theme.onSurfaceVariant} size={20} />}
+              />
+              <AuthField
+                appearance="glass"
+                label={t('authPasswordLabel')}
+                value={password}
+                autoComplete="current-password"
+                editable={!loading}
+                onChangeText={setPassword}
+                error={errors.password}
+                leading={<LockKeyhole color={theme.onSurfaceVariant} size={20} />}
+                secure={passwordHidden}
+                onToggleSecure={() => setPasswordHidden((value) => !value)}
+                toggleLabel={passwordHidden ? t('tooltipShowPassword') : t('tooltipHidePassword')}
+              />
+              <View style={styles.links}>
+                <TextAction color="#FFFFFF" label={t('authSignUp')} onPress={onRegister} />
+                <TextAction
+                  color="#FFFFFF"
+                  label={t('authPasswordForgot')}
+                  onPress={onForgotPassword}
                 />
-              </>
-            ) : null}
+              </View>
+              <PrimaryAction
+                label={t('authLogin')}
+                color="#FFFFFF"
+                foregroundColor="#17221C"
+                loading={loading}
+                onPress={() => void signInEmail()}
+              />
+              {discordEnabled ? (
+                <>
+                  <View
+                    accessibilityElementsHidden
+                    importantForAccessibility="no-hide-descendants"
+                    style={styles.divider}
+                  >
+                    <View style={[styles.dividerLine, { backgroundColor: theme.outlineVariant }]} />
+                  </View>
+                  <PrimaryAction
+                    label={t('authDiscordContinue')}
+                    loading={loading}
+                    onPress={() => void signInDiscord()}
+                    color={ckColors.discordBlurple}
+                    leading={
+                      <DiscordMark color={theme.onPrimary} size={20} testID="discord-login-mark" />
+                    }
+                  />
+                </>
+              ) : null}
+            </View>
+            <InlineError message={errors.action} />
+          </GlassSurface>
+
+          <View style={styles.helpLinks}>
+            <LoginHelpAction
+              icon={<DiscordMark color="#FFFFFF" size={16} testID="discord-support-mark" />}
+              color="#FFFFFF"
+              label={t('helpJoinDiscord')}
+              onPress={onJoinDiscord}
+            />
+            <LoginHelpAction
+              icon={<Mail color="#FFFFFF" size={16} />}
+              color="#FFFFFF"
+              label={t('helpEmailUs')}
+              onPress={onEmailSupport}
+            />
           </View>
-          <InlineError message={errors.action} />
         </View>
-
-        <View style={styles.helpLinks}>
-          <LoginHelpAction
-            icon={<DiscordMark color={theme.primary} size={16} testID="discord-support-mark" />}
-            label={t('helpJoinDiscord')}
-            onPress={onJoinDiscord}
-          />
-          <LoginHelpAction
-            icon={<Mail color={theme.primary} size={16} />}
-            label={t('helpEmailUs')}
-            onPress={onEmailSupport}
-          />
-        </View>
-      </View>
-    </LoginSurface>
+      </LoginSurface>
+    </View>
   );
 }
 
-function DiscordMark({ color, size, testID }: { color: string; size: number; testID?: string }) {
-  // Official Discord symbol from https://discord.com/branding (viewBox 0 0 59 44).
-  return (
-    <Svg testID={testID} width={(size * 59) / 44} height={size} viewBox="0 0 59 44" fill="none">
-      <Path
-        d="M37.1937 0C36.6265 1.0071 36.1172 2.04893 35.6541 3.11392C31.2553 2.45409 26.7754 2.45409 22.365 3.11392C21.9136 2.04893 21.3926 1.0071 20.8254 0C16.6928 0.70613 12.6644 1.94475 8.84436 3.69271C1.27372 14.9098 -0.775214 25.8374 0.243466 36.6146C4.67704 39.8906 9.6431 42.391 14.9333 43.9884C16.1256 42.391 17.179 40.6893 18.0819 38.9182C16.3687 38.2815 14.7133 37.4828 13.1274 36.5567C13.5442 36.2557 13.9493 35.9432 14.3429 35.6422C23.6384 40.0179 34.4039 40.0179 43.711 35.6422C44.1046 35.9663 44.5097 36.2789 44.9264 36.5567C43.3405 37.4943 41.6852 38.2815 39.9604 38.9298C40.8633 40.7009 41.9167 42.4025 43.109 44C48.3992 42.4025 53.3653 39.9137 57.7988 36.6377C59.0027 24.1358 55.7383 13.3007 49.1748 3.70429C45.3663 1.95633 41.3379 0.717706 37.2053 0.0231518L37.1937 0ZM19.3784 29.9816C16.5192 29.9816 14.1461 27.3886 14.1461 24.1821C14.1461 20.9755 16.4266 18.371 19.3669 18.371C22.3071 18.371 24.6455 20.9871 24.5992 24.1821C24.5529 27.377 22.2956 29.9816 19.3784 29.9816ZM38.6639 29.9816C35.7931 29.9816 33.4431 27.3886 33.4431 24.1821C33.4431 20.9755 35.7236 18.371 38.6639 18.371C41.6042 18.371 43.9309 20.9871 43.8846 24.1821C43.8383 27.377 41.581 29.9816 38.6639 29.9816Z"
-        fill={color}
-      />
-    </Svg>
-  );
-}
 
 function LoginSurface({ children }: { children: ReactNode }) {
-  const theme = useCKTheme();
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
   return (
-    <View testID="login-background" style={[styles.fill, { backgroundColor: theme.background }]}>
+    <View testID="login-background" style={styles.fill}>
       <SafeAreaView style={styles.fill} edges={['top', 'bottom']}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.fill}
         >
           <ScrollView
+            testID="login-scroll"
+            onLayout={(event) => setViewportHeight(event.nativeEvent.layout.height)}
+            onContentSizeChange={(_width, height) => setContentHeight(height)}
+            scrollEnabled={viewportHeight > 0 && contentHeight > viewportHeight + 1}
+            bounces={false}
+            alwaysBounceVertical={false}
+            overScrollMode="never"
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.page}
@@ -235,10 +473,12 @@ function LoginHelpAction({
   icon,
   label,
   onPress,
+  color,
 }: {
   icon: ReactNode;
   label: string;
   onPress: () => void;
+  color?: string;
 }) {
   const theme = useCKTheme();
   return (
@@ -248,7 +488,7 @@ function LoginHelpAction({
       style={({ pressed }) => [styles.helpAction, pressed && styles.pressed]}
     >
       {icon}
-      <CKText role="bodySmall" style={{ color: theme.primary, fontWeight: '600' }}>
+      <CKText role="bodySmall" style={{ color: color ?? theme.primary, fontWeight: '600' }}>
         {label}
       </CKText>
     </Pressable>
@@ -257,15 +497,18 @@ function LoginHelpAction({
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
+  welcomePage: { flexGrow: 1, paddingHorizontal: 24, paddingTop: 24, paddingBottom: 12 },
+  welcomeSpace: { flex: 1, minHeight: 260 },
+  welcomeActions: { width: '100%', maxWidth: 440, alignSelf: 'center', gap: 12 },
   page: {
     flexGrow: 1,
-    justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingTop: 32,
+    paddingTop: 12,
     paddingBottom: 28,
   },
-  content: { width: '100%', maxWidth: 480, alignSelf: 'center', gap: 28 },
-  authPanel: { gap: 16 },
+  content: { flexGrow: 1, width: '100%', maxWidth: 440, alignSelf: 'center', gap: 16 },
+  emailSpace: { flexGrow: 1, minHeight: 80 },
+  authPanel: { gap: 16, padding: 20 },
   tab: { gap: 16 },
   divider: { marginVertical: 2 },
   dividerLine: { width: '100%', height: StyleSheet.hairlineWidth, opacity: 0.55 },

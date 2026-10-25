@@ -8,7 +8,7 @@ version = '0.1.0'
 
 android {
   namespace 'com.clashking.nativebridge'
-  compileSdk 36
+  compileSdk rootProject.ext.compileSdkVersion
 
   defaultConfig { minSdk 24 }
 
@@ -22,7 +22,7 @@ android {
 
 dependencies {
   implementation project(':expo-modules-core')
-  implementation 'host.exp.exponent:expo.modules.backgroundtask:57.0.14'
+  implementation 'host.exp.exponent:expo.modules.backgroundtask:58.0.11'
   implementation 'androidx.annotation:annotation:1.9.1'
   implementation 'androidx.work:work-runtime-ktx:2.9.1'
   implementation 'com.google.crypto.tink:tink-android:1.21.0'

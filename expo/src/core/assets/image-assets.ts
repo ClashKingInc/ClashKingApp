@@ -1,11 +1,16 @@
+import { ASSET_ORIGIN } from './asset-origin';
+import { rememberBadgeToken } from './badge-token-hints';
+import { localGameAssetsUrl } from '../game-data/local-game-assets';
 import { gameDataState, isRecord, type JsonRecord } from '../game-data/game-data-state';
 
 export class ImageAssets {
-  static readonly baseUrl = 'https://assets.clashk.ing';
+  static readonly baseUrl = ASSET_ORIGIN;
   static readonly clanBadgeBaseUrl = 'https://badges.clashk.ing';
   static readonly defaultImage = `${ImageAssets.baseUrl}/icons/Icon_Unknown_Troop.png`;
   static readonly thinkingBuilder = `${ImageAssets.baseUrl}/stickers/thinking_bk.webp`;
   static readonly goldPass = `${ImageAssets.baseUrl}/icons/Icon_HV_Gold_Pass.png`;
+  static readonly calendar = `${ImageAssets.baseUrl}/bot/icons/calendar.png`;
+  static readonly hitpoints = `${ImageAssets.baseUrl}/bot/icons/heart.png`;
 
   static readonly darkModeLogo = `${ImageAssets.baseUrl}/logos/crown-arrow-dark-bg/ClashKing-1.png`;
   static readonly lightModeLogo = `${ImageAssets.baseUrl}/logos/crown-arrow-white-bg/ClashKing-2.png`;
@@ -60,10 +65,18 @@ export class ImageAssets {
 
   static getBuilderBaseLeagueImage(league: unknown): string {
     if (isRecord(league)) {
-      if (typeof league.name === 'string')
-        return ImageAssets.getBuilderBaseLeagueImage(league.name);
       const iconUrls = league.iconUrls;
       if (isRecord(iconUrls) && typeof iconUrls.medium === 'string') return iconUrls.medium;
+      if (typeof league.name === 'string')
+        return ImageAssets.getBuilderBaseLeagueImage(league.name);
+      const id = Number(league.id);
+      const knownLeagues = gameDataState.bundleData.builder_leagues;
+      if (Number.isInteger(id) && Array.isArray(knownLeagues)) {
+        const known = knownLeagues.find((item) => isRecord(item) && Number(item._id) === id);
+        if (isRecord(known) && typeof known.name === 'string')
+          return ImageAssets.getBuilderBaseLeagueImage(known.name);
+      }
+      return ImageAssets.builderBaseStar;
     }
     const name = league === undefined || league === null ? '' : String(league).trim();
     return name
@@ -101,6 +114,8 @@ export class ImageAssets {
   static readonly legendBlazonBorders = `${ImageAssets.baseUrl}/icons/Icon_HV_League_Legend_3_Border.png`;
   static readonly legendBlazonBordersNoPadding = `${ImageAssets.baseUrl}/icons/Icon_HV_League_Legend_3_Border_No_Padding.png`;
   static readonly legendLeagueOne = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_1.png`;
+  static readonly legacyLegendLeague = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league.png`;
+  static readonly originalLegendLeague = `${ImageAssets.baseUrl}/bot/player_leagues/LegendLeague.png`;
   static readonly legendLeagueTwo = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_2.png`;
   static readonly legendLeagueThree = `${ImageAssets.baseUrl}/leagues/league-tier/legend_league_3.png`;
 
@@ -110,7 +125,16 @@ export class ImageAssets {
 
   static readonly planet = `${ImageAssets.baseUrl}/icons/Icon_HV_Planet.png`;
 
-  static clanBadgeForTag(tag: string): string {
+  static clanBadgeForTag(tag: string, badgeData?: unknown): string {
+    rememberBadgeToken(tag, badgeData);
+    const trimmed = tag.trim();
+    const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
+    return normalized
+      ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}.avif`
+      : '';
+  }
+
+  static widgetClanBadgeForTag(tag: string): string {
     const trimmed = tag.trim();
     const normalized = (trimmed.startsWith('#') ? trimmed.slice(1) : trimmed).toUpperCase();
     return normalized ? `${ImageAssets.clanBadgeBaseUrl}/${encodeURIComponent(normalized)}` : '';
@@ -120,16 +144,26 @@ export class ImageAssets {
     return badgeUrl || `${ImageAssets.baseUrl}/icons/default_clan_badge.png`;
   }
 
+  static clanBadgeUrls(
+    tag: string,
+    badgeData?: unknown,
+  ): { small: string; medium: string; large: string } {
+    const url = ImageAssets.clanBadgeForTag(tag, badgeData);
+    return { small: url, medium: url, large: url };
+  }
+
   static getClanBadgeImage(url: string): string {
     return url || ImageAssets.defaultImage;
   }
 
   static readonly clanGamesMedals = `${ImageAssets.baseUrl}/icons/Icon_HV_Clan_Games_Medal.png`;
+  static readonly donations = `${ImageAssets.baseUrl}/clan_labels/donations.webp`;
   static readonly raidMedal = `${ImageAssets.baseUrl}/bot/icons/raid_medal.png`;
   static readonly iconTick = `${ImageAssets.baseUrl}/icons/Icon_DC_Tick.png`;
   static readonly iconCross = `${ImageAssets.baseUrl}/icons/Icon_DC_Cross.png`;
   static readonly iconClock = `${ImageAssets.baseUrl}/bot/icons/clock.png`;
   static readonly iconBuilderPotion = `${ImageAssets.baseUrl}/icons/Magic_Item_Builder_Potion.png`;
+  static readonly todoTarget = `${ImageAssets.baseUrl}/decorations/builder-base/target.webp`;
   static readonly builderPotion = `${ImageAssets.baseUrl}/magic_items/builder_potion.webp`;
   static readonly hammerOfBuilding = `${ImageAssets.baseUrl}/magic_items/hammer_of_building.webp`;
   static readonly lootCart = `${ImageAssets.baseUrl}/obstacles/home-village/loot_cart.webp`;
@@ -137,7 +171,17 @@ export class ImageAssets {
   static readonly elixir = `${ImageAssets.baseUrl}/resources/elixir.webp`;
   static readonly darkElixir = `${ImageAssets.baseUrl}/resources/dark_elixir.webp`;
   static readonly researchPotion = `${ImageAssets.baseUrl}/magic_items/research_potion.webp`;
+  static readonly builderBite = `${ImageAssets.baseUrl}/magic_snacks/builder_bite.webp`;
+  static readonly studySoup = `${ImageAssets.baseUrl}/magic_snacks/study_soup.webp`;
   static readonly petPotion = `${ImageAssets.baseUrl}/magic_items/pet_potion.webp`;
+  static readonly upgradeCategoryIcons = {
+    heroes: `${ImageAssets.baseUrl}/heroes/barbarian_king/icon.webp`,
+    equipment: `${ImageAssets.baseUrl}/buildings/home-village/blacksmith/level_1.webp`,
+    troops: `${ImageAssets.baseUrl}/bot/icons/troop.png`,
+    spells: `${ImageAssets.baseUrl}/bot/icons/spells.png`,
+    siege: `${ImageAssets.baseUrl}/troops/wall_wrecker/icon.webp`,
+    pets: `${ImageAssets.baseUrl}/bot/icons/pet_paw.png`,
+  } as const;
   static readonly clockTowerPotion = `${ImageAssets.baseUrl}/magic_items/clock_tower_potion.webp`;
   static readonly iconGoldPass = `${ImageAssets.baseUrl}/icons/Icon_HV_Gold_Pass.png`;
 
@@ -152,17 +196,37 @@ export class ImageAssets {
     return `${ImageAssets.baseUrl}/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${level}.png`;
   }
 
+  static capitalDistrictHall(level: number): string {
+    return `${ImageAssets.baseUrl}/capital-base/capital-hall-pics/Building_CC_District_Hall_level_${level}.png`;
+  }
+
   static readonly defaultProfile = `${ImageAssets.baseUrl}/icons/default_profile.png`;
   static readonly homeBaseBackground = `${ImageAssets.baseUrl}/landscape/home-landscape.png`;
   static readonly builderBaseBackground = `${ImageAssets.baseUrl}/landscape/builder-landscape.png`;
   static readonly legendPageBackground = `${ImageAssets.baseUrl}/landscape/legend-landscape.png`;
   static readonly clanPageBackground = `${ImageAssets.baseUrl}/landscape/clan-landscape.png`;
   static readonly cwlPageBackground = `${ImageAssets.baseUrl}/landscape/cwl-landscape.png`;
+  static readonly cwlArenaBackground = `${ImageAssets.baseUrl}/landscape/war-stats.png`;
   static readonly warPageBackground = `${ImageAssets.baseUrl}/landscape/war-landscape.jpg`;
   static readonly clanCapitalPageBackground = `${ImageAssets.baseUrl}/landscape/clan-capital-landscape.png`;
   static readonly playerWarStatsPageBackground = `${ImageAssets.baseUrl}/landscape/war-stats.png`;
   static readonly playerAchievementPageBackground = `${ImageAssets.baseUrl}/landscape/achievement-landscape.png`;
 
+  /** Resolve artwork from catalog identity before producing translated display labels. */
+  static getItemImage(
+    kind: 'hero' | 'pet' | 'equipment' | 'spell' | 'siege' | 'troop',
+    item: { readonly name?: unknown } | null | undefined,
+    fallback: string,
+  ): string {
+    const name = typeof item?.name === 'string' && item.name.trim() ? item.name : fallback;
+    if (kind === 'hero') return ImageAssets.getHeroImage(name);
+    if (kind === 'pet') return ImageAssets.getPetImage(name);
+    if (kind === 'equipment') return ImageAssets.getGearImage(name);
+    if (kind === 'spell') return ImageAssets.getSpellImage(name);
+    return ImageAssets.getTroopImage(name);
+  }
+
+  // Name-based entry points accept canonical English catalog names only.
   static getHeroImage(name: string): string {
     return iconAsset(['heroes'], name);
   }
@@ -200,6 +264,8 @@ export class ImageAssets {
   }
 
   static getGearImage(name: string): string {
+    if (localGameAssetsUrl && name === 'Portal Pendant')
+      return `${localGameAssetsUrl}/portal_pendant.webp`;
     return namedAsset(['equipment'], name);
   }
 

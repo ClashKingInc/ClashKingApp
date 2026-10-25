@@ -57,3 +57,34 @@ export function replaceGameDataSection(target: JsonRecord, source: unknown): voi
 export function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
+
+export interface GameAbility extends JsonRecord {
+  name: string;
+  levels: readonly JsonRecord[];
+}
+
+/** Read only the loaded collection. Absent/unpublished abilities stay absent;
+ * bundled fixtures must never silently override production game metadata. */
+export function gameAbilitiesFor(
+  id: string | number | undefined,
+  name: string,
+  bundle: Readonly<JsonRecord> = gameDataState.bundleData,
+): readonly GameAbility[] {
+  const collection = Array.isArray(bundle.abilities)
+    ? bundle.abilities
+    : isRecord(bundle.abilities) && Array.isArray(bundle.abilities.items)
+      ? bundle.abilities.items
+      : [];
+  const entry = collection.find(
+    (value: unknown) =>
+      isRecord(value) &&
+      ((id !== undefined && value._id !== undefined && String(value._id) === String(id)) ||
+        value.name === name),
+  );
+  if (!isRecord(entry) || !Array.isArray(entry.abilities)) return [];
+  return entry.abilities.flatMap((ability: unknown) =>
+    isRecord(ability) && typeof ability.name === 'string' && Array.isArray(ability.levels)
+      ? [{ ...ability, name: ability.name, levels: ability.levels.filter(isRecord) }]
+      : [],
+  );
+}

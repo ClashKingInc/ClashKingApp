@@ -16,6 +16,7 @@ export function RetainedPrimaryPager({
   onSelect: (route: PrimaryRouteId) => void;
   isRtl?: boolean;
   swipeEnabled?: boolean;
+  visible?: boolean;
 }) {
   const [visited, setVisited] = useState<ReadonlySet<PrimaryRouteId>>(() => new Set([selected]));
 

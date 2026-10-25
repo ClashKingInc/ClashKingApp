@@ -26,12 +26,17 @@ export type AppRouteId =
   | 'subscription'
   | 'todo'
   | 'ranked'
+  | 'legends'
   | 'upgradeTracker'
   | 'basesArmies'
   | 'gameAssets'
   | 'accounts'
+  | 'servers'
   | 'settings'
-  | 'achievements';
+  | 'achievements'
+  | 'esports'
+  | 'tournaments'
+  | 'profile';
 
 export interface AppRouteDefinition {
   id: AppRouteId;
@@ -43,6 +48,7 @@ export interface AppRouteDefinition {
   primaryTab?: boolean;
   mobileDrawer?: boolean;
   desktopSidebar?: boolean;
+  visibleWhenDisabled?: boolean;
 }
 
 export type RouteIconName =
@@ -72,10 +78,42 @@ export type FeatureState = Partial<Record<FeatureGate, boolean>>;
 
 /**
  * One source of truth for navigation without erasing existing platform drift.
- * Flutter deliberately omits Subscription and Bases/Armies from its desktop
- * sidebar while exposing them in the mobile drawer; parity keeps that behavior.
+ * Platform-specific entries remain explicit: eSports is native-only, while
+ * Bases/Armies is filtered by the Discord-account feature gate on both shells.
  */
 export const appRoutes = [
+  {
+    id: 'esports',
+    href: '/esports',
+    labelKey: 'competitiveEsports',
+    icon: 'trophy',
+    mobileDrawer: true,
+    desktopSidebar: false,
+  },
+  {
+    id: 'tournaments',
+    href: '/tournaments',
+    labelKey: 'competitiveTournaments',
+    icon: 'swords',
+    mobileDrawer: true,
+    desktopSidebar: true,
+  },
+  {
+    id: 'profile',
+    href: '/profile',
+    labelKey: 'competitiveProfile',
+    icon: 'user-round',
+    mobileDrawer: true,
+    desktopSidebar: true,
+  },
+  {
+    id: 'servers',
+    href: '/servers',
+    labelKey: 'homeWidgetsServers',
+    icon: 'users-round',
+    mobileDrawer: true,
+    desktopSidebar: false,
+  },
   {
     id: 'home',
     href: '/',
@@ -126,7 +164,7 @@ export const appRoutes = [
   {
     id: 'rankings',
     href: '/rankings',
-    labelKey: 'clanRankingsTab',
+    labelKey: 'homeRankingsAndStats',
     icon: 'chart-no-axes-combined',
     feature: 'leaderboards',
     mobileDrawer: true,
@@ -147,6 +185,7 @@ export const appRoutes = [
     labelKey: 'drawerCalculators',
     icon: 'calculator',
     feature: 'calculators',
+    visibleWhenDisabled: true,
     mobileDrawer: true,
     desktopSidebar: true,
   },
@@ -164,13 +203,21 @@ export const appRoutes = [
     href: '/todo',
     labelKey: 'todoTitle',
     icon: 'list-checks',
-    mobileDrawer: true,
-    desktopSidebar: true,
+    mobileDrawer: false,
+    desktopSidebar: false,
   },
   {
     id: 'ranked',
     href: '/ranked',
     labelKey: 'rankedLeagueTitle',
+    icon: 'trophy',
+    mobileDrawer: false,
+    desktopSidebar: false,
+  },
+  {
+    id: 'legends',
+    href: '/legends',
+    labelKey: 'legendsTitle',
     icon: 'trophy',
     mobileDrawer: true,
     desktopSidebar: true,
@@ -191,7 +238,7 @@ export const appRoutes = [
     icon: 'shield',
     feature: 'bases_armies',
     mobileDrawer: true,
-    desktopSidebar: false,
+    desktopSidebar: true,
   },
   {
     id: 'gameAssets',
@@ -236,33 +283,32 @@ export const primaryTabRoutes = ['home', 'players', 'clans', 'war'].map(route);
 
 export const mobileDrawerHeaderActionRoutes = ['achievements', 'accounts'].map(route);
 export const mobileDrawerBodyRoutes = [
+  'profile',
   'posts',
+  'esports',
+  'tournaments',
   'rankings',
-  'stats',
   'calculators',
-  'subscription',
-  'todo',
-  'ranked',
   'upgradeTracker',
   'basesArmies',
   'gameAssets',
-  'accounts',
+  'subscription',
 ].map(route);
 export const mobileDrawerFooterRoutes = ['settings'].map(route);
 export const mobileDrawerRoutes = [...mobileDrawerBodyRoutes, ...mobileDrawerFooterRoutes];
 
 export const desktopHeaderActionRoutes = ['achievements', 'accounts'].map(route);
 export const desktopSidebarBodyRoutes = [
+  'profile',
   'posts',
+  'tournaments',
   'rankings',
-  'stats',
   'calculators',
-  'todo',
-  'ranked',
   'upgradeTracker',
+  'basesArmies',
   'gameAssets',
 ].map(route);
-export const desktopSidebarFooterRoutes = ['accounts', 'settings'].map(route);
+export const desktopSidebarFooterRoutes = ['settings'].map(route);
 export const desktopSidebarRoutes = [...desktopSidebarBodyRoutes, ...desktopSidebarFooterRoutes];
 
 export function isRouteEnabled(definition: AppRouteDefinition, features: FeatureState): boolean {
@@ -274,6 +320,15 @@ export function filterEnabledRoutes<T extends AppRouteDefinition>(
   features: FeatureState,
 ): T[] {
   return routes.filter((definition) => isRouteEnabled(definition, features));
+}
+
+export function filterVisibleRoutes<T extends AppRouteDefinition>(
+  routes: readonly T[],
+  features: FeatureState,
+): T[] {
+  return routes.filter(
+    (definition) => definition.visibleWhenDisabled || isRouteEnabled(definition, features),
+  );
 }
 
 export function playerHref(tag: string): string {

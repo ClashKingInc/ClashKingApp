@@ -91,11 +91,23 @@ export function verifiedDamageAccountPresets(
     addOwned(ownedLevels, DamageSourceKind.Earthquake, player.spells, 'Earthquake Spell');
     addOwned(ownedLevels, DamageSourceKind.GiantArrow, player.equipments, 'Giant Arrow');
     addOwned(ownedLevels, DamageSourceKind.Fireball, player.equipments, 'Fireball');
+    addOwned(ownedLevels, DamageSourceKind.SpikyBall, player.equipments, 'Spiky Ball');
+    addOwned(ownedLevels, DamageSourceKind.SeekingShield, player.equipments, 'Seeking Shield');
+    addOwned(ownedLevels, DamageSourceKind.FlameBlower, player.equipments, 'Flame Blower');
+    addOwned(ownedLevels, DamageSourceKind.RocketBackpack, player.equipments, 'Rocket Backpack');
     addOwned(ownedLevels, DamageSourceKind.FlameFlinger, player.siegeMachines, 'Flame Flinger');
     addOwned(ownedLevels, DamageSourceKind.BalloonDeath, player.troops, 'Balloon');
     addOwned(
       ownedLevels,
       DamageSourceKind.RocketBalloonDeath,
+      player.superTroops,
+      'Rocket Balloon',
+    );
+    // Super troops can be inactive while still trainable at the base troop's level.
+    addOwned(ownedLevels, DamageSourceKind.RocketBalloonImpact, player.troops, 'Balloon');
+    addOwned(
+      ownedLevels,
+      DamageSourceKind.RocketBalloonImpact,
       player.superTroops,
       'Rocket Balloon',
     );

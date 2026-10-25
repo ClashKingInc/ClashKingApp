@@ -1,8 +1,10 @@
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useState, useSyncExternalStore, type ComponentType } from 'react';
 import {
   Modal,
   Platform,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -14,6 +16,9 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { materialBackLabel, materialCloseLabel, useI18n } from '../../../i18n';
 import {
   CKText,
+  Skeleton,
+  SkeletonContent,
+  useSkeletonContent,
   ckOpacity,
   ckRadius,
   ckSpacing,
@@ -22,7 +27,7 @@ import {
   useCKTheme,
 } from '../../../ui';
 import type { AchievementsRepository, AchievementsSnapshot } from '../data';
-import { isAchievementUnlocked, type Achievement } from '../models';
+import { ACHIEVEMENT_CATALOG_FALLBACK, isAchievementUnlocked, type Achievement } from '../models';
 import {
   AchievementModelViewer,
   type AchievementModelViewerProps,
@@ -53,8 +58,25 @@ export function AchievementsScreen({
   const { reduceMotion } = useCKAccessibility();
   const { width, height } = useWindowDimensions();
   const snapshot = useAchievementsSnapshot(repository);
-  const visibleAchievements = achievements ?? snapshot.achievements;
+  const [settled, setSettled] = useState(
+    achievements !== undefined || snapshot.achievements.length > 0,
+  );
+  const loading =
+    !settled &&
+    achievements === undefined &&
+    repository !== undefined &&
+    snapshot.achievements.length === 0;
+  const visibleAchievements =
+    achievements ?? (loading ? ACHIEVEMENT_CATALOG_FALLBACK : snapshot.achievements);
   const [selected, setSelected] = useState<Achievement>();
+  const [modelBudget, setModelBudget] = useState(0);
+  useEffect(() => {
+    if (loading || modelBudget >= visibleAchievements.length) return;
+    // Paint the destination and controls first. Creating every native WebView
+    // in the navigation commit otherwise makes the tap feel unregistered.
+    const frame = requestAnimationFrame(() => setModelBudget((count) => count + 1));
+    return () => cancelAnimationFrame(frame);
+  }, [loading, modelBudget, visibleAchievements.length]);
   const horizontalPadding = Math.max(ckSpacing.lg, (width - 1120) / 2);
   const collectionWidth = Math.min(width - horizontalPadding * 2, 1120);
   const columns = achievementColumnCount(collectionWidth);
@@ -63,7 +85,16 @@ export function AchievementsScreen({
 
   useEffect(() => {
     if (achievements === undefined && repository !== undefined) {
-      void repository.check().catch(() => undefined);
+      let active = true;
+      void repository
+        .load()
+        .catch(() => undefined)
+        .finally(() => {
+          if (active) setSettled(true);
+        });
+      return () => {
+        active = false;
+      };
     }
   }, [achievements, repository]);
 
@@ -74,6 +105,15 @@ export function AchievementsScreen({
     >
       <ScrollView
         alwaysBounceVertical
+        refreshControl={
+          repository ? (
+            <RefreshControl
+              refreshing={snapshot.isRefreshing}
+              onRefresh={() => void repository.check().catch(() => undefined)}
+              tintColor={theme.primary}
+            />
+          ) : undefined
+        }
         contentContainerStyle={{
           paddingHorizontal: horizontalPadding,
           paddingTop: ckSpacing.md,
@@ -98,19 +138,25 @@ export function AchievementsScreen({
             </Pressable>
           ) : null}
           <View style={styles.headerCopy}>
-            <CKText numberOfLines={1} role="screenTitle">
+            <CKText skeleton={false} numberOfLines={1} role="screenTitle">
               {t('achievementsTitle')}
             </CKText>
-            <CKText muted role="metadata">
-              {t('achievementSummary', {
-                earned: String(earned),
-                total: String(visibleAchievements.length),
-              })}
-            </CKText>
+            <SkeletonContent loading={loading}>
+              <CKText muted role="metadata">
+                {t('achievementSummary', {
+                  earned: String(earned),
+                  total: String(visibleAchievements.length),
+                })}
+              </CKText>
+            </SkeletonContent>
           </View>
         </View>
-        <View style={styles.grid} testID={`achievements-grid-${columns}`}>
-          {visibleAchievements.map((achievement) => {
+        <SkeletonContent
+          loading={loading}
+          style={styles.grid}
+          testID={`achievements-grid-${columns}`}
+        >
+          {visibleAchievements.map((achievement, index) => {
             const keys = ACHIEVEMENT_COPY_KEYS[achievement.id];
             const name = t(keys.name);
             const subtitle = isAchievementUnlocked(achievement)
@@ -121,6 +167,7 @@ export function AchievementsScreen({
                 key={achievement.id}
                 achievement={achievement}
                 modelRenderer={ModelRenderer}
+                showModel={index < modelBudget}
                 name={name}
                 onPress={() => setSelected(achievement)}
                 subtitle={subtitle}
@@ -128,7 +175,7 @@ export function AchievementsScreen({
               />
             );
           })}
-        </View>
+        </SkeletonContent>
       </ScrollView>
       <AchievementDetail
         achievement={selected}
@@ -142,13 +189,14 @@ export function AchievementsScreen({
   );
 }
 
-function AchievementTile({
+export function AchievementTile({
   achievement,
   modelRenderer: ModelRenderer,
   name,
   onPress,
   subtitle,
   width,
+  showModel = true,
 }: {
   achievement: Achievement;
   modelRenderer: ComponentType<AchievementModelViewerProps>;
@@ -156,8 +204,10 @@ function AchievementTile({
   onPress: () => void;
   subtitle: string;
   width: number;
+  showModel?: boolean;
 }) {
   const theme = useCKTheme();
+  const contentLoading = useSkeletonContent();
   const unlocked = isAchievementUnlocked(achievement);
   return (
     <Pressable
@@ -175,14 +225,27 @@ function AchievementTile({
         importantForAccessibility="no-hide-descendants"
         style={styles.tileBody}
       >
-        <View style={[styles.artwork, !unlocked && styles.lockedArtwork]}>
-          <ModelRenderer
-            achievement={achievement}
-            enableIdleRotation={false}
-            interactive={false}
-            semanticLabel={name}
-          />
-          {!unlocked ? (
+        <View style={styles.artwork}>
+          {/* Tiles and details must represent the same badge. Idle rotation is
+              reserved for the open detail to keep the collection still. */}
+          <View
+            style={[
+              styles.modelFrame,
+              achievement.id === 'verified_accounts' && styles.verifiedModelFrame,
+            ]}
+          >
+            {contentLoading || !showModel ? (
+              <Skeleton width="100%" height="100%" />
+            ) : (
+              <ModelRenderer
+                achievement={achievement}
+                semanticLabel={name}
+                interactive={false}
+                enableIdleRotation={false}
+              />
+            )}
+          </View>
+          {!unlocked && !contentLoading ? (
             <View style={[styles.lock, { backgroundColor: colorWithAlpha(theme.surface, 0.9) }]}>
               <Lock color={theme.onSurfaceVariant} size={18} />
             </View>
@@ -190,7 +253,7 @@ function AchievementTile({
         </View>
         <CKText
           numberOfLines={2}
-          role="compactLabel"
+          role="metadata"
           style={[styles.tileLabel, { color: unlocked ? theme.onSurface : theme.onSurfaceVariant }]}
         >
           {name}
@@ -203,7 +266,7 @@ function AchievementTile({
   );
 }
 
-function AchievementDetail({
+export function AchievementDetail({
   achievement,
   bottomInset,
   enableIdleRotation,
@@ -225,6 +288,7 @@ function AchievementDetail({
   const name = t(keys.name);
   return (
     <Modal
+      supportedOrientations={modalOrientations}
       animationType={enableIdleRotation ? 'slide' : 'none'}
       onRequestClose={onClose}
       presentationStyle="overFullScreen"
@@ -314,10 +378,13 @@ const styles = StyleSheet.create({
   backActionRtl: { marginLeft: ckSpacing.md },
   headerCopy: { flex: 1, gap: ckSpacing.xs },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: ckSpacing.lg },
-  tile: { height: 220, borderRadius: ckRadius.tile, overflow: 'hidden' },
+  tile: { height: 174, borderRadius: ckRadius.tile, overflow: 'hidden' },
   tileBody: { flex: 1, padding: ckSpacing.xs, alignItems: 'stretch' },
   artwork: { flex: 1, overflow: 'hidden' },
-  lockedArtwork: { opacity: 0.48 },
+  modelFrame: { flex: 1 },
+  // This open-outline badge fills its model bounds more than the other badges.
+  // Normalize only its collection framing; keep the detail model full-size.
+  verifiedModelFrame: { transform: [{ scale: 0.82 }] },
   lock: {
     position: 'absolute',
     top: ckSpacing.sm,

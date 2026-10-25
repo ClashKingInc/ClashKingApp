@@ -1,5 +1,6 @@
-import { forwardRef, useRef, useState } from 'react';
+import { modalOrientations } from '../../../ui/modal-orientations';
 import {
+  type ScrollViewInstance,
   Image,
   Modal,
   Platform,
@@ -7,14 +8,17 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  type View as ViewType,
+  type ViewInstance as ViewType,
 } from 'react-native';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { captureRef } from 'react-native-view-shot';
-import { Images, Share2, X } from 'lucide-react-native';
+import { Check, Copy, Share2, X } from 'lucide-react-native';
+import * as Clipboard from 'expo-clipboard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n, type I18nValue } from '../../../i18n';
-import { CKText, PressableSurface, Surface, ckRadius, useCKTheme } from '../../../ui';
+import { CKText, PressableSurface, useCKTheme } from '../../../ui';
 import {
   UpgradeCategory,
   UpgradeCollectionType,
@@ -27,6 +31,7 @@ import {
   type UpgradeVillageValue,
 } from '../models';
 import { formatTrackerDuration } from './upgrade-tracker-logic';
+import { trackerCategoryImage, trackerCategoryImageScale } from './tracker-category-art';
 
 export type TrackerShareKind = 'home' | 'builder' | 'collection';
 export type TrackerSharePreview = TrackerShareKind;
@@ -99,7 +104,7 @@ export function trackerProgressSections(
     .filter(([, matching]) => matching.length > 0)
     .map(([key, matching, category]) => ({
       key,
-      imageUrl: progressSectionImage(snapshot, village, key, matching),
+      imageUrl: trackerCategoryImage(key, village),
       summary: snapshot.summaryForItems(matching, UpgradeCategory[category]),
     }));
 }
@@ -169,26 +174,33 @@ export function UpgradeTrackerShareModal({
   const [preview, setPreview] = useState<TrackerSharePreview>(initial);
   const [sharing, setSharing] = useState(false);
   const [shareError, setShareError] = useState(false);
-  const boundary = useRef<ViewType>(null);
+  const [copied, setCopied] = useState(false);
+  const [pageWidth, setPageWidth] = useState(0);
+  const boundaries = useRef<Partial<Record<TrackerSharePreview, ViewType | null>>>({});
+  const carousel = useRef<ScrollViewInstance>(null);
   const theme = useCKTheme();
   const { t } = useI18n();
-  const title = t('upgradeTrackerShare');
-  const progressVillage = preview === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home;
-  const progressSectionCount =
-    preview === 'collection' ? 0 : trackerProgressSections(snapshot, progressVillage).length;
+  const insets = useSafeAreaInsets();
+  const previewLabels = {
+    home: t('upgradeTrackerHomeVillage'),
+    builder: t('upgradeTrackerBuilderBase'),
+    collection: t('upgradeTrackerCollection'),
+  };
+  useEffect(() => {
+    if (!visible || !pageWidth) return;
+    carousel.current?.scrollTo({ x: ALL_PREVIEWS.indexOf(initial) * pageWidth, animated: false });
+  }, [initial, visible, pageWidth]);
 
-  async function share(all: boolean) {
-    if (!boundary.current || sharing) return;
-    const original = preview;
+  async function share() {
+    if (sharing) return;
     setSharing(true);
     setShareError(false);
     try {
       await shareTrackerCaptures({
         snapshot,
         selected: preview,
-        all,
+        all: false,
         capture: async (next, filename) => {
-          setPreview(next);
           await afterPaint();
           await withTimeout(
             Promise.allSettled(
@@ -197,9 +209,10 @@ export function UpgradeTrackerShareModal({
             ARTWORK_TIMEOUT_MS,
           ).catch(() => undefined);
           await afterPaint();
-          if (!boundary.current) throw new Error('Share preview is unavailable.');
+          const boundary = boundaries.current[next];
+          if (!boundary) throw new Error('Share preview is unavailable.');
           return withTimeout(
-            captureRef(boundary.current, {
+            captureRef(boundary, {
               format: 'png',
               quality: 1,
               result: Platform.OS === 'web' ? 'data-uri' : 'tmpfile',
@@ -223,70 +236,170 @@ export function UpgradeTrackerShareModal({
     } catch {
       setShareError(true);
     } finally {
-      setPreview(original);
+      setSharing(false);
+    }
+  }
+
+  async function copy() {
+    const boundary = boundaries.current[preview];
+    if (!boundary || sharing) return;
+    setSharing(true);
+    setCopied(false);
+    setShareError(false);
+    try {
+      const png = await withTimeout(
+        captureRef(boundary, { format: 'png', quality: 1, result: 'base64' }),
+        CAPTURE_TIMEOUT_MS,
+      );
+      await Clipboard.setImageAsync(png);
+      setCopied(true);
+    } catch {
+      setShareError(true);
+    } finally {
       setSharing(false);
     }
   }
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={shareStyles.overlay}>
-        <Surface radius={ckRadius.card} style={shareStyles.sheet}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      animationType="fade"
+      onRequestClose={onClose}
+      onShow={() => {
+        setPreview(initial);
+        setCopied(false);
+      }}
+    >
+      <View
+        style={[
+          shareStyles.overlay,
+          {
+            backgroundColor: theme.background,
+            paddingTop: insets.top,
+            paddingBottom: Math.max(insets.bottom, 12),
+          },
+        ]}
+      >
+        <View style={shareStyles.sheet}>
           <View style={shareStyles.header}>
-            <CKText role="titleLarge" style={shareStyles.grow}>
-              {title}
-            </CKText>
-            <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={onClose}>
-              <X color={theme.onSurface} />
+            <View style={shareStyles.grow} />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('upgradeTrackerPlanClose')}
+              onPress={onClose}
+              style={shareStyles.close}
+            >
+              <X color={theme.onSurface} size={26} />
             </Pressable>
           </View>
-          <ScrollView contentContainerStyle={shareStyles.content}>
-            <View
-              ref={boundary}
-              collapsable={false}
-              style={[
-                shareStyles.graphicBoundary,
-                preview === 'collection'
-                  ? shareStyles.collectionGraphicBoundary
-                  : {
-                      aspectRatio: trackerProgressGraphicAspectRatio(progressSectionCount),
-                    },
-              ]}
-            >
-              {preview === 'collection' ? (
-                <CollectionGraphic snapshot={snapshot} />
-              ) : (
-                <ProgressGraphic
-                  snapshot={snapshot}
-                  village={preview === 'home' ? UpgradeVillage.home : UpgradeVillage.builderBase}
+          <View style={shareStyles.previewNavigation}>
+            {ALL_PREVIEWS.map((kind, index) => (
+              <Pressable
+                key={kind}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: preview === kind }}
+                accessibilityLabel={previewLabels[kind]}
+                disabled={sharing}
+                onPress={() => {
+                  setPreview(kind);
+                  setCopied(false);
+                  carousel.current?.scrollTo({ x: index * pageWidth, animated: true });
+                }}
+                style={shareStyles.previewTab}
+              >
+                <CKText
+                  role="body"
+                  style={{ color: preview === kind ? theme.onSurface : theme.onSurfaceVariant }}
+                >
+                  {previewLabels[kind]}
+                </CKText>
+                <View
+                  style={{
+                    height: 3,
+                    width: 24,
+                    borderRadius: 3,
+                    backgroundColor: preview === kind ? theme.primary : 'transparent',
+                  }}
                 />
-              )}
+              </Pressable>
+            ))}
+          </View>
+          <ScrollView contentContainerStyle={shareStyles.content}>
+            <View onLayout={(event) => setPageWidth(event.nativeEvent.layout.width)}>
+              <ScrollView
+                ref={carousel}
+                horizontal
+                pagingEnabled
+                scrollEnabled={!sharing}
+                showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={(event) => {
+                  const next =
+                    ALL_PREVIEWS[Math.round(event.nativeEvent.contentOffset.x / pageWidth)];
+                  if (next) {
+                    setPreview(next);
+                    setCopied(false);
+                  }
+                }}
+              >
+                {pageWidth > 0
+                  ? ALL_PREVIEWS.map((kind) => {
+                      return (
+                        <View key={kind} style={{ width: pageWidth, justifyContent: 'flex-start' }}>
+                          <View
+                            ref={(node) => {
+                              boundaries.current[kind] = node;
+                            }}
+                            collapsable={false}
+                            // Size the capture to its content, not tablet width.
+                            style={shareStyles.graphicBoundary}
+                          >
+                            {kind === 'collection' ? (
+                              <CollectionGraphic snapshot={snapshot} />
+                            ) : (
+                              <ProgressGraphic
+                                snapshot={snapshot}
+                                village={
+                                  kind === 'builder'
+                                    ? UpgradeVillage.builderBase
+                                    : UpgradeVillage.home
+                                }
+                              />
+                            )}
+                          </View>
+                        </View>
+                      );
+                    })
+                  : null}
+              </ScrollView>
             </View>
             {shareError ? (
               <CKText muted role="bodySmall" style={shareStyles.error}>
                 {t('apiErrorOperationFailed', { operation: t('upgradeTrackerShare') })}
               </CKText>
             ) : null}
+          </ScrollView>
+          <View style={shareStyles.actions}>
             <PressableSurface
               accessibilityRole="button"
               disabled={sharing}
-              onPress={() => void share(false)}
+              onPress={() => void share()}
               style={shareStyles.action}
             >
               <Share2 color={theme.onSurface} />
-              <CKText>{sharing ? t('generalLoading') : title}</CKText>
+              <CKText>{sharing ? t('generalLoading') : t('gameAssetsShare')}</CKText>
             </PressableSurface>
             <PressableSurface
               accessibilityRole="button"
               disabled={sharing}
-              onPress={() => void share(true)}
+              onPress={() => void copy()}
               style={shareStyles.action}
             >
-              <Images color={theme.onSurface} />
-              <CKText>Share all 3</CKText>
+              {copied ? <Check color={theme.onSurface} /> : <Copy color={theme.onSurface} />}
+              <CKText>{copied ? t('trackerPosterCopied') : t('trackerPosterCopy')}</CKText>
             </PressableSurface>
-          </ScrollView>
-        </Surface>
+          </View>
+        </View>
       </View>
     </Modal>
   );
@@ -386,7 +499,13 @@ const ProgressGraphic = forwardRef<
         <View style={shareStyles.categoryList}>
           {sections.map((section) => (
             <View key={section.key} style={shareStyles.categoryRow}>
-              <Image source={{ uri: section.imageUrl }} style={shareStyles.categoryIcon} />
+              <Image
+                source={{ uri: section.imageUrl }}
+                style={[
+                  shareStyles.categoryIcon,
+                  { transform: [{ scale: trackerCategoryImageScale(section.key) }] },
+                ]}
+              />
               <View style={shareStyles.categoryBody}>
                 <View style={shareStyles.categoryHeading}>
                   <CKText style={shareStyles.categoryLabel}>
@@ -608,23 +727,6 @@ export function trackerArtworkUrls(
   ].filter((url, index, values) => url.startsWith('http') && values.indexOf(url) === index);
 }
 
-function progressSectionImage(
-  snapshot: UpgradeTrackerSnapshot,
-  village: UpgradeVillageValue,
-  key: TrackerProgressSectionKey,
-  items: readonly UpgradeTrackerItem[],
-) {
-  if (key === 'buildings')
-    return village === UpgradeVillage.home
-      ? ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1)
-      : ImageAssets.getBuilderBaseBuildingImage("Builder's Hut", 1);
-  if (key === 'laboratory')
-    return village === UpgradeVillage.home
-      ? ImageAssets.getHomeVillageBuildingImage('Laboratory', 1)
-      : ImageAssets.getBuilderBaseBuildingImage('Star Laboratory', 1);
-  return items[0]?.imageUrl ?? ImageAssets.defaultImage;
-}
-
 function queueDurationSeconds(
   snapshot: UpgradeTrackerSnapshot,
   village: UpgradeVillageValue,
@@ -693,16 +795,20 @@ function compact(value: number, intlLocale: string) {
 }
 
 const shareStyles = StyleSheet.create({
-  overlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000070' },
-  sheet: { maxHeight: '92%', width: '100%', maxWidth: 620, alignSelf: 'center', padding: 14 },
+  previewNavigation: { flexDirection: 'row', justifyContent: 'center', gap: 10 },
+  previewTab: { flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center', gap: 8 },
+  overlay: { flex: 1 },
+  sheet: { flex: 1, width: '100%', maxWidth: 620, alignSelf: 'center', padding: 16 },
+  close: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  actions: { gap: 8, paddingTop: 12 },
   content: { gap: 10, paddingBottom: 24 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   grow: { flex: 1 },
   graphicBoundary: { width: '100%' },
   collectionGraphicBoundary: { aspectRatio: 1 },
-  graphic: { flex: 1, borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
+  graphic: { borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
   graphicShade: { backgroundColor: '#050506dc' },
-  graphicContent: { flex: 1, padding: 18 },
+  graphicContent: { padding: 18 },
   hall: { width: 58, height: 58, resizeMode: 'contain' },
   whiteTitle: { color: '#fff', fontSize: 20, fontWeight: '900' },
   silver: { color: '#bfc2c8', fontSize: 11, fontWeight: '700' },
@@ -756,11 +862,11 @@ const shareStyles = StyleSheet.create({
   },
   bar: { flex: 1, height: 6, borderRadius: 99, backgroundColor: '#303238', overflow: 'hidden' },
   barFill: { height: '100%', borderRadius: 99, backgroundColor: '#f1b84b' },
-  graphicFooter: { marginTop: 'auto' },
+  graphicFooter: { marginTop: 18 },
   brand: { color: '#fff', fontSize: 13, fontWeight: '900' },
   brandIcon: { width: 24, height: 24, resizeMode: 'contain' },
   collectionGraphic: { backgroundColor: '#0d0d0f' },
-  collectionGrid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 18 },
+  collectionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 18 },
   collectionCell: {
     width: '31%',
     minHeight: 86,

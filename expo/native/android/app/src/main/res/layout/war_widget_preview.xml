@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher previews cannot run provider binding or fetch account artwork. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:gravity="center"
+    android:background="@drawable/war_widget_background" android:padding="16dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/war_widget_label" android:textSize="14sp"
+        android:textColor="@color/war_widget_text" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:text="82  —  120" android:textSize="28sp"
+        android:textStyle="bold" android:textColor="@color/war_widget_text" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:text="⚔  32/40  ·  ⚔  40/40"
+        android:textSize="12sp" android:textColor="@color/war_widget_text" />
+</LinearLayout>

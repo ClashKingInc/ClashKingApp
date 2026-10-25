@@ -7,6 +7,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.View
 import android.widget.RemoteViews
@@ -176,10 +179,19 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
         val compactTaskCapacity = if (isLarge) 0 else taskCapacity(appWidgetManager, appWidgetId)
         val views = RemoteViews(context.packageName, layoutId)
-        views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context))
+        views.setInt(
+            R.id.upgrade_root_layout,
+            "setBackgroundResource",
+            if (UpgradeWidgetSelectionStore.transparentBackground(context, appWidgetId)) {
+                android.R.color.transparent
+            } else {
+                R.drawable.upgrade_widget_background
+            }
+        )
         val showBuilderBase = UpgradeWidgetSelectionStore.showBuilderBase(context, appWidgetId)
 
         val data = readCurrentUpgradeData(context, appWidgetId, widgetData)
+        views.setOnClickPendingIntent(R.id.upgrade_root_layout, getUpgradePendingIntent(context, appWidgetId))
         if (data == null) {
             renderEmptyState(context, views)
             appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -229,14 +241,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
 
         val instanceTag = UpgradeWidgetSelectionStore.selectedTag(context, appWidgetId)
-        val globalTag = widgetData.getString("upgradeWidgetSelectedTag", null)
-            ?.let(::normalizedTag)
+            ?: (widgetData.getString("upgradeWidgetSelectedTag", null)?.let(::normalizedTag)
+                ?.takeIf { it.isNotEmpty() } ?: linkedTags.firstOrNull())?.also {
+                UpgradeWidgetSelectionStore.saveSelectedTag(context, appWidgetId, it)
+            }
         val candidateTags = if (instanceTag != null) {
             listOf(instanceTag)
-        } else if (!globalTag.isNullOrEmpty()) {
-            listOf(globalTag)
         } else {
-            listOfNotNull(linkedTags.firstOrNull())
+            emptyList()
         }
         for (tag in candidateTags) {
             if (tag !in linkedTags) continue
@@ -249,7 +261,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
 
         // Compatibility with payloads written before per-account storage existed.
         if (linkedTags.isNotEmpty()) return null
-        return legacyUpgradeData(widgetData, instanceTag ?: globalTag)
+        return instanceTag?.let { legacyUpgradeData(widgetData, it) }
     }
 
     private fun legacyUpgradeData(
@@ -292,7 +304,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         )
 
         views.setTextViewText(R.id.upgrade_account_name, data.optString("name", "Upgrade Progress"))
-        views.setTextViewText(R.id.upgrade_account_tag, data.optString("tag", ""))
+        renderCompletion(context, views, data)
         addImageTarget(
             imageTargets,
             R.id.upgrade_hall_image,
@@ -391,7 +403,7 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
             R.drawable.ic_upgrade_hall_placeholder
         )
         views.setTextViewText(R.id.upgrade_account_name, data.optString("name", "Upgrade Progress"))
-        views.setTextViewText(R.id.upgrade_account_tag, data.optString("tag", ""))
+        renderCompletion(context, views, data)
         addImageTarget(
             imageTargets,
             R.id.upgrade_hall_image,
@@ -1008,6 +1020,33 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
         }
     }
 
+    // Match the Home card's Home Village completion, not elapsed calendar time.
+    // Older payloads omit the metric; keep that unknown rather than inventing 0%.
+    private fun renderCompletion(context: Context, views: RemoteViews, data: JSONObject) {
+        val completion = if (data.has("completion") && !data.isNull("completion"))
+            data.optDouble("completion").takeIf { it.isFinite() }?.coerceIn(0.0, 1.0) else null
+        val bitmap = Bitmap.createBitmap(126, 126, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 12f
+        paint.color = context.getColor(R.color.widget_text)
+        paint.alpha = 40
+        val bounds = RectF(6f, 6f, 120f, 120f)
+        canvas.drawOval(bounds, paint)
+        paint.alpha = 255
+        paint.color = context.getColor(R.color.widget_stat_positive)
+        paint.strokeCap = Paint.Cap.ROUND
+        canvas.drawArc(bounds, -90f, ((completion ?: 0.0) * 360).toFloat(), false, paint)
+        val text = completion?.let { Math.round(it * 100).toString() + "%" } ?: "—"
+        // RemoteViews may retain bitmaps across a launcher theme change. Keep the
+        // number in a theme-aware TextView so light-cached black never stays black
+        // on a dark widget (or the reverse).
+        views.setTextViewText(R.id.upgrade_completion_value, text)
+        views.setImageViewBitmap(R.id.upgrade_completion_ring, bitmap)
+        views.setContentDescription(R.id.upgrade_completion_ring, text)
+    }
+
     private fun labels(data: JSONObject?): JSONObject? = data?.optJSONObject("labels")
 
     private fun label(labels: JSONObject?, key: String, fallback: String): String =
@@ -1082,9 +1121,14 @@ class UpgradeAppWidgetProvider : AppWidgetProvider() {
     }
 }
 
-private fun getUpgradePendingIntent(context: Context): PendingIntent {
+private fun getUpgradePendingIntent(context: Context, appWidgetId: Int): PendingIntent {
     val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-    return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        ?: android.content.Intent(android.content.Intent.ACTION_MAIN).setPackage(context.packageName)
+    intent.action = android.content.Intent.ACTION_VIEW
+    val tag = UpgradeWidgetSelectionStore.selectedTag(context, appWidgetId)
+    intent.data = android.net.Uri.parse(if (tag.isNullOrBlank()) "clashking://upgrade-tracker"
+        else "clashking://upgrade-tracker?player=${android.net.Uri.encode(tag)}")
+    return PendingIntent.getActivity(context, appWidgetId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 private fun loadUpgradeBitmap(context: Context, url: String): Bitmap? {

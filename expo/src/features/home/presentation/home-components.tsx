@@ -1,14 +1,18 @@
-import { Children, useRef, useState, type ReactNode } from 'react';
+import type { ScrollViewInstance } from 'react-native';
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
+import { createContext, useContext, useRef, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-native';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { AccountBarScrollView } from '../../../ui/account-bar-scroll-view';
 import { materialNextPageTooltip, materialPreviousPageTooltip, useI18n } from '../../../i18n';
 import {
   CKText,
   MobileWebImage,
   Skeleton,
+  useSkeletonContent,
   ckRadius,
   ckSpacing,
   colorWithAlpha,
@@ -23,70 +27,49 @@ import {
   type HomeMetricModel,
 } from './contracts';
 
-export const HOME_METRIC_HEIGHT = 44;
-export const HOME_METRIC_GAP = 6;
+import {
+  DashboardCardFrame,
+  DashboardMetric,
+  DashboardMetricGrid,
+} from '../../../ui/dashboard-card';
+export const HomeDragContext = createContext(false);
 
 export function HomeCardFrame({
   children,
+  header,
   onPress,
+  actionLabel,
+  footer,
 }: {
   children: ReactNode;
+  header?: ReactNode;
   onPress?: () => void;
+  actionLabel?: string;
+  footer?: ReactNode;
 }) {
-  const theme = useCKTheme();
-  const body = (
-    <View
-      style={[
-        styles.frame,
-        {
-          backgroundColor: theme.surface,
-          borderColor: colorWithAlpha(theme.outlineVariant, 0.32),
-        },
-      ]}
+  const dragging = useContext(HomeDragContext);
+  return (
+    <DashboardCardFrame
+      header={header}
+      onPress={onPress}
+      actionLabel={actionLabel}
+      footer={footer}
+      pressEnabled={!dragging}
     >
       {children}
-    </View>
-  );
-  return onPress ? (
-    <Pressable accessibilityRole="button" onPress={onPress}>
-      {body}
-    </Pressable>
-  ) : (
-    body
-  );
-}
-
-export function HomeCardSkeleton({ rows }: { rows: number }) {
-  return (
-    <HomeCardFrame>
-      <View style={styles.skeletonHeader}>
-        <Skeleton width={46} height={46} radius={12} />
-        <View style={styles.flex}>
-          <Skeleton width={120} />
-          <Skeleton width={70} height={12} />
-        </View>
-        <Skeleton width={46} height={46} radius={23} />
-      </View>
-      <Skeleton height={14} />
-      {Array.from({ length: rows }, (_, index) => (
-        <View key={index} style={styles.metricRow}>
-          <Skeleton height={HOME_METRIC_HEIGHT} style={styles.flex} />
-          <Skeleton height={HOME_METRIC_HEIGHT} style={styles.flex} />
-        </View>
-      ))}
-    </HomeCardFrame>
+    </DashboardCardFrame>
   );
 }
 
 const metricAssets: Record<HomeMetricModel['kind'], string> = {
-  legendAttacks: 'https://assets.clashk.ing/icons/Icon_HV_League_Legend_3_No_Padding.png',
-  warAttacks: 'https://assets.clashk.ing/icons/Icon_DC_War.png',
-  cwlAttacks: 'https://assets.clashk.ing/icons/Icon_DC_CWL_No_Border.png',
-  raidAttacks: 'https://assets.clashk.ing/icons/Icon_HV_Raid_Attack.png',
-  clanGames: 'https://assets.clashk.ing/icons/Icon_HV_Clan_Games_Medal.png',
-  seasonPass: 'https://assets.clashk.ing/icons/Icon_HV_Gold_Pass.png',
-  rankedAttacks: 'https://assets.clashk.ing/icons/Icon_HV_Sword.png',
-  rankedDefenses: 'https://assets.clashk.ing/icons/Icon_HV_Shield_Arrow.png',
+  legendAttacks: `${ASSET_ORIGIN}/icons/Icon_HV_League_Legend_3_No_Padding.png`,
+  warAttacks: `${ASSET_ORIGIN}/icons/Icon_DC_War.png`,
+  cwlAttacks: `${ASSET_ORIGIN}/icons/Icon_DC_CWL_No_Border.png`,
+  raidAttacks: `${ASSET_ORIGIN}/icons/Icon_HV_Raid_Attack.png`,
+  clanGames: `${ASSET_ORIGIN}/icons/Icon_HV_Clan_Games_Medal.png`,
+  seasonPass: `${ASSET_ORIGIN}/icons/Icon_HV_Gold_Pass.png`,
+  rankedAttacks: `${ASSET_ORIGIN}/icons/Icon_HV_Sword.png`,
+  rankedDefenses: `${ASSET_ORIGIN}/icons/Icon_HV_Shield_Arrow.png`,
   builders: ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1),
   laboratory: ImageAssets.getHomeVillageBuildingImage('Laboratory', 1),
   pets: ImageAssets.getHomeVillageBuildingImage('Pet House', 1),
@@ -100,150 +83,97 @@ export function HomeMetricPill({ metric, label }: { metric: HomeMetricModel; lab
     metric.displayValue ??
     (metric.total === null ? `${metric.done}` : `${metric.done}/${metric.total}`);
   return (
-    <View
-      accessible
-      accessibilityLabel={metric.detail ? `${label}, ${metric.detail}` : `${label}, ${value}`}
-      style={[
-        styles.metric,
-        {
-          backgroundColor: colorWithAlpha(theme.surface, 0.5),
-          borderColor: colorWithAlpha(theme.outlineVariant, 0.18),
-        },
-      ]}
-    >
-      <MobileWebImage
-        imageUrl={metricAssets[metric.kind]}
-        style={styles.metricImage}
-        errorFallback={<ImageOff color={theme.onSurfaceVariant} size={18} />}
-      />
-      <View style={styles.flex}>
-        <View style={styles.metricLabelRow}>
-          <CKText muted role="labelMedium" numberOfLines={1} style={styles.flex}>
-            {label}
-          </CKText>
-          {metric.meta ? (
-            <CKText muted role="labelMedium">
-              {metric.meta}
-            </CKText>
-          ) : null}
-        </View>
-        <CKText
-          role="labelLarge"
-          numberOfLines={1}
-          style={progress === 1 ? { color: statColors.win, fontWeight: '900' } : styles.heavy}
-        >
-          {value}
-        </CKText>
-      </View>
-    </View>
+    <DashboardMetric
+      label={label}
+      value={value}
+      meta={metric.meta}
+      detail={metric.detail}
+      valueColor={progress === 1 ? statColors.win : undefined}
+      artwork={
+        <MobileWebImage
+          skeleton={false}
+          imageUrl={metricAssets[metric.kind]}
+          style={styles.metricImage}
+          errorFallback={<ImageOff color={theme.onSurfaceVariant} size={18} />}
+        />
+      }
+    />
   );
 }
-
-export function HomeMetricGrid({ children }: { children: ReactNode }) {
-  return (
-    <View style={styles.grid}>
-      {Children.map(children, (child) => (
-        <View style={styles.gridCell}>{child}</View>
-      ))}
-    </View>
-  );
-}
+export const HomeMetricGrid = DashboardMetricGrid;
 
 export interface HomeRailEntry extends HomeAccountIdentity {
   readonly pending?: boolean | null;
 }
 
-export function HomeAccountRail({
+/** Only the footer scrolls between account choices; the card itself never pages. */
+export function HomeAccountBar({
   entries,
   selectedIndex,
   onSelect,
-  allLabel,
 }: {
   entries: readonly HomeRailEntry[];
   selectedIndex: number;
   onSelect: (index: number) => void;
-  allLabel?: string;
 }) {
   const theme = useCKTheme();
   const { isRtl } = useI18n();
-  const railEntries: (HomeRailEntry | HomeAccountIdentity)[] = allLabel
-    ? [{ tag: '__all', name: allLabel, subtitle: '', imageUrl: '' }, ...entries]
-    : [...entries];
-  if (railEntries.length === 1) {
-    const entry = railEntries[0]!;
-    return (
-      <View style={styles.singleRail}>
-        {entry.imageUrl ? (
-          <MobileWebImage imageUrl={entry.imageUrl} style={styles.singleRailImage} />
-        ) : null}
-        <CKText muted role="labelLarge" numberOfLines={1}>
-          {entry.name}
-        </CKText>
-      </View>
-    );
-  }
+  const [railWidth, setRailWidth] = useState(0);
+  const [contentWidth, setContentWidth] = useState(0);
+  if (entries.length < 2) return null;
   return (
-    <ScrollView
+    <AccountBarScrollView
       horizontal
-      alwaysBounceHorizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.rail}
-      style={isRtl ? styles.rtlScroll : undefined}
+      testID="home-account-bar"
+      onLayout={(event) => setRailWidth(event.nativeEvent.layout.width)}
+      onContentSizeChange={(width) => setContentWidth(width)}
+      contentContainerStyle={[
+        styles.accountBar,
+        // Center short rows, but anchor overflowing rows so their first chips
+        // remain reachable instead of centering outside the scrollable bounds.
+        contentWidth > railWidth + 1 && { justifyContent: 'flex-start' },
+        isRtl && styles.rowRtl,
+      ]}
+      style={[{ backgroundColor: colorWithAlpha(theme.onSurface, 0.035) }]}
     >
-      {railEntries.map((entry, index) => {
+      {entries.map((entry, index) => {
         const selected = index === selectedIndex;
-        const pending = 'pending' in entry ? entry.pending : null;
         return (
           <Pressable
             key={entry.tag}
             accessibilityRole="button"
-            accessibilityState={{ selected }}
             accessibilityLabel={entry.name}
+            accessibilityState={{ selected }}
+            hitSlop={{ top: 10, bottom: 10 }}
             onPress={() => onSelect(index)}
-            style={[
-              styles.railTarget,
-              isRtl && styles.rtlItem,
+            style={({ pressed }) => [
+              styles.accountTarget,
               {
                 backgroundColor: colorWithAlpha(
-                  theme.surfaceContainerHighest,
-                  selected ? 0.55 : 0.25,
+                  theme.onSurface,
+                  pressed ? 0.14 : selected ? 0.08 : 0,
                 ),
-                borderColor: selected ? theme.primary : colorWithAlpha(theme.outlineVariant, 0.24),
-                borderWidth: selected ? 1.6 : 1,
               },
             ]}
           >
             {entry.imageUrl ? (
-              <View>
-                <MobileWebImage
-                  imageUrl={entry.imageUrl}
-                  style={[styles.railImage, !selected && styles.recede]}
-                />
-                {pending !== null && pending !== undefined ? (
-                  <View
-                    style={[
-                      styles.pending,
-                      {
-                        backgroundColor: pending ? statColors.loss : 'transparent',
-                        borderColor: pending ? theme.surface : statColors.win,
-                        borderWidth: pending ? 1.4 : 2,
-                      },
-                    ]}
-                  />
-                ) : null}
-              </View>
+              <MobileWebImage imageUrl={entry.imageUrl} style={styles.accountImage} />
             ) : (
-              <Group size={18} color={theme.onSurfaceVariant} />
+              <Group size={13} color={theme.onSurfaceVariant} />
             )}
-            {selected ? (
-              <CKText role="labelMedium" numberOfLines={1} style={styles.railName}>
-                {entry.name}
-              </CKText>
-            ) : null}
+            <CKText
+              role="labelMedium"
+              muted={!selected}
+              numberOfLines={1}
+              style={[styles.accountName, { opacity: selected ? 1 : 0.65 }]}
+            >
+              {entry.name}
+            </CKText>
           </Pressable>
         );
       })}
-    </ScrollView>
+    </AccountBarScrollView>
   );
 }
 
@@ -261,7 +191,10 @@ export function ProgressRing({
   showLabel?: boolean;
 }) {
   const theme = useCKTheme();
-  const value = Math.max(0, Math.min(1, progress));
+  const loading = useSkeletonContent();
+  if (loading) return <Skeleton width={size} height={size} radius={size / 2} />;
+  const value = normalizeHomeProgress(progress);
+  const progressLabel = label ?? formatHomeProgressRingLabel(value);
   const stroke = 4;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -290,19 +223,32 @@ export function ProgressRing({
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference * (1 - value)}
           strokeLinecap="round"
-          rotation="-90"
-          origin={`${size / 2}, ${size / 2}`}
+          // Keep the pivot in the SVG transform: origin emits an invalid
+          // transform-origin DOM prop on web. Both platforms start at noon.
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </Svg>
       {showLabel ? (
         <View style={styles.ringLabel}>
-          <CKText role="titleSmall" style={[styles.heavy, { fontSize: labelFontSize }]}>
-            {label ?? `${Math.round(value * 100)}%`}
+          <CKText
+            role="titleSmall"
+            numberOfLines={1}
+            style={[styles.heavy, { fontSize: labelFontSize ?? Math.max(12, size * 0.28) }]}
+          >
+            {progressLabel}
           </CKText>
         </View>
       ) : null}
     </View>
   );
+}
+
+export function formatHomeProgressRingLabel(progress: number): string {
+  return `${Math.round(normalizeHomeProgress(progress) * 100)}%`;
+}
+
+function normalizeHomeProgress(progress: number): number {
+  return Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
 }
 
 export function DesktopComparison({
@@ -319,7 +265,7 @@ export function DesktopComparison({
   const [availableWidth, setAvailableWidth] = useState(1120);
   const [scrollX, setScrollX] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
-  const railRef = useRef<ScrollView>(null);
+  const railRef = useRef<ScrollViewInstance>(null);
   const width = homeComparisonCardWidth(availableWidth, items.length, summaryFirst);
   const showsNavigation = homeComparisonNeedsNavigation(availableWidth, items.length);
   const start = summaryFirst ? 1 : 0;
@@ -396,21 +342,44 @@ export function CardHeader({
   subtitle,
   trailing,
   size = 46,
+  cornerImageUrl,
+  cornerSize = 26,
+  compact = false,
+  detail,
 }: {
   imageUrl: string;
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   trailing?: ReactNode;
   size?: number;
+  cornerImageUrl?: string;
+  cornerSize?: number;
+  compact?: boolean;
+  detail?: ReactNode;
 }) {
   return (
     <View style={styles.header}>
-      <MobileWebImage
-        imageUrl={imageUrl}
-        style={{ width: size, height: size, resizeMode: 'contain' }}
-      />
+      <View style={{ width: size, height: size }}>
+        <MobileWebImage
+          imageUrl={imageUrl}
+          style={{ width: size, height: size, resizeMode: 'contain' }}
+        />
+        {cornerImageUrl ? (
+          <MobileWebImage
+            imageUrl={cornerImageUrl}
+            style={{
+              position: 'absolute',
+              right: -5,
+              top: -5,
+              width: cornerSize,
+              height: cornerSize,
+              resizeMode: 'contain',
+            }}
+          />
+        ) : null}
+      </View>
       <View style={styles.headerCopy}>
-        <CKText role="titleSmall" numberOfLines={1} style={styles.heavy}>
+        <CKText role={compact ? 'bodyLarge' : 'titleSmall'} numberOfLines={1} style={styles.heavy}>
           {title}
         </CKText>
         {subtitle ? (
@@ -418,8 +387,9 @@ export function CardHeader({
             {subtitle}
           </CKText>
         ) : null}
+        {detail}
       </View>
-      {trailing}
+      {trailing ? <View style={styles.headerTrailing}>{trailing}</View> : null}
     </View>
   );
 }
@@ -461,25 +431,36 @@ export function CaughtUp({ label }: { label: string }) {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '900' },
-  frame: { borderWidth: StyleSheet.hairlineWidth, borderRadius: 28, padding: 14, gap: 10 },
-  skeletonHeader: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  metricRow: { flexDirection: 'row', gap: HOME_METRIC_GAP },
-  metric: {
-    height: HOME_METRIC_HEIGHT,
+  accountBar: {
+    // Fill spare width to center short rows; overflowing content still scrolls.
+    flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 7,
-    paddingHorizontal: 11,
-    borderRadius: ckRadius.pill,
-    borderWidth: StyleSheet.hairlineWidth,
+    justifyContent: 'center',
+    gap: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
   },
+  accountTarget: {
+    // Keep the footer height and label spacing unchanged while giving the
+    // selection/press fill breathing room and a rounded edge around the icon.
+    maxWidth: 120,
+    flexShrink: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 4,
+    paddingVertical: 4,
+    borderRadius: ckRadius.pill,
+  },
+  accountImage: { width: 13, height: 13 },
+  accountName: { flexShrink: 1, minWidth: 0, fontWeight: '700' },
+  skeletonHeader: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   metricImage: { width: 20, height: 20, resizeMode: 'contain' },
-  metricLabelRow: { flexDirection: 'row', gap: 5 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', margin: -HOME_METRIC_GAP / 2 },
-  gridCell: { width: '50%', padding: HOME_METRIC_GAP / 2 },
   singleRail: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 3 },
   singleRailImage: { width: 20, height: 20, resizeMode: 'contain' },
-  rail: { minHeight: 44, alignItems: 'center', gap: 4 },
+  railContainer: { minWidth: 0 },
+  rail: { minHeight: 44, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 },
   railTarget: {
     height: 28,
     minWidth: 28,
@@ -496,7 +477,7 @@ const styles = StyleSheet.create({
   rtlScroll: { transform: [{ scaleX: -1 }] },
   rtlItem: { transform: [{ scaleX: -1 }] },
   rowRtl: { flexDirection: 'row-reverse' },
-  railName: { flexShrink: 1, fontWeight: '900' },
+  railName: { flexShrink: 1, minWidth: 0, fontWeight: '900' },
   pending: { position: 'absolute', width: 9, height: 9, borderRadius: 5, right: 0, top: 0 },
   ringLabel: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
   comparison: { flexDirection: 'row', alignItems: 'stretch' },
@@ -509,7 +490,8 @@ const styles = StyleSheet.create({
   },
   comparisonButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  headerCopy: { flex: 1, gap: 2 },
+  headerCopy: { flex: 1, minWidth: 0, gap: 2 },
+  headerTrailing: { alignSelf: 'flex-start', alignItems: 'center' },
   statusRow: { minHeight: 22, flexDirection: 'row', alignItems: 'center' },
   caughtUp: {
     minHeight: 56,

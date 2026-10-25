@@ -1,6 +1,9 @@
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ChevronRight, X } from 'lucide-react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
 import { CKText, Surface, ckSpacing, useCKTheme } from '../../../ui';
@@ -25,7 +28,15 @@ export function LicensesScreen({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [selected, setSelected] = useState<LicensePackageSummary>();
+  const link = useLinkParameters();
+  const [selected, setSelected] = useState<LicensePackageSummary | undefined>(() =>
+    packages.find((entry) =>
+      entry.packages.some(
+        (name) =>
+          name === link.package || Boolean(link.package && name.startsWith(`${link.package}@`)),
+      ),
+    ),
+  );
   return (
     <SettingsPage title={t('settingsLicenses')} onBack={onBack}>
       <View style={styles.application}>
@@ -64,12 +75,13 @@ export function LicensesScreen({
         ))}
       </Surface>
       <Modal
+        supportedOrientations={modalOrientations}
         animationType="slide"
         onRequestClose={() => setSelected(undefined)}
         presentationStyle="pageSheet"
         visible={selected !== undefined}
       >
-        <View style={[styles.licensePage, { backgroundColor: theme.surface }]}>
+        <SafeAreaView style={[styles.licensePage, { backgroundColor: theme.surface }]}>
           <View style={styles.licenseHeader}>
             <View style={styles.copy}>
               <CKText role="titleMedium" numberOfLines={2} style={styles.strong}>
@@ -91,7 +103,7 @@ export function LicensesScreen({
               {selected?.text}
             </CKText>
           </ScrollView>
-        </View>
+        </SafeAreaView>
       </Modal>
     </SettingsPage>
   );

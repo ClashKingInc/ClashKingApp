@@ -1,4 +1,6 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { Children, Fragment, type ReactElement, type ReactNode } from 'react';
+import { TutorialScrollView } from '../../tutorials/tutorial-ui';
 import {
   Modal,
   Pressable,
@@ -11,6 +13,7 @@ import { ArrowLeft, Check, ChevronRight } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { materialBackLabel, useI18n } from '../../../i18n';
+import { SwitchIndicator } from '../../../ui/switch-indicator';
 import { CKText, Surface, ckRadius, ckSpacing, colorWithAlpha, useCKTheme } from '../../../ui';
 
 export function SettingsPage({
@@ -47,9 +50,9 @@ export function SettingsPage({
         ) : null}
         <CKText role="screenTitle">{title}</CKText>
       </View>
-      <ScrollView contentContainerStyle={styles.page} refreshControl={refreshControl}>
+      <TutorialScrollView contentContainerStyle={styles.page} refreshControl={refreshControl}>
         {children}
-      </ScrollView>
+      </TutorialScrollView>
     </SafeAreaView>
   );
 }
@@ -101,6 +104,7 @@ export function SettingsTile({
   icon,
   title,
   subtitle,
+  subtitleNumberOfLines = 1,
   trailing,
   destructive = false,
   disabled = false,
@@ -110,6 +114,7 @@ export function SettingsTile({
   icon: ReactNode;
   title: string;
   subtitle?: string;
+  subtitleNumberOfLines?: number;
   trailing?: string | ReactNode;
   destructive?: boolean;
   disabled?: boolean;
@@ -126,6 +131,7 @@ export function SettingsTile({
       style={({ pressed }) => [
         styles.tile,
         subtitle ? styles.tileWithSubtitle : styles.tileWithoutSubtitle,
+        subtitle && subtitleNumberOfLines > 1 && styles.multilineTile,
         disabled && styles.disabled,
         pressed && styles.pressed,
       ]}
@@ -134,13 +140,18 @@ export function SettingsTile({
       <View style={styles.tileCopy}>
         <CKText
           role="bodyLarge"
-          numberOfLines={1}
+          numberOfLines={subtitleNumberOfLines > 1 ? 2 : 1}
           style={[styles.tileTitle, { color: destructive ? theme.error : theme.onSurface }]}
         >
           {title}
         </CKText>
         {subtitle ? (
-          <CKText muted role="bodySmall" numberOfLines={1} style={styles.tileSubtitle}>
+          <CKText
+            muted
+            role="bodySmall"
+            numberOfLines={subtitleNumberOfLines}
+            style={styles.tileSubtitle}
+          >
             {subtitle}
           </CKText>
         ) : null}
@@ -178,7 +189,7 @@ export function ChoiceDialog<T extends string>({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
       <SafeAreaView style={styles.overlay}>
         <Pressable
           accessibilityElementsHidden
@@ -270,19 +281,15 @@ export function SettingSwitch({
   disabled?: boolean;
   onChange: (value: boolean) => void;
 }) {
-  const theme = useCKTheme();
   return (
     <Pressable
       accessibilityRole="switch"
       accessibilityState={{ checked: value, disabled }}
       disabled={disabled}
       onPress={() => onChange(!value)}
-      style={[
-        styles.switch,
-        { backgroundColor: value ? theme.primary : colorWithAlpha(theme.outlineVariant, 0.6) },
-      ]}
+      style={{ flexShrink: 0, opacity: disabled ? 0.5 : 1 }}
     >
-      <View style={[styles.knob, { alignSelf: value ? 'flex-end' : 'flex-start' }]} />
+      <SwitchIndicator value={value} />
     </Pressable>
   );
 }
@@ -314,6 +321,7 @@ const styles = StyleSheet.create({
   },
   tileWithoutSubtitle: { height: 50 },
   tileWithSubtitle: { height: 62 },
+  multilineTile: { height: undefined, minHeight: 62, paddingVertical: 12 },
   icon: { width: 28, alignItems: 'center' },
   tileCopy: { flex: 1, gap: 2 },
   tileTitle: { fontWeight: '500', fontSize: 17 },

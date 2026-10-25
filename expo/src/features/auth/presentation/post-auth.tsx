@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import { useI18n } from '../../../i18n';
-import { ErrorState, LoadingScreen } from '../../../ui';
+import { ErrorState } from '../../../ui';
+import { StartupLoadingScreen } from '../../../core/app/startup-loading';
 import { verifiedAccountDestination, type PostAuthPresentationProps } from './contracts';
 
 export function PostAuthGate({
@@ -46,5 +47,5 @@ export function PostAuthGate({
       </View>
     );
   }
-  return <LoadingScreen label={t('generalLoading')} />;
+  return <StartupLoadingScreen />;
 }

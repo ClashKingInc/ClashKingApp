@@ -28,6 +28,6 @@ When asked to publish or finish a pull request, continue until the requested PR 
 1. Before each commit, run the localization gate above and the focused formatting, analysis, and tests appropriate to the changed files.
 2. Commit only task-owned files, preserve unrelated dirty work, use the user's requested Git identity, and push to the existing dedicated branch.
 3. Read all current PR review threads with thread-resolution context. Address every unresolved actionable Codex review finding, add regression coverage, and push the fixes.
-4. Monitor GitHub Actions and Sonar after each push. Investigate and fix task-related failures or newly introduced Sonar issues, then repeat validation and push again.
-5. Re-check for new Codex reviews and CI results after the latest commit. Do not call the PR complete while actionable review threads, pending required checks, failing Actions, or new Sonar issues remain.
+4. Monitor GitHub Actions after each push. Investigate and fix task-related failures, then repeat validation and push again.
+5. Re-check for new Codex reviews and CI results after the latest commit. Do not call the PR complete while actionable review threads, pending required checks, or failing Actions remain.
 6. Do not resolve or reply to review threads unless the user has authorized those GitHub writes. Report unrelated infrastructure failures or pre-existing quality issues explicitly instead of changing unrelated code.

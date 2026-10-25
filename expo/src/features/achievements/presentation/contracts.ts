@@ -7,6 +7,10 @@ export interface AchievementCopyKeys {
 }
 
 export const ACHIEVEMENT_COPY_KEYS: Readonly<Record<AchievementId, AchievementCopyKeys>> = {
+  verified_accounts: {
+    name: 'achievementVerifiedAccountsName',
+    description: 'achievementVerifiedAccountsDescription',
+  },
   townhall_18: {
     name: 'achievementTownhall18Name',
     description: 'achievementTownhall18Requirement',
@@ -23,6 +27,10 @@ export const ACHIEVEMENT_COPY_KEYS: Readonly<Record<AchievementId, AchievementCo
     name: 'achievementDefenseDoesntMatterName',
     description: 'achievementDefenseDoesntMatterDescription',
   },
+  first_tournament: {
+    name: 'competitiveDebutName',
+    description: 'competitiveDebutDescription',
+  },
 };
 
 export interface AchievementModelRequest {
@@ -33,7 +41,5 @@ export interface AchievementModelRequest {
 }
 
 export function achievementColumnCount(width: number): number {
-  if (width < 520) return 2;
-  if (width < 760) return 3;
-  return 4;
+  return width < 290 ? 2 : 3;
 }

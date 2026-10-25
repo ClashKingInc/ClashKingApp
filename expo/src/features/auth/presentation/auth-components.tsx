@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -25,6 +25,7 @@ import {
   colorWithAlpha,
   useCKTheme,
   useCKThemeMode,
+  useCKAccessibility,
 } from '../../../ui';
 import type { PasswordCriteria } from './validation';
 
@@ -106,6 +107,7 @@ export function AuthField({
   secure,
   onToggleSecure,
   toggleLabel,
+  appearance = 'standard',
   ...props
 }: TextInputProps & {
   label: string;
@@ -114,8 +116,13 @@ export function AuthField({
   secure?: boolean;
   onToggleSecure?: () => void;
   toggleLabel?: string;
+  appearance?: 'standard' | 'glass';
 }) {
   const theme = useCKTheme();
+  const accessibility = useCKAccessibility();
+  const [focused, setFocused] = useState(false);
+  const glass = appearance === 'glass';
+  const opaque = accessibility.reduceTransparency || accessibility.highContrast;
   return (
     <View style={styles.fieldGroup}>
       <CKText role="bodySmall" style={styles.fieldLabel}>
@@ -126,10 +133,11 @@ export function AuthField({
           styles.fieldShell,
           {
             borderColor: colorWithAlpha(
-              error ? theme.error : theme.outlineVariant,
-              error ? 0.8 : 0.42,
+              error ? theme.error : glass ? theme.onSurface : theme.outlineVariant,
+              error ? 0.8 : glass ? (focused ? 0.65 : 0.16) : 0.42,
             ),
-            backgroundColor: theme.surface,
+            backgroundColor:
+              glass && !opaque ? colorWithAlpha(theme.onSurface, 0.09) : theme.surface,
           },
         ]}
       >
@@ -141,6 +149,14 @@ export function AuthField({
           secureTextEntry={secure}
           style={[styles.input, { color: theme.onSurface }]}
           {...props}
+          onFocus={(event) => {
+            setFocused(true);
+            props.onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            setFocused(false);
+            props.onBlur?.(event);
+          }}
         />
         {onToggleSecure ? (
           <Pressable
@@ -172,6 +188,7 @@ export function PrimaryAction({
   disabled = false,
   onPress,
   color,
+  foregroundColor,
   leading,
 }: {
   label: string;
@@ -179,6 +196,7 @@ export function PrimaryAction({
   disabled?: boolean;
   onPress: () => void;
   color?: string;
+  foregroundColor?: string;
   leading?: ReactNode;
 }) {
   const theme = useCKTheme();
@@ -200,7 +218,10 @@ export function PrimaryAction({
       ) : (
         <View style={styles.primaryActionContent}>
           {leading}
-          <CKText role="bodyLarge" style={{ color: theme.onPrimary, fontWeight: '600' }}>
+          <CKText
+            role="bodyLarge"
+            style={{ color: foregroundColor ?? theme.onPrimary, fontWeight: '600' }}
+          >
             {label}
           </CKText>
         </View>
@@ -213,10 +234,12 @@ export function TextAction({
   label,
   onPress,
   disabled = false,
+  color,
 }: {
   label: string;
   onPress: () => void;
   disabled?: boolean;
+  color?: string;
 }) {
   const theme = useCKTheme();
   return (
@@ -230,7 +253,7 @@ export function TextAction({
         pressed && styles.pressed,
       ]}
     >
-      <CKText role="bodySmall" style={{ color: theme.primary }}>
+      <CKText role="bodySmall" style={{ color: color ?? theme.primary }}>
         {label}
       </CKText>
     </Pressable>

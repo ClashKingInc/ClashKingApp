@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { Skeleton } from '../../../ui';
 
 import {
   sharedAchievementModelCache,
@@ -34,7 +36,29 @@ export function AchievementModelViewer({
     };
   }, [cache, modelUrl]);
 
-  if (source === undefined) return <View style={styles.fill} />;
+  const { achievement, semanticLabel, interactive, enableIdleRotation } = request;
+  const document = useMemo(
+    () =>
+      source === undefined
+        ? undefined
+        : {
+            html: buildAchievementModelDocument(source, {
+              achievement,
+              semanticLabel,
+              interactive,
+              enableIdleRotation,
+            }),
+            baseUrl: `${ASSET_ORIGIN}/`,
+          },
+    [source, achievement, semanticLabel, interactive, enableIdleRotation],
+  );
+
+  if (document === undefined)
+    return (
+      <View style={styles.loading}>
+        <Skeleton height="100%" radius={16} />
+      </View>
+    );
   return (
     <WebView
       accessibilityElementsHidden={!request.interactive}
@@ -48,10 +72,7 @@ export function AchievementModelViewer({
       pointerEvents={request.interactive ? 'auto' : 'none'}
       scrollEnabled={false}
       setSupportMultipleWindows={false}
-      source={{
-        html: buildAchievementModelDocument(source, request),
-        baseUrl: 'https://assets.clashk.ing/',
-      }}
+      source={document}
       style={styles.webView}
     />
   );
@@ -59,5 +80,6 @@ export function AchievementModelViewer({
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   webView: { flex: 1, backgroundColor: 'transparent' },
 });

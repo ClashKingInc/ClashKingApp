@@ -27,6 +27,7 @@ export interface DiscordOAuthRuntime {
 export interface DiscordOAuthOptions {
   readonly platform: 'web' | 'native';
   readonly runtime: DiscordOAuthRuntime;
+  readonly clientId?: string;
   readonly webOrigin?: string;
   readonly webHost?: string;
   readonly webRedirectOverride?: string;
@@ -51,6 +52,7 @@ export class DiscordOAuthClient {
         redirectUri,
         state,
         codeChallenge.replaceAll('=', '').replaceAll('+', '-').replaceAll('/', '_'),
+        resolveDiscordClientId(this.options.clientId),
       );
       authorizationStarted = true;
       const callback = await withTimeout(
@@ -84,7 +86,10 @@ export function resolveDiscordRedirectUri(
   if (options.webOrigin === undefined || options.webHost === undefined) {
     throw new Error('The web origin and host are required for Discord OAuth.');
   }
-  if (options.webHost === 'localhost' || options.webHost === '127.0.0.1') {
+  // The local HTTPS tunnel must return to itself, not the dev launcher's
+  // localhost override. The popup and API both require a same-origin callback.
+  if (options.webHost === 'localhost' || options.webHost === '127.0.0.1' ||
+      options.webHost === 'local-app.clashk.ing') {
     return `${options.webOrigin}/auth/callback`;
   }
   if ((options.webRedirectOverride ?? '').length > 0) {
@@ -97,16 +102,23 @@ export function buildDiscordAuthorizationUrl(
   redirectUri: string,
   state: string,
   codeChallenge: string,
+  clientId = DISCORD_CLIENT_ID,
 ): string {
   const url = new URL('https://discord.com/api/oauth2/authorize');
   url.searchParams.set('response_type', 'code');
-  url.searchParams.set('client_id', DISCORD_CLIENT_ID);
+  url.searchParams.set('client_id', clientId);
   url.searchParams.set('scope', 'identify');
   url.searchParams.set('redirect_uri', redirectUri);
   url.searchParams.set('code_challenge', codeChallenge);
   url.searchParams.set('code_challenge_method', 'S256');
   url.searchParams.set('state', state);
   return url.toString();
+}
+
+export function resolveDiscordClientId(override?: string): string {
+  const clientId = override?.trim() || DISCORD_CLIENT_ID;
+  if (!/^\d+$/u.test(clientId)) throw new Error('Discord client ID must contain only digits.');
+  return clientId;
 }
 
 async function randomString(length: number, characters: string): Promise<string> {

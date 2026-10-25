@@ -1,3 +1,4 @@
+import { modalOrientations } from './modal-orientations';
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   FlatList,
@@ -14,7 +15,7 @@ import { Check, ChevronDown, ChevronsUpDown, Search, X } from 'lucide-react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { tintIcon } from './icon-slot';
-import { Surface } from './surfaces';
+import { GlassControlSurface, GlassSurface } from './glass';
 import { CKText } from './text';
 import { ckControlHeight, ckRadius, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
@@ -26,6 +27,11 @@ export interface SelectionPickerOption<T extends string = string> {
   readonly subtitle?: string;
   readonly searchText?: string;
   readonly disabled?: boolean;
+  readonly trailingAction?: {
+    readonly label: string;
+    readonly icon: ReactNode;
+    readonly onPress: () => void;
+  };
 }
 
 export function SelectionPicker<T extends string>({
@@ -40,6 +46,8 @@ export function SelectionPicker<T extends string>({
   positionLabel,
   fillWidth = false,
   plain = false,
+  wrapLabel = false,
+  iconOnly = false,
   onOpen,
   externallyManaged = false,
 }: {
@@ -54,6 +62,10 @@ export function SelectionPicker<T extends string>({
   positionLabel?: string;
   fillWidth?: boolean;
   plain?: boolean;
+  /** Opt in for identity pickers where truncating a full name loses important context. */
+  wrapLabel?: boolean;
+  /** Hide only the selected label; menu labels and accessibility stay intact. */
+  iconOnly?: boolean;
   onOpen?: () => void;
   externallyManaged?: boolean;
 }) {
@@ -63,9 +75,19 @@ export function SelectionPicker<T extends string>({
   const controlContent = (
     <>
       {tintIcon(leading ?? selected?.icon, theme.onSurfaceVariant)}
-      <CKText role="rowTitle" numberOfLines={1} style={styles.grow}>
-        {selected?.label}
-      </CKText>
+      {!iconOnly ? (
+        <CKText
+          role="rowTitle"
+          numberOfLines={wrapLabel ? undefined : 1}
+          // A parent can stretch a picker without setting fillWidth. Always
+          // consume spare row width so trailing controls stay at the far edge.
+          // Keep an auto basis: flex:1 uses a zero basis and can hide labels in
+          // intrinsically sized controls. fillWidth only sizes the outer host.
+          style={styles.controlLabel}
+        >
+          {selected?.label}
+        </CKText>
+      ) : null}
       {positionLabel ? (
         <View
           testID="destination-picker-position"
@@ -83,35 +105,33 @@ export function SelectionPicker<T extends string>({
       )}
     </>
   );
+  const trigger = (
+    <Pressable
+      accessibilityLabel={accessibilityLabel ?? selected?.label}
+      accessibilityRole="button"
+      accessibilityState={{ expanded: visible }}
+      onPress={() => {
+        onOpen?.();
+        if (!externallyManaged) setVisible(true);
+      }}
+      style={({ pressed }) => [
+        styles.control,
+        plain && styles.plainControl,
+        pressed && styles.pressed,
+      ]}
+    >
+      {controlContent}
+    </Pressable>
+  );
   return (
-    <View style={fillWidth ? styles.grow : undefined}>
-      <Pressable
-        accessibilityLabel={accessibilityLabel ?? selected?.label}
-        accessibilityRole="button"
-        accessibilityState={{ expanded: visible }}
-        onPress={() => {
-          onOpen?.();
-          if (!externallyManaged) setVisible(true);
-        }}
-        style={({ pressed }) => pressed && styles.pressed}
-      >
-        {plain ? (
-          <View
-            testID="selection-picker-plain-control"
-            style={[styles.control, styles.plainControl]}
-          >
-            {controlContent}
-          </View>
-        ) : (
-          <Surface
-            radius={ckRadius.chip}
-            style={styles.control}
-            testID="destination-picker-control"
-          >
-            {controlContent}
-          </Surface>
-        )}
-      </Pressable>
+    <View style={fillWidth ? styles.fillControl : undefined}>
+      {plain ? (
+        <View testID="selection-picker-plain-control">{trigger}</View>
+      ) : (
+        <GlassControlSurface style={styles.controlGlass} testID="destination-picker-control">
+          {trigger}
+        </GlassControlSurface>
+      )}
       {!externallyManaged ? (
         <SelectionPickerModal
           visible={visible}
@@ -136,19 +156,25 @@ export function SelectionPickerModal<T extends string>({
   title,
   options,
   selectedKey,
+  selectedKeys,
   searchPlaceholder,
   clearSearchAccessibilityLabel,
   onSelect,
   onClose,
+  optionHeight = 50,
 }: {
   visible: boolean;
   title: string;
   options: readonly SelectionPickerOption<T>[];
   selectedKey: T;
+  /** Multi-select checkbox semantics; the caller controls when the sheet closes. */
+  selectedKeys?: readonly T[];
   searchPlaceholder?: string;
   clearSearchAccessibilityLabel?: string;
   onSelect: (key: T) => void;
   onClose: () => void;
+  /** Identity rows with artwork and subtitles need more room than simple choices. */
+  optionHeight?: number;
 }) {
   const theme = useCKTheme();
   const { height: viewportHeight } = useWindowDimensions();
@@ -163,14 +189,14 @@ export function SelectionPickerModal<T extends string>({
       `${option.label} ${option.searchText ?? ''}`.toLocaleLowerCase().includes(needle),
     );
   }, [options, query]);
-  const contentHeight = Math.max(1, filtered.length) * 50;
+  const contentHeight = Math.max(1, filtered.length) * optionHeight;
   const availableHeight = Math.max(1, viewportHeight - insets.top - insets.bottom - 24);
   const sheetChromeHeight = searchPlaceholder ? 121 : 65;
   const maximumVisibleOptions = 10;
   const maximumSheetHeight = availableHeight * 0.88;
   const listHeight = Math.min(
     contentHeight,
-    maximumVisibleOptions * 50,
+    maximumVisibleOptions * optionHeight,
     Math.max(50, maximumSheetHeight - sheetChromeHeight),
   );
   const listStateKey = `${visible ? 'open' : 'closed'}:${query}:${filtered
@@ -186,6 +212,7 @@ export function SelectionPickerModal<T extends string>({
   };
   return (
     <Modal
+      supportedOrientations={modalOrientations}
       animationType="fade"
       navigationBarTranslucent
       onRequestClose={close}
@@ -216,8 +243,9 @@ export function SelectionPickerModal<T extends string>({
             style={styles.modalHost}
             testID="selection-picker-modal-host"
           >
-            <Surface
-              radius={ckRadius.tile}
+            <GlassSurface
+              cornerRadius={ckRadius.tile}
+              testID="selection-picker-sheet"
               style={[
                 styles.sheet,
                 {
@@ -269,20 +297,23 @@ export function SelectionPickerModal<T extends string>({
                   keyExtractor={(option) => option.key}
                   maxToRenderPerBatch={16}
                   renderItem={({ item: option }) => {
-                    const selected = option.key === selectedKey;
+                    const selected = selectedKeys
+                      ? selectedKeys.includes(option.key)
+                      : option.key === selectedKey;
                     return (
                       <Pressable
                         accessibilityLabel={option.label}
-                        accessibilityRole="radio"
+                        accessibilityRole={selectedKeys ? 'checkbox' : 'radio'}
                         accessibilityState={{ checked: selected, disabled: option.disabled }}
                         disabled={option.disabled}
                         key={option.key}
                         onPress={() => {
-                          setQuery('');
+                          if (!selectedKeys) setQuery('');
                           onSelect(option.key);
                         }}
                         style={[
                           styles.option,
+                          { minHeight: optionHeight },
                           selected && {
                             backgroundColor: colorWithAlpha(theme.primary, 0.13),
                           },
@@ -304,6 +335,20 @@ export function SelectionPickerModal<T extends string>({
                           ) : null}
                         </View>
                         {selected ? <Check color={theme.primary} size={20} /> : null}
+                        {option.trailingAction ? (
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={option.trailingAction.label}
+                            hitSlop={8}
+                            onPress={(event) => {
+                              event.stopPropagation();
+                              option.trailingAction?.onPress();
+                            }}
+                            style={styles.trailingAction}
+                          >
+                            {option.trailingAction.icon}
+                          </Pressable>
+                        ) : null}
                       </Pressable>
                     );
                   }}
@@ -320,7 +365,9 @@ export function SelectionPickerModal<T extends string>({
                       atEnd: contentOffset.y + layoutMeasurement.height >= contentSize.height - 2,
                     });
                   }}
-                  scrollEnabled={canScroll}
+                  // Option subtitles and large text can make rows taller than
+                  // the estimate. Never disable native scrolling from that estimate.
+                  scrollEnabled
                   scrollEventThrottle={32}
                   style={styles.scroll}
                   testID="selection-picker-list"
@@ -340,7 +387,7 @@ export function SelectionPickerModal<T extends string>({
                   </View>
                 ) : null}
               </View>
-            </Surface>
+            </GlassSurface>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -350,6 +397,10 @@ export function SelectionPickerModal<T extends string>({
 
 const styles = StyleSheet.create({
   grow: { flex: 1 },
+  controlLabel: { flexGrow: 1, flexShrink: 1, flexBasis: 'auto', minWidth: 0 },
+  // Fill available width without flex-basis:0 collapsing the control's
+  // intrinsic height in a native, vertically measured pager/scroll page.
+  fillControl: { flexGrow: 1, flexShrink: 0, minHeight: ckControlHeight.compact },
   keyboardAvoider: { flex: 1 },
   pressed: { opacity: 0.72 },
   control: {
@@ -359,8 +410,10 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 14,
   },
+  controlGlass: { minHeight: ckControlHeight.compact },
   plainControl: { minWidth: 120, paddingHorizontal: 4 },
   positionHint: {
+    flexShrink: 0,
     minWidth: 34,
     minHeight: 24,
     paddingHorizontal: 7,
@@ -417,5 +470,6 @@ const styles = StyleSheet.create({
     borderRadius: ckRadius.control,
   },
   selectedLabel: { fontWeight: '700' },
+  trailingAction: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   disabled: { opacity: 0.46 },
 });

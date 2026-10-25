@@ -1,5 +1,6 @@
 import { createElement, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Skeleton } from '../../../ui';
 
 import {
   sharedAchievementModelCache,
@@ -33,7 +34,12 @@ export function AchievementModelViewer({
     };
   }, [cache, modelUrl]);
 
-  if (source === undefined) return <View style={styles.fill} />;
+  if (source === undefined)
+    return (
+      <View style={styles.loading}>
+        <Skeleton height="100%" radius={16} />
+      </View>
+    );
   return createElement('iframe', {
     'aria-label': request.semanticLabel,
     sandbox: 'allow-scripts allow-same-origin',
@@ -48,4 +54,6 @@ export function AchievementModelViewer({
   });
 }
 
-const styles = StyleSheet.create({ fill: { flex: 1 } });
+const styles = StyleSheet.create({
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+});
