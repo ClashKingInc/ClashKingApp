@@ -1,10 +1,8 @@
-ClashKing 0.6.3 alpha
+ClashKing 0.6.4 alpha
 
-- Improved ranked lists, battle cards and war statistics.
-- Fixed missing wars and incorrect opponent fallback.
-- Smoother Home carousel, loading placeholders and achievements.
-- Improved supercharge effects and shared header fades.
-- Clearer war widgets and clan member controls.
-- Fixed translated game images and system-language selection.
+- Improved event-bar swiping and rankings/statistics navigation.
+- Kept known labels and row positions visible while data loads.
+- Refreshed troop artwork lookups when game data changes.
+- Limited Home rank colors to the rank number.
 
 Please report issues found during testing.
