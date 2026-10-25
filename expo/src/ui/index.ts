@@ -1,3 +1,4 @@
+export * from './artwork-toggle-button';
 export * from './accessibility';
 export * from './calendar-picker';
 export * from './card-stats-footer';

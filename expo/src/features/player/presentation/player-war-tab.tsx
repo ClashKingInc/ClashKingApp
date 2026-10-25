@@ -5,8 +5,8 @@ import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
+  ArtworkToggleButton,
   InfoDialog,
-  colorWithAlpha,
   EmptyState,
   MobileWebImage,
   SkeletonContent,
@@ -66,33 +66,25 @@ export function PlayerWarTab({
   return (
     <View style={[styles.sections, styles.content]} testID="player-war-content">
       <View style={styles.rangeRow}>
-        <Pressable
+        <ArtworkToggleButton
           accessibilityRole="switch"
           accessibilityLabel={t('filtersSameTownHallOnly')}
           accessibilityHint={t('playerWarThScope')}
           accessibilityState={{ checked: sameHall }}
           onPress={() => setSameHall((value) => !value)}
           onLongPress={() => setThHelp(true)}
-          style={[
-            styles.thButton,
-            {
-              backgroundColor: colorWithAlpha(
-                sameHall ? theme.secondary : theme.onSurface,
-                sameHall ? 0.2 : 0.06,
-              ),
-            },
-          ]}
+          active={sameHall}
         >
           <MobileWebImage
             imageUrl={ImageAssets.townHall(player.townHallLevel)}
-            style={{ width: 28, height: 28, opacity: sameHall ? 1 : 0.45 }}
+            style={{ width: 28, height: 28 }}
           />
           <Equal
             size={13}
             color={sameHall ? theme.secondary : theme.onSurfaceVariant}
             style={styles.equalIcon}
           />
-        </Pressable>
+        </ArtworkToggleButton>
         <Pressable
           onPress={() => setThHelp(true)}
           accessibilityRole="button"
@@ -386,13 +378,6 @@ const styles = StyleSheet.create({
   rangePicker: { width: 190, maxWidth: '60%', flexShrink: 1, marginLeft: 'auto' },
   battleFilters: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   battlePicker: { flex: 1, minWidth: 0 },
-  thButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   equalIcon: { position: 'absolute', right: 3, bottom: 3 },
   thCaption: { flexShrink: 1, minWidth: 0, justifyContent: 'center' },
   content: { paddingHorizontal: 16, paddingTop: 12 },

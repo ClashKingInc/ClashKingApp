@@ -3,14 +3,13 @@ import { HeaderArtwork } from '../../../ui/header-artwork';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import {
   type ViewInstance,
-  type ScrollViewInstance,
   Animated,
   Alert,
   Modal,
   Platform,
   Pressable,
   RefreshControl,
-  ScrollView,
+  FlatList,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -103,6 +102,7 @@ export interface RankedScreenProps {
 }
 
 const RANKED_PAGES = ['season', 'rankings', 'history'] as const;
+const RANKED_CONTENT = [0];
 type RankedPage = (typeof RANKED_PAGES)[number];
 
 export function RankedScreen(props: RankedScreenProps) {
@@ -126,7 +126,10 @@ export function RankedScreen(props: RankedScreenProps) {
   const [tabPosition] = useState(() => new Animated.Value(RANKED_PAGES.indexOf(initialPage)));
   const [pageHeights, setPageHeights] = useState<Partial<Record<RankedPage, number>>>({});
   const pager = useRef<PagerViewHandle>(null);
-  const scrollRef = useRef<ScrollViewInstance>(null);
+  const scrollRef = useRef<FlatList<number>>(null);
+  const viewportTop = useRef(0);
+  const rankingBounds = useRef({ top: 0, height: 0 });
+  const jumpPending = useRef(false);
   const ownRankRef = useRef<ViewInstance>(null);
   const headerHeight = useRef(0);
   const scrollY = useRef(0);
@@ -164,7 +167,7 @@ export function RankedScreen(props: RankedScreenProps) {
     // Match Legends: preserve the collapsed header, not a deep scroll position
     // from a longer section that would hide the destination's content.
     const offset = Math.min(scrollY.current, headerHeight.current);
-    requestAnimationFrame(() => scrollRef.current?.scrollTo({ y: offset, animated: false }));
+    requestAnimationFrame(() => scrollRef.current?.scrollToOffset({ offset, animated: false }));
   };
   const goToPage = (next: RankedPage) => {
     selectPage(next);
@@ -175,13 +178,46 @@ export function RankedScreen(props: RankedScreenProps) {
       setSettledTab(next);
     } else pager.current?.setPage(index);
   };
-  const jumpToPlayer = () =>
+  const alignToOwnRank = () => {
     ownRankRef.current?.measure((_x, _y, _w, _h, _px, pageY) => {
-      scrollRef.current?.scrollTo({
-        y: Math.max(0, scrollY.current + pageY - height * 0.42),
+      scrollRef.current?.scrollToOffset({
+        offset: Math.max(0, scrollY.current + pageY - viewportTop.current - height * 0.42),
         animated: !reduceMotion,
       });
     });
+  };
+  const jumpToPlayer = () => {
+    if (ownRankRef.current) {
+      jumpPending.current = false;
+      alignToOwnRank();
+      return;
+    }
+    const members = period?.group?.members ?? [];
+    const index = members.findIndex(
+      (member) => canonicalTag(member.playerTag) === canonicalTag(props.player.tag),
+    );
+    if (index < 0) return;
+    // The target may be outside the render window. Move near its estimated
+    // position first, then align its real measured row after it mounts.
+    jumpPending.current = true;
+    scrollRef.current?.scrollToOffset({
+      offset: Math.max(
+        0,
+        rankingBounds.current.top +
+          (rankingBounds.current.height * index) / members.length -
+          height * 0.42,
+      ),
+      animated: false,
+    });
+  };
+  const ownRankDidLayout = () => {
+    if (!jumpPending.current) return;
+    jumpPending.current = false;
+    alignToOwnRank();
+  };
+  useEffect(() => {
+    jumpPending.current = false;
+  }, [period?.seasonId, props.player.tag]);
   const openPlayerTag = async (tag: string) => {
     if (openingPlayer) return;
     setOpeningPlayer(true);
@@ -199,8 +235,18 @@ export function RankedScreen(props: RankedScreenProps) {
       edges={['left', 'right']}
       style={[styles.fill, { backgroundColor: theme.background }]}
     >
-      <ScrollView
+      {/* Keep the pager in a list cell: React Native then forwards this scroll
+          viewport to its nested ranking list so it can actually virtualize. */}
+      <FlatList
         ref={scrollRef}
+        data={RANKED_CONTENT}
+        keyExtractor={() => 'ranked-content'}
+        removeClippedSubviews={false}
+        onLayout={() =>
+          scrollRef.current?.getNativeScrollRef()?.measure((_x, _y, _w, _h, _px, pageY) => {
+            viewportTop.current = pageY;
+          })
+        }
         testID={`ranked-scroll-${tab}`}
         scrollEventThrottle={16}
         onScroll={(event) => {
@@ -214,157 +260,171 @@ export function RankedScreen(props: RankedScreenProps) {
           />
         }
         contentContainerStyle={{ paddingBottom: insets.bottom + (tab === 'rankings' ? 88 : 28) }}
-      >
-        <View
-          onLayout={(event) => {
-            headerHeight.current = event.nativeEvent.layout.height;
-          }}
-        >
-          <RankedHeader
-            {...props}
-            displayPeriod={tab === 'history' ? periods[0] : period}
-            desktop={desktop}
-            top={insets.top}
-            onAccounts={() => setAccountPicker(true)}
-            onShare={() => {
-              if (period) setPosterOpen(true);
-              else
-                void sharePageLink(
-                  {
-                    kind: 'page',
-                    page: 'ranked',
-                    params: {
-                      player: props.player.tag,
-                      tab,
-                      mode: tab === 'rankings' ? 'ranking' : 'details',
-                    },
-                  },
-                  props.player.name,
-                ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')));
-            }}
-          />
-        </View>
-        <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
-          <ProfileTabs
-            variant="underline"
-            selectedKey={tab}
-            animatedPosition={tabPosition}
-            indicatorRtl={isRtl}
-            onSelect={(key) => goToPage(key as RankedPage)}
-            tabs={[
-              { key: 'season', label: t('clanRankingsSeason'), icon: <CalendarDays size={20} /> },
-              { key: 'rankings', label: t('sideRankingsTitle'), icon: <UsersRound size={20} /> },
-              { key: 'history', label: t('generalHistory'), icon: <History size={20} /> },
-            ]}
-          />
-          {period && tab !== 'history' ? (
-            <DateNavigator
-              label={formatPeriodRange(period.startsAt, locale)}
-              onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
-              onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
-              previousDisabled={safePeriodIndex >= periods.length - 1}
-              nextDisabled={safePeriodIndex === 0}
-              onPressLabel={() => setDateOpen(true)}
-              accessibilityLabel={t('rankingsSnapshotDate')}
-            />
-          ) : null}
+        ListHeaderComponent={
           <View
-            onTouchStart={() => blockPrimarySwipe(true)}
-            onTouchEnd={() => blockPrimarySwipe(false)}
-            onTouchCancel={() => blockPrimarySwipe(false)}
+            onLayout={(event) => {
+              headerHeight.current = event.nativeEvent.layout.height;
+            }}
           >
-            <PagerView
-              ref={pager}
-              initialPage={RANKED_PAGES.indexOf(initialPage)}
-              layoutDirection={isRtl ? 'rtl' : 'ltr'}
-              testID="ranked-section-pager"
-              style={{ height: Math.max(pageHeights[tab] ?? 500, pageHeights[settledTab] ?? 500) }}
-              onPageScroll={(event) => {
-                const { position, offset } = event.nativeEvent;
-                tabPosition.setValue(position + offset);
-                // Mount the incoming tab during the swipe, not after it lands.
-                // Unvisited tabs still stay out of ordinary week-change renders.
-                if (offset > 0) {
-                  const visible = RANKED_PAGES.slice(position, position + 2);
-                  if (visible.some((page) => !visitedPages.has(page)))
-                    setVisitedPages((pages) => new Set([...pages, ...visible]));
-                }
+            <RankedHeader
+              {...props}
+              displayPeriod={tab === 'history' ? periods[0] : period}
+              desktop={desktop}
+              top={insets.top}
+              onAccounts={() => setAccountPicker(true)}
+              onShare={() => {
+                if (period) setPosterOpen(true);
+                else
+                  void sharePageLink(
+                    {
+                      kind: 'page',
+                      page: 'ranked',
+                      params: {
+                        player: props.player.tag,
+                        tab,
+                        mode: tab === 'rankings' ? 'ranking' : 'details',
+                      },
+                    },
+                    props.player.name,
+                  ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')));
               }}
-              onPageSelected={(event) => {
-                const next = RANKED_PAGES[event.nativeEvent.position];
-                if (next) {
-                  selectPage(next);
-                  setSettledTab(next);
-                }
-              }}
-            >
-              {RANKED_PAGES.map((page) => (
-                <View
-                  key={page}
-                  collapsable={false}
-                  style={styles.fill}
-                  aria-hidden={page !== tab}
-                  accessibilityElementsHidden={page !== tab}
-                  importantForAccessibility={page !== tab ? 'no-hide-descendants' : 'auto'}
-                >
-                  <View
-                    style={{ paddingTop: 8 }}
-                    onLayout={(event) => {
-                      const value = Math.ceil(event.nativeEvent.layout.height);
-                      if (value > 0)
-                        setPageHeights((old) =>
-                          old[page] === value ? old : { ...old, [page]: value },
-                        );
-                    }}
-                  >
-                    {!visitedPages.has(page) ? null : props.loading && !props.data ? (
-                      <RankedSkeleton page={page} player={props.player} />
-                    ) : !period || !props.data ? (
-                      <EmptyState
-                        title={props.error ?? t('generalNoDataAvailable')}
-                        actionLabel={t('sideRefresh')}
-                        onAction={() => void props.onRefresh()}
-                      />
-                    ) : page === 'season' ? (
-                      <RankedBattles
-                        key={props.player.tag}
-                        period={period}
-                        onOpenOpponent={openPlayerTag}
-                        loading={
-                          props.loadingSeason === period.seasonId ||
-                          (!period.hasDetails &&
-                            !props.settledSeasons?.has(period.seasonId) &&
-                            !props.seasonError)
-                        }
-                        error={props.seasonError}
-                        onRetry={() => void onLoadSeason?.(period.seasonId)}
-                      />
-                    ) : page === 'rankings' ? (
-                      <RankingTable
-                        period={period}
-                        playerTag={props.player.tag}
-                        onOpenPlayerTag={openPlayerTag}
-                        ownRef={ownRankRef}
-                      />
-                    ) : (
-                      <HistoryPanel
-                        periods={periods}
-                        locale={locale}
-                        onSelect={(selected) => {
-                          setPeriodIndex(
-                            periods.findIndex((item) => item.seasonId === selected.seasonId),
-                          );
-                          goToPage('season');
-                        }}
-                      />
-                    )}
-                  </View>
-                </View>
-              ))}
-            </PagerView>
+            />
           </View>
-        </View>
-      </ScrollView>
+        }
+        renderItem={() => (
+          <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
+            <ProfileTabs
+              variant="underline"
+              selectedKey={tab}
+              animatedPosition={tabPosition}
+              indicatorRtl={isRtl}
+              onSelect={(key) => goToPage(key as RankedPage)}
+              tabs={[
+                { key: 'season', label: t('clanRankingsSeason'), icon: <CalendarDays size={20} /> },
+                { key: 'rankings', label: t('sideRankingsTitle'), icon: <UsersRound size={20} /> },
+                { key: 'history', label: t('generalHistory'), icon: <History size={20} /> },
+              ]}
+            />
+            {period && tab !== 'history' ? (
+              <DateNavigator
+                label={formatPeriodRange(period.startsAt, locale)}
+                onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
+                onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
+                previousDisabled={safePeriodIndex >= periods.length - 1}
+                nextDisabled={safePeriodIndex === 0}
+                onPressLabel={() => setDateOpen(true)}
+                accessibilityLabel={t('rankingsSnapshotDate')}
+              />
+            ) : null}
+            <View
+              onTouchStart={() => blockPrimarySwipe(true)}
+              onTouchEnd={() => blockPrimarySwipe(false)}
+              onTouchCancel={() => blockPrimarySwipe(false)}
+            >
+              <PagerView
+                ref={pager}
+                initialPage={RANKED_PAGES.indexOf(initialPage)}
+                layoutDirection={isRtl ? 'rtl' : 'ltr'}
+                testID="ranked-section-pager"
+                style={{
+                  height: Math.max(pageHeights[tab] ?? 500, pageHeights[settledTab] ?? 500),
+                }}
+                onPageScroll={(event) => {
+                  const { position, offset } = event.nativeEvent;
+                  tabPosition.setValue(position + offset);
+                  // Mount the incoming tab during the swipe, not after it lands.
+                  // Unvisited tabs still stay out of ordinary week-change renders.
+                  if (offset > 0) {
+                    const visible = RANKED_PAGES.slice(position, position + 2);
+                    if (visible.some((page) => !visitedPages.has(page)))
+                      setVisitedPages((pages) => new Set([...pages, ...visible]));
+                  }
+                }}
+                onPageSelected={(event) => {
+                  const next = RANKED_PAGES[event.nativeEvent.position];
+                  if (next) {
+                    selectPage(next);
+                    setSettledTab(next);
+                  }
+                }}
+              >
+                {RANKED_PAGES.map((page) => (
+                  <View
+                    key={page}
+                    collapsable={false}
+                    style={styles.fill}
+                    aria-hidden={page !== tab}
+                    accessibilityElementsHidden={page !== tab}
+                    importantForAccessibility={page !== tab ? 'no-hide-descendants' : 'auto'}
+                  >
+                    <View
+                      style={{ paddingTop: 8 }}
+                      onLayout={(event) => {
+                        const value = Math.ceil(event.nativeEvent.layout.height);
+                        if (value > 0)
+                          setPageHeights((old) =>
+                            old[page] === value ? old : { ...old, [page]: value },
+                          );
+                      }}
+                    >
+                      {!visitedPages.has(page) ? null : props.loading && !props.data ? (
+                        <RankedSkeleton page={page} player={props.player} />
+                      ) : !period || !props.data ? (
+                        <EmptyState
+                          title={props.error ?? t('generalNoDataAvailable')}
+                          actionLabel={t('sideRefresh')}
+                          onAction={() => void props.onRefresh()}
+                        />
+                      ) : page === 'season' ? (
+                        <RankedBattles
+                          key={props.player.tag}
+                          period={period}
+                          onOpenOpponent={openPlayerTag}
+                          loading={
+                            props.loadingSeason === period.seasonId ||
+                            (!period.hasDetails &&
+                              !props.settledSeasons?.has(period.seasonId) &&
+                              !props.seasonError)
+                          }
+                          error={props.seasonError}
+                          onRetry={() => void onLoadSeason?.(period.seasonId)}
+                        />
+                      ) : page === 'rankings' ? (
+                        <RankingTable
+                          period={period}
+                          playerTag={props.player.tag}
+                          onOpenPlayerTag={openPlayerTag}
+                          ownRef={ownRankRef}
+                          onOwnRowLayout={ownRankDidLayout}
+                          onBounds={(pageY, contentHeight) => {
+                            rankingBounds.current = {
+                              top: scrollY.current + pageY - viewportTop.current,
+                              height: contentHeight,
+                            };
+                            // A jump can be requested before the first list measurement.
+                            if (jumpPending.current) jumpToPlayer();
+                          }}
+                        />
+                      ) : (
+                        <HistoryPanel
+                          periods={periods}
+                          locale={locale}
+                          onSelect={(selected) => {
+                            setPeriodIndex(
+                              periods.findIndex((item) => item.seasonId === selected.seasonId),
+                            );
+                            goToPage('season');
+                          }}
+                        />
+                      )}
+                    </View>
+                  </View>
+                ))}
+              </PagerView>
+            </View>
+          </View>
+        )}
+      />
       {tab === 'rankings' && hasOwnRank ? (
         <View
           pointerEvents="box-none"
@@ -700,13 +760,18 @@ function RankingTable({
   playerTag,
   onOpenPlayerTag,
   ownRef,
+  onOwnRowLayout,
+  onBounds,
 }: {
   period: RankedPeriod;
   playerTag: string;
   onOpenPlayerTag: (tag: string) => Promise<void>;
   ownRef: RefObject<ViewInstance | null>;
+  onOwnRowLayout: () => void;
+  onBounds: (pageY: number, height: number) => void;
 }) {
   const { t } = useI18n();
+  const tableRef = useRef<ViewInstance>(null);
   if (!period.group?.members.length)
     return <EmptyState title={t('rankedLeagueGroupRanking')} body={t('rankedLeagueNoGroup')} />;
   const cutoffs = rankedCutoffs(period);
@@ -720,38 +785,68 @@ function RankingTable({
     </View>
   );
   return (
-    <View style={{ gap: 8 }}>
-      <CKText role="metadata" muted>
-        {t('rankedLeaguePlayers', { count: period.group.members.length })}
-      </CKText>
-      {period.group.members.map((member, index) => (
-        <View
-          collapsable={false}
-          key={canonicalTag(member.playerTag)}
-          ref={canonicalTag(member.playerTag) === canonicalTag(playerTag) ? ownRef : undefined}
-        >
-          {cutoffs && cutoffs.promotion > 0 && index === cutoffs.promotion
-            ? divider(t('rankedLeaguePromotionCutoff'), statColors.win)
-            : null}
-          {cutoffs && cutoffs.demotion > 0 && index === cutoffs.demotionStart
-            ? divider(t('rankedLeagueDemotionCutoff'), statColors.loss)
-            : null}
-          <RankingRow
-            member={member}
-            rank={index + 1}
-            maximum={period.maxBattles}
-            selected={canonicalTag(member.playerTag) === canonicalTag(playerTag)}
-            onPress={() => void onOpenPlayerTag(member.playerTag)}
-          />
-        </View>
-      ))}
-      {!cutoffs ? (
-        <CKText role="metadata" muted>
-          {t('rankedLeagueCutoffsUnavailable')}
-        </CKText>
-      ) : null}
+    <View
+      ref={tableRef}
+      collapsable={false}
+      onLayout={() => {
+        tableRef.current?.measure((_x, _y, _w, contentHeight, _px, pageY) =>
+          onBounds(pageY, contentHeight),
+        );
+      }}
+    >
+      <FlatList
+        testID="ranked-group-list"
+        data={period.group.members}
+        keyExtractor={(member) => canonicalTag(member.playerTag)}
+        scrollEnabled={false}
+        removeClippedSubviews={false}
+        initialNumToRender={8}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        ListHeaderComponent={
+          <CKText role="metadata" muted style={{ marginBottom: 8 }}>
+            {t('rankedLeaguePlayers', { count: period.group.members.length })}
+          </CKText>
+        }
+        ItemSeparatorComponent={RankingSeparator}
+        renderItem={({ item: member, index }) => {
+          const selected = canonicalTag(member.playerTag) === canonicalTag(playerTag);
+          return (
+            <View
+              collapsable={false}
+              ref={selected ? ownRef : undefined}
+              onLayout={selected ? onOwnRowLayout : undefined}
+            >
+              {cutoffs && cutoffs.promotion > 0 && index === cutoffs.promotion
+                ? divider(t('rankedLeaguePromotionCutoff'), statColors.win)
+                : null}
+              {cutoffs && cutoffs.demotion > 0 && index === cutoffs.demotionStart
+                ? divider(t('rankedLeagueDemotionCutoff'), statColors.loss)
+                : null}
+              <RankingRow
+                member={member}
+                rank={index + 1}
+                maximum={period.maxBattles}
+                selected={selected}
+                onPress={() => void onOpenPlayerTag(member.playerTag)}
+              />
+            </View>
+          );
+        }}
+        ListFooterComponent={
+          !cutoffs ? (
+            <CKText role="metadata" muted style={{ marginTop: 8 }}>
+              {t('rankedLeagueCutoffsUnavailable')}
+            </CKText>
+          ) : undefined
+        }
+      />
     </View>
   );
+}
+
+function RankingSeparator() {
+  return <View style={{ height: 8 }} />;
 }
 
 function RankingRow({

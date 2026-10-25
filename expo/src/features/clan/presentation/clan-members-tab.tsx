@@ -1,11 +1,12 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowDown, ArrowUp, BarChart3, Star, Users } from 'lucide-react-native';
+import { ArrowDown, ArrowUp, Star, Users } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
+  ArtworkToggleButton,
   EmptyState,
   MobileWebImage,
   PillSurface,
@@ -89,20 +90,25 @@ export function ClanMembersTab({
   return (
     <View style={styles.tab}>
       <View style={styles.summaryRow}>
-        <Pressable
-          accessibilityRole="button"
+        <ArtworkToggleButton
+          testID="clan-members-totals-toggle"
+          active={showTotals}
           accessibilityLabel={showTotals ? t('clanMembersHideTotals') : t('clanMembersShowTotals')}
           accessibilityState={{ selected: showTotals }}
           onPress={() => setShowTotals(!showTotals)}
-          style={[
-            styles.statsToggle,
-            {
-              borderColor: colorWithAlpha(showTotals ? theme.primary : theme.outlineVariant, 0.42),
-            },
-          ]}
         >
-          <BarChart3 size={23} color={showTotals ? theme.primary : theme.onSurfaceVariant} />
-        </Pressable>
+          <View style={styles.splitIcon}>
+            <View style={styles.iconHalf}>
+              <MobileWebImage imageUrl={ImageAssets.townHall(18)} style={styles.splitImage} />
+            </View>
+            <View style={styles.iconHalf}>
+              <MobileWebImage
+                imageUrl={ImageAssets.getLeagueImage('Electro League 33')}
+                style={[styles.splitImage, styles.rightImage]}
+              />
+            </View>
+          </View>
+        </ArtworkToggleButton>
         <View style={styles.sortControl}>
           <SelectionPicker
             options={sortOptions.map(({ value, label }) => ({ key: value, label }))}
@@ -352,15 +358,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sortControl: { flexShrink: 1, maxWidth: 260 },
-  statsToggle: {
-    width: 44,
-    height: 44,
-    flexShrink: 0,
-    borderWidth: 1,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  splitIcon: { width: 32, height: 32, flexDirection: 'row' },
+  iconHalf: { width: 16, height: 32, overflow: 'hidden' },
+  splitImage: { width: 32, height: 32 },
+  rightImage: { marginLeft: -16 },
   list: { gap: 6 },
   memberCard: {
     minHeight: 58,

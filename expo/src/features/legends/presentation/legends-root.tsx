@@ -322,7 +322,7 @@ export function LegendsScreen({
             contentPosition="center"
             transition={0}
           />
-          <HeroHeaderScrim variant="ranked" />
+          <HeroHeaderScrim variant="ranked" edgeColor={theme.background} />
           <View
             style={[
               styles.heroContent,

@@ -388,8 +388,8 @@ function AttackerRow({
             {player.name}
           </CKText>
           <CKText muted role="labelLarge">
-            {value.totalAttacks} {t('warAttacksTitle')} · {value.missedAttacks}{' '}
-            {t('warAttacksMissedShort')}
+            {value.totalAttacks} {t('warAttacksTitle')}
+            {sort !== 'missed' ? ` · ${value.missedAttacks} ${t('warAttacksMissedShort')}` : null}
           </CKText>
         </View>
         <View style={styles.rate}>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, G, Line, Path, Text as SvgText } from 'react-native-svg';
 import { gameDataState } from '../../../core/game-data/game-data-state';
+import { rankedGroupCutoffs } from '../../player/models/player-ranked';
 import {
   CKText,
   EmptyState,
@@ -23,14 +24,7 @@ function tierMetadata(id: number | undefined) {
 }
 
 export function rankedCutoffs(period: RankedPeriod) {
-  const metadata = tierMetadata(period.tier?.id);
-  const size = period.group?.members.length ?? 0;
-  // Published percentages apply to a complete group, never a partial roster.
-  if (!metadata || Number(metadata.group_size) !== size || size === 0) return null;
-  const promotion = (size * Number(metadata.promote_percentage)) / 100;
-  const demotion = (size * Number(metadata.demote_percentage)) / 100;
-  if (!Number.isInteger(promotion) || !Number.isInteger(demotion)) return null;
-  return { promotion, demotionStart: size - demotion, demotion };
+  return rankedGroupCutoffs(period.tier?.id, period.group?.members.length ?? 0);
 }
 
 export function rankedTierColor(name: string) {

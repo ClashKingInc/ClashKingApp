@@ -158,11 +158,11 @@ export function RankingsScreen({
               <RankedCheckerBackground color={rankingCheckerColor(provider.board)} />
             }
             compactIdentity
-            controlsTopPadding={4}
+            controlsTopPadding={16}
             onBack={onBack}
             backLabel={materialBackLabel(locale)}
             safeTop={insets.top}
-            bottomPadding={28}
+            bottomPadding={6}
             actions={
               provider.board === RankingBoard.playerWarTripleStreak ? (
                 <ProfileHeaderAction

@@ -145,7 +145,7 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
         backgroundUrl={sectionBackdrop(provider.section)}
         backgroundElement={<RankedCheckerBackground color={statsCheckerColor(provider.section)} />}
         compactIdentity
-        controlsTopPadding={4}
+        controlsTopPadding={16}
         safeTop={insets.top}
         onBack={onBack}
         backLabel={materialBackLabel(locale)}
@@ -1315,18 +1315,7 @@ function legendItemPresentation(
   );
   return {
     name,
-    imageUrl:
-      type === 'hero'
-        ? ImageAssets.getHeroImage(name)
-        : type === 'pet'
-          ? ImageAssets.getPetImage(name)
-          : type === 'equipment'
-            ? ImageAssets.getGearImage(name)
-            : type === 'spell'
-              ? ImageAssets.getSpellImage(name)
-              : type === 'siege'
-                ? ImageAssets.getSiegeMachineImage(name)
-                : ImageAssets.getTroopImage(name),
+    imageUrl: ImageAssets.getItemImage(type, raw, fallback),
   };
 }
 

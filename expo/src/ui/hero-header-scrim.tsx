@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
@@ -8,9 +8,12 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
  * Calculator tiles keep their existing, slightly translucent bottom edge. */
 export function HeroHeaderScrim({
   variant = 'standard',
+  edgeColor = '#000000',
 }: {
   variant?: 'standard' | 'clan' | 'player' | 'war' | 'ranked' | 'calculator' | 'calculatorDisabled';
+  edgeColor?: string;
 }) {
+  const [bounds, setBounds] = useState({ width: 0, height: 0 });
   const gradientId = `headerFade${useId().replace(/:/g, '')}`;
   const isCard = variant === 'calculator' || variant === 'calculatorDisabled';
   const stops = isCard
@@ -27,22 +30,49 @@ export function HeroHeaderScrim({
         [1, 1],
       ];
   return (
-    <View pointerEvents="none" accessible={false} style={styles.container}>
+    <View
+      collapsable={false}
+      pointerEvents="none"
+      accessible={false}
+      style={styles.container}
+      onLayout={({ nativeEvent: { layout } }) => {
+        // react-native-svg truncates numeric width/height with parseInt. Round
+        // outward first, or fractional native layouts expose an artwork hairline.
+        const width = Math.ceil(layout.width);
+        const height = Math.ceil(layout.height);
+        setBounds((current) =>
+          current.width === width && current.height === height ? current : { width, height },
+        );
+      }}
+    >
       {!isCard ? <View style={[styles.container, styles.tint]} /> : null}
-      <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
+      {/* Content-sized headers can grow when badges/chips resolve. A measured
+          viewport keeps the opaque stop at the real bottom instead of leaving
+          a black band followed by uncovered artwork. */}
+      <Svg
+        width={bounds.width || '100%'}
+        height={bounds.height || '100%'}
+        style={StyleSheet.absoluteFill}
+      >
         <Defs>
           <LinearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
             {stops.map(([offset, opacity]) => (
               <Stop
                 key={offset}
                 offset={offset}
-                stopColor={isCard ? '#030304' : '#000000'}
+                stopColor={isCard ? '#030304' : offset === 1 ? edgeColor : '#000000'}
                 stopOpacity={opacity}
               />
             ))}
           </LinearGradient>
         </Defs>
-        <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${gradientId})`} />
+        <Rect
+          x="0"
+          y="0"
+          width={bounds.width || '100%'}
+          height={bounds.height || '100%'}
+          fill={`url(#${gradientId})`}
+        />
       </Svg>
     </View>
   );

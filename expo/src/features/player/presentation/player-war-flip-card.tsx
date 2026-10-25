@@ -57,6 +57,20 @@ export function PlayerWarFlipCard({
     setSizes((old) =>
       Math.abs(old[side] - value) < 1 ? old : { ...old, [side]: Math.ceil(value) },
     );
+  const footer = (back: boolean) => (
+    <View style={styles.footer}>
+      <CKText muted role="metadata">
+        {warCountLabel}
+      </CKText>
+      <View style={styles.hint}>
+        {!back ? <BarChart3 size={16} color={accent} /> : null}
+        <CKText muted role="metadata">
+          {t(back ? 'generalSummary' : 'generalCharts')}
+        </CKText>
+        <RotateCcw size={16} color={theme.onSurfaceVariant} />
+      </View>
+    </View>
+  );
   return (
     <Reanimated.View style={layout} testID="player-war-flip-card">
       <Reanimated.View
@@ -72,18 +86,7 @@ export function PlayerWarFlipCard({
         >
           <View style={styles.content}>
             {front}
-            <View style={styles.footer}>
-              <CKText muted role="metadata">
-                {warCountLabel}
-              </CKText>
-              <View style={styles.hint}>
-                <BarChart3 size={16} color={accent} />
-                <CKText muted role="metadata">
-                  {t('generalCharts')}
-                </CKText>
-                <RotateCcw size={16} color={theme.onSurfaceVariant} />
-              </View>
-            </View>
+            {footer(false)}
           </View>
         </DashboardCardFrame>
       </Reanimated.View>
@@ -103,9 +106,9 @@ export function PlayerWarFlipCard({
               <CKText role="rowTitle" style={{ flex: 1 }}>
                 {title}
               </CKText>
-              <RotateCcw size={20} color={accent} />
             </View>
             {children}
+            {footer(true)}
           </View>
         </DashboardCardFrame>
       </Reanimated.View>
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
   initialFace: { position: 'relative' },
   face: { position: 'absolute', top: 0, left: 0, right: 0, backfaceVisibility: 'hidden' },
   content: { gap: 8 },
-  chartContent: { gap: 4, marginVertical: -3 },
+  chartContent: { gap: 4 },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { useCKAccessibility } from '../../../ui/accessibility';
-import { ChevronDown, ChevronRight } from 'lucide-react-native';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {
@@ -10,7 +9,6 @@ import {
   InfoTooltip,
   MobileWebImage,
   SkeletonContent,
-  Surface,
   ckRadius,
   colorWithAlpha,
   statColors,
@@ -20,6 +18,13 @@ import { RankedLeagueBattle } from '../../player/models';
 import type { RankedPeriod } from '../data';
 import { LegendArmy } from '../../legends/presentation/legend-army-presentation';
 import { relativeWarTime } from '../../war/presentation/presentation-utils';
+import { BattleResultCard } from '../../../ui/battle-result-card';
+
+// Ranked defenses award points; only Legends treats defense trophies as losses.
+// Normalize at this presentation boundary, keeping source records unchanged.
+function rankedPoints(battle: RankedLeagueBattle, direction: 'attacks' | 'defenses') {
+  return direction === 'defenses' ? Math.abs(battle.trophies) : battle.trophies;
+}
 
 export function RankedBattles({
   period,
@@ -85,13 +90,12 @@ export function RankedBattles({
   const remaining = max > 0 ? Math.max(0, max - count) : null;
   const average =
     battles.length > 0 && complete
-      ? battles.reduce((sum, battle) => sum + battle.trophies, 0) / battles.length
+      ? battles.reduce((sum, battle) => sum + rankedPoints(battle, direction), 0) / battles.length
       : null;
   const signed = (value: number) =>
-    new Intl.NumberFormat(toIntlLocale(locale), {
+    `${value > 0 ? '+' : ''}${new Intl.NumberFormat(toIntlLocale(locale), {
       maximumFractionDigits: 1,
-      signDisplay: 'exceptZero',
-    }).format(value);
+    }).format(value)}`;
   return (
     <View style={styles.section}>
       <View accessibilityRole="tablist" style={styles.selectors}>
@@ -102,7 +106,7 @@ export function RankedBattles({
           const used = registered + list.filter((battle) => battle.automatic).length;
           const limit = key === 'attacks' ? period.attackMaxBattles : period.defenseMaxBattles;
           const known = key === 'attacks' ? period.attacksComplete : period.defensesComplete;
-          const total = list.reduce((sum, battle) => sum + battle.trophies, 0);
+          const total = list.reduce((sum, battle) => sum + rankedPoints(battle, key), 0);
           const label = t(key === 'attacks' ? 'rankedLeagueAttacks' : 'rankedLeagueDefenses');
           return (
             <Pressable
@@ -169,6 +173,7 @@ export function RankedBattles({
                   <RankedBattleRow
                     key={index}
                     battle={new RankedLeagueBattle('', 'Opponent player', 3, 100, 40, new Date(0))}
+                    direction={direction}
                     onOpenOpponent={onOpenOpponent}
                   />
                 ))}
@@ -185,49 +190,32 @@ export function RankedBattles({
               </CKText>
             ) : null}
             {rows.map(({ battle, key }) => (
-              <RankedBattleRow key={key} battle={battle} onOpenOpponent={onOpenOpponent} />
+              <RankedBattleRow
+                key={key}
+                battle={battle}
+                direction={direction}
+                onOpenOpponent={onOpenOpponent}
+              />
             ))}
             {automatic.map((battle, index) => (
-              <Surface
+              <BattleResultCard
                 key={`automatic:${period.seasonId}:${index}`}
-                radius={ckRadius.tile}
+                compact
+                dashed
                 testID={`ranked-automatic-defense-${index}`}
-                style={[
-                  styles.battle,
-                  styles.automatic,
-                  { borderColor: colorWithAlpha(theme.outlineVariant, 0.5) },
-                ]}
-              >
-                <View style={styles.battleBody}>
-                  <View style={styles.battleTop}>
-                    <MobileWebImage
-                      imageUrl={ImageAssets.shieldWithArrow}
-                      style={styles.townHall}
-                    />
-                    <View style={styles.grow}>
-                      <CKText role="rowTitle">{t('legendsAutomaticDefense')}</CKText>
-                    </View>
-                    <View style={styles.result}>
-                      <CKText
-                        role="titleSmall"
-                        style={{
-                          color: battle.trophies < 0 ? statColors.loss : statColors.win,
-                        }}
-                      >
-                        {signed(battle.trophies)}
-                      </CKText>
-                      <View style={styles.inline}>
-                        <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.smallIcon} />
-                        <InfoTooltip
-                          label={t('legendsAutomaticDefense')}
-                          message={t('rankedAutomaticDefenseExplanation')}
-                          triggerStyle={{ width: 24, height: 24 }}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </Surface>
+                name={t('legendsAutomaticDefense')}
+                leadingIconUrl={ImageAssets.shieldWithArrow}
+                stars={null}
+                destruction={null}
+                trophies={rankedPoints(battle, direction)}
+                identityDetails={
+                  <InfoTooltip
+                    label={t('legendsAutomaticDefense')}
+                    message={t('rankedAutomaticDefenseExplanation')}
+                    triggerStyle={{ width: 24, height: 24 }}
+                  />
+                }
+              />
             ))}
             {!period.hasDetails || (!real.length && !automatic.length) ? (
               <EmptyState
@@ -247,95 +235,34 @@ export function RankedBattles({
 
 function RankedBattleRow({
   battle,
+  direction,
   onOpenOpponent,
 }: {
   battle: RankedLeagueBattle;
+  direction: 'attacks' | 'defenses';
   onOpenOpponent: (tag: string) => Promise<void>;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
-  const [expanded, setExpanded] = useState(false);
-  const hasArmy = Boolean(battle.shareCode);
-  const name = battle.opponentName || battle.opponentPlayerTag || t('generalUnknown');
-  const date = battle.creationTime ? relativeWarTime(battle.creationTime, new Date(), t) : null;
   return (
-    <Surface radius={ckRadius.tile} style={styles.battle}>
-      <Pressable
-        accessibilityRole={hasArmy ? 'button' : undefined}
-        accessibilityState={hasArmy ? { expanded } : undefined}
-        onPress={hasArmy ? () => setExpanded((value) => !value) : undefined}
-        style={styles.battleBody}
-      >
-        <View style={styles.battleTop}>
-          {battle.opponentTownHallLevel > 0 ? (
-            <MobileWebImage
-              imageUrl={ImageAssets.townHall(battle.opponentTownHallLevel)}
-              style={styles.townHall}
-            />
-          ) : null}
-          <View style={styles.grow}>
-            <Pressable
-              accessibilityRole={battle.opponentPlayerTag ? 'link' : undefined}
-              disabled={!battle.opponentPlayerTag}
-              onPress={(event) => {
-                event.stopPropagation();
-                void onOpenOpponent(battle.opponentPlayerTag);
-              }}
-            >
-              <CKText role="rowTitle" numberOfLines={1}>
-                {name}
-              </CKText>
-            </Pressable>
-            <CKText role="metadata" muted>
-              {date || '—'}
-            </CKText>
-          </View>
-          <View style={styles.result}>
-            <CKText
-              role="titleSmall"
-              style={{ color: battle.trophies < 0 ? statColors.loss : statColors.win }}
-            >
-              {battle.trophies > 0 ? '+' : ''}
-              {battle.trophies}
-            </CKText>
-            <View style={styles.inline}>
-              {[0, 1, 2].map((star) => (
-                <MobileWebImage
-                  key={star}
-                  imageUrl={ImageAssets.attackStar}
-                  style={[
-                    styles.star,
-                    (battle.stars === null || star >= battle.stars) && { opacity: 0.2 },
-                  ]}
-                />
-              ))}
-              <CKText role="metadata">
-                {battle.destructionPercentage === null
-                  ? '—'
-                  : `${Math.round(battle.destructionPercentage)}%`}
-              </CKText>
-            </View>
-          </View>
-        </View>
-        {hasArmy ? (
-          <View style={[styles.inline, styles.armyToggle]}>
-            <CKText role="metadata" muted>
-              {t('upgradeTrackerPlanCategoryArmy')}
-            </CKText>
-            {expanded ? (
-              <ChevronDown size={16} color={theme.onSurfaceVariant} />
-            ) : (
-              <ChevronRight size={16} color={theme.onSurfaceVariant} />
-            )}
-          </View>
-        ) : null}
-      </Pressable>
-      {expanded && hasArmy ? (
-        <View style={styles.army} testID="ranked-battle-army">
-          <LegendArmy shareCode={battle.shareCode} />
-        </View>
-      ) : null}
-    </Surface>
+    <BattleResultCard
+      compact
+      name={battle.opponentName || battle.opponentPlayerTag || t('generalUnknown')}
+      time={battle.creationTime ? relativeWarTime(battle.creationTime, new Date(), t) : null}
+      townHallLevel={battle.opponentTownHallLevel}
+      stars={battle.stars}
+      destruction={battle.destructionPercentage}
+      trophies={rankedPoints(battle, direction)}
+      onOpenOpponent={
+        battle.opponentPlayerTag
+          ? () => {
+              void onOpenOpponent(battle.opponentPlayerTag);
+            }
+          : undefined
+      }
+      detailTestID="ranked-battle-army"
+    >
+      {battle.shareCode ? <LegendArmy shareCode={battle.shareCode} /> : null}
+    </BattleResultCard>
   );
 }
 
@@ -361,14 +288,4 @@ const styles = StyleSheet.create({
   },
   icon: { width: 24, height: 24 },
   smallIcon: { width: 16, height: 16 },
-  battle: { borderWidth: 0, overflow: 'hidden' },
-  battleBody: { padding: 14, gap: 10, minHeight: 92 },
-  battleTop: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  grow: { flex: 1, minWidth: 0, gap: 4 },
-  townHall: { width: 38, height: 38 },
-  result: { alignItems: 'flex-end', gap: 6 },
-  star: { width: 15, height: 15 },
-  armyToggle: { justifyContent: 'flex-end' },
-  army: { paddingHorizontal: 14, paddingBottom: 16 },
-  automatic: { borderWidth: 1, borderStyle: 'dashed' },
 });

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Percent } from 'lucide-react-native';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -99,14 +100,18 @@ export function WarPerformanceSummary({
                       value={stats.totalAttacks.toLocaleString(intl)}
                       images={[ImageAssets.sword]}
                     />
-                    <SummaryMetric
-                      label={t('esportsTriples')}
-                      value={triples.toLocaleString(intl)}
-                      images={[
-                        ImageAssets.attackStar,
-                        ImageAssets.attackStar,
-                        ImageAssets.attackStar,
-                      ]}
+                    <DashboardMetric
+                      label={t('warDestructionAverage')}
+                      value={
+                        stats.totalAttacks
+                          ? `${stats.averageDestruction.toLocaleString(intl, { maximumFractionDigits: 1 })}%`
+                          : '—'
+                      }
+                      artwork={
+                        <View style={styles.metricArtwork}>
+                          <Percent size={20} color={theme.onSurfaceVariant} />
+                        </View>
+                      }
                     />
                     <SummaryMetric
                       label={t('warAttacksMissed')}
@@ -120,6 +125,9 @@ export function WarPerformanceSummary({
                     {t('playerWarNoAttacks')}
                   </CKText>
                 )}
+                {stats.totalAttacks ? (
+                  <StarDistribution counts={stats.starsCount} total={stats.totalAttacks} />
+                ) : null}
               </>
             }
           >
@@ -130,6 +138,57 @@ export function WarPerformanceSummary({
     </View>
   );
 }
+function StarDistribution({
+  counts,
+  total,
+}: {
+  counts: Readonly<Record<string, number>>;
+  total: number;
+}) {
+  const { t, locale } = useI18n();
+  const theme = useCKTheme();
+  // Use completed attacks in the selected war/TH scope, not missed attacks.
+  const percentage = (stars: number) =>
+    total > 0
+      ? ((counts[String(stars)] ?? 0) / total).toLocaleString(toIntlLocale(locale), {
+          style: 'percent',
+          maximumFractionDigits: 0,
+        })
+      : '—';
+  return (
+    <View
+      style={[styles.starDistribution, { borderColor: colorWithAlpha(theme.outlineVariant, 0.4) }]}
+    >
+      {[3, 2, 1, 0].map((stars) => (
+        <View
+          key={stars}
+          style={styles.starCount}
+          accessible
+          accessibilityLabel={`${stars} ${t('warStarsTitle')}: ${percentage(stars)} ${t('warAttacksTitle')}`}
+        >
+          <View style={styles.starIcons}>
+            {stars === 0 ? (
+              <CKText muted role="labelMedium">
+                0
+              </CKText>
+            ) : null}
+            {Array.from({ length: Math.max(1, stars) }, (_, index) => (
+              <MobileWebImage
+                key={index}
+                imageUrl={stars ? ImageAssets.attackStar : ImageAssets.emptyStar}
+                style={styles.distributionStar}
+              />
+            ))}
+          </View>
+          <CKText role="labelLarge" style={{ fontWeight: '700' }}>
+            {percentage(stars)}
+          </CKText>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 function SummaryMetric({
   label,
   value,
@@ -336,9 +395,24 @@ const styles = StyleSheet.create({
   grow: { flex: 1, minWidth: 0 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   summaryHeading: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 },
-  summaryIcon: { width: 32, height: 32 },
-  cardTitle: { fontSize: 18, lineHeight: 24, fontWeight: '700' },
+  summaryIcon: { width: 28, height: 28 },
+  cardTitle: { fontSize: 17, lineHeight: 22, fontWeight: '700' },
   rateBlock: { alignItems: 'flex-end' },
+  starDistribution: {
+    flexDirection: 'row',
+    paddingTop: 7,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  starCount: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  starIcons: { flexDirection: 'row', alignItems: 'center', gap: 1 },
+  distributionStar: { width: 9, height: 12 },
   metricArtwork: {
     width: 28,
     flexDirection: 'row',
@@ -351,7 +425,7 @@ const styles = StyleSheet.create({
   matrixContent: { flexGrow: 1, justifyContent: 'center' },
   emptyMatrix: { textAlign: 'center', paddingVertical: 12 },
   icon: { width: 24, height: 24 },
-  rate: { fontSize: 36, lineHeight: 43, fontWeight: '700', marginTop: 4 },
+  rate: { fontSize: 32, lineHeight: 38, fontWeight: '700', marginTop: 4 },
   chart: { paddingVertical: 3, paddingHorizontal: 0, borderWidth: 0, borderRadius: ckRadius.card },
   axisCell: { width: 68, minHeight: 66, alignItems: 'center', justifyContent: 'center', gap: 3 },
   hall: { width: 32, height: 32 },
