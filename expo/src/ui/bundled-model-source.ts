@@ -11,7 +11,7 @@ export interface BundledModelSceneProps {
   cameraOrbit?: string;
   cameraTarget?: string;
 }
-async function loadModel(module: number): Promise<string> {
+export async function loadModel(module: number): Promise<string> {
   const cached = resolved.get(module);
   if (cached) return cached;
   const inflight = pending.get(module);

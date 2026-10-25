@@ -24,7 +24,8 @@ export type ProfileTabsProps = {
   // For two-choice content switches use SlidingSegmentControl; profile
   // sections use underline. Do not revive compact tabs on new screens.
   variant?: 'glass' | 'underline' | 'compact';
-  overflow?: 'menu' | 'scroll';
+  /** Fit keeps every section visible; useful for four short, text-only tabs. */
+  overflow?: 'menu' | 'scroll' | 'fit';
   /** Optional continuous position from a pager; other profile tabs keep their existing behavior. */
   animatedPosition?: Animated.Value;
   indicatorRtl?: boolean;
@@ -78,6 +79,7 @@ export function ProfileTabs({
         >
           {tintIcon(tab.icon, colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64))}
           <CKText
+            skeleton={false}
             role="labelLarge"
             style={{ color: colorWithAlpha(theme.onSurface, isSelected ? 1 : 0.64) }}
           >
@@ -168,7 +170,9 @@ export function ProfileTabs({
                 isSelected && { backgroundColor: colorWithAlpha(theme.onSurface, 0.12) },
               ]}
             >
-              <CKText role="labelSmall">{tab.label}</CKText>
+              <CKText skeleton={false} role="labelSmall">
+                {tab.label}
+              </CKText>
             </Pressable>
           );
         })}
@@ -198,7 +202,11 @@ export function ProfileTabs({
               ]}
             >
               {tintIcon(tab.icon, isSelected ? theme.primary : theme.onSurfaceVariant)}
-              <CKText role="labelLarge" style={isSelected ? { color: theme.primary } : undefined}>
+              <CKText
+                skeleton={false}
+                role="labelLarge"
+                style={isSelected ? { color: theme.primary } : undefined}
+              >
                 {tab.label}
               </CKText>
             </Pressable>

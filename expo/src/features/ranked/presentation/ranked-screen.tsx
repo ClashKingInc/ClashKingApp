@@ -1,21 +1,29 @@
-import { HeroHeaderScrim } from "../../../ui/hero-header-scrim";
-import { Image } from 'expo-image';
-import { modalOrientations } from "../../../ui/modal-orientations";
-import { type ViewInstance, type ScrollViewInstance,
+import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
+import { HeaderArtwork } from '../../../ui/header-artwork';
+import { modalOrientations } from '../../../ui/modal-orientations';
+import {
+  type ViewInstance,
+  Animated,
   Alert,
   Modal,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
   Platform,
   Pressable,
   RefreshControl,
-  ScrollView,
+  FlatList,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type RefObject,
+  type ReactNode,
+} from 'react';
+import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import {
   ArrowLeft,
   Bookmark,
@@ -23,25 +31,25 @@ import {
   ChartLine,
   CalendarDays,
   ChevronDown,
-  ChevronLeft,
   ChevronRight,
   ExternalLink,
   History,
-  Info,
-  List,
+  X,
   LocateFixed,
   Share2,
-  Trophy,
   UsersRound,
 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { sharePageLink } from '../../../core/deep-links/share-page-link';
-import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
+import { materialBackLabel, materialCloseLabel, toIntlLocale, useI18n } from '../../../i18n';
 import { canonicalTag } from '../../../core/domain/tags';
 import {
   CKText,
+  CalendarPicker,
+  DateNavigator,
+  statColors,
   EmptyState,
   GlassSurface,
   MobileWebImage,
@@ -49,34 +57,34 @@ import {
   ProfileStatChip,
   ProfileTabs,
   SelectionPickerModal,
-  Skeleton,
-  PageLoading,
-  Surface,
+  SkeletonContent,
   PillSurface,
   ckRadius,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
-import type {
-  Player,
-  RankedLeagueBattle,
-  RankedLeagueData,
-  RankedLeagueMember,
-} from '../../player/models';
+import { RankedLeagueMember, RankedLeagueBattle } from '../../player/models';
+import type { Player, RankedLeagueData, RankedLeagueBattlelog } from '../../player/models';
+import { rankedHistoricalPeriods, rankedPeriods, type RankedPeriod } from '../data';
+import { RankedLeagueHistory, rankedCutoffs, rankedTierColor } from './ranked-league-history';
+import { PagerView, type PagerViewHandle } from '../../../ui/pager';
+import { useCKAccessibility } from '../../../ui/accessibility';
+import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
 import {
-  rankedBattleSummary,
-  rankedHistoricalPeriods,
-  rankedHistorySeries,
-  rankedPeriods,
-  rankedTierHighlights,
-  type RankedPeriod,
-} from '../data';
-import { RankedLineChart } from './line-chart';
+  gameDataState,
+  subscribeToGameDataRevision,
+} from '../../../core/game-data/game-data-state';
 import { RankedShareModal } from './ranked-share';
-import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { RankedBattles } from './ranked-battles';
 import { playerProfileClanIdentity } from '../../player/presentation/player-clan-identity';
 
 export interface RankedScreenProps {
+  readonly identityLoading?: boolean;
+  readonly seasonLogs?: ReadonlyMap<number, RankedLeagueBattlelog>;
+  readonly loadingSeason?: number;
+  readonly settledSeasons?: ReadonlySet<number>;
+  readonly seasonError?: string;
+  readonly onLoadSeason?: (season: number) => Promise<void>;
   readonly player: Player;
   readonly data: RankedLeagueData | null;
   readonly loading: boolean;
@@ -93,55 +101,51 @@ export interface RankedScreenProps {
   readonly onOpenPlayerTag: (tag: string) => Promise<void>;
 }
 
+const RANKED_PAGES = ['season', 'rankings', 'history'] as const;
+const RANKED_CONTENT = [0];
+type RankedPage = (typeof RANKED_PAGES)[number];
+
 export function RankedScreen(props: RankedScreenProps) {
-  const { t, locale } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && width >= 900;
   const link = useLinkParameters();
-  const [tab, setTab] = useState<'period' | 'history'>(
-    linkChoice(link.tab, ['period', 'history'], 'period'),
+  const initialPage: RankedPage =
+    link.tab === 'history'
+      ? 'history'
+      : link.tab === 'rankings' || link.mode === 'ranking'
+        ? 'rankings'
+        : 'season';
+  const [tab, setTab] = useState<RankedPage>(initialPage);
+  const [visitedPages, setVisitedPages] = useState<ReadonlySet<RankedPage>>(
+    () => new Set([initialPage]),
   );
+  const [settledTab, setSettledTab] = useState<RankedPage>(initialPage);
+  const [tabPosition] = useState(() => new Animated.Value(RANKED_PAGES.indexOf(initialPage)));
+  const [pageHeights, setPageHeights] = useState<Partial<Record<RankedPage, number>>>({});
+  const pager = useRef<PagerViewHandle>(null);
+  const scrollRef = useRef<FlatList<number>>(null);
+  const viewportTop = useRef(0);
+  const rankingBounds = useRef({ top: 0, height: 0 });
+  const jumpPending = useRef(false);
+  const ownRankRef = useRef<ViewInstance>(null);
+  const headerHeight = useRef(0);
+  const scrollY = useRef(0);
+  const { reduceMotion } = useCKAccessibility();
+  const blockPrimarySwipe = usePrimarySwipeGuard();
+  useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
+  useSyncExternalStore(subscribeToGameDataRevision, () => gameDataState.revision);
   const [periodIndex, setPeriodIndex] = useState<number | undefined>();
-  const [mode, setMode] = useState<'details' | 'ranking'>(
-    linkChoice(link.mode, ['details', 'ranking'], 'details'),
-  );
-  const [showHistoryTable, setShowHistoryTable] = useState(false);
-  const [info, setInfo] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
   const [accountPicker, setAccountPicker] = useState(false);
   const [posterOpen, setPosterOpen] = useState(false);
   const [openingPlayer, setOpeningPlayer] = useState(false);
-  const scrollRef = useRef<ScrollViewInstance>(null);
-  const scrollOffsets = useRef<Record<'period' | 'history', number>>({
-    period: 0,
-    history: 0,
-  });
-  const liveScrollOffset = useRef(0);
-  const selectRankedTab = (next: 'period' | 'history') => {
-    if (next === tab) return;
-    scrollOffsets.current[tab] = liveScrollOffset.current;
-    liveScrollOffset.current = scrollOffsets.current[next];
-    setTab(next);
-  };
-  useLayoutEffect(() => {
-    scrollRef.current?.scrollTo({ y: scrollOffsets.current[tab], animated: false });
-  }, [tab]);
-  const readScrollY = (
-    event: NativeSyntheticEvent<NativeScrollEvent> | null | undefined,
-  ): number | null => {
-    const y = event?.nativeEvent?.contentOffset?.y;
-    return typeof y === 'number' && Number.isFinite(y) ? y : null;
-  };
-  const rememberScrollOffset = (
-    event: NativeSyntheticEvent<NativeScrollEvent> | null | undefined,
-  ) => {
-    const y = readScrollY(event);
-    if (y === null) return;
-    liveScrollOffset.current = y;
-    scrollOffsets.current[tab] = y;
-  };
-  const periods = useMemo(() => (props.data ? rankedPeriods(props.data) : []), [props.data]);
+  const periods = useMemo(
+    () => (props.data ? rankedPeriods(props.data, new Date(), props.seasonLogs) : []),
+    [props.data, props.seasonLogs],
+  );
   const linkedPeriodIndex = periods.findIndex((period) =>
     link.day
       ? period.startsAt.toISOString().slice(0, 10) === link.day
@@ -152,7 +156,70 @@ export function RankedScreen(props: RankedScreenProps) {
     Math.max(0, periods.length - 1),
   );
   const period = periods[safePeriodIndex] ?? null;
+  const selectedSeason = period?.seasonId;
+  const { onLoadSeason } = props;
+  useEffect(() => {
+    if (selectedSeason !== undefined && tab === 'season') void onLoadSeason?.(selectedSeason);
+  }, [selectedSeason, tab, onLoadSeason]);
+  const selectPage = (next: RankedPage) => {
+    setTab(next);
+    setVisitedPages((pages) => (pages.has(next) ? pages : new Set(pages).add(next)));
+    // Match Legends: preserve the collapsed header, not a deep scroll position
+    // from a longer section that would hide the destination's content.
+    const offset = Math.min(scrollY.current, headerHeight.current);
+    requestAnimationFrame(() => scrollRef.current?.scrollToOffset({ offset, animated: false }));
+  };
+  const goToPage = (next: RankedPage) => {
+    selectPage(next);
+    const index = RANKED_PAGES.indexOf(next);
+    if (reduceMotion) {
+      pager.current?.setPageWithoutAnimation(index);
+      tabPosition.setValue(index);
+      setSettledTab(next);
+    } else pager.current?.setPage(index);
+  };
+  const alignToOwnRank = () => {
+    ownRankRef.current?.measure((_x, _y, _w, _h, _px, pageY) => {
+      scrollRef.current?.scrollToOffset({
+        offset: Math.max(0, scrollY.current + pageY - viewportTop.current - height * 0.42),
+        animated: !reduceMotion,
+      });
+    });
+  };
+  const jumpToPlayer = () => {
+    if (ownRankRef.current) {
+      jumpPending.current = false;
+      alignToOwnRank();
+      return;
+    }
+    const members = period?.group?.members ?? [];
+    const index = members.findIndex(
+      (member) => canonicalTag(member.playerTag) === canonicalTag(props.player.tag),
+    );
+    if (index < 0) return;
+    // The target may be outside the render window. Move near its estimated
+    // position first, then align its real measured row after it mounts.
+    jumpPending.current = true;
+    scrollRef.current?.scrollToOffset({
+      offset: Math.max(
+        0,
+        rankingBounds.current.top +
+          (rankingBounds.current.height * index) / members.length -
+          height * 0.42,
+      ),
+      animated: false,
+    });
+  };
+  const ownRankDidLayout = () => {
+    if (!jumpPending.current) return;
+    jumpPending.current = false;
+    alignToOwnRank();
+  };
+  useEffect(() => {
+    jumpPending.current = false;
+  }, [period?.seasonId, props.player.tag]);
   const openPlayerTag = async (tag: string) => {
+    if (openingPlayer) return;
     setOpeningPlayer(true);
     try {
       await props.onOpenPlayerTag(tag);
@@ -160,99 +227,31 @@ export function RankedScreen(props: RankedScreenProps) {
       setOpeningPlayer(false);
     }
   };
-  if (!props.data) {
-    return (
-      <SafeAreaView style={[styles.fill, { backgroundColor: theme.background }]}>
-        <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}>
-          <RankedHeader
-            {...props}
-            desktop={desktop}
-            top={insets.top}
-            onInfo={() => setInfo(true)}
-            onAccounts={() => setAccountPicker(true)}
-            onShare={() =>
-              void sharePageLink(
-                { kind: 'page', page: 'ranked', params: { player: props.player.tag } },
-                props.player.name,
-              )
-            }
-          />
-          <View style={styles.emptyBody}>
-            {props.loading ? (
-              <RankedSkeleton />
-            ) : (
-              <EmptyState
-                title={t('generalNoDataAvailable')}
-                actionLabel={t('sideRefresh')}
-                onAction={() => void props.onRefresh()}
-              />
-            )}
-          </View>
-        </ScrollView>
-        <AccountPicker
-          visible={accountPicker}
-          selected={props.player.tag}
-          players={props.accounts}
-          onClose={() => setAccountPicker(false)}
-          onSelect={(player) => {
-            setAccountPicker(false);
-            props.onSwitchPlayer(player);
-          }}
-        />
-      </SafeAreaView>
-    );
-  }
-  const body = !period ? (
-    <EmptyState
-      title={t('generalNoDataAvailable')}
-      actionLabel={t('sideRefresh')}
-      onAction={() => void props.onRefresh()}
-    />
-  ) : tab === 'period' ? (
-    <PeriodPanel
-      data={props.data}
-      period={period}
-      index={safePeriodIndex}
-      count={periods.length}
-      mode={mode}
-      locale={locale}
-      onMode={setMode}
-      onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
-      onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
-      onOpenPlayerTag={openPlayerTag}
-      onJumpToPlayer={(target) => {
-        target.measure((_x, _y, _width, _height, _pageX, pageY) => {
-          scrollRef.current?.scrollTo({
-            y: Math.max(0, liveScrollOffset.current + pageY - height / 2),
-            animated: true,
-          });
-        });
-      }}
-    />
-  ) : (
-    <HistoryPanel
-      periods={rankedHistoricalPeriods(periods)}
-      showTable={showHistoryTable}
-      locale={locale}
-      onToggle={() => setShowHistoryTable((value) => !value)}
-    />
+  const hasOwnRank = period?.group?.members.some(
+    (member) => canonicalTag(member.playerTag) === canonicalTag(props.player.tag),
   );
-
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={[styles.fill, { backgroundColor: theme.background }]}
     >
-      <ScrollView
-        testID={`ranked-scroll-${tab}`}
+      {/* Keep the pager in a list cell: React Native then forwards this scroll
+          viewport to its nested ranking list so it can actually virtualize. */}
+      <FlatList
         ref={scrollRef}
-        onScroll={(event) => {
-          const y = readScrollY(event);
-          if (y !== null) liveScrollOffset.current = y;
-        }}
-        onMomentumScrollEnd={rememberScrollOffset}
-        onScrollEndDrag={rememberScrollOffset}
+        data={RANKED_CONTENT}
+        keyExtractor={() => 'ranked-content'}
+        removeClippedSubviews={false}
+        onLayout={() =>
+          scrollRef.current?.getNativeScrollRef()?.measure((_x, _y, _w, _h, _px, pageY) => {
+            viewportTop.current = pageY;
+          })
+        }
+        testID={`ranked-scroll-${tab}`}
         scrollEventThrottle={16}
+        onScroll={(event) => {
+          scrollY.current = event.nativeEvent.contentOffset.y;
+        }}
         refreshControl={
           <RefreshControl
             refreshing={props.refreshing}
@@ -260,45 +259,208 @@ export function RankedScreen(props: RankedScreenProps) {
             tintColor={theme.primary}
           />
         }
-        contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}
-      >
-        <RankedHeader
-          {...props}
-          desktop={desktop}
-          top={insets.top}
-          onInfo={() => setInfo(true)}
-          onAccounts={() => setAccountPicker(true)}
-          onShare={() => {
-            if (period) setPosterOpen(true);
-            else
-              void sharePageLink(
-                { kind: 'page', page: 'ranked', params: { player: props.player.tag, tab, mode } },
-                props.player.name,
-              ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')));
+        contentContainerStyle={{ paddingBottom: insets.bottom + (tab === 'rankings' ? 88 : 28) }}
+        ListHeaderComponent={
+          <View
+            onLayout={(event) => {
+              headerHeight.current = event.nativeEvent.layout.height;
+            }}
+          >
+            <RankedHeader
+              {...props}
+              displayPeriod={tab === 'history' ? periods[0] : period}
+              desktop={desktop}
+              top={insets.top}
+              onAccounts={() => setAccountPicker(true)}
+              onShare={() => {
+                if (period) setPosterOpen(true);
+                else
+                  void sharePageLink(
+                    {
+                      kind: 'page',
+                      page: 'ranked',
+                      params: {
+                        player: props.player.tag,
+                        tab,
+                        mode: tab === 'rankings' ? 'ranking' : 'details',
+                      },
+                    },
+                    props.player.name,
+                  ).catch(() => Alert.alert(t('generalError'), t('generalTryAgain')));
+              }}
+            />
+          </View>
+        }
+        renderItem={() => (
+          <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
+            <ProfileTabs
+              variant="underline"
+              selectedKey={tab}
+              animatedPosition={tabPosition}
+              indicatorRtl={isRtl}
+              onSelect={(key) => goToPage(key as RankedPage)}
+              tabs={[
+                { key: 'season', label: t('clanRankingsSeason'), icon: <CalendarDays size={20} /> },
+                { key: 'rankings', label: t('sideRankingsTitle'), icon: <UsersRound size={20} /> },
+                { key: 'history', label: t('generalHistory'), icon: <History size={20} /> },
+              ]}
+            />
+            {period && tab !== 'history' ? (
+              <DateNavigator
+                label={formatPeriodRange(period.startsAt, locale)}
+                onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
+                onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
+                previousDisabled={safePeriodIndex >= periods.length - 1}
+                nextDisabled={safePeriodIndex === 0}
+                onPressLabel={() => setDateOpen(true)}
+                accessibilityLabel={t('rankingsSnapshotDate')}
+              />
+            ) : null}
+            <View
+              onTouchStart={() => blockPrimarySwipe(true)}
+              onTouchEnd={() => blockPrimarySwipe(false)}
+              onTouchCancel={() => blockPrimarySwipe(false)}
+            >
+              <PagerView
+                ref={pager}
+                initialPage={RANKED_PAGES.indexOf(initialPage)}
+                layoutDirection={isRtl ? 'rtl' : 'ltr'}
+                testID="ranked-section-pager"
+                style={{
+                  height: Math.max(pageHeights[tab] ?? 500, pageHeights[settledTab] ?? 500),
+                }}
+                onPageScroll={(event) => {
+                  const { position, offset } = event.nativeEvent;
+                  tabPosition.setValue(position + offset);
+                  // Mount the incoming tab during the swipe, not after it lands.
+                  // Unvisited tabs still stay out of ordinary week-change renders.
+                  if (offset > 0) {
+                    const visible = RANKED_PAGES.slice(position, position + 2);
+                    if (visible.some((page) => !visitedPages.has(page)))
+                      setVisitedPages((pages) => new Set([...pages, ...visible]));
+                  }
+                }}
+                onPageSelected={(event) => {
+                  const next = RANKED_PAGES[event.nativeEvent.position];
+                  if (next) {
+                    selectPage(next);
+                    setSettledTab(next);
+                  }
+                }}
+              >
+                {RANKED_PAGES.map((page) => (
+                  <View
+                    key={page}
+                    collapsable={false}
+                    style={styles.fill}
+                    aria-hidden={page !== tab}
+                    accessibilityElementsHidden={page !== tab}
+                    importantForAccessibility={page !== tab ? 'no-hide-descendants' : 'auto'}
+                  >
+                    <View
+                      style={{ paddingTop: 8 }}
+                      onLayout={(event) => {
+                        const value = Math.ceil(event.nativeEvent.layout.height);
+                        if (value > 0)
+                          setPageHeights((old) =>
+                            old[page] === value ? old : { ...old, [page]: value },
+                          );
+                      }}
+                    >
+                      {!visitedPages.has(page) ? null : props.loading && !props.data ? (
+                        <RankedSkeleton page={page} player={props.player} />
+                      ) : !period || !props.data ? (
+                        <EmptyState
+                          title={props.error ?? t('generalNoDataAvailable')}
+                          actionLabel={t('sideRefresh')}
+                          onAction={() => void props.onRefresh()}
+                        />
+                      ) : page === 'season' ? (
+                        <RankedBattles
+                          key={props.player.tag}
+                          period={period}
+                          onOpenOpponent={openPlayerTag}
+                          loading={
+                            props.loadingSeason === period.seasonId ||
+                            (!period.hasDetails &&
+                              !props.settledSeasons?.has(period.seasonId) &&
+                              !props.seasonError)
+                          }
+                          error={props.seasonError}
+                          onRetry={() => void onLoadSeason?.(period.seasonId)}
+                        />
+                      ) : page === 'rankings' ? (
+                        <RankingTable
+                          period={period}
+                          playerTag={props.player.tag}
+                          onOpenPlayerTag={openPlayerTag}
+                          ownRef={ownRankRef}
+                          onOwnRowLayout={ownRankDidLayout}
+                          onBounds={(pageY, contentHeight) => {
+                            rankingBounds.current = {
+                              top: scrollY.current + pageY - viewportTop.current,
+                              height: contentHeight,
+                            };
+                            // A jump can be requested before the first list measurement.
+                            if (jumpPending.current) jumpToPlayer();
+                          }}
+                        />
+                      ) : (
+                        <HistoryPanel
+                          periods={periods}
+                          locale={locale}
+                          onSelect={(selected) => {
+                            setPeriodIndex(
+                              periods.findIndex((item) => item.seasonId === selected.seasonId),
+                            );
+                            goToPage('season');
+                          }}
+                        />
+                      )}
+                    </View>
+                  </View>
+                ))}
+              </PagerView>
+            </View>
+          </View>
+        )}
+      />
+      {tab === 'rankings' && hasOwnRank ? (
+        <View
+          pointerEvents="box-none"
+          style={[styles.floatingRankWrap, { bottom: insets.bottom + 14 }]}
+        >
+          <Pressable
+            testID="ranked-jump-to-my-rank"
+            accessibilityRole="button"
+            accessibilityLabel={t('rankedLeagueJumpToMyRank')}
+            onPress={jumpToPlayer}
+            style={({ pressed }) => [
+              styles.floatingRank,
+              { backgroundColor: theme.primary, opacity: pressed ? 0.8 : 1 },
+            ]}
+          >
+            <LocateFixed size={19} color={theme.onPrimary} />
+            <CKText role="bodyMedium" style={{ color: theme.onPrimary }}>
+              {t('rankedLeagueJumpToMyRank')}
+            </CKText>
+            <CKText role="bodyMedium" style={{ color: theme.onPrimary }}>
+              #{period?.placement}
+            </CKText>
+          </Pressable>
+        </View>
+      ) : null}
+      {dateOpen && period ? (
+        <RankedPeriodPicker
+          periods={periods}
+          selected={period}
+          onClose={() => setDateOpen(false)}
+          onSelect={(index) => {
+            setPeriodIndex(index);
+            setDateOpen(false);
           }}
         />
-        <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
-          <ProfileTabs
-            variant="underline"
-            tabs={[
-              {
-                key: 'period',
-                label: t('clanRankingsSeason'),
-                icon: <CalendarDays size={18} color={theme.primary} />,
-              },
-              {
-                key: 'history',
-                label: t('generalHistory'),
-                icon: <History size={18} color={theme.primary} />,
-              },
-            ]}
-            selectedKey={tab}
-            onSelect={(key) => selectRankedTab(key as 'period' | 'history')}
-          />
-          {body}
-        </View>
-      </ScrollView>
-      <InfoModal visible={info} onClose={() => setInfo(false)} />
+      ) : null}
       {period && posterOpen ? (
         <RankedShareModal
           visible
@@ -315,17 +477,16 @@ export function RankedScreen(props: RankedScreenProps) {
         onSelect={(player) => {
           setAccountPicker(false);
           setPeriodIndex(0);
-          setMode('details');
-          setTab('period');
+          goToPage('season');
           props.onSwitchPlayer(player);
         }}
       />
-      <PageLoading visible={openingPlayer} kind="profile" />
     </SafeAreaView>
   );
 }
 
 function RankedHeader({
+  identityLoading = false,
   player,
   data,
   accounts,
@@ -336,13 +497,13 @@ function RankedHeader({
   onBack,
   onToggleBookmark,
   onOpenInGame,
-  onInfo,
   onShare,
   onAccounts,
+  displayPeriod,
 }: RankedScreenProps & {
   desktop: boolean;
+  displayPeriod?: RankedPeriod | null;
   top: number;
-  onInfo: () => void;
   onShare: () => void;
   onAccounts: () => void;
 }) {
@@ -350,9 +511,11 @@ function RankedHeader({
   const theme = useCKTheme();
   const intlLocale = toIntlLocale(locale);
   const member = data?.currentMember;
-  const attackCount = member ? member.attackWinCount + member.attackLoseCount : 0;
-  const defenseCount = member ? member.defenseWinCount + member.defenseLoseCount : 0;
-  const maxBattles = data?.currentMaxBattles;
+  const attackCount =
+    displayPeriod?.attackCount ?? (member ? member.attackWinCount + member.attackLoseCount : 0);
+  const defenseCount =
+    displayPeriod?.defenseCount ?? (member ? member.defenseWinCount + member.defenseLoseCount : 0);
+  const maxBattles = displayPeriod?.maxBattles || data?.currentMaxBattles;
   const clanIdentity = playerProfileClanIdentity(player);
   const canBookmark = !linked || bookmarked;
   const tile = (
@@ -384,7 +547,7 @@ function RankedHeader({
   return (
     <View testID="ranked-player-header" style={styles.rankedHeader}>
       <View style={styles.headerBackground}>
-        <Image
+        <HeaderArtwork
           testID="ranked-header-background"
           source={require('../../../../assets/clashking/backgrounds/ranked-cloud-trophy-v1.webp')}
           cachePolicy="disk"
@@ -392,11 +555,6 @@ function RankedHeader({
           contentPosition="center"
           transition={0}
           style={StyleSheet.absoluteFill}
-        />
-        <View
-          testID="ranked-header-scrim"
-          pointerEvents="none"
-          style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]}
         />
         <HeroHeaderScrim variant="ranked" />
         <View
@@ -413,7 +571,12 @@ function RankedHeader({
               onPress={onBack}
               icon={<ArrowLeft color="#FFF" />}
             />
-            <View style={styles.headerActions}>
+            <View
+              style={[styles.headerActions, identityLoading && { opacity: 0 }]}
+              pointerEvents={identityLoading ? 'none' : 'auto'}
+              accessibilityElementsHidden={identityLoading}
+              importantForAccessibility={identityLoading ? 'no-hide-descendants' : 'auto'}
+            >
               <ProfileHeaderAction
                 label={t('gameAssetsShare')}
                 onPress={onShare}
@@ -431,440 +594,162 @@ function RankedHeader({
                   icon={bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
                 />
               ) : null}
-              <ProfileHeaderAction
-                label={t('rankedLeagueAbout')}
-                onPress={onInfo}
-                icon={<Info color="#FFF" />}
-              />
             </View>
           </View>
-          <Pressable
-            accessibilityRole={accounts.length > 1 ? 'button' : undefined}
-            accessibilityLabel={
-              accounts.length > 1
-                ? t('upgradeTrackerSwitchAccount', { account: player.name })
-                : undefined
-            }
-            disabled={accounts.length < 2}
-            onPress={onAccounts}
-            style={[styles.identity, desktop && styles.identityDesktop]}
-          >
-            <View>
-              <MobileWebImage
-                // The resolved icon includes the numbered tier plaque; the
-                // API's large icon can be the generic unnumbered league crest.
-                imageUrl={data?.currentTier?.iconUrl || player.leagueUrl || ImageAssets.trophies}
-                style={{ width: 104, height: 104 }}
-                contentFit="contain"
-              />
-              <View style={styles.tierBadgeShell}>
+          <SkeletonContent loading={identityLoading} style={{ display: 'contents' }}>
+            <Pressable
+              accessibilityRole={accounts.length > 1 ? 'button' : undefined}
+              accessibilityLabel={
+                accounts.length > 1
+                  ? t('upgradeTrackerSwitchAccount', { account: player.name })
+                  : undefined
+              }
+              disabled={accounts.length < 2}
+              onPress={onAccounts}
+              style={[styles.identity, desktop && styles.identityDesktop]}
+            >
+              <View>
                 <MobileWebImage
-                  imageUrl={player.townHallPic}
-                  style={styles.tierBadge}
+                  // The resolved icon includes the numbered tier plaque; the
+                  // API's large icon can be the generic unnumbered league crest.
+                  imageUrl={
+                    displayPeriod?.tier?.iconUrl ||
+                    data?.currentTier?.iconUrl ||
+                    player.leagueUrl ||
+                    ImageAssets.trophies
+                  }
+                  style={{ width: 104, height: 104 }}
                   contentFit="contain"
                 />
-              </View>
-            </View>
-            <View style={styles.identityCopy}>
-              <CKText
-                role="screenTitle"
-                numberOfLines={1}
-                style={[styles.white, styles.identityName]}
-              >
-                {player.name}
-              </CKText>
-              {clanIdentity.name ? (
-                <View style={styles.clanLine}>
-                  {clanIdentity.badgeUrl ? (
-                    <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
-                  ) : null}
-                  <CKText role="labelLarge" style={styles.white}>
-                    {clanIdentity.name}
-                  </CKText>
-                </View>
-              ) : null}
-              {accounts.length > 1 ? (
-                <GlassSurface cornerRadius={ckRadius.pill} style={styles.accountPill}>
-                  <UsersRound size={17} color="#FFFFFFD1" />
-                  <CKText role="labelSmall" style={styles.white}>
-                    {t('rankedLeagueAccountSelector')}
-                  </CKText>
-                  <ChevronDown size={18} color="#FFFFFFC7" />
-                </GlassSurface>
-              ) : null}
-            </View>
-          </Pressable>
-          <View style={styles.headerStats}>
-            {desktop
-              ? tile(
-                  t('rankedLeagueTrophies'),
-                  (member?.leagueTrophies ?? data?.trophies ?? player.trophies).toLocaleString(
-                    intlLocale,
-                  ),
-                  data?.currentTier?.iconUrl || player.leagueUrl || ImageAssets.trophies,
-                  ImageAssets.trophies,
-                )
-              : null}
-            {desktop
-              ? tile(
-                  t('rankedLeagueGroupRank'),
-                  data?.currentRank
-                    ? `#${data.currentRank.toLocaleString(intlLocale)}`
-                    : t('legendsNoRank'),
-                  ImageAssets.trophies,
-                )
-              : null}
-            {!desktop
-              ? quick(
-                  t('rankedLeagueGroupRank'),
-                  data?.currentRank
-                    ? `#${data.currentRank.toLocaleString(intlLocale)}`
-                    : t('legendsNoRank'),
-                  <ChartLine size={19} color={theme.onSurface} />,
-                )
-              : null}
-            {desktop
-              ? quick(
-                  t('playerBestTrophies'),
-                  data?.bestTrophies ?? player.bestTrophies,
+                <View style={styles.tierBadgeShell}>
                   <MobileWebImage
-                    imageUrl={ImageAssets.bestTrophies}
-                    style={styles.headerQuickImage}
-                  />,
-                )
-              : null}
-            {quick(
-              t('rankedLeagueAttacks'),
-              maxBattles === null || maxBattles === undefined
-                ? attackCount
-                : `${attackCount}/${maxBattles}`,
-              <MobileWebImage imageUrl={ImageAssets.sword} style={styles.headerQuickImage} />,
-            )}
-            {quick(
-              t('rankedLeagueDefenses'),
-              maxBattles === null || maxBattles === undefined
-                ? defenseCount
-                : `${defenseCount}/${maxBattles}`,
-              <MobileWebImage
-                imageUrl={ImageAssets.shieldWithArrow}
-                style={styles.headerQuickImage}
-              />,
-            )}
-            {desktop && (data?.currentGroup?.members.length ?? 0) > 0
-              ? quick(
-                  t('rankedLeagueGroupRanking'),
-                  t('rankedLeaguePlayers', { count: data!.currentGroup!.members.length }),
-                  <UsersRound size={19} color={theme.onSurface} />,
-                )
-              : null}
-          </View>
-          <View
-            testID="ranked-header-fade-tail"
-            pointerEvents="none"
-            style={styles.headerFadeTail}
-          />
-        </View>
-      </View>
-    </View>
-  );
-}
-
-function PeriodPanel({
-  data,
-  period,
-  index,
-  count,
-  mode,
-  locale,
-  onMode,
-  onPrevious,
-  onNext,
-  onOpenPlayerTag,
-  onJumpToPlayer,
-}: {
-  data: RankedLeagueData;
-  period: RankedPeriod;
-  index: number;
-  count: number;
-  mode: 'details' | 'ranking';
-  locale: string;
-  onMode: (value: 'details' | 'ranking') => void;
-  onPrevious: () => void;
-  onNext: () => void;
-  onOpenPlayerTag: (tag: string) => Promise<void>;
-  onJumpToPlayer: (target: ViewInstance) => void;
-}) {
-  const { t, isRtl } = useI18n();
-  const theme = useCKTheme();
-  return (
-    <View style={styles.section}>
-      <SlidingSegmentControl
-        value={mode}
-        options={[
-          { value: 'details', label: t('generalDetails') },
-          { value: 'ranking', label: t('sideRankingsTitle') },
-        ]}
-        isRtl={isRtl}
-        onChange={onMode}
-        testID="ranked-mode-control"
-      />
-      <View style={styles.periodNav}>
-        <Pressable disabled={index >= count - 1} onPress={onPrevious} style={styles.arrow}>
-          <ChevronLeft color={index >= count - 1 ? theme.outlineVariant : theme.onSurface} />
-        </Pressable>
-        <View style={styles.center}>
-          <CKText role="sectionTitle">
-            {period.isCurrent ? t('rankedLeagueCurrentPeriod') : t('clanRankingsSeason')}
-          </CKText>
-          <CKText muted>{formatPeriodRange(period.startsAt, locale)}</CKText>
-        </View>
-        <Pressable disabled={index <= 0} onPress={onNext} style={styles.arrow}>
-          <ChevronRight color={index <= 0 ? theme.outlineVariant : theme.onSurface} />
-        </Pressable>
-      </View>
-      {mode === 'ranking' ? (
-        <RankingTable
-          period={period}
-          playerTag={data.playerTag}
-          onOpenPlayerTag={onOpenPlayerTag}
-          onJumpToPlayer={onJumpToPlayer}
-        />
-      ) : (
-        <PeriodDetails period={period} locale={locale} />
-      )}
-    </View>
-  );
-}
-
-function PeriodDetails({ period, locale }: { period: RankedPeriod; locale: string }) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const intlLocale = toIntlLocale(locale);
-  return (
-    <View style={styles.section}>
-      <Surface style={styles.rankTrophiesCard}>
-        <MiniStat
-          label={t('rankedLeagueGroupRank')}
-          value={period.placement > 0 ? `#${period.placement.toLocaleString(intlLocale)}` : '—'}
-        />
-        {period.tier?.largeIconUrl ? (
-          <MobileWebImage imageUrl={period.tier.largeIconUrl} style={styles.periodTierIcon} />
-        ) : (
-          <Trophy size={54} color={theme.onSurfaceVariant} />
-        )}
-        <MiniStat
-          label={t('rankedLeagueTrophies')}
-          value={period.trophies.toLocaleString(intlLocale)}
-        />
-      </Surface>
-      <View style={styles.battleGrid}>
-        <BattleCard
-          title={t('rankedLeagueAttacks')}
-          imageUrl={ImageAssets.sword}
-          battles={period.attacks}
-          count={period.attackCount}
-          max={period.attackMaxBattles}
-          attack
-          locale={locale}
-          hasDetails={period.hasDetails}
-          complete={period.attacksComplete}
-        />
-        <BattleCard
-          title={t('rankedLeagueDefenses')}
-          imageUrl={ImageAssets.shieldWithArrow}
-          battles={period.defenses}
-          count={period.defenseCount}
-          max={period.defenseMaxBattles}
-          locale={locale}
-          hasDetails={period.hasDetails}
-          complete={period.defensesComplete}
-        />
-      </View>
-      <Surface style={styles.notice}>
-        <MobileWebImage imageUrl={ImageAssets.shieldWithArrow} style={styles.noticeImage} />
-        <View style={styles.grow}>
-          <CKText role="rowTitle">{t('gameHeroesEquipments')}</CKText>
-          <CKText muted>{t('rankedLeagueEquipmentUnavailable')}</CKText>
-        </View>
-      </Surface>
-    </View>
-  );
-}
-
-function BattleCard({
-  title,
-  imageUrl,
-  battles,
-  count,
-  max,
-  attack = false,
-  locale,
-  hasDetails,
-  complete,
-}: {
-  title: string;
-  imageUrl: string;
-  battles: readonly RankedLeagueBattle[];
-  count: number;
-  max: number;
-  attack?: boolean;
-  locale: string;
-  hasDetails: boolean;
-  complete: boolean;
-}) {
-  const { t } = useI18n();
-  const {
-    remaining,
-    trophyTotal,
-    trophyAverage: average,
-  } = rankedBattleSummary(battles, count, max, complete);
-  const sign = attack ? '+' : '-';
-  return (
-    <Surface style={styles.battleCard}>
-      <View style={styles.cardTitle}>
-        <MobileWebImage imageUrl={imageUrl} style={styles.battleTitleImage} />
-        <CKText role="labelLarge" numberOfLines={1}>
-          {title}
-        </CKText>
-        {battles.length ? (
-          <CKText
-            role="labelSmall"
-            style={[styles.growRight, { color: attack ? '#2E7D32' : '#C62828' }]}
-          >
-            ({sign}
-            {Math.abs(trophyTotal)})
-          </CKText>
-        ) : null}
-      </View>
-      <View style={styles.averageRow}>
-        <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.averageTrophy} />
-        <MobileWebImage imageUrl={ImageAssets.builderBaseStar} style={styles.averageStar} />
-        <CKText
-          muted={average === null}
-          style={average === null ? undefined : { color: attack ? '#2E7D32' : '#C62828' }}
-        >
-          {average === null ? '—' : `${sign}${Math.abs(average).toFixed(1)}`}
-        </CKText>
-      </View>
-      {!hasDetails || !complete ? (
-        <CKText style={styles.unavailableBattles}>
-          {t('rankedLeagueBattleDetailsUnavailable')}
-        </CKText>
-      ) : null}
-      {hasDetails ? (
-        <View style={styles.battleList}>
-          {battles.map((battle, index) => (
-            <BattleRow
-              key={`${battle.opponentPlayerTag || 'automatic'}-${index}`}
-              battle={battle}
-              attack={attack}
-              locale={locale}
+                    imageUrl={player.townHallPic}
+                    style={styles.tierBadge}
+                    contentFit="contain"
+                  />
+                </View>
+              </View>
+              <View style={styles.identityCopy}>
+                <CKText
+                  role="screenTitle"
+                  numberOfLines={1}
+                  style={[styles.white, styles.identityName]}
+                >
+                  {player.name}
+                </CKText>
+                {clanIdentity.name ? (
+                  <View style={styles.clanLine}>
+                    {clanIdentity.badgeUrl ? (
+                      <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
+                    ) : null}
+                    <CKText role="labelLarge" style={styles.white}>
+                      {clanIdentity.name}
+                    </CKText>
+                  </View>
+                ) : null}
+                {accounts.length > 1 ? (
+                  <GlassSurface cornerRadius={ckRadius.pill} style={styles.accountPill}>
+                    <UsersRound size={17} color="#FFFFFFD1" />
+                    <CKText skeleton={false} role="labelSmall" style={styles.white}>
+                      {t('rankedLeagueAccountSelector')}
+                    </CKText>
+                    <ChevronDown size={18} color="#FFFFFFC7" />
+                  </GlassSurface>
+                ) : null}
+              </View>
+            </Pressable>
+            <View style={styles.headerStats}>
+              {!desktop
+                ? quick(
+                    t('rankedLeagueTrophies'),
+                    (
+                      displayPeriod?.trophies ??
+                      member?.leagueTrophies ??
+                      data?.trophies ??
+                      player.trophies
+                    ).toLocaleString(intlLocale),
+                    <MobileWebImage
+                      imageUrl={ImageAssets.trophies}
+                      style={styles.headerQuickImage}
+                    />,
+                  )
+                : null}
+              {desktop
+                ? tile(
+                    t('rankedLeagueTrophies'),
+                    (
+                      displayPeriod?.trophies ??
+                      member?.leagueTrophies ??
+                      data?.trophies ??
+                      player.trophies
+                    ).toLocaleString(intlLocale),
+                    displayPeriod?.tier?.iconUrl ||
+                      data?.currentTier?.iconUrl ||
+                      player.leagueUrl ||
+                      ImageAssets.trophies,
+                    ImageAssets.trophies,
+                  )
+                : null}
+              {desktop
+                ? tile(
+                    t('rankedLeagueGroupRank'),
+                    (displayPeriod?.placement ?? data?.currentRank)
+                      ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
+                      : t('legendsNoRank'),
+                    ImageAssets.trophies,
+                  )
+                : null}
+              {!desktop
+                ? quick(
+                    t('rankedLeagueGroupRank'),
+                    (displayPeriod?.placement ?? data?.currentRank)
+                      ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
+                      : t('legendsNoRank'),
+                    <ChartLine size={19} color={theme.onSurface} />,
+                  )
+                : null}
+              {desktop
+                ? quick(
+                    t('playerBestTrophies'),
+                    data?.bestTrophies ?? player.bestTrophies,
+                    <MobileWebImage
+                      imageUrl={ImageAssets.bestTrophies}
+                      style={styles.headerQuickImage}
+                    />,
+                  )
+                : null}
+              {quick(
+                t('rankedLeagueAttacks'),
+                maxBattles === null || maxBattles === undefined
+                  ? attackCount
+                  : `${attackCount}/${maxBattles}`,
+                <MobileWebImage imageUrl={ImageAssets.sword} style={styles.headerQuickImage} />,
+              )}
+              {quick(
+                t('rankedLeagueDefenses'),
+                maxBattles === null || maxBattles === undefined
+                  ? defenseCount
+                  : `${defenseCount}/${maxBattles}`,
+                <MobileWebImage
+                  imageUrl={ImageAssets.shieldWithArrow}
+                  style={styles.headerQuickImage}
+                />,
+              )}
+              {desktop && (data?.currentGroup?.members.length ?? 0) > 0
+                ? quick(
+                    t('rankedLeagueGroupRanking'),
+                    t('rankedLeaguePlayers', { count: data!.currentGroup!.members.length }),
+                    <UsersRound size={19} color={theme.onSurface} />,
+                  )
+                : null}
+            </View>
+            <View
+              testID="ranked-header-fade-tail"
+              pointerEvents="none"
+              style={styles.headerFadeTail}
             />
-          ))}
-          {Array.from({ length: remaining ?? 0 }, (_, index) => (
-            <EmptyBattleRow key={`remaining-${index}`} attack={attack} />
-          ))}
+          </SkeletonContent>
         </View>
-      ) : null}
-      <View style={styles.footerStats}>
-        <View style={styles.divider} />
-        <StatLine label={t('rankedLeagueBattles')} value={max > 0 ? `${count} / ${max}` : count} />
-        <StatLine label={t('rankedLeagueAverage')} value={average?.toFixed(1) ?? '-'} />
-        <StatLine label={t('rankedLeagueRemaining')} value={remaining ?? '-'} />
-      </View>
-    </Surface>
-  );
-}
-
-function EmptyBattleRow({ attack }: { attack: boolean }) {
-  return (
-    <View style={[styles.battleRow, styles.emptyBattleRow]}>
-      <MobileWebImage
-        imageUrl={attack ? ImageAssets.sword : ImageAssets.shieldWithArrow}
-        style={styles.battleRowImage}
-      />
-      <View style={styles.grow}>
-        <View style={styles.battleValues}>
-          {[0, 1, 2].map((star) => (
-            <MobileWebImage
-              key={star}
-              imageUrl={ImageAssets.builderBaseStar}
-              style={styles.battleStar}
-            />
-          ))}
-          <CKText role="labelLarge">-%</CKText>
-          <CKText role="labelSmall">(-)</CKText>
-        </View>
-        <CKText muted role="labelSmall">
-          -
-        </CKText>
-      </View>
-    </View>
-  );
-}
-
-function StatLine({ label, value }: { label: string; value: string | number }) {
-  return (
-    <View style={styles.statLine}>
-      <CKText muted role="labelSmall">
-        {label}
-      </CKText>
-      <CKText role="labelLarge">{value}</CKText>
-    </View>
-  );
-}
-
-function BattleRow({
-  battle,
-  attack,
-  locale,
-}: {
-  battle: RankedLeagueBattle;
-  attack: boolean;
-  locale: string;
-}) {
-  const sign = attack ? '+' : '-';
-  const automatic = battle.automatic;
-  return (
-    <View style={styles.battleRow}>
-      <MobileWebImage
-        imageUrl={attack ? ImageAssets.sword : ImageAssets.shieldWithArrow}
-        style={styles.battleRowImage}
-      />
-      <View style={styles.grow}>
-        <View style={styles.battleValues}>
-          {[0, 1, 2].map((star) => (
-            <MobileWebImage
-              key={star}
-              imageUrl={ImageAssets.builderBaseStar}
-              style={[
-                styles.battleStar,
-                (battle.stars === null || star >= battle.stars) && styles.dimmed,
-              ]}
-            />
-          ))}
-          <CKText role="labelLarge">
-            {battle.destructionPercentage === null
-              ? '—'
-              : `${Math.round(battle.destructionPercentage)}%`}
-          </CKText>
-          <CKText role="labelSmall" style={{ color: attack ? '#2E7D32' : '#C62828' }}>
-            ({sign}
-            {Math.abs(battle.trophies)})
-          </CKText>
-        </View>
-        <CKText muted role="labelSmall">
-          {automatic
-            ? '—'
-            : battle.creationTime
-              ? new Intl.DateTimeFormat(toIntlLocale(locale), {
-                  weekday: 'short',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: false,
-                }).format(battle.creationTime)
-              : '—'}
-        </CKText>
       </View>
     </View>
   );
@@ -874,330 +759,365 @@ function RankingTable({
   period,
   playerTag,
   onOpenPlayerTag,
-  onJumpToPlayer,
+  ownRef,
+  onOwnRowLayout,
+  onBounds,
 }: {
   period: RankedPeriod;
   playerTag: string;
   onOpenPlayerTag: (tag: string) => Promise<void>;
-  onJumpToPlayer: (target: ViewInstance) => void;
+  ownRef: RefObject<ViewInstance | null>;
+  onOwnRowLayout: () => void;
+  onBounds: (pageY: number, height: number) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
-  const ownRef = useRef<ViewInstance>(null);
-  if (!period.group || period.group.members.length === 0)
+  const tableRef = useRef<ViewInstance>(null);
+  if (!period.group?.members.length)
     return <EmptyState title={t('rankedLeagueGroupRanking')} body={t('rankedLeagueNoGroup')} />;
-  const normalizedPlayerTag = canonicalTag(playerTag);
-  const hasPlayer = period.group.members.some(
-    (member) => canonicalTag(member.playerTag) === normalizedPlayerTag,
-  );
-  return (
-    <View>
-      {hasPlayer ? (
-        <View style={styles.jumpButtonRow}>
-          <Pressable
-            onPress={() => {
-              if (ownRef.current) onJumpToPlayer(ownRef.current);
-            }}
-            style={[
-              styles.smallButton,
-              {
-                backgroundColor: colorWithAlpha(theme.primary, 0.12),
-                borderColor: colorWithAlpha(theme.primary, 0.32),
-              },
-            ]}
-          >
-            <LocateFixed size={16} color={theme.primary} />
-            <CKText role="labelLarge" style={{ color: theme.primary }}>
-              {t('rankedLeagueJumpToMyRank')}
-            </CKText>
-          </Pressable>
-        </View>
-      ) : null}
-      {period.group.members.map((member, index) => (
-        <View
-          ref={canonicalTag(member.playerTag) === normalizedPlayerTag ? ownRef : undefined}
-          key={canonicalTag(member.playerTag)}
-        >
-          <RankingRow
-            member={member}
-            rank={index + 1}
-            selected={canonicalTag(member.playerTag) === normalizedPlayerTag}
-            onPress={() => void onOpenPlayerTag(member.playerTag)}
-          />
-        </View>
-      ))}
+  const cutoffs = rankedCutoffs(period);
+  const divider = (label: string, color: string) => (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 }}>
+      <View style={{ flex: 1, height: 2, backgroundColor: colorWithAlpha(color, 0.45) }} />
+      <CKText role="metadata" style={{ color }}>
+        {label}
+      </CKText>
+      <View style={{ flex: 1, height: 2, backgroundColor: colorWithAlpha(color, 0.45) }} />
     </View>
   );
+  return (
+    <View
+      ref={tableRef}
+      collapsable={false}
+      onLayout={() => {
+        tableRef.current?.measure((_x, _y, _w, contentHeight, _px, pageY) =>
+          onBounds(pageY, contentHeight),
+        );
+      }}
+    >
+      <FlatList
+        testID="ranked-group-list"
+        data={period.group.members}
+        keyExtractor={(member) => canonicalTag(member.playerTag)}
+        scrollEnabled={false}
+        removeClippedSubviews={false}
+        initialNumToRender={8}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        ListHeaderComponent={
+          <CKText role="metadata" muted style={{ marginBottom: 8 }}>
+            {t('rankedLeaguePlayers', { count: period.group.members.length })}
+          </CKText>
+        }
+        ItemSeparatorComponent={RankingSeparator}
+        renderItem={({ item: member, index }) => {
+          const selected = canonicalTag(member.playerTag) === canonicalTag(playerTag);
+          return (
+            <View
+              collapsable={false}
+              ref={selected ? ownRef : undefined}
+              onLayout={selected ? onOwnRowLayout : undefined}
+            >
+              {cutoffs && cutoffs.promotion > 0 && index === cutoffs.promotion
+                ? divider(t('rankedLeaguePromotionCutoff'), statColors.win)
+                : null}
+              {cutoffs && cutoffs.demotion > 0 && index === cutoffs.demotionStart
+                ? divider(t('rankedLeagueDemotionCutoff'), statColors.loss)
+                : null}
+              <RankingRow
+                member={member}
+                rank={index + 1}
+                maximum={period.maxBattles}
+                selected={selected}
+                onPress={() => void onOpenPlayerTag(member.playerTag)}
+              />
+            </View>
+          );
+        }}
+        ListFooterComponent={
+          !cutoffs ? (
+            <CKText role="metadata" muted style={{ marginTop: 8 }}>
+              {t('rankedLeagueCutoffsUnavailable')}
+            </CKText>
+          ) : undefined
+        }
+      />
+    </View>
+  );
+}
+
+function RankingSeparator() {
+  return <View style={{ height: 8 }} />;
 }
 
 function RankingRow({
   member,
   rank,
+  maximum,
   selected,
   onPress,
 }: {
   member: RankedLeagueMember;
   rank: number;
+  maximum: number;
   selected: boolean;
   onPress: () => void;
 }) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const theme = useCKTheme();
-  const medal = rank === 1 ? '#FFD54F' : rank === 2 ? '#C7C9CC' : rank === 3 ? '#CE8946' : null;
+  const count = (value: number) => (maximum > 0 ? `${value}/${maximum}` : String(value));
   return (
     <Pressable
       accessibilityRole="button"
       testID={selected ? 'ranked-current-player-row' : undefined}
       onPress={onPress}
-      style={[
+      style={({ pressed }) => [
         styles.rankRow,
         {
-          borderColor: selected
-            ? colorWithAlpha('#008000', 0.7)
-            : colorWithAlpha(theme.outlineVariant, 0.3),
+          backgroundColor: selected ? colorWithAlpha(theme.primary, 0.12) : theme.card,
+          opacity: pressed ? 0.75 : 1,
         },
-        selected && { backgroundColor: colorWithAlpha('#008000', 0.14), borderWidth: 1.5 },
       ]}
     >
-      <View style={styles.rankNumber}>
-        {medal ? <Trophy size={22} color={medal} /> : <CKText role="labelMedium">#{rank}</CKText>}
-      </View>
-      <View style={styles.grow}>
-        <CKText role="rowTitle">{member.playerName}</CKText>
-        <CKText muted role="labelSmall">
-          {member.clanName || member.playerTag}
-        </CKText>
-      </View>
-      <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.miniImage} />
-      <CKText role="titleMedium">
-        {member.leagueTrophies.toLocaleString(toIntlLocale(locale))}
+      <CKText
+        skeleton={false}
+        role="rowTitle"
+        style={[styles.rankNumber, selected && { color: theme.primary }]}
+      >
+        #{rank}
       </CKText>
+      <View style={styles.grow}>
+        <CKText role="rowTitle" numberOfLines={1}>
+          {member.playerName}
+        </CKText>
+        {member.clanName || member.clanTag ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
+            {member.clanTag ? (
+              <MobileWebImage
+                imageUrl={ImageAssets.widgetClanBadgeForTag(member.clanTag)}
+                style={{ width: 16, height: 18 }}
+              />
+            ) : null}
+            <CKText muted role="metadata" numberOfLines={1} style={styles.grow}>
+              {member.clanName || member.clanTag}
+            </CKText>
+          </View>
+        ) : null}
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 8 }}>
+          <View
+            accessible
+            accessibilityLabel={`${t('rankedLeagueAttacks')}: ${count(member.attackWinCount + member.attackLoseCount)}`}
+            style={styles.inlineStat}
+          >
+            <MobileWebImage imageUrl={ImageAssets.sword} style={styles.miniImage} />
+            <CKText role="metadata" muted>
+              {count(member.attackWinCount + member.attackLoseCount)}
+            </CKText>
+          </View>
+          <View
+            accessible
+            accessibilityLabel={`${t('rankedLeagueDefenses')}: ${count(member.defenseWinCount + member.defenseLoseCount)}`}
+            style={styles.inlineStat}
+          >
+            <MobileWebImage imageUrl={ImageAssets.shieldWithArrow} style={styles.miniImage} />
+            <CKText role="metadata" muted>
+              {count(member.defenseWinCount + member.defenseLoseCount)}
+            </CKText>
+          </View>
+        </View>
+      </View>
+      <View style={{ alignItems: 'flex-end', gap: 4 }}>
+        <View style={styles.inlineStat}>
+          <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.miniImage} />
+          <CKText role="rowTitle">
+            {member.leagueTrophies.toLocaleString(toIntlLocale(locale))}
+          </CKText>
+        </View>
+        <ChevronRight size={17} color={theme.onSurfaceVariant} />
+      </View>
     </Pressable>
   );
 }
 
 function HistoryPanel({
   periods,
-  showTable,
   locale,
-  onToggle,
+  onSelect,
 }: {
   periods: readonly RankedPeriod[];
-  showTable: boolean;
   locale: string;
-  onToggle: () => void;
+  onSelect: (period: RankedPeriod) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
-  const highlights = rankedTierHighlights(periods);
-  const [tierIndex, setTierIndex] = useState(0);
-  const [pagerWidth, setPagerWidth] = useState(0);
-  const pagerRef = useRef<ScrollViewInstance>(null);
+  const completed = rankedHistoricalPeriods(periods);
   return (
     <View style={styles.section}>
-      <Pressable
-        accessibilityLabel={showTable ? t('tooltipShowChart') : t('tooltipShowTable')}
-        onPress={onToggle}
-        style={styles.historyToggle}
-      >
-        {showTable ? <ChartLine color={theme.onSurface} /> : <List color={theme.onSurface} />}
-      </Pressable>
-      {highlights.length ? (
-        <View onLayout={(event) => setPagerWidth(event.nativeEvent.layout.width)}>
-          <ScrollView
-            ref={pagerRef}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onMomentumScrollEnd={(event) => {
-              if (pagerWidth > 0) {
-                setTierIndex(Math.round(event.nativeEvent.contentOffset.x / pagerWidth));
-              }
-            }}
-          >
-            {highlights.map((highlight, index) => (
-              <View
-                key={highlight.tier?.id ?? highlight.lastPeriod.seasonId}
-                style={{ width: pagerWidth || 1 }}
-              >
-                <TierHighlightCard highlight={highlight} locale={locale} overall={index === 0} />
-              </View>
-            ))}
-          </ScrollView>
-          {highlights.length > 1 ? (
-            <View style={styles.pageDots}>
-              {highlights.map((highlight, index) => (
-                <Pressable
-                  key={highlight.tier?.id ?? index}
-                  onPress={() => {
-                    setTierIndex(index);
-                    pagerRef.current?.scrollTo({ x: index * pagerWidth, animated: true });
-                  }}
-                  style={[
-                    styles.pageDot,
-                    index === tierIndex && { backgroundColor: theme.primary },
-                  ]}
-                />
-              ))}
-            </View>
-          ) : null}
-        </View>
-      ) : null}
-      {!highlights.length ? <EmptyState title={t('generalNoDataAvailable')} /> : null}
-      {periods.length ? (
-        showTable ? (
-          <HistoryList periods={periods} locale={locale} />
-        ) : (
-          <RankedLineChart
-            title={t('legendsEosTrophies')}
-            series={[rankedHistorySeries(periods)]}
-            xLabel={(point) => formatShortDate(new Date(point.label), locale)}
-            yLabel={(value) => Math.round(value).toLocaleString(toIntlLocale(locale))}
+      <RankedLeagueHistory periods={periods} locale={locale} />
+      <CKText skeleton={false} role="titleSmall">
+        {t('generalHistory')}
+      </CKText>
+      {completed.length ? (
+        completed.map((period) => (
+          <HistoryPeriodRow
+            key={period.seasonId}
+            period={period}
+            locale={locale}
+            onPress={() => onSelect(period)}
           />
-        )
-      ) : null}
+        ))
+      ) : (
+        <EmptyState showSticker={false} title={t('generalNoDataAvailable')} />
+      )}
     </View>
   );
 }
 
-function TierHighlightCard({
-  highlight,
+function HistoryPeriodRow({
+  period,
   locale,
-  overall,
+  onPress,
 }: {
-  highlight: ReturnType<typeof rankedTierHighlights>[number];
+  period: RankedPeriod;
   locale: string;
-  overall: boolean;
+  onPress: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const color = rankedTierColor(period.tier?.name ?? '');
   return (
-    <Surface style={[styles.highlightCard, overall && styles.highlightBest]}>
-      <View style={styles.cardTitle}>
-        {highlight.tier?.largeIconUrl ? (
-          <MobileWebImage imageUrl={highlight.tier.largeIconUrl} style={styles.tierIcon} />
-        ) : (
-          <Trophy size={32} color={theme.onSurfaceVariant} />
-        )}
-        <CKText role="sectionTitle" style={styles.grow} numberOfLines={1}>
-          {highlight.tier?.name ?? t('rankedLeagueNoGroup')}
-        </CKText>
-        {overall ? <Trophy size={18} color="#FFD75E" /> : null}
-      </View>
-      <View style={styles.highlightGrid}>
-        <HighlightStat
-          label={t('rankedLeagueLastPeriod')}
-          period={highlight.lastPeriod}
-          locale={locale}
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => ({
+        padding: 14,
+        borderRadius: ckRadius.tile,
+        backgroundColor: theme.card,
+        gap: 12,
+        opacity: pressed ? 0.75 : 1,
+      })}
+    >
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <MobileWebImage
+          imageUrl={period.tier?.iconUrl ?? ImageAssets.trophies}
+          style={{ width: 44, height: 48 }}
         />
-        <HighlightStat
-          label={t('rankedLeagueBestGroupRank')}
-          period={highlight.bestRankPeriod}
-          locale={locale}
-        />
-        <HighlightStat
-          label={t('legendsBestTrophies')}
-          period={highlight.bestTrophiesPeriod}
-          locale={locale}
-        />
-        <HighlightStat
-          label={t('legendsMostAttacks')}
-          period={highlight.mostAttacksPeriod}
-          locale={locale}
-        />
-      </View>
-    </Surface>
-  );
-}
-
-function HighlightStat({
-  label,
-  period,
-  locale,
-}: {
-  label: string;
-  period: RankedPeriod | null;
-  locale: string;
-}) {
-  const theme = useCKTheme();
-  if (!period) return <View style={styles.highlightStat} />;
-  return (
-    <View style={styles.highlightStat}>
-      <CKText muted role="labelSmall" numberOfLines={1}>
-        {label}
-      </CKText>
-      <CKText muted role="labelSmall">
-        {formatLongDate(period.startsAt, locale)}
-      </CKText>
-      <View style={styles.highlightValue}>
-        <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.miniImage} />
-        <CKText role="labelMedium">{period.trophies.toLocaleString(toIntlLocale(locale))}</CKText>
-      </View>
-      <View style={styles.highlightValue}>
-        <ChartLine size={16} color={theme.onSurfaceVariant} />
-        <CKText role="labelMedium">{period.placement > 0 ? `#${period.placement}` : '—'}</CKText>
-      </View>
-      <View style={styles.highlightValue}>
-        <MobileWebImage imageUrl={ImageAssets.sword} style={styles.miniImage} />
-        <CKText role="labelMedium">{period.attackCount}</CKText>
-      </View>
-    </View>
-  );
-}
-
-function HistoryList({ periods, locale }: { periods: readonly RankedPeriod[]; locale: string }) {
-  const theme = useCKTheme();
-  return (
-    <View style={styles.historyList}>
-      {periods.map((period) => (
-        <Surface key={period.seasonId} style={styles.historyRow}>
-          {period.tier?.largeIconUrl ? (
-            <MobileWebImage imageUrl={period.tier.largeIconUrl} style={styles.historyTierIcon} />
-          ) : (
-            <Trophy size={44} color={theme.onSurfaceVariant} />
-          )}
-          <View style={styles.grow}>
-            <CKText role="rowTitle" numberOfLines={1}>
-              {period.tier?.name ?? formatLongDate(period.startsAt, locale)}
-            </CKText>
-            {period.tier ? (
-              <CKText muted role="labelMedium">
-                {formatLongDate(period.startsAt, locale)}
-              </CKText>
-            ) : null}
-            <View style={styles.historyChips}>
-              <HistoryChip
-                image={ImageAssets.trophies}
-                value={period.trophies.toLocaleString(toIntlLocale(locale))}
-              />
-              <HistoryChip value={period.placement > 0 ? `#${period.placement}` : '—'} />
-              <HistoryChip
-                image={ImageAssets.sword}
-                value={`${period.attackCount} (${period.attackStars}★)`}
-              />
-              <HistoryChip
-                image={ImageAssets.shieldWithArrow}
-                value={`${period.defenseCount} (${period.defenseStars}★)`}
-              />
-            </View>
+        <View style={styles.grow}>
+          <CKText role="rowTitle" style={{ color }}>
+            {period.tier?.name ?? t('rankedLeagueNoGroup')}
+          </CKText>
+          <CKText role="metadata" muted>
+            {formatPeriodRange(period.startsAt, locale)}
+          </CKText>
+        </View>
+        <View style={{ alignItems: 'flex-end', gap: 3 }}>
+          <View style={styles.inlineStat}>
+            <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.miniImage} />
+            <CKText role="rowTitle">{period.trophies.toLocaleString(toIntlLocale(locale))}</CKText>
           </View>
-        </Surface>
-      ))}
-    </View>
+          <CKText role="metadata" muted>
+            {period.placement > 0 ? `#${period.placement}` : '—'}
+          </CKText>
+        </View>
+        <ChevronRight size={17} color={theme.onSurfaceVariant} />
+      </View>
+      <View style={{ flexDirection: 'row', gap: 18 }}>
+        <View style={styles.inlineStat}>
+          <MobileWebImage imageUrl={ImageAssets.sword} style={styles.miniImage} />
+          <CKText role="metadata" muted>
+            {period.attackCount}
+            {period.maxBattles > 0 ? `/${period.maxBattles}` : ''}
+          </CKText>
+        </View>
+        <View style={styles.inlineStat}>
+          <MobileWebImage imageUrl={ImageAssets.shieldWithArrow} style={styles.miniImage} />
+          <CKText role="metadata" muted>
+            {period.defenseCount}
+            {period.maxBattles > 0 ? `/${period.maxBattles}` : ''}
+          </CKText>
+        </View>
+      </View>
+    </Pressable>
   );
 }
 
-function HistoryChip({ image, value }: { image?: string; value: string }) {
+function RankedPeriodPicker({
+  periods,
+  selected,
+  onClose,
+  onSelect,
+}: {
+  periods: readonly RankedPeriod[];
+  selected: RankedPeriod;
+  onClose: () => void;
+  onSelect: (index: number) => void;
+}) {
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const insets = useSafeAreaInsets();
+  // CalendarPicker uses local dates. Preserve the API's UTC Monday as a
+  // calendar date, rather than shifting it into Sunday in western time zones.
+  const local = (value: Date) =>
+    new Date(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate());
+  const key = (value: Date) => `${value.getFullYear()}-${value.getMonth()}-${value.getDate()}`;
+  const dates = periods.map((period) => local(period.startsAt));
+  const keys = new Set(dates.map(key));
   return (
-    <View style={styles.historyChip}>
-      {image ? (
-        <MobileWebImage imageUrl={image} style={styles.chipImage} />
-      ) : (
-        <ChartLine size={18} color={theme.onSurfaceVariant} />
-      )}
-      <CKText role="labelLarge">{value}</CKText>
-    </View>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
+      <Pressable
+        onPress={onClose}
+        style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000099' }}
+      >
+        <Pressable
+          onPress={() => undefined}
+          style={{
+            width: '100%',
+            maxWidth: 520,
+            alignSelf: 'center',
+            padding: 20,
+            paddingBottom: insets.bottom + 20,
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
+            backgroundColor: theme.surface,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 12,
+            }}
+          >
+            <CKText skeleton={false} role="titleSmall">
+              {t('clanRankingsSeason')}
+            </CKText>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={materialCloseLabel(locale)}
+              onPress={onClose}
+              style={{ padding: 8 }}
+            >
+              <X size={22} color={theme.onSurface} />
+            </Pressable>
+          </View>
+          <CalendarPicker
+            start={local(selected.startsAt)}
+            minimum={new Date(Math.min(...dates.map(Number)))}
+            maximum={new Date(Math.max(...dates.map(Number)))}
+            isDateSelectable={(date) => date.getDay() === 1 && keys.has(key(date))}
+            onChange={(date) => {
+              const index = dates.findIndex((value) => key(value) === key(date));
+              if (index >= 0) onSelect(index);
+            }}
+          />
+        </Pressable>
+      </Pressable>
+    </Modal>
   );
 }
 
@@ -1240,90 +1160,107 @@ function AccountPicker({
   );
 }
 
-function InfoModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
+function RankedSkeleton({ page, player }: { page: RankedPage; player: Player }) {
+  const { locale } = useI18n();
+  const period: RankedPeriod = {
+    seasonId: 1,
+    startsAt: new Date('2026-01-05T00:00:00Z'),
+    trophies: 1000,
+    placement: 1,
+    attackWins: 10,
+    attackLosses: 0,
+    attackStars: 30,
+    defenseWins: 10,
+    defenseLosses: 0,
+    defenseStars: 30,
+    maxBattles: 24,
+    tier: null,
+    group: null,
+    isCurrent: true,
+    attacks: [0, 1, 2].map(
+      () => new RankedLeagueBattle('', 'Opponent player', 3, 100, 40, new Date(0)),
+    ),
+    defenses: [],
+    hasDetails: true,
+    attacksComplete: true,
+    defensesComplete: true,
+    missingRealAttacks: 0,
+    missingRealDefenses: 0,
+    automaticDefensesDerived: false,
+    attackCount: 10,
+    defenseCount: 10,
+    attackMaxBattles: 24,
+    defenseMaxBattles: 24,
+  };
   return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.modalScrim}>
-        <Surface style={[styles.infoDialog, { backgroundColor: theme.surface }]}>
-          <CKText role="sectionTitle" style={[styles.infoDialogTitle, { color: theme.primary }]}>
-            {t('rankedLeagueAbout')}
-          </CKText>
-          <ScrollView
-            style={styles.infoDialogScroll}
-            contentContainerStyle={styles.infoDialogContent}
-          >
-            <CKText>{t('rankedLeagueAboutBody')}</CKText>
-          </ScrollView>
-          <Pressable
-            testID="ranked-info-action"
-            accessibilityRole="button"
-            onPress={onClose}
-            style={styles.infoDialogAction}
-          >
-            <CKText role="labelLarge" style={{ color: theme.primary }}>
-              {t('generalOk')}
-            </CKText>
-          </Pressable>
-        </Surface>
-      </View>
-    </Modal>
-  );
-}
-
-function MiniStat({ label, value }: { label: string; value: string | number }) {
-  return (
-    <View style={styles.miniStat}>
-      <CKText role="titleMedium">{value}</CKText>
-      <CKText role="labelSmall" muted>
-        {label}
-      </CKText>
-    </View>
-  );
-}
-function RankedSkeleton() {
-  return (
-    <View style={styles.section}>
-      <View style={{ flexDirection: 'row', gap: 12 }}>
-        <Skeleton height={44} />
-        <Skeleton height={44} />
-      </View>
-      <Skeleton width="65%" height={32} />
-      <View style={styles.grid}>
-        <Skeleton height={100} radius={20} />
-        <Skeleton height={160} />
-      </View>
-      <Skeleton height={100} radius={20} />
-      <Skeleton height={70} radius={20} />
-    </View>
+    <SkeletonContent loading>
+      {page === 'season' ? (
+        <RankedBattles
+          period={period}
+          onOpenOpponent={async () => undefined}
+          onRetry={() => undefined}
+        />
+      ) : page === 'rankings' ? (
+        <View style={styles.section}>
+          {[0, 1, 2, 3].map((index) => (
+            <RankingRow
+              key={index}
+              member={
+                new RankedLeagueMember(
+                  player.tag,
+                  'Player name',
+                  '',
+                  'Clan name',
+                  1000,
+                  10,
+                  0,
+                  10,
+                  0,
+                )
+              }
+              rank={index + 1}
+              maximum={24}
+              selected={false}
+              onPress={() => undefined}
+            />
+          ))}
+        </View>
+      ) : (
+        <HistoryPanel
+          periods={[period, { ...period, seasonId: 2, isCurrent: false }]}
+          locale={locale}
+          onSelect={() => undefined}
+        />
+      )}
+    </SkeletonContent>
   );
 }
 function formatPeriodRange(date: Date, locale: string) {
   const end = new Date(date.getTime() + 7 * 86_400_000);
   const formatter = new Intl.DateTimeFormat(toIntlLocale(locale), {
+    timeZone: 'UTC',
     month: 'short',
     day: 'numeric',
   });
   return `${formatter.format(date)} - ${formatter.format(end)}`;
 }
 
-function formatShortDate(date: Date, locale: string) {
-  return new Intl.DateTimeFormat(toIntlLocale(locale), {
-    month: 'numeric',
-    day: 'numeric',
-  }).format(date);
-}
-
-function formatLongDate(date: Date, locale: string) {
-  return new Intl.DateTimeFormat(toIntlLocale(locale), {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(date);
-}
-
 const styles = StyleSheet.create({
+  floatingRankWrap: { position: 'absolute', left: 16, right: 16, alignItems: 'center' },
+  floatingRank: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    minHeight: 46,
+    paddingHorizontal: 20,
+    borderRadius: ckRadius.pill,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+  },
+  inlineStat: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   fill: { flex: 1 },
   simpleAppBar: { minHeight: 56, flexDirection: 'row', alignItems: 'center' },
   simpleAppBarTitle: { flex: 1 },
@@ -1457,16 +1394,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   rankRow: {
-    minHeight: 62,
+    minHeight: 94,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: ckRadius.control,
-    marginBottom: 6,
+    gap: 10,
+    padding: 14,
+    borderWidth: 0,
+    borderRadius: ckRadius.tile,
   },
-  rankNumber: { width: 32, alignItems: 'center' },
+  rankNumber: { width: 34, textAlign: 'center' },
   highlightCard: { padding: 16, gap: 14 },
   highlightBest: {
     borderColor: 'rgba(255,215,94,.7)',

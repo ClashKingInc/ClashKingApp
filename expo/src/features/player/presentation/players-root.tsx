@@ -20,6 +20,7 @@ import { withUpdatedNotificationAccount } from './players-root-state';
 export interface PlayersRootProps {
   readonly openManageAccounts: () => void;
   readonly openPlayer: (player: Player) => void;
+  readonly openPlayerTag?: (tag: string) => void;
   readonly openGameSettings: () => void;
 }
 
@@ -95,6 +96,7 @@ export function PlayersRoot(props: PlayersRootProps) {
         .map((account) => canonicalTag(account.tag)),
     );
     return {
+      loading: runtime.players.isLoading || !runtime.bookmarks.loaded,
       profiles: runtime.players.profiles,
       accountLinks: runtime.accounts.accounts,
       bookmarks: runtime.bookmarks.players.map((bookmark) => ({
@@ -138,6 +140,7 @@ export function PlayersRoot(props: PlayersRootProps) {
       showMessage: setSnackbar,
       openManageAccounts: props.openManageAccounts,
       openPlayer: props.openPlayer,
+      openPlayerTag: props.openPlayerTag,
       hydrateBookmarkedPlayers: (tags) => runtime.players.hydrateBookmarkedPlayers(tags),
       loadBookmarkedPlayer: (tag) => runtime.players.getPlayerAndClanData(tag),
       verifyAccount: (playerTag, apiToken) => runtime.accounts.verifyAccount(playerTag, apiToken),

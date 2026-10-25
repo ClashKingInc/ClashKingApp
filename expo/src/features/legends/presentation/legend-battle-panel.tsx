@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View, type GestureResponderEvent } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
-import { CKText, MobileWebImage, Surface, ckRadius, colorWithAlpha, useCKTheme } from '../../../ui';
+import { CKText, MobileWebImage, ckRadius, colorWithAlpha, useCKTheme } from '../../../ui';
 import type { PlayerLegendBattle, PlayerLegendBattlelog } from '../../player/models';
 import { relativeWarTime } from '../../war/presentation/presentation-utils';
+import { BattleResultCard } from '../../../ui/battle-result-card';
 import { LegendArmy } from './legend-army-presentation';
 
 export function LegendBattlePanel({
@@ -23,9 +24,7 @@ export function LegendBattlePanel({
   const { t } = useI18n();
   const theme = useCKTheme();
   const [battleType, setBattleType] = useState<'attacks' | 'defenses'>('attacks');
-  const battles = sortedLegendBattles(
-    battleType === 'attacks' ? data.attacks : data.defenses,
-  );
+  const battles = sortedLegendBattles(battleType === 'attacks' ? data.attacks : data.defenses);
 
   return (
     <View style={styles.panel}>
@@ -62,8 +61,8 @@ export function LegendBattlePanel({
                   {count}
                   <CKText muted role="metadata">
                     {' '}
-                    / 8
-                    {' '}({trophies >= 0 ? '+' : ''}{trophies})
+                    / 8 ({trophies >= 0 ? '+' : ''}
+                    {trophies})
                   </CKText>
                 </CKText>
               </View>
@@ -105,7 +104,6 @@ function LegendBattleCard({
 }) {
   const { locale, t } = useI18n();
   const theme = useCKTheme();
-  const [expanded, setExpanded] = useState(false);
   const hasArmy = !battle.automatic && Boolean(battle.shareCode);
   const opponentName = battle.automatic
     ? t('legendsAutomaticDefense')
@@ -123,79 +121,31 @@ function LegendBattleCard({
         .filter(Boolean)
         .join(' ')
     : '';
-  const openOpponent = (event: GestureResponderEvent) => {
-    event.stopPropagation();
-    if (battle.opponentTag) onOpenOpponent?.(battle.opponentTag);
-  };
-
   return (
-    <Surface radius={ckRadius.tile} style={styles.card}>
-      <Pressable
-        accessibilityLabel={opponentName}
-        accessibilityRole={hasArmy ? 'button' : undefined}
-        accessibilityState={hasArmy ? { expanded } : undefined}
-        onPress={hasArmy ? () => setExpanded((value) => !value) : undefined}
-        style={({ pressed }) => [styles.cardBody, pressed && hasArmy && styles.pressed]}
-        testID={`legend-battle-${index}`}
-      >
-        <View style={styles.cardTop}>
-          <View style={styles.identity}>
-            <Pressable
-              accessibilityRole={battle.opponentTag && onOpenOpponent ? 'link' : undefined}
-              disabled={!battle.opponentTag || !onOpenOpponent}
-              onPress={openOpponent}
-            >
-              <CKText numberOfLines={1} role="bodyLarge">
-                {opponentName}
-              </CKText>
-            </Pressable>
-            {opponentDetails ? (
-              <View style={styles.opponentStanding}>
-                <MobileWebImage imageUrl={ImageAssets.legendLeagueOne} style={styles.legendIcon} />
-                <CKText muted role="metadata">
-                  {opponentDetails}
-                </CKText>
-              </View>
-            ) : null}
-            {relativeTime ? <CKText muted role="metadata">{relativeTime}</CKText> : null}
+    <BattleResultCard
+      name={opponentName}
+      time={relativeTime}
+      identityDetails={
+        opponentDetails ? (
+          <View style={styles.opponentStanding}>
+            <MobileWebImage imageUrl={ImageAssets.legendLeagueOne} style={styles.legendIcon} />
+            <CKText muted role="metadata">
+              {opponentDetails}
+            </CKText>
           </View>
-          <View style={styles.result}>
-            {battle.stars !== null ? (
-              <View
-                accessible
-                accessibilityLabel={`${t('warStarsTitle')}: ${battle.stars} / 3`}
-                style={styles.stars}
-              >
-                {[0, 1, 2].map((star) => (
-                  <MobileWebImage
-                    key={star}
-                    imageUrl={ImageAssets.attackStar}
-                    style={[styles.starIcon, star >= battle.stars! && styles.unearnedStar]}
-                    testID={`legend-battle-${index}-star-${star}`}
-                  />
-                ))}
-              </View>
-            ) : null}
-            <View style={styles.resultMain}>
-              {battle.stars !== null ? (
-                <CKText role="titleMedium">{battle.destructionPercentage ?? '—'}%</CKText>
-              ) : null}
-              <CKText muted role="metadata">
-                ({battle.trophies > 0 ? '+' : ''}{battle.trophies})
-              </CKText>
-              {hasArmy ? (
-                <ChevronRight
-                  color={theme.onSurfaceVariant}
-                  size={18}
-                  style={{ transform: [{ rotate: expanded ? '90deg' : '0deg' }] }}
-                />
-              ) : null}
-            </View>
-          </View>
-        </View>
-      </Pressable>
-      {expanded && hasArmy && battle.shareCode ? (
-        <View style={styles.armyDetail} testID={`legend-battle-army-${index}`}>
+        ) : undefined
+      }
+      stars={battle.stars}
+      destruction={battle.destructionPercentage}
+      trophies={battle.trophies}
+      onOpenOpponent={
+        battle.opponentTag && onOpenOpponent ? () => onOpenOpponent(battle.opponentTag!) : undefined
+      }
+      testID={`legend-battle-${index}`}
+      detailTestID={`legend-battle-army-${index}`}
+    >
+      {hasArmy && battle.shareCode ? (
+        <>
           <LegendArmy shareCode={battle.shareCode} />
           {onOpenArmy ? (
             <Pressable
@@ -207,9 +157,9 @@ function LegendBattleCard({
               <ChevronRight color={theme.onSurface} size={20} />
             </Pressable>
           ) : null}
-        </View>
+        </>
       ) : null}
-    </Surface>
+    </BattleResultCard>
   );
 }
 
@@ -245,26 +195,8 @@ const styles = StyleSheet.create({
   tabMain: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 },
   tabImage: { width: 30, height: 30 },
   battles: { gap: 8 },
-  card: { overflow: 'hidden' },
-  cardBody: {
-    minHeight: 82,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  pressed: { opacity: 0.78, transform: [{ scale: 0.99 }] },
-  cardTop: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 10 },
-  identity: { flex: 1, minWidth: 0, gap: 3 },
   opponentStanding: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   legendIcon: { width: 18, height: 18 },
-  result: { minWidth: 112, alignItems: 'center', justifyContent: 'center', gap: 3 },
-  resultMain: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4 },
-  stars: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 1 },
-  starIcon: { width: 19, height: 19 },
-  unearnedStar: { opacity: 0.24 },
-  armyDetail: { paddingHorizontal: 12, paddingBottom: 10 },
   detailsButton: {
     minHeight: 44,
     flexDirection: 'row',

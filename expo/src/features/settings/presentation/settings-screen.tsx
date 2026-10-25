@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import {
   Image,
@@ -60,6 +60,7 @@ export function SettingsScreen({
   currentLocale,
   localeChoices,
   themeMode,
+  systemLanguage = false,
   notificationsEnabled,
   alternateIconsSupported,
   selectedAppIcon = '',
@@ -75,6 +76,7 @@ export function SettingsScreen({
   currentLocale: string;
   localeChoices: readonly SettingsLocaleChoice[];
   themeMode: SettingsThemeMode;
+  systemLanguage?: boolean;
   notificationsEnabled: boolean;
   alternateIconsSupported: boolean;
   selectedAppIcon?: string;
@@ -90,7 +92,9 @@ export function SettingsScreen({
   const theme = useCKTheme();
   const measured = useWindowDimensions().width;
   const desktop = isDesktopSettings(platform, viewportWidth ?? measured);
-  const [dialog, setDialog] = useState<'language' | 'theme' | 'icon' | 'logout'>();
+  const [dialog, setDialog] = useState<
+    'language' | 'theme' | 'icon' | 'logout' | 'tutorial-reset'
+  >();
   const [busy, setBusy] = useState(false);
   const [snackbar, setSnackbar] = useState<string>();
   const iconColor = theme.onSurface;
@@ -100,11 +104,12 @@ export function SettingsScreen({
       : themeMode === 'light'
         ? t('settingsThemeLight')
         : t('settingsThemeDark');
-  const selectedLocale =
-    localeChoices.find(({ locale }) => locale === currentLocale)?.locale ??
-    localeChoices.find(({ locale }) => locale.split('_', 1)[0] === currentLocale.split('_', 1)[0])
-      ?.locale ??
-    currentLocale;
+  const selectedLocale = systemLanguage
+    ? 'system'
+    : (localeChoices.find(({ locale }) => locale === currentLocale)?.locale ??
+      localeChoices.find(({ locale }) => locale.split('_', 1)[0] === currentLocale.split('_', 1)[0])
+        ?.locale ??
+      currentLocale);
   const versionAvailable =
     versionLabel !== t('generalLoading') && versionLabel !== t('errorLoadingVersion');
   const body = (
@@ -139,8 +144,13 @@ export function SettingsScreen({
           trailing={themeLabel}
           onPress={() => setDialog('theme')}
         />
-        {actions.resetTutorials ? <SettingsTile icon={<RotateCcw color={iconColor} />} title={tutorialCopy.tutorialResetTitle}
-          onPress={() => { void actions.resetTutorials!().then(() => setSnackbar(tutorialCopy.tutorialResetDone)); }} /> : null}
+        {actions.resetTutorials ? (
+          <SettingsTile
+            icon={<RotateCcw color={iconColor} />}
+            title={t(tutorialCopy.tutorialResetTitle)}
+            onPress={() => setDialog('tutorial-reset')}
+          />
+        ) : null}
         {alternateIconsSupported ? (
           <SettingsTile
             icon={<ImageIcon color={iconColor} />}
@@ -251,18 +261,25 @@ export function SettingsScreen({
         title={t('settingsLanguage')}
         subtitle={t('settingsSelectLanguage')}
         heightFactor={0.82}
-        choices={localeChoices.map(({ locale, label, flagUrl }) => ({
-          value: locale,
-          label,
-          icon: (
-            <MobileWebImage
-              imageUrl={flagUrl}
-              contentFit="cover"
-              errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />}
-              style={styles.flag}
-            />
-          ),
-        }))}
+        choices={[
+          {
+            value: 'system',
+            label: t('settingsThemeSystem'),
+            icon: <Languages color={theme.onSurfaceVariant} size={20} />,
+          },
+          ...localeChoices.map(({ locale, label, flagUrl }) => ({
+            value: locale,
+            label,
+            icon: (
+              <MobileWebImage
+                imageUrl={flagUrl}
+                contentFit="cover"
+                errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />}
+                style={styles.flag}
+              />
+            ),
+          })),
+        ]}
         selected={selectedLocale}
         onSelect={(locale) => void actions.changeLocale(locale)}
         onClose={() => setDialog(undefined)}
@@ -331,6 +348,20 @@ export function SettingsScreen({
         onClose={() => setDialog(undefined)}
       />
       <ConfirmLogout
+        visible={dialog === 'tutorial-reset'}
+        onCancel={() => setDialog(undefined)}
+        onConfirm={() => {
+          setDialog(undefined);
+          void actions
+            .resetTutorials?.()
+            .then(() => setSnackbar(t(tutorialCopy.tutorialResetDone)));
+        }}
+        title={t(tutorialCopy.tutorialResetTitle)}
+        body={t('tutorialResetConfirm')}
+        cancel={t('generalCancel')}
+        confirm={t('generalReset')}
+      />
+      <ConfirmLogout
         visible={dialog === 'logout'}
         onCancel={() => setDialog(undefined)}
         onConfirm={() => {
@@ -389,7 +420,13 @@ function AppIconDialog({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
       <SafeAreaView style={styles.sheetOverlay}>
         <Pressable
           accessibilityElementsHidden
@@ -450,7 +487,13 @@ function ConfirmLogout({
 }) {
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onCancel}
+    >
       <View style={styles.modal}>
         <Surface style={styles.confirm}>
           <CKText role="titleLarge">{title}</CKText>

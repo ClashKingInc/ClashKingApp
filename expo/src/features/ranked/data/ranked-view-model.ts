@@ -1,10 +1,11 @@
-import type {
-  PlayerLegendRanking,
-  PlayerLegendSeason,
+import {
   RankedLeagueBattle,
-  RankedLeagueData,
-  RankedLeagueGroup,
-  RankedLeagueTier,
+  type RankedLeagueBattlelog,
+  type PlayerLegendRanking,
+  type PlayerLegendSeason,
+  type RankedLeagueData,
+  type RankedLeagueGroup,
+  type RankedLeagueTier,
 } from '../../player/models';
 
 export interface RankedPeriod {
@@ -69,7 +70,11 @@ export function rankedBattleSummary(
   };
 }
 
-export function rankedPeriods(data: RankedLeagueData, now = new Date()): readonly RankedPeriod[] {
+export function rankedPeriods(
+  data: RankedLeagueData,
+  now = new Date(),
+  archivedLogs?: ReadonlyMap<number, RankedLeagueBattlelog>,
+): readonly RankedPeriod[] {
   const group = data.currentGroup;
   const member = data.currentMember;
   const battlelogSeasonId = Number(data.currentBattlelog?.seasonId);
@@ -95,10 +100,34 @@ export function rankedPeriods(data: RankedLeagueData, now = new Date()): readonl
       | 'defenseMaxBattles'
     >,
   ): RankedPeriod => {
-    const battlelog = data.battlelogForSeason(input.seasonId);
+    const battlelog = data.battlelogForSeason(input.seasonId) ?? archivedLogs?.get(input.seasonId);
     const attacks = battlelog?.attacks ?? [];
-    const defenses = battlelog?.defenses ?? [];
-    const hasDetails = battlelog !== null;
+    const realDefenses = battlelog?.defenses.filter((battle) => !battle.automatic) ?? [];
+    const defenseCount = battlelog?.registeredDefenses ?? input.defenseWins + input.defenseLosses;
+    const defenseMax =
+      battlelog && battlelog.maxDefenses > 0 ? battlelog.maxDefenses : input.maxBattles;
+    // Only completed weeks receive automatic defenses. Their award is the
+    // floored mean of all real defenses, never a mean of a partially tracked
+    // week or of previously synthesized entries. Keep current-week slots open.
+    const canDeriveAutomatic =
+      !input.isCurrent &&
+      battlelog?.defensesComplete &&
+      realDefenses.length === defenseCount &&
+      realDefenses.length > 0;
+    const automaticCount = canDeriveAutomatic ? Math.max(0, defenseMax - defenseCount) : 0;
+    const automaticPoints = realDefenses.length
+      ? Math.floor(
+          realDefenses.reduce((sum, battle) => sum + battle.trophies, 0) / realDefenses.length,
+        )
+      : 0;
+    const defenses = [
+      ...realDefenses,
+      ...Array.from(
+        { length: automaticCount },
+        () => new RankedLeagueBattle('', '', null, null, automaticPoints, null, true),
+      ),
+    ];
+    const hasDetails = battlelog != null;
     return {
       ...input,
       attacks,
@@ -108,13 +137,12 @@ export function rankedPeriods(data: RankedLeagueData, now = new Date()): readonl
       defensesComplete: battlelog?.defensesComplete ?? false,
       missingRealAttacks: battlelog?.missingRealAttacks ?? 0,
       missingRealDefenses: battlelog?.missingRealDefenses ?? 0,
-      automaticDefensesDerived: battlelog?.automaticDefensesDerived ?? false,
+      automaticDefensesDerived: automaticCount > 0,
       attackCount: battlelog?.registeredAttacks ?? input.attackWins + input.attackLosses,
-      defenseCount: battlelog?.registeredDefenses ?? input.defenseWins + input.defenseLosses,
+      defenseCount,
       attackMaxBattles:
         battlelog && battlelog.maxAttacks > 0 ? battlelog.maxAttacks : input.maxBattles,
-      defenseMaxBattles:
-        battlelog && battlelog.maxDefenses > 0 ? battlelog.maxDefenses : input.maxBattles,
+      defenseMaxBattles: defenseMax,
     };
   };
   const periods: RankedPeriod[] = [

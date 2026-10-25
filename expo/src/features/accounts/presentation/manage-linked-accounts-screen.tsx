@@ -24,7 +24,6 @@ import {
   LoadingIndicator,
   MobileWebImage,
   PillSurface,
-  PageLoading,
   Snackbar,
   Surface,
   ckRadius,
@@ -364,10 +363,15 @@ export function ManageLinkedAccountsScreen({
                 <Pressable
                   accessibilityLabel={t('accountsAdd')}
                   accessibilityRole="button"
+                  accessibilityState={{ disabled: !normalizePlayerTag(tag) }}
+                  disabled={!normalizePlayerTag(tag)}
                   onPress={() => void add()}
                   style={styles.add}
                 >
-                  <PlusCircle color={theme.primary} size={28} />
+                  <PlusCircle
+                    color={normalizePlayerTag(tag) ? theme.primary : theme.onSurfaceVariant}
+                    size={28}
+                  />
                 </Pressable>
                 <InlineError message={error} />
                 <CKText muted role="bodySmall">
@@ -391,7 +395,14 @@ export function ManageLinkedAccountsScreen({
             testID="linked-accounts-continue"
             style={[styles.continue, { paddingBottom: Math.max(16, insets.bottom + 8) }]}
           >
-            <PrimaryAction label={continueLabel} onPress={() => void continueAfterPersist()} />
+            <PrimaryAction
+              label={continueLabel}
+              disabled={!hasVerified || continuing}
+              loading={continuing}
+              color={!hasVerified ? theme.surfaceContainerHighest : undefined}
+              foregroundColor={!hasVerified ? theme.onSurfaceVariant : undefined}
+              onPress={() => void continueAfterPersist()}
+            />
           </View>
         ) : null}
       </View>
@@ -412,7 +423,6 @@ export function ManageLinkedAccountsScreen({
         }}
         onVerified={() => void verified()}
       />
-      <PageLoading visible={continuing} kind="list" />
       <Snackbar message={notice} onDismiss={() => setNotice(undefined)} />
     </SafeAreaView>
   );

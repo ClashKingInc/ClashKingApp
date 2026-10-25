@@ -3,7 +3,7 @@ import { PanResponder, Pressable, StyleSheet, View } from 'react-native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { CKText, colorWithAlpha, useCKTheme } from '../../ui';
 import { useCKAccessibility } from '../../ui/accessibility';
-import { BundledModelScene } from '../../ui/bundled-model-scene';
+import { BundledHeroScene } from '../../ui/bundled-hero-scene';
 
 /* eslint-disable @typescript-eslint/no-require-imports -- Metro requires static bundled-asset references. */
 const models: Record<string, number> = {
@@ -94,40 +94,16 @@ export function HeroCarousel({
         </View>
       ) : null}
       <View style={styles.stage} {...responder.panHandlers}>
-        {/* Keep the small, fixed hero set mounted by identity. Removing offscreen
-            WebViews discards their decoded model and flashes a spinner on return;
-            hidden heroes stay warm but never play their animation. */}
-        {heroes.map((hero, heroIndex) => {
-          const relative = (heroIndex - index + heroes.length) % heroes.length;
-          const offset =
-            relative === 0 ? 0 : relative === 1 ? 1 : relative === heroes.length - 1 ? -1 : null;
-          return (
-            <View
-              key={hero.id}
-              pointerEvents="none"
-              accessibilityElementsHidden={offset === null}
-              importantForAccessibility={offset === null ? 'no-hide-descendants' : 'auto'}
-              style={[
-                styles.model,
-                offset === 0
-                  ? styles.center
-                  : offset === -1
-                    ? styles.previous
-                    : offset === 1
-                      ? styles.next
-                      : styles.parked,
-              ]}
-            >
-              <BundledModelScene
-                source={models[hero.name]!}
-                label={hero.label}
-                playing={offset === 0 && !reduceMotion}
-                cameraTarget={framing[hero.name]?.target}
-                cameraOrbit={framing[hero.name]?.orbit}
-              />
-            </View>
-          );
-        })}
+        <BundledHeroScene
+          models={heroes.map((hero) => ({
+            source: models[hero.name]!,
+            label: hero.label,
+            target: framing[hero.name]?.target,
+            orbit: framing[hero.name]?.orbit,
+          }))}
+          selected={index}
+          playing={!reduceMotion}
+        />
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={heroes[(index - 1 + heroes.length) % heroes.length]!.label}
@@ -187,11 +163,6 @@ export function HeroCarousel({
 const styles = StyleSheet.create({
   card: { borderRadius: 28, overflow: 'hidden', paddingBottom: 8 },
   stage: { height: 220, overflow: 'hidden', width: '100%', maxWidth: 700, alignSelf: 'center' },
-  model: { position: 'absolute', top: 0, height: 220, overflow: 'hidden' },
-  center: { left: '18%', width: '64%', zIndex: 2 },
-  parked: { left: '18%', width: '64%', opacity: 0, zIndex: 0 },
-  previous: { left: '-15%', width: '55%', opacity: 0.38, transform: [{ scale: 0.7 }], zIndex: 1 },
-  next: { right: '-15%', width: '55%', opacity: 0.38, transform: [{ scale: 0.7 }], zIndex: 1 },
   arrow: {
     position: 'absolute',
     top: 94,

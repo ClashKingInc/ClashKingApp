@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { ImageOff } from 'lucide-react-native';
 
-import { MobileWebImage, Skeleton, useCKTheme } from '../../ui';
+import { MobileWebImage, Skeleton, useCKTheme, useSkeletonContent } from '../../ui';
 import type { GameAsset } from './models';
 
 export function GameAssetImage({
@@ -21,6 +21,7 @@ export function GameAssetImage({
   style?: StyleProp<ImageStyle>;
 }) {
   const theme = useCKTheme();
+  const contentLoading = useSkeletonContent();
   const [loaded, setLoaded] = useState(false);
   const [skeletonSide, setSkeletonSide] = useState(64);
   const measure = (event: LayoutChangeEvent) => {
@@ -28,6 +29,12 @@ export function GameAssetImage({
     const boundedSide = Math.min(width || 72, height || 72);
     setSkeletonSide(Math.max(36, Math.min(96, boundedSide * 0.56)));
   };
+  if (contentLoading)
+    return (
+      <View style={[styles.frame, style]}>
+        <Skeleton width="70%" height="70%" />
+      </View>
+    );
   return (
     <View style={[styles.frame, style]} onLayout={measure}>
       {!loaded ? (

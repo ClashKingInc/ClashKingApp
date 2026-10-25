@@ -8,6 +8,7 @@ on:
       build_number: { required: true, type: string }
       track: { required: true, type: string }
       runtime_version: { required: true, type: string }
+      enable_updates: { required: false, type: boolean, default: true }
 jobs:
   deploy-ios:
     name: iOS Store Release
@@ -21,8 +22,15 @@ jobs:
       CI: true
       EXPO_NO_TELEMETRY: 1
       EXPO_NO_GIT_STATUS: 1
+      CK_RELEASE_TRACK: ${{ inputs.track }}
+      CK_APP_VERSION: ${{ inputs.version }}
+      CK_BUILD_NUMBER: ${{ inputs.build_number }}
+      CK_ENABLE_UPDATES: ${{ inputs.enable_updates }}
+      CK_RUNTIME_VERSION: ${{ inputs.runtime_version }}
+      CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
       APP_BUNDLE_ID: com.clashking.apps
       WIDGET_BUNDLE_ID: com.clashking.apps.warwidget
+      NOTIFICATION_BUNDLE_ID: com.clashking.apps.notificationservice
       APPLE_TEAM_ID: MZYXD43RX5
       IPA_PATH: expo/ios/build/ClashKing.ipa
 
@@ -55,6 +63,18 @@ jobs:
           cache: npm
           cache-dependency-path: expo/package-lock.json
 
+      - name: Configure release endpoints
+        run: node scripts/release-environment.mjs
+
+      - name: Materialize update verification certificate
+        if: inputs.enable_updates
+        env:
+          CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
+        run: |
+          test -n "$CERTIFICATE"
+          mkdir -p .release
+          printf '%s' "$CERTIFICATE" > .release/updates-certificate.pem
+
       - name: Install dependencies
         run: npm ci
 
@@ -66,19 +86,7 @@ jobs:
           npx expo-doctor
 
       - name: Generate iOS project
-        shell: bash
-        env:
-          CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
-          CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
-          CK_ENABLE_UPDATES: true
-          CK_RELEASE_TRACK: ${{ inputs.track }}
-          CK_RUNTIME_VERSION: ${{ inputs.runtime_version }}
-          EXPO_UPDATES_CODE_SIGNING_CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
-          EXPO_PUBLIC_CK_API_ENV: production
-        run: |
-          test -n "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE"
-          printf '%s' "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
-          CK_UPDATES_CERTIFICATE_PATH="$RUNNER_TEMP/expo-updates-certificate.pem" npx expo prebuild --platform ios --clean --no-install
+        run: npx expo prebuild --platform ios --clean --no-install
 
       - name: Install CocoaPods dependencies
         working-directory: expo/ios
@@ -92,6 +100,10 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           APP_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
           WIDGET_PROFILE_BASE64: ${{ secrets.IOS_WIDGET_PROVISIONING_PROFILE_BASE64 }}
+          NOTIFICATION_PROFILE_BASE64: ${{ secrets.IOS_NOTIFICATION_SERVICE_PROVISIONING_PROFILE_BASE64 }}
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
           set -euo pipefail
           for value in CERTIFICATE_BASE64 CERTIFICATE_PASSWORD APP_PROFILE_BASE64 WIDGET_PROFILE_BASE64; do
@@ -110,6 +122,13 @@ jobs:
           security default-keychain -d user -s build.keychain
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temppassword build.keychain
 
+          if [[ -n "$NOTIFICATION_PROFILE_BASE64" ]]; then
+            printf '%s' "$NOTIFICATION_PROFILE_BASE64" | base64 --decode > notification.mobileprovision
+          else
+            gem install fastlane --no-document
+            ruby scripts/provision-notification-service.rb
+          fi
+
           mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
           install_profile() {
             local profile="$1" prefix="$2"
@@ -124,6 +143,7 @@ jobs:
           }
           install_profile app.mobileprovision app
           install_profile widget.mobileprovision widget
+          install_profile notification.mobileprovision notification
 
       - name: Validate signing profile identifiers and entitlements
         shell: bash
@@ -133,6 +153,7 @@ jobs:
           set -euo pipefail
           [[ "${{ steps.signing.outputs.app_application_identifier }}" == "${{ env.APPLE_TEAM_ID }}.${{ env.APP_BUNDLE_ID }}" ]]
           [[ "${{ steps.signing.outputs.widget_application_identifier }}" == "${{ env.APPLE_TEAM_ID }}.${{ env.WIDGET_BUNDLE_ID }}" ]]
+          [[ "${{ steps.signing.outputs.notification_application_identifier }}" == "${{ env.APPLE_TEAM_ID }}.${{ env.NOTIFICATION_BUNDLE_ID }}" ]]
           python3 <<'PYTHON'
           import os
           import plistlib
@@ -176,11 +197,12 @@ jobs:
               raise SystemExit(1)
           PYTHON
 
-      - name: Configure manual signing for app and widget
+      - name: Configure manual signing for app and extensions
         shell: bash
         env:
           APP_PROFILE_NAME: ${{ steps.signing.outputs.app_profile_name }}
           WIDGET_PROFILE_NAME: ${{ steps.signing.outputs.widget_profile_name }}
+          NOTIFICATION_PROFILE_NAME: ${{ steps.signing.outputs.notification_profile_name }}
         run: |
           ruby <<'RUBY'
           require 'xcodeproj'
@@ -188,6 +210,7 @@ jobs:
           profiles = {
             'ClashKing' => ENV.fetch('APP_PROFILE_NAME'),
             'WarWidgetExtension' => ENV.fetch('WIDGET_PROFILE_NAME'),
+            'NotificationService' => ENV.fetch('NOTIFICATION_PROFILE_NAME'),
           }
           profiles.each do |target_name, profile|
             target = project.targets.find { |candidate| candidate.name == target_name }
@@ -204,8 +227,6 @@ jobs:
 
       - name: Archive app and widget
         working-directory: expo/ios
-        env:
-          EXPO_PUBLIC_CK_API_ENV: production
         run: |
           xcodebuild \
             -workspace ClashKing.xcworkspace \
@@ -222,11 +243,13 @@ jobs:
         env:
           APP_PROFILE_NAME: ${{ steps.signing.outputs.app_profile_name }}
           WIDGET_PROFILE_NAME: ${{ steps.signing.outputs.widget_profile_name }}
+          NOTIFICATION_PROFILE_NAME: ${{ steps.signing.outputs.notification_profile_name }}
         run: |
           cp config/ios/ExportOptions.plist.template ios/ExportOptions.plist
           /usr/libexec/PlistBuddy -c "Set :teamID $APPLE_TEAM_ID" ios/ExportOptions.plist
           /usr/libexec/PlistBuddy -c "Set :provisioningProfiles:$APP_BUNDLE_ID $APP_PROFILE_NAME" ios/ExportOptions.plist
           /usr/libexec/PlistBuddy -c "Set :provisioningProfiles:$WIDGET_BUNDLE_ID $WIDGET_PROFILE_NAME" ios/ExportOptions.plist
+          /usr/libexec/PlistBuddy -c "Set :provisioningProfiles:$NOTIFICATION_BUNDLE_ID $NOTIFICATION_PROFILE_NAME" ios/ExportOptions.plist
           plutil -lint ios/ExportOptions.plist
 
       - name: Export IPA
@@ -242,19 +265,21 @@ jobs:
           cp "$IPA" build/ClashKing.ipa
 
       - name: Upload to TestFlight
-        if: inputs.track == 'beta'
+        if: inputs.track == 'alpha' || inputs.track == 'beta'
         env:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
-          mkdir -p "$HOME/.appstoreconnect/private_keys"
-          printf '%s' "$API_PRIVATE_KEY" > "$HOME/.appstoreconnect/private_keys/AuthKey_${API_KEY_ID}.p8"
-          xcrun altool --upload-app \
-            --type ios \
-            --file ios/build/ClashKing.ipa \
-            --apiKey "$API_KEY_ID" \
-            --apiIssuer "$API_ISSUER_ID"
+          gem install fastlane --no-document
+          ruby -rjson -e 'File.write(ARGV[0], JSON.generate({key_id: ENV.fetch("API_KEY_ID"), issuer_id: ENV.fetch("API_ISSUER_ID"), key: ENV.fetch("API_PRIVATE_KEY"), in_house: false}))' "$RUNNER_TEMP/app-store-api-key.json"
+          fastlane pilot upload \
+            --api_key_path "$RUNNER_TEMP/app-store-api-key.json" \
+            --app_identifier "$APP_BUNDLE_ID" \
+            --ipa ios/build/ClashKing.ipa \
+            --changelog "$(cat ../update-news/whatsnew-en-US)" \
+            --skip_waiting_for_build_processing true \
+            --distribute_external false
 
       - name: Submit production build for App Store review
         if: inputs.track == 'production'
@@ -281,7 +306,7 @@ jobs:
 
       - name: Report App Store Connect destination
         run: |
-          if [[ "${{ inputs.track }}" == beta ]]; then
+          if [[ "${{ inputs.track }}" != production ]]; then
             echo 'The uploaded build is available for TestFlight assignment.'
           else
             echo 'The uploaded build was submitted for App Store review.'

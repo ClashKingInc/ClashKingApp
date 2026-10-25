@@ -1,5 +1,9 @@
 import { ASSET_ORIGIN, resolveAssetUrl, assetPath } from '../core/assets/asset-origin';
-import { badgeImageSource, badgeTokenForUrl, subscribeBadgeTokens } from '../core/assets/badge-token-hints';
+import {
+  badgeImageSource,
+  badgeTokenForUrl,
+  subscribeBadgeTokens,
+} from '../core/assets/badge-token-hints';
 import { Image, type ImageProps, type ImageLoadEventData } from 'expo-image';
 import {
   useCallback,
@@ -10,11 +14,14 @@ import {
   type ReactNode,
 } from 'react';
 import { localImageCache } from '../core/assets/local-asset-cache';
-import { Platform, StyleSheet, PixelRatio, View } from 'react-native';
+import { Animated, Platform, StyleSheet, PixelRatio, View, type ViewStyle } from 'react-native';
 import { sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } from './image-delivery';
 
 import { ImageAssets } from '../core/assets/image-assets';
-import { useCKThemeMode } from './theme';
+import { clearHeaderArtworkCache, headerArtworkForUrl } from '../core/assets/header-artwork-cache';
+import { HeaderArtwork } from './header-artwork';
+import { useCKTheme, useCKThemeMode } from './theme';
+import { useSkeletonAppearance } from './skeleton-content';
 import {
   assetManifestRevision,
   manifestImage,
@@ -54,12 +61,7 @@ export function prefetchMobileImage(
           metadata &&
           candidate !== imageUrl &&
           candidate.startsWith(`${ASSET_ORIGIN}/`)
-            ? await localImageCache.resolve(
-                candidate,
-                assetPath(imageUrl),
-                metadata.sha,
-                () => {},
-              )
+            ? await localImageCache.resolve(candidate, assetPath(imageUrl), metadata.sha, () => {})
             : candidate;
         if (await Image.prefetch(uri, { cachePolicy: 'memory-disk' })) {
           rememberResolved(requested, candidate);
@@ -94,6 +96,7 @@ const subscribeCache = (listener: () => void) => {
 const getCacheRevision = () => cacheRevision;
 
 export async function clearMobileImageCache(): Promise<void> {
+  clearHeaderArtworkCache();
   if (Platform.OS !== 'web') await localImageCache.clear();
   const results = await Promise.all([Image.clearMemoryCache(), Image.clearDiskCache()]);
   if (results.some((result) => result === false))
@@ -105,6 +108,8 @@ export async function clearMobileImageCache(): Promise<void> {
 
 export interface MobileWebImageProps extends Omit<ImageProps, 'source' | 'onError'> {
   readonly imageUrl: string;
+  /** Keep known artwork visible while sibling values are loading. */
+  readonly skeleton?: boolean;
   readonly fallbackImageUrls?: readonly string[];
   readonly errorFallback?: ReactNode;
   readonly preserveAnimation?: boolean;
@@ -113,7 +118,38 @@ export interface MobileWebImageProps extends Omit<ImageProps, 'source' | 'onErro
 }
 
 /** Expo equivalent of Flutter's shared MobileWebImage resolution/fallback behavior. */
-export function MobileWebImage({
+export function MobileWebImage({ skeleton, ...props }: MobileWebImageProps) {
+  const appearance = useSkeletonAppearance();
+  const loading = appearance.loading && skeleton !== false;
+  const theme = useCKTheme();
+  if (loading) {
+    // Use the image's own geometry, without starting requests for placeholder
+    // URLs or allowing its eventual load to move the surrounding content.
+    return (
+      <Animated.View
+        style={[
+          props.style as ViewStyle,
+          { backgroundColor: theme.surfaceContainerHighest, opacity: appearance.opacity },
+        ]}
+      />
+    );
+  }
+  const header = headerArtworkForUrl(props.imageUrl);
+  if (header !== undefined) {
+    const {
+      imageUrl: _url,
+      fallbackImageUrls: _fallbacks,
+      errorFallback: _error,
+      preserveAnimation: _animation,
+      displaySize: _size,
+      ...imageProps
+    } = props;
+    return <HeaderArtwork {...imageProps} source={header} />;
+  }
+  return <LoadedMobileWebImage {...props} />;
+}
+
+function LoadedMobileWebImage({
   imageUrl,
   fallbackImageUrls = EMPTY_FALLBACKS,
   errorFallback,
@@ -178,7 +214,15 @@ export function MobileWebImage({
     () => mobileWebImageCandidates(requestedUrl, [originalUrl, ...fallbackImageUrls]),
     // Cache clearing must also retry previously failed candidates.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fallbackImageUrls, requestedUrl, originalUrl, revision, metadata?.sha, retryAttempt, badgeToken],
+    [
+      fallbackImageUrls,
+      requestedUrl,
+      originalUrl,
+      revision,
+      metadata?.sha,
+      retryAttempt,
+      badgeToken,
+    ],
   );
   const identity = `${badgeToken ?? ''}\u0000${retryAttempt}\u0000${revision}\u0000${metadata?.sha}\u0000${imageUrl}\u0000${candidates.join('\u0000')}`;
   const onLayout: NonNullable<ImageProps['onLayout']> = (event) => {
@@ -204,7 +248,13 @@ export function MobileWebImage({
       {...imageProps}
       // The exported empty-star asset is nearly white, just like an earned
       // star. Apply its semantic inactive color here so all battle views agree.
-      tintColor={imageUrl === ImageAssets.emptyStar ? (themeMode === 'dark' ? '#464852' : '#C8CBD2') : imageProps.tintColor}
+      tintColor={
+        imageUrl === ImageAssets.emptyStar
+          ? themeMode === 'dark'
+            ? '#464852'
+            : '#C8CBD2'
+          : imageProps.tintColor
+      }
       onLayout={onLayout}
       allowDownscaling={allowDownscaling}
       cachePolicy={cachePolicy}
@@ -268,12 +318,7 @@ function CandidateImage({
       if (active) setDownloaded({ candidate, file });
     };
     void localImageCache
-      .resolve(
-        candidate,
-        assetPath(originalUrl),
-        metadata.sha,
-        display,
-      )
+      .resolve(candidate, assetPath(originalUrl), metadata.sha, display)
       .then(display)
       .catch(() => {
         if (active) {

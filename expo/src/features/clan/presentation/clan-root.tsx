@@ -5,7 +5,7 @@ import { Linking, View } from 'react-native';
 import { defaultIsNetworkError } from '../../../core/app/startup-coordinator';
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { useI18n } from '../../../i18n';
-import { ClashHandoffDialog, ConfirmationDialog, Snackbar } from '../../../ui';
+import { ClashHandoffDialog, ConfirmationDialog, InfoDialog, Snackbar } from '../../../ui';
 import type { ClanNotificationControls } from './clan-notification-options';
 import type { ClanNotificationSettings } from '../../notifications/data/notification-preferences-service';
 import { useClashGameHandoff } from '../../../ui/use-clash-game-handoff';
@@ -32,6 +32,8 @@ import type { ClanSpringOrigin } from './clan-spring-transition';
 
 export interface ClanNavigationActions {
   readonly openPlayer: (player: Player) => void;
+  readonly openPlayerTag?: (tag: string) => void;
+  readonly openClanTag?: (tag: string) => void;
   readonly openWar: (clan: Clan, war: WarCwl) => void;
   readonly openHistoricalWar: (war: WarInfo) => void;
   readonly openCwl: (clan: Clan, war: WarCwl) => void;
@@ -76,6 +78,7 @@ export function ClanRoot({
   }
 
   const model = {
+    loading: runtime.players.isLoading || runtime.clans.isLoading || !runtime.bookmarks.loaded,
     ...buildClansPresentationModel({
       profiles: ownedClanProfiles(
         runtime.players.profiles,
@@ -95,6 +98,7 @@ export function ClanRoot({
     hydrateBookmarkedClans: (tags) => runtime.clans.loadAllClanData(tags, { notify: true }),
     loadClan: (tag) => runtime.clans.getClanAndWarData(tag),
     openClan: onOpenClan ?? setSelectedClan,
+    openClanTag: navigation.openClanTag,
     reorderLinkedClans: async (orderedTags) => {
       const accounts = runtime.accounts.accounts.map((account) => account.playerTag);
       const order = accountTagsForClanOrder(orderedTags, accounts, runtime.players.profiles);
@@ -119,10 +123,12 @@ export function ClanInfoRoot({
   clan,
   goBack,
   navigation,
+  loading = false,
 }: {
   readonly clan: Clan;
   readonly goBack: () => void;
   readonly navigation: ClanNavigationActions;
+  readonly loading?: boolean;
 }) {
   const runtime = useAppRuntime();
   const { locale, t } = useI18n();
@@ -130,6 +136,7 @@ export function ClanInfoRoot({
   const [snackbar, setSnackbar] = useState<string>();
   const notifications = useClanNotificationControls(runtime, setSnackbar);
   const [removeBookmark, setRemoveBookmark] = useState<string>();
+  const [cwlHistoryUnavailable, setCwlHistoryUnavailable] = useState(false);
   const handoff = useClashGameHandoff((url) => {
     void Linking.openURL(url).catch(() => setSnackbar(t('deepLinkFailedToOpenClan')));
   });
@@ -204,7 +211,10 @@ export function ClanInfoRoot({
             const latest = history[0];
             if (latest)
               navigation.openHistoricalCwl(nextClan, latest.season, latest.league ?? undefined);
-            else setSnackbar(t('cwlHistoryEmptyTitle'));
+            // Keep the current tab and scroll position. A proper informational
+            // modal anchors feedback to the viewport rather than the page's
+            // variable-height content, where the old toast appeared to float.
+            else setCwlHistoryUnavailable(true);
           })
           .catch(() => setSnackbar(t('errorNetworkTitle')));
       },
@@ -212,6 +222,7 @@ export function ClanInfoRoot({
       showMessage: setSnackbar,
       loadPlayer: (tag) => runtime.players.getPlayerAndClanData(tag),
       openPlayer: navigation.openPlayer,
+      openPlayerTag: navigation.openPlayerTag,
       loadJoinLeave: (nextClan) => loadClanJoinLeave(runtime.clans, nextClan),
       loadMoreJoinLeave: (nextClan, current) =>
         loadMoreClanJoinLeave(runtime.clans, nextClan, current),
@@ -236,6 +247,7 @@ export function ClanInfoRoot({
     <View style={{ flex: 1 }}>
       <ClanInfoScreen
         key={clanInfoStateKey(currentClan.tag)}
+        loading={loading}
         model={{ ...model, notifications }}
         actions={actions}
       />
@@ -254,6 +266,12 @@ export function ClanInfoRoot({
               .then(() => runtime.bookmarks.load())
               .catch(() => setSnackbar(t('generalFailed')));
         }}
+      />
+      <InfoDialog
+        visible={cwlHistoryUnavailable}
+        title={t('cwlHistoryEmptyTitle')}
+        message={t('cwlHistoryEmptyBody')}
+        onClose={() => setCwlHistoryUnavailable(false)}
       />
       <Snackbar avoidBottomNavigation message={snackbar} onDismiss={() => setSnackbar(undefined)} />
       <ClashHandoffDialog

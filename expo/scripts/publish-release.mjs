@@ -30,18 +30,20 @@ const version = process.env.CK_RELEASE_VERSION;
 const appVersion = process.env.CK_APP_VERSION;
 const track = process.env.CK_RELEASE_TRACK;
 const releaseType = process.env.CK_RELEASE_TYPE;
-if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-beta)?$/.test(version)) {
+if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:alpha|beta))?$/.test(version)) {
   throw new Error('CK_RELEASE_VERSION is invalid.');
 }
 if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(appVersion)) {
   throw new Error('CK_APP_VERSION must be a numeric semantic version.');
 }
-if (!['beta', 'production'].includes(track)) throw new Error('CK_RELEASE_TRACK is invalid.');
+if (!['alpha', 'beta', 'production'].includes(track))
+  throw new Error('CK_RELEASE_TRACK is invalid.');
 if (!['native', 'ota'].includes(releaseType)) throw new Error('CK_RELEASE_TYPE is invalid.');
-if ((track === 'beta') !== version.endsWith('-beta')) {
-  throw new Error('Beta versions must use -beta and production versions must not.');
+const expectedVersion = track === 'production' ? appVersion : `${appVersion}-${track}`;
+if (version !== expectedVersion) {
+  throw new Error('Release version must match the app version and selected track suffix.');
 }
-const patchVersion = Number(version.replace(/-beta$/, '').split('.')[2]);
+const patchVersion = Number(appVersion.split('.')[2]);
 if (
   (releaseType === 'native' && patchVersion !== 0) ||
   (releaseType === 'ota' && patchVersion === 0)

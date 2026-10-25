@@ -237,7 +237,18 @@ function equipmentSource(
     const ability = abilities
       .flatMap((item) => item.levels)
       .find((item) => item.level === intValue(raw.level) && 'damage' in item);
-    const damage = doubleValue(ability?.damage);
+    // Older published equipment exports embed the resolved ability in each
+    // equipment-level row. Never index by its internal `Level` (an ability tier).
+    // Prefer standalone metadata when supplied; do not fabricate missing damage.
+    const embedded =
+      abilities.length === 0 && Array.isArray(raw.abilities)
+        ? raw.abilities
+            .map(asRecord)
+            .find((value) => value && doubleValue(value.Damage ?? value.ActAsPenetratingDamage) > 0)
+        : undefined;
+    const damage = doubleValue(
+      ability?.damage ?? embedded?.Damage ?? embedded?.ActAsPenetratingDamage,
+    );
     if (damage <= 0) return undefined;
     return new DamageLevel({
       level: intValue(raw.level),

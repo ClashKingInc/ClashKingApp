@@ -10,6 +10,7 @@ import {
   CKText,
   MobileWebImage,
   Skeleton,
+  SkeletonContent,
   ckColors,
   ckRadius,
   ckSpacing,
@@ -54,7 +55,9 @@ export function HomeActivityCard({
     .sort()
     .join('|');
   const signature = tags + ':' + (refreshKey ?? '') + ':' + retry;
-  const data = loaded.signature === signature ? loaded.data : {};
+  // Refresh the same account scope in place; only a different account set
+  // lacks a matching snapshot and needs placeholders.
+  const data = loaded.signature.startsWith(tags + ':') ? loaded.data : {};
   useEffect(() => {
     let active = true;
     void mapWithConcurrencyLimit(
@@ -198,7 +201,6 @@ export function HomeActivityCard({
   );
   return (
     <HomeCardFrame
-      accent={accent}
       footer={
         accounts.length > 1 ? (
           <HomeAccountBar
@@ -223,7 +225,7 @@ export function HomeActivityCard({
         <View style={styles.header}>
           <MobileWebImage imageUrl={ImageAssets.calendar} style={styles.headerImage} />
           <View style={styles.headerText}>
-            <CKText role="titleSmall" style={styles.headerTitle}>
+            <CKText skeleton={false} role="titleSmall" style={styles.headerTitle}>
               {t('filtersLast30Days')}
             </CKText>
           </View>
@@ -239,13 +241,7 @@ export function HomeActivityCard({
             </CKText>
           </View>
         </View>
-        {loading ? (
-          <View style={styles.body} accessibilityLabel={t('generalLoading')}>
-            <Skeleton height={22} width="45%" />
-            <Skeleton height={44} />
-            <Skeleton height={70} />
-          </View>
-        ) : unavailable ? (
+        {unavailable ? (
           <View style={styles.body}>
             <CKText muted>{t('apiErrorServer')}</CKText>
             <Pressable
@@ -260,7 +256,7 @@ export function HomeActivityCard({
             </Pressable>
           </View>
         ) : (
-          <View style={styles.body}>
+          <SkeletonContent loading={loading} style={styles.body}>
             <View
               style={styles.chart}
               onLayout={(event) => setChartWidth(event.nativeEvent.layout.width)}
@@ -276,7 +272,9 @@ export function HomeActivityCard({
                   </CKText>
                 ) : null}
               </View>
-              {hasDaily ? (
+              {loading ? (
+                <Skeleton height={66} radius={4} />
+              ) : hasDaily ? (
                 <View style={styles.chartPlot}>
                   <Svg
                     width={chartWidth}
@@ -380,7 +378,7 @@ export function HomeActivityCard({
               ) : null}
             </View>
             <View style={styles.farming}>
-              <CKText muted role="labelMedium">
+              <CKText skeleton={false} muted role="labelMedium">
                 {t('playerBattlelogFarming')}
               </CKText>
               <View style={styles.resources}>
@@ -411,7 +409,7 @@ export function HomeActivityCard({
               )}
               {metric('upgradeLevels', sum('upgradeLevels'), ImageAssets.builderPotion)}
             </View>
-          </View>
+          </SkeletonContent>
         )}
       </View>
     </HomeCardFrame>

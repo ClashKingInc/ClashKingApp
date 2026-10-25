@@ -20,23 +20,33 @@ export function useDiscordServers(userId: string | undefined) {
   useEffect(() => {
     if (!enabled) return;
     let active = true;
-    void Effect.runPromise(
-      runtime.contractApi.execute(GuildsEndpoint, { path: {}, query: {}, body: {} }),
-    )
-      .then((servers) => {
-        if (active) setResult({ userId, servers, generation, error: false });
-      })
-      .catch(() => {
-        if (active)
-          setResult((current) => ({
-            userId,
-            servers: current.userId === userId ? current.servers : [],
-            generation,
-            error: true,
-          }));
-      });
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    const load = (attempt = 0) =>
+      void Effect.runPromise(
+        runtime.contractApi.execute(GuildsEndpoint, { path: {}, query: {}, body: {} }),
+      )
+        .then((servers) => {
+          if (active) setResult({ userId, servers, generation, error: false });
+        })
+        .catch(() => {
+          // A brief tunnel/Discord outage must not strand a fresh sign-in on an
+          // empty list. Keep any known servers and bound automatic retries.
+          if (active && attempt < 2) {
+            retry = setTimeout(() => load(attempt + 1), 1000 * (attempt + 1));
+            return;
+          }
+          if (active)
+            setResult((current) => ({
+              userId,
+              servers: current.userId === userId ? current.servers : [],
+              generation,
+              error: true,
+            }));
+        });
+    load();
     return () => {
       active = false;
+      clearTimeout(retry);
     };
   }, [runtime, userId, enabled, generation]);
   useEffect(() => {

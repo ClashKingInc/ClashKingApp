@@ -1,9 +1,7 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
-import { Image } from 'expo-image';
+import { modalOrientations } from '../../../ui/modal-orientations';
+import { HeaderArtwork } from '../../../ui/header-artwork';
 import type { ViewInstance } from 'react-native';
 import { useRef, useState } from 'react';
-import { TutorialTarget } from '../../tutorials/tutorial-ui';
-import { tutorials, TUTORIAL_CLAN_TAG } from '../../tutorials/tutorial-service';
 import {
   Modal,
   Platform,
@@ -40,6 +38,7 @@ import {
   PillSurface,
   ProfileHeaderAction,
   ProfileStatChip,
+  SkeletonContent,
   useCKTheme,
 } from '../../../ui';
 import { clanMemberCapacityLabel } from './contracts';
@@ -56,10 +55,12 @@ export function ClanInfoHeader({
   model,
   actions,
   selectedTab = 'members',
+  loading = false,
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
   selectedTab?: ClanInfoTabKey;
+  loading?: boolean;
 }) {
   const { clan } = model;
   const { t, locale } = useI18n();
@@ -162,9 +163,9 @@ export function ClanInfoHeader({
   return (
     <View testID="clan-header-hero" style={styles.hero}>
       <View testID="clan-header-backdrop" pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Image
+        <HeaderArtwork
           testID="clan-header-background-image"
-          source={require('../../../../assets/clashking/backgrounds/clan-clearing-v3.webp')}
+          source={require('../../../../assets/clashking/backgrounds/clan-clearing-v5-dark.webp')}
           cachePolicy="memory-disk"
           transition={0}
           style={StyleSheet.absoluteFill}
@@ -172,7 +173,6 @@ export function ClanInfoHeader({
           contentPosition="center"
         />
         {/* Keep artwork subdued and finish the fade behind the final chip row. */}
-        <View style={styles.imageDarken} />
         <HeroHeaderScrim variant="clan" />
       </View>
       <View style={[styles.actions, { paddingTop: insets.top }, desktop && styles.desktopActions]}>
@@ -182,167 +182,169 @@ export function ClanInfoHeader({
           icon={<ArrowLeft color="#FFF" />}
         />
         <View style={styles.actionSpacer} />
-        {model.ongoingWar ? (
-          <ProfileHeaderAction
-            label={model.ongoingWar === 'cwl' ? t('cwlOngoing') : t('warOngoing')}
-            onPress={() =>
-              model.ongoingWar === 'cwl' ? actions.openCwl(clan) : actions.openWar(clan)
-            }
-            icon={
-              <MobileWebImage
-                imageUrl={
-                  model.ongoingWar === 'cwl' ? ImageAssets.cwlSwordsNoBorder : ImageAssets.war
+        {!loading ? (
+          <>
+            {model.ongoingWar ? (
+              <ProfileHeaderAction
+                label={model.ongoingWar === 'cwl' ? t('cwlOngoing') : t('warOngoing')}
+                onPress={() =>
+                  model.ongoingWar === 'cwl' ? actions.openCwl(clan) : actions.openWar(clan)
                 }
-                style={styles.actionImage}
+                icon={
+                  <MobileWebImage
+                    imageUrl={
+                      model.ongoingWar === 'cwl' ? ImageAssets.cwlSwordsNoBorder : ImageAssets.war
+                    }
+                    style={styles.actionImage}
+                  />
+                }
               />
-            }
-          />
-        ) : null}
-        {discordCode ? (
-          <ProfileHeaderAction
-            label={t('generalDiscord')}
-            onPress={() =>
-              void actions
-                .openDiscord(discordCode)
-                .catch(() => actions.showMessage(t('errorCannotOpenLink')))
-            }
-            icon={<DiscordMark color="#FFF" size={22} />}
-          />
-        ) : null}
-        <ProfileHeaderAction
-          label={t('gameAssetsShare')}
-          onPress={() =>
-            void sharePageLink(
-              { kind: 'clan', tag: clan.tag, params: { tab: selectedTab } },
-              clan.name,
-            ).catch(() => actions.showMessage(t('errorCannotOpenLink')))
-          }
-          icon={<Share2 color="#FFF" />}
-        />
-        <ProfileHeaderAction
-          label={t('playerOpenInGame')}
-          onPress={() => actions.openClanInGame(clan)}
-          icon={<ExternalLink color="#FFF" />}
-        />
-        <TutorialTarget
-          id="bookmark"
-          offer={clan.tag === TUTORIAL_CLAN_TAG ? 'clanGuide' : undefined}
-        >
-          <ProfileHeaderAction
-            label={model.bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
-            onPress={() =>
-              void actions.toggleClanBookmark(clan).then(() => tutorials.event('bookmarked'))
-            }
-            icon={model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />}
-          />
-        </TutorialTarget>
-      </View>
-      <View style={[styles.body, desktop ? styles.desktopBody : styles.mobileBody]}>
-        <View style={[styles.identity, desktop && styles.desktopIdentity]}>
-          <ClanSpringTarget part="badge">
-            <MobileWebImage
-              imageUrl={clan.badgeUrls.smallest}
-              cachePolicy="memory-disk"
-              transition={0}
-              style={[styles.badge, desktop && styles.desktopBadge]}
+            ) : null}
+            {discordCode ? (
+              <ProfileHeaderAction
+                label={t('generalDiscord')}
+                onPress={() =>
+                  void actions
+                    .openDiscord(discordCode)
+                    .catch(() => actions.showMessage(t('errorCannotOpenLink')))
+                }
+                icon={<DiscordMark color="#FFF" size={22} />}
+              />
+            ) : null}
+            <ProfileHeaderAction
+              label={t('gameAssetsShare')}
+              onPress={() =>
+                void sharePageLink(
+                  { kind: 'clan', tag: clan.tag, params: { tab: selectedTab } },
+                  clan.name,
+                ).catch(() => actions.showMessage(t('errorCannotOpenLink')))
+              }
+              icon={<Share2 color="#FFF" />}
             />
-          </ClanSpringTarget>
-          <View style={desktop ? styles.desktopIdentityCopy : styles.centered}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`${clan.name}. ${t('generalCopiedToClipboard')}`}
-              testID="clan-header-name-copy"
-              onPress={copyClanTag}
-            >
-              <ClanSpringTarget part="name">
-                <CKText numberOfLines={1} style={styles.name}>
-                  {clan.name}
-                </CKText>
-              </ClanSpringTarget>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`${clan.tag}. ${t('generalCopiedToClipboard')}`}
-              onPress={copyClanTag}
-              style={styles.tagRow}
-            >
-              <CKText style={styles.tag}>{clan.tag}</CKText>
-              <Copy size={13} color="#FFFFFF9E" />
-            </Pressable>
-            <View style={[styles.meta, desktop && styles.desktopMeta]}>
-              {clan.location?.countryCode ? (
-                <MobileWebImage
-                  imageUrl={ImageAssets.flag(clan.location.countryCode)}
-                  style={styles.flag}
-                />
-              ) : null}
-              {clan.location?.name ? (
-                <CKText style={styles.metaText}>{clan.location.name}</CKText>
-              ) : null}
-              {clan.location?.name && clan.labels.length ? (
-                <CKText style={styles.metaDivider}>|</CKText>
-              ) : null}
-              {clan.labels.slice(0, 3).map((label) => {
-                const uri = label.smallIconUrl ?? label.mediumIconUrl ?? label.tinyIconUrl;
-                return uri ? (
-                  <MobileWebImage key={label.id} imageUrl={uri} style={styles.labelIcon} />
-                ) : (
-                  <Shield key={label.id} size={16} color="#FFFFFFC2" />
-                );
-              })}
-              {description ? (
-                <Pressable
-                  ref={descriptionTriggerRef}
-                  testID="clan-description-trigger"
-                  accessibilityRole="button"
-                  accessibilityLabel={t('generalExpand')}
-                  onPress={showDescription}
-                  hitSlop={8}
-                >
-                  <MoreHorizontal size={18} color="#FFFFFFC2" />
-                </Pressable>
-              ) : null}
+            <ProfileHeaderAction
+              label={t('playerOpenInGame')}
+              onPress={() => actions.openClanInGame(clan)}
+              icon={<ExternalLink color="#FFF" />}
+            />
+            <ProfileHeaderAction
+              label={model.bookmarked ? t('generalRemoveBookmark') : t('generalBookmark')}
+              onPress={() => void actions.toggleClanBookmark(clan)}
+              icon={
+                model.bookmarked ? <BookmarkCheck color="#2F8CFF" /> : <Bookmark color="#FFF" />
+              }
+            />
+          </>
+        ) : null}
+      </View>
+      <SkeletonContent loading={loading} style={{ display: 'contents' }}>
+        <View style={[styles.body, desktop ? styles.desktopBody : styles.mobileBody]}>
+          <View style={[styles.identity, desktop && styles.desktopIdentity]}>
+            <ClanSpringTarget part="badge">
+              <MobileWebImage
+                imageUrl={clan.badgeUrls.smallest}
+                cachePolicy="memory-disk"
+                transition={0}
+                style={[styles.badge, desktop && styles.desktopBadge]}
+              />
+            </ClanSpringTarget>
+            <View style={desktop ? styles.desktopIdentityCopy : styles.centered}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`${clan.name}. ${t('generalCopiedToClipboard')}`}
+                testID="clan-header-name-copy"
+                onPress={copyClanTag}
+              >
+                <ClanSpringTarget part="name">
+                  <CKText numberOfLines={1} style={styles.name}>
+                    {clan.name}
+                  </CKText>
+                </ClanSpringTarget>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`${clan.tag}. ${t('generalCopiedToClipboard')}`}
+                onPress={copyClanTag}
+                style={styles.tagRow}
+              >
+                <CKText style={styles.tag}>{clan.tag}</CKText>
+                <Copy size={13} color="#FFFFFF9E" />
+              </Pressable>
+              <View style={[styles.meta, desktop && styles.desktopMeta]}>
+                {clan.location?.countryCode ? (
+                  <MobileWebImage
+                    imageUrl={ImageAssets.flag(clan.location.countryCode)}
+                    style={styles.flag}
+                  />
+                ) : null}
+                {clan.location?.name ? (
+                  <CKText style={styles.metaText}>{clan.location.name}</CKText>
+                ) : null}
+                {clan.location?.name && clan.labels.length ? (
+                  <CKText style={styles.metaDivider}>|</CKText>
+                ) : null}
+                {clan.labels.slice(0, 3).map((label) => {
+                  const uri = label.smallIconUrl ?? label.mediumIconUrl ?? label.tinyIconUrl;
+                  return uri ? (
+                    <MobileWebImage key={label.id} imageUrl={uri} style={styles.labelIcon} />
+                  ) : (
+                    <Shield key={label.id} size={16} color="#FFFFFFC2" />
+                  );
+                })}
+                {description ? (
+                  <Pressable
+                    ref={descriptionTriggerRef}
+                    testID="clan-description-trigger"
+                    accessibilityRole="button"
+                    accessibilityLabel={t('generalExpand')}
+                    onPress={showDescription}
+                    hitSlop={8}
+                  >
+                    <MoreHorizontal size={18} color="#FFFFFFC2" />
+                  </Pressable>
+                ) : null}
+              </View>
+            </View>
+          </View>
+          <View style={styles.stats}>
+            <View style={styles.leagues}>
+              <LeagueTile
+                leagueName={warLeagueLabel.replace(' League', '')}
+                subtitle={t('cwlTitle')}
+                imageUrl={ImageAssets.getWarLeagueImage(warLeagueAssetName)}
+                onPress={() => actions.openCwl(clan)}
+              />
+              <LeagueTile
+                leagueName={capitalLeagueLabel.replace(' League', '')}
+                subtitle={`${clan.clanCapitalPoints}`}
+                subtitleImageUrl={ImageAssets.capitalTrophy}
+                imageUrl={
+                  clan.capitalLeague
+                    ? ImageAssets.getCapitalLeagueImage(capitalLeagueAssetName)
+                    : ImageAssets.capitalTrophy
+                }
+                onPress={() => actions.openCapital(clan)}
+              />
+            </View>
+            <View style={styles.quickStats}>
+              {[primaryStats, secondaryStats].map((stats, index) => (
+                <View key={index} style={styles.quickStatRow}>
+                  {stats.map((stat) => (
+                    <ProfileStatChip
+                      key={`${stat.label}:${stat.value}`}
+                      label={stat.label}
+                      value={stat.value}
+                      icon={stat.image}
+                      iconElement={stat.iconElement}
+                    />
+                  ))}
+                </View>
+              ))}
             </View>
           </View>
         </View>
-        <View style={styles.stats}>
-          <View style={styles.leagues}>
-            <LeagueTile
-              leagueName={warLeagueLabel.replace(' League', '')}
-              subtitle={t('cwlTitle')}
-              imageUrl={ImageAssets.getWarLeagueImage(warLeagueAssetName)}
-              onPress={() => actions.openCwl(clan)}
-            />
-            <LeagueTile
-              leagueName={capitalLeagueLabel.replace(' League', '')}
-              subtitle={`${clan.clanCapitalPoints}`}
-              subtitleImageUrl={ImageAssets.capitalTrophy}
-              imageUrl={
-                clan.capitalLeague
-                  ? ImageAssets.getCapitalLeagueImage(capitalLeagueAssetName)
-                  : ImageAssets.capitalTrophy
-              }
-              onPress={() => actions.openCapital(clan)}
-            />
-          </View>
-          <View style={styles.quickStats}>
-            {[primaryStats, secondaryStats].map((stats, index) => (
-              <View key={index} style={styles.quickStatRow}>
-                {stats.map((stat) => (
-                  <ProfileStatChip
-                    key={`${stat.label}:${stat.value}`}
-                    label={stat.label}
-                    value={stat.value}
-                    icon={stat.image}
-                    iconElement={stat.iconElement}
-                  />
-                ))}
-              </View>
-            ))}
-          </View>
-        </View>
-      </View>
-      <Modal supportedOrientations={modalOrientations}
+      </SkeletonContent>
+      <Modal
+        supportedOrientations={modalOrientations}
         visible={descriptionVisible}
         transparent
         animationType="fade"
@@ -433,7 +435,6 @@ const styles = StyleSheet.create({
   // The destination bar supplies the same 8px top gap as Player Info; avoid a
   // second gutter here. The opaque gradient tail handles the artwork seam.
   hero: { width: '100%', paddingBottom: 0, backgroundColor: '#000', overflow: 'hidden' },
-  imageDarken: { ...StyleSheet.absoluteFill, backgroundColor: '#00000094' },
   actions: {
     minHeight: 48,
     paddingHorizontal: 12,

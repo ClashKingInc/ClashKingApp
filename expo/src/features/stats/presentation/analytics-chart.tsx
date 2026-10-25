@@ -1,7 +1,14 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { PanResponder, Pressable, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line, Polyline, Text as SvgText } from 'react-native-svg';
-import { CKText, ckColors, colorWithAlpha, useCKTheme } from '../../../ui';
+import {
+  CKText,
+  Skeleton,
+  ckColors,
+  colorWithAlpha,
+  useCKTheme,
+  useSkeletonContent,
+} from '../../../ui';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { StatsChartFrame } from './stats-chart-frame';
 import { aggregateChartSeries } from './chart-aggregation';
@@ -26,11 +33,21 @@ const LEFT = 40,
   TOP = 14,
   WIDTH = 360;
 
-export function chartSelectionIndex(x: number, width: number, count: number): number {
+export function chartSelectionIndex(
+  x: number,
+  width: number,
+  count: number,
+  bounds = { left: LEFT, right: RIGHT, width: WIDTH },
+): number {
   if (count <= 1 || width <= 0) return 0;
   return Math.max(
     0,
-    Math.min(count - 1, Math.round((((x / width) * WIDTH - LEFT) / (RIGHT - LEFT)) * (count - 1))),
+    Math.min(
+      count - 1,
+      Math.round(
+        (((x / width) * bounds.width - bounds.left) / (bounds.right - bounds.left)) * (count - 1),
+      ),
+    ),
   );
 }
 
@@ -60,9 +77,12 @@ export function AnalyticsLineChart({
   formatAxisValue,
   formatValue,
   formatDay,
+  formatAxisDay,
   formatPointDetail,
   showTitle = true,
   exportable = true,
+  xDomain = 'calendar',
+  responsiveAxes = false,
 }: {
   readonly title: string;
   readonly series: readonly AnalyticsSeries[];
@@ -76,11 +96,18 @@ export function AnalyticsLineChart({
   readonly formatAxisValue?: (value: number) => string;
   readonly formatValue?: (value: number) => string;
   readonly formatDay?: (day: string) => string;
+  readonly formatAxisDay?: (day: string) => string;
   readonly formatPointDetail?: (seriesKey: string, day: string) => string | undefined;
   readonly showTitle?: boolean;
   readonly exportable?: boolean;
+  /** Non-daily series (for example raid weekends) must select observations,
+   * not synthetic days inserted between their reporting periods. */
+  readonly xDomain?: 'calendar' | 'observations';
+  /** Use unscaled axis text and measured-width gutters for small inset charts. */
+  readonly responsiveAxes?: boolean;
 }) {
   const theme = useCKTheme();
+  const contentLoading = useSkeletonContent();
   const { t, locale } = useI18n();
   const [width, setWidth] = useState(0);
   const [selectedDay, setSelectedDay] = useState<string>();
@@ -105,10 +132,10 @@ export function AnalyticsLineChart({
   const touchStart = useRef<{ x: number; y: number } | undefined>(undefined);
   const days = useMemo(
     () =>
-      series === sourceSeries
+      series === sourceSeries && xDomain === 'calendar'
         ? analyticsChartDays(series)
         : [...new Set(series.flatMap((line) => line.points.map((point) => point.day)))].sort(),
-    [series, sourceSeries],
+    [series, sourceSeries, xDomain],
   );
   const visible = series.filter((line) => !hidden.includes(line.key));
   const values = visible.flatMap((line) =>
@@ -119,21 +146,64 @@ export function AnalyticsLineChart({
   const low = values.length ? Math.min(...values) : 0;
   const high = values.length ? Math.max(...values) : 1;
   const padding = Math.max(percent ? 2 : 1, (high - low) * 0.15);
-  const minimum = includeZero ? axisMinimum : Math.max(axisMinimum, Math.floor(low - padding));
-  const maximum = Math.max(
-    minimum + 1,
+  const rawMinimum = includeZero ? axisMinimum : Math.max(axisMinimum, Math.floor(low - padding));
+  const rawMaximum = Math.max(
+    rawMinimum + 1,
     Math.min(percent ? 100 : Infinity, Math.ceil(high + padding)),
   );
-  const bottom = height - 30;
-  const x = (index: number) => LEFT + (index / Math.max(1, days.length - 1)) * (RIGHT - LEFT);
+  // Round display bounds to useful intervals rather than labeling arbitrary
+  // data-derived fractions such as 607,813.5. Keep legacy chart scales intact.
+  const rawStep = (rawMaximum - rawMinimum) / 3;
+  const magnitude = 10 ** Math.floor(Math.log10(rawStep));
+  const step =
+    ([1, 2, 2.5, 5, 10].find((factor) => factor * magnitude >= rawStep) ?? 10) * magnitude;
+  const minimum = responsiveAxes
+    ? Math.max(axisMinimum, Math.floor(rawMinimum / step) * step)
+    : rawMinimum;
+  const maximum = responsiveAxes ? Math.ceil(rawMaximum / step) * step : rawMaximum;
+  const ticks = responsiveAxes
+    ? Array.from(
+        { length: Math.round((maximum - minimum) / step) + 1 },
+        (_, index) => minimum + index * step,
+      )
+    : [minimum, (minimum + maximum) / 2, maximum];
+  const formatTick = (value: number) =>
+    formatAxisValue?.(value) ??
+    formatValue?.(value) ??
+    Math.round(value).toLocaleString(toIntlLocale(locale));
+  const tickLabels = ticks.map(formatTick);
+  // Compact notation can collapse nearby ticks to the same label. Fall back
+  // to exact rounded values rather than presenting an ambiguous value axis.
+  const yLabels =
+    responsiveAxes && new Set(tickLabels).size < tickLabels.length
+      ? ticks.map((value) =>
+          value.toLocaleString(toIntlLocale(locale), { maximumFractionDigits: 2 }),
+        )
+      : tickLabels;
+  const axisFontSize = responsiveAxes ? 13 : 12;
+  const labelWidth = (label: string) =>
+    [...label].reduce(
+      (total, character) =>
+        total +
+        axisFontSize * (character === ' ' ? 0.35 : character.codePointAt(0)! > 255 ? 1.05 : 0.68),
+      0,
+    );
+  const viewWidth = responsiveAxes && width > 0 ? width : WIDTH;
+  const left = responsiveAxes
+    ? Math.max(36, ...yLabels.map((label) => labelWidth(label) + 10))
+    : LEFT;
+  const right = responsiveAxes ? viewWidth - 4 : RIGHT;
+  const top = responsiveAxes ? 8 : TOP;
+  const bottom = height - (responsiveAxes ? 32 : 30);
+  const x = (index: number) => left + (index / Math.max(1, days.length - 1)) * (right - left);
   const y = (value: number) =>
     Math.max(
-      TOP,
+      top,
       Math.min(
         bottom,
         inverted
-          ? TOP + ((value - minimum) / (maximum - minimum)) * (bottom - TOP)
-          : bottom - ((value - minimum) / (maximum - minimum)) * (bottom - TOP),
+          ? top + ((value - minimum) / (maximum - minimum)) * (bottom - top)
+          : bottom - ((value - minimum) / (maximum - minimum)) * (bottom - top),
       ),
     );
   const activeIndex = Math.max(
@@ -141,12 +211,14 @@ export function AnalyticsLineChart({
     selectedDay && days.includes(selectedDay) ? days.indexOf(selectedDay) : days.length - 1,
   );
   const selected = selectedDay && days.includes(selectedDay) ? selectedDay : undefined;
-  const legendDay = selected ?? days.findLast((day) =>
-    series.some((line) => {
-      const value = pointMaps.get(line.key)?.get(day);
-      return value != null && Number.isFinite(value);
-    }),
-  );
+  const legendDay =
+    selected ??
+    days.findLast((day) =>
+      series.some((line) => {
+        const value = pointMaps.get(line.key)?.get(day);
+        return value != null && Number.isFinite(value);
+      }),
+    );
   const dayLabel = (day: string) =>
     formatDay?.(day) ??
     new Date(`${day.length === 7 ? `${day}-01` : day}T12:00:00Z`).toLocaleDateString(
@@ -163,12 +235,47 @@ export function AnalyticsLineChart({
       percent
         ? `${value.toLocaleString(toIntlLocale(locale), { maximumFractionDigits: 1 })}%`
         : Math.round(value).toLocaleString(toIntlLocale(locale), { notation: 'compact' }));
+  const axisDayLabel = (day: string) => formatAxisDay?.(day) ?? dayLabel(day);
+  const candidateIndexes = [
+    0,
+    Math.round((days.length - 1) / 3),
+    Math.round(((days.length - 1) * 2) / 3),
+    days.length - 1,
+  ].filter((value, index, all) => all.indexOf(value) === index);
+  const labelBounds = (index: number) => {
+    const textWidth = labelWidth(axisDayLabel(days[index] ?? ''));
+    const start =
+      index === 0
+        ? x(index)
+        : index === days.length - 1
+          ? x(index) - textWidth
+          : x(index) - textWidth / 2;
+    return { start, end: start + textWidth };
+  };
+  const xTicks =
+    responsiveAxes &&
+    days.length > 1 &&
+    labelBounds(0).end + 16 > labelBounds(days.length - 1).start
+      ? [days.length - 1]
+      : responsiveAxes
+        ? candidateIndexes.reduce<number[]>((accepted, index) => {
+            if (index === 0 || index === days.length - 1) return [...accepted, index];
+            const previous = accepted.at(-1) ?? 0;
+            const current = labelBounds(index);
+            return current.start >= labelBounds(previous).end + 16 &&
+              current.end + 16 <= labelBounds(days.length - 1).start
+              ? [...accepted, index]
+              : accepted;
+          }, [])
+        : candidateIndexes;
   const selectDay = (day: string | undefined) => {
     dismissCharts();
     setSelectedDay(day);
   };
   const selectAt = (position: number) =>
-    selectDay(days[chartSelectionIndex(position, width, days.length)]);
+    selectDay(
+      days[chartSelectionIndex(position, width, days.length, { left, right, width: viewWidth })],
+    );
   const responder = PanResponder.create({
     onStartShouldSetPanResponder: () => false,
     onMoveShouldSetPanResponder: (_, gesture) =>
@@ -231,7 +338,9 @@ export function AnalyticsLineChart({
           })}
         </View>
       ) : null}
-      {values.length ? (
+      {contentLoading ? (
+        <Skeleton height={height} radius={12} />
+      ) : values.length ? (
         <View
           {...responder.panHandlers}
           onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
@@ -267,12 +376,23 @@ export function AnalyticsLineChart({
             )
           }
         >
-          <Svg width="100%" height={height} viewBox={`0 0 ${WIDTH} ${height}`} pointerEvents="none">
-            {[minimum, (minimum + maximum) / 2, maximum].map((value) => (
+          <Svg
+            width="100%"
+            height={height}
+            viewBox={`0 0 ${viewWidth} ${height}`}
+            pointerEvents="none"
+          >
+            {ticks.map((value, index) => (
               <ViewlessTick
                 key={value}
                 y={y(value)}
-                label={formatAxisValue?.(value) ?? format(value)}
+                label={
+                  responsiveAxes ? yLabels[index]! : (formatAxisValue?.(value) ?? format(value))
+                }
+                left={left}
+                right={right}
+                fontSize={axisFontSize}
+                labelGap={responsiveAxes ? 10 : 7}
                 color={theme.onSurfaceVariant}
                 grid={colorWithAlpha(theme.onSurface, 0.1)}
               />
@@ -349,7 +469,7 @@ export function AnalyticsLineChart({
               <Line
                 x1={x(activeIndex)}
                 x2={x(activeIndex)}
-                y1={TOP}
+                y1={top}
                 y2={bottom}
                 stroke={theme.onSurfaceVariant}
                 strokeOpacity={0.35}
@@ -371,25 +491,18 @@ export function AnalyticsLineChart({
                   );
                 })
               : null}
-            {[
-              0,
-              Math.round((days.length - 1) / 3),
-              Math.round(((days.length - 1) * 2) / 3),
-              days.length - 1,
-            ]
-              .filter((v, i, a) => a.indexOf(v) === i)
-              .map((index) => (
-                <SvgText
-                  key={index}
-                  x={x(index)}
-                  y={height - 5}
-                  textAnchor={index === 0 ? 'start' : index === days.length - 1 ? 'end' : 'middle'}
-                  fill={theme.onSurfaceVariant}
-                  fontSize={12}
-                >
-                  {days[index] ? dayLabel(days[index]!) : null}
-                </SvgText>
-              ))}
+            {xTicks.map((index) => (
+              <SvgText
+                key={index}
+                x={x(index)}
+                y={responsiveAxes ? bottom + 22 : height - 5}
+                textAnchor={index === 0 ? 'start' : index === days.length - 1 ? 'end' : 'middle'}
+                fill={theme.onSurfaceVariant}
+                fontSize={axisFontSize}
+              >
+                {days[index] ? axisDayLabel(days[index]!) : null}
+              </SvgText>
+            ))}
           </Svg>
           {selected ? (
             <View
@@ -400,7 +513,7 @@ export function AnalyticsLineChart({
                 {
                   left: Math.max(
                     0,
-                    Math.min(Math.max(0, width - 180), (x(activeIndex) / WIDTH) * width - 90),
+                    Math.min(Math.max(0, width - 180), (x(activeIndex) / viewWidth) * width - 90),
                   ),
                   top: Math.max(
                     2,
@@ -462,16 +575,24 @@ function ViewlessTick({
   label,
   color,
   grid,
+  left = LEFT,
+  right = RIGHT,
+  fontSize = 12,
+  labelGap = 7,
 }: {
   y: number;
   label: string;
   color: string;
   grid: string;
+  left?: number;
+  right?: number;
+  fontSize?: number;
+  labelGap?: number;
 }) {
   return (
     <>
-      <Line x1={LEFT} x2={RIGHT} y1={y} y2={y} stroke={grid} />
-      <SvgText x={LEFT - 7} y={y + 4} textAnchor="end" fill={color} fontSize={12}>
+      <Line x1={left} x2={right} y1={y} y2={y} stroke={grid} />
+      <SvgText x={left - labelGap} y={y + 4} textAnchor="end" fill={color} fontSize={fontSize}>
         {label}
       </SvgText>
     </>

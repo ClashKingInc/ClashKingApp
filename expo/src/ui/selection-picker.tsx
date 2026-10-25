@@ -1,4 +1,4 @@
-import { modalOrientations } from "./modal-orientations";
+import { modalOrientations } from './modal-orientations';
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   FlatList,
@@ -47,6 +47,7 @@ export function SelectionPicker<T extends string>({
   fillWidth = false,
   plain = false,
   wrapLabel = false,
+  iconOnly = false,
   onOpen,
   externallyManaged = false,
 }: {
@@ -63,6 +64,8 @@ export function SelectionPicker<T extends string>({
   plain?: boolean;
   /** Opt in for identity pickers where truncating a full name loses important context. */
   wrapLabel?: boolean;
+  /** Hide only the selected label; menu labels and accessibility stay intact. */
+  iconOnly?: boolean;
   onOpen?: () => void;
   externallyManaged?: boolean;
 }) {
@@ -72,17 +75,19 @@ export function SelectionPicker<T extends string>({
   const controlContent = (
     <>
       {tintIcon(leading ?? selected?.icon, theme.onSurfaceVariant)}
-      <CKText
-        role="rowTitle"
-        numberOfLines={wrapLabel ? undefined : 1}
-        // A parent can stretch a picker without setting fillWidth. Always
-        // consume spare row width so trailing controls stay at the far edge.
-        // Keep an auto basis: flex:1 uses a zero basis and can hide labels in
-        // intrinsically sized controls. fillWidth only sizes the outer host.
-        style={styles.controlLabel}
-      >
-        {selected?.label}
-      </CKText>
+      {!iconOnly ? (
+        <CKText
+          role="rowTitle"
+          numberOfLines={wrapLabel ? undefined : 1}
+          // A parent can stretch a picker without setting fillWidth. Always
+          // consume spare row width so trailing controls stay at the far edge.
+          // Keep an auto basis: flex:1 uses a zero basis and can hide labels in
+          // intrinsically sized controls. fillWidth only sizes the outer host.
+          style={styles.controlLabel}
+        >
+          {selected?.label}
+        </CKText>
+      ) : null}
       {positionLabel ? (
         <View
           testID="destination-picker-position"
@@ -206,7 +211,8 @@ export function SelectionPickerModal<T extends string>({
     onClose();
   };
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       animationType="fade"
       navigationBarTranslucent
       onRequestClose={close}

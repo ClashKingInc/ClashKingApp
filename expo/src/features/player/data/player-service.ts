@@ -89,6 +89,11 @@ export class PlayerService {
   private readonly rankedCache = new Map<string, RankedLeagueData>();
   private readonly rankedLoads = new Map<string, Promise<RankedLeagueData>>();
   private readonly rankedCacheTimes = new Map<string, number>();
+  private readonly rankedDetails = new Map<
+    string,
+    { at: number; rows: readonly PlayerBattlelogEntry[] }
+  >();
+  private readonly rankedDetailsLoads = new Map<string, Promise<readonly PlayerBattlelogEntry[]>>();
   private readonly rankedGroupLoads = new Map<string, Promise<JsonRecord | null>>();
   private readonly rankedGroupCache = new Map<string, { value: JsonRecord | null; at: number }>();
   private readonly legendBattlelogCache = new Map<string, PlayerLegendBattlelog | null>();
@@ -502,6 +507,8 @@ export class PlayerService {
     this.profileJsonLoads.clear();
     this.officialLoads.clear();
     this.rankedCacheTimes.clear();
+    this.rankedDetails.clear();
+    this.rankedDetailsLoads.clear();
     this.rankedGroupLoads.clear();
     this.rankedGroupCache.clear();
     this.rankedCache.clear();
@@ -826,6 +833,89 @@ export class PlayerService {
       if (this.rankedLoads.get(key) === load) this.rankedLoads.delete(key);
     }
   }
+  loadRankedBattleDetails(rawTag: string): Promise<readonly PlayerBattlelogEntry[]> {
+    const tag = canonicalTag(rawTag);
+    const cached = this.rankedDetails.get(tag);
+    if (cached && Date.now() - cached.at < 60_000) return Promise.resolve(cached.rows);
+    const pending = this.rankedDetailsLoads.get(tag);
+    if (pending) return pending;
+    const generation = this.rankedGeneration;
+    const load = Effect.runPromise(
+      this.api.execute(ProxyPlayerBattlelogEndpoint, {
+        path: { playerTag: tag },
+        query: {},
+        body: {},
+      }),
+    )
+      .then((response) => {
+        const rows = records(response.items)
+          .map(PlayerBattlelogEntry.fromOfficial)
+          .filter((entry) => entry.mode === 'ranked');
+        if (generation === this.rankedGeneration) {
+          if (this.rankedDetails.size >= 64)
+            this.rankedDetails.delete(this.rankedDetails.keys().next().value!);
+          this.rankedDetails.set(tag, { at: Date.now(), rows });
+        }
+        return rows;
+      })
+      .catch(() => [] as readonly PlayerBattlelogEntry[])
+      .finally(() => {
+        if (this.rankedDetailsLoads.get(tag) === load) this.rankedDetailsLoads.delete(tag);
+      });
+    this.rankedDetailsLoads.set(tag, load);
+    return load;
+  }
+
+  async loadRankedSeasonBattlelog(
+    rawTag: string,
+    season: number,
+    onBattlesReady?: (log: RankedLeagueBattlelog) => void,
+  ): Promise<RankedLeagueBattlelog | null> {
+    const tag = canonicalTag(rawTag);
+    if (!Number.isSafeInteger(season) || season <= 0) return null;
+    const response = await optionalApiResponse(
+      Effect.runPromise(
+        this.api.execute(RankedBattlelogEndpoint, {
+          path: { playerTag: tag, seasonId: String(season) },
+          query: {},
+          body: {},
+        }),
+      ),
+    );
+    // Older history entries lack a group tag. Still validate player and week;
+    // never merge a response from a different account or season.
+    const log = parseRankedBattlelog(response, tag, null, season);
+    if (!log) return null;
+    // Armies are optional enrichment: a second endpoint must not delay the
+    // selected week's valid battle records or keep its skeleton on screen.
+    onBattlesReady?.(log);
+    const [armies, details] = await Promise.all([
+      this.loadRankedArmyHistory(tag, [season]),
+      this.loadRankedBattleDetails(tag),
+    ]);
+    return log.withAttackArmies([...armies, ...details]);
+  }
+  private async loadRankedArmyHistory(tag: string, seasons: readonly number[]) {
+    const valid = seasons.filter((season) => Number.isSafeInteger(season) && season > 0);
+    if (!valid.length) return [];
+    // This is optional enrichment. A history outage must not hide otherwise
+    // valid official standings and battles.
+    const response = await Effect.runPromise(
+      this.api.execute(PlayerBattlelogHistoryEndpoint, {
+        path: { playerTag: tag },
+        query: {
+          'time[after]': new Date(Math.min(...valid) * 1000).toISOString().slice(0, 10),
+          'time[before]': new Date((Math.max(...valid) + 7 * 86400) * 1000)
+            .toISOString()
+            .slice(0, 10),
+        },
+        body: {},
+      }),
+    ).catch(() => null);
+    return records(response?.items)
+      .map(PlayerBattlelogEntry.fromHistory)
+      .filter((entry) => entry.mode === 'ranked');
+  }
   private loadRankedGroup(
     tag: string,
     group: string | null,
@@ -919,27 +1009,37 @@ export class PlayerService {
             ),
           )
         : Promise.resolve(null);
-    const [historyResponse, tiers, currentResponse, previousResponse, currentLog, previousLog] =
-      await Promise.all([
-        scope === 'detail'
-          ? optionalApiResponse(
-              Effect.runPromise(
-                this.api.execute(ProxyPlayerLeagueHistoryEndpoint, {
-                  path: { playerTag: tag },
-                  query: {},
-                  body: {},
-                }),
-              ),
-            )
-          : Promise.resolve(null),
-        scope === 'detail' || (currentTag && currentSeason > 0)
-          ? this.loadLeagueTiers()
-          : Promise.resolve(new Map<number, RankedLeagueTier>()),
-        loadGroup(currentTag, currentSeason),
-        scope === 'detail' ? loadGroup(previousTag, previousSeason) : Promise.resolve(null),
-        loadBattlelog(currentTag, currentSeason),
-        loadBattlelog(previousTag, previousSeason),
-      ]);
+    const [
+      historyResponse,
+      tiers,
+      currentResponse,
+      previousResponse,
+      currentLog,
+      previousLog,
+      armyHistory,
+    ] = await Promise.all([
+      scope === 'detail'
+        ? optionalApiResponse(
+            Effect.runPromise(
+              this.api.execute(ProxyPlayerLeagueHistoryEndpoint, {
+                path: { playerTag: tag },
+                query: {},
+                body: {},
+              }),
+            ),
+          )
+        : Promise.resolve(null),
+      scope === 'detail' || (currentTag && currentSeason > 0)
+        ? this.loadLeagueTiers()
+        : Promise.resolve(new Map<number, RankedLeagueTier>()),
+      loadGroup(currentTag, currentSeason),
+      scope === 'detail' ? loadGroup(previousTag, previousSeason) : Promise.resolve(null),
+      loadBattlelog(currentTag, currentSeason),
+      loadBattlelog(previousTag, previousSeason),
+      scope === 'detail'
+        ? this.loadRankedArmyHistory(tag, [currentSeason, previousSeason])
+        : Promise.resolve([]),
+    ]);
     const historyJson: JsonRecord = historyResponse
         ? (historyResponse as unknown as JsonRecord)
         : {},
@@ -985,8 +1085,8 @@ export class PlayerService {
       history,
       current,
       previous,
-      currentBattlelog,
-      previousBattlelog,
+      currentBattlelog?.withAttackArmies(armyHistory) ?? null,
+      previousBattlelog?.withAttackArmies(armyHistory) ?? null,
     );
   }
   private async loadLeagueTiers() {
@@ -1060,6 +1160,7 @@ export class PlayerService {
     const json = await this.playerWarHistory(normalized, filter);
     return buildPlayerWarStatsFromHistory(records(json.items), normalized, filter);
   }
+
   async loadWarFilterPresets() {
     const raw = await this.storage?.getString(STORAGE_KEYS.warStatsFilterPresets);
     if (!raw) return [];

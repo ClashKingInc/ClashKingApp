@@ -15,7 +15,7 @@ import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
 import {
   CKText,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   GlassControlSurface,
   ResponsiveGrid,
@@ -23,7 +23,13 @@ import {
   Surface,
   useCKTheme,
 } from '../../../ui';
-import type { ClanJoinLeave, ClanWarLog, JoinLeaveEvent, WarLogDetails } from '../models';
+import {
+  JoinLeaveEvent,
+  WarLogDetails,
+  ClanDetails,
+  type ClanJoinLeave,
+  type ClanWarLog,
+} from '../models';
 import { relativeWarTime } from '../../war/presentation/presentation-utils';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
 import {
@@ -155,12 +161,6 @@ export function ClanJoinLeaveTab({
   const cards = events.map((event, index) => (
     <JoinLeaveCard key={`${event.time.toISOString()}:${event.tag}:${index}`} event={event} />
   ));
-  if (loading && !current)
-    return (
-      <View style={styles.center}>
-        <PageSkeleton kind="list" />
-      </View>
-    );
   return (
     <View style={styles.tab}>
       <ClanFilterBar
@@ -202,7 +202,9 @@ export function ClanJoinLeaveTab({
           </>
         }
       />
-      {events.length === 0 ? (
+      {loading && !current ? (
+        <JoinLeaveLoading />
+      ) : events.length === 0 ? (
         <ClanTabEmpty
           title={
             movement !== 'all'
@@ -226,8 +228,21 @@ export function ClanJoinLeaveTab({
       ) : (
         <View style={styles.list}>{cards}</View>
       )}
-      {loadingMore ? <PageSkeleton kind="list" rows={1} /> : null}
+      {loadingMore ? <JoinLeaveLoading rows={1} /> : null}
     </View>
+  );
+}
+
+function JoinLeaveLoading({ rows = 3 }: { rows?: number }) {
+  return (
+    <SkeletonContent loading style={styles.list}>
+      {Array.from({ length: rows }, (_, index) => (
+        <JoinLeaveCard
+          key={index}
+          event={new JoinLeaveEvent('join', null, new Date(0), '', 'Player name', 16)}
+        />
+      ))}
+    </SkeletonContent>
   );
 }
 
@@ -367,9 +382,34 @@ export function ClanWarLogTab({
         />
       ) : null}
       {loading && !log ? (
-        <View style={styles.center}>
-          <PageSkeleton kind="war" />
-        </View>
+        <SkeletonContent loading style={styles.list}>
+          {[0, 1, 2].map((index) => (
+            <WarLogCard
+              key={index}
+              clanTag={model.clan.tag}
+              item={
+                new WarLogDetails(
+                  'win',
+                  model.clan.tag,
+                  new Date(0),
+                  15,
+                  2,
+                  new ClanDetails(
+                    model.clan.tag,
+                    model.clan.name,
+                    model.clan.badgeUrls,
+                    model.clan.clanLevel,
+                    20,
+                    40,
+                    90,
+                    0,
+                  ),
+                  new ClanDetails('', 'Opponent clan', model.clan.badgeUrls, 10, 20, 30, 80, 0),
+                )
+              }
+            />
+          ))}
+        </SkeletonContent>
       ) : failed ? (
         <ClanTabEmpty
           title={t('generalError')}

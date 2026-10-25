@@ -1,4 +1,5 @@
-import { type ViewInstance,
+import {
+  type ViewInstance,
   type ScrollViewInstance,
   Animated,
   Alert,
@@ -12,9 +13,17 @@ import { type ViewInstance,
   type GestureResponderEvent,
 } from 'react-native';
 import { LegendHistoryList } from './legend-history';
-import { Image } from 'expo-image';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, CalendarDays, ChartLine, ChevronRight, Download, History, Share2 } from 'lucide-react-native';
+import { HeaderArtwork } from '../../../ui/header-artwork';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import {
+  ArrowLeft,
+  CalendarDays,
+  ChartLine,
+  ChevronRight,
+  Download,
+  History,
+  Share2,
+} from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
 import {
@@ -23,7 +32,7 @@ import {
   ProfileTabs,
   EmptyState,
   ErrorState,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   PillSurface,
   ProfileHeaderAction,
@@ -251,6 +260,12 @@ export function LegendsScreen({
   const { width } = useWindowDimensions();
   const horizontal = Math.max(16, (width - 1120) / 2);
   const current = data?.currentDay;
+  const hasSectionContent = (section: LegendsPage) =>
+    section === 'daily'
+      ? !!current && data?.selectedDay === selectedDay
+      : section === 'season'
+        ? !!data?.recentDays.length
+        : !!data?.history.length;
   const clanIdentity = player ? playerProfileClanIdentity(player) : null;
   const [page, setPage] = useState<LegendsPage>('daily');
   const [settledPage, setSettledPage] = useState<LegendsPage>('daily');
@@ -285,16 +300,29 @@ export function LegendsScreen({
       <ScrollView
         ref={scroll}
         scrollEventThrottle={16}
-        onScroll={(event) => { scrollY.current = event.nativeEvent.contentOffset.y; }}
+        onScroll={(event) => {
+          scrollY.current = event.nativeEvent.contentOffset.y;
+        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => void onRefresh()} />
         }
         contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}
       >
-        <View testID="legends-hero" onLayout={(event) => { headerHeight.current = event.nativeEvent.layout.height; }} style={[styles.hero, { minHeight: 238 + insets.top }]}>
-          <Image source={require('../../../../assets/clashking/backgrounds/legends-pekka-classic-v1.webp')} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition="center" transition={0} />
-          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: '#00000080' }]} />
-          <HeroHeaderScrim variant="ranked" />
+        <View
+          testID="legends-hero"
+          onLayout={(event) => {
+            headerHeight.current = event.nativeEvent.layout.height;
+          }}
+          style={[styles.hero, { minHeight: 238 + insets.top }]}
+        >
+          <HeaderArtwork
+            source={require('../../../../assets/clashking/backgrounds/legends-pekka-classic-v1.webp')}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            contentPosition="center"
+            transition={0}
+          />
+          <HeroHeaderScrim variant="ranked" edgeColor={theme.background} />
           <View
             style={[
               styles.heroContent,
@@ -399,8 +427,14 @@ export function LegendsScreen({
           />
           <View
             onTouchStart={() => blockPrimarySwipe(true)}
-            onTouchEnd={() => { blockPrimarySwipe(false); setCalendarInteraction(false); }}
-            onTouchCancel={() => { blockPrimarySwipe(false); setCalendarInteraction(false); }}
+            onTouchEnd={() => {
+              blockPrimarySwipe(false);
+              setCalendarInteraction(false);
+            }}
+            onTouchCancel={() => {
+              blockPrimarySwipe(false);
+              setCalendarInteraction(false);
+            }}
           >
             <PagerView
               ref={pager}
@@ -408,8 +442,12 @@ export function LegendsScreen({
               scrollEnabled={sectionSwipeEnabled}
               layoutDirection={isRtl ? 'rtl' : 'ltr'}
               testID="legends-section-pager"
-              style={{ height: Math.max(pageHeights[page] ?? 600, pageHeights[settledPage] ?? 600) }}
-              onPageScroll={(event) => tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)}
+              style={{
+                height: Math.max(pageHeights[page] ?? 600, pageHeights[settledPage] ?? 600),
+              }}
+              onPageScroll={(event) =>
+                tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)
+              }
               onPageSelected={(event) => {
                 const next = LEGENDS_PAGES[event.nativeEvent.position];
                 if (!next) return;
@@ -418,27 +456,64 @@ export function LegendsScreen({
               }}
             >
               {LEGENDS_PAGES.map((section) => (
-                <View key={section} collapsable={false} style={{ flex: 1 }}
+                <View
+                  key={section}
+                  collapsable={false}
+                  style={{ flex: 1 }}
                   aria-hidden={section !== page}
                   accessibilityElementsHidden={section !== page}
-                  importantForAccessibility={section !== page ? 'no-hide-descendants' : 'auto'}>
-                  <View style={styles.sectionPage} onLayout={(event) => {
-                    const height = Math.ceil(event.nativeEvent.layout.height);
-                    if (height > 0) setPageHeights((old) => old[section] === height ? old : { ...old, [section]: height });
-                  }}>
+                  importantForAccessibility={section !== page ? 'no-hide-descendants' : 'auto'}
+                >
+                  <View
+                    style={styles.sectionPage}
+                    onLayout={(event) => {
+                      const height = Math.ceil(event.nativeEvent.layout.height);
+                      if (height > 0)
+                        setPageHeights((old) =>
+                          old[section] === height ? old : { ...old, [section]: height },
+                        );
+                    }}
+                  >
                     {section === 'daily' ? (
-                      <LegendDayNavigation day={selectedDay} onSelect={onSelectDay}
-                        today={currentLegendDay()} days={data?.recentDays ?? []}
-                        rank={data?.selectedDay === selectedDay ? data.historicalRank?.globalRank : undefined} />
+                      <LegendDayNavigation
+                        day={selectedDay}
+                        onSelect={onSelectDay}
+                        today={currentLegendDay()}
+                        days={data?.recentDays ?? []}
+                        rank={
+                          data?.selectedDay === selectedDay
+                            ? data.historicalRank?.globalRank
+                            : undefined
+                        }
+                      />
                     ) : null}
-                    {loading && !data ? <PageSkeleton kind="stats" /> : error ? (
-                      <ErrorState title={t('apiErrorServer')} actionLabel={t('sideRefresh')} onAction={() => void onRefresh()} />
+                    {loading && !hasSectionContent(section) ? (
+                      <LegendContentLoading section={section} player={player} day={selectedDay} />
+                    ) : error && !hasSectionContent(section) ? (
+                      <ErrorState
+                        title={t('apiErrorServer')}
+                        actionLabel={t('sideRefresh')}
+                        onAction={() => void onRefresh()}
+                      />
                     ) : data ? (
-                      section === 'season' ? <LegendRecentSummary data={data} onCalendarInteraction={setCalendarInteraction} />
-                        : section === 'history' ? <LegendHistoryList history={data.history} />
-                          : loading && data.selectedDay !== selectedDay ? <PageSkeleton kind="war" />
-                            : current ? <LegendBattlePanel data={current} onOpenOpponent={onOpenOpponent} />
-                              : <EmptyState title={t('legendsNotInLeague')} body={t('legendsNoDataToday')} style={styles.currentDayEmptyState} />
+                      section === 'season' ? (
+                        <LegendRecentSummary
+                          data={data}
+                          onCalendarInteraction={setCalendarInteraction}
+                        />
+                      ) : section === 'history' ? (
+                        <LegendHistoryList history={data.history} />
+                      ) : loading && data.selectedDay !== selectedDay ? (
+                        <LegendContentLoading section="daily" player={player} day={selectedDay} />
+                      ) : current ? (
+                        <LegendBattlePanel data={current} onOpenOpponent={onOpenOpponent} />
+                      ) : (
+                        <EmptyState
+                          title={t('legendsNotInLeague')}
+                          body={t('legendsNoDataToday')}
+                          style={styles.currentDayEmptyState}
+                        />
+                      )
                     ) : null}
                   </View>
                 </View>
@@ -451,7 +526,71 @@ export function LegendsScreen({
   );
 }
 
-function LegendRecentSummary({ data, onCalendarInteraction }: {
+function LegendContentLoading({
+  section,
+  player,
+  day,
+}: {
+  section: LegendsPage;
+  player?: Player;
+  day: string;
+}) {
+  const battles = [0, 1, 2].map(
+    () =>
+      new PlayerLegendBattle(
+        40,
+        false,
+        new Date(0),
+        180,
+        player?.townHallLevel ?? 16,
+        '',
+        'Opponent player',
+        player?.townHallLevel ?? 16,
+        3,
+        100,
+      ),
+  );
+  const log = new PlayerLegendBattlelog(
+    player?.tag ?? '',
+    day,
+    new Date(0),
+    new Date(86_400_000),
+    true,
+    120,
+    -120,
+    0,
+    battles,
+    battles,
+  );
+  const history = ['2026-01', '2025-12', '2025-11'].map(
+    (season) => new PlayerLegendHistoryEntry(season, null, null, 5000, 100, 100, 100),
+  );
+  const data = new PlayerLegendLeagueData(
+    player?.tag ?? '',
+    player?.name ?? 'Player name',
+    player?.townHallLevel ?? 16,
+    player?.trophies ?? 5000,
+    player?.bestTrophies ?? 5000,
+    log,
+    history,
+  );
+  return (
+    <SkeletonContent loading>
+      {section === 'daily' ? (
+        <LegendBattlePanel data={log} />
+      ) : section === 'history' ? (
+        <LegendHistoryList history={history} />
+      ) : (
+        <LegendRecentSummary data={data} onCalendarInteraction={() => undefined} />
+      )}
+    </SkeletonContent>
+  );
+}
+
+function LegendRecentSummary({
+  data,
+  onCalendarInteraction,
+}: {
   readonly data: PlayerLegendLeagueData;
   readonly onCalendarInteraction: (active: boolean) => void;
 }) {
@@ -459,14 +598,17 @@ function LegendRecentSummary({ data, onCalendarInteraction }: {
   const summary = legendsShareSummary(data);
   const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
   const popular = popularLegendItems(data.seasonArmyShareCodes);
-  const activeContribution = selectedContribution ?? summary.dailyContributions.at(-1)?.key ?? null;
-  const detailDay = data.recentDays.find((entry) => entry.day === activeContribution);
+  const activeContribution = summary.dailyContributions.some(
+    (day) => day.key === selectedContribution,
+  )
+    ? selectedContribution
+    : (summary.dailyContributions.at(-1)?.key ?? null);
   const seasonRange = legendSeasonDateRange(data.seasonStart, data.seasonEnd, data.selectedDay);
   const dateFormat = new Intl.DateTimeFormat(toIntlLocale(locale), { dateStyle: 'medium' });
   return (
     <View style={styles.seasonContent} testID="legend-recent-summary">
       <View style={styles.row}>
-        <CKText role="sectionTitle" style={styles.grow}>
+        <CKText skeleton={false} role="sectionTitle" style={styles.grow}>
           {t('statsSeasonStats')}
         </CKText>
         <CKText muted role="metadata">
@@ -492,38 +634,37 @@ function LegendRecentSummary({ data, onCalendarInteraction }: {
           points={data.recentDays.map((day) => ({ day: day.day, value: day.globalRank ?? null }))}
         />
       </Surface>
-      {summary.dailyContributions.length ? (
-        <Surface radius={ckRadius.tile} style={styles.recentSummary}>
-          <CKText role="titleMedium">{t('legendsTrophyGrid')}</CKText>
-          <View onTouchStart={() => onCalendarInteraction(true)}
-            onTouchEnd={() => onCalendarInteraction(false)}
-            onTouchCancel={() => onCalendarInteraction(false)}>
-            <ContributionCalendar
-              days={summary.dailyContributions}
-              selectedKey={activeContribution}
-              onSelect={setSelectedContribution}
-            />
-          </View>
-          <View style={styles.contributionDetail}>
-            <CKText role="rowTitle">{detailDay?.day ?? t('generalDetails')}</CKText>
-            {detailDay ? (
-              <View style={styles.row}>
-                <CKText muted role="metadata">
-                  {detailDay.trophyChange > 0 ? '+' : ''}
-                  {detailDay.trophyChange}
+      {data.recentDays.length ? (
+        <SeasonDayTable
+          days={data.recentDays}
+          selectedDay={activeContribution}
+          onSelectDay={setSelectedContribution}
+          header={
+            summary.dailyContributions.length ? (
+              <View style={styles.contributionSection}>
+                <CKText skeleton={false} role="titleMedium">
+                  {t('legendsTrophyGrid')}
                 </CKText>
-                <CKText muted role="metadata">
-                  {t('legendsGlobalRankTitle')} ·{' '}
-                  {detailDay.globalRank ? `#${detailDay.globalRank.toLocaleString()}` : '—'}
-                </CKText>
+                <View
+                  onTouchStart={() => onCalendarInteraction(true)}
+                  onTouchEnd={() => onCalendarInteraction(false)}
+                  onTouchCancel={() => onCalendarInteraction(false)}
+                >
+                  <ContributionCalendar
+                    days={summary.dailyContributions}
+                    selectedKey={activeContribution}
+                    onSelect={setSelectedContribution}
+                  />
+                </View>
               </View>
-            ) : null}
-          </View>
-        </Surface>
+            ) : undefined
+          }
+        />
       ) : null}
-      {data.recentDays.length ? <SeasonDayTable days={data.recentDays} /> : null}
       <Surface radius={ckRadius.tile} style={styles.recentSummary}>
-        <CKText role="titleMedium">{t('legendsPopularArmyItems')}</CKText>
+        <CKText skeleton={false} role="titleMedium">
+          {t('legendsPopularArmyItems')}
+        </CKText>
         {popular.length ? (
           <View style={styles.popularItems}>
             {popular.map((entry) => (
@@ -568,30 +709,36 @@ function HeroSeasonSummary({
   return (
     <>
       <View style={styles.heroChips}>
-      <HeroChip
-        imageUrl={
-          location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet
-        }
-        label={t('sideLocation')}
-        value={location?.name ?? '—'}
-      />
-      <HeroChip imageUrl={ImageAssets.trophies} label={t('rankedLeagueTrophies')}
-        value={trophies.toLocaleString(toIntlLocale(locale))} />
-      <HeroChip imageUrl={ImageAssets.bestTrophies} label={t('legendsGlobalRankTitle')}
-        value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'} />
-      <HeroChip
-        imageUrl={ImageAssets.attackStar}
-        label={t('legendsHitrate')}
-        value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'}
-      />
+        <HeroChip
+          imageUrl={
+            location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet
+          }
+          label={t('sideLocation')}
+          value={location?.name ?? '—'}
+        />
+        <HeroChip
+          imageUrl={ImageAssets.trophies}
+          label={t('rankedLeagueTrophies')}
+          value={trophies.toLocaleString(toIntlLocale(locale))}
+        />
+        <HeroChip
+          imageUrl={ImageAssets.bestTrophies}
+          label={t('legendsGlobalRankTitle')}
+          value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'}
+        />
+        <HeroChip
+          imageUrl={ImageAssets.attackStar}
+          label={t('legendsHitrate')}
+          value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'}
+        />
       </View>
       {favorite ? (
         <View style={styles.favoriteChipRow}>
-        <HeroChip
-          imageUrl={favorite?.item.imageUrl ?? ImageAssets.defaultImage}
-          label={favorite.item.name}
-          value={t('legendsPopularTroop')}
-        />
+          <HeroChip
+            imageUrl={favorite?.item.imageUrl ?? ImageAssets.defaultImage}
+            label={favorite.item.name}
+            value={t('legendsPopularTroop')}
+          />
         </View>
       ) : null}
     </>
@@ -641,7 +788,9 @@ function LegendPerformanceComparisons({ data }: { readonly data: PlayerLegendLea
         : t('statsLegendLeagueOne');
   return (
     <View style={styles.comparisons} testID="legend-performance-comparisons">
-      <CKText role="titleMedium">{t('statsPerformance')}</CKText>
+      <CKText skeleton={false} role="titleMedium">
+        {t('statsPerformance')}
+      </CKText>
       <PerformanceComparisonPanel
         comparisons={data.comparisons}
         playerName={data.playerName}
@@ -779,13 +928,19 @@ export function legendContributionRows(days: readonly LegendContribution[], colu
   );
 }
 
+// Rendering, wrapping and scrub hit-testing must share the same pitch.
+// Both cell and gap are 75% of their previous size (22px + 4px).
+const CONTRIBUTION_CELL = 16.5;
+const CONTRIBUTION_GAP = 3;
+const CONTRIBUTION_PITCH = CONTRIBUTION_CELL + CONTRIBUTION_GAP;
+
 export function legendContributionAtPoint(
   rows: readonly (readonly (LegendContribution | null | undefined)[])[],
   x: number,
   y: number,
 ) {
-  const column = Math.floor(x / 26);
-  const row = Math.floor(y / 26);
+  const column = Math.floor(x / CONTRIBUTION_PITCH);
+  const row = Math.floor(y / CONTRIBUTION_PITCH);
   return rows[row]?.[column] ?? null;
 }
 
@@ -802,7 +957,7 @@ function ContributionCalendar({
   const theme = useCKTheme();
   const gridRef = useRef<ViewInstance>(null);
   const [width, setWidth] = useState(0);
-  const columns = Math.max(1, Math.floor((width - 16 + 4) / 26));
+  const columns = Math.max(1, Math.floor((width - 16 + CONTRIBUTION_GAP) / CONTRIBUTION_PITCH));
   const rows = legendContributionRows(days, width ? columns : 12);
   const selectFromPoint = (event: GestureResponderEvent) => {
     const nativeEvent = event.nativeEvent as GestureResponderEvent['nativeEvent'] & {
@@ -887,30 +1042,55 @@ function ContributionCalendar({
   );
 }
 
-export function SeasonDayTable({ days }: { readonly days: readonly PlayerLegendDaySummary[] }) {
+export function SeasonDayTable({
+  days,
+  header,
+  selectedDay,
+  onSelectDay,
+}: {
+  readonly days: readonly PlayerLegendDaySummary[];
+  readonly header?: ReactNode;
+  readonly selectedDay?: string | null;
+  readonly onSelectDay?: (day: string) => void;
+}) {
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Surface radius={ckRadius.tile} style={styles.dayTable}>
+    <Surface radius={ckRadius.tile} style={styles.dayTable} testID="legend-season-days">
+      {header}
       <View style={styles.dayTableRow}>
-        <CKText muted role="metadata" style={styles.dayColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.dayColumn}>
           {t('statsByDay')}
         </CKText>
-        <CKText muted role="metadata" style={styles.numberColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.numberColumn}>
           {t('rankedLeagueAttacks')}
         </CKText>
-        <CKText muted role="metadata" style={styles.numberColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.numberColumn}>
           {t('rankedLeagueDefenses')}
         </CKText>
         <CKText muted role="metadata" style={styles.netColumn}>
           +/-
         </CKText>
-        <CKText muted role="metadata" style={styles.rankColumn}>
+        <CKText skeleton={false} muted role="metadata" style={styles.rankColumn}>
           {t('legendsGlobalRankTitle')}
         </CKText>
       </View>
       {[...days].reverse().map((day) => (
-        <View key={day.day} style={styles.dayTableRow}>
+        <Pressable
+          key={day.day}
+          onPress={onSelectDay ? () => onSelectDay(day.day) : undefined}
+          accessibilityRole={onSelectDay ? 'button' : undefined}
+          accessibilityState={{ selected: selectedDay === day.day }}
+          testID={`legend-season-day-${day.day}`}
+          style={[
+            styles.dayTableRow,
+            styles.dayDataRow,
+            selectedDay === day.day && {
+              backgroundColor: colorWithAlpha(theme.primary, 0.12),
+              borderStartColor: theme.primary,
+            },
+          ]}
+        >
           <CKText role="metadata" style={styles.dayColumn}>
             {day.day.slice(5)}
           </CKText>
@@ -941,7 +1121,7 @@ export function SeasonDayTable({ days }: { readonly days: readonly PlayerLegendD
           <CKText role="metadata" style={styles.rankColumn}>
             {day.globalRank ? `#${day.globalRank.toLocaleString()}` : '—'}
           </CKText>
-        </View>
+        </Pressable>
       ))}
     </Surface>
   );
@@ -1049,8 +1229,14 @@ const styles = StyleSheet.create({
   heroIdentity: { alignItems: 'center', gap: 2 },
   leagueIdentity: { width: 104, height: 104 },
   townHallBadgeShell: {
-    position: 'absolute', left: -2, bottom: 0, width: 38, height: 38,
-    borderRadius: 19, padding: 3, backgroundColor: 'rgba(24,24,24,.82)',
+    position: 'absolute',
+    left: -2,
+    bottom: 0,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    padding: 3,
+    backgroundColor: 'rgba(24,24,24,.82)',
   },
   townHallBadge: { width: 32, height: 32 },
   clanLine: {
@@ -1099,25 +1285,39 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   recentSummary: { padding: 14, gap: 12 },
-  contributionGrid: { width: '100%', gap: 4, paddingVertical: 4, paddingHorizontal: 8 },
-  contributionRow: { flexDirection: 'row', gap: 4 },
+  contributionSection: { gap: 8, paddingBottom: 6 },
+  contributionGrid: {
+    width: '100%',
+    gap: CONTRIBUTION_GAP,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  contributionRow: { flexDirection: 'row', gap: CONTRIBUTION_GAP },
   contributionCell: {
-    width: 22,
-    height: 22,
-    borderRadius: 4,
+    width: CONTRIBUTION_CELL,
+    height: CONTRIBUTION_CELL,
+    borderRadius: 3,
     borderWidth: 1,
     borderColor: 'transparent',
     alignItems: 'center',
     gap: 2,
   },
-  contributionPlaceholder: { width: 22, height: 22 },
+  contributionPlaceholder: { width: CONTRIBUTION_CELL, height: CONTRIBUTION_CELL },
   perfectContributionCell: { backgroundColor: '#E7B946', borderColor: '#E7B946' },
-  contributionDetail: { minHeight: 54, justifyContent: 'center', gap: 2 },
   popularItems: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   popularItem: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   popularItemImage: { width: 48, height: 48 },
   dayTable: { padding: 14, gap: 4 },
-  dayTableRow: { minHeight: 38, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  dayTableRow: {
+    minHeight: 38,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 8,
+    borderStartWidth: 2,
+    borderStartColor: 'transparent',
+  },
+  dayDataRow: { minHeight: 44, borderRadius: 10 },
   dayColumn: { flex: 1.1 },
   numberColumn: { flex: 1, textAlign: 'right' },
   netColumn: { flex: 0.85, textAlign: 'right' },

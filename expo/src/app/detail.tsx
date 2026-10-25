@@ -7,7 +7,7 @@ import {
   notifyNativeSecondaryRemoved,
   subscribeNativeSecondaryLayer,
 } from '../core/app/native-secondary-navigation';
-import { PageSkeleton, useCKTheme } from '../ui';
+import { LoadingIndicator, useCKTheme } from '../ui';
 
 export default function NativeSecondaryRoute() {
   const theme = useCKTheme();
@@ -48,7 +48,7 @@ export default function NativeSecondaryRoute() {
     <View style={[styles.root, { backgroundColor: theme.background }]}>
       {content ?? (
         <View style={styles.loading}>
-          <PageSkeleton kind="profile" showHeader />
+          <LoadingIndicator />
         </View>
       )}
     </View>

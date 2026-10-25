@@ -51,6 +51,7 @@ export interface LegendsWidgetPayload {
   readonly mode?: 'ranked' | 'legends';
   readonly destinationUrl?: string;
   readonly periodLabel?: string;
+  readonly locale?: string;
   readonly attacksLimit?: number;
   readonly defensesLimit?: number;
   readonly tag: string;
@@ -197,6 +198,7 @@ export function buildRankedWidgetPayload(
   return {
     schemaVersion: LEGENDS_WIDGET_SCHEMA_VERSION,
     mode: 'ranked',
+    locale,
     destinationUrl: `clashking://ranked?player=${tag.slice(1)}`,
     periodLabel: `${periodFormatter.format(start)} – ${periodFormatter.format(end)}`,
     tag,

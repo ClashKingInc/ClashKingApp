@@ -17,7 +17,14 @@ import DraggableFlatList, {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
-import { EmptyState, ResponsiveGrid, Surface, ckRadius, useCKTheme } from '../../../ui';
+import {
+  EmptyState,
+  ResponsiveGrid,
+  SkeletonContent,
+  Surface,
+  ckRadius,
+  useCKTheme,
+} from '../../../ui';
 import { PlayerRosterControl } from '../../player/presentation/players-screen';
 import { ClanRosterCard } from './clan-card';
 import type { ClanSpringOrigin } from './clan-spring-transition';
@@ -86,9 +93,7 @@ export function ClansScreen({
     mode === 'linked' ? !item.bookmarked : item.bookmarked,
   );
   useEffect(() => {
-    const missing = roster.missingClanTags.filter(
-      (tag) => !requestedBookmarks.current.has(tag),
-    );
+    const missing = roster.missingClanTags.filter((tag) => !requestedBookmarks.current.has(tag));
     if (missing.length === 0) return;
     missing.forEach((tag) => requestedBookmarks.current.add(tag));
     void actions.hydrateBookmarkedClans(missing);
@@ -99,6 +104,7 @@ export function ClansScreen({
       else actions.openClan(item.clan);
       return;
     }
+    if (actions.openClanTag) return actions.openClanTag(item.tag);
     try {
       actions.openClan(await actions.loadClan(item.tag));
     } catch {
@@ -106,12 +112,16 @@ export function ClansScreen({
     }
   };
   const cards = entries.map((item) => (
-    <ClanRosterCard
+    <SkeletonContent
       key={`${item.bookmarked ? 'bookmark' : 'linked'}:${item.tag}`}
-      item={item}
-      notifications={model.notifications}
-      onOpen={(origin) => void open(item, origin)}
-    />
+      loading={!!model.loading && !item.clan}
+    >
+      <ClanRosterCard
+        item={item}
+        notifications={model.notifications}
+        onOpen={(origin) => void open(item, origin)}
+      />
+    </SkeletonContent>
   ));
   const reorder = ({ data, from, to }: { data: typeof entries; from: number; to: number }) => {
     if (from === to) return;
@@ -132,7 +142,29 @@ export function ClansScreen({
       />
     </View>
   );
-  const emptyRoster = (
+  const emptyRoster = model.loading ? (
+    <SkeletonContent loading style={[styles.roster, { gap: 12 }]}>
+      {[0, 1, 2].map((index) => (
+        <ClanRosterCard
+          key={index}
+          item={{
+            tag: '',
+            name: 'Clan name',
+            badgeUrl: ImageAssets.clanCastle,
+            members: 50,
+            warLeague: '',
+            clanPoints: 10000,
+            countryCode: '',
+            locationName: '',
+            type: '',
+            accountCount: 1,
+            bookmarked: mode === 'bookmarked',
+          }}
+          onOpen={() => undefined}
+        />
+      ))}
+    </SkeletonContent>
+  ) : (
     <Surface radius={ckRadius.control}>
       <EmptyState
         title={mode === 'linked' ? t('clanNone') : t('generalNoDataAvailable')}
@@ -201,13 +233,15 @@ export function ClansScreen({
             <ScaleDecorator activeScale={1.015}>
               <DragJiggle active={params.isActive}>
                 <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
-                  <ClanRosterCard
-                    item={params.item}
-                    notifications={model.notifications}
-                    onOpen={(origin) => void open(params.item, origin)}
-                    onLongPress={params.drag}
-                    dragTestID={`clan-roster-card-${params.item.tag}`}
-                  />
+                  <SkeletonContent loading={!!model.loading && !params.item.clan}>
+                    <ClanRosterCard
+                      item={params.item}
+                      notifications={model.notifications}
+                      onOpen={(origin) => void open(params.item, origin)}
+                      onLongPress={params.drag}
+                      dragTestID={`clan-roster-card-${params.item.tag}`}
+                    />
+                  </SkeletonContent>
                 </View>
               </DragJiggle>
             </ScaleDecorator>

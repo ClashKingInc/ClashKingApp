@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
@@ -14,13 +14,23 @@ import {
 } from 'lucide-react-native';
 
 import { useI18n } from '../../../i18n';
-import { CKText, LoadingIndicator, Surface, ckRadius, ckSpacing, useCKTheme } from '../../../ui';
+import {
+  CKText,
+  LoadingIndicator,
+  Surface,
+  ckRadius,
+  ckSpacing,
+  colorWithAlpha,
+  useCKTheme,
+} from '../../../ui';
 import type { PrivacyPresentationActions } from './contracts';
 import { SettingsPage } from './settings-components';
 import { ProfileOptionSwitch } from '../../../ui/profile-option-switch';
 
 export function privacyColumnCount(platform: string, viewportWidth: number): 1 | 2 {
-  return platform === 'web' && viewportWidth >= 900 && Math.min(viewportWidth - 48, 1100) >= 780
+  return ['web', 'ios', 'android'].includes(platform) &&
+    viewportWidth >= 900 &&
+    Math.min(viewportWidth - 48, 1100) >= 780
     ? 2
     : 1;
 }
@@ -151,13 +161,14 @@ export function PrivacyControlsScreen({
     </PrivacyCard>,
     <PrivacyCard
       key="delete"
+      destructive
       icon={<Trash2 color={theme.error} />}
       title={t('settingsPrivacyDeletionTitle')}
       body={t('settingsPrivacyDeletionDescription')}
     >
       <Action
         label={t('settingsPrivacyDeleteAccount')}
-        icon={deleting ? <LoadingIndicator /> : <Trash2 color={theme.onError} />}
+        icon={deleting ? <LoadingIndicator /> : <Trash2 color={theme.error} />}
         destructive
         disabled={deleting}
         onPress={() => setConfirming(true)}
@@ -173,34 +184,46 @@ export function PrivacyControlsScreen({
   return (
     <>
       <SettingsPage title={t('settingsPrivacyDataTitle')} onBack={onBack}>
-        <ProfileOptionSwitch
-          icon={<EyeOff color={theme.onSurfaceVariant} />}
-          title={t('settingsHideAccounts')}
-          subtitle={t('settingsHideAccountsDescription')}
-          value={hideAccountsEnabled}
-          enabled={!!onHideAccountsChange && !savingHideAccounts}
-          loading={savingHideAccounts}
-          onChange={(enabled) => {
-            setSavingHideAccounts(true);
-            void onHideAccountsChange?.(enabled)
-              .catch(() => setNotice(t('generalError')))
-              .finally(() => setSavingHideAccounts(false));
-          }}
-        />
+        <Surface
+          radius={ckRadius.tile}
+          style={[
+            styles.preference,
+            { backgroundColor: colorWithAlpha(theme.onSurface, 0.045), borderWidth: 0 },
+          ]}
+        >
+          <ProfileOptionSwitch
+            icon={<EyeOff color={theme.onSurfaceVariant} />}
+            title={t('settingsHideAccounts')}
+            subtitle={t('settingsHideAccountsDescription')}
+            value={hideAccountsEnabled}
+            enabled={!!onHideAccountsChange && !savingHideAccounts}
+            loading={savingHideAccounts}
+            onChange={(enabled) => {
+              setSavingHideAccounts(true);
+              void onHideAccountsChange?.(enabled)
+                .catch(() => setNotice(t('generalError')))
+                .finally(() => setSavingHideAccounts(false));
+            }}
+          />
+        </Surface>
         {notice ? (
           <CKText accessibilityLiveRegion="polite" style={styles.notice}>
             {notice}
           </CKText>
         ) : null}
         <View style={[styles.cards, twoColumns && styles.twoColumns]}>
-          {cards.map((card) => (
+          {[
+            ...cards.filter((card) => card.key !== 'delete'),
+            ...cards.filter((card) => card.key === 'delete'),
+          ].map((card) => (
             <View key={card.key} style={twoColumns ? styles.half : styles.full}>
               {card}
             </View>
           ))}
         </View>
       </SettingsPage>
-      <Modal supportedOrientations={modalOrientations}
+      <Modal
+        supportedOrientations={modalOrientations}
         visible={confirming}
         transparent
         animationType="fade"
@@ -230,21 +253,48 @@ function PrivacyCard({
   title,
   body,
   children,
+  destructive = false,
 }: {
   icon: React.ReactNode;
   title: string;
   body: string;
   children?: React.ReactNode;
+  destructive?: boolean;
 }) {
+  const theme = useCKTheme();
   return (
-    <Surface radius={ckRadius.card} style={styles.card}>
+    <Surface
+      radius={ckRadius.tile}
+      style={[
+        styles.card,
+        {
+          backgroundColor: colorWithAlpha(
+            destructive ? theme.error : theme.onSurface,
+            destructive ? 0.055 : 0.035,
+          ),
+          borderWidth: 0,
+        },
+      ]}
+    >
       <View style={styles.cardTitle}>
-        {icon}
-        <CKText role="titleMedium" style={styles.strong}>
+        <View
+          style={[
+            styles.iconBadge,
+            { backgroundColor: colorWithAlpha(destructive ? theme.error : theme.primary, 0.1) },
+          ]}
+        >
+          {icon}
+        </View>
+        <CKText
+          role="titleSmall"
+          style={[styles.strong, { flex: 1, color: destructive ? theme.error : theme.onSurface }]}
+        >
           {title}
         </CKText>
       </View>
-      <CKText muted>{body}</CKText>
+      <CKText role="bodyMedium" muted style={{ lineHeight: 21 }}>
+        {body}
+      </CKText>
       {children}
     </Surface>
   );
@@ -270,13 +320,21 @@ function Action({
       onPress={onPress}
       style={({ pressed }) => [
         styles.action,
-        { backgroundColor: destructive ? theme.error : theme.surfaceContainerHighest },
+        {
+          backgroundColor: colorWithAlpha(
+            destructive ? theme.error : theme.onSurface,
+            destructive ? 0.12 : 0.075,
+          ),
+        },
         disabled && styles.disabled,
         pressed && styles.pressed,
       ]}
     >
       {icon}
-      <CKText style={{ color: destructive ? theme.onError : theme.onSurface, fontWeight: '700' }}>
+      <CKText
+        role="rowTitle"
+        style={{ color: destructive ? theme.error : theme.onSurface, flexShrink: 1 }}
+      >
         {label}
       </CKText>
     </Pressable>
@@ -285,6 +343,14 @@ function Action({
 
 const styles = StyleSheet.create({
   cards: { gap: 12 },
+  preference: { padding: 10, marginBottom: 16 },
+  iconBadge: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   twoColumns: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -293,14 +359,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   full: { width: '100%' },
-  half: { width: '48%' },
-  card: { padding: ckSpacing.lg, gap: 10 },
+  half: { width: '48.5%' },
+  card: { padding: 18, gap: 14 },
   cardTitle: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   strong: { fontWeight: '700' },
   actionRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   action: {
     minHeight: 44,
-    borderRadius: ckRadius.control,
+    borderRadius: ckRadius.pill,
     paddingHorizontal: 14,
     flexDirection: 'row',
     alignItems: 'center',

@@ -2,17 +2,15 @@
 
 ## Build, test, and lint commands
 
-The shipping app is the Expo SDK 57 project under `expo/`. Run application commands from that directory with Node.js 22.
+The shipping app is the Expo SDK 58 project under `expo/`. Run application commands from that directory with Node.js 22.
 
 - `npm ci` installs locked Expo dependencies.
 - `npm run lint` and `npm run typecheck` run static checks.
-- `npm test` runs the full Jest suite; pass a test path for a focused run.
-- `npm run test:native-plugin` verifies the CNG/native parity contract.
 - `npx expo-doctor` verifies Expo SDK dependency/config health.
 - `npx expo prebuild --clean` generates ignored native projects.
 - `npx expo export --platform web --output-dir dist` builds Cloudflare Pages output.
 
-Tests live beside Expo source and under `expo/plugins/__tests__`. Add focused tests for changed behavior and do not edit generated `expo/ios` or `expo/android` projects directly.
+Retain and add only end-to-end tests against the actual local application. Do not add, maintain, or run unit or mocked component tests. Browser/device visual verification requires explicit user authorization. Do not edit generated `expo/ios` or `expo/android` projects directly.
 
 ## Architecture
 
@@ -29,6 +27,6 @@ Tests live beside Expo source and under `expo/plugins/__tests__`. Add focused te
 - Keep network failures from clearing a valid authenticated session. Startup failures should route to `ErrorPage` with retry behavior.
 - Use `DebugUtils` for local diagnostic logging and `ErrorReporter` for deduplicated Sentry errors.
 - Add localization keys to every supported `expo/src/i18n/arb/*.arb` file, regenerate catalogs, and pass `npm run l10n:check`.
-- Preserve `expo/package-lock.json`. Dependency upgrades must pass lint, typecheck, tests, Expo Doctor, clean prebuild, and relevant platform builds.
+- Preserve `expo/package-lock.json`. Dependency upgrades must pass lint, typecheck, actual local end-to-end checks, Expo Doctor, and relevant builds. Native prebuild/device checks require explicit authorization.
 - Treat `expo/ios` and `expo/android` as disposable CNG output; durable native changes must be expressed through app config, config plugins, retained native inputs, or the local Expo module.
 - Update `update-news/whatsnew-en-US` for user-facing release changes.

@@ -171,6 +171,8 @@ export class ImageAssets {
   static readonly elixir = `${ImageAssets.baseUrl}/resources/elixir.webp`;
   static readonly darkElixir = `${ImageAssets.baseUrl}/resources/dark_elixir.webp`;
   static readonly researchPotion = `${ImageAssets.baseUrl}/magic_items/research_potion.webp`;
+  static readonly builderBite = `${ImageAssets.baseUrl}/magic_snacks/builder_bite.webp`;
+  static readonly studySoup = `${ImageAssets.baseUrl}/magic_snacks/study_soup.webp`;
   static readonly petPotion = `${ImageAssets.baseUrl}/magic_items/pet_potion.webp`;
   static readonly upgradeCategoryIcons = {
     heroes: `${ImageAssets.baseUrl}/heroes/barbarian_king/icon.webp`,
@@ -194,6 +196,10 @@ export class ImageAssets {
     return `${ImageAssets.baseUrl}/capital-base/capital-hall-pics/Building_CC_Capital_Hall_level_${level}.png`;
   }
 
+  static capitalDistrictHall(level: number): string {
+    return `${ImageAssets.baseUrl}/capital-base/capital-hall-pics/Building_CC_District_Hall_level_${level}.png`;
+  }
+
   static readonly defaultProfile = `${ImageAssets.baseUrl}/icons/default_profile.png`;
   static readonly homeBaseBackground = `${ImageAssets.baseUrl}/landscape/home-landscape.png`;
   static readonly builderBaseBackground = `${ImageAssets.baseUrl}/landscape/builder-landscape.png`;
@@ -206,6 +212,21 @@ export class ImageAssets {
   static readonly playerWarStatsPageBackground = `${ImageAssets.baseUrl}/landscape/war-stats.png`;
   static readonly playerAchievementPageBackground = `${ImageAssets.baseUrl}/landscape/achievement-landscape.png`;
 
+  /** Resolve artwork from catalog identity before producing translated display labels. */
+  static getItemImage(
+    kind: 'hero' | 'pet' | 'equipment' | 'spell' | 'siege' | 'troop',
+    item: { readonly name?: unknown } | null | undefined,
+    fallback: string,
+  ): string {
+    const name = typeof item?.name === 'string' && item.name.trim() ? item.name : fallback;
+    if (kind === 'hero') return ImageAssets.getHeroImage(name);
+    if (kind === 'pet') return ImageAssets.getPetImage(name);
+    if (kind === 'equipment') return ImageAssets.getGearImage(name);
+    if (kind === 'spell') return ImageAssets.getSpellImage(name);
+    return ImageAssets.getTroopImage(name);
+  }
+
+  // Name-based entry points accept canonical English catalog names only.
   static getHeroImage(name: string): string {
     return iconAsset(['heroes'], name);
   }

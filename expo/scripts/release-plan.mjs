@@ -1,15 +1,18 @@
 import { execFileSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { GetObjectCommand, ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import { RELEASE_TRACKS } from './release-environment.mjs';
 
 export function parseVersion(value) {
-  const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-beta)?$/.exec(value ?? '');
+  const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(alpha|beta))?$/.exec(value ?? '');
   if (!match) return null;
   return {
     major: Number(match[1]),
     minor: Number(match[2]),
     patch: Number(match[3]),
-    beta: Boolean(match[4]),
+    track: match[4] ?? 'production',
   };
 }
 
@@ -18,28 +21,41 @@ export function compareVersions(left, right) {
   const b = parseVersion(right);
   if (!a || !b) throw new Error('Cannot compare invalid release versions.');
   return (
-    a.major - b.major || a.minor - b.minor || a.patch - b.patch || Number(!a.beta) - Number(!b.beta)
+    a.major - b.major ||
+    a.minor - b.minor ||
+    a.patch - b.patch ||
+    ['alpha', 'beta', 'production'].indexOf(a.track) -
+      ['alpha', 'beta', 'production'].indexOf(b.track)
   );
 }
 
 function validMarker(marker) {
   const version = parseVersion(marker?.version);
-  if (!version || !['beta', 'production'].includes(marker.track)) return false;
+  if (!version || !RELEASE_TRACKS.includes(marker.track)) return false;
   if (!['native', 'ota'].includes(marker.type)) return false;
-  if (version.beta !== (marker.track === 'beta')) return false;
+  if (version.track !== marker.track) return false;
   return marker.type === 'native' ? version.patch === 0 : version.patch > 0;
 }
 
-export function decideRelease({ markers, track, version: requestedVersion, fingerprints }) {
-  if (track !== 'beta' && track !== 'production') {
-    throw new Error('Release track must be beta or production.');
+export function decideRelease({
+  markers,
+  track,
+  version: requestedVersion,
+  fingerprints,
+  nativeOnly = false,
+}) {
+  if (!RELEASE_TRACKS.includes(track)) {
+    throw new Error('Release track must be alpha, beta, or production.');
   }
   if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(requestedVersion ?? '')) {
     throw new Error('Release version must be a semantic x.y.z version without a suffix.');
   }
-  const suffix = track === 'beta' ? '-beta' : '';
+  const suffix = track === 'production' ? '' : `-${track}`;
   const version = `${requestedVersion}${suffix}`;
   const requested = parseVersion(version);
+  if (nativeOnly && track !== 'alpha') {
+    throw new Error('Standalone native releases without OTA are supported only on alpha.');
+  }
   const valid = markers.filter(validMarker);
   const trackMarkers = valid
     .filter((marker) => marker.track === track)
@@ -50,7 +66,9 @@ export function decideRelease({ markers, track, version: requestedVersion, finge
   if (trackMarkers[0] && compareVersions(version, trackMarkers[0].version) <= 0) {
     throw new Error(`Release ${version} must be newer than ${trackMarkers[0].version}.`);
   }
-  if (requested.patch === 0) {
+  // A standalone alpha has no OTA baseline. Patch releases on this track must
+  // still rebuild the binary when embedded configuration (such as OAuth) changes.
+  if (requested.patch === 0 || nativeOnly) {
     return {
       type: 'native',
       version,
@@ -102,8 +120,13 @@ async function listMarkers(client, bucket) {
 
 function fingerprint(platform) {
   const output = execFileSync(
-    'npx',
-    ['--no-install', 'fingerprint', 'fingerprint:generate', '--platform', platform],
+    process.execPath,
+    [
+      fileURLToPath(new URL('../node_modules/@expo/fingerprint/bin/cli.js', import.meta.url)),
+      'fingerprint:generate',
+      '--platform',
+      platform,
+    ],
     {
       encoding: 'utf8',
       env: {
@@ -115,34 +138,50 @@ function fingerprint(platform) {
       },
     },
   );
-  return JSON.parse(output).hash;
+  // A rotated verification certificate also requires a new native binary.
+  const certificate =
+    process.env.CK_ENABLE_UPDATES === 'true'
+      ? readFileSync(process.env.CK_UPDATES_CERTIFICATE_PATH, 'utf8')
+      : '';
+  return createHash('sha256')
+    .update(JSON.stringify({ native: JSON.parse(output).hash, certificate }))
+    .digest('hex');
 }
 
 async function main() {
   const track = process.env.CK_RELEASE_TRACK;
-  if (track !== 'beta' && track !== 'production')
-    throw new Error('CK_RELEASE_TRACK must be beta or production.');
+  if (!RELEASE_TRACKS.includes(track))
+    throw new Error('CK_RELEASE_TRACK must be alpha, beta, or production.');
+  const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
+  const version = process.env.CK_RELEASE_VERSION;
+  if (!updatesEnabled && (track !== 'alpha' || !parseVersion(version))) {
+    throw new Error('Only a native alpha release may be published without OTA infrastructure.');
+  }
   const required = [
     'R2_ACCOUNT_ID',
     'R2_ACCESS_KEY_ID',
     'R2_SECRET_ACCESS_KEY',
     'R2_UPDATES_BUCKET_NAME',
   ];
-  for (const name of required) if (!process.env[name]) throw new Error(`${name} is required.`);
-  const client = new S3Client({
-    region: 'auto',
-    endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId: process.env.R2_ACCESS_KEY_ID,
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    },
-  });
+  for (const name of updatesEnabled ? required : [])
+    if (!process.env[name]) throw new Error(`${name} is required.`);
+  const client = updatesEnabled
+    ? new S3Client({
+        region: 'auto',
+        endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+        credentials: {
+          accessKeyId: process.env.R2_ACCESS_KEY_ID,
+          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+        },
+      })
+    : null;
   const fingerprints = { ios: fingerprint('ios'), android: fingerprint('android') };
   const plan = decideRelease({
-    markers: await listMarkers(client, process.env.R2_UPDATES_BUCKET_NAME),
+    markers: updatesEnabled ? await listMarkers(client, process.env.R2_UPDATES_BUCKET_NAME) : [],
     track,
-    version: process.env.CK_RELEASE_VERSION,
+    version,
     fingerprints,
+    nativeOnly: !updatesEnabled,
   });
   const result = {
     ...plan,
@@ -171,4 +210,4 @@ async function main() {
   console.log(JSON.stringify(result, null, 2));
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) await main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

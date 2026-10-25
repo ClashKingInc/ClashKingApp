@@ -1,6 +1,8 @@
-ClashKing 0.4.0 has been rebuilt for a faster, smoother mobile experience.
+ClashKing 0.6.4 alpha
 
-- Refreshed player, clan, war, rankings, and Upgrade Tracker screens.
-- Improved navigation, search, filters, loading states, and dark mode.
-- Updated account management, notifications, widgets, and sign-in.
-- Fixed performance, reliability, and data refresh issues throughout the app.
+- Improved event-bar swiping and rankings/statistics navigation.
+- Kept known labels and row positions visible while data loads.
+- Refreshed troop artwork lookups when game data changes.
+- Limited Home rank colors to the rank number.
+
+Please report issues found during testing.

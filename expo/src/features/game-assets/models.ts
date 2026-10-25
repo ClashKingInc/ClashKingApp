@@ -1,4 +1,5 @@
 import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
+import { gameDataState } from '../../core/game-data/game-data-state';
 export const SUPPORTED_GAME_ASSET_EXTENSIONS = Object.freeze(
   new Set(['avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']),
 );
@@ -11,7 +12,9 @@ export class GameAssetManifest {
   constructor(version: number, assets: Iterable<GameAsset>) {
     this.version = version;
     this.assets = Object.freeze(
-      [...assets].sort((left, right) => naturalCompare(left.path, right.path)),
+      [...assets]
+        .filter((asset) => normalizedCategory(asset.category) !== 'countryflags')
+        .sort((left, right) => naturalCompare(left.path, right.path)),
     );
     this.categories = Object.freeze(buildCategories(this.assets));
   }
@@ -110,15 +113,20 @@ export class GameAsset {
   }
 
   get tileDisplayName(): string {
-    if (this.category !== 'buildings') return this.displayName;
-    const segments = this.path.split('/');
-    if (segments.length < 4) return this.displayName;
-    return `${formatGameAssetCategory(segments.at(-2)!)} · ${formatGameAssetCategory(this.displayName)}`;
+    // The manifest already includes building names; prefixing the folder
+    // repeats them. House-part filenames instead contain IDs, so resolve those
+    // through the same authoritative game metadata used by the tracker.
+    const name = capitalHousePart(this)?.name ?? this.displayName;
+    return formatGameAssetCategory(name.replace(/(\p{L})(\d)/gu, '$1 $2'));
   }
 
   matches(query: string): boolean {
     const normalized = query.trim().toLowerCase();
-    return !normalized || this.searchText.includes(normalized);
+    return (
+      !normalized ||
+      this.searchText.includes(normalized) ||
+      this.tileDisplayName.toLowerCase().includes(normalized)
+    );
   }
 }
 
@@ -136,6 +144,10 @@ export class GameAssetCategory {
   }
 
   get representativeAsset(): GameAsset {
+    if (normalizedCategory(this.id) === 'capitalhouseparts') {
+      const roof = this.assets.find((asset) => capitalHousePart(asset)?.slotType === 'roof');
+      if (roof) return roof;
+    }
     return this.assets.find((asset) => asset.extension !== 'svg') ?? this.assets[0]!;
   }
 
@@ -161,12 +173,46 @@ export function filterGameAssets(
 
 export function formatGameAssetCategory(category: string): string {
   return category
-    .split(/[-_]+/)
+    .split(/[\s_-]+/)
     .filter(Boolean)
     .map((word) =>
       word.length === 1 ? word.toUpperCase() : word[0]!.toUpperCase() + word.slice(1),
     )
     .join(' ');
+}
+
+function normalizedCategory(category: string): string {
+  return category.toLowerCase().replace(/[-_]/g, '');
+}
+
+let housePartRevision = -1;
+const housePartNames = new Map<string, { name: string; slotType: string }>();
+
+function capitalHousePart(asset: GameAsset) {
+  if (normalizedCategory(asset.category) !== 'capitalhouseparts') return undefined;
+  if (housePartRevision !== gameDataState.revision) {
+    housePartRevision = gameDataState.revision;
+    housePartNames.clear();
+    const source = gameDataState.bundleData.capital_house_parts;
+    const rows = Array.isArray(source)
+      ? source
+      : isRecord(source) && Array.isArray(source.items)
+        ? source.items
+        : [];
+    for (const row of rows) {
+      if (isRecord(row) && row._id !== undefined && typeof row.name === 'string') {
+        housePartNames.set(String(row._id), {
+          name: row.name,
+          slotType: String(row.slot_type ?? ''),
+        });
+      }
+    }
+  }
+  const id = asset.path
+    .split('/')
+    .at(-1)
+    ?.replace(/\.[^.]+$/, '');
+  return id ? housePartNames.get(id) : undefined;
 }
 
 export function naturalCompare(left: string, right: string): number {

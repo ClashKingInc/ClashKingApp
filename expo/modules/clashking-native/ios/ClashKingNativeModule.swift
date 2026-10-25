@@ -12,6 +12,7 @@ private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
 private let defaultKeychainAccessGroup = "MZYXD43RX5.com.clashking.apps"
 private let flutterSecureStorageService = "flutter_secure_storage_service"
 private let allowedAlternateIcons = Set([
+  "AppIconHalloween",
   "AppIconChristmas",
   "AppIconBlackWhite",
   "AppIconDarkLogo",

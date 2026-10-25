@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import {
   FlatList,
@@ -20,7 +20,10 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { RankedCheckerBackground, type RankedCheckerColor } from '../../../ui/ranked-checker-background';
+import {
+  RankedCheckerBackground,
+  type RankedCheckerColor,
+} from '../../../ui/ranked-checker-background';
 import {
   gameDataState,
   subscribeToGameDataRevision,
@@ -37,8 +40,7 @@ import {
   ProfileHeaderAction,
   Surface,
   SelectionPicker,
-  Skeleton,
-  PageLoading,
+  SkeletonContent,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
@@ -95,11 +97,8 @@ export function RankingsScreen({
   );
   const [dateOpen, setDateOpen] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
-  const [opening, setOpening] = useState(false);
-  const entries = useMemo(
-    () => (provider.isLoading ? [] : (provider.result?.entries ?? [])),
-    [provider.isLoading, provider.result],
-  );
+  const [, setOpening] = useState(false);
+  const entries = useMemo(() => provider.currentResult?.entries ?? [], [provider.currentResult]);
   const listItems = useMemo<readonly RankingListItem[]>(
     () => [{ kind: 'content' }, ...entries.map((entry) => ({ kind: 'entry' as const, entry }))],
     [entries],
@@ -155,13 +154,15 @@ export function RankingsScreen({
             title={boardLabel(provider.board, t)}
             imageUrl={rankingBoardArtwork(provider.board)}
             backgroundUrl={rankingBackground(provider.board)}
-            backgroundElement={<RankedCheckerBackground color={rankingCheckerColor(provider.board)} />}
+            backgroundElement={
+              <RankedCheckerBackground color={rankingCheckerColor(provider.board)} />
+            }
             compactIdentity
-            controlsTopPadding={4}
+            controlsTopPadding={16}
             onBack={onBack}
             backLabel={materialBackLabel(locale)}
             safeTop={insets.top}
-            bottomPadding={28}
+            bottomPadding={6}
             actions={
               provider.board === RankingBoard.playerWarTripleStreak ? (
                 <ProfileHeaderAction
@@ -180,7 +181,11 @@ export function RankingsScreen({
                 onToggleStar={onToggleStar}
               />
             ) : null}
-            {hasFilter ? <View style={styles.locationInHeader}><RankingControls provider={provider} /></View> : null}
+            {hasFilter ? (
+              <View style={styles.locationInHeader}>
+                <RankingControls provider={provider} />
+              </View>
+            ) : null}
           </ProfilePageHeader>
         }
         renderItem={({ item }) => {
@@ -207,22 +212,13 @@ export function RankingsScreen({
                     accessibilityLabel={t('rankingsSnapshotDate')}
                   />
                 ) : null}
-                {provider.isLoading ? (
+                {provider.isLoading && !provider.currentResult ? (
                   <View
                     style={{ gap: 12, paddingVertical: 16 }}
                     accessibilityLabel={t('generalLoading')}
                   >
                     {[0, 1, 2, 3, 4].map((index) => (
-                      <View
-                        key={index}
-                        style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}
-                      >
-                        <Skeleton width={48} height={48} radius={16} />
-                        <View style={{ flex: 1, gap: 8 }}>
-                          <Skeleton height={16} />
-                          <Skeleton width="55%" height={12} />
-                        </View>
-                      </View>
+                      <RankingRow key={index} placeholderRank={index + 1} onPress={() => {}} />
                     ))}
                   </View>
                 ) : null}
@@ -272,8 +268,8 @@ export function RankingsScreen({
       {dateOpen ? (
         <RankingDateSheet provider={provider} onClose={() => setDateOpen(false)} />
       ) : null}
-      <PageLoading visible={opening} kind="profile" />
-      <Modal supportedOrientations={modalOrientations}
+      <Modal
+        supportedOrientations={modalOrientations}
         visible={rulesOpen}
         transparent
         animationType="fade"
@@ -436,67 +432,102 @@ export function rankingBackground(board: RankingBoardValue): string {
 
 function rankingCheckerColor(board: RankingBoardValue): RankedCheckerColor {
   if (board === RankingBoard.playerTownHall || board === RankingBoard.clanDonations) return 'green';
-  if (board === RankingBoard.playerWarTripleStreak || board === RankingBoard.clanWarWins || board === RankingBoard.clanWinStreak) return 'red';
-  if (board === RankingBoard.playerRanked || board === RankingBoard.clanCapital || board === RankingBoard.clanHome) return 'purple';
+  if (
+    board === RankingBoard.playerWarTripleStreak ||
+    board === RankingBoard.clanWarWins ||
+    board === RankingBoard.clanWinStreak
+  )
+    return 'red';
+  if (
+    board === RankingBoard.playerRanked ||
+    board === RankingBoard.clanCapital ||
+    board === RankingBoard.clanHome
+  )
+    return 'purple';
   return 'blue';
 }
 
-function RankingRow({ entry, onPress }: { entry: RankingEntry; onPress: () => void }) {
+function RankingRow({
+  entry: loadedEntry,
+  placeholderRank = 1,
+  onPress,
+}: {
+  entry?: RankingEntry;
+  placeholderRank?: number;
+  onPress: () => void;
+}) {
   const { locale } = useI18n();
   const theme = useCKTheme();
+  // Placeholder values belong only to this disabled presentation tree.
+  const entry = loadedEntry ?? {
+    rank: placeholderRank,
+    movement: '=',
+    score: 5000,
+    name: 'ClashKing player',
+    subtitle: 'Clan name',
+    clanBadgeUrl: '',
+    displayImageUrl: ImageAssets.townHall(1),
+    metricImageUrl: ImageAssets.trophies,
+  };
   const formattedScore = entry.score.toLocaleString(toIntlLocale(locale));
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${entry.rank}. ${entry.name}, ${formattedScore}`}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.row,
-        {
-          backgroundColor: theme.card,
-          borderColor: colorWithAlpha(theme.outlineVariant, 0.32),
-          opacity: pressed ? 0.78 : 1,
-        },
-      ]}
-    >
-      <View style={styles.rank}>
-        <CKText role="labelLarge" muted>{`#${entry.rank}`}</CKText>
-        {entry.movement !== '=' ? (
-          <CKText
-            role="bodySmall"
-            style={{ color: entry.movement.startsWith('+') ? '#2E7D32' : '#BA1A1A' }}
-          >
-            {entry.movement}
-          </CKText>
-        ) : null}
-      </View>
-      <MobileWebImage
-        testID="ranking-entry-image"
-        imageUrl={entry.displayImageUrl}
-        style={styles.entryImage}
-        contentFit="contain"
-      />
-      <View style={styles.entryCopy}>
-        <CKText role="rowTitle" numberOfLines={1}>
-          {entry.name}
-        </CKText>
-        {entry.subtitle || entry.clanBadgeUrl ? (
-          <View style={styles.subtitle}>
-            {entry.clanBadgeUrl ? (
-              <MobileWebImage imageUrl={entry.clanBadgeUrl} style={styles.clanBadge} />
-            ) : null}
-            <CKText role="bodySmall" muted numberOfLines={1}>
-              {entry.subtitle}
+    <SkeletonContent loading={!loadedEntry}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${entry.rank}. ${entry.name}, ${formattedScore}`}
+        onPress={onPress}
+        style={({ pressed }) => [
+          styles.row,
+          {
+            backgroundColor: theme.card,
+            borderColor: colorWithAlpha(theme.outlineVariant, 0.32),
+            opacity: pressed ? 0.78 : 1,
+          },
+        ]}
+      >
+        <View style={styles.rank}>
+          <CKText skeleton={false} role="labelLarge" muted>{`#${entry.rank}`}</CKText>
+          {entry.movement !== '=' ? (
+            <CKText
+              role="bodySmall"
+              style={{ color: entry.movement.startsWith('+') ? '#2E7D32' : '#BA1A1A' }}
+            >
+              {entry.movement}
             </CKText>
-          </View>
-        ) : null}
-      </View>
-      <MobileWebImage imageUrl={entry.metricImageUrl} style={styles.metric} contentFit="contain" />
-      <CKText role="labelLarge" numberOfLines={1} style={styles.score}>
-        {formattedScore}
-      </CKText>
-      <ChevronRight size={20} color={theme.onSurfaceVariant} />
-    </Pressable>
+          ) : null}
+        </View>
+        <MobileWebImage
+          testID="ranking-entry-image"
+          imageUrl={entry.displayImageUrl}
+          style={styles.entryImage}
+          contentFit="contain"
+        />
+        <View style={styles.entryCopy}>
+          <CKText role="rowTitle" numberOfLines={1}>
+            {entry.name}
+          </CKText>
+          {entry.subtitle || entry.clanBadgeUrl ? (
+            <View style={styles.subtitle}>
+              {entry.clanBadgeUrl ? (
+                <MobileWebImage imageUrl={entry.clanBadgeUrl} style={styles.clanBadge} />
+              ) : null}
+              <CKText role="bodySmall" muted numberOfLines={1}>
+                {entry.subtitle}
+              </CKText>
+            </View>
+          ) : null}
+        </View>
+        <MobileWebImage
+          imageUrl={entry.metricImageUrl}
+          style={styles.metric}
+          contentFit="contain"
+        />
+        <CKText role="labelLarge" numberOfLines={1} style={styles.score}>
+          {formattedScore}
+        </CKText>
+        <ChevronRight size={20} color={theme.onSurfaceVariant} />
+      </Pressable>
+    </SkeletonContent>
   );
 }
 
@@ -511,7 +542,13 @@ function RankingDateSheet({
   const { t } = useI18n();
   const theme = useCKTheme();
   return (
-    <Modal supportedOrientations={modalOrientations} visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
       <Pressable style={styles.overlay} onPress={onClose}>
         <Pressable
           style={[styles.sheet, { backgroundColor: theme.surface }]}
@@ -523,7 +560,9 @@ function RankingDateSheet({
               { backgroundColor: colorWithAlpha(theme.onSurfaceVariant, 0.3) },
             ]}
           />
-          <CKText role="titleLarge">{t('rankingsSnapshotDate')}</CKText>
+          <CKText skeleton={false} role="titleLarge">
+            {t('rankingsSnapshotDate')}
+          </CKText>
           <View style={styles.sheetBody}>
             <CalendarPicker
               start={

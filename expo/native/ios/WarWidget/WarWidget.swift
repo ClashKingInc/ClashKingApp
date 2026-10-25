@@ -60,6 +60,7 @@ struct WarWidgetEntry: TimelineEntry {
   let clanBadgeData: Data?
   let opponentBadgeData: Data?
   var selectedClanTag: String? = nil
+  var selectedClanName: String? = nil
 }
 
 struct WarWidgetData: Codable {
@@ -102,21 +103,16 @@ struct WarWidgetData: Codable {
     cwlLeague: nil
   )
 
-  static let empty = WarWidgetData(
-    state: "notInWar",
-    mode: "war",
-    updatedAt: "Open app",
-    timeState: "",
-    score: "-",
-    statusIcon: "shield",
-    primaryText: "No active war",
-    secondaryText: "Open ClashKing to refresh",
-    colorTheme: "neutral",
-    clan: Side(name: "ClashKing", badgeUrlMedium: nil, percent: "0%", attacks: "0/0", stars: 0, maxStars: 0),
-    opponent: nil,
-    cwlRank: nil,
-    cwlLeague: nil
-  )
+  // No cached payload is not evidence that the clan has no war.
+  static let empty = status("unconfigured")
+
+  static func status(_ state: String, clan: Side? = nil) -> WarWidgetData {
+    WarWidgetData(
+      state: state, mode: "war", updatedAt: nil, timeState: nil,
+      score: nil, statusIcon: nil, primaryText: nil, secondaryText: nil,
+      colorTheme: "neutral", clan: clan, opponent: nil, cwlRank: nil, cwlLeague: nil
+    )
+  }
 
   static func current(clanTag: String? = nil) -> WarWidgetData {
     guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
@@ -131,7 +127,7 @@ struct WarWidgetData: Codable {
       let data = raw.data(using: .utf8),
       let decoded = try? JSONDecoder().decode(WarWidgetData.self, from: data)
     else {
-      return .empty
+      return .status("unavailable")
     }
     return decoded
   }
@@ -212,24 +208,25 @@ struct WarTimelineProvider: AppIntentTimelineProvider {
   }
 
   func snapshot(for configuration: SelectWarClanIntent, in context: Context) async -> WarWidgetEntry {
-    makeEntry(data: context.isPreview ? .placeholder : .current(clanTag: configuration.clan?.id), clanTag: configuration.clan?.id)
+    makeEntry(data: context.isPreview ? .placeholder : .current(clanTag: configuration.clan?.id), clanTag: configuration.clan?.id, clanName: configuration.clan?.name)
   }
 
   func timeline(for configuration: SelectWarClanIntent, in context: Context) async -> Timeline<WarWidgetEntry> {
     let clanTag = configuration.clan?.id
     let data = await WarWidgetFreshFetcher().fetch(clanTag: clanTag) ?? .current(clanTag: clanTag)
-    let entry = makeEntry(data: data, clanTag: clanTag)
+    let entry = makeEntry(data: data, clanTag: clanTag, clanName: configuration.clan?.name)
     let next = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date().addingTimeInterval(900)
     return Timeline(entries: [entry], policy: .after(next))
   }
 
-  private func makeEntry(data: WarWidgetData, clanTag: String? = nil) -> WarWidgetEntry {
+  private func makeEntry(data: WarWidgetData, clanTag: String? = nil, clanName: String? = nil) -> WarWidgetEntry {
     WarWidgetEntry(
       date: Date(),
       data: data,
-      clanBadgeData: fetchBadgeData(data.clan?.badgeUrlMedium),
+      clanBadgeData: fetchBadgeData(widgetClanBadge(clanTag) ?? data.clan?.badgeUrlMedium),
       opponentBadgeData: fetchBadgeData(data.opponent?.badgeUrlMedium),
-      selectedClanTag: clanTag
+      selectedClanTag: clanTag,
+      selectedClanName: clanName
     )
   }
 
@@ -505,11 +502,16 @@ private struct WarWidgetFreshFetcher {
 
     do {
       let (data, response) = try await URLSession.shared.data(for: request)
-      guard
-        let httpResponse = response as? HTTPURLResponse,
-        httpResponse.statusCode == 200,
-        let raw = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-      else {
+      guard let httpResponse = response as? HTTPURLResponse else { return nil }
+      let raw: [String: Any]
+      if httpResponse.statusCode == 403 {
+        // Private regular logs can still have a readable CWL group. Keep that
+        // lookup below, then represent privacy rather than an empty/no-war state.
+        raw = ["state": "accessDenied"]
+      } else if httpResponse.statusCode == 200,
+                let decoded = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+        raw = decoded
+      } else {
         return nil
       }
       // currentwar can be tomorrow's CWL preparation while today's round is still live.
@@ -580,21 +582,8 @@ private struct WarWidgetFreshFetcher {
     let state = string(currentWar["state"]) ?? "notInWar"
     guard ["preparation", "inWar", "warEnded"].contains(state) else {
       let selectedClan = cachedClanSide(clanTag: clanTag, defaults: defaults)
-      return WarWidgetData(
-        state: state,
-        mode: "war",
-        updatedAt: updatedAt(),
-        timeState: "",
-        score: "",
-        statusIcon: "shield",
-        primaryText: "Not in War",
-        secondaryText: "",
-        colorTheme: "neutral",
-        clan: selectedClan,
-        opponent: nil,
-        cwlRank: nil,
-        cwlLeague: nil
-      )
+      let status = state == "notInWar" || state == "accessDenied" ? state : "unavailable"
+      return .status(status, clan: selectedClan)
     }
     return buildRegularWarData(currentWar: currentWar, state: state, isCwl: isCwl)
   }
@@ -815,8 +804,18 @@ struct WarWidgetView: View {
       if entry.data.opponent == nil {
         emptyStateView
       } else {
-        HStack(alignment: .center, spacing: 8) {
-          sideView(entry.data.clan, badgeData: entry.clanBadgeData, badgeSize: 52)
+        GeometryReader { geometry in
+          let centerWidth = min(120, max(100, geometry.size.width * 0.34))
+          let sideWidth = max(0, (geometry.size.width - centerWidth - 16) / 2)
+          let baseNameSize = UIFont.preferredFont(forTextStyle: .caption1).pointSize
+          let measuringFont = UIFont.systemFont(ofSize: baseNameSize, weight: .semibold)
+          let longestNameWidth = [entry.data.clan?.name ?? "Unknown", entry.data.opponent?.name ?? "Unknown"]
+            .map { ($0 as NSString).size(withAttributes: [.font: measuringFont]).width }
+            .max() ?? 1
+          let sharedNameSize = max(8, baseNameSize * min(1, sideWidth / max(1, longestNameWidth)))
+          HStack(alignment: .center, spacing: 8) {
+          sideView(entry.data.clan, badgeData: entry.clanBadgeData, badgeSize: 52, uniformText: true, nameFontSize: sharedNameSize)
+            .frame(width: sideWidth)
             .layoutPriority(1)
           VStack(spacing: 4) {
             Text(entry.data.primaryText ?? entry.data.timeState ?? "")
@@ -826,10 +825,13 @@ struct WarWidgetView: View {
               .minimumScaleFactor(0.75)
             scoreLabel(size: scoreText == "-" ? 22 : 29, minScale: 0.72)
           }
-          .frame(minWidth: 100, idealWidth: 110, maxWidth: 120)
+          .frame(width: centerWidth)
           .layoutPriority(4)
-          sideView(entry.data.opponent, badgeData: entry.opponentBadgeData, badgeSize: 52)
+          sideView(entry.data.opponent, badgeData: entry.opponentBadgeData, badgeSize: 52, uniformText: true, nameFontSize: sharedNameSize)
+            .frame(width: sideWidth)
             .layoutPriority(1)
+          }
+          .frame(height: geometry.size.height)
         }
       }
     }
@@ -877,10 +879,18 @@ struct WarWidgetView: View {
     HStack(spacing: 6) {
       badgeView(entry.data.clan, badgeData: entry.clanBadgeData, size: 18)
       VStack(alignment: .leading, spacing: 1) {
-        scoreLabel(size: 17, minScale: 0.72)
-        Text(entry.data.primaryText ?? entry.data.timeState ?? "War")
-          .font(.caption2)
+        Text(entry.data.clan?.name ?? entry.selectedClanName ?? "ClashKing")
+          .font(.system(size: 10, weight: .semibold))
           .lineLimit(1)
+          .truncationMode(.tail)
+        if entry.data.opponent == nil {
+          Text(emptyStateTitle).font(.caption2).lineLimit(2)
+        } else {
+          scoreLabel(size: 17, minScale: 0.72, leading: true)
+          Text(entry.data.primaryText ?? entry.data.timeState ?? "War")
+            .font(.caption2)
+            .lineLimit(1)
+        }
       }
     }
     .widgetBackground
@@ -908,11 +918,11 @@ struct WarWidgetView: View {
       .minimumScaleFactor(0.7)
   }
 
-  private func attacksMetric(_ side: WarWidgetData.Side?) -> some View {
+  private func attacksMetric(_ side: WarWidgetData.Side?, uniformText: Bool = false) -> some View {
     HStack(spacing: 3) {
       Group {
         if let sword = UIImage(named: "Icon_HV_Sword") {
-          Image(uiImage: sword).resizable().scaledToFit()
+          Image(uiImage: sword).resizable().widgetArtwork.scaledToFit()
         } else {
           Image(systemName: "sword").resizable().scaledToFit()
         }
@@ -924,7 +934,7 @@ struct WarWidgetView: View {
         .font(.caption2.weight(.semibold).monospacedDigit())
         .foregroundStyle(.primary)
         .lineLimit(1)
-        .minimumScaleFactor(0.72)
+        .minimumScaleFactor(uniformText ? 1 : 0.72)
     }
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(String(localized: "legends_widget_attacks", table: "LegendsWidget"))
@@ -944,22 +954,71 @@ struct WarWidgetView: View {
     .minimumScaleFactor(0.58)
   }
 
-  private var emptyStateView: some View {
-    VStack(spacing: 7) {
-      badgeView(entry.data.clan, badgeData: entry.clanBadgeData, size: family == .systemSmall ? 48 : 56)
-      Text(entry.data.clan?.name ?? "Clan War")
-        .font((family == .systemSmall ? Font.caption : Font.callout).weight(.semibold))
-        .multilineTextAlignment(.center)
-        .lineLimit(1)
-        .minimumScaleFactor(0.6)
-      Text(entry.data.primaryText ?? "Not in War")
-        .font((family == .systemSmall ? Font.caption2 : Font.caption).weight(.bold))
-        .foregroundStyle(.primary)
-        .multilineTextAlignment(.center)
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
+  private var emptyStateTitle: String {
+    let key: String
+    switch entry.data.state {
+    case "notInWar": key = "war_state_idle"
+    case "accessDenied": key = "war_state_private"
+    case "unconfigured", "notInClan": key = "war_state_choose"
+    case "cwl": key = "war_state_idle"
+    default: key = "war_state_unavailable"
     }
-    .frame(maxWidth: .infinity)
+    return NSLocalizedString(key, tableName: "LegendsWidget", comment: "War widget status")
+  }
+
+  private var emptyClanName: String {
+    entry.selectedClanName ?? entry.data.clan?.name ?? "ClashKing"
+  }
+
+  private var emptyStateMessage: String {
+    let key: String
+    switch entry.data.state {
+    case "notInWar", "cwl": key = "war_state_idle_message"
+    case "accessDenied": key = "war_state_private_message"
+    default:
+      return entry.selectedClanName == nil ? emptyStateTitle : "\(emptyClanName)\n\(emptyStateTitle)"
+    }
+    return String(format: NSLocalizedString(key, tableName: "LegendsWidget", comment: "Clan war status"), emptyClanName)
+  }
+
+  private var emptyStateBadge: some View {
+    Group {
+      if let data = entry.clanBadgeData, let image = UIImage(data: data) {
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
+      } else {
+        Image("Icon_HV_Sword").resizable().widgetArtwork.scaledToFit()
+      }
+    }
+    .frame(width: family == .systemSmall ? 42 : 54, height: family == .systemSmall ? 42 : 54)
+    .accessibilityHidden(true)
+  }
+
+  private var emptyStateView: some View {
+    Group {
+      if family == .systemSmall {
+        VStack(spacing: 12) {
+          emptyStateBadge
+          Text(emptyStateMessage)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .lineLimit(4)
+            .minimumScaleFactor(0.8)
+        }
+      } else {
+        HStack(spacing: 16) {
+          emptyStateBadge
+          Text(emptyStateMessage)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .lineLimit(3)
+            .minimumScaleFactor(0.8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .accessibilityElement(children: .combine)
   }
 
   private var scoreText: String {
@@ -980,14 +1039,16 @@ struct WarWidgetView: View {
       .replacingOccurrences(of: " – ", with: "-")
   }
 
-  private func scoreLabel(size: CGFloat, minScale: CGFloat) -> some View {
+  private func scoreLabel(size: CGFloat, minScale: CGFloat, leading: Bool = false) -> some View {
     Text(compactScoreText)
       .font(.system(size: size, weight: .bold, design: .rounded).monospacedDigit())
       .lineLimit(1)
       .minimumScaleFactor(minScale)
       .allowsTightening(true)
-      .multilineTextAlignment(.center)
-      .frame(maxWidth: .infinity)
+      // The accessory score shares the timer's leading edge. Home Screen
+      // score layouts retain their centered alignment between clan sides.
+      .multilineTextAlignment(leading ? .leading : .center)
+      .frame(maxWidth: .infinity, alignment: leading ? .leading : .center)
   }
 
   private var compactScoreParts: (String, String) {
@@ -1018,15 +1079,17 @@ struct WarWidgetView: View {
     .allowsTightening(true)
   }
 
-  private func sideView(_ side: WarWidgetData.Side?, badgeData: Data?, badgeSize: CGFloat = 54) -> some View {
+  private func sideView(_ side: WarWidgetData.Side?, badgeData: Data?, badgeSize: CGFloat = 54, uniformText: Bool = false, nameFontSize: CGFloat? = nil) -> some View {
     VStack(spacing: 5) {
       badgeView(side, badgeData: badgeData, size: badgeSize)
       Text(side?.name ?? "Unknown")
-        .font(.caption.weight(.semibold))
+        .font(nameFontSize.map { Font.system(size: $0, weight: .semibold) } ?? .caption.weight(.semibold))
         .multilineTextAlignment(.center)
         .lineLimit(1)
-        .minimumScaleFactor(0.7)
-      attacksMetric(side)
+        // Measure both medium names together so even the shorter name uses the
+        // same font size. Only unusually long names truncate at the shared floor.
+        .minimumScaleFactor(uniformText ? 1 : 0.7)
+      attacksMetric(side, uniformText: uniformText)
     }
     .frame(maxWidth: .infinity)
   }
@@ -1035,7 +1098,9 @@ struct WarWidgetView: View {
     Group {
       if let badgeData, let image = UIImage(data: badgeData) {
         Image(uiImage: image)
+          .renderingMode(.original)
           .resizable()
+          .widgetArtwork
           .scaledToFit()
       } else {
         fallbackBadge(side, size: size)
@@ -1063,9 +1128,7 @@ struct WarWidgetView: View {
 
 private extension View {
   @ViewBuilder var widgetBackground: some View {
-    if #available(iOSApplicationExtension 26.0, *) {
-      self.modifier(LiquidGlassWidgetBackground())
-    } else if #available(iOSApplicationExtension 17.0, *) {
+    if #available(iOSApplicationExtension 17.0, *) {
       self.modifier(StandardWidgetBackground())
     } else {
       self.background(Color(.secondarySystemBackground))
@@ -1073,26 +1136,26 @@ private extension View {
   }
 }
 
-@available(iOSApplicationExtension 26.0, *)
-private struct LiquidGlassWidgetBackground: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .containerBackground(for: .widget) {
-        ZStack {
-          Color(red: 0.025, green: 0.025, blue: 0.028)
-          RoundedRectangle(cornerRadius: 28, style: .continuous)
-            .fill(.regularMaterial)
-          RoundedRectangle(cornerRadius: 28, style: .continuous)
-            .strokeBorder(.white.opacity(0.12), lineWidth: 1)
-        }
-      }
-  }
-}
-
 @available(iOSApplicationExtension 17.0, *)
 private struct StandardWidgetBackground: ViewModifier {
   func body(content: Content) -> some View {
+    // Keep the entire background removable. In Clear/Tinted appearance iOS
+    // replaces this container with its own glass; a custom material or border
+    // belongs neither in the foreground nor on top of that system surface.
     content.containerBackground(.fill.tertiary, for: .widget)
+  }
+}
+
+private extension Image {
+  @ViewBuilder var widgetArtwork: some View {
+    if #available(iOSApplicationExtension 18.0, *) {
+      // Preserve artwork detail instead of turning opaque game images into
+      // white silhouettes. Normal appearance retains the original colors;
+      // Clear/Tinted follows the system's monochrome treatment.
+      self.widgetAccentedRenderingMode(.desaturated)
+    } else {
+      self
+    }
   }
 }
 
@@ -1106,6 +1169,7 @@ struct WarWidget: Widget {
     .configurationDisplayName("Clan War")
     .description("Track selected-clan war and CWL score.")
     .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular])
+    .containerBackgroundRemovable(true)
   }
 }
 
@@ -1256,6 +1320,7 @@ private struct LegendsWidgetData: Codable {
   var attacksLimit: Int? = nil
   var defensesLimit: Int? = nil
   var league: LegendsWidgetLeague? = nil
+  var locale: String? = nil
   let tag: String
   let name: String
   let townHallLevel: Int
@@ -1511,6 +1576,10 @@ private struct LegendsFreshPlayer: Decodable {
   let name: String
   let townHallLevel: Int
   let clan: Clan?
+  let currentLeagueGroupTag: String?
+  let currentLeagueSeasonId: Int?
+  let leagueTier: RankedFreshTier?
+  let league: RankedFreshTier?
 
   var townHallImageUrl: String? {
     guard townHallLevel > 0 else { return nil }
@@ -1523,11 +1592,70 @@ private struct LegendsFreshPlayer: Decodable {
   }
 }
 
+private struct RankedFreshTier: Decodable {
+  struct Icons: Decodable { let small: String?; let large: String? }
+  let id: Int
+  let name: String
+  let iconUrls: Icons?
+}
+
+private struct RankedFreshMember: Decodable {
+  let playerTag: String
+  let leagueTrophies: Int
+  let attackWinCount: Int
+  let attackLoseCount: Int
+  let defenseWinCount: Int
+  let defenseLoseCount: Int
+}
+
+private struct RankedOfficialBattle: Decodable {
+  let trophies: Int
+  let creationTime: Date
+  let opponentName: String
+  let stars: Int
+  let destructionPercentage: Double
+  var widget: LegendsWidgetBattle {
+    LegendsWidgetBattle(trophies: trophies, battleTime: creationTime, opponentName: opponentName, opponentTownHallLevel: nil, stars: stars, destructionPercentage: destructionPercentage)
+  }
+}
+
+private struct RankedFreshGroup: Decodable {
+  let members: [RankedFreshMember]?
+  let attackLogs: [RankedOfficialBattle]?
+  let defenseLogs: [RankedOfficialBattle]?
+}
+
+private struct RankedAnalyticsBattle: Decodable {
+  struct Opponent: Decodable { let townHallLevel: Int? }
+  let trophies: Int
+  let time: Date?
+  let automatic: Bool?
+  let stars: Int?
+  let destructionPercentage: Double?
+  let opponent: Opponent?
+  var widget: LegendsWidgetBattle {
+    LegendsWidgetBattle(trophies: trophies, battleTime: time, opponentName: nil, opponentTownHallLevel: opponent?.townHallLevel, stars: stars, destructionPercentage: destructionPercentage)
+  }
+}
+
+private struct RankedFreshBattlelog: Decodable {
+  let tag: String
+  let seasonId: String
+  let leagueGroupId: String
+  let maxBattles: Int
+  let registeredAttacks: Int
+  let registeredDefenses: Int
+  let attacks: [RankedAnalyticsBattle]
+  let defenses: [RankedAnalyticsBattle]
+}
+
+private struct RankedFreshHistory: Decodable {
+  struct Entry: Decodable { let leagueTierId: Int; let maxBattles: Int }
+  let items: [Entry]
+}
+
 private struct LegendsWidgetFreshFetcher {
   func fetch(player: LegendsWidgetPlayerEntity, cached: LegendsWidgetData, now: Date) async -> LegendsWidgetData? {
-    // Ranked is hydrated by the app's existing group/battlelog service. Never
-    // replace a weekly snapshot with the unrelated daily Legend endpoint.
-    if cached.mode == "ranked" { return nil }
     let normalized = LegendsWidgetPlayerQuery.normalizedTag(player.id)
     let stillBookmarked = LegendsWidgetPlayerQuery().allEntities()
       .contains { LegendsWidgetPlayerQuery.normalizedTag($0.id) == normalized }
@@ -1536,6 +1664,14 @@ private struct LegendsWidgetFreshFetcher {
       let defaults = UserDefaults(suiteName: appGroupIdentifier),
       let baseURL = apiBaseURL(defaults: defaults)
     else { return nil }
+
+    // Weekly Ranked data has its own group, counts and positive defense points.
+    // Never send it through the daily Legend request/merge path.
+    if cached.mode == "ranked" {
+      guard let refreshed = await fetchRanked(player: player, cached: cached, defaults: defaults, baseURL: baseURL, now: now) else { return nil }
+      cache(refreshed, player: player, defaults: defaults)
+      return refreshed
+    }
 
     let day = LegendsDayWindow.current(at: now)
     async let battlelogRequest = fetchBattlelog(player: player, day: day, baseURL: baseURL)
@@ -1553,6 +1689,114 @@ private struct LegendsWidgetFreshFetcher {
     )
     cache(merged, player: player, defaults: defaults)
     return merged
+  }
+
+  private func fetchRanked(player: LegendsWidgetPlayerEntity, cached: LegendsWidgetData, defaults: UserDefaults, baseURL: URL, now: Date) async -> LegendsWidgetData? {
+    guard let profile = await fetchPlayer(player: player, defaults: defaults),
+          let groupTag = profile.currentLeagueGroupTag, !groupTag.isEmpty,
+          let season = profile.currentLeagueSeasonId, season > 0,
+          let token = await WidgetAuthSessionProvider().validAccessToken(defaults: defaults),
+          let groupURL = proxyURL(defaults: defaults, path: "leaguegroup/\(groupTag)/\(season)", query: [URLQueryItem(name: "playerTag", value: player.id)]),
+          let historyURL = proxyURL(defaults: defaults, path: "players/\(player.id)/leaguehistory"),
+          let logURL = URL(string: "player/\(LegendsWidgetPlayerQuery.normalizedTag(player.id))/ranked/\(season)/battlelog", relativeTo: baseURL)
+    else { return nil }
+    let start = Date(timeIntervalSince1970: TimeInterval(season))
+    let end = start.addingTimeInterval(7 * 86_400)
+    guard start <= now, now < end else { return nil }
+
+    async let groupResult: RankedFreshGroup? = authenticatedGet(groupURL, token: token)
+    async let logResult: RankedFreshBattlelog? = get(logURL)
+    async let historyResult: RankedFreshHistory? = authenticatedGet(historyURL, token: token)
+    let (group, candidateLog, history) = await (groupResult, logResult, historyResult)
+    let normalized = LegendsWidgetPlayerQuery.normalizedTag(player.id)
+    guard let members = group?.members,
+          let member = members.first(where: { LegendsWidgetPlayerQuery.normalizedTag($0.playerTag) == normalized })
+    else { return nil }
+    let attacksUsed = member.attackWinCount + member.attackLoseCount
+    let defensesTaken = member.defenseWinCount + member.defenseLoseCount
+    guard attacksUsed >= 0, defensesTaken >= 0 else { return nil }
+    // Analytics can lag the live roster. Only merge matching identity, period,
+    // and registered counts; otherwise use the official scoped logs, or unknown.
+    let log = candidateLog.flatMap { log in
+      LegendsWidgetPlayerQuery.normalizedTag(log.tag) == normalized && log.seasonId == String(season) &&
+      LegendsWidgetPlayerQuery.normalizedTag(log.leagueGroupId) == LegendsWidgetPlayerQuery.normalizedTag(groupTag) &&
+      log.registeredAttacks == attacksUsed && log.registeredDefenses == defensesTaken ? log : nil
+    }
+    let attacks = log?.attacks.map(\.widget) ?? group?.attackLogs?.map(\.widget)
+    let defenses = log?.defenses.map(\.widget) ?? group?.defenseLogs?.map(\.widget)
+    let attacksComplete = log.map { $0.attacks.filter { $0.automatic != true }.count == attacksUsed }
+      ?? (group?.attackLogs.map { $0.count == attacksUsed } ?? false)
+    let defensesComplete = log.map { $0.defenses.filter { $0.automatic != true }.count == defensesTaken }
+      ?? (group?.defenseLogs.map { $0.count == defensesTaken } ?? false)
+    let attackTotal = attacksComplete ? attacks?.reduce(0, { $0 + ($1.trophies ?? 0) }) : nil
+    let defenseTotal = defensesComplete ? defenses?.reduce(0, { $0 + ($1.trophies ?? 0) }) : nil
+    let tier = profile.leagueTier ?? profile.league
+    let samePeriod = cached.dayStartsAt == start
+    let sameTier = tier?.name == cached.league?.name
+    let historicalLimit = history?.items.first(where: { $0.leagueTierId == tier?.id && $0.maxBattles > 0 })?.maxBattles
+    let limit = (log?.maxBattles ?? 0) > 0 ? log?.maxBattles : historicalLimit ?? (samePeriod && sameTier ? cached.attacksLimit : nil)
+    let sorted = members.sorted { $0.leagueTrophies > $1.leagueTrophies }
+    let rank = sorted.firstIndex(where: { LegendsWidgetPlayerQuery.normalizedTag($0.playerTag) == normalized }).map { $0 + 1 }
+    let periodFormatter = DateFormatter()
+    periodFormatter.locale = Locale(identifier: cached.locale ?? Locale.current.identifier)
+    periodFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    periodFormatter.setLocalizedDateFormatFromTemplate("MMM d")
+    let dayFormatter = DateFormatter()
+    dayFormatter.locale = Locale(identifier: "en_US_POSIX")
+    dayFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    dayFormatter.dateFormat = "yyyy-MM-dd"
+    let currentLeague = tier.map { tier in
+      LegendsWidgetLeague(name: tier.name, iconUrl: sameTier ? cached.league?.iconUrl : tier.iconUrls?.large ?? tier.iconUrls?.small)
+    }
+    return LegendsWidgetData(
+      schemaVersion: cached.schemaVersion,
+      mode: "ranked",
+      destinationUrl: "clashking://ranked?player=\(normalized)",
+      periodLabel: samePeriod ? cached.periodLabel : "\(periodFormatter.string(from: start)) – \(periodFormatter.string(from: end))",
+      attacksLimit: limit,
+      defensesLimit: limit,
+      league: currentLeague,
+      locale: cached.locale,
+      tag: player.id,
+      name: profile.name,
+      townHallLevel: profile.townHallLevel,
+      townHallImageUrl: profile.townHallImageUrl,
+      updatedAt: now,
+      legendDay: dayFormatter.string(from: start),
+      legendDayIndex: nil,
+      dayStartsAt: start,
+      dayEndsAt: end,
+      trophies: member.leagueTrophies,
+      globalRank: rank,
+      attackTrophies: attackTotal,
+      defenseTrophies: defenseTotal,
+      netTrophies: attackTotal.flatMap { attack in defenseTotal.map { attack + $0 } },
+      attacksUsed: attacksUsed,
+      defensesTaken: defensesTaken,
+      latestAttack: attacks?.filter { $0.battleTime != nil }.max { $0.battleTime! < $1.battleTime! },
+      latestDefense: defenses?.filter { $0.battleTime != nil }.max { $0.battleTime! < $1.battleTime! },
+      clan: profile.widgetClan,
+      artwork: cached.artwork,
+      labels: cached.labels
+    )
+  }
+
+  private func proxyURL(defaults: UserDefaults, path: String, query: [URLQueryItem] = []) -> URL? {
+    let raw = defaults.string(forKey: "warWidgetProxyUrl") ?? "https://api.clashk.ing/proxy/v1"
+    guard var components = URLComponents(string: raw), components.scheme == "https", components.host != nil,
+          components.user == nil, components.password == nil, components.query == nil, components.fragment == nil,
+          components.path == "/proxy/v1" || components.path == "/proxy/v1/" else { return nil }
+    components.path = "/proxy/v1/\(path)"
+    components.queryItems = query.isEmpty ? nil : query
+    return components.url
+  }
+
+  private func authenticatedGet<T: Decodable>(_ url: URL, token: String) async -> T? {
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 8
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+    return await execute(request)
   }
 
   private func fetchPlayer(
@@ -1980,10 +2224,10 @@ private struct LegendsWidgetView: View {
       if let url = entry.data.townHallImageUrl,
          let data = entry.images[url],
          let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit()
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
       } else if (1...18).contains(entry.data.townHallLevel) {
         Image("town_hall_\(entry.data.townHallLevel)", bundle: .main)
-          .resizable().scaledToFit()
+          .resizable().widgetArtwork.scaledToFit()
       } else {
         Text(entry.data.townHallLevel > 0 ? "TH\(entry.data.townHallLevel)" : "TH")
           .font(.system(size: size * 0.38, weight: .bold, design: .rounded))
@@ -2022,7 +2266,7 @@ private struct LegendsWidgetView: View {
       if let url = clan.badgeUrl,
          let data = entry.images[url],
          let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit().frame(width: 12, height: 14)
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit().frame(width: 12, height: 14)
       } else {
         Text(String((clan.name ?? "?").prefix(1)))
           .font(.caption.weight(.bold))
@@ -2146,11 +2390,11 @@ private struct LegendsWidgetView: View {
     Group {
       // Static battle icons must also work for native-only refreshes with no app payload.
       if let bundledAsset, let image = UIImage(named: bundledAsset) {
-        Image(uiImage: image).renderingMode(.original).resizable().scaledToFit()
+        Image(uiImage: image).renderingMode(.original).resizable().widgetArtwork.scaledToFit()
       } else if let url,
          let data = entry.images[url],
          let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit()
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
       } else if let symbol {
         Image(systemName: symbol)
           .resizable().scaledToFit().foregroundStyle(.primary)
@@ -2243,6 +2487,7 @@ private struct LegendsWidget: Widget {
     .configurationDisplayName(LocalizedStringResource("legends_widget_label", table: "LegendsWidget"))
     .description(LocalizedStringResource("legends_widget_configure_description", table: "LegendsWidget"))
     .supportedFamilies([.systemSmall, .systemMedium])
+    .containerBackgroundRemovable(true)
   }
 }
 
@@ -2407,6 +2652,22 @@ private struct UpgradeWidgetSectionData: Codable {
   let tasks: [UpgradeWidgetTask]
 }
 
+private struct OngoingWidgetQueue: Codable, Identifiable {
+  let id: String
+  let title: String
+  let imageUrl: String
+  let capacity: Int
+  let finishesAt: [Date]
+  let extra: Int
+  let nextTask: UpgradeWidgetTask?
+}
+
+private struct OngoingWidgetSummary: Codable {
+  let queues: [OngoingWidgetQueue]
+  let boosts: [UpgradeWidgetBoost]
+  var builderBase: OngoingWidgetQueue? = nil
+}
+
 private struct UpgradeWidgetLabels: Codable {
   let title: String
   let homeVillage: String
@@ -2426,6 +2687,12 @@ private struct UpgradeWidgetLabels: Codable {
   let staleData: String?
   let level: String
   let ready: String
+  var ongoingTitle: String? = nil
+  var builderBaseTitle: String? = nil
+  var freeSlots: String? = nil
+  var freeIn: String? = nil
+  var notBuilt: String? = nil
+  var toLevel: String? = nil
 
   static let fallback = UpgradeWidgetLabels(
     title: "Upgrade Progress",
@@ -2465,6 +2732,7 @@ private struct UpgradeWidgetData: Codable {
   let laboratory: UpgradeWidgetSectionData
   let pets: UpgradeWidgetSectionData
   let builderBase: UpgradeWidgetSectionData
+  var ongoing: OngoingWidgetSummary? = nil
 
   static let placeholder = UpgradeWidgetData(
     tag: "#PLAYER",
@@ -2606,7 +2874,6 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
     let now = Date()
     let showBuilderBase = configuration.showBuilderBase
     let imageData = await images(for: data, showBuilderBase: showBuilderBase)
-    let rotationCount = data.mediumTaskChoices(showBuilderBase: showBuilderBase).count
     let baseEntry = UpgradeWidgetEntry(
       date: now,
       data: data,
@@ -2615,38 +2882,18 @@ private struct UpgradeTimelineProvider: AppIntentTimelineProvider {
       showBuilderBase: showBuilderBase,
       selectedAccountTag: configuration.account?.id
     )
-    let entries: [UpgradeWidgetEntry]
-    if context.family == .systemMedium && rotationCount > 1 {
-      let rotationInterval: TimeInterval = 15 * 60
-      entries = (0..<rotationCount).map { index in
-        UpgradeWidgetEntry(
-          date: now.addingTimeInterval(TimeInterval(index) * rotationInterval),
-          data: data,
-          images: imageData,
-          mediumTaskIndex: index,
-          showBuilderBase: showBuilderBase,
-          selectedAccountTag: configuration.account?.id
-        )
-      }
-    } else {
-      entries = [baseEntry]
-    }
     let next = data.timelineDates(showBuilderBase: showBuilderBase)
       .filter { $0 > now }
       .min() ?? now.addingTimeInterval(3600)
-    let refreshDate: Date
-    if context.family == .systemMedium && rotationCount > 1 {
-      let rotationCycleEnd = now.addingTimeInterval(TimeInterval(rotationCount) * 15 * 60)
-      refreshDate = min(next, rotationCycleEnd)
-    } else {
-      refreshDate = next
-    }
-    return Timeline(entries: entries, policy: .after(refreshDate))
+    // The medium summary shows all queues together instead of rotating jobs.
+    return Timeline(entries: [baseEntry], policy: .after(next))
   }
 
   private func images(for data: UpgradeWidgetData, showBuilderBase: Bool) async -> [String: Data] {
     var result: [String: Data] = [:]
-    let urls = [data.hallImageUrl] + data.allTasks(showBuilderBase: showBuilderBase).map(\.imageUrl) + data.helpers.map(\.imageUrl) + data.boosts.compactMap(\.imageUrl)
+    let summaryQueues = (data.ongoing?.queues ?? []) + (showBuilderBase ? [data.ongoing?.builderBase].compactMap { $0 } : [])
+    let summaryImages = summaryQueues.flatMap { [$0.imageUrl, $0.nextTask?.imageUrl].compactMap { $0 } } + (data.ongoing?.boosts ?? []).compactMap(\.imageUrl)
+    let urls = [data.hallImageUrl] + data.allTasks(showBuilderBase: showBuilderBase).map(\.imageUrl) + data.helpers.map(\.imageUrl) + data.boosts.compactMap(\.imageUrl) + summaryImages
     for imageUrl in urls where result[imageUrl] == nil && !imageUrl.isEmpty {
       guard let url = URL(string: imageUrl), url.scheme == "https" else { continue }
       if let (bytes, response) = try? await URLSession.shared.data(from: url),
@@ -2692,7 +2939,8 @@ private extension UpgradeWidgetData {
     let taskDates = allTasks(showBuilderBase: showBuilderBase).flatMap { task in
       [task.finishesAt, task.helperFinishesAt].compactMap { $0 }
     }
-    return taskDates + activeBoosts(at: Date()).compactMap(\.expiresAt) + helpers.compactMap(\.statusUntil)
+    let summaryDates = (ongoing?.queues ?? []).flatMap(\.finishesAt) + (showBuilderBase ? ongoing?.builderBase?.finishesAt ?? [] : []) + (ongoing?.boosts ?? []).compactMap(\.expiresAt)
+    return taskDates + activeBoosts(at: Date()).compactMap(\.expiresAt) + helpers.compactMap(\.statusUntil) + summaryDates
   }
 
   func hasFinishedTask(now: Date, showBuilderBase: Bool) -> Bool {
@@ -2761,6 +3009,79 @@ private struct UpgradeWidgetView: View {
   }
 
   private var mediumBody: some View {
+    Group {
+      if let summary = entry.data.ongoing {
+        ongoingMediumBody(summary)
+      } else {
+        legacyMediumBody
+      }
+    }
+  }
+
+  private func ongoingMediumBody(_ summary: OngoingWidgetSummary) -> some View {
+    TimelineView(.periodic(from: .now, by: 60)) { context in
+      VStack(alignment: .leading, spacing: 6) {
+        HStack(spacing: 6) {
+          hallImage.frame(width: 28, height: 28)
+          Text(entry.data.name).font(.system(size: 14, weight: .semibold)).lineLimit(1)
+          if entry.data.hasFinishedTask(now: context.date, showBuilderBase: entry.showBuilderBase) {
+            Image(systemName: "arrow.clockwise")
+              .font(.system(size: 9))
+              .accessibilityLabel(labels.staleData ?? "Update needed")
+          }
+          Spacer(minLength: 4)
+          let boosts = summary.boosts.filter { ($0.expiresAt ?? .distantFuture) > context.date }
+          ForEach(Array(boosts.prefix(3))) { boost in
+            VStack(spacing: 1) {
+              boostImage(boost)
+              if let until = boost.expiresAt {
+                Text(humanDuration(until: until, now: context.date))
+                  .font(.system(size: 8)).monospacedDigit().lineLimit(1)
+              }
+            }
+            .accessibilityLabel(boost.label)
+          }
+          if boosts.count > 3 { Text("+\(boosts.count - 3)").font(.system(size: 9)) }
+          completionRing
+        }
+        HStack(alignment: .top, spacing: 12) {
+          ForEach(summary.queues) { queue in
+            ongoingQueueColumn(queue, now: context.date)
+          }
+        }
+      }
+    }
+  }
+
+  private func ongoingQueueColumn(_ queue: OngoingWidgetQueue, now: Date) -> some View {
+    let future = queue.finishesAt.filter { $0 > now }
+    return VStack(alignment: .leading, spacing: 3) {
+      HStack(spacing: 4) {
+        if let bytes = entry.images[queue.imageUrl], let image = UIImage(data: bytes) {
+          Image(uiImage: image).resizable().widgetArtwork.scaledToFit().frame(width: 19, height: 19)
+        }
+        Text(queue.title).font(.system(size: 10, weight: .semibold)).lineLimit(1).minimumScaleFactor(0.8)
+      }
+      HStack(alignment: .firstTextBaseline, spacing: 3) {
+        Text("\(future.count)/\(queue.capacity)")
+          .font(.system(size: 17, weight: .semibold)).monospacedDigit()
+        if queue.extra > 0 { Text("+\(queue.extra)").font(.system(size: 8)).accessibilityLabel("\(queue.extra)") }
+      }
+      Text(availability(queue, now: now))
+        .font(.system(size: 9)).lineLimit(1).minimumScaleFactor(0.8)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  private func availability(_ queue: OngoingWidgetQueue, now: Date) -> String {
+    let future = queue.finishesAt.filter { $0 > now }
+    let free = max(0, queue.capacity - future.count)
+    if queue.capacity == 0 { return labels.notBuilt ?? "Not built" }
+    if free > 0 { return (labels.freeSlots ?? "{count} free").replacingOccurrences(of: "{count}", with: "\(free)") }
+    return (labels.freeIn ?? "Free in {duration}").replacingOccurrences(of: "{duration}", with: humanDuration(until: future.min() ?? now, now: now))
+  }
+
+  private var legacyMediumBody: some View {
     VStack(alignment: .leading, spacing: 6) {
       accountHeader
       if entry.data.hasFinishedTask(now: entry.date, showBuilderBase: entry.showBuilderBase) {
@@ -2833,6 +3154,7 @@ private struct UpgradeWidgetView: View {
       Circle().trim(from: 0, to: progress)
         .stroke(widgetPositiveColor, style: StrokeStyle(lineWidth: 4, lineCap: .round))
         .rotationEffect(.degrees(-90))
+        .widgetAccentable()
       Text(entry.data.completion == nil ? "—" : "\(percent)%")
         .font(.system(size: 10, weight: .bold)).monospacedDigit()
         .foregroundStyle(.primary)
@@ -3015,7 +3337,7 @@ private struct UpgradeWidgetView: View {
       if let imageUrl = boost.imageUrl,
          let data = entry.images[imageUrl],
          let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit()
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
       } else {
         Image(systemName: boostIcon(boost.kind))
       }
@@ -3041,7 +3363,7 @@ private struct UpgradeWidgetView: View {
   private var hallImage: some View {
     Group {
       if let data = entry.images[entry.data.hallImageUrl], let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit()
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
       } else {
         RoundedRectangle(cornerRadius: 7).fill(.quaternary)
       }
@@ -3154,7 +3476,7 @@ private struct UpgradeWidgetView: View {
   private func taskImage(_ task: UpgradeWidgetTask) -> some View {
     Group {
       if let data = entry.images[task.imageUrl], let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit()
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
       } else {
         RoundedRectangle(cornerRadius: 6).fill(.quaternary)
       }
@@ -3165,7 +3487,7 @@ private struct UpgradeWidgetView: View {
   private func helperImage(_ helper: UpgradeWidgetHelper) -> some View {
     Group {
       if let data = entry.images[helper.imageUrl], let image = UIImage(data: data) {
-        Image(uiImage: image).resizable().scaledToFit()
+        Image(uiImage: image).resizable().widgetArtwork.scaledToFit()
       } else {
         Image(systemName: "person.crop.circle.badge.clock")
           .foregroundStyle(.primary)
@@ -3189,6 +3511,7 @@ private struct UpgradeWidget: Widget {
     .configurationDisplayName("Upgrade Progress")
     .description("Track active upgrades for a linked account.")
     .supportedFamilies([.systemMedium, .systemLarge])
+    .containerBackgroundRemovable(true)
   }
 }
 

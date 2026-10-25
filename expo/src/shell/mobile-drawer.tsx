@@ -116,7 +116,10 @@ export function MobileDrawer({
             <View style={[styles.headerActions, isRtl && styles.rowRtl]}>
               <DrawerHeaderAction
                 label={t('achievementsTitle')}
-                onPress={() => onRequestClose(onAchievements)}
+                onPress={() => {
+                  onRequestClose();
+                  onAchievements();
+                }}
               >
                 <Goal color={ckColors.warGold} size={22} />
               </DrawerHeaderAction>

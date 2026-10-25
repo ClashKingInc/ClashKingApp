@@ -36,9 +36,18 @@ export function SlidingSegmentControl<T extends string>({
   const { reduceMotion } = useCKAccessibility();
   const [segmentWidth, setSegmentWidth] = useState(0);
   const [position] = useState(
-    () => new Animated.Value(Math.max(0, options.findIndex((option) => option.value === value))),
+    () =>
+      new Animated.Value(
+        Math.max(
+          0,
+          options.findIndex((option) => option.value === value),
+        ),
+      ),
   );
-  const startIndex = Math.max(0, options.findIndex((option) => option.value === value));
+  const startIndex = Math.max(
+    0,
+    options.findIndex((option) => option.value === value),
+  );
   const lastIndex = options.length - 1;
   const animateTo = useCallback(
     (index: number) => {
@@ -140,6 +149,7 @@ export function SlidingSegmentControl<T extends string>({
             style={styles.segmentItem}
           >
             <CKText
+              skeleton={false}
               style={[
                 styles.segmentLabel,
                 value !== optionValue && { color: colorWithAlpha(theme.onSurface, 0.67) },

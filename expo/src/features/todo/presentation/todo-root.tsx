@@ -74,8 +74,23 @@ export function TodoRoot({ onBack, openPlayer }: TodoRootProps) {
     [filter, linkedTags, now, presenceFor, query, revision, runtime],
   );
   const loadTimers = useCallback((tag: string) => runtime.players.loadPlayerTimers(tag), [runtime]);
+  const pendingAccounts = runtime.players.isLoading
+    ? runtime.accounts.verifiedAccounts
+        .filter(
+          (account) =>
+            !runtime.players.profiles.some(
+              (player) => canonicalTag(player.tag) === canonicalTag(account.playerTag),
+            ) && runtime.playerCardPreferences.isShownInTodoPage(account.playerTag),
+        )
+        .map((account) => ({
+          tag: account.playerTag,
+          name: String(account.raw.name ?? ''),
+          townHallLevel: Number(account.raw.townHallLevel) || 1,
+        }))
+    : [];
   return (
     <TodoScreen
+      pendingAccounts={pendingAccounts}
       model={model}
       query={query}
       filter={filter}

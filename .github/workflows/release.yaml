@@ -1,6 +1,8 @@
 name: Release mobile app
 
 on:
+  push:
+    tags: ["v*-alpha"]
   workflow_dispatch:
     inputs:
       ref:
@@ -9,7 +11,7 @@ on:
         default: main
         type: string
       version:
-        description: Exact numeric version (x.y.0 builds native; x.y.1+ publishes OTA)
+        description: Exact numeric version (standalone alpha always builds native; otherwise x.y.1+ publishes OTA)
         required: true
         type: string
       track:
@@ -17,7 +19,12 @@ on:
         required: true
         default: beta
         type: choice
-        options: [beta, production]
+        options: [alpha, beta, production]
+      enable_updates:
+        description: Enable signed OTA delivery (requires API/R2 infrastructure)
+        required: true
+        default: true
+        type: boolean
       release_notes:
         description: Release notes
         required: false
@@ -27,13 +34,19 @@ permissions:
   contents: write
 
 concurrency:
-  group: mobile-release-${{ inputs.track }}
+  group: mobile-release-${{ inputs.track || 'alpha' }}
   cancel-in-progress: false
+
+env:
+  CI: true
+  CK_RELEASE_TRACK: ${{ inputs.track || 'alpha' }}
+  # The first tagged alpha is a standalone native release without OTA prerequisites.
+  CK_ENABLE_UPDATES: ${{ inputs.enable_updates == true }}
 
 jobs:
   plan:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.track }}
+    environment: ${{ inputs.track || 'alpha' }}
     outputs:
       type: ${{ steps.plan.outputs.type }}
       version: ${{ steps.plan.outputs.version }}
@@ -49,13 +62,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ inputs.ref || github.ref }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: expo/package-lock.json
+      - name: Configure release endpoints
+        run: node scripts/release-environment.mjs
       - run: npm ci
       - name: Validate the exact release commit
         run: |
@@ -64,30 +79,40 @@ jobs:
           npm run e2e:structure
           npm run l10n:check
           npm run licenses:check
+          npm run release:check
       - name: Materialize update verification certificate
+        if: inputs.enable_updates == true
         env:
           CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
         run: |
           test -n "$CERTIFICATE"
-          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
+          mkdir -p .release
+          printf '%s' "$CERTIFICATE" > .release/updates-certificate.pem
       - id: sha
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - id: plan
         env:
-          CK_RELEASE_TRACK: ${{ inputs.track }}
-          CK_RELEASE_VERSION: ${{ inputs.version }}
-          CK_ENABLE_UPDATES: true
-          CK_UPDATES_CERTIFICATE_PATH: ${{ runner.temp }}/expo-updates-certificate.pem
+          CK_RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
+          CK_RELEASE_PLAN_PATH: ${{ runner.temp }}/release-plan.json
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_UPDATES_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_UPDATES_SECRET_ACCESS_KEY }}
           R2_UPDATES_BUCKET_NAME: ${{ secrets.R2_UPDATES_BUCKET_NAME }}
-        run: node scripts/release-plan.mjs
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == push ]]; then
+            [[ "$CK_RELEASE_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-alpha$ ]] || { echo 'Alpha tags must use vX.Y.Z-alpha.' >&2; exit 1; }
+            export CK_RELEASE_VERSION="${CK_RELEASE_VERSION#v}"
+            export CK_RELEASE_VERSION="${CK_RELEASE_VERSION%-alpha}"
+          fi
+          node scripts/release-plan.mjs
 
   ensure-draft-release:
     needs: plan
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ needs.plan.outputs.sha }}" }
       - env:
           GH_TOKEN: ${{ github.token }}
           TAG: v${{ needs.plan.outputs.version }}
@@ -95,6 +120,7 @@ jobs:
           SHA: ${{ needs.plan.outputs.sha }}
           NOTES: ${{ inputs.release_notes }}
         run: |
+          if [[ -z "$NOTES" ]]; then NOTES="$(cat update-news/whatsnew-en-US)"; fi
           EXISTING_TARGET="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json targetCommitish --jq .targetCommitish 2>/dev/null || true)"
           if [[ -n "$EXISTING_TARGET" ]]; then
             [[ "$EXISTING_TARGET" == "$SHA" ]] || {
@@ -114,7 +140,8 @@ jobs:
       ref: ${{ needs.plan.outputs.sha }}
       version: ${{ needs.plan.outputs.app_version }}
       build_number: ${{ needs.plan.outputs.build_number }}
-      track: ${{ inputs.track }}
+      track: ${{ inputs.track || 'alpha' }}
+      enable_updates: ${{ inputs.enable_updates == true }}
       runtime_version: ${{ needs.plan.outputs.android_fingerprint }}
     secrets: inherit
 
@@ -126,7 +153,8 @@ jobs:
       ref: ${{ needs.plan.outputs.sha }}
       version: ${{ needs.plan.outputs.app_version }}
       build_number: ${{ needs.plan.outputs.build_number }}
-      track: ${{ inputs.track }}
+      track: ${{ inputs.track || 'alpha' }}
+      enable_updates: ${{ inputs.enable_updates == true }}
       runtime_version: ${{ needs.plan.outputs.ios_fingerprint }}
     secrets: inherit
 
@@ -134,7 +162,7 @@ jobs:
     needs: [plan, native-android, native-ios]
     if: needs.plan.outputs.type == 'native' && needs.native-android.result == 'success' && needs.native-ios.result == 'success'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.track }}
+    environment: ${{ inputs.track || 'alpha' }}
     defaults:
       run:
         working-directory: expo
@@ -153,50 +181,47 @@ jobs:
           APK="$(find "$RUNNER_TEMP/android-release" -type f -name '*.apk' -print -quit)"
           test -n "$APK"
           gh release upload "$TAG" "$APK#ClashKing-${{ needs.plan.outputs.version }}.apk" --repo "$GITHUB_REPOSITORY" --clobber
-      - name: Publish GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: v${{ needs.plan.outputs.version }}
-          TRACK: ${{ inputs.track }}
-        run: |
-          if [[ "$TRACK" == beta ]]; then
-            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
-          else
-            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
-          fi
       - uses: actions/setup-node@v4
+        if: inputs.enable_updates == true
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: expo/package-lock.json
+      - name: Configure release endpoints
+        if: inputs.enable_updates == true
+        run: node scripts/release-environment.mjs
       - run: npm ci
+        if: inputs.enable_updates == true
       - name: Materialize update signing material
+        if: inputs.enable_updates == true
         env:
           CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
           PRIVATE_KEY: ${{ secrets.EXPO_UPDATES_PRIVATE_KEY }}
         run: |
           test -n "$CERTIFICATE"
           test -n "$PRIVATE_KEY"
-          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
+          mkdir -p .release
+          printf '%s' "$CERTIFICATE" > .release/updates-certificate.pem
           printf '%s' "$PRIVATE_KEY" > "$RUNNER_TEMP/expo-updates-private-key.pem"
       - name: Export embedded release baseline
+        if: inputs.enable_updates == true
         env:
           CK_APP_VERSION: ${{ needs.plan.outputs.app_version }}
           CK_BUILD_NUMBER: ${{ needs.plan.outputs.build_number }}
           CK_ENABLE_UPDATES: true
-          CK_RELEASE_TRACK: ${{ inputs.track }}
-          CK_UPDATES_CERTIFICATE_PATH: ${{ runner.temp }}/expo-updates-certificate.pem
-          EXPO_PUBLIC_CK_API_ENV: production
+          CK_RELEASE_TRACK: ${{ inputs.track || 'alpha' }}
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
         run: |
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-ios.json"
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-android.json"
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap
       - name: Publish immutable native marker last
+        if: inputs.enable_updates == true
         env:
           CK_RELEASE_VERSION: ${{ needs.plan.outputs.version }}
           CK_APP_VERSION: ${{ needs.plan.outputs.app_version }}
-          CK_RELEASE_TRACK: ${{ inputs.track }}
+          CK_RELEASE_TRACK: ${{ inputs.track || 'alpha' }}
           CK_RELEASE_TYPE: native
           CK_GIT_SHA: ${{ needs.plan.outputs.sha }}
           CK_IOS_FINGERPRINT: ${{ needs.plan.outputs.ios_fingerprint }}
@@ -207,7 +232,7 @@ jobs:
           CK_IOS_EXPO_CONFIG_PATH: ${{ runner.temp }}/expo-config-ios.json
           CK_ANDROID_EXPO_CONFIG_PATH: ${{ runner.temp }}/expo-config-android.json
           CK_UPDATES_PRIVATE_KEY_PATH: ${{ runner.temp }}/expo-updates-private-key.pem
-          CK_UPDATES_CERTIFICATE_PATH: ${{ runner.temp }}/expo-updates-certificate.pem
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_UPDATES_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_UPDATES_SECRET_ACCESS_KEY }}
@@ -215,11 +240,23 @@ jobs:
           R2_UPDATES_PUBLIC_ORIGIN: ${{ vars.R2_UPDATES_PUBLIC_ORIGIN }}
         run: node scripts/publish-release.mjs
 
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ needs.plan.outputs.version }}
+          TRACK: ${{ inputs.track || 'alpha' }}
+        run: |
+          if [[ "$TRACK" != production ]]; then
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
+          else
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          fi
+
   publish-ota:
     needs: [plan, ensure-draft-release]
     if: needs.plan.outputs.type == 'ota'
     runs-on: ubuntu-latest
-    environment: ${{ inputs.track }}
+    environment: ${{ inputs.track || 'alpha' }}
     defaults:
       run:
         working-directory: expo
@@ -231,6 +268,8 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: expo/package-lock.json
+      - name: Configure release endpoints
+        run: node scripts/release-environment.mjs
       - run: npm ci
       - name: Materialize update signing material
         env:
@@ -239,35 +278,26 @@ jobs:
         run: |
           test -n "$CERTIFICATE"
           test -n "$PRIVATE_KEY"
-          printf '%s' "$CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
+          mkdir -p .release
+          printf '%s' "$CERTIFICATE" > .release/updates-certificate.pem
           printf '%s' "$PRIVATE_KEY" > "$RUNNER_TEMP/expo-updates-private-key.pem"
       - name: Export both native platforms
         env:
           CK_APP_VERSION: ${{ needs.plan.outputs.app_version }}
           CK_BUILD_NUMBER: ${{ needs.plan.outputs.build_number }}
           CK_ENABLE_UPDATES: true
-          CK_RELEASE_TRACK: ${{ inputs.track }}
-          CK_UPDATES_CERTIFICATE_PATH: ${{ runner.temp }}/expo-updates-certificate.pem
-          EXPO_PUBLIC_CK_API_ENV: production
+          CK_RELEASE_TRACK: ${{ inputs.track || 'alpha' }}
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
         run: |
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-ios.json"
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-android.json"
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap
-      - name: Publish GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if [[ "${{ inputs.track }}" == beta ]]; then
-            gh release edit "v${{ needs.plan.outputs.version }}" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
-          else
-            gh release edit "v${{ needs.plan.outputs.version }}" --repo "$GITHUB_REPOSITORY" --draft=false --latest
-          fi
       - name: Upload content and immutable marker
         env:
           CK_RELEASE_VERSION: ${{ needs.plan.outputs.version }}
           CK_APP_VERSION: ${{ needs.plan.outputs.app_version }}
-          CK_RELEASE_TRACK: ${{ inputs.track }}
+          CK_RELEASE_TRACK: ${{ inputs.track || 'alpha' }}
           CK_RELEASE_TYPE: ota
           CK_BASE_NATIVE_VERSION: ${{ needs.plan.outputs.base_native_version }}
           CK_GIT_SHA: ${{ needs.plan.outputs.sha }}
@@ -279,10 +309,22 @@ jobs:
           CK_IOS_EXPO_CONFIG_PATH: ${{ runner.temp }}/expo-config-ios.json
           CK_ANDROID_EXPO_CONFIG_PATH: ${{ runner.temp }}/expo-config-android.json
           CK_UPDATES_PRIVATE_KEY_PATH: ${{ runner.temp }}/expo-updates-private-key.pem
-          CK_UPDATES_CERTIFICATE_PATH: ${{ runner.temp }}/expo-updates-certificate.pem
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_UPDATES_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_UPDATES_SECRET_ACCESS_KEY }}
           R2_UPDATES_BUCKET_NAME: ${{ secrets.R2_UPDATES_BUCKET_NAME }}
           R2_UPDATES_PUBLIC_ORIGIN: ${{ vars.R2_UPDATES_PUBLIC_ORIGIN }}
         run: node scripts/publish-release.mjs
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ needs.plan.outputs.version }}
+          TRACK: ${{ inputs.track || 'alpha' }}
+        run: |
+          if [[ "$TRACK" != production ]]; then
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
+          else
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          fi

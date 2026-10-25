@@ -1,45 +1,85 @@
-import { Image, StyleSheet } from 'react-native';
-import { useCKThemeMode } from './theme';
+import { useId, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
-const sources = {
-  standard: {
-    dark: require('../../assets/clashking/backgrounds/header-standard-dark.png'),
-    light: require('../../assets/clashking/backgrounds/header-standard-light.png'),
-  },
-  clan: {
-    dark: require('../../assets/clashking/backgrounds/header-clan-dark.png'),
-    light: require('../../assets/clashking/backgrounds/header-clan-light.png'),
-  },
-  player: {
-    dark: require('../../assets/clashking/backgrounds/header-player-dark.png'),
-    light: require('../../assets/clashking/backgrounds/header-player-light.png'),
-  },
-  war: {
-    dark: require('../../assets/clashking/backgrounds/header-war-dark.png'),
-    light: require('../../assets/clashking/backgrounds/header-war-light.png'),
-  },
-};
-
-/** Bundled gradients share artwork bounds in native layout, including rotation.
- * Do not wait for onLayout in JS: that exposes an untinted frame while resizing. */
-export function HeroHeaderScrim({ variant = 'standard' }: {
+/** Illustrated headers share the Ranked/Legends tint and opaque lower fade.
+ * Draw the scrim directly: routing it through the artwork bitmap cache can
+ * expose the photo while its tiny stretched image is loading or resizing.
+ * Calculator tiles keep their existing, slightly translucent bottom edge. */
+export function HeroHeaderScrim({
+  variant = 'standard',
+  edgeColor = '#000000',
+}: {
   variant?: 'standard' | 'clan' | 'player' | 'war' | 'ranked' | 'calculator' | 'calculatorDisabled';
+  edgeColor?: string;
 }) {
-  const mode = useCKThemeMode();
-  const source = variant === 'ranked'
-    ? require('../../assets/clashking/backgrounds/header-ranked.png')
-    : variant === 'calculator'
-    ? require('../../assets/clashking/backgrounds/header-calculator.png')
-    : variant === 'calculatorDisabled'
-      ? require('../../assets/clashking/backgrounds/header-calculator-disabled.png')
-      : sources[variant][mode];
-  return <Image pointerEvents="none" accessible={false} source={source}
-    resizeMode="stretch" style={styles.fill} />;
+  const [bounds, setBounds] = useState({ width: 0, height: 0 });
+  const gradientId = `headerFade${useId().replace(/:/g, '')}`;
+  const isCard = variant === 'calculator' || variant === 'calculatorDisabled';
+  const stops = isCard
+    ? [
+        [0, variant === 'calculatorDisabled' ? 0.35 : 0.2],
+        [0.45, 0.32],
+        [0.7, 0.65],
+        [1, 0.94],
+      ]
+    : [
+        [0, 0.34],
+        [0.6, 0.52],
+        [0.84, 0.76],
+        [1, 1],
+      ];
+  return (
+    <View
+      collapsable={false}
+      pointerEvents="none"
+      accessible={false}
+      style={styles.container}
+      onLayout={({ nativeEvent: { layout } }) => {
+        // react-native-svg truncates numeric width/height with parseInt. Round
+        // outward first, or fractional native layouts expose an artwork hairline.
+        const width = Math.ceil(layout.width);
+        const height = Math.ceil(layout.height);
+        setBounds((current) =>
+          current.width === width && current.height === height ? current : { width, height },
+        );
+      }}
+    >
+      {!isCard ? <View style={[styles.container, styles.tint]} /> : null}
+      {/* Content-sized headers can grow when badges/chips resolve. A measured
+          viewport keeps the opaque stop at the real bottom instead of leaving
+          a black band followed by uncovered artwork. */}
+      <Svg
+        width={bounds.width || '100%'}
+        height={bounds.height || '100%'}
+        style={StyleSheet.absoluteFill}
+      >
+        <Defs>
+          <LinearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+            {stops.map(([offset, opacity]) => (
+              <Stop
+                key={offset}
+                offset={offset}
+                stopColor={isCard ? '#030304' : offset === 1 ? edgeColor : '#000000'}
+                stopOpacity={opacity}
+              />
+            ))}
+          </LinearGradient>
+        </Defs>
+        <Rect
+          x="0"
+          y="0"
+          width={bounds.width || '100%'}
+          height={bounds.height || '100%'}
+          fill={`url(#${gradientId})`}
+        />
+      </Svg>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  // These source images are only 2px wide. Absolute edge constraints alone can
-  // retain an Image's intrinsic bounds on native; specify both dimensions so
-  // the gradient fills its parent in the same layout pass, including rotation.
-  fill: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
+  // Edge-pin the overlay independently of a header's padding and safe area.
+  container: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
+  tint: { backgroundColor: '#00000080' },
 });

@@ -1,12 +1,12 @@
 import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { BarChart3, List, Repeat2, Users } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
-import { DestinationPicker, MobileWebImage, useCKTheme } from '../../../ui';
+import { DestinationPicker, MobileWebImage, SkeletonContent, useCKTheme } from '../../../ui';
 import { retainRecentSections } from '../../../ui/retained-sections';
 import { ClanJoinLeaveTab, ClanWarLogTab } from './clan-activity-tabs';
 import {
@@ -28,17 +28,18 @@ import { ClanLeaderboardType, type ClanLeaderboardTypeValue } from '../models';
 import { ClanCwlHistoryTab, ClanRankingsTab } from './clan-statistics-tabs';
 import { ClanStatisticsTab } from './clan-war-stats-tab';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
-import { TutorialScrollView, TutorialTarget } from '../../tutorials/tutorial-ui';
-import { tutorials, TUTORIAL_CLAN_TAG } from '../../tutorials/tutorial-service';
+import { TutorialScrollView } from '../../tutorials/tutorial-ui';
 
 export function ClanInfoScreen({
   model,
   actions,
   initialTab = 0,
+  loading = false,
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
   initialTab?: number;
+  loading?: boolean;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -102,6 +103,7 @@ export function ClanInfoScreen({
     };
   }, [actions, historyCache]);
   useEffect(() => {
+    if (loading) return;
     let active = true;
     const types = Object.values(ClanLeaderboardType);
     // Only fetch the tiny availability summaries here. Retain these promises so
@@ -120,7 +122,7 @@ export function ClanInfoScreen({
     return () => {
       active = false;
     };
-  }, [historyActions, model.clan.tag]);
+  }, [historyActions, loading, model.clan.tag]);
   const destinations = tabs.map((key) => tabDestination(key, t, theme.onSurfaceVariant));
   const selectTab = (nextIndex: number) => {
     const next = tabs[nextIndex];
@@ -128,8 +130,6 @@ export function ClanInfoScreen({
     setSelectedTab(next);
     setRetainedTabs((retained) => retainRecentSections(retained, next));
     joinLeaveEndArmed.current = false;
-    if (nextIndex !== activeIndex && model.clan.tag === TUTORIAL_CLAN_TAG)
-      tutorials.event('clan-page-changed');
   };
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -164,13 +164,13 @@ export function ClanInfoScreen({
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
       >
         <View testID="clan-info-header-scroll-child">
-          <ClanInfoHeader model={model} actions={actions} selectedTab={active} />
+          <ClanInfoHeader model={model} actions={actions} selectedTab={active} loading={loading} />
         </View>
         <View
           testID="clan-destination-bar"
           style={[styles.navigation, { backgroundColor: theme.background }]}
         >
-          <TutorialTarget id="clan-pages" style={styles.navigationControl}>
+          <View style={styles.navigationControl}>
             <DestinationPicker
               accessibilityLabel={destinations[activeIndex]?.label}
               onSelect={(key) => {
@@ -181,9 +181,9 @@ export function ClanInfoScreen({
               selectedKey={active}
               showPositionHint
             />
-          </TutorialTarget>
+          </View>
         </View>
-        <View testID="clan-detail-body" style={styles.tabBody}>
+        <SkeletonContent loading={loading} testID="clan-detail-body" style={styles.tabBody}>
           {tabs.map((key) =>
             key === active || retainedTabs.includes(key) ? (
               <View
@@ -195,7 +195,7 @@ export function ClanInfoScreen({
               </View>
             ) : null,
           )}
-        </View>
+        </SkeletonContent>
       </TutorialScrollView>
     </SafeAreaView>
   );

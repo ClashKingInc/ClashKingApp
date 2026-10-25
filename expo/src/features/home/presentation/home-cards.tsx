@@ -1,10 +1,18 @@
 import { type ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Plus } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n, type MessageKey } from '../../../i18n';
-import { CKText, MobileWebImage, ckColors, colorWithAlpha, useCKTheme } from '../../../ui';
+import {
+  CKText,
+  MobileWebImage,
+  SkeletonContent,
+  ckColors,
+  statColors,
+  colorWithAlpha,
+  useCKTheme,
+} from '../../../ui';
 import { homeSelectedAccountIndex } from './contracts';
 import type {
   HomeAccountIdentity,
@@ -23,7 +31,6 @@ import {
   CaughtUp,
   HomeAccountBar,
   HomeCardFrame,
-  HomeCardSkeleton,
   HomeMetricGrid,
   HomeMetricPill,
   ProgressRing,
@@ -86,10 +93,10 @@ function HomeWidgetHeader({
   return (
     <View style={styles.mobileHeader}>
       <View>
-        <MobileWebImage imageUrl={imageUrl} style={{ width: 36, height: 36 }} />
+        <MobileWebImage skeleton={false} imageUrl={imageUrl} style={{ width: 36, height: 36 }} />
       </View>
       <View style={styles.flex}>
-        <CKText role="titleSmall" numberOfLines={1}>
+        <CKText skeleton={false} role="titleSmall" numberOfLines={1}>
           {title}
         </CKText>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -134,7 +141,6 @@ export function HomeTodoCard({
   const current = pages[safeSelected]!;
   return (
     <HomeCardFrame
-      accent={ckColors.donationGreen}
       onPress={actions.openTodo}
       actionLabel={t('todoTitle')}
       footer={
@@ -256,7 +262,15 @@ export function HomeRankedCard({
   actions: HomeDashboardActions;
 }) {
   const { t } = useI18n();
-  if (model.state === 'loading') return <HomeCardSkeleton rows={1} />;
+  if (model.state === 'loading')
+    return (
+      <HomePendingCard
+        kind="ranked"
+        identities={model.identities}
+        count={model.configuredCount}
+        actions={actions}
+      />
+    );
   if (model.state === 'empty' || model.accounts.length === 0)
     return (
       <HomeCardFrame>
@@ -275,7 +289,6 @@ export function HomeRankedCard({
   const current = pages[safeSelected];
   return (
     <HomeCardFrame
-      accent={current?.tierColor}
       footer={
         pages.length > 1 ? (
           <HomeAccountBar
@@ -302,13 +315,34 @@ export function HomeRankedCard({
             cornerImageUrl={account.imageUrl}
             title={account.name}
             subtitle={
-              account.mode === 'legend'
-                ? (account.rank ? `${t('cwlRankTitle')} #${account.rank}` : undefined)
-                : account.rank !== null
-                  ? `${t('cwlRankTitle')} #${account.rank} / ${account.groupSize}`
-                  : `${account.tierName} · ${t('rankedLeagueNoGroup')}`
+              account.mode === 'legend' ? (
+                account.rank ? (
+                  `${t('cwlRankTitle')} #${account.rank}`
+                ) : undefined
+              ) : account.rank !== null ? (
+                <>
+                  {t('cwlRankTitle')}{' '}
+                  <Text
+                    style={{
+                      color:
+                        account.rankZone === 'promotion'
+                          ? statColors.win
+                          : account.rankZone === 'demotion'
+                            ? statColors.loss
+                            : undefined,
+                    }}
+                  >
+                    #{account.rank}
+                  </Text>
+                  {` / ${account.groupSize}`}
+                </>
+              ) : (
+                `${account.tierName} · ${t('rankedLeagueNoGroup')}`
+              )
             }
-            size={54}
+            size={40}
+            cornerSize={20}
+            compact
             trailing={<RankedPlacement account={account} />}
           />
           <RankedBody account={account} />
@@ -395,7 +429,15 @@ export function HomeUpgradeCard({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  if (model.state === 'loading') return <HomeCardSkeleton rows={2} />;
+  if (model.state === 'loading')
+    return (
+      <HomePendingCard
+        kind="upgrade"
+        identities={model.identities}
+        count={model.configuredCount}
+        actions={actions}
+      />
+    );
   const entries = model.state === 'ready' ? [...model.accounts, ...model.missingAccounts] : [];
   const pages = entries;
   const safeSelected = homeSelectedAccountIndex(
@@ -446,7 +488,10 @@ export function HomeUpgradeCard({
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={t('upgradeTrackerImportTitle')}
-      onPress={() => actions.openUpgradeImport?.(current?.tag ?? selectedAccountTag ?? '')}
+      onPress={(event) => {
+        event.stopPropagation();
+        actions.openUpgradeImport?.(current?.tag ?? selectedAccountTag ?? '');
+      }}
       style={{
         width: 44,
         height: 44,
@@ -461,8 +506,7 @@ export function HomeUpgradeCard({
   ) : null;
   return (
     <HomeCardFrame
-      accent={ckColors.builderBlue}
-      onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}
+      onPress={() => actions.openUpgradeTracker(current?.tag ?? selectedAccountTag ?? '')}
       actionLabel={t('drawerUpgradeTracker')}
       footer={
         pages.length > 1 ? (
@@ -484,13 +528,13 @@ export function HomeUpgradeCard({
           showClan={false}
           trailing={
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {importAction}
               <ProgressRing
                 progress={completion(current)}
                 size={42}
                 labelFontSize={12}
                 label={current && 'capturedAt' in current ? undefined : '—'}
               />
-              {importAction}
             </View>
           }
         />
@@ -499,6 +543,113 @@ export function HomeUpgradeCard({
       {renderBody(current)}
     </HomeCardFrame>
   );
+}
+
+/** Presentation-only models let the same cards reserve their actual geometry.
+ * These never enter a store and the scope blocks all navigation/actions. */
+export function HomePendingCard({
+  kind,
+  identities,
+  count = 1,
+  actions,
+}: {
+  kind: 'todo' | 'ranked' | 'upgrade';
+  identities?: readonly HomeAccountIdentity[];
+  count?: number;
+  actions: HomeDashboardActions;
+}) {
+  const { t } = useI18n();
+  const entries = identities?.length
+    ? identities
+    : Array.from({ length: Math.max(1, count) }, (_, index) => ({
+        tag: `pending-${index}`,
+        name: t('generalLoading'),
+        subtitle: '',
+        imageUrl: '',
+      }));
+  const card =
+    kind === 'ranked' ? (
+      <HomeRankedCard
+        desktop={false}
+        actions={actions}
+        model={{
+          state: 'ready',
+          configuredCount: count,
+          accounts: entries.map((entry) => ({
+            ...entry,
+            mode: 'ranked',
+            statsAvailable: false,
+            tierColor: '',
+            tierIconUrl: '',
+            groupSize: 50,
+            trophies: 1000,
+            rank: 10,
+            attacksDone: 0,
+            defensesDone: 0,
+            maxBattles: 24,
+          })),
+        }}
+      />
+    ) : kind === 'upgrade' ? (
+      <HomeUpgradeCard
+        desktop={false}
+        actions={actions}
+        model={{
+          state: 'ready',
+          configuredCount: count,
+          accounts: entries.map((entry) => ({
+            ...entry,
+            completion: 0,
+            capturedAt: new Date(0),
+            needsUpdate: false,
+            hasActionableQueueWork: false,
+            builderProjectedSeconds: 3600,
+            labProjectedSeconds: 3600,
+            petProjectedSeconds: 3600,
+            activeBuilders: 0,
+            totalBuilders: 6,
+            labActive: false,
+            hasLab: true,
+            petsActive: false,
+            hasPets: true,
+            wallsAtMax: 0,
+            wallsTotal: 300,
+          })),
+          missingAccounts: [],
+          combined: {
+            completion: 0,
+            status: '',
+            builderProjectedSeconds: 0,
+            labProjectedSeconds: 0,
+            petProjectedSeconds: 0,
+            activeBuilders: 0,
+            totalBuilders: 6,
+            activeLabs: 0,
+            totalLabs: 1,
+            activePets: 0,
+            totalPets: 1,
+          },
+        }}
+      />
+    ) : (
+      <HomeTodoCard
+        desktop={false}
+        actions={actions}
+        model={{
+          accounts: entries.map((account) => ({
+            account,
+            status: t('generalLoading'),
+            done: 0,
+            total: 2,
+            metrics: [
+              { id: 'games', kind: 'clanGames', done: 0, total: 4000 },
+              { id: 'pass', kind: 'seasonPass', done: 0, total: 2000 },
+            ],
+          })),
+        }}
+      />
+    );
+  return <SkeletonContent>{card}</SkeletonContent>;
 }
 
 const styles = StyleSheet.create({

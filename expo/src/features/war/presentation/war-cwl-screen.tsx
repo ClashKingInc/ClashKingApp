@@ -1,18 +1,20 @@
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { DragJiggle } from '../../../ui/drag-jiggle';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { ShieldAlert } from 'lucide-react-native';
-import DraggableFlatList, {
-  ScaleDecorator,
-  type RenderItemParams,
-} from 'react-native-draggable-flatlist';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useI18n } from '../../../i18n';
+import { toIntlLocale, useI18n } from '../../../i18n';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { EmptyState, useCKTheme } from '../../../ui';
-import { PlayerRosterControl } from '../../player/presentation/players-screen';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 import type { WarCwl, WarInfo } from '../models';
 import {
   buildWarRoster,
@@ -157,7 +159,7 @@ export function WarCwlScreen({
   onOpenWar: (item: WarRosterItem, war: WarInfo) => void;
   onOpenCwl: (item: WarRosterItem, summary: WarCwl) => void;
 }) {
-  const { t, isRtl } = useI18n();
+  const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -167,17 +169,46 @@ export function WarCwlScreen({
   const [refreshing, setRefreshing] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const link = useLinkParameters();
-  const [mode, setMode] = useState<'linked' | 'bookmarked'>(
-    linkChoice(
-      link.tab === 'bookmarks' ? 'bookmarked' : link.tab,
-      ['linked', 'bookmarked'],
-      'linked',
-    ),
+  const [mode, setMode] = useState<'inWar' | 'other'>(
+    linkChoice(link.tab === 'noWar' ? 'other' : link.tab, ['inWar', 'other'], 'inWar'),
   );
   const roster = useMemo(() => buildWarRoster(model), [model]);
-  const entries = roster.items.filter((item) =>
-    mode === 'linked' ? !item.bookmarked : item.bookmarked,
-  );
+  const isOther = (item: WarRosterItem) => {
+    const war = item.displayWar;
+    const hasMatchup = war && !['notInWar', 'unknown', 'accessDenied'].includes(war.state);
+    if (hasMatchup && (war.state === 'warEnded' || (war.endTime && now >= war.endTime))) {
+      // Recent completed wars stay beside current wars for 24 hours. Crossing
+      // that boundary only changes this view; never rewrite the saved order.
+      const end = war.endTime?.getTime();
+      return end === undefined || !Number.isFinite(end) || now.getTime() - end >= 86_400_000;
+    }
+    if (hasMatchup) return false;
+    if (item.summary?.warInfo.state === 'accessDenied') return true;
+    // Missing/failed status remains visible, rather than being called inactive.
+    return Boolean(
+      item.summary && !item.summary.isInCwl && item.summary.warInfo.state === 'notInWar',
+    );
+  };
+  const entries = roster.items
+    .filter((item) => (mode === 'other' ? isOther(item) : !isOther(item)))
+    .sort((a, b) => {
+      // Ownership means a linked account is actually in this war's lineup,
+      // not merely in the clan. Each tier uses the same ending-first order.
+      const yours = (item: WarRosterItem) =>
+        item.accountStatuses.some((status) => status.inWar && !status.account.bookmarked);
+      const tier = Number(yours(b)) - Number(yours(a));
+      if (tier) return tier;
+      const deadline = (item: WarRosterItem) => {
+        const end = item.displayWar?.endTime?.getTime();
+        return end !== undefined && Number.isFinite(end) ? end : Infinity;
+      };
+      const endA = deadline(a),
+        endB = deadline(b);
+      if (endA !== endB) return endA < endB ? -1 : 1;
+      // App locale IDs include underscores (en_GB); Intl sorting accepts BCP 47
+      // tags (en-GB). Missing/equal war deadlines must still sort without crashing.
+      return a.name.localeCompare(b.name, toIntlLocale(locale)) || a.tag.localeCompare(b.tag);
+    });
   const refreshingRef = useRef(false);
   const refresh = useCallback(
     async function refreshWarCwl() {
@@ -237,28 +268,30 @@ export function WarCwlScreen({
   }, [actions, roster.missingWarClanTags, t]);
 
   const desktop = width >= 900;
-  const reorder = ({ data, from, to }: { data: typeof entries; from: number; to: number }) => {
-    if (from === to) return;
-    const operation =
-      mode === 'linked'
-        ? actions.reorderLinkedClans?.(data.map((item) => item.tag))
-        : actions.reorderBookmarkedClans?.(data.map((item) => item.tag));
-    void operation?.catch(() => actions.showMessage(t('accountsErrorFailedToUpdateOrder')));
-  };
   const listHeader = (
     <View style={styles.segmentWrap}>
-      <PlayerRosterControl
-        mode={mode}
-        linkedLabel={t('playersLinked')}
-        bookmarkedLabel={t('playersBookmarked')}
+      <SlidingSegmentControl
+        value={mode}
+        options={[
+          { value: 'inWar', label: t('warStatusInWar') },
+          { value: 'other', label: t('warStatusOther') },
+        ]}
         isRtl={isRtl}
         onChange={setMode}
+        style={{ marginHorizontal: 16 }}
+        testID="war-status-control"
       />
     </View>
   );
   const emptyRoster = (
     <EmptyState
-      title={mode === 'linked' ? t('warNoLinkedOrBookmarked') : t('generalNoDataAvailable')}
+      title={
+        !roster.items.length
+          ? t('warNoLinkedOrBookmarked')
+          : mode === 'other'
+            ? t('warNoOtherClans')
+            : t('warNoActiveClans')
+      }
       icon={<ShieldAlert color={theme.onSurfaceVariant} />}
     />
   );
@@ -312,44 +345,36 @@ export function WarCwlScreen({
           )}
         </ScrollView>
       ) : (
-        <DraggableFlatList
-          containerStyle={styles.listViewport}
+        <FlatList
           style={styles.listViewport}
-          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+          onScroll={pullRefresh.onScroll}
+          scrollEventThrottle={16}
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
           onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          activationDistance={8}
           alwaysBounceVertical
           data={entries}
           testID="war-scroll-view"
           key={`${mode}-war-roster`}
           keyExtractor={(item) => item.tag}
-          onDragEnd={reorder}
           contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 96 }]}
           ListHeaderComponent={listHeader}
           ListEmptyComponent={emptyRoster}
           refreshControl={refreshControl}
-          renderItem={(params: RenderItemParams<WarRosterItem>) => (
-            <ScaleDecorator activeScale={1.015}>
-              <DragJiggle active={params.isActive}>
-                <View style={[styles.mobileItem, params.isActive && styles.activeCard]}>
-                  <WarSummaryCard
-                    item={params.item}
-                    loading={
-                      loadingWarTags.has(params.item.tag) ||
-                      (!params.item.summary && !requestedWars.current.has(params.item.tag))
-                    }
-                    now={now}
-                    onOpenWar={(war) => onOpenWar(params.item, war)}
-                    onOpenCwl={() => {
-                      if (params.item.summary) onOpenCwl(params.item, params.item.summary);
-                    }}
-                    onLongPress={params.drag}
-                    dragTestID={`war-roster-card-${params.item.tag}`}
-                  />
-                </View>
-              </DragJiggle>
-            </ScaleDecorator>
+          renderItem={({ item }) => (
+            <View style={styles.mobileItem}>
+              <WarSummaryCard
+                item={item}
+                loading={
+                  loadingWarTags.has(item.tag) ||
+                  (!item.summary && !requestedWars.current.has(item.tag))
+                }
+                now={now}
+                onOpenWar={(war) => onOpenWar(item, war)}
+                onOpenCwl={() => {
+                  if (item.summary) onOpenCwl(item, item.summary);
+                }}
+              />
+            </View>
           )}
         />
       )}

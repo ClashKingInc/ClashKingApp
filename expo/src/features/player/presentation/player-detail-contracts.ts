@@ -74,6 +74,7 @@ export interface PlayerDetailPresentationActions {
 }
 
 export interface PlayerDetailRootProps {
+  readonly loading?: boolean;
   readonly player: Player;
   readonly service: {
     readonly apiV2Url: string;

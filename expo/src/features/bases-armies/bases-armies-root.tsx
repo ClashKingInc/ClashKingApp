@@ -1,9 +1,13 @@
-import { modalOrientations } from "../../ui/modal-orientations";
-import { cloneElement, useCallback, useEffect, useState, type ReactElement } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { modalOrientations } from '../../ui/modal-orientations';
+import { cloneElement, useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 import * as Clipboard from 'expo-clipboard';
-import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
+import { PagerView, type PagerViewHandle } from '../../ui/pager';
+import { useCKAccessibility } from '../../ui/accessibility';
+import { usePrimarySwipeGuard } from '../../ui/primary-swipe-guard';
 import {
   Bookmark,
+  Swords,
   CalendarDays,
   Check,
   ChevronDown,
@@ -18,6 +22,7 @@ import {
   X,
 } from 'lucide-react-native';
 import {
+  Animated,
   Linking,
   KeyboardAvoidingView,
   Modal,
@@ -35,14 +40,15 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAppRuntime } from '../../core/app/runtime-context';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { LegendArmy, LegendArmyPreview } from '../legends/presentation/legend-army-presentation';
-import { materialBackLabel, useI18n } from '../../i18n';
+import { materialBackLabel, materialCloseLabel, useI18n } from '../../i18n';
 import {
   CKText,
   EmptyState,
   ErrorState,
   HeaderIconButton,
-  Skeleton,
+  SkeletonContent,
   ProfilePageHeader,
+  ProfileTabs,
   MobileWebImage,
   SelectionPicker,
   Surface,
@@ -85,8 +91,10 @@ export function BasesArmiesScreen({
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
-  const horizontal = Platform.OS === 'web' && width >= 900 ? Math.max(16, (width - 1200) / 2) : 16;
+  const { width, fontScale } = useWindowDimensions();
+  const contentWidth = Math.min(width, 1200);
+  const horizontal = 16;
+  const [expandedArmy, setExpandedArmy] = useState<string | null>(null);
   const [state, setState] = useState<PersonalBasesState | null>(null);
   const [armyState, setArmyState] = useState<PersonalArmiesState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -98,6 +106,24 @@ export function BasesArmiesScreen({
   const [cleanupNow, setCleanupNow] = useState(Date.now);
   const link = useLinkParameters();
   const [section, setSection] = useState(linkChoice(link.section, ['bases', 'armies'], 'bases'));
+  // Army compositions need more horizontal room than base thumbnails. Keep
+  // the same sizing rule for loaded cards and their loading placeholders.
+  const baseColumns = width < 350 || fontScale > 1.35 ? 1 : width >= 900 ? 4 : width >= 600 ? 3 : 2;
+  const armyColumns = width >= 600 && fontScale <= 1.35 ? 2 : 1;
+  const [initialSection] = useState(section);
+  const pager = useRef<PagerViewHandle>(null);
+  const [tabPosition] = useState(() => new Animated.Value(initialSection === 'bases' ? 0 : 1));
+  const { reduceMotion } = useCKAccessibility();
+  const blockPrimarySwipe = usePrimarySwipeGuard();
+  useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
+  const selectSection = (next: 'bases' | 'armies') => {
+    setSection(next);
+    const index = next === 'bases' ? 0 : 1;
+    if (reduceMotion) {
+      pager.current?.setPageWithoutAnimation(index);
+      tabPosition.setValue(index);
+    } else pager.current?.setPage(index);
+  };
   const [townHallFilter, setTownHallFilter] = useState('all');
   const [armyTownHallFilter, setArmyTownHallFilter] = useState('all');
   const [editingArmy, setEditingArmy] = useState<PersonalArmy | null>(null);
@@ -199,6 +225,10 @@ export function BasesArmiesScreen({
       <ProfilePageHeader
         title={t('sideBasesArmiesTitle')}
         imageUrl={ImageAssets.clanCastle}
+        imageSize={40}
+        identityLayout="inline"
+        identityOffsetY={-8}
+        backgroundSource={require('../../../assets/clashking/backgrounds/library-barbarians.webp')}
         safeTop={insets.top}
         onBack={onBack}
         backLabel={materialBackLabel(locale)}
@@ -217,19 +247,30 @@ export function BasesArmiesScreen({
             />
           ) : undefined
         }
-      >
-        {/* Keep navigation outside the list scroller, including loading/error
-            states. Never reduce the device safe-area inset to compact it. */}
-        <SlidingSegmentControl
-          value={section}
-          isRtl={isRtl}
-          onChange={setSection}
-          options={[
-            { value: 'bases', label: t('personalBasesTab') },
-            { value: 'armies', label: t('statsArmies') },
+      />
+      <View style={[styles.libraryTabs, { paddingHorizontal: horizontal }]}>
+        <ProfileTabs
+          variant="underline"
+          selectedKey={section}
+          animatedPosition={tabPosition}
+          indicatorRtl={isRtl}
+          onSelect={(key) => selectSection(key as 'bases' | 'armies')}
+          tabs={[
+            {
+              key: 'bases',
+              label: t('personalBasesTab'),
+              icon: (
+                <MobileWebImage
+                  imageUrl={ImageAssets.townHall(10)}
+                  style={{ width: 24, height: 24 }}
+                  contentFit="contain"
+                />
+              ),
+            },
+            { key: 'armies', label: t('statsArmies'), icon: <Swords size={20} /> },
           ]}
         />
-      </ProfilePageHeader>
+      </View>
 
       {/* Both the section tabs and its filters stay outside the scrolling list. */}
       <View
@@ -262,106 +303,177 @@ export function BasesArmiesScreen({
         />
       </View>
 
-      {loading && state === null ? (
-        <View
-          accessibilityRole="progressbar"
-          accessibilityLabel={t('generalLoading')}
-          style={[styles.content, { paddingHorizontal: horizontal, gap: 12 }]}
-        >
-          {[0, 1, 2].map((index) => (
-            <Surface key={index} radius={20} style={{ padding: 16, gap: 12 }}>
-              <Skeleton width="55%" height={18} />
-              <Skeleton height={96} radius={12} />
-            </Surface>
-          ))}
-        </View>
-      ) : loadError && state === null ? (
-        <View style={[styles.feedbackWrap, { paddingHorizontal: horizontal }]}>
-          <ErrorState
-            title={t('generalError')}
-            actionLabel={t('generalRetry')}
-            onAction={() => void load()}
-          />
-        </View>
-      ) : (
-        <ScrollView
+      <View
+        style={styles.list}
+        onTouchStart={() => blockPrimarySwipe(true)}
+        onTouchEnd={() => blockPrimarySwipe(false)}
+        onTouchCancel={() => blockPrimarySwipe(false)}
+      >
+        <PagerView
+          ref={pager}
           style={styles.list}
-          contentContainerStyle={[
-            styles.content,
-            { paddingHorizontal: horizontal, paddingBottom: insets.bottom + 28 },
-          ]}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={() => void load(true)} />
+          testID="personal-library-pager"
+          initialPage={initialSection === 'bases' ? 0 : 1}
+          layoutDirection={isRtl ? 'rtl' : 'ltr'}
+          onPageScroll={(event) =>
+            tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)
+          }
+          onPageSelected={(event) =>
+            setSection(event.nativeEvent.position === 0 ? 'bases' : 'armies')
           }
         >
-          {mutationError ? (
-            <ErrorState
-              title={t('generalError')}
-              actionLabel={t('generalRetry')}
-              onAction={() => void load(true)}
-              style={styles.mutationError}
-            />
-          ) : null}
-          {section === 'bases' ? (
-            <>
-              {visibleItems.length === 0 ? (
-                <EmptyState
-                  title={t('personalBasesEmptyTitle')}
-                  body={t('personalBasesEmptyBody')}
-                />
-              ) : (
-                visibleItems.map((base) => (
-                  <BaseCard
-                    base={base}
-                    busy={busyKey !== null}
-                    key={base.id}
-                    onOpen={() => void Linking.openURL(base.baseLink)}
-                    onToggleSaved={() =>
-                      void mutate(`base:${base.id}`, async () => {
-                        setState(
-                          await (base.saved
-                            ? baseService.unsave(base.id)
-                            : baseService.save(base.id)),
-                        );
-                      })
+          {(['bases', 'armies'] as const).map((page) => {
+            const columns = page === 'bases' ? baseColumns : armyColumns;
+            const tileWidth = (contentWidth - horizontal * 2 - (columns - 1) * 12) / columns;
+            return (
+              <View
+                key={page}
+                collapsable={false}
+                style={styles.list}
+                accessibilityElementsHidden={page !== section}
+                importantForAccessibility={page !== section ? 'no-hide-descendants' : 'auto'}
+              >
+                {loading && state === null ? (
+                  <View
+                    accessibilityRole="progressbar"
+                    accessibilityLabel={t('generalLoading')}
+                    style={[styles.content, { paddingHorizontal: horizontal }]}
+                  >
+                    <SkeletonContent loading style={styles.libraryGrid}>
+                      {[0, 1, 2, 3].map((index) =>
+                        page === 'bases' ? (
+                          <BaseCard
+                            key={index}
+                            style={{ width: tileWidth }}
+                            busy
+                            onOpen={() => {}}
+                            onToggleSaved={() => {}}
+                          />
+                        ) : (
+                          <ArmyCard
+                            key={index}
+                            style={{ width: tileWidth }}
+                            busy
+                            onOpen={() => {}}
+                            onRemove={() => {}}
+                            onEdit={() => {}}
+                          />
+                        ),
+                      )}
+                    </SkeletonContent>
+                  </View>
+                ) : loadError && state === null ? (
+                  <View style={[styles.feedbackWrap, { paddingHorizontal: horizontal }]}>
+                    <ErrorState
+                      title={t('generalError')}
+                      actionLabel={t('generalRetry')}
+                      onAction={() => void load()}
+                    />
+                  </View>
+                ) : (
+                  <ScrollView
+                    style={styles.list}
+                    contentContainerStyle={[
+                      styles.content,
+                      { paddingHorizontal: horizontal, paddingBottom: insets.bottom + 28 },
+                    ]}
+                    refreshControl={
+                      <RefreshControl refreshing={refreshing} onRefresh={() => void load(true)} />
                     }
-                  />
-                ))
-              )}
-            </>
-          ) : (
-            <>
-              {visibleArmies.length === 0 ? (
-                <EmptyState
-                  title={t('personalArmiesEmptyTitle')}
-                  body={t('personalArmiesEmptyBody')}
-                />
-              ) : (
-                visibleArmies.map((army) => (
-                  <ArmyCard
-                    army={army}
-                    busy={busyKey !== null}
-                    key={army.shareCode}
-                    onOpen={() => void Linking.openURL(army.armyLink)}
-                    onEdit={() => {
-                      setEditingArmy(army);
-                      setArmyName(army.name ?? '');
-                      setArmyNotes(army.notes ?? '');
-                      setEditError(false);
-                    }}
-                    onRemove={() =>
-                      void mutate(`army:${army.shareCode}`, async () => {
-                        setArmyState(await armyService.remove(army.shareCode));
-                      })
-                    }
-                  />
-                ))
-              )}
-            </>
-          )}
-        </ScrollView>
-      )}
-      <Modal supportedOrientations={modalOrientations} transparent visible={cleanupVisible} onRequestClose={() => setCleanupVisible(false)}>
+                  >
+                    {mutationError ? (
+                      <ErrorState
+                        title={t('generalError')}
+                        actionLabel={t('generalRetry')}
+                        onAction={() => void load(true)}
+                        style={styles.mutationError}
+                      />
+                    ) : null}
+                    {page === 'bases' ? (
+                      <>
+                        {visibleItems.length === 0 ? (
+                          <EmptyState
+                            title={t('personalBasesEmptyTitle')}
+                            body={t('personalBasesEmptyBody')}
+                          />
+                        ) : (
+                          <View style={styles.libraryGrid}>
+                            {visibleItems.map((base) => (
+                              <BaseCard
+                                style={{ width: tileWidth }}
+                                base={base}
+                                busy={busyKey !== null}
+                                key={base.id}
+                                onOpen={() => void Linking.openURL(base.baseLink)}
+                                onToggleSaved={() =>
+                                  void mutate(`base:${base.id}`, async () => {
+                                    setState(
+                                      await (base.saved
+                                        ? baseService.unsave(base.id)
+                                        : baseService.save(base.id)),
+                                    );
+                                  })
+                                }
+                              />
+                            ))}
+                          </View>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {visibleArmies.length === 0 ? (
+                          <EmptyState
+                            title={t('personalArmiesEmptyTitle')}
+                            body={t('personalArmiesEmptyBody')}
+                          />
+                        ) : (
+                          <View style={styles.libraryGrid}>
+                            {visibleArmies.map((army) => (
+                              <ArmyCard
+                                style={{
+                                  width:
+                                    expandedArmy === army.shareCode ? contentWidth - 32 : tileWidth,
+                                }}
+                                expanded={expandedArmy === army.shareCode}
+                                onToggleExpanded={() =>
+                                  setExpandedArmy((current) =>
+                                    current === army.shareCode ? null : army.shareCode,
+                                  )
+                                }
+                                army={army}
+                                busy={busyKey !== null}
+                                key={army.shareCode}
+                                onOpen={() => void Linking.openURL(army.armyLink)}
+                                onEdit={() => {
+                                  setEditingArmy(army);
+                                  setArmyName(army.name ?? '');
+                                  setArmyNotes(army.notes ?? '');
+                                  setEditError(false);
+                                }}
+                                onRemove={() =>
+                                  void mutate(`army:${army.shareCode}`, async () => {
+                                    setArmyState(await armyService.remove(army.shareCode));
+                                  })
+                                }
+                              />
+                            ))}
+                          </View>
+                        )}
+                      </>
+                    )}
+                  </ScrollView>
+                )}
+              </View>
+            );
+          })}
+        </PagerView>
+      </View>
+      <Modal
+        supportedOrientations={modalOrientations}
+        transparent
+        visible={cleanupVisible}
+        onRequestClose={() => setCleanupVisible(false)}
+      >
         <Pressable style={styles.modalBackdrop} onPress={() => setCleanupVisible(false)}>
           <Surface radius={18} style={styles.confirmation}>
             <View style={styles.confirmationHeader}>
@@ -399,7 +511,8 @@ export function BasesArmiesScreen({
           </Surface>
         </Pressable>
       </Modal>
-      <Modal supportedOrientations={modalOrientations}
+      <Modal
+        supportedOrientations={modalOrientations}
         transparent
         visible={editingArmy !== null}
         onRequestClose={() => {
@@ -480,13 +593,19 @@ export function BasesArmiesScreen({
 }
 
 function ArmyCard({
-  army,
+  army: loadedArmy,
+  style,
+  expanded = false,
+  onToggleExpanded = () => {},
   busy,
   onOpen,
   onRemove,
   onEdit,
 }: {
-  readonly army: PersonalArmy;
+  readonly army?: PersonalArmy;
+  readonly style?: StyleProp<ViewStyle>;
+  readonly expanded?: boolean;
+  readonly onToggleExpanded?: () => void;
   readonly busy: boolean;
   readonly onOpen: () => void;
   readonly onRemove: () => void;
@@ -494,7 +613,14 @@ function ArmyCard({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [expanded, setExpanded] = useState(false);
+  const army = loadedArmy ?? {
+    name: 'Saved army',
+    minimumTownHall: 1,
+    shareCode: 'u20x0',
+    armyLink: '',
+    notes: null,
+    savedAt: '2000-01-01',
+  };
   const [copied, setCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
   useEffect(() => {
@@ -512,15 +638,31 @@ function ArmyCard({
     }
   };
   const expandLabel = t(expanded ? 'generalCollapse' : 'generalExpand');
+  const copyAction = (
+    <View style={{ marginLeft: 'auto' }}>
+      <HeaderIconButton
+        glass={false}
+        label={copied ? t('generalCopiedToClipboard') : t('gameAssetsCopyUrl')}
+        icon={
+          copied ? (
+            <Check size={21} color={theme.primary} />
+          ) : (
+            <Link2 size={21} color={theme.onSurface} />
+          )
+        }
+        onPress={() => void copyLink()}
+      />
+    </View>
+  );
 
   return (
-    <Surface radius={18} style={styles.armyCard}>
+    <Surface radius={18} style={[styles.armyCard, style]}>
       <View style={styles.armyIdentity}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`${expandLabel}: ${army.name || t('personalArmyUnnamed')}`}
           accessibilityState={{ expanded }}
-          onPress={() => setExpanded((value) => !value)}
+          onPress={onToggleExpanded}
           style={[styles.armyIdentity, styles.grow, { minHeight: 44 }]}
         >
           {army.minimumTownHall != null ? (
@@ -540,18 +682,6 @@ function ArmyCard({
             <ChevronDown size={18} color={theme.onSurfaceVariant} />
           )}
         </Pressable>
-        <HeaderIconButton
-          glass={false}
-          label={copied ? t('generalCopiedToClipboard') : t('gameAssetsCopyUrl')}
-          icon={
-            copied ? (
-              <Check size={21} color={theme.primary} />
-            ) : (
-              <Link2 size={21} color={theme.onSurface} />
-            )
-          }
-          onPress={() => void copyLink()}
-        />
       </View>
       {copyFailed ? (
         <CKText accessibilityRole="alert" style={{ color: theme.error }}>
@@ -594,42 +724,101 @@ function ArmyCard({
             >
               <Bookmark size={22} color={theme.onSurface} fill={theme.onSurface} />
             </Pressable>
+            {copyAction}
           </View>
         </>
       ) : (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`${expandLabel}: ${army.name || t('personalArmyUnnamed')}`}
-          accessibilityState={{ expanded: false }}
-          onPress={() => setExpanded(true)}
-        >
-          <LegendArmyPreview shareCode={army.shareCode} />
-        </Pressable>
+        <View style={[styles.armyIdentity, { alignItems: 'flex-end' }]}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${expandLabel}: ${army.name || t('personalArmyUnnamed')}`}
+            accessibilityState={{ expanded: false }}
+            onPress={onToggleExpanded}
+            style={styles.grow}
+          >
+            <LegendArmyPreview shareCode={army.shareCode} />
+          </Pressable>
+          {copyAction}
+        </View>
       )}
     </Surface>
   );
 }
 
 function BaseCard({
-  base,
+  base: loadedBase,
+  style,
   busy,
   onOpen,
   onToggleSaved,
 }: {
-  readonly base: PersonalBase;
+  readonly base?: PersonalBase;
+  readonly style?: StyleProp<ViewStyle>;
   readonly busy: boolean;
   readonly onOpen: () => void;
   readonly onToggleSaved?: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const insets = useSafeAreaInsets();
+  const [preview, setPreview] = useState(false);
+  const base = loadedBase ?? {
+    images: [ImageAssets.clanCastle],
+    upvotes: 100,
+    downvotes: 10,
+    downloadedAt: '2000-01-01',
+    saved: false,
+  };
   return (
-    <Surface radius={18} style={styles.baseCard}>
-      <MobileWebImage
-        contentFit="contain"
-        imageUrl={base.images[0] ?? ImageAssets.clanCastle}
-        style={styles.baseImage}
-      />
+    <Surface radius={20} style={[styles.baseCard, style]}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('generalExpand')}
+        onPress={() => setPreview(true)}
+      >
+        <MobileWebImage
+          contentFit="contain"
+          imageUrl={base.images[0] ?? ImageAssets.clanCastle}
+          style={styles.baseImage}
+        />
+      </Pressable>
+      <Modal
+        supportedOrientations={modalOrientations}
+        visible={preview}
+        animationType="fade"
+        onRequestClose={() => setPreview(false)}
+      >
+        {/* Modal content is hosted outside the page's native safe-area view.
+            Apply the measured window insets explicitly so its toolbar never
+            overlaps the status bar, Dynamic Island, or landscape cutout. */}
+        <View
+          style={[
+            styles.basePreview,
+            {
+              backgroundColor: theme.background,
+              paddingTop: insets.top + 8,
+              paddingBottom: insets.bottom + 16,
+              paddingLeft: insets.left + 16,
+              paddingRight: insets.right + 16,
+            },
+          ]}
+        >
+          <View style={styles.previewActions}>
+            <ActionButton icon={<ExternalLink />} label={t('generalOpen')} onPress={onOpen} />
+            <HeaderIconButton
+              glass={false}
+              label={materialCloseLabel(locale)}
+              onPress={() => setPreview(false)}
+              icon={<X color={theme.onSurface} />}
+            />
+          </View>
+          <MobileWebImage
+            contentFit="contain"
+            imageUrl={base.images[0] ?? ImageAssets.clanCastle}
+            style={{ flex: 1, width: '100%' }}
+          />
+        </View>
+      </Modal>
       <View style={styles.baseContent}>
         <View style={styles.metaRow}>
           <Meta icon={<ThumbsUp color={theme.onSurfaceVariant} />} label={String(base.upvotes)} />
@@ -688,7 +877,7 @@ function Meta({
   return (
     <View style={styles.meta}>
       {cloneElement(icon, { color: theme.onSurfaceVariant, size: 14 })}
-      <CKText muted role="labelSmall">
+      <CKText muted role="bodySmall">
         {label}
       </CKText>
     </View>
@@ -751,11 +940,15 @@ const styles = StyleSheet.create({
   },
   list: { flex: 1, minHeight: 0 },
   armyIdentity: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  baseCard: { overflow: 'hidden', marginBottom: 20 },
-  armyCard: { marginBottom: 16, padding: 14, gap: 14 },
+  libraryTabs: { width: '100%', maxWidth: 1200, alignSelf: 'center', paddingTop: 4 },
+  libraryGrid: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start', gap: 12 },
+  baseCard: { overflow: 'hidden' },
+  armyCard: { padding: 14, gap: 14 },
   baseImage: { width: '100%', aspectRatio: 4 / 3 },
-  baseContent: { padding: 12, gap: 12 },
-  metaRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 10 },
+  basePreview: { flex: 1, padding: 16 },
+  previewActions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  baseContent: { padding: 10, gap: 6 },
+  metaRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 8 },
   meta: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   actions: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 8 },
   bookmarkButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },

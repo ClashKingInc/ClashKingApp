@@ -1,5 +1,6 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
-import { type ScrollViewInstance,
+import { modalOrientations } from '../../../ui/modal-orientations';
+import {
+  type ScrollViewInstance,
   Image,
   Modal,
   Platform,
@@ -260,7 +261,8 @@ export function UpgradeTrackerShareModal({
   }
 
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       visible={visible}
       animationType="fade"
       onRequestClose={onClose}
@@ -342,8 +344,6 @@ export function UpgradeTrackerShareModal({
               >
                 {pageWidth > 0
                   ? ALL_PREVIEWS.map((kind) => {
-                      const village =
-                        kind === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home;
                       return (
                         <View key={kind} style={{ width: pageWidth, justifyContent: 'flex-start' }}>
                           <View
@@ -351,22 +351,20 @@ export function UpgradeTrackerShareModal({
                               boundaries.current[kind] = node;
                             }}
                             collapsable={false}
-                            style={[
-                              shareStyles.graphicBoundary,
-                              {
-                                aspectRatio:
-                                  kind === 'collection'
-                                    ? 1
-                                    : trackerProgressGraphicAspectRatio(
-                                        trackerProgressSections(snapshot, village).length,
-                                      ),
-                              },
-                            ]}
+                            // Size the capture to its content, not tablet width.
+                            style={shareStyles.graphicBoundary}
                           >
                             {kind === 'collection' ? (
                               <CollectionGraphic snapshot={snapshot} />
                             ) : (
-                              <ProgressGraphic snapshot={snapshot} village={village} />
+                              <ProgressGraphic
+                                snapshot={snapshot}
+                                village={
+                                  kind === 'builder'
+                                    ? UpgradeVillage.builderBase
+                                    : UpgradeVillage.home
+                                }
+                              />
                             )}
                           </View>
                         </View>
@@ -808,9 +806,9 @@ const shareStyles = StyleSheet.create({
   grow: { flex: 1 },
   graphicBoundary: { width: '100%' },
   collectionGraphicBoundary: { aspectRatio: 1 },
-  graphic: { flex: 1, borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
+  graphic: { borderRadius: 22, overflow: 'hidden', backgroundColor: '#0d0d0f' },
   graphicShade: { backgroundColor: '#050506dc' },
-  graphicContent: { flex: 1, padding: 18 },
+  graphicContent: { padding: 18 },
   hall: { width: 58, height: 58, resizeMode: 'contain' },
   whiteTitle: { color: '#fff', fontSize: 20, fontWeight: '900' },
   silver: { color: '#bfc2c8', fontSize: 11, fontWeight: '700' },
@@ -864,11 +862,11 @@ const shareStyles = StyleSheet.create({
   },
   bar: { flex: 1, height: 6, borderRadius: 99, backgroundColor: '#303238', overflow: 'hidden' },
   barFill: { height: '100%', borderRadius: 99, backgroundColor: '#f1b84b' },
-  graphicFooter: { marginTop: 'auto' },
+  graphicFooter: { marginTop: 18 },
   brand: { color: '#fff', fontSize: 13, fontWeight: '900' },
   brandIcon: { width: 24, height: 24, resizeMode: 'contain' },
   collectionGraphic: { backgroundColor: '#0d0d0f' },
-  collectionGrid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 18 },
+  collectionGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 18 },
   collectionCell: {
     width: '31%',
     minHeight: 86,

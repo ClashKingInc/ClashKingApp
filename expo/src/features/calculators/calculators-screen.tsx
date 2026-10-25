@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../ui/modal-orientations";
+import { modalOrientations } from '../../ui/modal-orientations';
 import { useEffect, useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,18 +26,13 @@ import {
 
 import { ImageAssets } from '../../core/assets/image-assets';
 import { translationForTid } from '../../core/game-data/game-data-localization';
-import {
-  materialCloseLabel,
-  toIntlLocale,
-  useI18n,
-  type MessageKey,
-} from '../../i18n';
+import { materialCloseLabel, toIntlLocale, useI18n, type MessageKey } from '../../i18n';
 import {
   CKText,
   EmptyState,
   MobileWebImage,
   PillSurface,
-  Skeleton,
+  SkeletonContent,
   Surface,
   colorWithAlpha,
   useCKTheme,
@@ -519,7 +514,9 @@ function FarmGoalMode(
       <SectionTitle>{t('farmGoalTargetTitle')}</SectionTitle>
       <Surface style={styles.panel}>
         {props.trackerLoading ? (
-          <Skeleton height={44} radius={16} />
+          <SkeletonContent loading>
+            <TrackerSuggestion onPress={() => {}} />
+          </SkeletonContent>
         ) : !suggestionSelected && suggestion ? (
           <TrackerSuggestion
             target={suggestion}
@@ -570,7 +567,7 @@ function FarmGoalMode(
               </View>
             </View>
             <View style={styles.controlRow}>
-              <CKText muted style={styles.flex}>
+              <CKText skeleton={false} muted style={styles.flex}>
                 {t('farmGoalTargetLevelLabel')}
               </CKText>
               <SelectButton
@@ -618,7 +615,9 @@ function FarmGoalMode(
           />
           <CKText muted>{resourceLabel}</CKText>
         </View>
-        <CKText muted>{t('farmGoalPerfectLootHint')}</CKText>
+        <CKText skeleton={false} muted>
+          {t('farmGoalPerfectLootHint')}
+        </CKText>
         <CKText muted>
           {account?.league && leagueEstimate?.loot
             ? t('farmGoalLeagueEstimate', {
@@ -790,7 +789,7 @@ function TargetCard({
         </Pressable>
       </View>
       <View style={styles.controlRow}>
-        <CKText muted style={styles.flex}>
+        <CKText skeleton={false} muted style={styles.flex}>
           {t('damageTargetLevelLabel')}
         </CKText>
         <SelectButton
@@ -814,7 +813,9 @@ function ResultSummary({ result }: { result: DamageResult }) {
   return (
     <View style={styles.resultSummary}>
       <View style={styles.between}>
-        <CKText muted>{t('damageResults')}</CKText>
+        <CKText skeleton={false} muted>
+          {t('damageResults')}
+        </CKText>
         <PillSurface style={{ backgroundColor: colorWithAlpha(accent, 0.14) }}>
           <View style={styles.statusPill}>
             <MobileWebImage
@@ -939,7 +940,7 @@ function ZapQuakePanel({
           style={styles.smallImage}
           errorFallback={<Bolt size={18} color={theme.secondary} />}
         />
-        <CKText role="bodyLarge" style={styles.flex}>
+        <CKText skeleton={false} role="bodyLarge" style={styles.flex}>
           {t('damageSpellCapacity')}
         </CKText>
         <Stepper
@@ -1019,7 +1020,9 @@ function FarmResults({
           errorFallback={<Rocket size={28} color={theme.onSurfaceVariant} />}
         />
         <View style={styles.flex}>
-          <CKText role="titleSmall">{t('farmGoalResultTitle')}</CKText>
+          <CKText skeleton={false} role="titleSmall">
+            {t('farmGoalResultTitle')}
+          </CKText>
           <CKText muted>
             {t('farmGoalResultSummary', {
               target: formatInt(upgradeCost, locale),
@@ -1043,28 +1046,37 @@ function FarmResults({
           </View>
           <View style={styles.alignEnd}>
             <CKText role="titleLarge">{scenario.attacks}</CKText>
-            <CKText muted>{t('farmGoalAttacks')}</CKText>
+            <CKText skeleton={false} muted>
+              {t('farmGoalAttacks')}
+            </CKText>
           </View>
         </View>
       ))}
-      <CKText muted>{t('farmGoalScenarioHint')}</CKText>
+      <CKText skeleton={false} muted>
+        {t('farmGoalScenarioHint')}
+      </CKText>
     </Surface>
   );
 }
 
 function TrackerSuggestion({
-  target,
+  target: loadedTarget,
   onPress,
 }: {
-  target: FarmTrackerTarget;
+  target?: FarmTrackerTarget;
   onPress: () => void;
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const target = loadedTarget ?? {
+    item: { name: 'Town Hall', currentLevel: 1, steps: [] },
+    plannedCosts: undefined,
+    plannedStep: undefined,
+  };
   const level = target.plannedStep?.targetLevel ?? target.item.steps[0]?.targetLevel ?? 1;
   return (
     <View style={styles.trackerBlock}>
-      <CKText muted role="bodySmall">
+      <CKText skeleton={false} muted role="bodySmall">
         {t('farmGoalTrackerNextTitle')}
       </CKText>
       <Pressable onPress={onPress} style={styles.trackerRow}>
@@ -1184,11 +1196,17 @@ function AccountPicker({
     `${account.name} ${account.tag}`.toLowerCase().includes(query.trim().toLowerCase()),
   );
   return (
-    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
       <View style={styles.sheetBackdrop}>
         <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
-            <CKText role="titleLarge" style={styles.flex}>
+            <CKText skeleton={false} role="titleLarge" style={styles.flex}>
               {t('damageAccountPresetShort')}
             </CKText>
             <Pressable
@@ -1333,7 +1351,13 @@ function BuildingPicker({
     />
   );
   return (
-    <Modal supportedOrientations={modalOrientations} transparent animationType="slide" visible={visible} onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
       <View style={styles.sheetBackdrop}>
         <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
           <View style={styles.sheetHeader}>
@@ -1540,7 +1564,8 @@ function SelectButton({
         <CKText numberOfLines={1}>{label}</CKText>
         <ChevronDown size={16} color={theme.onSurfaceVariant} />
       </Pressable>
-      <Modal supportedOrientations={modalOrientations}
+      <Modal
+        supportedOrientations={modalOrientations}
         transparent
         visible={visible}
         animationType="fade"

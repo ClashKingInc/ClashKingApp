@@ -8,6 +8,7 @@ on:
       build_number: { required: true, type: string }
       track: { required: true, type: string }
       runtime_version: { required: true, type: string }
+      enable_updates: { required: false, type: boolean, default: true }
 permissions:
   contents: write
 
@@ -24,6 +25,12 @@ jobs:
       CI: true
       EXPO_NO_TELEMETRY: 1
       EXPO_NO_GIT_STATUS: 1
+      CK_RELEASE_TRACK: ${{ inputs.track }}
+      CK_APP_VERSION: ${{ inputs.version }}
+      CK_BUILD_NUMBER: ${{ inputs.build_number }}
+      CK_ENABLE_UPDATES: ${{ inputs.enable_updates }}
+      CK_RUNTIME_VERSION: ${{ inputs.runtime_version }}
+      CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
       JAVA_VERSION: 21
       AAB_PATH: ${{ github.workspace }}/expo/android/app/build/outputs/bundle/release/app-release.aab
       APK_PATH: ${{ github.workspace }}/expo/android/app/build/outputs/apk/release/app-release.apk
@@ -55,13 +62,21 @@ jobs:
         id: release
         shell: bash
         run: |
-          RELEASE_TRACK="${{ inputs.track }}"
-          [[ "$RELEASE_TRACK" == beta ]] && TRACK=internal || TRACK=production
-          case "$TRACK" in
-            internal|production) ;;
-            *) echo "Unsupported Play track: $TRACK" >&2; exit 1 ;;
+          case "$CK_RELEASE_TRACK" in
+            alpha)
+              TRACK="$CLOSED_TRACK"
+              [[ -n "$TRACK" && "$TRACK" != internal && "$TRACK" != beta && "$TRACK" != production ]] || {
+                echo 'Set PLAY_ALPHA_TRACK to the existing closed testing track identifier in Play Console.' >&2
+                exit 1
+              }
+              ;;
+            beta) TRACK=beta ;;
+            production) TRACK=production ;;
+            *) echo "Unsupported release track: $CK_RELEASE_TRACK" >&2; exit 1 ;;
           esac
           echo "track=$TRACK" >> "$GITHUB_OUTPUT"
+        env:
+          CLOSED_TRACK: ${{ vars.PLAY_ALPHA_TRACK || 'alpha' }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -76,30 +91,31 @@ jobs:
           distribution: zulu
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Configure release endpoints
+        run: node scripts/release-environment.mjs
+
+      - name: Materialize update verification certificate
+        if: inputs.enable_updates
+        env:
+          CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
+        run: |
+          test -n "$CERTIFICATE"
+          mkdir -p .release
+          printf '%s' "$CERTIFICATE" > .release/updates-certificate.pem
+
       - name: Install dependencies
         run: npm ci
 
       - name: Verify Expo project
         run: |
+          node scripts/check-release-notes.mjs
           npm run typecheck
           npm run lint
           npm run l10n:check
           npx expo-doctor
 
       - name: Generate Android project
-        shell: bash
-        env:
-          CK_APP_VERSION: ${{ steps.version.outputs.version_name }}
-          CK_BUILD_NUMBER: ${{ steps.version.outputs.build_number }}
-          CK_ENABLE_UPDATES: true
-          CK_RELEASE_TRACK: ${{ inputs.track }}
-          CK_RUNTIME_VERSION: ${{ inputs.runtime_version }}
-          EXPO_UPDATES_CODE_SIGNING_CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
-          EXPO_PUBLIC_CK_API_ENV: production
-        run: |
-          test -n "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE"
-          printf '%s' "$EXPO_UPDATES_CODE_SIGNING_CERTIFICATE" > "$RUNNER_TEMP/expo-updates-certificate.pem"
-          CK_UPDATES_CERTIFICATE_PATH="$RUNNER_TEMP/expo-updates-certificate.pem" npx expo prebuild --platform android --clean --no-install
+        run: npx expo prebuild --platform android --clean --no-install
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
@@ -122,12 +138,17 @@ jobs:
       - name: Build signed AAB and APK
         working-directory: expo/android
         env:
-          EXPO_PUBLIC_CK_API_ENV: production
           ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_FILE: ${{ github.workspace }}/expo/ck_key.jks
           ORG_GRADLE_PROJECT_CK_UPLOAD_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           ORG_GRADLE_PROJECT_CK_UPLOAD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew :app:bundleRelease :app:assembleRelease --no-daemon
+        # Expo prebuild restores its 512 MiB Metaspace default. Override the
+        # build JVM here so release compilation keeps the larger budget even
+        # after a clean prebuild; bound worker concurrency for native builds.
+        run: >-
+          ./gradlew :app:bundleRelease :app:assembleRelease
+          --no-daemon --max-workers=4
+          -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=2g -Dfile.encoding=UTF-8"
 
       - name: Verify release outputs
         working-directory: .

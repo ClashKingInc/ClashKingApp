@@ -33,7 +33,7 @@ import {
   CKText,
   GlassControlSurface,
   LoadingIndicator,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   PressableSurface,
   SelectionPicker,
@@ -186,6 +186,7 @@ export function SearchScreen(props: SearchScreenProps) {
       {props.query.trim().length === 0 && visibleRecents.length ? (
         <>
           <CKText
+            skeleton={false}
             role="titleMedium"
             style={[
               styles.recentTitle,
@@ -218,7 +219,20 @@ export function SearchScreen(props: SearchScreenProps) {
           {t('searchNoResult')}
         </CKText>
       ) : props.isSearching && props.results.length === 0 ? (
-        <PageSkeleton kind="list" />
+        <SkeletonContent loading>
+          {[0, 1, 2, 3, 4].map((index) => (
+            <EntityTile
+              key={index}
+              name="ClashKing player"
+              tag="#PLAYER"
+              subtitle="Player information"
+              imageUrl={props.mode === 'players' ? ImageAssets.townHall(1) : ImageAssets.clanCastle}
+              type={props.mode === 'players' ? 'player' : 'clan'}
+              overlay={props.overlay ?? false}
+              onPress={() => {}}
+            />
+          ))}
+        </SkeletonContent>
       ) : (
         props.results.map((result, index) => (
           <EntityTile

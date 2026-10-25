@@ -3,7 +3,7 @@ import { upgradeSnapshotNeedsRefresh } from '../../upgrade-tracker/models/snapsh
 import { rankedLeagueDisplayColor } from '../../../ui/league-colors';
 import { formatCompactNumber, type I18nValue } from '../../../i18n';
 import type { Player } from '../../player/models';
-import type { RankedLeagueData } from '../../player/models/player-ranked';
+import { rankedPlacementZone, type RankedLeagueData } from '../../player/models/player-ranked';
 import type { PlayerLegendLeagueData } from '../../player/models/player-legend';
 import type { WarCwlService } from '../../war/data';
 import {
@@ -70,7 +70,12 @@ export function buildHomeRankedModel(
   loading = false,
   legends: ReadonlyMap<string, PlayerLegendLeagueData> = new Map(),
 ): HomeRankedCardModel {
-  if (loading) return { state: 'loading', configuredCount: players.length };
+  if (loading && loaded.size === 0 && legends.size === 0)
+    return {
+      state: 'loading',
+      configuredCount: players.length,
+      identities: players.map(homeAccountIdentity),
+    };
   const accounts = players.flatMap<HomeRankedAccount>((player) => {
     if (player.isLegendLeague) {
       const legend = legends.get(normalizeTag(player.tag));
@@ -111,6 +116,11 @@ export function buildHomeRankedModel(
         groupSize: data.currentGroup?.members.length ?? 0,
         trophies: member?.leagueTrophies ?? data.trophies,
         rank: data.currentRank,
+        rankZone: rankedPlacementZone(
+          tier.id,
+          data.currentGroup?.members.length ?? 0,
+          data.currentRank,
+        ),
         attacksDone: member ? member.attackWinCount + member.attackLoseCount : 0,
         defensesDone: member ? member.defenseWinCount + member.defenseLoseCount : 0,
         maxBattles: data.currentMaxBattles,
@@ -128,7 +138,12 @@ export function buildHomeUpgradeModel(
   t: Translate,
   options: { loading?: boolean; now?: Date } = {},
 ): HomeUpgradeCardModel {
-  if (options.loading) return { state: 'loading', configuredCount: players.length };
+  if (options.loading && loaded.size === 0)
+    return {
+      state: 'loading',
+      configuredCount: players.length,
+      identities: players.map(homeAccountIdentity),
+    };
   const now = options.now ?? new Date();
   const accounts: HomeUpgradeAccount[] = [];
   const missingAccounts: HomeAccountIdentity[] = [];

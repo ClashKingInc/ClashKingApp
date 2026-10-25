@@ -20,7 +20,6 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
-import { CardAppearanceProvider } from '../../../ui/card-appearance';
 import { CARD_REORDER_HOLD_MS, DragJiggle } from '../../../ui/drag-jiggle';
 import {
   homeContentWidth,
@@ -33,8 +32,8 @@ import {
   type HomePlatform,
 } from './contracts';
 import { HomeEventBanner } from './event-banner';
-import { HomeCardSkeleton, HomeDragContext } from './home-components';
-import { HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
+import { HomeDragContext } from './home-components';
+import { HomePendingCard, HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
 import { HomeActivityCard } from './home-activity-card';
 import { tutorials } from '../../tutorials/tutorial-service';
 import { TutorialTarget } from '../../tutorials/tutorial-ui';
@@ -50,10 +49,12 @@ export function homeBottomPadding(desktop: boolean, bottomInset: number): number
 export function DashboardScreen({
   model,
   actions,
+  active = true,
   platform = Platform.OS as HomePlatform,
 }: {
   model: HomeDashboardModel;
   actions: HomeDashboardActions;
+  active?: boolean;
   platform?: HomePlatform;
 }) {
   const { t, locale } = useI18n();
@@ -65,11 +66,9 @@ export function DashboardScreen({
   const [refreshing, setRefreshing] = useState(false);
   const refreshingRef = useRef(false);
   const dragValues = useRef<HomeDragValues | null>(null);
-  const lastScrollOffset = useRef(0);
   const list = useRef<FlatList<HomeCardId>>(null);
   const [animationValues, setAnimationValues] = useState<HomeDragValues | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [dragLayoutRevision, setDragLayoutRevision] = useState(0);
   const holdPageY = useSharedValue(0);
   const listPageY = useSharedValue(0);
   const lastAutoScroll = useSharedValue(0);
@@ -131,24 +130,8 @@ export function DashboardScreen({
     desktop ? homeContentWidth(windowWidth) : 840,
   );
   const cards = visibleHomeCards(model);
-  // The native list holds translated cell positions until another onLayout.
-  // On iPad, a reorder or rotation can leave equal-size cells without that
-  // callback, retaining a card-sized hole. Start fresh native measurements for
-  // each committed order/width, while retaining page state and scroll position.
-  // Keep the established phone and web list lifecycle unchanged.
-  const listLayoutKey = Platform.OS === 'ios' && Platform.isPad
-    ? `ipad:${Math.round(contentWidth)}:${cards.join(',')}:${dragLayoutRevision}`
-    : 'home';
-  useEffect(() => {
-    if (Platform.OS !== 'ios' || !Platform.isPad) return;
-    holdEpoch.current += 1;
-    const offset = lastScrollOffset.current;
-    const frame = requestAnimationFrame(() => {
-      setDragging(false);
-      list.current?.scrollToOffset({ offset, animated: false });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [listLayoutKey]);
+  // The shared Fabric cell patch resets settled offsets without destroying
+  // the list, so nested card state and the scroll position survive a drop.
   const refresh = useCallback(async () => {
     if (refreshingRef.current) return;
     refreshingRef.current = true;
@@ -180,6 +163,7 @@ export function DashboardScreen({
   const header = (
     <>
       <HomeEventBanner
+        active={active}
         announcements={model.announcements}
         desktop={desktop}
         onOpen={actions.openAnnouncement}
@@ -191,9 +175,9 @@ export function DashboardScreen({
   if (model.loading && model.linkedAccountCount === 0)
     emptyBody = (
       <>
-        <HomeCardSkeleton rows={1} />
+        <HomePendingCard kind="todo" actions={actions} />
         <View style={styles.mobileGap} />
-        <HomeCardSkeleton rows={2} />
+        <HomePendingCard kind="upgrade" actions={actions} />
       </>
     );
   else if (model.linkedAccountCount === 0)
@@ -233,35 +217,33 @@ export function DashboardScreen({
         <TutorialTarget id="home-reorder" enabled={index === 0} style={{ width: '100%' }}>
           <DragJiggle active={isActive} scale={1.015}>
             <HomeDragContext.Provider value={isActive}>
-              <CardAppearanceProvider value={index === 0 ? 'glow' : 'edge'}>
-                {card === 'activity' && model.activityAccounts ? (
-                  <HomeActivityCard
-                    accounts={model.activityAccounts}
-                    refreshKey={model.lastRefresh?.toISOString()}
-                  />
-                ) : card === 'todo' && model.todo ? (
-                  <HomeTodoCard
-                    model={model.todo}
-                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
-                    desktop={desktop}
-                    actions={cardActions}
-                  />
-                ) : card === 'ranked' && model.ranked ? (
-                  <HomeRankedCard
-                    model={model.ranked}
-                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
-                    desktop={desktop}
-                    actions={cardActions}
-                  />
-                ) : card === 'upgrade' && model.upgrade ? (
-                  <HomeUpgradeCard
-                    model={model.upgrade}
-                    selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
-                    desktop={desktop}
-                    actions={cardActions}
-                  />
-                ) : null}
-              </CardAppearanceProvider>
+              {card === 'activity' && model.activityAccounts ? (
+                <HomeActivityCard
+                  accounts={model.activityAccounts}
+                  refreshKey={model.lastRefresh?.toISOString()}
+                />
+              ) : card === 'todo' && model.todo ? (
+                <HomeTodoCard
+                  model={model.todo}
+                  selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                  desktop={desktop}
+                  actions={cardActions}
+                />
+              ) : card === 'ranked' && model.ranked ? (
+                <HomeRankedCard
+                  model={model.ranked}
+                  selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                  desktop={desktop}
+                  actions={cardActions}
+                />
+              ) : card === 'upgrade' && model.upgrade ? (
+                <HomeUpgradeCard
+                  model={model.upgrade}
+                  selectedAccountTag={cardAccounts[card] ?? model.selectedAccountTag}
+                  desktop={desktop}
+                  actions={cardActions}
+                />
+              ) : null}
             </HomeDragContext.Provider>
           </DragJiggle>
         </TutorialTarget>
@@ -275,7 +257,10 @@ export function DashboardScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <DraggableFlatList
-        key={listLayoutKey}
+        // Let nested horizontal controls take ownership on both platforms;
+        // the parent RNGH scroll wrapper otherwise disallows interruption.
+        {...{ disallowInterruption: false }}
+        {...(Platform.OS === 'android' ? { androidHoldToDrag: true } : {})}
         ref={list}
         testID="home-scroll-view"
         data={cards}
@@ -308,7 +293,6 @@ export function DashboardScreen({
         ItemSeparatorComponent={HomeCardSeparator}
         refreshControl={refreshControl}
         onScrollOffsetChange={(offset) => {
-          lastScrollOffset.current = offset;
           pullRefresh.onScrollOffsetChange(offset);
         }}
         onScrollBeginDrag={() => {
@@ -318,9 +302,6 @@ export function DashboardScreen({
         onScrollEndDrag={pullRefresh.onScrollEndDrag}
         onDragEnd={({ data, from, to }) => {
           setDragging(false);
-          // Also discard held transforms after a drop back in the original slot.
-          if (Platform.OS === 'ios' && Platform.isPad)
-            setDragLayoutRevision((revision) => revision + 1);
           if (from === to) return;
           // The shared list owns offsets and completes its native settling before
           // this callback. Do not keep a second JS/native transform map for Home.

@@ -31,13 +31,23 @@ const ANDROID_LAUNCHER_ALIASES = [
     aliasName: '.MainActivityDefault',
     resourceName: 'app_icon_default',
     sourcePath: './public/icons/Icon-maskable-512.png',
+    adaptive: true,
     enabled: true,
+  },
+  {
+    iconName: 'AppIconHalloween',
+    aliasName: '.MainActivityHalloween',
+    resourceName: 'app_icon_halloween',
+    sourcePath: './assets/clashking/icons/app_icon_halloween.png',
+    adaptive: true,
+    enabled: false,
   },
   {
     iconName: 'AppIconChristmas',
     aliasName: '.MainActivityChristmas',
     resourceName: 'app_icon_christmas',
     sourcePath: './assets/clashking/icons/app_icon_christmas.png',
+    adaptive: true,
     enabled: false,
   },
   {
@@ -45,6 +55,7 @@ const ANDROID_LAUNCHER_ALIASES = [
     aliasName: '.MainActivityBlackWhite',
     resourceName: 'app_icon_black_white',
     sourcePath: './assets/clashking/icons/app_icon_black_white.png',
+    adaptive: true,
     enabled: false,
   },
   {
@@ -52,6 +63,7 @@ const ANDROID_LAUNCHER_ALIASES = [
     aliasName: '.MainActivityDarkLogo',
     resourceName: 'app_icon_dark_logo',
     sourcePath: './assets/clashking/icons/app_icon_dark_logo.png',
+    adaptive: true,
     enabled: false,
   },
 ];
@@ -133,6 +145,7 @@ function validateLegacyWidgetContract(contract) {
   }
   const expectedIconOptions = [
     ['default', null, 'assets/icons/app_icon_ios_default.png'],
+    ['halloween', 'AppIconHalloween', 'assets/icons/app_icon_halloween.png'],
     ['christmas', 'AppIconChristmas', 'assets/icons/app_icon_christmas.png'],
     ['black_white', 'AppIconBlackWhite', 'assets/icons/app_icon_black_white.png'],
     ['dark_mode', 'AppIconDarkLogo', 'assets/icons/app_icon_dark_logo.png'],
@@ -141,7 +154,7 @@ function validateLegacyWidgetContract(contract) {
     JSON.stringify(contract.alternateIcons) !==
     JSON.stringify(expectedIconOptions.slice(1).map((option) => option[1]))
   ) {
-    throw new Error('alternateIcons must match the shipping Flutter alternate icon names.');
+    throw new Error('alternateIcons must match the supported native alternate icon names.');
   }
   const actualIconOptions = contract.alternateIconOptions?.map((option) => [
     option.labelKey,
@@ -149,7 +162,7 @@ function validateLegacyWidgetContract(contract) {
     option.previewAsset,
   ]);
   if (JSON.stringify(actualIconOptions) !== JSON.stringify(expectedIconOptions)) {
-    throw new Error('alternateIconOptions must match the shipping Flutter AppIconService options.');
+    throw new Error('alternateIconOptions must match the AppIconService options.');
   }
   const notificationDebug = contract.notificationDebug;
   if (
@@ -371,6 +384,10 @@ function withClashKingAndroidLinks(config, contract) {
 
 function configureAndroidLauncherAliases(application, targetActivity) {
   if (!targetActivity) throw new Error('Generated Android launcher activity has no name.');
+  // System surfaces also need the layered icon; otherwise Settings can show
+  // the old padded bitmap even when the launcher alias is correct.
+  application.$['android:icon'] = '@mipmap/app_icon_default';
+  application.$['android:roundIcon'] = '@mipmap/app_icon_default';
   const managedNames = new Set(ANDROID_LAUNCHER_ALIASES.map((option) => option.aliasName));
   const unmanagedAliases = (application['activity-alias'] || []).filter(
     (alias) => !managedNames.has(alias.$?.['android:name']),
@@ -383,8 +400,8 @@ function configureAndroidLauncherAliases(application, targetActivity) {
         'android:targetActivity': targetActivity,
         'android:enabled': String(option.enabled),
         'android:exported': 'true',
-        'android:icon': `@drawable/${option.resourceName}`,
-        'android:roundIcon': `@drawable/${option.resourceName}`,
+        'android:icon': `@${option.adaptive ? 'mipmap' : 'drawable'}/${option.resourceName}`,
+        'android:roundIcon': `@${option.adaptive ? 'mipmap' : 'drawable'}/${option.resourceName}`,
       },
       'intent-filter': [
         {
@@ -401,17 +418,30 @@ function withAndroidAlternateIconAssets(config, projectRoot) {
   return withDangerousMod(config, [
     'android',
     async (mod) => {
-      const destination = path.join(
-        mod.modRequest.platformProjectRoot,
-        'app/src/main/res/drawable-nodpi',
-      );
-      for (const option of ANDROID_LAUNCHER_ALIASES) {
-        const source = requirePath(projectRoot, option.sourcePath, option.resourceName);
-        copyFileIfChanged(source, path.join(destination, `${option.resourceName}.png`));
-      }
+      copyAndroidLauncherAssets(projectRoot, mod.modRequest.platformProjectRoot);
       return mod;
     },
   ]);
+}
+
+function copyAndroidLauncherAssets(projectRoot, androidRoot) {
+  const res = path.join(androidRoot, 'app/src/main/res');
+  for (const option of ANDROID_LAUNCHER_ALIASES) {
+    const source = requirePath(projectRoot, option.sourcePath, option.resourceName);
+    copyFileIfChanged(source, path.join(res, 'drawable-nodpi', `${option.resourceName}.png`));
+    if (!option.adaptive) continue;
+    // Legacy PNG fallback for older launchers; adaptive resources override it
+    // from API 26 onward. Do not send an opaque square PNG as the foreground.
+    copyFileIfChanged(source, path.join(res, 'mipmap', `${option.resourceName}.png`));
+  }
+  const adaptiveRoot = requirePath(
+    projectRoot,
+    './assets/clashking/icons/android',
+    'adaptive launcher resources',
+  );
+  for (const directory of ['drawable', 'drawable-nodpi', 'mipmap-anydpi-v26']) {
+    copyTreeIfChanged(path.join(adaptiveRoot, directory), path.join(res, directory));
+  }
 }
 
 function removeUnscopedAndroidScheme(filters, scheme) {
@@ -838,7 +868,13 @@ function withIosWidgetTarget(config, contract) {
       'app_extension',
     );
     project.addBuildPhase(
-      ['WarWidget/PrivacyInfo.xcprivacy', 'WarWidget/LegendsWidget.xcstrings', 'WarWidget/TownHalls.xcassets', 'WarWidget/Icon_HV_Sword.png', 'WarWidget/Icon_HV_Shield_Arrow.png'],
+      [
+        'WarWidget/PrivacyInfo.xcprivacy',
+        'WarWidget/LegendsWidget.xcstrings',
+        'WarWidget/TownHalls.xcassets',
+        'WarWidget/Icon_HV_Sword.png',
+        'WarWidget/Icon_HV_Shield_Arrow.png',
+      ],
       'PBXResourcesBuildPhase',
       'Resources',
       target.uuid,
@@ -1033,7 +1069,10 @@ function withClashKingNative(config, options = {}) {
     // SDK 58 moved window startup into SceneDelegate. RNFirebase's older
     // insertion matcher misses that template, but Firebase still must be
     // configured once before modules request its default app.
-    if (mod.modResults.language === 'swift' && !mod.modResults.contents.includes('FirebaseApp.configure()')) {
+    if (
+      mod.modResults.language === 'swift' &&
+      !mod.modResults.contents.includes('FirebaseApp.configure()')
+    ) {
       const marker = '    let delegate = ReactNativeDelegate()';
       if (!mod.modResults.contents.includes(marker)) {
         throw new Error('Cannot locate SDK 58 Firebase initialization point.');
@@ -1083,6 +1122,7 @@ module.exports.configureGeneratedAndroidBuildTypePermissions =
   configureGeneratedAndroidBuildTypePermissions;
 module.exports.configureIosPlatformPlist = configureIosPlatformPlist;
 module.exports.configureAndroidLauncherAliases = configureAndroidLauncherAliases;
+module.exports.copyAndroidLauncherAssets = copyAndroidLauncherAssets;
 module.exports.removeUnscopedAndroidScheme = removeUnscopedAndroidScheme;
 module.exports.android12SplashStyleXml = android12SplashStyleXml;
 module.exports.copyAndroidSplashResources = copyAndroidSplashResources;

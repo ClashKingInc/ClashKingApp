@@ -8,7 +8,15 @@ const arbRoot = resolve(expoRoot, 'src/i18n/arb');
 const androidRoot = resolve(expoRoot, 'native/android/app/src/main/res');
 const iosCatalogPath = resolve(expoRoot, 'native/ios/WarWidget/LegendsWidget.xcstrings');
 
+// Both native widget families consume these catalogs; reuse ARB translations.
 const resources = {
+  war_state_idle: 'warWidgetNoActiveWar',
+  war_state_private: 'warWidgetPrivateWarLog',
+  war_state_choose: 'warWidgetChooseClan',
+  war_state_unavailable: 'generalNoDataAvailable',
+  war_state_idle_message: 'warIsNotInWar',
+  war_state_private_message: 'warLogClosed',
+
   legends_widget_label: 'rankedLegendsWidgetTitle',
   legends_widget_description: 'rankedLegendsWidgetTitle',
   legends_widget_player_label: 'exportLabelPlayer',
@@ -120,7 +128,9 @@ function androidDocument({ messages }) {
 }
 
 function androidValue(message, sourceKey) {
-  const formatted = sourceKey === 'statsDayIndex' ? message.replace('{index}', '%1$d') : message;
+  const formatted = sourceKey === 'statsDayIndex'
+    ? message.replace('{index}', '%1$d')
+    : message.replaceAll('{clan}', '%1$s');
   return formatted
     .replaceAll('\\', '\\\\')
     .replaceAll('&', '&amp;')
@@ -143,7 +153,7 @@ function iosDocument(allCatalogs) {
             {
               stringUnit: {
                 state: 'translated',
-                value: messages[sourceKey],
+                value: messages[sourceKey].replaceAll('{clan}', '%@'),
               },
             },
           ]),

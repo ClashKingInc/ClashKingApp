@@ -171,6 +171,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     pendingDrawerAction.current = undefined;
     pending?.();
   }, []);
+  useEffect(() => tutorials.registerAction('close-sidebar', () => closeDrawer()), [closeDrawer]);
   const handleDrawerOpen = useCallback(() => {
     tutorials.event('sidebar-opened');
     setDrawerOpen(true);
@@ -216,7 +217,11 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
       swipeEnabled={!secondaryActive && (drawerOpen || canSwipeOpenDrawer)}
       // Drawer 4.x creates a legacy Gesture.Pan at runtime; Gesture Handler 3
       // renamed its public type without changing this builder's behavior.
-      configureGestureHandler={configureDrawerGesture as unknown as React.ComponentProps<typeof Drawer>['configureGestureHandler']}
+      configureGestureHandler={
+        configureDrawerGesture as unknown as React.ComponentProps<
+          typeof Drawer
+        >['configureGestureHandler']
+      }
       direction={isRtl ? 'rtl' : 'ltr'}
       drawerPosition={isRtl ? 'right' : 'left'}
       drawerType="slide"

@@ -52,6 +52,7 @@ export function StatsRoot({ onBack, initialSection }: StatsRootProps) {
     return value;
   }, [runtime.contractApi, audience, section, start, end]);
   const [selection, setSelection] = useState({ provider, focused: hasLinkedSection });
+  const [selectionRequest, setSelectionRequest] = useState(0);
   const focused = selection.provider === provider ? selection.focused : hasLinkedSection;
   const subscribe = useCallback((listener: () => void) => provider.subscribe(listener), [provider]);
   const revision = useSyncExternalStore(subscribe, provider.getSnapshot, provider.getSnapshot);
@@ -68,38 +69,39 @@ export function StatsRoot({ onBack, initialSection }: StatsRootProps) {
     };
   }, [provider]);
   const grid = (
-          <DestinationHub
-            title={t('sideStatsTitle')}
-            onBack={onBack}
-            groups={[
-              {
-                key: 'statistics',
-                choices: statsSections,
-              },
-            ].map(({ key, choices }) => ({
-              key,
-              fillLastRow: true,
-              items: choices.map((choice) => ({
-                key: choice,
-                label: sectionLabel(choice, t),
-                imageUrl: sectionImage(choice),
-                backgroundUrl: sectionBackdrop(choice),
-                accentColor: {
-                  war: ckColors.warGold,
-                  armies: ckColors.legendBlue,
-                  items: ckColors.upgradePets,
-                  ranked: ckColors.capitalOrange,
-                  cwl: ckColors.warGold,
-                  players: ckColors.builderBlue,
-                  clans: ckColors.donationGreen,
-                }[choice],
-                onPress: () => {
-                  provider.selectSection(choice);
-                  setSelection({ provider, focused: true });
-                },
-              })),
-            }))}
-          />
+    <DestinationHub
+      title={t('sideStatsTitle')}
+      onBack={onBack}
+      groups={[
+        {
+          key: 'statistics',
+          choices: statsSections,
+        },
+      ].map(({ key, choices }) => ({
+        key,
+        fillLastRow: true,
+        items: choices.map((choice) => ({
+          key: choice,
+          label: sectionLabel(choice, t),
+          imageUrl: sectionImage(choice),
+          backgroundUrl: sectionBackdrop(choice),
+          accentColor: {
+            war: ckColors.warGold,
+            armies: ckColors.legendBlue,
+            items: ckColors.upgradePets,
+            ranked: ckColors.capitalOrange,
+            cwl: ckColors.warGold,
+            players: ckColors.builderBlue,
+            clans: ckColors.donationGreen,
+          }[choice],
+          onPress: () => {
+            setSelectionRequest((request) => request + 1);
+            provider.selectSection(choice);
+            setSelection({ provider, focused: true });
+          },
+        })),
+      }))}
+    />
   );
   if (initialSection)
     return (
@@ -112,6 +114,7 @@ export function StatsRoot({ onBack, initialSection }: StatsRootProps) {
     );
   return (
     <DestinationStack
+      selectionKey={selectionRequest}
       focused={focused}
       onCloseDetail={closeFocused}
       grid={grid}

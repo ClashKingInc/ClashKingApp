@@ -3,7 +3,8 @@ import type { PlayerCardOptions } from '../models/player-support';
 import type { Player } from '../models/player';
 
 export type PlayerRosterMode = 'linked' | 'bookmarked';
-export type PlayerCardOption = 'notifications' | 'home' | 'todo' | 'upgrade' | 'ranked' | 'war' | 'hidden';
+export type PlayerCardOption =
+  'notifications' | 'home' | 'todo' | 'upgrade' | 'ranked' | 'war' | 'hidden';
 
 export interface BookmarkedPlayerSummary {
   readonly tag: string;
@@ -22,6 +23,7 @@ export interface PlayersFeatureFlags {
 }
 
 export interface PlayersPresentationModel {
+  readonly loading?: boolean;
   readonly profiles: readonly Player[];
   readonly accountLinks: readonly CocAccountLink[];
   readonly bookmarks: readonly BookmarkedPlayerSummary[];
@@ -40,6 +42,7 @@ export interface PlayersPresentationActions {
   showMessage(message: string): void;
   openManageAccounts(): void;
   openPlayer(player: Player): void;
+  openPlayerTag?(tag: string): void;
   hydrateBookmarkedPlayers(tags: readonly string[]): Promise<void>;
   loadBookmarkedPlayer(tag: string): Promise<Player>;
   verifyAccount(

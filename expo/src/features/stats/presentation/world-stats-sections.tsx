@@ -18,6 +18,7 @@ import {
   ckSpacing,
   colorWithAlpha,
   useCKTheme,
+  useSkeletonContent,
 } from '../../../ui';
 import type {
   StatsClanCountsResponse,
@@ -84,16 +85,24 @@ export function ClansSection({ data }: { readonly data: StatsClanCountsResponse 
         describe={(id) => capitalLeague(id, locale, t).label}
         artwork={(id) => capitalLeague(id, locale, t).imageUrl}
       />
-      {memberBins ? <DistributionGroup
-        testID="clan-members"
-        title={t('clanMembers')}
-        values={memberBins.filter((bin) => bin.maxMembers > 0).map((bin) => ({ id: bin.minMembers, count: bin.count }))}
-        overview="bins"
-        describe={(id) => {
-          const bin = memberBins.find((entry) => entry.minMembers === id);
-          return bin ? bin.minMembers === bin.maxMembers ? `${bin.minMembers}` : `${bin.minMembers}–${bin.maxMembers}` : t('generalUnknown');
-        }}
-      /> : null}
+      {memberBins ? (
+        <DistributionGroup
+          testID="clan-members"
+          title={t('clanMembers')}
+          values={memberBins
+            .filter((bin) => bin.maxMembers > 0)
+            .map((bin) => ({ id: bin.minMembers, count: bin.count }))}
+          overview="bins"
+          describe={(id) => {
+            const bin = memberBins.find((entry) => entry.minMembers === id);
+            return bin
+              ? bin.minMembers === bin.maxMembers
+                ? `${bin.minMembers}`
+                : `${bin.minMembers}–${bin.maxMembers}`
+              : t('generalUnknown');
+          }}
+        />
+      ) : null}
       <DistributionGroup
         testID="locations"
         title={t('statsTrackedLocations')}
@@ -131,21 +140,28 @@ function DistributionGroup({
     .sort((left, right) => right.count - left.count || (right.id ?? -1) - (left.id ?? -1));
   const total = ranked.reduce((sum, item) => sum + item.count, 0);
   const barMaximum = ranked[0]?.count || 1;
+  const contentLoading = useSkeletonContent();
   // Every Town Hall occupies the same position even when no tracked player has it.
   const maxTownHall = Math.max(
     0,
     finiteId(gameDataState.gameData.max_TownHall) ?? 0,
     ...ranked.map((item) => item.id ?? 0),
   );
-  const sorted = overview === 'town-halls' && maxTownHall > 0
-    ? Array.from({ length: maxTownHall }, (_, index) =>
-        ranked.find((item) => item.id === index + 1) ?? { id: index + 1, count: 0 },
-      )
-    : overview === 'all'
-      ? [...ranked].sort((left, right) => (right.id ?? -1) - (left.id ?? -1))
-      : overview === 'bins'
-        ? [...ranked].sort((left, right) => (left.id ?? -1) - (right.id ?? -1))
-      : ranked;
+  const sorted =
+    overview === 'town-halls' && maxTownHall > 0
+      ? Array.from(
+          { length: maxTownHall },
+          (_, index) =>
+            ranked.find((item) => item.id === maxTownHall - index) ?? {
+              id: maxTownHall - index,
+              count: 0,
+            },
+        )
+      : overview === 'all'
+        ? [...ranked].sort((left, right) => (right.id ?? -1) - (left.id ?? -1))
+        : overview === 'bins'
+          ? [...ranked].sort((left, right) => (left.id ?? -1) - (right.id ?? -1))
+          : ranked;
   const showAll = overview != null || expanded;
   const visible = showAll ? sorted : sorted.slice(0, collapsedRowCount);
   const topShare =
@@ -153,99 +169,138 @@ function DistributionGroup({
   return (
     <View style={styles.group} testID={`${testID}-distribution`}>
       <StatsChartFrame title={title} testID={testID}>
-      <View style={styles.chart}>
-      {sorted.length === 0 ? (
-        <View style={styles.emptyRow}>
-          <CKText role="bodySmall" muted>{t('generalNoDataAvailable')}</CKText>
-        </View>
-      ) : (
-        <View style={styles.rows}>
-          {visible.map((item) => {
-            const label = describe(item.id);
-            const share = total === 0 ? 0 : item.count / total;
-            const shareLabel = formatShare(share, locale);
-            return (
-              <View
-                key={`${item.id ?? 'unknown'}`}
-                accessible
-                accessibilityLabel={`${label}, ${formatCompactNumber(item.count, locale)}, ${shareLabel}`}
-                style={styles.row}
-                testID={`${testID}-row-${item.id ?? 'unknown'}`}
-              >
-                {artwork ? <MobileWebImage
-                  imageUrl={artwork(item.id)}
-                  contentFit="contain"
-                  accessible={false}
-                  style={styles.artwork}
-                  testID={`${testID}-artwork-${item.id ?? 'unknown'}`}
-                /> : null}
-                <View style={styles.rowBody}>
-                  <View style={styles.rowCopy}>
-                    <CKText role="bodySmall" numberOfLines={1} style={styles.rowLabel}>
-                      {label}
-                    </CKText>
-                    <CKText role="bodySmall" muted>
-                      {formatCompactNumber(item.count, locale)} · {shareLabel}
-                    </CKText>
-                  </View>
-                  <View
-                      style={[
-                        styles.track,
-                        { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.25) },
-                      ]}
-                    >
-                      <View
-                        style={[
-                          styles.fill,
-                          {
-                            backgroundColor: theme.primary,
-                            width: `${Math.max(item.count / barMaximum * 100, 0)}%`,
-                            minWidth: share > 0 ? 1 : 0,
-                          },
-                        ]}
-                      />
-                  </View>
-                </View>
-              </View>
-            );
-          })}
-        </View>
-      )}
-      {testID === 'locations' && !expanded && ranked.length > collapsedRowCount ? (
-        <View style={styles.row} testID="locations-other-row">
-          <MobileWebImage imageUrl={ImageAssets.planet} contentFit="contain" accessible={false} style={styles.artwork} />
-          <View style={styles.rowBody}>
-            <View style={styles.rowCopy}>
-              <CKText role="rowTitle" style={styles.rowLabel}>{t('generalOthers')}</CKText>
+        <View style={styles.chart}>
+          {sorted.length === 0 ? (
+            <View style={styles.emptyRow}>
               <CKText role="bodySmall" muted>
-                {formatCompactNumber(total - ranked.slice(0, collapsedRowCount).reduce((sum, item) => sum + item.count, 0), locale)} · {formatShare(1 - topShare, locale)}
+                {t('generalNoDataAvailable')}
               </CKText>
             </View>
-            <View style={[styles.track, { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.25) }]}>
-              <View style={[styles.fill, { backgroundColor: theme.secondary, width: `${Math.min(1, (total * (1 - topShare)) / barMaximum) * 100}%` }]} />
-            </View>
-          </View>
-        </View>
-      ) : null}
-      {!overview && sorted.length > collapsedRowCount ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityState={{ expanded }}
-          accessibilityLabel={expanded ? t('generalCollapse') : t('generalExpand')}
-          onPress={() => setExpanded((value) => !value)}
-          style={({ pressed }) => [styles.disclosure, pressed && styles.pressed]}
-        >
-          <CKText role="labelLarge" style={{ color: theme.primary }}>
-            {expanded ? t('generalCollapse') : t('generalExpand')}
-          </CKText>
-          {expanded ? (
-            <ChevronUp size={18} color={theme.primary} />
           ) : (
-            <ChevronDown size={18} color={theme.primary} />
+            <View style={styles.rows}>
+              {visible.map((item) => {
+                const label = describe(item.id);
+                const share = total === 0 ? 0 : item.count / total;
+                const shareLabel = formatShare(share, locale);
+                return (
+                  <View
+                    key={`${item.id ?? 'unknown'}`}
+                    accessible
+                    accessibilityLabel={`${label}, ${formatCompactNumber(item.count, locale)}, ${shareLabel}`}
+                    style={styles.row}
+                    testID={`${testID}-row-${item.id ?? 'unknown'}`}
+                  >
+                    {artwork ? (
+                      <MobileWebImage
+                        skeleton={overview === 'town-halls' ? false : undefined}
+                        imageUrl={artwork(item.id)}
+                        contentFit="contain"
+                        accessible={false}
+                        style={styles.artwork}
+                        testID={`${testID}-artwork-${item.id ?? 'unknown'}`}
+                      />
+                    ) : null}
+                    <View style={styles.rowBody}>
+                      <View style={styles.rowCopy}>
+                        <CKText
+                          skeleton={overview === 'town-halls' ? false : undefined}
+                          role="bodySmall"
+                          numberOfLines={1}
+                          style={styles.rowLabel}
+                        >
+                          {label}
+                        </CKText>
+                        <CKText role="bodySmall" muted>
+                          {formatCompactNumber(item.count, locale)} · {shareLabel}
+                        </CKText>
+                      </View>
+                      <View
+                        style={[
+                          styles.track,
+                          { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.25) },
+                        ]}
+                      >
+                        <View
+                          style={[
+                            styles.fill,
+                            {
+                              backgroundColor: contentLoading
+                                ? theme.surfaceContainerHighest
+                                : theme.primary,
+                              width: `${Math.max((item.count / barMaximum) * 100, 0)}%`,
+                              minWidth: share > 0 ? 1 : 0,
+                            },
+                          ]}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
           )}
-        </Pressable>
-      ) : null}
-      </View>
+          {testID === 'locations' && !expanded && ranked.length > collapsedRowCount ? (
+            <View style={styles.row} testID="locations-other-row">
+              <MobileWebImage
+                imageUrl={ImageAssets.planet}
+                contentFit="contain"
+                accessible={false}
+                style={styles.artwork}
+              />
+              <View style={styles.rowBody}>
+                <View style={styles.rowCopy}>
+                  <CKText role="rowTitle" style={styles.rowLabel}>
+                    {t('generalOthers')}
+                  </CKText>
+                  <CKText role="bodySmall" muted>
+                    {formatCompactNumber(
+                      total -
+                        ranked
+                          .slice(0, collapsedRowCount)
+                          .reduce((sum, item) => sum + item.count, 0),
+                      locale,
+                    )}{' '}
+                    · {formatShare(1 - topShare, locale)}
+                  </CKText>
+                </View>
+                <View
+                  style={[
+                    styles.track,
+                    { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.25) },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.fill,
+                      {
+                        backgroundColor: theme.secondary,
+                        width: `${Math.min(1, (total * (1 - topShare)) / barMaximum) * 100}%`,
+                      },
+                    ]}
+                  />
+                </View>
+              </View>
+            </View>
+          ) : null}
+          {!overview && sorted.length > collapsedRowCount ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ expanded }}
+              accessibilityLabel={expanded ? t('generalCollapse') : t('generalExpand')}
+              onPress={() => setExpanded((value) => !value)}
+              style={({ pressed }) => [styles.disclosure, pressed && styles.pressed]}
+            >
+              <CKText role="labelLarge" style={{ color: theme.primary }}>
+                {expanded ? t('generalCollapse') : t('generalExpand')}
+              </CKText>
+              {expanded ? (
+                <ChevronUp size={18} color={theme.primary} />
+              ) : (
+                <ChevronDown size={18} color={theme.primary} />
+              )}
+            </Pressable>
+          ) : null}
+        </View>
       </StatsChartFrame>
     </View>
   );
@@ -265,18 +320,37 @@ function usePlayerLeagues(locale: string): ReadonlyMap<number, LeaguePresentatio
     () => gameDataState.revision,
   );
   const result = new Map<number, LeaguePresentation>([
-    [105000000, { label: 'Unranked', canonicalName: 'Unranked', imageUrl: ImageAssets.getLeagueImage('Unranked') }],
+    [
+      105000000,
+      {
+        label: 'Unranked',
+        canonicalName: 'Unranked',
+        imageUrl: ImageAssets.getLeagueImage('Unranked'),
+      },
+    ],
     [
       105000036,
-      { label: 'Legend League 1', canonicalName: 'Legend League 1', imageUrl: ImageAssets.legendLeagueOne },
+      {
+        label: 'Legend League 1',
+        canonicalName: 'Legend League 1',
+        imageUrl: ImageAssets.legendLeagueOne,
+      },
     ],
     [
       105000035,
-      { label: 'Legend League 2', canonicalName: 'Legend League 2', imageUrl: ImageAssets.legendLeagueTwo },
+      {
+        label: 'Legend League 2',
+        canonicalName: 'Legend League 2',
+        imageUrl: ImageAssets.legendLeagueTwo,
+      },
     ],
     [
       105000034,
-      { label: 'Legend League 3', canonicalName: 'Legend League 3', imageUrl: ImageAssets.legendLeagueThree },
+      {
+        label: 'Legend League 3',
+        canonicalName: 'Legend League 3',
+        imageUrl: ImageAssets.legendLeagueThree,
+      },
     ],
   ]);
   const leagues = gameDataState.playerLeagueData.leagues;
@@ -291,9 +365,14 @@ function usePlayerLeagues(locale: string): ReadonlyMap<number, LeaguePresentatio
       { languageCode: locale.split(/[-_]/, 1)[0] || 'en' },
       name,
     );
-    const label = id === 105000036 ? 'Legend League 1'
-      : id === 105000035 ? 'Legend League 2'
-      : id === 105000034 ? 'Legend League 3' : localized;
+    const label =
+      id === 105000036
+        ? 'Legend League 1'
+        : id === 105000035
+          ? 'Legend League 2'
+          : id === 105000034
+            ? 'Legend League 3'
+            : localized;
     result.set(id, { label, canonicalName: name, imageUrl: ImageAssets.getLeagueImage(name) });
   }
   return result;
@@ -354,15 +433,27 @@ function cwlLeague(
 function defaultCwlLeague(id: number, t: Translate): LeaguePresentation {
   const offset = id - 48_000_000;
   if (offset === 0) {
-    return { label: t('generalUnranked'), canonicalName: 'Unranked', imageUrl: ImageAssets.getWarLeagueImage('Unranked') };
+    return {
+      label: t('generalUnranked'),
+      canonicalName: 'Unranked',
+      imageUrl: ImageAssets.getWarLeagueImage('Unranked'),
+    };
   }
   if (offset === 22) {
-    return { label: t('legendsTitle'), canonicalName: 'Legend League', imageUrl: ImageAssets.getWarLeagueImage('Legend League') };
+    return {
+      label: t('legendsTitle'),
+      canonicalName: 'Legend League',
+      imageUrl: ImageAssets.getWarLeagueImage('Legend League'),
+    };
   }
   if (offset >= 19 && offset <= 21) {
     const division = ['III', 'II', 'I'][offset - 19];
     const canonicalName = `Titan League ${division}`;
-    return { label: `Titan ${division}`, canonicalName, imageUrl: ImageAssets.getWarLeagueImage(canonicalName) };
+    return {
+      label: `Titan ${division}`,
+      canonicalName,
+      imageUrl: ImageAssets.getWarLeagueImage(canonicalName),
+    };
   }
   if (offset < 1 || offset > 18) {
     return { label: `${id}`, canonicalName: `${id}`, imageUrl: ImageAssets.defaultImage };

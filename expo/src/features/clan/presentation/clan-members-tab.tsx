@@ -1,21 +1,19 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
 import { useMemo, useState, type ReactNode } from 'react';
-import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowDown, ArrowUp, BarChart3, Star, Users } from 'lucide-react-native';
+import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { ArrowDown, ArrowUp, Star, Users } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
+  ArtworkToggleButton,
   EmptyState,
   MobileWebImage,
   PillSurface,
   ResponsiveGrid,
   SelectionPicker,
   SelectionPickerModal,
-  Skeleton,
   Surface,
-  ckRadius,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
@@ -68,6 +66,8 @@ export function ClanMembersTab({
     ? allMembers.reduce((sum, member) => sum + member.townHallLevel, 0) / allMembers.length
     : 0;
   const openMember = async (member: ClanMember) => {
+    if (actions.openPlayerTag) return actions.openPlayerTag(member.tag);
+    if (loadingPlayer) return;
     setLoadingPlayer(true);
     try {
       actions.openPlayer(await actions.loadPlayer(member.tag));
@@ -90,20 +90,25 @@ export function ClanMembersTab({
   return (
     <View style={styles.tab}>
       <View style={styles.summaryRow}>
-        <Pressable
-          accessibilityRole="button"
+        <ArtworkToggleButton
+          testID="clan-members-totals-toggle"
+          active={showTotals}
           accessibilityLabel={showTotals ? t('clanMembersHideTotals') : t('clanMembersShowTotals')}
           accessibilityState={{ selected: showTotals }}
           onPress={() => setShowTotals(!showTotals)}
-          style={[
-            styles.statsToggle,
-            {
-              borderColor: colorWithAlpha(showTotals ? theme.primary : theme.outlineVariant, 0.42),
-            },
-          ]}
         >
-          <BarChart3 size={23} color={showTotals ? theme.primary : theme.onSurfaceVariant} />
-        </Pressable>
+          <View style={styles.splitIcon}>
+            <View style={styles.iconHalf}>
+              <MobileWebImage imageUrl={ImageAssets.townHall(18)} style={styles.splitImage} />
+            </View>
+            <View style={styles.iconHalf}>
+              <MobileWebImage
+                imageUrl={ImageAssets.getLeagueImage('Electro League 33')}
+                style={[styles.splitImage, styles.rightImage]}
+              />
+            </View>
+          </View>
+        </ArtworkToggleButton>
         <View style={styles.sortControl}>
           <SelectionPicker
             options={sortOptions.map(({ value, label }) => ({ key: value, label }))}
@@ -115,7 +120,9 @@ export function ClanMembersTab({
           />
         </View>
       </View>
-      {showTotals ? <MemberBreakdown members={allMembers} averageTownHall={averageTownHall} /> : null}
+      {showTotals ? (
+        <MemberBreakdown members={allMembers} averageTownHall={averageTownHall} />
+      ) : null}
       {members.length === 0 ? (
         <EmptyState
           title={t('accountsNoneFound')}
@@ -160,20 +167,6 @@ export function ClanMembersTab({
         }}
         onClose={() => setShowSort(false)}
       />
-      <Modal supportedOrientations={modalOrientations}
-        transparent
-        visible={loadingPlayer}
-        animationType="fade"
-        onRequestClose={() => undefined}
-      >
-        <View style={styles.overlay}>
-          <Surface radius={ckRadius.tile} style={styles.loading}>
-            <Skeleton width={48} height={48} radius={24} />
-            <Skeleton width={180} />
-            <Skeleton width={120} height={12} />
-          </Surface>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -303,7 +296,10 @@ function memberMetric(
   };
 }
 
-function MemberBreakdown({ members, averageTownHall }: {
+function MemberBreakdown({
+  members,
+  averageTownHall,
+}: {
   members: readonly ClanMember[];
   averageTownHall: number;
 }) {
@@ -325,7 +321,9 @@ function MemberBreakdown({ members, averageTownHall }: {
       <View style={styles.breakdownRow}>
         <View style={styles.breakdownAverage}>
           <CKText role="labelLarge">{averageTownHall ? averageTownHall.toFixed(1) : '—'}</CKText>
-          <CKText muted role="labelSmall">{t('clanMembersAverageTh')}</CKText>
+          <CKText muted role="labelSmall">
+            {t('clanMembersAverageTh')}
+          </CKText>
         </View>
         {townHalls.map(([level, count]) => (
           <Breakdown key={level} image={ImageAssets.townHall(level)} count={count} />
@@ -353,17 +351,17 @@ function Breakdown({ image, count }: { image: string; count: number }) {
 
 const styles = StyleSheet.create({
   tab: { padding: 16, gap: 8 },
-  summaryRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  sortControl: { flexShrink: 1, maxWidth: 260 },
-  statsToggle: {
-    width: 44,
-    height: 44,
-    flexShrink: 0,
-    borderWidth: 1,
-    borderRadius: 14,
+  summaryRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
   },
+  sortControl: { flexShrink: 1, maxWidth: 260 },
+  splitIcon: { width: 32, height: 32, flexDirection: 'row' },
+  iconHalf: { width: 16, height: 32, overflow: 'hidden' },
+  splitImage: { width: 32, height: 32 },
+  rightImage: { marginLeft: -16 },
   list: { gap: 6 },
   memberCard: {
     minHeight: 58,

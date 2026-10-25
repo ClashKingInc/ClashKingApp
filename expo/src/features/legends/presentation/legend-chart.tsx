@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line, Polyline, Text } from 'react-native-svg';
 
 import { useI18n } from '../../../i18n';
-import { CKText, useCKTheme } from '../../../ui';
+import { CKText, Skeleton, useSkeletonContent, useCKTheme } from '../../../ui';
 
 export interface LegendChartPoint {
   readonly day: string;
@@ -79,6 +79,7 @@ export function LegendChart({
   readonly large?: boolean;
 }) {
   const theme = useCKTheme();
+  const loading = useSkeletonContent();
   const { t } = useI18n();
   const [selected, setSelected] = useState<string | null>(null);
   const valid = points.filter(
@@ -141,7 +142,9 @@ export function LegendChart({
             : t('generalNoDataAvailable')}
         </CKText>
       </View>
-      {valid.length ? (
+      {loading ? (
+        <Skeleton height={height} />
+      ) : valid.length ? (
         <Svg
           width="100%"
           height={height}

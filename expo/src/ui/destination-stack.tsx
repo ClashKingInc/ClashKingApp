@@ -1,13 +1,11 @@
-import {
-  createNativeStackNavigator,
-  type NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
   NavigationIndependentTree,
-  useIsFocused,
+  StackActions,
+  useNavigationContainerRef,
 } from '@react-navigation/native';
 import {
   createContext,
@@ -15,7 +13,8 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
-  type MutableRefObject,
+  useCallback,
+  useState,
   type ReactNode,
 } from 'react';
 import { Platform } from 'react-native';
@@ -29,6 +28,8 @@ type DestinationRoutes = {
 
 export type DestinationStackProps = {
   focused: boolean;
+  /** Changes for every explicit new selection, including the same tile again. */
+  selectionKey?: number | string;
   onCloseDetail: () => void;
   grid: ReactNode;
   detail: ReactNode;
@@ -37,12 +38,7 @@ export type DestinationStackProps = {
 };
 
 const Stack = createNativeStackNavigator<DestinationRoutes>();
-type DestinationContextValue = DestinationStackProps & {
-  dismissedByNativeBackRef: MutableRefObject<boolean>;
-  closingFromOwnerRef: MutableRefObject<boolean>;
-};
-
-const DestinationContext = createContext<DestinationContextValue | null>(null);
+const DestinationContext = createContext<DestinationStackProps | null>(null);
 
 function useDestination() {
   const destination = useContext(DestinationContext);
@@ -50,52 +46,19 @@ function useDestination() {
   return destination;
 }
 
-function GridRoute({ navigation }: NativeStackScreenProps<DestinationRoutes, 'Grid'>) {
-  const { focused, grid, dismissedByNativeBackRef, closingFromOwnerRef } = useDestination();
-  const routeFocused = useIsFocused();
-
-  useLayoutEffect(() => {
-    const state = navigation.getState();
-    const detailIsActive = state.routes[state.index]?.name === 'Detail';
-    if (!focused) {
-      dismissedByNativeBackRef.current = false;
-      if (detailIsActive) {
-        closingFromOwnerRef.current = true;
-        navigation.pop();
-      } else {
-        closingFromOwnerRef.current = false;
-      }
-    } else if (!detailIsActive && !dismissedByNativeBackRef.current) {
-      closingFromOwnerRef.current = false;
-      navigation.navigate('Detail');
-    }
-    // A new selection can arrive during the previous native pop. Reconcile again
-    // when Grid regains focus; owner state alone does not change when pop finishes.
-  }, [closingFromOwnerRef, dismissedByNativeBackRef, focused, navigation, routeFocused]);
-
-  // The native stack retains this route while Detail is presented. Its React
-  // content (and any provider state above the stack) is not reconstructed on back.
-  return grid;
+function GridRoute() {
+  // The native stack owns hit testing during the swipe. An extra owner-state
+  // blocker here discards taps after Grid is visible but before JS catches up.
+  return useDestination().grid;
 }
 
-function DetailRoute({ navigation }: NativeStackScreenProps<DestinationRoutes, 'Detail'>) {
-  const { focused, onCloseDetail, detail, dismissedByNativeBackRef, closingFromOwnerRef } =
-    useDestination();
-
-  useLayoutEffect(
-    () =>
-      navigation.addListener('beforeRemove', () => {
-        // A header back button clears `focused` first. Native swipe / hardware
-        // back removes the route first, so only that path needs to sync its owner.
-        if (focused && !closingFromOwnerRef.current) {
-          dismissedByNativeBackRef.current = true;
-          onCloseDetail();
-        }
-      }),
-    [closingFromOwnerRef, dismissedByNativeBackRef, focused, navigation, onCloseDetail],
-  );
-
-  return detail;
+function DetailRoute() {
+  const { focused, detail } = useDestination();
+  const [lastDetail, setLastDetail] = useState(detail);
+  // Owner-driven Back clears the selection before UIKit finishes closing.
+  // Keep the outgoing screen instead of swapping it for an unrelated detail.
+  if (focused && lastDetail !== detail) setLastDetail(detail);
+  return focused ? detail : lastDetail;
 }
 
 export function DestinationStack(props: DestinationStackProps) {
@@ -114,22 +77,115 @@ export function DestinationStack(props: DestinationStackProps) {
       },
     };
   }, [mode, props.backgroundColor, theme]);
-  const dismissedByNativeBackRef = useRef(false);
-  const closingFromOwnerRef = useRef(false);
+  const navigation = useNavigationContainerRef<DestinationRoutes>();
+  const desiredFocus = useRef(props.focused);
+  const desiredSelection = useRef(props.selectionKey);
+  const presentedSelection = useRef(props.selectionKey);
+  const onCloseDetail = useRef(props.onCloseDetail);
+  const hadDetail = useRef(false);
+  const transitioning = useRef(false);
+  const arrivedRoute = useRef<string | undefined>(undefined);
+  const ownerPopPending = useRef(false);
+  const syncOwnerWithState = useCallback((state: { routes: readonly { name: string }[] }) => {
+    const hasDetail = state.routes.some((route) => route.name === 'Detail');
+    const removedDetail = hadDetail.current && !hasDetail;
+    hadDetail.current = hasDetail;
+    if (!removedDetail) return;
+    const wasOwnerPop = ownerPopPending.current;
+    ownerPopPending.current = false;
+    // A tile press while native Back is finishing belongs to the next page.
+    // Do not let the old removal erase that new request, even for the same tile.
+    if (
+      !wasOwnerPop &&
+      desiredFocus.current &&
+      desiredSelection.current === presentedSelection.current
+    ) {
+      desiredFocus.current = false;
+      onCloseDetail.current();
+    }
+  }, []);
+  const reconcile = useCallback(() => {
+    if (!navigation.isReady() || transitioning.current) return;
+    const state = navigation.getRootState();
+    if (!state) return;
+    syncOwnerWithState(state);
+    const detailIsActive = state.routes[state.index]?.name === 'Detail';
+    if (desiredFocus.current === detailIsActive) {
+      if (detailIsActive) presentedSelection.current = desiredSelection.current;
+      return;
+    }
+    transitioning.current = true;
+    arrivedRoute.current = undefined;
+    if (desiredFocus.current) {
+      presentedSelection.current = desiredSelection.current;
+      navigation.navigate('Detail');
+    } else {
+      ownerPopPending.current = true;
+      navigation.dispatch(StackActions.pop());
+    }
+  }, [navigation, syncOwnerWithState]);
+  const finishTransition = useCallback(() => {
+    const state = navigation.getRootState();
+    if (!state) return;
+    // getRootState can already show Grid before onStateChange delivers that
+    // removal. Consume native Back first, or reconciliation would re-push Detail
+    // from the owner's stale focused=true and bounce the user straight back in.
+    syncOwnerWithState(state);
+    if (!arrivedRoute.current || arrivedRoute.current !== state.routes[state.index]?.key) return;
+    // UIKit appearance and JS stack removal can arrive in either order. Keep
+    // the arrival until both agree, rather than dropping the first event.
+    arrivedRoute.current = undefined;
+    transitioning.current = false;
+    reconcile();
+  }, [navigation, reconcile, syncOwnerWithState]);
+  useLayoutEffect(() => {
+    onCloseDetail.current = props.onCloseDetail;
+  }, [props.onCloseDetail]);
+  useLayoutEffect(() => {
+    desiredFocus.current = props.focused;
+    desiredSelection.current = props.selectionKey;
+    reconcile();
+  }, [props.focused, props.selectionKey, reconcile]);
   if (Platform.OS === 'web') return props.focused ? props.detail : props.grid;
 
   return (
-    <DestinationContext.Provider
-      value={{ ...props, dismissedByNativeBackRef, closingFromOwnerRef }}
-    >
+    <DestinationContext.Provider value={props}>
       {/* These local Grid/Detail routes are not filesystem routes. SDK 58's
           Expo navigator requires globally seeded route state, so use React
           Navigation's isolated tree for this retained, state-driven stack.
           All hooks/events below must come from that same navigation package. */}
       <NavigationIndependentTree>
-        <NavigationContainer theme={navigationTheme}>
+        <NavigationContainer
+          ref={navigation}
+          theme={navigationTheme}
+          onReady={reconcile}
+          onStateChange={() => {
+            // Read the latest state rather than a possibly queued snapshot from
+            // before an arrival callback. Both event paths share the same sync.
+            const state = navigation.getRootState();
+            if (state) syncOwnerWithState(state);
+            finishTransition();
+          }}
+        >
           <Stack.Navigator
             initialRouteName="Grid"
+            screenListeners={({ route }) => ({
+              transitionStart: (event) => {
+                transitioning.current = true;
+                if (!event.data.closing) arrivedRoute.current = undefined;
+              },
+              transitionEnd: (event) => {
+                if (!event.data.closing) {
+                  arrivedRoute.current = route.key;
+                  finishTransition();
+                }
+              },
+              gestureCancel: () => {
+                arrivedRoute.current = undefined;
+                transitioning.current = false;
+                reconcile();
+              },
+            })}
             screenOptions={{
               headerShown: false,
               gestureEnabled: props.gestureEnabled ?? true,

@@ -234,6 +234,7 @@ export class UpgradeEventModifier {
 }
 
 export interface UpgradeBoostOptions {
+  activeEffects?: readonly UpgradeActiveEffect[];
   builderBoostSeconds?: number;
   labBoostSeconds?: number;
   clockTowerBoostSeconds?: number;
@@ -247,7 +248,16 @@ export interface UpgradeBoostOptions {
   labCostReductionPercent?: number;
   labTimeReductionPercent?: number;
 }
+export interface UpgradeActiveEffect {
+  readonly key: string;
+  readonly name: string;
+  readonly imageUrl: string;
+  readonly seconds: number;
+  readonly nameTid?: string;
+  readonly village: UpgradeVillageValue;
+}
 export class UpgradeBoosts {
+  readonly activeEffects: readonly UpgradeActiveEffect[];
   readonly builderBoostSeconds;
   readonly labBoostSeconds;
   readonly clockTowerBoostSeconds;
@@ -261,6 +271,7 @@ export class UpgradeBoosts {
   readonly labCostReductionPercent;
   readonly labTimeReductionPercent;
   constructor(options: UpgradeBoostOptions = {}) {
+    this.activeEffects = options.activeEffects ?? [];
     this.builderBoostSeconds = options.builderBoostSeconds ?? 0;
     this.labBoostSeconds = options.labBoostSeconds ?? 0;
     this.clockTowerBoostSeconds = options.clockTowerBoostSeconds ?? 0;

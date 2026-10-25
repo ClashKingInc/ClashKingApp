@@ -29,7 +29,7 @@ import { materialPreviousPageTooltip, materialNextPageTooltip } from '../../i18n
 import {
   CKText,
   DestinationStack,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   PressableSurface,
   SelectionPicker,
@@ -235,7 +235,11 @@ function CompetitiveScenePage({
       style={{ flex: 1, backgroundColor: theme.background }}
       // Artwork-led pages own their top inset so the image reaches behind the
       // status bar. Text-only scenes retain the normal safe-area content inset.
-      edges={['esports', 'profile', 'person'].includes(scene.kind) ? ['left', 'right', 'bottom'] : ['top', 'left', 'right', 'bottom']}
+      edges={
+        ['esports', 'profile', 'person'].includes(scene.kind)
+          ? ['left', 'right', 'bottom']
+          : ['top', 'left', 'right', 'bottom']
+      }
     >
       {/* Absolute children ignore SafeAreaView's content padding. Keep Back
           below the status bar while retaining the artwork beneath it. */}
@@ -298,7 +302,13 @@ function useCompetition<T>(path: string, publicRead = false) {
         if (active) setState({ path, data, loading: false });
       })
       .catch((error: Error) => {
-        if (active) setState({ path, error: error.message, loading: false });
+        if (active)
+          setState((old) => ({
+            path,
+            data: old.path === path ? old.data : undefined,
+            error: error.message,
+            loading: false,
+          }));
       });
     return () => {
       active = false;
@@ -348,8 +358,7 @@ function Page({
           <CKText style={{ color: theme.primary }}>{t('generalRetry')}</CKText>
         </PressableSurface>
       ) : null}
-      {query?.loading && !query.data ? <PageSkeleton kind="list" /> : null}
-      {children}
+      <SkeletonContent loading={!!query?.loading && !query.data}>{children}</SkeletonContent>
     </ScrollView>
   );
 }
@@ -412,6 +421,19 @@ function Identity({
     </PressableSurface>
   );
 }
+// View-only records keep the actual discovery cards mounted before the first response.
+const loadingTournaments: readonly Tournament[] = [0, 1, 2].map((index) => ({
+  id: `loading-${index}`,
+  serverId: '',
+  name: 'ClashKing tournament',
+  format: 'single_elimination',
+  teamSize: 5,
+  startsAt: '2000-01-01',
+  endsAt: '2000-01-02',
+  status: 'upcoming',
+  rules: 'Tournament rules',
+}));
+
 function TournamentList({ push }: { push: (scene: Scene) => void }) {
   const query = useCompetition<{ items: Tournament[] }>('/competitive/tournaments', true);
   const { t, locale } = useI18n();
@@ -424,7 +446,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
   const rail = useRef<ScrollViewInstance>(null);
   const [active, setActive] = useState(0);
   const cardWidth = Math.min(width - 60, 330);
-  const items = query.data?.items ?? [];
+  const items = query.data?.items ?? (query.loading ? loadingTournaments : []);
   const move = (index: number) => {
     const next = Math.max(0, Math.min(index, items.length - 1));
     rail.current?.scrollTo({ x: next * (cardWidth + 14), animated: !reduceMotion });
@@ -503,6 +525,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
         </Svg>
         <View style={{ flex: 1, justifyContent: 'flex-end', padding: 24, paddingBottom: 34 }}>
           <CKText
+            skeleton={false}
             style={{
               color: '#fff',
               fontSize: width < 600 ? 36 : 48,
@@ -513,7 +536,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
           >
             {t('competitiveFindYourNextWar')}
           </CKText>
-          <CKText style={{ color: '#ead5c1', marginTop: 10, maxWidth: 420 }}>
+          <CKText skeleton={false} style={{ color: '#ead5c1', marginTop: 10, maxWidth: 420 }}>
             {t('competitiveArenaSubtitle')}
           </CKText>
         </View>
@@ -522,7 +545,9 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
         <View
           style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <CKText role="sectionTitle">{t('competitiveTournaments')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('competitiveTournaments')}
+          </CKText>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             <PressableSurface
               accessibilityRole="button"
@@ -550,102 +575,104 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
         </View>
         {query.error ? <Action label={t('generalRetry')} onPress={query.refresh} /> : null}
       </View>
-      <ScrollView
-        ref={rail}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        decelerationRate="fast"
-        snapToInterval={cardWidth + 14}
-        scrollEventThrottle={16}
-        onScroll={(event) =>
-          setActive(Math.round(event.nativeEvent.contentOffset.x / (cardWidth + 14)))
-        }
-        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 18, gap: 14 }}
-        testID="tournament-event-rail"
-      >
-        {items.map((item, index) => {
-          const accent = ['#BA8543', '#9362D1', '#C95F51'][index % 3]!;
-          const sculpture = ['triumphant_trophy', 'crown_sword', 'war_chief_2026'][index % 3];
-          return (
-            <PressableSurface
-              key={item.id}
-              accessibilityRole="button"
-              accessibilityLabel={item.name}
-              onPress={() => push({ kind: 'tournament', id: item.id })}
-              style={{
-                width: cardWidth,
-                minHeight: 320,
-                overflow: 'hidden',
-                borderWidth: 0,
-                borderRadius: 26,
-                backgroundColor: colorWithAlpha(accent, 0.14),
-              }}
-            >
-              <View style={{ padding: 20, flex: 1, gap: 8 }}>
+      <SkeletonContent loading={query.loading && !query.data}>
+        <ScrollView
+          ref={rail}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          decelerationRate="fast"
+          snapToInterval={cardWidth + 14}
+          scrollEventThrottle={16}
+          onScroll={(event) =>
+            setActive(Math.round(event.nativeEvent.contentOffset.x / (cardWidth + 14)))
+          }
+          contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 18, gap: 14 }}
+          testID="tournament-event-rail"
+        >
+          {items.map((item, index) => {
+            const accent = ['#BA8543', '#9362D1', '#C95F51'][index % 3]!;
+            const sculpture = ['triumphant_trophy', 'crown_sword', 'war_chief_2026'][index % 3];
+            return (
+              <PressableSurface
+                key={item.id}
+                accessibilityRole="button"
+                accessibilityLabel={item.name}
+                onPress={() => push({ kind: 'tournament', id: item.id })}
+                style={{
+                  width: cardWidth,
+                  minHeight: 320,
+                  overflow: 'hidden',
+                  borderWidth: 0,
+                  borderRadius: 26,
+                  backgroundColor: colorWithAlpha(accent, 0.14),
+                }}
+              >
+                <View style={{ padding: 20, flex: 1, gap: 8 }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <CKText role="metadata" style={{ color: theme.onSurfaceVariant }}>
+                      {new Date(item.startsAt).toLocaleDateString(toIntlLocale(locale), {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </CKText>
+                    <View
+                      style={{
+                        backgroundColor: colorWithAlpha(accent, 0.2),
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
+                        borderRadius: 20,
+                      }}
+                    >
+                      <CKText role="metadata">
+                        {item.teamSize}v{item.teamSize}
+                      </CKText>
+                    </View>
+                  </View>
+                  <View
+                    style={{ flexDirection: 'row', alignItems: 'center', flex: 1, minHeight: 160 }}
+                  >
+                    <View style={{ flex: 1, gap: 8 }}>
+                      <CKText style={{ fontSize: 27, lineHeight: 30, fontWeight: '800' }}>
+                        {item.name}
+                      </CKText>
+                      <CKText muted role="metadata">
+                        {item.format === 'elo' ? 'Elo' : item.format.replaceAll('_', ' ')}
+                      </CKText>
+                    </View>
+                    <MobileWebImage
+                      imageUrl={`${ASSET_ORIGIN}/decorations/home-village/${sculpture}.webp`}
+                      contentFit="contain"
+                      style={{ width: 110, height: 150 }}
+                    />
+                  </View>
+                  <CKText role="metadata" style={{ color: ckColors.donationGreen }}>
+                    {t('competitiveFreeEntry')}
+                  </CKText>
+                </View>
                 <View
                   style={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 16,
+                    backgroundColor: colorWithAlpha(accent, 0.18),
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}
                 >
-                  <CKText role="metadata" style={{ color: theme.onSurfaceVariant }}>
-                    {new Date(item.startsAt).toLocaleDateString(toIntlLocale(locale), {
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </CKText>
-                  <View
-                    style={{
-                      backgroundColor: colorWithAlpha(accent, 0.2),
-                      paddingHorizontal: 10,
-                      paddingVertical: 5,
-                      borderRadius: 20,
-                    }}
-                  >
-                    <CKText role="metadata">
-                      {item.teamSize}v{item.teamSize}
-                    </CKText>
-                  </View>
+                  <CKText role="rowTitle">{t('competitiveViewTournament')}</CKText>
+                  <ChevronRight size={19} color={theme.onSurface} />
                 </View>
-                <View
-                  style={{ flexDirection: 'row', alignItems: 'center', flex: 1, minHeight: 160 }}
-                >
-                  <View style={{ flex: 1, gap: 8 }}>
-                    <CKText style={{ fontSize: 27, lineHeight: 30, fontWeight: '800' }}>
-                      {item.name}
-                    </CKText>
-                    <CKText muted role="metadata">
-                      {item.format === 'elo' ? 'Elo' : item.format.replaceAll('_', ' ')}
-                    </CKText>
-                  </View>
-                  <MobileWebImage
-                    imageUrl={`${ASSET_ORIGIN}/decorations/home-village/${sculpture}.webp`}
-                    contentFit="contain"
-                    style={{ width: 110, height: 150 }}
-                  />
-                </View>
-                <CKText role="metadata" style={{ color: ckColors.donationGreen }}>
-                  {t('competitiveFreeEntry')}
-                </CKText>
-              </View>
-              <View
-                style={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 16,
-                  backgroundColor: colorWithAlpha(accent, 0.18),
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <CKText role="rowTitle">{t('competitiveViewTournament')}</CKText>
-                <ChevronRight size={19} color={theme.onSurface} />
-              </View>
-            </PressableSurface>
-          );
-        })}
-      </ScrollView>
+              </PressableSurface>
+            );
+          })}
+        </ScrollView>
+      </SkeletonContent>
       {!items.length && !query.loading ? (
         <View style={{ padding: 24, gap: 10 }}>
           <CKText role="titleMedium">{t('competitiveNoTournamentsYet')}</CKText>
@@ -678,8 +705,30 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
   const [round, setRound] = useState('');
   const [notice, setNotice] = useState('');
   const [saving, setSaving] = useState(false);
-  const tournament = query.data?.tournament;
-  const rounds = [...new Set(query.data?.matches.map((match) => match.round ?? 1) ?? [])].sort(
+  const detail: TournamentDetail | undefined =
+    query.data ??
+    (query.loading
+      ? {
+          tournament: loadingTournaments[0]!,
+          participants: [0, 1, 2].map((index) => ({
+            teamId: `loading-${index}`,
+            clanName: 'Tournament team',
+            status: 'Registered',
+          })),
+          standings: [],
+          matches: [0, 1].map((index) => ({
+            id: `loading-match-${index}`,
+            status: 'Pending',
+            round: 1,
+            homeTeamId: 'loading-0',
+            awayTeamId: 'loading-1',
+            homeScore: 15,
+            awayScore: 12,
+          })),
+        }
+      : undefined);
+  const tournament = detail?.tournament;
+  const rounds = [...new Set(detail?.matches.map((match) => match.round ?? 1) ?? [])].sort(
     (a, b) => a - b,
   );
   const selectedRound = rounds.includes(Number(round)) ? Number(round) : rounds.at(-1);
@@ -692,7 +741,7 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
   ];
   const chosen = teams.find((team) => team.id === selected) ?? teams[0];
   const clanName = (teamId: string) =>
-    query.data?.participants.find((participant) => participant.teamId === teamId)?.clanName ?? '—';
+    detail?.participants.find((participant) => participant.teamId === teamId)?.clanName ?? '—';
   const register = async () => {
     if (!chosen) return;
     setSaving(true);
@@ -731,7 +780,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               timeStyle: 'short',
             })}
           </CKText>
-          <CKText role="sectionTitle">{t('competitiveRules')}</CKText>
+          <CKText skeleton={false} role="sectionTitle">
+            {t('competitiveRules')}
+          </CKText>
           <CKText>
             {(typeof tournament.rules === 'string'
               ? tournament.rules
@@ -748,7 +799,9 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               </CKText>
               {tournament.rules.prizeDescription ? (
                 <View style={styles.group}>
-                  <CKText role="titleSmall">{t('capitalRaidRewards')}</CKText>
+                  <CKText skeleton={false} role="titleSmall">
+                    {t('capitalRaidRewards')}
+                  </CKText>
                   <CKText>{tournament.rules.prizeDescription}</CKText>
                 </View>
               ) : null}
@@ -813,10 +866,12 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
             <Action label={t('competitiveTeams')} onPress={() => push({ kind: 'profile' })} />
           )}
           {notice ? <CKText accessibilityLiveRegion="polite">{notice}</CKText> : null}
-          {query.data?.standings?.length ? (
-            <CKText role="sectionTitle">{t('clanRankingsTab')}</CKText>
+          {detail?.standings?.length ? (
+            <CKText skeleton={false} role="sectionTitle">
+              {t('clanRankingsTab')}
+            </CKText>
           ) : null}
-          {query.data?.standings?.map((standing, index) => (
+          {detail?.standings?.map((standing, index) => (
             <Identity
               key={standing.teamId}
               name={`${index + 1}. ${clanName(standing.teamId)}`}
@@ -824,34 +879,38 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               image={ImageAssets.trophies}
             />
           ))}
-          <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
-          {!query.data?.participants.length ? (
+          <CKText skeleton={false} role="sectionTitle">
+            {t('competitiveTeams')}
+          </CKText>
+          {!detail?.participants.length ? (
             <CKText muted>{t('competitiveRegisteredClansEmpty')}</CKText>
           ) : null}
-          {query.data?.participants.map((participant) => (
+          {detail?.participants.map((participant) => (
             <Identity
               key={participant.teamId}
               name={participant.clanName ?? participant.clanTag ?? '—'}
               subtitle={
                 participant.rating === undefined ? participant.status : `${participant.rating}`
               }
-              onPress={() => {
-                void query.service
-                  .request<{ team: CompetitiveTeam }>(
-                    `/competitive/teams/${encodeURIComponent(participant.teamId)}`,
-                    'GET',
-                    undefined,
-                    true,
-                  )
-                  .then(({ team }) => push({ kind: 'team', team }))
-                  .catch((error: Error) => setNotice(error.message));
-              }}
+              onPress={() =>
+                push({
+                  kind: 'team',
+                  team: {
+                    id: participant.teamId,
+                    clanTag: participant.clanTag ?? '',
+                    clanName: participant.clanName ?? 'Team name',
+                    size: tournament.teamSize,
+                    archived: false,
+                    members: [],
+                  },
+                })
+              }
             />
           ))}
-          <CKText role="sectionTitle">{t('cwlMatches')}</CKText>
-          {!query.data?.matches.length ? (
-            <CKText muted>{t('competitiveMatchupsEmpty')}</CKText>
-          ) : null}
+          <CKText skeleton={false} role="sectionTitle">
+            {t('cwlMatches')}
+          </CKText>
+          {!detail?.matches.length ? <CKText muted>{t('competitiveMatchupsEmpty')}</CKText> : null}
           {rounds.length ? (
             <SelectionPicker
               title={t('cwlRounds')}
@@ -863,7 +922,7 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               }))}
             />
           ) : null}
-          {query.data?.matches
+          {detail?.matches
             .filter((match) => (match.round ?? 1) === selectedRound)
             .map((match) => (
               <TournamentMatchCard
@@ -939,7 +998,18 @@ function TournamentMatchAttacks({ id }: { id: string }) {
   const { t } = useI18n();
   return (
     <View style={styles.group}>
-      {query.loading && !query.data ? <PageSkeleton kind="list" rows={3} /> : null}
+      {query.loading && !query.data ? (
+        <SkeletonContent loading>
+          {[0, 1, 2].map((index) => (
+            <Identity
+              key={index}
+              name="Attacker → Defender"
+              subtitle="3 ★ · 100% · 2:30"
+              onPress={() => {}}
+            />
+          ))}
+        </SkeletonContent>
+      ) : null}
       {query.error ? (
         <Pressable onPress={query.refresh}>
           <CKText muted>{t('competitiveUnavailable')}</CKText>
@@ -1000,7 +1070,18 @@ function TeamScreen({ team, push }: { team: CompetitiveTeam; push: (scene: Scene
     team: CompetitiveTeam;
     history: { playerTag: string; joinedAt: string; leftAt?: string | null }[];
   }>(`/competitive/teams/${encodeURIComponent(team.id)}`, true);
-  const current = query.data?.team ?? team;
+  const current =
+    query.data?.team ??
+    (query.loading && !team.members.length
+      ? {
+          ...team,
+          members: [0, 1, 2].map((index) => ({
+            playerTag: `loading-${index}`,
+            name: 'Team member',
+            profile: null,
+          })),
+        }
+      : team);
   const profile = useCompetition<CompetitiveProfile>('/competitive/profile');
   const [notice, setNotice] = useState('');
   const [saving, setSaving] = useState(false);
@@ -1045,7 +1126,9 @@ function TeamScreen({ team, push }: { team: CompetitiveTeam; push: (scene: Scene
         </View>
       ))}
       {notice ? <CKText accessibilityLiveRegion="polite">{notice}</CKText> : null}
-      <CKText role="sectionTitle">{t('clanMembers')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('clanMembers')}
+      </CKText>
       {current.members.map((member) => (
         <View key={member.playerTag} style={styles.group}>
           <Identity
@@ -1062,7 +1145,9 @@ function TeamScreen({ team, push }: { team: CompetitiveTeam; push: (scene: Scene
           ) : null}
         </View>
       ))}
-      <CKText role="sectionTitle">{t('competitiveTeamHistory')}</CKText>
+      <CKText skeleton={false} role="sectionTitle">
+        {t('competitiveTeamHistory')}
+      </CKText>
       {query.data?.history?.map((entry, index) => (
         <Identity
           key={`${entry.playerTag}:${index}`}
@@ -1110,8 +1195,27 @@ export function ClanCompetitiveTeams({ clanTag }: { clanTag: string }) {
     );
   return (
     <View style={styles.page}>
-      <CKText role="sectionTitle">{t('competitiveTeams')}</CKText>
-      {query.loading && !query.data ? <PageSkeleton kind="list" rows={3} /> : null}
+      <CKText skeleton={false} role="sectionTitle">
+        {t('competitiveTeams')}
+      </CKText>
+      {query.loading && !query.data ? (
+        <SkeletonContent loading>
+          {[0, 1, 2].map((index) => (
+            <TeamRow
+              key={index}
+              team={{
+                id: `loading-${index}`,
+                clanTag: '',
+                clanName: 'Tournament team',
+                size: 5,
+                archived: false,
+                members: [],
+              }}
+              onPress={() => {}}
+            />
+          ))}
+        </SkeletonContent>
+      ) : null}
       {query.error ? (
         <Pressable onPress={query.refresh}>
           <CKText muted>{t('competitiveUnavailable')}</CKText>

@@ -44,7 +44,10 @@ export class UpgradeTrackerFormatError extends Error {
 export class UpgradeTrackerRepository {
   private readonly snapshotCache = new Map<string, UpgradeTrackerSnapshot>();
   private readonly emptyRemoteSnapshots = new Map<string, number>();
-  private readonly snapshotLoads = new Map<string, Promise<UpgradeTrackerSnapshot | null>>();
+  private readonly snapshotLoads = new Map<
+    string,
+    { promise: Promise<UpgradeTrackerSnapshot | null>; forceRefresh: boolean }
+  >();
   private remoteAccountId: string | null = null;
   private verifiedRemoteTags = new Set<string>();
   private cacheGeneration = 0;
@@ -87,6 +90,13 @@ export class UpgradeTrackerRepository {
     return this.snapshotCache.get(UpgradeTrackerRepository.normalizeTag(playerTag)) ?? null;
   }
 
+  /** Display saved data immediately without allowing it to satisfy a server refresh. */
+  async loadCached(playerTag: string): Promise<UpgradeTrackerSnapshot | null> {
+    this.ensureStaticData();
+    const tag = UpgradeTrackerRepository.normalizeTag(playerTag);
+    return this.peekCached(tag) ?? this.loadPersistedSnapshot(tag, this.cacheGeneration);
+  }
+
   async load(playerTag: string, forceRefresh = false): Promise<UpgradeTrackerSnapshot | null> {
     this.ensureStaticData();
     const normalized = UpgradeTrackerRepository.normalizeTag(playerTag);
@@ -95,14 +105,22 @@ export class UpgradeTrackerRepository {
       if (cached) return cached;
     }
     const pending = this.snapshotLoads.get(normalized);
-    if (pending) return pending;
+    if (pending) {
+      if (!forceRefresh || pending.forceRefresh) return pending.promise;
+      // Startup may still be reading disk. Opening the tracker must follow that
+      // cache-only request with a real server check, not mistake it for sync.
+      await pending.promise.catch(() => null);
+      if (this.snapshotLoads.get(normalized) === pending) this.snapshotLoads.delete(normalized);
+      return this.load(normalized, true);
+    }
     const generation = this.cacheGeneration;
     const load = this.loadOnce(normalized, generation, forceRefresh);
-    this.snapshotLoads.set(normalized, load);
+    this.snapshotLoads.set(normalized, { promise: load, forceRefresh });
     try {
       return await load;
     } finally {
-      if (this.snapshotLoads.get(normalized) === load) this.snapshotLoads.delete(normalized);
+      if (this.snapshotLoads.get(normalized)?.promise === load)
+        this.snapshotLoads.delete(normalized);
     }
   }
 

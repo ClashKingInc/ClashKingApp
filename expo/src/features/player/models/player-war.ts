@@ -1,5 +1,6 @@
 import { int, intMap, number, record, records, string, type JsonRecord } from './parsing';
 import { WarInfo } from '../../war/models/war';
+import { ImageAssets } from '../../../core/assets/image-assets';
 export { WarInfo as WarInfoSnapshot } from '../../war/models/war';
 export class EnemyTownhallStats {
   constructor(
@@ -143,12 +144,10 @@ export class PlayerWarStats {
     const offense = filterTownHalls(
       selected.map((value) => value.byEnemyTownhall),
       options,
-      false,
     );
     const defense = filterTownHalls(
       selected.map((value) => value.byEnemyTownhallDef),
       options,
-      true,
     );
     return new PlayerWarTypeStats(
       selected.reduce((s, v) => s + v.warsCounts, 0),
@@ -544,7 +543,6 @@ function filterTownHalls(
     defenderThFilter?: readonly number[] | null;
     equalThSelected?: boolean;
   },
-  defense: boolean,
 ) {
   const result: Record<string, EnemyTownhallStats> = {};
   for (const map of maps) {
@@ -557,12 +555,10 @@ function filterTownHalls(
         !options.attackerThFilter?.length || options.attackerThFilter.includes(attacker);
       const defenderMatches =
         !options.defenderThFilter?.length || options.defenderThFilter.includes(defender);
-      const included = defense
-        ? (options.equalThSelected === true && attacker === defender) ||
-          (attackerMatches && defenderMatches)
-        : options.equalThSelected === true
-          ? attacker === defender && attackerMatches && defenderMatches
-          : attackerMatches && defenderMatches;
+      // Same-TH means an exact match for both directions. An OR here admits
+      // every defense when no explicit attacker/defender filters are set.
+      const included =
+        (!options.equalThSelected || attacker === defender) && attackerMatches && defenderMatches;
       if (!included) continue;
       if (result[key]) result[key].merge(value);
       else result[key] = value.copy();
@@ -570,4 +566,3 @@ function filterTownHalls(
   }
   return result;
 }
-import { ImageAssets } from '../../../core/assets/image-assets';

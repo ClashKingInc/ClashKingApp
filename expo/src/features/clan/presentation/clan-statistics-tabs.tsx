@@ -9,7 +9,7 @@ import {
   CKText,
   CardStatsFooter,
   ErrorState,
-  PageSkeleton,
+  SkeletonContent,
   MobileWebImage,
   PillSurface,
   ResponsiveGrid,
@@ -111,7 +111,11 @@ export function ClanRankingsTab({
   return (
     <View style={styles.tab}>
       <ClanFilterBar
-        middle={<CKText muted>{t('rankingsCurrent')}</CKText>}
+        middle={
+          <CKText skeleton={false} muted>
+            {t('rankingsCurrent')}
+          </CKText>
+        }
         chips={
           <>
             <FilterPill
@@ -148,7 +152,34 @@ export function ClanRankingsTab({
           }}
         />
       ) : !data ? (
-        <PageSkeleton kind="list" />
+        <SkeletonContent loading>
+          <ResponsiveGrid
+            minItemWidth={340}
+            maxColumns={Platform.OS === 'web' && width >= 900 ? 3 : 1}
+            gap={10}
+          >
+            {[ImageAssets.trophies, ImageAssets.builderBaseTrophy, ImageAssets.capitalTrophy].map(
+              (art, index) => (
+                <RankingCard
+                  key={art}
+                  item={{
+                    title: [
+                      t('clanPointsTitle'),
+                      t('clanBuilderBasePoints'),
+                      t('clanCapitalPoints'),
+                    ][index]!,
+                    category: 'points',
+                    art,
+                    value: 10000,
+                    globalRank: 100,
+                    localRank: 100,
+                  }}
+                  countryCode={model.clan.location?.countryCode ?? null}
+                />
+              ),
+            )}
+          </ResponsiveGrid>
+        </SkeletonContent>
       ) : !shown.length ? (
         <ClanTabEmpty title={t('sideRankingsEmptyTitle')} />
       ) : (
@@ -247,9 +278,28 @@ export function ClanCwlHistoryTab({
   }, [actions, model.clan.tag]);
   if (!entries && !error)
     return (
-      <View style={styles.center}>
-        <PageSkeleton kind="list" />
-      </View>
+      <SkeletonContent loading style={styles.tab}>
+        {[0, 1, 2].map((index) => (
+          <CwlCard
+            key={index}
+            entry={{
+              season: '2026-01',
+              league: model.clan.warLeague?.name ?? 'Champion League I',
+              leagueId: model.clan.warLeague?.id ?? 0,
+              rank: 1,
+              stars: 100,
+              destruction: 100,
+              roundsWon: 1,
+              roundsTied: 1,
+              roundsLost: 1,
+              hasStanding: true,
+            }}
+            movement={null}
+            locale={locale}
+            onPress={() => undefined}
+          />
+        ))}
+      </SkeletonContent>
     );
   if (error)
     return (

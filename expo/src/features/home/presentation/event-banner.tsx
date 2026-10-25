@@ -1,6 +1,6 @@
 import type { ScrollViewInstance } from 'react-native';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, AppState, Easing, Pressable, StyleSheet, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Animated, AppState, Easing, Platform, Pressable, StyleSheet, View } from 'react-native';
 import {
   Castle,
   ChevronLeft,
@@ -189,12 +189,14 @@ function remaining(milliseconds: number) {
 }
 
 function BannerCard({
+  active,
   item,
   featured,
   mobile,
   isRtl,
   onPress,
 }: {
+  active: boolean;
   item: HomeBannerItem;
   featured?: boolean;
   mobile?: boolean;
@@ -222,7 +224,7 @@ function BannerCard({
         },
       ]}
     >
-      {item.highlighted ? <HighlightSweep color={item.color} /> : null}
+      {item.highlighted ? <HighlightSweep color={item.color} active={active} /> : null}
       <View
         style={[
           styles.iconCircle,
@@ -288,7 +290,7 @@ function BannerFallback({
   return <Icon color={color} size={size} />;
 }
 
-function HighlightSweep({ color }: { color: string }) {
+function HighlightSweep({ color, active }: { color: string; active: boolean }) {
   const { reduceMotion } = useCKAccessibility();
   const [progress] = useState(() => new Animated.Value(0));
   useEffect(() => {
@@ -296,6 +298,7 @@ function HighlightSweep({ color }: { color: string }) {
       progress.setValue(0.5);
       return;
     }
+    if (!active) return;
     const animation = Animated.loop(
       Animated.timing(progress, {
         toValue: 1,
@@ -306,7 +309,7 @@ function HighlightSweep({ color }: { color: string }) {
     );
     animation.start();
     return () => animation.stop();
-  }, [progress, reduceMotion]);
+  }, [active, progress, reduceMotion]);
   return (
     <Animated.View
       pointerEvents="none"
@@ -325,10 +328,12 @@ function HighlightSweep({ color }: { color: string }) {
 }
 
 export function HomeEventBanner({
+  active,
   announcements,
   desktop,
   onOpen,
 }: {
+  active: boolean;
   announcements: readonly HomeAnnouncement[];
   desktop: boolean;
   onOpen: (announcement: HomeAnnouncement) => void;
@@ -340,21 +345,37 @@ export function HomeEventBanner({
   const [foreground, setForeground] = useState(
     AppState.currentState !== 'background' && AppState.currentState !== 'inactive',
   );
+  // The primary pager retains Home while hidden. Gate recurring work on both
+  // route visibility and app state without remounting or resetting its native scroller.
+  const running = active && foreground;
   const [interacting, setInteracting] = useState(false);
   const scrollRef = useRef<ScrollViewInstance>(null);
+  // Use the same native horizontal scroll surface as account strips. Nesting
+  // an Android ViewPager inside the primary ViewPager lets the outer page
+  // intercept partial drags before the inner pager can settle.
+  const touchActive = useRef(false);
+  const dragActive = useRef(false);
+  const offset = useRef(0);
+  const settledIndex = useRef(0);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
       setForeground(state === 'active');
       setInteracting(false);
-      if (state === 'active') setNow(new Date());
     });
     return () => subscription.remove();
   }, []);
   useEffect(() => {
-    if (!foreground) return;
-    const timer = setTimeout(() => setNow(new Date()), 60000 - (Date.now() % 60000));
+    if (!running) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      setNow(new Date());
+      timer = setTimeout(tick, 60000 - (Date.now() % 60000));
+    };
+    // Refresh once on return, then on minute boundaries. Never replay hidden ticks.
+    timer = setTimeout(tick, 0);
     return () => clearTimeout(timer);
-  }, [foreground, now]);
+  }, [running]);
   const items = useMemo(
     () => buildHomeBannerItems(now, announcements, t, theme.background === '#030304'),
     [now, announcements, t, theme.background],
@@ -362,15 +383,67 @@ export function HomeEventBanner({
   const [index, setIndex] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(680);
   const safeIndex = Math.min(index, Math.max(0, items.length - 1));
+  const settle = useCallback(() => {
+    clearTimeout(settleTimer.current);
+    const next = homeBannerPageIndex(offset.current, availableWidth, items.length);
+    // Native paging owns dragging and deceleration. The fallback may only
+    // correct a released, quiet scroller; an animated correction starts another
+    // momentum cycle and can fight a new swipe on either native platform.
+    if (touchActive.current || dragActive.current) return;
+    const target = next * availableWidth;
+    if (Math.abs(offset.current - target) > 0.5) {
+      offset.current = target;
+      scrollRef.current?.scrollTo({ x: target, animated: false });
+    }
+    settledIndex.current = next;
+    setIndex(next);
+    setInteracting(false);
+  }, [availableWidth, items.length]);
+  const scheduleSettle = useCallback(() => {
+    clearTimeout(settleTimer.current);
+    settleTimer.current = setTimeout(settle, 180);
+  }, [settle]);
+  const changeTouch = useCallback((touching: boolean) => {
+    touchActive.current = touching;
+    if (touching) {
+      clearTimeout(settleTimer.current);
+      setInteracting(true);
+    }
+  }, []);
+  const finishNativeGesture = useCallback(() => {
+    // Only native finalization (or web release) ends touch ownership. RN sends
+    // touch-cancel when the native scroll view takes over, while the finger is down.
+    touchActive.current = false;
+    dragActive.current = false;
+    scheduleSettle();
+  }, [scheduleSettle]);
   useEffect(() => {
-    if (desktop || !foreground || interacting || reduceMotion || items.length < 2) return;
+    if (running) return;
+    clearTimeout(settleTimer.current);
+    touchActive.current = false;
+    dragActive.current = false;
+    const frame = requestAnimationFrame(() => setInteracting(false));
+    return () => cancelAnimationFrame(frame);
+  }, [running]);
+  useEffect(() => () => clearTimeout(settleTimer.current), []);
+  useEffect(() => {
+    clearTimeout(settleTimer.current);
+    dragActive.current = false;
+    offset.current = Math.min(settledIndex.current, Math.max(0, items.length - 1)) * availableWidth;
+    scrollRef.current?.scrollTo({ x: offset.current, animated: false });
+  }, [availableWidth, items.length]);
+  useEffect(() => {
+    if (desktop || !running || interacting || reduceMotion || items.length < 2) return;
     const timer = setTimeout(() => {
+      // A native touch can arrive before React commits interacting=true.
+      if (touchActive.current || dragActive.current) return;
       const next = (safeIndex + 1) % items.length;
+      settledIndex.current = next;
       scrollRef.current?.scrollTo({ x: next * availableWidth, animated: next !== 0 });
       setIndex(next);
     }, 8000);
     return () => clearTimeout(timer);
-  }, [desktop, foreground, interacting, reduceMotion, items.length, safeIndex, availableWidth]);
+  }, [desktop, running, interacting, reduceMotion, items.length, safeIndex, availableWidth]);
   const action = (item: HomeBannerItem) =>
     item.announcement && isHomeAnnouncementOpenable(item.announcement)
       ? () => onOpen(item.announcement!)
@@ -390,11 +463,17 @@ export function HomeEventBanner({
         style={styles.desktop}
         onLayout={(event) => setAvailableWidth(event.nativeEvent.layout.width)}
       >
-        <BannerCard item={featured} featured isRtl={isRtl} onPress={action(featured)} />
+        <BannerCard
+          active={running}
+          item={featured}
+          featured
+          isRtl={isRtl}
+          onPress={action(featured)}
+        />
         <View style={styles.eventGrid}>
           {rest.map((item) => (
             <View key={item.id} style={{ width: cellWidth }}>
-              <BannerCard item={item} isRtl={isRtl} onPress={action(item)} />
+              <BannerCard active={running} item={item} isRtl={isRtl} onPress={action(item)} />
             </View>
           ))}
         </View>
@@ -409,13 +488,22 @@ export function HomeEventBanner({
       <HorizontalSwipeScrollView
         ref={scrollRef}
         testID="home-event-carousel"
-        claimAndroidTouchOnStart
         nestedScrollEnabled
-        onTouchStart={() => setInteracting(true)}
-        onTouchEnd={() => setInteracting(false)}
-        onTouchCancel={() => setInteracting(false)}
-        onScrollBeginDrag={() => setInteracting(true)}
-        onScrollEndDrag={() => setInteracting(false)}
+        onNativeTouchChange={changeTouch}
+        onNativeGestureFinalize={finishNativeGesture}
+        onTouchStart={() => changeTouch(true)}
+        onTouchEnd={Platform.OS === 'web' ? finishNativeGesture : undefined}
+        onTouchCancel={Platform.OS === 'web' ? finishNativeGesture : undefined}
+        onScrollBeginDrag={() => {
+          dragActive.current = true;
+          clearTimeout(settleTimer.current);
+          setInteracting(true);
+        }}
+        onScrollEndDrag={(event) => {
+          offset.current = event.nativeEvent.contentOffset.x;
+          dragActive.current = false;
+          scheduleSettle();
+        }}
         onMomentumScrollBegin={() => setInteracting(true)}
         horizontal
         pagingEnabled
@@ -425,24 +513,15 @@ export function HomeEventBanner({
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
         style={isRtl ? styles.rtlScroll : undefined}
-        onScroll={(event) =>
-          setIndex(
-            homeBannerPageIndex(
-              event.nativeEvent.contentOffset.x,
-              event.nativeEvent.layoutMeasurement.width,
-              items.length,
-            ),
-          )
-        }
+        onScroll={(event) => {
+          offset.current = event.nativeEvent.contentOffset.x;
+          if (running && !touchActive.current && !dragActive.current) scheduleSettle();
+        }}
         onMomentumScrollEnd={(event) => {
-          setInteracting(false);
-          setIndex(
-            homeBannerPageIndex(
-              event.nativeEvent.contentOffset.x,
-              event.nativeEvent.layoutMeasurement.width,
-              items.length,
-            ),
-          );
+          offset.current = event.nativeEvent.contentOffset.x;
+          // A stale momentum-end can follow the next touch-down. The guarded
+          // fallback must never snap a card out from underneath that new touch.
+          settle();
         }}
       >
         {items.map((item) => (
@@ -450,7 +529,7 @@ export function HomeEventBanner({
             key={item.id}
             style={[{ width: availableWidth, paddingHorizontal: 1 }, isRtl && styles.rtlItem]}
           >
-            <BannerCard item={item} mobile isRtl={isRtl} onPress={action(item)} />
+            <BannerCard active={running} item={item} mobile isRtl={isRtl} onPress={action(item)} />
           </View>
         ))}
       </HorizontalSwipeScrollView>

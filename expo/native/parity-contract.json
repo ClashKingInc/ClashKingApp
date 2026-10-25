@@ -192,12 +192,17 @@
     "dynamicPrefixes": ["warInfo_", "upgradeWidget_"]
   },
   "androidPinWidgetProvider": "WarAppWidgetProvider",
-  "alternateIcons": ["AppIconChristmas", "AppIconBlackWhite", "AppIconDarkLogo"],
+  "alternateIcons": ["AppIconHalloween", "AppIconChristmas", "AppIconBlackWhite", "AppIconDarkLogo"],
   "alternateIconOptions": [
     {
       "labelKey": "default",
       "iconName": null,
       "previewAsset": "assets/icons/app_icon_ios_default.png"
+    },
+    {
+      "labelKey": "halloween",
+      "iconName": "AppIconHalloween",
+      "previewAsset": "assets/icons/app_icon_halloween.png"
     },
     {
       "labelKey": "christmas",

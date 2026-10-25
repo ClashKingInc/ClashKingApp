@@ -60,6 +60,7 @@ export interface ClanInfoPresentationActions {
   showMessage(message: string): void;
   loadPlayer(tag: string): Promise<Player>;
   openPlayer(player: Player): void;
+  openPlayerTag?(tag: string): void;
   loadJoinLeave(clan: Clan): Promise<ClanJoinLeave>;
   loadMoreJoinLeave(clan: Clan, current: ClanJoinLeave): Promise<ClanJoinLeave>;
   loadWarLog(clan: Clan): Promise<ClanWarLog | null>;

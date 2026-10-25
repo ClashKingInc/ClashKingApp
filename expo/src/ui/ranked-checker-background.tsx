@@ -1,7 +1,9 @@
 import { memo } from 'react';
-import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Asset } from 'expo-asset';
-import { useCKThemeMode } from './theme';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { HeaderArtwork } from './header-artwork';
+import { prepareHeaderArtwork } from '../core/assets/header-artwork-cache';
+import { useCKTheme } from './theme';
+import { HeroHeaderScrim } from './hero-header-scrim';
 
 export type RankedCheckerColor = 'blue' | 'purple' | 'green' | 'red';
 const artwork = {
@@ -10,30 +12,24 @@ const artwork = {
   green: require('../../assets/clashking/backgrounds/green.webp'),
   red: require('../../assets/clashking/backgrounds/red.webp'),
 };
-const fades = {
-  dark: require('../../assets/clashking/backgrounds/fade-dark.png'),
-  light: require('../../assets/clashking/backgrounds/fade-light.png'),
-};
 const fallback = { blue: '#302A68', purple: '#4A203D', green: '#174A20', red: '#652626' };
 let warmup: Promise<unknown> | undefined;
 
 /** Opportunistic warmup only: routing and the launch screen never await artwork. */
 export function warmRankedCheckerBackgrounds() {
   warmup ??= Promise.allSettled(
-    [...Object.values(artwork), ...Object.values(fades)].map((source) =>
-      Image.prefetch(Asset.fromModule(source).uri),
-    ),
+    Object.values(artwork).map((source) => prepareHeaderArtwork(source)),
   );
   return warmup;
 }
 
-/** No layout feedback or SVG composition on navigation; native views paint cached rasters. */
+/** Cache the checker artwork, then share the same measured scrim as other headers. */
 export const RankedCheckerBackground = memo(function RankedCheckerBackground({
   color,
 }: {
   color: RankedCheckerColor;
 }) {
-  const mode = useCKThemeMode();
+  const theme = useCKTheme();
   const { width: screenWidth } = useWindowDimensions();
   const width = Math.max(700, screenWidth);
   return (
@@ -41,11 +37,9 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
       pointerEvents="none"
       style={[StyleSheet.absoluteFill, styles.clip, { backgroundColor: fallback[color] }]}
     >
-      <Image
+      <HeaderArtwork
         source={artwork[color]}
-        resizeMode="cover"
-        resizeMethod="resize"
-        fadeDuration={0}
+        contentFit="cover"
         style={{
           position: 'absolute',
           width,
@@ -55,18 +49,9 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
           transform: [{ translateX: -width / 2 }],
         }}
       />
-      {/* Shade only the artwork; keep titles and controls fully opaque. Apply
-        below the existing theme fade so every checker header stays consistent. */}
-      <View
-        testID="ranked-checker-tint"
-        style={[StyleSheet.absoluteFill, { backgroundColor: '#0000007A' }]}
-      />
-      <Image
-        source={fades[mode]}
-        resizeMode="stretch"
-        fadeDuration={0}
-        style={StyleSheet.absoluteFill}
-      />
+      {/* Custom ProfilePageHeader backdrops own their scrim. Use the same
+          measured fade as illustrated headers, never a stretched fade bitmap. */}
+      <HeroHeaderScrim edgeColor={theme.background} />
     </View>
   );
 });
