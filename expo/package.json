@@ -1,7 +1,7 @@
 {
   "name": "clashking-expo",
   "main": "expo-router/entry",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "dependencies": {
     "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.28.tgz",
     "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.28-home-restored.tgz",

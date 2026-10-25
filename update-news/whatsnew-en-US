@@ -1,9 +1,10 @@
-ClashKing 0.6.2 alpha
+ClashKing 0.6.3 alpha
 
-- Redesigned Clan Capital, player war stats, Bases & Armies, and Game Assets.
-- Faster loading and smoother navigation, scrolling, and card reordering.
-- Improved ranked and Legend history, filters, and battle details.
-- Updated icons, Halloween animation, widgets, and translations.
-- More accurate upgrade limits and tracking.
+- Improved ranked lists, battle cards and war statistics.
+- Fixed missing wars and incorrect opponent fallback.
+- Smoother Home carousel, loading placeholders and achievements.
+- Improved supercharge effects and shared header fades.
+- Clearer war widgets and clan member controls.
+- Fixed translated game images and system-language selection.
 
 Please report issues found during testing.
