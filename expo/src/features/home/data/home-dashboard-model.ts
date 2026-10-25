@@ -3,7 +3,7 @@ import { upgradeSnapshotNeedsRefresh } from '../../upgrade-tracker/models/snapsh
 import { rankedLeagueDisplayColor } from '../../../ui/league-colors';
 import { formatCompactNumber, type I18nValue } from '../../../i18n';
 import type { Player } from '../../player/models';
-import type { RankedLeagueData } from '../../player/models/player-ranked';
+import { rankedPlacementZone, type RankedLeagueData } from '../../player/models/player-ranked';
 import type { PlayerLegendLeagueData } from '../../player/models/player-legend';
 import type { WarCwlService } from '../../war/data';
 import {
@@ -116,6 +116,11 @@ export function buildHomeRankedModel(
         groupSize: data.currentGroup?.members.length ?? 0,
         trophies: member?.leagueTrophies ?? data.trophies,
         rank: data.currentRank,
+        rankZone: rankedPlacementZone(
+          tier.id,
+          data.currentGroup?.members.length ?? 0,
+          data.currentRank,
+        ),
         attacksDone: member ? member.attackWinCount + member.attackLoseCount : 0,
         defensesDone: member ? member.defenseWinCount + member.defenseLoseCount : 0,
         maxBattles: data.currentMaxBattles,

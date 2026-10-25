@@ -49,10 +49,12 @@ export function homeBottomPadding(desktop: boolean, bottomInset: number): number
 export function DashboardScreen({
   model,
   actions,
+  active = true,
   platform = Platform.OS as HomePlatform,
 }: {
   model: HomeDashboardModel;
   actions: HomeDashboardActions;
+  active?: boolean;
   platform?: HomePlatform;
 }) {
   const { t, locale } = useI18n();
@@ -161,6 +163,7 @@ export function DashboardScreen({
   const header = (
     <>
       <HomeEventBanner
+        active={active}
         announcements={model.announcements}
         desktop={desktop}
         onOpen={actions.openAnnouncement}

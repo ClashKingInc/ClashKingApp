@@ -55,6 +55,7 @@ export interface HomeRankedAccount extends HomeAccountIdentity {
   readonly tierIconUrl: string;
   readonly trophies: number;
   readonly rank: number | null;
+  readonly rankZone?: 'promotion' | 'demotion' | 'neutral';
   readonly attacksDone: number;
   readonly defensesDone: number;
   readonly maxBattles: number | null;

@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useEffect, type ReactNode } from 'react';
 import {
   ActivityIndicator,
   Animated,
-  Easing,
   Pressable,
   Platform,
   StyleSheet,
@@ -13,12 +12,13 @@ import {
 } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
-import { useCKAccessibility } from './accessibility';
 import { ImageAssets } from '../core/assets/image-assets';
 import { MobileWebImage } from './mobile-web-image';
 import { CKText } from './text';
 import { ckRadius, ckSpacing, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
+import { useSkeletonContent } from './skeleton-content';
+import { useSkeletonMotion } from './skeleton-motion';
 
 export function LoadingIndicator({ label }: { label?: string }) {
   const theme = useCKTheme();
@@ -42,33 +42,8 @@ export function Skeleton({
   style?: StyleProp<ViewStyle>;
 }) {
   const theme = useCKTheme();
-  const { reduceMotion } = useCKAccessibility();
-  const [opacity] = useState(() => new Animated.Value(0.42));
-
-  useEffect(() => {
-    if (reduceMotion) {
-      opacity.setValue(0.62);
-      return;
-    }
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 0.82,
-          duration: 900,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0.42,
-          duration: 900,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]),
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [opacity, reduceMotion]);
+  const inherited = useSkeletonContent();
+  const opacity = useSkeletonMotion(!inherited);
 
   return (
     <Animated.View

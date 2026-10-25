@@ -1,6 +1,7 @@
 import { createContext, useContext, type PropsWithChildren } from 'react';
-import { View, type StyleProp, type ViewStyle, type ViewProps } from 'react-native';
+import { Animated, View, type StyleProp, type ViewStyle, type ViewProps } from 'react-native';
 import { useI18n } from '../i18n';
+import { useSkeletonMotion } from './skeleton-motion';
 
 const SkeletonContentContext = createContext(false);
 
@@ -24,12 +25,13 @@ export function SkeletonContent({
   const { t } = useI18n();
   const inherited = useContext(SkeletonContentContext);
   const pending = inherited || loading;
+  const opacity = useSkeletonMotion(loading && !inherited);
   return (
     <SkeletonContentContext.Provider value={pending}>
-      <View
+      <Animated.View
         testID={testID}
         onLayout={onLayout}
-        style={style}
+        style={[style, { opacity }]}
         pointerEvents={pending ? 'none' : 'auto'}
         accessibilityRole={pending ? 'progressbar' : undefined}
         accessibilityLabel={pending ? (label ?? t('generalLoading')) : undefined}
@@ -43,7 +45,7 @@ export function SkeletonContent({
         >
           {children}
         </View>
-      </View>
+      </Animated.View>
     </SkeletonContentContext.Provider>
   );
 }

@@ -9,6 +9,7 @@ import {
   MobileWebImage,
   SkeletonContent,
   ckColors,
+  statColors,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
@@ -322,7 +323,16 @@ export function HomeRankedCard({
                   ? `${t('cwlRankTitle')} #${account.rank} / ${account.groupSize}`
                   : `${account.tierName} · ${t('rankedLeagueNoGroup')}`
             }
-            size={54}
+            subtitleColor={
+              account.rankZone === 'promotion'
+                ? statColors.win
+                : account.rankZone === 'demotion'
+                  ? statColors.loss
+                  : undefined
+            }
+            size={40}
+            cornerSize={20}
+            compact
             trailing={<RankedPlacement account={account} />}
           />
           <RankedBody account={account} />

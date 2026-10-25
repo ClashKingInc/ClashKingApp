@@ -153,13 +153,20 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const pager = useRef<PagerViewHandle>(null);
   const [trackerScrollY] = useState(() => new Animated.Value(0));
   const [trackerOffsets, setTrackerOffsets] = useState<Partial<Record<TrackerTab, number>>>({});
+  // Reserve the page while the saved snapshot resolves. Fast empty responses
+  // must go directly to import, without flashing a fictitious village.
   const pending = props.loading && !props.snapshot;
+  const [showPlaceholder, setShowPlaceholder] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowPlaceholder(pending), pending ? 150 : 0);
+    return () => clearTimeout(timer);
+  }, [pending]);
   const placeholder = useMemo(
     () =>
       trackerLoadingSnapshot(props.accounts.find((account) => account.tag === props.selectedTag)),
     [props.accounts, props.selectedTag],
   );
-  const snapshot = props.snapshot ?? (pending ? placeholder : null);
+  const snapshot = props.snapshot ?? (pending && showPlaceholder ? placeholder : null);
   const viewportWidth = useWindowDimensions().width;
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
   const selectedAccount = props.accounts.find((account) => account.tag === props.selectedTag);
@@ -254,7 +261,9 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           onImport={() => setImportOpen(true)}
         />
       ) : null}
-      {props.error && !snapshot ? (
+      {pending && !showPlaceholder ? (
+        <View style={styles.emptyBody} />
+      ) : props.error && !snapshot ? (
         <EmptyState
           title={t('upgradeTrackerSnapshotUnreadable')}
           body={props.error}

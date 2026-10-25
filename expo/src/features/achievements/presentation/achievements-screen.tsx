@@ -69,6 +69,14 @@ export function AchievementsScreen({
   const visibleAchievements =
     achievements ?? (loading ? ACHIEVEMENT_CATALOG_FALLBACK : snapshot.achievements);
   const [selected, setSelected] = useState<Achievement>();
+  const [modelBudget, setModelBudget] = useState(0);
+  useEffect(() => {
+    if (loading || modelBudget >= visibleAchievements.length) return;
+    // Paint the destination and controls first. Creating every native WebView
+    // in the navigation commit otherwise makes the tap feel unregistered.
+    const frame = requestAnimationFrame(() => setModelBudget((count) => count + 1));
+    return () => cancelAnimationFrame(frame);
+  }, [loading, modelBudget, visibleAchievements.length]);
   const horizontalPadding = Math.max(ckSpacing.lg, (width - 1120) / 2);
   const collectionWidth = Math.min(width - horizontalPadding * 2, 1120);
   const columns = achievementColumnCount(collectionWidth);
@@ -148,7 +156,7 @@ export function AchievementsScreen({
           style={styles.grid}
           testID={`achievements-grid-${columns}`}
         >
-          {visibleAchievements.map((achievement) => {
+          {visibleAchievements.map((achievement, index) => {
             const keys = ACHIEVEMENT_COPY_KEYS[achievement.id];
             const name = t(keys.name);
             const subtitle = isAchievementUnlocked(achievement)
@@ -159,6 +167,7 @@ export function AchievementsScreen({
                 key={achievement.id}
                 achievement={achievement}
                 modelRenderer={ModelRenderer}
+                showModel={index < modelBudget}
                 name={name}
                 onPress={() => setSelected(achievement)}
                 subtitle={subtitle}
@@ -187,6 +196,7 @@ export function AchievementTile({
   onPress,
   subtitle,
   width,
+  showModel = true,
 }: {
   achievement: Achievement;
   modelRenderer: ComponentType<AchievementModelViewerProps>;
@@ -194,6 +204,7 @@ export function AchievementTile({
   onPress: () => void;
   subtitle: string;
   width: number;
+  showModel?: boolean;
 }) {
   const theme = useCKTheme();
   const contentLoading = useSkeletonContent();
@@ -223,7 +234,7 @@ export function AchievementTile({
               achievement.id === 'verified_accounts' && styles.verifiedModelFrame,
             ]}
           >
-            {contentLoading ? (
+            {contentLoading || !showModel ? (
               <Skeleton width="100%" height="100%" />
             ) : (
               <ModelRenderer

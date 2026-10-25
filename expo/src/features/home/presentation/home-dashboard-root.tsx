@@ -332,7 +332,7 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
 
   return (
     <View style={{ flex: 1 }}>
-      <DashboardScreen model={model} actions={actions} />
+      <DashboardScreen model={model} actions={actions} active={props.active ?? true} />
       <UpgradeImportModal
         visible={importOpen}
         onClose={() => setImportOpen(false)}

@@ -339,17 +339,23 @@ export function CardHeader({
   imageUrl,
   title,
   subtitle,
+  subtitleColor,
   trailing,
   size = 46,
   cornerImageUrl,
+  cornerSize = 26,
+  compact = false,
   detail,
 }: {
   imageUrl: string;
   title: string;
   subtitle?: string;
+  subtitleColor?: string;
   trailing?: ReactNode;
   size?: number;
   cornerImageUrl?: string;
+  cornerSize?: number;
+  compact?: boolean;
   detail?: ReactNode;
 }) {
   return (
@@ -366,19 +372,24 @@ export function CardHeader({
               position: 'absolute',
               right: -5,
               top: -5,
-              width: 26,
-              height: 26,
+              width: cornerSize,
+              height: cornerSize,
               resizeMode: 'contain',
             }}
           />
         ) : null}
       </View>
       <View style={styles.headerCopy}>
-        <CKText role="titleSmall" numberOfLines={1} style={styles.heavy}>
+        <CKText role={compact ? 'bodyLarge' : 'titleSmall'} numberOfLines={1} style={styles.heavy}>
           {title}
         </CKText>
         {subtitle ? (
-          <CKText muted role="labelLarge" numberOfLines={1}>
+          <CKText
+            muted
+            role="labelLarge"
+            numberOfLines={1}
+            style={subtitleColor ? { color: subtitleColor } : undefined}
+          >
             {subtitle}
           </CKText>
         ) : null}
@@ -485,7 +496,7 @@ const styles = StyleSheet.create({
   },
   comparisonButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  headerCopy: { flex: 1, gap: 2 },
+  headerCopy: { flex: 1, minWidth: 0, gap: 2 },
   headerTrailing: { alignSelf: 'flex-start', alignItems: 'center' },
   statusRow: { minHeight: 22, flexDirection: 'row', alignItems: 'center' },
   caughtUp: {

@@ -417,3 +417,34 @@ export class PlayerRankingCategory {
     );
   }
 }
+
+/** Share the exact published cutoffs between Home and the ranked table.
+ * Partial groups cannot establish placement, so keep their rank neutral. */
+export function rankedGroupCutoffs(tierId: number | undefined, size: number) {
+  const tiers = Object.values(record(gameDataState.playerLeagueData.leagues));
+  const metadata = tiers.map(record).find((tier) => Number(tier._id) === tierId);
+  if (!metadata || Number(metadata.group_size) !== size || size <= 0) return null;
+  const promotion = (size * Number(metadata.promote_percentage)) / 100;
+  const demotion = (size * Number(metadata.demote_percentage)) / 100;
+  if (
+    !Number.isInteger(promotion) ||
+    !Number.isInteger(demotion) ||
+    promotion < 0 ||
+    demotion < 0 ||
+    promotion + demotion > size
+  )
+    return null;
+  return { promotion, demotionStart: size - demotion, demotion };
+}
+
+export function rankedPlacementZone(
+  tierId: number | undefined,
+  size: number,
+  rank: number | null,
+): 'promotion' | 'demotion' | 'neutral' {
+  const cutoffs = rankedGroupCutoffs(tierId, size);
+  if (!cutoffs || rank === null || rank < 1 || rank > size) return 'neutral';
+  if (rank <= cutoffs.promotion) return 'promotion';
+  if (rank > cutoffs.demotionStart) return 'demotion';
+  return 'neutral';
+}
