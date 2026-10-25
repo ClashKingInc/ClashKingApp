@@ -19,15 +19,10 @@ import DraggableFlatList, {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
-import {
-  EmptyState,
-  ResponsiveGrid,
-  PageLoading,
-  useCKTheme,
-} from '../../../ui';
+import { EmptyState, ResponsiveGrid, SkeletonContent, useCKTheme } from '../../../ui';
 import { AccountVerificationDialog } from '../../accounts/presentation/account-verification-dialog';
 import { PlayerCardOptions } from '../models/player-support';
-import type { Player } from '../models/player';
+import { Player } from '../models/player';
 import {
   buildPlayerRosters,
   normalizeRosterTag,
@@ -53,7 +48,6 @@ export function PlayersScreen({
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const desktop = platform === 'web' && width >= 900;
-  const usesNativeRefreshScroll = platform === 'android';
   const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
   const link = useLinkParameters();
   const [mode, setMode] = useState<PlayerRosterMode>(
@@ -96,6 +90,8 @@ export function PlayersScreen({
     void actions.hydrateBookmarkedPlayers(missing);
   }, [actions, rosters.missingBookmarkTags]);
   const openBookmark = async (tag: string) => {
+    if (actions.openPlayerTag) return actions.openPlayerTag(tag);
+    if (loadingBookmark) return;
     setLoadingBookmark(true);
     try {
       actions.openPlayer(await actions.loadBookmarkedPlayer(tag));
@@ -106,6 +102,43 @@ export function PlayersScreen({
     }
   };
   const entries = mode === 'linked' ? rosters.linked : rosters.bookmarked;
+  const pendingLinks =
+    mode === 'linked' && model.loading
+      ? model.accountLinks.filter(
+          (link) =>
+            !model.profiles.some(
+              (player) => normalizeRosterTag(player.tag) === normalizeRosterTag(link.playerTag),
+            ),
+        )
+      : [];
+  // Pending identities remain in the real card layout, but these display models
+  // never enter the service cache or any enabled interaction.
+  const pendingCards =
+    model.loading && (pendingLinks.length > 0 || entries.length === 0) ? (
+      <SkeletonContent loading style={styles.mobileCards}>
+        {(pendingLinks.length ? pendingLinks : [undefined, undefined, undefined]).map(
+          (link, index) => (
+            <PlayerDataCard
+              key={link?.playerTag ?? index}
+              player={Player.fromJson({
+                tag: link?.playerTag ?? '',
+                name: 'Player name',
+                townHallLevel: 16,
+              })}
+              link={link}
+              bookmarked={mode === 'bookmarked'}
+              options={new PlayerCardOptions()}
+              featureFlags={model.featureFlags}
+              notificationsEnabled={false}
+              notificationActive={false}
+              notificationUpdating={false}
+              actions={actions}
+              onVerify={() => undefined}
+            />
+          ),
+        )}
+      </SkeletonContent>
+    ) : null;
   const cardForEntry = (entry: PlayerRosterEntry, drag?: () => void, dragTestID?: string) => {
     if (entry.kind === 'linked') {
       const key = normalizeRosterTag(entry.player.tag);
@@ -173,7 +206,7 @@ export function PlayersScreen({
       </View>
     </>
   );
-  const emptyRoster = (
+  const emptyRoster = pendingCards ?? (
     <EmptyState
       title={
         mode === 'linked' ? t('dashboardNoLinkedAccountsTitle') : t('playersNoBookmarkedTitle')
@@ -206,7 +239,7 @@ export function PlayersScreen({
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {desktop || usesNativeRefreshScroll ? (
+      {desktop ? (
         <ScrollView
           onScroll={pullRefresh.onScroll}
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
@@ -215,19 +248,10 @@ export function PlayersScreen({
           alwaysBounceVertical
           contentContainerStyle={{ paddingHorizontal: horizontal, paddingBottom: 32 }}
           refreshControl={refreshControl}
-          testID={usesNativeRefreshScroll ? 'player-scroll-view' : undefined}
         >
           {listHeader}
           {entries.length === 0 ? (
             emptyRoster
-          ) : usesNativeRefreshScroll ? (
-            <View style={styles.mobileCards}>
-              {entries.map((entry) => (
-                <View key={playerRosterEntryTag(entry)} style={styles.cardItem}>
-                  {cardForEntry(entry)}
-                </View>
-              ))}
-            </View>
           ) : (
             <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
               {entries.map((entry) => (
@@ -235,9 +259,16 @@ export function PlayersScreen({
               ))}
             </ResponsiveGrid>
           )}
+          {entries.length > 0 ? pendingCards : null}
         </ScrollView>
       ) : (
         <DraggableFlatList
+          // Android needs the same long-press callback as iOS. Keep native
+          // refresh on this list; a plain ScrollView silently removes reorder.
+          {...(platform === 'android'
+            ? { disallowInterruption: false, androidHoldToDrag: true }
+            : {})}
+          testID="player-scroll-view"
           onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
           onScrollEndDrag={pullRefresh.onScrollEndDrag}
@@ -253,6 +284,7 @@ export function PlayersScreen({
           }}
           ListHeaderComponent={listHeader}
           ListEmptyComponent={emptyRoster}
+          ListFooterComponent={entries.length > 0 ? (pendingCards ?? undefined) : undefined}
           refreshControl={refreshControl}
           renderItem={(params: RenderItemParams<PlayerRosterEntry>) => (
             <ScaleDecorator activeScale={1.015}>
@@ -269,7 +301,6 @@ export function PlayersScreen({
           )}
         />
       )}
-      <PageLoading visible={loadingBookmark} kind="profile" />
       <AccountVerificationDialog
         visible={verification !== undefined}
         playerTag={verification?.tag ?? ''}

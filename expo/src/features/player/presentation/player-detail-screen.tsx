@@ -6,7 +6,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useI18n } from '../../../i18n';
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { MobileWebImage, ProfileTabs, useCKTheme } from '../../../ui';
+import { MobileWebImage, ProfileTabs, SkeletonContent, useCKTheme } from '../../../ui';
 import { retainRecentSections } from '../../../ui/retained-sections';
 import type {
   PlayerDetailPresentationActions,
@@ -28,15 +28,18 @@ import { LegendHistoryList } from '../../legends/presentation/legend-history';
 import { PlayerAchievementsTab } from './player-achievements-tab';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { PlayerBattlelogShareModal } from './player-battlelog-share';
+import { playerLoadingModel } from './player-loading-model';
 
 export function PlayerDetailScreen({
   model,
   actions,
   initialTab = 'home',
+  loading = false,
 }: {
   model: PlayerDetailPresentationModel;
   actions: PlayerDetailPresentationActions;
   initialTab?: PlayerDetailTabKey;
+  loading?: boolean;
 }) {
   const theme = useCKTheme();
   const { t } = useI18n();
@@ -158,6 +161,7 @@ export function PlayerDetailScreen({
             selectedTab={tab}
             onBattlelogExport={() => setBattlelogShareVisible(true)}
             safeTop={insets.top}
+            loading={loading}
           />
         </View>
         <View
@@ -176,7 +180,7 @@ export function PlayerDetailScreen({
             />
           </View>
         </View>
-        <View testID="player-detail-body" style={styles.tabBody}>
+        <SkeletonContent loading={loading} testID="player-detail-body" style={styles.tabBody}>
           {tabs.map((item) =>
             retainedTabs.includes(item.key) ? (
               <View
@@ -185,12 +189,18 @@ export function PlayerDetailScreen({
                 style={item.key === tab ? undefined : styles.hiddenTab}
               >
                 <TabState model={model} tab={item.key} actions={actions}>
-                  {renderTab(item.key, model, actions, visibleBattles, setLootGridScrubbing)}
+                  {renderTab(
+                    item.key,
+                    playerLoadingModel(model, item.key),
+                    actions,
+                    visibleBattles,
+                    setLootGridScrubbing,
+                  )}
                 </TabState>
               </View>
             ) : null,
           )}
-        </View>
+        </SkeletonContent>
       </ScrollView>
       <PlayerBattlelogShareModal
         items={(model.battlelog?.forMode('farming') ?? []).filter((item) => item.attack)}
@@ -257,6 +267,7 @@ function renderTab(
     return (
       <PlayerWarTab
         data={model.warStats}
+        cwlHistory={model.cwlHistory}
         actions={actions}
         player={model.player}
         loading={model.loadingTabs?.has('war') === true}

@@ -1,4 +1,4 @@
-import { getMaxTownHallLevel } from '@/core/game-data/game-data-service';
+import { maximumItemLevelAtHall } from '@/core/game-data/hall-item-limits';
 import { isRecord, type JsonRecord } from '../models/parsing';
 import type { PlayerItem, RawPlayerItemInput } from '../models/player-items';
 
@@ -47,31 +47,11 @@ export function filterGameData(
   );
 }
 export const filterSpellGameData = (data: unknown) => filterGameData(data, () => true);
-export function maxLevelForTH(
-  meta: JsonRecord | null | undefined,
-  thLevel: number,
-  options: { maxTownHallLevel?: number; itemMaxLevel?: number } = {},
-): number {
-  if (!meta || thLevel <= 0 || !Array.isArray(meta.levels) || meta.levels.length === 0) return 0;
-  let max = 0;
-  for (const entry of meta.levels)
-    if (
-      isRecord(entry) &&
-      typeof entry.required_townhall === 'number' &&
-      typeof entry.level === 'number' &&
-      entry.required_townhall <= thLevel
-    )
-      max = Math.max(max, Math.trunc(entry.level));
-  const declared =
-      options.itemMaxLevel ?? (typeof meta.maxLevel === 'number' ? Math.trunc(meta.maxLevel) : 0),
-    maxTh = options.maxTownHallLevel ?? getMaxTownHallLevel();
-  return maxTh > 0 && thLevel >= maxTh && declared > max ? declared : max;
+export function maxLevelForTH(meta: JsonRecord | null | undefined, thLevel: number): number {
+  return maximumItemLevelAtHall(meta, thLevel);
 }
-export function maxLevelForItemAtTH(item: PlayerItem, thLevel: number, maxTownHallLevel?: number) {
-  return (
-    maxLevelForTH(item.meta, thLevel, { maxTownHallLevel, itemMaxLevel: item.maxLevel }) ||
-    item.maxLevel
-  );
+export function maxLevelForItemAtTH(item: PlayerItem, thLevel: number) {
+  return maxLevelForTH(item.meta, thLevel);
 }
 export interface UpgradeResourceAmount {
   key: string;

@@ -12,6 +12,7 @@ import {
 import { canonicalTag } from '../../../core/domain/tags';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { gameDataState } from '../../../core/game-data/game-data-state';
+import type { PlayerBattlelogEntry } from './player-battlelog';
 
 export class RankedLeagueTier {
   constructor(
@@ -76,6 +77,7 @@ export class RankedLeagueBattle {
     readonly opponentTownHallLevel = 0,
     readonly townHallLevel = 0,
     readonly duration = 0,
+    readonly shareCode = '',
   ) {}
   static fromOfficial(json: JsonRecord) {
     return new RankedLeagueBattle(
@@ -94,7 +96,7 @@ export class RankedLeagueBattle {
     const opponent = record(json.opponent);
     return new RankedLeagueBattle(
       string(opponent.tag),
-      '',
+      string(opponent.name),
       int(json.stars),
       number(json.destructionPercentage),
       int(json.trophies),
@@ -103,6 +105,7 @@ export class RankedLeagueBattle {
       int(opponent.townHallLevel),
       int(json.townHallLevel),
       int(json.duration),
+      string(json.shareCode),
     );
   }
 }
@@ -125,6 +128,60 @@ export class RankedLeagueBattlelog {
     readonly attacks: readonly RankedLeagueBattle[],
     readonly defenses: readonly RankedLeagueBattle[],
   ) {}
+
+  withAttackArmies(history: readonly PlayerBattlelogEntry[]): RankedLeagueBattlelog {
+    const enrich = (battle: RankedLeagueBattle, attack: boolean) => {
+      if (!battle.creationTime || battle.automatic) return battle;
+      // Never infer historical TH from today's profile. Match exact time,
+      // direction and result; reject conflicting opponent identities.
+      const matches = history.filter(
+        (entry) =>
+          entry.mode === 'ranked' &&
+          entry.attack === attack &&
+          entry.timestamp?.getTime() === battle.creationTime!.getTime() &&
+          entry.stars === battle.stars &&
+          entry.destructionPercentage === battle.destructionPercentage &&
+          (!entry.opponentTag ||
+            !battle.opponentPlayerTag ||
+            canonicalTag(entry.opponentTag) === canonicalTag(battle.opponentPlayerTag)),
+      );
+      const official = matches.filter((entry) => entry.source === 'official');
+      const archived = matches.filter((entry) => entry.source === 'history');
+      const detail = official.length === 1 ? official[0] : undefined;
+      const stored = archived.length === 1 ? archived[0] : undefined;
+      if (!detail && !stored) return battle;
+      return new RankedLeagueBattle(
+        battle.opponentPlayerTag || detail?.opponentTag || '',
+        battle.opponentName || detail?.opponentName || '',
+        battle.stars,
+        battle.destructionPercentage,
+        battle.trophies,
+        battle.creationTime,
+        false,
+        battle.opponentTownHallLevel || detail?.opponentTownHall || 0,
+        battle.townHallLevel,
+        battle.duration || detail?.duration || stored?.duration || 0,
+        battle.shareCode || detail?.armyShareCode || stored?.armyShareCode || '',
+      );
+    };
+    return new RankedLeagueBattlelog(
+      this.tag,
+      this.seasonId,
+      this.leagueGroupId,
+      this.leagueTierId,
+      this.attacksComplete,
+      this.defensesComplete,
+      this.missingRealAttacks,
+      this.missingRealDefenses,
+      this.automaticDefensesDerived,
+      this.registeredAttacks,
+      this.registeredDefenses,
+      this.maxAttacks,
+      this.maxDefenses,
+      this.attacks.map((battle) => enrich(battle, true)),
+      this.defenses.map((battle) => enrich(battle, false)),
+    );
+  }
 
   // The official group response is scoped to the requested player by playerTag.
   // Archived analytics may not have a membership snapshot for a live period yet.
@@ -170,7 +227,12 @@ export class RankedLeagueBattlelog {
     const registeredAttacks = int(json.registeredAttacks);
     const registeredDefenses = int(json.registeredDefenses);
     const missingRealAttacks = Math.max(0, registeredAttacks - attacks.length);
-    const missingRealDefenses = Math.max(0, registeredDefenses - defenses.length);
+    // Automatic defenses are not registered real battles. Counting them here
+    // can hide missing logs and incorrectly mark a partial week complete.
+    const missingRealDefenses = Math.max(
+      0,
+      registeredDefenses - defenses.filter((item) => item.automatic !== true).length,
+    );
     const maxBattles = int(json.maxBattles);
     return new RankedLeagueBattlelog(
       string(json.tag),
@@ -256,6 +318,22 @@ export class RankedLeagueData {
     readonly currentBattlelog: RankedLeagueBattlelog | null = null,
     readonly previousBattlelog: RankedLeagueBattlelog | null = null,
   ) {}
+  withBattleDetails(entries: readonly PlayerBattlelogEntry[]): RankedLeagueData {
+    return new RankedLeagueData(
+      this.playerTag,
+      this.playerName,
+      this.townHallLevel,
+      this.trophies,
+      this.bestTrophies,
+      this.currentTier,
+      this.tiers,
+      this.history,
+      this.currentGroup,
+      this.previousGroup,
+      this.currentBattlelog?.withAttackArmies(entries) ?? null,
+      this.previousBattlelog?.withAttackArmies(entries) ?? null,
+    );
+  }
   groupForSeason(id: number) {
     return this.currentGroup?.seasonId === id
       ? this.currentGroup

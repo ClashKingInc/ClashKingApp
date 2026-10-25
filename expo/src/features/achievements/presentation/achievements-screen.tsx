@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useState, useSyncExternalStore, type ComponentType } from 'react';
 import {
   Modal,
@@ -16,6 +16,9 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { materialBackLabel, materialCloseLabel, useI18n } from '../../../i18n';
 import {
   CKText,
+  Skeleton,
+  SkeletonContent,
+  useSkeletonContent,
   ckOpacity,
   ckRadius,
   ckSpacing,
@@ -24,7 +27,7 @@ import {
   useCKTheme,
 } from '../../../ui';
 import type { AchievementsRepository, AchievementsSnapshot } from '../data';
-import { isAchievementUnlocked, type Achievement } from '../models';
+import { ACHIEVEMENT_CATALOG_FALLBACK, isAchievementUnlocked, type Achievement } from '../models';
 import {
   AchievementModelViewer,
   type AchievementModelViewerProps,
@@ -55,7 +58,16 @@ export function AchievementsScreen({
   const { reduceMotion } = useCKAccessibility();
   const { width, height } = useWindowDimensions();
   const snapshot = useAchievementsSnapshot(repository);
-  const visibleAchievements = achievements ?? snapshot.achievements;
+  const [settled, setSettled] = useState(
+    achievements !== undefined || snapshot.achievements.length > 0,
+  );
+  const loading =
+    !settled &&
+    achievements === undefined &&
+    repository !== undefined &&
+    snapshot.achievements.length === 0;
+  const visibleAchievements =
+    achievements ?? (loading ? ACHIEVEMENT_CATALOG_FALLBACK : snapshot.achievements);
   const [selected, setSelected] = useState<Achievement>();
   const horizontalPadding = Math.max(ckSpacing.lg, (width - 1120) / 2);
   const collectionWidth = Math.min(width - horizontalPadding * 2, 1120);
@@ -65,7 +77,16 @@ export function AchievementsScreen({
 
   useEffect(() => {
     if (achievements === undefined && repository !== undefined) {
-      void repository.load().catch(() => undefined);
+      let active = true;
+      void repository
+        .load()
+        .catch(() => undefined)
+        .finally(() => {
+          if (active) setSettled(true);
+        });
+      return () => {
+        active = false;
+      };
     }
   }, [achievements, repository]);
 
@@ -112,15 +133,21 @@ export function AchievementsScreen({
             <CKText numberOfLines={1} role="screenTitle">
               {t('achievementsTitle')}
             </CKText>
-            <CKText muted role="metadata">
-              {t('achievementSummary', {
-                earned: String(earned),
-                total: String(visibleAchievements.length),
-              })}
-            </CKText>
+            <SkeletonContent loading={loading}>
+              <CKText muted role="metadata">
+                {t('achievementSummary', {
+                  earned: String(earned),
+                  total: String(visibleAchievements.length),
+                })}
+              </CKText>
+            </SkeletonContent>
           </View>
         </View>
-        <View style={styles.grid} testID={`achievements-grid-${columns}`}>
+        <SkeletonContent
+          loading={loading}
+          style={styles.grid}
+          testID={`achievements-grid-${columns}`}
+        >
           {visibleAchievements.map((achievement) => {
             const keys = ACHIEVEMENT_COPY_KEYS[achievement.id];
             const name = t(keys.name);
@@ -139,7 +166,7 @@ export function AchievementsScreen({
               />
             );
           })}
-        </View>
+        </SkeletonContent>
       </ScrollView>
       <AchievementDetail
         achievement={selected}
@@ -169,6 +196,7 @@ export function AchievementTile({
   width: number;
 }) {
   const theme = useCKTheme();
+  const contentLoading = useSkeletonContent();
   const unlocked = isAchievementUnlocked(achievement);
   return (
     <Pressable
@@ -189,15 +217,24 @@ export function AchievementTile({
         <View style={styles.artwork}>
           {/* Tiles and details must represent the same badge. Idle rotation is
               reserved for the open detail to keep the collection still. */}
-          <View style={[styles.modelFrame, achievement.id === 'verified_accounts' && styles.verifiedModelFrame]}>
-            <ModelRenderer
-              achievement={achievement}
-              semanticLabel={name}
-              interactive={false}
-              enableIdleRotation={false}
-            />
+          <View
+            style={[
+              styles.modelFrame,
+              achievement.id === 'verified_accounts' && styles.verifiedModelFrame,
+            ]}
+          >
+            {contentLoading ? (
+              <Skeleton width="100%" height="100%" />
+            ) : (
+              <ModelRenderer
+                achievement={achievement}
+                semanticLabel={name}
+                interactive={false}
+                enableIdleRotation={false}
+              />
+            )}
           </View>
-          {!unlocked ? (
+          {!unlocked && !contentLoading ? (
             <View style={[styles.lock, { backgroundColor: colorWithAlpha(theme.surface, 0.9) }]}>
               <Lock color={theme.onSurfaceVariant} size={18} />
             </View>
@@ -239,7 +276,8 @@ export function AchievementDetail({
   const keys = ACHIEVEMENT_COPY_KEYS[achievement.id];
   const name = t(keys.name);
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       animationType={enableIdleRotation ? 'slide' : 'none'}
       onRequestClose={onClose}
       presentationStyle="overFullScreen"

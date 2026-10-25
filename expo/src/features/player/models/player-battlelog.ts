@@ -162,16 +162,18 @@ export class PlayerBattlelogArmyCatalog {
     const item = id === null || Number.isNaN(id) ? null : findItem(prefix, id);
     const translated = localizedNameForItem(item).trim();
     const name = translated || code;
+    // Labels follow the selected language; published asset paths never do.
+    const assetName = string(item?.name).trim() || code;
     const image =
       prefix === 's' || prefix === 'd'
-        ? ImageAssets.getSpellImage(name)
+        ? ImageAssets.getSpellImage(assetName)
         : prefix === 'h'
-          ? ImageAssets.getHeroImage(name)
+          ? ImageAssets.getHeroImage(assetName)
           : prefix === 'p'
-            ? ImageAssets.getPetImage(name)
+            ? ImageAssets.getPetImage(assetName)
             : prefix === 'e'
-              ? ImageAssets.getGearImage(name)
-              : ImageAssets.getTroopImage(name);
+              ? ImageAssets.getGearImage(assetName)
+              : ImageAssets.getTroopImage(assetName);
     return new PlayerBattlelogArmyItem(
       code,
       name,
