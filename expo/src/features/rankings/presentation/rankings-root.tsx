@@ -104,6 +104,7 @@ export function RankingsRoot({
   const preferenceWriteRef = useRef<Promise<void>>(Promise.resolve());
   const { t } = useI18n();
   const [revision, setRevision] = useState(0);
+  const [selectionRequest, setSelectionRequest] = useState(0);
   const [message, setMessage] = useState<string>();
   const [activeStats, setActiveStats] = useState<StatsSectionValue | null>(() =>
     statsSections.includes(link.section as StatsSectionValue)
@@ -158,6 +159,7 @@ export function RankingsRoot({
     void provider.selectLocation(location);
   };
   const openBoard = (board: RankingBoardValue) => {
+    setSelectionRequest((request) => request + 1);
     activeBoardRef.current = board;
     setLocalSelection({ linkKey, board });
     void provider.openBoard(board, locationsReadyRef.current);
@@ -228,7 +230,10 @@ export function RankingsRoot({
               players: ckColors.builderBlue,
               clans: ckColors.donationGreen,
             }[section],
-            onPress: () => setActiveStats(section),
+            onPress: () => {
+              setSelectionRequest((request) => request + 1);
+              setActiveStats(section);
+            },
           })),
         },
         {
@@ -268,6 +273,7 @@ export function RankingsRoot({
       {/* Stats and leaderboards share the retained launcher stack. Replacing
           the stack with StatsRoot lets the native swipe pop the whole utility. */}
       <DestinationStack
+        selectionKey={selectionRequest}
         focused={Boolean(activeBoard) || Boolean(activeStats)}
         onCloseDetail={closeFocused}
         grid={grid}
