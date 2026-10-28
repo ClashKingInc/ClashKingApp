@@ -26,6 +26,7 @@ try {
     import assert from 'node:assert/strict';
     import { createApiClient, httpTransport } from '@clashking/api-client';
     import { StatsRepository } from './src/features/stats/data/stats-repository';
+    import { aggregateChartSeries } from './src/features/stats/presentation/chart-aggregation';
     import { StatsDateFilter, StatsLegendQuery, StatsLegendCohort } from './src/features/stats/models';
     let requests = 0;
     const api = createApiClient({ baseUrl: process.env.CLASHKING_E2E_BASE_URL, transport: httpTransport((...args) => {
@@ -40,6 +41,9 @@ try {
     assert.equal(data.periods[0].availableDays, 2);
     assert.equal(data.periods[0].expectedDays, 3);
     assert.equal(data.items.length, 2);
+    const trend = aggregateChartSeries([{key:'mean',label:'mean',aggregation:'weightedMean',points:data.items.map(item=>({day:item.day,value:item.offense.meanTrophies,weight:item.offense.completePlayerDays}))}], 'week', false)[0].points;
+    const trendMean = trend.reduce((sum,p)=>sum+(p.value??0)*(p.weight??0),0)/trend.reduce((sum,p)=>sum+(p.weight??0),0);
+    assert.equal(trendMean,640/3,'Weekly averages must preserve player-day weights');
     assert.strictEqual(await repository.loadLegendPerformance(query), data);
     assert.equal(requests, 1, 'The repository should reuse the completed response');
     const top = await repository.loadLegendPerformance(new StatsLegendQuery(dates, StatsLegendCohort.top200));

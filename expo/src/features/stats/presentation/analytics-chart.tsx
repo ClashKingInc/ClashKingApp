@@ -20,6 +20,8 @@ export interface AnalyticsSeries {
   readonly key: string;
   readonly label: string;
   readonly color?: string;
+  /** Means must preserve their denominator when grouped into weeks/months. */
+  readonly aggregation?: 'sum' | 'weightedMean';
   readonly points: readonly { day: string; value: number | null; weight?: number }[];
 }
 const palette = [

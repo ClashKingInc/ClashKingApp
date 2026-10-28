@@ -236,6 +236,7 @@ export function LegendDayPerformanceSection({
                 series={[
                   {
                     key: 'mean',
+                    aggregation: 'weightedMean',
                     label: gainLabel,
                     points: state.data.items.map((item) => ({
                       day: item.day,

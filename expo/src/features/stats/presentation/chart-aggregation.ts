@@ -18,15 +18,20 @@ export function aggregateChartSeries(
   if (granularity === 'day' || series.some((line) => line.points.some((p) => p.day.length !== 10)))
     return series;
   if (
-    percent &&
-    series.some((line) =>
-      line.points.some(
-        (p) => p.value != null && (p.weight == null || !Number.isFinite(p.weight) || p.weight <= 0),
-      ),
+    series.some(
+      (line) =>
+        (percent || line.aggregation === 'weightedMean') &&
+        line.points.some(
+          (p) =>
+            p.value != null && (p.weight == null || !Number.isFinite(p.weight) || p.weight <= 0),
+        ),
     )
   )
     return series;
   return series.map((line) => {
+    // Counts keep summing by default. A mean is a different quantity: combine
+    // its original sample weights instead of summing daily averages.
+    const weighted = percent || line.aggregation === 'weightedMean';
     const buckets = new Map<string, { sum: number; weight: number; count: number }>();
     const dates = line.points.map((point) => point.day).sort();
     if (dates.length) {
@@ -45,7 +50,7 @@ export function aggregateChartSeries(
       const day = chartBucket(point.day, granularity);
       const bucket = buckets.get(day) ?? { sum: 0, weight: 0, count: 0 };
       if (point.value != null && Number.isFinite(point.value)) {
-        const weight = percent ? point.weight! : 1;
+        const weight = weighted ? point.weight! : 1;
         bucket.sum += point.value * weight;
         bucket.weight += weight;
         bucket.count++;
@@ -58,7 +63,7 @@ export function aggregateChartSeries(
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([day, b]) => ({
           day,
-          value: b.count ? (percent ? b.sum / b.weight : b.sum) : null,
+          value: b.count ? (weighted ? b.sum / b.weight : b.sum) : null,
           weight: b.weight,
         })),
     };
