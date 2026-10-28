@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { modalOrientations } from '../../ui/modal-orientations';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import {
@@ -69,6 +70,8 @@ export function GameAssetsScreen({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
   const contentLoading = !loadedManifest && loading;
   const manifest = loadedManifest ?? (contentLoading ? loadingManifest : null);
   const categories = manifest?.categories ?? [];
@@ -138,8 +141,22 @@ export function GameAssetsScreen({
     );
   }
 
-  const columns = width >= 600 ? 4 : 3;
-  const contentWidth = Math.min(width, 1120);
+  const phoneWidth =
+    layout.isDuo && !layout.isExpanded
+      ? Math.min(layout.width, layout.contentMaxWidth)
+      : layout.isDuo || layout.isTablet
+        ? layout.width
+        : width;
+  const columns = layout.isExpanded
+    ? layout.columns(220, 4)
+    : layout.isDuo
+      ? 3
+      : phoneWidth >= 600
+        ? 4
+        : 3;
+  const contentWidth = layout.isExpanded
+    ? Math.min(layout.usableWidth, layout.contentMaxWidth)
+    : Math.min(phoneWidth, 1120);
   const tileWidth = Math.max(0, (contentWidth - 32 - (columns - 1) * 12) / columns);
   const chooseCategory = (next: string) => {
     setCategoryId(next);
@@ -162,7 +179,7 @@ export function GameAssetsScreen({
         keyExtractor={(asset) => asset.path}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        columnWrapperStyle={styles.gridRow}
+        columnWrapperStyle={columns > 1 ? styles.gridRow : undefined}
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <>
@@ -193,7 +210,10 @@ export function GameAssetsScreen({
           </View>
         }
         renderItem={({ item }) => (
-          <SkeletonContent loading={contentLoading}>
+          <SkeletonContent
+            loading={contentLoading}
+            style={columns === 1 ? { alignSelf: 'center', marginBottom: 12 } : undefined}
+          >
             <GameAssetTile
               asset={item}
               width={tileWidth}
@@ -219,7 +239,17 @@ export function GameAssetsScreen({
         showMessage={showMessage}
       />
       {snackbar && !selectedAsset ? (
-        <PillSurface style={[styles.snackbar, { backgroundColor: theme.snackbar }]}>
+        <PillSurface
+          style={[
+            styles.snackbar,
+            { backgroundColor: theme.snackbar },
+            (layout.isDuo || layout.isTablet) && {
+              left: insets.left + 16,
+              right: insets.right + 16,
+              bottom: insets.bottom + 18,
+            },
+          ]}
+        >
           <CKText>{snackbar}</CKText>
         </PillSurface>
       ) : null}
@@ -306,7 +336,9 @@ function AssetControls({
   onQueryChange: (value: string) => void;
 }) {
   const { t } = useI18n();
-  const { width, fontScale } = useWindowDimensions();
+  const { width: windowWidth, fontScale } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const width = layout.isDuo || layout.isTablet ? layout.width : windowWidth;
   const stackControls = width < 350 || fontScale > 1.35;
   const categorySelector = (
     <SelectionPicker
@@ -353,6 +385,7 @@ function GameAssetTile({
   onLongPress: () => void;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   return (
     <Pressable
       accessibilityRole="button"
@@ -362,7 +395,7 @@ function GameAssetTile({
       onLongPress={onLongPress}
       style={{ width }}
     >
-      <Surface radius={20} style={styles.tile}>
+      <Surface radius={20} style={[styles.tile, layout.isExpanded && { height: 226, padding: 18 }]}>
         <GameAssetImage asset={asset} style={styles.tileImage} />
         <CKText role="labelLarge" numberOfLines={2} style={styles.tileName}>
           {asset.tileDisplayName}

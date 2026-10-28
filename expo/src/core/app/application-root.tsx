@@ -40,7 +40,7 @@ import {
 } from './startup-coordinator';
 import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
 import { StartupHandoff } from './startup-loading';
-import { StartupUpdateGate } from './startup-update-gate';
+import { StartupUpdateGate, useStartupUpdate } from './startup-update-gate';
 
 const DISCORD_URL = 'https://discord.gg/clashking';
 const SUPPORT_EMAIL_URL = 'mailto:devs@clashk.ing?subject=ClashKing%20App%20Support';
@@ -55,6 +55,7 @@ export function ApplicationRoot() {
 }
 
 function ApplicationContent() {
+  const { ready: updateReady } = useStartupUpdate();
   const runtime = useAppRuntime();
   const { locale, t } = useI18n();
   const [scene, setScene] = useState<ApplicationScene>({ kind: 'startup' });
@@ -181,14 +182,15 @@ function ApplicationContent() {
   }, [runtime]);
 
   useEffect(() => {
-    // Mounting the application root is the external event that begins bootstrap.
+    if (!updateReady) return;
+    // Bootstrap begins only after the update decision; the shared cover stays mounted.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void runStartup();
     return () => {
       startupGeneration.current += 1;
       if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
     };
-  }, [runStartup]);
+  }, [runStartup, updateReady]);
 
   useEffect(
     () =>

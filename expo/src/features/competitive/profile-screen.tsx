@@ -1,3 +1,7 @@
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../ui/illustrated-header-layout';
+import { ResponsiveGrid } from '../../ui/responsive-grid';
+import { resolveGridColumns } from '../../ui/layout';
 import { useEffect, useState } from 'react';
 import {
   useWindowDimensions,
@@ -9,7 +13,7 @@ import {
 } from 'react-native';
 import { ChevronRight, Pencil, Settings2, Share2 } from 'lucide-react-native';
 import { HeaderArtwork } from '../../ui/header-artwork';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { HeroHeaderScrim } from '../../ui/hero-header-scrim';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { useAppRuntime } from '../../core/app/runtime-context';
@@ -72,12 +76,13 @@ export function CompetitiveProfileScreen({
   const runtime = useAppRuntime();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
   const [draft, setDraft] = useState<CompetitiveProfile>();
   const [editing, setEditing] = useState(false);
   const [tab, setTab] = useState('accounts');
   const [notice, setNotice] = useState('');
   const [saving, setSaving] = useState(false);
-  const [headerSize, setHeaderSize] = useState({ width: 0, height: 0 });
   const loadedProfile = draft ?? query.data;
   const contentLoading = query.loading && !loadedProfile;
   const profile: CompetitiveProfile | undefined =
@@ -159,7 +164,10 @@ export function CompetitiveProfileScreen({
   };
   return (
     <ScrollView
-      contentContainerStyle={styles.page}
+      contentContainerStyle={[
+        styles.page,
+        (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+      ]}
       keyboardShouldPersistTaps="handled"
       refreshControl={
         <RefreshControl
@@ -182,16 +190,17 @@ export function CompetitiveProfileScreen({
             <View
               style={[
                 styles.header,
-                { minHeight: 236 + insets.top, paddingTop: ckSpacing.lg + insets.top },
+                {
+                  minHeight: (layout.isExpanded ? headerLayout.minHeight : 236) + insets.top,
+                  paddingTop: ckSpacing.lg + insets.top,
+                  ...(layout.isExpanded
+                    ? {
+                        paddingHorizontal: headerLayout.horizontal,
+                        paddingBottom: headerLayout.bottom,
+                      }
+                    : {}),
+                },
               ]}
-              onLayout={(event) => {
-                const { width, height } = event.nativeEvent.layout;
-                setHeaderSize((current) =>
-                  current.width === width && current.height === height
-                    ? current
-                    : { width, height },
-                );
-              }}
             >
               <HeaderArtwork
                 // Original profile-only artwork; do not substitute another page's backdrop.
@@ -200,36 +209,41 @@ export function CompetitiveProfileScreen({
                 contentFit="cover"
                 contentPosition="center"
               />
-              {/* Native SVG percentages resolve against padded content bounds and
-                leave a rectangular seam. Match the entire measured backdrop. */}
-              {headerSize.width > 0 ? (
-                <Svg
-                  style={StyleSheet.absoluteFill}
-                  width={headerSize.width}
-                  height={headerSize.height}
-                  viewBox={`0 0 ${headerSize.width} ${headerSize.height}`}
-                  pointerEvents="none"
-                >
-                  <Defs>
-                    <LinearGradient id="profile-identity-scrim" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <Stop offset="0" stopColor="#070811" stopOpacity={0.06} />
-                      <Stop offset="0.45" stopColor="#070811" stopOpacity={0.08} />
-                      <Stop offset="1" stopColor="#070811" stopOpacity={0.86} />
-                    </LinearGradient>
-                  </Defs>
-                  <Rect
-                    width={headerSize.width}
-                    height={headerSize.height}
-                    fill="url(#profile-identity-scrim)"
-                  />
-                </Svg>
-              ) : null}
-              <View style={styles.identity}>
+              <HeroHeaderScrim edgeColor={theme.background} />
+              <View
+                style={[
+                  styles.identity,
+                  layout.isExpanded && {
+                    gap: headerLayout.gap,
+                    minHeight: headerLayout.bodyMinHeight,
+                  },
+                ]}
+              >
                 {avatarUrl ? (
-                  <MobileWebImage imageUrl={avatarUrl} contentFit="cover" style={styles.avatar} />
+                  <MobileWebImage
+                    imageUrl={avatarUrl}
+                    contentFit="cover"
+                    style={[
+                      styles.avatar,
+                      layout.isExpanded && {
+                        width: headerLayout.image,
+                        height: headerLayout.image,
+                      },
+                    ]}
+                  />
                 ) : null}
                 <View style={styles.identityText}>
-                  <CKText role="screenTitle" style={[styles.name, { color: '#FFFFFF' }]}>
+                  <CKText
+                    role="screenTitle"
+                    style={[
+                      styles.name,
+                      { color: '#FFFFFF' },
+                      layout.isExpanded && {
+                        fontSize: headerLayout.title,
+                        lineHeight: headerLayout.titleLine,
+                      },
+                    ]}
+                  >
                     {profile.discordHandle || profile.displayName || t('competitiveProfile')}
                   </CKText>
                 </View>
@@ -246,6 +260,7 @@ export function CompetitiveProfileScreen({
                   ) : null}
                   <ProfileHeaderAction
                     label={t('gameAssetsShare')}
+                    appLinkShare
                     icon={<Share2 color="#FFFFFF" size={20} />}
                     onPress={() =>
                       void sharePageLink(
@@ -342,9 +357,21 @@ export function CompetitiveProfileScreen({
                     {profile.accounts?.length ? (
                       // The profile endpoint only returns verified accounts.
                       // Keep this source even though the tab uses the shorter label.
-                      profile.accounts.map((account) => (
-                        <ProfileAccount key={account.tag} account={account} />
-                      ))
+                      layout.isExpanded ? (
+                        <ResponsiveGrid
+                          minItemWidth={360}
+                          maxColumns={layout.columns(360, 2)}
+                          gap={16}
+                        >
+                          {profile.accounts.map((account) => (
+                            <ProfileAccount key={account.tag} account={account} />
+                          ))}
+                        </ResponsiveGrid>
+                      ) : (
+                        profile.accounts.map((account) => (
+                          <ProfileAccount key={account.tag} account={account} />
+                        ))
+                      )
                     ) : (
                       <ProfileEmpty />
                     )}
@@ -538,9 +565,13 @@ function ProfileAchievements({
   verifiedCount?: number;
 }) {
   const { t } = useI18n();
-  const { width, height } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight, fontScale } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const width = layout.isDuo || layout.isTablet ? layout.width : windowWidth;
+  const height = layout.isDuo || layout.isTablet ? layout.height : windowHeight;
   const { reduceMotion } = useCKAccessibility();
   const [selected, setSelected] = useState<Achievement>();
+  const [gridWidth, setGridWidth] = useState(0);
   const byId = new Map<string, number>();
   for (const award of awards) byId.set(award.id, (byId.get(award.id) ?? 0) + 1);
   // Catalog entries remain visible before earning them. Count only awards
@@ -562,9 +593,31 @@ function ProfileAchievements({
           : 0
         : (byId.get(item.id) ?? 0),
   }));
-  const tileWidth = (Math.min(width - 32, 1088) - 32) / 3;
+  const collectionWidth = Math.min(
+    width - 32,
+    layout.isExpanded || layout.isDuo ? layout.contentMaxWidth - 32 : 1088,
+  );
+  // The profile can occupy a narrower pane than the window after the Duo rail
+  // and page padding. Size expanded tiles from the grid that actually contains them.
+  const expandedWidth = gridWidth || collectionWidth;
+  const columns = layout.isExpanded
+    ? resolveGridColumns({
+        width: expandedWidth,
+        minItemWidth: 232 * Math.max(1, fontScale),
+        maxColumns: 4,
+        gap: ckSpacing.md,
+      })
+    : 3;
+  const tileWidth = layout.isExpanded
+    ? (expandedWidth - ckSpacing.md * (columns - 1)) / columns
+    : (collectionWidth - 16 * (columns - 1)) / columns;
   return (
-    <View style={styles.achievements}>
+    <View
+      style={styles.achievements}
+      onLayout={
+        layout.isExpanded ? ({ nativeEvent }) => setGridWidth(nativeEvent.layout.width) : undefined
+      }
+    >
       {achievements.map((achievement) => (
         <AchievementTile
           key={achievement.id}

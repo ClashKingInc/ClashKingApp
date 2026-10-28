@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
@@ -42,6 +43,7 @@ export function PlayerDetailScreen({
   loading?: boolean;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const hasLegendHistory = !!model.legendHistory?.length;
@@ -168,8 +170,15 @@ export function PlayerDetailScreen({
           testID="player-detail-navigation"
           style={[styles.navigation, { backgroundColor: theme.background }]}
         >
-          <View style={styles.navigationContent}>
+          <View
+            style={[
+              styles.navigationContent,
+              layout.isExpanded && { maxWidth: layout.contentMaxWidth, paddingHorizontal: 24 },
+            ]}
+          >
             <ProfileTabs
+              variant={layout.isExpanded ? 'underline' : undefined}
+              overflow={layout.isExpanded ? 'scroll' : undefined}
               tabs={tabs.map((item) => ({
                 key: item.key,
                 label: labelFor(item),
@@ -180,7 +189,11 @@ export function PlayerDetailScreen({
             />
           </View>
         </View>
-        <SkeletonContent loading={loading} testID="player-detail-body" style={styles.tabBody}>
+        <SkeletonContent
+          loading={loading}
+          testID="player-detail-body"
+          style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
+        >
           {tabs.map((item) =>
             retainedTabs.includes(item.key) ? (
               <View
@@ -214,6 +227,9 @@ export function PlayerDetailScreen({
 }
 
 const PLAYER_DETAIL_PRELOAD_TABS: readonly PlayerDetailTabKey[] = [
+  // Availability depends on retained finishes. Load them before filtering the
+  // picker, or its hidden tab can never be selected to trigger its own request.
+  'legendHistory',
   'battles',
   'history',
   'war',
@@ -255,14 +271,7 @@ function renderTab(
         onLootGridScrubChange={onLootGridScrubChange}
       />
     );
-  if (tab === 'history')
-    return (
-      <PlayerActivityTab
-        data={model.activity}
-        verifiedTracking={model.verifiedTracking}
-        actions={actions}
-      />
-    );
+  if (tab === 'history') return <PlayerActivityTab data={model.activity} actions={actions} />;
   if (tab === 'war')
     return (
       <PlayerWarTab

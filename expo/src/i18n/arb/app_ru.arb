@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "Разрешить",
   "achievementsTitle": "Достижения",
   "achievementEarnedLabel": "Получено",
+  "achievementGemsEarnedRatio": "Получено {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Получено {earned} из {total} кристаллов за достижения.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} завершено",
   "achievementEarnedCount": "Получено ×{count}",
   "achievementTownhall18Name": "Ратуша 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Только одинаковый ТХ",
+  "warStatsSameTownHall": "Одинаковая ратуша",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "Последователи",
   "drawerFollowersHelp": "Люди, которые добавили в закладки одну из ваших подтвержденных связанных учетных записей.",
   "drawerCalculators": "Калькуляторы",
-  "drawerSubscription": "Подписка",
   "drawerUpgradeTracker": "Обновление трекера",
   "drawerBasesArmies": "Базы и армии",
   "drawerGameAssets": "Игровые ресурсы",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "Получайте оповещения для этого аккаунта.",
   "playerOptionNotificationsEnableMaster": "Сначала разрешите уведомления в настройках.",
   "playerOptionNotificationsVerifyFirst": "Чтобы включить уведомления, подтвердите этот аккаунт.",
-  "playerOptionNotificationsSubscriptionRequired": "Уведомления для закладок доступны по подписке.",
   "playerOptionNotificationsLimitReached": "Вы использовали все доступные уведомления для закладок.",
   "playerOptionShowTodoPageTitle": "Показать на странице дел",
   "playerOptionShowTodoPageSubtitle": "Включите эту учетную запись в полный список дел.",

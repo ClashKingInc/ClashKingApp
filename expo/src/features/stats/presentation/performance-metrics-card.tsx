@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line, Polyline, Text as SvgText } from 'react-native-svg';
@@ -192,10 +193,12 @@ export function PerformanceMetricsCard({
 
 function Metric({ label, value }: { readonly label: string; readonly value: string }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <View
       style={[
         styles.metric,
+        layout.isExpanded && { flexBasis: 156, minHeight: 84, padding: 16, gap: 6 },
         { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.38) },
       ]}
     >

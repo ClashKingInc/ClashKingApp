@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BackHandler,
@@ -82,6 +83,7 @@ export function ManageLinkedAccountsScreen({
   firstConnection?: boolean;
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
   const theme = useCKTheme();
   const mode = useCKThemeMode();
   const insets = useSafeAreaInsets();
@@ -300,7 +302,13 @@ export function ManageLinkedAccountsScreen({
           </View>
         </View>
       ) : null}
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          layout.isExpanded && { maxWidth: layout.readableMaxWidth, paddingTop: 16 },
+          layout.isDuo && !layout.isExpanded && { maxWidth: layout.contentMaxWidth },
+        ]}
+      >
         <DraggableFlatList
           activationDistance={8}
           data={presentedAccounts}
@@ -442,6 +450,7 @@ export function AccountRow({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <ScaleDecorator activeScale={1.02}>
       <Pressable
@@ -449,13 +458,24 @@ export function AccountRow({
         onLongPress={isActive ? undefined : drag}
         testID={`account-card-${account.playerTag}`}
       >
-        <Surface radius={ckRadius.chip} style={[styles.account, isActive && styles.activeAccount]}>
+        <Surface
+          radius={ckRadius.chip}
+          style={[
+            styles.account,
+            layout.isExpanded && { minHeight: 98, padding: 18, gap: 16 },
+            isActive && styles.activeAccount,
+          ]}
+        >
           <MobileWebImage
             imageUrl={ImageAssets.townHall(account.townHallLevel)}
             errorFallback={
-              <Shield color={theme.onSurfaceVariant} size={32} style={styles.townHall} />
+              <Shield
+                color={theme.onSurfaceVariant}
+                size={32}
+                style={[styles.townHall, layout.isExpanded && { width: 56, height: 56 }]}
+              />
             }
-            style={styles.townHall}
+            style={[styles.townHall, layout.isExpanded && { width: 56, height: 56 }]}
           />
           <View style={styles.accountCopy}>
             <CKText style={styles.strong} numberOfLines={1}>

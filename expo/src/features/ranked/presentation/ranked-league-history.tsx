@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { View } from 'react-native';
 import Svg, { Circle, G, Line, Path, Text as SvgText } from 'react-native-svg';
 import { gameDataState } from '../../../core/game-data/game-data-state';
@@ -58,6 +59,7 @@ export function RankedLeagueHistory({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const loading = useSkeletonContent();
   const [width, setWidth] = useState(0);
   const [selection, setSelection] = useState<number | null>(null);
@@ -72,11 +74,20 @@ export function RankedLeagueHistory({
   );
   const low = levels.length ? order(levels[0]!) : 0;
   const high = levels.length ? order(levels.at(-1)!) : 1;
-  const left = 94,
+  // Wide views enlarge axis text; reserve matching space for the longest
+  // real league name so its leading characters do not clip at the card edge.
+  const left = layout.isExpanded
+      ? Math.max(
+          118,
+          Math.min(174, Math.max(0, ...levels.map((point) => point.tier!.name.length)) * 7 + 12),
+        )
+      : 94,
     right = 18,
     top = 14,
     bottom = 28,
-    height = 205;
+    // A bounded chart needs more vertical room on a tablet; the compact
+    // 205pt plot and its exact axis positions remain unchanged on phones.
+    height = layout.isExpanded ? Math.max(260, Math.min(320, width * 0.38)) : 205;
   const x = (point: RankedPeriod) =>
     left +
     (points.length === 1
@@ -138,7 +149,7 @@ export function RankedLeagueHistory({
                   <SvgText
                     x={left - 8}
                     y={y(point) + 3}
-                    fontSize={9}
+                    fontSize={layout.isExpanded ? 12 : 9}
                     fill={theme.onSurfaceVariant}
                     textAnchor="end"
                   >
@@ -184,7 +195,7 @@ export function RankedLeagueHistory({
                     x={x(point)}
                     y={height - 7}
                     fill={theme.onSurfaceVariant}
-                    fontSize={9}
+                    fontSize={layout.isExpanded ? 12 : 9}
                     textAnchor="middle"
                   >
                     {date(point)}

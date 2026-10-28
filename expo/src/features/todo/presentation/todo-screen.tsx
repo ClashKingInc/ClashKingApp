@@ -1,5 +1,7 @@
+import { EntityModalViewport } from '../../war/presentation/war-panel-grid';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Asset } from 'expo-asset';
 import {
   Modal,
@@ -10,6 +12,7 @@ import {
   TextInput,
   View,
   useWindowDimensions,
+  type ViewInstance,
 } from 'react-native';
 import { ArrowLeft, Check, CheckCircle2, ChevronDown, Info, Search, X } from 'lucide-react-native';
 import Svg, { Circle } from 'react-native-svg';
@@ -23,6 +26,7 @@ import {
   EmptyState,
   GlassSurface,
   HeaderIconButton,
+  ProfilePageHeader,
   MobileWebImage,
   ResponsiveGrid,
   Surface,
@@ -67,9 +71,12 @@ export function TodoScreen(props: TodoScreenProps) {
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const filterTrigger = useRef<ViewInstance>(null);
+  const [filterAnchor, setFilterAnchor] = useState<{ top: number; right: number } | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
-  const horizontal = 16;
+  const horizontal = layout.isExpanded ? 24 : 16;
   const now = props.now ?? new Date();
   // These records only establish the real card geometry. They are masked,
   // noninteractive and never enter the model, cache or timer service.
@@ -105,50 +112,87 @@ export function TodoScreen(props: TodoScreenProps) {
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         keyboardShouldPersistTaps="handled"
       >
-        <View
-          style={{
-            minHeight: insets.top + 224,
-            paddingBottom: 24,
-            overflow: 'hidden',
-            backgroundColor: theme.background,
-          }}
-        >
-          <MobileWebImage
-            imageUrl={TODO_HEADER_ART}
-            // Artwork and scrim cover the same content-sized header. A
-            // width-based image height leaves a hard edge before the fade ends.
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-            contentPosition="center"
-          />
-          <HeroHeaderScrim />
-          <View style={{ paddingTop: insets.top }}>
-            <View style={styles.headerActions}>
-              <HeaderIconButton
-                glass={false}
-                icon={<ArrowLeft color="#FFF" />}
-                label={materialBackLabel(locale)}
-                onPress={props.onBack}
-              />
+        {layout.isExpanded ? (
+          <ProfilePageHeader
+            title={t('todoTitle')}
+            subtitle={t('todoAccountsNumber', {
+              number: props.model.header.totalAccounts + pendingPlayers.length,
+            })}
+            imageUrl={ImageAssets.todoTarget}
+            backgroundUrl={TODO_HEADER_ART}
+            onBack={props.onBack}
+            backLabel={materialBackLabel(locale)}
+            safeTop={insets.top}
+            actions={
               <HeaderIconButton
                 glass={false}
                 icon={<Info color="#FFF" />}
                 label={t('todoExplanationTitle')}
                 onPress={() => setInfoOpen(true)}
               />
-            </View>
-            <View style={{ height: Math.min(64, Math.max(24, width * 0.08)) }} />
-            <TodoIdentity
-              summary={{
-                ...props.model.header,
-                totalAccounts: props.model.header.totalAccounts + pendingPlayers.length,
-              }}
+            }
+          />
+        ) : (
+          <View
+            style={{
+              minHeight: insets.top + 224,
+              paddingBottom: 24,
+              overflow: 'hidden',
+              backgroundColor: theme.background,
+            }}
+          >
+            <MobileWebImage
+              imageUrl={TODO_HEADER_ART}
+              // Artwork and scrim cover the same content-sized header. A
+              // width-based image height leaves a hard edge before the fade ends.
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              contentPosition="center"
             />
+            <HeroHeaderScrim />
+            <View style={{ paddingTop: insets.top }}>
+              <View style={styles.headerActions}>
+                <HeaderIconButton
+                  glass={false}
+                  icon={<ArrowLeft color="#FFF" />}
+                  label={materialBackLabel(locale)}
+                  onPress={props.onBack}
+                />
+                <HeaderIconButton
+                  glass={false}
+                  icon={<Info color="#FFF" />}
+                  label={t('todoExplanationTitle')}
+                  onPress={() => setInfoOpen(true)}
+                />
+              </View>
+              <View style={{ height: Math.min(64, Math.max(24, width * 0.08)) }} />
+              <TodoIdentity
+                summary={{
+                  ...props.model.header,
+                  totalAccounts: props.model.header.totalAccounts + pendingPlayers.length,
+                }}
+              />
+            </View>
           </View>
-        </View>
-        <View style={{ maxWidth: 1120, width: '100%', alignSelf: 'center' }}>
+        )}
+        <View
+          style={{
+            maxWidth: layout.isExpanded ? layout.contentMaxWidth : 1120,
+            width: '100%',
+            alignSelf: 'center',
+          }}
+        >
           <View style={{ paddingHorizontal: horizontal, paddingTop: 12 }}>
-            <View style={styles.controls}>
+            <View
+              style={[
+                styles.controls,
+                layout.isExpanded && {
+                  width: '100%',
+                  maxWidth: layout.contentMaxWidth,
+                  alignSelf: 'center',
+                },
+              ]}
+            >
               <GlassSurface cornerRadius={22} style={styles.searchField}>
                 <Search size={20} color={theme.onSurfaceVariant} />
                 <TextInput
@@ -173,7 +217,17 @@ export function TodoScreen(props: TodoScreenProps) {
                   </Pressable>
                 ) : null}
               </GlassSurface>
-              <Pressable accessibilityRole="button" onPress={() => setFilterOpen(true)}>
+              <Pressable
+                ref={filterTrigger}
+                accessibilityRole="button"
+                onPress={() => {
+                  if (layout.isExpanded)
+                    filterTrigger.current?.measureInWindow((x, y, w, h) =>
+                      setFilterAnchor({ top: y + h + 8, right: Math.max(16, width - x - w) }),
+                    );
+                  setFilterOpen(true);
+                }}
+              >
                 <GlassSurface cornerRadius={22} interactive style={styles.filterButton}>
                   <CKText role="labelLarge" numberOfLines={1}>
                     {filterLabel(props.filter, props.model)}
@@ -184,7 +238,11 @@ export function TodoScreen(props: TodoScreenProps) {
             </View>
             <View style={{ paddingTop: 10 }}>
               {props.model.visiblePlayers.length || pendingPlayers.length ? (
-                <ResponsiveGrid minItemWidth={330} maxColumns={3} gap={12}>
+                <ResponsiveGrid
+                  minItemWidth={330}
+                  maxColumns={layout.isExpanded ? layout.columns(330, 3) : 3}
+                  gap={12}
+                >
                   {props.model.visiblePlayers.map((player) => (
                     <TodoPlayerCard
                       key={player.tag}
@@ -223,8 +281,12 @@ export function TodoScreen(props: TodoScreenProps) {
         visible={filterOpen}
         selected={props.filter}
         model={props.model}
-        top={insets.top + 280}
-        right={Math.max(16, (width - 1120) / 2) + 16}
+        top={layout.isExpanded && filterAnchor ? filterAnchor.top : insets.top + 280}
+        right={
+          layout.isExpanded && filterAnchor
+            ? filterAnchor.right
+            : Math.max(16, (width - 1120) / 2) + 16
+        }
         onSelect={(filter) => {
           props.onFilterChange(filter);
           setFilterOpen(false);
@@ -670,23 +732,25 @@ function InfoDialog({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.dialogBackdrop} onPress={onClose}>
-        <Pressable style={styles.dialogPressable} onPress={(event) => event.stopPropagation()}>
-          <Surface radius={ckRadius.card} style={styles.dialog} accessibilityViewIsModal>
-            <CKText role="titleMedium" style={{ color: theme.primary, textAlign: 'center' }}>
-              {title}
-            </CKText>
-            <ScrollView contentContainerStyle={styles.dialogBody}>{children}</ScrollView>
-            <View style={styles.dialogActions}>
-              <Pressable accessibilityRole="button" onPress={onClose} style={styles.okButton}>
-                <CKText style={{ color: theme.primary, fontWeight: '700' }}>
-                  {t('generalOk')}
-                </CKText>
-              </Pressable>
-            </View>
-          </Surface>
+      <EntityModalViewport>
+        <Pressable style={styles.dialogBackdrop} onPress={onClose}>
+          <Pressable style={styles.dialogPressable} onPress={(event) => event.stopPropagation()}>
+            <Surface radius={ckRadius.card} style={styles.dialog} accessibilityViewIsModal>
+              <CKText role="titleMedium" style={{ color: theme.primary, textAlign: 'center' }}>
+                {title}
+              </CKText>
+              <ScrollView contentContainerStyle={styles.dialogBody}>{children}</ScrollView>
+              <View style={styles.dialogActions}>
+                <Pressable accessibilityRole="button" onPress={onClose} style={styles.okButton}>
+                  <CKText style={{ color: theme.primary, fontWeight: '700' }}>
+                    {t('generalOk')}
+                  </CKText>
+                </Pressable>
+              </View>
+            </Surface>
+          </Pressable>
         </Pressable>
-      </Pressable>
+      </EntityModalViewport>
     </Modal>
   );
 }

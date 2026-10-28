@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Toestaan",
   "achievementsTitle": "Prestaties",
   "achievementEarnedLabel": "Behaald",
+  "achievementGemsEarnedRatio": "{earned} / {total} verdiend",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "{earned} van de {total} edelstenen voor prestaties verdiend.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} voltooid",
   "achievementEarnedCount": "Behaald ×{count}",
   "achievementTownhall18Name": "Stadhuis 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Alleen hetzelfde stadhuis",
+  "warStatsSameTownHall": "Hetzelfde gemeentehuis",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Volgers",
   "drawerFollowersHelp": "Mensen die een van je geverifieerde gekoppelde accounts als favoriet hebben opgeslagen.",
   "drawerCalculators": "Rekenmachines",
-  "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Upgrade-tracker",
   "drawerBasesArmies": "Basissen en legers",
   "drawerGameAssets": "Spelbronnen",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Ontvang meldingen voor dit account.",
   "playerOptionNotificationsEnableMaster": "Schakel eerst meldingen in via Instellingen.",
   "playerOptionNotificationsVerifyFirst": "Verifieer dit account om meldingen in te schakelen.",
-  "playerOptionNotificationsSubscriptionRequired": "Voor bladwijzermeldingen is een abonnement vereist.",
   "playerOptionNotificationsLimitReached": "Je limiet voor bladwijzermeldingen is bereikt.",
   "playerOptionShowTodoPageTitle": "Tonen op To Do-pagina",
   "playerOptionShowTodoPageSubtitle": "Neem dit account op in de volledige To Do-lijst.",

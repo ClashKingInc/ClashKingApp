@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { useState, useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
@@ -39,7 +41,7 @@ export function PlayersSection({ data }: { readonly data: StatsPlayerCountsRespo
     leagueCounts.set(id, (leagueCounts.get(id) ?? 0) + item.count);
   }
   return (
-    <View style={styles.section}>
+    <AdaptiveStatsPanels style={styles.section}>
       <DistributionGroup
         testID="town-halls"
         title={t('statsTownHallDistribution')}
@@ -58,7 +60,7 @@ export function PlayersSection({ data }: { readonly data: StatsPlayerCountsRespo
         describe={(id) => playerLeague(id, leagues).label}
         artwork={(id) => playerLeague(id, leagues).imageUrl}
       />
-    </View>
+    </AdaptiveStatsPanels>
   );
 }
 
@@ -68,7 +70,7 @@ export function ClansSection({ data }: { readonly data: StatsClanCountsResponse 
   const locations = new Map(data.locationMetadata.map((location) => [location.id, location]));
   const memberBins = data.memberBins;
   return (
-    <View style={styles.section}>
+    <AdaptiveStatsPanels style={styles.section}>
       <DistributionGroup
         testID="cwl-leagues"
         title={t('statsCwlLeagueDistribution')}
@@ -113,7 +115,7 @@ export function ClansSection({ data }: { readonly data: StatsClanCountsResponse 
           return countryCode ? ImageAssets.flag(countryCode) : ImageAssets.planet;
         }}
       />
-    </View>
+    </AdaptiveStatsPanels>
   );
 }
 
@@ -134,6 +136,7 @@ function DistributionGroup({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [expanded, setExpanded] = useState(false);
   const ranked = [...values]
     .filter((item) => item.count > 0)
@@ -187,7 +190,7 @@ function DistributionGroup({
                     key={`${item.id ?? 'unknown'}`}
                     accessible
                     accessibilityLabel={`${label}, ${formatCompactNumber(item.count, locale)}, ${shareLabel}`}
-                    style={styles.row}
+                    style={[styles.row, layout.isExpanded && { minHeight: 54, gap: 14 }]}
                     testID={`${testID}-row-${item.id ?? 'unknown'}`}
                   >
                     {artwork ? (
@@ -196,7 +199,7 @@ function DistributionGroup({
                         imageUrl={artwork(item.id)}
                         contentFit="contain"
                         accessible={false}
-                        style={styles.artwork}
+                        style={[styles.artwork, layout.isExpanded && { width: 38, height: 38 }]}
                         testID={`${testID}-artwork-${item.id ?? 'unknown'}`}
                       />
                     ) : null}
@@ -217,6 +220,7 @@ function DistributionGroup({
                       <View
                         style={[
                           styles.track,
+                          layout.isExpanded && { height: 6 },
                           { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.25) },
                         ]}
                       >
@@ -240,12 +244,15 @@ function DistributionGroup({
             </View>
           )}
           {testID === 'locations' && !expanded && ranked.length > collapsedRowCount ? (
-            <View style={styles.row} testID="locations-other-row">
+            <View
+              style={[styles.row, layout.isExpanded && { minHeight: 54, gap: 14 }]}
+              testID="locations-other-row"
+            >
               <MobileWebImage
                 imageUrl={ImageAssets.planet}
                 contentFit="contain"
                 accessible={false}
-                style={styles.artwork}
+                style={[styles.artwork, layout.isExpanded && { width: 38, height: 38 }]}
               />
               <View style={styles.rowBody}>
                 <View style={styles.rowCopy}>
@@ -266,6 +273,7 @@ function DistributionGroup({
                 <View
                   style={[
                     styles.track,
+                    layout.isExpanded && { height: 6 },
                     { backgroundColor: colorWithAlpha(theme.outlineVariant, 0.25) },
                   ]}
                 >

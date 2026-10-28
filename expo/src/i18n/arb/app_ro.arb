@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "Permite",
   "achievementsTitle": "Realizări",
   "achievementEarnedLabel": "Obținut",
+  "achievementGemsEarnedRatio": "{earned} / {total} câștigate",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Ai câștigat {earned} din {total} gemme din realizări.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} finalizat",
   "achievementEarnedCount": "Obținut ×{count}",
   "achievementTownhall18Name": "Primăria 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Doar aceeași Primărie",
+  "warStatsSameTownHall": "Aceeași primărie",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "Urmaritori",
   "drawerFollowersHelp": "Persoane care au marcat unul dintre conturile dvs. conectate verificate.",
   "drawerCalculators": "Calculatoare",
-  "drawerSubscription": "Abonament",
   "drawerUpgradeTracker": "Tracker îmbunătățiri",
   "drawerBasesArmies": "Baze și armate",
   "drawerGameAssets": "Activele jocului",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "Primiți alerte pentru acest cont.",
   "playerOptionNotificationsEnableMaster": "Activează mai întâi notificările în Setări.",
   "playerOptionNotificationsVerifyFirst": "Verifică acest cont pentru a activa notificările.",
-  "playerOptionNotificationsSubscriptionRequired": "Este necesar un abonament pentru notificările marcajelor.",
   "playerOptionNotificationsLimitReached": "Ai atins limita notificărilor pentru marcaje.",
   "playerOptionShowTodoPageTitle": "Afișați pe pagina de activități",
   "playerOptionShowTodoPageSubtitle": "Includeți acest cont în lista completă de activități.",

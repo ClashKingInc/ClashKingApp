@@ -1,3 +1,6 @@
+import { InlineBackControl } from '../../ui/native-back-context';
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { ResponsiveGrid } from '../../ui/responsive-grid';
 import type { ViewInstance, ScrollViewInstance } from 'react-native';
 import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
@@ -243,26 +246,28 @@ function CompetitiveScenePage({
     >
       {/* Absolute children ignore SafeAreaView's content padding. Keep Back
           below the status bar while retaining the artwork beneath it. */}
-      <View pointerEvents="box-none" style={[styles.header, { top: insets.top + 6 }]}>
-        <Pressable
-          onPress={back}
-          accessibilityRole="button"
-          accessibilityLabel={materialBackLabel(locale)}
-          style={[
-            styles.back,
-            {
-              backgroundColor:
-                scene.kind === 'profile' || scene.kind === 'person'
-                  ? colorWithAlpha(theme.onSurface, 0.06)
-                  : '#100b14aa',
-            },
-          ]}
-        >
-          <ArrowLeft
-            color={scene.kind === 'profile' || scene.kind === 'person' ? theme.onSurface : '#fff'}
-          />
-        </Pressable>
-      </View>
+      <InlineBackControl onBack={back}>
+        <View pointerEvents="box-none" style={[styles.header, { top: insets.top + 6 }]}>
+          <Pressable
+            onPress={back}
+            accessibilityRole="button"
+            accessibilityLabel={materialBackLabel(locale)}
+            style={[
+              styles.back,
+              {
+                backgroundColor:
+                  scene.kind === 'profile' || scene.kind === 'person'
+                    ? colorWithAlpha(theme.onSurface, 0.06)
+                    : '#100b14aa',
+              },
+            ]}
+          >
+            <ArrowLeft
+              color={scene.kind === 'profile' || scene.kind === 'person' ? theme.onSurface : '#fff'}
+            />
+          </Pressable>
+        </View>
+      </InlineBackControl>
       {scene.kind === 'esports' ? (
         <EsportsLanding push={push} />
       ) : scene.kind === 'ccnTeam' ? (
@@ -327,6 +332,16 @@ function useCompetition<T>(path: string, publicRead = false) {
   };
 }
 
+function CompetitiveRecordGrid({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded) return <>{children}</>;
+  return (
+    <ResponsiveGrid minItemWidth={420} maxColumns={layout.columns(420, 2)} gap={20}>
+      {children}
+    </ResponsiveGrid>
+  );
+}
+
 function Page({
   children,
   query,
@@ -335,10 +350,14 @@ function Page({
   query?: { loading: boolean; data?: unknown; error?: string; refresh: () => void };
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { t } = useI18n();
   return (
     <ScrollView
-      contentContainerStyle={styles.page}
+      contentContainerStyle={[
+        styles.page,
+        (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+      ]}
       refreshControl={
         query ? (
           <RefreshControl
@@ -406,8 +425,13 @@ function Identity({
   onPress?: () => void;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
-    <PressableSurface disabled={!onPress} onPress={onPress} style={styles.identity}>
+    <PressableSurface
+      disabled={!onPress}
+      onPress={onPress}
+      style={[styles.identity, layout.isExpanded && { minHeight: 88, padding: 22, gap: 18 }]}
+    >
       {image ? <MobileWebImage imageUrl={image} style={styles.art} /> : null}
       <View style={{ flex: 1, gap: 4 }}>
         <CKText role="titleSmall">{name}</CKText>
@@ -439,19 +463,106 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const discoveryWidth =
+    layout.isDuo && !layout.isExpanded
+      ? Math.min(layout.width, layout.contentMaxWidth)
+      : layout.isDuo || layout.isTablet
+        ? layout.width
+        : width;
   const [heroWidth, setHeroWidth] = useState(Math.min(width, 1120));
-  const heroHeight = width < 600 ? 310 : 370;
+  const heroHeight = layout.isExpanded ? 240 : discoveryWidth < 600 ? 310 : 370;
   const { reduceMotion } = useCKAccessibility();
   const [scroll] = useState(() => new Animated.Value(0));
   const rail = useRef<ScrollViewInstance>(null);
   const [active, setActive] = useState(0);
-  const cardWidth = Math.min(width - 60, 330);
+  const cardWidth = Math.min(discoveryWidth - 60, 330);
   const items = query.data?.items ?? (query.loading ? loadingTournaments : []);
   const move = (index: number) => {
     const next = Math.max(0, Math.min(index, items.length - 1));
     rail.current?.scrollTo({ x: next * (cardWidth + 14), animated: !reduceMotion });
     setActive(next);
   };
+  const cards = items.map((item, index) => {
+    const accent = ['#BA8543', '#9362D1', '#C95F51'][index % 3]!;
+    const sculpture = ['triumphant_trophy', 'crown_sword', 'war_chief_2026'][index % 3];
+    return (
+      <PressableSurface
+        key={item.id}
+        accessibilityRole="button"
+        accessibilityLabel={item.name}
+        onPress={() => push({ kind: 'tournament', id: item.id })}
+        style={{
+          width: layout.isExpanded ? '100%' : cardWidth,
+          minHeight: 320,
+          overflow: 'hidden',
+          borderWidth: 0,
+          borderRadius: 26,
+          backgroundColor: colorWithAlpha(accent, 0.14),
+        }}
+      >
+        <View style={{ padding: 20, flex: 1, gap: 8 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <CKText role="metadata" style={{ color: theme.onSurfaceVariant }}>
+              {new Date(item.startsAt).toLocaleDateString(toIntlLocale(locale), {
+                month: 'short',
+                day: 'numeric',
+              })}
+            </CKText>
+            <View
+              style={{
+                backgroundColor: colorWithAlpha(accent, 0.2),
+                paddingHorizontal: 10,
+                paddingVertical: 5,
+                borderRadius: 20,
+              }}
+            >
+              <CKText role="metadata">
+                {item.teamSize}v{item.teamSize}
+              </CKText>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, minHeight: 160 }}>
+            <View style={{ flex: 1, gap: 8 }}>
+              <CKText style={{ fontSize: 27, lineHeight: 30, fontWeight: '800' }}>
+                {item.name}
+              </CKText>
+              <CKText muted role="metadata">
+                {item.format === 'elo' ? 'Elo' : item.format.replaceAll('_', ' ')}
+              </CKText>
+            </View>
+            <MobileWebImage
+              imageUrl={`${ASSET_ORIGIN}/decorations/home-village/${sculpture}.webp`}
+              contentFit="contain"
+              style={{ width: 110, height: 150 }}
+            />
+          </View>
+          <CKText role="metadata" style={{ color: ckColors.donationGreen }}>
+            {t('competitiveFreeEntry')}
+          </CKText>
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 20,
+            paddingVertical: 16,
+            backgroundColor: colorWithAlpha(accent, 0.18),
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <CKText role="rowTitle">{t('competitiveViewTournament')}</CKText>
+          <ChevronRight size={19} color={theme.onSurface} />
+        </View>
+      </PressableSurface>
+    );
+  });
   return (
     <Animated.ScrollView
       testID="tournament-discovery"
@@ -469,7 +580,7 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
       contentContainerStyle={{
         paddingBottom: 40,
         width: '100%',
-        maxWidth: 1120,
+        maxWidth: layout.isExpanded || layout.isDuo ? layout.contentMaxWidth : 1120,
         alignSelf: 'center',
       }}
     >
@@ -528,8 +639,8 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
             skeleton={false}
             style={{
               color: '#fff',
-              fontSize: width < 600 ? 36 : 48,
-              lineHeight: width < 600 ? 40 : 52,
+              fontSize: layout.isExpanded ? 40 : discoveryWidth < 600 ? 36 : 48,
+              lineHeight: layout.isExpanded ? 46 : discoveryWidth < 600 ? 40 : 52,
               fontWeight: '800',
               maxWidth: 430,
             }}
@@ -548,130 +659,62 @@ function TournamentList({ push }: { push: (scene: Scene) => void }) {
           <CKText skeleton={false} role="sectionTitle">
             {t('competitiveTournaments')}
           </CKText>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            <PressableSurface
-              accessibilityRole="button"
-              accessibilityLabel={materialPreviousPageTooltip(locale)}
-              disabled={active === 0}
-              onPress={() => move(active - 1)}
-              style={{ padding: 10, opacity: active === 0 ? 0.35 : 1, borderWidth: 0 }}
-            >
-              <ChevronLeft size={20} color={theme.onSurface} />
-            </PressableSurface>
-            <PressableSurface
-              accessibilityRole="button"
-              accessibilityLabel={materialNextPageTooltip(locale)}
-              disabled={active >= items.length - 1}
-              onPress={() => move(active + 1)}
-              style={{
-                padding: 10,
-                opacity: active >= items.length - 1 ? 0.35 : 1,
-                borderWidth: 0,
-              }}
-            >
-              <ChevronRight size={20} color={theme.onSurface} />
-            </PressableSurface>
-          </View>
+          {!layout.isExpanded ? (
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <PressableSurface
+                accessibilityRole="button"
+                accessibilityLabel={materialPreviousPageTooltip(locale)}
+                disabled={active === 0}
+                onPress={() => move(active - 1)}
+                style={{ padding: 10, opacity: active === 0 ? 0.35 : 1, borderWidth: 0 }}
+              >
+                <ChevronLeft size={20} color={theme.onSurface} />
+              </PressableSurface>
+              <PressableSurface
+                accessibilityRole="button"
+                accessibilityLabel={materialNextPageTooltip(locale)}
+                disabled={active >= items.length - 1}
+                onPress={() => move(active + 1)}
+                style={{
+                  padding: 10,
+                  opacity: active >= items.length - 1 ? 0.35 : 1,
+                  borderWidth: 0,
+                }}
+              >
+                <ChevronRight size={20} color={theme.onSurface} />
+              </PressableSurface>
+            </View>
+          ) : null}
         </View>
         {query.error ? <Action label={t('generalRetry')} onPress={query.refresh} /> : null}
       </View>
       <SkeletonContent loading={query.loading && !query.data}>
-        <ScrollView
-          ref={rail}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          decelerationRate="fast"
-          snapToInterval={cardWidth + 14}
-          scrollEventThrottle={16}
-          onScroll={(event) =>
-            setActive(Math.round(event.nativeEvent.contentOffset.x / (cardWidth + 14)))
-          }
-          contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 18, gap: 14 }}
-          testID="tournament-event-rail"
-        >
-          {items.map((item, index) => {
-            const accent = ['#BA8543', '#9362D1', '#C95F51'][index % 3]!;
-            const sculpture = ['triumphant_trophy', 'crown_sword', 'war_chief_2026'][index % 3];
-            return (
-              <PressableSurface
-                key={item.id}
-                accessibilityRole="button"
-                accessibilityLabel={item.name}
-                onPress={() => push({ kind: 'tournament', id: item.id })}
-                style={{
-                  width: cardWidth,
-                  minHeight: 320,
-                  overflow: 'hidden',
-                  borderWidth: 0,
-                  borderRadius: 26,
-                  backgroundColor: colorWithAlpha(accent, 0.14),
-                }}
-              >
-                <View style={{ padding: 20, flex: 1, gap: 8 }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <CKText role="metadata" style={{ color: theme.onSurfaceVariant }}>
-                      {new Date(item.startsAt).toLocaleDateString(toIntlLocale(locale), {
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </CKText>
-                    <View
-                      style={{
-                        backgroundColor: colorWithAlpha(accent, 0.2),
-                        paddingHorizontal: 10,
-                        paddingVertical: 5,
-                        borderRadius: 20,
-                      }}
-                    >
-                      <CKText role="metadata">
-                        {item.teamSize}v{item.teamSize}
-                      </CKText>
-                    </View>
-                  </View>
-                  <View
-                    style={{ flexDirection: 'row', alignItems: 'center', flex: 1, minHeight: 160 }}
-                  >
-                    <View style={{ flex: 1, gap: 8 }}>
-                      <CKText style={{ fontSize: 27, lineHeight: 30, fontWeight: '800' }}>
-                        {item.name}
-                      </CKText>
-                      <CKText muted role="metadata">
-                        {item.format === 'elo' ? 'Elo' : item.format.replaceAll('_', ' ')}
-                      </CKText>
-                    </View>
-                    <MobileWebImage
-                      imageUrl={`${ASSET_ORIGIN}/decorations/home-village/${sculpture}.webp`}
-                      contentFit="contain"
-                      style={{ width: 110, height: 150 }}
-                    />
-                  </View>
-                  <CKText role="metadata" style={{ color: ckColors.donationGreen }}>
-                    {t('competitiveFreeEntry')}
-                  </CKText>
-                </View>
-                <View
-                  style={{
-                    paddingHorizontal: 20,
-                    paddingVertical: 16,
-                    backgroundColor: colorWithAlpha(accent, 0.18),
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <CKText role="rowTitle">{t('competitiveViewTournament')}</CKText>
-                  <ChevronRight size={19} color={theme.onSurface} />
-                </View>
-              </PressableSurface>
-            );
-          })}
-        </ScrollView>
+        {layout.isExpanded ? (
+          <ResponsiveGrid
+            minItemWidth={280}
+            maxColumns={layout.columns(280, 3)}
+            gap={14}
+            style={{ paddingHorizontal: 20, paddingVertical: 18 }}
+          >
+            {cards}
+          </ResponsiveGrid>
+        ) : (
+          <ScrollView
+            ref={rail}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate="fast"
+            snapToInterval={cardWidth + 14}
+            scrollEventThrottle={16}
+            onScroll={(event) =>
+              setActive(Math.round(event.nativeEvent.contentOffset.x / (cardWidth + 14)))
+            }
+            contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 18, gap: 14 }}
+            testID="tournament-event-rail"
+          >
+            {cards}
+          </ScrollView>
+        )}
       </SkeletonContent>
       {!items.length && !query.loading ? (
         <View style={{ padding: 24, gap: 10 }}>
@@ -885,28 +928,30 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
           {!detail?.participants.length ? (
             <CKText muted>{t('competitiveRegisteredClansEmpty')}</CKText>
           ) : null}
-          {detail?.participants.map((participant) => (
-            <Identity
-              key={participant.teamId}
-              name={participant.clanName ?? participant.clanTag ?? '—'}
-              subtitle={
-                participant.rating === undefined ? participant.status : `${participant.rating}`
-              }
-              onPress={() =>
-                push({
-                  kind: 'team',
-                  team: {
-                    id: participant.teamId,
-                    clanTag: participant.clanTag ?? '',
-                    clanName: participant.clanName ?? 'Team name',
-                    size: tournament.teamSize,
-                    archived: false,
-                    members: [],
-                  },
-                })
-              }
-            />
-          ))}
+          <CompetitiveRecordGrid>
+            {detail?.participants.map((participant) => (
+              <Identity
+                key={participant.teamId}
+                name={participant.clanName ?? participant.clanTag ?? '—'}
+                subtitle={
+                  participant.rating === undefined ? participant.status : `${participant.rating}`
+                }
+                onPress={() =>
+                  push({
+                    kind: 'team',
+                    team: {
+                      id: participant.teamId,
+                      clanTag: participant.clanTag ?? '',
+                      clanName: participant.clanName ?? 'Team name',
+                      size: tournament.teamSize,
+                      archived: false,
+                      members: [],
+                    },
+                  })
+                }
+              />
+            ))}
+          </CompetitiveRecordGrid>
           <CKText skeleton={false} role="sectionTitle">
             {t('cwlMatches')}
           </CKText>
@@ -922,16 +967,18 @@ function TournamentScreen({ id, push }: { id: string; push: (scene: Scene) => vo
               }))}
             />
           ) : null}
-          {detail?.matches
-            .filter((match) => (match.round ?? 1) === selectedRound)
-            .map((match) => (
-              <TournamentMatchCard
-                key={match.id}
-                match={match}
-                home={clanName(match.homeTeamId)}
-                away={clanName(match.awayTeamId)}
-              />
-            ))}
+          <CompetitiveRecordGrid>
+            {detail?.matches
+              .filter((match) => (match.round ?? 1) === selectedRound)
+              .map((match) => (
+                <TournamentMatchCard
+                  key={match.id}
+                  match={match}
+                  home={clanName(match.homeTeamId)}
+                  away={clanName(match.awayTeamId)}
+                />
+              ))}
+          </CompetitiveRecordGrid>
         </>
       ) : null}
     </Page>
@@ -1129,22 +1176,24 @@ function TeamScreen({ team, push }: { team: CompetitiveTeam; push: (scene: Scene
       <CKText skeleton={false} role="sectionTitle">
         {t('clanMembers')}
       </CKText>
-      {current.members.map((member) => (
-        <View key={member.playerTag} style={styles.group}>
-          <Identity
-            name={member.name}
-            subtitle={member.playerTag}
-            onPress={() => queueAppLink(`/player/${encodeURIComponent(member.playerTag)}`)}
-          />
-          {member.profile ? (
-            <Pressable onPress={() => push({ kind: 'person', id: member.profile!.userId })}>
-              <CKText style={{ color: ckColors.secondaryBlue }}>
-                {member.profile.displayName} · {t('competitiveViewProfile')}
-              </CKText>
-            </Pressable>
-          ) : null}
-        </View>
-      ))}
+      <CompetitiveRecordGrid>
+        {current.members.map((member) => (
+          <View key={member.playerTag} style={styles.group}>
+            <Identity
+              name={member.name}
+              subtitle={member.playerTag}
+              onPress={() => queueAppLink(`/player/${encodeURIComponent(member.playerTag)}`)}
+            />
+            {member.profile ? (
+              <Pressable onPress={() => push({ kind: 'person', id: member.profile!.userId })}>
+                <CKText style={{ color: ckColors.secondaryBlue }}>
+                  {member.profile.displayName} · {t('competitiveViewProfile')}
+                </CKText>
+              </Pressable>
+            ) : null}
+          </View>
+        ))}
+      </CompetitiveRecordGrid>
       <CKText skeleton={false} role="sectionTitle">
         {t('competitiveTeamHistory')}
       </CKText>

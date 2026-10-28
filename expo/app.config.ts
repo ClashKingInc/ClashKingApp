@@ -51,7 +51,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       buildNumber,
       supportsTablet: true,
       associatedDomains: ['applinks:app.clashk.ing'],
-      requireFullScreen: true,
+      requireFullScreen: false,
       // Native appearance variants follow the Home Screen setting without
       // changing the user's manually selected seasonal/alternate app icon.
       icon: {
@@ -70,12 +70,19 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         UIFileSharingEnabled: true,
         LSSupportsOpeningDocumentsInPlace: true,
         UISupportsDocumentBrowser: true,
-        UIRequiresFullScreen: true,
-        UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait'],
+        UIRequiresFullScreen: false,
+        // The Duo changes window shape as it folds. Keep iOS resizable and
+        // allow rotation; Android phones retain the existing portrait default.
+        UISupportedInterfaceOrientations: [
+          'UIInterfaceOrientationPortrait',
+          'UIInterfaceOrientationLandscapeLeft',
+          'UIInterfaceOrientationLandscapeRight',
+        ],
         'UISupportedInterfaceOrientations~ipad': [
           'UIInterfaceOrientationPortrait',
           'UIInterfaceOrientationLandscapeLeft',
           'UIInterfaceOrientationLandscapeRight',
+          'UIInterfaceOrientationPortraitUpsideDown',
         ],
       },
     },
@@ -118,7 +125,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
               '/tournaments',
               '/profile',
               '/accounts',
-              '/subscription',
               '/settings',
             ].map((path) => ({ scheme: 'https', host: 'app.clashk.ing', path })),
             ...[
@@ -162,6 +168,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     plugins: [
       'expo-router',
+      ['expo-screen-orientation', { initialOrientation: 'PORTRAIT_UP' }],
       'expo-localization',
       'expo-image',
       [

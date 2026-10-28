@@ -3,12 +3,17 @@ import { AppState, Platform } from 'react-native';
 import { Effect } from 'effect';
 import { GuildsEndpoint, type EndpointResponse } from '@clashking/api-contracts/expo';
 import { useAppRuntime } from '../../core/app/runtime-context';
+import type { AuthUser } from '../auth/models';
 
 export type DashboardServer = EndpointResponse<typeof GuildsEndpoint>[number];
 
-export function useDiscordServers(userId: string | undefined) {
+export function useDiscordServers(user: AuthUser | null | undefined) {
   const runtime = useAppRuntime();
-  const enabled = userId !== undefined && Platform.OS !== 'web';
+  const userId = user?.userId;
+  // A ClashKing user ID can survive conversion to email-only login. Only the
+  // linked auth methods establish Discord access; email + Discord still works.
+  const hasDiscordIdentity = user?.authMethods.includes('discord') === true;
+  const enabled = Boolean(userId) && hasDiscordIdentity && Platform.OS !== 'web';
   const [generation, setGeneration] = useState(0);
   const [result, setResult] = useState<{
     userId: string | undefined;
@@ -68,7 +73,7 @@ export function useDiscordServers(userId: string | undefined) {
         loading,
         error: !loading && result.error,
       };
-  return { ...current, refresh };
+  return { ...current, hasDiscordIdentity, refresh };
 }
 
 export type DiscordServersState = ReturnType<typeof useDiscordServers>;

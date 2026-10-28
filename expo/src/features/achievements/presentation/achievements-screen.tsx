@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { InlineBackControl } from '../../../ui/native-back-context';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useState, useSyncExternalStore, type ComponentType } from 'react';
 import {
@@ -56,7 +58,12 @@ export function AchievementsScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { reduceMotion } = useCKAccessibility();
-  const { width, height } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  // SafeAreaView already removes the Duo rail from its child area. Measure the
+  // collection in that same space instead of treating the rail as extra gutters.
+  const width = layout.isDuo ? layout.usableWidth : layout.isTablet ? layout.width : windowWidth;
+  const height = layout.isDuo || layout.isTablet ? layout.height : windowHeight;
   const snapshot = useAchievementsSnapshot(repository);
   const [settled, setSettled] = useState(
     achievements !== undefined || snapshot.achievements.length > 0,
@@ -77,9 +84,16 @@ export function AchievementsScreen({
     const frame = requestAnimationFrame(() => setModelBudget((count) => count + 1));
     return () => cancelAnimationFrame(frame);
   }, [loading, modelBudget, visibleAchievements.length]);
-  const horizontalPadding = Math.max(ckSpacing.lg, (width - 1120) / 2);
+  const collectionLimit = layout.isExpanded
+    ? layout.contentMaxWidth
+    : layout.isDuo
+      ? layout.contentMaxWidth
+      : 1120;
+  const horizontalPadding = Math.max(ckSpacing.lg, (width - collectionLimit) / 2);
   const collectionWidth = Math.min(width - horizontalPadding * 2, 1120);
-  const columns = achievementColumnCount(collectionWidth);
+  const columns = layout.isExpanded
+    ? layout.columns(232, 4)
+    : achievementColumnCount(collectionWidth);
   const tileWidth = (collectionWidth - ckSpacing.lg * (columns - 1)) / columns;
   const earned = visibleAchievements.filter(isAchievementUnlocked).length;
 
@@ -122,20 +136,22 @@ export function AchievementsScreen({
       >
         <View style={styles.header} testID="achievements-header">
           {onBack ? (
-            <Pressable
-              accessibilityLabel={materialBackLabel(locale)}
-              accessibilityRole="button"
-              hitSlop={8}
-              onPress={onBack}
-              style={[styles.headerAction, isRtl ? styles.backActionRtl : styles.backAction]}
-              testID="achievements-back"
-            >
-              {isRtl ? (
-                <ArrowRight color={theme.onSurface} size={24} />
-              ) : (
-                <ArrowLeft color={theme.onSurface} size={24} />
-              )}
-            </Pressable>
+            <InlineBackControl onBack={onBack}>
+              <Pressable
+                accessibilityLabel={materialBackLabel(locale)}
+                accessibilityRole="button"
+                hitSlop={8}
+                onPress={onBack}
+                style={[styles.headerAction, isRtl ? styles.backActionRtl : styles.backAction]}
+                testID="achievements-back"
+              >
+                {isRtl ? (
+                  <ArrowRight color={theme.onSurface} size={24} />
+                ) : (
+                  <ArrowLeft color={theme.onSurface} size={24} />
+                )}
+              </Pressable>
+            </InlineBackControl>
           ) : null}
           <View style={styles.headerCopy}>
             <CKText skeleton={false} numberOfLines={1} role="screenTitle">
@@ -208,6 +224,7 @@ export function AchievementTile({
 }) {
   const theme = useCKTheme();
   const contentLoading = useSkeletonContent();
+  const layout = useAdaptiveLayout();
   const unlocked = isAchievementUnlocked(achievement);
   return (
     <Pressable
@@ -216,6 +233,7 @@ export function AchievementTile({
       onPress={onPress}
       style={({ pressed }) => [
         styles.tile,
+        layout.isExpanded && { height: 236 },
         { width, opacity: pressed && Platform.OS !== 'web' ? 0.82 : 1 },
       ]}
       testID={`achievement-${achievement.id}`}
@@ -283,6 +301,7 @@ export function AchievementDetail({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   if (!achievement) return null;
   const keys = ACHIEVEMENT_COPY_KEYS[achievement.id];
   const name = t(keys.name);
@@ -298,7 +317,11 @@ export function AchievementDetail({
       <Pressable
         accessibilityViewIsModal
         onPress={onClose}
-        style={[styles.scrim, { backgroundColor: colorWithAlpha('#000000', 0.72) }]}
+        style={[
+          styles.scrim,
+          { backgroundColor: colorWithAlpha('#000000', 0.72) },
+          layout.isExpanded && { justifyContent: 'center', padding: 24 },
+        ]}
       >
         <Pressable
           onPress={(event) => event.stopPropagation()}
@@ -309,6 +332,12 @@ export function AchievementDetail({
               backgroundColor: theme.surface,
               borderColor: colorWithAlpha(theme.outlineVariant, ckOpacity.borderStrong),
               paddingBottom: bottomInset + ckSpacing.xl,
+            },
+            layout.isExpanded && {
+              width: '100%',
+              maxWidth: 640,
+              alignSelf: 'center',
+              borderRadius: ckRadius.card,
             },
           ]}
           testID="achievement-detail-sheet"

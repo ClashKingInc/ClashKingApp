@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronRight, Equal, ListFilter } from 'lucide-react-native';
@@ -37,6 +38,7 @@ export function PlayerWarTab({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [range, setRange] = useState<WarHistoryRange>('days:90');
   const [battleType, setBattleType] = useState<PlayerWarMode | 'all'>('all');
   // The TH control affects only card statistics; battle filters stay independent.
@@ -64,7 +66,18 @@ export function PlayerWarTab({
     }
   };
   return (
-    <View style={[styles.sections, styles.content]} testID="player-war-content">
+    <View
+      style={[
+        styles.sections,
+        styles.content,
+        layout.isExpanded && {
+          width: '100%',
+          maxWidth: layout.contentMaxWidth,
+          alignSelf: 'center',
+        },
+      ]}
+      testID="player-war-content"
+    >
       <View style={styles.rangeRow}>
         <ArtworkToggleButton
           accessibilityRole="switch"
@@ -121,20 +134,46 @@ export function PlayerWarTab({
         <EmptyState title={t('generalNoDataAvailable')} />
       ) : (
         <SkeletonContent loading={loading || pending}>
-          <View style={styles.sections}>
-            <WarPerformanceSummary data={data} sameHall={sameHall} />
-            <PlayerWarBattles
-              key={[range, battleType].join(':')}
-              wars={data.wars}
-              mode={battleType}
-              onModeChange={(next) => {
-                setBattleType(next);
-              }}
-              cwlHistory={cwlHistory}
-              direction={battleDirection}
-              onDirectionChange={setBattleDirection}
-              actions={actions}
-            />
+          <View
+            style={[
+              styles.sections,
+              layout.isExpanded &&
+                layout.usableWidth >= 840 && {
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  gap: 24,
+                },
+            ]}
+          >
+            <View
+              style={
+                layout.isExpanded && layout.usableWidth >= 840
+                  ? { width: 350 }
+                  : { display: 'contents' }
+              }
+            >
+              <WarPerformanceSummary data={data} sameHall={sameHall} />
+            </View>
+            <View
+              style={
+                layout.isExpanded && layout.usableWidth >= 840
+                  ? { flex: 1, minWidth: 0 }
+                  : { display: 'contents' }
+              }
+            >
+              <PlayerWarBattles
+                key={[range, battleType].join(':')}
+                wars={data.wars}
+                mode={battleType}
+                onModeChange={(next) => {
+                  setBattleType(next);
+                }}
+                cwlHistory={cwlHistory}
+                direction={battleDirection}
+                onDirectionChange={setBattleDirection}
+                actions={actions}
+              />
+            </View>
           </View>
         </SkeletonContent>
       )}

@@ -1,6 +1,8 @@
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { isDuoDevice, useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { CalculatorWorkspaceColumns } from './calculator-workspace-columns';
+import { useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Copy, SlidersHorizontal, Trash2, X } from 'lucide-react-native';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { ImageAssets } from '../../core/assets/image-assets';
@@ -87,10 +89,12 @@ export function EquipmentCompare({
           onBack={onBack}
         />
       ) : (
-        <View>
-          <CalcHeader onBack={onBack} />
-          <EmptyState title={t('damageNoStaticDataTitle')} body={t('damageNoStaticDataBody')} />
-        </View>
+        <EquipmentSafeContent enabled={isDuoDevice}>
+          <View>
+            <CalcHeader onBack={onBack} />
+            <EmptyState title={t('damageNoStaticDataTitle')} body={t('damageNoStaticDataBody')} />
+          </View>
+        </EquipmentSafeContent>
       )}
     </View>
   );
@@ -112,6 +116,7 @@ function EquipmentEditor({
   onBack: () => void;
 }) {
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const number = new Intl.NumberFormat(toIntlLocale(locale), { maximumFractionDigits: 2 });
@@ -318,7 +323,15 @@ function EquipmentEditor({
   return (
     <ScrollView
       style={styles.mainScroll}
-      contentContainerStyle={[s.content, { paddingTop: insets.top + 16, gap: 12 }]}
+      contentContainerStyle={
+        layout.isDuo
+          ? undefined
+          : [
+              s.content,
+              { paddingTop: insets.top + 16, gap: 12 },
+              (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+            ]
+      }
       keyboardShouldPersistTaps="handled"
     >
       <View
@@ -336,286 +349,325 @@ function EquipmentEditor({
           style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]}
         />
       </View>
-      <View style={{ gap: 4 }}>
-        <HeroCarousel
-          leading={<CalcHeader onBack={onBack} />}
-          selectedId={hero.id}
-          onSelect={onHero}
-          heroes={heroes.map((item) => ({ id: item.id, name: item.name, label: itemLabel(item) }))}
-          trailing={
-            <SelectionPicker
-              title={t('damageAccountPresetShort')}
-              accessibilityLabel={t('damageAccountPresetShort')}
-              selectedKey={preset}
-              options={[
-                { key: 'manual', label: t('calcMaxLevels') },
-                ...(preset === 'custom' ? [{ key: 'custom', label: t('calcCustomLevels') }] : []),
-                ...availablePlayers.map((player) => ({ key: player.tag, label: player.name })),
-              ]}
-              onSelect={choosePreset}
-            />
-          }
-        >
-          <LevelSlider
-            label={t('calcHeroLevel')}
-            value={heroLevel}
-            minimum={Number(hero.levels[0]!.level)}
-            maximum={maxHero}
-            onChange={(value) => {
-              setPreset('custom');
-              setHeroLevel(value);
-              setRows((current) => current.map((row) => ({ ...row, heroLevel: value })));
-            }}
-          />
-        </HeroCarousel>
-        <CalculatorSelectionModal
-          inline
-          visible
-          title={t('calcEquipmentPool')}
-          testID="equipment-selection-inline"
-          onClose={() => {}}
-          items={items.map((item) => {
-            const owned =
-              levelAccount?.equipments.find((gear) => gear.name === item.name)?.level ?? 0;
-            return {
-              key: item.id,
-              label: itemLabel(item),
-              imageUrl: ImageAssets.getGearImage(item.name),
-              selected: pool.includes(item.id),
-              level: levels[item.id]!,
-              minimum: Number(item.levels[0]!.level),
-              maximum: Number(item.levels.at(-1)!.level),
-              steps: equipmentLevelOptions(item, levels[item.id]!).map((option) =>
-                Number(option.key),
-              ),
-              detail: levelAccount
-                ? owned > 0
-                  ? t('calcOwnedLevel', { level: owned })
-                  : t('calcNotOwned')
-                : undefined,
-            };
-          })}
-          onToggle={(id) => {
-            const next = pool.includes(id) ? pool.filter((key) => key !== id) : [...pool, id];
-            setPool(next);
-            regenerate(next);
-          }}
-          onLevelChange={(id, value) => {
-            setPreset('custom');
-            const next = { ...levels, [id]: value };
-            setLevels(next);
-            regenerate(pool, next);
-          }}
-          actions={
-            <View style={{ gap: 4 }}>
-              <CalcChip
-                label={t('calcSelectAll')}
-                onPress={() => {
-                  const next = items.map((item) => item.id);
-                  setPool(next);
-                  regenerate(next);
-                }}
-              />
-              <CalcChip
-                label={t('calcClear')}
-                onPress={() => {
-                  setPool([]);
-                  regenerate([]);
-                }}
-              />
-            </View>
-          }
-        />
-      </View>
-      <View
-        onLayout={({ nativeEvent }) =>
-          setGradientHeight(nativeEvent.layout.y + nativeEvent.layout.height + 20)
-        }
-        style={[s.row, { alignItems: 'flex-end', flexWrap: 'nowrap' }]}
+      <EquipmentContent
+        enabled={layout.isDuo}
+        top={insets.top + 16}
+        maxWidth={layout.contentMaxWidth}
       >
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`${t('calcKeepEquipped')}: ${items.find((item) => item.id === pinned)?.name ?? t('calcNone')}`}
-          onPress={() => setPinOpen(true)}
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 16,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: colorWithAlpha(theme.onSurface, 0.06),
-          }}
-        >
-          {items.find((item) => item.id === pinned) ? (
-            <GearImage item={items.find((item) => item.id === pinned)!} size={30} />
-          ) : (
-            <MobileWebImage
-              imageUrl={ImageAssets.upgradeCategoryIcons.equipment}
-              style={{ width: 30, height: 30 }}
+        <CalculatorWorkspaceColumns compactGap={4}>
+          <HeroCarousel
+            leading={<CalcHeader onBack={onBack} />}
+            selectedId={hero.id}
+            onSelect={onHero}
+            heroes={heroes.map((item) => ({
+              id: item.id,
+              name: item.name,
+              label: itemLabel(item),
+            }))}
+            trailing={
+              <SelectionPicker
+                title={t('damageAccountPresetShort')}
+                accessibilityLabel={t('damageAccountPresetShort')}
+                selectedKey={preset}
+                options={[
+                  { key: 'manual', label: t('calcMaxLevels') },
+                  ...(preset === 'custom' ? [{ key: 'custom', label: t('calcCustomLevels') }] : []),
+                  ...availablePlayers.map((player) => ({ key: player.tag, label: player.name })),
+                ]}
+                onSelect={choosePreset}
+              />
+            }
+          >
+            <LevelSlider
+              label={t('calcHeroLevel')}
+              value={heroLevel}
+              minimum={Number(hero.levels[0]!.level)}
+              maximum={maxHero}
+              onChange={(value) => {
+                setPreset('custom');
+                setHeroLevel(value);
+                setRows((current) => current.map((row) => ({ ...row, heroLevel: value })));
+              }}
             />
-          )}
-        </Pressable>
-        <CalcSelect
-          title={t('calcSort')}
-          value={sortMetric}
-          options={chosenMetrics.map((metric) => ({ key: metric.id, label: metric.label }))}
-          onChange={setSortMetric}
-        />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('calcAttributes')}
-          onPress={() => setAttributesOpen(true)}
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 16,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: colorWithAlpha(theme.onSurface, 0.06),
-          }}
-        >
-          <SlidersHorizontal size={20} color={theme.onSurface} />
-        </Pressable>
-      </View>
-      <>
-        <SelectionPickerModal
-          visible={pinOpen}
-          title={t('calcKeepEquipped')}
-          selectedKey={pinned}
-          options={[
-            {
-              key: 'none',
-              label: t('calcNone'),
-              icon: (
-                <MobileWebImage
-                  imageUrl={ImageAssets.upgradeCategoryIcons.equipment}
-                  style={{ width: 28, height: 28 }}
-                />
-              ),
-            },
-            ...items
-              .filter((item) => pool.includes(item.id))
-              .map((item) => ({
+          </HeroCarousel>
+          <CalculatorSelectionModal
+            inline
+            visible
+            title={t('calcEquipmentPool')}
+            testID="equipment-selection-inline"
+            onClose={() => {}}
+            items={items.map((item) => {
+              const owned =
+                levelAccount?.equipments.find((gear) => gear.name === item.name)?.level ?? 0;
+              return {
                 key: item.id,
                 label: itemLabel(item),
-                icon: <GearImage item={item} size={28} />,
-              })),
-          ]}
-          onClose={() => setPinOpen(false)}
-          onSelect={(id) => {
-            regenerate(pool, levels, heroLevel, id);
-            setPinOpen(false);
-          }}
-        />
-        <SelectionPickerModal
-          visible={attributesOpen}
-          title={t('calcAttributes')}
-          selectedKey={chosenMetrics[0]?.id ?? ''}
-          selectedKeys={chosenMetrics.map((metric) => metric.id)}
-          options={allMetrics.map((metric) => ({
-            key: metric.id,
-            label: metric.label,
-            disabled: chosenMetrics.length === 1 && chosenMetrics[0]?.id === metric.id,
-          }))}
-          onClose={() => setAttributesOpen(false)}
-          onSelect={(id) => {
-            const next = chosenMetrics.some((metric) => metric.id === id)
-              ? chosenMetrics.filter((metric) => metric.id !== id).map((metric) => metric.id)
-              : [...chosenMetrics.map((metric) => metric.id), id];
-            if (next.length === 0) return;
-            setMetrics(next);
-            if (!next.includes(sortMetric)) setSortMetric(next[0]!);
-          }}
-        />
-        <ComparisonMatrix
-          exportData={exportData}
-          hero={hero}
-          items={items}
-          rows={[baseline, ...displayed]}
-          metrics={chosenMetrics}
-          format={format}
-          selected={editingRow}
-          onSelect={(id) => setEditingRow((current) => (current === id ? undefined : id))}
-        />
-      </>
-      {activeRow ? (
-        <Surface style={s.card} testID="equipment-row-editor">
-          <View style={s.row}>
-            <CKText role="sectionTitle" style={s.grow}>
-              {t('filtersOptions')}
-            </CKText>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('calcDuplicate')}
-              style={styles.action}
-              onPress={() => {
-                const copy = { ...activeRow, id: `${activeRow.id}-copy-${Date.now()}` };
-                setRows((current) => [...current, copy]);
-                setEditingRow(copy.id);
-              }}
-            >
-              <Copy size={20} color={theme.onSurface} />
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('calcRemove')}
-              style={styles.action}
-              onPress={() => {
-                setRows((current) => current.filter((row) => row.id !== activeRow.id));
-                setEditingRow(undefined);
-              }}
-            >
-              <Trash2 size={20} color={theme.onSurfaceVariant} />
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={materialCloseLabel(locale)}
-              style={styles.action}
-              onPress={() => setEditingRow(undefined)}
-            >
-              <X size={20} color={theme.onSurface} />
-            </Pressable>
-          </View>
-          <View style={s.row}>
-            {activeRow.equipment.map((selection) => {
-              const item = items.find((item) => item.id === selection.id)!;
-              return (
-                <View
-                  key={item.id}
-                  style={styles.editorGear}
-                  testID={`equipment-row-level-${item.id}`}
-                >
-                  <GearImage item={item} />
-                  <View style={styles.heroLevel}>
-                    <LevelSlider
-                      label={itemLabel(item)}
-                      value={selection.level}
-                      minimum={Number(item.levels[0]!.level)}
-                      maximum={Number(item.levels.at(-1)!.level)}
-                      steps={equipmentLevelOptions(item, selection.level).map((option) =>
-                        Number(option.key),
-                      )}
-                      onChange={(value) =>
-                        changeRow(activeRow.id, {
-                          equipment: activeRow.equipment.map((gear) =>
-                            gear.id === item.id ? { ...gear, level: value } : gear,
-                          ),
-                        })
-                      }
-                    />
-                  </View>
-                </View>
-              );
+                imageUrl: ImageAssets.getGearImage(item.name),
+                selected: pool.includes(item.id),
+                level: levels[item.id]!,
+                minimum: Number(item.levels[0]!.level),
+                maximum: Number(item.levels.at(-1)!.level),
+                steps: equipmentLevelOptions(item, levels[item.id]!).map((option) =>
+                  Number(option.key),
+                ),
+                detail: levelAccount
+                  ? owned > 0
+                    ? t('calcOwnedLevel', { level: owned })
+                    : t('calcNotOwned')
+                  : undefined,
+              };
             })}
-          </View>
-        </Surface>
-      ) : rows.length > 0 ? (
-        <CKText muted role="metadata">
-          {t('calcSelectLoadout')}
-        </CKText>
-      ) : null}
-      {rows.length === 0 ? <EmptyState title={t('calcChooseEquipment')} /> : null}
+            onToggle={(id) => {
+              const next = pool.includes(id) ? pool.filter((key) => key !== id) : [...pool, id];
+              setPool(next);
+              regenerate(next);
+            }}
+            onLevelChange={(id, value) => {
+              setPreset('custom');
+              const next = { ...levels, [id]: value };
+              setLevels(next);
+              regenerate(pool, next);
+            }}
+            actions={
+              <View style={{ gap: 4 }}>
+                <CalcChip
+                  label={t('calcSelectAll')}
+                  onPress={() => {
+                    const next = items.map((item) => item.id);
+                    setPool(next);
+                    regenerate(next);
+                  }}
+                />
+                <CalcChip
+                  label={t('calcClear')}
+                  onPress={() => {
+                    setPool([]);
+                    regenerate([]);
+                  }}
+                />
+              </View>
+            }
+          />
+        </CalculatorWorkspaceColumns>
+        <View
+          onLayout={({ nativeEvent }) =>
+            setGradientHeight(nativeEvent.layout.y + nativeEvent.layout.height + 20)
+          }
+          style={[s.row, { alignItems: 'flex-end', flexWrap: 'nowrap' }]}
+        >
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${t('calcKeepEquipped')}: ${items.find((item) => item.id === pinned)?.name ?? t('calcNone')}`}
+            onPress={() => setPinOpen(true)}
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 16,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: colorWithAlpha(theme.onSurface, 0.06),
+            }}
+          >
+            {items.find((item) => item.id === pinned) ? (
+              <GearImage item={items.find((item) => item.id === pinned)!} size={30} />
+            ) : (
+              <MobileWebImage
+                imageUrl={ImageAssets.upgradeCategoryIcons.equipment}
+                style={{ width: 30, height: 30 }}
+              />
+            )}
+          </Pressable>
+          <CalcSelect
+            title={t('calcSort')}
+            value={sortMetric}
+            options={chosenMetrics.map((metric) => ({ key: metric.id, label: metric.label }))}
+            onChange={setSortMetric}
+          />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('calcAttributes')}
+            onPress={() => setAttributesOpen(true)}
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 16,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: colorWithAlpha(theme.onSurface, 0.06),
+            }}
+          >
+            <SlidersHorizontal size={20} color={theme.onSurface} />
+          </Pressable>
+        </View>
+        <>
+          <SelectionPickerModal
+            visible={pinOpen}
+            title={t('calcKeepEquipped')}
+            selectedKey={pinned}
+            options={[
+              {
+                key: 'none',
+                label: t('calcNone'),
+                icon: (
+                  <MobileWebImage
+                    imageUrl={ImageAssets.upgradeCategoryIcons.equipment}
+                    style={{ width: 28, height: 28 }}
+                  />
+                ),
+              },
+              ...items
+                .filter((item) => pool.includes(item.id))
+                .map((item) => ({
+                  key: item.id,
+                  label: itemLabel(item),
+                  icon: <GearImage item={item} size={28} />,
+                })),
+            ]}
+            onClose={() => setPinOpen(false)}
+            onSelect={(id) => {
+              regenerate(pool, levels, heroLevel, id);
+              setPinOpen(false);
+            }}
+          />
+          <SelectionPickerModal
+            visible={attributesOpen}
+            title={t('calcAttributes')}
+            selectedKey={chosenMetrics[0]?.id ?? ''}
+            selectedKeys={chosenMetrics.map((metric) => metric.id)}
+            options={allMetrics.map((metric) => ({
+              key: metric.id,
+              label: metric.label,
+              disabled: chosenMetrics.length === 1 && chosenMetrics[0]?.id === metric.id,
+            }))}
+            onClose={() => setAttributesOpen(false)}
+            onSelect={(id) => {
+              const next = chosenMetrics.some((metric) => metric.id === id)
+                ? chosenMetrics.filter((metric) => metric.id !== id).map((metric) => metric.id)
+                : [...chosenMetrics.map((metric) => metric.id), id];
+              if (next.length === 0) return;
+              setMetrics(next);
+              if (!next.includes(sortMetric)) setSortMetric(next[0]!);
+            }}
+          />
+          <ComparisonMatrix
+            exportData={exportData}
+            hero={hero}
+            items={items}
+            rows={[baseline, ...displayed]}
+            metrics={chosenMetrics}
+            format={format}
+            selected={editingRow}
+            onSelect={(id) => setEditingRow((current) => (current === id ? undefined : id))}
+          />
+        </>
+        {activeRow ? (
+          <Surface style={s.card} testID="equipment-row-editor">
+            <View style={s.row}>
+              <CKText role="sectionTitle" style={s.grow}>
+                {t('filtersOptions')}
+              </CKText>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('calcDuplicate')}
+                style={styles.action}
+                onPress={() => {
+                  const copy = { ...activeRow, id: `${activeRow.id}-copy-${Date.now()}` };
+                  setRows((current) => [...current, copy]);
+                  setEditingRow(copy.id);
+                }}
+              >
+                <Copy size={20} color={theme.onSurface} />
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('calcRemove')}
+                style={styles.action}
+                onPress={() => {
+                  setRows((current) => current.filter((row) => row.id !== activeRow.id));
+                  setEditingRow(undefined);
+                }}
+              >
+                <Trash2 size={20} color={theme.onSurfaceVariant} />
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={materialCloseLabel(locale)}
+                style={styles.action}
+                onPress={() => setEditingRow(undefined)}
+              >
+                <X size={20} color={theme.onSurface} />
+              </Pressable>
+            </View>
+            <View style={s.row}>
+              {activeRow.equipment.map((selection) => {
+                const item = items.find((item) => item.id === selection.id)!;
+                return (
+                  <View
+                    key={item.id}
+                    style={styles.editorGear}
+                    testID={`equipment-row-level-${item.id}`}
+                  >
+                    <GearImage item={item} />
+                    <View style={styles.heroLevel}>
+                      <LevelSlider
+                        label={itemLabel(item)}
+                        value={selection.level}
+                        minimum={Number(item.levels[0]!.level)}
+                        maximum={Number(item.levels.at(-1)!.level)}
+                        steps={equipmentLevelOptions(item, selection.level).map((option) =>
+                          Number(option.key),
+                        )}
+                        onChange={(value) =>
+                          changeRow(activeRow.id, {
+                            equipment: activeRow.equipment.map((gear) =>
+                              gear.id === item.id ? { ...gear, level: value } : gear,
+                            ),
+                          })
+                        }
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </Surface>
+        ) : rows.length > 0 ? (
+          <CKText muted role="metadata">
+            {t('calcSelectLoadout')}
+          </CKText>
+        ) : null}
+        {rows.length === 0 ? <EmptyState title={t('calcChooseEquipment')} /> : null}
+      </EquipmentContent>
     </ScrollView>
+  );
+}
+
+// Keep the scrolling gradient full width while controls clear the physical rail.
+function EquipmentSafeContent({ enabled, children }: { enabled: boolean; children: ReactNode }) {
+  return enabled ? (
+    <SafeAreaView edges={['left', 'right']}>{children}</SafeAreaView>
+  ) : (
+    <>{children}</>
+  );
+}
+
+function EquipmentContent({
+  enabled,
+  top,
+  maxWidth,
+  children,
+}: {
+  enabled: boolean;
+  top: number;
+  maxWidth: number;
+  children: ReactNode;
+}) {
+  return enabled ? (
+    <EquipmentSafeContent enabled>
+      <View style={[s.content, { paddingTop: top, gap: 12, maxWidth }]}>{children}</View>
+    </EquipmentSafeContent>
+  ) : (
+    <>{children}</>
   );
 }
 
@@ -625,12 +677,14 @@ function LoadoutHeader({
   selected,
   onSelect,
   iconsOnly = false,
+  expanded = false,
 }: {
   row: Loadout;
   items: ComparisonItem[];
   selected?: boolean;
   onSelect: () => void;
   iconsOnly?: boolean;
+  expanded?: boolean;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -652,6 +706,7 @@ function LoadoutHeader({
       disabled={row.id === 'baseline'}
       style={[
         iconsOnly ? styles.iconHeader : styles.headerCell,
+        expanded && { width: 120, height: 84 },
         {
           backgroundColor: colorWithAlpha(
             selected ? theme.secondary : theme.onSurface,
@@ -668,7 +723,7 @@ function LoadoutHeader({
           const item = items.find((item) => item.id === gear.id)!;
           return (
             <View key={gear.id} style={styles.headerGear}>
-              <GearImage item={item} size={iconsOnly ? 32 : 40} />
+              <GearImage item={item} size={expanded ? 42 : iconsOnly ? 32 : 40} />
               {!iconsOnly ? (
                 <View>
                   <CKText muted role="metadata">
@@ -709,6 +764,7 @@ function ComparisonMatrix({
   onSelect: (id: string) => void;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <ScrollView
       horizontal
@@ -718,13 +774,24 @@ function ComparisonMatrix({
     >
       <View style={styles.comparisonRow}>
         {/* Keep export in the matrix corner so it stays aligned with the grid. */}
-        <View style={[styles.iconHeader, styles.attributeHeading]}>
+        <View
+          style={[
+            styles.iconHeader,
+            styles.attributeHeading,
+            layout.isExpanded && { width: 120, height: 84 },
+          ]}
+        >
           <EquipmentComparisonCopy data={exportData} />
         </View>
         {metrics.map((metric) => (
           <View
             key={metric.id}
-            style={[styles.valueCell, styles.attributeColumn, styles.attributeHeading]}
+            style={[
+              styles.valueCell,
+              styles.attributeColumn,
+              styles.attributeHeading,
+              layout.isExpanded && { width: 156, height: 84, padding: 14 },
+            ]}
           >
             <CKText role="metadata" numberOfLines={3}>
               {metric.label}
@@ -740,6 +807,7 @@ function ComparisonMatrix({
             selected={selected === row.id}
             onSelect={() => onSelect(row.id)}
             iconsOnly
+            expanded={layout.isExpanded}
           />
           {metrics.map((metric) => (
             <View
@@ -750,6 +818,7 @@ function ComparisonMatrix({
               style={[
                 styles.valueCell,
                 styles.attributeColumn,
+                layout.isExpanded && { width: 156, height: 84, padding: 14 },
                 { backgroundColor: colorWithAlpha(theme.onSurface, 0.03) },
               ]}
             >

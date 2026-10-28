@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { InlineBackControl } from '../../../ui/native-back-context';
 import {
   ArrowLeft,
   ArrowRight,
@@ -47,6 +49,7 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
   const { width: windowWidth } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
   const [contentWidth, setContentWidth] = useState(windowWidth);
   const [posts, setPosts] = useState<readonly AppAnnouncement[]>([]);
   const [loading, setLoading] = useState(false);
@@ -57,7 +60,14 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
   const generation = useRef(0);
   const { openAnnouncement, presentation } = useAnnouncementPresentation();
   const isDesktopWeb = Platform.OS === 'web' && windowWidth >= ckBreakpoints.desktop;
-  const horizontalPadding = centeredContentPadding(contentWidth, 1200, ckSpacing.lg);
+  const isGrid = isDesktopWeb || layout.isExpanded;
+  // The outer SafeAreaView measurement still includes the Duo rail. Its list
+  // children do not, so compare safe width to safe width when centering cards.
+  const horizontalPadding = centeredContentPadding(
+    layout.isDuo ? layout.usableWidth : contentWidth,
+    layout.isExpanded ? layout.contentMaxWidth : layout.isDuo ? layout.contentMaxWidth : 1200,
+    ckSpacing.lg,
+  );
   const localeTag = toIntlLocale(locale);
 
   const load = useCallback(
@@ -122,7 +132,7 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
 
   const contents =
     posts.length === 0 && loading ? (
-      <PostsLoadingSkeleton isGrid={isDesktopWeb} />
+      <PostsLoadingSkeleton isGrid={isGrid} />
     ) : posts.length === 0 && error ? (
       <EmptyState
         actionLabel={t('generalRetry')}
@@ -137,8 +147,12 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
       />
     ) : (
       <>
-        {posts.length && isDesktopWeb ? (
-          <ResponsiveGrid gap={16} maxColumns={2} minItemWidth={360}>
+        {posts.length && isGrid ? (
+          <ResponsiveGrid
+            gap={16}
+            maxColumns={layout.isExpanded ? layout.columns(340, 3) : 2}
+            minItemWidth={layout.isExpanded ? 340 : 360}
+          >
             {posts.map((post) => (
               <PostArchiveCard
                 key={post.id}
@@ -194,19 +208,21 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
     >
       <View style={styles.header}>
         {onBack ? (
-          <Pressable
-            accessibilityLabel={materialBackLabel(locale)}
-            accessibilityRole="button"
-            hitSlop={8}
-            onPress={onBack}
-            style={styles.back}
-          >
-            {isRtl ? (
-              <ArrowRight color={theme.onSurface} size={24} />
-            ) : (
-              <ArrowLeft color={theme.onSurface} size={24} />
-            )}
-          </Pressable>
+          <InlineBackControl onBack={onBack}>
+            <Pressable
+              accessibilityLabel={materialBackLabel(locale)}
+              accessibilityRole="button"
+              hitSlop={8}
+              onPress={onBack}
+              style={styles.back}
+            >
+              {isRtl ? (
+                <ArrowRight color={theme.onSurface} size={24} />
+              ) : (
+                <ArrowLeft color={theme.onSurface} size={24} />
+              )}
+            </Pressable>
+          </InlineBackControl>
         ) : null}
         <CKText skeleton={false} role="screenTitle">
           {t('postsTitle')}
@@ -240,6 +256,7 @@ function PostArchiveCard({
 }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const hasImage = Boolean(post.bannerImageUrl);
   const dateLabel = post.publishedAt
     ? new Intl.DateTimeFormat(intlLocale, { dateStyle: 'medium' }).format(post.publishedAt)
@@ -258,7 +275,11 @@ function PostArchiveCard({
         <MobileWebImage
           contentFit="cover"
           imageUrl={post.bannerImageUrl!}
-          style={[styles.cardImage, { backgroundColor: theme.surfaceContainerHighest }]}
+          style={[
+            styles.cardImage,
+            layout.isExpanded && { height: 228 },
+            { backgroundColor: theme.surfaceContainerHighest },
+          ]}
           testID="post-archive-image"
           transition={160}
         />
@@ -317,9 +338,14 @@ function PostDotLabel({ color, label }: { color: string; label: string }) {
 }
 
 function PostsLoadingSkeleton({ isGrid }: { isGrid: boolean }) {
+  const layout = useAdaptiveLayout();
   const cards = [true, false, true, false];
   return isGrid ? (
-    <ResponsiveGrid gap={16} maxColumns={2} minItemWidth={360}>
+    <ResponsiveGrid
+      gap={16}
+      maxColumns={layout.isExpanded ? layout.columns(340, 3) : 2}
+      minItemWidth={layout.isExpanded ? 340 : 360}
+    >
       {cards.map((showImage, index) => (
         <PostSkeletonCard key={index} showImage={showImage} />
       ))}

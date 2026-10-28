@@ -1,8 +1,12 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   AppState,
   Platform,
   RefreshControl,
+  ScrollView,
+  type ScrollViewInstance,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -18,6 +22,7 @@ import DraggableFlatList, {
 import { EyeOff, UserCircle } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { toIntlLocale, useI18n } from '../../../i18n';
+import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';
 import { EmptyState, centeredContentPadding, ckSpacing, useCKTheme } from '../../../ui';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { CARD_REORDER_HOLD_MS, DragJiggle } from '../../../ui/drag-jiggle';
@@ -58,6 +63,8 @@ export function DashboardScreen({
   platform?: HomePlatform;
 }) {
   const { t, locale } = useI18n();
+  const nativeTabs = useNativePrimaryNavigation();
+  const layout = useAdaptiveLayout();
   const theme = useCKTheme(),
     insets = useSafeAreaInsets();
   const { width: windowWidth } = useWindowDimensions();
@@ -69,6 +76,8 @@ export function DashboardScreen({
   const list = useRef<FlatList<HomeCardId>>(null);
   const [animationValues, setAnimationValues] = useState<HomeDragValues | null>(null);
   const [dragging, setDragging] = useState(false);
+  const nativeScroll = useRef<ScrollViewInstance>(null);
+  const nativeScrollOffset = useRef(0);
   const holdPageY = useSharedValue(0);
   const listPageY = useSharedValue(0);
   const lastAutoScroll = useSharedValue(0);
@@ -125,11 +134,21 @@ export function DashboardScreen({
     holdEpoch.current += 1;
   };
   const desktop = isDesktopHome(platform, windowWidth);
+  const usableWidth = nativeTabs ? layout.usableWidth : windowWidth - insets.left - insets.right;
+  const wideNative = layout.isExpanded;
+  const adaptiveHome = nativeTabs || wideNative;
   const horizontal = centeredContentPadding(
-    contentWidth,
-    desktop ? homeContentWidth(windowWidth) : 840,
+    nativeTabs ? usableWidth : contentWidth,
+    layout.isExpanded
+      ? layout.contentMaxWidth
+      : layout.isDuo
+        ? layout.contentMaxWidth
+        : desktop
+          ? homeContentWidth(windowWidth)
+          : 840,
   );
   const cards = visibleHomeCards(model);
+  const columns = wideNative ? 2 : 1;
   // The shared Fabric cell patch resets settled offsets without destroying
   // the list, so nested card state and the scroll position survive a drop.
   const refresh = useCallback(async () => {
@@ -166,6 +185,7 @@ export function DashboardScreen({
         active={active}
         announcements={model.announcements}
         desktop={desktop}
+        compact={wideNative}
         onOpen={actions.openAnnouncement}
       />
       <View style={{ height: ckSpacing.lg }} />
@@ -220,6 +240,7 @@ export function DashboardScreen({
               {card === 'activity' && model.activityAccounts ? (
                 <HomeActivityCard
                   accounts={model.activityAccounts}
+                  compact={wideNative}
                   refreshKey={model.lastRefresh?.toISOString()}
                 />
               ) : card === 'todo' && model.todo ? (
@@ -250,86 +271,137 @@ export function DashboardScreen({
       </View>
     );
   };
+  const draggableList = (
+    <DraggableFlatList
+      // Let nested horizontal controls take ownership on both platforms;
+      // the parent RNGH scroll wrapper otherwise disallows interruption.
+      {...{ disallowInterruption: false }}
+      {...(Platform.OS === 'android' ? { androidHoldToDrag: true } : {})}
+      ref={list}
+      testID="home-scroll-view"
+      data={cards}
+      keyExtractor={(card) => card}
+      activationDistance={8}
+      // Tall or partially visible widgets must not jump to fit the viewport
+      // when picked up. Preserve their grabbed position, even beyond its edge.
+      dragItemOverflow
+      autoscrollSpeed={0}
+      onAnimValInit={(values) => {
+        dragValues.current = values;
+        setAnimationValues(values);
+      }}
+      onContainerLayout={({ containerRef }) => {
+        containerRef.current?.measureInWindow((_x, y) => {
+          listPageY.value = y;
+        });
+      }}
+      onDragBegin={() => setDragging(true)}
+      onRelease={() => setDragging(false)}
+      onTouchEnd={cancelPendingHolds}
+      onTouchCancel={cancelPendingHolds}
+      alwaysBounceVertical
+      contentContainerStyle={{
+        paddingHorizontal: horizontal,
+        paddingBottom: nativeTabs ? insets.bottom + 24 : homeBottomPadding(desktop, insets.bottom),
+      }}
+      ListHeaderComponent={header}
+      ListEmptyComponent={emptyBody}
+      ItemSeparatorComponent={HomeCardSeparator}
+      refreshControl={refreshControl}
+      onScrollOffsetChange={(offset) => {
+        pullRefresh.onScrollOffsetChange(offset);
+      }}
+      onScrollBeginDrag={() => {
+        cancelPendingHolds();
+        pullRefresh.onScrollBeginDrag();
+      }}
+      onScrollEndDrag={pullRefresh.onScrollEndDrag}
+      onDragEnd={({ data, from, to }) => {
+        setDragging(false);
+        if (from === to) return;
+        // The shared list owns offsets and completes its native settling before
+        // this callback. Do not keep a second JS/native transform map for Home.
+        if (actions.reorderCards(data) !== false)
+          requestAnimationFrame(() => tutorials.event('card-reordered'));
+      }}
+      renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
+        <HomeCardHold
+          onHold={
+            cards.length > 1
+              ? (position) => {
+                  holdPageY.value = position.y;
+                  lastAutoScroll.value = 0;
+                  if (dragValues.current) dragValues.current.touchTranslate.value = 0;
+                  drag();
+                }
+              : undefined
+          }
+          active={isActive}
+          getEpoch={() => holdEpoch.current}
+          canStart={() =>
+            Platform.OS === 'web' || dragValues.current?.isTouchActiveNative.value === true
+          }
+        >
+          {renderCard(item, getIndex() ?? 0, isActive)}
+        </HomeCardHold>
+      )}
+    />
+  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <DraggableFlatList
-        // Let nested horizontal controls take ownership on both platforms;
-        // the parent RNGH scroll wrapper otherwise disallows interruption.
-        {...{ disallowInterruption: false }}
-        {...(Platform.OS === 'android' ? { androidHoldToDrag: true } : {})}
-        ref={list}
-        testID="home-scroll-view"
-        data={cards}
-        keyExtractor={(card) => card}
-        activationDistance={8}
-        // Tall or partially visible widgets must not jump to fit the viewport
-        // when picked up. Preserve their grabbed position, even beyond its edge.
-        dragItemOverflow
-        autoscrollSpeed={0}
-        onAnimValInit={(values) => {
-          dragValues.current = values;
-          setAnimationValues(values);
-        }}
-        onContainerLayout={({ containerRef }) => {
-          containerRef.current?.measureInWindow((_x, y) => {
-            listPageY.value = y;
-          });
-        }}
-        onDragBegin={() => setDragging(true)}
-        onRelease={() => setDragging(false)}
-        onTouchEnd={cancelPendingHolds}
-        onTouchCancel={cancelPendingHolds}
-        alwaysBounceVertical
-        contentContainerStyle={{
-          paddingHorizontal: horizontal,
-          paddingBottom: homeBottomPadding(desktop, insets.bottom),
-        }}
-        ListHeaderComponent={header}
-        ListEmptyComponent={emptyBody}
-        ItemSeparatorComponent={HomeCardSeparator}
-        refreshControl={refreshControl}
-        onScrollOffsetChange={(offset) => {
-          pullRefresh.onScrollOffsetChange(offset);
-        }}
-        onScrollBeginDrag={() => {
-          cancelPendingHolds();
-          pullRefresh.onScrollBeginDrag();
-        }}
-        onScrollEndDrag={pullRefresh.onScrollEndDrag}
-        onDragEnd={({ data, from, to }) => {
-          setDragging(false);
-          if (from === to) return;
-          // The shared list owns offsets and completes its native settling before
-          // this callback. Do not keep a second JS/native transform map for Home.
-          if (actions.reorderCards(data) !== false)
-            requestAnimationFrame(() => tutorials.event('card-reordered'));
-        }}
-        renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
-          <HomeCardHold
-            onHold={
-              cards.length > 1
-                ? (position) => {
-                    holdPageY.value = position.y;
-                    lastAutoScroll.value = 0;
-                    if (dragValues.current) dragValues.current.touchTranslate.value = 0;
-                    drag();
-                  }
-                : undefined
-            }
-            active={isActive}
-            getEpoch={() => holdEpoch.current}
-            canStart={() =>
-              Platform.OS === 'web' || dragValues.current?.isTouchActiveNative.value === true
-            }
+      {adaptiveHome ? (
+        <>
+          <ScrollView
+            ref={nativeScroll}
+            scrollEnabled={!dragging}
+            testID="home-scroll-view"
+            refreshControl={refreshControl}
+            contentContainerStyle={{
+              paddingHorizontal: horizontal,
+              paddingBottom: nativeTabs
+                ? insets.bottom + 24
+                : homeBottomPadding(false, insets.bottom),
+            }}
+            onScroll={(event) => {
+              nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
+              pullRefresh.onScrollOffsetChange(event.nativeEvent.contentOffset.y);
+            }}
+            onScrollBeginDrag={() => {
+              cancelPendingHolds();
+              pullRefresh.onScrollBeginDrag();
+            }}
+            onScrollEndDrag={pullRefresh.onScrollEndDrag}
+            scrollEventThrottle={16}
           >
-            {renderCard(item, getIndex() ?? 0, isActive)}
-          </HomeCardHold>
-        )}
-      />
+            {header}
+            {cards.length ? (
+              <InlineReorderGrid
+                data={cards}
+                keyExtractor={(card) => card}
+                columns={columns}
+                gap={ckSpacing.md}
+                scrollRef={nativeScroll}
+                scrollOffset={nativeScrollOffset}
+                onDragStateChange={setDragging}
+                renderItem={(card, index, active) => renderCard(card, index, active)}
+                onReorder={(data) => {
+                  const result = actions.reorderCards(data);
+                  if (result !== false) tutorials.event('card-reordered');
+                  return result;
+                }}
+              />
+            ) : (
+              emptyBody
+            )}
+          </ScrollView>
+        </>
+      ) : (
+        draggableList
+      )}
       <PullRefreshHint
         distance={pullRefresh.distance}
         refreshing={refreshing}

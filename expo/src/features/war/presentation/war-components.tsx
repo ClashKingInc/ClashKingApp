@@ -1,3 +1,4 @@
+import { EntityModalViewport } from './war-panel-grid';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { HeaderIconButton } from '../../../ui/header';
@@ -355,86 +356,88 @@ export function AttackDetailsModal({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.modalOverlay} onPress={onClose}>
-        <Pressable
-          onPress={(event) => event.stopPropagation()}
-          style={[styles.detailSheet, { backgroundColor: theme.surface }]}
-        >
-          <ScrollView contentContainerStyle={styles.detailSheetContent}>
-            <View style={styles.handle} />
-            <View style={styles.modalTitleRow}>
-              <View style={styles.grow}>
-                <CKText skeleton={false} role="titleLarge">
-                  {t('warAttacksDetailsTitle')}
-                </CKText>
-                <View style={styles.detailMeta}>
-                  <PillSurface style={styles.detailMetaPill}>
-                    <CKText role="labelMedium">#{attack.order}</CKText>
-                  </PillSurface>
-                  {war.isClanWarLeague || war.warType === 'friendly' ? (
+      <EntityModalViewport>
+        <Pressable style={styles.modalOverlay} onPress={onClose}>
+          <Pressable
+            onPress={(event) => event.stopPropagation()}
+            style={[styles.detailSheet, { backgroundColor: theme.surface }]}
+          >
+            <ScrollView contentContainerStyle={styles.detailSheetContent}>
+              <View style={styles.handle} />
+              <View style={styles.modalTitleRow}>
+                <View style={styles.grow}>
+                  <CKText skeleton={false} role="titleLarge">
+                    {t('warAttacksDetailsTitle')}
+                  </CKText>
+                  <View style={styles.detailMeta}>
                     <PillSurface style={styles.detailMetaPill}>
-                      <CKText role="labelMedium">
-                        {t(war.isClanWarLeague ? 'cwlTitle' : 'warFiltersFriendly')}
-                      </CKText>
+                      <CKText role="labelMedium">#{attack.order}</CKText>
                     </PillSurface>
-                  ) : null}
+                    {war.isClanWarLeague || war.warType === 'friendly' ? (
+                      <PillSurface style={styles.detailMetaPill}>
+                        <CKText role="labelMedium">
+                          {t(war.isClanWarLeague ? 'cwlTitle' : 'warFiltersFriendly')}
+                        </CKText>
+                      </PillSurface>
+                    ) : null}
+                  </View>
                 </View>
+                <RoundButton label={t('generalCancel')} onPress={onClose}>
+                  <X size={20} color={theme.onSurface} />
+                </RoundButton>
               </View>
-              <RoundButton label={t('generalCancel')} onPress={onClose}>
-                <X size={20} color={theme.onSurface} />
-              </RoundButton>
-            </View>
-            <View style={styles.resultHero}>
-              <View
-                style={styles.resultStars}
-                accessibilityLabel={`${attack.stars}/3 ${t('warStarsTitle')}`}
-              >
-                {[0, 1, 2].map((index) => (
-                  <MobileWebImage
-                    key={index}
-                    imageUrl={ImageAssets.attackStar}
-                    style={[styles.resultStar, index >= attack.stars && styles.unearnedStar]}
+              <View style={styles.resultHero}>
+                <View
+                  style={styles.resultStars}
+                  accessibilityLabel={`${attack.stars}/3 ${t('warStarsTitle')}`}
+                >
+                  {[0, 1, 2].map((index) => (
+                    <MobileWebImage
+                      key={index}
+                      imageUrl={ImageAssets.attackStar}
+                      style={[styles.resultStar, index >= attack.stars && styles.unearnedStar]}
+                    />
+                  ))}
+                </View>
+                <CKText role="titleLarge">{formatPercent(attack.destructionPercentage)}</CKText>
+              </View>
+              <Participant
+                title={t('warAttacksDetailsAttacker')}
+                member={attacker}
+                clan={clanFor(attack.attackerTag)}
+                onPress={() => onOpenPlayer(attack.attackerTag)}
+              />
+              <View style={styles.versus}>
+                <Sword size={18} color={theme.onSurfaceVariant} />
+                <CKText muted>VS</CKText>
+                <Shield size={18} color={theme.onSurfaceVariant} />
+              </View>
+              <Participant
+                title={t('warAttacksDetailsDefender')}
+                member={defender}
+                clan={clanFor(attack.defenderTag)}
+                onPress={() => onOpenPlayer(attack.defenderTag)}
+              />
+              <Surface muted style={styles.detailsPanel}>
+                {attack.duration !== null ? (
+                  <DetailRow
+                    label={t('warAttacksDetailsDuration')}
+                    value={formatDuration(attack.duration)}
                   />
-                ))}
-              </View>
-              <CKText role="titleLarge">{formatPercent(attack.destructionPercentage)}</CKText>
-            </View>
-            <Participant
-              title={t('warAttacksDetailsAttacker')}
-              member={attacker}
-              clan={clanFor(attack.attackerTag)}
-              onPress={() => onOpenPlayer(attack.attackerTag)}
-            />
-            <View style={styles.versus}>
-              <Sword size={18} color={theme.onSurfaceVariant} />
-              <CKText muted>VS</CKText>
-              <Shield size={18} color={theme.onSurfaceVariant} />
-            </View>
-            <Participant
-              title={t('warAttacksDetailsDefender')}
-              member={defender}
-              clan={clanFor(attack.defenderTag)}
-              onPress={() => onOpenPlayer(attack.defenderTag)}
-            />
-            <Surface muted style={styles.detailsPanel}>
-              {attack.duration !== null ? (
+                ) : null}
                 <DetailRow
-                  label={t('warAttacksDetailsDuration')}
-                  value={formatDuration(attack.duration)}
+                  label={t('warTeamSize')}
+                  value={war.teamSize?.toString() ?? t('generalUnknown')}
                 />
-              ) : null}
-              <DetailRow
-                label={t('warTeamSize')}
-                value={war.teamSize?.toString() ?? t('generalUnknown')}
-              />
-              <DetailRow
-                label={t('warDataAttacksPerMember')}
-                value={String(war.effectiveAttacksPerMember)}
-              />
-            </Surface>
-          </ScrollView>
+                <DetailRow
+                  label={t('warDataAttacksPerMember')}
+                  value={String(war.effectiveAttacksPerMember)}
+                />
+              </Surface>
+            </ScrollView>
+          </Pressable>
         </Pressable>
-      </Pressable>
+      </EntityModalViewport>
     </Modal>
   );
 }

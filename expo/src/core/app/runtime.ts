@@ -41,7 +41,6 @@ import { PushNotificationService, type PushFeature } from '../../features/notifi
 import { PlayerCardPreferencesService, PlayerService } from '../../features/player/data';
 import { RankingsProvider } from '../../features/rankings/data/rankings-provider';
 import { RankingsService } from '../../features/rankings/data/rankings-service';
-import { SubscriptionService } from '../../features/subscription/subscription-service';
 import { UpgradeTrackerRepository } from '../../features/upgrade-tracker/data/upgrade-tracker-repository';
 import { UpgradeWidgetSyncService } from '../../features/upgrade-tracker/data/upgrade-widget-sync-service';
 import { AppIconService } from '../../features/settings/app-icons/app-icon-service';
@@ -94,7 +93,6 @@ export interface AppRuntime {
   readonly announcementPresentation: AnnouncementPresentationService;
   createRankingsProvider(): RankingsProvider;
   readonly upgrades: UpgradeTrackerRepository;
-  readonly subscription: SubscriptionService;
   readonly upgradeWidgets: UpgradeWidgetSyncService;
   readonly clans: ClanService;
   readonly wars: WarCwlService;
@@ -221,7 +219,6 @@ export function createAppRuntime(): AppRuntime {
   );
   const announcementPresentation = new AnnouncementPresentationService(preferences);
   const upgrades = new UpgradeTrackerRepository(contractApi, preferences);
-  const subscription = new SubscriptionService(contractApi);
   const upgradeWidgets = new UpgradeWidgetSyncService({
     platform: runtimePlatform,
     native: ClashKingNative,
@@ -384,7 +381,6 @@ export function createAppRuntime(): AppRuntime {
     announcementPresentation,
     createRankingsProvider: () => new RankingsProvider(rankings),
     upgrades,
-    subscription,
     upgradeWidgets,
     clans,
     wars,

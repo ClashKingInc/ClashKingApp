@@ -40,14 +40,16 @@ export function LoginScreen(props: ComponentProps<typeof EmailLoginScreen>) {
       <LoginBackdrop />
       <SafeAreaView
         pointerEvents="none"
-        edges={['top']}
+        edges={['top', 'left', 'right']}
         style={[StyleSheet.absoluteFill, { paddingTop: 24 }]}
       >
         <LoginBrand />
       </SafeAreaView>
       {/* SDK 58 owns the navigation container. The welcome/form navigator
           nests in that existing tree instead of creating a second root. */}
-      <LoginContent {...props} />
+      <SafeAreaView edges={['left', 'right']} style={styles.fill}>
+        <LoginContent {...props} />
+      </SafeAreaView>
     </View>
   );
 }
@@ -146,8 +148,20 @@ function LoginContent(props: ComponentProps<typeof EmailLoginScreen>) {
 }
 
 function LoginBackdrop() {
+  const [size, setSize] = useState({ width: 0, height: 0 });
   return (
-    <View pointerEvents="none" accessible={false} style={StyleSheet.absoluteFill}>
+    <View
+      pointerEvents="none"
+      accessible={false}
+      style={StyleSheet.absoluteFill}
+      onLayout={({ nativeEvent: { layout } }) => {
+        setSize((current) =>
+          current.width === layout.width && current.height === layout.height
+            ? current
+            : { width: layout.width, height: layout.height },
+        );
+      }}
+    >
       <Image
         testID="login-landscape"
         source={require('../../../../assets/clashking/login-village.png')}
@@ -157,9 +171,11 @@ function LoginBackdrop() {
       />
       {/* The supplied artwork already defocuses the foreground grass. A gradual
             scrim keeps that softness without a hard panel or an expensive live blur. */}
-      <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
+      {/* Size the SVG from its actual container. Percentage dimensions can keep
+          the old viewport after a Duo display change and leave half the art untinted. */}
+      <Svg width={size.width} height={size.height} style={StyleSheet.absoluteFill}>
         <Defs>
-          <LinearGradient id="welcome-shade" x1="0" y1="0" x2="0" y2="1">
+          <LinearGradient id="welcome-shade" x1="0%" y1="0%" x2="0%" y2="100%">
             <Stop offset="0" stopColor="#10211C" stopOpacity={0.3} />
             <Stop offset="0.35" stopColor="#10211C" stopOpacity={0.05} />
             <Stop offset="0.58" stopColor="#17241C" stopOpacity={0.18} />
@@ -167,7 +183,7 @@ function LoginBackdrop() {
             <Stop offset="1" stopColor="#111C16" stopOpacity={0.96} />
           </LinearGradient>
         </Defs>
-        <Rect width="100%" height="100%" fill="url(#welcome-shade)" />
+        <Rect width={size.width} height={size.height} fill="url(#welcome-shade)" />
       </Svg>
     </View>
   );
@@ -437,7 +453,6 @@ function EmailLoginScreen({
     </View>
   );
 }
-
 
 function LoginSurface({ children }: { children: ReactNode }) {
   const [viewportHeight, setViewportHeight] = useState(0);

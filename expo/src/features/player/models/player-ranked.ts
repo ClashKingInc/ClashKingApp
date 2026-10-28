@@ -418,22 +418,29 @@ export class PlayerRankingCategory {
   }
 }
 
-/** Share the exact published cutoffs between Home and the ranked table.
- * Partial groups cannot establish placement, so keep their rank neutral. */
+/** Share the same rounded placement counts between Home and the ranked table.
+ * group_size is only a capacity check: partially filled groups use their actual
+ * membership. For 94 players, 3% promotes 3 and 15% demotes 14 (#81 onward).
+ * Round to nearest, rather than flooring or anchoring positions to 100 slots. */
 export function rankedGroupCutoffs(tierId: number | undefined, size: number) {
   const tiers = Object.values(record(gameDataState.playerLeagueData.leagues));
   const metadata = tiers.map(record).find((tier) => Number(tier._id) === tierId);
-  if (!metadata || Number(metadata.group_size) !== size || size <= 0) return null;
-  const promotion = (size * Number(metadata.promote_percentage)) / 100;
-  const demotion = (size * Number(metadata.demote_percentage)) / 100;
+  if (!metadata || !Number.isSafeInteger(size) || size <= 0) return null;
+  const maximum = Number(metadata.group_size);
+  if (!Number.isSafeInteger(maximum) || maximum <= 0 || size > maximum) return null;
+  if (metadata.promote_percentage == null || metadata.demote_percentage == null) return null;
+  const promotePercentage = Number(metadata.promote_percentage);
+  const demotePercentage = Number(metadata.demote_percentage);
   if (
-    !Number.isInteger(promotion) ||
-    !Number.isInteger(demotion) ||
-    promotion < 0 ||
-    demotion < 0 ||
-    promotion + demotion > size
+    !Number.isFinite(promotePercentage) ||
+    !Number.isFinite(demotePercentage) ||
+    promotePercentage < 0 ||
+    demotePercentage < 0 ||
+    promotePercentage + demotePercentage > 100
   )
     return null;
+  const promotion = Math.round((size * promotePercentage) / 100);
+  const demotion = Math.round((size * demotePercentage) / 100);
   return { promotion, demotionStart: size - demotion, demotion };
 }
 

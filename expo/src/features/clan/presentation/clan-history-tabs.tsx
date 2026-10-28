@@ -1,3 +1,5 @@
+import { ClanAdaptiveCards , ClanTabEmpty, FilterPill } from './clan-tab-components';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ArrowRight, Calendar, History } from 'lucide-react-native';
@@ -32,7 +34,6 @@ import {
   type ClanRecords,
 } from '../models';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import { ClanTabEmpty, FilterPill } from './clan-tab-components';
 
 type LeaderboardData = {
   summary: ClanLeaderboardHistorySummary;
@@ -193,20 +194,22 @@ export function ClanLeaderboardHistoryTab({
             />
           </View>
           <View style={styles.historyCharts}>
-            <HistoryChart
-              items={[]}
-              metric="rank"
-              type={type}
-              label={t('cwlRankTitle')}
-              locale={locale}
-            />
-            <HistoryChart
-              items={[]}
-              metric="points"
-              type={type}
-              label={pointsLabel}
-              locale={locale}
-            />
+            <ClanAdaptiveCards>
+              <HistoryChart
+                items={[]}
+                metric="rank"
+                type={type}
+                label={t('cwlRankTitle')}
+                locale={locale}
+              />
+              <HistoryChart
+                items={[]}
+                metric="points"
+                type={type}
+                label={pointsLabel}
+                locale={locale}
+              />
+            </ClanAdaptiveCards>
           </View>
         </SkeletonContent>
       ) : !data.summary.seasons.length ? (
@@ -224,20 +227,22 @@ export function ClanLeaderboardHistoryTab({
           {data.history.items.length ? (
             <ChartInteractionBoundary key={`${type}:${seasonIndex}`}>
               <View style={styles.historyCharts}>
-                <HistoryChart
-                  items={data.history.items}
-                  metric="rank"
-                  type={type}
-                  label={t('cwlRankTitle')}
-                  locale={locale}
-                />
-                <HistoryChart
-                  items={data.history.items}
-                  metric="points"
-                  type={type}
-                  label={pointsLabel}
-                  locale={locale}
-                />
+                <ClanAdaptiveCards>
+                  <HistoryChart
+                    items={data.history.items}
+                    metric="rank"
+                    type={type}
+                    label={t('cwlRankTitle')}
+                    locale={locale}
+                  />
+                  <HistoryChart
+                    items={data.history.items}
+                    metric="points"
+                    type={type}
+                    label={pointsLabel}
+                    locale={locale}
+                  />
+                </ClanAdaptiveCards>
               </View>
             </ChartInteractionBoundary>
           ) : (
@@ -325,6 +330,7 @@ export function ClanLegendHistoryTab({
   actions: ClanInfoPresentationActions;
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
   const [summary, setSummary] = useState<ClanLegendHistorySummary>();
   const [items, setItems] = useState<readonly ClanLegendHistoryEntry[]>();
   const [season, setSeason] = useState<string>();
@@ -394,7 +400,7 @@ export function ClanLegendHistoryTab({
             onSelect={() => undefined}
           />
         </View>
-        <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+        <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
           {[0, 1, 2].map((index) => (
             <LegendRow
               key={index}
@@ -438,7 +444,7 @@ export function ClanLegendHistoryTab({
           onSelect={(key) => void load(key)}
         />
       </View>
-      <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+      <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
         {items.map((entry, index) => (
           <LegendRow
             key={`${entry.season}:${entry.tag}:${entry.rank}:${index}`}
@@ -499,6 +505,7 @@ export function ClanRecordsHistoryTab({
   actions: ClanInfoPresentationActions;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const [records, setRecords] = useState<ClanRecords>();
   const [history, setHistory] = useState<ClanProfileHistory>();
   const [filter, setFilter] = useState<'all' | 'description' | 'clanLevel'>('all');
@@ -547,7 +554,7 @@ export function ClanRecordsHistoryTab({
   if (!records || !history)
     return (
       <SkeletonContent loading style={styles.tab}>
-        <ResponsiveGrid minItemWidth={360} maxColumns={2} gap={12}>
+        <ResponsiveGrid minItemWidth={layout.isExpanded ? 300 : 360} maxColumns={2} gap={12}>
           <RecordPanel
             label={t('clanPointsTitle')}
             record={{ value: 10000, time: new Date(0) }}
@@ -573,7 +580,7 @@ export function ClanRecordsHistoryTab({
   const changes = history.items.filter((change) => filter === 'all' || change.type === filter);
   return (
     <View style={styles.tab}>
-      <ResponsiveGrid minItemWidth={360} maxColumns={2} gap={12}>
+      <ResponsiveGrid minItemWidth={layout.isExpanded ? 300 : 360} maxColumns={2} gap={12}>
         {records.clanPoints ? (
           <RecordPanel
             label={t('clanPointsTitle')}
@@ -609,7 +616,7 @@ export function ClanRecordsHistoryTab({
             />
           </View>
           {changes.length ? (
-            <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+            <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
               {changes.map((change, index) => (
                 <ProfileChangeRow
                   key={profileChangeKey(change, index)}

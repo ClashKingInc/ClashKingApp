@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
@@ -24,7 +25,7 @@ import {
   Users,
   Trash2,
 } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   createDefaultNotificationPreferences,
@@ -46,7 +47,13 @@ import {
 } from '../../../ui';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 import type { NotificationSettingsPresentationService } from './contracts';
-import { SettingSwitch, SettingsPage, SettingsSection, SettingsTile } from './settings-components';
+import {
+  SettingSwitch,
+  SettingsPage,
+  SettingsColumns,
+  SettingsSection,
+  SettingsTile,
+} from './settings-components';
 import { TutorialTarget } from '../../tutorials/tutorial-ui';
 
 const categoryRows: readonly {
@@ -205,7 +212,7 @@ export function NotificationSettingsScreen({
   const busy = loading || saving || configuringPush;
   return (
     <View style={styles.screen}>
-      <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack}>
+      <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack} wide>
         <SkeletonContent loading={loading}>
           <SettingsSection title={t('notifSystemNotifications')}>
             <TutorialTarget id="notifications-permission" offer="notifications">
@@ -223,74 +230,78 @@ export function NotificationSettingsScreen({
               />
             </TutorialTarget>
           </SettingsSection>
-          <>
-            <SettingsSection title={`${t('searchTabPlayers')} · ${t('searchTabClans')}`}>
-              <TutorialTarget id="notifications-entities">
-                {entityControls ?? (
-                  <>
-                    <SettingsTile
-                      icon={<Users color={theme.onSurface} size={22} />}
-                      title={t('searchTabPlayers')}
-                      subtitle={t('notifManagePlayersDescription')}
-                      subtitleNumberOfLines={3}
-                      onPress={onManagePlayers}
-                    />
-                    {onManageClans ? (
+          <SettingsColumns>
+            <>
+              <SettingsSection title={`${t('searchTabPlayers')} · ${t('searchTabClans')}`}>
+                <TutorialTarget id="notifications-entities">
+                  {entityControls ?? (
+                    <>
                       <SettingsTile
-                        icon={<Shield color={theme.onSurface} size={22} />}
-                        title={t('searchTabClans')}
-                        onPress={onManageClans}
+                        icon={<Users color={theme.onSurface} size={22} />}
+                        title={t('searchTabPlayers')}
+                        subtitle={t('notifManagePlayersDescription')}
+                        subtitleNumberOfLines={3}
+                        onPress={onManagePlayers}
                       />
-                    ) : null}
-                  </>
-                )}
-              </TutorialTarget>
-            </SettingsSection>
-            <SettingsSection title={t('notifChooseAlerts')}>
-              {categoryRows.map((row) => (
-                <ToggleRow
-                  key={row.category}
-                  icon={row.icon(theme.onSurface)}
-                  title={t(row.title)}
-                  description={t(row.description)}
-                  value={settings[row.category]}
-                  disabled={busy}
-                  onChange={(value) =>
-                    void save(withNotificationCategory(settings, row.category, value))
-                  }
-                />
-              ))}
-            </SettingsSection>
-            <TutorialTarget id="notifications-reminders">
-              <SettingsSection title={t('notifCustomReminders')}>
-                <ReminderRow
-                  icon={<AlarmClock color={theme.onSurface} size={22} />}
-                  title={t('notifGroupWarReminders')}
-                  description={t('notifWarRemindersDescription')}
-                  enabled={settings.warReminders}
-                  disabled={busy}
-                  values={settings.reminderTimings}
-                  maxHours={47}
-                  onToggle={(value) =>
-                    void save(withNotificationCategory(settings, 'warReminders', value))
-                  }
-                  onValues={(values) => void save({ ...settings, reminderTimings: values })}
-                />
-                <ReminderRow
-                  icon={<Castle color={theme.onSurface} size={22} />}
-                  title={t('notifGroupRaidReminders')}
-                  enabled={settings.raidReminders}
-                  disabled={busy}
-                  values={settings.raidReminderTimings}
-                  maxHours={72}
-                  onToggle={(value) =>
-                    void save(withNotificationCategory(settings, 'raidReminders', value))
-                  }
-                  onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
-                />
+                      {onManageClans ? (
+                        <SettingsTile
+                          icon={<Shield color={theme.onSurface} size={22} />}
+                          title={t('searchTabClans')}
+                          onPress={onManageClans}
+                        />
+                      ) : null}
+                    </>
+                  )}
+                </TutorialTarget>
               </SettingsSection>
-            </TutorialTarget>
-          </>
+            </>
+            <>
+              <SettingsSection title={t('notifChooseAlerts')}>
+                {categoryRows.map((row) => (
+                  <ToggleRow
+                    key={row.category}
+                    icon={row.icon(theme.onSurface)}
+                    title={t(row.title)}
+                    description={t(row.description)}
+                    value={settings[row.category]}
+                    disabled={busy}
+                    onChange={(value) =>
+                      void save(withNotificationCategory(settings, row.category, value))
+                    }
+                  />
+                ))}
+              </SettingsSection>
+              <TutorialTarget id="notifications-reminders">
+                <SettingsSection title={t('notifCustomReminders')}>
+                  <ReminderRow
+                    icon={<AlarmClock color={theme.onSurface} size={22} />}
+                    title={t('notifGroupWarReminders')}
+                    description={t('notifWarRemindersDescription')}
+                    enabled={settings.warReminders}
+                    disabled={busy}
+                    values={settings.reminderTimings}
+                    maxHours={47}
+                    onToggle={(value) =>
+                      void save(withNotificationCategory(settings, 'warReminders', value))
+                    }
+                    onValues={(values) => void save({ ...settings, reminderTimings: values })}
+                  />
+                  <ReminderRow
+                    icon={<Castle color={theme.onSurface} size={22} />}
+                    title={t('notifGroupRaidReminders')}
+                    enabled={settings.raidReminders}
+                    disabled={busy}
+                    values={settings.raidReminderTimings}
+                    maxHours={72}
+                    onToggle={(value) =>
+                      void save(withNotificationCategory(settings, 'raidReminders', value))
+                    }
+                    onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
+                  />
+                </SettingsSection>
+              </TutorialTarget>
+            </>
+          </SettingsColumns>
           {debugEnabled && service.sendTestNotification ? (
             <SettingsSection title={t('notifTestNotification')}>
               <View style={styles.debugWrap}>
@@ -489,6 +500,7 @@ function ReminderTimingSheet({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [hour, setHour] = useState(1);
   const selectedMinutes = hour * 60;
   const updateHour = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -503,9 +515,26 @@ function ReminderTimingSheet({
       visible
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.overlay}>
-        <Pressable accessibilityRole="button" onPress={onClose} style={styles.dismissArea} />
-        <Surface accessibilityViewIsModal style={styles.sheet}>
+      <SafeAreaView
+        style={[styles.overlay, layout.isExpanded && { justifyContent: 'center', padding: 24 }]}
+      >
+        <Pressable
+          accessibilityRole="button"
+          onPress={onClose}
+          style={layout.isExpanded ? StyleSheet.absoluteFill : styles.dismissArea}
+        />
+        <Surface
+          accessibilityViewIsModal
+          style={[
+            styles.sheet,
+            layout.isExpanded && {
+              width: '100%',
+              maxWidth: 480,
+              alignSelf: 'center',
+              borderRadius: 24,
+            },
+          ]}
+        >
           <View style={[styles.dragHandle, { backgroundColor: theme.onSurfaceVariant }]} />
           <CKText role="titleLarge" style={styles.strong}>
             {title}
@@ -576,6 +605,8 @@ function ReminderTimingSheet({
 
 function SettingsSnackbar({ message, onDismiss }: { message?: string; onDismiss: () => void }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
   useEffect(() => {
     if (!message) return undefined;
     const timer = setTimeout(onDismiss, 4000);
@@ -587,7 +618,15 @@ function SettingsSnackbar({ message, onDismiss }: { message?: string; onDismiss:
       accessibilityLiveRegion="polite"
       accessibilityRole="alert"
       onPress={onDismiss}
-      style={[styles.snackbar, { backgroundColor: theme.surfaceContainerHighest }]}
+      style={[
+        styles.snackbar,
+        { backgroundColor: theme.surfaceContainerHighest },
+        (layout.isDuo || layout.isTablet) && {
+          left: insets.left + 16,
+          right: insets.right + 16,
+          bottom: insets.bottom + 16,
+        },
+      ]}
     >
       <CKText>{message}</CKText>
     </Pressable>

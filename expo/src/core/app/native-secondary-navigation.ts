@@ -105,15 +105,15 @@ export function nativeSecondaryRouteTransition(
 export function applyNativeSecondaryRouteTransition(
   transition: NativeSecondaryRouteTransition,
   navigation: {
-    dismissTo: (href: '/') => void;
+    dismissAll: () => void;
     push: (href: { pathname: '/detail'; params: { layer: string } }) => void;
     replace: (href: { pathname: '/detail'; params: { layer: string } }) => void;
   },
 ) {
   if (transition.type === 'dismiss') {
-    // Target the outer app route, not the nested Settings/Stats navigator.
-    // Keep its content alive until beforeRemove runs, avoiding a blank exit.
-    navigation.dismissTo('/');
+    // Pop the outer detail stack without selecting Home inside the native tab
+    // navigator. Returning from a Players detail must retain the Players tab.
+    navigation.dismissAll();
     return;
   }
   transition.staleKeys.forEach(removeNativeSecondaryLayer);

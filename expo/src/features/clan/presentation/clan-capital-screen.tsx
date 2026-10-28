@@ -1,3 +1,5 @@
+import { ClanAdaptiveCards, ClanModalViewport } from './clan-tab-components';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
@@ -97,6 +99,7 @@ export function ClanCapitalScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
   const storedRaids = clan.clanCapitalRaid?.items ?? [];
   const pending = loading && !storedRaids.length;
   // This model exists only inside the skeleton scope; never attach it to the
@@ -203,7 +206,9 @@ export function ClanCapitalScreen({
             style={styles.empty}
           />
         ) : (
-          <View style={styles.contentWidth}>
+          <View
+            style={[styles.contentWidth, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
+          >
             <View style={styles.tabs}>
               <ProfileTabs
                 variant="underline"
@@ -734,7 +739,11 @@ function MembersTab({
           }
         />
       ) : (
-        rows.map(({ key, ...row }) => <MemberRow key={key} {...row} />)
+        <ClanAdaptiveCards>
+          {rows.map(({ key, ...row }) => (
+            <MemberRow key={key} {...row} />
+          ))}
+        </ClanAdaptiveCards>
       )}
     </View>
   );
@@ -743,6 +752,8 @@ function MembersTab({
 function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const [contentWidth, setContentWidth] = useState(0);
   const [offense, setOffense] = useState(true);
   const [opponent, setOpponent] = useState<OpponentStat>();
   const log = offense ? raid.attackLog : raid.defenseLog;
@@ -750,10 +761,16 @@ function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
   const districts = districtStats(log);
   const defense = offense ? [] : districtDefenseStats(log);
   const opponents = opponentStats(log);
-  return (
-    <View style={styles.breakdownSection}>
+  const wideSections =
+    layout.isExpanded &&
+    contentWidth >= 840 &&
+    (districts.length > 0 || defense.length > 0) &&
+    opponents.length > 0;
+  const controls = (
+    <>
       <SlidingSegmentControl
         value={offense ? 'offense' : 'defense'}
+        style={layout.isExpanded ? styles.breakdownMode : undefined}
         isRtl={isRtl}
         options={[
           { value: 'offense', label: t('capitalDetailsOffense') },
@@ -765,48 +782,77 @@ function BreakdownTab({ raid }: { raid: CapitalHistoryItem }) {
         <MetricPill label={t('capitalRaidOneshots')} value={efficiency.oneshots} />
         <MetricPill label={t('capitalRaidFails')} value={efficiency.fails} />
       </View>
+    </>
+  );
+  return (
+    <View
+      style={styles.breakdownSection}
+      onLayout={(event) => setContentWidth(event.nativeEvent.layout.width)}
+    >
+      {layout.isExpanded ? <View style={styles.breakdownToolbar}>{controls}</View> : controls}
       {!opponents.length ? (
         <EmptyState
           title={t('generalNoDataAvailable')}
           icon={<Swords color={theme.onSurfaceVariant} />}
         />
       ) : null}
-      {defense.length ? <SectionTitle title={t('capitalDetailsDefense')} /> : null}
-      {defense.map((item) => (
-        <DataRow
-          key={item.id}
-          image={districtArtwork(raid.defenseLog, item.id)}
-          title={item.name}
-          subtitle={`${item.held} held / ${item.destroyed} destroyed · ${item.avgAttacksTaken.toFixed(1)} hits avg`}
-          trailing={`${item.avgDestruction.toFixed(0)}%\n${formatNumber(item.lootLost, locale)}`}
-        />
-      ))}
-      {districts.length ? <SectionTitle title={t('capitalDistrictsSection')} /> : null}
-      {districts.map((item) => (
-        <DataRow
-          key={item.id}
-          image={districtArtwork(log, item.id)}
-          title={item.name}
-          subtitle={`${item.destroyedCount} destroyed · ${item.avgAttacksPerDestroy.toFixed(1)} ${t('capitalAvgAttacksPerDistrict')}`}
-          trailing={
-            <CapitalGoldValues
-              total={formatNumber(item.loot, locale)}
-              perHit={`${formatNumber(Math.round(item.avgLootPerAttack), locale)}/hit`}
+      <View
+        style={[
+          { gap: 12, display: wideSections ? 'flex' : 'contents' },
+          wideSections && { flexDirection: 'row', alignItems: 'flex-start' },
+        ]}
+      >
+        <View
+          style={[
+            { gap: 12, display: wideSections ? 'flex' : 'contents' },
+            wideSections && { flex: 1, minWidth: 0 },
+          ]}
+        >
+          {defense.length ? <SectionTitle title={t('capitalDetailsDefense')} /> : null}
+          {defense.map((item) => (
+            <DataRow
+              key={item.id}
+              image={districtArtwork(raid.defenseLog, item.id)}
+              title={item.name}
+              subtitle={`${item.held} held / ${item.destroyed} destroyed · ${item.avgAttacksTaken.toFixed(1)} hits avg`}
+              trailing={`${item.avgDestruction.toFixed(0)}%\n${formatNumber(item.lootLost, locale)}`}
             />
-          }
-        />
-      ))}
-      {opponents.length ? <SectionTitle title={t('capitalOpponentsSection')} /> : null}
-      {opponents.map((item) => (
-        <Pressable key={item.clan.tag || item.clan.name} onPress={() => setOpponent(item)}>
-          <DataRow
-            image={item.clan.badgeUrls.small}
-            title={item.clan.name}
-            subtitle={`${item.districtsDestroyed}/${item.districtCount} districts · ${item.attacks} attacks`}
-            trailing={<CapitalGoldValues total={formatNumber(item.loot, locale)} />}
-          />
-        </Pressable>
-      ))}
+          ))}
+          {districts.length ? <SectionTitle title={t('capitalDistrictsSection')} /> : null}
+          {districts.map((item) => (
+            <DataRow
+              key={item.id}
+              image={districtArtwork(log, item.id)}
+              title={item.name}
+              subtitle={`${item.destroyedCount} destroyed · ${item.avgAttacksPerDestroy.toFixed(1)} ${t('capitalAvgAttacksPerDistrict')}`}
+              trailing={
+                <CapitalGoldValues
+                  total={formatNumber(item.loot, locale)}
+                  perHit={`${formatNumber(Math.round(item.avgLootPerAttack), locale)}/hit`}
+                />
+              }
+            />
+          ))}
+        </View>
+        <View
+          style={[
+            { gap: 12, display: wideSections ? 'flex' : 'contents' },
+            wideSections && { flex: 1, minWidth: 0 },
+          ]}
+        >
+          {opponents.length ? <SectionTitle title={t('capitalOpponentsSection')} /> : null}
+          {opponents.map((item) => (
+            <Pressable key={item.clan.tag || item.clan.name} onPress={() => setOpponent(item)}>
+              <DataRow
+                image={item.clan.badgeUrls.small}
+                title={item.clan.name}
+                subtitle={`${item.districtsDestroyed}/${item.districtCount} districts · ${item.attacks} attacks`}
+                trailing={<CapitalGoldValues total={formatNumber(item.loot, locale)} />}
+              />
+            </Pressable>
+          ))}
+        </View>
+      </View>
       <OpponentDialog opponent={opponent} onClose={() => setOpponent(undefined)} />
     </View>
   );
@@ -823,6 +869,7 @@ function CapitalStatsTab({
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [metric, setMetric] = useState<'loot' | 'rewards' | 'trophies'>('loot');
   const ended = raids
     .filter((raid) => raid.state === 'ended')
@@ -848,7 +895,7 @@ function CapitalStatsTab({
   );
   const chart =
     ended.length > 1 ? (
-      <CardSurface style={styles.chartCard}>
+      <CardSurface style={[styles.chartCard, layout.isExpanded && styles.expandedChartCard]}>
         <View style={styles.dialogTitle}>
           <CKText skeleton={false} role="sectionTitle" style={styles.grow}>
             {t('capitalHistoryChartTitle')}
@@ -861,6 +908,7 @@ function CapitalStatsTab({
         </View>
         <SlidingSegmentControl
           value={metric}
+          style={layout.isExpanded ? styles.expandedChartSwitch : undefined}
           isRtl={isRtl}
           onChange={setMetric}
           options={[
@@ -878,7 +926,7 @@ function CapitalStatsTab({
           exportable={false}
           xDomain="observations"
           responsiveAxes
-          height={200}
+          height={layout.isExpanded ? 260 : 200}
           showPoints
           connectGaps={false}
           formatAxisValue={(value) => formatCompact(value, locale)}
@@ -935,55 +983,141 @@ function CapitalStatsTab({
         />
       </CardSurface>
     ) : null;
-  return (
-    <View style={styles.section}>
-      {chart}
-      {children}
-      {!ended.length ? (
-        <EmptyState title={t('generalNoDataAvailable')} />
-      ) : (
-        <>
-          <View style={styles.metricGrid}>
-            <Metric label={t('capitalHistoryWeeksTracked')} value={ended.length} />
-            <Metric
-              label={t('capitalAvgLootPerWeek')}
-              value={formatNumber(Math.round(totalLoot / ended.length), locale)}
-              image={ImageAssets.capitalGold}
-            />
-            <Metric
-              label={t('capitalAvgAttacksPerWeek')}
-              value={(totalAttacks / ended.length).toFixed(1)}
-              icon={<Zap size={18} color={theme.onSurfaceVariant} />}
-            />
-            <Metric
-              label={t('clanCapitalAvgRewards')}
-              value={formatNumber(
-                Math.round(ended.reduce((sum, raid) => sum + rewards(raid), 0) / ended.length),
-                locale,
-              )}
-              image={ImageAssets.raidMedal}
-            />
+  // The chart is a peer of the history summary, not a sidebar beside the
+  // entire district list. Keep breakdown controls and records full width below.
+  const sideBySide = chart !== null && Math.min(layout.usableWidth, layout.contentMaxWidth) >= 780;
+  if (layout.isExpanded)
+    return (
+      <View style={styles.section}>
+        <View style={[styles.statsOverview, sideBySide && styles.statsOverviewRow]}>
+          {chart ? (
+            <View style={sideBySide ? styles.statsChartColumn : undefined}>{chart}</View>
+          ) : null}
+          <View style={[styles.statsSummaryColumn, sideBySide && { flex: 1 }]}>
+            {!ended.length ? (
+              <EmptyState title={t('generalNoDataAvailable')} />
+            ) : (
+              <>
+                <View style={styles.metricGrid}>
+                  <Metric
+                    columns={2}
+                    label={t('capitalHistoryWeeksTracked')}
+                    value={ended.length}
+                  />
+                  <Metric
+                    columns={2}
+                    label={t('capitalAvgLootPerWeek')}
+                    value={formatNumber(Math.round(totalLoot / ended.length), locale)}
+                    image={ImageAssets.capitalGold}
+                  />
+                  <Metric
+                    columns={2}
+                    label={t('capitalAvgAttacksPerWeek')}
+                    value={(totalAttacks / ended.length).toFixed(1)}
+                    icon={<Zap size={18} color={theme.onSurfaceVariant} />}
+                  />
+                  <Metric
+                    columns={2}
+                    label={t('clanCapitalAvgRewards')}
+                    value={formatNumber(
+                      Math.round(
+                        ended.reduce((sum, raid) => sum + rewards(raid), 0) / ended.length,
+                      ),
+                      locale,
+                    )}
+                    image={ImageAssets.raidMedal}
+                  />
+                </View>
+                {best ? (
+                  <Highlight
+                    raid={best}
+                    label={t('capitalBestRaid')}
+                    reward={rewards(best)}
+                    color={statColors.win}
+                    locale={locale}
+                  />
+                ) : null}
+                {worst ? (
+                  <Highlight
+                    raid={worst}
+                    label={t('capitalWorstRaid')}
+                    reward={rewards(worst)}
+                    color={statColors.loss}
+                    locale={locale}
+                  />
+                ) : null}
+              </>
+            )}
           </View>
-          {best ? (
-            <Highlight
-              raid={best}
-              label={t('capitalBestRaid')}
-              reward={rewards(best)}
-              color={statColors.win}
-              locale={locale}
-            />
-          ) : null}
-          {worst ? (
-            <Highlight
-              raid={worst}
-              label={t('capitalWorstRaid')}
-              reward={rewards(worst)}
-              color={statColors.loss}
-              locale={locale}
-            />
-          ) : null}
-        </>
-      )}
+        </View>
+        {children}
+      </View>
+    );
+  return (
+    <View
+      style={[
+        styles.section,
+        layout.isExpanded && chart && { flexDirection: 'row', alignItems: 'flex-start', gap: 24 },
+      ]}
+    >
+      <View
+        style={layout.isExpanded && chart ? { width: '40%', minWidth: 0 } : { display: 'contents' }}
+      >
+        {chart}
+      </View>
+      <View
+        style={[
+          { gap: 12, display: layout.isExpanded && chart ? 'flex' : 'contents' },
+          layout.isExpanded && chart && { flex: 1, minWidth: 0 },
+        ]}
+      >
+        {children}
+        {!ended.length ? (
+          <EmptyState title={t('generalNoDataAvailable')} />
+        ) : (
+          <>
+            <View style={styles.metricGrid}>
+              <Metric label={t('capitalHistoryWeeksTracked')} value={ended.length} />
+              <Metric
+                label={t('capitalAvgLootPerWeek')}
+                value={formatNumber(Math.round(totalLoot / ended.length), locale)}
+                image={ImageAssets.capitalGold}
+              />
+              <Metric
+                label={t('capitalAvgAttacksPerWeek')}
+                value={(totalAttacks / ended.length).toFixed(1)}
+                icon={<Zap size={18} color={theme.onSurfaceVariant} />}
+              />
+              <Metric
+                label={t('clanCapitalAvgRewards')}
+                value={formatNumber(
+                  Math.round(ended.reduce((sum, raid) => sum + rewards(raid), 0) / ended.length),
+                  locale,
+                )}
+                image={ImageAssets.raidMedal}
+              />
+            </View>
+            {best ? (
+              <Highlight
+                raid={best}
+                label={t('capitalBestRaid')}
+                reward={rewards(best)}
+                color={statColors.win}
+                locale={locale}
+              />
+            ) : null}
+            {worst ? (
+              <Highlight
+                raid={worst}
+                label={t('capitalWorstRaid')}
+                reward={rewards(worst)}
+                color={statColors.loss}
+                locale={locale}
+              />
+            ) : null}
+          </>
+        )}
+      </View>
     </View>
   );
 }
@@ -1153,17 +1287,30 @@ function Metric({
   icon,
   image,
   hint,
+  columns,
 }: {
   label: string;
   value: string | number;
   icon?: ReactNode;
   image?: string;
   hint?: string;
+  columns?: number;
 }) {
   const { locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const columnCount = columns ?? layout.columns(170, 4);
   return (
-    <Surface style={styles.metric}>
+    <Surface
+      style={[
+        styles.metric,
+        layout.isExpanded && {
+          // The overview summary is narrower than the page. Leave real room
+          // for its 10pt gap, then flexGrow shares the remaining width evenly.
+          flexBasis: columns === 2 ? '46%' : `${(100 - (columnCount - 1) * 1.5) / columnCount}%`,
+        },
+      ]}
+    >
       <View style={styles.metricTitle}>
         {image ? (
           <MobileWebImage imageUrl={image} style={styles.metricImage} />
@@ -1261,33 +1408,35 @@ function OpponentDialog({ opponent, onClose }: { opponent?: OpponentStat; onClos
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalBackdrop}>
-        <CardSurface style={[styles.opponentDialog, { backgroundColor: theme.sheet }]}>
-          <View style={styles.dialogTitle}>
-            <CKText role="sectionTitle" style={styles.grow}>
-              {opponent?.clan.name}
-            </CKText>
-            <Pressable onPress={onClose}>
-              <X color={theme.onSurface} />
-            </Pressable>
-          </View>
-          <ScrollView>
-            {opponent?.districts.map((district) => (
-              <DataRow
-                key={district.id}
-                image={
-                  district.id === 70_000_000
-                    ? ImageAssets.capitalHall(district.districtHallLevel)
-                    : ImageAssets.capitalDistrictHall(district.districtHallLevel)
-                }
-                title={district.name}
-                subtitle={`${district.attackCount} attacks · ${district.destructionPercent}%`}
-                trailing={`${district.stars}★\n${formatNumber(district.totalLooted, locale)}`}
-              />
-            ))}
-          </ScrollView>
-        </CardSurface>
-      </View>
+      <ClanModalViewport>
+        <View style={styles.modalBackdrop}>
+          <CardSurface style={[styles.opponentDialog, { backgroundColor: theme.sheet }]}>
+            <View style={styles.dialogTitle}>
+              <CKText role="sectionTitle" style={styles.grow}>
+                {opponent?.clan.name}
+              </CKText>
+              <Pressable onPress={onClose}>
+                <X color={theme.onSurface} />
+              </Pressable>
+            </View>
+            <ScrollView>
+              {opponent?.districts.map((district) => (
+                <DataRow
+                  key={district.id}
+                  image={
+                    district.id === 70_000_000
+                      ? ImageAssets.capitalHall(district.districtHallLevel)
+                      : ImageAssets.capitalDistrictHall(district.districtHallLevel)
+                  }
+                  title={district.name}
+                  subtitle={`${district.attackCount} attacks · ${district.destructionPercent}%`}
+                  trailing={`${district.stars}★\n${formatNumber(district.totalLooted, locale)}`}
+                />
+              ))}
+            </ScrollView>
+          </CardSurface>
+        </View>
+      </ClanModalViewport>
     </Modal>
   );
 }
@@ -1436,6 +1585,20 @@ const styles = StyleSheet.create({
   },
   section: { padding: 16, gap: 12 },
   breakdownSection: { gap: 12 },
+  breakdownToolbar: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  breakdownMode: { flex: 1, minWidth: 260, maxWidth: 420, height: 44 },
+  expandedChartCard: { padding: 20, gap: 16 },
+  expandedChartSwitch: { height: 44 },
+  statsOverview: { gap: 20, marginBottom: 12 },
+  statsOverviewRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 24 },
+  statsChartColumn: { flex: 1.4, minWidth: 0 },
+  statsSummaryColumn: { gap: 12, minWidth: 0 },
   searchRow: { flexDirection: 'row', gap: 8 },
   searchSurface: {
     minHeight: 48,

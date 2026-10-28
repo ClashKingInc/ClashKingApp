@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { StyleSheet, View } from 'react-native';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -11,7 +12,10 @@ function historyBadge(season: PlayerLegendHistoryEntry): string {
   // Old API rows may carry today's reused league ID, so dates take priority here.
   if (finish <= Date.parse('2025-10-06T05:00:00Z')) return ImageAssets.originalLegendLeague;
   if (finish <= Date.parse('2026-04-27T05:00:00Z')) return ImageAssets.legacyLegendLeague;
-  if (season.leagueName && /^(?:legend league|legend)\s+(?:[123]|i{1,3})$/iu.test(season.leagueName.trim()))
+  if (
+    season.leagueName &&
+    /^(?:legend league|legend)\s+(?:[123]|i{1,3})$/iu.test(season.leagueName.trim())
+  )
     return ImageAssets.getLeagueImage(season.leagueName);
   return ImageAssets.legendLeagueOne;
 }
@@ -22,8 +26,9 @@ export function LegendHistoryList({
   readonly history: readonly PlayerLegendHistoryEntry[];
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
   return history.length ? (
-    <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+    <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
       {history.map((season) => (
         <LegendHistoryRow key={season.season} season={season} locale={locale} />
       ))}

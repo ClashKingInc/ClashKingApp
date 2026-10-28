@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import {
@@ -28,7 +29,7 @@ import {
   Languages as TranslateIcon,
   UserRound,
 } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n, toIntlLocale } from '../../../i18n';
 import {
@@ -41,7 +42,13 @@ import {
   useCKTheme,
 } from '../../../ui';
 import type { SettingsPresentationActions, SettingsThemeMode, SettingsUser } from './contracts';
-import { ChoiceDialog, SettingsPage, SettingsSection, SettingsTile } from './settings-components';
+import {
+  ChoiceDialog,
+  SettingsPage,
+  SettingsSection,
+  SettingsTile,
+  SettingsColumns,
+} from './settings-components';
 import { tutorialCopy } from '../../tutorials/tutorial-copy';
 
 export type SettingsAppIconChoice = {
@@ -90,6 +97,8 @@ export function SettingsScreen({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
   const measured = useWindowDimensions().width;
   const desktop = isDesktopSettings(platform, viewportWidth ?? measured);
   const [dialog, setDialog] = useState<
@@ -131,129 +140,135 @@ export function SettingsScreen({
           {user.username}
         </CKText>
       </View>
-      <SettingsSection title={t('settingsPreferences')}>
-        <SettingsTile
-          icon={<Languages color={iconColor} />}
-          title={t('settingsLanguage')}
-          subtitle={t('settingsSelectLanguage')}
-          onPress={() => setDialog('language')}
-        />
-        <SettingsTile
-          icon={<SunMoon color={iconColor} />}
-          title={t('settingsToggleTheme')}
-          trailing={themeLabel}
-          onPress={() => setDialog('theme')}
-        />
-        {actions.resetTutorials ? (
-          <SettingsTile
-            icon={<RotateCcw color={iconColor} />}
-            title={t(tutorialCopy.tutorialResetTitle)}
-            onPress={() => setDialog('tutorial-reset')}
-          />
-        ) : null}
-        {alternateIconsSupported ? (
-          <SettingsTile
-            icon={<ImageIcon color={iconColor} />}
-            title={t('settingsAppIcon')}
-            trailing={
-              busy
-                ? t('settingsChanging')
-                : (appIcons.find((item) => item.iconName === selectedAppIcon)?.label ??
-                  t('settingsAppIcon'))
-            }
-            disabled={busy}
-            onPress={() => setDialog('icon')}
-          />
-        ) : null}
-        {platform !== 'web' && notificationsEnabled ? (
-          <SettingsTile
-            icon={<BellRing color={iconColor} />}
-            title={t('settingsNotificationsTitle')}
-            subtitle={t('settingsNotificationsSubtitle')}
-            onPress={() => actions.open('notifications')}
-          />
-        ) : null}
-      </SettingsSection>
-      <SettingsSection title={t('settingsSupport')}>
-        <SettingsTile
-          icon={<MessageSquareText color={iconColor} />}
-          title={t('faqTitle')}
-          subtitle={t('faqSubtitle')}
-          onPress={() => actions.open('faq')}
-        />
-        <SettingsTile
-          icon={<TranslateIcon color={iconColor} />}
-          title={t('translationHelpUsTranslate')}
-          onPress={() => actions.open('translation')}
-        />
-        <SettingsTile
-          icon={<Gamepad2 color={iconColor} />}
-          title={t('faqJoinDiscord')}
-          onPress={actions.openDiscord}
-        />
-      </SettingsSection>
-      <SettingsSection title={t('settingsAbout')}>
-        <SettingsTile
-          icon={<FileText color={iconColor} />}
-          title={t('settingsLicenses')}
-          subtitle={t('settingsLicensesSubtitle')}
-          onPress={actions.showLicenses}
-        />
-        <SettingsTile
-          icon={<Shield color={iconColor} />}
-          title={t('settingsPrivacyPolicy')}
-          subtitle={t('settingsPrivacyPolicySubtitle')}
-          onPress={() => actions.open('privacy')}
-        />
-        <SettingsTile
-          icon={<Info color={iconColor} />}
-          title={t('versionDevice')}
-          subtitle={versionLabel}
-          showChevron={false}
-          onPress={
-            versionAvailable
-              ? () => {
-                  actions.copyVersion(versionLabel);
-                  setSnackbar(t('generalCopiedToClipboard'));
+      <SettingsColumns>
+        <>
+          <SettingsSection title={t('settingsPreferences')}>
+            <SettingsTile
+              icon={<Languages color={iconColor} />}
+              title={t('settingsLanguage')}
+              subtitle={t('settingsSelectLanguage')}
+              onPress={() => setDialog('language')}
+            />
+            <SettingsTile
+              icon={<SunMoon color={iconColor} />}
+              title={t('settingsToggleTheme')}
+              trailing={themeLabel}
+              onPress={() => setDialog('theme')}
+            />
+            {actions.resetTutorials ? (
+              <SettingsTile
+                icon={<RotateCcw color={iconColor} />}
+                title={t(tutorialCopy.tutorialResetTitle)}
+                onPress={() => setDialog('tutorial-reset')}
+              />
+            ) : null}
+            {alternateIconsSupported ? (
+              <SettingsTile
+                icon={<ImageIcon color={iconColor} />}
+                title={t('settingsAppIcon')}
+                trailing={
+                  busy
+                    ? t('settingsChanging')
+                    : (appIcons.find((item) => item.iconName === selectedAppIcon)?.label ??
+                      t('settingsAppIcon'))
                 }
-              : undefined
-          }
-        />
-        {actions.clearImageCache ? (
-          <SettingsTile
-            icon={<ImageIcon color={iconColor} />}
-            title={t('settingsClearImageCache')}
-            trailing={`${new Intl.NumberFormat(toIntlLocale(currentLocale), { maximumFractionDigits: 1 }).format(imageCacheBytes / (1024 * 1024))} MB`}
-            disabled={busy}
-            onPress={() => {
-              setBusy(true);
-              void actions.clearImageCache!()
-                .then(() => setSnackbar(t('settingsImageCacheCleared')))
-                .catch(() => setSnackbar(t('settingsImageCacheClearFailed')))
-                .finally(() => setBusy(false));
-            }}
-          />
-        ) : null}
-      </SettingsSection>
-      <SettingsSection title={t('settingsAccount')}>
-        <SettingsTile
-          icon={<AtSign color={iconColor} />}
-          title={user.email ?? user.username}
-          subtitle={user.email ? t('authEmail') : t('settingsSignedIn')}
-          showChevron={false}
-        />
-        <SettingsTile
-          icon={<LogOut color={theme.error} />}
-          title={t('authLogout')}
-          destructive
-          onPress={() => setDialog('logout')}
-        />
-      </SettingsSection>
+                disabled={busy}
+                onPress={() => setDialog('icon')}
+              />
+            ) : null}
+            {platform !== 'web' && notificationsEnabled ? (
+              <SettingsTile
+                icon={<BellRing color={iconColor} />}
+                title={t('settingsNotificationsTitle')}
+                subtitle={t('settingsNotificationsSubtitle')}
+                onPress={() => actions.open('notifications')}
+              />
+            ) : null}
+          </SettingsSection>
+          <SettingsSection title={t('settingsSupport')}>
+            <SettingsTile
+              icon={<MessageSquareText color={iconColor} />}
+              title={t('faqTitle')}
+              subtitle={t('faqSubtitle')}
+              onPress={() => actions.open('faq')}
+            />
+            <SettingsTile
+              icon={<TranslateIcon color={iconColor} />}
+              title={t('translationHelpUsTranslate')}
+              onPress={() => actions.open('translation')}
+            />
+            <SettingsTile
+              icon={<Gamepad2 color={iconColor} />}
+              title={t('faqJoinDiscord')}
+              onPress={actions.openDiscord}
+            />
+          </SettingsSection>
+        </>
+        <>
+          <SettingsSection title={t('settingsAbout')}>
+            <SettingsTile
+              icon={<FileText color={iconColor} />}
+              title={t('settingsLicenses')}
+              subtitle={t('settingsLicensesSubtitle')}
+              onPress={actions.showLicenses}
+            />
+            <SettingsTile
+              icon={<Shield color={iconColor} />}
+              title={t('settingsPrivacyPolicy')}
+              subtitle={t('settingsPrivacyPolicySubtitle')}
+              onPress={() => actions.open('privacy')}
+            />
+            <SettingsTile
+              icon={<Info color={iconColor} />}
+              title={t('versionDevice')}
+              subtitle={versionLabel}
+              showChevron={false}
+              onPress={
+                versionAvailable
+                  ? () => {
+                      actions.copyVersion(versionLabel);
+                      setSnackbar(t('generalCopiedToClipboard'));
+                    }
+                  : undefined
+              }
+            />
+            {actions.clearImageCache ? (
+              <SettingsTile
+                icon={<ImageIcon color={iconColor} />}
+                title={t('settingsClearImageCache')}
+                trailing={`${new Intl.NumberFormat(toIntlLocale(currentLocale), { maximumFractionDigits: 1 }).format(imageCacheBytes / (1024 * 1024))} MB`}
+                disabled={busy}
+                onPress={() => {
+                  setBusy(true);
+                  void actions.clearImageCache!()
+                    .then(() => setSnackbar(t('settingsImageCacheCleared')))
+                    .catch(() => setSnackbar(t('settingsImageCacheClearFailed')))
+                    .finally(() => setBusy(false));
+                }}
+              />
+            ) : null}
+          </SettingsSection>
+          <SettingsSection title={t('settingsAccount')}>
+            <SettingsTile
+              icon={<AtSign color={iconColor} />}
+              title={user.email ?? user.username}
+              subtitle={user.email ? t('authEmail') : t('settingsSignedIn')}
+              showChevron={false}
+            />
+            <SettingsTile
+              icon={<LogOut color={theme.error} />}
+              title={t('authLogout')}
+              destructive
+              onPress={() => setDialog('logout')}
+            />
+          </SettingsSection>
+        </>
+      </SettingsColumns>
     </View>
   );
   return (
     <>
-      <SettingsPage title={t('generalSettings')} onBack={onBack}>
+      <SettingsPage title={t('generalSettings')} onBack={onBack} wide>
         {body}
       </SettingsPage>
       <ChoiceDialog
@@ -377,7 +392,15 @@ export function SettingsScreen({
         <Pressable
           accessibilityLiveRegion="polite"
           onPress={() => setSnackbar(undefined)}
-          style={[styles.snackbar, { backgroundColor: theme.surfaceContainerHighest }]}
+          style={[
+            styles.snackbar,
+            { backgroundColor: theme.surfaceContainerHighest },
+            (layout.isDuo || layout.isTablet) && {
+              left: insets.left + 16,
+              right: insets.right + 16,
+              bottom: insets.bottom + 16,
+            },
+          ]}
         >
           <CKText style={{ color: theme.onSurface }}>{snackbar}</CKText>
         </Pressable>
@@ -419,6 +442,7 @@ function AppIconDialog({
   onClose: () => void;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <Modal
       supportedOrientations={modalOrientations}
@@ -427,14 +451,31 @@ function AppIconDialog({
       visible={visible}
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.sheetOverlay}>
+      <SafeAreaView
+        style={[
+          styles.sheetOverlay,
+          layout.isExpanded && { justifyContent: 'center', padding: 24 },
+        ]}
+      >
         <Pressable
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
           onPress={onClose}
           style={StyleSheet.absoluteFill}
         />
-        <Surface radius={ckRadius.card} style={styles.bottomSheet} accessibilityViewIsModal>
+        <Surface
+          radius={ckRadius.card}
+          style={[
+            styles.bottomSheet,
+            layout.isExpanded && {
+              width: '100%',
+              maxWidth: 560,
+              alignSelf: 'center',
+              borderRadius: ckRadius.card,
+            },
+          ]}
+          accessibilityViewIsModal
+        >
           <View style={[styles.dragHandle, { backgroundColor: theme.onSurfaceVariant }]} />
           <View style={styles.appIconSheetBody}>
             <SettingsSection title={title}>

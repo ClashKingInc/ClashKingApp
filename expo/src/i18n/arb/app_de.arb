@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Zulassen",
   "achievementsTitle": "Erfolge",
   "achievementEarnedLabel": "Verdient",
+  "achievementGemsEarnedRatio": "{earned} / {total} verdient",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "{earned} von {total} Juwelen für Erfolge verdient.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} abgeschlossen",
   "achievementEarnedCount": "Verdient ×{count}",
   "achievementTownhall18Name": "Rathaus 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Nur dasselbe Rathaus",
+  "warStatsSameTownHall": "Gleiches Rathaus",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Anhänger",
   "drawerFollowersHelp": "Personen, die eines Ihrer verifizierten verknüpften Konten mit einem Lesezeichen versehen haben.",
   "drawerCalculators": "Taschenrechner",
-  "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Upgrade-Tracker",
   "drawerBasesArmies": "Stützpunkte und Armeen",
   "drawerGameAssets": "Spielressourcen",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Erhalten Sie Benachrichtigungen für dieses Konto.",
   "playerOptionNotificationsEnableMaster": "Aktiviere zuerst die Benachrichtigungen in den Einstellungen.",
   "playerOptionNotificationsVerifyFirst": "Verifiziere dieses Konto, um Benachrichtigungen zu aktivieren.",
-  "playerOptionNotificationsSubscriptionRequired": "Für Benachrichtigungen zu Lesezeichen ist ein Abonnement erforderlich.",
   "playerOptionNotificationsLimitReached": "Du hast das Limit für Lesezeichen-Benachrichtigungen erreicht.",
   "playerOptionShowTodoPageTitle": "Auf der Aufgabenseite anzeigen",
   "playerOptionShowTodoPageSubtitle": "Nehmen Sie dieses Konto in die vollständige To-Do-Liste auf.",

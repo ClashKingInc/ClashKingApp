@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Tillad",
   "achievementsTitle": "Præstationer",
   "achievementEarnedLabel": "Optjent",
+  "achievementGemsEarnedRatio": "{earned} / {total} optjent",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Optjent {earned} af {total} ædelstene fra præstationer.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} fuldført",
   "achievementEarnedCount": "Optjent ×{count}",
   "achievementTownhall18Name": "Rådhus 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Kun samme rådhus",
+  "warStatsSameTownHall": "Samme rådhus",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Tilhængere",
   "drawerFollowersHelp": "Personer, der har bogmærket en af ​​dine bekræftede linkede konti.",
   "drawerCalculators": "Lommeregnere",
-  "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Opgrader Tracker",
   "drawerBasesArmies": "Baser og hære",
   "drawerGameAssets": "Spilaktiver",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Få underretninger for denne konto.",
   "playerOptionNotificationsEnableMaster": "Tænd for notifikationer i Indstillinger først.",
   "playerOptionNotificationsVerifyFirst": "Verificér denne konto for at aktivere notifikationer.",
-  "playerOptionNotificationsSubscriptionRequired": "Et abonnement er påkrævet for bogmærkenotifikationer.",
   "playerOptionNotificationsLimitReached": "Din grænse for bogmærkenotifikationer er nået.",
   "playerOptionShowTodoPageTitle": "Vis på opgavesiden",
   "playerOptionShowTodoPageSubtitle": "Inkluder denne konto i den fulde huskeliste.",

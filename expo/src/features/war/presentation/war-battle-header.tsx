@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { useEffect, useState } from 'react';
 import { HeaderArtwork } from '../../../ui/header-artwork';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
@@ -30,6 +32,8 @@ export function WarBattleHeader({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
   const { reduceMotion } = useCKAccessibility();
   const [settle] = useState(() => new Animated.Value(1));
   const [flagsHeight, setFlagsHeight] = useState(0);
@@ -84,7 +88,16 @@ export function WarBattleHeader({
   return (
     <View
       testID="war-battle-header"
-      style={[styles.header, { paddingTop: insets.top + 4, backgroundColor: theme.background }]}
+      style={[
+        styles.header,
+        { paddingTop: insets.top + 4, backgroundColor: theme.background },
+        layout.isExpanded && {
+          marginLeft: -insets.left,
+          marginRight: -insets.right,
+          minHeight: headerLayout.minHeight + insets.top,
+          paddingBottom: headerLayout.bottom,
+        },
+      ]}
     >
       {/* Mount artwork on the first render. Waiting for onLayout left this
           region black while native layout and the roster finished loading. */}
@@ -95,9 +108,17 @@ export function WarBattleHeader({
           style={StyleSheet.absoluteFill}
           contentFit="cover"
         />
-        <HeroHeaderScrim variant="war" />
+        <HeroHeaderScrim variant="war" clipRailInset={layout.isExpanded} />
       </View>
-      <View style={styles.navigation}>
+      <View
+        style={[
+          styles.navigation,
+          layout.isExpanded && {
+            paddingLeft: headerLayout.horizontal + insets.left,
+            paddingRight: headerLayout.horizontal + insets.right,
+          },
+        ]}
+      >
         <HeaderIconButton
           icon={<ArrowLeft size={24} color="#fff" />}
           label={materialBackLabel(locale)}
@@ -115,7 +136,17 @@ export function WarBattleHeader({
         </SkeletonContent>
         <View style={{ width: 44 }} />
       </View>
-      <SkeletonContent loading={loading} style={styles.content}>
+      <SkeletonContent
+        loading={loading}
+        style={[
+          styles.content,
+          layout.isExpanded && {
+            maxWidth: 820,
+            paddingLeft: headerLayout.horizontal + insets.left,
+            paddingRight: headerLayout.horizontal + insets.right,
+          },
+        ]}
+      >
         <Animated.View style={{ gap: 4, paddingTop: 2, transform: [{ scale: settle }] }}>
           <View style={[styles.badgeRow, { minHeight: Math.max(54, hasFlags ? flagsHeight : 0) }]}>
             <Pressable
@@ -126,7 +157,13 @@ export function WarBattleHeader({
             >
               <MobileWebImage
                 imageUrl={war.clan?.badgeUrls.smallest ?? ImageAssets.clanCastle}
-                style={styles.badge}
+                style={[
+                  styles.badge,
+                  layout.isExpanded && {
+                    width: Math.round(headerLayout.image * 0.75),
+                    height: Math.round(headerLayout.image * 0.75),
+                  },
+                ]}
               />
             </Pressable>
             {hasFlags ? (
@@ -182,11 +219,17 @@ export function WarBattleHeader({
             >
               <MobileWebImage
                 imageUrl={war.opponent?.badgeUrls.smallest ?? ImageAssets.clanCastle}
-                style={styles.badge}
+                style={[
+                  styles.badge,
+                  layout.isExpanded && {
+                    width: Math.round(headerLayout.image * 0.75),
+                    height: Math.round(headerLayout.image * 0.75),
+                  },
+                ]}
               />
             </Pressable>
           </View>
-          <View style={styles.match}>
+          <View style={[styles.match, layout.isExpanded && { gap: headerLayout.gap }]}>
             {(['clan', 'opponent'] as const).map((side) => (
               <Pressable
                 key={side}
@@ -195,7 +238,16 @@ export function WarBattleHeader({
                 accessibilityLabel={war[side]?.name}
                 style={[styles.identity, { gap: 4 }]}
               >
-                <CKText role="rowTitle" style={styles.name}>
+                <CKText
+                  role="rowTitle"
+                  style={[
+                    styles.name,
+                    layout.isExpanded && {
+                      fontSize: Math.round(headerLayout.title * 0.8),
+                      lineHeight: Math.round(headerLayout.titleLine * 0.85),
+                    },
+                  ]}
+                >
                   {war[side]?.name}
                 </CKText>
               </Pressable>

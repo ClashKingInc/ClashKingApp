@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import {
   type ViewInstance,
   type ScrollViewInstance,
@@ -258,7 +260,9 @@ export function LegendsScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const horizontal = Math.max(16, (width - 1120) / 2);
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
+  const horizontal = layout.isExpanded ? headerLayout.horizontal : Math.max(16, (width - 1120) / 2);
   const current = data?.currentDay;
   const hasSectionContent = (section: LegendsPage) =>
     section === 'daily'
@@ -313,7 +317,15 @@ export function LegendsScreen({
           onLayout={(event) => {
             headerHeight.current = event.nativeEvent.layout.height;
           }}
-          style={[styles.hero, { minHeight: 238 + insets.top }]}
+          style={[
+            styles.hero,
+            { minHeight: 238 + insets.top },
+            layout.isExpanded && {
+              marginLeft: -insets.left,
+              marginRight: -insets.right,
+              minHeight: headerLayout.minHeight + insets.top,
+            },
+          ]}
         >
           <HeaderArtwork
             source={require('../../../../assets/clashking/backgrounds/legends-pekka-classic-v1.webp')}
@@ -322,18 +334,34 @@ export function LegendsScreen({
             contentPosition="center"
             transition={0}
           />
-          <HeroHeaderScrim variant="ranked" edgeColor={theme.background} />
+          <HeroHeaderScrim
+            variant="ranked"
+            edgeColor={theme.background}
+            clipRailInset={layout.isExpanded}
+          />
           <View
             style={[
               styles.heroContent,
               { paddingTop: insets.top + 56, paddingHorizontal: horizontal },
+              layout.isExpanded && {
+                width: '100%',
+                maxWidth: layout.contentMaxWidth + insets.left + insets.right,
+                alignSelf: 'center',
+                paddingLeft: horizontal + insets.left,
+                paddingRight: horizontal + insets.right,
+                paddingBottom: headerLayout.bottom,
+              },
             ]}
           >
             <View
               testID="legends-hero-actions"
               style={[
                 styles.heroActions,
-                { top: insets.top + 4, left: horizontal, right: horizontal },
+                {
+                  top: insets.top + 4,
+                  left: horizontal + (layout.isExpanded ? insets.left : 0),
+                  right: horizontal + (layout.isExpanded ? insets.right : 0),
+                },
               ]}
             >
               <ProfileHeaderAction
@@ -345,6 +373,7 @@ export function LegendsScreen({
                 {onShareLink ? (
                   <ProfileHeaderAction
                     label={t('gameAssetsShare')}
+                    appLinkShare
                     onPress={onShareLink}
                     icon={<Share2 color="#FFF" />}
                   />
@@ -357,53 +386,89 @@ export function LegendsScreen({
                 />
               </View>
             </View>
-            <View style={styles.heroIdentity}>
-              <View>
-                <MobileWebImage
-                  testID="legends-league-badge"
-                  imageUrl={player?.leagueUrl || ImageAssets.legendLeagueOne}
-                  style={styles.leagueIdentity}
-                  contentFit="contain"
-                />
-                <View style={styles.townHallBadgeShell}>
+            <View
+              style={[
+                { gap: 4 },
+                layout.isExpanded && {
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: headerLayout.gap,
+                  minHeight: headerLayout.bodyMinHeight,
+                },
+              ]}
+            >
+              <View style={[styles.heroIdentity, layout.isExpanded && { flex: 1, minWidth: 0 }]}>
+                <View>
                   <MobileWebImage
-                    testID="legends-town-hall"
-                    imageUrl={player?.townHallPic || ImageAssets.townHall(data?.townHallLevel ?? 1)}
-                    style={styles.townHallBadge}
+                    testID="legends-league-badge"
+                    imageUrl={player?.leagueUrl || ImageAssets.legendLeagueOne}
+                    style={[
+                      styles.leagueIdentity,
+                      layout.isExpanded && {
+                        width: headerLayout.image,
+                        height: headerLayout.image,
+                      },
+                    ]}
                     contentFit="contain"
                   />
+                  <View style={styles.townHallBadgeShell}>
+                    <MobileWebImage
+                      testID="legends-town-hall"
+                      imageUrl={
+                        player?.townHallPic || ImageAssets.townHall(data?.townHallLevel ?? 1)
+                      }
+                      style={styles.townHallBadge}
+                      contentFit="contain"
+                    />
+                  </View>
                 </View>
-              </View>
-              <CKText numberOfLines={1} role="screenTitle" style={styles.white}>
-                {data?.playerName ?? ''}
-              </CKText>
-              {clanIdentity?.tag ? (
-                <Pressable
-                  accessibilityRole={onOpenClan ? 'button' : undefined}
-                  disabled={!onOpenClan}
-                  onPress={() => onOpenClan?.(clanIdentity.tag)}
-                  style={styles.clanLine}
+                <CKText
+                  numberOfLines={1}
+                  role="screenTitle"
+                  style={[
+                    styles.white,
+                    layout.isExpanded && {
+                      fontSize: headerLayout.title,
+                      lineHeight: headerLayout.titleLine,
+                    },
+                  ]}
                 >
-                  <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
-                  <CKText numberOfLines={1} role="labelLarge" style={styles.white}>
-                    {clanIdentity.name}
-                  </CKText>
-                  {onOpenClan ? <ChevronRight size={18} color="#FFFFFFAD" /> : null}
-                </Pressable>
+                  {data?.playerName ?? ''}
+                </CKText>
+                {clanIdentity?.tag ? (
+                  <Pressable
+                    accessibilityRole={onOpenClan ? 'button' : undefined}
+                    disabled={!onOpenClan}
+                    onPress={() => onOpenClan?.(clanIdentity.tag)}
+                    style={styles.clanLine}
+                  >
+                    <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
+                    <CKText numberOfLines={1} role="labelLarge" style={styles.white}>
+                      {clanIdentity.name}
+                    </CKText>
+                    {onOpenClan ? <ChevronRight size={18} color="#FFFFFFAD" /> : null}
+                  </Pressable>
+                ) : null}
+              </View>
+              {data ? (
+                <HeroSeasonSummary
+                  favorite={headerFavorite}
+                  location={data.currentRank?.location ?? null}
+                  stats={data.seasonStats}
+                  trophies={data.currentRank?.trophies ?? data.trophies}
+                  rank={data.currentRank?.globalRank ?? null}
+                />
               ) : null}
             </View>
-            {data ? (
-              <HeroSeasonSummary
-                favorite={headerFavorite}
-                location={data.currentRank?.location ?? null}
-                stats={data.seasonStats}
-                trophies={data.currentRank?.trophies ?? data.trophies}
-                rank={data.currentRank?.globalRank ?? null}
-              />
-            ) : null}
           </View>
         </View>
-        <View style={[styles.content, { paddingHorizontal: horizontal }]}>
+        <View
+          style={[
+            styles.content,
+            { paddingHorizontal: horizontal },
+            layout.isExpanded && { maxWidth: layout.contentMaxWidth },
+          ]}
+        >
           <ProfileTabs
             variant="underline"
             selectedKey={page}
@@ -465,7 +530,15 @@ export function LegendsScreen({
                   importantForAccessibility={section !== page ? 'no-hide-descendants' : 'auto'}
                 >
                   <View
-                    style={styles.sectionPage}
+                    style={[
+                      styles.sectionPage,
+                      layout.isExpanded &&
+                        section !== 'season' && {
+                          width: '100%',
+                          maxWidth: layout.contentMaxWidth,
+                          alignSelf: 'center',
+                        },
+                    ]}
                     onLayout={(event) => {
                       const height = Math.ceil(event.nativeEvent.layout.height);
                       if (height > 0)
@@ -595,6 +668,10 @@ function LegendRecentSummary({
   readonly onCalendarInteraction: (active: boolean) => void;
 }) {
   const { locale, t } = useI18n();
+  const layout = useAdaptiveLayout();
+  // An empty adaptive chart keeps its title and no-data label without reserving
+  // plot height. Phones retain their existing empty chart presentation.
+  const compactEmptyCharts = layout.isDuo || layout.isTablet;
   const summary = legendsShareSummary(data);
   const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
   const popular = popularLegendItems(data.seasonArmyShareCodes);
@@ -620,16 +697,23 @@ function LegendRecentSummary({
           {dateFormat.format(seasonRange.start)} – {dateFormat.format(seasonRange.end)}
         </CKText>
       ) : null}
-      <Surface radius={ckRadius.tile} style={styles.recentSummary}>
+      <Surface
+        radius={ckRadius.tile}
+        style={[styles.recentSummary, layout.isExpanded && { flexDirection: 'row', gap: 24 }]}
+      >
         <LegendChart
+          style={layout.isExpanded ? { flex: 1, minWidth: 0 } : undefined}
           title={t('rankedLeagueTrophies')}
+          compactEmpty={compactEmptyCharts}
           points={data.recentDays.map((day) => ({
             day: day.day,
             value: day.closingTrophies ?? null,
           }))}
         />
         <LegendChart
+          style={layout.isExpanded ? { flex: 1, minWidth: 0 } : undefined}
           title={t('legendsGlobalRankTitle')}
+          compactEmpty={compactEmptyCharts}
           rank
           points={data.recentDays.map((day) => ({ day: day.day, value: day.globalRank ?? null }))}
         />
@@ -704,9 +788,10 @@ function HeroSeasonSummary({
   readonly rank: number | null;
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
   const tripleRate = (triples: number, attacks: number) =>
     attacks > 0 ? `${((triples / attacks) * 100).toFixed(1)}%` : '—';
-  return (
+  const content = (
     <>
       <View style={styles.heroChips}>
         <HeroChip
@@ -743,6 +828,7 @@ function HeroSeasonSummary({
       ) : null}
     </>
   );
+  return layout.isExpanded ? <View style={{ flex: 1, minWidth: 0 }}>{content}</View> : content;
 }
 
 function HeroChip({

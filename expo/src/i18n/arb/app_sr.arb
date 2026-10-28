@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "Дозволи",
   "achievementsTitle": "Достигнућа",
   "achievementEarnedLabel": "Освојено",
+  "achievementGemsEarnedRatio": "Освојено {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Освојено је {earned} од {total} драгуља за достигнућа.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} završeno",
   "achievementEarnedCount": "Освојено ×{count}",
   "achievementTownhall18Name": "Градска кућа 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Samo ista Gradska većnica",
+  "warStatsSameTownHall": "Иста градска кућа",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "Фолловерс",
   "drawerFollowersHelp": "Људи који су обележили један од ваших верификованих повезаних налога.",
   "drawerCalculators": "Калкулатори",
-  "drawerSubscription": "Претплата",
   "drawerUpgradeTracker": "Упграде Трацкер",
   "drawerBasesArmies": "базе и војске",
   "drawerGameAssets": "Гаме Ассетс",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "Добијајте обавештења за овај налог.",
   "playerOptionNotificationsEnableMaster": "Укључите обавештења да бисте подесили упозорења за овај налог.",
   "playerOptionNotificationsVerifyFirst": "Верификујте овај налог да бисте укључили обавештења.",
-  "playerOptionNotificationsSubscriptionRequired": "За обавештења овог налога потребна је активна претплата.",
   "playerOptionNotificationsLimitReached": "Достигли сте ограничење налога са обавештењима за своју претплату.",
   "playerOptionShowTodoPageTitle": "Прикажи на страници са обавезама",
   "playerOptionShowTodoPageSubtitle": "Укључите овај налог у комплетну листу обавеза.",

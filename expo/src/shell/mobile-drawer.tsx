@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import * as Linking from 'expo-linking';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Bot, CircleHelp, Goal, MessageCircle, UserPlus } from 'lucide-react-native';
 import { TutorialTarget } from '../features/tutorials/tutorial-ui';
 
@@ -36,6 +36,7 @@ export function MobileDrawer({
   onAddAccount,
   hasUser,
   hasManagedDiscordBot = false,
+  safeAreaEdges = ['top', 'right', 'bottom', 'left'],
 }: {
   isRtl: boolean;
   features: FeatureState;
@@ -50,6 +51,7 @@ export function MobileDrawer({
   onAddAccount: () => void;
   hasUser: boolean;
   hasManagedDiscordBot?: boolean;
+  safeAreaEdges?: Edge[];
 }) {
   const theme = useCKTheme();
   // A narrow browser uses this drawer too. The embedded dashboard is native-only.
@@ -86,7 +88,7 @@ export function MobileDrawer({
   };
   return (
     <SafeAreaView
-      edges={['top', 'right', 'bottom', 'left']}
+      edges={safeAreaEdges}
       onAccessibilityEscape={() => onRequestClose()}
       style={[
         styles.drawer,

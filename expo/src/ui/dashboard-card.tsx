@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View, type LayoutChangeEvent } from 'react-nativ
 import { CKText } from './text';
 import { useCKTheme } from './theme';
 import { ckColors, ckRadius, colorWithAlpha } from './tokens';
+import { useTabletTypography } from './typography-context';
 
 export const DASHBOARD_METRIC_HEIGHT = 44;
 export const DASHBOARD_METRIC_GAP = 6;
@@ -28,10 +29,14 @@ export function DashboardCardFrame({
   onLayout?: (event: LayoutChangeEvent) => void;
 }) {
   const theme = useCKTheme();
+  const tablet = useTabletTypography();
   const pressStart = useRef({ x: 0, y: 0 });
   const pressDelta = useRef({ x: 0, y: 0 });
   return (
-    <View onLayout={onLayout} style={[styles.frame, { backgroundColor: theme.surface }]}>
+    <View
+      onLayout={onLayout}
+      style={[styles.frame, tablet && styles.tabletFrame, { backgroundColor: theme.surface }]}
+    >
       {onPress ? (
         <Pressable
           accessibilityRole="button"
@@ -71,7 +76,7 @@ export function DashboardCardFrame({
           {children}
         </>
       )}
-      {footer ? <View style={styles.footer}>{footer}</View> : null}
+      {footer ? <View style={[styles.footer, tablet && styles.tabletFooter]}>{footer}</View> : null}
     </View>
   );
 }
@@ -94,12 +99,14 @@ export function DashboardMetric({
   tone?: 'danger';
 }) {
   const theme = useCKTheme();
+  const tablet = useTabletTypography();
   return (
     <View
       accessible
       accessibilityLabel={detail ? `${label}, ${detail}` : `${label}, ${value}`}
       style={[
         styles.metric,
+        tablet && styles.tabletMetric,
         {
           backgroundColor:
             tone === 'danger'
@@ -144,6 +151,15 @@ export function DashboardMetricGrid({ children }: { children: ReactNode }) {
 const styles = StyleSheet.create({
   frame: { borderRadius: ckRadius.card, padding: 14, gap: 10, overflow: 'hidden' },
   footer: { marginHorizontal: -14, marginBottom: -14 },
+  tabletFrame: { padding: 22, gap: 16 },
+  tabletFooter: { marginHorizontal: -22, marginBottom: -22 },
+  tabletMetric: {
+    minHeight: 62,
+    height: 'auto',
+    paddingVertical: 10,
+    gap: 10,
+    paddingHorizontal: 15,
+  },
   metric: {
     height: DASHBOARD_METRIC_HEIGHT,
     flexDirection: 'row',

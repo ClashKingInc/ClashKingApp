@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
@@ -27,6 +28,7 @@ export function LicensesScreen({
   onBack: () => void;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const theme = useCKTheme();
   const link = useLinkParameters();
   const [selected, setSelected] = useState<LicensePackageSummary | undefined>(() =>
@@ -98,7 +100,16 @@ export function LicensesScreen({
               <X color={theme.onSurface} />
             </Pressable>
           </View>
-          <ScrollView contentContainerStyle={styles.licenseText}>
+          <ScrollView
+            contentContainerStyle={[
+              styles.licenseText,
+              layout.isExpanded && {
+                width: '100%',
+                maxWidth: layout.readableMaxWidth,
+                alignSelf: 'center',
+              },
+            ]}
+          >
             <CKText selectable role="bodySmall">
               {selected?.text}
             </CKText>

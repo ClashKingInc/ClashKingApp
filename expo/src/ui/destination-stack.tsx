@@ -5,6 +5,7 @@ import {
   NavigationContainer,
   NavigationIndependentTree,
   StackActions,
+  useIsFocused,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {
@@ -20,6 +21,7 @@ import {
 import { Platform } from 'react-native';
 
 import { useCKTheme, useCKThemeMode } from './theme';
+import { NativeBackScope } from './native-back-context';
 
 type DestinationRoutes = {
   Grid: undefined;
@@ -49,16 +51,22 @@ function useDestination() {
 function GridRoute() {
   // The native stack owns hit testing during the swipe. An extra owner-state
   // blocker here discards taps after Grid is visible but before JS catches up.
-  return useDestination().grid;
+  const focused = useIsFocused();
+  return <NativeBackScope active={focused}>{useDestination().grid}</NativeBackScope>;
 }
 
 function DetailRoute() {
   const { focused, detail } = useDestination();
+  const routeFocused = useIsFocused();
   const [lastDetail, setLastDetail] = useState(detail);
   // Owner-driven Back clears the selection before UIKit finishes closing.
   // Keep the outgoing screen instead of swapping it for an unrelated detail.
   if (focused && lastDetail !== detail) setLastDetail(detail);
-  return focused ? detail : lastDetail;
+  return (
+    <NativeBackScope active={routeFocused && focused}>
+      {focused ? detail : lastDetail}
+    </NativeBackScope>
+  );
 }
 
 export function DestinationStack(props: DestinationStackProps) {

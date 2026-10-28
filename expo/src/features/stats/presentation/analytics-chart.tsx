@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { PanResponder, Pressable, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line, Polyline, Text as SvgText } from 'react-native-svg';
@@ -68,7 +69,7 @@ export function AnalyticsLineChart({
   title,
   series: sourceSeries,
   percent = false,
-  height = 192,
+  height: requestedHeight = 192,
   includeZero = false,
   inverted = false,
   connectGaps = true,
@@ -107,6 +108,11 @@ export function AnalyticsLineChart({
   readonly responsiveAxes?: boolean;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const height = layout.isExpanded ? Math.max(260, requestedHeight) : requestedHeight;
+  // The closed Duo has a narrower plot after the system rail. Use measured
+  // label gutters there too, without changing ordinary phone chart geometry.
+  const useResponsiveAxes = responsiveAxes || layout.isExpanded || layout.isDuo;
   const contentLoading = useSkeletonContent();
   const { t, locale } = useI18n();
   const [width, setWidth] = useState(0);
@@ -157,11 +163,11 @@ export function AnalyticsLineChart({
   const magnitude = 10 ** Math.floor(Math.log10(rawStep));
   const step =
     ([1, 2, 2.5, 5, 10].find((factor) => factor * magnitude >= rawStep) ?? 10) * magnitude;
-  const minimum = responsiveAxes
+  const minimum = useResponsiveAxes
     ? Math.max(axisMinimum, Math.floor(rawMinimum / step) * step)
     : rawMinimum;
-  const maximum = responsiveAxes ? Math.ceil(rawMaximum / step) * step : rawMaximum;
-  const ticks = responsiveAxes
+  const maximum = useResponsiveAxes ? Math.ceil(rawMaximum / step) * step : rawMaximum;
+  const ticks = useResponsiveAxes
     ? Array.from(
         { length: Math.round((maximum - minimum) / step) + 1 },
         (_, index) => minimum + index * step,
@@ -175,12 +181,12 @@ export function AnalyticsLineChart({
   // Compact notation can collapse nearby ticks to the same label. Fall back
   // to exact rounded values rather than presenting an ambiguous value axis.
   const yLabels =
-    responsiveAxes && new Set(tickLabels).size < tickLabels.length
+    useResponsiveAxes && new Set(tickLabels).size < tickLabels.length
       ? ticks.map((value) =>
           value.toLocaleString(toIntlLocale(locale), { maximumFractionDigits: 2 }),
         )
       : tickLabels;
-  const axisFontSize = responsiveAxes ? 13 : 12;
+  const axisFontSize = layout.isExpanded ? 15 : useResponsiveAxes ? 13 : 12;
   const labelWidth = (label: string) =>
     [...label].reduce(
       (total, character) =>
@@ -188,13 +194,13 @@ export function AnalyticsLineChart({
         axisFontSize * (character === ' ' ? 0.35 : character.codePointAt(0)! > 255 ? 1.05 : 0.68),
       0,
     );
-  const viewWidth = responsiveAxes && width > 0 ? width : WIDTH;
-  const left = responsiveAxes
+  const viewWidth = useResponsiveAxes && width > 0 ? width : WIDTH;
+  const left = useResponsiveAxes
     ? Math.max(36, ...yLabels.map((label) => labelWidth(label) + 10))
     : LEFT;
-  const right = responsiveAxes ? viewWidth - 4 : RIGHT;
-  const top = responsiveAxes ? 8 : TOP;
-  const bottom = height - (responsiveAxes ? 32 : 30);
+  const right = useResponsiveAxes ? viewWidth - 4 : RIGHT;
+  const top = useResponsiveAxes ? 8 : TOP;
+  const bottom = height - (useResponsiveAxes ? 32 : 30);
   const x = (index: number) => left + (index / Math.max(1, days.length - 1)) * (right - left);
   const y = (value: number) =>
     Math.max(
@@ -253,11 +259,11 @@ export function AnalyticsLineChart({
     return { start, end: start + textWidth };
   };
   const xTicks =
-    responsiveAxes &&
+    useResponsiveAxes &&
     days.length > 1 &&
     labelBounds(0).end + 16 > labelBounds(days.length - 1).start
       ? [days.length - 1]
-      : responsiveAxes
+      : useResponsiveAxes
         ? candidateIndexes.reduce<number[]>((accepted, index) => {
             if (index === 0 || index === days.length - 1) return [...accepted, index];
             const previous = accepted.at(-1) ?? 0;
@@ -387,12 +393,12 @@ export function AnalyticsLineChart({
                 key={value}
                 y={y(value)}
                 label={
-                  responsiveAxes ? yLabels[index]! : (formatAxisValue?.(value) ?? format(value))
+                  useResponsiveAxes ? yLabels[index]! : (formatAxisValue?.(value) ?? format(value))
                 }
                 left={left}
                 right={right}
                 fontSize={axisFontSize}
-                labelGap={responsiveAxes ? 10 : 7}
+                labelGap={useResponsiveAxes ? 10 : 7}
                 color={theme.onSurfaceVariant}
                 grid={colorWithAlpha(theme.onSurface, 0.1)}
               />
@@ -495,7 +501,7 @@ export function AnalyticsLineChart({
               <SvgText
                 key={index}
                 x={x(index)}
-                y={responsiveAxes ? bottom + 22 : height - 5}
+                y={useResponsiveAxes ? bottom + 22 : height - 5}
                 textAnchor={index === 0 ? 'start' : index === days.length - 1 ? 'end' : 'middle'}
                 fill={theme.onSurfaceVariant}
                 fontSize={axisFontSize}

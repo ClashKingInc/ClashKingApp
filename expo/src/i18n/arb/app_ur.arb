@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "اجازت دیں",
   "achievementsTitle": "کامیابیاں",
   "achievementEarnedLabel": "حاصل کردہ",
+  "achievementGemsEarnedRatio": "{earned} / {total} حاصل کیے",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "کامیابیوں کے کل {total} میں سے {earned} جواہرات حاصل کیے۔",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} مکمل",
   "achievementEarnedCount": "حاصل کردہ ×{count}",
   "achievementTownhall18Name": "ٹاؤن ہال 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "صرف ایک ہی ٹاؤن ہال",
+  "warStatsSameTownHall": "ایک جیسا ٹاؤن ہال",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "پیروکار",
   "drawerFollowersHelp": "وہ لوگ جنہوں نے آپ کے تصدیق شدہ لنک کردہ اکاؤنٹس میں سے ایک کو بک مارک کیا۔",
   "drawerCalculators": "کیلکولیٹر",
-  "drawerSubscription": "رکنیت",
   "drawerUpgradeTracker": "ٹریکر کو اپ گریڈ کریں۔",
   "drawerBasesArmies": "اڈے اور فوجیں۔",
   "drawerGameAssets": "کھیل ہی کھیل میں اثاثوں",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "اس اکاؤنٹ کے لیے الرٹس حاصل کریں۔",
   "playerOptionNotificationsEnableMaster": "پہلے ترتیبات میں اطلاعات آن کریں۔",
   "playerOptionNotificationsVerifyFirst": "اطلاعات فعال کرنے کے لیے اس اکاؤنٹ کی تصدیق کریں۔",
-  "playerOptionNotificationsSubscriptionRequired": "بک مارک اطلاعات کے لیے رکنیت درکار ہے۔",
   "playerOptionNotificationsLimitReached": "آپ کی بک مارک اطلاعات کی حد پوری ہو چکی ہے۔",
   "playerOptionShowTodoPageTitle": "کرنے والے صفحہ پر دکھائیں۔",
   "playerOptionShowTodoPageSubtitle": "اس اکاؤنٹ کو مکمل کرنے کی فہرست میں شامل کریں۔",

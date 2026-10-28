@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import type { ScrollViewInstance } from 'react-native';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, AppState, Easing, Platform, Pressable, StyleSheet, View } from 'react-native';
@@ -331,15 +332,18 @@ export function HomeEventBanner({
   active,
   announcements,
   desktop,
+  compact = false,
   onOpen,
 }: {
   active: boolean;
   announcements: readonly HomeAnnouncement[];
   desktop: boolean;
+  compact?: boolean;
   onOpen: (announcement: HomeAnnouncement) => void;
 }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { reduceMotion } = useCKAccessibility();
   const [now, setNow] = useState(() => new Date());
   const [foreground, setForeground] = useState(
@@ -433,7 +437,7 @@ export function HomeEventBanner({
     scrollRef.current?.scrollTo({ x: offset.current, animated: false });
   }, [availableWidth, items.length]);
   useEffect(() => {
-    if (desktop || !running || interacting || reduceMotion || items.length < 2) return;
+    if (desktop || compact || !running || interacting || reduceMotion || items.length < 2) return;
     const timer = setTimeout(() => {
       // A native touch can arrive before React commits interacting=true.
       if (touchActive.current || dragActive.current) return;
@@ -443,11 +447,82 @@ export function HomeEventBanner({
       setIndex(next);
     }, 8000);
     return () => clearTimeout(timer);
-  }, [desktop, running, interacting, reduceMotion, items.length, safeIndex, availableWidth]);
+  }, [
+    desktop,
+    compact,
+    running,
+    interacting,
+    reduceMotion,
+    items.length,
+    safeIndex,
+    availableWidth,
+  ]);
   const action = (item: HomeBannerItem) =>
     item.announcement && isHomeAnnouncementOpenable(item.announcement)
       ? () => onOpen(item.announcement!)
       : undefined;
+  if (compact) {
+    // Announcements stay first. Landscape iPad has room for four events;
+    // portrait and Duo keep three readable cards in the same manual strip.
+    const cards = items.filter((item) => item.announcement || item.sortKey);
+    const visibleCards =
+      layout.isTablet && layout.isExpanded && layout.width > layout.height ? 4 : 3;
+    const cardWidth = (availableWidth - (visibleCards - 1) * 8) / visibleCards;
+    return (
+      <View onLayout={(event) => setAvailableWidth(event.nativeEvent.layout.width)}>
+        <HorizontalSwipeScrollView
+          testID="home-wide-event-carousel"
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={cardWidth + 8}
+          decelerationRate="fast"
+          contentContainerStyle={{ gap: 8 }}
+          style={isRtl ? styles.rtlScroll : undefined}
+        >
+          {cards.map((item) => (
+            <Pressable
+              key={item.id}
+              testID={`home-wide-event-${item.id}`}
+              onPress={action(item)}
+              disabled={!action(item)}
+              accessibilityRole={action(item) ? 'button' : undefined}
+              accessibilityLabel={`${item.title}, ${item.subtitle}`}
+              style={[
+                {
+                  width: cardWidth,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 9,
+                  padding: 10,
+                  borderRadius: 16,
+                  backgroundColor: theme.surface,
+                },
+                isRtl && styles.rtlItem,
+                isRtl && styles.rowRtl,
+              ]}
+            >
+              <MobileWebImage imageUrl={item.imageUrl} style={{ width: 28, height: 28 }} />
+              <View style={{ flex: 1, gap: 3 }}>
+                <CKText role="labelMedium" numberOfLines={1} style={{ fontWeight: '700' }}>
+                  {item.title}
+                </CKText>
+                <CKText role="labelSmall" muted numberOfLines={1}>
+                  {item.subtitle}
+                </CKText>
+              </View>
+              {action(item) ? (
+                isRtl ? (
+                  <ChevronLeft size={13} color={theme.onSurfaceVariant} />
+                ) : (
+                  <ChevronRight size={13} color={theme.onSurfaceVariant} />
+                )
+              ) : null}
+            </Pressable>
+          ))}
+        </HorizontalSwipeScrollView>
+      </View>
+    );
+  }
   if (desktop) {
     const featured = items.find((item) => !item.sortKey && !item.announcement) ?? items[0]!;
     const rest = items.filter((item) => item !== featured).slice(0, 8);

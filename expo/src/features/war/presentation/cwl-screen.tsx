@@ -1,3 +1,6 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
+import { WarPanelGrid } from './war-panel-grid';
 import type { ScrollViewInstance } from 'react-native';
 import {
   memo,
@@ -97,6 +100,7 @@ export function CwlScreen({
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
   const placeholderIdentity =
     placeholder || (loading && !sourceSummary.leagueInfo?.getClanDetails(clanTag));
   const summary =
@@ -224,7 +228,13 @@ export function CwlScreen({
             }
           />
         </View>
-        <View style={[styles.tabs, { backgroundColor: theme.background }]}>
+        <View
+          style={[
+            styles.tabs,
+            { backgroundColor: theme.background },
+            layout.isExpanded && { maxWidth: layout.contentMaxWidth },
+          ]}
+        >
           <ProfileTabs
             variant="underline"
             animatedPosition={tabPosition}
@@ -257,7 +267,7 @@ export function CwlScreen({
             ]}
           />
         </View>
-        <View style={styles.content}>
+        <View style={[styles.content, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}>
           {!loading && !coverage.complete ? (
             <Surface
               style={[styles.coverage, { backgroundColor: colorWithAlpha(ckColors.warGold, 0.09) }]}
@@ -395,6 +405,8 @@ function CwlHero({
   loading?: boolean;
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
   const match = /^(\d{4})-(\d{2})/.exec(season ?? '');
   const date = match
     ? new Date(Number(match[1]), Number(match[2]) - 1, 1).toLocaleDateString(toIntlLocale(locale), {
@@ -406,21 +418,50 @@ function CwlHero({
   return (
     // Apply the status-bar inset to content, not the screen container, so the
     // backdrop also covers the safe area instead of leaving a black strip.
-    <View style={[styles.hero, { backgroundColor: theme.background, paddingTop: topInset }]}>
+    <View
+      style={[
+        styles.hero,
+        { backgroundColor: theme.background, paddingTop: topInset },
+        layout.isExpanded && {
+          minHeight: headerLayout.minHeight + topInset,
+          paddingBottom: headerLayout.bottom,
+        },
+      ]}
+    >
       <CwlLeagueBackdrop league={league} />
       {navigation}
       <SkeletonContent loading={loading}>
-        <View style={styles.identity}>
-          <View style={styles.heroHeading}>
+        <View
+          style={[styles.identity, layout.isExpanded && { minHeight: headerLayout.bodyMinHeight }]}
+        >
+          <View
+            style={[
+              styles.heroHeading,
+              layout.isExpanded && {
+                gap: headerLayout.gap,
+                marginHorizontal: headerLayout.horizontal,
+              },
+            ]}
+          >
             <MobileWebImage
               imageUrl={ImageAssets.getWarLeagueImage(league ?? '')}
-              style={styles.heroBadge}
+              style={[
+                styles.heroBadge,
+                layout.isExpanded && { width: headerLayout.image, height: headerLayout.image },
+              ]}
             />
             <View style={styles.heroTitleGroup}>
               <CKText
                 role="screenTitle"
                 numberOfLines={2}
-                style={[styles.heroText, { color: theme.onSurface }]}
+                style={[
+                  styles.heroText,
+                  { color: theme.onSurface },
+                  layout.isExpanded && {
+                    fontSize: headerLayout.title,
+                    lineHeight: headerLayout.titleLine,
+                  },
+                ]}
               >
                 {league ?? t('cwlTitle')}
               </CKText>
@@ -684,9 +725,15 @@ const CwlMatches = memo(function CwlMatches({
           <CKText skeleton={false} role="sectionTitle">
             {t('cwlOtherMatches')}
           </CKText>
-          {others.map((war) => (
-            <MatchRow key={war.tag} war={war} onPress={() => onOpenWar(war, round!.roundNumber)} />
-          ))}
+          <WarPanelGrid embedded style={styles.stack} gap={16}>
+            {others.map((war) => (
+              <MatchRow
+                key={war.tag}
+                war={war}
+                onPress={() => onOpenWar(war, round!.roundNumber)}
+              />
+            ))}
+          </WarPanelGrid>
         </View>
       ) : null}
       {missing > 0 ? (
@@ -821,100 +868,104 @@ const CwlClans = memo(function CwlClans({
   const demotions = typeof rule?.demotions === 'number' ? rule.demotions : 0;
   return (
     <View style={styles.stack}>
-      {standings.map((standing) => {
-        const clan = summary.leagueInfo!.getClanDetails(standing.tag)!;
-        const selected = clan.tag === clanTag;
-        const tied = standings.filter((row) => row.rank === standing.rank).length;
-        // A tie crossing a cutoff is not a secured promotion.
-        const promoting = standing.rank > 0 && standing.rank + tied - 1 <= promotions;
-        const demoting = standing.rank > standings.length - demotions;
-        const zoneColor = promoting
-          ? ckColors.donationGreen
-          : demoting
-            ? ckColors.lossRed
-            : theme.onSurfaceVariant;
-        return (
-          <Surface
-            key={clan.tag}
-            style={[
-              styles.clanStandingCard,
-              {
-                backgroundColor: selected ? colorWithAlpha(ckColors.builderBlue, 0.1) : theme.card,
-              },
-            ]}
-          >
-            <View style={[styles.clanHeading, styles.clanStandingHeading]}>
-              <CKText role="titleSmall" style={[styles.rank, { color: zoneColor }]}>
-                {standing.rank || '—'}
-              </CKText>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={clan.name}
-                onPress={() => actions.openClan(clan.tag)}
-                style={styles.entityLink}
-              >
-                <MobileWebImage imageUrl={clan.badgeUrls.smallest} style={styles.clanBadge} />
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={clan.name}
-                accessibilityState={{ expanded: expanded === clan.tag }}
-                onPress={() => setExpanded(expanded === clan.tag ? undefined : clan.tag)}
-                style={[styles.clanHeading, styles.grow]}
-              >
-                <View style={styles.grow}>
-                  <CKText role="rowTitle">{clan.name}</CKText>
-                  {promoting || demoting ? (
-                    <CKText role="metadata" style={{ color: zoneColor }}>
-                      {promoting ? '↑ ' : '↓ '}
-                      {t(promoting ? 'cwlPromotionZone' : 'cwlDemotionZone')}
+      <WarPanelGrid embedded style={styles.stack} gap={16}>
+        {standings.map((standing) => {
+          const clan = summary.leagueInfo!.getClanDetails(standing.tag)!;
+          const selected = clan.tag === clanTag;
+          const tied = standings.filter((row) => row.rank === standing.rank).length;
+          // A tie crossing a cutoff is not a secured promotion.
+          const promoting = standing.rank > 0 && standing.rank + tied - 1 <= promotions;
+          const demoting = standing.rank > standings.length - demotions;
+          const zoneColor = promoting
+            ? ckColors.donationGreen
+            : demoting
+              ? ckColors.lossRed
+              : theme.onSurfaceVariant;
+          return (
+            <Surface
+              key={clan.tag}
+              style={[
+                styles.clanStandingCard,
+                {
+                  backgroundColor: selected
+                    ? colorWithAlpha(ckColors.builderBlue, 0.1)
+                    : theme.card,
+                },
+              ]}
+            >
+              <View style={[styles.clanHeading, styles.clanStandingHeading]}>
+                <CKText role="titleSmall" style={[styles.rank, { color: zoneColor }]}>
+                  {standing.rank || '—'}
+                </CKText>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={clan.name}
+                  onPress={() => actions.openClan(clan.tag)}
+                  style={styles.entityLink}
+                >
+                  <MobileWebImage imageUrl={clan.badgeUrls.smallest} style={styles.clanBadge} />
+                </Pressable>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={clan.name}
+                  accessibilityState={{ expanded: expanded === clan.tag }}
+                  onPress={() => setExpanded(expanded === clan.tag ? undefined : clan.tag)}
+                  style={[styles.clanHeading, styles.grow]}
+                >
+                  <View style={styles.grow}>
+                    <CKText role="rowTitle">{clan.name}</CKText>
+                    {promoting || demoting ? (
+                      <CKText role="metadata" style={{ color: zoneColor }}>
+                        {promoting ? '↑ ' : '↓ '}
+                        {t(promoting ? 'cwlPromotionZone' : 'cwlDemotionZone')}
+                      </CKText>
+                    ) : null}
+                  </View>
+                  {expanded === clan.tag ? (
+                    <ChevronUp size={17} color={theme.onSurfaceVariant} />
+                  ) : (
+                    <ChevronDown size={17} color={theme.onSurfaceVariant} />
+                  )}
+                </Pressable>
+              </View>
+              <CardStatsFooter>
+                <View style={styles.metricValue}>
+                  <MobileWebImage imageUrl={ImageAssets.attackStar} style={styles.metricIcon} />
+                  <CKText role="body">
+                    {standing.stars}{' '}
+                    <CKText skeleton={false} role="metadata" muted>
+                      {t('warStarsTitle')}
                     </CKText>
-                  ) : null}
-                </View>
-                {expanded === clan.tag ? (
-                  <ChevronUp size={17} color={theme.onSurfaceVariant} />
-                ) : (
-                  <ChevronDown size={17} color={theme.onSurfaceVariant} />
-                )}
-              </Pressable>
-            </View>
-            <CardStatsFooter>
-              <View style={styles.metricValue}>
-                <MobileWebImage imageUrl={ImageAssets.attackStar} style={styles.metricIcon} />
-                <CKText role="body">
-                  {standing.stars}{' '}
-                  <CKText skeleton={false} role="metadata" muted>
-                    {t('warStarsTitle')}
                   </CKText>
-                </CKText>
-              </View>
-              <View style={styles.metricValue}>
-                <MobileWebImage
-                  imageUrl={ImageAssets.cwlSwordsNoBorder}
-                  style={styles.metricIcon}
-                />
-                <CKText role="body">
-                  {standing.wins}{' '}
-                  <CKText skeleton={false} role="metadata" muted>
-                    {t('warWinsTitle')}
-                  </CKText>
-                </CKText>
-              </View>
-              <CKText role="body">{formatPercent(standing.destruction, 1)}</CKText>
-            </CardStatsFooter>
-            {expanded === clan.tag ? (
-              <View style={styles.compactClanDetail}>
-                <View style={styles.performanceRow}>
-                  <Metric label={t('esportsTriples')} value={String(clan.threeStars)} />
-                  <Metric label={t('warAttacksTitle')} value={String(clan.attackCount)} />
-                  <Metric label={t('warAttacksMissedShort')} value={String(clan.missedAttacks)} />
                 </View>
-                <TownHallBreakdown members={clan.members} compact />
-              </View>
-            ) : null}
-          </Surface>
-        );
-      })}
+                <View style={styles.metricValue}>
+                  <MobileWebImage
+                    imageUrl={ImageAssets.cwlSwordsNoBorder}
+                    style={styles.metricIcon}
+                  />
+                  <CKText role="body">
+                    {standing.wins}{' '}
+                    <CKText skeleton={false} role="metadata" muted>
+                      {t('warWinsTitle')}
+                    </CKText>
+                  </CKText>
+                </View>
+                <CKText role="body">{formatPercent(standing.destruction, 1)}</CKText>
+              </CardStatsFooter>
+              {expanded === clan.tag ? (
+                <View style={styles.compactClanDetail}>
+                  <View style={styles.performanceRow}>
+                    <Metric label={t('esportsTriples')} value={String(clan.threeStars)} />
+                    <Metric label={t('warAttacksTitle')} value={String(clan.attackCount)} />
+                    <Metric label={t('warAttacksMissedShort')} value={String(clan.missedAttacks)} />
+                  </View>
+                  <TownHallBreakdown members={clan.members} compact />
+                </View>
+              ) : null}
+            </Surface>
+          );
+        })}
+      </WarPanelGrid>
       {!cwlFinished(summary) ? (
         <SeasonOutlook summary={summary} clanTag={clanTag} standings={standings} league={league} />
       ) : null}
@@ -1118,7 +1169,7 @@ const StarLeaderboard = memo(function StarLeaderboard({
   const [expanded, setExpanded] = useState<string>();
   const ranking = useMemo(() => sortCwlMembers(members, 'stars'), [members]);
   return (
-    <View style={styles.stack}>
+    <WarPanelGrid style={styles.stack} gap={16}>
       {ranking.map((member, index) => {
         const missed = member.attackStats?.missedAttacks ?? 0;
         return (
@@ -1178,7 +1229,7 @@ const StarLeaderboard = memo(function StarLeaderboard({
           </Surface>
         );
       })}
-    </View>
+    </WarPanelGrid>
   );
 });
 /** Round logs distinguish missing archives, unused attacks and absence from the lineup.

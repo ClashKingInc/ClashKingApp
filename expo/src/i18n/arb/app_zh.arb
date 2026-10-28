@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "允许",
   "achievementsTitle": "成就",
   "achievementEarnedLabel": "获得次数",
+  "achievementGemsEarnedRatio": "已获得 {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "已获得成就宝石 {earned} 个，共 {total} 个。",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} 已完成",
   "achievementEarnedCount": "获得次数 ×{count}",
   "achievementTownhall18Name": "18级大本营",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "仅相同大本营",
+  "warStatsSameTownHall": "相同大本营",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "追随者",
   "drawerFollowersHelp": "为您已验证的关联帐户之一添加书签的人。",
   "drawerCalculators": "计算器",
-  "drawerSubscription": "订阅",
   "drawerUpgradeTracker": "升级追踪器",
   "drawerBasesArmies": "基地和军队",
   "drawerGameAssets": "游戏资产",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "获取此帐户的提醒。",
   "playerOptionNotificationsEnableMaster": "请先在设置中开启通知。",
   "playerOptionNotificationsVerifyFirst": "验证该账号后才能开启通知。",
-  "playerOptionNotificationsSubscriptionRequired": "收藏通知需要订阅。",
   "playerOptionNotificationsLimitReached": "收藏通知数量已达上限。",
   "playerOptionShowTodoPageTitle": "显示在待办事项页面上",
   "playerOptionShowTodoPageSubtitle": "将此帐户包含在完整的待办事项列表中。",

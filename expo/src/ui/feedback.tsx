@@ -19,6 +19,7 @@ import { ckRadius, ckSpacing, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
 import { useSkeletonAppearance } from './skeleton-content';
 import { useSkeletonMotion } from './skeleton-motion';
+import { isAdaptiveIOSDevice } from './adaptive-layout';
 
 export function LoadingIndicator({ label }: { label?: string }) {
   const theme = useCKTheme();
@@ -189,7 +190,7 @@ export function Snackbar({
   const insets = useContext(SafeAreaInsetsContext) ?? { top: 0, right: 0, bottom: 0, left: 0 };
   const { width } = useWindowDimensions();
   const bottom =
-    avoidBottomNavigation && !(Platform.OS === 'web' && width >= 900)
+    avoidBottomNavigation && !isAdaptiveIOSDevice && !(Platform.OS === 'web' && width >= 900)
       ? insets.bottom + 96
       : insets.bottom + ckSpacing.xl;
   useEffect(() => {
@@ -209,6 +210,16 @@ export function Snackbar({
           backgroundColor: theme.snackbar,
           borderColor: colorWithAlpha(theme.outlineVariant, 0.3),
           bottom,
+          ...(isAdaptiveIOSDevice
+            ? {
+                left:
+                  insets.left +
+                  Math.max(ckSpacing.lg, (width - insets.left - insets.right - 560) / 2),
+                right:
+                  insets.right +
+                  Math.max(ckSpacing.lg, (width - insets.left - insets.right - 560) / 2),
+              }
+            : {}),
         },
       ]}
     >

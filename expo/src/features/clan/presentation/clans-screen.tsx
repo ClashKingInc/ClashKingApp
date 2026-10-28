@@ -1,3 +1,6 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';
+import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { DragJiggle } from '../../../ui/drag-jiggle';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -5,6 +8,7 @@ import {
   Platform,
   RefreshControl,
   ScrollView,
+  type ScrollViewInstance,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -48,13 +52,23 @@ export function ClansScreen({
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const nativeTabs = useNativePrimaryNavigation();
+  const layout = useAdaptiveLayout();
+  const [gridDragging, setGridDragging] = useState(false);
+  const nativeScroll = useRef<ScrollViewInstance>(null);
+  const nativeScrollOffset = useRef(0);
   const { width } = useWindowDimensions();
   useEffect(() => {
     const size = headerArtworkSize(width);
     void prefetchMobileImage(ImageAssets.homeBaseBackground, size.width, size.height);
   }, [width]);
   const desktop = Platform.OS === 'web' && width >= 900;
-  const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
+  const horizontal = Math.max(
+    16,
+    ((layout.isDuo || layout.isTablet ? layout.usableWidth : width) -
+      (layout.isDuo || layout.isTablet ? layout.contentMaxWidth : desktop ? 1320 : 840)) /
+      2,
+  );
   const [refreshing, setRefreshing] = useState(false);
   const refreshingRef = useRef(false);
   const refresh = useCallback(async () => {
@@ -120,6 +134,7 @@ export function ClansScreen({
         item={item}
         notifications={model.notifications}
         onOpen={(origin) => void open(item, origin)}
+        dragTestID={`clan-roster-card-${item.tag}`}
       />
     </SkeletonContent>
   ));
@@ -129,7 +144,15 @@ export function ClansScreen({
       mode === 'linked'
         ? actions.reorderLinkedClans(data.map((item) => item.tag))
         : actions.reorderBookmarkedClans(data.map((item) => item.tag));
-    void operation.catch(() => actions.showMessage(t('accountsErrorFailedToUpdateOrder')));
+    // Return the result for the adaptive grid's optimistic-order rollback.
+    // DraggableFlatList continues to ignore it and retains its existing behavior.
+    return operation.then(
+      () => true,
+      () => {
+        actions.showMessage(t('accountsErrorFailedToUpdateOrder'));
+        return false;
+      },
+    );
   };
   const listHeader = (
     <View style={styles.segmentWrap}>
@@ -181,21 +204,64 @@ export function ClansScreen({
       tintColor={theme.primary}
     />
   );
+  const draggableList = (
+    <DraggableFlatList
+      onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+      onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+      onScrollEndDrag={pullRefresh.onScrollEndDrag}
+      activationDistance={8}
+      alwaysBounceVertical
+      data={entries}
+      testID="clans-scroll-view"
+      key={`${mode}-clan-roster`}
+      keyExtractor={(item) => item.tag}
+      onDragEnd={reorder}
+      contentContainerStyle={{
+        paddingHorizontal: horizontal,
+        paddingBottom: insets.bottom + (nativeTabs ? 24 : 96),
+      }}
+      ListHeaderComponent={listHeader}
+      ListEmptyComponent={emptyRoster}
+      refreshControl={refreshControl}
+      renderItem={(params: RenderItemParams<(typeof entries)[number]>) => (
+        <ScaleDecorator activeScale={1.015}>
+          <DragJiggle active={params.isActive}>
+            <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+              <SkeletonContent loading={!!model.loading && !params.item.clan}>
+                <ClanRosterCard
+                  item={params.item}
+                  notifications={model.notifications}
+                  onOpen={(origin) => void open(params.item, origin)}
+                  onLongPress={params.drag}
+                  dragTestID={`clan-roster-card-${params.item.tag}`}
+                />
+              </SkeletonContent>
+            </View>
+          </DragJiggle>
+        </ScaleDecorator>
+      )}
+    />
+  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {desktop ? (
+      {desktop || layout.isDuo || layout.isTablet ? (
         <ScrollView
+          ref={nativeScroll}
+          scrollEnabled={!gridDragging}
           testID="clans-scroll-view"
-          onScroll={pullRefresh.onScroll}
+          onScroll={(event) => {
+            nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
+            pullRefresh.onScroll(event);
+          }}
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
           onScrollEndDrag={pullRefresh.onScrollEndDrag}
           scrollEventThrottle={16}
           contentContainerStyle={{
             paddingHorizontal: horizontal,
-            paddingBottom: 32,
+            paddingBottom: nativeTabs ? insets.bottom + 24 : 32,
           }}
           refreshControl={refreshControl}
         >
@@ -203,6 +269,29 @@ export function ClansScreen({
           <View style={styles.roster}>
             {entries.length === 0 ? (
               emptyRoster
+            ) : layout.isDuo || layout.isTablet ? (
+              <InlineReorderGrid
+                key={mode}
+                data={entries}
+                keyExtractor={(item) => item.tag}
+                columns={layout.columns(layout.isTablet ? 420 : 280, 2)}
+                scrollRef={nativeScroll}
+                scrollOffset={nativeScrollOffset}
+                onDragStateChange={setGridDragging}
+                onReorder={(data, from, to) => reorder({ data, from, to })}
+                renderItem={(item, _index, active) => (
+                  <DragJiggle active={active}>
+                    <SkeletonContent loading={!!model.loading && !item.clan}>
+                      <ClanRosterCard
+                        item={item}
+                        notifications={model.notifications}
+                        onOpen={(origin) => void open(item, origin)}
+                        dragTestID={`clan-roster-card-${item.tag}`}
+                      />
+                    </SkeletonContent>
+                  </DragJiggle>
+                )}
+              />
             ) : (
               <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
                 {cards}
@@ -211,42 +300,7 @@ export function ClansScreen({
           </View>
         </ScrollView>
       ) : (
-        <DraggableFlatList
-          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          activationDistance={8}
-          alwaysBounceVertical
-          data={entries}
-          testID="clans-scroll-view"
-          key={`${mode}-clan-roster`}
-          keyExtractor={(item) => item.tag}
-          onDragEnd={reorder}
-          contentContainerStyle={{
-            paddingHorizontal: horizontal,
-            paddingBottom: insets.bottom + 96,
-          }}
-          ListHeaderComponent={listHeader}
-          ListEmptyComponent={emptyRoster}
-          refreshControl={refreshControl}
-          renderItem={(params: RenderItemParams<(typeof entries)[number]>) => (
-            <ScaleDecorator activeScale={1.015}>
-              <DragJiggle active={params.isActive}>
-                <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
-                  <SkeletonContent loading={!!model.loading && !params.item.clan}>
-                    <ClanRosterCard
-                      item={params.item}
-                      notifications={model.notifications}
-                      onOpen={(origin) => void open(params.item, origin)}
-                      onLongPress={params.drag}
-                      dragTestID={`clan-roster-card-${params.item.tag}`}
-                    />
-                  </SkeletonContent>
-                </View>
-              </DragJiggle>
-            </ScaleDecorator>
-          )}
-        />
+        draggableList
       )}
       <PullRefreshHint
         distance={pullRefresh.distance}

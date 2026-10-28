@@ -1,3 +1,4 @@
+import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { useState, useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
@@ -63,6 +64,7 @@ export function CwlParticipationSection({ data, onSelectSeason }: {
       onSelect={onSelectSeason}
       fillWidth
     /> : data.season ? <CKText role="titleMedium">{seasonLabel(data.season, locale)}</CKText> : null}
+    <AdaptiveStatsPanels embedded style={styles.section}>
     {history.length > 1 ? <AnalyticsLineChart
       title={t('statsCwlSeasonHistory')}
       series={[
@@ -80,12 +82,15 @@ export function CwlParticipationSection({ data, onSelectSeason }: {
       formatDay={(day) => seasonLabel(day, locale)}
       includeZero
     /> : null}
+    </AdaptiveStatsPanels>
+    <AdaptiveStatsPanels embedded style={styles.section}>
     {data.items.map((item) => {
       const league = leagues.get(item.leagueId);
       const canonicalName = typeof league?.name === 'string' ? league.name : item.leagueId === 48000022 ? 'Legend League' : item.leagueId === 48000000 ? 'Unranked' : `${item.leagueId}`;
       const leagueName = league ? localizedNameForItemOrFallback(league, { languageCode: locale.split(/[-_]/, 1)[0] || 'en' }, canonicalName) : item.leagueId === 48000000 ? t('generalUnranked') : canonicalName;
       return <Bucket key={`${item.leagueId}:${item.warSize}`} item={item} leagueName={leagueName} leagueImage={ImageAssets.getWarLeagueImage(canonicalName)} />;
     })}
+    </AdaptiveStatsPanels>
     {data.items.length === 0 ? <CKText muted role="bodyMedium">{t('statsNoDataBody')}</CKText> : null}
   </View>;
 }

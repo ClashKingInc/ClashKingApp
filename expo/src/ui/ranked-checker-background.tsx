@@ -4,6 +4,7 @@ import { HeaderArtwork } from './header-artwork';
 import { prepareHeaderArtwork } from '../core/assets/header-artwork-cache';
 import { useCKTheme } from './theme';
 import { HeroHeaderScrim } from './hero-header-scrim';
+import { useAdaptiveLayout } from './adaptive-layout';
 
 export type RankedCheckerColor = 'blue' | 'purple' | 'green' | 'red';
 const artwork = {
@@ -30,6 +31,7 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
   color: RankedCheckerColor;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { width: screenWidth } = useWindowDimensions();
   const width = Math.max(700, screenWidth);
   return (
@@ -51,7 +53,7 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
       />
       {/* Custom ProfilePageHeader backdrops own their scrim. Use the same
           measured fade as illustrated headers, never a stretched fade bitmap. */}
-      <HeroHeaderScrim edgeColor={theme.background} />
+      <HeroHeaderScrim edgeColor={theme.background} clipRailInset={layout.isExpanded} />
     </View>
   );
 });

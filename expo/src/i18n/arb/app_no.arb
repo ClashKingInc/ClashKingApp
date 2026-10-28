@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Tillat",
   "achievementsTitle": "Prestasjoner",
   "achievementEarnedLabel": "Opptjent",
+  "achievementGemsEarnedRatio": "{earned} / {total} opptjent",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Opptjent {earned} av {total} edelstener fra prestasjoner.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} fullført",
   "achievementEarnedCount": "Opptjent ×{count}",
   "achievementTownhall18Name": "Rådhus 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Kun samme rådhus",
+  "warStatsSameTownHall": "Samme rådhus",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Følgere",
   "drawerFollowersHelp": "Folk som har bokmerket en av de bekreftede tilknyttede kontoene dine.",
   "drawerCalculators": "Kalkulatorer",
-  "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Oppgrader Tracker",
   "drawerBasesArmies": "Baser og hærer",
   "drawerGameAssets": "Spilleiendeler",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Få varsler for denne kontoen.",
   "playerOptionNotificationsEnableMaster": "Slå først på varsler i Innstillinger.",
   "playerOptionNotificationsVerifyFirst": "Bekreft kontoen for å aktivere varsler.",
-  "playerOptionNotificationsSubscriptionRequired": "Et abonnement kreves for bokmerkevarsler.",
   "playerOptionNotificationsLimitReached": "Du har nådd grensen for bokmerkevarsler.",
   "playerOptionShowTodoPageTitle": "Vis på gjøremålssiden",
   "playerOptionShowTodoPageSubtitle": "Inkluder denne kontoen i den fullstendige oppgavelisten.",

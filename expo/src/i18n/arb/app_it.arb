@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Consenti",
   "achievementsTitle": "Obiettivi",
   "achievementEarnedLabel": "Ottenuto",
+  "achievementGemsEarnedRatio": "{earned} / {total} ottenute",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Hai ottenuto {earned} gemme su {total} dagli obiettivi.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} completato",
   "achievementEarnedCount": "Ottenuto ×{count}",
   "achievementTownhall18Name": "Municipio 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Solo stesso Municipio",
+  "warStatsSameTownHall": "Stesso municipio",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Seguaci",
   "drawerFollowersHelp": "Persone che hanno aggiunto ai preferiti uno dei tuoi account collegati verificati.",
   "drawerCalculators": "Calcolatrici",
-  "drawerSubscription": "Sottoscrizione",
   "drawerUpgradeTracker": "Monitoraggio degli aggiornamenti",
   "drawerBasesArmies": "Basi ed eserciti",
   "drawerGameAssets": "Risorse di gioco",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Ricevi avvisi per questo account.",
   "playerOptionNotificationsEnableMaster": "Attiva prima le notifiche nelle Impostazioni.",
   "playerOptionNotificationsVerifyFirst": "Verifica questo account per abilitare le notifiche.",
-  "playerOptionNotificationsSubscriptionRequired": "Per le notifiche dei preferiti è richiesto un abbonamento.",
   "playerOptionNotificationsLimitReached": "Hai raggiunto il limite di notifiche per i preferiti.",
   "playerOptionShowTodoPageTitle": "Mostra nella pagina delle cose da fare",
   "playerOptionShowTodoPageSubtitle": "Includi questo account nell'elenco completo delle cose da fare.",

@@ -1,3 +1,6 @@
+import { WarPanelGrid, EntityModalViewport } from '../../war/presentation/war-panel-grid';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { HeaderArtwork } from '../../../ui/header-artwork';
 import { modalOrientations } from '../../../ui/modal-orientations';
@@ -110,7 +113,8 @@ export function RankedScreen(props: RankedScreenProps) {
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const link = useLinkParameters();
   const initialPage: RankedPage =
     link.tab === 'history'
@@ -230,6 +234,18 @@ export function RankedScreen(props: RankedScreenProps) {
   const hasOwnRank = period?.group?.members.some(
     (member) => canonicalTag(member.playerTag) === canonicalTag(props.player.tag),
   );
+  const periodNavigation = period ? (
+    <DateNavigator
+      compact={layout.isExpanded}
+      label={formatPeriodRange(period.startsAt, locale)}
+      onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
+      onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
+      previousDisabled={safePeriodIndex >= periods.length - 1}
+      nextDisabled={safePeriodIndex === 0}
+      onPressLabel={() => setDateOpen(true)}
+      accessibilityLabel={t('rankingsSnapshotDate')}
+    />
+  ) : null;
   return (
     <SafeAreaView
       edges={['left', 'right']}
@@ -292,7 +308,18 @@ export function RankedScreen(props: RankedScreenProps) {
           </View>
         }
         renderItem={() => (
-          <View style={[styles.content, { paddingHorizontal: Math.max(16, (width - 1120) / 2) }]}>
+          <View
+            style={[
+              styles.content,
+              { paddingHorizontal: Math.max(16, (width - 1120) / 2) },
+              layout.isExpanded && {
+                width: '100%',
+                maxWidth: layout.contentMaxWidth,
+                paddingHorizontal: 24,
+                alignSelf: 'center',
+              },
+            ]}
+          >
             <ProfileTabs
               variant="underline"
               selectedKey={tab}
@@ -305,17 +332,9 @@ export function RankedScreen(props: RankedScreenProps) {
                 { key: 'history', label: t('generalHistory'), icon: <History size={20} /> },
               ]}
             />
-            {period && tab !== 'history' ? (
-              <DateNavigator
-                label={formatPeriodRange(period.startsAt, locale)}
-                onPrevious={() => setPeriodIndex(Math.min(periods.length - 1, safePeriodIndex + 1))}
-                onNext={() => setPeriodIndex(Math.max(0, safePeriodIndex - 1))}
-                previousDisabled={safePeriodIndex >= periods.length - 1}
-                nextDisabled={safePeriodIndex === 0}
-                onPressLabel={() => setDateOpen(true)}
-                accessibilityLabel={t('rankingsSnapshotDate')}
-              />
-            ) : null}
+            {tab !== 'history' && !(layout.isExpanded && tab === 'season')
+              ? periodNavigation
+              : null}
             <View
               onTouchStart={() => blockPrimarySwipe(true)}
               onTouchEnd={() => blockPrimarySwipe(false)}
@@ -358,7 +377,14 @@ export function RankedScreen(props: RankedScreenProps) {
                     importantForAccessibility={page !== tab ? 'no-hide-descendants' : 'auto'}
                   >
                     <View
-                      style={{ paddingTop: 8 }}
+                      style={[
+                        { paddingTop: layout.isExpanded && page === 'rankings' ? 0 : 8 },
+                        layout.isExpanded && {
+                          width: '100%',
+                          maxWidth: layout.contentMaxWidth,
+                          alignSelf: 'center',
+                        },
+                      ]}
                       onLayout={(event) => {
                         const value = Math.ceil(event.nativeEvent.layout.height);
                         if (value > 0)
@@ -379,6 +405,7 @@ export function RankedScreen(props: RankedScreenProps) {
                         <RankedBattles
                           key={props.player.tag}
                           period={period}
+                          dateNavigator={layout.isExpanded ? periodNavigation : undefined}
                           onOpenOpponent={openPlayerTag}
                           loading={
                             props.loadingSeason === period.seasonId ||
@@ -509,6 +536,9 @@ function RankedHeader({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
+  const insets = useSafeAreaInsets();
   const intlLocale = toIntlLocale(locale);
   const member = data?.currentMember;
   const attackCount =
@@ -545,7 +575,13 @@ function RankedHeader({
     <ProfileStatChip label={label} value={value} iconElement={icon} />
   );
   return (
-    <View testID="ranked-player-header" style={styles.rankedHeader}>
+    <View
+      testID="ranked-player-header"
+      style={[
+        styles.rankedHeader,
+        layout.isExpanded && { marginLeft: -insets.left, marginRight: -insets.right },
+      ]}
+    >
       <View style={styles.headerBackground}>
         <HeaderArtwork
           testID="ranked-header-background"
@@ -556,13 +592,23 @@ function RankedHeader({
           transition={0}
           style={StyleSheet.absoluteFill}
         />
-        <HeroHeaderScrim variant="ranked" />
+        <HeroHeaderScrim variant="ranked" clipRailInset={layout.isExpanded} />
         <View
           testID="ranked-header-content"
           style={[
             styles.hero,
             desktop && styles.heroDesktop,
             { paddingTop: top, paddingHorizontal: desktop ? 20 : 12 },
+            layout.isExpanded && {
+              width: '100%',
+              minHeight: top + (layout.isDuo ? 200 : headerLayout.minHeight),
+              paddingBottom: layout.isDuo ? 16 : headerLayout.bottom,
+              gap: layout.isDuo ? 12 : headerLayout.gap,
+              maxWidth: layout.contentMaxWidth + insets.left + insets.right,
+              alignSelf: 'center',
+              paddingLeft: headerLayout.horizontal + insets.left,
+              paddingRight: headerLayout.horizontal + insets.right,
+            },
           ]}
         >
           <View style={styles.headerRow}>
@@ -579,6 +625,8 @@ function RankedHeader({
             >
               <ProfileHeaderAction
                 label={t('gameAssetsShare')}
+                appLinkShare
+                disabled={identityLoading}
                 onPress={onShare}
                 icon={<Share2 color="#FFF" />}
               />
@@ -597,152 +645,200 @@ function RankedHeader({
             </View>
           </View>
           <SkeletonContent loading={identityLoading} style={{ display: 'contents' }}>
-            <Pressable
-              accessibilityRole={accounts.length > 1 ? 'button' : undefined}
-              accessibilityLabel={
-                accounts.length > 1
-                  ? t('upgradeTrackerSwitchAccount', { account: player.name })
-                  : undefined
-              }
-              disabled={accounts.length < 2}
-              onPress={onAccounts}
-              style={[styles.identity, desktop && styles.identityDesktop]}
-            >
-              <View>
-                <MobileWebImage
-                  // The resolved icon includes the numbered tier plaque; the
-                  // API's large icon can be the generic unnumbered league crest.
-                  imageUrl={
-                    displayPeriod?.tier?.iconUrl ||
-                    data?.currentTier?.iconUrl ||
-                    player.leagueUrl ||
-                    ImageAssets.trophies
-                  }
-                  style={{ width: 104, height: 104 }}
-                  contentFit="contain"
-                />
-                <View style={styles.tierBadgeShell}>
+            <RankedHeaderBody expanded={layout.isExpanded}>
+              <Pressable
+                accessibilityRole={accounts.length > 1 ? 'button' : undefined}
+                accessibilityLabel={
+                  accounts.length > 1
+                    ? t('upgradeTrackerSwitchAccount', { account: player.name })
+                    : undefined
+                }
+                disabled={accounts.length < 2}
+                onPress={onAccounts}
+                style={[
+                  styles.identity,
+                  desktop && styles.identityDesktop,
+                  layout.isExpanded && styles.expandedIdentity,
+                ]}
+              >
+                <View>
                   <MobileWebImage
-                    imageUrl={player.townHallPic}
-                    style={styles.tierBadge}
-                    contentFit="contain"
-                  />
-                </View>
-              </View>
-              <View style={styles.identityCopy}>
-                <CKText
-                  role="screenTitle"
-                  numberOfLines={1}
-                  style={[styles.white, styles.identityName]}
-                >
-                  {player.name}
-                </CKText>
-                {clanIdentity.name ? (
-                  <View style={styles.clanLine}>
-                    {clanIdentity.badgeUrl ? (
-                      <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
-                    ) : null}
-                    <CKText role="labelLarge" style={styles.white}>
-                      {clanIdentity.name}
-                    </CKText>
-                  </View>
-                ) : null}
-                {accounts.length > 1 ? (
-                  <GlassSurface cornerRadius={ckRadius.pill} style={styles.accountPill}>
-                    <UsersRound size={17} color="#FFFFFFD1" />
-                    <CKText skeleton={false} role="labelSmall" style={styles.white}>
-                      {t('rankedLeagueAccountSelector')}
-                    </CKText>
-                    <ChevronDown size={18} color="#FFFFFFC7" />
-                  </GlassSurface>
-                ) : null}
-              </View>
-            </Pressable>
-            <View style={styles.headerStats}>
-              {!desktop
-                ? quick(
-                    t('rankedLeagueTrophies'),
-                    (
-                      displayPeriod?.trophies ??
-                      member?.leagueTrophies ??
-                      data?.trophies ??
-                      player.trophies
-                    ).toLocaleString(intlLocale),
-                    <MobileWebImage
-                      imageUrl={ImageAssets.trophies}
-                      style={styles.headerQuickImage}
-                    />,
-                  )
-                : null}
-              {desktop
-                ? tile(
-                    t('rankedLeagueTrophies'),
-                    (
-                      displayPeriod?.trophies ??
-                      member?.leagueTrophies ??
-                      data?.trophies ??
-                      player.trophies
-                    ).toLocaleString(intlLocale),
-                    displayPeriod?.tier?.iconUrl ||
+                    // The resolved icon includes the numbered tier plaque; the
+                    // API's large icon can be the generic unnumbered league crest.
+                    imageUrl={
+                      displayPeriod?.tier?.iconUrl ||
                       data?.currentTier?.iconUrl ||
                       player.leagueUrl ||
-                      ImageAssets.trophies,
-                    ImageAssets.trophies,
-                  )
-                : null}
-              {desktop
-                ? tile(
-                    t('rankedLeagueGroupRank'),
-                    (displayPeriod?.placement ?? data?.currentRank)
-                      ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
-                      : t('legendsNoRank'),
-                    ImageAssets.trophies,
-                  )
-                : null}
-              {!desktop
-                ? quick(
-                    t('rankedLeagueGroupRank'),
-                    (displayPeriod?.placement ?? data?.currentRank)
-                      ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
-                      : t('legendsNoRank'),
-                    <ChartLine size={19} color={theme.onSurface} />,
-                  )
-                : null}
-              {desktop
-                ? quick(
-                    t('playerBestTrophies'),
-                    data?.bestTrophies ?? player.bestTrophies,
+                      ImageAssets.trophies
+                    }
+                    style={{
+                      width: layout.isExpanded ? headerLayout.image : 104,
+                      height: layout.isExpanded ? headerLayout.image : 104,
+                    }}
+                    contentFit="contain"
+                  />
+                  <View style={styles.tierBadgeShell}>
                     <MobileWebImage
-                      imageUrl={ImageAssets.bestTrophies}
+                      imageUrl={player.townHallPic}
+                      style={styles.tierBadge}
+                      contentFit="contain"
+                    />
+                  </View>
+                </View>
+                <View
+                  style={[styles.identityCopy, layout.isExpanded && styles.expandedIdentityCopy]}
+                >
+                  <CKText
+                    role="screenTitle"
+                    numberOfLines={1}
+                    style={[
+                      styles.white,
+                      styles.identityName,
+                      layout.isExpanded && {
+                        maxWidth: '100%',
+                        fontSize: headerLayout.title,
+                        lineHeight: headerLayout.titleLine,
+                      },
+                    ]}
+                  >
+                    {player.name}
+                  </CKText>
+                  {clanIdentity.name ? (
+                    <View style={styles.clanLine}>
+                      {clanIdentity.badgeUrl ? (
+                        <MobileWebImage imageUrl={clanIdentity.badgeUrl} style={styles.clanBadge} />
+                      ) : null}
+                      <CKText role="labelLarge" style={styles.white}>
+                        {clanIdentity.name}
+                      </CKText>
+                    </View>
+                  ) : null}
+                  {accounts.length > 1 ? (
+                    <GlassSurface cornerRadius={ckRadius.pill} style={styles.accountPill}>
+                      <UsersRound size={17} color="#FFFFFFD1" />
+                      <CKText skeleton={false} role="labelSmall" style={styles.white}>
+                        {t('rankedLeagueAccountSelector')}
+                      </CKText>
+                      <ChevronDown size={18} color="#FFFFFFC7" />
+                    </GlassSurface>
+                  ) : null}
+                </View>
+              </Pressable>
+              {layout.isExpanded ? (
+                <View style={styles.expandedHeaderStats}>
+                  <RankedHeaderMetric
+                    label={t('rankedLeagueTrophies')}
+                    value={(
+                      displayPeriod?.trophies ??
+                      member?.leagueTrophies ??
+                      data?.trophies ??
+                      player.trophies
+                    ).toLocaleString(intlLocale)}
+                    imageUrl={ImageAssets.trophies}
+                  />
+                  <RankedHeaderMetric
+                    label={t('rankedLeagueGroupRank')}
+                    value={
+                      (displayPeriod?.placement ?? data?.currentRank)
+                        ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
+                        : t('legendsNoRank')
+                    }
+                    imageUrl={ImageAssets.bestTrophies}
+                  />
+                  <RankedHeaderMetric
+                    label={t('playerBestTrophies')}
+                    value={(data?.bestTrophies ?? player.bestTrophies).toLocaleString(intlLocale)}
+                    imageUrl={ImageAssets.bestTrophies}
+                  />
+                </View>
+              ) : (
+                <View style={styles.headerStats}>
+                  {!desktop
+                    ? quick(
+                        t('rankedLeagueTrophies'),
+                        (
+                          displayPeriod?.trophies ??
+                          member?.leagueTrophies ??
+                          data?.trophies ??
+                          player.trophies
+                        ).toLocaleString(intlLocale),
+                        <MobileWebImage
+                          imageUrl={ImageAssets.trophies}
+                          style={styles.headerQuickImage}
+                        />,
+                      )
+                    : null}
+                  {desktop
+                    ? tile(
+                        t('rankedLeagueTrophies'),
+                        (
+                          displayPeriod?.trophies ??
+                          member?.leagueTrophies ??
+                          data?.trophies ??
+                          player.trophies
+                        ).toLocaleString(intlLocale),
+                        displayPeriod?.tier?.iconUrl ||
+                          data?.currentTier?.iconUrl ||
+                          player.leagueUrl ||
+                          ImageAssets.trophies,
+                        ImageAssets.trophies,
+                      )
+                    : null}
+                  {desktop
+                    ? tile(
+                        t('rankedLeagueGroupRank'),
+                        (displayPeriod?.placement ?? data?.currentRank)
+                          ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
+                          : t('legendsNoRank'),
+                        ImageAssets.trophies,
+                      )
+                    : null}
+                  {!desktop
+                    ? quick(
+                        t('rankedLeagueGroupRank'),
+                        (displayPeriod?.placement ?? data?.currentRank)
+                          ? `#${(displayPeriod?.placement ?? data?.currentRank ?? 0).toLocaleString(intlLocale)}`
+                          : t('legendsNoRank'),
+                        <ChartLine size={19} color={theme.onSurface} />,
+                      )
+                    : null}
+                  {desktop
+                    ? quick(
+                        t('playerBestTrophies'),
+                        data?.bestTrophies ?? player.bestTrophies,
+                        <MobileWebImage
+                          imageUrl={ImageAssets.bestTrophies}
+                          style={styles.headerQuickImage}
+                        />,
+                      )
+                    : null}
+                  {quick(
+                    t('rankedLeagueAttacks'),
+                    maxBattles === null || maxBattles === undefined
+                      ? attackCount
+                      : `${attackCount}/${maxBattles}`,
+                    <MobileWebImage imageUrl={ImageAssets.sword} style={styles.headerQuickImage} />,
+                  )}
+                  {quick(
+                    t('rankedLeagueDefenses'),
+                    maxBattles === null || maxBattles === undefined
+                      ? defenseCount
+                      : `${defenseCount}/${maxBattles}`,
+                    <MobileWebImage
+                      imageUrl={ImageAssets.shieldWithArrow}
                       style={styles.headerQuickImage}
                     />,
-                  )
-                : null}
-              {quick(
-                t('rankedLeagueAttacks'),
-                maxBattles === null || maxBattles === undefined
-                  ? attackCount
-                  : `${attackCount}/${maxBattles}`,
-                <MobileWebImage imageUrl={ImageAssets.sword} style={styles.headerQuickImage} />,
+                  )}
+                  {desktop && (data?.currentGroup?.members.length ?? 0) > 0
+                    ? quick(
+                        t('rankedLeagueGroupRanking'),
+                        t('rankedLeaguePlayers', { count: data!.currentGroup!.members.length }),
+                        <UsersRound size={19} color={theme.onSurface} />,
+                      )
+                    : null}
+                </View>
               )}
-              {quick(
-                t('rankedLeagueDefenses'),
-                maxBattles === null || maxBattles === undefined
-                  ? defenseCount
-                  : `${defenseCount}/${maxBattles}`,
-                <MobileWebImage
-                  imageUrl={ImageAssets.shieldWithArrow}
-                  style={styles.headerQuickImage}
-                />,
-              )}
-              {desktop && (data?.currentGroup?.members.length ?? 0) > 0
-                ? quick(
-                    t('rankedLeagueGroupRanking'),
-                    t('rankedLeaguePlayers', { count: data!.currentGroup!.members.length }),
-                    <UsersRound size={19} color={theme.onSurface} />,
-                  )
-                : null}
-            </View>
+            </RankedHeaderBody>
             <View
               testID="ranked-header-fade-tail"
               pointerEvents="none"
@@ -751,6 +847,50 @@ function RankedHeader({
           </SkeletonContent>
         </View>
       </View>
+    </View>
+  );
+}
+
+function RankedHeaderBody({ expanded, children }: { expanded: boolean; children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  const header = illustratedHeaderLayout(layout);
+  return expanded ? (
+    <View
+      style={[
+        styles.expandedHeroBody,
+        {
+          minHeight: layout.isDuo ? 88 : header.bodyMinHeight,
+          gap: layout.isDuo ? 12 : header.gap,
+        },
+      ]}
+    >
+      {children}
+    </View>
+  ) : (
+    <>{children}</>
+  );
+}
+
+function RankedHeaderMetric({
+  label,
+  value,
+  imageUrl,
+}: {
+  label: string;
+  value: string;
+  imageUrl: string;
+}) {
+  return (
+    <View accessible accessibilityLabel={`${label}: ${value}`} style={styles.expandedHeaderMetric}>
+      <View style={styles.inlineStat}>
+        <MobileWebImage imageUrl={imageUrl} style={styles.headerQuickImage} />
+        <CKText muted role="metadata" style={styles.expandedMetricLabel}>
+          {label}
+        </CKText>
+      </View>
+      <CKText role="titleSmall" style={styles.expandedMetricValue} numberOfLines={1}>
+        {value}
+      </CKText>
     </View>
   );
 }
@@ -949,21 +1089,26 @@ function HistoryPanel({
 }) {
   const { t } = useI18n();
   const completed = rankedHistoricalPeriods(periods);
+  const layout = useAdaptiveLayout();
   return (
     <View style={styles.section}>
-      <RankedLeagueHistory periods={periods} locale={locale} />
+      <View style={layout.isExpanded ? styles.expandedHistoryChart : { display: 'contents' }}>
+        <RankedLeagueHistory periods={periods} locale={locale} />
+      </View>
       <CKText skeleton={false} role="titleSmall">
         {t('generalHistory')}
       </CKText>
       {completed.length ? (
-        completed.map((period) => (
-          <HistoryPeriodRow
-            key={period.seasonId}
-            period={period}
-            locale={locale}
-            onPress={() => onSelect(period)}
-          />
-        ))
+        <WarPanelGrid embedded>
+          {completed.map((period) => (
+            <HistoryPeriodRow
+              key={period.seasonId}
+              period={period}
+              locale={locale}
+              onPress={() => onSelect(period)}
+            />
+          ))}
+        </WarPanelGrid>
       ) : (
         <EmptyState showSticker={false} title={t('generalNoDataAvailable')} />
       )}
@@ -1068,55 +1213,57 @@ function RankedPeriodPicker({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <Pressable
-        onPress={onClose}
-        style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000099' }}
-      >
+      <EntityModalViewport>
         <Pressable
-          onPress={() => undefined}
-          style={{
-            width: '100%',
-            maxWidth: 520,
-            alignSelf: 'center',
-            padding: 20,
-            paddingBottom: insets.bottom + 20,
-            borderTopLeftRadius: 28,
-            borderTopRightRadius: 28,
-            backgroundColor: theme.surface,
-          }}
+          onPress={onClose}
+          style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000099' }}
         >
-          <View
+          <Pressable
+            onPress={() => undefined}
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 12,
+              width: '100%',
+              maxWidth: 520,
+              alignSelf: 'center',
+              padding: 20,
+              paddingBottom: insets.bottom + 20,
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
+              backgroundColor: theme.surface,
             }}
           >
-            <CKText skeleton={false} role="titleSmall">
-              {t('clanRankingsSeason')}
-            </CKText>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={materialCloseLabel(locale)}
-              onPress={onClose}
-              style={{ padding: 8 }}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 12,
+              }}
             >
-              <X size={22} color={theme.onSurface} />
-            </Pressable>
-          </View>
-          <CalendarPicker
-            start={local(selected.startsAt)}
-            minimum={new Date(Math.min(...dates.map(Number)))}
-            maximum={new Date(Math.max(...dates.map(Number)))}
-            isDateSelectable={(date) => date.getDay() === 1 && keys.has(key(date))}
-            onChange={(date) => {
-              const index = dates.findIndex((value) => key(value) === key(date));
-              if (index >= 0) onSelect(index);
-            }}
-          />
+              <CKText skeleton={false} role="titleSmall">
+                {t('clanRankingsSeason')}
+              </CKText>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={materialCloseLabel(locale)}
+                onPress={onClose}
+                style={{ padding: 8 }}
+              >
+                <X size={22} color={theme.onSurface} />
+              </Pressable>
+            </View>
+            <CalendarPicker
+              start={local(selected.startsAt)}
+              minimum={new Date(Math.min(...dates.map(Number)))}
+              maximum={new Date(Math.max(...dates.map(Number)))}
+              isDateSelectable={(date) => date.getDay() === 1 && keys.has(key(date))}
+              onChange={(date) => {
+                const index = dates.findIndex((value) => key(value) === key(date));
+                if (index >= 0) onSelect(index);
+              }}
+            />
+          </Pressable>
         </Pressable>
-      </Pressable>
+      </EntityModalViewport>
     </Modal>
   );
 }
@@ -1284,6 +1431,37 @@ const styles = StyleSheet.create({
   headerActions: { flexDirection: 'row', gap: 8 },
   identity: { alignItems: 'center', gap: 8 },
   identityDesktop: { flexDirection: 'row', alignSelf: 'center' },
+  expandedHeroBody: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 24,
+    paddingVertical: 0,
+  },
+  expandedIdentity: {
+    flexBasis: 240,
+    flexGrow: 1,
+    alignSelf: 'auto',
+    justifyContent: 'flex-start',
+    gap: 16,
+  },
+  expandedIdentityCopy: { alignItems: 'flex-start', flex: 1, minWidth: 0 },
+  expandedHeaderStats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flexBasis: 460,
+    flexGrow: 1,
+    gap: 12,
+  },
+  expandedHeaderMetric: { flex: 1, minWidth: 100, gap: 3 },
+  expandedMetricLabel: { fontSize: 14, lineHeight: 19 },
+  expandedMetricValue: {
+    fontSize: 24,
+    lineHeight: 29,
+    fontWeight: '700',
+    fontVariant: ['tabular-nums'],
+  },
+  expandedHistoryChart: { width: '100%', maxWidth: 880, alignSelf: 'center' },
   identityCopy: { alignItems: 'center' },
   identityName: { maxWidth: 280, fontSize: 26, lineHeight: 27, fontWeight: '700' },
   tierBadgeShell: {

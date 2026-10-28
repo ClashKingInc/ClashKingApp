@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Autoriser",
   "achievementsTitle": "Succès",
   "achievementEarnedLabel": "Obtenu",
+  "achievementGemsEarnedRatio": "{earned} / {total} obtenues",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Vous avez obtenu {earned} gemmes sur {total} grâce aux succès.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} terminé",
   "achievementEarnedCount": "Obtenu ×{count}",
   "achievementTownhall18Name": "Hôtel de ville 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Même hôtel de ville uniquement",
+  "warStatsSameTownHall": "Même hôtel de ville",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Abonnés",
   "drawerFollowersHelp": "Personnes ayant ajouté l’un de tes comptes liés et vérifiés à leurs favoris.",
   "drawerCalculators": "Calculateurs",
-  "drawerSubscription": "Abonnement",
   "drawerUpgradeTracker": "Suivi des améliorations",
   "drawerBasesArmies": "Bases et armées",
   "drawerGameAssets": "Ressources du jeu",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Recevoir des alertes pour ce compte.",
   "playerOptionNotificationsEnableMaster": "Active d’abord les notifications dans les paramètres.",
   "playerOptionNotificationsVerifyFirst": "Vérifie ce compte pour activer les notifications.",
-  "playerOptionNotificationsSubscriptionRequired": "Un abonnement est nécessaire pour les notifications des favoris.",
   "playerOptionNotificationsLimitReached": "La limite de notifications pour les favoris est atteinte.",
   "playerOptionShowTodoPageTitle": "Afficher sur la page To Do",
   "playerOptionShowTodoPageSubtitle": "Inclure ce compte dans la liste To Do complète.",

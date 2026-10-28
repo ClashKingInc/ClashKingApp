@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { useNativeRailBack } from '../../ui/native-back-context';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { BackHandler, Pressable, View, useWindowDimensions } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
@@ -22,9 +24,11 @@ export function ServerDashboardScreen({
     theme = useCKTheme(),
     { t, locale } = useI18n();
   const selected = server;
+  const layout = useAdaptiveLayout();
+  const nativeBack = useNativeRailBack(onBack);
   const { width, height } = useWindowDimensions();
   // Use the short edge so rotating a phone cannot enable the tablet header.
-  const showNavigationBar = Math.min(width, height) >= 600 && width > height;
+  const showNavigationBar = layout.isExpanded || (Math.min(width, height) >= 600 && width > height);
   const [handoff, setHandoff] = useState<{
       code: string;
       codeVerifier: string;
@@ -91,16 +95,34 @@ export function ServerDashboardScreen({
       style={{ flex: 1, backgroundColor: theme.background }}
     >
       {showNavigationBar ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={materialBackLabel(locale)}
-            onPress={onBack}
-            style={{ minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' }}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: layout.isExpanded ? 16 : 8,
+            minHeight: layout.isExpanded ? 64 : undefined,
+          }}
+        >
+          {!nativeBack ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={materialBackLabel(locale)}
+              onPress={onBack}
+              style={{
+                minWidth: 44,
+                minHeight: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <ChevronLeft color={theme.onSurface} size={24} />
+            </Pressable>
+          ) : null}
+          <CKText
+            role={layout.isExpanded ? 'titleSmall' : 'labelLarge'}
+            numberOfLines={1}
+            style={{ flex: 1 }}
           >
-            <ChevronLeft color={theme.onSurface} size={24} />
-          </Pressable>
-          <CKText role="labelLarge" numberOfLines={1} style={{ flex: 1 }}>
             {server.name}
           </CKText>
         </View>

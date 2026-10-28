@@ -1,7 +1,11 @@
 import { type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
+import { illustratedHeaderLayout } from './illustrated-header-layout';
 import { HeroHeaderScrim } from './hero-header-scrim';
+import { useNativeRailBack } from './native-back-context';
+import { useAdaptiveLayout } from './adaptive-layout';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeaderArtwork } from './header-artwork';
 
 import { ImageAssets } from '../core/assets/image-assets';
@@ -54,7 +58,152 @@ export function ProfilePageHeader({
   children,
   testID = 'profile-page-header',
 }: ProfilePageHeaderProps) {
+  const nativeBack = useNativeRailBack(onBack);
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  if (layout.isExpanded) {
+    const geometry = illustratedHeaderLayout(layout);
+    const railLeft = layout.isDuo ? insets.left : 0;
+    const railRight = layout.isDuo ? insets.right : 0;
+    return (
+      <View
+        testID={testID}
+        style={[
+          styles.header,
+          {
+            paddingTop: safeTop,
+            minHeight: geometry.minHeight + safeTop,
+            marginLeft: -railLeft,
+            marginRight: -railRight,
+          },
+        ]}
+      >
+        <View testID="profile-page-header-backdrop" pointerEvents="none" style={styles.backdrop}>
+          {backgroundElement ?? (
+            <>
+              {backgroundSource ? (
+                <HeaderArtwork
+                  source={backgroundSource}
+                  style={StyleSheet.absoluteFill}
+                  contentFit="cover"
+                />
+              ) : (
+                <MobileWebImage
+                  imageUrl={backgroundUrl}
+                  displaySize={headerArtworkSize(width)}
+                  cachePolicy="memory-disk"
+                  priority="high"
+                  transition={0}
+                  style={StyleSheet.absoluteFill}
+                  contentFit="cover"
+                />
+              )}
+              <HeroHeaderScrim clipRailInset />
+            </>
+          )}
+        </View>
+        <View
+          style={{
+            width: '100%',
+            maxWidth: layout.contentMaxWidth + railLeft + railRight,
+            alignSelf: 'center',
+            paddingLeft: railLeft,
+            paddingRight: railRight,
+          }}
+        >
+          <View style={[styles.actionRow, { paddingHorizontal: 20 }]}>
+            {nativeBack ? (
+              <View style={styles.backButton} />
+            ) : (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={backLabel}
+                hitSlop={8}
+                onPress={onBack}
+                style={styles.backButton}
+              >
+                <ArrowLeft color="#fff" />
+              </Pressable>
+            )}
+            <View style={styles.actionSpacer} />
+            {actions ? <View style={styles.actions}>{actions}</View> : null}
+          </View>
+          <View
+            style={{
+              minHeight: geometry.bodyMinHeight,
+              justifyContent: 'center',
+              gap: 16,
+              paddingHorizontal: geometry.horizontal,
+              paddingTop: 8,
+              paddingBottom: Math.max(geometry.bottom, bottomPadding),
+            }}
+          >
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: geometry.gap,
+              }}
+            >
+              {imageElement ?? (
+                <MobileWebImage
+                  imageUrl={imageUrl}
+                  cachePolicy="memory-disk"
+                  priority="high"
+                  transition={0}
+                  style={{
+                    width: Math.max(imageSize, geometry.image),
+                    height: Math.max(imageSize, geometry.image),
+                  }}
+                  contentFit="contain"
+                  testID="profile-page-header-image"
+                />
+              )}
+              <View style={{ flex: 1, minWidth: 0, gap: 6 }}>
+                <View style={[styles.titleRow, { justifyContent: 'flex-start' }]}>
+                  {titleImageUrl ? (
+                    <MobileWebImage
+                      imageUrl={titleImageUrl}
+                      style={styles.titleImage}
+                      contentFit="contain"
+                    />
+                  ) : null}
+                  <CKText
+                    role="titleLarge"
+                    style={[
+                      styles.title,
+                      {
+                        textAlign: 'left',
+                        fontSize: geometry.title,
+                        lineHeight: geometry.titleLine,
+                      },
+                    ]}
+                  >
+                    {title}
+                  </CKText>
+                </View>
+                {subtitle ? (
+                  <CKText
+                    role="bodySmall"
+                    style={[styles.subtitle, { textAlign: 'left', paddingHorizontal: 0 }]}
+                  >
+                    {subtitle}
+                  </CKText>
+                ) : null}
+              </View>
+            </View>
+            {children ? (
+              <View style={{ width: '100%', minWidth: 0, gap: 8, alignItems: 'flex-start' }}>
+                {children}
+              </View>
+            ) : null}
+          </View>
+        </View>
+      </View>
+    );
+  }
   return (
     <View testID={testID} style={[styles.header, { paddingTop: safeTop }]}>
       <View testID="profile-page-header-backdrop" pointerEvents="none" style={styles.backdrop}>
@@ -81,17 +230,27 @@ export function ProfilePageHeader({
           </>
         )}
       </View>
-      <View style={[styles.content, { paddingBottom: bottomPadding }]}>
+      <View
+        style={[
+          styles.content,
+          { paddingBottom: bottomPadding },
+          layout.isDuo && { maxWidth: layout.contentMaxWidth },
+        ]}
+      >
         <View style={styles.actionRow}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={backLabel}
-            hitSlop={8}
-            onPress={onBack}
-            style={styles.backButton}
-          >
-            <ArrowLeft color="#fff" />
-          </Pressable>
+          {nativeBack ? (
+            <View style={styles.backButton} />
+          ) : (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={backLabel}
+              hitSlop={8}
+              onPress={onBack}
+              style={styles.backButton}
+            >
+              <ArrowLeft color="#fff" />
+            </Pressable>
+          )}
           <View style={styles.actionSpacer} />
           {actions ? <View style={styles.actions}>{actions}</View> : null}
         </View>

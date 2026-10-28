@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "허용",
   "achievementsTitle": "업적",
   "achievementEarnedLabel": "획득 횟수",
+  "achievementGemsEarnedRatio": "{earned} / {total} 획득",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "업적 보석 총 {total}개 중 {earned}개를 획득했습니다.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} 완료됨",
   "achievementEarnedCount": "획득 횟수 ×{count}",
   "achievementTownhall18Name": "마을 회관 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "동일 마을회관만",
+  "warStatsSameTownHall": "같은 마을 회관",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "추종자",
   "drawerFollowersHelp": "확인된 연결 계정 중 하나를 북마크한 사람들입니다.",
   "drawerCalculators": "계산기",
-  "drawerSubscription": "신청",
   "drawerUpgradeTracker": "업그레이드 추적기",
   "drawerBasesArmies": "기지 및 군대",
   "drawerGameAssets": "게임 자산",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "이 계정에 대한 알림을 받으세요.",
   "playerOptionNotificationsEnableMaster": "먼저 설정에서 알림을 켜세요.",
   "playerOptionNotificationsVerifyFirst": "알림을 사용하려면 이 계정을 인증하세요.",
-  "playerOptionNotificationsSubscriptionRequired": "북마크 알림을 사용하려면 구독이 필요합니다.",
   "playerOptionNotificationsLimitReached": "북마크 알림 한도에 도달했습니다.",
   "playerOptionShowTodoPageTitle": "할 일 페이지에 표시",
   "playerOptionShowTodoPageSubtitle": "전체 할 일 목록에 이 계정을 포함하세요.",

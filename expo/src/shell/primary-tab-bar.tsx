@@ -14,7 +14,7 @@ export function PrimaryTabBar({
   t,
   isRtl = false,
 }: {
-  selected: PrimaryRouteId;
+  selected?: PrimaryRouteId;
   onSelect: (route: PrimaryRouteId) => void;
   t: Translate;
   isRtl?: boolean;

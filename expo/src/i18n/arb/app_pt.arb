@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Permitir",
   "achievementsTitle": "Conquistas",
   "achievementEarnedLabel": "Conquistado",
+  "achievementGemsEarnedRatio": "{earned} / {total} obtidas",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Você obteve {earned} de {total} gemas de conquistas.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} concluído",
   "achievementEarnedCount": "Conquistado ×{count}",
   "achievementTownhall18Name": "Câmara Municipal 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Apenas mesmo Centro da Vila",
+  "warStatsSameTownHall": "Mesmo centro de vila",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Seguidores",
   "drawerFollowersHelp": "Pessoas que adicionaram uma de suas contas vinculadas verificadas aos favoritos.",
   "drawerCalculators": "Calculadoras",
-  "drawerSubscription": "Subscrição",
   "drawerUpgradeTracker": "Rastreador de atualização",
   "drawerBasesArmies": "Bases e exércitos",
   "drawerGameAssets": "Recursos do jogo",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Receba alertas para esta conta.",
   "playerOptionNotificationsEnableMaster": "Ative primeiro as notificações nas Definições.",
   "playerOptionNotificationsVerifyFirst": "Verifique esta conta para ativar as notificações.",
-  "playerOptionNotificationsSubscriptionRequired": "É necessária uma subscrição para as notificações dos favoritos.",
   "playerOptionNotificationsLimitReached": "Atingiu o limite de notificações dos favoritos.",
   "playerOptionShowTodoPageTitle": "Mostrar na página de tarefas",
   "playerOptionShowTodoPageSubtitle": "Inclua esta conta na lista completa de tarefas.",

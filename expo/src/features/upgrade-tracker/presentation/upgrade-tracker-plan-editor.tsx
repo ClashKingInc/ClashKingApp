@@ -1,5 +1,7 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
-import { type ViewInstance, type ScrollViewInstance,
+import { modalOrientations } from '../../../ui/modal-orientations';
+import {
+  type ViewInstance,
+  type ScrollViewInstance,
   Modal,
   PanResponder,
   Pressable,
@@ -21,6 +23,8 @@ import { runOnJS, useAnimatedReaction, useSharedValue } from 'react-native-reani
 import { CARD_REORDER_HOLD_MS, DragJiggle } from '../../../ui/drag-jiggle';
 
 import { useI18n } from '../../../i18n';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { ReservedRegionLayout } from '../../../ui/reserved-region-layout';
 import { CKText, PillSurface, PressableSurface, Surface, ckRadius, useCKTheme } from '../../../ui';
 import {
   UpgradeCategory,
@@ -207,23 +211,66 @@ export function priorityTierForOrder(
   return 999;
 }
 
+type PlanEditorProps = {
+  visible: boolean;
+  snapshot: UpgradeTrackerSnapshot;
+  preferences: UpgradePlanPreferencesType;
+  onClose: () => void;
+  onSave: (value: UpgradePlanPreferencesType) => void;
+};
+
 export function UpgradeTrackerPlanEditor({
   visible,
   snapshot,
   preferences,
   onClose,
   onSave,
+}: PlanEditorProps) {
+  const theme = useCKTheme();
+  const [draft, setDraft] = useState(preferences);
+  return (
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      presentationStyle="fullScreen"
+      animationType="fade"
+      onRequestClose={onClose}
+      onShow={() => setDraft(preferences)}
+    >
+      {/* Keep the gesture root and its full-window background outside the pane. */}
+      <GestureHandlerRootView style={[editorStyles.overlay, { backgroundColor: theme.background }]}>
+        <ReservedRegionLayout>
+          <PlanEditorContent
+            snapshot={snapshot}
+            draft={draft}
+            setDraft={setDraft}
+            onClose={onClose}
+            onSave={onSave}
+          />
+        </ReservedRegionLayout>
+      </GestureHandlerRootView>
+    </Modal>
+  );
+}
+
+function PlanEditorContent({
+  snapshot,
+  draft,
+  setDraft,
+  onClose,
+  onSave,
 }: {
-  visible: boolean;
   snapshot: UpgradeTrackerSnapshot;
-  preferences: UpgradePlanPreferencesType;
+  draft: UpgradePlanPreferencesType;
+  setDraft: (value: UpgradePlanPreferencesType) => void;
   onClose: () => void;
   onSave: (value: UpgradePlanPreferencesType) => void;
 }) {
   const theme = useCKTheme();
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
-  const [draft, setDraft] = useState(preferences);
+  const layout = useAdaptiveLayout();
+  const expanded = layout.isExpanded;
   const sections = useMemo(
     () =>
       [
@@ -255,141 +302,151 @@ export function UpgradeTrackerPlanEditor({
           villages: [UpgradeVillage.home],
         },
       ] as const,
-    [draft, t],
+    [draft, t, setDraft],
   );
   return (
-    <Modal supportedOrientations={modalOrientations}
-      visible={visible}
-      presentationStyle="fullScreen"
-      animationType="fade"
-      onRequestClose={onClose}
-      onShow={() => setDraft(preferences)}
+    <Surface
+      radius={0}
+      style={[
+        editorStyles.modal,
+        { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 },
+        layout.isDuo &&
+          !expanded && {
+            paddingLeft: insets.left + 16,
+            paddingRight: insets.right + 16,
+          },
+        expanded && {
+          maxWidth: layout.contentMaxWidth,
+          paddingLeft: insets.left + 24,
+          paddingRight: insets.right + 24,
+        },
+      ]}
     >
-      {/* Native Modal creates a separate gesture root. Without this wrapper iOS can scroll but cannot reorder. */}
-      <GestureHandlerRootView style={[editorStyles.overlay, { backgroundColor: theme.background }]}>
-        <Surface
-          radius={0}
-          style={[
-            editorStyles.modal,
-            { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 },
-          ]}
+      <View style={editorStyles.header}>
+        <View style={editorStyles.grow}>
+          <CKText role="titleLarge">{t('upgradeTrackerPlanPrioritiesTitle')}</CKText>
+        </View>
+        <InfoTooltip
+          label={t('upgradeTrackerPlanPrioritiesTitle')}
+          message={t('upgradeTrackerPlanRuleNote')}
+        />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('upgradeTrackerPlanClose')}
+          onPress={onClose}
         >
-          <View style={editorStyles.header}>
-            <View style={editorStyles.grow}>
-              <CKText role="titleLarge">{t('upgradeTrackerPlanPrioritiesTitle')}</CKText>
+          <X color={theme.onSurface} />
+        </Pressable>
+      </View>
+      <PriorityScrollContainer contentContainerStyle={editorStyles.content}>
+        {sections.map((section) => {
+          const villageOrders = section.villages.map((village) => ({
+            village,
+            order: planQueueOrder(snapshot, draft, village, section.queue),
+          }));
+          if (!villageOrders.some(({ order }) => order.length)) return null;
+          return (
+            <View key={section.title} style={editorStyles.section}>
+              {section.queue !== UpgradeQueue.builders ? (
+                <SectionTitle title={section.title} />
+              ) : null}
+              <CompactToggle
+                label={t('upgradeTrackerPlanPrioritizeNewItems')}
+                description={t('upgradeTrackerPlanPrioritizeNewDescription')}
+                value={section.toggle}
+                onChange={section.setToggle}
+              />
+              <View
+                style={
+                  expanded
+                    ? { flexDirection: 'row', gap: 24, alignItems: 'flex-start' }
+                    : { gap: 5 }
+                }
+              >
+                {villageOrders.map(({ village, order }) => {
+                  return order.length ? (
+                    <View
+                      key={village}
+                      style={[editorStyles.village, expanded && { flex: 1, minWidth: 0 }]}
+                    >
+                      <CKText role="labelLarge">
+                        {village === UpgradeVillage.home
+                          ? t('upgradeTrackerHomeVillage')
+                          : t('upgradeTrackerBuilderBase')}
+                      </CKText>
+                      <PriorityList
+                        snapshot={snapshot}
+                        village={village}
+                        order={order}
+                        targets={
+                          village === UpgradeVillage.home
+                            ? draft.homeCategoryTargets
+                            : draft.builderBaseCategoryTargets
+                        }
+                        shares={
+                          village === UpgradeVillage.home
+                            ? draft.homeCategoryShares
+                            : draft.builderBaseCategoryShares
+                        }
+                        onReorder={(next) => {
+                          const replacement = replacePlanQueueOrder(
+                            snapshot,
+                            draft.orderFor(village),
+                            village,
+                            section.queue,
+                            next,
+                          );
+                          updateDraft(draft, setDraft, {
+                            ...(village === UpgradeVillage.home
+                              ? { homeCategoryOrder: replacement }
+                              : { builderBaseCategoryOrder: replacement }),
+                          });
+                        }}
+                        onTarget={(category, target) =>
+                          updateMap(draft, setDraft, village, 'target', category, target)
+                        }
+                        onShare={(category, share) =>
+                          updateMap(draft, setDraft, village, 'share', category, share)
+                        }
+                      />
+                    </View>
+                  ) : null;
+                })}
+              </View>
             </View>
-            <InfoTooltip
-              label={t('upgradeTrackerPlanPrioritiesTitle')}
-              message={t('upgradeTrackerPlanRuleNote')}
-            />
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('upgradeTrackerPlanClose')}
-              onPress={onClose}
-            >
-              <X color={theme.onSurface} />
-            </Pressable>
-          </View>
-          <PriorityScrollContainer contentContainerStyle={editorStyles.content}>
-            {sections.map((section) => {
-              const villageOrders = section.villages.map((village) => ({
-                village,
-                order: planQueueOrder(snapshot, draft, village, section.queue),
-              }));
-              if (!villageOrders.some(({ order }) => order.length)) return null;
-              return (
-                <View key={section.title} style={editorStyles.section}>
-                  {section.queue !== UpgradeQueue.builders ? (
-                    <SectionTitle title={section.title} />
-                  ) : null}
-                  <CompactToggle
-                    label={t('upgradeTrackerPlanPrioritizeNewItems')}
-                    description={t('upgradeTrackerPlanPrioritizeNewDescription')}
-                    value={section.toggle}
-                    onChange={section.setToggle}
-                  />
-                  {villageOrders.map(({ village, order }) => {
-                    return order.length ? (
-                      <View key={village} style={editorStyles.village}>
-                        <CKText role="labelLarge">
-                          {village === UpgradeVillage.home
-                            ? t('upgradeTrackerHomeVillage')
-                            : t('upgradeTrackerBuilderBase')}
-                        </CKText>
-                        <PriorityList
-                          snapshot={snapshot}
-                          village={village}
-                          order={order}
-                          targets={
-                            village === UpgradeVillage.home
-                              ? draft.homeCategoryTargets
-                              : draft.builderBaseCategoryTargets
-                          }
-                          shares={
-                            village === UpgradeVillage.home
-                              ? draft.homeCategoryShares
-                              : draft.builderBaseCategoryShares
-                          }
-                          onReorder={(next) => {
-                            const replacement = replacePlanQueueOrder(
-                              snapshot,
-                              draft.orderFor(village),
-                              village,
-                              section.queue,
-                              next,
-                            );
-                            updateDraft(draft, setDraft, {
-                              ...(village === UpgradeVillage.home
-                                ? { homeCategoryOrder: replacement }
-                                : { builderBaseCategoryOrder: replacement }),
-                            });
-                          }}
-                          onTarget={(category, target) =>
-                            updateMap(draft, setDraft, village, 'target', category, target)
-                          }
-                          onShare={(category, share) =>
-                            updateMap(draft, setDraft, village, 'share', category, share)
-                          }
-                        />
-                      </View>
-                    ) : null;
-                  })}
-                </View>
-              );
-            })}
-            <SectionTitle title={t('upgradeTrackerWalls')} />
-            <StepSlider
-              label={t('upgradeTrackerPlanWallsEachWeek')}
-              value={draft.wallsPerWeek}
-              minimum={0}
-              maximum={20}
-              lowLabel={t('upgradeTrackerPlanOff')}
-              highLabel={t('upgradeTrackerPlanPerWeek', { count: draft.wallsPerWeek })}
-              onChange={(wallsPerWeek) => updateDraft(draft, setDraft, { wallsPerWeek })}
-            />
-            <CompactToggle
-              label={t('upgradeTrackerPlanPreferGold')}
-              description={t('upgradeTrackerPlanPreferGoldDescription')}
-              value={draft.wallResourcePreference === UpgradeWallResourcePreference.gold}
-              onChange={(value) =>
-                updateDraft(draft, setDraft, {
-                  wallResourcePreference: value
-                    ? UpgradeWallResourcePreference.gold
-                    : UpgradeWallResourcePreference.elixir,
-                })
-              }
-            />
-          </PriorityScrollContainer>
-          <PressableSurface
-            accessibilityRole="button"
-            onPress={() => onSave(draft)}
-            style={editorStyles.primaryAction}
-          >
-            <CKText>{t('upgradeTrackerPlanApplyPriorities')}</CKText>
-          </PressableSurface>
-        </Surface>
-      </GestureHandlerRootView>
-    </Modal>
+          );
+        })}
+        <SectionTitle title={t('upgradeTrackerWalls')} />
+        <StepSlider
+          label={t('upgradeTrackerPlanWallsEachWeek')}
+          value={draft.wallsPerWeek}
+          minimum={0}
+          maximum={20}
+          lowLabel={t('upgradeTrackerPlanOff')}
+          highLabel={t('upgradeTrackerPlanPerWeek', { count: draft.wallsPerWeek })}
+          onChange={(wallsPerWeek) => updateDraft(draft, setDraft, { wallsPerWeek })}
+        />
+        <CompactToggle
+          label={t('upgradeTrackerPlanPreferGold')}
+          description={t('upgradeTrackerPlanPreferGoldDescription')}
+          value={draft.wallResourcePreference === UpgradeWallResourcePreference.gold}
+          onChange={(value) =>
+            updateDraft(draft, setDraft, {
+              wallResourcePreference: value
+                ? UpgradeWallResourcePreference.gold
+                : UpgradeWallResourcePreference.elixir,
+            })
+          }
+        />
+      </PriorityScrollContainer>
+      <PressableSurface
+        accessibilityRole="button"
+        onPress={() => onSave(draft)}
+        style={editorStyles.primaryAction}
+      >
+        <CKText>{t('upgradeTrackerPlanApplyPriorities')}</CKText>
+      </PressableSurface>
+    </Surface>
   );
 }
 
@@ -531,7 +588,8 @@ function PriorityList({
           );
         }}
       />
-      <Modal supportedOrientations={modalOrientations}
+      <Modal
+        supportedOrientations={modalOrientations}
         visible={menu !== null}
         transparent
         animationType="fade"

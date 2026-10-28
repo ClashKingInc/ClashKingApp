@@ -1,4 +1,7 @@
 import type { TextInputInstance } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { ResponsiveGrid } from '../../ui/responsive-grid';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import {
@@ -85,6 +88,18 @@ export interface SearchScreenProps {
 export function SearchScreen(props: SearchScreenProps) {
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
+  const controlBounds = (layout.isExpanded || layout.isDuo) && {
+    width: '100%' as const,
+    maxWidth: layout.readableMaxWidth,
+    alignSelf: 'center' as const,
+  };
+  const resultBounds = (layout.isExpanded || layout.isDuo) && {
+    width: '100%' as const,
+    maxWidth: layout.contentMaxWidth,
+    alignSelf: 'center' as const,
+  };
   const { reduceMotion } = useCKAccessibility();
   const [contentOpacity] = useState(
     () => new Animated.Value(props.overlay && !reduceMotion ? 0 : 1),
@@ -197,18 +212,20 @@ export function SearchScreen(props: SearchScreenProps) {
           >
             {t('searchRecent')}
           </CKText>
-          {visibleRecents.slice(0, 10).map((item) => (
-            <EntityTile
-              key={`${item.type}:${item.tag}`}
-              name={item.name}
-              tag={item.tag}
-              subtitle={recentSubtitle(item, t)}
-              imageUrl={item.imageUrl}
-              type={item.type}
-              overlay={props.overlay ?? false}
-              onPress={() => props.onOpenRecent(item)}
-            />
-          ))}
+          <SearchResultCollection>
+            {visibleRecents.slice(0, 10).map((item) => (
+              <EntityTile
+                key={`${item.type}:${item.tag}`}
+                name={item.name}
+                tag={item.tag}
+                subtitle={recentSubtitle(item, t)}
+                imageUrl={item.imageUrl}
+                type={item.type}
+                overlay={props.overlay ?? false}
+                onPress={() => props.onOpenRecent(item)}
+              />
+            ))}
+          </SearchResultCollection>
         </>
       ) : null}
       {props.query.trim().length !== 0 &&
@@ -220,42 +237,57 @@ export function SearchScreen(props: SearchScreenProps) {
         </CKText>
       ) : props.isSearching && props.results.length === 0 ? (
         <SkeletonContent loading>
-          {[0, 1, 2, 3, 4].map((index) => (
-            <EntityTile
-              key={index}
-              name="ClashKing player"
-              tag="#PLAYER"
-              subtitle="Player information"
-              imageUrl={props.mode === 'players' ? ImageAssets.townHall(1) : ImageAssets.clanCastle}
-              type={props.mode === 'players' ? 'player' : 'clan'}
-              overlay={props.overlay ?? false}
-              onPress={() => {}}
-            />
-          ))}
+          <SearchResultCollection>
+            {[0, 1, 2, 3, 4].map((index) => (
+              <EntityTile
+                key={index}
+                name="ClashKing player"
+                tag="#PLAYER"
+                subtitle="Player information"
+                imageUrl={
+                  props.mode === 'players' ? ImageAssets.townHall(1) : ImageAssets.clanCastle
+                }
+                type={props.mode === 'players' ? 'player' : 'clan'}
+                overlay={props.overlay ?? false}
+                onPress={() => {}}
+              />
+            ))}
+          </SearchResultCollection>
         </SkeletonContent>
       ) : (
-        props.results.map((result, index) => (
-          <EntityTile
-            key={`${stringValue(result.tag)}:${index}`}
-            name={stringValue(result.name)}
-            tag={stringValue(result.tag)}
-            subtitle={resultSubtitle(result, props.mode)}
-            imageUrl={resultImage(result, props.mode)}
-            type={props.mode === 'players' ? 'player' : 'clan'}
-            overlay={props.overlay ?? false}
-            onPress={() => props.onOpenResult(result, props.mode)}
-          />
-        ))
+        <SearchResultCollection>
+          {props.results.map((result, index) => (
+            <EntityTile
+              key={`${stringValue(result.tag)}:${index}`}
+              name={stringValue(result.name)}
+              tag={stringValue(result.tag)}
+              subtitle={resultSubtitle(result, props.mode)}
+              imageUrl={resultImage(result, props.mode)}
+              type={props.mode === 'players' ? 'player' : 'clan'}
+              overlay={props.overlay ?? false}
+              onPress={() => props.onOpenResult(result, props.mode)}
+            />
+          ))}
+        </SearchResultCollection>
       )}
     </>
   );
 
   if (props.overlay) {
     return (
-      <GlobalSearchHeaderFrame style={[styles.screen, { backgroundColor: theme.background }]}>
+      <GlobalSearchHeaderFrame
+        style={[
+          styles.screen,
+          { backgroundColor: theme.background },
+          (layout.isDuo || layout.isTablet) && {
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
+      >
         <View
           onLayout={() => setHeaderLaidOut(true)}
-          style={[styles.overlayHeader, isRtl && styles.rowRtl]}
+          style={[styles.overlayHeader, isRtl && styles.rowRtl, controlBounds]}
         >
           <Pressable
             accessibilityRole="button"
@@ -272,7 +304,7 @@ export function SearchScreen(props: SearchScreenProps) {
           <View style={styles.grow}>{searchField}</View>
         </View>
         <Animated.View style={[styles.grow, { opacity: contentOpacity }]}>
-          <View style={styles.overlayMode}>
+          <View style={[styles.overlayMode, controlBounds]}>
             <ModeSelector mode={props.mode} compact isRtl={isRtl} onChange={props.onModeChange} />
           </View>
           <ScrollView
@@ -282,6 +314,7 @@ export function SearchScreen(props: SearchScreenProps) {
             style={styles.grow}
             contentContainerStyle={[
               styles.overlayResults,
+              resultBounds,
               props.query.trim().length !== 0 || visibleRecents.length === 0
                 ? styles.overlayResultSpacer
                 : undefined,
@@ -289,7 +322,7 @@ export function SearchScreen(props: SearchScreenProps) {
             testID="search-overlay-scroll"
           >
             {props.filtersExpanded ? (
-              <View style={styles.overlayFilters}>{filtersPanel(props)}</View>
+              <View style={[styles.overlayFilters, controlBounds]}>{filtersPanel(props)}</View>
             ) : null}
             {resultContent}
           </ScrollView>
@@ -303,12 +336,18 @@ export function SearchScreen(props: SearchScreenProps) {
       <ScrollView
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.page}
+        contentContainerStyle={[styles.page, resultBounds]}
       >
-        <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
-        <View style={styles.pageSearch}>{searchField}</View>
+        {controlBounds ? (
+          <View style={controlBounds}>
+            <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
+          </View>
+        ) : (
+          <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
+        )}
+        <View style={[styles.pageSearch, controlBounds]}>{searchField}</View>
         {props.filtersExpanded ? (
-          <View style={styles.pageFilters}>{filtersPanel(props)}</View>
+          <View style={[styles.pageFilters, controlBounds]}>{filtersPanel(props)}</View>
         ) : null}
         <View
           style={
@@ -321,6 +360,16 @@ export function SearchScreen(props: SearchScreenProps) {
         </View>
       </ScrollView>
     </View>
+  );
+}
+
+function SearchResultCollection({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded) return <>{children}</>;
+  return (
+    <ResponsiveGrid minItemWidth={300} maxColumns={layout.columns(300, 3)} gap={16}>
+      {children}
+    </ResponsiveGrid>
   );
 }
 

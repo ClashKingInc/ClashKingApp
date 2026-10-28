@@ -1,3 +1,4 @@
+import { ClanAdaptiveCards, ClanModalViewport, ClanTabEmpty } from './clan-tab-components';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -16,7 +17,6 @@ import {
 import type { ClanCompetitiveDay } from '../models/clan-competitive';
 import { ClanMember } from '../models/clan-core';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import { ClanTabEmpty } from './clan-tab-components';
 
 const signed = (value: number) => `${value >= 0 ? '+' : ''}${value.toLocaleString()}`;
 
@@ -140,77 +140,81 @@ export function ClanCompetitiveTab({
           animationType="slide"
           onRequestClose={() => setDateOpen(false)}
         >
-          <Pressable style={styles.overlay} onPress={() => setDateOpen(false)}>
-            <Pressable
-              style={[styles.sheet, { backgroundColor: theme.surface }]}
-              onPress={() => undefined}
-            >
-              <CalendarPicker
-                start={selectedDate}
-                minimum={earliest}
-                maximum={new Date(`${today}T12:00:00`)}
-                onChange={selectDate}
-              />
+          <ClanModalViewport>
+            <Pressable style={styles.overlay} onPress={() => setDateOpen(false)}>
+              <Pressable
+                style={[styles.sheet, { backgroundColor: theme.surface }]}
+                onPress={() => undefined}
+              >
+                <CalendarPicker
+                  start={selectedDate}
+                  minimum={earliest}
+                  maximum={new Date(`${today}T12:00:00`)}
+                  onChange={selectDate}
+                />
+              </Pressable>
             </Pressable>
-          </Pressable>
+          </ClanModalViewport>
         </Modal>
       ) : null}
       {rows.length ? (
         <SkeletonContent loading={!data && loading} style={{ gap: 12 }}>
-          {rows.map(({ member, globalRank, trophies, stats }) => (
-            <PressableSurface
-              key={member.tag}
-              style={styles.player}
-              onPress={() => void open(member.tag)}
-            >
-              <View style={styles.identity}>
-                <MobileWebImage
-                  imageUrl={ImageAssets.townHall(member.townHallLevel)}
-                  style={styles.hall}
-                />
-                <View style={styles.name}>
-                  <CKText role="rowTitle">{member.name}</CKText>
-                  <CKText role="metadata" muted>
-                    {member.tag}
-                    {globalRank ? ` · #${globalRank.toLocaleString()}` : ''}
-                  </CKText>
-                </View>
-                <View style={styles.trophies}>
+          <ClanAdaptiveCards>
+            {rows.map(({ member, globalRank, trophies, stats }) => (
+              <PressableSurface
+                key={member.tag}
+                style={styles.player}
+                onPress={() => void open(member.tag)}
+              >
+                <View style={styles.identity}>
                   <MobileWebImage
-                    imageUrl={ImageAssets.getLeagueImage(member.league.name)}
-                    style={styles.icon}
+                    imageUrl={ImageAssets.townHall(member.townHallLevel)}
+                    style={styles.hall}
                   />
-                  <CKText role="rowTitle">{trophies?.toLocaleString() ?? '—'}</CKText>
-                </View>
-              </View>
-              {stats ? (
-                <View style={styles.metrics}>
-                  <View style={styles.metric}>
-                    <MobileWebImage imageUrl={ImageAssets.sword} style={styles.icon} />
-                    <CKText>
-                      {signed(stats.attackTrophies)} · {stats.attacks}/8
+                  <View style={styles.name}>
+                    <CKText role="rowTitle">{member.name}</CKText>
+                    <CKText role="metadata" muted>
+                      {member.tag}
+                      {globalRank ? ` · #${globalRank.toLocaleString()}` : ''}
                     </CKText>
                   </View>
-                  <View style={styles.metric}>
-                    <MobileWebImage imageUrl={ImageAssets.shield} style={styles.icon} />
-                    <CKText>
-                      {signed(stats.defenseTrophies)} · {stats.defenses}/8
+                  <View style={styles.trophies}>
+                    <MobileWebImage
+                      imageUrl={ImageAssets.getLeagueImage(member.league.name)}
+                      style={styles.icon}
+                    />
+                    <CKText role="rowTitle">{trophies?.toLocaleString() ?? '—'}</CKText>
+                  </View>
+                </View>
+                {stats ? (
+                  <View style={styles.metrics}>
+                    <View style={styles.metric}>
+                      <MobileWebImage imageUrl={ImageAssets.sword} style={styles.icon} />
+                      <CKText>
+                        {signed(stats.attackTrophies)} · {stats.attacks}/8
+                      </CKText>
+                    </View>
+                    <View style={styles.metric}>
+                      <MobileWebImage imageUrl={ImageAssets.shield} style={styles.icon} />
+                      <CKText>
+                        {signed(stats.defenseTrophies)} · {stats.defenses}/8
+                      </CKText>
+                    </View>
+                    <CKText
+                      role="rowTitle"
+                      style={{
+                        color: stats.netTrophies >= 0 ? ckColors.donationGreen : ckColors.lossRed,
+                      }}
+                    >
+                      {signed(stats.netTrophies)}
                     </CKText>
                   </View>
-                  <CKText
-                    role="rowTitle"
-                    style={{
-                      color: stats.netTrophies >= 0 ? ckColors.donationGreen : ckColors.lossRed,
-                    }}
-                  >
-                    {signed(stats.netTrophies)}
-                  </CKText>
-                </View>
-              ) : (
-                <CKText muted>{t('generalNoDataAvailable')}</CKText>
-              )}
-            </PressableSurface>
-          ))}
+                ) : (
+                  <CKText muted>{t('generalNoDataAvailable')}</CKText>
+                )}
+              </PressableSurface>
+            ))}
+          </ClanAdaptiveCards>
         </SkeletonContent>
       ) : null}
       {data && !rows.length ? <ClanTabEmpty title={t('generalNoDataAvailable')} /> : null}

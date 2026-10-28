@@ -10,7 +10,7 @@
         {"/": "/search"}, {"/": "/todo"}, {"/": "/ranked"}, {"/": "/upgrade-tracker"},
         {"/": "/rankings"}, {"/": "/stats"}, {"/": "/calculators"},
         {"/": "/posts"}, {"/": "/posts/*"}, {"/": "/bases-armies"}, {"/": "/game-assets"},
-        {"/": "/achievements"}, {"/": "/accounts"}, {"/": "/subscription"},
+        {"/": "/achievements"}, {"/": "/accounts"},
         {"/": "/esports"}, {"/": "/tournaments"}, {"/": "/tournaments/*"},
         {"/": "/profile"}, {"/": "/profile/*"},
         {"/": "/settings"}, {"/": "/settings/*"}

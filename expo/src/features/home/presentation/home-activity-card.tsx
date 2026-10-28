@@ -20,6 +20,7 @@ import {
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { HomeCardFrame, HomeAccountBar } from './home-components';
 import type { HomeAccountIdentity } from './contracts';
+import { useTabletTypography } from '../../../ui/typography-context';
 
 type Summary = EndpointResponse<typeof PlayerActivityEndpoint>;
 type MetricKey =
@@ -27,13 +28,17 @@ type MetricKey =
 export function HomeActivityCard({
   accounts: includedAccounts,
   refreshKey,
+  compact: dense = false,
 }: {
   accounts: readonly HomeAccountIdentity[];
   refreshKey?: string;
+  compact?: boolean;
 }) {
   const accounts = includedAccounts;
   const runtime = useAppRuntime();
   const theme = useCKTheme();
+  const tablet = useTabletTypography();
+  const plotHeight = tablet ? 140 : 66;
   const { t, locale } = useI18n();
   const [retry, setRetry] = useState(0);
   const [scope, setScope] = useState('all');
@@ -174,7 +179,7 @@ export function HomeActivityCard({
   const minimum = Math.min(0, ...points.map(([, value]) => value));
   const maximum = Math.max(0, ...points.map(([, value]) => value));
   const range = maximum - minimum || 1;
-  const y = (value: number) => 62 - ((value - minimum) / range) * 58;
+  const y = (value: number) => plotHeight - 4 - ((value - minimum) / range) * (plotHeight - 8);
   const selectedStyle = (key: MetricKey) => ({
     backgroundColor: selected === key ? colorWithAlpha(accents[key], 0.1) : 'transparent',
     borderBottomColor: selected === key ? accents[key] : 'transparent',
@@ -186,11 +191,22 @@ export function HomeActivityCard({
       accessibilityLabel={labels[key]}
       accessibilityState={{ selected: selected === key }}
       onPress={() => selectMetric(key)}
-      style={[styles.metric, styles.selectable, selectedStyle(key)]}
+      style={[
+        styles.metric,
+        styles.selectable,
+        selectedStyle(key),
+        dense && {
+          // The parent pair owns the column width. Percentage flex sizing in
+          // a card being remeasured during a fold can lose its intended wrap.
+          flexBasis: 'auto',
+          flexGrow: 1,
+          minWidth: 0,
+        },
+      ]}
     >
       <MobileWebImage imageUrl={image} style={styles.metricImage} />
       <View style={styles.metricText}>
-        <CKText muted role="labelMedium">
+        <CKText muted role="labelMedium" numberOfLines={dense ? 1 : undefined}>
           {labels[key]}
         </CKText>
         <CKText role="bodyLarge" style={{ fontWeight: '700' }}>
@@ -199,6 +215,16 @@ export function HomeActivityCard({
       </View>
     </Pressable>
   );
+  const metricCards = [
+    metric('donated', sum('donated'), ImageAssets.clanCastle),
+    metric('received', sum('received'), ImageAssets.clanCastle),
+    metric(
+      'attacks',
+      sum('farmingAttacks') + sum('rankedAttacks') + sum('legendAttacks'),
+      ImageAssets.sword,
+    ),
+    metric('upgradeLevels', sum('upgradeLevels'), ImageAssets.builderPotion),
+  ];
   return (
     <HomeCardFrame
       footer={
@@ -221,7 +247,7 @@ export function HomeActivityCard({
     >
       {/* Keep the heading and totals in one flow, without the frame's separate
           header gap or a nested farming surface competing with the card. */}
-      <View style={styles.content}>
+      <View style={[styles.content, tablet && { gap: 16 }]}>
         <View style={styles.header}>
           <MobileWebImage imageUrl={ImageAssets.calendar} style={styles.headerImage} />
           <View style={styles.headerText}>
@@ -273,12 +299,12 @@ export function HomeActivityCard({
                 ) : null}
               </View>
               {loading ? (
-                <Skeleton height={66} radius={4} />
+                <Skeleton height={plotHeight} radius={4} />
               ) : hasDaily ? (
-                <View style={styles.chartPlot}>
+                <View style={[styles.chartPlot, tablet && { height: plotHeight }]}>
                   <Svg
                     width={chartWidth}
-                    height={66}
+                    height={plotHeight}
                     pointerEvents="none"
                     accessible={Platform.OS === 'web' ? undefined : false}
                     aria-hidden
@@ -299,7 +325,7 @@ export function HomeActivityCard({
                         }
                         y={0}
                         width={chartWidth / points.length}
-                        height={66}
+                        height={plotHeight}
                         rx={3}
                         fill={accent}
                         opacity={0.14}
@@ -389,26 +415,42 @@ export function HomeActivityCard({
                     accessibilityLabel={labels[key]}
                     accessibilityState={{ selected: selected === key }}
                     onPress={() => selectMetric(key)}
-                    style={[styles.resource, styles.selectable, selectedStyle(key)]}
+                    style={[
+                      styles.resource,
+                      styles.selectable,
+                      selectedStyle(key),
+                      dense && { flex: 1, minWidth: 0, gap: 4 },
+                    ]}
                   >
-                    <MobileWebImage imageUrl={image} style={styles.resourceImage} />
-                    <CKText role="titleSmall" style={styles.resourceValue}>
+                    <MobileWebImage
+                      imageUrl={image}
+                      style={[styles.resourceImage, dense && { width: 18, height: 18 }]}
+                    />
+                    <CKText
+                      role="titleSmall"
+                      style={[styles.resourceValue, dense && { fontSize: 16, flexShrink: 1 }]}
+                    >
                       {compact(sum(key))}
                     </CKText>
                   </Pressable>
                 ))}
               </View>
             </View>
-            <View style={styles.metrics}>
-              {metric('donated', sum('donated'), ImageAssets.clanCastle)}
-              {metric('received', sum('received'), ImageAssets.clanCastle)}
-              {metric(
-                'attacks',
-                sum('farmingAttacks') + sum('rankedAttacks') + sum('legendAttacks'),
-                ImageAssets.sword,
-              )}
-              {metric('upgradeLevels', sum('upgradeLevels'), ImageAssets.builderPotion)}
-            </View>
+            {dense ? (
+              <View style={{ gap: ckSpacing.sm }}>
+                {[metricCards.slice(0, 2), metricCards.slice(2)].map((row, index) => (
+                  <View key={index} style={{ flexDirection: 'row', gap: ckSpacing.sm }}>
+                    {row.map((card) => (
+                      <View key={card.key} style={{ flex: 1, minWidth: 0 }}>
+                        {card}
+                      </View>
+                    ))}
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.metrics}>{metricCards}</View>
+            )}
           </SkeletonContent>
         )}
       </View>

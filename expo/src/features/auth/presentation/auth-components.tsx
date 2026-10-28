@@ -132,9 +132,19 @@ export function AuthField({
         style={[
           styles.fieldShell,
           {
+            // Registration/reset fields need visible bounds on the near-black
+            // form surface; their focus state also needs a distinct cue.
             borderColor: colorWithAlpha(
-              error ? theme.error : glass ? theme.onSurface : theme.outlineVariant,
-              error ? 0.8 : glass ? (focused ? 0.65 : 0.16) : 0.42,
+              error
+                ? theme.error
+                : focused
+                  ? glass
+                    ? theme.onSurface
+                    : theme.primary
+                  : glass
+                    ? theme.onSurface
+                    : theme.onSurfaceVariant,
+              error ? 0.8 : glass ? (focused ? 0.65 : 0.16) : focused ? 0.9 : 0.55,
             ),
             backgroundColor:
               glass && !opaque ? colorWithAlpha(theme.onSurface, 0.09) : theme.surface,

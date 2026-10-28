@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useI18n } from '../../i18n';
 import { CKText, useCKAccessibility, useCKTheme } from '../../ui';
+import { isResumingStartupUpdate, registerStartupCover } from './startup-update-handoff';
+import { useStartupUpdate } from './startup-update-gate';
 import { StartupBrand } from './startup-brand';
 import { StartupHalloweenBrand } from './startup-halloween-brand';
 import { useAppRuntime } from './runtime-context';
@@ -10,19 +12,29 @@ import { HALLOWEEN_ICON_NAME } from '../../features/settings/app-icons/app-icon-
 
 /** Mount Home underneath the same splash so its requests settle before it is revealed. */
 export function StartupHandoff({ loading, children }: { loading: boolean; children: ReactNode }) {
+  const update = useStartupUpdate();
+  const covered = loading || !update.ready;
   return (
     <View style={{ flex: 1 }}>
       <View
         style={{ flex: 1 }}
-        accessibilityElementsHidden={loading}
-        importantForAccessibility={loading ? 'no-hide-descendants' : 'auto'}
-        pointerEvents={loading ? 'none' : 'auto'}
+        accessibilityElementsHidden={covered}
+        importantForAccessibility={covered ? 'no-hide-descendants' : 'auto'}
+        pointerEvents={covered ? 'none' : 'auto'}
       >
         {children}
       </View>
-      {loading ? (
-        <View style={StyleSheet.absoluteFill} testID="startup-cover">
-          <StartupLoadingScreen />
+      {covered ? (
+        <View
+          ref={registerStartupCover}
+          collapsable={false}
+          style={StyleSheet.absoluteFill}
+          testID="startup-cover"
+        >
+          <StartupLoadingScreen
+            update={update.ready ? undefined : update}
+            onUpdateInBackground={update.continueInBackground}
+          />
         </View>
       ) : null}
     </View>
@@ -39,7 +51,9 @@ export function StartupLoadingScreen({
   const { t } = useI18n();
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  const [footerHeight, setFooterHeight] = useState(0);
+  const resumeUpdate = isResumingStartupUpdate();
   const insets = useContext(SafeAreaInsetsContext);
   const { appIcons } = useAppRuntime();
   const selectedIcon = useSyncExternalStore(
@@ -48,7 +62,7 @@ export function StartupLoadingScreen({
     appIcons.getSelectionSnapshot,
   );
   const [selectionUnavailable, setSelectionUnavailable] = useState(false);
-  const [statusIndex, setStatusIndex] = useState(-1);
+  const [statusIndex, setStatusIndex] = useState(resumeUpdate ? 0 : -1);
   useEffect(() => {
     let active = true;
     void appIcons.getAlternateIconName().catch(() => {
@@ -59,14 +73,13 @@ export function StartupLoadingScreen({
     };
   }, [appIcons]);
   useEffect(() => {
-    if (update) return;
     const reveal = setTimeout(() => setStatusIndex(0), 770);
     const rotate = setInterval(() => setStatusIndex((index) => (index + 1) % 6), 3000);
     return () => {
       clearTimeout(reveal);
       clearInterval(rotate);
     };
-  }, [update]);
+  }, []);
   const messages = [
     'loadingVillages',
     'loadingClanData',
@@ -88,7 +101,7 @@ export function StartupLoadingScreen({
         />
       ) : selectedIcon === HALLOWEEN_ICON_NAME ? (
         <StartupHalloweenBrand
-          reduceMotion={reduceMotion}
+          reduceMotion={reduceMotion || resumeUpdate}
           foreground={theme.onSurface}
           background={theme.surface}
           label={t('appTitle')}
@@ -96,32 +109,34 @@ export function StartupLoadingScreen({
         />
       ) : (
         <StartupBrand
-          reduceMotion={reduceMotion}
+          reduceMotion={reduceMotion || resumeUpdate}
           foreground={theme.onSurface}
           background={theme.surface}
           label={t('appTitle')}
           width={Math.min(width * 0.78, 330)}
         />
       )}
-      {!update && statusIndex >= 0 ? (
-        <View style={styles.status}>
+      {!update?.downloading && statusIndex >= 0 ? (
+        <View
+          style={[
+            styles.status,
+            { bottom: Math.max(height * 0.18, footerHeight + (insets?.bottom ?? 0) + 32) },
+          ]}
+        >
           <CKText muted accessibilityLiveRegion="polite" style={{ textAlign: 'center' }}>
             {t(messages[statusIndex]!)}
           </CKText>
         </View>
       ) : null}
-      {update ? (
-        <View style={styles.updateControls}>
-          <CKText
-            muted
-            style={{ textAlign: 'center', marginBottom: 16 }}
-            accessibilityLiveRegion="polite"
-          >
-            {t(update.downloading ? 'startupDownloadingUpdate' : 'startupCheckingUpdate')}
-          </CKText>
-          {update.downloading ? (
+      <View
+        style={[styles.footer, { bottom: (insets?.bottom ?? 0) + 16 }]}
+        onLayout={(event) => setFooterHeight(event.nativeEvent.layout.height)}
+      >
+        {update?.downloading ? (
+          <View style={styles.updateControls}>
             <View
               accessibilityRole="progressbar"
+              accessibilityLabel={t('startupDownloadingUpdate')}
               accessibilityValue={{ min: 0, max: 100, now: Math.round(progress * 100) }}
               style={[styles.progressTrack, { backgroundColor: theme.primary + '33' }]}
             >
@@ -134,21 +149,17 @@ export function StartupLoadingScreen({
                 }}
               />
             </View>
-          ) : null}
-          <Pressable
-            accessibilityRole="button"
-            onPress={onUpdateInBackground}
-            style={styles.backgroundAction}
-          >
-            <CKText muted role="bodySmall">
-              {t('startupUpdateInBackground')}
-            </CKText>
-          </Pressable>
-        </View>
-      ) : null}
-      {/* Keep the existing translated unofficiality notice visible immediately,
-          including the update-check splash; it must not wait for loading tips. */}
-      <View style={[styles.disclaimer, { bottom: (insets?.bottom ?? 0) + 16 }]}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={onUpdateInBackground}
+              style={styles.backgroundAction}
+            >
+              <CKText muted role="bodySmall">
+                {t('startupUpdateInBackground')}
+              </CKText>
+            </Pressable>
+          </View>
+        ) : null}
         <CKText muted style={styles.disclaimerText}>
           {t('faqFanContentPolicy')}
         </CKText>
@@ -158,10 +169,10 @@ export function StartupLoadingScreen({
 }
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  status: { position: 'absolute', bottom: '18%', left: 24, right: 24 },
-  updateControls: { marginTop: 48, width: '65%', maxWidth: 320, alignItems: 'center' },
-  progressTrack: { height: 5, borderRadius: 3, width: '100%', overflow: 'hidden' },
+  status: { position: 'absolute', left: 24, right: 24 },
+  updateControls: { width: '100%', maxWidth: 320, alignItems: 'center', marginBottom: 12 },
+  progressTrack: { height: 5, borderRadius: 3, width: '100%', maxWidth: 320, overflow: 'hidden' },
   backgroundAction: { minHeight: 44, justifyContent: 'center', marginTop: 8 },
-  disclaimer: { position: 'absolute', left: 24, right: 24, alignItems: 'center' },
+  footer: { position: 'absolute', left: 24, right: 24, alignItems: 'center' },
   disclaimerText: { maxWidth: 560, fontSize: 12, lineHeight: 17, textAlign: 'center' },
 });

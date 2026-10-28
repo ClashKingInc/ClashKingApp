@@ -1,3 +1,6 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';
+import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 import { DragJiggle } from '../../../ui/drag-jiggle';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
@@ -7,6 +10,7 @@ import {
   Platform,
   RefreshControl,
   ScrollView,
+  type ScrollViewInstance,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -46,9 +50,19 @@ export function PlayersScreen({
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const nativeTabs = useNativePrimaryNavigation();
+  const layout = useAdaptiveLayout();
+  const [gridDragging, setGridDragging] = useState(false);
+  const nativeScroll = useRef<ScrollViewInstance>(null);
+  const nativeScrollOffset = useRef(0);
   const { width } = useWindowDimensions();
   const desktop = platform === 'web' && width >= 900;
-  const horizontal = Math.max(16, (width - (desktop ? 1320 : 840)) / 2);
+  const horizontal = Math.max(
+    16,
+    ((layout.isDuo || layout.isTablet ? layout.usableWidth : width) -
+      (layout.isDuo || layout.isTablet ? layout.contentMaxWidth : desktop ? 1320 : 840)) /
+      2,
+  );
   const link = useLinkParameters();
   const [mode, setMode] = useState<PlayerRosterMode>(
     linkChoice(
@@ -191,7 +205,15 @@ export function PlayersScreen({
       mode === 'linked'
         ? actions.reorderLinkedPlayers(data.map(playerRosterEntryTag))
         : actions.reorderBookmarkedPlayers(data.map(playerRosterEntryTag));
-    void operation.catch(() => actions.showMessage(t('accountsErrorFailedToUpdateOrder')));
+    // Return the result for the adaptive grid's optimistic-order rollback.
+    // DraggableFlatList continues to ignore it and retains its existing behavior.
+    return operation.then(
+      () => true,
+      () => {
+        actions.showMessage(t('accountsErrorFailedToUpdateOrder'));
+        return false;
+      },
+    );
   };
   const listHeader = (
     <>
@@ -234,72 +256,108 @@ export function PlayersScreen({
       onRefresh={() => void refresh()}
     />
   );
+  const draggableList = (
+    <DraggableFlatList
+      // Android needs the same long-press callback as iOS. Keep native
+      // refresh on this list; a plain ScrollView silently removes reorder.
+      {...(platform === 'android' ? { disallowInterruption: false, androidHoldToDrag: true } : {})}
+      testID="player-scroll-view"
+      onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
+      onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+      onScrollEndDrag={pullRefresh.onScrollEndDrag}
+      activationDistance={8}
+      alwaysBounceVertical
+      data={entries}
+      key={`${mode}-roster`}
+      keyExtractor={playerRosterEntryTag}
+      onDragEnd={reorder}
+      contentContainerStyle={{
+        paddingHorizontal: horizontal,
+        paddingBottom: insets.bottom + (nativeTabs ? 24 : 96),
+      }}
+      ListHeaderComponent={listHeader}
+      ListEmptyComponent={emptyRoster}
+      ListFooterComponent={entries.length > 0 ? (pendingCards ?? undefined) : undefined}
+      refreshControl={refreshControl}
+      renderItem={(params: RenderItemParams<PlayerRosterEntry>) => (
+        <ScaleDecorator activeScale={1.015}>
+          <DragJiggle active={params.isActive}>
+            <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+              {cardForEntry(
+                params.item,
+                params.drag,
+                `player-roster-card-${playerRosterEntryTag(params.item)}`,
+              )}
+            </View>
+          </DragJiggle>
+        </ScaleDecorator>
+      )}
+    />
+  );
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {desktop ? (
+      {desktop || layout.isDuo || layout.isTablet ? (
         <ScrollView
-          onScroll={pullRefresh.onScroll}
+          ref={nativeScroll}
+          scrollEnabled={!gridDragging}
+          testID="player-scroll-view"
+          onScroll={(event) => {
+            nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
+            pullRefresh.onScroll(event);
+          }}
           onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
           onScrollEndDrag={pullRefresh.onScrollEndDrag}
           scrollEventThrottle={16}
           alwaysBounceVertical
-          contentContainerStyle={{ paddingHorizontal: horizontal, paddingBottom: 32 }}
+          contentContainerStyle={{
+            paddingHorizontal: horizontal,
+            paddingBottom: nativeTabs ? insets.bottom + 24 : 32,
+          }}
           refreshControl={refreshControl}
         >
           {listHeader}
           {entries.length === 0 ? (
             emptyRoster
+          ) : layout.isDuo || layout.isTablet ? (
+            <InlineReorderGrid
+              key={mode}
+              data={entries}
+              keyExtractor={playerRosterEntryTag}
+              columns={layout.columns(layout.isTablet ? 420 : 280, 2)}
+              scrollRef={nativeScroll}
+              scrollOffset={nativeScrollOffset}
+              onDragStateChange={setGridDragging}
+              onReorder={(data, from, to) => reorder({ data, from, to })}
+              renderItem={(entry, _index, active) => (
+                <DragJiggle active={active}>
+                  {cardForEntry(
+                    entry,
+                    undefined,
+                    `player-roster-card-${playerRosterEntryTag(entry)}`,
+                  )}
+                </DragJiggle>
+              )}
+            />
           ) : (
             <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
               {entries.map((entry) => (
-                <View key={playerRosterEntryTag(entry)}>{cardForEntry(entry)}</View>
+                <View key={playerRosterEntryTag(entry)}>
+                  {cardForEntry(
+                    entry,
+                    undefined,
+                    `player-roster-card-${playerRosterEntryTag(entry)}`,
+                  )}
+                </View>
               ))}
             </ResponsiveGrid>
           )}
           {entries.length > 0 ? pendingCards : null}
         </ScrollView>
       ) : (
-        <DraggableFlatList
-          // Android needs the same long-press callback as iOS. Keep native
-          // refresh on this list; a plain ScrollView silently removes reorder.
-          {...(platform === 'android'
-            ? { disallowInterruption: false, androidHoldToDrag: true }
-            : {})}
-          testID="player-scroll-view"
-          onScrollOffsetChange={pullRefresh.onScrollOffsetChange}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          activationDistance={8}
-          alwaysBounceVertical
-          data={entries}
-          key={`${mode}-roster`}
-          keyExtractor={playerRosterEntryTag}
-          onDragEnd={reorder}
-          contentContainerStyle={{
-            paddingHorizontal: horizontal,
-            paddingBottom: insets.bottom + 96,
-          }}
-          ListHeaderComponent={listHeader}
-          ListEmptyComponent={emptyRoster}
-          ListFooterComponent={entries.length > 0 ? (pendingCards ?? undefined) : undefined}
-          refreshControl={refreshControl}
-          renderItem={(params: RenderItemParams<PlayerRosterEntry>) => (
-            <ScaleDecorator activeScale={1.015}>
-              <DragJiggle active={params.isActive}>
-                <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
-                  {cardForEntry(
-                    params.item,
-                    params.drag,
-                    `player-roster-card-${playerRosterEntryTag(params.item)}`,
-                  )}
-                </View>
-              </DragJiggle>
-            </ScaleDecorator>
-          )}
-        />
+        draggableList
       )}
       <AccountVerificationDialog
         visible={verification !== undefined}

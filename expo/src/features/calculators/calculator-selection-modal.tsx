@@ -1,4 +1,5 @@
-import { modalOrientations } from "../../ui/modal-orientations";
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { modalOrientations } from '../../ui/modal-orientations';
 import { useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Check, X } from 'lucide-react-native';
@@ -46,18 +47,27 @@ export function CalculatorSelectionModal({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
+  const scrollItems = inline && !layout.isExpanded;
   const { height } = useWindowDimensions();
   const [activeKey, setActiveKey] = useState(items[0]?.key);
   const active = items.find((item) => item.key === activeKey) ?? items[0];
   const content = (
     <ScrollView
       keyboardShouldPersistTaps="handled"
+      scrollEnabled={!inline || !layout.isExpanded}
       contentContainerStyle={{ gap: 18, paddingBottom: 4 }}
     >
       {!inline ? actions : null}
-      <ScrollView horizontal={inline} showsHorizontalScrollIndicator={false}>
-        <View style={{ flexDirection: 'row', flexWrap: inline ? 'nowrap' : 'wrap', gap: 8 }}>
-          {inline && actions ? <View style={{ width: 84 }}>{actions}</View> : null}
+      <ScrollView
+        horizontal={scrollItems}
+        scrollEnabled={!inline || !layout.isExpanded}
+        showsHorizontalScrollIndicator={false}
+      >
+        <View style={{ flexDirection: 'row', flexWrap: scrollItems ? 'nowrap' : 'wrap', gap: 8 }}>
+          {inline && actions ? (
+            <View style={{ width: layout.isExpanded ? 104 : 84 }}>{actions}</View>
+          ) : null}
           {items.map((item) => (
             <Pressable
               key={item.key}
@@ -69,8 +79,8 @@ export function CalculatorSelectionModal({
                 onToggle(item.key);
               }}
               style={{
-                width: 72,
-                height: 84,
+                width: layout.isExpanded ? 96 : 72,
+                height: layout.isExpanded ? 116 : 84,
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 2,
@@ -101,7 +111,11 @@ export function CalculatorSelectionModal({
               </View>
               <MobileWebImage
                 imageUrl={item.imageUrl}
-                style={{ width: 42, height: 42, opacity: item.selected ? 1 : 0.6 }}
+                style={{
+                  width: layout.isExpanded ? 58 : 42,
+                  height: layout.isExpanded ? 58 : 42,
+                  opacity: item.selected ? 1 : 0.6,
+                }}
               />
               <Pressable
                 accessibilityRole="button"
@@ -113,7 +127,8 @@ export function CalculatorSelectionModal({
                 }}
                 style={{
                   paddingHorizontal: 8,
-                  paddingVertical: 3,
+                  paddingVertical: layout.isExpanded ? 6 : 3,
+                  minHeight: layout.isExpanded ? 36 : undefined,
                   borderRadius: 12,
                   backgroundColor: colorWithAlpha(
                     theme.onSurface,
@@ -150,7 +165,8 @@ export function CalculatorSelectionModal({
   );
   if (inline) return visible ? <View testID={testID}>{content}</View> : null;
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       visible={visible}
       transparent
       animationType="fade"

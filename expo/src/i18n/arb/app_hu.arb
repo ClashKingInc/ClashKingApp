@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "Engedélyezés",
   "achievementsTitle": "Teljesítmények",
   "achievementEarnedLabel": "Megszerzések",
+  "achievementGemsEarnedRatio": "{earned} / {total} megszerezve",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "{earned} drágakövet szereztél a teljesítményekkel elérhető {total} közül.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} kész",
   "achievementEarnedCount": "Megszerzések ×{count}",
   "achievementTownhall18Name": "Városháza 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Csak azonos városháza",
+  "warStatsSameTownHall": "Azonos városháza",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "Követők",
   "drawerFollowersHelp": "Azok az emberek, akik könyvjelzővel látták el valamelyik igazolt összekapcsolt fiókját.",
   "drawerCalculators": "Számológépek",
-  "drawerSubscription": "Előfizetés",
   "drawerUpgradeTracker": "Frissítse a Trackert",
   "drawerBasesArmies": "Bázisok és hadseregek",
   "drawerGameAssets": "Játékeszközök",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "Értesítések kérése ehhez a fiókhoz.",
   "playerOptionNotificationsEnableMaster": "Kapcsold be az értesítéseket a fiók riasztásainak beállításához.",
   "playerOptionNotificationsVerifyFirst": "Az értesítések bekapcsolásához igazold ezt a fiókot.",
-  "playerOptionNotificationsSubscriptionRequired": "A fiók értesítéseihez aktív előfizetés szükséges.",
   "playerOptionNotificationsLimitReached": "Elérted az előfizetésedben értesítésekhez engedélyezett fiókok számát.",
   "playerOptionShowTodoPageTitle": "Megjelenítés a teendők oldalon",
   "playerOptionShowTodoPageSubtitle": "Vegye fel ezt a fiókot a teljes feladatlistába.",

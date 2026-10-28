@@ -1783,7 +1783,12 @@ private struct LegendsWidgetFreshFetcher {
 
   private func proxyURL(defaults: UserDefaults, path: String, query: [URLQueryItem] = []) -> URL? {
     let raw = defaults.string(forKey: "warWidgetProxyUrl") ?? "https://api.clashk.ing/proxy/v1"
-    guard var components = URLComponents(string: raw), components.scheme == "https", components.host != nil,
+    // Match the analytics URL policy: the simulator's owned loopback API uses
+    // HTTP. Rejecting it here silently prevented every automatic Ranked refresh.
+    // Remote hosts still require HTTPS; do not allow arbitrary plaintext hosts.
+    guard var components = URLComponents(string: raw),
+          components.scheme == "https" || (components.scheme == "http" && ["localhost", "127.0.0.1", "::1"].contains(components.host ?? "")),
+          components.host != nil,
           components.user == nil, components.password == nil, components.query == nil, components.fragment == nil,
           components.path == "/proxy/v1" || components.path == "/proxy/v1/" else { return nil }
     components.path = "/proxy/v1/\(path)"
@@ -1808,7 +1813,7 @@ private struct LegendsWidgetFreshFetcher {
     guard
       let token = await WidgetAuthSessionProvider().validAccessToken(defaults: defaults),
       var components = URLComponents(string: rawBase),
-      components.scheme == "https",
+      components.scheme == "https" || (components.scheme == "http" && ["localhost", "127.0.0.1", "::1"].contains(components.host ?? "")),
       components.user == nil,
       components.password == nil,
       components.query == nil,

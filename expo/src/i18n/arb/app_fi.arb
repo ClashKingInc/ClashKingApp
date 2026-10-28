@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Salli",
   "achievementsTitle": "Saavutukset",
   "achievementEarnedLabel": "Ansaittu",
+  "achievementGemsEarnedRatio": "{earned} / {total} ansaittu",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Ansaittu {earned} / {total} saavutusten jalokiveä.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} valmis",
   "achievementEarnedCount": "Ansaittu ×{count}",
   "achievementTownhall18Name": "Kaupungintalo 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Vain sama kaupungintalo",
+  "warStatsSameTownHall": "Sama kaupungintalo",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Seuraajat",
   "drawerFollowersHelp": "Ihmiset, jotka lisäsivät yhden vahvistetuista linkitetyistä tileistäsi kirjanmerkkeihin.",
   "drawerCalculators": "Laskimet",
-  "drawerSubscription": "Tilaus",
   "drawerUpgradeTracker": "Päivitä Tracker",
   "drawerBasesArmies": "Tukikohdat ja armeijat",
   "drawerGameAssets": "Pelin omaisuus",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Hanki hälytyksiä tälle tilille.",
   "playerOptionNotificationsEnableMaster": "Ota ilmoitukset ensin käyttöön asetuksissa.",
   "playerOptionNotificationsVerifyFirst": "Vahvista tili ottaaksesi ilmoitukset käyttöön.",
-  "playerOptionNotificationsSubscriptionRequired": "Kirjanmerkki-ilmoitukset vaativat tilauksen.",
   "playerOptionNotificationsLimitReached": "Kirjanmerkki-ilmoitusten raja on saavutettu.",
   "playerOptionShowTodoPageTitle": "Näytä tehtäväsivulla",
   "playerOptionShowTodoPageSubtitle": "Sisällytä tämä tili täydelliseen tehtäväluetteloon.",

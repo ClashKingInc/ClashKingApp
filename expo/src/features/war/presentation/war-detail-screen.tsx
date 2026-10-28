@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { WarPanelGrid } from './war-panel-grid';
 import type { ScrollViewInstance } from 'react-native';
 import { memo, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Animated, Linking, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -66,6 +68,7 @@ function WarDetailContent({
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
   const [mode, setMode] = useState<WarPage>('players');
   const [settledPage, setSettledPage] = useState<WarPage>('players');
   const [bodyReady, setBodyReady] = useState(false);
@@ -147,7 +150,12 @@ function WarDetailContent({
   const renderPage = (page: WarPage) => (
     <SkeletonContent
       loading={bodyLoading}
-      style={styles.content}
+      style={[
+        styles.content,
+        layout.isExpanded && {
+          maxWidth: page === 'players' ? layout.contentMaxWidth : layout.readableMaxWidth,
+        },
+      ]}
       onLayout={(event) => {
         const height = Math.ceil(event.nativeEvent.layout.height);
         if (height > 0)
@@ -222,22 +230,24 @@ function WarDetailContent({
             ) : null}
           </View>
           {filteredMembers.length ? (
-            filteredMembers.map((member) => (
-              <PlayerWarCard
-                key={member.tag}
-                member={member}
-                war={war}
-                events={events}
-                attacksKnown={attacksKnown}
-                linked={linked.has(member.tag)}
-                expanded={expanded === member.tag}
-                onToggle={() =>
-                  setExpanded((value) => (value === member.tag ? undefined : member.tag))
-                }
-                onAttack={setSelected}
-                onOpenPlayer={actions.openPlayer}
-              />
-            ))
+            <WarPanelGrid embedded style={{ gap: 12 }}>
+              {filteredMembers.map((member) => (
+                <PlayerWarCard
+                  key={member.tag}
+                  member={member}
+                  war={war}
+                  events={events}
+                  attacksKnown={attacksKnown}
+                  linked={linked.has(member.tag)}
+                  expanded={expanded === member.tag}
+                  onToggle={() =>
+                    setExpanded((value) => (value === member.tag ? undefined : member.tag))
+                  }
+                  onAttack={setSelected}
+                  onOpenPlayer={actions.openPlayer}
+                />
+              ))}
+            </WarPanelGrid>
           ) : (
             <EmptyState title={t('generalNoDataAvailable')} />
           )}
@@ -257,21 +267,25 @@ function WarDetailContent({
             />
           </View>
           {filteredEvents.length ? (
-            filteredEvents.map((event) => (
-              <WarEventCard
-                key={[event.side, event.attack.order, event.attack.attackerTag].join(':')}
-                event={event}
-                attacking={event.side === 'clan'}
-              />
-            ))
+            <WarPanelGrid embedded>
+              {filteredEvents.map((event) => (
+                <WarEventCard
+                  key={[event.side, event.attack.order, event.attack.attackerTag].join(':')}
+                  event={event}
+                  attacking={event.side === 'clan'}
+                />
+              ))}
+            </WarPanelGrid>
           ) : (
             <EmptyState title={t('generalNoDataAvailable')} />
           )}
         </>
       ) : (
         <>
-          <WarHistoryPanel history={history} teamSize={war.teamSize ?? 0} />
-          <WarComposition war={war} onOpenClan={openClan} />
+          <WarPanelGrid embedded>
+            <WarHistoryPanel history={history} teamSize={war.teamSize ?? 0} />
+            <WarComposition war={war} onOpenClan={openClan} />
+          </WarPanelGrid>
         </>
       )}
       {page === 'details' ? (

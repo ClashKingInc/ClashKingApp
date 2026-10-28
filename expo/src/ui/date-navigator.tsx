@@ -15,6 +15,7 @@ export function DateNavigator({
   previousDisabled = false,
   nextDisabled = false,
   accessibilityLabel,
+  compact = false,
   children,
 }: {
   label: string;
@@ -24,6 +25,7 @@ export function DateNavigator({
   previousDisabled?: boolean;
   nextDisabled?: boolean;
   accessibilityLabel?: string;
+  compact?: boolean;
   children?: ReactNode;
 }) {
   const { locale } = useI18n();
@@ -35,7 +37,10 @@ export function DateNavigator({
     </>
   );
   return (
-    <View accessibilityLabel={accessibilityLabel} style={styles.dayNavigation}>
+    <View
+      accessibilityLabel={accessibilityLabel}
+      style={[styles.dayNavigation, compact && styles.compactNavigation]}
+    >
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={materialPreviousPageTooltip(locale)}
@@ -80,6 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 8,
   },
+  compactNavigation: { minHeight: 44 },
   dayNavigationLabel: {
     flex: 1,
     minHeight: 44,

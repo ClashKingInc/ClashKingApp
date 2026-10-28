@@ -1,3 +1,4 @@
+import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronDown, ChevronRight } from 'lucide-react-native';
@@ -157,104 +158,106 @@ export function ArmySetupSection({
           ))}
         </SkeletonContent>
       ) : null}
-      {data?.items.map((item, index) => (
-        <Surface key={item.groupKey} radius={ckRadius.tile} style={styles.family}>
-          <SetupRow
-            item={item}
-            position={index + 1}
-            selected={groupKey === item.groupKey}
-            onPress={() => {
-              const nextGroup = groupKey === item.groupKey ? undefined : item.groupKey;
-              setGroupKey(nextGroup);
-              setVariantKey(undefined);
-              setVariants(
-                nextGroup ? variantCache.current.get(`${rangeKey}:${nextGroup}`) : undefined,
-              );
-              setTimeline(
-                nextGroup
-                  ? timelineCache.current.get(`${rangeKey}:${nextGroup}:overview`)
-                  : undefined,
-              );
-            }}
-          />
-          {groupKey === item.groupKey ? (
-            <View
-              style={[
-                styles.expanded,
-                { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.4) },
-              ]}
-            >
-              {variants?.items.length ? (
-                <SelectionPicker
-                  fillWidth
-                  title={t('upgradeTrackerPlanCategoryArmy')}
-                  accessibilityLabel={t('upgradeTrackerPlanCategoryArmy')}
-                  options={[
-                    { key: 'overview', label: t('generalAll') },
-                    ...variants.items.map((variant) => ({
-                      key: variant.variantKey,
-                      label: conditionLabel(variant.conditions),
-                      icon: <SetupConditionIcons conditions={variant.conditions} />,
-                    })),
-                  ]}
-                  selectedKey={variantKey ?? 'overview'}
-                  onSelect={(key) => {
-                    const nextVariant = key === 'overview' ? undefined : key;
-                    setVariantKey(nextVariant);
-                    setTimeline(
-                      timelineCache.current.get(
-                        `${rangeKey}:${groupKey}:${nextVariant ?? 'overview'}`,
-                      ),
-                    );
-                  }}
+      <AdaptiveStatsPanels embedded style={styles.section}>
+        {data?.items.map((item, index) => (
+          <Surface key={item.groupKey} radius={ckRadius.tile} style={styles.family}>
+            <SetupRow
+              item={item}
+              position={index + 1}
+              selected={groupKey === item.groupKey}
+              onPress={() => {
+                const nextGroup = groupKey === item.groupKey ? undefined : item.groupKey;
+                setGroupKey(nextGroup);
+                setVariantKey(undefined);
+                setVariants(
+                  nextGroup ? variantCache.current.get(`${rangeKey}:${nextGroup}`) : undefined,
+                );
+                setTimeline(
+                  nextGroup
+                    ? timelineCache.current.get(`${rangeKey}:${nextGroup}:overview`)
+                    : undefined,
+                );
+              }}
+            />
+            {groupKey === item.groupKey ? (
+              <View
+                style={[
+                  styles.expanded,
+                  { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.4) },
+                ]}
+              >
+                {variants?.items.length ? (
+                  <SelectionPicker
+                    fillWidth
+                    title={t('upgradeTrackerPlanCategoryArmy')}
+                    accessibilityLabel={t('upgradeTrackerPlanCategoryArmy')}
+                    options={[
+                      { key: 'overview', label: t('generalAll') },
+                      ...variants.items.map((variant) => ({
+                        key: variant.variantKey,
+                        label: conditionLabel(variant.conditions),
+                        icon: <SetupConditionIcons conditions={variant.conditions} />,
+                      })),
+                    ]}
+                    selectedKey={variantKey ?? 'overview'}
+                    onSelect={(key) => {
+                      const nextVariant = key === 'overview' ? undefined : key;
+                      setVariantKey(nextVariant);
+                      setTimeline(
+                        timelineCache.current.get(
+                          `${rangeKey}:${groupKey}:${nextVariant ?? 'overview'}`,
+                        ),
+                      );
+                    }}
+                  />
+                ) : null}
+                {variantKey && variants?.items.find((v) => v.variantKey === variantKey) ? (
+                  <SetupMetrics item={variants.items.find((v) => v.variantKey === variantKey)!} />
+                ) : null}
+                {item.comparisons?.length ? (
+                  <CohortUsageComparison
+                    item={item}
+                    selectedKey={provider.armyRankLimit?.toString() ?? 'overall'}
+                  />
+                ) : null}
+                <LegendArmy
+                  shareCode={
+                    (variants?.items.find((v) => v.variantKey === variantKey) ?? item).shareCode
+                  }
+                  siegeContent={
+                    visibleSieges(variants?.items.find((v) => v.variantKey === variantKey) ?? item)
+                      .length ? (
+                      <SiegeUsage
+                        item={variants?.items.find((v) => v.variantKey === variantKey) ?? item}
+                      />
+                    ) : null
+                  }
                 />
-              ) : null}
-              {variantKey && variants?.items.find((v) => v.variantKey === variantKey) ? (
-                <SetupMetrics item={variants.items.find((v) => v.variantKey === variantKey)!} />
-              ) : null}
-              {item.comparisons?.length ? (
-                <CohortUsageComparison
-                  item={item}
-                  selectedKey={provider.armyRankLimit?.toString() ?? 'overall'}
-                />
-              ) : null}
-              <LegendArmy
-                shareCode={
-                  (variants?.items.find((v) => v.variantKey === variantKey) ?? item).shareCode
-                }
-                siegeContent={
-                  visibleSieges(variants?.items.find((v) => v.variantKey === variantKey) ?? item)
-                    .length ? (
-                    <SiegeUsage
-                      item={variants?.items.find((v) => v.variantKey === variantKey) ?? item}
-                    />
-                  ) : null
-                }
-              />
-              {loading && !timeline ? (
-                <SkeletonContent loading>
-                  <SetupTimeline />
-                </SkeletonContent>
-              ) : null}
-              {timeline ? <SetupTimeline data={timeline} /> : null}
-              {error ? (
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => {
-                    variantCache.current.delete(`${rangeKey}:${groupKey}`);
-                    timelineCache.current.delete(
-                      `${rangeKey}:${groupKey}:${variantKey ?? 'overview'}`,
-                    );
-                    setRevision((value) => value + 1);
-                  }}
-                >
-                  <CKText style={{ color: theme.error }}>{t('generalRetry')}</CKText>
-                </Pressable>
-              ) : null}
-            </View>
-          ) : null}
-        </Surface>
-      ))}
+                {loading && !timeline ? (
+                  <SkeletonContent loading>
+                    <SetupTimeline />
+                  </SkeletonContent>
+                ) : null}
+                {timeline ? <SetupTimeline data={timeline} /> : null}
+                {error ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => {
+                      variantCache.current.delete(`${rangeKey}:${groupKey}`);
+                      timelineCache.current.delete(
+                        `${rangeKey}:${groupKey}:${variantKey ?? 'overview'}`,
+                      );
+                      setRevision((value) => value + 1);
+                    }}
+                  >
+                    <CKText style={{ color: theme.error }}>{t('generalRetry')}</CKText>
+                  </Pressable>
+                ) : null}
+              </View>
+            ) : null}
+          </Surface>
+        ))}
+      </AdaptiveStatsPanels>
       {data && !data.items.length && !listLoading ? (
         <CKText role="bodyMedium" muted>
           {t('statsNoDataBody')}

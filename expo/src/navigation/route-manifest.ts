@@ -7,7 +7,6 @@ export type FeatureGate =
   | 'leaderboards'
   | 'global_stats'
   | 'calculators'
-  | 'subscription_support'
   | 'upgrade_tracker'
   | 'bases_armies'
   | 'game_assets'
@@ -23,7 +22,6 @@ export type AppRouteId =
   | 'rankings'
   | 'stats'
   | 'calculators'
-  | 'subscription'
   | 'todo'
   | 'ranked'
   | 'legends'
@@ -64,7 +62,6 @@ export type RouteIconName =
   | 'chart-no-axes-combined'
   | 'chart-pie'
   | 'calculator'
-  | 'heart'
   | 'list-checks'
   | 'trophy'
   | 'arrow-up-circle'
@@ -190,15 +187,6 @@ export const appRoutes = [
     desktopSidebar: true,
   },
   {
-    id: 'subscription',
-    href: '/subscription',
-    labelKey: 'drawerSubscription',
-    icon: 'heart',
-    feature: 'subscription_support',
-    mobileDrawer: true,
-    desktopSidebar: false,
-  },
-  {
     id: 'todo',
     href: '/todo',
     labelKey: 'todoTitle',
@@ -292,7 +280,6 @@ export const mobileDrawerBodyRoutes = [
   'upgradeTracker',
   'basesArmies',
   'gameAssets',
-  'subscription',
 ].map(route);
 export const mobileDrawerFooterRoutes = ['settings'].map(route);
 export const mobileDrawerRoutes = [...mobileDrawerBodyRoutes, ...mobileDrawerFooterRoutes];

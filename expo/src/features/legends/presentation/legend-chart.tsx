@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Line, Polyline, Text } from 'react-native-svg';
 
 import { useI18n } from '../../../i18n';
@@ -70,6 +70,8 @@ export function LegendChart({
   dark = false,
   height = 184,
   large = false,
+  compactEmpty = false,
+  style,
 }: {
   readonly title: string;
   readonly points: readonly LegendChartPoint[];
@@ -77,6 +79,8 @@ export function LegendChart({
   readonly dark?: boolean;
   readonly height?: number;
   readonly large?: boolean;
+  readonly compactEmpty?: boolean;
+  readonly style?: StyleProp<ViewStyle>;
 }) {
   const theme = useCKTheme();
   const loading = useSkeletonContent();
@@ -116,7 +120,7 @@ export function LegendChart({
   ].filter((index) => index >= 0 && points[index]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <View style={styles.heading}>
         <CKText
           role="titleMedium"
@@ -262,7 +266,7 @@ export function LegendChart({
             </Text>
           ))}
         </Svg>
-      ) : (
+      ) : compactEmpty ? null : (
         <View style={[styles.empty, { height }]}>
           <CKText role="bodySmall" style={dark ? styles.soft : undefined} muted={!dark}>
             {t('generalNoDataAvailable')}

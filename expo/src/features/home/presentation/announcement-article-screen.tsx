@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { InlineBackControl } from '../../../ui/native-back-context';
 import { ArrowLeft, ArrowRight, CalendarDays } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,22 +11,25 @@ import type { AppAnnouncement } from '../data';
 import { AnnouncementWebView } from './announcement-webview';
 
 export function PostArticleScreen({ post, onBack }: { post: AppAnnouncement; onBack: () => void }) {
+  const layout = useAdaptiveLayout();
   const theme = useCKTheme();
   const { locale, isRtl } = useI18n();
   const dateLabel = post.publishedAt
     ? new Intl.DateTimeFormat(toIntlLocale(locale), { dateStyle: 'full' }).format(post.publishedAt)
     : null;
   const articleHtml = post.body?.trim()
-    ? buildPostArticleHtml(post, dateLabel, theme, isRtl)
+    ? buildPostArticleHtml(post, dateLabel, theme, isRtl, layout.isExpanded)
     : null;
 
   return (
     <SafeAreaView
-      edges={['top', 'bottom']}
+      edges={layout.isDuo ? ['top', 'bottom', 'left', 'right'] : ['top', 'bottom']}
       style={[styles.page, { backgroundColor: theme.surface }]}
     >
       <AnnouncementHeader onBack={onBack} />
-      <View style={styles.articleBody}>
+      <View
+        style={[styles.articleBody, layout.isExpanded && { maxWidth: layout.readableMaxWidth }]}
+      >
         <AnnouncementWebView
           html={articleHtml}
           url={!articleHtml?.trim() ? post.htmlUrl : undefined}
@@ -56,6 +61,7 @@ export function buildPostArticleHtml(
   dateLabel: string | null,
   theme: ReturnType<typeof useCKTheme>,
   isRtl = false,
+  expanded = false,
 ): string {
   const hero =
     post.bannerImageUrl && isHttpsUrl(post.bannerImageUrl)
@@ -89,6 +95,7 @@ export function buildPostArticleHtml(
     a{color:${theme.secondary};text-decoration:underline}blockquote{margin:24px 0;padding:4px 0 4px 18px;border-inline-start:3px solid ${theme.primary};color:${theme.onSurfaceVariant}}
     code,pre{font-family:ui-monospace,SFMono-Regular,monospace;background:${theme.surfaceContainerHighest};border-radius:6px}
     code{padding:2px 5px}pre{overflow:auto;padding:16px;margin:20px 0}pre code{padding:0}
+    ${expanded ? '.article-content{font-size:20px;line-height:1.75}.subtitle{font-size:21px}time{font-size:15px}.intro,.article-content{padding-left:28px;padding-right:28px}' : ''}
   </style>`;
   return /<\/head>/i.test(content)
     ? content.replace(/<\/head>/i, `${css}</head>`)
@@ -130,19 +137,21 @@ function AnnouncementHeader({ title, onBack }: { title?: string; onBack: () => v
   const theme = useCKTheme();
   return (
     <View style={[styles.navigationHeader, isRtl && styles.rowRtl]}>
-      <Pressable
-        accessibilityLabel={title ?? materialBackLabel(locale)}
-        accessibilityRole="button"
-        hitSlop={8}
-        onPress={onBack}
-        style={styles.back}
-      >
-        {isRtl ? (
-          <ArrowRight color={theme.onSurface} size={24} />
-        ) : (
-          <ArrowLeft color={theme.onSurface} size={24} />
-        )}
-      </Pressable>
+      <InlineBackControl onBack={onBack}>
+        <Pressable
+          accessibilityLabel={title ?? materialBackLabel(locale)}
+          accessibilityRole="button"
+          hitSlop={8}
+          onPress={onBack}
+          style={styles.back}
+        >
+          {isRtl ? (
+            <ArrowRight color={theme.onSurface} size={24} />
+          ) : (
+            <ArrowLeft color={theme.onSurface} size={24} />
+          )}
+        </Pressable>
+      </InlineBackControl>
       {title ? (
         <CKText
           numberOfLines={1}

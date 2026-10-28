@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "許可",
   "achievementsTitle": "実績",
   "achievementEarnedLabel": "獲得回数",
+  "achievementGemsEarnedRatio": "{earned} / {total} 獲得",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "実績のエメラルドを{total}個中{earned}個獲得しました。",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} 完了",
   "achievementEarnedCount": "獲得回数 ×{count}",
   "achievementTownhall18Name": "タウンホール18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "同じタウンホールのみ",
+  "warStatsSameTownHall": "同じタウンホール",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "フォロワー",
   "drawerFollowersHelp": "確認済みのリンクされたアカウントのいずれかをブックマークした人。",
   "drawerCalculators": "電卓",
-  "drawerSubscription": "サブスクリプション",
   "drawerUpgradeTracker": "アップグレードトラッカー",
   "drawerBasesArmies": "基地と軍隊",
   "drawerGameAssets": "ゲームアセット",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "このアカウントのアラートを受け取ります。",
   "playerOptionNotificationsEnableMaster": "先に設定で通知をオンにしてください。",
   "playerOptionNotificationsVerifyFirst": "通知を有効にするには、このアカウントを確認してください。",
-  "playerOptionNotificationsSubscriptionRequired": "ブックマーク通知を利用するにはサブスクリプションが必要です。",
   "playerOptionNotificationsLimitReached": "ブックマーク通知の上限に達しました。",
   "playerOptionShowTodoPageTitle": "ToDoページに表示",
   "playerOptionShowTodoPageSubtitle": "このアカウントを完全な To-Do リストに含めてください。",

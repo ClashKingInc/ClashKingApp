@@ -1,5 +1,6 @@
+import { isDuoDevice } from '../../ui/adaptive-layout';
 import * as Clipboard from 'expo-clipboard';
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import {
   useCallback,
   useEffect,
@@ -66,7 +67,6 @@ import {
   WarInfoRoot,
 } from '../../features/war/presentation';
 import type { WarCwl, WarInfo } from '../../features/war/models';
-import { SubscriptionRoot } from '../../features/subscription';
 import { SearchRoot } from '../../features/search';
 import { RankedRoot } from '../../features/ranked';
 import { LegendsRoot } from '../../features/legends';
@@ -241,7 +241,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         .then(() => tutorials.visitHome(true));
     }
   }, [onHomeReady, runtime, primary, utility, pushedScenes.length]);
-  const discordServers = useDiscordServers(user?.userId);
+  const discordServers = useDiscordServers(user);
   const pushedScene = pushedScenes.at(-1);
   const selectPrimary = (route: PrimaryRouteId) => {
     recordBrowserPath(routeById(route).href);
@@ -250,6 +250,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     setPushedScenes([]);
     setUtility(undefined);
     setPrimary(route);
+    if (isDuoDevice) selectNativePrimary(route);
   };
   const showUtility = useCallback(
     (route: AppRouteDefinition, playerTag?: string, initialParams: AppLinkParams = {}) => {
@@ -741,6 +742,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         if (link.kind === 'page') {
           if (routeById(link.page).primaryTab) {
             setPrimary(link.page as PrimaryRouteId);
+            if (isDuoDevice) selectNativePrimary(link.page as PrimaryRouteId);
             setPrimaryLinks((current) => ({
               ...current,
               [link.page]: { key: generation, params: link.params },
@@ -848,7 +850,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           onManageAccounts={() => pushUtility('accounts')}
         />
       );
-    if (route === 'subscription') return <SubscriptionRoot onBack={closeSecondary} />;
     if (route === 'search')
       return (
         <SearchRoot
@@ -1200,7 +1201,16 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
 
     const transition = nativeSecondaryRouteTransition(nativeRouteKeys.current, expected);
     nativeRouteKeys.current = transition.routeKeys;
-    applyNativeSecondaryRouteTransition(transition, router);
+    applyNativeSecondaryRouteTransition(
+      transition,
+      isDuoDevice
+        ? router
+        : {
+            ...router,
+            // The retained iPhone shell has no nested native tab route to preserve.
+            dismissAll: () => router.dismissTo('/'),
+          },
+    );
   });
 
   useEffect(
@@ -1240,6 +1250,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         onAchievements={() => openUtility(routeById('achievements'))}
         onAddAccount={() => openUtility(routeById('accounts'))}
         onPrimarySelect={selectPrimary}
+        onNativePrimaryFocus={setPrimary}
         onSearch={() => openUtility(routeById('search'))}
         onUtilityNavigate={openUtility}
         primaryScreens={
@@ -1374,3 +1385,10 @@ const styles = StyleSheet.create({
   avatar: { width: 36, height: 36, borderRadius: 18 },
   boundary: { flex: 1, padding: 16 },
 });
+
+function selectNativePrimary(route: PrimaryRouteId) {
+  // Dismiss the outer detail stack before targeting a nested tab. Dispatching
+  // both in the same commit lets the detail dismissal undo the tab selection.
+  router.dismissAll();
+  requestAnimationFrame(() => router.navigate(routeById(route).href as Href));
+}

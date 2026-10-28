@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
@@ -53,10 +54,11 @@ export function PrivacyControlsScreen({
   onHideAccountsChange?: (enabled: boolean) => Promise<void>;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const theme = useCKTheme();
   const measured = useWindowDimensions().width;
   const width = viewportWidth ?? measured;
-  const twoColumns = privacyColumnCount(platform, width) === 2;
+  const twoColumns = layout.isExpanded || privacyColumnCount(platform, width) === 2;
   const [exporting, setExporting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [prepared, setPrepared] = useState<{ fileName: string; data: string }>();
@@ -183,7 +185,7 @@ export function PrivacyControlsScreen({
   ];
   return (
     <>
-      <SettingsPage title={t('settingsPrivacyDataTitle')} onBack={onBack}>
+      <SettingsPage wide={layout.isExpanded} title={t('settingsPrivacyDataTitle')} onBack={onBack}>
         <Surface
           radius={ckRadius.tile}
           style={[

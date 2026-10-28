@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Menu, Search } from 'lucide-react-native';
 import { TutorialTarget } from '../features/tutorials/tutorial-ui';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../ui/header';
+import { useTabletTypography } from '../ui/typography-context';
 
 import {
   CKText,
@@ -20,6 +21,10 @@ export function MobileHeader({
   onOpenProfile,
   onSearch,
   isRtl = false,
+  maxContentWidth,
+  searchMaxWidth,
+  pageTitle,
+  alignSearchToEnd = false,
 }: {
   avatar: ReactNode;
   profileLabel: string;
@@ -27,18 +32,34 @@ export function MobileHeader({
   onOpenProfile: () => void;
   onSearch?: () => void;
   isRtl?: boolean;
+  maxContentWidth?: number;
+  searchMaxWidth?: number;
+  /** Expanded layouts use a title and trailing search as two balanced groups. */
+  pageTitle?: string;
+  alignSearchToEnd?: boolean;
 }) {
   const theme = useCKTheme();
   const mode = useCKThemeMode();
+  const tablet = useTabletTypography();
   return (
     <GlobalSearchHeaderFrame style={styles.safeArea}>
-      <View style={[styles.header, isRtl && styles.rowRtl]}>
+      <View
+        style={[
+          styles.header,
+          tablet && { height: 78, gap: 14 },
+          isRtl && styles.rowRtl,
+          maxContentWidth
+            ? { width: '100%', maxWidth: maxContentWidth + 32, alignSelf: 'center' }
+            : undefined,
+        ]}
+      >
         <TutorialTarget id="sidebar-open">
           <GlassSurface
             cornerRadius={23}
             interactive
             style={[
               styles.profileGlass,
+              tablet && { width: 54, height: 54 },
               {
                 borderColor: colorWithAlpha(theme.outlineVariant, mode === 'dark' ? 0.16 : 0.32),
                 shadowOpacity: mode === 'dark' ? 0.14 : 0.1,
@@ -74,8 +95,23 @@ export function MobileHeader({
             </Pressable>
           </GlassSurface>
         </TutorialTarget>
+        {pageTitle ? (
+          <CKText role="titleLarge" numberOfLines={1} style={styles.pageTitle}>
+            {pageTitle}
+          </CKText>
+        ) : alignSearchToEnd ? (
+          <View style={styles.headerSpacer} />
+        ) : null}
         {onSearch && (
-          <GlassControlSurface style={styles.searchGlass} testID="mobile-global-search-glass">
+          <GlassControlSurface
+            style={[
+              styles.searchGlass,
+              tablet && { height: 54 },
+              (pageTitle || alignSearchToEnd) && styles.trailingSearch,
+              searchMaxWidth ? { maxWidth: searchMaxWidth } : undefined,
+            ]}
+            testID="mobile-global-search-glass"
+          >
             <Pressable
               accessibilityLabel={searchHint}
               accessibilityRole="search"
@@ -141,6 +177,11 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   searchText: { flex: 1 },
+  pageTitle: { flex: 1, minWidth: 0, fontWeight: '700' },
+  headerSpacer: { flex: 1 },
+  // Reset the original flex:1 basis as well as growth; otherwise Yoga keeps a
+  // zero basis and the bounded field collapses despite a valid accessibility node.
+  trailingSearch: { flex: 0, flexBasis: 'auto', flexShrink: 1, width: '42%', marginStart: 12 },
   pressed: { opacity: 0.72 },
   rowRtl: { flexDirection: 'row-reverse' },
 });

@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "אישור",
   "achievementsTitle": "הישגים",
   "achievementEarnedLabel": "הושג",
+  "achievementGemsEarnedRatio": "הושגו {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "הושגו {earned} מתוך {total} אבני חן מהישגים.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} הושלם",
   "achievementEarnedCount": "הושג ×{count}",
   "achievementTownhall18Name": "בית עירייה 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "רק אותו TH",
+  "warStatsSameTownHall": "אותה רמת בניין עירייה",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "עוקבים",
   "drawerFollowersHelp": "אנשים שסימנו אחד מהחשבונות המאומתים המקושרים שלך.",
   "drawerCalculators": "מחשבונים",
-  "drawerSubscription": "מִנוּי",
   "drawerUpgradeTracker": "שדרוג Tracker",
   "drawerBasesArmies": "בסיסים וצבאות",
   "drawerGameAssets": "נכסי משחק",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "קבל התראות עבור חשבון זה.",
   "playerOptionNotificationsEnableMaster": "יש להפעיל תחילה התראות בהגדרות.",
   "playerOptionNotificationsVerifyFirst": "יש לאמת את החשבון כדי להפעיל התראות.",
-  "playerOptionNotificationsSubscriptionRequired": "נדרש מנוי להתראות של סימניות.",
   "playerOptionNotificationsLimitReached": "הגעת למגבלת ההתראות של הסימניות.",
   "playerOptionShowTodoPageTitle": "הצג בדף המטלות",
   "playerOptionShowTodoPageSubtitle": "כלול חשבון זה ברשימת המטלות המלאה.",

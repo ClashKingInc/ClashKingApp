@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
@@ -23,9 +24,41 @@ export function LegendBattlePanel({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [battleType, setBattleType] = useState<'attacks' | 'defenses'>('attacks');
   const battles = sortedLegendBattles(battleType === 'attacks' ? data.attacks : data.defenses);
 
+  if (layout.isExpanded && layout.usableWidth >= 760) {
+    return (
+      <View style={{ flexDirection: 'row', gap: 20, alignItems: 'flex-start' }}>
+        {(['attacks', 'defenses'] as const).map((type) => (
+          <View key={type} style={{ flex: 1, minWidth: 0, gap: 12 }}>
+            <View style={[styles.tab, { backgroundColor: theme.surface }]}>
+              <CKText role="sectionTitle">
+                {t(type === 'attacks' ? 'rankedLeagueAttacks' : 'rankedLeagueDefenses')}
+              </CKText>
+              <CKText role="rowTitle">
+                {data[type].length} / 8 ·{' '}
+                {type === 'attacks' ? data.attackTrophies : data.defenseTrophies}
+              </CKText>
+            </View>
+            <View style={styles.battles}>
+              {sortedLegendBattles(data[type]).map((battle, index) => (
+                <LegendBattleCard
+                  key={`${type}-${battle.battleTime?.getTime() ?? 'unknown'}-${index}`}
+                  battle={battle}
+                  index={index}
+                  now={now}
+                  onOpenArmy={onOpenArmy}
+                  onOpenOpponent={onOpenOpponent}
+                />
+              ))}
+            </View>
+          </View>
+        ))}
+      </View>
+    );
+  }
   return (
     <View style={styles.panel}>
       <View accessibilityRole="tablist" style={styles.tabs}>

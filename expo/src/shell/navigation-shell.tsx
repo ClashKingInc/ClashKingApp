@@ -28,6 +28,8 @@ import { MobileDrawer } from './mobile-drawer';
 import { MobileHeader } from './mobile-header';
 import { tutorials } from '../features/tutorials/tutorial-service';
 import { PrimaryTabBar } from './primary-tab-bar';
+import { IosNativeTabs } from './ios-native-tabs';
+import { isDuoDevice, useAdaptiveLayout } from '../ui/adaptive-layout';
 import {
   RetainedPrimaryPager,
   type PrimaryRouteId,
@@ -65,6 +67,7 @@ export interface NavigationShellProps {
   closeDrawerLabel: string;
   drawerHintStore?: StringStorage;
   onPrimarySelect: (route: PrimaryRouteId) => void;
+  onNativePrimaryFocus?: (route: PrimaryRouteId) => void;
   onUtilityNavigate: (route: AppRouteDefinition, options: { replace: boolean }) => void;
   onSearch?: () => void;
   onAchievements: () => void;
@@ -78,6 +81,9 @@ export function NavigationShell(props: NavigationShellProps) {
   const measured = useWindowDimensions().width;
   const width = props.viewportWidth ?? measured;
   const platform = props.platform ?? Platform.OS;
+  // Only Duo needs UIKit's side rail. iPad keeps the same bottom bar and
+  // retained page gestures as the regular iPhone rather than top-mounted tabs.
+  if (platform === 'ios' && isDuoDevice) return <IosNativeTabs {...props} />;
   return resolveShellLayout(platform, width) === 'desktop' ? (
     <DesktopNavigationShell {...props} width={width} />
   ) : (
@@ -87,6 +93,7 @@ export function NavigationShell(props: NavigationShellProps) {
 
 function MobileNavigationShell(props: NavigationShellProps & { width: number }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { isRtl, width } = props;
   const platform = props.platform ?? Platform.OS;
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -269,6 +276,11 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
             onOpenProfile={openDrawer}
             onSearch={props.onSearch}
             isRtl={props.isRtl}
+            maxContentWidth={
+              layout.isTablet && layout.isExpanded ? layout.contentMaxWidth : undefined
+            }
+            searchMaxWidth={layout.isTablet && layout.isExpanded ? 760 : undefined}
+            alignSearchToEnd={layout.isTablet && layout.isExpanded}
           />
           <RetainedPrimaryPager
             visible={!secondaryActive && !drawerOpen}

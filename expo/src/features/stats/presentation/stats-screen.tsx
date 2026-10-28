@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import {
   memo,
@@ -57,6 +59,7 @@ import {
   Surface,
   ProfilePageHeader,
   ProfileStatChip,
+  ResponsiveGrid,
   ckRadius,
   colorWithAlpha,
   useCKTheme,
@@ -120,8 +123,21 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
   const granularity = useChartGranularity();
-  const horizontal = Math.max(16, (width - 1120) / 2);
+  const horizontal = layout.isExpanded
+    ? Math.max(
+        24,
+        (layout.usableWidth -
+          Math.min(
+            layout.contentMaxWidth,
+            provider.section === StatsSection.items ? 1000 : layout.contentMaxWidth,
+          )) /
+          2,
+      )
+    : layout.isDuo
+      ? Math.max(16, (layout.usableWidth - layout.contentMaxWidth) / 2)
+      : Math.max(16, (width - 1120) / 2);
   const hasDateFilter =
     provider.section === StatsSection.war ||
     provider.section === StatsSection.ranked ||
@@ -367,7 +383,9 @@ function ItemsSection({
   'use no memo';
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const { width, fontScale } = useWindowDimensions();
+  const { width: windowWidth, fontScale } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const width = layout.isDuo || layout.isTablet ? layout.width : windowWidth;
   const catalogRevision = useSyncExternalStore(
     subscribeToGameDataRevision,
     () => gameDataState.revision,
@@ -421,12 +439,19 @@ function ItemsSection({
         testID="troop-league-compare-row"
         style={{
           flexDirection: 'row',
-          flexWrap: largeText ? 'wrap' : 'nowrap',
+          flexWrap: largeText || layout.isExpanded ? 'wrap' : 'nowrap',
           alignItems: 'center',
           gap: 8,
         }}
       >
-        <View style={{ flex: 1, flexBasis: largeText ? '100%' : undefined, minWidth: 0 }}>
+        <View
+          style={{
+            flex: 1,
+            flexBasis: largeText ? '100%' : undefined,
+            minWidth: 0,
+            maxWidth: layout.isExpanded ? 440 : undefined,
+          }}
+        >
           <LeagueStatsPicker />
         </View>
         <Pressable
@@ -819,6 +844,8 @@ function LegendCategoryRanking({
   readonly onSelectCohort: (cohort: 'overall' | 'top1000' | 'top200') => void;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
+  const { fontScale } = useWindowDimensions();
   const [comparisonMetric, setComparisonMetric] = useState<'usage' | 'hitrate'>('usage');
   const values = index.values;
   const selectedKeys = selected.filter((key) => values.some((value) => value.key === key));
@@ -916,6 +943,66 @@ function LegendCategoryRanking({
       </View>
     </>
   );
+  const renderRanking = (value: LegendCategoryValue, position: number, rowHorizontal: number) => (
+    <SkeletonContent loading={contentLoading}>
+      <LegendRankingRow
+        value={value}
+        position={position}
+        category={category}
+        index={index}
+        locale={locale}
+        horizontal={rowHorizontal}
+        expanded={
+          expanded?.cohort === cohort &&
+          expanded.category === category &&
+          expanded.key === value.key
+        }
+        selected={selectedKeys.includes(value.key)}
+        selectionLimitReached={selectedKeys.length >= 5}
+        compareOpen={compareOpen}
+        cohortValues={cohortValues}
+        cohort={cohort}
+        onSelectCohort={onSelectCohort}
+        onToggleExpanded={toggleExpanded}
+        onToggleSelected={toggleSelected}
+      />
+    </SkeletonContent>
+  );
+  if (layout.isExpanded) {
+    const available = Math.min(layout.usableWidth - horizontal * 2, layout.contentMaxWidth);
+    const columns = available >= (layout.isDuo ? 760 : 852) * Math.max(1, fontScale) ? 2 : 1;
+    const groups = Array.from({ length: Math.ceil(values.length / columns) }, (_, row) =>
+      values.slice(row * columns, (row + 1) * columns).map((value, column) => ({
+        value,
+        position: row * columns + column,
+      })),
+    );
+    // Group the same ordered records without changing FlatList's native column
+    // count or key. Fold/rotation keeps selection, disclosure and list state.
+    return (
+      <FlatList
+        testID="troop-ranking-list"
+        data={groups}
+        keyExtractor={(group) => group[0]!.value.key}
+        initialNumToRender={8}
+        maxToRenderPerBatch={8}
+        windowSize={7}
+        extraData={{ expanded, selectedKeys, compareOpen, cohortValues }}
+        ListHeaderComponent={listHeader}
+        contentContainerStyle={{ gap: 12, paddingBottom: bottomInset + 24 }}
+        renderItem={({ item: group }) => (
+          <View style={{ flexDirection: 'row', gap: 12, paddingHorizontal: horizontal }}>
+            {group.map(({ value, position }) => (
+              <View key={value.key} style={{ flex: 1, minWidth: 0 }}>
+                {renderRanking(value, position, 0)}
+              </View>
+            ))}
+            {group.length < columns ? <View style={{ flex: 1 }} /> : null}
+          </View>
+        )}
+      />
+    );
+  }
   return (
     <FlatList
       testID="troop-ranking-list"
@@ -927,31 +1014,7 @@ function LegendCategoryRanking({
       extraData={{ expanded, selectedKeys, compareOpen, cohortValues }}
       ListHeaderComponent={listHeader}
       contentContainerStyle={{ gap: 8, paddingBottom: bottomInset + 24 }}
-      renderItem={({ item: value, index: position }) => (
-        <SkeletonContent loading={contentLoading}>
-          <LegendRankingRow
-            value={value}
-            position={position}
-            category={category}
-            index={index}
-            locale={locale}
-            horizontal={horizontal}
-            expanded={
-              expanded?.cohort === cohort &&
-              expanded.category === category &&
-              expanded.key === value.key
-            }
-            selected={selectedKeys.includes(value.key)}
-            selectionLimitReached={selectedKeys.length >= 5}
-            compareOpen={compareOpen}
-            cohortValues={cohortValues}
-            cohort={cohort}
-            onSelectCohort={onSelectCohort}
-            onToggleExpanded={toggleExpanded}
-            onToggleSelected={toggleSelected}
-          />
-        </SkeletonContent>
-      )}
+      renderItem={({ item: value, index: position }) => renderRanking(value, position, horizontal)}
     />
   );
 }
@@ -998,7 +1061,9 @@ const LegendRankingRow = memo(function LegendRankingRow({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const { width, fontScale } = useWindowDimensions();
+  const { width: windowWidth, fontScale } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const width = layout.isDuo || layout.isTablet ? layout.width : windowWidth;
   const overallRate = index.attacks ? index.backgroundTriples / index.attacks : null;
   const showName =
     category !== 'equipmentPairs' && category !== 'petCombos' && category !== 'petAssignments';
@@ -1010,7 +1075,11 @@ const LegendRankingRow = memo(function LegendRankingRow({
   return (
     <Surface
       radius={ckRadius.tile}
-      style={{ padding: 12, gap: 10, marginHorizontal: horizontal }}
+      style={{
+        padding: layout.isExpanded ? 20 : 12,
+        gap: layout.isExpanded ? 16 : 10,
+        marginHorizontal: horizontal,
+      }}
       testID={`legend-item-${category}-${value.key}`}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -1359,23 +1428,57 @@ function OverviewMetrics({
 }) {
   const { t, locale } = useI18n();
   const { fontScale } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const entries = [
+    { label: t('statsThreeStarRate'), value: percent(metrics.threeStarRate), primary: true },
+    { label: t('warAttacksTitle'), value: formatCompactNumber(metrics.sampleSize, locale) },
+    { label: t('statsAverageStars'), value: metrics.averageStars.toFixed(2) },
+    { label: t('statsAverageDestruction'), value: percent(metrics.averageDestruction) },
+    ...(wars == null
+      ? []
+      : [{ label: t('warStatsWars'), value: formatCompactNumber(wars, locale) }]),
+    ...(missed == null
+      ? []
+      : [{ label: t('statsMissedAttacks'), value: formatCompactNumber(missed, locale) }]),
+  ];
+  if (layout.isExpanded) {
+    return (
+      <ResponsiveGrid
+        testID="stats-overview-metrics"
+        minItemWidth={180 * Math.max(1, fontScale)}
+        // Six totals read as two balanced rows instead of leaving one
+        // isolated value when a portrait tablet happens to fit five cards.
+        maxColumns={entries.length === 6 ? 3 : entries.length}
+        gap={12}
+      >
+        {entries.map(({ label, value, primary }) => (
+          <Surface
+            key={label}
+            radius={ckRadius.tile}
+            style={styles.expandedMetric}
+            accessible
+            accessibilityLabel={`${label}: ${value}`}
+          >
+            <CKText
+              role="titleSmall"
+              style={{ fontVariant: ['tabular-nums'], ...(primary ? { color: '#E8A524' } : {}) }}
+            >
+              {value}
+            </CKText>
+            <CKText skeleton={false} role="metadata" muted>
+              {label}
+            </CKText>
+          </Surface>
+        ))}
+      </ResponsiveGrid>
+    );
+  }
   return (
     <View
       testID="stats-overview-metrics"
       style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 18 }}
     >
-      {[
-        { label: t('statsThreeStarRate'), value: percent(metrics.threeStarRate), primary: true },
-        { label: t('warAttacksTitle'), value: formatCompactNumber(metrics.sampleSize, locale) },
-        { label: t('statsAverageStars'), value: metrics.averageStars.toFixed(2) },
-        { label: t('statsAverageDestruction'), value: percent(metrics.averageDestruction) },
-        ...(wars == null
-          ? []
-          : [{ label: t('warStatsWars'), value: formatCompactNumber(wars, locale) }]),
-        ...(missed == null
-          ? []
-          : [{ label: t('statsMissedAttacks'), value: formatCompactNumber(missed, locale) }]),
-      ].map(({ label, value, primary }) => (
+      {entries.map(({ label, value, primary }) => (
         <View
           key={label}
           accessible
@@ -1487,10 +1590,50 @@ function RankedOverview({
   readonly dates: StatsDateFilter;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const metrics = legendMetrics(data);
   const hasComposition = hasRankedCompositionData(data.items, dates);
+  if (layout.isExpanded) {
+    return (
+      <Section>
+        <OverviewMetrics metrics={metrics} />
+        <AdaptiveStatsPanels>
+          <ExpandedStatsPanel>
+            <AnalyticsLineChart
+              title={t('statsStarRates')}
+              series={starSeries(metrics.daily, t)}
+              percent
+              height={300}
+              exportable={false}
+            />
+          </ExpandedStatsPanel>
+          <ExpandedStatsPanel>
+            {hasComposition ? (
+              <RankedCompositionChart daily={data.items} dates={dates} />
+            ) : (
+              <AnalyticsLineChart
+                title={t('warAttacksTitle')}
+                series={[
+                  {
+                    key: 'attacks',
+                    label: t('warAttacksTitle'),
+                    points: metrics.daily.map((point) => ({
+                      day: point.date,
+                      value: point.sampleSize,
+                    })),
+                  },
+                ]}
+                includeZero
+                height={300}
+              />
+            )}
+          </ExpandedStatsPanel>
+        </AdaptiveStatsPanels>
+      </Section>
+    );
+  }
   return (
-    <Section>
+    <Section panels>
       <StatsChartFrame
         title={t('statsRanked')}
         showTitle={false}
@@ -1530,6 +1673,7 @@ function RankedOverview({
 function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [expandedTownHall, setExpandedTownHall] = useState<number | null>(null);
   const summaries = data.warSummaries;
   const totalWars = summaries.reduce((sum, item) => sum + item.wars, 0);
@@ -1555,224 +1699,248 @@ function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
     }))
     .sort((a, b) => b.wars - a.wars);
   return (
-    <Section>
-      <StatsChartFrame
-        title={t('warStatsWars')}
-        showTitle={false}
-        copyPlacement="footer"
-        testID="war-overview-copy"
-      >
-        <View style={{ gap: 20 }}>
-          <OverviewMetrics metrics={data.metrics} wars={totalWars} missed={missedAttacks} />
-          {data.metrics.daily.length ? (
-            <AnalyticsLineChart
-              title={t('statsStarRates')}
-              showTitle={false}
-              series={starSeries(data.metrics.daily, t)}
-              percent
-              exportable={false}
-            />
-          ) : null}
-        </View>
-      </StatsChartFrame>
-      {summaries.length ? (
-        <AnalyticsLineChart
-          title={t('statsWarsOverTime')}
-          series={[
-            {
-              key: 'wars',
-              label: t('warStatsWars'),
-              points: summaries.map((item) => ({ day: item.period, value: item.wars })),
-            },
-          ]}
-          includeZero
-        />
+    <Section panels={!layout.isExpanded}>
+      {layout.isExpanded ? (
+        <OverviewMetrics metrics={data.metrics} wars={totalWars} missed={missedAttacks} />
       ) : null}
-      {sizes.length ? (
-        <StatsChartFrame title={t('statsWarSizes')} testID="war-sizes-chart">
-          <View style={{ gap: 12 }}>
-            {sizes.map(({ size, wars }) => (
-              <View key={size} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                <CKText role="rowTitle" numberOfLines={1} style={{ minWidth: 72, flexShrink: 0 }}>
-                  {size}v{size}
-                </CKText>
-                <View
+      <AdaptiveStatsPanels embedded>
+        {!layout.isExpanded || data.metrics.daily.length ? (
+          <ExpandedStatsPanel>
+            <StatsChartFrame
+              title={t('warStatsWars')}
+              showTitle={false}
+              copyPlacement="footer"
+              testID="war-overview-copy"
+            >
+              <View style={{ gap: 20 }}>
+                {!layout.isExpanded ? (
+                  <OverviewMetrics metrics={data.metrics} wars={totalWars} missed={missedAttacks} />
+                ) : null}
+                {data.metrics.daily.length ? (
+                  <AnalyticsLineChart
+                    title={t('statsStarRates')}
+                    showTitle={false}
+                    series={starSeries(data.metrics.daily, t)}
+                    percent
+                    exportable={false}
+                  />
+                ) : null}
+              </View>
+            </StatsChartFrame>
+          </ExpandedStatsPanel>
+        ) : null}
+        {summaries.length ? (
+          <ExpandedStatsPanel>
+            <AnalyticsLineChart
+              title={t('statsWarsOverTime')}
+              series={[
+                {
+                  key: 'wars',
+                  label: t('warStatsWars'),
+                  points: summaries.map((item) => ({ day: item.period, value: item.wars })),
+                },
+              ]}
+              includeZero
+            />
+          </ExpandedStatsPanel>
+        ) : null}
+        {sizes.length ? (
+          <ExpandedStatsPanel>
+            <StatsChartFrame title={t('statsWarSizes')} testID="war-sizes-chart">
+              <View style={{ gap: 12 }}>
+                {sizes.map(({ size, wars }) => (
+                  <View key={size} style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                    <CKText
+                      role="rowTitle"
+                      numberOfLines={1}
+                      style={{ minWidth: 72, flexShrink: 0 }}
+                    >
+                      {size}v{size}
+                    </CKText>
+                    <View
+                      style={{
+                        flex: 1,
+                        height: 9,
+                        borderRadius: 9,
+                        backgroundColor: theme.surfaceContainerHighest,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: `${Math.max(1, (100 * wars) / Math.max(totalWars, 1))}%`,
+                          height: 9,
+                          borderRadius: 9,
+                          backgroundColor: theme.secondary,
+                        }}
+                      />
+                    </View>
+                    <CKText role="bodySmall">{formatCompactNumber(wars, locale)}</CKText>
+                  </View>
+                ))}
+              </View>
+            </StatsChartFrame>
+          </ExpandedStatsPanel>
+        ) : null}
+      </AdaptiveStatsPanels>
+      <SectionTitle>{t('statsHitratesByTownHall')}</SectionTitle>
+      <AdaptiveStatsPanels embedded>
+        {townHalls.map((townHall) => {
+          const rows = data.warHitRates.filter((row) => row.townHall === townHall);
+          const comparison = data.comparisons.find((entry) => entry.key === `TH${townHall}`);
+          const attacks = rows.length
+            ? rows.reduce((sum, row) => sum + row.attacks, 0)
+            : (comparison?.metrics.sampleSize ?? 0);
+          const triples = rows.reduce(
+            (sum, row) => sum + (row.stars.find((star) => star.stars === 3)?.count ?? 0),
+            0,
+          );
+          const tripleRate = rows.length
+            ? attacks
+              ? triples / attacks
+              : 0
+            : (comparison?.metrics.threeStarRate ?? 0);
+          const averageStars =
+            rows.length && attacks
+              ? rows.reduce((sum, row) => sum + row.averageStars * row.attacks, 0) / attacks
+              : (comparison?.metrics.averageStars ?? 0);
+          const averageDestruction =
+            rows.length && attacks
+              ? rows.reduce((sum, row) => sum + row.averageDestruction * row.attacks, 0) / attacks
+              : (comparison?.metrics.averageDestruction ?? 0);
+          const expanded = expandedTownHall === townHall;
+          const daily = rows.map(
+            (row) =>
+              new StatsDailyPoint(
+                row.period,
+                row.attacks,
+                row.averageStars,
+                row.averageDestruction,
+                ...([0, 1, 2, 3].map((stars) =>
+                  row.attacks
+                    ? (row.stars.find((item) => item.stars === stars)?.count ?? 0) / row.attacks
+                    : 0,
+                ) as [number, number, number, number]),
+              ),
+          );
+          return (
+            <Surface key={townHall} radius={ckRadius.tile} style={{ padding: 16, gap: 12 }}>
+              <StatsChartFrame
+                title={`${t('statsHitratesByTownHall')} · TH${townHall}`}
+                showTitle={false}
+                copyEnabled={expanded}
+                copyPlacement="footer"
+                testID={`townhall-${townHall}-share`}
+                exportContent={
+                  <View style={{ gap: 16 }}>
+                    <MobileWebImage
+                      imageUrl={ImageAssets.townHall(townHall)}
+                      style={{ width: 54, height: 54, alignSelf: 'center' }}
+                      contentFit="contain"
+                    />
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 16 }}>
+                      {[
+                        {
+                          label: t('warAttacksTitle'),
+                          value: formatCompactNumber(attacks, locale),
+                        },
+                        { label: t('statsThreeStarRate'), value: percent(tripleRate) },
+                        { label: t('statsAverageStars'), value: averageStars.toFixed(2) },
+                        { label: t('statsAverageDestruction'), value: percent(averageDestruction) },
+                      ].map(({ label, value }) => (
+                        <View key={label} style={{ width: '50%', alignItems: 'center', gap: 4 }}>
+                          <CKText skeleton={false} role="bodySmall" muted>
+                            {label}
+                          </CKText>
+                          <CKText role="titleSmall">{value}</CKText>
+                        </View>
+                      ))}
+                    </View>
+                    {daily.length ? (
+                      <AnalyticsLineChart
+                        title={t('statsStarRates')}
+                        showTitle={false}
+                        series={starSeries(daily, t)}
+                        percent
+                        exportable={false}
+                      />
+                    ) : null}
+                  </View>
+                }
+              >
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityState={{ expanded }}
+                  onPress={() => setExpandedTownHall(expanded ? null : townHall)}
                   style={{
-                    flex: 1,
-                    height: 9,
-                    borderRadius: 9,
-                    backgroundColor: theme.surfaceContainerHighest,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 10,
+                    minHeight: 44,
                   }}
                 >
-                  <View
-                    style={{
-                      width: `${Math.max(1, (100 * wars) / Math.max(totalWars, 1))}%`,
-                      height: 9,
-                      borderRadius: 9,
-                      backgroundColor: theme.secondary,
-                    }}
-                  />
-                </View>
-                <CKText role="bodySmall">{formatCompactNumber(wars, locale)}</CKText>
-              </View>
-            ))}
-          </View>
-        </StatsChartFrame>
-      ) : null}
-      <SectionTitle>{t('statsHitratesByTownHall')}</SectionTitle>
-      {townHalls.map((townHall) => {
-        const rows = data.warHitRates.filter((row) => row.townHall === townHall);
-        const comparison = data.comparisons.find((entry) => entry.key === `TH${townHall}`);
-        const attacks = rows.length
-          ? rows.reduce((sum, row) => sum + row.attacks, 0)
-          : (comparison?.metrics.sampleSize ?? 0);
-        const triples = rows.reduce(
-          (sum, row) => sum + (row.stars.find((star) => star.stars === 3)?.count ?? 0),
-          0,
-        );
-        const tripleRate = rows.length
-          ? attacks
-            ? triples / attacks
-            : 0
-          : (comparison?.metrics.threeStarRate ?? 0);
-        const averageStars =
-          rows.length && attacks
-            ? rows.reduce((sum, row) => sum + row.averageStars * row.attacks, 0) / attacks
-            : (comparison?.metrics.averageStars ?? 0);
-        const averageDestruction =
-          rows.length && attacks
-            ? rows.reduce((sum, row) => sum + row.averageDestruction * row.attacks, 0) / attacks
-            : (comparison?.metrics.averageDestruction ?? 0);
-        const expanded = expandedTownHall === townHall;
-        const daily = rows.map(
-          (row) =>
-            new StatsDailyPoint(
-              row.period,
-              row.attacks,
-              row.averageStars,
-              row.averageDestruction,
-              ...([0, 1, 2, 3].map((stars) =>
-                row.attacks
-                  ? (row.stars.find((item) => item.stars === stars)?.count ?? 0) / row.attacks
-                  : 0,
-              ) as [number, number, number, number]),
-            ),
-        );
-        return (
-          <Surface key={townHall} radius={ckRadius.tile} style={{ padding: 16, gap: 12 }}>
-            <StatsChartFrame
-              title={`${t('statsHitratesByTownHall')} · TH${townHall}`}
-              showTitle={false}
-              copyEnabled={expanded}
-              copyPlacement="footer"
-              testID={`townhall-${townHall}-share`}
-              exportContent={
-                <View style={{ gap: 16 }}>
                   <MobileWebImage
                     imageUrl={ImageAssets.townHall(townHall)}
-                    style={{ width: 54, height: 54, alignSelf: 'center' }}
+                    style={{ width: 42, height: 42 }}
                     contentFit="contain"
                   />
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 16 }}>
-                    {[
-                      { label: t('warAttacksTitle'), value: formatCompactNumber(attacks, locale) },
-                      { label: t('statsThreeStarRate'), value: percent(tripleRate) },
-                      { label: t('statsAverageStars'), value: averageStars.toFixed(2) },
-                      { label: t('statsAverageDestruction'), value: percent(averageDestruction) },
-                    ].map(({ label, value }) => (
-                      <View key={label} style={{ width: '50%', alignItems: 'center', gap: 4 }}>
-                        <CKText skeleton={false} role="bodySmall" muted>
-                          {label}
-                        </CKText>
-                        <CKText role="titleSmall">{value}</CKText>
-                      </View>
-                    ))}
+                  <View style={{ flex: 1 }}>
+                    <CKText role="rowTitle">TH{townHall}</CKText>
+                    <CKText role="bodySmall" muted>
+                      {formatCompactNumber(attacks, locale)} {t('warAttacksTitle')}
+                    </CKText>
                   </View>
-                  {daily.length ? (
-                    <AnalyticsLineChart
-                      title={t('statsStarRates')}
-                      showTitle={false}
-                      series={starSeries(daily, t)}
-                      percent
-                      exportable={false}
-                    />
-                  ) : null}
-                </View>
-              }
-            >
-              <Pressable
-                accessibilityRole="button"
-                accessibilityState={{ expanded }}
-                onPress={() => setExpandedTownHall(expanded ? null : townHall)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 10,
-                  minHeight: 44,
-                }}
-              >
-                <MobileWebImage
-                  imageUrl={ImageAssets.townHall(townHall)}
-                  style={{ width: 42, height: 42 }}
-                  contentFit="contain"
-                />
-                <View style={{ flex: 1 }}>
-                  <CKText role="rowTitle">TH{townHall}</CKText>
-                  <CKText role="bodySmall" muted>
-                    {formatCompactNumber(attacks, locale)} {t('warAttacksTitle')}
+                  <CKText role="titleSmall" style={{ color: '#E8A524' }}>
+                    {percent(tripleRate)}
                   </CKText>
-                </View>
-                <CKText role="titleSmall" style={{ color: '#E8A524' }}>
-                  {percent(tripleRate)}
-                </CKText>
-                <View
-                  testID={`townhall-${townHall}-${expanded ? 'collapse' : 'expand'}-caret`}
-                  style={{
-                    width: 20,
-                    height: 20,
-                    flexShrink: 0,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {expanded ? (
-                    <ChevronUp color={theme.onSurfaceVariant} size={20} />
-                  ) : (
-                    <ChevronDown color={theme.onSurfaceVariant} size={20} />
-                  )}
-                </View>
-              </Pressable>
-              {expanded ? (
-                <View style={{ gap: 12 }}>
-                  <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <View>
-                      <CKText skeleton={false} role="bodySmall" muted>
-                        {t('statsAverageStars')}
-                      </CKText>
-                      <CKText role="rowTitle">{averageStars.toFixed(2)}</CKText>
-                    </View>
-                    <View>
-                      <CKText skeleton={false} role="bodySmall" muted>
-                        {t('statsAverageDestruction')}
-                      </CKText>
-                      <CKText role="rowTitle">{percent(averageDestruction)}</CKText>
-                    </View>
+                  <View
+                    testID={`townhall-${townHall}-${expanded ? 'collapse' : 'expand'}-caret`}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      flexShrink: 0,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {expanded ? (
+                      <ChevronUp color={theme.onSurfaceVariant} size={20} />
+                    ) : (
+                      <ChevronDown color={theme.onSurfaceVariant} size={20} />
+                    )}
                   </View>
-                  {daily.length ? (
-                    <AnalyticsLineChart
-                      title={t('statsStarRates')}
-                      showTitle={false}
-                      series={starSeries(daily, t)}
-                      percent
-                      exportable={false}
-                    />
-                  ) : null}
-                </View>
-              ) : null}
-            </StatsChartFrame>
-          </Surface>
-        );
-      })}
+                </Pressable>
+                {expanded ? (
+                  <View style={{ gap: 12 }}>
+                    <View style={{ flexDirection: 'row', gap: 20 }}>
+                      <View>
+                        <CKText skeleton={false} role="bodySmall" muted>
+                          {t('statsAverageStars')}
+                        </CKText>
+                        <CKText role="rowTitle">{averageStars.toFixed(2)}</CKText>
+                      </View>
+                      <View>
+                        <CKText skeleton={false} role="bodySmall" muted>
+                          {t('statsAverageDestruction')}
+                        </CKText>
+                        <CKText role="rowTitle">{percent(averageDestruction)}</CKText>
+                      </View>
+                    </View>
+                    {daily.length ? (
+                      <AnalyticsLineChart
+                        title={t('statsStarRates')}
+                        showTitle={false}
+                        series={starSeries(daily, t)}
+                        percent
+                        exportable={false}
+                      />
+                    ) : null}
+                  </View>
+                ) : null}
+              </StatsChartFrame>
+            </Surface>
+          );
+        })}
+      </AdaptiveStatsPanels>
     </Section>
   );
 }
@@ -1806,6 +1974,7 @@ function BattleFiltersCore({
   const { t, locale } = useI18n();
   const cwlLeagues = useLocalizedCwlLeagues(t, locale);
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const initialTh =
     section === StatsSection.ranked
       ? provider.rankedTownHall
@@ -1942,8 +2111,16 @@ function BattleFiltersCore({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
+      <View
+        style={[styles.overlay, layout.isExpanded && { justifyContent: 'center', padding: 24 }]}
+      >
+        <View
+          style={[
+            styles.sheet,
+            { backgroundColor: theme.surface },
+            layout.isExpanded && { maxWidth: 680, borderRadius: 28, padding: 28 },
+          ]}
+        >
           <View style={styles.sheetHeader}>
             <CKText role="titleLarge">{t('generalFilters')}</CKText>
             <Pressable
@@ -2132,6 +2309,7 @@ function LegendFilters({ provider, onClose }: { provider: StatsProvider; onClose
   'use no memo';
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [cohort, setCohort] = useState(provider.legendCohort);
   const [start, setStart] = useState(StatsDateFilter.formatDate(provider.dates.start));
   const [end, setEnd] = useState(StatsDateFilter.formatDate(provider.dates.end));
@@ -2161,8 +2339,16 @@ function LegendFilters({ provider, onClose }: { provider: StatsProvider; onClose
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={[styles.sheet, { backgroundColor: theme.surface }]}>
+      <View
+        style={[styles.overlay, layout.isExpanded && { justifyContent: 'center', padding: 24 }]}
+      >
+        <View
+          style={[
+            styles.sheet,
+            { backgroundColor: theme.surface },
+            layout.isExpanded && { maxWidth: 680, borderRadius: 28, padding: 28 },
+          ]}
+        >
           <View style={styles.sheetHeader}>
             <CKText role="titleLarge">{t('generalFilters')}</CKText>
             <Pressable
@@ -2293,8 +2479,23 @@ function FilterLabel({ label, value, icon }: { label: string; value: string; ico
     </View>
   );
 }
-function Section({ children }: { children: ReactNode }) {
-  return <View style={styles.section}>{children}</View>;
+function ExpandedStatsPanel({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  return layout.isExpanded ? (
+    <Surface radius={ckRadius.tile} style={styles.expandedPanel}>
+      {children}
+    </Surface>
+  ) : (
+    <>{children}</>
+  );
+}
+
+function Section({ children, panels = false }: { children: ReactNode; panels?: boolean }) {
+  return panels ? (
+    <AdaptiveStatsPanels style={styles.section}>{children}</AdaptiveStatsPanels>
+  ) : (
+    <View style={styles.section}>{children}</View>
+  );
 }
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
@@ -2596,6 +2797,8 @@ const styles = StyleSheet.create({
   },
   section: { gap: 12, paddingBottom: 12 },
   sectionFrame: { gap: 10 },
+  expandedMetric: { padding: 16, gap: 8, minHeight: 104, borderWidth: 0 },
+  expandedPanel: { padding: 20, borderWidth: 0 },
   state: { marginVertical: 24 },
   card: { padding: 16, gap: 12 },
   summary: { padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12 },

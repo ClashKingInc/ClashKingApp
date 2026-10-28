@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { StyleSheet, View } from 'react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
@@ -21,6 +22,7 @@ export function PerformanceComparisons({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   if (comparisons.length === 0) return null;
   const isTownHall = section === StatsSection.war || section === StatsSection.cwl;
   return (
@@ -43,7 +45,7 @@ export function PerformanceComparisons({
               key={key}
               muted
               radius={ckRadius.tile}
-              style={styles.row}
+              style={[styles.row, layout.isExpanded && { minHeight: 76, padding: 16, gap: 14 }]}
               accessibilityLabel={`${key}, ${metrics.available ? rate(metrics.threeStarRate, locale) : '—'}, ${sample} ${t('warAttacksTitle')}`}
               testID={`performance-comparison-${key}`}
             >
@@ -51,7 +53,7 @@ export function PerformanceComparisons({
                 imageUrl={imageUrl}
                 contentFit="contain"
                 accessible={false}
-                style={styles.artwork}
+                style={[styles.artwork, layout.isExpanded && { width: 46, height: 46 }]}
               />
               <CKText role="rowTitle" numberOfLines={1} style={styles.label}>
                 {key}

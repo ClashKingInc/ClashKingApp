@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Laat toe",
   "achievementsTitle": "Prestasies",
   "achievementEarnedLabel": "Verdien",
+  "achievementGemsEarnedRatio": "{earned} / {total} verdien",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Het {earned} van {total} prestasie-edelstene verdien.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} voltooi",
   "achievementEarnedCount": "Verdien ×{count}",
   "achievementTownhall18Name": "Stadsaal 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Net dieselfde stadsaal",
+  "warStatsSameTownHall": "Dieselfde stadsaal",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Volgelinge",
   "drawerFollowersHelp": "Mense wat een van jou geverifieerde gekoppelde rekeninge geboekmerk het.",
   "drawerCalculators": "Sakrekenaars",
-  "drawerSubscription": "Intekening",
   "drawerUpgradeTracker": "Opgraderingsvolger",
   "drawerBasesArmies": "Basisse en leërs",
   "drawerGameAssets": "Spelbates",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Kry waarskuwings vir hierdie rekening.",
   "playerOptionNotificationsEnableMaster": "Skakel eers kennisgewings in Instellings aan.",
   "playerOptionNotificationsVerifyFirst": "Verifieer hierdie rekening om kennisgewings te aktiveer.",
-  "playerOptionNotificationsSubscriptionRequired": "'n Intekening word vir boekmerkkennisgewings vereis.",
   "playerOptionNotificationsLimitReached": "Jou limiet vir boekmerkkennisgewings is bereik.",
   "playerOptionShowTodoPageTitle": "Wys op doen-bladsy",
   "playerOptionShowTodoPageSubtitle": "Sluit hierdie rekening by die volledige doenlys in.",

@@ -1,4 +1,5 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -29,6 +30,7 @@ export function AnnouncementStoryModal({
   onFinish: (result: AnnouncementStoryResult) => void;
 }) {
   const { width, height } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
   const { reduceMotion } = useCKAccessibility();
   const [entrance] = useState(() => new Animated.Value(reduceMotion ? 1 : 0));
@@ -58,7 +60,11 @@ export function AnnouncementStoryModal({
   }, [visible, finishDismissal]);
   const dimension = Math.max(
     0,
-    Math.min(560, width - 24, height - insets.top - insets.bottom - 24),
+    Math.min(
+      layout.isExpanded ? 760 : 560,
+      (layout.isExpanded ? layout.width : width) - 24,
+      (layout.isExpanded ? layout.height : height) - insets.top - insets.bottom - 24,
+    ),
   );
 
   useEffect(() => {
@@ -101,7 +107,8 @@ export function AnnouncementStoryModal({
   };
 
   return (
-    <Modal supportedOrientations={modalOrientations}
+    <Modal
+      supportedOrientations={modalOrientations}
       animationType="none"
       onRequestClose={() => requestDismissal('closed')}
       onDismiss={finishDismissal}

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { Gesture } from 'react-native-gesture-handler';
+import type { Gesture, LegacyPanGesture } from 'react-native-gesture-handler';
 
 // Pause the primary pager for an interactive widget (including web fallback).
 // Native account strips also use explicit recognizer relationships below and
@@ -9,4 +9,6 @@ export const usePrimarySwipeGuard = () => useContext(PrimarySwipeGuard);
 
 // Horizontal account bars make the native pager wait for their own recognizer.
 // This relationship is decided on the UI thread, not after a React state update.
-export const PrimaryPageGestureContext = createContext<ReturnType<typeof Gesture.Native> | undefined>(undefined);
+export const PrimaryPageGestureContext = createContext<
+  ReturnType<typeof Gesture.Native> | LegacyPanGesture | undefined
+>(undefined);

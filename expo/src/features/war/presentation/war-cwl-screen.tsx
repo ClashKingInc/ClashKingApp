@@ -1,3 +1,6 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { ResponsiveGrid } from '../../../ui/responsive-grid';
+import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
 import { PullRefreshHint, usePullRefreshHint } from '../../../ui/pull-refresh-hint';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -162,6 +165,8 @@ export function WarCwlScreen({
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
+  const nativeTabs = useNativePrimaryNavigation();
+  const layout = useAdaptiveLayout();
   const { width } = useWindowDimensions();
   const requestedPlayers = useRef(new Set<string>());
   const requestedWars = useRef(new Set<string>());
@@ -307,7 +312,7 @@ export function WarCwlScreen({
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      {desktop ? (
+      {desktop || layout.isDuo || layout.isTablet ? (
         <ScrollView
           testID="war-scroll-view"
           onScroll={pullRefresh.onScroll}
@@ -317,12 +322,42 @@ export function WarCwlScreen({
           refreshControl={refreshControl}
           contentContainerStyle={[
             styles.scroll,
-            { paddingBottom: insets.bottom + (desktop ? 32 : 96) },
+            (layout.isDuo || layout.isTablet) && { maxWidth: layout.contentMaxWidth },
+            { paddingBottom: insets.bottom + (desktop ? 32 : nativeTabs ? 24 : 96) },
           ]}
         >
           {listHeader}
           {!entries.length ? (
             emptyRoster
+          ) : layout.isDuo || layout.isTablet ? (
+            <ResponsiveGrid
+              // Each war card compares two named clans. Give that comparison
+              // enough space rather than squeezing both identities into thirds.
+              minItemWidth={layout.isExpanded ? (layout.isTablet ? 430 : 300) : 420}
+              maxColumns={
+                layout.isExpanded
+                  ? layout.columns(layout.isTablet ? 430 : 300, layout.isTablet ? 2 : 3)
+                  : 2
+              }
+              gap={12}
+            >
+              {entries.map((item) => (
+                <View key={item.tag}>
+                  <WarSummaryCard
+                    item={item}
+                    loading={
+                      loadingWarTags.has(item.tag) ||
+                      (!item.summary && !requestedWars.current.has(item.tag))
+                    }
+                    now={now}
+                    onOpenWar={(war) => onOpenWar(item, war)}
+                    onOpenCwl={() => {
+                      if (item.summary) onOpenCwl(item, item.summary);
+                    }}
+                  />
+                </View>
+              ))}
+            </ResponsiveGrid>
           ) : (
             <View style={[styles.grid, desktop && styles.desktopGrid]}>
               {entries.map((item) => (
@@ -356,7 +391,11 @@ export function WarCwlScreen({
           testID="war-scroll-view"
           key={`${mode}-war-roster`}
           keyExtractor={(item) => item.tag}
-          contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 96 }]}
+          contentContainerStyle={[
+            styles.scroll,
+            (layout.isDuo || layout.isTablet) && { maxWidth: layout.contentMaxWidth },
+            { paddingBottom: insets.bottom + (nativeTabs ? 24 : 96) },
+          ]}
           ListHeaderComponent={listHeader}
           ListEmptyComponent={emptyRoster}
           refreshControl={refreshControl}

@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { modalOrientations } from '../../ui/modal-orientations';
 import { cloneElement, useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
@@ -92,7 +93,16 @@ export function BasesArmiesScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width, fontScale } = useWindowDimensions();
-  const contentWidth = Math.min(width, 1200);
+  const layout = useAdaptiveLayout();
+  const effectiveWidth =
+    layout.isDuo && !layout.isExpanded
+      ? Math.min(layout.width, layout.contentMaxWidth)
+      : layout.isDuo || layout.isTablet
+        ? layout.width
+        : width;
+  const contentWidth = layout.isExpanded
+    ? Math.min(layout.usableWidth, layout.contentMaxWidth)
+    : Math.min(effectiveWidth, 1200);
   const horizontal = 16;
   const [expandedArmy, setExpandedArmy] = useState<string | null>(null);
   const [state, setState] = useState<PersonalBasesState | null>(null);
@@ -108,8 +118,24 @@ export function BasesArmiesScreen({
   const [section, setSection] = useState(linkChoice(link.section, ['bases', 'armies'], 'bases'));
   // Army compositions need more horizontal room than base thumbnails. Keep
   // the same sizing rule for loaded cards and their loading placeholders.
-  const baseColumns = width < 350 || fontScale > 1.35 ? 1 : width >= 900 ? 4 : width >= 600 ? 3 : 2;
-  const armyColumns = width >= 600 && fontScale <= 1.35 ? 2 : 1;
+  const baseColumns = layout.isExpanded
+    ? layout.columns(210, layout.isTablet ? 5 : 4)
+    : layout.isDuo
+      ? fontScale > 1.35
+        ? 1
+        : 2
+      : effectiveWidth < 350 || fontScale > 1.35
+        ? 1
+        : effectiveWidth >= 900
+          ? 4
+          : effectiveWidth >= 600
+            ? 3
+            : 2;
+  const armyColumns = layout.isExpanded
+    ? layout.columns(380, 2)
+    : !layout.isDuo && effectiveWidth >= 600 && fontScale <= 1.35
+      ? 2
+      : 1;
   const [initialSection] = useState(section);
   const pager = useRef<PagerViewHandle>(null);
   const [tabPosition] = useState(() => new Animated.Value(initialSection === 'bases' ? 0 : 1));

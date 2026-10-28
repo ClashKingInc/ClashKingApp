@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { InlineBackControl } from '../../ui/native-back-context';
+import { ResponsiveGrid } from '../../ui/responsive-grid';
+import { useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,8 +26,9 @@ export function ServersRoot({
   directory: DiscordServersState;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { t } = useI18n();
-  const { servers, loading, error, refresh } = directory;
+  const { servers, loading, error, hasDiscordIdentity, refresh } = directory;
   const [viewportHeight, setViewportHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
   const installed = servers.filter((server) => server.has_bot);
@@ -39,9 +43,18 @@ export function ServersRoot({
       onPress={() =>
         server.has_bot ? onOpenServer(server) : openInstall(discordServerInstallUrl(server.id))
       }
-      style={[styles.server, { backgroundColor: theme.card }]}
+      style={[
+        styles.server,
+        { backgroundColor: theme.card },
+        layout.isExpanded && { minHeight: 104, padding: 22, gap: 18 },
+      ]}
     >
-      {server.icon ? <MobileWebImage imageUrl={server.icon} style={styles.icon} /> : null}
+      {server.icon ? (
+        <MobileWebImage
+          imageUrl={server.icon}
+          style={[styles.icon, layout.isExpanded && { width: 52, height: 52 }]}
+        />
+      ) : null}
       <View style={styles.identity}>
         <CKText role="titleSmall">{server.name}</CKText>
         <CKText muted role="labelMedium">
@@ -60,21 +73,38 @@ export function ServersRoot({
       )}
     </Pressable>
   );
+  const cards = (children: ReactNode) =>
+    layout.isExpanded ? (
+      <ResponsiveGrid minItemWidth={420} maxColumns={layout.columns(420, 2)} gap={12}>
+        {children}
+      </ResponsiveGrid>
+    ) : (
+      children
+    );
+  const pageWidth = layout.isExpanded
+    ? {
+        width: '100%' as const,
+        maxWidth: Math.min(1040, layout.contentMaxWidth),
+        alignSelf: 'center' as const,
+      }
+    : undefined;
   return (
     <SafeAreaView
       edges={['top', 'left', 'right', 'bottom']}
       style={{ flex: 1, backgroundColor: theme.background }}
     >
-      <View style={styles.header}>
-        <Pressable accessibilityRole="button" onPress={onBack} style={styles.headerAction}>
-          <ChevronLeft color={theme.onSurface} />
-        </Pressable>
+      <View style={[styles.header, pageWidth]}>
+        <InlineBackControl onBack={onBack}>
+          <Pressable accessibilityRole="button" onPress={onBack} style={styles.headerAction}>
+            <ChevronLeft color={theme.onSurface} />
+          </Pressable>
+        </InlineBackControl>
         <CKText skeleton={false} role="titleMedium" style={styles.identity}>
           {t('homeWidgetsServers')}
         </CKText>
       </View>
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, pageWidth]}
         onLayout={(event) => setViewportHeight(event.nativeEvent.layout.height)}
         onContentSizeChange={(_, height) => setContentHeight(height)}
         scrollEnabled={contentHeight > viewportHeight + 1}
@@ -100,14 +130,29 @@ export function ServersRoot({
           </SkeletonContent>
         ) : (
           <>
-            {error ? (
+            {!hasDiscordIdentity ? (
+              <View
+                testID="discord-account-not-connected"
+                style={[styles.connection, { backgroundColor: theme.card }]}
+              >
+                <CKText role="titleSmall">
+                  {t('generalDiscord')} · {t('authAccountNotConnected')}
+                </CKText>
+                <CKText muted role="bodyMedium">
+                  {t('authAccountAddDiscordAuth')}
+                </CKText>
+              </View>
+            ) : null}
+            {hasDiscordIdentity && error ? (
               <Pressable accessibilityRole="button" onPress={refresh} style={styles.headerAction}>
                 <CKText>
                   {t('apiErrorServer')} · {t('generalRetry')}
                 </CKText>
               </Pressable>
             ) : null}
-            {installed.length > 0 ? <View style={styles.section}>{installed.map(row)}</View> : null}
+            {installed.length > 0 ? (
+              <View style={styles.section}>{cards(installed.map(row))}</View>
+            ) : null}
             <View style={styles.actions}>
               <Pressable
                 accessibilityRole="button"
@@ -133,7 +178,7 @@ export function ServersRoot({
                 <CKText skeleton={false} role="titleSmall">
                   {t('discordServersWithoutBot')}
                 </CKText>
-                {installable.map(row)}
+                {cards(installable.map(row))}
               </View>
             ) : null}
           </>
@@ -147,6 +192,7 @@ const styles = StyleSheet.create({
   headerAction: { padding: 10 },
   content: { padding: 16, gap: 20 },
   section: { gap: 12 },
+  connection: { padding: 20, borderRadius: 24, gap: 8 },
   identity: { flex: 1 },
   server: { flexDirection: 'row', alignItems: 'center', gap: 14, padding: 18, borderRadius: 24 },
   icon: { width: 40, height: 40, borderRadius: 12 },

@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -6,7 +7,13 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
-import { DestinationPicker, MobileWebImage, SkeletonContent, useCKTheme } from '../../../ui';
+import {
+  DestinationPicker,
+  ProfileTabs,
+  MobileWebImage,
+  SkeletonContent,
+  useCKTheme,
+} from '../../../ui';
 import { retainRecentSections } from '../../../ui/retained-sections';
 import { ClanJoinLeaveTab, ClanWarLogTab } from './clan-activity-tabs';
 import {
@@ -43,6 +50,7 @@ export function ClanInfoScreen({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
   const [historyTypes, setHistoryTypes] = useState<readonly ClanLeaderboardTypeValue[] | null>(
     null,
@@ -170,20 +178,42 @@ export function ClanInfoScreen({
           testID="clan-destination-bar"
           style={[styles.navigation, { backgroundColor: theme.background }]}
         >
-          <View style={styles.navigationControl}>
-            <DestinationPicker
-              accessibilityLabel={destinations[activeIndex]?.label}
-              onSelect={(key) => {
-                const nextIndex = tabs.indexOf(key as ClanInfoTabKey);
-                if (nextIndex >= 0) selectTab(nextIndex);
-              }}
-              options={destinations}
-              selectedKey={active}
-              showPositionHint
-            />
+          <View
+            style={[
+              styles.navigationControl,
+              layout.isExpanded && { maxWidth: layout.contentMaxWidth, paddingHorizontal: 24 },
+            ]}
+          >
+            {layout.isExpanded ? (
+              <ProfileTabs
+                variant="underline"
+                overflow="scroll"
+                tabs={destinations}
+                selectedKey={active}
+                onSelect={(key) => {
+                  const index = tabs.indexOf(key as ClanInfoTabKey);
+                  if (index >= 0) selectTab(index);
+                }}
+              />
+            ) : (
+              <DestinationPicker
+                accessibilityLabel={destinations[activeIndex]?.label}
+                onSelect={(key) => {
+                  const nextIndex = tabs.indexOf(key as ClanInfoTabKey);
+                  if (nextIndex >= 0) selectTab(nextIndex);
+                }}
+                options={destinations}
+                selectedKey={active}
+                showPositionHint
+              />
+            )}
           </View>
         </View>
-        <SkeletonContent loading={loading} testID="clan-detail-body" style={styles.tabBody}>
+        <SkeletonContent
+          loading={loading}
+          testID="clan-detail-body"
+          style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
+        >
           {tabs.map((key) =>
             key === active || retainedTabs.includes(key) ? (
               <View

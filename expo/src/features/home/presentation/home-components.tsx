@@ -183,12 +183,14 @@ export function ProgressRing({
   label,
   labelFontSize,
   showLabel = true,
+  color = statColors.win,
 }: {
   progress: number;
   size: number;
   label?: string;
   labelFontSize?: number;
   showLabel?: boolean;
+  color?: string;
 }) {
   const theme = useCKTheme();
   const loading = useSkeletonContent();
@@ -218,7 +220,7 @@ export function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={statColors.win}
+          stroke={color}
           strokeWidth={stroke}
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference * (1 - value)}

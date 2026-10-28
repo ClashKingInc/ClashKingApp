@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useMemo, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { ArrowDown, ArrowUp, Star, Users } from 'lucide-react-native';
@@ -40,7 +41,8 @@ export function ClanMembersTab({
   const { t } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const [sort, setSort] = useState<MemberSort>('league');
   const [showSort, setShowSort] = useState(false);
   const [showTotals, setShowTotals] = useState(false);
@@ -129,7 +131,11 @@ export function ClanMembersTab({
           icon={<Users color={theme.onSurfaceVariant} />}
         />
       ) : desktop ? (
-        <ResponsiveGrid minItemWidth={340} maxColumns={3} gap={10}>
+        <ResponsiveGrid
+          minItemWidth={layout.isExpanded ? 300 : 340}
+          maxColumns={layout.isExpanded ? layout.columns(300, 3) : 3}
+          gap={12}
+        >
           {cards}
         </ResponsiveGrid>
       ) : (

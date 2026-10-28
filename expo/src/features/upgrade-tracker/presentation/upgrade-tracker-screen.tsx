@@ -1,3 +1,6 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
+import { useNativeRailBack } from '../../../ui/native-back-context';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { Asset } from 'expo-asset';
@@ -5,6 +8,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useLayoutEffect,
   useRef,
   useState,
   type Dispatch,
@@ -137,7 +141,18 @@ export interface UpgradeTrackerScreenProps {
   readonly onOpenGameSettings: () => void;
 }
 
+type TrackerSearchBinding = { value: string; onChange: (value: string) => void };
+type TrackerSearchRegistry = Partial<Record<UpgradeVillageValue, TrackerSearchBinding | null>>;
+
+function expandedTrackerHeaderHeight(tablet: boolean, fontScale: number) {
+  // Labels may wrap in larger accessibility text; reserve space instead of
+  // shrinking values or clipping the fixed overlay above the scrolling page.
+  const header = illustratedHeaderLayout({ isTablet: tablet, isExpanded: true });
+  return header.minHeight + Math.ceil(Math.max(0, fontScale - 1) * 180);
+}
+
 export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
+  const layout = useAdaptiveLayout();
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
@@ -149,6 +164,18 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const [importOpen, setImportOpen] = useState(() => link.import === '1');
   const [shareKind, setShareKind] = useState<'home' | 'builder' | 'collection' | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [trackerSearches, setTrackerSearches] = useState<TrackerSearchRegistry>({});
+  const registerTrackerSearch = useCallback(
+    (village: UpgradeVillageValue, binding: TrackerSearchBinding | null) => {
+      setTrackerSearches((current) =>
+        current[village]?.value === binding?.value &&
+        current[village]?.onChange === binding?.onChange
+          ? current
+          : { ...current, [village]: binding },
+      );
+    },
+    [],
+  );
   const [goldPassOpen, setGoldPassOpen] = useState(false);
   const pager = useRef<PagerViewHandle>(null);
   const [trackerScrollY] = useState(() => new Animated.Value(0));
@@ -167,7 +194,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
     [props.accounts, props.selectedTag],
   );
   const snapshot = props.snapshot ?? (pending && showPlaceholder ? placeholder : null);
-  const viewportWidth = useWindowDimensions().width;
+  const { width: viewportWidth, fontScale } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
   const selectedAccount = props.accounts.find((account) => account.tag === props.selectedTag);
   const clock = useTrackerClock(snapshot);
@@ -223,8 +250,14 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
     trackerScrollY.setValue(trackerOffsets[next] ?? 0);
     pager.current?.setPageWithoutAnimation(trackerTabs.indexOf(next));
   };
-  const trackerHeaderHeight = (desktop ? 280 : 300) + insets.top;
-  const trackerTabHeight = 54;
+  const wideTracker = layout.isExpanded;
+  const trackerHeaderHeight =
+    (wideTracker ? expandedTrackerHeaderHeight(layout.isTablet, fontScale) : desktop ? 280 : 300) +
+    insets.top;
+  const trackerTabHeight = wideTracker ? 68 : 54;
+  const searchVillage =
+    tab === 'home' ? UpgradeVillage.home : tab === 'builder' ? UpgradeVillage.builderBase : null;
+  const searchBinding = searchVillage ? trackerSearches[searchVillage] : null;
   const trackerChromeInset = trackerHeaderHeight + trackerTabHeight;
   const trackerCollapseDistance = trackerHeaderHeight - insets.top;
   const trackerChromeTranslate = trackerScrollY.interpolate({
@@ -247,6 +280,8 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
     selectTab('home');
   };
   return (
+    // The Duo detail host already provides the available pane. Applying its
+    // inset-reduced contentMaxWidth here would subtract the safe area twice.
     <SafeAreaView edges={['left', 'right']} style={styles.safe}>
       {!snapshot ? (
         <TrackerHeader
@@ -335,6 +370,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
               onPriorities={() => setSettingsOpen(true)}
               onGoldPass={() => setGoldPassOpen(true)}
               goldPassPercent={props.goldPassPercent}
+              registerSearch={registerTrackerSearch}
               onSelect={(next) => {
                 setTab(next);
                 trackerScrollY.setValue(trackerOffsets[next] ?? 0);
@@ -371,6 +407,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
             style={[
               styles.tabWrap,
               styles.trackerTabsOverlay,
+              wideTracker && styles.expandedTabsWrap,
               {
                 top: trackerHeaderHeight,
                 backgroundColor: theme.background,
@@ -378,13 +415,34 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
               },
             ]}
           >
-            <View style={styles.tabControl}>
-              <ProfileTabs
-                tabs={tabs}
-                selectedKey={tab}
-                onSelect={(key) => selectTab(key as TrackerTab)}
-              />
-            </View>
+            {wideTracker ? (
+              <View style={[styles.expandedToolbar, { maxWidth: layout.contentMaxWidth }]}>
+                {searchVillage ? (
+                  <View style={styles.expandedSearch}>
+                    <SearchBar
+                      value={searchBinding?.value ?? ''}
+                      onChange={searchBinding?.onChange ?? (() => {})}
+                      placeholder={t('upgradeTrackerSearchUpgrades')}
+                    />
+                  </View>
+                ) : null}
+                <View style={[styles.tabControl, styles.expandedTabControl]}>
+                  <ProfileTabs
+                    tabs={tabs}
+                    selectedKey={tab}
+                    onSelect={(key) => selectTab(key as TrackerTab)}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View style={styles.tabControl}>
+                <ProfileTabs
+                  tabs={tabs}
+                  selectedKey={tab}
+                  onSelect={(key) => selectTab(key as TrackerTab)}
+                />
+              </View>
+            )}
           </Animated.View>
         </View>
       )}
@@ -476,11 +534,14 @@ function TrackerHeader({
   onImport: () => void;
   loading?: boolean;
 }) {
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
   const { t } = useI18n();
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
-  const viewportWidth = useWindowDimensions().width;
+  const { width: viewportWidth, fontScale } = useWindowDimensions();
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
+  const wideTracker = layout.isExpanded;
   const village = tab === 'builder' ? UpgradeVillage.builderBase : UpgradeVillage.home;
   const collection = tab === 'collection';
   const summary = snapshot?.overallSummary(village);
@@ -555,6 +616,154 @@ function TrackerHeader({
             image: ImageAssets.iconClock,
           },
         ];
+  if (wideTracker) {
+    const hallSize = headerLayout.image;
+    return (
+      <View
+        style={[
+          styles.heroHeader,
+          { height: expandedTrackerHeaderHeight(layout.isTablet, fontScale) + insets.top },
+        ]}
+      >
+        <MobileWebImage imageUrl={background} contentFit="cover" style={styles.heroBackdrop} />
+        <HeroHeaderScrim />
+        <View
+          style={[
+            styles.expandedHeaderWidth,
+            {
+              maxWidth: layout.contentMaxWidth,
+              paddingTop: insets.top,
+              paddingHorizontal: headerLayout.horizontal,
+            },
+          ]}
+        >
+          <View style={styles.heroActions}>
+            <HeroIconButton label={materialBackLabel(locale)} onPress={onBack}>
+              <ArrowLeft color="white" />
+            </HeroIconButton>
+            <View style={styles.grow} />
+            {snapshot ? (
+              <HeroIconButton label={t('upgradeTrackerShare')} onPress={onShare}>
+                <Share2 color="white" />
+              </HeroIconButton>
+            ) : null}
+            <HeroIconButton label={t('upgradeTrackerPasteJson')} onPress={onImport}>
+              <Upload color="white" />
+            </HeroIconButton>
+          </View>
+          <SkeletonContent
+            loading={loading}
+            style={[
+              styles.expandedHeaderBody,
+              {
+                gap: headerLayout.gap,
+                paddingBottom: headerLayout.bottom,
+                minHeight: headerLayout.bodyMinHeight,
+              },
+            ]}
+          >
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('upgradeTrackerChooseAccount')}
+              onPress={onAccount}
+              style={[styles.expandedIdentity, { gap: headerLayout.gap }]}
+            >
+              <MobileWebImage
+                imageUrl={hall}
+                contentFit="contain"
+                style={{ width: hallSize, height: hallSize }}
+              />
+              <View style={styles.expandedIdentityCopy}>
+                <View style={styles.expandedNameRow}>
+                  <CKText
+                    role="titleLarge"
+                    style={[
+                      styles.heroText,
+                      {
+                        fontSize: headerLayout.title,
+                        lineHeight: headerLayout.titleLine,
+                        fontWeight: '700',
+                        flexShrink: 1,
+                      },
+                    ]}
+                    numberOfLines={2}
+                  >
+                    {snapshot?.name ?? account?.name ?? t('upgradeTrackerChooseAccount')}
+                  </CKText>
+                  <ChevronDown color="white" size={20} />
+                </View>
+                {snapshot && upgradeSnapshotNeedsRefresh(snapshot) ? (
+                  <Pressable
+                    onPress={(event) => {
+                      event.stopPropagation();
+                      onImport();
+                    }}
+                    accessibilityRole="button"
+                    style={styles.expandedFreshness}
+                  >
+                    <Upload size={15} color="#E8A524" />
+                    <CKText role="metadata" style={{ color: '#E8A524' }}>
+                      {t('widgetDataStale')}
+                    </CKText>
+                  </Pressable>
+                ) : snapshot ? (
+                  <CKText role="metadata" style={styles.heroSecondary}>
+                    {snapshotAgeLabel(snapshot.capturedAt, t)}
+                  </CKText>
+                ) : null}
+              </View>
+            </Pressable>
+            <View style={styles.expandedMetrics}>
+              {/* Measure the flex column before sizing cells. Percentage bases
+                  could resolve against the whole hero and stack all four. */}
+              <ResponsiveGrid minColumns={2} maxColumns={2} gap={10}>
+                {values.map((value) => (
+                  <View
+                    key={value.label}
+                    accessible
+                    accessibilityLabel={`${value.label}: ${value.value}`}
+                    style={[
+                      styles.expandedMetric,
+                      { backgroundColor: colorWithAlpha(theme.surface, 0.56) },
+                    ]}
+                  >
+                    <View style={styles.expandedMetricValue}>
+                      <MobileWebImage
+                        imageUrl={value.image}
+                        contentFit="contain"
+                        style={{ width: 21, height: 21 }}
+                      />
+                      <CKText
+                        role="titleMedium"
+                        style={{
+                          color: 'white',
+                          fontSize: layout.isTablet ? 23 : 21,
+                          lineHeight: 28,
+                          fontWeight: '700',
+                        }}
+                      >
+                        {value.value}
+                      </CKText>
+                    </View>
+                    <CKText
+                      role="metadata"
+                      style={{
+                        color: '#FFFFFFD6',
+                        fontSize: layout.isTablet ? 14 : 13,
+                        lineHeight: 18,
+                      }}
+                    >
+                      {value.label}
+                    </CKText>
+                  </View>
+                ))}
+              </ResponsiveGrid>
+            </View>
+          </SkeletonContent>
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={[styles.heroHeader, { height: (desktop ? 280 : 300) + insets.top }]}>
       <MobileWebImage imageUrl={background} contentFit="cover" style={styles.heroBackdrop} />
@@ -578,60 +787,100 @@ function TrackerHeader({
           <Upload color="white" />
         </HeroIconButton>
       </View>
-      <SkeletonContent loading={loading} style={{ flex: 1 }}>
+      <SkeletonContent
+        loading={loading}
+        style={[
+          { flex: 1 },
+          wideTracker && {
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+            paddingBottom: 12,
+            gap: 20,
+          },
+        ]}
+      >
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('upgradeTrackerChooseAccount')}
           onPress={onAccount}
-          style={styles.heroProfile}
+          style={[
+            styles.heroProfile,
+            wideTracker && {
+              flex: 0,
+              width: '40%',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              gap: 12,
+            },
+          ]}
         >
-          <View style={styles.heroHallBadge}>
+          <View style={[styles.heroHallBadge, wideTracker && { width: 64, height: 64 }]}>
             <MobileWebImage
               imageUrl={hall}
-              style={[styles.heroHall, desktop && styles.heroHallDesktop]}
+              style={[
+                styles.heroHall,
+                desktop && styles.heroHallDesktop,
+                wideTracker && { width: 64, height: 64 },
+              ]}
             />
           </View>
-          <View style={styles.heroNameRow}>
-            <CKText
-              role="titleLarge"
-              style={[styles.heroText, { fontSize: desktop ? 24 : 26, fontWeight: '700' }]}
-              numberOfLines={1}
-            >
-              {snapshot?.name ?? account?.name ?? t('upgradeTrackerChooseAccount')}
-            </CKText>
-            <ChevronDown color="white" size={20} />
-          </View>
-          {snapshot && upgradeSnapshotNeedsRefresh(snapshot) ? (
-            <Pressable
-              onPress={(event) => {
-                event.stopPropagation();
-                onImport();
-              }}
-              accessibilityRole="button"
-              style={styles.freshnessAction}
-            >
-              <Upload size={14} color="#E8A524" />
-              <CKText role="metadata" style={{ color: '#E8A524' }}>
-                {t('widgetDataStale')}
+          <View
+            style={[{ alignItems: 'center' }, wideTracker && { flex: 1, alignItems: 'flex-start' }]}
+          >
+            <View style={[styles.heroNameRow, wideTracker && { maxWidth: '100%' }]}>
+              <CKText
+                role="titleLarge"
+                style={[
+                  styles.heroText,
+                  { fontSize: wideTracker ? 22 : desktop ? 24 : 26, fontWeight: '700' },
+                ]}
+                numberOfLines={1}
+              >
+                {snapshot?.name ?? account?.name ?? t('upgradeTrackerChooseAccount')}
               </CKText>
-            </Pressable>
-          ) : snapshot ? (
-            <CKText role="metadata" style={styles.heroSecondary}>
-              {snapshotAgeLabel(snapshot.capturedAt, t)}
-            </CKText>
-          ) : null}
+              <ChevronDown color="white" size={20} />
+            </View>
+            {snapshot && upgradeSnapshotNeedsRefresh(snapshot) ? (
+              <Pressable
+                onPress={(event) => {
+                  event.stopPropagation();
+                  onImport();
+                }}
+                accessibilityRole="button"
+                style={styles.freshnessAction}
+              >
+                <Upload size={14} color="#E8A524" />
+                <CKText role="metadata" style={{ color: '#E8A524' }}>
+                  {t('widgetDataStale')}
+                </CKText>
+              </Pressable>
+            ) : snapshot ? (
+              <CKText role="metadata" style={styles.heroSecondary}>
+                {snapshotAgeLabel(snapshot.capturedAt, t)}
+              </CKText>
+            ) : null}
+          </View>
         </Pressable>
         <View
           style={[
             styles.quickStats,
-            { paddingHorizontal: desktop ? 24 : 16, paddingBottom: desktop ? 12 : 10 },
+            {
+              paddingHorizontal: wideTracker ? 0 : desktop ? 24 : 16,
+              paddingBottom: wideTracker ? 0 : desktop ? 12 : 10,
+            },
+            wideTracker && { flex: 1 },
           ]}
         >
           {values.map((value) => (
             <View
               key={value.label}
               accessibilityLabel={value.label}
-              style={[styles.quickStat, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}
+              style={[
+                styles.quickStat,
+                { backgroundColor: colorWithAlpha(theme.surface, 0.58) },
+                wideTracker && { borderRadius: 16, minHeight: 66 },
+              ]}
             >
               <View
                 style={{
@@ -742,6 +991,10 @@ function HeroIconButton({
   onPress: () => void;
   children: ReactNode;
 }) {
+  const { locale } = useI18n();
+  const isBack = label === materialBackLabel(locale);
+  const nativeBack = useNativeRailBack(isBack ? onPress : undefined);
+  if (nativeBack && isBack) return <View style={styles.heroIconButton} />;
   return (
     <Pressable
       accessibilityRole="button"
@@ -932,6 +1185,7 @@ function TrackerPager({
   onPriorities,
   onGoldPass,
   goldPassPercent,
+  registerSearch,
 }: {
   pager: React.RefObject<PagerViewHandle | null>;
   tab: TrackerTab;
@@ -946,6 +1200,7 @@ function TrackerPager({
   onPriorities: () => void;
   onGoldPass: () => void;
   goldPassPercent: number;
+  registerSearch: (village: UpgradeVillageValue, binding: TrackerSearchBinding | null) => void;
 }) {
   const previousTab = useRef(tab);
   const [pageStateStore] = useState(() => new Map<string, unknown>());
@@ -967,6 +1222,7 @@ function TrackerPager({
         snapshot={snapshot}
         village={UpgradeVillage.home}
         stateStore={pageStateStore}
+        registerSearch={registerSearch}
         contentInset={contentInset}
         initialOffset={initialOffsets.home ?? 0}
         onScroll={onScroll('home')}
@@ -978,6 +1234,7 @@ function TrackerPager({
         snapshot={snapshot}
         village={UpgradeVillage.builderBase}
         stateStore={pageStateStore}
+        registerSearch={registerSearch}
         contentInset={contentInset}
         initialOffset={initialOffsets.builder ?? 0}
         onScroll={onScroll('builder')}
@@ -1072,6 +1329,7 @@ function UpgradesTab({
   snapshot,
   village,
   stateStore,
+  registerSearch,
   contentInset,
   initialOffset,
   onScroll,
@@ -1080,16 +1338,24 @@ function UpgradesTab({
   snapshot: UpgradeTrackerSnapshot;
   village: UpgradeVillageValue;
   stateStore: Map<string, unknown>;
+  registerSearch: (village: UpgradeVillageValue, binding: TrackerSearchBinding | null) => void;
   contentInset: number;
   initialOffset: number;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
+  const layout = useAdaptiveLayout();
   const { t } = useI18n();
   const viewportWidth = useWindowDimensions().width;
   const desktop = Platform.OS === 'web' && viewportWidth >= 900;
+  const twoColumns = desktop || layout.isExpanded;
   const cachePrefix = village === UpgradeVillage.home ? 'home' : 'builder';
   const [query, setQuery] = useCachedPageState(stateStore, `${cachePrefix}.query`, '');
+  useLayoutEffect(() => {
+    if (!layout.isExpanded) return;
+    registerSearch(village, { value: query, onChange: setQuery });
+    return () => registerSearch(village, null);
+  }, [layout.isExpanded, query, registerSearch, setQuery, village]);
   const [activeOpen, setActiveOpen] = useCachedPageState(
     stateStore,
     `${cachePrefix}.activeExpanded`,
@@ -1118,7 +1384,11 @@ function UpgradesTab({
           ? 'upgrade-tracker-home-scroll'
           : 'upgrade-tracker-builder-scroll'
       }
-      contentContainerStyle={[styles.content, { paddingTop: contentInset + 12 }]}
+      contentContainerStyle={[
+        styles.content,
+        { paddingTop: contentInset + 12 },
+        layout.isExpanded && { maxWidth: layout.contentMaxWidth },
+      ]}
       contentOffset={initialContentOffset}
       keyboardShouldPersistTaps="handled"
       onScroll={onScroll}
@@ -1126,11 +1396,15 @@ function UpgradesTab({
       onScrollEndDrag={onScrollSettled}
       scrollEventThrottle={16}
     >
-      <SearchBar
-        value={query}
-        onChange={setQuery}
-        placeholder={t('upgradeTrackerSearchUpgrades')}
-      />
+      {!layout.isExpanded ? (
+        <View style={twoColumns ? { maxWidth: 640, width: '100%' } : undefined}>
+          <SearchBar
+            value={query}
+            onChange={setQuery}
+            placeholder={t('upgradeTrackerSearchUpgrades')}
+          />
+        </View>
+      ) : null}
       <TrackerSummaryCard
         title={t('upgradeTrackerOngoingUpgrades')}
         imageUrl={ImageAssets.iconClock}
@@ -1197,12 +1471,12 @@ function UpgradesTab({
           })}
         </View>
       </TrackerSummaryCard>
-      <View style={desktop ? styles.desktopSectionGrid : styles.upgradeGroupList}>
+      <View style={twoColumns ? styles.desktopSectionGrid : styles.upgradeGroupList}>
         {groups.map(([group, items]) => {
           const open = expanded.has(group);
           const summary = snapshot.summaryForItems(items);
           return (
-            <View key={group} style={desktop ? styles.desktopSection : undefined}>
+            <View key={group} style={twoColumns ? styles.desktopSection : undefined}>
               <TrackerSummaryCard
                 title={upgradeGroupLabel(group, village, t)}
                 imageUrl={trackerCategoryImage(group, village)}
@@ -1257,7 +1531,8 @@ function UpgradeSummaryMetrics({
 }) {
   const { t, locale } = useI18n();
   const resources = Object.entries(costs).filter(([, amount]) => amount > 0);
-  const fontSize = 12;
+  const layout = useAdaptiveLayout();
+  const fontSize = layout.isExpanded && layout.isTablet ? 14 : 12;
   const label =
     levels === 0 ? t('homeRecentlyCompleted') : t('gameItemLevelCount', { count: levels });
   return (
@@ -1267,7 +1542,7 @@ function UpgradeSummaryMetrics({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        flexWrap: 'nowrap',
+        flexWrap: layout.isExpanded ? 'wrap' : 'nowrap',
       }}
     >
       <CKText role="bodyMedium" muted numberOfLines={1} style={{ fontSize, flexShrink: 1 }}>
@@ -1885,6 +2160,7 @@ function CalendarTab({
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
+  const layout = useAdaptiveLayout();
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const loading = useSkeletonContent();
@@ -1970,8 +2246,16 @@ function CalendarTab({
     latest ? Math.ceil((latest.getTime() - start.getTime()) / 86_400_000) + 1 : 7,
   );
   const horizonEnd = new Date(firstDay.getTime() + windowDays * 86_400_000);
-  const dayWidth = 144;
-  const labelWidth = 64;
+  const dayWidth = layout.isExpanded
+    ? Math.max(
+        112,
+        Math.min(
+          160,
+          (Math.min(layout.usableWidth, layout.contentMaxWidth) - 136) / (layout.isTablet ? 7 : 5),
+        ),
+      )
+    : 144;
+  const labelWidth = layout.isExpanded ? 104 : 64;
   const timelineWidth = dayWidth * windowDays;
   // Only mount nearby blocks. The date canvas can cover months without mounting the whole plan.
   const visibleStartDay = Math.min(
@@ -1997,7 +2281,15 @@ function CalendarTab({
   return (
     <Animated.ScrollView
       testID="upgrade-tracker-calendar-scroll"
-      contentContainerStyle={[styles.calendarRoot, { paddingTop: contentInset + 4 }]}
+      contentContainerStyle={[
+        styles.calendarRoot,
+        { paddingTop: contentInset + 4 },
+        layout.isExpanded && {
+          maxWidth: layout.contentMaxWidth,
+          width: '100%',
+          alignSelf: 'center',
+        },
+      ]}
       contentOffset={initialContentOffset}
       onScroll={onScroll}
       onMomentumScrollEnd={onScrollSettled}
@@ -2556,11 +2848,12 @@ function PlanTab({
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
+  const layout = useAdaptiveLayout();
   const { locale, t } = useI18n();
   const theme = useCKTheme();
   const intlLocale = toIntlLocale(locale);
   const viewportWidth = useWindowDimensions().width;
-  const desktop = Platform.OS === 'web' && viewportWidth >= 900;
+  const desktop = (Platform.OS === 'web' && viewportWidth >= 900) || layout.isExpanded;
   const [village, setVillage] = useCachedPageState<'all' | 'home' | 'builderBase'>(
     stateStore,
     'plan.village',
@@ -2628,7 +2921,11 @@ function PlanTab({
   return (
     <Animated.ScrollView
       testID="upgrade-tracker-plan-scroll"
-      contentContainerStyle={[styles.content, { paddingTop: contentInset + 12 }]}
+      contentContainerStyle={[
+        styles.content,
+        { paddingTop: contentInset + 12 },
+        layout.isExpanded && { maxWidth: layout.contentMaxWidth },
+      ]}
       contentOffset={initialContentOffset}
       onScroll={onScroll}
       onMomentumScrollEnd={onScrollSettled}
@@ -2961,8 +3258,10 @@ function CollectionTab({
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
+  const layout = useAdaptiveLayout();
   const { t } = useI18n();
   const theme = useCKTheme();
+  const collectionColumns = layout.isExpanded ? layout.columns(150, 6) : 3;
   const [query, setQuery] = useCachedPageState(stateStore, 'collection.query', '');
   const [filter, setFilter] = useCachedPageState<'all' | 'owned' | 'missing'>(
     stateStore,
@@ -3043,16 +3342,16 @@ function CollectionTab({
         const result: CollectionRow[] = [{ kind: 'summary', key: summary.type, summary }];
         if (summary.type !== category) return result;
         if (!visibleItems.length) result.push({ kind: 'empty', key: summary.type + '-empty' });
-        for (let index = 0; index < visibleItems.length; index += 3) {
+        for (let index = 0; index < visibleItems.length; index += collectionColumns) {
           result.push({
             kind: 'items',
             key: summary.type + '-' + index,
-            items: visibleItems.slice(index, index + 3),
+            items: visibleItems.slice(index, index + collectionColumns),
           });
         }
         return result;
       }),
-    [summaries, category, visibleItems],
+    [summaries, category, visibleItems, collectionColumns],
   );
   const filtered =
     !!query.trim() || filter !== 'all' || village !== 'all' || sort !== 'nameAscending';
@@ -3076,7 +3375,11 @@ function CollectionTab({
     <View style={{ flex: 1 }}>
       <Animated.FlatList
         testID="upgrade-tracker-collection-scroll"
-        contentContainerStyle={[styles.content, { paddingTop: contentInset + 12 }]}
+        contentContainerStyle={[
+          styles.content,
+          { paddingTop: contentInset + 12 },
+          layout.isExpanded && { maxWidth: layout.contentMaxWidth },
+        ]}
         contentOffset={initialContentOffset}
         onScroll={onScroll}
         onMomentumScrollEnd={onScrollSettled}
@@ -3158,7 +3461,12 @@ function CollectionTab({
                   accessibilityRole="button"
                   accessibilityLabel={collectionDisplayName(item)}
                   onPress={() => setSelected(item)}
-                  style={{ flex: 1, maxWidth: '32%' }}
+                  style={{
+                    flex: 1,
+                    maxWidth: layout.isExpanded
+                      ? `${(100 - (collectionColumns - 1)) / collectionColumns}%`
+                      : '32%',
+                  }}
                 >
                   <Surface
                     radius={ckRadius.tile}
@@ -3702,6 +4010,54 @@ const styles = StyleSheet.create({
   secondaryButton: { minHeight: 44, alignItems: 'center', justifyContent: 'center', padding: 10 },
   skeletonPage: { flex: 1, gap: 10, padding: 16 },
   skeletonCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
+  expandedHeaderWidth: {
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+  },
+  expandedHeaderBody: {
+    flex: 1,
+    minHeight: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 24,
+    paddingBottom: 12,
+  },
+  expandedIdentity: { flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  expandedIdentityCopy: { flex: 1, minWidth: 0, gap: 6, alignItems: 'flex-start' },
+  expandedNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, maxWidth: '100%' },
+  expandedFreshness: { flexDirection: 'row', alignItems: 'center', gap: 5, minHeight: 32 },
+  expandedMetrics: {
+    flex: 1,
+    minWidth: 0,
+  },
+  expandedMetric: {
+    minWidth: 0,
+    borderRadius: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    gap: 2,
+  },
+  expandedMetricValue: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  expandedTabsWrap: { height: 68, paddingTop: 8, paddingBottom: 8, paddingHorizontal: 0 },
+  expandedToolbar: {
+    width: '100%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingHorizontal: 20,
+  },
+  expandedTabControl: {
+    width: '34%',
+    minWidth: 220,
+    maxWidth: 320,
+    alignSelf: 'auto',
+    flexShrink: 0,
+    marginStart: 'auto',
+  },
+  expandedSearch: { flex: 1, minWidth: 0 },
   heroHeader: { height: 276, overflow: 'hidden' },
   heroHeaderDesktop: { height: 260 },
   heroBackdrop: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },

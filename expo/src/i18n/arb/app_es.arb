@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Permitir",
   "achievementsTitle": "Logros",
   "achievementEarnedLabel": "Conseguido",
+  "achievementGemsEarnedRatio": "{earned} / {total} obtenidas",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Has obtenido {earned} de {total} gemas de logros.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} completado",
   "achievementEarnedCount": "Conseguido ×{count}",
   "achievementTownhall18Name": "Ayuntamiento 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Solo mismo Ayuntamiento",
+  "warStatsSameTownHall": "Mismo ayuntamiento",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Seguidores",
   "drawerFollowersHelp": "Personas que agregaron a favoritos una de sus cuentas vinculadas verificadas.",
   "drawerCalculators": "Calculadoras",
-  "drawerSubscription": "Suscripción",
   "drawerUpgradeTracker": "Rastreador de actualizaciones",
   "drawerBasesArmies": "Bases y ejércitos",
   "drawerGameAssets": "Activos del juego",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Recibe alertas para esta cuenta.",
   "playerOptionNotificationsEnableMaster": "Activa las notificaciones para configurar los avisos de esta cuenta.",
   "playerOptionNotificationsVerifyFirst": "Verifica esta cuenta para activar sus notificaciones.",
-  "playerOptionNotificationsSubscriptionRequired": "Las notificaciones de esta cuenta requieren una suscripción activa.",
   "playerOptionNotificationsLimitReached": "Has alcanzado el límite de cuentas con notificaciones de tu suscripción.",
   "playerOptionShowTodoPageTitle": "Mostrar en la página de tareas pendientes",
   "playerOptionShowTodoPageSubtitle": "Incluya esta cuenta en la lista completa de tareas pendientes.",

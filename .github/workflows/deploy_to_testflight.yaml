@@ -56,6 +56,16 @@ jobs:
           echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
+      - name: Verify Apple release credentials
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          NOTIFICATION_PROFILE_BASE64: ${{ secrets.IOS_NOTIFICATION_SERVICE_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          gem install fastlane --version 2.241.1 --no-document
+          ruby scripts/check-app-store-auth.rb
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -125,7 +135,6 @@ jobs:
           if [[ -n "$NOTIFICATION_PROFILE_BASE64" ]]; then
             printf '%s' "$NOTIFICATION_PROFILE_BASE64" | base64 --decode > notification.mobileprovision
           else
-            gem install fastlane --no-document
             ruby scripts/provision-notification-service.rb
           fi
 
@@ -271,7 +280,6 @@ jobs:
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
-          gem install fastlane --no-document
           ruby -rjson -e 'File.write(ARGV[0], JSON.generate({key_id: ENV.fetch("API_KEY_ID"), issuer_id: ENV.fetch("API_ISSUER_ID"), key: ENV.fetch("API_PRIVATE_KEY"), in_house: false}))' "$RUNNER_TEMP/app-store-api-key.json"
           fastlane pilot upload \
             --api_key_path "$RUNNER_TEMP/app-store-api-key.json" \
@@ -289,7 +297,6 @@ jobs:
           API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
         run: |
-          gem install fastlane --no-document
           ruby -rjson -e 'File.write(ARGV[0], JSON.generate({key_id: ENV.fetch("API_KEY_ID"), issuer_id: ENV.fetch("API_ISSUER_ID"), key: ENV.fetch("API_PRIVATE_KEY"), in_house: false}))' "$RUNNER_TEMP/app-store-api-key.json"
           fastlane deliver \
             --api_key_path "$RUNNER_TEMP/app-store-api-key.json" \

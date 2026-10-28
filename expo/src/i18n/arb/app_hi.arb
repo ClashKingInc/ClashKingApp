@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "अनुमति दें",
   "achievementsTitle": "उपलब्धियाँ",
   "achievementEarnedLabel": "अर्जित",
+  "achievementGemsEarnedRatio": "{earned} / {total} अर्जित",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "उपलब्धियों से {total} में से {earned} जेम्स अर्जित किए।",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} पूर्ण",
   "achievementEarnedCount": "अर्जित ×{count}",
   "achievementTownhall18Name": "टाउन हॉल 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "केवल समान टाउन हॉल",
+  "warStatsSameTownHall": "समान टाउन हॉल",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "समर्थक",
   "drawerFollowersHelp": "वे लोग जिन्होंने आपके सत्यापित लिंक किए गए खातों में से किसी एक को बुकमार्क किया है।",
   "drawerCalculators": "कैलकुलेटर",
-  "drawerSubscription": "सदस्यता",
   "drawerUpgradeTracker": "ट्रैकर को अपग्रेड करें",
   "drawerBasesArmies": "अड्डे और सेनाएँ",
   "drawerGameAssets": "खेल संपत्ति",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "इस खाते के लिए अलर्ट प्राप्त करें.",
   "playerOptionNotificationsEnableMaster": "पहले सेटिंग में सूचनाएँ चालू करें।",
   "playerOptionNotificationsVerifyFirst": "सूचनाएँ चालू करने के लिए इस खाते को सत्यापित करें।",
-  "playerOptionNotificationsSubscriptionRequired": "बुकमार्क सूचनाओं के लिए सदस्यता आवश्यक है।",
   "playerOptionNotificationsLimitReached": "आपकी बुकमार्क सूचना सीमा पूरी हो गई है।",
   "playerOptionShowTodoPageTitle": "कार्य-कार्य पृष्ठ पर दिखाएं",
   "playerOptionShowTodoPageSubtitle": "इस खाते को संपूर्ण कार्य सूची में शामिल करें.",

@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import {
@@ -89,7 +90,12 @@ export function RankingsScreen({
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const horizontal = Math.max(16, (width - 1120) / 2);
+  const layout = useAdaptiveLayout();
+  const horizontal = layout.isExpanded
+    ? Math.max(24, (layout.usableWidth - layout.readableMaxWidth) / 2)
+    : layout.isDuo || layout.isTablet
+      ? Math.max(16, (layout.usableWidth - 1120) / 2)
+      : Math.max(16, (width - 1120) / 2);
   const gameDataRevision = useSyncExternalStore(
     subscribeToGameDataRevision,
     () => gameDataState.revision,
@@ -458,6 +464,7 @@ function RankingRow({
 }) {
   const { locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   // Placeholder values belong only to this disabled presentation tree.
   const entry = loadedEntry ?? {
     rank: placeholderRank,
@@ -478,6 +485,12 @@ function RankingRow({
         onPress={onPress}
         style={({ pressed }) => [
           styles.row,
+          layout.isExpanded && {
+            minHeight: 88,
+            paddingHorizontal: 18,
+            paddingVertical: 14,
+            gap: 14,
+          },
           {
             backgroundColor: theme.card,
             borderColor: colorWithAlpha(theme.outlineVariant, 0.32),
@@ -485,7 +498,7 @@ function RankingRow({
           },
         ]}
       >
-        <View style={styles.rank}>
+        <View style={[styles.rank, layout.isExpanded && { width: 58 }]}>
           <CKText skeleton={false} role="labelLarge" muted>{`#${entry.rank}`}</CKText>
           {entry.movement !== '=' ? (
             <CKText
@@ -499,7 +512,7 @@ function RankingRow({
         <MobileWebImage
           testID="ranking-entry-image"
           imageUrl={entry.displayImageUrl}
-          style={styles.entryImage}
+          style={[styles.entryImage, layout.isExpanded && { width: 54, height: 54 }]}
           contentFit="contain"
         />
         <View style={styles.entryCopy}>
@@ -509,7 +522,10 @@ function RankingRow({
           {entry.subtitle || entry.clanBadgeUrl ? (
             <View style={styles.subtitle}>
               {entry.clanBadgeUrl ? (
-                <MobileWebImage imageUrl={entry.clanBadgeUrl} style={styles.clanBadge} />
+                <MobileWebImage
+                  imageUrl={entry.clanBadgeUrl}
+                  style={[styles.clanBadge, layout.isExpanded && { width: 22, height: 22 }]}
+                />
               ) : null}
               <CKText role="bodySmall" muted numberOfLines={1}>
                 {entry.subtitle}
@@ -519,10 +535,14 @@ function RankingRow({
         </View>
         <MobileWebImage
           imageUrl={entry.metricImageUrl}
-          style={styles.metric}
+          style={[styles.metric, layout.isExpanded && { width: 25, height: 25 }]}
           contentFit="contain"
         />
-        <CKText role="labelLarge" numberOfLines={1} style={styles.score}>
+        <CKText
+          role="labelLarge"
+          numberOfLines={1}
+          style={[styles.score, layout.isExpanded && { maxWidth: 120 }]}
+        >
           {formattedScore}
         </CKText>
         <ChevronRight size={20} color={theme.onSurfaceVariant} />
@@ -541,6 +561,7 @@ function RankingDateSheet({
   'use no memo';
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <Modal
       supportedOrientations={modalOrientations}
@@ -549,9 +570,16 @@ function RankingDateSheet({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <Pressable style={styles.overlay} onPress={onClose}>
+      <Pressable
+        style={[styles.overlay, layout.isExpanded && { justifyContent: 'center', padding: 24 }]}
+        onPress={onClose}
+      >
         <Pressable
-          style={[styles.sheet, { backgroundColor: theme.surface }]}
+          style={[
+            styles.sheet,
+            { backgroundColor: theme.surface },
+            layout.isExpanded && { maxWidth: 620, borderRadius: 28, padding: 24 },
+          ]}
           onPress={() => undefined}
         >
           <View

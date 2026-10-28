@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "Να επιτρέπονται",
   "achievementsTitle": "Επιτεύγματα",
   "achievementEarnedLabel": "Κερδήθηκε",
+  "achievementGemsEarnedRatio": "Κερδήθηκαν {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Κερδήθηκαν {earned} από {total} πολύτιμους λίθους επιτευγμάτων.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} ολοκληρώθηκε",
   "achievementEarnedCount": "Κερδήθηκε ×{count}",
   "achievementTownhall18Name": "Δημαρχείο 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Μόνο ίδιο Δημαρχείο",
+  "warStatsSameTownHall": "Ίδιο δημαρχείο",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "Οπαδοί",
   "drawerFollowersHelp": "Άτομα που πρόσθεσαν σελιδοδείκτη σε έναν από τους επαληθευμένους συνδεδεμένους λογαριασμούς σας.",
   "drawerCalculators": "Αριθμομηχανές",
-  "drawerSubscription": "Συνδρομή",
   "drawerUpgradeTracker": "Αναβάθμιση Tracker",
   "drawerBasesArmies": "Βάσεις & Στρατοί",
   "drawerGameAssets": "Περιουσιακά στοιχεία παιχνιδιού",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "Λάβετε ειδοποιήσεις για αυτόν τον λογαριασμό.",
   "playerOptionNotificationsEnableMaster": "Ενεργοποιήστε πρώτα τις ειδοποιήσεις στις Ρυθμίσεις.",
   "playerOptionNotificationsVerifyFirst": "Επαληθεύστε αυτόν τον λογαριασμό για να ενεργοποιήσετε τις ειδοποιήσεις.",
-  "playerOptionNotificationsSubscriptionRequired": "Απαιτείται συνδρομή για ειδοποιήσεις σελιδοδεικτών.",
   "playerOptionNotificationsLimitReached": "Το όριο ειδοποιήσεων σελιδοδεικτών σας έχει συμπληρωθεί.",
   "playerOptionShowTodoPageTitle": "Εμφάνιση στη σελίδα υποχρεώσεων",
   "playerOptionShowTodoPageSubtitle": "Συμπεριλάβετε αυτόν τον λογαριασμό στην πλήρη λίστα υποχρεώσεων.",

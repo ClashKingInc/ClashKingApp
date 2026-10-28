@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "سماح",
   "achievementsTitle": "الإنجازات",
   "achievementEarnedLabel": "مرات الإنجاز",
+  "achievementGemsEarnedRatio": "تم اكتساب {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "تم اكتساب {earned} من أصل {total} جوهرة من الإنجازات.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} مكتمل",
   "achievementEarnedCount": "مرات الإنجاز ×{count}",
   "achievementTownhall18Name": "قاعة المدينة 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "نفس قاعة المدينة فقط",
+  "warStatsSameTownHall": "نفس مستوى دار البلدية",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "المتابعون",
   "drawerFollowersHelp": "الأشخاص الذين وضعوا إشارة مرجعية على أحد حساباتك المرتبطة التي تم التحقق منها.",
   "drawerCalculators": "الآلات الحاسبة",
-  "drawerSubscription": "الاشتراك",
   "drawerUpgradeTracker": "ترقية المقتفي",
   "drawerBasesArmies": "القواعد والجيوش",
   "drawerGameAssets": "أصول اللعبة",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "احصل على تنبيهات لهذا الحساب.",
   "playerOptionNotificationsEnableMaster": "فعّل الإشعارات من الإعدادات أولاً.",
   "playerOptionNotificationsVerifyFirst": "تحقق من هذا الحساب لتفعيل الإشعارات.",
-  "playerOptionNotificationsSubscriptionRequired": "يلزم اشتراك لإشعارات الإشارات المرجعية.",
   "playerOptionNotificationsLimitReached": "لقد وصلت إلى حد إشعارات الإشارات المرجعية.",
   "playerOptionShowTodoPageTitle": "عرض على صفحة المهام",
   "playerOptionShowTodoPageSubtitle": "قم بتضمين هذا الحساب في قائمة المهام الكاملة.",

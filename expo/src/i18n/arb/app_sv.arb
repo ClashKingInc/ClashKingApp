@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Tillåt",
   "achievementsTitle": "Prestationer",
   "achievementEarnedLabel": "Intjänat",
+  "achievementGemsEarnedRatio": "{earned} / {total} intjänade",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Du har tjänat {earned} av {total} ädelstenar från prestationer.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} slutfört",
   "achievementEarnedCount": "Intjänat ×{count}",
   "achievementTownhall18Name": "Stadshus 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Endast samma rådhus",
+  "warStatsSameTownHall": "Samma rådhus",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Följare",
   "drawerFollowersHelp": "Personer som bokmärkt ett av dina verifierade länkade konton.",
   "drawerCalculators": "Miniräknare",
-  "drawerSubscription": "Prenumeration",
   "drawerUpgradeTracker": "Uppgradera Tracker",
   "drawerBasesArmies": "Baser och arméer",
   "drawerGameAssets": "Speltillgångar",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Få varningar för det här kontot.",
   "playerOptionNotificationsEnableMaster": "Aktivera först aviseringar i Inställningar.",
   "playerOptionNotificationsVerifyFirst": "Verifiera kontot för att aktivera aviseringar.",
-  "playerOptionNotificationsSubscriptionRequired": "En prenumeration krävs för bokmärkesaviseringar.",
   "playerOptionNotificationsLimitReached": "Du har nått gränsen för bokmärkesaviseringar.",
   "playerOptionShowTodoPageTitle": "Visa på att göra-sidan",
   "playerOptionShowTodoPageSubtitle": "Inkludera detta konto i hela att göra-listan.",

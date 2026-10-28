@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Povolit",
   "achievementsTitle": "Úspěchy",
   "achievementEarnedLabel": "Získáno",
+  "achievementGemsEarnedRatio": "Získáno {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Získáno {earned} z {total} drahokamů za úspěchy.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} dokončeno",
   "achievementEarnedCount": "Získáno ×{count}",
   "achievementTownhall18Name": "Radnice 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Pouze stejná radnice",
+  "warStatsSameTownHall": "Stejná radnice",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Následovníci",
   "drawerFollowersHelp": "Lidé, kteří si přidali do záložek jeden z vašich ověřených propojených účtů.",
   "drawerCalculators": "Kalkulačky",
-  "drawerSubscription": "Předplatné",
   "drawerUpgradeTracker": "Sledování vylepšení",
   "drawerBasesArmies": "Základny a armády",
   "drawerGameAssets": "Herní aktiva",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Získejte upozornění pro tento účet.",
   "playerOptionNotificationsEnableMaster": "Zapněte oznámení, chcete-li upravit upozornění pro tento účet.",
   "playerOptionNotificationsVerifyFirst": "Ověřte tento účet, chcete-li zapnout jeho oznámení.",
-  "playerOptionNotificationsSubscriptionRequired": "Pro oznámení tohoto účtu je vyžadováno aktivní předplatné.",
   "playerOptionNotificationsLimitReached": "Dosáhli jste limitu účtů s oznámeními pro své předplatné.",
   "playerOptionShowTodoPageTitle": "Zobrazit na stránce úkolů",
   "playerOptionShowTodoPageSubtitle": "Zahrnout tento účet do úplného seznamu úkolů.",

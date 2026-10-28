@@ -1,13 +1,23 @@
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { CalculatorWorkspaceColumns } from './calculator-workspace-columns';
 import { useState, type ReactNode } from 'react';
 import { Image as BackgroundImage, Pressable, ScrollView, View } from 'react-native';
 import { Asset } from 'expo-asset';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SuperchargedBuildingArtwork } from './supercharged-building-artwork';
 import { SuperchargeBorder } from './supercharge-border';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { gameDataState } from '../../core/game-data/game-data-state';
 import { useI18n, toIntlLocale } from '../../i18n';
-import { CKText, EmptyState, MobileWebImage, SelectionPicker, Surface, colorWithAlpha, useCKTheme } from '../../ui';
+import {
+  CKText,
+  EmptyState,
+  MobileWebImage,
+  SelectionPicker,
+  Surface,
+  colorWithAlpha,
+  useCKTheme,
+} from '../../ui';
 import { LevelSlider } from '../../ui/level-slider';
 import {
   BuildingLevelDefinition,
@@ -38,6 +48,7 @@ export function DamageWorkbench({
   onBack: () => void;
 }) {
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
   const { t } = useI18n(),
     theme = useCKTheme();
   const [, setRevision] = useState(0),
@@ -114,7 +125,10 @@ export function DamageWorkbench({
       else {
         session.setTownHall(session.catalog.maxTownHall);
         for (const source of session.availableSources)
-          session.setSourceLevel(source.kind, source.levelsForTownHall(session.townHall).at(-1)!.level);
+          session.setSourceLevel(
+            source.kind,
+            source.levelsForTownHall(session.townHall).at(-1)!.level,
+          );
       }
     });
   };
@@ -126,156 +140,233 @@ export function DamageWorkbench({
       options={buildings.map((item) => ({
         key: item.id,
         label: item.name,
-        icon: <MobileWebImage imageUrl={ImageAssets.getHomeVillageBuildingImage(item.imageName, item.levelsForTownHall(targetTownHall).at(-1)!.level)} style={s.image} />,
+        icon: (
+          <MobileWebImage
+            imageUrl={ImageAssets.getHomeVillageBuildingImage(
+              item.imageName,
+              item.levelsForTownHall(targetTownHall).at(-1)!.level,
+            )}
+            style={s.image}
+          />
+        ),
       }))}
       searchPlaceholder={t('calcSearch')}
-      onSelect={(id) => { setBuildingId(id); setCharge(0); setShowAll(false); }}
+      onSelect={(id) => {
+        setBuildingId(id);
+        setCharge(0);
+        setShowAll(false);
+      }}
     />
   );
   return (
     <View style={[s.page, { backgroundColor: theme.background }]} testID="damage-workbench">
-      <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 260 }}>
-        <BackgroundImage source={theme.background === '#030304' ? require('../../../assets/clashking/backgrounds/hub-blue-dark.png') : require('../../../assets/clashking/backgrounds/hub-blue-light.png')} resizeMode="stretch" style={{ width: '100%', height: '100%' }} />
-      </View>
-      <ScrollView
-        contentContainerStyle={[s.content, { paddingTop: insets.top + 16 }]}
-        keyboardShouldPersistTaps="handled"
+      <View
+        pointerEvents="none"
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 260 }}
       >
-        {target ? (
-          <>
-            <View style={[s.row, { minHeight: 56, justifyContent: 'space-between', flexWrap: 'nowrap' }]}>
-              <CalcHeader onBack={onBack} />
-              <View style={{ width: 164 }}>
-                <SelectionPicker
-                  title={t('damageAccountPresetShort')}
-                  accessibilityLabel={t('damageAccountPresetShort')}
-                  selectedKey={account}
-                  options={[
-                    { key: 'manual', label: t('calcMaxLevels') },
-                    ...accounts.map((item) => ({ key: item.tag, label: item.name })),
-                  ]}
-                  onSelect={chooseAccount}
-                />
-              </View>
-            </View>
-            <TargetPanel
-              key={`${building!.id}-${level!.level}`}
-              building={building!}
-              levels={building!.levelsForTownHall(targetTownHall)}
-              selectedLevel={level!}
-              charge={charge}
-              defensePicker={defensePicker}
-              onLevelChange={(value) => {
-                setTargetLevels((current) => ({ ...current, [building!.id]: value }));
-                setCharge(0);
-                setShowAll(false);
-              }}
-              onChargeChange={(value) => {
-                setCharge(value);
-                setShowAll(false);
-              }}
-            />
-            <DamageSourcePicker
-              sources={sources}
-              session={session}
-              enabled={enabled}
-              modifier={modifier}
-              onSelectAll={() => { setEnabled(sources.map((source) => source.kind)); setShowAll(false); }}
-              onClear={() => { setEnabled([]); setShowAll(false); }}
-              onToggle={(kind) => {
-                setEnabled((current) =>
-                  current.includes(kind)
-                    ? current.filter((item) => item !== kind)
-                    : [...current, kind],
-                );
-                setShowAll(false);
-              }}
-              onLevelChange={(kind, value) => mutate(() => session.setSourceLevel(kind, value))}
-            >
-              <View style={s.row}>
-                <CalcSelect
-                  title={t('damageSpellCapacity')}
-                  searchable={false}
-                  value={String(session.spellCapacity)}
-                  options={Array.from({ length: session.catalog.spellCapacityForTownHall(session.townHall) + 1 }, (_, i) => ({
-                    key: String(session.catalog.spellCapacityForTownHall(session.townHall) - i),
-                    label: String(session.catalog.spellCapacityForTownHall(session.townHall) - i),
-                  }))}
-                  onChange={(value) => mutate(() => session.setSpellCapacity(Number(value)))}
-                />
-                <CalcSelect
-                  title={t('calcBattleModifier')}
-                  value={modifier}
-                  options={[
-                    { key: 'normal', label: t('calcNormal') },
-                    ...modifiers.map((item) => ({
-                      key: String(item.name),
-                      label:
-                        item.name === 'Hard Mode'
-                          ? t('calcEsports')
-                          : item.name === 'Minus One'
-                            ? 'Legend I'
-                            : item.name === 'Minus Two'
-                              ? 'Legend II'
-                              : item.name === 'Minus Three'
-                                ? 'Legend III'
-                                : String(item.name),
-                    })),
-                  ]}
-                  onChange={(value) => { setModifier(value); setShowAll(false); }}
-                />
-              </View>
-            </DamageSourcePicker>
-            {rocket && (rocket.level.damage ?? 0) > 0 ? (
-              <Surface style={s.card} testID="rocket-balloon-estimate">
-                <View style={s.row}>
-                  <MobileWebImage
-                    imageUrl={rocket.source.imageUrl}
-                    style={{ width: 56, height: 56 }}
+        <BackgroundImage
+          source={
+            theme.background === '#030304'
+              ? require('../../../assets/clashking/backgrounds/hub-blue-dark.png')
+              : require('../../../assets/clashking/backgrounds/hub-blue-light.png')
+          }
+          resizeMode="stretch"
+          style={{ width: '100%', height: '100%' }}
+        />
+      </View>
+      <DuoSafeContent enabled={layout.isDuo}>
+        <ScrollView
+          contentContainerStyle={[
+            s.content,
+            { paddingTop: insets.top + 16 },
+            (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+          ]}
+          keyboardShouldPersistTaps="handled"
+        >
+          {target ? (
+            <>
+              <View
+                style={[
+                  s.row,
+                  { minHeight: 56, justifyContent: 'space-between', flexWrap: 'nowrap' },
+                ]}
+              >
+                <CalcHeader onBack={onBack} />
+                <View style={{ width: 164 }}>
+                  <SelectionPicker
+                    title={t('damageAccountPresetShort')}
+                    accessibilityLabel={t('damageAccountPresetShort')}
+                    selectedKey={account}
+                    options={[
+                      { key: 'manual', label: t('calcMaxLevels') },
+                      ...accounts.map((item) => ({ key: item.tag, label: item.name })),
+                    ]}
+                    onSelect={chooseAccount}
                   />
-                  <View style={s.grow}>
-                    <CKText role="sectionTitle">
-                      {rocket.source.name} ×{Math.ceil(target.hitpoints / rocket.level.damage!)}
-                    </CKText>
-                    <CKText muted role="metadata">
-                      {t('calcRocketBalloonAssumption', { damage: rocket.level.damage! })}
-                    </CKText>
-                    <CKText muted role="metadata">
-                      {t('sideLevel', { level: rocket.level.level })}
-                    </CKText>
-                  </View>
                 </View>
-              </Surface>
-            ) : null}
-            {results.length || !rocket ? (
-              <View style={s.heading}>
-                <CKText role="sectionTitle">{t('calcResults', { count: results.length })}</CKText>
               </View>
-            ) : null}
-            {!results.length && !rocket ? (
-              <EmptyState title={t('damageNoValidZapQuake')} body={t('calcNoCombinationHelp')} />
-            ) : (
-              results
-                .slice(0, showAll ? results.length : 3)
-                .map((result, index) => (
-                  <CombinationRow key={index} result={result} index={index} />
-                ))
-            )}
-            {!showAll && results.length > 3 ? (
-              <CalcChip
-                label={t('calcShowAll', { count: results.length })}
-                onPress={() => setShowAll(true)}
-              />
-            ) : null}
-          </>
-        ) : (
-          <View>
-            <CalcHeader onBack={onBack} />
-            <EmptyState title={t('damageNoStaticDataTitle')} body={t('damageNoStaticDataBody')} />
-          </View>
-        )}
-      </ScrollView>
+              <CalculatorWorkspaceColumns>
+                <>
+                  <TargetPanel
+                    key={`${building!.id}-${level!.level}`}
+                    building={building!}
+                    levels={building!.levelsForTownHall(targetTownHall)}
+                    selectedLevel={level!}
+                    charge={charge}
+                    defensePicker={defensePicker}
+                    onLevelChange={(value) => {
+                      setTargetLevels((current) => ({ ...current, [building!.id]: value }));
+                      setCharge(0);
+                      setShowAll(false);
+                    }}
+                    onChargeChange={(value) => {
+                      setCharge(value);
+                      setShowAll(false);
+                    }}
+                  />
+                  <DamageSourcePicker
+                    sources={sources}
+                    session={session}
+                    enabled={enabled}
+                    modifier={modifier}
+                    onSelectAll={() => {
+                      setEnabled(sources.map((source) => source.kind));
+                      setShowAll(false);
+                    }}
+                    onClear={() => {
+                      setEnabled([]);
+                      setShowAll(false);
+                    }}
+                    onToggle={(kind) => {
+                      setEnabled((current) =>
+                        current.includes(kind)
+                          ? current.filter((item) => item !== kind)
+                          : [...current, kind],
+                      );
+                      setShowAll(false);
+                    }}
+                    onLevelChange={(kind, value) =>
+                      mutate(() => session.setSourceLevel(kind, value))
+                    }
+                  >
+                    <View style={s.row}>
+                      <CalcSelect
+                        title={t('damageSpellCapacity')}
+                        searchable={false}
+                        value={String(session.spellCapacity)}
+                        options={Array.from(
+                          {
+                            length: session.catalog.spellCapacityForTownHall(session.townHall) + 1,
+                          },
+                          (_, i) => ({
+                            key: String(
+                              session.catalog.spellCapacityForTownHall(session.townHall) - i,
+                            ),
+                            label: String(
+                              session.catalog.spellCapacityForTownHall(session.townHall) - i,
+                            ),
+                          }),
+                        )}
+                        onChange={(value) => mutate(() => session.setSpellCapacity(Number(value)))}
+                      />
+                      <CalcSelect
+                        title={t('calcBattleModifier')}
+                        value={modifier}
+                        options={[
+                          { key: 'normal', label: t('calcNormal') },
+                          ...modifiers.map((item) => ({
+                            key: String(item.name),
+                            label:
+                              item.name === 'Hard Mode'
+                                ? t('calcEsports')
+                                : item.name === 'Minus One'
+                                  ? 'Legend I'
+                                  : item.name === 'Minus Two'
+                                    ? 'Legend II'
+                                    : item.name === 'Minus Three'
+                                      ? 'Legend III'
+                                      : String(item.name),
+                          })),
+                        ]}
+                        onChange={(value) => {
+                          setModifier(value);
+                          setShowAll(false);
+                        }}
+                      />
+                    </View>
+                  </DamageSourcePicker>
+                </>
+                <>
+                  {rocket && (rocket.level.damage ?? 0) > 0 ? (
+                    <Surface style={s.card} testID="rocket-balloon-estimate">
+                      <View style={s.row}>
+                        <MobileWebImage
+                          imageUrl={rocket.source.imageUrl}
+                          style={{ width: 56, height: 56 }}
+                        />
+                        <View style={s.grow}>
+                          <CKText role="sectionTitle">
+                            {rocket.source.name} ×
+                            {Math.ceil(target.hitpoints / rocket.level.damage!)}
+                          </CKText>
+                          <CKText muted role="metadata">
+                            {t('calcRocketBalloonAssumption', { damage: rocket.level.damage! })}
+                          </CKText>
+                          <CKText muted role="metadata">
+                            {t('sideLevel', { level: rocket.level.level })}
+                          </CKText>
+                        </View>
+                      </View>
+                    </Surface>
+                  ) : null}
+                  {results.length || !rocket ? (
+                    <View style={s.heading}>
+                      <CKText role="sectionTitle">
+                        {t('calcResults', { count: results.length })}
+                      </CKText>
+                    </View>
+                  ) : null}
+                  {!results.length && !rocket ? (
+                    <EmptyState
+                      title={t('damageNoValidZapQuake')}
+                      body={t('calcNoCombinationHelp')}
+                    />
+                  ) : (
+                    results
+                      .slice(0, showAll ? results.length : 3)
+                      .map((result, index) => (
+                        <CombinationRow key={index} result={result} index={index} />
+                      ))
+                  )}
+                  {!showAll && results.length > 3 ? (
+                    <CalcChip
+                      label={t('calcShowAll', { count: results.length })}
+                      onPress={() => setShowAll(true)}
+                    />
+                  ) : null}
+                </>
+              </CalculatorWorkspaceColumns>
+            </>
+          ) : (
+            <View>
+              <CalcHeader onBack={onBack} />
+              <EmptyState title={t('damageNoStaticDataTitle')} body={t('damageNoStaticDataBody')} />
+            </View>
+          )}
+        </ScrollView>
+      </DuoSafeContent>
     </View>
+  );
+}
+
+// Only the controls clear the Duo rail; the backdrop fills the whole pane.
+function DuoSafeContent({ enabled, children }: { enabled: boolean; children: ReactNode }) {
+  return enabled ? (
+    <SafeAreaView edges={['left', 'right']} style={{ flex: 1 }}>
+      {children}
+    </SafeAreaView>
+  ) : (
+    <>{children}</>
   );
 }
 
@@ -308,7 +399,12 @@ function DamageSourcePicker({
       title={t('calcSelectDamageSources')}
       testID="damage-source-selection-inline"
       onClose={() => {}}
-      actions={<View style={{ gap: 4 }}><CalcChip label={t('calcSelectAll')} onPress={onSelectAll} /><CalcChip label={t('calcClear')} onPress={onClear} /></View>}
+      actions={
+        <View style={{ gap: 4 }}>
+          <CalcChip label={t('calcSelectAll')} onPress={onSelectAll} />
+          <CalcChip label={t('calcClear')} onPress={onClear} />
+        </View>
+      }
       onToggle={(key) => onToggle(key as DamageSourceKind)}
       onLevelChange={(key, level) => onLevelChange(key as DamageSourceKind, level)}
       items={sources.map((source) => {
@@ -375,10 +471,24 @@ function TargetPanel({
       testID="damage-target-card"
     >
       {activeCharge > 0 ? <SuperchargeBorder /> : null}
-      <View accessible accessibilityLabel={t('damageHitpoints', { hitpoints: new Intl.NumberFormat(toIntlLocale(locale)).format(hitpoints) })}
-        style={{ position: 'absolute', top: 16, left: 16, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+      <View
+        accessible
+        accessibilityLabel={t('damageHitpoints', {
+          hitpoints: new Intl.NumberFormat(toIntlLocale(locale)).format(hitpoints),
+        })}
+        style={{
+          position: 'absolute',
+          top: 16,
+          left: 16,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 5,
+        }}
+      >
         <MobileWebImage imageUrl={ImageAssets.hitpoints} style={{ width: 18, height: 18 }} />
-        <CKText role="metadata">{new Intl.NumberFormat(toIntlLocale(locale)).format(hitpoints)}</CKText>
+        <CKText role="metadata">
+          {new Intl.NumberFormat(toIntlLocale(locale)).format(hitpoints)}
+        </CKText>
       </View>
       <View style={{ alignItems: 'center', paddingTop: 36 }}>
         <SuperchargedBuildingArtwork
@@ -399,10 +509,34 @@ function TargetPanel({
         onChange={onLevelChange}
       />
       {level.superchargeHitpoints.length ? (
-        <Pressable accessibilityRole="switch" accessibilityLabel={t('calcSupercharge')} accessibilityState={{ checked: activeCharge > 0 }}
+        <Pressable
+          accessibilityRole="switch"
+          accessibilityLabel={t('calcSupercharge')}
+          accessibilityState={{ checked: activeCharge > 0 }}
           onPress={() => onChargeChange(activeCharge > 0 ? 0 : level.superchargeHitpoints.length)}
-          style={{ position: 'absolute', top: 12, right: 12, width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: colorWithAlpha(activeCharge > 0 ? theme.secondary : theme.onSurface, activeCharge > 0 ? 0.2 : 0.06) }}>
-          <MobileWebImage imageUrl={Asset.fromModule(require('../../../assets/clashking/calculators/supercharge-icon.webp')).uri} style={{ width: 28, height: 28, opacity: activeCharge > 0 ? 1 : 0.5 }} />
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            width: 44,
+            height: 44,
+            borderRadius: 14,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colorWithAlpha(
+              activeCharge > 0 ? theme.secondary : theme.onSurface,
+              activeCharge > 0 ? 0.2 : 0.06,
+            ),
+          }}
+        >
+          <MobileWebImage
+            imageUrl={
+              Asset.fromModule(
+                require('../../../assets/clashking/calculators/supercharge-icon.webp'),
+              ).uri
+            }
+            style={{ width: 28, height: 28, opacity: activeCharge > 0 ? 1 : 0.5 }}
+          />
         </Pressable>
       ) : null}
     </Surface>

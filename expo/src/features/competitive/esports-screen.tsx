@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { ResponsiveGrid } from '../../ui/responsive-grid';
 import {
   useCallback,
   useEffect,
@@ -192,6 +194,7 @@ function Frame({
   rows?: ReactElement[];
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
     if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 500) onEndReached?.();
@@ -207,7 +210,10 @@ function Frame({
         : undefined,
     scrollEventThrottle: 16,
     style: { backgroundColor: theme.background === '#030304' ? '#170D2A' : '#F4F0FC' },
-    contentContainerStyle: styles.page,
+    contentContainerStyle: [
+      styles.page,
+      (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+    ],
     refreshControl: refresh ? (
       <RefreshControl onRefresh={refresh} refreshing={refreshing} tintColor={theme.primary} />
     ) : undefined,
@@ -423,6 +429,7 @@ function ccnDate(value: string) {
 
 export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
   const insets = useSafeAreaInsets();
+  const layout = useAdaptiveLayout();
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
@@ -546,7 +553,13 @@ export function EsportsLanding({ push }: { push: (scene: Scene) => void }) {
       refreshing={page === 0 && ranking.loading && !!ranking.data}
     >
       <View
-        style={[styles.hero, { minHeight: 330 + insets.top, paddingTop: 100 + insets.top }]}
+        style={[
+          styles.hero,
+          {
+            minHeight: (layout.isExpanded ? 238 : 330) + insets.top,
+            paddingTop: (layout.isExpanded ? 66 : 100) + insets.top,
+          },
+        ]}
         onLayout={({ nativeEvent }) => {
           const { width, height } = nativeEvent.layout;
           setHeroSize((old) =>
@@ -844,6 +857,16 @@ function RankMovement({ value }: { value: number }) {
   );
 }
 
+function PerformanceColumns({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded) return <>{children}</>;
+  return (
+    <ResponsiveGrid minItemWidth={420} maxColumns={layout.columns(420, 2)} gap={20}>
+      {children}
+    </ResponsiveGrid>
+  );
+}
+
 function PerformanceStats({ stats, label }: { stats: Stats; label: string }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -1111,6 +1134,7 @@ type TeamTab = (typeof TEAM_TABS)[number];
 export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => void }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [tab, setTab] = useState<TeamTab>('matches');
   const [settledTab, setSettledTab] = useState<TeamTab>('matches');
   const [tabPosition] = useState(() => new Animated.Value(0));
@@ -1330,14 +1354,16 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                                 />
                               </View>
                             </View>
-                            <PerformanceStats
-                              stats={team.stats.offense}
-                              label={t('warAttacksTitle')}
-                            />
-                            <PerformanceStats
-                              stats={team.stats.defense}
-                              label={t('warDefensesTitle')}
-                            />
+                            <PerformanceColumns>
+                              <PerformanceStats
+                                stats={team.stats.offense}
+                                label={t('warAttacksTitle')}
+                              />
+                              <PerformanceStats
+                                stats={team.stats.defense}
+                                label={t('warDefensesTitle')}
+                              />
+                            </PerformanceColumns>
                           </>
                         ) : (
                           <Feedback query={query} empty={!query.loading} />
@@ -1352,7 +1378,14 @@ export function EsportsTeam({ id, push }: { id: string; push: (scene: Scene) => 
                               key={player.tag}
                               accessibilityRole="button"
                               onPress={() => push({ kind: 'ccnPlayer', tag: player.tag })}
-                              style={[styles.rosterCard, { backgroundColor: theme.card }]}
+                              style={[
+                                styles.rosterCard,
+                                { backgroundColor: theme.card },
+                                layout.isExpanded && {
+                                  flexBasis: `${100 / layout.columns(260, 3) - 2}%`,
+                                  minWidth: 0,
+                                },
+                              ]}
                             >
                               <PlayerPortrait tag={player.tag} name={player.name} size={80} />
                               <CKText role="titleSmall" numberOfLines={2}>
@@ -1594,6 +1627,7 @@ function TeamMatch({ match, push }: { match: Match; push: (scene: Scene) => void
 }
 export function EsportsPlayer({ tag }: { tag: string }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const query = useCcn<Player>(`player?playerTag=${encodeURIComponent(tag)}`);
   const contentLoading = query.loading && !query.data;
   const player: Player | undefined | null =
@@ -1628,20 +1662,30 @@ export function EsportsPlayer({ tag }: { tag: string }) {
           <Feedback query={query} empty={query.data === null} kind="profile" />
           {player ? (
             <>
-              {(
-                [
-                  ['warAttacksTitle', player.stats_offense],
-                  ['warDefensesTitle', player.stats_defense],
-                ] as const
-              ).map(([label, stats]) =>
-                stats ? <PerformanceStats key={label} stats={stats} label={t(label)} /> : null,
-              )}
+              <PerformanceColumns>
+                {(
+                  [
+                    ['warAttacksTitle', player.stats_offense],
+                    ['warDefensesTitle', player.stats_defense],
+                  ] as const
+                ).map(([label, stats]) =>
+                  stats ? <PerformanceStats key={label} stats={stats} label={t(label)} /> : null,
+                )}
+              </PerformanceColumns>
               <CKText skeleton={false} role="sectionTitle">
                 {t('esportsAccounts')}
               </CKText>
-              {player.accounts.map((account) => (
-                <GameAccount key={account.tag} name={account.name} tag={account.tag} />
-              ))}
+              {layout.isExpanded ? (
+                <ResponsiveGrid minItemWidth={360} maxColumns={layout.columns(360, 2)} gap={16}>
+                  {player.accounts.map((account) => (
+                    <GameAccount key={account.tag} name={account.name} tag={account.tag} />
+                  ))}
+                </ResponsiveGrid>
+              ) : (
+                player.accounts.map((account) => (
+                  <GameAccount key={account.tag} name={account.name} tag={account.tag} />
+                ))
+              )}
             </>
           ) : null}
         </View>

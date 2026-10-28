@@ -396,6 +396,20 @@
   "notificationPrimerAllow": "Cho phép",
   "achievementsTitle": "Thành tựu",
   "achievementEarnedLabel": "Đã đạt",
+  "achievementGemsEarnedRatio": "Đã kiếm {earned} / {total}",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Đã kiếm {earned} trên tổng số {total} đá quý từ thành tích.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} đã hoàn thành",
   "achievementEarnedCount": "Đã đạt ×{count}",
   "achievementTownhall18Name": "Nhà Chính 18",
@@ -2181,6 +2195,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Chỉ cùng cấp Nhà Chính",
+  "warStatsSameTownHall": "Cùng cấp nhà chính",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -3055,7 +3070,6 @@
   "drawerFollowers": "Người theo dõi",
   "drawerFollowersHelp": "Những người đã đánh dấu một trong các tài khoản được liên kết đã được xác minh của bạn.",
   "drawerCalculators": "Máy tính",
-  "drawerSubscription": "Đăng ký",
   "drawerUpgradeTracker": "Trình theo dõi nâng cấp",
   "drawerBasesArmies": "Căn cứ & Quân đội",
   "drawerGameAssets": "Tài sản trò chơi",
@@ -3181,7 +3195,6 @@
   "playerOptionNotificationsSubtitle": "Nhận thông báo cho tài khoản này.",
   "playerOptionNotificationsEnableMaster": "Trước tiên, hãy bật thông báo trong phần Cài đặt.",
   "playerOptionNotificationsVerifyFirst": "Xác minh tài khoản này để bật thông báo.",
-  "playerOptionNotificationsSubscriptionRequired": "Cần đăng ký để nhận thông báo dấu trang.",
   "playerOptionNotificationsLimitReached": "Bạn đã đạt giới hạn thông báo dấu trang.",
   "playerOptionShowTodoPageTitle": "Hiển thị trên trang việc cần làm",
   "playerOptionShowTodoPageSubtitle": "Đưa tài khoản này vào danh sách việc cần làm đầy đủ.",

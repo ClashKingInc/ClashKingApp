@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GlassSurface } from './glass';
 import { ckRadius } from './tokens';
+import { useNativeRailBack, useNativeRailShare } from './native-back-context';
+import { materialBackLabel, useI18n } from '../i18n';
 
 // The global search field must stay anchored when its editable view opens.
 export const globalSearchHeaderLayout = {
@@ -33,6 +35,10 @@ export function HeaderIconButton({
   onPress: () => void;
   glass?: boolean;
 }) {
+  const { locale } = useI18n();
+  const nativeBack = useNativeRailBack(label === materialBackLabel(locale) ? onPress : undefined);
+  if (nativeBack && label === materialBackLabel(locale))
+    return <View style={styles.headerButtonFrame} />;
   const button = (
     <Pressable
       accessibilityRole="button"
@@ -61,12 +67,20 @@ export function ProfileHeaderAction({
   label,
   onPress,
   disabled = false,
+  appLinkShare = false,
 }: {
   icon: ReactNode;
   label: string;
   onPress: () => void;
   disabled?: boolean;
+  appLinkShare?: boolean;
 }) {
+  const { locale } = useI18n();
+  const isBack = label === materialBackLabel(locale);
+  const nativeBack = useNativeRailBack(isBack ? onPress : undefined);
+  const nativeShare = useNativeRailShare(appLinkShare && !disabled ? onPress : undefined, label);
+  if (nativeBack && isBack) return <View style={styles.headerButtonFrame} />;
+  if (nativeShare) return null;
   return (
     <Pressable
       accessibilityRole="button"

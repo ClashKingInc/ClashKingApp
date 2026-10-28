@@ -1,8 +1,19 @@
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { HeaderArtwork } from '../../../ui/header-artwork';
 import { modalOrientations } from '../../../ui/modal-orientations';
-import type { ViewInstance } from 'react-native';
-import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import type { StyleProp, ViewInstance, ViewStyle } from 'react-native';
+import {
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import {
   Modal,
   PanResponder,
@@ -23,10 +34,8 @@ import {
   Check,
   ChevronRight,
   Clock3,
-  Crosshair,
   ExternalLink,
   Filter,
-  Info,
   ListOrdered,
   LogIn,
   LogOut,
@@ -55,7 +64,7 @@ import {
   localizedNameForItem,
 } from '../../../core/game-data/game-data-localization';
 import { toIntlLocale, useI18n, type MessageKey } from '../../../i18n';
-import { materialBackLabel, materialCloseLabel } from '../../../i18n/material-labels';
+import { materialBackLabel } from '../../../i18n/material-labels';
 import {
   CKText,
   EmptyState,
@@ -63,6 +72,7 @@ import {
   SkeletonContent,
   MobileWebImage,
   PillSurface,
+  PressableSurface,
   ProfileHeaderAction,
   ProfileStatChip as QuickStat,
   ResponsiveGrid,
@@ -149,10 +159,13 @@ export function PlayerDetailHeader({
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
   const [headerSize, setHeaderSize] = useState({ width, height: 0 });
-  // Native tablets retain the centered profile composition in both orientations.
-  // The desktop row reserves space for a sidebar-sized league rail; applying it
-  // to a native landscape window let that rail consume the identity's width.
-  const compact = Platform.OS !== 'web' || Math.min(width, headerSize.width) < 900;
+  // Expanded native layouts share the desktop identity and league row while
+  // compact phones retain the centered composition.
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
+  const insets = useSafeAreaInsets();
+  const compact =
+    !layout.isExpanded && (Platform.OS !== 'web' || Math.min(width, headerSize.width) < 900);
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
   const copyPlayerTag = () =>
@@ -179,7 +192,11 @@ export function PlayerDetailHeader({
   const leagueTiles = (
     <View
       testID="player-league-tiles"
-      style={[styles.leagueTiles, compact ? styles.leagueTilesCompact : styles.leagueTilesDesktop]}
+      style={[
+        styles.leagueTiles,
+        compact ? styles.leagueTilesCompact : styles.leagueTilesDesktop,
+        layout.isExpanded && styles.leagueTilesExpanded,
+      ]}
     >
       {(selectedTab === 'builder'
         ? [
@@ -296,7 +313,15 @@ export function PlayerDetailHeader({
             : { width: layout.width, height: layout.height },
         )
       }
-      style={[styles.header, { paddingTop: safeTop }]}
+      style={[
+        styles.header,
+        { paddingTop: safeTop },
+        layout.isExpanded && {
+          marginLeft: -insets.left,
+          marginRight: -insets.right,
+          minHeight: headerLayout.minHeight + safeTop,
+        },
+      ]}
     >
       <View testID="player-header-backdrop" pointerEvents="none" style={styles.headerBackdrop}>
         {/* All Player Info tabs share this artwork, including Builder Base. */}
@@ -310,13 +335,25 @@ export function PlayerDetailHeader({
           cachePolicy="memory-disk"
         />
         {/* Native image bounds follow rotation without a JS measurement frame. */}
-        <HeroHeaderScrim variant="player" />
+        <HeroHeaderScrim variant="player" clipRailInset={layout.isExpanded} />
       </View>
-      <View testID="player-header-content" style={styles.headerContent}>
+      <View
+        testID="player-header-content"
+        style={[
+          styles.headerContent,
+          layout.isExpanded && {
+            maxWidth: layout.contentMaxWidth + insets.left + insets.right,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+            paddingBottom: headerLayout.bottom,
+          },
+        ]}
+      >
         <View
           style={[
             styles.headerActions,
             compact ? styles.headerActionsCompact : styles.headerActionsDesktop,
+            layout.isExpanded && { paddingHorizontal: headerLayout.horizontal },
           ]}
         >
           <ProfileHeaderAction
@@ -343,6 +380,7 @@ export function PlayerDetailHeader({
               ) : null}
               <ProfileHeaderAction
                 label={t('gameAssetsShare')}
+                appLinkShare
                 onPress={() =>
                   void sharePageLink(
                     { kind: 'player', tag: player.tag, params: { tab: selectedTab } },
@@ -370,16 +408,33 @@ export function PlayerDetailHeader({
         </View>
         <SkeletonContent loading={loading} style={{ display: 'contents' }}>
           <View
-            style={[styles.identity, compact ? styles.identityCompact : styles.identityDesktop]}
+            style={[
+              styles.identity,
+              compact ? styles.identityCompact : styles.identityDesktop,
+              layout.isExpanded && {
+                gap: headerLayout.gap,
+                paddingHorizontal: headerLayout.horizontal,
+                minHeight: headerLayout.bodyMinHeight,
+              },
+            ]}
           >
-            <View style={styles.hallBadge}>
+            <View
+              style={[
+                styles.hallBadge,
+                layout.isExpanded && { width: headerLayout.image, height: headerLayout.image },
+              ]}
+            >
               <MobileWebImage
                 imageUrl={
                   selectedTab === 'builder'
                     ? ImageAssets.builderHall(player.builderHallLevel)
                     : player.townHallPic || ImageAssets.townHall(player.townHallLevel)
                 }
-                style={[styles.hall, compact && styles.hallCompact]}
+                style={[
+                  styles.hall,
+                  compact && styles.hallCompact,
+                  layout.isExpanded && { width: headerLayout.image, height: headerLayout.image },
+                ]}
               />
               {selectedTab !== 'builder' && player.townHallWeaponLevel > 0 ? (
                 <View
@@ -412,7 +467,14 @@ export function PlayerDetailHeader({
                 <CKText
                   role="titleLarge"
                   numberOfLines={1}
-                  style={[styles.headerText, compact && styles.centerText]}
+                  style={[
+                    styles.headerText,
+                    compact && styles.centerText,
+                    layout.isExpanded && {
+                      fontSize: headerLayout.title,
+                      lineHeight: headerLayout.titleLine,
+                    },
+                  ]}
                 >
                   {player.name}
                 </CKText>
@@ -501,10 +563,16 @@ export function PlayerBaseTab({
   village: 'home' | 'builder';
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
+  const sectionStyle = [styles.sections, layout.isExpanded && { maxWidth: layout.contentMaxWidth }];
   if (village === 'builder') {
     return (
-      <View style={styles.sections}>
-        <ResponsiveGrid minItemWidth={430} maxColumns={2}>
+      <View style={sectionStyle}>
+        <ResponsiveGrid
+          minItemWidth={layout.isExpanded ? 330 : 430}
+          maxColumns={2}
+          gap={layout.isExpanded ? 12 : undefined}
+        >
           <PlayerItemSection
             title={t('gameHeroes')}
             items={player.bbHeroes}
@@ -524,8 +592,12 @@ export function PlayerBaseTab({
     );
   }
   return (
-    <View style={styles.sections}>
-      <ResponsiveGrid minItemWidth={430} maxColumns={2}>
+    <View style={sectionStyle}>
+      <ResponsiveGrid
+        minItemWidth={layout.isExpanded ? 330 : 430}
+        maxColumns={2}
+        gap={layout.isExpanded ? 12 : undefined}
+      >
         {player.superTroops.some((item) => item.isActive) ? (
           <PlayerSuperTroopSection
             title={t('gameActiveSuperTroops')}
@@ -794,6 +866,24 @@ export function PlayerItemSection({
   );
 }
 
+function PlayerModalViewport({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isDuo && !layout.isTablet) return <>{children}</>;
+  // Tint belongs to the full modal window; only the content respects safe areas.
+  // Moving the whole backdrop into SafeAreaView leaves untinted strips at the rail.
+  const backdrop = isValidElement<{ style?: StyleProp<ViewStyle> }>(children)
+    ? StyleSheet.flatten(children.props.style)?.backgroundColor
+    : undefined;
+  const content = isValidElement<{ style?: StyleProp<ViewStyle> }>(children)
+    ? cloneElement(children, { style: [children.props.style, { backgroundColor: 'transparent' }] })
+    : children;
+  return (
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: backdrop }}>
+      <SafeAreaView style={{ flex: 1 }}>{content}</SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
+
 function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: () => void }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -807,50 +897,52 @@ function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: 
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <Pressable
-          accessible={false}
-          onPress={onClose}
-          style={StyleSheet.absoluteFill}
-          testID="player-item-detail-backdrop"
-        />
-        {item ? (
-          <Surface
-            accessibilityViewIsModal
-            onAccessibilityEscape={onClose}
-            radius={ckRadius.card}
-            style={styles.dialog}
-            testID="player-item-detail-dialog"
-          >
-            <View style={styles.dialogTitle}>
-              <MobileWebImage imageUrl={item.imageUrl} style={styles.detailImage} />
-              <View style={styles.grow}>
-                <CKText role="titleLarge">{localizedName}</CKText>
-                <CKText muted>
-                  {item instanceof PlayerSuperTroop && item.superTroopIsActive
-                    ? t('generalActive')
-                    : t('generalInactive')}
-                </CKText>
+      <PlayerModalViewport>
+        <View style={styles.overlay}>
+          <Pressable
+            accessible={false}
+            onPress={onClose}
+            style={StyleSheet.absoluteFill}
+            testID="player-item-detail-backdrop"
+          />
+          {item ? (
+            <Surface
+              accessibilityViewIsModal
+              onAccessibilityEscape={onClose}
+              radius={ckRadius.card}
+              style={styles.dialog}
+              testID="player-item-detail-dialog"
+            >
+              <View style={styles.dialogTitle}>
+                <MobileWebImage imageUrl={item.imageUrl} style={styles.detailImage} />
+                <View style={styles.grow}>
+                  <CKText role="titleLarge">{localizedName}</CKText>
+                  <CKText muted>
+                    {item instanceof PlayerSuperTroop && item.superTroopIsActive
+                      ? t('generalActive')
+                      : t('generalInactive')}
+                  </CKText>
+                </View>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t('generalOk')}
+                  onPress={onClose}
+                >
+                  <X color={theme.onSurfaceVariant} />
+                </Pressable>
               </View>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t('generalOk')}
-                onPress={onClose}
-              >
-                <X color={theme.onSurfaceVariant} />
-              </Pressable>
-            </View>
-            {localizedDescription ? (
-              <>
-                <CKText skeleton={false} role="rowTitle">
-                  {t('gameItemOverview')}
-                </CKText>
-                <CKText muted>{localizedDescription}</CKText>
-              </>
-            ) : null}
-          </Surface>
-        ) : null}
-      </View>
+              {localizedDescription ? (
+                <>
+                  <CKText skeleton={false} role="rowTitle">
+                    {t('gameItemOverview')}
+                  </CKText>
+                  <CKText muted>{localizedDescription}</CKText>
+                </>
+              ) : null}
+            </Surface>
+          ) : null}
+        </View>
+      </PlayerModalViewport>
     </Modal>
   );
 }
@@ -880,6 +972,7 @@ export function PlayerBattlelogTab({
   onLootGridScrubChange?: (active: boolean) => void;
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
   const mode = 'farming';
   const attacks = useMemo(() => data?.forMode(mode).filter((item) => item.attack) ?? [], [data]);
   const lootTimeline = useMemo(() => battlelogLootTimeline(attacks, new Date(), 180), [attacks]);
@@ -897,7 +990,7 @@ export function PlayerBattlelogTab({
   const popularAttacks = data.popularTroops(mode, { limit: 5, weightByHousing: true });
   return (
     <ChartInteractionBoundary>
-      <View style={styles.sections}>
+      <View style={[styles.sections, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}>
         <Surface radius={ckRadius.card} style={styles.section}>
           <BattleOverviewBand
             title={t('warAttacksTitle')}
@@ -930,7 +1023,7 @@ export function PlayerBattlelogTab({
           </CKText>
         </View>
         <View testID="battle-responsive-grid">
-          <ResponsiveGrid minItemWidth={430} maxColumns={2}>
+          <ResponsiveGrid minItemWidth={layout.isExpanded ? 330 : 430} maxColumns={2}>
             {attacks.slice(0, visibleCount).map((item, index) => (
               <BattleRow key={`${item.mergeKey}-${index}`} item={item} />
             ))}
@@ -1329,6 +1422,7 @@ function BattleOverviewBand({
   popular: readonly PlayerPopularArmyItem[];
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   return (
     <View style={styles.battleOverviewBand}>
       <View style={styles.battleBandTitle}>
@@ -1365,19 +1459,30 @@ function BattleOverviewBand({
             {t('playerBattlelogPopularTroops')}
           </CKText>
           <View style={styles.popularTroopRow}>
-            {popular.slice(0, 5).map((entry) => (
-              <View
-                key={entry.item.code}
-                accessible
-                accessibilityLabel={`${entry.item.name}, ×${entry.uses}`}
-                style={styles.popularTroop}
-              >
-                <MobileWebImage imageUrl={entry.item.imageUrl} style={styles.popularTroopImage} />
-                <PillSurface style={styles.popularCount}>
-                  <CKText role="labelSmall">×{entry.uses}</CKText>
-                </PillSurface>
-              </View>
-            ))}
+            {popular.slice(0, 5).map((entry) => {
+              const content = (
+                <>
+                  <MobileWebImage imageUrl={entry.item.imageUrl} style={styles.popularTroopImage} />
+                  <PillSurface style={styles.popularCount}>
+                    <CKText role="labelSmall">×{entry.uses}</CKText>
+                  </PillSurface>
+                </>
+              );
+              return (
+                <View
+                  key={entry.item.code}
+                  accessible
+                  accessibilityLabel={`${entry.item.name}, ×${entry.uses}`}
+                  style={styles.popularTroop}
+                >
+                  {layout.isExpanded ? (
+                    <View style={styles.popularTroopVisual}>{content}</View>
+                  ) : (
+                    content
+                  )}
+                </View>
+              );
+            })}
           </View>
         </>
       ) : null}
@@ -1387,17 +1492,14 @@ function BattleOverviewBand({
 
 export function PlayerActivityTab({
   data,
-  verifiedTracking,
   actions,
 }: {
   data: PlayerActivityFeed | null | undefined;
-  verifiedTracking: boolean;
   actions: PlayerDetailPresentationActions;
 }) {
-  const { t, locale } = useI18n();
-  const theme = useCKTheme();
+  const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const [filter, setFilter] = useState<PlayerHistoryTypeValue>('troop_level');
-  const [showTracking, setShowTracking] = useState(false);
   if (!data) return <EmptyState title={t('playerActivityLoadError')} body={t('generalTryAgain')} />;
   const choices: readonly (readonly [PlayerHistoryTypeValue, string])[] = [
     ['troop_level', t('gameTroops')],
@@ -1413,27 +1515,14 @@ export function PlayerActivityTab({
     ['war_preference', t('playerWarPreferenceTitle')],
   ];
   return (
-    <View style={styles.sections}>
-      <View style={styles.toolbar}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`${verifiedTracking ? t('playerActivityTrackingActive') : t('playerActivityTrackingUnknown')}. ${verifiedTracking ? t('playerActivityTrackingActiveBody') : t('playerActivityTrackingUnknownBody')}`}
-          onPress={() => setShowTracking(true)}
-          style={styles.trackingControl}
-        >
-          <PillSurface style={styles.dropdownControl}>
-            {verifiedTracking ? (
-              <Crosshair size={18} color={theme.primary} />
-            ) : (
-              <Info size={18} color={theme.onSurfaceVariant} />
-            )}
-            <CKText style={styles.trackingLabel}>
-              {verifiedTracking
-                ? t('playerActivityTrackingActive')
-                : t('playerActivityTrackingUnknown')}
-            </CKText>
-          </PillSurface>
-        </Pressable>
+    <View style={[styles.sections, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}>
+      <View
+        testID="player-history-category-filter"
+        style={[
+          styles.toolbar,
+          layout.isExpanded ? styles.historyToolbar : styles.compactHistoryToolbar,
+        ]}
+      >
         <FilterDropdown
           fillWidth
           choices={choices}
@@ -1452,31 +1541,6 @@ export function PlayerActivityTab({
           ))}
         </ResponsiveGrid>
       </View>
-      <Modal
-        supportedOrientations={modalOrientations}
-        transparent
-        visible={showTracking}
-        animationType="fade"
-        onRequestClose={() => setShowTracking(false)}
-      >
-        <Pressable style={styles.overlay} onPress={() => setShowTracking(false)}>
-          <Surface radius={ckRadius.card} style={styles.dialog}>
-            <CKText role="titleLarge">
-              {verifiedTracking
-                ? t('playerActivityTrackingActive')
-                : t('playerActivityTrackingUnknown')}
-            </CKText>
-            <CKText>
-              {verifiedTracking
-                ? t('playerActivityTrackingActiveBody')
-                : t('playerActivityTrackingUnknownBody')}
-            </CKText>
-            <Pressable accessibilityRole="button" onPress={() => setShowTracking(false)}>
-              <CKText>{materialCloseLabel(locale)}</CKText>
-            </Pressable>
-          </Surface>
-        </Pressable>
-      </Modal>
       {!data.items.length ? (
         <EmptyState
           title={t('playerActivityNoEventsTitle')}
@@ -1514,17 +1578,25 @@ export function PlayerCwlTab({
   actions: PlayerDetailPresentationActions;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   if (!data?.items.length)
     return <EmptyState title={t('cwlHistoryEmptyTitle')} body={t('generalNoDataAvailable')} />;
+  const cards = data.items.map((season, index) => (
+    <CwlSeasonCard
+      key={`${season.season}-${season.clan.tag}-${index}`}
+      recordId={`${season.season}-${index}`}
+      season={season}
+    />
+  ));
   return (
-    <View style={styles.sections}>
-      {data.items.map((season, index) => (
-        <CwlSeasonCard
-          key={`${season.season}-${season.clan.tag}-${index}`}
-          recordId={`${season.season}-${index}`}
-          season={season}
-        />
-      ))}
+    <View style={[styles.sections, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}>
+      {layout.isDuo || layout.isTablet ? (
+        <ResponsiveGrid minItemWidth={330} maxColumns={layout.isExpanded ? 2 : 1} gap={10}>
+          {cards}
+        </ResponsiveGrid>
+      ) : (
+        cards
+      )}
     </View>
   );
 }
@@ -1648,8 +1720,9 @@ export function PlayerJoinLeaveTab({
   actions: PlayerDetailPresentationActions;
   loadingMore?: boolean;
 }) {
-  const { t } = useI18n();
+  const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [view, setView] = useState<'events' | 'clans'>('events');
   const [eventType, setEventType] = useState<'all' | 'join' | 'leave'>('all');
   const [totalsSort, setTotalsSort] = useState<'time' | 'visits'>('time');
@@ -1662,153 +1735,148 @@ export function PlayerJoinLeaveTab({
         onAction={() => void actions.loadTab('joinLeave', true)}
       />
     );
+  // Filtering must keep the API's chronology and every individual event. The
+  // aggregate Clans view alone is sorted; page.available is the full event count,
+  // not the currently loaded or filtered subset. Unknown clan totals stay uncounted.
   const events = filteredJoinLeaveEvents(page, eventType);
   const sortedTotals = sortedJoinLeaveTotals(totals ?? [], totalsSort);
-  const totalMinutes = (totals ?? []).reduce((sum, total) => sum + total.minutes, 0);
+  const count = (value: number) => value.toLocaleString(toIntlLocale(locale));
+  const filterActive = view === 'events' ? eventType !== 'all' : totalsSort !== 'time';
+  const filterLabel =
+    view === 'events'
+      ? eventType === 'join'
+        ? t('joinLeaveJoin')
+        : eventType === 'leave'
+          ? t('joinLeaveLeave')
+          : t('generalAll')
+      : totalsSort === 'visits'
+        ? t('playerJoinLeaveVisits')
+        : t('playerJoinLeaveTimeSpent');
   return (
-    <View style={styles.sections}>
+    <View
+      style={[
+        styles.sections,
+        styles.joinLeaveSection,
+        layout.isExpanded && {
+          maxWidth: Math.min(layout.contentMaxWidth, view === 'events' ? 960 : 1240),
+        },
+      ]}
+    >
       <View testID="player-join-leave-toolbar" style={styles.joinLeaveToolbar}>
         <View testID="player-join-leave-controls-row" style={styles.joinLeaveControlsRow}>
-          <View testID="player-join-leave-view-control">
-            <FilterDropdown
+          <View testID="player-join-leave-view-control" style={styles.joinLeaveViewControl}>
+            <SlidingSegmentControl
+              testID="player-join-leave-mode"
               value={view}
-              plain
-              showIcon={false}
-              choices={[
-                ['events', t('generalHistory')],
-                ['clans', t('playerJoinLeaveClanTotals')],
+              options={[
+                { value: 'events', label: `${t('warEventsTitle')} ${count(page.available)}` },
+                {
+                  value: 'clans',
+                  label:
+                    totals == null ? t('statsClans') : `${t('statsClans')} ${count(totals.length)}`,
+                },
               ]}
-              onSelect={(v) => setView(v as typeof view)}
+              style={styles.joinLeaveSegment}
+              isRtl={isRtl}
+              onChange={setView}
             />
           </View>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('generalFilters')}
-            accessibilityState={{ expanded: filtersExpanded }}
+            accessibilityLabel={`${t('generalFilters')}: ${filterLabel}`}
+            accessibilityState={{ expanded: filtersExpanded, selected: filterActive }}
             testID="player-join-leave-filter-control"
             onPress={() => setFiltersExpanded((value) => !value)}
           >
-            <PillSurface style={styles.compactFilterButton}>
-              <Filter size={17} color={theme.onSurfaceVariant} />
+            <PillSurface
+              style={[
+                styles.joinLeaveFilterButton,
+                (filterActive || filtersExpanded) && {
+                  backgroundColor: colorWithAlpha(theme.primary, 0.12),
+                },
+              ]}
+            >
+              <Filter
+                size={20}
+                color={filterActive || filtersExpanded ? theme.primary : theme.onSurfaceVariant}
+              />
             </PillSurface>
           </Pressable>
         </View>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          testID="player-join-leave-summary-row"
-          style={styles.joinLeaveSummaryRail}
-        >
-          <View style={styles.wrap}>
-            {view === 'events' ? (
-              <>
-                <JoinLeaveSummaryChip
-                  icon={<Repeat2 size={15} color={theme.primary} />}
-                  value={`${page.available}`}
-                  label={t('warEventsTitle')}
-                  color={theme.primary}
+        {filtersExpanded ? (
+          view === 'events' ? (
+            <View testID="player-join-leave-filter-options" style={styles.wrap}>
+              {(
+                [
+                  [
+                    'all',
+                    t('generalAll'),
+                    <ListOrdered key="all" size={16} color={theme.primary} />,
+                    theme.primary,
+                  ],
+                  [
+                    'join',
+                    t('joinLeaveJoin'),
+                    <LogIn key="join" size={16} color={ckColors.donationGreen} />,
+                    ckColors.donationGreen,
+                  ],
+                  [
+                    'leave',
+                    t('joinLeaveLeave'),
+                    <LogOut key="leave" size={16} color={ckColors.lossRed} />,
+                    ckColors.lossRed,
+                  ],
+                ] as const
+              ).map(([key, label, icon, color]) => (
+                <Choice
+                  key={key}
+                  label={label}
+                  icon={icon}
+                  accent={color}
+                  selected={eventType === key}
+                  onPress={() => setEventType(key)}
                 />
-                <JoinLeaveSummaryChip
-                  icon={<Shield size={15} color={theme.primary} />}
-                  value={`${(totals ?? []).length}`}
-                  label={t('statsClans')}
-                  color={theme.primary}
+              ))}
+            </View>
+          ) : (
+            <View testID="player-join-leave-filter-options" style={styles.wrap}>
+              {(
+                [
+                  [
+                    'time',
+                    t('playerJoinLeaveTimeSpent'),
+                    <Clock3 key="time" size={16} color={ckColors.donationGreen} />,
+                    ckColors.donationGreen,
+                  ],
+                  [
+                    'visits',
+                    t('playerJoinLeaveVisits'),
+                    <Repeat2 key="visits" size={16} color={theme.primary} />,
+                    theme.primary,
+                  ],
+                ] as const
+              ).map(([key, label, icon, color]) => (
+                <Choice
+                  key={key}
+                  label={label}
+                  icon={icon}
+                  accent={color}
+                  selected={totalsSort === key}
+                  onPress={() => setTotalsSort(key)}
                 />
-              </>
-            ) : (
-              <>
-                <JoinLeaveSummaryChip
-                  icon={<Shield size={15} color={theme.primary} />}
-                  value={`${(totals ?? []).length}`}
-                  label={t('statsClans')}
-                  color={theme.primary}
-                />
-                <JoinLeaveSummaryChip
-                  icon={<Clock3 size={15} color="#009688" />}
-                  value={joinLeaveDuration(totalMinutes)}
-                  label={t('playerJoinLeaveTime')}
-                  color="#009688"
-                />
-              </>
-            )}
-          </View>
-        </ScrollView>
+              ))}
+            </View>
+          )
+        ) : null}
       </View>
-      {filtersExpanded ? (
-        view === 'events' ? (
-          <View
-            testID="player-join-leave-filter-options"
-            style={[styles.wrap, styles.trailingChoices]}
-          >
-            {(
-              [
-                [
-                  'all',
-                  t('generalAll'),
-                  <ListOrdered key="all" size={16} color={theme.primary} />,
-                  theme.primary,
-                ],
-                [
-                  'join',
-                  t('joinLeaveJoin'),
-                  <LogIn key="join" size={16} color="#4CAF50" />,
-                  '#4CAF50',
-                ],
-                [
-                  'leave',
-                  t('joinLeaveLeave'),
-                  <LogOut key="leave" size={16} color="#FF5252" />,
-                  '#FF5252',
-                ],
-              ] as const
-            ).map(([key, label, icon, color]) => (
-              <Choice
-                key={key}
-                label={label}
-                icon={icon}
-                accent={color}
-                selected={eventType === key}
-                onPress={() => setEventType(key as typeof eventType)}
-              />
-            ))}
-          </View>
-        ) : (
-          <View
-            testID="player-join-leave-filter-options"
-            style={[styles.wrap, styles.trailingChoices]}
-          >
-            {(
-              [
-                [
-                  'time',
-                  t('playerJoinLeaveTimeSpent'),
-                  <Clock3 key="time" size={16} color="#009688" />,
-                  '#009688',
-                ],
-                [
-                  'visits',
-                  t('playerJoinLeaveVisits'),
-                  <Repeat2 key="visits" size={16} color={theme.primary} />,
-                  theme.primary,
-                ],
-              ] as const
-            ).map(([key, label, icon, color]) => (
-              <Choice
-                key={key}
-                label={label}
-                icon={icon}
-                accent={color}
-                selected={totalsSort === key}
-                onPress={() => setTotalsSort(key as typeof totalsSort)}
-              />
-            ))}
-          </View>
-        )
-      ) : null}
       {view === 'events' ? (
-        <>
+        <View testID="player-join-leave-event-stream" style={styles.joinLeaveEventStream}>
           {events.map((event, index) => (
-            <PlayerJoinLeaveEventRow key={`${event.time.toISOString()}-${index}`} event={event} />
+            <PlayerJoinLeaveEventRow
+              key={`${event.time.toISOString()}-${index}`}
+              event={event}
+              onOpenClan={actions.openClan}
+            />
           ))}
           {!events.length ? (
             <EmptyState
@@ -1817,46 +1885,36 @@ export function PlayerJoinLeaveTab({
               }
             />
           ) : null}
-          {page.items.length < page.available ? (
-            loadingMore ? (
-              <SkeletonContent loading>
-                <PlayerJoinLeaveEventRow
-                  event={{
-                    type: 'join',
-                    time: new Date(0),
-                    tag: '',
-                    name: 'Player name',
-                    th: 16,
-                    clan: { tag: '', name: 'Clan name', badge: ImageAssets.clanCastle },
-                  }}
-                />
-              </SkeletonContent>
-            ) : null
+          {page.items.length < page.available && loadingMore ? (
+            <SkeletonContent loading>
+              <PlayerJoinLeaveEventRow
+                event={{
+                  type: 'join',
+                  time: new Date(0),
+                  tag: '',
+                  name: 'Player name',
+                  th: 16,
+                  clan: { tag: '', name: 'Clan name', badge: ImageAssets.clanCastle },
+                }}
+              />
+            </SkeletonContent>
           ) : null}
-        </>
+        </View>
       ) : (
         <>
-          {sortedTotals.map((total) => (
-            <Surface key={total.clan.tag} radius={ckRadius.tile} style={styles.rowCard}>
-              <MobileWebImage imageUrl={total.clan.badge} style={styles.rowImage} />
-              <View style={styles.grow}>
-                <CKText role="rowTitle">{total.clan.name || total.clan.tag}</CKText>
-                <View style={styles.row}>
-                  <CKText style={{ color: '#009688' }}>{joinLeaveDuration(total.minutes)}</CKText>
-                  <CKText skeleton={false} muted>
-                    {t('playerJoinLeaveTimeSpent')}
-                  </CKText>
-                </View>
-              </View>
-              <PillSurface style={styles.joinLeaveVisitChip}>
-                <Repeat2 size={15} color={theme.primary} />
-                <CKText role="labelLarge">{total.visits}</CKText>
-                <CKText skeleton={false} role="labelSmall">
-                  {t('playerJoinLeaveVisits')}
-                </CKText>
-              </PillSurface>
-            </Surface>
-          ))}
+          <ResponsiveGrid
+            minItemWidth={360}
+            maxColumns={layout.isExpanded ? layout.columns(360, 3) : 1}
+            gap={12}
+          >
+            {sortedTotals.map((total) => (
+              <PlayerJoinLeaveClanCard
+                key={total.clan.tag}
+                total={total}
+                onOpenClan={actions.openClan}
+              />
+            ))}
+          </ResponsiveGrid>
           {!sortedTotals.length ? <EmptyState title={t('playerJoinLeaveNoClanTotals')} /> : null}
         </>
       )}
@@ -1864,62 +1922,93 @@ export function PlayerJoinLeaveTab({
   );
 }
 
-function PlayerJoinLeaveEventRow({ event }: { event: PlayerJoinLeavePage['items'][number] }) {
+function PlayerJoinLeaveEventRow({
+  event,
+  onOpenClan,
+}: {
+  event: PlayerJoinLeavePage['items'][number];
+  onOpenClan?: (tag: string) => void;
+}) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const joined = event.type.toLowerCase().includes('join');
+  const tone = joined ? ckColors.donationGreen : ckColors.lossRed;
+  const movement = t(joined ? 'playerJoinLeaveJoined' : 'playerJoinLeaveLeft');
+  const clanName = event.clan?.name || event.clan?.tag || t('generalUnknown');
+  const relativeTime = joinLeaveRelativeTime(event.time, t);
+  const clanTag = event.clan?.tag;
   return (
-    <Surface radius={ckRadius.tile} style={styles.rowCard}>
+    <PressableSurface
+      radius={ckRadius.tile}
+      accessibilityRole={clanTag && onOpenClan ? 'button' : undefined}
+      accessibilityLabel={`${clanName}, ${movement}, ${relativeTime}`}
+      disabled={!clanTag || !onOpenClan}
+      onPress={clanTag && onOpenClan ? () => onOpenClan(clanTag) : undefined}
+      style={styles.joinLeaveEventRow}
+    >
       {event.clan?.badge ? (
-        <MobileWebImage imageUrl={event.clan.badge} style={styles.rowImage} />
+        <MobileWebImage imageUrl={event.clan.badge} style={styles.joinLeaveClanBadge} />
       ) : (
-        <View style={styles.rowImageFallback}>
-          <Shield color={theme.onSurfaceVariant} />
+        <View style={styles.joinLeaveClanBadgeFallback}>
+          <Shield color={theme.onSurfaceVariant} size={22} />
         </View>
       )}
-      <View style={styles.grow}>
-        <CKText role="rowTitle">{event.clan?.name || event.clan?.tag || ''}</CKText>
-        <CKText muted>{joinLeaveRelativeTime(event.time, t)}</CKText>
-      </View>
-      <View style={styles.joinLeaveMovement}>
-        {event.type.toLowerCase().includes('join') ? (
-          <LogIn size={18} color="#4CAF50" />
-        ) : (
-          <LogOut size={18} color="#FF5252" />
-        )}
-        <CKText>
-          {event.type.toLowerCase().includes('join')
-            ? t('playerJoinLeaveJoined')
-            : t('playerJoinLeaveLeft')}
+      <View style={styles.joinLeaveEventIdentity}>
+        <CKText role="rowTitle">{clanName}</CKText>
+        <CKText muted role="bodySmall">
+          {relativeTime}
         </CKText>
       </View>
-    </Surface>
+      <View style={styles.joinLeaveMovement}>
+        {joined ? <LogIn size={17} color={tone} /> : <LogOut size={17} color={tone} />}
+        <CKText role="bodySmall" style={{ color: tone, flexShrink: 1 }}>
+          {movement}
+        </CKText>
+      </View>
+    </PressableSurface>
   );
 }
 
-function JoinLeaveSummaryChip({
-  icon,
-  value,
-  label,
-  color,
+function PlayerJoinLeaveClanCard({
+  total,
+  onOpenClan,
 }: {
-  icon: ReactNode;
-  value: string;
-  label: string;
-  color: string;
+  total: PlayerJoinLeaveTotal;
+  onOpenClan: (tag: string) => void;
 }) {
+  const { t, locale } = useI18n();
+  const theme = useCKTheme();
   return (
-    <View
-      style={[
-        styles.joinLeaveSummaryChip,
-        { backgroundColor: colorWithAlpha(color, 0.12), borderColor: colorWithAlpha(color, 0.3) },
-      ]}
+    <PressableSurface
+      testID={`player-join-leave-clan-${total.clan.tag}`}
+      radius={ckRadius.tile}
+      accessibilityRole="button"
+      disabled={!total.clan.tag}
+      onPress={() => onOpenClan(total.clan.tag)}
+      style={styles.joinLeaveClanCard}
     >
-      {icon}
-      <CKText role="labelLarge">{value}</CKText>
-      <CKText skeleton={false} muted role="labelSmall">
-        {label}
-      </CKText>
-    </View>
+      <View style={styles.joinLeaveClanIdentity}>
+        <MobileWebImage imageUrl={total.clan.badge} style={styles.joinLeaveClanBadge} />
+        <CKText role="rowTitle" style={styles.grow}>
+          {total.clan.name || total.clan.tag || t('generalUnknown')}
+        </CKText>
+        <ChevronRight size={18} color={theme.onSurfaceVariant} />
+      </View>
+      <View style={styles.joinLeaveClanMetrics}>
+        <View style={styles.joinLeaveClanMetric}>
+          <CKText role="bodyMedium">{joinLeaveDuration(total.minutes)}</CKText>
+          <CKText muted role="bodySmall">
+            {t('playerJoinLeaveTimeSpent')}
+          </CKText>
+        </View>
+        <View style={styles.joinLeaveClanMetric}>
+          <CKText role="bodyMedium">{total.visits.toLocaleString(toIntlLocale(locale))}</CKText>
+          <CKText muted role="bodySmall">
+            {t('playerJoinLeaveVisits')}
+          </CKText>
+        </View>
+      </View>
+    </PressableSurface>
   );
 }
 
@@ -2167,6 +2256,7 @@ const styles = StyleSheet.create({
   // League summaries stay phone-sized instead of becoming full-width tablet tiles.
   leagueTilesCompact: { paddingHorizontal: 16, maxWidth: 460, alignSelf: 'center' },
   leagueTilesDesktop: { width: '44%', maxWidth: 460, flexShrink: 0 },
+  leagueTilesExpanded: { paddingRight: 8 },
   leagueTilePressable: { flex: 1 },
   clanLine: { flexDirection: 'row', alignItems: 'center', maxWidth: 320 },
   clanBadge: { width: 16, height: 16, resizeMode: 'contain', marginRight: 4 },
@@ -2321,10 +2411,6 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 12,
   },
-  trackingControl: { maxWidth: '55%', flexShrink: 1 },
-  // Tracking status is meaningful copy, so wrap it instead of truncating it
-  // at an arbitrary width when the neighboring history filter needs space.
-  trackingLabel: { flexShrink: 1, paddingVertical: 6 },
   dropdownMenu: {
     position: 'absolute',
     zIndex: 20,
@@ -2353,6 +2439,9 @@ const styles = StyleSheet.create({
   battleSummaryDivider: { height: 1, backgroundColor: '#80808044', marginVertical: 12 },
   popularTroopRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 4 },
   popularTroop: { flex: 1, height: 48, alignItems: 'center', justifyContent: 'center' },
+  // The row cell may span a tablet column; the badge belongs to the image,
+  // not that cell's far edge. Compact retains its existing view hierarchy.
+  popularTroopVisual: { width: 48, height: 48, flexShrink: 0, position: 'relative' },
   popularTroopImage: { width: 48, height: 48, borderRadius: ckRadius.tile },
   popularCount: { position: 'absolute', right: 0, bottom: 0, paddingHorizontal: 4 },
   chartRow: { minHeight: 36, flexDirection: 'row', alignItems: 'center', gap: 8 },
@@ -2431,11 +2520,12 @@ const styles = StyleSheet.create({
   alignEnd: { textAlign: 'right' },
   rowCard: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
   joinLeaveMovement: {
-    width: 104,
+    maxWidth: '36%',
     flexShrink: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'flex-end',
+    gap: 5,
   },
   battleCard: { minHeight: 120, gap: 8, paddingHorizontal: 12, paddingVertical: 8 },
   lootContributionCard: { paddingVertical: 6, gap: 12, position: 'relative' },
@@ -2492,31 +2582,47 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', borderRadius: 999 },
   rowImage: { width: 50, height: 50, resizeMode: 'contain' },
   rowImageFallback: { width: 50, height: 50, alignItems: 'center', justifyContent: 'center' },
-  joinLeaveSummaryChip: {
-    height: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 9,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 999,
-  },
-  joinLeaveVisitChip: {
-    minHeight: 32,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 9,
-  },
-  joinLeaveToolbar: { gap: 8 },
+  // Keep the two-mode toolbar above the content on every device. Events are
+  // one chronological stream; only the already-aggregated Clans view uses a grid.
+  joinLeaveSection: { gap: 14 },
+  joinLeaveToolbar: { gap: 10 },
   joinLeaveControlsRow: {
-    minHeight: 40,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 8,
+    justifyContent: 'space-between',
+    gap: 10,
   },
-  joinLeaveSummaryRail: { width: '100%' },
+  joinLeaveViewControl: { flex: 1, minWidth: 0, maxWidth: 460 },
+  joinLeaveSegment: { height: 44, borderWidth: 0 },
+  joinLeaveFilterButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 0,
+  },
+  joinLeaveEventStream: { gap: 8 },
+  joinLeaveEventIdentity: { flex: 1, minWidth: 0, gap: 3 },
+  joinLeaveEventRow: {
+    minHeight: 74,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderWidth: 0,
+  },
+  joinLeaveClanBadge: { width: 42, height: 42, resizeMode: 'contain', flexShrink: 0 },
+  joinLeaveClanBadgeFallback: {
+    width: 42,
+    height: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  joinLeaveClanCard: { padding: 16, gap: 16, borderWidth: 0 },
+  joinLeaveClanIdentity: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  joinLeaveClanMetrics: { flexDirection: 'row', gap: 18, paddingLeft: 54 },
+  joinLeaveClanMetric: { flex: 1, minWidth: 0, gap: 2 },
   directionBadge: { width: 64, alignItems: 'center', padding: 5, borderRadius: ckRadius.tile },
   subRow: {
     minHeight: 42,
@@ -2526,10 +2632,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   toolbar: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  // Keep the category filter aligned above the history list, even when its
+  // records use multiple columns; a dedicated side rail wastes that space.
+  historyToolbar: { width: '100%', maxWidth: 420, alignSelf: 'flex-start' },
+  compactHistoryToolbar: { width: '50%', minWidth: 180, maxWidth: '100%', alignSelf: 'flex-end' },
   filterButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
-  compactFilterButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  trailingChoices: { justifyContent: 'flex-end' },
   fieldGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   filterField: { minWidth: 150, flex: 1, gap: 4 },
   filterInput: {

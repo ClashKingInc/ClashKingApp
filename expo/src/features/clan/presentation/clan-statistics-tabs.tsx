@@ -1,3 +1,4 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
@@ -20,13 +21,11 @@ import {
 import type { CwlRankingHistoryEntry } from '../models';
 import type { ClanCurrentRankings } from '../data/clan-service';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import { ClanFilterBar, ClanTabEmpty, FilterPill } from './clan-tab-components';
+import { ClanTabEmpty } from './clan-tab-components';
 
-type RankingCategory = 'activity' | 'war' | 'points';
 type Ranking = {
   title: string;
   value: number;
-  category: RankingCategory;
   globalRank: number | null;
   localRank: number | null;
   art: string;
@@ -40,7 +39,7 @@ export function ClanRankingsTab({
 }) {
   const { t } = useI18n();
   const { width } = useWindowDimensions();
-  const [filter, setFilter] = useState<'all' | RankingCategory>('all');
+  const layout = useAdaptiveLayout();
   const [data, setData] = useState<ClanCurrentRankings>();
   const [failed, setFailed] = useState(false);
   const [revision, setRevision] = useState(0);
@@ -61,7 +60,6 @@ export function ClanRankingsTab({
   const category = (
     value: ClanCurrentRankings['homeVillage'] | undefined,
     title: string,
-    kind: RankingCategory,
     art: string,
   ): Ranking[] => {
     if (!value) return [];
@@ -77,7 +75,6 @@ export function ClanRankingsTab({
     return [
       {
         title,
-        category: kind,
         art,
         value: global?.points ?? local!.points,
         globalRank: global?.rank ?? null,
@@ -87,60 +84,18 @@ export function ClanRankingsTab({
   };
   const rankings = data
     ? [
-        ...category(data.homeVillage, t('clanPointsTitle'), 'points', ImageAssets.trophies),
-        ...category(
-          data.builderBase,
-          t('clanBuilderBasePoints'),
-          'points',
-          ImageAssets.builderBaseTrophy,
-        ),
-        ...category(data.clanCapital, t('clanCapitalPoints'), 'points', ImageAssets.capitalTrophy),
-        ...category(data.donations, t('gameDonations'), 'activity', 'up'),
-        ...category(data.donationsReceived, t('gameDonationsReceived'), 'activity', 'down'),
-        ...category(data.warWins, t('warWinsTitle'), 'war', ImageAssets.sword),
-        ...category(data.warWinStreak, t('clanWinStreakTitle'), 'war', 'fire'),
-        ...category(
-          data.capitalGold,
-          t('rankingsCapitalGold'),
-          'activity',
-          ImageAssets.capitalTrophy,
-        ),
+        ...category(data.homeVillage, t('clanPointsTitle'), ImageAssets.trophies),
+        ...category(data.builderBase, t('clanBuilderBasePoints'), ImageAssets.builderBaseTrophy),
+        ...category(data.clanCapital, t('clanCapitalPoints'), ImageAssets.capitalTrophy),
+        ...category(data.donations, t('gameDonations'), 'up'),
+        ...category(data.donationsReceived, t('gameDonationsReceived'), 'down'),
+        ...category(data.warWins, t('warWinsTitle'), ImageAssets.sword),
+        ...category(data.warWinStreak, t('clanWinStreakTitle'), 'fire'),
+        ...category(data.capitalGold, t('rankingsCapitalGold'), ImageAssets.capitalTrophy),
       ]
     : [];
-  const shown = rankings.filter((item) => filter === 'all' || item.category === filter);
   return (
     <View style={styles.tab}>
-      <ClanFilterBar
-        middle={
-          <CKText skeleton={false} muted>
-            {t('rankingsCurrent')}
-          </CKText>
-        }
-        chips={
-          <>
-            <FilterPill
-              label={t('generalAll')}
-              selected={filter === 'all'}
-              onPress={() => setFilter('all')}
-            />
-            <FilterPill
-              label={t('clanRankingsFilterActivity')}
-              selected={filter === 'activity'}
-              onPress={() => setFilter('activity')}
-            />
-            <FilterPill
-              label={t('clanRankingsFilterWar')}
-              selected={filter === 'war'}
-              onPress={() => setFilter('war')}
-            />
-            <FilterPill
-              label={t('clanRankingsFilterPoints')}
-              selected={filter === 'points'}
-              onPress={() => setFilter('points')}
-            />
-          </>
-        }
-      />
       {failed ? (
         <ErrorState
           title={t('generalFailed')}
@@ -154,8 +109,17 @@ export function ClanRankingsTab({
       ) : !data ? (
         <SkeletonContent loading>
           <ResponsiveGrid
-            minItemWidth={340}
-            maxColumns={Platform.OS === 'web' && width >= 900 ? 3 : 1}
+            minItemWidth={layout.isExpanded ? 400 : 340}
+            minColumns={layout.isExpanded ? 2 : 1}
+            maxColumns={
+              layout.isExpanded
+                ? layout.isTablet && layout.width > layout.height
+                  ? 3
+                  : 2
+                : Platform.OS === 'web' && width >= 900
+                  ? 3
+                  : 1
+            }
             gap={10}
           >
             {[ImageAssets.trophies, ImageAssets.builderBaseTrophy, ImageAssets.capitalTrophy].map(
@@ -168,7 +132,6 @@ export function ClanRankingsTab({
                       t('clanBuilderBasePoints'),
                       t('clanCapitalPoints'),
                     ][index]!,
-                    category: 'points',
                     art,
                     value: 10000,
                     globalRank: 100,
@@ -180,15 +143,24 @@ export function ClanRankingsTab({
             )}
           </ResponsiveGrid>
         </SkeletonContent>
-      ) : !shown.length ? (
+      ) : !rankings.length ? (
         <ClanTabEmpty title={t('sideRankingsEmptyTitle')} />
       ) : (
         <ResponsiveGrid
-          minItemWidth={340}
-          maxColumns={Platform.OS === 'web' && width >= 900 ? 3 : 1}
+          minItemWidth={layout.isExpanded ? 400 : 340}
+          minColumns={layout.isExpanded ? 2 : 1}
+          maxColumns={
+            layout.isExpanded
+              ? layout.isTablet && layout.width > layout.height
+                ? 3
+                : 2
+              : Platform.OS === 'web' && width >= 900
+                ? 3
+                : 1
+          }
           gap={10}
         >
-          {shown.map((item) => (
+          {rankings.map((item) => (
             <RankingCard
               key={item.title}
               item={item}
@@ -201,8 +173,61 @@ export function ClanRankingsTab({
   );
 }
 function RankingCard({ item, countryCode }: { item: Ranking; countryCode: string | null }) {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  // Wider cards separate the metric from its placements. Keeping the compact
+  // row below intact preserves the phone layout while long values stay whole.
+  if (layout.isExpanded) {
+    return (
+      <Surface radius={22} style={styles.expandedRankingCard}>
+        <View style={styles.expandedRankingHeading}>
+          {item.art.startsWith('http') ? (
+            <MobileWebImage imageUrl={item.art} style={styles.expandedRankingArt} />
+          ) : item.art === 'up' ? (
+            <ArrowUp color="#14A37F" size={28} />
+          ) : item.art === 'down' ? (
+            <ArrowDown color="#E35D4F" size={28} />
+          ) : (
+            <Trophy color={theme.primary} size={28} />
+          )}
+          <CKText role="rowTitle" style={styles.expandedRankingTitle}>
+            {item.title}
+          </CKText>
+        </View>
+        <CKText
+          role="titleLarge"
+          style={styles.expandedRankingValue}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.7}
+        >
+          {item.value.toLocaleString(toIntlLocale(locale))}
+        </CKText>
+        <View style={styles.expandedRankingPlacements}>
+          {item.globalRank !== null ? (
+            <ExpandedRank
+              label={t('statsWorld')}
+              icon={<Globe2 size={20} color={theme.onSurfaceVariant} />}
+              value={item.globalRank}
+            />
+          ) : null}
+          {item.localRank !== null && countryCode ? (
+            <ExpandedRank
+              label={t('legendsCountryTitle')}
+              icon={
+                <MobileWebImage
+                  imageUrl={ImageAssets.flag(countryCode)}
+                  style={styles.expandedFlag}
+                />
+              }
+              value={item.localRank}
+            />
+          ) : null}
+        </View>
+      </Surface>
+    );
+  }
   return (
     <Surface radius={18} style={styles.rankingCard}>
       {item.art.startsWith('http') ? (
@@ -232,6 +257,30 @@ function RankingCard({ item, countryCode }: { item: Ranking; countryCode: string
     </Surface>
   );
 }
+function ExpandedRank({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+}) {
+  const { locale } = useI18n();
+  return (
+    <View style={styles.expandedRank}>
+      {icon}
+      <View style={styles.expandedRankText}>
+        <CKText muted role="metadata">
+          {label}
+        </CKText>
+        <CKText role="rowTitle" style={styles.expandedRankValue}>
+          #{value.toLocaleString(toIntlLocale(locale))}
+        </CKText>
+      </View>
+    </View>
+  );
+}
 function Rank({ icon, value }: { icon: React.ReactNode; value: number }) {
   const { locale } = useI18n();
   return (
@@ -251,7 +300,8 @@ export function ClanCwlHistoryTab({
 }) {
   const { t, locale } = useI18n();
   const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const [entries, setEntries] = useState<readonly CwlRankingHistoryEntry[]>();
   const [error, setError] = useState(false);
   const load = async () => {
@@ -323,7 +373,7 @@ export function ClanCwlHistoryTab({
   return (
     <View style={styles.tab}>
       {desktop ? (
-        <ResponsiveGrid minItemWidth={420} maxColumns={2} gap={10}>
+        <ResponsiveGrid minItemWidth={layout.isExpanded ? 300 : 420} maxColumns={2} gap={10}>
           {cards}
         </ResponsiveGrid>
       ) : (
@@ -477,6 +527,16 @@ const styles = StyleSheet.create({
   calendar: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   rankingCard: { minHeight: 62, padding: 10, flexDirection: 'row', alignItems: 'center', gap: 10 },
   rankingArt: { width: 28, height: 28, resizeMode: 'contain' },
+  expandedRankingCard: { padding: 18, gap: 16, borderWidth: 0 },
+  expandedRankingHeading: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  expandedRankingArt: { width: 32, height: 32, resizeMode: 'contain' },
+  expandedRankingTitle: { flex: 1, minWidth: 0 },
+  expandedRankingValue: { fontWeight: '800', fontVariant: ['tabular-nums'] },
+  expandedRankingPlacements: { flexDirection: 'row', flexWrap: 'wrap', gap: 20 },
+  expandedRank: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 112 },
+  expandedRankText: { gap: 2 },
+  expandedRankValue: { fontVariant: ['tabular-nums'] },
+  expandedFlag: { width: 20, height: 20 },
   rank: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8 },
   flag: { width: 17, height: 17 },
   cwlCard: { borderWidth: 0, overflow: 'hidden' },

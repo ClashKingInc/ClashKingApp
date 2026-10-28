@@ -935,6 +935,33 @@ function withAlternateIconAssets(config, projectRoot, contract) {
   ]);
 }
 
+function withNativeTabAssets(config, projectRoot) {
+  return withDangerousMod(config, [
+    'ios',
+    async (mod) => {
+      const source = requirePath(
+        projectRoot,
+        'assets/native-tabs/NativeTabs.xcassets',
+        'native tab icons',
+      );
+      const destination = path.join(
+        mod.modRequest.platformProjectRoot,
+        mod.modRequest.projectName,
+        'Images.xcassets',
+      );
+      // UIKit needs these synchronously when creating the Duo rail. Loading
+      // JavaScript image sources later can leave its items absent until rotation.
+      for (const name of ['Home', 'Players', 'Clans', 'War']) {
+        for (const suffix of ['', 'Selected']) {
+          const directory = `CKTab${name}${suffix}.imageset`;
+          copyTreeIfChanged(path.join(source, directory), path.join(destination, directory));
+        }
+      }
+      return mod;
+    },
+  ]);
+}
+
 const ANDROID_SPLASH_REQUIRED_FILES = [
   'res/drawable-mdpi/android12splash.png',
   'res/drawable-hdpi/android12splash.png',
@@ -1097,6 +1124,7 @@ function withClashKingNative(config, options = {}) {
   config = withAndroidAlternateIconAssets(config, projectRoot);
   config = withRNFirebaseCocoaPodsMode(config);
   config = withGeneratedIosPlatformPlist(config, contract);
+  config = withNativeTabAssets(config, projectRoot);
   if (options.stageAlternateIcons !== false) {
     config = withAlternateIconBuildSettings(config, contract);
     config = withAlternateIconAssets(config, projectRoot, contract);

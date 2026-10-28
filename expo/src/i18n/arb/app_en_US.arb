@@ -301,6 +301,20 @@
   "notificationPrimerAllow": "Allow",
   "achievementsTitle": "Achievements",
   "achievementEarnedLabel": "Earned",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
+  "@achievementGemsEarnedRatio": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
+  "@achievementGemsAccessibility": {
+    "placeholders": {
+      "earned": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
   "achievementSummary": "{earned}/{total} completed",
   "achievementEarnedCount": "Earned ×{count}",
   "achievementTownhall18Name": "Townhall 18",
@@ -2086,6 +2100,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Same Town Hall Only",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2960,7 +2975,6 @@
   "drawerFollowers": "Followers",
   "drawerFollowersHelp": "People who bookmarked one of your verified linked accounts.",
   "drawerCalculators": "Calculators",
-  "drawerSubscription": "Subscription",
   "drawerUpgradeTracker": "Upgrade Tracker",
   "drawerBasesArmies": "Bases & Armies",
   "drawerGameAssets": "Game Assets",
@@ -3086,7 +3100,6 @@
   "playerOptionNotificationsSubtitle": "Get alerts for this account.",
   "playerOptionNotificationsEnableMaster": "Turn on notifications in Settings first.",
   "playerOptionNotificationsVerifyFirst": "Verify this account to enable notifications.",
-  "playerOptionNotificationsSubscriptionRequired": "A subscription is required for bookmark notifications.",
   "playerOptionNotificationsLimitReached": "Your bookmark notification limit has been reached.",
   "playerOptionShowTodoPageTitle": "Show on to-do page",
   "playerOptionShowTodoPageSubtitle": "Include this account in the full to-do list.",

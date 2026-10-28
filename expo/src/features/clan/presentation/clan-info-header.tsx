@@ -1,3 +1,5 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { HeaderArtwork } from '../../../ui/header-artwork';
 import type { ViewInstance } from 'react-native';
@@ -67,7 +69,9 @@ export function ClanInfoHeader({
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const theme = useCKTheme();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const headerLayout = illustratedHeaderLayout(layout);
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const descriptionTriggerRef = useRef<ViewInstance>(null);
   const descriptionMeasureGeneration = useRef(0);
   const [descriptionVisible, setDescriptionVisible] = useState(false);
@@ -160,8 +164,47 @@ export function ClanInfoHeader({
         ]
       : []),
   ];
+  const quickStats = (
+    <View style={layout.isExpanded ? styles.expandedQuickStats : styles.quickStats}>
+      {layout.isExpanded
+        ? [...primaryStats, ...secondaryStats].map((stat) => (
+            <ProfileStatChip
+              key={`${stat.label}:${stat.value}`}
+              label={stat.label}
+              value={stat.value}
+              icon={stat.image}
+              iconElement={stat.iconElement}
+            />
+          ))
+        : [primaryStats, secondaryStats].map((stats, index) => (
+            <View key={index} style={styles.quickStatRow}>
+              {stats.map((stat) => (
+                <ProfileStatChip
+                  key={`${stat.label}:${stat.value}`}
+                  label={stat.label}
+                  value={stat.value}
+                  icon={stat.image}
+                  iconElement={stat.iconElement}
+                />
+              ))}
+            </View>
+          ))}
+    </View>
+  );
   return (
-    <View testID="clan-header-hero" style={styles.hero}>
+    <View
+      testID="clan-header-hero"
+      style={[
+        styles.hero,
+        layout.isExpanded && {
+          // Let the negative safe-area margins expand the artwork on both sides.
+          width: 'auto',
+          marginLeft: -insets.left,
+          marginRight: -insets.right,
+          minHeight: headerLayout.minHeight + insets.top,
+        },
+      ]}
+    >
       <View testID="clan-header-backdrop" pointerEvents="none" style={StyleSheet.absoluteFill}>
         <HeaderArtwork
           testID="clan-header-background-image"
@@ -173,9 +216,19 @@ export function ClanInfoHeader({
           contentPosition="center"
         />
         {/* Keep artwork subdued and finish the fade behind the final chip row. */}
-        <HeroHeaderScrim variant="clan" />
+        <HeroHeaderScrim variant="clan" clipRailInset={layout.isExpanded} />
       </View>
-      <View style={[styles.actions, { paddingTop: insets.top }, desktop && styles.desktopActions]}>
+      <View
+        style={[
+          styles.actions,
+          { paddingTop: insets.top },
+          desktop && styles.desktopActions,
+          layout.isExpanded && {
+            paddingLeft: headerLayout.horizontal + insets.left,
+            paddingRight: headerLayout.horizontal + insets.right,
+          },
+        ]}
+      >
         <ProfileHeaderAction
           label={materialBackLabel(locale)}
           onPress={actions.goBack}
@@ -213,6 +266,7 @@ export function ClanInfoHeader({
             ) : null}
             <ProfileHeaderAction
               label={t('gameAssetsShare')}
+              appLinkShare
               onPress={() =>
                 void sharePageLink(
                   { kind: 'clan', tag: clan.tag, params: { tab: selectedTab } },
@@ -237,17 +291,44 @@ export function ClanInfoHeader({
         ) : null}
       </View>
       <SkeletonContent loading={loading} style={{ display: 'contents' }}>
-        <View style={[styles.body, desktop ? styles.desktopBody : styles.mobileBody]}>
-          <View style={[styles.identity, desktop && styles.desktopIdentity]}>
+        <View
+          style={[
+            styles.body,
+            desktop ? styles.desktopBody : styles.mobileBody,
+            layout.isExpanded && {
+              maxWidth: layout.contentMaxWidth + insets.left + insets.right,
+              gap: headerLayout.gap,
+              paddingLeft: headerLayout.horizontal + insets.left,
+              paddingRight: headerLayout.horizontal + insets.right,
+              minHeight: headerLayout.bodyMinHeight,
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.identity,
+              desktop && styles.desktopIdentity,
+              layout.isExpanded && { flex: 1, minWidth: 0, justifyContent: 'flex-start' },
+            ]}
+          >
             <ClanSpringTarget part="badge">
               <MobileWebImage
                 imageUrl={clan.badgeUrls.smallest}
                 cachePolicy="memory-disk"
                 transition={0}
-                style={[styles.badge, desktop && styles.desktopBadge]}
+                style={[
+                  styles.badge,
+                  desktop && styles.desktopBadge,
+                  layout.isExpanded && { width: headerLayout.image, height: headerLayout.image },
+                ]}
               />
             </ClanSpringTarget>
-            <View style={desktop ? styles.desktopIdentityCopy : styles.centered}>
+            <View
+              style={[
+                desktop ? styles.desktopIdentityCopy : styles.centered,
+                layout.isExpanded && { marginLeft: headerLayout.gap, maxWidth: 360 },
+              ]}
+            >
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={`${clan.name}. ${t('generalCopiedToClipboard')}`}
@@ -255,7 +336,16 @@ export function ClanInfoHeader({
                 onPress={copyClanTag}
               >
                 <ClanSpringTarget part="name">
-                  <CKText numberOfLines={1} style={styles.name}>
+                  <CKText
+                    numberOfLines={1}
+                    style={[
+                      styles.name,
+                      layout.isExpanded && {
+                        fontSize: headerLayout.title,
+                        lineHeight: headerLayout.titleLine,
+                      },
+                    ]}
+                  >
                     {clan.name}
                   </CKText>
                 </ClanSpringTarget>
@@ -305,7 +395,7 @@ export function ClanInfoHeader({
               </View>
             </View>
           </View>
-          <View style={styles.stats}>
+          <View style={[styles.stats, layout.isExpanded && styles.expandedStats]}>
             <View style={styles.leagues}>
               <LeagueTile
                 leagueName={warLeagueLabel.replace(' League', '')}
@@ -325,23 +415,20 @@ export function ClanInfoHeader({
                 onPress={() => actions.openCapital(clan)}
               />
             </View>
-            <View style={styles.quickStats}>
-              {[primaryStats, secondaryStats].map((stats, index) => (
-                <View key={index} style={styles.quickStatRow}>
-                  {stats.map((stat) => (
-                    <ProfileStatChip
-                      key={`${stat.label}:${stat.value}`}
-                      label={stat.label}
-                      value={stat.value}
-                      icon={stat.image}
-                      iconElement={stat.iconElement}
-                    />
-                  ))}
-                </View>
-              ))}
-            </View>
+            {layout.isExpanded ? null : quickStats}
           </View>
         </View>
+        {layout.isExpanded ? (
+          <View
+            style={{
+              paddingLeft: insets.left + headerLayout.horizontal,
+              paddingRight: insets.right + headerLayout.horizontal,
+              paddingBottom: headerLayout.bottom,
+            }}
+          >
+            {quickStats}
+          </View>
+        ) : null}
       </SkeletonContent>
       <Modal
         supportedOrientations={modalOrientations}
@@ -402,6 +489,7 @@ function LeagueTile({
   onPress?: () => void;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <Pressable
       accessibilityRole={onPress ? 'button' : undefined}
@@ -410,10 +498,17 @@ function LeagueTile({
       disabled={!onPress}
       style={styles.leaguePressable}
     >
-      <PillSurface testID="clan-header-league-surface" style={styles.leagueTile}>
+      <PillSurface
+        testID="clan-header-league-surface"
+        style={[styles.leagueTile, layout.isExpanded && { height: undefined, minHeight: 76 }]}
+      >
         <MobileWebImage imageUrl={imageUrl} style={styles.leagueImage} />
         <View style={styles.leagueCopy}>
-          <CKText role="bodyMedium" numberOfLines={1} style={styles.leagueName}>
+          <CKText
+            role="bodyMedium"
+            numberOfLines={layout.isExpanded ? 2 : 1}
+            style={styles.leagueName}
+          >
             {leagueName}
           </CKText>
           <View style={styles.leagueSubtitle}>
@@ -504,6 +599,14 @@ const styles = StyleSheet.create({
   tooltipContent: { paddingVertical: 16, paddingLeft: 16, paddingRight: 48 },
   tooltipText: { color: '#FFF', fontSize: 14, lineHeight: 20 },
   stats: { flex: 6, paddingTop: 11, paddingHorizontal: 16, paddingBottom: 0 },
+  expandedStats: {
+    flex: 0,
+    width: '44%',
+    maxWidth: 460,
+    paddingTop: 0,
+    paddingLeft: 0,
+    paddingRight: 8,
+  },
   leagues: { flexDirection: 'row', gap: 8 },
   leaguePressable: { flex: 1 },
   leagueTile: {
@@ -522,6 +625,13 @@ const styles = StyleSheet.create({
   quickStats: {
     marginTop: 8,
     gap: 8,
+  },
+  expandedQuickStats: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 7,
+    justifyContent: 'center',
+    marginTop: 10,
   },
   quickStatRow: {
     flexDirection: 'row',

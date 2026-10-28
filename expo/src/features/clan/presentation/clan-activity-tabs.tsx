@@ -1,3 +1,12 @@
+import { ClanAdaptiveCards ,
+  ClanFilterBar,
+  ClanTabEmpty,
+  FilterPill,
+  SummaryChip,
+  SummaryRail,
+  relativeClanEventTime,
+} from './clan-tab-components';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
@@ -32,14 +41,6 @@ import {
 } from '../models';
 import { relativeWarTime } from '../../war/presentation/presentation-utils';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import {
-  ClanFilterBar,
-  ClanTabEmpty,
-  FilterPill,
-  SummaryChip,
-  SummaryRail,
-  relativeClanEventTime,
-} from './clan-tab-components';
 
 type WarLogFilter =
   | 'newest'
@@ -115,7 +116,8 @@ export function ClanJoinLeaveTab({
   const { t } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const [movement, setMovement] = useState<'all' | 'joined' | 'left'>('all');
   const [data, setData] = useState<ClanJoinLeave | null>(model.clan.joinLeave);
   const [loading, setLoading] = useState(data === null);
@@ -222,7 +224,11 @@ export function ClanJoinLeaveTab({
           }
         />
       ) : desktop ? (
-        <ResponsiveGrid minItemWidth={340} maxColumns={3} gap={10}>
+        <ResponsiveGrid
+          minItemWidth={layout.isExpanded ? 300 : 340}
+          maxColumns={layout.isExpanded ? layout.columns(300, 3) : 3}
+          gap={10}
+        >
           {cards}
         </ResponsiveGrid>
       ) : (
@@ -424,22 +430,24 @@ export function ClanWarLogTab({
         <ClanTabEmpty title={t('generalNoDataAvailable')} />
       ) : (
         <View style={styles.list}>
-          {items.map((item) => {
-            const war = log?.wars.find(
-              (candidate) =>
-                candidate.endTime?.getTime() === item.endTime.getTime() &&
-                (candidate.clan?.tag === item.opponent.tag ||
-                  candidate.opponent?.tag === item.opponent.tag),
-            );
-            return (
-              <WarLogCard
-                key={`${item.endTime.toISOString()}:${item.opponent.tag}`}
-                item={item}
-                clanTag={model.clan.tag}
-                onPress={war ? () => actions.openHistoricalWar(war) : undefined}
-              />
-            );
-          })}
+          <ClanAdaptiveCards>
+            {items.map((item) => {
+              const war = log?.wars.find(
+                (candidate) =>
+                  candidate.endTime?.getTime() === item.endTime.getTime() &&
+                  (candidate.clan?.tag === item.opponent.tag ||
+                    candidate.opponent?.tag === item.opponent.tag),
+              );
+              return (
+                <WarLogCard
+                  key={`${item.endTime.toISOString()}:${item.opponent.tag}`}
+                  item={item}
+                  clanTag={model.clan.tag}
+                  onPress={war ? () => actions.openHistoricalWar(war) : undefined}
+                />
+              );
+            })}
+          </ClanAdaptiveCards>
         </View>
       )}
       <SelectionPickerModal

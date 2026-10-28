@@ -1,6 +1,8 @@
+import { ResponsiveGrid } from '../../../ui/responsive-grid';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { ClanAdaptiveCards, FilterPill } from './clan-tab-components';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { Filter, Search, X } from 'lucide-react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { canonicalTag } from '../../../core/domain/tags';
@@ -8,10 +10,8 @@ import { useI18n } from '../../../i18n';
 import {
   CKText,
   EmptyState,
-  GlassControlSurface,
   SkeletonContent,
   MobileWebImage,
-  SearchField,
   SelectionPicker,
   Surface,
   colorWithAlpha,
@@ -22,7 +22,6 @@ import type { ClanWarStats } from '../models';
 import { ClanWarStatsFilter } from '../models/clan-war-stats-filter';
 import { warHistoryRangeFilter, type WarHistoryRange } from '../../war/models/war-history-range';
 import { WarRangePicker } from '../../war/presentation/war-range-picker';
-import { FilterPill } from './clan-tab-components';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
 
 type WarType = 'cwl' | 'random' | 'friendly';
@@ -37,7 +36,7 @@ export function ClanStatisticsTab({
   actions: ClanInfoPresentationActions;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const clan = model.clan;
   const requestId = useRef(0);
   const [stats, setStats] = useState<ClanWarStats | null>(clan.clanWarStats);
@@ -48,9 +47,6 @@ export function ClanStatisticsTab({
   const [currentOnly, setCurrentOnly] = useState(true);
   const [types, setTypes] = useState<readonly WarType[]>(ALL_TYPES);
   const [sort, setSort] = useState<SortKey>('hitrate');
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState('');
 
   useEffect(() => {
     if (clan.clanWarStats?.players.length) return;
@@ -129,11 +125,7 @@ export function ClanStatisticsTab({
         }),
     [stats, currentOnly, memberTags, selectedTypes, sort],
   );
-  const shown = attackers
-    .map((item, index) => ({ ...item, rank: index + 1 }))
-    .filter(({ player }) =>
-      `${player.name} ${player.tag}`.toLowerCase().includes(query.trim().toLowerCase()),
-    );
+  const rankedAttackers = attackers.map((item, index) => ({ ...item, rank: index + 1 }));
   const attacks = attackers.reduce((sum, { value }) => sum + value.totalAttacks, 0);
   const triples = attackers.reduce((sum, { value }) => sum + (value.starsCount['3'] ?? 0), 0);
   const missed = attackers.reduce((sum, { value }) => sum + value.missedAttacks, 0);
@@ -155,89 +147,90 @@ export function ClanStatisticsTab({
           : current
         : [...current, type],
     );
+  const sortControl = (
+    <View style={styles.dropdown} testID="clan-war-stats-sort-control">
+      <SelectionPicker
+        accessibilityLabel={t('statsSortBy')}
+        title={t('statsSortBy')}
+        options={[
+          { key: 'hitrate', label: t('legendsHitrate') },
+          { key: 'stars', label: t('warStarsAverage') },
+          { key: 'missed', label: t('warAttacksMissedShort') },
+        ]}
+        selectedKey={sort}
+        onSelect={setSort}
+      />
+    </View>
+  );
 
   return (
     <View style={styles.tab}>
+      {loading || stats ? (
+        <SkeletonContent loading={loading && !stats}>
+          <Surface radius={22} style={styles.overview} testID="clan-war-stats-overview">
+            <Metric
+              value={loading && !stats ? '100.0%' : `${hitrate.toFixed(1)}%`}
+              label={t('legendsHitrate')}
+            />
+            <Metric
+              value={loading && !stats ? '3.00' : averageStars.toFixed(2)}
+              label={t('warStarsAverage')}
+            />
+            <Metric
+              value={loading && !stats ? '10' : String(missed)}
+              label={t('warAttacksMissedShort')}
+            />
+          </Surface>
+        </SkeletonContent>
+      ) : null}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.filters}
+        testID="clan-war-stats-advanced-filters"
+      >
+        <FilterPill
+          label={t('warStatsCurrentMembers')}
+          imageUrl={ImageAssets.clanCastle}
+          selected={currentOnly}
+          onPress={() => setCurrentOnly((value) => !value)}
+        />
+        <FilterPill
+          label={t('warStatsSameTownHall')}
+          imageUrl={ImageAssets.townHall(1)}
+          selected={sameTownHall}
+          onPress={() => {
+            setSameTownHall((value) => !value);
+            void load(range, !sameTownHall);
+          }}
+        />
+        <FilterPill
+          label={t('cwlTitle')}
+          imageUrl={ImageAssets.cwlSwordsNoBorder}
+          selected={types.includes('cwl')}
+          onPress={() => toggleType('cwl')}
+        />
+        <FilterPill
+          label={t('warFiltersRandom')}
+          imageUrl={ImageAssets.sword}
+          selected={types.includes('random')}
+          onPress={() => toggleType('random')}
+        />
+        <FilterPill
+          label={t('warFiltersFriendly')}
+          imageUrl={ImageAssets.warClan}
+          selected={types.includes('friendly')}
+          onPress={() => toggleType('friendly')}
+        />
+      </ScrollView>
       <View style={styles.toolbar}>
-        <View style={styles.grow}>
+        <View style={styles.dropdown}>
           <WarRangePicker value={range} onChange={changeRange} />
         </View>
-        <IconButton
-          label={t('warStatsSearchPlaceholder')}
-          testID="clan-war-stats-search-trigger"
-          expanded={searchOpen}
-          onPress={() => setSearchOpen((value) => !value)}
-          icon={<Search size={19} color={theme.onSurface} />}
-        />
-        <IconButton
-          label={t('generalFilters')}
-          testID="clan-war-stats-filter-trigger"
-          expanded={filtersOpen}
-          onPress={() => setFiltersOpen((value) => !value)}
-          icon={<Filter size={19} color={theme.onSurface} />}
-        />
+        {sortControl}
       </View>
-      {searchOpen ? (
-        <View style={styles.toolbar}>
-          <SearchField
-            value={query}
-            onChangeText={setQuery}
-            placeholder={t('warStatsSearchPlaceholder')}
-            style={styles.grow}
-          />
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('generalClearSearch')}
-            onPress={() => {
-              setQuery('');
-              setSearchOpen(false);
-            }}
-            style={styles.iconButton}
-          >
-            <X size={20} color={theme.onSurfaceVariant} />
-          </Pressable>
-        </View>
-      ) : null}
-      {filtersOpen ? (
-        <View testID="clan-war-stats-advanced-filters" style={styles.filters}>
-          <FilterPill
-            label={t('warStatsCurrentMembers')}
-            selected={currentOnly}
-            onPress={() => setCurrentOnly((value) => !value)}
-          />
-          <FilterPill
-            label={t('filtersSameTownHallOnly')}
-            selected={sameTownHall}
-            onPress={() => {
-              setSameTownHall((value) => !value);
-              void load(range, !sameTownHall);
-            }}
-          />
-          <FilterPill
-            label={t('cwlTitle')}
-            imageUrl={ImageAssets.cwlSwordsNoBorder}
-            selected={types.includes('cwl')}
-            onPress={() => toggleType('cwl')}
-          />
-          <FilterPill
-            label={t('warFiltersRandom')}
-            selected={types.includes('random')}
-            onPress={() => toggleType('random')}
-          />
-          <FilterPill
-            label={t('warFiltersFriendly')}
-            selected={types.includes('friendly')}
-            onPress={() => toggleType('friendly')}
-          />
-        </View>
-      ) : null}
       {loading && !stats ? (
         <SkeletonContent loading style={{ gap: 12 }}>
-          <Surface radius={22} style={styles.overview}>
-            <Metric value="100.0%" label={t('legendsHitrate')} />
-            <Metric value="3.00" label={t('warStarsAverage')} />
-            <Metric value="10" label={t('warAttacksMissedShort')} />
-          </Surface>
           <View style={styles.list}>
             {(clan.memberList.length
               ? clan.memberList.slice(0, 3)
@@ -273,73 +266,32 @@ export function ClanStatisticsTab({
       ) : !stats || !attackers.length ? (
         <EmptyState title={t('generalNoDataAvailable')} />
       ) : (
-        <>
-          <Surface radius={22} style={styles.overview} testID="clan-war-stats-overview">
-            <Metric value={`${hitrate.toFixed(1)}%`} label={t('legendsHitrate')} />
-            <Metric value={averageStars.toFixed(2)} label={t('warStarsAverage')} />
-            <Metric value={String(missed)} label={t('warAttacksMissedShort')} />
-          </Surface>
-          <View style={styles.sortRow}>
-            <View style={styles.sortPicker} testID="clan-war-stats-sort-control">
-              <SelectionPicker
-                accessibilityLabel={t('statsSortBy')}
-                title={t('statsSortBy')}
-                options={[
-                  { key: 'hitrate', label: t('legendsHitrate') },
-                  { key: 'stars', label: t('warStarsAverage') },
-                  { key: 'missed', label: t('warAttacksMissedShort') },
-                ]}
-                selectedKey={sort}
-                onSelect={setSort}
-              />
-            </View>
-          </View>
-          <View style={styles.list}>
-            {shown.length ? (
-              shown.map((item) => (
+        <View style={layout.isExpanded ? styles.expandedResults : { display: 'contents' }}>
+          <View style={[styles.list, layout.isExpanded && { width: '100%' }]}>
+            <WarStatsCards>
+              {rankedAttackers.map((item) => (
                 <AttackerRow
                   key={item.player.tag}
                   item={item}
                   sort={sort}
                   linked={linkedTags.has(canonicalTag(item.player.tag))}
                 />
-              ))
-            ) : (
-              <EmptyState title={t('generalNoFilteredResults')} />
-            )}
+              ))}
+            </WarStatsCards>
           </View>
-        </>
+        </View>
       )}
     </View>
   );
 }
 
-function IconButton({
-  label,
-  testID,
-  expanded,
-  onPress,
-  icon,
-}: {
-  label: string;
-  testID: string;
-  expanded: boolean;
-  onPress: () => void;
-  icon: React.ReactNode;
-}) {
+function WarStatsCards({ children }: { children: React.ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded) return <ClanAdaptiveCards>{children}</ClanAdaptiveCards>;
   return (
-    <GlassControlSurface style={styles.control}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={label}
-        accessibilityState={{ expanded }}
-        testID={testID}
-        onPress={onPress}
-        style={styles.iconButton}
-      >
-        {icon}
-      </Pressable>
-    </GlassControlSurface>
+    <ResponsiveGrid minItemWidth={400} maxColumns={2} gap={14}>
+      {children}
+    </ResponsiveGrid>
   );
 }
 
@@ -365,12 +317,14 @@ function AttackerRow({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { player, value, hitrate, rank } = item;
   return (
     <Surface
       radius={20}
       style={[
         styles.attacker,
+        layout.isExpanded && styles.expandedAttacker,
         { borderColor: linked ? '#22A35AB3' : colorWithAlpha(theme.outlineVariant, 0.32) },
       ]}
       testID={`war-attacker-${canonicalTag(player.tag)}`}
@@ -419,14 +373,13 @@ const styles = StyleSheet.create({
   tab: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 28, gap: 14 },
   toolbar: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   grow: { flex: 1 },
-  control: { width: 44, height: 44 },
-  iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  filters: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  expandedResults: { gap: 18 },
+  expandedAttacker: { padding: 18, minHeight: 96 },
+  filters: { flexDirection: 'row', gap: 8 },
   loading: { minHeight: 200, alignItems: 'center', justifyContent: 'center' },
   overview: { flexDirection: 'row', paddingHorizontal: 8, paddingVertical: 16 },
   metric: { flex: 1, alignItems: 'center', gap: 4 },
-  sortRow: { flexDirection: 'row', justifyContent: 'flex-end' },
-  sortPicker: { width: 168, maxWidth: '100%' },
+  dropdown: { flex: 1, minWidth: 0 },
   list: { gap: 10 },
   attacker: { padding: 12 },
   playerLine: { flexDirection: 'row', alignItems: 'center', gap: 8 },
