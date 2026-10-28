@@ -259,6 +259,7 @@ function DrawerRoute({
     <DrawerAction
       icon={<RouteIcon route={route} color={theme.onSurface} size={compact ? 18 : 21} />}
       label={t(route.labelKey)}
+      badge={route.comingSoon ? t('generalComingSoon') : undefined}
       onPress={onPress}
       compact={compact}
       disabled={disabled}
@@ -275,6 +276,7 @@ function DrawerAction({
   disabled = false,
   isRtl = false,
   testID,
+  badge,
 }: {
   icon: ReactNode;
   label: string;
@@ -283,6 +285,7 @@ function DrawerAction({
   disabled?: boolean;
   isRtl?: boolean;
   testID?: string;
+  badge?: string;
 }) {
   return (
     <Pressable
@@ -307,6 +310,7 @@ function DrawerAction({
       >
         {label}
       </CKText>
+      {badge ? <CKText role="labelSmall" muted style={{ marginLeft: 'auto' }}>{badge}</CKText> : null}
     </Pressable>
   );
 }

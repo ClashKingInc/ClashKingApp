@@ -13,7 +13,7 @@ import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-na
 import { Trophy, UserRound } from 'lucide-react-native';
 
 import { ServersRoot, type DashboardServer } from '../../features/servers/servers-root';
-import { CompetitiveRoot } from '../../features/competitive/competitive-root';
+import { EsportsRoot } from '../../features/competitive/esports-root';
 import { ServerDashboardScreen } from '../../features/servers/server-dashboard-screen';
 import {
   managesDiscordServer,
@@ -110,6 +110,7 @@ import { isRouteEnabled } from '../../navigation/route-manifest';
 import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
 import { selectLegendsPlayer } from './legends-player-selection';
 import { tutorials } from '../../features/tutorials/tutorial-service';
+import { useStartupCovered } from './startup-loading';
 
 type ResolvedScene = {
   readonly linkParams?: AppLinkParams;
@@ -222,6 +223,12 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     presentation: announcementPresentation,
   } = useAnnouncementPresentation();
   const user = authState.currentUser;
+  const startupCovered = useStartupCovered();
+  const tutorialState = useSyncExternalStore(tutorials.subscribe, tutorials.getSnapshot, tutorials.getSnapshot);
+  const canAutoAnnounce = !startupCovered && tutorialState.ready && tutorialState.returningUser &&
+    tutorialState.userId === (user?.userId ?? null) && tutorialState.current === null;
+  const canAutoAnnounceRef = useRef(canAutoAnnounce);
+  useEffect(() => { canAutoAnnounceRef.current = canAutoAnnounce; }, [canAutoAnnounce]);
   useEffect(() => {
     void tutorials.bind(runtime.preferences, user?.userId ?? null);
     return () => {
@@ -254,7 +261,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   };
   const showUtility = useCallback(
     (route: AppRouteDefinition, playerTag?: string, initialParams: AppLinkParams = {}) => {
-      if (route.id === 'basesArmies' && !featureStateRef.current.bases_armies) return;
+      if (!isRouteEnabled(route, featureStateRef.current)) return;
       recordBrowserPath(
         appLinkPath({
           kind: 'page',
@@ -590,22 +597,25 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   }, [isHomeRouteCurrent]);
 
   useEffect(() => {
+    if (!canAutoAnnounce) return;
+    let active = true;
+    const canPresent = () => active && canAutoAnnounceRef.current && routeCurrent.current;
     const timer = setTimeout(() => {
       const controller = new AnnouncementOpeningController({
         platform: Platform.OS,
         featureEnabled: () => state.features[APP_FEATURE_FLAGS.homeAnnouncements] === true,
-        routeCurrent: () => routeCurrent.current,
+        routeCurrent: canPresent,
         openingAnnouncement: runtime.announcements.getActiveAnnouncement(),
         shouldPresent: (item) => runtime.announcementPresentation.shouldPresent(item),
         prepareStory: (item) => sharedAnnouncementStoryCache.prepare(item),
         presentStory: (item, preparedUri) =>
-          presentPreparedStory(item, preparedUri, () => routeCurrent.current),
+          presentPreparedStory(item, preparedUri, canPresent),
         markDismissed: (item) => runtime.announcementPresentation.markDismissed(item),
       });
       void controller.tryPresent();
     }, 0);
-    return () => clearTimeout(timer);
-  }, [presentPreparedStory, runtime, state.features]);
+    return () => { active = false; clearTimeout(timer); };
+  }, [canAutoAnnounce, presentPreparedStory, runtime, state.features]);
 
   useEffect(
     () =>
@@ -841,15 +851,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     if (route === 'posts')
       return <PostsRoot initialPostId={utilityPostId} onBack={closeSecondary} />;
     if (route === 'achievements') return <AchievementsRoot onBack={closeSecondary} />;
-    if (route === 'tournaments' || route === 'profile' || route === 'esports')
-      return (
-        <CompetitiveRoot
-          key={route}
-          initial={route}
-          onBack={closeSecondary}
-          onManageAccounts={() => pushUtility('accounts')}
-        />
-      );
+    if (route === 'esports') return <EsportsRoot onBack={closeSecondary} />;
     if (route === 'search')
       return (
         <SearchRoot

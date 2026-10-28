@@ -18,8 +18,6 @@ export function generateStaticParams() {
     'settings',
     'achievements',
     'esports',
-    'tournaments',
-    'profile',
     'settings/faq',
     'settings/privacy',
     'settings/translation',

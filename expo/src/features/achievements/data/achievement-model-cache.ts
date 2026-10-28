@@ -2,7 +2,6 @@ import { Asset } from 'expo-asset';
 import { File } from 'expo-file-system';
 import { Platform } from 'react-native';
 
-export const BUNDLED_TOURNAMENT_MODEL = 'bundled:first_tournament';
 
 export interface AchievementModelCacheOptions {
   readonly fetchImplementation?: typeof fetch;
@@ -41,15 +40,11 @@ export class AchievementModelCache {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.timeoutMs);
     try {
-      if (url === BUNDLED_TOURNAMENT_MODEL || url === 'derived:verified_accounts') {
+      if (url === 'derived:verified_accounts') {
         const asset = Asset.fromModule(
-          url === 'derived:verified_accounts'
-            ? // Bundle the selected verified-icon relief directly. Keep this a
-              // static require so Metro includes its self-contained geometry.
-              // eslint-disable-next-line @typescript-eslint/no-require-imports
-              require('../../../../assets/clashking/achievements/verified-accounts.glb')
-            : // eslint-disable-next-line @typescript-eslint/no-require-imports
-              require('../../../../assets/clashking/achievements/tournament-debut.glb'),
+          // Keep the verified badge bundled independently of future tournaments.
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          require('../../../../assets/clashking/achievements/verified-accounts.glb'),
         );
         // The browser receives Metro's asset path through the app's HTTPS
         // proxy. Avoid downloadAsync here: its URI can retain the HTTP Metro

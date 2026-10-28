@@ -22,10 +22,8 @@ import {
   Languages,
   LogOut,
   MessageSquareText,
-  Moon,
   SunMoon,
   Shield,
-  Sun,
   Languages as TranslateIcon,
   UserRound,
 } from 'lucide-react-native';
@@ -38,17 +36,17 @@ import {
   Surface,
   ckRadius,
   ckSpacing,
-  colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
 import type { SettingsPresentationActions, SettingsThemeMode, SettingsUser } from './contracts';
 import {
-  ChoiceDialog,
   SettingsPage,
   SettingsSection,
   SettingsTile,
   SettingsColumns,
 } from './settings-components';
+import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
+import { SelectionPickerModal } from '../../../ui/selection-picker';
 import { tutorialCopy } from '../../tutorials/tutorial-copy';
 
 export type SettingsAppIconChoice = {
@@ -95,24 +93,18 @@ export function SettingsScreen({
   viewportWidth?: number;
   platform?: string;
 }) {
-  const { t } = useI18n();
+  const { t, isRtl } = useI18n();
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
   const measured = useWindowDimensions().width;
   const desktop = isDesktopSettings(platform, viewportWidth ?? measured);
   const [dialog, setDialog] = useState<
-    'language' | 'theme' | 'icon' | 'logout' | 'tutorial-reset'
+    'language' | 'icon' | 'logout' | 'tutorial-reset'
   >();
   const [busy, setBusy] = useState(false);
   const [snackbar, setSnackbar] = useState<string>();
   const iconColor = theme.onSurface;
-  const themeLabel =
-    themeMode === 'system'
-      ? t('settingsThemeSystem')
-      : themeMode === 'light'
-        ? t('settingsThemeLight')
-        : t('settingsThemeDark');
   const selectedLocale = systemLanguage
     ? 'system'
     : (localeChoices.find(({ locale }) => locale === currentLocale)?.locale ??
@@ -152,8 +144,21 @@ export function SettingsScreen({
             <SettingsTile
               icon={<SunMoon color={iconColor} />}
               title={t('settingsToggleTheme')}
-              trailing={themeLabel}
-              onPress={() => setDialog('theme')}
+              showChevron={false}
+              trailing={
+                <SlidingSegmentControl<SettingsThemeMode>
+                  value={themeMode}
+                  options={[
+                    { value: 'light', label: t('settingsThemeLight') },
+                    { value: 'dark', label: t('settingsThemeDark') },
+                    { value: 'system', label: t('settingsThemeSystem') },
+                  ]}
+                  isRtl={isRtl}
+                  style={{ width: 210, maxWidth: '100%' }}
+                  onChange={(mode) => void actions.changeTheme(mode).catch((error: unknown) =>
+                    setSnackbar(error instanceof Error ? error.message : String(error)))}
+                />
+              }
             />
             {actions.resetTutorials ? (
               <SettingsTile
@@ -271,78 +276,23 @@ export function SettingsScreen({
       <SettingsPage title={t('generalSettings')} onBack={onBack} wide>
         {body}
       </SettingsPage>
-      <ChoiceDialog
+      <SelectionPickerModal
         visible={dialog === 'language'}
         title={t('settingsLanguage')}
-        subtitle={t('settingsSelectLanguage')}
-        heightFactor={0.82}
-        choices={[
-          {
-            value: 'system',
-            label: t('settingsThemeSystem'),
-            icon: <Languages color={theme.onSurfaceVariant} size={20} />,
-          },
+        options={[
+          { key: 'system', label: t('settingsThemeSystem'), icon: <Languages color={theme.onSurfaceVariant} size={20} /> },
           ...localeChoices.map(({ locale, label, flagUrl }) => ({
-            value: locale,
-            label,
-            icon: (
-              <MobileWebImage
-                imageUrl={flagUrl}
-                contentFit="cover"
-                errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />}
-                style={styles.flag}
-              />
-            ),
+            key: locale, label,
+            icon: <MobileWebImage imageUrl={flagUrl} contentFit="cover"
+              errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />} style={styles.flag} />,
           })),
         ]}
-        selected={selectedLocale}
-        onSelect={(locale) => void actions.changeLocale(locale)}
-        onClose={() => setDialog(undefined)}
-      />
-      <ChoiceDialog
-        visible={dialog === 'theme'}
-        title={t('settingsAppearance')}
-        choices={[
-          {
-            value: 'system',
-            label: t('settingsThemeSystem'),
-            subtitle: t('settingsThemeMatchDevice'),
-            icon: (
-              <ChoiceIcon selected={themeMode === 'system'}>
-                <SunMoon
-                  color={themeMode === 'system' ? theme.primary : theme.onSurfaceVariant}
-                  size={21}
-                />
-              </ChoiceIcon>
-            ),
-          },
-          {
-            value: 'light',
-            label: t('settingsThemeLight'),
-            icon: (
-              <ChoiceIcon selected={themeMode === 'light'}>
-                <Sun
-                  color={themeMode === 'light' ? theme.primary : theme.onSurfaceVariant}
-                  size={21}
-                />
-              </ChoiceIcon>
-            ),
-          },
-          {
-            value: 'dark',
-            label: t('settingsThemeDark'),
-            icon: (
-              <ChoiceIcon selected={themeMode === 'dark'}>
-                <Moon
-                  color={themeMode === 'dark' ? theme.primary : theme.onSurfaceVariant}
-                  size={21}
-                />
-              </ChoiceIcon>
-            ),
-          },
-        ]}
-        selected={themeMode}
-        onSelect={(mode) => void actions.changeTheme(mode)}
+        selectedKey={selectedLocale}
+        onSelect={(locale) => {
+          setDialog(undefined);
+          void actions.changeLocale(locale).catch((error: unknown) =>
+            setSnackbar(error instanceof Error ? error.message : String(error)));
+        }}
         onClose={() => setDialog(undefined)}
       />
       <AppIconDialog
@@ -406,21 +356,6 @@ export function SettingsScreen({
         </Pressable>
       ) : null}
     </>
-  );
-}
-
-function ChoiceIcon({ selected, children }: { selected: boolean; children: React.ReactNode }) {
-  const theme = useCKTheme();
-  const color = selected ? theme.primary : theme.onSurfaceVariant;
-  return (
-    <View
-      style={[
-        styles.choiceIcon,
-        { backgroundColor: colorWithAlpha(color, selected ? 0.12 : 0.08) },
-      ]}
-    >
-      {children}
-    </View>
   );
 }
 

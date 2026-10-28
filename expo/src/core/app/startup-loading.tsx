@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useI18n } from '../../i18n';
@@ -9,6 +9,9 @@ import { StartupBrand } from './startup-brand';
 import { StartupHalloweenBrand } from './startup-halloween-brand';
 import { useAppRuntime } from './runtime-context';
 import { HALLOWEEN_ICON_NAME } from '../../features/settings/app-icons/app-icon-service';
+
+const StartupCoveredContext = createContext(true);
+export const useStartupCovered = () => useContext(StartupCoveredContext);
 
 /** Mount Home underneath the same splash so its requests settle before it is revealed. */
 export function StartupHandoff({ loading, children }: { loading: boolean; children: ReactNode }) {
@@ -22,7 +25,7 @@ export function StartupHandoff({ loading, children }: { loading: boolean; childr
         importantForAccessibility={covered ? 'no-hide-descendants' : 'auto'}
         pointerEvents={covered ? 'none' : 'auto'}
       >
-        {children}
+        <StartupCoveredContext.Provider value={covered}>{children}</StartupCoveredContext.Provider>
       </View>
       {covered ? (
         <View

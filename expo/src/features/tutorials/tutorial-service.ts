@@ -63,11 +63,11 @@ export const tutorialSteps: Record<TutorialId, readonly TutorialStep[]> = {
   clanGuide: [],
 };
 type Target = { reveal: () => void };
-type Snapshot = { current: TutorialId | null; step: number; revision: number; ready: boolean };
+type Snapshot = { current: TutorialId | null; step: number; revision: number; ready: boolean; returningUser: boolean; userId: string | null };
 
 /** Local, per-login discovery state. It never modifies accounts or notification preferences. */
 class TutorialService {
-  private state: Snapshot = { current: null, step: 0, revision: 0, ready: false };
+  private state: Snapshot = { current: null, step: 0, revision: 0, ready: false, returningUser: false, userId: null };
   private listeners = new Set<() => void>();
   private completed = new Set<TutorialId>();
   private pending = new Set<TutorialId>();
@@ -96,7 +96,7 @@ class TutorialService {
     this.completed.clear();
     this.pending.clear();
     this.homeLoaded = false;
-    this.publish({ current: null, step: 0, ready: false });
+    this.publish({ current: null, step: 0, ready: false, returningUser: false, userId });
     if (!key) return;
     let saved: unknown;
     try {
@@ -108,7 +108,9 @@ class TutorialService {
     if (Array.isArray(saved))
       for (const id of saved)
         if (typeof id === 'string' && id in tutorialSteps) this.completed.add(id as TutorialId);
-    this.publish({ ready: true });
+    // Capture eligibility at session start. Completing or skipping onboarding
+    // must not immediately replace the tour with a release announcement.
+    this.publish({ ready: true, returningUser: this.completed.has('welcome') });
     this.startPending();
   }
   private persist() {
@@ -157,6 +159,12 @@ class TutorialService {
     action?.();
   };
   dismiss = () => {
+    // Welcome and Notifications form one onboarding flow. Skip must persist
+    // for both, including a Notifications screen opened manually later.
+    if (this.state.current === 'welcome') {
+      this.completed.add('notifications');
+      this.pending.delete('notifications');
+    }
     this.finish();
   };
   finish = () => {
@@ -184,7 +192,7 @@ class TutorialService {
   reset = async () => {
     this.completed.clear();
     this.pending.clear();
-    this.publish({ current: null, step: 0 });
+    this.publish({ current: null, step: 0, returningUser: false });
     this.persist();
     await this.writes;
   };

@@ -1,123 +1,6 @@
 import { Platform } from 'react-native';
 import type { AppRuntime } from '../../core/app/runtime';
 
-export interface CompetitiveTeam {
-  id: string;
-  clanTag: string;
-  clanName: string;
-  size: number;
-  archived: boolean;
-  members: {
-    playerTag: string;
-    name: string;
-    profile: { userId: string; displayName: string; avatarUrl?: string } | null;
-  }[];
-}
-export interface CompetitiveProfile {
-  userId: string;
-  displayName: string;
-  verifiedAccountCount?: number;
-  avatarUrl: string | null;
-  discordAvatarUrl?: string | null;
-  bannerUrl: string | null;
-  private: boolean;
-  hideDiscord: boolean;
-  discordHandle?: string | null;
-  bio: string;
-  socials: Record<string, string>;
-  achievements: { id: string; playerTag: string; earnedAt: string }[];
-  tournamentHistory: {
-    id: string;
-    name: string;
-    format: string;
-    status: string;
-    startsAt: string;
-    endsAt: string;
-    teamId: string;
-    clanName: string;
-    clanTag: string;
-  }[];
-  tournamentStats?: null | {
-    attacks: number;
-    triples: number;
-    stars: number;
-    hitRatePercent: number | null;
-    averageDestruction: number | null;
-    averageDuration: number | null;
-    observedMatches: number;
-    totalCompletedMatches: number;
-  };
-  statsAvailability?: {
-    status: 'awaiting_observation' | 'partial' | 'available';
-    observedMatches: number;
-    totalCompletedMatches: number;
-  };
-  accounts: { tag: string; name: string; townHallLevel: number }[];
-  teams: {
-    id: string;
-    clanTag: string;
-    clanName: string;
-    size: number;
-    playerTag: string;
-    joinedAt: string;
-    leftAt: string | null;
-    acceptedAt?: string | null;
-  }[];
-}
-export interface Tournament {
-  id: string;
-  serverId: string;
-  name: string;
-  format: 'single_elimination' | 'double_elimination' | 'round_robin' | 'swiss' | 'elo';
-  teamSize: number;
-  startsAt: string;
-  endsAt: string;
-  status: string;
-  rules:
-    | string
-    | {
-        description: string;
-        minTownHall: number;
-        maxTownHall: number;
-        maxRosterSize: number;
-        prizeDescription?: string;
-        rulebookUrl?: string;
-        visibility?: 'public' | 'unlisted';
-      };
-}
-export interface TournamentDetail {
-  tournament: Tournament;
-  participants: {
-    teamId: string;
-    clanName?: string;
-    clanTag?: string;
-    status?: string;
-    rating?: number;
-    withdrawnAt?: string | null;
-    checkedInAt?: string | null;
-    roster?: { playerTag: string; name: string; townHallLevel: number }[];
-  }[];
-  matches: {
-    id: string;
-    status: string;
-    round?: number;
-    homeTeamId: string;
-    awayTeamId: string;
-    homeScore: number | null;
-    awayScore: number | null;
-    warId?: string | null;
-  }[];
-  standings: {
-    teamId: string;
-    played: number;
-    wins: number;
-    losses: number;
-    draws: number;
-    points: number;
-    elo: number;
-  }[];
-}
-
 interface RequestOptions {
   signal?: AbortSignal;
   force?: boolean;
@@ -131,7 +14,7 @@ interface ServiceState {
 // Runtime wrappers can change during React renders. The token service is the
 // stable owner; environment and session changes still discard every old read.
 const states = new WeakMap<AppRuntime['tokens'], ServiceState>();
-export function competitiveService(runtime: AppRuntime) {
+export function esportsService(runtime: AppRuntime) {
   let state = states.get(runtime.tokens);
   if (!state) {
     state = { scope: '', generation: 0, cache: new Map(), pending: new Map() };
@@ -164,9 +47,7 @@ export function competitiveService(runtime: AppRuntime) {
     }
     const key = `${publicRead ? 'public' : 'session'}:${path}`;
     const read = method === 'GET';
-    // CCN is public provider data. Profiles, linked accounts, team membership,
-    // and tournament visibility can change elsewhere, so only deduplicate
-    // their active requests and always revalidate subsequent reads.
+    // Cache only public CCN reads; authenticated requests always revalidate.
     const cacheable = read && publicRead && path.startsWith('/esports/');
     if (read && options.force) invalidate();
     const cached = shared.cache.get(key);

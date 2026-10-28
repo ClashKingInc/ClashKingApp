@@ -44,7 +44,7 @@ import { usePrimarySwipeGuard } from '../../ui/primary-swipe-guard';
 import { useCKAccessibility } from '../../ui/accessibility';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import { prefetchMobileImage } from '../../ui/mobile-web-image';
-import { competitiveService } from './competitive-service';
+import { esportsService } from './esports-service';
 import { COMPETITIVE_ESPORTS_COVER } from './competitive-artwork';
 
 type Response<T> = { source: string; fetchedAt: string; data: T | null };
@@ -127,12 +127,12 @@ type Upcoming = {
   }[];
 };
 type Scene =
-  { kind: 'ccnTeam'; id: string } | { kind: 'ccnPlayer'; tag: string } | { kind: 'tournaments' };
+  { kind: 'ccnTeam'; id: string } | { kind: 'ccnPlayer'; tag: string };
 
 function useCcn<T>(path: string | null) {
   const contentLoading = useSkeletonContent();
   const runtime = useAppRuntime();
-  const service = useMemo(() => competitiveService(runtime), [runtime]);
+  const service = useMemo(() => esportsService(runtime), [runtime]);
   const [revision, setRevision] = useState(0);
   const [state, setState] = useState<{
     path: string | null;
@@ -1040,7 +1040,7 @@ function PlayerPortrait({ tag, name, size = 52 }: { tag: string; name: string; s
 
 function useRosterPortraitWarmup(players: Team['players'] | undefined) {
   const runtime = useAppRuntime();
-  const service = useMemo(() => competitiveService(runtime), [runtime]);
+  const service = useMemo(() => esportsService(runtime), [runtime]);
   const tags = (players ?? []).map((player) => player.tag).join(',');
   useEffect(() => {
     let active = true;

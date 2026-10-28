@@ -34,7 +34,7 @@ export type AppRouteId =
   | 'achievements'
   | 'esports'
   | 'tournaments'
-  | 'profile';
+;
 
 export interface AppRouteDefinition {
   id: AppRouteId;
@@ -47,6 +47,7 @@ export interface AppRouteDefinition {
   mobileDrawer?: boolean;
   desktopSidebar?: boolean;
   visibleWhenDisabled?: boolean;
+  comingSoon?: boolean;
 }
 
 export type RouteIconName =
@@ -91,15 +92,9 @@ export const appRoutes = [
     id: 'tournaments',
     href: '/tournaments',
     labelKey: 'competitiveTournaments',
+    comingSoon: true,
+    visibleWhenDisabled: true,
     icon: 'swords',
-    mobileDrawer: true,
-    desktopSidebar: true,
-  },
-  {
-    id: 'profile',
-    href: '/profile',
-    labelKey: 'competitiveProfile',
-    icon: 'user-round',
     mobileDrawer: true,
     desktopSidebar: true,
   },
@@ -271,7 +266,6 @@ export const primaryTabRoutes = ['home', 'players', 'clans', 'war'].map(route);
 
 export const mobileDrawerHeaderActionRoutes = ['achievements', 'accounts'].map(route);
 export const mobileDrawerBodyRoutes = [
-  'profile',
   'posts',
   'esports',
   'tournaments',
@@ -286,7 +280,6 @@ export const mobileDrawerRoutes = [...mobileDrawerBodyRoutes, ...mobileDrawerFoo
 
 export const desktopHeaderActionRoutes = ['achievements', 'accounts'].map(route);
 export const desktopSidebarBodyRoutes = [
-  'profile',
   'posts',
   'tournaments',
   'rankings',
@@ -299,7 +292,7 @@ export const desktopSidebarFooterRoutes = ['settings'].map(route);
 export const desktopSidebarRoutes = [...desktopSidebarBodyRoutes, ...desktopSidebarFooterRoutes];
 
 export function isRouteEnabled(definition: AppRouteDefinition, features: FeatureState): boolean {
-  return definition.feature === undefined || features[definition.feature] === true;
+  return !definition.comingSoon && (definition.feature === undefined || features[definition.feature] === true);
 }
 
 export function filterEnabledRoutes<T extends AppRouteDefinition>(
