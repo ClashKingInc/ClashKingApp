@@ -43,12 +43,23 @@ export function LegendDayPerformanceSection({
   const [side, setSide] = useState<Side>('offense');
   const [view, setView] = useState<'distribution' | 'trend'>('distribution');
   const [reload, setReload] = useState(0);
-  const [state, setState] = useState<{ data?: LegendDayPerformance; error?: unknown }>({});
+  const [result, setResult] = useState<{
+    key: string;
+    repository: StatsRepository;
+    data?: LegendDayPerformance;
+    error?: unknown;
+  } | null>(null);
   const first = StatsDateFilter.formatDate(dates.start),
     last = StatsDateFilter.formatDate(dates.end);
+  const requestKey = `${first}:${last}:${cohort}:${reload}`;
+  // Derive loading from the requested identity. Resetting state in an effect
+  // adds a render and can briefly expose data from the previous selection.
+  const state =
+    result?.key === requestKey && result.repository === repository
+      ? result
+      : { data: undefined, error: undefined };
   useEffect(() => {
     let active = true;
-    setState({});
     // Ignore late responses after a cohort/date change or navigation. The
     // repository deduplicates bounded requests and caches by the exact range.
     void repository
@@ -61,16 +72,16 @@ export function LegendDayPerformanceSection({
       )
       .then(
         (data) => {
-          if (active) setState({ data });
+          if (active) setResult({ key: requestKey, repository, data });
         },
         (error) => {
-          if (active) setState({ error });
+          if (active) setResult({ key: requestKey, repository, error });
         },
       );
     return () => {
       active = false;
     };
-  }, [repository, first, last, cohort, reload]);
+  }, [repository, first, last, cohort, reload, requestKey]);
   const format = useMemo(
     () => new Intl.NumberFormat(toIntlLocale(locale), { maximumFractionDigits: 1 }),
     [locale],
