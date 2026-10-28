@@ -109,7 +109,7 @@ export function buildLegendsWidgetPayload(
   now = new Date(),
 ): LegendsWidgetPayload {
   const legendDay = currentLegendDay(now);
-  const start = new Date(`${legendDay}T05:10:00.000Z`);
+  const start = new Date(`${legendDay}T05:00:00.000Z`);
   const end = new Date(start.getTime() + 86_400_000);
   const day = data.currentDay?.day === legendDay ? data.currentDay : null;
   const rank = data.currentRank;

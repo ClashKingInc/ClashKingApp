@@ -1503,14 +1503,14 @@ private struct LegendsDayWindow {
   let end: Date
 
   static func current(at date: Date) -> LegendsDayWindow {
-    let shifted = date.addingTimeInterval(-(5 * 60 + 10) * 60)
+    let shifted = date.addingTimeInterval(-(5 * 60) * 60)
     let calendar = Calendar(identifier: .gregorian)
     let components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: shifted)
     let year = components.year ?? 1970
     let month = components.month ?? 1
     let dayOfMonth = components.day ?? 1
     let label = String(format: "%04d-%02d-%02d", year, month, dayOfMonth)
-    let start = ISO8601DateFormatter().date(from: "\(label)T05:10:00Z") ?? date
+    let start = ISO8601DateFormatter().date(from: "\(label)T05:00:00Z") ?? date
     return LegendsDayWindow(day: label, start: start, end: start.addingTimeInterval(86_400))
   }
 }

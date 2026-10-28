@@ -15,8 +15,8 @@ export async function loadClanCompetitiveDay(
   selectedDay?: string,
 ): Promise<ClanCompetitiveDay> {
   // One bounded batch per source, not a request per member. The same UTC
-  // 05:10 boundary is used by the Legend battle endpoints and Discord bot.
-  const today = new Date(Date.now() - (5 * 60 + 10) * 60_000).toISOString().slice(0, 10);
+  // 05:00 boundary is used by the Legend battle endpoints and Discord bot.
+  const today = new Date(Date.now() - (5 * 60) * 60_000).toISOString().slice(0, 10);
   const day = selectedDay ?? today;
   if (
     !/^\d{4}-\d{2}-\d{2}$/.test(day) ||

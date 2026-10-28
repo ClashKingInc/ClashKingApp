@@ -31,7 +31,7 @@ export function ClanCompetitiveTab({
     theme = useCKTheme();
   const [data, setData] = useState<ClanCompetitiveDay>();
   const [today] = useState(() =>
-    new Date(Date.now() - (5 * 60 + 10) * 60_000).toISOString().slice(0, 10),
+    new Date(Date.now() - (5 * 60) * 60_000).toISOString().slice(0, 10),
   );
   const [day, setDay] = useState(today);
   const [dateOpen, setDateOpen] = useState(false);

@@ -65,7 +65,7 @@ export class PlayerLegendBattlelog {
 
   static fromJson(json: JsonRecord) {
     const day = string(json.day);
-    const startsAt = new Date(`${day}T05:10:00.000Z`);
+    const startsAt = new Date(`${day}T05:00:00.000Z`);
     const endsAt = new Date(startsAt.getTime() + 86_400_000);
     const attacks = records(json.attacks);
     const defenses = records(json.defenses);
@@ -222,8 +222,9 @@ export class PlayerLegendLeagueData {
   ) {}
 }
 
+// Match the 05:00 UTC game reset, not the backend's delayed closeout job.
 export function currentLegendDay(now = new Date()): string {
-  return new Date(now.getTime() - (5 * 60 + 10) * 60 * 1000).toISOString().slice(0, 10);
+  return new Date(now.getTime() - (5 * 60) * 60 * 1000).toISOString().slice(0, 10);
 }
 
 export class LegendHeroGear {
