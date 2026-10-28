@@ -4,6 +4,7 @@ export const ACHIEVEMENT_IDS = [
   'war_warrior',
   'mr_legend',
   'defense_doesnt_matter',
+  'first_tournament',
   'verified_accounts',
 ] as const;
 

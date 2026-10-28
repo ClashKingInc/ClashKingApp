@@ -27,6 +27,10 @@ export const ACHIEVEMENT_COPY_KEYS: Readonly<Record<AchievementId, AchievementCo
     name: 'achievementDefenseDoesntMatterName',
     description: 'achievementDefenseDoesntMatterDescription',
   },
+  first_tournament: {
+    name: 'competitiveDebutName',
+    description: 'competitiveDebutDescription',
+  },
 };
 
 export interface AchievementModelRequest {

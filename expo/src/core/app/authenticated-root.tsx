@@ -13,7 +13,7 @@ import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-na
 import { Trophy, UserRound } from 'lucide-react-native';
 
 import { ServersRoot, type DashboardServer } from '../../features/servers/servers-root';
-import { EsportsRoot } from '../../features/competitive/esports-root';
+import { CompetitiveRoot } from '../../features/competitive/competitive-root';
 import { ServerDashboardScreen } from '../../features/servers/server-dashboard-screen';
 import {
   managesDiscordServer,
@@ -851,7 +851,15 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     if (route === 'posts')
       return <PostsRoot initialPostId={utilityPostId} onBack={closeSecondary} />;
     if (route === 'achievements') return <AchievementsRoot onBack={closeSecondary} />;
-    if (route === 'esports') return <EsportsRoot onBack={closeSecondary} />;
+    if (route === 'tournaments' || route === 'profile' || route === 'esports')
+      return (
+        <CompetitiveRoot
+          key={route}
+          initial={route}
+          onBack={closeSecondary}
+          onManageAccounts={() => pushUtility('accounts')}
+        />
+      );
     if (route === 'search')
       return (
         <SearchRoot
