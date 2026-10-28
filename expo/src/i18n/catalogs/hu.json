@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "Normál háború",
   "warWidgetNoActiveWar": "Nincs aktív háború",
   "warWidgetPrivateWarLog": "Privát háborús napló",
-  "warWidgetChooseClan": "Válassz klánt"
+  "warWidgetChooseClan": "Válassz klánt",
+  "legendPerformanceTitle": "Napi teljesítmény",
+  "legendCompleteDays": "Teljes napok",
+  "legendPerfectDays": "Tökéletes napok",
+  "legendPartialDays": "Hiányos napok",
+  "legendMissingDays": "Nincs feljegyzés",
+  "legendInvalidDays": "Érvénytelen napok",
+  "legendTrophiesGained": "Szerzett trófeák",
+  "legendTrophiesLost": "Elvesztett trófeák",
+  "legendDistribution": "Eloszlás",
+  "legendPreviousDays": "Előző {count} nap",
+  "legendAvailableDays": "Elérhető napok",
+  "legendCompleteOnly": "Az eloszlás a 8 rögzített csatával rendelkező napokat tartalmazza.",
+  "legendPerfectSources": "Tökéletes napok helyezés szerint"
 }

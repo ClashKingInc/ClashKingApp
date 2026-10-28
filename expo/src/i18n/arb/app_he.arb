@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "מלחמה רגילה",
   "warWidgetNoActiveWar": "אין מלחמה פעילה",
   "warWidgetPrivateWarLog": "יומן מלחמה פרטי",
-  "warWidgetChooseClan": "בחירת קלאן"
+  "warWidgetChooseClan": "בחירת קלאן",
+  "legendPerformanceTitle": "ביצועים יומיים",
+  "legendCompleteDays": "ימים מלאים",
+  "legendPerfectDays": "ימים מושלמים",
+  "legendPartialDays": "ימים חלקיים",
+  "legendMissingDays": "ללא תיעוד",
+  "legendInvalidDays": "ימים לא תקינים",
+  "legendTrophiesGained": "גביעים שנצברו",
+  "legendTrophiesLost": "גביעים שאבדו",
+  "legendDistribution": "התפלגות",
+  "legendPreviousDays": "{count} הימים הקודמים",
+  "legendAvailableDays": "ימים זמינים",
+  "legendCompleteOnly": "ההתפלגות כוללת ימים שבהם תועדו 8 קרבות.",
+  "legendPerfectSources": "ימים מושלמים לפי דירוג",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

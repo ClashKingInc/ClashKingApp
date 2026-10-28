@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "Normal savaş",
   "warWidgetNoActiveWar": "Aktif savaş yok",
   "warWidgetPrivateWarLog": "Özel savaş günlüğü",
-  "warWidgetChooseClan": "Bir klan seç"
+  "warWidgetChooseClan": "Bir klan seç",
+  "legendPerformanceTitle": "Günlük performans",
+  "legendCompleteDays": "Tam günler",
+  "legendPerfectDays": "Kusursuz günler",
+  "legendPartialDays": "Eksik günler",
+  "legendMissingDays": "Kayıt yok",
+  "legendInvalidDays": "Geçersiz günler",
+  "legendTrophiesGained": "Kazanılan kupalar",
+  "legendTrophiesLost": "Kaybedilen kupalar",
+  "legendDistribution": "Dağılım",
+  "legendPreviousDays": "Önceki {count} gün",
+  "legendAvailableDays": "Veri bulunan günler",
+  "legendCompleteOnly": "Dağılım, 8 savaşın kaydedildiği günleri içerir.",
+  "legendPerfectSources": "Sıralamaya göre kusursuz günler",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

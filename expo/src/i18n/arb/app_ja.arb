@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "通常対戦",
   "warWidgetNoActiveWar": "進行中の対戦なし",
   "warWidgetPrivateWarLog": "対戦ログは非公開です",
-  "warWidgetChooseClan": "クランを選択"
+  "warWidgetChooseClan": "クランを選択",
+  "legendPerformanceTitle": "日別成績",
+  "legendCompleteDays": "全戦記録済みの日",
+  "legendPerfectDays": "パーフェクトの日",
+  "legendPartialDays": "一部記録済みの日",
+  "legendMissingDays": "記録なし",
+  "legendInvalidDays": "無効な日",
+  "legendTrophiesGained": "獲得トロフィー",
+  "legendTrophiesLost": "失ったトロフィー",
+  "legendDistribution": "分布",
+  "legendPreviousDays": "直前の{count}日間",
+  "legendAvailableDays": "データのある日数",
+  "legendCompleteOnly": "8戦すべてが記録された日を集計しています。",
+  "legendPerfectSources": "順位帯別のパーフェクト日数",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

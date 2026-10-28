@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "Tavallinen sota",
   "warWidgetNoActiveWar": "Ei aktiivista sotaa",
   "warWidgetPrivateWarLog": "Yksityinen sotaloki",
-  "warWidgetChooseClan": "Valitse klaani"
+  "warWidgetChooseClan": "Valitse klaani",
+  "legendPerformanceTitle": "Päivittäinen suoritus",
+  "legendCompleteDays": "Täydet päivät",
+  "legendPerfectDays": "Täydelliset päivät",
+  "legendPartialDays": "Osittaiset päivät",
+  "legendMissingDays": "Ei havaintoja",
+  "legendInvalidDays": "Virheelliset päivät",
+  "legendTrophiesGained": "Saadut pokaalit",
+  "legendTrophiesLost": "Menetetyt pokaalit",
+  "legendDistribution": "Jakauma",
+  "legendPreviousDays": "Edelliset {count} päivää",
+  "legendAvailableDays": "Saatavilla olevat päivät",
+  "legendCompleteOnly": "Jakauma sisältää päivät, joille on kirjattu 8 taistelua.",
+  "legendPerfectSources": "Täydelliset päivät sijoituksen mukaan"
 }

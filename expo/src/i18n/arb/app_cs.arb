@@ -5034,5 +5034,25 @@
   "playerWarRegularWars": "Běžná válka",
   "warWidgetNoActiveWar": "Žádná aktivní válka",
   "warWidgetPrivateWarLog": "Soukromý válečný deník",
-  "warWidgetChooseClan": "Vyber klan"
+  "warWidgetChooseClan": "Vyber klan",
+  "legendPerformanceTitle": "Denní výkon",
+  "legendCompleteDays": "Úplné dny",
+  "legendPerfectDays": "Perfektní dny",
+  "legendPartialDays": "Neúplné dny",
+  "legendMissingDays": "Bez záznamů",
+  "legendInvalidDays": "Neplatné dny",
+  "legendTrophiesGained": "Získané trofeje",
+  "legendTrophiesLost": "Ztracené trofeje",
+  "legendDistribution": "Rozložení",
+  "legendPreviousDays": "Předchozích {count} dní",
+  "legendAvailableDays": "Dostupné dny",
+  "legendCompleteOnly": "Rozložení zahrnuje dny s 8 zaznamenanými bitvami.",
+  "legendPerfectSources": "Perfektní dny podle pořadí",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

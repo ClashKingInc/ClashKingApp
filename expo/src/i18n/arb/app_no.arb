@@ -5034,5 +5034,25 @@
   "playerWarRegularWars": "Vanlig krig",
   "warWidgetNoActiveWar": "Ingen aktiv krig",
   "warWidgetPrivateWarLog": "Privat krigslogg",
-  "warWidgetChooseClan": "Velg en klan"
+  "warWidgetChooseClan": "Velg en klan",
+  "legendPerformanceTitle": "Daglig prestasjon",
+  "legendCompleteDays": "Fullstendige dager",
+  "legendPerfectDays": "Perfekte dager",
+  "legendPartialDays": "Ufullstendige dager",
+  "legendMissingDays": "Ingen registreringer",
+  "legendInvalidDays": "Ugyldige dager",
+  "legendTrophiesGained": "Vunne trofeer",
+  "legendTrophiesLost": "Tapte trofeer",
+  "legendDistribution": "Fordeling",
+  "legendPreviousDays": "De foregående {count} dagene",
+  "legendAvailableDays": "Tilgjengelige dager",
+  "legendCompleteOnly": "Fordelingen bruker dager med 8 registrerte kamper.",
+  "legendPerfectSources": "Perfekte dager etter plassering",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

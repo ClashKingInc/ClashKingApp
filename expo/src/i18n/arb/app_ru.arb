@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "Обычная война",
   "warWidgetNoActiveWar": "Нет активной войны",
   "warWidgetPrivateWarLog": "Закрытый журнал войн",
-  "warWidgetChooseClan": "Выбрать клан"
+  "warWidgetChooseClan": "Выбрать клан",
+  "legendPerformanceTitle": "Результаты по дням",
+  "legendCompleteDays": "Полные дни",
+  "legendPerfectDays": "Идеальные дни",
+  "legendPartialDays": "Неполные дни",
+  "legendMissingDays": "Нет записей",
+  "legendInvalidDays": "Некорректные дни",
+  "legendTrophiesGained": "Полученные трофеи",
+  "legendTrophiesLost": "Потерянные трофеи",
+  "legendDistribution": "Распределение",
+  "legendPreviousDays": "Предыдущие {count} дней",
+  "legendAvailableDays": "Дни с данными",
+  "legendCompleteOnly": "В распределение входят дни с 8 записанными боями.",
+  "legendPerfectSources": "Идеальные дни по местам",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

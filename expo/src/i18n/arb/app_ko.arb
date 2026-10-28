@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "일반 클랜전",
   "warWidgetNoActiveWar": "진행 중인 전쟁 없음",
   "warWidgetPrivateWarLog": "비공개 전쟁 기록",
-  "warWidgetChooseClan": "클랜 선택"
+  "warWidgetChooseClan": "클랜 선택",
+  "legendPerformanceTitle": "일일 성적",
+  "legendCompleteDays": "전체 기록일",
+  "legendPerfectDays": "퍼펙트 달성일",
+  "legendPartialDays": "일부 기록일",
+  "legendMissingDays": "기록 없음",
+  "legendInvalidDays": "유효하지 않은 날짜",
+  "legendTrophiesGained": "획득 트로피",
+  "legendTrophiesLost": "잃은 트로피",
+  "legendDistribution": "분포",
+  "legendPreviousDays": "이전 {count}일",
+  "legendAvailableDays": "데이터가 있는 일수",
+  "legendCompleteOnly": "8회 전투가 기록된 날짜의 분포입니다.",
+  "legendPerfectSources": "순위 구간별 퍼펙트 달성일",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

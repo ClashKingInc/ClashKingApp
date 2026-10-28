@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "Обичан рат",
   "warWidgetNoActiveWar": "Нема активног рата",
   "warWidgetPrivateWarLog": "Приватан ратни дневник",
-  "warWidgetChooseClan": "Изабери клан"
+  "warWidgetChooseClan": "Изабери клан",
+  "legendPerformanceTitle": "Дневни учинак",
+  "legendCompleteDays": "Потпуни дани",
+  "legendPerfectDays": "Савршени дани",
+  "legendPartialDays": "Непотпуни дани",
+  "legendMissingDays": "Без записа",
+  "legendInvalidDays": "Неважећи дани",
+  "legendTrophiesGained": "Освојени трофеји",
+  "legendTrophiesLost": "Изгубљени трофеји",
+  "legendDistribution": "Расподела",
+  "legendPreviousDays": "Претходних {count} дана",
+  "legendAvailableDays": "Доступни дани",
+  "legendCompleteOnly": "Расподела обухвата дане са 8 забележених битака.",
+  "legendPerfectSources": "Савршени дани по рангу",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

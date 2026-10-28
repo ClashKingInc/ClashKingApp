@@ -5034,5 +5034,25 @@
   "playerWarRegularWars": "Guerra normal",
   "warWidgetNoActiveWar": "Cap guerra activa",
   "warWidgetPrivateWarLog": "Registre de guerra privat",
-  "warWidgetChooseClan": "Tria un clan"
+  "warWidgetChooseClan": "Tria un clan",
+  "legendPerformanceTitle": "Rendiment diari",
+  "legendCompleteDays": "Dies complets",
+  "legendPerfectDays": "Dies perfectes",
+  "legendPartialDays": "Dies parcials",
+  "legendMissingDays": "Sense observacions",
+  "legendInvalidDays": "Dies no vàlids",
+  "legendTrophiesGained": "Trofeus guanyats",
+  "legendTrophiesLost": "Trofeus perduts",
+  "legendDistribution": "Distribució",
+  "legendPreviousDays": "{count} dies anteriors",
+  "legendAvailableDays": "Dies disponibles",
+  "legendCompleteOnly": "La distribució inclou dies amb 8 batalles registrades.",
+  "legendPerfectSources": "Dies perfectes per posició",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

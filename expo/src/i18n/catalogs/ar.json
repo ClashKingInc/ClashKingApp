@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "حرب عادية",
   "warWidgetNoActiveWar": "لا توجد حرب نشطة",
   "warWidgetPrivateWarLog": "سجل الحرب خاص",
-  "warWidgetChooseClan": "اختر قبيلة"
+  "warWidgetChooseClan": "اختر قبيلة",
+  "legendPerformanceTitle": "الأداء اليومي",
+  "legendCompleteDays": "أيام مكتملة",
+  "legendPerfectDays": "أيام مثالية",
+  "legendPartialDays": "أيام جزئية",
+  "legendMissingDays": "لا توجد بيانات مسجلة",
+  "legendInvalidDays": "أيام غير صالحة",
+  "legendTrophiesGained": "الكؤوس المكتسبة",
+  "legendTrophiesLost": "الكؤوس المفقودة",
+  "legendDistribution": "التوزيع",
+  "legendPreviousDays": "الأيام الـ {count} السابقة",
+  "legendAvailableDays": "الأيام المتاحة",
+  "legendCompleteOnly": "يشمل التوزيع الأيام التي سُجلت فيها 8 معارك.",
+  "legendPerfectSources": "الأيام المثالية حسب الترتيب"
 }

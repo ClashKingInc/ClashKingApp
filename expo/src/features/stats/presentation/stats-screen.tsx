@@ -84,6 +84,7 @@ import {
   StatsMetrics,
   type StatsSectionValue,
 } from '../models';
+import { LegendDayPerformanceSection } from './legend-day-performance-section';
 import { ArmySetupSection } from './army-setup-section';
 import { PlayersSection, ClansSection } from './world-stats-sections';
 import { CwlParticipationSection } from './cwl-participation-section';
@@ -231,6 +232,9 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
         {hero}
         <View style={{ paddingHorizontal: horizontal }}>
+          {provider.section === StatsSection.ranked && api ? (
+            <LegendDayPerformanceSection api={api} dates={provider.dates} />
+          ) : null}
           <StatsSectionContent provider={provider} api={api} />
         </View>
       </ScrollView>
@@ -285,6 +289,7 @@ function StatsSectionContent({
         onSelectSeason={(season) => provider.setCwlSeason(season)}
       />
     );
+  if (state.status === StatsLoadStatus.empty && provider.section === StatsSection.ranked) return null;
   if (state.status === StatsLoadStatus.empty) {
     return (
       <Section>

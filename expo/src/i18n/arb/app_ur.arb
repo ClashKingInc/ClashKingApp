@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "عام جنگ",
   "warWidgetNoActiveWar": "کوئی فعال جنگ نہیں",
   "warWidgetPrivateWarLog": "نجی جنگی لاگ",
-  "warWidgetChooseClan": "کلین منتخب کریں"
+  "warWidgetChooseClan": "کلین منتخب کریں",
+  "legendPerformanceTitle": "روزانہ کارکردگی",
+  "legendCompleteDays": "مکمل دن",
+  "legendPerfectDays": "بے عیب دن",
+  "legendPartialDays": "نامکمل دن",
+  "legendMissingDays": "کوئی ریکارڈ نہیں",
+  "legendInvalidDays": "غیر درست دن",
+  "legendTrophiesGained": "حاصل کردہ ٹرافیاں",
+  "legendTrophiesLost": "کھوئی ہوئی ٹرافیاں",
+  "legendDistribution": "تقسیم",
+  "legendPreviousDays": "گزشتہ {count} دن",
+  "legendAvailableDays": "دستیاب دن",
+  "legendCompleteOnly": "تقسیم میں وہ دن شامل ہیں جن میں 8 لڑائیاں ریکارڈ ہوئیں۔",
+  "legendPerfectSources": "درجہ بندی کے مطابق بے عیب دن",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

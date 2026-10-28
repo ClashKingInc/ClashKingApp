@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "Chiến tranh thường",
   "warWidgetNoActiveWar": "Không có chiến tranh đang diễn ra",
   "warWidgetPrivateWarLog": "Nhật ký chiến tranh riêng tư",
-  "warWidgetChooseClan": "Chọn bang hội"
+  "warWidgetChooseClan": "Chọn bang hội",
+  "legendPerformanceTitle": "Thành tích hằng ngày",
+  "legendCompleteDays": "Ngày đầy đủ",
+  "legendPerfectDays": "Ngày hoàn hảo",
+  "legendPartialDays": "Ngày chưa đầy đủ",
+  "legendMissingDays": "Không có bản ghi",
+  "legendInvalidDays": "Ngày không hợp lệ",
+  "legendTrophiesGained": "Cúp giành được",
+  "legendTrophiesLost": "Cúp bị mất",
+  "legendDistribution": "Phân bố",
+  "legendPreviousDays": "{count} ngày trước đó",
+  "legendAvailableDays": "Ngày có dữ liệu",
+  "legendCompleteOnly": "Phân bố chỉ gồm những ngày có 8 trận được ghi nhận.",
+  "legendPerfectSources": "Ngày hoàn hảo theo thứ hạng",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

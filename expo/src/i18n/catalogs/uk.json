@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "Звичайна війна",
   "warWidgetNoActiveWar": "Немає активної війни",
   "warWidgetPrivateWarLog": "Приватний журнал війн",
-  "warWidgetChooseClan": "Вибрати клан"
+  "warWidgetChooseClan": "Вибрати клан",
+  "legendPerformanceTitle": "Результати за днями",
+  "legendCompleteDays": "Повні дні",
+  "legendPerfectDays": "Ідеальні дні",
+  "legendPartialDays": "Неповні дні",
+  "legendMissingDays": "Немає записів",
+  "legendInvalidDays": "Некоректні дні",
+  "legendTrophiesGained": "Здобуті трофеї",
+  "legendTrophiesLost": "Втрачені трофеї",
+  "legendDistribution": "Розподіл",
+  "legendPreviousDays": "Попередні {count} днів",
+  "legendAvailableDays": "Дні з даними",
+  "legendCompleteOnly": "Розподіл охоплює дні з 8 записаними боями.",
+  "legendPerfectSources": "Ідеальні дні за місцями"
 }

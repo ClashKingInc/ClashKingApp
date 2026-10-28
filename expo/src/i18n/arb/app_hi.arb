@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "सामान्य युद्ध",
   "warWidgetNoActiveWar": "कोई सक्रिय युद्ध नहीं",
   "warWidgetPrivateWarLog": "निजी युद्ध लॉग",
-  "warWidgetChooseClan": "क्लैन चुनें"
+  "warWidgetChooseClan": "क्लैन चुनें",
+  "legendPerformanceTitle": "दैनिक प्रदर्शन",
+  "legendCompleteDays": "पूरे दिन",
+  "legendPerfectDays": "परफेक्ट दिन",
+  "legendPartialDays": "अधूरे दिन",
+  "legendMissingDays": "कोई रिकॉर्ड नहीं",
+  "legendInvalidDays": "अमान्य दिन",
+  "legendTrophiesGained": "जीती गई ट्रॉफ़ियाँ",
+  "legendTrophiesLost": "हारी गई ट्रॉफ़ियाँ",
+  "legendDistribution": "वितरण",
+  "legendPreviousDays": "पिछले {count} दिन",
+  "legendAvailableDays": "उपलब्ध दिन",
+  "legendCompleteOnly": "वितरण में 8 दर्ज लड़ाइयों वाले दिन शामिल हैं।",
+  "legendPerfectSources": "रैंक के अनुसार परफेक्ट दिन",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

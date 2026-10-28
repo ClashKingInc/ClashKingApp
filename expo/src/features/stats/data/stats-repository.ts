@@ -6,6 +6,8 @@ import {
   ClanMemberBinsEndpoint,
   CwlLeagueCountsEndpoint,
   LegendDaysEndpoint,
+  LegendDayPerformanceEndpoint,
+  type EndpointResponse,
   PlayerLeagueTierCountsEndpoint,
   PlayerTownhallCountsEndpoint,
   StatsCwlEndpoint,
@@ -41,7 +43,10 @@ import {
   type StatsWarSummary,
 } from '../models';
 
+export type LegendDayPerformance = EndpointResponse<typeof LegendDayPerformanceEndpoint>;
+
 export interface StatsRepositoryContract {
+  loadLegendPerformance(request: StatsLegendQuery, fresh?: boolean): Promise<LegendDayPerformance>;
   loadPlayerCounts(fresh?: boolean): Promise<StatsPlayerCountsResponse>;
   loadClanCounts(fresh?: boolean): Promise<StatsClanCountsResponse>;
   loadArmySetups(request: StatsArmySetupQuery, fresh?: boolean): Promise<StatsArmySetupResponse>;
@@ -159,6 +164,20 @@ export class StatsRepository implements StatsRepositoryContract {
     return this.cached(`army-setup-timeline:${JSON.stringify(request)}`, fresh, () =>
       Effect.runPromise(
         this.contractApi.execute(ArmySetupTimelineEndpoint, { path: {}, query: request, body: {} }),
+      ),
+    );
+  }
+  async loadLegendPerformance(
+    request: StatsLegendQuery,
+    fresh = false,
+  ): Promise<LegendDayPerformance> {
+    return this.cached(`legend-performance:${JSON.stringify(request.toQuery())}`, fresh, () =>
+      Effect.runPromise(
+        this.contractApi.execute(LegendDayPerformanceEndpoint, {
+          path: {},
+          query: request.toQuery(),
+          body: {},
+        }),
       ),
     );
   }

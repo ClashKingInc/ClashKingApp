@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "Κανονικός πόλεμος",
   "warWidgetNoActiveWar": "Δεν υπάρχει ενεργός πόλεμος",
   "warWidgetPrivateWarLog": "Ιδιωτικό ημερολόγιο πολέμου",
-  "warWidgetChooseClan": "Επίλεξε φυλή"
+  "warWidgetChooseClan": "Επίλεξε φυλή",
+  "legendPerformanceTitle": "Ημερήσια απόδοση",
+  "legendCompleteDays": "Πλήρεις ημέρες",
+  "legendPerfectDays": "Τέλειες ημέρες",
+  "legendPartialDays": "Μερικές ημέρες",
+  "legendMissingDays": "Χωρίς καταγραφές",
+  "legendInvalidDays": "Μη έγκυρες ημέρες",
+  "legendTrophiesGained": "Κερδισμένα τρόπαια",
+  "legendTrophiesLost": "Χαμένα τρόπαια",
+  "legendDistribution": "Κατανομή",
+  "legendPreviousDays": "Προηγούμενες {count} ημέρες",
+  "legendAvailableDays": "Διαθέσιμες ημέρες",
+  "legendCompleteOnly": "Η κατανομή περιλαμβάνει ημέρες με 8 καταγεγραμμένες μάχες.",
+  "legendPerfectSources": "Τέλειες ημέρες ανά κατάταξη"
 }

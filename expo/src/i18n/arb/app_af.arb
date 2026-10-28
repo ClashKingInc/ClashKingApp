@@ -5034,5 +5034,25 @@
   "playerWarRegularWars": "Gewone oorlog",
   "warWidgetNoActiveWar": "Geen aktiewe oorlog",
   "warWidgetPrivateWarLog": "Privaat oorlogslogboek",
-  "warWidgetChooseClan": "Kies ’n stam"
+  "warWidgetChooseClan": "Kies ’n stam",
+  "legendPerformanceTitle": "Daaglikse prestasie",
+  "legendCompleteDays": "Volledige dae",
+  "legendPerfectDays": "Perfekte dae",
+  "legendPartialDays": "Gedeeltelike dae",
+  "legendMissingDays": "Geen waarnemings",
+  "legendInvalidDays": "Ongeldige dae",
+  "legendTrophiesGained": "Trofeë verdien",
+  "legendTrophiesLost": "Trofeë verloor",
+  "legendDistribution": "Verspreiding",
+  "legendPreviousDays": "Vorige {count} dae",
+  "legendAvailableDays": "Beskikbare dae",
+  "legendCompleteOnly": "Die verspreiding gebruik dae met 8 aangetekende gevegte.",
+  "legendPerfectSources": "Perfekte dae volgens rang",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

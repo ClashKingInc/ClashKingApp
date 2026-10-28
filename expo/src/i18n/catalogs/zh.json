@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "普通部落战",
   "warWidgetNoActiveWar": "没有进行中的部落对战",
   "warWidgetPrivateWarLog": "对战日志不公开",
-  "warWidgetChooseClan": "选择部落"
+  "warWidgetChooseClan": "选择部落",
+  "legendPerformanceTitle": "每日表现",
+  "legendCompleteDays": "完整天数",
+  "legendPerfectDays": "完美天数",
+  "legendPartialDays": "记录不完整的天数",
+  "legendMissingDays": "无记录",
+  "legendInvalidDays": "无效天数",
+  "legendTrophiesGained": "获得奖杯",
+  "legendTrophiesLost": "损失奖杯",
+  "legendDistribution": "分布",
+  "legendPreviousDays": "此前 {count} 天",
+  "legendAvailableDays": "有数据的天数",
+  "legendCompleteOnly": "分布仅统计记录了8场战斗的日期。",
+  "legendPerfectSources": "按排名区间统计完美天数"
 }

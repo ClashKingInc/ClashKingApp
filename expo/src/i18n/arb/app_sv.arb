@@ -5034,5 +5034,25 @@
   "playerWarRegularWars": "Vanligt krig",
   "warWidgetNoActiveWar": "Inget aktivt krig",
   "warWidgetPrivateWarLog": "Privat krigslogg",
-  "warWidgetChooseClan": "Välj en klan"
+  "warWidgetChooseClan": "Välj en klan",
+  "legendPerformanceTitle": "Dagliga resultat",
+  "legendCompleteDays": "Fullständiga dagar",
+  "legendPerfectDays": "Perfekta dagar",
+  "legendPartialDays": "Ofullständiga dagar",
+  "legendMissingDays": "Inga registreringar",
+  "legendInvalidDays": "Ogiltiga dagar",
+  "legendTrophiesGained": "Vunna troféer",
+  "legendTrophiesLost": "Förlorade troféer",
+  "legendDistribution": "Fördelning",
+  "legendPreviousDays": "Föregående {count} dagar",
+  "legendAvailableDays": "Tillgängliga dagar",
+  "legendCompleteOnly": "Fördelningen omfattar dagar med 8 registrerade strider.",
+  "legendPerfectSources": "Perfekta dagar efter placering",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

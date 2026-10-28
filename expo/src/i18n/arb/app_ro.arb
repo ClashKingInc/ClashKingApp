@@ -5129,5 +5129,25 @@
   "playerWarRegularWars": "Război obișnuit",
   "warWidgetNoActiveWar": "Niciun război activ",
   "warWidgetPrivateWarLog": "Jurnal de război privat",
-  "warWidgetChooseClan": "Alege un clan"
+  "warWidgetChooseClan": "Alege un clan",
+  "legendPerformanceTitle": "Performanță zilnică",
+  "legendCompleteDays": "Zile complete",
+  "legendPerfectDays": "Zile perfecte",
+  "legendPartialDays": "Zile parțiale",
+  "legendMissingDays": "Fără înregistrări",
+  "legendInvalidDays": "Zile nevalide",
+  "legendTrophiesGained": "Trofee câștigate",
+  "legendTrophiesLost": "Trofee pierdute",
+  "legendDistribution": "Distribuție",
+  "legendPreviousDays": "Cele {count} zile anterioare",
+  "legendAvailableDays": "Zile disponibile",
+  "legendCompleteOnly": "Distribuția include zilele cu 8 lupte înregistrate.",
+  "legendPerfectSources": "Zile perfecte după rang",
+  "@legendPreviousDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

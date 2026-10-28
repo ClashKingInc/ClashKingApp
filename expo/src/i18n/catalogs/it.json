@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "Guerra normale",
   "warWidgetNoActiveWar": "Nessuna guerra attiva",
   "warWidgetPrivateWarLog": "Registro di guerra privato",
-  "warWidgetChooseClan": "Scegli un clan"
+  "warWidgetChooseClan": "Scegli un clan",
+  "legendPerformanceTitle": "Prestazioni giornaliere",
+  "legendCompleteDays": "Giorni completi",
+  "legendPerfectDays": "Giorni perfetti",
+  "legendPartialDays": "Giorni parziali",
+  "legendMissingDays": "Nessuna registrazione",
+  "legendInvalidDays": "Giorni non validi",
+  "legendTrophiesGained": "Trofei guadagnati",
+  "legendTrophiesLost": "Trofei persi",
+  "legendDistribution": "Distribuzione",
+  "legendPreviousDays": "{count} giorni precedenti",
+  "legendAvailableDays": "Giorni disponibili",
+  "legendCompleteOnly": "La distribuzione include i giorni con 8 battaglie registrate.",
+  "legendPerfectSources": "Giorni perfetti per posizione"
 }

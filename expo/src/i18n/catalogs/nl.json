@@ -2342,5 +2342,18 @@
   "playerWarRegularWars": "Gewone oorlog",
   "warWidgetNoActiveWar": "Geen actieve oorlog",
   "warWidgetPrivateWarLog": "Privéoorlogslogboek",
-  "warWidgetChooseClan": "Kies een clan"
+  "warWidgetChooseClan": "Kies een clan",
+  "legendPerformanceTitle": "Dagelijkse prestaties",
+  "legendCompleteDays": "Volledige dagen",
+  "legendPerfectDays": "Perfecte dagen",
+  "legendPartialDays": "Onvolledige dagen",
+  "legendMissingDays": "Geen waarnemingen",
+  "legendInvalidDays": "Ongeldige dagen",
+  "legendTrophiesGained": "Gewonnen trofeeën",
+  "legendTrophiesLost": "Verloren trofeeën",
+  "legendDistribution": "Verdeling",
+  "legendPreviousDays": "Vorige {count} dagen",
+  "legendAvailableDays": "Beschikbare dagen",
+  "legendCompleteOnly": "De verdeling bevat dagen met 8 geregistreerde gevechten.",
+  "legendPerfectSources": "Perfecte dagen per rang"
 }
