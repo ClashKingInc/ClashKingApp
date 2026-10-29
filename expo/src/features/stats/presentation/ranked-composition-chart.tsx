@@ -15,13 +15,15 @@ export interface RankedCompositionDay {
   readonly unknownCount: number;
 }
 
+type CompositionSource = Pick<StatsLegendDay, 'day' | 'attacks' | 'attackTypes'>;
+
 const daysInChart = 14;
 const dayMs = 86_400_000;
 const datePattern = /^\d{4}-\d{2}-\d{2}$/u;
 
 /** The daily closeout and this chart must describe the same Legend attack cohort. */
 export function rankedCompositionWindow(
-  daily: readonly StatsLegendDay[],
+  daily: readonly CompositionSource[],
   end: Date,
 ): readonly { date: string; point?: RankedCompositionDay }[] {
   const observed = new Map<string, RankedCompositionDay>();
@@ -54,7 +56,7 @@ export function rankedCompositionWindow(
 }
 
 export function hasRankedCompositionData(
-  daily: readonly StatsLegendDay[],
+  daily: readonly CompositionSource[],
   dates: StatsDateFilter,
 ): boolean {
   const firstDay = new Date(
@@ -75,7 +77,7 @@ export function RankedCompositionChart({
   dates,
   exportContext,
 }: {
-  readonly daily: readonly StatsLegendDay[];
+  readonly daily: readonly CompositionSource[];
   readonly dates: StatsDateFilter;
   readonly exportContext?: string;
 }) {
@@ -120,6 +122,7 @@ export function RankedCompositionChart({
             : undefined
         }
         percent
+        responsiveAxes
         includeZero
         connectGaps={false}
         showPoints

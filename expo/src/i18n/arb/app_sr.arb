@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Дани са потпуно пораженом одбраном",
-  "legendCompleteDayDefinition": "Укључени су само дани са свих 8 битака."
+  "legendCompleteDayDefinition": "Укључени су само дани са свих 8 битака.",
+  "statsCommunity": "Заједница"
 }

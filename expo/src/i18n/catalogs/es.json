@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Ver los datos más recientes",
   "statsLatestAvailableDate": "Últimos datos disponibles: {date}",
   "legendPerfectedDefenseDays": "Días con defensa derrotada por completo",
-  "legendCompleteDayDefinition": "Solo se incluyen los días con las 8 batallas completas."
+  "legendCompleteDayDefinition": "Solo se incluyen los días con las 8 batallas completas.",
+  "statsCommunity": "Comunidad"
 }

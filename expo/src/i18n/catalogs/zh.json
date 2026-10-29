@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "查看最新数据",
   "statsLatestAvailableDate": "最新可用数据：{date}",
   "legendPerfectedDefenseDays": "防守被全三星的天数",
-  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。"
+  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。",
+  "statsCommunity": "社区"
 }

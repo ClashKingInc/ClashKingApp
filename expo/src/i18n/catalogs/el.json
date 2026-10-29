@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Προβολή νεότερων δεδομένων",
   "statsLatestAvailableDate": "Νεότερα διαθέσιμα: {date}",
   "legendPerfectedDefenseDays": "Ημέρες με ολοκληρωτικά ηττημένη άμυνα",
-  "legendCompleteDayDefinition": "Περιλαμβάνονται μόνο ημέρες με και τις 8 μάχες."
+  "legendCompleteDayDefinition": "Περιλαμβάνονται μόνο ημέρες με και τις 8 μάχες.",
+  "statsCommunity": "Κοινότητα"
 }

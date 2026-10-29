@@ -50,6 +50,7 @@ export interface StatsRepositoryContract {
     request: StatsLegendQuery,
     fresh?: boolean,
     observed?: boolean,
+    withArmyTypes?: boolean,
   ): Promise<LegendDayPerformance>;
   loadPlayerCounts(fresh?: boolean): Promise<StatsPlayerCountsResponse>;
   loadClanCounts(fresh?: boolean): Promise<StatsClanCountsResponse>;
@@ -175,8 +176,18 @@ export class StatsRepository implements StatsRepositoryContract {
     request: StatsLegendQuery,
     fresh = false,
     observed = false,
+    withArmyTypes = true,
   ): Promise<LegendDayPerformance> {
-    const query = { ...request.toQuery(), ...(observed ? { cohort: 'observed' as const } : {}) };
+    const query = {
+      ...request.toQuery(),
+      ...(observed
+        ? {
+            cohort: 'observed' as const,
+            compare: 'false' as const,
+            armyTypes: withArmyTypes ? ('true' as const) : ('false' as const),
+          }
+        : {}),
+    };
     return this.cached(`legend-performance:${JSON.stringify(query)}`, fresh, () =>
       Effect.runPromise(
         this.contractApi.execute(LegendDayPerformanceEndpoint, {

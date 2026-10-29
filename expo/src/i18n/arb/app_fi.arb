@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Täysin kukistetun puolustuksen päivät",
-  "legendCompleteDayDefinition": "Vain päivät, joilla on kaikki 8 taistelua, lasketaan mukaan."
+  "legendCompleteDayDefinition": "Vain päivät, joilla on kaikki 8 taistelua, lasketaan mukaan.",
+  "statsCommunity": "Yhteisö"
 }

@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Dias com defesa totalmente derrotada",
-  "legendCompleteDayDefinition": "Apenas dias com todas as 8 batalhas são incluídos."
+  "legendCompleteDayDefinition": "Apenas dias com todas as 8 batalhas são incluídos.",
+  "statsCommunity": "Comunidade"
 }

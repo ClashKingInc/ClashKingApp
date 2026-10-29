@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Дні з повністю розгромленою обороною",
-  "legendCompleteDayDefinition": "Враховуються лише дні з усіма 8 боями."
+  "legendCompleteDayDefinition": "Враховуються лише дні з усіма 8 боями.",
+  "statsCommunity": "Спільнота"
 }

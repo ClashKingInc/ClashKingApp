@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Vezi cele mai recente date",
   "statsLatestAvailableDate": "Cele mai recente date disponibile: {date}",
   "legendPerfectedDefenseDays": "Zile cu apărarea învinsă complet",
-  "legendCompleteDayDefinition": "Sunt incluse doar zilele cu toate cele 8 lupte."
+  "legendCompleteDayDefinition": "Sunt incluse doar zilele cu toate cele 8 lupte.",
+  "statsCommunity": "Comunitate"
 }

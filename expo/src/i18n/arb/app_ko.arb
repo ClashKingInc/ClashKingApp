@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "모든 방어에서 완패한 날",
-  "legendCompleteDayDefinition": "8번의 전투가 모두 기록된 날만 포함돼요."
+  "legendCompleteDayDefinition": "8번의 전투가 모두 기록된 날만 포함돼요.",
+  "statsCommunity": "커뮤니티"
 }

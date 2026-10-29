@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Teljesen legyőzött védekezésű napok",
-  "legendCompleteDayDefinition": "Csak a mind a 8 csatát tartalmazó napok számítanak."
+  "legendCompleteDayDefinition": "Csak a mind a 8 csatát tartalmazó napok számítanak.",
+  "statsCommunity": "Közösség"
 }

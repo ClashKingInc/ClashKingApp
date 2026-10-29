@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Legfrissebb adatok megtekintése",
   "statsLatestAvailableDate": "Legfrissebb elérhető: {date}",
   "legendPerfectedDefenseDays": "Teljesen legyőzött védekezésű napok",
-  "legendCompleteDayDefinition": "Csak a mind a 8 csatát tartalmazó napok számítanak."
+  "legendCompleteDayDefinition": "Csak a mind a 8 csatát tartalmazó napok számítanak.",
+  "statsCommunity": "Közösség"
 }

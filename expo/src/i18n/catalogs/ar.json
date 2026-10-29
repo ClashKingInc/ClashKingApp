@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "عرض أحدث البيانات",
   "statsLatestAvailableDate": "أحدث بيانات متاحة: {date}",
   "legendPerfectedDefenseDays": "أيام الدفاعات المكتملة ضدك",
-  "legendCompleteDayDefinition": "تُحتسب فقط الأيام التي اكتملت فيها المعارك الثماني."
+  "legendCompleteDayDefinition": "تُحتسب فقط الأيام التي اكتملت فيها المعارك الثماني.",
+  "statsCommunity": "المجتمع"
 }

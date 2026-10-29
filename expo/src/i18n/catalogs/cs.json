@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Zobrazit nejnovější data",
   "statsLatestAvailableDate": "Nejnovější dostupná data: {date}",
   "legendPerfectedDefenseDays": "Dny s dokonale prolomenou obranou",
-  "legendCompleteDayDefinition": "Započítávají se pouze dny se všemi 8 bitvami."
+  "legendCompleteDayDefinition": "Započítávají se pouze dny se všemi 8 bitvami.",
+  "statsCommunity": "Komunita"
 }

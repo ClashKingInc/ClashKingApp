@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "पूरी तरह हारी गई रक्षा के दिन",
-  "legendCompleteDayDefinition": "केवल सभी 8 लड़ाइयों वाले दिन शामिल हैं।"
+  "legendCompleteDayDefinition": "केवल सभी 8 लड़ाइयों वाले दिन शामिल हैं।",
+  "statsCommunity": "समुदाय"
 }

@@ -298,37 +298,35 @@ function RankedStatsSection({
     error?: unknown;
   }>();
   useEffect(() => {
-    if (view !== 'battles' || cohort === StatsLegendCohort.legend || cohort === 'observed') return;
+    if (view !== 'battles' || cohort === 'observed') return;
     let active = true;
-    void repository
-      .loadItems(
-        new StatsLegendQuery(
-          new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
-          cohort,
-        ),
-        battleReload > 0,
-      )
-      .then(
-        (data) => {
-          if (active) setBattleResult({ key: requestKey, data });
-        },
-        (error: unknown) => {
-          if (active) setBattleResult({ key: requestKey, error });
-        },
-      );
+    const query = new StatsLegendQuery(
+      new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
+      cohort,
+    );
+    void repository.loadItems(query, battleReload > 0).then(
+      (data) => {
+        if (active) setBattleResult({ key: requestKey, data });
+      },
+      (error: unknown) => {
+        if (active) setBattleResult({ key: requestKey, error });
+      },
+    );
+    // Hitrate may be the first tab used for a cohort. Fetch its available dates
+    // independently so an empty current range still offers the real history.
+    void repository.loadLegendPerformance(query, battleReload > 0).then(
+      (data) => {
+        if (active && data.availability) rememberAvailability(data.availability);
+      },
+      () => {},
+    );
     return () => {
       active = false;
     };
-  }, [view, cohort, repository, first, last, requestKey, battleReload]);
+  }, [view, cohort, repository, first, last, requestKey, battleReload, rememberAvailability]);
   const response = battleResult?.key === requestKey ? battleResult : undefined;
-  const current = provider.currentState;
-  const battles =
-    cohort === StatsLegendCohort.legend
-      ? current.data instanceof StatsLegendResponse
-        ? current.data
-        : undefined
-      : response?.data;
-  const error = cohort === StatsLegendCohort.legend ? current.error : response?.error;
+  const battles = response?.data;
+  const error = response?.error;
   return (
     <View style={{ gap: 12 }} testID="ranked-stats-overview">
       <SelectionPicker
@@ -365,8 +363,8 @@ function RankedStatsSection({
         selectedKey={view}
         onSelect={setView}
         tabs={[
-          { key: 'days', label: t('legendPerformanceTitle') },
-          { key: 'battles', label: t('statsBattle') },
+          { key: 'days', label: t('statsCommunity') },
+          { key: 'battles', label: t('legendsHitrate') },
         ]}
       />
       {view === 'days' || cohort === 'observed' ? (
@@ -385,8 +383,7 @@ function RankedStatsSection({
           body={t('statsNoDataBody')}
           actionLabel={t('generalRetry')}
           onAction={() => {
-            if (cohort === StatsLegendCohort.legend) void provider.load(provider.section, true);
-            else setBattleReload((value) => value + 1);
+            setBattleReload((value) => value + 1);
           }}
         />
       ) : !battles ? (

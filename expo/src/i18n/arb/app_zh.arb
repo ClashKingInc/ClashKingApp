@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "防守被全三星的天数",
-  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。"
+  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。",
+  "statsCommunity": "社区"
 }

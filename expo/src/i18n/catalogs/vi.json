@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Xem dữ liệu mới nhất",
   "statsLatestAvailableDate": "Dữ liệu mới nhất hiện có: {date}",
   "legendPerfectedDefenseDays": "Ngày phòng thủ bị đánh bại hoàn toàn",
-  "legendCompleteDayDefinition": "Chỉ tính những ngày có đủ cả 8 trận đấu."
+  "legendCompleteDayDefinition": "Chỉ tính những ngày có đủ cả 8 trận đấu.",
+  "statsCommunity": "Cộng đồng"
 }

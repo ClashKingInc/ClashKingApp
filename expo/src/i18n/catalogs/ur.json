@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "تازہ ترین ڈیٹا دیکھیں",
   "statsLatestAvailableDate": "تازہ ترین دستیاب ڈیٹا: {date}",
   "legendPerfectedDefenseDays": "مکمل طور پر شکست خوردہ دفاع کے دن",
-  "legendCompleteDayDefinition": "صرف وہ دن شامل ہیں جن میں تمام 8 لڑائیاں ہوئی ہوں۔"
+  "legendCompleteDayDefinition": "صرف وہ دن شامل ہیں جن میں تمام 8 لڑائیاں ہوئی ہوں۔",
+  "statsCommunity": "کمیونٹی"
 }

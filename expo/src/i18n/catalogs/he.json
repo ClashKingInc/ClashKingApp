@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "הצג את הנתונים העדכניים",
   "statsLatestAvailableDate": "הנתונים העדכניים הזמינים: {date}",
   "legendPerfectedDefenseDays": "ימים שבהם ההגנה הובסה לחלוטין",
-  "legendCompleteDayDefinition": "נכללים רק ימים שבהם כל 8 הקרבות הושלמו."
+  "legendCompleteDayDefinition": "נכללים רק ימים שבהם כל 8 הקרבות הושלמו.",
+  "statsCommunity": "קהילה"
 }

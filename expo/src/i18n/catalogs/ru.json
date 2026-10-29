@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Показать последние данные",
   "statsLatestAvailableDate": "Последние доступные данные: {date}",
   "legendPerfectedDefenseDays": "Дни с полностью разгромленной защитой",
-  "legendCompleteDayDefinition": "Учитываются только дни со всеми 8 боями."
+  "legendCompleteDayDefinition": "Учитываются только дни со всеми 8 боями.",
+  "statsCommunity": "Сообщество"
 }

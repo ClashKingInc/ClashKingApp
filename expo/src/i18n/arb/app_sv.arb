@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Dagar med fullständigt besegrat försvar",
-  "legendCompleteDayDefinition": "Endast dagar med alla 8 strider räknas med."
+  "legendCompleteDayDefinition": "Endast dagar med alla 8 strider räknas med.",
+  "statsCommunity": "Community"
 }

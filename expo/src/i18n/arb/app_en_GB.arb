@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Perfected defense days",
-  "legendCompleteDayDefinition": "Only days with all 8 battles are included."
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
+  "statsCommunity": "Community"
 }

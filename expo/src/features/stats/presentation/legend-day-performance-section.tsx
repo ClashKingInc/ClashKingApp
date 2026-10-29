@@ -23,6 +23,7 @@ import {
 } from '../models';
 import { AnalyticsLineChart } from './analytics-chart';
 import { StatsChartFrame } from './stats-chart-frame';
+import { LegendHitRateDetails } from './legend-hit-rate-details';
 
 type Summary = LegendDayPerformance['periods'][number]['offense'];
 type Availability = { firstDay: string; lastDay: string };
@@ -51,44 +52,50 @@ export function LegendDayPerformanceSection({
   const [reload, setReload] = useState(0);
   const [result, setResult] = useState<{
     key: string;
+    baseKey: string;
     repository: StatsRepository;
     data?: LegendDayPerformance;
     error?: unknown;
   } | null>(null);
   const first = StatsDateFilter.formatDate(dates.start),
     last = StatsDateFilter.formatDate(dates.end);
-  const requestKey = `${first}:${last}:${cohort}:${observed}:${reload}`;
-  // Derive loading from the requested identity. Resetting state in an effect
-  // adds a render and can briefly expose data from the previous selection.
+  const baseKey = `${first}:${last}:${cohort}:${observed}:${reload}`;
+  const requestKey = `${baseKey}:${displayMode}`;
+  // Keep the same cohort/date summary visible while Hitrate loads army detail.
+  // A different date or population must never reuse that visible result.
   const state =
-    result?.key === requestKey && result.repository === repository
-      ? result
+    result?.baseKey === baseKey && result.repository === repository
+      ? { ...result, error: result.key === requestKey ? result.error : undefined }
       : { data: undefined, error: undefined };
   useEffect(() => {
     let active = true;
     // Ignore late responses after a cohort/date change or navigation. The
     // repository deduplicates bounded requests and caches by the exact range.
-    void repository
-      .loadLegendPerformance(
-        new StatsLegendQuery(
-          new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
-          cohort,
-        ),
-        reload > 0,
-        observed,
-      )
-      .then(
-        (data) => {
-          if (active) setResult({ key: requestKey, repository, data });
-        },
-        (error) => {
-          if (active) setResult({ key: requestKey, repository, error });
-        },
-      );
+    const query = new StatsLegendQuery(
+      new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
+      cohort,
+    );
+    void (async () => {
+      const data = await repository.loadLegendPerformance(query, reload > 0, observed, false);
+      if (active) setResult({ key: `${baseKey}:days`, baseKey, repository, data });
+      if (active && displayMode === 'battles') {
+        const details = await repository.loadLegendPerformance(query, reload > 0, observed, true);
+        if (active) setResult({ key: requestKey, baseKey, repository, data: details });
+      }
+    })().catch((error: unknown) => {
+      if (active)
+        setResult((previous) => ({
+          key: requestKey,
+          baseKey,
+          repository,
+          error,
+          data: previous?.baseKey === baseKey ? previous.data : undefined,
+        }));
+    });
     return () => {
       active = false;
     };
-  }, [repository, first, last, cohort, observed, reload, requestKey]);
+  }, [repository, first, last, cohort, observed, reload, requestKey, baseKey, displayMode]);
   const format = useMemo(
     () => new Intl.NumberFormat(toIntlLocale(locale), { maximumFractionDigits: 1 }),
     [locale],
@@ -123,7 +130,7 @@ export function LegendDayPerformanceSection({
     : undefined;
   return (
     <View style={styles.section} testID="legend-day-performance">
-      {state.error ? (
+      {state.error && !state.data ? (
         <ErrorState
           title={t('sideStatsLoadError')}
           body={t('statsNoDataBody')}
@@ -206,48 +213,63 @@ export function LegendDayPerformanceSection({
             })}
           </View>
           {displayMode === 'battles' ? (
-            <View style={[styles.chartCard, { backgroundColor: theme.surface }]}>
-              <AnalyticsLineChart
-                legendMode="hidden"
-                showTitle={false}
-                title={t('statsThreeStarRate')}
-                exportTitle={`${t('statsThreeStarRate')} · ${cohortLabel} · ${first} – ${last}`}
-                percent
-                includeZero
-                connectGaps={false}
-                responsiveAxes
-                series={(['offense', 'defense'] as const).map((direction) => ({
-                  key: direction,
-                  label: t(
-                    direction === 'offense' ? 'capitalDetailsOffense' : 'capitalDetailsDefense',
-                  ),
-                  color: direction === 'offense' ? ckColors.donationGreen : ckColors.lossRed,
-                  aggregation: 'weightedMean',
-                  points: [
-                    ...state.data!.items.map((item) => ({
-                      day: item.day,
-                      value:
-                        item[direction].tripleRate === null
-                          ? null
-                          : item[direction].tripleRate! * 100,
-                      weight: item[direction].observedBattles,
-                    })),
-                    ...(state.data!.currentDay
-                      ? [
-                          {
-                            day: state.data!.currentDay.day,
-                            value:
-                              state.data!.currentDay[direction].tripleRate === null
-                                ? null
-                                : state.data!.currentDay[direction].tripleRate! * 100,
-                            weight: state.data!.currentDay[direction].battles,
-                          },
-                        ]
-                      : []),
-                  ],
-                }))}
-              />
-            </View>
+            <>
+              <View style={[styles.chartCard, { backgroundColor: theme.surface }]}>
+                <AnalyticsLineChart
+                  legendMode="hidden"
+                  showTitle={false}
+                  title={t('statsThreeStarRate')}
+                  exportTitle={`${t('statsThreeStarRate')} · ${cohortLabel} · ${first} – ${last}`}
+                  percent
+                  includeZero
+                  connectGaps={false}
+                  responsiveAxes
+                  series={(['offense', 'defense'] as const).map((direction) => ({
+                    key: direction,
+                    label: t(
+                      direction === 'offense' ? 'capitalDetailsOffense' : 'capitalDetailsDefense',
+                    ),
+                    color: direction === 'offense' ? ckColors.donationGreen : ckColors.lossRed,
+                    aggregation: 'weightedMean',
+                    points: [
+                      ...state.data!.items.map((item) => ({
+                        day: item.day,
+                        value:
+                          item[direction].tripleRate === null
+                            ? null
+                            : item[direction].tripleRate! * 100,
+                        weight: item[direction].observedBattles,
+                      })),
+                      ...(state.data!.currentDay
+                        ? [
+                            {
+                              day: state.data!.currentDay.day,
+                              value:
+                                state.data!.currentDay[direction].tripleRate === null
+                                  ? null
+                                  : state.data!.currentDay[direction].tripleRate! * 100,
+                              weight: state.data!.currentDay[direction].battles,
+                            },
+                          ]
+                        : []),
+                    ],
+                  }))}
+                />
+              </View>
+              <LegendHitRateDetails data={state.data} dates={dates} />
+              {result?.key !== requestKey ? (
+                <ActivityIndicator color={theme.primary} />
+              ) : state.error ? (
+                <Pressable
+                  onPress={() => setReload((value) => value + 1)}
+                  accessibilityRole="button"
+                >
+                  <CKText role="bodySmall" style={{ color: theme.primary }}>
+                    {t('generalRetry')}
+                  </CKText>
+                </Pressable>
+              ) : null}
+            </>
           ) : (
             <>
               <View style={[styles.chartCard, { backgroundColor: theme.surface }]}>

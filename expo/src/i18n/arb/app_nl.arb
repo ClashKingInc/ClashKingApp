@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Dagen met volledig verslagen verdediging",
-  "legendCompleteDayDefinition": "Alleen dagen met alle 8 gevechten tellen mee."
+  "legendCompleteDayDefinition": "Alleen dagen met alle 8 gevechten tellen mee.",
+  "statsCommunity": "Community"
 }

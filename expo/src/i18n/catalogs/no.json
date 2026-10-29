@@ -2366,5 +2366,6 @@
   "statsViewLatestData": "Vis nyeste data",
   "statsLatestAvailableDate": "Sist tilgjengelig: {date}",
   "legendPerfectedDefenseDays": "Dager med fullstendig beseiret forsvar",
-  "legendCompleteDayDefinition": "Bare dager med alle 8 kamper er inkludert."
+  "legendCompleteDayDefinition": "Bare dager med alle 8 kamper er inkludert.",
+  "statsCommunity": "Fellesskap"
 }

@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Savunmanın tamamen yenildiği günler",
-  "legendCompleteDayDefinition": "Yalnızca 8 savaşın tamamlandığı günler dahil edilir."
+  "legendCompleteDayDefinition": "Yalnızca 8 savaşın tamamlandığı günler dahil edilir.",
+  "statsCommunity": "Topluluk"
 }

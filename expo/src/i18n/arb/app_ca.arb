@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Dies amb defensa derrotada al màxim",
-  "legendCompleteDayDefinition": "Només s’inclouen els dies amb les 8 batalles completes."
+  "legendCompleteDayDefinition": "Només s’inclouen els dies amb les 8 batalles completes.",
+  "statsCommunity": "Comunitat"
 }

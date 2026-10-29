@@ -231,7 +231,8 @@ export function SettingsTile({
   );
 }
 
-/** A compact choice is part of the settings row, not a second floating control.
+/** Choices occupy the row itself; do not add an inset track or rounded thumb.
+ * Match the 50pt neighboring rows so this control never reads as an extra panel.
  * The choices identify this setting visually; each accessible label retains its title. */
 export function SettingsChoiceTile<T extends string>({
   icon,
@@ -257,16 +258,12 @@ export function SettingsChoiceTile<T extends string>({
       <View
         style={{
           flex: 1,
-          height: 38,
-          marginEnd: 8,
-          padding: 3,
-          borderRadius: 10,
-          backgroundColor: colorWithAlpha(theme.onSurface, 0.06),
+          height: 50,
           flexDirection: isRtl ? 'row-reverse' : 'row',
           minWidth: 0,
         }}
       >
-        {options.map((option) => {
+        {options.map((option, index) => {
           const selected = option.value === value;
           return (
             <Pressable
@@ -275,18 +272,18 @@ export function SettingsChoiceTile<T extends string>({
               accessibilityState={{ checked: selected }}
               accessibilityLabel={`${title}: ${option.label}`}
               onPress={() => onChange(option.value)}
-              hitSlop={{ top: 6, bottom: 6 }}
               style={({ pressed }) => ({
                 flex: 1,
                 minWidth: 0,
-                height: 32,
-                borderRadius: 7,
+                height: 50,
+                borderStartWidth: index ? StyleSheet.hairlineWidth : 0,
+                borderStartColor: colorWithAlpha(theme.onSurface, 0.09),
                 paddingHorizontal: 4,
                 paddingVertical: 2,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: selected
-                  ? theme.surfaceContainerHighest
+                  ? colorWithAlpha(theme.onSurface, 0.065)
                   : pressed
                     ? colorWithAlpha(theme.onSurface, 0.05)
                     : 'transparent',
@@ -308,11 +305,10 @@ export function SettingsChoiceTile<T extends string>({
                   pointerEvents="none"
                   style={{
                     position: 'absolute',
-                    bottom: 1,
-                    left: '40%',
-                    right: '40%',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
                     height: 2,
-                    borderRadius: 2,
                     backgroundColor: theme.primary,
                   }}
                 />

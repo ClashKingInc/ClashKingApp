@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Dni z całkowicie pokonaną obroną",
-  "legendCompleteDayDefinition": "Uwzględniane są tylko dni ze wszystkimi 8 bitwami."
+  "legendCompleteDayDefinition": "Uwzględniane są tylko dni ze wszystkimi 8 bitwami.",
+  "statsCommunity": "Społeczność"
 }

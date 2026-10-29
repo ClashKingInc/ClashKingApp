@@ -5189,5 +5189,6 @@
     }
   },
   "legendPerfectedDefenseDays": "防衛で全敗した日数",
-  "legendCompleteDayDefinition": "8回すべての対戦が記録された日のみを含みます。"
+  "legendCompleteDayDefinition": "8回すべての対戦が記録された日のみを含みます。",
+  "statsCommunity": "コミュニティ"
 }

@@ -5094,5 +5094,6 @@
     }
   },
   "legendPerfectedDefenseDays": "Dae met volmaakte aanvalle teen jou verdediging",
-  "legendCompleteDayDefinition": "Slegs dae met al 8 gevegte word ingesluit."
+  "legendCompleteDayDefinition": "Slegs dae met al 8 gevegte word ingesluit.",
+  "statsCommunity": "Gemeenskap"
 }
