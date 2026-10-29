@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Vorige {count} dae",
   "legendAvailableDays": "Beskikbare dae",
   "legendCompleteOnly": "Die verspreiding gebruik dae met 8 aangetekende gevegte.",
-  "legendPerfectSources": "Perfekte dae volgens rang"
+  "legendPerfectSources": "Perfekte dae volgens rang",
+  "onboardingOverviewTitle": "Jou dorpie, in fokus",
+  "onboardingOverviewBody": "Hou jou rekeninge, klans en daaglikse vordering bymekaar.",
+  "onboardingProgressTitle": "Ken jou volgende stap",
+  "onboardingProgressBody": "Volg jou gevegte, vergelyk jou vordering en hou opgraderings aan die gang.",
+  "onboardingRemindersTitle": "’n Herinnering op die regte tyd",
+  "onboardingRemindersBody": "Kry oorlogherinnerings en die waarskuwings wat jy kies. Kies jou rekeninge en waarskuwingsoorte in Instellings.",
+  "onboardingReplayTitle": "Speel inleiding weer",
+  "statsViewLatestData": "Bekyk jongste data",
+  "statsLatestAvailableDate": "Jongste beskikbaar: {date}",
+  "legendPerfectedDefenseDays": "Dae met volmaakte aanvalle teen jou verdediging",
+  "legendCompleteDayDefinition": "Slegs dae met al 8 gevegte word ingesluit."
 }

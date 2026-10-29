@@ -40,8 +40,6 @@ import { HomeEventBanner } from './event-banner';
 import { HomeDragContext } from './home-components';
 import { HomePendingCard, HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
 import { HomeActivityCard } from './home-activity-card';
-import { tutorials } from '../../tutorials/tutorial-service';
-import { TutorialTarget } from '../../tutorials/tutorial-ui';
 
 export const MOBILE_HOME_OVERLAY_CLEARANCE = 96;
 type HomeDragValues = Parameters<
@@ -234,7 +232,7 @@ export function DashboardScreen({
         ]}
         testID={`home-card-shell-${card}`}
       >
-        <TutorialTarget id="home-reorder" enabled={index === 0} style={{ width: '100%' }}>
+        <View style={{ width: '100%' }}>
           <DragJiggle active={isActive} scale={1.015}>
             <HomeDragContext.Provider value={isActive}>
               {card === 'activity' && model.activityAccounts ? (
@@ -267,7 +265,7 @@ export function DashboardScreen({
               ) : null}
             </HomeDragContext.Provider>
           </DragJiggle>
-        </TutorialTarget>
+        </View>
       </View>
     );
   };
@@ -321,8 +319,7 @@ export function DashboardScreen({
         if (from === to) return;
         // The shared list owns offsets and completes its native settling before
         // this callback. Do not keep a second JS/native transform map for Home.
-        if (actions.reorderCards(data) !== false)
-          requestAnimationFrame(() => tutorials.event('card-reordered'));
+        actions.reorderCards(data);
       }}
       renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
         <HomeCardHold
@@ -390,7 +387,6 @@ export function DashboardScreen({
                 renderItem={(card, index, active) => renderCard(card, index, active)}
                 onReorder={(data) => {
                   const result = actions.reorderCards(data);
-                  if (result !== false) tutorials.event('card-reordered');
                   return result;
                 }}
               />

@@ -1,7 +1,7 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { BarChart3, List, Repeat2, Users } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -35,7 +35,6 @@ import { ClanLeaderboardType, type ClanLeaderboardTypeValue } from '../models';
 import { ClanCwlHistoryTab, ClanRankingsTab } from './clan-statistics-tabs';
 import { ClanStatisticsTab } from './clan-war-stats-tab';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
-import { TutorialScrollView } from '../../tutorials/tutorial-ui';
 
 export function ClanInfoScreen({
   model,
@@ -152,7 +151,7 @@ export function ClanInfoScreen({
       edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
-      <TutorialScrollView
+      <ScrollView
         ref={scrollRef}
         testID="clan-info-scroll"
         stickyHeaderIndices={[1]}
@@ -226,7 +225,7 @@ export function ClanInfoScreen({
             ) : null,
           )}
         </SkeletonContent>
-      </TutorialScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 }

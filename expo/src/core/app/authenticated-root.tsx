@@ -109,7 +109,7 @@ import { apiDate } from '../../features/war/models';
 import { isRouteEnabled } from '../../navigation/route-manifest';
 import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
 import { selectLegendsPlayer } from './legends-player-selection';
-import { tutorials } from '../../features/tutorials/tutorial-service';
+import { onboarding } from '../../features/onboarding/onboarding-service';
 import { useStartupCovered } from './startup-loading';
 
 type ResolvedScene = {
@@ -197,7 +197,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     };
   }, [state.features, hasDiscordAccount]);
   const [pushedScenes, setPushedScenes] = useState<readonly PushedScene[]>([]);
-  const tutorialClanVisit = useRef(false);
   useEffect(() => {
     if (pushedScenes.length > 0) onHomeReady?.();
   }, [onHomeReady, pushedScenes.length]);
@@ -224,30 +223,24 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   } = useAnnouncementPresentation();
   const user = authState.currentUser;
   const startupCovered = useStartupCovered();
-  const tutorialState = useSyncExternalStore(tutorials.subscribe, tutorials.getSnapshot, tutorials.getSnapshot);
-  const canAutoAnnounce = !startupCovered && tutorialState.ready && tutorialState.returningUser &&
-    tutorialState.userId === (user?.userId ?? null) && tutorialState.current === null;
+  const onboardingState = useSyncExternalStore(
+    onboarding.subscribe,
+    onboarding.getSnapshot,
+    onboarding.getSnapshot,
+  );
+  const canAutoAnnounce =
+    !startupCovered &&
+    onboardingState.ready &&
+    onboardingState.returningUser &&
+    onboardingState.userId === (user?.userId ?? null) &&
+    !onboardingState.visible;
   const canAutoAnnounceRef = useRef(canAutoAnnounce);
-  useEffect(() => { canAutoAnnounceRef.current = canAutoAnnounce; }, [canAutoAnnounce]);
   useEffect(() => {
-    void tutorials.bind(runtime.preferences, user?.userId ?? null);
-    return () => {
-      void tutorials.bind(runtime.preferences, null);
-    };
-  }, [runtime.preferences, user?.userId]);
-  const tutorialReady = useCallback(() => {
+    canAutoAnnounceRef.current = canAutoAnnounce;
+  }, [canAutoAnnounce]);
+  const handleHomeReady = useCallback(() => {
     onHomeReady?.();
-    if (
-      primary === 'home' &&
-      !utility &&
-      !pushedScenes.length &&
-      runtime.accounts.verifiedAccounts.length
-    ) {
-      void tutorials
-        .bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null)
-        .then(() => tutorials.visitHome(true));
-    }
-  }, [onHomeReady, runtime, primary, utility, pushedScenes.length]);
+  }, [onHomeReady]);
   const discordServers = useDiscordServers(user);
   const pushedScene = pushedScenes.at(-1);
   const selectPrimary = (route: PrimaryRouteId) => {
@@ -279,15 +272,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     [],
   );
   const openUtility = useCallback((route: AppRouteDefinition) => showUtility(route), [showUtility]);
-  useEffect(() => {
-    if (
-      primary === 'home' &&
-      !utility &&
-      !pushedScenes.length &&
-      runtime.accounts.verifiedAccounts.length
-    )
-      tutorials.visitHome();
-  }, [primary, utility, pushedScenes.length, runtime]);
   const openPlayerUtility = (route: AppRouteDefinition, playerTag: string) => {
     if (route.id === 'ranked' || route.id === 'legends') loadPlayerUtility(route.id, playerTag);
     else showUtility(route, playerTag);
@@ -304,14 +288,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
   };
   const closeSecondary = useCallback(() => {
     navigationGeneration.current += 1;
-    if (
-      tutorialClanVisit.current &&
-      pushedScenes.length === 1 &&
-      pushedScenes[0]?.kind === 'clan'
-    ) {
-      tutorialClanVisit.current = false;
-      if (tutorials.getSnapshot().current === 'clanGuide') tutorials.dismiss();
-    }
     if (backThroughBrowserHistory()) return;
     if (usesNativeSecondaryNavigation && (pushedScenes.length || utility !== undefined)) {
       router.back();
@@ -500,25 +476,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
       { kind: 'page', page: route, params: { player: tag } },
     );
   };
-  useEffect(() => {
-    const removeHome = tutorials.registerAction('go-home', () => selectPrimary('home'));
-    const removeNotifications = tutorials.registerAction('open-notifications', () => {
-      if (Platform.OS === 'web') selectPrimary('home');
-      else {
-        showUtility(routeById('settings'), undefined, { section: 'notifications' });
-      }
-    });
-    return () => {
-      removeNotifications();
-      removeHome();
-    };
-  });
-  useEffect(() => {
-    if (tutorialClanVisit.current && !pushedScenes.length && !utility) {
-      tutorialClanVisit.current = false;
-      if (tutorials.getSnapshot().current === 'clanGuide') tutorials.dismiss();
-    }
-  }, [pushedScenes.length, utility]);
   const clanNavigation: ClanNavigationActions = {
     openPlayer: pushPlayer,
     openPlayerTag: loadPlayer,
@@ -552,7 +509,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     home: (
       <HomeDashboardRoot
         active={primary === 'home' && !utility && pushedScenes.length === 0}
-        onReady={startupPlayerLink ? undefined : tutorialReady}
+        onReady={startupPlayerLink ? undefined : handleHomeReady}
         openManageAccounts={() => openUtility(routeById('accounts'))}
         openAnnouncement={(item) => void presentHomeAnnouncement(item)}
         openTodo={() => openUtility(routeById('todo'))}
@@ -608,13 +565,15 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         openingAnnouncement: runtime.announcements.getActiveAnnouncement(),
         shouldPresent: (item) => runtime.announcementPresentation.shouldPresent(item),
         prepareStory: (item) => sharedAnnouncementStoryCache.prepare(item),
-        presentStory: (item, preparedUri) =>
-          presentPreparedStory(item, preparedUri, canPresent),
+        presentStory: (item, preparedUri) => presentPreparedStory(item, preparedUri, canPresent),
         markDismissed: (item) => runtime.announcementPresentation.markDismissed(item),
       });
       void controller.tryPresent();
     }, 0);
-    return () => { active = false; clearTimeout(timer); };
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [canAutoAnnounce, presentPreparedStory, runtime, state.features]);
 
   useEffect(
@@ -1182,10 +1141,6 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         ),
         onRemove: () => {
           if (!expectedNativeRouteKeys.current.includes(layer.key)) return;
-          if (tutorialClanVisit.current && layer.key.startsWith('pushed:0:clan:')) {
-            tutorialClanVisit.current = false;
-            if (tutorials.getSnapshot().current === 'clanGuide') tutorials.dismiss();
-          }
           navigationGeneration.current += 1;
           nativeRouteKeys.current = nativeRouteKeys.current.filter((key) => key !== layer.key);
           if (layer.key.startsWith('utility:')) {

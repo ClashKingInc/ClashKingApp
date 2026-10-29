@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "{count} giorni precedenti",
   "legendAvailableDays": "Giorni disponibili",
   "legendCompleteOnly": "La distribuzione include i giorni con 8 battaglie registrate.",
-  "legendPerfectSources": "Giorni perfetti per posizione"
+  "legendPerfectSources": "Giorni perfetti per posizione",
+  "onboardingOverviewTitle": "Il tuo villaggio, in primo piano",
+  "onboardingOverviewBody": "Riunisci i tuoi account, clan e progressi quotidiani.",
+  "onboardingProgressTitle": "Scegli la prossima mossa",
+  "onboardingProgressBody": "Segui le battaglie, confronta i progressi e continua i miglioramenti.",
+  "onboardingRemindersTitle": "Un promemoria al momento giusto",
+  "onboardingRemindersBody": "Ricevi promemoria di guerra e gli avvisi che scegli. Seleziona account e tipi di avviso nelle Impostazioni.",
+  "onboardingReplayTitle": "Rivedi l’introduzione",
+  "statsViewLatestData": "Mostra i dati più recenti",
+  "statsLatestAvailableDate": "Ultimi dati disponibili: {date}",
+  "legendPerfectedDefenseDays": "Giorni con difese completamente sconfitte",
+  "legendCompleteDayDefinition": "Sono inclusi solo i giorni con tutte e 8 le battaglie."
 }

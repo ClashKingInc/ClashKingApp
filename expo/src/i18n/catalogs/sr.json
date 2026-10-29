@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Претходних {count} дана",
   "legendAvailableDays": "Доступни дани",
   "legendCompleteOnly": "Расподела обухвата дане са 8 забележених битака.",
-  "legendPerfectSources": "Савршени дани по рангу"
+  "legendPerfectSources": "Савршени дани по рангу",
+  "onboardingOverviewTitle": "Твоје село у фокусу",
+  "onboardingOverviewBody": "Држи налоге, кланове и дневни напредак на једном месту.",
+  "onboardingProgressTitle": "Изабери следећи корак",
+  "onboardingProgressBody": "Прати битке, упореди напредак и настави побољшања.",
+  "onboardingRemindersTitle": "Подсетник у правом тренутку",
+  "onboardingRemindersBody": "Примај ратне подсетнике и изабрана обавештења. Изабери налоге и врсте обавештења у Подешавањима.",
+  "onboardingReplayTitle": "Понови увод",
+  "statsViewLatestData": "Прикажи најновије податке",
+  "statsLatestAvailableDate": "Најновије доступно: {date}",
+  "legendPerfectedDefenseDays": "Дани са потпуно пораженом одбраном",
+  "legendCompleteDayDefinition": "Укључени су само дани са свих 8 битака."
 }

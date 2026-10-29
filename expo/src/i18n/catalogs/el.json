@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Προηγούμενες {count} ημέρες",
   "legendAvailableDays": "Διαθέσιμες ημέρες",
   "legendCompleteOnly": "Η κατανομή περιλαμβάνει ημέρες με 8 καταγεγραμμένες μάχες.",
-  "legendPerfectSources": "Τέλειες ημέρες ανά κατάταξη"
+  "legendPerfectSources": "Τέλειες ημέρες ανά κατάταξη",
+  "onboardingOverviewTitle": "Το χωριό σου στο επίκεντρο",
+  "onboardingOverviewBody": "Κράτησε τους λογαριασμούς, τις φυλές και την καθημερινή σου πρόοδο μαζί.",
+  "onboardingProgressTitle": "Βρες το επόμενο βήμα",
+  "onboardingProgressBody": "Παρακολούθησε μάχες, σύγκρινε την πρόοδό σου και συνέχισε τις αναβαθμίσεις.",
+  "onboardingRemindersTitle": "Υπενθύμιση την κατάλληλη στιγμή",
+  "onboardingRemindersBody": "Λάβε υπενθυμίσεις πολέμου και τις ειδοποιήσεις που επιλέγεις. Διάλεξε λογαριασμούς και τύπους ειδοποιήσεων στις Ρυθμίσεις.",
+  "onboardingReplayTitle": "Επανάληψη εισαγωγής",
+  "statsViewLatestData": "Προβολή νεότερων δεδομένων",
+  "statsLatestAvailableDate": "Νεότερα διαθέσιμα: {date}",
+  "legendPerfectedDefenseDays": "Ημέρες με ολοκληρωτικά ηττημένη άμυνα",
+  "legendCompleteDayDefinition": "Περιλαμβάνονται μόνο ημέρες με και τις 8 μάχες."
 }

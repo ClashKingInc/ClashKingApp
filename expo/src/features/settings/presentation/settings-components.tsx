@@ -2,7 +2,6 @@ import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { InlineBackControl } from '../../../ui/native-back-context';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { Children, Fragment, type ReactElement, type ReactNode } from 'react';
-import { TutorialScrollView } from '../../tutorials/tutorial-ui';
 import {
   Modal,
   Pressable,
@@ -72,7 +71,7 @@ export function SettingsPage({
         ) : null}
         <CKText role="screenTitle">{title}</CKText>
       </View>
-      <TutorialScrollView
+      <ScrollView
         contentContainerStyle={[
           styles.page,
           (layout.isExpanded || layout.isDuo) && {
@@ -88,7 +87,7 @@ export function SettingsPage({
         refreshControl={refreshControl}
       >
         {children}
-      </TutorialScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -229,6 +228,83 @@ export function SettingsTile({
       )}
       {showChevron && onPress ? <ChevronRight color={theme.onSurfaceVariant} size={22} /> : null}
     </Pressable>
+  );
+}
+
+/** A compact choice is part of the settings row, not a second floating control.
+ * The choices identify this setting visually; each accessible label retains its title. */
+export function SettingsChoiceTile<T extends string>({
+  icon,
+  title,
+  value,
+  options,
+  onChange,
+  isRtl = false,
+}: {
+  icon: ReactNode;
+  title: string;
+  value: T;
+  options: readonly { value: T; label: string }[];
+  onChange: (value: T) => void;
+  isRtl?: boolean;
+}) {
+  const theme = useCKTheme();
+  return (
+    <View
+      style={{ flexDirection: isRtl ? 'row-reverse' : 'row', alignItems: 'stretch', minHeight: 62 }}
+    >
+      <View style={{ width: 56, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+      <View style={{ flex: 1, flexDirection: isRtl ? 'row-reverse' : 'row', minWidth: 0 }}>
+        {options.map((option) => {
+          const selected = option.value === value;
+          return (
+            <Pressable
+              key={option.value}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: selected }}
+              accessibilityLabel={`${title}: ${option.label}`}
+              onPress={() => onChange(option.value)}
+              style={({ pressed }) => ({
+                flex: 1,
+                minWidth: 0,
+                minHeight: 62,
+                paddingHorizontal: 5,
+                paddingVertical: 13,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: colorWithAlpha(theme.primary, selected ? 0.1 : pressed ? 0.05 : 0),
+              })}
+            >
+              <CKText
+                role="bodyMedium"
+                skeleton={false}
+                style={{
+                  textAlign: 'center',
+                  fontWeight: selected ? '700' : '500',
+                  color: selected ? theme.onSurface : theme.onSurfaceVariant,
+                }}
+              >
+                {option.label}
+              </CKText>
+              {selected ? (
+                <View
+                  pointerEvents="none"
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 14,
+                    right: 14,
+                    height: 3,
+                    borderRadius: 2,
+                    backgroundColor: theme.primary,
+                  }}
+                />
+              ) : null}
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
   );
 }
 

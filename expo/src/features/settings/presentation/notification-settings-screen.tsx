@@ -54,7 +54,6 @@ import {
   SettingsSection,
   SettingsTile,
 } from './settings-components';
-import { TutorialTarget } from '../../tutorials/tutorial-ui';
 
 const categoryRows: readonly {
   category: NotificationCategory;
@@ -215,7 +214,7 @@ export function NotificationSettingsScreen({
       <SettingsPage title={t('settingsNotificationsTitle')} onBack={onBack} wide>
         <SkeletonContent loading={loading}>
           <SettingsSection title={t('notifSystemNotifications')}>
-            <TutorialTarget id="notifications-permission" offer="notifications">
+            <View>
               <SettingsTile
                 icon={<Bell color={theme.onSurface} size={22} />}
                 title={
@@ -228,12 +227,12 @@ export function NotificationSettingsScreen({
                 disabled={busy}
                 onPress={() => void openSystemSettings()}
               />
-            </TutorialTarget>
+            </View>
           </SettingsSection>
           <SettingsColumns>
             <>
               <SettingsSection title={`${t('searchTabPlayers')} · ${t('searchTabClans')}`}>
-                <TutorialTarget id="notifications-entities">
+                <View>
                   {entityControls ?? (
                     <>
                       <SettingsTile
@@ -252,7 +251,7 @@ export function NotificationSettingsScreen({
                       ) : null}
                     </>
                   )}
-                </TutorialTarget>
+                </View>
               </SettingsSection>
             </>
             <>
@@ -271,7 +270,7 @@ export function NotificationSettingsScreen({
                   />
                 ))}
               </SettingsSection>
-              <TutorialTarget id="notifications-reminders">
+              <View>
                 <SettingsSection title={t('notifCustomReminders')}>
                   <ReminderRow
                     icon={<AlarmClock color={theme.onSurface} size={22} />}
@@ -299,7 +298,7 @@ export function NotificationSettingsScreen({
                     onValues={(values) => void save({ ...settings, raidReminderTimings: values })}
                   />
                 </SettingsSection>
-              </TutorialTarget>
+              </View>
             </>
           </SettingsColumns>
           {debugEnabled && service.sendTestNotification ? (

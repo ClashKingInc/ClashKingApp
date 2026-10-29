@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Vorige {count} dagen",
   "legendAvailableDays": "Beschikbare dagen",
   "legendCompleteOnly": "De verdeling bevat dagen met 8 geregistreerde gevechten.",
-  "legendPerfectSources": "Perfecte dagen per rang"
+  "legendPerfectSources": "Perfecte dagen per rang",
+  "onboardingOverviewTitle": "Je dorp in beeld",
+  "onboardingOverviewBody": "Houd je accounts, clans en dagelijkse voortgang bij elkaar.",
+  "onboardingProgressTitle": "Bepaal je volgende stap",
+  "onboardingProgressBody": "Volg je gevechten, vergelijk je voortgang en blijf upgraden.",
+  "onboardingRemindersTitle": "Een herinnering op het juiste moment",
+  "onboardingRemindersBody": "Ontvang oorlogsherinneringen en de meldingen die je kiest. Kies accounts en meldingstypen in Instellingen.",
+  "onboardingReplayTitle": "Introductie opnieuw bekijken",
+  "statsViewLatestData": "Nieuwste gegevens bekijken",
+  "statsLatestAvailableDate": "Laatst beschikbaar: {date}",
+  "legendPerfectedDefenseDays": "Dagen met volledig verslagen verdediging",
+  "legendCompleteDayDefinition": "Alleen dagen met alle 8 gevechten tellen mee."
 }

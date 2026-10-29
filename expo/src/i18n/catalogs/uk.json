@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Попередні {count} днів",
   "legendAvailableDays": "Дні з даними",
   "legendCompleteOnly": "Розподіл охоплює дні з 8 записаними боями.",
-  "legendPerfectSources": "Ідеальні дні за місцями"
+  "legendPerfectSources": "Ідеальні дні за місцями",
+  "onboardingOverviewTitle": "Твоє селище в центрі уваги",
+  "onboardingOverviewBody": "Облікові записи, клани та щоденний поступ в одному місці.",
+  "onboardingProgressTitle": "Обери наступний крок",
+  "onboardingProgressBody": "Стеж за боями, порівнюй поступ і продовжуй покращення.",
+  "onboardingRemindersTitle": "Нагадування вчасно",
+  "onboardingRemindersBody": "Отримуй нагадування про війни й вибрані сповіщення. Вибери облікові записи та типи сповіщень у налаштуваннях.",
+  "onboardingReplayTitle": "Повторити вступ",
+  "statsViewLatestData": "Переглянути найновіші дані",
+  "statsLatestAvailableDate": "Останні доступні дані: {date}",
+  "legendPerfectedDefenseDays": "Дні з повністю розгромленою обороною",
+  "legendCompleteDayDefinition": "Враховуються лише дні з усіма 8 боями."
 }

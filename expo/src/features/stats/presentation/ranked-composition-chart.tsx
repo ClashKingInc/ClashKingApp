@@ -35,7 +35,8 @@ export function rankedCompositionWindow(
       day.attacks < 0 ||
       !counts.every((count) => Number.isSafeInteger(count) && count >= 0) ||
       counts.reduce((sum, count) => sum + count, 0) !== day.attacks
-    ) continue;
+    )
+      continue;
     observed.set(day.day, {
       date: day.day,
       sampleSize: day.attacks,
@@ -47,43 +48,77 @@ export function rankedCompositionWindow(
   }
   const lastDay = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
   return Array.from({ length: daysInChart }, (_, index) => {
-    const date = new Date(lastDay - (daysInChart - 1 - index) * dayMs)
-      .toISOString().slice(0, 10);
+    const date = new Date(lastDay - (daysInChart - 1 - index) * dayMs).toISOString().slice(0, 10);
     return { date, point: observed.get(date) };
   });
 }
 
-export function hasRankedCompositionData(daily: readonly StatsLegendDay[], dates: StatsDateFilter): boolean {
-  const firstDay = new Date(Date.UTC(dates.start.getFullYear(), dates.start.getMonth(), dates.start.getDate()))
-    .toISOString().slice(0, 10);
-  return rankedCompositionWindow(daily, dates.end).some(({ date, point }) =>
-    date >= firstDay && point !== undefined &&
-    point.airCount + point.groundCount + point.mixedCount > 0,
+export function hasRankedCompositionData(
+  daily: readonly StatsLegendDay[],
+  dates: StatsDateFilter,
+): boolean {
+  const firstDay = new Date(
+    Date.UTC(dates.start.getFullYear(), dates.start.getMonth(), dates.start.getDate()),
+  )
+    .toISOString()
+    .slice(0, 10);
+  return rankedCompositionWindow(daily, dates.end).some(
+    ({ date, point }) =>
+      date >= firstDay &&
+      point !== undefined &&
+      point.airCount + point.groundCount + point.mixedCount > 0,
   );
 }
 
 export function RankedCompositionChart({
   daily,
   dates,
+  exportContext,
 }: {
   readonly daily: readonly StatsLegendDay[];
   readonly dates: StatsDateFilter;
+  readonly exportContext?: string;
 }) {
   const { t, locale } = useI18n();
-  const days = useMemo(() => rankedCompositionWindow(daily, dates.end).filter(
-    ({ date }) => Date.parse(`${date}T00:00:00Z`) >=
-      Date.UTC(dates.start.getFullYear(), dates.start.getMonth(), dates.start.getDate()),
-  ), [daily, dates]);
+  const days = useMemo(
+    () =>
+      rankedCompositionWindow(daily, dates.end).filter(
+        ({ date }) =>
+          Date.parse(`${date}T00:00:00Z`) >=
+          Date.UTC(dates.start.getFullYear(), dates.start.getMonth(), dates.start.getDate()),
+      ),
+    [daily, dates],
+  );
   const count = (value: number) => value.toLocaleString(toIntlLocale(locale));
   const categories = [
-    { key: 'air', label: t('gameItemTargetsAir'), color: ckColors.legendBlue, count: (day: RankedCompositionDay) => day.airCount },
-    { key: 'ground', label: t('gameItemTargetsGround'), color: ckColors.warGold, count: (day: RankedCompositionDay) => day.groundCount },
-    { key: 'mixed', label: `${t('gameItemTargetsAir')} + ${t('gameItemTargetsGround')}`, color: ckColors.capitalPurple, count: (day: RankedCompositionDay) => day.mixedCount },
+    {
+      key: 'air',
+      label: t('gameItemTargetsAir'),
+      color: ckColors.legendBlue,
+      count: (day: RankedCompositionDay) => day.airCount,
+    },
+    {
+      key: 'ground',
+      label: t('gameItemTargetsGround'),
+      color: ckColors.warGold,
+      count: (day: RankedCompositionDay) => day.groundCount,
+    },
+    {
+      key: 'mixed',
+      label: `${t('gameItemTargetsAir')} + ${t('gameItemTargetsGround')}`,
+      color: ckColors.capitalPurple,
+      count: (day: RankedCompositionDay) => day.mixedCount,
+    },
   ] as const;
   return (
     <View testID="ranked-composition-chart" style={{ gap: 8 }}>
       <AnalyticsLineChart
-        title={t('statsDailyTrend')}
+        title={`${t('gameItemTargetsAir')} + ${t('gameItemTargetsGround')}`}
+        exportTitle={
+          exportContext
+            ? `${t('gameItemTargetsAir')} + ${t('gameItemTargetsGround')} · ${exportContext}`
+            : undefined
+        }
         percent
         includeZero
         connectGaps={false}

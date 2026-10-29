@@ -63,15 +63,24 @@
   "esportsDefense": "Apărare",
   "competitiveArenaSubtitle": "Clanul tău. Echipa ta. Următoarea ta provocare.",
   "competitiveViewTournament": "Vezi turneul",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "{earned} / {total} câștigate",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "Ai câștigat {earned} din {total} gemme din realizări.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} finalizat",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "Nu s-a putut încărca clanul.",
   "gameItemLevels": "Niveluri",
   "gameItemLevelCount": "{count, plural, one {# nivel} few {# niveluri} other {# de niveluri}}",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Elixir întunecat",
   "resourceBuilderElixir": "Elixir de constructor",
   "resourceBuilderGold": "Aur de constructor",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "Servere fără ClashKing",
   "rankingsPlayerSection": "Clasamente jucători",
   "rankingsClanSection": "Clasamente clanuri",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Victoria este încă posibilă",
   "warOutlookDrawOnly": "Cel mult egalitate",
   "warOutlookDefeat": "Victoria nu mai este posibilă",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Analiza formației",
   "warScoutOpponent": "Războaiele recente ale adversarului",
   "warScoutScope": "Formația actuală · aceleași reguli · până la 10 războaie anterioare",
-  "upgradeTrackerCapturedWork": "Din ultima actualizare"
-  ,
+  "upgradeTrackerCapturedWork": "Din ultima actualizare",
   "tutorialWelcomeBody": "Descoperă ClashKing într-un tur scurt. Îl poți omite oricând.",
   "tutorialReorderBody": "Ține apăsat un card, apoi trage-l pentru a-i schimba poziția.",
   "tutorialSidebarBody": "Glisează pe ecranul principal pentru a deschide meniul sau atinge avatarul.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "Satul tău, în prim-plan",
+  "onboardingOverviewBody": "Păstrează conturile, clanurile și progresul zilnic într-un singur loc.",
+  "onboardingProgressTitle": "Alege următorul pas",
+  "onboardingProgressBody": "Urmărește luptele, compară progresul și continuă îmbunătățirile.",
+  "onboardingRemindersTitle": "Un memento la momentul potrivit",
+  "onboardingRemindersBody": "Primește mementouri de război și alertele alese. Selectează conturile și tipurile de alerte din Setări.",
+  "onboardingReplayTitle": "Revezi introducerea",
+  "statsViewLatestData": "Vezi cele mai recente date",
+  "statsLatestAvailableDate": "Cele mai recente date disponibile: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Zile cu apărarea învinsă complet",
+  "legendCompleteDayDefinition": "Sunt incluse doar zilele cu toate cele 8 lupte."
 }

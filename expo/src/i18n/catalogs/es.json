@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "{count} días anteriores",
   "legendAvailableDays": "Días disponibles",
   "legendCompleteOnly": "La distribución incluye días con 8 batallas registradas.",
-  "legendPerfectSources": "Días perfectos por posición"
+  "legendPerfectSources": "Días perfectos por posición",
+  "onboardingOverviewTitle": "Tu aldea, en primer plano",
+  "onboardingOverviewBody": "Reúne tus cuentas, clanes y progreso diario.",
+  "onboardingProgressTitle": "Prepara tu siguiente paso",
+  "onboardingProgressBody": "Sigue tus batallas, compara tu progreso y continúa las mejoras.",
+  "onboardingRemindersTitle": "Un recordatorio en el momento justo",
+  "onboardingRemindersBody": "Recibe recordatorios de guerra y las alertas que elijas. Selecciona tus cuentas y tipos de alerta en Ajustes.",
+  "onboardingReplayTitle": "Volver a ver la introducción",
+  "statsViewLatestData": "Ver los datos más recientes",
+  "statsLatestAvailableDate": "Últimos datos disponibles: {date}",
+  "legendPerfectedDefenseDays": "Días con defensa derrotada por completo",
+  "legendCompleteDayDefinition": "Solo se incluyen los días con las 8 batallas completas."
 }

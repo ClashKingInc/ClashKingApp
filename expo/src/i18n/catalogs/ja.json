@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "直前の{count}日間",
   "legendAvailableDays": "データのある日数",
   "legendCompleteOnly": "8戦すべてが記録された日を集計しています。",
-  "legendPerfectSources": "順位帯別のパーフェクト日数"
+  "legendPerfectSources": "順位帯別のパーフェクト日数",
+  "onboardingOverviewTitle": "あなたの村をひと目で",
+  "onboardingOverviewBody": "アカウント、クラン、毎日の進み具合をひとつに。",
+  "onboardingProgressTitle": "次の一手を見つけよう",
+  "onboardingProgressBody": "対戦を振り返り、進み具合を比べて、アップグレードを続けよう。",
+  "onboardingRemindersTitle": "ちょうどよいタイミングで通知",
+  "onboardingRemindersBody": "対戦リマインダーや必要な通知を受け取れます。設定でアカウントと通知の種類を選べます。",
+  "onboardingReplayTitle": "紹介をもう一度見る",
+  "statsViewLatestData": "最新のデータを見る",
+  "statsLatestAvailableDate": "最新のデータ：{date}",
+  "legendPerfectedDefenseDays": "防衛で全敗した日数",
+  "legendCompleteDayDefinition": "8回すべての対戦が記録された日のみを含みます。"
 }

@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "{count} ngày trước đó",
   "legendAvailableDays": "Ngày có dữ liệu",
   "legendCompleteOnly": "Phân bố chỉ gồm những ngày có 8 trận được ghi nhận.",
-  "legendPerfectSources": "Ngày hoàn hảo theo thứ hạng"
+  "legendPerfectSources": "Ngày hoàn hảo theo thứ hạng",
+  "onboardingOverviewTitle": "Ngôi làng trong tầm mắt",
+  "onboardingOverviewBody": "Tập hợp tài khoản, hội và tiến độ hằng ngày ở một nơi.",
+  "onboardingProgressTitle": "Chọn bước tiếp theo",
+  "onboardingProgressBody": "Theo dõi trận đánh, so sánh tiến độ và tiếp tục nâng cấp.",
+  "onboardingRemindersTitle": "Nhắc nhở đúng lúc",
+  "onboardingRemindersBody": "Nhận nhắc nhở chiến tranh và thông báo bạn chọn. Chọn tài khoản và loại thông báo trong Cài đặt.",
+  "onboardingReplayTitle": "Xem lại phần giới thiệu",
+  "statsViewLatestData": "Xem dữ liệu mới nhất",
+  "statsLatestAvailableDate": "Dữ liệu mới nhất hiện có: {date}",
+  "legendPerfectedDefenseDays": "Ngày phòng thủ bị đánh bại hoàn toàn",
+  "legendCompleteDayDefinition": "Chỉ tính những ngày có đủ cả 8 trận đấu."
 }

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Menu, Search } from 'lucide-react-native';
-import { TutorialTarget } from '../features/tutorials/tutorial-ui';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../ui/header';
 import { useTabletTypography } from '../ui/typography-context';
 
@@ -53,7 +52,7 @@ export function MobileHeader({
             : undefined,
         ]}
       >
-        <TutorialTarget id="sidebar-open">
+        <View>
           <GlassSurface
             cornerRadius={23}
             interactive
@@ -94,7 +93,7 @@ export function MobileHeader({
               </View>
             </Pressable>
           </GlassSurface>
-        </TutorialTarget>
+        </View>
         {pageTitle ? (
           <CKText role="titleLarge" numberOfLines={1} style={styles.pageTitle}>
             {pageTitle}

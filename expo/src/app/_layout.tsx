@@ -33,7 +33,6 @@ import { nativeSecondaryScreenOptions } from '../core/app/native-secondary-navig
 import { WebDocumentTitle } from '../core/app/web-document-title';
 import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
 import { warmHeaderArtwork } from '../core/assets/header-artwork-cache';
-import { TutorialOverlay } from '../features/tutorials/tutorial-ui';
 
 void SplashScreen.preventAutoHideAsync();
 initializeObservability();
@@ -122,7 +121,6 @@ export default function RootLayout() {
                   }
                 />
               </Stack>
-              <TutorialOverlay />
             </NavigationTheme>
           </AppRuntimeProvider>
         </QueryClientProvider>

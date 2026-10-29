@@ -63,15 +63,24 @@
   "esportsDefense": "防守",
   "competitiveArenaSubtitle": "你的部落。你的战队。你的下一场挑战。",
   "competitiveViewTournament": "查看锦标赛",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "已获得 {earned} / {total}",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "已获得成就宝石 {earned} 个，共 {total} 个。",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} 已完成",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "加载部落失败。",
   "gameItemLevels": "等级",
   "gameItemLevelCount": "{count} 级",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "暗黑重油",
   "resourceBuilderElixir": "建筑大师圣水",
   "resourceBuilderGold": "建筑大师金币",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "未添加 ClashKing 的服务器",
   "rankingsPlayerSection": "玩家排行榜",
   "rankingsClanSection": "部落排行榜",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "仍有获胜可能",
   "warOutlookDrawOnly": "最好只能平局",
   "warOutlookDefeat": "已无法获胜",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "阵容分析",
   "warScoutOpponent": "对手近期部落对战",
   "warScoutScope": "当前阵容 · 相同规则 · 最多10场此前对战",
-  "upgradeTrackerCapturedWork": "来自上次更新"
-  ,
+  "upgradeTrackerCapturedWork": "来自上次更新",
   "tutorialWelcomeBody": "快速了解ClashKing。您可以随时跳过导览。",
   "tutorialReorderBody": "长按卡片，然后拖动即可调整位置。",
   "tutorialSidebarBody": "在主页上滑动或点按头像即可打开菜单。",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "你的村庄，一目了然",
+  "onboardingOverviewBody": "在一处查看账号、部落和每日进度。",
+  "onboardingProgressTitle": "找到下一步目标",
+  "onboardingProgressBody": "回顾对战、比较进度，继续升级。",
+  "onboardingRemindersTitle": "及时收到提醒",
+  "onboardingRemindersBody": "接收部落战提醒和你选择的通知。在设置中选择账号和通知类型。",
+  "onboardingReplayTitle": "重新查看介绍",
+  "statsViewLatestData": "查看最新数据",
+  "statsLatestAvailableDate": "最新可用数据：{date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "防守被全三星的天数",
+  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。"
 }

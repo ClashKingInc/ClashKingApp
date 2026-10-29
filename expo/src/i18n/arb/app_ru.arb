@@ -63,15 +63,24 @@
   "esportsDefense": "Защита",
   "competitiveArenaSubtitle": "Твой клан. Твоя команда. Твой следующий вызов.",
   "competitiveViewTournament": "Посмотреть турнир",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "Получено {earned} / {total}",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "Получено {earned} из {total} кристаллов за достижения.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} завершено",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "Не удалось загрузить клан.",
   "gameItemLevels": "Уровни",
   "gameItemLevelCount": "{count, plural, one {# уровень} few {# уровня} many {# уровней} other {# уровня}}",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Тёмный эликсир",
   "resourceBuilderElixir": "Эликсир строителя",
   "resourceBuilderGold": "Золото строителя",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "Серверы без ClashKing",
   "rankingsPlayerSection": "Рейтинги игроков",
   "rankingsClanSection": "Рейтинги кланов",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Победа ещё возможна",
   "warOutlookDrawOnly": "В лучшем случае ничья",
   "warOutlookDefeat": "Победа невозможна",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Анализ состава",
   "warScoutOpponent": "Недавние войны соперника",
   "warScoutScope": "Текущий состав · те же правила · до 10 предыдущих войн",
-  "upgradeTrackerCapturedWork": "Из последнего обновления"
-  ,
+  "upgradeTrackerCapturedWork": "Из последнего обновления",
   "tutorialWelcomeBody": "Познакомьтесь с ClashKing в коротком обзоре. Его можно пропустить в любой момент.",
   "tutorialReorderBody": "Удерживайте карточку и перетащите её на новое место.",
   "tutorialSidebarBody": "Проведите по главному экрану, чтобы открыть меню, или нажмите на свой аватар.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "Твоя деревня в центре внимания",
+  "onboardingOverviewBody": "Аккаунты, кланы и ежедневный прогресс в одном месте.",
+  "onboardingProgressTitle": "Выбери следующий шаг",
+  "onboardingProgressBody": "Следи за боями, сравнивай результаты и продолжай улучшения.",
+  "onboardingRemindersTitle": "Напоминание вовремя",
+  "onboardingRemindersBody": "Получай напоминания о войнах и выбранные уведомления. Выбери аккаунты и типы уведомлений в настройках.",
+  "onboardingReplayTitle": "Повторить введение",
+  "statsViewLatestData": "Показать последние данные",
+  "statsLatestAvailableDate": "Последние доступные данные: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Дни с полностью разгромленной защитой",
+  "legendCompleteDayDefinition": "Учитываются только дни со всеми 8 боями."
 }

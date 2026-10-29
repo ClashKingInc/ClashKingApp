@@ -63,15 +63,24 @@
   "esportsDefense": "הגנה",
   "competitiveArenaSubtitle": "השבט שלך. הקבוצה שלך. האתגר הבא שלך.",
   "competitiveViewTournament": "הצגת הטורניר",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "הושגו {earned} / {total}",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "הושגו {earned} מתוך {total} אבני חן מהישגים.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} הושלם",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "טעינת הקלאן נכשלה.",
   "gameItemLevels": "רמות",
   "gameItemLevelCount": "{count, plural, one {רמה אחת} two {# רמות} other {# רמות}}",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "דארק אליקסיר",
   "resourceBuilderElixir": "אליקסיר הבנאי",
   "resourceBuilderGold": "זהב הבנאי",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "שרתים ללא ClashKing",
   "rankingsPlayerSection": "דירוגי שחקנים",
   "rankingsClanSection": "דירוגי שבטים",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "עדיין אפשר לנצח",
   "warOutlookDrawOnly": "לכל היותר תיקו",
   "warOutlookDefeat": "אין אפשרות לנצח",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "סקירת ההרכב",
   "warScoutOpponent": "המלחמות האחרונות של היריב",
   "warScoutScope": "ההרכב הנוכחי · אותם כללים · עד 10 מלחמות קודמות",
-  "upgradeTrackerCapturedWork": "מהעדכון האחרון שלך"
-  ,
+  "upgradeTrackerCapturedWork": "מהעדכון האחרון שלך",
   "tutorialWelcomeBody": "צאו לסיור קצר ב-ClashKing. אפשר לדלג עליו בכל רגע.",
   "tutorialReorderBody": "לחצו לחיצה ארוכה על כרטיס וגררו אותו כדי לשנות את מיקומו.",
   "tutorialSidebarBody": "החליקו במסך הבית לפתיחת התפריט, או הקישו על תמונת הפרופיל.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "הכפר שלך במרכז",
+  "onboardingOverviewBody": "כל החשבונות, השבטים וההתקדמות היומית שלך במקום אחד.",
+  "onboardingProgressTitle": "הצעד הבא שלך",
+  "onboardingProgressBody": "עקוב אחר הקרבות, השווה את ההתקדמות והמשך בשדרוגים.",
+  "onboardingRemindersTitle": "תזכורת בזמן הנכון",
+  "onboardingRemindersBody": "קבל תזכורות מלחמה והתראות לבחירתך. בחר חשבונות וסוגי התראות בהגדרות.",
+  "onboardingReplayTitle": "הצג שוב את המבוא",
+  "statsViewLatestData": "הצג את הנתונים העדכניים",
+  "statsLatestAvailableDate": "הנתונים העדכניים הזמינים: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "ימים שבהם ההגנה הובסה לחלוטין",
+  "legendCompleteDayDefinition": "נכללים רק ימים שבהם כל 8 הקרבות הושלמו."
 }

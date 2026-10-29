@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Poprzednie {count} dni",
   "legendAvailableDays": "Dostępne dni",
   "legendCompleteOnly": "Rozkład obejmuje dni z 8 zarejestrowanymi bitwami.",
-  "legendPerfectSources": "Perfekcyjne dni według pozycji"
+  "legendPerfectSources": "Perfekcyjne dni według pozycji",
+  "onboardingOverviewTitle": "Twoja wioska w centrum uwagi",
+  "onboardingOverviewBody": "Miej konta, klany i codzienne postępy w jednym miejscu.",
+  "onboardingProgressTitle": "Zaplanuj kolejny krok",
+  "onboardingProgressBody": "Śledź bitwy, porównuj postępy i kontynuuj ulepszenia.",
+  "onboardingRemindersTitle": "Przypomnienie we właściwym czasie",
+  "onboardingRemindersBody": "Otrzymuj przypomnienia o wojnach i wybrane alerty. Wybierz konta i typy powiadomień w Ustawieniach.",
+  "onboardingReplayTitle": "Pokaż wprowadzenie ponownie",
+  "statsViewLatestData": "Pokaż najnowsze dane",
+  "statsLatestAvailableDate": "Najnowsze dostępne dane: {date}",
+  "legendPerfectedDefenseDays": "Dni z całkowicie pokonaną obroną",
+  "legendCompleteDayDefinition": "Uwzględniane są tylko dni ze wszystkimi 8 bitwami."
 }

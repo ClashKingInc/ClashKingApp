@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "De foregående {count} dage",
   "legendAvailableDays": "Tilgængelige dage",
   "legendCompleteOnly": "Fordelingen bruger dage med 8 registrerede kampe.",
-  "legendPerfectSources": "Perfekte dage efter placering"
+  "legendPerfectSources": "Perfekte dage efter placering",
+  "onboardingOverviewTitle": "Din landsby i fokus",
+  "onboardingOverviewBody": "Saml dine konti, klaner og daglige fremskridt.",
+  "onboardingProgressTitle": "Find dit næste træk",
+  "onboardingProgressBody": "Følg dine kampe, sammenlign fremskridt, og fortsæt dine opgraderinger.",
+  "onboardingRemindersTitle": "En påmindelse på rette tidspunkt",
+  "onboardingRemindersBody": "Få krigspåmindelser og de varsler, du vælger. Vælg konti og varselstyper i Indstillinger.",
+  "onboardingReplayTitle": "Vis introduktionen igen",
+  "statsViewLatestData": "Vis seneste data",
+  "statsLatestAvailableDate": "Senest tilgængelig: {date}",
+  "legendPerfectedDefenseDays": "Dage med fuldt besejret forsvar",
+  "legendCompleteDayDefinition": "Kun dage med alle 8 kampe tælles med."
 }

@@ -63,15 +63,24 @@
   "esportsDefense": "Védekezés",
   "competitiveArenaSubtitle": "A klánod. A csapatod. A következő kihívásod.",
   "competitiveViewTournament": "Bajnokság megtekintése",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "{earned} / {total} megszerezve",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "{earned} drágakövet szereztél a teljesítményekkel elérhető {total} közül.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} kész",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "A klán betöltése sikertelen.",
   "gameItemLevels": "Szintek",
   "gameItemLevelCount": "{count} szint",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Sötét elixír",
   "resourceBuilderElixir": "Építő elixír",
   "resourceBuilderGold": "Építő arany",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "ClashKing nélküli szerverek",
   "rankingsPlayerSection": "Játékosranglisták",
   "rankingsClanSection": "Klánranglisták",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Még lehetséges a győzelem",
   "warOutlookDrawOnly": "Legfeljebb döntetlen",
   "warOutlookDefeat": "Már nem lehet nyerni",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Felállás elemzése",
   "warScoutOpponent": "Az ellenfél legutóbbi háborúi",
   "warScoutScope": "Jelenlegi felállás · azonos szabályok · legfeljebb 10 korábbi háború",
-  "upgradeTrackerCapturedWork": "A legutóbbi frissítésedből"
-  ,
+  "upgradeTrackerCapturedWork": "A legutóbbi frissítésedből",
   "tutorialWelcomeBody": "Ismerd meg a ClashKinget egy rövid bemutatóval. Bármikor kihagyhatod.",
   "tutorialReorderBody": "Tartsd nyomva a kártyát, majd húzd új helyre.",
   "tutorialSidebarBody": "A menü megnyitásához húzd el az ujjad a kezdőlapon, vagy koppints az avatarodra.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "A falud a középpontban",
+  "onboardingOverviewBody": "Tartsd együtt fiókjaidat, klánjaidat és napi fejlődésedet.",
+  "onboardingProgressTitle": "Tervezd meg a következő lépést",
+  "onboardingProgressBody": "Kövesd csatáidat, hasonlítsd össze eredményeidet, és haladj a fejlesztésekkel.",
+  "onboardingRemindersTitle": "Emlékeztető a megfelelő időben",
+  "onboardingRemindersBody": "Kapj háborús emlékeztetőket és választott értesítéseket. A Beállításokban válassz fiókokat és értesítéstípusokat.",
+  "onboardingReplayTitle": "Bevezető újraindítása",
+  "statsViewLatestData": "Legfrissebb adatok megtekintése",
+  "statsLatestAvailableDate": "Legfrissebb elérhető: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Teljesen legyőzött védekezésű napok",
+  "legendCompleteDayDefinition": "Csak a mind a 8 csatát tartalmazó napok számítanak."
 }

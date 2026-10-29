@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "گزشتہ {count} دن",
   "legendAvailableDays": "دستیاب دن",
   "legendCompleteOnly": "تقسیم میں وہ دن شامل ہیں جن میں 8 لڑائیاں ریکارڈ ہوئیں۔",
-  "legendPerfectSources": "درجہ بندی کے مطابق بے عیب دن"
+  "legendPerfectSources": "درجہ بندی کے مطابق بے عیب دن",
+  "onboardingOverviewTitle": "آپ کا گاؤں، ایک نظر میں",
+  "onboardingOverviewBody": "اپنے اکاؤنٹس، کلینز اور روزانہ کی پیش رفت ایک جگہ رکھیں۔",
+  "onboardingProgressTitle": "اگلا قدم جانیں",
+  "onboardingProgressBody": "لڑائیوں پر نظر رکھیں، پیش رفت کا موازنہ کریں اور اپ گریڈ جاری رکھیں۔",
+  "onboardingRemindersTitle": "صحیح وقت پر یاد دہانی",
+  "onboardingRemindersBody": "جنگ کی یاد دہانیاں اور اپنی پسند کی اطلاعات حاصل کریں۔ ترتیبات میں اکاؤنٹس اور اطلاعات کی اقسام منتخب کریں۔",
+  "onboardingReplayTitle": "تعارف دوبارہ دیکھیں",
+  "statsViewLatestData": "تازہ ترین ڈیٹا دیکھیں",
+  "statsLatestAvailableDate": "تازہ ترین دستیاب ڈیٹا: {date}",
+  "legendPerfectedDefenseDays": "مکمل طور پر شکست خوردہ دفاع کے دن",
+  "legendCompleteDayDefinition": "صرف وہ دن شامل ہیں جن میں تمام 8 لڑائیاں ہوئی ہوں۔"
 }

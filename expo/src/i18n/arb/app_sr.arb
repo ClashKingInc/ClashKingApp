@@ -63,15 +63,24 @@
   "esportsDefense": "Одбрана",
   "competitiveArenaSubtitle": "Твој клан. Твој тим. Твој следећи изазов.",
   "competitiveViewTournament": "Прикажи турнир",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "Освојено {earned} / {total}",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "Освојено је {earned} од {total} драгуља за достигнућа.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} završeno",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "Učitavanje klana nije uspelo.",
   "gameItemLevels": "Nivoi",
   "gameItemLevelCount": "{count, plural, one {# nivo} few {# nivoa} other {# nivoa}}",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Tamni eliksir",
   "resourceBuilderElixir": "Graditeljski eliksir",
   "resourceBuilderGold": "Graditeljsko zlato",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "Serveri bez ClashKing-a",
   "rankingsPlayerSection": "Rang-liste igrača",
   "rankingsClanSection": "Rang-liste klanova",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Победа је још могућа",
   "warOutlookDrawOnly": "Највише нерешено",
   "warOutlookDefeat": "Победа није могућа",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Анализа поставе",
   "warScoutOpponent": "Недавни ратови противника",
   "warScoutScope": "Тренутна постава · иста правила · до 10 претходна рата",
-  "upgradeTrackerCapturedWork": "Из последњег ажурирања"
-  ,
+  "upgradeTrackerCapturedWork": "Из последњег ажурирања",
   "tutorialWelcomeBody": "Упознајте ClashKing кроз кратак обилазак. Можете га прескочити у сваком тренутку.",
   "tutorialReorderBody": "Држите картицу притиснуту и превуците је на ново место.",
   "tutorialSidebarBody": "Превуците преко почетног екрана да отворите мени или додирните свој аватар.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "Твоје село у фокусу",
+  "onboardingOverviewBody": "Држи налоге, кланове и дневни напредак на једном месту.",
+  "onboardingProgressTitle": "Изабери следећи корак",
+  "onboardingProgressBody": "Прати битке, упореди напредак и настави побољшања.",
+  "onboardingRemindersTitle": "Подсетник у правом тренутку",
+  "onboardingRemindersBody": "Примај ратне подсетнике и изабрана обавештења. Изабери налоге и врсте обавештења у Подешавањима.",
+  "onboardingReplayTitle": "Понови увод",
+  "statsViewLatestData": "Прикажи најновије податке",
+  "statsLatestAvailableDate": "Најновије доступно: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Дани са потпуно пораженом одбраном",
+  "legendCompleteDayDefinition": "Укључени су само дани са свих 8 битака."
 }

@@ -69,6 +69,7 @@ export function analyticsChartDays(series: readonly AnalyticsSeries[]): string[]
 /** Connect observed points across gaps; tooltips still report missing dates as unavailable. */
 export function AnalyticsLineChart({
   title,
+  exportTitle,
   series: sourceSeries,
   percent = false,
   height: requestedHeight = 192,
@@ -88,6 +89,7 @@ export function AnalyticsLineChart({
   responsiveAxes = false,
 }: {
   readonly title: string;
+  readonly exportTitle?: string;
   readonly series: readonly AnalyticsSeries[];
   readonly percent?: boolean;
   readonly height?: number;
@@ -299,7 +301,12 @@ export function AnalyticsLineChart({
     )
     .join(', ');
   return (
-    <StatsChartFrame title={title} showTitle={showTitle} copyEnabled={exportable}>
+    <StatsChartFrame
+      title={title}
+      exportTitle={exportTitle}
+      showTitle={showTitle}
+      copyEnabled={exportable}
+    >
       {series.length > 1 ? (
         <View style={[styles.legend, !showTitle && exportable && { paddingRight: 38 }]}>
           {series.map((line, index) => {

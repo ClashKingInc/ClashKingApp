@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Cele {count} zile anterioare",
   "legendAvailableDays": "Zile disponibile",
   "legendCompleteOnly": "Distribuția include zilele cu 8 lupte înregistrate.",
-  "legendPerfectSources": "Zile perfecte după rang"
+  "legendPerfectSources": "Zile perfecte după rang",
+  "onboardingOverviewTitle": "Satul tău, în prim-plan",
+  "onboardingOverviewBody": "Păstrează conturile, clanurile și progresul zilnic într-un singur loc.",
+  "onboardingProgressTitle": "Alege următorul pas",
+  "onboardingProgressBody": "Urmărește luptele, compară progresul și continuă îmbunătățirile.",
+  "onboardingRemindersTitle": "Un memento la momentul potrivit",
+  "onboardingRemindersBody": "Primește mementouri de război și alertele alese. Selectează conturile și tipurile de alerte din Setări.",
+  "onboardingReplayTitle": "Revezi introducerea",
+  "statsViewLatestData": "Vezi cele mai recente date",
+  "statsLatestAvailableDate": "Cele mai recente date disponibile: {date}",
+  "legendPerfectedDefenseDays": "Zile cu apărarea învinsă complet",
+  "legendCompleteDayDefinition": "Sunt incluse doar zilele cu toate cele 8 lupte."
 }

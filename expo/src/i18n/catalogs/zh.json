@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "此前 {count} 天",
   "legendAvailableDays": "有数据的天数",
   "legendCompleteOnly": "分布仅统计记录了8场战斗的日期。",
-  "legendPerfectSources": "按排名区间统计完美天数"
+  "legendPerfectSources": "按排名区间统计完美天数",
+  "onboardingOverviewTitle": "你的村庄，一目了然",
+  "onboardingOverviewBody": "在一处查看账号、部落和每日进度。",
+  "onboardingProgressTitle": "找到下一步目标",
+  "onboardingProgressBody": "回顾对战、比较进度，继续升级。",
+  "onboardingRemindersTitle": "及时收到提醒",
+  "onboardingRemindersBody": "接收部落战提醒和你选择的通知。在设置中选择账号和通知类型。",
+  "onboardingReplayTitle": "重新查看介绍",
+  "statsViewLatestData": "查看最新数据",
+  "statsLatestAvailableDate": "最新可用数据：{date}",
+  "legendPerfectedDefenseDays": "防守被全三星的天数",
+  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。"
 }

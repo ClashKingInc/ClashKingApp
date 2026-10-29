@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Önceki {count} gün",
   "legendAvailableDays": "Veri bulunan günler",
   "legendCompleteOnly": "Dağılım, 8 savaşın kaydedildiği günleri içerir.",
-  "legendPerfectSources": "Sıralamaya göre kusursuz günler"
+  "legendPerfectSources": "Sıralamaya göre kusursuz günler",
+  "onboardingOverviewTitle": "Köyün gözünün önünde",
+  "onboardingOverviewBody": "Hesaplarını, klanlarını ve günlük ilerlemeni bir arada tut.",
+  "onboardingProgressTitle": "Sonraki adımını belirle",
+  "onboardingProgressBody": "Savaşlarını takip et, ilerlemeni karşılaştır ve yükseltmelere devam et.",
+  "onboardingRemindersTitle": "Doğru zamanda hatırlatma",
+  "onboardingRemindersBody": "Savaş hatırlatmalarını ve seçtiğin bildirimleri al. Ayarlar’dan hesaplarını ve bildirim türlerini seç.",
+  "onboardingReplayTitle": "Tanıtımı yeniden göster",
+  "statsViewLatestData": "En yeni verileri gör",
+  "statsLatestAvailableDate": "En son mevcut veri: {date}",
+  "legendPerfectedDefenseDays": "Savunmanın tamamen yenildiği günler",
+  "legendCompleteDayDefinition": "Yalnızca 8 savaşın tamamlandığı günler dahil edilir."
 }

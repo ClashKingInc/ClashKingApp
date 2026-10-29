@@ -63,15 +63,24 @@
   "esportsDefense": "Άμυνα",
   "competitiveArenaSubtitle": "Η φυλή σου. Η ομάδα σου. Η επόμενη πρόκλησή σου.",
   "competitiveViewTournament": "Προβολή τουρνουά",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "Κερδήθηκαν {earned} / {total}",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "Κερδήθηκαν {earned} από {total} πολύτιμους λίθους επιτευγμάτων.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} ολοκληρώθηκε",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "Αποτυχία φόρτωσης clan.",
   "gameItemLevels": "Επίπεδα",
   "gameItemLevelCount": "{count, plural, one {# επίπεδο} other {# επίπεδα}}",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Σκοτεινό ελιξίριο",
   "resourceBuilderElixir": "Ελιξίριο Κατασκευαστή",
   "resourceBuilderGold": "Χρυσός Κατασκευαστή",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "Διακομιστές χωρίς ClashKing",
   "rankingsPlayerSection": "Κατατάξεις παικτών",
   "rankingsClanSection": "Κατατάξεις φυλών",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Η νίκη είναι ακόμα εφικτή",
   "warOutlookDrawOnly": "Στην καλύτερη περίπτωση ισοπαλία",
   "warOutlookDefeat": "Η νίκη δεν είναι εφικτή",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Ανάλυση σύνθεσης",
   "warScoutOpponent": "Πρόσφατοι πόλεμοι αντιπάλου",
   "warScoutScope": "Τρέχουσα σύνθεση · ίδιοι κανόνες · έως 10 προηγούμενοι πόλεμοι",
-  "upgradeTrackerCapturedWork": "Από την τελευταία ενημέρωσή σου"
-  ,
+  "upgradeTrackerCapturedWork": "Από την τελευταία ενημέρωσή σου",
   "tutorialWelcomeBody": "Γνωρίστε το ClashKing με μια σύντομη περιήγηση. Μπορείτε να την παραλείψετε οποτεδήποτε.",
   "tutorialReorderBody": "Κρατήστε πατημένη μια κάρτα και σύρετέ την για να αλλάξετε τη θέση της.",
   "tutorialSidebarBody": "Σύρετε στην αρχική οθόνη για να ανοίξετε το μενού ή πατήστε το avatar σας.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "Το χωριό σου στο επίκεντρο",
+  "onboardingOverviewBody": "Κράτησε τους λογαριασμούς, τις φυλές και την καθημερινή σου πρόοδο μαζί.",
+  "onboardingProgressTitle": "Βρες το επόμενο βήμα",
+  "onboardingProgressBody": "Παρακολούθησε μάχες, σύγκρινε την πρόοδό σου και συνέχισε τις αναβαθμίσεις.",
+  "onboardingRemindersTitle": "Υπενθύμιση την κατάλληλη στιγμή",
+  "onboardingRemindersBody": "Λάβε υπενθυμίσεις πολέμου και τις ειδοποιήσεις που επιλέγεις. Διάλεξε λογαριασμούς και τύπους ειδοποιήσεων στις Ρυθμίσεις.",
+  "onboardingReplayTitle": "Επανάληψη εισαγωγής",
+  "statsViewLatestData": "Προβολή νεότερων δεδομένων",
+  "statsLatestAvailableDate": "Νεότερα διαθέσιμα: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Ημέρες με ολοκληρωτικά ηττημένη άμυνα",
+  "legendCompleteDayDefinition": "Περιλαμβάνονται μόνο ημέρες με και τις 8 μάχες."
 }

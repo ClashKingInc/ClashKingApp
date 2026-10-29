@@ -3,6 +3,7 @@ import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import {
   memo,
+  useEffect,
   useCallback,
   useMemo,
   useState,
@@ -60,11 +61,13 @@ import {
   ProfilePageHeader,
   ProfileStatChip,
   ResponsiveGrid,
+  SelectionPicker,
   ckRadius,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
 import { StatsLoadStatus, type StatsProvider } from '../data';
+import { StatsRepository } from '../data/stats-repository';
 import {
   isArmyItemIdentity,
   type StatsArmySetupResponse,
@@ -74,6 +77,7 @@ import {
   StatsDailyPoint,
   StatsItemQuantityFilter,
   StatsLegendCohort,
+  StatsLegendQuery,
   StatsLegendResponse,
   StatsTroopStatsResponse,
   StatsPerformanceResponse,
@@ -233,12 +237,176 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
         {hero}
         <View style={{ paddingHorizontal: horizontal }}>
           {provider.section === StatsSection.ranked && api ? (
-            <LegendDayPerformanceSection api={api} dates={provider.dates} />
-          ) : null}
-          <StatsSectionContent provider={provider} api={api} />
+            <RankedStatsSection provider={provider} api={api} />
+          ) : (
+            <StatsSectionContent provider={provider} api={api} />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+/** Daily player totals and individual attacks have different denominators.
+ * One cohort selector serves both views, without mixing their headline values. */
+function RankedStatsSection({
+  provider,
+  api,
+}: {
+  provider: StatsProvider;
+  api: ContractApiService;
+}) {
+  const { t, locale } = useI18n();
+  const theme = useCKTheme();
+  const [cohort, setCohort] = useState<StatsLegendCohortValue>(StatsLegendCohort.legend);
+  const [view, setView] = useState('days');
+  const [battleReload, setBattleReload] = useState(0);
+  const [available, setAvailable] = useState<{
+    cohort: StatsLegendCohortValue;
+    firstDay: string;
+    lastDay: string;
+  }>();
+  const rememberAvailability = useCallback(
+    (next: { firstDay: string; lastDay: string }) => {
+      setAvailable((previous) =>
+        previous?.cohort === cohort &&
+        previous.firstDay === next.firstDay &&
+        previous.lastDay === next.lastDay
+          ? previous
+          : { ...next, cohort },
+      );
+    },
+    [cohort],
+  );
+  const latest = available?.cohort === cohort ? available : undefined;
+  const showLatest = (range: { firstDay: string; lastDay: string }) => {
+    const end = new Date(`${range.lastDay}T12:00:00`);
+    const start = new Date(end);
+    start.setDate(start.getDate() - Math.min(90, provider.dates.inclusiveDays) + 1);
+    const earliest = new Date(`${range.firstDay}T12:00:00`);
+    void provider.setDates(start < earliest ? earliest : start, end);
+  };
+  const repository = useMemo(() => new StatsRepository(api), [api]);
+  const first = StatsDateFilter.formatDate(provider.dates.start),
+    last = StatsDateFilter.formatDate(provider.dates.end);
+  const requestKey = `${first}:${last}:${cohort}:${battleReload}`;
+  const [battleResult, setBattleResult] = useState<{
+    key: string;
+    data?: StatsLegendResponse;
+    error?: unknown;
+  }>();
+  useEffect(() => {
+    if (view !== 'battles' || cohort === StatsLegendCohort.legend) return;
+    let active = true;
+    void repository
+      .loadItems(
+        new StatsLegendQuery(
+          new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
+          cohort,
+        ),
+        battleReload > 0,
+      )
+      .then(
+        (data) => {
+          if (active) setBattleResult({ key: requestKey, data });
+        },
+        (error: unknown) => {
+          if (active) setBattleResult({ key: requestKey, error });
+        },
+      );
+    return () => {
+      active = false;
+    };
+  }, [view, cohort, repository, first, last, requestKey, battleReload]);
+  const response = battleResult?.key === requestKey ? battleResult : undefined;
+  const current = provider.currentState;
+  const battles =
+    cohort === StatsLegendCohort.legend
+      ? current.data instanceof StatsLegendResponse
+        ? current.data
+        : undefined
+      : response?.data;
+  const error = cohort === StatsLegendCohort.legend ? current.error : response?.error;
+  return (
+    <View style={{ gap: 20 }} testID="ranked-stats-overview">
+      <SelectionPicker
+        title={t('statsPlayers')}
+        accessibilityLabel={t('statsPlayers')}
+        fillWidth
+        options={[
+          StatsLegendCohort.legend,
+          StatsLegendCohort.top1000,
+          StatsLegendCohort.top200,
+        ].map((key) => ({
+          key,
+          label:
+            key === StatsLegendCohort.legend
+              ? t('statsLegendLeagueOne')
+              : t('rankingsTopCount', { count: key === StatsLegendCohort.top200 ? 200 : 1000 }),
+          icon: (
+            <MobileWebImage
+              imageUrl={ImageAssets.legendLeagueOne}
+              style={{ width: 28, height: 28 }}
+              contentFit="contain"
+            />
+          ),
+        }))}
+        selectedKey={cohort}
+        onSelect={setCohort}
+      />
+      <ProfileTabs
+        variant="underline"
+        overflow="fit"
+        selectedKey={view}
+        onSelect={setView}
+        tabs={[
+          { key: 'days', label: t('legendPerformanceTitle') },
+          { key: 'battles', label: t('statsBattle') },
+        ]}
+      />
+      {view === 'days' ? (
+        <LegendDayPerformanceSection
+          api={api}
+          dates={provider.dates}
+          cohort={cohort}
+          onAvailability={rememberAvailability}
+          onShowLatest={showLatest}
+        />
+      ) : error ? (
+        <ErrorState
+          title={t('sideStatsLoadError')}
+          body={t('statsNoDataBody')}
+          actionLabel={t('generalRetry')}
+          onAction={() => {
+            if (cohort === StatsLegendCohort.legend) void provider.load(provider.section, true);
+            else setBattleReload((value) => value + 1);
+          }}
+        />
+      ) : !battles ? (
+        <ActivityIndicator color={theme.primary} />
+      ) : !battles.items.length ? (
+        <View style={{ gap: 10 }}>
+          <EmptyState
+            title={t('statsNoDataTitle')}
+            body={t('statsNoDataBody')}
+            actionLabel={latest ? t('statsViewLatestData') : undefined}
+            onAction={latest ? () => showLatest(latest) : undefined}
+          />
+          {latest ? (
+            <CKText role="bodySmall" muted style={{ textAlign: 'center' }}>
+              {t('statsLatestAvailableDate', {
+                date: new Date(`${latest.lastDay}T12:00:00`).toLocaleDateString(
+                  toIntlLocale(locale),
+                  { month: 'short', day: 'numeric', year: 'numeric' },
+                ),
+              })}
+            </CKText>
+          ) : null}
+        </View>
+      ) : (
+        <RankedOverview data={battles} dates={provider.dates} />
+      )}
+    </View>
   );
 }
 
@@ -289,7 +457,8 @@ function StatsSectionContent({
         onSelectSeason={(season) => provider.setCwlSeason(season)}
       />
     );
-  if (state.status === StatsLoadStatus.empty && provider.section === StatsSection.ranked) return null;
+  if (state.status === StatsLoadStatus.empty && provider.section === StatsSection.ranked)
+    return null;
   if (state.status === StatsLoadStatus.empty) {
     return (
       <Section>
@@ -1587,6 +1756,42 @@ function legendMetrics(data: StatsLegendResponse): StatsMetrics {
   );
 }
 
+function RankedBattleSummary({ metrics }: { metrics: StatsMetrics }) {
+  const { t, locale } = useI18n();
+  return (
+    <View style={{ gap: 20 }}>
+      <View style={{ gap: 6 }}>
+        <CKText role="heroMetric" style={{ color: '#E8A524' }}>
+          {metrics.available ? percent(metrics.threeStarRate) : '—'}
+        </CKText>
+        <CKText role="bodyMedium" muted>
+          {t('statsThreeStarRate')}
+        </CKText>
+      </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 20 }}>
+        {[
+          { label: t('warAttacksTitle'), value: formatCompactNumber(metrics.sampleSize, locale) },
+          {
+            label: t('statsAverageStars'),
+            value: metrics.available ? metrics.averageStars.toFixed(2) : '—',
+          },
+          {
+            label: t('statsAverageDestruction'),
+            value: metrics.available ? percent(metrics.averageDestruction) : '—',
+          },
+        ].map((item) => (
+          <View key={item.label} style={{ flex: 1, minWidth: 85, gap: 3 }}>
+            <CKText role="titleSmall">{item.value}</CKText>
+            <CKText role="bodySmall" muted>
+              {item.label}
+            </CKText>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
 function RankedOverview({
   data,
   dates,
@@ -1594,30 +1799,45 @@ function RankedOverview({
   readonly data: StatsLegendResponse;
   readonly dates: StatsDateFilter;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const cohortLabel =
+    data.cohort === StatsLegendCohort.legend
+      ? t('statsLegendLeagueOne')
+      : t('rankingsTopCount', { count: data.cohort === StatsLegendCohort.top200 ? 200 : 1000 });
+  const dayFormat = new Intl.DateTimeFormat(toIntlLocale(locale), {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  const exportContext = `${cohortLabel} · ${dayFormat.format(dates.start)} – ${dayFormat.format(dates.end)}`;
   const layout = useAdaptiveLayout();
   const metrics = legendMetrics(data);
   const hasComposition = hasRankedCompositionData(data.items, dates);
   if (layout.isExpanded) {
     return (
       <Section>
-        <OverviewMetrics metrics={metrics} />
+        <RankedBattleSummary metrics={metrics} />
         <AdaptiveStatsPanels>
           <ExpandedStatsPanel>
             <AnalyticsLineChart
               title={t('statsStarRates')}
+              exportTitle={`${t('statsStarRates')} · ${exportContext}`}
               series={starSeries(metrics.daily, t)}
               percent
               height={300}
-              exportable={false}
             />
           </ExpandedStatsPanel>
           <ExpandedStatsPanel>
             {hasComposition ? (
-              <RankedCompositionChart daily={data.items} dates={dates} />
+              <RankedCompositionChart
+                daily={data.items}
+                dates={dates}
+                exportContext={exportContext}
+              />
             ) : (
               <AnalyticsLineChart
                 title={t('warAttacksTitle')}
+                exportTitle={`${t('warAttacksTitle')} · ${exportContext}`}
                 series={[
                   {
                     key: 'attacks',
@@ -1642,13 +1862,15 @@ function RankedOverview({
       <StatsChartFrame
         title={t('statsRanked')}
         showTitle={false}
-        copyEnabled={false}
+        exportTitle={`${t('statsStarRates')} · ${exportContext}`}
+        copyPlacement="footer"
         testID="ranked-overview-copy"
       >
         <View style={{ gap: 20 }}>
-          <OverviewMetrics metrics={metrics} />
+          <RankedBattleSummary metrics={metrics} />
           <AnalyticsLineChart
             title={t('statsStarRates')}
+            exportTitle={`${t('statsStarRates')} · ${exportContext}`}
             showTitle={false}
             series={starSeries(metrics.daily, t)}
             percent
@@ -1657,10 +1879,11 @@ function RankedOverview({
         </View>
       </StatsChartFrame>
       {hasComposition ? (
-        <RankedCompositionChart daily={data.items} dates={dates} />
+        <RankedCompositionChart daily={data.items} dates={dates} exportContext={exportContext} />
       ) : (
         <AnalyticsLineChart
           title={t('warAttacksTitle')}
+          exportTitle={`${t('warAttacksTitle')} · ${exportContext}`}
           series={[
             {
               key: 'attacks',

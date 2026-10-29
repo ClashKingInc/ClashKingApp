@@ -63,15 +63,24 @@
   "esportsDefense": "Savunma",
   "competitiveArenaSubtitle": "Senin klanın. Senin takımın. Sıradaki mücadelen.",
   "competitiveViewTournament": "Turnuvayı görüntüle",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "{earned} / {total} kazanıldı",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "Başarılardan kazanılabilecek {total} mücevherin {earned} kadarı kazanıldı.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} tamamlandı",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "Klan yüklenemedi.",
   "gameItemLevels": "Seviyeler",
   "gameItemLevelCount": "{count} seviye",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Kara İksir",
   "resourceBuilderElixir": "İnşaatçı İksiri",
   "resourceBuilderGold": "İnşaatçı Altını",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "ClashKing olmayan sunucular",
   "rankingsPlayerSection": "Oyuncu Sıralamaları",
   "rankingsClanSection": "Klan Sıralamaları",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Galibiyet hâlâ mümkün",
   "warOutlookDrawOnly": "En iyi ihtimalle beraberlik",
   "warOutlookDefeat": "Galibiyet mümkün değil",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Kadro analizi",
   "warScoutOpponent": "Rakibin son savaşları",
   "warScoutScope": "Mevcut kadro · aynı kurallar · önceki en fazla 10 savaş",
-  "upgradeTrackerCapturedWork": "Son güncellemenden"
-  ,
+  "upgradeTrackerCapturedWork": "Son güncellemenden",
   "tutorialWelcomeBody": "Kısa bir turla ClashKing'i keşfedin. İstediğiniz zaman atlayabilirsiniz.",
   "tutorialReorderBody": "Bir karta basılı tutup yerini değiştirmek için sürükleyin.",
   "tutorialSidebarBody": "Menüyü açmak için Ana Sayfa üzerinde kaydırın veya avatarınıza dokunun.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "Köyün gözünün önünde",
+  "onboardingOverviewBody": "Hesaplarını, klanlarını ve günlük ilerlemeni bir arada tut.",
+  "onboardingProgressTitle": "Sonraki adımını belirle",
+  "onboardingProgressBody": "Savaşlarını takip et, ilerlemeni karşılaştır ve yükseltmelere devam et.",
+  "onboardingRemindersTitle": "Doğru zamanda hatırlatma",
+  "onboardingRemindersBody": "Savaş hatırlatmalarını ve seçtiğin bildirimleri al. Ayarlar’dan hesaplarını ve bildirim türlerini seç.",
+  "onboardingReplayTitle": "Tanıtımı yeniden göster",
+  "statsViewLatestData": "En yeni verileri gör",
+  "statsLatestAvailableDate": "En son mevcut veri: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Savunmanın tamamen yenildiği günler",
+  "legendCompleteDayDefinition": "Yalnızca 8 savaşın tamamlandığı günler dahil edilir."
 }

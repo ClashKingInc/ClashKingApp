@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Previous {count} days",
   "legendAvailableDays": "Days available",
   "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
-  "legendPerfectSources": "Perfect days by rank"
+  "legendPerfectSources": "Perfect days by rank",
+  "onboardingOverviewTitle": "Your village, in focus",
+  "onboardingOverviewBody": "Keep your accounts, clans, and daily progress together.",
+  "onboardingProgressTitle": "Know your next move",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "A reminder at the right time",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included."
 }

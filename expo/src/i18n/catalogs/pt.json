@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "{count} dias anteriores",
   "legendAvailableDays": "Dias disponíveis",
   "legendCompleteOnly": "A distribuição inclui dias com 8 batalhas registradas.",
-  "legendPerfectSources": "Dias perfeitos por posição"
+  "legendPerfectSources": "Dias perfeitos por posição",
+  "onboardingOverviewTitle": "Sua vila em destaque",
+  "onboardingOverviewBody": "Reúna suas contas, clãs e progresso diário.",
+  "onboardingProgressTitle": "Escolha o próximo passo",
+  "onboardingProgressBody": "Acompanhe batalhas, compare seu progresso e continue as melhorias.",
+  "onboardingRemindersTitle": "Um lembrete na hora certa",
+  "onboardingRemindersBody": "Receba lembretes de guerra e os alertas que escolher. Selecione contas e tipos de alerta nas Configurações.",
+  "onboardingReplayTitle": "Rever a introdução",
+  "statsViewLatestData": "Ver os dados mais recentes",
+  "statsLatestAvailableDate": "Últimos dados disponíveis: {date}",
+  "legendPerfectedDefenseDays": "Dias com defesa totalmente derrotada",
+  "legendCompleteDayDefinition": "Apenas dias com todas as 8 batalhas são incluídos."
 }

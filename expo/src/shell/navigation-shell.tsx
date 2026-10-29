@@ -26,7 +26,6 @@ import { DesktopHeader } from './desktop-header';
 import { DesktopSidebar } from './desktop-sidebar';
 import { MobileDrawer } from './mobile-drawer';
 import { MobileHeader } from './mobile-header';
-import { tutorials } from '../features/tutorials/tutorial-service';
 import { PrimaryTabBar } from './primary-tab-bar';
 import { IosNativeTabs } from './ios-native-tabs';
 import { isDuoDevice, useAdaptiveLayout } from '../ui/adaptive-layout';
@@ -160,7 +159,6 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     if (secondaryActive) return;
     setDrawerOpen(true);
   }, [secondaryActive]);
-  useEffect(() => tutorials.registerAction('open-sidebar', openDrawer), [openDrawer]);
   const closeDrawer = useCallback(
     (after?: () => void) => {
       pendingDrawerAction.current = after;
@@ -178,9 +176,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
     pendingDrawerAction.current = undefined;
     pending?.();
   }, []);
-  useEffect(() => tutorials.registerAction('close-sidebar', () => closeDrawer()), [closeDrawer]);
   const handleDrawerOpen = useCallback(() => {
-    tutorials.event('sidebar-opened');
     setDrawerOpen(true);
     setDrawerHintVisible(false);
     void props.drawerHintStore?.setString(hintStorageKey, 'true').catch(() => {

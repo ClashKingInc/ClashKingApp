@@ -30,24 +30,16 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n, toIntlLocale } from '../../../i18n';
-import {
-  CKText,
-  MobileWebImage,
-  Surface,
-  ckRadius,
-  ckSpacing,
-  useCKTheme,
-} from '../../../ui';
+import { CKText, MobileWebImage, Surface, ckRadius, ckSpacing, useCKTheme } from '../../../ui';
 import type { SettingsPresentationActions, SettingsThemeMode, SettingsUser } from './contracts';
 import {
   SettingsPage,
   SettingsSection,
   SettingsTile,
+  SettingsChoiceTile,
   SettingsColumns,
 } from './settings-components';
-import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 import { SelectionPickerModal } from '../../../ui/selection-picker';
-import { tutorialCopy } from '../../tutorials/tutorial-copy';
 
 export type SettingsAppIconChoice = {
   iconName: string;
@@ -99,9 +91,7 @@ export function SettingsScreen({
   const insets = useSafeAreaInsets();
   const measured = useWindowDimensions().width;
   const desktop = isDesktopSettings(platform, viewportWidth ?? measured);
-  const [dialog, setDialog] = useState<
-    'language' | 'icon' | 'logout' | 'tutorial-reset'
-  >();
+  const [dialog, setDialog] = useState<'language' | 'icon' | 'logout'>();
   const [busy, setBusy] = useState(false);
   const [snackbar, setSnackbar] = useState<string>();
   const iconColor = theme.onSurface;
@@ -141,30 +131,29 @@ export function SettingsScreen({
               subtitle={t('settingsSelectLanguage')}
               onPress={() => setDialog('language')}
             />
-            <SettingsTile
+            <SettingsChoiceTile<SettingsThemeMode>
               icon={<SunMoon color={iconColor} />}
               title={t('settingsToggleTheme')}
-              showChevron={false}
-              trailing={
-                <SlidingSegmentControl<SettingsThemeMode>
-                  value={themeMode}
-                  options={[
-                    { value: 'light', label: t('settingsThemeLight') },
-                    { value: 'dark', label: t('settingsThemeDark') },
-                    { value: 'system', label: t('settingsThemeSystem') },
-                  ]}
-                  isRtl={isRtl}
-                  style={{ width: 210, maxWidth: '100%' }}
-                  onChange={(mode) => void actions.changeTheme(mode).catch((error: unknown) =>
-                    setSnackbar(error instanceof Error ? error.message : String(error)))}
-                />
+              value={themeMode}
+              options={[
+                { value: 'light', label: t('settingsThemeLight') },
+                { value: 'dark', label: t('settingsThemeDark') },
+                { value: 'system', label: t('settingsThemeSystem') },
+              ]}
+              isRtl={isRtl}
+              onChange={(mode) =>
+                void actions
+                  .changeTheme(mode)
+                  .catch((error: unknown) =>
+                    setSnackbar(error instanceof Error ? error.message : String(error)),
+                  )
               }
             />
-            {actions.resetTutorials ? (
+            {actions.replayOnboarding ? (
               <SettingsTile
                 icon={<RotateCcw color={iconColor} />}
-                title={t(tutorialCopy.tutorialResetTitle)}
-                onPress={() => setDialog('tutorial-reset')}
+                title={t('onboardingReplayTitle')}
+                onPress={() => void actions.replayOnboarding?.()}
               />
             ) : null}
             {alternateIconsSupported ? (
@@ -280,18 +269,32 @@ export function SettingsScreen({
         visible={dialog === 'language'}
         title={t('settingsLanguage')}
         options={[
-          { key: 'system', label: t('settingsThemeSystem'), icon: <Languages color={theme.onSurfaceVariant} size={20} /> },
+          {
+            key: 'system',
+            label: t('settingsThemeSystem'),
+            icon: <Languages color={theme.onSurfaceVariant} size={20} />,
+          },
           ...localeChoices.map(({ locale, label, flagUrl }) => ({
-            key: locale, label,
-            icon: <MobileWebImage imageUrl={flagUrl} contentFit="cover"
-              errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />} style={styles.flag} />,
+            key: locale,
+            label,
+            icon: (
+              <MobileWebImage
+                imageUrl={flagUrl}
+                contentFit="cover"
+                errorFallback={<Languages color={theme.onSurfaceVariant} size={20} />}
+                style={styles.flag}
+              />
+            ),
           })),
         ]}
         selectedKey={selectedLocale}
         onSelect={(locale) => {
           setDialog(undefined);
-          void actions.changeLocale(locale).catch((error: unknown) =>
-            setSnackbar(error instanceof Error ? error.message : String(error)));
+          void actions
+            .changeLocale(locale)
+            .catch((error: unknown) =>
+              setSnackbar(error instanceof Error ? error.message : String(error)),
+            );
         }}
         onClose={() => setDialog(undefined)}
       />
@@ -311,20 +314,6 @@ export function SettingsScreen({
             .finally(() => setBusy(false));
         }}
         onClose={() => setDialog(undefined)}
-      />
-      <ConfirmLogout
-        visible={dialog === 'tutorial-reset'}
-        onCancel={() => setDialog(undefined)}
-        onConfirm={() => {
-          setDialog(undefined);
-          void actions
-            .resetTutorials?.()
-            .then(() => setSnackbar(t(tutorialCopy.tutorialResetDone)));
-        }}
-        title={t(tutorialCopy.tutorialResetTitle)}
-        body={t('tutorialResetConfirm')}
-        cancel={t('generalCancel')}
-        confirm={t('generalReset')}
       />
       <ConfirmLogout
         visible={dialog === 'logout'}

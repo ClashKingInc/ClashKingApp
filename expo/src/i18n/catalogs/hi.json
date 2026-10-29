@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "पिछले {count} दिन",
   "legendAvailableDays": "उपलब्ध दिन",
   "legendCompleteOnly": "वितरण में 8 दर्ज लड़ाइयों वाले दिन शामिल हैं।",
-  "legendPerfectSources": "रैंक के अनुसार परफेक्ट दिन"
+  "legendPerfectSources": "रैंक के अनुसार परफेक्ट दिन",
+  "onboardingOverviewTitle": "आपका गाँव, एक नज़र में",
+  "onboardingOverviewBody": "अपने खाते, कबीले और रोज़ की प्रगति एक जगह रखें।",
+  "onboardingProgressTitle": "अगला कदम जानें",
+  "onboardingProgressBody": "लड़ाइयों पर नज़र रखें, अपनी प्रगति की तुलना करें और अपग्रेड जारी रखें।",
+  "onboardingRemindersTitle": "सही समय पर याद दिलाएँ",
+  "onboardingRemindersBody": "युद्ध के रिमाइंडर और अपनी पसंद के अलर्ट पाएँ। सेटिंग्स में खाते और अलर्ट के प्रकार चुनें।",
+  "onboardingReplayTitle": "परिचय फिर देखें",
+  "statsViewLatestData": "नवीनतम डेटा देखें",
+  "statsLatestAvailableDate": "नवीनतम उपलब्ध डेटा: {date}",
+  "legendPerfectedDefenseDays": "पूरी तरह हारी गई रक्षा के दिन",
+  "legendCompleteDayDefinition": "केवल सभी 8 लड़ाइयों वाले दिन शामिल हैं।"
 }

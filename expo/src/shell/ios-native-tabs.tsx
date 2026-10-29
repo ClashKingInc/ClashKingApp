@@ -16,7 +16,6 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { primaryTabRoutes } from '../navigation';
-import { tutorials } from '../features/tutorials/tutorial-service';
 import { modalOrientations as defaultModalOrientations } from '../ui/modal-orientations';
 import { NativePrimaryNavigation } from '../ui/native-primary-navigation';
 import { useAdaptiveLayout } from '../ui/adaptive-layout';
@@ -102,8 +101,6 @@ export function IosNativeTabs(props: NavigationShellProps) {
     () => registerDuoNavigationActions({ select: props.onPrimarySelect }),
     [props.onPrimarySelect],
   );
-  useEffect(() => tutorials.registerAction('open-sidebar', openDrawer), [openDrawer]);
-  useEffect(() => tutorials.registerAction('close-sidebar', () => closeDrawer()), [closeDrawer]);
 
   return (
     <NativePrimaryNavigation.Provider value={!portraitBottomBar}>

@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Föregående {count} dagar",
   "legendAvailableDays": "Tillgängliga dagar",
   "legendCompleteOnly": "Fördelningen omfattar dagar med 8 registrerade strider.",
-  "legendPerfectSources": "Perfekta dagar efter placering"
+  "legendPerfectSources": "Perfekta dagar efter placering",
+  "onboardingOverviewTitle": "Din by i fokus",
+  "onboardingOverviewBody": "Samla dina konton, klaner och dagliga framsteg.",
+  "onboardingProgressTitle": "Hitta ditt nästa steg",
+  "onboardingProgressBody": "Följ striderna, jämför framstegen och fortsätt uppgradera.",
+  "onboardingRemindersTitle": "En påminnelse vid rätt tillfälle",
+  "onboardingRemindersBody": "Få krigspåminnelser och de aviseringar du väljer. Välj konton och aviseringstyper i Inställningar.",
+  "onboardingReplayTitle": "Visa introduktionen igen",
+  "statsViewLatestData": "Visa senaste data",
+  "statsLatestAvailableDate": "Senast tillgängliga: {date}",
+  "legendPerfectedDefenseDays": "Dagar med fullständigt besegrat försvar",
+  "legendCompleteDayDefinition": "Endast dagar med alla 8 strider räknas med."
 }

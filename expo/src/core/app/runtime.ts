@@ -194,7 +194,6 @@ export function createAppRuntime(): AppRuntime {
       } else effects.openRoute(route);
     },
     openAdminPost: (postId) => effects.openRoute(`/posts/${encodeURIComponent(postId)}`),
-    showPermissionPrimer: () => effects.showPermissionPrimer(),
     reportError: ({ operation, error }) => reportException(error, operation),
   });
   const accounts = new CocAccountService(contractApi, preferences, (operation, error) =>

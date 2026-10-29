@@ -1,16 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
-import Svg, { Polyline } from 'react-native-svg';
+import Svg, { Line, Polyline } from 'react-native-svg';
+import { ChevronDown, ChevronUp } from 'lucide-react-native';
 import type { ContractApiService } from '../../../core/api/contract-api';
-import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
   EmptyState,
   ErrorState,
-  MobileWebImage,
   ProfileTabs,
-  SelectionPicker,
   ckColors,
   colorWithAlpha,
   useCKTheme,
@@ -28,21 +26,28 @@ import { StatsChartFrame } from './stats-chart-frame';
 
 type Side = 'offense' | 'defense';
 type Summary = LegendDayPerformance['periods'][number]['offense'];
+type Availability = { firstDay: string; lastDay: string };
 
 export function LegendDayPerformanceSection({
   api,
   dates,
+  cohort,
+  onShowLatest,
+  onAvailability,
 }: {
   readonly api: ContractApiService;
   readonly dates: StatsDateFilter;
+  readonly cohort: StatsLegendCohortValue;
+  readonly onShowLatest?: (availability: Availability) => void;
+  readonly onAvailability?: (availability: Availability) => void;
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const repository = useMemo(() => new StatsRepository(api), [api]);
-  const [cohort, setCohort] = useState<StatsLegendCohortValue>(StatsLegendCohort.legend);
   const [side, setSide] = useState<Side>('offense');
   const [view, setView] = useState<'distribution' | 'trend'>('distribution');
   const [reload, setReload] = useState(0);
+  const [coverageOpen, setCoverageOpen] = useState(false);
   const [result, setResult] = useState<{
     key: string;
     repository: StatsRepository;
@@ -110,36 +115,16 @@ export function LegendDayPerformanceSection({
       ? t('statsLegendLeagueOne')
       : t('rankingsTopCount', { count: cohort === StatsLegendCohort.top200 ? 200 : 1000 });
   const gainLabel = t(side === 'offense' ? 'legendTrophiesGained' : 'legendTrophiesLost');
+  const perfectLabel = t(side === 'offense' ? 'legendPerfectDays' : 'legendPerfectedDefenseDays');
+  const availability = state.data?.availability;
+  useEffect(() => {
+    if (availability) onAvailability?.(availability);
+  }, [availability, onAvailability]);
+  const latestLabel = availability
+    ? dateFormat.format(new Date(`${availability.lastDay}T12:00:00`))
+    : undefined;
   return (
     <View style={styles.section} testID="legend-day-performance">
-      <CKText role="titleMedium" skeleton={false}>
-        {t('legendPerformanceTitle')}
-      </CKText>
-      <SelectionPicker
-        title={t('gameLeague')}
-        accessibilityLabel={t('gameLeague')}
-        fillWidth
-        options={[
-          StatsLegendCohort.legend,
-          StatsLegendCohort.top1000,
-          StatsLegendCohort.top200,
-        ].map((key) => ({
-          key,
-          label:
-            key === StatsLegendCohort.legend
-              ? t('statsLegendLeagueOne')
-              : t('rankingsTopCount', { count: key === StatsLegendCohort.top200 ? 200 : 1000 }),
-          icon: (
-            <MobileWebImage
-              imageUrl={ImageAssets.legendLeagueOne}
-              style={{ width: 28, height: 28 }}
-              contentFit="contain"
-            />
-          ),
-        }))}
-        selectedKey={cohort}
-        onSelect={setCohort}
-      />
       <SlidingSegmentControl
         value={side}
         isRtl={isRtl}
@@ -159,20 +144,41 @@ export function LegendDayPerformanceSection({
       ) : !state.data ? (
         <ActivityIndicator color={theme.primary} />
       ) : !selected || selected.availableDays === 0 || !summary ? (
-        <EmptyState
-          title={t('statsNoDataTitle')}
-          body={t('statsNoDataBody')}
-          actionLabel={t('generalRetry')}
-          onAction={() => setReload((value) => value + 1)}
-        />
+        <View style={{ gap: 10 }}>
+          <EmptyState
+            title={t('statsNoDataTitle')}
+            body={t('statsNoDataBody')}
+            actionLabel={
+              availability && onShowLatest ? t('statsViewLatestData') : t('generalRetry')
+            }
+            onAction={() =>
+              availability && onShowLatest
+                ? onShowLatest(availability)
+                : setReload((value) => value + 1)
+            }
+          />
+          {latestLabel ? (
+            <CKText role="bodySmall" muted style={{ textAlign: 'center' }}>
+              {t('statsLatestAvailableDate', { date: latestLabel })}
+            </CKText>
+          ) : null}
+        </View>
       ) : (
         <>
+          <View style={styles.headline}>
+            <CKText
+              role="heroMetric"
+              style={{ color: side === 'offense' ? ckColors.donationGreen : ckColors.lossRed }}
+            >
+              {percent(summary.perfectDayRate)}
+            </CKText>
+            <CKText role="bodyLarge">{perfectLabel}</CKText>
+            <CKText role="bodySmall" muted>
+              {format.format(summary.perfectPlayerDays)} /{' '}
+              {format.format(summary.completePlayerDays)} {t('legendCompleteDays')}
+            </CKText>
+          </View>
           <View style={styles.metrics}>
-            <Metric
-              label={t('legendPerfectDays')}
-              value={percent(summary.perfectDayRate)}
-              detail={`${format.format(summary.perfectPlayerDays)} / ${format.format(summary.completePlayerDays)}`}
-            />
             <Metric
               label={t(side === 'offense' ? 'legendsAvgOffense' : 'legendsAvgDefense')}
               value={summary.meanTrophies === null ? '—' : format.format(summary.meanTrophies)}
@@ -181,31 +187,8 @@ export function LegendDayPerformanceSection({
             <Metric
               label={t('statsPlayers')}
               value={unique == null ? '—' : format.format(unique)}
-              detail={t('legendPerfectDays')}
+              detail={perfectLabel}
             />
-          </View>
-          <CKText role="bodySmall" style={{ color: theme.onSurfaceVariant }}>
-            {t('legendAvailableDays')}: {format.format(selected.availableDays)} /{' '}
-            {format.format(selected.expectedDays)}
-          </CKText>
-          <CKText role="bodySmall" style={{ color: theme.onSurfaceVariant }}>
-            {t('legendCompleteOnly')}
-          </CKText>
-          <View style={styles.coverage}>
-            <CKText role="bodySmall">
-              {t('legendCompleteDays')}: {format.format(summary.completePlayerDays)}
-            </CKText>
-            <CKText role="bodySmall">
-              {t('legendPartialDays')}: {format.format(summary.partialPlayerDays)}
-            </CKText>
-            <CKText role="bodySmall">
-              {t('legendMissingDays')}: {format.format(summary.missingPlayerDays)}
-            </CKText>
-            {summary.invalidPlayerDays > 0 ? (
-              <CKText role="bodySmall">
-                {t('legendInvalidDays')}: {format.format(summary.invalidPlayerDays)}
-              </CKText>
-            ) : null}
           </View>
           <ProfileTabs
             variant="underline"
@@ -219,12 +202,12 @@ export function LegendDayPerformanceSection({
           />
           {view === 'distribution' ? (
             <StatsChartFrame
-              title={`${t('legendDistribution')} · ${cohortLabel}`}
+              title={`${gainLabel} · ${cohortLabel} · ${dateFormat.format(new Date(`${first}T12:00:00`))} – ${dateFormat.format(new Date(`${last}T12:00:00`))}`}
+              showTitle={false}
               copyPlacement="footer"
             >
-              <CKText role="bodySmall" style={{ color: theme.onSurfaceVariant }}>
-                {dateFormat.format(new Date(`${first}T12:00:00`))} –{' '}
-                {dateFormat.format(new Date(`${last}T12:00:00`))} · {gainLabel}
+              <CKText role="bodySmall" muted>
+                {gainLabel}
               </CKText>
               {summary.completePlayerDays === 0 ? (
                 <CKText muted>{t('statsNoDataTitle')}</CKText>
@@ -242,13 +225,16 @@ export function LegendDayPerformanceSection({
             <>
               <AnalyticsLineChart
                 title={gainLabel}
+                exportTitle={`${gainLabel} · ${cohortLabel} · ${first} – ${last}`}
                 includeZero
                 connectGaps={false}
+                responsiveAxes
                 series={[
                   {
                     key: 'mean',
                     aggregation: 'weightedMean',
                     label: gainLabel,
+                    color: side === 'offense' ? ckColors.donationGreen : ckColors.lossRed,
                     points: state.data.items.map((item) => ({
                       day: item.day,
                       value: item[side].meanTrophies,
@@ -258,17 +244,23 @@ export function LegendDayPerformanceSection({
                 ]}
               />
               <AnalyticsLineChart
-                title={t('legendPerfectDays')}
+                title={perfectLabel}
+                exportTitle={`${perfectLabel} · ${cohortLabel} · ${first} – ${last}`}
                 percent
                 includeZero
                 connectGaps={false}
+                responsiveAxes
                 series={[
                   {
                     key: 'perfect',
-                    label: t('legendPerfectDays'),
+                    label: perfectLabel,
+                    color: ckColors.warGold,
+                    // The analytics plot consumes percentages on a 0–100 scale;
+                    // the canonical API rate is a fraction and retains its day count.
                     points: state.data.items.map((item) => ({
                       day: item.day,
-                      value: item[side].perfectDayRate,
+                      value:
+                        item[side].perfectDayRate === null ? null : item[side].perfectDayRate * 100,
                       weight: item[side].completePlayerDays,
                     })),
                   },
@@ -276,32 +268,91 @@ export function LegendDayPerformanceSection({
               />
             </>
           )}
-          <CKText role="titleSmall">
-            {t('legendPerfectSources')} · {t('statsLegendLeagueOne')}
-          </CKText>
-          {state.data.perfectDayContributions.map((row) => {
-            const count = side === 'offense' ? row.offensePlayerDays : row.defensePlayerDays;
-            const total = state.data!.perfectDayContributions.reduce(
-              (sum, item) =>
-                sum + (side === 'offense' ? item.offensePlayerDays : item.defensePlayerDays),
-              0,
-            );
-            return (
-              <View key={row.rankBand} style={styles.rankRow}>
-                <CKText>
-                  #
-                  {row.rankBand === '1_200'
-                    ? `${format.format(1)}–${format.format(200)}`
-                    : row.rankBand === '201_1000'
-                      ? `${format.format(201)}–${format.format(1000)}`
-                      : `${format.format(1001)}+`}
-                </CKText>
-                <CKText>
-                  {format.format(count)} · {percent(total === 0 ? null : count / total)}
-                </CKText>
-              </View>
-            );
-          })}
+          <View style={{ gap: 12 }}>
+            <CKText role="bodyMedium">
+              {side === 'offense' ? t('legendPerfectSources') : perfectLabel} ·{' '}
+              {t('statsLegendLeagueOne')}
+            </CKText>
+            {state.data.perfectDayContributions.map((row) => {
+              const count = side === 'offense' ? row.offensePlayerDays : row.defensePlayerDays;
+              const total = state.data!.perfectDayContributions.reduce(
+                (sum, item) =>
+                  sum + (side === 'offense' ? item.offensePlayerDays : item.defensePlayerDays),
+                0,
+              );
+              const share = total > 0 ? count / total : null;
+              return (
+                <View key={row.rankBand} style={styles.rankRow}>
+                  <CKText role="bodySmall" muted style={{ minWidth: 90 }}>
+                    #
+                    {row.rankBand === '1_200'
+                      ? `${format.format(1)}–${format.format(200)}`
+                      : row.rankBand === '201_1000'
+                        ? `${format.format(201)}–${format.format(1000)}`
+                        : `${format.format(1001)}+`}
+                  </CKText>
+                  <View
+                    style={[
+                      styles.rankTrack,
+                      { backgroundColor: colorWithAlpha(theme.onSurface, 0.06) },
+                    ]}
+                  >
+                    <View
+                      style={{
+                        height: '100%',
+                        width: `${100 * (share ?? 0)}%`,
+                        borderRadius: 4,
+                        backgroundColor: colorWithAlpha(ckColors.legendBlue, 0.6),
+                      }}
+                    />
+                  </View>
+                  <CKText role="bodySmall" style={{ minWidth: 48, textAlign: 'right' }}>
+                    {percent(share)}
+                  </CKText>
+                </View>
+              );
+            })}
+          </View>
+          <Pressable
+            onPress={() => setCoverageOpen(!coverageOpen)}
+            accessibilityRole="button"
+            accessibilityState={{ expanded: coverageOpen }}
+            style={styles.coverageToggle}
+          >
+            <CKText role="bodySmall" muted style={{ flex: 1 }}>
+              {t('legendCompleteDayDefinition')}
+            </CKText>
+            {coverageOpen ? (
+              <ChevronUp color={theme.onSurfaceVariant} size={17} />
+            ) : (
+              <ChevronDown color={theme.onSurfaceVariant} size={17} />
+            )}
+          </Pressable>
+          {selected.availableDays < selected.expectedDays ? (
+            <CKText role="bodySmall" muted>
+              {t('legendAvailableDays')}: {format.format(selected.availableDays)} /{' '}
+              {format.format(selected.expectedDays)}
+            </CKText>
+          ) : null}
+          {coverageOpen ? (
+            <View style={styles.coverage}>
+              {[
+                [t('legendCompleteDays'), summary.completePlayerDays],
+                [t('legendPartialDays'), summary.partialPlayerDays],
+                [t('legendMissingDays'), summary.missingPlayerDays],
+                ...(summary.invalidPlayerDays
+                  ? [[t('legendInvalidDays'), summary.invalidPlayerDays]]
+                  : []),
+              ].map(([label, count]) => (
+                <View key={String(label)} style={styles.rankRow}>
+                  <CKText role="bodySmall" muted>
+                    {label}
+                  </CKText>
+                  <CKText role="bodySmall">{format.format(Number(count))}</CKText>
+                </View>
+              ))}
+            </View>
+          ) : null}
         </>
       )}
     </View>
@@ -336,15 +387,24 @@ function Distribution({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [selectedBucket, setSelectedBucket] = useState(15);
+  const [selection, setSelection] = useState<number | null>(null);
+  const selectedBucket =
+    selection ??
+    summary.buckets.reduce(
+      (best, bucket, index, buckets) =>
+        (bucket.share ?? 0) > (buckets[best]?.share ?? 0) ? index : best,
+      0,
+    );
+  const accent = side === 'offense' ? ckColors.donationGreen : ckColors.lossRed;
   const comparisons = data.periods.filter((period) => period.kind !== 'selected');
   const drawableComparisons = comparisons.filter((period) => period[side].completePlayerDays > 0);
-  const max = Math.max(
-    0.1,
+  const peak = Math.max(
+    0.05,
     ...[summary, ...comparisons.map((period) => period[side])].flatMap((item) =>
       item.buckets.map((bucket) => bucket.share ?? 0),
     ),
   );
+  const max = Math.ceil(peak / 0.05) * 0.05;
   const bucket = summary.buckets[selectedBucket];
   const range = (minimum: number, maximum: number) =>
     `${format.format(minimum)}–${format.format(maximum)}`;
@@ -360,25 +420,42 @@ function Distribution({
           </CKText>
         </View>
         <View style={{ flex: 1, height: 176 }}>
+          <Svg
+            pointerEvents="none"
+            viewBox="0 0 320 176"
+            preserveAspectRatio="none"
+            style={StyleSheet.absoluteFill}
+          >
+            {[8, 92, 176].map((y) => (
+              <Line
+                key={y}
+                x1={0}
+                x2={320}
+                y1={y}
+                y2={y}
+                stroke={colorWithAlpha(theme.onSurface, 0.08)}
+                strokeWidth={1}
+              />
+            ))}
+          </Svg>
           <View style={styles.bars}>
             {summary.buckets.map((value, index) => (
               <Pressable
                 key={value.minimum}
                 style={styles.barTouch}
-                onPress={() => setSelectedBucket(index)}
+                onPress={() => setSelection(index)}
                 accessibilityRole="button"
                 accessibilityState={{ selected: index === selectedBucket }}
                 accessibilityLabel={`${range(value.minimum, value.maximum)} · ${t('legendCompleteDays')}: ${format.format(value.playerDays)} · ${percent(value.share)}`}
               >
                 <View
                   style={{
-                    height: Math.max(1, ((value.share ?? 0) / max) * 168),
+                    height: ((value.share ?? 0) / max) * 168,
                     width: '100%',
-                    borderRadius: 3,
+                    borderTopLeftRadius: 4,
+                    borderTopRightRadius: 4,
                     backgroundColor:
-                      index === selectedBucket
-                        ? theme.primary
-                        : colorWithAlpha(ckColors.legendBlue, 0.7),
+                      index === selectedBucket ? accent : colorWithAlpha(accent, 0.35),
                   }}
                 />
               </Pressable>
@@ -414,10 +491,17 @@ function Distribution({
         ))}
       </View>
       {bucket ? (
-        <CKText accessibilityLiveRegion="polite">
-          {range(bucket.minimum, bucket.maximum)} · {format.format(bucket.playerDays)}{' '}
-          {t('legendCompleteDays')} · {percent(bucket.share)}
-        </CKText>
+        <View style={styles.rankRow} accessibilityLiveRegion="polite">
+          <View style={{ gap: 3 }}>
+            <CKText role="bodyMedium">{range(bucket.minimum, bucket.maximum)}</CKText>
+            <CKText role="bodySmall" muted>
+              {format.format(bucket.playerDays)} {t('legendCompleteDays')}
+            </CKText>
+          </View>
+          <CKText role="titleMedium" style={{ color: accent }}>
+            {percent(bucket.share)}
+          </CKText>
+        </View>
       ) : null}
       {comparisons.map((period) => (
         <View key={period.kind} style={styles.rankRow}>
@@ -439,11 +523,14 @@ function Distribution({
 }
 
 const styles = StyleSheet.create({
-  section: { gap: 14, marginBottom: 28 },
+  section: { gap: 20, marginBottom: 20 },
+  headline: { gap: 7, alignItems: 'center', paddingVertical: 10 },
+  rankTrack: { flex: 1, height: 6, borderRadius: 4, overflow: 'hidden' },
+  coverageToggle: { flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 44 },
   metrics: { flexDirection: 'row', flexWrap: 'wrap', gap: 16 },
-  metric: { flexGrow: 1, flexBasis: 90, gap: 3 },
-  coverage: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  rankRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' },
+  metric: { flex: 1, minWidth: 110, gap: 3 },
+  coverage: { gap: 10 },
+  rankRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   chartRow: { flexDirection: 'row', gap: 8, paddingTop: 12 },
   axis: { width: 34, justifyContent: 'space-between' },
   bars: { height: 176, flexDirection: 'row', alignItems: 'flex-end', direction: 'ltr' },

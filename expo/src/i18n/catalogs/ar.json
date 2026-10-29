@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "الأيام الـ {count} السابقة",
   "legendAvailableDays": "الأيام المتاحة",
   "legendCompleteOnly": "يشمل التوزيع الأيام التي سُجلت فيها 8 معارك.",
-  "legendPerfectSources": "الأيام المثالية حسب الترتيب"
+  "legendPerfectSources": "الأيام المثالية حسب الترتيب",
+  "onboardingOverviewTitle": "قريتك في الواجهة",
+  "onboardingOverviewBody": "اجمع حساباتك وقبائلك وتقدمك اليومي في مكان واحد.",
+  "onboardingProgressTitle": "اعرف خطوتك التالية",
+  "onboardingProgressBody": "تابع معاركك وقارن تقدمك وواصل الترقيات.",
+  "onboardingRemindersTitle": "تذكير في الوقت المناسب",
+  "onboardingRemindersBody": "احصل على تذكيرات الحرب والتنبيهات التي تختارها. اختر حساباتك وأنواع التنبيهات من الإعدادات.",
+  "onboardingReplayTitle": "إعادة المقدمة",
+  "statsViewLatestData": "عرض أحدث البيانات",
+  "statsLatestAvailableDate": "أحدث بيانات متاحة: {date}",
+  "legendPerfectedDefenseDays": "أيام الدفاعات المكتملة ضدك",
+  "legendCompleteDayDefinition": "تُحتسب فقط الأيام التي اكتملت فيها المعارك الثماني."
 }

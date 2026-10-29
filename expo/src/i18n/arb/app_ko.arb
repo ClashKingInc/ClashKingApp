@@ -63,15 +63,24 @@
   "esportsDefense": "방어",
   "competitiveArenaSubtitle": "당신의 클랜. 당신의 팀. 다음 도전.",
   "competitiveViewTournament": "토너먼트 보기",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "{earned} / {total} 획득",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "업적 보석 총 {total}개 중 {earned}개를 획득했습니다.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} 완료됨",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "클랜을 불러오지 못했습니다.",
   "gameItemLevels": "레벨",
   "gameItemLevelCount": "{count} 레벨",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "다크 엘릭서",
   "resourceBuilderElixir": "장인 엘릭서",
   "resourceBuilderGold": "장인 골드",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "ClashKing이 없는 서버",
   "rankingsPlayerSection": "플레이어 순위",
   "rankingsClanSection": "클랜 순위",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "아직 승리 가능",
   "warOutlookDrawOnly": "최선은 무승부",
   "warOutlookDefeat": "승리 불가능",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "라인업 분석",
   "warScoutOpponent": "상대의 최근 전쟁",
   "warScoutScope": "현재 라인업 · 동일한 규칙 · 이전 최대 10개 전쟁",
-  "upgradeTrackerCapturedWork": "마지막 업데이트 기준"
-  ,
+  "upgradeTrackerCapturedWork": "마지막 업데이트 기준",
   "tutorialWelcomeBody": "짧은 안내로 ClashKing을 둘러보세요. 언제든 건너뛸 수 있습니다.",
   "tutorialReorderBody": "카드를 길게 누른 후 드래그하여 위치를 바꾸세요.",
   "tutorialSidebarBody": "홈 화면을 스와이프하거나 아바타를 탭하면 메뉴가 열립니다.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "내 마을을 한눈에",
+  "onboardingOverviewBody": "계정, 클랜, 일일 진행 상황을 한곳에서 확인하세요.",
+  "onboardingProgressTitle": "다음 단계를 확인하세요",
+  "onboardingProgressBody": "전투를 살펴보고 진행 상황을 비교하며 업그레이드를 이어 가세요.",
+  "onboardingRemindersTitle": "필요한 순간에 알림",
+  "onboardingRemindersBody": "전쟁 알림과 원하는 알림을 받으세요. 설정에서 계정과 알림 종류를 선택할 수 있어요.",
+  "onboardingReplayTitle": "소개 다시 보기",
+  "statsViewLatestData": "최신 데이터 보기",
+  "statsLatestAvailableDate": "최신 데이터: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "모든 방어에서 완패한 날",
+  "legendCompleteDayDefinition": "8번의 전투가 모두 기록된 날만 포함돼요."
 }

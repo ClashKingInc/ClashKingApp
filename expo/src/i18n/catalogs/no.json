@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "De foregående {count} dagene",
   "legendAvailableDays": "Tilgjengelige dager",
   "legendCompleteOnly": "Fordelingen bruker dager med 8 registrerte kamper.",
-  "legendPerfectSources": "Perfekte dager etter plassering"
+  "legendPerfectSources": "Perfekte dager etter plassering",
+  "onboardingOverviewTitle": "Landsbyen din i fokus",
+  "onboardingOverviewBody": "Samle kontoene, klanene og den daglige fremgangen din.",
+  "onboardingProgressTitle": "Finn ditt neste trekk",
+  "onboardingProgressBody": "Følg kampene dine, sammenlign fremgangen og fortsett oppgraderingene.",
+  "onboardingRemindersTitle": "En påminnelse til rett tid",
+  "onboardingRemindersBody": "Få krigspåminnelser og varslene du velger. Velg kontoer og varseltyper i Innstillinger.",
+  "onboardingReplayTitle": "Vis introduksjonen igjen",
+  "statsViewLatestData": "Vis nyeste data",
+  "statsLatestAvailableDate": "Sist tilgjengelig: {date}",
+  "legendPerfectedDefenseDays": "Dager med fullstendig beseiret forsvar",
+  "legendCompleteDayDefinition": "Bare dager med alle 8 kamper er inkludert."
 }

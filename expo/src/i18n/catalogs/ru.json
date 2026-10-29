@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Предыдущие {count} дней",
   "legendAvailableDays": "Дни с данными",
   "legendCompleteOnly": "В распределение входят дни с 8 записанными боями.",
-  "legendPerfectSources": "Идеальные дни по местам"
+  "legendPerfectSources": "Идеальные дни по местам",
+  "onboardingOverviewTitle": "Твоя деревня в центре внимания",
+  "onboardingOverviewBody": "Аккаунты, кланы и ежедневный прогресс в одном месте.",
+  "onboardingProgressTitle": "Выбери следующий шаг",
+  "onboardingProgressBody": "Следи за боями, сравнивай результаты и продолжай улучшения.",
+  "onboardingRemindersTitle": "Напоминание вовремя",
+  "onboardingRemindersBody": "Получай напоминания о войнах и выбранные уведомления. Выбери аккаунты и типы уведомлений в настройках.",
+  "onboardingReplayTitle": "Повторить введение",
+  "statsViewLatestData": "Показать последние данные",
+  "statsLatestAvailableDate": "Последние доступные данные: {date}",
+  "legendPerfectedDefenseDays": "Дни с полностью разгромленной защитой",
+  "legendCompleteDayDefinition": "Учитываются только дни со всеми 8 боями."
 }

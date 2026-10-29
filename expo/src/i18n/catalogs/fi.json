@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Edelliset {count} päivää",
   "legendAvailableDays": "Saatavilla olevat päivät",
   "legendCompleteOnly": "Jakauma sisältää päivät, joille on kirjattu 8 taistelua.",
-  "legendPerfectSources": "Täydelliset päivät sijoituksen mukaan"
+  "legendPerfectSources": "Täydelliset päivät sijoituksen mukaan",
+  "onboardingOverviewTitle": "Kyläsi yhdellä silmäyksellä",
+  "onboardingOverviewBody": "Pidä tilisi, klaanisi ja päivittäinen edistymisesi yhdessä.",
+  "onboardingProgressTitle": "Löydä seuraava askel",
+  "onboardingProgressBody": "Seuraa taistelujasi, vertaa edistymistäsi ja jatka parannuksia.",
+  "onboardingRemindersTitle": "Muistutus oikeaan aikaan",
+  "onboardingRemindersBody": "Saa sotamuistutuksia ja valitsemiasi ilmoituksia. Valitse tilit ja ilmoitustyypit asetuksista.",
+  "onboardingReplayTitle": "Näytä esittely uudelleen",
+  "statsViewLatestData": "Näytä uusimmat tiedot",
+  "statsLatestAvailableDate": "Uusimmat saatavilla: {date}",
+  "legendPerfectedDefenseDays": "Täysin kukistetun puolustuksen päivät",
+  "legendCompleteDayDefinition": "Vain päivät, joilla on kaikki 8 taistelua, lasketaan mukaan."
 }

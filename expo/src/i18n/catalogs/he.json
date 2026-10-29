@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "{count} הימים הקודמים",
   "legendAvailableDays": "ימים זמינים",
   "legendCompleteOnly": "ההתפלגות כוללת ימים שבהם תועדו 8 קרבות.",
-  "legendPerfectSources": "ימים מושלמים לפי דירוג"
+  "legendPerfectSources": "ימים מושלמים לפי דירוג",
+  "onboardingOverviewTitle": "הכפר שלך במרכז",
+  "onboardingOverviewBody": "כל החשבונות, השבטים וההתקדמות היומית שלך במקום אחד.",
+  "onboardingProgressTitle": "הצעד הבא שלך",
+  "onboardingProgressBody": "עקוב אחר הקרבות, השווה את ההתקדמות והמשך בשדרוגים.",
+  "onboardingRemindersTitle": "תזכורת בזמן הנכון",
+  "onboardingRemindersBody": "קבל תזכורות מלחמה והתראות לבחירתך. בחר חשבונות וסוגי התראות בהגדרות.",
+  "onboardingReplayTitle": "הצג שוב את המבוא",
+  "statsViewLatestData": "הצג את הנתונים העדכניים",
+  "statsLatestAvailableDate": "הנתונים העדכניים הזמינים: {date}",
+  "legendPerfectedDefenseDays": "ימים שבהם ההגנה הובסה לחלוטין",
+  "legendCompleteDayDefinition": "נכללים רק ימים שבהם כל 8 הקרבות הושלמו."
 }

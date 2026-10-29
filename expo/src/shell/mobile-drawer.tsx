@@ -3,7 +3,6 @@ import * as Linking from 'expo-linking';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { Bot, CircleHelp, Goal, MessageCircle, UserPlus } from 'lucide-react-native';
-import { TutorialTarget } from '../features/tutorials/tutorial-ui';
 
 import { DISCORD_BOT_INVITE_URL, DISCORD_URL } from '../core/config/api-config';
 import type { MessageKey } from '../i18n';
@@ -169,7 +168,7 @@ export function MobileDrawer({
             ) : null}
           </View>
         </View>
-        <TutorialTarget id="sidebar-links" style={styles.body}>
+        <View style={styles.body}>
           {bodyRoutes.map((route) => (
             <DrawerRoute
               key={route.id}
@@ -180,7 +179,7 @@ export function MobileDrawer({
               onPress={() => navigate(route)}
             />
           ))}
-        </TutorialTarget>
+        </View>
       </ScrollView>
       <View style={[styles.footer, { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.2) }]}>
         <DrawerAction
@@ -310,7 +309,11 @@ function DrawerAction({
       >
         {label}
       </CKText>
-      {badge ? <CKText role="labelSmall" muted style={{ marginLeft: 'auto' }}>{badge}</CKText> : null}
+      {badge ? (
+        <CKText role="labelSmall" muted style={{ marginLeft: 'auto' }}>
+          {badge}
+        </CKText>
+      ) : null}
     </Pressable>
   );
 }

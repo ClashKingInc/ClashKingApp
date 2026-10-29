@@ -212,22 +212,6 @@ export class PushNotificationService {
     }
   }
 
-  async showPermissionPrimerOnce(): Promise<void> {
-    if (!this.supportsPushNotifications) return;
-    const prompted = await this.options.preferences.getItem(
-      STORAGE_KEYS.notificationPermissionPrimerShown,
-    );
-    if (prompted === 'true' || this.options.showPermissionPrimer === undefined) {
-      return;
-    }
-
-    const shouldEnable = await this.options.showPermissionPrimer();
-    await this.options.preferences.setItem(STORAGE_KEYS.notificationPermissionPrimerShown, 'true');
-    if (!shouldEnable) return;
-
-    await this.requestPermissionAndRegister();
-  }
-
   async setCurrentDeviceEnabled(enabled: boolean): Promise<PushNotificationSetupResult> {
     if (enabled) return this.requestPermissionAndRegister();
     if (!supportsPush(this.options.platform) || this.options.runtime === undefined) {
@@ -394,12 +378,16 @@ export class PushNotificationService {
   private handleDataNavigation(data: PushData): void {
     const type = String(data.type ?? '');
     if (type === 'legend_defense' || type === 'war_reminder') {
-      const tag = String(data.target_tag ?? '').trim().replace(/^#/, '').toUpperCase();
+      const tag = String(data.target_tag ?? '')
+        .trim()
+        .replace(/^#/, '')
+        .toUpperCase();
       if (!/^[0289PYLQGRJCUV]{3,15}$/.test(tag)) return;
-      const route: SupportedPushRoute = type === 'legend_defense'
-        ? `/player/${tag}?tab=legends`
-        : `/clan/${tag}/war`;
-      void Promise.resolve(this.options.openRoute(route)).catch((error) => this.report('navigation', error));
+      const route: SupportedPushRoute =
+        type === 'legend_defense' ? `/player/${tag}?tab=legends` : `/clan/${tag}/war`;
+      void Promise.resolve(this.options.openRoute(route)).catch((error) =>
+        this.report('navigation', error),
+      );
       return;
     }
     if (String(data.type ?? '') === 'admin_post') {
@@ -414,7 +402,8 @@ export class PushNotificationService {
     }
 
     const route = String(data.route ?? '');
-    if (type !== 'admin_campaign' || route !== '/posts' || !this.options.isFeatureEnabled('posts')) return;
+    if (type !== 'admin_campaign' || route !== '/posts' || !this.options.isFeatureEnabled('posts'))
+      return;
     void Promise.resolve(this.options.openRoute('/posts')).catch((error) =>
       this.report('navigation', error),
     );

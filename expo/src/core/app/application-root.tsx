@@ -30,7 +30,8 @@ import {
   type ApplicationScene,
 } from './application-flow';
 import { AuthenticatedRoot } from './authenticated-root';
-import { NotificationPermissionPrimer } from './notification-primer';
+import { OnboardingScreen } from '../../features/onboarding/onboarding-screen';
+import { onboarding } from '../../features/onboarding/onboarding-service';
 import { useAppRuntime } from './runtime-context';
 import {
   defaultIsMaintenanceError,
@@ -64,11 +65,8 @@ function ApplicationContent() {
   const onHomeReady = useCallback(() => {
     setHomeReady(true);
   }, []);
-  const [primerVisible, setPrimerVisible] = useState(false);
   const sceneRef = useRef(scene);
   const startupGeneration = useRef(0);
-  const permissionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const primerResolver = useRef<((enabled: boolean) => void) | null>(null);
 
   useEffect(() => {
     sceneRef.current = scene;
@@ -94,12 +92,6 @@ function ApplicationContent() {
       notificationsEnabled,
       push: runtime.push,
     }).catch((error) => reportException(error, 'postAuth.push'));
-    if (notificationsEnabled && runtime.push.supportsPushNotifications) {
-      if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
-      permissionTimer.current = setTimeout(() => {
-        void runtime.push.showPermissionPrimerOnce();
-      }, 1000);
-    }
     return runtime.accounts.accounts;
   }, [runtime]);
 
@@ -165,12 +157,6 @@ function ApplicationContent() {
       }
       if (generation !== startupGeneration.current) return;
       setScene(sceneForStartupResult(result));
-      if (result.requestPushPermission) {
-        if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
-        permissionTimer.current = setTimeout(() => {
-          void runtime.push.showPermissionPrimerOnce();
-        }, 1000);
-      }
     } catch (error) {
       reportException(error, 'startup.bootstrap');
       if (generation === startupGeneration.current) {
@@ -188,22 +174,8 @@ function ApplicationContent() {
     void runStartup();
     return () => {
       startupGeneration.current += 1;
-      if (permissionTimer.current !== null) clearTimeout(permissionTimer.current);
     };
   }, [runStartup, updateReady]);
-
-  useEffect(
-    () =>
-      runtime.effects.bindPermissionPrimer(
-        () =>
-          new Promise<boolean>((resolve) => {
-            primerResolver.current?.(false);
-            primerResolver.current = resolve;
-            setPrimerVisible(true);
-          }),
-      ),
-    [runtime],
-  );
 
   useEffect(
     () =>
@@ -217,8 +189,6 @@ function ApplicationContent() {
       }),
     [runtime],
   );
-
-  useEffect(() => () => primerResolver.current?.(false), []);
 
   useEffect(() => {
     const refresh = () => {
@@ -248,12 +218,16 @@ function ApplicationContent() {
     [runtime],
   );
 
-  const closePrimer = (enabled: boolean) => {
-    setPrimerVisible(false);
-    const resolve = primerResolver.current;
-    primerResolver.current = null;
-    resolve?.(enabled);
-  };
+  const onboardingEligible = scene.kind === 'home' || scene.kind === 'account-setup';
+  const onboardingUser = onboardingEligible
+    ? (runtime.auth.state.currentUser?.userId ?? null)
+    : null;
+  useEffect(() => {
+    void onboarding.bind(runtime.preferences, onboardingUser);
+    return () => {
+      void onboarding.bind(runtime.preferences, null);
+    };
+  }, [runtime.preferences, onboardingUser]);
 
   let content: ReactNode;
   switch (scene.kind) {
@@ -389,11 +363,7 @@ function ApplicationContent() {
   return (
     <StartupHandoff loading={scene.kind === 'startup' || (scene.kind === 'home' && !homeReady)}>
       {content}
-      <NotificationPermissionPrimer
-        onAllow={() => closePrimer(true)}
-        onDecline={() => closePrimer(false)}
-        visible={primerVisible}
-      />
+      <OnboardingScreen eligible={onboardingEligible} />
     </StartupHandoff>
   );
 }

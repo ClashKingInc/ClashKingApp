@@ -12,6 +12,7 @@ const ExportContext = createContext(false);
 /** One export boundary for every analytics visualization, including its branding. */
 export function StatsChartFrame({
   title,
+  exportTitle,
   children,
   showTitle = true,
   testID,
@@ -20,6 +21,7 @@ export function StatsChartFrame({
   copyPlacement = 'overlay',
 }: {
   readonly title: string;
+  readonly exportTitle?: string;
   readonly children: ReactNode;
   readonly showTitle?: boolean;
   readonly testID?: string;
@@ -128,7 +130,7 @@ export function StatsChartFrame({
           >
             <ExportContext.Provider value={true}>
               <CKText skeleton={false} role="titleSmall">
-                {title}
+                {exportTitle ?? title}
               </CKText>
               {exportContent ?? children}
               <View style={styles.credit}>

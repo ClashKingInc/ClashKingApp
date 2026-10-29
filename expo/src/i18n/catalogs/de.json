@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Vorherige {count} Tage",
   "legendAvailableDays": "Verfügbare Tage",
   "legendCompleteOnly": "Die Verteilung umfasst Tage mit 8 aufgezeichneten Kämpfen.",
-  "legendPerfectSources": "Perfekte Tage nach Rang"
+  "legendPerfectSources": "Perfekte Tage nach Rang",
+  "onboardingOverviewTitle": "Dein Dorf im Blick",
+  "onboardingOverviewBody": "Behalte deine Konten, Clans und täglichen Fortschritte an einem Ort.",
+  "onboardingProgressTitle": "Dein nächster Schritt",
+  "onboardingProgressBody": "Verfolge Kämpfe, vergleiche Fortschritte und bringe Verbesserungen voran.",
+  "onboardingRemindersTitle": "Eine Erinnerung zur richtigen Zeit",
+  "onboardingRemindersBody": "Erhalte Kriegserinnerungen und die gewünschten Hinweise. Wähle Konten und Hinweisarten in den Einstellungen.",
+  "onboardingReplayTitle": "Einführung erneut ansehen",
+  "statsViewLatestData": "Neueste Daten ansehen",
+  "statsLatestAvailableDate": "Zuletzt verfügbar: {date}",
+  "legendPerfectedDefenseDays": "Tage mit vollständig besiegter Verteidigung",
+  "legendCompleteDayDefinition": "Es werden nur Tage mit allen 8 Kämpfen berücksichtigt."
 }

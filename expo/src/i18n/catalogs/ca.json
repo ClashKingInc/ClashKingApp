@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "{count} dies anteriors",
   "legendAvailableDays": "Dies disponibles",
   "legendCompleteOnly": "La distribució inclou dies amb 8 batalles registrades.",
-  "legendPerfectSources": "Dies perfectes per posició"
+  "legendPerfectSources": "Dies perfectes per posició",
+  "onboardingOverviewTitle": "El teu poble, al centre",
+  "onboardingOverviewBody": "Reuneix els teus comptes, clans i progrés diari.",
+  "onboardingProgressTitle": "Prepara el següent pas",
+  "onboardingProgressBody": "Segueix les batalles, compara el progrés i continua millorant.",
+  "onboardingRemindersTitle": "Un recordatori en el moment adequat",
+  "onboardingRemindersBody": "Rep recordatoris de guerra i els avisos que triïs. Selecciona els comptes i tipus d’avís a Configuració.",
+  "onboardingReplayTitle": "Torna a veure la introducció",
+  "statsViewLatestData": "Mostra les dades més recents",
+  "statsLatestAvailableDate": "Últimes dades disponibles: {date}",
+  "legendPerfectedDefenseDays": "Dies amb defensa derrotada al màxim",
+  "legendCompleteDayDefinition": "Només s’inclouen els dies amb les 8 batalles completes."
 }

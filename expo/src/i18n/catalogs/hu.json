@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Előző {count} nap",
   "legendAvailableDays": "Elérhető napok",
   "legendCompleteOnly": "Az eloszlás a 8 rögzített csatával rendelkező napokat tartalmazza.",
-  "legendPerfectSources": "Tökéletes napok helyezés szerint"
+  "legendPerfectSources": "Tökéletes napok helyezés szerint",
+  "onboardingOverviewTitle": "A falud a középpontban",
+  "onboardingOverviewBody": "Tartsd együtt fiókjaidat, klánjaidat és napi fejlődésedet.",
+  "onboardingProgressTitle": "Tervezd meg a következő lépést",
+  "onboardingProgressBody": "Kövesd csatáidat, hasonlítsd össze eredményeidet, és haladj a fejlesztésekkel.",
+  "onboardingRemindersTitle": "Emlékeztető a megfelelő időben",
+  "onboardingRemindersBody": "Kapj háborús emlékeztetőket és választott értesítéseket. A Beállításokban válassz fiókokat és értesítéstípusokat.",
+  "onboardingReplayTitle": "Bevezető újraindítása",
+  "statsViewLatestData": "Legfrissebb adatok megtekintése",
+  "statsLatestAvailableDate": "Legfrissebb elérhető: {date}",
+  "legendPerfectedDefenseDays": "Teljesen legyőzött védekezésű napok",
+  "legendCompleteDayDefinition": "Csak a mind a 8 csatát tartalmazó napok számítanak."
 }

@@ -63,15 +63,24 @@
   "esportsDefense": "रक्षा",
   "competitiveArenaSubtitle": "आपका क्लैन। आपकी टीम। आपकी अगली चुनौती।",
   "competitiveViewTournament": "टूर्नामेंट देखें",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "{earned} / {total} अर्जित",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "उपलब्धियों से {total} में से {earned} जेम्स अर्जित किए।",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} पूर्ण",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "क्लैन लोड करने में विफल।",
   "gameItemLevels": "स्तर",
   "gameItemLevelCount": "{count} स्तर",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "डार्क एलिक्सिर",
   "resourceBuilderElixir": "बिल्डर एलिक्सिर",
   "resourceBuilderGold": "बिल्डर गोल्ड",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "ClashKing के बिना सर्वर",
   "rankingsPlayerSection": "खिलाड़ी रैंकिंग",
   "rankingsClanSection": "क्लैन रैंकिंग",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "जीत अभी भी संभव है",
   "warOutlookDrawOnly": "अधिकतम बराबरी",
   "warOutlookDefeat": "जीत संभव नहीं है",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "लाइनअप का विश्लेषण",
   "warScoutOpponent": "प्रतिद्वंद्वी के हाल के युद्ध",
   "warScoutScope": "वर्तमान लाइनअप · समान नियम · अधिकतम 10 पिछले युद्ध",
-  "upgradeTrackerCapturedWork": "आपके पिछले अपडेट से"
-  ,
+  "upgradeTrackerCapturedWork": "आपके पिछले अपडेट से",
   "tutorialWelcomeBody": "ClashKing का छोटा परिचय देखें। आप इसे कभी भी छोड़ सकते हैं।",
   "tutorialReorderBody": "कार्ड को दबाकर रखें और उसकी जगह बदलने के लिए खींचें।",
   "tutorialSidebarBody": "मेन्यू खोलने के लिए होम स्क्रीन पर स्वाइप करें या अपने अवतार पर टैप करें।",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "आपका गाँव, एक नज़र में",
+  "onboardingOverviewBody": "अपने खाते, कबीले और रोज़ की प्रगति एक जगह रखें।",
+  "onboardingProgressTitle": "अगला कदम जानें",
+  "onboardingProgressBody": "लड़ाइयों पर नज़र रखें, अपनी प्रगति की तुलना करें और अपग्रेड जारी रखें।",
+  "onboardingRemindersTitle": "सही समय पर याद दिलाएँ",
+  "onboardingRemindersBody": "युद्ध के रिमाइंडर और अपनी पसंद के अलर्ट पाएँ। सेटिंग्स में खाते और अलर्ट के प्रकार चुनें।",
+  "onboardingReplayTitle": "परिचय फिर देखें",
+  "statsViewLatestData": "नवीनतम डेटा देखें",
+  "statsLatestAvailableDate": "नवीनतम उपलब्ध डेटा: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "पूरी तरह हारी गई रक्षा के दिन",
+  "legendCompleteDayDefinition": "केवल सभी 8 लड़ाइयों वाले दिन शामिल हैं।"
 }

@@ -81,10 +81,15 @@ export interface PushNotificationServiceOptions {
   readonly isFeatureEnabled: (feature: PushFeature) => boolean;
   readonly openRoute: (route: SupportedPushRoute) => void | Promise<void>;
   readonly openAdminPost: (postId: string) => void | Promise<void>;
-  readonly showPermissionPrimer?: () => boolean | Promise<boolean>;
   readonly reportError?: (context: PushErrorContext) => void | Promise<void>;
   readonly log?: (message: string) => void;
 }
 
 export type SupportedPushRoute =
-  '/support-creator' | '/settings/support' | '/posts' | '/search' | '/upgrade-tracker' | `/player/${string}?tab=legends` | `/clan/${string}/war`;
+  | '/support-creator'
+  | '/settings/support'
+  | '/posts'
+  | '/search'
+  | '/upgrade-tracker'
+  | `/player/${string}?tab=legends`
+  | `/clan/${string}/war`;

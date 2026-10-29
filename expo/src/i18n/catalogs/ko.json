@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "이전 {count}일",
   "legendAvailableDays": "데이터가 있는 일수",
   "legendCompleteOnly": "8회 전투가 기록된 날짜의 분포입니다.",
-  "legendPerfectSources": "순위 구간별 퍼펙트 달성일"
+  "legendPerfectSources": "순위 구간별 퍼펙트 달성일",
+  "onboardingOverviewTitle": "내 마을을 한눈에",
+  "onboardingOverviewBody": "계정, 클랜, 일일 진행 상황을 한곳에서 확인하세요.",
+  "onboardingProgressTitle": "다음 단계를 확인하세요",
+  "onboardingProgressBody": "전투를 살펴보고 진행 상황을 비교하며 업그레이드를 이어 가세요.",
+  "onboardingRemindersTitle": "필요한 순간에 알림",
+  "onboardingRemindersBody": "전쟁 알림과 원하는 알림을 받으세요. 설정에서 계정과 알림 종류를 선택할 수 있어요.",
+  "onboardingReplayTitle": "소개 다시 보기",
+  "statsViewLatestData": "최신 데이터 보기",
+  "statsLatestAvailableDate": "최신 데이터: {date}",
+  "legendPerfectedDefenseDays": "모든 방어에서 완패한 날",
+  "legendCompleteDayDefinition": "8번의 전투가 모두 기록된 날만 포함돼요."
 }

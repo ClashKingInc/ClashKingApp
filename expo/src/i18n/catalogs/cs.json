@@ -2355,5 +2355,16 @@
   "legendPreviousDays": "Předchozích {count} dní",
   "legendAvailableDays": "Dostupné dny",
   "legendCompleteOnly": "Rozložení zahrnuje dny s 8 zaznamenanými bitvami.",
-  "legendPerfectSources": "Perfektní dny podle pořadí"
+  "legendPerfectSources": "Perfektní dny podle pořadí",
+  "onboardingOverviewTitle": "Tvoje vesnice na jednom místě",
+  "onboardingOverviewBody": "Měj své účty, klany a denní pokrok pohromadě.",
+  "onboardingProgressTitle": "Vyber další krok",
+  "onboardingProgressBody": "Sleduj bitvy, porovnávej pokrok a pokračuj ve vylepšování.",
+  "onboardingRemindersTitle": "Připomenutí ve správný čas",
+  "onboardingRemindersBody": "Dostávej připomenutí válek a vybraná upozornění. Účty a typy upozornění si zvol v Nastavení.",
+  "onboardingReplayTitle": "Znovu zobrazit úvod",
+  "statsViewLatestData": "Zobrazit nejnovější data",
+  "statsLatestAvailableDate": "Nejnovější dostupná data: {date}",
+  "legendPerfectedDefenseDays": "Dny s dokonale prolomenou obranou",
+  "legendCompleteDayDefinition": "Započítávají se pouze dny se všemi 8 bitvami."
 }

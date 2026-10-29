@@ -63,15 +63,24 @@
   "esportsDefense": "Phòng thủ",
   "competitiveArenaSubtitle": "Hội của bạn. Đội của bạn. Thử thách tiếp theo của bạn.",
   "competitiveViewTournament": "Xem giải đấu",
-  "@esportsWinLoss": {"placeholders":{"wins":{"type":"num"},"losses":{"type":"num"}}},
-"competitiveRegisteredClansEmpty": "Registered clans will appear here.",
-"competitiveMatchupsEmpty": "Matchups will appear after the draw.",
+  "@esportsWinLoss": {
+    "placeholders": {
+      "wins": {
+        "type": "num"
+      },
+      "losses": {
+        "type": "num"
+      }
+    }
+  },
+  "competitiveRegisteredClansEmpty": "Registered clans will appear here.",
+  "competitiveMatchupsEmpty": "Matchups will appear after the draw.",
   "esportsSearchTeams": "Search teams",
   "esportsLadderLoading": "Large ladder tables can take a few moments to load.",
   "esportsStageMatchesUnavailable": "CCN does not provide match records for this stage. Open a team to see its recent matches.",
-"competitiveFindYourNextWar": "Find your next war",
-"competitiveNoTournamentsYet": "The arena is getting ready",
-"competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
+  "competitiveFindYourNextWar": "Find your next war",
+  "competitiveNoTournamentsYet": "The arena is getting ready",
+  "competitiveTournamentsCheckBack": "New clan tournaments will appear here. Check back soon for your next match.",
   "esportsRatingsDescription": "CCN Elo ratings for teams in this stage.",
   "esportsTeamRatings": "Team ratings",
   "esportsEvent": "Event",
@@ -399,15 +408,23 @@
   "achievementGemsEarnedRatio": "Đã kiếm {earned} / {total}",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementGemsAccessibility": "Đã kiếm {earned} trên tổng số {total} đá quý từ thành tích.",
   "@achievementGemsAccessibility": {
     "placeholders": {
-      "earned": { "type": "String" },
-      "total": { "type": "String" }
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "achievementSummary": "{earned}/{total} đã hoàn thành",
@@ -3322,7 +3339,13 @@
   "clanLoadFailed": "Không thể tải hội.",
   "gameItemLevels": "Cấp độ",
   "gameItemLevelCount": "{count} cấp độ",
-  "@gameItemLevelCount": {"placeholders": {"count": {"type": "int"}}},
+  "@gameItemLevelCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resourceDarkElixir": "Dầu đen",
   "resourceBuilderElixir": "Dầu thợ xây",
   "resourceBuilderGold": "Vàng thợ xây",
@@ -5076,16 +5099,16 @@
   "discordServersWithoutBot": "Máy chủ chưa có ClashKing",
   "rankingsPlayerSection": "Bảng xếp hạng người chơi",
   "rankingsClanSection": "Bảng xếp hạng bang hội",
-"cwlArchiveCoverage": "{available} of {total} matchups available.",
-"cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
-"cwlPromotionChance": "Estimated promotion chance",
-"cwlPromotionPlaces": "Top {count} promote",
-"cwlForecastWaiting": "Forecasts need two completed wars per clan.",
-"cwlSeasonFinished": "Season complete",
-"cwlSeasonProgress": "{played} of {total} wars finished",
-"cwlRecordedStats": "Recorded wars only",
-"cwlMissingMatchups": "{count} matchups unavailable",
-"cwlHighestLeague": "Highest league · no promotion",
+  "cwlArchiveCoverage": "{available} of {total} matchups available.",
+  "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
+  "cwlPromotionChance": "Estimated promotion chance",
+  "cwlPromotionPlaces": "Top {count} promote",
+  "cwlForecastWaiting": "Forecasts need two completed wars per clan.",
+  "cwlSeasonFinished": "Season complete",
+  "cwlSeasonProgress": "{played} of {total} wars finished",
+  "cwlRecordedStats": "Recorded wars only",
+  "cwlMissingMatchups": "{count} matchups unavailable",
+  "cwlHighestLeague": "Highest league · no promotion",
   "warOutlookWinPossible": "Vẫn có thể thắng",
   "warOutlookDrawOnly": "Tốt nhất là hòa",
   "warOutlookDefeat": "Không thể thắng",
@@ -5094,8 +5117,7 @@
   "warScoutTitle": "Phân tích đội hình",
   "warScoutOpponent": "Các cuộc chiến gần đây của đối thủ",
   "warScoutScope": "Đội hình hiện tại · cùng luật · tối đa 10 cuộc chiến trước",
-  "upgradeTrackerCapturedWork": "Từ lần cập nhật gần nhất"
-  ,
+  "upgradeTrackerCapturedWork": "Từ lần cập nhật gần nhất",
   "tutorialWelcomeBody": "Khám phá nhanh ClashKing. Bạn có thể bỏ qua bất cứ lúc nào.",
   "tutorialReorderBody": "Nhấn giữ một thẻ rồi kéo để đổi vị trí.",
   "tutorialSidebarBody": "Vuốt trên màn hình chính để mở menu hoặc chạm vào ảnh đại diện.",
@@ -5149,5 +5171,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "onboardingOverviewTitle": "Ngôi làng trong tầm mắt",
+  "onboardingOverviewBody": "Tập hợp tài khoản, hội và tiến độ hằng ngày ở một nơi.",
+  "onboardingProgressTitle": "Chọn bước tiếp theo",
+  "onboardingProgressBody": "Theo dõi trận đánh, so sánh tiến độ và tiếp tục nâng cấp.",
+  "onboardingRemindersTitle": "Nhắc nhở đúng lúc",
+  "onboardingRemindersBody": "Nhận nhắc nhở chiến tranh và thông báo bạn chọn. Chọn tài khoản và loại thông báo trong Cài đặt.",
+  "onboardingReplayTitle": "Xem lại phần giới thiệu",
+  "statsViewLatestData": "Xem dữ liệu mới nhất",
+  "statsLatestAvailableDate": "Dữ liệu mới nhất hiện có: {date}",
+  "@statsLatestAvailableDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "legendPerfectedDefenseDays": "Ngày phòng thủ bị đánh bại hoàn toàn",
+  "legendCompleteDayDefinition": "Chỉ tính những ngày có đủ cả 8 trận đấu."
 }
