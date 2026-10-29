@@ -146,6 +146,12 @@ function displayForWar(
   let primaryText = '';
   let secondaryText = '';
   let colorTheme = cwl ? 'cwl' : 'active';
+  // Match the native widget: destruction breaks equal stars; an exact tie is a draw.
+  const comparison =
+    clanStars === opponentStars
+      ? number(record(war.clan).destructionPercentage) -
+        number(record(war.opponent).destructionPercentage)
+      : clanStars - opponentStars;
   if (state === 'preparation') {
     statusIcon = cwl ? '🏅' : '🛡️';
     primaryText = cwl ? 'CWL Preparation' : 'War Preparation';
@@ -157,8 +163,7 @@ function displayForWar(
     }
   } else if (state === 'inWar') {
     secondaryText = `${clanStars} - ${opponentStars}`;
-    colorTheme =
-      clanStars > opponentStars ? 'winning' : clanStars < opponentStars ? 'losing' : 'tied';
+    colorTheme = comparison > 0 ? 'winning' : comparison < 0 ? 'losing' : 'tied';
     const end = date(war.endTime);
     if (end !== undefined) {
       timeState = futureTimeLabel('Ends', end, now, true);
@@ -166,11 +171,21 @@ function displayForWar(
     }
     score = secondaryText;
   } else if (state === 'warEnded') {
-    const won = clanStars > opponentStars;
-    statusIcon = won ? '🏆' : cwl ? '🥈' : '💔';
-    primaryText = won ? (cwl ? 'CWL Victory!' : 'Victory!') : cwl ? 'CWL Complete' : 'Defeat';
+    statusIcon = comparison > 0 ? '🏆' : comparison < 0 ? '💔' : '🤝';
+    primaryText =
+      comparison > 0
+        ? cwl
+          ? 'CWL Victory!'
+          : 'Victory!'
+        : comparison < 0
+          ? cwl
+            ? 'CWL Defeat'
+            : 'Defeat'
+          : cwl
+            ? 'CWL Draw'
+            : 'Draw';
     secondaryText = `${clanStars} - ${opponentStars}`;
-    colorTheme = won ? 'victory' : cwl ? 'cwl' : 'defeat';
+    colorTheme = comparison > 0 ? 'victory' : comparison < 0 ? 'defeat' : 'tied';
     timeState = cwl ? 'CWL War Ended' : 'War Ended';
     score = secondaryText;
   }

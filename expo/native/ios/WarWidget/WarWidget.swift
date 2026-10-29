@@ -593,6 +593,11 @@ private struct WarWidgetFreshFetcher {
     let opponent = dictionary(currentWar["opponent"])
     let clanStars = int(clan["stars"])
     let opponentStars = int(opponent["stars"])
+    // Stars decide first; equal stars use destruction, and an exact tie is a draw.
+    // Keep this aligned with the app payload so a background refresh cannot change the outcome.
+    let comparison = clanStars == opponentStars
+      ? double(clan["destructionPercentage"]) - double(opponent["destructionPercentage"])
+      : Double(clanStars - opponentStars)
     let teamSize = int(currentWar["teamSize"])
     var timeState = ""
     var score = ""
@@ -618,7 +623,7 @@ private struct WarWidgetFreshFetcher {
     } else if state == "inWar" {
       statusIcon = "sword"
       secondaryText = "\(clanStars) - \(opponentStars)"
-      colorTheme = clanStars > opponentStars ? "winning" : (clanStars < opponentStars ? "losing" : "tied")
+      colorTheme = comparison > 0 ? "winning" : (comparison < 0 ? "losing" : "tied")
       if let endTime = date(string(currentWar["endTime"])) {
         let delta = endTime.timeIntervalSince(Date())
         if delta > 3600 {
@@ -631,11 +636,10 @@ private struct WarWidgetFreshFetcher {
       }
       score = "\(clanStars) - \(opponentStars)"
     } else if state == "warEnded" {
-      let isWin = clanStars > opponentStars
-      statusIcon = isWin ? "trophy" : "heart.slash"
-      primaryText = isWin ? "Victory!" : "Defeat"
+      statusIcon = comparison > 0 ? "trophy" : (comparison < 0 ? "heart.slash" : "equal")
+      primaryText = comparison > 0 ? "Victory!" : (comparison < 0 ? "Defeat" : "Draw")
       secondaryText = "\(clanStars) - \(opponentStars)"
-      colorTheme = isWin ? "victory" : "defeat"
+      colorTheme = comparison > 0 ? "victory" : (comparison < 0 ? "defeat" : "tied")
       timeState = "War Ended"
       score = "\(clanStars) - \(opponentStars)"
     }
