@@ -89,7 +89,10 @@ export function LegendDayPerformanceSection({
           baseKey,
           repository,
           error,
-          data: previous?.baseKey === baseKey ? previous.data : undefined,
+          data:
+            previous?.baseKey === baseKey && previous.repository === repository
+              ? previous.data
+              : undefined,
         }));
     });
     return () => {
