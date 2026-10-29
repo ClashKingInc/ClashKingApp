@@ -164,9 +164,15 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
         title={sectionLabel(provider.section, t)}
         imageUrl={sectionImage(provider.section)}
         backgroundUrl={sectionBackdrop(provider.section)}
-        backgroundElement={<RankedCheckerBackground color={statsCheckerColor(provider.section)} />}
+        backgroundElement={
+          provider.section === StatsSection.ranked ? undefined : (
+            <RankedCheckerBackground color={statsCheckerColor(provider.section)} />
+          )
+        }
         compactIdentity
-        controlsTopPadding={16}
+        identityLayout={provider.section === StatsSection.ranked ? 'inline' : 'stacked'}
+        imageSize={provider.section === StatsSection.ranked ? 44 : 64}
+        controlsTopPadding={provider.section === StatsSection.ranked ? 6 : 16}
         safeTop={insets.top}
         onBack={onBack}
         backLabel={materialBackLabel(locale)}
@@ -2902,7 +2908,7 @@ export function sectionLabel(section: StatsSectionValue, t: Translate): string {
     case StatsSection.cwl:
       return t('statsCwl');
     case StatsSection.ranked:
-      return t('statsRanked');
+      return t('legendsTitle');
   }
 }
 export function sectionImage(section: StatsSectionValue): string {
@@ -2924,6 +2930,7 @@ export function sectionImage(section: StatsSectionValue): string {
   }
 }
 export function sectionBackdrop(section: StatsSectionValue): string {
+  if (section === StatsSection.ranked) return ImageAssets.legendPageBackground;
   if (section === StatsSection.war) return ImageAssets.warPageBackground;
   if (section === StatsSection.cwl) return ImageAssets.cwlPageBackground;
   if (section === StatsSection.armies || section === StatsSection.items)
