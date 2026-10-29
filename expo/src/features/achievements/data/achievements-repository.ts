@@ -2,7 +2,7 @@ import { AchievementsCheckEndpoint } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
-import { sharedAchievementModelCache } from './achievement-model-cache';
+import { BUNDLED_TOURNAMENT_MODEL, sharedAchievementModelCache } from './achievement-model-cache';
 import {
   ACHIEVEMENT_CATALOG_FALLBACK,
   isAchievementId,
@@ -101,7 +101,14 @@ export class AchievementsRepository {
     for (const rawItem of response.items) {
       if (!isRecord(rawItem)) continue;
       const id = typeof rawItem.id === 'string' ? rawItem.id : '';
-      const modelUrl = id === 'verified_accounts' ? 'derived:verified_accounts' : rawItem.asset_url;
+      // Participation uses the shipped model until an asset release publishes
+      // it. The server still owns catalog inclusion and every earned count.
+      const modelUrl =
+        id === 'first_tournament'
+          ? BUNDLED_TOURNAMENT_MODEL
+          : id === 'verified_accounts'
+            ? 'derived:verified_accounts'
+            : rawItem.asset_url;
       const earnedCount = rawItem.earned_count;
       const repeatable = rawItem.repeatable;
       if (
@@ -125,6 +132,10 @@ export class AchievementsRepository {
       const remote = remoteById.get(catalogItem.id);
       return remote ? [remote] : [];
     });
+    // New achievements appear only when the server includes their catalog row
+    // and actual earned count. The participation artwork is bundled locally.
+    const debut = remoteById.get('first_tournament');
+    if (debut) achievements.push(debut);
     this.setSnapshot(achievements, preserveRefreshing && this.snapshotValue.isRefreshing);
     // Startup already fetches earned counts. Warm only earned artwork through
     // the existing shared cache, so opening Profile does not begin a fresh GLB

@@ -36,6 +36,8 @@ const headers: readonly number[] = [
   require('../../../assets/clashking/cwl/champion.webp'),
   require('../../../assets/clashking/cwl/titan.webp'),
   require('../../../assets/clashking/cwl/legend.webp'),
+  require('../../../assets/clashking/competitive/profile-elixir-workshop.webp'),
+  require('../../../assets/clashking/competitive/tournament-war-arena.webp'),
   require('../../../assets/clashking/competitive/esports-trophy-clean.png'),
   require('../../../assets/clashking/profile/profile-selected-banner.png'),
   require('../../../assets/clashking/backgrounds/blue.webp'),

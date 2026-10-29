@@ -13,6 +13,7 @@ export type AppLink =
 const hosts = new Set(['app.clashk.ing', 'staging-app.clashk.ing', 'dev-app.clashk.ing']);
 const queryKeys = new Set([
   'userId',
+  'tournamentId',
   'tab',
   'player',
   'clan',
@@ -108,6 +109,10 @@ export function parseAppLink(input: string): AppLink | null {
     }
     if (head === 'posts' && segments.length === 2)
       return { kind: 'page', page: 'posts', params: { ...params, postId: tagPart! } };
+    if (head === 'tournaments' && segments.length === 2)
+      return { kind: 'page', page: 'tournaments', params: { ...params, tournamentId: tagPart! } };
+    if (head === 'profile' && segments.length === 2)
+      return { kind: 'page', page: 'profile', params: { ...params, userId: tagPart! } };
     if (head === 'settings' && segments.length === 2 && settingsSections.has(tagPart!))
       return { kind: 'page', page: 'settings', params: { ...params, section: tagPart! } };
     const route = appRoutes.find((route) => route.href === `/${segments.join('/')}`);
@@ -126,8 +131,14 @@ export function appLinkPath(link: AppLink): string {
       path += `/${encodeURIComponent(params.postId)}`;
       delete params.postId;
     }
-
-
+    if (link.page === 'tournaments' && params.tournamentId) {
+      path += `/${encodeURIComponent(params.tournamentId)}`;
+      delete params.tournamentId;
+    }
+    if (link.page === 'profile' && params.userId) {
+      path += `/${encodeURIComponent(params.userId)}`;
+      delete params.userId;
+    }
     if (link.page === 'settings' && params.section) {
       path += `/${encodeURIComponent(params.section)}`;
       delete params.section;

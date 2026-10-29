@@ -122,6 +122,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
               '/game-assets',
               '/achievements',
               '/esports',
+              '/tournaments',
+              '/profile',
               '/accounts',
               '/settings',
             ].map((path) => ({ scheme: 'https', host: 'app.clashk.ing', path })),
