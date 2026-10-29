@@ -87,6 +87,7 @@ export function AnalyticsLineChart({
   exportable = true,
   xDomain = 'calendar',
   responsiveAxes = false,
+  legendMode = 'interactive',
 }: {
   readonly title: string;
   readonly exportTitle?: string;
@@ -110,6 +111,8 @@ export function AnalyticsLineChart({
   readonly xDomain?: 'calendar' | 'observations';
   /** Use unscaled axis text and measured-width gutters for small inset charts. */
   readonly responsiveAxes?: boolean;
+  /** Comparison views can keep both series visible and show values only on chart interaction. */
+  readonly legendMode?: 'interactive' | 'labels' | 'hidden';
 }) {
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
@@ -307,14 +310,15 @@ export function AnalyticsLineChart({
       showTitle={showTitle}
       copyEnabled={exportable}
     >
-      {series.length > 1 ? (
+      {series.length > 1 && legendMode !== 'hidden' ? (
         <View style={[styles.legend, !showTitle && exportable && { paddingRight: 38 }]}>
           {series.map((line, index) => {
             const value = pointMaps.get(line.key)?.get(legendDay ?? '');
             return (
               <Pressable
                 key={line.key}
-                accessibilityRole="button"
+                accessibilityRole={legendMode === 'interactive' ? 'button' : undefined}
+                disabled={legendMode === 'labels'}
                 accessibilityLabel={line.label}
                 accessibilityState={{ selected: !hidden.includes(line.key) }}
                 onPress={() =>
@@ -339,14 +343,16 @@ export function AnalyticsLineChart({
                 />
                 <View style={styles.legendLabel}>
                   <CKText role="bodySmall">{line.label}</CKText>
-                  <CKText
-                    testID={`chart-selection-value-${line.key}`}
-                    role="bodySmall"
-                    numberOfLines={1}
-                    style={styles.legendValue}
-                  >
-                    {value == null ? '—' : format(value)}
-                  </CKText>
+                  {legendMode === 'interactive' ? (
+                    <CKText
+                      testID={`chart-selection-value-${line.key}`}
+                      role="bodySmall"
+                      numberOfLines={1}
+                      style={styles.legendValue}
+                    >
+                      {value == null ? '—' : format(value)}
+                    </CKText>
+                  ) : null}
                 </View>
               </Pressable>
             );

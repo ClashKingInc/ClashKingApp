@@ -46,7 +46,11 @@ import {
 export type LegendDayPerformance = EndpointResponse<typeof LegendDayPerformanceEndpoint>;
 
 export interface StatsRepositoryContract {
-  loadLegendPerformance(request: StatsLegendQuery, fresh?: boolean): Promise<LegendDayPerformance>;
+  loadLegendPerformance(
+    request: StatsLegendQuery,
+    fresh?: boolean,
+    observed?: boolean,
+  ): Promise<LegendDayPerformance>;
   loadPlayerCounts(fresh?: boolean): Promise<StatsPlayerCountsResponse>;
   loadClanCounts(fresh?: boolean): Promise<StatsClanCountsResponse>;
   loadArmySetups(request: StatsArmySetupQuery, fresh?: boolean): Promise<StatsArmySetupResponse>;
@@ -170,12 +174,14 @@ export class StatsRepository implements StatsRepositoryContract {
   async loadLegendPerformance(
     request: StatsLegendQuery,
     fresh = false,
+    observed = false,
   ): Promise<LegendDayPerformance> {
-    return this.cached(`legend-performance:${JSON.stringify(request.toQuery())}`, fresh, () =>
+    const query = { ...request.toQuery(), ...(observed ? { cohort: 'observed' as const } : {}) };
+    return this.cached(`legend-performance:${JSON.stringify(query)}`, fresh, () =>
       Effect.runPromise(
         this.contractApi.execute(LegendDayPerformanceEndpoint, {
           path: {},
-          query: request.toQuery(),
+          query,
           body: {},
         }),
       ),

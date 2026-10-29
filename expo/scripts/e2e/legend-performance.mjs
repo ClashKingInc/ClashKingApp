@@ -35,6 +35,24 @@ try {
     const repository = new StatsRepository(api);
     const dates = new StatsDateFilter(new Date(process.env.CLASHKING_E2E_FIRST_DAY + 'T12:00:00'), new Date(process.env.CLASHKING_E2E_LAST_DAY + 'T12:00:00'));
     const query = new StatsLegendQuery(dates, StatsLegendCohort.legend);
+    if (process.env.CLASHKING_E2E_OBSERVED === '1') {
+      const observed = await repository.loadLegendPerformance(query, false, true);
+      assert.equal(observed.cohort, 'observed');
+      assert.equal(observed.periods[0].offense.completePlayerDays, 2);
+      assert.equal(observed.currentDay, undefined, 'Historical selections must not include today');
+      assert.deepEqual(observed.perfectDayContributions, []);
+      assert.strictEqual(await repository.loadLegendPerformance(query, false, true), observed);
+      assert.equal(requests, 1);
+      const ranked = await repository.loadLegendPerformance(query);
+      assert.equal(ranked.cohort, 'legend_i');
+      assert.equal(requests, 2, 'Ranked and observed requests must not share a cache entry');
+      const today = new Date(Date.now() - 5 * 3600000).toISOString().slice(0, 10);
+      const current = await repository.loadLegendPerformance(new StatsLegendQuery(new StatsDateFilter(dates.start, new Date(today + 'T12:00:00')), StatsLegendCohort.legend), false, true);
+      assert.equal(current.currentDay.offense.battles, 3);
+      assert.equal(current.currentDay.offense.tripleRate, 2 / 3);
+      assert.equal(current.items.some(item => item.day === current.currentDay.day), false);
+      console.log('PASS: app repository -> vendored observed contract -> real local API/Timescale; fresh logs, closed days, current-day separation and distinct cache keys');
+    } else {
     const data = await repository.loadLegendPerformance(query);
     assert.equal(data.periods[0].offense.perfectDayRate, 2 / 3);
     assert.equal(data.periods[0].perfectOffensePlayers, 1);
@@ -51,6 +69,7 @@ try {
     assert.notStrictEqual(await repository.loadLegendPerformance(query, true), data);
     assert.equal(requests, 3, 'Explicit refresh should reach the actual API');
     console.log('PASS: app StatsRepository -> vendored typed client -> real local Worker/Timescale; ranges, cohorts, coverage, cache and refresh');
+    }
   `,
     },
     outfile: output,

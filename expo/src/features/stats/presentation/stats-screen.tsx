@@ -185,16 +185,18 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
               value={`${dateFormat.format(dates.start)} – ${dateFormat.format(dates.end)}`}
               iconElement={<CalendarDays size={19} color={theme.onSurface} />}
             />
-            <ProfileStatChip
-              label={t('statsChartGranularity')}
-              value={t(
-                granularity === 'day'
-                  ? 'statsDaily'
-                  : granularity === 'week'
-                    ? 'statsWeekly'
-                    : 'statsMonthly',
-              )}
-            />
+            {provider.section !== StatsSection.ranked ? (
+              <ProfileStatChip
+                label={t('statsChartGranularity')}
+                value={t(
+                  granularity === 'day'
+                    ? 'statsDaily'
+                    : granularity === 'week'
+                      ? 'statsWeekly'
+                      : 'statsMonthly',
+                )}
+              />
+            ) : null}
           </View>
         ) : null}
       </ProfilePageHeader>
@@ -258,11 +260,11 @@ function RankedStatsSection({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
-  const [cohort, setCohort] = useState<StatsLegendCohortValue>(StatsLegendCohort.legend);
+  const [cohort, setCohort] = useState<StatsLegendCohortValue | 'observed'>('observed');
   const [view, setView] = useState('days');
   const [battleReload, setBattleReload] = useState(0);
   const [available, setAvailable] = useState<{
-    cohort: StatsLegendCohortValue;
+    cohort: StatsLegendCohortValue | 'observed';
     firstDay: string;
     lastDay: string;
   }>();
@@ -296,7 +298,7 @@ function RankedStatsSection({
     error?: unknown;
   }>();
   useEffect(() => {
-    if (view !== 'battles' || cohort === StatsLegendCohort.legend) return;
+    if (view !== 'battles' || cohort === StatsLegendCohort.legend || cohort === 'observed') return;
     let active = true;
     void repository
       .loadItems(
@@ -328,21 +330,24 @@ function RankedStatsSection({
       : response?.data;
   const error = cohort === StatsLegendCohort.legend ? current.error : response?.error;
   return (
-    <View style={{ gap: 20 }} testID="ranked-stats-overview">
+    <View style={{ gap: 12 }} testID="ranked-stats-overview">
       <SelectionPicker
         title={t('statsPlayers')}
         accessibilityLabel={t('statsPlayers')}
         fillWidth
         options={[
+          'observed' as const,
           StatsLegendCohort.legend,
           StatsLegendCohort.top1000,
           StatsLegendCohort.top200,
         ].map((key) => ({
           key,
           label:
-            key === StatsLegendCohort.legend
-              ? t('statsLegendLeagueOne')
-              : t('rankingsTopCount', { count: key === StatsLegendCohort.top200 ? 200 : 1000 }),
+            key === 'observed'
+              ? t('generalAll')
+              : key === StatsLegendCohort.legend
+                ? t('statsLegendLeagueOne')
+                : t('rankingsTopCount', { count: key === StatsLegendCohort.top200 ? 200 : 1000 }),
           icon: (
             <MobileWebImage
               imageUrl={ImageAssets.legendLeagueOne}
@@ -364,11 +369,13 @@ function RankedStatsSection({
           { key: 'battles', label: t('statsBattle') },
         ]}
       />
-      {view === 'days' ? (
+      {view === 'days' || cohort === 'observed' ? (
         <LegendDayPerformanceSection
           api={api}
           dates={provider.dates}
-          cohort={cohort}
+          cohort={cohort === 'observed' ? StatsLegendCohort.legend : cohort}
+          observed={cohort === 'observed'}
+          displayMode={view as 'days' | 'battles'}
           onAvailability={rememberAvailability}
           onShowLatest={showLatest}
         />
@@ -1757,20 +1764,26 @@ function legendMetrics(data: StatsLegendResponse): StatsMetrics {
 }
 
 function RankedBattleSummary({ metrics }: { metrics: StatsMetrics }) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   return (
-    <View style={{ gap: 20 }}>
-      <View style={{ gap: 6 }}>
-        <CKText role="heroMetric" style={{ color: '#E8A524' }}>
-          {metrics.available ? percent(metrics.threeStarRate) : '—'}
-        </CKText>
-        <CKText role="bodyMedium" muted>
-          {t('statsThreeStarRate')}
-        </CKText>
+    <View style={{ gap: 16 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+        <MobileWebImage
+          imageUrl={ImageAssets.attackStar}
+          contentFit="contain"
+          style={{ width: 48, height: 48 }}
+        />
+        <View style={{ gap: 2 }}>
+          <CKText role="heroMetric" style={{ color: '#E8A524', fontSize: 36 }}>
+            {metrics.available ? percent(metrics.threeStarRate) : '—'}
+          </CKText>
+          <CKText role="bodyMedium" muted>
+            {t('statsThreeStarRate')}
+          </CKText>
+        </View>
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 20 }}>
+      <View style={{ flexDirection: 'row', gap: 20 }}>
         {[
-          { label: t('warAttacksTitle'), value: formatCompactNumber(metrics.sampleSize, locale) },
           {
             label: t('statsAverageStars'),
             value: metrics.available ? metrics.averageStars.toFixed(2) : '—',
@@ -1780,7 +1793,7 @@ function RankedBattleSummary({ metrics }: { metrics: StatsMetrics }) {
             value: metrics.available ? percent(metrics.averageDestruction) : '—',
           },
         ].map((item) => (
-          <View key={item.label} style={{ flex: 1, minWidth: 85, gap: 3 }}>
+          <View key={item.label} style={{ flex: 1, gap: 3 }}>
             <CKText role="titleSmall">{item.value}</CKText>
             <CKText role="bodySmall" muted>
               {item.label}
@@ -1859,25 +1872,27 @@ function RankedOverview({
   }
   return (
     <Section panels>
-      <StatsChartFrame
-        title={t('statsRanked')}
-        showTitle={false}
-        exportTitle={`${t('statsStarRates')} · ${exportContext}`}
-        copyPlacement="footer"
-        testID="ranked-overview-copy"
-      >
-        <View style={{ gap: 20 }}>
-          <RankedBattleSummary metrics={metrics} />
-          <AnalyticsLineChart
-            title={t('statsStarRates')}
-            exportTitle={`${t('statsStarRates')} · ${exportContext}`}
-            showTitle={false}
-            series={starSeries(metrics.daily, t)}
-            percent
-            exportable={false}
-          />
-        </View>
-      </StatsChartFrame>
+      <Surface radius={24} style={{ padding: 16 }}>
+        <StatsChartFrame
+          title={t('statsRanked')}
+          showTitle={false}
+          exportTitle={`${t('statsStarRates')} · ${exportContext}`}
+          copyPlacement="footer"
+          testID="ranked-overview-copy"
+        >
+          <View style={{ gap: 20 }}>
+            <RankedBattleSummary metrics={metrics} />
+            <AnalyticsLineChart
+              title={t('statsStarRates')}
+              exportTitle={`${t('statsStarRates')} · ${exportContext}`}
+              showTitle={false}
+              series={starSeries(metrics.daily, t)}
+              percent
+              exportable={false}
+            />
+          </View>
+        </StatsChartFrame>
+      </Surface>
       {hasComposition ? (
         <RankedCompositionChart daily={data.items} dates={dates} exportContext={exportContext} />
       ) : (

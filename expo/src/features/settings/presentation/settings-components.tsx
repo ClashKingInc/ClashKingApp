@@ -251,10 +251,21 @@ export function SettingsChoiceTile<T extends string>({
   const theme = useCKTheme();
   return (
     <View
-      style={{ flexDirection: isRtl ? 'row-reverse' : 'row', alignItems: 'stretch', minHeight: 62 }}
+      style={{ flexDirection: isRtl ? 'row-reverse' : 'row', alignItems: 'center', height: 50 }}
     >
       <View style={{ width: 56, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
-      <View style={{ flex: 1, flexDirection: isRtl ? 'row-reverse' : 'row', minWidth: 0 }}>
+      <View
+        style={{
+          flex: 1,
+          height: 38,
+          marginEnd: 8,
+          padding: 3,
+          borderRadius: 10,
+          backgroundColor: colorWithAlpha(theme.onSurface, 0.06),
+          flexDirection: isRtl ? 'row-reverse' : 'row',
+          minWidth: 0,
+        }}
+      >
         {options.map((option) => {
           const selected = option.value === value;
           return (
@@ -264,15 +275,21 @@ export function SettingsChoiceTile<T extends string>({
               accessibilityState={{ checked: selected }}
               accessibilityLabel={`${title}: ${option.label}`}
               onPress={() => onChange(option.value)}
+              hitSlop={{ top: 6, bottom: 6 }}
               style={({ pressed }) => ({
                 flex: 1,
                 minWidth: 0,
-                minHeight: 62,
-                paddingHorizontal: 5,
-                paddingVertical: 13,
+                height: 32,
+                borderRadius: 7,
+                paddingHorizontal: 4,
+                paddingVertical: 2,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: colorWithAlpha(theme.primary, selected ? 0.1 : pressed ? 0.05 : 0),
+                backgroundColor: selected
+                  ? theme.surfaceContainerHighest
+                  : pressed
+                    ? colorWithAlpha(theme.onSurface, 0.05)
+                    : 'transparent',
               })}
             >
               <CKText
@@ -291,10 +308,10 @@ export function SettingsChoiceTile<T extends string>({
                   pointerEvents="none"
                   style={{
                     position: 'absolute',
-                    bottom: 0,
-                    left: 14,
-                    right: 14,
-                    height: 3,
+                    bottom: 1,
+                    left: '40%',
+                    right: '40%',
+                    height: 2,
                     borderRadius: 2,
                     backgroundColor: theme.primary,
                   }}

@@ -94,6 +94,9 @@ export class StatsProvider {
   ) {
     const today = day(this.now());
     this.defaultDates = new StatsDateFilter(addDays(today, -89), today);
+    // Start Legend comparisons with the recent week; explicit calendar changes
+    // still own the selected range and never affect other statistics pages.
+    this.sectionDates.set(StatsSection.ranked, new StatsDateFilter(addDays(today, -6), today));
     this.warDates = this.defaultDates;
     this.cwlDates = new StatsDateFilter(
       new Date(today.getFullYear(), today.getMonth() - 1, 1),
