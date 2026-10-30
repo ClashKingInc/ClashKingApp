@@ -2,7 +2,7 @@ import { EntityModalViewport } from '../../war/presentation/war-panel-grid';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Asset } from 'expo-asset';
+import { bundledImageUrl } from '../../../core/assets/bundled-image-source';
 import {
   Modal,
   Platform,
@@ -62,9 +62,9 @@ export interface TodoScreenProps {
 }
 
 const FILTERS: readonly TodoAccountFilter[] = ['all', 'needs_action', 'done'];
-const TODO_HEADER_ART = Asset.fromModule(
+const TODO_HEADER_ART = bundledImageUrl(
   require('../../../../assets/clashking/todo/builder-meeting.jpg'),
-).uri;
+);
 
 export function TodoScreen(props: TodoScreenProps) {
   const { t, locale } = useI18n();

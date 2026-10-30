@@ -15,6 +15,7 @@ export function generateStaticParams() {
     'bases-armies',
     'game-assets',
     'accounts',
+    'profile',
     'settings',
     'achievements',
     'esports',

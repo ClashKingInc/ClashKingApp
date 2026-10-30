@@ -28,7 +28,7 @@ import { MobileDrawer } from './mobile-drawer';
 import { MobileHeader } from './mobile-header';
 import { PrimaryTabBar } from './primary-tab-bar';
 import { IosNativeTabs } from './ios-native-tabs';
-import { isDuoDevice, useAdaptiveLayout } from '../ui/adaptive-layout';
+import { useAdaptiveLayout } from '../ui/adaptive-layout';
 import {
   RetainedPrimaryPager,
   type PrimaryRouteId,
@@ -62,6 +62,7 @@ export interface NavigationShellProps {
   productLabel: string;
   hasUser: boolean;
   hasManagedDiscordBot?: boolean;
+  hidePrimaryNavigation?: boolean;
   profileMenuLabel: string;
   closeDrawerLabel: string;
   drawerHintStore?: StringStorage;
@@ -80,9 +81,9 @@ export function NavigationShell(props: NavigationShellProps) {
   const measured = useWindowDimensions().width;
   const width = props.viewportWidth ?? measured;
   const platform = props.platform ?? Platform.OS;
-  // Only Duo needs UIKit's side rail. iPad keeps the same bottom bar and
-  // retained page gestures as the regular iPhone rather than top-mounted tabs.
-  if (platform === 'ios' && isDuoDevice) return <IosNativeTabs {...props} />;
+  // UIKit owns iOS tab selection and its gestures. The native shell keeps
+  // labels hidden while retaining the app's page-swipe coordination.
+  if (platform === 'ios') return <IosNativeTabs {...props} />;
   return resolveShellLayout(platform, width) === 'desktop' ? (
     <DesktopNavigationShell {...props} width={width} />
   ) : (

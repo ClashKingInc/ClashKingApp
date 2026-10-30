@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
-import { PanResponder, Platform, View, type KeyDownEvent } from 'react-native';
+import { PanResponder, Platform, Pressable, View, type KeyDownEvent } from 'react-native';
+import { Minus, Plus } from 'lucide-react-native';
 import { useI18n } from '../i18n';
 import { CKText } from './text';
 import { useCKTheme } from './theme';
@@ -11,6 +12,7 @@ type LevelSliderProps = {
   maximum: number;
   label: string;
   accent?: string;
+  showStepButtons?: boolean;
   /** Optional exact milestones; omit for ordinary every-level controls. */
   steps?: readonly number[];
   /** Lightweight preview only; expensive work belongs in onChange on release. */
@@ -29,6 +31,7 @@ function LevelSliderControl({
   label,
   accent,
   steps,
+  showStepButtons = false,
   onPreviewChange,
   onChange,
 }: LevelSliderProps) {
@@ -55,6 +58,36 @@ function LevelSliderControl({
     allowed
       ? allowed[Math.max(0, Math.min(allowed.length - 1, allowed.indexOf(preview) + direction))]!
       : Math.max(minimum, Math.min(maximum, preview + direction));
+  const adjust = (direction: number) => {
+    const next = stepValue(direction);
+    liveValue.current = next;
+    setPreview(next);
+    setFraction(maximum > minimum ? (next - minimum) / (maximum - minimum) : 0);
+    onPreviewChange?.(next);
+    onChange(next);
+  };
+  const stepButton = (direction: -1 | 1) => {
+    const disabled = direction < 0 ? preview <= minimum : preview >= maximum;
+    const Icon = direction < 0 ? Minus : Plus;
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t(direction < 0 ? 'sideDecrease' : 'sideIncrease')}
+        accessibilityState={{ disabled }}
+        disabled={disabled}
+        onPress={() => adjust(direction)}
+        style={{
+          width: 44,
+          height: 44,
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: disabled ? 0.3 : 1,
+        }}
+      >
+        <Icon size={22} color={controlColor} />
+      </Pressable>
+    );
+  };
   // Read the grant position once, then use gesture displacement. locationX is
   // relative to the touched child and jumps when the thumb crosses the track.
   /* eslint-disable react-hooks/refs -- PanResponder registers event callbacks here; refs are read only when a gesture fires. */
@@ -102,66 +135,70 @@ function LevelSliderControl({
           {t('sideLevel', { level: preview })}
         </CKText>
       </View>
-      <View
-        accessibilityRole="adjustable"
-        accessibilityLabel={label}
-        accessibilityValue={{ min: minimum, max: maximum, now: preview }}
-        accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-        onAccessibilityAction={(event) => {
-          const next = stepValue(event.nativeEvent.actionName === 'increment' ? 1 : -1);
-          setPreview(next);
-          onChange(next);
-        }}
-        onLayout={(event) => setWidth(Math.max(1, event.nativeEvent.layout.width))}
-        style={{ height: 44, justifyContent: 'center', marginHorizontal: 12 }}
-        {...(Platform.OS === 'web'
-          ? {
-              tabIndex: 0,
-              onKeyDown: (event: KeyDownEvent) => {
-                const key = event.nativeEvent.key;
-                const delta =
-                  key === 'ArrowRight' || key === 'ArrowUp'
-                    ? 1
-                    : key === 'ArrowLeft' || key === 'ArrowDown'
-                      ? -1
-                      : 0;
-                if (!delta && key !== 'Home' && key !== 'End') return;
-                event.preventDefault();
-                const next =
-                  key === 'Home' ? minimum : key === 'End' ? maximum : stepValue(delta);
-                setPreview(next);
-                onChange(next);
-              },
-            }
-          : {})}
-        {...responder.panHandlers}
-      >
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {showStepButtons ? stepButton(-1) : null}
         <View
-          pointerEvents="none"
-          style={{ height: 5, borderRadius: 999, backgroundColor: theme.surfaceContainerHighest }}
-        />
-        <View
-          pointerEvents="none"
-          style={{
-            position: 'absolute',
-            height: 5,
-            width: `${fraction * 100}%`,
-            borderRadius: 999,
-            backgroundColor: controlColor,
+          accessibilityRole="adjustable"
+          accessibilityLabel={label}
+          accessibilityValue={{ min: minimum, max: maximum, now: preview }}
+          accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
+          onAccessibilityAction={(event) => {
+            const next = stepValue(event.nativeEvent.actionName === 'increment' ? 1 : -1);
+            setPreview(next);
+            onChange(next);
           }}
-        />
-        <View
-          pointerEvents="none"
-          style={{
-            position: 'absolute',
-            left: `${fraction * 100}%`,
-            marginLeft: -11,
-            width: 22,
-            height: 22,
-            borderRadius: 11,
-            backgroundColor: controlColor,
-          }}
-        />
+          onLayout={(event) => setWidth(Math.max(1, event.nativeEvent.layout.width))}
+          style={{ flex: 1, height: 44, justifyContent: 'center', marginHorizontal: 12 }}
+          {...(Platform.OS === 'web'
+            ? {
+                tabIndex: 0,
+                onKeyDown: (event: KeyDownEvent) => {
+                  const key = event.nativeEvent.key;
+                  const delta =
+                    key === 'ArrowRight' || key === 'ArrowUp'
+                      ? 1
+                      : key === 'ArrowLeft' || key === 'ArrowDown'
+                        ? -1
+                        : 0;
+                  if (!delta && key !== 'Home' && key !== 'End') return;
+                  event.preventDefault();
+                  const next =
+                    key === 'Home' ? minimum : key === 'End' ? maximum : stepValue(delta);
+                  setPreview(next);
+                  onChange(next);
+                },
+              }
+            : {})}
+          {...responder.panHandlers}
+        >
+          <View
+            pointerEvents="none"
+            style={{ height: 5, borderRadius: 999, backgroundColor: theme.surfaceContainerHighest }}
+          />
+          <View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              height: 5,
+              width: `${fraction * 100}%`,
+              borderRadius: 999,
+              backgroundColor: controlColor,
+            }}
+          />
+          <View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              left: `${fraction * 100}%`,
+              marginLeft: -11,
+              width: 22,
+              height: 22,
+              borderRadius: 11,
+              backgroundColor: controlColor,
+            }}
+          />
+        </View>
+        {showStepButtons ? stepButton(1) : null}
       </View>
     </View>
   );

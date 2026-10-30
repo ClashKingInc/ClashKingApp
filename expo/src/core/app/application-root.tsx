@@ -24,11 +24,7 @@ import {
   refreshLinkedAccountsForCurrentAuth,
 } from '../../features/auth/startup';
 import { materialContinueLabel, useI18n } from '../../i18n';
-import {
-  sceneForPostAuthDestination,
-  sceneForStartupResult,
-  type ApplicationScene,
-} from './application-flow';
+import { sceneForStartupResult, type ApplicationScene } from './application-flow';
 import { AuthenticatedRoot } from './authenticated-root';
 import { OnboardingScreen } from '../../features/onboarding/onboarding-screen';
 import { onboarding } from '../../features/onboarding/onboarding-service';
@@ -98,8 +94,13 @@ function ApplicationContent() {
   const postAuth = useMemo(
     () => ({
       loadAccounts,
-      onDestination: (destination: PostAuthDestination) =>
-        setScene(sceneForPostAuthDestination(destination)),
+      onDestination: async (_destination: PostAuthDestination) => {
+        // Explicit sign-in starts the overview even for verified accounts.
+        // Reset the session marker so a release announcement cannot replace it.
+        await onboarding.bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null);
+        await onboarding.replay();
+        setScene({ kind: 'introduction', stage: 'overview' });
+      },
       onFailure: (error: unknown) =>
         setScene(
           defaultIsMaintenanceError(error)
@@ -107,7 +108,7 @@ function ApplicationContent() {
             : { kind: 'error', networkError: defaultIsNetworkError(error) },
         ),
     }),
-    [loadAccounts],
+    [loadAccounts, runtime],
   );
 
   const runStartup = useCallback(async () => {
@@ -156,7 +157,15 @@ function ApplicationContent() {
         } else await hydrate();
       }
       if (generation !== startupGeneration.current) return;
-      setScene(sceneForStartupResult(result));
+      if (result.authenticated) {
+        await onboarding.bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null);
+        if (generation !== startupGeneration.current) return;
+        setScene(
+          onboarding.getSnapshot().returningUser
+            ? sceneForStartupResult(result)
+            : { kind: 'introduction', stage: 'overview' },
+        );
+      } else setScene(sceneForStartupResult(result));
     } catch (error) {
       reportException(error, 'startup.bootstrap');
       if (generation === startupGeneration.current) {
@@ -182,7 +191,7 @@ function ApplicationContent() {
       runtime.auth.subscribe((authState) => {
         if (
           !authState.isAuthenticated &&
-          (sceneRef.current.kind === 'home' || sceneRef.current.kind === 'account-setup')
+          ['home', 'account-setup', 'introduction'].includes(sceneRef.current.kind)
         ) {
           setScene({ kind: 'login' });
         }
@@ -218,10 +227,10 @@ function ApplicationContent() {
     [runtime],
   );
 
-  const onboardingEligible = scene.kind === 'home' || scene.kind === 'account-setup';
-  const onboardingUser = onboardingEligible
-    ? (runtime.auth.state.currentUser?.userId ?? null)
-    : null;
+  const onboardingUser =
+    scene.kind === 'home' || scene.kind === 'account-setup' || scene.kind === 'introduction'
+      ? (runtime.auth.state.currentUser?.userId ?? null)
+      : null;
   useEffect(() => {
     void onboarding.bind(runtime.preferences, onboardingUser);
     return () => {
@@ -306,6 +315,7 @@ function ApplicationContent() {
               ),
             ),
           )}
+          lookupPlayer={(tag) => runtime.players.lookupPlayerIdentity(tag)}
           playerProfiles={runtime.players.profiles}
           onContinue={async () => {
             const result = await refreshLinkedAccountsForCurrentAuth(
@@ -322,7 +332,7 @@ function ApplicationContent() {
                 selectedTagLoaded: true,
               })
               .catch((error) => reportException(error, 'accountSetup.bootstrap'));
-            setScene({ kind: 'home' });
+            setScene({ kind: 'introduction', stage: 'notifications' });
           }}
           onOpenGameSettings={() => openExternal(CLASH_SETTINGS_URL)}
           onRefresh={async () => {
@@ -336,6 +346,12 @@ function ApplicationContent() {
           user={runtime.auth.state.currentUser}
         />
       );
+      break;
+    case 'introduction':
+      content =
+        scene.stage === 'notifications' ? (
+          <AuthenticatedRoot onHomeReady={onHomeReady} suppressAnnouncements />
+        ) : null;
       break;
     case 'home':
       content = <AuthenticatedRoot onHomeReady={onHomeReady} />;
@@ -363,7 +379,19 @@ function ApplicationContent() {
   return (
     <StartupHandoff loading={scene.kind === 'startup' || (scene.kind === 'home' && !homeReady)}>
       {content}
-      <OnboardingScreen eligible={onboardingEligible} />
+      {scene.kind === 'introduction' ? (
+        <OnboardingScreen
+          key={scene.stage}
+          stage={scene.stage}
+          onAccounts={() => setScene({ kind: 'account-setup' })}
+          onComplete={() => {
+            // Home is already mounted behind this step. Its own placeholders
+            // handle unfinished requests without flashing the launch screen.
+            setHomeReady(true);
+            setScene({ kind: 'home' });
+          }}
+        />
+      ) : null}
     </StartupHandoff>
   );
 }

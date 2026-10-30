@@ -12,7 +12,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Asset } from 'expo-asset';
+import { bundledImageUrl } from '../../core/assets/bundled-image-source';
 import { HeroHeaderScrim } from '../../ui/hero-header-scrim';
 import { useI18n } from '../../i18n';
 import {
@@ -174,7 +174,7 @@ export function CalculatorHub({
                   style={[styles.destination, { height: cardHeight }]}
                 >
                   <MobileWebImage
-                    imageUrl={Asset.fromModule(card.image).uri}
+                    imageUrl={bundledImageUrl(card.image)}
                     contentFit="cover"
                     style={[StyleSheet.absoluteFill, card.id === 'farming' && styles.disabledArt]}
                     transition={0}

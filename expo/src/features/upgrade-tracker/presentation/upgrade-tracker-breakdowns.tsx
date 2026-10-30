@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Clock3, Coins, Layers3, X } from 'lucide-react-native';
@@ -241,6 +241,7 @@ function UpgradeItemDetailContent({
         ]}
       />
       <LevelSlider
+        showStepButtons
         label={t('gameItemLevels')}
         value={selected}
         minimum={minimum}
@@ -464,7 +465,13 @@ function BreakdownModal({
     </View>
   );
   return (
-    <Modal supportedOrientations={modalOrientations} visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <View style={breakdownStyles.overlay}>
         <Pressable
           accessible={false}

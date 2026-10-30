@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import {
   AtSign,
-  RotateCcw,
   BellRing,
   FileText,
   Gamepad2,
@@ -27,7 +26,7 @@ import {
   Languages as TranslateIcon,
   UserRound,
 } from 'lucide-react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n, toIntlLocale } from '../../../i18n';
 import { CKText, MobileWebImage, Surface, ckRadius, ckSpacing, useCKTheme } from '../../../ui';
@@ -149,13 +148,6 @@ export function SettingsScreen({
                   )
               }
             />
-            {actions.replayOnboarding ? (
-              <SettingsTile
-                icon={<RotateCcw color={iconColor} />}
-                title={t('onboardingReplayTitle')}
-                onPress={() => void actions.replayOnboarding?.()}
-              />
-            ) : null}
             {alternateIconsSupported ? (
               <SettingsTile
                 icon={<ImageIcon color={iconColor} />}
@@ -298,13 +290,18 @@ export function SettingsScreen({
         }}
         onClose={() => setDialog(undefined)}
       />
-      <AppIconDialog
+      <SelectionPickerModal
         visible={dialog === 'icon'}
         title={t('settingsAppIcon')}
-        choices={appIcons}
-        selected={selectedAppIcon}
-        selectedLabel={t('settingsThemeSelected')}
+        options={appIcons.map((choice) => ({
+          key: choice.iconName,
+          label: choice.label,
+          icon: <Image source={choice.previewSource} style={styles.appIconPreview} />,
+        }))}
+        selectedKey={selectedAppIcon}
         onSelect={(iconName) => {
+          setDialog(undefined);
+          if (iconName === selectedAppIcon) return;
           setBusy(true);
           void actions
             .changeAppIcon?.(iconName || null)
@@ -345,91 +342,6 @@ export function SettingsScreen({
         </Pressable>
       ) : null}
     </>
-  );
-}
-
-function AppIconDialog({
-  visible,
-  title,
-  choices,
-  selected,
-  selectedLabel,
-  onSelect,
-  onClose,
-}: {
-  visible: boolean;
-  title: string;
-  choices: readonly SettingsAppIconChoice[];
-  selected: string;
-  selectedLabel: string;
-  onSelect: (iconName: string) => void;
-  onClose: () => void;
-}) {
-  const theme = useCKTheme();
-  const layout = useAdaptiveLayout();
-  return (
-    <Modal
-      supportedOrientations={modalOrientations}
-      transparent
-      animationType="slide"
-      visible={visible}
-      onRequestClose={onClose}
-    >
-      <SafeAreaView
-        style={[
-          styles.sheetOverlay,
-          layout.isExpanded && { justifyContent: 'center', padding: 24 },
-        ]}
-      >
-        <Pressable
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-          onPress={onClose}
-          style={StyleSheet.absoluteFill}
-        />
-        <Surface
-          radius={ckRadius.card}
-          style={[
-            styles.bottomSheet,
-            layout.isExpanded && {
-              width: '100%',
-              maxWidth: 560,
-              alignSelf: 'center',
-              borderRadius: ckRadius.card,
-            },
-          ]}
-          accessibilityViewIsModal
-        >
-          <View style={[styles.dragHandle, { backgroundColor: theme.onSurfaceVariant }]} />
-          <View style={styles.appIconSheetBody}>
-            <SettingsSection title={title}>
-              {choices.map((choice) => (
-                <Pressable
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: selected === choice.iconName }}
-                  key={choice.iconName || 'default'}
-                  onPress={() => {
-                    onClose();
-                    onSelect(choice.iconName);
-                  }}
-                  style={({ pressed }) => [styles.appIconRow, pressed && styles.pressed]}
-                >
-                  <Image source={choice.previewSource} style={styles.appIconPreview} />
-                  <CKText numberOfLines={1} role="bodyLarge" style={styles.appIconLabel}>
-                    {choice.label}
-                  </CKText>
-                  {selected === choice.iconName ? (
-                    <CKText muted role="bodyMedium" style={styles.appIconSelected}>
-                      {selectedLabel}
-                    </CKText>
-                  ) : null}
-                </Pressable>
-              ))}
-            </SettingsSection>
-          </View>
-        </Surface>
-      </SafeAreaView>
-    </Modal>
   );
 }
 
@@ -500,31 +412,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sheetOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000066' },
-  bottomSheet: {
-    maxHeight: '82%',
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-  },
-  dragHandle: {
-    width: 32,
-    height: 4,
-    borderRadius: 2,
-    opacity: 0.4,
-    alignSelf: 'center',
-    marginTop: 8,
-  },
-  appIconSheetBody: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
-  appIconRow: {
-    height: 62,
-    paddingHorizontal: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
   appIconPreview: { width: 36, height: 36, borderRadius: 9 },
-  appIconLabel: { flex: 1, fontWeight: '500', fontSize: 17 },
-  appIconSelected: { fontSize: 16 },
   snackbar: {
     position: 'absolute',
     left: 16,

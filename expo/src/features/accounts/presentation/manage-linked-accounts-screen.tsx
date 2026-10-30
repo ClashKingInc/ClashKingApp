@@ -1,3 +1,5 @@
+import { DraggableArtworkBubble } from '../../../ui/draggable-artwork-bubble';
+import { useCKAccessibility } from '../../../ui/accessibility';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -8,7 +10,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ChevronLeft, LogOut, PlusCircle, Shield, Trash2, UserRound } from 'lucide-react-native';
+import { ChevronLeft, LogOut, Search, ArrowRight, Shield, Trash2 } from 'lucide-react-native';
 import DraggableFlatList, {
   ScaleDecorator,
   type DragEndParams,
@@ -31,10 +33,10 @@ import {
   colorWithAlpha,
   statColors,
   useCKTheme,
-  useCKThemeMode,
 } from '../../../ui';
-import { AuthField, InlineError, PrimaryAction } from '../../auth/presentation';
-import { normalizePlayerTag } from '../../auth/presentation/validation';
+import { InlineError, PrimaryAction } from '../../auth/presentation';
+import { ApiResponseError } from '@clashking/api-client';
+import { SearchField } from '../../../ui/search-sort';
 import { AccountVerificationDialog } from './account-verification-dialog';
 import {
   accountPresentationItem,
@@ -47,6 +49,7 @@ type PlayerProfileIdentity = {
   readonly tag: string;
   readonly name: string;
   readonly townHallLevel: number;
+  readonly clanOverview?: { readonly name: string; readonly badgeUrls: { readonly small: string } };
 };
 
 const EMPTY_PLAYER_PROFILES: readonly PlayerProfileIdentity[] = [];
@@ -61,7 +64,7 @@ export function ManageLinkedAccountsScreen({
   onBack,
   onLogout,
   onRefresh,
-  user,
+  lookupPlayer,
   playerProfiles = EMPTY_PLAYER_PROFILES,
   viewportWidth,
   platform = Platform.OS,
@@ -76,6 +79,7 @@ export function ManageLinkedAccountsScreen({
   onBack?: () => void | Promise<void>;
   onLogout?: () => void | Promise<void>;
   onRefresh?: () => void | Promise<void>;
+  lookupPlayer: (tag: string) => Promise<PlayerProfileIdentity>;
   user?: { readonly username: string; readonly avatarUrl: string } | null;
   playerProfiles?: readonly PlayerProfileIdentity[];
   viewportWidth?: number;
@@ -85,7 +89,7 @@ export function ManageLinkedAccountsScreen({
   const { t, locale } = useI18n();
   const layout = useAdaptiveLayout();
   const theme = useCKTheme();
-  const mode = useCKThemeMode();
+  const { reduceMotion } = useCKAccessibility();
   const insets = useSafeAreaInsets();
   const measuredWidth = useWindowDimensions().width;
   const desktopWeb = platform === 'web' && (viewportWidth ?? measuredWidth) >= 900;
@@ -96,7 +100,9 @@ export function ManageLinkedAccountsScreen({
   const [continuing, setContinuing] = useState(false);
   const [error, setError] = useState<string>();
   const [verification, setVerification] = useState<LinkedAccountItem>();
-  const [pendingTag, setPendingTag] = useState<string>();
+  const [pendingPlayer, setPendingPlayer] = useState<PlayerProfileIdentity>();
+  const [lookingUp, setLookingUp] = useState(false);
+  const lookupGeneration = useRef(0);
   const [notice, setNotice] = useState<string>();
   const refreshVersion = useRef(0);
   const initialAccountsSignature = JSON.stringify(
@@ -161,19 +167,51 @@ export function ManageLinkedAccountsScreen({
       }),
     [accounts, profilesByTag],
   );
-  const add = () => {
-    const normalized = normalizePlayerTag(tag);
-    if (!normalized) {
-      setError(t('accountsEnterPlayerTag'));
+  const add = async () => {
+    const input = tag.trim().toUpperCase().replace(/O/g, '0');
+    // Validate before canonicalization: stripping arbitrary characters can
+    // turn an invalid input into a different, apparently valid player tag.
+    if (!/^#?[0289PYLQGRJCUV]{3,15}$/.test(input)) {
+      setError(t('accountsErrorTagNotExists'));
       return;
     }
+    const normalized = canonicalTag(input);
     if (byTag.has(normalized)) {
       setError(t('accountsErrorAlreadyLinkedToYou'));
       return;
     }
+    const generation = ++lookupGeneration.current;
+    setLookingUp(true);
     setError(undefined);
-    setPendingTag(normalized);
+    try {
+      const player = await lookupPlayer(normalized);
+      if (generation === lookupGeneration.current) setPendingPlayer(player);
+    } catch (error) {
+      if (generation !== lookupGeneration.current) return;
+      setError(
+        t(
+          error instanceof ApiResponseError && (error.status === 404 || error.status === 400)
+            ? 'accountsErrorTagNotExists'
+            : 'searchErrorPlayerLoadFailed',
+        ),
+      );
+    } finally {
+      if (generation === lookupGeneration.current) setLookingUp(false);
+    }
   };
+  const changeTag = (value: string) => {
+    lookupGeneration.current += 1;
+    setLookingUp(false);
+    setPendingPlayer(undefined);
+    setTag(value);
+    setError(undefined);
+  };
+  useEffect(
+    () => () => {
+      lookupGeneration.current += 1;
+    },
+    [],
+  );
   const finishReorder = ({ data, from, to }: DragEndParams<LinkedAccountItem>) => {
     if (from === to) return;
     setAccounts(data);
@@ -253,52 +291,55 @@ export function ManageLinkedAccountsScreen({
     });
     return () => subscription.remove();
   });
+  const verificationProfile = verification
+    ? profilesByTag.get(canonicalTag(verification.playerTag))
+    : pendingPlayer;
   const verified = async () => {
-    if (!verification && !pendingTag) return;
+    if (!verification && !pendingPlayer) return;
     setAccounts(service.accounts.map((account) => presentAccount(account)));
     setVerification(undefined);
-    setPendingTag(undefined);
+    setPendingPlayer(undefined);
     setTag('');
     setNotice(t('accountVerificationSuccess'));
     await refreshAfterMutation();
   };
   return (
     <SafeAreaView
-      edges={['top', 'left', 'right']}
+      edges={['left', 'right']}
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       {!desktopWeb ? (
-        <View style={styles.appBar}>
-          <Pressable
-            accessibilityLabel={onBack ? materialBackLabel(locale) : t('authLogout')}
-            accessibilityRole="button"
-            onPress={() => {
-              if (onBack) void leaveAfterPersist();
-              else void onLogout?.();
-            }}
-            style={({ pressed }) => [styles.appBarAction, pressed && styles.pressed]}
-          >
-            {onBack ? (
-              <ChevronLeft color={theme.onSurface} size={25} />
-            ) : (
-              <LogOut color={theme.onSurface} size={24} />
-            )}
-          </Pressable>
-          <View style={styles.appBarUser}>
-            <CKText numberOfLines={1} role="bodyMedium">
-              {user?.username ?? t('generalLoading')}
-            </CKText>
-            <View style={styles.appBarAvatar}>
-              {user?.avatarUrl ? (
-                <MobileWebImage
-                  imageUrl={user.avatarUrl}
-                  errorFallback={<UserRound color={theme.onSurfaceVariant} size={24} />}
-                  style={styles.appBarAvatar}
-                />
+        <View style={{ paddingTop: insets.top }}>
+          <View style={styles.appBar}>
+            <Pressable
+              accessibilityLabel={onBack ? materialBackLabel(locale) : t('authLogout')}
+              accessibilityRole="button"
+              onPress={() => {
+                if (onBack) void leaveAfterPersist();
+                else void onLogout?.();
+              }}
+              style={({ pressed }) => [
+                styles.appBarAction,
+                { backgroundColor: colorWithAlpha(theme.onSurface, 0.07) },
+                pressed && styles.pressed,
+              ]}
+            >
+              {onBack ? (
+                <ChevronLeft color={theme.onSurface} size={25} />
               ) : (
-                <UserRound color={theme.onSurfaceVariant} size={24} />
+                <LogOut color={theme.onSurface} size={24} />
               )}
-            </View>
+            </Pressable>
+            <CKText
+              role="screenTitle"
+              accessibilityRole="header"
+              skeleton={false}
+              style={styles.appBarTitle}
+            >
+              {t('accountsMyTitle')}
+            </CKText>
+            {/* Balance the back action so the title centers on the whole screen. */}
+            <View style={styles.appBarBalance} />
           </View>
         </View>
       ) : null}
@@ -327,68 +368,82 @@ export function ManageLinkedAccountsScreen({
           ListHeaderComponent={
             <>
               <View style={styles.intro}>
-                {requiresVerifiedAccount ? (
-                  <>
-                    <MobileWebImage
-                      imageUrl={
-                        mode === 'dark' ? ImageAssets.darkModeLogo : ImageAssets.lightModeLogo
-                      }
-                      errorFallback={<Shield color={theme.primary} size={64} style={styles.logo} />}
-                      style={styles.logo}
-                    />
-                    <MobileWebImage
-                      imageUrl={
-                        mode === 'dark'
-                          ? ImageAssets.darkModeTextLogo
-                          : ImageAssets.lightModeTextLogo
-                      }
-                      contentFit="contain"
-                      errorFallback={<CKText role="screenTitle">{t('appTitle')}</CKText>}
-                      style={styles.textLogo}
-                    />
-                    <CKText role="titleSmall" style={styles.center}>
-                      {t('accountsWelcome')}
-                    </CKText>
-                    <CKText style={styles.center}>{t('accountsWelcomeMessage')}</CKText>
-                  </>
-                ) : (
-                  <>
-                    <CKText role="titleLarge" style={styles.strong}>
-                      {t('accountsManageTitle')}
-                    </CKText>
-                    <CKText muted>{t('authAccountManagement')}</CKText>
-                  </>
-                )}
-              </View>
-              <View style={[styles.sticky, { backgroundColor: theme.background }]}>
-                <AuthField
-                  label={t('accountsPlayerTag')}
-                  value={tag}
-                  autoCapitalize="characters"
-                  onChangeText={setTag}
-                  onSubmitEditing={() => void add()}
-                />
-                <Pressable
-                  accessibilityLabel={t('accountsAdd')}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: !normalizePlayerTag(tag) }}
-                  disabled={!normalizePlayerTag(tag)}
-                  onPress={() => void add()}
-                  style={styles.add}
+                {desktopWeb ? (
+                  <CKText role="screenTitle" skeleton={false} style={styles.setupTitle}>
+                    {t('accountsMyTitle')}
+                  </CKText>
+                ) : null}
+                <View
+                  style={styles.accountArtwork}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
                 >
-                  <PlusCircle
-                    color={normalizePlayerTag(tag) ? theme.primary : theme.onSurfaceVariant}
-                    size={28}
+                  <DraggableArtworkBubble
+                    source={require('../../../../assets/clashking/legend-poster/th10.png')}
+                    size={60}
+                    maxTravel={16}
+                    reduceMotion={reduceMotion}
+                    style={styles.townHallTen}
                   />
-                </Pressable>
+                  <DraggableArtworkBubble
+                    source={require('../../../../assets/clashking/legend-poster/th14.png')}
+                    size={60}
+                    maxTravel={16}
+                    reduceMotion={reduceMotion}
+                    style={styles.townHallFourteen}
+                  />
+                  <DraggableArtworkBubble
+                    source={require('../../../../assets/clashking/legend-poster/th18.png')}
+                    size={76}
+                    maxTravel={16}
+                    reduceMotion={reduceMotion}
+                    style={styles.townHallEighteen}
+                  />
+                </View>
+              </View>
+              <View style={styles.sticky}>
+                <View style={{ flexDirection: 'row' }}>
+                  <SearchField
+                    value={tag}
+                    onChangeText={changeTag}
+                    placeholder={t('accountsEnterPlayerTag')}
+                    onSubmit={() => {
+                      if (!lookingUp && tag.trim()) void add();
+                    }}
+                    searchIcon={
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={t('accountsAdd')}
+                        disabled={lookingUp || !tag.trim()}
+                        hitSlop={10}
+                        onPress={() => void add()}
+                      >
+                        {lookingUp ? (
+                          <LoadingIndicator />
+                        ) : (
+                          <Search size={18} color={theme.onSurfaceVariant} />
+                        )}
+                      </Pressable>
+                    }
+                  />
+                </View>
                 <InlineError message={error} />
-                <CKText muted role="bodySmall">
-                  {t('accountsAddInstruction')}
-                </CKText>
+                {presentedAccounts.length ? (
+                  <CKText
+                    role="bodySmall"
+                    muted
+                    skeleton={false}
+                    style={{ marginTop: 24, marginBottom: 6 }}
+                  >
+                    {t('accountsMenuTitle')} · {presentedAccounts.length}
+                  </CKText>
+                ) : null}
               </View>
             </>
           }
-          ListEmptyComponent={<EmptyState title={t('accountsNoneFound')} />}
+          ListEmptyComponent={
+            firstConnection ? undefined : <EmptyState title={t('accountsNoneFound')} />
+          }
           renderItem={(params) => (
             <AccountRow
               {...params}
@@ -415,19 +470,21 @@ export function ManageLinkedAccountsScreen({
         ) : null}
       </View>
       <AccountVerificationDialog
-        visible={verification !== undefined || pendingTag !== undefined}
-        playerTag={verification?.playerTag ?? pendingTag ?? ''}
-        playerName={verification?.name ?? pendingTag ?? ''}
-        townHallLevel={verification?.townHallLevel ?? 0}
+        visible={verification !== undefined || pendingPlayer !== undefined}
+        playerTag={verification?.playerTag ?? pendingPlayer?.tag ?? ''}
+        playerName={verification?.name ?? pendingPlayer?.name ?? ''}
+        townHallLevel={verification?.townHallLevel ?? pendingPlayer?.townHallLevel ?? 0}
+        clanName={verificationProfile?.clanOverview?.name}
+        clanBadgeUrl={verificationProfile?.clanOverview?.badgeUrls.small}
         onVerify={(token) =>
-          verification || pendingTag
-            ? service.addAccountWithToken(verification?.playerTag ?? pendingTag!, token)
+          verification || pendingPlayer
+            ? service.addAccountWithToken(verification?.playerTag ?? pendingPlayer!.tag, token)
             : Promise.resolve({ success: false, message: null })
         }
         onOpenSettings={onOpenGameSettings}
         onCancel={() => {
           setVerification(undefined);
-          setPendingTag(undefined);
+          setPendingPlayer(undefined);
         }}
         onVerified={() => void verified()}
       />
@@ -486,6 +543,9 @@ export function AccountRow({
             </CKText>
           </View>
           <Pressable
+            accessibilityLabel={
+              account.isVerified ? t('accountVerified') : `${t('accountVerify')} ${account.name}`
+            }
             disabled={account.isVerified}
             accessibilityRole={account.isVerified ? undefined : 'button'}
             onPress={onVerify}
@@ -502,7 +562,7 @@ export function AccountRow({
               ]}
             >
               <CKText
-                role="labelMedium"
+                role="bodySmall"
                 style={{
                   color: account.isVerified ? statColors.win : statColors.capitalProjected,
                   fontWeight: '700',
@@ -510,6 +570,9 @@ export function AccountRow({
               >
                 {account.isVerified ? t('accountVerified') : t('accountVerify')}
               </CKText>
+              {!account.isVerified ? (
+                <ArrowRight size={15} color={statColors.capitalProjected} />
+              ) : null}
             </PillSurface>
           </Pressable>
           <Pressable
@@ -530,13 +593,22 @@ export function AccountRow({
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   appBar: {
-    height: 60,
-    paddingHorizontal: 4,
+    height: 44,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 12,
   },
-  appBarAction: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
+  appBarTitle: { flex: 1, textAlign: 'center', fontSize: 24, lineHeight: 30 },
+  appBarBalance: { width: 42 },
+  appBarAction: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   appBarUser: {
     minWidth: 0,
     maxWidth: '72%',
@@ -556,21 +628,25 @@ const styles = StyleSheet.create({
   container: { flex: 1, minHeight: 0, width: '100%', maxWidth: 1040, alignSelf: 'center' },
   accountList: { flex: 1, minHeight: 0 },
   scroll: { paddingBottom: 24 },
-  intro: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16, gap: 4, alignItems: 'center' },
-  logo: { width: 70, height: 70, resizeMode: 'contain' },
-  textLogo: { width: 150, height: 48, marginTop: 12, marginBottom: 28 },
-  center: { textAlign: 'center' },
+  // Reserve the bounded upward drag inside the scroll viewport. Letting the
+  // whole list overflow would also expose scrolled account rows behind Back.
+  intro: {
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 20,
+    alignItems: 'center',
+    gap: 10,
+  },
+  accountArtwork: { width: 232, height: 104 },
+  townHallTen: { position: 'absolute', left: 16, top: 27, transform: [{ rotate: '-13deg' }] },
+  townHallFourteen: { position: 'absolute', right: 16, top: 27, transform: [{ rotate: '13deg' }] },
+  townHallEighteen: { position: 'absolute', left: 78, top: 8 },
+  setupTitle: { fontSize: 32, lineHeight: 38, fontWeight: '700', textAlign: 'center' },
+  setupSkip: { minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   strong: { fontWeight: '800' },
   sticky: { paddingHorizontal: 16, paddingBottom: 10 },
-  add: {
-    position: 'absolute',
-    right: 22,
-    top: 24,
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  searchRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
+
   list: { paddingHorizontal: 16, paddingTop: 8, gap: 8 },
   account: {
     marginHorizontal: 16,
@@ -584,7 +660,13 @@ const styles = StyleSheet.create({
   activeAccount: { opacity: 0.96 },
   townHall: { width: 44, height: 44, resizeMode: 'contain' },
   accountCopy: { flex: 1 },
-  status: { paddingHorizontal: 8, paddingVertical: 5 },
+  status: {
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   continue: { flexShrink: 0, paddingHorizontal: 16, paddingTop: 8 },
 });

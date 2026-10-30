@@ -1,4 +1,4 @@
-import { Asset } from 'expo-asset';
+import { bundledImageUrl } from '../../../core/assets/bundled-image-source';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { UpgradeVillage, type UpgradeVillageValue } from '../models';
 
@@ -24,16 +24,14 @@ export function trackerCategoryImage(key: string, village: UpgradeVillageValue):
     case 'siege':
       return ImageAssets.upgradeCategoryIcons.siege;
     case 'equipment':
-      return Asset.fromModule(require('../../../../assets/clashking/tracker/equipment-anvil.webp'))
-        .uri;
+      return bundledImageUrl(require('../../../../assets/clashking/tracker/equipment-anvil.webp'));
     case 'supercharges':
     case 'supercharge':
-      return Asset.fromModule(
+      return bundledImageUrl(
         require('../../../../assets/clashking/calculators/supercharge-icon.webp'),
-      ).uri;
+      );
     case 'craftedDefenses':
-      return Asset.fromModule(require('../../../../assets/clashking/tracker/crafting-station.webp'))
-        .uri;
+      return bundledImageUrl(require('../../../../assets/clashking/tracker/crafting-station.webp'));
     case 'defenses':
       return home
         ? ImageAssets.getHomeVillageBuildingImage('Cannon', 1)

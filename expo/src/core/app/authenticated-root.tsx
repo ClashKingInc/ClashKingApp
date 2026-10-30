@@ -1,4 +1,3 @@
-import { isDuoDevice } from '../../ui/adaptive-layout';
 import * as Clipboard from 'expo-clipboard';
 import { router, type Href } from 'expo-router';
 import {
@@ -109,6 +108,7 @@ import { apiDate } from '../../features/war/models';
 import { isRouteEnabled } from '../../navigation/route-manifest';
 import { recordBrowserPath, backThroughBrowserHistory } from '../deep-links/browser-history';
 import { selectLegendsPlayer } from './legends-player-selection';
+import { UserProfileScreen } from '../../features/accounts/presentation/user-profile-screen';
 import { onboarding } from '../../features/onboarding/onboarding-service';
 import { useStartupCovered } from './startup-loading';
 
@@ -154,7 +154,10 @@ type PushedScene =
     };
 
 /** Production shell composition for the retained four-tab Flutter navigation model. */
-export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } = {}) {
+export function AuthenticatedRoot({
+  onHomeReady,
+  suppressAnnouncements = false,
+}: { onHomeReady?: () => void; suppressAnnouncements?: boolean } = {}) {
   const [startupPlayerLink, setStartupPlayerLink] = useState(
     () => pendingAppLink()?.kind === 'player',
   );
@@ -229,6 +232,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     onboarding.getSnapshot,
   );
   const canAutoAnnounce =
+    !suppressAnnouncements &&
     !startupCovered &&
     onboardingState.ready &&
     onboardingState.returningUser &&
@@ -250,7 +254,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     setPushedScenes([]);
     setUtility(undefined);
     setPrimary(route);
-    if (isDuoDevice) selectNativePrimary(route);
+    if (Platform.OS === 'ios') selectNativePrimary(route);
   };
   const showUtility = useCallback(
     (route: AppRouteDefinition, playerTag?: string, initialParams: AppLinkParams = {}) => {
@@ -711,7 +715,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         if (link.kind === 'page') {
           if (routeById(link.page).primaryTab) {
             setPrimary(link.page as PrimaryRouteId);
-            if (isDuoDevice) selectNativePrimary(link.page as PrimaryRouteId);
+            if (Platform.OS === 'ios') selectNativePrimary(link.page as PrimaryRouteId);
             setPrimaryLinks((current) => ({
               ...current,
               [link.page]: { key: generation, params: link.params },
@@ -769,6 +773,23 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
           }}
         />
       );
+    if (route === 'profile')
+      return (
+        <UserProfileScreen
+          user={user}
+          accounts={runtime.accounts.accounts.map((account) =>
+            accountPresentationItem(
+              account,
+              runtime.players.profiles.find(
+                (profile) => canonicalTag(profile.tag) === canonicalTag(account.playerTag),
+              ),
+            ),
+          )}
+          onBack={closeSecondary}
+          onAddAccount={() => openUtility(routeById('accounts'))}
+          onOpenPlayer={loadPlayer}
+        />
+      );
     if (route === 'accounts')
       return (
         <ManageLinkedAccountsScreen
@@ -782,6 +803,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
               ),
             ),
           )}
+          lookupPlayer={(tag) => runtime.players.lookupPlayerIdentity(tag)}
           playerProfiles={runtime.players.profiles}
           onBack={closeSecondary}
           onContinue={async () => {
@@ -1160,11 +1182,11 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
     nativeRouteKeys.current = transition.routeKeys;
     applyNativeSecondaryRouteTransition(
       transition,
-      isDuoDevice
+      Platform.OS === 'ios'
         ? router
         : {
             ...router,
-            // The retained iPhone shell has no nested native tab route to preserve.
+            // Non-iOS shells have no nested native tab route to preserve.
             dismissAll: () => router.dismissTo('/'),
           },
     );
@@ -1199,6 +1221,7 @@ export function AuthenticatedRoot({ onHomeReady }: { onHomeReady?: () => void } 
         features={featureState}
         followerCount={authState.followerCount}
         hasUser={user !== null}
+        hidePrimaryNavigation={suppressAnnouncements}
         hasManagedDiscordBot={discordServers.servers.some(
           (server) => server.has_bot && managesDiscordServer(server),
         )}

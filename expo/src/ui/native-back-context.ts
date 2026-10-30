@@ -19,7 +19,8 @@ export const NativeRailBack = createContext({
     () => {},
 });
 
-/** Explicit app-link actions only; exports and in-game links stay in the page. */
+/** The visible screen can place its share action beneath Back in the Duo rail.
+ * Unrelated export/open-in-game actions remain owned by their page controls. */
 export function useNativeRailShare(action: (() => void) | undefined, label: string) {
   const { enabled, depth, registerShare } = useContext(NativeRailBack);
   const actionRef = useRef(action);

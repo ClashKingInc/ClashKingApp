@@ -109,7 +109,7 @@ export function IosNativeTabs(props: NavigationShellProps) {
           tintColor={theme.primary}
           minimizeBehavior="never"
           sidebarAdaptable={false}
-          hidden={portraitBottomBar}
+          hidden={portraitBottomBar || props.hidePrimaryNavigation}
           disableHiddenAnimation
         >
           {primaryTabRoutes.map((route) => (
@@ -170,8 +170,8 @@ export function IosNativeTabs(props: NavigationShellProps) {
                     onNavigate={(route) =>
                       closeDrawer(() => props.onUtilityNavigate(route, { replace: false }))
                     }
-                    onAchievements={() => closeDrawer(props.onAchievements)}
-                    onAddAccount={() => closeDrawer(props.onAddAccount)}
+                    onAchievements={props.onAchievements}
+                    onAddAccount={props.onAddAccount}
                     hasUser={props.hasUser}
                     hasManagedDiscordBot={props.hasManagedDiscordBot}
                   />

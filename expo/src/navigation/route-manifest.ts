@@ -28,13 +28,13 @@ export type AppRouteId =
   | 'upgradeTracker'
   | 'basesArmies'
   | 'gameAssets'
+  | 'profile'
   | 'accounts'
   | 'servers'
   | 'settings'
   | 'achievements'
   | 'esports'
-  | 'tournaments'
-;
+  | 'tournaments';
 
 export interface AppRouteDefinition {
   id: AppRouteId;
@@ -80,6 +80,14 @@ export type FeatureState = Partial<Record<FeatureGate, boolean>>;
  * Bases/Armies is filtered by the Discord-account feature gate on both shells.
  */
 export const appRoutes = [
+  {
+    id: 'profile',
+    href: '/profile',
+    labelKey: 'competitiveProfile',
+    icon: 'user-round',
+    mobileDrawer: true,
+    desktopSidebar: true,
+  },
   {
     id: 'esports',
     href: '/esports',
@@ -265,7 +273,9 @@ const route = (id: string) => {
 export const primaryTabRoutes = ['home', 'players', 'clans', 'war'].map(route);
 
 export const mobileDrawerHeaderActionRoutes = ['achievements', 'accounts'].map(route);
+// Profile belongs to every authenticated account, independent of its login method.
 export const mobileDrawerBodyRoutes = [
+  'profile',
   'posts',
   'esports',
   'tournaments',
@@ -280,6 +290,7 @@ export const mobileDrawerRoutes = [...mobileDrawerBodyRoutes, ...mobileDrawerFoo
 
 export const desktopHeaderActionRoutes = ['achievements', 'accounts'].map(route);
 export const desktopSidebarBodyRoutes = [
+  'profile',
   'posts',
   'tournaments',
   'rankings',
@@ -292,7 +303,10 @@ export const desktopSidebarFooterRoutes = ['settings'].map(route);
 export const desktopSidebarRoutes = [...desktopSidebarBodyRoutes, ...desktopSidebarFooterRoutes];
 
 export function isRouteEnabled(definition: AppRouteDefinition, features: FeatureState): boolean {
-  return !definition.comingSoon && (definition.feature === undefined || features[definition.feature] === true);
+  return (
+    !definition.comingSoon &&
+    (definition.feature === undefined || features[definition.feature] === true)
+  );
 }
 
 export function filterEnabledRoutes<T extends AppRouteDefinition>(

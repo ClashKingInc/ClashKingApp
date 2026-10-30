@@ -49,7 +49,14 @@ const headers: readonly number[] = [
   require('../../../assets/clashking/backgrounds/header-calculator.png'),
   require('../../../assets/clashking/backgrounds/header-calculator-disabled.png'),
 ];
-const byUrl = new Map(headers.map((source) => [Asset.fromModule(source).uri, source]));
+const byUrl = new Map(
+  headers.flatMap((source) => {
+    const asset = Asset.fromModule(source);
+    return [asset.localUri, asset.uri]
+      .filter((uri): uri is string => Boolean(uri))
+      .map((uri) => [uri, source] as const);
+  }),
+);
 // Decode the common first destinations; fetch the remaining bundled files
 // without pinning every possible page's bitmap in memory at launch.
 const firstDestinations = new Set([

@@ -379,7 +379,7 @@ export function AchievementDetail({
   );
 }
 
-function useAchievementsSnapshot(repository?: AchievementsRepository): AchievementsSnapshot {
+export function useAchievementsSnapshot(repository?: AchievementsRepository): AchievementsSnapshot {
   const subscribe = useCallback(
     (listener: () => void) => repository?.subscribe(listener) ?? (() => undefined),
     [repository],

@@ -13,6 +13,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from 'react';
+import { bundledImageSource } from '../core/assets/bundled-image-source';
 import { localImageCache } from '../core/assets/local-asset-cache';
 import { Animated, Platform, StyleSheet, PixelRatio, View, type ViewStyle } from 'react-native';
 import { sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } from './image-delivery';
@@ -97,8 +98,10 @@ const getCacheRevision = () => cacheRevision;
 
 export async function clearMobileImageCache(): Promise<void> {
   clearHeaderArtworkCache();
-  if (Platform.OS !== 'web') await localImageCache.clear();
-  const results = await Promise.all([Image.clearMemoryCache(), Image.clearDiskCache()]);
+  const [results] = await Promise.all([
+    Promise.all([Image.clearMemoryCache(), Image.clearDiskCache()]),
+    Platform.OS !== 'web' ? localImageCache.clear() : Promise.resolve(),
+  ]);
   if (results.some((result) => result === false))
     throw new Error('Image cache could not be cleared');
   resetMobileWebImageCacheForTesting();
@@ -135,7 +138,8 @@ export function MobileWebImage({ skeleton, ...props }: MobileWebImageProps) {
     );
   }
   const header = headerArtworkForUrl(props.imageUrl);
-  if (header !== undefined) {
+  const bundled = bundledImageSource(props.imageUrl);
+  if (header !== undefined || bundled !== undefined) {
     const {
       imageUrl: _url,
       fallbackImageUrls: _fallbacks,
@@ -144,7 +148,11 @@ export function MobileWebImage({ skeleton, ...props }: MobileWebImageProps) {
       displaySize: _size,
       ...imageProps
     } = props;
-    return <HeaderArtwork {...imageProps} source={header} />;
+    return header !== undefined ? (
+      <HeaderArtwork {...imageProps} source={header} />
+    ) : (
+      <Image {...imageProps} source={bundled} />
+    );
   }
   return <LoadedMobileWebImage {...props} />;
 }

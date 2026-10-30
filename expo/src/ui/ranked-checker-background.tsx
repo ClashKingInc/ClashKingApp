@@ -27,8 +27,10 @@ export function warmRankedCheckerBackgrounds() {
 /** Cache the checker artwork, then share the same measured scrim as other headers. */
 export const RankedCheckerBackground = memo(function RankedCheckerBackground({
   color,
+  scrimStrength = 1,
 }: {
   color: RankedCheckerColor;
+  scrimStrength?: number;
 }) {
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
@@ -53,7 +55,11 @@ export const RankedCheckerBackground = memo(function RankedCheckerBackground({
       />
       {/* Custom ProfilePageHeader backdrops own their scrim. Use the same
           measured fade as illustrated headers, never a stretched fade bitmap. */}
-      <HeroHeaderScrim edgeColor={theme.background} clipRailInset={layout.isExpanded} />
+      <HeroHeaderScrim
+        strength={scrimStrength}
+        edgeColor={theme.background}
+        clipRailInset={layout.isExpanded}
+      />
     </View>
   );
 });

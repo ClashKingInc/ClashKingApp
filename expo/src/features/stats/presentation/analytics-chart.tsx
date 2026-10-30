@@ -1,7 +1,15 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, useId, Fragment } from 'react';
 import { PanResponder, Pressable, StyleSheet, View } from 'react-native';
-import Svg, { Circle, Line, Polyline, Text as SvgText } from 'react-native-svg';
+import Svg, {
+  Circle,
+  Defs,
+  LinearGradient,
+  Line,
+  Path,
+  Stop,
+  Text as SvgText,
+} from 'react-native-svg';
 import {
   CKText,
   Skeleton,
@@ -115,6 +123,7 @@ export function AnalyticsLineChart({
   readonly legendMode?: 'interactive' | 'labels' | 'hidden';
 }) {
   const theme = useCKTheme();
+  const fillId = `chart${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   const layout = useAdaptiveLayout();
   const height = layout.isExpanded ? Math.max(260, requestedHeight) : requestedHeight;
   // The closed Duo has a narrower plot after the system rail. Use measured
@@ -403,6 +412,29 @@ export function AnalyticsLineChart({
             viewBox={`0 0 ${viewWidth} ${height}`}
             pointerEvents="none"
           >
+            <Defs>
+              {series.map((line, index) => (
+                <LinearGradient
+                  key={line.key}
+                  id={`${fillId}${index}`}
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <Stop
+                    offset="0%"
+                    stopColor={line.color ?? palette[index % palette.length]}
+                    stopOpacity={0.18}
+                  />
+                  <Stop
+                    offset="100%"
+                    stopColor={line.color ?? palette[index % palette.length]}
+                    stopOpacity={0}
+                  />
+                </LinearGradient>
+              ))}
+            </Defs>
             {ticks.map((value, index) => (
               <ViewlessTick
                 key={value}
@@ -415,7 +447,7 @@ export function AnalyticsLineChart({
                 fontSize={axisFontSize}
                 labelGap={useResponsiveAxes ? 10 : 7}
                 color={theme.onSurfaceVariant}
-                grid={colorWithAlpha(theme.onSurface, 0.1)}
+                grid={colorWithAlpha(theme.onSurface, 0.07)}
               />
             ))}
             {series.map((line, index) => {
@@ -445,25 +477,25 @@ export function AnalyticsLineChart({
                     fill={color}
                   />
                 ) : (
-                  <Polyline
-                    testID={`chart-line-${line.key}`}
-                    key={`${line.key}-${part}`}
-                    points={segment.map((i) => `${x(i)},${y(points[i]!.value!)}`).join(' ')}
-                    fill="none"
-                    stroke={color}
-                    strokeWidth={2.5}
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    strokeDasharray={
-                      index === 0
-                        ? undefined
-                        : index === 1
-                          ? '7 3'
-                          : index === 2
-                            ? '2 3'
-                            : '8 3 2 3'
-                    }
-                  />
+                  <Fragment key={`${line.key}-${part}`}>
+                    <Path
+                      key={`${line.key}-area-${part}`}
+                      d={`${smoothChartPath(segment.map((i) => ({ x: x(i), y: y(points[i]!.value!) })))} L${x(segment.at(-1)!)},${bottom} L${x(segment[0]!)},${bottom} Z`}
+                      fill={`url(#${fillId}${index})`}
+                    />
+                    <Path
+                      testID={`chart-line-${line.key}`}
+                      key={`${line.key}-${part}`}
+                      d={smoothChartPath(
+                        segment.map((i) => ({ x: x(i), y: y(points[i]!.value!) })),
+                      )}
+                      fill="none"
+                      stroke={color}
+                      strokeWidth={2.5}
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                    />
+                  </Fragment>
                 ),
               );
               return [
@@ -630,3 +662,15 @@ const styles = StyleSheet.create({
   tooltipRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   swatch: { width: 12, height: 3, borderRadius: 2 },
 });
+
+function smoothChartPath(points: readonly { x: number; y: number }[]) {
+  if (!points.length) return '';
+  let d = `M${points[0]!.x},${points[0]!.y}`;
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1]!,
+      b = points[i]!,
+      mid = (a.x + b.x) / 2;
+    d += ` C${mid},${a.y} ${mid},${b.y} ${b.x},${b.y}`;
+  }
+  return d;
+}

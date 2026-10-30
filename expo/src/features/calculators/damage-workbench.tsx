@@ -2,7 +2,7 @@ import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { CalculatorWorkspaceColumns } from './calculator-workspace-columns';
 import { useState, type ReactNode } from 'react';
 import { Image as BackgroundImage, Pressable, ScrollView, View } from 'react-native';
-import { Asset } from 'expo-asset';
+import { bundledImageUrl } from '../../core/assets/bundled-image-source';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SuperchargedBuildingArtwork } from './supercharged-building-artwork';
 import { SuperchargeBorder } from './supercharge-border';
@@ -530,11 +530,9 @@ function TargetPanel({
           }}
         >
           <MobileWebImage
-            imageUrl={
-              Asset.fromModule(
-                require('../../../assets/clashking/calculators/supercharge-icon.webp'),
-              ).uri
-            }
+            imageUrl={bundledImageUrl(
+              require('../../../assets/clashking/calculators/supercharge-icon.webp'),
+            )}
             style={{ width: 28, height: 28, opacity: activeCharge > 0 ? 1 : 0.5 }}
           />
         </Pressable>

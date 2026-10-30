@@ -485,6 +485,28 @@ export class PlayerService {
   ) {
     await this.loadOfficialPlayerData(tags, options);
   }
+  async lookupPlayerIdentity(rawTag: string) {
+    // Account lookup needs only identity. Do not toggle global player loading
+    // or request last-active/history data while someone edits a player tag.
+    const tag = canonicalTag(rawTag);
+    // Preserve the typed HTTP failure for the form; runPromise on a failed
+    // Effect wraps it, which would hide a nonexistent player's 404.
+    const result = await Effect.runPromise(
+      Effect.result(
+        this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} }),
+      ),
+    );
+    if (result._tag === 'Failure') throw result.failure;
+    const player = Player.fromJson(result.success);
+    if (canonicalTag(player.tag) !== tag || !player.name || player.townHallLevel < 1)
+      throw new Error('Player identity was incomplete.');
+    return {
+      tag: player.tag,
+      name: player.name,
+      townHallLevel: player.townHallLevel,
+      clanOverview: player.clanOverview,
+    };
+  }
   async getPlayerAndClanData(rawTag: string, extraHeaders?: Readonly<Record<string, string>>) {
     this.loading = true;
     this.notify();

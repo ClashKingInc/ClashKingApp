@@ -102,6 +102,7 @@ export function AuthPanel({ children }: { children: ReactNode }) {
 
 export function AuthField({
   label,
+  labelAccessory,
   error,
   leading,
   secure,
@@ -111,6 +112,7 @@ export function AuthField({
   ...props
 }: TextInputProps & {
   label: string;
+  labelAccessory?: ReactNode;
   error?: string;
   leading?: ReactNode;
   secure?: boolean;
@@ -125,9 +127,12 @@ export function AuthField({
   const opaque = accessibility.reduceTransparency || accessibility.highContrast;
   return (
     <View style={styles.fieldGroup}>
-      <CKText role="bodySmall" style={styles.fieldLabel}>
-        {label}
-      </CKText>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <CKText role="bodySmall" style={styles.fieldLabel}>
+          {label}
+        </CKText>
+        {labelAccessory}
+      </View>
       <View
         style={[
           styles.fieldShell,

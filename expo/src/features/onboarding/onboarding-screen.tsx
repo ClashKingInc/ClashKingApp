@@ -1,421 +1,338 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AccessibilityInfo,
-  Animated,
   AppState,
-  Image,
-  Modal,
+  BackHandler,
   Pressable,
   ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Bell, Check, ChevronLeft, Users, Shield } from 'lucide-react-native';
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  initialWindowMetrics,
+} from 'react-native-safe-area-context';
+import { ChevronLeft } from 'lucide-react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { materialBackLabel, materialContinueLabel, useI18n } from '../../i18n';
 import type { MessageKey } from '../../i18n/catalogs.generated';
-import { CKText, ckRadius, ckSpacing, colorWithAlpha, useCKTheme } from '../../ui';
+import { CKText, colorWithAlpha, useCKTheme } from '../../ui';
 import { useCKAccessibility } from '../../ui/accessibility';
-import { modalOrientations } from '../../ui/modal-orientations';
 import { PagerView, type PagerViewHandle } from '../../ui/pager';
-import { useStartupCovered } from '../../core/app/startup-loading';
 import { useAppRuntime } from '../../core/app/runtime-context';
+import { openSystemNotificationSettings } from '../settings/presentation/system-notification-settings';
 import { onboarding } from './onboarding-service';
+import { OnboardingScene, onboardingAccents } from './onboarding-scenes';
 
 const pages = [
-  {
-    title: 'onboardingOverviewTitle',
-    body: 'onboardingOverviewBody',
-    art: require('../../../assets/clashking/icons/startup-crown.png'),
-  },
-  {
-    title: 'onboardingProgressTitle',
-    body: 'onboardingProgressBody',
-    art: require('../../../assets/clashking/cwl/legend.webp'),
-  },
-  {
-    title: 'onboardingRemindersTitle',
-    body: 'onboardingRemindersBody',
-    art: require('../../../assets/clashking/icons/sword-cross.png'),
-  },
-] as const satisfies readonly { title: MessageKey; body: MessageKey; art: number }[];
+  { title: 'onboardingOverviewTitle', body: 'onboardingOverviewBody' },
+  { title: 'onboardingProgressTitle', body: 'onboardingStatsBody' },
+  { title: 'onboardingWidgetsTitle', body: 'onboardingWidgetsBody' },
+  { title: 'onboardingRemindersTitle', body: 'onboardingRemindersBody' },
+] as const satisfies readonly { title: MessageKey; body: MessageKey }[];
 
-export function OnboardingScreen({ eligible }: { eligible: boolean }) {
-  const state = useSyncExternalStore(
-    onboarding.subscribe,
-    onboarding.getSnapshot,
-    onboarding.getSnapshot,
-  );
-  const covered = useStartupCovered();
-  useEffect(() => {
-    onboarding.setEligible(eligible && !covered);
-  }, [eligible, covered, state.ready]);
-  return state.ready ? (
-    <OnboardingContent key={state.presentation} visible={state.visible} />
-  ) : null;
-}
-
-// Mount a fresh pager for each explicit introduction. No effect-driven reset
-// or stale native page index can leak from a previous replay.
-function OnboardingContent({ visible }: { visible: boolean }) {
+// The overview and notification step share art, but accounts must be reviewed
+// between them. Keep this opaque layer mounted while Home prepares behind it.
+export function OnboardingScreen({
+  stage,
+  onAccounts,
+  onComplete,
+}: {
+  stage: 'overview' | 'notifications';
+  onAccounts: () => void;
+  onComplete: () => void;
+}) {
+  const visible = true;
+  const displayedPages = stage === 'overview' ? pages.slice(0, 3) : pages.slice(3);
+  const pageOffset = stage === 'overview' ? 0 : 3;
   const runtime = useAppRuntime();
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
+  const { width } = useWindowDimensions();
   const pager = useRef<PagerViewHandle>(null);
+  const finishing = useRef(false);
   const [page, setPage] = useState(0);
   const [busy, setBusy] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const finish = async (skip: boolean) => {
-    if (busy) return;
+  const [failed, setFailed] = useState<MessageKey | null>(null);
+  const [permissionDenied, setPermissionDenied] = useState(false);
+  const [foreground, setForeground] = useState(AppState.currentState === 'active');
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', (next) =>
+      setForeground(next === 'active'),
+    );
+    return () => listener.remove();
+  }, []);
+  const finish = async (skip = false) => {
+    if (finishing.current) return;
+    finishing.current = true;
     setBusy(true);
-    setFailed(false);
+    setFailed(null);
     try {
       await onboarding.finish(skip ? 'skipped' : 'completed');
+      onComplete();
     } catch {
-      setFailed(true);
+      setFailed('generalError');
     } finally {
+      finishing.current = false;
       setBusy(false);
     }
   };
-  const advance = () => {
-    if (page < pages.length - 1) {
-      const next = page + 1;
-      if (reduceMotion) pager.current?.setPageWithoutAnimation(next);
-      else pager.current?.setPage(next);
-      return;
-    }
-    void finish(false);
-  };
-  const allow = async () => {
-    if (busy) return;
+  const enableNotifications = async () => {
+    if (finishing.current) return;
+    finishing.current = true;
     setBusy(true);
-    setFailed(false);
+    setFailed(null);
     try {
-      // Permission grants delivery only. Account selection and alert types stay
-      // in Settings; onboarding must never subscribe someone to alerts silently.
-      await runtime.push.requestPermissionAndRegister();
-      await onboarding.finish();
+      if (permissionDenied) {
+        await openSystemNotificationSettings();
+        return;
+      }
+      // Request the system prompt from this explicit action. Registration does
+      // not choose accounts or opt the user into war/upgrade reminder types.
+      const result = await runtime.push.requestPermissionAndRegister();
+      if (result.state === 'ready') {
+        await onboarding.finish();
+        onComplete();
+      } else if (result.state === 'permissionDenied') {
+        // iOS will not repeat a denied prompt. Offer Settings only after the
+        // user makes another explicit choice; Not now always remains available.
+        setPermissionDenied(true);
+        setFailed('notifPushPermissionDenied');
+      } else {
+        const errors = {
+          notConfigured: 'notifPushNotConfigured',
+          tokenUnavailable: 'notifPushTokenUnavailable',
+          permissionRequired: 'notifPushPermissionRequired',
+          unsupported: 'notifPushUnsupported',
+          initializing: 'notifPushInitializing',
+        } as const;
+        setFailed(errors[result.state]);
+      }
     } catch {
-      setFailed(true);
+      setFailed('generalError');
     } finally {
+      finishing.current = false;
       setBusy(false);
     }
   };
+  const select = (next: number) => {
+    if (busy) return;
+    if (reduceMotion) pager.current?.setPageWithoutAnimation(next);
+    else pager.current?.setPage(next);
+  };
+  const finalPage = stage === 'notifications';
+  useEffect(() => {
+    const back = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (busy) return true;
+      if (finalPage) onAccounts();
+      else if (page > 0) {
+        if (reduceMotion) pager.current?.setPageWithoutAnimation(page - 1);
+        else pager.current?.setPage(page - 1);
+      }
+      return true;
+    });
+    return () => back.remove();
+  }, [busy, finalPage, onAccounts, page, reduceMotion]);
   const supportsPush =
     runtime.appState.getState().isFeatureEnabled('notifications') &&
     runtime.push.supportsPushNotifications;
+  const sceneWidth = Math.min(width, 480);
   return (
-    <Modal
-      visible={visible}
-      animationType={reduceMotion ? 'none' : 'fade'}
-      presentationStyle="fullScreen"
-      supportedOrientations={modalOrientations}
-      onRequestClose={() => void finish(true)}
-    >
-      <SafeAreaView
-        style={[styles.root, { backgroundColor: theme.background }]}
-        edges={['top', 'bottom', 'left', 'right']}
-      >
-        <View style={styles.top}>
-          <Pressable
-            disabled={page === 0 || busy}
-            onPress={() =>
-              reduceMotion
-                ? pager.current?.setPageWithoutAnimation(page - 1)
-                : pager.current?.setPage(page - 1)
-            }
-            accessibilityLabel={materialBackLabel(locale)}
-            accessibilityRole="button"
-            style={[styles.back, { opacity: page === 0 ? 0 : 1 }]}
+    <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.background, zIndex: 20 }]}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <SafeAreaView
+            style={[styles.root, { backgroundColor: theme.background }]}
+            edges={['top', 'bottom', 'left', 'right']}
           >
-            <ChevronLeft
-              color={theme.onSurface}
-              size={24}
-              style={isRtl ? { transform: [{ scaleX: -1 }] } : undefined}
-            />
-          </Pressable>
-          <View style={styles.progress} accessible={false}>
-            {pages.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.progressPart,
-                  {
-                    backgroundColor:
-                      index === page ? theme.primary : colorWithAlpha(theme.onSurface, 0.12),
-                  },
+            <View style={styles.top}>
+              <Pressable
+                disabled={(page === 0 && !finalPage) || busy}
+                onPress={() => (finalPage ? onAccounts() : select(page - 1))}
+                accessibilityRole="button"
+                accessibilityLabel={materialBackLabel(locale)}
+                style={[styles.back, { opacity: page === 0 && !finalPage ? 0 : 1 }]}
+              >
+                <ChevronLeft
+                  color={theme.onSurface}
+                  size={24}
+                  style={isRtl ? { transform: [{ scaleX: -1 }] } : undefined}
+                />
+              </Pressable>
+              <View style={styles.progress} accessible={false}>
+                {pages.map((_, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.progressPart,
+                      {
+                        width: index === page + pageOffset ? 25 : 7,
+                        backgroundColor:
+                          index === page + pageOffset
+                            ? onboardingAccents[page + pageOffset]
+                            : colorWithAlpha(theme.onSurface, 0.17),
+                      },
+                    ]}
+                  />
+                ))}
+              </View>
+              <View style={styles.skip} />
+            </View>
+            <PagerView
+              ref={pager}
+              testID="onboarding-pager"
+              style={{ flex: 1 }}
+              initialPage={0}
+              layoutDirection={isRtl ? 'rtl' : 'ltr'}
+              overdrag={false}
+              scrollEnabled={!busy}
+              onPageSelected={(event) => {
+                const next = event.nativeEvent.position;
+                setPage(next);
+                if (visible)
+                  AccessibilityInfo.announceForAccessibility(t(displayedPages[next]!.title));
+              }}
+            >
+              {displayedPages.map((item, index) => (
+                <View
+                  key={item.title}
+                  collapsable={false}
+                  style={{ flex: 1 }}
+                  accessibilityElementsHidden={page !== index}
+                  importantForAccessibility={page === index ? 'auto' : 'no-hide-descendants'}
+                >
+                  <ScrollView
+                    bounces={false}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.scroll}
+                  >
+                    <OnboardingScene
+                      index={index + pageOffset}
+                      width={sceneWidth}
+                      active={visible && foreground && page === index}
+                      reduceMotion={reduceMotion}
+                    />
+                    <View style={styles.copy}>
+                      <CKText
+                        role="screenTitle"
+                        skeleton={false}
+                        style={[styles.title, { writingDirection: isRtl ? 'rtl' : 'ltr' }]}
+                      >
+                        {t(item.title)}
+                      </CKText>
+                      <CKText role="bodyLarge" muted skeleton={false} style={styles.body}>
+                        {t(item.body)}
+                      </CKText>
+                    </View>
+                    {index > 0 ? (
+                      <CKText role="labelMedium" muted skeleton={false} style={styles.preview}>
+                        {t('statsPreview')}
+                      </CKText>
+                    ) : null}
+                  </ScrollView>
+                </View>
+              ))}
+            </PagerView>
+            <View style={styles.footer}>
+              {failed ? (
+                <CKText
+                  accessibilityLiveRegion="polite"
+                  muted
+                  skeleton={false}
+                  style={styles.error}
+                >
+                  {t(failed)}
+                </CKText>
+              ) : null}
+              <Pressable
+                testID="onboarding-next"
+                disabled={busy}
+                onPress={() =>
+                  finalPage
+                    ? supportsPush
+                      ? void enableNotifications()
+                      : void finish()
+                    : page === 2
+                      ? onAccounts()
+                      : select(page + 1)
+                }
+                accessibilityRole="button"
+                accessibilityState={{ disabled: busy, busy }}
+                style={({ pressed }) => [
+                  styles.primary,
+                  { backgroundColor: theme.primary, opacity: busy ? 0.6 : pressed ? 0.85 : 1 },
                 ]}
-              />
-            ))}
-          </View>
-          {page < 2 ? (
-            <Pressable
-              disabled={busy}
-              onPress={() => void finish(true)}
-              accessibilityRole="button"
-              style={styles.skip}
-            >
-              <CKText role="bodyMedium" muted skeleton={false}>
-                {t('notificationPrimerNotNow')}
-              </CKText>
-            </Pressable>
-          ) : (
-            <View style={styles.skip} />
-          )}
-        </View>
-        <PagerView
-          ref={pager}
-          style={styles.pager}
-          initialPage={0}
-          layoutDirection={isRtl ? 'rtl' : 'ltr'}
-          overdrag={false}
-          scrollEnabled={!busy}
-          onPageSelected={(event) => setPage(event.nativeEvent.position)}
-        >
-          {pages.map((item, index) => (
-            <View
-              key={item.title}
-              collapsable={false}
-              style={styles.page}
-              accessibilityElementsHidden={page !== index}
-              importantForAccessibility={page === index ? 'auto' : 'no-hide-descendants'}
-            >
-              <IntroPage index={index} active={visible && page === index} />
+              >
+                <CKText
+                  role="bodyLarge"
+                  skeleton={false}
+                  style={{ color: theme.onPrimary, fontWeight: '700' }}
+                >
+                  {finalPage
+                    ? supportsPush
+                      ? t(permissionDenied ? 'notifSystemSettings' : 'onboardingSetupNotifications')
+                      : t('homeDone')
+                    : materialContinueLabel(locale)}
+                </CKText>
+              </Pressable>
+              {finalPage ? (
+                <Pressable
+                  disabled={busy}
+                  onPress={() => void finish(false)}
+                  accessibilityRole="button"
+                  style={styles.secondary}
+                >
+                  <CKText role="bodyMedium" muted skeleton={false}>
+                    {t('notificationPrimerNotNow')}
+                  </CKText>
+                </Pressable>
+              ) : (
+                <View style={styles.secondary} />
+              )}
             </View>
-          ))}
-        </PagerView>
-        <View style={styles.footer}>
-          {failed ? (
-            <CKText accessibilityLiveRegion="polite" muted skeleton={false} style={styles.error}>
-              {t('generalError')}
-            </CKText>
-          ) : null}
-          <Pressable
-            disabled={busy}
-            onPress={page === 2 && supportsPush ? () => void allow() : advance}
-            accessibilityRole="button"
-            accessibilityState={{ disabled: busy, busy }}
-            style={({ pressed }) => [
-              styles.primary,
-              { backgroundColor: theme.primary, opacity: busy ? 0.6 : pressed ? 0.85 : 1 },
-            ]}
-          >
-            <CKText
-              role="bodyLarge"
-              skeleton={false}
-              style={{ color: theme.onPrimary, fontWeight: '700' }}
-            >
-              {page === 2
-                ? supportsPush
-                  ? t('notificationPrimerAllow')
-                  : t('homeDone')
-                : materialContinueLabel(locale)}
-            </CKText>
-          </Pressable>
-          {page === 2 ? (
-            <Pressable
-              disabled={busy}
-              onPress={() => void finish(true)}
-              accessibilityRole="button"
-              style={styles.secondary}
-            >
-              <CKText role="bodyMedium" muted skeleton={false}>
-                {t('notificationPrimerNotNow')}
-              </CKText>
-            </Pressable>
-          ) : (
-            <View style={styles.secondary} />
-          )}
-        </View>
-      </SafeAreaView>
-    </Modal>
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </View>
   );
 }
-
-function IntroPage({ index, active }: { index: number; active: boolean }) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const { height } = useWindowDimensions();
-  const { reduceMotion } = useCKAccessibility();
-  const [foreground, setForeground] = useState(AppState.currentState === 'active');
-  const [entry] = useState(() => new Animated.Value(0));
-  const item = pages[index]!;
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', (next) =>
-      setForeground(next === 'active'),
-    );
-    return () => subscription.remove();
-  }, []);
-  useEffect(() => {
-    const show = active && foreground;
-    if (active) AccessibilityInfo.announceForAccessibility(t(item.title));
-    if (!show || reduceMotion) {
-      entry.setValue(show ? 1 : 0);
-      return;
-    }
-    entry.setValue(0);
-    const animation = Animated.timing(entry, { toValue: 1, duration: 360, useNativeDriver: true });
-    animation.start();
-    return () => animation.stop();
-  }, [active, foreground, reduceMotion, entry, item.title, t]);
-  const accent = index === 1 ? '#8D63D9' : index === 2 ? '#E8A524' : theme.primary;
-  const stageHeight = Math.max(150, Math.min(height * 0.35, 310));
-  return (
-    <ScrollView
-      bounces={false}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.scroll}
-    >
-      <View
-        style={[styles.scene, { height: stageHeight }]}
-        accessible={false}
-        importantForAccessibility="no-hide-descendants"
-        accessibilityElementsHidden
-      >
-        <View
-          style={[
-            styles.halo,
-            {
-              width: stageHeight * 0.82,
-              height: stageHeight * 0.82,
-              backgroundColor: colorWithAlpha(accent, 0.09),
-            },
-          ]}
-        />
-        <Animated.View
-          style={{
-            opacity: entry,
-            transform: [
-              {
-                translateY: reduceMotion
-                  ? 0
-                  : entry.interpolate({ inputRange: [0, 1], outputRange: [16, 0] }),
-              },
-              {
-                scale: reduceMotion
-                  ? 1
-                  : entry.interpolate({ inputRange: [0, 1], outputRange: [0.96, 1] }),
-              },
-            ],
-          }}
-        >
-          <Image
-            source={item.art}
-            resizeMode="contain"
-            style={{ width: stageHeight * 0.6, height: stageHeight * 0.6 }}
-          />
-        </Animated.View>
-        {index === 0 ? (
-          <>
-            <View style={[styles.mini, styles.leading, { backgroundColor: theme.card }]}>
-              <Users size={19} color={theme.onSurfaceVariant} />
-              <CKText role="bodySmall" skeleton={false}>
-                {t('searchTabPlayers')}
-              </CKText>
-            </View>
-            <View style={[styles.mini, styles.trailing, { backgroundColor: theme.card }]}>
-              <Shield size={19} color={theme.onSurfaceVariant} />
-              <CKText role="bodySmall" skeleton={false}>
-                {t('searchTabClans')}
-              </CKText>
-            </View>
-          </>
-        ) : index === 1 ? (
-          <View style={[styles.mini, styles.progressPreview, { backgroundColor: theme.card }]}>
-            <Check size={19} color={accent} />
-            <CKText role="bodySmall" skeleton={false}>
-              {t('notifGroupProgress')}
-            </CKText>
-            <View style={[styles.previewTrack, { backgroundColor: colorWithAlpha(accent, 0.13) }]}>
-              <View style={[styles.previewFill, { backgroundColor: accent }]} />
-            </View>
-          </View>
-        ) : (
-          <View style={[styles.mini, styles.notification, { backgroundColor: theme.card }]}>
-            <Bell size={23} color={accent} />
-            <CKText role="bodyMedium" skeleton={false}>
-              {t('notifGroupReminders')}
-            </CKText>
-          </View>
-        )}
-      </View>
-      <View style={styles.copy}>
-        <CKText role="screenTitle" skeleton={false} style={styles.title}>
-          {t(item.title)}
-        </CKText>
-        <CKText role="bodyLarge" muted skeleton={false} style={styles.body}>
-          {t(item.body)}
-        </CKText>
-      </View>
-    </ScrollView>
-  );
-}
-
 const styles = StyleSheet.create({
   root: { flex: 1 },
   top: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    height: 56,
+    height: 54,
+    paddingHorizontal: 15,
     justifyContent: 'space-between',
   },
-  back: { width: 44, height: 44, justifyContent: 'center', alignItems: 'center' },
+  back: { width: 70, height: 44, justifyContent: 'center', alignItems: 'flex-start' },
   skip: { minHeight: 44, minWidth: 70, alignItems: 'flex-end', justifyContent: 'center' },
-  progress: { flexDirection: 'row', gap: 6 },
-  progressPart: { height: 4, width: 22, borderRadius: 3 },
-  pager: { flex: 1 },
-  page: { flex: 1 },
-  scroll: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    paddingHorizontal: ckSpacing.xl,
-    paddingBottom: 12,
-  },
-  scene: {
-    width: '100%',
-    maxWidth: 460,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  halo: { position: 'absolute', borderRadius: 999 },
-  mini: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    padding: 15,
-    borderRadius: ckRadius.tile,
-  },
-  leading: { left: '4%', bottom: '11%', transform: [{ rotate: '-5deg' }] },
-  trailing: { right: '2%', top: '18%', transform: [{ rotate: '6deg' }] },
-  progressPreview: { bottom: '6%', width: '82%', maxWidth: 350, justifyContent: 'center' },
-  previewTrack: { width: 55, height: 6, borderRadius: 4 },
-  previewFill: { width: '70%', height: 6, borderRadius: 4 },
-  notification: { bottom: '9%', width: '76%', maxWidth: 330 },
-  copy: { maxWidth: 440, width: '100%', alignSelf: 'center', gap: 14 },
-  title: { textAlign: 'center', fontSize: 29, lineHeight: 35 },
-  body: { textAlign: 'center', lineHeight: 25 },
+  progress: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  progressPart: { height: 7, borderRadius: 5 },
+  scroll: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 8 },
+  copy: { width: '100%', maxWidth: 448, paddingHorizontal: 29, marginTop: 12, gap: 15 },
+  title: { fontSize: 34, lineHeight: 40, fontWeight: '700' },
+  body: { fontSize: 16, lineHeight: 25 },
+  preview: { marginTop: 18, opacity: 0.6 },
   footer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 27,
     paddingTop: 12,
-    paddingBottom: 8,
+    paddingBottom: 3,
     width: '100%',
     maxWidth: 488,
     alignSelf: 'center',
   },
   primary: {
-    minHeight: 54,
-    paddingHorizontal: 20,
+    minHeight: 55,
+    paddingHorizontal: 16,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: ckRadius.control,
+    borderRadius: 19,
   },
-  secondary: { minHeight: 46, justifyContent: 'center', alignItems: 'center' },
+  secondary: { minHeight: 42, justifyContent: 'center', alignItems: 'center' },
   error: { textAlign: 'center', marginBottom: 8 },
 });

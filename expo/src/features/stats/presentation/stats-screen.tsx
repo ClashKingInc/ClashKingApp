@@ -3,7 +3,6 @@ import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import {
   memo,
-  useEffect,
   useCallback,
   useMemo,
   useState,
@@ -61,13 +60,11 @@ import {
   ProfilePageHeader,
   ProfileStatChip,
   ResponsiveGrid,
-  SelectionPicker,
   ckRadius,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
 import { StatsLoadStatus, type StatsProvider } from '../data';
-import { StatsRepository } from '../data/stats-repository';
 import {
   isArmyItemIdentity,
   type StatsArmySetupResponse,
@@ -77,7 +74,6 @@ import {
   StatsDailyPoint,
   StatsItemQuantityFilter,
   StatsLegendCohort,
-  StatsLegendQuery,
   StatsLegendResponse,
   StatsTroopStatsResponse,
   StatsPerformanceResponse,
@@ -88,7 +84,8 @@ import {
   StatsMetrics,
   type StatsSectionValue,
 } from '../models';
-import { LegendDayPerformanceSection } from './legend-day-performance-section';
+import { RankedComparisonPage } from './ranked-comparison-page';
+import { RankedChartInteractionScope } from './ranked-trend-chart';
 import { ArmySetupSection } from './army-setup-section';
 import { PlayersSection, ClansSection } from './world-stats-sections';
 import { CwlParticipationSection } from './cwl-participation-section';
@@ -165,14 +162,15 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
         imageUrl={sectionImage(provider.section)}
         backgroundUrl={sectionBackdrop(provider.section)}
         backgroundElement={
-          provider.section === StatsSection.ranked ? undefined : (
-            <RankedCheckerBackground color={statsCheckerColor(provider.section)} />
-          )
+          <RankedCheckerBackground
+            scrimStrength={0.85}
+            color={statsCheckerColor(provider.section)}
+          />
         }
         compactIdentity
-        identityLayout={provider.section === StatsSection.ranked ? 'inline' : 'stacked'}
-        imageSize={provider.section === StatsSection.ranked ? 44 : 64}
-        controlsTopPadding={provider.section === StatsSection.ranked ? 6 : 16}
+        identityLayout="stacked"
+        imageSize={64}
+        controlsTopPadding={16}
         safeTop={insets.top}
         onBack={onBack}
         backLabel={materialBackLabel(locale)}
@@ -237,27 +235,26 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
     );
   }
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[styles.fill, { backgroundColor: theme.background }]}
-    >
-      <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
-        {hero}
-        <View style={{ paddingHorizontal: horizontal }}>
-          {provider.section === StatsSection.ranked && api ? (
-            <RankedStatsSection provider={provider} api={api} />
-          ) : (
-            <StatsSectionContent provider={provider} api={api} />
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <RankedChartInteractionScope>
+      <SafeAreaView
+        edges={['left', 'right']}
+        style={[styles.fill, { backgroundColor: theme.background }]}
+      >
+        <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
+          {hero}
+          <View style={{ paddingHorizontal: horizontal }}>
+            {provider.section === StatsSection.ranked && api ? (
+              <RankedStatsSection provider={provider} api={api} />
+            ) : (
+              <StatsSectionContent provider={provider} api={api} />
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </RankedChartInteractionScope>
   );
 }
 
-/** Daily player totals and individual attacks have different denominators.
- * One cohort selector serves a single page; battle rates and completed-day totals
- * stay separate sections because their denominators differ. */
 function RankedStatsSection({
   provider,
   api,
@@ -265,157 +262,12 @@ function RankedStatsSection({
   provider: StatsProvider;
   api: ContractApiService;
 }) {
-  const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const [cohort, setCohort] = useState<StatsLegendCohortValue | 'observed'>('observed');
-  const [battleReload, setBattleReload] = useState(0);
-  const [available, setAvailable] = useState<{
-    cohort: StatsLegendCohortValue | 'observed';
-    firstDay: string;
-    lastDay: string;
-  }>();
-  const rememberAvailability = useCallback(
-    (next: { firstDay: string; lastDay: string }) => {
-      setAvailable((previous) =>
-        previous?.cohort === cohort &&
-        previous.firstDay === next.firstDay &&
-        previous.lastDay === next.lastDay
-          ? previous
-          : { ...next, cohort },
-      );
-    },
-    [cohort],
-  );
-  const latest = available?.cohort === cohort ? available : undefined;
-  const showLatest = (range: { firstDay: string; lastDay: string }) => {
-    const end = new Date(`${range.lastDay}T12:00:00`);
-    const start = new Date(end);
-    start.setDate(start.getDate() - Math.min(90, provider.dates.inclusiveDays) + 1);
-    const earliest = new Date(`${range.firstDay}T12:00:00`);
-    void provider.setDates(start < earliest ? earliest : start, end);
-  };
-  const repository = useMemo(() => new StatsRepository(api), [api]);
-  const first = StatsDateFilter.formatDate(provider.dates.start),
-    last = StatsDateFilter.formatDate(provider.dates.end);
-  const requestKey = `${first}:${last}:${cohort}:${battleReload}`;
-  const [battleResult, setBattleResult] = useState<{
-    key: string;
-    data?: StatsLegendResponse;
-    error?: unknown;
-  }>();
-  useEffect(() => {
-    if (cohort === 'observed') return;
-    let active = true;
-    const query = new StatsLegendQuery(
-      new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
-      cohort,
-    );
-    void repository.loadItems(query, battleReload > 0).then(
-      (data) => {
-        if (active) setBattleResult({ key: requestKey, data });
-      },
-      (error: unknown) => {
-        if (active) setBattleResult({ key: requestKey, error });
-      },
-    );
-    // Fetch available dates independently so an empty current range still
-    // offers the real history before either section has loaded.
-    void repository.loadLegendPerformance(query, battleReload > 0).then(
-      (data) => {
-        if (active && data.availability) rememberAvailability(data.availability);
-      },
-      () => {},
-    );
-    return () => {
-      active = false;
-    };
-  }, [cohort, repository, first, last, requestKey, battleReload, rememberAvailability]);
-  const response = battleResult?.key === requestKey ? battleResult : undefined;
-  const battles = response?.data;
-  const error = response?.error;
   return (
-    <View style={{ gap: 12 }} testID="ranked-stats-overview">
-      <SelectionPicker
-        title={t('statsPlayers')}
-        accessibilityLabel={t('statsPlayers')}
-        fillWidth
-        options={[
-          'observed' as const,
-          StatsLegendCohort.legend,
-          StatsLegendCohort.top1000,
-          StatsLegendCohort.top200,
-        ].map((key) => ({
-          key,
-          label:
-            key === 'observed'
-              ? t('generalAll')
-              : key === StatsLegendCohort.legend
-                ? t('statsLegendLeagueOne')
-                : t('rankingsTopCount', { count: key === StatsLegendCohort.top200 ? 200 : 1000 }),
-          icon: (
-            <MobileWebImage
-              imageUrl={ImageAssets.legendLeagueOne}
-              style={{ width: 28, height: 28 }}
-              contentFit="contain"
-            />
-          ),
-        }))}
-        selectedKey={cohort}
-        onSelect={setCohort}
-      />
-      {cohort === 'observed' ? (
-        <LegendDayPerformanceSection
-          api={api}
-          dates={provider.dates}
-          cohort={cohort === 'observed' ? StatsLegendCohort.legend : cohort}
-          observed={cohort === 'observed'}
-          displayMode="all"
-          onAvailability={rememberAvailability}
-          onShowLatest={showLatest}
-        />
-      ) : error ? (
-        <ErrorState
-          title={t('sideStatsLoadError')}
-          body={t('statsNoDataBody')}
-          actionLabel={t('generalRetry')}
-          onAction={() => {
-            setBattleReload((value) => value + 1);
-          }}
-        />
-      ) : !battles ? (
-        <ActivityIndicator color={theme.primary} />
-      ) : !battles.items.length ? (
-        <View style={{ gap: 10 }}>
-          <EmptyState
-            title={t('statsNoDataTitle')}
-            body={t('statsNoDataBody')}
-            actionLabel={latest ? t('statsViewLatestData') : undefined}
-            onAction={latest ? () => showLatest(latest) : undefined}
-          />
-          {latest ? (
-            <CKText role="bodySmall" muted style={{ textAlign: 'center' }}>
-              {t('statsLatestAvailableDate', {
-                date: new Date(`${latest.lastDay}T12:00:00`).toLocaleDateString(
-                  toIntlLocale(locale),
-                  { month: 'short', day: 'numeric', year: 'numeric' },
-                ),
-              })}
-            </CKText>
-          ) : null}
-        </View>
-      ) : (
-        <>
-          <RankedOverview data={battles} dates={provider.dates} />
-          <LegendDayPerformanceSection
-            api={api}
-            dates={provider.dates}
-            cohort={cohort}
-            onAvailability={rememberAvailability}
-            onShowLatest={showLatest}
-          />
-        </>
-      )}
-    </View>
+    <RankedComparisonPage
+      api={api}
+      dates={provider.dates}
+      onDates={(dates) => void provider.setDates(dates.start, dates.end)}
+    />
   );
 }
 
@@ -2907,7 +2759,7 @@ export function sectionLabel(section: StatsSectionValue, t: Translate): string {
     case StatsSection.cwl:
       return t('statsCwl');
     case StatsSection.ranked:
-      return t('legendsTitle');
+      return t('statsRanked');
   }
 }
 export function sectionImage(section: StatsSectionValue): string {

@@ -161,7 +161,10 @@ export function RankingsScreen({
             imageUrl={rankingBoardArtwork(provider.board)}
             backgroundUrl={rankingBackground(provider.board)}
             backgroundElement={
-              <RankedCheckerBackground color={rankingCheckerColor(provider.board)} />
+              <RankedCheckerBackground
+                scrimStrength={0.85}
+                color={rankingCheckerColor(provider.board)}
+              />
             }
             compactIdentity
             controlsTopPadding={16}

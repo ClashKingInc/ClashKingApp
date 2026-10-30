@@ -34,7 +34,6 @@ import { getVersionDeviceLabel } from './settings-runtime';
 import { SettingsScreen, type SettingsAppIconChoice } from './settings-screen';
 import { TranslationScreen } from './translation-screen';
 import { openSystemNotificationSettings } from './system-notification-settings';
-import { onboarding } from '../../onboarding/onboarding-service';
 
 type SettingsScene = 'main' | SettingsDestination | 'licenses';
 
@@ -262,7 +261,6 @@ export function SettingsRoot({
   })();
 
   const settingsActions: SettingsPresentationActions = {
-    replayOnboarding: onboarding.replay,
     clearImageCache: Platform.OS === 'web' ? undefined : clearMobileImageCache,
     changeLocale: (nextLocale) =>
       runtime.appState.getState().changeLanguage(nextLocale as SupportedLocale | 'system'),

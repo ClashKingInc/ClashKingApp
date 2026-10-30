@@ -12,6 +12,7 @@ export interface FileIndexStorage {
   getKeys(): Promise<readonly string[]>;
   getMany(keys: readonly string[]): Promise<readonly (readonly [string, string | null])[]>;
   removeString(key: string): Promise<void>;
+  removeStrings?(keys: readonly string[]): Promise<void>;
 }
 const LEGACY_KEY = 'asset-local-files-v2';
 const PREFIX = 'asset-local-file-v3:';
@@ -187,6 +188,16 @@ export class FileUpdateIndex {
         pendingSha: !target || target === sha ? null : target,
       };
     });
+  }
+  /** Batch cache resets and notify mounted images once, not once per file. */
+  async removeMany(keys: readonly string[]) {
+    await this.hydrate();
+    await Promise.allSettled(keys.map((key) => this.tails.get(key)));
+    const storageKeys = keys.map((key) => PREFIX + encodeURIComponent(key));
+    if (this.storage.removeStrings) await this.storage.removeStrings(storageKeys);
+    else await Promise.all(storageKeys.map((key) => this.storage.removeString(key)));
+    for (const key of keys) this.records.delete(key);
+    if (keys.length) this.changed();
   }
   async remove(key: string) {
     await this.update(key, () => undefined);

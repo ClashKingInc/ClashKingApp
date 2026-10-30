@@ -113,7 +113,14 @@ export function MobileDrawer({
       >
         <View style={styles.header} accessibilityHint={closeLabel}>
           <View style={[styles.headerTop, isRtl && styles.rowRtl]}>
-            <View style={styles.avatar}>{avatar}</View>
+            <Pressable
+              style={styles.avatar}
+              accessibilityRole="button"
+              accessibilityLabel={t('competitiveViewProfile')}
+              onPress={() => navigate(appRoutes.find((route) => route.id === 'profile')!)}
+            >
+              {avatar}
+            </Pressable>
             <View style={[styles.headerActions, isRtl && styles.rowRtl]}>
               <DrawerHeaderAction
                 label={t('achievementsTitle')}
@@ -132,9 +139,15 @@ export function MobileDrawer({
               </DrawerHeaderAction>
             </View>
           </View>
-          <CKText role="titleLarge" numberOfLines={1} style={styles.displayName}>
-            {displayName}
-          </CKText>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('competitiveViewProfile')}
+            onPress={() => navigate(appRoutes.find((route) => route.id === 'profile')!)}
+          >
+            <CKText role="titleLarge" numberOfLines={1} style={styles.displayName}>
+              {displayName}
+            </CKText>
+          </Pressable>
           <View style={styles.followerWrap}>
             <View style={[styles.followerRow, isRtl && styles.rowRtl]}>
               <CKText muted role="bodyMedium">

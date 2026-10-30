@@ -1,9 +1,9 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
-import { useNativeRailBack } from '../../../ui/native-back-context';
+import { useNativeRailBack, useNativeRailShare } from '../../../ui/native-back-context';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
-import { Asset } from 'expo-asset';
+import { Image as ExpoImage } from 'expo-image';
 import {
   useCallback,
   useEffect,
@@ -39,7 +39,7 @@ import {
   Play,
   Search,
   Share2,
-  Upload,
+  ClipboardPaste,
   X,
 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -328,7 +328,7 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
                 },
               ]}
             >
-              <Upload size={20} color={theme.onPrimary} />
+              <ClipboardPaste size={20} color={theme.onPrimary} />
               <CKText skeleton={false} role="bodyMedium" style={{ color: theme.onPrimary }}>
                 {t('upgradeTrackerImportTitle')}
               </CKText>
@@ -564,9 +564,8 @@ function TrackerHeader({
     : village === UpgradeVillage.home
       ? ImageAssets.townHall(snapshot?.townHallLevel ?? account?.townHallLevel ?? 1)
       : ImageAssets.builderHall(snapshot?.builderHallLevel ?? account?.builderHallLevel ?? 1);
-  const background = Asset.fromModule(
-    require('../../../../assets/clashking/tracker/builder-village-flat-roof.jpg'),
-  ).uri;
+  // Keep the bundled module reference so Expo resolves the installed OTA asset.
+  const background = require('../../../../assets/clashking/tracker/builder-village-flat-roof.jpg');
   const values = !snapshot
     ? []
     : collection
@@ -625,7 +624,7 @@ function TrackerHeader({
           { height: expandedTrackerHeaderHeight(layout.isTablet, fontScale) + insets.top },
         ]}
       >
-        <MobileWebImage imageUrl={background} contentFit="cover" style={styles.heroBackdrop} />
+        <ExpoImage source={background} contentFit="cover" style={styles.heroBackdrop} />
         <HeroHeaderScrim />
         <View
           style={[
@@ -648,7 +647,7 @@ function TrackerHeader({
               </HeroIconButton>
             ) : null}
             <HeroIconButton label={t('upgradeTrackerPasteJson')} onPress={onImport}>
-              <Upload color="white" />
+              <ClipboardPaste color="white" />
             </HeroIconButton>
           </View>
           <SkeletonContent
@@ -701,7 +700,7 @@ function TrackerHeader({
                     accessibilityRole="button"
                     style={styles.expandedFreshness}
                   >
-                    <Upload size={15} color="#E8A524" />
+                    <ClipboardPaste size={15} color="#E8A524" />
                     <CKText role="metadata" style={{ color: '#E8A524' }}>
                       {t('widgetDataStale')}
                     </CKText>
@@ -766,7 +765,7 @@ function TrackerHeader({
   }
   return (
     <View style={[styles.heroHeader, { height: (desktop ? 280 : 300) + insets.top }]}>
-      <MobileWebImage imageUrl={background} contentFit="cover" style={styles.heroBackdrop} />
+      <ExpoImage source={background} contentFit="cover" style={styles.heroBackdrop} />
       <HeroHeaderScrim />
       <View
         style={[
@@ -784,7 +783,7 @@ function TrackerHeader({
           </HeroIconButton>
         ) : null}
         <HeroIconButton label={t('upgradeTrackerPasteJson')} onPress={onImport}>
-          <Upload color="white" />
+          <ClipboardPaste color="white" />
         </HeroIconButton>
       </View>
       <SkeletonContent
@@ -850,7 +849,7 @@ function TrackerHeader({
                 accessibilityRole="button"
                 style={styles.freshnessAction}
               >
-                <Upload size={14} color="#E8A524" />
+                <ClipboardPaste size={14} color="#E8A524" />
                 <CKText role="metadata" style={{ color: '#E8A524' }}>
                   {t('widgetDataStale')}
                 </CKText>
@@ -991,9 +990,14 @@ function HeroIconButton({
   onPress: () => void;
   children: ReactNode;
 }) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
   const isBack = label === materialBackLabel(locale);
   const nativeBack = useNativeRailBack(isBack ? onPress : undefined);
+  const nativeShare = useNativeRailShare(
+    label === t('upgradeTrackerShare') ? onPress : undefined,
+    label,
+  );
+  if (nativeShare) return null;
   if (nativeBack && isBack) return <View style={styles.heroIconButton} />;
   return (
     <Pressable
@@ -3792,7 +3796,7 @@ function ImportModal({
         {busy ? (
           <ActivityIndicator color={theme.onPrimary} />
         ) : (
-          <Upload size={20} color={theme.onPrimary} />
+          <ClipboardPaste size={20} color={theme.onPrimary} />
         )}
         <CKText role="bodyMedium" style={{ color: theme.onPrimary }}>
           {t(busy ? 'generalLoading' : 'upgradeTrackerPasteClipboard')}

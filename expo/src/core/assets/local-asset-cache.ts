@@ -10,6 +10,7 @@ export const localFileIndex = new FileUpdateIndex({
   getKeys: () => AsyncStorage.getAllKeys(),
   getMany: (keys) => AsyncStorage.multiGet([...keys]),
   removeString: (key) => AsyncStorage.removeItem(key),
+  removeStrings: (keys) => AsyncStorage.multiRemove([...keys]),
   getString: (key) => AsyncStorage.getItem(key),
   setString: (key, value) => AsyncStorage.setItem(key, value),
 });
@@ -34,8 +35,15 @@ export const localImageCache = new ManagedImageCache(localFileIndex, {
     const file = ownedFile(uri);
     if (file.exists) file.delete();
   },
-  download: async (url, expectedSha) => {
+  clearAll: async () => {
+    const directory = cacheDirectory();
+    if (directory.exists) directory.delete();
+  },
+  download: async (url, expectedSha, signal) => {
     const controller = new AbortController();
+    const cancel = () => controller.abort();
+    signal?.addEventListener('abort', cancel, { once: true });
+    if (signal?.aborted) controller.abort();
     const timeout = setTimeout(() => controller.abort(), 30_000);
     try {
       const response = await fetch(url, {
@@ -82,6 +90,7 @@ export const localImageCache = new ManagedImageCache(localFileIndex, {
       return { file: file.uri, sha: expectedSha, bytes: length };
     } finally {
       clearTimeout(timeout);
+      signal?.removeEventListener('abort', cancel);
     }
   },
 });

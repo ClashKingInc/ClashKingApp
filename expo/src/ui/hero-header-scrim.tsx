@@ -13,10 +13,12 @@ export function HeroHeaderScrim({
   variant = 'standard',
   edgeColor = '#000000',
   clipRailInset = false,
+  strength = 1,
 }: {
   variant?: 'standard' | 'clan' | 'player' | 'war' | 'ranked' | 'calculator' | 'calculatorDisabled';
   edgeColor?: string;
   clipRailInset?: boolean;
+  strength?: number;
 }) {
   const gradientId = `headerFade${useId().replace(/:/g, '')}`;
   const isCard = variant === 'calculator' || variant === 'calculatorDisabled';
@@ -35,7 +37,7 @@ export function HeroHeaderScrim({
       ];
   return (
     <View collapsable={false} pointerEvents="none" accessible={false} style={styles.container}>
-      {!isCard ? <View style={[styles.container, styles.tint]} /> : null}
+      {!isCard ? <View style={[styles.container, styles.tint, { opacity: strength }]} /> : null}
       {/* Native layout resizes the gradient with the artwork. The small overscan
           covers fractional edges without waiting for a JavaScript layout event. */}
       <View style={styles.overscan}>
@@ -47,7 +49,7 @@ export function HeroHeaderScrim({
                   key={offset}
                   offset={offset}
                   stopColor={isCard ? '#030304' : offset === 1 ? edgeColor : '#000000'}
-                  stopOpacity={opacity}
+                  stopOpacity={offset === 1 ? 1 : opacity! * strength}
                 />
               ))}
             </LinearGradient>

@@ -11,6 +11,18 @@ module.exports = defineConfig([
       'no-restricted-syntax': ['error', {
         selector: "JSXOpeningElement[name.name='Modal']:not(:has(JSXAttribute[name.name='supportedOrientations']))",
         message: 'Use supportedOrientations={modalOrientations} to preserve iPad orientation.',
+      }, {
+        selector: "MemberExpression[property.name='uri'][object.type='CallExpression'][object.callee.object.name='Asset'][object.callee.property.name='fromModule']",
+        message: 'Use bundledImageUrl for URL-based image controls, or pass the asset module directly to Image. Raw Asset.uri can bypass installed OTA assets.',
+      }],
+    },
+  },
+  {
+    files: ['src/features/**/*.ts'],
+    rules: {
+      'no-restricted-syntax': ['error', {
+        selector: "MemberExpression[property.name='uri'][object.type='CallExpression'][object.callee.object.name='Asset'][object.callee.property.name='fromModule']",
+        message: 'Use bundledImageUrl for URL-based image controls, or pass the asset module directly to Image. Raw Asset.uri can bypass installed OTA assets.',
       }],
     },
   },

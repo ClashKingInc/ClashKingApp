@@ -35,41 +35,48 @@ export function DuoDetailShortcuts({
     return <PrimaryTabBar onSelect={(route) => actions?.select(route)} t={t} isRtl={isRtl} />;
   }
   return (
-    <Stack.Toolbar placement="bottom">
-      {share ? (
-        <Stack.Toolbar.Button
-          accessibilityLabel={share.label}
-          icon="square.and.arrow.up"
-          separateBackground
-          tintColor={theme.onSurface}
-          onPress={share.action}
-        />
-      ) : null}
-      <Stack.Toolbar.Spacer sharesBackground={false} />
-      {back ? (
-        <Stack.Toolbar.Button
-          accessibilityLabel={materialBackLabel(locale)}
-          icon={isRtl ? 'arrow.right' : 'arrow.left'}
-          separateBackground
-          tintColor={theme.onSurface}
-          onPress={back}
-        />
-      ) : null}
-      {back ? <Stack.Toolbar.Spacer width={16} sharesBackground={false} /> : null}
-      {primaryTabRoutes.map((route) => (
-        <Stack.Toolbar.Button
-          key={route.id}
-          accessibilityLabel={t(route.labelKey)}
-          selected={false}
-          tintColor={theme.onSurface}
-          onPress={() => actions?.select(route.id as PrimaryRouteId)}
-        >
-          <Stack.Toolbar.Icon
-            xcasset={icons[route.id as PrimaryRouteId]}
-            renderingMode="template"
+    <>
+      <Stack.Screen
+        options={{ headerTransparent: true, headerTitle: '', headerBackVisible: false }}
+      />
+      <Stack.Toolbar placement="left">
+        {/* The rail mirrors native Duo navigation: Back then Share directly
+          below status controls; flexible space keeps primary tabs at the foot. */}
+        {back ? (
+          <Stack.Toolbar.Button
+            accessibilityLabel={materialBackLabel(locale)}
+            icon={isRtl ? 'chevron.right' : 'chevron.left'}
+            separateBackground
+            tintColor={theme.onSurface}
+            onPress={back}
           />
-        </Stack.Toolbar.Button>
-      ))}
-    </Stack.Toolbar>
+        ) : null}
+        {share ? (
+          <Stack.Toolbar.Button
+            accessibilityLabel={share.label}
+            icon="square.and.arrow.up"
+            separateBackground
+            tintColor={theme.onSurface}
+            onPress={share.action}
+          />
+        ) : null}
+      </Stack.Toolbar>
+      <Stack.Toolbar placement="bottom">
+        {primaryTabRoutes.map((route) => (
+          <Stack.Toolbar.Button
+            key={route.id}
+            accessibilityLabel={t(route.labelKey)}
+            selected={false}
+            tintColor={theme.onSurface}
+            onPress={() => actions?.select(route.id as PrimaryRouteId)}
+          >
+            <Stack.Toolbar.Icon
+              xcasset={icons[route.id as PrimaryRouteId]}
+              renderingMode="template"
+            />
+          </Stack.Toolbar.Button>
+        ))}
+      </Stack.Toolbar>
+    </>
   );
 }

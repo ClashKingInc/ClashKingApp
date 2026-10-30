@@ -190,11 +190,15 @@ export class StatsRepository implements StatsRepositoryContract {
     };
     return this.cached(`legend-performance:${JSON.stringify(query)}`, fresh, () =>
       Effect.runPromise(
-        this.contractApi.execute(LegendDayPerformanceEndpoint, {
-          path: {},
-          query,
-          body: {},
-        }),
+        this.contractApi.execute(
+          LegendDayPerformanceEndpoint,
+          {
+            path: {},
+            query,
+            body: {},
+          },
+          { timeoutMs: 35_000 },
+        ),
       ),
     );
   }
