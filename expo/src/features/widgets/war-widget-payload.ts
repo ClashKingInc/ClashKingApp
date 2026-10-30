@@ -1,6 +1,8 @@
+import { ASSET_ORIGIN } from '../../core/assets/asset-origin';
+import { ImageAssets } from '../../core/assets/image-assets';
 type JsonRecord = Record<string, unknown>;
 
-const FALLBACK_BADGE = 'https://assets.clashk.ing/clashkinglogo.png';
+const FALLBACK_BADGE = `${ASSET_ORIGIN}/clashkinglogo.png`;
 
 export function buildWarWidgetPayload(value: unknown, clanTag: string, now = new Date()): string {
   const data = record(value);
@@ -79,6 +81,7 @@ function regularWarPayload(warInfo: JsonRecord, updatedAt: string, now: Date) {
     mode: 'war',
     updatedAt,
     ...display,
+    attackIconUrl: ImageAssets.sword,
     clan: sidePayload(clan, teamSize * 2, teamSize * 3, clanStars, 'Unknown', true),
     opponent: sidePayload(opponent, teamSize * 2, teamSize * 3, opponentStars, 'Unknown', true),
   };
@@ -121,6 +124,7 @@ function cwlWarPayload(data: JsonRecord, updatedAt: string, clanTag: string, now
     mode: 'cwl',
     updatedAt,
     ...display,
+    attackIconUrl: ImageAssets.sword,
     clan: sidePayload(clan, teamSize, teamSize * 3, clanStars, 'CWL Clan', false),
     cwlRank: leagueClan === undefined ? null : (nullableInteger(leagueClan.rank) ?? null),
     cwlLeague: nullableString(league.season) ?? 'unknown',
@@ -142,6 +146,12 @@ function displayForWar(
   let primaryText = '';
   let secondaryText = '';
   let colorTheme = cwl ? 'cwl' : 'active';
+  // Match the native widget: destruction breaks equal stars; an exact tie is a draw.
+  const comparison =
+    clanStars === opponentStars
+      ? number(record(war.clan).destructionPercentage) -
+        number(record(war.opponent).destructionPercentage)
+      : clanStars - opponentStars;
   if (state === 'preparation') {
     statusIcon = cwl ? '🏅' : '🛡️';
     primaryText = cwl ? 'CWL Preparation' : 'War Preparation';
@@ -153,8 +163,7 @@ function displayForWar(
     }
   } else if (state === 'inWar') {
     secondaryText = `${clanStars} - ${opponentStars}`;
-    colorTheme =
-      clanStars > opponentStars ? 'winning' : clanStars < opponentStars ? 'losing' : 'tied';
+    colorTheme = comparison > 0 ? 'winning' : comparison < 0 ? 'losing' : 'tied';
     const end = date(war.endTime);
     if (end !== undefined) {
       timeState = futureTimeLabel('Ends', end, now, true);
@@ -162,11 +171,21 @@ function displayForWar(
     }
     score = secondaryText;
   } else if (state === 'warEnded') {
-    const won = clanStars > opponentStars;
-    statusIcon = won ? '🏆' : cwl ? '🥈' : '💔';
-    primaryText = won ? (cwl ? 'CWL Victory!' : 'Victory!') : cwl ? 'CWL Complete' : 'Defeat';
+    statusIcon = comparison > 0 ? '🏆' : comparison < 0 ? '💔' : '🤝';
+    primaryText =
+      comparison > 0
+        ? cwl
+          ? 'CWL Victory!'
+          : 'Victory!'
+        : comparison < 0
+          ? cwl
+            ? 'CWL Defeat'
+            : 'Defeat'
+          : cwl
+            ? 'CWL Draw'
+            : 'Draw';
     secondaryText = `${clanStars} - ${opponentStars}`;
-    colorTheme = won ? 'victory' : cwl ? 'cwl' : 'defeat';
+    colorTheme = comparison > 0 ? 'victory' : comparison < 0 ? 'defeat' : 'tied';
     timeState = cwl ? 'CWL War Ended' : 'War Ended';
     score = secondaryText;
   }
@@ -181,14 +200,10 @@ function sidePayload(
   fallbackName: string,
   fallbackBadge: boolean,
 ) {
-  const badgeUrls = record(side.badgeUrls);
-  const badge =
-    nullableString(badgeUrls.small) ??
-    nullableString(badgeUrls.medium) ??
-    nullableString(badgeUrls.large);
+  const badge = ImageAssets.widgetClanBadgeForTag(nullableString(side.tag) ?? '') || null;
   return {
     name: nullableString(side.name) ?? fallbackName,
-    badgeUrlMedium: fallbackBadge ? (badge ?? FALLBACK_BADGE) : badge,
+    badgeUrlMedium: fallbackBadge ? badge || FALLBACK_BADGE : badge,
     percent: `${number(side.destructionPercentage).toFixed(2)}%`,
     attacks: `${integer(side.attacks)}/${attackMaximum}`,
     stars,

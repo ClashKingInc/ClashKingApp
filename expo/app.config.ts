@@ -1,7 +1,15 @@
 import type { ExpoConfig, ConfigContext } from 'expo/config';
 
-const version = process.env.CK_APP_VERSION?.trim() || '0.3.5';
-const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '25';
+const version = process.env.CK_APP_VERSION?.trim() || '0.6.4';
+const buildNumber = process.env.CK_BUILD_NUMBER?.trim() || '26';
+const updatesEnabled = process.env.CK_ENABLE_UPDATES === 'true';
+const updateChannel = process.env.CK_RELEASE_TRACK?.trim() || 'production';
+const updateCertificatePath = process.env.CK_UPDATES_CERTIFICATE_PATH?.trim();
+const explicitRuntimeVersion = process.env.CK_RUNTIME_VERSION?.trim();
+
+if (updatesEnabled && !updateCertificatePath) {
+  throw new Error('CK_UPDATES_CERTIFICATE_PATH is required when release updates are enabled.');
+}
 
 if (!/^[1-9]\d*$/.test(buildNumber)) {
   throw new Error('CK_BUILD_NUMBER must be a positive integer string.');
@@ -14,31 +22,68 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     name: 'ClashKing',
     slug: 'clashking-app',
     version,
+    // Phone default; with-tablet-orientation unlocks Android tablets at launch.
     orientation: 'portrait',
     icon: './assets/clashking/icons/icon-play-store.png',
     scheme: 'clashking',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
-    runtimeVersion: { policy: 'fingerprint' },
-    updates: { enabled: false },
+    runtimeVersion: explicitRuntimeVersion || { policy: 'fingerprint' },
+    updates: updatesEnabled
+      ? {
+          enabled: true,
+          url:
+            process.env.CK_UPDATES_URL?.trim() || 'https://api.clashk.ing/v2/app/updates/manifest',
+          requestHeaders: { 'expo-channel-name': updateChannel },
+          checkAutomatically: 'NEVER',
+          fallbackToCacheTimeout: 0,
+          ...(updateCertificatePath
+            ? {
+                codeSigningCertificate: updateCertificatePath,
+                codeSigningMetadata: { keyid: 'main', alg: 'rsa-v1_5-sha256' as const },
+              }
+            : {}),
+        }
+      : { enabled: false },
     ios: {
       bundleIdentifier: 'com.clashking.apps',
       appleTeamId: 'MZYXD43RX5',
       buildNumber,
       supportsTablet: true,
-      requireFullScreen: true,
-      icon: './assets/clashking/icons/app_icon_ios_default.png',
+      associatedDomains: ['applinks:app.clashk.ing'],
+      requireFullScreen: false,
+      // Native appearance variants follow the Home Screen setting without
+      // changing the user's manually selected seasonal/alternate app icon.
+      icon: {
+        light: './assets/clashking/icons/app_icon_ios_default.png',
+        dark: './assets/clashking/icons/app_icon_dark_logo.png',
+        // Keep the light mark on black for iOS tinted/Clear rendering. The
+        // black-on-white alternate icon reverses the foreground/background.
+        tinted: './assets/clashking/icons/app_icon_tinted.png',
+      },
       googleServicesFile: './config/firebase/GoogleService-Info.plist',
       infoPlist: {
         CADisableMinimumFrameDurationOnPhone: true,
+        ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
-          'ClashKing uses photo library access only when you choose to share generated progress images with a compatible app.',
+          'Choose a profile photo or banner, or save and share ClashKing progress images.',
         UIFileSharingEnabled: true,
         LSSupportsOpeningDocumentsInPlace: true,
         UISupportsDocumentBrowser: true,
-        UIRequiresFullScreen: true,
-        UISupportedInterfaceOrientations: ['UIInterfaceOrientationPortrait'],
-        'UISupportedInterfaceOrientations~ipad': ['UIInterfaceOrientationPortrait'],
+        UIRequiresFullScreen: false,
+        // The Duo changes window shape as it folds. Keep iOS resizable and
+        // allow rotation; Android phones retain the existing portrait default.
+        UISupportedInterfaceOrientations: [
+          'UIInterfaceOrientationPortrait',
+          'UIInterfaceOrientationLandscapeLeft',
+          'UIInterfaceOrientationLandscapeRight',
+        ],
+        'UISupportedInterfaceOrientations~ipad': [
+          'UIInterfaceOrientationPortrait',
+          'UIInterfaceOrientationLandscapeLeft',
+          'UIInterfaceOrientationLandscapeRight',
+          'UIInterfaceOrientationPortraitUpsideDown',
+        ],
       },
     },
     android: {
@@ -47,24 +92,68 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       googleServicesFile: './config/firebase/google-services.json',
       icon: './assets/clashking/icons/icon-play-store.png',
       adaptiveIcon: {
-        backgroundColor: '#000000',
-        foregroundImage: './assets/clashking/icons/icon-play-store.png',
-        monochromeImage: './assets/clashking/icons/app_icon_black_white.png',
+        backgroundColor: '#FFFFFF',
+        foregroundImage: './public/icons/Icon-maskable-512.png',
+        // with-clashking-native supplies the transparent vector monochrome
+        // layer for the application icon and every selectable launcher alias.
       },
       permissions: ['INTERNET', 'POST_NOTIFICATIONS'],
+      intentFilters: [
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          category: ['BROWSABLE', 'DEFAULT'],
+          data: [
+            ...[
+              '/',
+              '/players',
+              '/clans',
+              '/war',
+              '/search',
+              '/todo',
+              '/ranked',
+              '/legends',
+              '/upgrade-tracker',
+              '/rankings',
+              '/stats',
+              '/calculators',
+              '/posts',
+              '/bases-armies',
+              '/game-assets',
+              '/achievements',
+              '/esports',
+              '/accounts',
+              '/settings',
+            ].map((path) => ({ scheme: 'https', host: 'app.clashk.ing', path })),
+            ...[
+              '/player/',
+              '/clan/',
+              '/war/',
+              '/posts/',
+              '/settings/',
+              '/tournaments/',
+              '/profile/',
+            ].map((pathPrefix) => ({
+              scheme: 'https',
+              host: 'app.clashk.ing',
+              pathPrefix,
+            })),
+          ],
+        },
+      ],
       predictiveBackGestureEnabled: false,
     },
     web: {
       bundler: 'metro',
       output: 'static',
-      name: 'clashkingapp',
-      shortName: 'clashkingapp',
+      name: 'ClashKing',
+      shortName: 'ClashKing',
       lang: 'en',
       startUrl: '.',
       display: 'standalone',
       orientation: 'portrait-primary',
-      backgroundColor: '#0175C2',
-      themeColor: '#0175C2',
+      backgroundColor: '#FFFFFF',
+      themeColor: '#000000',
       barStyle: 'black',
       description:
         'ClashKing helps players and clans track wars, upgrades, rankings, and account progress.',
@@ -77,7 +166,17 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     plugins: [
       'expo-router',
+      ['expo-screen-orientation', { initialOrientation: 'PORTRAIT_UP' }],
       'expo-localization',
+      'expo-image',
+      [
+        'expo-image-picker',
+        {
+          photosPermission: 'Choose a profile photo or banner for ClashKing.',
+          cameraPermission: false,
+          microphonePermission: false,
+        },
+      ],
       '@react-native-firebase/app',
       '@react-native-firebase/messaging',
       [
@@ -92,13 +191,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         'expo-splash-screen',
         {
           ios: {
-            backgroundColor: '#FFFFFF',
-            image: './assets/clashking/icons/splashIOSlight.png',
-            enableFullScreenImage_legacy: true,
+            // Match the opening frame of the default-dark, JS-driven brand animation.
+            backgroundColor: '#0B0B0C',
+            image: './assets/clashking/icons/startup-crown.png',
+            imageWidth: 330,
             resizeMode: 'contain',
             dark: {
-              backgroundColor: '#000000',
-              image: './assets/clashking/icons/splashIOSdark.png',
+              backgroundColor: '#0B0B0C',
+              image: './assets/clashking/icons/startup-crown.png',
             },
           },
           android: {
@@ -122,16 +222,20 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             ccacheEnabled: true,
           },
           android: {
+            // Pin CMake for reproducible native builds and reliable Windows long-path support.
+            cmakeVersion: '3.31.6',
+            // Ship only the ARM64 devices we support; prebuild and CI share this setting.
+            buildArchs: ['arm64-v8a'],
             minSdkVersion: 24,
-            compileSdkVersion: 36,
-            targetSdkVersion: 36,
-            kotlinVersion: '2.1.20',
+            // Let the installed SDK choose matching compile/target/Kotlin
+            // versions; pinning SDK 57's toolchain breaks SDK 58 native modules.
           },
         },
       ],
       ['expo-secure-store', { configureAndroidBackup: true }],
       'expo-background-task',
       'expo-sharing',
+      'expo-web-browser',
       ['react-native-share', { android: [], ios: [], enableBase64ShareAndroid: false }],
       [
         'expo-audio',
@@ -150,7 +254,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           stageAndroidWidgetInputs: true,
         },
       ],
+      './plugins/with-notification-service',
       './plugins/with-android-release-signing',
+      './plugins/with-tablet-orientation',
     ],
     experiments: {
       typedRoutes: true,

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
+import { Keyboard, Platform, View } from 'react-native';
 
 import { useAppRuntime } from '../../core/app/runtime-context';
 import { useI18n } from '../../i18n';
-import { SkeletonLoadingDialog, Snackbar } from '../../ui';
+import { PageLoading, Snackbar } from '../../ui';
 import { Clan } from '../clan/models';
 import type { Player } from '../player/models/player';
 import {
@@ -33,6 +34,12 @@ import {
 } from './search-state';
 
 export interface SearchRootProps {
+  readonly onOpenDestination?: (request: {
+    kind: 'player' | 'clan';
+    seed: JsonRecord;
+    load: () => Promise<SearchDestinationResult>;
+  }) => void;
+  readonly initialQuery?: string;
   readonly overlay?: boolean;
   readonly autofocus?: boolean;
   readonly onCancel?: () => void;
@@ -40,19 +47,28 @@ export interface SearchRootProps {
   readonly onOpenClan: (clan: Clan) => void;
 }
 
+export type SearchDestinationResult =
+  | { readonly kind: 'player'; readonly player: Player }
+  | { readonly kind: 'clan'; readonly clan: Clan };
+
 /** Live replacement for Flutter's utility-page and global-overlay SearchPage variants. */
 export function SearchRoot({
+  initialQuery,
   overlay = false,
   autofocus = false,
   onCancel,
   onOpenPlayer,
   onOpenClan,
+  onOpenDestination,
 }: SearchRootProps) {
   const runtime = useAppRuntime();
   const { t } = useI18n();
-  const service = useMemo(() => new SearchService(runtime.api), [runtime.api]);
-  const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<SearchMode>('players');
+  const service = useMemo(() => new SearchService(runtime.contractApi), [runtime.contractApi]);
+  const link = useLinkParameters();
+  const [query, setQuery] = useState(initialQuery ?? link.q ?? '');
+  const [mode, setMode] = useState<SearchMode>(
+    linkChoice(link.type, ['players', 'clans'], 'players'),
+  );
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [playerFilters, setPlayerFiltersState] = useState(emptyPlayerSearchFilters);
   const [clanFilters, setClanFiltersState] = useState(emptyClanSearchFilters);
@@ -62,6 +78,13 @@ export function SearchRoot({
   const [locations, setLocations] = useState<readonly SearchLocation[]>([]);
   const [leagues, setLeagues] = useState<readonly SearchLeague[]>([]);
   const [opening, setOpening] = useState(false);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const [snackbar, setSnackbar] = useState<string>();
   const userId = runtime.auth.state.currentUser?.userId.trim() || null;
 
@@ -111,7 +134,25 @@ export function SearchRoot({
     if (!started.shouldSearch) return;
     const version = started.state.version;
     try {
-      const trackingHeaders = userId ? { 'x-ck-user-id': userId } : undefined;
+      // Browsers must not send the legacy native tracking header: it is not
+      // CORS-allowed. The authenticated API already knows the caller's identity.
+      const trackingHeaders =
+        userId && Platform.OS !== 'web' ? { 'x-ck-user-id': userId } : undefined;
+      const directTag = query.trim().toUpperCase().replace(/O/g, '0');
+      if (mode === 'players' && /^#?[0289PYLQGRJCUV]{3,}$/.test(directTag)) {
+        const player = await runtime.players.getPlayerAndClanData(directTag, trackingHeaders);
+        publishRequest(
+          completeSearch(requestRef.current, version, [
+            {
+              tag: player.tag,
+              name: player.name,
+              townHallLevel: player.townHallLevel,
+              trophies: player.trophies,
+            },
+          ]),
+        );
+        return;
+      }
       const results =
         mode === 'players'
           ? await runtime.players.searchPlayers(query.trim(), {
@@ -160,26 +201,47 @@ export function SearchRoot({
   };
 
   const openResult = async (result: JsonRecord, type: SearchMode) => {
+    if (opening) return;
     const tag = typeof result.tag === 'string' ? result.tag : '';
-    setOpening(true);
-    try {
-      const trackingHeaders = userId ? { 'x-ck-user-id': userId } : undefined;
+    Keyboard.dismiss();
+    const load = async (): Promise<SearchDestinationResult> => {
+      const trackingHeaders =
+        userId && Platform.OS !== 'web' ? { 'x-ck-user-id': userId } : undefined;
       if (type === 'players') {
         const player = await runtime.players.getPlayerAndClanData(tag, trackingHeaders);
         void loadRecents();
-        onOpenPlayer(player);
+        return { kind: 'player', player };
       } else {
         let clan: Clan;
         try {
           clan = await runtime.clans.getClanAndWarData(tag, { extraHeaders: trackingHeaders });
         } catch {
-          clan = Clan.fromJson(await service.loadClanFallback(tag, trackingHeaders));
-          await runtime.clans.loadJoinLeaveForClan(clan);
+          try {
+            clan = Clan.fromJson(await service.loadClanFallback(tag, trackingHeaders));
+          } catch {
+            // Search already returned enough identity data to open a useful clan detail shell.
+            // This keeps web navigation responsive when the follow-up proxy request is blocked.
+            clan = Clan.fromJson(result);
+          }
+          void runtime.clans.loadJoinLeaveForClan(clan);
         }
         void loadRecents();
-        onOpenClan(clan);
+        return { kind: 'clan', clan };
       }
+    };
+    if (onOpenDestination) {
+      onOpenDestination({ kind: type === 'players' ? 'player' : 'clan', seed: result, load });
+      return;
+    }
+    // Standalone consumers without shell navigation retain their existing handoff.
+    setOpening(true);
+    try {
+      const destination = await load();
+      if (!mounted.current) return;
+      if (destination.kind === 'player') onOpenPlayer(destination.player);
+      else onOpenClan(destination.clan);
     } catch {
+      if (!mounted.current) return;
       setSnackbar(
         type === 'players' ? t('searchErrorPlayerLoadFailed') : t('searchErrorClanLoadFailed'),
       );
@@ -212,11 +274,11 @@ export function SearchRoot({
         onFiltersExpandedChange={setFiltersExpanded}
         onPlayerFiltersChange={changePlayerFilters}
         onClanFiltersChange={changeClanFilters}
-        onOpenResult={(result, type) => void openResult(result, type)}
+        onOpenResult={openResult}
         onOpenRecent={(item) => void openRecent(item)}
         onCancel={onCancel}
       />
-      <SkeletonLoadingDialog visible={opening} />
+      <PageLoading visible={opening} />
       <Snackbar message={snackbar} onDismiss={() => setSnackbar(undefined)} />
     </View>
   );

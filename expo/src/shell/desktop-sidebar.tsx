@@ -4,9 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { MessageKey } from '../i18n';
 import {
+  appRoutes,
   desktopSidebarBodyRoutes,
   desktopSidebarFooterRoutes,
   filterEnabledRoutes,
+  filterVisibleRoutes,
+  isRouteEnabled,
   primaryTabRoutes,
   RouteIcon,
   type AppRouteDefinition,
@@ -45,7 +48,7 @@ export function DesktopSidebar({
   isRtl?: boolean;
 }) {
   const theme = useCKTheme();
-  const body = filterEnabledRoutes(desktopSidebarBodyRoutes, features);
+  const body = filterVisibleRoutes(desktopSidebarBodyRoutes, features);
   const footer = filterEnabledRoutes(desktopSidebarFooterRoutes, features);
   return (
     <SafeAreaView
@@ -62,17 +65,29 @@ export function DesktopSidebar({
       ]}
       testID="desktop-sidebar"
     >
-      <View style={[styles.identity, isRtl && styles.rowRtl]}>
+      <Pressable
+        style={[styles.identity, isRtl && styles.rowRtl]}
+        accessibilityRole="button"
+        accessibilityLabel={t('competitiveViewProfile')}
+        onPress={() =>
+          onUtility(
+            appRoutes.find((route) => route.id === 'profile')!,
+            false,
+          )
+        }
+      >
         <View style={styles.avatar}>{avatar}</View>
         <View style={styles.identityText}>
           <CKText role="titleMedium" numberOfLines={1} style={styles.strong}>
             {displayName}
           </CKText>
-          <CKText muted role="labelMedium" numberOfLines={1}>
-            {productLabel}
-          </CKText>
+          {productLabel ? (
+            <CKText muted role="labelMedium" numberOfLines={1}>
+              {productLabel}
+            </CKText>
+          ) : null}
         </View>
-      </View>
+      </Pressable>
       <View style={styles.primary}>
         {primaryTabRoutes.map((route) => (
           <SidebarRoute
@@ -86,6 +101,10 @@ export function DesktopSidebar({
         ))}
       </View>
       <ScrollView
+        testID="desktop-sidebar-scroll"
+        bounces={false}
+        alwaysBounceVertical={false}
+        overScrollMode="never"
         contentContainerStyle={[
           styles.utilities,
           { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.2) },
@@ -97,6 +116,7 @@ export function DesktopSidebar({
             route={route}
             label={t(route.labelKey)}
             selected={route.id === selectedUtility}
+            disabled={!isRouteEnabled(route, features)}
             onPress={() => onUtility(route, selectedUtility !== undefined)}
             isRtl={isRtl}
             compact

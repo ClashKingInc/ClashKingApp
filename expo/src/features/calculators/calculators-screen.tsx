@@ -1,15 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { modalOrientations } from '../../ui/modal-orientations';
+import { Children, useEffect, useState, type ReactNode } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ArrowLeft,
   ArrowRight,
@@ -34,24 +27,16 @@ import {
 
 import { ImageAssets } from '../../core/assets/image-assets';
 import { translationForTid } from '../../core/game-data/game-data-localization';
-import {
-  materialBackLabel,
-  materialCloseLabel,
-  toIntlLocale,
-  useI18n,
-  type MessageKey,
-} from '../../i18n';
+import { materialCloseLabel, toIntlLocale, useI18n, type MessageKey } from '../../i18n';
 import {
   CKText,
   EmptyState,
-  HeaderIconButton,
   MobileWebImage,
   PillSurface,
-  Skeleton,
+  SkeletonContent,
   Surface,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../ui';
 import {
   DamageCalculatorEngine,
@@ -85,9 +70,12 @@ import {
   type FarmTrackerTarget,
 } from './calculator-logic';
 
+import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
+import { CalcHeader } from './calculator-controls';
 export type CalculatorMode = 'damage' | 'farmGoal';
 
 export interface CalculatorsScreenProps {
+  readonly damageOnly?: boolean;
   readonly session: DamageCalculatorSession;
   readonly accountPresets: readonly DamageAccountPreset[];
   readonly trackerSnapshot: UpgradeTrackerSnapshot | null;
@@ -104,7 +92,10 @@ const engine = new DamageCalculatorEngine();
 export function CalculatorsScreen(props: CalculatorsScreenProps) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [mode, setMode] = useState<CalculatorMode>('damage');
+  const link = useLinkParameters();
+  const [mode, setMode] = useState<CalculatorMode>(
+    props.damageOnly ? 'damage' : linkChoice(link.mode, ['damage', 'farmGoal'], 'damage'),
+  );
   const [revision, setRevision] = useState(0);
   const mutate = (operation: () => void) => {
     operation();
@@ -113,13 +104,21 @@ export function CalculatorsScreen(props: CalculatorsScreenProps) {
   const catalogMissing =
     props.session.catalog.buildings.length === 0 || props.session.catalog.sources.length === 0;
   void revision;
-  return (
-    <View style={[styles.screen, { backgroundColor: theme.background }]}>
+  const header = (
+    <View style={{ marginHorizontal: -16, marginTop: -16, marginBottom: 16 }}>
       <CalculatorHero mode={mode} onBack={props.onBack} />
-      <ModeTabs mode={mode} onChange={setMode} />
+      {!props.damageOnly && <ModeTabs mode={mode} onChange={setMode} />}
+    </View>
+  );
+  return (
+    <View
+      testID={props.damageOnly ? 'damage-manual' : 'legacy-calculators'}
+      style={[styles.screen, { backgroundColor: theme.background }]}
+    >
       {mode === 'damage' ? (
         catalogMissing ? (
           <View style={styles.emptyPage}>
+            {header}
             <EmptyState
               icon={<CloudOff color={theme.onSurfaceVariant} />}
               title={t('damageNoStaticDataTitle')}
@@ -127,82 +126,38 @@ export function CalculatorsScreen(props: CalculatorsScreenProps) {
             />
           </View>
         ) : (
-          <DamageMode {...props} mutate={mutate} />
+          <DamageMode {...props} mutate={mutate} header={header} />
         )
       ) : (
-        <FarmGoalMode {...props} mutate={mutate} />
+        <FarmGoalMode {...props} mutate={mutate} header={header} />
       )}
     </View>
   );
 }
 
+function CalculatorColumns({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded || layout.columns(350, 2) < 2) return <>{children}</>;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 24 }}>
+      {Children.toArray(children).map((child, index) => (
+        <View key={index} style={{ flex: 1, minWidth: 0 }}>
+          {child}
+        </View>
+      ))}
+    </View>
+  );
+}
+
 function CalculatorHero({ mode, onBack }: { mode: CalculatorMode; onBack: () => void }) {
-  const { t, isRtl, locale } = useI18n();
-  const themeMode = useCKThemeMode();
-  const insets = useSafeAreaInsets();
-  const { width, fontScale } = useWindowDimensions();
-  const desktop = width >= 900;
-  const scaleAllowance = Math.max(0, Math.min(72, (16 * fontScale - 16) * 1.5));
-  const height = insets.top + (desktop ? 292 : 332 + scaleAllowance);
+  const { t } = useI18n();
   const damage = mode === 'damage';
   return (
-    <View style={[styles.hero, { height }]}>
-      <MobileWebImage
-        imageUrl={
-          damage ? ImageAssets.playerWarStatsPageBackground : ImageAssets.homeBaseBackground
-        }
-        contentFit="cover"
-        contentPosition="bottom center"
-        style={StyleSheet.absoluteFill}
-      />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Defs>
-          <LinearGradient id="calculatorGradient" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.5 : 0.34} />
-            <Stop offset="0.5" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.72 : 0.52} />
-            <Stop offset="1" stopColor="#000" stopOpacity={themeMode === 'dark' ? 0.94 : 0.72} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#calculatorGradient)" />
-      </Svg>
-      <SafeAreaView
-        edges={['top', 'left', 'right']}
-        style={[styles.heroSafe, { paddingHorizontal: desktop ? 20 : 12 }]}
-      >
-        <HeaderIconButton
-          glass={false}
-          label={materialBackLabel(locale)}
-          onPress={onBack}
-          icon={isRtl ? <ArrowRight color="#fff" /> : <ArrowLeft color="#fff" />}
-        />
-        <View style={[styles.heroIdentity, desktop && styles.heroHorizontal]}>
-          <MobileWebImage
-            imageUrl={damage ? ImageAssets.getSpellImage('Lightning Spell') : ImageAssets.lootCart}
-            contentFit="contain"
-            style={{ width: desktop ? 104 : 112, height: desktop ? 104 : 112 }}
-            errorFallback={
-              damage ? <Bolt color="#fff" size={42} /> : <Rocket color="#fff" size={42} />
-            }
-          />
-          <View
-            style={[
-              styles.heroCopy,
-              { maxWidth: desktop ? 520 : 330, alignItems: desktop ? 'flex-start' : 'center' },
-            ]}
-          >
-            <CKText role="screenTitle" numberOfLines={1} style={styles.heroTitle}>
-              {t('calculatorsTitle')}
-            </CKText>
-            <CKText
-              numberOfLines={2}
-              style={[styles.heroSubtitle, { textAlign: desktop ? 'left' : 'center' }]}
-            >
-              {t(damage ? 'damageCalculatorSubtitle' : 'farmGoalFormTitle')}
-            </CKText>
-          </View>
-        </View>
-      </SafeAreaView>
-    </View>
+    <CalcHeader
+      title={t(damage ? 'damageCalculatorTitle' : 'farmGoalFormTitle')}
+      image={damage ? ImageAssets.getSpellImage('Lightning Spell') : ImageAssets.lootCart}
+      onBack={onBack}
+    />
   );
 }
 
@@ -260,9 +215,12 @@ function ModeTab({
   );
 }
 
-function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => void) => void }) {
+function DamageMode(
+  props: CalculatorsScreenProps & { mutate: (operation: () => void) => void; header: ReactNode },
+) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const session = props.session;
   const [setupId, setSetupId] = useState<string>(calculatorSetupIds.custom);
   const [showAll, setShowAll] = useState(false);
@@ -300,111 +258,124 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
       }
     });
   return (
-    <ScrollView contentContainerStyle={styles.pageContent} keyboardShouldPersistTaps="handled">
-      <SectionTitle>{t('damageAccountPresetShort')}</SectionTitle>
-      <AccountPanel
-        accounts={props.accountPresets}
-        selected={selectedAccount}
-        onOpen={() => setAccountPicker(true)}
-        hint={t('damageAccountSelectorHint')}
-      />
-      <Spacer />
-      <SectionTitle>{t('damageTargetSectionTitle')}</SectionTitle>
-      {targets.length === 0 ? (
-        <EmptyTarget onChoose={() => setBuildingPicker(true)} />
-      ) : (
+    <ScrollView
+      contentContainerStyle={[
+        styles.pageContent,
+        (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+      ]}
+      keyboardShouldPersistTaps="handled"
+    >
+      {props.header}
+      <CalculatorColumns>
         <>
-          {targets.map((target) => (
-            <TargetCard
-              key={target.id}
-              target={target}
-              result={resultById.get(target.id)}
-              townHall={session.townHall}
-              onLevel={(level) => props.mutate(() => session.setTargetLevel(target.id, level))}
-              onRemove={() => props.mutate(() => session.removeTarget(target.id))}
-            />
-          ))}
-          <ActionButton
-            label={t('damageAddBuilding')}
-            icon={<Plus size={19} color={theme.primary} />}
-            disabled={session.availableBuildings.length === targets.length}
-            tonal
-            onPress={() => setBuildingPicker(true)}
+          <SectionTitle>{t('damageAccountPresetShort')}</SectionTitle>
+          <AccountPanel
+            accounts={props.accountPresets}
+            selected={selectedAccount}
+            onOpen={() => setAccountPicker(true)}
+            hint={t('damageAccountSelectorHint')}
           />
-        </>
-      )}
-      <Spacer />
-      <SectionTitle>{t('damageAttackStack')}</SectionTitle>
-      <View style={styles.chips}>
-        {setupIds.map((id) => (
-          <SetupChip
-            key={id}
-            id={id}
-            selected={id === setupId}
-            image={quickSetupImage(session, id)}
-            onPress={() =>
-              props.mutate(() => {
-                setSetupId(id);
-                setShowAll(false);
-                applyQuickSetup(session, id);
-              })
-            }
-          />
-        ))}
-      </View>
-      <View style={styles.sourceList}>
-        {primary.map((source) => (
-          <SourceRow
-            key={source.kind}
-            source={source}
-            selection={session.sources.get(source.kind)!}
-            townHall={session.townHall}
-            onLevel={(level) => props.mutate(() => session.setSourceLevel(source.kind, level))}
-            onCount={(count) => props.mutate(() => session.setSourceCount(source.kind, count))}
-          />
-        ))}
-      </View>
-      {session.availableSources.length === 0 ? (
-        <InlineEmpty text={t('damageNoSourcesForTownHall')} />
-      ) : null}
-      {extra.length ? (
-        <>
-          {showAll ? (
+          <Spacer />
+          <SectionTitle>{t('damageTargetSectionTitle')}</SectionTitle>
+          {targets.length === 0 ? (
+            <EmptyTarget onChoose={() => setBuildingPicker(true)} />
+          ) : (
             <>
-              <InlineLabel>{t('damageOtherSources')}</InlineLabel>
-              <View style={styles.sourceList}>
-                {extra.map((source) => (
-                  <SourceRow
-                    key={source.kind}
-                    source={source}
-                    selection={session.sources.get(source.kind)!}
-                    townHall={session.townHall}
-                    onLevel={(level) =>
-                      props.mutate(() => session.setSourceLevel(source.kind, level))
-                    }
-                    onCount={(count) =>
-                      props.mutate(() => session.setSourceCount(source.kind, count))
-                    }
-                  />
-                ))}
-              </View>
+              {targets.map((target) => (
+                <TargetCard
+                  key={target.id}
+                  target={target}
+                  result={resultById.get(target.id)}
+                  townHall={session.targetTownHall ?? session.townHall}
+                  onLevel={(level) => props.mutate(() => session.setTargetLevel(target.id, level))}
+                  onRemove={() => props.mutate(() => session.removeTarget(target.id))}
+                />
+              ))}
+              <ActionButton
+                label={t('damageAddBuilding')}
+                icon={<Plus size={19} color={theme.primary} />}
+                disabled={session.availableBuildings.length === targets.length}
+                tonal
+                onPress={() => setBuildingPicker(true)}
+              />
+            </>
+          )}
+          <Spacer />
+        </>
+        <>
+          <SectionTitle>{t('damageAttackStack')}</SectionTitle>
+          <View style={styles.chips}>
+            {setupIds.map((id) => (
+              <SetupChip
+                key={id}
+                id={id}
+                selected={id === setupId}
+                image={quickSetupImage(session, id)}
+                onPress={() =>
+                  props.mutate(() => {
+                    setSetupId(id);
+                    setShowAll(false);
+                    applyQuickSetup(session, id);
+                  })
+                }
+              />
+            ))}
+          </View>
+          <View style={styles.sourceList}>
+            {primary.map((source) => (
+              <SourceRow
+                key={source.kind}
+                source={source}
+                selection={session.sources.get(source.kind)!}
+                townHall={session.townHall}
+                onLevel={(level) => props.mutate(() => session.setSourceLevel(source.kind, level))}
+                onCount={(count) => props.mutate(() => session.setSourceCount(source.kind, count))}
+              />
+            ))}
+          </View>
+          {session.availableSources.length === 0 ? (
+            <InlineEmpty text={t('damageNoSourcesForTownHall')} />
+          ) : null}
+          {extra.length ? (
+            <>
+              {showAll ? (
+                <>
+                  <InlineLabel>{t('damageOtherSources')}</InlineLabel>
+                  <View style={styles.sourceList}>
+                    {extra.map((source) => (
+                      <SourceRow
+                        key={source.kind}
+                        source={source}
+                        selection={session.sources.get(source.kind)!}
+                        townHall={session.townHall}
+                        onLevel={(level) =>
+                          props.mutate(() => session.setSourceLevel(source.kind, level))
+                        }
+                        onCount={(count) =>
+                          props.mutate(() => session.setSourceCount(source.kind, count))
+                        }
+                      />
+                    ))}
+                  </View>
+                </>
+              ) : null}
+              <Pressable style={styles.textAction} onPress={() => setShowAll((value) => !value)}>
+                <Plus size={18} color={theme.onSurfaceVariant} />
+                <CKText role="labelLarge">
+                  {t(showAll ? 'damageShowFewerSources' : 'damageShowAllSources')}
+                </CKText>
+              </Pressable>
             </>
           ) : null}
-          <Pressable style={styles.textAction} onPress={() => setShowAll((value) => !value)}>
-            <Plus size={18} color={theme.onSurfaceVariant} />
-            <CKText role="labelLarge">
-              {t(showAll ? 'damageShowFewerSources' : 'damageShowAllSources')}
-            </CKText>
-          </Pressable>
+          {setupId === calculatorSetupIds.zapQuake && targets.length > 0 ? (
+            <>
+              <Spacer />
+              <SectionTitle>{t('damageZapQuakeOptimizer')}</SectionTitle>
+              <ZapQuakePanel session={session} targets={targets} mutate={props.mutate} />
+            </>
+          ) : null}
         </>
-      ) : null}
-      {setupId === calculatorSetupIds.zapQuake && targets.length > 0 ? (
-        <>
-          <Spacer />
-          <SectionTitle>{t('damageZapQuakeOptimizer')}</SectionTitle>
-          <ZapQuakePanel session={session} targets={targets} mutate={props.mutate} />
-        </>
-      ) : null}
+      </CalculatorColumns>
       <AccountPicker
         visible={accountPicker}
         accounts={props.accountPresets}
@@ -419,7 +390,7 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
         visible={buildingPicker}
         buildings={session.availableBuildings}
         excluded={new Set(session.targets.map((target) => target.buildingId))}
-        townHall={session.townHall}
+        townHall={session.targetTownHall ?? session.townHall}
         onClose={() => setBuildingPicker(false)}
         onSelect={(id) => {
           setBuildingPicker(false);
@@ -430,9 +401,12 @@ function DamageMode(props: CalculatorsScreenProps & { mutate: (operation: () => 
   );
 }
 
-function FarmGoalMode(props: CalculatorsScreenProps & { mutate: (operation: () => void) => void }) {
+function FarmGoalMode(
+  props: CalculatorsScreenProps & { mutate: (operation: () => void) => void; header: ReactNode },
+) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [accountTag, setAccountTag] = useState(
     props.session.selectedAccountTag ?? props.accountPresets[0]?.tag ?? null,
   );
@@ -556,155 +530,175 @@ function FarmGoalMode(props: CalculatorsScreenProps & { mutate: (operation: () =
     normalized(suggestion.item.name) === normalized(building.name) &&
     suggestion.plannedStep?.targetLevel === level.level;
   return (
-    <ScrollView contentContainerStyle={styles.pageContent} keyboardShouldPersistTaps="handled">
-      <SectionTitle>{t('farmGoalAccountTitle')}</SectionTitle>
-      <AccountPanel
-        accounts={props.accountPresets}
-        selected={account}
-        onOpen={() => setAccountPicker(true)}
-        hint={t('farmGoalAccountHint')}
-      />
-      <Spacer />
-      <SectionTitle>{t('farmGoalTargetTitle')}</SectionTitle>
-      <Surface style={styles.panel}>
-        {props.trackerLoading ? (
-          <Skeleton height={44} radius={16} />
-        ) : !suggestionSelected && suggestion ? (
-          <TrackerSuggestion
-            target={suggestion}
-            onPress={() => {
-              const found = buildings.find(
-                (candidate) => normalized(candidate.name) === normalized(suggestion.item.name),
-              );
-              if (found) selectBuilding(found.id, suggestion);
-            }}
+    <ScrollView
+      contentContainerStyle={[
+        styles.pageContent,
+        (layout.isExpanded || layout.isDuo) && { maxWidth: layout.contentMaxWidth },
+      ]}
+      keyboardShouldPersistTaps="handled"
+    >
+      {props.header}
+      <CalculatorColumns>
+        <>
+          <SectionTitle>{t('farmGoalAccountTitle')}</SectionTitle>
+          <AccountPanel
+            accounts={props.accountPresets}
+            selected={account}
+            onOpen={() => setAccountPicker(true)}
+            hint={t('farmGoalAccountHint')}
           />
-        ) : null}
-        {!props.trackerLoading && account && !props.trackerSnapshot ? (
-          <TrackerPrompt onPress={() => props.onOpenUpgradeTracker(accountTag)} />
-        ) : null}
-        {!props.trackerLoading && props.trackerSnapshot && suggestions.length === 0 ? (
-          <View style={styles.noticeRow}>
-            <CircleCheck color={theme.secondary} />
-            <CKText muted style={styles.flex}>
-              {t('farmGoalTrackerPlanComplete')}
-            </CKText>
-          </View>
-        ) : null}
-        {!building || !level ? (
-          <BuildingEmpty
-            title={t('farmGoalNoTargetTitle')}
-            body={t('farmGoalNoTargetBody')}
-            action={t('farmGoalChooseBuilding')}
-            onPress={() => setBuildingPicker(true)}
-          />
-        ) : (
-          <>
-            <View style={styles.targetSummary}>
-              <MobileWebImage
-                imageUrl={ImageAssets.getHomeVillageBuildingImage(building.imageName, level.level)}
-                contentFit="contain"
-                style={styles.targetImage}
-                errorFallback={<TriangleAlert color={theme.onSurfaceVariant} />}
-              />
-              <View style={styles.flex}>
-                <CKText role="titleSmall">
-                  {buildingName(building.name, t)} · {t('sideLevel', { level: level.level })}
-                </CKText>
-                <CKText muted>
-                  {upgradeCost
-                    ? `${t('farmGoalUpgradeCostLabel')}: ${formatInt(upgradeCost, locale)} ${resourceLabel}`
-                    : t('farmGoalCostUnavailable')}
-                </CKText>
-              </View>
-            </View>
-            <View style={styles.controlRow}>
-              <CKText muted style={styles.flex}>
-                {t('farmGoalTargetLevelLabel')}
-              </CKText>
-              <SelectButton
-                label={t('sideLevel', { level: level.level })}
-                options={levels.map((candidate) => ({
-                  value: String(candidate.level),
-                  label: t('sideLevel', { level: candidate.level }),
-                }))}
-                onSelect={(value) => {
-                  const next = Number(value);
-                  setLevelNumber(next);
-                  setAverageLoot(
-                    String(
-                      defaultFarmLoot(
-                        levels.find((candidate) => candidate.level === next)?.upgradeResource,
-                      ),
-                    ),
+          <Spacer />
+          <SectionTitle>{t('farmGoalTargetTitle')}</SectionTitle>
+          <Surface style={styles.panel}>
+            {props.trackerLoading ? (
+              <SkeletonContent loading>
+                <TrackerSuggestion onPress={() => {}} />
+              </SkeletonContent>
+            ) : !suggestionSelected && suggestion ? (
+              <TrackerSuggestion
+                target={suggestion}
+                onPress={() => {
+                  const found = buildings.find(
+                    (candidate) => normalized(candidate.name) === normalized(suggestion.item.name),
                   );
+                  if (found) selectBuilding(found.id, suggestion);
                 }}
               />
+            ) : null}
+            {!props.trackerLoading && account && !props.trackerSnapshot ? (
+              <TrackerPrompt onPress={() => props.onOpenUpgradeTracker(accountTag)} />
+            ) : null}
+            {!props.trackerLoading && props.trackerSnapshot && suggestions.length === 0 ? (
+              <View style={styles.noticeRow}>
+                <CircleCheck color={theme.secondary} />
+                <CKText muted style={styles.flex}>
+                  {t('farmGoalTrackerPlanComplete')}
+                </CKText>
+              </View>
+            ) : null}
+            {!building || !level ? (
+              <BuildingEmpty
+                title={t('farmGoalNoTargetTitle')}
+                body={t('farmGoalNoTargetBody')}
+                action={t('farmGoalChooseBuilding')}
+                onPress={() => setBuildingPicker(true)}
+              />
+            ) : (
+              <>
+                <View style={styles.targetSummary}>
+                  <MobileWebImage
+                    imageUrl={ImageAssets.getHomeVillageBuildingImage(
+                      building.imageName,
+                      level.level,
+                    )}
+                    contentFit="contain"
+                    style={styles.targetImage}
+                    errorFallback={<TriangleAlert color={theme.onSurfaceVariant} />}
+                  />
+                  <View style={styles.flex}>
+                    <CKText role="titleSmall">
+                      {buildingName(building.name, t)} · {t('sideLevel', { level: level.level })}
+                    </CKText>
+                    <CKText muted>
+                      {upgradeCost
+                        ? `${t('farmGoalUpgradeCostLabel')}: ${formatInt(upgradeCost, locale)} ${resourceLabel}`
+                        : t('farmGoalCostUnavailable')}
+                    </CKText>
+                  </View>
+                </View>
+                <View style={styles.controlRow}>
+                  <CKText skeleton={false} muted style={styles.flex}>
+                    {t('farmGoalTargetLevelLabel')}
+                  </CKText>
+                  <SelectButton
+                    label={t('sideLevel', { level: level.level })}
+                    options={levels.map((candidate) => ({
+                      value: String(candidate.level),
+                      label: t('sideLevel', { level: candidate.level }),
+                    }))}
+                    onSelect={(value) => {
+                      const next = Number(value);
+                      setLevelNumber(next);
+                      setAverageLoot(
+                        String(
+                          defaultFarmLoot(
+                            levels.find((candidate) => candidate.level === next)?.upgradeResource,
+                          ),
+                        ),
+                      );
+                    }}
+                  />
+                </View>
+                <ActionButton
+                  label={t('farmGoalChangeBuilding')}
+                  icon={<SlidersHorizontal size={19} color={theme.onSurface} />}
+                  onPress={() => setBuildingPicker(true)}
+                />
+              </>
+            )}
+          </Surface>
+          <Spacer />
+        </>
+        <>
+          <SectionTitle>{t('farmGoalLootTitle')}</SectionTitle>
+          <Surface style={styles.panel}>
+            <View style={styles.lootInput}>
+              <MobileWebImage
+                imageUrl={resourceImage(resource)}
+                contentFit="contain"
+                style={styles.resourceImage}
+              />
+              <TextInput
+                accessibilityLabel={t('farmGoalAverageLootLabel')}
+                keyboardType="number-pad"
+                value={averageLoot}
+                onChangeText={(value) => setAverageLoot(value.replace(/[^0-9]/g, ''))}
+                style={[styles.textInput, { color: theme.onSurface }]}
+              />
+              <CKText muted>{resourceLabel}</CKText>
             </View>
-            <ActionButton
-              label={t('farmGoalChangeBuilding')}
-              icon={<SlidersHorizontal size={19} color={theme.onSurface} />}
-              onPress={() => setBuildingPicker(true)}
+            <CKText skeleton={false} muted>
+              {t('farmGoalPerfectLootHint')}
+            </CKText>
+            <CKText muted>
+              {account?.league && leagueEstimate?.loot
+                ? t('farmGoalLeagueEstimate', {
+                    league: account.league,
+                    amount: formatInt(leagueEstimate.loot, locale),
+                    resource: resourceLabel,
+                  })
+                : t('farmGoalNoLeagueLoot')}
+            </CKText>
+            {leagueEstimate?.starBonus ? (
+              <CKText muted>
+                {t('farmGoalStarBonusEstimate', {
+                  amount: formatInt(leagueEstimate.starBonus, locale),
+                  resource: resourceLabel,
+                })}
+              </CKText>
+            ) : null}
+          </Surface>
+          <View style={styles.resultGap} />
+          {scenarios.length ? (
+            <FarmResults
+              scenarios={scenarios}
+              upgradeCost={upgradeCost!}
+              perfectLoot={perfectLoot}
+              resource={resourceLabel}
             />
-          </>
-        )}
-      </Surface>
-      <Spacer />
-      <SectionTitle>{t('farmGoalLootTitle')}</SectionTitle>
-      <Surface style={styles.panel}>
-        <View style={styles.lootInput}>
-          <MobileWebImage
-            imageUrl={resourceImage(resource)}
-            contentFit="contain"
-            style={styles.resourceImage}
-          />
-          <TextInput
-            accessibilityLabel={t('farmGoalAverageLootLabel')}
-            keyboardType="number-pad"
-            value={averageLoot}
-            onChangeText={(value) => setAverageLoot(value.replace(/[^0-9]/g, ''))}
-            style={[styles.textInput, { color: theme.onSurface }]}
-          />
-          <CKText muted>{resourceLabel}</CKText>
-        </View>
-        <CKText muted>{t('farmGoalPerfectLootHint')}</CKText>
-        <CKText muted>
-          {account?.league && leagueEstimate?.loot
-            ? t('farmGoalLeagueEstimate', {
-                league: account.league,
-                amount: formatInt(leagueEstimate.loot, locale),
-                resource: resourceLabel,
-              })
-            : t('farmGoalNoLeagueLoot')}
-        </CKText>
-        {leagueEstimate?.starBonus ? (
-          <CKText muted>
-            {t('farmGoalStarBonusEstimate', {
-              amount: formatInt(leagueEstimate.starBonus, locale),
-              resource: resourceLabel,
-            })}
-          </CKText>
-        ) : null}
-      </Surface>
-      <View style={styles.resultGap} />
-      {scenarios.length ? (
-        <FarmResults
-          scenarios={scenarios}
-          upgradeCost={upgradeCost!}
-          perfectLoot={perfectLoot}
-          resource={resourceLabel}
-        />
-      ) : (
-        <InlineEmpty
-          text={
-            !building
-              ? t('farmGoalMissingTarget')
-              : !upgradeCost
-                ? t('farmGoalCostUnavailable')
-                : t('farmGoalMissingValues')
-          }
-        />
-      )}
+          ) : (
+            <InlineEmpty
+              text={
+                !building
+                  ? t('farmGoalMissingTarget')
+                  : !upgradeCost
+                    ? t('farmGoalCostUnavailable')
+                    : t('farmGoalMissingValues')
+              }
+            />
+          )}
+        </>
+      </CalculatorColumns>
       <AccountPicker
         visible={accountPicker}
         accounts={props.accountPresets}
@@ -839,7 +833,7 @@ function TargetCard({
         </Pressable>
       </View>
       <View style={styles.controlRow}>
-        <CKText muted style={styles.flex}>
+        <CKText skeleton={false} muted style={styles.flex}>
           {t('damageTargetLevelLabel')}
         </CKText>
         <SelectButton
@@ -863,7 +857,9 @@ function ResultSummary({ result }: { result: DamageResult }) {
   return (
     <View style={styles.resultSummary}>
       <View style={styles.between}>
-        <CKText muted>{t('damageResults')}</CKText>
+        <CKText skeleton={false} muted>
+          {t('damageResults')}
+        </CKText>
         <PillSurface style={{ backgroundColor: colorWithAlpha(accent, 0.14) }}>
           <View style={styles.statusPill}>
             <MobileWebImage
@@ -988,7 +984,7 @@ function ZapQuakePanel({
           style={styles.smallImage}
           errorFallback={<Bolt size={18} color={theme.secondary} />}
         />
-        <CKText role="bodyLarge" style={styles.flex}>
+        <CKText skeleton={false} role="bodyLarge" style={styles.flex}>
           {t('damageSpellCapacity')}
         </CKText>
         <Stepper
@@ -1068,7 +1064,9 @@ function FarmResults({
           errorFallback={<Rocket size={28} color={theme.onSurfaceVariant} />}
         />
         <View style={styles.flex}>
-          <CKText role="titleSmall">{t('farmGoalResultTitle')}</CKText>
+          <CKText skeleton={false} role="titleSmall">
+            {t('farmGoalResultTitle')}
+          </CKText>
           <CKText muted>
             {t('farmGoalResultSummary', {
               target: formatInt(upgradeCost, locale),
@@ -1092,28 +1090,37 @@ function FarmResults({
           </View>
           <View style={styles.alignEnd}>
             <CKText role="titleLarge">{scenario.attacks}</CKText>
-            <CKText muted>{t('farmGoalAttacks')}</CKText>
+            <CKText skeleton={false} muted>
+              {t('farmGoalAttacks')}
+            </CKText>
           </View>
         </View>
       ))}
-      <CKText muted>{t('farmGoalScenarioHint')}</CKText>
+      <CKText skeleton={false} muted>
+        {t('farmGoalScenarioHint')}
+      </CKText>
     </Surface>
   );
 }
 
 function TrackerSuggestion({
-  target,
+  target: loadedTarget,
   onPress,
 }: {
-  target: FarmTrackerTarget;
+  target?: FarmTrackerTarget;
   onPress: () => void;
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const target = loadedTarget ?? {
+    item: { name: 'Town Hall', currentLevel: 1, steps: [] },
+    plannedCosts: undefined,
+    plannedStep: undefined,
+  };
   const level = target.plannedStep?.targetLevel ?? target.item.steps[0]?.targetLevel ?? 1;
   return (
     <View style={styles.trackerBlock}>
-      <CKText muted role="bodySmall">
+      <CKText skeleton={false} muted role="bodySmall">
         {t('farmGoalTrackerNextTitle')}
       </CKText>
       <Pressable onPress={onPress} style={styles.trackerRow}>
@@ -1228,16 +1235,39 @@ function AccountPicker({
 }) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [query, setQuery] = useState('');
   const filtered = accounts.filter((account) =>
     `${account.name} ${account.tag}`.toLowerCase().includes(query.trim().toLowerCase()),
   );
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
-      <View style={styles.sheetBackdrop}>
-        <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View
+        style={[
+          styles.sheetBackdrop,
+          layout.isExpanded && { justifyContent: 'center', padding: 24 },
+        ]}
+      >
+        <SafeAreaView
+          style={[
+            styles.sheet,
+            { backgroundColor: theme.surface },
+            layout.isExpanded && {
+              width: '100%',
+              maxWidth: 640,
+              alignSelf: 'center',
+              borderRadius: 24,
+            },
+          ]}
+        >
           <View style={styles.sheetHeader}>
-            <CKText role="titleLarge" style={styles.flex}>
+            <CKText skeleton={false} role="titleLarge" style={styles.flex}>
               {t('damageAccountPresetShort')}
             </CKText>
             <Pressable
@@ -1294,6 +1324,7 @@ function BuildingPicker({
 }) {
   const { t, locale, isRtl } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const [query, setQuery] = useState('');
   const normalizedQuery = query.trim().toLowerCase();
   const hasQuery = normalizedQuery.length > 0;
@@ -1312,7 +1343,16 @@ function BuildingPicker({
   const byName = new Map(buildings.map((building) => [building.name, building]));
   const common = hasQuery
     ? []
-    : ['Town Hall', 'Inferno Tower', 'Eagle Artillery', 'Scattershot', 'X-Bow', 'Air Defense']
+    : [
+        'Town Hall',
+        'Clan Castle',
+        'Monolith',
+        'Inferno Tower',
+        'Eagle Artillery',
+        'Scattershot',
+        'X-Bow',
+        'Air Defense',
+      ]
         .map((name) => byName.get(name))
         .filter(
           (building): building is BuildingDefinition =>
@@ -1373,9 +1413,31 @@ function BuildingPicker({
     />
   );
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
-      <View style={styles.sheetBackdrop}>
-        <SafeAreaView style={[styles.sheet, { backgroundColor: theme.surface }]}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View
+        style={[
+          styles.sheetBackdrop,
+          layout.isExpanded && { justifyContent: 'center', padding: 24 },
+        ]}
+      >
+        <SafeAreaView
+          style={[
+            styles.sheet,
+            { backgroundColor: theme.surface },
+            layout.isExpanded && {
+              width: '100%',
+              maxWidth: 640,
+              alignSelf: 'center',
+              borderRadius: 24,
+            },
+          ]}
+        >
           <View style={styles.sheetHeader}>
             <CKText role="titleLarge" style={styles.flex}>
               {t('damageChooseTarget')}
@@ -1581,6 +1643,7 @@ function SelectButton({
         <ChevronDown size={16} color={theme.onSurfaceVariant} />
       </Pressable>
       <Modal
+        supportedOrientations={modalOrientations}
         transparent
         visible={visible}
         animationType="fade"
@@ -1733,7 +1796,7 @@ function setupLabel(id: string, t: Translator) {
       : fallback;
 }
 function sourceName(source: DamageSourceDefinition, t: Translator) {
-  const keys: Record<DamageSourceKind, MessageKey> = {
+  const keys: Partial<Record<DamageSourceKind, MessageKey>> = {
     [DamageSourceKind.Lightning]: 'damageSourceLightning',
     [DamageSourceKind.Earthquake]: 'damageSourceEarthquake',
     [DamageSourceKind.GiantArrow]: 'damageSourceGiantArrow',
@@ -1742,7 +1805,8 @@ function sourceName(source: DamageSourceDefinition, t: Translator) {
     [DamageSourceKind.BalloonDeath]: 'damageSourceBalloonDeath',
     [DamageSourceKind.RocketBalloonDeath]: 'damageSourceRocketBalloonDeath',
   };
-  const fallback = t(keys[source.kind]);
+  const key = keys[source.kind];
+  const fallback = key ? t(key) : source.name;
   return source.kind === DamageSourceKind.GiantArrow
     ? (translationForTid('TID_GEAR_PIERCING_ARROW') ?? fallback)
     : source.kind === DamageSourceKind.Fireball

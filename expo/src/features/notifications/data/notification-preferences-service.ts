@@ -1,4 +1,14 @@
-import { type ApiClient, type ApiResponse } from '../../../core/api/client';
+import {
+  NotificationAccountPutEndpoint,
+  NotificationClansGetEndpoint,
+  NotificationClanPutEndpoint,
+  type NotificationClansResponse,
+  NotificationPreferencesGetEndpoint,
+  NotificationPreferencesPutEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import {
   createDefaultNotificationPreferences,
   parseLocalNotificationPreferences,
@@ -12,9 +22,8 @@ import {
 import { LEGACY_NOTIFICATION_PREFERENCE_KEYS, STORAGE_KEYS } from '../../../core/storage/storage';
 import type { StringStore } from '../../../services/storage/auth-storage';
 
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
-
 export const NOTIFICATION_PREFERENCES_ENDPOINT = '/notifications/preferences';
+export type ClanNotificationSettings = typeof NotificationClansResponse.Type;
 
 export class NotificationPreferencesHttpError extends Error {
   constructor(
@@ -27,68 +36,124 @@ export class NotificationPreferencesHttpError extends Error {
 }
 
 export interface NotificationPreferencesServiceOptions {
-  readonly api: ApiClient;
-  readonly deviceIdProvider: () => Promise<string>;
-  readonly environmentProvider: () => string;
+  readonly api: ContractApiService;
   readonly preferences: StringStore;
   readonly pushApiV2BaseUrlOverride?: string;
 }
 
 export class NotificationPreferencesService {
+  clans: ClanNotificationSettings | undefined;
+  private readonly clanListeners = new Set<() => void>();
+  private clanGeneration = 0;
   constructor(private readonly options: NotificationPreferencesServiceOptions) {}
 
-  async load(): Promise<NotificationPreferences> {
-    const [deviceId, environment] = await Promise.all([
-      this.options.deviceIdProvider(),
-      Promise.resolve(this.options.environmentProvider()),
-    ]);
-    const query = new URLSearchParams({ device_id: deviceId, environment });
-    const response = await this.rawRequest(
-      `${NOTIFICATION_PREFERENCES_ENDPOINT}?${query.toString()}`,
-      'GET',
+  subscribeClans(listener: () => void): () => void {
+    this.clanListeners.add(listener);
+    return () => {
+      this.clanListeners.delete(listener);
+    };
+  }
+
+  clearClans(): void {
+    ++this.clanGeneration;
+    this.clans = undefined;
+    this.clanListeners.forEach((listener) => listener());
+  }
+
+  async loadClans(): Promise<ClanNotificationSettings> {
+    const generation = ++this.clanGeneration;
+    const saved = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationClansGetEndpoint,
+        { path: {}, query: {}, body: {} },
+        this.executeOptions(),
+      ),
     );
-    this.expectSuccess(response, 'load notification preferences');
-    const settings = parseNotificationPreferences(parseResponseJson(response));
+    if (generation === this.clanGeneration) this.acceptClans(saved);
+    return saved;
+  }
+
+  async setClanEnabled(tag: string, type: 'war' | 'raid', enabled: boolean): Promise<void> {
+    const current = this.clans?.clans.find((clan) => clan.tag === tag);
+    const generation = ++this.clanGeneration;
+    const saved = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationClanPutEndpoint,
+        {
+          path: { tag },
+          query: {},
+          body: {
+            warEnabled: type === 'war' ? enabled : (current?.warEnabled ?? false),
+            raidEnabled: type === 'raid' ? enabled : (current?.raidEnabled ?? false),
+          },
+        },
+        this.executeOptions(),
+      ),
+    );
+    if (generation === this.clanGeneration) this.acceptClans(saved);
+  }
+
+  async removeClanBookmark(tag: string): Promise<void> {
+    const generation = ++this.clanGeneration;
+    const saved = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationClanPutEndpoint,
+        {
+          path: { tag },
+          query: {},
+          body: { warEnabled: false, raidEnabled: false, removeBookmark: true },
+        },
+        this.executeOptions(),
+      ),
+    );
+    if (generation === this.clanGeneration) this.acceptClans(saved);
+  }
+
+  private acceptClans(saved: ClanNotificationSettings): void {
+    this.clans = saved;
+    this.clanListeners.forEach((listener) => listener());
+  }
+
+  async load(): Promise<NotificationPreferences> {
+    const response = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationPreferencesGetEndpoint,
+        { path: {}, query: {}, body: {} },
+        this.executeOptions(),
+      ),
+    );
+    const settings = parseNotificationPreferences(response);
     await this.persistBestEffort(settings);
     return settings;
   }
 
   async save(settings: NotificationPreferences): Promise<NotificationPreferences> {
-    const [deviceId, environment] = await Promise.all([
-      this.options.deviceIdProvider(),
-      Promise.resolve(this.options.environmentProvider()),
-    ]);
-    const response = await this.rawRequest(
-      NOTIFICATION_PREFERENCES_ENDPOINT,
-      'PUT',
-      serializeNotificationPreferencesForPut(settings, deviceId, environment),
+    const response = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationPreferencesPutEndpoint,
+        { path: {}, query: {}, body: serializeNotificationPreferencesForPut(settings) },
+        this.executeOptions(),
+      ),
     );
-    this.expectSuccess(response, 'save notification preferences');
-    const saved = parseNotificationPreferences(parseResponseJson(response));
+    const saved = parseNotificationPreferences(response);
     await this.persistBestEffort(saved);
     return saved;
   }
 
-  async setDeviceEnabled(enabled: boolean): Promise<NotificationPreferences> {
-    const current = await this.load();
-    return this.save({ ...current, notificationsEnabled: enabled });
-  }
-
-  async setAccountEnabled(playerTag: string, enabled: boolean): Promise<NotificationAccount> {
-    const endpoint = `/notifications/accounts/${encodeURIComponent(playerTag)}`;
-    const response = await this.rawRequest(endpoint, 'PUT', { enabled });
-    this.expectSuccess(response, 'update account notifications');
-    return parseNotificationAccount(parseResponseJson(response));
+  async setAccountEnabled(tag: string, enabled: boolean): Promise<NotificationAccount> {
+    const response = await Effect.runPromise(
+      this.options.api.execute(
+        NotificationAccountPutEndpoint,
+        { path: { tag }, query: {}, body: { enabled } },
+        this.executeOptions(),
+      ),
+    );
+    return parseNotificationAccount(response);
   }
 
   async loadLocal(): Promise<NotificationPreferences> {
     const raw = await this.options.preferences.getItem(STORAGE_KEYS.notificationSettings);
-    if (raw === null) {
-      return createDefaultNotificationPreferences(
-        await this.options.deviceIdProvider(),
-        this.options.environmentProvider(),
-      );
-    }
+    if (raw === null) return createDefaultNotificationPreferences();
     return parseLocalNotificationPreferences(JSON.parse(raw) as unknown);
   }
 
@@ -96,10 +161,6 @@ export class NotificationPreferencesService {
     await this.options.preferences.setItem(
       STORAGE_KEYS.notificationSettings,
       JSON.stringify(serializeNotificationPreferencesForLocalStorage(settings)),
-    );
-    await this.options.preferences.setItem(
-      STORAGE_KEYS.notificationsEnabled,
-      String(settings.notificationsEnabled),
     );
     await Promise.all(
       LEGACY_NOTIFICATION_PREFERENCE_KEYS.map((key) => this.options.preferences.removeItem(key)),
@@ -114,35 +175,8 @@ export class NotificationPreferencesService {
     }
   }
 
-  private rawRequest(
-    endpoint: string,
-    method: 'GET' | 'PUT',
-    body?: unknown,
-  ): Promise<ApiResponse> {
+  private executeOptions() {
     const override = this.options.pushApiV2BaseUrlOverride?.replace(/\/$/, '');
-    return this.options.api.request(endpoint, {
-      method,
-      body,
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-      ...(override ? { url: `${override}${endpoint}` } : undefined),
-    });
-  }
-
-  private expectSuccess(response: ApiResponse, operation: string): void {
-    if (response.status < 200 || response.status >= 300) {
-      throw new NotificationPreferencesHttpError(
-        response.status,
-        `Failed to ${operation} (${response.status})`,
-      );
-    }
-  }
-}
-
-function parseResponseJson(response: ApiResponse): unknown {
-  try {
-    return JSON.parse(response.bodyText) as unknown;
-  } catch (error) {
-    throw new TypeError('Invalid notification preferences response', { cause: error });
+    return override ? { baseUrl: override.replace(/\/v2\/?$/, '') } : undefined;
   }
 }

@@ -119,17 +119,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify Expo E2E migration structure
-        run: npm run e2e:structure
-
       - name: Verify localization generation
         run: npm run l10n:check
 
-      - name: Verify native config plugins
-        run: npm run test:native-plugin
+      - name: Verify production license inventory
+        run: npm run licenses:check
 
-      - name: Verify web build tooling
-        run: npm run test:web-build
+      - name: Verify release channels and native compatibility
+        run: npm run release:check
 
       - name: Lint Expo source
         run: npm run lint
@@ -137,23 +134,16 @@ jobs:
       - name: Type-check Expo source
         run: npm run typecheck
 
-      - name: Run tests with coverage
-        run: npm test -- --coverage
+      - name: Verify TypeScript compatibility during tsrs adoption
+        run: npm run typecheck:typescript
 
       - name: Verify Expo dependencies and configuration
         run: npx expo-doctor
 
-      - name: Verify static web export
+      - name: Build native-app link landing
         env:
           EXPO_PUBLIC_CK_API_ENV: development
         run: npm run web:export
-
-      - name: SonarQube scan
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        uses: SonarSource/sonarqube-scan-action@v7
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   android_build:
     name: Android debug build

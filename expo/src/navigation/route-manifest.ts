@@ -7,7 +7,6 @@ export type FeatureGate =
   | 'leaderboards'
   | 'global_stats'
   | 'calculators'
-  | 'subscription_support'
   | 'upgrade_tracker'
   | 'bases_armies'
   | 'game_assets'
@@ -23,15 +22,19 @@ export type AppRouteId =
   | 'rankings'
   | 'stats'
   | 'calculators'
-  | 'subscription'
   | 'todo'
   | 'ranked'
+  | 'legends'
   | 'upgradeTracker'
   | 'basesArmies'
   | 'gameAssets'
+  | 'profile'
   | 'accounts'
+  | 'servers'
   | 'settings'
-  | 'achievements';
+  | 'achievements'
+  | 'esports'
+  | 'tournaments';
 
 export interface AppRouteDefinition {
   id: AppRouteId;
@@ -43,6 +46,8 @@ export interface AppRouteDefinition {
   primaryTab?: boolean;
   mobileDrawer?: boolean;
   desktopSidebar?: boolean;
+  visibleWhenDisabled?: boolean;
+  comingSoon?: boolean;
 }
 
 export type RouteIconName =
@@ -58,7 +63,6 @@ export type RouteIconName =
   | 'chart-no-axes-combined'
   | 'chart-pie'
   | 'calculator'
-  | 'heart'
   | 'list-checks'
   | 'trophy'
   | 'arrow-up-circle'
@@ -72,10 +76,44 @@ export type FeatureState = Partial<Record<FeatureGate, boolean>>;
 
 /**
  * One source of truth for navigation without erasing existing platform drift.
- * Flutter deliberately omits Subscription and Bases/Armies from its desktop
- * sidebar while exposing them in the mobile drawer; parity keeps that behavior.
+ * Platform-specific entries remain explicit: eSports is native-only, while
+ * Bases/Armies is filtered by the Discord-account feature gate on both shells.
  */
 export const appRoutes = [
+  {
+    id: 'profile',
+    href: '/profile',
+    labelKey: 'competitiveProfile',
+    icon: 'user-round',
+    mobileDrawer: true,
+    desktopSidebar: true,
+  },
+  {
+    id: 'esports',
+    href: '/esports',
+    labelKey: 'competitiveEsports',
+    icon: 'trophy',
+    mobileDrawer: true,
+    desktopSidebar: false,
+  },
+  {
+    id: 'tournaments',
+    href: '/tournaments',
+    labelKey: 'competitiveTournaments',
+    comingSoon: true,
+    visibleWhenDisabled: true,
+    icon: 'swords',
+    mobileDrawer: true,
+    desktopSidebar: true,
+  },
+  {
+    id: 'servers',
+    href: '/servers',
+    labelKey: 'homeWidgetsServers',
+    icon: 'users-round',
+    mobileDrawer: true,
+    desktopSidebar: false,
+  },
   {
     id: 'home',
     href: '/',
@@ -126,7 +164,7 @@ export const appRoutes = [
   {
     id: 'rankings',
     href: '/rankings',
-    labelKey: 'clanRankingsTab',
+    labelKey: 'homeRankingsAndStats',
     icon: 'chart-no-axes-combined',
     feature: 'leaderboards',
     mobileDrawer: true,
@@ -147,30 +185,30 @@ export const appRoutes = [
     labelKey: 'drawerCalculators',
     icon: 'calculator',
     feature: 'calculators',
+    visibleWhenDisabled: true,
     mobileDrawer: true,
     desktopSidebar: true,
-  },
-  {
-    id: 'subscription',
-    href: '/subscription',
-    labelKey: 'drawerSubscription',
-    icon: 'heart',
-    feature: 'subscription_support',
-    mobileDrawer: true,
-    desktopSidebar: false,
   },
   {
     id: 'todo',
     href: '/todo',
     labelKey: 'todoTitle',
     icon: 'list-checks',
-    mobileDrawer: true,
-    desktopSidebar: true,
+    mobileDrawer: false,
+    desktopSidebar: false,
   },
   {
     id: 'ranked',
     href: '/ranked',
     labelKey: 'rankedLeagueTitle',
+    icon: 'trophy',
+    mobileDrawer: false,
+    desktopSidebar: false,
+  },
+  {
+    id: 'legends',
+    href: '/legends',
+    labelKey: 'legendsTitle',
     icon: 'trophy',
     mobileDrawer: true,
     desktopSidebar: true,
@@ -191,7 +229,7 @@ export const appRoutes = [
     icon: 'shield',
     feature: 'bases_armies',
     mobileDrawer: true,
-    desktopSidebar: false,
+    desktopSidebar: true,
   },
   {
     id: 'gameAssets',
@@ -235,38 +273,40 @@ const route = (id: string) => {
 export const primaryTabRoutes = ['home', 'players', 'clans', 'war'].map(route);
 
 export const mobileDrawerHeaderActionRoutes = ['achievements', 'accounts'].map(route);
+// Profile belongs to every authenticated account, independent of its login method.
 export const mobileDrawerBodyRoutes = [
+  'profile',
   'posts',
+  'esports',
+  'tournaments',
   'rankings',
-  'stats',
   'calculators',
-  'subscription',
-  'todo',
-  'ranked',
   'upgradeTracker',
   'basesArmies',
   'gameAssets',
-  'accounts',
 ].map(route);
 export const mobileDrawerFooterRoutes = ['settings'].map(route);
 export const mobileDrawerRoutes = [...mobileDrawerBodyRoutes, ...mobileDrawerFooterRoutes];
 
 export const desktopHeaderActionRoutes = ['achievements', 'accounts'].map(route);
 export const desktopSidebarBodyRoutes = [
+  'profile',
   'posts',
+  'tournaments',
   'rankings',
-  'stats',
   'calculators',
-  'todo',
-  'ranked',
   'upgradeTracker',
+  'basesArmies',
   'gameAssets',
 ].map(route);
-export const desktopSidebarFooterRoutes = ['accounts', 'settings'].map(route);
+export const desktopSidebarFooterRoutes = ['settings'].map(route);
 export const desktopSidebarRoutes = [...desktopSidebarBodyRoutes, ...desktopSidebarFooterRoutes];
 
 export function isRouteEnabled(definition: AppRouteDefinition, features: FeatureState): boolean {
-  return definition.feature === undefined || features[definition.feature] === true;
+  return (
+    !definition.comingSoon &&
+    (definition.feature === undefined || features[definition.feature] === true)
+  );
 }
 
 export function filterEnabledRoutes<T extends AppRouteDefinition>(
@@ -274,6 +314,15 @@ export function filterEnabledRoutes<T extends AppRouteDefinition>(
   features: FeatureState,
 ): T[] {
   return routes.filter((definition) => isRouteEnabled(definition, features));
+}
+
+export function filterVisibleRoutes<T extends AppRouteDefinition>(
+  routes: readonly T[],
+  features: FeatureState,
+): T[] {
+  return routes.filter(
+    (definition) => definition.visibleWhenDisabled || isRouteEnabled(definition, features),
+  );
 }
 
 export function playerHref(tag: string): string {

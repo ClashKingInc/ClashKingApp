@@ -1,3 +1,4 @@
+import { modalOrientations } from './modal-orientations';
 import { useMemo, useState, type ReactNode } from 'react';
 import {
   FlatList,
@@ -14,10 +15,12 @@ import { Check, ChevronDown, ChevronsUpDown, Search, X } from 'lucide-react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { tintIcon } from './icon-slot';
-import { Surface } from './surfaces';
+import { GlassControlSurface, GlassSurface } from './glass';
 import { CKText } from './text';
 import { ckControlHeight, ckRadius, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
+import { isAdaptiveIOSDevice, useAdaptiveLayout } from './adaptive-layout';
+import { ReservedRegionLayout } from './reserved-region-layout';
 
 export interface SelectionPickerOption<T extends string = string> {
   readonly key: T;
@@ -26,6 +29,11 @@ export interface SelectionPickerOption<T extends string = string> {
   readonly subtitle?: string;
   readonly searchText?: string;
   readonly disabled?: boolean;
+  readonly trailingAction?: {
+    readonly label: string;
+    readonly icon: ReactNode;
+    readonly onPress: () => void;
+  };
 }
 
 export function SelectionPicker<T extends string>({
@@ -40,6 +48,8 @@ export function SelectionPicker<T extends string>({
   positionLabel,
   fillWidth = false,
   plain = false,
+  wrapLabel = false,
+  iconOnly = false,
   onOpen,
   externallyManaged = false,
 }: {
@@ -54,6 +64,10 @@ export function SelectionPicker<T extends string>({
   positionLabel?: string;
   fillWidth?: boolean;
   plain?: boolean;
+  /** Opt in for identity pickers where truncating a full name loses important context. */
+  wrapLabel?: boolean;
+  /** Hide only the selected label; menu labels and accessibility stay intact. */
+  iconOnly?: boolean;
   onOpen?: () => void;
   externallyManaged?: boolean;
 }) {
@@ -63,9 +77,19 @@ export function SelectionPicker<T extends string>({
   const controlContent = (
     <>
       {tintIcon(leading ?? selected?.icon, theme.onSurfaceVariant)}
-      <CKText role="rowTitle" numberOfLines={1} style={styles.grow}>
-        {selected?.label}
-      </CKText>
+      {!iconOnly ? (
+        <CKText
+          role="rowTitle"
+          numberOfLines={wrapLabel ? undefined : 1}
+          // A parent can stretch a picker without setting fillWidth. Always
+          // consume spare row width so trailing controls stay at the far edge.
+          // Keep an auto basis: flex:1 uses a zero basis and can hide labels in
+          // intrinsically sized controls. fillWidth only sizes the outer host.
+          style={styles.controlLabel}
+        >
+          {selected?.label}
+        </CKText>
+      ) : null}
       {positionLabel ? (
         <View
           testID="destination-picker-position"
@@ -83,35 +107,33 @@ export function SelectionPicker<T extends string>({
       )}
     </>
   );
+  const trigger = (
+    <Pressable
+      accessibilityLabel={accessibilityLabel ?? selected?.label}
+      accessibilityRole="button"
+      accessibilityState={{ expanded: visible }}
+      onPress={() => {
+        onOpen?.();
+        if (!externallyManaged) setVisible(true);
+      }}
+      style={({ pressed }) => [
+        styles.control,
+        plain && styles.plainControl,
+        pressed && styles.pressed,
+      ]}
+    >
+      {controlContent}
+    </Pressable>
+  );
   return (
-    <View style={fillWidth ? styles.grow : undefined}>
-      <Pressable
-        accessibilityLabel={accessibilityLabel ?? selected?.label}
-        accessibilityRole="button"
-        accessibilityState={{ expanded: visible }}
-        onPress={() => {
-          onOpen?.();
-          if (!externallyManaged) setVisible(true);
-        }}
-        style={({ pressed }) => pressed && styles.pressed}
-      >
-        {plain ? (
-          <View
-            testID="selection-picker-plain-control"
-            style={[styles.control, styles.plainControl]}
-          >
-            {controlContent}
-          </View>
-        ) : (
-          <Surface
-            radius={ckRadius.chip}
-            style={styles.control}
-            testID="destination-picker-control"
-          >
-            {controlContent}
-          </Surface>
-        )}
-      </Pressable>
+    <View style={fillWidth ? styles.fillControl : undefined}>
+      {plain ? (
+        <View testID="selection-picker-plain-control">{trigger}</View>
+      ) : (
+        <GlassControlSurface style={styles.controlGlass} testID="destination-picker-control">
+          {trigger}
+        </GlassControlSurface>
+      )}
       {!externallyManaged ? (
         <SelectionPickerModal
           visible={visible}
@@ -131,29 +153,74 @@ export function SelectionPicker<T extends string>({
   );
 }
 
-export function SelectionPickerModal<T extends string>({
-  visible,
-  title,
-  options,
-  selectedKey,
-  searchPlaceholder,
-  clearSearchAccessibilityLabel,
-  onSelect,
-  onClose,
-}: {
+type SelectionPickerModalProps<T extends string> = {
   visible: boolean;
   title: string;
   options: readonly SelectionPickerOption<T>[];
   selectedKey: T;
+  /** Multi-select checkbox semantics; the caller controls when the sheet closes. */
+  selectedKeys?: readonly T[];
   searchPlaceholder?: string;
   clearSearchAccessibilityLabel?: string;
   onSelect: (key: T) => void;
   onClose: () => void;
+  optionHeight?: number;
+};
+
+export function SelectionPickerModal<T extends string>(props: SelectionPickerModalProps<T>) {
+  const [query, setQuery] = useState('');
+  const close = () => {
+    setQuery('');
+    props.onClose();
+  };
+  const content = (
+    <SelectionPickerContent {...props} query={query} setQuery={setQuery} close={close} />
+  );
+  return (
+    <Modal
+      supportedOrientations={modalOrientations}
+      animationType="fade"
+      navigationBarTranslucent
+      onRequestClose={close}
+      presentationStyle="overFullScreen"
+      statusBarTranslucent
+      transparent
+      visible={props.visible}
+    >
+      {isAdaptiveIOSDevice ? (
+        <View style={styles.fullScrim}>
+          <ReservedRegionLayout>{content}</ReservedRegionLayout>
+        </View>
+      ) : (
+        content
+      )}
+    </Modal>
+  );
+}
+
+function SelectionPickerContent<T extends string>({
+  visible,
+  title,
+  options,
+  selectedKey,
+  selectedKeys,
+  searchPlaceholder,
+  clearSearchAccessibilityLabel,
+  onSelect,
+  optionHeight = 50,
+  query,
+  setQuery,
+  close,
+}: SelectionPickerModalProps<T> & {
+  query: string;
+  setQuery: (value: string) => void;
+  close: () => void;
 }) {
   const theme = useCKTheme();
-  const { height: viewportHeight } = useWindowDimensions();
+  const { height: windowHeight } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const viewportHeight = isAdaptiveIOSDevice ? layout.height : windowHeight;
   const insets = useSafeAreaInsets();
-  const [query, setQuery] = useState('');
   const [listEndState, setListEndState] = useState({ key: '', atEnd: false });
   const [listLayoutState, setListLayoutState] = useState({ key: '', height: 0 });
   const filtered = useMemo(() => {
@@ -163,14 +230,14 @@ export function SelectionPickerModal<T extends string>({
       `${option.label} ${option.searchText ?? ''}`.toLocaleLowerCase().includes(needle),
     );
   }, [options, query]);
-  const contentHeight = Math.max(1, filtered.length) * 50;
+  const contentHeight = Math.max(1, filtered.length) * optionHeight;
   const availableHeight = Math.max(1, viewportHeight - insets.top - insets.bottom - 24);
   const sheetChromeHeight = searchPlaceholder ? 121 : 65;
   const maximumVisibleOptions = 10;
   const maximumSheetHeight = availableHeight * 0.88;
   const listHeight = Math.min(
     contentHeight,
-    maximumVisibleOptions * 50,
+    maximumVisibleOptions * optionHeight,
     Math.max(50, maximumSheetHeight - sheetChromeHeight),
   );
   const listStateKey = `${visible ? 'open' : 'closed'}:${query}:${filtered
@@ -180,177 +247,193 @@ export function SelectionPickerModal<T extends string>({
   const atListEnd = listEndState.key === listStateKey && listEndState.atEnd;
   const effectiveListHeight = Math.min(listHeight, renderedListHeight ?? listHeight);
   const canScroll = contentHeight > effectiveListHeight + 1;
-  const close = () => {
-    setQuery('');
-    onClose();
-  };
   return (
-    <Modal
-      animationType="fade"
-      navigationBarTranslucent
-      onRequestClose={close}
-      presentationStyle="overFullScreen"
-      statusBarTranslucent
-      transparent
-      visible={visible}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={styles.keyboardAvoider}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.keyboardAvoider}
+      <View
+        style={[
+          styles.overlay,
+          isAdaptiveIOSDevice && { backgroundColor: 'transparent' },
+          { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 },
+          isAdaptiveIOSDevice && {
+            paddingLeft: insets.left + 20,
+            paddingRight: insets.right + 20,
+          },
+        ]}
       >
+        <Pressable
+          accessibilityRole="none"
+          onPress={close}
+          style={styles.backdropHitTarget}
+          testID="selection-picker-backdrop"
+        />
         <View
-          style={[
-            styles.overlay,
-            { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 },
-          ]}
+          accessibilityViewIsModal
+          onAccessibilityEscape={close}
+          style={styles.modalHost}
+          testID="selection-picker-modal-host"
         >
-          <Pressable
-            accessibilityRole="none"
-            onPress={close}
-            style={styles.backdropHitTarget}
-            testID="selection-picker-backdrop"
-          />
-          <View
-            accessibilityViewIsModal
-            onAccessibilityEscape={close}
-            style={styles.modalHost}
-            testID="selection-picker-modal-host"
+          <GlassSurface
+            cornerRadius={ckRadius.tile}
+            testID="selection-picker-sheet"
+            style={[
+              styles.sheet,
+              {
+                height: Math.min(maximumSheetHeight, sheetChromeHeight + listHeight),
+                maxHeight: maximumSheetHeight,
+              },
+            ]}
           >
-            <Surface
-              radius={ckRadius.tile}
-              style={[
-                styles.sheet,
-                {
-                  height: Math.min(maximumSheetHeight, sheetChromeHeight + listHeight),
-                  maxHeight: maximumSheetHeight,
-                },
-              ]}
-            >
-              <CKText role="titleMedium" style={styles.titleRow}>
-                {title}
-              </CKText>
-              {searchPlaceholder ? (
-                <View
-                  style={[
-                    styles.search,
-                    { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.72) },
-                  ]}
-                >
-                  <Search color={theme.onSurfaceVariant} size={19} />
-                  <TextInput
-                    accessibilityLabel={searchPlaceholder}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={setQuery}
-                    placeholder={searchPlaceholder}
-                    placeholderTextColor={theme.onSurfaceVariant}
-                    style={[styles.searchInput, { color: theme.onSurface }]}
-                    value={query}
-                  />
-                  {query ? (
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel={clearSearchAccessibilityLabel ?? searchPlaceholder}
-                      onPress={() => setQuery('')}
-                    >
-                      <X color={theme.onSurfaceVariant} size={19} />
-                    </Pressable>
-                  ) : null}
-                </View>
-              ) : null}
+            <CKText role="titleMedium" style={styles.titleRow}>
+              {title}
+            </CKText>
+            {searchPlaceholder ? (
               <View
-                style={[styles.listViewport, { height: listHeight }]}
-                testID="selection-picker-list-viewport"
+                style={[
+                  styles.search,
+                  { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.72) },
+                ]}
               >
-                <FlatList
-                  data={filtered}
-                  initialNumToRender={16}
-                  keyboardShouldPersistTaps="handled"
-                  keyExtractor={(option) => option.key}
-                  maxToRenderPerBatch={16}
-                  renderItem={({ item: option }) => {
-                    const selected = option.key === selectedKey;
-                    return (
-                      <Pressable
-                        accessibilityLabel={option.label}
-                        accessibilityRole="radio"
-                        accessibilityState={{ checked: selected, disabled: option.disabled }}
-                        disabled={option.disabled}
-                        key={option.key}
-                        onPress={() => {
-                          setQuery('');
-                          onSelect(option.key);
-                        }}
-                        style={[
-                          styles.option,
-                          selected && {
-                            backgroundColor: colorWithAlpha(theme.primary, 0.13),
-                          },
-                          option.disabled && styles.disabled,
-                        ]}
-                      >
-                        {tintIcon(option.icon, selected ? theme.primary : theme.onSurfaceVariant)}
-                        <View style={styles.grow}>
-                          <CKText
-                            numberOfLines={1}
-                            style={selected ? styles.selectedLabel : undefined}
-                          >
-                            {option.label}
-                          </CKText>
-                          {option.subtitle ? (
-                            <CKText muted role="bodySmall" numberOfLines={1}>
-                              {option.subtitle}
-                            </CKText>
-                          ) : null}
-                        </View>
-                        {selected ? <Check color={theme.primary} size={20} /> : null}
-                      </Pressable>
-                    );
-                  }}
-                  onLayout={(event) =>
-                    setListLayoutState({
-                      key: listStateKey,
-                      height: event.nativeEvent.layout.height,
-                    })
-                  }
-                  onScroll={(event) => {
-                    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-                    setListEndState({
-                      key: listStateKey,
-                      atEnd: contentOffset.y + layoutMeasurement.height >= contentSize.height - 2,
-                    });
-                  }}
-                  scrollEnabled={canScroll}
-                  scrollEventThrottle={32}
-                  style={styles.scroll}
-                  testID="selection-picker-list"
-                  windowSize={7}
+                <Search color={theme.onSurfaceVariant} size={19} />
+                <TextInput
+                  accessibilityLabel={searchPlaceholder}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onChangeText={setQuery}
+                  placeholder={searchPlaceholder}
+                  placeholderTextColor={theme.onSurfaceVariant}
+                  style={[styles.searchInput, { color: theme.onSurface }]}
+                  value={query}
                 />
-                {canScroll && !atListEnd ? (
-                  <View
-                    accessible={false}
-                    pointerEvents="none"
-                    style={[
-                      styles.scrollCue,
-                      { backgroundColor: colorWithAlpha(theme.onSurface, 0.08) },
-                    ]}
-                    testID="selection-picker-scroll-cue"
+                {query ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={clearSearchAccessibilityLabel ?? searchPlaceholder}
+                    onPress={() => setQuery('')}
                   >
-                    <ChevronDown color={theme.onSurfaceVariant} size={18} />
-                  </View>
+                    <X color={theme.onSurfaceVariant} size={19} />
+                  </Pressable>
                 ) : null}
               </View>
-            </Surface>
-          </View>
+            ) : null}
+            <View
+              style={[styles.listViewport, { height: listHeight }]}
+              testID="selection-picker-list-viewport"
+            >
+              <FlatList
+                data={filtered}
+                initialNumToRender={16}
+                keyboardShouldPersistTaps="handled"
+                keyExtractor={(option) => option.key}
+                maxToRenderPerBatch={16}
+                renderItem={({ item: option }) => {
+                  const selected = selectedKeys
+                    ? selectedKeys.includes(option.key)
+                    : option.key === selectedKey;
+                  return (
+                    <Pressable
+                      accessibilityLabel={option.label}
+                      accessibilityRole={selectedKeys ? 'checkbox' : 'radio'}
+                      accessibilityState={{ checked: selected, disabled: option.disabled }}
+                      disabled={option.disabled}
+                      key={option.key}
+                      onPress={() => {
+                        if (!selectedKeys) setQuery('');
+                        onSelect(option.key);
+                      }}
+                      style={[
+                        styles.option,
+                        { minHeight: optionHeight },
+                        selected && {
+                          backgroundColor: colorWithAlpha(theme.primary, 0.13),
+                        },
+                        option.disabled && styles.disabled,
+                      ]}
+                    >
+                      {tintIcon(option.icon, selected ? theme.primary : theme.onSurfaceVariant)}
+                      <View style={styles.grow}>
+                        <CKText
+                          numberOfLines={1}
+                          style={selected ? styles.selectedLabel : undefined}
+                        >
+                          {option.label}
+                        </CKText>
+                        {option.subtitle ? (
+                          <CKText muted role="bodySmall" numberOfLines={1}>
+                            {option.subtitle}
+                          </CKText>
+                        ) : null}
+                      </View>
+                      {selected ? <Check color={theme.primary} size={20} /> : null}
+                      {option.trailingAction ? (
+                        <Pressable
+                          accessibilityRole="button"
+                          accessibilityLabel={option.trailingAction.label}
+                          hitSlop={8}
+                          onPress={(event) => {
+                            event.stopPropagation();
+                            option.trailingAction?.onPress();
+                          }}
+                          style={styles.trailingAction}
+                        >
+                          {option.trailingAction.icon}
+                        </Pressable>
+                      ) : null}
+                    </Pressable>
+                  );
+                }}
+                onLayout={(event) =>
+                  setListLayoutState({
+                    key: listStateKey,
+                    height: event.nativeEvent.layout.height,
+                  })
+                }
+                onScroll={(event) => {
+                  const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+                  setListEndState({
+                    key: listStateKey,
+                    atEnd: contentOffset.y + layoutMeasurement.height >= contentSize.height - 2,
+                  });
+                }}
+                // Option subtitles and large text can make rows taller than
+                // the estimate. Never disable native scrolling from that estimate.
+                scrollEnabled
+                scrollEventThrottle={32}
+                style={styles.scroll}
+                testID="selection-picker-list"
+                windowSize={7}
+              />
+              {canScroll && !atListEnd ? (
+                <View
+                  accessible={false}
+                  pointerEvents="none"
+                  style={[
+                    styles.scrollCue,
+                    { backgroundColor: colorWithAlpha(theme.onSurface, 0.08) },
+                  ]}
+                  testID="selection-picker-scroll-cue"
+                >
+                  <ChevronDown color={theme.onSurfaceVariant} size={18} />
+                </View>
+              ) : null}
+            </View>
+          </GlassSurface>
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   grow: { flex: 1 },
+  controlLabel: { flexGrow: 1, flexShrink: 1, flexBasis: 'auto', minWidth: 0 },
+  // Fill available width without flex-basis:0 collapsing the control's
+  // intrinsic height in a native, vertically measured pager/scroll page.
+  fillControl: { flexGrow: 1, flexShrink: 0, minHeight: ckControlHeight.compact },
   keyboardAvoider: { flex: 1 },
+  fullScrim: { flex: 1, backgroundColor: '#00000066' },
   pressed: { opacity: 0.72 },
   control: {
     minHeight: ckControlHeight.compact,
@@ -359,8 +442,10 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 14,
   },
+  controlGlass: { minHeight: ckControlHeight.compact },
   plainControl: { minWidth: 120, paddingHorizontal: 4 },
   positionHint: {
+    flexShrink: 0,
     minWidth: 34,
     minHeight: 24,
     paddingHorizontal: 7,
@@ -417,5 +502,6 @@ const styles = StyleSheet.create({
     borderRadius: ckRadius.control,
   },
   selectedLabel: { fontWeight: '700' },
+  trailingAction: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   disabled: { opacity: 0.46 },
 });

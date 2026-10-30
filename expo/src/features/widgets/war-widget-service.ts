@@ -4,6 +4,7 @@ import {
   playerClanTagStorageKey,
   warWidgetInfoStorageKey,
 } from '../../core/storage/storage';
+import { ImageAssets } from '../../core/assets/image-assets';
 import { APP_FEATURE_FLAGS, defaultFeatureFlagValue } from '../../core/feature-flags/feature-flags';
 import type {
   WarWidgetBookmarkedClan,
@@ -36,7 +37,9 @@ export function warInfoKeyForClan(tag: string): string {
 export function clanOptionsFromProfiles(
   profiles: readonly WarWidgetPlayerProfile[],
   bookmarkedClans: readonly WarWidgetBookmarkedClan[] = [],
+  hydratedClans: readonly WarWidgetPlayerProfile['clanOverview'][] = [],
 ): WarWidgetClanOption[] {
+  const hydratedByTag = new Map(hydratedClans.map((clan) => [normalizedClanTag(clan.tag), clan]));
   const byTag = new Map<string, WarWidgetClanOption>();
   for (const player of profiles) {
     const clan = player.clanOverview;
@@ -44,19 +47,19 @@ export function clanOptionsFromProfiles(
     byTag.set(normalizedClanTag(clan.tag), {
       tag: clan.tag,
       name: clan.name,
-      ...(clan.badgeUrls.small || clan.badgeUrls.medium || clan.badgeUrls.large
-        ? { badgeUrl: clan.badgeUrls.small || clan.badgeUrls.medium || clan.badgeUrls.large }
-        : undefined),
+      badgeUrl: ImageAssets.clanBadgeForTag(clan.tag, clan),
     });
   }
   for (const clan of bookmarkedClans) {
     if (!clan.tag || !clan.name) continue;
     const key = normalizedClanTag(clan.tag);
     if (!byTag.has(key)) {
+      const hydrated = hydratedByTag.get(key);
+      const badgeUrl = ImageAssets.clanBadgeForTag(clan.tag, hydrated ?? clan);
       byTag.set(key, {
         tag: clan.tag,
-        name: clan.name,
-        ...(clan.badgeUrl ? { badgeUrl: clan.badgeUrl } : undefined),
+        name: hydrated?.name || clan.name,
+        ...(badgeUrl ? { badgeUrl } : undefined),
       });
     }
   }
@@ -190,14 +193,16 @@ export class WarWidgetService {
     profiles: readonly WarWidgetPlayerProfile[],
     options: {
       bookmarkedClans?: readonly WarWidgetBookmarkedClan[];
+      hydratedClans?: readonly WarWidgetPlayerProfile['clanOverview'][];
       selectedPlayerTag?: string | null;
       refreshWarData?: boolean;
     } = {},
   ): Promise<void> {
-    const clans = clanOptionsFromProfiles(profiles, options.bookmarkedClans);
-    if (clans.length === 0) return;
+    const clans = clanOptionsFromProfiles(profiles, options.bookmarkedClans, options.hydratedClans);
     const selected =
-      selectedClanTagFromProfiles(profiles, options.selectedPlayerTag ?? null) ?? clans[0]!.tag;
+      selectedClanTagFromProfiles(profiles, options.selectedPlayerTag ?? null) ??
+      clans[0]?.tag ??
+      null;
     if (options.refreshWarData) await this.prepareClanWidgets(clans, selected);
     else {
       await this.cacheClanOptions(clans, selected);
@@ -216,7 +221,7 @@ export class WarWidgetService {
         if (!isRecord(value)) return [];
         const tag = String(value.tag ?? '');
         if (!tag) return [];
-        const badgeUrl = value.badgeUrl == null ? undefined : String(value.badgeUrl);
+        const badgeUrl = ImageAssets.widgetClanBadgeForTag(tag);
         return [
           {
             tag,
@@ -256,13 +261,18 @@ export class WarWidgetService {
   ): Promise<void> {
     if (syncConfig) await this.syncWidgetProxyConfig();
     const deduped = new Map<string, WarWidgetClanOption>();
-    for (const clan of clans) if (clan.tag) deduped.set(normalizedClanTag(clan.tag), clan);
+    for (const clan of clans)
+      if (clan.tag)
+        deduped.set(normalizedClanTag(clan.tag), {
+          ...clan,
+          badgeUrl: ImageAssets.widgetClanBadgeForTag(clan.tag),
+        });
     const options = [...deduped.values()].sort((left, right) =>
       compareNames(left.name, right.name),
     );
     await this.writeWidgetValue(WIDGET_STORAGE_KEYS.warClans, JSON.stringify(options));
-    const selected = selectedClanTag ?? options[0]?.tag ?? (await this.getCurrentPlayerClanTag());
-    if (selected) await this.writeWidgetValue(WIDGET_STORAGE_KEYS.warSelectedClan, selected);
+    const selected = selectedClanTag ?? options[0]?.tag ?? null;
+    await this.writeWidgetValue(WIDGET_STORAGE_KEYS.warSelectedClan, selected);
   }
 
   async refreshWarInfoForClan(clanTag: string, makeDefault = false): Promise<void> {
@@ -338,7 +348,15 @@ export class WarWidgetService {
       try {
         if (!clanTag) return buildNotInClanWidgetPayload(this.now());
         const response = await this.options.loadWarSummary(clanTag);
-        return buildWarWidgetPayload(response, clanTag, this.now());
+        const payload = JSON.parse(buildWarWidgetPayload(response, clanTag, this.now()));
+        if (!payload.clan) {
+          const clan = (await this.getCachedClanOptions()).find(
+            (option) => normalizedClanTag(option.tag) === key,
+          );
+          payload.clan = { name: clan?.name || clanTag, badgeUrlMedium: clan?.badgeUrl ?? null };
+          payload.secondaryText ||= payload.clan.name;
+        }
+        return JSON.stringify(payload);
       } catch (error) {
         await this.report('widget.fetch_war_summary', error);
         return buildWarWidgetErrorPayload(this.now());

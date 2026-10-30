@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View } from 'react-native';
 
 import type {
   PlayerActivityFeed,
   PlayerBattlelogData,
   PlayerCwlHistory,
+  PlayerLegendHistoryEntry,
   PlayerJoinLeavePage,
   PlayerJoinLeaveTotal,
   PlayerHistoryTypeValue,
@@ -12,6 +14,8 @@ import type {
 } from '../models';
 import { WarStatsFilter as WarStatsFilterModel } from '../models';
 import { canonicalTag } from '../../../core/domain/tags';
+import { ClashHandoffDialog } from '../../../ui';
+import { useClashGameHandoff } from '../../../ui/use-clash-game-handoff';
 import type {
   PlayerDetailPresentationActions,
   PlayerDetailRootProps,
@@ -19,6 +23,7 @@ import type {
 } from './player-detail-contracts';
 import { PlayerDetailScreen } from './player-detail-screen';
 import { exportPlayerWarStats } from './player-war-export';
+import { warHistoryRangeFilter } from '../../war/models/war-history-range';
 import { mergeJoinLeavePages } from './player-join-leave-state';
 
 export function PlayerDetailRoot(props: PlayerDetailRootProps) {
@@ -26,6 +31,7 @@ export function PlayerDetailRoot(props: PlayerDetailRootProps) {
 }
 
 function PlayerDetailRootState({
+  loading = false,
   player,
   service,
   actions: externalActions,
@@ -37,11 +43,15 @@ function PlayerDetailRootState({
   initialTab,
 }: PlayerDetailRootProps) {
   const [battlelog, setBattlelog] = useState<PlayerBattlelogData | null>(null);
+  const [legendHistory, setLegendHistory] = useState<readonly PlayerLegendHistoryEntry[] | null>(
+    null,
+  );
   const [activity, setActivity] = useState<PlayerActivityFeed | null>(null);
   const [cwlHistory, setCwlHistory] = useState<PlayerCwlHistory | null>(null);
   const [warStats, setWarStats] = useState<PlayerWarStats | null>(player.warStats);
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const [cachedClanTag, setCachedClanTag] = useState<string | null>(null);
+  const handoff = useClashGameHandoff(externalActions.openInGame);
   const [joinLeave, setJoinLeave] = useState<PlayerJoinLeavePage | null>(null);
   const [joinLeaveTotals, setJoinLeaveTotals] = useState<readonly PlayerJoinLeaveTotal[] | null>(
     null,
@@ -55,12 +65,16 @@ function PlayerDetailRootState({
     new Set(['home', 'builder', 'achievements']),
   );
   const loadingTabsRef = useRef<ReadonlySet<PlayerDetailTabKey>>(new Set());
+  const warFilterRef = useRef(new WarStatsFilterModel(warHistoryRangeFilter('days:90')));
+  const warRequestId = useRef(0);
   const activityTypeRef = useRef<PlayerHistoryTypeValue>('troop_level');
 
   const loadTab = useCallback(
     async (tab: PlayerDetailTabKey, force = false) => {
+      if (loading) return;
       if (!force && loadedTabsRef.current.has(tab)) return;
       if (!force && loadingTabsRef.current.has(tab)) return;
+      const warGeneration = tab === 'war' ? ++warRequestId.current : null;
       loadingTabsRef.current = new Set(loadingTabsRef.current).add(tab);
       setLoadingTabs((current) => new Set(current).add(tab));
       setErrorByTab((current) => ({ ...current, [tab]: undefined }));
@@ -68,16 +82,17 @@ function PlayerDetailRootState({
         if (tab === 'battles') setBattlelog(await service.loadPlayerBattlelog(player.tag, force));
         else if (tab === 'history')
           setActivity(await service.loadPlayerActivity(player.tag, activityTypeRef.current, force));
+        else if (tab === 'legendHistory')
+          setLegendHistory(await service.loadPlayerLegendHistory(player.tag));
         else if (tab === 'cwl')
           setCwlHistory(await service.loadPlayerCwlHistory(player.tag, force));
-        else if (tab === 'war')
-          setWarStats(
-            await service.loadPlayerWarStatsWithFilter(
-              player.tag,
-              WarStatsFilterModel.defaultFilter(),
-            ),
+        else if (tab === 'war') {
+          const result = await service.loadPlayerWarStatsWithFilter(
+            player.tag,
+            warFilterRef.current,
           );
-        else if (tab === 'joinLeave') {
+          if (warGeneration === warRequestId.current) setWarStats(result);
+        } else if (tab === 'joinLeave') {
           const [page, totals] = await Promise.all([
             service.loadPlayerJoinLeave(player.tag),
             service.loadPlayerJoinLeaveTotals(player.tag),
@@ -91,30 +106,29 @@ function PlayerDetailRootState({
           return next;
         });
       } catch (error) {
-        setErrorByTab((current) => ({
-          ...current,
-          [tab]: error instanceof Error ? error.message : String(error),
-        }));
+        if (tab !== 'war' || warGeneration === warRequestId.current)
+          setErrorByTab((current) => ({
+            ...current,
+            [tab]: error instanceof Error ? error.message : String(error),
+          }));
       } finally {
-        const loading = new Set(loadingTabsRef.current);
-        loading.delete(tab);
-        loadingTabsRef.current = loading;
-        setLoadingTabs((current) => {
-          const next = new Set(current);
-          next.delete(tab);
-          return next;
-        });
+        if (tab !== 'war' || warGeneration === warRequestId.current) {
+          const loading = new Set(loadingTabsRef.current);
+          loading.delete(tab);
+          loadingTabsRef.current = loading;
+          setLoadingTabs((current) => {
+            const next = new Set(current);
+            next.delete(tab);
+            return next;
+          });
+        }
       }
     },
-    [player.tag, service],
+    [loading, player.tag, service],
   );
 
-  useEffect(() => {
-    // Flutter keeps each profile page attached, so its stateful history tabs
-    // begin loading as soon as the player opens. Warm the equivalent Expo
-    // datasets here so switching destinations never starts a cold request.
-    for (const tab of ['battles', 'history', 'cwl', 'joinLeave'] as const) void loadTab(tab);
-  }, [loadTab]);
+  // PlayerDetailScreen loads the visible tab first and warms remaining tabs
+  // when idle. A second eager fan-out here competed with the opening screen.
 
   useEffect(() => {
     let active = true;
@@ -131,23 +145,27 @@ function PlayerDetailRootState({
 
   const updateWarFilter = useCallback(
     async (filter: WarStatsFilter) => {
+      const requestId = ++warRequestId.current;
+      warFilterRef.current = filter;
       setLoadingTabs((current) => new Set(current).add('war'));
       try {
-        setWarStats(await service.loadPlayerWarStatsWithFilter(player.tag, filter));
-        setErrorByTab((current) => ({ ...current, war: undefined }));
+        const result = await service.loadPlayerWarStatsWithFilter(player.tag, filter);
+        if (requestId === warRequestId.current) {
+          setWarStats(result);
+          setErrorByTab((current) => ({ ...current, war: undefined }));
+        }
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        setErrorByTab((current) => ({ ...current, war: undefined }));
-        externalActions.showMessage(message);
+        if (requestId === warRequestId.current) throw error;
       } finally {
-        setLoadingTabs((current) => {
-          const next = new Set(current);
-          next.delete('war');
-          return next;
-        });
+        if (requestId === warRequestId.current)
+          setLoadingTabs((current) => {
+            const next = new Set(current);
+            next.delete('war');
+            return next;
+          });
       }
     },
-    [externalActions, player.tag, service],
+    [player.tag, service],
   );
   const loadMoreJoinLeave = useCallback(async () => {
     if (
@@ -201,6 +219,7 @@ function PlayerDetailRootState({
   const actions = useMemo<PlayerDetailPresentationActions>(
     () => ({
       ...externalActions,
+      openInGame: handoff.request,
       toggleBookmark: async (nextPlayer) => {
         const previous = isBookmarked;
         setIsBookmarked(!previous);
@@ -216,12 +235,18 @@ function PlayerDetailRootState({
       loadMoreJoinLeave,
       updateWarFilter,
       exportWarStats: (filter) =>
-        exportPlayerWarStats(service.apiV2Url, player.tag, player.name, filter),
+        exportPlayerWarStats(
+          (body) => service.downloadWarStatsExport(body),
+          player.tag,
+          player.name,
+          filter,
+        ),
       loadWarFilterPresets: () => service.loadWarFilterPresets(),
       saveWarFilterPresets: (presets) => service.saveWarFilterPresets(presets),
     }),
     [
       externalActions,
+      handoff.request,
       isBookmarked,
       loadActivity,
       loadMoreJoinLeave,
@@ -234,26 +259,36 @@ function PlayerDetailRootState({
   );
 
   return (
-    <PlayerDetailScreen
-      initialTab={initialTab}
-      actions={actions}
-      model={{
-        player,
-        bookmarked: isBookmarked,
-        linkedAccount,
-        verifiedTracking,
-        battlelog,
-        activity,
-        cwlHistory,
-        warStats,
-        currentWar,
-        currentCwl,
-        cachedClanTag,
-        joinLeave,
-        joinLeaveTotals,
-        loadingTabs,
-        errorByTab,
-      }}
-    />
+    <View style={{ flex: 1 }}>
+      <PlayerDetailScreen
+        loading={loading}
+        initialTab={initialTab}
+        actions={actions}
+        model={{
+          player,
+          bookmarked: isBookmarked,
+          linkedAccount,
+          verifiedTracking,
+          battlelog,
+          activity,
+          cwlHistory,
+          legendHistory,
+          warStats,
+          currentWar,
+          currentCwl,
+          cachedClanTag,
+          joinLeave,
+          joinLeaveTotals,
+          loadingTabs,
+          errorByTab,
+        }}
+      />
+      <ClashHandoffDialog
+        visible={handoff.visible}
+        onCancel={handoff.cancel}
+        onConfirm={handoff.confirm}
+        allowRemember
+      />
+    </View>
   );
 }

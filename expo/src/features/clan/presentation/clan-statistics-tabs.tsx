@@ -1,500 +1,239 @@
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
+import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
-import {
-  ArrowDown,
-  ArrowUp,
-  Calendar,
-  ChevronRight,
-  Globe2,
-  Handshake,
-  Percent,
-  Shuffle,
-  SlidersHorizontal,
-  Star,
-  Trophy,
-  Users,
-} from 'lucide-react-native';
+import { ArrowDown, ArrowUp, ChevronRight, Globe2, Trophy } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {
   CKText,
-  EmptyState,
-  LoadingIndicator,
+  CardStatsFooter,
+  ErrorState,
+  SkeletonContent,
   MobileWebImage,
   PillSurface,
   ResponsiveGrid,
-  SearchField,
-  SelectionPicker,
   Surface,
-  colorWithAlpha,
+  ckColors,
   useCKTheme,
 } from '../../../ui';
-import type { ClanWarStats, CwlRankingHistoryEntry } from '../models';
-import { ClanWarStatsFilter } from '../models/clan-war-stats-filter';
-import type { PlayerWarStats } from '../../player/models/player-war';
+import type { CwlRankingHistoryEntry } from '../models';
+import type { ClanCurrentRankings } from '../data/clan-service';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import {
-  ClanFilterBar,
-  ClanTabEmpty,
-  FilterPill,
-  SummaryChip,
-  SummaryRail,
-} from './clan-tab-components';
-import type { WarTypes } from './clan-activity-tabs';
-import { ClanWarStatsRangeModal, type WarStatsRangeMode } from './clan-war-stats-range-modal';
-import { clanWarStatsFilterForRange } from './clan-war-stats-range';
+import { ClanTabEmpty } from './clan-tab-components';
 
-type StatsSort =
-  'three' | 'two' | 'one' | 'zero' | 'destruction' | 'stars' | 'participation' | 'missed';
-
-export function ClanStatisticsTab({
+type Ranking = {
+  title: string;
+  value: number;
+  globalRank: number | null;
+  localRank: number | null;
+  art: string;
+};
+export function ClanRankingsTab({
   model,
   actions,
-  warTypes,
-  setWarTypes,
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
-  warTypes: WarTypes;
-  setWarTypes: (value: WarTypes) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
-  const [stats, setStats] = useState<ClanWarStats | null>(model.clan.clanWarStats);
-  const [loading, setLoading] = useState(stats === null);
-  const [query, setQuery] = useState('');
-  const [sort, setSort] = useState<StatsSort>('three');
-  const [currentOnly, setCurrentOnly] = useState(false);
-  const [currentTownHall, setCurrentTownHall] = useState(false);
-  const [rangeMode, setRangeMode] = useState<WarStatsRangeMode>('wars');
-  const [warRange, setWarRange] = useState(50);
-  const [dayRange, setDayRange] = useState(90);
-  const [showRange, setShowRange] = useState(false);
-  const selectedTypes = [
-    warTypes.cwl && 'cwl',
-    warTypes.random && 'random',
-    warTypes.friendly && 'friendly',
-  ].filter(Boolean) as string[];
-  const sortOptions: readonly { key: StatsSort; label: string }[] = [
-    { key: 'three', label: t('warStarsThree') },
-    { key: 'two', label: t('warStarsTwo') },
-    { key: 'one', label: t('warStarsOne') },
-    { key: 'zero', label: t('warStarsZero') },
-    { key: 'destruction', label: t('warDestructionAverage') },
-    { key: 'stars', label: t('warStarsAverage') },
-    { key: 'participation', label: t('warParticipation') },
-    { key: 'missed', label: t('warAttacksMissed') },
-  ];
-  const sortLabel = sortOptions.find((option) => option.key === sort)?.label ?? sort;
-  const rangeLabel =
-    rangeMode === 'wars'
-      ? t('warStatsRangeWarsCompact', { number: warRange })
-      : t('warStatsRangeDaysCompact', { number: dayRange });
-  const load = async (mode: WarStatsRangeMode, wars: number, days: number) => {
-    setLoading(true);
-    try {
-      setStats(
-        await actions.loadWarStats(model.clan, clanWarStatsFilterForRange(mode, wars, days)),
-      );
-    } catch {
-      // Flutter keeps the previously loaded period visible on range errors.
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const [data, setData] = useState<ClanCurrentRankings>();
+  const [failed, setFailed] = useState(false);
+  const [revision, setRevision] = useState(0);
   useEffect(() => {
-    if (model.clan.clanWarStats) return;
     let active = true;
     void actions
-      .loadWarStats(model.clan, new ClanWarStatsFilter())
+      .loadCurrentRankings(model.clan.tag)
       .then((value) => {
-        if (active) setStats(value);
+        if (active) setData(value);
       })
-      .finally(() => {
-        if (active) setLoading(false);
+      .catch(() => {
+        if (active) setFailed(true);
       });
     return () => {
       active = false;
     };
-  }, [actions, model.clan]);
-  const players = useMemo(() => {
-    const currentTags = new Set(
-      model.clan.memberList.map((member) => member.tag.trim().toUpperCase()),
-    );
-    const types = [
-      warTypes.cwl && 'cwl',
-      warTypes.random && 'random',
-      warTypes.friendly && 'friendly',
-    ].filter(Boolean) as string[];
-    const result = (stats?.players ?? []).filter(
-      (player) =>
-        (!currentOnly || currentTags.has(player.tag.trim().toUpperCase())) &&
-        (!query ||
-          player.name.toLowerCase().includes(query.toLowerCase()) ||
-          player.tag.toLowerCase().includes(query.toLowerCase())),
-    );
-    result.sort((a, b) => statValue(b, sort, types) - statValue(a, sort, types));
-    return result;
-  }, [currentOnly, model.clan.memberList, query, sort, stats, warTypes]);
-  const overview = warOverview(players, selectedTypes, currentTownHall);
-  const cards = players.map((player) => (
-    <WarStatsPlayerCard
-      key={player.tag}
-      player={player}
-      selectedTypes={selectedTypes}
-      currentTownHall={currentTownHall}
-    />
-  ));
+  }, [actions, model.clan.tag, revision]);
+  const category = (
+    value: ClanCurrentRankings['homeVillage'] | undefined,
+    title: string,
+    art: string,
+  ): Ranking[] => {
+    if (!value) return [];
+    const global = value.placements.find((item) => item.locationId === 'global' && item.rank > 0);
+    const local = model.clan.location?.isCountry
+      ? value.placements.find(
+          (item) => item.locationId === String(model.clan.location!.id) && item.rank > 0,
+        )
+      : undefined;
+    // A missing placement is not rank zero. Never derive ranks from the clan's
+    // stat value or from this subset of leaderboard records.
+    if (!global && !local) return [];
+    return [
+      {
+        title,
+        art,
+        value: global?.points ?? local!.points,
+        globalRank: global?.rank ?? null,
+        localRank: local?.rank ?? null,
+      },
+    ];
+  };
+  const rankings = data
+    ? [
+        ...category(data.homeVillage, t('clanPointsTitle'), ImageAssets.trophies),
+        ...category(data.builderBase, t('clanBuilderBasePoints'), ImageAssets.builderBaseTrophy),
+        ...category(data.clanCapital, t('clanCapitalPoints'), ImageAssets.capitalTrophy),
+        ...category(data.donations, t('gameDonations'), 'up'),
+        ...category(data.donationsReceived, t('gameDonationsReceived'), 'down'),
+        ...category(data.warWins, t('warWinsTitle'), ImageAssets.sword),
+        ...category(data.warWinStreak, t('clanWinStreakTitle'), 'fire'),
+        ...category(data.capitalGold, t('rankingsCapitalGold'), ImageAssets.capitalTrophy),
+      ]
+    : [];
   return (
     <View style={styles.tab}>
-      <View testID="clan-war-stats-search-row">
-        <SearchField
-          value={query}
-          onChangeText={setQuery}
-          placeholder={t('warStatsSearchPlaceholder')}
-        />
-      </View>
-      <ClanFilterBar
-        middle={
-          <View testID="clan-war-stats-controls-row" style={styles.statsControlPickers}>
-            <SelectionPicker
-              accessibilityLabel={t('filtersDateRange')}
-              externallyManaged
-              fillWidth
-              leading={<SlidersHorizontal size={16} color={theme.onSurfaceVariant} />}
-              onOpen={() => setShowRange(true)}
-              onSelect={() => undefined}
-              options={[{ key: 'range', label: rangeLabel }]}
-              selectedKey="range"
-              title={t('filtersDateRange')}
-            />
-            <SelectionPicker
-              accessibilityLabel={sortLabel}
-              fillWidth
-              leading={<Star size={16} color={theme.onSurfaceVariant} />}
-              onSelect={setSort}
-              options={sortOptions}
-              selectedKey={sort}
-              title={sortLabel}
-            />
-          </View>
-        }
-        chips={
-          <>
-            <FilterPill
-              label={t('cwlTitle')}
-              imageUrl={ImageAssets.cwlSwordsNoBorder}
-              selected={warTypes.cwl}
-              onPress={() => setWarTypes({ ...warTypes, cwl: !warTypes.cwl })}
-            />
-            <FilterPill
-              label={t('warFiltersRandom')}
-              icon={<Shuffle size={15} color={theme.onSurfaceVariant} />}
-              selected={warTypes.random}
-              onPress={() => setWarTypes({ ...warTypes, random: !warTypes.random })}
-            />
-            <FilterPill
-              label={t('warFiltersFriendly')}
-              icon={<Handshake size={15} color={theme.onSurfaceVariant} />}
-              selected={warTypes.friendly}
-              onPress={() => setWarTypes({ ...warTypes, friendly: !warTypes.friendly })}
-            />
-            <FilterPill
-              label={t('warStatsCurrentTownHall')}
-              selected={currentTownHall}
-              onPress={() => setCurrentTownHall(!currentTownHall)}
-            />
-            <FilterPill
-              label={t('warStatsCurrentMembers')}
-              selected={currentOnly}
-              onPress={() => setCurrentOnly(!currentOnly)}
-            />
-          </>
-        }
-      />
-      <View testID="clan-war-stats-summary-row">
-        <SummaryRail>
-          <SummaryChip
-            value={`${overview.activePlayers}`}
-            label={t('clanMembers')}
-            icon={<Users size={18} color={theme.primary} />}
-          />
-          <SummaryChip value={`${overview.attacks}`} label={t('warAttacksTitle')} />
-          <SummaryChip
-            value={overview.averageStars.toFixed(2)}
-            label={t('warStarsAverage')}
-            icon={<Star size={18} color={theme.primary} />}
-          />
-          <SummaryChip
-            value={`${overview.averageDestruction.toFixed(1)}%`}
-            label={t('warDestructionAverage')}
-            icon={<Percent size={18} color={theme.primary} />}
-          />
-          <SummaryChip value={`${overview.missed}`} label={t('warAttacksMissedShort')} />
-        </SummaryRail>
-      </View>
-      {loading ? (
-        <View style={styles.center}>
-          <LoadingIndicator />
-        </View>
-      ) : players.length === 0 ? (
-        <EmptyState title={t('generalNoFilteredResults')} body={t('generalAdjustFilters')} />
-      ) : (
-        <View style={styles.list}>{cards}</View>
-      )}
-      {showRange ? (
-        <ClanWarStatsRangeModal
-          initialMode={rangeMode}
-          initialWarRange={warRange}
-          initialDayRange={dayRange}
-          onClose={() => setShowRange(false)}
-          onApply={(selection) => {
-            setShowRange(false);
-            if (
-              selection.mode === rangeMode &&
-              selection.wars === warRange &&
-              selection.days === dayRange
-            ) {
-              return;
-            }
-            setRangeMode(selection.mode);
-            setWarRange(selection.wars);
-            setDayRange(selection.days);
-            void load(selection.mode, selection.wars, selection.days);
+      {failed ? (
+        <ErrorState
+          title={t('generalFailed')}
+          actionLabel={t('generalRetry')}
+          onAction={() => {
+            setFailed(false);
+            setData(undefined);
+            setRevision((value) => value + 1);
           }}
         />
-      ) : null}
-    </View>
-  );
-}
-
-function statValue(player: PlayerWarStats, sort: StatsSort, types: string[]): number {
-  const stats = player.getStatsForTypes(types);
-  if (sort === 'destruction') return stats.averageDestruction;
-  if (sort === 'stars') return stats.averageStars;
-  if (sort === 'participation') return stats.warsCounts;
-  if (sort === 'missed') return stats.missedAttacks;
-  const stars = sort === 'three' ? '3' : sort === 'two' ? '2' : sort === 'one' ? '1' : '0';
-  return stats.starsCount[stars] ?? 0;
-}
-function warOverview(
-  players: readonly PlayerWarStats[],
-  types: string[],
-  currentTownHall: boolean,
-) {
-  let activePlayers = 0,
-    attacks = 0,
-    totalStars = 0,
-    missed = 0,
-    destruction = 0;
-  players.forEach((player) => {
-    const stats = player.getStatsForTypes(types);
-    const counts = currentTownHall
-      ? stats.getStarsCountAgainstTh(player.townhallLevel)
-      : stats.starsCount;
-    const count = Object.values(counts).reduce((sum, value) => sum + value, 0);
-    if (!count) return;
-    activePlayers += 1;
-    attacks += count;
-    missed += stats.missedAttacks;
-    destruction += stats.averageDestruction * count;
-    Object.entries(counts).forEach(([star, value]) => (totalStars += Number(star) * value));
-  });
-  return {
-    activePlayers,
-    attacks,
-    missed,
-    averageStars: attacks ? totalStars / attacks : 0,
-    averageDestruction: attacks ? destruction / attacks : 0,
-  };
-}
-function WarStatsPlayerCard({
-  player,
-  selectedTypes,
-  currentTownHall,
-}: {
-  player: PlayerWarStats;
-  selectedTypes: string[];
-  currentTownHall: boolean;
-}) {
-  const stats = player.getStatsForTypes(selectedTypes);
-  const stars = currentTownHall
-    ? stats.getStarsCountAgainstTh(player.townhallLevel)
-    : stats.starsCount;
-  return (
-    <Surface radius={18} style={styles.playerCard}>
-      <MobileWebImage
-        imageUrl={ImageAssets.townHall(player.townhallLevel)}
-        style={styles.playerTownHall}
-      />
-      <View style={styles.grow}>
-        <CKText style={styles.bold}>{player.name}</CKText>
-        <CKText muted role="labelMedium">
-          {player.tag}
-        </CKText>
-      </View>
-      {['3', '2', '1', '0'].map((value) => (
-        <View key={value} style={styles.starMetric}>
-          <CKText role="labelSmall">{value}★</CKText>
-          <CKText role="labelLarge">{stars[value] ?? 0}</CKText>
-        </View>
-      ))}
-    </Surface>
-  );
-}
-
-type RankingCategory = 'activity' | 'war' | 'points';
-export function ClanRankingsTab({ model }: { model: ClanInfoPresentationModel }) {
-  const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
-  const [filter, setFilter] = useState<'all' | RankingCategory>('all');
-  const [season, setSeason] = useState(new Date(2026, 6, 1));
-  const offset = Math.max(
-    0,
-    Math.min(24, (2026 - season.getFullYear()) * 12 + 7 - (season.getMonth() + 1)),
-  );
-  const donated = model.clan.memberList.reduce((sum, member) => sum + member.donations, 0);
-  const received = model.clan.memberList.reduce((sum, member) => sum + member.donationsReceived, 0);
-  const rankings = [
-    ranking(t('gameDonations'), donated, 'activity', 42 + offset * 7, 3 + offset, 'up'),
-    ranking(t('gameDonationsReceived'), received, 'activity', 98 + offset * 7, 8 + offset, 'down'),
-    ranking(
-      t('warWinsTitle'),
-      model.clan.warWins,
-      'war',
-      118 + offset * 7,
-      7 + offset,
-      ImageAssets.sword,
-    ),
-    ranking(
-      t('clanWinStreakTitle'),
-      model.clan.warWinStreak,
-      'war',
-      210 + offset * 7,
-      12 + offset,
-      'fire',
-    ),
-    ranking(
-      t('clanPointsTitle'),
-      model.clan.clanPoints,
-      'points',
-      164 + offset * 7,
-      16 + offset,
-      ImageAssets.trophies,
-    ),
-    ranking(
-      t('clanBuilderBasePoints'),
-      model.clan.clanBuilderBasePoints,
-      'points',
-      187 + offset * 7,
-      18 + offset,
-      ImageAssets.builderBaseTrophy,
-    ),
-    ranking(
-      t('clanCapitalPoints'),
-      model.clan.clanCapitalPoints,
-      'points',
-      73 + offset * 7,
-      6 + offset,
-      ImageAssets.capitalTrophy,
-    ),
-  ];
-  const shown = rankings.filter((item) => filter === 'all' || item.category === filter);
-  const cards = shown.map((item) => (
-    <RankingCard
-      key={item.title}
-      item={item}
-      countryCode={model.clan.location?.countryCode ?? null}
-    />
-  ));
-  return (
-    <View style={styles.tab}>
-      <ClanFilterBar
-        actions={
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={t('clanRankingsSelectSeason')}
-            onPress={() => setSeason(new Date(season.getFullYear(), season.getMonth() - 1, 1))}
-            style={styles.calendar}
+      ) : !data ? (
+        <SkeletonContent loading>
+          <ResponsiveGrid
+            minItemWidth={layout.isExpanded ? 400 : 340}
+            minColumns={layout.isExpanded ? 2 : 1}
+            maxColumns={
+              layout.isExpanded
+                ? layout.isTablet && layout.width > layout.height
+                  ? 3
+                  : 2
+                : Platform.OS === 'web' && width >= 900
+                  ? 3
+                  : 1
+            }
+            gap={10}
           >
-            <Calendar size={18} color={theme.onSurfaceVariant} />
-          </Pressable>
-        }
-        middle={
-          <SummaryChip
-            value={new Intl.DateTimeFormat(toIntlLocale(locale), {
-              year: 'numeric',
-              month: 'long',
-            }).format(season)}
-            label={t('clanRankingsSeason')}
-          />
-        }
-        chips={
-          <>
-            <FilterPill
-              label={t('generalAll')}
-              selected={filter === 'all'}
-              onPress={() => setFilter('all')}
-            />
-            <FilterPill
-              label={t('clanRankingsFilterActivity')}
-              selected={filter === 'activity'}
-              onPress={() => setFilter('activity')}
-            />
-            <FilterPill
-              label={t('clanRankingsFilterWar')}
-              selected={filter === 'war'}
-              onPress={() => setFilter('war')}
-            />
-            <FilterPill
-              label={t('clanRankingsFilterPoints')}
-              selected={filter === 'points'}
-              onPress={() => setFilter('points')}
-            />
-          </>
-        }
-      />
-      {desktop ? (
-        <ResponsiveGrid minItemWidth={340} maxColumns={3} gap={10}>
-          {cards}
-        </ResponsiveGrid>
+            {[ImageAssets.trophies, ImageAssets.builderBaseTrophy, ImageAssets.capitalTrophy].map(
+              (art, index) => (
+                <RankingCard
+                  key={art}
+                  item={{
+                    title: [
+                      t('clanPointsTitle'),
+                      t('clanBuilderBasePoints'),
+                      t('clanCapitalPoints'),
+                    ][index]!,
+                    art,
+                    value: 10000,
+                    globalRank: 100,
+                    localRank: 100,
+                  }}
+                  countryCode={model.clan.location?.countryCode ?? null}
+                />
+              ),
+            )}
+          </ResponsiveGrid>
+        </SkeletonContent>
+      ) : !rankings.length ? (
+        <ClanTabEmpty title={t('sideRankingsEmptyTitle')} />
       ) : (
-        <View style={styles.list}>{cards}</View>
+        <ResponsiveGrid
+          minItemWidth={layout.isExpanded ? 400 : 340}
+          minColumns={layout.isExpanded ? 2 : 1}
+          maxColumns={
+            layout.isExpanded
+              ? layout.isTablet && layout.width > layout.height
+                ? 3
+                : 2
+              : Platform.OS === 'web' && width >= 900
+                ? 3
+                : 1
+          }
+          gap={10}
+        >
+          {rankings.map((item) => (
+            <RankingCard
+              key={item.title}
+              item={item}
+              countryCode={model.clan.location?.countryCode ?? null}
+            />
+          ))}
+        </ResponsiveGrid>
       )}
     </View>
   );
 }
-type Ranking = {
-  title: string;
-  value: number;
-  category: RankingCategory;
-  globalRank: number;
-  localRank: number;
-  art: string;
-};
-function ranking(
-  title: string,
-  value: number,
-  category: RankingCategory,
-  globalRank: number,
-  localRank: number,
-  art: string,
-): Ranking {
-  return { title, value, category, globalRank, localRank, art };
-}
 function RankingCard({ item, countryCode }: { item: Ranking; countryCode: string | null }) {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  // Wider cards separate the metric from its placements. Keeping the compact
+  // row below intact preserves the phone layout while long values stay whole.
+  if (layout.isExpanded) {
+    return (
+      <Surface radius={22} style={styles.expandedRankingCard}>
+        <View style={styles.expandedRankingHeading}>
+          {item.art.startsWith('http') ? (
+            <MobileWebImage imageUrl={item.art} style={styles.expandedRankingArt} />
+          ) : item.art === 'up' ? (
+            <ArrowUp color="#14A37F" size={28} />
+          ) : item.art === 'down' ? (
+            <ArrowDown color="#E35D4F" size={28} />
+          ) : (
+            <Trophy color={theme.primary} size={28} />
+          )}
+          <CKText role="rowTitle" style={styles.expandedRankingTitle}>
+            {item.title}
+          </CKText>
+        </View>
+        <CKText
+          role="titleLarge"
+          style={styles.expandedRankingValue}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.7}
+        >
+          {item.value.toLocaleString(toIntlLocale(locale))}
+        </CKText>
+        <View style={styles.expandedRankingPlacements}>
+          {item.globalRank !== null ? (
+            <ExpandedRank
+              label={t('statsWorld')}
+              icon={<Globe2 size={20} color={theme.onSurfaceVariant} />}
+              value={item.globalRank}
+            />
+          ) : null}
+          {item.localRank !== null && countryCode ? (
+            <ExpandedRank
+              label={t('legendsCountryTitle')}
+              icon={
+                <MobileWebImage
+                  imageUrl={ImageAssets.flag(countryCode)}
+                  style={styles.expandedFlag}
+                />
+              }
+              value={item.localRank}
+            />
+          ) : null}
+        </View>
+      </Surface>
+    );
+  }
   return (
     <Surface radius={18} style={styles.rankingCard}>
       {item.art.startsWith('http') ? (
         <MobileWebImage imageUrl={item.art} style={styles.rankingArt} />
       ) : item.art === 'up' ? (
-        <ArrowUp color="#22A35A" />
+        <ArrowUp color="#14A37F" />
       ) : item.art === 'down' ? (
         <ArrowDown color="#E35D4F" />
       ) : (
@@ -506,25 +245,48 @@ function RankingCard({ item, countryCode }: { item: Ranking; countryCode: string
           {item.value.toLocaleString(toIntlLocale(locale))}
         </CKText>
       </View>
-      <Rank icon={<Globe2 size={17} color={theme.onSurfaceVariant} />} value={item.globalRank} />
-      <Rank
-        icon={
-          countryCode ? (
-            <MobileWebImage imageUrl={ImageAssets.flag(countryCode)} style={styles.flag} />
-          ) : (
-            <Trophy size={17} color={theme.onSurfaceVariant} />
-          )
-        }
-        value={item.localRank}
-      />
+      {item.globalRank !== null ? (
+        <Rank icon={<Globe2 size={17} color={theme.onSurfaceVariant} />} value={item.globalRank} />
+      ) : null}
+      {item.localRank !== null && countryCode ? (
+        <Rank
+          icon={<MobileWebImage imageUrl={ImageAssets.flag(countryCode)} style={styles.flag} />}
+          value={item.localRank}
+        />
+      ) : null}
     </Surface>
   );
 }
+function ExpandedRank({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+}) {
+  const { locale } = useI18n();
+  return (
+    <View style={styles.expandedRank}>
+      {icon}
+      <View style={styles.expandedRankText}>
+        <CKText muted role="metadata">
+          {label}
+        </CKText>
+        <CKText role="rowTitle" style={styles.expandedRankValue}>
+          #{value.toLocaleString(toIntlLocale(locale))}
+        </CKText>
+      </View>
+    </View>
+  );
+}
 function Rank({ icon, value }: { icon: React.ReactNode; value: number }) {
+  const { locale } = useI18n();
   return (
     <View style={styles.rank}>
       {icon}
-      <CKText role="labelLarge">#{value}</CKText>
+      <CKText role="labelLarge">#{value.toLocaleString(toIntlLocale(locale))}</CKText>
     </View>
   );
 }
@@ -538,7 +300,8 @@ export function ClanCwlHistoryTab({
 }) {
   const { t, locale } = useI18n();
   const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const [entries, setEntries] = useState<readonly CwlRankingHistoryEntry[]>();
   const [error, setError] = useState(false);
   const load = async () => {
@@ -565,9 +328,28 @@ export function ClanCwlHistoryTab({
   }, [actions, model.clan.tag]);
   if (!entries && !error)
     return (
-      <View style={styles.center}>
-        <LoadingIndicator />
-      </View>
+      <SkeletonContent loading style={styles.tab}>
+        {[0, 1, 2].map((index) => (
+          <CwlCard
+            key={index}
+            entry={{
+              season: '2026-01',
+              league: model.clan.warLeague?.name ?? 'Champion League I',
+              leagueId: model.clan.warLeague?.id ?? 0,
+              rank: 1,
+              stars: 100,
+              destruction: 100,
+              roundsWon: 1,
+              roundsTied: 1,
+              roundsLost: 1,
+              hasStanding: true,
+            }}
+            movement={null}
+            locale={locale}
+            onPress={() => undefined}
+          />
+        ))}
+      </SkeletonContent>
     );
   if (error)
     return (
@@ -585,12 +367,13 @@ export function ClanCwlHistoryTab({
       entry={entry}
       movement={cwlMovement(entries, index, model.clan.warLeague?.id)}
       locale={locale}
+      onPress={() => actions.openHistoricalCwl(model.clan, entry.season, entry.league ?? undefined)}
     />
   ));
   return (
     <View style={styles.tab}>
       {desktop ? (
-        <ResponsiveGrid minItemWidth={420} maxColumns={2} gap={10}>
+        <ResponsiveGrid minItemWidth={layout.isExpanded ? 300 : 420} maxColumns={2} gap={10}>
           {cards}
         </ResponsiveGrid>
       ) : (
@@ -625,204 +408,102 @@ export function CwlCard({
   entry,
   movement,
   locale,
+  onPress,
 }: {
   entry: CwlRankingHistoryEntry;
   movement: 'up' | 'down' | null;
   locale: string;
+  onPress?: () => void;
 }) {
   const theme = useCKTheme();
-  const shellGradientId = `cwl-card-shell-gradient-${useId().replace(/:/g, '')}`;
-  const materialGradientId = `cwl-card-material-gradient-${useId().replace(/:/g, '')}`;
-  const highlightId = `cwl-card-highlight-${useId().replace(/:/g, '')}`;
   const league = entry.league ?? 'Unranked';
   const date = new Date(`${entry.season.slice(0, 7)}-01T00:00:00`);
-  const accent = cwlLeagueAccent(league);
-  const surfaceContainer = mixColors(theme.surface, theme.surfaceContainerHighest, 0.375);
+  const season = Number.isNaN(date.getTime())
+    ? entry.season
+    : new Intl.DateTimeFormat(toIntlLocale(locale), { month: 'long', year: 'numeric' }).format(
+        date,
+      );
+  const number = new Intl.NumberFormat(toIntlLocale(locale));
   return (
-    <View
-      testID={`clan-cwl-card-${entry.season}`}
-      style={[
-        styles.cwlCardShell,
-        {
-          shadowColor: '#000000',
-          shadowOpacity: 0.16,
-          shadowRadius: 10,
-          shadowOffset: { width: 0, height: 4 },
-        },
-      ]}
-    >
-      <Svg
-        testID={`clan-cwl-card-shell-${entry.season}`}
-        pointerEvents="none"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        style={StyleSheet.absoluteFill}
+    <Surface style={styles.cwlCard}>
+      <Pressable
+        testID={`clan-cwl-card-${entry.season}`}
+        onPress={onPress}
+        disabled={!onPress}
+        accessibilityRole={onPress ? 'button' : undefined}
+        accessibilityLabel={`${season}, ${league}, ${entry.hasStanding && entry.rank > 0 ? '#' + entry.rank : '—'}`}
+        style={({ pressed }) => (pressed && onPress ? { opacity: 0.75 } : undefined)}
       >
-        <Defs>
-          <LinearGradient id={shellGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0" stopColor="#FFFFFF" stopOpacity={0.3} />
-            <Stop offset="0.333333" stopColor={theme.outlineVariant} stopOpacity={0.22} />
-            <Stop offset="0.666667" stopColor="#FFFFFF" stopOpacity={0.07} />
-            <Stop offset="1" stopColor={theme.outlineVariant} stopOpacity={0.18} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100" height="100" fill={`url(#${shellGradientId})`} />
-      </Svg>
-      <View testID={`clan-cwl-card-inner-${entry.season}`} style={styles.cwlCardInner}>
-        <Svg
-          testID={`clan-cwl-card-gradient-${entry.season}`}
-          pointerEvents="none"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          style={StyleSheet.absoluteFill}
-        >
-          <Defs>
-            <LinearGradient id={materialGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <Stop
-                offset="0"
-                stopColor={alphaBlend(accent, 0.3, theme.surfaceContainerHighest, 0.46)}
-              />
-              <Stop offset="0.5" stopColor={colorWithAlpha(surfaceContainer, 0.34)} />
-              <Stop offset="1" stopColor={alphaBlend(accent, 0.13, theme.surface, 0.28)} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="100" height="100" fill={`url(#${materialGradientId})`} />
-        </Svg>
-        <Svg
-          testID={`clan-cwl-card-highlight-${entry.season}`}
-          pointerEvents="none"
-          viewBox="0 0 100 1.1"
-          preserveAspectRatio="none"
-          style={styles.cwlCardHighlight}
-        >
-          <Defs>
-            <LinearGradient id={highlightId} x1="0%" y1="0%" x2="100%" y2="0%">
-              <Stop offset="0" stopColor="#FFFFFF" stopOpacity={0} />
-              <Stop offset="0.333333" stopColor="#FFFFFF" stopOpacity={0.42} />
-              <Stop offset="0.666667" stopColor="#FFFFFF" stopOpacity={0.12} />
-              <Stop offset="1" stopColor="#FFFFFF" stopOpacity={0} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="100" height="1.1" fill={`url(#${highlightId})`} />
-        </Svg>
         <View style={styles.cwlCardContent}>
           <MobileWebImage
             imageUrl={ImageAssets.getWarLeagueImage(league)}
             style={styles.cwlImage}
           />
-          <View testID="clan-cwl-main" style={styles.grow}>
-            <CKText muted role="labelSmall">
+          <View testID="clan-cwl-main" style={styles.cwlIdentity}>
+            <CKText role="bodyMedium" style={styles.cwlSeasonLabel}>
+              {season}
+            </CKText>
+            <CKText muted role="labelLarge" style={styles.cwlLeagueLabel}>
               {league}
             </CKText>
-            <View style={styles.cwlRank}>
-              <CKText role="titleLarge" style={styles.cwlRankValue}>
-                {entry.hasStanding && entry.rank > 0 ? `#${entry.rank}` : '—'}
-              </CKText>
-              {entry.hasStanding ? (
-                <PillSurface style={styles.record}>
-                  <CKText role="labelMedium" style={{ color: '#22A35A' }}>
-                    {entry.roundsWon}W
-                  </CKText>
-                  <CKText role="labelMedium">{entry.roundsTied}T</CKText>
-                  <CKText role="labelMedium" style={{ color: '#E35D4F' }}>
-                    {entry.roundsLost}L
-                  </CKText>
-                </PillSurface>
-              ) : null}
+          </View>
+          <View style={styles.cwlRank}>
+            <View style={styles.movementSlot}>
               {movement ? (
                 <MobileWebImage
                   accessibilityLabel={movement === 'up' ? 'Promoted' : 'Demoted'}
                   imageUrl={
                     movement === 'up'
-                      ? 'https://assets.clashk.ing/bot/icons/up_green_arrow.png'
-                      : 'https://assets.clashk.ing/bot/icons/down_red_arrow.png'
+                      ? `${ASSET_ORIGIN}/bot/icons/up_green_arrow.png`
+                      : `${ASSET_ORIGIN}/bot/icons/down_red_arrow.png`
                   }
                   style={styles.movementIcon}
                 />
               ) : null}
             </View>
+            <CKText role="titleLarge" style={styles.cwlRankValue}>
+              {entry.hasStanding && entry.rank > 0 ? `#${entry.rank}` : '—'}
+            </CKText>
           </View>
-          <View testID="clan-cwl-side" style={styles.cwlSide}>
-            <View style={styles.cwlSeasonRow}>
-              <CKText role="labelSmall" style={styles.cwlSeasonLabel}>
-                {Number.isNaN(date.getTime())
-                  ? entry.season
-                  : new Intl.DateTimeFormat(toIntlLocale(locale), {
-                      month: 'long',
-                      year: 'numeric',
-                    }).format(date)}
-              </CKText>
-              <ChevronRight size={16} color={colorWithAlpha(theme.onSurface, 0.5)} />
+          {onPress ? (
+            <View style={styles.cwlNavigation}>
+              <ChevronRight size={26} color={theme.onSurfaceVariant} />
             </View>
-            <View style={styles.cwlMetricRow}>
-              <MobileWebImage
-                imageUrl={ImageAssets.builderBaseStar}
-                style={styles.cwlMetricImage}
-              />
-              <CKText role="labelSmall">{entry.hasStanding ? entry.stars : '—'}</CKText>
-              <CKText muted role="labelSmall">
-                ·
-              </CKText>
-              <Percent size={13} color={theme.onSurfaceVariant} />
-              <CKText role="labelSmall">
-                {entry.hasStanding ? entry.destruction.toFixed(2) : '—'}
-              </CKText>
-            </View>
-          </View>
+          ) : null}
         </View>
-      </View>
-    </View>
+        {/* A shared full-width footer gives results room without a second card.
+            Avoid a fixed height: long season/league labels must be able to wrap. */}
+        <CardStatsFooter testID="clan-cwl-side">
+          <View style={styles.cwlMetricRow}>
+            <MobileWebImage imageUrl={ImageAssets.attackStar} style={styles.cwlMetricImage} />
+            <CKText role="bodyMedium" style={styles.cwlResultText}>
+              {entry.hasStanding ? number.format(entry.stars) : '—'}
+            </CKText>
+          </View>
+          {entry.hasStanding ? (
+            <PillSurface style={styles.record}>
+              <CKText style={[styles.cwlResultText, { color: ckColors.donationGreen }]}>
+                {entry.roundsWon}W
+              </CKText>
+              <CKText style={styles.cwlResultText}>{entry.roundsTied}T</CKText>
+              <CKText style={[styles.cwlResultText, { color: ckColors.lossRed }]}>
+                {entry.roundsLost}L
+              </CKText>
+            </PillSurface>
+          ) : null}
+          <CKText muted style={styles.cwlResultText}>
+            {entry.hasStanding
+              ? new Intl.NumberFormat(toIntlLocale(locale), {
+                  style: 'percent',
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(entry.destruction / 100)
+              : '—'}
+          </CKText>
+        </CardStatsFooter>
+      </Pressable>
+    </Surface>
   );
-}
-
-function alphaBlend(
-  foreground: string,
-  foregroundAlpha: number,
-  background: string,
-  backgroundAlpha: number,
-): string {
-  const foregroundRgb = parseHexColor(foreground);
-  const backgroundRgb = parseHexColor(background);
-  if (!foregroundRgb || !backgroundRgb) return foreground;
-
-  const outputAlpha = foregroundAlpha + backgroundAlpha * (1 - foregroundAlpha);
-  const channel = (foregroundChannel: number, backgroundChannel: number) =>
-    Math.round(
-      (foregroundChannel * foregroundAlpha +
-        backgroundChannel * backgroundAlpha * (1 - foregroundAlpha)) /
-        outputAlpha,
-    );
-  const red = channel(foregroundRgb[0], backgroundRgb[0]);
-  const green = channel(foregroundRgb[1], backgroundRgb[1]);
-  const blue = channel(foregroundRgb[2], backgroundRgb[2]);
-  const alpha = Math.round(outputAlpha * 255);
-  return `#${[red, green, blue, alpha]
-    .map((value) => value.toString(16).padStart(2, '0'))
-    .join('')}`;
-}
-
-function parseHexColor(color: string): readonly [number, number, number] | null {
-  const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(color);
-  if (!match) return null;
-  return [
-    Number.parseInt(match[1]!, 16),
-    Number.parseInt(match[2]!, 16),
-    Number.parseInt(match[3]!, 16),
-  ];
-}
-
-function mixColors(start: string, end: string, amount: number): string {
-  const startRgb = parseHexColor(start);
-  const endRgb = parseHexColor(end);
-  if (!startRgb || !endRgb) return start;
-  const clampedAmount = Math.max(0, Math.min(1, amount));
-  return `#${startRgb
-    .map((channel, index) =>
-      Math.round(channel + (endRgb[index]! - channel) * clampedAmount)
-        .toString(16)
-        .padStart(2, '0'),
-    )
-    .join('')}`;
 }
 
 export function cwlLeagueAccent(league: string): string {
@@ -843,52 +524,52 @@ const styles = StyleSheet.create({
   list: { gap: 8 },
   bold: { fontWeight: '800' },
   grow: { flex: 1 },
-  statsControlPickers: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
-  playerCard: { minHeight: 62, flexDirection: 'row', alignItems: 'center', gap: 9, padding: 10 },
-  playerTownHall: { width: 42, height: 42, resizeMode: 'contain' },
-  starMetric: { alignItems: 'center', minWidth: 26 },
   calendar: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   rankingCard: { minHeight: 62, padding: 10, flexDirection: 'row', alignItems: 'center', gap: 10 },
   rankingArt: { width: 28, height: 28, resizeMode: 'contain' },
+  expandedRankingCard: { padding: 18, gap: 16, borderWidth: 0 },
+  expandedRankingHeading: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  expandedRankingArt: { width: 32, height: 32, resizeMode: 'contain' },
+  expandedRankingTitle: { flex: 1, minWidth: 0 },
+  expandedRankingValue: { fontWeight: '800', fontVariant: ['tabular-nums'] },
+  expandedRankingPlacements: { flexDirection: 'row', flexWrap: 'wrap', gap: 20 },
+  expandedRank: { flexDirection: 'row', alignItems: 'center', gap: 8, minWidth: 112 },
+  expandedRankText: { gap: 2 },
+  expandedRankValue: { fontVariant: ['tabular-nums'] },
+  expandedFlag: { width: 20, height: 20 },
   rank: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8 },
   flag: { width: 17, height: 17 },
-  cwlCardShell: {
-    height: 74,
-    padding: 0.8,
-    borderRadius: 16,
-    backgroundColor: 'transparent',
-    overflow: 'hidden',
-    elevation: 4,
-  },
-  cwlCardInner: {
-    flex: 1,
-    borderRadius: 15.2,
-    overflow: 'hidden',
-  },
-  cwlCardHighlight: {
-    position: 'absolute',
-    top: 0,
-    left: 12,
-    right: 54,
-    height: 1.1,
-  },
+  cwlCard: { borderWidth: 0, overflow: 'hidden' },
   cwlCardContent: {
-    flex: 1,
-    paddingLeft: 9.2,
-    paddingRight: 11.2,
-    paddingVertical: 7.2,
+    paddingLeft: 12,
+    paddingRight: 6,
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
-  cwlImage: { width: 52, height: 52, resizeMode: 'contain' },
-  cwlRank: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  cwlRankValue: { fontWeight: '900', lineHeight: 23 },
-  record: { flexDirection: 'row', gap: 5, paddingHorizontal: 8, paddingVertical: 3 },
-  cwlSide: { alignItems: 'flex-end', gap: 10 },
-  cwlSeasonRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  cwlSeasonLabel: { fontWeight: '800' },
+  cwlImage: { width: 48, height: 48, resizeMode: 'contain' },
+  cwlIdentity: { flex: 1, minWidth: 0, gap: 4 },
+  cwlRank: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  movementSlot: { width: 18, alignItems: 'center', justifyContent: 'center' },
+  cwlRankValue: { lineHeight: 28, fontWeight: '800', fontVariant: ['tabular-nums'] },
+  cwlNavigation: { width: 32, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
+  record: {
+    flexDirection: 'row',
+    gap: 7,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 0,
+  },
+  cwlSeasonLabel: { fontSize: 14, lineHeight: 20, fontWeight: '700' },
+  cwlLeagueLabel: { fontSize: 12, lineHeight: 17 },
   movementIcon: { width: 18, height: 18, resizeMode: 'contain' },
-  cwlMetricRow: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  cwlMetricImage: { width: 14, height: 14, resizeMode: 'contain' },
+  cwlMetricRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  cwlMetricImage: { width: 18, height: 18, resizeMode: 'contain' },
+  cwlResultText: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '600',
+    fontVariant: ['tabular-nums'],
+  },
 });

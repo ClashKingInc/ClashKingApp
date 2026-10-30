@@ -42,6 +42,9 @@ export type SceneryAudioNativeStatus = {
 };
 
 export type ClashKingNativeModule = {
+  readonly supportsReservedRegionObservation?: boolean;
+  reconcileNativeTabBar?(): Promise<boolean>;
+  padNotificationThumbnail(uri: string): Promise<string>;
   addListener(
     event: 'onSceneryAudioStatus',
     listener: (status: SceneryAudioNativeStatus) => void,

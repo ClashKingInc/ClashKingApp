@@ -8,7 +8,7 @@ import type {
   WarInfo,
   WarMember,
 } from '../models';
-import type { useI18n } from '../../../i18n';
+import { createTranslator, resolveLocale, type useI18n } from '../../../i18n';
 
 type Translate = ReturnType<typeof useI18n>['t'];
 
@@ -43,6 +43,20 @@ export function remainingWarTime(value: Date, now: Date, t: Translate): string {
     primary: Math.floor(hours / 24),
     secondary: hours % 24,
   });
+}
+
+/** Human-readable countdown, including localized units and safe legacy locale tags. */
+export function warTimeRemaining(value: Date, now: Date, locale: string): string {
+  const minutes = Math.max(0, Math.ceil((value.getTime() - now.getTime()) / 60_000));
+  const hours = Math.floor(minutes / 60);
+  const t = createTranslator(resolveLocale(locale));
+  // Keep units in ICU copy so native unit formatters cannot substitute seconds.
+  return [
+    hours ? t('cwlDuration', { unit: 'hours', count: hours }) : '',
+    minutes % 60 || !hours ? t('cwlDuration', { unit: 'minutes', count: minutes % 60 }) : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 }
 
 export type WarMemberFilter =

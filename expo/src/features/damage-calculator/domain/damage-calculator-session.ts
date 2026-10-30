@@ -4,6 +4,7 @@ import {
   type DamageStackEntry,
   DamageSourceKind,
   DamageTarget,
+  BuildingLevelDefinition,
 } from './damage-calculator-engine';
 
 export interface DamageAccountPreset {
@@ -17,6 +18,7 @@ export interface DamageAccountPreset {
 export interface SelectedBuilding {
   readonly buildingId: string;
   readonly level: number;
+  readonly supercharge?: number;
 }
 
 export interface SelectedDamageSource {
@@ -28,7 +30,8 @@ export interface SelectedDamageSource {
 export class DamageCalculatorSession {
   readonly catalog: DamageCatalog;
   townHall: number;
-  spellCapacity = 11;
+  targetTownHall?: number;
+  private spellCapacityOverride?: number;
   selectedAccountTag?: string;
   readonly targets: SelectedBuilding[] = [];
   readonly sources = new Map<DamageSourceKind, SelectedDamageSource>();
@@ -40,7 +43,15 @@ export class DamageCalculatorSession {
   }
 
   get availableBuildings(): readonly BuildingDefinition[] {
-    return this.catalog.buildingsForTownHall(this.townHall);
+    return this.catalog.buildingsForTownHall(this.targetTownHall ?? this.townHall);
+  }
+
+  get spellCapacity(): number {
+    // Account/max-level changes follow their TH capacity until the user edits
+    // this value. Preserve a manual budget across presets, but never allow it
+    // to exceed the selected TH's real capacity, including Clan Castle spells.
+    const maximum = this.catalog.spellCapacityForTownHall(this.townHall);
+    return Math.min(this.spellCapacityOverride ?? maximum, maximum);
   }
 
   get availableSources() {
@@ -55,11 +66,22 @@ export class DamageCalculatorSession {
     this.repairSources();
   }
 
+  setTargetTownHall(value: number): void {
+    this.targetTownHall = clamp(value, 1, this.catalog.maxTownHall);
+    this.repairTargets();
+  }
+
+  setTargetSupercharge(buildingId: string, supercharge: number): void {
+    const index = this.targets.findIndex((target) => target.buildingId === buildingId);
+    const target = this.targets[index];
+    if (target) this.targets[index] = { ...target, supercharge };
+  }
+
   addTarget(buildingId: string): boolean {
     if (this.targets.some((target) => target.buildingId === buildingId)) return false;
     const building = this.availableBuilding(buildingId);
     if (!building) return false;
-    const levels = building.levelsForTownHall(this.townHall);
+    const levels = building.levelsForTownHall(this.targetTownHall ?? this.townHall);
     const last = levels.at(-1);
     if (!last) return false;
     this.targets.push({ buildingId, level: last.level });
@@ -74,7 +96,7 @@ export class DamageCalculatorSession {
   setTargetLevel(buildingId: string, level: number): void {
     const building = this.availableBuilding(buildingId);
     if (!building) return;
-    const valid = building.levelsForTownHall(this.townHall);
+    const valid = building.levelsForTownHall(this.targetTownHall ?? this.townHall);
     if (!valid.some((candidate) => candidate.level === level)) return;
     const index = this.targets.findIndex((target) => target.buildingId === buildingId);
     if (index >= 0) this.targets[index] = { buildingId, level };
@@ -99,7 +121,8 @@ export class DamageCalculatorSession {
   }
 
   setSpellCapacity(value: number): void {
-    this.spellCapacity = clamp(value, 1, 20);
+    // Zero is valid for an equipment-only attack; arbitrary 16–20 budgets are not.
+    this.spellCapacityOverride = clamp(Math.trunc(value), 0, this.catalog.spellCapacityForTownHall(this.townHall));
   }
 
   applyPreset(preset: DamageAccountPreset): void {
@@ -120,7 +143,17 @@ export class DamageCalculatorSession {
     for (const selected of this.targets) {
       const building = this.availableBuilding(selected.buildingId);
       const level = building?.level(selected.level);
-      if (building && level) resolved.push(new DamageTarget({ building, level }));
+      if (building && level)
+        resolved.push(
+          new DamageTarget({
+            building,
+            level: new BuildingLevelDefinition({
+              ...level,
+              hitpoints:
+                level.superchargeHitpoints[(selected.supercharge ?? 0) - 1] ?? level.hitpoints,
+            }),
+          }),
+        );
     }
     return resolved;
   }
@@ -141,7 +174,7 @@ export class DamageCalculatorSession {
     for (let index = this.targets.length - 1; index >= 0; index -= 1) {
       const selected = this.targets[index]!;
       const building = this.availableBuilding(selected.buildingId);
-      const valid = building?.levelsForTownHall(this.townHall) ?? [];
+      const valid = building?.levelsForTownHall(this.targetTownHall ?? this.townHall) ?? [];
       const last = valid.at(-1);
       if (!last) {
         this.targets.splice(index, 1);

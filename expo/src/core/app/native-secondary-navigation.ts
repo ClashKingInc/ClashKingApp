@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
 
 interface NativeSecondaryLayer {
+  readonly clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin;
   readonly content: ReactNode;
   readonly onRemove: () => void;
 }
 
 export type NativeSecondaryRouteTransition =
   | {
-      readonly type: 'none';
+      readonly type: 'none' | 'dismiss';
       readonly routeKeys: readonly string[];
       readonly staleKeys: readonly string[];
     }
@@ -20,6 +21,21 @@ export type NativeSecondaryRouteTransition =
 
 const layers = new Map<string, NativeSecondaryLayer>();
 const listeners = new Map<string, Set<() => void>>();
+
+// Choose transitions before navigation starts; changing options after mount
+// is too late. Search expands in place, while its results remain native pushes.
+export const nativeDetailScreenOptions = {
+  gestureEnabled: true,
+  presentation: 'card',
+  animation: 'slide_from_right',
+  gestureDirection: 'horizontal',
+} as const;
+
+export function nativeSecondaryScreenOptions(layer?: string) {
+  return layer?.startsWith('utility:search:')
+    ? { ...nativeDetailScreenOptions, animation: 'none' as const, gestureEnabled: false }
+    : nativeDetailScreenOptions;
+}
 
 export function publishNativeSecondaryLayer(key: string, layer: NativeSecondaryLayer) {
   layers.set(key, layer);
@@ -37,6 +53,10 @@ export function removeNativeSecondaryLayers(keys: Iterable<string>) {
 
 export function nativeSecondaryContent(key: string): ReactNode {
   return layers.get(key)?.content ?? null;
+}
+
+export function nativeSecondaryClanSpring(key: string) {
+  return layers.get(key)?.clanSpring;
 }
 
 export function notifyNativeSecondaryRemoved(key: string) {
@@ -69,6 +89,9 @@ export function nativeSecondaryRouteTransition(
 
   const staleKeys = current.slice(prefixLength);
   const nextKey = expected[prefixLength];
+  if (!expected.length && current.length) {
+    return { type: 'dismiss', routeKeys: [], staleKeys };
+  }
   if (nextKey === undefined) return { type: 'none', routeKeys: current, staleKeys };
 
   return {
@@ -77,4 +100,30 @@ export function nativeSecondaryRouteTransition(
     routeKeys: [...current.slice(0, prefixLength), nextKey],
     staleKeys,
   };
+}
+
+export function applyNativeSecondaryRouteTransition(
+  transition: NativeSecondaryRouteTransition,
+  navigation: {
+    dismissAll: () => void;
+    push: (href: { pathname: '/detail'; params: { layer: string } }) => void;
+    replace: (href: { pathname: '/detail'; params: { layer: string } }) => void;
+  },
+) {
+  if (transition.type === 'dismiss') {
+    // Pop the outer detail stack without selecting Home inside the native tab
+    // navigator. Returning from a Players detail must retain the Players tab.
+    navigation.dismissAll();
+    return;
+  }
+  transition.staleKeys.forEach(removeNativeSecondaryLayer);
+  if (transition.type === 'push' || transition.type === 'replace') {
+    navigation[transition.type]({
+      pathname: '/detail',
+      params: {
+        layer: transition.key,
+        ...(layers.get(transition.key)?.clanSpring ? { clanSpring: '1' } : {}),
+      },
+    });
+  }
 }

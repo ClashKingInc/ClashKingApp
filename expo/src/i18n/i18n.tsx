@@ -58,8 +58,16 @@ export function resolveLocale(input?: string | null): SupportedLocale {
 }
 
 export function systemLocale(): SupportedLocale {
-  const locale = getLocales()[0];
-  return resolveFlutterStartupLocale(locale?.languageCode);
+  // Resolve from the full preferred locale on every startup/foreground, so
+  // newly supported languages and regional variants follow the OS automatically.
+  for (const locale of getLocales()) {
+    const normalized = locale.languageTag.replaceAll('-', '_');
+    if (isSupportedLocale(normalized)) return normalized;
+    const language = locale.languageCode?.toLowerCase();
+    if (language && (isSupportedLocale(language) || language in flutterStartupLocales))
+      return resolveFlutterStartupLocale(language);
+  }
+  return 'en';
 }
 
 /** Mirrors MyAppState._loadLanguage, which discards stored/system subtags and

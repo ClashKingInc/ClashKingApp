@@ -1,4 +1,13 @@
-import type { ApiClient, ApiResponse } from '../../../core/api/client';
+import {
+  UpgradePreferencesGetEndpoint,
+  UpgradePreferencesPatchEndpoint,
+  UpgradesGetEndpoint,
+  UpgradesPutEndpoint,
+} from '@clashking/api-contracts/expo';
+import { ApiResponseError } from '@clashking/api-client';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { gameDataState } from '../../../core/game-data/game-data-state';
 import {
   STORAGE_KEYS,
@@ -6,10 +15,12 @@ import {
   upgradeTrackerSnapshotStorageKey,
 } from '../../../core/storage/storage';
 import type { StringStore } from '../../../services/storage/auth-storage';
-import { UpgradePlanPreferences, type UpgradeTrackerSnapshot } from '../models';
+import {
+  UpgradePlanPreferences,
+  type UpgradeJsonValue,
+  type UpgradeTrackerSnapshot,
+} from '../models';
 import { UpgradeTrackerParser } from './upgrade-tracker-parser';
-
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
 
 export interface SavedUpgradeSnapshotAccount {
   readonly tag: string;
@@ -22,7 +33,8 @@ export interface SavedUpgradeSnapshotAccount {
 export class UpgradeTrackerFormatError extends Error {
   constructor(
     message: string,
-    readonly reason: 'invalid-account-json' | 'unlinked-account' = 'invalid-account-json',
+    readonly reason:
+      'invalid-account-json' | 'unlinked-account' | 'unverified-account' = 'invalid-account-json',
   ) {
     super(message);
     this.name = 'UpgradeTrackerFormatError';
@@ -31,13 +43,17 @@ export class UpgradeTrackerFormatError extends Error {
 
 export class UpgradeTrackerRepository {
   private readonly snapshotCache = new Map<string, UpgradeTrackerSnapshot>();
-  private readonly snapshotLoads = new Map<string, Promise<UpgradeTrackerSnapshot | null>>();
+  private readonly emptyRemoteSnapshots = new Map<string, number>();
+  private readonly snapshotLoads = new Map<
+    string,
+    { promise: Promise<UpgradeTrackerSnapshot | null>; forceRefresh: boolean }
+  >();
   private remoteAccountId: string | null = null;
   private verifiedRemoteTags = new Set<string>();
   private cacheGeneration = 0;
 
   constructor(
-    private readonly api: ApiClient,
+    private readonly api: ContractApiService,
     private readonly storage: StringStore,
     private readonly parser = new UpgradeTrackerParser(),
     private readonly bundleProvider: () => Record<string, unknown> = () => gameDataState.bundleData,
@@ -45,14 +61,25 @@ export class UpgradeTrackerRepository {
 
   configureRemote(options: { accountId: string | null; verifiedPlayerTags: Iterable<string> }) {
     const id = options.accountId?.trim() ?? '';
+    const nextTags = [...options.verifiedPlayerTags]
+      .map(UpgradeTrackerRepository.normalizeTag)
+      .filter(Boolean);
+    if (
+      this.remoteAccountId !== (id || null) ||
+      nextTags.length !== this.verifiedRemoteTags.size ||
+      nextTags.some((tag) => !this.verifiedRemoteTags.has(tag))
+    ) {
+      this.emptyRemoteSnapshots.clear();
+      this.snapshotLoads.clear();
+      this.cacheGeneration += 1;
+    }
     this.remoteAccountId = id || null;
-    this.verifiedRemoteTags = new Set(
-      [...options.verifiedPlayerTags].map(UpgradeTrackerRepository.normalizeTag).filter(Boolean),
-    );
+    this.verifiedRemoteTags = new Set(nextTags);
   }
 
   clearCache() {
     this.snapshotCache.clear();
+    this.emptyRemoteSnapshots.clear();
     this.snapshotLoads.clear();
     this.remoteAccountId = null;
     this.verifiedRemoteTags.clear();
@@ -63,6 +90,13 @@ export class UpgradeTrackerRepository {
     return this.snapshotCache.get(UpgradeTrackerRepository.normalizeTag(playerTag)) ?? null;
   }
 
+  /** Display saved data immediately without allowing it to satisfy a server refresh. */
+  async loadCached(playerTag: string): Promise<UpgradeTrackerSnapshot | null> {
+    this.ensureStaticData();
+    const tag = UpgradeTrackerRepository.normalizeTag(playerTag);
+    return this.peekCached(tag) ?? this.loadPersistedSnapshot(tag, this.cacheGeneration);
+  }
+
   async load(playerTag: string, forceRefresh = false): Promise<UpgradeTrackerSnapshot | null> {
     this.ensureStaticData();
     const normalized = UpgradeTrackerRepository.normalizeTag(playerTag);
@@ -71,29 +105,51 @@ export class UpgradeTrackerRepository {
       if (cached) return cached;
     }
     const pending = this.snapshotLoads.get(normalized);
-    if (pending) return pending;
+    if (pending) {
+      if (!forceRefresh || pending.forceRefresh) return pending.promise;
+      // Startup may still be reading disk. Opening the tracker must follow that
+      // cache-only request with a real server check, not mistake it for sync.
+      await pending.promise.catch(() => null);
+      if (this.snapshotLoads.get(normalized) === pending) this.snapshotLoads.delete(normalized);
+      return this.load(normalized, true);
+    }
     const generation = this.cacheGeneration;
-    const load = this.loadOnce(normalized, generation);
-    this.snapshotLoads.set(normalized, load);
+    const load = this.loadOnce(normalized, generation, forceRefresh);
+    this.snapshotLoads.set(normalized, { promise: load, forceRefresh });
     try {
       return await load;
     } finally {
-      if (this.snapshotLoads.get(normalized) === load) this.snapshotLoads.delete(normalized);
+      if (this.snapshotLoads.get(normalized)?.promise === load)
+        this.snapshotLoads.delete(normalized);
     }
   }
 
-  private async loadOnce(normalized: string, generation: number) {
-    const remote = await this.tryLoadRemoteSnapshot(normalized, generation);
+  private async loadOnce(normalized: string, generation: number, forceRefresh: boolean) {
+    if (!forceRefresh) {
+      const local = await this.loadPersistedSnapshot(normalized, generation);
+      if (local) return local;
+    }
+    const remote = await this.tryLoadRemoteSnapshot(normalized, generation, forceRefresh);
     if (remote) return remote;
     const cached = this.snapshotCache.get(normalized);
     return cached ?? this.loadPersistedSnapshot(normalized, generation);
   }
 
-  private async tryLoadRemoteSnapshot(normalized: string, generation: number) {
+  private async tryLoadRemoteSnapshot(
+    normalized: string,
+    generation: number,
+    forceRefresh: boolean,
+  ) {
     if (!this.remoteAccountId || !this.verifiedRemoteTags.has(normalized)) return null;
+    const age = Date.now() - (this.emptyRemoteSnapshots.get(normalized) ?? -Infinity);
+    if (!forceRefresh && age >= 0 && age < 60_000) return null;
     try {
       const remote = await this.loadRemoteSnapshot(normalized);
-      if (!remote) return null;
+      if (!remote) {
+        if (generation === this.cacheGeneration)
+          this.emptyRemoteSnapshots.set(normalized, Date.now());
+        return null;
+      }
       const parsed = this.parser.parse(remote, { staticData: this.bundleProvider() });
       if (generation === this.cacheGeneration) {
         await this.saveRawSnapshotLocally(normalized, remote, parsed);
@@ -137,6 +193,7 @@ export class UpgradeTrackerRepository {
     const parsed =
       parsedSnapshot ?? this.parser.parse(snapshot, { staticData: this.bundleProvider() });
     this.snapshotCache.set(normalized, parsed);
+    this.emptyRemoteSnapshots.delete(normalized);
     const accounts = await this.savedSnapshotAccounts();
     const byTag = new Map(accounts.map((account) => [account.tag, account]));
     const name = String(snapshot.name ?? '').trim();
@@ -158,6 +215,7 @@ export class UpgradeTrackerRepository {
     options: {
       linkedNamesByTag?: Readonly<Record<string, string>>;
       allowedTags?: ReadonlySet<string>;
+      linkedTags?: ReadonlySet<string>;
     } = {},
   ) {
     let decoded: unknown;
@@ -177,9 +235,14 @@ export class UpgradeTrackerRepository {
         .filter(Boolean),
     );
     if (!allowed.has(tag)) {
+      const linked = [...(options.linkedTags ?? [])].some(
+        (value) => UpgradeTrackerRepository.normalizeTag(value) === tag,
+      );
       throw new UpgradeTrackerFormatError(
-        'This JSON does not match one of your linked accounts',
-        'unlinked-account',
+        linked
+          ? 'This linked account must be verified before importing'
+          : 'This JSON does not match one of your linked accounts',
+        linked ? 'unverified-account' : 'unlinked-account',
       );
     }
     raw.tag = tag;
@@ -251,19 +314,16 @@ export class UpgradeTrackerRepository {
     const normalized = UpgradeTrackerRepository.normalizeTag(playerTag);
     if (this.remoteAccountId && this.verifiedRemoteTags.has(normalized)) {
       try {
-        const response = await this.api.get(
-          this.remoteEndpoint(normalized, 'upgrade-preferences'),
-          {
-            requiresAuth: true,
-            acceptedStatuses: ALL_HTTP_STATUSES,
-          },
+        const decoded = await Effect.runPromise(
+          this.api.execute(UpgradePreferencesGetEndpoint, {
+            path: this.remotePath(normalized),
+            query: {},
+            body: {},
+          }),
         );
-        if (isSuccess(response)) {
-          const decoded = parseRecord(response.bodyText);
-          if (isRecord(decoded.preferences)) {
-            await this.savePlanPreferencesLocally(normalized, decoded.preferences);
-            return decoded.preferences;
-          }
+        if (isRecord(decoded.preferences)) {
+          await this.savePlanPreferencesLocally(normalized, decoded.preferences);
+          return decoded.preferences;
         }
       } catch {
         // The on-device preferences remain the offline fallback.
@@ -289,39 +349,52 @@ export class UpgradeTrackerRepository {
     };
     if (this.remoteAccountId) {
       this.requireVerifiedRemoteTag(normalized);
-      const response = await this.api.patch(
-        this.remoteEndpoint(normalized, 'upgrade-preferences'),
-        {
-          body: { preferences: value },
-          requiresAuth: true,
-          acceptedStatuses: ALL_HTTP_STATUSES,
-        },
-      );
-      if (!isSuccess(response))
-        throw new Error(`Could not save upgrade preferences (${response.status})`);
+      try {
+        await Effect.runPromise(
+          this.api.execute(UpgradePreferencesPatchEndpoint, {
+            path: this.remotePath(normalized),
+            query: {},
+            body: { preferences: value },
+          }),
+        );
+      } catch (error) {
+        if (error instanceof ApiResponseError) {
+          throw new Error(`Could not save upgrade preferences (${error.status})`, { cause: error });
+        }
+        throw error;
+      }
     }
     await this.savePlanPreferencesLocally(normalized, value);
   }
 
   private async loadRemoteSnapshot(normalized: string) {
-    const response = await this.api.get(this.remoteEndpoint(normalized, 'upgrades'), {
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-    });
-    if (!isSuccess(response)) return null;
-    const decoded = parseRecord(response.bodyText);
+    const decoded = await Effect.runPromise(
+      this.api.execute(UpgradesGetEndpoint, {
+        path: this.remotePath(normalized),
+        query: {},
+        body: {},
+      }),
+    );
     return isRecord(decoded.data) && Object.keys(decoded.data).length ? decoded.data : null;
   }
 
   private async replaceRemoteSnapshot(normalized: string, snapshot: Record<string, unknown>) {
     if (!this.remoteAccountId) return;
     this.requireVerifiedRemoteTag(normalized);
-    const response = await this.api.put(this.remoteEndpoint(normalized, 'upgrades'), {
-      body: { data: snapshot },
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-    });
-    if (!isSuccess(response)) throw new Error(`Could not save upgrade data (${response.status})`);
+    try {
+      await Effect.runPromise(
+        this.api.execute(UpgradesPutEndpoint, {
+          path: this.remotePath(normalized),
+          query: {},
+          body: { data: decodeJsonRecord(snapshot) },
+        }),
+      );
+    } catch (error) {
+      if (error instanceof ApiResponseError) {
+        throw new Error(`Could not save upgrade data (${error.status})`, { cause: error });
+      }
+      throw error;
+    }
   }
 
   private savePlanPreferencesLocally(normalized: string, value: Record<string, unknown>) {
@@ -330,8 +403,8 @@ export class UpgradeTrackerRepository {
       JSON.stringify(value),
     );
   }
-  private remoteEndpoint(tag: string, resource: string) {
-    return `/links/${encodeURIComponent(this.remoteAccountId!)}/${encodeURIComponent(tag)}/${resource}`;
+  private remotePath(tag: string) {
+    return { userId: this.remoteAccountId!, playerTag: tag };
   }
   private requireVerifiedRemoteTag(tag: string) {
     if (!this.verifiedRemoteTags.has(tag))
@@ -348,6 +421,28 @@ export class UpgradeTrackerRepository {
   }
 }
 
+function decodeJsonRecord(value: unknown): Readonly<Record<string, UpgradeJsonValue>> {
+  if (!isJsonRecord(value)) {
+    throw new TypeError('Expected a JSON object.');
+  }
+  return value;
+}
+
+function isJsonRecord(value: unknown): value is Readonly<Record<string, UpgradeJsonValue>> {
+  return isRecord(value) && Object.values(value).every(isJsonValue);
+}
+
+function isJsonValue(value: unknown): value is UpgradeJsonValue {
+  return (
+    value === null ||
+    typeof value === 'boolean' ||
+    typeof value === 'string' ||
+    (typeof value === 'number' && Number.isFinite(value)) ||
+    (Array.isArray(value) && value.every(isJsonValue)) ||
+    isJsonRecord(value)
+  );
+}
+
 function unwrapSnapshot(decoded: Record<string, unknown>) {
   if (decoded.tag != null) return { ...decoded };
   for (const key of ['player', 'account', 'data', 'snapshot']) {
@@ -355,14 +450,6 @@ function unwrapSnapshot(decoded: Record<string, unknown>) {
     if (isRecord(nested) && nested.tag != null) return { ...nested };
   }
   return { ...decoded };
-}
-function isSuccess(response: ApiResponse) {
-  return response.status >= 200 && response.status < 300;
-}
-function parseRecord(body: string) {
-  const value: unknown = JSON.parse(body);
-  if (!isRecord(value)) throw new TypeError('Invalid upgrade response');
-  return value;
 }
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);

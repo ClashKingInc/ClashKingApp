@@ -16,6 +16,8 @@ import {
   type UpgradeVillageValue,
 } from '../models';
 
+export { formatUpgradeDuration as formatTrackerDuration } from '../../../core/utils/upgrade-duration';
+
 export const trackerTabs = ['home', 'builder', 'calendar', 'plan', 'collection'] as const;
 export type TrackerTab = (typeof trackerTabs)[number];
 
@@ -285,17 +287,6 @@ function categoryOrder(category: UpgradeCategoryValue) {
   const order = Object.values(UpgradeCategory);
   const index = order.indexOf(category);
   return index < 0 ? 999 : index;
-}
-
-export function formatTrackerDuration(seconds: number) {
-  const value = Math.max(0, Math.round(seconds));
-  if (value <= 0) return 'Now';
-  const days = Math.floor(value / 86400);
-  const hours = Math.floor((value % 86400) / 3600);
-  const minutes = Math.floor((value % 3600) / 60);
-  if (days) return hours ? `${days}d ${hours}h` : `${days}d`;
-  if (hours) return minutes ? `${hours}h ${minutes}m` : `${hours}h`;
-  return `${Math.max(1, Math.min(59, minutes))}m`;
 }
 
 export function sceneryMusicUrl(item: { type?: string; meta: Record<string, unknown> | null }) {

@@ -1,60 +1,53 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { modalOrientations } from '../../ui/modal-orientations';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet,
-  TextInput,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
-  ClipboardCopy,
-  Download,
-  FileImage,
-  ImageOff,
   Images,
-  Link2,
+  ImageOff,
   PackageOpen,
-  RefreshCw,
   Search,
   Share2,
-  X,
 } from 'lucide-react-native';
 
 import { ImageAssets } from '../../core/assets/image-assets';
+import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { materialBackLabel, toIntlLocale, useI18n, type MessageKey } from '../../i18n';
 import {
   CKText,
   EmptyState,
   ErrorState,
-  GlassPill,
   HeaderIconButton,
   MobileWebImage,
+  ProfilePageHeader,
+  SearchField,
+  SelectionPicker,
   PillSurface,
-  Skeleton,
+  SkeletonContent,
   Surface,
   colorWithAlpha,
   useCKTheme,
-  useCKThemeMode,
 } from '../../ui';
 import type { GameAssetActions } from './actions';
 import { GameAssetImage } from './game-asset-image';
+import { useLinkParameters } from '../../core/deep-links/link-parameters';
 import {
   filterGameAssets,
   formatGameAssetCategory,
-  type GameAsset,
+  GameAsset,
   type GameAssetCategory,
-  type GameAssetManifest,
+  GameAssetManifest,
 } from './models';
 
 export interface GameAssetsScreenProps {
@@ -67,7 +60,7 @@ export interface GameAssetsScreenProps {
 }
 
 export function GameAssetsScreen({
-  manifest,
+  manifest: loadedManifest,
   loading,
   error,
   actions,
@@ -77,18 +70,39 @@ export function GameAssetsScreen({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
+  const contentLoading = !loadedManifest && loading;
+  const manifest = loadedManifest ?? (contentLoading ? loadingManifest : null);
   const categories = manifest?.categories ?? [];
-  const [categoryId, setCategoryId] = useState<string>();
-  const [query, setQuery] = useState('');
-  const [extension, setExtension] = useState('');
-  const [selectedAsset, setSelectedAsset] = useState<GameAsset>();
+  const link = useLinkParameters();
+  const [categoryId, setCategoryId] = useState(link.category ?? 'all');
+  const [query, setQuery] = useState(link.q ?? '');
+  const [selectedAssetOverride, setSelectedAssetOverride] = useState<GameAsset | null>();
+  const selectedAsset =
+    selectedAssetOverride === undefined
+      ? manifest?.assets.find((asset) => asset.path === link.asset)
+      : (selectedAssetOverride ?? undefined);
+  const setSelectedAsset = (asset?: GameAsset) => setSelectedAssetOverride(asset ?? null);
   const [snackbar, setSnackbar] = useState<string>();
   const snackbarTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const selectedCategory =
-    categories.find((category) => category.id === categoryId) ?? categories[0] ?? null;
+  const dataRevision = useSyncExternalStore(
+    subscribeToGameDataRevision,
+    () => gameDataState.revision,
+    () => gameDataState.revision,
+  );
+  const selectedCategory = categories.find((category) => category.id === categoryId) ?? null;
   const filteredAssets = useMemo(
-    () => (selectedCategory ? filterGameAssets(selectedCategory.assets, { query, extension }) : []),
-    [extension, query, selectedCategory],
+    // All is a view over the complete manifest, never just its first category.
+    // Old format links must not silently narrow results after the picker is removed.
+    () => {
+      void dataRevision;
+      return filterGameAssets(
+        selectedCategory?.assets ?? manifest?.assets ?? [],
+        contentLoading ? {} : { query },
+      );
+    },
+    [query, selectedCategory, manifest, contentLoading, dataRevision],
   );
   useEffect(
     () => () => {
@@ -97,14 +111,6 @@ export function GameAssetsScreen({
     [],
   );
 
-  if (!manifest && loading) {
-    return (
-      <View style={[styles.screen, { backgroundColor: theme.background }]}>
-        <GameAssetsHero category={null} loading onBack={onBack} onRefresh={onRefresh} />
-        <LoadingSkeleton width={width} />
-      </View>
-    );
-  }
   if (!manifest && error) {
     return (
       <SafeAreaView style={[styles.screen, { backgroundColor: theme.background }]}>
@@ -112,7 +118,7 @@ export function GameAssetsScreen({
         <View style={styles.feedbackWrap}>
           <ErrorState
             title={t('gameAssetsLoadError')}
-            body={String(error)}
+            body={t('generalTryAgain')}
             actionLabel={t('generalRetry')}
             onAction={onRefresh}
           />
@@ -120,7 +126,7 @@ export function GameAssetsScreen({
       </SafeAreaView>
     );
   }
-  if (!selectedCategory) {
+  if (!manifest || manifest.assets.length === 0) {
     return (
       <SafeAreaView style={[styles.screen, { backgroundColor: theme.background }]}>
         <SimpleHeader onBack={onBack} />
@@ -135,13 +141,26 @@ export function GameAssetsScreen({
     );
   }
 
-  const columns = width >= 600 ? 4 : 3;
-  const contentWidth = Math.min(width, 1120);
-  const tileWidth = Math.max(0, (contentWidth - 24 - (columns - 1) * 10) / columns);
+  const phoneWidth =
+    layout.isDuo && !layout.isExpanded
+      ? Math.min(layout.width, layout.contentMaxWidth)
+      : layout.isDuo || layout.isTablet
+        ? layout.width
+        : width;
+  const columns = layout.isExpanded
+    ? layout.columns(220, 4)
+    : layout.isDuo
+      ? 3
+      : phoneWidth >= 600
+        ? 4
+        : 3;
+  const contentWidth = layout.isExpanded
+    ? Math.min(layout.usableWidth, layout.contentMaxWidth)
+    : Math.min(phoneWidth, 1120);
+  const tileWidth = Math.max(0, (contentWidth - 32 - (columns - 1) * 12) / columns);
   const chooseCategory = (next: string) => {
     setCategoryId(next);
-    setQuery('');
-    setExtension('');
+    // Keep the search phrase when changing category so All can widen the same search.
   };
   const showMessage = (message: string) => {
     setSnackbar(message);
@@ -160,29 +179,24 @@ export function GameAssetsScreen({
         keyExtractor={(asset) => asset.path}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        columnWrapperStyle={styles.gridRow}
+        columnWrapperStyle={columns > 1 ? styles.gridRow : undefined}
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={
           <>
-            <GameAssetsHero
-              category={selectedCategory}
-              loading={loading}
-              onBack={onBack}
-              onRefresh={onRefresh}
-            />
+            <GameAssetsHero onBack={onBack} />
             <View style={[styles.controlsBound, { width: contentWidth }]}>
-              <AssetControls
-                category={selectedCategory}
-                categories={categories}
-                extension={extension}
-                query={query}
-                onCategoryChange={chooseCategory}
-                onExtensionChange={setExtension}
-                onQueryChange={setQuery}
-              />
-              <CKText muted role="bodySmall" style={styles.resultCount}>
-                {formatResultCount(filteredAssets.length, locale, t)}
-              </CKText>
+              <SkeletonContent loading={contentLoading}>
+                <AssetControls
+                  category={selectedCategory}
+                  categories={categories}
+                  query={query}
+                  onCategoryChange={chooseCategory}
+                  onQueryChange={setQuery}
+                />
+                <CKText muted role="bodySmall" style={styles.resultCount}>
+                  {formatResultCount(filteredAssets.length, locale, t)}
+                </CKText>
+              </SkeletonContent>
             </View>
           </>
         }
@@ -196,19 +210,24 @@ export function GameAssetsScreen({
           </View>
         }
         renderItem={({ item }) => (
-          <GameAssetTile
-            asset={item}
-            width={tileWidth}
-            onOpen={() => setSelectedAsset(item)}
-            onLongPress={async () => {
-              try {
-                await actions.copy(item.url);
-                showMessage(t('gameAssetsUrlCopied'));
-              } catch {
-                showMessage(t('gameAssetsCopyError'));
-              }
-            }}
-          />
+          <SkeletonContent
+            loading={contentLoading}
+            style={columns === 1 ? { alignSelf: 'center', marginBottom: 12 } : undefined}
+          >
+            <GameAssetTile
+              asset={item}
+              width={tileWidth}
+              onOpen={() => setSelectedAsset(item)}
+              onLongPress={async () => {
+                try {
+                  await actions.copy(item.url);
+                  showMessage(t('gameAssetsUrlCopied'));
+                } catch {
+                  showMessage(t('gameAssetsCopyError'));
+                }
+              }}
+            />
+          </SkeletonContent>
         )}
       />
       <GameAssetPreview
@@ -220,7 +239,17 @@ export function GameAssetsScreen({
         showMessage={showMessage}
       />
       {snackbar && !selectedAsset ? (
-        <PillSurface style={[styles.snackbar, { backgroundColor: theme.snackbar }]}>
+        <PillSurface
+          style={[
+            styles.snackbar,
+            { backgroundColor: theme.snackbar },
+            (layout.isDuo || layout.isTablet) && {
+              left: insets.left + 16,
+              right: insets.right + 16,
+              bottom: insets.bottom + 18,
+            },
+          ]}
+        >
           <CKText>{snackbar}</CKText>
         </PillSurface>
       ) : null}
@@ -228,150 +257,43 @@ export function GameAssetsScreen({
   );
 }
 
-function GameAssetsHero({
-  category,
-  loading,
-  onBack,
-  onRefresh,
-}: {
-  category: GameAssetCategory | null;
-  loading: boolean;
-  onBack: () => void;
-  onRefresh: () => void;
-}) {
-  const { t, locale, isRtl } = useI18n();
-  const theme = useCKTheme();
-  const mode = useCKThemeMode();
+function GameAssetsHero({ onBack }: { onBack: () => void }) {
+  const { t, locale } = useI18n();
   const insets = useSafeAreaInsets();
-  const { width, height } = useWindowDimensions();
-  const desktop = width >= 900;
-  const compactLandscape = width >= 600 && height < 600;
-  const heroHeight = insets.top + (compactLandscape ? 144 : desktop ? 240 : 264);
-  const extensions = category?.extensions ?? [];
-  const extensionText = extensions.length
-    ? extensions
-        .slice(0, 2)
-        .map((value) => value.toUpperCase())
-        .join(' / ')
-    : t('gameAssetsAllFormats');
-  const imageCount = category ? formatImageCount(category.count, locale, t) : null;
-  const stats = imageCount ? (
-    <View style={styles.heroStats}>
-      <HeroStat icon={<Images size={19} color={theme.onSurface} />} value={imageCount} />
-      <HeroStat icon={<FileImage size={19} color={theme.onSurface} />} value={extensionText} />
-    </View>
-  ) : (
-    <View style={styles.heroStats}>
-      <Skeleton width={122} height={31} radius={999} />
-      <Skeleton width={82} height={31} radius={999} />
-    </View>
-  );
   return (
-    <View style={[styles.hero, { height: heroHeight }]}>
-      <MobileWebImage
-        imageUrl={ImageAssets.homeBaseBackground}
-        contentFit="cover"
-        contentPosition="bottom center"
-        style={StyleSheet.absoluteFill}
-      />
-      <View style={[StyleSheet.absoluteFill, styles.heroAdditionalDarken]} />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill} width="100%" height="100%">
-        <Defs>
-          <LinearGradient id="gameAssetsHeroGradient" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#000" stopOpacity={mode === 'dark' ? 0.5 : 0.34} />
-            <Stop offset="0.5" stopColor="#000" stopOpacity={mode === 'dark' ? 0.72 : 0.52} />
-            <Stop offset="1" stopColor="#000" stopOpacity={mode === 'dark' ? 0.94 : 0.72} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill="url(#gameAssetsHeroGradient)" />
-      </Svg>
-      <SafeAreaView
-        edges={['top', 'left', 'right']}
-        style={[styles.heroSafe, { paddingHorizontal: desktop ? 24 : 12 }]}
-      >
-        <View style={styles.heroTopRow}>
-          <HeaderIconButton
-            glass={false}
-            label={materialBackLabel(locale)}
-            onPress={onBack}
-            icon={isRtl ? <ArrowRight color="#fff" /> : <ArrowLeft color="#fff" />}
-          />
-          <HeaderIconButton
-            glass={false}
-            label={t('sideRefresh')}
-            onPress={loading ? () => undefined : onRefresh}
-            icon={loading ? <ActivityIndicator color="#fff" /> : <RefreshCw color="#fff" />}
-          />
-        </View>
-        {compactLandscape ? (
-          <View
-            style={[
-              styles.compactHeroIdentity,
-              desktop ? styles.desktopHeroIdentityWidth : undefined,
-            ]}
-          >
-            <View style={styles.compactHeroImage}>
-              {category ? (
-                <GameAssetImage asset={category.representativeAsset} style={styles.fill} />
-              ) : (
-                <Skeleton width={48} height={48} radius={14} />
-              )}
-            </View>
-            <View style={styles.heroCopy}>
-              <CKText
-                role="titleLarge"
-                numberOfLines={1}
-                style={[styles.heroTitle, styles.compactHeroText]}
-              >
-                {t('sideGameAssetsTitle')}
-              </CKText>
-              <CKText
-                role="bodySmall"
-                numberOfLines={1}
-                style={[styles.heroSubtitle, styles.compactHeroText]}
-              >
-                {t('sideGameAssetsSubtitle')}
-              </CKText>
-            </View>
-            <View style={styles.compactHeroStats}>{stats}</View>
-          </View>
-        ) : (
-          <View
-            style={[
-              styles.heroIdentity,
-              desktop ? styles.desktopHeroIdentityWidth : undefined,
-              { marginTop: desktop ? 4 : 8 },
-            ]}
-          >
-            <View style={styles.heroImage}>
-              {category ? (
-                <GameAssetImage asset={category.representativeAsset} style={styles.fill} />
-              ) : (
-                <Skeleton width={64} height={64} radius={18} />
-              )}
-            </View>
-            <CKText role="screenTitle" numberOfLines={1} style={styles.heroTitle}>
-              {t('sideGameAssetsTitle')}
-            </CKText>
-            <CKText role="bodySmall" numberOfLines={1} style={styles.heroSubtitle}>
-              {t('sideGameAssetsSubtitle')}
-            </CKText>
-            {stats}
-          </View>
-        )}
-      </SafeAreaView>
-    </View>
+    <ProfilePageHeader
+      title={t('sideGameAssetsTitle')}
+      imageUrl={`${ImageAssets.baseUrl}/resources/starry_ore.webp`}
+      imageElement={<OreHeaderIcon />}
+      imageSize={48}
+      identityOffsetY={-16}
+      backgroundSource={require('../../../assets/clashking/backgrounds/assets-goblin-v2.webp')}
+      safeTop={insets.top}
+      bottomPadding={16}
+      onBack={onBack}
+      backLabel={materialBackLabel(locale)}
+    />
   );
 }
 
-function HeroStat({ icon, value }: { icon: ReactNode; value: string }) {
-  const theme = useCKTheme();
+function OreHeaderIcon() {
   return (
-    <View style={[styles.heroStat, { backgroundColor: colorWithAlpha(theme.surface, 0.58) }]}>
-      {icon}
-      <CKText role="labelLarge" numberOfLines={1}>
-        {value}
-      </CKText>
+    <View pointerEvents="none" accessible={false} style={styles.oreCluster}>
+      <MobileWebImage
+        imageUrl={`${ImageAssets.baseUrl}/resources/shiny_ore.webp`}
+        contentFit="contain"
+        style={[styles.oreRear, { left: 0 }]}
+      />
+      <MobileWebImage
+        imageUrl={`${ImageAssets.baseUrl}/resources/glowy_ore.webp`}
+        contentFit="contain"
+        style={[styles.oreRear, { right: 0 }]}
+      />
+      <MobileWebImage
+        imageUrl={`${ImageAssets.baseUrl}/resources/starry_ore.webp`}
+        contentFit="contain"
+        style={styles.oreFront}
+      />
     </View>
   );
 }
@@ -389,8 +311,12 @@ function SimpleHeader({ onBack }: { onBack: () => void }) {
         }
       />
       <View style={styles.heroCopy}>
-        <CKText role="screenTitle">{t('sideGameAssetsTitle')}</CKText>
-        <CKText muted>{t('sideGameAssetsSubtitle')}</CKText>
+        <CKText skeleton={false} role="screenTitle">
+          {t('sideGameAssetsTitle')}
+        </CKText>
+        <CKText skeleton={false} muted>
+          {t('sideGameAssetsSubtitle')}
+        </CKText>
       </View>
     </View>
   );
@@ -400,164 +326,50 @@ function AssetControls({
   category,
   categories,
   query,
-  extension,
   onCategoryChange,
-  onExtensionChange,
   onQueryChange,
 }: {
-  category: GameAssetCategory;
+  category: GameAssetCategory | null;
   categories: readonly GameAssetCategory[];
   query: string;
-  extension: string;
   onCategoryChange: (value: string) => void;
-  onExtensionChange: (value: string) => void;
   onQueryChange: (value: string) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
-  const { width } = useWindowDimensions();
-  const categoryOptions = categories.map((item) => ({
-    value: item.id,
-    label: localizedCategory(item.id, t),
-    asset: item.representativeAsset,
-  }));
-  const formatOptions = [
-    { value: '', label: t('gameAssetsAllFormats') },
-    ...category.extensions.map((value) => ({ value, label: value.toUpperCase() })),
-  ];
+  const { width: windowWidth, fontScale } = useWindowDimensions();
+  const layout = useAdaptiveLayout();
+  const width = layout.isDuo || layout.isTablet ? layout.width : windowWidth;
+  const stackControls = width < 350 || fontScale > 1.35;
   const categorySelector = (
-    <AssetSelector
-      value={category.id}
-      options={categoryOptions}
-      height={width >= 600 ? 44 : 36}
-      onChange={onCategoryChange}
-    />
-  );
-  const formatSelector = (
-    <AssetSelector
-      value={extension}
-      options={formatOptions}
-      leading={<FileImage size={18} color={theme.onSurfaceVariant} />}
-      height={width >= 600 ? 44 : 36}
-      onChange={onExtensionChange}
+    <SelectionPicker
+      fillWidth
+      iconOnly
+      title={formatGameAssetCategory(t('sideGameAssetsTitle'))}
+      selectedKey={category?.id ?? 'all'}
+      onSelect={onCategoryChange}
+      options={[
+        { key: 'all', label: formatGameAssetCategory(t('generalAll')), icon: <Images size={20} /> },
+        ...categories.map((item) => ({
+          key: item.id,
+          label: localizedCategory(item.id, t),
+          icon: <GameAssetImage asset={item.representativeAsset} style={styles.selectorImage} />,
+        })),
+      ]}
     />
   );
   const search = (
-    <GlassPill style={styles.searchField}>
-      <Search size={20} color={theme.onSurfaceVariant} />
-      <TextInput
-        accessibilityLabel={t('gameAssetsSearchHint')}
-        autoCapitalize="none"
-        autoCorrect={false}
-        onChangeText={onQueryChange}
-        placeholder={t('gameAssetsSearchHint')}
-        placeholderTextColor={theme.onSurfaceVariant}
-        style={[styles.searchInput, { color: theme.onSurface }]}
-        value={query}
-      />
-      {query ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('searchClear')}
-          onPress={() => onQueryChange('')}
-        >
-          <X size={20} color={theme.onSurfaceVariant} />
-        </Pressable>
-      ) : null}
-    </GlassPill>
+    <SearchField
+      value={query}
+      onChangeText={onQueryChange}
+      placeholder={t('gameAssetsSearchHint')}
+      searchIcon={<Search size={20} />}
+    />
   );
-  return width >= 600 ? (
-    <View style={styles.desktopControls}>
-      <View style={styles.desktopCategory}>{categorySelector}</View>
-      <View style={styles.desktopFormat}>{formatSelector}</View>
-      <View style={styles.desktopSearch}>{search}</View>
-    </View>
-  ) : (
-    <View style={styles.compactControls}>
-      <View style={styles.selectorRow}>
-        <View style={styles.selectorGrow}>{categorySelector}</View>
-        <View style={styles.selectorGrow}>{formatSelector}</View>
-      </View>
-      {search}
-    </View>
-  );
-}
-
-interface SelectorOption {
-  readonly value: string;
-  readonly label: string;
-  readonly asset?: GameAsset;
-}
-
-function AssetSelector({
-  value,
-  options,
-  leading,
-  height,
-  onChange,
-}: {
-  value: string;
-  options: readonly SelectorOption[];
-  leading?: ReactNode;
-  height: number;
-  onChange: (value: string) => void;
-}) {
-  const theme = useCKTheme();
-  const [visible, setVisible] = useState(false);
-  const selected = options.find((option) => option.value === value) ?? options[0];
   return (
-    <>
-      <Pressable
-        onPress={() => setVisible(true)}
-        accessibilityRole="button"
-        accessibilityLabel={selected?.label}
-      >
-        <Surface radius={12} style={[styles.selector, { minHeight: height }]}>
-          {selected?.asset ? (
-            <GameAssetImage asset={selected.asset} style={styles.selectorImage} />
-          ) : (
-            leading
-          )}
-          <CKText numberOfLines={1} style={styles.selectorText}>
-            {selected?.label}
-          </CKText>
-          <CKText muted>▾</CKText>
-        </Surface>
-      </Pressable>
-      <Modal
-        transparent
-        animationType="fade"
-        visible={visible}
-        onRequestClose={() => setVisible(false)}
-      >
-        <Pressable style={styles.modalBackdrop} onPress={() => setVisible(false)}>
-          <Surface style={styles.selectorSheet}>
-            <ScrollView contentContainerStyle={styles.selectorList}>
-              {options.map((option) => (
-                <Pressable
-                  key={option.value || 'all'}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: option.value === value }}
-                  onPress={() => {
-                    onChange(option.value);
-                    setVisible(false);
-                  }}
-                  style={styles.selectorOption}
-                >
-                  {option.asset ? (
-                    <GameAssetImage asset={option.asset} style={styles.selectorImage} />
-                  ) : leading ? (
-                    leading
-                  ) : null}
-                  <CKText style={styles.selectorText}>{option.label}</CKText>
-                  {option.value === value ? <Check size={20} color={theme.primary} /> : null}
-                </Pressable>
-              ))}
-            </ScrollView>
-          </Surface>
-        </Pressable>
-      </Modal>
-    </>
+    <View style={[styles.controlsRow, stackControls && { flexDirection: 'column' }]}>
+      <View style={!stackControls && styles.searchGrow}>{search}</View>
+      <View style={{ width: 76 }}>{categorySelector}</View>
+    </View>
   );
 }
 
@@ -573,7 +385,7 @@ function GameAssetTile({
   onLongPress: () => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <Pressable
       accessibilityRole="button"
@@ -583,17 +395,12 @@ function GameAssetTile({
       onLongPress={onLongPress}
       style={{ width }}
     >
-      <View
-        style={[
-          styles.tile,
-          { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.34) },
-        ]}
-      >
+      <Surface radius={20} style={[styles.tile, layout.isExpanded && { height: 226, padding: 18 }]}>
         <GameAssetImage asset={asset} style={styles.tileImage} />
         <CKText role="labelLarge" numberOfLines={2} style={styles.tileName}>
           {asset.tileDisplayName}
         </CKText>
-      </View>
+      </Surface>
     </Pressable>
   );
 }
@@ -614,46 +421,8 @@ function GameAssetPreview({
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
   const [sharing, setSharing] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const scale = useSharedValue(1);
-  const savedScale = useSharedValue(1);
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const savedX = useSharedValue(0);
-  const savedY = useSharedValue(0);
-  const pinch = Gesture.Pinch()
-    .onUpdate((event) => {
-      scale.value = Math.max(0.5, Math.min(5, savedScale.value * event.scale));
-    })
-    .onEnd(() => {
-      savedScale.value = scale.value;
-    });
-  const pan = Gesture.Pan()
-    .onUpdate((event) => {
-      translateX.value = savedX.value + event.translationX;
-      translateY.value = savedY.value + event.translationY;
-    })
-    .onEnd(() => {
-      savedX.value = translateX.value;
-      savedY.value = translateY.value;
-    });
-  const gesture = Gesture.Simultaneous(pinch, pan);
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-      { scale: scale.value },
-    ],
-  }));
+  const insets = useSafeAreaInsets();
   if (!asset) return null;
-  const copy = async (value: string, confirmation: string) => {
-    try {
-      await actions.copy(value);
-      showMessage(confirmation);
-    } catch {
-      showMessage(t('gameAssetsCopyError'));
-    }
-  };
   const share = async () => {
     setSharing(true);
     try {
@@ -664,20 +433,28 @@ function GameAssetPreview({
       setSharing(false);
     }
   };
-  const save = async () => {
-    setSaving(true);
-    try {
-      const path = await actions.save(asset);
-      showMessage(path ? t('gameAssetsSavedTo', { path }) : t('gameAssetsSaved'));
-    } catch {
-      showMessage(t('gameAssetsSaveError'));
-    } finally {
-      setSaving(false);
-    }
-  };
   return (
-    <Modal visible transparent={false} animationType="slide" onRequestClose={onClose}>
-      <SafeAreaView style={[styles.preview, { backgroundColor: theme.background }]}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      visible
+      transparent={false}
+      animationType="slide"
+      onRequestClose={onClose}
+    >
+      {/* A full-screen Modal has its own native host; explicit window insets
+          keep its controls below the status bar and clear of landscape cutouts. */}
+      <View
+        style={[
+          styles.preview,
+          {
+            backgroundColor: theme.background,
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
+      >
         <View style={[styles.previewHeader, { backgroundColor: theme.surface }]}>
           <HeaderIconButton
             label={materialBackLabel(locale)}
@@ -687,7 +464,7 @@ function GameAssetPreview({
             }
           />
           <CKText role="titleMedium" numberOfLines={1} style={styles.previewTitle}>
-            {asset.displayName}
+            {asset.tileDisplayName}
           </CKText>
         </View>
         <View
@@ -696,30 +473,15 @@ function GameAssetPreview({
             { backgroundColor: colorWithAlpha(theme.surfaceContainerHighest, 0.34) },
           ]}
         >
-          <GestureDetector gesture={gesture}>
-            <Animated.View style={[styles.previewImage, animatedStyle]}>
-              <GameAssetImage asset={asset} style={styles.fill} />
-            </Animated.View>
-          </GestureDetector>
+          <GameAssetImage asset={asset} style={styles.previewImage} />
         </View>
         <View style={styles.previewDetails}>
-          <CKText role="bodyMedium" selectable style={styles.previewPath}>
-            {asset.path}
-          </CKText>
-          <CKText role="labelSmall" muted style={styles.previewExtension}>
-            {asset.extension.toUpperCase()}
-          </CKText>
+          {message ? (
+            <PillSurface style={{ backgroundColor: theme.snackbar, padding: 12 }}>
+              <CKText accessibilityRole="alert">{message}</CKText>
+            </PillSurface>
+          ) : null}
           <View style={styles.actionWrap}>
-            <ActionButton
-              label={t('gameAssetsCopyUrl')}
-              icon={<Link2 size={18} color={theme.onSurface} />}
-              onPress={() => void copy(asset.url, t('gameAssetsUrlCopied'))}
-            />
-            <ActionButton
-              label={t('gameAssetsCopyPath')}
-              icon={<ClipboardCopy size={18} color={theme.onSurface} />}
-              onPress={() => void copy(asset.path, t('gameAssetsPathCopied'))}
-            />
             <ActionButton
               label={t('gameAssetsShare')}
               icon={
@@ -733,27 +495,9 @@ function GameAssetPreview({
               tonal
               onPress={() => void share()}
             />
-            <ActionButton
-              label={saving ? t('gameAssetsSaving') : t('gameAssetsSave')}
-              icon={
-                saving ? (
-                  <ActivityIndicator color={theme.onPrimary} />
-                ) : (
-                  <Download size={18} color={theme.onPrimary} />
-                )
-              }
-              disabled={saving}
-              filled
-              onPress={() => void save()}
-            />
           </View>
         </View>
-        {message ? (
-          <PillSurface style={[styles.snackbar, { backgroundColor: theme.snackbar }]}>
-            <CKText>{message}</CKText>
-          </PillSurface>
-        ) : null}
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 }
@@ -804,30 +548,21 @@ function ActionButton({
   );
 }
 
-function LoadingSkeleton({ width }: { width: number }) {
-  const columns = width >= 600 ? 4 : 3;
-  const contentWidth = Math.min(width, 1120) - 32;
-  const tileWidth = Math.max(0, (contentWidth - (columns - 1) * 10) / columns);
-  return (
-    <View style={styles.loadingWrap}>
-      <View style={styles.selectorRow}>
-        <Skeleton height={36} radius={16} style={styles.selectorGrow} />
-        <Skeleton height={36} radius={16} style={styles.selectorGrow} />
-      </View>
-      <Skeleton height={44} radius={16} />
-      <Skeleton width={118} height={12} radius={8} />
-      <View style={styles.loadingGrid}>
-        {Array.from({ length: columns * 4 }, (_, index) => (
-          <Surface key={index} radius={16} style={[styles.loadingTile, { width: tileWidth }]}>
-            <Skeleton width={70} height={70} radius={18} />
-            <Skeleton height={13} radius={8} />
-            <Skeleton width={58} height={11} radius={8} />
-          </Surface>
-        ))}
-      </View>
-    </View>
-  );
-}
+// Presentation-only rows; they never enter the manifest cache or asset actions.
+const loadingManifest = new GameAssetManifest(
+  2,
+  Array.from(
+    { length: 12 },
+    (_, index) =>
+      new GameAsset({
+        path: `buildings/loading-${index}.webp`,
+        category: 'buildings',
+        displayName: 'Game artwork',
+        extension: 'webp',
+        url: 'https://assets.clashk.ing/loading.webp',
+      }),
+  ),
+);
 
 type Translator = ReturnType<typeof useI18n>['t'];
 
@@ -862,7 +597,7 @@ export function localizedCategory(category: string, t: Translator): string {
                               : category === 'troops'
                                 ? 'gameAssetsCategoryTroops'
                                 : null;
-  return key ? t(key) : formatGameAssetCategory(category);
+  return formatGameAssetCategory(key ? t(key) : category);
 }
 
 export function formatImageCount(count: number, locale: string, t: Translator): string {
@@ -884,45 +619,11 @@ export function formatResultCount(count: number, locale: string, t: Translator):
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   listContent: { paddingBottom: 28 },
-  hero: { width: '100%' },
-  heroAdditionalDarken: { backgroundColor: '#00000014' },
-  heroSafe: { flex: 1, paddingBottom: 14 },
-  heroTopRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  heroIdentity: { width: '100%', alignItems: 'center', justifyContent: 'center' },
-  desktopHeroIdentityWidth: { maxWidth: 1120, alignSelf: 'center' },
-  compactHeroIdentity: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-  },
-  heroImage: { width: 80, height: 80, marginBottom: 4 },
-  compactHeroImage: { width: 56, height: 56 },
-  compactHeroStats: { marginStart: 8, marginTop: -10 },
   fill: { width: '100%', height: '100%' },
   heroCopy: { flex: 1 },
-  heroTitle: { color: '#fff', fontWeight: '800', textAlign: 'center', lineHeight: 25 },
-  heroSubtitle: { color: '#FFFFFFB8', fontWeight: '700', textAlign: 'center', marginTop: 2 },
-  compactHeroText: { textAlign: 'left' },
-  heroStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    gap: 7,
-    marginTop: 10,
-  },
-  heroStat: {
-    maxWidth: 132,
-    minHeight: 31,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
+  oreCluster: { width: 48, height: 48 },
+  oreRear: { position: 'absolute', top: 0, width: 26, height: 26 },
+  oreFront: { position: 'absolute', bottom: 0, left: 7, width: 34, height: 34 },
   simpleHeader: {
     minHeight: 72,
     flexDirection: 'row',
@@ -932,45 +633,15 @@ const styles = StyleSheet.create({
   },
   feedbackWrap: { flex: 1, padding: 16 },
   controlsBound: { alignSelf: 'center', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 7 },
-  desktopControls: { flexDirection: 'row', gap: 8 },
-  desktopCategory: { flex: 3 },
-  desktopFormat: { width: 190 },
-  desktopSearch: { flex: 4 },
-  compactControls: { gap: 7 },
-  selectorRow: { flexDirection: 'row', gap: 8 },
-  selectorGrow: { flex: 1 },
-  selector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    paddingHorizontal: 10,
-  },
+  controlsRow: { flexDirection: 'row', gap: 8 },
+  searchGrow: { flex: 1, minWidth: 0 },
   selectorImage: { width: 22, height: 22 },
-  selectorText: { minWidth: 0, flex: 1 },
-  searchField: {
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 12,
-  },
-  searchInput: { flex: 1, height: 44, paddingVertical: 0, fontFamily: 'ClashKing', fontSize: 14 },
   resultCount: { paddingHorizontal: 2, paddingTop: 7 },
-  gridRow: { justifyContent: 'center', gap: 10, marginBottom: 10 },
-  tile: { height: 154, padding: 10, borderRadius: 16 },
+  gridRow: { justifyContent: 'center', gap: 12, marginBottom: 12 },
+  tile: { height: 142, padding: 12 },
   tileImage: { flex: 1, width: '100%' },
-  tileName: { minHeight: 30, marginTop: 9, fontWeight: '800' },
+  tileName: { minHeight: 30, marginTop: 8 },
   emptyResults: { alignSelf: 'center', paddingHorizontal: 18 },
-  modalBackdrop: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#00000088' },
-  selectorSheet: { maxHeight: '70%' },
-  selectorList: { padding: 8 },
-  selectorOption: {
-    minHeight: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    paddingHorizontal: 12,
-  },
   preview: { flex: 1 },
   previewHeader: {
     minHeight: 56,
@@ -988,10 +659,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   previewImage: { width: '100%', height: '100%' },
-  previewDetails: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 18 },
-  previewPath: { fontWeight: '700' },
-  previewExtension: { fontWeight: '800', marginTop: 4 },
-  actionWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
+  previewDetails: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 18, gap: 12 },
+  actionWrap: { flexDirection: 'row', justifyContent: 'center' },
   actionButton: {
     minHeight: 44,
     flexDirection: 'row',
@@ -1010,7 +679,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 16,
   },
-  loadingWrap: { width: '100%', maxWidth: 1120, alignSelf: 'center', padding: 16, gap: 10 },
-  loadingGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  loadingTile: { height: 154, justifyContent: 'space-between', padding: 10 },
 });

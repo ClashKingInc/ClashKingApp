@@ -9,7 +9,6 @@ export function supportCreatorUrl(locale: string): string {
 
 export class RuntimeEffects {
   private routeHandler: ((route: RuntimeRoute) => void | Promise<void>) | null = null;
-  private permissionPrimerHandler: (() => boolean | Promise<boolean>) | null = null;
   private readonly pendingRoutes: {
     readonly route: RuntimeRoute;
     readonly resolve: () => void;
@@ -24,13 +23,6 @@ export class RuntimeEffects {
     };
   }
 
-  bindPermissionPrimer(handler: () => boolean | Promise<boolean>): () => void {
-    this.permissionPrimerHandler = handler;
-    return () => {
-      if (this.permissionPrimerHandler === handler) this.permissionPrimerHandler = null;
-    };
-  }
-
   openRoute(route: RuntimeRoute): void | Promise<void> {
     if (this.routeHandler !== null) return this.routeHandler(route);
     return new Promise<void>((resolve, reject) => {
@@ -40,10 +32,6 @@ export class RuntimeEffects {
 
   clearPendingRoutes(): void {
     for (const pending of this.pendingRoutes.splice(0)) pending.resolve();
-  }
-
-  showPermissionPrimer(): boolean | Promise<boolean> {
-    return this.permissionPrimerHandler?.() ?? false;
   }
 
   private async flushPendingRoutes(

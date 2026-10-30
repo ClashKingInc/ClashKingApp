@@ -1,4 +1,11 @@
-import type { ApiClient } from '../../../core/api/client';
+import {
+  ActiveAnnouncementsEndpoint,
+  AnnouncementEndpoint,
+  PostsEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { isRecord } from '../../player/models/parsing';
 import { AppAnnouncement } from './app-announcement';
 
@@ -15,8 +22,10 @@ export function announcementTarget(platform: string): AnnouncementTarget {
 }
 
 export class AnnouncementService {
+  private readonly activeLoads = new Map<string, Promise<readonly AppAnnouncement[]>>();
+  private readonly activeCache = new Map<string, { at: number; items: readonly AppAnnouncement[] }>();
   constructor(
-    private readonly api: ApiClient,
+    private readonly api: ContractApiService,
     private readonly platform: string,
     private readonly locale: () => string,
   ) {}
@@ -25,13 +34,34 @@ export class AnnouncementService {
     return (await this.getActiveAnnouncements())[0] ?? null;
   }
 
-  async getActiveAnnouncements(): Promise<readonly AppAnnouncement[]> {
+  async getActiveAnnouncements(forceRefresh = false): Promise<readonly AppAnnouncement[]> {
+    const locale = this.languageCode();
+    const cached = this.activeCache.get(locale);
+    if (!forceRefresh && cached && Date.now() >= cached.at && Date.now() - cached.at < 60_000) return cached.items;
+    const pending = this.activeLoads.get(locale);
+    if (pending) return pending;
+    const load = this.fetchActiveAnnouncements(locale).finally(() => {
+      if (this.activeLoads.get(locale) === load) this.activeLoads.delete(locale);
+    });
+    this.activeLoads.set(locale, load);
+    return load;
+  }
+
+  private async fetchActiveAnnouncements(locale: string): Promise<readonly AppAnnouncement[]> {
     try {
-      const response = await this.api.requestRecord(
-        `/app/announcements/active?target=${announcementTarget(this.platform)}&locale=${encodeURIComponent(this.languageCode())}`,
-        { requiresAuth: false },
+      const response = await Effect.runPromise(
+        this.api.execute(ActiveAnnouncementsEndpoint, {
+          path: {},
+          query: {
+            target: announcementTarget(this.platform),
+            locale,
+          },
+          body: {},
+        }),
       );
-      return decodeAnnouncementCollection(response);
+      const items = decodeAnnouncementCollection(response);
+      this.activeCache.set(locale, { at: Date.now(), items });
+      return items;
     } catch {
       return [];
     }
@@ -41,9 +71,12 @@ export class AnnouncementService {
     const targetId = id.trim();
     if (!targetId) return null;
     try {
-      const response = await this.api.requestRecord(
-        `/app/announcements/${encodeURIComponent(targetId)}?locale=${encodeURIComponent(this.languageCode())}`,
-        { requiresAuth: false },
+      const response = await Effect.runPromise(
+        this.api.execute(AnnouncementEndpoint, {
+          path: { announcementId: targetId },
+          query: { locale: this.languageCode() },
+          body: {},
+        }),
       );
       return decodeAnnouncement(response.item ?? response);
     } catch {
@@ -52,9 +85,17 @@ export class AnnouncementService {
   }
 
   async getPublishedPosts(limit = 20, offset = 0): Promise<AnnouncementArchivePage> {
-    const response = await this.api.requestRecord(
-      `/app/posts?target=${announcementTarget(this.platform)}&limit=${limit}&offset=${offset}&locale=${encodeURIComponent(this.languageCode())}`,
-      { requiresAuth: false },
+    const response = await Effect.runPromise(
+      this.api.execute(PostsEndpoint, {
+        path: {},
+        query: {
+          target: announcementTarget(this.platform),
+          limit,
+          offset,
+          locale: this.languageCode(),
+        },
+        body: {},
+      }),
     );
     const items = Array.isArray(response.items)
       ? response.items

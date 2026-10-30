@@ -29,6 +29,13 @@ import { PlayerRankings } from './player-ranked';
 import { PlayerWarStats, WarInfoSnapshot } from './player-war';
 
 export class Player {
+  leagueTierId: number;
+  get isLegendLeague() {
+    // Only Legend I uses the daily Legend format; Legend II/III are weekly Ranked.
+    return (
+      this.leagueTierId === 105000036 || (!this.leagueTierId && this.league === 'Legend League')
+    );
+  }
   name: string;
   tag: string;
   townHallLevel: number;
@@ -67,6 +74,7 @@ export class Player {
   bbTroops: PlayerBuilderBaseTroop[];
   spells: PlayerSpell[];
   equipments: PlayerEquipment[];
+  readonly hasEquipmentOwnershipData: boolean;
   siegeMachines: PlayerSiegeMachine[];
   pets: PlayerPet[];
   legendsBySeason: PlayerLegendStats | null = null;
@@ -105,6 +113,7 @@ export class Player {
     donationsReceived: number;
     clanCapitalContributions: number;
     league: string;
+    leagueTierId?: number;
     townHallPic: string;
     builderHallPic: string;
     leagueUrl: string;
@@ -115,6 +124,7 @@ export class Player {
     bbTroops: PlayerBuilderBaseTroop[];
     spells: PlayerSpell[];
     equipments: PlayerEquipment[];
+    hasEquipmentOwnershipData?: boolean;
     siegeMachines: PlayerSiegeMachine[];
     pets: PlayerPet[];
   }) {
@@ -143,6 +153,7 @@ export class Player {
     this.donationsReceived = input.donationsReceived;
     this.clanCapitalContributions = input.clanCapitalContributions;
     this.league = input.league;
+    this.leagueTierId = input.leagueTierId ?? 0;
     this.townHallPic = input.townHallPic;
     this.builderHallPic = input.builderHallPic;
     this.leagueUrl = input.leagueUrl;
@@ -153,6 +164,7 @@ export class Player {
     this.bbTroops = input.bbTroops;
     this.spells = input.spells;
     this.equipments = input.equipments;
+    this.hasEquipmentOwnershipData = input.hasEquipmentOwnershipData ?? false;
     this.siegeMachines = input.siegeMachines;
     this.pets = input.pets;
   }
@@ -219,7 +231,7 @@ export class Player {
   }
   getTodoProgressMetrics(memberCwl: WarMemberPresenceLike, now = new Date()): TodoProgressMetric[] {
     const metrics: TodoProgressMetric[] = [];
-    if (this.league === 'Legend League' && this.currentLegendSeason?.currentDay)
+    if (this.isLegendLeague && this.currentLegendSeason?.currentDay)
       metrics.push(
         new TodoProgressMetric(
           'legend_attacks',
@@ -307,6 +319,7 @@ export class Player {
         donationsReceived: intString(json.donationsReceived),
         clanCapitalContributions: intString(json.clanCapitalContributions),
         league: string(league.name, 'Unranked'),
+        leagueTierId: int(league.id),
         townHallPic: ImageAssets.townHall(int(json.townHallLevel)),
         builderHallPic: ImageAssets.builderHall(int(json.builderHallLevel)),
         leagueUrl: ImageAssets.getLeagueImage(string(league.name, 'Unranked')),
@@ -370,6 +383,9 @@ export class Player {
           gameData: record(gameDataState.gearsData.gears),
           factory: PlayerEquipment.fromRaw,
         }),
+        // A complete generated catalog is not proof that ownership was loaded.
+        // Thin account placeholders omit this field and must not lock every item.
+        hasEquipmentOwnershipData: Array.isArray(json.heroEquipment) && json.heroEquipment.length > 0,
       });
     } catch {
       return Player.empty();
