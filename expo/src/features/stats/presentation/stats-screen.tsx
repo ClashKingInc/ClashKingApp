@@ -256,7 +256,8 @@ function StatsScreenBody({ provider, revision, onBack, api }: StatsScreenProps) 
 }
 
 /** Daily player totals and individual attacks have different denominators.
- * One cohort selector serves both views, without mixing their headline values. */
+ * One cohort selector serves a single page; battle rates and completed-day totals
+ * stay separate sections because their denominators differ. */
 function RankedStatsSection({
   provider,
   api,
@@ -267,7 +268,6 @@ function RankedStatsSection({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const [cohort, setCohort] = useState<StatsLegendCohortValue | 'observed'>('observed');
-  const [view, setView] = useState('days');
   const [battleReload, setBattleReload] = useState(0);
   const [available, setAvailable] = useState<{
     cohort: StatsLegendCohortValue | 'observed';
@@ -304,7 +304,7 @@ function RankedStatsSection({
     error?: unknown;
   }>();
   useEffect(() => {
-    if (view !== 'battles' || cohort === 'observed') return;
+    if (cohort === 'observed') return;
     let active = true;
     const query = new StatsLegendQuery(
       new StatsDateFilter(new Date(`${first}T12:00:00`), new Date(`${last}T12:00:00`)),
@@ -318,8 +318,8 @@ function RankedStatsSection({
         if (active) setBattleResult({ key: requestKey, error });
       },
     );
-    // Hitrate may be the first tab used for a cohort. Fetch its available dates
-    // independently so an empty current range still offers the real history.
+    // Fetch available dates independently so an empty current range still
+    // offers the real history before either section has loaded.
     void repository.loadLegendPerformance(query, battleReload > 0).then(
       (data) => {
         if (active && data.availability) rememberAvailability(data.availability);
@@ -329,7 +329,7 @@ function RankedStatsSection({
     return () => {
       active = false;
     };
-  }, [view, cohort, repository, first, last, requestKey, battleReload, rememberAvailability]);
+  }, [cohort, repository, first, last, requestKey, battleReload, rememberAvailability]);
   const response = battleResult?.key === requestKey ? battleResult : undefined;
   const battles = response?.data;
   const error = response?.error;
@@ -363,23 +363,13 @@ function RankedStatsSection({
         selectedKey={cohort}
         onSelect={setCohort}
       />
-      <ProfileTabs
-        variant="underline"
-        overflow="fit"
-        selectedKey={view}
-        onSelect={setView}
-        tabs={[
-          { key: 'days', label: t('statsCommunity') },
-          { key: 'battles', label: t('legendsHitrate') },
-        ]}
-      />
-      {view === 'days' || cohort === 'observed' ? (
+      {cohort === 'observed' ? (
         <LegendDayPerformanceSection
           api={api}
           dates={provider.dates}
           cohort={cohort === 'observed' ? StatsLegendCohort.legend : cohort}
           observed={cohort === 'observed'}
-          displayMode={view as 'days' | 'battles'}
+          displayMode="all"
           onAvailability={rememberAvailability}
           onShowLatest={showLatest}
         />
@@ -414,7 +404,16 @@ function RankedStatsSection({
           ) : null}
         </View>
       ) : (
-        <RankedOverview data={battles} dates={provider.dates} />
+        <>
+          <RankedOverview data={battles} dates={provider.dates} />
+          <LegendDayPerformanceSection
+            api={api}
+            dates={provider.dates}
+            cohort={cohort}
+            onAvailability={rememberAvailability}
+            onShowLatest={showLatest}
+          />
+        </>
       )}
     </View>
   );

@@ -39,7 +39,7 @@ export function LegendDayPerformanceSection({
 }: {
   readonly api: ContractApiService;
   readonly observed?: boolean;
-  readonly displayMode?: 'days' | 'battles';
+  readonly displayMode?: 'days' | 'battles' | 'all';
   readonly dates: StatsDateFilter;
   readonly cohort: StatsLegendCohortValue;
   readonly onShowLatest?: (availability: Availability) => void;
@@ -61,7 +61,7 @@ export function LegendDayPerformanceSection({
     last = StatsDateFilter.formatDate(dates.end);
   const baseKey = `${first}:${last}:${cohort}:${observed}:${reload}`;
   const requestKey = `${baseKey}:${displayMode}`;
-  // Keep the same cohort/date summary visible while Hitrate loads army detail.
+  // Keep the same cohort/date summary visible while the battle section loads army detail.
   // A different date or population must never reuse that visible result.
   const state =
     result?.baseKey === baseKey && result.repository === repository
@@ -78,7 +78,7 @@ export function LegendDayPerformanceSection({
     void (async () => {
       const data = await repository.loadLegendPerformance(query, reload > 0, observed, false);
       if (active) setResult({ key: `${baseKey}:days`, baseKey, repository, data });
-      if (active && displayMode === 'battles') {
+      if (active && displayMode !== 'days') {
         const details = await repository.loadLegendPerformance(query, reload > 0, observed, true);
         if (active) setResult({ key: requestKey, baseKey, repository, data: details });
       }
@@ -143,7 +143,7 @@ export function LegendDayPerformanceSection({
       ) : !state.data ? (
         <ActivityIndicator color={theme.primary} />
       ) : !selected ||
-        (selected.availableDays === 0 && !(displayMode === 'battles' && state.data.currentDay)) ? (
+        (selected.availableDays === 0 && !(displayMode !== 'days' && state.data.currentDay)) ? (
         <View style={{ gap: 10 }}>
           <EmptyState
             title={t('statsNoDataTitle')}
@@ -165,7 +165,7 @@ export function LegendDayPerformanceSection({
         </View>
       ) : (
         <>
-          {displayMode === 'battles' ? (
+          {displayMode !== 'days' ? (
             <>
               <View style={[styles.report, { backgroundColor: theme.surface }]}>
                 <LegendComparison
@@ -204,7 +204,8 @@ export function LegendDayPerformanceSection({
                 </Pressable>
               ) : null}
             </>
-          ) : (
+          ) : null}
+          {displayMode !== 'battles' ? (
             <>
               <View style={[styles.report, { backgroundColor: theme.surface }]}>
                 <LegendComparison
@@ -299,7 +300,7 @@ export function LegendDayPerformanceSection({
                 </View>
               ) : null}
             </>
-          )}
+          ) : null}
           {state.data.perfectDayContributions.some(
             (row) => row.offensePlayerDays + row.defensePlayerDays > 0,
           ) ? (
