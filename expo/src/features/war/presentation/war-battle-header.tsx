@@ -104,7 +104,7 @@ export function WarBattleHeader({
       <View pointerEvents="none" style={StyleSheet.absoluteFill}>
         <HeaderArtwork
           testID="war-header-artwork"
-          source={require('../../../../assets/clashking/war/war-wood-header.webp')}
+          source={require('../../../../assets/generated/clashking/headers/war/war-wood-header.webp')}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
         />

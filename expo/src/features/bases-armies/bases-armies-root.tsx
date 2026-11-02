@@ -254,7 +254,7 @@ export function BasesArmiesScreen({
         imageSize={40}
         identityLayout="inline"
         identityOffsetY={-8}
-        backgroundSource={require('../../../assets/clashking/backgrounds/library-barbarians.webp')}
+        backgroundSource={require('../../../assets/generated/clashking/headers/library-barbarians.webp')}
         safeTop={insets.top}
         onBack={onBack}
         backLabel={materialBackLabel(locale)}

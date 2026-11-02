@@ -8,12 +8,12 @@ import { Surface } from './surfaces';
 import { ckSpacing } from './tokens';
 import { useCKTheme } from './theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { isAdaptiveIOSDevice } from './adaptive-layout';
+import { isAdaptiveNativeDevice } from './adaptive-layout';
 import { ReservedRegionLayout } from './reserved-region-layout';
 
 function useDialogInsets() {
   const insets = useSafeAreaInsets();
-  return isAdaptiveIOSDevice
+  return isAdaptiveNativeDevice
     ? {
         paddingLeft: insets.left + 24,
         paddingRight: insets.right + 24,
@@ -24,7 +24,7 @@ function useDialogInsets() {
 }
 
 function DialogFrame({ children }: { children: ReactNode }) {
-  if (!isAdaptiveIOSDevice) {
+  if (!isAdaptiveNativeDevice) {
     return (
       <View style={styles.overlay}>
         <Surface style={styles.dialog} accessibilityViewIsModal>

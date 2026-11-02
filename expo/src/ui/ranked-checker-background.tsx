@@ -8,10 +8,10 @@ import { useAdaptiveLayout } from './adaptive-layout';
 
 export type RankedCheckerColor = 'blue' | 'purple' | 'green' | 'red';
 const artwork = {
-  blue: require('../../assets/clashking/backgrounds/blue.webp'),
-  purple: require('../../assets/clashking/backgrounds/purple.webp'),
-  green: require('../../assets/clashking/backgrounds/green.webp'),
-  red: require('../../assets/clashking/backgrounds/red.webp'),
+  blue: require('../../assets/generated/clashking/headers/blue.webp'),
+  purple: require('../../assets/generated/clashking/headers/purple.webp'),
+  green: require('../../assets/generated/clashking/headers/green.webp'),
+  red: require('../../assets/generated/clashking/headers/red.webp'),
 };
 const fallback = { blue: '#302A68', purple: '#4A203D', green: '#174A20', red: '#652626' };
 let warmup: Promise<unknown> | undefined;

@@ -32,11 +32,6 @@ import { AchievementsRepository } from '../../features/achievements/data';
 import { ClanService } from '../../features/clan/data';
 import { AnnouncementPresentationService, AnnouncementService } from '../../features/home/data';
 import { NotificationPreferencesService } from '../../features/notifications/data/notification-preferences-service';
-import {
-  createNotificationSettingsDebugAdapter,
-  NotificationDebugService,
-  type NotificationSettingsDebugAdapter,
-} from '../../features/notifications/debug/notification-debug-service';
 import { PushNotificationService, type PushFeature } from '../../features/notifications/push';
 import { PlayerCardPreferencesService, PlayerService } from '../../features/player/data';
 import { RankingsProvider } from '../../features/rankings/data/rankings-provider';
@@ -101,7 +96,6 @@ export interface AppRuntime {
   readonly appState: ReturnType<typeof createAppStateStore>;
   readonly push: PushNotificationService;
   readonly notificationPreferences: NotificationPreferencesService;
-  readonly notificationSettingsDebug: NotificationSettingsDebugAdapter | null;
   readonly appIcons: AppIconService;
   readonly warWidgets: WarWidgetService;
   readonly legendsWidgets: LegendsWidgetService;
@@ -291,10 +285,6 @@ export function createAppRuntime(): AppRuntime {
     preferences,
     pushApiV2BaseUrlOverride: process.env.EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL,
   });
-  const notificationSettingsDebug = createNotificationSettingsDebugAdapter(
-    new NotificationDebugService(runtimePlatform, ClashKingNative),
-    __DEV__,
-  );
   const appIcons = new AppIconService(runtimePlatform, ClashKingNative);
   const warWidgets = new WarWidgetService({
     platform: runtimePlatform,
@@ -388,7 +378,6 @@ export function createAppRuntime(): AppRuntime {
     appState,
     push,
     notificationPreferences,
-    notificationSettingsDebug,
     appIcons,
     warWidgets,
     legendsWidgets,

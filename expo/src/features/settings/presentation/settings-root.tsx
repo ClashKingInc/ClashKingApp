@@ -156,12 +156,6 @@ export function SettingsRoot({
       initializePush: () => runtime.push.initialize(true),
       enablePush: () => runtime.push.requestPermissionAndRegister(),
       openSystemSettings: openSystemNotificationSettings,
-      ...(runtime.notificationSettingsDebug
-        ? {
-            testNotificationTypes: runtime.notificationSettingsDebug.testNotificationTypes,
-            sendTestNotification: runtime.notificationSettingsDebug.service.sendTestNotification,
-          }
-        : undefined),
     }),
     [runtime],
   );
@@ -212,7 +206,6 @@ export function SettingsRoot({
     if (scene === 'notifications') {
       return (
         <NotificationSettingsScreen
-          debugEnabled={runtime.notificationSettingsDebug !== null}
           onBack={() => setScene('main')}
           onManagePlayers={onManagePlayers}
           onManageClans={onManageClans}

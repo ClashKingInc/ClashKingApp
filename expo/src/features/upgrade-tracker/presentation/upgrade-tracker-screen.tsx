@@ -565,7 +565,7 @@ function TrackerHeader({
       ? ImageAssets.townHall(snapshot?.townHallLevel ?? account?.townHallLevel ?? 1)
       : ImageAssets.builderHall(snapshot?.builderHallLevel ?? account?.builderHallLevel ?? 1);
   // Keep the bundled module reference so Expo resolves the installed OTA asset.
-  const background = require('../../../../assets/clashking/tracker/builder-village-flat-roof.jpg');
+  const background = require('../../../../assets/generated/clashking/headers/tracker/builder-village-flat-roof.jpg');
   const values = !snapshot
     ? []
     : collection

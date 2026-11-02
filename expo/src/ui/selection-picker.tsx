@@ -19,7 +19,7 @@ import { GlassControlSurface, GlassSurface } from './glass';
 import { CKText } from './text';
 import { ckControlHeight, ckRadius, colorWithAlpha } from './tokens';
 import { useCKTheme } from './theme';
-import { isAdaptiveIOSDevice, useAdaptiveLayout } from './adaptive-layout';
+import { isAdaptiveNativeDevice, useAdaptiveLayout } from './adaptive-layout';
 import { ReservedRegionLayout } from './reserved-region-layout';
 
 export interface SelectionPickerOption<T extends string = string> {
@@ -187,7 +187,7 @@ export function SelectionPickerModal<T extends string>(props: SelectionPickerMod
       transparent
       visible={props.visible}
     >
-      {isAdaptiveIOSDevice ? (
+      {isAdaptiveNativeDevice ? (
         <View style={styles.fullScrim}>
           <ReservedRegionLayout>{content}</ReservedRegionLayout>
         </View>
@@ -219,7 +219,7 @@ function SelectionPickerContent<T extends string>({
   const theme = useCKTheme();
   const { height: windowHeight } = useWindowDimensions();
   const layout = useAdaptiveLayout();
-  const viewportHeight = isAdaptiveIOSDevice ? layout.height : windowHeight;
+  const viewportHeight = isAdaptiveNativeDevice ? layout.height : windowHeight;
   const insets = useSafeAreaInsets();
   const [listEndState, setListEndState] = useState({ key: '', atEnd: false });
   const [listLayoutState, setListLayoutState] = useState({ key: '', height: 0 });
@@ -255,9 +255,9 @@ function SelectionPickerContent<T extends string>({
       <View
         style={[
           styles.overlay,
-          isAdaptiveIOSDevice && { backgroundColor: 'transparent' },
+          isAdaptiveNativeDevice && { backgroundColor: 'transparent' },
           { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 },
-          isAdaptiveIOSDevice && {
+          isAdaptiveNativeDevice && {
             paddingLeft: insets.left + 20,
             paddingRight: insets.right + 20,
           },

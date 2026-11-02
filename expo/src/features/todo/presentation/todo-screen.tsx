@@ -63,7 +63,7 @@ export interface TodoScreenProps {
 
 const FILTERS: readonly TodoAccountFilter[] = ['all', 'needs_action', 'done'];
 const TODO_HEADER_ART = bundledImageUrl(
-  require('../../../../assets/clashking/todo/builder-meeting.jpg'),
+  require('../../../../assets/generated/clashking/headers/todo/builder-meeting.jpg'),
 );
 
 export function TodoScreen(props: TodoScreenProps) {

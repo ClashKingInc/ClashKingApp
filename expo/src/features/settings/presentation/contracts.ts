@@ -1,5 +1,4 @@
 import type { NotificationPreferences } from '../../../core/dto/notification-preferences';
-import type { MessageKey } from '../../../i18n';
 import type { AuthUser } from '../../auth/models';
 import type { PushNotificationSetupResult } from '../../notifications/push/contracts';
 
@@ -27,8 +26,6 @@ export interface NotificationSettingsPresentationService {
   initializePush(): Promise<PushNotificationSetupResult>;
   enablePush(): Promise<PushNotificationSetupResult>;
   openSystemSettings(): Promise<void>;
-  readonly testNotificationTypes?: readonly { id: string; labelKey: MessageKey }[];
-  sendTestNotification?(sampleId: string): Promise<string>;
 }
 
 export interface PrivacyPresentationActions {

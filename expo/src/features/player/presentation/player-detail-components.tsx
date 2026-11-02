@@ -327,7 +327,7 @@ export function PlayerDetailHeader({
         {/* All Player Info tabs share this artwork, including Builder Base. */}
         <HeaderArtwork
           testID="player-header-background-image"
-          source={require('../../../../assets/clashking/backgrounds/player-electro-dragon-quiet-v3.webp')}
+          source={require('../../../../assets/generated/clashking/headers/player-electro-dragon-quiet-v3.webp')}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           contentPosition="center"

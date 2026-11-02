@@ -6,14 +6,14 @@ import { useCKTheme } from '../../../ui';
 
 // These local derivatives retain the original game artwork. Never hold navigation on a CDN image.
 const maps = [
-  require('../../../../assets/clashking/cwl/bronze.webp'),
-  require('../../../../assets/clashking/cwl/silver.webp'),
-  require('../../../../assets/clashking/cwl/gold.webp'),
-  require('../../../../assets/clashking/cwl/crystal.webp'),
-  require('../../../../assets/clashking/cwl/master.webp'),
-  require('../../../../assets/clashking/cwl/champion.webp'),
-  require('../../../../assets/clashking/cwl/titan.webp'),
-  require('../../../../assets/clashking/cwl/legend.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/bronze.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/silver.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/gold.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/crystal.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/master.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/champion.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/titan.webp'),
+  require('../../../../assets/generated/clashking/headers/cwl/legend.webp'),
 ];
 const families = ['bronze', 'silver', 'gold', 'crystal', 'master', 'champion', 'titan', 'legend'];
 // In every 1100px derivative, the wall's league emblem sits around x=532,

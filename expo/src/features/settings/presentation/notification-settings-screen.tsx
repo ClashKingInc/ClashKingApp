@@ -36,9 +36,7 @@ import {
 import { useI18n, type I18nValue, type MessageKey } from '../../../i18n';
 import {
   CKText,
-  LoadingIndicator,
   SkeletonContent,
-  SelectionPicker,
   Surface,
   ckRadius,
   ckSpacing,
@@ -95,14 +93,12 @@ const categoryRows: readonly {
 
 export function NotificationSettingsScreen({
   service,
-  debugEnabled = false,
   onManagePlayers,
   onManageClans,
   onBack,
   entityControls,
 }: {
   service: NotificationSettingsPresentationService;
-  debugEnabled?: boolean;
   onManagePlayers?: () => void;
   onManageClans?: () => void;
   onBack?: () => void;
@@ -117,8 +113,6 @@ export function NotificationSettingsScreen({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [configuringPush, setConfiguringPush] = useState(false);
-  const [sendingSample, setSendingSample] = useState(false);
-  const [sampleId, setSampleId] = useState(service.testNotificationTypes?.[0]?.id ?? '');
   const [snackbar, setSnackbar] = useState<string>();
   const savingRef = useRef(false);
   const configuringRef = useRef(false);
@@ -192,19 +186,6 @@ export function NotificationSettingsScreen({
     } finally {
       configuringRef.current = false;
       setConfiguringPush(false);
-    }
-  };
-
-  const sendSample = async () => {
-    if (!service.sendTestNotification || sendingSample) return;
-    setSendingSample(true);
-    try {
-      const title = await service.sendTestNotification(sampleId);
-      setSnackbar(t('notifScheduledMessage', { title }));
-    } catch (error) {
-      setSnackbar(String(error));
-    } finally {
-      setSendingSample(false);
     }
   };
 
@@ -301,32 +282,6 @@ export function NotificationSettingsScreen({
               </View>
             </>
           </SettingsColumns>
-          {debugEnabled && service.sendTestNotification ? (
-            <SettingsSection title={t('notifTestNotification')}>
-              <View style={styles.debugWrap}>
-                <SelectionPicker
-                  options={(service.testNotificationTypes ?? []).map(({ id, labelKey }) => ({
-                    key: id,
-                    label: t(labelKey),
-                  }))}
-                  selectedKey={sampleId}
-                  onSelect={setSampleId}
-                  title={t('notifTestType')}
-                  accessibilityLabel={t('notifTestType')}
-                  fillWidth
-                />
-                <Pressable
-                  accessibilityRole="button"
-                  disabled={sendingSample || !sampleId}
-                  onPress={() => void sendSample()}
-                  style={[styles.debug, { backgroundColor: colorWithAlpha(theme.primary, 0.14) }]}
-                >
-                  {sendingSample ? <LoadingIndicator /> : <Bell color={theme.primary} size={20} />}
-                  <CKText role="rowTitle">{t('notifSendTestNotification')}</CKText>
-                </Pressable>
-              </View>
-            </SettingsSection>
-          ) : null}
         </SkeletonContent>
       </SettingsPage>
       <SettingsSnackbar message={snackbar} onDismiss={() => setSnackbar(undefined)} />

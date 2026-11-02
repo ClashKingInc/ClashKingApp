@@ -1,6 +1,6 @@
-import { isAdaptiveIOSDevice, isDuoDevice } from './adaptive-layout';
+import { isAdaptiveIOSDevice, isTabletDevice } from './adaptive-layout';
 import { createContext, createElement, useContext, useEffect, type PropsWithChildren } from 'react';
-import { Appearance, Platform, useColorScheme, useWindowDimensions } from 'react-native';
+import { Appearance, useColorScheme, useWindowDimensions } from 'react-native';
 import { TabletTypographyContext } from './typography-context';
 
 import { ckThemeColors, type CKThemeColors, type CKThemeMode } from './tokens';
@@ -15,7 +15,7 @@ export function CKThemeProvider({
 }: PropsWithChildren<{ preference: CKThemePreference }>) {
   const { width } = useWindowDimensions();
   const tabletTypography =
-    Platform.OS === 'ios' && Platform.isPad === true && !isDuoDevice && width >= 640;
+    isTabletDevice && width >= 640;
   useEffect(() => {
     if (!isAdaptiveIOSDevice) return;
     // Native bars and sheets must follow the saved app theme. Reset the

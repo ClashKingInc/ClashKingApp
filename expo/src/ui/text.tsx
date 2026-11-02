@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, type TextProps } from 'react-native';
+import { Animated, Platform, StyleSheet, type TextProps } from 'react-native';
 
 import { ckTypography, type CKTextRole } from './tokens';
 import { useCKTheme } from './theme';
@@ -53,7 +53,9 @@ export function CKText({ role = 'body', muted = false, skeleton, style, ...props
         { color: muted ? theme.onSurfaceVariant : theme.onSurface, opacity: 1 },
         style,
         loading && {
-          color: 'transparent',
+          // Android can paint transparent glyphs black inside animated text.
+          // Matching the opaque placeholder fill hides them without changing layout.
+          color: Platform.OS === 'android' ? theme.surfaceContainerHighest : 'transparent',
           backgroundColor: theme.surfaceContainerHighest,
           borderRadius: 4,
           textShadowColor: 'transparent',

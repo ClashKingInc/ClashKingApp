@@ -3,11 +3,11 @@
   "main": "expo-router/entry",
   "version": "0.6.4",
   "dependencies": {
-    "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.28.tgz",
-    "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.28-rank-curve.tgz",
+    "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.33.tgz",
+    "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.33.tgz",
     "@clashking/clash-contract": "file:vendor/clashking-clash-contract-1.0.1-ranking-location.tgz",
     "@clashking/native": "file:./modules/clashking-native",
-    "@expo/ui": "~58.0.25",
+    "@expo/ui": "~58.0.26",
     "@formatjs/icu-messageformat-parser": "^3.5.17",
     "@formatjs/intl-getcanonicallocales": "^3.2.11",
     "@formatjs/intl-locale": "^5.3.10",
@@ -24,13 +24,13 @@
     "expo": "~58.0.21",
     "expo-application": "~58.1.2",
     "expo-asset": "~58.0.18",
-    "expo-audio": "~58.0.10",
-    "expo-background-task": "~58.0.11",
-    "expo-build-properties": "~58.0.11",
+    "expo-audio": "~58.0.11",
+    "expo-background-task": "~58.0.12",
+    "expo-build-properties": "~58.0.12",
     "expo-clipboard": "~58.0.4",
     "expo-constants": "~58.0.13",
     "expo-crypto": "~58.0.7",
-    "expo-dev-client": "~58.0.17",
+    "expo-dev-client": "~58.0.18",
     "expo-device": "~58.0.5",
     "expo-document-picker": "~58.0.4",
     "expo-file-system": "~58.0.11",
@@ -42,7 +42,7 @@
     "expo-linking": "~58.0.15",
     "expo-localization": "~58.0.5",
     "expo-notifications": "~58.1.7",
-    "expo-router": "~58.0.28",
+    "expo-router": "~58.0.29",
     "expo-screen-orientation": "~58.0.3",
     "expo-secure-store": "~58.0.2",
     "expo-sharing": "~58.0.21",
@@ -50,22 +50,21 @@
     "expo-status-bar": "~58.0.4",
     "expo-symbols": "~58.0.4",
     "expo-system-ui": "~58.0.7",
-    "expo-task-manager": "~58.0.12",
-    "expo-updates": "~58.0.19",
+    "expo-task-manager": "~58.0.13",
+    "expo-updates": "~58.0.20",
     "expo-web-browser": "~58.0.7",
-    "expo-widgets": "~58.0.23",
     "intl-messageformat": "^11.2.14",
     "lucide-react-native": "^1.37.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "react-native": "0.88.0",
+    "react-native": "^0.88.1",
     "react-native-draggable-flatlist": "^4.0.3",
     "react-native-drawer-layout": "4.2.12",
     "react-native-gesture-handler": "~3.3.0",
     "react-native-pager-view": "9.0.7",
     "react-native-reanimated": "4.7.1",
     "react-native-safe-area-context": "~5.10.1",
-    "react-native-screens": "~4.30.0",
+    "react-native-screens": "~4.30.1",
     "react-native-share": "^12.3.1",
     "react-native-svg": "15.16.0",
     "react-native-view-shot": "6.1.1",
@@ -106,9 +105,11 @@
     "licenses:generate": "node ./scripts/generate-license-inventory.mjs",
     "licenses:check": "node ./scripts/generate-license-inventory.mjs --check",
     "e2e:structure": "node ./scripts/check-expo-e2e-structure.mjs",
-    "release:check": "node scripts/check-release-notes.mjs && node --check scripts/release-plan.mjs && node --check scripts/release-environment.mjs && node --check scripts/publish-release.mjs",
+    "release:check": "npm run artwork:check && node scripts/check-release-notes.mjs && node --check scripts/release-plan.mjs && node --check scripts/release-environment.mjs && node --check scripts/publish-release.mjs",
     "typecheck": "tsrs --noEmit",
-    "typecheck:typescript": "tsc --noEmit"
+    "typecheck:typescript": "tsc --noEmit",
+    "artwork:check": "node scripts/sync-header-artwork.mjs --check",
+    "artwork:sync": "node scripts/sync-header-artwork.mjs --sync"
   },
   "expo": {
     "autolinking": {
@@ -119,5 +120,12 @@
       }
     }
   },
-  "private": true
+  "private": true,
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "1.14.7"
+    },
+    "glob@>=13 <14": "14.0.3",
+    "minimatch@>=10 <11": "11.0.4"
+  }
 }

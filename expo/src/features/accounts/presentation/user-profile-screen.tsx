@@ -99,7 +99,7 @@ export function UserProfileScreen({
         ]}
       >
         <HeaderArtwork
-          source={require('../../../../assets/clashking/profile/profile-selected-banner.png')}
+          source={require('../../../../assets/generated/clashking/headers/profile/profile-selected-banner.png')}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           contentPosition="center"

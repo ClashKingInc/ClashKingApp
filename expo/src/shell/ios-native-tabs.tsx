@@ -7,16 +7,16 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Drawer } from 'react-native-drawer-layout';
+import type { LegacyPanGesture as PanGesture } from 'react-native-gesture-handler';
 import { useIsFocused } from 'expo-router';
 import { NativeTabs } from 'expo-router/native-tabs';
 import ClashKingNative from '@clashking/native';
-import { useHinge } from 'expo-hinge';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { primaryTabRoutes } from '../navigation';
-import { modalOrientations as defaultModalOrientations } from '../ui/modal-orientations';
 import { NativePrimaryNavigation } from '../ui/native-primary-navigation';
 import { useAdaptiveLayout } from '../ui/adaptive-layout';
 import { PrimaryPageGestureContext } from '../ui/primary-swipe-guard';
@@ -51,16 +51,6 @@ export function IosNativeTabs(props: NavigationShellProps) {
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
   const portraitBottomBar = useDuoPortraitBottomBar();
-  const hinge = useHinge();
-  const [hasHinge, setHasHinge] = useState(hinge !== null);
-  if (hinge !== null && !hasHinge) setHasHinge(true);
-  // Keep this sheet in the current Duo orientation, including when hinge
-  // updates briefly disappear while the window moves between displays.
-  const modalOrientations = hasHinge
-    ? (['portrait', 'landscape-left', 'landscape-right'] as (
-        'portrait' | 'landscape-left' | 'landscape-right'
-      )[])
-    : defaultModalOrientations;
   const { width } = useWindowDimensions();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const afterDismiss = useRef<(() => void) | undefined>(undefined);
@@ -84,18 +74,19 @@ export function IosNativeTabs(props: NavigationShellProps) {
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback((after?: () => void) => {
     // MobileDrawer also requests close after selecting a route. That second
-    // close must not erase the destination queued for the modal's dismissal.
+    // close must not erase the destination queued for the drawer's closing transition.
     if (after) afterDismiss.current = after;
     setDrawerOpen(false);
   }, []);
-  const dismissSwipe = useMemo(
-    () =>
-      Gesture.Pan()
-        .activeOffsetX(props.isRtl ? 24 : -24)
-        .failOffsetY([-16, 16])
-        .runOnJS(true)
-        .onStart(() => setDrawerOpen(false)),
-    [props.isRtl],
+  const configureDrawerGesture = useCallback(
+    (gesture: PanGesture) => {
+      const direction = (props.isRtl ? -1 : 1) * (drawerOpen ? -1 : 1);
+      return gesture
+        .activeOffsetX(direction * 12)
+        .failOffsetX(-direction * 8)
+        .failOffsetY([-14, 14]);
+    },
+    [drawerOpen, props.isRtl],
   );
   useEffect(
     () => registerDuoNavigationActions({ select: props.onPrimarySelect }),
@@ -105,81 +96,82 @@ export function IosNativeTabs(props: NavigationShellProps) {
   return (
     <NativePrimaryNavigation.Provider value={!portraitBottomBar}>
       <IosTabsContext.Provider value={{ ...props, openDrawer }}>
-        <NativeTabs
-          tintColor={theme.primary}
-          minimizeBehavior="never"
-          sidebarAdaptable={false}
-          hidden={portraitBottomBar || props.hidePrimaryNavigation}
-          disableHiddenAnimation
-        >
-          {primaryTabRoutes.map((route) => (
-            <NativeTabs.Trigger
-              key={route.id}
-              name={route.id === 'home' ? 'index' : route.id}
-              disableAutomaticContentInsets
-              testID={`primary-tab-${route.id}`}
-              accessibilityLabel={props.t(route.labelKey)}
-            >
-              <NativeTabs.Trigger.Label hidden>{props.t(route.labelKey)}</NativeTabs.Trigger.Label>
-              <NativeTabs.Trigger.Icon xcasset={icons[route.id as PrimaryRouteId]} />
-            </NativeTabs.Trigger>
-          ))}
-        </NativeTabs>
-        <Modal
-          supportedOrientations={modalOrientations}
-          transparent
-          visible={drawerOpen}
-          animationType="fade"
-          onRequestClose={() => closeDrawer()}
-          onDismiss={() => {
+        {/* Keep UIKit tabs inside the sliding surface so the whole page follows
+            the finger. A Modal here turns the drawer into an unrelated overlay. */}
+        <Drawer
+          open={drawerOpen}
+          onOpen={() => setDrawerOpen(true)}
+          onClose={() => setDrawerOpen(false)}
+          onTransitionEnd={(closing) => {
+            if (!closing) return;
             const action = afterDismiss.current;
             afterDismiss.current = undefined;
             action?.();
           }}
+          style={{ flex: 1 }}
+          drawerType="slide"
+          drawerPosition={props.isRtl ? 'right' : 'left'}
+          direction={props.isRtl ? 'rtl' : 'ltr'}
+          drawerStyle={{
+            width: Math.min(width * 0.88, layout.isDuo || layout.isExpanded ? 320 : 400),
+            backgroundColor: theme.background,
+          }}
+          swipeEnabled={drawerOpen || props.selectedPrimary === 'home'}
+          swipeEdgeWidth={24}
+          swipeMinDistance={40}
+          configureGestureHandler={
+            configureDrawerGesture as unknown as React.ComponentProps<
+              typeof Drawer
+            >['configureGestureHandler']
+          }
+          keyboardDismissMode="on-drag"
+          hideStatusBarOnOpen={false}
+          overlayStyle={{ backgroundColor: '#00000066' }}
+          overlayAccessibilityLabel={props.closeDrawerLabel}
+          renderDrawerContent={() => (
+            <MobileDrawer
+              isRtl={props.isRtl}
+              safeAreaEdges={['top', 'bottom', props.isRtl ? 'right' : 'left']}
+              features={props.features}
+              t={props.t}
+              avatar={props.avatar}
+              displayName={props.displayName}
+              followerCount={props.followerCount}
+              closeLabel={props.closeDrawerLabel}
+              onRequestClose={closeDrawer}
+              onNavigate={(route) =>
+                closeDrawer(() => props.onUtilityNavigate(route, { replace: false }))
+              }
+              onAchievements={props.onAchievements}
+              onAddAccount={props.onAddAccount}
+              hasUser={props.hasUser}
+              hasManagedDiscordBot={props.hasManagedDiscordBot}
+            />
+          )}
         >
-          <SafeAreaProvider>
-            <GestureDetector gesture={dismissSwipe}>
-              <View style={styles.modal}>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={props.closeDrawerLabel}
-                  onPress={() => closeDrawer()}
-                  style={StyleSheet.absoluteFill}
-                />
-                <View
-                  style={{
-                    // A tablet-width window should not turn this menu into a full pane.
-                    width: Math.min(width * 0.88, layout.isDuo || layout.isExpanded ? 320 : 400),
-                    flex: 1,
-                    alignSelf: props.isRtl ? 'flex-end' : 'flex-start',
-                    backgroundColor: theme.background,
-                  }}
-                >
-                  <MobileDrawer
-                    isRtl={props.isRtl}
-                    // Only the drawer's physical outside edge touches the screen.
-                    // Applying the opposite rail inset here compresses its icons.
-                    safeAreaEdges={['top', 'bottom', props.isRtl ? 'right' : 'left']}
-                    features={props.features}
-                    t={props.t}
-                    avatar={props.avatar}
-                    displayName={props.displayName}
-                    followerCount={props.followerCount}
-                    closeLabel={props.closeDrawerLabel}
-                    onRequestClose={closeDrawer}
-                    onNavigate={(route) =>
-                      closeDrawer(() => props.onUtilityNavigate(route, { replace: false }))
-                    }
-                    onAchievements={props.onAchievements}
-                    onAddAccount={props.onAddAccount}
-                    hasUser={props.hasUser}
-                    hasManagedDiscordBot={props.hasManagedDiscordBot}
-                  />
-                </View>
-              </View>
-            </GestureDetector>
-          </SafeAreaProvider>
-        </Modal>
+          <NativeTabs
+            tintColor={theme.primary}
+            minimizeBehavior="never"
+            sidebarAdaptable={false}
+            hidden={portraitBottomBar || props.hidePrimaryNavigation}
+            disableHiddenAnimation
+          >
+            {primaryTabRoutes.map((route) => (
+              <NativeTabs.Trigger
+                key={route.id}
+                name={route.id === 'home' ? 'index' : route.id}
+                disableAutomaticContentInsets
+                testID={`primary-tab-${route.id}`}
+                accessibilityLabel={props.t(route.labelKey)}
+              >
+                <NativeTabs.Trigger.Label hidden>
+                  {props.t(route.labelKey)}
+                </NativeTabs.Trigger.Label>
+                <NativeTabs.Trigger.Icon xcasset={icons[route.id as PrimaryRouteId]} />
+              </NativeTabs.Trigger>
+            ))}
+          </NativeTabs>
+        </Drawer>
       </IosTabsContext.Provider>
     </NativePrimaryNavigation.Provider>
   );
@@ -196,19 +188,8 @@ export function IosPrimaryPage({ route }: { route: PrimaryRouteId }) {
   }, [focused, route, onFocus]);
   const openDrawer = context?.openDrawer;
   const isRtl = context?.isRtl ?? false;
-  // Claim only a narrow leading-edge drag. Embedded event/account strips keep
-  // horizontal gestures elsewhere, and vertical scrolling can fail this pan.
-  const openSwipe = useMemo(
-    () =>
-      Gesture.Pan()
-        .enabled(route === 'home')
-        .hitSlop(isRtl ? { right: 0, width: 24 } : { left: 0, width: 24 })
-        .activeOffsetX(isRtl ? -24 : 24)
-        .failOffsetY([-16, 16])
-        .runOnJS(true)
-        .onStart(() => openDrawer?.()),
-    [isRtl, openDrawer, route],
-  );
+  // The parent Drawer owns the interactive edge drag. A second recognizer here
+  // would open it at a threshold instead of letting the page follow the finger.
   const selectPrimary = context?.onPrimarySelect;
   const pageSwipe = useMemo(
     () =>
@@ -226,15 +207,11 @@ export function IosPrimaryPage({ route }: { route: PrimaryRouteId }) {
         }),
     [route, isRtl, selectPrimary, openDrawer],
   );
-  const navigationGesture = useMemo(
-    () => Gesture.Race(openSwipe, pageSwipe),
-    [openSwipe, pageSwipe],
-  );
   if (!context) return null; // Android renders its retained pager from the group layout.
   return (
     <PrimaryPageGestureContext.Provider value={pageSwipe}>
       <ReservedRegionLayout>
-        <GestureDetector gesture={navigationGesture}>
+        <GestureDetector gesture={pageSwipe}>
           <View
             style={styles.page}
             collapsable={false}
@@ -283,5 +260,4 @@ export function IosPrimaryPage({ route }: { route: PrimaryRouteId }) {
 const styles = StyleSheet.create({
   portraitBar: { position: 'absolute', left: 0, right: 0, bottom: 0 },
   page: { flex: 1 },
-  modal: { flex: 1, backgroundColor: '#00000066' },
 });

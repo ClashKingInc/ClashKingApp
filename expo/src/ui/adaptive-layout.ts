@@ -4,12 +4,18 @@ import { Platform, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AdaptiveViewportContext } from './adaptive-viewport';
 
-/** Identity and width are separate: large Android/regular iPhone windows must
- * retain their existing behavior, rather than entering the tablet redesign. */
+/** Device identity enables tablet layouts; available width decides whether
+ * they fit. A landscape phone must not become a tablet just because it is wide. */
 export const isDuoDevice =
   Platform.OS === 'ios' &&
   (Device.modelName === 'iPhone Duo' ||
     (!Device.isDevice && !!Device.deviceName?.startsWith('iPhone Duo')));
+
+export const isTabletDevice =
+  (Platform.OS === 'ios' && Platform.isPad === true) ||
+  (Platform.OS === 'android' && Device.deviceType === Device.DeviceType.TABLET);
+
+export const isAdaptiveNativeDevice = isTabletDevice || isDuoDevice;
 
 export const isAdaptiveIOSDevice =
   Platform.OS === 'ios' && (Platform.isPad === true || isDuoDevice);
@@ -22,9 +28,9 @@ export function useAdaptiveLayout() {
   const insets = useSafeAreaInsets();
   const usableWidth = Math.max(0, width - insets.left - insets.right);
   const isDuo = isDuoDevice;
-  const isTablet = Platform.OS === 'ios' && Platform.isPad === true && !isDuo;
+  const isTablet = isTabletDevice && !isDuo;
   // Duo portrait deliberately follows the phone presentation, including on
-  // the inner display. Narrow iPad multitasking windows also collapse safely.
+  // the inner display. Narrow tablet multitasking windows also collapse safely.
   const mode =
     usableWidth >= 640 && (isTablet || (isDuo && windowWidth > windowHeight))
       ? isTablet

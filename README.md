@@ -95,3 +95,41 @@ You can support ClashKing by using creator code **ClashKing** in supported Super
 See [LICENSE](LICENSE) for the repository's license. Third-party components retain their own licenses and notices.
 
 ClashKing is not affiliated with Supercell. Clash of Clans and its related assets belong to Supercell.
+
+## Bundled header artwork
+
+ClashKingAssets owns the header illustrations. The native app bundles the
+version selected by `expo/artwork/header-artwork.lock.json` under
+`expo/assets/generated/clashking`; these files are generated copies, not a
+second hand-edited source. First launch, offline use and page navigation do not
+download these headers. The existing header decode cache remains unchanged.
+
+After reviewing a new Assets selection, run from `expo/`:
+
+```sh
+npm run artwork:sync -- --assets-root /path/to/clashking_assets --update-lock
+npm run artwork:check
+```
+
+Normal CI and release checks verify the committed lock and bytes without a
+network request or an Assets checkout. Game metadata, including abilities,
+continues to use the published manifest and the existing offline data cache;
+there is no bundled abilities fallback.
+
+## Dependency security pins
+
+The Expo App remains on SDK 58. The lockfile includes Expo 58.0.22 and its
+patched CLI dependency graph. The scoped npm override for
+`@firebase/firestore > @grpc/grpc-js` selects 1.14.7 to remove the vulnerable
+1.9.x transport pulled in by Firebase. Keep the override until Firebase's
+upstream dependency selects a patched transport; do not downgrade the native
+Firebase integration merely to satisfy npm's suggested audit fix.
+
+`expo-widgets` is not installed: the App has no imports from it, and the custom
+`plugins/with-clashking-native` plugin owns the existing widget targets and
+storage contract. Do not add a second widget target generator for those widgets.
+
+The dependency overrides also select patched glob 14.0.3 for glob 13 consumers
+and minimatch 11.0.4 for minimatch 10 consumers. Keep these scoped by old major;
+do not force minimatch 3 users onto the incompatible export API. Validate Metro
+exports, Expo compatibility and license inventory when changing these overrides.

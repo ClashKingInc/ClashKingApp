@@ -208,7 +208,7 @@ export function ClanInfoHeader({
       <View testID="clan-header-backdrop" pointerEvents="none" style={StyleSheet.absoluteFill}>
         <HeaderArtwork
           testID="clan-header-background-image"
-          source={require('../../../../assets/clashking/backgrounds/clan-clearing-v5-dark.webp')}
+          source={require('../../../../assets/generated/clashking/headers/clan-clearing-v5-dark.webp')}
           cachePolicy="memory-disk"
           transition={0}
           style={StyleSheet.absoluteFill}

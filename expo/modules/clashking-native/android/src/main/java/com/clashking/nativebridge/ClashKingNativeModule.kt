@@ -96,10 +96,6 @@ class ClashKingNativeModule : Module() {
             setAlternateIconName(requireContext(), iconName)
         }
 
-        AsyncFunction("showDebugNotification") { _: Map<String, Any?> ->
-            unsupportedDebugNotification()
-        }
-
         lateinit var fileSaveLauncher: AppContextActivityResultLauncher<FileSaveOptions, FileSaveResult>
 
         RegisterActivityContracts {
@@ -594,12 +590,6 @@ private class FileSaveContract : AppContextActivityResultContract<FileSaveOption
         if (resultCode != Activity.RESULT_OK) return FileSaveResult.Cancelled
         return intent?.data?.toString()?.let(FileSaveResult::Saved) ?: FileSaveResult.Cancelled
     }
-}
-
-private fun unsupportedDebugNotification(): Map<String, Any?> {
-    throw IllegalStateException(
-        "Notification debug samples are only supported by the ClashKing iOS build."
-    )
 }
 
 private fun legacyWidgetKeyIsAllowed(key: String): Boolean {

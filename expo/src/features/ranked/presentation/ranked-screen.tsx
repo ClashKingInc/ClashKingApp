@@ -585,7 +585,7 @@ function RankedHeader({
       <View style={styles.headerBackground}>
         <HeaderArtwork
           testID="ranked-header-background"
-          source={require('../../../../assets/clashking/backgrounds/ranked-cloud-trophy-v1.webp')}
+          source={require('../../../../assets/generated/clashking/headers/ranked-cloud-trophy-v1.webp')}
           cachePolicy="disk"
           contentFit="cover"
           contentPosition="center"

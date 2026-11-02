@@ -328,7 +328,7 @@ export function LegendsScreen({
           ]}
         >
           <HeaderArtwork
-            source={require('../../../../assets/clashking/backgrounds/legends-pekka-classic-v1.webp')}
+            source={require('../../../../assets/generated/clashking/headers/legends-pekka-classic-v1.webp')}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
             contentPosition="center"

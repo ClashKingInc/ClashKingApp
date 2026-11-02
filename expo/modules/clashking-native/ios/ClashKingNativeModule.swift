@@ -174,11 +174,6 @@ public final class ClashKingNativeModule: Module {
       }
     }
 
-    AsyncFunction("showDebugNotification") {
-      (payload: [String: Any]) async throws -> [String: Any] in
-      try await NotificationDebugBridge.showSample(payload: payload)
-    }
-
     AsyncFunction("saveFile") { (options: [String: String], promise: Promise) in
       guard self.fileSaveContext == nil else {
         throw NativeParityError.fileSaveInProgress
@@ -477,95 +472,6 @@ private final class FileSaveDelegate: NSObject, UIDocumentPickerDelegate,
     let callback = completion
     completion = nil
     callback?(url)
-  }
-}
-
-private enum NotificationDebugBridge {
-  static func showSample(payload: [String: Any]) async throws -> [String: Any] {
-    let center = UNUserNotificationCenter.current()
-    let granted: Bool
-    do {
-      granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
-    } catch {
-      throw Exception(
-        name: "NotificationDebugPermissionFailed",
-        description: error.localizedDescription,
-        code: "permission_failed"
-      )
-    }
-    guard granted else {
-      throw Exception(
-        name: "NotificationDebugPermissionDenied",
-        description: "Notifications are disabled for ClashKing.",
-        code: "permission_denied"
-      )
-    }
-
-    let title = payload["title"] as? String ?? "ClashKing"
-    let body = payload["body"] as? String ?? "Test notification"
-    let threadIdentifier = payload["threadIdentifier"] as? String ?? "debug"
-    let content = UNMutableNotificationContent()
-    content.title = title
-    content.body = body
-    content.threadIdentifier = threadIdentifier
-    content.sound = .default
-    content.attachments = await attachments(from: payload)
-
-    let request = UNNotificationRequest(
-      identifier: "clashking-debug-\(UUID().uuidString)",
-      content: content,
-      trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-    )
-    do {
-      try await center.add(request)
-    } catch {
-      throw Exception(
-        name: "NotificationDebugScheduleFailed",
-        description: error.localizedDescription,
-        code: "schedule_failed"
-      )
-    }
-    return [
-      "scheduled": true,
-      "title": title,
-      "attachmentCount": content.attachments.count,
-    ]
-  }
-
-  private static func attachments(from payload: [String: Any]) async -> [UNNotificationAttachment] {
-    let urls: [String]
-    if let assetUrls = payload["assetUrls"] as? [String] {
-      urls = assetUrls
-    } else if let assetUrl = payload["assetUrl"] as? String {
-      urls = [assetUrl]
-    } else {
-      urls = []
-    }
-
-    var attachments: [UNNotificationAttachment] = []
-    for (index, urlString) in urls.prefix(2).enumerated() {
-      if let attachment = await attachment(urlString: urlString, index: index) {
-        attachments.append(attachment)
-      }
-    }
-    return attachments
-  }
-
-  private static func attachment(urlString: String, index: Int) async -> UNNotificationAttachment? {
-    guard let url = URL(string: urlString) else { return nil }
-    do {
-      let (data, response) = try await URLSession.shared.data(from: url)
-      if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode) {
-        return nil
-      }
-      let pathExtension = url.pathExtension.isEmpty ? "png" : url.pathExtension
-      let fileURL = FileManager.default.temporaryDirectory
-        .appendingPathComponent("clashking-notification-\(UUID().uuidString)-\(index).\(pathExtension)")
-      try data.write(to: fileURL, options: .atomic)
-      return try UNNotificationAttachment(identifier: "image-\(index)", url: fileURL)
-    } catch {
-      return nil
-    }
   }
 }
 

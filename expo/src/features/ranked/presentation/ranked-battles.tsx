@@ -150,12 +150,10 @@ export function RankedBattles({
                       <CKText skeleton={false} role="metadata" style={styles.expandedSelectorLabel}>
                         {label}
                       </CKText>
-                      <CKText role="titleLarge" style={styles.expandedSelectorCount}>
-                        {used}
-                        <CKText muted role="metadata">
-                          {limit > 0 ? ` / ${limit}` : ''}
-                        </CKText>
-                      </CKText>
+                      <View style={styles.countRow}>
+                        <CKText role="titleLarge" style={styles.expandedSelectorCount}>{used}</CKText>
+                        {limit > 0 ? <CKText muted role="metadata">/ {limit}</CKText> : null}
+                      </View>
                     </View>
                     <View style={styles.inline}>
                       <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.smallIcon} />
@@ -184,12 +182,10 @@ export function RankedBattles({
                       </CKText>
                     </View>
                     <View style={styles.summaryNumbers}>
-                      <CKText role="titleLarge">
-                        {used}
-                        <CKText muted role="metadata">
-                          {limit > 0 ? ` / ${limit}` : ''}
-                        </CKText>
-                      </CKText>
+                      <View style={styles.countRow}>
+                        <CKText role="titleLarge" style={styles.selectorCount}>{used}</CKText>
+                        {limit > 0 ? <CKText muted role="metadata">/ {limit}</CKText> : null}
+                      </View>
                       <View style={styles.inline}>
                         <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.smallIcon} />
                         <CKText
@@ -370,6 +366,9 @@ const styles = StyleSheet.create({
   dateNavigator: { width: '100%', maxWidth: 440 },
   selector: { flex: 1, padding: 14, gap: 12, borderRadius: ckRadius.tile, borderBottomWidth: 3 },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  // Separate text nodes keep Android's smaller denominator from clipping the count glyphs.
+  countRow: { flexDirection: 'row', alignItems: 'baseline', gap: 3 },
+  selectorCount: { lineHeight: 32, includeFontPadding: true, fontVariant: ['tabular-nums'] },
   summaryNumbers: {
     flexDirection: 'row',
     justifyContent: 'space-between',
