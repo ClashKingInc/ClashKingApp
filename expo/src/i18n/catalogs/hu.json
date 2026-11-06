@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Összekapcsolt fiókjaid készen állnak. Adj hozzá egy újabbat, vagy folytasd.",
   "onboardingSkipAccountSetup": "Kihagyás",
   "accountsSetupBody": "Add hozzá és igazold Clash of Clans-fiókjaidat.",
-  "accountsMyTitle": "Saját fiókjaim"
+  "accountsMyTitle": "Saját fiókjaim",
+  "profileAvatar": "Kinézet módosítása",
+  "avatarPickerTitle": "Válassz egy avatárt"
 }

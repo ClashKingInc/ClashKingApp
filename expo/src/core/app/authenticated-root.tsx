@@ -1,3 +1,4 @@
+import { ProfileAvatar } from '../../features/avatars/clash-avatar';
 import * as Clipboard from 'expo-clipboard';
 import { router, type Href } from 'expo-router';
 import {
@@ -9,7 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Trophy, UserRound } from 'lucide-react-native';
+import { Trophy } from 'lucide-react-native';
 
 import { ServersRoot, type DashboardServer } from '../../features/servers/servers-root';
 import { EsportsRoot } from '../../features/competitive/esports-root';
@@ -83,7 +84,6 @@ import { DeepLinkHandler, startDeepLinkHandling, type DeepLinkFeedback } from '.
 import {
   ClashHandoffDialog,
   EmptyState,
-  MobileWebImage,
   PageLoadingOverlay,
   PageLoadingHost,
   usePageLoadingRequest,
@@ -1204,17 +1204,8 @@ export function AuthenticatedRoot({
   return (
     <PageLoadingHost value={true}>
       <NavigationShell
-        avatar={
-          user?.avatarUrl ? (
-            <MobileWebImage
-              imageUrl={user.avatarUrl}
-              style={styles.avatar}
-              errorFallback={<UserRound color={theme.onSurfaceVariant} size={28} />}
-            />
-          ) : (
-            <UserRound color={theme.onSurfaceVariant} size={28} />
-          )
-        }
+        avatar={<ProfileAvatar size={40} />}
+        sidebarAvatar={<ProfileAvatar size={88} interactive />}
         closeDrawerLabel={t('navigationCloseDrawer')}
         displayName={user?.username ?? 'ClashKing'}
         drawerHintStore={runtime.preferences}

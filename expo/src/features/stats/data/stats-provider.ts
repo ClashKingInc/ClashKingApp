@@ -1,7 +1,5 @@
 import {
   armySetupQuery,
-  StatsArmiesQuery,
-  StatsArmiesResponse,
   StatsAudience,
   StatsClanCountsResponse,
   StatsCwlQuery,
@@ -69,7 +67,7 @@ export class StatsProvider {
   armiesLeagueTier?: number;
   armiesMinimumSample = 100;
   armiesLimit = 25;
-  armiesSortBy: StatsArmiesQuery['sortBy'] = 'usage';
+  armiesSortBy: 'usage' | 'tripleRate' | 'zeroStarRate' | 'averageDuration' | 'averageDestruction' = 'usage';
   armiesInclude: readonly StatsItemQuantityFilter[] = [];
   armiesExclude: readonly string[] = [];
   armyRankLimit?: 200 | 1000;
@@ -175,7 +173,7 @@ export class StatsProvider {
     leagueTier?: number | null;
     minimumSample?: number;
     limit?: number;
-    sortBy?: StatsArmiesQuery['sortBy'];
+    sortBy?: 'usage' | 'tripleRate' | 'zeroStarRate' | 'averageDuration' | 'averageDestruction';
     include?: readonly StatsItemQuantityFilter[];
     exclude?: readonly string[];
   }): void {
@@ -413,7 +411,6 @@ function isEmpty(value: object): boolean {
         (value.memberBins?.length ?? 0) ===
       0
     );
-  if (value instanceof StatsArmiesResponse) return false;
   return false;
 }
 function day(value: Date): Date {

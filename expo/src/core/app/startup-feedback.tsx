@@ -1,13 +1,14 @@
+import { ProfileAvatar } from '../../features/avatars/clash-avatar';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Hammer, LogOut, MessageCircle, RefreshCcw, UserRound, WifiOff } from 'lucide-react-native';
+import { Hammer, LogOut, MessageCircle, RefreshCcw, WifiOff } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../assets/image-assets';
 import { useI18n } from '../../i18n';
 import {
   CKText,
-  LoadingIndicator,
   MobileWebImage,
+  LoadingIndicator,
   ckRadius,
   ckSpacing,
   colorWithAlpha,
@@ -44,7 +45,6 @@ export function StartupErrorScreen({
   onJoinDiscord,
   onLogout,
   userName,
-  avatarUrl,
 }: {
   isNetworkError: boolean;
   retrying: boolean;
@@ -72,16 +72,7 @@ export function StartupErrorScreen({
             {userName ?? t('generalLoading')}
           </CKText>
           <View style={[styles.accountAvatar, { backgroundColor: theme.surfaceContainerHighest }]}>
-            {avatarUrl ? (
-              <MobileWebImage
-                contentFit="cover"
-                imageUrl={avatarUrl}
-                style={styles.accountAvatarImage}
-                errorFallback={<UserRound color={theme.onSurfaceVariant} size={22} />}
-              />
-            ) : (
-              <UserRound color={theme.onSurfaceVariant} size={22} />
-            )}
+            <ProfileAvatar size={36} />
           </View>
         </View>
       </View>

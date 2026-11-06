@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Dine tilknyttede konti er klar. Tilføj en konto mere, eller fortsæt.",
   "onboardingSkipAccountSetup": "Spring over",
   "accountsSetupBody": "Tilføj og bekræft dine Clash of Clans-konti.",
-  "accountsMyTitle": "Mine konti"
+  "accountsMyTitle": "Mine konti",
+  "profileAvatar": "Skift udseende",
+  "avatarPickerTitle": "Vælg en avatar"
 }

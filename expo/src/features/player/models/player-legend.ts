@@ -18,7 +18,6 @@ export class PlayerLegendBattle {
     readonly destructionPercentage: number | null = null,
     readonly shareCode: string | null = null,
     readonly opponentInsight: PlayerLegendOpponentInsight | null = null,
-    readonly familyId: string | null = null,
   ) {}
 
   static fromJson(json: JsonRecord) {
@@ -36,7 +35,6 @@ export class PlayerLegendBattle {
       json.destructionPercentage == null ? null : number(json.destructionPercentage),
       json.shareCode === null ? null : string(json.shareCode),
       null,
-      typeof json.familyId === 'string' ? json.familyId : null,
     );
   }
 }

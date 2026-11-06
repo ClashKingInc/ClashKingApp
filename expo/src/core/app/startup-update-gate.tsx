@@ -31,16 +31,7 @@ export async function loadStartupUpdate(
   const result = await runtime.check();
   if (!result.isAvailable && !result.isRollBackToEmbedded) return;
   callbacks.downloading();
-  // Keep quick downloads readable without adding time to slower downloads.
-  // Start the minimum alongside the fetch; an explicit background choice still
-  // releases the screen immediately and prevents the later automatic reload.
-  const minimumDisplay = new Promise<void>((resolve) => setTimeout(resolve, 3000));
-  let downloaded;
-  try {
-    downloaded = await runtime.fetch();
-  } finally {
-    await minimumDisplay;
-  }
+  const downloaded = await runtime.fetch();
   if ((downloaded.isNew || downloaded.isRollBackToEmbedded) && callbacks.shouldReload()) {
     await runtime.reload();
   }

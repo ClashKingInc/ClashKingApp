@@ -5198,5 +5198,7 @@
   "onboardingAccountsReadyBody": "Твоји повезани налози су спремни. Додај још један или настави.",
   "onboardingSkipAccountSetup": "Прескочи",
   "accountsSetupBody": "Додај и потврди своје Clash of Clans налоге.",
-  "accountsMyTitle": "Моји налози"
+  "accountsMyTitle": "Моји налози",
+  "profileAvatar": "Промени изглед",
+  "avatarPickerTitle": "Изабери аватар"
 }

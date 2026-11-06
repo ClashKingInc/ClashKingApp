@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "De tilknyttede kontoene dine er klare. Legg til en til, eller fortsett.",
   "onboardingSkipAccountSetup": "Hopp over",
   "accountsSetupBody": "Legg til og bekreft Clash of Clans-kontoene dine.",
-  "accountsMyTitle": "Mine kontoer"
+  "accountsMyTitle": "Mine kontoer",
+  "profileAvatar": "Endre utseende",
+  "avatarPickerTitle": "Velg en avatar"
 }

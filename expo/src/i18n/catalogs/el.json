@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Οι συνδεδεμένοι λογαριασμοί σου είναι έτοιμοι. Πρόσθεσε άλλον ή συνέχισε.",
   "onboardingSkipAccountSetup": "Παράλειψη",
   "accountsSetupBody": "Πρόσθεσε και επαλήθευσε τους λογαριασμούς σου στο Clash of Clans.",
-  "accountsMyTitle": "Οι λογαριασμοί μου"
+  "accountsMyTitle": "Οι λογαριασμοί μου",
+  "profileAvatar": "Αλλαγή εμφάνισης",
+  "avatarPickerTitle": "Διάλεξε ένα άβαταρ"
 }

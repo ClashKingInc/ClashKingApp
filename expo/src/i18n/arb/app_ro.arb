@@ -5198,5 +5198,7 @@
   "onboardingAccountsReadyBody": "Conturile conectate sunt pregătite. Adaugă alt cont sau continuă.",
   "onboardingSkipAccountSetup": "Omite",
   "accountsSetupBody": "Adaugă și verifică-ți conturile Clash of Clans.",
-  "accountsMyTitle": "Conturile mele"
+  "accountsMyTitle": "Conturile mele",
+  "profileAvatar": "Schimbă aspectul",
+  "avatarPickerTitle": "Alege un avatar"
 }

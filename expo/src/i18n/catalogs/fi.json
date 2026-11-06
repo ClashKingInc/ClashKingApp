@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Yhdistetyt tilisi ovat valmiina. Lisää toinen tili tai jatka.",
   "onboardingSkipAccountSetup": "Ohita",
   "accountsSetupBody": "Lisää ja vahvista Clash of Clans -tilisi.",
-  "accountsMyTitle": "Omat tilit"
+  "accountsMyTitle": "Omat tilit",
+  "profileAvatar": "Vaihda ulkoasua",
+  "avatarPickerTitle": "Valitse avatar"
 }

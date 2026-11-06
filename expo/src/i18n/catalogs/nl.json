@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Je gekoppelde accounts zijn klaar. Voeg nog een account toe of ga verder.",
   "onboardingSkipAccountSetup": "Overslaan",
   "accountsSetupBody": "Voeg je Clash of Clans-accounts toe en verifieer ze.",
-  "accountsMyTitle": "Mijn accounts"
+  "accountsMyTitle": "Mijn accounts",
+  "profileAvatar": "Uiterlijk wijzigen",
+  "avatarPickerTitle": "Kies een avatar"
 }

@@ -1,6 +1,7 @@
+import { ProfileAvatar } from '../../avatars/clash-avatar';
 import { useEffect, useState, useCallback } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowLeft, ChevronRight, Settings2, UserRound } from 'lucide-react-native';
+import { ArrowLeft, ChevronRight, Settings2 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
@@ -86,85 +87,78 @@ export function UserProfileScreen({
         />
       }
     >
-      <View
-        style={[
-          styles.header,
-          {
-            minHeight: (layout.isExpanded ? headerLayout.minHeight : 236) + insets.top,
-            paddingTop: ckSpacing.lg + insets.top,
-            ...(layout.isExpanded
-              ? { paddingHorizontal: headerLayout.horizontal, paddingBottom: headerLayout.bottom }
-              : {}),
-          },
-        ]}
-      >
-        <HeaderArtwork
-          source={require('../../../../assets/generated/clashking/headers/profile/profile-selected-banner.png')}
-          style={StyleSheet.absoluteFill}
-          contentFit="cover"
-          contentPosition="center"
-        />
-        <HeroHeaderScrim edgeColor={theme.background} />
-        <View style={{ position: 'absolute', top: insets.top + 8, left: 14 }}>
-          <InlineBackControl onBack={onBack}>
-            <ProfileHeaderAction
-              label={materialBackLabel(locale)}
-              icon={<ArrowLeft color="#fff" size={23} />}
-              onPress={onBack}
-            />
-          </InlineBackControl>
-        </View>
+      <View>
         <View
           style={[
-            styles.identity,
-            layout.isExpanded && { gap: headerLayout.gap, minHeight: headerLayout.bodyMinHeight },
+            styles.header,
+            {
+              minHeight: (layout.isExpanded ? headerLayout.minHeight : 236) + insets.top,
+              paddingTop: ckSpacing.lg + insets.top,
+              ...(layout.isExpanded
+                ? { paddingHorizontal: headerLayout.horizontal, paddingBottom: 4 }
+                : {}),
+            },
           ]}
         >
+          <HeaderArtwork
+            source={require('../../../../assets/generated/clashking/headers/profile/profile-selected-banner.png')}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            contentPosition="center"
+          />
+          <HeroHeaderScrim edgeColor={theme.background} />
+          <View style={{ position: 'absolute', top: insets.top + 8, left: 14 }}>
+            <InlineBackControl onBack={onBack}>
+              <ProfileHeaderAction
+                label={materialBackLabel(locale)}
+                icon={<ArrowLeft color="#fff" size={23} />}
+                onPress={onBack}
+              />
+            </InlineBackControl>
+          </View>
           <View
             style={[
-              styles.avatar,
-              layout.isExpanded && { width: headerLayout.image, height: headerLayout.image },
+              styles.identity,
+              layout.isExpanded && { gap: headerLayout.gap, minHeight: headerLayout.bodyMinHeight },
             ]}
           >
-            {user?.avatarUrl ? (
-              <MobileWebImage
-                imageUrl={user.avatarUrl}
-                contentFit="cover"
-                style={{ width: '100%', height: '100%' }}
-                errorFallback={<UserRound size={34} color="#fff" />}
-              />
-            ) : (
-              <UserRound size={34} color="#fff" />
-            )}
-          </View>
-          <View style={styles.identityText}>
-            <CKText
-              role="screenTitle"
+            <View
               style={[
-                styles.name,
-                { color: '#fff' },
-                layout.isExpanded && {
-                  fontSize: headerLayout.title,
-                  lineHeight: headerLayout.titleLine,
-                },
+                styles.avatar,
+                layout.isExpanded && { width: headerLayout.image, height: headerLayout.image },
               ]}
             >
-              {user?.username || t('competitiveProfile')}
-            </CKText>
+              <ProfileAvatar size={headerLayout.image} />
+            </View>
+            <View style={styles.identityText}>
+              <CKText
+                role="screenTitle"
+                style={[
+                  styles.name,
+                  { color: '#fff' },
+                  layout.isExpanded && {
+                    fontSize: headerLayout.title,
+                    lineHeight: headerLayout.titleLine,
+                  },
+                ]}
+              >
+                {user?.username || t('competitiveProfile')}
+              </CKText>
+            </View>
           </View>
         </View>
+        <ProfileTabs
+          variant="underline"
+          overflow="menu"
+          selectedKey={tab}
+          onSelect={setTab}
+          tabs={[
+            { key: 'accounts', label: t('accountsMenuTitle') },
+            { key: 'achievements', label: t('achievementsTitle') },
+            { key: 'tournaments', label: t('competitiveTournaments') },
+          ]}
+        />
       </View>
-      <ProfileTabs
-        variant="underline"
-        overflow="menu"
-        selectedKey={tab}
-        onSelect={setTab}
-        tabs={[
-          { key: 'accounts', label: t('accountsMenuTitle') },
-          { key: 'achievements', label: t('achievementsTitle') },
-          { key: 'tournaments', label: t('competitiveTournaments') },
-        ]}
-      />
       {tab === 'accounts' ? (
         <View style={styles.section}>
           <PressableSurface
@@ -376,6 +370,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: ckRadius.card,
     borderBottomRightRadius: ckRadius.card,
     padding: ckSpacing.lg,
+    // Keep the identity and tabs together; the outer page gap starts after both.
+    paddingBottom: 4,
     overflow: 'hidden',
     minHeight: 236,
     justifyContent: 'flex-end',
@@ -384,10 +380,10 @@ const styles = StyleSheet.create({
   identityText: { flex: 1, minWidth: 0, gap: ckSpacing.xs },
   name: { fontSize: 30, lineHeight: 36 },
   avatar: {
-    width: 64,
-    height: 64,
+    width: 88,
+    height: 88,
     borderRadius: ckRadius.tile,
-    overflow: 'hidden',
+    overflow: 'visible',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -5103,5 +5103,7 @@
   "onboardingAccountsReadyBody": "Tus cuentas vinculadas están listas. Añade otra cuenta o continúa.",
   "onboardingSkipAccountSetup": "Omitir",
   "accountsSetupBody": "Añade y verifica tus cuentas de Clash of Clans.",
-  "accountsMyTitle": "Mis cuentas"
+  "accountsMyTitle": "Mis cuentas",
+  "profileAvatar": "Cambiar aspecto",
+  "avatarPickerTitle": "Elige un avatar"
 }

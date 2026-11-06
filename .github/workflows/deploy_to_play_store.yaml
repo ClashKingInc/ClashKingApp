@@ -109,6 +109,7 @@ jobs:
       - name: Verify Expo project
         run: |
           node scripts/check-release-notes.mjs
+          npm run release:config
           npm run typecheck
           npm run lint
           npm run l10n:check

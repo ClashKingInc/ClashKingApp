@@ -65,19 +65,19 @@ export function DesktopSidebar({
       ]}
       testID="desktop-sidebar"
     >
-      <Pressable
-        style={[styles.identity, isRtl && styles.rowRtl]}
-        accessibilityRole="button"
-        accessibilityLabel={t('competitiveViewProfile')}
-        onPress={() =>
-          onUtility(
-            appRoutes.find((route) => route.id === 'profile')!,
-            false,
-          )
-        }
-      >
+      <View style={[styles.identity, isRtl && styles.rowRtl]}>
         <View style={styles.avatar}>{avatar}</View>
-        <View style={styles.identityText}>
+        <Pressable
+          style={styles.identityText}
+          accessibilityRole="button"
+          accessibilityLabel={t('competitiveViewProfile')}
+          onPress={() =>
+            onUtility(
+              appRoutes.find((route) => route.id === 'profile')!,
+              false,
+            )
+          }
+        >
           <CKText role="titleMedium" numberOfLines={1} style={styles.strong}>
             {displayName}
           </CKText>
@@ -86,8 +86,8 @@ export function DesktopSidebar({
               {productLabel}
             </CKText>
           ) : null}
-        </View>
-      </Pressable>
+        </Pressable>
+      </View>
       <View style={styles.primary}>
         {primaryTabRoutes.map((route) => (
           <SidebarRoute
@@ -198,10 +198,10 @@ const styles = StyleSheet.create({
   },
   identity: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 24 },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    overflow: 'hidden',
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    overflow: 'visible',
     alignItems: 'center',
     justifyContent: 'center',
   },

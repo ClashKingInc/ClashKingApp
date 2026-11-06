@@ -307,6 +307,7 @@ function ApplicationContent() {
         <ManageLinkedAccountsScreen
           continueLabel={materialContinueLabel(locale)}
           firstConnection
+          allowUnverifiedBack
           initialAccounts={runtime.accounts.accounts.map((account) =>
             accountPresentationItem(
               account,
@@ -338,10 +339,7 @@ function ApplicationContent() {
           onRefresh={async () => {
             await loadAccounts();
           }}
-          onLogout={async () => {
-            runtime.players.clearRankedLeagueCache();
-            await runtime.auth.signOut();
-          }}
+          onBack={() => setScene({ kind: 'introduction', stage: 'overview' })}
           service={runtime.accounts}
           user={runtime.auth.state.currentUser}
         />

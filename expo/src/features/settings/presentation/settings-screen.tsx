@@ -1,3 +1,4 @@
+import { SettingsAvatar } from '../../avatars/avatar-picker';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
@@ -24,7 +25,6 @@ import {
   SunMoon,
   Shield,
   Languages as TranslateIcon,
-  UserRound,
 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -105,18 +105,7 @@ export function SettingsScreen({
   const body = (
     <View style={[styles.body, desktop && styles.desktop]}>
       <View style={styles.profile}>
-        <View style={[styles.avatar, { backgroundColor: theme.surfaceContainerHighest }]}>
-          {user.avatarUrl ? (
-            <MobileWebImage
-              imageUrl={user.avatarUrl}
-              contentFit="cover"
-              errorFallback={<UserRound color={theme.onSurfaceVariant} size={30} />}
-              style={styles.avatar}
-            />
-          ) : (
-            <UserRound color={theme.onSurfaceVariant} size={30} />
-          )}
-        </View>
+        <SettingsAvatar />
         <CKText role="titleLarge" numberOfLines={1} style={styles.strong}>
           {user.username}
         </CKText>

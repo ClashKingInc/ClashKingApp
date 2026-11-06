@@ -17,7 +17,9 @@ begin
     key: ENV.fetch('API_PRIVATE_KEY'),
     in_house: false,
   )
-  Spaceship::ConnectAPI::App.all(limit: 1)
+  app = Spaceship::ConnectAPI::App.find('com.clashking.apps')
+  abort 'The Apple API key cannot access com.clashking.apps.' unless app
+  puts "ClashKing App Store Connect app ID: #{app.id}"
   if ENV.fetch('NOTIFICATION_PROFILE_BASE64', '').strip.empty?
     Spaceship::ConnectAPI::Certificate.all(limit: 1)
   end

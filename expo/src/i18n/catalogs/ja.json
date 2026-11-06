@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "連携済みのアカウントを利用できます。別のアカウントを追加するか、次へ進んでください。",
   "onboardingSkipAccountSetup": "スキップ",
   "accountsSetupBody": "Clash of Clansのアカウントを追加し、所有権を確認しましょう。",
-  "accountsMyTitle": "マイアカウント"
+  "accountsMyTitle": "マイアカウント",
+  "profileAvatar": "見た目を変更",
+  "avatarPickerTitle": "アバターを選ぼう"
 }

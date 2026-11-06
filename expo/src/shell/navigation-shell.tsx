@@ -57,6 +57,7 @@ export interface NavigationShellProps {
   t: Translate;
   isRtl: boolean;
   avatar: ReactNode;
+  sidebarAvatar?: ReactNode;
   displayName: string;
   followerCount: number | null;
   productLabel: string;
@@ -240,7 +241,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
             isRtl={props.isRtl}
             features={props.features}
             t={props.t}
-            avatar={props.avatar}
+            avatar={props.sidebarAvatar ?? props.avatar}
             displayName={props.displayName}
             followerCount={props.followerCount}
             closeLabel={props.closeDrawerLabel}
@@ -424,7 +425,7 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
           selectedUtility={effectiveUtility}
           features={props.features}
           t={props.t}
-          avatar={props.avatar}
+          avatar={props.sidebarAvatar ?? props.avatar}
           displayName={props.displayName}
           productLabel={props.productLabel}
           hasUser={props.hasUser}

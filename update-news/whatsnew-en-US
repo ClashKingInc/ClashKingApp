@@ -1,8 +1,6 @@
-ClashKing 0.6.4 alpha
+ClashKing 1.0
 
-- Improved event-bar swiping and rankings/statistics navigation.
-- Kept known labels and row positions visible while data loads.
-- Refreshed troop artwork lookups when game data changes.
-- Limited Home rank colors to the rank number.
-
-Please report issues found during testing.
+- A rebuilt native app for player, clan, war and league statistics.
+- Track your accounts, upgrades and clan notifications.
+- Choose your avatar and keep your preferences across devices.
+- Improved navigation, widgets and support for multiple languages.

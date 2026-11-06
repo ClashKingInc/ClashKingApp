@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Tvé propojené účty jsou připravené. Přidej další účet nebo pokračuj.",
   "onboardingSkipAccountSetup": "Přeskočit",
   "accountsSetupBody": "Přidej a ověř své účty Clash of Clans.",
-  "accountsMyTitle": "Moje účty"
+  "accountsMyTitle": "Moje účty",
+  "profileAvatar": "Změnit vzhled",
+  "avatarPickerTitle": "Vyber si avatara"
 }

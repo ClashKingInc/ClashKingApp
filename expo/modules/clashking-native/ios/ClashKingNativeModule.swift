@@ -1,4 +1,5 @@
 import Darwin
+import ObjectiveC
 import AVFoundation
 import CryptoKit
 import ExpoModulesCore
@@ -56,7 +57,6 @@ public final class ClashKingNativeModule: Module {
     }
     AsyncFunction("reconcileNativeTabBar") { () async -> Bool in
       await MainActor.run {
-        guard #available(iOS 27.0, *) else { return false }
         let windows = UIApplication.shared.connectedScenes
           .compactMap { $0 as? UIWindowScene }.flatMap { $0.windows }
         guard let pair = windows.compactMap({ window -> (UIWindow, UITabBarController)? in
@@ -65,6 +65,8 @@ public final class ClashKingNativeModule: Module {
           return (window, tabs)
         }).first else { return false }
         let (window, tabs) = pair
+        configurePrimaryTabTransitions(tabs)
+        guard #available(iOS 27.0, *) else { return true }
         guard !tabs.isTabBarHidden else { return false }
         guard tabs.tabBar.superview != nil else { return false }
         let rect = tabs.tabBar.convert(tabs.tabBar.bounds, to: window)
@@ -719,4 +721,94 @@ private func nativeTabController(in controller: UIViewController) -> UITabBarCon
     if let tabs = nativeTabController(in: child) { return tabs }
   }
   return nil
+}
+
+private var primaryTabTransitionKey: UInt8 = 0
+
+/// Keep react-native-screens as the navigation authority. The proxy supplies
+/// only the missing visual transition; every selection/lifecycle callback still
+/// goes to its original delegate, including native tab-bar gestures.
+@MainActor
+func configurePrimaryTabTransitions(_ tabs: UITabBarController) {
+  if tabs.delegate is PrimaryTabTransitionDelegate { return }
+  let proxy = PrimaryTabTransitionDelegate(original: tabs.delegate)
+  objc_setAssociatedObject(tabs, &primaryTabTransitionKey, proxy, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+  tabs.delegate = proxy
+}
+
+@MainActor
+private final class PrimaryTabTransitionDelegate: NSObject, UITabBarControllerDelegate {
+  private weak var original: (any UITabBarControllerDelegate)?
+  init(original: (any UITabBarControllerDelegate)?) {
+    self.original = original
+    super.init()
+  }
+
+  override func responds(to selector: Selector!) -> Bool {
+    super.responds(to: selector) || original?.responds(to: selector) == true
+  }
+
+  override func forwardingTarget(for selector: Selector!) -> Any? {
+    if original?.responds(to: selector) == true { return original }
+    return super.forwardingTarget(for: selector)
+  }
+
+  func tabBarController(
+    _ tabBarController: UITabBarController,
+    animationControllerForTransitionFrom fromVC: UIViewController,
+    to toVC: UIViewController
+  ) -> (any UIViewControllerAnimatedTransitioning)? {
+    // Respect any transition supplied by the router now or in future versions.
+    if let animator = original?.tabBarController?(
+      tabBarController, animationControllerForTransitionFrom: fromVC, to: toVC
+    ) { return animator }
+    guard !UIAccessibility.isReduceMotionEnabled,
+          let controllers = tabBarController.viewControllers,
+          let from = controllers.firstIndex(of: fromVC),
+          let to = controllers.firstIndex(of: toVC), from != to else { return nil }
+    let rtl = tabBarController.view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+    return PrimaryTabSlide(direction: (to > from ? 1 : -1) * (rtl ? -1 : 1))
+  }
+}
+
+@MainActor
+private final class PrimaryTabSlide: NSObject, UIViewControllerAnimatedTransitioning {
+  private let direction: CGFloat
+
+  init(direction: Int) {
+    self.direction = CGFloat(direction)
+  }
+
+  func transitionDuration(using transitionContext: (any UIViewControllerContextTransitioning)?) -> TimeInterval {
+    0.28
+  }
+
+  func animateTransition(using context: any UIViewControllerContextTransitioning) {
+    guard let from = context.view(forKey: .from), let to = context.view(forKey: .to),
+          let destination = context.viewController(forKey: .to) else {
+      context.completeTransition(false)
+      return
+    }
+    let container = context.containerView
+    let finalFrame = context.finalFrame(for: destination)
+    let initialFrame = from.frame
+    let offset = direction * container.bounds.width
+    to.frame = finalFrame.offsetBy(dx: offset, dy: 0)
+    container.addSubview(to)
+    UIView.animate(
+      withDuration: transitionDuration(using: context), delay: 0,
+      options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
+      animations: {
+        from.frame = initialFrame.offsetBy(dx: -offset, dy: 0)
+        to.frame = finalFrame
+      }, completion: { _ in
+        let completed = !context.transitionWasCancelled
+        // Retained tab views must never keep an offscreen frame after a switch.
+        from.frame = initialFrame
+        to.frame = finalFrame
+        if !completed { to.removeFromSuperview() }
+        context.completeTransition(completed)
+      }
+    )
+  }
 }

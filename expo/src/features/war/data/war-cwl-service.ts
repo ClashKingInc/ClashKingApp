@@ -199,7 +199,9 @@ export class WarCwlService {
   private async fetchCwlDetail(tag: string, season: string): Promise<WarCwl> {
     // The live endpoint only knows this month's group. Archived seasons must
     // go directly to their exact stored group, never through today's CWL first.
-    if (season !== new Date().toISOString().slice(0, 7))
+    // Live Clash responses can identify a season as YYYY-MM-01. Compare its
+    // month without changing the exact archive key used for older seasons.
+    if (season.slice(0, 7) !== new Date().toISOString().slice(0, 7))
       return (await this.loadLinkedCwl(tag, season)).summary;
     const response = await Effect.runPromise(
       this.api.executeStatus(ProxyCurrentLeagueGroupEndpoint, {
@@ -208,7 +210,7 @@ export class WarCwlService {
         body: {},
       }),
     );
-    if (!response.ok || response.value.season !== season) {
+    if (!response.ok || string(response.value.season).slice(0, 7) !== season.slice(0, 7)) {
       return (await this.loadLinkedCwl(tag, season)).summary;
     }
     const group = response.value;

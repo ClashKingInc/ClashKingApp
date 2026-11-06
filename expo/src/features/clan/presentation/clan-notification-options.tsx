@@ -29,7 +29,9 @@ export function ClanNotificationOptions({
   const selected = controls.settings?.clans.find((clan) => clan.tag === tag);
   const change = async (type: 'war' | 'raid', value: boolean) => {
     if (busy || !controls.settings) return;
-    if (value && controls.settings.usage[type] >= controls.settings.limits[type]) {
+    const enabledClans = controls.settings.clans.filter(clan => clan.warEnabled || clan.raidEnabled).length;
+    if (value && ((!selected?.warEnabled && !selected?.raidEnabled && enabledClans >= 2) ||
+        controls.settings.usage[type] >= Math.min(2, controls.settings.limits[type]))) {
       controls.showMessage(t('playerOptionNotificationsLimitReached'));
       return;
     }

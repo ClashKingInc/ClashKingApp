@@ -62,6 +62,7 @@ export function ManageLinkedAccountsScreen({
   onOrderChanged,
   onOpenGameSettings,
   onBack,
+  allowUnverifiedBack = false,
   onLogout,
   onRefresh,
   lookupPlayer,
@@ -77,6 +78,7 @@ export function ManageLinkedAccountsScreen({
   onOrderChanged?: (orderedTags: readonly string[]) => void;
   onOpenGameSettings: () => boolean | void | Promise<boolean | void>;
   onBack?: () => void | Promise<void>;
+  allowUnverifiedBack?: boolean;
   onLogout?: () => void | Promise<void>;
   onRefresh?: () => void | Promise<void>;
   lookupPlayer: (tag: string) => Promise<PlayerProfileIdentity>;
@@ -266,7 +268,8 @@ export function ManageLinkedAccountsScreen({
         }
         setOrderChanged(false);
       }
-      if (!hasVerified) {
+      // Onboarding may go back before linking; entering the app still requires verification.
+      if (!hasVerified && !allowUnverifiedBack) {
         setError(t('homeVerifiedAccountRequiredBody'));
         return;
       }

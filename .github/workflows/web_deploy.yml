@@ -42,6 +42,8 @@ jobs:
       - name: Build native-app link landing
         env:
           CK_ANDROID_APP_LINKS_SHA256: ${{ vars.CK_ANDROID_APP_LINKS_SHA256 }}
+          CK_ANDROID_STORE_URL: ${{ vars.CK_ANDROID_STORE_URL }}
+          CK_IOS_STORE_URL: ${{ vars.CK_IOS_STORE_URL }}
         run: npm run web:export
 
       - name: Publish to Cloudflare Pages

@@ -134,7 +134,7 @@ export function IosNativeTabs(props: NavigationShellProps) {
               safeAreaEdges={['top', 'bottom', props.isRtl ? 'right' : 'left']}
               features={props.features}
               t={props.t}
-              avatar={props.avatar}
+              avatar={props.sidebarAvatar ?? props.avatar}
               displayName={props.displayName}
               followerCount={props.followerCount}
               closeLabel={props.closeDrawerLabel}

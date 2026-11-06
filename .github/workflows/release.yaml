@@ -17,7 +17,7 @@ on:
       track:
         description: Independent release track
         required: true
-        default: beta
+        default: production
         type: choice
         options: [alpha, beta, production]
       enable_updates:

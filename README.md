@@ -118,7 +118,7 @@ there is no bundled abilities fallback.
 
 ## Dependency security pins
 
-The Expo App remains on SDK 58. The lockfile includes Expo 58.0.22 and its
+The Expo App remains on SDK 58. The lockfile includes Expo 58.0.23 and its
 patched CLI dependency graph. The scoped npm override for
 `@firebase/firestore > @grpc/grpc-js` selects 1.14.7 to remove the vulnerable
 1.9.x transport pulled in by Firebase. Keep the override until Firebase's
@@ -133,3 +133,36 @@ The dependency overrides also select patched glob 14.0.3 for glob 13 consumers
 and minimatch 11.0.4 for minimatch 10 consumers. Keep these scoped by old major;
 do not force minimatch 3 users onto the incompatible export API. Validate Metro
 exports, Expo compatibility and license inventory when changing these overrides.
+
+### Account avatars
+
+The native app offers the 11 approved Clash faces after account setup and in
+Settings. The selected face replaces the app's Discord portrait. Settings uses
+an interactive 116-point face; navigation and profile headers share its choice.
+The API owns the choice through authenticated GET/PUT `/v2/auth/avatar` for both
+email and Discord accounts. The device cache is display-only. Saving requires a
+successful API response; reopening the app or returning to the foreground loads
+the account's latest choice. Deploy database migration `057_account_avatar.sql`
+and the matching API before releasing the app bundle. Never change the approved
+catalog IDs without coordinating the API contract and database constraint.
+
+## Production release
+
+The first public native release is 1.0.0. Run the **Release mobile app** workflow
+against the exact reviewed commit with version `1.0.0`, track `production`, and
+signed updates enabled. Android uploads to the production Play track; iOS
+archives with the app, widget and notification-service profiles and submits
+the production build to App Store review. Store approval and public availability
+are separate from a successful build or upload.
+
+The production profile disables dotenv loading and sets the API, proxy, push,
+OAuth application and OTA endpoint explicitly. Both native jobs run
+`npm run release:config` against the resolved Expo configuration before prebuild.
+The native baseline marker is published only after both native jobs succeed.
+The Admin dashboard selects compatible OTA releases; it does not sign them.
+
+The app-link landing deploys to the existing `clashkingapp` Cloudflare Pages
+project at `app.clashk.ing`. Configure `CK_ANDROID_STORE_URL`, `CK_IOS_STORE_URL`
+and `CK_ANDROID_APP_LINKS_SHA256` as repository variables. The Android fingerprint
+must come from Play's app-signing certificate. The landing builds from the native
+route manifest and must serve association JSON rather than the old web app shell.

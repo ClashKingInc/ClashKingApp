@@ -1,3 +1,4 @@
+import * as SecureStore from 'expo-secure-store';
 import type { StringStorage } from '../../core/storage/storage';
 
 type OnboardingSnapshot = {
@@ -53,6 +54,7 @@ class OnboardingService {
     this.publish({ ready: false, visible: false, returningUser: false, userId });
     if (!userId) return;
     let completed = false;
+    const durableKey = `onboarding-completed.${encodeURIComponent(userId).replace(/%/g, '_')}`;
     try {
       const saved = JSON.parse((await storage.getString(key)) ?? 'null') as unknown;
       completed = saved === 'completed' || saved === 'skipped';
@@ -66,6 +68,14 @@ class OnboardingService {
       }
     } catch {
       // Corrupt local introduction state must not prevent access to the app.
+    }
+    // Preferences are cleared on sign-out. Keep only this completion flag in
+    // durable storage so the same account does not replay its introduction.
+    try {
+      completed = completed || (await SecureStore.getItemAsync(durableKey)) === 'true';
+      if (completed) await SecureStore.setItemAsync(durableKey, 'true');
+    } catch {
+      /* Local completion still works when secure storage is unavailable. */
     }
     if (generation !== this.generation) return;
     this.completed = completed;
@@ -86,7 +96,12 @@ class OnboardingService {
     if (!storage || !key) return Promise.resolve();
     this.finishing = storage
       .setString(key, JSON.stringify(outcome))
-      .then(() => {
+      .then(async () => {
+        if (generation !== this.generation) return;
+        await SecureStore.setItemAsync(
+          `onboarding-completed.${encodeURIComponent(this.state.userId ?? '').replace(/%/g, '_')}`,
+          'true',
+        ).catch(() => undefined);
         if (generation !== this.generation) return;
         this.completed = true;
         this.publish({ visible: false });

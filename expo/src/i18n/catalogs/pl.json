@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Twoje połączone konta są gotowe. Dodaj kolejne konto lub kontynuuj.",
   "onboardingSkipAccountSetup": "Pomiń",
   "accountsSetupBody": "Dodaj i zweryfikuj swoje konta Clash of Clans.",
-  "accountsMyTitle": "Moje konta"
+  "accountsMyTitle": "Moje konta",
+  "profileAvatar": "Zmień wygląd",
+  "avatarPickerTitle": "Wybierz awatar"
 }

@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "حساباتك المرتبطة جاهزة. أضف حسابًا آخر أو تابع.",
   "onboardingSkipAccountSetup": "تخطي",
   "accountsSetupBody": "أضف حساباتك في Clash of Clans وتحقق من ملكيتها.",
-  "accountsMyTitle": "حساباتي"
+  "accountsMyTitle": "حساباتي",
+  "profileAvatar": "غيّر المظهر",
+  "avatarPickerTitle": "اختر صورة رمزية"
 }

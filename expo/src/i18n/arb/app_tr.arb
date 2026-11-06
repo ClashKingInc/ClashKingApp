@@ -5198,5 +5198,7 @@
   "onboardingAccountsReadyBody": "Bağlı hesapların hazır. Başka bir hesap ekle veya devam et.",
   "onboardingSkipAccountSetup": "Atla",
   "accountsSetupBody": "Clash of Clans hesaplarını ekle ve doğrula.",
-  "accountsMyTitle": "Hesaplarım"
+  "accountsMyTitle": "Hesaplarım",
+  "profileAvatar": "Görünümü değiştir",
+  "avatarPickerTitle": "Bir avatar seç"
 }

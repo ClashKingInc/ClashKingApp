@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "आपके लिंक किए गए अकाउंट तैयार हैं। एक और अकाउंट जोड़ें या आगे बढ़ें।",
   "onboardingSkipAccountSetup": "छोड़ें",
   "accountsSetupBody": "अपने Clash of Clans खाते जोड़ें और सत्यापित करें।",
-  "accountsMyTitle": "मेरे खाते"
+  "accountsMyTitle": "मेरे खाते",
+  "profileAvatar": "रूप बदलें",
+  "avatarPickerTitle": "एक अवतार चुनें"
 }

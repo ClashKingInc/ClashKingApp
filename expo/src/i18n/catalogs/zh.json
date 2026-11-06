@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "已关联的账号已准备就绪。你可以添加其他账号或继续。",
   "onboardingSkipAccountSetup": "跳过",
   "accountsSetupBody": "添加并验证你的《部落冲突》账号。",
-  "accountsMyTitle": "我的账号"
+  "accountsMyTitle": "我的账号",
+  "profileAvatar": "更换形象",
+  "avatarPickerTitle": "选择头像"
 }

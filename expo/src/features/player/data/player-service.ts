@@ -1296,7 +1296,6 @@ function enrichLegendOpponent(
       rank?.globalRank ?? null,
       dayNetTrophies,
     ),
-    battle.familyId,
   );
 }
 

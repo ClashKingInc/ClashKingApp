@@ -1,3 +1,5 @@
+import { useAvatarPreference } from '../avatars/avatar-preference';
+import { AvatarPicker } from '../avatars/avatar-picker';
 import { useEffect, useRef, useState } from 'react';
 import {
   AccessibilityInfo,
@@ -18,7 +20,7 @@ import { ChevronLeft } from 'lucide-react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { materialBackLabel, materialContinueLabel, useI18n } from '../../i18n';
 import type { MessageKey } from '../../i18n/catalogs.generated';
-import { CKText, colorWithAlpha, useCKTheme } from '../../ui';
+import { CKText, LoadingIndicator, colorWithAlpha, useCKTheme } from '../../ui';
 import { useCKAccessibility } from '../../ui/accessibility';
 import { PagerView, type PagerViewHandle } from '../../ui/pager';
 import { useAppRuntime } from '../../core/app/runtime-context';
@@ -55,6 +57,9 @@ export function OnboardingScreen({
   const pager = useRef<PagerViewHandle>(null);
   const finishing = useRef(false);
   const [page, setPage] = useState(0);
+  const [avatarConfirmed, setAvatarConfirmed] = useState(false);
+  const [avatarRequested, setAvatarRequested] = useState(false);
+  const avatar = useAvatarPreference();
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<MessageKey | null>(null);
   const [permissionDenied, setPermissionDenied] = useState(false);
@@ -124,22 +129,71 @@ export function OnboardingScreen({
     else pager.current?.setPage(next);
   };
   const finalPage = stage === 'notifications';
+  const needsAvatar = !avatarConfirmed && (avatarRequested || !avatar.ready || !avatar.chosen);
   useEffect(() => {
     const back = BackHandler.addEventListener('hardwareBackPress', () => {
       if (busy) return true;
-      if (finalPage) onAccounts();
-      else if (page > 0) {
+      if (finalPage) {
+        if (needsAvatar) onAccounts();
+        else {
+          setAvatarConfirmed(false);
+          setAvatarRequested(true);
+        }
+      } else if (page > 0) {
         if (reduceMotion) pager.current?.setPageWithoutAnimation(page - 1);
         else pager.current?.setPage(page - 1);
       }
       return true;
     });
     return () => back.remove();
-  }, [busy, finalPage, onAccounts, page, reduceMotion]);
+  }, [busy, finalPage, needsAvatar, onAccounts, page, reduceMotion]);
   const supportsPush =
     runtime.appState.getState().isFeatureEnabled('notifications') &&
     runtime.push.supportsPushNotifications;
   const sceneWidth = Math.min(width, 480);
+  if (finalPage && !avatar.ready && !avatarConfirmed)
+    return (
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.background, zIndex: 20 }]}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <SafeAreaView edges={['top', 'bottom', 'left', 'right']} style={{ flex: 1 }}>
+            <View style={{ paddingHorizontal: 16, paddingTop: 6 }}>
+              <Pressable
+                onPress={onAccounts}
+                accessibilityRole="button"
+                accessibilityLabel={materialBackLabel(locale)}
+                style={styles.avatarBack}
+              >
+                <ChevronLeft
+                  color={theme.onSurface}
+                  size={26}
+                  style={isRtl ? { transform: [{ scaleX: -1 }] } : undefined}
+                />
+              </Pressable>
+            </View>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+              {avatar.failed ? (
+                <>
+                  <CKText>{t('generalError')}</CKText>
+                  <Pressable onPress={() => void avatar.reload()} accessibilityRole="button">
+                    <CKText>{t('generalRetry')}</CKText>
+                  </Pressable>
+                </>
+              ) : (
+                <LoadingIndicator label={t('generalLoading')} />
+              )}
+            </View>
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </View>
+    );
+  if (finalPage && needsAvatar)
+    return (
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.background, zIndex: 20 }]}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <AvatarPicker onBack={onAccounts} onContinue={() => setAvatarConfirmed(true)} />
+        </SafeAreaProvider>
+      </View>
+    );
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.background, zIndex: 20 }]}>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -151,7 +205,11 @@ export function OnboardingScreen({
             <View style={styles.top}>
               <Pressable
                 disabled={(page === 0 && !finalPage) || busy}
-                onPress={() => (finalPage ? onAccounts() : select(page - 1))}
+                onPress={() =>
+                  finalPage
+                    ? (setAvatarRequested(true), setAvatarConfirmed(false))
+                    : select(page - 1)
+                }
                 accessibilityRole="button"
                 accessibilityLabel={materialBackLabel(locale)}
                 style={[styles.back, { opacity: page === 0 && !finalPage ? 0 : 1 }]}
@@ -227,11 +285,6 @@ export function OnboardingScreen({
                         {t(item.body)}
                       </CKText>
                     </View>
-                    {index > 0 ? (
-                      <CKText role="labelMedium" muted skeleton={false} style={styles.preview}>
-                        {t('statsPreview')}
-                      </CKText>
-                    ) : null}
                   </ScrollView>
                 </View>
               ))}
@@ -308,6 +361,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'space-between',
   },
+  avatarBack: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   back: { width: 70, height: 44, justifyContent: 'center', alignItems: 'flex-start' },
   skip: { minHeight: 44, minWidth: 70, alignItems: 'flex-end', justifyContent: 'center' },
   progress: { flexDirection: 'row', alignItems: 'center', gap: 6 },
@@ -316,7 +370,6 @@ const styles = StyleSheet.create({
   copy: { width: '100%', maxWidth: 448, paddingHorizontal: 29, marginTop: 12, gap: 15 },
   title: { fontSize: 34, lineHeight: 40, fontWeight: '700' },
   body: { fontSize: 16, lineHeight: 25 },
-  preview: { marginTop: 18, opacity: 0.6 },
   footer: {
     paddingHorizontal: 27,
     paddingTop: 12,

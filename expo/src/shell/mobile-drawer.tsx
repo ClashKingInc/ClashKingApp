@@ -113,14 +113,7 @@ export function MobileDrawer({
       >
         <View style={styles.header} accessibilityHint={closeLabel}>
           <View style={[styles.headerTop, isRtl && styles.rowRtl]}>
-            <Pressable
-              style={styles.avatar}
-              accessibilityRole="button"
-              accessibilityLabel={t('competitiveViewProfile')}
-              onPress={() => navigate(appRoutes.find((route) => route.id === 'profile')!)}
-            >
-              {avatar}
-            </Pressable>
+            <View style={styles.avatar}>{avatar}</View>
             <View style={[styles.headerActions, isRtl && styles.rowRtl]}>
               <DrawerHeaderAction
                 label={t('achievementsTitle')}
@@ -336,10 +329,10 @@ const styles = StyleSheet.create({
   header: { paddingLeft: 20, paddingTop: 12, paddingRight: 16, paddingBottom: 8, zIndex: 2 },
   headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    overflow: 'hidden',
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    overflow: 'visible',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -367,7 +360,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 22,
   },
-  displayName: { marginTop: 10, fontWeight: '800' },
+  displayName: { marginTop: 2, fontWeight: '800' },
   scrollContent: { flexGrow: 1 },
   body: { paddingHorizontal: 12, paddingBottom: 8 },
   route: {

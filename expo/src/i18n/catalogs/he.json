@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "החשבונות המקושרים שלך מוכנים. אפשר להוסיף חשבון נוסף או להמשיך.",
   "onboardingSkipAccountSetup": "דילוג",
   "accountsSetupBody": "הוסף ואמת את חשבונות Clash of Clans שלך.",
-  "accountsMyTitle": "החשבונות שלי"
+  "accountsMyTitle": "החשבונות שלי",
+  "profileAvatar": "שינוי מראה",
+  "avatarPickerTitle": "בחרו אווטאר"
 }

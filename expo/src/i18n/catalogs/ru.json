@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Твои привязанные аккаунты готовы. Добавь ещё один или продолжай.",
   "onboardingSkipAccountSetup": "Пропустить",
   "accountsSetupBody": "Добавьте и подтвердите свои аккаунты Clash of Clans.",
-  "accountsMyTitle": "Мои аккаунты"
+  "accountsMyTitle": "Мои аккаунты",
+  "profileAvatar": "Изменить облик",
+  "avatarPickerTitle": "Выбери аватар"
 }

@@ -2375,5 +2375,7 @@
   "onboardingAccountsReadyBody": "Các tài khoản đã liên kết đã sẵn sàng. Thêm tài khoản khác hoặc tiếp tục.",
   "onboardingSkipAccountSetup": "Bỏ qua",
   "accountsSetupBody": "Thêm và xác minh các tài khoản Clash of Clans của bạn.",
-  "accountsMyTitle": "Tài khoản của tôi"
+  "accountsMyTitle": "Tài khoản của tôi",
+  "profileAvatar": "Đổi diện mạo",
+  "avatarPickerTitle": "Chọn ảnh đại diện"
 }

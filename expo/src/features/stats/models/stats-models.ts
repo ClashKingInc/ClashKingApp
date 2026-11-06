@@ -1,5 +1,4 @@
 import type {
-  ArmySearchQuery,
   EndpointRequest,
   LegendDaysEndpoint,
   StatsCwlEndpoint,
@@ -7,7 +6,6 @@ import type {
   StatsWarEndpoint,
 } from '@clashking/api-contracts/expo';
 
-type ArmySearchQueryContract = typeof ArmySearchQuery.Type;
 type LegendDaysQueryContract = EndpointRequest<typeof LegendDaysEndpoint>['query'];
 type StatsCwlQueryContract = EndpointRequest<typeof StatsCwlEndpoint>['query'];
 interface StatsItemsQueryContract {
@@ -125,38 +123,6 @@ export class StatsBattleFilters {
         : {}),
       ...(this.excludeItems.length ? { excludeItems: [...this.excludeItems] } : {}),
       minimumSampleSize: this.minimumSampleSize,
-    };
-  }
-}
-export class StatsArmiesQuery {
-  constructor(
-    readonly filters: StatsBattleFilters,
-    readonly limit = 25,
-    readonly sortBy: NonNullable<ArmySearchQueryContract['sort']> = 'usage',
-    readonly cohort: StatsLegendCohortValue = StatsLegendCohort.legend,
-  ) {}
-  toQuery(): ArmySearchQueryContract {
-    const maximumLimit = this.filters.dates.inclusiveDays === 1 ? 250 : 10;
-    const limit = Math.max(1, Math.min(Math.trunc(this.limit), maximumLimit));
-    const identities = this.filters.includeItems.map((item) => item.item.trim().split(':'));
-    const heroIds = identities
-      .filter(([type]) => type === 'hero')
-      .map(([, id]) => id)
-      .filter(Boolean);
-    const equipmentIds = identities
-      .filter(([type]) => type === 'hero_equipment')
-      .map(([, id]) => id)
-      .filter(Boolean);
-    return {
-      'time[after]': StatsDateFilter.formatDate(this.filters.dates.start),
-      'time[before]': StatsDateFilter.formatDate(this.filters.dates.end),
-      ...(heroIds.length ? { heroIds: heroIds.join(',') } : {}),
-      ...(equipmentIds.length ? { equipmentIds: equipmentIds.join(',') } : {}),
-      minimumAttacks: this.filters.minimumSampleSize,
-      limit,
-      sort: this.sortBy,
-      direction: 'desc',
-      cohort: this.cohort,
     };
   }
 }
@@ -479,60 +445,6 @@ export function decodeStatsGroupedCounts(
   key: string,
 ): readonly StatsGroupedCount[] {
   return list(record(value).items).map((item) => StatsGroupedCount.fromJson(item, key));
-}
-export class StatsArmyResult {
-  constructor(
-    readonly familyId: string,
-    readonly name: string | null,
-    readonly armyShareCode: string,
-    readonly players: number | null,
-    readonly totalLegendAttacks: number,
-    readonly averageDuration: number | null,
-    readonly metrics: StatsMetrics,
-  ) {}
-  static fromJson(value: unknown): StatsArmyResult {
-    const j = record(value);
-    const starCounts = record(j.starCounts);
-    const attacks = integer(j.attacks);
-    const totalLegendAttacks = integer(j.totalLegendAttacks);
-    return new StatsArmyResult(
-      text(j.familyId),
-      j.name == null ? null : text(j.name),
-      text(j.shareCode),
-      j.players == null ? null : integer(j.players),
-      totalLegendAttacks,
-      j.averageDuration == null ? null : decimal(j.averageDuration),
-      new StatsMetrics(
-        attacks > 0,
-        attacks,
-        attacks === 0
-          ? 0
-          : (integer(starCounts.one) +
-              integer(starCounts.two) * 2 +
-              integer(starCounts.three) * 3) /
-              attacks,
-        decimal(j.averageDestruction),
-        attacks === 0 ? 0 : integer(starCounts.zero) / attacks,
-        attacks === 0 ? 0 : integer(starCounts.one) / attacks,
-        attacks === 0 ? 0 : integer(starCounts.two) / attacks,
-        attacks === 0 ? 0 : integer(starCounts.three) / attacks,
-        [],
-        totalLegendAttacks === 0 ? 0 : attacks / totalLegendAttacks,
-      ),
-    );
-  }
-}
-export class StatsArmiesResponse {
-  constructor(
-    readonly dateRange: StatsDateRange,
-    readonly items: readonly StatsArmyResult[],
-    readonly count: number,
-  ) {}
-  static fromJson(value: unknown, dates = new StatsDateRange(null, null)): StatsArmiesResponse {
-    const j = record(value);
-    const items = list(j.items).map(StatsArmyResult.fromJson);
-    return new StatsArmiesResponse(dates, items, items.length);
-  }
 }
 export class StatsItemResult {
   constructor(
