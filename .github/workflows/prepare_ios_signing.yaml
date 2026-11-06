@@ -13,10 +13,13 @@ concurrency:
   cancel-in-progress: false
 jobs:
   signing:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
       - run: gem install fastlane --version 2.241.1 --no-document
       - name: Prepare replacement certificate and profiles
         env:
