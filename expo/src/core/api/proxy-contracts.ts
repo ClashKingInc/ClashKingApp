@@ -1,5 +1,6 @@
 import * as Wire from '@clashking/clash-contract/effect';
 import * as Api from '@clashking/api-contracts/expo';
+import { Schema } from 'effect';
 
 // Keep ClashKing routing/auth metadata; wire bodies come from the released Clash contract.
 const errors = [400, 403, 404, 429].map((status) => ({ status, body: Wire.ClientErrorResponse }));
@@ -67,9 +68,19 @@ export const ProxyBuilderPlayerRankingsEndpoint = {
   response: Wire.PlayerBuilderBaseRankingListResponse,
   errors,
 };
+// Mirror the corrected canonical contract until the next contract package is
+// released. Worldwide rankings include clans with no selected country; never
+// discard all 200 entries or invent a country for those rows.
+const ClanRankingWithOptionalLocation = Schema.Struct({
+  ...Wire.ClanRanking.fields,
+  location: Schema.optionalKey(Schema.Union([Wire.Location, Schema.Null])),
+});
 export const ProxyClanRankingsEndpoint = {
   ...Api.ProxyClanRankingsEndpoint,
-  response: Wire.ClanRankingListResponse,
+  response: Schema.Struct({
+    ...Wire.ClanRankingListResponse.fields,
+    items: Schema.Array(ClanRankingWithOptionalLocation),
+  }),
   errors,
 };
 export const ProxyBuilderClanRankingsEndpoint = {
