@@ -1,6 +1,9 @@
 require 'openssl'
 require 'spaceship'
 require 'json'
+require 'base64'
+require 'digest'
+require 'time'
 
 # Fail before installing dependencies when Apple rejects the release identity.
 # Only read Apple resources; profile creation remains in the signing step.
@@ -21,6 +24,32 @@ begin
   app = Spaceship::ConnectAPI::App.find('com.clashking.apps')
   abort 'The Apple API key cannot access com.clashking.apps.' unless app
   puts "ClashKing App Store Connect app ID: #{app.id}"
+  if !ENV.fetch('CERTIFICATE_BASE64', '').empty?
+    # Compare public DER bytes rather than API serial formatting. Only public
+    # certificate metadata is logged; the PKCS12 private key stays in memory.
+    imported = OpenSSL::PKCS12.new(
+      Base64.decode64(ENV.fetch('CERTIFICATE_BASE64')),
+      ENV.fetch('CERTIFICATE_PASSWORD')
+    ).certificate
+    team_certificates = Spaceship::ConnectAPI::Certificate.all
+    matches = team_certificates.select do |certificate|
+      Base64.decode64(certificate.certificate_content.to_s) == imported.to_der
+    end
+    puts "Read-only signing certificate: #{JSON.generate({
+      subject: imported.subject.to_s,
+      serial: imported.serial.to_s(16).upcase,
+      expires_at: imported.not_after.utc.iso8601,
+      fingerprint_sha256: Digest::SHA256.hexdigest(imported.to_der),
+      currently_valid: imported.not_before <= Time.now && imported.not_after > Time.now,
+      apple_team_certificates: team_certificates.length,
+      matching_apple_certificates: matches.length,
+      apple_certificates: team_certificates.map { |certificate| {
+        serial: certificate.serial_number,
+        type: certificate.certificate_type,
+        expires_at: certificate.expiration_date
+      } }
+    })}"
+  end
   # Read only metadata. Report presence/counts, never review contacts, account
   # passwords, signing material or image contents in CI diagnostics.
   versions = app.get_app_store_versions(
