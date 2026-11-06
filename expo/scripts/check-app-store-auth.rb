@@ -1,5 +1,6 @@
 require 'openssl'
 require 'spaceship'
+require 'json'
 
 # Fail before installing dependencies when Apple rejects the release identity.
 # Only read Apple resources; profile creation remains in the signing step.
@@ -20,6 +21,38 @@ begin
   app = Spaceship::ConnectAPI::App.find('com.clashking.apps')
   abort 'The Apple API key cannot access com.clashking.apps.' unless app
   puts "ClashKing App Store Connect app ID: #{app.id}"
+  # Read only metadata. Report presence/counts, never review contacts, account
+  # passwords, signing material or image contents in CI diagnostics.
+  versions = app.get_app_store_versions(
+    filter: { platform: 'IOS' }, includes: 'appStoreReviewDetail', limit: 5
+  )
+  presence = ->(value) { !value.to_s.strip.empty? }
+  metadata = versions.map do |version|
+    review = version.app_store_review_detail
+    {
+      version: version.version_string,
+      state: version.app_store_state,
+      copyright_present: presence.call(version.copyright),
+      review_contact_complete: review && [review.contact_first_name, review.contact_last_name, review.contact_phone, review.contact_email].all?(&presence),
+      review_sign_in_required: review&.demo_account_required,
+      review_account_complete: review && [review.demo_account_name, review.demo_account_password].all?(&presence),
+      localizations: version.get_app_store_version_localizations.map do |locale|
+        {
+          locale: locale.locale,
+          description_present: presence.call(locale.description),
+          support_url_present: presence.call(locale.support_url),
+          screenshot_sets: locale.get_app_screenshot_sets.map do |set|
+            { display_type: set.screenshot_display_type, image_count: (set.app_screenshots || []).length }
+          end,
+        }
+      end,
+    }
+  end
+  info = app.fetch_latest_app_info
+  privacy = info ? info.get_app_info_localizations.map do |locale|
+    { locale: locale.locale, privacy_policy_url_present: presence.call(locale.privacy_policy_url) }
+  end : []
+  puts "Read-only App Store metadata: #{JSON.generate({ versions: metadata, privacy: privacy })}"
   if ENV.fetch('NOTIFICATION_PROFILE_BASE64', '').strip.empty?
     Spaceship::ConnectAPI::Certificate.all(limit: 1)
   end
