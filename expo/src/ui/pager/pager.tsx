@@ -1,3 +1,11 @@
+import { type ScrollViewInstance,
+  ScrollView,
+  StyleSheet,
+  View,
+  type LayoutChangeEvent,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+} from 'react-native';
 import {
   Children,
   forwardRef,
@@ -7,16 +15,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  type LayoutChangeEvent,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-} from 'react-native';
 
-import type { PagerViewHandle, PagerViewOnPageSelectedEvent, PagerViewProps } from './types';
+import type {
+  PagerViewHandle,
+  PagerViewOnPageSelectedEvent,
+  PagerViewOnPageScrollEvent,
+  PagerViewProps,
+} from './types';
 
 export function pageOffsetForIndex(
   index: number,
@@ -47,6 +52,7 @@ export const PagerView = forwardRef<PagerViewHandle, PagerViewProps>(function Pa
     keyboardDismissMode = 'none',
     layoutDirection = 'ltr',
     onPageSelected,
+    onPageScroll,
     orientation = 'horizontal',
     scrollEnabled = true,
     style,
@@ -59,21 +65,55 @@ export const PagerView = forwardRef<PagerViewHandle, PagerViewProps>(function Pa
   }
   const pages = Children.toArray(children);
   const isRtl = layoutDirection === 'rtl';
-  const scroll = useRef<ScrollView>(null);
+  const scroll = useRef<ScrollViewInstance>(null);
   const [width, setWidth] = useState(0);
   const selectedPage = useRef(initialPage);
+  const reportedPage = useRef(initialPage);
+  const animationFrame = useRef<number | undefined>(undefined);
+  const selectionCallback = useRef(onPageSelected);
+  useEffect(() => {
+    selectionCallback.current = onPageSelected;
+  }, [onPageSelected]);
+  const stopAnimation = useCallback(() => {
+    if (animationFrame.current !== undefined) cancelAnimationFrame(animationFrame.current);
+    animationFrame.current = undefined;
+  }, []);
+  useEffect(() => stopAnimation, [stopAnimation]);
 
   const moveToPage = useCallback(
     (index: number, animated: boolean) => {
       selectedPage.current = Math.max(0, Math.min(index, Math.max(0, pages.length - 1)));
       if (width <= 0) return;
-      scroll.current?.scrollTo({
-        x: pageOffsetForIndex(selectedPage.current, pages.length, width, isRtl),
-        y: 0,
-        animated,
-      });
+      stopAnimation();
+      const target = pageOffsetForIndex(selectedPage.current, pages.length, width, isRtl);
+      const finish = () => {
+        animationFrame.current = undefined;
+        if (reportedPage.current === selectedPage.current) return;
+        reportedPage.current = selectedPage.current;
+        selectionCallback.current?.({
+          nativeEvent: { position: selectedPage.current },
+        } as PagerViewOnPageSelectedEvent);
+      };
+      if (!animated) {
+        scroll.current?.scrollTo({ x: target, y: 0, animated: false });
+        finish();
+        return;
+      }
+      const node = scroll.current?.getScrollableNode() as unknown as { scrollLeft?: number } | undefined;
+      const start = node?.scrollLeft ?? target;
+      const startTime = performance.now();
+      // Browser-native smooth scrolling can take >600ms across two tabs. Use
+      // a bounded, interruptible transition and always report its settled page.
+      const frame = (now: number) => {
+        const progress = Math.min(1, (now - startTime) / 220);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        scroll.current?.scrollTo({ x: start + (target - start) * eased, y: 0, animated: false });
+        if (progress < 1) animationFrame.current = requestAnimationFrame(frame);
+        else finish();
+      };
+      animationFrame.current = requestAnimationFrame(frame);
     },
-    [isRtl, pages.length, width],
+    [isRtl, pages.length, width, stopAnimation],
   );
 
   useImperativeHandle(
@@ -96,8 +136,9 @@ export const PagerView = forwardRef<PagerViewHandle, PagerViewProps>(function Pa
 
   const handleMomentumEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const next = pageIndexForOffset(event.nativeEvent.contentOffset.x, pages.length, width, isRtl);
-    if (next === selectedPage.current) return;
+    if (animationFrame.current !== undefined || next === reportedPage.current) return;
     selectedPage.current = next;
+    reportedPage.current = next;
     onPageSelected?.({ nativeEvent: { position: next } } as PagerViewOnPageSelectedEvent);
   };
 
@@ -111,6 +152,20 @@ export const PagerView = forwardRef<PagerViewHandle, PagerViewProps>(function Pa
         horizontal
         keyboardDismissMode={keyboardDismissMode === 'on-drag' ? 'on-drag' : 'none'}
         onMomentumScrollEnd={handleMomentumEnd}
+        onTouchStart={stopAnimation}
+        scrollEventThrottle={16}
+        onScroll={(event) => {
+          if (!onPageScroll || width <= 0) return;
+          const visual = Math.abs(event.nativeEvent.contentOffset.x) / width;
+          const logical = Math.max(
+            0,
+            Math.min(pages.length - 1, isRtl ? pages.length - 1 - visual : visual),
+          );
+          const position = Math.floor(logical);
+          onPageScroll({
+            nativeEvent: { position, offset: logical - position },
+          } as PagerViewOnPageScrollEvent);
+        }}
         overScrollMode="never"
         pagingEnabled
         ref={scroll}

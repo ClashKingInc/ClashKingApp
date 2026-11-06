@@ -1,5 +1,7 @@
+import { modalOrientations } from "../../../ui/modal-orientations";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Modal, Platform } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import type { AppAnnouncement, AnnouncementStoryCacheService } from '../data';
 import { isTrustedHttpsUrl, sharedAnnouncementStoryCache } from '../data';
@@ -139,20 +141,22 @@ export function useAnnouncementPresentation(
           preparedUri={presentation.preparedUri}
         />
       ) : presentation?.type === 'article' ? (
-        <Modal
+        <Modal supportedOrientations={modalOrientations}
           animationType="slide"
           onRequestClose={closeAnnouncement}
           presentationStyle="fullScreen"
           visible
         >
-          {presentation.compact ? (
-            <HomeAnnouncementArticleScreen
-              onBack={closeAnnouncement}
-              post={presentation.announcement}
-            />
-          ) : (
-            <PostArticleScreen onBack={closeAnnouncement} post={presentation.announcement} />
-          )}
+          <SafeAreaProvider>
+            {presentation.compact ? (
+              <HomeAnnouncementArticleScreen
+                onBack={closeAnnouncement}
+                post={presentation.announcement}
+              />
+            ) : (
+              <PostArticleScreen onBack={closeAnnouncement} post={presentation.announcement} />
+            )}
+          </SafeAreaProvider>
         </Modal>
       ) : null,
   };

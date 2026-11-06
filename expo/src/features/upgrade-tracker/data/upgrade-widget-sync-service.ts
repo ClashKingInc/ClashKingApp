@@ -1,4 +1,7 @@
 import { ImageAssets } from '../../../core/assets/image-assets';
+import { upgradeSnapshotNeedsRefresh } from '../models/snapshot-freshness';
+import { ongoingUpgradeQueues } from '../models/ongoing-upgrade-queues';
+import { trackerCategoryImage } from '../presentation/tracker-category-art';
 import {
   localizedNameForItem,
   translationForTid,
@@ -127,13 +130,33 @@ export class UpgradeWidgetSyncService {
           ? ImageAssets.townHall(townHallLevel)
           : ImageAssets.builderHall(builderHallLevel),
       updatedAt: now.toISOString(),
-      hasStaleData: snapshot.items.some(
-        (item) =>
-          !item.isComplete &&
-          (item.activeSeconds ?? 0) > 0 &&
-          snapshot.remainingActiveSeconds(item, now) <= 0,
-      ),
+      hasStaleData: upgradeSnapshotNeedsRefresh(snapshot, now),
+      // Match the Home card exactly: Home Village overall progress excludes the
+      // helper/builders category and uses the existing time/resource weighting.
+      completion: Math.max(0, Math.min(1, snapshot.overallSummary(UpgradeVillage.home).completion)),
       labels: this.labels(),
+      ongoing: {
+        queues: this.ongoingQueues(snapshot, UpgradeVillage.home, now),
+        builderBase:
+          snapshot.builderHallLevel > 0
+            ? this.ongoingQueues(snapshot, UpgradeVillage.builderBase, now)[0]
+            : null,
+        boosts: (snapshot.boosts.activeEffects ?? [])
+          .filter(
+            (effect) =>
+              effect.village === UpgradeVillage.home &&
+              snapshot.remainingCapturedSeconds(effect.seconds, now) > 0,
+          )
+          .map((effect) => ({
+            kind: effect.key,
+            label: translationForTid(effect.nameTid) ?? effect.name,
+            imageUrl: effect.imageUrl,
+            expiresAt: addSeconds(
+              now,
+              snapshot.remainingCapturedSeconds(effect.seconds, now),
+            ).toISOString(),
+          })),
+      },
       boosts: this.boostPayload(snapshot, now),
       helpers: this.helperPayload(snapshot, now),
       homeBuilders: this.widgetSection(
@@ -197,6 +220,31 @@ export class UpgradeWidgetSyncService {
       tasks: visible.map((group) => this.widgetTask(snapshot, group, now)),
       ...(hiddenFinish ? { hiddenFinishesAt: hiddenFinish.toISOString() } : null),
     };
+  }
+  private ongoingQueues(snapshot: UpgradeTrackerSnapshot, village: UpgradeVillageValue, now: Date) {
+    return ongoingUpgradeQueues(snapshot, village, now).map((section) => ({
+      id: section.queue,
+      title: this.options.translate(
+        section.queue === UpgradeQueue.builders
+          ? 'dashboardUpgradeTrackerBuilders'
+          : section.queue === UpgradeQueue.laboratory
+            ? 'upgradeTrackerLaboratory'
+            : 'upgradeTrackerPetHouse',
+      ),
+      imageUrl:
+        section.queue === UpgradeQueue.pets
+          ? ImageAssets.getHomeVillageBuildingImage('Pet House', 1)
+          : trackerCategoryImage(
+              section.queue === UpgradeQueue.builders ? 'builders' : 'laboratory',
+              village,
+            ),
+      capacity: section.capacity,
+      finishesAt: section.times.map((seconds) => addSeconds(now, seconds).toISOString()),
+      extra: section.extra,
+      nextTask: section.work[0]
+        ? this.widgetTask(snapshot, { item: section.work[0], count: 1 }, now)
+        : null,
+    }));
   }
   private widgetTask(snapshot: UpgradeTrackerSnapshot, group: TaskGroup, now: Date) {
     const item = group.item,
@@ -392,6 +440,12 @@ export class UpgradeWidgetSyncService {
       moreUpgrades: t('widgetMoreUpgrades'),
       level: t('widgetLevelShort'),
       ready: t('widgetReady'),
+      ongoingTitle: t('upgradeTrackerOngoingUpgrades'),
+      builderBaseTitle: t('upgradeTrackerBuilderBase'),
+      freeSlots: t('upgradeTrackerFreeSlots', { count: '{count}' }),
+      freeIn: t('upgradeTrackerFreeIn', { duration: '{duration}' }),
+      notBuilt: t('upgradeTrackerNotBuilt'),
+      toLevel: t('upgradeTrackerToLevel', { level: '{level}' }),
     };
   }
   private async clearCurrentSelection() {

@@ -1,4 +1,8 @@
-import { ApiClient } from '../../../core/api/client';
+import { ClanWarlogEndpoint } from '@clashking/api-contracts/expo';
+import { ProxyClanWarlogEndpoint } from '../../../core/api/proxy-contracts';
+import { Effect } from 'effect';
+
+import type { ContractApiService } from '../../../core/api/contract-api';
 import { WarInfoSnapshot } from '../../player/models';
 import { ClanBadgeUrls } from './clan-core';
 import {
@@ -27,7 +31,7 @@ export class ClanDetails {
     return new ClanDetails(
       string(json.tag),
       string(json.name),
-      ClanBadgeUrls.fromJson(json.badgeUrls),
+      ClanBadgeUrls.fromJson(json, string(json.tag)),
       int(json.clanLevel),
       int(json.attacks),
       int(json.stars),
@@ -46,6 +50,7 @@ export class WarLogDetails {
     readonly attacksPerMember: number,
     readonly clan: ClanDetails,
     readonly opponent: ClanDetails,
+    readonly warType: string = 'random',
   ) {}
   static fromJson(json: JsonRecord, clanTag: string) {
     return new WarLogDetails(
@@ -53,9 +58,19 @@ export class WarLogDetails {
       clanTag,
       apiDateOrEpoch(json.endTime),
       int(json.teamSize),
-      int(json.attacksPerMember, 1),
+      int(json.attacksPerMember, 2),
       ClanDetails.fromJson(record(json.clan)),
       ClanDetails.fromJson(record(json.opponent)),
+      string(
+        json.warType ?? json.type,
+        // Official CWL season summaries omit the opponent and can exceed one
+        // war's star/destruction limits. They do not belong in a war-by-war log.
+        !string(record(json.opponent).tag) ||
+          number(record(json.clan).stars) > int(json.teamSize) * 3 ||
+          number(record(json.clan).destructionPercentage) > 100
+          ? 'cwl'
+          : 'random',
+      ),
     );
   }
 }
@@ -94,6 +109,7 @@ export class ClanWarLog {
     readonly wars: readonly WarInfoSnapshot[] = [],
     readonly isPrivate = false,
     readonly reconstructed = false,
+    readonly detailsLoaded = false,
   ) {}
 
   static fromJson(json: JsonRecord, clanTag: string): ClanWarLog {
@@ -101,13 +117,21 @@ export class ClanWarLog {
     const items = rawItems
       .filter((item) => strictWarDate(item.endTime).getUTCFullYear() >= 2022)
       .map((item) => WarLogDetails.fromJson(item, clanTag));
-    const wars = rawItems.map((item) =>
-      WarInfoSnapshot.fromJson({
-        ...item,
-        state: 'warEnded',
-        warType: item.warType ?? (string(item.result) ? 'random' : 'friendly'),
-      }),
-    );
+    // Summary rows have scores but no rosters/attacks. They are not war detail
+    // records and must not create a navigation arrow into an empty detail page.
+    const wars = rawItems
+      .filter(
+        (item) =>
+          records(record(item.clan).members).length > 0 &&
+          records(record(item.opponent).members).length > 0,
+      )
+      .map((item) =>
+        WarInfoSnapshot.fromJson({
+          ...item,
+          state: 'warEnded',
+          warType: item.warType ?? (string(item.result) ? 'random' : 'friendly'),
+        }),
+      );
     return new ClanWarLog(
       items,
       clanTag,
@@ -185,20 +209,26 @@ export class WarLogStatsService {
 
 export class WarLogService {
   static async fetchWarLogData(
-    api: ApiClient,
+    api: ContractApiService,
     tag: string,
     options: { isWarLogPublic: boolean },
   ): Promise<ClanWarLog> {
-    const endpoint = options.isWarLogPublic
-      ? `/clans/${encodeURIComponent(tag)}/warlog?limit=50`
-      : `/clan/${encodeURIComponent(tag)}/warlog?limit=50`;
     const response = options.isWarLogPublic
-      ? await api.proxyGet(endpoint)
-      : await api.get(endpoint, { requiresAuth: true });
-    const parsed: unknown = JSON.parse(response.bodyText);
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
-      throw new TypeError('Invalid war log response.');
-    const result = ClanWarLog.fromJson(parsed as JsonRecord, tag);
+      ? await Effect.runPromise(
+          api.execute(ProxyClanWarlogEndpoint, {
+            path: { clanTag: tag },
+            query: { limit: 50 },
+            body: {},
+          }),
+        )
+      : await Effect.runPromise(
+          api.execute(ClanWarlogEndpoint, {
+            path: { clanTag: tag },
+            query: { limit: 50 },
+            body: {},
+          }),
+        );
+    const result = ClanWarLog.fromJson(response, tag);
     result.warLogStats = analyzeWarLogs(result.items);
     return result;
   }

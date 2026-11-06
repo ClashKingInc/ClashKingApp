@@ -1,16 +1,10 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { ClanAdaptiveCards , ClanTabEmpty, FilterPill } from './clan-tab-components';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ArrowRight, Calendar, History, Users } from 'lucide-react-native';
-import Svg, {
-  Circle,
-  Defs,
-  Line,
-  LinearGradient,
-  Polygon,
-  Polyline,
-  Stop,
-  Text as SvgText,
-} from 'react-native-svg';
+import { ArrowRight, Calendar, History } from 'lucide-react-native';
+import { AnalyticsLineChart } from '../../stats/presentation/analytics-chart';
+import { ChartInteractionBoundary } from '../../stats/presentation/chart-interaction-boundary';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -18,7 +12,7 @@ import {
   CKText,
   DestinationPicker,
   EmptyState,
-  LoadingIndicator,
+  SkeletonContent,
   MobileWebImage,
   ResponsiveGrid,
   Surface,
@@ -40,7 +34,6 @@ import {
   type ClanRecords,
 } from '../models';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import { ClanTabEmpty, FilterPill, SummaryChip, SummaryRail } from './clan-tab-components';
 
 type LeaderboardData = {
   summary: ClanLeaderboardHistorySummary;
@@ -86,74 +79,63 @@ async function fetchLeaderboardData(
 export function ClanLeaderboardHistoryTab({
   model,
   actions,
+  availableTypes = Object.values(ClanLeaderboardType),
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
+  availableTypes?: readonly ClanLeaderboardTypeValue[];
 }) {
   const { t, locale } = useI18n();
-  const theme = useCKTheme();
-  const [type, setType] = useState<ClanLeaderboardTypeValue>(ClanLeaderboardType.homeVillage);
-  const [metric, setMetric] = useState<'rank' | 'points'>('rank');
+  const [type, setType] = useState<ClanLeaderboardTypeValue>(
+    availableTypes[0] ?? ClanLeaderboardType.homeVillage,
+  );
   const [seasonIndex, setSeasonIndex] = useState(0);
   const [data, setData] = useState<LeaderboardData>();
   const [error, setError] = useState(false);
+  const requestId = useRef(0);
   const load = async (nextType = type, nextIndex = seasonIndex) => {
+    const id = ++requestId.current;
     setError(false);
     setData(undefined);
     try {
       const value = await fetchLeaderboardData(actions, model.clan.tag, nextType, nextIndex);
+      if (id !== requestId.current) return;
       setSeasonIndex(value.index);
       setData(value.data);
     } catch {
-      setError(true);
+      if (id === requestId.current) setError(true);
     }
   };
   useEffect(() => {
-    let active = true;
+    const id = ++requestId.current;
     void fetchLeaderboardData(actions, model.clan.tag, type, 0)
       .then((value) => {
-        if (active) {
-          setSeasonIndex(value.index);
-          setData(value.data);
-          setError(false);
-        }
+        if (id !== requestId.current) return;
+        setSeasonIndex(value.index);
+        setData(value.data);
+        setError(false);
       })
       .catch(() => {
-        if (active) setError(true);
+        if (id === requestId.current) setError(true);
       });
     return () => {
-      active = false;
+      requestId.current += 1;
     };
   }, [actions, model.clan.tag, type]);
-  if (error)
-    return (
-      <ClanTabEmpty
-        title={t('generalError')}
-        body={t('generalTryAgain')}
-        onRetry={() => void load()}
-      />
-    );
-  if (!data)
-    return (
-      <View style={styles.center}>
-        <LoadingIndicator />
-      </View>
-    );
-  if (!data.summary.seasons.length) return <ClanTabEmpty title={t('generalNoDataAvailable')} />;
   const pointsLabel =
     type === ClanLeaderboardType.homeVillage
       ? t('clanPointsTitle')
       : type === ClanLeaderboardType.builderBase
         ? t('clanBuilderBasePoints')
         : t('clanCapitalPoints');
-  const seasonChoices = data.summary.seasons.flatMap((item, index) =>
+  const seasonChoices = (data?.summary.seasons ?? []).flatMap((item, index) =>
     type !== ClanLeaderboardType.clanCapital || index % 6 === 0
       ? [
           {
             key: `${index}`,
             label:
               type === ClanLeaderboardType.clanCapital
-                ? capitalBucketLabel(data.summary.seasons, index, locale)
+                ? capitalBucketLabel(data!.summary.seasons, index, locale)
                 : `${seasonLabel(item.season, locale)} · ${t('statsIndexDays', {
                     index: item.daysInTop200,
                   })}`,
@@ -164,93 +146,109 @@ export function ClanLeaderboardHistoryTab({
   return (
     <View style={styles.tab}>
       <View style={styles.pills}>
-        <FilterPill
-          label={t('gameBaseHome')}
-          selected={type === ClanLeaderboardType.homeVillage}
-          onPress={() => {
-            setSeasonIndex(0);
-            setMetric('rank');
-            setType(ClanLeaderboardType.homeVillage);
-          }}
-        />
-        <FilterPill
-          label={t('gameBaseBuilder')}
-          selected={type === ClanLeaderboardType.builderBase}
-          onPress={() => {
-            setSeasonIndex(0);
-            setMetric('rank');
-            setType(ClanLeaderboardType.builderBase);
-          }}
-        />
-        <FilterPill
-          label={t('gameClanCapital')}
-          selected={type === ClanLeaderboardType.clanCapital}
-          onPress={() => {
-            setSeasonIndex(0);
-            setMetric('rank');
-            setType(ClanLeaderboardType.clanCapital);
-          }}
-        />
-      </View>
-      <View style={styles.seasonPickerRow}>
-        <SeasonPicker
-          accessibilityLabel={t('clanRankingsSelectSeason')}
-          selectedKey={`${seasonIndex}`}
-          choices={seasonChoices}
-          onSelect={(key) => void load(type, Number(key))}
-        />
-      </View>
-      <SummaryRail>
-        {data.selected.map((item, index) => (
-          <View key={`${item.season}:${index}`} style={styles.summaryGroup}>
-            <SummaryChip
-              value={`${item.daysInTop200}`}
-              label={t('statsIndexDays', { index: item.daysInTop200 })}
-              icon={<Calendar size={18} color={theme.onSurfaceVariant} />}
-            />
-            <SummaryChip value={`#${item.bestRank}`} label={t('cwlRankTitle')} />
-            <SummaryChip
-              value={`${item.peakPoints}`}
-              label={pointsLabel}
-              imageUrl={pointsImage(type)}
-            />
-          </View>
-        ))}
-      </SummaryRail>
-      <View style={styles.pills}>
-        <FilterPill
-          label={t('cwlRankTitle')}
-          selected={metric === 'rank'}
-          onPress={() => setMetric('rank')}
-        />
-        <FilterPill
-          label={pointsLabel}
-          selected={metric === 'points'}
-          onPress={() => setMetric('points')}
-        />
-      </View>
-      {data.history.items.length ? (
-        <>
-          <HistoryChart
-            items={data.history.items}
-            summaries={data.selected}
-            metric={metric}
-            type={type}
-            label={metric === 'rank' ? t('cwlRankTitle') : pointsLabel}
-            locale={locale}
+        {availableTypes.includes(ClanLeaderboardType.homeVillage) ? (
+          <FilterPill
+            label={t('gameBaseHome')}
+            selected={type === ClanLeaderboardType.homeVillage}
+            onPress={() => {
+              setSeasonIndex(0);
+              setType(ClanLeaderboardType.homeVillage);
+            }}
           />
-          <View style={styles.list}>
-            {data.history.items.map((entry, index) => (
-              <LeaderboardRow
-                key={leaderboardEntryKey(entry, index, type)}
-                entry={entry}
-                type={type}
-              />
-            ))}
+        ) : null}
+        {availableTypes.includes(ClanLeaderboardType.builderBase) ? (
+          <FilterPill
+            label={t('gameBaseBuilder')}
+            selected={type === ClanLeaderboardType.builderBase}
+            onPress={() => {
+              setSeasonIndex(0);
+              setType(ClanLeaderboardType.builderBase);
+            }}
+          />
+        ) : null}
+        {availableTypes.includes(ClanLeaderboardType.clanCapital) ? (
+          <FilterPill
+            label={t('gameClanCapital')}
+            selected={type === ClanLeaderboardType.clanCapital}
+            onPress={() => {
+              setSeasonIndex(0);
+              setType(ClanLeaderboardType.clanCapital);
+            }}
+          />
+        ) : null}
+      </View>
+      {error ? (
+        <ClanTabEmpty
+          title={t('generalError')}
+          body={t('generalTryAgain')}
+          onRetry={() => void load()}
+        />
+      ) : !data ? (
+        <SkeletonContent loading>
+          <View style={styles.seasonPickerRow}>
+            <SeasonPicker
+              accessibilityLabel={t('clanRankingsSelectSeason')}
+              selectedKey="loading"
+              choices={[{ key: 'loading', label: 'Season' }]}
+              onSelect={() => undefined}
+            />
           </View>
-        </>
+          <View style={styles.historyCharts}>
+            <ClanAdaptiveCards>
+              <HistoryChart
+                items={[]}
+                metric="rank"
+                type={type}
+                label={t('cwlRankTitle')}
+                locale={locale}
+              />
+              <HistoryChart
+                items={[]}
+                metric="points"
+                type={type}
+                label={pointsLabel}
+                locale={locale}
+              />
+            </ClanAdaptiveCards>
+          </View>
+        </SkeletonContent>
+      ) : !data.summary.seasons.length ? (
+        <ClanTabEmpty title={t('generalNoDataAvailable')} />
       ) : (
-        <EmptyState title={t('generalNoDataAvailable')} />
+        <>
+          <View style={styles.seasonPickerRow}>
+            <SeasonPicker
+              accessibilityLabel={t('clanRankingsSelectSeason')}
+              selectedKey={`${seasonIndex}`}
+              choices={seasonChoices}
+              onSelect={(key) => void load(type, Number(key))}
+            />
+          </View>
+          {data.history.items.length ? (
+            <ChartInteractionBoundary key={`${type}:${seasonIndex}`}>
+              <View style={styles.historyCharts}>
+                <ClanAdaptiveCards>
+                  <HistoryChart
+                    items={data.history.items}
+                    metric="rank"
+                    type={type}
+                    label={t('cwlRankTitle')}
+                    locale={locale}
+                  />
+                  <HistoryChart
+                    items={data.history.items}
+                    metric="points"
+                    type={type}
+                    label={pointsLabel}
+                    locale={locale}
+                  />
+                </ClanAdaptiveCards>
+              </View>
+            </ChartInteractionBoundary>
+          ) : (
+            <EmptyState title={t('generalNoDataAvailable')} />
+          )}
+        </>
       )}
     </View>
   );
@@ -258,150 +256,60 @@ export function ClanLeaderboardHistoryTab({
 
 function HistoryChart({
   items,
-  summaries,
   metric,
   type,
   label,
   locale,
 }: {
   items: readonly ClanLeaderboardHistoryEntry[];
-  summaries: readonly ClanLeaderboardSeasonSummary[];
   metric: 'rank' | 'points';
   type: ClanLeaderboardTypeValue;
   label: string;
   locale: string;
 }) {
-  const theme = useCKTheme();
-  const intlLocale = toIntlLocale(locale);
-  const width = 360;
-  const height = 242;
-  const left = 52;
-  const right = 12;
-  const top = 18;
-  const bottom = 38;
-  const plotWidth = width - left - right;
-  const plotHeight = height - top - bottom;
-  const values = items.map((item) => (metric === 'rank' ? item.rank : item.points));
-  const rawMin = Math.min(...values);
-  const rawMax = Math.max(...values);
-  const range = rawMax - rawMin || 1;
-  const rangeStart = summaries.reduce(
-    (earliest, summary) => (summary.after < earliest ? summary.after : earliest),
-    summaries[0]?.after ?? items[0]!.date,
-  );
-  const rangeEnd = summaries.reduce(
-    (latest, summary) => (summary.before > latest ? summary.before : latest),
-    summaries[0]?.before ?? items.at(-1)!.date,
-  );
-  const timeRange = Math.max(1, rangeEnd.getTime() - rangeStart.getTime());
-  const xFor = (date: Date) =>
-    left +
-    Math.max(0, Math.min(1, (date.getTime() - rangeStart.getTime()) / timeRange)) * plotWidth;
-  const yFor = (value: number) => {
-    const normalized = (value - rawMin) / range;
-    return top + (metric === 'rank' ? normalized : 1 - normalized) * plotHeight;
-  };
-  const points = items.map(
-    (item) => `${xFor(item.date)},${yFor(metric === 'rank' ? item.rank : item.points)}`,
-  );
-  const accent = leaderboardChartAccent(type);
-  const yTicks = [0, 0.5, 1].map((fraction) => ({
-    y: top + fraction * plotHeight,
-    value: metric === 'rank' ? rawMin + fraction * range : rawMax - fraction * range,
-  }));
-  const xTicks = [0, 1 / 3, 2 / 3, 1].map((fraction) => ({
-    x: left + fraction * plotWidth,
-    date: new Date(rangeStart.getTime() + timeRange * fraction),
-  }));
-  const number = new Intl.NumberFormat(intlLocale, {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  });
+  const { t } = useI18n();
+  const groups = new Map<string, ClanLeaderboardHistoryEntry[]>();
+  for (const item of items) {
+    const key = item.location?.name ?? '';
+    groups.set(key, [...(groups.get(key) ?? []), item]);
+  }
   return (
     <Surface style={styles.chart}>
-      <View style={styles.chartLegend}>
-        <View style={[styles.chartLegendDot, { backgroundColor: accent }]} />
-        <CKText role="labelMedium" style={styles.grow}>
-          {label}
-        </CKText>
-        <CKText muted role="labelSmall">
-          {new Intl.DateTimeFormat(intlLocale, { month: 'short', day: 'numeric' }).format(
-            rangeStart,
-          )}{' '}
-          –{' '}
-          {new Intl.DateTimeFormat(intlLocale, { month: 'short', day: 'numeric' }).format(rangeEnd)}
-        </CKText>
-      </View>
-      <Svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
-        <Defs>
-          <LinearGradient id={`leaderboard-area-${type}`} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor={accent} stopOpacity={0.22} />
-            <Stop offset="1" stopColor={accent} stopOpacity={0.01} />
-          </LinearGradient>
-        </Defs>
-        {yTicks.map((tick, index) => (
-          <Line
-            key={`grid-${index}`}
-            x1={left}
-            x2={width - right}
-            y1={tick.y}
-            y2={tick.y}
-            stroke={colorWithAlpha(theme.outlineVariant, 0.35)}
-            strokeWidth={1}
-          />
-        ))}
-        {points.length > 1 ? (
-          <Polygon
-            points={`${left},${top + plotHeight} ${points.join(' ')} ${width - right},${top + plotHeight}`}
-            fill={`url(#leaderboard-area-${type})`}
-          />
-        ) : null}
-        <Polyline
-          points={points.join(' ')}
-          fill="none"
-          stroke={accent}
-          strokeWidth={3}
-          strokeLinejoin="round"
-          strokeLinecap="round"
-        />
-        {items.length <= 36
-          ? items.map((item, index) => (
-              <Circle
-                key={leaderboardEntryKey(item, index, type)}
-                cx={xFor(item.date)}
-                cy={yFor(metric === 'rank' ? item.rank : item.points)}
-                r={3.2}
-                fill={accent}
-              />
-            ))
-          : null}
-        {yTicks.map((tick, index) => (
-          <SvgText
-            key={`y-${index}`}
-            x={left - 7}
-            y={tick.y + 3}
-            textAnchor="end"
-            fontSize={10}
-            fill={theme.onSurfaceVariant}
-          >
-            {number.format(Math.max(0, Math.round(tick.value)))}
-          </SvgText>
-        ))}
-        {xTicks.map((tick, index) => (
-          <SvgText
-            key={`x-${index}`}
-            x={tick.x}
-            y={height - 12}
-            textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'}
-            fontSize={10}
-            fill={theme.onSurfaceVariant}
-          >
-            {new Intl.DateTimeFormat(intlLocale, { month: 'short', day: 'numeric' }).format(
-              tick.date,
-            )}
-          </SvgText>
-        ))}
-      </Svg>
+      <AnalyticsLineChart
+        title={label}
+        inverted={metric === 'rank'}
+        showPoints
+        connectGaps={false}
+        axisMinimum={metric === 'rank' ? 1 : 0}
+        formatAxisValue={(value) =>
+          metric === 'rank'
+            ? `#${Math.round(value)}`
+            : Math.round(value).toLocaleString(toIntlLocale(locale), {
+                notation: 'compact',
+                maximumFractionDigits: 1,
+              })
+        }
+        formatPointDetail={(key, day) => {
+          const entry = groups
+            .get(key.slice(metric.length + 1))
+            ?.findLast((item) => item.date.toISOString().slice(0, 10) === day);
+          return entry
+            ? `${t('clanMembers')}: ${entry.members.toLocaleString(toIntlLocale(locale))}`
+            : undefined;
+        }}
+        formatValue={(value) =>
+          `${metric === 'rank' ? '#' : ''}${Math.round(value).toLocaleString(toIntlLocale(locale))}`
+        }
+        series={[...groups].map(([location, entries], index) => ({
+          key: `${metric}:${location}`,
+          label: location || label,
+          ...(index === 0 ? { color: leaderboardChartAccent(type) } : {}),
+          points: entries.map((entry) => ({
+            day: entry.date.toISOString().slice(0, 10),
+            value: metric === 'rank' ? entry.rank : entry.points,
+          })),
+        }))}
+      />
     </Surface>
   );
 }
@@ -414,55 +322,6 @@ export function leaderboardEntryKey(
   return `${type}:${entry.date.toISOString()}:${entry.rank}:${entry.points}:${entry.members}:${index}`;
 }
 
-function LeaderboardRow({
-  entry,
-  type,
-}: {
-  entry: ClanLeaderboardHistoryEntry;
-  type: ClanLeaderboardTypeValue;
-}) {
-  const { t, locale } = useI18n();
-  const intlLocale = toIntlLocale(locale);
-  const theme = useCKTheme();
-  return (
-    <Surface style={styles.row}>
-      <View style={styles.rowHead}>
-        <CKText style={styles.bold}>
-          {new Intl.DateTimeFormat(intlLocale, {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          }).format(entry.date)}
-        </CKText>
-        <CKText role="labelLarge">#{entry.rank.toLocaleString(intlLocale)}</CKText>
-      </View>
-      <View style={styles.metrics}>
-        <Metric
-          image={pointsImage(type)}
-          label={
-            type === ClanLeaderboardType.homeVillage
-              ? t('clanPointsTitle')
-              : type === ClanLeaderboardType.builderBase
-                ? t('clanBuilderBasePoints')
-                : t('clanCapitalPoints')
-          }
-          value={entry.points.toLocaleString(intlLocale)}
-        />
-        <Metric
-          icon={<Users size={18} color={theme.onSurfaceVariant} />}
-          label={t('clanMembers')}
-          value={entry.members.toLocaleString(intlLocale)}
-        />
-      </View>
-      {entry.location?.name ? (
-        <CKText muted role="metadata">
-          {entry.location.name}
-        </CKText>
-      ) : null}
-    </Surface>
-  );
-}
-
 export function ClanLegendHistoryTab({
   model,
   actions,
@@ -471,6 +330,7 @@ export function ClanLegendHistoryTab({
   actions: ClanInfoPresentationActions;
 }) {
   const { t, locale } = useI18n();
+  const layout = useAdaptiveLayout();
   const [summary, setSummary] = useState<ClanLegendHistorySummary>();
   const [items, setItems] = useState<readonly ClanLegendHistoryEntry[]>();
   const [season, setSeason] = useState<string>();
@@ -531,9 +391,34 @@ export function ClanLegendHistoryTab({
     );
   if (!summary || !items)
     return (
-      <View style={styles.center}>
-        <LoadingIndicator />
-      </View>
+      <SkeletonContent loading style={styles.tab}>
+        <View style={styles.seasonPickerRow}>
+          <SeasonPicker
+            accessibilityLabel={t('clanRankingsSelectSeason')}
+            selectedKey="loading"
+            choices={[{ key: 'loading', label: 'Season' }]}
+            onSelect={() => undefined}
+          />
+        </View>
+        <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
+          {[0, 1, 2].map((index) => (
+            <LegendRow
+              key={index}
+              entry={{
+                season: '2026-01',
+                tag: '',
+                name: 'Player name',
+                expLevel: 100,
+                trophies: 5000,
+                attackWins: 100,
+                defenseWins: 10,
+                rank: 100,
+              }}
+              showSeason={false}
+            />
+          ))}
+        </ResponsiveGrid>
+      </SkeletonContent>
     );
   if (!summary.seasons.length && !items.length)
     return <ClanTabEmpty title={t('generalNoDataAvailable')} />;
@@ -559,7 +444,7 @@ export function ClanLegendHistoryTab({
           onSelect={(key) => void load(key)}
         />
       </View>
-      <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+      <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
         {items.map((entry, index) => (
           <LegendRow
             key={`${entry.season}:${entry.tag}:${entry.rank}:${index}`}
@@ -620,6 +505,7 @@ export function ClanRecordsHistoryTab({
   actions: ClanInfoPresentationActions;
 }) {
   const { t } = useI18n();
+  const layout = useAdaptiveLayout();
   const [records, setRecords] = useState<ClanRecords>();
   const [history, setHistory] = useState<ClanProfileHistory>();
   const [filter, setFilter] = useState<'all' | 'description' | 'clanLevel'>('all');
@@ -667,16 +553,34 @@ export function ClanRecordsHistoryTab({
     );
   if (!records || !history)
     return (
-      <View style={styles.center}>
-        <LoadingIndicator />
-      </View>
+      <SkeletonContent loading style={styles.tab}>
+        <ResponsiveGrid minItemWidth={layout.isExpanded ? 300 : 360} maxColumns={2} gap={12}>
+          <RecordPanel
+            label={t('clanPointsTitle')}
+            record={{ value: 10000, time: new Date(0) }}
+            image={ImageAssets.bestTrophies}
+          />
+          <RecordPanel
+            label={t('rankingsWinStreak')}
+            record={{ value: 100, time: new Date(0) }}
+            image={ImageAssets.war}
+          />
+        </ResponsiveGrid>
+        {[0, 1, 2].map((index) => (
+          <ProfileChangeRow
+            key={index}
+            change={{ time: new Date(0), type: 'clanLevel', previous: 10, current: 11 }}
+            badge={model.clan.badgeUrls.smallest}
+          />
+        ))}
+      </SkeletonContent>
     );
   if (records.isEmpty && !history.items.length)
     return <ClanTabEmpty title={t('generalNoDataAvailable')} />;
   const changes = history.items.filter((change) => filter === 'all' || change.type === filter);
   return (
     <View style={styles.tab}>
-      <ResponsiveGrid minItemWidth={360} maxColumns={2} gap={12}>
+      <ResponsiveGrid minItemWidth={layout.isExpanded ? 300 : 360} maxColumns={2} gap={12}>
         {records.clanPoints ? (
           <RecordPanel
             label={t('clanPointsTitle')}
@@ -712,7 +616,7 @@ export function ClanRecordsHistoryTab({
             />
           </View>
           {changes.length ? (
-            <ResponsiveGrid minItemWidth={430} maxColumns={2} gap={12}>
+            <ResponsiveGrid minItemWidth={layout.isExpanded ? 320 : 430} maxColumns={2} gap={12}>
               {changes.map((change, index) => (
                 <ProfileChangeRow
                   key={profileChangeKey(change, index)}
@@ -918,13 +822,6 @@ function Metric({
     </View>
   );
 }
-function pointsImage(type: ClanLeaderboardTypeValue) {
-  return type === ClanLeaderboardType.builderBase
-    ? ImageAssets.builderBaseTrophy
-    : type === ClanLeaderboardType.clanCapital
-      ? ImageAssets.capitalTrophy
-      : ImageAssets.trophies;
-}
 function seasonLabel(season: string, locale: string) {
   const normalized = season.startsWith('v2-') ? season.slice(3) : season;
   const date = new Date(
@@ -972,6 +869,7 @@ function legendBadgeForSeason(season: string) {
 
 const styles = StyleSheet.create({
   tab: { padding: 16, gap: 12 },
+  historyCharts: { gap: 12 },
   center: { minHeight: 180, alignItems: 'center', justifyContent: 'center' },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   grow: { flex: 1 },

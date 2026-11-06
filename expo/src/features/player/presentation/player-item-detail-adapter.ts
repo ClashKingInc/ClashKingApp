@@ -1,3 +1,4 @@
+import { maxLevelForItemAtTH } from '../data/player-item-utils';
 import {
   PlayerEquipment,
   PlayerPet,
@@ -15,7 +16,7 @@ import {
   UpgradeVillage,
 } from '../../upgrade-tracker/models';
 
-export function upgradeDetailsItem(item: PlayerItem) {
+export function upgradeDetailsItem(item: PlayerItem, targetLevel = item.maxLevel) {
   const category =
     item instanceof PlayerEquipment
       ? UpgradeCategory.equipment
@@ -42,7 +43,7 @@ export function upgradeDetailsItem(item: PlayerItem) {
       )
     : [];
   const steps = Array.from(
-    { length: Math.max(0, item.maxLevel - item.level) },
+    { length: Math.max(0, targetLevel - item.level) },
     (_, index) => item.level + index + 1,
   ).flatMap((target) => {
     const row = levels.find((candidate) => candidate.level === target - 1);
@@ -76,24 +77,28 @@ export function upgradeDetailsItem(item: PlayerItem) {
     category,
     queue,
     currentLevel: item.level,
-    targetLevel: item.maxLevel,
+    targetLevel,
     count: 1,
     steps,
     completedUpgradeSeconds: 0,
     totalUpgradeSeconds: steps.reduce((sum, step) => sum + step.seconds, 0),
-    meta: item.meta,
+    meta: item.meta
+      ? { ...item.meta, levels: levels.filter((row) => Number(row.level) <= targetLevel) }
+      : null,
     wardenWeight: optionalNumber(item.meta?.warden_weight),
     healerWeight: optionalNumber(item.meta?.healer_weight),
   });
 }
 
-export function upgradeDetailsSnapshot(item: PlayerItem | null) {
-  const detail = item ? upgradeDetailsItem(item) : null;
+export function upgradeDetailsSnapshot(item: PlayerItem | null, hall = 0) {
+  const detail = item
+    ? upgradeDetailsItem(item, hall > 0 ? maxLevelForItemAtTH(item, hall) : item.maxLevel)
+    : null;
   return new UpgradeTrackerSnapshot({
     tag: '',
     name: '',
-    townHallLevel: 0,
-    builderHallLevel: 0,
+    townHallLevel: detail?.village === UpgradeVillage.home ? hall : 0,
+    builderHallLevel: detail?.village === UpgradeVillage.builderBase ? hall : 0,
     homeBuilderCount: 0,
     builderBaseBuilderCount: 0,
     items: detail ? [detail] : [],

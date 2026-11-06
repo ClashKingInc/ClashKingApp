@@ -3,7 +3,7 @@ import type { CocAccountLink } from '../../auth/models';
 
 export interface LinkedAccountPresentationService {
   readonly accounts: readonly CocAccountLink[];
-  addAccount(playerTag: string): Promise<AccountMutationResult>;
+  addAccount(playerTag: string, apiToken: string): Promise<AccountMutationResult>;
   addAccountWithToken(playerTag: string, apiToken: string): Promise<AccountVerificationResult>;
   removeAccount(playerTag: string): Promise<boolean>;
   updateAccountOrder(playerTags: readonly string[]): Promise<boolean>;

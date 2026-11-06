@@ -16,3 +16,17 @@ The Cloudflare route is deliberately narrow:
 `OTP_API_TOKEN` is a required Worker secret and must match the GitHub Actions
 secret `E2E_OTP_API_TOKEN`. Run `npm run check` before deploying with
 `npm run deploy`; rerun `npm run types` whenever bindings change.
+
+## Dependency maintenance
+
+Miniflare currently pins an older Undici release. The scoped package override
+keeps local worker tooling on Undici 7.30.1 for its HTTP security fixes. Remove
+the override when Miniflare itself requires that version or newer; verify the
+local email-to-OTP flow when changing it. PostalMime 4 retains the static
+`PostalMime.parse` API used by the worker.
+
+For a local end-to-end check, start `npx wrangler dev --local --ip 127.0.0.1
+--port 8797 --var OTP_API_TOKEN:local-dependency-check`, then run
+`npm run check:local`. The check sends a synthetic email through the actual
+local worker, reads the parsed code, checks recipient isolation, and deletes
+the local record. It refuses non-local URLs.

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
-import ts from 'typescript';
+import { spawnSync } from 'node:child_process';
 
 const expoRoot = path.resolve(import.meta.dirname, '..');
 const e2eRoot = path.resolve(expoRoot, '../e2e');
@@ -35,21 +35,33 @@ for (const file of sourceFiles) {
     if (pattern.test(source)) failures.push(`${file}: ${description}`);
     pattern.lastIndex = 0;
   }
+}
 
-  const result = ts.transpileModule(source, {
-    fileName: absolutePath,
-    reportDiagnostics: true,
-    compilerOptions: {
-      module: ts.ModuleKind.ESNext,
-      target: ts.ScriptTarget.ES2022,
-    },
-  });
-
-  for (const diagnostic of result.diagnostics ?? []) {
-    if (diagnostic.category !== ts.DiagnosticCategory.Error) continue;
-    const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-    failures.push(`${file}: ${message}`);
-  }
+const typeScript7 = path.join(expoRoot, 'node_modules/typescript7/bin/tsc');
+const syntaxCheck = spawnSync(
+  process.execPath,
+  [
+    typeScript7,
+    '--ignoreConfig',
+    '--noEmit',
+    '--noCheck',
+    '--pretty',
+    'false',
+    '--target',
+    'ES2022',
+    '--module',
+    'ESNext',
+    '--moduleResolution',
+    'bundler',
+    '--skipLibCheck',
+    ...sourceFiles.map((file) => path.join(sourceRoot, file)),
+  ],
+  { encoding: 'utf8' },
+);
+if (syntaxCheck.status !== 0) {
+  failures.push(
+    `TypeScript 7 E2E syntax check failed:\n${syntaxCheck.stdout}${syntaxCheck.stderr}`.trim(),
+  );
 }
 
 if (failures.length > 0) {

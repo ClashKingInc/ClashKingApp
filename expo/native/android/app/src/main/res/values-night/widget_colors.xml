@@ -15,6 +15,8 @@
     <color name="widget_warning_text">#FFFFD27A</color>
     <color name="widget_status_idle">#FFFFA04A</color>
     <color name="widget_status_maxed">#FF5FD187</color>
+    <color name="widget_stat_positive">#FF54C7A4</color>
+    <color name="widget_stat_negative">#FFFF6F66</color>
     <color name="war_widget_background">#F9070708</color>
     <color name="war_widget_border">#24FFFFFF</color>
     <color name="war_widget_text">#FFFFFFFF</color>

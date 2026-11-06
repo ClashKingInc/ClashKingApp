@@ -1,228 +1,168 @@
 # ClashKing Mobile App
 
-[![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-blue)](https://github.com/ClashKingInc)
-[![Expo](https://img.shields.io/badge/Expo-SDK%2057-000020)](https://expo.dev)
-[![License](https://img.shields.io/badge/license-Open%20Source-green)](https://github.com/ClashKingInc)
+ClashKing is a Clash of Clans companion app for iOS and Android, built with Expo, React Native, and TypeScript.
 
-The Clash of Clans companion app for tracking stats, managing clans, and analyzing performance. The shipping application is the Expo SDK 57 project under `expo/`.
+## Features
 
-## ✨ Features
+- Player and clan profiles
+- Ranked and Legend League tracking
+- War and Clan War League statistics
+- Upgrade tracking and calculators
+- Home-screen widgets
+- Multiple languages and light/dark themes
 
-### 📊 **Player Statistics**
+## Getting started
 
-- Comprehensive player profile tracking
-- Trophy progression and league rankings
-- Achievement monitoring and progress
-- Legend League daily tracking with detailed analytics
+You will need Node.js 22, npm, and the native tools for your platform:
 
-### 🏰 **Clan Management**
+- Android: Android Studio and an Android SDK
+- iOS: macOS and Xcode
 
-- Real-time clan member monitoring
-- Donation tracking and clan health metrics
-- Join/leave event tracking
-- Clan capital raid analytics
+Clone the repository and install the app dependencies:
 
-### ⚔️ **War Analytics**
-
-- Detailed war performance tracking
-- Attack strategy analysis and win rates
-- War history and statistical trends
-- Clan War League (CWL) performance metrics
-
-### 🏆 **Legend League Tracking**
-
-- Daily trophy gain/loss tracking
-- End-of-season statistics
-- Performance charts and trends
-- Attack and defense analytics
-
-### 🔧 **Additional Features**
-
-- Multi-language support (20+ languages)
-- Dark/light theme support
-- Account verification with API tokens
-- Android home screen widgets
-- Offline data caching
-- Native and cross-platform glass surfaces with responsive iOS, Android, and web behavior
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 22
-- npm
-- Android Studio / Xcode for device deployment
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/ClashKingInc/clashkingapp.git
-   cd clashkingapp
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   cd expo
-   npm ci
-   ```
-
-3. **Run the app**
-   ```bash
-   npm run start
-   ```
-
-### Development Commands
-
-- `npm ci` - Install locked dependencies from `expo/`
-- `npm run start` - Start Expo for native or web development
-- `npm run lint` / `npm run typecheck` - Run static checks
-- `npm test` - Run the Expo test suite
-- `npm run test:native-plugin` - Verify the retained native/widget contract
-- `npx expo prebuild --clean` - Generate native projects through CNG
-- `npm run web:export` - Build the Cloudflare Pages artifact and stamp its release cache
-
-The shared web process is managed from the repository root with
-`tooling/dev-app start`. It serves Expo web at `https://dev-app.clashk.ing`
-through the existing tunnel and owns port `7357`; use `reload`, `restart`,
-`logs`, and `status` instead of starting a second process.
-
-The deployed production web build uses
-`EXPO_PUBLIC_CK_API_V2_BASE_URL=https://api.clashk.ing/v2`.
-Browser authentication uses the `/v2/auth/web/*` cookie endpoints; native iOS
-and Android builds keep the JSON access/refresh-token contract.
-
-Set `EXPO_PUBLIC_CK_API_ENV` to `development`, `staging`, or `local` to select
-the non-production environment. Optional `EXPO_PUBLIC_CK_API_BASE_URL`,
-`EXPO_PUBLIC_CK_API_V2_BASE_URL`, `EXPO_PUBLIC_CK_PROXY_BASE_URL`, and
-`EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL` values override canonical environment
-URLs. CI alpha builds use development, beta builds use staging, and production
-builds use `api.clashk.ing`.
-
-## 🌐 ClashKing Ecosystem
-
-ClashKing is a comprehensive platform with multiple tools:
-
-- **📱 Mobile App** (this repository) - Beautiful, fast access to your stats
-- **🤖 Discord Bot** - Clan management and server integration
-- **🔗 Free API** - Open-source data access for developers
-
-All tools work together seamlessly, sharing data to provide the ultimate Clash of Clans experience.
-
-## 🏗️ Architecture
-
-### Project Structure
-
-```
-expo/
-├── src/
-│   ├── core/       # Runtime, API, storage, and shared domain code
-│   ├── features/   # Feature-based application modules
-│   ├── i18n/       # Generated catalogs and source ARB files
-│   └── ui/         # Shared responsive components and tokens
-├── native/         # Retained widget sources and native parity contract
-├── plugins/        # Expo config plugins that generate native projects
-└── public/         # PWA, OAuth callback, and Cloudflare static assets
+```bash
+git clone https://github.com/ClashKingInc/ClashKingApp.git
+cd ClashKingApp/expo
+npm ci
 ```
 
-The Expo project uses CNG: `expo/ios` and `expo/android` are generated and
-ignored. Make durable native changes in `expo/app.config.ts`, `expo/plugins`,
-`expo/native`, or the local `@clashking/native` module.
+Run a development build:
 
-Expo startup and post-login hydration share `AccountBootstrapService`. The
-runtime context owns the reusable API client, auth/session storage, preferences,
-and feature services.
+```bash
+npm run android
+# or, on macOS:
+npm run ios
+```
 
-### Key Technologies
+For an already installed development build, start Metro with:
 
-- **Expo SDK 57 / React Native** - iOS, Android, and static web runtime
-- **Expo Router** - Cross-platform routing and static web export
-- **TanStack Query and Zustand** - Remote and local state
-- **Expo config plugins / CNG** - Reproducible native projects and widgets
-- **Cloudflare Pages** - Production static web hosting
+```bash
+npm start
+```
 
-## Release delivery
+Expo Go is not supported because the app uses custom native modules. Ask a maintainer for any development configuration you need, and never commit credentials or local environment files.
 
-GitHub Actions regenerates native projects from `expo/app.config.ts`, the native parity contract, config plugins, and local native sources. Android releases produce a signed AAB and APK before uploading the AAB to the selected Play track; iOS releases archive the `ClashKing` app and `WarWidgetExtension` together before uploading the IPA to TestFlight; web releases export static Expo Router output to Cloudflare Pages. These workflows preserve `com.clashking.clashkingapp`, `com.clashking.apps`, `com.clashking.apps.warwidget`, Apple team `MZYXD43RX5`, and app group `group.com.clashking.apps`.
+## Project structure
 
-Repository or environment secrets required by the release workflows are:
+- `expo/src/features/` — app features and screens
+- `expo/src/core/` — shared services and application code
+- `expo/src/ui/` — shared UI components
+- `expo/src/i18n/arb/` — source translations
+- `expo/modules/` — local native modules
+- `expo/native/` — native widget and platform resources
+- `expo/plugins/` — Expo configuration plugins
 
-- Android: `KEY_STORE_FILE`, `KEY_ALIAS`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD`, `GOOGLE_PLAY_JSON_KEY`, and `PACKAGE_NAME`.
-- iOS: `IOS_CERTIFICATE_BASE64`, `IOS_CERTIFICATE_PASSWORD`, `IOS_PROVISIONING_PROFILE_BASE64`, `IOS_WIDGET_PROVISIONING_PROFILE_BASE64`, `APP_STORE_CONNECT_API_KEY_ID`, `APP_STORE_CONNECT_API_ISSUER_ID`, and `APP_STORE_CONNECT_API_KEY`. The app and widget provisioning profiles must both be App Store distribution profiles and include the shared app group; the app profile must also retain its push entitlement.
-- Web: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` for the existing `clashkingapp` Pages project.
+The app UI runs on iOS and Android. The small browser landing page only helps users open or download the app.
 
-The TestFlight workflow uploads the build but leaves external TestFlight review and group assignment in App Store Connect. Local validation can verify generated targets, compilation, and plist contracts, but production signing and store acceptance require the real credentials above.
+Native projects are generated by Expo. Make persistent native changes in the configuration, plugins, modules, or native resources rather than the generated `expo/ios/` and `expo/android/` directories.
 
-## 🌍 Internationalization
+## Contributing
 
-The app supports 20+ languages with community-driven translations:
+1. Create a branch for your change.
+2. Follow the existing TypeScript and shared-component patterns.
+3. Add translations for user-facing text in every supported locale.
+4. Run the checks relevant to your change from `expo/`:
 
-- English (reference language)
-- French (developer-maintained)
-- Spanish, German, Italian, Portuguese, and more
+   ```bash
+   npm run typecheck
+   npm run lint
+   npm run l10n:check
+   ```
 
-### Contributing Translations
+5. Verify app changes on the affected native platforms and open a pull request with a clear description and validation results.
 
-The ARB catalogs under `expo/src/i18n/arb` are the localization source of
-truth. `npm run l10n:generate` creates the runtime JSON and TypeScript catalogs,
-and `npm run l10n:check` verifies that generated output is current.
+Read [AGENTS.md](AGENTS.md) for repository guidance. Native implementation notes are in [expo/native/README.md](expo/native/README.md).
 
-Help us translate the app! We use Crowdin for community translations:
+## Translations
 
-- Visit our [Crowdin project](https://crowdin.com/project/clashkingapp)
-- Join our [Discord community](https://discord.gg/clashking) for translator support
+Edit the ARB files in `expo/src/i18n/arb/`, then regenerate and check the runtime catalogs:
 
-## 🤝 Contributing
+```bash
+npm run l10n:generate
+npm run l10n:check
+```
 
-We welcome contributions from the community! This is a side project developed alongside our full-time jobs, driven by our passion for Clash of Clans.
+Commit the source translations and their generated output together.
 
-### How to Contribute
+## Feedback and support
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Use the repository's GitHub Issues for bug reports and feature requests. Include the app version, device, and steps to reproduce the problem.
 
-### Development Guidelines
+You can support ClashKing by using creator code **ClashKing** in supported Supercell games.
 
-- Follow the existing Expo/TypeScript patterns
-- Maintain existing code style and patterns
-- Add translations for new strings
-- Test on both Android and iOS
-- Ensure no secrets or API keys are committed
+## License
 
-## 🐛 Bug Reports & Feature Requests
+See [LICENSE](LICENSE) for the repository's license. Third-party components retain their own licenses and notices.
 
-- **Bug Reports**: [GitHub Issues](https://github.com/ClashKingInc/clashkingapp/issues)
-- **Feature Requests**: Use our in-app feature voting system
-- **General Support**: [Discord Community](https://discord.gg/clashking)
-- **Email**: devs@clashk.ing
+ClashKing is not affiliated with Supercell. Clash of Clans and its related assets belong to Supercell.
 
-## 💖 Support the Project
+## Bundled header artwork
 
-ClashKing is funded entirely through user donations and Supercell Creator code usage:
+ClashKingAssets owns the header illustrations. The native app bundles the
+version selected by `expo/artwork/header-artwork.lock.json` under
+`expo/assets/generated/clashking`; these files are generated copies, not a
+second hand-edited source. First launch, offline use and page navigation do not
+download these headers. The existing header decode cache remains unchanged.
 
-- **Use Creator Code**: Enter "ClashKing" in any Supercell game shop
-- **Patreon**: [Support us on Patreon](https://www.patreon.com/clashking)
-- **Discord**: [Join our community](https://discord.gg/clashking)
-- **Share**: Tell your clan mates about ClashKing!
+After reviewing a new Assets selection, run from `expo/`:
 
-## 📜 License
+```sh
+npm run artwork:sync -- --assets-root /path/to/clashking_assets --update-lock
+npm run artwork:check
+```
 
-This project is open source. See the source code for implementation details.
+Normal CI and release checks verify the committed lock and bytes without a
+network request or an Assets checkout. Game metadata, including abilities,
+continues to use the published manifest and the existing offline data cache;
+there is no bundled abilities fallback.
 
-**Important**: This project is not affiliated with Supercell. Clash of Clans is a trademark of Supercell Oy. This app follows the [Supercell Fan Content Policy](https://supercell.com/en/fan-content-policy/).
+## Dependency security pins
 
-## 🔗 Links
+The Expo App remains on SDK 58. The lockfile includes Expo 58.0.23 and its
+patched CLI dependency graph. The scoped npm override for
+`@firebase/firestore > @grpc/grpc-js` selects 1.14.7 to remove the vulnerable
+1.9.x transport pulled in by Firebase. Keep the override until Firebase's
+upstream dependency selects a patched transport; do not downgrade the native
+Firebase integration merely to satisfy npm's suggested audit fix.
 
-- **API Repository**: [ClashKing API](https://github.com/ClashKingInc/ClashKingAPI)
-- **Discord Bot**: [Invite to your server](https://discord.com/api/oauth2/authorize?client_id=824653933347209227&permissions=8&scope=bot%20applications.commands)
-- **Website**: [clashk.ing](https://clashk.ing)
-- **Discord Community**: [discord.gg/clashking](https://discord.gg/clashking)
+`expo-widgets` is not installed: the App has no imports from it, and the custom
+`plugins/with-clashking-native` plugin owns the existing widget targets and
+storage contract. Do not add a second widget target generator for those widgets.
 
----
+The dependency overrides also select patched glob 14.0.3 for glob 13 consumers
+and minimatch 11.0.4 for minimatch 10 consumers. Keep these scoped by old major;
+do not force minimatch 3 users onto the incompatible export API. Validate Metro
+exports, Expo compatibility and license inventory when changing these overrides.
 
-Made with ❤️ by the ClashKing team and community contributors.
+### Account avatars
+
+The native app offers the 11 approved Clash faces after account setup and in
+Settings. The selected face replaces the app's Discord portrait. Settings uses
+an interactive 116-point face; navigation and profile headers share its choice.
+The API owns the choice through authenticated GET/PUT `/v2/auth/avatar` for both
+email and Discord accounts. The device cache is display-only. Saving requires a
+successful API response; reopening the app or returning to the foreground loads
+the account's latest choice. Deploy database migration `057_account_avatar.sql`
+and the matching API before releasing the app bundle. Never change the approved
+catalog IDs without coordinating the API contract and database constraint.
+
+## Production release
+
+The first public native release is 1.0.0. Run the **Release mobile app** workflow
+against the exact reviewed commit with version `1.0.0`, track `production`, and
+signed updates enabled. Android uploads to the production Play track; iOS
+archives with the app, widget and notification-service profiles and submits
+the production build to App Store review. Store approval and public availability
+are separate from a successful build or upload.
+
+The production profile disables dotenv loading and sets the API, proxy, push,
+OAuth application and OTA endpoint explicitly. Both native jobs run
+`npm run release:config` against the resolved Expo configuration before prebuild.
+The native baseline marker is published only after both native jobs succeed.
+The Admin dashboard selects compatible OTA releases; it does not sign them.
+
+The app-link landing deploys to the existing `clashkingapp` Cloudflare Pages
+project at `app.clashk.ing`. Configure `CK_ANDROID_STORE_URL`, `CK_IOS_STORE_URL`
+and `CK_ANDROID_APP_LINKS_SHA256` as repository variables. The Android fingerprint
+must come from Play's app-signing certificate. The landing builds from the native
+route manifest and must serve association JSON rather than the old web app shell.

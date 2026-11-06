@@ -6,6 +6,11 @@ export enum DamageSourceKind {
   FlameFlinger = 'flameFlinger',
   BalloonDeath = 'balloonDeath',
   RocketBalloonDeath = 'rocketBalloonDeath',
+  RocketBalloonImpact = 'rocketBalloonImpact',
+  SpikyBall = 'spikyBall',
+  SeekingShield = 'seekingShield',
+  FlameBlower = 'flameBlower',
+  RocketBackpack = 'rocketBackpack',
 }
 
 export class DamageLevel {
@@ -33,6 +38,8 @@ export class DamageLevel {
 }
 
 export class DamageSourceDefinition {
+  readonly hero?: string;
+  readonly rarity?: string;
   readonly kind: DamageSourceKind;
   readonly name: string;
   readonly imageUrl: string;
@@ -45,18 +52,24 @@ export class DamageSourceDefinition {
     imageUrl,
     levels,
     housingSpace = 0,
+    hero,
+    rarity,
   }: {
     kind: DamageSourceKind;
     name: string;
     imageUrl: string;
     levels: readonly DamageLevel[];
     housingSpace?: number;
+    hero?: string;
+    rarity?: string;
   }) {
     this.kind = kind;
     this.name = name;
     this.imageUrl = imageUrl;
     this.levels = levels;
     this.housingSpace = housingSpace;
+    this.hero = hero;
+    this.rarity = rarity;
   }
 
   levelsForTownHall(townHall: number): readonly DamageLevel[] {
@@ -69,6 +82,7 @@ export class DamageSourceDefinition {
 }
 
 export class BuildingLevelDefinition {
+  readonly superchargeHitpoints: readonly number[];
   readonly level: number;
   readonly hitpoints: number;
   readonly requiredTownHall: number;
@@ -81,27 +95,32 @@ export class BuildingLevelDefinition {
     requiredTownHall,
     upgradeResource,
     upgradeCost,
+    superchargeHitpoints = [],
   }: {
     level: number;
     hitpoints: number;
     requiredTownHall: number;
     upgradeResource?: string;
     upgradeCost?: number;
+    superchargeHitpoints?: readonly number[];
   }) {
     this.level = level;
     this.hitpoints = hitpoints;
     this.requiredTownHall = requiredTownHall;
     this.upgradeResource = upgradeResource;
     this.upgradeCost = upgradeCost;
+    this.superchargeHitpoints = superchargeHitpoints;
   }
 }
 
 export class BuildingDefinition {
+  readonly defensive: boolean;
   readonly id: string;
   readonly name: string;
   readonly imageName: string;
   readonly levels: readonly BuildingLevelDefinition[];
   readonly zapQuakeEligible: boolean;
+  readonly earthquakeEligible: boolean;
 
   constructor({
     id,
@@ -109,18 +128,24 @@ export class BuildingDefinition {
     imageName,
     levels,
     zapQuakeEligible,
+    earthquakeEligible = zapQuakeEligible,
+    defensive = true,
   }: {
     id: string;
     name: string;
     imageName: string;
     levels: readonly BuildingLevelDefinition[];
     zapQuakeEligible: boolean;
+    earthquakeEligible?: boolean;
+    defensive?: boolean;
   }) {
     this.id = id;
     this.name = name;
     this.imageName = imageName;
     this.levels = levels;
     this.zapQuakeEligible = zapQuakeEligible;
+    this.earthquakeEligible = earthquakeEligible;
+    this.defensive = defensive;
   }
 
   levelsForTownHall(townHall: number): readonly BuildingLevelDefinition[] {
@@ -222,9 +247,8 @@ export class DamageCalculatorEngine {
     for (const entry of stack) {
       if (entry.count <= 0) continue;
       if (
-        !target.building.zapQuakeEligible &&
-        (entry.source.kind === DamageSourceKind.Lightning ||
-          entry.source.kind === DamageSourceKind.Earthquake)
+        (entry.source.kind === DamageSourceKind.Lightning && !target.building.zapQuakeEligible) ||
+        (entry.source.kind === DamageSourceKind.Earthquake && !target.building.earthquakeEligible)
       ) {
         continue;
       }
@@ -241,7 +265,8 @@ export class DamageCalculatorEngine {
     return new DamageResult({
       target,
       totalDamage: Math.min(target.hitpoints, total),
-      remainingHitpoints: Math.max(0, target.hitpoints - total),
+      // Percentage spell sums can land a fraction below an integer boundary.
+      remainingHitpoints: total + 0.000001 >= target.hitpoints ? 0 : target.hitpoints - total,
     });
   }
 

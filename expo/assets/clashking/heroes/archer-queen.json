@@ -1,0 +1,46 @@
+{
+  "name": "archer-queen",
+  "geometry": "archerqueen_default_geo.glb",
+  "pose": "archerqueen_default_menuidle1.glb",
+  "texture": "sc3d/archerqueen_default_a.sctx",
+  "bytes": 2251948,
+  "validation": {
+    "meshes": 17,
+    "skinnedMeshes": 17,
+    "texturedMeshes": 17,
+    "bones": 110,
+    "animations": 1,
+    "tracks": 333
+  },
+  "landing": {
+    "schemaVersion": 1,
+    "slug": "archerqueen-default",
+    "model": "model.glb",
+    "animation": {
+      "clip": "archerqueen_default_menuidle1",
+      "speed": 1,
+      "loop": true
+    },
+    "transform": {
+      "scale": 1,
+      "offsetY": 0,
+      "initialYaw": 0
+    },
+    "camera": {
+      "fov": 36,
+      "distance": 2.1,
+      "targetY": 0
+    },
+    "interaction": {
+      "allowYaw": true,
+      "minYaw": -45,
+      "maxYaw": 45,
+      "allowPitch": false,
+      "allowZoom": false,
+      "allowPan": false,
+      "dragSensitivity": 0.8,
+      "autoRotate": false,
+      "autoRotateSpeed": 0.5
+    }
+  }
+}

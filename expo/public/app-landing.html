@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="Open ClashKing on your iPhone or Android device." />
+    <title>Open ClashKing</title>
+    <link rel="icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/landing/style.css" />
+    <script type="module" src="/landing/open-app.js"></script>
+  </head>
+  <body>
+    <main>
+      <img class="app-icon" src="/icons/Icon-192.png" width="88" height="88" alt="ClashKing" />
+      <h1>ClashKing</h1>
+      <a id="open-app" class="open" href="clashking:///"
+        >Open ClashKing <span aria-hidden="true">↗</span></a
+      >
+      <p id="destination" class="hint" hidden></p>
+      <div class="stores" aria-label="Download ClashKing">
+        <a
+          id="store-ios"
+          class="store"
+          role="link"
+          aria-disabled="true"
+          aria-describedby="store-ios-status"
+          ><strong>App Store</strong><span id="store-ios-status">Coming soon</span></a
+        >
+        <a
+          id="store-android"
+          class="store"
+          role="link"
+          aria-disabled="true"
+          aria-describedby="store-android-status"
+          ><strong>Google Play</strong><span id="store-android-status">Coming soon</span></a
+        >
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p class="legal">
+        ClashKing is unofficial and is not endorsed by Supercell.<br /><a
+          href="https://supercell.com/en/fan-content-policy/"
+          rel="noopener noreferrer"
+          >Fan Content Policy</a
+        >
+      </p>
+      <noscript
+        ><p class="hint">
+          The button opens the app home screen. Enable JavaScript to open a shared page.
+        </p></noscript
+      >
+    </main>
+  </body>
+</html>

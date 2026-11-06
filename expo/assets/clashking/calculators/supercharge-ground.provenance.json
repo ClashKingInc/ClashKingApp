@@ -1,0 +1,19 @@
+{
+  "inspected_on": "2026-10-18",
+  "fingerprint": "7839fe492f55e0c5cb096b788649cd82f2a99f01",
+  "game_version": "18.600.6",
+  "freshness": "Historical fingerprint; official CDN availability verified during this task. Not verified as the newest game version.",
+  "source": "https://game-assets.clashofclans.com/7839fe492f55e0c5cb096b788649cd82f2a99f01/sc/buildings.sc",
+  "source_sha1": "684ade5fc5b2da675b96f587965fe7e580cdae45",
+  "names": ["minilevel_3x3_idle_01", "minilevel_3x3_idle_02", "minilevel_3x3_idle_max"],
+  "exporter": "/Users/matthewanderson/PycharmProjects/clashking_assets/internal/render",
+  "source_world_bounds": {"min_x": -94, "min_y": 1, "max_x": 93, "max_y": 135},
+  "source_origin_in_export_pixels": [94, -1],
+  "width": 187,
+  "height": 134,
+  "frames": 60,
+  "duration_ms": 2500,
+  "loop": "infinite",
+  "alpha": true,
+  "scope": "3x3 ground-footprint animation. Align to the building ground plane, not the full artwork bounding box."
+}

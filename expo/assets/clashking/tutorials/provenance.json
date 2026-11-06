@@ -1,0 +1,7 @@
+{
+  "source": "https://game-assets.clashofclans.com/7839fe492f55e0c5cb096b788649cd82f2a99f01/sc/tutorial_character_neutral.sc",
+  "exports": ["character_friendly_neutral", "character_friendly_happy_open", "character_friendly_thinking"],
+  "size": [182, 365],
+  "format": "WebP quality 100, first frame, original dimensions",
+  "note": "Original game tutorial villager poses, not generated artwork. Each pose is exported at its original dimensions. Historical fingerprint; not a claim of latest client version."
+}

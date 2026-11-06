@@ -1,6 +1,16 @@
-import { useState, type ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Filter, RotateCcw } from 'lucide-react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { ResponsiveGrid } from '../../../ui/responsive-grid';
+import { cloneElement, isValidElement, useState, type ReactNode } from 'react';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { Filter } from 'lucide-react-native';
 
 import { useI18n } from '../../../i18n';
 import {
@@ -11,6 +21,21 @@ import {
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
+
+/** On compact phones, the surrounding list keeps its original spacing and tree. */
+export function ClanAdaptiveCards({ children }: { readonly children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isTablet && !layout.isDuo) return <>{children}</>;
+  return (
+    <ResponsiveGrid
+      minItemWidth={320}
+      maxColumns={layout.isExpanded ? layout.columns(320, 3) : 1}
+      gap={12}
+    >
+      {children}
+    </ResponsiveGrid>
+  );
+}
 
 export function ClanFilterBar({
   chips,
@@ -174,13 +199,11 @@ export function ClanTabEmpty({
   body?: string;
   onRetry?: () => void;
 }) {
-  const theme = useCKTheme();
   const { t } = useI18n();
   return (
     <EmptyState
       title={title}
       body={body}
-      icon={<RotateCcw color={theme.onSurfaceVariant} />}
       actionLabel={onRetry ? t('generalRetry') : undefined}
       onAction={onRetry}
     />
@@ -233,3 +256,21 @@ const styles = StyleSheet.create({
   },
   summaryImage: { width: 18, height: 18, resizeMode: 'contain' },
 });
+
+export function ClanModalViewport({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isDuo && !layout.isTablet) return <>{children}</>;
+  // Tint belongs to the full modal window; only the content respects safe areas.
+  // Moving the whole backdrop into SafeAreaView leaves untinted strips at the rail.
+  const backdrop = isValidElement<{ style?: StyleProp<ViewStyle> }>(children)
+    ? StyleSheet.flatten(children.props.style)?.backgroundColor
+    : undefined;
+  const content = isValidElement<{ style?: StyleProp<ViewStyle> }>(children)
+    ? cloneElement(children, { style: [children.props.style, { backgroundColor: 'transparent' }] })
+    : children;
+  return (
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: backdrop }}>
+      <SafeAreaView style={{ flex: 1 }}>{content}</SafeAreaView>
+    </SafeAreaProvider>
+  );
+}

@@ -4,17 +4,21 @@ import * as Linking from 'expo-linking';
 import * as Sharing from 'expo-sharing';
 import { useMemo, useState, useEffect } from 'react';
 import { Platform, View } from 'react-native';
+import { ArrowLeft } from 'lucide-react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { defaultIsNetworkError } from '../../../core/app/startup-coordinator';
 import { canonicalTag } from '../../../core/domain/tags';
 import { StartupErrorScreen } from '../../../core/app/startup-feedback';
-import { useI18n } from '../../../i18n';
-import { Snackbar } from '../../../ui';
+import { materialBackLabel, useI18n } from '../../../i18n';
+import { ErrorState, ProfileHeaderAction, Snackbar, useCKTheme } from '../../../ui';
+import { accountTagsForClanOrder } from '../../clan/presentation/clan-root-state';
 import { WarCwlService } from '../data';
 import type { WarCwl, WarInfo } from '../models';
 import type { WarPresentationActions, WarPresentationModel } from './contracts';
 import { CwlScreen } from './cwl-screen';
+import { loadingCwl } from './war-loading-model';
 import { WarCwlPresentationRoot } from './war-cwl-screen';
 import { WarDetailScreen } from './war-detail-screen';
 import { extraWarClanTags, hiddenWarPlayerTags, hydratedClanValues } from './war-root-state';
@@ -104,13 +108,22 @@ export function WarCwlRoot(props: WarCwlRootProps) {
         setSnackbar(t('downloadInProgress'));
         try {
           const path = await downloadCwlExport(runtime.configuration.apiV2Url, clanTag);
-          setSnackbar(t('downloadSuccess', { path }));
+          setSnackbar(Platform.OS === 'web' ? t('downloadSuccess', { path }) : undefined);
         } catch {
           setSnackbar(t('downloadError'));
         }
       },
       fetchPreviousWar: (clanTag, before) =>
-        WarCwlService.fetchWarDataFromTime(runtime.api, clanTag, before),
+        WarCwlService.fetchWarDataFromTime(runtime.contractApi, clanTag, before),
+      loadScoutingWars: (tag, before, type) =>
+        WarCwlService.fetchScoutingWars(runtime.contractApi, tag, before, type),
+      reorderLinkedClans: async (orderedTags) => {
+        const accounts = runtime.accounts.accounts.map((account) => account.playerTag);
+        const order = accountTagsForClanOrder(orderedTags, accounts, runtime.players.profiles);
+        if (!(await runtime.accounts.updateAccountOrder(order)))
+          throw new Error('Couldn’t update clan order.');
+      },
+      reorderBookmarkedClans: (orderedTags) => runtime.bookmarks.reorderClans(orderedTags),
     }),
     [additionalClanTags, props, runtime, t],
   );
@@ -152,6 +165,7 @@ export function WarCwlRoot(props: WarCwlRootProps) {
 }
 
 export interface WarInfoRootProps {
+  readonly loading?: boolean;
   readonly war: WarInfo;
   readonly roundNumber?: number | null;
   readonly onBack: () => void;
@@ -162,6 +176,7 @@ export interface WarInfoRootProps {
 
 /** A shell-owned war detail route, used when Flutter would push above the current page. */
 export function WarInfoRoot({
+  loading = false,
   war,
   roundNumber,
   onBack,
@@ -176,6 +191,7 @@ export function WarInfoRoot({
   return (
     <View style={{ flex: 1 }}>
       <WarDetailScreen
+        loading={loading}
         war={war}
         linkedPlayerTags={ownedPlayerTags}
         cwlRoundNumber={roundNumber}
@@ -189,6 +205,7 @@ export function WarInfoRoot({
 }
 
 export interface CwlInfoRootProps {
+  readonly placeholder?: boolean;
   readonly summary: WarCwl;
   readonly clanTag: string;
   readonly warLeagueName?: string;
@@ -200,6 +217,7 @@ export interface CwlInfoRootProps {
 
 /** A shell-owned CWL route that keeps nested war navigation on the same app stack. */
 export function CwlInfoRoot({
+  placeholder = false,
   summary,
   clanTag,
   warLeagueName,
@@ -208,7 +226,142 @@ export function CwlInfoRoot({
   openClan,
   openPlayer,
 }: CwlInfoRootProps) {
+  const runtime = useAppRuntime();
+  const { t } = useI18n();
+  const [detail, setDetail] = useState<WarCwl | undefined>(() =>
+    runtime.wars.getCwlDetail(clanTag, summary.leagueInfo?.season ?? ''),
+  );
+  const [completedKey, setCompletedKey] = useState('');
+  const [failureKey, setFailureKey] = useState('');
+  const [revision, setRevision] = useState(0);
+  const season = summary.leagueInfo?.season ?? '';
+  const requestKey = `${clanTag}:${season}:${revision}`;
+  const loading = placeholder || completedKey !== requestKey;
+  const failed = failureKey === requestKey;
+  useEffect(() => {
+    if (placeholder) return;
+    let active = true;
+    void runtime.wars
+      .loadCwlDetail(clanTag, season)
+      .then((loaded) => {
+        if (active) setDetail(loaded);
+      })
+      .catch(() => {
+        if (active) setFailureKey(requestKey);
+      })
+      .finally(() => {
+        if (active) setCompletedKey(requestKey);
+      });
+    return () => {
+      active = false;
+    };
+  }, [runtime, clanTag, season, requestKey, placeholder]);
+  const matchingDetail =
+    detail?.tag === clanTag &&
+    (season.length === 7
+      ? detail.leagueInfo?.season.slice(0, 7) === season
+      : detail.leagueInfo?.season === season)
+      ? detail
+      : undefined;
   const { actions, snackbar, dismissSnackbar } = useStandaloneWarActions(openClan, openPlayer);
+  return (
+    <View style={{ flex: 1 }}>
+      <CwlScreen
+        summary={matchingDetail ?? summary}
+        placeholder={placeholder}
+        loading={loading && !matchingDetail}
+        failed={failed && !matchingDetail}
+        refreshing={loading && !!matchingDetail}
+        onRefresh={() => setRevision((value) => value + 1)}
+        clanTag={clanTag}
+        warLeagueName={warLeagueName}
+        actions={actions}
+        onBack={onBack}
+        onOpenWar={onOpenWar}
+      />
+      <Snackbar
+        avoidBottomNavigation
+        message={failed && matchingDetail ? t('errorNetworkTitle') : snackbar}
+        onDismiss={() => {
+          setFailureKey('');
+          dismissSnackbar();
+        }}
+      />
+    </View>
+  );
+}
+
+/** Exact-season route: one push, then load the archived group in place. */
+export function HistoricalCwlRoot({
+  clanTag,
+  season,
+  warLeagueName,
+  onBack,
+  onOpenWar,
+  openClan,
+  openPlayer,
+}: Omit<CwlInfoRootProps, 'summary'> & { readonly season: string }) {
+  const runtime = useAppRuntime();
+  const theme = useCKTheme();
+  const { t, locale } = useI18n();
+  const [summary, setSummary] = useState(() => runtime.wars.getCwlDetail(clanTag, season));
+  const [failed, setFailed] = useState(false);
+  const [revision, setRevision] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const reload = () => {
+    setLoading(true);
+    setFailed(false);
+    setRevision((value) => value + 1);
+  };
+  const { actions, snackbar, dismissSnackbar } = useStandaloneWarActions(openClan, openPlayer);
+  useEffect(() => {
+    let active = true;
+    void runtime.wars
+      .loadCwlDetail(clanTag, season)
+      .then((value) => {
+        if (active) setSummary(value);
+      })
+      .catch(() => {
+        if (active) setFailed(true);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [runtime, clanTag, season, revision]);
+  if (!summary && !failed)
+    return (
+      <CwlScreen
+        summary={loadingCwl(clanTag, season)}
+        loading
+        placeholder
+        clanTag={clanTag}
+        warLeagueName={warLeagueName}
+        actions={actions}
+        onBack={onBack}
+        onOpenWar={onOpenWar}
+      />
+    );
+  if (!summary)
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+        <View style={{ paddingHorizontal: 16 }}>
+          <ProfileHeaderAction
+            icon={<ArrowLeft color={theme.onSurface} />}
+            label={materialBackLabel(locale)}
+            onPress={onBack}
+          />
+        </View>
+        <ErrorState
+          title={t('generalError')}
+          body={t('generalTryAgain')}
+          actionLabel={t('generalRetry')}
+          onAction={reload}
+        />
+      </SafeAreaView>
+    );
   return (
     <View style={{ flex: 1 }}>
       <CwlScreen
@@ -218,8 +371,16 @@ export function CwlInfoRoot({
         actions={actions}
         onBack={onBack}
         onOpenWar={onOpenWar}
+        refreshing={loading}
+        onRefresh={reload}
       />
-      <Snackbar avoidBottomNavigation message={snackbar} onDismiss={dismissSnackbar} />
+      <Snackbar
+        message={failed ? t('errorNetworkTitle') : snackbar}
+        onDismiss={() => {
+          setFailed(false);
+          dismissSnackbar();
+        }}
+      />
     </View>
   );
 }
@@ -254,13 +415,15 @@ function useStandaloneWarActions(
         setSnackbar(t('downloadInProgress'));
         try {
           const path = await downloadCwlExport(runtime.configuration.apiV2Url, tag);
-          setSnackbar(t('downloadSuccess', { path }));
+          setSnackbar(Platform.OS === 'web' ? t('downloadSuccess', { path }) : undefined);
         } catch {
           setSnackbar(t('downloadError'));
         }
       },
       fetchPreviousWar: (tag, before) =>
-        WarCwlService.fetchWarDataFromTime(runtime.api, tag, before),
+        WarCwlService.fetchWarDataFromTime(runtime.contractApi, tag, before),
+      loadScoutingWars: (tag, before, type) =>
+        WarCwlService.fetchScoutingWars(runtime.contractApi, tag, before, type),
     }),
     [openClan, openPlayer, runtime, t],
   );

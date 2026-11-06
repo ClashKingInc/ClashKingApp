@@ -1,5 +1,6 @@
-import { createContext, useContext, useMemo, type PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useMemo, type PropsWithChildren } from 'react';
 import { useStore } from 'zustand';
+import { AppState } from 'react-native';
 
 import { I18nProvider } from '../../i18n';
 import { CKThemeProvider } from '../../ui';
@@ -14,6 +15,16 @@ export function AppRuntimeProvider({
 }: PropsWithChildren<{ runtime?: AppRuntime }>) {
   const state = useStore(runtime.appState);
   const runtimeValue = useMemo(() => runtime, [runtime]);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active')
+        void runtime.appState
+          .getState()
+          .refreshSystemLocale()
+          .catch(() => undefined);
+    });
+    return () => subscription.remove();
+  }, [runtime]);
   return (
     <AppRuntimeContext.Provider value={runtimeValue}>
       <I18nProvider locale={state.locale}>

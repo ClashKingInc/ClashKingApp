@@ -1,7 +1,7 @@
 import { createStore, type StoreApi } from 'zustand/vanilla';
 
 import type { SupportedLocale } from '../../i18n';
-import { resolveFlutterStartupLocale } from '../../i18n';
+import { resolveLocale } from '../../i18n';
 import type { StringStore } from '../../services/storage/auth-storage';
 import type { GameDataService } from '../game-data';
 import {
@@ -16,11 +16,13 @@ export type AppFeatureState = Readonly<Record<KnownFeatureFlag, boolean>>;
 
 export interface AppStateSnapshot {
   readonly locale: SupportedLocale;
+  readonly languagePreference: SupportedLocale | 'system';
   readonly themePreference: AppThemePreference;
   readonly features: AppFeatureState;
   readonly initialized: boolean;
   readonly initialize: () => Promise<void>;
-  readonly changeLanguage: (locale: SupportedLocale) => Promise<void>;
+  readonly changeLanguage: (locale: SupportedLocale | 'system') => Promise<void>;
+  readonly refreshSystemLocale: () => Promise<void>;
   readonly setThemePreference: (mode: AppThemePreference) => Promise<void>;
   readonly toggleTheme: () => Promise<void>;
   readonly isFeatureEnabled: (key: string, fallback?: boolean) => boolean;
@@ -37,33 +39,51 @@ export function createAppStateStore(
   dependencies: AppStateDependencies,
 ): StoreApi<AppStateSnapshot> {
   let initializeInFlight: Promise<void> | null = null;
+  let featureFlagsLoaded = false;
+  const refreshFeatureFlags = async () => {
+    try {
+      await dependencies.featureFlags.refresh();
+      featureFlagsLoaded = true;
+    } catch {
+      // Startup can proceed with defaults, but its next retry must reload config.
+    }
+  };
 
   const store = createStore<AppStateSnapshot>((set, get) => ({
-    locale: 'en',
-    themePreference: 'system',
+    locale: dependencies.systemLocale(),
+    languagePreference: 'system',
+    themePreference: 'dark',
     features: defaultFeatureState(),
     initialized: false,
 
     initialize: async () => {
-      if (get().initialized) return;
+      if (get().initialized && featureFlagsLoaded) return;
       if (initializeInFlight !== null) return initializeInFlight;
       const initialize = (async () => {
+        if (get().initialized) {
+          await refreshFeatureFlags();
+          set({ features: currentFeatureState(dependencies.featureFlags) });
+          return;
+        }
         const [storedLocale, storedTheme] = await Promise.all([
           dependencies.preferences.getItem('languageCode'),
           dependencies.preferences.getItem('themeMode'),
         ]);
+        const languagePreference =
+          storedLocale === null || storedLocale === 'system'
+            ? 'system'
+            : resolveLocale(storedLocale);
         const locale =
-          storedLocale === null
-            ? dependencies.systemLocale()
-            : resolveFlutterStartupLocale(storedLocale);
+          languagePreference === 'system' ? dependencies.systemLocale() : languagePreference;
         const themePreference = parseThemePreference(storedTheme);
 
         await Promise.all([
           dependencies.gameData.loadTranslationsForLocale(appLocale(locale)),
-          dependencies.featureFlags.refresh().catch(() => undefined),
+          refreshFeatureFlags(),
         ]);
         set({
           locale,
+          languagePreference,
           themePreference,
           features: currentFeatureState(dependencies.featureFlags),
           initialized: true,
@@ -77,19 +97,31 @@ export function createAppStateStore(
       }
     },
 
-    changeLanguage: async (locale) => {
+    changeLanguage: async (languagePreference) => {
+      const locale =
+        languagePreference === 'system' ? dependencies.systemLocale() : languagePreference;
       const parsed = appLocale(locale);
+      set({ languagePreference });
       await Promise.all([
-        dependencies.preferences.setItem('languageCode', parsed.languageCode),
+        dependencies.preferences.setItem('languageCode', languagePreference),
         parsed.countryCode === undefined
-          ? Promise.resolve()
+          ? dependencies.preferences.removeItem('countryCode')
           : dependencies.preferences.setItem('countryCode', parsed.countryCode),
         parsed.scriptCode === undefined
-          ? Promise.resolve()
+          ? dependencies.preferences.removeItem('scriptCode')
           : dependencies.preferences.setItem('scriptCode', parsed.scriptCode),
         dependencies.gameData.loadTranslationsForLocale(parsed),
       ]);
-      set({ locale });
+      set({ locale, languagePreference });
+    },
+
+    refreshSystemLocale: async () => {
+      if (!get().initialized || get().languagePreference !== 'system') return;
+      const locale = dependencies.systemLocale();
+      if (locale === get().locale) return;
+      await dependencies.gameData.loadTranslationsForLocale(appLocale(locale));
+      // A manual selection during the fetch must win over a foreground refresh.
+      if (get().languagePreference === 'system') set({ locale });
     },
 
     setThemePreference: async (themePreference) => {
@@ -127,7 +159,7 @@ function currentFeatureState(
 }
 
 function parseThemePreference(value: string | null): AppThemePreference {
-  return value === 'dark' || value === 'light' ? value : 'system';
+  return value === 'dark' || value === 'light' || value === 'system' ? value : 'dark';
 }
 
 function appLocale(locale: SupportedLocale): {

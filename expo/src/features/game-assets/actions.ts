@@ -36,8 +36,8 @@ export class PlatformGameAssetActions implements GameAssetActions {
     const platform = this.options.platform ?? Platform.OS;
     await Share.share(
       platform === 'ios'
-        ? { title: asset.displayName, url: asset.url }
-        : { title: asset.displayName, message: asset.url },
+        ? { title: asset.tileDisplayName, url: asset.url }
+        : { title: asset.tileDisplayName, message: asset.url },
     );
   }
 

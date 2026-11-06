@@ -9,6 +9,7 @@ export type ApplicationScene =
   | { readonly kind: 'forgot-password' }
   | { readonly kind: 'reset-password'; readonly email: string }
   | { readonly kind: 'account-setup' }
+  | { readonly kind: 'introduction'; readonly stage: 'overview' | 'notifications' }
   | { readonly kind: 'home' }
   | { readonly kind: 'maintenance' }
   | { readonly kind: 'error'; readonly networkError: boolean };

@@ -1,21 +1,41 @@
-# Native parity inputs
+# Native inputs and compatibility
 
-This directory owns the retained native inputs for the Expo development build.
-`parity-contract.json` contains the identities and local inputs that must not
-drift during prebuild; it has no Flutter-tree source dependency.
+This directory contains persistent native inputs for Expo prebuild. The generated
+`expo/ios` and `expo/android` directories are disposable; make durable changes in
+`app.config.ts`, `plugins/`, `native/`, or `modules/clashking-native/`.
 
-- `ios/WarWidget` is the retained WidgetKit extension source and entitlements.
-- `ios/alternate-icons` contains the three alternate app icon catalogs.
-- `android/app/src/main` contains both widget providers, the configuration
-  activity, and every referenced layout, drawable, value, XML, and mipmap.
-- `android/splash` contains the shipping light/dark density resources. The finalized config-plugin stage
-  overwrites Expo's generated Android splash PNGs so pre-Android-12 and Android
-  12 launches keep their distinct shipping artwork.
+`parity-contract.json` records bundle identities and the native inputs consumed by
+`with-clashking-native`. Keep its widget and alternate-icon staging enabled. The
+Firebase files are `config/firebase/GoogleService-Info.plist` and
+`config/firebase/google-services.json`. Platform versions come from app config
+and the installed Expo SDK; do not copy old compile/target SDK pins from handoffs.
 
-Android installed-user auth continuity uses an exact vendored copy of
-`flutter_secure_storage` 10.3.1 in the local Expo module. Its default
-`FlutterSecureStorage` preferences name, encoded key prefix, algorithm markers,
-Tink compatibility path, and Android Keystore aliases are preserved. Standard
-upstream cipher migration can update those storage files during initialization,
-but `resetOnError` remains false and the bridge never guesses or deletes a value
-after a failed read.
+- `ios/WarWidget` owns the WidgetKit source, privacy manifest and entitlements.
+- `ios/alternate-icons` owns the alternate app icon catalogs.
+- `android/app/src/main` owns widget providers, configuration activities and
+  their resources.
+- `android/splash` owns the shipping light/dark splash resources staged after
+  Expo's defaults.
+
+## Widget data
+
+Write payloads with `setWidgetValue`, then call `reloadWidgets` after the batch.
+Payload keys must match the native readers. Startup/resume consumes pending
+Android widget actions through `consumePendingWidgetAction`.
+
+## Installed-user auth and preference migration
+
+Read `readSharedAuthSession` before falling back to interactive sign-in. Session
+refresh uses `acquireSharedAuthRefreshLock` and releases the lock in `finally`.
+iOS retains the shipping shared Keychain access group.
+
+Android retains the vendored `flutter_secure_storage` 10.3.1 implementation,
+including its preferences name, encoded key prefix, algorithm markers, Tink
+compatibility path and Keystore aliases. Keep `resetOnError` false: a failed read
+must not silently erase an installed user's credentials.
+
+Enumerate legacy secure values with `readAllLegacyFlutterSecureValues` and
+non-secure preferences with `readAllLegacyFlutterPreferences`. Preserve dynamic
+keys such as `player_*_clan_tag`, filter through the existing preferences
+allowlist, and persist each destination value before deleting its source. The
+native enumeration functions themselves must never delete source values.

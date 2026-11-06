@@ -3,9 +3,15 @@ import Constants from 'expo-constants';
 import * as Crypto from 'expo-crypto';
 import { Platform } from 'react-native';
 import ClashKingNative from '@clashking/native';
+import { AppConfigEndpoint } from '@clashking/api-contracts/expo';
+import { httpTransport } from '@clashking/api-client';
+import { Effect } from 'effect';
 
-import { ApiClient } from '../api/client';
+import { withBearerToken, type ContractApiService } from '../api/contract-api';
+import { createAppContractClient } from '../api/app-contract-client';
+import { observedTransport, withApiDiagnostics } from '../api/contract-api-observability';
 import { BookmarkService } from '../bookmarks';
+import { queueAppLink } from '../deep-links/link-inbox';
 import { resolveApiConfiguration } from '../config/api-config';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
 import { RemoteFeatureFlagService } from '../feature-flags/remote-feature-flag-service';
@@ -20,20 +26,16 @@ import { createTranslator, systemLocale } from '../../i18n';
 import { CocAccountService } from '../../features/auth/account-service';
 import { AccountBootstrapService } from '../../features/auth/account-bootstrap-service';
 import { AuthService } from '../../features/auth/auth-service';
+import { PersonalArmiesService } from '../../features/bases-armies/personal-armies-service';
+import { PersonalBasesService } from '../../features/bases-armies/personal-bases-service';
 import { AchievementsRepository } from '../../features/achievements/data';
 import { ClanService } from '../../features/clan/data';
 import { AnnouncementPresentationService, AnnouncementService } from '../../features/home/data';
 import { NotificationPreferencesService } from '../../features/notifications/data/notification-preferences-service';
-import {
-  createNotificationSettingsDebugAdapter,
-  NotificationDebugService,
-  type NotificationSettingsDebugAdapter,
-} from '../../features/notifications/debug/notification-debug-service';
 import { PushNotificationService, type PushFeature } from '../../features/notifications/push';
 import { PlayerCardPreferencesService, PlayerService } from '../../features/player/data';
 import { RankingsProvider } from '../../features/rankings/data/rankings-provider';
 import { RankingsService } from '../../features/rankings/data/rankings-service';
-import { SubscriptionService } from '../../features/subscription/subscription-service';
 import { UpgradeTrackerRepository } from '../../features/upgrade-tracker/data/upgrade-tracker-repository';
 import { UpgradeWidgetSyncService } from '../../features/upgrade-tracker/data/upgrade-widget-sync-service';
 import { AppIconService } from '../../features/settings/app-icons/app-icon-service';
@@ -43,6 +45,8 @@ import {
   ExpoWidgetBackgroundScheduler,
 } from '../../features/widgets/expo-background-runtime';
 import { WarWidgetService } from '../../features/widgets';
+import { LegendsWidgetService } from '../../features/widgets/legends-widget-service';
+import { fetchLegendsWidgetData } from '../../features/widgets/legends-widget-api';
 import { fetchWarWidgetSummary } from '../../features/widgets/war-widget-api';
 import { WarCwlService } from '../../features/war/data';
 import { ExpoDeviceIdentity } from '../../services/auth/device-identity';
@@ -68,13 +72,15 @@ export interface AppRuntime {
   readonly configuration: ReturnType<typeof resolveApiConfiguration>;
   readonly preferences: ExpoPreferenceStore;
   readonly preferenceMigration: FlutterPreferenceMigration;
-  readonly api: ApiClient;
+  readonly contractApi: ContractApiService;
   readonly tokens: TokenService;
   readonly auth: AuthService;
   readonly accounts: CocAccountService;
   readonly accountBootstrap: AccountBootstrapService;
   readonly achievements: AchievementsRepository;
   readonly bookmarks: BookmarkService;
+  readonly personalBases: PersonalBasesService;
+  readonly personalArmies: PersonalArmiesService;
   readonly players: PlayerService;
   readonly playerCardPreferences: PlayerCardPreferencesService;
   readonly rankings: RankingsService;
@@ -82,7 +88,6 @@ export interface AppRuntime {
   readonly announcementPresentation: AnnouncementPresentationService;
   createRankingsProvider(): RankingsProvider;
   readonly upgrades: UpgradeTrackerRepository;
-  readonly subscription: SubscriptionService;
   readonly upgradeWidgets: UpgradeWidgetSyncService;
   readonly clans: ClanService;
   readonly wars: WarCwlService;
@@ -91,9 +96,9 @@ export interface AppRuntime {
   readonly appState: ReturnType<typeof createAppStateStore>;
   readonly push: PushNotificationService;
   readonly notificationPreferences: NotificationPreferencesService;
-  readonly notificationSettingsDebug: NotificationSettingsDebugAdapter | null;
   readonly appIcons: AppIconService;
   readonly warWidgets: WarWidgetService;
+  readonly legendsWidgets: LegendsWidgetService;
   readonly effects: RuntimeEffects;
   readonly discordSignInEnabled: boolean;
 }
@@ -138,17 +143,22 @@ export function createAppRuntime(): AppRuntime {
     refreshLock,
     deviceIdentity: identity,
   });
-  const api = new ApiClient({
-    baseUrl: configuration.apiV2Url,
-    proxyUrl: configuration.proxyUrl,
-    environment: configuration.environment,
-    tokenProvider: tokens,
-    platform: nativePlatform,
-    observability: { addHttpBreadcrumb, reportException },
-  });
+  const contractApi = withApiDiagnostics(
+    withBearerToken(
+      createAppContractClient({
+        baseUrl: configuration.apiV2Url.replace(/\/v2\/?$/, ''),
+        transport: observedTransport(httpTransport(), { addHttpBreadcrumb }),
+        web: nativePlatform === 'web',
+      }),
+      tokens,
+    ),
+    { reportException },
+  );
   const gameData = createExpoGameDataService();
   const featureFlags = new RemoteFeatureFlagService({
-    api,
+    environment: configuration.environment,
+    loadConfig: () =>
+      Effect.runPromise(contractApi.execute(AppConfigEndpoint, { path: {}, query: {}, body: {} })),
     preferences,
     platform: runtimePlatform,
     appVersionProvider: async () => appVersion(),
@@ -164,7 +174,7 @@ export function createAppRuntime(): AppRuntime {
   const push = new PushNotificationService({
     platform: runtimePlatform,
     apiEnvironment: configuration.environment,
-    api,
+    api: contractApi,
     preferences,
     tokenService: tokens,
     runtime: createPlatformPushRuntime(),
@@ -172,46 +182,83 @@ export function createAppRuntime(): AppRuntime {
     appVersion,
     locale: () => appState.getState().locale,
     isFeatureEnabled: (feature) => isPushFeatureEnabled(appState, feature),
-    openRoute: (route) => effects.openRoute(route),
+    openRoute: (route) => {
+      if (route.startsWith('/player/') || route.startsWith('/clan/')) {
+        queueAppLink(`https://app.clashk.ing${route}`);
+      } else effects.openRoute(route);
+    },
     openAdminPost: (postId) => effects.openRoute(`/posts/${encodeURIComponent(postId)}`),
-    showPermissionPrimer: () => effects.showPermissionPrimer(),
     reportError: ({ operation, error }) => reportException(error, operation),
   });
-  const accounts = new CocAccountService(api, preferences, (operation, error) =>
+  const accounts = new CocAccountService(contractApi, preferences, (operation, error) =>
     reportException(error, operation),
   );
-  const achievements = new AchievementsRepository(api);
-  const bookmarks = new BookmarkService(api);
-  const players = new PlayerService(api, preferences, configuration.apiV2Url, (operation, error) =>
-    reportException(error, operation),
+  const achievements = new AchievementsRepository(contractApi);
+  const bookmarks = new BookmarkService(contractApi);
+  const personalBases = new PersonalBasesService(contractApi, configuration.apiV2Url);
+  const personalArmies = new PersonalArmiesService(contractApi);
+  const players = new PlayerService(
+    contractApi,
+    preferences,
+    configuration.apiV2Url,
+    (operation, error) => reportException(error, operation),
   );
   const playerCardPreferences = new PlayerCardPreferencesService(preferences);
-  const rankings = new RankingsService(api);
+  const rankings = new RankingsService(contractApi, preferences);
   const announcements = new AnnouncementService(
-    api,
+    contractApi,
     runtimePlatform,
     () => appState.getState().locale,
   );
   const announcementPresentation = new AnnouncementPresentationService(preferences);
-  const upgrades = new UpgradeTrackerRepository(api, preferences);
-  const subscription = new SubscriptionService(api);
+  const upgrades = new UpgradeTrackerRepository(contractApi, preferences);
   const upgradeWidgets = new UpgradeWidgetSyncService({
     platform: runtimePlatform,
     native: ClashKingNative,
     mirror: preferences,
     translate: (key, values) => createTranslator(appState.getState().locale)(key, values),
   });
-  const clans = new ClanService(api);
-  const wars = new WarCwlService(api);
+  const legendsWidgets = new LegendsWidgetService({
+    platform: runtimePlatform,
+    native: ClashKingNative,
+    mirror: preferences,
+    loadPlayer: async (tag) => {
+      if (!auth.state.isAuthenticated)
+        throw new Error('Use cached widget identity while signed out.');
+      return players.getPlayerAndClanData(tag);
+    },
+    cachedPlayer: (tag) =>
+      players.profiles.find((player) => player.tag.toUpperCase() === tag.toUpperCase()) ?? null,
+    eligiblePlayers: () =>
+      accounts.verifiedAccounts.map((account) => ({
+        tag: account.playerTag,
+        name: '',
+        townHallLevel: 0,
+      })),
+    loadLegendData: (tag, day) => fetchLegendsWidgetData(contractApi, tag, day),
+    loadRankedData: (tag) => players.loadRankedLeagueData(tag, false, false, 'detail'),
+    locale: () => appState.getState().locale,
+    t: (key, values) => createTranslator(appState.getState().locale)(key, values),
+    reportError: ({ operation, error }) => reportException(error, operation),
+  });
+  accounts.subscribe(() => {
+    if (runtimePlatform === 'web') return;
+    void legendsWidgets
+      .syncBookmarkedPlayers([])
+      .catch((error) => reportException(error, 'legends_widget.sync'));
+  });
+  const clans = new ClanService(contractApi);
+  const wars = new WarCwlService(contractApi);
   const discordOAuth = new DiscordOAuthClient({
     platform: nativePlatform,
     runtime: new PlatformDiscordOAuthRuntime(),
+    clientId: process.env.EXPO_PUBLIC_CK_DISCORD_CLIENT_ID,
     webOrigin: webOrigin(),
     webHost: webHost(),
     webRedirectOverride: process.env.EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI,
   });
   const auth = new AuthService({
-    api,
+    api: contractApi,
     tokens,
     preferences,
     environment: configuration.environment,
@@ -222,6 +269,7 @@ export function createAppRuntime(): AppRuntime {
       await push.unregisterCurrentDeviceToken();
     },
     clearAccountData: () => {
+      notificationPreferences.clearClans();
       effects.clearPendingRoutes();
       accounts.clearAccountData();
       achievements.bindSession(null);
@@ -229,19 +277,14 @@ export function createAppRuntime(): AppRuntime {
       players.clearRankedLeagueCache();
       upgrades.clearCache();
       void upgradeWidgets.clear();
+      void legendsWidgets.clear().catch((error) => reportException(error, 'legends_widget.clear'));
     },
   });
   const notificationPreferences = new NotificationPreferencesService({
-    api,
-    deviceIdProvider: () => tokens.getDeviceId(),
-    environmentProvider: () => push.environment,
+    api: contractApi,
     preferences,
     pushApiV2BaseUrlOverride: process.env.EXPO_PUBLIC_CK_PUSH_API_V2_BASE_URL,
   });
-  const notificationSettingsDebug = createNotificationSettingsDebugAdapter(
-    new NotificationDebugService(runtimePlatform, ClashKingNative),
-    __DEV__,
-  );
   const appIcons = new AppIconService(runtimePlatform, ClashKingNative);
   const warWidgets = new WarWidgetService({
     platform: runtimePlatform,
@@ -253,7 +296,7 @@ export function createAppRuntime(): AppRuntime {
       runtimePlatform === 'android' ? new ExpoWidgetBackgroundScheduler() : undefined,
     proxyUrl: configuration.proxyUrl,
     apiV2Url: configuration.apiV2Url,
-    loadWarSummary: (clanTag) => fetchWarWidgetSummary(api, clanTag),
+    loadWarSummary: (clanTag) => fetchWarWidgetSummary(contractApi, clanTag, wars),
     getFirstAvailableAccount: async () => {
       const current = accounts.accounts[0]?.playerTag;
       if (current !== undefined) return current;
@@ -269,7 +312,28 @@ export function createAppRuntime(): AppRuntime {
     },
     reportError: ({ operation, error }) => reportException(error, operation),
   });
-  configureWarWidgetBackgroundExecutor((taskName) => warWidgets.executeBackgroundTask(taskName));
+  configureWarWidgetBackgroundExecutor(async (taskName) => {
+    const results = await Promise.allSettled([
+      warWidgets.executeBackgroundTask(taskName),
+      legendsWidgets.refreshCachedBookmarks(),
+    ]);
+    return results.every((result) => result.status === 'fulfilled' && result.value !== false);
+  });
+  accounts.setSelectedTagChangeHandler(async (selectedTag) => {
+    if (accounts.accounts.length === 0) await upgradeWidgets.clear();
+    else await upgradeWidgets.syncSelectedTag(selectedTag);
+    await warWidgets.seedClanOptionsFromProfiles(
+      players.profiles.filter((player) =>
+        accounts.accounts.some(
+          (account) => account.playerTag.toUpperCase() === player.tag.toUpperCase(),
+        ),
+      ),
+      {
+        bookmarkedClans: bookmarks.clans,
+        selectedPlayerTag: selectedTag,
+      },
+    );
+  });
   const accountBootstrap = new AccountBootstrapService({
     accounts,
     bookmarks,
@@ -281,6 +345,7 @@ export function createAppRuntime(): AppRuntime {
     wars,
     storage: preferences,
     warWidgets,
+    legendsWidgets,
     reportError: (operation, error) => reportException(error, operation),
   });
   accounts.setBootstrapCoordinator((userId) => accountBootstrap.initialize(userId));
@@ -289,13 +354,15 @@ export function createAppRuntime(): AppRuntime {
     configuration,
     preferences,
     preferenceMigration: new FlutterPreferenceMigration(preferences, legacyBridge, secureStore),
-    api,
+    contractApi,
     tokens,
     auth,
     accounts,
     accountBootstrap,
     achievements,
     bookmarks,
+    personalBases,
+    personalArmies,
     players,
     playerCardPreferences,
     rankings,
@@ -303,7 +370,6 @@ export function createAppRuntime(): AppRuntime {
     announcementPresentation,
     createRankingsProvider: () => new RankingsProvider(rankings),
     upgrades,
-    subscription,
     upgradeWidgets,
     clans,
     wars,
@@ -312,9 +378,9 @@ export function createAppRuntime(): AppRuntime {
     appState,
     push,
     notificationPreferences,
-    notificationSettingsDebug,
     appIcons,
     warWidgets,
+    legendsWidgets,
     effects,
     discordSignInEnabled: envBoolean(process.env.EXPO_PUBLIC_CK_DISCORD_SIGN_IN_ENABLED, true),
   };

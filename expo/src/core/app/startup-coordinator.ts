@@ -1,10 +1,12 @@
 import type { StoreApi } from 'zustand/vanilla';
+import { ApiResponseError, TransportError } from '@clashking/api-client';
 
 import type { AuthService } from '../../features/auth/auth-service';
 import type { CocAccountService } from '../../features/auth/account-service';
 import { initializeAccountsForCurrentAuth, type StartupResult } from '../../features/auth/startup';
 import type { PushNotificationService } from '../../features/notifications/push';
 import type { FlutterPreferenceMigration } from '../../services/storage/auth-storage';
+import { UnauthorizedException } from '../api/contract-api';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
 import type { GameDataService } from '../game-data';
 import type { AppStateSnapshot } from './app-state';
@@ -28,7 +30,7 @@ export interface StartupCoordinatorDependencies {
   readonly appState: StoreApi<AppStateSnapshot>;
   readonly auth: AuthService;
   readonly accounts: CocAccountService;
-  readonly gameData: Pick<GameDataService, 'loadFreshGameData'>;
+  readonly gameData: Pick<GameDataService, 'loadGameData'>;
   readonly push: Pick<
     PushNotificationService,
     'supportsPushNotifications' | 'initialize' | 'registerCurrentDeviceToken'
@@ -52,21 +54,25 @@ export async function initializeApplication(
   try {
     await Promise.all([
       dependencies.auth.initializeAuth(),
-      dependencies.gameData.loadFreshGameData(),
+      dependencies.gameData.loadGameData(),
       dependencies.appState.getState().initialize(),
     ]);
   } catch (error) {
     const isNetworkError = dependencies.isNetworkError ?? defaultIsNetworkError;
     const isMaintenanceError = dependencies.isMaintenanceError ?? defaultIsMaintenanceError;
-    if (isNetworkError(error) || isMaintenanceError(error)) {
+    const rejectedSession =
+      error instanceof UnauthorizedException ||
+      (error instanceof ApiResponseError && error.status === 401);
+    if (!rejectedSession) {
       dependencies.reportError?.('startup.bootstrap', error);
       return failureResult(error, dependencies.auth.canUseApp, {
         network: isNetworkError(error),
         maintenance: isMaintenanceError(error),
       });
     }
-    // AuthService clears an expired/revoked session before rethrowing. Flutter
-    // deliberately continues to Login instead of trapping the user on Error.
+    // Only a definitive rejected session may continue to Login. A profile
+    // decode error, forbidden request, or unavailable service needs retry;
+    // none proves that the browser's refresh cookie is invalid.
   }
 
   let accountResult: StartupResult;
@@ -76,13 +82,15 @@ export async function initializeApplication(
       dependencies.accounts,
     );
     if (accountResult.authenticated) {
-      await dependencies.initializeAuthenticatedData?.();
-      await initializeAuthenticatedPush({
+      void dependencies
+        .initializeAuthenticatedData?.()
+        .catch((error) => dependencies.reportError?.('startup.authenticatedData', error));
+      void initializeAuthenticatedPush({
         notificationsEnabled: dependencies.appState
           .getState()
           .isFeatureEnabled(APP_FEATURE_FLAGS.notifications),
         push: dependencies.push,
-      });
+      }).catch((error) => dependencies.reportError?.('startup.push', error));
     }
   } catch (error) {
     dependencies.reportError?.('startup.bootstrap', error);
@@ -110,19 +118,42 @@ export async function initializeApplication(
 export async function initializeAuthenticatedPush({
   notificationsEnabled,
   push,
+  timeoutMs = 10_000,
 }: {
   notificationsEnabled: boolean;
   push: Pick<
     PushNotificationService,
     'supportsPushNotifications' | 'initialize' | 'registerCurrentDeviceToken'
   >;
+  timeoutMs?: number;
 }): Promise<boolean> {
   if (!push.supportsPushNotifications || !notificationsEnabled) return false;
-  const result = await push.initialize();
-  if (result.token !== undefined) {
-    void push.registerCurrentDeviceToken({ token: result.token });
-  }
-  return true;
+  return withTimeout(
+    (async () => {
+      const result = await push.initialize();
+      if (result.token !== undefined) {
+        await push.registerCurrentDeviceToken({ token: result.token });
+      }
+      return true;
+    })(),
+    timeoutMs,
+  );
+}
+
+function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Push initialization timed out')), timeoutMs);
+    void operation.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
 }
 
 function failureResult(
@@ -141,6 +172,7 @@ function failureResult(
 }
 
 export function defaultIsNetworkError(error: unknown): boolean {
+  if (error instanceof TransportError) return true;
   const text = String(error).toLowerCase();
   return (
     text.includes('network') ||
@@ -155,6 +187,9 @@ export function defaultIsNetworkError(error: unknown): boolean {
 }
 
 export function defaultIsMaintenanceError(error: unknown): boolean {
-  const text = String(error);
-  return text.includes('503') || text.includes('500');
+  if (!(error instanceof ApiResponseError) || error.status !== 503) return false;
+  const body = error.body;
+  if (!body || typeof body !== 'object') return false;
+  // HTTP 500/503 also cover our backend and database failures, not just game maintenance.
+  return 'reason' in body && body.reason === 'maintenance';
 }

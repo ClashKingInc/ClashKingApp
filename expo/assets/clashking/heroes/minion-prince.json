@@ -1,0 +1,46 @@
+{
+  "name": "minion-prince",
+  "geometry": "princeminion_default_geo.glb",
+  "pose": "princeminion_default_idle1.glb",
+  "texture": "sc3d/princeminion_default_a.sctx",
+  "bytes": 2424412,
+  "validation": {
+    "meshes": 11,
+    "skinnedMeshes": 11,
+    "texturedMeshes": 11,
+    "bones": 135,
+    "animations": 1,
+    "tracks": 411
+  },
+  "landing": {
+    "schemaVersion": 1,
+    "slug": "princeminion-default",
+    "model": "model.glb",
+    "animation": {
+      "clip": "princeminion_default_idle1",
+      "speed": 1,
+      "loop": true
+    },
+    "transform": {
+      "scale": 1,
+      "offsetY": 0,
+      "initialYaw": 0
+    },
+    "camera": {
+      "fov": 36,
+      "distance": 2.1,
+      "targetY": 0
+    },
+    "interaction": {
+      "allowYaw": true,
+      "minYaw": -45,
+      "maxYaw": 45,
+      "allowPitch": false,
+      "allowZoom": false,
+      "allowPan": false,
+      "dragSensitivity": 0.8,
+      "autoRotate": false,
+      "autoRotateSpeed": 0.5
+    }
+  }
+}

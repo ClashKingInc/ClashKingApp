@@ -1,12 +1,12 @@
 {
-  "name": "clashkingapp",
-  "short_name": "clashkingapp",
+  "name": "ClashKing",
+  "short_name": "ClashKing",
   "description": "ClashKing helps players and clans track wars, upgrades, rankings, and account progress.",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0175C2",
-  "theme_color": "#0175C2",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
   "prefer_related_applications": false,
   "icons": [
     {

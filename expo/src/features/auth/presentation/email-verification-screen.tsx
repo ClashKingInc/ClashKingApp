@@ -1,3 +1,5 @@
+import type { TextInputInstance } from 'react-native';
+import { defaultIsMaintenanceError } from '../../../core/app/startup-coordinator';
 import { createRef, useMemo, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
@@ -30,7 +32,7 @@ export function EmailVerificationScreen({
   const { t } = useI18n();
   const theme = useCKTheme();
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
-  const refs = useMemo(() => Array.from({ length: 6 }, () => createRef<TextInput>()), []);
+  const refs = useMemo(() => Array.from({ length: 6 }, () => createRef<TextInputInstance>()), []);
   const [loading, setLoading] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState<string>();
@@ -49,7 +51,7 @@ export function EmailVerificationScreen({
       setAuthenticated(true);
     } catch (nextError) {
       const raw = String(nextError).toLowerCase();
-      if (/\b(?:500|503)\b/.test(raw)) onMaintenance();
+      if (defaultIsMaintenanceError(nextError)) onMaintenance();
       else if (raw.includes('already verified') || raw.includes('try logging in instead'))
         onBackToLogin(email);
       else {

@@ -1,4 +1,10 @@
-import type { ApiEnvironment, ApiRequestOptions } from '../../../core/api/client';
+import {
+  NotificationDeviceDeleteEndpoint,
+  NotificationDeviceRegisterEndpoint,
+} from '@clashking/api-contracts/expo';
+import { Effect } from 'effect';
+
+import type { ApiEnvironment } from '../../../core/api/contract-api';
 import { STORAGE_KEYS } from '../../../core/storage/storage';
 import type {
   PushAuthorizationStatus,
@@ -12,14 +18,6 @@ import type {
 } from './contracts';
 
 export const PUSH_DEVICE_ENDPOINT = '/notifications/devices';
-const ALL_HTTP_STATUSES = Array.from({ length: 500 }, (_, index) => index + 100);
-const SUPPORTED_ROUTES = new Set<SupportedPushRoute>([
-  '/support-creator',
-  '/settings/support',
-  '/posts',
-  '/search',
-  '/upgrade-tracker',
-]);
 
 export interface NotificationDeviceRegistrationPayload {
   readonly token: string;
@@ -27,6 +25,7 @@ export interface NotificationDeviceRegistrationPayload {
   readonly provider: 'fcm';
   readonly platform: 'ios' | 'android';
   readonly environment: 'sandbox' | 'production';
+  readonly enabled: boolean;
   readonly app_version: string;
   readonly locale: string;
   readonly authorization_status: NotificationDeviceAuthorizationStatus;
@@ -64,6 +63,7 @@ export function buildNotificationDeviceRegistrationPayload(input: {
   appVersion: string;
   locale: string;
   authorizationStatus: PushAuthorizationStatus;
+  enabled: boolean;
 }): NotificationDeviceRegistrationPayload {
   return {
     token: input.token,
@@ -71,6 +71,7 @@ export function buildNotificationDeviceRegistrationPayload(input: {
     provider: 'fcm',
     platform: input.platform,
     environment: input.environment,
+    enabled: input.enabled,
     app_version: input.appVersion,
     locale: input.locale,
     authorization_status: apiAuthorizationStatus(input.authorizationStatus),
@@ -144,6 +145,12 @@ export class PushNotificationService {
       this.initialized = true;
 
       const authorizationStatus = await this.options.runtime.getAuthorizationStatus();
+      // Device delivery follows OS permission; there is no second app-level master switch.
+      // Reading permission never requests it, and preserves per-type/account preferences.
+      await this.options.preferences.setItem(
+        STORAGE_KEYS.notificationsEnabled,
+        String(hasDisplayPermission(authorizationStatus)),
+      );
       if (!hasDisplayPermission(authorizationStatus)) {
         return this.setResult({
           state: permissionState(authorizationStatus),
@@ -157,7 +164,7 @@ export class PushNotificationService {
       }
 
       await this.cacheToken(token);
-      if (register) void this.registerCurrentDeviceToken({ token });
+      if (register) await this.registerCurrentDeviceToken({ token });
       return this.setResult({ state: 'ready', token });
     } catch (error) {
       await this.report('initialize', error);
@@ -191,7 +198,13 @@ export class PushNotificationService {
         });
       }
       await this.cacheToken(token);
-      await this.registerCurrentDeviceToken({ token, allowDisabled: true });
+      await this.registerCurrentDeviceToken({
+        token,
+        enabled: true,
+        allowDisabled: true,
+        throwOnFailure: true,
+      });
+      await this.options.preferences.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
       return this.setResult({ state: 'ready', authorizationStatus, token });
     } catch (error) {
       await this.report('permission', error);
@@ -199,39 +212,37 @@ export class PushNotificationService {
     }
   }
 
-  async showPermissionPrimerOnce(onPermissionAccepted?: () => void | Promise<void>): Promise<void> {
-    if (!this.supportsPushNotifications) return;
-    const prompted = await this.options.preferences.getItem(
-      STORAGE_KEYS.notificationPermissionPrimerShown,
-    );
-    if (prompted === 'true' || this.options.showPermissionPrimer === undefined) {
-      return;
+  async setCurrentDeviceEnabled(enabled: boolean): Promise<PushNotificationSetupResult> {
+    if (enabled) return this.requestPermissionAndRegister();
+    if (!supportsPush(this.options.platform) || this.options.runtime === undefined) {
+      return this.setResult({ state: 'unsupported' });
     }
-
-    const shouldEnable = await this.options.showPermissionPrimer();
-    await this.options.preferences.setItem(STORAGE_KEYS.notificationPermissionPrimerShown, 'true');
-    if (!shouldEnable) return;
-
-    const result = await this.requestPermissionAndRegister();
-    if (canReceivePush(result) && onPermissionAccepted !== undefined) {
-      try {
-        await onPermissionAccepted();
-      } catch (error) {
-        await this.report('primer-callback', error);
-      }
-    }
+    const token = (await this.cachedToken()) ?? (await this.options.runtime.getToken());
+    if (!token) throw new Error('Push token is unavailable.');
+    await this.cacheToken(token);
+    await this.registerCurrentDeviceToken({
+      token,
+      enabled: false,
+      allowDisabled: true,
+      throwOnFailure: true,
+    });
+    await this.options.preferences.setItem(STORAGE_KEYS.notificationsEnabled, 'false');
+    return this.setResult({ state: 'ready', token });
   }
 
   async registerCurrentDeviceToken(
     options: {
       token?: string;
       allowDisabled?: boolean;
+      enabled?: boolean;
+      throwOnFailure?: boolean;
     } = {},
   ): Promise<void> {
     if (!supportsPush(this.options.platform) || this.options.runtime === undefined) {
       return;
     }
-    if (!options.allowDisabled && !(await this.areNotificationsEnabled())) {
+    const enabled = options.enabled ?? (await this.areNotificationsEnabled());
+    if (!options.allowDisabled && !enabled) {
       this.options.log?.('Push registration skipped: notifications disabled.');
       return;
     }
@@ -247,20 +258,27 @@ export class PushNotificationService {
         deviceId: await this.options.tokenService.getDeviceId(),
         platform: this.options.platform,
         environment: this.environment,
+        enabled,
         appVersion: this.options.appVersion(),
         locale: this.options.locale(),
         authorizationStatus: await this.options.runtime.getAuthorizationStatus(),
       });
-      const response = await this.request('POST', payload);
-      if (response.status >= 200 && response.status < 300) {
-        await this.options.preferences.setItem(STORAGE_KEYS.pushLastRegistrationToken, token);
-        this.options.log?.('Push device token registered.');
-      } else {
-        this.options.log?.(`Push token registration failed: ${response.status}`);
+      const response = await Effect.runPromise(
+        this.options.api.execute(
+          NotificationDeviceRegisterEndpoint,
+          { path: {}, query: {}, body: payload },
+          this.executeOptions(),
+        ),
+      );
+      if (response.enabled !== enabled) {
+        throw new Error('Push device enabled state did not match the requested state.');
       }
+      await this.options.preferences.setItem(STORAGE_KEYS.pushLastRegistrationToken, token);
+      this.options.log?.('Push device token registered.');
     } catch (error) {
       // Registration remains non-fatal while the API endpoint is unavailable.
       await this.report('register', error);
+      if (options.throwOnFailure) throw error;
     }
   }
 
@@ -271,15 +289,21 @@ export class PushNotificationService {
 
     let unregistered = false;
     try {
-      const query = new URLSearchParams({
-        device_id: await this.options.tokenService.getDeviceId(),
-      });
-      const response = await this.request(
-        'DELETE',
-        undefined,
-        `${PUSH_DEVICE_ENDPOINT}?${query.toString()}`,
+      await Effect.runPromise(
+        this.options.api.execute(
+          NotificationDeviceDeleteEndpoint,
+          {
+            path: {},
+            query: {
+              device_id: await this.options.tokenService.getDeviceId(),
+              environment: this.environment,
+            },
+            body: {},
+          },
+          this.executeOptions(),
+        ),
       );
-      unregistered = response.status >= 200 && response.status < 300;
+      unregistered = true;
     } catch (error) {
       await this.report('unregister', error);
     } finally {
@@ -352,6 +376,20 @@ export class PushNotificationService {
   }
 
   private handleDataNavigation(data: PushData): void {
+    const type = String(data.type ?? '');
+    if (type === 'legend_defense' || type === 'war_reminder') {
+      const tag = String(data.target_tag ?? '')
+        .trim()
+        .replace(/^#/, '')
+        .toUpperCase();
+      if (!/^[0289PYLQGRJCUV]{3,15}$/.test(tag)) return;
+      const route: SupportedPushRoute =
+        type === 'legend_defense' ? `/player/${tag}?tab=legends` : `/clan/${tag}/war`;
+      void Promise.resolve(this.options.openRoute(route)).catch((error) =>
+        this.report('navigation', error),
+      );
+      return;
+    }
     if (String(data.type ?? '') === 'admin_post') {
       if (!this.options.isFeatureEnabled('posts')) return;
       const postId = String(data.post_id ?? '');
@@ -364,15 +402,9 @@ export class PushNotificationService {
     }
 
     const route = String(data.route ?? '');
-    if (!SUPPORTED_ROUTES.has(route as SupportedPushRoute)) return;
-    const supportedRoute = route as SupportedPushRoute;
-    if (
-      (supportedRoute === '/posts' && !this.options.isFeatureEnabled('posts')) ||
-      (supportedRoute === '/upgrade-tracker' && !this.options.isFeatureEnabled('upgradeTracker'))
-    ) {
+    if (type !== 'admin_campaign' || route !== '/posts' || !this.options.isFeatureEnabled('posts'))
       return;
-    }
-    void Promise.resolve(this.options.openRoute(supportedRoute)).catch((error) =>
+    void Promise.resolve(this.options.openRoute('/posts')).catch((error) =>
       this.report('navigation', error),
     );
   }
@@ -399,16 +431,9 @@ export class PushNotificationService {
     return this.options.preferences.setItem(STORAGE_KEYS.pushFcmToken, token);
   }
 
-  private request(method: 'POST' | 'DELETE', body?: unknown, endpoint = PUSH_DEVICE_ENDPOINT) {
+  private executeOptions() {
     const override = this.options.pushApiV2BaseUrlOverride?.replace(/\/$/, '');
-    const requestOptions: ApiRequestOptions = {
-      method,
-      ...(body === undefined ? undefined : { body }),
-      requiresAuth: true,
-      acceptedStatuses: ALL_HTTP_STATUSES,
-      ...(override ? { url: `${override}${endpoint}` } : undefined),
-    };
-    return this.options.api.request(endpoint, requestOptions);
+    return override ? { baseUrl: override.replace(/\/v2\/?$/, '') } : undefined;
   }
 
   private setResult(result: PushNotificationSetupResult) {

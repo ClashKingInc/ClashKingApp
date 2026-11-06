@@ -1,3 +1,6 @@
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { InlineBackControl } from '../../../ui/native-back-context';
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { Children, Fragment, type ReactElement, type ReactNode } from 'react';
 import {
   Modal,
@@ -11,6 +14,7 @@ import { ArrowLeft, Check, ChevronRight } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { materialBackLabel, useI18n } from '../../../i18n';
+import { SwitchIndicator } from '../../../ui/switch-indicator';
 import { CKText, Surface, ckRadius, ckSpacing, colorWithAlpha, useCKTheme } from '../../../ui';
 
 export function SettingsPage({
@@ -19,38 +23,87 @@ export function SettingsPage({
   onBack,
   backLabel,
   refreshControl,
+  wide = false,
 }: {
   title: string;
   children: ReactNode;
   onBack?: () => void;
   backLabel?: string;
   refreshControl?: ReactElement<RefreshControlProps>;
+  wide?: boolean;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   const { locale } = useI18n();
   return (
     <SafeAreaView
-      edges={['top', 'bottom']}
+      edges={
+        layout.isExpanded || layout.isDuo ? ['top', 'bottom', 'left', 'right'] : ['top', 'bottom']
+      }
       style={[styles.safe, { backgroundColor: theme.surface }]}
     >
-      <View style={styles.header}>
+      <View
+        style={[
+          styles.header,
+          (layout.isExpanded || layout.isDuo) && {
+            width: '100%',
+            maxWidth: !layout.isExpanded
+              ? layout.contentMaxWidth
+              : wide
+                ? layout.contentMaxWidth
+                : layout.readableMaxWidth,
+            alignSelf: 'center',
+          },
+        ]}
+      >
         {onBack ? (
-          <Pressable
-            accessibilityLabel={backLabel ?? materialBackLabel(locale)}
-            accessibilityRole="button"
-            hitSlop={8}
-            onPress={onBack}
-            style={({ pressed }) => [styles.back, pressed && styles.pressed]}
-          >
-            <ArrowLeft color={theme.onSurface} size={24} />
-          </Pressable>
+          <InlineBackControl onBack={onBack}>
+            <Pressable
+              accessibilityLabel={backLabel ?? materialBackLabel(locale)}
+              accessibilityRole="button"
+              hitSlop={8}
+              onPress={onBack}
+              style={({ pressed }) => [styles.back, pressed && styles.pressed]}
+            >
+              <ArrowLeft color={theme.onSurface} size={24} />
+            </Pressable>
+          </InlineBackControl>
         ) : null}
         <CKText role="screenTitle">{title}</CKText>
       </View>
-      <ScrollView contentContainerStyle={styles.page} refreshControl={refreshControl}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.page,
+          (layout.isExpanded || layout.isDuo) && {
+            width: '100%',
+            maxWidth: !layout.isExpanded
+              ? layout.contentMaxWidth
+              : wide
+                ? layout.contentMaxWidth
+                : layout.readableMaxWidth,
+            alignSelf: 'center',
+          },
+        ]}
+        refreshControl={refreshControl}
+      >
         {children}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+/** Preserve phone section order; large windows get two independent columns. */
+export function SettingsColumns({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded || layout.columns(420, 2) < 2) return <>{children}</>;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 24 }}>
+      {Children.toArray(children).map((child, index) => (
+        <View key={index} style={{ flex: 1, minWidth: 0 }}>
+          {child}
+        </View>
+      ))}
+    </View>
   );
 }
 
@@ -101,6 +154,7 @@ export function SettingsTile({
   icon,
   title,
   subtitle,
+  subtitleNumberOfLines = 1,
   trailing,
   destructive = false,
   disabled = false,
@@ -110,6 +164,7 @@ export function SettingsTile({
   icon: ReactNode;
   title: string;
   subtitle?: string;
+  subtitleNumberOfLines?: number;
   trailing?: string | ReactNode;
   destructive?: boolean;
   disabled?: boolean;
@@ -117,6 +172,7 @@ export function SettingsTile({
   onPress?: () => void;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
     <Pressable
       accessibilityRole={onPress ? 'button' : 'text'}
@@ -126,6 +182,13 @@ export function SettingsTile({
       style={({ pressed }) => [
         styles.tile,
         subtitle ? styles.tileWithSubtitle : styles.tileWithoutSubtitle,
+        subtitle && subtitleNumberOfLines > 1 && styles.multilineTile,
+        layout.isExpanded && {
+          height: undefined,
+          minHeight: subtitle ? 82 : 64,
+          paddingVertical: 14,
+          gap: 14,
+        },
         disabled && styles.disabled,
         pressed && styles.pressed,
       ]}
@@ -134,13 +197,24 @@ export function SettingsTile({
       <View style={styles.tileCopy}>
         <CKText
           role="bodyLarge"
-          numberOfLines={1}
-          style={[styles.tileTitle, { color: destructive ? theme.error : theme.onSurface }]}
+          numberOfLines={layout.isExpanded || subtitleNumberOfLines > 1 ? 2 : 1}
+          style={[
+            styles.tileTitle,
+            layout.isExpanded && { fontSize: 20, lineHeight: 25 },
+            { color: destructive ? theme.error : theme.onSurface },
+          ]}
         >
           {title}
         </CKText>
         {subtitle ? (
-          <CKText muted role="bodySmall" numberOfLines={1} style={styles.tileSubtitle}>
+          <CKText
+            muted
+            role="bodySmall"
+            numberOfLines={
+              layout.isExpanded ? Math.max(2, subtitleNumberOfLines) : subtitleNumberOfLines
+            }
+            style={[styles.tileSubtitle, layout.isExpanded && { fontSize: 15, lineHeight: 21 }]}
+          >
             {subtitle}
           </CKText>
         ) : null}
@@ -154,6 +228,96 @@ export function SettingsTile({
       )}
       {showChevron && onPress ? <ChevronRight color={theme.onSurfaceVariant} size={22} /> : null}
     </Pressable>
+  );
+}
+
+/** Choices occupy the row itself; do not add an inset track or rounded thumb.
+ * Match the 50pt neighboring rows so this control never reads as an extra panel.
+ * The choices identify this setting visually; each accessible label retains its title. */
+export function SettingsChoiceTile<T extends string>({
+  icon,
+  title,
+  value,
+  options,
+  onChange,
+  isRtl = false,
+}: {
+  icon: ReactNode;
+  title: string;
+  value: T;
+  options: readonly { value: T; label: string }[];
+  onChange: (value: T) => void;
+  isRtl?: boolean;
+}) {
+  const theme = useCKTheme();
+  return (
+    <View
+      style={{ flexDirection: isRtl ? 'row-reverse' : 'row', alignItems: 'center', height: 50 }}
+    >
+      <View style={{ width: 56, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
+      <View
+        style={{
+          flex: 1,
+          height: 50,
+          flexDirection: isRtl ? 'row-reverse' : 'row',
+          minWidth: 0,
+        }}
+      >
+        {options.map((option, index) => {
+          const selected = option.value === value;
+          return (
+            <Pressable
+              key={option.value}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: selected }}
+              accessibilityLabel={`${title}: ${option.label}`}
+              onPress={() => onChange(option.value)}
+              style={({ pressed }) => ({
+                flex: 1,
+                minWidth: 0,
+                height: 50,
+                borderStartWidth: index ? StyleSheet.hairlineWidth : 0,
+                borderStartColor: colorWithAlpha(theme.onSurface, 0.09),
+                paddingHorizontal: 4,
+                paddingVertical: 2,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: selected
+                  ? colorWithAlpha(theme.onSurface, 0.065)
+                  : pressed
+                    ? colorWithAlpha(theme.onSurface, 0.05)
+                    : 'transparent',
+              })}
+            >
+              <CKText
+                role="bodyMedium"
+                skeleton={false}
+                style={{
+                  textAlign: 'center',
+                  fontWeight: selected ? '700' : '500',
+                  color: selected ? theme.onSurface : theme.onSurfaceVariant,
+                }}
+              >
+                {option.label}
+              </CKText>
+              {selected ? (
+                <View
+                  pointerEvents="none"
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 2,
+                    backgroundColor: theme.primary,
+                  }}
+                />
+              ) : null}
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
   );
 }
 
@@ -177,9 +341,18 @@ export function ChoiceDialog<T extends string>({
   heightFactor?: number;
 }) {
   const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
-      <SafeAreaView style={styles.overlay}>
+    <Modal
+      supportedOrientations={modalOrientations}
+      transparent
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <SafeAreaView
+        style={[styles.overlay, layout.isExpanded && { justifyContent: 'center', padding: 24 }]}
+      >
         <Pressable
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
@@ -188,7 +361,17 @@ export function ChoiceDialog<T extends string>({
         />
         <Surface
           radius={ckRadius.card}
-          style={[styles.sheet, heightFactor ? { height: `${heightFactor * 100}%` } : undefined]}
+          style={[
+            styles.sheet,
+            heightFactor ? { height: `${heightFactor * 100}%` } : undefined,
+            layout.isExpanded && {
+              width: '100%',
+              maxWidth: 560,
+              alignSelf: 'center',
+              borderBottomLeftRadius: ckRadius.card,
+              borderBottomRightRadius: ckRadius.card,
+            },
+          ]}
           accessibilityViewIsModal
         >
           <View style={[styles.dragHandle, { backgroundColor: theme.onSurfaceVariant }]} />
@@ -216,6 +399,11 @@ export function ChoiceDialog<T extends string>({
                       style={({ pressed }) => [
                         styles.choice,
                         choice.subtitle ? styles.choiceWithSubtitle : styles.choiceWithoutSubtitle,
+                        layout.isExpanded && {
+                          height: undefined,
+                          minHeight: choice.subtitle ? 82 : 64,
+                          paddingVertical: 14,
+                        },
                         isSelected && {
                           backgroundColor: colorWithAlpha(theme.primary, 0.08),
                         },
@@ -224,7 +412,13 @@ export function ChoiceDialog<T extends string>({
                     >
                       <View style={styles.choiceLeading}>{choice.icon}</View>
                       <View style={styles.tileCopy}>
-                        <CKText numberOfLines={1} style={styles.choiceTitle}>
+                        <CKText
+                          numberOfLines={1}
+                          style={[
+                            styles.choiceTitle,
+                            layout.isExpanded && { fontSize: 20, lineHeight: 25 },
+                          ]}
+                        >
                           {choice.label}
                         </CKText>
                         {choice.subtitle ? (
@@ -232,7 +426,10 @@ export function ChoiceDialog<T extends string>({
                             muted
                             numberOfLines={1}
                             role="bodySmall"
-                            style={styles.choiceSubtitle}
+                            style={[
+                              styles.choiceSubtitle,
+                              layout.isExpanded && { fontSize: 15, lineHeight: 21 },
+                            ]}
                           >
                             {choice.subtitle}
                           </CKText>
@@ -270,19 +467,15 @@ export function SettingSwitch({
   disabled?: boolean;
   onChange: (value: boolean) => void;
 }) {
-  const theme = useCKTheme();
   return (
     <Pressable
       accessibilityRole="switch"
       accessibilityState={{ checked: value, disabled }}
       disabled={disabled}
       onPress={() => onChange(!value)}
-      style={[
-        styles.switch,
-        { backgroundColor: value ? theme.primary : colorWithAlpha(theme.outlineVariant, 0.6) },
-      ]}
+      style={{ flexShrink: 0, opacity: disabled ? 0.5 : 1 }}
     >
-      <View style={[styles.knob, { alignSelf: value ? 'flex-end' : 'flex-start' }]} />
+      <SwitchIndicator value={value} />
     </Pressable>
   );
 }
@@ -314,6 +507,7 @@ const styles = StyleSheet.create({
   },
   tileWithoutSubtitle: { height: 50 },
   tileWithSubtitle: { height: 62 },
+  multilineTile: { height: undefined, minHeight: 62, paddingVertical: 12 },
   icon: { width: 28, alignItems: 'center' },
   tileCopy: { flex: 1, gap: 2 },
   tileTitle: { fontWeight: '500', fontSize: 17 },

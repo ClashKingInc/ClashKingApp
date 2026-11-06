@@ -11,21 +11,6 @@ export type WidgetPinRequestResult = {
   requested: boolean;
 };
 
-export type NotificationDebugPayload = {
-  sampleId: string;
-  title: string;
-  body: string;
-  assetUrl: string;
-  assetUrls: string[];
-  threadIdentifier: string;
-};
-
-export type NotificationDebugResult = {
-  scheduled: true;
-  title: string;
-  attachmentCount: number;
-};
-
 export type SaveFileOptions = {
   fileUri: string;
   fileName: string;
@@ -42,6 +27,9 @@ export type SceneryAudioNativeStatus = {
 };
 
 export type ClashKingNativeModule = {
+  readonly supportsReservedRegionObservation?: boolean;
+  reconcileNativeTabBar?(): Promise<boolean>;
+  padNotificationThumbnail(uri: string): Promise<string>;
   addListener(
     event: 'onSceneryAudioStatus',
     listener: (status: SceneryAudioNativeStatus) => void,
@@ -56,7 +44,6 @@ export type ClashKingNativeModule = {
   supportsAlternateIcons(): Promise<boolean>;
   getAlternateIconName(): Promise<string | null>;
   setAlternateIconName(iconName: string | null): Promise<void>;
-  showDebugNotification(payload: NotificationDebugPayload): Promise<NotificationDebugResult>;
   saveFile(options: SaveFileOptions): Promise<string>;
   setWidgetValue(key: string, value: string | null): Promise<void>;
   reloadWidgets(): Promise<void>;

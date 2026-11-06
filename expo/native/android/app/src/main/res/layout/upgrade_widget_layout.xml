@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="42dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -43,10 +43,10 @@
             <TextView
                 android:id="@+id/upgrade_account_tag"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/widget_text_secondary"
+                android:textColor="@color/widget_text"
                 android:textSize="9sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -61,10 +61,28 @@
             android:maxLines="1"
             android:paddingHorizontal="9dp"
             android:text="Update needed"
-            android:textColor="@color/widget_warning_text"
+            android:textColor="@color/widget_text"
             android:textSize="8sp"
             android:textStyle="bold"
             android:visibility="gone" />
+        <FrameLayout
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp">
+            <ImageView
+                android:id="@+id/upgrade_completion_ring"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@null" />
+            <TextView
+                android:id="@+id/upgrade_completion_value"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/widget_text"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </FrameLayout>
     </LinearLayout>
 
     <TextView
@@ -77,7 +95,7 @@
         android:gravity="center"
         android:padding="12dp"
         android:text="@string/upgrade_widget_empty_sync"
-        android:textColor="@color/widget_text_secondary"
+        android:textColor="@color/widget_text"
         android:textSize="12sp"
         android:visibility="gone" />
 
@@ -114,7 +132,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="HOME VILLAGE"
-                    android:textColor="@color/widget_text_secondary"
+                    android:textColor="@color/widget_text"
                     android:textSize="8sp"
                     android:textStyle="bold" />
 
@@ -168,7 +186,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="Lv 17 → 18  ·  2h 30m"
-                        android:textColor="@color/widget_text_secondary"
+                        android:textColor="@color/widget_text"
                         android:textSize="9sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -213,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/widget_text_secondary"
+                        android:textColor="@color/widget_text"
                         android:textSize="8sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -258,7 +276,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/widget_text_secondary"
+                        android:textColor="@color/widget_text"
                         android:textSize="8sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -303,7 +321,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/widget_text_secondary"
+                        android:textColor="@color/widget_text"
                         android:textSize="8sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -316,7 +334,7 @@
                 android:gravity="end"
                 android:maxLines="1"
                 android:text="+4 more upgrades"
-                android:textColor="@color/widget_text_secondary"
+                android:textColor="@color/widget_text"
                 android:textSize="8sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -344,7 +362,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="VILLAGE"
-                    android:textColor="@color/widget_text_secondary"
+                    android:textColor="@color/widget_text"
                     android:textSize="8sp"
                     android:textStyle="bold" />
 
@@ -384,7 +402,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="RESEARCH"
-                    android:textColor="@color/widget_text_secondary"
+                    android:textColor="@color/widget_text"
                     android:textSize="8sp"
                     android:textStyle="bold" />
 

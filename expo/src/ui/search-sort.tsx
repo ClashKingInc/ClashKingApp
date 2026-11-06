@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react-native';
 import {
   Pressable,
   StyleSheet,
@@ -8,10 +9,10 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { GlassSurface } from './glass';
+import { GlassControlSurface } from './glass';
 import { tintIcon } from './icon-slot';
 import { CKText } from './text';
-import { ckControlHeight, ckRadius, ckSpacing } from './tokens';
+import { ckControlHeight, ckSpacing } from './tokens';
 import { useCKTheme } from './theme';
 
 export type SearchSortBarProps = {
@@ -30,7 +31,7 @@ export type SearchSortBarProps = {
 export type SearchFieldProps = Pick<
   SearchSortBarProps,
   'value' | 'onChangeText' | 'placeholder' | 'searchLabel' | 'searchIcon' | 'style'
->;
+> & { readonly onSubmit?: () => void };
 
 export function SearchField({
   value,
@@ -39,14 +40,11 @@ export function SearchField({
   searchLabel,
   searchIcon,
   style,
+  onSubmit,
 }: SearchFieldProps) {
   const theme = useCKTheme();
   return (
-    <GlassSurface
-      cornerRadius={ckRadius.pill}
-      style={[styles.search, style]}
-      testID="search-sort-search"
-    >
+    <GlassControlSurface style={[styles.search, style]} testID="search-sort-search">
       {tintIcon(searchIcon, theme.onSurfaceVariant)}
       <TextInput
         accessibilityLabel={searchLabel ?? placeholder}
@@ -55,13 +53,14 @@ export function SearchField({
         autoCorrect={false}
         clearButtonMode="while-editing"
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmit}
         placeholder={placeholder}
         placeholderTextColor={theme.onSurfaceVariant}
         returnKeyType="search"
         style={[styles.input, { color: theme.onSurface }]}
         value={value}
       />
-    </GlassSurface>
+    </GlassControlSurface>
   );
 }
 
@@ -87,12 +86,12 @@ export function SearchSortBar({
         searchLabel={searchLabel}
         searchIcon={searchIcon}
       />
-      <Pressable accessibilityRole="button" accessibilityLabel={sortLabel} onPress={onSortPress}>
-        <GlassSurface
-          cornerRadius={ckRadius.chip}
-          interactive
-          style={styles.sort}
-          testID="search-sort-control"
+      <GlassControlSurface style={styles.sort} testID="search-sort-control">
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={sortLabel}
+          onPress={onSortPress}
+          style={styles.sortContent}
         >
           {tintIcon(sortIcon, theme.onSurface)}
           {sortValue ? (
@@ -100,8 +99,9 @@ export function SearchSortBar({
               {sortValue}
             </CKText>
           ) : null}
-        </GlassSurface>
-      </Pressable>
+          <ChevronDown color={theme.onSurfaceVariant} size={16} />
+        </Pressable>
+      </GlassControlSurface>
     </View>
   );
 }
@@ -126,8 +126,11 @@ const styles = StyleSheet.create({
   },
   sort: {
     minWidth: 40,
-    height: 40,
+    height: ckControlHeight.compact,
     maxWidth: 160,
+  },
+  sortContent: {
+    height: ckControlHeight.compact,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

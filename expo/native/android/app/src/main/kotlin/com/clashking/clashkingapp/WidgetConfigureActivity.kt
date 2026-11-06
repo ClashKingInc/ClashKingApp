@@ -5,10 +5,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RadioButton
@@ -35,6 +39,8 @@ abstract class WidgetConfigureActivity : Activity() {
     @get:StringRes protected abstract val automaticText: Int
     @get:StringRes protected abstract val actionText: Int
     @get:StringRes protected open val builderBaseOptionText: Int? = null
+    @get:StringRes protected open val transparentBackgroundOptionText: Int =
+        R.string.widget_configure_transparent_background
 
     protected abstract fun selectedTag(appWidgetId: Int): String?
     protected abstract fun readOptions(): List<WidgetSelectionOption>
@@ -42,20 +48,48 @@ abstract class WidgetConfigureActivity : Activity() {
     protected abstract fun widgetProviderClass(): Class<out AppWidgetProvider>
     protected open fun builderBaseEnabled(appWidgetId: Int): Boolean = true
     protected open fun saveBuilderBaseEnabled(appWidgetId: Int, enabled: Boolean) = Unit
+    protected abstract fun transparentBackgroundEnabled(appWidgetId: Int): Boolean
+    protected abstract fun saveTransparentBackgroundEnabled(appWidgetId: Int, enabled: Boolean)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setResult(RESULT_CANCELED)
-        appWidgetId = intent?.extras?.getInt(
+        appWidgetId = savedInstanceState?.takeIf {
+            it.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)
+        }?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
+            ?: intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            setResult(RESULT_CANCELED)
             finish()
             return
         }
+        // Launcher owns this ID. Return it on cancellation too, and retain it through
+        // recreation; never infer an ID from another widget or turn Back into success.
+        setResult(RESULT_CANCELED, resultIntent())
         setContentView(buildContent())
+        val light = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK !=
+            Configuration.UI_MODE_NIGHT_YES
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS or
+                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+            window.insetsController?.setSystemBarsAppearance(if (light) mask else 0, mask)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = if (light) {
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            } else 0
+        }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun resultIntent() =
+        Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 
     private fun buildContent(): ScrollView {
         val padding = dp(20)
@@ -103,14 +137,7 @@ abstract class WidgetConfigureActivity : Activity() {
             }
         }
 
-        val automatic = selectionOption(getString(automaticText))
-        tagsByRadioId[automatic.id] = null
-        radioGroup.addView(automatic, 0)
-        if (savedTag == null) {
-            defaultRadioId = automatic.id
-        }
         if (options.isEmpty()) {
-            defaultRadioId = automatic.id
             container.addView(TextView(this).apply {
                 setText(emptyText)
                 textSize = 14f
@@ -118,7 +145,9 @@ abstract class WidgetConfigureActivity : Activity() {
                 setPadding(0, 0, 0, dp(12))
             })
         }
-        radioGroup.check(defaultRadioId ?: automatic.id)
+        if (radioGroup.childCount > 0) {
+            radioGroup.check(defaultRadioId ?: radioGroup.getChildAt(0).id)
+        }
         container.addView(radioGroup)
 
         val builderBaseSwitch = builderBaseOptionText?.let { textResource ->
@@ -148,8 +177,31 @@ abstract class WidgetConfigureActivity : Activity() {
             }.also(container::addView)
         }
 
+        val transparentBackgroundSwitch = Switch(this).apply {
+            setText(transparentBackgroundOptionText)
+            textSize = 15f
+            setTextColor(getColor(R.color.widget_text))
+            isChecked = transparentBackgroundEnabled(appWidgetId)
+            buttonTintList = null
+            thumbTintList = ColorStateList.valueOf(getColor(R.color.widget_text))
+            trackTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+                intArrayOf(
+                    getColor(R.color.widget_accent),
+                    getColor(R.color.widget_text_secondary)
+                )
+            )
+            setPadding(dp(14), dp(10), dp(14), dp(10))
+            setBackgroundResource(R.drawable.upgrade_widget_config_option)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = dp(10) }
+        }.also(container::addView)
+
         container.addView(Button(this).apply {
             setText(actionText)
+            isEnabled = options.isNotEmpty()
             isAllCaps = false
             textSize = 15f
             setTypeface(typeface, Typeface.BOLD)
@@ -160,9 +212,11 @@ abstract class WidgetConfigureActivity : Activity() {
             minWidth = 0
             setPadding(dp(16), 0, dp(16), 0)
             setOnClickListener {
+                val tag = tagsByRadioId[radioGroup.checkedRadioButtonId] ?: return@setOnClickListener
                 saveSelection(
-                    tagsByRadioId[radioGroup.checkedRadioButtonId],
-                    builderBaseSwitch?.isChecked ?: true
+                    tag,
+                    builderBaseSwitch?.isChecked ?: true,
+                    transparentBackgroundSwitch.isChecked
                 )
             }
             layoutParams = LinearLayout.LayoutParams(
@@ -175,6 +229,23 @@ abstract class WidgetConfigureActivity : Activity() {
         return ScrollView(this).apply {
             setBackgroundColor(getColor(R.color.widget_background))
             isFillViewport = true
+            // SDK 35+ draws edge-to-edge. Insets must move the entire scrolling
+            // form below system bars, including landscape cutouts and the keyboard.
+            setOnApplyWindowInsetsListener { view, insets ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val safe = insets.getInsets(
+                        WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout() or
+                            WindowInsets.Type.ime()
+                    )
+                    view.setPadding(safe.left, safe.top, safe.right, safe.bottom)
+                } else {
+                    @Suppress("DEPRECATION")
+                    view.setPadding(insets.systemWindowInsetLeft, insets.systemWindowInsetTop,
+                        insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
+                }
+                insets
+            }
+            requestApplyInsets()
             addView(
                 container,
                 ViewGroup.LayoutParams(
@@ -212,16 +283,21 @@ abstract class WidgetConfigureActivity : Activity() {
         }
     }
 
-    private fun saveSelection(tag: String?, showBuilderBase: Boolean) {
+    private fun saveSelection(
+        tag: String?,
+        showBuilderBase: Boolean,
+        transparentBackground: Boolean
+    ) {
         saveSelectedTag(appWidgetId, tag)
         saveBuilderBaseEnabled(appWidgetId, showBuilderBase)
+        saveTransparentBackgroundEnabled(appWidgetId, transparentBackground)
         sendBroadcast(Intent(this, widgetProviderClass()).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))
         })
         setResult(
             RESULT_OK,
-            Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            resultIntent()
         )
         finish()
     }

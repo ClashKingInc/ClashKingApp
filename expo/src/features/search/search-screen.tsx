@@ -1,7 +1,19 @@
+import type { TextInputInstance } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAdaptiveLayout } from '../../ui/adaptive-layout';
+import { ResponsiveGrid } from '../../ui/responsive-grid';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Keyboard, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
+import {
+  Animated,
+  Keyboard,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,18 +30,18 @@ import {
 } from 'lucide-react-native';
 
 import { ImageAssets } from '../../core/assets/image-assets';
-import { useI18n } from '../../i18n';
+import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../../ui/header';
+import { materialBackLabel, useI18n } from '../../i18n';
 import {
   CKText,
-  GlassPill,
-  GlassSurface,
+  GlassControlSurface,
   LoadingIndicator,
+  SkeletonContent,
   MobileWebImage,
   PressableSurface,
   SelectionPicker,
-  ckRadius,
-  colorWithAlpha,
   useCKTheme,
+  useCKAccessibility,
 } from '../../ui';
 import {
   emptyClanSearchFilters,
@@ -74,9 +86,26 @@ export interface SearchScreenProps {
 }
 
 export function SearchScreen(props: SearchScreenProps) {
-  const { t, isRtl } = useI18n();
+  const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
-  const inputRef = useRef<TextInput>(null);
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
+  const controlBounds = (layout.isExpanded || layout.isDuo) && {
+    width: '100%' as const,
+    maxWidth: layout.readableMaxWidth,
+    alignSelf: 'center' as const,
+  };
+  const resultBounds = (layout.isExpanded || layout.isDuo) && {
+    width: '100%' as const,
+    maxWidth: layout.contentMaxWidth,
+    alignSelf: 'center' as const,
+  };
+  const { reduceMotion } = useCKAccessibility();
+  const [contentOpacity] = useState(
+    () => new Animated.Value(props.overlay && !reduceMotion ? 0 : 1),
+  );
+  const inputRef = useRef<TextInputInstance>(null);
+  const [headerLaidOut, setHeaderLaidOut] = useState(!props.overlay);
   const activeFilters =
     props.mode === 'clans'
       ? !isClanSearchFiltersEmpty(props.clanFilters)
@@ -86,13 +115,25 @@ export function SearchScreen(props: SearchScreenProps) {
   );
 
   useEffect(() => {
-    if (!props.autofocus) return;
-    const timer = setTimeout(() => inputRef.current?.focus(), props.overlay ? 180 : 0);
-    return () => clearTimeout(timer);
-  }, [props.autofocus, props.overlay]);
+    // Let the anchored header settle before Android adjustResize opens the
+    // keyboard; focus must not race the overlay's initial native layout.
+    if (!props.autofocus || !headerLaidOut) return;
+    const frame = requestAnimationFrame(() => inputRef.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [props.autofocus, headerLaidOut]);
+
+  useEffect(() => {
+    const animation = Animated.timing(contentOpacity, {
+      toValue: 1,
+      duration: reduceMotion ? 0 : 160,
+      useNativeDriver: true,
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [contentOpacity, reduceMotion]);
 
   const searchField = (
-    <GlassPill interactive style={[styles.searchField, isRtl && styles.rowRtl]}>
+    <GlassControlSurface style={[styles.searchField, isRtl && styles.rowRtl]}>
       <Search size={20} color={theme.onSurfaceVariant} />
       <TextInput
         ref={inputRef}
@@ -152,7 +193,7 @@ export function SearchScreen(props: SearchScreenProps) {
           <X size={22} color={theme.onSurfaceVariant} />
         </Pressable>
       ) : null}
-    </GlassPill>
+    </GlassControlSurface>
   );
 
   const resultContent = (
@@ -160,6 +201,7 @@ export function SearchScreen(props: SearchScreenProps) {
       {props.query.trim().length === 0 && visibleRecents.length ? (
         <>
           <CKText
+            skeleton={false}
             role="titleMedium"
             style={[
               styles.recentTitle,
@@ -170,18 +212,20 @@ export function SearchScreen(props: SearchScreenProps) {
           >
             {t('searchRecent')}
           </CKText>
-          {visibleRecents.slice(0, 10).map((item) => (
-            <EntityTile
-              key={`${item.type}:${item.tag}`}
-              name={item.name}
-              tag={item.tag}
-              subtitle={recentSubtitle(item, t)}
-              imageUrl={item.imageUrl}
-              type={item.type}
-              overlay={props.overlay ?? false}
-              onPress={() => props.onOpenRecent(item)}
-            />
-          ))}
+          <SearchResultCollection>
+            {visibleRecents.slice(0, 10).map((item) => (
+              <EntityTile
+                key={`${item.type}:${item.tag}`}
+                name={item.name}
+                tag={item.tag}
+                subtitle={recentSubtitle(item, t)}
+                imageUrl={item.imageUrl}
+                type={item.type}
+                overlay={props.overlay ?? false}
+                onPress={() => props.onOpenRecent(item)}
+              />
+            ))}
+          </SearchResultCollection>
         </>
       ) : null}
       {props.query.trim().length !== 0 &&
@@ -191,59 +235,99 @@ export function SearchScreen(props: SearchScreenProps) {
         <CKText role="bodyLarge" muted style={styles.noResults}>
           {t('searchNoResult')}
         </CKText>
+      ) : props.isSearching && props.results.length === 0 ? (
+        <SkeletonContent loading>
+          <SearchResultCollection>
+            {[0, 1, 2, 3, 4].map((index) => (
+              <EntityTile
+                key={index}
+                name="ClashKing player"
+                tag="#PLAYER"
+                subtitle="Player information"
+                imageUrl={
+                  props.mode === 'players' ? ImageAssets.townHall(1) : ImageAssets.clanCastle
+                }
+                type={props.mode === 'players' ? 'player' : 'clan'}
+                overlay={props.overlay ?? false}
+                onPress={() => {}}
+              />
+            ))}
+          </SearchResultCollection>
+        </SkeletonContent>
       ) : (
-        props.results.map((result, index) => (
-          <EntityTile
-            key={`${stringValue(result.tag)}:${index}`}
-            name={stringValue(result.name)}
-            tag={stringValue(result.tag)}
-            subtitle={resultSubtitle(result, props.mode)}
-            imageUrl={resultImage(result, props.mode)}
-            type={props.mode === 'players' ? 'player' : 'clan'}
-            overlay={props.overlay ?? false}
-            onPress={() => props.onOpenResult(result, props.mode)}
-          />
-        ))
+        <SearchResultCollection>
+          {props.results.map((result, index) => (
+            <EntityTile
+              key={`${stringValue(result.tag)}:${index}`}
+              name={stringValue(result.name)}
+              tag={stringValue(result.tag)}
+              subtitle={resultSubtitle(result, props.mode)}
+              imageUrl={resultImage(result, props.mode)}
+              type={props.mode === 'players' ? 'player' : 'clan'}
+              overlay={props.overlay ?? false}
+              onPress={() => props.onOpenResult(result, props.mode)}
+            />
+          ))}
+        </SearchResultCollection>
       )}
     </>
   );
 
   if (props.overlay) {
     return (
-      <SafeAreaView edges={['top']} style={[styles.screen, { backgroundColor: theme.surface }]}>
-        <View style={[styles.overlayHeader, isRtl && styles.rowRtl]}>
-          <View style={styles.grow}>{searchField}</View>
+      <GlobalSearchHeaderFrame
+        style={[
+          styles.screen,
+          { backgroundColor: theme.background },
+          (layout.isDuo || layout.isTablet) && {
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
+      >
+        <View
+          onLayout={() => setHeaderLaidOut(true)}
+          style={[styles.overlayHeader, isRtl && styles.rowRtl, controlBounds]}
+        >
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('generalCancel')}
+            accessibilityLabel={materialBackLabel(locale)}
             onPress={props.onCancel}
             style={styles.cancelButton}
           >
-            <X size={24} color={theme.onSurface} />
+            <ChevronLeft
+              size={24}
+              color={theme.onSurface}
+              style={isRtl && styles.mirrorHorizontal}
+            />
           </Pressable>
+          <View style={styles.grow}>{searchField}</View>
         </View>
-        <View style={styles.overlayMode}>
-          <ModeSelector mode={props.mode} compact isRtl={isRtl} onChange={props.onModeChange} />
-        </View>
-        <ScrollView
-          automaticallyAdjustKeyboardInsets
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          style={styles.grow}
-          contentContainerStyle={[
-            styles.overlayResults,
-            props.query.trim().length !== 0 || visibleRecents.length === 0
-              ? styles.overlayResultSpacer
-              : undefined,
-          ]}
-          testID="search-overlay-scroll"
-        >
-          {props.filtersExpanded ? (
-            <View style={styles.overlayFilters}>{filtersPanel(props)}</View>
-          ) : null}
-          {resultContent}
-        </ScrollView>
-      </SafeAreaView>
+        <Animated.View style={[styles.grow, { opacity: contentOpacity }]}>
+          <View style={[styles.overlayMode, controlBounds]}>
+            <ModeSelector mode={props.mode} compact isRtl={isRtl} onChange={props.onModeChange} />
+          </View>
+          <ScrollView
+            automaticallyAdjustKeyboardInsets
+            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps="handled"
+            style={styles.grow}
+            contentContainerStyle={[
+              styles.overlayResults,
+              resultBounds,
+              props.query.trim().length !== 0 || visibleRecents.length === 0
+                ? styles.overlayResultSpacer
+                : undefined,
+            ]}
+            testID="search-overlay-scroll"
+          >
+            {props.filtersExpanded ? (
+              <View style={[styles.overlayFilters, controlBounds]}>{filtersPanel(props)}</View>
+            ) : null}
+            {resultContent}
+          </ScrollView>
+        </Animated.View>
+      </GlobalSearchHeaderFrame>
     );
   }
 
@@ -252,12 +336,18 @@ export function SearchScreen(props: SearchScreenProps) {
       <ScrollView
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.page}
+        contentContainerStyle={[styles.page, resultBounds]}
       >
-        <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
-        <View style={styles.pageSearch}>{searchField}</View>
+        {controlBounds ? (
+          <View style={controlBounds}>
+            <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
+          </View>
+        ) : (
+          <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
+        )}
+        <View style={[styles.pageSearch, controlBounds]}>{searchField}</View>
         {props.filtersExpanded ? (
-          <View style={styles.pageFilters}>{filtersPanel(props)}</View>
+          <View style={[styles.pageFilters, controlBounds]}>{filtersPanel(props)}</View>
         ) : null}
         <View
           style={
@@ -270,6 +360,16 @@ export function SearchScreen(props: SearchScreenProps) {
         </View>
       </ScrollView>
     </View>
+  );
+}
+
+function SearchResultCollection({ children }: { children: ReactNode }) {
+  const layout = useAdaptiveLayout();
+  if (!layout.isExpanded) return <>{children}</>;
+  return (
+    <ResponsiveGrid minItemWidth={300} maxColumns={layout.columns(300, 3)} gap={16}>
+      {children}
+    </ResponsiveGrid>
   );
 }
 
@@ -291,7 +391,6 @@ function filtersPanel(props: SearchScreenProps): ReactNode {
 
 function ModeSelector({
   mode,
-  compact = false,
   isRtl,
   onChange,
 }: {
@@ -301,34 +400,17 @@ function ModeSelector({
   onChange: (mode: SearchMode) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
   return (
-    <GlassSurface
-      cornerRadius={ckRadius.card}
+    <SlidingSegmentControl
+      value={mode}
+      isRtl={isRtl}
+      onChange={onChange}
+      options={[
+        { value: 'players', label: t('searchTabPlayers') },
+        { value: 'clans', label: t('searchTabClans') },
+      ]}
       testID="search-mode-selector"
-      style={[styles.segment, compact && styles.compactSegment, isRtl && styles.rowRtl]}
-    >
-      {(['players', 'clans'] as const).map((value) => {
-        const selected = value === mode;
-        return (
-          <Pressable
-            key={value}
-            accessibilityRole="tab"
-            accessibilityState={{ selected }}
-            onPress={() => onChange(value)}
-            style={[
-              styles.segmentButton,
-              compact && styles.compactSegmentButton,
-              selected && { backgroundColor: colorWithAlpha(theme.primary, 0.14) },
-            ]}
-          >
-            <CKText role="labelLarge" style={selected ? { color: theme.primary } : undefined}>
-              {value === 'players' ? t('searchTabPlayers') : t('searchTabClans')}
-            </CKText>
-          </Pressable>
-        );
-      })}
-    </GlassSurface>
+    />
   );
 }
 
@@ -358,7 +440,9 @@ function EntityTile({
           <MobileWebImage
             imageUrl={imageUrl}
             contentFit="contain"
-            style={styles.entityImage}
+            // Search rows already know their artwork size. Do not defer the
+            // request to a percentage-size measurement inside the pressable.
+            style={overlay ? styles.overlayEntityImage : styles.entityImage}
             errorFallback={
               type === 'clan' ? <Shield size={40} color={theme.onSurfaceVariant} /> : undefined
             }
@@ -954,13 +1038,7 @@ function resultImage(result: JsonRecord, mode: SearchMode): string | null {
   if (mode === 'players') {
     return ImageAssets.townHall(numberValue(result.townHallLevel, numberValue(result.townhall, 1)));
   }
-  const badgeUrls = recordValue(result.badgeUrls);
-  return (
-    stringValue(badgeUrls.small) ||
-    stringValue(badgeUrls.medium) ||
-    stringValue(badgeUrls.large) ||
-    null
-  );
+  return ImageAssets.clanBadgeForTag(stringValue(result.tag), result) || null;
 }
 
 const styles = StyleSheet.create({
@@ -972,17 +1050,20 @@ const styles = StyleSheet.create({
   overlayHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    paddingTop: 10,
-    paddingRight: 12,
-    paddingBottom: 8,
-    gap: 4,
+    height: globalSearchHeaderLayout.height,
+    paddingHorizontal: globalSearchHeaderLayout.paddingHorizontal,
+    gap: globalSearchHeaderLayout.gap,
   },
   overlayMode: { paddingHorizontal: 16, paddingBottom: 6 },
   overlayFilters: { paddingTop: 4, paddingBottom: 12 },
-  cancelButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
-  searchField: {
+  cancelButton: {
+    width: globalSearchHeaderLayout.leadingWidth,
     height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchField: {
+    height: globalSearchHeaderLayout.fieldHeight,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 14,
@@ -999,15 +1080,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   fieldAction: { width: 38, height: 44, alignItems: 'center', justifyContent: 'center' },
-  segment: { height: 52, flexDirection: 'row', padding: 4 },
-  compactSegment: { height: 40 },
-  segmentButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: ckRadius.tile,
-  },
-  compactSegmentButton: { minHeight: 32 },
   pageResultSpacer: { paddingTop: 14 },
   overlayResults: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 20 },
   overlayResultSpacer: { paddingTop: 12 },
@@ -1018,7 +1090,8 @@ const styles = StyleSheet.create({
   entityRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   entityImageBox: { width: 54, height: 54, alignItems: 'center', justifyContent: 'center' },
   overlayImageBox: { width: 48, height: 48 },
-  entityImage: { width: '100%', height: '100%' },
+  entityImage: { width: 54, height: 54 },
+  overlayEntityImage: { width: 48, height: 48 },
   overlayName: { fontWeight: '700' },
   tagLine: { marginTop: 2 },
   subtitle: { marginTop: 5 },

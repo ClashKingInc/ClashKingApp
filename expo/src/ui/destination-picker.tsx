@@ -30,6 +30,10 @@ export function DestinationPicker({
   const selectedIndex = options.findIndex((option) => option.key === selectedKey);
   return (
     <SelectionPicker
+      // Destination bars span their container. Explicitly opt into the
+      // flexible label so the position/chevron stays at the trailing edge;
+      // compact filter pickers still use SelectionPicker's intrinsic sizing.
+      fillWidth
       accessibilityLabel={accessibilityLabel}
       externallyManaged={externallyManaged}
       onOpen={onOpen}

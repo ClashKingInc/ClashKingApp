@@ -1,0 +1,46 @@
+{
+  "name": "royal-champion",
+  "geometry": "royalchampion_default_geo.glb",
+  "pose": "royalchampion_default_idle1.glb",
+  "texture": "sc3d/royalchampion_default_a.sctx",
+  "bytes": 1943192,
+  "validation": {
+    "meshes": 15,
+    "skinnedMeshes": 15,
+    "texturedMeshes": 15,
+    "bones": 102,
+    "animations": 1,
+    "tracks": 312
+  },
+  "landing": {
+    "schemaVersion": 1,
+    "slug": "royalchampion-default",
+    "model": "model.glb",
+    "animation": {
+      "clip": "royalchampion_default_idle1",
+      "speed": 1,
+      "loop": true
+    },
+    "transform": {
+      "scale": 1,
+      "offsetY": 0,
+      "initialYaw": 0
+    },
+    "camera": {
+      "fov": 36,
+      "distance": 2.1,
+      "targetY": 0
+    },
+    "interaction": {
+      "allowYaw": true,
+      "minYaw": -45,
+      "maxYaw": 45,
+      "allowPitch": false,
+      "allowZoom": false,
+      "allowPan": false,
+      "dragSensitivity": 0.8,
+      "autoRotate": false,
+      "autoRotateSpeed": 0.5
+    }
+  }
+}

@@ -1,0 +1,358 @@
+[
+  {
+    "id": "barbarian",
+    "name": "Barbarian",
+    "category": "Troop",
+    "signature": "Blond crop. Big moustache.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Face",
+        "fill": "#F3B786",
+        "path": "M34 28H66C76 28 80 36 80 48V63C80 78 69 85 50 85C31 85 20 78 20 63V48C20 36 24 28 34 28Z"
+      },
+      {
+        "name": "Hair",
+        "fill": "#F7C940",
+        "path": "M22 42V31Q22 20 34 20H66Q78 20 78 31V42Q71 43 69 36H31Q29 43 22 42Z"
+      },
+      {
+        "name": "Moustache",
+        "fill": "#F7C940",
+        "path": "M34 64C40 61 45 62 50 65C55 62 60 61 66 64C71 67 72 74 69 78C67 80 63 79 62 76L60 71H40L38 76C37 79 33 80 31 78C28 74 29 67 34 64Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "archer",
+    "name": "Archer",
+    "category": "Troop",
+    "signature": "A pink bob and a blunt fringe.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Bob",
+        "fill": "#E957A6",
+        "path": "M50 19C70 19 80 31 80 51V77Q80 83 74 83H26Q20 83 20 77V51C20 31 30 19 50 19Z"
+      },
+      {
+        "name": "Face",
+        "fill": "#F3B786",
+        "path": "M31 37H69V60C69 76 61 83 50 83C39 83 31 76 31 60Z"
+      },
+      {
+        "name": "Fringe",
+        "fill": "#E957A6",
+        "path": "M30 30H70V43H54L51 37L49 43H30Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "category": "Troop",
+    "signature": "Big ears. One little green face.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Head and ears",
+        "fill": "#8CCB45",
+        "path": "M50 27C63 27 71 33 75 42L87 34Q92 31 91 37C90 48 84 57 76 59V65C76 79 65 85 50 85C35 85 24 79 24 65V59C16 57 10 48 9 37Q8 31 13 34L25 42C29 33 37 27 50 27Z"
+      },
+      {
+        "name": "Ear insides",
+        "fill": "#5DA83F",
+        "path": "M15 40L27 48L24 54Q18 51 15 40ZM85 40L76 54L73 48Z"
+      },
+      {
+        "name": "Nose",
+        "fill": "#70B33D",
+        "path": "M48 62Q50 60 52 62L57 69Q59 73 54 74H46Q41 73 43 69Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "giant",
+    "name": "Giant",
+    "category": "Troop",
+    "signature": "A wide bald head and ginger sideburns.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Head",
+        "fill": "#F3B786",
+        "path": "M50 21C72 21 83 35 83 54V65C83 80 69 86 50 86C31 86 17 80 17 65V54C17 35 28 21 50 21Z"
+      },
+      {
+        "name": "Sideburns",
+        "fill": "#BE6A32",
+        "path": "M18 45Q21 42 25 44V63Q25 69 20 69Q16 68 16 63V53Q16 48 18 45ZM82 45Q84 48 84 53V63Q84 68 80 69Q75 69 75 63V44Q79 42 82 45Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "wizard",
+    "name": "Wizard",
+    "category": "Troop",
+    "signature": "Blue hood. A tiny brown beard.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Hood",
+        "fill": "#4786CD",
+        "path": "M50 16C70 16 80 35 80 55L85 77Q87 85 78 85H22Q13 85 15 77L20 55C20 35 30 16 50 16Z"
+      },
+      {
+        "name": "Face",
+        "fill": "#F3B786",
+        "path": "M50 32C64 32 70 42 70 55V64C70 77 60 82 50 82C40 82 30 77 30 64V55C30 42 36 32 50 32Z"
+      },
+      {
+        "name": "Beard",
+        "fill": "#604335",
+        "path": "M31 62Q36 65 39 70Q50 75 61 70Q64 65 69 62L66 77Q63 85 50 87Q37 85 34 77Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "hog-rider",
+    "name": "Hog Rider",
+    "category": "Troop",
+    "signature": "Mohawk, dark beard, and a gold hoop.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Face",
+        "fill": "#9D5B37",
+        "path": "M34 28H66C76 28 80 36 80 48V63C80 78 69 85 50 85C31 85 20 78 20 63V48C20 36 24 28 34 28Z"
+      },
+      {
+        "name": "Mohawk",
+        "fill": "#352B2C",
+        "path": "M42 35V21Q42 15 48 15H52Q58 15 58 21V35Z"
+      },
+      {
+        "name": "Beard",
+        "fill": "#352B2C",
+        "path": "M22 59Q27 58 30 64L35 70Q50 75 65 70L70 64Q73 58 78 59V66Q78 84 50 86Q22 84 22 66Z"
+      },
+      {
+        "name": "Hoop",
+        "fill": "#F7C940",
+        "path": "M77 56A6 7 0 1 1 77 70A6 7 0 1 1 77 56ZM77 60A2 3 0 1 0 77 66A2 3 0 1 0 77 60Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "valkyrie",
+    "name": "Valkyrie",
+    "category": "Troop",
+    "signature": "An orange bob with a sweeping part.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Bob",
+        "fill": "#ED762C",
+        "path": "M49 18C68 18 79 29 79 48V76Q79 82 73 82H27Q21 82 21 76V48C21 28 32 18 49 18Z"
+      },
+      {
+        "name": "Face",
+        "fill": "#F3B786",
+        "path": "M31 36H69V61C69 75 61 83 50 83C39 83 31 75 31 61Z"
+      },
+      {
+        "name": "Sweep",
+        "fill": "#ED762C",
+        "path": "M29 31Q48 18 70 29L72 46Q58 46 50 33Q43 46 28 48Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "barbarian-king",
+    "name": "Barbarian King",
+    "category": "Hero",
+    "signature": "The Barbarian, with his chunky gold crown.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Face",
+        "fill": "#F3B786",
+        "path": "M34 28H66C76 28 80 36 80 48V63C80 78 69 85 50 85C31 85 20 78 20 63V48C20 36 24 28 34 28Z"
+      },
+      {
+        "name": "Sideburns",
+        "fill": "#F7C940",
+        "path": "M21 37H29V52Q29 56 25 56Q21 56 21 52ZM71 37H79V52Q79 56 75 56Q71 56 71 52Z"
+      },
+      {
+        "name": "Moustache",
+        "fill": "#F7C940",
+        "path": "M34 64C40 61 45 62 50 65C55 62 60 61 66 64C71 67 72 74 69 78C67 80 63 79 62 76L60 71H40L38 76C37 79 33 80 31 78C28 74 29 67 34 64Z"
+      },
+      {
+        "name": "Crown",
+        "fill": "#E8AF2F",
+        "path": "M22 34V18Q22 15 25 15H31Q34 15 34 18V24H43V13Q43 10 46 10H54Q57 10 57 13V24H66V18Q66 15 69 15H75Q78 15 78 18V34Q78 40 72 40H28Q22 40 22 34Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 53,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "archer-queen",
+    "name": "Archer Queen",
+    "category": "Hero",
+    "signature": "Purple hair beneath a gold crown.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Hair",
+        "fill": "#8A4BC3",
+        "path": "M50 20C70 20 79 31 79 52V82Q79 87 74 87H26Q21 87 21 82V52C21 31 30 20 50 20Z"
+      },
+      {
+        "name": "Face",
+        "fill": "#F3B786",
+        "path": "M31 35H69V61C69 76 60 83 50 83C40 83 31 76 31 61Z"
+      },
+      {
+        "name": "Fringe",
+        "fill": "#8A4BC3",
+        "path": "M29 31H71V44H55L52 38L50 44H29Z"
+      },
+      {
+        "name": "Crown",
+        "fill": "#E8AF2F",
+        "path": "M22 34V18Q22 15 25 15H31Q34 15 34 18V24H43V13Q43 10 46 10H54Q57 10 57 13V24H66V18Q66 15 69 15H75Q78 15 78 18V34Q78 40 72 40H28Q22 40 22 34Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 56,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "royal-champion",
+    "name": "Royal Champion",
+    "category": "Hero",
+    "signature": "Blue hair and her gold V-shaped band.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Hair",
+        "fill": "#366D91",
+        "path": "M50 19C70 19 80 33 80 52V75Q80 81 74 81H26Q20 81 20 75V52C20 33 30 19 50 19Z"
+      },
+      {
+        "name": "Face",
+        "fill": "#A96B48",
+        "path": "M50 32Q70 32 70 52V62Q70 82 50 84Q30 82 30 62V52Q30 32 50 32Z"
+      },
+      {
+        "name": "Headband",
+        "fill": "#ECC551",
+        "path": "M23 32Q35 33 50 40Q65 33 77 32V39Q64 41 52 48Q50 49 48 48Q36 41 23 39Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 58,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  },
+  {
+    "id": "minion-prince",
+    "name": "Minion Prince",
+    "category": "Hero",
+    "signature": "Blue skin, dark horns, and a little silver crown.",
+    "viewBox": [0, 0, 100, 100],
+    "shapes": [
+      {
+        "name": "Horns",
+        "fill": "#384665",
+        "path": "M32 44Q14 38 14 23Q14 19 18 22Q23 29 33 29ZM68 44L67 29Q77 29 82 22Q86 19 86 23Q86 38 68 44Z"
+      },
+      {
+        "name": "Face",
+        "fill": "#64B5D7",
+        "path": "M50 29C69 29 78 40 78 57V65C78 80 65 86 50 86C35 86 22 80 22 65V57C22 40 31 29 50 29Z"
+      },
+      {
+        "name": "Beard",
+        "fill": "#384665",
+        "path": "M24 66Q32 68 38 74Q50 78 62 74Q68 68 76 66Q75 83 52 89Q50 90 48 89Q25 83 24 66Z"
+      },
+      {
+        "name": "Crown",
+        "fill": "#B9CCD5",
+        "path": "M34 35L30 22Q29 18 33 19L43 25L47 16Q50 11 53 16L57 25L67 19Q71 18 70 22L66 35Z"
+      }
+    ],
+    "eyes": {
+      "x": 50,
+      "y": 55,
+      "spacing": 17,
+      "scale": 1.05,
+      "fill": "#28232D"
+    }
+  }
+]

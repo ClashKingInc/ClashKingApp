@@ -1,12 +1,21 @@
+import { ClanAdaptiveCards ,
+  ClanFilterBar,
+  ClanTabEmpty,
+  FilterPill,
+  SummaryChip,
+  SummaryRail,
+  relativeClanEventTime,
+} from './clan-tab-components';
+import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
   ArrowDownToLine,
   ArrowUpFromLine,
+  LogIn,
+  LogOut,
   ChevronRight,
-  Handshake,
-  Shuffle,
-  Star,
+  SlidersHorizontal,
   Swords,
   Users,
 } from 'lucide-react-native';
@@ -15,27 +24,24 @@ import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
 import {
   CKText,
-  LoadingIndicator,
+  SkeletonContent,
   MobileWebImage,
+  GlassControlSurface,
   ResponsiveGrid,
-  SearchSortBar,
+  SelectionPickerModal,
   Surface,
   useCKTheme,
 } from '../../../ui';
-import type { ClanJoinLeave, ClanWarLog, JoinLeaveEvent, WarLogDetails } from '../models';
-import { SelectionModal } from '../../war/presentation/war-components';
+import {
+  JoinLeaveEvent,
+  WarLogDetails,
+  ClanDetails,
+  type ClanJoinLeave,
+  type ClanWarLog,
+} from '../models';
 import { relativeWarTime } from '../../war/presentation/presentation-utils';
 import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
-import {
-  ClanFilterBar,
-  ClanTabEmpty,
-  FilterPill,
-  SummaryChip,
-  SummaryRail,
-  relativeClanEventTime,
-} from './clan-tab-components';
 
-type WarTypes = { cwl: boolean; random: boolean; friendly: boolean };
 type WarLogFilter =
   | 'newest'
   | 'oldest'
@@ -52,43 +58,42 @@ type WarLogFilter =
   | '40'
   | '50';
 
+function warLogSides(item: WarLogDetails, clanTag: string) {
+  const canonical = (tag: string) => tag.trim().toUpperCase().replace(/^#?/, '#');
+  const mine = canonical(item.clan.tag) === canonical(clanTag) ? item.clan : item.opponent;
+  return { mine, theirs: mine === item.clan ? item.opponent : item.clan };
+}
+
+export function warLogOutcome(item: WarLogDetails, clanTag: string): 'victory' | 'defeat' | 'draw' {
+  const { mine, theirs } = warLogSides(item, clanTag);
+  if (mine.stars !== theirs.stars) return mine.stars > theirs.stars ? 'victory' : 'defeat';
+  if (mine.destructionPercentage !== theirs.destructionPercentage)
+    return mine.destructionPercentage > theirs.destructionPercentage ? 'victory' : 'defeat';
+  return 'draw';
+}
+
+export function warLogOutcomeCounts(items: readonly WarLogDetails[], clanTag: string) {
+  return items.reduce(
+    (counts, item) => {
+      counts[warLogOutcome(item, clanTag)] += 1;
+      return counts;
+    },
+    { victory: 0, defeat: 0, draw: 0 },
+  );
+}
+
 export function filterClanWarLogItems(
   log: ClanWarLog | null,
   clanTag: string,
-  warTypes: WarTypes,
-  query: string,
   filter: WarLogFilter,
 ): readonly WarLogDetails[] {
-  const selectedTypes = new Set([
-    ...(warTypes.cwl ? ['cwl'] : []),
-    ...(warTypes.random ? ['random'] : []),
-    ...(warTypes.friendly ? ['friendly'] : []),
-  ]);
-  const needle = query.trim().toLowerCase();
-  const canonical = (tag: string) => tag.trim().toUpperCase().replace(/^#?/, '#');
-  const resultFor = (item: WarLogDetails) => {
-    if (item.clan.destructionPercentage === 100 && item.opponent.destructionPercentage === 100)
-      return 'perfectWar';
-    const mine = canonical(item.clan.tag) === canonical(clanTag) ? item.clan : item.opponent;
-    const theirs = mine === item.clan ? item.opponent : item.clan;
-    if (mine.stars !== theirs.stars) return mine.stars > theirs.stars ? 'victory' : 'defeat';
-    if (mine.destructionPercentage !== theirs.destructionPercentage)
-      return mine.destructionPercentage > theirs.destructionPercentage ? 'victory' : 'defeat';
-    return 'draw';
-  };
   const items = (log?.items ?? []).filter((item) => {
-    const matchingWar = log?.wars.find((war) => war.endTime?.getTime() === item.endTime.getTime());
-    const type = matchingWar?.warType?.toLowerCase() ?? 'random';
-    if (!selectedTypes.has(type)) return false;
-    if (
-      needle &&
-      ![item.clan.name, item.clan.tag, item.opponent.name, item.opponent.tag].some((value) =>
-        value.toLowerCase().includes(needle),
-      )
-    )
+    if (['cwl', 'clanwarleague', 'clanwarleagues'].includes(item.warType.toLowerCase()))
       return false;
-    if (['victory', 'defeat', 'draw', 'perfectWar'].includes(filter))
-      return resultFor(item) === filter;
+    if (filter === 'perfectWar')
+      return item.clan.destructionPercentage === 100 && item.opponent.destructionPercentage === 100;
+    if (filter === 'victory' || filter === 'defeat' || filter === 'draw')
+      return warLogOutcome(item, clanTag) === filter;
     if (/^\d+$/.test(filter)) return item.teamSize === Number(filter);
     return true;
   });
@@ -111,7 +116,8 @@ export function ClanJoinLeaveTab({
   const { t } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
-  const desktop = Platform.OS === 'web' && width >= 900;
+  const layout = useAdaptiveLayout();
+  const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const [movement, setMovement] = useState<'all' | 'joined' | 'left'>('all');
   const [data, setData] = useState<ClanJoinLeave | null>(model.clan.joinLeave);
   const [loading, setLoading] = useState(data === null);
@@ -126,7 +132,7 @@ export function ClanJoinLeaveTab({
         if (active) setData(value);
       })
       .catch((error: unknown) => {
-        if (active) actions.showMessage(t('generalRefreshFailed', { error: String(error) }));
+        if (active) actions.showMessage(t('generalTryAgain'));
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -157,12 +163,6 @@ export function ClanJoinLeaveTab({
   const cards = events.map((event, index) => (
     <JoinLeaveCard key={`${event.time.toISOString()}:${event.tag}:${index}`} event={event} />
   ));
-  if (loading && !current)
-    return (
-      <View style={styles.center}>
-        <LoadingIndicator />
-      </View>
-    );
   return (
     <View style={styles.tab}>
       <ClanFilterBar
@@ -204,7 +204,9 @@ export function ClanJoinLeaveTab({
           </>
         }
       />
-      {events.length === 0 ? (
+      {loading && !current ? (
+        <JoinLeaveLoading />
+      ) : events.length === 0 ? (
         <ClanTabEmpty
           title={
             movement !== 'all'
@@ -222,20 +224,36 @@ export function ClanJoinLeaveTab({
           }
         />
       ) : desktop ? (
-        <ResponsiveGrid minItemWidth={340} maxColumns={3} gap={10}>
+        <ResponsiveGrid
+          minItemWidth={layout.isExpanded ? 300 : 340}
+          maxColumns={layout.isExpanded ? layout.columns(300, 3) : 3}
+          gap={10}
+        >
           {cards}
         </ResponsiveGrid>
       ) : (
         <View style={styles.list}>{cards}</View>
       )}
-      {loadingMore ? <LoadingIndicator /> : null}
+      {loadingMore ? <JoinLeaveLoading rows={1} /> : null}
     </View>
+  );
+}
+
+function JoinLeaveLoading({ rows = 3 }: { rows?: number }) {
+  return (
+    <SkeletonContent loading style={styles.list}>
+      {Array.from({ length: rows }, (_, index) => (
+        <JoinLeaveCard
+          key={index}
+          event={new JoinLeaveEvent('join', null, new Date(0), '', 'Player name', 16)}
+        />
+      ))}
+    </SkeletonContent>
   );
 }
 
 function JoinLeaveCard({ event }: { event: JoinLeaveEvent }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
   const joined = event.type.toLowerCase().includes('join');
   const accent = joined ? '#22A35A' : '#E35D4F';
   return (
@@ -243,7 +261,7 @@ function JoinLeaveCard({ event }: { event: JoinLeaveEvent }) {
       {event.th > 0 ? (
         <MobileWebImage imageUrl={ImageAssets.townHall(event.th)} style={styles.eventTownHall} />
       ) : (
-        <Users size={34} color={theme.onSurfaceVariant} />
+        <MobileWebImage imageUrl={ImageAssets.townHall(1)} style={styles.eventTownHall} />
       )}
       <View style={styles.eventCopy}>
         <CKText numberOfLines={1} style={styles.bold}>
@@ -255,11 +273,7 @@ function JoinLeaveCard({ event }: { event: JoinLeaveEvent }) {
       </View>
       <View style={styles.eventSide}>
         <View style={styles.eventType}>
-          {joined ? (
-            <ArrowDownToLine size={18} color={accent} />
-          ) : (
-            <ArrowUpFromLine size={18} color={accent} />
-          )}
+          {joined ? <LogIn size={18} color={accent} /> : <LogOut size={18} color={accent} />}
           <CKText role="labelLarge" style={{ color: accent }}>
             {joined ? t('joinLeaveJoin') : t('joinLeaveLeave')}
           </CKText>
@@ -275,28 +289,32 @@ function JoinLeaveCard({ event }: { event: JoinLeaveEvent }) {
 export function ClanWarLogTab({
   model,
   actions,
-  warTypes,
-  setWarTypes,
 }: {
   model: ClanInfoPresentationModel;
   actions: ClanInfoPresentationActions;
-  warTypes: WarTypes;
-  setWarTypes: (value: WarTypes) => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  const [log, setLog] = useState<ClanWarLog | null>(model.clan.clanWarLog);
+  const [loadedLog, setLog] = useState<ClanWarLog | null>(model.clan.clanWarLog);
+  const log = model.clan.clanWarLog ?? loadedLog;
   const [loading, setLoading] = useState(log === null);
-  const [query, setQuery] = useState('');
+  const [failed, setFailed] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const [detailsFailed, setDetailsFailed] = useState(false);
   const [sort, setSort] = useState<WarLogFilter>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
   useEffect(() => {
-    if (model.clan.clanWarLog) return;
+    if (model.clan.clanWarLog) {
+      return;
+    }
     let active = true;
     void actions
       .loadWarLog(model.clan)
       .then((value) => {
         if (active) setLog(value);
+      })
+      .catch(() => {
+        if (active) setFailed(true);
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -304,10 +322,25 @@ export function ClanWarLogTab({
     return () => {
       active = false;
     };
-  }, [actions, model.clan]);
+  }, [actions, model.clan, retry]);
+  useEffect(() => {
+    if (!log || log.detailsLoaded) return;
+    let active = true;
+    void actions
+      .loadWarLogDetails(model.clan, log)
+      .then((value) => {
+        if (active) setLog(value);
+      })
+      .catch(() => {
+        if (active) setDetailsFailed(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [actions, model.clan, log, retry]);
   const items = useMemo(
-    () => filterClanWarLogItems(log, model.clan.tag, warTypes, query, sort),
-    [log, model.clan.tag, query, sort, warTypes],
+    () => filterClanWarLogItems(log, model.clan.tag, sort),
+    [log, model.clan.tag, sort],
   );
   const filterOptions: readonly { key: WarLogFilter; label: string }[] = [
     { key: 'newest', label: t('warEventsNewest') },
@@ -323,19 +356,20 @@ export function ClanWarLogTab({
   ];
   return (
     <View style={styles.tab}>
-      <SearchSortBar
-        value={query}
-        onChangeText={setQuery}
-        placeholder={t('warLogSearchPlaceholder')}
-        sortLabel={filterOptions.find((option) => option.key === sort)?.label ?? sort}
-        sortValue={filterOptions.find((option) => option.key === sort)?.label ?? sort}
-        sortIcon={<Swords size={18} color={theme.onSurfaceVariant} />}
-        onSortPress={() => setFilterOpen(true)}
-      />
-      <ClanFilterBar
-        middle={<WarLogSummary log={log} />}
-        chips={<WarTypePills warTypes={warTypes} setWarTypes={setWarTypes} />}
-      />
+      <View style={styles.warRecordRow}>
+        <WarLogSummary items={items} clanTag={model.clan.tag} />
+        <GlassControlSurface style={styles.warSortControl}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${t('generalFilters')}: ${filterOptions.find((option) => option.key === sort)?.label ?? sort}`}
+            onPress={() => setFilterOpen(true)}
+            style={styles.warSortButton}
+            testID="clan-war-sort-trigger"
+          >
+            <SlidersHorizontal size={19} color={theme.onSurface} />
+          </Pressable>
+        </GlassControlSurface>
+      </View>
       {log?.reconstructed ? (
         <Surface radius={14} style={styles.notice}>
           <CKText role="bodySmall">
@@ -343,89 +377,133 @@ export function ClanWarLogTab({
           </CKText>
         </Surface>
       ) : null}
-      {loading ? (
-        <View style={styles.center}>
-          <LoadingIndicator />
-        </View>
+      {detailsFailed ? (
+        <ClanTabEmpty
+          title={t('generalFailed')}
+          body={t('generalTryAgain')}
+          onRetry={() => {
+            setDetailsFailed(false);
+            setRetry((value) => value + 1);
+          }}
+        />
+      ) : null}
+      {loading && !log ? (
+        <SkeletonContent loading style={styles.list}>
+          {[0, 1, 2].map((index) => (
+            <WarLogCard
+              key={index}
+              clanTag={model.clan.tag}
+              item={
+                new WarLogDetails(
+                  'win',
+                  model.clan.tag,
+                  new Date(0),
+                  15,
+                  2,
+                  new ClanDetails(
+                    model.clan.tag,
+                    model.clan.name,
+                    model.clan.badgeUrls,
+                    model.clan.clanLevel,
+                    20,
+                    40,
+                    90,
+                    0,
+                  ),
+                  new ClanDetails('', 'Opponent clan', model.clan.badgeUrls, 10, 20, 30, 80, 0),
+                )
+              }
+            />
+          ))}
+        </SkeletonContent>
+      ) : failed ? (
+        <ClanTabEmpty
+          title={t('generalError')}
+          body={t('generalTryAgain')}
+          onRetry={() => {
+            setLoading(true);
+            setFailed(false);
+            setRetry((value) => value + 1);
+          }}
+        />
       ) : items.length === 0 ? (
         <ClanTabEmpty title={t('generalNoDataAvailable')} />
       ) : (
         <View style={styles.list}>
-          {items.map((item) => {
-            const war = log?.wars.find(
-              (candidate) => candidate.endTime?.getTime() === item.endTime.getTime(),
-            );
-            return (
-              <WarLogCard
-                key={`${item.endTime.toISOString()}:${item.opponent.tag}`}
-                item={item}
-                onPress={war ? () => actions.openHistoricalWar(war) : undefined}
-              />
-            );
-          })}
+          <ClanAdaptiveCards>
+            {items.map((item) => {
+              const war = log?.wars.find(
+                (candidate) =>
+                  candidate.endTime?.getTime() === item.endTime.getTime() &&
+                  (candidate.clan?.tag === item.opponent.tag ||
+                    candidate.opponent?.tag === item.opponent.tag),
+              );
+              return (
+                <WarLogCard
+                  key={`${item.endTime.toISOString()}:${item.opponent.tag}`}
+                  item={item}
+                  clanTag={model.clan.tag}
+                  onPress={war ? () => actions.openHistoricalWar(war) : undefined}
+                />
+              );
+            })}
+          </ClanAdaptiveCards>
         </View>
       )}
-      <SelectionModal
+      <SelectionPickerModal
         visible={filterOpen}
         title={t('generalFilters')}
         options={filterOptions}
-        selected={sort}
-        onSelect={setSort}
+        selectedKey={sort}
+        onSelect={(value) => {
+          setSort(value);
+          setFilterOpen(false);
+        }}
         onClose={() => setFilterOpen(false)}
       />
     </View>
   );
 }
 
-function WarTypePills({
-  warTypes,
-  setWarTypes,
+function WarLogSummary({ items, clanTag }: { items: readonly WarLogDetails[]; clanTag: string }) {
+  const { t } = useI18n();
+  const counts = warLogOutcomeCounts(items, clanTag);
+  return (
+    <Surface radius={18} style={styles.warRecord} testID="clan-war-record">
+      {[
+        { value: counts.victory, label: t('warWinsTitle'), color: '#38B56A' },
+        { value: counts.defeat, label: t('warLossesTitle'), color: '#E35D4F' },
+        { value: counts.draw, label: t('warDrawsTitle'), color: '#E8A524' },
+      ].map((stat) => (
+        <View key={stat.label} style={styles.warRecordStat}>
+          <CKText role="labelLarge" style={{ color: stat.color }}>
+            {stat.value}
+          </CKText>
+          <CKText muted role="labelSmall">
+            {stat.label}
+          </CKText>
+        </View>
+      ))}
+    </Surface>
+  );
+}
+function WarLogCard({
+  item,
+  clanTag,
+  onPress,
 }: {
-  warTypes: WarTypes;
-  setWarTypes: (value: WarTypes) => void;
+  item: WarLogDetails;
+  clanTag: string;
+  onPress?: () => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
-  return (
-    <>
-      <FilterPill
-        label={t('cwlTitle')}
-        imageUrl={ImageAssets.cwlSwordsNoBorder}
-        selected={warTypes.cwl}
-        onPress={() => setWarTypes({ ...warTypes, cwl: !warTypes.cwl })}
-      />
-      <FilterPill
-        label={t('warFiltersRandom')}
-        icon={<Shuffle size={15} color={theme.onSurfaceVariant} />}
-        selected={warTypes.random}
-        onPress={() => setWarTypes({ ...warTypes, random: !warTypes.random })}
-      />
-      <FilterPill
-        label={t('warFiltersFriendly')}
-        icon={<Handshake size={15} color={theme.onSurfaceVariant} />}
-        selected={warTypes.friendly}
-        onPress={() => setWarTypes({ ...warTypes, friendly: !warTypes.friendly })}
-      />
-    </>
-  );
-}
-
-function WarLogSummary({ log }: { log: ClanWarLog | null }) {
-  const { t } = useI18n();
-  const stats = log?.warLogStats;
-  return (
-    <SummaryRail>
-      <SummaryChip value={`${stats?.totalWins ?? 0}`} label={t('warWinsTitle')} />
-      <SummaryChip value={`${stats?.totalLosses ?? 0}`} label={t('warLossesTitle')} />
-      <SummaryChip value={`${stats?.totalTies ?? 0}`} label={t('warDrawsTitle')} />
-    </SummaryRail>
-  );
-}
-function WarLogCard({ item, onPress }: { item: WarLogDetails; onPress?: () => void }) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
+  const outcome = warLogOutcome(item, clanTag);
+  const { mine, theirs } = warLogSides(item, clanTag);
   const resultColor =
-    item.result === 'win' ? '#22A35A' : item.result === 'lose' ? '#E35D4F' : theme.onSurfaceVariant;
+    outcome === 'victory' ? '#22A35A' : outcome === 'defeat' ? '#E35D4F' : theme.onSurfaceVariant;
+  const resultLabel =
+    outcome === 'victory' ? t('warVictory') : outcome === 'defeat' ? t('warDefeat') : t('warDraw');
   return (
     <Pressable
       accessibilityRole={onPress ? 'button' : undefined}
@@ -433,29 +511,30 @@ function WarLogCard({ item, onPress }: { item: WarLogDetails; onPress?: () => vo
       disabled={!onPress}
     >
       <Surface radius={18} style={styles.warCard}>
-        <MobileWebImage imageUrl={item.opponent.badgeUrls.smallest} style={styles.warBadge} />
+        <MobileWebImage imageUrl={theirs.badgeUrls.smallest} style={styles.warBadge} />
         <View style={styles.eventCopy}>
-          <CKText style={styles.bold}>{item.opponent.name}</CKText>
-          <CKText muted role="labelMedium">
-            {item.teamSize}v{item.teamSize}
+          <CKText style={styles.bold} numberOfLines={1}>
+            {theirs.name}
           </CKText>
-          <CKText muted role="labelSmall">
-            {relativeWarTime(item.endTime, new Date(), t)}
+          <CKText muted role="labelSmall" numberOfLines={1}>
+            {item.teamSize}v{item.teamSize} · {relativeWarTime(item.endTime, new Date(), t)}
           </CKText>
         </View>
         <View style={styles.eventSide}>
-          <CKText style={{ color: resultColor, fontWeight: '800' }}>{item.result}</CKText>
+          <CKText role="labelSmall" style={{ color: resultColor, fontWeight: '700' }}>
+            {resultLabel}
+          </CKText>
           <View style={styles.eventType}>
-            <Star size={15} color="#E8A524" />
+            <MobileWebImage imageUrl={ImageAssets.attackStar} style={{ width: 15, height: 15 }} />
             <CKText role="titleMedium" style={styles.warScore}>
-              {item.clan.stars} - {item.opponent.stars}
+              {mine.stars} - {theirs.stars}
             </CKText>
           </View>
           <View style={styles.eventType}>
-            <CKText role="labelSmall">{item.clan.destructionPercentage.toFixed(1)}%</CKText>
-            {item.clan.expEarned > 0 ? (
+            <CKText role="labelSmall">{mine.destructionPercentage.toFixed(1)}%</CKText>
+            {mine.expEarned > 0 ? (
               <CKText muted role="labelSmall">
-                · {item.clan.expEarned} XP
+                · {mine.expEarned} XP
               </CKText>
             ) : null}
             {onPress ? <ChevronRight size={17} color={theme.onSurfaceVariant} /> : null}
@@ -465,8 +544,6 @@ function WarLogCard({ item, onPress }: { item: WarLogDetails; onPress?: () => vo
     </Pressable>
   );
 }
-
-export type { WarTypes };
 
 const styles = StyleSheet.create({
   tab: { padding: 16, gap: 12 },
@@ -486,7 +563,19 @@ const styles = StyleSheet.create({
   bold: { fontWeight: '800' },
   loadMore: { minHeight: 48, alignItems: 'center', justifyContent: 'center' },
   notice: { padding: 12 },
-  warCard: { minHeight: 76, padding: 10, flexDirection: 'row', alignItems: 'center' },
+  warRecordRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  warRecord: {
+    flex: 1,
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingHorizontal: 8,
+  },
+  warRecordStat: { flexDirection: 'row', alignItems: 'baseline', gap: 3 },
+  warSortControl: { width: 48, height: 48 },
+  warSortButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
+  warCard: { minHeight: 84, padding: 12, flexDirection: 'row', alignItems: 'center' },
   warScore: { fontWeight: '800' },
   warBadge: { width: 48, height: 48, resizeMode: 'contain' },
 });

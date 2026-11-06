@@ -1,4 +1,5 @@
 import Darwin
+import ObjectiveC
 import AVFoundation
 import CryptoKit
 import ExpoModulesCore
@@ -12,6 +13,7 @@ private let keychainAccessGroup = "MZYXD43RX5.group.com.clashking.apps"
 private let defaultKeychainAccessGroup = "MZYXD43RX5.com.clashking.apps"
 private let flutterSecureStorageService = "flutter_secure_storage_service"
 private let allowedAlternateIcons = Set([
+  "AppIconHalloween",
   "AppIconChristmas",
   "AppIconBlackWhite",
   "AppIconDarkLogo",
@@ -44,6 +46,63 @@ public final class ClashKingNativeModule: Module {
 
   public func definition() -> ModuleDefinition {
     Name("ClashKingNative")
+    Constant("supportsReservedRegionObservation") {
+      #if canImport(UIKit, _version: 9127.0.85)
+      if #available(iOS 27.1, *) { return true }
+      #endif
+      return false
+    }
+    View(ReservedRegionObserverView.self) {
+      Events("onReservedRegionsChange")
+    }
+    AsyncFunction("reconcileNativeTabBar") { () async -> Bool in
+      await MainActor.run {
+        let windows = UIApplication.shared.connectedScenes
+          .compactMap { $0 as? UIWindowScene }.flatMap { $0.windows }
+        guard let pair = windows.compactMap({ window -> (UIWindow, UITabBarController)? in
+          guard !window.isHidden, let root = window.rootViewController,
+                let tabs = nativeTabController(in: root), tabs.view.window === window else { return nil }
+          return (window, tabs)
+        }).first else { return false }
+        let (window, tabs) = pair
+        configurePrimaryTabTransitions(tabs)
+        guard #available(iOS 27.0, *) else { return true }
+        guard !tabs.isTabBarHidden else { return false }
+        guard tabs.tabBar.superview != nil else { return false }
+        let rect = tabs.tabBar.convert(tabs.tabBar.bounds, to: window)
+        var ancestor = tabs.tabBar.superview
+        var emptyHost = false
+        while let view = ancestor, view !== tabs.view {
+          emptyHost = emptyHost || view.bounds.isEmpty
+          ancestor = view.superview
+        }
+        // On Duo cold launch UIKit can retain a zero-height bottom-bar host
+        // after moving the bar to the side rail. A public visibility refresh
+        // rebuilds that host. Never toggle a valid bar or a deliberately hidden one.
+        if emptyHost || rect.intersection(window.bounds).isEmpty || rect.intersection(window.bounds).isNull {
+          tabs.setTabBarHidden(true, animated: false)
+          tabs.setTabBarHidden(false, animated: false)
+        }
+        return true
+      }
+    }
+    AsyncFunction("padNotificationThumbnail") { (uri: String) throws -> String in
+      guard let file = URL(string: uri), file.isFileURL,
+            file.standardizedFileURL.path.hasPrefix(FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].path + "/"),
+            let image = UIImage(contentsOfFile: file.path), image.size.width > 0, image.size.height > 0 else {
+        throw NSError(domain: "NotificationThumbnail", code: 1)
+      }
+      let format = UIGraphicsImageRendererFormat()
+      format.scale = 1
+      format.opaque = false
+      let scale = 224 / max(image.size.width, image.size.height)
+      let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+      let data = UIGraphicsImageRenderer(size: CGSize(width: 256, height: 256), format: format).pngData { _ in
+        image.draw(in: CGRect(x: (256 - size.width) / 2, y: (256 - size.height) / 2, width: size.width, height: size.height))
+      }
+      try data.write(to: file, options: .atomic)
+      return file.absoluteString
+    }
     Events("onSceneryAudioStatus")
 
     AsyncFunction("prepareSceneryAudio") { (source: String) async throws in
@@ -115,11 +174,6 @@ public final class ClashKingNativeModule: Module {
           }
         }
       }
-    }
-
-    AsyncFunction("showDebugNotification") {
-      (payload: [String: Any]) async throws -> [String: Any] in
-      try await NotificationDebugBridge.showSample(payload: payload)
     }
 
     AsyncFunction("saveFile") { (options: [String: String], promise: Promise) in
@@ -423,95 +477,6 @@ private final class FileSaveDelegate: NSObject, UIDocumentPickerDelegate,
   }
 }
 
-private enum NotificationDebugBridge {
-  static func showSample(payload: [String: Any]) async throws -> [String: Any] {
-    let center = UNUserNotificationCenter.current()
-    let granted: Bool
-    do {
-      granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
-    } catch {
-      throw Exception(
-        name: "NotificationDebugPermissionFailed",
-        description: error.localizedDescription,
-        code: "permission_failed"
-      )
-    }
-    guard granted else {
-      throw Exception(
-        name: "NotificationDebugPermissionDenied",
-        description: "Notifications are disabled for ClashKing.",
-        code: "permission_denied"
-      )
-    }
-
-    let title = payload["title"] as? String ?? "ClashKing"
-    let body = payload["body"] as? String ?? "Test notification"
-    let threadIdentifier = payload["threadIdentifier"] as? String ?? "debug"
-    let content = UNMutableNotificationContent()
-    content.title = title
-    content.body = body
-    content.threadIdentifier = threadIdentifier
-    content.sound = .default
-    content.attachments = await attachments(from: payload)
-
-    let request = UNNotificationRequest(
-      identifier: "clashking-debug-\(UUID().uuidString)",
-      content: content,
-      trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-    )
-    do {
-      try await center.add(request)
-    } catch {
-      throw Exception(
-        name: "NotificationDebugScheduleFailed",
-        description: error.localizedDescription,
-        code: "schedule_failed"
-      )
-    }
-    return [
-      "scheduled": true,
-      "title": title,
-      "attachmentCount": content.attachments.count,
-    ]
-  }
-
-  private static func attachments(from payload: [String: Any]) async -> [UNNotificationAttachment] {
-    let urls: [String]
-    if let assetUrls = payload["assetUrls"] as? [String] {
-      urls = assetUrls
-    } else if let assetUrl = payload["assetUrl"] as? String {
-      urls = [assetUrl]
-    } else {
-      urls = []
-    }
-
-    var attachments: [UNNotificationAttachment] = []
-    for (index, urlString) in urls.prefix(2).enumerated() {
-      if let attachment = await attachment(urlString: urlString, index: index) {
-        attachments.append(attachment)
-      }
-    }
-    return attachments
-  }
-
-  private static func attachment(urlString: String, index: Int) async -> UNNotificationAttachment? {
-    guard let url = URL(string: urlString) else { return nil }
-    do {
-      let (data, response) = try await URLSession.shared.data(from: url)
-      if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode) {
-        return nil
-      }
-      let pathExtension = url.pathExtension.isEmpty ? "png" : url.pathExtension
-      let fileURL = FileManager.default.temporaryDirectory
-        .appendingPathComponent("clashking-notification-\(UUID().uuidString)-\(index).\(pathExtension)")
-      try data.write(to: fileURL, options: .atomic)
-      return try UNNotificationAttachment(identifier: "image-\(index)", url: fileURL)
-    } catch {
-      return nil
-    }
-  }
-}
-
 private func legacyWidgetKeyIsAllowed(_ key: String) -> Bool {
   legacyWidgetKeys.contains(key)
     || key.hasPrefix("warInfo_")
@@ -746,5 +711,104 @@ private enum NativeParityError: Error, LocalizedError {
     case .sceneryAudioDownloadFailed:
       return "The scenery audio file could not be downloaded."
     }
+  }
+}
+
+@MainActor
+private func nativeTabController(in controller: UIViewController) -> UITabBarController? {
+  if let tabs = controller as? UITabBarController { return tabs }
+  for child in controller.children {
+    if let tabs = nativeTabController(in: child) { return tabs }
+  }
+  return nil
+}
+
+private var primaryTabTransitionKey: UInt8 = 0
+
+/// Keep react-native-screens as the navigation authority. The proxy supplies
+/// only the missing visual transition; every selection/lifecycle callback still
+/// goes to its original delegate, including native tab-bar gestures.
+@MainActor
+func configurePrimaryTabTransitions(_ tabs: UITabBarController) {
+  if tabs.delegate is PrimaryTabTransitionDelegate { return }
+  let proxy = PrimaryTabTransitionDelegate(original: tabs.delegate)
+  objc_setAssociatedObject(tabs, &primaryTabTransitionKey, proxy, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+  tabs.delegate = proxy
+}
+
+@MainActor
+private final class PrimaryTabTransitionDelegate: NSObject, UITabBarControllerDelegate {
+  private weak var original: (any UITabBarControllerDelegate)?
+  init(original: (any UITabBarControllerDelegate)?) {
+    self.original = original
+    super.init()
+  }
+
+  override func responds(to selector: Selector!) -> Bool {
+    super.responds(to: selector) || original?.responds(to: selector) == true
+  }
+
+  override func forwardingTarget(for selector: Selector!) -> Any? {
+    if original?.responds(to: selector) == true { return original }
+    return super.forwardingTarget(for: selector)
+  }
+
+  func tabBarController(
+    _ tabBarController: UITabBarController,
+    animationControllerForTransitionFrom fromVC: UIViewController,
+    to toVC: UIViewController
+  ) -> (any UIViewControllerAnimatedTransitioning)? {
+    // Respect any transition supplied by the router now or in future versions.
+    if let animator = original?.tabBarController?(
+      tabBarController, animationControllerForTransitionFrom: fromVC, to: toVC
+    ) { return animator }
+    guard !UIAccessibility.isReduceMotionEnabled,
+          let controllers = tabBarController.viewControllers,
+          let from = controllers.firstIndex(of: fromVC),
+          let to = controllers.firstIndex(of: toVC), from != to else { return nil }
+    let rtl = tabBarController.view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+    return PrimaryTabSlide(direction: (to > from ? 1 : -1) * (rtl ? -1 : 1))
+  }
+}
+
+@MainActor
+private final class PrimaryTabSlide: NSObject, UIViewControllerAnimatedTransitioning {
+  private let direction: CGFloat
+
+  init(direction: Int) {
+    self.direction = CGFloat(direction)
+  }
+
+  func transitionDuration(using transitionContext: (any UIViewControllerContextTransitioning)?) -> TimeInterval {
+    0.28
+  }
+
+  func animateTransition(using context: any UIViewControllerContextTransitioning) {
+    guard let from = context.view(forKey: .from), let to = context.view(forKey: .to),
+          let destination = context.viewController(forKey: .to) else {
+      context.completeTransition(false)
+      return
+    }
+    let container = context.containerView
+    let finalFrame = context.finalFrame(for: destination)
+    let initialFrame = from.frame
+    let offset = direction * container.bounds.width
+    to.frame = finalFrame.offsetBy(dx: offset, dy: 0)
+    container.addSubview(to)
+    UIView.animate(
+      withDuration: transitionDuration(using: context), delay: 0,
+      options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
+      animations: {
+        from.frame = initialFrame.offsetBy(dx: -offset, dy: 0)
+        to.frame = finalFrame
+      }, completion: { _ in
+        let completed = !context.transitionWasCancelled
+        // Retained tab views must never keep an offscreen frame after a switch.
+        from.frame = initialFrame
+        to.frame = finalFrame
+        if !completed { to.removeFromSuperview() }
+        context.completeTransition(completed)
+      }
+    )
   }
 }

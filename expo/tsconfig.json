@@ -4,7 +4,7 @@
     "strict": true,
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true,
-    "types": ["jest", "node", "react", "react-native"],
+    "types": ["node", "react", "react-native"],
     "paths": {
       "@/*": ["./src/*"],
       "@/assets/*": ["./assets/*"]

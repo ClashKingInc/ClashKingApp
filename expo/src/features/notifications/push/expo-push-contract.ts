@@ -34,6 +34,12 @@ export function foregroundNotificationContent(message: PushMessage): {
   title: string;
   body: string;
   data: Record<string, unknown>;
+  attachments?: {
+    identifier: string;
+    url: string;
+    type: string | null;
+    thumbnailClipArea: { x: number; y: number; width: number; height: number };
+  }[];
 } {
   const data = message.data ?? {};
   return {
@@ -41,5 +47,17 @@ export function foregroundNotificationContent(message: PushMessage): {
     body:
       message.notification?.body ?? (data.body == null ? 'New ClashKing alert' : String(data.body)),
     data: { ...data },
+    ...(typeof data.image_url === 'string' && data.image_url.startsWith('https://')
+      ? {
+          attachments: [
+            {
+              identifier: 'thumbnail',
+              url: data.image_url,
+              type: null,
+              thumbnailClipArea: { x: 0, y: 0, width: 1, height: 1 },
+            },
+          ],
+        }
+      : {}),
   };
 }

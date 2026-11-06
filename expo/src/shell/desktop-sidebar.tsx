@@ -4,9 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { MessageKey } from '../i18n';
 import {
+  appRoutes,
   desktopSidebarBodyRoutes,
   desktopSidebarFooterRoutes,
   filterEnabledRoutes,
+  filterVisibleRoutes,
+  isRouteEnabled,
   primaryTabRoutes,
   RouteIcon,
   type AppRouteDefinition,
@@ -45,7 +48,7 @@ export function DesktopSidebar({
   isRtl?: boolean;
 }) {
   const theme = useCKTheme();
-  const body = filterEnabledRoutes(desktopSidebarBodyRoutes, features);
+  const body = filterVisibleRoutes(desktopSidebarBodyRoutes, features);
   const footer = filterEnabledRoutes(desktopSidebarFooterRoutes, features);
   return (
     <SafeAreaView
@@ -64,14 +67,26 @@ export function DesktopSidebar({
     >
       <View style={[styles.identity, isRtl && styles.rowRtl]}>
         <View style={styles.avatar}>{avatar}</View>
-        <View style={styles.identityText}>
+        <Pressable
+          style={styles.identityText}
+          accessibilityRole="button"
+          accessibilityLabel={t('competitiveViewProfile')}
+          onPress={() =>
+            onUtility(
+              appRoutes.find((route) => route.id === 'profile')!,
+              false,
+            )
+          }
+        >
           <CKText role="titleMedium" numberOfLines={1} style={styles.strong}>
             {displayName}
           </CKText>
-          <CKText muted role="labelMedium" numberOfLines={1}>
-            {productLabel}
-          </CKText>
-        </View>
+          {productLabel ? (
+            <CKText muted role="labelMedium" numberOfLines={1}>
+              {productLabel}
+            </CKText>
+          ) : null}
+        </Pressable>
       </View>
       <View style={styles.primary}>
         {primaryTabRoutes.map((route) => (
@@ -86,6 +101,10 @@ export function DesktopSidebar({
         ))}
       </View>
       <ScrollView
+        testID="desktop-sidebar-scroll"
+        bounces={false}
+        alwaysBounceVertical={false}
+        overScrollMode="never"
         contentContainerStyle={[
           styles.utilities,
           { borderTopColor: colorWithAlpha(theme.outlineVariant, 0.2) },
@@ -97,6 +116,7 @@ export function DesktopSidebar({
             route={route}
             label={t(route.labelKey)}
             selected={route.id === selectedUtility}
+            disabled={!isRouteEnabled(route, features)}
             onPress={() => onUtility(route, selectedUtility !== undefined)}
             isRtl={isRtl}
             compact
@@ -178,10 +198,10 @@ const styles = StyleSheet.create({
   },
   identity: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 24 },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    overflow: 'hidden',
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    overflow: 'visible',
     alignItems: 'center',
     justifyContent: 'center',
   },

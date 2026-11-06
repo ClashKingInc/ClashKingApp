@@ -1,15 +1,19 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-} from 'react-native';
+import { type ReactNode } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Plus } from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n, type MessageKey } from '../../../i18n';
-import { CKText, MobileWebImage, PillSurface } from '../../../ui';
+import {
+  CKText,
+  MobileWebImage,
+  SkeletonContent,
+  ckColors,
+  statColors,
+  colorWithAlpha,
+  useCKTheme,
+} from '../../../ui';
+import { homeSelectedAccountIndex } from './contracts';
 import type {
   HomeAccountIdentity,
   HomeDashboardActions,
@@ -25,15 +29,12 @@ import type {
 import {
   CardHeader,
   CaughtUp,
-  DesktopComparison,
-  HomeAccountRail,
+  HomeAccountBar,
   HomeCardFrame,
-  HomeCardSkeleton,
   HomeMetricGrid,
   HomeMetricPill,
   ProgressRing,
   StatusRow,
-  type HomeRailEntry,
 } from './home-components';
 
 const metricKeys: Record<HomeMetricKind, MessageKey> = {
@@ -51,10 +52,6 @@ const metricKeys: Record<HomeMetricKind, MessageKey> = {
   walls: 'dashboardUpgradeTrackerWalls',
 };
 
-export function clampHomePageIndex(selected: number, pageCount: number): number {
-  return Math.max(0, Math.min(selected, Math.max(0, pageCount - 1)));
-}
-
 function Metrics({ metrics }: { metrics: readonly HomeMetricModel[] }) {
   const { t } = useI18n();
   if (metrics.length === 0) return <CaughtUp label={t('todoAllCaughtUpForNow')} />;
@@ -64,54 +61,6 @@ function Metrics({ metrics }: { metrics: readonly HomeMetricModel[] }) {
         <HomeMetricPill key={metric.id} metric={metric} label={t(metricKeys[metric.kind])} />
       ))}
     </HomeMetricGrid>
-  );
-}
-
-function MobilePager({
-  selected,
-  onSelect,
-  children,
-}: {
-  selected: number;
-  onSelect: (index: number) => void;
-  children: readonly ReactNode[];
-}) {
-  const ref = useRef<ScrollView>(null);
-  const { isRtl } = useI18n();
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    if (width > 0) ref.current?.scrollTo({ x: selected * width, animated: true });
-  }, [selected, width]);
-  const finish = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (width > 0)
-      onSelect(
-        clampHomePageIndex(
-          Math.round(Math.max(0, event.nativeEvent.contentOffset.x) / width),
-          children.length,
-        ),
-      );
-  };
-  return (
-    <View onLayout={(event) => setWidth(event.nativeEvent.layout.width)}>
-      <ScrollView
-        ref={ref}
-        horizontal
-        pagingEnabled
-        bounces={false}
-        alwaysBounceHorizontal={false}
-        overScrollMode="never"
-        contentInsetAdjustmentBehavior="never"
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={finish}
-        style={isRtl ? styles.rtlScroll : undefined}
-      >
-        {children.map((child, index) => (
-          <View key={index} style={[{ width: width || 1 }, isRtl && styles.rtlItem]}>
-            {child}
-          </View>
-        ))}
-      </ScrollView>
-    </View>
   );
 }
 
@@ -128,26 +77,44 @@ function TodoBody({ summary, chevron = true }: { summary: HomeTodoSummary; chevr
   );
 }
 
-function MobileRailHeader({
+function HomeWidgetHeader({
   imageUrl,
   title,
-  rail,
   trailing,
+  account,
+  showClan = true,
 }: {
   imageUrl: string;
   title: string;
-  rail: ReactNode;
   trailing?: ReactNode;
+  account?: HomeAccountIdentity;
+  showClan?: boolean;
 }) {
   return (
     <View style={styles.mobileHeader}>
-      <MobileWebImage imageUrl={imageUrl} style={styles.mobileHeaderImage} />
+      <View>
+        <MobileWebImage skeleton={false} imageUrl={imageUrl} style={{ width: 36, height: 36 }} />
+      </View>
       <View style={styles.flex}>
-        <CKText role="titleSmall" style={styles.heavy} numberOfLines={1}>
+        <CKText skeleton={false} role="titleSmall" numberOfLines={1}>
           {title}
         </CKText>
-        <View style={styles.railGap} />
-        {rail}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          {account?.imageUrl ? (
+            <MobileWebImage imageUrl={account.imageUrl} style={{ width: 20, height: 20 }} />
+          ) : null}
+          <CKText muted role="labelMedium" numberOfLines={1} style={{ flexShrink: 1 }}>
+            {account?.name}
+          </CKText>
+          {showClan && account?.clanBadgeUrl ? (
+            <MobileWebImage imageUrl={account.clanBadgeUrl} style={{ width: 14, height: 14 }} />
+          ) : null}
+          {showClan && account?.clanName ? (
+            <CKText muted role="labelSmall" numberOfLines={1} style={{ flexShrink: 1 }}>
+              {account.clanName}
+            </CKText>
+          ) : null}
+        </View>
       </View>
       {trailing}
     </View>
@@ -156,96 +123,73 @@ function MobileRailHeader({
 
 export function HomeTodoCard({
   model,
-  desktop,
+  selectedAccountTag,
   actions,
 }: {
   model: HomeTodoCardModel;
+  selectedAccountTag?: string | null;
   desktop: boolean;
   actions: HomeDashboardActions;
 }) {
   const { t } = useI18n();
-  const hasSummary = model.accounts.length > 1 && model.combined !== undefined;
-  const pages = useMemo(
-    () => (hasSummary ? [model.combined!, ...model.accounts] : [...model.accounts]),
-    [hasSummary, model],
+  const pages = model.accounts;
+  const safeSelected = homeSelectedAccountIndex(
+    pages.map((page) => page.account?.tag ?? ''),
+    selectedAccountTag,
   );
-  const [selected, setSelected] = useState(0);
-  const safeSelected = clampHomePageIndex(selected, pages.length);
-  if (desktop) {
-    return (
-      <DesktopComparison
-        items={pages.map((page, index) => page.account?.tag ?? `summary-${index}`)}
-        summaryFirst={hasSummary}
-        renderItem={(index) => {
-          const page = pages[index]!;
-          return (
-            <HomeCardFrame onPress={actions.openTodo}>
-              <CardHeader
-                imageUrl={page.account?.imageUrl ?? ImageAssets.iconBuilderPotion}
-                title={page.account?.name ?? t('todoAllAccounts')}
-                subtitle={
-                  page.account?.subtitle ??
-                  t('todoAccountsNumber', { number: model.accounts.length })
-                }
-                size={54}
-                trailing={
-                  <ProgressRing
-                    progress={page.total === 0 ? 1 : page.done / page.total}
-                    size={54}
-                    showLabel={false}
-                  />
-                }
-              />
-              <TodoBody summary={page} />
-            </HomeCardFrame>
-          );
-        }}
-      />
-    );
-  }
-  const rail: HomeRailEntry[] = model.accounts.map((summary) => ({
-    ...summary.account!,
-    pending: summary.done < summary.total,
-  }));
+
   const current = pages[safeSelected]!;
   return (
-    <HomeCardFrame onPress={actions.openTodo}>
-      <MobileRailHeader
-        imageUrl={ImageAssets.iconBuilderPotion}
-        title={t('todoTitle')}
-        rail={
-          <HomeAccountRail
-            entries={rail}
+    <HomeCardFrame
+      onPress={actions.openTodo}
+      actionLabel={t('todoTitle')}
+      footer={
+        pages.length > 1 ? (
+          <HomeAccountBar
+            entries={pages.flatMap((page) => (page.account ? [page.account] : []))}
             selectedIndex={safeSelected}
-            onSelect={setSelected}
-            allLabel={hasSummary ? t('todoAllAccounts') : undefined}
+            onSelect={(index) => {
+              const tag = pages[index]?.account?.tag;
+              if (tag) actions.selectAccount?.(tag);
+            }}
           />
-        }
-        trailing={
-          <ProgressRing
-            progress={current.total === 0 ? 1 : current.done / current.total}
-            size={46}
-            showLabel={false}
-          />
-        }
-      />
-      <MobilePager selected={safeSelected} onSelect={setSelected}>
-        {pages.map((page) => (
-          <TodoBody key={page.account?.tag ?? 'all'} summary={page} />
-        ))}
-      </MobilePager>
+        ) : null
+      }
+      header={
+        <HomeWidgetHeader
+          imageUrl={ImageAssets.todoTarget}
+          title={t('todoTitle')}
+          account={current.account ?? undefined}
+          trailing={
+            <ProgressRing
+              progress={current.total === 0 ? 1 : current.done / current.total}
+              size={46}
+              labelFontSize={13}
+            />
+          }
+        />
+      }
+    >
+      <TodoBody summary={current} />
     </HomeCardFrame>
   );
 }
 
 function rankedMetrics(account: HomeRankedAccount): HomeMetricModel[] {
   return [
-    { id: 'attacks', kind: 'rankedAttacks', done: account.attacksDone, total: account.maxBattles },
+    {
+      id: 'attacks',
+      kind: 'rankedAttacks',
+      done: account.attacksDone,
+      total: account.maxBattles,
+      ...(!account.statsAvailable ? { displayValue: '—' } : {}),
+    },
     {
       id: 'defenses',
       kind: 'rankedDefenses',
       done: account.defensesDone,
       total: account.maxBattles,
+      ...(!account.statsAvailable ? { displayValue: '—' } : {}),
     },
   ];
 }
@@ -257,24 +201,10 @@ function RankedBody({
   account?: HomeRankedAccount;
   combined?: readonly HomeRankedAccount[];
 }) {
-  const { t, locale } = useI18n();
-  const intlLocale = toIntlLocale(locale);
+  const { t } = useI18n();
   if (account) {
     return (
       <View style={styles.body}>
-        <StatusRow chevron>
-          <CKText muted role="labelLarge" numberOfLines={1}>
-            {account.rank === null
-              ? t('rankedLeagueNoGroup')
-              : `${t('rankedLeagueGroupRank')} #${account.rank.toLocaleString(intlLocale)}`}
-          </CKText>
-          <PillSurface style={styles.trophy}>
-            <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.trophyImage} />
-            <CKText role="labelLarge" style={styles.heavy}>
-              {account.trophies.toLocaleString(intlLocale)}
-            </CKText>
-          </PillSurface>
-        </StatusRow>
         <Metrics metrics={rankedMetrics(account)} />
       </View>
     );
@@ -323,16 +253,24 @@ function RankedBody({
 
 export function HomeRankedCard({
   model,
-  desktop,
+  selectedAccountTag,
   actions,
 }: {
   model: HomeRankedCardModel;
+  selectedAccountTag?: string | null;
   desktop: boolean;
   actions: HomeDashboardActions;
 }) {
   const { t } = useI18n();
-  const [selected, setSelected] = useState(0);
-  if (model.state === 'loading') return <HomeCardSkeleton rows={1} />;
+  if (model.state === 'loading')
+    return (
+      <HomePendingCard
+        kind="ranked"
+        identities={model.identities}
+        count={model.configuredCount}
+        actions={actions}
+      />
+    );
   if (model.state === 'empty' || model.accounts.length === 0)
     return (
       <HomeCardFrame>
@@ -343,63 +281,88 @@ export function HomeRankedCard({
         />
       </HomeCardFrame>
     );
-  const hasSummary = model.accounts.length > 1;
-  const pages: (HomeRankedAccount | undefined)[] = hasSummary
-    ? [undefined, ...model.accounts]
-    : [...model.accounts];
-  const safeSelected = clampHomePageIndex(selected, pages.length);
-  if (desktop)
-    return (
-      <DesktopComparison
-        items={pages.map((page, index) => page?.tag ?? `summary-${index}`)}
-        summaryFirst={hasSummary}
-        renderItem={(index) => {
-          const account = pages[index];
-          return (
-            <HomeCardFrame onPress={account ? () => actions.openRanked(account.tag) : undefined}>
-              <CardHeader
-                imageUrl={account?.tierIconUrl || ImageAssets.shieldWithArrow}
-                title={account?.name ?? t('todoAllAccounts')}
-                subtitle={
-                  account?.subtitle ?? t('todoAccountsNumber', { number: model.accounts.length })
-                }
-                size={54}
-              />
-              <RankedBody account={account} combined={account ? undefined : model.accounts} />
-            </HomeCardFrame>
-          );
-        }}
-      />
-    );
-  const rail = model.accounts.map((account) => ({
-    ...account,
-    pending: account.maxBattles === null ? null : account.attacksDone < account.maxBattles,
-  }));
+  const pages = model.accounts;
+  const safeSelected = homeSelectedAccountIndex(
+    pages.map((page) => page.tag),
+    selectedAccountTag,
+  );
   const current = pages[safeSelected];
   return (
-    <HomeCardFrame onPress={current ? () => actions.openRanked(current.tag) : undefined}>
-      <MobileRailHeader
-        imageUrl={current?.tierIconUrl || ImageAssets.shieldWithArrow}
-        title={t('rankedLeagueTitle')}
-        rail={
-          <HomeAccountRail
-            entries={rail}
+    <HomeCardFrame
+      footer={
+        pages.length > 1 ? (
+          <HomeAccountBar
+            entries={pages}
             selectedIndex={safeSelected}
-            onSelect={setSelected}
-            allLabel={hasSummary ? t('todoAllAccounts') : undefined}
+            onSelect={(index) => {
+              const tag = pages[index]?.tag;
+              if (tag) actions.selectAccount?.(tag);
+            }}
           />
-        }
-      />
-      <MobilePager selected={safeSelected} onSelect={setSelected}>
-        {pages.map((account, index) => (
-          <RankedBody
-            key={account?.tag ?? `all-${index}`}
-            account={account}
-            combined={account ? undefined : model.accounts}
+        ) : null
+      }
+    >
+      {[current!].map((account) => (
+        <Pressable
+          key={account.tag}
+          accessibilityRole="button"
+          accessibilityLabel={`${account.name}, ${t('rankedLeagueTitle')}`}
+          onPress={() => actions.openRanked(account.tag)}
+          style={{ gap: 12, paddingVertical: 4 }}
+        >
+          <CardHeader
+            imageUrl={account.tierIconUrl || ImageAssets.shieldWithArrow}
+            cornerImageUrl={account.imageUrl}
+            title={account.name}
+            subtitle={
+              account.mode === 'legend' ? (
+                account.rank ? (
+                  `${t('cwlRankTitle')} #${account.rank}`
+                ) : undefined
+              ) : account.rank !== null ? (
+                <>
+                  {t('cwlRankTitle')}{' '}
+                  <Text
+                    style={{
+                      color:
+                        account.rankZone === 'promotion'
+                          ? statColors.win
+                          : account.rankZone === 'demotion'
+                            ? statColors.loss
+                            : undefined,
+                    }}
+                  >
+                    #{account.rank}
+                  </Text>
+                  {` / ${account.groupSize}`}
+                </>
+              ) : (
+                `${account.tierName} · ${t('rankedLeagueNoGroup')}`
+              )
+            }
+            size={40}
+            cornerSize={20}
+            compact
+            trailing={<RankedPlacement account={account} />}
           />
-        ))}
-      </MobilePager>
+          <RankedBody account={account} />
+        </Pressable>
+      ))}
     </HomeCardFrame>
+  );
+}
+
+function RankedPlacement({ account }: { account: HomeRankedAccount }) {
+  const { locale } = useI18n();
+  return (
+    <View style={{ alignItems: 'flex-end', gap: 3 }}>
+      <View style={styles.trophy}>
+        <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.trophyImage} />
+        <CKText role="titleMedium" style={styles.heavy}>
+          {account.trophies.toLocaleString(toIntlLocale(locale))}
+        </CKText>
+      </View>
+    </View>
   );
 }
 
@@ -448,113 +411,71 @@ function snapshotAge(capturedAt: Date, t: ReturnType<typeof useI18n>['t'], local
   if (minutes < 60) return t('upgradeTrackerUpdatedMinutesAgo', { count: minutes });
   if (minutes < 1440)
     return t('upgradeTrackerUpdatedHoursAgo', { count: Math.floor(minutes / 60) });
-  return t('upgradeTrackerUpdatedOn', {
-    date: capturedAt.toLocaleString(toIntlLocale(locale)),
+  const days = Math.floor(minutes / 1440);
+  return t('warWidgetLastUpdated', {
+    time: days === 1 ? t('timeDayAgo', { day: 1 }) : t('timeDaysAgo', { days }),
   });
 }
 
 export function HomeUpgradeCard({
   model,
-  desktop,
+  selectedAccountTag,
   actions,
 }: {
   model: HomeUpgradeCardModel;
+  selectedAccountTag?: string | null;
   desktop: boolean;
   actions: HomeDashboardActions;
 }) {
   const { t, locale } = useI18n();
-  const [selected, setSelected] = useState(0);
-  if (model.state === 'loading') return <HomeCardSkeleton rows={2} />;
-  if (
-    model.state === 'empty' ||
-    (model.accounts.length === 0 && model.missingAccounts.length === 0)
-  )
+  const theme = useCKTheme();
+  if (model.state === 'loading')
     return (
-      <HomeCardFrame>
-        <CardHeader
-          imageUrl={ImageAssets.builderWave}
-          title={t('drawerUpgradeTracker')}
-          subtitle={
-            model.configuredCount > 0
-              ? t('todoAccountsNumber', { number: model.configuredCount })
-              : t('upgradeTrackerSubtitle')
-          }
-          trailing={<ProgressRing progress={0} size={46} />}
-        />
-        <StatusRow>
-          <CKText muted role="labelLarge" numberOfLines={1}>
-            {t('dashboardUpgradeTrackerNoData')}
-          </CKText>
-        </StatusRow>
-        <Metrics
-          metrics={[
-            { id: 'builders', kind: 'builders', done: 0, total: null, displayValue: '-' },
-            { id: 'lab', kind: 'laboratory', done: 0, total: null, displayValue: '-' },
-            { id: 'pets', kind: 'pets', done: 0, total: null, displayValue: '-' },
-          ]}
-        />
-      </HomeCardFrame>
+      <HomePendingCard
+        kind="upgrade"
+        identities={model.identities}
+        count={model.configuredCount}
+        actions={actions}
+      />
     );
-  const entries = [...model.accounts, ...model.missingAccounts];
-  const hasSummary = entries.length > 1;
-  const pages: (HomeUpgradeAccount | HomeAccountIdentity | undefined)[] = hasSummary
-    ? [undefined, ...entries]
-    : entries;
-  const safeSelected = clampHomePageIndex(selected, pages.length);
+  const entries = model.state === 'ready' ? [...model.accounts, ...model.missingAccounts] : [];
+  const pages = entries;
+  const safeSelected = homeSelectedAccountIndex(
+    pages.map((entry) => entry.tag),
+    selectedAccountTag,
+  );
+  const current = pages[safeSelected];
   const renderBody = (entry: HomeUpgradeAccount | HomeAccountIdentity | undefined) => {
-    if (!entry)
+    // Missing snapshots must keep the same two-row grid as loaded accounts.
+    // Unknown is not zero: retain the real icons but never invent progress.
+    if (!entry || !('capturedAt' in entry))
       return (
         <View style={styles.body}>
-          <StatusRow>
+          <StatusRow chevron>
             <CKText muted role="labelLarge" numberOfLines={1}>
-              {model.combined.status}
+              {t('dashboardUpgradeTrackerNoData')}
             </CKText>
           </StatusRow>
           <Metrics
             metrics={[
-              {
-                id: 'builders',
-                kind: 'builders',
-                done: model.combined.activeBuilders,
-                total: model.combined.totalBuilders,
-                meta: formatHomeDuration(model.combined.builderProjectedSeconds),
-              },
-              {
-                id: 'lab',
-                kind: 'laboratory',
-                done: model.combined.activeLabs,
-                total: model.combined.totalLabs,
-                ...(model.combined.totalLabs <= 0 ? { displayValue: '-' } : {}),
-                meta: formatHomeDuration(model.combined.labProjectedSeconds),
-              },
-              ...(model.combined.totalPets > 0
-                ? [
-                    {
-                      id: 'pets',
-                      kind: 'pets' as const,
-                      done: model.combined.activePets,
-                      total: model.combined.totalPets,
-                      meta: formatHomeDuration(model.combined.petProjectedSeconds),
-                    },
-                  ]
-                : []),
+              { id: 'builders', kind: 'builders', done: 0, total: null, displayValue: '—' },
+              { id: 'lab', kind: 'laboratory', done: 0, total: null, displayValue: '—' },
+              { id: 'pets', kind: 'pets', done: 0, total: null, displayValue: '—' },
+              { id: 'walls', kind: 'walls', done: 0, total: null, displayValue: '—' },
             ]}
           />
         </View>
       );
-    if (!('capturedAt' in entry))
-      return (
-        <StatusRow chevron>
-          <CKText muted role="labelLarge">
-            {t('dashboardUpgradeTrackerNoData')}
-          </CKText>
-        </StatusRow>
-      );
     return (
       <View style={styles.body}>
         <StatusRow chevron>
-          <CKText muted role="labelLarge" numberOfLines={1}>
-            {snapshotAge(entry.capturedAt, t, locale)}
+          <CKText
+            muted={!entry.needsUpdate}
+            role="labelLarge"
+            numberOfLines={1}
+            style={entry.needsUpdate ? { color: ckColors.warGold } : undefined}
+          >
+            {entry.needsUpdate ? t('widgetDataStale') : snapshotAge(entry.capturedAt, t, locale)}
           </CKText>
         </StatusRow>
         <Metrics metrics={upgradeMetrics(entry)} />
@@ -562,67 +483,182 @@ export function HomeUpgradeCard({
     );
   };
   const completion = (entry: HomeUpgradeAccount | HomeAccountIdentity | undefined) =>
-    !entry ? model.combined.completion : 'completion' in entry ? entry.completion : 0;
-  if (desktop)
-    return (
-      <DesktopComparison
-        items={pages.map((page, index) => page?.tag ?? `summary-${index}`)}
-        summaryFirst={hasSummary}
-        renderItem={(index) => {
-          const entry = pages[index];
-          return (
-            <HomeCardFrame
-              onPress={entry ? () => actions.openUpgradeTracker(entry.tag) : undefined}
-            >
-              <CardHeader
-                imageUrl={entry?.imageUrl ?? ImageAssets.builderWave}
-                title={entry?.name ?? t('todoAllAccounts')}
-                subtitle={entry?.subtitle ?? t('todoAccountsNumber', { number: entries.length })}
-                size={54}
-                trailing={
-                  <ProgressRing progress={completion(entry)} size={54} labelFontSize={15} />
-                }
+    entry && 'completion' in entry ? entry.completion : 0;
+  const importAction = actions.openUpgradeImport ? (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t('upgradeTrackerImportTitle')}
+      onPress={(event) => {
+        event.stopPropagation();
+        actions.openUpgradeImport?.(current?.tag ?? selectedAccountTag ?? '');
+      }}
+      style={{
+        width: 44,
+        height: 44,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 22,
+        backgroundColor: colorWithAlpha(ckColors.builderBlue, 0.12),
+      }}
+    >
+      <Plus size={21} color={theme.onSurface} />
+    </Pressable>
+  ) : null;
+  return (
+    <HomeCardFrame
+      onPress={() => actions.openUpgradeTracker(current?.tag ?? selectedAccountTag ?? '')}
+      actionLabel={t('drawerUpgradeTracker')}
+      footer={
+        pages.length > 1 ? (
+          <HomeAccountBar
+            entries={pages}
+            selectedIndex={safeSelected}
+            onSelect={(index) => {
+              const tag = pages[index]?.tag;
+              if (tag) actions.selectAccount?.(tag);
+            }}
+          />
+        ) : null
+      }
+      header={
+        <HomeWidgetHeader
+          imageUrl={ImageAssets.builderWave}
+          title={t('drawerUpgradeTracker')}
+          account={current}
+          showClan={false}
+          trailing={
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {importAction}
+              <ProgressRing
+                progress={completion(current)}
+                size={42}
+                labelFontSize={12}
+                label={current && 'capturedAt' in current ? undefined : '—'}
               />
-              {renderBody(entry)}
-            </HomeCardFrame>
-          );
+            </View>
+          }
+        />
+      }
+    >
+      {renderBody(current)}
+    </HomeCardFrame>
+  );
+}
+
+/** Presentation-only models let the same cards reserve their actual geometry.
+ * These never enter a store and the scope blocks all navigation/actions. */
+export function HomePendingCard({
+  kind,
+  identities,
+  count = 1,
+  actions,
+}: {
+  kind: 'todo' | 'ranked' | 'upgrade';
+  identities?: readonly HomeAccountIdentity[];
+  count?: number;
+  actions: HomeDashboardActions;
+}) {
+  const { t } = useI18n();
+  const entries = identities?.length
+    ? identities
+    : Array.from({ length: Math.max(1, count) }, (_, index) => ({
+        tag: `pending-${index}`,
+        name: t('generalLoading'),
+        subtitle: '',
+        imageUrl: '',
+      }));
+  const card =
+    kind === 'ranked' ? (
+      <HomeRankedCard
+        desktop={false}
+        actions={actions}
+        model={{
+          state: 'ready',
+          configuredCount: count,
+          accounts: entries.map((entry) => ({
+            ...entry,
+            mode: 'ranked',
+            statsAvailable: false,
+            tierColor: '',
+            tierIconUrl: '',
+            groupSize: 50,
+            trophies: 1000,
+            rank: 10,
+            attacksDone: 0,
+            defensesDone: 0,
+            maxBattles: 24,
+          })),
+        }}
+      />
+    ) : kind === 'upgrade' ? (
+      <HomeUpgradeCard
+        desktop={false}
+        actions={actions}
+        model={{
+          state: 'ready',
+          configuredCount: count,
+          accounts: entries.map((entry) => ({
+            ...entry,
+            completion: 0,
+            capturedAt: new Date(0),
+            needsUpdate: false,
+            hasActionableQueueWork: false,
+            builderProjectedSeconds: 3600,
+            labProjectedSeconds: 3600,
+            petProjectedSeconds: 3600,
+            activeBuilders: 0,
+            totalBuilders: 6,
+            labActive: false,
+            hasLab: true,
+            petsActive: false,
+            hasPets: true,
+            wallsAtMax: 0,
+            wallsTotal: 300,
+          })),
+          missingAccounts: [],
+          combined: {
+            completion: 0,
+            status: '',
+            builderProjectedSeconds: 0,
+            labProjectedSeconds: 0,
+            petProjectedSeconds: 0,
+            activeBuilders: 0,
+            totalBuilders: 6,
+            activeLabs: 0,
+            totalLabs: 1,
+            activePets: 0,
+            totalPets: 1,
+          },
+        }}
+      />
+    ) : (
+      <HomeTodoCard
+        desktop={false}
+        actions={actions}
+        model={{
+          accounts: entries.map((account) => ({
+            account,
+            status: t('generalLoading'),
+            done: 0,
+            total: 2,
+            metrics: [
+              { id: 'games', kind: 'clanGames', done: 0, total: 4000 },
+              { id: 'pass', kind: 'seasonPass', done: 0, total: 2000 },
+            ],
+          })),
         }}
       />
     );
-  const rail = entries.map((entry) => ({
-    ...entry,
-    pending: 'capturedAt' in entry ? entry.needsUpdate || entry.hasActionableQueueWork : true,
-  }));
-  const current = pages[safeSelected];
-  return (
-    <HomeCardFrame onPress={current ? () => actions.openUpgradeTracker(current.tag) : undefined}>
-      <MobileRailHeader
-        imageUrl={ImageAssets.builderWave}
-        title={t('drawerUpgradeTracker')}
-        rail={
-          <HomeAccountRail
-            entries={rail}
-            selectedIndex={safeSelected}
-            onSelect={setSelected}
-            allLabel={hasSummary ? t('todoAllAccounts') : undefined}
-          />
-        }
-        trailing={<ProgressRing progress={completion(current)} size={46} labelFontSize={13} />}
-      />
-      <MobilePager selected={safeSelected} onSelect={setSelected}>
-        {pages.map((entry, index) => (
-          <View key={entry?.tag ?? `all-${index}`}>{renderBody(entry)}</View>
-        ))}
-      </MobilePager>
-    </HomeCardFrame>
-  );
+  return <SkeletonContent>{card}</SkeletonContent>;
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   heavy: { fontWeight: '900' },
   body: { gap: 10 },
+  mobileHeaderBlock: { gap: 6 },
   mobileHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  mobileHeaderTrailing: { alignItems: 'center', justifyContent: 'center' },
   mobileHeaderImage: { width: 46, height: 46, resizeMode: 'contain' },
   railGap: { height: 4 },
   trophy: {
@@ -633,6 +669,4 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   trophyImage: { width: 18, height: 18, resizeMode: 'contain' },
-  rtlScroll: { transform: [{ scaleX: -1 }] },
-  rtlItem: { transform: [{ scaleX: -1 }] },
 });

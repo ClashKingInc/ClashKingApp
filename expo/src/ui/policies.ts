@@ -8,15 +8,18 @@ export function durationForMotion(duration: number, reduceMotion: boolean): numb
 export function resolveGlassMode({
   platform,
   nativeGlassAvailable,
+  nativeGlassEnabled = true,
   reduceTransparency,
   highContrast,
 }: {
   platform: CKPlatform;
   nativeGlassAvailable: boolean;
+  nativeGlassEnabled?: boolean;
   reduceTransparency: boolean;
   highContrast: boolean;
 }): CKGlassMode {
   if (platform === 'web' || reduceTransparency || highContrast) return 'opaque';
-  if (platform === 'ios' && nativeGlassAvailable) return 'native';
+  // Preserve native refraction and interaction on supported iOS versions.
+  if (platform === 'ios' && nativeGlassAvailable && nativeGlassEnabled) return 'native';
   return 'decorated';
 }

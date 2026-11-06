@@ -4,7 +4,7 @@ import { Building2 } from 'lucide-react-native';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { useI18n } from '../../../i18n';
-import { ErrorState, LoadingScreen, useCKTheme } from '../../../ui';
+import { ErrorState, useCKTheme } from '../../../ui';
 import type { Clan } from '../models';
 import { ClanCapitalScreen } from './clan-capital-screen';
 
@@ -51,8 +51,7 @@ export function ClanCapitalRoot({ clan, goBack }: { clan: Clan; goBack: () => vo
 
   const current = runtime.clans.getClanByTag(clan.tag) ?? clan;
   void revision;
-  if (loading) return <LoadingScreen label={t('loadingCapitalRaids')} />;
-  if (error) {
+  if (error && !current.clanCapitalRaid) {
     return (
       <View style={{ flex: 1, padding: 16, justifyContent: 'center' }}>
         <ErrorState
@@ -67,6 +66,7 @@ export function ClanCapitalRoot({ clan, goBack }: { clan: Clan; goBack: () => vo
   return (
     <ClanCapitalScreen
       clan={current}
+      loading={loading}
       goBack={goBack}
       linkedPlayerTags={runtime.accounts.accounts.map((account) => account.playerTag)}
     />
