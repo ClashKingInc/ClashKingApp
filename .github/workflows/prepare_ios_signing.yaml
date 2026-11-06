@@ -22,5 +22,11 @@ jobs:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: ruby expo/scripts/prepare-ios-signing.rb
+      - name: Save encrypted signing transfer
+        uses: actions/upload-artifact@v4
+        with:
+          name: encrypted-signing-transfer
+          path: signing-encrypted.json
+          retention-days: 1
+          if-no-files-found: error

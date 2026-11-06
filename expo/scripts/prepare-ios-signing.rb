@@ -4,6 +4,7 @@ require 'securerandom'
 require 'base64'
 require 'open3'
 require 'cfpropertylist'
+require 'json'
 
 # Dedicated, explicitly requested credential repair. Existing Apple certificates
 # and profiles are retained; all replacement profiles are validated before any
@@ -22,7 +23,7 @@ end
 begin
   repo = ENV.fetch('GITHUB_REPOSITORY')
   raise 'Unexpected repository' unless repo == 'ClashKingInc/ClashKingApp'
-  gh!('secret', 'list', '--repo', repo)
+  stage = 'Apple authentication'
   Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
     key_id: ENV.fetch('API_KEY_ID'), issuer_id: ENV.fetch('API_ISSUER_ID'),
     key: ENV.fetch('API_PRIVATE_KEY'), in_house: false
@@ -48,12 +49,14 @@ begin
   csr.subject = OpenSSL::X509::Name.parse('/CN=ClashKing Production CI')
   csr.public_key = key.public_key
   csr.sign(key, OpenSSL::Digest::SHA256.new)
+  stage = 'certificate creation'
   record = Spaceship::ConnectAPI::Certificate.create(certificate_type: 'DISTRIBUTION', csr_content: csr.to_pem)
   certificate = OpenSSL::X509::Certificate.new(Base64.decode64(record.certificate_content))
   raise 'Issued certificate does not match the generated key' unless certificate.check_private_key(key)
   raise 'Issued certificate belongs to another team' unless certificate.subject.to_a.any? { |n,v| n == 'OU' && v == team }
   raise 'Issued certificate is expired' unless certificate.not_after > Time.now
   values = {}
+  stage = 'profile creation and validation'
   ids.each do |secret, bundle_id|
     profile = Spaceship::ConnectAPI::Profile.create(
       name: "ClashKing CI #{bundles.fetch(secret)} #{ENV.fetch('GITHUB_RUN_ID')}",
@@ -80,11 +83,24 @@ begin
   raise 'P12 roundtrip failed' unless OpenSSL::PKCS12.new(archive, password).certificate.to_der == certificate.to_der
   values['IOS_CERTIFICATE_PASSWORD'] = password
   values['IOS_CERTIFICATE_BASE64'] = Base64.strict_encode64(archive)
-  values.each { |name, value| gh!('secret', 'set', name, '--repo', repo, input: value) }
-  puts "Prepared and installed a new distribution identity expiring #{certificate.not_after.utc.strftime('%Y-%m-%d')} and three validated App Store profiles."
+  stage = 'encrypted credential export'
+  # Only this machine holds the transfer private key. The Actions artifact is
+  # encrypted, and GitHub repository write credentials are not sent to CI.
+  recipient = OpenSSL::PKey.read(File.read('expo/scripts/signing-transfer-public.pem'))
+  aes = OpenSSL::Cipher.new('aes-256-gcm').encrypt
+  aes_key = aes.random_key
+  iv = aes.random_iv
+  aes.auth_data = ''
+  encrypted = aes.update(JSON.generate(values)) + aes.final
+  sealed_key = recipient.encrypt(aes_key, { 'rsa_padding_mode' => 'oaep', 'rsa_oaep_md' => 'sha256' })
+  File.write('signing-encrypted.json', JSON.generate({
+    key: Base64.strict_encode64(sealed_key), iv: Base64.strict_encode64(iv),
+    ciphertext: Base64.strict_encode64(encrypted), tag: Base64.strict_encode64(aes.auth_tag)
+  }))
+  puts "Prepared and encrypted a new distribution identity expiring #{certificate.not_after.utc.strftime('%Y-%m-%d')} and three validated App Store profiles."
   puts 'Existing Apple certificates/profiles retained. No app built, uploaded or submitted by this job.'
 rescue StandardError => error
   # Do not serialize API objects, PEM, PKCS12, passwords, or HTTP responses.
-  warn "Signing repair stopped (#{error.class}). No secret values are logged."
+  warn "Signing repair stopped during #{stage} (#{error.class}). No secret values are logged."
   exit 1
 end
