@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/prepare_ios_signing.yaml
       - expo/scripts/prepare-ios-signing.rb
+      - expo/scripts/signing-transfer-public.pem
 permissions:
   contents: read
 concurrency:

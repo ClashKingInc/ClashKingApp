@@ -9,11 +9,6 @@ require 'json'
 # Dedicated, explicitly requested credential repair. Existing Apple certificates
 # and profiles are retained; all replacement profiles are validated before any
 # release secret changes. Private material stays in memory on the ephemeral runner.
-def gh!(*args, input: '')
-  output, _stderr, status = Open3.capture3('gh', *args, stdin_data: input)
-  raise 'GitHub signing configuration operation failed' unless status.success?
-  output
-end
 
 def plist(bytes)
   xml = OpenSSL::PKCS7.new(bytes).data
@@ -23,6 +18,9 @@ end
 begin
   repo = ENV.fetch('GITHUB_REPOSITORY')
   raise 'Unexpected repository' unless repo == 'ClashKingInc/ClashKingApp'
+  stage = 'transfer key validation'
+  recipient = OpenSSL::PKey.read(File.read('expo/scripts/signing-transfer-public.pem'))
+  raise 'Transfer key must be public RSA' unless recipient.is_a?(OpenSSL::PKey::RSA) && !recipient.private?
   stage = 'Apple authentication'
   Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
     key_id: ENV.fetch('API_KEY_ID'), issuer_id: ENV.fetch('API_ISSUER_ID'),
@@ -86,7 +84,6 @@ begin
   stage = 'encrypted credential export'
   # Only this machine holds the transfer private key. The Actions artifact is
   # encrypted, and GitHub repository write credentials are not sent to CI.
-  recipient = OpenSSL::PKey.read(File.read('expo/scripts/signing-transfer-public.pem'))
   aes = OpenSSL::Cipher.new('aes-256-gcm').encrypt
   aes_key = aes.random_key
   iv = aes.random_iv
