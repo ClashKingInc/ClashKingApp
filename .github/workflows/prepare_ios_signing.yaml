@@ -1,0 +1,26 @@
+name: Prepare production iOS signing
+on:
+  push:
+    branches: [ci/repair-ios-signing]
+    paths:
+      - .github/workflows/prepare_ios_signing.yaml
+      - expo/scripts/prepare-ios-signing.rb
+permissions:
+  contents: read
+concurrency:
+  group: prepare-production-ios-signing
+  cancel-in-progress: false
+jobs:
+  signing:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: gem install fastlane --version 2.241.1 --no-document
+      - name: Prepare replacement certificate and profiles
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: ruby expo/scripts/prepare-ios-signing.rb
