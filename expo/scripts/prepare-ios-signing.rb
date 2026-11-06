@@ -11,7 +11,11 @@ require 'json'
 # release secret changes. Private material stays in memory on the ephemeral runner.
 
 def plist(bytes)
-  xml = OpenSSL::PKCS7.new(bytes).data
+  envelope = OpenSSL::PKCS7.new(bytes)
+  # PKCS7 exposes the payload only after signature verification. Apple delivered
+  # the profile over authenticated TLS; validate its CMS signature here.
+  raise 'Profile signature is invalid' unless envelope.verify([], OpenSSL::X509::Store.new, nil, OpenSSL::PKCS7::NOVERIFY)
+  xml = envelope.data
   CFPropertyList.native_types(CFPropertyList::List.new(data: xml).value)
 end
 
