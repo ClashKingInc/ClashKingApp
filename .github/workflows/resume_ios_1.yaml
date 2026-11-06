@@ -1,0 +1,158 @@
+name: Resume production iOS submission and native baseline
+on:
+  push:
+    branches: [ci/repair-ios-signing]
+    paths: [.github/workflows/resume_ios_1.yaml]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: mobile-release-production
+  cancel-in-progress: false
+jobs:
+  submit-ios:
+    runs-on: macos-latest
+    environment: production
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: c4c5fba58db2bd06bb48082cfc045ff54efe14f4
+      - name: Validate the original release identity and Android result
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/ClashKingInc/ClashKingApp/actions/runs/42249513185 > "$RUNNER_TEMP/original-run.json"
+          gh api 'repos/ClashKingInc/ClashKingApp/actions/runs/42249513185/jobs?per_page=100' > "$RUNNER_TEMP/original-jobs.json"
+          python3 - <<'PYTHON'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])
+          run=json.loads((root/'original-run.json').read_text())
+          assert run['head_sha']=='c4c5fba58db2bd06bb48082cfc045ff54efe14f4'
+          jobs=json.loads((root/'original-jobs.json').read_text())['jobs']
+          assert any('Android Store Release' in job['name'] and job['conclusion']=='success' for job in jobs)
+          print('Original source commit and successful Android release verified.')
+          PYTHON
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 42249513185
+          name: ios-ipa
+          path: ${{ runner.temp }}/ios-release
+      - name: Verify signed IPA identity
+        run: |
+          python3 - <<'PYTHON'
+          import os, plistlib, zipfile
+          from pathlib import Path
+          path=next((Path(os.environ['RUNNER_TEMP'])/'ios-release').rglob('*.ipa'))
+          with zipfile.ZipFile(path) as archive:
+            name=next(n for n in archive.namelist() if n.startswith('Payload/') and n.count('/')==2 and n.endswith('.app/Info.plist'))
+            info=plistlib.loads(archive.read(name))
+          assert info['CFBundleIdentifier']=='com.clashking.apps'
+          assert info['CFBundleShortVersionString']=='1.0.0'
+          assert str(info['CFBundleVersion'])=='1793981359'
+          print('Saved IPA has the expected production identity, version and build.')
+          PYTHON
+      - run: gem install fastlane --version 2.241.1 --no-document
+      - name: Upload and submit the existing signed IPA
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          ruby -rjson -e 'File.write(ARGV[0], JSON.generate({key_id: ENV.fetch("API_KEY_ID"), issuer_id: ENV.fetch("API_ISSUER_ID"), key: ENV.fetch("API_PRIVATE_KEY"), in_house: false}))' "$RUNNER_TEMP/app-store-api-key.json"
+          IPA="$(find "$RUNNER_TEMP/ios-release" -name '*.ipa' -print -quit)"
+          fastlane deliver --api_key_path "$RUNNER_TEMP/app-store-api-key.json" --app_identifier com.clashking.apps --ipa "$IPA" --app_version 1.0.0 --skip_metadata true --skip_screenshots true --submit_for_review true --automatic_release true --run_precheck_before_submit false --force true
+      - name: Remove temporary API key file
+        if: always()
+        run: rm -f "$RUNNER_TEMP/app-store-api-key.json"
+  publish-native-marker:
+    needs: [submit-ios]
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: expo
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "c4c5fba58db2bd06bb48082cfc045ff54efe14f4" }
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 42249513185
+          name: android-store-release
+          path: ${{ runner.temp }}/android-release
+      - name: Attach signed APK to the draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v1.0.0
+        run: |
+          APK="$(find "$RUNNER_TEMP/android-release" -type f -name '*.apk' -print -quit)"
+          test -n "$APK"
+          gh release upload "$TAG" "$APK#ClashKing-1.0.0.apk" --repo "$GITHUB_REPOSITORY" --clobber
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: expo/package-lock.json
+      - name: Configure release endpoints
+        run: node scripts/release-environment.mjs
+      - run: npm ci
+      - name: Materialize update signing material
+        env:
+          CERTIFICATE: ${{ secrets.EXPO_UPDATES_CODE_SIGNING_CERTIFICATE }}
+          PRIVATE_KEY: ${{ secrets.EXPO_UPDATES_PRIVATE_KEY }}
+        run: |
+          test -n "$CERTIFICATE"
+          test -n "$PRIVATE_KEY"
+          mkdir -p .release
+          printf '%s' "$CERTIFICATE" > .release/updates-certificate.pem
+          printf '%s' "$PRIVATE_KEY" > "$RUNNER_TEMP/expo-updates-private-key.pem"
+      - name: Export embedded release baseline
+        env:
+          CK_APP_VERSION: 1.0.0
+          CK_BUILD_NUMBER: 1793981359
+          CK_ENABLE_UPDATES: true
+          CK_RELEASE_TRACK: production
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
+        run: |
+          CK_RUNTIME_VERSION="0af0b2aefd4d599a5d716443f938e5c37171c2a6340a9f9c6c2192bfb2b54ad2" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-ios.json"
+          CK_RUNTIME_VERSION="0af0b2aefd4d599a5d716443f938e5c37171c2a6340a9f9c6c2192bfb2b54ad2" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap
+          CK_RUNTIME_VERSION="f420573d90cfc47c076e042ca47ae668e0da629cfeea9e242b3f6e4ac5a93348" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-android.json"
+          CK_RUNTIME_VERSION="f420573d90cfc47c076e042ca47ae668e0da629cfeea9e242b3f6e4ac5a93348" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap
+      - name: Publish immutable native marker last
+        env:
+          CK_RELEASE_VERSION: 1.0.0
+          CK_APP_VERSION: 1.0.0
+          CK_RELEASE_TRACK: production
+          CK_RELEASE_TYPE: native
+          CK_GIT_SHA: c4c5fba58db2bd06bb48082cfc045ff54efe14f4
+          CK_IOS_FINGERPRINT: 0af0b2aefd4d599a5d716443f938e5c37171c2a6340a9f9c6c2192bfb2b54ad2
+          CK_ANDROID_FINGERPRINT: f420573d90cfc47c076e042ca47ae668e0da629cfeea9e242b3f6e4ac5a93348
+          CK_RELEASE_NOTES: ClashKing 1.0 production release.
+          CK_IOS_UPDATE_OUTPUT_DIR: ${{ runner.temp }}/expo-update-ios
+          CK_ANDROID_UPDATE_OUTPUT_DIR: ${{ runner.temp }}/expo-update-android
+          CK_IOS_EXPO_CONFIG_PATH: ${{ runner.temp }}/expo-config-ios.json
+          CK_ANDROID_EXPO_CONFIG_PATH: ${{ runner.temp }}/expo-config-android.json
+          CK_UPDATES_PRIVATE_KEY_PATH: ${{ runner.temp }}/expo-updates-private-key.pem
+          CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_UPDATES_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_UPDATES_SECRET_ACCESS_KEY }}
+          R2_UPDATES_BUCKET_NAME: ${{ secrets.R2_UPDATES_BUCKET_NAME }}
+          R2_UPDATES_PUBLIC_ORIGIN: ${{ vars.R2_UPDATES_PUBLIC_ORIGIN }}
+        run: node scripts/publish-release.mjs
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v1.0.0
+          TRACK: production
+        run: |
+          if [[ "$TRACK" != production ]]; then
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
+          else
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          fi
+
