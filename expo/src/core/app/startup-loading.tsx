@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from 'react';
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useI18n } from '../../i18n';
@@ -135,23 +142,25 @@ export function StartupLoadingScreen({
         style={[styles.footer, { bottom: (insets?.bottom ?? 0) + 16 }]}
         onLayout={(event) => setFooterHeight(event.nativeEvent.layout.height)}
       >
-        {update?.downloading ? (
+        {update ? (
           <View style={styles.updateControls}>
-            <View
-              accessibilityRole="progressbar"
-              accessibilityLabel={t('startupDownloadingUpdate')}
-              accessibilityValue={{ min: 0, max: 100, now: Math.round(progress * 100) }}
-              style={[styles.progressTrack, { backgroundColor: theme.primary + '33' }]}
-            >
+            {update.downloading ? (
               <View
-                style={{
-                  height: '100%',
-                  width: `${progress * 100}%`,
-                  backgroundColor: theme.primary,
-                  borderRadius: 3,
-                }}
-              />
-            </View>
+                accessibilityRole="progressbar"
+                accessibilityLabel={t('startupDownloadingUpdate')}
+                accessibilityValue={{ min: 0, max: 100, now: Math.round(progress * 100) }}
+                style={[styles.progressTrack, { backgroundColor: theme.primary + '33' }]}
+              >
+                <View
+                  style={{
+                    height: '100%',
+                    width: `${progress * 100}%`,
+                    backgroundColor: theme.primary,
+                    borderRadius: 3,
+                  }}
+                />
+              </View>
+            ) : null}
             <Pressable
               accessibilityRole="button"
               onPress={onUpdateInBackground}

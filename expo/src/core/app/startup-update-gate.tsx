@@ -55,15 +55,31 @@ export function StartupUpdateGate({ children }: { children: ReactNode }) {
     if (!enabled) return;
     let active = true;
     mayReload.current = true;
-    const release = () => {
-      mayReload.current = false;
-      if (active) setReleased(true);
-    };
-    // A slow manifest request must not prevent someone opening the installed app.
-    const checkDeadline = setTimeout(release, 5000);
+    // Only an explicit background choice may defer a successful update. A
+    // manifest response arriving after a timer must not finish downloading and
+    // then leave the user in the old, possibly broken session without reloading.
+    // The startup cover exposes the background action during the check too.
     void loadStartupUpdate(
       {
-        check: Updates.checkForUpdateAsync,
+        check: async () => {
+          let deadline: ReturnType<typeof setTimeout> | undefined;
+          try {
+            // Bound an unavailable manifest service before starting a download.
+            // A late check cannot start a background download after this returns;
+            // once a download starts, only the user's background choice defers it.
+            return await Promise.race([
+              Updates.checkForUpdateAsync(),
+              new Promise<{ isAvailable: boolean; isRollBackToEmbedded: boolean }>((resolve) => {
+                deadline = setTimeout(
+                  () => resolve({ isAvailable: false, isRollBackToEmbedded: false }),
+                  30_000,
+                );
+              }),
+            ]);
+          } finally {
+            if (deadline !== undefined) clearTimeout(deadline);
+          }
+        },
         fetch: Updates.fetchUpdateAsync,
         reload: async () => {
           await markStartupUpdateReload().catch(() => undefined);
@@ -85,7 +101,6 @@ export function StartupUpdateGate({ children }: { children: ReactNode }) {
       },
       {
         downloading: () => {
-          clearTimeout(checkDeadline);
           if (active) setDownloading(true);
         },
         shouldReload: () => active && mayReload.current,
@@ -93,13 +108,11 @@ export function StartupUpdateGate({ children }: { children: ReactNode }) {
     )
       .catch((error) => reportException(error, 'startup.update'))
       .finally(() => {
-        clearTimeout(checkDeadline);
         if (active) setReleased(true);
       });
     return () => {
       active = false;
       mayReload.current = false;
-      clearTimeout(checkDeadline);
     };
   }, [enabled]);
 
