@@ -41,21 +41,21 @@ begin
     raise 'Required Apple bundle identifier is missing' unless bundle
     bundle.id
   end
-  key = OpenSSL::PKey::RSA.new(2048)
-  csr = OpenSSL::X509::Request.new
-  csr.version = 0
-  csr.subject = OpenSSL::X509::Name.parse('/CN=ClashKing Production CI')
-  csr.public_key = key.public_key
-  csr.sign(key, OpenSSL::Digest::SHA256.new)
+  csr = OpenSSL::X509::Request.new(File.read('expo/scripts/distribution-request.csr'))
+  key = csr.public_key
   stage = 'certificate creation'
-  record = Spaceship::ConnectAPI::Certificate.create(certificate_type: 'DISTRIBUTION', csr_content: csr.to_pem)
+  record = Spaceship::ConnectAPI::Certificate.all.find do |item|
+    OpenSSL::X509::Certificate.new(Base64.decode64(item.certificate_content)).public_key.to_der == key.to_der
+  end
+  record ||= Spaceship::ConnectAPI::Certificate.create(certificate_type: 'DISTRIBUTION', csr_content: csr.to_pem)
   certificate = OpenSSL::X509::Certificate.new(Base64.decode64(record.certificate_content))
-  raise 'Issued certificate does not match the generated key' unless certificate.check_private_key(key)
+  raise 'Issued certificate does not match the generated key' unless certificate.public_key.to_der == key.to_der
   raise 'Issued certificate belongs to another team' unless certificate.subject.to_a.any? { |n,v| n == 'OU' && v == team }
   raise 'Issued certificate is expired' unless certificate.not_after > Time.now
-  values = {}
+  values = { 'certificate_der' => Base64.strict_encode64(certificate.to_der) }
   stage = 'profile creation and validation'
   ids.each do |secret, bundle_id|
+    stage = 'profile ' + secret
     profile = Spaceship::ConnectAPI::Profile.create(
       name: "ClashKing CI #{bundles.fetch(secret)} #{ENV.fetch('GITHUB_RUN_ID')}",
       profile_type: 'IOS_APP_STORE', bundle_id_id: bundle_id, certificate_ids: [record.id]
@@ -76,11 +76,6 @@ begin
     end
     values[secret] = Base64.strict_encode64(bytes)
   end
-  password = SecureRandom.hex(32)
-  archive = OpenSSL::PKCS12.create(password, 'ClashKing Production', key, certificate).to_der
-  raise 'P12 roundtrip failed' unless OpenSSL::PKCS12.new(archive, password).certificate.to_der == certificate.to_der
-  values['IOS_CERTIFICATE_PASSWORD'] = password
-  values['IOS_CERTIFICATE_BASE64'] = Base64.strict_encode64(archive)
   stage = 'encrypted credential export'
   # Only this machine holds the transfer private key. The Actions artifact is
   # encrypted, and GitHub repository write credentials are not sent to CI.
@@ -98,6 +93,6 @@ begin
   puts 'Existing Apple certificates/profiles retained. No app built, uploaded or submitted by this job.'
 rescue StandardError => error
   # Do not serialize API objects, PEM, PKCS12, passwords, or HTTP responses.
-  warn "Signing repair stopped during #{stage} (#{error.class}). No secret values are logged."
+  warn "Signing repair stopped during #{stage} (#{error.class}, #{error.respond_to?(:name) ? error.name : :unknown}, #{error.backtrace.first.split(":in").first}). No secret values are logged."
   exit 1
 end
