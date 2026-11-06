@@ -4,10 +4,12 @@ require 'json'
 require 'base64'
 require 'digest'
 require 'time'
+require 'open3'
 
 # Fail before installing dependencies when Apple rejects the release identity.
 # Only read Apple resources; profile creation remains in the signing step.
 begin
+  stage = 'Apple API authentication'
   fields = %w[API_KEY_ID API_ISSUER_ID API_PRIVATE_KEY]
   missing = fields.select { |name| ENV.fetch(name, '').strip.empty? }
   abort "Missing App Store Connect credentials: #{missing.join(', ')}" unless missing.empty?
@@ -27,10 +29,17 @@ begin
   if !ENV.fetch('CERTIFICATE_BASE64', '').empty?
     # Compare public DER bytes rather than API serial formatting. Only public
     # certificate metadata is logged; the PKCS12 private key stays in memory.
-    imported = OpenSSL::PKCS12.new(
-      Base64.decode64(ENV.fetch('CERTIFICATE_BASE64')),
-      ENV.fetch('CERTIFICATE_PASSWORD')
-    ).certificate
+    stage = 'distribution certificate read'
+    # Older P12 exports use RC2 encryption. OpenSSL 3 needs the legacy provider
+    # to read them, even though macOS security imports the identity successfully.
+    pem, _stderr, status = Open3.capture3(
+      'openssl', 'pkcs12', '-legacy', '-clcerts', '-nokeys',
+      '-passin', 'env:CERTIFICATE_PASSWORD',
+      stdin_data: Base64.decode64(ENV.fetch('CERTIFICATE_BASE64'))
+    )
+    raise 'Cannot read the public distribution certificate' unless status.success?
+    imported = OpenSSL::X509::Certificate.new(pem)
+    stage = 'Apple distribution certificate comparison'
     team_certificates = Spaceship::ConnectAPI::Certificate.all
     matches = team_certificates.select do |certificate|
       Base64.decode64(certificate.certificate_content.to_s) == imported.to_der
@@ -50,6 +59,7 @@ begin
       } }
     })}"
   end
+  stage = 'App Store metadata read'
   # Read only metadata. Report presence/counts, never review contacts, account
   # passwords, signing material or image contents in CI diagnostics.
   versions = app.get_app_store_versions(
@@ -90,5 +100,5 @@ rescue OpenSSL::PKey::PKeyError
   abort 'App Store Connect private key could not be parsed. Use the complete matching .p8 contents.'
 rescue StandardError => error
   # Never print the key, generated JWT, or raw HTTP response in CI diagnostics.
-  abort "Apple credential preflight failed (#{error.class}). Check that the key ID, issuer ID and private key match an active team key with the required access."
+  abort "Apple release preflight failed during #{stage} (#{error.class}). No signing credentials or raw responses are printed."
 end
