@@ -1,0 +1,25 @@
+name: Complete first-release store metadata
+on:
+  push:
+    branches: [ci/repair-ios-signing]
+    paths:
+      - .github/workflows/complete_store_metadata.yaml
+      - expo/scripts/complete-store-copyright.rb
+permissions:
+  contents: read
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - run: gem install fastlane --version 2.241.1 --no-document
+      - name: Complete missing copyright from existing brand
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: ruby expo/scripts/complete-store-copyright.rb
