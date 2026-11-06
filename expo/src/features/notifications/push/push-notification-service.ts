@@ -167,8 +167,11 @@ export class PushNotificationService {
       if (register) await this.registerCurrentDeviceToken({ token });
       return this.setResult({ state: 'ready', token });
     } catch (error) {
+      // A transient native/token failure must not latch onboarding into the
+      // saved notConfigured result. The next explicit attempt must try again.
+      this.initialized = false;
       await this.report('initialize', error);
-      return this.setResult({ state: 'notConfigured', message: String(error) });
+      return this.setResult({ state: 'tokenUnavailable', message: String(error) });
     } finally {
       this.initializing = false;
     }
@@ -207,8 +210,11 @@ export class PushNotificationService {
       await this.options.preferences.setItem(STORAGE_KEYS.notificationsEnabled, 'true');
       return this.setResult({ state: 'ready', authorizationStatus, token });
     } catch (error) {
+      // Device registration can fail after native setup succeeds. Allow the
+      // Enable action to retry instead of returning this failure forever.
+      this.initialized = false;
       await this.report('permission', error);
-      return this.setResult({ state: 'notConfigured', message: String(error) });
+      return this.setResult({ state: 'tokenUnavailable', message: String(error) });
     }
   }
 
@@ -290,18 +296,20 @@ export class PushNotificationService {
     let unregistered = false;
     try {
       await Effect.runPromise(
-        this.options.api.execute(
-          NotificationDeviceDeleteEndpoint,
-          {
-            path: {},
-            query: {
-              device_id: await this.options.tokenService.getDeviceId(),
-              environment: this.environment,
+        this.options.api
+          .execute(
+            NotificationDeviceDeleteEndpoint,
+            {
+              path: {},
+              query: {
+                device_id: await this.options.tokenService.getDeviceId(),
+                environment: this.environment,
+              },
+              body: {},
             },
-            body: {},
-          },
-          this.executeOptions(),
-        ),
+            this.executeOptions(),
+          )
+          .pipe(Effect.timeout('3 seconds')),
       );
       unregistered = true;
     } catch (error) {

@@ -57,6 +57,8 @@ function ApplicationContent() {
   const { locale, t } = useI18n();
   const [scene, setScene] = useState<ApplicationScene>({ kind: 'startup' });
   const [retrying, setRetrying] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutFailed, setLogoutFailed] = useState(false);
   const [homeReady, setHomeReady] = useState(false);
   const onHomeReady = useCallback(() => {
     setHomeReady(true);
@@ -363,8 +365,21 @@ function ApplicationContent() {
           avatarUrl={runtime.auth.state.currentUser?.avatarUrl ?? null}
           isNetworkError={scene.networkError}
           onJoinDiscord={() => void openExternal(DISCORD_URL)}
+          loggingOut={loggingOut}
+          logoutFailed={logoutFailed}
           onLogout={() => {
-            void runtime.auth.signOut().then(() => setScene({ kind: 'login' }));
+            if (loggingOut) return;
+            startupGeneration.current += 1;
+            setLoggingOut(true);
+            setLogoutFailed(false);
+            void runtime.auth
+              .signOut()
+              .then(() => setScene({ kind: 'login' }))
+              .catch((error) => {
+                reportException(error, 'auth.logout');
+                setLogoutFailed(true);
+              })
+              .finally(() => setLoggingOut(false));
           }}
           onRetry={() => void runStartup()}
           retrying={retrying}

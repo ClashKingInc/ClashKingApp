@@ -2,6 +2,8 @@ import {
   deleteToken,
   getInitialNotification,
   getMessaging,
+  getAPNSToken,
+  setAPNSToken,
   getToken,
   onMessage,
   onNotificationOpenedApp,
@@ -118,8 +120,28 @@ export class ExpoPushRuntime implements PushRuntime {
     return authorizationStatus(permissions);
   }
 
-  getToken(): Promise<string> {
-    return getToken(getMessaging());
+  async getToken(): Promise<string | null> {
+    const messaging = getMessaging();
+    if (Platform.OS === 'ios' && (await getAPNSToken(messaging)) === null) {
+      // Expo owns notification permission/registration. Its delegate may receive
+      // APNs before Firebase does, so explicitly pass the native token to FCM.
+      // Never request an FCM token until APNs is ready; a timeout is retryable.
+      let timeout: ReturnType<typeof setTimeout> | undefined;
+      try {
+        const token = await Promise.race([
+          Notifications.getDevicePushTokenAsync(),
+          new Promise<null>((resolve) => {
+            timeout = setTimeout(() => resolve(null), 10_000);
+          }),
+        ]);
+        if (token === null) return null;
+        if (token.type !== 'ios' || typeof token.data !== 'string') return null;
+        await setAPNSToken(messaging, token.data);
+      } finally {
+        if (timeout !== undefined) clearTimeout(timeout);
+      }
+    }
+    return getToken(messaging);
   }
 
   deleteToken(): Promise<void> {

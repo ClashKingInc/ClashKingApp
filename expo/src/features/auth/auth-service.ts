@@ -144,6 +144,9 @@ export class AuthService {
           currentUser: null,
           followerCount: null,
         });
+        // A rejected restored session is a sign-in destination, not a startup
+        // outage. In particular, old beta sessions must be able to sign in again.
+        return;
       }
       throw error;
     }
@@ -285,13 +288,14 @@ export class AuthService {
       // Flutter also treats clearing non-secret preferences as best effort.
     }
     this.options.clearAccountData?.();
-    await this.options.observability?.clearUser();
     this.publish({
       accessToken: null,
       isAuthenticated: false,
       currentUser: null,
       followerCount: null,
     });
+    // Telemetry cleanup must not prevent navigation after credentials are cleared.
+    void this.options.observability?.clearUser().catch(() => undefined);
   }
 
   private async finishAuthentication(response: AuthenticationResponse): Promise<void> {
