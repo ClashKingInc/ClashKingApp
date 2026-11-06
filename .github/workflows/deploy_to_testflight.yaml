@@ -299,12 +299,13 @@ jobs:
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
         run: |
           ruby -rjson -e 'File.write(ARGV[0], JSON.generate({key_id: ENV.fetch("API_KEY_ID"), issuer_id: ENV.fetch("API_ISSUER_ID"), key: ENV.fetch("API_PRIVATE_KEY"), in_house: false}))' "$RUNNER_TEMP/app-store-api-key.json"
+          # The IPA already contains its build number. Fastlane rejects an
+          # explicit build_number when uploading an IPA rather than selecting a build.
           fastlane deliver \
             --api_key_path "$RUNNER_TEMP/app-store-api-key.json" \
             --app_identifier "$APP_BUNDLE_ID" \
             --ipa ios/build/ClashKing.ipa \
             --app_version "$VERSION_NAME" \
-            --build_number "${{ steps.version.outputs.build_number }}" \
             --skip_metadata true \
             --skip_screenshots true \
             --submit_for_review true \
