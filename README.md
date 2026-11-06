@@ -146,6 +146,23 @@ the account's latest choice. Deploy database migration `057_account_avatar.sql`
 and the matching API before releasing the app bundle. Never change the approved
 catalog IDs without coordinating the API contract and database constraint.
 
+## Session and push recovery
+
+Android sessions use Expo SecureStore under the `clashking.auth.v2` service.
+On the first read, import a readable Flutter shared session. A known Flutter
+cipher-migration failure leaves the old encrypted store untouched and requires
+sign-in again. Keep the secure import marker after logout so retained Flutter
+credentials cannot restore the previous account. Do not roll back this storage
+change to a bundle that only reads Flutter storage; ship a corrective bundle
+that retains the new store. iOS continues sharing its existing Keychain session
+with WidgetKit.
+
+On iOS, Expo notification registration must supply an APNs token to Firebase
+before requesting an FCM token. Token registration failures remain retryable;
+missing registration is not proof that the native Firebase configuration is
+absent. Push-device cleanup is best effort during logout, while clearing the
+local session is required before reporting logout success.
+
 ## Production release
 
 The first public native release is 1.0.0. Run the **Release mobile app** workflow

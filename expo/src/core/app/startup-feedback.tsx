@@ -41,6 +41,8 @@ export function MaintenanceScreen({ onRetry }: { onRetry: () => void }) {
 export function StartupErrorScreen({
   isNetworkError,
   retrying,
+  loggingOut = false,
+  logoutFailed = false,
   onRetry,
   onJoinDiscord,
   onLogout,
@@ -48,6 +50,8 @@ export function StartupErrorScreen({
 }: {
   isNetworkError: boolean;
   retrying: boolean;
+  loggingOut?: boolean;
+  logoutFailed?: boolean;
   onRetry: () => void;
   onJoinDiscord: () => void;
   onLogout: () => void;
@@ -63,9 +67,10 @@ export function StartupErrorScreen({
           accessibilityLabel={t('authLogout')}
           accessibilityRole="button"
           onPress={onLogout}
+          disabled={loggingOut}
           style={styles.headerButton}
         >
-          <LogOut color={theme.onSurface} size={22} />
+          {loggingOut ? <LoadingIndicator /> : <LogOut color={theme.onSurface} size={22} />}
         </Pressable>
         <View style={styles.accountIdentity}>
           <CKText role="bodyMedium" numberOfLines={1} style={styles.accountName}>
@@ -77,6 +82,11 @@ export function StartupErrorScreen({
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.errorScroll}>
+        {logoutFailed ? (
+          <CKText accessibilityRole="alert" style={[styles.center, { color: theme.error }]}>
+            {t('generalError')}. {t('generalTryAgain')}
+          </CKText>
+        ) : null}
         <View style={styles.illustration}>
           {isNetworkError ? (
             <View
@@ -112,7 +122,7 @@ export function StartupErrorScreen({
         ) : null}
         <Pressable
           accessibilityRole="button"
-          disabled={retrying}
+          disabled={retrying || loggingOut}
           onPress={onRetry}
           style={[
             styles.retry,
