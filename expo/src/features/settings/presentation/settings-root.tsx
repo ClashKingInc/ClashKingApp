@@ -41,8 +41,6 @@ const GITHUB_URL = 'https://github.com/ClashKingInc';
 const FAN_CONTENT_URL = 'https://supercell.com/en/fan-content-policy/';
 const PATREON_URL = 'https://www.patreon.com/clashking?utm_campaign=creatorshare_creator';
 const CROWDIN_URL = 'https://crowdin.com/project/clashkingapp';
-const CROWDIN_INVITE_URL =
-  'https://crowdin.com/project/clashkingapp/invite?h=87a407268713f1cb79724a2e0c00a5d52098842';
 const PRIVACY_URL = 'https://clashk.ing/privacy';
 const SUPPORT_EMAIL_URL = 'mailto:devs@clashk.ing?subject=App%20Inquiry';
 const PRIVACY_EMAIL_URL =
@@ -221,7 +219,7 @@ export function SettingsRoot({
       return (
         <TranslationScreen
           actions={{
-            openCrowdin: () => void openExternal(CROWDIN_INVITE_URL),
+            openCrowdin: () => void openExternal(CROWDIN_URL),
             openDiscord: () => void openExternal(DISCORD_URL),
           }}
           onBack={() => setScene('main')}
