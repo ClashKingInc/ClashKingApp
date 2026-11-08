@@ -55,12 +55,14 @@ try {
         assert.equal(unknown.seasonStart, null);
         assert.equal(unknown.seasonEnd, null);
         assert.equal(legendHistoryBadge(unknown), null);
-        assert.equal(formatLegendHistorySeason(unknown, 'en-US'), '2024-03-25');
+        assert.equal(formatLegendHistorySeason(unknown, 'en-US'), 'March 25, 2024');
         const recentUnknown = items.find(item => item.season === 'v2-2026-08-31T05:00:00Z')!;
         assert.equal(legendHistoryBadge(recentUnknown), null, 'Recent unknown history must not invent Legend I');
         const namedTier = items.find(item => item.season === 'v2-2026-07-06T05:00:00Z')!;
         assert.deepEqual(legendHistoryBadge(namedTier), {kind:'named', name:'Legend League II'});
-        assert.notEqual(formatLegendHistorySeason(items[0], 'en-US'), items[0].season);
+        assert.equal(formatLegendHistorySeason(items[0], 'en-US'), 'October 26, 2026');
+        assert.equal(formatLegendHistorySeason(legacy, 'en-US'), 'March 2023');
+        assert.equal(formatLegendHistorySeason(dated, 'en-US'), 'May 18, 2026');
         assert.equal(paths.length, 1);
         assert(paths[0].endsWith('/legend-history'));
         assert(!paths.some(path => path.endsWith('/league/history')));
