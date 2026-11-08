@@ -18,7 +18,7 @@ import {
 } from '../upgrade-tracker/presentation/ability-details';
 import { CalcChip, CalcHeader, CalcSelect, calcStyles as s } from './calculator-controls';
 import { HeroCarousel, heroAccents } from './hero-carousel';
-import { HeaderArtwork } from '../../ui/header-artwork';
+import { HeaderAtmosphere } from '../../ui/hero-header-scrim';
 import { CalculatorSelectionModal } from './calculator-selection-modal';
 import {
   EquipmentComparisonCopy,
@@ -338,16 +338,7 @@ function EquipmentEditor({
         pointerEvents="none"
         style={{ position: 'absolute', top: 0, left: 0, right: 0, height: gradientHeight }}
       >
-        <HeaderArtwork
-          pointerEvents="none"
-          accessible={false}
-          source={require('../../../assets/clashking/backgrounds/header-atmosphere.png')}
-          contentFit="fill"
-          tintColor={heroAccents[hero.name] ?? theme.secondary}
-          // A 2px-wide gradient can retain its intrinsic size on native even
-          // with edge constraints. Explicit dimensions fill the measured area.
-          style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]}
-        />
+        <HeaderAtmosphere color={heroAccents[hero.name] ?? theme.secondary} />
       </View>
       <EquipmentContent
         enabled={layout.isDuo}

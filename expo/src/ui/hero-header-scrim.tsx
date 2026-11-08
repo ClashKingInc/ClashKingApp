@@ -5,6 +5,32 @@ import { useVerticalBarEdgeIOS } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { isDuoDevice } from './adaptive-layout';
 
+/** Hero-colored atmosphere is drawn directly so iOS ImageRef cache changes
+ * cannot render its white alpha mask before the image tint is applied. */
+export function HeaderAtmosphere({ color }: { color: string }) {
+  const gradientId = `headerAtmosphere${useId().replace(/:/g, '')}`;
+  return (
+    <Svg
+      pointerEvents="none"
+      accessible={false}
+      width="100%"
+      height="100%"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style={StyleSheet.absoluteFill}
+    >
+      <Defs>
+        <LinearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+          <Stop offset={0} stopColor={color} stopOpacity={0.28} />
+          <Stop offset={0.5} stopColor={color} stopOpacity={0.1} />
+          <Stop offset={1} stopColor={color} stopOpacity={0} />
+        </LinearGradient>
+      </Defs>
+      <Rect width={100} height={100} fill={`url(#${gradientId})`} />
+    </Svg>
+  );
+}
+
 /** Illustrated headers share the Ranked/Legends tint and opaque lower fade.
  * Draw the scrim directly: routing it through the artwork bitmap cache can
  * expose the photo while its tiny stretched image is loading or resizing.
