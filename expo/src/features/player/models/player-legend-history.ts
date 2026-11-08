@@ -32,7 +32,9 @@ export class PlayerLegendHistoryEntry {
       int(json.attackWins),
       int(json.defenseWins),
       int(json.rank),
-      json.population == null ? null : int(json.population),
+      // The archive reports its highest retained rank, not the number of all
+      // season participants. It cannot be used as a percentile denominator.
+      null,
       apiDate(json.seasonStart),
       apiDate(json.seasonEnd),
       league?.namespace === 'legacy' || league?.namespace === 'tier' ? league.namespace : null,

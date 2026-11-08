@@ -39,7 +39,7 @@ try {
         assert.equal(items[0].leagueNamespace, 'tier');
         assert.equal(items[0].leagueIconUrls, null);
         assert.deepEqual(legendHistoryBadge(items[0]), {kind:'named', name:'Legend League I'});
-        assert.equal(items[0].population, 17);
+        assert.equal(items[0].population, null, 'A retained rank ceiling must not produce a season percentile');
         assert.equal(items[0].seasonStart?.toISOString(), '2026-09-28T05:00:00.000Z');
         const legacy = items.find(item => item.season === '2023-03')!;
         assert.equal(legacy.leagueId, 29000022);
