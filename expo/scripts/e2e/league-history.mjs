@@ -33,18 +33,22 @@ try {
           paths.push(new URL(request.url).pathname); return fetch(request);
         }) });
         const items = await readPlayerLegendHistory(api, process.env.CLASHKING_E2E_HISTORY_TAG!);
-        assert.equal(items.length, 9);
+        assert.equal(items.length, 10);
         assert.equal(items[0].season, 'v2-2026-10-26T05:00:00Z');
-        assert.equal(items[0].leagueName, 'Original Legend I');
+        assert.equal(items[0].leagueName, 'Legend League I');
         assert.equal(items[0].leagueNamespace, 'tier');
-        assert.equal(items[0].leagueIconUrls?.medium, 'https://source.example/original-medium.png');
-        assert.deepEqual(legendHistoryBadge(items[0]), {kind:'source', imageUrl:'https://source.example/original-medium.png'});
+        assert.equal(items[0].leagueIconUrls, null);
+        assert.deepEqual(legendHistoryBadge(items[0]), {kind:'named', name:'Legend League I'});
         assert.equal(items[0].population, 17);
         assert.equal(items[0].seasonStart?.toISOString(), '2026-09-28T05:00:00.000Z');
         const legacy = items.find(item => item.season === '2023-03')!;
         assert.equal(legacy.leagueId, 29000022);
-        assert.equal(legacy.leagueName, 'Original Legend League');
+        assert.equal(legacy.leagueName, 'Legend League');
         assert.equal(legacy.leagueNamespace, 'legacy');
+        assert.deepEqual(legendHistoryBadge(legacy), {kind:'named', name:'Legend League'});
+        const dated=items.find(item=>item.season==='2026-05-18')!;
+        assert.equal(dated.leagueNamespace,'tier');
+        assert.equal(dated.seasonStart?.toISOString(),'2026-04-20T05:00:00.000Z');
         const unknown = items.find(item => item.season === '2024-03-25')!;
         assert.equal(unknown.leagueId, null);
         assert.equal(unknown.leagueName, null);
@@ -55,12 +59,12 @@ try {
         const recentUnknown = items.find(item => item.season === 'v2-2026-08-31T05:00:00Z')!;
         assert.equal(legendHistoryBadge(recentUnknown), null, 'Recent unknown history must not invent Legend I');
         const namedTier = items.find(item => item.season === 'v2-2026-07-06T05:00:00Z')!;
-        assert.deepEqual(legendHistoryBadge(namedTier), {kind:'tier', name:'Legend League II'});
+        assert.deepEqual(legendHistoryBadge(namedTier), {kind:'named', name:'Legend League II'});
         assert.notEqual(formatLegendHistorySeason(items[0], 'en-US'), items[0].season);
         assert.equal(paths.length, 1);
         assert(paths[0].endsWith('/legend-history'));
         assert(!paths.some(path => path.endsWith('/league/history')));
-        console.log('PASS Expo shared Legend loader -> rc63 Legend alias -> real API: original tier/legacy labels, nullable metadata and raw-season boundaries');
+        console.log('PASS Expo shared Legend loader -> rc63 Legend alias -> real API: season-format tier/legacy labels using existing storage and raw-season boundaries');
       `,
     },
     outfile: output,

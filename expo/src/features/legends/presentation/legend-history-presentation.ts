@@ -2,7 +2,7 @@ import type { PlayerLegendHistoryEntry } from '../../player/models/player-legend
 
 export type LegendHistoryBadge =
   | { readonly kind: 'source'; readonly imageUrl: string }
-  | { readonly kind: 'tier'; readonly name: string }
+  | { readonly kind: 'named'; readonly name: string }
   | null;
 
 export function legendHistoryBadge(season: PlayerLegendHistoryEntry): LegendHistoryBadge {
@@ -10,10 +10,10 @@ export function legendHistoryBadge(season: PlayerLegendHistoryEntry): LegendHist
     const imageUrl = season.leagueIconUrls?.[size];
     if (imageUrl?.trim()) return { kind: 'source', imageUrl };
   }
-  // A recorded tier name may resolve to the matching game asset. A date or
-  // reused legacy category cannot identify today's Legend I/II badge.
-  const name = season.leagueNamespace === 'tier' ? season.leagueName?.trim() : null;
-  return name ? { kind: 'tier', name } : null;
+  // The API interprets the stored ID within its season's system. The original
+  // monthly league has its own badge; it must not become today's Legend I.
+  const name = season.leagueNamespace !== null ? season.leagueName?.trim() : null;
+  return name ? { kind: 'named', name } : null;
 }
 
 export function formatLegendHistorySeason(season: PlayerLegendHistoryEntry, locale: string): string {

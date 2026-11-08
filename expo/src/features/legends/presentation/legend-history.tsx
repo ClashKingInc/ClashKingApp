@@ -50,7 +50,7 @@ function LegendHistoryRow({
   const badge = legendHistoryBadge(season);
   const badgeUrl = badge?.kind === 'source'
     ? badge.imageUrl
-    : badge?.kind === 'tier' ? ImageAssets.getLeagueImage(badge.name) : null;
+    : badge?.kind === 'named' ? ImageAssets.getLeagueImage(badge.name) : null;
   return (
     <Surface radius={ckRadius.tile} style={styles.seasonCard}>
       <View style={styles.historyHeader}>
