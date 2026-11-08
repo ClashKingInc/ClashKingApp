@@ -1,3 +1,5 @@
+import type { PlayerLegendHistoryEntry } from './player-legend-history';
+import { canonicalTag } from '../../../core/domain/tags';
 import { gameDataState } from '@/core/game-data/game-data-state';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import type { LegendPosterInput } from '../../../core/graphics/legend-poster-layout';
@@ -82,32 +84,7 @@ export class PlayerLegendBattlelog {
   }
 }
 
-export class PlayerLegendHistoryEntry {
-  constructor(
-    readonly season: string,
-    readonly leagueId: number | null,
-    readonly leagueName: string | null,
-    readonly trophies: number,
-    readonly attackWins: number,
-    readonly defenseWins: number,
-    readonly rank: number,
-    readonly population: number | null = null,
-  ) {}
-
-  static fromJson(json: JsonRecord) {
-    const league = json.league === null ? null : record(json.league);
-    return new PlayerLegendHistoryEntry(
-      string(json.season),
-      league ? int(league.id) : null,
-      league ? string(league.name) : null,
-      int(json.trophies),
-      int(json.attackWins),
-      int(json.defenseWins),
-      int(json.rank),
-      json.population == null ? null : int(json.population),
-    );
-  }
-}
+export { PlayerLegendHistoryEntry } from './player-legend-history';
 
 export class PlayerLegendRank {
   constructor(
@@ -218,6 +195,17 @@ export class PlayerLegendLeagueData {
     readonly comparisons: readonly LegendPerformanceComparison[] = [],
     readonly posterSeason: LegendPosterInput['season'] | null = null,
   ) {}
+
+  withCurrentDay(day: PlayerLegendBattlelog): PlayerLegendLeagueData {
+    if (canonicalTag(day.tag) !== canonicalTag(this.playerTag)) throw new TypeError('Legend day belongs to another player.');
+    return new PlayerLegendLeagueData(
+      this.playerTag, this.playerName, this.townHallLevel, this.trophies, this.bestTrophies,
+      day, this.history, day.day, this.currentRank,
+      day.day === this.selectedDay ? this.historicalRank : null,
+      this.recentDays, this.seasonArmyShareCodes, this.seasonStart, this.seasonEnd,
+      this.seasonStats, this.comparisons, this.posterSeason,
+    );
+  }
 }
 
 // Match the 05:00 UTC game reset, not the backend's delayed closeout job.

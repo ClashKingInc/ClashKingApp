@@ -17,6 +17,7 @@ export interface TokenServiceOptions {
   readonly deviceIdentity: DeviceIdentity;
   readonly fetchImplementation?: typeof fetch;
   readonly nowSeconds?: () => number;
+  readonly onSessionRejected?: () => Promise<void>;
 }
 
 export class TokenService {
@@ -42,6 +43,39 @@ export class TokenService {
 
   getDeviceName(): Promise<string> {
     return this.options.deviceIdentity.getDeviceName();
+  }
+
+  get sessionVersion(): number {
+    return this.sessionGeneration;
+  }
+
+  canReplayWithAccessToken(rejected: string, current: string): boolean {
+    try {
+      const previous = JSON.parse(decodeBase64Url(rejected.split('.')[1]!)) as unknown;
+      const next = JSON.parse(decodeBase64Url(current.split('.')[1]!)) as unknown;
+      return (
+        isRecord(previous) &&
+        isRecord(next) &&
+        typeof previous.sub === 'string' &&
+        previous.sub === next.sub
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  async refreshAfterUnauthorized(rejectedAccessToken: string): Promise<string | null> {
+    if (
+      this.cachedAccessToken !== null &&
+      this.cachedAccessToken !== rejectedAccessToken &&
+      !this.isTokenExpired(this.cachedAccessToken)
+    ) {
+      return this.cachedAccessToken;
+    }
+    if (this.options.platform === 'web') return this.refreshWebAccessToken();
+    const session = await this.options.sessions.read();
+    if (session.refreshToken === null) return null;
+    return this.refreshExpiredToken(session.refreshToken, rejectedAccessToken);
   }
 
   async getAccessToken(): Promise<string | null> {
@@ -77,6 +111,7 @@ export class TokenService {
     }
     const deviceId = this.options.platform === 'ios' ? await this.getDeviceId() : null;
     const saved = await this.options.refreshLock.run(async () => {
+      this.sessionGeneration += 1;
       await this.saveSession({ accessToken, refreshToken, deviceId });
       return true;
     });
@@ -108,9 +143,13 @@ export class TokenService {
     }
   }
 
-  private async refreshExpiredToken(refreshToken: string): Promise<string | null> {
+  private async refreshExpiredToken(
+    refreshToken: string,
+    rejectedAccessToken?: string,
+  ): Promise<string | null> {
     if (this.refreshInFlight !== null) return this.refreshInFlight;
-    const refresh = (async () => this.refreshAccessToken(refreshToken, await this.getDeviceId()))();
+    const refresh = (async () =>
+      this.refreshAccessToken(refreshToken, await this.getDeviceId(), rejectedAccessToken))();
     this.refreshInFlight = refresh;
     try {
       return await refresh;
@@ -122,14 +161,17 @@ export class TokenService {
   private async refreshAccessToken(
     capturedRefreshToken: string,
     deviceId: string,
+    rejectedAccessToken?: string,
   ): Promise<string | null> {
     if (this.options.platform === 'web') return this.refreshWebAccessToken();
     const refreshed = await this.options.refreshLock.run(async () => {
+      const version = this.sessionGeneration;
       const latest = await this.options.sessions.read();
       if (
         latest.accessToken !== null &&
         latest.refreshToken !== null &&
-        !this.isTokenExpired(latest.accessToken)
+        !this.isTokenExpired(latest.accessToken) &&
+        latest.accessToken !== rejectedAccessToken
       ) {
         this.cacheSession(latest);
         return latest.accessToken;
@@ -152,17 +194,37 @@ export class TokenService {
           }),
         },
       );
+      const current = await this.options.sessions.read();
+      if (version !== this.sessionGeneration || current.refreshToken !== latest.refreshToken) {
+        // Another process/session may have replaced these credentials while
+        // the rejected request was in flight. Never clear its newer session.
+        this.cacheSession(current);
+        if (current.accessToken !== null && !this.isTokenExpired(current.accessToken))
+          return current.accessToken;
+        throw new TransportError({
+          cause: null,
+          message: 'Session changed during refresh. Retry authentication.',
+        });
+      }
       if (response.status === 401) {
         await this.clearSessionUnlocked();
+        await this.options.onSessionRejected?.();
         return null;
       }
       if (response.status !== 200) {
-        throw new Error(`Native session refresh failed (${response.status}).`);
+        throw new TransportError({
+          cause: null,
+          message: `Native session refresh failed (${response.status}). Retry authentication.`,
+        });
       }
       const data = await parseResponseRecord(response);
       const accessToken = nonEmptyString(data.access_token);
       const refreshToken = nonEmptyString(data.refresh_token);
-      if (accessToken === null || refreshToken === null) return null;
+      if (accessToken === null || refreshToken === null)
+        throw new TransportError({
+          cause: null,
+          message: 'Invalid native session refresh response. Retry authentication.',
+        });
       await this.saveSession({
         accessToken,
         refreshToken,
@@ -196,7 +258,11 @@ export class TokenService {
           }
           if (generation !== this.sessionGeneration) return null;
           if (response.status === 401) {
-            if (await isWebRotationRace(response)) {
+            const rotationRace = await isWebRotationRace(response);
+            // Parsing the response yields, so a newer sign-in can invalidate
+            // the generation checked above. Never clear its cached bearer.
+            if (generation !== this.sessionGeneration) return null;
+            if (rotationRace) {
               throw new TransportError({
                 cause: null,
                 message: 'Browser session refresh is busy. Retry startup.',
@@ -251,9 +317,17 @@ export class TokenService {
     }
     if (this.tokenLoad !== null) return this.tokenLoad;
     const load = this.options.sessions.read();
+    const generation = this.sessionGeneration;
     this.tokenLoad = load;
     try {
       const session = await load;
+      if (generation !== this.sessionGeneration) {
+        return {
+          accessToken: this.cachedAccessToken,
+          refreshToken: this.cachedRefreshToken,
+          deviceId: null,
+        };
+      }
       this.cacheSession(session);
       this.tokensLoaded = true;
       return session;

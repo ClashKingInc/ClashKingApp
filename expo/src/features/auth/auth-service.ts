@@ -108,7 +108,9 @@ export class AuthService {
       return;
     }
 
+    const version = this.options.tokens.sessionVersion;
     const accessToken = await this.options.tokens.getAccessToken();
+    if (version !== this.options.tokens.sessionVersion) return;
     if (accessToken === null) {
       await this.options.observability?.clearUser();
       this.publish({
@@ -122,8 +124,11 @@ export class AuthService {
 
     try {
       const response = await this.execute(AuthMeEndpoint, {});
-      await this.applyAuthenticatedResponse(response, accessToken);
+      const currentToken = await this.options.tokens.getAccessToken();
+      if (currentToken === null || version !== this.options.tokens.sessionVersion) return;
+      await this.applyAuthenticatedResponse(response, currentToken);
     } catch (error) {
+      if (version !== this.options.tokens.sessionVersion) return;
       if (this.isNetworkError(error)) {
         this.publish({
           ...this.stateValue,
@@ -134,21 +139,38 @@ export class AuthService {
         error instanceof UnauthorizedException ||
         (error instanceof ApiResponseError && error.status === 401)
       ) {
-        // Failed profile loading is not proof that refresh credentials were
-        // revoked. Preserve the session for retry unless the API rejects it.
-        await this.options.tokens.clearTokens();
-        await this.options.observability?.clearUser();
-        this.publish({
-          accessToken: null,
-          isAuthenticated: false,
-          currentUser: null,
-          followerCount: null,
+        // The shared client already refreshed/replayed this access rejection.
+        // Only TokenService may discard a definitively rejected refresh token;
+        // a late profile 401 must not erase a newer sign-in or rotation.
+        if (version !== this.options.tokens.sessionVersion) return;
+        if ((await this.options.tokens.getAccessToken()) === null) {
+          await this.handleSessionRejected();
+          // A rejected restored session goes to sign-in rather than startup's
+          // outage UI, preserving the existing upgraded-session recovery path.
+          return;
+        }
+        throw new TransportError({
+          cause: error,
+          message: 'Account session validation failed. Retry startup.',
         });
-        // A rejected restored session is a sign-in destination, not a startup
-        // outage. In particular, old beta sessions must be able to sign in again.
-        return;
       }
       throw error;
+    }
+  }
+
+  async handleSessionRejected(): Promise<void> {
+    const hadUser = this.stateValue.isAuthenticated || this.stateValue.currentUser !== null;
+    this.publish({
+      accessToken: null,
+      isAuthenticated: false,
+      currentUser: null,
+      followerCount: null,
+    });
+    if (hadUser) this.options.clearAccountData?.();
+    try {
+      await this.options.observability?.clearUser();
+    } catch {
+      // Reporting cannot prevent a definitive local sign-out.
     }
   }
 
@@ -327,9 +349,11 @@ export class AuthService {
   private async applyAuthenticatedResponse(
     response: CurrentUserResponse,
     accessToken: string | null,
+    expectedVersion = this.options.tokens.sessionVersion,
   ): Promise<void> {
     const user = parseAuthUser(response);
     await this.options.observability?.setAuthenticatedUser(user);
+    if (expectedVersion !== this.options.tokens.sessionVersion) return;
     this.publish({
       accessToken,
       isAuthenticated: true,

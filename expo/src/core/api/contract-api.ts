@@ -38,8 +38,20 @@ export interface ContractApiService {
 
 export function withBearerToken(
   client: ContractApiService,
-  tokenProvider: { getAccessToken(): Promise<string | null> },
+  tokenProvider: { readonly sessionVersion?: number; getAccessToken(): Promise<string | null> },
 ): ContractApiService {
+  const accessTokenForRequest = async () => {
+    const version = tokenProvider.sessionVersion;
+    const token = await tokenProvider.getAccessToken();
+    if (version !== tokenProvider.sessionVersion) {
+      throw new TransportError({
+        cause: null,
+        message:
+          'Authentication changed while preparing this request. Retry with the current account.',
+      });
+    }
+    return token;
+  };
   return {
     execute: (endpoint, input, options) => {
       options = { timeoutMs: 15_000, ...options };
@@ -47,7 +59,7 @@ export function withBearerToken(
         return client.execute(endpoint, input, options);
       }
       return Effect.tryPromise({
-        try: () => tokenProvider.getAccessToken(),
+        try: accessTokenForRequest,
         catch: (cause) =>
           new TransportError({ cause, message: 'ClashKing access-token lookup failed' }),
       }).pipe(
@@ -65,7 +77,7 @@ export function withBearerToken(
         return client.executeStatus(endpoint, input, options);
       }
       return Effect.tryPromise({
-        try: () => tokenProvider.getAccessToken(),
+        try: accessTokenForRequest,
         catch: (cause) =>
           new TransportError({ cause, message: 'ClashKing access-token lookup failed' }),
       }).pipe(

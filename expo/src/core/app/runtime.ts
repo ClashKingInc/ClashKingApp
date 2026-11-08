@@ -136,12 +136,14 @@ export function createAppRuntime(): AppRuntime {
     runtimePlatform === 'web'
       ? new NoopAuthRefreshLock()
       : new NativeAuthRefreshLock(runtimePlatform);
-  const tokens = new TokenService({
+  const tokens: TokenService = new TokenService({
     apiV2Url: configuration.apiV2Url,
     platform: runtimePlatform,
     sessions,
     refreshLock,
     deviceIdentity: identity,
+    // Invoked only after the refresh API rejects the still-current session.
+    onSessionRejected: (): Promise<void> => auth.handleSessionRejected(),
   });
   const contractApi = withApiDiagnostics(
     withBearerToken(
@@ -149,6 +151,7 @@ export function createAppRuntime(): AppRuntime {
         baseUrl: configuration.apiV2Url.replace(/\/v2\/?$/, ''),
         transport: observedTransport(httpTransport(), { addHttpBreadcrumb }),
         web: nativePlatform === 'web',
+        tokens,
       }),
       tokens,
     ),
@@ -257,7 +260,7 @@ export function createAppRuntime(): AppRuntime {
     webHost: webHost(),
     webRedirectOverride: process.env.EXPO_PUBLIC_CK_WEB_DISCORD_REDIRECT_URI,
   });
-  const auth = new AuthService({
+  const auth: AuthService = new AuthService({
     api: contractApi,
     tokens,
     preferences,
