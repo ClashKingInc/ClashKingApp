@@ -17,14 +17,15 @@ export function legendHistoryBadge(season: PlayerLegendHistoryEntry): LegendHist
 }
 
 export function formatLegendHistorySeason(season: PlayerLegendHistoryEntry, locale: string): string {
-  const start = season.seasonStart;
-  const end = season.seasonEnd;
-  if (!start || !end || !Number.isFinite(start.valueOf()) || !Number.isFinite(end.valueOf()))
-    return season.season;
-  const format = new Intl.DateTimeFormat(locale, {
-    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
-  });
-  return typeof format.formatRange === 'function'
-    ? format.formatRange(start, end)
-    : `${format.format(start)} – ${format.format(end)}`;
+  // Bounds are used for historical calculations, not the card heading. Keep
+  // monthly IDs as month/year and dated season IDs as a single finish date.
+  const monthly = /^\d{4}-\d{2}$/u.test(season.season);
+  const value = monthly
+    ? `${season.season}-01T00:00:00Z`
+    : season.season.replace(/^v2-/u, '');
+  const date = new Date(value);
+  if (!Number.isFinite(date.valueOf())) return season.season;
+  return new Intl.DateTimeFormat(locale, {
+    month: 'long', year: 'numeric', ...(monthly ? {} : { day: 'numeric' }), timeZone: 'UTC',
+  }).format(date);
 }
